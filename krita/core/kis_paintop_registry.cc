@@ -56,12 +56,12 @@ KisPaintOpRegistry::KisPaintOpRegistry()
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin )
-            kdDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
+            kDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
         else {
-            kdDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
+            kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
             if( errCode == KParts::ComponentFactory::ErrNoLibrary)
             {
-                kdWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
+                kWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
             }
         }
 
@@ -86,7 +86,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, const KisPaintOpSettings * settings, KisPainter * painter) const
 {
     if (painter == 0) {
-        kdWarning() << " KisPaintOpRegistry::paintOp painter is null";
+        kWarning() << " KisPaintOpRegistry::paintOp painter is null";
         return 0;
     }
     KisPaintOpFactorySP f = get(id);
@@ -117,7 +117,7 @@ bool KisPaintOpRegistry::userVisible(const KisID & id, KisColorSpace* cs) const
 
     KisPaintOpFactorySP f = get(id);
     if (!f) {
-        kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
+        kDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
         return false;
     }
     return f->userVisible(cs);
@@ -129,7 +129,7 @@ QString KisPaintOpRegistry::pixmap(const KisID & id) const
     KisPaintOpFactorySP f = get(id);
 
     if (!f) {
-        kdDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
+        kDebug(DBG_AREA_REGISTRY) << "No paintop " << id.id() << "\n";
         return "";
     }
 

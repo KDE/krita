@@ -105,7 +105,7 @@ void KisToolGradient::move(KisMoveEvent *e)
             paintLine();
         }
 
-        if ((e->state() & Qt::ShiftButton) == Qt::ShiftButton) {
+        if ((e->state() & Qt::ShiftModifier) == Qt::ShiftButton) {
             m_endPos = straightLine(e->pos());
         }
         else {
@@ -131,7 +131,7 @@ void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
             return;
         }
 
-        if ((e->state() & Qt::ShiftButton) == Qt::ShiftButton) {
+        if ((e->state() & Qt::ShiftModifier) == Qt::ShiftButton) {
             m_endPos = straightLine(e->pos());
         }
         else {

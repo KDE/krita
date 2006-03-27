@@ -20,7 +20,7 @@
 #include "kis_tile.h"
 #include "kis_tile_global.h"
 
-KisMemento::KisMemento(Q_UINT32 pixelSize) : KShared()
+KisMemento::KisMemento(quint32 pixelSize) : KShared()
 {
     m_hashTable = new KisTile * [1024];
     Q_CHECK_PTR(m_hashTable);
@@ -34,8 +34,8 @@ KisMemento::KisMemento(Q_UINT32 pixelSize) : KShared()
         m_redoHashTable [i] = 0;
     }
     m_numTiles = 0;
-    m_defPixel = new Q_UINT8[pixelSize];
-    m_redoDefPixel = new Q_UINT8[pixelSize];
+    m_defPixel = new quint8[pixelSize];
+    m_redoDefPixel = new quint8[pixelSize];
     m_valid = true;
 }
 
@@ -87,12 +87,12 @@ void KisMemento::deleteAll(KisTile *tile)
     }
 }
 
-void KisMemento::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+void KisMemento::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
 {
-    Q_INT32 maxX = Q_INT32_MIN;
-    Q_INT32 maxY = Q_INT32_MIN;
-    x = Q_INT32_MAX;
-    y = Q_INT32_MAX;
+    qint32 maxX = qint32_MIN;
+    qint32 maxY = qint32_MIN;
+    x = qint32_MAX;
+    y = qint32_MAX;
 
     for(int i = 0; i < 1024; i++)
     {
@@ -126,17 +126,17 @@ void KisMemento::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 
 QRect KisMemento::extent() const
 {
-    Q_INT32 x;
-    Q_INT32 y;
-    Q_INT32 w;
-    Q_INT32 h;
+    qint32 x;
+    qint32 y;
+    qint32 w;
+    qint32 h;
 
     extent(x, y, w, h);
 
     return QRect(x, y, w, h);
 }
 
-bool KisMemento::containsTile(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash) const
+bool KisMemento::containsTile(qint32 col, qint32 row, quint32 tileHash) const
 {
     const KisTile *tile = m_hashTable[tileHash];
 

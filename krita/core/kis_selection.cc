@@ -57,20 +57,20 @@ KisSelection::~KisSelection()
 {
 }
 
-Q_UINT8 KisSelection::selected(Q_INT32 x, Q_INT32 y)
+quint8 KisSelection::selected(qint32 x, qint32 y)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
-    Q_UINT8 *pix = iter.rawData();
+    quint8 *pix = iter.rawData();
 
     return *pix;
 }
 
-void KisSelection::setSelected(Q_INT32 x, Q_INT32 y, Q_UINT8 s)
+void KisSelection::setSelected(qint32 x, qint32 y, quint8 s)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
 
-    Q_UINT8 *pix = iter.rawData();
+    quint8 *pix = iter.rawData();
 
     *pix = s;
 }
@@ -79,7 +79,7 @@ QImage KisSelection::maskImage()
 {
     // If part of a KisAdjustmentLayer, there may be no parent device.
     QImage img;
-    Q_INT32 x, y, w, h, y2, x2;
+    qint32 x, y, w, h, y2, x2;
     if (m_parentPaintDevice) {
 
         m_parentPaintDevice->exactBounds(x, y, w, h);
@@ -97,8 +97,8 @@ QImage KisSelection::maskImage()
             KisHLineIteratorPixel it = createHLineIterator(x, y2, w, false);
             x2 = 0;
             while (!it.isDone()) {
-                    Q_UINT8 s = MAX_SELECTED - *(it.rawData());
-                    Q_INT32 c = qRgb(s, s, s);
+                    quint8 s = MAX_SELECTED - *(it.rawData());
+                    qint32 c = qRgb(s, s, s);
                     img.setPixel(x2, y2, c);
                     ++x2;
                     ++it;
@@ -111,7 +111,7 @@ void KisSelection::select(QRect r)
     KisFillPainter painter(this);
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     painter.fillRect(r, KisColor(Qt::white, cs), MAX_SELECTED);
-    Q_INT32 x, y, w, h;
+    qint32 x, y, w, h;
     extent(x, y, w, h);
 }
 
@@ -124,14 +124,14 @@ void KisSelection::clear(QRect r)
 
 void KisSelection::clear()
 {
-    Q_UINT8 defPixel = MIN_SELECTED;
+    quint8 defPixel = MIN_SELECTED;
     m_datamanager->setDefaultPixel(&defPixel);
     m_datamanager->clear();
 }
 
 void KisSelection::invert()
 {
-    Q_INT32 x,y,w,h;
+    qint32 x,y,w,h;
 
     extent(x, y, w, h);
     KisRectIterator it = createRectIterator(x, y, w, h, true);
@@ -142,7 +142,7 @@ void KisSelection::invert()
         *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         ++it;
     }
-    Q_UINT8 defPixel = MAX_SELECTED - *(m_datamanager->defaultPixel());
+    quint8 defPixel = MAX_SELECTED - *(m_datamanager->defaultPixel());
     m_datamanager->setDefaultPixel(&defPixel);
 }
 
@@ -189,21 +189,21 @@ void KisSelection::paintUniformSelectionRegion(QImage img, const QRect& imageRec
             for (unsigned int i = 0; i < rects.count(); i++) {
                 QRect r = rects[i];
 
-                for (Q_INT32 y = 0; y < r.height(); ++y) {
+                for (qint32 y = 0; y < r.height(); ++y) {
 
                     QRgb *imagePixel = reinterpret_cast<QRgb *>(img.scanLine(r.y() - imageRect.y() + y));
                     imagePixel += r.x() - imageRect.x();
 
-                    Q_INT32 numPixels = r.width();
+                    qint32 numPixels = r.width();
 
                     while (numPixels > 0) {
 
                         QRgb srcPixel = *imagePixel;
-                        Q_UINT8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
-                        Q_UINT8 srcAlpha = qAlpha(srcPixel);
+                        quint8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
+                        quint8 srcAlpha = qAlpha(srcPixel);
 
                         srcGrey = UINT8_MULT(srcGrey, srcAlpha);
-                        Q_UINT8 dstAlpha = QMAX(srcAlpha, 192);
+                        quint8 dstAlpha = qMax(srcAlpha, 192);
 
                         QRgb dstPixel = qRgba(128 + srcGrey, 128 + srcGrey, 165 + srcGrey, dstAlpha);
                         *imagePixel = dstPixel;
@@ -217,7 +217,7 @@ void KisSelection::paintUniformSelectionRegion(QImage img, const QRect& imageRec
     }
 }
 
-void KisSelection::paintSelection(QImage img, Q_INT32 imageRectX, Q_INT32 imageRectY, Q_INT32 imageRectWidth, Q_INT32 imageRectHeight)
+void KisSelection::paintSelection(QImage img, qint32 imageRectX, qint32 imageRectY, qint32 imageRectWidth, qint32 imageRectHeight)
 {
     Q_ASSERT(img.size() == QSize(imageRectWidth, imageRectHeight));
 
@@ -244,56 +244,56 @@ void KisSelection::paintSelection(QImage img, Q_INT32 imageRectX, Q_INT32 imageR
 
     if (!nonuniformRect.isEmpty()) {
 
-        const Q_INT32 imageRectOffsetX = nonuniformRect.x() - imageRectX;
-        const Q_INT32 imageRectOffsetY = nonuniformRect.y() - imageRectY;
+        const qint32 imageRectOffsetX = nonuniformRect.x() - imageRectX;
+        const qint32 imageRectOffsetY = nonuniformRect.y() - imageRectY;
 
         imageRectX = nonuniformRect.x();
         imageRectY = nonuniformRect.y();
         imageRectWidth = nonuniformRect.width();
         imageRectHeight = nonuniformRect.height();
 
-        const Q_INT32 NUM_SELECTION_ROWS = 3;
+        const qint32 NUM_SELECTION_ROWS = 3;
     
-        Q_UINT8 *selectionRow[NUM_SELECTION_ROWS];
+        quint8 *selectionRow[NUM_SELECTION_ROWS];
     
-        Q_INT32 aboveRowIndex = 0;
-        Q_INT32 centreRowIndex = 1;
-        Q_INT32 belowRowIndex = 2;
+        qint32 aboveRowIndex = 0;
+        qint32 centreRowIndex = 1;
+        qint32 belowRowIndex = 2;
     
-        selectionRow[aboveRowIndex] = new Q_UINT8[imageRectWidth + 2];
-        selectionRow[centreRowIndex] = new Q_UINT8[imageRectWidth + 2];
-        selectionRow[belowRowIndex] = new Q_UINT8[imageRectWidth + 2];
+        selectionRow[aboveRowIndex] = new quint8[imageRectWidth + 2];
+        selectionRow[centreRowIndex] = new quint8[imageRectWidth + 2];
+        selectionRow[belowRowIndex] = new quint8[imageRectWidth + 2];
     
         readBytes(selectionRow[centreRowIndex], imageRectX - 1, imageRectY - 1, imageRectWidth + 2, 1);
         readBytes(selectionRow[belowRowIndex], imageRectX - 1, imageRectY, imageRectWidth + 2, 1);
     
-        for (Q_INT32 y = 0; y < imageRectHeight; ++y) {
+        for (qint32 y = 0; y < imageRectHeight; ++y) {
     
-            Q_INT32 oldAboveRowIndex = aboveRowIndex;
+            qint32 oldAboveRowIndex = aboveRowIndex;
             aboveRowIndex = centreRowIndex;
             centreRowIndex = belowRowIndex;
             belowRowIndex = oldAboveRowIndex;
     
             readBytes(selectionRow[belowRowIndex], imageRectX - 1, imageRectY + y + 1, imageRectWidth + 2, 1);
     
-            const Q_UINT8 *aboveRow = selectionRow[aboveRowIndex] + 1;
-            const Q_UINT8 *centreRow = selectionRow[centreRowIndex] + 1;
-            const Q_UINT8 *belowRow = selectionRow[belowRowIndex] + 1;
+            const quint8 *aboveRow = selectionRow[aboveRowIndex] + 1;
+            const quint8 *centreRow = selectionRow[centreRowIndex] + 1;
+            const quint8 *belowRow = selectionRow[belowRowIndex] + 1;
     
             QRgb *imagePixel = reinterpret_cast<QRgb *>(img.scanLine(imageRectOffsetY + y));
             imagePixel += imageRectOffsetX;
     
-            for (Q_INT32 x = 0; x < imageRectWidth; ++x) {
+            for (qint32 x = 0; x < imageRectWidth; ++x) {
     
-                Q_UINT8 centre = *centreRow;
+                quint8 centre = *centreRow;
     
                 if (centre != MAX_SELECTED) {
     
                     // this is where we come if the pixels should be blue or bluish
     
                     QRgb srcPixel = *imagePixel;
-                    Q_UINT8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
-                    Q_UINT8 srcAlpha = qAlpha(srcPixel);
+                    quint8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
+                    quint8 srcAlpha = qAlpha(srcPixel);
     
                     // Colour influence is proportional to alphaPixel.
                     srcGrey = UINT8_MULT(srcGrey, srcAlpha);
@@ -303,14 +303,14 @@ void KisSelection::paintSelection(QImage img, Q_INT32 imageRectX, Q_INT32 imageR
                     if (centre == MIN_SELECTED) {
                         //this is where we come if the pixels should be blue (or red outline)
     
-                        Q_UINT8 left = *(centreRow - 1);
-                        Q_UINT8 right = *(centreRow + 1);
-                        Q_UINT8 above = *aboveRow;
-                        Q_UINT8 below = *belowRow;
+                        quint8 left = *(centreRow - 1);
+                        quint8 right = *(centreRow + 1);
+                        quint8 above = *aboveRow;
+                        quint8 below = *belowRow;
     
                         // Stop unselected transparent areas from appearing the same
                         // as selected transparent areas.
-                        Q_UINT8 dstAlpha = QMAX(srcAlpha, 192);
+                        quint8 dstAlpha = qMax(srcAlpha, 192);
     
                         // now for a simple outline based on 4-connectivity
                         if (left != MIN_SELECTED || right != MIN_SELECTED || above != MIN_SELECTED || below != MIN_SELECTED) {
@@ -353,8 +353,8 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
         return;
     }
 
-    Q_INT32 imageWidth = imageSize.width();
-    Q_INT32 imageHeight = imageSize.height();
+    qint32 imageWidth = imageSize.width();
+    qint32 imageHeight = imageSize.height();
 
     QRect selectionExtent = extent();
 
@@ -384,45 +384,45 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
 
     if (!nonuniformRect.isEmpty()) {
 
-        const Q_INT32 scaledImageRectXOffset = nonuniformRect.x() - scaledImageRect.x();
-        const Q_INT32 scaledImageRectYOffset = nonuniformRect.y() - scaledImageRect.y();
+        const qint32 scaledImageRectXOffset = nonuniformRect.x() - scaledImageRect.x();
+        const qint32 scaledImageRectYOffset = nonuniformRect.y() - scaledImageRect.y();
 
-        const Q_INT32 scaledImageRectX = nonuniformRect.x();
-        const Q_INT32 scaledImageRectY = nonuniformRect.y();
-        const Q_INT32 scaledImageRectWidth = nonuniformRect.width();
-        const Q_INT32 scaledImageRectHeight = nonuniformRect.height();
+        const qint32 scaledImageRectX = nonuniformRect.x();
+        const qint32 scaledImageRectY = nonuniformRect.y();
+        const qint32 scaledImageRectWidth = nonuniformRect.width();
+        const qint32 scaledImageRectHeight = nonuniformRect.height();
 
-        const Q_INT32 imageRowLeft = static_cast<Q_INT32>(scaledImageRectX / xScale);
-        const Q_INT32 imageRowRight = static_cast<Q_INT32>((ceil((scaledImageRectX + scaledImageRectWidth - 1 + 1) / xScale)) - 1);
+        const qint32 imageRowLeft = static_cast<qint32>(scaledImageRectX / xScale);
+        const qint32 imageRowRight = static_cast<qint32>((ceil((scaledImageRectX + scaledImageRectWidth - 1 + 1) / xScale)) - 1);
 
-        const Q_INT32 imageRowWidth = imageRowRight - imageRowLeft + 1;
-        const Q_INT32 imageRowStride = imageRowWidth + 2;
+        const qint32 imageRowWidth = imageRowRight - imageRowLeft + 1;
+        const qint32 imageRowStride = imageRowWidth + 2;
 
-        const Q_INT32 NUM_SELECTION_ROWS = 3;
+        const qint32 NUM_SELECTION_ROWS = 3;
 
-        Q_INT32 aboveRowIndex = 0;
-        Q_INT32 centreRowIndex = 1;
-        Q_INT32 belowRowIndex = 2;
+        qint32 aboveRowIndex = 0;
+        qint32 centreRowIndex = 1;
+        qint32 belowRowIndex = 2;
 
-        Q_INT32 aboveRowSrcY = -3;
-        Q_INT32 centreRowSrcY = -3;
-        Q_INT32 belowRowSrcY = -3;
+        qint32 aboveRowSrcY = -3;
+        qint32 centreRowSrcY = -3;
+        qint32 belowRowSrcY = -3;
 
-        Q_UINT8 *selectionRows = new Q_UINT8[imageRowStride * NUM_SELECTION_ROWS];
-        Q_UINT8 *selectionRow[NUM_SELECTION_ROWS];
+        quint8 *selectionRows = new quint8[imageRowStride * NUM_SELECTION_ROWS];
+        quint8 *selectionRow[NUM_SELECTION_ROWS];
 
         selectionRow[0] = selectionRows + 1;
         selectionRow[1] = selectionRow[0] + imageRowStride;
         selectionRow[2] = selectionRow[0] + (2 * imageRowStride);
 
-        for (Q_INT32 y = 0; y < scaledImageRectHeight; ++y) {
+        for (qint32 y = 0; y < scaledImageRectHeight; ++y) {
 
-            Q_INT32 scaledY = scaledImageRectY + y;
-            Q_INT32 srcY = (scaledY * imageHeight) / scaledImageSize.height();
+            qint32 scaledY = scaledImageRectY + y;
+            qint32 srcY = (scaledY * imageHeight) / scaledImageSize.height();
 
-            Q_UINT8 *aboveRow;
-            Q_UINT8 *centreRow;
-            Q_UINT8 *belowRow;
+            quint8 *aboveRow;
+            quint8 *centreRow;
+            quint8 *belowRow;
 
             if (srcY - 1 == aboveRowSrcY) {
                 aboveRow = selectionRow[aboveRowIndex];
@@ -430,7 +430,7 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
                 belowRow = selectionRow[belowRowIndex];
             } else if (srcY - 1 == centreRowSrcY) {
 
-                Q_INT32 oldAboveRowIndex = aboveRowIndex;
+                qint32 oldAboveRowIndex = aboveRowIndex;
 
                 aboveRowIndex = centreRowIndex;
                 centreRowIndex = belowRowIndex;
@@ -444,8 +444,8 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
 
             } else if (srcY - 1 == belowRowSrcY) {
 
-                Q_INT32 oldAboveRowIndex = aboveRowIndex;
-                Q_INT32 oldCentreRowIndex = centreRowIndex;
+                qint32 oldAboveRowIndex = aboveRowIndex;
+                qint32 oldCentreRowIndex = centreRowIndex;
 
                 aboveRowIndex = belowRowIndex;
                 centreRowIndex = oldAboveRowIndex;
@@ -482,20 +482,20 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
             QRgb *imagePixel = reinterpret_cast<QRgb *>(img.scanLine(scaledImageRectYOffset + y));
             imagePixel += scaledImageRectXOffset;
 
-            for (Q_INT32 x = 0; x < scaledImageRectWidth; ++x) {
+            for (qint32 x = 0; x < scaledImageRectWidth; ++x) {
 
-                Q_INT32 scaledX = scaledImageRectX + x;
-                Q_INT32 srcX = (scaledX * imageWidth) / scaledImageSize.width();
+                qint32 scaledX = scaledImageRectX + x;
+                qint32 srcX = (scaledX * imageWidth) / scaledImageSize.width();
 
-                Q_UINT8 centre = *(centreRow + srcX - imageRowLeft);
+                quint8 centre = *(centreRow + srcX - imageRowLeft);
 
                 if (centre != MAX_SELECTED) {
 
                     // this is where we come if the pixels should be blue or bluish
 
                     QRgb srcPixel = *imagePixel;
-                    Q_UINT8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
-                    Q_UINT8 srcAlpha = qAlpha(srcPixel);
+                    quint8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
+                    quint8 srcAlpha = qAlpha(srcPixel);
 
                     // Colour influence is proportional to alphaPixel.
                     srcGrey = UINT8_MULT(srcGrey, srcAlpha);
@@ -505,14 +505,14 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
                     if (centre == MIN_SELECTED) {
                         //this is where we come if the pixels should be blue (or red outline)
 
-                        Q_UINT8 left = *(centreRow + (srcX - imageRowLeft) - 1);
-                        Q_UINT8 right = *(centreRow + (srcX - imageRowLeft) + 1);
-                        Q_UINT8 above = *(aboveRow + (srcX - imageRowLeft));
-                        Q_UINT8 below = *(belowRow + (srcX - imageRowLeft));
+                        quint8 left = *(centreRow + (srcX - imageRowLeft) - 1);
+                        quint8 right = *(centreRow + (srcX - imageRowLeft) + 1);
+                        quint8 above = *(aboveRow + (srcX - imageRowLeft));
+                        quint8 below = *(belowRow + (srcX - imageRowLeft));
 
                         // Stop unselected transparent areas from appearing the same
                         // as selected transparent areas.
-                        Q_UINT8 dstAlpha = QMAX(srcAlpha, 192);
+                        quint8 dstAlpha = qMax(srcAlpha, 192);
 
                         // now for a simple outline based on 4-connectivity
                         if (left != MIN_SELECTED || right != MIN_SELECTED || above != MIN_SELECTED || below != MIN_SELECTED) {

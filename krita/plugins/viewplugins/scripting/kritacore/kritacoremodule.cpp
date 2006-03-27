@@ -161,8 +161,8 @@ Kross::Api::Object::Ptr KritaCoreFactory::getFilter(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr args)
 {
-    uint w = QMAX(1, Kross::Api::Variant::toUInt(args->item(0)));
-    uint h = QMAX(1, Kross::Api::Variant::toUInt(args->item(1)));
+    uint w = qMax(1, Kross::Api::Variant::toUInt(args->item(0)));
+    uint h = qMax(1, Kross::Api::Variant::toUInt(args->item(1)));
     uint hf = 0;
     uint vf = 0;
     if( args.count() > 2)
@@ -177,8 +177,8 @@ Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr a
 }
 Kross::Api::Object::Ptr KritaCoreFactory::newRectBrush(Kross::Api::List::Ptr args)
 {
-    uint w = QMAX(1, Kross::Api::Variant::toUInt(args->item(0)));
-    uint h = QMAX(1, Kross::Api::Variant::toUInt(args->item(1)));
+    uint w = qMax(1, Kross::Api::Variant::toUInt(args->item(0)));
+    uint h = qMax(1, Kross::Api::Variant::toUInt(args->item(1)));
     uint hf = 0;
     uint vf = 0;
     if( args.count() > 2)
@@ -223,10 +223,10 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
 {
 
     QMap<QString, Object::Ptr> children = manager->getChildren();
-    kdDebug(41011) << " there are " << children.size() << endl;
+    kDebug(41011) << " there are " << children.size() << endl;
     for(QMap<QString, Object::Ptr>::const_iterator it = children.begin(); it != children.end(); it++)
     {
-        kdDebug(41011) << it.key() << " " << it.data() << endl;
+        kDebug(41011) << it.key() << " " << it.data() << endl;
     }
 
     // Wrap doc
@@ -275,7 +275,7 @@ const QString KritaCoreModule::getClassName() const
 
 Kross::Api::Object::Ptr KritaCoreModule::call(const QString& name, Kross::Api::List::Ptr arguments)
 {
-    kdDebug(41011) << "KritaCoreModule::call = " << name << endl;
+    kDebug(41011) << "KritaCoreModule::call = " << name << endl;
     if( m_factory->isAFunction(name))
     {
         return m_factory->call(name, arguments);

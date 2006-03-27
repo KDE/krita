@@ -42,7 +42,7 @@ public:
     /**
      * Create a new filter config.
      */
-    KisFilterConfiguration(const QString & name, Q_INT32 version)
+    KisFilterConfiguration(const QString & name, qint32 version)
         : m_name(name)
         , m_version(version) {}
 
@@ -71,7 +71,7 @@ public:
     /**
      * Get the version of the filter that has created this config
      */
-    Q_INT32 version() const;
+    qint32 version() const;
 
     /**
      * Set the property with name to value.
@@ -97,7 +97,7 @@ private:
 protected:
 
     QString m_name;
-    Q_INT32 m_version;
+    qint32 m_version;
     QMap<QString, QVariant> m_properties;
     
 };

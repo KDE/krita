@@ -137,7 +137,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
             cfg->transfer[i] = 0x0;
         for(int i=minvalue; i <maxvalue; i++)
         {
-            Q_INT32 val = (i-minvalue)/diff;
+            qint32 val = (i-minvalue)/diff;
 
             val = int((0xFFFF * (i-minvalue)) / diff);
             if(val >0xFFFF)
@@ -168,12 +168,12 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
     setProgressTotalSteps(rect.width() * rect.height());
-    Q_INT32 pixelsProcessed = 0;
+    qint32 pixelsProcessed = 0;
 
     while( ! iter.isDone()  && !cancelRequested())
     {
-        Q_UINT32 npix=0, maxpix = iter.nConseqPixels();
-        Q_UINT8 selectedness = iter.selectedness();
+        quint32 npix=0, maxpix = iter.nConseqPixels();
+        quint8 selectedness = iter.selectedness();
         // The idea here is to handle stretches of completely selected and completely unselected pixels.
         // Partially selected pixels are handled one pixel at a time.
         switch(selectedness)
@@ -190,7 +190,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
             case MAX_SELECTED:
             {
-                Q_UINT8 *firstPixel = iter.rawData();
+                quint8 *firstPixel = iter.rawData();
                 while(iter.selectedness()==MAX_SELECTED && maxpix)
                 {
                     --maxpix;
@@ -206,8 +206,8 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
             default:
                 // adjust, but since it's partially selected we also only partially adjust
                 src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), adj, 1);
-                const Q_UINT8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-                Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
+                quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
                 ++iter;
                 pixelsProcessed++;
@@ -260,12 +260,12 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
     setProgressTotalSteps(rect.width() * rect.height());
-    Q_INT32 pixelsProcessed = 0;
+    qint32 pixelsProcessed = 0;
 
     while( ! iter.isDone()  && !cancelRequested())
     {
-        Q_UINT32 npix=0, maxpix = iter.nConseqPixels();
-        Q_UINT8 selectedness = iter.selectedness();
+        quint32 npix=0, maxpix = iter.nConseqPixels();
+        quint8 selectedness = iter.selectedness();
         // The idea here is to handle stretches of completely selected and completely unselected pixels.
         // Partially selected pixels are handled one pixel at a time.
         switch(selectedness)
@@ -282,7 +282,7 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
 
             case MAX_SELECTED:
             {
-                Q_UINT8 *firstPixel = iter.rawData();
+                quint8 *firstPixel = iter.rawData();
                 while(iter.selectedness()==MAX_SELECTED && maxpix)
                 {
                     --maxpix;
@@ -298,8 +298,8 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
             default:
                 // adjust, but since it's partially selected we also only partially adjust
                 src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), m_adj, 1);
-                const Q_UINT8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-                Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
+                quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
                 ++iter;
                 pixelsProcessed++;

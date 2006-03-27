@@ -47,14 +47,14 @@ KisMetaRegistry::KisMetaRegistry()
     QStringList filenames = d.entryList();
 
     for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += d.absFilePath(*it);
+        profileFilenames += d.absoluteFilePath(*it);
     }
 
-    d.setPath(QDir::homeDirPath() + "/.color/icc/");
+    d.setPath(QDir::homePath() + "/.color/icc/");
     filenames = d.entryList();
 
     for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += d.absFilePath(*it);
+        profileFilenames += d.absoluteFilePath(*it);
     }
 
     // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.

@@ -51,7 +51,7 @@ public:
     }
 
     virtual bool visit(KisPaintLayer *layer)
-    {        //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
+    {        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
         QString location = m_external ? QString::null : m_uri;
         location += m_img->name() + "/layers/" + m_layerFilenames[layer];
@@ -83,9 +83,9 @@ public:
             // replace the old colorspace
             layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
             QRect rc = layer->paintDevice()->extent();
-            kdDebug() << "After loading " << layer->name() << " extent is: " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
+            kDebug() << "After loading " << layer->name() << " extent is: " << rc.x() << ", " << rc.y() << ", " << rc.width() << ", " << rc.height() << endl;
             layer->setDirty(rc);
-            kdDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
+            kDebug(DBG_AREA_FILE) << "Opened icc information, size is " << data.size() << endl;
         }
 
         return true;
@@ -118,7 +118,7 @@ public:
     
     virtual bool visit(KisAdjustmentLayer* layer)
     {
-        //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
+        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
         // The selection -- if present. If not, we simply cannot open the dratted thing.
         QString location = m_external ? QString::null : m_uri;

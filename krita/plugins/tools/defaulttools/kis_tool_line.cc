@@ -102,11 +102,11 @@ void KisToolLine::move(KisMoveEvent *e)
             paintLine();
         //KisCanvasController *controller = m_subject->canvasController();
 
-        if (e->state() & Qt::AltButton) {
+        if (e->state() & Qt::AltModifier) {
             KisPoint trans = e->pos() - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
-        } else if (e->state() & Qt::ShiftButton)
+        } else if (e->state() & Qt::ShiftModifier)
             m_endPos = straightLine(e->pos());
         else
             m_endPos = e->pos();//controller->windowToView(e->pos());
@@ -127,7 +127,7 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
             return;
         }
 
-        if ((e->state() & Qt::ShiftButton) == Qt::ShiftButton) {
+        if ((e->state() & Qt::ShiftModifier) == Qt::ShiftButton) {
             m_endPos = straightLine(e->pos());
         } else m_endPos = e->pos();
 

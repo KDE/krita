@@ -29,7 +29,7 @@
 #include "kis_paint_device.h"
 
 
-KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceSP dev)
+KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
@@ -40,7 +40,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
 }
 
 
-KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity)
+KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity)
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
@@ -48,7 +48,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
     m_paintdev->startBackgroundFilters();
 }
 
-KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace)
+KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KisColorSpace * colorSpace)
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
@@ -76,7 +76,7 @@ KisPaintLayer::~KisPaintLayer()
     }
 }
 
-void KisPaintLayer::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisPaintLayer::paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
 {
     if (m_paintdev->hasSelection())
             m_paintdev->selection()->paintSelection(img, x, y, w, h);
@@ -89,19 +89,19 @@ void KisPaintLayer::paintSelection(QImage &img, const QRect& scaledImageRect, co
     }
 }
 
-void KisPaintLayer::paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisPaintLayer::paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h)
 {
     uchar *j = img.bits();
 
     KisColorSpace *cs = m_paintdev->colorSpace();
 
-    for (Q_INT32 y2 = y; y2 < h + y; ++y2) {
+    for (qint32 y2 = y; y2 < h + y; ++y2) {
         KisHLineIteratorPixel it = m_paintdev->createHLineIterator(x, y2, w, false);
         while ( ! it.isDone()) {
-            Q_UINT8 s = cs->getAlpha(it.rawData());
+            quint8 s = cs->getAlpha(it.rawData());
             if(s==0)
             {
-                Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+                quint8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
 
                 *(j+0) = 128+g ;
                 *(j+1) = 165+g;
@@ -113,7 +113,7 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q
     }
 }
 
-QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
+QImage KisPaintLayer::createThumbnail(qint32 w, qint32 h)
 {
     if (m_paintdev)
         return m_paintdev->createThumbnail(w, h);
@@ -122,16 +122,16 @@ QImage KisPaintLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
 }
 
 
-Q_INT32 KisPaintLayer::x() const { if (m_paintdev) return m_paintdev->getX(); else return 0; }
+qint32 KisPaintLayer::x() const { if (m_paintdev) return m_paintdev->getX(); else return 0; }
 
-void KisPaintLayer::setX(Q_INT32 x)
+void KisPaintLayer::setX(qint32 x)
 {
     if (m_paintdev)
         m_paintdev->setX(x);
 }
 
-Q_INT32 KisPaintLayer::y() const { if (m_paintdev) return m_paintdev->getY(); else return 0;  }
-void KisPaintLayer::setY(Q_INT32 y) { if (m_paintdev) m_paintdev->setY(y); }
+qint32 KisPaintLayer::y() const { if (m_paintdev) return m_paintdev->getY(); else return 0;  }
+void KisPaintLayer::setY(qint32 y) { if (m_paintdev) m_paintdev->setY(y); }
 
 QRect KisPaintLayer::extent() const { if (m_paintdev) return m_paintdev->extent(); else return QRect(); }
 QRect KisPaintLayer::exactBounds() const { if (m_paintdev) return m_paintdev->exactBounds(); else return QRect(); }

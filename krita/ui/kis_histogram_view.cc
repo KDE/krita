@@ -263,14 +263,14 @@ void KisHistogramView::addProducerChannels(KisHistogramProducerSP producer) {
 
 void KisHistogramView::updateHistogram()
 {
-    Q_UINT32 height = this->height();
+    quint32 height = this->height();
     int selFrom, selTo; // from - to in bins
 
     if (!m_currentProducer) { // Something's very wrong: no producer for this colorspace to update histogram with!
         return;
     }
 
-    Q_INT32 bins = m_histogram->producer()->numberOfBins();
+    qint32 bins = m_histogram->producer()->numberOfBins();
     m_pix = QPixmap(bins, height);
     m_pix.fill();
     QPainter p(&m_pix);
@@ -289,7 +289,7 @@ void KisHistogramView::updateHistogram()
         selTo = 2;
     }
 
-    Q_INT32 i = 0;
+    qint32 i = 0;
     double highest = 0;
     bool blackOnBlack = false;
 

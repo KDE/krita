@@ -48,8 +48,8 @@ public:
 
 public slots:
     void setZoom(double zoom);
-    void updatePointer(Q_INT32 x, Q_INT32 y);
-    void updateVisibleArea(Q_INT32 xpos, Q_INT32 ypos);
+    void updatePointer(qint32 x, qint32 y);
+    void updateVisibleArea(qint32 xpos, qint32 ypos);
     void setUnit(KoUnit::Unit u);
     void hide();
     void show();
@@ -62,14 +62,14 @@ protected:
 
     void recalculateSize();
     void drawRuler();
-    void initMarker(Q_INT32 w, Q_INT32 h);
-    void drawNums(QPainter *gc, Q_INT32 x, Q_INT32 y, QString& num, bool orientationHoriz);
+    void initMarker(qint32 w, qint32 h);
+    void drawNums(QPainter *gc, qint32 x, qint32 y, QString& num, bool orientationHoriz);
 
 private:
     KoUnit::Unit m_unit;
     Qt::Orientation m_orientation;
-    Q_INT32 m_firstVisible;
-    Q_INT32 m_currentPosition;
+    qint32 m_firstVisible;
+    qint32 m_currentPosition;
     QPixmap *m_pixmapBuffer;
     QPixmap m_pixmapMarker;
     QPixmap m_pixmapNums;

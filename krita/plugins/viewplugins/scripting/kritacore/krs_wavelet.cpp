@@ -49,7 +49,7 @@ Wavelet::~Wavelet()
 
 Kross::Api::Object::Ptr Wavelet::getNCoeff(Kross::Api::List::Ptr args)
 {
-    Q_UINT32 n = Kross::Api::Variant::toUInt(args->item(0));
+    quint32 n = Kross::Api::Variant::toUInt(args->item(0));
     if( n > m_numCoeff)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("getNCoeff") + "\n" + i18n("Index out of bound") ) );
@@ -59,7 +59,7 @@ Kross::Api::Object::Ptr Wavelet::getNCoeff(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Wavelet::setNCoeff(Kross::Api::List::Ptr args)
 {
-    Q_UINT32 n = Kross::Api::Variant::toUInt(args->item(0));
+    quint32 n = Kross::Api::Variant::toUInt(args->item(0));
     double v = Kross::Api::Variant::toDouble(args->item(1));
     if( n > m_numCoeff)
     {
@@ -71,8 +71,8 @@ Kross::Api::Object::Ptr Wavelet::setNCoeff(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Wavelet::getXYCoeff(Kross::Api::List::Ptr args)
 {
-    Q_UINT32 x = Kross::Api::Variant::toUInt(args->item(0));
-    Q_UINT32 y = Kross::Api::Variant::toUInt(args->item(1));
+    quint32 x = Kross::Api::Variant::toUInt(args->item(0));
+    quint32 y = Kross::Api::Variant::toUInt(args->item(1));
     if( x > m_wavelet->size && y > m_wavelet->size)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("getXYCoeff") + "\n" + i18n("Index out of bound") ) );
@@ -82,8 +82,8 @@ Kross::Api::Object::Ptr Wavelet::getXYCoeff(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Wavelet::setXYCoeff(Kross::Api::List::Ptr args)
 {
-    Q_UINT32 x = Kross::Api::Variant::toUInt(args->item(0));
-    Q_UINT32 y = Kross::Api::Variant::toUInt(args->item(1));
+    quint32 x = Kross::Api::Variant::toUInt(args->item(0));
+    quint32 y = Kross::Api::Variant::toUInt(args->item(1));
     double v = Kross::Api::Variant::toDouble(args->item(2));
     if( x > m_wavelet->size && y > m_wavelet->size)
     {

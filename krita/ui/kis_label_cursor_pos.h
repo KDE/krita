@@ -29,13 +29,13 @@ public:
     virtual ~KisLabelCursorPos();
 
 public slots:
-    void updatePos(Q_INT32 xpos, Q_INT32 ypos);
+    void updatePos(qint32 xpos, qint32 ypos);
     void enter();
     void leave();
 
 private:
     bool m_doUpdates;
-    Q_INT32 m_ypos;
+    qint32 m_ypos;
 };
 
 #endif // KIS_LABEL_CURSOR_POS_H_

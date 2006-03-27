@@ -50,7 +50,7 @@ public:
 
     virtual void update(KisCanvasSubject *subject);
     virtual void setup(KActionCollection *collection);
-    virtual Q_UINT32 priority() { return 8; }
+    virtual quint32 priority() { return 8; }
     virtual enumToolType toolType() { return TOOL_SELECT; }
 
 public slots:

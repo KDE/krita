@@ -74,7 +74,7 @@ DlgLayerSize::~DlgLayerSize()
     delete m_page;
 }
 
-void DlgLayerSize::setWidth(Q_UINT32 w)
+void DlgLayerSize::setWidth(quint32 w)
 {
     blockAll();
 
@@ -86,7 +86,7 @@ void DlgLayerSize::setWidth(Q_UINT32 w)
     unblockAll();
 }
 
-void DlgLayerSize::setWidthPercent(Q_UINT32 w)
+void DlgLayerSize::setWidthPercent(quint32 w)
 {
     blockAll();
 
@@ -97,19 +97,19 @@ void DlgLayerSize::setWidthPercent(Q_UINT32 w)
 }
 
 
-void DlgLayerSize::setMaximumWidth(Q_UINT32 w)
+void DlgLayerSize::setMaximumWidth(quint32 w)
 {
     m_page->intWidth->setMaxValue(w);
     m_maxW = w;
 }
 
-Q_INT32 DlgLayerSize::width()
+qint32 DlgLayerSize::width()
 {
-    //return (Q_INT32)qRound(m_oldW);
-    return (Q_INT32)qRound(m_page->intWidth->value());
+    //return (qint32)qRound(m_oldW);
+    return (qint32)qRound(m_page->intWidth->value());
 }
 
-void DlgLayerSize::setHeight(Q_UINT32 h)
+void DlgLayerSize::setHeight(quint32 h)
 {
     blockAll();
 
@@ -122,7 +122,7 @@ void DlgLayerSize::setHeight(Q_UINT32 h)
 }
 
 
-void DlgLayerSize::setHeightPercent(Q_UINT32 h)
+void DlgLayerSize::setHeightPercent(quint32 h)
 {
     blockAll();
 
@@ -132,16 +132,16 @@ void DlgLayerSize::setHeightPercent(Q_UINT32 h)
     unblockAll();
 }
 
-void DlgLayerSize::setMaximumHeight(Q_UINT32 h)
+void DlgLayerSize::setMaximumHeight(quint32 h)
 {
     m_page->intHeight->setMaxValue(h);
     m_maxH = h;
 }
 
-Q_INT32 DlgLayerSize::height()
+qint32 DlgLayerSize::height()
 {
-    //return (Q_INT32)qRound(m_oldH);
-    return (Q_INT32)qRound(m_page->intHeight->value());
+    //return (qint32)qRound(m_oldH);
+    return (qint32)qRound(m_page->intHeight->value());
 }
 
 KisFilterStrategy *DlgLayerSize::filterType()

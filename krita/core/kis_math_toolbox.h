@@ -38,7 +38,7 @@ class KisMathToolbox : public QObject {
             KisFloatRepresentation(uint nsize, uint ndepth) throw(std::bad_alloc ) : coeffs(new float[nsize*nsize*ndepth]) ,size(nsize), depth(ndepth)
             {
                 // XXX: Valgrind shows that these are being used without being initialised.
-                for (Q_UINT32 i = 0; i < nsize*nsize*ndepth; ++i) {
+                for (quint32 i = 0; i < nsize*nsize*ndepth; ++i) {
                     coeffs[i] = 0;
                 }
             }
@@ -107,7 +107,7 @@ inline KisMathToolbox::KisWavelet* KisMathToolbox::initWavelet(KisPaintDeviceSP 
     int size;
     int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();
     for(size = 2; size < maxrectsize; size *= 2) ;
-    Q_INT32 depth = src->colorSpace()->nColorChannels();
+    qint32 depth = src->colorSpace()->nColorChannels();
     return new KisWavelet(size, depth);
 }
 

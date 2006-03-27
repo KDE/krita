@@ -185,7 +185,7 @@ KisPaintDeviceSP KisClipboard::clip()
 
         KisConfig cfg;
 
-        Q_UINT32 behaviour = cfg.pasteBehaviour();
+        quint32 behaviour = cfg.pasteBehaviour();
 
         if(behaviour==2)
         {

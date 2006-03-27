@@ -67,11 +67,11 @@ public:
     KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam);
     virtual void setConfiguration(KisFilterConfiguration * cfg);
 public:
-    inline Q_INT32 nbValues() { return m_nbdoubleWidgets; };
-    inline double valueAt( Q_INT32 i ) { return m_doubleWidgets[i]->value(); };
+    inline qint32 nbValues() { return m_nbdoubleWidgets; };
+    inline double valueAt( qint32 i ) { return m_doubleWidgets[i]->value(); };
 private:
     KisDelayedActionDoubleInput** m_doubleWidgets;
-    Q_INT32 m_nbdoubleWidgets;
+    qint32 m_nbdoubleWidgets;
 };
 
 #endif

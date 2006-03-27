@@ -140,7 +140,7 @@ void KisStrategyMove::simpleMove(const QPoint& pt1, const QPoint& pt2)
     endDrag(pt2);
 }
 
-void KisStrategyMove::simpleMove(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2)
+void KisStrategyMove::simpleMove(qint32 x1, qint32 y1, qint32 x2, qint32 y2)
 {
     startDrag(QPoint(x1, y1));
     endDrag(QPoint(x2, y2));

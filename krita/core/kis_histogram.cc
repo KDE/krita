@@ -59,7 +59,7 @@ KisHistogram::~KisHistogram()
 
 void KisHistogram::updateHistogram()
 {
-    Q_INT32 x,y,w,h;
+    qint32 x,y,w,h;
     m_dev->exactBounds(x,y,w,h);
     KisRectIteratorPixel srcIt = m_dev->createRectIterator(x,y,w,h, false);
     KisColorSpace* cs = m_dev->colorSpace();
@@ -126,7 +126,7 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
     // XXX If from == to, we only want a specific bin, handle that properly!
 
     double max = from, min = to, total = 0.0, mean = 0.0; //, median = 0.0, stddev = 0.0;
-    Q_UINT32 high = 0, low = (Q_UINT32) -1, count = 0;
+    quint32 high = 0, low = (quint32) -1, count = 0;
 
     if (m_producer->count() == 0) {
         // We won't get anything, even if a range is specified
@@ -134,17 +134,17 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
         return c;
     }
 
-    Q_INT32 totbins = m_producer->numberOfBins();
-    Q_UINT32 current;
+    qint32 totbins = m_producer->numberOfBins();
+    quint32 current;
 
     // convert the double range into actual bins:
     double factor = static_cast<double>(totbins) / m_producer->viewWidth();
 
-    Q_INT32 fromBin = static_cast<Q_INT32>((from - m_producer->viewFrom()) * factor);
-    Q_INT32 toBin = fromBin + static_cast<Q_INT32>((to - from) * factor);
+    qint32 fromBin = static_cast<qint32>((from - m_producer->viewFrom()) * factor);
+    qint32 toBin = fromBin + static_cast<qint32>((to - from) * factor);
 
     // Min, max, count, low, high
-    for (Q_INT32 i = fromBin; i < toBin; i++) {
+    for (qint32 i = fromBin; i < toBin; i++) {
         current = m_producer->getBinAt(channel, i);
         double pos = static_cast<double>(i) / factor + from;
         if (current > high)
@@ -179,37 +179,37 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
 
 
 void KisHistogram::dump() {
-    kdDebug(DBG_AREA_MATH) << "Histogram\n";
+    kDebug(DBG_AREA_MATH) << "Histogram\n";
 
     switch (m_type) {
     case LINEAR:
-        kdDebug(DBG_AREA_MATH) << "Linear histogram\n";
+        kDebug(DBG_AREA_MATH) << "Linear histogram\n";
         break;
     case LOGARITHMIC:
-        kdDebug(DBG_AREA_MATH) << "Logarithmic histogram\n";
+        kDebug(DBG_AREA_MATH) << "Logarithmic histogram\n";
     }
 
-    kdDebug(DBG_AREA_MATH) << "Dumping channel " << m_channel << endl;
+    kDebug(DBG_AREA_MATH) << "Dumping channel " << m_channel << endl;
     Calculations c = calculations();
 
 /*        for( int i = 0; i <256; ++i ) {
-        kdDebug(DBG_AREA_MATH) << "Value "
+        kDebug(DBG_AREA_MATH) << "Value "
               << QString().setNum(i)
               << ": "
               <<  QString().setNum(m_values[i])
               << "\n";
         }*/
-    kdDebug(DBG_AREA_MATH) << "\n";
+    kDebug(DBG_AREA_MATH) << "\n";
 
-    kdDebug(DBG_AREA_MATH) << "Max: " << QString().setNum(c.getMax()) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Min: " << QString().setNum(c.getMin()) << "\n";
-    kdDebug(DBG_AREA_MATH) << "High: " << QString().setNum(c.getHighest()) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Low: " << QString().setNum(c.getLowest()) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Mean: " << m_producer->positionToString(c.getMean()) << "\n";
-    kdDebug(DBG_AREA_MATH) << "Total: " << QString().setNum(c.getTotal()) << "\n";
-//    kdDebug(DBG_AREA_MATH) << "Median: " << QString().setNum(m_median) << "\n";
-//    kdDebug(DBG_AREA_MATH) << "Stddev: " << QString().setNum(m_stddev) << "\n";
-//    kdDebug(DBG_AREA_MATH) << "percentile: " << QString().setNum(m_percentile) << "\n";
+    kDebug(DBG_AREA_MATH) << "Max: " << QString().setNum(c.getMax()) << "\n";
+    kDebug(DBG_AREA_MATH) << "Min: " << QString().setNum(c.getMin()) << "\n";
+    kDebug(DBG_AREA_MATH) << "High: " << QString().setNum(c.getHighest()) << "\n";
+    kDebug(DBG_AREA_MATH) << "Low: " << QString().setNum(c.getLowest()) << "\n";
+    kDebug(DBG_AREA_MATH) << "Mean: " << m_producer->positionToString(c.getMean()) << "\n";
+    kDebug(DBG_AREA_MATH) << "Total: " << QString().setNum(c.getTotal()) << "\n";
+//    kDebug(DBG_AREA_MATH) << "Median: " << QString().setNum(m_median) << "\n";
+//    kDebug(DBG_AREA_MATH) << "Stddev: " << QString().setNum(m_stddev) << "\n";
+//    kDebug(DBG_AREA_MATH) << "percentile: " << QString().setNum(m_percentile) << "\n";
 
-    kdDebug(DBG_AREA_MATH) << "\n";
+    kDebug(DBG_AREA_MATH) << "\n";
 }

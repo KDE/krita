@@ -78,7 +78,7 @@ void DlgImageSize::hideScaleBox()
     m_page->grpResizeScale->hide();
 }
 
-void DlgImageSize::setWidth(Q_UINT32 w)
+void DlgImageSize::setWidth(quint32 w)
 {
     blockAll();
 
@@ -90,7 +90,7 @@ void DlgImageSize::setWidth(Q_UINT32 w)
     unblockAll();
 }
 
-void DlgImageSize::setWidthPercent(Q_UINT32 w)
+void DlgImageSize::setWidthPercent(quint32 w)
 {
     blockAll();
 
@@ -101,19 +101,19 @@ void DlgImageSize::setWidthPercent(Q_UINT32 w)
 }
 
 
-void DlgImageSize::setMaximumWidth(Q_UINT32 w)
+void DlgImageSize::setMaximumWidth(quint32 w)
 {
     m_page->intWidth->setMaxValue(w);
     m_maxW = w;
 }
 
-Q_INT32 DlgImageSize::width()
+qint32 DlgImageSize::width()
 {
-    //return (Q_INT32)qRound(m_oldW);
-    return (Q_INT32)qRound(m_page->intWidth->value());
+    //return (qint32)qRound(m_oldW);
+    return (qint32)qRound(m_page->intWidth->value());
 }
 
-void DlgImageSize::setHeight(Q_UINT32 h)
+void DlgImageSize::setHeight(quint32 h)
 {
     blockAll();
 
@@ -126,7 +126,7 @@ void DlgImageSize::setHeight(Q_UINT32 h)
 }
 
 
-void DlgImageSize::setHeightPercent(Q_UINT32 h)
+void DlgImageSize::setHeightPercent(quint32 h)
 {
     blockAll();
 
@@ -138,17 +138,17 @@ void DlgImageSize::setHeightPercent(Q_UINT32 h)
 
 
 
-void DlgImageSize::setMaximumHeight(Q_UINT32 h)
+void DlgImageSize::setMaximumHeight(quint32 h)
 {
     m_page->intHeight->setMaxValue(h);
     m_maxH = h;
 }
 
 
-Q_INT32 DlgImageSize::height()
+qint32 DlgImageSize::height()
 {
-    //return (Q_INT32)qRound(m_oldH);
-    return (Q_INT32)qRound(m_page->intHeight->value());
+    //return (qint32)qRound(m_oldH);
+    return (qint32)qRound(m_page->intHeight->value());
 }
 
 bool DlgImageSize::scale()

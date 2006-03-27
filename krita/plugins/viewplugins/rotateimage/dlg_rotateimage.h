@@ -42,8 +42,8 @@ public:
              const char* name = 0);
     ~DlgRotateImage();
 
-    void setAngle(Q_UINT32 w);
-    Q_INT32 angle();
+    void setAngle(quint32 w);
+    qint32 angle();
 
     void setDirection (enumRotationDirection direction);
     enumRotationDirection direction();

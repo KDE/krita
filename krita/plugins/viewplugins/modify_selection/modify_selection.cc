@@ -99,8 +99,8 @@ void ModifySelection::slotGrowSelection()
     KisConfig cfg;
 
     if (dlgGrowSelection->exec() == QDialog::Accepted) {
-        Q_INT32 xradius = dlgGrowSelection->xradius();
-        Q_INT32 yradius = dlgGrowSelection->yradius();
+        qint32 xradius = dlgGrowSelection->xradius();
+        qint32 yradius = dlgGrowSelection->yradius();
 
         m_view ->canvasSubject()-> selectionManager()->grow(xradius, yradius);
     }
@@ -122,8 +122,8 @@ void ModifySelection::slotShrinkSelection()
     KisConfig cfg;
 
     if (dlgShrinkSelection->exec() == QDialog::Accepted) {
-        Q_INT32 xradius = dlgShrinkSelection->xradius();
-        Q_INT32 yradius = dlgShrinkSelection->yradius();
+        qint32 xradius = dlgShrinkSelection->xradius();
+        qint32 yradius = dlgShrinkSelection->yradius();
         bool shrinkFromImageBorder = dlgShrinkSelection->shrinkFromImageBorder();
 
         m_view ->canvasSubject()-> selectionManager()->shrink(xradius, yradius, shrinkFromImageBorder);
@@ -146,8 +146,8 @@ void ModifySelection::slotBorderSelection()
     KisConfig cfg;
 
     if (dlgBorderSelection->exec() == QDialog::Accepted) {
-        Q_INT32 xradius = dlgBorderSelection->xradius();
-        Q_INT32 yradius = dlgBorderSelection->yradius();
+        qint32 xradius = dlgBorderSelection->xradius();
+        qint32 yradius = dlgBorderSelection->yradius();
 
         m_view ->canvasSubject()-> selectionManager()->border(xradius, yradius);
     }

@@ -39,7 +39,7 @@ class KisGroupLayer : public KisLayer {
     Q_OBJECT
 
 public:
-    KisGroupLayer(KisImage *img, const QString &name, Q_UINT8 opacity);
+    KisGroupLayer(KisImage *img, const QString &name, quint8 opacity);
     KisGroupLayer(const KisGroupLayer& rhs);
     virtual ~KisGroupLayer();
 
@@ -63,11 +63,11 @@ public:
 
     virtual void deactivate() {};
 
-    virtual Q_INT32 x() const;
-    virtual void setX(Q_INT32);
+    virtual qint32 x() const;
+    virtual void setX(qint32);
 
-    virtual Q_INT32 y() const;
-    virtual void setY(Q_INT32);
+    virtual qint32 y() const;
+    virtual void setY(qint32);
 
     // Sets this layer and all its descendants' owner image to the given image.
     virtual void setImage(KisImage *image);
@@ -77,7 +77,7 @@ public:
 
     virtual bool accept(KisLayerVisitor &v)
         {
-//            kdDebug(41001) << "GROUP\t\t" << name()
+//            kDebug(41001) << "GROUP\t\t" << name()
 //                    << " dirty: " << dirty()
 //                    << ", " << m_layers.count() << " children "
 //                    << ", projection: " << m_projection
@@ -116,7 +116,7 @@ public:
     /// Removes the layer from this group. Fails if there's no such layer in this group.
     virtual bool removeLayer(KisLayerSP layer);
 
-    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+    virtual QImage createThumbnail(qint32 w, qint32 h);
     
 signals:
 
@@ -130,8 +130,8 @@ private:
     vKisLayerSP m_layers; // Contains the list of all layers
     KisPaintDeviceSP m_projection; // The cached composition of all layers in this group
 
-    Q_INT32 m_x;
-    Q_INT32 m_y;
+    qint32 m_x;
+    qint32 m_y;
 };
 
 #endif // KIS_GROUP_LAYER_H_

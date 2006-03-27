@@ -67,7 +67,7 @@ public:
      * @param nPixels The number of pixels
      * @param colorSpace the colorspace that can decode the pixel data.
      */
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace* colorSpace) = 0;
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace* colorSpace) = 0;
 
     // Methods to set what exactly is being added to the bins
     virtual void setView(double from, double width) = 0;
@@ -77,17 +77,17 @@ public:
     // Methods with general information about this specific producer
     virtual const KisID& id() const = 0;
     virtual Q3ValueVector<KisChannelInfo *> channels() = 0;
-    virtual Q_INT32 numberOfBins() = 0;
+    virtual qint32 numberOfBins() = 0;
     virtual QString positionToString(double pos) const = 0;
     virtual double viewFrom() const = 0;
     virtual double viewWidth() const = 0;
     virtual double maximalZoom() const = 0;
 
     // Methods to get information on the data we have seen
-    virtual Q_INT32 count() = 0;
-    virtual Q_INT32 getBinAt(Q_INT32 channel, Q_INT32 position) = 0;
-    virtual Q_INT32 outOfViewLeft(Q_INT32 channel) = 0;
-    virtual Q_INT32 outOfViewRight(Q_INT32 channel) = 0;
+    virtual qint32 count() = 0;
+    virtual qint32 getBinAt(qint32 channel, qint32 position) = 0;
+    virtual qint32 outOfViewLeft(qint32 channel) = 0;
+    virtual qint32 outOfViewRight(qint32 channel) = 0;
 protected:
     bool m_skipTransparent;
     bool m_skipUnselected;

@@ -17,7 +17,7 @@
  */
 #include "kis_nameserver.h"
 
-KisNameServer::KisNameServer(const QString& prefix, Q_INT32 seed)
+KisNameServer::KisNameServer(const QString& prefix, qint32 seed)
 {
     m_prefix = prefix;
     m_generator = seed;
@@ -32,12 +32,12 @@ QString KisNameServer::name()
     return m_prefix.arg(m_generator++);
 }
 
-Q_INT32 KisNameServer::currentSeed() const
+qint32 KisNameServer::currentSeed() const
 {
     return m_generator;
 }
 
-Q_INT32 KisNameServer::number()
+qint32 KisNameServer::number()
 {
     return m_generator++;
 }

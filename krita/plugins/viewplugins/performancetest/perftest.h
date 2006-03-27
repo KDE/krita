@@ -41,28 +41,28 @@ private slots:
 
 private:
 
-    QString bltTest(Q_UINT32 testCount);
-    QString fillTest(Q_UINT32 testCount);
-    QString gradientTest(Q_UINT32 testCount);
-    QString pixelTest(Q_UINT32 testCount);
-    QString shapeTest(Q_UINT32 testCount);
-    QString layerTest(Q_UINT32 testCount);
-    QString scaleTest(Q_UINT32 testCount);
-    QString rotateTest(Q_UINT32 testCount);
-    QString renderTest(Q_UINT32 restCount);
-    QString selectionTest(Q_UINT32 testCount);
-    QString colorConversionTest(Q_UINT32 testCount);
-    QString filterTest(Q_UINT32 testCount);
-    QString readBytesTest(Q_UINT32 testCount);
-    QString writeBytesTest(Q_UINT32 testCount);
-    QString iteratorTest(Q_UINT32 testCount);
-    QString paintViewTest(Q_UINT32 testCount);
+    QString bltTest(quint32 testCount);
+    QString fillTest(quint32 testCount);
+    QString gradientTest(quint32 testCount);
+    QString pixelTest(quint32 testCount);
+    QString shapeTest(quint32 testCount);
+    QString layerTest(quint32 testCount);
+    QString scaleTest(quint32 testCount);
+    QString rotateTest(quint32 testCount);
+    QString renderTest(quint32 restCount);
+    QString selectionTest(quint32 testCount);
+    QString colorConversionTest(quint32 testCount);
+    QString filterTest(quint32 testCount);
+    QString readBytesTest(quint32 testCount);
+    QString writeBytesTest(quint32 testCount);
+    QString iteratorTest(quint32 testCount);
+    QString paintViewTest(quint32 testCount);
     QString paintViewFPSTest();
 
     QString doBlit(const KisCompositeOp& op, 
                KisID cspace,
-               Q_UINT8 opacity,
-               Q_UINT32 testCount,
+               quint8 opacity,
+               quint32 testCount,
                KisImageSP img);
 
 private:

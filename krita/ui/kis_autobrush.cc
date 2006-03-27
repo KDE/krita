@@ -72,8 +72,8 @@ void KisAutobrush::activate()
 
 void KisAutobrush::paramChanged()
 {
-    Q_INT32 fh = QMIN( spinBoxWidth->value()/2, spinBoxHorizontal->value() ) ;
-    Q_INT32 fv = QMIN( spinBoxHeigth->value()/2, spinBoxVertical->value() );
+    qint32 fh = qMin( spinBoxWidth->value()/2, spinBoxHorizontal->value() ) ;
+    qint32 fv = qMin( spinBoxHeigth->value()/2, spinBoxVertical->value() );
     KisAutobrushShape* kas;
 
     if(comboBoxShape->currentItem() == 0) // use index compare instead of comparing a translatable string

@@ -27,27 +27,27 @@
 //Added by qt3to4:
 #include <Q3MemArray>
 
-typedef Q3MemArray<Q_UINT8> UByteArray;
+typedef Q3MemArray<quint8> UByteArray;
 
 struct KisExifRational {
-    Q_UINT32 numerator;
-    Q_UINT32 denominator;
+    quint32 numerator;
+    quint32 denominator;
 };
 
 struct KisExifSRational {
-    Q_INT32 numerator;
-    Q_INT32 denominator;
+    qint32 numerator;
+    qint32 denominator;
 };
 
 class ExifValue {
     typedef union {
-        Q_UINT8 m_byte;
-        Q_UINT16 m_short;
-        Q_UINT32 m_long;
+        quint8 m_byte;
+        quint16 m_short;
+        quint32 m_long;
         KisExifRational m_rational;
-        Q_INT8 m_sbyte;
-        Q_INT16 m_sshort;
-        Q_INT32 m_slong;
+        qint8 m_sbyte;
+        qint16 m_sshort;
+        qint32 m_slong;
         KisExifSRational m_srational;
         float m_float;
         double m_double;
@@ -129,33 +129,33 @@ class ExifValue {
          */
         QString toString();
         
-        inline Q_UINT8 asByte(uint i)
+        inline quint8 asByte(uint i)
         {
             if(m_type == EXIF_TYPE_BYTE)
                 return asExifNumber(i).m_byte;
             return 0;
         }
-        inline void setValue(uint i, Q_UINT8 v)
+        inline void setValue(uint i, quint8 v)
         {
             ((ExifNumber*)m_value)[i].m_byte = v;
         }
-        inline Q_UINT8 asShort(uint i)
+        inline quint8 asShort(uint i)
         {
             if(m_type == EXIF_TYPE_SHORT)
                 return asExifNumber(i).m_short;
             return 0;
         }
-        inline void setValue(uint i, Q_UINT16 v)
+        inline void setValue(uint i, quint16 v)
         {
             ((ExifNumber*)m_value)[i].m_short = v;
         }
-        inline Q_UINT8 asLong(uint i)
+        inline quint8 asLong(uint i)
         {
             if(m_type == EXIF_TYPE_LONG)
                 return asExifNumber(i).m_long;
             return 0;
         }
-        inline void setValue(uint i, Q_UINT32 v)
+        inline void setValue(uint i, quint32 v)
         {
             ((ExifNumber*)m_value)[i].m_long = v;
         }
@@ -165,7 +165,7 @@ class ExifValue {
                 return asExifNumber(i).m_rational;
             return KisExifRational();
         }
-        inline void setValue(uint i, Q_UINT32 n, Q_UINT32 d)
+        inline void setValue(uint i, quint32 n, quint32 d)
         {
             ((ExifNumber*)m_value)[i].m_rational.numerator = n;
             ((ExifNumber*)m_value)[i].m_rational.denominator = d;
@@ -174,33 +174,33 @@ class ExifValue {
         {
             ((ExifNumber*)m_value)[i].m_rational = r;
         }
-        inline Q_INT8 asSByte(uint i)
+        inline qint8 asSByte(uint i)
         {
             if(m_type == EXIF_TYPE_SBYTE)
                 return asExifNumber(i).m_sbyte;
             return 0;
         }
-        inline void setValue(uint i, Q_INT8 v)
+        inline void setValue(uint i, qint8 v)
         {
             ((ExifNumber*)m_value)[i].m_sbyte = v;
         }
-        inline Q_INT16 asSShort(uint i)
+        inline qint16 asSShort(uint i)
         {
             if(m_type == EXIF_TYPE_SSHORT)
                 return asExifNumber(i).m_sshort;
             return 0;
         }
-        inline void setValue(uint i, Q_INT16 v)
+        inline void setValue(uint i, qint16 v)
         {
             ((ExifNumber*)m_value)[i].m_sshort = v;
         }
-        inline Q_INT32 asSLong(uint i)
+        inline qint32 asSLong(uint i)
         {
             if(m_type == EXIF_TYPE_SLONG)
                 return asExifNumber(i).m_slong;
             return 0;
         }
-        inline void setValue(uint i, Q_INT32 v)
+        inline void setValue(uint i, qint32 v)
         {
             ((ExifNumber*)m_value)[i].m_slong = v;
         }
@@ -214,7 +214,7 @@ class ExifValue {
         {
             ((ExifNumber*)m_value)[i].m_srational = r;
         }
-        inline void setValue(uint i, Q_INT32 n, Q_INT32 d)
+        inline void setValue(uint i, qint32 n, qint32 d)
         {
             ((ExifNumber*)m_value)[i].m_srational.numerator = n;
             ((ExifNumber*)m_value)[i].m_srational.denominator = d;

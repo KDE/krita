@@ -32,7 +32,7 @@
 
 class KisSaveXmlVisitor : public KisLayerVisitor {
 public:
-    KisSaveXmlVisitor(QDomDocument doc, QDomElement element, Q_UINT32 &count, bool root=false) :
+    KisSaveXmlVisitor(QDomDocument doc, QDomElement element, quint32 &count, bool root=false) :
         KisLayerVisitor(),
         m_doc(doc),
         m_count(count),
@@ -136,7 +136,7 @@ public:
 private:
     QDomDocument m_doc;
     QDomElement m_elem;
-    Q_UINT32 &m_count;
+    quint32 &m_count;
     bool m_root;
 };
 

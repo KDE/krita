@@ -27,16 +27,16 @@
 #include <Q3PtrList>
 #include <Q3ValueList>
 #include <QMouseEvent>
-#include <klistview.h>
+#include <k3listview.h>
 
 class QMouseEvent;
 class QString;
-class KPopupMenu;
+class KMenu;
 class LayerItem;
 class LayerFolder;
 template<class T> class Q3PtrList;
 
-class LayerList: public KListView
+class LayerList: public K3ListView
 {
     Q_OBJECT
 
@@ -72,7 +72,7 @@ public:
     {
         enum { NewLayer = 0, NewFolder, RemoveLayer, LayerProperties, COUNT };
     };
-    KPopupMenu *contextMenu() const;
+    KMenu *contextMenu() const;
 
 public slots:
     void setFoldersCanBeActive( bool can );
@@ -147,7 +147,7 @@ protected slots:
     virtual void menuActivated( int id, LayerItem *layer );
 
 private:
-    typedef KListView super;
+    typedef K3ListView super;
     friend class LayerItem;
     friend class LayerToolTIp;
 
@@ -170,7 +170,7 @@ protected:
     virtual void findDrop( const QPoint &pos, Q3ListViewItem *&parent, Q3ListViewItem *&after );
 };
 
-class LayerItem: public KListViewItem
+class LayerItem: public K3ListViewItem
 {
 public:
     LayerItem( const QString &displayName, LayerList *parent, LayerItem *after = 0, int id = -1 );
@@ -244,7 +244,7 @@ protected:
     virtual QImage tooltipPreview() const;
 
 private:
-    typedef KListViewItem super;
+    typedef K3ListViewItem super;
     friend class LayerList;
     friend class LayerToolTip;
 

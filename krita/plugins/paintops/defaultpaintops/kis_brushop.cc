@@ -140,9 +140,9 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    Q_INT32 x;
+    qint32 x;
     double xFraction;
-    Q_INT32 y;
+    qint32 y;
     double yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
@@ -150,17 +150,17 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisPaintDeviceSP dab = 0;
 
-    Q_UINT8 origOpacity = m_painter->opacity();
+    quint8 origOpacity = m_painter->opacity();
     KisColor origColor = m_painter->paintColor();
 
     if (m_pressureOpacity)
-        m_painter->setOpacity((Q_INT8)(origOpacity * info.pressure));
+        m_painter->setOpacity((qint8)(origOpacity * info.pressure));
 
     if (m_pressureDarken) {
         KisColor darkened = origColor;
         // Darken docs aren't really clear about what exactly the amount param can have as value...
         darkened.colorSpace()->darken(origColor.data(), darkened.data(),
-            (Q_INT32)(255  - 75 * info.pressure), false, 0.0, 1);
+            (qint32)(255  - 75 * info.pressure), false, 0.0, 1);
         m_painter->setPaintColor(darkened);
     }
 
@@ -186,10 +186,10 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    Q_INT32 sx = dstRect.x() - x;
-    Q_INT32 sy = dstRect.y() - y;
-    Q_INT32 sw = dstRect.width();
-    Q_INT32 sh = dstRect.height();
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
     
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(),

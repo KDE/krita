@@ -104,7 +104,7 @@ void KisToolZoom::buttonRelease(KisButtonReleaseEvent *e)
         QPoint delta = m_endPos - m_startPos;
 
         if (sqrt(delta.x() * delta.x() + delta.y() * delta.y()) < 10) {
-            if (e->state() & Qt::ControlButton) {
+            if (e->state() & Qt::ControlModifier) {
                 controller->zoomOut(m_endPos.x(), m_endPos.y());
             } else {
                 controller->zoomIn(m_endPos.x(), m_endPos.y());
@@ -129,13 +129,13 @@ void KisToolZoom::deactivate()
 void KisToolZoom::slotTimer()
 {
 #if KDE_IS_VERSION(3,4,0)
-    int state = kapp->keyboardMouseState() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton);
+    int state = kapp->keyboardMouseState() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
 #else
     int state = kapp->keyboardModifiers() & (KApplication::ShiftModifier
             |KApplication::ControlModifier|KApplication::Modifier1);
 #endif
 
-    if (state & Qt::ControlButton) {
+    if (state & Qt::ControlModifier) {
         m_subject->canvasController()->setCanvasCursor(m_minusCursor);
     } else {
         m_subject->canvasController()->setCanvasCursor(m_plusCursor);

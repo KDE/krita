@@ -55,7 +55,7 @@ public:
     /**
      * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
      */
-    void eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h);
+    void eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h);
     /**
      * Overloaded version of the above function.
      */
@@ -64,7 +64,7 @@ public:
     /**
      * Fill a rectangle with a certain color.
      */
-    void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c);
+    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KisColor& c);
     /**
      * Overloaded version of the above function.
      */
@@ -73,17 +73,17 @@ public:
     /**
      * Fill a rectangle with a certain color and opacity.
      */
-    void fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c, Q_UINT8 opacity);
+    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KisColor& c, quint8 opacity);
     /**
      * Overloaded version of the above function.
      */
-    void fillRect(const QRect& rc, const KisColor& c, Q_UINT8 opacity);
+    void fillRect(const QRect& rc, const KisColor& c, quint8 opacity);
 
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
      */
-    void fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern);
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPattern * pattern);
     /**
      * Overloaded version of the above function.
      */
@@ -158,7 +158,7 @@ private:
 
 
 inline
-void KisFillPainter::fillRect(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const KisColor& c)
+void KisFillPainter::fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KisColor& c)
 {
     fillRect(x, y, w, h, c, OPACITY_OPAQUE);
 }
@@ -170,7 +170,7 @@ void KisFillPainter::fillRect(const QRect& rc, const KisColor& c)
 }
 
 inline
-void KisFillPainter::eraseRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h)
+void KisFillPainter::eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
 {
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     KisColor c(Qt::black, cs);
@@ -186,7 +186,7 @@ void KisFillPainter::eraseRect(const QRect& rc)
 }
 
 inline
-void KisFillPainter::fillRect(const QRect& rc, const KisColor& c, Q_UINT8 opacity)
+void KisFillPainter::fillRect(const QRect& rc, const KisColor& c, quint8 opacity)
 {
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }

@@ -87,13 +87,13 @@ KisProfile::~KisProfile()
 bool KisProfile::load()
 {
     QFile file(m_filename);
-    file.open(IO_ReadOnly);
+    file.open(QIODevice::ReadOnly);
     m_rawData = file.readAll();
     m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
     file.close();
 
     if (m_profile == 0) {
-        kdWarning() << "Failed to load profile from " << m_filename << endl;
+        kWarning() << "Failed to load profile from " << m_filename << endl;
     }
 
     return init();
@@ -141,7 +141,7 @@ cmsHPROFILE KisProfile::profile()
 #if 0
 	if (m_profile = 0) {
 	    QFile file(m_filename);
-	    file.open(IO_ReadOnly);
+	    file.open(QIODevice::ReadOnly);
 	    m_rawData = file.readAll();
 	    m_profile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD)m_rawData.size());
         file.close();
@@ -174,7 +174,7 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
     int format;
     unsigned long nitems;
     unsigned long bytes_after;
-    Q_UINT8 * str;
+    quint8 * str;
 
     static Atom icc_atom = XInternAtom( qt_xdisplay(), "_ICC_PROFILE", False );
 
@@ -193,7 +193,7 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
                 ) {
 
         QByteArray bytes (nitems);
-        bytes.assign((char*)str, (Q_UINT32)nitems);
+        bytes.assign((char*)str, (quint32)nitems);
 
         return new KisProfile(bytes);
     } else {

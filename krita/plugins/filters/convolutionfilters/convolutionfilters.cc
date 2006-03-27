@@ -29,10 +29,10 @@
 
 #include "kis_custom_convolution_filter.h"
 
-KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
-                          Q_INT32 i3, Q_INT32 i4, Q_INT32 i5,
-                          Q_INT32 i6, Q_INT32 i7, Q_INT32 i8,
-                          Q_INT32 factor, Q_INT32 offset )
+KisKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
+                          qint32 i3, qint32 i4, qint32 i5,
+                          qint32 i6, qint32 i7, qint32 i8,
+                          qint32 factor, qint32 offset )
 {
     KisKernelSP kernel = new KisKernel();
     kernel->width = 3;
@@ -41,7 +41,7 @@ KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
     kernel->factor = factor;
     kernel->offset = offset;
 
-    kernel->data = new Q_INT32[9];
+    kernel->data = new qint32[9];
     kernel->data[0] = i0;
     kernel->data[1] = i1;
     kernel->data[2] = i2;

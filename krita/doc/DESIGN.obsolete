@@ -118,7 +118,7 @@ Plugins
   can do with plugins.
 
   To judge from the code in kis_plugin_server, it never got beyond
-  an idea. (kdDebug() << "hallo\n"...)
+  an idea. (kDebug() << "hallo\n"...)
 
   (This code should be removed.)
 

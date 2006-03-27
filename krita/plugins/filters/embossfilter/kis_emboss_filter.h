@@ -27,13 +27,13 @@
 class KisEmbossFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisEmbossFilterConfiguration(Q_UINT32 depth)
+    KisEmbossFilterConfiguration(quint32 depth)
         : KisFilterConfiguration( "emboss", 1 )
     {
         setProperty("depth", depth);
     };
 public:
-    inline Q_UINT32 depth() { return getInt("depth"); };
+    inline quint32 depth() { return getInt("depth"); };
 };
 
 class KisEmbossFilter : public KisFilter

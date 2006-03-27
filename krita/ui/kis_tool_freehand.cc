@@ -211,7 +211,7 @@ void KisToolFreehand::initPaint(KisEvent *)
 
     }
 
-/*    kdDebug() << "target: " << m_target << "( " << m_target->name() << " )"
+/*    kDebug() << "target: " << m_target << "( " << m_target->name() << " )"
             << " source: " << m_source << "( " << m_source->name() << " )"
             << ", incremental " << m_paintIncremental
             << ", paint on selection: " << m_paintOnSelection
@@ -311,8 +311,8 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
 
         gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
-        gc.setViewport(0, 0, static_cast<Q_INT32>(canvas->width() * m_subject->zoomFactor()),
-                       static_cast<Q_INT32>(canvas->height() * m_subject->zoomFactor()));
+        gc.setViewport(0, 0, static_cast<qint32>(canvas->width() * m_subject->zoomFactor()),
+                       static_cast<qint32>(canvas->height() * m_subject->zoomFactor()));
         gc.translate((- controller->horzValue()) / m_subject->zoomFactor(),
                         (- controller->vertValue()) / m_subject->zoomFactor());
 

@@ -50,36 +50,36 @@ class KisAlphaMask : public KShared {
     /**
        Create a transparent mask.
     */
-    KisAlphaMask(Q_INT32 width, Q_INT32 height);
+    KisAlphaMask(qint32 width, qint32 height);
 
     virtual ~KisAlphaMask();
 
     /**
        @return the number of alpha values in a scanline.
     */
-    Q_INT32 height() const;
+    qint32 height() const;
 
     /**
        @return the number of lines in the mask.
      */
-       Q_INT32 width() const;
+       qint32 width() const;
 
     /**
        @return the alpha value at the specified position.
 
-       Returns Q_UINT8 OPACITY_TRANSPARENT if the value is
+       Returns quint8 OPACITY_TRANSPARENT if the value is
        outside the bounds of the mask.
 
        XXX: this is, of course, not the best way of masking.
        Better would be to let KisAlphaMask fill a chunk of memory
        with the alpha values at the right position, something like
-       void applyMask(Q_UINT8 *pixeldata, Q_INT32 pixelWidth,
-       Q_INT32 alphaPos). That would be fastest, or we could
+       void applyMask(quint8 *pixeldata, qint32 pixelWidth,
+       qint32 alphaPos). That would be fastest, or we could
        provide an iterator over the mask, that would be nice, too.
     */
-    Q_UINT8 alphaAt(Q_INT32 x, Q_INT32 y) const;
+    quint8 alphaAt(qint32 x, qint32 y) const;
 
-    void setAlphaAt(Q_INT32 x, Q_INT32 y, Q_UINT8 alpha);
+    void setAlphaAt(qint32 x, qint32 y, quint8 alpha);
 
     // Create a new mask by interpolating between mask1 and mask2 as t
     // goes from 0 to 1.
@@ -89,9 +89,9 @@ private:
     void computeAlpha(const QImage& img);
     void copyAlpha(const QImage& img);
 
-    Q3ValueVector<Q_UINT8> m_data;
-    Q_INT32 m_width;
-    Q_INT32 m_height;
+    Q3ValueVector<quint8> m_data;
+    qint32 m_width;
+    qint32 m_height;
 };
 
 #endif // KIS_ALPHA_MASK_

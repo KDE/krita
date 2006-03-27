@@ -53,22 +53,22 @@ void KisIconItem::updatePixmaps()
 
         if (img.width() > THUMB_SIZE || img.height() > THUMB_SIZE) {
             QImage thumb = img;
-            Q_INT32 xsize = THUMB_SIZE;
-            Q_INT32 ysize = THUMB_SIZE;
-            Q_INT32 picW  = thumb.width();
-            Q_INT32 picH  = thumb.height();
+            qint32 xsize = THUMB_SIZE;
+            qint32 ysize = THUMB_SIZE;
+            qint32 picW  = thumb.width();
+            qint32 picH  = thumb.height();
 
             if (picW > picH) {
                 float yFactor = (float)((float)(float)picH / (float)picW);
 
-                ysize = (Q_INT32)(yFactor * (float)THUMB_SIZE);
+                ysize = (qint32)(yFactor * (float)THUMB_SIZE);
             
                 if (ysize > THUMB_SIZE) 
                     ysize = THUMB_SIZE;
             } else if (picW < picH) {
                 float xFactor = (float)((float)picW / (float)picH);
 
-                xsize = (Q_INT32)(xFactor * (float)THUMB_SIZE);
+                xsize = (qint32)(xFactor * (float)THUMB_SIZE);
 
                 if (xsize > THUMB_SIZE) 
                     xsize = THUMB_SIZE;

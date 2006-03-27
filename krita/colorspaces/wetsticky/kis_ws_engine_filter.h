@@ -31,13 +31,13 @@ public:
 
     KisWSEngineFilterConfiguration() { m_pixels = 10000; }
 
-    KisWSEngineFilterConfiguration(Q_UINT32 pixels = 0) { m_pixels = pixels; }
+    KisWSEngineFilterConfiguration(quint32 pixels = 0) { m_pixels = pixels; }
 
-    Q_UINT32 pixels() { return m_pixels; }
+    quint32 pixels() { return m_pixels; }
 
 private:
 
-    Q_UINT32 m_pixels; // The number of pixels the filter should
+    quint32 m_pixels; // The number of pixels the filter should
                // move. 0 means keep running indefinitely
 
 

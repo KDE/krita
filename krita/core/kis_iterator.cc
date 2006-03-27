@@ -25,7 +25,7 @@
 #include "kis_datamanager.h"
 #include "kis_tilediterator.h"
 
-KisRectIterator::KisRectIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable) 
+KisRectIterator::KisRectIterator ( KisDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h, bool writable) 
 {
     m_iter = new KisTiledRectIterator(dm, x, y, w, h, writable);
 }
@@ -44,11 +44,11 @@ KisRectIterator::~KisRectIterator()
 {
 }
 
-Q_UINT8 * KisRectIterator::rawData() const { return m_iter->rawData();}
+quint8 * KisRectIterator::rawData() const { return m_iter->rawData();}
 
-const Q_UINT8 * KisRectIterator::oldRawData() const { return m_iter->oldRawData();}
+const quint8 * KisRectIterator::oldRawData() const { return m_iter->oldRawData();}
 
-Q_INT32 KisRectIterator::nConseqPixels() const { return m_iter->nConseqPixels(); }
+qint32 KisRectIterator::nConseqPixels() const { return m_iter->nConseqPixels(); }
 
 KisRectIterator & KisRectIterator::operator+=(int n) { m_iter->operator+=(n); return *this; }
 
@@ -56,12 +56,12 @@ KisRectIterator & KisRectIterator::operator++() { m_iter->operator++(); return *
 
 bool KisRectIterator::isDone()  const { return m_iter->isDone(); }
 
-Q_INT32 KisRectIterator::x() const { return m_iter->x(); }
-Q_INT32 KisRectIterator::y() const { return m_iter->y(); }
+qint32 KisRectIterator::x() const { return m_iter->x(); }
+qint32 KisRectIterator::y() const { return m_iter->y(); }
 
 //---------------------------------------------------------------------------------------
 
-KisHLineIterator::KisHLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 w, bool writable) 
+KisHLineIterator::KisHLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32 w, bool writable) 
 {
     m_iter = new KisTiledHLineIterator(dm, x, y, w, writable);
 }
@@ -82,16 +82,16 @@ KisHLineIterator::~KisHLineIterator()
 {
 }
 
-Q_UINT8 *KisHLineIterator::rawData() const 
+quint8 *KisHLineIterator::rawData() const 
 { 
     return m_iter->rawData();
 }
 
-const Q_UINT8 *KisHLineIterator::oldRawData() const { return m_iter->oldRawData();}
+const quint8 *KisHLineIterator::oldRawData() const { return m_iter->oldRawData();}
 
 KisHLineIterator & KisHLineIterator::operator++() { m_iter->operator++(); return *this; }
 
-Q_INT32 KisHLineIterator::nConseqHPixels() const { return m_iter->nConseqHPixels(); }
+qint32 KisHLineIterator::nConseqHPixels() const { return m_iter->nConseqHPixels(); }
 
 KisHLineIterator & KisHLineIterator::operator+=(int n) { m_iter->operator+=(n); return *this; }
 
@@ -99,15 +99,15 @@ KisHLineIterator & KisHLineIterator::operator--() { m_iter->operator--(); return
 
 bool KisHLineIterator::isDone()  const { return m_iter->isDone(); }
 
-Q_INT32 KisHLineIterator::x() const { return m_iter->x(); }
+qint32 KisHLineIterator::x() const { return m_iter->x(); }
  
-Q_INT32 KisHLineIterator::y() const { return m_iter->y(); }
+qint32 KisHLineIterator::y() const { return m_iter->y(); }
 
 void KisHLineIterator::nextRow() { m_iter->nextRow(); }
 
 //---------------------------------------------------------------------------------------
 
-KisVLineIterator::KisVLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32  h, bool writable)
+KisVLineIterator::KisVLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32  h, bool writable)
 {
     m_iter = new KisTiledVLineIterator(dm, x, y, h, writable);
 }
@@ -127,16 +127,16 @@ KisVLineIterator::~KisVLineIterator()
 {
 }
 
-Q_UINT8 *KisVLineIterator::rawData() const { return m_iter->rawData();}
+quint8 *KisVLineIterator::rawData() const { return m_iter->rawData();}
 
-const Q_UINT8 * KisVLineIterator::oldRawData() const { return m_iter->oldRawData();}
+const quint8 * KisVLineIterator::oldRawData() const { return m_iter->oldRawData();}
 
 KisVLineIterator & KisVLineIterator::operator++() { m_iter->operator++(); return *this; }
 
 bool KisVLineIterator::isDone() const { return m_iter->isDone(); }
 
-Q_INT32 KisVLineIterator::x() const { return m_iter->x(); }
+qint32 KisVLineIterator::x() const { return m_iter->x(); }
 
-Q_INT32 KisVLineIterator::y() const { return m_iter->y(); }
+qint32 KisVLineIterator::y() const { return m_iter->y(); }
 
 void KisVLineIterator::nextCol() { return m_iter->nextCol(); }

@@ -26,13 +26,13 @@ void KisAutobrushShape::createBrush( QImage* img)
     {
         for(int i = 0; i < m_w; i++)
         {
-            Q_INT8 v = valueAt(i,j);
+            qint8 v = valueAt(i,j);
             img->setPixel( i, j, qRgb(v,v,v));
         }
     }
 }
 
-KisAutobrushCircleShape::KisAutobrushCircleShape(Q_INT32 w, Q_INT32 h, double fh, double fv)
+KisAutobrushCircleShape::KisAutobrushCircleShape(qint32 w, qint32 h, double fh, double fv)
     : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
         m_xcentre ( w / 2.0 ),
         m_ycentre ( h / 2.0 ),
@@ -42,7 +42,7 @@ KisAutobrushCircleShape::KisAutobrushCircleShape(Q_INT32 w, Q_INT32 h, double fh
         m_yfadecoef ( (m_fv == 0) ? 1 : ( 1.0 / m_fv))
 {
 }
-Q_INT8 KisAutobrushCircleShape::valueAt(Q_INT32 x, Q_INT32 y)
+qint8 KisAutobrushCircleShape::valueAt(qint32 x, qint32 y)
 {
     double xr = (x - m_xcentre) + 0.5;
     double yr = (y - m_ycentre) + 0.5;
@@ -80,14 +80,14 @@ Q_INT8 KisAutobrushCircleShape::valueAt(Q_INT32 x, Q_INT32 y)
     }
 }
 
-KisAutobrushRectShape::KisAutobrushRectShape(Q_INT32 w, Q_INT32 h, double fh, double fv)
+KisAutobrushRectShape::KisAutobrushRectShape(qint32 w, qint32 h, double fh, double fv)
     : KisAutobrushShape( w, h, w / 2.0 - fh, h / 2.0 - fv),
         m_xcentre ( w / 2.0 ),
         m_ycentre ( h / 2.0 ),
         m_c( fv/fh)
 {
 }
-Q_INT8 KisAutobrushRectShape::valueAt(Q_INT32 x, Q_INT32 y)
+qint8 KisAutobrushRectShape::valueAt(qint32 x, qint32 y)
 {
     double xr = QABS(x - m_xcentre);
     double yr = QABS(y - m_ycentre);

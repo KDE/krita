@@ -37,7 +37,7 @@ class Q3Button;
 class QPainter;
 class QWidget;
 class KIconLoader;
-class KPopupMenu;
+class KMenu;
 class KoDocumentEntry;
 class KisCompositeOp;
 class KisLayerList;
@@ -112,7 +112,7 @@ private:
     KisLayerList* list() const;
     void markModified(KisLayer *layer);
 
-    KPopupMenu *m_newLayerMenu;
+    KMenu *m_newLayerMenu;
     KoPartSelectAction *m_partLayerAction;
     KisImageSP m_image;
     Q3ValueList<int> m_modified;

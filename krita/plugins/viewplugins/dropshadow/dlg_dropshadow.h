@@ -42,10 +42,10 @@ public:
 
 public:
 
-    Q_INT32 getXOffset();
-    Q_INT32 getYOffset();
-    Q_INT32 getBlurRadius();
-    Q_UINT8 getShadowOpacity();
+    qint32 getXOffset();
+    qint32 getYOffset();
+    qint32 getBlurRadius();
+    quint8 getShadowOpacity();
     QColor getShadowColor();
     bool allowResizingChecked();
 private slots:

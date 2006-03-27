@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kiconloader.h>
 
 #include "kis_progress_subject.h"
@@ -53,7 +53,7 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, WFlags f) 
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setAutoAdd(true);
 
-    QIconSet cancelIconSet = SmallIconSet("stop");
+    QIcon cancelIconSet = SmallIconSet("stop");
 
     m_cancelButton = new EscapeButton(this, "cancel_button");
     m_cancelButton->setIconSet(cancelIconSet);
@@ -85,7 +85,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
 
         if (canCancel) {
             if (modal) {
-                kdDebug() << "grabbing 1\n";
+                kDebug() << "grabbing 1\n";
                 m_cancelButton->grabMouse();
                 m_cancelButton->grabKeyboard();
             }
@@ -95,7 +95,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
 
             if (modal) {
                 // Only visible widgets can grab.
-                kdDebug() << "grabbing 2\n";
+                kDebug() << "grabbing 2\n";
                 grabMouse();
                 grabKeyboard();
             }

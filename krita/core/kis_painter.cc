@@ -147,12 +147,12 @@ QRect KisPainter::dirtyRect() {
     return r;
 }
 
-void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
+void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KisCompositeOp& op,
                         KisPaintDeviceSP srcdev,
-                        Q_UINT8 opacity,
-                        Q_INT32 sx, Q_INT32 sy,
-                        Q_INT32 sw, Q_INT32 sh)
+                        quint8 opacity,
+                        qint32 sx, qint32 sy,
+                        qint32 sw, qint32 sh)
 {
     if (srcdev == 0) {
         return;
@@ -180,34 +180,34 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
 
     KisColorSpace * srcCs = srcdev->colorSpace();
 
-    Q_INT32 dstY = dy;
-    Q_INT32 srcY = sy;
-    Q_INT32 rowsRemaining = sh;
+    qint32 dstY = dy;
+    qint32 srcY = sy;
+    qint32 rowsRemaining = sh;
 
     while (rowsRemaining > 0) {
 
-        Q_INT32 dstX = dx;
-        Q_INT32 srcX = sx;
-        Q_INT32 columnsRemaining = sw;
-        Q_INT32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
-        Q_INT32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
+        qint32 dstX = dx;
+        qint32 srcX = sx;
+        qint32 columnsRemaining = sw;
+        qint32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
+        qint32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
 
-        Q_INT32 rows = QMIN(numContiguousDstRows, numContiguousSrcRows);
-        rows = QMIN(rows, rowsRemaining);
+        qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
+        rows = qMin(rows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
-            Q_INT32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
-            Q_INT32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
+            qint32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
+            qint32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
 
-            Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns);
-            columns = QMIN(columns, columnsRemaining);
+            qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
+            columns = qMin(columns, columnsRemaining);
 
-            const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
-            Q_INT32 srcRowStride = srcdev->rowStride(srcX, srcY);
+            const quint8 *srcData = srcdev->pixel(srcX, srcY);
+            qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
 
-            Q_UINT8 *dstData = m_device->writablePixel(dstX, dstY);
-            Q_INT32 dstRowStride = m_device->rowStride(dstX, dstY);
+            quint8 *dstData = m_device->writablePixel(dstX, dstY);
+            qint32 dstRowStride = m_device->rowStride(dstX, dstY);
 
 
             m_colorSpace->bitBlt(dstData,
@@ -233,13 +233,13 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
     }
 }
 
-void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
+void KisPainter::bltSelection(qint32 dx, qint32 dy,
                   const KisCompositeOp &op,
                   KisPaintDeviceSP srcdev,
                   KisSelectionSP seldev,
-                  Q_UINT8 opacity,
-                  Q_INT32 sx, Q_INT32 sy,
-                  Q_INT32 sw, Q_INT32 sh)
+                  quint8 opacity,
+                  qint32 sx, qint32 sy,
+                  qint32 sw, qint32 sh)
 {
     if (srcdev == 0) return;
 
@@ -249,9 +249,9 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
     if (seldev->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
 /*
-        kdDebug() << "Blitting outside selection rect\n";
+        kDebug() << "Blitting outside selection rect\n";
 
-        kdDebug() << "srcdev: " << srcdev << " (" << srcdev->name() << ")"
+        kDebug() << "srcdev: " << srcdev << " (" << srcdev->name() << ")"
                 << ", seldev: " << seldev << " (" << seldev->name() << ")"
                 << ". dx, dy " << dx << "," << dy
                 << ". sx, sy : sw, sy " << sx << "," << sy << " : " << sw << "," << sh << endl;
@@ -281,41 +281,41 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 
     KisColorSpace * srcCs = srcdev->colorSpace();
 
-    Q_INT32 dstY = dy;
-    Q_INT32 srcY = sy;
-    Q_INT32 rowsRemaining = sh;
+    qint32 dstY = dy;
+    qint32 srcY = sy;
+    qint32 rowsRemaining = sh;
 
     while (rowsRemaining > 0) {
 
-        Q_INT32 dstX = dx;
-        Q_INT32 srcX = sx;
-        Q_INT32 columnsRemaining = sw;
-        Q_INT32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
-        Q_INT32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
-        Q_INT32 numContiguousSelRows = seldev->numContiguousRows(dstY, dstX, dstX + sw - 1);
+        qint32 dstX = dx;
+        qint32 srcX = sx;
+        qint32 columnsRemaining = sw;
+        qint32 numContiguousDstRows = m_device->numContiguousRows(dstY, dstX, dstX + sw - 1);
+        qint32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
+        qint32 numContiguousSelRows = seldev->numContiguousRows(dstY, dstX, dstX + sw - 1);
 
-        Q_INT32 rows = QMIN(numContiguousDstRows, numContiguousSrcRows);
-        rows = QMIN(numContiguousSelRows, rows);
-        rows = QMIN(rows, rowsRemaining);
+        qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
+        rows = qMin(numContiguousSelRows, rows);
+        rows = qMin(rows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
-            Q_INT32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
-            Q_INT32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
-            Q_INT32 numContiguousSelColumns = seldev->numContiguousColumns(dstX, dstY, dstY + rows - 1);
+            qint32 numContiguousDstColumns = m_device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
+            qint32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
+            qint32 numContiguousSelColumns = seldev->numContiguousColumns(dstX, dstY, dstY + rows - 1);
 
-            Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns);
-            columns = QMIN(numContiguousSelColumns, columns);
-            columns = QMIN(columns, columnsRemaining);
+            qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
+            columns = qMin(numContiguousSelColumns, columns);
+            columns = qMin(columns, columnsRemaining);
 
-            Q_UINT8 *dstData = m_device->writablePixel(dstX, dstY);
-            Q_INT32 dstRowStride = m_device->rowStride(dstX, dstY);
+            quint8 *dstData = m_device->writablePixel(dstX, dstY);
+            qint32 dstRowStride = m_device->rowStride(dstX, dstY);
 
-            const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
-            Q_INT32 srcRowStride = srcdev->rowStride(srcX, srcY);
+            const quint8 *srcData = srcdev->pixel(srcX, srcY);
+            qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
 
-            const Q_UINT8 *selData = seldev->pixel(dstX, dstY);
-            Q_INT32 selRowStride = seldev->rowStride(dstX, dstY);
+            const quint8 *selData = seldev->pixel(dstX, dstY);
+            qint32 selRowStride = seldev->rowStride(dstX, dstY);
 
             m_colorSpace->bitBlt(dstData,
                                    dstRowStride,
@@ -341,12 +341,12 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
 }
 
 
-void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
+void KisPainter::bltSelection(qint32 dx, qint32 dy,
                   const KisCompositeOp& op,
                   KisPaintDeviceSP srcdev,
-                  Q_UINT8 opacity,
-                  Q_INT32 sx, Q_INT32 sy,
-                  Q_INT32 sw, Q_INT32 sh)
+                  quint8 opacity,
+                  qint32 sx, qint32 sy,
+                  qint32 sw, qint32 sh)
 {
     if (m_device == 0) return;
     if (!m_device->hasSelection()) {
@@ -795,7 +795,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
         // Currently unsupported, fall through
     case FillStyleStrokes:
         // Currently unsupported, fall through
-        kdWarning(DBG_AREA_CORE) << "Unknown or unsupported fill style in fillPolygon\n";
+        kWarning(DBG_AREA_CORE) << "Unknown or unsupported fill style in fillPolygon\n";
     case FillStyleForegroundColor:
         fillPainter.fillRect(boundingRectangle, paintColor(), OPACITY_OPAQUE);
         break;

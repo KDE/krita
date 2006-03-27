@@ -62,9 +62,9 @@ void KisRainDropsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Kis
     Q_UNUSED(dst);
 
     //read the filter configuration values from the KisFilterConfiguration object
-    Q_UINT32 dropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
-    Q_UINT32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
-    Q_UINT32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
+    quint32 dropSize = ((KisRainDropsFilterConfiguration*)configuration)->dropSize();
+    quint32 number = ((KisRainDropsFilterConfiguration*)configuration)->number();
+    quint32 fishEyes = ((KisRainDropsFilterConfiguration*)configuration)->fishEyes();
 
 
     rainDrops(src, dst, rect, dropSize, number, fishEyes);
@@ -267,9 +267,9 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
                             KisHLineIterator oldIt = src->createHLineIterator(rect.x() + l, rect.y() + k, 1, false);
                             cs->toQColor(oldIt.oldRawData(), &originalColor);
 
-                            int newRed = CLAMP(originalColor.red() + Bright, 0, Q_UINT8_MAX);
-                            int newGreen = CLAMP(originalColor.green() + Bright, 0, Q_UINT8_MAX);
-                            int newBlue = CLAMP(originalColor.blue() + Bright, 0, Q_UINT8_MAX);
+                            int newRed = CLAMP(originalColor.red() + Bright, 0, quint8_MAX);
+                            int newGreen = CLAMP(originalColor.green() + Bright, 0, quint8_MAX);
+                            int newBlue = CLAMP(originalColor.blue() + Bright, 0, quint8_MAX);
 
                             QColor newColor;
                             newColor.setRgb(newRed, newGreen, newBlue);

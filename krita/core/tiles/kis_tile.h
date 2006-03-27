@@ -31,8 +31,8 @@ class KisTiledIterator;
  */
 class KisTile  {
 public:
-    KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, const Q_UINT8 *defPixel);
-    KisTile(const KisTile& rhs, Q_INT32 col, Q_INT32 row);
+    KisTile(qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel);
+    KisTile(const KisTile& rhs, qint32 col, qint32 row);
     KisTile(const KisTile& rhs);
     ~KisTile();
 
@@ -40,16 +40,16 @@ public:
     void release();
     void allocate();
 
-    Q_UINT8 *data(Q_INT32 xoff, Q_INT32 yoff) const;
-    Q_UINT8 *data() const { return m_data; }
+    quint8 *data(qint32 xoff, qint32 yoff) const;
+    quint8 *data() const { return m_data; }
 
-    void setData(const Q_UINT8 *pixel);
+    void setData(const quint8 *pixel);
 
-    Q_INT32 refCount() const;
+    qint32 refCount() const;
     void ref();
 
-    Q_INT32 getRow() const { return m_row; }
-    Q_INT32 getCol() const { return m_col; }
+    qint32 getRow() const { return m_row; }
+    qint32 getCol() const { return m_col; }
 
     QRect extent() const { return QRect(m_col * WIDTH, m_row * HEIGHT, WIDTH, HEIGHT); }
 
@@ -59,7 +59,7 @@ public:
     /// Functions that are needed for locking the tiles into memory for caching
     void addReader();
     void removeReader();
-    Q_INT32 readers() { return m_nReadlock; }
+    qint32 readers() { return m_nReadlock; }
 
     friend class KisTiledIterator;
     friend class KisTiledDataManager;
@@ -69,16 +69,16 @@ private:
     KisTile& operator=(const KisTile&);
 
 private:
-    Q_UINT8 *m_data;
-    Q_INT32 m_nReadlock;
-    Q_INT32 m_row;
-    Q_INT32 m_col;
-    Q_INT32 m_pixelSize;
+    quint8 *m_data;
+    qint32 m_nReadlock;
+    qint32 m_row;
+    qint32 m_col;
+    qint32 m_pixelSize;
     KisTile *m_nextTile;
 
 public:
-    static const Q_INT32 WIDTH;
-    static const Q_INT32 HEIGHT;
+    static const qint32 WIDTH;
+    static const qint32 HEIGHT;
 };
 
 #endif // KIS_TILE_H_

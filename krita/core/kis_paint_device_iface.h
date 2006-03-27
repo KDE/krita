@@ -37,12 +37,12 @@ k_dcop:
     /**
      * Return the number of bytes a pixel takes.
      */
-    Q_INT32 pixelSize() const;
+    qint32 pixelSize() const;
 
     /**
      * Return the number of channels a pixel takes
      */
-    Q_INT32 nChannels() const;
+    qint32 nChannels() const;
 
     /**
      * Read the bytes representing the rectangle described by x, y, w, h into
@@ -54,7 +54,7 @@ k_dcop:
      * Reading from areas not previously initialized will read the default
      * pixel value into data.
      */
-    QByteArray readBytes(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    QByteArray readBytes(qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
      * Copy the bytes in data into the rect specified by x, y, w, h. If there
@@ -64,7 +64,7 @@ k_dcop:
      * If the data is written to areas of the paint device not previously initialized,
      * the paint device will grow.
      */
-    void writeBytes(QByteArray bytes, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    void writeBytes(QByteArray bytes, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
      * Get the colorspace of this image

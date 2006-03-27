@@ -95,10 +95,10 @@ public:
     double  azimuth;
     double  elevation;
     double  depth;
-    Q_INT32 xofs;
-    Q_INT32 yofs;
-    Q_INT32 waterlevel;
-    Q_INT32 ambient;
+    qint32 xofs;
+    qint32 yofs;
+    qint32 waterlevel;
+    qint32 ambient;
     bool    compensate;
     bool    invert;
     bool    tiled;

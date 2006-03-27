@@ -34,9 +34,9 @@
 #include "kis_point.h"
 
 
-const Q_INT32 STARTING_PAINTLOAD = 100;
-const Q_INT32 CANVAS_WETNESS = 10;
-const Q_INT32 NUMBER_OF_TUFTS = 16;
+const qint32 STARTING_PAINTLOAD = 100;
+const qint32 CANVAS_WETNESS = 10;
+const qint32 NUMBER_OF_TUFTS = 16;
 
 class KisSmearyOp::SmearyTuft {
 
@@ -50,7 +50,7 @@ public:
      *        by picking up paint from the canvas
      * @param color the initial paint color. Will change through contact with color on the canvas
      */
-    SmearyTuft(Q_INT32 distanceFromCenter, Q_INT32 paintload, KisColor color)
+    SmearyTuft(qint32 distanceFromCenter, qint32 paintload, KisColor color)
         : m_distanceFromCenter(distanceFromCenter)
         , m_paintload(paintload)
         , m_color(color) {};
@@ -78,8 +78,8 @@ public:
     };
 
 public:
-    Q_INT32 m_distanceFromCenter;
-    Q_INT32 m_paintload;
+    qint32 m_distanceFromCenter;
+    qint32 m_paintload;
     KisColor m_color;
 
 };
@@ -124,7 +124,7 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    Q_INT32 x, y;
+    qint32 x, y;
     double xFraction, yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);

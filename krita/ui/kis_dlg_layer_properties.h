@@ -31,7 +31,7 @@ class KisDlgLayerProperties : public KDialogBase {
 
 public:
     KisDlgLayerProperties(const QString& deviceName,
-                        Q_INT32 opacity,
+                        qint32 opacity,
                         const KisCompositeOp& compositeOp,
                         const KisColorSpace * colorSpace,
                         QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
@@ -39,7 +39,7 @@ public:
     virtual ~KisDlgLayerProperties();
 
     QString getName() const;
-    Q_INT32 getOpacity() const;
+    qint32 getOpacity() const;
     KisCompositeOp getCompositeOp() const;
 
 protected slots:

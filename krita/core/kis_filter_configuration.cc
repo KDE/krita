@@ -102,7 +102,7 @@ const QString & KisFilterConfiguration::name() const
     return m_name;
 }
 
-Q_INT32 KisFilterConfiguration::version() const
+qint32 KisFilterConfiguration::version() const
 {
     return m_version;
 }

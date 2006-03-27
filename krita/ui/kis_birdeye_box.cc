@@ -133,20 +133,20 @@ namespace {
                     KisPaintDevice thumbnailRect(m_image->colorSpace(), "thumbnailRect");
                     KisPaintDeviceSP mergedImage = m_image->projection();
                     
-                    Q_INT32 imageWidth = m_image->width();
-                    Q_INT32 imageHeight = m_image->height();
-                    Q_UINT32 pixelSize = m_image->colorSpace()->pixelSize();
+                    qint32 imageWidth = m_image->width();
+                    qint32 imageHeight = m_image->height();
+                    quint32 pixelSize = m_image->colorSpace()->pixelSize();
 
-                    for (Q_INT32 y = 0; y < r.height(); ++y) {
+                    for (qint32 y = 0; y < r.height(); ++y) {
 
                         KisHLineIterator it = thumbnailRect.createHLineIterator(0, y, r.width(), true);
-                        Q_INT32 thumbnailY = r.y() + y;
-                        Q_INT32 thumbnailX = r.x();
-                        Q_INT32 imageY = (thumbnailY * imageHeight) / thumbnailSize.height();
+                        qint32 thumbnailY = r.y() + y;
+                        qint32 thumbnailX = r.x();
+                        qint32 imageY = (thumbnailY * imageHeight) / thumbnailSize.height();
 
                         while (!it.isDone()) {
 
-                            Q_INT32 imageX = (thumbnailX * imageWidth) / thumbnailSize.width();
+                            qint32 imageX = (thumbnailX * imageWidth) / thumbnailSize.width();
 
                             KisColor pixelColor = mergedImage->colorAt(imageX, imageY);
                             memcpy(it.rawData(), pixelColor.data(), pixelSize);
@@ -188,7 +188,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
     m_birdEyePanel = new KoBirdEyePanel(m_zoomAdapter, ktp, kpc, this);
 
-    connect(view, SIGNAL(cursorPosition( Q_INT32, Q_INT32 )), m_birdEyePanel, SLOT(cursorPosChanged( Q_INT32, Q_INT32 )));
+    connect(view, SIGNAL(cursorPosition( qint32, qint32 )), m_birdEyePanel, SLOT(cursorPosChanged( qint32, qint32 )));
     connect(view, SIGNAL(viewTransformationsChanged()), m_birdEyePanel, SLOT(slotViewTransformationChanged()));
 
     l->addWidget(m_birdEyePanel);
@@ -242,7 +242,7 @@ void KisBirdEyeBox::setImage(KisImageSP image)
 
     if (m_image) {
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
-        connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
+        connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
         connect(m_image, SIGNAL(sigColorSpaceChanged(KisColorSpace *)), SLOT(slotImageColorSpaceChanged(KisColorSpace *)));
         m_birdEyePanel->slotUpdate(m_image->bounds());
         slotImageColorSpaceChanged(m_image->colorSpace());
@@ -264,7 +264,7 @@ void KisBirdEyeBox::slotImageUpdated(QRect r)
     m_dirtyRect |= r;
 }
 
-void KisBirdEyeBox::slotImageSizeChanged(Q_INT32 /*w*/, Q_INT32 /*h*/)
+void KisBirdEyeBox::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 {
     if (m_image) {
         m_birdEyePanel->slotUpdate(m_image->bounds());

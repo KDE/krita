@@ -36,15 +36,15 @@ public:
              const char* name = 0);
     ~DlgLayerSize();
 
-    void setWidth(Q_UINT32 w);
-    void setWidthPercent(Q_UINT32 w);
-    void setMaximumWidth(Q_UINT32 w);
-    Q_INT32 width();
+    void setWidth(quint32 w);
+    void setWidthPercent(quint32 w);
+    void setMaximumWidth(quint32 w);
+    qint32 width();
 
-    void setHeight(Q_UINT32 h);
-    void setHeightPercent(Q_UINT32 h);
-    void setMaximumHeight(Q_UINT32 h);
-    Q_INT32 height();
+    void setHeight(quint32 h);
+    void setHeightPercent(quint32 h);
+    void setMaximumHeight(quint32 h);
+    qint32 height();
     KisFilterStrategy *filterType();
 
 private slots:

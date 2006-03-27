@@ -47,10 +47,10 @@
 
 #include "kis_tool_selectsimilar.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const Q_UINT8 * c, int fuzziness, enumSelectionMode mode)
+void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 * c, int fuzziness, enumSelectionMode mode)
 {
     // XXX: Multithread this!
-    Q_INT32 x, y, w, h;
+    qint32 x, y, w, h;
 
     dev->exactBounds(x, y, w, h);
 
@@ -63,7 +63,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const Q_UINT8
             //if (dev->colorSpace()->hasAlpha())
             //    opacity = dev->colorSpace()->getAlpha(hiter.rawData());
 
-            Q_UINT8 match = cs->difference(c, hiter.rawData());
+            quint8 match = cs->difference(c, hiter.rawData());
 
             if (mode == SELECTION_ADD) {
                 if (match <= fuzziness) {
@@ -128,7 +128,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         KisImageSP img;
         KisPaintDeviceSP dev;
         QPoint pos;
-        Q_UINT8 opacity = OPACITY_OPAQUE;
+        quint8 opacity = OPACITY_OPAQUE;
 
         if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton)
             return;
@@ -165,16 +165,16 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 void KisToolSelectSimilar::slotTimer()
 {
 #if KDE_IS_VERSION(3,4,0)
-    int state = kapp->keyboardMouseState() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton);
+    int state = kapp->keyboardMouseState() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
 #else
     int state = kapp->keyboardModifiers() & (KApplication::ShiftModifier
             |KApplication::ControlModifier|KApplication::Modifier1);
 #endif
     enumSelectionMode action;
 
-    if (state == Qt::ShiftButton)
+    if (state == Qt::ShiftModifier)
         action = SELECTION_ADD;
-    else if (state == Qt::ControlButton)
+    else if (state == Qt::ControlModifier)
         action = SELECTION_SUBTRACT;
     else
         action = m_defaultSelectAction;

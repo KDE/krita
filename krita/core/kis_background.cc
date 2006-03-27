@@ -29,7 +29,7 @@ KisBackground::KisBackground()
     {
         for (int x = 0; x < PATTERN_WIDTH; x++)
         {
-            Q_UINT8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
+            quint8 v = 128 + 63 * ((x / 16 + y / 16) % 2);
             m_patternTile.setPixel(x, y, qRgb(v, v, v));
         }
     }
@@ -76,14 +76,14 @@ void KisBackground::paintBackground(QImage image, int imageLeftX, int imageTopY)
         for (int x = 0; x < imageWidth; x++)
         {
             QRgb imagePixel = *imagePixelPtr;
-            Q_UINT8 imagePixelAlpha = qAlpha(imagePixel);
+            quint8 imagePixelAlpha = qAlpha(imagePixel);
 
             if (imagePixelAlpha != 255) {
 
                 QRgb patternPixel = patternScanLine[patternX];
-                Q_UINT8 imageRed = UINT8_BLEND(qRed(imagePixel), qRed(patternPixel), imagePixelAlpha);
-                Q_UINT8 imageGreen = UINT8_BLEND(qGreen(imagePixel), qGreen(patternPixel), imagePixelAlpha);
-                Q_UINT8 imageBlue = UINT8_BLEND(qBlue(imagePixel), qBlue(patternPixel), imagePixelAlpha);
+                quint8 imageRed = UINT8_BLEND(qRed(imagePixel), qRed(patternPixel), imagePixelAlpha);
+                quint8 imageGreen = UINT8_BLEND(qGreen(imagePixel), qGreen(patternPixel), imagePixelAlpha);
+                quint8 imageBlue = UINT8_BLEND(qBlue(imagePixel), qBlue(patternPixel), imagePixelAlpha);
 
                 *imagePixelPtr = qRgba(imageRed, imageGreen, imageBlue, 255);
             }
@@ -116,33 +116,33 @@ void KisBackground::paintBackground(QImage img, const QRect& scaledImageRect, co
         return;
     }
 
-    Q_INT32 imageWidth = imageSize.width();
-    Q_INT32 imageHeight = imageSize.height();
+    qint32 imageWidth = imageSize.width();
+    qint32 imageHeight = imageSize.height();
 
-    for (Q_INT32 y = 0; y < scaledImageRect.height(); ++y) {
+    for (qint32 y = 0; y < scaledImageRect.height(); ++y) {
 
-        Q_INT32 scaledY = scaledImageRect.y() + y;
-        Q_INT32 srcY = (scaledY * imageHeight) / scaledImageSize.height();
-        Q_INT32 patternY = srcY % PATTERN_HEIGHT;
+        qint32 scaledY = scaledImageRect.y() + y;
+        qint32 srcY = (scaledY * imageHeight) / scaledImageSize.height();
+        qint32 patternY = srcY % PATTERN_HEIGHT;
 
         QRgb *imagePixelPtr = reinterpret_cast<QRgb *>(img.scanLine(y));
         const QRgb *patternScanLine = reinterpret_cast<const QRgb *>(m_patternTile.scanLine(patternY));
 
-        for (Q_INT32 x = 0; x < scaledImageRect.width(); ++x) {
+        for (qint32 x = 0; x < scaledImageRect.width(); ++x) {
 
             QRgb imagePixel = *imagePixelPtr;
-            Q_UINT8 imagePixelAlpha = qAlpha(imagePixel);
+            quint8 imagePixelAlpha = qAlpha(imagePixel);
 
             if (imagePixelAlpha != 255) {
 
-                Q_INT32 scaledX = scaledImageRect.x() + x;
-                Q_INT32 srcX = (scaledX * imageWidth) / scaledImageSize.width();
-                Q_INT32 patternX = srcX % PATTERN_WIDTH;
+                qint32 scaledX = scaledImageRect.x() + x;
+                qint32 srcX = (scaledX * imageWidth) / scaledImageSize.width();
+                qint32 patternX = srcX % PATTERN_WIDTH;
 
                 QRgb patternPixel = patternScanLine[patternX];
-                Q_UINT8 imageRed = UINT8_BLEND(qRed(imagePixel), qRed(patternPixel), imagePixelAlpha);
-                Q_UINT8 imageGreen = UINT8_BLEND(qGreen(imagePixel), qGreen(patternPixel), imagePixelAlpha);
-                Q_UINT8 imageBlue = UINT8_BLEND(qBlue(imagePixel), qBlue(patternPixel), imagePixelAlpha);
+                quint8 imageRed = UINT8_BLEND(qRed(imagePixel), qRed(patternPixel), imagePixelAlpha);
+                quint8 imageGreen = UINT8_BLEND(qGreen(imagePixel), qGreen(patternPixel), imagePixelAlpha);
+                quint8 imageBlue = UINT8_BLEND(qBlue(imagePixel), qBlue(patternPixel), imagePixelAlpha);
 
                 *imagePixelPtr = qRgba(imageRed, imageGreen, imageBlue, 255);
             }

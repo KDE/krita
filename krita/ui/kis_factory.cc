@@ -124,23 +124,23 @@ KInstance* KisFactory::instance()
 
         s_instance->dirs()->addResourceType("kis_brushes", KStandardDirs::kde_default("data") + "krita/brushes/");
         s_instance->dirs()->addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-        s_instance->dirs()->addResourceDir("kis_brushes", QDir::homeDirPath() + QString("/.create/brushes/gimp"));
+        s_instance->dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
     
         s_instance->dirs()->addResourceType("kis_patterns", KStandardDirs::kde_default("data") + "krita/patterns/");
         s_instance->dirs()->addResourceDir("kis_patterns", "/usr/share/create/patterns/gimp");
-        s_instance->dirs()->addResourceDir("kis_patterns", QDir::homeDirPath() + QString("/.create/patterns/gimp"));
+        s_instance->dirs()->addResourceDir("kis_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
         s_instance->dirs()->addResourceType("kis_gradients", KStandardDirs::kde_default("data") + "krita/gradients/");
         s_instance->dirs()->addResourceDir("kis_gradients", "/usr/share/create/gradients/gimp");
-        s_instance->dirs()->addResourceDir("kis_gradients", QDir::homeDirPath() + QString("/.create/gradients/gimp"));
+        s_instance->dirs()->addResourceDir("kis_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
  
         s_instance->dirs()->addResourceType("kis_profiles", KStandardDirs::kde_default("data") + "krita/profiles/");
         s_instance->dirs()->addResourceDir("kis_profiles", "/usr/share/color/icc");
-        s_instance->dirs()->addResourceDir("kis_profiles", QDir::homeDirPath() + QString("/.icc"));
+        s_instance->dirs()->addResourceDir("kis_profiles", QDir::homePath() + QString("/.icc"));
 
         s_instance->dirs()->addResourceType("kis_palettes", KStandardDirs::kde_default("data") + "krita/palettes/");
         s_instance->dirs()->addResourceDir("kis_palettes", "/usr/share/create/swatches");
-        s_instance->dirs()->addResourceDir("kis_palettes", QDir::homeDirPath() + QString("/.create/swatches"));
+        s_instance->dirs()->addResourceDir("kis_palettes", QDir::homePath() + QString("/.create/swatches"));
 
         // Tell the iconloader about share/apps/koffice/icons
         s_instance->iconLoader()->addAppDir("koffice");

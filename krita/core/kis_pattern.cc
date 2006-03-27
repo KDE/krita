@@ -43,16 +43,16 @@
 
 namespace {
     struct GimpPatternHeader {
-        Q_UINT32 header_size;  /*  header_size = sizeof (PatternHeader) + brush name  */
-        Q_UINT32 version;      /*  pattern file version #  */
-        Q_UINT32 width;        /*  width of pattern */
-        Q_UINT32 height;       /*  height of pattern  */
-        Q_UINT32 bytes;        /*  depth of pattern in bytes : 1, 2, 3 or 4*/
-        Q_UINT32 magic_number; /*  GIMP brush magic number  */
+        quint32 header_size;  /*  header_size = sizeof (PatternHeader) + brush name  */
+        quint32 version;      /*  pattern file version #  */
+        quint32 width;        /*  width of pattern */
+        quint32 height;       /*  height of pattern  */
+        quint32 bytes;        /*  depth of pattern in bytes : 1, 2, 3 or 4*/
+        quint32 magic_number; /*  GIMP brush magic number  */
     };
 
     // Yes! This is _NOT_ what my pat.txt file says. It's really not 'GIMP', but 'GPAT'
-    Q_UINT32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
+    quint32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
 }
 
 KisPattern::KisPattern(const QString& file) : super(file), m_hasFile(true)
@@ -78,10 +78,10 @@ bool KisPattern::load()
         return true;
 
     QFile file(filename());
-    file.open(IO_ReadOnly);
+    file.open(QIODevice::ReadOnly);
     QByteArray data = file.readAll();
     if (!data.isEmpty()) {
-        Q_INT32 startPos = m_data.size();
+        qint32 startPos = m_data.size();
 
         m_data.resize(m_data.size() + data.count());
         memcpy(&m_data[startPos], data.data(), data.count());
@@ -93,7 +93,7 @@ bool KisPattern::load()
 bool KisPattern::save()
 {
     QFile file(filename());
-    file.open(IO_WriteOnly | IO_Truncate);
+    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
 
     QTextStream stream(&file);
     // Header: header_size (24+name length),version,width,height,colourdepth of brush,magic,name
@@ -130,8 +130,8 @@ bool KisPattern::save()
 
     int k = 0;
     bytes.resize(width() * height() * 4);
-    for (Q_INT32 y = 0; y < height(); y++) {
-        for (Q_INT32 x = 0; x < width(); x++) {
+    for (qint32 y = 0; y < height(); y++) {
+        for (qint32 x = 0; x < width(); x++) {
             // RGBA only
             QRgb pixel = m_img.pixel(x,y);
             bytes[k++] = static_cast<char>(qRed(pixel));
@@ -159,7 +159,7 @@ bool KisPattern::init()
 {
     // load Gimp patterns
     GimpPatternHeader bh;
-    Q_INT32 k;
+    qint32 k;
     QValueVector<char> name;
 
     if (sizeof(GimpPatternHeader) > m_data.size()) {
@@ -195,12 +195,12 @@ bool KisPattern::init()
 
     if (bh.bytes == 1) {
         // Grayscale
-        Q_INT32 val;
+        qint32 val;
 
-        for (Q_UINT32 y = 0; y < bh.height; y++) {
-            for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
-                if (static_cast<Q_UINT32>(k) > m_data.size()) {
-                    kdDebug(DBG_AREA_FILE) << "failed in gray\n";
+        for (quint32 y = 0; y < bh.height; y++) {
+            for (quint32 x = 0; x < bh.width; x++, k++) {
+                if (static_cast<quint32>(k) > m_data.size()) {
+                    kDebug(DBG_AREA_FILE) << "failed in gray\n";
                     return false;
                 }
 
@@ -211,12 +211,12 @@ bool KisPattern::init()
         }
     } else if (bh.bytes == 2) {
         // Grayscale + A
-        Q_INT32 val;
-        Q_INT32 alpha;
-        for (Q_UINT32 y = 0; y < bh.height; y++) {
-            for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
-                if (static_cast<Q_UINT32>(k + 2) > m_data.size()) {
-                    kdDebug(DBG_AREA_FILE) << "failed in grayA\n";
+        qint32 val;
+        qint32 alpha;
+        for (quint32 y = 0; y < bh.height; y++) {
+            for (quint32 x = 0; x < bh.width; x++, k++) {
+                if (static_cast<quint32>(k + 2) > m_data.size()) {
+                    kDebug(DBG_AREA_FILE) << "failed in grayA\n";
                     return false;
                 }
 
@@ -228,10 +228,10 @@ bool KisPattern::init()
         }
     } else if (bh.bytes == 3) {
         // RGB without alpha
-        for (Q_UINT32 y = 0; y < bh.height; y++) {
-            for (Q_UINT32 x = 0; x < bh.width; x++) {
-                if (static_cast<Q_UINT32>(k + 3) > m_data.size()) {
-                    kdDebug(DBG_AREA_FILE) << "failed in RGB\n";
+        for (quint32 y = 0; y < bh.height; y++) {
+            for (quint32 x = 0; x < bh.width; x++) {
+                if (static_cast<quint32>(k + 3) > m_data.size()) {
+                    kDebug(DBG_AREA_FILE) << "failed in RGB\n";
                     return false;
                 }
 
@@ -244,10 +244,10 @@ bool KisPattern::init()
         }
     } else if (bh.bytes == 4) {
         // Has alpha
-        for (Q_UINT32 y = 0; y < bh.height; y++) {
-            for (Q_UINT32 x = 0; x < bh.width; x++) {
-                if (static_cast<Q_UINT32>(k + 4) > m_data.size()) {
-                    kdDebug(DBG_AREA_FILE) << "failed in RGBA\n";
+        for (quint32 y = 0; y < bh.height; y++) {
+            for (quint32 x = 0; x < bh.width; x++) {
+                if (static_cast<quint32>(k + 4) > m_data.size()) {
+                    kDebug(DBG_AREA_FILE) << "failed in RGBA\n";
                     return false;
                 }
 
@@ -292,22 +292,22 @@ KisPaintDeviceSP KisPattern::image(KisColorSpace * colorSpace) {
     return layer;
 }
 
-Q_INT32 KisPattern::width() const
+qint32 KisPattern::width() const
 {
     return m_width;
 }
 
-void KisPattern::setWidth(Q_INT32 w)
+void KisPattern::setWidth(qint32 w)
 {
     m_width = w;
 }
 
-Q_INT32 KisPattern::height() const
+qint32 KisPattern::height() const
 {
     return m_height;
 }
 
-void KisPattern::setHeight(Q_INT32 h)
+void KisPattern::setHeight(qint32 h)
 {
     m_height = h;
 }

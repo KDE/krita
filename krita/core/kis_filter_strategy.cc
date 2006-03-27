@@ -29,7 +29,7 @@ double KisHermiteFilterStrategy::valueAt(double t) const {
         return(0.0);
 }
 
-Q_UINT32 KisHermiteFilterStrategy::intValueAt(Q_INT32 t) const {
+quint32 KisHermiteFilterStrategy::intValueAt(qint32 t) const {
         /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
         if(t < 0) t = -t;
         if(t < 256)
@@ -52,7 +52,7 @@ double KisBoxFilterStrategy::valueAt(double t) const {
         return(0.0);
 }
 
-Q_UINT32 KisBoxFilterStrategy::intValueAt(Q_INT32 t) const {
+quint32 KisBoxFilterStrategy::intValueAt(qint32 t) const {
         /* f(t) = 1, -0.5 < t <= 0.5 */
     if((t > -128) && (t <= 128))
         return 255;
@@ -65,7 +65,7 @@ double KisTriangleFilterStrategy::valueAt(double t) const {
         return(0.0);
 }
 
-Q_UINT32 KisTriangleFilterStrategy::intValueAt(Q_INT32 t) const {
+quint32 KisTriangleFilterStrategy::intValueAt(qint32 t) const {
         /* f(t) = |t|, -1 <= t <= 1 */
         if(t < 0) t = -t;
         if(t < 256)

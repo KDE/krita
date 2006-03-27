@@ -184,12 +184,12 @@ void KisCanvasWidgetPainter::setWorldXForm(bool /*enable*/)
 {
 }
 
-const QWMatrix& KisCanvasWidgetPainter::worldMatrix() const
+const QMatrix& KisCanvasWidgetPainter::worldMatrix() const
 {
     return m_defaultWorldMatrix;
 }
 
-void KisCanvasWidgetPainter::setWorldMatrix(const QWMatrix& /*matrix*/, bool /*combine*/)
+void KisCanvasWidgetPainter::setMatrix(const QMatrix& /*matrix*/, bool /*combine*/)
 {
 }
 
@@ -833,7 +833,7 @@ void KisCanvasPainter::setWorldXForm(bool enable)
     }
 }
 
-const QWMatrix& KisCanvasPainter::worldMatrix() const
+const QMatrix& KisCanvasPainter::worldMatrix() const
 {
     if (m_canvasWidgetPainter != 0) {
         return m_canvasWidgetPainter->worldMatrix();
@@ -841,10 +841,10 @@ const QWMatrix& KisCanvasPainter::worldMatrix() const
     return m_defaultWorldMatrix;
 }
 
-void KisCanvasPainter::setWorldMatrix(const QWMatrix& matrix, bool combine)
+void KisCanvasPainter::setMatrix(const QMatrix& matrix, bool combine)
 {
     if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->setWorldMatrix(matrix, combine);
+        m_canvasWidgetPainter->setMatrix(matrix, combine);
     }
 }
 

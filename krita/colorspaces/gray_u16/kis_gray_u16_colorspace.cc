@@ -35,22 +35,22 @@
 #include "kis_colorspace_factory_registry.h"
 
 namespace {
-    const Q_INT32 MAX_CHANNEL_GRAY = 1;
-    const Q_INT32 MAX_CHANNEL_GRAYA = 2;
+    const qint32 MAX_CHANNEL_GRAY = 1;
+    const qint32 MAX_CHANNEL_GRAYA = 2;
 }
 
 KisGrayU16ColorSpace::KisGrayU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
     KisU16BaseColorSpace(KisID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")), TYPE_GRAYA_16, icSigGrayData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Gray"), PIXEL_GRAY * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("Gray"), PIXEL_GRAY * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
 
 /*    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
 */
 
-    m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
+    m_alphaPos = PIXEL_ALPHA * sizeof(quint16);
 
     init();
 }
@@ -59,16 +59,16 @@ KisGrayU16ColorSpace::~KisGrayU16ColorSpace()
 {
 }
 
-void KisGrayU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+void KisGrayU16ColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
 {
-    Q_UINT32 totalGray = 0, newAlpha = 0;
+    quint32 totalGray = 0, newAlpha = 0;
 
     while (nColors--)
     {
         const Pixel *pixel = reinterpret_cast<const Pixel *>(*colors);
 
-        Q_UINT32 alpha = pixel->alpha;
-        Q_UINT32 alphaTimesWeight = UINT16_MULT(alpha, UINT8_TO_UINT16(*weights));
+        quint32 alpha = pixel->alpha;
+        quint32 alphaTimesWeight = UINT16_MULT(alpha, UINT8_TO_UINT16(*weights));
 
         totalGray += UINT16_MULT(pixel->gray, alphaTimesWeight);
         newAlpha += alphaTimesWeight;
@@ -90,16 +90,16 @@ void KisGrayU16ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
     dstPixel->gray = totalGray;
 }
 
-void KisGrayU16ColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst,
-                                          Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+void KisGrayU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst,
+                                          qint32 factor, qint32 offset, qint32 nColors) const
 {
-    Q_INT32 totalGray = 0, totalAlpha = 0;
+    qint32 totalGray = 0, totalAlpha = 0;
 
     while (nColors--)
     {
         const Pixel * pixel = reinterpret_cast<const Pixel *>( *colors );
 
-        Q_INT32 weight = *kernelValues;
+        qint32 weight = *kernelValues;
 
         if (weight != 0) {
             totalGray += pixel->gray * weight;
@@ -112,29 +112,29 @@ void KisGrayU16ColorSpace::convolveColors(Q_UINT8** colors, Q_INT32* kernelValue
     Pixel * p = reinterpret_cast< Pixel *>( dst );
 
     if (channelFlags & KisChannelInfo::FLAG_COLOR) {
-        p->gray = CLAMP( ( totalGray / factor) + offset, 0, Q_UINT16_MAX);
+        p->gray = CLAMP( ( totalGray / factor) + offset, 0, quint16_MAX);
     }
     if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
-        p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, Q_UINT16_MAX);
+        p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, quint16_MAX);
     }
 }
 
 
-void KisGrayU16ColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+void KisGrayU16ColorSpace::invertColor(quint8 * src, qint32 nPixels)
 {
-    Q_UINT32 psize = pixelSize();
+    quint32 psize = pixelSize();
 
     while (nPixels--)
     {
         Pixel * p = reinterpret_cast< Pixel *>( src );
-        p->gray = Q_UINT16_MAX - p->gray;
+        p->gray = quint16_MAX - p->gray;
         src += psize;
     }
 }
 
 
 
-Q_UINT8 KisGrayU16ColorSpace::intensity8(const Q_UINT8 * src) const
+quint8 KisGrayU16ColorSpace::intensity8(const quint8 * src) const
 {
     const Pixel * p = reinterpret_cast<const Pixel *>( src );
     return UINT16_TO_UINT8(p->gray);
@@ -146,37 +146,37 @@ QValueVector<KisChannelInfo *> KisGrayU16ColorSpace::channels() const
     return m_channels;
 }
 
-Q_UINT32 KisGrayU16ColorSpace::nChannels() const
+quint32 KisGrayU16ColorSpace::nChannels() const
 {
     return MAX_CHANNEL_GRAYA;
 }
 
-Q_UINT32 KisGrayU16ColorSpace::nColorChannels() const
+quint32 KisGrayU16ColorSpace::nColorChannels() const
 {
     return MAX_CHANNEL_GRAY;
 }
 
-Q_UINT32 KisGrayU16ColorSpace::pixelSize() const
+quint32 KisGrayU16ColorSpace::pixelSize() const
 {
-    return MAX_CHANNEL_GRAYA * sizeof(Q_UINT16);
+    return MAX_CHANNEL_GRAYA * sizeof(quint16);
 }
 
-void KisGrayU16ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     while (rows > 0) {
 
-        const Q_UINT16 *src = reinterpret_cast<const Q_UINT16 *>(srcRowStart);
-        Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(dstRowStart);
-        const Q_UINT8 *mask = maskRowStart;
-        Q_INT32 columns = numColumns;
+        const quint16 *src = reinterpret_cast<const quint16 *>(srcRowStart);
+        quint16 *dst = reinterpret_cast<quint16 *>(dstRowStart);
+        const quint8 *mask = maskRowStart;
+        qint32 columns = numColumns;
 
         while (columns > 0) {
 
-            Q_UINT16 srcAlpha = src[PIXEL_ALPHA];
+            quint16 srcAlpha = src[PIXEL_ALPHA];
 
             // apply the alphamask
             if (mask != 0) {
-                Q_UINT8 U8_mask = *mask;
+                quint8 U8_mask = *mask;
 
                 if (U8_mask != OPACITY_OPAQUE) {
                     srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask));
@@ -191,16 +191,16 @@ void KisGrayU16ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
                 }
 
                 if (srcAlpha == U16_OPACITY_OPAQUE) {
-                    memcpy(dst, src, MAX_CHANNEL_GRAYA * sizeof(Q_UINT16));
+                    memcpy(dst, src, MAX_CHANNEL_GRAYA * sizeof(quint16));
                 } else {
-                    Q_UINT16 dstAlpha = dst[PIXEL_ALPHA];
+                    quint16 dstAlpha = dst[PIXEL_ALPHA];
 
-                    Q_UINT16 srcBlend;
+                    quint16 srcBlend;
 
                     if (dstAlpha == U16_OPACITY_OPAQUE) {
                         srcBlend = srcAlpha;
                     } else {
-                        Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                        quint16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
                         dst[PIXEL_ALPHA] = newAlpha;
 
                         if (newAlpha != 0) {
@@ -211,7 +211,7 @@ void KisGrayU16ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
                     }
 
                     if (srcBlend == U16_OPACITY_OPAQUE) {
-                        memcpy(dst, src, MAX_CHANNEL_GRAY * sizeof(Q_UINT16));
+                        memcpy(dst, src, MAX_CHANNEL_GRAY * sizeof(quint16));
                     } else {
                         dst[PIXEL_GRAY] = UINT16_BLEND(src[PIXEL_GRAY], dst[PIXEL_GRAY], srcBlend);
                     }
@@ -235,20 +235,20 @@ void KisGrayU16ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
 #define COMMON_COMPOSITE_OP_PROLOG() \
     while (rows > 0) { \
     \
-        const Q_UINT16 *src = reinterpret_cast<const Q_UINT16 *>(srcRowStart); \
-        Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(dstRowStart); \
-        Q_INT32 columns = numColumns; \
-        const Q_UINT8 *mask = maskRowStart; \
+        const quint16 *src = reinterpret_cast<const quint16 *>(srcRowStart); \
+        quint16 *dst = reinterpret_cast<quint16 *>(dstRowStart); \
+        qint32 columns = numColumns; \
+        const quint8 *mask = maskRowStart; \
     \
         while (columns > 0) { \
     \
-            Q_UINT16 srcAlpha = src[PIXEL_ALPHA]; \
-            Q_UINT16 dstAlpha = dst[PIXEL_ALPHA]; \
+            quint16 srcAlpha = src[PIXEL_ALPHA]; \
+            quint16 dstAlpha = dst[PIXEL_ALPHA]; \
     \
-            srcAlpha = QMIN(srcAlpha, dstAlpha); \
+            srcAlpha = qMin(srcAlpha, dstAlpha); \
     \
             if (mask != 0) { \
-                Q_UINT8 U8_mask = *mask; \
+                quint8 U8_mask = *mask; \
     \
                 if (U8_mask != OPACITY_OPAQUE) { \
                     srcAlpha = UINT16_MULT(srcAlpha, UINT8_TO_UINT16(U8_mask)); \
@@ -262,12 +262,12 @@ void KisGrayU16ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
                     srcAlpha = UINT16_MULT(srcAlpha, opacity); \
                 } \
     \
-                Q_UINT16 srcBlend; \
+                quint16 srcBlend; \
     \
                 if (dstAlpha == U16_OPACITY_OPAQUE) { \
                     srcBlend = srcAlpha; \
                 } else { \
-                    Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha); \
+                    quint16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha); \
                     dst[PIXEL_ALPHA] = newAlpha; \
     \
                     if (newAlpha != 0) { \
@@ -293,13 +293,13 @@ void KisGrayU16ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
         } \
     }
 
-void KisGrayU16ColorSpace::compositeMultiply(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeMultiply(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
-        Q_UINT16 srcColor = src[PIXEL_GRAY];
-        Q_UINT16 dstColor = dst[PIXEL_GRAY];
+        quint16 srcColor = src[PIXEL_GRAY];
+        quint16 dstColor = dst[PIXEL_GRAY];
 
         srcColor = UINT16_MULT(srcColor, dstColor);
 
@@ -310,19 +310,19 @@ void KisGrayU16ColorSpace::compositeMultiply(Q_UINT8 *dstRowStart, Q_INT32 dstRo
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
-void KisGrayU16ColorSpace::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeDivide(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
         for (int channel = 0; channel < MAX_CHANNEL_GRAY; channel++) {
 
-            Q_UINT16 srcColor = src[channel];
-            Q_UINT16 dstColor = dst[channel];
+            quint16 srcColor = src[channel];
+            quint16 dstColor = dst[channel];
 
-            srcColor = QMIN((dstColor * (UINT16_MAX + 1u) + (srcColor / 2u)) / (1u + srcColor), UINT16_MAX);
+            srcColor = qMin((dstColor * (UINT16_MAX + 1u) + (srcColor / 2u)) / (1u + srcColor), UINT16_MAX);
 
-            Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
+            quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;
         }
@@ -331,19 +331,19 @@ void KisGrayU16ColorSpace::compositeDivide(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
-void KisGrayU16ColorSpace::compositeScreen(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeScreen(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
         for (int channel = 0; channel < MAX_CHANNEL_GRAY; channel++) {
 
-            Q_UINT16 srcColor = src[channel];
-            Q_UINT16 dstColor = dst[channel];
+            quint16 srcColor = src[channel];
+            quint16 dstColor = dst[channel];
 
             srcColor = UINT16_MAX - UINT16_MULT(UINT16_MAX - dstColor, UINT16_MAX - srcColor);
 
-            Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
+            quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;
         }
@@ -352,19 +352,19 @@ void KisGrayU16ColorSpace::compositeScreen(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
-void KisGrayU16ColorSpace::compositeOverlay(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeOverlay(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
         for (int channel = 0; channel < MAX_CHANNEL_GRAY; channel++) {
 
-            Q_UINT16 srcColor = src[channel];
-            Q_UINT16 dstColor = dst[channel];
+            quint16 srcColor = src[channel];
+            quint16 dstColor = dst[channel];
 
             srcColor = UINT16_MULT(dstColor, dstColor + 2u * UINT16_MULT(srcColor, UINT16_MAX - dstColor));
 
-            Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
+            quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;
         }
@@ -373,19 +373,19 @@ void KisGrayU16ColorSpace::compositeOverlay(Q_UINT8 *dstRowStart, Q_INT32 dstRow
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
-void KisGrayU16ColorSpace::compositeDodge(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeDodge(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
         for (int channel = 0; channel < MAX_CHANNEL_GRAY; channel++) {
 
-            Q_UINT16 srcColor = src[channel];
-            Q_UINT16 dstColor = dst[channel];
+            quint16 srcColor = src[channel];
+            quint16 dstColor = dst[channel];
 
-            srcColor = QMIN((dstColor * (UINT16_MAX + 1u)) / (UINT16_MAX + 1u - srcColor), UINT16_MAX);
+            srcColor = qMin((dstColor * (UINT16_MAX + 1u)) / (UINT16_MAX + 1u - srcColor), UINT16_MAX);
 
-            Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
+            quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;
         }
@@ -394,20 +394,20 @@ void KisGrayU16ColorSpace::compositeDodge(Q_UINT8 *dstRowStart, Q_INT32 dstRowSt
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
-void KisGrayU16ColorSpace::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
         for (int channel = 0; channel < MAX_CHANNEL_GRAY; channel++) {
 
-            Q_UINT16 srcColor = src[channel];
-            Q_UINT16 dstColor = dst[channel];
+            quint16 srcColor = src[channel];
+            quint16 dstColor = dst[channel];
 
-            srcColor = kMin(((UINT16_MAX - dstColor) * (UINT16_MAX + 1u)) / (srcColor + 1u), UINT16_MAX);
+            srcColor = qMin(((UINT16_MAX - dstColor) * (UINT16_MAX + 1u)) / (srcColor + 1u), UINT16_MAX);
             srcColor = kClamp(UINT16_MAX - srcColor, 0u, UINT16_MAX);
 
-            Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
+            quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;
         }
@@ -416,19 +416,19 @@ void KisGrayU16ColorSpace::compositeBurn(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
-void KisGrayU16ColorSpace::compositeDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeDarken(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
         for (int channel = 0; channel < MAX_CHANNEL_GRAY; channel++) {
 
-            Q_UINT16 srcColor = src[channel];
-            Q_UINT16 dstColor = dst[channel];
+            quint16 srcColor = src[channel];
+            quint16 dstColor = dst[channel];
 
-            srcColor = QMIN(srcColor, dstColor);
+            srcColor = qMin(srcColor, dstColor);
 
-            Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
+            quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;
         }
@@ -437,19 +437,19 @@ void KisGrayU16ColorSpace::compositeDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
     COMMON_COMPOSITE_OP_EPILOG();
 }
 
-void KisGrayU16ColorSpace::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisGrayU16ColorSpace::compositeLighten(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     COMMON_COMPOSITE_OP_PROLOG();
 
     {
         for (int channel = 0; channel < MAX_CHANNEL_GRAY; channel++) {
 
-            Q_UINT16 srcColor = src[channel];
-            Q_UINT16 dstColor = dst[channel];
+            quint16 srcColor = src[channel];
+            quint16 dstColor = dst[channel];
 
-            srcColor = QMAX(srcColor, dstColor);
+            srcColor = qMax(srcColor, dstColor);
 
-            Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
+            quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 
             dst[channel] = newColor;
         }
@@ -459,29 +459,29 @@ void KisGrayU16ColorSpace::compositeLighten(Q_UINT8 *dstRowStart, Q_INT32 dstRow
 }
 
 
-void KisGrayU16ColorSpace::compositeErase(Q_UINT8 *dst,
-            Q_INT32 dstRowSize,
-            const Q_UINT8 *src,
-            Q_INT32 srcRowSize,
-            const Q_UINT8 *srcAlphaMask,
-            Q_INT32 maskRowStride,
-            Q_INT32 rows,
-            Q_INT32 cols,
-            Q_UINT16 /*opacity*/)
+void KisGrayU16ColorSpace::compositeErase(quint8 *dst,
+            qint32 dstRowSize,
+            const quint8 *src,
+            qint32 srcRowSize,
+            const quint8 *srcAlphaMask,
+            qint32 maskRowStride,
+            qint32 rows,
+            qint32 cols,
+            quint16 /*opacity*/)
 {
     while (rows-- > 0)
     {
         const Pixel *s = reinterpret_cast<const Pixel *>(src);
         Pixel *d = reinterpret_cast<Pixel *>(dst);
-        const Q_UINT8 *mask = srcAlphaMask;
+        const quint8 *mask = srcAlphaMask;
 
-        for (Q_INT32 i = cols; i > 0; i--, s++, d++)
+        for (qint32 i = cols; i > 0; i--, s++, d++)
         {
-            Q_UINT16 srcAlpha = s->alpha;
+            quint16 srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
-                Q_UINT8 U8_mask = *mask;
+                quint8 U8_mask = *mask;
 
                 if (U8_mask != OPACITY_OPAQUE) {
                     srcAlpha = UINT16_BLEND(srcAlpha, U16_OPACITY_OPAQUE, UINT8_TO_UINT16(U8_mask));
@@ -499,18 +499,18 @@ void KisGrayU16ColorSpace::compositeErase(Q_UINT8 *dst,
     }
 }
 
-void KisGrayU16ColorSpace::bitBlt(Q_UINT8 *dst,
-                      Q_INT32 dstRowStride,
-                      const Q_UINT8 *src,
-                      Q_INT32 srcRowStride,
-                      const Q_UINT8 *mask,
-                      Q_INT32 maskRowStride,
-                      Q_UINT8 U8_opacity,
-                      Q_INT32 rows,
-                      Q_INT32 cols,
+void KisGrayU16ColorSpace::bitBlt(quint8 *dst,
+                      qint32 dstRowStride,
+                      const quint8 *src,
+                      qint32 srcRowStride,
+                      const quint8 *mask,
+                      qint32 maskRowStride,
+                      quint8 U8_opacity,
+                      qint32 rows,
+                      qint32 cols,
                       const KisCompositeOp& op)
 {
-    Q_UINT16 opacity = UINT8_TO_UINT16(U8_opacity);
+    quint16 opacity = UINT8_TO_UINT16(U8_opacity);
 
     switch (op.op()) {
     case COMPOSITE_UNDEF:

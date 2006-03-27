@@ -79,30 +79,30 @@ public:
     // Return a vector describing all the channels this color model has.
     virtual Q3ValueVector<KisChannelInfo *> channels() const = 0;
 
-    virtual Q_UINT32 nChannels() const = 0;
+    virtual quint32 nChannels() const = 0;
 
-    virtual Q_UINT32 nColorChannels() const = 0;
+    virtual quint32 nColorChannels() const = 0;
 
-    virtual Q_UINT32 nSubstanceChannels() const { return 0; };
+    virtual quint32 nSubstanceChannels() const { return 0; };
 
-    virtual Q_UINT32 pixelSize() const = 0;
+    virtual quint32 pixelSize() const = 0;
 
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
+    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const = 0;
+    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
-    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
+    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos) = 0;
 
-    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos) = 0;
+    virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) = 0;
 
-    virtual void getSingleChannelPixel(Q_UINT8 *dstPixel, const Q_UINT8 *srcPixel, Q_UINT32 channelIndex);
+    virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex);
 
     //========== Identification ===============================================//
 
     virtual KisID id() const { return m_id; }
 
-    void setColorSpaceType(Q_UINT32 type) { m_cmType = type; }
-    Q_UINT32 colorSpaceType() { return m_cmType; }
+    void setColorSpaceType(quint32 type) { m_cmType = type; }
+    quint32 colorSpaceType() { return m_cmType; }
 
     virtual icColorSpaceSignature colorSpaceSignature() { return m_colorSpaceSignature; }
 
@@ -124,21 +124,21 @@ public:
 //================= Conversion functions ==================================//
 
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile = 0);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KisProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile = 0);
 
-    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    KisProfile *  dstProfile,
-                                   Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+                                   qint32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f);
 
-    virtual bool convertPixelsTo(const Q_UINT8 * src,
-                                 Q_UINT8 * dst, KisColorSpace * dstColorSpace,
-                                 Q_UINT32 numPixels,
-                                 Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    virtual bool convertPixelsTo(const quint8 * src,
+                                 quint8 * dst, KisColorSpace * dstColorSpace,
+                                 quint32 numPixels,
+                                 qint32 renderingIntent = INTENT_PERCEPTUAL);
 
 //============================== Manipulation fucntions ==========================//
 
@@ -147,38 +147,38 @@ public:
 // The manipulation functions have default implementations that _convert_ the pixel
 // to a QColor and back. Reimplement these methods in your color strategy!
 //
-    virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
+    virtual KisColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues);
 
     virtual KisColorAdjustment *createDesaturateAdjustment();
 
-    virtual KisColorAdjustment *createPerChannelAdjustment(Q_UINT16 **transferValues);
+    virtual KisColorAdjustment *createPerChannelAdjustment(quint16 **transferValues);
 
-    virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
+    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *, qint32 nPixels);
 
-    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);
+    virtual void invertColor(quint8 * src, qint32 nPixels);
     
-    virtual Q_UINT8 difference(const Q_UINT8* src1, const Q_UINT8* src2);
+    virtual quint8 difference(const quint8* src1, const quint8* src2);
 
-    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
-    virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
 
-    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
+    virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
 
-    virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
+    virtual quint8 intensity8(const quint8 * src) const;
     
     virtual KisID mathToolboxID() const;
 
-    virtual void bitBlt(Q_UINT8 *dst,
-                Q_INT32 dststride,
+    virtual void bitBlt(quint8 *dst,
+                qint32 dststride,
                 KisColorSpace * srcSpace,
-                const Q_UINT8 *src,
-                Q_INT32 srcRowStride,
-                const Q_UINT8 *srcAlphaMask,
-                Q_INT32 maskRowStride,
-                Q_UINT8 opacity,
-                Q_INT32 rows,
-                Q_INT32 cols,
+                const quint8 *src,
+                qint32 srcRowStride,
+                const quint8 *srcAlphaMask,
+                qint32 maskRowStride,
+                quint8 opacity,
+                qint32 rows,
+                qint32 cols,
                 const KisCompositeOp& op);
 
 //========================== END of Public API ========================================//
@@ -190,30 +190,30 @@ protected:
      * Compose two byte arrays containing pixels in the same color
      * model together.
      */
-    virtual void bitBlt(Q_UINT8 *dst,
-                Q_INT32 dstRowSize,
-                const Q_UINT8 *src,
-                Q_INT32 srcRowStride,
-                const Q_UINT8 *srcAlphaMask,
-                Q_INT32 maskRowStride,
-                Q_UINT8 opacity,
-                Q_INT32 rows,
-                Q_INT32 cols,
+    virtual void bitBlt(quint8 *dst,
+                qint32 dstRowSize,
+                const quint8 *src,
+                qint32 srcRowStride,
+                const quint8 *srcAlphaMask,
+                qint32 maskRowStride,
+                quint8 opacity,
+                qint32 rows,
+                qint32 cols,
                 const KisCompositeOp& op) = 0;
 
     virtual cmsHTRANSFORM createTransform(KisColorSpace * dstColorSpace,
                           KisProfile *  srcProfile,
                           KisProfile *  dstProfile,
-                          Q_INT32 renderingIntent);
+                          qint32 renderingIntent);
 
-    virtual void compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity);
+    virtual void compositeCopy(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity);
 
 protected:
 
     QStringList m_profileFilenames;
-    Q_UINT8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
-    Q_INT32 m_alphaPos; // The position in _bytes_ of the alpha channel
-    Q_INT32 m_alphaSize; // The width in _bytes_ of the alpha channel
+    quint8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
+    qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
+    qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
 
     Q3ValueVector<KisChannelInfo *> m_channels;
 
@@ -246,7 +246,7 @@ private:
     KisAbstractColorSpace(const KisAbstractColorSpace&);
     KisAbstractColorSpace& operator=(const KisAbstractColorSpace&);
 
-    Q3MemArray<Q_UINT8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
+    Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

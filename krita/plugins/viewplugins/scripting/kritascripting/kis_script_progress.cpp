@@ -26,7 +26,7 @@ void KisScriptProgress::activateAsSubject()
     m_view->canvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
 }
 
-void KisScriptProgress::setProgressTotalSteps(Q_INT32 totalSteps)
+void KisScriptProgress::setProgressTotalSteps(qint32 totalSteps)
 {
     m_progressTotalSteps = totalSteps;
     m_progressSteps = 0;
@@ -34,10 +34,10 @@ void KisScriptProgress::setProgressTotalSteps(Q_INT32 totalSteps)
     emit notifyProgress(0);
 }
 
-void KisScriptProgress::setProgress(Q_INT32 progress)
+void KisScriptProgress::setProgress(qint32 progress)
 {
     m_progressSteps = progress;
-    Q_INT32 progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
+    qint32 progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
 
     if (progressPerCent != m_lastProgressPerCent) {
 
@@ -51,9 +51,9 @@ void KisScriptProgress::incProgress()
     setProgress( ++m_progressSteps );
 }
 
-void KisScriptProgress::setProgressStage(const QString& stage, Q_INT32 progress)
+void KisScriptProgress::setProgressStage(const QString& stage, qint32 progress)
 {
-    Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+    qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
     m_lastProgressPerCent = progress;
     emit notifyProgressStage( stage, progressPerCent);
 }

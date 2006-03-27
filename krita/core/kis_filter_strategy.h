@@ -34,13 +34,13 @@ class KisFilterStrategy
 
         KisID id() {return m_id;};
         virtual double valueAt(double /*t*/) const {return 0;};
-        virtual Q_UINT32 intValueAt(Q_INT32 t) const {return Q_UINT32(255*valueAt(t/256.0));};
+        virtual quint32 intValueAt(qint32 t) const {return quint32(255*valueAt(t/256.0));};
         double support() { return supportVal;};
-        Q_UINT32 intSupport() { return intSupportVal;};
+        quint32 intSupport() { return intSupportVal;};
         virtual bool boxSpecial() { return false;};
     protected:
         double supportVal;
-        Q_UINT32 intSupportVal;
+        quint32 intSupportVal;
         KisID m_id;
 };
 
@@ -51,7 +51,7 @@ class KisHermiteFilterStrategy : public KisFilterStrategy
             {supportVal = 1.0; intSupportVal = 256;}
         virtual ~KisHermiteFilterStrategy() {}
         
-        virtual Q_UINT32 intValueAt(Q_INT32 t) const;
+        virtual quint32 intValueAt(qint32 t) const;
         virtual double valueAt(double t) const;
 };
 
@@ -62,7 +62,7 @@ class KisBoxFilterStrategy : public KisFilterStrategy
              {supportVal = 0.5; intSupportVal = 128;}
         virtual ~KisBoxFilterStrategy() {}
 
-        virtual Q_UINT32 intValueAt(Q_INT32 t) const;
+        virtual quint32 intValueAt(qint32 t) const;
         virtual double valueAt(double t) const;
         virtual bool boxSpecial() { return true;};
 };
@@ -74,7 +74,7 @@ class KisTriangleFilterStrategy : public KisFilterStrategy
             {supportVal = 1.0; intSupportVal = 256;}
         virtual ~KisTriangleFilterStrategy() {}
 
-        virtual Q_UINT32 intValueAt(Q_INT32 t) const;
+        virtual quint32 intValueAt(qint32 t) const;
         virtual double valueAt(double t) const;
 };
 

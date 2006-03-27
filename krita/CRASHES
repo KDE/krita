@@ -59,7 +59,7 @@ Using host libthread_db library "/lib/tls/i686/cmov/libthread_db.so.1".
 #16 0xb767ee92 in QSignal::signal () from /usr/lib/libqt-mt.so.3
 #17 0xb733d344 in QSignal::activate () from /usr/lib/libqt-mt.so.3
 #18 0xb7442963 in QPopupMenu::mouseReleaseEvent () from /usr/lib/libqt-mt.so.3
-#19 0xb6d92d60 in KPopupMenu::mouseReleaseEvent () from /usr/lib/libkdeui.so.4
+#19 0xb6d92d60 in KMenu::mouseReleaseEvent () from /usr/lib/libkdeui.so.4
 #20 0xb735a356 in QWidget::event () from /usr/lib/libqt-mt.so.3
 #21 0xb72b6f80 in QApplication::internalNotify () from /usr/lib/libqt-mt.so.3
 #22 0xb72b7500 in QApplication::notify () from /usr/lib/libqt-mt.so.3

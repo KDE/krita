@@ -83,8 +83,8 @@ void ShearImage::slotShearImage()
     dlgShearImage->setCaption(i18n("Shear Image"));
 
         if (dlgShearImage->exec() == QDialog::Accepted) {
-        Q_INT32 angleX = dlgShearImage->angleX();
-                Q_INT32 angleY = dlgShearImage->angleY();
+        qint32 angleX = dlgShearImage->angleX();
+                qint32 angleY = dlgShearImage->angleY();
                 m_view->shearCurrentImage(angleX, angleY);
     }
         delete dlgShearImage;
@@ -102,8 +102,8 @@ void ShearImage::slotShearLayer()
     dlgShearImage->setCaption(i18n("Shear Layer"));
 
     if (dlgShearImage->exec() == QDialog::Accepted) {
-                Q_INT32 angleX = dlgShearImage->angleX();
-                Q_INT32 angleY = dlgShearImage->angleY();
+                qint32 angleX = dlgShearImage->angleX();
+                qint32 angleY = dlgShearImage->angleY();
                 m_view->shearLayer(angleX, angleY);
 
     }

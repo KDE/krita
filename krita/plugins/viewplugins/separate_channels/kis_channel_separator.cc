@@ -83,7 +83,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     KisColorSpace * dstCs = 0;
 
-    Q_UINT32 numberOfChannels = src->nChannels();
+    quint32 numberOfChannels = src->nChannels();
     KisColorSpace * srcCs  = src->colorSpace();
     QValueVector<KisChannelInfo *> channels = srcCs->channels();
 
@@ -106,7 +106,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
     QRect rect = src->exactBounds();
 
     int i = 0;
-    Q_UINT32 channelIndex = 0;
+    quint32 channelIndex = 0;
     for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex)
     {
 
@@ -116,9 +116,9 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             continue;
         }
 
-        Q_INT32 channelSize = ch->size();
-        Q_INT32 channelPos = ch->pos();
-        Q_INT32 destSize = 1;
+        qint32 channelSize = ch->size();
+        qint32 channelPos = ch->pos();
+        qint32 destSize = 1;
 
         KisPaintDeviceSP dev;
         if (toColor) {
@@ -139,7 +139,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
         layers.push_back(dev);
 
-        for (Q_INT32 row = 0; row < rect.height(); ++row) {
+        for (qint32 row = 0; row < rect.height(); ++row) {
 
             KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y() + row, rect.width(), false);
             KisHLineIteratorPixel dstIt = dev->createHLineIterator(rect.x(), rect.y() + row, rect.width(), true);

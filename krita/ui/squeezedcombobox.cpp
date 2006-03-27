@@ -98,7 +98,7 @@ QSize SqueezedComboBox::sizeHint() const
     QFontMetrics fm = fontMetrics();
 
     int maxW = count() ? 18 : 7 * fm.width(QChar('x')) + 18;
-    int maxH = QMAX( fm.lineSpacing(), 14 ) + 2;
+    int maxH = qMax( fm.lineSpacing(), 14 ) + 2;
 
     return style().sizeFromContents(QStyle::CT_ComboBox, this,
     QSize(maxW, maxH)).

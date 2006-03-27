@@ -61,7 +61,7 @@ class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
 
 public:
-    KisImage(KisUndoAdapter * adapter, Q_INT32 width, Q_INT32 height, KisColorSpace * colorSpace, const QString& name);
+    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, KisColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
     virtual DCOPObject *dcopObject();
@@ -77,10 +77,10 @@ public:
 
     /// Paint the specified rect onto the painter, adjusting the colors using the
     /// given profile. The exposure setting is used if the image has a high dynamic range.
-    virtual void renderToPainter(Q_INT32 x1,
-                     Q_INT32 y1,
-                     Q_INT32 x2,
-                     Q_INT32 y2,
+    virtual void renderToPainter(qint32 x1,
+                     qint32 y1,
+                     qint32 x2,
+                     qint32 y2,
                      QPainter &painter,
                      KisProfile *profile,
                      PaintFlags paintFlags,
@@ -89,10 +89,10 @@ public:
      * Render the projection onto a QImage. In contrast with the above method, the
      * selection is not rendered.
      */
-     virtual QImage convertToQImage(Q_INT32 x1,
-                                    Q_INT32 y1,
-                                    Q_INT32 x2,
-                                    Q_INT32 y2,
+     virtual QImage convertToQImage(qint32 x1,
+                                    qint32 y1,
+                                    qint32 x2,
+                                    qint32 y2,
                                     KisProfile * profile,
                                     float exposure = 0.0f);
 
@@ -141,7 +141,7 @@ public:
      * @param y the y position of the crop on all layer if cropLayers is true
      * @param cropLayers if true, all layers are cropped to the new size.
      */
-    void resize(Q_INT32 w, Q_INT32 h, Q_INT32 x = 0, Q_INT32 y = 0,  bool cropLayers = false);
+    void resize(qint32 w, qint32 h, qint32 x = 0, qint32 y = 0,  bool cropLayers = false);
 
     /**
      * Resize the image to the specified width and height. The resize
@@ -159,7 +159,7 @@ public:
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    void convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent = INTENT_PERCEPTUAL);
 
     // Get the profile associated with this image
     KisProfile *  getProfile() const;
@@ -204,8 +204,8 @@ public:
     double yRes();
     void setResolution(double xres, double yres);
 
-    Q_INT32 width() const;
-    Q_INT32 height() const;
+    qint32 width() const;
+    qint32 height() const;
 
     bool empty() const;
 
@@ -218,16 +218,16 @@ public:
     /*
      * Returns the colour of the merged image at pixel (x, y).
      */
-    KisColor mergedPixel(Q_INT32 x, Q_INT32 y);
+    KisColor mergedPixel(qint32 x, qint32 y);
 
     /// Creates a new paint layer with the specified properties, adds it to the image, and returns it.
-    KisLayerSP newLayer(const QString& name, Q_UINT8 opacity,
+    KisLayerSP newLayer(const QString& name, quint8 opacity,
                              const KisCompositeOp& compositeOp = KisCompositeOp(), KisColorSpace * colorstrategy = 0);
 
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
     KisPaintDeviceSP activeDevice();
 
-    void setLayerProperties(KisLayerSP layer, Q_UINT8 opacity, const KisCompositeOp& compositeOp, const QString& name);
+    void setLayerProperties(KisLayerSP layer, quint8 opacity, const KisCompositeOp& compositeOp, const QString& name);
 
     KisGroupLayerSP rootLayer() const;
     KisLayerSP activeLayer() const;
@@ -282,8 +282,8 @@ public:
     /// Move layer to bottom slot
     bool toBottom(KisLayerSP layer);
 
-    Q_INT32 nlayers() const;
-    Q_INT32 nHiddenLayers() const;
+    qint32 nlayers() const;
+    qint32 nHiddenLayers() const;
 
     KCommand *raiseLayerCommand(KisLayerSP layer);
     KCommand *lowerLayerCommand(KisLayerSP layer);
@@ -396,7 +396,7 @@ signals:
      */
     void sigImageModified();
 
-    void sigSizeChanged(Q_INT32 w, Q_INT32 h);
+    void sigSizeChanged(qint32 w, qint32 h);
     void sigProfileChanged(KisProfile *  profile);
     void sigColorSpaceChanged(KisColorSpace*  cs);
 
@@ -408,7 +408,7 @@ public slots:
 
 private:
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoAdapter * adapter, Q_INT32 width, Q_INT32 height,  KisColorSpace * colorSpace, const QString& name);
+    void init(KisUndoAdapter * adapter, qint32 width, qint32 height,  KisColorSpace * colorSpace, const QString& name);
     void emitSizeChanged();
 
 private:
@@ -417,8 +417,8 @@ private:
     QString m_name;
     QString m_description;
 
-    Q_INT32 m_width;
-    Q_INT32 m_height;
+    qint32 m_width;
+    qint32 m_height;
 
     double m_xres;
     double m_yres;

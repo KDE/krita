@@ -82,14 +82,14 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 // 'regular' filling
 // XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
 //      this is more eraseToColor.
-void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, const KisColor& kc, Q_UINT8 opacity)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisColor& kc, quint8 opacity)
 {
     if (w > 0 && h > 0) {
         // Make sure we're in the right colorspace
 
         KisColor kc2(kc); // get rid of const
         kc2.convertTo(m_device->colorSpace());
-        Q_UINT8 * data = kc2.data();
+        quint8 * data = kc2.data();
         m_device->colorSpace()->setAlpha(data, opacity, 1);
 
         m_device->fill(x1, y1, w, h, data);
@@ -98,7 +98,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, cons
     }
 }
 
-void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisPattern * pattern) {
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPattern * pattern) {
     if (!pattern) return;
     if (!pattern->valid()) return;
     if (!m_device) return;
@@ -117,7 +117,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisP
     }
 
     while (y < y1 + h) {
-        sh = QMIN((y1 + h) - y, pattern->height() - sy);
+        sh = qMin((y1 + h) - y, pattern->height() - sy);
 
         int x = x1;
 
@@ -128,7 +128,7 @@ void KisFillPainter::fillRect(Q_INT32 x1, Q_INT32 y1, Q_INT32 w, Q_INT32 h, KisP
         }
 
         while (x < x1 + w) {
-            sw = QMIN((x1 + w) - x, pattern->width() - sx);
+            sw = qMin((x1 + w) - x, pattern->width() - sx);
 
             bitBlt(x, y, m_compositeOp, patternLayer.data(), m_opacity, sx, sy, sw, sh);
             x += sw; sx = 0;
@@ -212,7 +212,7 @@ typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     if (m_width < 0 || m_height < 0) {
         if (m_device->hasSelection() && m_careForSelection) {
-            Q_INT32 x,y,w,h;
+            qint32 x,y,w,h;
             m_device->selection()->extent(x,y,w,h);
             m_width = w - (startX - x);
             m_height = h - (startY - y);
@@ -246,7 +246,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     KisColorSpace * colorSpace = selection->colorSpace();
     KisColorSpace * devColorSpace = sourceDevice->colorSpace();
 
-    Q_UINT8* source = new Q_UINT8[sourceDevice->pixelSize()];
+    quint8* source = new quint8[sourceDevice->pixelSize()];
     KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);
 
     memcpy(source, pixelIt.rawData(), sourceDevice->pixelSize());
@@ -283,7 +283,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
         it is needed to start the iterator at the first position, and then skip to (x,y). */
         pixelIt = sourceDevice->createHLineIterator(0, y, m_width, false);
         pixelIt += x;
-        Q_UINT8 diff = devColorSpace->difference(source, pixelIt.rawData());
+        quint8 diff = devColorSpace->difference(source, pixelIt.rawData());
 
         if (diff >= m_threshold
             || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {

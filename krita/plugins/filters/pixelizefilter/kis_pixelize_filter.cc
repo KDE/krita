@@ -62,13 +62,13 @@ void KisPixelizeFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
     Q_ASSERT( configuration );
     Q_ASSERT( rect.isValid() );
 
-    Q_INT32 x = rect.x(), y = rect.y();
-    Q_INT32 width = rect.width();
-    Q_INT32 height = rect.height();
+    qint32 x = rect.x(), y = rect.y();
+    qint32 width = rect.width();
+    qint32 height = rect.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
-    Q_UINT32 pixelWidth = ((KisPixelizeFilterConfiguration*)configuration)->pixelWidth();
-    Q_UINT32 pixelHeight = ((KisPixelizeFilterConfiguration*)configuration)->pixelHeight();
+    quint32 pixelWidth = ((KisPixelizeFilterConfiguration*)configuration)->pixelWidth();
+    quint32 pixelHeight = ((KisPixelizeFilterConfiguration*)configuration)->pixelHeight();
 
     pixelize(src, dst, x, y, width, height, pixelWidth, pixelHeight);
 }
@@ -81,20 +81,20 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
     if (!src) return;
     if (!dst) return;
 
-    Q_INT32 pixelSize = src->pixelSize();
-    QMemArray<Q_INT32> average(  pixelSize );
+    qint32 pixelSize = src->pixelSize();
+    QMemArray<qint32> average(  pixelSize );
 
-    Q_INT32 count;
+    qint32 count;
 
     //calculate the total number of pixels
-    Q_INT32 numX=0;
-    Q_INT32 numY=0;
+    qint32 numX=0;
+    qint32 numY=0;
 
-    for (Q_INT32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
+    for (qint32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
     {
         numX++;
     }
-    for (Q_INT32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
+    for (qint32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
     {
         numY++;
     }
@@ -102,19 +102,19 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
     setProgressTotalSteps( numX * numY );
     setProgressStage(i18n("Applying pixelize filter..."),0);
 
-    Q_INT32 numberOfPixelsProcessed = 0;
+    qint32 numberOfPixelsProcessed = 0;
 
-    for (Q_INT32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
+    for (qint32 y = starty; y < starty + height; y += pixelHeight - (y % pixelHeight))
     {
-        Q_INT32 h = pixelHeight - (y % pixelHeight);
+        qint32 h = pixelHeight - (y % pixelHeight);
         h = MIN(h, starty + height - y);
 
-        for (Q_INT32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
+        for (qint32 x = startx; x < startx + width; x += pixelWidth - (x % pixelWidth))
         {
-            Q_INT32 w = pixelWidth - (x % pixelWidth);
+            qint32 w = pixelWidth - (x % pixelWidth);
             w = MIN(w, startx + width - x);
 
-            for (Q_INT32 i = 0; i < pixelSize; i++)
+            for (qint32 i = 0; i < pixelSize; i++)
             {
                 average[i] = 0;
             }
@@ -125,7 +125,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
             while( ! srcIt.isDone() ) {
                 if(srcIt.isSelected())
                 {
-                    for (Q_INT32 i = 0; i < pixelSize; i++)
+                    for (qint32 i = 0; i < pixelSize; i++)
                     {
                         average[i] += srcIt.oldRawData()[i];
                     }
@@ -137,7 +137,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
             //average
             if (count > 0)
             {
-                for (Q_INT32 i = 0; i < pixelSize; i++)
+                for (qint32 i = 0; i < pixelSize; i++)
                     average[i] /= count;
             }
             //write

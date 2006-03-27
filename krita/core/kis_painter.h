@@ -102,11 +102,11 @@ public:
     /**
      * Blast the specified region from src onto the current paint device.
      */
-    void bitBlt(Q_INT32 dx, Q_INT32 dy,
+    void bitBlt(qint32 dx, qint32 dy,
                 const KisCompositeOp& op,
                 KisPaintDeviceSP src,
-                Q_INT32 sx, Q_INT32 sy,
-                Q_INT32 sw, Q_INT32 sh)
+                qint32 sx, qint32 sy,
+                qint32 sw, qint32 sh)
     {
         bitBlt(dx, dy, op, src, OPACITY_OPAQUE, sx, sy, sw, sh);
     }
@@ -115,36 +115,36 @@ public:
      * Overloaded version of the previous, differs in that it is possible to specify
      * a value for opacity
      */
-    void bitBlt(Q_INT32 dx, Q_INT32 dy,
+    void bitBlt(qint32 dx, qint32 dy,
                 const KisCompositeOp& op,
                 KisPaintDeviceSP src,
-                Q_UINT8 opacity,
-                Q_INT32 sx, Q_INT32 sy,
-                Q_INT32 sw, Q_INT32 sh);
+                quint8 opacity,
+                qint32 sx, qint32 sy,
+                qint32 sw, qint32 sh);
 
 
     /**
      * A version of bitBlt that renders using an external selection mask, ignoring
      * the src device's own selection, if it has one.
      */
-    void bltSelection(Q_INT32 dx, Q_INT32 dy,
+    void bltSelection(qint32 dx, qint32 dy,
                       const KisCompositeOp &op,
                       KisPaintDeviceSP src,
                       KisSelectionSP selMask,
-                      Q_UINT8 opacity,
-                      Q_INT32 sx, Q_INT32 sy,
-                      Q_INT32 sw, Q_INT32 sh);
+                      quint8 opacity,
+                      qint32 sx, qint32 sy,
+                      qint32 sw, qint32 sh);
 
 
     /**
      * A version of bitBlt that renders using the src device's selection mask, if it has one.
      */
-    void bltSelection(Q_INT32 dx, Q_INT32 dy,
+    void bltSelection(qint32 dx, qint32 dy,
                       const KisCompositeOp &op,
                       KisPaintDeviceSP src,
-                      Q_UINT8 opacity,
-                      Q_INT32 sx, Q_INT32 sy,
-                      Q_INT32 sw, Q_INT32 sh);
+                      quint8 opacity,
+                      qint32 sx, qint32 sy,
+                      qint32 sw, qint32 sh);
 
 
     /**
@@ -306,9 +306,9 @@ public:
     StrokeStyle strokeStyle() const { return m_strokeStyle; }
 
     /// Set the opacity which is used in painting (like filling polygons)
-    void setOpacity(Q_UINT8 opacity) { m_opacity = opacity; }
+    void setOpacity(quint8 opacity) { m_opacity = opacity; }
     /// Returns the opacity that is used in painting
-    Q_UINT8 opacity() const { return m_opacity; }
+    quint8 opacity() const { return m_opacity; }
 
     /**
      * Sets the current composite operation. Everything painted will be composited on
@@ -379,13 +379,13 @@ protected:
     KisBrush *m_brush;
     KisPattern *m_pattern;
     KisPoint m_duplicateOffset;
-    Q_UINT8 m_opacity;
+    quint8 m_opacity;
     KisCompositeOp m_compositeOp;
     KisFilterSP m_filter;
     KisPaintOp * m_paintOp;
     double m_pressure;
     bool m_cancelRequested;
-    Q_INT32 m_pixelSize;
+    qint32 m_pixelSize;
     KisColorSpace * m_colorSpace;
     KisProfile *  m_profile;
     KisPaintDeviceSP m_dab;

@@ -49,13 +49,13 @@ class KoStore;
  * that may allow deferred loading.
  *
  * A datamanager knows nothing about the type of pixel data except
- * how many Q_UINT8's a single pixel takes.
+ * how many quint8's a single pixel takes.
  */
 
 class KisTiledDataManager : public KShared {
 
 protected:
-    KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel);
+    KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);
     ~KisTiledDataManager();
     KisTiledDataManager(const KisTiledDataManager &dm);
     KisTiledDataManager & operator=(const KisTiledDataManager &dm);
@@ -68,8 +68,8 @@ protected:
 
 protected:
 
-    void setDefaultPixel(const Q_UINT8 *defPixel);
-    const Q_UINT8 * defaultPixel() const { return m_defPixel;};
+    void setDefaultPixel(const quint8 *defPixel);
+    const quint8 * defaultPixel() const { return m_defPixel;};
 
     KisMementoSP getMemento();
     void rollback(KisMementoSP memento);
@@ -88,24 +88,24 @@ protected:
 
 protected:
 
-    Q_UINT32 pixelSize();
+    quint32 pixelSize();
 
-    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     QRect extent() const;
 
-    void setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    void setExtent(qint32 x, qint32 y, qint32 w, qint32 h);
 
 protected:
 
-    void clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 clearValue);
-    void clear(Q_INT32 x, Q_INT32 y,  Q_INT32 w, Q_INT32 h, const Q_UINT8 *clearPixel);
+    void clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 clearValue);
+    void clear(qint32 x, qint32 y,  qint32 w, qint32 h, const quint8 *clearPixel);
     void clear();
 
 
 protected:
 
-    void paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
-                Q_INT32 w, Q_INT32 h);
+    void paste(KisDataManagerSP data,  qint32 sx, qint32 sy, qint32 dx, qint32 dy,
+                qint32 w, qint32 h);
 
 
 protected:
@@ -114,86 +114,86 @@ protected:
     /**
      * Get a read-only pointer to pixel (x, y).
      */
-    const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
+    const quint8* pixel(qint32 x, qint32 y);
 
     /**
      * Get a read-write pointer to pixel (x, y).
      */
-    Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y);
+    quint8* writablePixel(qint32 x, qint32 y);
 
     /**
      * write the specified data to x, y. There is no checking on pixelSize!
      */
-    void setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data);
+    void setPixel(qint32 x, qint32 y, const quint8 * data);
 
 
     /**
      * Copy the bytes in the specified rect to a vector. The caller is responsible
      * for managing the vector.
      */
-    void readBytes(Q_UINT8 * bytes,
-               Q_INT32 x, Q_INT32 y,
-               Q_INT32 w, Q_INT32 h);
+    void readBytes(quint8 * bytes,
+               qint32 x, qint32 y,
+               qint32 w, qint32 h);
     /**
      * Copy the bytes in the vector to the specified rect. If there are bytes left
      * in the vector after filling the rect, they will be ignored. If there are
      * not enough bytes, the rest of the rect will be filled with the default value
      * given (by default, 0);
      */
-    void writeBytes(const Q_UINT8 * bytes,
-            Q_INT32 x, Q_INT32 y,
-            Q_INT32 w, Q_INT32 h);
+    void writeBytes(const quint8 * bytes,
+            qint32 x, qint32 y,
+            qint32 w, qint32 h);
 
     /// Get the number of contiguous columns starting at x, valid for all values
     /// of y between minY and maxY.
-    Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY);
+    qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY);
 
     /// Get the number of contiguous rows starting at y, valid for all values
     /// of x between minX and maxX.
-    Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX);
+    qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX);
 
     /// Get the row stride at pixel (x, y). This is the number of bytes to add to a
     /// pointer to pixel (x, y) to access (x, y + 1).
-    Q_INT32 rowStride(Q_INT32 x, Q_INT32 y);
+    qint32 rowStride(qint32 x, qint32 y);
 
     // For debugging use
-    Q_INT32 numTiles() const;
+    qint32 numTiles() const;
 
 private:
 
-    Q_UINT32 m_pixelSize;
-    Q_UINT32 m_numTiles;
+    quint32 m_pixelSize;
+    quint32 m_numTiles;
     KisTile *m_defaultTile;
     KisTile **m_hashTable;
     KisMementoSP m_currentMemento;
-    Q_INT32 m_extentMinX;
-    Q_INT32 m_extentMinY;
-    Q_INT32 m_extentMaxX;
-    Q_INT32 m_extentMaxY;
-    Q_UINT8 *m_defPixel;
+    qint32 m_extentMinX;
+    qint32 m_extentMinY;
+    qint32 m_extentMaxX;
+    qint32 m_extentMaxY;
+    quint8 *m_defPixel;
 
 private:
 
-    void ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, const KisTile *refTile);
-    KisTile *getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def);
-    KisTile *getTile(Q_INT32 col, Q_INT32 row, bool writeAccess);
-    Q_UINT32 calcTileHash(Q_INT32 col, Q_INT32 row);
-    void updateExtent(Q_INT32 col, Q_INT32 row);
+    void ensureTileMementoed(qint32 col, qint32 row, quint32 tileHash, const KisTile *refTile);
+    KisTile *getOldTile(qint32 col, qint32 row, KisTile *def);
+    KisTile *getTile(qint32 col, qint32 row, bool writeAccess);
+    quint32 calcTileHash(qint32 col, qint32 row);
+    void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
     void deleteTiles(const KisMemento::DeletedTile *deletedTileList);
-    Q_INT32 xToCol(Q_INT32 x) const;
-    Q_INT32 yToRow(Q_INT32 y) const;
-    void getContiguousColumnsAndRows(Q_INT32 x, Q_INT32 y, Q_INT32 *columns, Q_INT32 *rows);
-    Q_UINT8* pixelPtr(Q_INT32 x, Q_INT32 y, bool writable);
+    qint32 xToCol(qint32 x) const;
+    qint32 yToRow(qint32 y) const;
+    void getContiguousColumnsAndRows(qint32 x, qint32 y, qint32 *columns, qint32 *rows);
+    quint8* pixelPtr(qint32 x, qint32 y, bool writable);
 };
 
 
-inline Q_UINT32 KisTiledDataManager::pixelSize()
+inline quint32 KisTiledDataManager::pixelSize()
 {
     return m_pixelSize;
 }
 
-inline Q_INT32 KisTiledDataManager::xToCol(Q_INT32 x) const
+inline qint32 KisTiledDataManager::xToCol(qint32 x) const
 {
     if (x >= 0) {
         return x / KisTile::WIDTH;
@@ -202,7 +202,7 @@ inline Q_INT32 KisTiledDataManager::xToCol(Q_INT32 x) const
     }
 }
 
-inline Q_INT32 KisTiledDataManager::yToRow(Q_INT32 y) const
+inline qint32 KisTiledDataManager::yToRow(qint32 y) const
 {
     if (y >= 0) {
         return y / KisTile::HEIGHT;

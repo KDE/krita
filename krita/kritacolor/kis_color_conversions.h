@@ -36,14 +36,14 @@
  void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
  void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
 
- void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, float * h, float * l, float * s);
+ void rgb_to_hls(quint8 r, quint8 g, quint8 b, float * h, float * l, float * s);
 
  float hue_value(float n1, float n2, float hue);
 
- void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b);
+ void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b);
 
- void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, int * h, int * l, int * s);
- void hls_to_rgb(int h, int l, int s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b);
+ void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s);
+ void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b);
 
 #endif // _KIS_CONVERSIONS_H_
 

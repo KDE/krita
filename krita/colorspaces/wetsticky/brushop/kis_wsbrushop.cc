@@ -77,9 +77,9 @@ void KisWSBrushOp::paintAt(const KisPoint &pos,
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    Q_INT32 x;
+    qint32 x;
     double xFraction;
-    Q_INT32 y;
+    qint32 y;
     double yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
@@ -107,10 +107,10 @@ void KisWSBrushOp::paintAt(const KisPoint &pos,
     
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    Q_INT32 sx = dstRect.x() - x;
-    Q_INT32 sy = dstRect.y() - y;
-    Q_INT32 sw = dstRect.width();
-    Q_INT32 sh = dstRect.height();
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
 
     m_painter -> bltSelection(dstRect.x(), dstRect.y(), m_painter -> compositeOp(), dab.data(), m_painter -> opacity(), sx, sy, sw, sh);
     m_painter -> addDirtyRect(dstRect);

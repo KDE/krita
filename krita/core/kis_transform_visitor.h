@@ -41,7 +41,7 @@ public:
 
     KisTransformVisitor(KisImageSP img, double  xscale, double  yscale,
         double  /*xshear*/, double  /*yshear*/, double angle,
-        Q_INT32  tx, Q_INT32  ty, KisProgressDisplayInterface *progress, KisFilterStrategy *filter) 
+        qint32  tx, qint32  ty, KisProgressDisplayInterface *progress, KisFilterStrategy *filter) 
         : KisLayerVisitor()
         , m_sx(xscale)
         , m_sy(yscale)
@@ -109,7 +109,7 @@ public:
 
 private:
     double m_sx, m_sy;
-    Q_INT32 m_tx, m_ty;
+    qint32 m_tx, m_ty;
     KisFilterStrategy *m_filter;
     double m_angle;
     KisProgressDisplayInterface *m_progress;

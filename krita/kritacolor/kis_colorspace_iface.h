@@ -33,7 +33,7 @@ public:
 	KisColorSpaceIface( KisColorSpace * parent );
 k_dcop:
 
-    QByteArray invertColor(QByteArray src, Q_INT32 nPixels);
+    QByteArray invertColor(QByteArray src, qint32 nPixels);
 
 private:
 

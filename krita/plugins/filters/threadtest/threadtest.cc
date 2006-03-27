@@ -74,29 +74,29 @@ public:
         , m_dst(dst)
         , m_rect(rect)
         {
-            kdDebug() << "Thread created " << m_name << ", " << QThread::currentThread() << ", " << m_rect << "\n";
+            kDebug() << "Thread created " << m_name << ", " << QThread::currentThread() << ", " << m_rect << "\n";
         };
 
     void run()
         {
-            kdDebug() << "Thread started:" << m_name  << ", " << QThread::currentThread() << "\n";
+            kDebug() << "Thread started:" << m_name  << ", " << QThread::currentThread() << "\n";
 
             KisRectIteratorPixel dstIt = m_dst->createRectIterator(m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height(), true );
             KisRectIteratorPixel srcIt = m_src->createRectIterator(m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height(), false);
-            Q_INT32 depth = m_src -> colorSpace() -> nColorChannels();
+            qint32 depth = m_src -> colorSpace() -> nColorChannels();
 
-            kdDebug() << "Thread " << m_name << " starts loop \n";
+            kDebug() << "Thread " << m_name << " starts loop \n";
 
             while( ! srcIt.isDone() ) {
                 if ( srcIt.isSelected() ) {
                     for( int i = 0; i < depth; i++) {
-                        dstIt.rawData()[i] = Q_UINT8_MAX - srcIt.oldRawData()[i];
+                        dstIt.rawData()[i] = quint8_MAX - srcIt.oldRawData()[i];
                    }
                 }
                 ++srcIt;
                 ++dstIt;
             }
-            kdDebug() << "Thread " << m_name << " finished \n";
+            kDebug() << "Thread " << m_name << " finished \n";
         };
 
 private:
@@ -113,7 +113,7 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "colors", i18n("Invert with
 
 void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
-    kdDebug() << "Going to invert " << rect << "\n";
+    kDebug() << "Going to invert " << rect << "\n";
     int h2 = rect.height() / 2;
     int w2 = rect.width() / 2;
 

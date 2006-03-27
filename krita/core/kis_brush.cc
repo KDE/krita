@@ -53,28 +53,28 @@
 
 namespace {
     struct GimpBrushV1Header {
-        Q_UINT32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
-        Q_UINT32 version;      /*  brush file version #  */
-        Q_UINT32 width;        /*  width of brush  */
-        Q_UINT32 height;       /*  height of brush  */
-        Q_UINT32 bytes;        /*  depth of brush in bytes */
+        quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
+        quint32 version;      /*  brush file version #  */
+        quint32 width;        /*  width of brush  */
+        quint32 height;       /*  height of brush  */
+        quint32 bytes;        /*  depth of brush in bytes */
     };
 
     /// All fields are in MSB on disk!
     struct GimpBrushHeader {
-        Q_UINT32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
-        Q_UINT32 version;      /*  brush file version #  */
-        Q_UINT32 width;        /*  width of brush  */
-        Q_UINT32 height;       /*  height of brush  */
-        Q_UINT32 bytes;        /*  depth of brush in bytes */
+        quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
+        quint32 version;      /*  brush file version #  */
+        quint32 width;        /*  width of brush  */
+        quint32 height;       /*  height of brush  */
+        quint32 bytes;        /*  depth of brush in bytes */
 
                        /*  The following are only defined in version 2 */
-        Q_UINT32 magic_number; /*  GIMP brush magic number  */
-        Q_UINT32 spacing;      /*  brush spacing as % of width & height, 0 - 1000 */
+        quint32 magic_number; /*  GIMP brush magic number  */
+        quint32 spacing;      /*  brush spacing as % of width & height, 0 - 1000 */
     };
 
     // Needed, or the GIMP won't open it!
-    Q_UINT32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
+    quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
 }
 
 #define DEFAULT_SPACING 0.25
@@ -92,7 +92,7 @@ KisBrush::KisBrush(const QString& filename) : super(filename)
 
 KisBrush::KisBrush(const QString& filename,
            const QByteArray& data,
-           Q_UINT32 & dataPos) : super(filename)
+           quint32 & dataPos) : super(filename)
 {
     m_brushType = INVALID;
     m_ownData = false;
@@ -145,7 +145,7 @@ bool KisBrush::load()
 {
     if (m_ownData) {
         QFile file(filename());
-        file.open(IO_ReadOnly);
+        file.open(QIODevice::ReadOnly);
         m_data = file.readAll();
         file.close();
     }
@@ -214,28 +214,28 @@ bool KisBrush::init()
         return false;
     }
 
-    Q_INT32 k = bh.header_size;
+    qint32 k = bh.header_size;
 
     if (bh.bytes == 1) {
         // Grayscale
 
-        if (static_cast<Q_UINT32>(k + bh.width * bh.height) > m_data.size()) {
+        if (static_cast<quint32>(k + bh.width * bh.height) > m_data.size()) {
             return false;
         }
 
         m_brushType = MASK;
         m_hasColor = false;
 
-        for (Q_UINT32 y = 0; y < bh.height; y++) {
-            for (Q_UINT32 x = 0; x < bh.width; x++, k++) {
-                Q_INT32 val = 255 - static_cast<uchar>(m_data[k]);
+        for (quint32 y = 0; y < bh.height; y++) {
+            for (quint32 x = 0; x < bh.width; x++, k++) {
+                qint32 val = 255 - static_cast<uchar>(m_data[k]);
                 m_img.setPixel(x, y, qRgb(val, val, val));
             }
         }
     } else if (bh.bytes == 4) {
         // RGBA
 
-        if (static_cast<Q_UINT32>(k + (bh.width * bh.height * 4)) > m_data.size()) {
+        if (static_cast<quint32>(k + (bh.width * bh.height * 4)) > m_data.size()) {
             return false;
         }
 
@@ -243,8 +243,8 @@ bool KisBrush::init()
         m_img.setAlphaBuffer(true);
         m_hasColor = true;
 
-        for (Q_UINT32 y = 0; y < bh.height; y++) {
-            for (Q_UINT32 x = 0; x < bh.width; x++, k += 4) {
+        for (quint32 y = 0; y < bh.height; y++) {
+            for (quint32 x = 0; x < bh.width; x++, k += 4) {
                 m_img.setPixel(x, y, qRgba(m_data[k],
                                m_data[k+1],
                                m_data[k+2],
@@ -286,7 +286,7 @@ bool KisBrush::initFromPaintDev(KisPaintDevice* image, int x, int y, int w, int 
 bool KisBrush::save()
 {
     QFile file(filename());
-    file.open(IO_WriteOnly | IO_Truncate);
+    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
     bool ok = saveToDevice(&file);
     file.close();
     return ok;
@@ -310,7 +310,7 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
     else
         bh.bytes = htonl(4);
     bh.magic_number = htonl(GimpV2BrushMagic);
-    bh.spacing = htonl(static_cast<Q_UINT32>(spacing() * 100.0));
+    bh.spacing = htonl(static_cast<quint32>(spacing() * 100.0));
 
     // Write header: first bh, then the name
     QByteArray bytes;
@@ -329,16 +329,16 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
 
     if (!hasColor()) {
         bytes.resize(width() * height());
-        for (Q_INT32 y = 0; y < height(); y++) {
-            for (Q_INT32 x = 0; x < width(); x++) {
+        for (qint32 y = 0; y < height(); y++) {
+            for (qint32 x = 0; x < width(); x++) {
                 QRgb c = m_img.pixel(x, y);
                 bytes[k++] = static_cast<char>(255 - qRed(c)); // red == blue == green
             }
         }
     } else {
         bytes.resize(width() * height() * 4);
-        for (Q_INT32 y = 0; y < height(); y++) {
-            for (Q_INT32 x = 0; x < width(); x++) {
+        for (qint32 y = 0; y < height(); y++) {
+            for (qint32 x = 0; x < width(); x++) {
                 // order for gimp brushes, v2 is: RGBA
                 QRgb pixel = m_img.pixel(x,y);
                 bytes[k++] = static_cast<char>(qRed(pixel));
@@ -460,7 +460,7 @@ KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintI
     for (int y = 0; y < outputHeight; y++) {
         KisHLineIterator iter = layer->createHLineIterator( 0, y, outputWidth, true);
         for (int x = 0; x < outputWidth; x++) {
-	    Q_UINT8 * p = iter.rawData();
+	    quint8 * p = iter.rawData();
 
             QRgb pixel = outputImage.pixel(x, y);
             int red = qRed(pixel);
@@ -608,16 +608,16 @@ double KisBrush::scaleForPressure(double pressure)
     return scale;
 }
 
-Q_INT32 KisBrush::maskWidth(const KisPaintInformation& info) const
+qint32 KisBrush::maskWidth(const KisPaintInformation& info) const
 {
     // Add one for sub-pixel shift
-    return static_cast<Q_INT32>(ceil(width() * scaleForPressure(info.pressure)) + 1);
+    return static_cast<qint32>(ceil(width() * scaleForPressure(info.pressure)) + 1);
 }
 
-Q_INT32 KisBrush::maskHeight(const KisPaintInformation& info) const
+qint32 KisBrush::maskHeight(const KisPaintInformation& info) const
 {
     // Add one for sub-pixel shift
-    return static_cast<Q_INT32>(ceil(height() * scaleForPressure(info.pressure)) + 1);
+    return static_cast<qint32>(ceil(height() * scaleForPressure(info.pressure)) + 1);
 }
 
 KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const
@@ -663,10 +663,10 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
 
             double yInterp = srcY - topY;
 
-            Q_UINT8 topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX, topY) : OPACITY_TRANSPARENT;
-            Q_UINT8 bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX, topY + 1) : OPACITY_TRANSPARENT;
-            Q_UINT8 topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX + 1, topY) : OPACITY_TRANSPARENT;
-            Q_UINT8 bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX + 1, topY + 1) : OPACITY_TRANSPARENT;
+            quint8 topLeft = (leftX >= 0 && leftX < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX, topY) : OPACITY_TRANSPARENT;
+            quint8 bottomLeft = (leftX >= 0 && leftX < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX, topY + 1) : OPACITY_TRANSPARENT;
+            quint8 topRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY >= 0 && topY < srcHeight) ? srcMask->alphaAt(leftX + 1, topY) : OPACITY_TRANSPARENT;
+            quint8 bottomRight = (leftX + 1 >= 0 && leftX + 1 < srcWidth && topY + 1 >= 0 && topY + 1 < srcHeight) ? srcMask->alphaAt(leftX + 1, topY + 1) : OPACITY_TRANSPARENT;
 
             double a = 1 - xInterp;
             double b = 1 - yInterp;
@@ -685,7 +685,7 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
                 d = OPACITY_OPAQUE;
             }
 
-            dstMask->setAlphaAt(dstX, dstY, static_cast<Q_UINT8>(d));
+            dstMask->setAlphaAt(dstX, dstY, static_cast<quint8>(d));
         }
     }
 
@@ -971,7 +971,7 @@ void KisBrush::findScaledBrushes(double scale, const ScaledBrush **aboveBrush, c
     }
 }
 
-KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, Q_UINT8 maskValue, double subPixelX, double subPixelY)
+KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, quint8 maskValue, double subPixelX, double subPixelY)
 {
     int srcWidth = 1;
     int srcHeight = 1;
@@ -986,10 +986,10 @@ KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, Q_UINT8 maskValue, d
     for (int y = 0; y < dstHeight; y++) {
         for (int x = 0; x < dstWidth; x++) {
 
-            Q_UINT8 topLeft = (x > 0 && y > 0) ? maskValue : OPACITY_TRANSPARENT;
-            Q_UINT8 bottomLeft = (x > 0 && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
-            Q_UINT8 topRight = (x < srcWidth && y > 0) ? maskValue : OPACITY_TRANSPARENT;
-            Q_UINT8 bottomRight = (x < srcWidth && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
+            quint8 topLeft = (x > 0 && y > 0) ? maskValue : OPACITY_TRANSPARENT;
+            quint8 bottomLeft = (x > 0 && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
+            quint8 topRight = (x < srcWidth && y > 0) ? maskValue : OPACITY_TRANSPARENT;
+            quint8 bottomRight = (x < srcWidth && y < srcHeight) ? maskValue : OPACITY_TRANSPARENT;
 
             // Bi-linear interpolation
             int d = static_cast<int>(a * b * topLeft
@@ -1009,7 +1009,7 @@ KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, Q_UINT8 maskValue, d
                 d = OPACITY_OPAQUE;
             }
 
-            outputMask->setAlphaAt(x, y, static_cast<Q_UINT8>(d));
+            outputMask->setAlphaAt(x, y, static_cast<quint8>(d));
         }
     }
 
@@ -1220,22 +1220,22 @@ void KisBrush::setImage(const QImage& img)
     setValid(true);
 }
 
-Q_INT32 KisBrush::width() const
+qint32 KisBrush::width() const
 {
     return m_width;
 }
 
-void KisBrush::setWidth(Q_INT32 w)
+void KisBrush::setWidth(qint32 w)
 {
     m_width = w;
 }
 
-Q_INT32 KisBrush::height() const
+qint32 KisBrush::height() const
 {
     return m_height;
 }
 
-void KisBrush::setHeight(Q_INT32 h)
+void KisBrush::setHeight(qint32 h)
 {
     m_height = h;
 }

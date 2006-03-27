@@ -67,7 +67,7 @@ public:
     virtual KisFilterConfiguration* configuration(QWidget*);
     virtual KisFilterConfiguration * configuration() { return new KisSobelFilterConfiguration( true, true, true, true); };
 private:
-    void prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
+    void prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h);
     void sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque);
 };
 

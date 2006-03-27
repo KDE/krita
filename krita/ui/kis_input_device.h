@@ -41,17 +41,17 @@ public:
     static KisInputDevice unknown();   
 
 private:
-    KisInputDevice(Q_INT32 id) : m_id(id) {}
+    KisInputDevice(qint32 id) : m_id(id) {}
 
-    Q_INT32 id() const { return m_id; }
+    qint32 id() const { return m_id; }
 
     static void allocateDefaultDevicesIfNeeded();
     static KisInputDevice allocateNextDevice();
 
 private:
-     Q_INT32 m_id;
+     qint32 m_id;
 
-     static Q_INT32 NextInputDeviceID;
+     static qint32 NextInputDeviceID;
      static Q3ValueVector<KisInputDevice> InputDevices;
 
      static KisInputDevice Mouse;

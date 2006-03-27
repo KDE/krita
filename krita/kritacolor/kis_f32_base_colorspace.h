@@ -64,18 +64,18 @@ public:
 	m_alphaSize = sizeof(float);
     };
 
-    virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) const;
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const;
-    virtual void multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+    virtual quint8 getAlpha(const quint8 * pixel) const;
+    virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
+    virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels);
 
-    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
-    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels);
+    virtual void applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels);
 
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
+    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
-    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
-    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos);
+    virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
 
     virtual bool hasHighDynamicRange() const { return true; }
 };

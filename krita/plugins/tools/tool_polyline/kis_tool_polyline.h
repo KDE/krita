@@ -57,7 +57,7 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual Q_UINT32 priority() { return 5; }
+    virtual quint32 priority() { return 5; }
 
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void doubleClick(KisDoubleClickEvent *e);

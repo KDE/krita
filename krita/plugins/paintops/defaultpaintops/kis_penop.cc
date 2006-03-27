@@ -70,8 +70,8 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisPoint hotSpot = brush->hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
-    Q_INT32 x = pt.roundX();
-    Q_INT32 y = pt.roundY();
+    qint32 x = pt.roundX();
+    qint32 y = pt.roundY();
 
     KisPaintDeviceSP dab = 0;
     if (brush->brushType() == IMAGE || 
@@ -104,7 +104,7 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisRectIteratorPixel pixelIt = dab->createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height(), true);
 
     while (!pixelIt.isDone()) {
-        Q_UINT8 alpha = cs->getAlpha(pixelIt.rawData());
+        quint8 alpha = cs->getAlpha(pixelIt.rawData());
 
         if (alpha < (4 * OPACITY_OPAQUE) / 10) {
             cs->setAlpha(pixelIt.rawData(), OPACITY_TRANSPARENT, 1);
@@ -115,10 +115,10 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         ++pixelIt;
     }
 
-    Q_INT32 sx = dstRect.x() - x;
-    Q_INT32 sy = dstRect.y() - y;
-    Q_INT32 sw = dstRect.width();
-    Q_INT32 sh = dstRect.height();
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
 
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(),

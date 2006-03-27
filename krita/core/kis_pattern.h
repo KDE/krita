@@ -51,16 +51,16 @@ public:
      **/
     KisPaintDeviceSP image(KisColorSpace * colorSpace);
 
-    Q_INT32 width() const;
-    Q_INT32 height() const;
+    qint32 width() const;
+    qint32 height() const;
 
     void setImage(const QImage& img);
 
     KisPattern* clone() const;
 
 protected:
-    void setWidth(Q_INT32 w);
-    void setHeight(Q_INT32 h);
+    void setWidth(qint32 w);
+    void setHeight(qint32 h);
 
 private:
     bool init();
@@ -71,8 +71,8 @@ private:
     QMap<QString, KisPaintDeviceSP> m_colorspaces;
     bool m_hasFile;
 
-    Q_INT32 m_width;
-    Q_INT32 m_height;
+    qint32 m_width;
+    qint32 m_height;
 };
 
 #endif

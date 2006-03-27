@@ -39,7 +39,7 @@ public:
     void drag(const QPoint& pos);
     void endDrag(const QPoint& pos, bool undo = true);
     void simpleMove(const QPoint& pt1, const QPoint& pt2);
-    void simpleMove(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2);
+    void simpleMove(qint32 x1, qint32 y1, qint32 x2, qint32 y2);
 
 private:
     KisStrategyMove(const KisStrategyMove&);

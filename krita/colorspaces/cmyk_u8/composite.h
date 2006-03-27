@@ -19,55 +19,55 @@
 #ifndef COMPOSITE_CMYK
 #define COMPOSITE_CMYK
 
-void compositeCopyCyan(Q_INT32 stride,
-               Q_UINT8 *dst, 
-               Q_INT32 dststride,
-               Q_UINT8 *src, 
-               Q_INT32 srcstride,
-               Q_INT32 rows, 
-               Q_INT32 cols, 
-               Q_UINT8 opacity = OPACITY_OPAQUE)
+void compositeCopyCyan(qint32 stride,
+               quint8 *dst, 
+               qint32 dststride,
+               quint8 *src, 
+               qint32 srcstride,
+               qint32 rows, 
+               qint32 cols, 
+               quint8 opacity = OPACITY_OPAQUE)
 {
     compositeCopyChannel(PIXEL_CYAN, stride, dst, dststride, src, srcstride, rows, cols, opacity);
 }
 
 
-void compositeCopyMagenta(Q_INT32 stride,
-              Q_UINT8 *dst, 
-              Q_INT32 dststride,
-              Q_UINT8 *src, 
-              Q_INT32 srcstride,
-              Q_INT32 rows, 
-              Q_INT32 cols, 
-              Q_UINT8 opacity = OPACITY_OPAQUE)
+void compositeCopyMagenta(qint32 stride,
+              quint8 *dst, 
+              qint32 dststride,
+              quint8 *src, 
+              qint32 srcstride,
+              qint32 rows, 
+              qint32 cols, 
+              quint8 opacity = OPACITY_OPAQUE)
 {
     compositeCopyChannel(PIXEL_MAGENTA, stride, dst, dststride, src, srcstride, rows, cols, opacity);
 
 }
 
 
-void compositeCopyYellow(Q_INT32 stride,
-             Q_UINT8 *dst, 
-             Q_INT32 dststride,
-             Q_UINT8 *src, 
-             Q_INT32 srcstride,
-             Q_INT32 rows, 
-             Q_INT32 cols, 
-             Q_UINT8 opacity = OPACITY_OPAQUE)
+void compositeCopyYellow(qint32 stride,
+             quint8 *dst, 
+             qint32 dststride,
+             quint8 *src, 
+             qint32 srcstride,
+             qint32 rows, 
+             qint32 cols, 
+             quint8 opacity = OPACITY_OPAQUE)
 {
     compositeCopyChannel(PIXEL_YELLOW, stride, dst, dststride, src, srcstride, rows, cols, opacity);
 
 }
 
 
-void compositeCopyBlack(Q_INT32 stride,
-            Q_UINT8 *dst, 
-            Q_INT32 dststride,
-            Q_UINT8 *src, 
-            Q_INT32 srcstride,
-            Q_INT32 rows, 
-            Q_INT32 cols, 
-            Q_UINT8 opacity = OPACITY_OPAQUE)
+void compositeCopyBlack(qint32 stride,
+            quint8 *dst, 
+            qint32 dststride,
+            quint8 *src, 
+            qint32 srcstride,
+            qint32 rows, 
+            qint32 cols, 
+            quint8 opacity = OPACITY_OPAQUE)
 {
     compositeCopyChannel(PIXEL_BLACK, stride, dst, dststride, src, srcstride, rows, cols, opacity);
 }

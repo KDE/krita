@@ -46,14 +46,14 @@ private:
     bool m_cancelRequested;
         virtual void cancel() { m_cancelRequested = true; }
 
-    void initProgress(Q_INT32 totalSteps);
+    void initProgress(qint32 totalSteps);
     void incrementProgress();
     void setProgressDone();
 
     KisProgressDisplayInterface *m_progress;
-    Q_INT32 m_progressStep;
-    Q_INT32 m_progressTotalSteps;
-    Q_INT32 m_lastProgressPerCent;
+    qint32 m_progressStep;
+    qint32 m_progressTotalSteps;
+    qint32 m_lastProgressPerCent;
 
     KisPaintDeviceSP rotateRight90(KisPaintDeviceSP src);
     KisPaintDeviceSP rotateLeft90(KisPaintDeviceSP src);

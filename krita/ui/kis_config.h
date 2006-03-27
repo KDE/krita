@@ -32,14 +32,14 @@ public:
     bool undoEnabled() const;
     void setUndoEnabled(bool undo);
     
-    Q_INT32 defUndoLimit() const;
-    void defUndoLimit(Q_INT32 limit);
+    qint32 defUndoLimit() const;
+    void defUndoLimit(qint32 limit);
 
-    Q_INT32 defImgWidth() const;
-    void defImgWidth(Q_INT32 width);
+    qint32 defImgWidth() const;
+    void defImgWidth(qint32 width);
 
-    Q_INT32 defImgHeight() const;
-    void defImgHeight(Q_INT32 height);
+    qint32 defImgHeight() const;
+    void defImgHeight(qint32 height);
 
     double defImgResolution() const;
     void defImgResolution(double res);
@@ -69,11 +69,11 @@ public:
     bool showRulers() const;
     void setShowRulers(bool rulers);
 
-    Q_INT32 pasteBehaviour() const;
-    void setPasteBehaviour(Q_INT32 behaviour);
+    qint32 pasteBehaviour() const;
+    void setPasteBehaviour(qint32 behaviour);
 
-    Q_INT32 renderIntent() const;
-    void setRenderIntent(Q_INT32 renderIntent);
+    qint32 renderIntent() const;
+    void setRenderIntent(qint32 renderIntent);
 
     bool useOpenGL() const;
     void setUseOpenGL(bool useOpenGL);
@@ -81,55 +81,55 @@ public:
     bool useOpenGLShaders() const;
     void setUseOpenGLShaders(bool useOpenGLShaders);
 
-    Q_INT32 maxNumberOfThreads();
-    void setMaxNumberOfThreads(Q_INT32 numberOfThreads);
+    qint32 maxNumberOfThreads();
+    void setMaxNumberOfThreads(qint32 numberOfThreads);
 
     /// Maximum tiles in memory (this is a guideline, not absolute)
-    Q_INT32 maxTilesInMem() const;
-    void setMaxTilesInMem(Q_INT32 tiles);
+    qint32 maxTilesInMem() const;
+    void setMaxTilesInMem(qint32 tiles);
 
     /// Number of tiles that will be swapped at once. The higher, the more swapped, but more
     /// chance that it will become slow
-    Q_INT32 swappiness() const;
-    void setSwappiness(Q_INT32 swappiness);
+    qint32 swappiness() const;
+    void setSwappiness(qint32 swappiness);
 
-    Q_INT32 getPressureCorrection();
-    void setPressureCorrection( Q_INT32 correction);
-    Q_INT32 getDefaultPressureCorrection();
+    qint32 getPressureCorrection();
+    void setPressureCorrection( qint32 correction);
+    qint32 getDefaultPressureCorrection();
 
     bool tabletDeviceEnabled(const QString& tabletDeviceName) const;
     void setTabletDeviceEnabled(const QString& tabletDeviceName, bool enabled);
 
-    Q_INT32 tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, Q_INT32 defaultAxis) const;
-    void setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, Q_INT32 axis) const;
+    qint32 tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 defaultAxis) const;
+    void setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 axis) const;
 
-    Q_INT32 dockability();
-    Q_INT32 getDefaultDockability();
-    void setDockability( Q_INT32 dockability);
+    qint32 dockability();
+    qint32 getDefaultDockability();
+    void setDockability( qint32 dockability);
 
     float dockerFontSize();
     float getDefaultDockerFontSize();
     void setDockerFontSize(float);
 
     
-    Q_UINT32 getGridMainStyle();
-    void setGridMainStyle(Q_UINT32 v);
-    Q_UINT32 getGridSubdivisionStyle();
-    void setGridSubdivisionStyle(Q_UINT32 v);
+    quint32 getGridMainStyle();
+    void setGridMainStyle(quint32 v);
+    quint32 getGridSubdivisionStyle();
+    void setGridSubdivisionStyle(quint32 v);
     QColor getGridMainColor();
     void setGridMainColor(QColor v);
     QColor getGridSubdivisionColor();
     void setGridSubdivisionColor(QColor v);
-    Q_UINT32 getGridHSpacing();
-    void setGridHSpacing(Q_UINT32 v);
-    Q_UINT32 getGridVSpacing();
-    void setGridVSpacing(Q_UINT32 v);
-    Q_UINT32 getGridSubdivisions();
-    void setGridSubdivisions(Q_UINT32 v);
-    Q_UINT32 getGridOffsetX();
-    void setGridOffsetX(Q_UINT32 v);
-    Q_UINT32 getGridOffsetY();
-    void setGridOffsetY(Q_UINT32 v);
+    quint32 getGridHSpacing();
+    void setGridHSpacing(quint32 v);
+    quint32 getGridVSpacing();
+    void setGridVSpacing(quint32 v);
+    quint32 getGridSubdivisions();
+    void setGridSubdivisions(quint32 v);
+    quint32 getGridOffsetX();
+    void setGridOffsetX(quint32 v);
+    quint32 getGridOffsetY();
+    void setGridOffsetY(quint32 v);
 
     
 private:

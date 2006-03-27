@@ -52,7 +52,7 @@ void KisImageTester::mergeTests()
     KisColor mergedPixel = image->mergedPixel(0, 0);
 
     QColor colour;
-    Q_UINT8 opacity;
+    quint8 opacity;
 
     mergedPixel.toQColor(&colour, &opacity);
 

@@ -44,7 +44,7 @@ public:
     KisDropshadow(KisView * view);
     virtual ~KisDropshadow() {};
 
-    void dropshadow(KisProgressDisplayInterface * progress, Q_INT32 xoffset, Q_INT32 yoffset, Q_INT32 blurradius, QColor color, Q_UINT8 opacity, bool allowResize);
+    void dropshadow(KisProgressDisplayInterface * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, QColor color, quint8 opacity, bool allowResize);
 
 public: // Implement KisProgressSubject
         virtual void cancel() { m_cancelRequested = true; }
@@ -56,11 +56,11 @@ private:
                        KisProgressDisplayInterface * progressDisplay);
     //gaussian blur helper functions
     void find_constants(double n_p[], double n_m[], double d_p[], double d_m[], double bd_p[], double bd_m[], double  std_dev);
-    void transfer_pixels(double *src1, double *src2, Q_UINT8  *dest, Q_INT32 bytes, Q_INT32 width);
-    Q_INT32* make_curve(double sigma, Q_INT32 *length);
-    void run_length_encode (Q_UINT8 *src, Q_INT32 *dest, Q_INT32 bytes, Q_INT32 width);
-    void multiply_alpha (Q_UINT8 *buf, Q_INT32 width, Q_INT32 bytes);
-    void separate_alpha (Q_UINT8 *buf, Q_INT32 width, Q_INT32 bytes);
+    void transfer_pixels(double *src1, double *src2, quint8  *dest, qint32 bytes, qint32 width);
+    qint32* make_curve(double sigma, qint32 *length);
+    void run_length_encode (quint8 *src, qint32 *dest, qint32 bytes, qint32 width);
+    void multiply_alpha (quint8 *buf, qint32 width, qint32 bytes);
+    void separate_alpha (quint8 *buf, qint32 width, qint32 bytes);
 
 private:
     KisView * m_view;

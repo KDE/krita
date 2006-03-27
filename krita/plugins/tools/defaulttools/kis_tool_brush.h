@@ -47,7 +47,7 @@ public:
     virtual void update(KisCanvasSubject *subject);
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual Q_UINT32 priority() { return 0; }
+    virtual quint32 priority() { return 0; }
     QWidget* createOptionWidget(QWidget* parent);
 
 protected:
@@ -64,7 +64,7 @@ private slots:
 
 private:
     
-    Q_INT32 m_rate;
+    qint32 m_rate;
     QTimer * m_timer;
     Q3GridLayout* m_optionLayout;
     QCheckBox * m_chkDirect;

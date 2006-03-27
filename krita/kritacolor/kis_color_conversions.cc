@@ -146,8 +146,8 @@ void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B)
 
 void RGBToHSV(float r, float g, float b, float *h, float *s, float *v)
 {
-    float max = QMAX(r, QMAX(g, b));
-    float min = QMIN(r, QMIN(g, b));
+    float max = qMax(r, qMax(g, b));
+    float min = qMin(r, qMin(g, b));
 
     *v = max;
 
@@ -235,7 +235,7 @@ void HSVToRGB(float h, float s, float v, float *r, float *g, float *b)
     }
 }
 
-void rgb_to_hls(Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, float * hue, float * lightness, float * saturation)
+void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float * hue, float * lightness, float * saturation)
 {
     float r = red / 255.0;
     float g = green / 255.0;
@@ -246,11 +246,11 @@ void rgb_to_hls(Q_UINT8 red, Q_UINT8 green, Q_UINT8 blue, float * hue, float * l
 
     float max, min, delta;
 
-    max = QMAX(r, g);
-    max = QMAX(max, b);
+    max = qMax(r, g);
+    max = qMax(max, b);
     
-    min = QMIN(r, g);
-    min = QMIN(min, b);
+    min = qMin(r, g);
+    min = qMin(min, b);
 
     delta = max - min;
 
@@ -306,7 +306,7 @@ float hue_value(float n1, float n2, float hue)
 }
 
 
-void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b)
+void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b)
 {
     float m1, m2;
 
@@ -317,13 +317,13 @@ void hls_to_rgb(float h, float l, float s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b
 
     m1 = 2 * l - m2;
     
-    *r = (Q_UINT8)(hue_value(m1, m2, h + 120) * 255 + 0.5);
-    *g = (Q_UINT8)(hue_value(m1, m2, h) * 255 + 0.5);
-    *b = (Q_UINT8)(hue_value(m1, m2, h - 120) * 255 + 0.5);
+    *r = (quint8)(hue_value(m1, m2, h + 120) * 255 + 0.5);
+    *g = (quint8)(hue_value(m1, m2, h) * 255 + 0.5);
+    *b = (quint8)(hue_value(m1, m2, h - 120) * 255 + 0.5);
 
 }
 
-void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, int * h, int * l, int * s)
+void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s)
 {
     float hue, saturation, lightness;
 
@@ -333,7 +333,7 @@ void rgb_to_hls(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b, int * h, int * l, int * s)
     *s = (int)(saturation * 255 + 0.5);
 }
 
-void hls_to_rgb(int h, int l, int s, Q_UINT8 * r, Q_UINT8 * g, Q_UINT8 * b)
+void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b)
 {
     float hue = h;
     float lightness = l / 255.0;
@@ -355,10 +355,10 @@ void RGBToHSL(float r, float g, float b, float *h, float *s, float *l)
     float vm;
     float r2, g2, b2;
 
-    v = QMAX(r,g);
-    v = QMAX(v,b);
-    m = QMIN(r,g);
-    m = QMIN(m,b);
+    v = qMax(r,g);
+    v = qMax(v,b);
+    m = qMin(r,g);
+    m = qMin(m,b);
 
     if ((*l = (m + v) / 2.0) <= 0.0) {
         *h = UNDEFINED_HUE;

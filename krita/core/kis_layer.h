@@ -43,7 +43,7 @@ class KRITACORE_EXPORT KisLayer : public QObject, public KShared
     Q_OBJECT
 
 public:
-    KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity);
+    KisLayer(KisImage *img, const QString &name, quint8 opacity);
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
@@ -153,11 +153,11 @@ public:
     virtual void deactivate() {};
 
 public:
-    virtual Q_INT32 x() const = 0;
-    virtual void setX(Q_INT32) = 0;
+    virtual qint32 x() const = 0;
+    virtual void setX(qint32) = 0;
 
-    virtual Q_INT32 y() const = 0;
-    virtual void setY(Q_INT32) = 0;
+    virtual qint32 y() const = 0;
+    virtual void setY(qint32) = 0;
 
     virtual KNamedCommand *moveCommand(QPoint oldPosition, QPoint newPosition);
 
@@ -170,10 +170,10 @@ public:
     virtual void setVisible(bool v);
     KNamedCommand *setVisibleCommand(bool visiblel);
 
-    Q_UINT8 opacity() const;
-    void setOpacity(Q_UINT8 val);
-    KNamedCommand *setOpacityCommand(Q_UINT8 val);
-    KNamedCommand *setOpacityCommand(Q_UINT8 prevOpacity, Q_UINT8 newOpacity);
+    quint8 opacity() const;
+    void setOpacity(quint8 val);
+    KNamedCommand *setOpacityCommand(quint8 val);
+    KNamedCommand *setOpacityCommand(quint8 prevOpacity, quint8 newOpacity);
 
     bool locked() const;
     void setLocked(bool l);
@@ -197,15 +197,15 @@ public:
     KisUndoAdapter *undoAdapter() const;
 
     /// paints a mask where the selection on this layer resides
-    virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
     virtual void paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
     /// paints where no data is on this layer. Useful when it is a transparent layer stacked on top of another one
-    virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /// Returns a thumbnail in requested size. The QImage may have transparent parts.
     /// May also return 0
-    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+    virtual QImage createThumbnail(qint32 w, qint32 h);
 
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
@@ -218,7 +218,7 @@ private:
 
     int m_id;
     int m_index;
-    Q_UINT8 m_opacity;
+    quint8 m_opacity;
     bool m_locked;
     bool m_visible;
     bool m_temporary;

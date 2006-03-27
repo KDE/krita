@@ -42,6 +42,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <krandom.h>
 
 #include "kis_global.h"
 #include "kis_paint_device.h"
@@ -62,7 +63,7 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
     for (uint i = 0; i < parasites.count(); i++) {
         QStringList splitted = QStringList::split(parasiteSplitter, *parasites.at(i));
         if (splitted.count() != 2) {
-            kdWarning(41001) << "Wrong count for this parasite key/value:" << *parasites.at(i) << endl;
+            kWarning(41001) << "Wrong count for this parasite key/value:" << *parasites.at(i) << endl;
             continue;
         }
         QString index = *splitted.at(0);
@@ -91,19 +92,19 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 else
                     selection[selIndex] = Constant;
             } else {
-                kdWarning(41001)<< "Sel: wrong index: " << selIndex << "(dim = " << dim << ")" << endl;
+                kWarning(41001)<< "Sel: wrong index: " << selIndex << "(dim = " << dim << ")" << endl;
             }
         } else if (index.startsWith("rank")) {
             int rankIndex = index.mid(strlen("rank")).toInt();
             if (rankIndex < 0 || rankIndex > dim) {
-                kdWarning(41001) << "Rankindex out of range: " << rankIndex << endl;
+                kWarning(41001) << "Rankindex out of range: " << rankIndex << endl;
                 continue;
             }
             rank[rankIndex] = (*splitted.at(1)).toInt();
         } else if (index == "ncells") {
             ncells = (*splitted.at(1)).toInt();
             if (ncells < 1 ) {
-                kdWarning(41001) << "ncells out of range: " << ncells << endl;
+                kWarning(41001) << "ncells out of range: " << ncells << endl;
                 ncells = 1;
             }
         }
@@ -194,7 +195,7 @@ KisImagePipeBrush::~KisImagePipeBrush()
 bool KisImagePipeBrush::load()
 {
     QFile file(filename());
-    file.open(IO_ReadOnly);
+    file.open(QIODevice::ReadOnly);
     m_data = file.readAll();
     file.close();
     return init();
@@ -208,7 +209,7 @@ bool KisImagePipeBrush::init()
     // The first line contains the name -- this means we look until we arrive at the first newline
     QValueVector<char> line1;
 
-    Q_UINT32 i = 0;
+    quint32 i = 0;
 
     while (m_data[i] != '\n' && i < m_data.size()) {
         line1.append(m_data[i]);
@@ -228,11 +229,11 @@ bool KisImagePipeBrush::init()
      }
 
     QString paramline = QString::fromUtf8((&line2[0]), line2.size());
-    Q_UINT32 m_numOfBrushes = paramline.left(paramline.find(' ')).toUInt();
+    quint32 m_numOfBrushes = paramline.left(paramline.find(' ')).toUInt();
     m_parasite = paramline.mid(paramline.find(' ') + 1);
     i++; // Skip past the second newline
 
-     Q_UINT32 numOfBrushes = 0;
+     quint32 numOfBrushes = 0;
       while (numOfBrushes < m_numOfBrushes && i < m_data.size()){
         KisBrush * brush = new KisBrush(name() + "_" + numOfBrushes,
                         m_data,
@@ -264,7 +265,7 @@ bool KisImagePipeBrush::init()
 bool KisImagePipeBrush::save()
 {
     QFile file(filename());
-    file.open(IO_WriteOnly | IO_Truncate);
+    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
     bool ok = saveToDevice(&file);
     file.close();
     return ok;
@@ -277,7 +278,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     int len = qstrlen(name);
 
     if (parasite().dim != 1) {
-        kdWarning(41001) << "Save to file for pipe brushes with dim != not yet supported!" << endl;
+        kWarning(41001) << "Save to file for pipe brushes with dim != not yet supported!" << endl;
         return false;
     }
 
@@ -391,7 +392,7 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
             case KisPipeBrushParasite::Incremental:
                 index = (index + 1) % m_parasite.rank[i]; break;
             case KisPipeBrushParasite::Random:
-                index = int(float(m_parasite.rank[i])*KApplication::random() / RAND_MAX); break;
+                index = int(float(m_parasite.rank[i])*KRandom::random() / RAND_MAX); break;
             case KisPipeBrushParasite::Pressure:
                 index = static_cast<int>(info.pressure * (m_parasite.rank[i] - 1) + 0.5); break;
             case KisPipeBrushParasite::Angular:
@@ -405,7 +406,7 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const {
                 index = static_cast<int>(angle / (2.0 * M_PI) * m_parasite.rank[i]);
                 break;
             default:
-                kdWarning(41001) << "This parasite selectionMode has not been implemented. Reselecting"
+                kWarning(41001) << "This parasite selectionMode has not been implemented. Reselecting"
                         << " to Incremental" << endl;
                 m_parasite.selection[i] = KisPipeBrushParasite::Incremental;
                 index = 0;

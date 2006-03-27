@@ -164,7 +164,7 @@ KisGradientSegment *KisGradient::segmentAt(double t) const
     return segment;
 }
 
-void KisGradient::colorAt(double t, QColor *color, Q_UINT8 *opacity) const
+void KisGradient::colorAt(double t, QColor *color, quint8 *opacity) const
 {
     const KisGradientSegment *segment = segmentAt(t);
     Q_ASSERT(segment != 0);
@@ -172,7 +172,7 @@ void KisGradient::colorAt(double t, QColor *color, Q_UINT8 *opacity) const
     if (segment) {
         Color col = segment->colorAt(t);
         *color = col.color();
-        *opacity = static_cast<Q_UINT8>(col.alpha() * OPACITY_OPAQUE + 0.5);
+        *opacity = static_cast<quint8>(col.alpha() * OPACITY_OPAQUE + 0.5);
     }
 }
 
@@ -188,7 +188,7 @@ QImage KisGradient::generatePreview(int width, int height) const
             int backgroundBlue = backgroundRed;
 
             QColor color;
-            Q_UINT8 opacity;
+            quint8 opacity;
             double t = static_cast<double>(x) / (img.width() - 1);
 
             colorAt(t,  &color, &opacity);

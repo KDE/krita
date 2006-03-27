@@ -54,7 +54,7 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_TRANSFORM; }
-    virtual Q_UINT32 priority() { return 1; }
+    virtual quint32 priority() { return 1; }
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
     virtual void buttonPress(KisButtonPressEvent *e);
@@ -72,13 +72,13 @@ private:
     QRegion handles(QRect rect);
     void paintOutlineWithHandles();
     void paintOutlineWithHandles(KisCanvasPainter& gc, const QRect& rc);
-    Q_INT32 mouseOnHandle (const QPoint currentViewPoint);
-    void setMoveResizeCursor (Q_INT32 handle);
+    qint32 mouseOnHandle (const QPoint currentViewPoint);
+    void setMoveResizeCursor (qint32 handle);
     void validateSelection(bool updateratio = true);
-    void setOptionWidgetX(Q_INT32 x);
-    void setOptionWidgetY(Q_INT32 y);
-    void setOptionWidgetWidth(Q_INT32 x);
-    void setOptionWidgetHeight(Q_INT32 y);
+    void setOptionWidgetX(qint32 x);
+    void setOptionWidgetY(qint32 y);
+    void setOptionWidgetWidth(qint32 x);
+    void setOptionWidgetHeight(qint32 y);
     void setOptionWidgetRatio(double ratio);
 
 private slots:
@@ -104,11 +104,11 @@ private:
 
     WdgToolCrop* m_optWidget;
 
-    Q_INT32 m_handleSize;
+    qint32 m_handleSize;
     QRegion m_handlesRegion;
     bool m_haveCropSelection;
-    Q_INT32 m_dx, m_dy;
-    Q_INT32 m_mouseOnHandleType;
+    qint32 m_dx, m_dy;
+    qint32 m_mouseOnHandleType;
     QCursor m_cropCursor;
 
     enum handleType

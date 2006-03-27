@@ -26,7 +26,7 @@
 #include <QCustomEvent>
 #include <QPixmap>
 
-#include <kiconview.h>
+#include <k3iconview.h>
 
 #include "kis_id.h"
 #include "kis_types.h"
@@ -106,7 +106,7 @@ private:
     KisFiltersThumbnailThread * m_thread;
 };
 
-class KisFiltersListView : public KIconView {
+class KisFiltersListView : public K3IconView {
 
 public:
     

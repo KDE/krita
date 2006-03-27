@@ -105,7 +105,7 @@ signals:
      * @param width  New image width 
      * @param height New image height
      */
-    void sigSizeChanged(Q_INT32 width, Q_INT32 height);
+    void sigSizeChanged(qint32 width, qint32 height);
 
 protected:
     KisOpenGLImageContext(KisImageSP image, KisProfile *monitorProfile);
@@ -121,7 +121,7 @@ protected:
 
 protected slots:
     void slotImageUpdated(QRect r);
-    void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
+    void slotImageSizeChanged(qint32 w, qint32 h);
 
 private:
     KisImageSP m_image;

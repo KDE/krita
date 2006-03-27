@@ -29,7 +29,7 @@
 
 class KisSaveVisitor : public KisLayerVisitor {
 public:
-    KisSaveVisitor(KisImageSP img, KoStore *store, Q_UINT32 &count) :
+    KisSaveVisitor(KisImageSP img, KoStore *store, quint32 &count) :
         KisLayerVisitor(),
         m_count(count)
     {
@@ -47,7 +47,7 @@ public:
 
     virtual bool visit(KisPaintLayer *layer)
     {
-        //connect(*layer->paintDevice(), SIGNAL(ioProgress(Q_INT8)), m_img, SLOT(slotIOProgress(Q_INT8)));
+        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
         QString location = m_external ? QString::null : m_uri;
         location += m_img->name() + QString("/layers/layer%1").arg(m_count);
@@ -144,7 +144,7 @@ private:
     KoStore *m_store;
     bool m_external;
     QString m_uri;
-    Q_UINT32 &m_count;
+    quint32 &m_count;
 };
 
 #endif // KIS_SAVE_VISITOR_H_

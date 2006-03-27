@@ -101,12 +101,12 @@ std::map<XID, KisCanvasWidget::X11TabletDevice> KisCanvasWidget::X11TabletDevice
 
 namespace {
 
-    static Q_INT32 correctPressureScale( Q_INT32 inPressure )
+    static qint32 correctPressureScale( qint32 inPressure )
     {
         KisConfig cfg;
-        Q_INT32 correction = cfg.getPressureCorrection();
+        qint32 correction = cfg.getPressureCorrection();
 
-        Q_INT32 x1, y1, x2, y2;
+        qint32 x1, y1, x2, y2;
 
         if ( correction == 0 ) {
             x1 = 20;
@@ -470,13 +470,13 @@ Qt::ButtonState KisCanvasWidget::translateX11ButtonState(int state)
     if (state & Button3Mask)
         buttonState |= Qt::RightButton;
     if (state & ShiftMask)
-        buttonState |= Qt::ShiftButton;
+        buttonState |= Qt::ShiftModifier;
     if (state & ControlMask)
-        buttonState |= Qt::ControlButton;
+        buttonState |= Qt::ControlModifier;
     if (state & X11AltMask)
-        buttonState |= Qt::AltButton;
+        buttonState |= Qt::AltModifier;
     if (state & X11MetaMask)
-        buttonState |= Qt::MetaButton;
+        buttonState |= Qt::MetaModifier;
 
     return static_cast<Qt::ButtonState>(buttonState);
 }
@@ -621,87 +621,87 @@ bool KisCanvasWidget::X11TabletDevice::enabled() const
     return m_enabled;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::numAxes() const
+qint32 KisCanvasWidget::X11TabletDevice::numAxes() const
 {
     return m_axisInfo.count();
 }
 
-void KisCanvasWidget::X11TabletDevice::setXAxis(Q_INT32 axis)
+void KisCanvasWidget::X11TabletDevice::setXAxis(qint32 axis)
 {
     m_xAxis = axis;
 }
 
-void KisCanvasWidget::X11TabletDevice::setYAxis(Q_INT32 axis)
+void KisCanvasWidget::X11TabletDevice::setYAxis(qint32 axis)
 {
     m_yAxis = axis;
 }
 
-void KisCanvasWidget::X11TabletDevice::setPressureAxis(Q_INT32 axis)
+void KisCanvasWidget::X11TabletDevice::setPressureAxis(qint32 axis)
 {
     m_pressureAxis = axis;
 }
 
-void KisCanvasWidget::X11TabletDevice::setXTiltAxis(Q_INT32 axis)
+void KisCanvasWidget::X11TabletDevice::setXTiltAxis(qint32 axis)
 {
     m_xTiltAxis = axis;
 }
 
-void KisCanvasWidget::X11TabletDevice::setYTiltAxis(Q_INT32 axis)
+void KisCanvasWidget::X11TabletDevice::setYTiltAxis(qint32 axis)
 {
     m_yTiltAxis = axis;
 }
 
-void KisCanvasWidget::X11TabletDevice::setWheelAxis(Q_INT32 axis)
+void KisCanvasWidget::X11TabletDevice::setWheelAxis(qint32 axis)
 {
     m_wheelAxis = axis;
 }
 
-void KisCanvasWidget::X11TabletDevice::setToolIDAxis(Q_INT32 axis)
+void KisCanvasWidget::X11TabletDevice::setToolIDAxis(qint32 axis)
 {
     m_toolIDAxis = axis;
 }
 
-void KisCanvasWidget::X11TabletDevice::setSerialNumberAxis(Q_INT32 axis)
+void KisCanvasWidget::X11TabletDevice::setSerialNumberAxis(qint32 axis)
 {
     m_serialNumberAxis = axis;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::xAxis() const
+qint32 KisCanvasWidget::X11TabletDevice::xAxis() const
 {
     return m_xAxis;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::yAxis() const
+qint32 KisCanvasWidget::X11TabletDevice::yAxis() const
 {
     return m_yAxis;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::pressureAxis() const
+qint32 KisCanvasWidget::X11TabletDevice::pressureAxis() const
 {
     return m_pressureAxis;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::xTiltAxis() const
+qint32 KisCanvasWidget::X11TabletDevice::xTiltAxis() const
 {
     return m_xTiltAxis;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::yTiltAxis() const
+qint32 KisCanvasWidget::X11TabletDevice::yTiltAxis() const
 {
     return m_yTiltAxis;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::wheelAxis() const
+qint32 KisCanvasWidget::X11TabletDevice::wheelAxis() const
 {
     return m_wheelAxis;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::toolIDAxis() const
+qint32 KisCanvasWidget::X11TabletDevice::toolIDAxis() const
 {
     return m_toolIDAxis;
 }
 
-Q_INT32 KisCanvasWidget::X11TabletDevice::serialNumberAxis() const
+qint32 KisCanvasWidget::X11TabletDevice::serialNumberAxis() const
 {
     return m_serialNumberAxis;
 }
@@ -787,7 +787,7 @@ void KisCanvasWidget::X11TabletDevice::enableEvents(QWidget *widget) const
                                            m_eventClassList.count());
     
         if (result != Success) {
-            kdDebug(41001) << "Failed to select extension events for " << m_name << endl;
+            kDebug(41001) << "Failed to select extension events for " << m_name << endl;
         }
     }
 }
@@ -808,7 +808,7 @@ double KisCanvasWidget::X11TabletDevice::translateAxisValue(int value, const XAx
 }
 
 KisCanvasWidget::X11TabletDevice::State::State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
-                                               Q_UINT32 toolID, Q_UINT32 serialNumber)
+                                               quint32 toolID, quint32 serialNumber)
     : m_pos(pos), 
       m_pressure(pressure), 
       m_tilt(tilt),
@@ -834,21 +834,21 @@ KisCanvasWidget::X11TabletDevice::State KisCanvasWidget::X11TabletDevice::transl
     }
 
     KisVector2D tilt = KisVector2D(0, 0);
-    Q_UINT32 toolID = 0;
-    Q_UINT32 serialNumber = 0;
+    quint32 toolID = 0;
+    quint32 serialNumber = 0;
 
     if (m_xTiltAxis != NoAxis) {
         // Latest wacom driver returns the tool id and serial number in 
         // the upper 16 bits of the x and y tilts and wheel.
-        int xTiltAxisValue = (Q_INT16)(axisData[m_xTiltAxis] & 0xffff);
-        toolID = ((Q_UINT32)axisData[m_xTiltAxis] >> 16) & 0xffff;
+        int xTiltAxisValue = (qint16)(axisData[m_xTiltAxis] & 0xffff);
+        toolID = ((quint32)axisData[m_xTiltAxis] >> 16) & 0xffff;
 
         tilt.setX(translateAxisValue(xTiltAxisValue, m_axisInfo[m_xTiltAxis]));
     }
 
     if (m_yTiltAxis != NoAxis) {
-        int yTiltAxisValue = (Q_INT16)(axisData[m_yTiltAxis] & 0xffff);
-        serialNumber = (Q_UINT32)axisData[m_yTiltAxis] & 0xffff0000;
+        int yTiltAxisValue = (qint16)(axisData[m_yTiltAxis] & 0xffff);
+        serialNumber = (quint32)axisData[m_yTiltAxis] & 0xffff0000;
 
         tilt.setY(translateAxisValue(yTiltAxisValue, m_axisInfo[m_yTiltAxis]));
     }
@@ -856,8 +856,8 @@ KisCanvasWidget::X11TabletDevice::State KisCanvasWidget::X11TabletDevice::transl
     double wheel = 0;
 
     if (m_wheelAxis != NoAxis) {
-        int wheelAxisValue = (Q_INT16)(axisData[m_wheelAxis] & 0xffff);
-        serialNumber |= ((Q_UINT32)axisData[m_wheelAxis] >> 16) & 0xffff;
+        int wheelAxisValue = (qint16)(axisData[m_wheelAxis] & 0xffff);
+        serialNumber |= ((quint32)axisData[m_wheelAxis] >> 16) & 0xffff;
 
         wheel = translateAxisValue(wheelAxisValue, m_axisInfo[m_wheelAxis]);
     }
@@ -1140,7 +1140,7 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     useOpenGL = false;
 #else
     if (useOpenGL && !QGLFormat::hasOpenGL()) {
-        kdDebug(41001) << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        kDebug(41001) << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
         useOpenGL = false;
     }
 

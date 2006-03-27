@@ -103,7 +103,7 @@ namespace {
 
 }
 
-Q_UINT32 matchColors(const QColor & c, enumAction action)
+quint32 matchColors(const QColor & c, enumAction action)
 {
     int r = c.red();
     int g = c.green();
@@ -237,7 +237,7 @@ void DlgColorRange::updatePreview()
 {
     if (!m_selection) return;
 
-    Q_INT32 x, y, w, h;
+    qint32 x, y, w, h;
     m_dev->exactBounds(x, y, w, h);
     QPixmap pix = QPixmap(m_selection->maskImage().smoothScale(350, 350, QImage::ScaleMin));
     m_subject->canvasController()->updateCanvas();
@@ -283,10 +283,10 @@ void DlgColorRange::slotSelectClicked()
 {
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     // XXX: Multithread this!
-    Q_INT32 x, y, w, h;
+    qint32 x, y, w, h;
     m_dev->exactBounds(x, y, w, h);
     KisColorSpace * cs = m_dev->colorSpace();
-    Q_UINT8 opacity;
+    quint8 opacity;
     for (int y2 = y; y2 < h - y; ++y2) {
         KisHLineIterator hiter = m_dev->createHLineIterator(x, y2, w, false);
         KisHLineIterator selIter = m_selection ->createHLineIterator(x, y2, w, true);
@@ -296,7 +296,7 @@ void DlgColorRange::slotSelectClicked()
             cs->toQColor(hiter.rawData(), &c, &opacity);
             // Don't try to select transparent pixels.
             if (opacity > OPACITY_TRANSPARENT) {
-                Q_UINT8 match = matchColors(c, m_currentAction);
+                quint8 match = matchColors(c, m_currentAction);
 
                 if (match) {
                     // Personally, I think the invert option a bit silly. But it's possible I don't quite understand it. BSAR.
@@ -305,7 +305,7 @@ void DlgColorRange::slotSelectClicked()
                             *(selIter.rawData()) =  match;
                         }
                         else if (m_mode == SELECTION_SUBTRACT) {
-                            Q_UINT8 selectedness = *(selIter.rawData());
+                            quint8 selectedness = *(selIter.rawData());
                             if (match < selectedness) {
                                 *(selIter.rawData()) = selectedness - match;
                             }
@@ -316,7 +316,7 @@ void DlgColorRange::slotSelectClicked()
                     }
                     else {
                         if (m_mode == SELECTION_ADD) {
-                            Q_UINT8 selectedness = *(selIter.rawData());
+                            quint8 selectedness = *(selIter.rawData());
                             if (match < selectedness) {
                                 *(selIter.rawData()) = selectedness - match;
                             }

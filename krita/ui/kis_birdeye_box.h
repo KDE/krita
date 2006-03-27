@@ -47,7 +47,7 @@ public:
 public slots:
     void slotDocCommandExecuted();
     void slotImageUpdated(QRect r);
-    void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
+    void slotImageSizeChanged(qint32 w, qint32 h);
     void slotImageColorSpaceChanged(KisColorSpace *cs);
 
 protected slots:

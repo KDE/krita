@@ -38,15 +38,15 @@ class KisScriptProgress : public KisProgressSubject
         void activateAsSubject();
         virtual void cancel() {};
     public:
-        void setProgressTotalSteps(Q_INT32 totalSteps);
-        void setProgress(Q_INT32 progress);
+        void setProgressTotalSteps(qint32 totalSteps);
+        void setProgress(qint32 progress);
         void incProgress();
-        void setProgressStage(const QString& stage, Q_INT32 progress);
+        void setProgressStage(const QString& stage, qint32 progress);
         void progressDone();
         inline void setPackagePath(QString path) { m_packagePath = path; };
         inline QString packagePath() { return m_packagePath; }
     private:
-        Q_INT32 m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
+        qint32 m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
         KisView * m_view;
         QString m_packagePath;
 };

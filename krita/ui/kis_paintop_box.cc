@@ -29,7 +29,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
-#include <kaccelmanager.h>
+#include <kacceleratormanager.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 

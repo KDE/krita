@@ -104,7 +104,7 @@ private:
 protected:
     KisCanvasSubject *m_subject;
     QRect m_dirtyRect;
-    Q_UINT8 m_opacity;
+    quint8 m_opacity;
     KisCompositeOp m_compositeOp;
     bool m_paintOutline;
 

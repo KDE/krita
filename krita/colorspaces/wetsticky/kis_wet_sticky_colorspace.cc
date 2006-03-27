@@ -60,7 +60,7 @@ enum WetStickyChannelIndex {
 KisWetStickyColorSpace::KisWetStickyColorSpace() :
     KisAbstractColorSpace(KisID("W&S", i18n("Wet & Sticky")), 0, icMaxEnumData)
 {
-    Q_INT32 pos = 0;
+    qint32 pos = 0;
 
     // Basic representational definition
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), pos, COLOR, 1));
@@ -94,11 +94,11 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     for (it = m_channels.begin(); it != m_channels.end(); ++it)
     {
         KisChannelInfo * ch = (*it);
-        kdDebug(DBG_AREA_CMS) << "Channel: " << ch->name() << ", " << ch->pos() << ", " << i << "\n";
+        kDebug(DBG_AREA_CMS) << "Channel: " << ch->name() << ", " << ch->pos() << ", " << i << "\n";
         ++i;
     }
 
-    kdDebug(DBG_AREA_CMS) << "Size of cell: " << sizeof(CELL) << "\n";
+    kDebug(DBG_AREA_CMS) << "Size of cell: " << sizeof(CELL) << "\n";
 #endif
 }
 
@@ -107,10 +107,10 @@ KisWetStickyColorSpace::~KisWetStickyColorSpace()
 {
 }
 
-void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile)
+void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) dst;
-    Q_UINT8 r, g, b;
+    quint8 r, g, b;
 
     r = c.red();
     g = c.green();
@@ -134,7 +134,7 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfil
     p -> volume = 0;
 
 #ifdef WSDEBUG
-    kdDebug(DBG_AREA_CMS) << "qcolor: "
+    kDebug(DBG_AREA_CMS) << "qcolor: "
         << " r: " << c.red() << " b: " << c.blue() << " g: " << c.red()
         << " native color: (" << QString().setNum(p->red) << ", "
                               << QString().setNum(p->green) << ", "
@@ -146,10 +146,10 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfil
 #endif
 }
 
-void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile)
+void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) dst;
-    Q_UINT8 r, g, b;
+    quint8 r, g, b;
 
     r = c.red();
     g = c.green();
@@ -172,7 +172,7 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT
     p -> volume = 0;
 
 #ifdef WSDEBUG
-    kdDebug(DBG_AREA_CMS) << "qcolor: "
+    kDebug(DBG_AREA_CMS) << "qcolor: "
         << " r: " << c.red() << " b: " << c.blue() << " g: " << c.red() << " opacity: " << opacity
         << " native color: (" << QString().setNum(p->red) << ", "
                               << QString().setNum(p->green) << ", "
@@ -184,7 +184,7 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT
 #endif
 }
 
-void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile)
+void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) src;
 
@@ -192,11 +192,11 @@ void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile 
             p -> green,
             p -> blue);
 #ifdef WSDEBUG
-    kdDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+    kDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 #endif
 }
 
-void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile)
+void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile *  profile)
 {
 
     CELL_PTR p = (CELL_PTR) src;
@@ -207,32 +207,32 @@ void KisWetStickyColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *op
 
     *opacity = p -> alpha;
 #ifdef WSDEBUG
-    kdDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+    kDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
 #endif
 }
 
 
 
-KisPixelRO KisWetStickyColorSpace::toKisPixelRO(const Q_UINT8 *src, KisProfile *  profile)
+KisPixelRO KisWetStickyColorSpace::toKisPixelRO(const quint8 *src, KisProfile *  profile)
 {
     return KisPixelRO (src, src, this, profile);
 }
 
-KisPixel KisWetStickyColorSpace::toKisPixel(Q_UINT8 *src, KisProfile *  profile)
+KisPixel KisWetStickyColorSpace::toKisPixel(quint8 *src, KisProfile *  profile)
 {
     return KisPixel (src, src, this, profile);
 }
 
-void KisWetStickyColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+void KisWetStickyColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
 {
 }
 
-Q_UINT8 KisWetStickyColorSpace::getAlpha(const Q_UINT8 *pixel) const
+quint8 KisWetStickyColorSpace::getAlpha(const quint8 *pixel) const
 {
     return ((CELL_PTR)pixel)->alpha;
 }
 
-void KisWetStickyColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const
+void KisWetStickyColorSpace::setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
 {
     while (nPixels > 0) {
         ((CELL_PTR)pixels)->alpha = alpha;
@@ -241,20 +241,20 @@ void KisWetStickyColorSpace::setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 n
     }
 }
 
-void KisWetStickyColorSpace::applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+void KisWetStickyColorSpace::applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels)
 {
 }
 
-void KisWetStickyColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels)
+void KisWetStickyColorSpace::applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels)
 {
 }
 
-Q_UINT8 KisWetStickyColorSpace::scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos)
+quint8 KisWetStickyColorSpace::scaleToU8(const quint8 * srcPixel, qint32 channelPos)
 {
     return 0;
 }
 
-Q_UINT16 KisWetStickyColorSpace::scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos)
+quint16 KisWetStickyColorSpace::scaleToU16(const quint8 * srcPixel, qint32 channelPos)
 {
     return 0;
 }
@@ -270,46 +270,46 @@ bool KisWetStickyColorSpace::hasAlpha() const
     return true;
 }
 
-Q_INT32 KisWetStickyColorSpace::nChannels() const
+qint32 KisWetStickyColorSpace::nChannels() const
 {
     return 14;
 }
 
-Q_INT32 KisWetStickyColorSpace::nColorChannels() const
+qint32 KisWetStickyColorSpace::nColorChannels() const
 {
     return 3;
 }
 
-Q_INT32 KisWetStickyColorSpace::nSubstanceChannels() const
+qint32 KisWetStickyColorSpace::nSubstanceChannels() const
 {
     return 4;
 
 }
 
-Q_INT32 KisWetStickyColorSpace::pixelSize() const
+qint32 KisWetStickyColorSpace::pixelSize() const
 {
     return sizeof(CELL);
 }
 
 
-QImage KisWetStickyColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+QImage KisWetStickyColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                            KisProfile *  /*srcProfile*/, KisProfile *  /*dstProfile*/,
-                           Q_INT32 /*renderingIntent*/, float /*exposure*/)
+                           qint32 /*renderingIntent*/, float /*exposure*/)
 {
 
     QImage img(width, height, 32, 0, QImage::LittleEndian);
 
-    Q_INT32 i = 0;
+    qint32 i = 0;
     uchar *j = img.bits();
 
     CELL_PTR p = (CELL_PTR) data;
 
     while ( i < width * height) {
 
-        const Q_UINT8 PIXEL_BLUE = 0;
-        const Q_UINT8 PIXEL_GREEN = 1;
-        const Q_UINT8 PIXEL_RED = 2;
-        const Q_UINT8 PIXEL_ALPHA = 3;
+        const quint8 PIXEL_BLUE = 0;
+        const quint8 PIXEL_GREEN = 1;
+        const quint8 PIXEL_RED = 2;
+        const quint8 PIXEL_ALPHA = 3;
 
         *( j + PIXEL_ALPHA ) = p -> alpha;
         *( j + PIXEL_RED )   = p -> red;
@@ -323,16 +323,16 @@ QImage KisWetStickyColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 widt
     return img;
 }
 
-bool KisWetStickyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfile *  /*srcProfile*/,
-                         Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
-                         Q_UINT32 numPixels,
-                         Q_INT32 /*renderingIntent*/)
+bool KisWetStickyColorSpace::convertPixelsTo(const quint8 * src, KisProfile *  /*srcProfile*/,
+                         quint8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
+                         quint32 numPixels,
+                         qint32 /*renderingIntent*/)
 {
-    Q_INT32 dSize = dstColorSpace -> pixelSize();
-    Q_INT32 sSize = pixelSize();
+    qint32 dSize = dstColorSpace -> pixelSize();
+    qint32 sSize = pixelSize();
 
-    Q_UINT32 j = 0;
-    Q_UINT32 i = 0;
+    quint32 j = 0;
+    quint32 i = 0;
     QColor c;
     CELL_PTR cp;
     while ( i < numPixels ) {
@@ -352,15 +352,15 @@ bool KisWetStickyColorSpace::convertPixelsTo(const Q_UINT8 * src, KisProfile *  
 
 }
 
-void KisWetStickyColorSpace::bitBlt(Q_UINT8 *dst,
-                      Q_INT32 dstRowStride,
-                      const Q_UINT8 *src,
-                      Q_INT32 srcRowStride,
-                      const Q_UINT8 *mask,
-                      Q_INT32 maskRowStride,
-                      Q_UINT8 opacity,
-                      Q_INT32 rows,
-                      Q_INT32 cols,
+void KisWetStickyColorSpace::bitBlt(quint8 *dst,
+                      qint32 dstRowStride,
+                      const quint8 *src,
+                      qint32 srcRowStride,
+                      const quint8 *mask,
+                      qint32 maskRowStride,
+                      quint8 opacity,
+                      qint32 rows,
+                      qint32 cols,
                       const KisCompositeOp& op)
 {
     switch (op.op()) {
@@ -379,7 +379,7 @@ void KisWetStickyColorSpace::bitBlt(Q_UINT8 *dst,
 }
 
 
-void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
+void KisWetStickyColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity)
 {
     // XXX: This is basically the same as with rgb and used to composite layers for  Composition for
     //      painting works differently
@@ -387,11 +387,11 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 
     while (rows > 0) {
 
-        const Q_UINT8 *src = srcRowStart;
-        Q_UINT8 *dst = dstRowStart;
-        const Q_UINT8 *mask = maskRowStart;
+        const quint8 *src = srcRowStart;
+        quint8 *dst = dstRowStart;
+        const quint8 *mask = maskRowStart;
 
-        Q_INT32 columns = numColumns;
+        qint32 columns = numColumns;
 
         while (columns > 0) {
 
@@ -399,16 +399,16 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
             CELL_PTR srcCell = (CELL_PTR) src;
 
 #ifdef WSDEBUG
-            kdDebug(DBG_AREA_CMS) << "Source: " << rows << ", " << columns << " color: " <<
+            kDebug(DBG_AREA_CMS) << "Source: " << rows << ", " << columns << " color: " <<
                 srcCell->red << ", " << srcCell->blue << ", " << srcCell->green << ", " << srcCell->alpha << ", " << srcCell->volume << "\n";
 
 
-            kdDebug(DBG_AREA_CMS) << "Destination: "  << rows << ", " << columns << " color: " <<
+            kDebug(DBG_AREA_CMS) << "Destination: "  << rows << ", " << columns << " color: " <<
                 dstCell->red << ", " << dstCell->blue << ", " << dstCell->green << ", " << dstCell->alpha << ", " << dstCell->volume << "\n";
 
 #endif
 
-            Q_UINT8 srcAlpha = srcCell->alpha;
+            quint8 srcAlpha = srcCell->alpha;
 
             // apply the alphamask
             if(mask != 0)
@@ -427,14 +427,14 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
                 if (srcAlpha == OPACITY_OPAQUE) {
                     memcpy(dst, src, 3); // XXX: First three bytes for rgb?
                 } else {
-                    Q_UINT8 dstAlpha = dstCell->alpha;
+                    quint8 dstAlpha = dstCell->alpha;
 
-                    Q_UINT8 srcBlend;
+                    quint8 srcBlend;
 
                     if (dstAlpha == OPACITY_OPAQUE) {
                         srcBlend = srcAlpha;
                     } else {
-                        Q_UINT8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                        quint8 newAlpha = dstAlpha + UINT8_MULT(OPACITY_OPAQUE - dstAlpha, srcAlpha);
                         dstCell->alpha = newAlpha;
 
                         if (newAlpha != 0) {
@@ -467,11 +467,11 @@ void KisWetStickyColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowS
 
 }
 
-void KisWetStickyColorSpace::compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity)
+void KisWetStickyColorSpace::compositeCopy(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity)
 {
-    Q_INT32 linesize = sizeof(CELL) * columns;
-    Q_UINT8 *d;
-    const Q_UINT8 *s;
+    qint32 linesize = sizeof(CELL) * columns;
+    quint8 *d;
+    const quint8 *s;
     d = dst;
     s = src;
 
@@ -493,7 +493,7 @@ KisCompositeOpList KisWetStickyColorSpace::userVisiblecompositeOps() const
     return list;
 }
 
-QString KisWetStickyColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+QString KisWetStickyColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < nChannels());
     const CELL *pixel = reinterpret_cast<const CELL *>(U8_pixel);
@@ -547,7 +547,7 @@ QString KisWetStickyColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT
     }
 }
 
-QString KisWetStickyColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+QString KisWetStickyColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < nChannels());
     const CELL *pixel = reinterpret_cast<const CELL *>(U8_pixel);

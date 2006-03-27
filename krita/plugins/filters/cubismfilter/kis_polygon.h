@@ -30,8 +30,8 @@ class KisPolygon : public KisPointVector
                 void addPoint(double x, double y);
                 void translate(double tx, double ty);
                 void rotate(double theta);
-                Q_INT32 extents(double &minX, double &minY, double &maxX, double &maxY);
-                Q_INT32 numberOfPoints();
+                qint32 extents(double &minX, double &minY, double &maxX, double &maxY);
+                qint32 numberOfPoints();
 };
 
 #endif

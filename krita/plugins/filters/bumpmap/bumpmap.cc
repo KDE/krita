@@ -90,7 +90,7 @@ KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "map", i18n("&Bumpmap..."
 }
 
 namespace {
-    void convertRow(KisPaintDevice * orig, Q_UINT8 * row, Q_INT32 x, Q_INT32 y, Q_INT32 w,  Q_UINT8 * lut, Q_INT32 waterlevel)
+    void convertRow(KisPaintDevice * orig, quint8 * row, qint32 x, qint32 y, qint32 w,  quint8 * lut, qint32 waterlevel)
     {
         KisColorSpace * csOrig = orig->colorSpace();
 
@@ -117,16 +117,16 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     KisBumpmapConfiguration * config = (KisBumpmapConfiguration*)cfg;
 
-    Q_INT32 lx, ly;       /* X and Y components of light vector */
-    Q_INT32 nz2, nzlz;    /* nz^2, nz*lz */
-    Q_INT32 background;   /* Shade for vertical normals */
+    qint32 lx, ly;       /* X and Y components of light vector */
+    qint32 nz2, nzlz;    /* nz^2, nz*lz */
+    qint32 background;   /* Shade for vertical normals */
     double  compensation; /* Background compensation */
-    Q_UINT8 lut[256];     /* Look-up table for modes */
+    quint8 lut[256];     /* Look-up table for modes */
 
     double azimuth;
     double elevation;
-    Q_INT32 lz, nz;
-    Q_INT32 i;
+    qint32 lz, nz;
+    qint32 i;
     double n;
 
     // ------------------ Prepare parameters
@@ -136,13 +136,13 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     elevation = M_PI * config->elevation / 180.0;
 
     /* Calculate the light vector */
-    lx = (Q_INT32)(cos(azimuth) * cos(elevation) * 255.0);
-    ly = (Q_INT32)(sin(azimuth) * cos(elevation) * 255.0);
+    lx = (qint32)(cos(azimuth) * cos(elevation) * 255.0);
+    ly = (qint32)(sin(azimuth) * cos(elevation) * 255.0);
 
-    lz = (Q_INT32)(sin(elevation) * 255.0);
+    lz = (qint32)(sin(elevation) * 255.0);
 
     /* Calculate constant Z component of surface normal */
-    nz = (Q_INT32)((6 * 255) / config->depth);
+    nz = (qint32)((6 * 255) / config->depth);
     nz2  = nz * nz;
     nzlz = nz * lz;
 
@@ -220,19 +220,19 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     }
 
 
-    Q_INT32 sel_h = rect.height();
-    Q_INT32 sel_w = rect.width();
-    Q_INT32 sel_x = rect.x();
-    Q_INT32 sel_y = rect.y();
+    qint32 sel_h = rect.height();
+    qint32 sel_w = rect.width();
+    qint32 sel_x = rect.x();
+    qint32 sel_y = rect.y();
 
-    Q_INT32 bm_h = bmRect.height();
-    Q_INT32 bm_w = bmRect.width();
-    Q_INT32 bm_x = bmRect.x();
+    qint32 bm_h = bmRect.height();
+    qint32 bm_w = bmRect.width();
+    qint32 bm_x = bmRect.x();
 
     setProgressTotalSteps(sel_h);
 
     // ------------------- Map the bumps
-    Q_INT32 yofs1, yofs2, yofs3;
+    qint32 yofs1, yofs2, yofs3;
 
     // ------------------- Initialize offsets
     if (config->tiled) {
@@ -253,10 +253,10 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     QValueVector<KisChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
-    Q_UINT8 * bm_row1 = new Q_UINT8[bm_w];
-    Q_UINT8 * bm_row2 = new Q_UINT8[bm_w];
-    Q_UINT8 * bm_row3 = new Q_UINT8[bm_w];
-    Q_UINT8 * tmp_row;
+    quint8 * bm_row1 = new quint8[bm_w];
+    quint8 * bm_row2 = new quint8[bm_w];
+    quint8 * bm_row3 = new quint8[bm_w];
+    quint8 * tmp_row;
 
     convertRow(bumpmap, bm_row1, bm_x, yofs1, bm_w, lut, config->waterlevel);
     convertRow(bumpmap, bm_row2, bm_x, yofs2, bm_w, lut, config->waterlevel);
@@ -264,7 +264,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     bool row_in_bumpmap;
 
-    Q_INT32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
+    qint32 xofs1, xofs2, xofs3, shade, ndotl, nx, ny;
     for (int y = sel_y; y < sel_h + sel_y; y++) {
 
         row_in_bumpmap = (y >= - config->yofs && y < - config->yofs + bm_h);
@@ -274,10 +274,10 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), y, sel_w, true);
         KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), y, sel_w, false);
 
-        Q_INT32 tmp = config->xofs + sel_x;
+        qint32 tmp = config->xofs + sel_x;
         xofs2 = MOD (tmp, bm_w);
 
-        Q_INT32 x = 0;
+        qint32 x = 0;
         //while (x < sel_w || cancelRequested()) {
         while (!srcIt.isDone() && !cancelRequested()) {
             if (srcIt.isSelected()) {
@@ -315,11 +315,11 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
                     ndotl = (nx * lx) + (ny * ly) + nzlz;
 
                     if (ndotl < 0) {
-                        shade = (Q_INT32)(compensation * config->ambient);
+                        shade = (qint32)(compensation * config->ambient);
                     }
                     else {
-                        shade = (Q_INT32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
-                        shade = (Q_INT32)(shade + QMAX(0, (255 * compensation - shade)) * config->ambient / 255);
+                        shade = (qint32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
+                        shade = (qint32)(shade + qMax(0, (255 * compensation - shade)) * config->ambient / 255);
                     }
                 }
 

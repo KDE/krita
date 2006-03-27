@@ -124,7 +124,7 @@ void NewLayerDialog::fillCmbComposite(const KisID & s)
 
 int NewLayerDialog::opacity() const
 {
-    Q_INT32 opacity = m_page->intOpacity->value();
+    qint32 opacity = m_page->intOpacity->value();
 
     if (!opacity)
         return 0;

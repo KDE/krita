@@ -38,7 +38,7 @@
 
 class QLineEdit;
 class QCheckBox;
-class KURLRequester;
+class KUrlRequester;
 class WdgColorSettings;
 class KisCmbIDList;
 class KisID;
@@ -126,9 +126,9 @@ private:
     class DeviceSettings {
     public:
         DeviceSettings(KisCanvasWidget::X11TabletDevice *tabletDevice, bool enabled, 
-                       Q_INT32 xAxis, Q_INT32 yAxis, Q_INT32 pressureAxis, 
-                       Q_INT32 xTiltAxis, Q_INT32 yTiltAxis, Q_INT32 wheelAxis,
-                       Q_INT32 toolIDAxis, Q_INT32 serialNumberAxis);
+                       qint32 xAxis, qint32 yAxis, qint32 pressureAxis, 
+                       qint32 xTiltAxis, qint32 yTiltAxis, qint32 wheelAxis,
+                       qint32 toolIDAxis, qint32 serialNumberAxis);
         DeviceSettings();
 
         void applySettings();
@@ -136,38 +136,38 @@ private:
         void setEnabled(bool enabled);
         bool enabled() const;
     
-        Q_INT32 numAxes() const;
+        qint32 numAxes() const;
 
-        void setXAxis(Q_INT32 axis);
-        void setYAxis(Q_INT32 axis);
-        void setPressureAxis(Q_INT32 axis);
-        void setXTiltAxis(Q_INT32 axis);
-        void setYTiltAxis(Q_INT32 axis);
-        void setWheelAxis(Q_INT32 axis);
-        void setToolIDAxis(Q_INT32 axis);
-        void setSerialNumberAxis(Q_INT32 axis);
+        void setXAxis(qint32 axis);
+        void setYAxis(qint32 axis);
+        void setPressureAxis(qint32 axis);
+        void setXTiltAxis(qint32 axis);
+        void setYTiltAxis(qint32 axis);
+        void setWheelAxis(qint32 axis);
+        void setToolIDAxis(qint32 axis);
+        void setSerialNumberAxis(qint32 axis);
     
-        Q_INT32 xAxis() const;
-        Q_INT32 yAxis() const;
-        Q_INT32 pressureAxis() const;
-        Q_INT32 xTiltAxis() const;
-        Q_INT32 yTiltAxis() const;
-        Q_INT32 wheelAxis() const;
-        Q_INT32 toolIDAxis() const;
-        Q_INT32 serialNumberAxis() const;
+        qint32 xAxis() const;
+        qint32 yAxis() const;
+        qint32 pressureAxis() const;
+        qint32 xTiltAxis() const;
+        qint32 yTiltAxis() const;
+        qint32 wheelAxis() const;
+        qint32 toolIDAxis() const;
+        qint32 serialNumberAxis() const;
     
     private:
         KisCanvasWidget::X11TabletDevice *m_tabletDevice;
 
         bool m_enabled;
-        Q_INT32 m_xAxis;
-        Q_INT32 m_yAxis;
-        Q_INT32 m_pressureAxis;
-        Q_INT32 m_xTiltAxis;
-        Q_INT32 m_yTiltAxis;
-        Q_INT32 m_wheelAxis;
-        Q_INT32 m_toolIDAxis;
-        Q_INT32 m_serialNumberAxis;
+        qint32 m_xAxis;
+        qint32 m_yAxis;
+        qint32 m_pressureAxis;
+        qint32 m_xTiltAxis;
+        qint32 m_yTiltAxis;
+        qint32 m_wheelAxis;
+        qint32 m_toolIDAxis;
+        qint32 m_serialNumberAxis;
     };
 
     class TabletDeviceSettingsDialog : public KDialogBase {

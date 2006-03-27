@@ -148,21 +148,21 @@ public:
 protected slots:
 
     // Convenience functions for progress display.
-    void setProgressTotalSteps(Q_INT32 totalSteps);
-    void setProgress(Q_INT32 progress);
+    void setProgressTotalSteps(qint32 totalSteps);
+    void setProgress(qint32 progress);
     void incProgress();
-    void setProgressStage(const QString& stage, Q_INT32 progress);
+    void setProgressStage(const QString& stage, qint32 progress);
     void setProgressDone();
-    inline Q_INT32 progress() { return m_progressSteps; }
+    inline qint32 progress() { return m_progressSteps; }
 private:
     bool m_cancelRequested;
     bool m_progressEnabled;
     bool m_autoUpdate;
 
 protected:
-    Q_INT32 m_progressTotalSteps;
-    Q_INT32 m_lastProgressPerCent;
-    Q_INT32 m_progressSteps;
+    qint32 m_progressTotalSteps;
+    qint32 m_lastProgressPerCent;
+    qint32 m_progressSteps;
 
     KisID m_id;
     KisProgressDisplayInterface * m_progressDisplay;

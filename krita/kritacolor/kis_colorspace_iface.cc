@@ -30,9 +30,9 @@ KisColorSpaceIface::KisColorSpaceIface( KisColorSpace * parent )
 	m_parent = parent;
 }
 
-QByteArray KisColorSpaceIface::invertColor(QByteArray src, Q_INT32 nPixels)
+QByteArray KisColorSpaceIface::invertColor(QByteArray src, qint32 nPixels)
 {
-    m_parent->invertColor((Q_UINT8*)src.data(), nPixels);
+    m_parent->invertColor((quint8*)src.data(), nPixels);
     return src;
 
 }

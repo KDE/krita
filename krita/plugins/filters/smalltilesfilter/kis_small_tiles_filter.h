@@ -27,7 +27,7 @@
 class KisSmallTilesFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisSmallTilesFilterConfiguration(Q_UINT32 numberOfTiles)
+    KisSmallTilesFilterConfiguration(quint32 numberOfTiles)
         : KisFilterConfiguration( "smalltiles", 1 )
         , m_numberOfTiles(numberOfTiles) {};
 
@@ -36,10 +36,10 @@ public:
     virtual QString toString();
     
 public:
-    inline Q_UINT32 numberOfTiles() { return m_numberOfTiles; };
+    inline quint32 numberOfTiles() { return m_numberOfTiles; };
 
 private:
-    Q_UINT32 m_numberOfTiles;
+    quint32 m_numberOfTiles;
 };
 
 class KisSmallTilesFilter : public KisFilter
@@ -63,7 +63,7 @@ public:
     virtual KisFilterConfiguration * configuration() { return new KisSmallTilesFilterConfiguration( 2 ); };
 
 private:
-    void createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles);
+    void createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, quint32 numberOfTiles);
 };
 
 #endif

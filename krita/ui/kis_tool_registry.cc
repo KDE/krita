@@ -50,12 +50,12 @@ KisToolRegistry::KisToolRegistry()
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin )
-            kdDebug(DBG_AREA_PLUGINS) << "found plugin " << service->property("Name").toString() << "\n";
+            kDebug(DBG_AREA_PLUGINS) << "found plugin " << service->property("Name").toString() << "\n";
         else {
-            kdDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
+            kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
             if( errCode == KParts::ComponentFactory::ErrNoLibrary)
             {
-                kdWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
+                kWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
             }
         }
 

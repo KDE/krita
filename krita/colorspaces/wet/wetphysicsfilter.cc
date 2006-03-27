@@ -43,7 +43,7 @@ WetPhysicsFilter::WetPhysicsFilter()
 
 void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& r)
 {
-     kdDebug() << "Wetphysics filter called " << dst->name() << ", " << r << endl;
+     kDebug() << "Wetphysics filter called " << dst->name() << ", " << r << endl;
     /*
       This is actually a kind of convolution filter. Use the slow but clear way of convolving
       until I get the physics right; then move to the faster way of convolving from the convolution
@@ -130,7 +130,7 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
             topIt.nextRow();
             midIt.nextRow();
             botIt.nextRow();
-            //kdDebug() << "Done one row: " << y << "\n";
+            //kDebug() << "Done one row: " << y << "\n";
             x = 0;
             ++y;
         }
@@ -171,7 +171,7 @@ void WetPhysicsFilter::adsorbPixel(WetPix * paint, WetPix * adsorb)
     WetPixDbl wet_bot;
     double ads;
     
-    ads = 0.5 / QMAX(paint->w, 1);
+    ads = 0.5 / qMax(paint->w, 1);
     
     wetPixToDouble(&wet_top, paint);
     wetPixToDouble(&wet_bot, adsorb);
@@ -232,11 +232,11 @@ void WetPhysicsFilter::adsorbPixel(WetPix * paint, WetPix * adsorb)
     
     wetPixFromDouble(adsorb, &wet_bot);
 
-    paint->rd *= (Q_UINT16)(1 - ads);
-    paint->rw *= (Q_UINT16)(1 - ads);
-    paint->gd *= (Q_UINT16)(1 - ads);
-    paint->gw *= (Q_UINT16)(1 - ads);
-    paint->bd *= (Q_UINT16)(1 - ads);
-    paint->bw *= (Q_UINT16)(1 - ads);
+    paint->rd *= (quint16)(1 - ads);
+    paint->rw *= (quint16)(1 - ads);
+    paint->gd *= (quint16)(1 - ads);
+    paint->gw *= (quint16)(1 - ads);
+    paint->bd *= (quint16)(1 - ads);
+    paint->bw *= (quint16)(1 - ads);
 
 }

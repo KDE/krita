@@ -86,7 +86,7 @@ protected:
     /**
      * Split the coordinate into whole + fraction, where fraction is always >= 0.
      */
-    virtual void splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction);
+    virtual void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
 
     KisPainter * m_painter;
     KisPaintDeviceSP m_source; // use this layer as source layer for the operation

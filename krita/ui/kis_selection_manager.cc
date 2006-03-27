@@ -389,7 +389,7 @@ void KisSelectionManager::copy()
 
     // Apply selection mask.
 
-    for (Q_INT32 y = 0; y < r.height(); y++) {
+    for (qint32 y = 0; y < r.height(); y++) {
         KisHLineIterator layerIt = clip->createHLineIterator(0, y, r.width(), true);
         KisHLineIterator selectionIt = selection->createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
@@ -699,7 +699,7 @@ void KisSelectionManager::feather()
     k->height = 3;
     k->factor = 16;
     k->offset = 0;
-    k->data = new Q_INT32[9];
+    k->data = new qint32[9];
     k->data[0] = 1;
     k->data[1] = 2;
     k->data[2] = 1;
@@ -746,7 +746,7 @@ void KisSelectionManager::save() {}
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
+void KisSelectionManager::grow (qint32 xradius, qint32 yradius)
 {
     KisImageSP img = m_parent->currentImg();
     if (!img) return;
@@ -764,8 +764,8 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
         Blame all bugs in this function on jaycox@gimp.org
     */
 
-    Q_UINT8  **buf;  // caches the region's pixel data
-    Q_UINT8  **max;  // caches the largest values for each column
+    quint8  **buf;  // caches the region's pixel data
+    quint8  **max;  // caches the largest values for each column
 
     if (xradius <= 0 || yradius <= 0)
         return;
@@ -777,14 +777,14 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
         Q_CHECK_PTR(t);
     }
 
-    max = new Q_UINT8* [layerSize.width() + 2 * xradius];
-    buf = new Q_UINT8* [yradius + 1];
-    for (Q_INT32 i = 0; i < yradius + 1; i++)
+    max = new quint8* [layerSize.width() + 2 * xradius];
+    buf = new quint8* [yradius + 1];
+    for (qint32 i = 0; i < yradius + 1; i++)
     {
-        buf[i] = new Q_UINT8[layerSize.width()];
+        buf[i] = new quint8[layerSize.width()];
     }
-    Q_UINT8* buffer = new Q_UINT8[ ( layerSize.width() + 2 * xradius ) * ( yradius + 1 ) ];
-    for (Q_INT32 i = 0; i < layerSize.width() + 2 * xradius; i++)
+    quint8* buffer = new quint8[ ( layerSize.width() + 2 * xradius ) * ( yradius + 1 ) ];
+    for (qint32 i = 0; i < layerSize.width() + 2 * xradius; i++)
     {
         if (i < xradius)
             max[i] = buffer;
@@ -793,16 +793,16 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
         else
             max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius - 1)];
 
-        for (Q_INT32 j = 0; j < xradius + 1; j++)
+        for (qint32 j = 0; j < xradius + 1; j++)
             max[i][j] = 0;
     }
     /* offset the max pointer by xradius so the range of the array
         is [-xradius] to [region->w + xradius] */
     max += xradius;
 
-    Q_UINT8* out = new Q_UINT8[ layerSize.width() ]; // holds the new scan line we are computing
+    quint8* out = new quint8[ layerSize.width() ]; // holds the new scan line we are computing
 
-    Q_INT32* circ = new Q_INT32[ 2 * xradius + 1 ]; // holds the y coords of the filter's mask
+    qint32* circ = new qint32[ 2 * xradius + 1 ]; // holds the y coords of the filter's mask
     computeBorder (circ, xradius, yradius);
 
     /* offset the circ pointer by xradius so the range of the array
@@ -810,39 +810,39 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
     circ += xradius;
 
     memset (buf[0], 0, layerSize.width());
-    for (Q_INT32 i = 0; i < yradius && i < layerSize.height(); i++) // load top of image
+    for (qint32 i = 0; i < yradius && i < layerSize.height(); i++) // load top of image
     {
         selection->readBytes(buf[i + 1], layerSize.x(), layerSize.y() + i, layerSize.width(), 1);
     }
 
-    for (Q_INT32 x = 0; x < layerSize.width() ; x++) // set up max for top of image
+    for (qint32 x = 0; x < layerSize.width() ; x++) // set up max for top of image
     {
             max[x][0] = 0;         // buf[0][x] is always 0
             max[x][1] = buf[1][x]; // MAX (buf[1][x], max[x][0]) always = buf[1][x]
-            for (Q_INT32 j = 2; j < yradius + 1; j++)
+            for (qint32 j = 2; j < yradius + 1; j++)
             {
                 max[x][j] = MAX(buf[j][x], max[x][j-1]);
             }
     }
 
-    for (Q_INT32 y = 0; y < layerSize.height(); y++)
+    for (qint32 y = 0; y < layerSize.height(); y++)
     {
         rotatePointers (buf, yradius + 1);
         if (y < layerSize.height() - (yradius))
             selection->readBytes(buf[yradius], layerSize.x(), layerSize.y() + y + yradius, layerSize.width(), 1);
         else
             memset (buf[yradius], 0, layerSize.width());
-    for (Q_INT32 x = 0; x < layerSize.width(); x++) /* update max array */
+    for (qint32 x = 0; x < layerSize.width(); x++) /* update max array */
     {
-        for (Q_INT32 i = yradius; i > 0; i--)
+        for (qint32 i = yradius; i > 0; i--)
         {
             max[x][i] = MAX (MAX (max[x][i - 1], buf[i - 1][x]), buf[i][x]);
         }
         max[x][0] = buf[0][x];
     }
-    Q_INT32 last_max = max[0][circ[-1]];
-    Q_INT32 last_index = 1;
-    for (Q_INT32 x = 0; x < layerSize.width(); x++) /* render scan line */
+    qint32 last_max = max[0][circ[-1]];
+    qint32 last_index = 1;
+    for (qint32 x = 0; x < layerSize.width(); x++) /* render scan line */
     {
         last_index--;
         if (last_index >= 0)
@@ -852,7 +852,7 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
             else
             {
                 last_max = 0;
-                for (Q_INT32 i = xradius; i >= 0; i--)
+                for (qint32 i = xradius; i >= 0; i--)
                     if (last_max < max[x + i][circ[i]])
                     {
                         last_max = max[x + i][circ[i]];
@@ -865,7 +865,7 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
         {
             last_index = xradius;
             last_max = max[x + xradius][circ[xradius]];
-            for (Q_INT32 i = xradius - 1; i >= -xradius; i--)
+            for (qint32 i = xradius - 1; i >= -xradius; i--)
                 if (last_max < max[x + i][circ[i]])
                 {
                     last_max = max[x + i][circ[i]];
@@ -883,7 +883,7 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
     delete[] circ;
     delete[] buffer;
     delete[] max;
-    for (Q_INT32 i = 0; i < yradius + 1; i++)
+    for (qint32 i = 0; i < yradius + 1; i++)
         delete[] buf[i];
     delete[] buf;
     delete[] out;
@@ -895,7 +895,7 @@ void KisSelectionManager::grow (Q_INT32 xradius, Q_INT32 yradius)
     }
 }
 
-void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lock)
+void KisSelectionManager::shrink (qint32 xradius, qint32 yradius, bool edge_lock)
 {
 
     KisImageSP img = m_parent->currentImg();
@@ -917,29 +917,29 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
      we are passed are identical to the edge pixels.
      If edge_lock is false, we assume that pixels outside the region are 0
   */
-    Q_UINT8  **buf;  // caches the the region's pixels
-    Q_UINT8  **max;  // caches the smallest values for each column
-    Q_INT32    last_max, last_index;
+    quint8  **buf;  // caches the the region's pixels
+    quint8  **max;  // caches the smallest values for each column
+    qint32    last_max, last_index;
 
     if (xradius <= 0 || yradius <= 0)
         return;
 
-    max = new Q_UINT8* [layerSize.width() + 2 * xradius];
-    buf = new Q_UINT8* [yradius + 1];
-    for (Q_INT32 i = 0; i < yradius + 1; i++)
+    max = new quint8* [layerSize.width() + 2 * xradius];
+    buf = new quint8* [yradius + 1];
+    for (qint32 i = 0; i < yradius + 1; i++)
     {
-        buf[i] = new Q_UINT8[layerSize.width()];
+        buf[i] = new quint8[layerSize.width()];
     }
 
-    Q_INT32 buffer_size = (layerSize.width() + 2 * xradius + 1) * (yradius + 1);
-    Q_UINT8* buffer = new Q_UINT8[buffer_size];
+    qint32 buffer_size = (layerSize.width() + 2 * xradius + 1) * (yradius + 1);
+    quint8* buffer = new quint8[buffer_size];
 
     if (edge_lock)
         memset(buffer, 255, buffer_size);
     else
         memset(buffer, 0, buffer_size);
 
-    for (Q_INT32 i = 0; i < layerSize.width() + 2 * xradius; i++)
+    for (qint32 i = 0; i < layerSize.width() + 2 * xradius; i++)
     {
         if (i < xradius)
             if (edge_lock)
@@ -955,21 +955,21 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
                 max[i] = &buffer[(yradius + 1) * (layerSize.width() + xradius)];
     }
     if (!edge_lock)
-        for (Q_INT32 j = 0 ; j < xradius + 1; j++) max[0][j] = 0;
+        for (qint32 j = 0 ; j < xradius + 1; j++) max[0][j] = 0;
 
     // offset the max pointer by xradius so the range of the array is [-xradius] to [region->w + xradius]
     max += xradius;
 
-    Q_UINT8* out = new Q_UINT8[layerSize.width()]; // holds the new scan line we are computing
+    quint8* out = new quint8[layerSize.width()]; // holds the new scan line we are computing
 
-    Q_INT32* circ = new Q_INT32[2 * xradius + 1]; // holds the y coords of the filter's mask
+    qint32* circ = new qint32[2 * xradius + 1]; // holds the y coords of the filter's mask
 
     computeBorder (circ, xradius, yradius);
 
     // offset the circ pointer by xradius so the range of the array is [-xradius] to [xradius]
     circ += xradius;
 
-    for (Q_INT32 i = 0; i < yradius && i < layerSize.height(); i++) // load top of image
+    for (qint32 i = 0; i < yradius && i < layerSize.height(); i++) // load top of image
         selection->readBytes(buf[i + 1], layerSize.x(), layerSize.y() + i, layerSize.width(), 1);
 
     if (edge_lock)
@@ -978,14 +978,14 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
         memset (buf[0], 0, layerSize.width());
 
 
-    for (Q_INT32 x = 0; x < layerSize.width(); x++) // set up max for top of image
+    for (qint32 x = 0; x < layerSize.width(); x++) // set up max for top of image
     {
         max[x][0] = buf[0][x];
-        for (Q_INT32 j = 1; j < yradius + 1; j++)
+        for (qint32 j = 1; j < yradius + 1; j++)
             max[x][j] = MIN(buf[j][x], max[x][j-1]);
     }
 
-    for (Q_INT32 y = 0; y < layerSize.height(); y++)
+    for (qint32 y = 0; y < layerSize.height(); y++)
     {
         rotatePointers (buf, yradius + 1);
         if (y < layerSize.height() - yradius)
@@ -995,9 +995,9 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
         else
             memset (buf[yradius], 0, layerSize.width());
 
-        for (Q_INT32 x = 0 ; x < layerSize.width(); x++) // update max array
+        for (qint32 x = 0 ; x < layerSize.width(); x++) // update max array
         {
-            for (Q_INT32 i = yradius; i > 0; i--)
+            for (qint32 i = yradius; i > 0; i--)
             {
                 max[x][i] = MIN (MIN (max[x][i - 1], buf[i - 1][x]), buf[i][x]);
             }
@@ -1006,7 +1006,7 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
         last_max =  max[0][circ[-1]];
         last_index = 0;
 
-        for (Q_INT32 x = 0 ; x < layerSize.width(); x++) // render scan line
+        for (qint32 x = 0 ; x < layerSize.width(); x++) // render scan line
         {
             last_index--;
             if (last_index >= 0)
@@ -1016,7 +1016,7 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
                 else
                 {
                     last_max = 255;
-                    for (Q_INT32 i = xradius; i >= 0; i--)
+                    for (qint32 i = xradius; i >= 0; i--)
                         if (last_max > max[x + i][circ[i]])
                         {
                             last_max = max[x + i][circ[i]];
@@ -1029,7 +1029,7 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
             {
                 last_index = xradius;
                 last_max = max[x + xradius][circ[xradius]];
-                for (Q_INT32 i = xradius - 1; i >= -xradius; i--)
+                for (qint32 i = xradius - 1; i >= -xradius; i--)
                 if (last_max > max[x + i][circ[i]])
                     {
                     last_max = max[x + i][circ[i]];
@@ -1049,7 +1049,7 @@ void KisSelectionManager::shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lo
     delete[] circ;
     delete[] buffer;
     delete[] max;
-    for (Q_INT32 i = 0; i < yradius + 1; i++)
+    for (qint32 i = 0; i < yradius + 1; i++)
             delete buf[i];
     delete[] buf;
     delete[] out;
@@ -1073,13 +1073,13 @@ void KisSelectionManager::smooth()
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
 
-    Q_UINT8      *buf[3];
+    quint8      *buf[3];
 
-    Q_INT32 width = layerSize.width();
+    qint32 width = layerSize.width();
 
-    for (Q_INT32 i = 0; i < 3; i++) buf[i] = new Q_UINT8[width + 2];
+    for (qint32 i = 0; i < 3; i++) buf[i] = new quint8[width + 2];
 
-    Q_UINT8* out = new Q_UINT8[width];
+    quint8* out = new quint8[width];
 
     // load top of image
     selection->readBytes(buf[0] + 1, layerSize.x(), layerSize.y(), width, 1);
@@ -1089,7 +1089,7 @@ void KisSelectionManager::smooth()
 
     memcpy (buf[1], buf[0], width + 2);
 
-    for (Q_INT32 y = 0; y < layerSize.height(); y++)
+    for (qint32 y = 0; y < layerSize.height(); y++)
     {
         if (y + 1 < layerSize.height())
         {
@@ -1103,9 +1103,9 @@ void KisSelectionManager::smooth()
             memcpy (buf[2], buf[1], width + 2);
         }
 
-        for (Q_INT32 x = 0 ; x < width; x++)
+        for (qint32 x = 0 ; x < width; x++)
         {
-            Q_INT32 value = (buf[0][x] + buf[0][x+1] + buf[0][x+2] +
+            qint32 value = (buf[0][x] + buf[0][x+1] + buf[0][x+2] +
                              buf[1][x] + buf[2][x+1] + buf[1][x+2] +
                              buf[2][x] + buf[1][x+1] + buf[2][x+2]);
 
@@ -1117,7 +1117,7 @@ void KisSelectionManager::smooth()
         rotatePointers (buf, 3);
     }
 
-    for (Q_INT32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++)
         delete[] buf[i];
 
     delete[] out;
@@ -1141,15 +1141,15 @@ void KisSelectionManager::erode()
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
 
-    Q_UINT8* buf[3];
+    quint8* buf[3];
 
 
-    Q_INT32 width = layerSize.width();
+    qint32 width = layerSize.width();
 
-    for (Q_INT32 i = 0; i < 3; i++)
-        buf[i] = new Q_UINT8[width + 2];
+    for (qint32 i = 0; i < 3; i++)
+        buf[i] = new quint8[width + 2];
 
-    Q_UINT8* out = new Q_UINT8[width];
+    quint8* out = new quint8[width];
 
     // load top of image
     selection->readBytes(buf[0] + 1, layerSize.x(), layerSize.y(), width, 1);
@@ -1159,7 +1159,7 @@ void KisSelectionManager::erode()
 
     memcpy (buf[1], buf[0], width + 2);
 
-    for (Q_INT32 y = 0; y < layerSize.height(); y++)
+    for (qint32 y = 0; y < layerSize.height(); y++)
     {
         if (y + 1 < layerSize.height())
         {
@@ -1173,9 +1173,9 @@ void KisSelectionManager::erode()
             memcpy (buf[2], buf[1], width + 2);
         }
 
-      for (Q_INT32 x = 0 ; x < width; x++)
+      for (qint32 x = 0 ; x < width; x++)
         {
-          Q_INT32 min = 255;
+          qint32 min = 255;
 
           if (buf[0][x+1] < min) min = buf[0][x+1];
           if (buf[1][x]   < min) min = buf[1][x];
@@ -1191,7 +1191,7 @@ void KisSelectionManager::erode()
         rotatePointers (buf, 3);
     }
 
-    for (Q_INT32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++)
         delete[] buf[i];
 
     delete[] out;
@@ -1215,14 +1215,14 @@ void KisSelectionManager::dilate()
     //determine the layerSize
     QRect layerSize = dev->exactBounds();
 
-    Q_UINT8* buf[3];
+    quint8* buf[3];
 
-    Q_INT32 width = layerSize.width();
+    qint32 width = layerSize.width();
 
-    for (Q_INT32 i = 0; i < 3; i++)
-        buf[i] = new Q_UINT8[width + 2];
+    for (qint32 i = 0; i < 3; i++)
+        buf[i] = new quint8[width + 2];
 
-    Q_UINT8* out = new Q_UINT8[width];
+    quint8* out = new quint8[width];
 
     // load top of image
     selection->readBytes(buf[0] + 1, layerSize.x(), layerSize.y(), width, 1);
@@ -1232,7 +1232,7 @@ void KisSelectionManager::dilate()
 
     memcpy (buf[1], buf[0], width + 2);
 
-    for (Q_INT32 y = 0; y < layerSize.height(); y++)
+    for (qint32 y = 0; y < layerSize.height(); y++)
     {
         if (y + 1 < layerSize.height())
         {
@@ -1246,9 +1246,9 @@ void KisSelectionManager::dilate()
             memcpy (buf[2], buf[1], width + 2);
         }
 
-        for (Q_INT32 x = 0 ; x < width; x++)
+        for (qint32 x = 0 ; x < width; x++)
         {
-            Q_INT32 max = 0;
+            qint32 max = 0;
 
             if (buf[0][x+1] > max) max = buf[0][x+1];
             if (buf[1][x]   > max) max = buf[1][x];
@@ -1264,7 +1264,7 @@ void KisSelectionManager::dilate()
         rotatePointers (buf, 3);
     }
 
-    for (Q_INT32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++)
         delete[] buf[i];
 
     delete[] out;
@@ -1272,7 +1272,7 @@ void KisSelectionManager::dilate()
     dev->emitSelectionChanged();
 }
 
-void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
+void KisSelectionManager::border(qint32 xradius, qint32 yradius)
 {
     KisImageSP img = m_parent->currentImg();
     if (!img) return;
@@ -1290,18 +1290,18 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
      This function has no bugs, but if you imagine some you can
      blame them on jaycox@gimp.org
   */
-    Q_UINT8  *buf[3];
-    Q_UINT8 **density;
-    Q_UINT8 **transition;
+    quint8  *buf[3];
+    quint8 **density;
+    quint8 **transition;
 
     if (xradius == 1 && yradius == 1) // optimize this case specifically
     {
-        Q_UINT8* source[3];
+        quint8* source[3];
 
-        for (Q_INT32 i = 0; i < 3; i++)
-            source[i] = new Q_UINT8[layerSize.width()];
+        for (qint32 i = 0; i < 3; i++)
+            source[i] = new quint8[layerSize.width()];
 
-        Q_UINT8* transition = new Q_UINT8[layerSize.width()];
+        quint8* transition = new quint8[layerSize.width()];
 
         selection->readBytes(source[0], layerSize.x(), layerSize.y(), layerSize.width(), 1);
         memcpy (source[1], source[0], layerSize.width());
@@ -1313,7 +1313,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
         computeTransition (transition, source, layerSize.width());
         selection->writeBytes(transition, layerSize.x(), layerSize.y(), layerSize.width(), 1);
 
-        for (Q_INT32 y = 1; y < layerSize.height(); y++)
+        for (qint32 y = 1; y < layerSize.height(); y++)
         {
             rotatePointers (source, 3);
             if (y + 1 < layerSize.height())
@@ -1324,41 +1324,41 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
             selection->writeBytes(transition, layerSize.x(), layerSize.y() + y, layerSize.width(), 1);
         }
 
-        for (Q_INT32 i = 0; i < 3; i++)
+        for (qint32 i = 0; i < 3; i++)
             delete[] source[i];
         delete[] transition;
         return;
     }
 
-    Q_INT32* max = new Q_INT32[layerSize.width() + 2 * xradius];
-    for (Q_INT32 i = 0; i < (layerSize.width() + 2 * xradius); i++)
+    qint32* max = new qint32[layerSize.width() + 2 * xradius];
+    for (qint32 i = 0; i < (layerSize.width() + 2 * xradius); i++)
         max[i] = yradius + 2;
     max += xradius;
 
-    for (Q_INT32 i = 0; i < 3; i++)
-        buf[i] = new Q_UINT8[layerSize.width()];
+    for (qint32 i = 0; i < 3; i++)
+        buf[i] = new quint8[layerSize.width()];
 
-    transition = new Q_UINT8*[yradius + 1];
-    for (Q_INT32 i = 0; i < yradius + 1; i++)
+    transition = new quint8*[yradius + 1];
+    for (qint32 i = 0; i < yradius + 1; i++)
     {
-        transition[i] = new Q_UINT8[layerSize.width() + 2 * xradius];
+        transition[i] = new quint8[layerSize.width() + 2 * xradius];
         memset(transition[i], 0, layerSize.width() + 2 * xradius);
         transition[i] += xradius;
     }
-    Q_UINT8* out = new Q_UINT8[layerSize.width()];
-    density = new Q_UINT8*[2 * xradius + 1];
+    quint8* out = new quint8[layerSize.width()];
+    density = new quint8*[2 * xradius + 1];
     density += xradius;
 
-    for (Q_INT32 x = 0; x < (xradius + 1); x++) // allocate density[][]
+    for (qint32 x = 0; x < (xradius + 1); x++) // allocate density[][]
     {
-        density[ x]  = new Q_UINT8[2 * yradius + 1];
+        density[ x]  = new quint8[2 * yradius + 1];
         density[ x] += yradius;
         density[-x]  = density[x];
     }
-    for (Q_INT32 x = 0; x < (xradius + 1); x++) // compute density[][]
+    for (qint32 x = 0; x < (xradius + 1); x++) // compute density[][]
     {
         double tmpx, tmpy, dist;
-        Q_UINT8 a;
+        quint8 a;
 
         if (x > 0)
             tmpx = x - 0.5;
@@ -1367,7 +1367,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
         else
             tmpx = 0.0;
 
-        for (Q_INT32 y = 0; y < (yradius + 1); y++)
+        for (qint32 y = 0; y < (yradius + 1); y++)
         {
             if (y > 0)
                 tmpy = y - 0.5;
@@ -1378,7 +1378,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
             dist = ((tmpy * tmpy) / (yradius * yradius) +
                     (tmpx * tmpx) / (xradius * xradius));
             if (dist < 1.0)
-                a = 255 * (Q_UINT8)(1.0 - sqrt (dist));
+                a = 255 * (quint8)(1.0 - sqrt (dist));
             else
                 a = 0;
             density[ x][ y] = a;
@@ -1395,23 +1395,23 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
         memcpy (buf[2], buf[1], layerSize.width());
     computeTransition (transition[1], buf, layerSize.width());
 
-    for (Q_INT32 y = 1; y < yradius && y + 1 < layerSize.height(); y++) // set up top of image
+    for (qint32 y = 1; y < yradius && y + 1 < layerSize.height(); y++) // set up top of image
     {
         rotatePointers (buf, 3);
         selection->readBytes(buf[2], layerSize.x(), layerSize.y() + y + 1, layerSize.width(), 1);
         computeTransition (transition[y + 1], buf, layerSize.width());
     }
-    for (Q_INT32 x = 0; x < layerSize.width(); x++) // set up max[] for top of image
+    for (qint32 x = 0; x < layerSize.width(); x++) // set up max[] for top of image
     {
         max[x] = -(yradius + 7);
-        for (Q_INT32 j = 1; j < yradius + 1; j++)
+        for (qint32 j = 1; j < yradius + 1; j++)
             if (transition[j][x])
             {
                 max[x] = j;
                 break;
             }
     }
-    for (Q_INT32 y = 0; y < layerSize.height(); y++) // main calculation loop
+    for (qint32 y = 0; y < layerSize.height(); y++) // main calculation loop
     {
         rotatePointers (buf, 3);
         rotatePointers (transition, yradius + 1);
@@ -1423,7 +1423,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
         else
             memcpy (transition[yradius], transition[yradius - 1], layerSize.width());
 
-        for (Q_INT32 x = 0; x < layerSize.width(); x++) // update max array
+        for (qint32 x = 0; x < layerSize.width(); x++) // update max array
         {
             if (max[x] < 1)
             {
@@ -1447,15 +1447,15 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
             if (max[x] < -yradius - 1)
                 max[x] = -yradius - 1;
         }
-        Q_UINT8 last_max =  max[0][density[-1]];
-        Q_INT32 last_index = 1;
-        for (Q_INT32 x = 0 ; x < layerSize.width(); x++) // render scan line
+        quint8 last_max =  max[0][density[-1]];
+        qint32 last_index = 1;
+        for (qint32 x = 0 ; x < layerSize.width(); x++) // render scan line
         {
             last_index--;
             if (last_index >= 0)
             {
                 last_max = 0;
-                for (Q_INT32 i = xradius; i >= 0; i--)
+                for (qint32 i = xradius; i >= 0; i--)
                     if (max[x + i] <= yradius && max[x + i] >= -yradius && density[i][max[x+i]] > last_max)
                     {
                         last_max = density[i][max[x + i]];
@@ -1466,7 +1466,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
             else
             {
                 last_max = 0;
-                for (Q_INT32 i = xradius; i >= -xradius; i--)
+                for (qint32 i = xradius; i >= -xradius; i--)
                     if (max[x + i] <= yradius && max[x + i] >= -yradius && density[i][max[x + i]] > last_max)
                     {
                         last_max = density[i][max[x + i]];
@@ -1476,7 +1476,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
             }
             if (last_max == 0)
             {
-                Q_INT32 i;
+                qint32 i;
                 for (i = x + 1; i < layerSize.width(); i++)
                 {
                     if (max[i] >= -yradius)
@@ -1495,20 +1495,20 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
     }
     delete out;
 
-    for (Q_INT32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++)
         delete buf[i];
 
     max -= xradius;
     delete[] max;
 
-    for (Q_INT32 i = 0; i < yradius + 1; i++)
+    for (qint32 i = 0; i < yradius + 1; i++)
     {
         transition[i] -= xradius;
         delete transition[i];
     }
     delete[] transition;
 
-    for (Q_INT32 i = 0; i < xradius + 1 ; i++)
+    for (qint32 i = 0; i < xradius + 1 ; i++)
     {
         density[i] -= yradius;
         delete density[i];
@@ -1521,10 +1521,10 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
 
 #define RINT(x) floor ((x) + 0.5)
 
-void KisSelectionManager::computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT32  yradius)
+void KisSelectionManager::computeBorder (qint32  *circ, qint32  xradius, qint32  yradius)
 {
-  Q_INT32 i;
-  Q_INT32 diameter = xradius * 2 + 1;
+  qint32 i;
+  qint32 diameter = xradius * 2 + 1;
   double tmp;
 
     for (i = 0; i < diameter; i++)
@@ -1536,14 +1536,14 @@ void KisSelectionManager::computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT
         else
         tmp = 0.0;
 
-        circ[i] = (Q_INT32) RINT (yradius / (double) xradius * sqrt (xradius * xradius - tmp * tmp));
+        circ[i] = (qint32) RINT (yradius / (double) xradius * sqrt (xradius * xradius - tmp * tmp));
     }
 }
 
-void KisSelectionManager::rotatePointers (Q_UINT8  **p, Q_UINT32 n)
+void KisSelectionManager::rotatePointers (quint8  **p, quint32 n)
 {
-    Q_UINT32  i;
-    Q_UINT8  *tmp;
+    quint32  i;
+    quint8  *tmp;
 
     tmp = p[0];
 
@@ -1552,9 +1552,9 @@ void KisSelectionManager::rotatePointers (Q_UINT8  **p, Q_UINT32 n)
     p[i] = tmp;
 }
 
-void KisSelectionManager::computeTransition (Q_UINT8* transition, Q_UINT8** buf, Q_INT32 width)
+void KisSelectionManager::computeTransition (quint8* transition, quint8** buf, qint32 width)
 {
-    Q_INT32 x = 0;
+    qint32 x = 0;
 
     if (width == 1)
     {
@@ -1575,7 +1575,7 @@ void KisSelectionManager::computeTransition (Q_UINT8* transition, Q_UINT8** buf,
     }
     else
         transition[x] = 0;
-    for (Q_INT32 x = 1; x < width - 1; x++)
+    for (qint32 x = 1; x < width - 1; x++)
     {
         if (buf[1][x] >= 128)
         {

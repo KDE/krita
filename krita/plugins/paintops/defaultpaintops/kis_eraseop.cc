@@ -86,9 +86,9 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisPoint hotSpot = brush->hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
-    Q_INT32 destX;
+    qint32 destX;
     double xFraction;
-    Q_INT32 destY;
+    qint32 destY;
     double yFraction;
 
     splitCoordinate(pt.x(), &destX, &xFraction);
@@ -99,15 +99,15 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace(), "erase op dab");
     Q_CHECK_PTR(dab);
 
-    Q_INT32 maskWidth = mask->width();
-    Q_INT32 maskHeight = mask->height();
+    qint32 maskWidth = mask->width();
+    qint32 maskHeight = mask->height();
 
     QRect dstRect;
 
     KisRectIteratorPixel it = dab->createRectIterator(0, 0, maskWidth, maskHeight, true);
     KisColorSpace* cs = dab->colorSpace();
     while (!it.isDone()) {
-        cs->setAlpha(it.rawData(), Q_UINT8_MAX - mask->alphaAt(it.x(), it.y()), 1);
+        cs->setAlpha(it.rawData(), quint8_MAX - mask->alphaAt(it.x(), it.y()), 1);
         ++it;
     }
 
@@ -122,10 +122,10 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    Q_INT32 sx = dstRect.x() - destX;
-    Q_INT32 sy = dstRect.y() - destY;
-    Q_INT32 sw = dstRect.width();
-    Q_INT32 sh = dstRect.height();
+    qint32 sx = dstRect.x() - destX;
+    qint32 sy = dstRect.y() - destY;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
 
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(),

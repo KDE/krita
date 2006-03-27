@@ -65,9 +65,9 @@ public:
     virtual ~KisSelection();
 
     // Returns selectedness, or 0 if invalid coordinates
-    Q_UINT8 selected(Q_INT32 x, Q_INT32 y);
+    quint8 selected(qint32 x, qint32 y);
 
-    void setSelected(Q_INT32 x, Q_INT32 y, Q_UINT8 s);
+    void setSelected(qint32 x, qint32 y, quint8 s);
 
     QImage maskImage();
 
@@ -94,7 +94,7 @@ public:
      */
     QRect selectedExactRect();
 
-    void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    void paintSelection(QImage img, qint32 x, qint32 y, qint32 w, qint32 h);
     void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
 private:

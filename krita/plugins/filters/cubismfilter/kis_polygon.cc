@@ -62,7 +62,7 @@ void KisPolygon::translate(double tx, double ty)
         }
 }
 
-Q_INT32 KisPolygon::extents (double& x1, double& y1, double& x2, double& y2)
+qint32 KisPolygon::extents (double& x1, double& y1, double& x2, double& y2)
 {
         if ( empty() )
         {
@@ -95,7 +95,7 @@ Q_INT32 KisPolygon::extents (double& x1, double& y1, double& x2, double& y2)
         return 1;
 }
 
-Q_INT32 KisPolygon::numberOfPoints()
+qint32 KisPolygon::numberOfPoints()
 {
         return count();
 }

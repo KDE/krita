@@ -124,8 +124,8 @@ void KisIntSpinbox::sliderValueChanged(int val)
 
 void KisIntSpinbox::setRange(int lower, int upper, int /*step*/)
 {
-    upper = kMax(upper, lower);
-    lower = kMin(upper, lower);
+    upper = qMax(upper, lower);
+    lower = qMin(upper, lower);
     d->m_slider->setRange(lower, upper);
 
     layout();

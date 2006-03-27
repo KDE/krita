@@ -162,8 +162,8 @@ public: // KoView implementation
     virtual int topBorder() const;
     virtual int bottomBorder() const;
 
-    Q_INT32 docWidth() const;
-    Q_INT32 docHeight() const;
+    qint32 docWidth() const;
+    qint32 docHeight() const;
 
     void updateStatusBarSelectionLabel();
 
@@ -182,7 +182,7 @@ signals:
      * changed.
      **/
     void currentColorSpaceChanged(KisColorSpace* cs);
-    void cursorPosition(Q_INT32 xpos, Q_INT32 ypos);
+    void cursorPosition(qint32 xpos, qint32 ypos);
 
     void sigFGQColorChanged(const QColor &);
     void sigBGQColorChanged(const QColor &);
@@ -217,7 +217,7 @@ public slots:
 public:
     virtual void mouseMoveEvent(QMouseEvent *e);
 
-    void resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers = false);
+    void resizeCurrentImage(qint32 w, qint32 h, bool cropLayers = false);
     void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateCurrentImage(double angle);
     void shearCurrentImage(double angleX, double angleY);
@@ -303,21 +303,21 @@ private slots:
 private:
     virtual KisCanvas *kiscanvas() const;
     
-    virtual Q_INT32 horzValue() const;
-    virtual Q_INT32 vertValue() const;
+    virtual qint32 horzValue() const;
+    virtual qint32 vertValue() const;
 
-    virtual void scrollTo(Q_INT32 x, Q_INT32 y);
+    virtual void scrollTo(qint32 x, qint32 y);
 
-    virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void updateCanvas(qint32 x, qint32 y, qint32 w, qint32 h);
     virtual void updateCanvas(const QRect& imageRect);
 
     virtual void zoomIn();
-    virtual void zoomIn(Q_INT32 x, Q_INT32 y);
+    virtual void zoomIn(qint32 x, qint32 y);
 
     virtual void zoomOut();
-    virtual void zoomOut(Q_INT32 x, Q_INT32 y);
+    virtual void zoomOut(qint32 x, qint32 y);
 
-    virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void zoomTo(qint32 x, qint32 y, qint32 w, qint32 h);
     virtual void zoomTo(const QRect& r);
     virtual void zoomTo(const KisRect& r);
     virtual void zoomAroundPoint(double x, double y, double zf);
@@ -327,14 +327,14 @@ private:
     virtual KisPoint viewToWindow(const KisPoint& pt);
     virtual QRect viewToWindow(const QRect& rc);
     virtual KisRect viewToWindow(const KisRect& rc);
-    virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y);
+    virtual void viewToWindow(qint32 *x, qint32 *y);
 
     virtual QPoint windowToView(const QPoint& pt);
     virtual QPoint windowToView(const QPoint& pt) const;
     virtual KisPoint windowToView(const KisPoint& pt);
     virtual QRect windowToView(const QRect& rc);
     virtual KisRect windowToView(const KisRect& rc);
-    virtual void windowToView(Q_INT32 *x, Q_INT32 *y);
+    virtual void windowToView(qint32 *x, qint32 *y);
 
     virtual QCursor setCanvasCursor(const QCursor & cursor);
 
@@ -396,7 +396,7 @@ private:
      * @param url the url to the image file
      * @return the number of layers added
      */
-    Q_INT32 importImage(const KUrl& url = KUrl());
+    qint32 importImage(const KUrl& url = KUrl());
     KisFilterManager * filterManager() { return m_filterManager; }
     void setCurrentImage(KisImageSP image);
 
@@ -492,7 +492,7 @@ private slots:
     void slotActualSize();
     void slotFitToCanvas();
 
-    void slotImageSizeChanged(Q_INT32 w, Q_INT32 h);
+    void slotImageSizeChanged(qint32 w, qint32 h);
 
     void scrollH(int value);
     void scrollV(int value);
@@ -535,9 +535,9 @@ private:
     // Fringe benefits
     KisRuler *m_hRuler;
     KisRuler *m_vRuler;
-    Q_INT32 m_rulerThickness;
-    Q_INT32 m_vScrollBarExtent;
-    Q_INT32 m_hScrollBarExtent;
+    qint32 m_rulerThickness;
+    qint32 m_vScrollBarExtent;
+    qint32 m_hScrollBarExtent;
 
     // Actions
     KAction *m_imgFlatten;

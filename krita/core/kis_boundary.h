@@ -41,7 +41,7 @@ public:
 
 private:
     typedef QPair<KisPoint, int> PointPair; // int->length
-    bool isDark(Q_UINT8 val);
+    bool isDark(quint8 val);
     KisPaintDevice* m_device;
     int m_fuzzyness;
 

@@ -27,18 +27,18 @@
 
 #define KRITA_VERSION VERSION
 
-const Q_UINT8 Q_UINT8_MAX = UCHAR_MAX;
-const Q_UINT16 Q_UINT16_MAX = 65535;
+const quint8 quint8_MAX = UCHAR_MAX;
+const quint16 quint16_MAX = 65535;
 
-const Q_INT32 Q_INT32_MAX = (2147483647);
-const Q_INT32 Q_INT32_MIN = (-2147483647-1);
+const qint32 qint32_MAX = (2147483647);
+const qint32 qint32_MIN = (-2147483647-1);
 
-const Q_UINT8 OPACITY_TRANSPARENT = 0;
-const Q_UINT8 OPACITY_OPAQUE = UCHAR_MAX;
+const quint8 OPACITY_TRANSPARENT = 0;
+const quint8 OPACITY_OPAQUE = UCHAR_MAX;
 
-const Q_UINT8 MAX_SELECTED = UCHAR_MAX;
-const Q_UINT8 MIN_SELECTED = 0;
-const Q_UINT8 SELECTION_THRESHOLD = 1;
+const quint8 MAX_SELECTED = UCHAR_MAX;
+const quint8 MIN_SELECTED = 0;
+const quint8 SELECTION_THRESHOLD = 1;
 
 enum enumCursorStyle {
     CURSOR_STYLE_TOOLICON = 0,
@@ -59,7 +59,7 @@ enum enumResourceTypes {
  * this is downscaled to 127 levels because the line would be too jittery, and
  * the amount of masks take too much memory otherwise.
  */
-const Q_INT32 PRESSURE_LEVELS= 127;
+const qint32 PRESSURE_LEVELS= 127;
 const double PRESSURE_MIN = 0.0;
 const double PRESSURE_MAX = 1.0;
 const double PRESSURE_DEFAULT = (PRESSURE_MAX - PRESSURE_MIN) / 2;

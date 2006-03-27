@@ -23,16 +23,16 @@
 
 class KisNameServer {
 public:
-    KisNameServer(const QString& prefix, Q_INT32 seed = 1);
+    KisNameServer(const QString& prefix, qint32 seed = 1);
     ~KisNameServer();
 
     QString name();
-    Q_INT32 number();
-    Q_INT32 currentSeed() const;
+    qint32 number();
+    qint32 currentSeed() const;
     void rollback();
 
 private:
-    Q_INT32 m_generator;
+    qint32 m_generator;
     QString m_prefix;
 };
 

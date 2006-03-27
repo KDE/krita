@@ -51,10 +51,10 @@ private:
 
 
 struct KisIntegerWidgetParam {
-    KRITA_EXPORT KisIntegerWidgetParam(  Q_INT32 nmin, Q_INT32 nmax, Q_INT32 ninitvalue, QString label, QString nname);
-    Q_INT32 min;
-    Q_INT32 max;
-    Q_INT32 initvalue;
+    KRITA_EXPORT KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 ninitvalue, QString label, QString nname);
+    qint32 min;
+    qint32 max;
+    qint32 initvalue;
     QString label;
     QString name;
 };
@@ -70,11 +70,11 @@ public:
     virtual void setConfiguration(KisFilterConfiguration * config);
     
 public:
-    inline Q_INT32 nbValues() { return m_nbintegerWidgets; };
-    inline Q_INT32 valueAt( Q_INT32 i ) { return m_integerWidgets[i]->value(); };
+    inline qint32 nbValues() { return m_nbintegerWidgets; };
+    inline qint32 valueAt( qint32 i ) { return m_integerWidgets[i]->value(); };
     
 private:
-    Q_INT32 m_nbintegerWidgets;
+    qint32 m_nbintegerWidgets;
     KisDelayedActionIntegerInput** m_integerWidgets;
 };
 

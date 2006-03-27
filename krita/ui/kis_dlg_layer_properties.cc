@@ -36,7 +36,7 @@
 #include "kis_colorspace.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
-                     Q_INT32 opacity,
+                     qint32 opacity,
                      const KisCompositeOp& compositeOp,
                      const KisColorSpace * colorSpace,
                      QWidget *parent, const char *name, WFlags f)
@@ -87,7 +87,7 @@ QString KisDlgLayerProperties::getName() const
 
 int KisDlgLayerProperties::getOpacity() const
 {
-    Q_INT32 opacity = m_page->intOpacity->value();
+    qint32 opacity = m_page->intOpacity->value();
 
     if (!opacity)
         return 0;

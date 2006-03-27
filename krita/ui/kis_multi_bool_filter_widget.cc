@@ -35,7 +35,7 @@ KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, QString nlabel, QStrin
 KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char * name, const char * caption, vKisBoolWidgetParam iwparam) : 
     KisFilterConfigWidget( parent, name )
 {
-    Q_INT32 m_nbboolWidgets = iwparam.size();
+    qint32 m_nbboolWidgets = iwparam.size();
 
     this->setCaption(caption);
 
@@ -43,7 +43,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char 
 
     m_boolWidgets = new QCheckBox*[ m_nbboolWidgets ];
 
-    for( Q_INT32 i = 0; i < m_nbboolWidgets; ++i)
+    for( qint32 i = 0; i < m_nbboolWidgets; ++i)
     {
         m_boolWidgets[i] = new QCheckBox( this, iwparam[i].name.ascii());
         m_boolWidgets[i]->setChecked( iwparam[i].initvalue );

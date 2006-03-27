@@ -50,7 +50,7 @@ void KisGrayColorSpaceTester::testBasics()
     KisGrayColorSpace *cs = new KisGrayColorSpace(profile);
 
 
-    Q_UINT8 pixel[MAX_CHANNEL_GRAYSCALEA];
+    quint8 pixel[MAX_CHANNEL_GRAYSCALEA];
 
     pixel[KisGrayColorSpace::PIXEL_GRAY] = 255;
     pixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA] = 128;
@@ -71,8 +71,8 @@ void KisGrayColorSpaceTester::testBasics()
     CHECK((uint)pixel[KisGrayColorSpace::PIXEL_GRAY], 128u);
     CHECK((uint)pixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA], 192u);
 
-    Q_UINT8 gray;
-    Q_UINT8 alpha;
+    quint8 gray;
+    quint8 alpha;
 
     cs->getPixel(pixel, &gray, &alpha);
     CHECK((uint)gray, 128u);
@@ -86,9 +86,9 @@ void KisGrayColorSpaceTester::testMixColors()
     KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
     KisAbstractColorSpace * cs = new KisGrayColorSpace(profile);
 
-    Q_UINT8 pixel1[MAX_CHANNEL_GRAYSCALEA];
-    Q_UINT8 pixel2[MAX_CHANNEL_GRAYSCALEA];
-    Q_UINT8 outputPixel[MAX_CHANNEL_GRAYSCALEA];
+    quint8 pixel1[MAX_CHANNEL_GRAYSCALEA];
+    quint8 pixel2[MAX_CHANNEL_GRAYSCALEA];
+    quint8 outputPixel[MAX_CHANNEL_GRAYSCALEA];
 
     pixel1[KisGrayColorSpace::PIXEL_GRAY] = 255;
     pixel1[KisGrayColorSpace::PIXEL_GRAY_ALPHA] = 255;
@@ -96,8 +96,8 @@ void KisGrayColorSpaceTester::testMixColors()
     pixel2[KisGrayColorSpace::PIXEL_GRAY] = 0;
     pixel2[KisGrayColorSpace::PIXEL_GRAY_ALPHA] = 0;
 
-    const Q_UINT8 *pixelPtrs[2];
-    Q_UINT8 weights[2];
+    const quint8 *pixelPtrs[2];
+    quint8 weights[2];
 
     pixelPtrs[0] = pixel1;
     pixelPtrs[1] = pixel2;

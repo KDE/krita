@@ -84,7 +84,7 @@ void KritaFiltersGallery::showFiltersGalleryDialog()
     KisDlgFiltersGallery dlg(m_view, m_view);
     if (dlg.exec())
     {
-        QApplication::setOverrideCursor( Qt::waitCursor );
+        QApplication::setOverrideCursor( Qt::WaitCursor );
 
         KisFilter* filter = dlg.currentFilter();
         if(filter )

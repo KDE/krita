@@ -124,7 +124,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                                 this, &Iterator<_T_It>::setChannelFLOAT, ci->pos() ) );
                         break;
                     default:
-                        kdDebug(41011) << "unsupported data format in scripts" << endl;
+                        kDebug(41011) << "unsupported data format in scripts" << endl;
                         break;
                 }
             }
@@ -132,7 +132,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
             // set/get general
             addFunction("set" + initiales, &Iterator::setPixel, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") );
             addFunction("get" + initiales, &Iterator::getPixel);
-            kdDebug(41011) << ( "get" + initiales ) << endl;
+            kDebug(41011) << ( "get" + initiales ) << endl;
             // Various colorSpace
             addFunction("invertColor", &Iterator::invertColor);
             addFunction("darken", &Iterator::darken);
@@ -157,7 +157,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
          */
         Kross::Api::Object::Ptr darken(Kross::Api::List::Ptr args)
         {
-            Q_INT32 shade = Kross::Api::Variant::toUInt( args->item(0) );
+            qint32 shade = Kross::Api::Variant::toUInt( args->item(0) );
             bool compensate = (args->count() == 2);
             double compensation = compensate ? Kross::Api::Variant::toDouble( args->item(2) ) : 0.;
             m_layer->paintDevice()->colorSpace()->darken(m_it->rawData(), m_it->rawData(), shade, compensate, compensation, 1);
@@ -188,23 +188,23 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         }
         Kross::Api::Object::Ptr getChannelUINT8(Kross::Api::List::Ptr, uint channelpos)
         {
-            Q_UINT8* data = (Q_UINT8*)(m_it->rawData() + channelpos);
+            quint8* data = (quint8*)(m_it->rawData() + channelpos);
             return new Kross::Api::Variant( * data);
         }
         Kross::Api::Object::Ptr setChannelUINT8(Kross::Api::List::Ptr args, uint channelpos)
         {
-            Q_UINT8* data = (Q_UINT8*)(m_it->rawData() + channelpos); //*(uint*)channelpos);
+            quint8* data = (quint8*)(m_it->rawData() + channelpos); //*(uint*)channelpos);
             *data = Kross::Api::Variant::toUInt( args->item(0) );
             return 0;
         }
         Kross::Api::Object::Ptr getChannelUINT16(Kross::Api::List::Ptr, uint channelpos)
         {
-            Q_UINT16* data = (Q_UINT16*)(m_it->rawData() + channelpos);
+            quint16* data = (quint16*)(m_it->rawData() + channelpos);
             return new Kross::Api::Variant( * data);
         }
         Kross::Api::Object::Ptr setChannelUINT16(Kross::Api::List::Ptr args, uint channelpos)
         {
-            Q_UINT16* data = (Q_UINT16*)(m_it->rawData() + channelpos);
+            quint16* data = (quint16*)(m_it->rawData() + channelpos);
             *data =  Kross::Api::Variant::toUInt( args->item(0) );
             return 0;
         }
@@ -226,21 +226,21 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
             for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
             {
                 KisChannelInfo * ci = *itC;
-                Q_UINT8* data = (Q_UINT8*)(m_it->rawData() + ci->pos());
+                quint8* data = (quint8*)(m_it->rawData() + ci->pos());
                 switch(ci->channelValueType())
                 {
                     case KisChannelInfo::UINT8:
                         pixel.push_back( *data);
                         break;
                     case KisChannelInfo::UINT16:
-                        pixel.push_back( *((Q_UINT16*) data) );
+                        pixel.push_back( *((quint16*) data) );
                         break;
                     case KisChannelInfo::FLOAT32:
                         pixel.push_back( *((float*) data) );
                         break;
                     default:
-                        kdDebug(41011) << i18n("An error has occurred in %1").arg("getPixel") << endl;
-                        kdDebug(41011) << i18n("unsupported data format in scripts") << endl;
+                        kDebug(41011) << i18n("An error has occurred in %1").arg("getPixel") << endl;
+                        kDebug(41011) << i18n("unsupported data format in scripts") << endl;
                         break;
                 }
             }
@@ -254,21 +254,21 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
             for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++, i++)
             {
                 KisChannelInfo * ci = *itC;
-                Q_UINT8* data = (Q_UINT8*)(m_it->rawData() + ci->pos());
+                quint8* data = (quint8*)(m_it->rawData() + ci->pos());
                 switch(ci->channelValueType())
                 {
                     case KisChannelInfo::UINT8:
                         *data = pixel[i].toUInt();
                         break;
                     case KisChannelInfo::UINT16:
-                        *((Q_UINT16*) data) = pixel[i].toUInt();
+                        *((quint16*) data) = pixel[i].toUInt();
                         break;
                     case KisChannelInfo::FLOAT32:
                         *((float*) data) = pixel[i].toDouble();
                         break;
                     default:
-                        kdDebug(41011) << i18n("An error has occurred in %1").arg("setPixel") << endl;
-                        kdDebug(41011) << i18n("unsupported data format in scripts") << endl;
+                        kDebug(41011) << i18n("An error has occurred in %1").arg("setPixel") << endl;
+                        kDebug(41011) << i18n("unsupported data format in scripts") << endl;
                         break;
                 }
             }
@@ -277,14 +277,14 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
     private:
         virtual void invalidateIterator()
         {
-            kdDebug(41011) << "invalidating iterator" << endl;
+            kDebug(41011) << "invalidating iterator" << endl;
             if(m_it)
             {
-                kdDebug(41011) << "deleting iterator" << endl;
+                kDebug(41011) << "deleting iterator" << endl;
                 delete m_it;
             }
             m_it = 0;
-            kdDebug() << " Iterator = " << m_it << endl;
+            kDebug() << " Iterator = " << m_it << endl;
         }
     private:
         IteratorMemoryManager* m_itmm;

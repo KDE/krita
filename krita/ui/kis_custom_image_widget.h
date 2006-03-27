@@ -38,7 +38,7 @@ public:
      * @param parent the parent widget
      * @param doc the document that wants to be altered
      */
-    KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32 defWidth, Q_INT32 defHeight, double resolution, QString defColorSpaceName, QString imageName);
+    KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, QString defColorSpaceName, QString imageName);
 
 private slots:
     void buttonClicked();
@@ -49,7 +49,7 @@ signals:
     void documentSelected();
 
 private:
-    Q_UINT8 backgroundOpacity() const;
+    quint8 backgroundOpacity() const;
 
     KisDoc *m_doc;
 };

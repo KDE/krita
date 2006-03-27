@@ -106,7 +106,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 }
 
 
-Q_INT32 KisAdjustmentLayer::x() const
+qint32 KisAdjustmentLayer::x() const
 {
     if (m_selection)
         return m_selection->getX();
@@ -114,7 +114,7 @@ Q_INT32 KisAdjustmentLayer::x() const
         return 0;
 }
 
-void KisAdjustmentLayer::setX(Q_INT32 x)
+void KisAdjustmentLayer::setX(qint32 x)
 {
     if (m_selection) {
         m_selection->setX(x);
@@ -123,7 +123,7 @@ void KisAdjustmentLayer::setX(Q_INT32 x)
 
 }
 
-Q_INT32 KisAdjustmentLayer::y() const
+qint32 KisAdjustmentLayer::y() const
 {
     if (m_selection)
         return m_selection->getY();
@@ -131,7 +131,7 @@ Q_INT32 KisAdjustmentLayer::y() const
         return 0;
 }
 
-void KisAdjustmentLayer::setY(Q_INT32 y)
+void KisAdjustmentLayer::setY(qint32 y)
 {
     if (m_selection) {
         m_selection->setY(y);

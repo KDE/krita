@@ -241,7 +241,7 @@ bool KisFilterManager::apply()
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return false;
 
-    QApplication::setOverrideCursor( Qt::waitCursor );
+    QApplication::setOverrideCursor( Qt::WaitCursor );
 
     //Apply the filter
     m_lastFilterConfig = m_lastFilter->configuration(m_lastWidget);

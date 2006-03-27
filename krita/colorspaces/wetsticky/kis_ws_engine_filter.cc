@@ -66,7 +66,7 @@ KisWSEngineFilter::KisWSEngineFilter() : KisFilter(id(), "", i18n("&Wet & Sticky
  * cell on the canvas to be visited.  There is an even probability
  * of each cell being visited.
  */
-QPoint next_cell(Q_UINT32 width, Q_UINT32 height)
+QPoint next_cell(quint32 width, quint32 height)
 {
     return QPoint(random() * width,  random() * height);
 }
@@ -83,17 +83,17 @@ void single_step(KisColorSpace * cs, KisPaintDeviceSP src,  KisPaintDeviceSP dst
     // effect.
     KisHLineIterator iter = src -> createHLineIterator(p.x(), p.y(), 1,  false);
 
-    Q_UINT8 *orig = iter.rawData();
-    Q_UINT8 *pix = orig;
+    quint8 *orig = iter.rawData();
+    quint8 *pix = orig;
 
      if (!orig) return;
 
     if (!native ) {
         QColor c;
-        Q_UINT8 opacity;
+        quint8 opacity;
 
         src -> colorSpace() -> toQColor(pix, &c, &opacity);
-        Q_UINT8 *pix = new Q_UINT8[sizeof( cell )];
+        quint8 *pix = new quint8[sizeof( cell )];
         Q_CHECK_PTR(pix);
 
         cs -> fromQColor(c, opacity, pix);
@@ -119,7 +119,7 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
     m_rect = rect;
 
 
-    kdDebug(DBG_AREA_FILTERS) << "WSEnginefilter called!\n";
+    kDebug(DBG_AREA_FILTERS) << "WSEnginefilter called!\n";
     QTime t;
     t.restart();
 
@@ -134,9 +134,9 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
     // XXX: We need a better way to ID color strategies
     KisColorSpace * cs = KisColorSpaceRegistry::instance()->get("W&S");
 
-    Q_UINT32 pixels = 400; //m_cfg -> pixels();
+    quint32 pixels = 400; //m_cfg -> pixels();
 
-    kdDebug(DBG_AREA_FILTERS) << "Going to singlestep " << pixels << " pixels.\n";
+    kDebug(DBG_AREA_FILTERS) << "Going to singlestep " << pixels << " pixels.\n";
 
     // Determine whether we want an infinite loop
     if ( pixels == 0 ) {
@@ -145,18 +145,18 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
     }
     // Or not.
     else {
-        for ( Q_UINT32 i = 0; i < pixels; ++i ) {
+        for ( quint32 i = 0; i < pixels; ++i ) {
             single_step (cs, src, dst, rect, native);
         }
     }
-    kdDebug(DBG_AREA_FILTERS) << "Done in " << t.elapsed() << " ms\n";
+    kDebug(DBG_AREA_FILTERS) << "Done in " << t.elapsed() << " ms\n";
 
 }
 
 KisFilterConfigWidget * KisWSEngineFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev)
 {
 //     KisWSEngineFilterConfigurationWidget* kefcw = new KisWSEngineFilterConfigurationWidget(this,parent, "");
-//     kdDebug(DBG_AREA_FILTERS) << kefcw << endl;
+//     kDebug(DBG_AREA_FILTERS) << kefcw << endl;
 //     return kefcw  ;
     return 0;
 }
@@ -169,7 +169,7 @@ KisFilterConfiguration* KisWSEngineFilter::configuration(QWidget* nwidget, KisPa
 //     {
 //         return new KisWSEngineFilterConfiguration(30);
 //     } else {
-//                 Q_UINT32 depth = widget -> baseWidget() -> depthSpinBox -> value();
+//                 quint32 depth = widget -> baseWidget() -> depthSpinBox -> value();
 
 //                 return new KisWSEngineFilterConfiguration(depth);
 //         }

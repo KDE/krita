@@ -25,8 +25,8 @@
 #include "kis_u16_base_colorspace.h"
 
 namespace xyz {
-    const Q_INT32 MAX_CHANNEL_XYZ = 3;
-    const Q_INT32 MAX_CHANNEL_XYZA = 4;
+    const qint32 MAX_CHANNEL_XYZ = 3;
+    const qint32 MAX_CHANNEL_XYZA = 4;
 }
 
 
@@ -36,10 +36,10 @@ class KisXyzColorSpace : public KisU16BaseColorSpace {
 public:
 
     struct Pixel {
-        Q_UINT16 X;
-        Q_UINT16 Y;
-        Q_UINT16 Z;
-        Q_UINT16 alpha;
+        quint16 X;
+        quint16 Y;
+        quint16 Z;
+        quint16 alpha;
     };
 
 public:
@@ -56,56 +56,56 @@ public:
         };
 public:
     // Pixel manipulation
-    virtual KisColorAdjustment *createBrightnessContrastAdjustment(Q_UINT16 *transferValues);
-    virtual void applyAdjustment(const Q_UINT8 *src, Q_UINT8 *dst, KisColorAdjustment *, Q_INT32 nPixels);
-    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);
-    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
-    virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nPixels) const;
-    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
-    virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
+    virtual KisColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues);
+    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *, qint32 nPixels);
+    virtual void invertColor(quint8 * src, qint32 nPixels);
+    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
+    virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
+    virtual quint8 intensity8(const quint8 * src) const;
 
     // Information about the colorstrategy
     virtual Q3ValueVector<KisChannelInfo *> channels() const;
-    virtual Q_UINT32 nChannels() const;
-    virtual Q_UINT32 nColorChannels() const;
-    virtual Q_UINT32 pixelSize() const;
+    virtual quint32 nChannels() const;
+    virtual quint32 nColorChannels() const;
+    virtual quint32 pixelSize() const;
 
 
     // Composition
 
-    virtual void bitBlt(Q_UINT8 *dst,
-                Q_INT32 dststride,
-                const Q_UINT8 *src,
-                Q_INT32 srcRowStride,
-                const Q_UINT8 *srcAlphaMask,
-                Q_INT32 maskRowStride,
-                Q_UINT8 opacity,
-                Q_INT32 rows,
-                Q_INT32 cols,
+    virtual void bitBlt(quint8 *dst,
+                qint32 dststride,
+                const quint8 *src,
+                qint32 srcRowStride,
+                const quint8 *srcAlphaMask,
+                qint32 maskRowStride,
+                quint8 opacity,
+                qint32 rows,
+                qint32 cols,
                 const KisCompositeOp& op);
 
     KisCompositeOpList userVisiblecompositeOps() const;
 
 protected:
-    void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeMultiply(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeDivide(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeScreen(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeOverlay(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeDodge(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeBurn(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeDarken(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeLighten(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
-    void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT16 opacity);
+    void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeMultiply(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeDivide(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeScreen(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeOverlay(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeDodge(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeBurn(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeDarken(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeLighten(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
+    void compositeErase(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
 
 private:
 
-    static const Q_UINT8 PIXEL_X = 0;
-    static const Q_UINT8 PIXEL_Y = 1;
-    static const Q_UINT8 PIXEL_Z = 2;
-    static const Q_UINT8 PIXEL_ALPHA = 3;
+    static const quint8 PIXEL_X = 0;
+    static const quint8 PIXEL_Y = 1;
+    static const quint8 PIXEL_Z = 2;
+    static const quint8 PIXEL_ALPHA = 3;
 
-    Q_UINT8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
+    quint8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
 
 };
 

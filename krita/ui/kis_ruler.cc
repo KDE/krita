@@ -66,7 +66,7 @@ KisRuler::~KisRuler()
     delete m_pixmapBuffer;
 }
 
-void KisRuler::initMarker(Q_INT32 w, Q_INT32 h)
+void KisRuler::initMarker(qint32 w, qint32 h)
 {
     QPainter p;
 
@@ -80,8 +80,8 @@ void KisRuler::initMarker(Q_INT32 w, Q_INT32 h)
 
 void KisRuler::recalculateSize()
 {
-    Q_INT32 w;
-    Q_INT32 h;
+    qint32 w;
+    qint32 h;
 
     if (m_pixmapBuffer) {
         delete m_pixmapBuffer;
@@ -125,7 +125,7 @@ void KisRuler::setZoom(double zoom)
     update();
 }
 
-void KisRuler::updatePointer(Q_INT32 x, Q_INT32 y)
+void KisRuler::updatePointer(qint32 x, qint32 y)
 {
     if (m_pixmapBuffer) {
         if (m_orientation == Qt::Horizontal) {
@@ -148,7 +148,7 @@ void KisRuler::updatePointer(Q_INT32 x, Q_INT32 y)
     }
 }
 
-void KisRuler::updateVisibleArea(Q_INT32 xpos, Q_INT32 ypos)
+void KisRuler::updateVisibleArea(qint32 xpos, qint32 ypos)
 {
     if (m_orientation == Qt::Horizontal)
         m_firstVisible = xpos;
@@ -174,11 +174,11 @@ void KisRuler::drawRuler()
 {
     QPainter p;
     QString buf;
-    Q_INT32 st1 = 0;
-    Q_INT32 st2 = 0;
-    Q_INT32 st3 = 0;
-    Q_INT32 st4 = 0;
-    Q_INT32 stt = 0;
+    qint32 st1 = 0;
+    qint32 st2 = 0;
+    qint32 st3 = 0;
+    qint32 st4 = 0;
+    qint32 stt = 0;
 
     if (!m_pixmapBuffer)
         return;
@@ -218,7 +218,7 @@ void KisRuler::drawRuler()
     bool s4 = KoUnit::fromUserValue(st4, m_unit) * m_zoom > 3.0;
 
     float cx = KoUnit::fromUserValue(100, m_unit) / m_zoom;
-    Q_INT32 step = qRound(cx);
+    qint32 step = qRound(cx);
 
     if (step < 5) {
         step = 1;
@@ -252,12 +252,12 @@ void KisRuler::drawRuler()
         step = 100000;
     }
 
-    Q_INT32 start = (Q_INT32)(KoUnit::fromUserValue(m_firstVisible, m_unit) / m_zoom);
-    Q_INT32 pos = 0;
+    qint32 start = (qint32)(KoUnit::fromUserValue(m_firstVisible, m_unit) / m_zoom);
+    qint32 pos = 0;
 
     if (m_orientation == Qt::Horizontal) {
         do {
-            pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
+            pos = (qint32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
             if (!s3 && s4 && start % st4 == 0)
                 p.drawLine(pos, RULER_THICKNESS - 9, pos, RULER_THICKNESS);
@@ -280,7 +280,7 @@ void KisRuler::drawRuler()
         } while (pos < m_pixmapBuffer->width());
     } else {
         do {
-            pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
+            pos = (qint32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
             if (!s3 && s4 && start % st4 == 0)
                 p.drawLine(RULER_THICKNESS - 9, pos, RULER_THICKNESS, pos);
@@ -348,15 +348,15 @@ void KisRuler::hide()
     super::hide();
 }
 
-void KisRuler::drawNums(QPainter *p, Q_INT32 x, Q_INT32 y, QString& num, bool orientationHoriz)
+void KisRuler::drawNums(QPainter *p, qint32 x, qint32 y, QString& num, bool orientationHoriz)
 {
     if (orientationHoriz)
         x -= 7;
     else
         y -= 8;
 
-    for (Q_UINT32 k = 0; k < num.length(); k++) {
-        Q_INT32 st = num.at(k).digitValue() * 7;
+    for (quint32 k = 0; k < num.length(); k++) {
+        qint32 st = num.at(k).digitValue() * 7;
 
         p->drawPixmap(x, y, m_pixmapNums, st, 0, 7, 7);
 

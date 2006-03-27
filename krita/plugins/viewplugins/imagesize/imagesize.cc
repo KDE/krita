@@ -97,8 +97,8 @@ void ImageSize::slotImageSize()
     dlgImageSize->setHeight(image->height());
 
     if (dlgImageSize->exec() == QDialog::Accepted) {
-        Q_INT32 w = dlgImageSize->width();
-        Q_INT32 h = dlgImageSize->height();
+        qint32 w = dlgImageSize->width();
+        qint32 h = dlgImageSize->height();
 
         if (dlgImageSize->scale()) {
             m_view->scaleCurrentImage((double)w / ((double)(image->width())),
@@ -130,8 +130,8 @@ void ImageSize::slotLayerSize()
     dlgLayerSize->setHeight(image->height());
 
     if (dlgLayerSize->exec() == QDialog::Accepted) {
-        Q_INT32 w = dlgLayerSize->width();
-        Q_INT32 h = dlgLayerSize->height();
+        qint32 w = dlgLayerSize->width();
+        qint32 h = dlgLayerSize->height();
 
         m_view->scaleLayer((double)w / ((double)(image->width())),
                     (double)h / ((double)(image->height())),
@@ -169,8 +169,8 @@ void ImageSize::slotSelectionScale()
     dlgImageSize->hideScaleBox();
 
     if (dlgImageSize->exec() == QDialog::Accepted) {
-        Q_INT32 w = dlgImageSize->width();
-        Q_INT32 h = dlgImageSize->height();
+        qint32 w = dlgImageSize->width();
+        qint32 h = dlgImageSize->height();
 
         m_view->scaleLayer((double)w / ((double)(image->width())),
                      (double)h / ((double)(image->height())),

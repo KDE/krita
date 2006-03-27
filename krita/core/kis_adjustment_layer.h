@@ -63,11 +63,11 @@ public:
     
 public:
     
-    virtual Q_INT32 x() const;
-    virtual void setX(Q_INT32);
+    virtual qint32 x() const;
+    virtual void setX(qint32);
 
-    virtual Q_INT32 y() const;
-    virtual void setY(Q_INT32);
+    virtual qint32 y() const;
+    virtual void setY(qint32);
 
     /// Returns an approximation of where the bounds on actual data are in this layer
     virtual QRect extent() const;

@@ -49,7 +49,7 @@ signals:
 
 private slots:
     void imageUpdated(QRect rc);
-    void imageSizeChanged(Q_INT32 w, Q_INT32 h);
+    void imageSizeChanged(qint32 w, qint32 h);
     void timeOut();
 
 private:

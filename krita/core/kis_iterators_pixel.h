@@ -35,7 +35,7 @@ class KisHLineIteratorPixel : public KisHLineIterator, public KisIteratorPixelTr
 public:
 
     KisHLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
-                           Q_INT32 x , Q_INT32 y , Q_INT32 w, Q_INT32 offsetx, Q_INT32 offsety,
+                           qint32 x , qint32 y , qint32 w, qint32 offsetx, qint32 offsety,
                            bool writable);
     
     KisHLineIteratorPixel(const KisHLineIteratorPixel& rhs) : KisHLineIterator(rhs), KisIteratorPixelTrait<KisHLineIterator>(rhs)
@@ -54,20 +54,20 @@ public:
     /// Advances a number of pixels until it reaches the end of the line
     KisHLineIteratorPixel & operator+=(int n) { KisHLineIterator::operator+=(n); advance(n); return *this; };
 
-    Q_INT32 x() const { return KisHLineIterator::x() + m_offsetx; }
+    qint32 x() const { return KisHLineIterator::x() + m_offsetx; }
     
-    Q_INT32 y() const { return KisHLineIterator::y() + m_offsety; }
+    qint32 y() const { return KisHLineIterator::y() + m_offsety; }
     
 protected:
 
-    Q_INT32 m_offsetx, m_offsety;
+    qint32 m_offsetx, m_offsety;
 };
 
 class KisVLineIteratorPixel : public KisVLineIterator, public KisIteratorPixelTrait <KisVLineIterator>
 {
 public:
     KisVLineIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
-                           Q_INT32 xpos , Q_INT32 ypos , Q_INT32 height, Q_INT32 offsetx, Q_INT32 offsety,
+                           qint32 xpos , qint32 ypos , qint32 height, qint32 offsetx, qint32 offsety,
                            bool writable);
                            
     KisVLineIteratorPixel(const KisVLineIteratorPixel& rhs) : KisVLineIterator(rhs), KisIteratorPixelTrait<KisVLineIterator>(rhs)
@@ -82,20 +82,20 @@ public:
 
     inline KisVLineIteratorPixel & operator ++() { KisVLineIterator::operator++(); advance(1); return *this;}
 
-    Q_INT32 x() const { return KisVLineIterator::x() + m_offsetx; }
+    qint32 x() const { return KisVLineIterator::x() + m_offsetx; }
     
-    Q_INT32 y() const { return KisVLineIterator::y() + m_offsety; }
+    qint32 y() const { return KisVLineIterator::y() + m_offsety; }
     
 protected:
 
-    Q_INT32 m_offsetx, m_offsety;
+    qint32 m_offsetx, m_offsety;
 };
 
 class KisRectIteratorPixel : public KisRectIterator, public KisIteratorPixelTrait <KisRectIterator>
 {
 public:
     KisRectIteratorPixel( KisPaintDevice *ndevice, KisDataManager *dm, KisDataManager *sel_dm,
-                          Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_INT32 offsetx, Q_INT32 offsety,
+                          qint32 x, qint32 y, qint32 w, qint32 h, qint32 offsetx, qint32 offsety,
                           bool writable);
     
     KisRectIteratorPixel(const KisRectIteratorPixel& rhs) : KisRectIterator(rhs), KisIteratorPixelTrait<KisRectIterator>(rhs)
@@ -110,13 +110,13 @@ public:
 
     inline KisRectIteratorPixel & operator ++() { KisRectIterator::operator++(); advance(1); return *this;}
 
-    Q_INT32 x() const { return KisRectIterator::x() + m_offsetx; }
+    qint32 x() const { return KisRectIterator::x() + m_offsetx; }
     
-    Q_INT32 y() const { return KisRectIterator::y() + m_offsety; }
+    qint32 y() const { return KisRectIterator::y() + m_offsety; }
     
 protected:
 
-    Q_INT32 m_offsetx, m_offsety;
+    qint32 m_offsetx, m_offsety;
 };
 
 #endif

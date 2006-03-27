@@ -49,7 +49,7 @@ void KisCmbIDList::setIDList(const KisIDList & list)
 
 KisID KisCmbIDList::currentItem() const
 {
-    Q_UINT32 i = super::currentItem();
+    quint32 i = super::currentItem();
     if (i > m_list.count()) return KisID();
 
     return m_list[i];

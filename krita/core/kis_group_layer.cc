@@ -31,7 +31,7 @@
 #include "kis_merge_visitor.h"
 #include "kis_fill_painter.h"
 
-KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
+KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, quint8 opacity) :
     super(img, name, opacity),
     m_x(0),
     m_y(0)
@@ -159,7 +159,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
     if (x < 0 || kClamp(uint(x), uint(0), childCount()) != uint(x) ||
         newLayer->parent() || m_layers.contains(newLayer))
     {
-        kdWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
+        kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
         return false;
     }
     uint index(x);
@@ -181,7 +181,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 {
     if (aboveThis && aboveThis->parent().data() != this)
     {
-        kdWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
+        kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)!" << endl;
         return false;
     }
     return addLayer(newLayer, aboveThis ? aboveThis->index() : childCount());
@@ -207,7 +207,7 @@ bool KisGroupLayer::removeLayer(int x)
         }
         return true;
     }
-    kdWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
+    kWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
     return false;
 }
 
@@ -215,7 +215,7 @@ bool KisGroupLayer::removeLayer(KisLayerSP layer)
 {
     if (layer->parent().data() != this)
     {
-        kdWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
+        kWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
         return false;
     }
 
@@ -255,14 +255,14 @@ QRect KisGroupLayer::exactBounds() const
     return groupExactBounds;
 }
 
-Q_INT32 KisGroupLayer::x() const
+qint32 KisGroupLayer::x() const
 {
     return m_x;
 }
 
-void KisGroupLayer::setX(Q_INT32 x)
+void KisGroupLayer::setX(qint32 x)
 {
-    Q_INT32 delta = x - m_x;
+    qint32 delta = x - m_x;
 
     for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it)
     {
@@ -272,14 +272,14 @@ void KisGroupLayer::setX(Q_INT32 x)
     m_x = x;
 }
 
-Q_INT32 KisGroupLayer::y() const
+qint32 KisGroupLayer::y() const
 {
     return m_y;
 }
 
-void KisGroupLayer::setY(Q_INT32 y)
+void KisGroupLayer::setY(qint32 y)
 {
-    Q_INT32 delta = y - m_y;
+    qint32 delta = y - m_y;
 
     for (vKisLayerSP_cit it = m_layers.begin(); it != m_layers.end(); ++it)
     {
@@ -290,7 +290,7 @@ void KisGroupLayer::setY(Q_INT32 y)
     m_y = y;
 }
 
-QImage KisGroupLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
+QImage KisGroupLayer::createThumbnail(qint32 w, qint32 h)
 {
     return m_projection->createThumbnail(w, h);
 }

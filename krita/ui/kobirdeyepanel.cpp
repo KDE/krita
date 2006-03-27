@@ -69,7 +69,7 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
 {
     Q3HBoxLayout * l = new Q3HBoxLayout(this);
     m_page = new WdgBirdEye(this);
-    m_page->zoom->setRange((int) (QMAX(1, 100 * zoomListener->getMinZoom())), (int) (100 * zoomListener->getMaxZoom()));
+    m_page->zoom->setRange((int) (qMax(1, 100 * zoomListener->getMinZoom())), (int) (100 * zoomListener->getMaxZoom()));
     m_page->zoom->setValue(100);
     m_page->zoom->setSuffix("%");
 
@@ -198,7 +198,7 @@ void KoBirdEyePanel::sliderChanged( int v )
     }
 }
 
-void KoBirdEyePanel::cursorPosChanged(Q_INT32 xpos, Q_INT32 ypos)
+void KoBirdEyePanel::cursorPosChanged(qint32 xpos, qint32 ypos)
 {
     m_page->txtX->setText(QString("%L1").arg(xpos, 5));
     m_page->txtY->setText(QString("%L1").arg(ypos, 5));
@@ -260,10 +260,10 @@ QRect KoBirdEyePanel::documentToThumbnail(const KoRect& docRect)
         return QRect();
     }
 
-    Q_INT32 thumbnailLeft = static_cast<Q_INT32>((docRect.left() * m_thumbnail.width()) / m_documentSize.width());
-    Q_INT32 thumbnailRight = static_cast<Q_INT32>(((docRect.right() + 1) * m_thumbnail.width()) / m_documentSize.width());
-    Q_INT32 thumbnailTop = static_cast<Q_INT32>((docRect.top() * m_thumbnail.height()) / m_documentSize.height());
-    Q_INT32 thumbnailBottom = static_cast<Q_INT32>(((docRect.bottom() + 1) * m_thumbnail.height()) / m_documentSize.height());
+    qint32 thumbnailLeft = static_cast<qint32>((docRect.left() * m_thumbnail.width()) / m_documentSize.width());
+    qint32 thumbnailRight = static_cast<qint32>(((docRect.right() + 1) * m_thumbnail.width()) / m_documentSize.width());
+    qint32 thumbnailTop = static_cast<qint32>((docRect.top() * m_thumbnail.height()) / m_documentSize.height());
+    qint32 thumbnailBottom = static_cast<qint32>(((docRect.bottom() + 1) * m_thumbnail.height()) / m_documentSize.height());
 
     QRect thumbnailRect(thumbnailLeft, thumbnailTop, thumbnailRight - thumbnailLeft + 1, thumbnailBottom - thumbnailTop + 1);
     thumbnailRect &= m_thumbnail.rect();
@@ -398,21 +398,21 @@ void KoBirdEyePanel::handleMouseMove(QPoint p)
     switch (dragHandleAt(p)) {
     case DragHandleLeft:
     case DragHandleRight:
-        cursor = Qt::sizeHorCursor;
+        cursor = Qt::SizeHorCursor;
         break;
     case DragHandleTop:
     case DragHandleBottom:
-        cursor = Qt::sizeVerCursor;
+        cursor = Qt::SizeHorCursor;
         break;
     case DragHandleCentre:
-        cursor = Qt::sizeAllCursor;
+        cursor = Qt::SizeAllCursor;
         break;
     default:
     case DragHandleNone:
         if (m_thumbnail.rect().contains(p)) {
             cursor = Qt::PointingHandCursor;
         } else {
-            cursor = Qt::arrowCursor;
+            cursor = Qt::ArrowCursor;
         }
         break;
     }
@@ -424,8 +424,8 @@ void KoBirdEyePanel::handleMouseMoveAction(QPoint p)
 {
     if (m_dragging) {
 
-        Q_INT32 dx = p.x() - m_lastDragPos.x();
-        Q_INT32 dy = p.y() - m_lastDragPos.y();
+        qint32 dx = p.x() - m_lastDragPos.x();
+        qint32 dy = p.y() - m_lastDragPos.y();
 
         m_lastDragPos = p;
 
@@ -477,7 +477,7 @@ void KoBirdEyePanel::handleMousePress(QPoint p)
                 makeThumbnailRectVisible(thumbnailRect);
     
                 m_dragHandle = DragHandleCentre;
-                m_page->view->setCursor(Qt::sizeAllCursor);
+                m_page->view->setCursor(Qt::SizeAllCursor);
                 m_dragging = true;
             }
         } else {
@@ -554,8 +554,8 @@ void KoBirdEyePanel::resizeViewEvent(QSize size)
 void KoBirdEyePanel::fitThumbnailToView()
 {
     QRect docRect = QRect(0, 0, m_thumbnailProvider->pixelSize().width(), m_thumbnailProvider->pixelSize().height());
-    Q_INT32 thumbnailWidth;
-    Q_INT32 thumbnailHeight;
+    qint32 thumbnailWidth;
+    qint32 thumbnailHeight;
 
     if (docRect.isEmpty()) {
         thumbnailWidth = 0;
@@ -568,9 +568,9 @@ void KoBirdEyePanel::fitThumbnailToView()
 
         if (xScale < yScale) {
             thumbnailWidth = m_page->view->contentsRect().width() - thumbnailBorderPixels;
-            thumbnailHeight = Q_INT32(ceil(docRect.height() * xScale));
+            thumbnailHeight = qint32(ceil(docRect.height() * xScale));
         } else {
-            thumbnailWidth = Q_INT32(ceil(docRect.width() * yScale));
+            thumbnailWidth = qint32(ceil(docRect.width() * yScale));
             thumbnailHeight = m_page->view->contentsRect().height() - thumbnailBorderPixels;
         }
     }

@@ -39,12 +39,12 @@ KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
          icSigLabData, parent, p)
 
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(100,100,100)));
-    m_channels.push_back(new KisChannelInfo(i18n("a*"), CHANNEL_A * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(150,150,150)));
-    m_channels.push_back(new KisChannelInfo(i18n("b*"), CHANNEL_B * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(200,200,200)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(100,100,100)));
+    m_channels.push_back(new KisChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(150,150,150)));
+    m_channels.push_back(new KisChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
 
-    m_alphaPos = CHANNEL_ALPHA * sizeof(Q_UINT16);
+    m_alphaPos = CHANNEL_ALPHA * sizeof(quint16);
 
     init();
 }
@@ -53,7 +53,7 @@ KisLabColorSpace::~KisLabColorSpace()
 {
 }
 
-Q_UINT8 KisLabColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
+quint8 KisLabColorSpace::difference(const quint8 *src1, const quint8 *src2)
 {
     cmsCIELab labF1, labF2;
 
@@ -66,18 +66,18 @@ Q_UINT8 KisLabColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)
     if(diff>255)
         return 255;
     else
-        return Q_INT8(diff);
+        return qint8(diff);
 }
 
-void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const
+void KisLabColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
 {
-    Q_UINT32 totalLightness = 0, totalAlpha = 0;
-    Q_UINT32 totala = 0, totalb = 0;
+    quint32 totalLightness = 0, totalAlpha = 0;
+    quint32 totala = 0, totalb = 0;
 
     while (nColors--)
     {
         const Pixel *color = reinterpret_cast<const Pixel *>( *colors );
-        Q_UINT32 alphaTimesWeight = UINT8_MULT(color->alpha, *weights);
+        quint32 alphaTimesWeight = UINT8_MULT(color->alpha, *weights);
 
         totalLightness += color->lightness * alphaTimesWeight;
         totala += color->a * alphaTimesWeight;
@@ -119,9 +119,9 @@ void KisLabColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,
     ((Pixel *)dst)->b = totalb;
 }
 
-void KisLabColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
+void KisLabColorSpace::invertColor(quint8 * src, qint32 nPixels)
 {
-    Q_UINT32 psize = pixelSize();
+    quint32 psize = pixelSize();
 
     while (nPixels--)
     {
@@ -135,26 +135,26 @@ void KisLabColorSpace::invertColor(Q_UINT8 * src, Q_INT32 nPixels)
     }
 }
 
-void KisLabColorSpace::convolveColors(Q_UINT8** colors, Q_INT32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags,
-                                      Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const
+void KisLabColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags,
+                                      quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     // XXX: Either do this native, or do this in 16 bit rgba, not this, which is going back to QColor!
     KisAbstractColorSpace::convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nColors);
 }
 
-void KisLabColorSpace::darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const
+void KisLabColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const
 {
     // XXX: Is the 255 right for u16 colorspaces?
-    Q_UINT32 pSize = pixelSize();
+    quint32 pSize = pixelSize();
     while ( nPixels-- ) {
         const Pixel * s = reinterpret_cast<const Pixel*>( src );
         Pixel * d = reinterpret_cast<Pixel*>( dst );
 
         if ( compensate ) {
-            d->lightness = static_cast<Q_UINT16>( ( s->lightness * shade ) / ( compensation * 255 ) );
+            d->lightness = static_cast<quint16>( ( s->lightness * shade ) / ( compensation * 255 ) );
         }
         else {
-            d->lightness = static_cast<Q_UINT16>( s->lightness * shade / 255 );
+            d->lightness = static_cast<quint16>( s->lightness * shade / 255 );
         }
         d->a = s->a;
         d->b = s->b;
@@ -171,22 +171,22 @@ QValueVector<KisChannelInfo *> KisLabColorSpace::channels() const
     return m_channels;
 }
 
-Q_UINT32 KisLabColorSpace::nChannels() const
+quint32 KisLabColorSpace::nChannels() const
 {
     return NUM_CHANNELS;
 }
 
-Q_UINT32 KisLabColorSpace::nColorChannels() const
+quint32 KisLabColorSpace::nColorChannels() const
 {
     return NUM_COLOR_CHANNELS;
 }
 
-Q_UINT32 KisLabColorSpace::pixelSize() const
+quint32 KisLabColorSpace::pixelSize() const
 {
     return sizeof(Pixel);
 }
 
-void KisLabColorSpace::getSingleChannelPixel(Q_UINT8 *dst, const Q_UINT8 *src, Q_UINT32 channelIndex)
+void KisLabColorSpace::getSingleChannelPixel(quint8 *dst, const quint8 *src, quint32 channelIndex)
 {
     if (channelIndex < NUM_CHANNELS) {
 
@@ -222,17 +222,17 @@ void KisLabColorSpace::getSingleChannelPixel(Q_UINT8 *dst, const Q_UINT8 *src, Q
     }
 }
 
-void KisLabColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT16 opacity)
+void KisLabColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     while (rows > 0) {
         const Pixel *src = reinterpret_cast<const Pixel *>(srcRowStart);
         Pixel *dst = reinterpret_cast<Pixel *>(dstRowStart);
-        const Q_UINT8 *mask = maskRowStart;
-        Q_INT32 columns = numColumns;
+        const quint8 *mask = maskRowStart;
+        qint32 columns = numColumns;
 
         while (columns > 0) {
 
-            Q_UINT16 srcAlpha = src->alpha;
+            quint16 srcAlpha = src->alpha;
 
             // apply the alphamask
             if (mask != 0) {
@@ -251,14 +251,14 @@ void KisLabColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
                 if (srcAlpha == U16_OPACITY_OPAQUE) {
                     memcpy(dst, src, sizeof(Pixel));
                 } else {
-                    Q_UINT16 dstAlpha = dst->alpha;
+                    quint16 dstAlpha = dst->alpha;
 
-                    Q_UINT16 srcBlend;
+                    quint16 srcBlend;
 
                     if (dstAlpha == U16_OPACITY_OPAQUE) {
                         srcBlend = srcAlpha;
                     } else {
-                        Q_UINT16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
+                        quint16 newAlpha = dstAlpha + UINT16_MULT(U16_OPACITY_OPAQUE - dstAlpha, srcAlpha);
                         dst->alpha = newAlpha;
 
                         if (newAlpha != 0) {
@@ -297,29 +297,29 @@ printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
     }
 }
 
-void KisLabColorSpace::compositeErase(Q_UINT8 *dst,
-            Q_INT32 dstRowSize,
-            const Q_UINT8 *src,
-            Q_INT32 srcRowSize,
-            const Q_UINT8 *srcAlphaMask,
-            Q_INT32 maskRowStride,
-            Q_INT32 rows,
-            Q_INT32 cols,
-            Q_UINT16 /*opacity*/)
+void KisLabColorSpace::compositeErase(quint8 *dst,
+            qint32 dstRowSize,
+            const quint8 *src,
+            qint32 srcRowSize,
+            const quint8 *srcAlphaMask,
+            qint32 maskRowStride,
+            qint32 rows,
+            qint32 cols,
+            quint16 /*opacity*/)
 {
     while (rows-- > 0)
     {
         const Pixel *s = reinterpret_cast<const Pixel *>(src);
         Pixel *d = reinterpret_cast<Pixel *>(dst);
-        const Q_UINT8 *mask = srcAlphaMask;
+        const quint8 *mask = srcAlphaMask;
 
-        for (Q_INT32 i = cols; i > 0; i--, s++, d++)
+        for (qint32 i = cols; i > 0; i--, s++, d++)
         {
-            Q_UINT16 srcAlpha = s->alpha;
+            quint16 srcAlpha = s->alpha;
 
             // apply the alphamask
             if (mask != 0) {
-                Q_UINT8 U8_mask = *mask;
+                quint8 U8_mask = *mask;
 
                 if (U8_mask != OPACITY_OPAQUE) {
                     srcAlpha = UINT16_BLEND(srcAlpha, U16_OPACITY_OPAQUE, UINT8_TO_UINT16(U8_mask));
@@ -337,18 +337,18 @@ void KisLabColorSpace::compositeErase(Q_UINT8 *dst,
     }
 }
 
-void KisLabColorSpace::bitBlt(Q_UINT8 *dst,
-                      Q_INT32 dstRowStride,
-                      const Q_UINT8 *src,
-                      Q_INT32 srcRowStride,
-                      const Q_UINT8 *mask,
-                      Q_INT32 maskRowStride,
-                      Q_UINT8 U8_opacity,
-                      Q_INT32 rows,
-                      Q_INT32 cols,
+void KisLabColorSpace::bitBlt(quint8 *dst,
+                      qint32 dstRowStride,
+                      const quint8 *src,
+                      qint32 srcRowStride,
+                      const quint8 *mask,
+                      qint32 maskRowStride,
+                      quint8 U8_opacity,
+                      qint32 rows,
+                      qint32 cols,
                       const KisCompositeOp& op)
 {
-    Q_UINT16 opacity = UINT8_TO_UINT16(U8_opacity);
+    quint16 opacity = UINT8_TO_UINT16(U8_opacity);
 
     switch (op.op()) {
     case COMPOSITE_UNDEF:
@@ -481,7 +481,7 @@ KisCompositeOpList KisLabColorSpace::userVisiblecompositeOps() const
     return list;
 }
 
-QString KisLabColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+QString KisLabColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     const Pixel *pix = reinterpret_cast<const Pixel *>(U8_pixel);
     Q_ASSERT(channelIndex < nChannels());
@@ -500,7 +500,7 @@ QString KisLabColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 cha
     }
 }
 
-QString KisLabColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+QString KisLabColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     const Pixel *pix = reinterpret_cast<const Pixel *>(U8_pixel);
     Q_ASSERT(channelIndex < nChannels());

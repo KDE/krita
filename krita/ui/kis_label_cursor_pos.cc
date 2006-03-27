@@ -30,7 +30,7 @@ KisLabelCursorPos::~KisLabelCursorPos()
 {
 }
 
-void KisLabelCursorPos::updatePos(Q_INT32 xpos, Q_INT32 ypos)
+void KisLabelCursorPos::updatePos(qint32 xpos, qint32 ypos)
 {
     if (m_doUpdates) {
         QString s;

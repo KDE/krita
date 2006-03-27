@@ -59,7 +59,7 @@ enum enumToolType {
 
 };
 
-const Q_UINT8 NUMBER_OF_TOOLTYPES = 6;
+const quint8 NUMBER_OF_TOOLTYPES = 6;
 
 class KisTool : public QObject, public KisCanvasObserver, public KShared {
     Q_OBJECT
@@ -113,7 +113,7 @@ public:
     virtual bool wantsAutoScroll() const { return true; }
 
     // Methods for integration with karbon-style toolbox
-    virtual Q_UINT32 priority() { return 0; }
+    virtual quint32 priority() { return 0; }
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
     virtual QString icon() { return m_action->icon(); }
     virtual QString quickHelp() const { return ""; }

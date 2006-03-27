@@ -88,7 +88,7 @@ void KisToolStar::move(KisMoveEvent *event)
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize star
-        if (event->state() & Qt::AltButton) {
+        if (event->state() & Qt::AltModifier) {
             KisPoint trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
@@ -198,7 +198,7 @@ void KisToolStar::setup(KActionCollection *collection)
 vKisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
 {
     double R=0, r=0;
-    Q_INT32 n=0;
+    qint32 n=0;
     double angle;
 
     vKisPoint starCoordinatesArray(2*N);

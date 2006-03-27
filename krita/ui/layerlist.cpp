@@ -43,7 +43,7 @@
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstringhandler.h>
 
 class LayerItemIterator: public Q3ListViewItemIterator
@@ -86,7 +86,7 @@ public:
     bool previewsShown;
     int itemHeight;
     Q3ValueList<LayerProperty> properties;
-    KPopupMenu contextMenu;
+    KMenu contextMenu;
     LayerToolTip *tooltip;
 
     Private( QWidget *parent, LayerList *list );
@@ -209,12 +209,12 @@ public:
 
         int width = text.widthUsed();
         if( !m_img.isNull() )
-            width += kMin( m_img.width(), MAX_SIZE ) + 10;
+            width += qMin( m_img.width(), MAX_SIZE ) + 10;
         width += 10;
 
         int height = text.height();
-        if( !m_img.isNull() && kMin( m_img.height(), MAX_SIZE ) > height )
-            height = kMin( m_img.height(), MAX_SIZE );
+        if( !m_img.isNull() && qMin( m_img.height(), MAX_SIZE ) > height )
+            height = qMin( m_img.height(), MAX_SIZE );
         height += 10;
 
         return QSize( width, height );
@@ -232,9 +232,9 @@ public:
         if( irect.bottom() + height < drect.bottom() )
             y = irect.bottom();
         else
-            y = kMax( drect.top(), irect.top() - height );
+            y = qMax( drect.top(), irect.top() - height );
 
-        int x = kMax( drect.x(), QToolTip::parentWidget()->mapToGlobal( m_pos ).x() - width/2 );
+        int x = qMax( drect.x(), QToolTip::parentWidget()->mapToGlobal( m_pos ).x() - width/2 );
         if( x + width > drect.right() )
             x = drect.right() - width;
 
@@ -422,7 +422,7 @@ int LayerList::itemHeight() const
 
 int LayerList::numRows() const
 {
-    if( itemHeight() < kMax( fontMetrics().height(), iconSize().height() ) )
+    if( itemHeight() < qMax( fontMetrics().height(), iconSize().height() ) )
         return 0;
 
     return ( itemHeight() - fontMetrics().height() ) / iconSize().height() + 1;
@@ -462,7 +462,7 @@ bool LayerList::property( int id, const QString &name ) const
     return l->property( name );
 }
 
-KPopupMenu *LayerList::contextMenu() const
+KMenu *LayerList::contextMenu() const
 {
     return &( d->contextMenu );
 }
@@ -498,7 +498,7 @@ void LayerList::setNumRows( int rows )
         return;
 
     if( rows == 1 )
-        setItemHeight( kMax( fontMetrics().height(), iconSize().height() ) );
+        setItemHeight( qMax( fontMetrics().height(), iconSize().height() ) );
     else
         setItemHeight( fontMetrics().height() + ( rows - 1 ) * iconSize().height() );
 }
@@ -1133,7 +1133,7 @@ void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect
 
     if( d->previewChanged || r.size() != d->previewSize )
     {      //TODO handle width() != height()
-        const int size = kMin( r.width(), kMax( previewImage()->width(), previewImage()->height() ) );
+        const int size = qMin( r.width(), qMax( previewImage()->width(), previewImage()->height() ) );
         const QImage i = previewImage()->smoothScale( size, size, Qt::KeepAspectRatio );
         d->scaledPreview.convertFromImage( i );
         d->previewOffset.setX( r.width()/2 - i.width()/2 );
@@ -1265,7 +1265,7 @@ int LayerItem::width( const QFontMetrics &fm, const Q3ListView *lv, int c ) cons
     const int iconswidth = propscount * iconSize().width() + (propscount - 1) * listView()->itemMargin();
 
     if( multiline() )
-        return kMax( super::width( fm, lv, 0 ), iconswidth );
+        return qMax( super::width( fm, lv, 0 ), iconswidth );
     else
         return super::width( fm, lv, 0 ) + iconswidth;
 }

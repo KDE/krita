@@ -123,7 +123,7 @@ public:
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
-    virtual void move(Q_INT32 x, Q_INT32 y);
+    virtual void move(qint32 x, qint32 y);
 
     /**
      * Convenience method for the above
@@ -134,12 +134,12 @@ public:
      * Move the paint device to the specified location and make it possible to
      * undo the move.
      */
-    virtual KNamedCommand * moveCommand(Q_INT32 x, Q_INT32 y);
+    virtual KNamedCommand * moveCommand(qint32 x, qint32 y);
 
     /**
      * Returns true of x,y is within the extent of this paint device
      */
-    bool contains(Q_INT32 x, Q_INT32 y) const;
+    bool contains(qint32 x, qint32 y) const;
 
     /**
      * Convenience method for the above
@@ -152,7 +152,7 @@ public:
      * For instance, the tiled datamanager keeps the extent to the nearest
      * multiple of 64.
      */
-    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     virtual QRect extent() const;
 
     /**
@@ -171,13 +171,13 @@ public:
      * Get the exact bounds of this paint device. This may be very slow,
      * especially on larger paint devices because it does a linear scanline search.
      */
-    void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     virtual QRect exactBounds() const;
 
     /**
      * Cut the paint device down to the specified rect
      */
-    void crop(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    void crop(qint32 x, qint32 y, qint32 w, qint32 h);
 
     /// Convience method for the above
     void crop(QRect r);
@@ -190,7 +190,7 @@ public:
     /**
      * Fill the given rectangle with the given pixel.
      */
-    void fill(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const Q_UINT8 *fillPixel);
+    void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
     /**
      * Read the bytes representing the rectangle described by x, y, w, h into
@@ -202,7 +202,7 @@ public:
      * Reading from areas not previously initialized will read the default
      * pixel value into data but not initialize that region.
      */
-    virtual void readBytes(Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void readBytes(quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
      * Copy the bytes in data into the rect specified by x, y, w, h. If the
@@ -212,40 +212,40 @@ public:
      * If the data is written to areas of the paint device not previously initialized,
      * the paint device will grow.
      */
-    virtual void writeBytes(const Q_UINT8 * data, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void writeBytes(const quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
      * Get the number of contiguous columns starting at x, valid for all values
      * of y between minY and maxY.
      */
-    Q_INT32 numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY);
+    qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY);
 
     /**
      * Get the number of contiguous rows starting at y, valid for all values
      * of x between minX and maxX.
      */
-    Q_INT32 numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX);
+    qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX);
 
     /**
      * Get the row stride at pixel (x, y). This is the number of bytes to add to a
      * pointer to pixel (x, y) to access (x, y + 1).
      */
-    Q_INT32 rowStride(Q_INT32 x, Q_INT32 y);
+    qint32 rowStride(qint32 x, qint32 y);
 
     /**
      * Get a read-only pointer to pixel (x, y).
      */
-    const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
+    const quint8* pixel(qint32 x, qint32 y);
 
     /**
      * Get a read-write pointer to pixel (x, y).
      */
-    Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y);
+    quint8* writablePixel(qint32 x, qint32 y);
 
     /**
      *   Converts the paint device to a different colorspace
      */
-    virtual void convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    virtual void convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent = INTENT_PERCEPTUAL);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given
@@ -257,7 +257,7 @@ public:
      * Fill this paint device with the data from img; starting at (offsetX, offsetY)
      * @param srcProfileName name of the RGB profile to interpret the img as. "" is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& img, const QString &srcProfileName, Q_INT32 offsetX = 0, Q_INT32 offsetY = 0);
+    virtual void convertFromQImage(const QImage& img, const QString &srcProfileName, qint32 offsetX = 0, qint32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.
@@ -271,7 +271,7 @@ public:
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(KisProfile *  dstProfile, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, float exposure = 0.0f);
+    virtual QImage convertToQImage(KisProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, float exposure = 0.0f);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The rectangle is defined by the parent image's bounds.
@@ -288,14 +288,14 @@ public:
      * The width and height of the returned device won't exceed \p maxw and \p maxw, but they may be smaller.
      */
 
-    KisPaintDeviceSP createThumbnailDevice(Q_INT32 w, Q_INT32 h);
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h);
             
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
      * The width and height of the returned QImage won't exceed \p maxw and \p maxw, but they may be smaller.
      * The colors are not corrected for display!
      */
-    virtual QImage createThumbnail(Q_INT32 maxw, Q_INT32 maxh);
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh);
 
 
     /**
@@ -306,7 +306,7 @@ public:
      *
      * @return true if the operation was succesful.
      */
-    bool pixel(Q_INT32 x, Q_INT32 y, QColor *c, Q_UINT8 *opacity);
+    bool pixel(qint32 x, qint32 y, QColor *c, quint8 *opacity);
 
 
     /**
@@ -318,12 +318,12 @@ public:
      *
      * @return true if the operation was succesful.
      */
-    bool pixel(Q_INT32 x, Q_INT32 y, KisColor * kc);
+    bool pixel(qint32 x, qint32 y, KisColor * kc);
 
     /**
      * Return the KisColor of the pixel at x,y.
      */
-    KisColor colorAt(Q_INT32 x, Q_INT32 y);
+    KisColor colorAt(qint32 x, qint32 y);
 
     /**
      * Set the specified pixel to the specified color. Note that this
@@ -340,9 +340,9 @@ public:
      * @return true if the operation was succesful
      *
      */
-    bool setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8 opacity);
+    bool setPixel(qint32 x, qint32 y, const QColor& c, quint8 opacity);
 
-    bool setPixel(Q_INT32 x, Q_INT32 y, const KisColor& kc);
+    bool setPixel(qint32 x, qint32 y, const KisColor& kc);
 
     KisColorSpace * colorSpace() const;
 
@@ -356,33 +356,33 @@ public:
     /**
      * The X offset of the paint device
      */
-    Q_INT32 getX() const;
+    qint32 getX() const;
 
     /**
      * The Y offset of the paint device
      */
-    Q_INT32 getY() const;
+    qint32 getY() const;
 
     /**
      * Return the X offset of the paint device
      */
-    void setX(Q_INT32 x);
+    void setX(qint32 x);
 
     /**
      * Return the Y offset of the paint device
      */
-    void setY(Q_INT32 y);
+    void setY(qint32 y);
 
 
     /**
      * Return the number of bytes a pixel takes.
      */
-    virtual Q_INT32 pixelSize() const;
+    virtual qint32 pixelSize() const;
 
     /**
      * Return the number of channels a pixel takes
      */
-    virtual Q_INT32 nChannels() const;
+    virtual qint32 nChannels() const;
 
     /**
      * Return the image that contains this paint device, or 0 if it is not
@@ -429,17 +429,17 @@ public:
     /**
      * This function return an iterator which points to the first pixel of an rectangle
      */
-    KisRectIteratorPixel createRectIterator(Q_INT32 left, Q_INT32 top, Q_INT32 w, Q_INT32 h, bool writable);
+    KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, bool writable);
 
     /**
      * This function return an iterator which points to the first pixel of a horizontal line
      */
-    KisHLineIteratorPixel createHLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable);
+    KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w, bool writable);
 
     /**
      * This function return an iterator which points to the first pixel of a vertical line
      */
-    KisVLineIteratorPixel createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
+    KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h, bool writable);
 
 
     /** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
@@ -505,7 +505,7 @@ public:
     bool hasExifInfo() { return m_exifInfo != 0; }
 signals:
     void positionChanged(KisPaintDeviceSP device);
-    void ioProgress(Q_INT8 percentage);
+    void ioProgress(qint8 percentage);
     void profileChanged(KisProfile *  profile);
 
 private slots:
@@ -526,12 +526,12 @@ private:
 
     bool m_extentIsValid;
 
-    Q_INT32 m_x;
-    Q_INT32 m_y;
+    qint32 m_x;
+    qint32 m_y;
     KisColorSpace * m_colorSpace;
     // Cached for quick access
-    Q_INT32 m_pixelSize;
-    Q_INT32 m_nChannels;
+    qint32 m_pixelSize;
+    qint32 m_nChannels;
 
     // Whether the selection is active
     bool m_hasSelection;
@@ -549,13 +549,13 @@ private:
     QTimer * m_longRunningFilterTimer;
 };
 
-inline Q_INT32 KisPaintDevice::pixelSize() const
+inline qint32 KisPaintDevice::pixelSize() const
 {
     Q_ASSERT(m_pixelSize > 0);
     return m_pixelSize;
 }
 
-inline Q_INT32 KisPaintDevice::nChannels() const
+inline qint32 KisPaintDevice::nChannels() const
 {
     Q_ASSERT(m_nChannels > 0);
     return m_nChannels;
@@ -569,12 +569,12 @@ inline KisColorSpace * KisPaintDevice::colorSpace() const
 }
 
 
-inline Q_INT32 KisPaintDevice::getX() const
+inline qint32 KisPaintDevice::getX() const
 {
     return m_x;
 }
 
-inline Q_INT32 KisPaintDevice::getY() const
+inline qint32 KisPaintDevice::getY() const
 {
     return m_y;
 }

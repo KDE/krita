@@ -27,13 +27,13 @@
 class KisRoundCornersFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisRoundCornersFilterConfiguration(Q_INT32 radius)
+    KisRoundCornersFilterConfiguration(qint32 radius)
         : KisFilterConfiguration( "roundcorners", 1 )
     {
         setProperty("radius", radius);
     };
 public:
-    inline Q_INT32 radius() { return getInt("radius"); };
+    inline qint32 radius() { return getInt("radius"); };
 };
 
 class KisRoundCornersFilter : public KisFilter

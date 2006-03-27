@@ -51,7 +51,7 @@ KisAlphaMask::KisAlphaMask(const QImage& img)
     }
 }
 
-KisAlphaMask::KisAlphaMask(Q_INT32 width, Q_INT32 height)
+KisAlphaMask::KisAlphaMask(qint32 width, qint32 height)
 {
     m_width = width;
     m_height = height;
@@ -63,17 +63,17 @@ KisAlphaMask::~KisAlphaMask()
 {
 }
 
-Q_INT32 KisAlphaMask::width() const
+qint32 KisAlphaMask::width() const
 {
     return m_width;
 }
 
-Q_INT32 KisAlphaMask::height() const
+qint32 KisAlphaMask::height() const
 {
     return m_height;
 }
 
-Q_UINT8 KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
+quint8 KisAlphaMask::alphaAt(qint32 x, qint32 y) const
 {
     if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
         return m_data[(y * m_width) + x];
@@ -83,7 +83,7 @@ Q_UINT8 KisAlphaMask::alphaAt(Q_INT32 x, Q_INT32 y) const
     }
 }
 
-void KisAlphaMask::setAlphaAt(Q_INT32 x, Q_INT32 y, Q_UINT8 alpha)
+void KisAlphaMask::setAlphaAt(qint32 x, qint32 y, quint8 alpha)
 {
     if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
         m_data[(y * m_width) + x] = alpha;
@@ -95,7 +95,7 @@ void KisAlphaMask::copyAlpha(const QImage& img)
     for (int y = 0; y < img.height(); y++) {
         for (int x = 0; x < img.width(); x++) {
                         QRgb c = img.pixel(x,y);
-                        Q_UINT8 a = (qGray(c) * qAlpha(c)) / 255;
+                        quint8 a = (qGray(c) * qAlpha(c)) / 255;
             m_data.push_back(a);
 
         }
@@ -131,7 +131,7 @@ KisAlphaMaskSP KisAlphaMask::interpolate(KisAlphaMaskSP mask1, KisAlphaMaskSP ma
 
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            Q_UINT8 d = static_cast<Q_UINT8>((1 - t) * mask1->alphaAt(x, y) + t * mask2->alphaAt(x, y));
+            quint8 d = static_cast<quint8>((1 - t) * mask1->alphaAt(x, y) + t * mask2->alphaAt(x, y));
             outputMask->setAlphaAt(x, y, d);
         }
     }

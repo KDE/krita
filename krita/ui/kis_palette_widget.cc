@@ -47,7 +47,7 @@
 #include <kimageeffect.h>
 
 #include <kcolordialog.h>
-#include <kcolordrag.h>
+#include <k3colordrag.h>
 #include <config.h>
 #include <kdebug.h>
 

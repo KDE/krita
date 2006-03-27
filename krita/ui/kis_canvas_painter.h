@@ -81,7 +81,7 @@ public:
 
     virtual void setWorldXForm(bool);
     virtual const QMatrix&worldMatrix() const;
-    virtual void setWorldMatrix(const QMatrix&, bool combine=FALSE);
+    virtual void setMatrix(const QMatrix&, bool combine=FALSE);
 
     virtual void saveWorldMatrix();
     virtual void restoreWorldMatrix();
@@ -244,7 +244,7 @@ public:
 
     void setWorldXForm(bool);
     const QMatrix&worldMatrix() const;
-    void setWorldMatrix(const QMatrix&, bool combine=FALSE);
+    void setMatrix(const QMatrix&, bool combine=FALSE);
 
     void saveWorldMatrix();
     void restoreWorldMatrix();

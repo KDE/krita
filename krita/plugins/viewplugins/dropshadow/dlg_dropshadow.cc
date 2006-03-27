@@ -54,26 +54,26 @@ DlgDropshadow::~DlgDropshadow()
     delete m_page;
 }
 
-Q_INT32 DlgDropshadow::getXOffset()
+qint32 DlgDropshadow::getXOffset()
 {
     return m_page->xOffsetSpinBox->value();
 }
 
-Q_INT32 DlgDropshadow::getYOffset()
+qint32 DlgDropshadow::getYOffset()
 {
     return m_page->yOffsetSpinBox->value();
 }
 
-Q_INT32 DlgDropshadow::getBlurRadius()
+qint32 DlgDropshadow::getBlurRadius()
 {
     return m_page->blurRadiusSpinBox->value();
 }
 
-Q_UINT8 DlgDropshadow::getShadowOpacity()
+quint8 DlgDropshadow::getShadowOpacity()
 {
     double opacity = (double)m_page->opacitySpinBox->value();
     //convert percent to a 8 bit opacity value
-    return (Q_UINT8)(opacity / 100 * 255);
+    return (quint8)(opacity / 100 * 255);
 }
 
 QColor DlgDropshadow::getShadowColor()

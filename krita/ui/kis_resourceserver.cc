@@ -94,7 +94,7 @@ QValueList<KisResource*> KisResourceServerBase::resources()
 void KisResourceServerBase::addResource(KisResource* resource)
 {
     if (!resource->valid()) {
-        kdWarning(41001) << "Tried to add an invalid resource!" << endl;
+        kWarning(41001) << "Tried to add an invalid resource!" << endl;
         return;
     }
 

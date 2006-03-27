@@ -53,7 +53,7 @@ public:
 
 public:
     KisChannelInfo() { };
-    KisChannelInfo( const QString & name, Q_INT32 npos, enumChannelType channelType, enumChannelValueType channelValueType, Q_INT32 size = 1, QColor color = QColor(0,0,0))
+    KisChannelInfo( const QString & name, qint32 npos, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = 1, QColor color = QColor(0,0,0))
     : m_name (name), m_pos (npos), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color) { };
 public:
     /**
@@ -64,12 +64,12 @@ public:
     /** 
      * returns the position of the first byte of the channel in the pixel
      */
-    inline Q_INT32 pos() const { return m_pos; };
+    inline qint32 pos() const { return m_pos; };
     
     /**
      * returns the number of bytes this channel takes
      */
-    inline Q_INT32 size() const { return m_size; };
+    inline qint32 size() const { return m_size; };
 
     /**
      * returns the type of the channel
@@ -88,10 +88,10 @@ public:
 private:
 
     QString m_name;
-    Q_INT32 m_pos;
+    qint32 m_pos;
     enumChannelType m_channelType;
     enumChannelValueType m_channelValueType;
-    Q_INT32 m_size;
+    qint32 m_size;
     QColor m_color;
 
 };

@@ -51,7 +51,7 @@ public:
 
         double m_max, m_min, m_mean, m_total, m_median, m_stddev;
 
-        Q_UINT32 m_high, m_low, m_count;
+        quint32 m_high, m_low, m_count;
 
         friend class KisHistogram;
 
@@ -70,18 +70,18 @@ public:
          */
         inline double getMin() { return m_min; }
         /// This function return the highest value of the histogram
-        inline Q_UINT32 getHighest() { return m_high; }
+        inline quint32 getHighest() { return m_high; }
         /// This function return the lowest value of the histogram
-        inline Q_UINT32 getLowest() { return m_low; }
+        inline quint32 getLowest() { return m_low; }
         /// This function return the mean of value of the histogram
         inline double getMean() { return m_mean; }
         //double getMedian() { return m_median; }
         //double getStandardDeviation() { return m_stddev; }
         /// This function return the number of pixels used by the histogram
-        inline Q_UINT32 getCount() { return m_count; }
+        inline quint32 getCount() { return m_count; }
         /** The sum of (the contents of every bin * the double value of that bin)*/
         inline double getTotal() { return m_total; }
-        //Q_UINT8 getPercentile() { return m_percentile; } // What is this exactly? XXX
+        //quint8 getPercentile() { return m_percentile; } // What is this exactly? XXX
     };
 
     KisHistogram(KisPaintLayerSP layer, 
@@ -108,14 +108,14 @@ public:
     /** The information on the current selection for the current channel */
     Calculations selectionCalculations();
 
-    inline Q_UINT32 getValue(Q_UINT8 i) { return m_producer->getBinAt(m_channel, i); }
+    inline quint32 getValue(quint8 i) { return m_producer->getBinAt(m_channel, i); }
 
     inline enumHistogramType getHistogramType() { return m_type; }
     inline void setHistogramType(enumHistogramType type) { m_type = type; }
     inline void setProducer(KisHistogramProducerSP producer) { m_producer = producer; }
-    inline void setChannel(Q_INT32 channel) { m_channel = channel; }
+    inline void setChannel(qint32 channel) { m_channel = channel; }
     inline KisHistogramProducerSP producer() { return m_producer; }
-    inline Q_INT32 channel() { return m_channel; }
+    inline qint32 channel() { return m_channel; }
 
     inline bool hasSelection() { return m_selection; }
     inline double selectionFrom() { return m_selFrom; }
@@ -137,7 +137,7 @@ private:
 
     enumHistogramType m_type;
 
-    Q_INT32 m_channel;
+    qint32 m_channel;
     double m_selFrom, m_selTo;
     bool m_selection;
 

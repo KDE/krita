@@ -59,13 +59,13 @@ public:
             return false;
         }
         
-        kdDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible()
+        kDebug(41010) << "Visiting on paint layer " << layer->name() << ", visible: " << layer->visible()
                 << ", temporary: " << layer->temporary() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
         if (!layer->visible())
             return true;
 
-        Q_INT32 sx, sy, dx, dy, w, h;
+        qint32 sx, sy, dx, dy, w, h;
 
         QRect rc = layer->paintDevice()->extent() & m_rc;
 
@@ -90,13 +90,13 @@ public:
             return false;
         }
         
-        kdDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+        kDebug(41010) << "Visiting on group layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
                 
         if (!layer->visible())
             return true;
         
-        Q_INT32 sx, sy, dx, dy, w, h;
+        qint32 sx, sy, dx, dy, w, h;
 
         // This automatically makes sure the projection is up-to-date for the specified rect.
         KisPaintDeviceSP dev = layer->projection(m_rc);
@@ -118,7 +118,7 @@ public:
     virtual bool visit(KisPartLayer* layer)
     {
 
-        kdDebug(41010) << "Visiting on part layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+        kDebug(41010) << "Visiting on part layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
         
         if (m_projection == 0) {
@@ -131,7 +131,7 @@ public:
         if (!dev)
             return true;
 
-        Q_INT32 sx, sy, dx, dy, w, h;
+        qint32 sx, sy, dx, dy, w, h;
 
         QRect rc = dev->extent() & m_rc;
 
@@ -151,7 +151,7 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
-        kdDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
+        kDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
         
         if (m_projection == 0) {

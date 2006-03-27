@@ -47,28 +47,28 @@ public:
 
 
 public:
-    void setPixel(Q_UINT8 *pixel, float longWave, float middleWave, float shortWave, float alpha) const;
-    void getPixel(const Q_UINT8 *pixel, float *longWave, float *middleWave, float *shortWave, float *alpha) const;
+    void setPixel(quint8 *pixel, float longWave, float middleWave, float shortWave, float alpha) const;
+    void getPixel(const quint8 *pixel, float *longWave, float *middleWave, float *shortWave, float *alpha) const;
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile = 0);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KisProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile = 0);
 
-    virtual Q_UINT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
-    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+    virtual quint8 difference(const quint8 *src1, const quint8 *src2);
+    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
     virtual Q3ValueVector<KisChannelInfo *> channels() const;
-    virtual Q_UINT32 nChannels() const;
-    virtual Q_UINT32 nColorChannels() const;
-    virtual Q_UINT32 pixelSize() const;
+    virtual quint32 nChannels() const;
+    virtual quint32 nColorChannels() const;
+    virtual quint32 pixelSize() const;
 
     virtual bool hasHighDynamicRange() const { return false; }
 
-    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                        KisProfile *  dstProfile,
-                       Q_INT32 renderingIntent,
+                       qint32 renderingIntent,
                        float exposure = 0.0f);
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
@@ -76,53 +76,53 @@ public:
 
 protected:
 
-    virtual void bitBlt(Q_UINT8 *dst,
-                Q_INT32 dstRowStride,
-                const Q_UINT8 *src,
-                Q_INT32 srcRowStride,
-                const Q_UINT8 *srcAlphaMask,
-                Q_INT32 maskRowStride,
-                Q_UINT8 opacity,
-                Q_INT32 rows,
-                Q_INT32 cols,
+    virtual void bitBlt(quint8 *dst,
+                qint32 dstRowStride,
+                const quint8 *src,
+                qint32 srcRowStride,
+                const quint8 *srcAlphaMask,
+                qint32 maskRowStride,
+                quint8 opacity,
+                qint32 rows,
+                qint32 cols,
                 const KisCompositeOp& op);
 
-    void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, float opacity);
-    void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, float opacity);
-    void compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, float opacity);
+    void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, float opacity);
+    void compositeErase(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, float opacity);
+    void compositeCopy(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, float opacity);
 
 private:
-    inline Q_UINT8 computeRed(float l, float m, float s) const
+    inline quint8 computeRed(float l, float m, float s) const
     {
         return FLOAT_TO_UINT8(4.4679*l - 3.58738*m + 0.1193*s);
     }
-    inline Q_UINT8 computeGreen(float l, float m, float s) const
+    inline quint8 computeGreen(float l, float m, float s) const
     {
         return FLOAT_TO_UINT8(-1.2186*l + 2.3809*m - 0.1624*s);
     }
-    inline Q_UINT8 computeBlue(float l, float m, float s) const
+    inline quint8 computeBlue(float l, float m, float s) const
     {
         return FLOAT_TO_UINT8(0.0497*l - 0.2439*m + 1.2045*s);
     }
-    inline float computeLong(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b) const
+    inline float computeLong(quint8 r, quint8 g, quint8 b) const
     {
         return 0.3811*UINT8_TO_FLOAT(r) + 0.5783*UINT8_TO_FLOAT(g) + 0.0402*UINT8_TO_FLOAT(b);
     }
-    inline float computeMiddle(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b) const
+    inline float computeMiddle(quint8 r, quint8 g, quint8 b) const
     {
         return 0.1967*UINT8_TO_FLOAT(r) + 0.7244*UINT8_TO_FLOAT(g) + 0.0782*UINT8_TO_FLOAT(b);
     }
-    inline float computeShort(Q_UINT8 r, Q_UINT8 g, Q_UINT8 b) const
+    inline float computeShort(quint8 r, quint8 g, quint8 b) const
     {
         return 0.0241*UINT8_TO_FLOAT(r) + 0.1288*UINT8_TO_FLOAT(g) + 0.8444*UINT8_TO_FLOAT(b);
     }
 
     friend class KisLmsF32ColorSpaceTester;
 
-    static const Q_UINT8 PIXEL_LONGWAVE = 0;
-    static const Q_UINT8 PIXEL_MIDDLEWAVE = 1;
-    static const Q_UINT8 PIXEL_SHORTWAVE = 2;
-    static const Q_UINT8 PIXEL_ALPHA = 3;
+    static const quint8 PIXEL_LONGWAVE = 0;
+    static const quint8 PIXEL_MIDDLEWAVE = 1;
+    static const quint8 PIXEL_SHORTWAVE = 2;
+    static const quint8 PIXEL_ALPHA = 3;
 
     struct Pixel {
         float longWave;
@@ -144,7 +144,7 @@ public:
     /**
      * lcms colorspace type definition.
      */
-    virtual Q_UINT32 colorSpaceType() { return 0; }; // FIXME: lcms do not support LMS cone space
+    virtual quint32 colorSpaceType() { return 0; }; // FIXME: lcms do not support LMS cone space
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; };
 

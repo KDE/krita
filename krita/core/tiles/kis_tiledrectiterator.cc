@@ -22,8 +22,8 @@
 #include "kis_tile_global.h"
 #include "kis_tilediterator.h"
 
-KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  Q_INT32 nleft,
-                        Q_INT32 ntop, Q_INT32 nw, Q_INT32 nh, bool writable) :
+KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  qint32 nleft,
+                        qint32 ntop, qint32 nw, qint32 nh, bool writable) :
     KisTiledIterator(ndevice),
     m_left(nleft),
     m_top(ntop),
@@ -118,7 +118,7 @@ KisTiledRectIterator::~KisTiledRectIterator( )
 {
 }
 
-Q_INT32 KisTiledRectIterator::nConseqPixels() const
+qint32 KisTiledRectIterator::nConseqPixels() const
 {
     if(m_leftInTile || (m_rightInTile != KisTile::WIDTH - 1))
         return m_rightInTile - m_xInTile + 1;

@@ -105,41 +105,41 @@ void KisRgbU16ColorSpaceTester::testBasics()
     CHECK((int)defaultPixel.blue, 0);
     CHECK((int)defaultPixel.alpha, 0);
 
-    Q_UINT16 pixel[NUM_CHANNELS];
+    quint16 pixel[NUM_CHANNELS];
 
-    cs->fromQColor(qRgb(255, 255, 255), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(255, 255, 255), reinterpret_cast<quint8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
 
-    cs->fromQColor(qRgb(0, 0, 0), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(0, 0, 0), reinterpret_cast<quint8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MIN_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MIN_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_BLUE], MIN_CHANNEL_VALUE);
 
-    cs->fromQColor(qRgb(128, 64, 192), reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(128, 64, 192), reinterpret_cast<quint8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], (uint)UINT8_TO_UINT16(128));
     CHECK((uint)pixel[PIXEL_GREEN], (uint)UINT8_TO_UINT16(64));
     CHECK((uint)pixel[PIXEL_BLUE], (uint)UINT8_TO_UINT16(192));
 
-    cs->fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE, reinterpret_cast<quint8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_ALPHA], MAX_CHANNEL_VALUE);
 
-    cs->fromQColor(qRgb(255, 255, 255), OPACITY_TRANSPARENT, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(255, 255, 255), OPACITY_TRANSPARENT, reinterpret_cast<quint8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_BLUE], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_ALPHA], MIN_CHANNEL_VALUE);
 
-    cs->fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE / 2, reinterpret_cast<Q_UINT8 *>(pixel));
+    cs->fromQColor(qRgb(255, 255, 255), OPACITY_OPAQUE / 2, reinterpret_cast<quint8 *>(pixel));
 
     CHECK((uint)pixel[PIXEL_RED], MAX_CHANNEL_VALUE);
     CHECK((uint)pixel[PIXEL_GREEN], MAX_CHANNEL_VALUE);
@@ -152,7 +152,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
 
     QColor c;
 
-    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
+    cs->toQColor(reinterpret_cast<const quint8 *>(pixel), &c);
 
     CHECK(c.red(), 255);
     CHECK(c.green(), 255);
@@ -162,7 +162,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
     pixel[PIXEL_GREEN] = MIN_CHANNEL_VALUE;
     pixel[PIXEL_BLUE] = MIN_CHANNEL_VALUE;
 
-    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
+    cs->toQColor(reinterpret_cast<const quint8 *>(pixel), &c);
 
     CHECK(c.red(), 0);
     CHECK(c.green(), 0);
@@ -172,7 +172,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
     pixel[PIXEL_GREEN] = MAX_CHANNEL_VALUE / 2;
     pixel[PIXEL_BLUE] = (3 * MAX_CHANNEL_VALUE) / 4;
 
-    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c);
+    cs->toQColor(reinterpret_cast<const quint8 *>(pixel), &c);
 
     CHECK(c.red(), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 4));
     CHECK(c.green(), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 2));
@@ -183,9 +183,9 @@ void KisRgbU16ColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = MAX_CHANNEL_VALUE;
     pixel[PIXEL_ALPHA] = MAX_CHANNEL_VALUE;
 
-    Q_UINT8 opacity;
+    quint8 opacity;
 
-    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
+    cs->toQColor(reinterpret_cast<const quint8 *>(pixel), &c, &opacity);
 
     CHECK(c.red(), 255);
     CHECK(c.green(), 255);
@@ -194,7 +194,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
 
     pixel[PIXEL_ALPHA] = MAX_CHANNEL_VALUE;
 
-    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
+    cs->toQColor(reinterpret_cast<const quint8 *>(pixel), &c, &opacity);
 
     CHECK(c.red(), 255);
     CHECK(c.green(), 255);
@@ -206,7 +206,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = MIN_CHANNEL_VALUE;
     pixel[PIXEL_ALPHA] = MIN_CHANNEL_VALUE;
 
-    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
+    cs->toQColor(reinterpret_cast<const quint8 *>(pixel), &c, &opacity);
 
     CHECK(c.red(), 0);
     CHECK(c.green(), 0);
@@ -218,7 +218,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = (3 * MAX_CHANNEL_VALUE) / 4;
     pixel[PIXEL_ALPHA] = MAX_CHANNEL_VALUE / 2;
 
-    cs->toQColor(reinterpret_cast<const Q_UINT8 *>(pixel), &c, &opacity);
+    cs->toQColor(reinterpret_cast<const quint8 *>(pixel), &c, &opacity);
 
     CHECK(c.red(), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 4));
     CHECK(c.green(), (int)UINT16_TO_UINT8(MAX_CHANNEL_VALUE / 2));
@@ -234,7 +234,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
         {MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
     };
 
-    cs->setAlpha(reinterpret_cast<Q_UINT8 *>(pixels), OPACITY_OPAQUE / 2, NUM_PIXELS);
+    cs->setAlpha(reinterpret_cast<quint8 *>(pixels), OPACITY_OPAQUE / 2, NUM_PIXELS);
 
     CHECK((uint)pixels[0].red, MAX_CHANNEL_VALUE);
     CHECK((uint)pixels[0].green, MAX_CHANNEL_VALUE);
@@ -261,42 +261,42 @@ void KisRgbU16ColorSpaceTester::testBasics()
     pixel[PIXEL_BLUE] = MAX_CHANNEL_VALUE / 4;
     pixel[PIXEL_ALPHA] = MIN_CHANNEL_VALUE;
 
-    QString valueText = cs->channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), RED_CHANNEL);
+    QString valueText = cs->channelValueText(reinterpret_cast<quint8 *>(pixel), RED_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE));
 
-    valueText = cs->channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), GREEN_CHANNEL);
+    valueText = cs->channelValueText(reinterpret_cast<quint8 *>(pixel), GREEN_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE / 2));
 
-    valueText = cs->channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), BLUE_CHANNEL);
+    valueText = cs->channelValueText(reinterpret_cast<quint8 *>(pixel), BLUE_CHANNEL);
     CHECK(valueText, QString().setNum(MAX_CHANNEL_VALUE / 4));
 
-    valueText = cs->channelValueText(reinterpret_cast<Q_UINT8 *>(pixel), ALPHA_CHANNEL);
+    valueText = cs->channelValueText(reinterpret_cast<quint8 *>(pixel), ALPHA_CHANNEL);
     CHECK(valueText, QString().setNum(MIN_CHANNEL_VALUE));
 
-    valueText = cs->normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), RED_CHANNEL);
+    valueText = cs->normalisedChannelValueText(reinterpret_cast<quint8 *>(pixel), RED_CHANNEL);
     CHECK(valueText, QString().setNum(static_cast<float>(MAX_CHANNEL_VALUE) / MAX_CHANNEL_VALUE));
 
-    valueText = cs->normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), GREEN_CHANNEL);
+    valueText = cs->normalisedChannelValueText(reinterpret_cast<quint8 *>(pixel), GREEN_CHANNEL);
     CHECK(valueText, QString().setNum(static_cast<float>(MAX_CHANNEL_VALUE / 2) / MAX_CHANNEL_VALUE));
 
-    valueText = cs->normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), BLUE_CHANNEL);
+    valueText = cs->normalisedChannelValueText(reinterpret_cast<quint8 *>(pixel), BLUE_CHANNEL);
     CHECK(valueText, QString().setNum(static_cast<float>(MAX_CHANNEL_VALUE / 4) / MAX_CHANNEL_VALUE));
 
-    valueText = cs->normalisedChannelValueText(reinterpret_cast<Q_UINT8 *>(pixel), ALPHA_CHANNEL);
+    valueText = cs->normalisedChannelValueText(reinterpret_cast<quint8 *>(pixel), ALPHA_CHANNEL);
     CHECK(valueText, QString().setNum(static_cast<float>(MIN_CHANNEL_VALUE) / MAX_CHANNEL_VALUE));
 
-    cs->setPixel(reinterpret_cast<Q_UINT8 *>(pixel), 128, 192, 64, 99);
+    cs->setPixel(reinterpret_cast<quint8 *>(pixel), 128, 192, 64, 99);
     CHECK((uint)pixel[PIXEL_RED], 128u);
     CHECK((uint)pixel[PIXEL_GREEN], 192u);
     CHECK((uint)pixel[PIXEL_BLUE], 64u);
     CHECK((uint)pixel[PIXEL_ALPHA], 99u);
 
-    Q_UINT16 red;
-    Q_UINT16 green;
-    Q_UINT16 blue;
-    Q_UINT16 alpha;
+    quint16 red;
+    quint16 green;
+    quint16 blue;
+    quint16 alpha;
 
-    cs->getPixel(reinterpret_cast<const Q_UINT8 *>(pixel), &red, &green, &blue, &alpha);
+    cs->getPixel(reinterpret_cast<const quint8 *>(pixel), &red, &green, &blue, &alpha);
     CHECK((uint)red, 128u);
     CHECK((uint)green, 192u);
     CHECK((uint)blue, 64u);
@@ -310,9 +310,9 @@ void KisRgbU16ColorSpaceTester::testMixColors()
     KisAbstractColorSpace * cs = new KisRgbU16ColorSpace(defProfile);
 
     // Test mixColors.
-    Q_UINT16 pixel1[NUM_CHANNELS];
-    Q_UINT16 pixel2[NUM_CHANNELS];
-    Q_UINT16 outputPixel[NUM_CHANNELS];
+    quint16 pixel1[NUM_CHANNELS];
+    quint16 pixel2[NUM_CHANNELS];
+    quint16 outputPixel[NUM_CHANNELS];
 
     outputPixel[PIXEL_RED] = 0;
     outputPixel[PIXEL_GREEN] = 0;
@@ -329,16 +329,16 @@ void KisRgbU16ColorSpaceTester::testMixColors()
     pixel2[PIXEL_BLUE] = 0;
     pixel2[PIXEL_ALPHA] = 0;
 
-    const Q_UINT8 *pixelPtrs[2];
-    Q_UINT8 weights[2];
+    const quint8 *pixelPtrs[2];
+    quint8 weights[2];
 
-    pixelPtrs[0] = reinterpret_cast<const Q_UINT8 *>(pixel1);
-    pixelPtrs[1] = reinterpret_cast<const Q_UINT8 *>(pixel2);
+    pixelPtrs[0] = reinterpret_cast<const quint8 *>(pixel1);
+    pixelPtrs[1] = reinterpret_cast<const quint8 *>(pixel2);
 
     weights[0] = 255;
     weights[1] = 0;
 
-    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     CHECK((uint)outputPixel[PIXEL_RED], UINT16_MAX);
     CHECK((uint)outputPixel[PIXEL_GREEN], UINT16_MAX);
@@ -348,7 +348,7 @@ void KisRgbU16ColorSpaceTester::testMixColors()
     weights[0] = 0;
     weights[1] = 255;
 
-    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     CHECK((int)outputPixel[PIXEL_RED], 0);
     CHECK((int)outputPixel[PIXEL_GREEN], 0);
@@ -358,7 +358,7 @@ void KisRgbU16ColorSpaceTester::testMixColors()
     weights[0] = 128;
     weights[1] = 127;
 
-    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     CHECK((uint)outputPixel[PIXEL_RED], UINT16_MAX);
     CHECK((uint)outputPixel[PIXEL_GREEN], UINT16_MAX);
@@ -375,7 +375,7 @@ void KisRgbU16ColorSpaceTester::testMixColors()
     pixel2[PIXEL_BLUE] = 2000;
     pixel2[PIXEL_ALPHA] = UINT16_MAX;
 
-    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     CHECK_TOLERANCE((uint)outputPixel[PIXEL_RED], (128u * 20000u + 127u * 10000u) / 255u, 5u);
     CHECK_TOLERANCE((uint)outputPixel[PIXEL_GREEN], (128u * 10000u + 127u * 20000u) / 255u, 5u);
@@ -395,7 +395,7 @@ void KisRgbU16ColorSpaceTester::testMixColors()
     weights[0] = 89;
     weights[1] = 166;
 
-    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<Q_UINT8 *>(outputPixel));
+    cs->mixColors(pixelPtrs, weights, 2, reinterpret_cast<quint8 *>(outputPixel));
 
     CHECK((uint)outputPixel[PIXEL_RED], UINT16_MAX);
     CHECK((uint)outputPixel[PIXEL_GREEN], UINT16_MAX);
@@ -419,7 +419,7 @@ void KisRgbU16ColorSpaceTester::testToQImage()
         {MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
     };
 
-    QImage image = cs->convertToQImage(reinterpret_cast<const Q_UINT8 *>(pixels), PIXELS_WIDTH, PIXELS_HEIGHT, 0, 0);
+    QImage image = cs->convertToQImage(reinterpret_cast<const quint8 *>(pixels), PIXELS_WIDTH, PIXELS_HEIGHT, 0, 0);
 
     QRgb c = image.pixel(0, 0);
 
@@ -480,22 +480,22 @@ void  KisRgbU16ColorSpaceTester::testCompositeOps()
 
     dstPixel = srcPixel;
 
-    cs->compositeDivide(reinterpret_cast<Q_UINT8 *>(&dstPixel), 1, reinterpret_cast<const Q_UINT8 *>(&srcPixel),
+    cs->compositeDivide(reinterpret_cast<quint8 *>(&dstPixel), 1, reinterpret_cast<const quint8 *>(&srcPixel),
                 1, 0, 0, 1, 1, KisRgbU16ColorSpace::U16_OPACITY_OPAQUE);
     /*
-    CHECK(dstPixel.red, (Q_UINT16)UINT8_TO_UINT16(253));
-    CHECK(dstPixel.green, (Q_UINT16)UINT8_TO_UINT16(254));
-    CHECK(dstPixel.blue, (Q_UINT16)UINT8_TO_UINT16(254));
+    CHECK(dstPixel.red, (quint16)UINT8_TO_UINT16(253));
+    CHECK(dstPixel.green, (quint16)UINT8_TO_UINT16(254));
+    CHECK(dstPixel.blue, (quint16)UINT8_TO_UINT16(254));
     CHECK(dstPixel.alpha, KisRgbU16ColorSpace::U16_OPACITY_OPAQUE);
 
-    Q_UINT16 srcColor = 43690;
-    Q_UINT16 dstColor = 43690;
+    quint16 srcColor = 43690;
+    quint16 dstColor = 43690;
 
-    srcColor = QMIN((dstColor * (65535u + 1u) + (srcColor / 2u)) / (1u + srcColor), 65535u);
+    srcColor = qMin((dstColor * (65535u + 1u) + (srcColor / 2u)) / (1u + srcColor), 65535u);
 
     CHECK((int)srcColor, 65534);
 
-    Q_UINT16 newColor = UINT16_BLEND(srcColor, dstColor, 65535u);
+    quint16 newColor = UINT16_BLEND(srcColor, dstColor, 65535u);
 
     CHECK((int)newColor, 65534);
     */
@@ -515,7 +515,7 @@ void  KisRgbU16ColorSpaceTester::testCompositeOps()
         {MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MIN_CHANNEL_VALUE, MAX_CHANNEL_VALUE}
     };
 
-    cs->compositeOver(reinterpret_cast<Q_UINT8 *>(dstPixels), DST_ROW_STRIDE, reinterpret_cast<const Q_UINT8 *>(srcPixels),
+    cs->compositeOver(reinterpret_cast<quint8 *>(dstPixels), DST_ROW_STRIDE, reinterpret_cast<const quint8 *>(srcPixels),
                 SRC_ROW_STRIDE, mask, MASK_ROW_STRIDE, NUM_ROWS, NUM_COLUMNS, opacity);
     */
 

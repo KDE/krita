@@ -109,23 +109,23 @@ private: // Undo adapter
 public:
 
 
-    Q_INT32 undoLimit() const;
-    void setUndoLimit(Q_INT32 limit);
+    qint32 undoLimit() const;
+    void setUndoLimit(qint32 limit);
 
-    Q_INT32 redoLimit() const;
-    void setRedoLimit(Q_INT32 limit);
-
-    /**
-     * Create a new image that has this document as a parent and
-     * replace the current image with this image.
-     */
-    bool newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution);
+    qint32 redoLimit() const;
+    void setRedoLimit(qint32 limit);
 
     /**
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    KisImageSP newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * colorstrategy);
+    bool newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution);
+
+    /**
+     * Create a new image that has this document as a parent and
+     * replace the current image with this image.
+     */
+    KisImageSP newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * colorstrategy);
 
     void renameImage(const QString& oldName, const QString& newName);
 
@@ -178,8 +178,8 @@ protected slots:
     virtual void openTemplate(const QString& file);
 
 private slots:
-    void slotUpdate(KisImageSP img, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
-    void slotIOProgress(Q_INT8 percentage);
+    void slotUpdate(KisImageSP img, quint32 x, quint32 y, quint32 w, quint32 h);
+    void slotIOProgress(qint8 percentage);
     
 private:
     
@@ -188,20 +188,20 @@ private:
     void loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent);
     KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
     KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img,
-                QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                 KisCompositeOp compositeOp);
     KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
-                QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                 KisCompositeOp compositeOp);
     KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img,
-                                             QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                                             QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                              KisCompositeOp compositeOp);
     KisPartLayerSP loadPartLayer(const QDomElement& elem, KisImageSP img,
-                                  QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity,
+                                  QString name, qint32 x, qint32 y, qint32 opacity,
                                   bool visible, bool locked, KisCompositeOp compositeOp);
     bool init();
 
-    void setIOSteps(Q_INT32 nsteps);
+    void setIOSteps(qint32 nsteps);
     void IOCompletedStep();
     void IODone();
 
@@ -214,8 +214,8 @@ private:
     DCOPObject *m_dcop;
     KisNameServer *m_nserver;
     KMacroCommand *m_currentMacro;
-    Q_INT32 m_macroNestDepth;
-    Q_INT32 m_conversionDepth;
+    qint32 m_macroNestDepth;
+    qint32 m_conversionDepth;
     int m_ioProgressTotalSteps;
     int m_ioProgressBase;
     QMap<KisLayerSP, QString> m_layerFilenames; // temp storage during load

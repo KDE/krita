@@ -72,8 +72,8 @@ protected:
     KisImageSP m_currentImage;
 private:
         vKisPoint starCoordinates(int N, double mx, double my, double x, double y);
-        Q_INT32 m_innerOuterRatio;
-        Q_INT32 m_vertices;
+        qint32 m_innerOuterRatio;
+        qint32 m_vertices;
     WdgToolStar* m_optWidget;
 };
 

@@ -131,7 +131,7 @@ Core
       and the floodfill tool should use that rect to blit and notify the image, instead 
       of notifying the complete image.s
 P? * A possible cause for the threadpool crashing issue is the fact that we throw QStrings across
-     threads, and kdDebug in threaded filters. Possible fix: use std::string in KisID and don't kdDebug in filters. But that's all a long shot, hence the '?' ;)
+     threads, and kDebug in threaded filters. Possible fix: use std::string in KisID and don't kDebug in filters. But that's all a long shot, hence the '?' ;)
 
 
 General user interface

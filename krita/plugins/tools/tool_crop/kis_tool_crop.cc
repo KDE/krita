@@ -187,8 +187,8 @@ void KisToolCrop::move(KisMoveEvent *e)
 
                 KisImageSP image = m_subject->currentImg();
 
-                m_rectCrop.setRight( QMIN(m_rectCrop.right(), image->width()));
-                m_rectCrop.setBottom( QMIN(m_rectCrop.bottom(), image->width()));
+                m_rectCrop.setRight( qMin(m_rectCrop.right(), image->width()));
+                m_rectCrop.setBottom( qMin(m_rectCrop.bottom(), image->width()));
 
                 paintOutlineWithHandles();
             }
@@ -198,8 +198,8 @@ void KisToolCrop::move(KisMoveEvent *e)
                 if (m_mouseOnHandleType != None && m_dragStart != m_dragStop ) {
 
 
-                    Q_INT32 imageWidth = m_subject->currentImg()->width();
-                    Q_INT32 imageHeight = m_subject->currentImg()->height();
+                    qint32 imageWidth = m_subject->currentImg()->width();
+                    qint32 imageHeight = m_subject->currentImg()->height();
 
                     paintOutlineWithHandles();
 
@@ -232,28 +232,28 @@ void KisToolCrop::move(KisMoveEvent *e)
                             {
                             case (UpperLeft):
                             {
-                                Q_INT32 dep = (drag.x() + drag.y()) / 2;
+                                qint32 dep = (drag.x() + drag.y()) / 2;
                                 m_rectCrop.setTop( m_rectCrop.top() + dep  );
                                 m_rectCrop.setLeft( (int) ( m_rectCrop.right() - m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
                             }
                                 break;
                             case (LowerRight):
                             {
-                                Q_INT32 dep = (drag.x() + drag.y()) / 2;
+                                qint32 dep = (drag.x() + drag.y()) / 2;
                                 m_rectCrop.setBottom( m_rectCrop.bottom() + dep );
                                 m_rectCrop.setWidth( (int) ( m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
                                 break;
                             }
                             case (UpperRight):
                             {
-                                Q_INT32 dep = (drag.x() - drag.y()) / 2;
+                                qint32 dep = (drag.x() - drag.y()) / 2;
                                 m_rectCrop.setTop( m_rectCrop.top() - dep  );
                                 m_rectCrop.setWidth( (int) ( m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
                                 break;
                             }
                             case (LowerLeft):
                             {
-                                Q_INT32 dep = (drag.x() - drag.y()) / 2;
+                                qint32 dep = (drag.x() - drag.y()) / 2;
                                 m_rectCrop.setBottom( m_rectCrop.bottom() - dep );
                                 m_rectCrop.setLeft( (int) ( m_rectCrop.right() - m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
                                 break;
@@ -332,7 +332,7 @@ void KisToolCrop::move(KisMoveEvent *e)
             if ( m_haveCropSelection )  //if the crop selection is set
             {
                 KisCanvasController *controller = m_subject->canvasController();
-                Q_INT32 type = mouseOnHandle(controller->windowToView(e->pos().floorQPoint()));
+                qint32 type = mouseOnHandle(controller->windowToView(e->pos().floorQPoint()));
                 //set resize cursor if we are on one of the handles
                 setMoveResizeCursor(type);
             }
@@ -375,12 +375,12 @@ void KisToolCrop::validateSelection(bool updateratio)
         KisImageSP image = m_subject->currentImg();
 
         if (image) {
-            Q_INT32 imageWidth = image->width();
-            Q_INT32 imageHeight = image->height();
-            m_rectCrop.setLeft(QMAX(0, m_rectCrop.left()));
-            m_rectCrop.setTop(QMAX(0, m_rectCrop.top()));
-            m_rectCrop.setRight(QMIN(imageWidth, m_rectCrop.right()));
-            m_rectCrop.setBottom(QMIN(imageHeight, m_rectCrop.bottom()));
+            qint32 imageWidth = image->width();
+            qint32 imageHeight = image->height();
+            m_rectCrop.setLeft(qMax(0, m_rectCrop.left()));
+            m_rectCrop.setTop(qMax(0, m_rectCrop.top()));
+            m_rectCrop.setRight(qMin(imageWidth, m_rectCrop.right()));
+            m_rectCrop.setBottom(qMin(imageHeight, m_rectCrop.bottom()));
 
             updateWidgetValues(updateratio);
         }
@@ -419,10 +419,10 @@ void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
         //draw handles
         m_handlesRegion = handles(QRect(start, end));
 
-        Q_INT32 startx;
-        Q_INT32 starty;
-        Q_INT32 endx;
-        Q_INT32 endy;
+        qint32 startx;
+        qint32 starty;
+        qint32 endx;
+        qint32 endy;
         if(start.x()<=end.x())
         {
             startx=start.x();
@@ -619,7 +619,7 @@ void KisToolCrop::setRatio(double )
     }
 }
 
-void KisToolCrop::setOptionWidgetX(Q_INT32 x)
+void KisToolCrop::setOptionWidgetX(qint32 x)
 {
     // Disable signals otherwise we get the valueChanged signal, which we don't want
     // to go through the logic for setting values that way.
@@ -628,21 +628,21 @@ void KisToolCrop::setOptionWidgetX(Q_INT32 x)
     m_optWidget->intX->blockSignals(false);
 }
 
-void KisToolCrop::setOptionWidgetY(Q_INT32 y)
+void KisToolCrop::setOptionWidgetY(qint32 y)
 {
     m_optWidget->intY->blockSignals(true);
     m_optWidget->intY->setValue(y);
     m_optWidget->intY->blockSignals(false);
 }
 
-void KisToolCrop::setOptionWidgetWidth(Q_INT32 x)
+void KisToolCrop::setOptionWidgetWidth(qint32 x)
 {
     m_optWidget->intWidth->blockSignals(true);
     m_optWidget->intWidth->setValue(x);
     m_optWidget->intWidth->blockSignals(false);
 }
 
-void KisToolCrop::setOptionWidgetHeight(Q_INT32 y)
+void KisToolCrop::setOptionWidgetHeight(qint32 y)
 {
     m_optWidget->intHeight->blockSignals(true);
     m_optWidget->intHeight->setValue(y);
@@ -745,17 +745,17 @@ QRegion KisToolCrop::handles(QRect rect)
     return handlesRegion;
 }
 
-Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
+qint32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
 {
     KisCanvasController *controller = m_subject->canvasController();
     Q_ASSERT(controller);
     QPoint start = controller->windowToView(m_rectCrop.topLeft());
     QPoint end = controller->windowToView(m_rectCrop.bottomRight());
 
-    Q_INT32 startx;
-    Q_INT32 starty;
-    Q_INT32 endx;
-    Q_INT32 endy;
+    qint32 startx;
+    qint32 starty;
+    qint32 endx;
+    qint32 endy;
     if(start.x()<=end.x())
     {
         startx=start.x();
@@ -852,7 +852,7 @@ Q_INT32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
     else return None;
 }
 
-void KisToolCrop::setMoveResizeCursor (Q_INT32 handle)
+void KisToolCrop::setMoveResizeCursor (qint32 handle)
 {
     switch (handle)
     {

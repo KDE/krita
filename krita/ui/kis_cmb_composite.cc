@@ -47,7 +47,7 @@ void KisCmbComposite::setCompositeOpList(const KisCompositeOpList & list)
 
 KisCompositeOp KisCmbComposite::currentItem() const
 {
-    Q_UINT32 i = super::currentItem();
+    quint32 i = super::currentItem();
     if (i > m_list.count()) return KisCompositeOp();
 
     return m_list[i];
@@ -71,14 +71,14 @@ void KisCmbComposite::setCurrentText(const QString & s)
 
 void KisCmbComposite::slotOpActivated(int i)
 {
-    if ((Q_UINT32)i > m_list.count()) return;
+    if ((quint32)i > m_list.count()) return;
 
     emit activated(m_list[i]);
 }
 
 void KisCmbComposite::slotOpHighlighted(int i)
 {
-    if ((Q_UINT32)i > m_list.count()) return;
+    if ((quint32)i > m_list.count()) return;
 
     emit highlighted(m_list[i]);
 }

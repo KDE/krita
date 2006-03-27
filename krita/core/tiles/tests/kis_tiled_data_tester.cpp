@@ -30,27 +30,27 @@ KUNITTEST_MODULE_REGISTER_TESTER( KisTiledDataTester );
 
 #define TEST_PIXEL_SIZE 4
 
-static Q_UINT8 defaultPixel[TEST_PIXEL_SIZE] = {0, 0, 0, OPACITY_TRANSPARENT};
+static quint8 defaultPixel[TEST_PIXEL_SIZE] = {0, 0, 0, OPACITY_TRANSPARENT};
 
 void KisTiledDataTester::allTests()
 {
     KisDataManager *dm = new KisDataManager(TEST_PIXEL_SIZE, defaultPixel);
 
-    Q_INT32 extentX;
-    Q_INT32 extentY;
-    Q_INT32 extentWidth;
-    Q_INT32 extentHeight;
+    qint32 extentX;
+    qint32 extentY;
+    qint32 extentWidth;
+    qint32 extentHeight;
 
     dm->extent(extentX, extentY, extentWidth, extentHeight);
     CHECK(extentWidth, 0);
     CHECK(extentHeight, 0);
 
-    const Q_UINT8 *readOnlyPixel = dm->pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
+    const quint8 *readOnlyPixel = dm->pixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
     dm->extent(extentX, extentY, extentWidth, extentHeight);
     CHECK(extentWidth, 0);
     CHECK(extentHeight, 0);
 
-    Q_UINT8 *writablePixel = dm->writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
+    quint8 *writablePixel = dm->writablePixel(KisTile::WIDTH/2, KisTile::HEIGHT/2);
     dm->extent(extentX, extentY, extentWidth, extentHeight);
     CHECK(extentX, 0);
     CHECK(extentY, 0);

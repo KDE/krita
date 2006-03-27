@@ -101,8 +101,8 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         }
         QImage image = pixels.convertToImage();
 
-        Q_INT32 height = boundingRect.height();
-        Q_INT32 width = boundingRect.width();
+        qint32 height = boundingRect.height();
+        qint32 width = boundingRect.width();
         KisPaintLayer *layer = new KisPaintLayer(img, '"' + text + '"', OPACITY_OPAQUE);
         KisGroupLayerSP parent = img->rootLayer();
         if (img->activeLayer())
@@ -112,7 +112,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
             for (int x = 0; x < width; x++) {
                 QRgb pixel = image.pixel(x, y);
                  // use the 'blackness' as alpha :)
-                Q_UINT8 alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
+                quint8 alpha = 255 - qRed(pixel) * OPACITY_OPAQUE / 255;
                 QColor c = m_subject->fgColor().toQColor();
                 layer->paintDevice()->setPixel(x, y, c, alpha);
             }
@@ -121,8 +121,8 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         layer->setOpacity(m_opacity);
         layer->setCompositeOp(m_compositeOp);
 
-        Q_INT32 x = QMAX(0, static_cast<int>(e->x() - width/2));
-        Q_INT32 y = QMAX(0, static_cast<int>(e->y() - height/2));
+        qint32 x = qMax(0, static_cast<int>(e->x() - width/2));
+        qint32 y = qMax(0, static_cast<int>(e->y() - height/2));
         layer->setX(x);
         layer->setY(y);
 

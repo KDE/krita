@@ -13,7 +13,7 @@ void KisPaintDevice::clearSelection()
 	QRect r = m_selection -> selectedRect();
 	r = r.normalize();
 
-	for (Q_INT32 y = 0; y < r.height(); y++) {
+	for (qint32 y = 0; y < r.height(); y++) {
 		KisHLineIterator devIt = createHLineIterator(r.x(), r.y() + y, r.width(), true);
 		KisHLineIterator selectionIt = m_selection -> createHLineIterator(r.x(), r.y() + y, r.width(), false);
 
@@ -21,7 +21,7 @@ void KisPaintDevice::clearSelection()
 			KisPixel p = toPixel(devIt.rawData());
 			KisPixel s = m_selection -> toPixel(selectionIt.rawData());
 			// XXX: Why Q_UIN16 here? Doesn't that clash with UINT8_MULT later on?
-			Q_UINT16 p_alpha, s_alpha;
+			quint16 p_alpha, s_alpha;
 			p_alpha = p.alpha();
 			s_alpha = MAX_SELECTED - s.alpha();
 
@@ -38,7 +38,7 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
 	QRect r = mask -> extent();
 	crop(r);
 
-	for (Q_INT32 y = r.top(); y <= r.bottom(); ++y) {
+	for (qint32 y = r.top(); y <= r.bottom(); ++y) {
 
 		KisHLineIterator pixelIt = createHLineIterator(r.x(), y, r.width(), true);
 		KisHLineIterator maskIt = mask -> createHLineIterator(r.x(), y, r.width(), false);

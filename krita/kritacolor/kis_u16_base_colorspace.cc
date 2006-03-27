@@ -23,26 +23,26 @@
 #include "kis_u16_base_colorspace.h"
 
 
-Q_UINT8 KisU16BaseColorSpace::getAlpha(const Q_UINT8 * U8_pixel) const
+quint8 KisU16BaseColorSpace::getAlpha(const quint8 * U8_pixel) const
 {
     if (m_alphaPos < 0) return OPACITY_OPAQUE;
 
     U8_pixel+= m_alphaPos;
 
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
+    const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
     return UINT16_TO_UINT8(*pixel);
 }
 
 
-void KisU16BaseColorSpace::setAlpha(Q_UINT8 *U8_pixel, Q_UINT8 alpha, Q_INT32 nPixels) const
+void KisU16BaseColorSpace::setAlpha(quint8 *U8_pixel, quint8 alpha, qint32 nPixels) const
 {
     if (m_alphaPos < 0) return;
-    Q_INT32 psize = pixelSize();
+    qint32 psize = pixelSize();
 
 
     while (nPixels > 0) {
 
-        Q_UINT16 *pixel = reinterpret_cast<Q_UINT16 *>(U8_pixel + m_alphaPos);
+        quint16 *pixel = reinterpret_cast<quint16 *>(U8_pixel + m_alphaPos);
         pixel[0] = UINT8_TO_UINT16(alpha);
 
         --nPixels;
@@ -50,16 +50,16 @@ void KisU16BaseColorSpace::setAlpha(Q_UINT8 *U8_pixel, Q_UINT8 alpha, Q_INT32 nP
     }
 }
 
-void KisU16BaseColorSpace::multiplyAlpha(Q_UINT8 *U8_pixel, Q_UINT8 U8_alpha, Q_INT32 nPixels)
+void KisU16BaseColorSpace::multiplyAlpha(quint8 *U8_pixel, quint8 U8_alpha, qint32 nPixels)
 {
     if (m_alphaPos < 0) return;
 
-    Q_INT32 psize = pixelSize();
-    Q_UINT16 alpha = UINT8_TO_UINT16(U8_alpha);
+    qint32 psize = pixelSize();
+    quint16 alpha = UINT8_TO_UINT16(U8_alpha);
 
     while (nPixels > 0) {
 
-        Q_UINT16 *pixelAlpha = reinterpret_cast<Q_UINT16 *>(U8_pixel + m_alphaPos);
+        quint16 *pixelAlpha = reinterpret_cast<quint16 *>(U8_pixel + m_alphaPos);
         *pixelAlpha = UINT16_MULT(*pixelAlpha, alpha);
 
         --nPixels;
@@ -67,18 +67,18 @@ void KisU16BaseColorSpace::multiplyAlpha(Q_UINT8 *U8_pixel, Q_UINT8 U8_alpha, Q_
     }
 }
 
-void KisU16BaseColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixel, Q_UINT8 * alpha8, Q_INT32 nPixels)
+void KisU16BaseColorSpace::applyAlphaU8Mask(quint8 * U8_pixel, quint8 * alpha8, qint32 nPixels)
 {
     if (m_alphaPos < 0) return;
 
-    Q_INT32 psize = pixelSize();
+    qint32 psize = pixelSize();
 
     while (nPixels--) {
 
         // Go to the alpha position (which is given in bytes from the start of the pixel,
         // and cast to short.
 
-        Q_UINT16 *pixelAlpha = reinterpret_cast<Q_UINT16 *>(U8_pixel + m_alphaPos);
+        quint16 *pixelAlpha = reinterpret_cast<quint16 *>(U8_pixel + m_alphaPos);
         *pixelAlpha = UINT8_MULT(*pixelAlpha, *alpha8);
 
         ++alpha8;
@@ -87,20 +87,20 @@ void KisU16BaseColorSpace::applyAlphaU8Mask(Q_UINT8 * U8_pixel, Q_UINT8 * alpha8
     }
 }
 
-void KisU16BaseColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * U8_pixels, Q_UINT8 * alpha8, Q_INT32 nPixels)
+void KisU16BaseColorSpace::applyInverseAlphaU8Mask(quint8 * U8_pixels, quint8 * alpha8, qint32 nPixels)
 {
 
     if (m_alphaPos < 0) return;
 
-    Q_INT32 psize = pixelSize();
+    qint32 psize = pixelSize();
 
 
     while(nPixels--) {
 
-            Q_UINT16 s_alpha8;
-            Q_UINT32 p_alpha, s_alpha16;
+            quint16 s_alpha8;
+            quint32 p_alpha, s_alpha16;
 
-            Q_UINT16 *alpha = reinterpret_cast<Q_UINT16 *>(U8_pixels + m_alphaPos);
+            quint16 *alpha = reinterpret_cast<quint16 *>(U8_pixels + m_alphaPos);
 
             p_alpha = *(alpha);
             s_alpha8 = MAX_SELECTED - *alpha8;
@@ -116,33 +116,33 @@ void KisU16BaseColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * U8_pixels, Q_UINT8 
     }
 }
 
-QString KisU16BaseColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+QString KisU16BaseColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < (Q_UINT32)nChannels());
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    Q_UINT32 channelPosition = channels()[channelIndex]->pos() / sizeof(Q_UINT16);
+    Q_ASSERT(channelIndex < (quint32)nChannels());
+    const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
+    quint32 channelPosition = channels()[channelIndex]->pos() / sizeof(quint16);
 
     return QString().setNum(pixel[channelPosition]);
 }
 
-QString KisU16BaseColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+QString KisU16BaseColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
-    Q_ASSERT(channelIndex < (Q_UINT32)nChannels());
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    Q_UINT32 channelPosition = m_channels[channelIndex]->pos() / sizeof(Q_UINT16);
+    Q_ASSERT(channelIndex < (quint32)nChannels());
+    const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
+    quint32 channelPosition = m_channels[channelIndex]->pos() / sizeof(quint16);
 
     return QString().setNum(100.0 * static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }
 
-Q_UINT8 KisU16BaseColorSpace::scaleToU8(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)
+quint8 KisU16BaseColorSpace::scaleToU8(const quint8 * U8_pixel, qint32 channelPos)
 {
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
+    const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
     return UINT16_TO_UINT8(pixel[channelPos]);
 }
 
-Q_UINT16 KisU16BaseColorSpace::scaleToU16(const Q_UINT8 * U8_pixel, Q_INT32 channelPos)
+quint16 KisU16BaseColorSpace::scaleToU16(const quint8 * U8_pixel, qint32 channelPos)
 {
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
+    const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
     return pixel[channelPos];
 }
 

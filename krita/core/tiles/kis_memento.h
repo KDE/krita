@@ -33,7 +33,7 @@ typedef KSharedPtr<KisMemento> KisMementoSP;
 class KisMemento : public KShared
 {
 public:
-    KisMemento(Q_UINT32 pixelSize);
+    KisMemento(quint32 pixelSize);
     ~KisMemento();
 /*
     // For consolidating transactions
@@ -42,10 +42,10 @@ public:
     virtual KisTransaction &operator+(const KisTransaction &,
                   const KisTransaction &) = 0;
 */
-    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const;
+    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     QRect extent() const;
 
-    bool containsTile(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash) const;
+    bool containsTile(qint32 col, qint32 row, quint32 tileHash) const;
 
     // For debugging use
     bool valid() const { return m_valid; }
@@ -55,20 +55,20 @@ private:
 
     class DeletedTile {
     public:
-        DeletedTile(Q_INT32 col, Q_INT32 row, const DeletedTile *next)
+        DeletedTile(qint32 col, qint32 row, const DeletedTile *next)
             : m_col(col),
               m_row(row),
               m_next(next)
         {
         }
 
-        Q_INT32 col() const { return m_col; }
-        Q_INT32 row() const { return m_row; }
+        qint32 col() const { return m_col; }
+        qint32 row() const { return m_row; }
         const DeletedTile *next() const { return m_next; }
 
     private:
-        Q_INT32 m_col;
-        Q_INT32 m_row;
+        qint32 m_col;
+        qint32 m_row;
         const DeletedTile *m_next;
     };
 
@@ -81,7 +81,7 @@ private:
 
         ~DeletedTileList();
 
-        void addTile(Q_INT32 col, Q_INT32 row)
+        void addTile(qint32 col, qint32 row)
         {
             DeletedTile *d = new DeletedTile(col, row, m_firstDeletedTile);
             Q_CHECK_PTR(d);
@@ -100,7 +100,7 @@ private:
         DeletedTile *m_firstDeletedTile;
     };
 
-    void addTileToDeleteOnRedo(Q_INT32 col, Q_INT32 row)
+    void addTileToDeleteOnRedo(qint32 col, qint32 row)
     {
         m_redoDelTilesList.addTile(col, row);
     }
@@ -115,7 +115,7 @@ private:
         m_redoDelTilesList.clear();
     }
 
-    void addTileToDeleteOnUndo(Q_INT32 col, Q_INT32 row)
+    void addTileToDeleteOnUndo(qint32 col, qint32 row)
     {
         m_undoDelTilesList.addTile(col, row);
     }
@@ -133,12 +133,12 @@ private:
     friend class KisTiledDataManager;
     KisTiledDataManager *originator;
     KisTile **m_hashTable;
-    Q_UINT32 m_numTiles;
+    quint32 m_numTiles;
     KisTile **m_redoHashTable;
     DeletedTileList m_redoDelTilesList;
     DeletedTileList m_undoDelTilesList;
-    Q_UINT8 *m_defPixel;
-    Q_UINT8 *m_redoDefPixel;
+    quint8 *m_defPixel;
+    quint8 *m_redoDefPixel;
     void deleteAll(KisTile *tile);
 
     bool m_valid;

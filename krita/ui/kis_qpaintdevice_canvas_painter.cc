@@ -224,14 +224,14 @@ void KisQPaintDeviceCanvasPainter::setWorldXForm(bool enable)
     m_painter.setWorldXForm(enable);
 }
 
-const QWMatrix& KisQPaintDeviceCanvasPainter::worldMatrix() const
+const QMatrix& KisQPaintDeviceCanvasPainter::worldMatrix() const
 {
     return m_painter.worldMatrix();
 }
 
-void KisQPaintDeviceCanvasPainter::setWorldMatrix(const QWMatrix& matrix, bool combine)
+void KisQPaintDeviceCanvasPainter::setMatrix(const QMatrix& matrix, bool combine)
 {
-    m_painter.setWorldMatrix(matrix, combine);
+    m_painter.setMatrix(matrix, combine);
 }
 
 void KisQPaintDeviceCanvasPainter::saveWorldMatrix()

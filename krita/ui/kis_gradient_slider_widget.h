@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
-class KPopupMenu;
+class KMenu;
 class KisAutogradientResource;
 class KisGradientSegment;
 
@@ -76,7 +76,7 @@ private:
     KisAutogradientResource* m_autogradientResource;
     KisGradientSegment* m_currentSegment;
     KisGradientSegment* m_selectedSegment;
-    KPopupMenu* m_segmentMenu;
+    KMenu* m_segmentMenu;
     int m_drag;
 };
 

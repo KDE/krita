@@ -103,9 +103,9 @@ void KisAirbrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info
     KisPoint hotSpot = brush->hotSpot(info);
     KisPoint pt = pos - hotSpot;
 
-    Q_INT32 x;
+    qint32 x;
     double xFraction;
-    Q_INT32 y;
+    qint32 y;
     double yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
@@ -133,10 +133,10 @@ void KisAirbrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    Q_INT32 sx = dstRect.x() - x;
-    Q_INT32 sy = dstRect.y() - y;
-    Q_INT32 sw = dstRect.width();
-    Q_INT32 sh = dstRect.height();
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
 
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(),

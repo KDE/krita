@@ -62,7 +62,7 @@ private:
 
 private:
 
-    Q_INT32 m_adsorbCount;
+    qint32 m_adsorbCount;
 
 
 };

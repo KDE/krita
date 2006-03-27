@@ -141,7 +141,7 @@ KisColorSpace * KisDlgImageProperties::colorSpace()
 KisProfile * KisDlgImageProperties::profile()
 {
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
-    Q_UINT32 index = m_page->cmbProfile->currentItem();
+    quint32 index = m_page->cmbProfile->currentItem();
 
     if (index < profileList.count()) {
         return profileList.at(index);

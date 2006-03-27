@@ -33,8 +33,8 @@
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="236" isRoot="false" isAbstract="false" name="KisDataManager*" elementReference="233" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="245" isRoot="false" isAbstract="false" name="const KisRectIterator&amp;" elementReference="234" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="249" isRoot="false" isAbstract="false" name="KisRectIterator&amp;" elementReference="234" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="252" isRoot="false" isAbstract="false" name="Q_UINT8*" elementReference="251" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="254" isRoot="false" isAbstract="false" name="const Q_UINT8*" elementReference="251" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="252" isRoot="false" isAbstract="false" name="quint8*" elementReference="251" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="254" isRoot="false" isAbstract="false" name="const quint8*" elementReference="251" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="272" isRoot="false" isAbstract="false" name="const KisHLineIterator&amp;" elementReference="263" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="276" isRoot="false" isAbstract="false" name="KisHLineIterator&amp;" elementReference="263" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="297" isRoot="false" isAbstract="false" name="const KisVLineIterator&amp;" elementReference="288" />
@@ -49,18 +49,18 @@
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="392" isRoot="false" isAbstract="false" name="KisVLineIteratorPixel&amp;" elementReference="370" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="416" isRoot="false" isAbstract="false" name="const KisRectIteratorPixel&amp;" elementReference="11" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="511" isRoot="false" isAbstract="false" name="const enumHistogramType" elementReference="483" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="569" isRoot="false" isAbstract="false" name="Q_INT32&amp;" elementReference="43" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="569" isRoot="false" isAbstract="false" name="qint32&amp;" elementReference="43" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="576" isRoot="false" isAbstract="false" name="KisTiledDataManager*" elementReference="559" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="578" isRoot="false" isAbstract="false" name="KisTile**" elementReference="558" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="585" isRoot="false" isAbstract="false" name="DeletedTile*" elementReference="582" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="593" isRoot="false" isAbstract="false" name="KisTile*" elementReference="558" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="603" isRoot="false" isAbstract="false" name="KisTile&amp;" elementReference="558" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="629" isRoot="false" isAbstract="false" name="const KisTile&amp;" elementReference="558" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="638" isRoot="false" isAbstract="false" name="const Q_INT32" elementReference="43" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="638" isRoot="false" isAbstract="false" name="const qint32" elementReference="43" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="652" isRoot="false" isAbstract="false" name="const KisTiledDataManager&amp;" elementReference="559" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="656" isRoot="false" isAbstract="false" name="KisTiledDataManager&amp;" elementReference="559" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="667" isRoot="false" isAbstract="false" name="KoStore*" elementReference="643" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="773" isRoot="false" isAbstract="false" name="Q_INT32*" elementReference="43" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="773" isRoot="false" isAbstract="false" name="qint32*" elementReference="43" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="787" isRoot="false" isAbstract="false" name="const KisDataManager&amp;" elementReference="233" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="814" isRoot="false" isAbstract="false" name="const QRect&amp;" elementReference="813" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="894" isRoot="false" isAbstract="false" name="KisDoc*" elementReference="878" />
@@ -263,7 +263,7 @@ The producer may only read the iterator, it may safely be constructed with write
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="26" isRoot="false" isAbstract="false" name="KisColorSpace" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="37" isRoot="false" isAbstract="false" name="KisID" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="40" isRoot="false" isAbstract="false" name="QValueVector" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="43" isRoot="false" isAbstract="false" name="Q_INT32" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="43" isRoot="false" isAbstract="false" name="qint32" />
     <UML:Class stereotype="60" isSpecification="false" isLeaf="false" visibility="public" xmi.id="59" isRoot="false" isAbstract="false" name="KisHistogramProducerSP" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="61" isRoot="false" isAbstract="false" name="KisHistogramProducerFactory" >
      <UML:Classifier.feature>
@@ -679,7 +679,7 @@ the tile manager, are responsible for:
 that may allow deferred loading.
 
 A datamanager knows nothing about the type of pixel data except
-how many Q_UINT8's a single pixel takes." isSpecification="false" isLeaf="false" visibility="public" xmi.id="233" isRoot="false" isAbstract="false" name="KisDataManager" >
+how many quint8's a single pixel takes." isSpecification="false" isLeaf="false" visibility="public" xmi.id="233" isRoot="false" isAbstract="false" name="KisDataManager" >
      <UML:GeneralizableElement.generalization>
       <UML:Generalization xmi.idref="780" />
      </UML:GeneralizableElement.generalization>
@@ -921,7 +921,7 @@ there is no guarantee that the iterator will work scanline by scanline." isSpeci
       </UML:Operation>
      </UML:Classifier.feature>
     </UML:Class>
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="251" isRoot="false" isAbstract="false" name="Q_UINT8" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="251" isRoot="false" isAbstract="false" name="quint8" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="263" isRoot="false" isAbstract="false" name="KisHLineIterator" >
      <UML:Classifier.feature>
       <UML:Attribute isSpecification="false" isLeaf="false" visibility="private" xmi.id="287" isRoot="false" initialValue="" type="232" isAbstract="false" name="m_iter" />
@@ -2698,7 +2698,7 @@ Doubles are in the 0-1 range, use the producer's positionToString function to di
      <UML:EnumerationLiteral isSpecification="false" isLeaf="false" visibility="public" xmi.id="485" isRoot="false" isAbstract="false" name="LINEAR" />
      <UML:EnumerationLiteral isSpecification="false" isLeaf="false" visibility="public" xmi.id="486" isRoot="false" isAbstract="false" name="LOGARITHMIC" />
     </UML:Enumeration>
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="497" isRoot="false" isAbstract="false" name="Q_UINT32" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="497" isRoot="false" isAbstract="false" name="quint32" />
     <UML:Class comment="Provides abstraction to a tile.  A tile contains
 a part of a PaintDevice, but only the individual pixels
 are accesable and that only via iterators." isSpecification="false" isLeaf="false" visibility="public" xmi.id="558" isRoot="false" isAbstract="false" name="KisTile" >
@@ -2800,7 +2800,7 @@ as other datamangers may also rely on the same interface.
 that may allow deferred loading.
 
 A datamanager knows nothing about the type of pixel data except
-how many Q_UINT8's a single pixel takes." isSpecification="false" isLeaf="false" visibility="public" xmi.id="559" isRoot="false" isAbstract="false" name="KisTiledDataManager" >
+how many quint8's a single pixel takes." isSpecification="false" isLeaf="false" visibility="public" xmi.id="559" isRoot="false" isAbstract="false" name="KisTiledDataManager" >
      <UML:GeneralizableElement.generalization>
       <UML:Generalization xmi.idref="644" />
      </UML:GeneralizableElement.generalization>
@@ -3164,13 +3164,13 @@ of choice, and rounded to a reasonable precision to avoid 0.999999" isSpecificat
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1136" isRoot="false" isAbstract="false" name="QMutex" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1138" isRoot="false" isAbstract="false" name="QSize" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1139" isRoot="false" isAbstract="false" name="QPoint" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1140" isRoot="false" isAbstract="false" name="QWMatrix" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1140" isRoot="false" isAbstract="false" name="QMatrix" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1141" isRoot="false" isAbstract="false" name="KNamedCommand" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1142" isRoot="false" isAbstract="false" name="KisRotateVisitor" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1143" isRoot="false" isAbstract="false" name="KisScaleVisitor" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1147" isRoot="false" isAbstract="false" name="KisPaintDevice" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1267" isRoot="false" isAbstract="false" name="QColor" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1373" isRoot="false" isAbstract="false" name="Q_INT8" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1373" isRoot="false" isAbstract="false" name="qint8" />
     <UML:Generalization isSpecification="false" child="14" visibility="public" xmi.id="16" parent="15" discriminator="" name="" />
     <UML:Generalization isSpecification="false" child="70" visibility="public" xmi.id="73" parent="72" discriminator="" name="" />
     <UML:Generalization isSpecification="false" child="89" visibility="public" xmi.id="90" parent="14" discriminator="" name="" />

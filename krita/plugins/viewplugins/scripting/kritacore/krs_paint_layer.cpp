@@ -115,7 +115,7 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
 /*    KisIDList listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
     for(KisIDList::iterator it = listID.begin(); it != listID.end(); it++)
     {
-        kdDebug(41011) << (*it).name() << " " << (*it).id() << endl;
+        kDebug(41011) << (*it).name() << " " << (*it).id() << endl;
     }*/
 
     enumHistogramType type ;

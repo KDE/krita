@@ -49,7 +49,7 @@ public:
         //
 
     virtual void setup(KActionCollection *collection);
-    virtual Q_UINT32 priority() { return 3; }
+    virtual quint32 priority() { return 3; }
     virtual enumToolType toolType() { return TOOL_SHAPE; }
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void move(KisMoveEvent *event);

@@ -61,8 +61,8 @@ private:
     QLabel * m_optionWidget;
     KisCanvasSubject *m_subject;
     KisPoint m_dragPos;
-    Q_INT32 m_origScrollX;
-    Q_INT32 m_origScrollY;
+    qint32 m_origScrollX;
+    qint32 m_origScrollY;
     bool m_dragging;
 };
 

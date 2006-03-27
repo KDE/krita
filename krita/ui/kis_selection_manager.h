@@ -84,9 +84,9 @@ public slots:
     void toggleDisplaySelection();
 
 public:
-    void grow (Q_INT32 xradius, Q_INT32 yradius);
-    void shrink (Q_INT32 xradius, Q_INT32 yradius, bool edge_lock);
-    void border(Q_INT32 xradius, Q_INT32 yradius);
+    void grow (qint32 xradius, qint32 yradius);
+    void shrink (qint32 xradius, qint32 yradius, bool edge_lock);
+    void border(qint32 xradius, qint32 yradius);
     // the following functions are needed for the siox tool
     // they might be also usefull on its own
     void erode();
@@ -95,9 +95,9 @@ public:
 private:
     void fill(const KisColor& color, bool fillWithPattern, const QString& transactionText);
     
-    void computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT32  yradius);
-    inline void rotatePointers (Q_UINT8  **p, Q_UINT32 n);
-    void computeTransition (Q_UINT8* transition, Q_UINT8** buf, Q_INT32 width);
+    void computeBorder (qint32  *circ, qint32  xradius, qint32  yradius);
+    inline void rotatePointers (quint8  **p, quint32 n);
+    void computeTransition (quint8* transition, quint8** buf, qint32 width);
 
     KisView * m_parent;
     KisDoc * m_doc;

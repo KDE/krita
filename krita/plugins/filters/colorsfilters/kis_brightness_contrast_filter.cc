@@ -47,7 +47,7 @@
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
     : KisFilterConfiguration( "brightnesscontrast", 1 )
 {
-    for (Q_UINT32 i = 0; i < 256; ++i) {
+    for (quint32 i = 0; i < 256; ++i) {
         transfer[i] = i * 257;
     }
     curve.setAutoDelete(true);
@@ -175,7 +175,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 {
     
     if (!config) {
-        kdWarning() << "No configuration object for brightness/contrast filter\n";
+        kWarning() << "No configuration object for brightness/contrast filter\n";
         return;
     }
     
@@ -194,12 +194,12 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
     setProgressTotalSteps(rect.width() * rect.height());
-    Q_INT32 pixelsProcessed = 0;
+    qint32 pixelsProcessed = 0;
 
     while( ! iter.isDone()  && !cancelRequested())
     {
-        Q_UINT32 npix=0, maxpix = iter.nConseqPixels();
-        Q_UINT8 selectedness = iter.selectedness();
+        quint32 npix=0, maxpix = iter.nConseqPixels();
+        quint8 selectedness = iter.selectedness();
         // The idea here is to handle stretches of completely selected and completely unselected pixels.
         // Partially selected pixels are handled one pixel at a time.
         switch(selectedness)
@@ -216,7 +216,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
 
             case MAX_SELECTED:
             {
-                Q_UINT8 *firstPixel = iter.rawData();
+                quint8 *firstPixel = iter.rawData();
                 while(iter.selectedness()==MAX_SELECTED && maxpix)
                 {
                     --maxpix;
@@ -232,8 +232,8 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
             default:
                 // adjust, but since it's partially selected we also only partially adjust
                 src->colorSpace()->applyAdjustment(iter.oldRawData(), iter.rawData(), configBC->m_adjustment, 1);
-                const Q_UINT8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-                Q_UINT8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
+                quint8 weights[2] = {MAX_SELECTED - selectedness, selectedness};
                 src->colorSpace()->mixColors(pixels, weights, 2, iter.rawData());
                 ++iter;
                 pixelsProcessed++;
@@ -296,7 +296,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     p.setPen(QPen::QPen(Qt::gray,1, Qt::SolidLine));
 
     double highest = (double)histogram.calculations().getHighest();
-    Q_INT32 bins = histogram.producer()->numberOfBins();
+    qint32 bins = histogram.producer()->numberOfBins();
 
     if (histogram.getHistogramType() == LINEAR) {
         double factor = (double)height / highest;
@@ -320,7 +320,7 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
 
     for(int i=0; i <256; i++)
     {
-        Q_INT32 val;
+        qint32 val;
         val = int(0xFFFF * m_page->kCurve->getCurveValue( i / 255.0));
         if(val >0xFFFF)
             val=0xFFFF;

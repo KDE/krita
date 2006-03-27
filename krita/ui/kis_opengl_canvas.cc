@@ -25,9 +25,9 @@ KisOpenGLCanvasWidget::KisOpenGLCanvasWidget(QWidget *parent, const char *name, 
     : QGLWidget(KisOpenGLCanvasFormat, parent, name, sharedContextWidget)
 {
     if (isSharing()) {
-        kdDebug(41001) << "Created QGLWidget with sharing\n";
+        kDebug(41001) << "Created QGLWidget with sharing\n";
     } else {
-        kdDebug(41001) << "Created QGLWidget with no sharing\n";
+        kDebug(41001) << "Created QGLWidget with no sharing\n";
     }
 }
 

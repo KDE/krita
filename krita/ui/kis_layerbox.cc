@@ -38,7 +38,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
@@ -117,7 +117,7 @@ KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char 
     connect(list(), SIGNAL(requestLayerProperties(LayerItem*)),
                     SLOT(slotRequestLayerProperties(LayerItem*)));
 
-    m_newLayerMenu = new KPopupMenu(this);
+    m_newLayerMenu = new KMenu(this);
     m_lst->bnAdd->setPopup(m_newLayerMenu);
     m_lst->bnAdd->setPopupDelay(1);
     m_newLayerMenu->insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), PAINT_LAYER );
@@ -629,7 +629,7 @@ void KisLayerBox::printKritaLayers() const
         s = QString("[%1]").arg( s );
     if( m_image->activeLayer().data() == root )
         s.prepend("*");
-    kdDebug() << (QString().fill(' ', indent) +  s) << endl;
+    kDebug() << (QString().fill(' ', indent) +  s) << endl;
     for (KisLayer* layer = root->firstChild(); layer; layer = layer->nextSibling())
     {
         indent += 2;
@@ -661,7 +661,7 @@ void KisLayerBox::printLayerboxLayers() const
         s = QString("[%1]").arg( s );
     if( list()->activeLayer() == root )
         s.prepend("*");
-    kdDebug() << (QString().fill(' ', indent) +  s) << endl;
+    kDebug() << (QString().fill(' ', indent) +  s) << endl;
     for (LayerItem* layer = root->firstChild(); layer; layer = layer->nextSibling())
     {
         indent += 2;

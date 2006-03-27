@@ -76,7 +76,7 @@ public:
      * Return one channel from the current kispixel. Does not check whether
      * channel index actually exists in this colorspace.
      */
-    inline Q_UINT8 operator[](int index) const
+    inline quint8 operator[](int index) const
             { return m_underlyingIterator->rawData()[index]; };
 
     /**
@@ -93,7 +93,7 @@ public:
     /**
       * Returns the degree of selectedness of the pixel.
       */
-    inline Q_UINT8 selectedness() const
+    inline quint8 selectedness() const
         {
             if (m_selectionIterator)
                 return *(m_selectionIterator->rawData());
@@ -107,7 +107,7 @@ public:
      * to have the same number of consecutive pixels that the iterator has
      * at a given point. It return a 0 if there is no selection.
      */
-    inline Q_UINT8 * selectionMask() const
+    inline quint8 * selectionMask() const
         {
             if ( m_selectionIterator )
                 return m_selectionIterator->rawData();

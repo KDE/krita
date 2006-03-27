@@ -51,7 +51,7 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
         kernel->factor = 1;
         kernel->offset = 127;
 
-        kernel->data = new Q_INT32[9];
+        kernel->data = new qint32[9];
         kernel->data[0] = 0;
         kernel->data[1] = 0;
         kernel->data[2] = 0;
@@ -71,7 +71,7 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
         kernel->width = 3;
         kernel->height = 3;
 
-        kernel->data = new Q_INT32[9];
+        kernel->data = new qint32[9];
 
         KisCustomConvolutionFilterConfigurationBaseWidget* mw = widget->matrixWidget();
 

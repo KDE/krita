@@ -42,7 +42,7 @@ public:
     KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source);
     ~KisAccumulatingHistogramProducer();
     /// Does _nothing_, use addRegionsToBinAsync
-    virtual void addRegionToBin(Q_UINT8 *, Q_UINT8*, Q_UINT32, KisColorSpace *) {}
+    virtual void addRegionToBin(quint8 *, quint8*, quint32, KisColorSpace *) {}
     virtual void addRegionsToBinAsync();
     virtual QString positionToString(double pos) const
         { return m_source->at(0)->positionToString(pos); }
@@ -50,7 +50,7 @@ public:
     virtual void setView(double, double) {} // No view support
     virtual double maximalZoom() const { return 1.0; }
 
-    virtual Q_INT32 numberOfBins() { return m_source->at(0)->numberOfBins(); }
+    virtual qint32 numberOfBins() { return m_source->at(0)->numberOfBins(); }
 
     virtual Q3ValueVector<KisChannelInfo *> channels() { return m_source->at(0)->channels(); }
 

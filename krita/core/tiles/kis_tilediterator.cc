@@ -82,23 +82,23 @@ KisTiledIterator& KisTiledIterator::operator=(const KisTiledIterator& rhs)
     return *this;
 }
 
-Q_UINT8 * KisTiledIterator::rawData() const
+quint8 * KisTiledIterator::rawData() const
 {
     return m_data + m_offset;
 }
 
 
-const Q_UINT8 * KisTiledIterator::oldRawData() const
+const quint8 * KisTiledIterator::oldRawData() const
 {
 #ifdef DEBUG
     // Warn if we're misusing oldRawData(). If there's no memento, oldRawData is the same
     // as rawData().
-    kdWarning(!m_ktm->hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
+    kWarning(!m_ktm->hasCurrentMemento(), DBG_AREA_TILES) << "Accessing oldRawData() when no transaction is in progress.\n";
 #endif
     return m_oldData + m_offset;
 }
 
-void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
+void KisTiledIterator::fetchTileData(qint32 col, qint32 row)
 {
     if (m_tile)
         m_tile->removeReader();

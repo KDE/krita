@@ -33,8 +33,8 @@ public:
     DlgGrowSelection(QWidget * parent = 0, const char* name = 0);
     ~DlgGrowSelection();
 
-    Q_INT32 xradius();
-    Q_INT32 yradius();
+    qint32 xradius();
+    qint32 yradius();
 
 private slots:
 

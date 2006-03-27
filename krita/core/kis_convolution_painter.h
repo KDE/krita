@@ -42,11 +42,11 @@ class KisKernel : public KShared
 
 public:
     
-    Q_UINT32 width;
-    Q_UINT32 height;
-    Q_INT32 offset;
-    Q_INT32 factor;
-    Q_INT32 * data;
+    quint32 width;
+    quint32 height;
+    qint32 offset;
+    qint32 factor;
+    qint32 * data;
 
     KisKernel() : width(0), height(0), offset(0), factor(0), data(0) {};
 
@@ -80,14 +80,14 @@ public:
      *
      * Note that we do not (currently) support different kernels for different channels _or_ channel types.
      */
-    void applyMatrix(KisKernelSP kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+    void applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                      KisConvolutionBorderOp borderOp = BORDER_AVOID,
                      KisChannelInfo::enumChannelFlags channelFlags = KisChannelInfo::FLAG_COLOR);
 private:
     /**
      * This function is called by applyMatrix when borderOp == BORDER_REPEAT
      */
-    void applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h,
+    void applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                            KisChannelInfo::enumChannelFlags channelFlags);
 
 

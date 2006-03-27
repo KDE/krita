@@ -44,7 +44,7 @@ public:
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
     virtual enumToolType toolType() { return TOOL_FILL; }
-    virtual Q_UINT32 priority() { return 3; }
+    virtual quint32 priority() { return 3; }
 
 public slots:
     void slotSetUpdateColor(bool);

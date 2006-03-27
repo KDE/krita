@@ -251,9 +251,9 @@ void TabletSettingsTab::applySettings()
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
 TabletSettingsTab::DeviceSettings::DeviceSettings(KisCanvasWidget::X11TabletDevice *tabletDevice, bool enabled,
-                                                  Q_INT32 xAxis, Q_INT32 yAxis, Q_INT32 pressureAxis, 
-                                                  Q_INT32 xTiltAxis, Q_INT32 yTiltAxis, Q_INT32 wheelAxis,
-                                                  Q_INT32 toolIDAxis, Q_INT32 serialNumberAxis)
+                                                  qint32 xAxis, qint32 yAxis, qint32 pressureAxis, 
+                                                  qint32 xTiltAxis, qint32 yTiltAxis, qint32 wheelAxis,
+                                                  qint32 toolIDAxis, qint32 serialNumberAxis)
     : m_tabletDevice(tabletDevice),
       m_enabled(enabled),
       m_xAxis(xAxis),
@@ -305,87 +305,87 @@ bool TabletSettingsTab::DeviceSettings::enabled() const
     return m_enabled;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::numAxes() const
+qint32 TabletSettingsTab::DeviceSettings::numAxes() const
 {
     return m_tabletDevice->numAxes();
 }
 
-void TabletSettingsTab::DeviceSettings::setXAxis(Q_INT32 axis)
+void TabletSettingsTab::DeviceSettings::setXAxis(qint32 axis)
 {
     m_xAxis = axis;
 }
 
-void TabletSettingsTab::DeviceSettings::setYAxis(Q_INT32 axis)
+void TabletSettingsTab::DeviceSettings::setYAxis(qint32 axis)
 {
     m_yAxis = axis;
 }
 
-void TabletSettingsTab::DeviceSettings::setPressureAxis(Q_INT32 axis)
+void TabletSettingsTab::DeviceSettings::setPressureAxis(qint32 axis)
 {
     m_pressureAxis = axis;
 }
 
-void TabletSettingsTab::DeviceSettings::setXTiltAxis(Q_INT32 axis)
+void TabletSettingsTab::DeviceSettings::setXTiltAxis(qint32 axis)
 {
     m_xTiltAxis = axis;
 }
 
-void TabletSettingsTab::DeviceSettings::setYTiltAxis(Q_INT32 axis)
+void TabletSettingsTab::DeviceSettings::setYTiltAxis(qint32 axis)
 {
     m_yTiltAxis = axis;
 }
 
-void TabletSettingsTab::DeviceSettings::setWheelAxis(Q_INT32 axis)
+void TabletSettingsTab::DeviceSettings::setWheelAxis(qint32 axis)
 {
     m_wheelAxis = axis;
 }
 
-void TabletSettingsTab::DeviceSettings::setToolIDAxis(Q_INT32 axis)
+void TabletSettingsTab::DeviceSettings::setToolIDAxis(qint32 axis)
 {
     m_toolIDAxis = axis;
 }
 
-void TabletSettingsTab::DeviceSettings::setSerialNumberAxis(Q_INT32 axis)
+void TabletSettingsTab::DeviceSettings::setSerialNumberAxis(qint32 axis)
 {
     m_serialNumberAxis = axis;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::xAxis() const
+qint32 TabletSettingsTab::DeviceSettings::xAxis() const
 {
     return m_xAxis;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::yAxis() const
+qint32 TabletSettingsTab::DeviceSettings::yAxis() const
 {
     return m_yAxis;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::pressureAxis() const
+qint32 TabletSettingsTab::DeviceSettings::pressureAxis() const
 {
     return m_pressureAxis;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::xTiltAxis() const
+qint32 TabletSettingsTab::DeviceSettings::xTiltAxis() const
 {
     return m_xTiltAxis;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::yTiltAxis() const
+qint32 TabletSettingsTab::DeviceSettings::yTiltAxis() const
 {
     return m_yTiltAxis;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::wheelAxis() const
+qint32 TabletSettingsTab::DeviceSettings::wheelAxis() const
 {
     return m_wheelAxis;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::toolIDAxis() const
+qint32 TabletSettingsTab::DeviceSettings::toolIDAxis() const
 {
     return m_toolIDAxis;
 }
 
-Q_INT32 TabletSettingsTab::DeviceSettings::serialNumberAxis() const
+qint32 TabletSettingsTab::DeviceSettings::serialNumberAxis() const
 {
     return m_serialNumberAxis;
 }
@@ -401,7 +401,7 @@ TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    for (Q_INT32 axis = 0; axis < settings.numAxes(); axis++) {
+    for (qint32 axis = 0; axis < settings.numAxes(); axis++) {
         QString axisString;
 
         axisString.setNum(axis);
@@ -483,7 +483,7 @@ TabletSettingsTab::TabletDeviceSettingsDialog::~TabletDeviceSettingsDialog()
 
 TabletSettingsTab::DeviceSettings TabletSettingsTab::TabletDeviceSettingsDialog::settings()
 {
-    const Q_INT32 noAxis = m_settings.numAxes();
+    const qint32 noAxis = m_settings.numAxes();
 
     if (m_page->cbX->currentItem() != noAxis ) {
         m_settings.setXAxis(m_page->cbX->currentItem());
@@ -593,7 +593,7 @@ void TabletSettingsTab::slotConfigureDevice()
 
 void TabletSettingsTab::applyTabletDeviceSettings()
 {
-    for (Q_UINT32 deviceIndex = 0; deviceIndex < m_deviceSettings.count(); ++deviceIndex) {
+    for (quint32 deviceIndex = 0; deviceIndex < m_deviceSettings.count(); ++deviceIndex) {
         m_deviceSettings[deviceIndex].applySettings();
     }
 }

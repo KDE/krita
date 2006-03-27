@@ -94,17 +94,17 @@ namespace {
         typedef KisLayerCommand super;
 
     public:
-        KisLayerOpacityCommand(KisLayerSP layer, Q_UINT8 oldOpacity, Q_UINT8 newOpacity);
+        KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity);
 
         virtual void execute();
         virtual void unexecute();
 
     private:
-        Q_UINT8 m_oldOpacity;
-        Q_UINT8 m_newOpacity;
+        quint8 m_oldOpacity;
+        quint8 m_newOpacity;
     };
 
-    KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, Q_UINT8 oldOpacity, Q_UINT8 newOpacity) :
+    KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity) :
         super(i18n("Layer Opacity"), layer)
     {
         m_oldOpacity = oldOpacity;
@@ -266,7 +266,7 @@ static int getID()
 }
 
 
-KisLayer::KisLayer(KisImage *img, const QString &name, Q_UINT8 opacity) :
+KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
     QObject(0, name.latin1()),
     KShared(),
     m_id(getID()),
@@ -437,12 +437,12 @@ bool KisLayer::matchesFlags(int flags) const
     return true;
 }
 
-Q_UINT8 KisLayer::opacity() const
+quint8 KisLayer::opacity() const
 {
     return m_opacity;
 }
 
-void KisLayer::setOpacity(Q_UINT8 val)
+void KisLayer::setOpacity(quint8 val)
 {
     if (m_opacity != val)
     {
@@ -452,12 +452,12 @@ void KisLayer::setOpacity(Q_UINT8 val)
     }
 }
 
-KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 newOpacity)
+KNamedCommand *KisLayer::setOpacityCommand(quint8 newOpacity)
 {
     return new KisLayerOpacityCommand(this, opacity(), newOpacity);
 }
 
-KNamedCommand *KisLayer::setOpacityCommand(Q_UINT8 prevOpacity, Q_UINT8 newOpacity)
+KNamedCommand *KisLayer::setOpacityCommand(quint8 prevOpacity, quint8 newOpacity)
 {
     return new KisLayerOpacityCommand(this, prevOpacity, newOpacity);
 }
@@ -561,11 +561,11 @@ KisUndoAdapter *KisLayer::undoAdapter() const
     return 0;
 }
 
-void KisLayer::paintMaskInactiveLayers(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
+void KisLayer::paintMaskInactiveLayers(QImage &, qint32, qint32, qint32, qint32)
 {
 }
 
-void KisLayer::paintSelection(QImage &, Q_INT32, Q_INT32, Q_INT32, Q_INT32)
+void KisLayer::paintSelection(QImage &, qint32, qint32, qint32, qint32)
 {
 }
 
@@ -573,7 +573,7 @@ void KisLayer::paintSelection(QImage &, const QRect&, const QSize&, const QSize&
 {
 }
 
-QImage KisLayer::createThumbnail(Q_INT32, Q_INT32)
+QImage KisLayer::createThumbnail(qint32, qint32)
 {
     return 0;
 }

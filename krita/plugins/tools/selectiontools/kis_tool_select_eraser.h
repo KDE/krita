@@ -42,7 +42,7 @@ public:
     virtual ~KisToolSelectEraser();
 
     virtual void setup(KActionCollection *collection);
-    virtual Q_UINT32 priority() { return 2; }
+    virtual quint32 priority() { return 2; }
     virtual enumToolType toolType() { return TOOL_SELECT; }
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();

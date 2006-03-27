@@ -68,7 +68,7 @@ void KisToolPolyline::update (KisCanvasSubject *subject)
 void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
 {
     if (m_currentImage) {
-        if (event->button() == LeftButton && event->state() != Qt::ShiftButton ) {
+        if (event->button() == LeftButton && event->state() != Qt::ShiftModifier ) {
 
             m_dragging = true;
 
@@ -82,7 +82,7 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
                 m_dragEnd = event->pos();
                 draw();
             }
-        } else if (event->button() == LeftButton && event->state() == Qt::ShiftButton ) {
+        } else if (event->button() == LeftButton && event->state() == Qt::ShiftModifier ) {
             finish();
         }
     }

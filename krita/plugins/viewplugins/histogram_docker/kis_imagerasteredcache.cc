@@ -49,8 +49,8 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
 
     connect(img, SIGNAL(sigImageUpdated(QRect)),
             this, SLOT(imageUpdated(QRect)));
-    connect(img, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)),
-            this, SLOT(imageSizeChanged(Q_INT32, Q_INT32)));
+    connect(img, SIGNAL(sigSizeChanged(qint32, qint32)),
+            this, SLOT(imageSizeChanged(qint32, qint32)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
@@ -93,7 +93,7 @@ void KisImageRasteredCache::imageUpdated(QRect rc) {
     }
 }
 
-void KisImageRasteredCache::imageSizeChanged(Q_INT32 w, Q_INT32 h) {
+void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h) {
 
     KisImageSP image = m_view->canvasSubject()->currentImg();
 

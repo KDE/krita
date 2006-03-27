@@ -70,10 +70,10 @@ public:
                enumGradientRepeat repeat,
                double antiAliasThreshold,
                bool reverseGradient,
-               Q_INT32 startx,
-               Q_INT32 starty,
-               Q_INT32 width,
-               Q_INT32 height);
+               qint32 startx,
+               qint32 starty,
+               qint32 width,
+               qint32 height);
 
 
 private:

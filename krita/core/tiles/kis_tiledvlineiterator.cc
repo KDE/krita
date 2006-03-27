@@ -22,7 +22,7 @@
 #include "kis_tile_global.h"
 #include "kis_tilediterator.h"
 
-KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  Q_INT32 x,  Q_INT32 y, Q_INT32 h, bool writable) :
+KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  qint32 x,  qint32 y, qint32 h, bool writable) :
     KisTiledIterator(ndevice),
     m_bottom(y + h - 1)
 {

@@ -54,8 +54,8 @@ KisTileManager::KisTileManager() {
     // Hardcoded (at the moment only?): 4 pools of 1000 tiles each
     m_tilesPerPool = 1000;
 
-    m_pools = new Q_UINT8*[4];
-    m_poolPixelSizes = new Q_INT32[4];
+    m_pools = new quint8*[4];
+    m_poolPixelSizes = new qint32[4];
     m_poolFreeList = new PoolFreeList[4];
     for (int i = 0; i < 4; i++) {
         m_pools[i] = 0;
@@ -261,7 +261,7 @@ void KisTileManager::toSwap(TileInfo* info) {
         // This tile is not yet in the file. Save it there
         // ### check return values of mmap functions!
         KisTile *tile = info->tile;
-        Q_UINT8* data = 0;
+        quint8* data = 0;
         uint pixelSize = (info->size / m_tileSize);
         if (m_freeLists.capacity() > pixelSize) {
             if (!m_freeLists[pixelSize].empty()) {
@@ -284,20 +284,20 @@ void KisTileManager::toSwap(TileInfo* info) {
             if (ftruncate(m_tempFile.handle(), newsize)) {
                 // XXX make these maybe i18n()able and in an error box, but then through
                 // some kind of proxy such that we don't pollute this with GUI code
-                kdWarning(DBG_AREA_TILES) << "Resizing the temporary swapfile failed!" << endl;
+                kWarning(DBG_AREA_TILES) << "Resizing the temporary swapfile failed!" << endl;
                 // Be somewhat pollite and try to figure out why it failed
                 switch (errno) {
-                    case EIO: kdWarning(DBG_AREA_TILES) << "Error was E IO, "
+                    case EIO: kWarning(DBG_AREA_TILES) << "Error was E IO, "
                             << "possible reason is a disk error!" << endl; break;
-                    case EINVAL: kdWarning(DBG_AREA_TILES) << "Error was E INVAL, "
+                    case EINVAL: kWarning(DBG_AREA_TILES) << "Error was E INVAL, "
                             << "possible reason is that you are using more memory than "
                             << "the filesystem or disk can handle" << endl; break;
-                    default: kdWarning(DBG_AREA_TILES) << "Errno was: " << errno << endl;
+                    default: kWarning(DBG_AREA_TILES) << "Errno was: " << errno << endl;
                 }
-                kdWarning(DBG_AREA_TILES) << "The swapfile is: " << m_tempFile.name() << endl;
-                kdWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
+                kWarning(DBG_AREA_TILES) << "The swapfile is: " << m_tempFile.name() << endl;
+                kWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
 
-                kdDebug(DBG_AREA_TILES) << "Failed ftruncate info: "
+                kDebug(DBG_AREA_TILES) << "Failed ftruncate info: "
                         << "tried mapping " << info->size << " bytes"
                         << "to a " << m_fileSize << " bytes file" << endl;
                 printInfo();
@@ -307,26 +307,26 @@ void KisTileManager::toSwap(TileInfo* info) {
                 return;
             }
 
-            data = (Q_UINT8*) mmap(0, info->size,
+            data = (quint8*) mmap(0, info->size,
                                    PROT_READ | PROT_WRITE,
                                    MAP_SHARED,
                                    m_tempFile.handle(), m_fileSize);
 
             // Same here for warning and GUI
-            if (data == (Q_UINT8*)-1) {
-                kdWarning(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're probably going to crash very soon now...\n";
+            if (data == (quint8*)-1) {
+                kWarning(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're probably going to crash very soon now...\n";
 
                 // Try to ignore what happened and carry on, but unlikely that we'll get
                 // much further, since the file resizing went OK and this is memory-related...
                 if (errno == ENOMEM) {
-                    kdWarning(DBG_AREA_TILES) << "mmap failed with E NOMEM! This means that "
+                    kWarning(DBG_AREA_TILES) << "mmap failed with E NOMEM! This means that "
                             << "either there are no more memory mappings available for Krita, "
                             << "or that there is no more memory available!" << endl;
                 }
 
-                kdWarning(DBG_AREA_TILES) << "Trying to continue anyway (no guarantees)" << endl;
-                kdWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
-                kdDebug(DBG_AREA_TILES) << "Failed mmap info: "
+                kWarning(DBG_AREA_TILES) << "Trying to continue anyway (no guarantees)" << endl;
+                kWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
+                kDebug(DBG_AREA_TILES) << "Failed mmap info: "
                         << "tried mapping " << info->size << " bytes"
                         << "to a " << m_fileSize << " bytes file" << endl;
                 printInfo();
@@ -375,9 +375,9 @@ void KisTileManager::doSwapping()
 
 #if 1 // enable this to enable swapping
 
-    Q_UINT32 count = QMIN(m_swappableList.size(), m_swappiness);
+    quint32 count = qMin(m_swappableList.size(), m_swappiness);
 
-    for (Q_UINT32 i = 0; i < count; i++) {
+    for (quint32 i = 0; i < count; i++) {
         toSwap(m_swappableList.front());
         m_swappableList.front()->validNode = false;
         m_swappableList.pop_front();
@@ -390,40 +390,40 @@ void KisTileManager::doSwapping()
 
 void KisTileManager::printInfo()
 {
-    kdDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
-    kdDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
-    kdDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
-    kdDebug(DBG_AREA_TILES) << "Freelists information\n";
+    kDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
+    kDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
+    kDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
+    kDebug(DBG_AREA_TILES) << "Freelists information\n";
     for (uint i = 0; i < m_freeLists.capacity(); i++) {
         if ( ! m_freeLists[i].empty() ) {
-            kdDebug(DBG_AREA_TILES) << m_freeLists[i].size()
+            kDebug(DBG_AREA_TILES) << m_freeLists[i].size()
                     << " elements in the freelist for pixelsize " << i << "\n";
         }
     }
-    kdDebug(DBG_AREA_TILES) << "Pool stats (" <<  m_tilesPerPool << " tiles per pool)" << endl;
+    kDebug(DBG_AREA_TILES) << "Pool stats (" <<  m_tilesPerPool << " tiles per pool)" << endl;
     for (int i = 0; i < 4; i++) {
         if (m_pools[i]) {
-            kdDebug(DBG_AREA_TILES) << "Pool " << i << ": Freelist count: " << m_poolFreeList[i].count()
+            kDebug(DBG_AREA_TILES) << "Pool " << i << ": Freelist count: " << m_poolFreeList[i].count()
                     << ", pixelSize: " << m_poolPixelSizes[i] << endl;
         }
     }
-    kdDebug(DBG_AREA_TILES) << endl;
+    kDebug(DBG_AREA_TILES) << endl;
 }
 
-Q_UINT8* KisTileManager::requestTileData(Q_INT32 pixelSize)
+quint8* KisTileManager::requestTileData(qint32 pixelSize)
 {
     m_swapMutex->lock();
 
-    Q_UINT8* data = findTileFor(pixelSize);
+    quint8* data = findTileFor(pixelSize);
     if ( data ) {
         m_swapMutex->unlock();
         return data;
     }
     m_swapMutex->unlock();
-    return new Q_UINT8[m_tileSize * pixelSize];
+    return new quint8[m_tileSize * pixelSize];
 }
 
-void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize)
+void KisTileManager::dontNeedTileData(quint8* data, qint32 pixelSize)
 {
     m_poolMutex->lock();
     if (isPoolTile(data, pixelSize)) {
@@ -433,13 +433,13 @@ void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize)
     m_poolMutex->unlock();
 }
 
-Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize)
+quint8* KisTileManager::findTileFor(qint32 pixelSize)
 {
     m_poolMutex->lock();
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize) {
             if (!m_poolFreeList[i].isEmpty()) {
-                Q_UINT8* data = m_poolFreeList[i].front();
+                quint8* data = m_poolFreeList[i].front();
                 m_poolFreeList[i].pop_front();
                 m_poolMutex->unlock();
                 return data;
@@ -448,7 +448,7 @@ Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize)
         if (m_pools[i] == 0) {
             // allocate new pool
             m_poolPixelSizes[i] = pixelSize;
-            m_pools[i] = new Q_UINT8[pixelSize * m_tileSize * m_tilesPerPool];
+            m_pools[i] = new quint8[pixelSize * m_tileSize * m_tilesPerPool];
             // j = 1 because we return the first element, so no need to add it to the freelist
             for (int j = 1; j < m_tilesPerPool; j++)
                 m_poolFreeList[i].append(&m_pools[i][j * pixelSize * m_tileSize]);
@@ -460,7 +460,7 @@ Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize)
     return 0;
 }
 
-bool KisTileManager::isPoolTile(Q_UINT8* data, Q_INT32 pixelSize) {
+bool KisTileManager::isPoolTile(quint8* data, qint32 pixelSize) {
 
     if (data == 0)
         return false;
@@ -480,7 +480,7 @@ bool KisTileManager::isPoolTile(Q_UINT8* data, Q_INT32 pixelSize) {
     return false;
 }
 
-void KisTileManager::reclaimTileToPool(Q_UINT8* data, Q_INT32 pixelSize) {
+void KisTileManager::reclaimTileToPool(quint8* data, qint32 pixelSize) {
     m_poolMutex->lock();
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize)

@@ -19,7 +19,7 @@
 #include <qwidget.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <qlayout.h>
 
 #include "kis_canvas_controller.h"

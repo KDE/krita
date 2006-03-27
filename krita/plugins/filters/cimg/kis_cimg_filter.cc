@@ -160,8 +160,8 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 {
     Q_UNUSED(dst);
 
-    Q_INT32 width = rect.width();
-    Q_INT32 height = rect.height();
+    qint32 width = rect.width();
+    qint32 height = rect.height();
 
      // Copy the src data into a CImg type image with three channels and no alpha.
     // XXX: This means that a CImg is always rgba; find the quickest way to get 8-bit rgb from any colorspace & find a way
@@ -177,8 +177,8 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
         QColor color;
         cs->toQColor(it.rawData(), &color);
 
-        Q_INT32 x = it.x() - rect.x();
-        Q_INT32 y = it.y() - rect.y();
+        qint32 x = it.x() - rect.x();
+        qint32 y = it.y() - rect.y();
 
         img(x, y, 0) = color.red();
         img(x, y, 1) = color.green();
@@ -210,8 +210,8 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
             if (it.isSelected()) {
 
-                Q_INT32 x = it.x() - rect.x();
-                Q_INT32 y = it.y() - rect.y();
+                qint32 x = it.x() - rect.x();
+                qint32 y = it.y() - rect.y();
 
                 QColor color((int)img(x, y, 0), (int)img(x, y, 1), (int)img(x, y, 2));
 

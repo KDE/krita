@@ -61,10 +61,10 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
 
     KisColorSpace * colorSpace = dab->colorSpace();
 
-    Q_INT32 pixelSize = colorSpace->pixelSize();
+    qint32 pixelSize = colorSpace->pixelSize();
 
-    Q_INT32 maskWidth = mask->width();
-    Q_INT32 maskHeight = mask->height();
+    qint32 maskWidth = mask->width();
+    qint32 maskHeight = mask->height();
 
     // Convert the kiscolor to the right colorspace.
     kc.convertTo(colorSpace);
@@ -85,9 +85,9 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
     return dab;
 }
 
-void KisPaintOp::splitCoordinate(double coordinate, Q_INT32 *whole, double *fraction)
+void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction)
 {
-    Q_INT32 i = static_cast<Q_INT32>(coordinate);
+    qint32 i = static_cast<qint32>(coordinate);
 
     if (coordinate < 0) {
         // We always want the fractional part to be positive.

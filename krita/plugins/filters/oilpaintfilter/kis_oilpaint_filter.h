@@ -29,7 +29,7 @@ class KisOilPaintFilterConfiguration : public KisFilterConfiguration
 
 public:
 
-    KisOilPaintFilterConfiguration(Q_UINT32 brushSize, Q_UINT32 smooth)
+    KisOilPaintFilterConfiguration(quint32 brushSize, quint32 smooth)
         : KisFilterConfiguration( "oilpaint", 1 )
         {
             setProperty("brushSize", brushSize);
@@ -37,8 +37,8 @@ public:
         };
 public:
 
-    inline Q_UINT32 brushSize() { return getInt("brushSize"); };
-    inline Q_UINT32 smooth() {return getInt("smooth"); };
+    inline quint32 brushSize() { return getInt("brushSize"); };
+    inline quint32 smooth() {return getInt("smooth"); };
 
 };
 

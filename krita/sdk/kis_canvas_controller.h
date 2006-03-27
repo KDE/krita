@@ -52,12 +52,12 @@ public:
     /**
      * @return the value of the horizontal scrollbar.
      */
-    virtual Q_INT32 horzValue() const = 0;
+    virtual qint32 horzValue() const = 0;
 
     /**
      * @return the value of the vertical scrollbar
      */
-    virtual Q_INT32 vertValue() const = 0;
+    virtual qint32 vertValue() const = 0;
     
     /**
      * Sets the horizontal and vertical scrollbars to the specified values
@@ -65,7 +65,7 @@ public:
      * @param x the value the horizontal scrollbar is set to
      * @param y the value the vertical scrollbar is set to
      */
-    virtual void scrollTo(Q_INT32 x, Q_INT32 y) = 0;
+    virtual void scrollTo(qint32 x, qint32 y) = 0;
     
     /**
      * Tell all of the canvas to repaint itself.
@@ -77,7 +77,7 @@ public:
      * Tell the canvas to repaint the rectangle defined by x, y, w and h.
      * The coordinates are image coordinates.
      */
-    virtual void updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
+    virtual void updateCanvas(qint32 x, qint32 y, qint32 w, qint32 h) = 0;
 
     /**
      * Tell the canvas repaint the specified rectangle. The coordinates
@@ -96,7 +96,7 @@ public:
      * @param x The x coordinate of the visible point in image coordinates
      * @param y the y coordinate of the visible point in image coordinates
      */
-    virtual void zoomIn(Q_INT32 x, Q_INT32 y) = 0;
+    virtual void zoomIn(qint32 x, qint32 y) = 0;
     
     /**
      * Decrease the zoomlevel one step
@@ -110,7 +110,7 @@ public:
      * @param x the x coordinate of the visible point in image coordinates
      * @param y the y coordinate of the visible point in image coordinates
      */
-    virtual void zoomOut(Q_INT32 x, Q_INT32 y) = 0;
+    virtual void zoomOut(qint32 x, qint32 y) = 0;
     
     /**
      * To centre the view on the given point with the given zoom factor.
@@ -126,7 +126,7 @@ public:
      * out as necessary. The view will be centered around the center point
      * of the specified rect.
      */
-    virtual void zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) = 0;
+    virtual void zoomTo(qint32 x, qint32 y, qint32 w, qint32 h) = 0;
 
     /**
      * Make the rect defined by x, y, w and h visible, zooming in or
@@ -156,7 +156,7 @@ public:
     virtual KisPoint viewToWindow(const KisPoint& pt) = 0;
     virtual QRect viewToWindow(const QRect& rc) = 0;
     virtual KisRect viewToWindow(const KisRect& rc) = 0;
-    virtual void viewToWindow(Q_INT32 *x, Q_INT32 *y) = 0;
+    virtual void viewToWindow(qint32 *x, qint32 *y) = 0;
     
     /**
      * Conversion functions from image coordinates to view coordinates
@@ -165,7 +165,7 @@ public:
     virtual KisPoint windowToView(const KisPoint& pt) = 0;
     virtual QRect windowToView(const QRect& rc) = 0;
     virtual KisRect windowToView(const KisRect& rc) = 0;
-    virtual void windowToView(Q_INT32 *x, Q_INT32 *y) = 0;
+    virtual void windowToView(qint32 *x, qint32 *y) = 0;
     
     /**
      * Set the cursor shown when the pointer is over the canvas widget to 

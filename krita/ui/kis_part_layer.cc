@@ -105,7 +105,7 @@ void KisPartLayerImpl::childDeactivated(bool activated)
     }
 }
 
-void KisPartLayerImpl::setX(Q_INT32 x) {
+void KisPartLayerImpl::setX(qint32 x) {
     QRect rect = m_doc->geometry();
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
@@ -114,7 +114,7 @@ void KisPartLayerImpl::setX(Q_INT32 x) {
     m_doc->setGeometry(rect);
 }
 
-void KisPartLayerImpl::setY(Q_INT32 y) {
+void KisPartLayerImpl::setY(qint32 y) {
     QRect rect = m_doc->geometry();
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
@@ -123,14 +123,14 @@ void KisPartLayerImpl::setY(Q_INT32 y) {
     m_doc->setGeometry(rect);
 }
 
-void KisPartLayerImpl::paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h) {
+void KisPartLayerImpl::paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h) {
     uchar *j = img.bits();
     QRect rect = m_doc->geometry();
 
     for (int y2 = y; y2 < h + y; ++y2) {
         for (int x2 = x; x2 < w + x; ++x2) {
             if (!rect.contains(x2, y2)) {
-                Q_UINT8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
+                quint8 g = (*(j + 0)  + *(j + 1 ) + *(j + 2 )) / 9;
                 *(j+0) = 165+g;
                 *(j+1) = 128+g;
                 *(j+2) = 128+g;
@@ -186,7 +186,7 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
     return m_cache;
 }
 
-QImage KisPartLayerImpl::createThumbnail(Q_INT32 w, Q_INT32 h) {
+QImage KisPartLayerImpl::createThumbnail(qint32 w, qint32 h) {
     QRect bounds(exactBounds());
     QPixmap pm(w, h);
     QPainter painter(&pm);

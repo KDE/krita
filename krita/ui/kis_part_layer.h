@@ -92,14 +92,14 @@ public:
     void setDocType(const QString& type) { m_docType = type; }
     QString docType() const { return m_docType; }
 
-    virtual void setX(Q_INT32 x);
-    virtual void setY(Q_INT32 y);
-    virtual Q_INT32 x() const { return m_doc->geometry() . x(); }
-    virtual Q_INT32 y() const { return m_doc->geometry() . y(); } //m_paintLayer->y(); }
+    virtual void setX(qint32 x);
+    virtual void setY(qint32 y);
+    virtual qint32 x() const { return m_doc->geometry() . x(); }
+    virtual qint32 y() const { return m_doc->geometry() . y(); } //m_paintLayer->y(); }
     virtual QRect extent() const { return m_doc->geometry(); }
     virtual QRect exactBounds() const { return m_doc->geometry(); }
 
-    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+    virtual QImage createThumbnail(qint32 w, qint32 h);
 
     virtual bool accept(KisLayerVisitor& visitor) {
         return visitor.visit(this);
@@ -107,7 +107,7 @@ public:
 
     virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r);
 
-    virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
 
     virtual bool saveToXML(QDomDocument doc, QDomElement elem);
 private slots:

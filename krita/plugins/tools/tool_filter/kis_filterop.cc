@@ -74,9 +74,9 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    Q_INT32 x;
+    qint32 x;
     double xFraction;
-    Q_INT32 y;
+    qint32 y;
     double yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
@@ -88,8 +88,8 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     m_painter->setPressure(info.pressure);
 
-    Q_INT32 maskWidth = mask->width();
-    Q_INT32 maskHeight = mask->height();
+    qint32 maskWidth = mask->width();
+    qint32 maskHeight = mask->height();
 
     // Create a temporary paint device
     KisPaintDeviceSP tmpDev = new KisPaintDevice(colorSpace, "filterop tmpdev");
@@ -112,7 +112,7 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         int x=0;
         while(! hiter.isDone())
         {
-            Q_UINT8 alpha = mask->alphaAt( x++, y );
+            quint8 alpha = mask->alphaAt( x++, y );
             colorSpace->setAlpha(hiter.rawData(), alpha, 1);
 
             ++hiter;
@@ -131,10 +131,10 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    Q_INT32 sx = dstRect.x() - x;
-    Q_INT32 sy = dstRect.y() - y;
-    Q_INT32 sw = dstRect.width();
-    Q_INT32 sh = dstRect.height();
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
 
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev.data(),

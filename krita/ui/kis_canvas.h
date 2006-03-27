@@ -172,28 +172,28 @@ public:
         void setEnabled(bool enabled);
         bool enabled() const;
 
-        Q_INT32 numAxes() const;
+        qint32 numAxes() const;
 
-        void setXAxis(Q_INT32 axis);
-        void setYAxis(Q_INT32 axis);
-        void setPressureAxis(Q_INT32 axis);
-        void setXTiltAxis(Q_INT32 axis);
-        void setYTiltAxis(Q_INT32 axis);
-        void setWheelAxis(Q_INT32 axis);
-        void setToolIDAxis(Q_INT32 axis);
-        void setSerialNumberAxis(Q_INT32 axis);
+        void setXAxis(qint32 axis);
+        void setYAxis(qint32 axis);
+        void setPressureAxis(qint32 axis);
+        void setXTiltAxis(qint32 axis);
+        void setYTiltAxis(qint32 axis);
+        void setWheelAxis(qint32 axis);
+        void setToolIDAxis(qint32 axis);
+        void setSerialNumberAxis(qint32 axis);
 
-        static const Q_INT32 NoAxis = -1;
-        static const Q_INT32 DefaultAxis = -2;
+        static const qint32 NoAxis = -1;
+        static const qint32 DefaultAxis = -2;
 
-        Q_INT32 xAxis() const;
-        Q_INT32 yAxis() const;
-        Q_INT32 pressureAxis() const;
-        Q_INT32 xTiltAxis() const;
-        Q_INT32 yTiltAxis() const;
-        Q_INT32 wheelAxis() const;
-        Q_INT32 toolIDAxis() const;
-        Q_INT32 serialNumberAxis() const;
+        qint32 xAxis() const;
+        qint32 yAxis() const;
+        qint32 pressureAxis() const;
+        qint32 xTiltAxis() const;
+        qint32 yTiltAxis() const;
+        qint32 wheelAxis() const;
+        qint32 toolIDAxis() const;
+        qint32 serialNumberAxis() const;
 
         void readSettingsFromConfig();
         void writeSettingsToConfig();
@@ -212,7 +212,7 @@ public:
         public:
             State() {}
             State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
-                  Q_UINT32 toolID, Q_UINT32 serialNumber);
+                  quint32 toolID, quint32 serialNumber);
 
             // Position, pressure and wheel are normalised to 0 - 1
             KisPoint pos() const { return m_pos; }
@@ -221,16 +221,16 @@ public:
             KisVector2D tilt() const { return m_tilt; }
             double wheel() const { return m_wheel; }
             // Wacom tool id and serial number of device.
-            Q_UINT32 toolID() const { return m_toolID; }
-            Q_UINT32 serialNumber() const { return m_serialNumber; }
+            quint32 toolID() const { return m_toolID; }
+            quint32 serialNumber() const { return m_serialNumber; }
 
         private:
             KisPoint m_pos;
             double m_pressure;
             KisVector2D m_tilt;
             double m_wheel;
-            Q_UINT32 m_toolID;
-            Q_UINT32 m_serialNumber;
+            quint32 m_toolID;
+            quint32 m_serialNumber;
         };
 
         State translateAxisData(const int *axisData) const;
@@ -248,14 +248,14 @@ public:
 
         bool m_enabled;
 
-        Q_INT32 m_xAxis;
-        Q_INT32 m_yAxis;
-        Q_INT32 m_pressureAxis;
-        Q_INT32 m_xTiltAxis;
-        Q_INT32 m_yTiltAxis;
-        Q_INT32 m_wheelAxis;
-        Q_INT32 m_toolIDAxis;
-        Q_INT32 m_serialNumberAxis;
+        qint32 m_xAxis;
+        qint32 m_yAxis;
+        qint32 m_pressureAxis;
+        qint32 m_xTiltAxis;
+        qint32 m_yTiltAxis;
+        qint32 m_wheelAxis;
+        qint32 m_toolIDAxis;
+        qint32 m_serialNumberAxis;
 
         Q3ValueVector<XAxisInfo> m_axisInfo;
 

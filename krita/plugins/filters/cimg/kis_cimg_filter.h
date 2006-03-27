@@ -36,7 +36,7 @@ public:
     
 public:
 
-    Q_INT32 nb_iter;    // Number of smoothing iterations
+    qint32 nb_iter;    // Number of smoothing iterations
     double dt;         // Time step
     double dlength;    // Integration step
     double dtheta;     // Angular step (in degrees)

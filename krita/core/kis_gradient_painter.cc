@@ -246,7 +246,7 @@ namespace {
             distance2 = fabs(distance2);
         }
 
-        double t = QMAX(distance1, distance2) / m_vectorLength;
+        double t = qMax(distance1, distance2) / m_vectorLength;
 
         return t;
     }
@@ -487,10 +487,10 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
-                       Q_INT32 startx,
-                       Q_INT32 starty,
-                       Q_INT32 width,
-                       Q_INT32 height)
+                       qint32 startx,
+                       qint32 starty,
+                       qint32 width,
+                       qint32 height)
 {
     m_cancelRequested = false;
 
@@ -546,8 +546,8 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
         height = r.height();
     }
 
-    Q_INT32 endx = startx + width - 1;
-    Q_INT32 endy = starty + height - 1;
+    qint32 endx = startx + width - 1;
+    qint32 endy = starty + height - 1;
 
     QImage layer (width, height, 32);
     layer.setAlphaBuffer(true);
@@ -574,7 +574,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             }
 
             QColor color;
-            Q_UINT8 opacity;
+            quint8 opacity;
 
             m_gradient->colorAt(t, &color, &opacity);
 
@@ -602,14 +602,14 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     if (!m_cancelRequested && antiAliasThreshold < 1 - DBL_EPSILON) {
 
         emit notifyProgressStage(i18n("Anti-aliasing gradient..."), lastProgressPercent);
-        Q_UINT8 * layerPointer = layer.bits();
+        quint8 * layerPointer = layer.bits();
         for (int y = starty; y <= endy; y++) {
             for (int x = startx; x <= endx; x++) {
 
                 double maxDistance = 0;
 
                 QColor thisPixel(layerPointer[2], layerPointer[1], layerPointer[0]);
-                Q_UINT8 thisPixelOpacity = layerPointer[3];
+                quint8 thisPixelOpacity = layerPointer[3];
 
                 for (int yOffset = -1; yOffset < 2; yOffset++) {
                     for (int xOffset = -1; xOffset < 2; xOffset++) {
@@ -621,9 +621,9 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                             if (sampleX >= startx && sampleX <= endx && sampleY >= starty && sampleY <= endy) {
                                 uint x = sampleX - startx;
                                 uint y = sampleY - starty;
-                                Q_UINT8 * pixelPos = layer.bits() + (y * width * 4) + (x * 4);
+                                quint8 * pixelPos = layer.bits() + (y * width * 4) + (x * 4);
                                 QColor color(*(pixelPos +2), *(pixelPos + 1), *pixelPos);
-                                Q_UINT8 opacity = *(pixelPos + 3);
+                                quint8 opacity = *(pixelPos + 3);
 
                                 double dRed = (color.red() * opacity - thisPixel.red() * thisPixelOpacity) / 65535.0;
                                 double dGreen = (color.green() * opacity - thisPixel.green() * thisPixelOpacity) / 65535.0;
@@ -665,7 +665,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                             }
 
                             QColor color;
-                            Q_UINT8 opacity;
+                            quint8 opacity;
 
                             m_gradient->colorAt(t, &color, &opacity);
 
@@ -706,7 +706,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     }
 
     if (!m_cancelRequested) {
-        kdDebug() << "Have we got a selection? " << m_device->hasSelection() << endl;
+        kDebug() << "Have we got a selection? " << m_device->hasSelection() << endl;
         KisPaintDeviceSP dev = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temporary device for gradient");
         dev->writeBytes(layer.bits(), startx, starty, width, height);
         bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);

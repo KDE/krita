@@ -58,17 +58,17 @@ public:
     /**
      * Create a palette from the colours in an image
      */
-    KisPalette(const QImage * img, Q_INT32 nColors, const QString & name);
+    KisPalette(const QImage * img, qint32 nColors, const QString & name);
 
     /**
      * Create a palette from the colours in a paint device
      */
-    KisPalette(const KisPaintDeviceSP device, Q_INT32 nColors, const QString & name);
+    KisPalette(const KisPaintDeviceSP device, qint32 nColors, const QString & name);
 
     /**
      * Create a palette from the colours in a gradient
      */
-    KisPalette(const KisGradient * gradient, Q_INT32 nColors, const QString & name);
+    KisPalette(const KisGradient * gradient, qint32 nColors, const QString & name);
 
     /**
      * Load a palette from a file. This can be a Gimp
@@ -93,8 +93,8 @@ public:
 
     void add(const KisPaletteEntry &);
     void remove(const KisPaletteEntry &);
-    KisPaletteEntry getColor(Q_UINT32 index);
-    Q_INT32 nColors();
+    KisPaletteEntry getColor(quint32 index);
+    qint32 nColors();
 
 private:
     bool init();
@@ -106,7 +106,7 @@ private:
     QImage m_img;
     QString m_name;
     QString m_comment;
-    Q_INT32 m_columns;
+    qint32 m_columns;
     Q3ValueVector<KisPaletteEntry> m_colors;
 
 };

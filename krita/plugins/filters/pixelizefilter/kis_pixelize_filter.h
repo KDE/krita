@@ -27,15 +27,15 @@
 class KisPixelizeFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisPixelizeFilterConfiguration(Q_UINT32 pixelWidth, Q_UINT32 pixelHeight)
+    KisPixelizeFilterConfiguration(quint32 pixelWidth, quint32 pixelHeight)
         : KisFilterConfiguration( "pixelize", 1 )
         {
             setProperty("pixelWidth", pixelWidth);
             setProperty("pixelHeight", pixelHeight);
         };
 public:
-    inline Q_UINT32 pixelWidth() { return getInt("pixelWidth"); };
-    inline Q_UINT32 pixelHeight() {return getInt("pixelHeight"); };
+    inline quint32 pixelWidth() { return getInt("pixelWidth"); };
+    inline quint32 pixelHeight() {return getInt("pixelHeight"); };
 };
 
 class KisPixelizeFilter : public KisFilter

@@ -127,23 +127,23 @@ void KisToolSelectRectangular::move(KisMoveEvent *e)
     if (m_subject && m_selecting) {
         paintOutline();
         // move (alt) or resize rectangle
-        if (e->state() & Qt::AltButton) {
+        if (e->state() & Qt::AltModifier) {
             KisPoint trans = e->pos() - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else {
-            KisPoint diag = e->pos() - (e->state() & Qt::ControlButton
+            KisPoint diag = e->pos() - (e->state() & Qt::ControlModifier
                     ? m_centerPos : m_startPos);
             // square?
-            if (e->state() & Qt::ShiftButton) {
-                double size = QMAX(fabs(diag.x()), fabs(diag.y()));
+            if (e->state() & Qt::ShiftModifier) {
+                double size = qMax(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
                 diag = KisPoint(w, h);
             }
 
             // resize around center point?
-            if (e->state() & Qt::ControlButton) {
+            if (e->state() & Qt::ControlModifier) {
                 m_startPos = m_centerPos - diag;
                 m_endPos = m_centerPos + diag;
             } else {

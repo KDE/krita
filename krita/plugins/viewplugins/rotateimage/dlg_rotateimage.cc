@@ -68,7 +68,7 @@ void DlgRotateImage::slotAngleValueChanged( int )
     m_page->radioCustom->setChecked(true);
 }
 
-void DlgRotateImage::setAngle(Q_UINT32 angle)
+void DlgRotateImage::setAngle(quint32 angle)
 {
     if (angle == 90) {
         m_page->radio90->setChecked(true);
@@ -91,7 +91,7 @@ void DlgRotateImage::setAngle(Q_UINT32 angle)
 
 }
 
-Q_INT32 DlgRotateImage::angle()
+qint32 DlgRotateImage::angle()
 {
     double angle = 0;
     if (m_page->radio90->isChecked()) {
@@ -107,10 +107,10 @@ Q_INT32 DlgRotateImage::angle()
         angle = qRound(m_page->intCustom->value());
     }
     if (m_page->radioCW->isChecked()) {
-        return Q_INT32(angle);
+        return qint32(angle);
     }
     else {
-        return Q_INT32(-angle);
+        return qint32(-angle);
     }
 }
 

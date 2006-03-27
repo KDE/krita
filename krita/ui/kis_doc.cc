@@ -283,7 +283,7 @@ QDomDocument KisDoc::saveXML()
     QDomElement root = doc.documentElement();
 
     root.setAttribute("editor", "Krita");
-    root.setAttribute("depth", sizeof(Q_UINT8));
+    root.setAttribute("depth", sizeof(quint8));
     root.setAttribute("syntaxVersion", "1");
 
     root.appendChild(saveImage(doc, m_currentImage));
@@ -373,7 +373,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("x-res", img->xRes());
     image.setAttribute("y-res", img->yRes());
 
-    Q_UINT32 count=0;
+    quint32 count=0;
     KisSaveXmlVisitor visitor(doc, image, count, true);
 
     m_currentImage->rootLayer()->accept(visitor);
@@ -390,8 +390,8 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
     QDomNode child;
     KisImageSP img;
     QString name;
-    Q_INT32 width;
-    Q_INT32 height;
+    qint32 width;
+    qint32 height;
     QString description;
     QString profileProductName;
     double xres;
@@ -440,7 +440,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
         }
 
         if (cs == 0) {
-            kdWarning(DBG_AREA_FILE) << "Could not open colorspace\n";
+            kWarning(DBG_AREA_FILE) << "Could not open colorspace\n";
             return 0;
         }
 
@@ -473,7 +473,7 @@ void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLaye
                     KisLayerSP layer = loadLayer(child.toElement(), img);
 
                     if (!layer) {
-                        kdWarning(DBG_AREA_FILE) << "Could not load layer\n";
+                        kWarning(DBG_AREA_FILE) << "Could not load layer\n";
                     }
                     else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of layers.
@@ -493,9 +493,9 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     // compatibilty.
     QString attr;
     QString name;
-    Q_INT32 x;
-    Q_INT32 y;
-    Q_INT32 opacity;
+    qint32 x;
+    qint32 y;
+    qint32 opacity;
     bool visible;
     bool locked;
 
@@ -514,7 +514,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     if ((attr = element.attribute("opacity")).isNull())
         return 0;
 
-    if ((opacity = attr.toInt()) < 0 || opacity > Q_UINT8_MAX)
+    if ((opacity = attr.toInt()) < 0 || opacity > quint8_MAX)
         opacity = OPACITY_OPAQUE;
 
 
@@ -557,14 +557,14 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     if(attr == "partlayer")
         return loadPartLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
 
-    kdWarning(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
+    kWarning(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
     return 0;
 }
 
 
 KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
-                                  QString name, Q_INT32 x, Q_INT32 y,
-                                  Q_INT32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
+                                  QString name, qint32 x, qint32 y,
+                                  qint32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
 {
     QString attr;
     KisPaintLayerSP layer;
@@ -606,7 +606,7 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
 }
 
 KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
-                                       QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                                       QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                        KisCompositeOp compositeOp)
 {
     QString attr;
@@ -627,7 +627,7 @@ KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP im
 }
 
 KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, KisImageSP img,
-                                             QString name, Q_INT32 x, Q_INT32 y, Q_INT32 opacity, bool visible, bool locked,
+                                             QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
                                              KisCompositeOp compositeOp)
 {
     QString attr;
@@ -636,13 +636,13 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
 
     if ((filtername = element.attribute("filtername")).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
-        kdWarning(DBG_AREA_FILE) << "No filter in adjustment layer" << endl;
+        kWarning(DBG_AREA_FILE) << "No filter in adjustment layer" << endl;
         return 0;
     }
 
     KisFilter * f = KisFilterRegistry::instance()->get(filtername);
     if (!f) {
-        kdWarning(DBG_AREA_FILE) << "No filter for filtername " << filtername << "\n";
+        kWarning(DBG_AREA_FILE) << "No filter for filtername " << filtername << "\n";
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
@@ -668,7 +668,7 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
 }
 
 KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
-                                     QString name, Q_INT32 /*x*/, Q_INT32 /*y*/, Q_INT32 opacity,
+                                     QString name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
                                       KisCompositeOp compositeOp) {
     KisChildDoc* child = new KisChildDoc(this);
@@ -676,7 +676,7 @@ KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
     QDomElement partElement = element.namedItem("object").toElement();
 
     if (partElement.isNull()) {
-        kdWarning() << "loadPartLayer failed with partElement isNull" << endl;
+        kWarning() << "loadPartLayer failed with partElement isNull" << endl;
         return 0;
     }
 
@@ -700,7 +700,7 @@ bool KisDoc::completeSaving(KoStore *store)
     QString uri = url().url();
     QString location;
     bool external = isStoredExtern();
-    Q_INT32 totalSteps = 0;
+    qint32 totalSteps = 0;
 
     if (!m_currentImage) return false;
 
@@ -710,7 +710,7 @@ bool KisDoc::completeSaving(KoStore *store)
     setIOSteps(totalSteps + 1);
 
     // Save the layers data
-    Q_UINT32 count=0;
+    quint32 count=0;
     KisSaveVisitor visitor(m_currentImage, store, count);
 
     if(external)
@@ -753,7 +753,7 @@ bool KisDoc::completeLoading(KoStore *store)
     QString uri = url().url();
     QString location;
     bool external = isStoredExtern();
-    Q_INT32 totalSteps = 0;
+    qint32 totalSteps = 0;
 
     totalSteps = (m_currentImage)->nlayers();
 
@@ -813,7 +813,7 @@ QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
 }
 
 
-KoDocument* KisDoc::hitTest(const QPoint &pos, const QWMatrix& matrix) {
+KoDocument* KisDoc::hitTest(const QPoint &pos, const QMatrix& matrix) {
     KoDocument* doc = super::hitTest(pos, matrix);
     if (doc && doc != this) {
         // We hit a child document. We will only acknowledge we hit it, if the hit child
@@ -841,7 +841,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 }
 
 
-KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * colorstrategy)
+KisImageSP KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * colorstrategy)
 {
     if (!init())
         return false;
@@ -872,14 +872,14 @@ KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, 
     return img;
 }
 
-bool KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution)
+bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution)
 {
     if (!init())
         return false;
 
     KisConfig cfg;
 
-    Q_UINT8 opacity = OPACITY_OPAQUE;//bgColor.getAlpha();
+    quint8 opacity = OPACITY_OPAQUE;//bgColor.getAlpha();
     KisImageSP img;
     KisPaintLayer *layer;
 
@@ -1028,7 +1028,7 @@ void KisDoc::addCommand(KCommand *cmd)
             emit sigCommandExecuted();
         }
     } else {
-        kdDebug() << "Deleting command\n";
+        kDebug() << "Deleting command\n";
         delete cmd;
     }
 }
@@ -1042,22 +1042,22 @@ void KisDoc::setUndo(bool undo)
     }
 }
 
-Q_INT32 KisDoc::undoLimit() const
+qint32 KisDoc::undoLimit() const
 {
     return m_cmdHistory->undoLimit();
 }
 
-void KisDoc::setUndoLimit(Q_INT32 limit)
+void KisDoc::setUndoLimit(qint32 limit)
 {
     m_cmdHistory->setUndoLimit(limit);
 }
 
-Q_INT32 KisDoc::redoLimit() const
+qint32 KisDoc::redoLimit() const
 {
     return m_cmdHistory->redoLimit();
 }
 
-void KisDoc::setRedoLimit(Q_INT32 limit)
+void KisDoc::setRedoLimit(qint32 limit)
 {
     m_cmdHistory->setRedoLimit(limit);
 }
@@ -1080,7 +1080,7 @@ void KisDoc::slotCommandExecuted(KCommand *command)
 
 }
 
-void KisDoc::slotUpdate(KisImageSP, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
+void KisDoc::slotUpdate(KisImageSP, quint32 x, quint32 y, quint32 w, quint32 h)
 {
     QRect rc(x, y, w, h);
 
@@ -1092,7 +1092,7 @@ bool KisDoc::undo() const
     return m_undo;
 }
 
-void KisDoc::setIOSteps(Q_INT32 nsteps)
+void KisDoc::setIOSteps(qint32 nsteps)
 {
     m_ioProgressTotalSteps = nsteps * 100;
     m_ioProgressBase = 0;
@@ -1109,7 +1109,7 @@ void KisDoc::IODone()
     emitProgress(-1);
 }
 
-void KisDoc::slotIOProgress(Q_INT8 percentage)
+void KisDoc::slotIOProgress(qint8 percentage)
 {
     KApplication *app = KApplication::kApplication();
 

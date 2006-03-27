@@ -51,8 +51,8 @@ public: // Tile management
     void maySwapTile(KisTile* tile);
 
 public: // Pool management
-    Q_UINT8* requestTileData(Q_INT32 pixelSize);
-    void dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize);
+    quint8* requestTileData(qint32 pixelSize);
+    void dontNeedTileData(quint8* data, qint32 pixelSize);
 
 public: // Configuration
     void configChanged();
@@ -67,31 +67,31 @@ private:
     KTempFile m_tempFile;
     int m_fileSize;
     // For use when any swap-allocating function failed; the risk of swap allocating failing
-    // again is too big, and we'd clutter the logs with kdWarnings otherwise
+    // again is too big, and we'd clutter the logs with kWarnings otherwise
     bool m_swapForbidden;
 
     struct TileInfo { KisTile *tile; bool inMem; int filePos; int size; int fsize;
         bool validNode; Q3ValueList<TileInfo*>::iterator node; };
-    typedef struct { Q_UINT8 *pointer; int filePos; int size; } FreeInfo;
+    typedef struct { quint8 *pointer; int filePos; int size; } FreeInfo;
     typedef QMap<KisTile*, TileInfo*> TileMap;
     typedef Q3ValueList<TileInfo*> TileList;
     typedef Q3ValueList<FreeInfo*> FreeList;
     typedef Q3ValueVector<FreeList> FreeListList;
-    typedef Q3ValueList<Q_UINT8*> PoolFreeList;
+    typedef Q3ValueList<quint8*> PoolFreeList;
 
     TileMap m_tileMap;
     TileList m_swappableList;
     FreeListList m_freeLists;
-    Q_INT32 m_maxInMem;
-    Q_INT32 m_currentInMem;
-    Q_UINT32 m_swappiness;
-    Q_INT32 m_tileSize; // size of a tile if it used 1 byte per pixel
+    qint32 m_maxInMem;
+    qint32 m_currentInMem;
+    quint32 m_swappiness;
+    qint32 m_tileSize; // size of a tile if it used 1 byte per pixel
     unsigned long m_bytesInMem;
     unsigned long m_bytesTotal;
 
-    Q_UINT8 **m_pools;
-    Q_INT32 *m_poolPixelSizes;
-    Q_INT32 m_tilesPerPool;
+    quint8 **m_pools;
+    qint32 *m_poolPixelSizes;
+    qint32 m_tilesPerPool;
     PoolFreeList *m_poolFreeList;
     QMutex * m_poolMutex;
     QMutex * m_swapMutex;
@@ -104,9 +104,9 @@ private:
     void toSwap(TileInfo* info);
     void doSwapping();
     void printInfo();
-    Q_UINT8* findTileFor(Q_INT32 pixelSize);
-    bool isPoolTile(Q_UINT8* data, Q_INT32 pixelSize);
-    void reclaimTileToPool(Q_UINT8* data, Q_INT32 pixelSize);
+    quint8* findTileFor(qint32 pixelSize);
+    bool isPoolTile(quint8* data, qint32 pixelSize);
+    void reclaimTileToPool(quint8* data, qint32 pixelSize);
 
 };
 

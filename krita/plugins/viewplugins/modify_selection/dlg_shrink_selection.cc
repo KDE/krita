@@ -55,12 +55,12 @@ DlgShrinkSelection::~DlgShrinkSelection()
     delete m_page;
 }
 
-Q_INT32 DlgShrinkSelection::xradius()
+qint32 DlgShrinkSelection::xradius()
 {
     return m_page->radiusSpinBox->value();
 }
 
-Q_INT32 DlgShrinkSelection::yradius()
+qint32 DlgShrinkSelection::yradius()
 {
     return m_page->radiusSpinBox->value();
 }

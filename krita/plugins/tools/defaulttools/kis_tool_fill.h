@@ -63,9 +63,9 @@ public slots:
 
 private:
     int m_threshold;
-    Q_INT32 m_depth;
+    qint32 m_depth;
     KisLayerSP m_lay;
-    Q_UINT8* m_oldColor, *m_color;
+    quint8* m_oldColor, *m_color;
     KisPainter *m_painter;
     KisCanvasSubject *m_subject;
     KisImageSP m_currentImage;

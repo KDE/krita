@@ -95,7 +95,7 @@ private:
     KisHistogramProducerSP m_currentProducer;
     Q3ValueVector<KisChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()
-    Q3ValueVector<Q_INT32> m_channelToOffset;
+    Q3ValueVector<qint32> m_channelToOffset;
     QStringList m_channelStrings;
     bool m_color;
     double m_from;

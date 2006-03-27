@@ -55,12 +55,12 @@ DlgGrowSelection::~DlgGrowSelection()
     delete m_page;
 }
 
-Q_INT32 DlgGrowSelection::xradius()
+qint32 DlgGrowSelection::xradius()
 {
     return m_page->radiusSpinBox->value();
 }
 
-Q_INT32 DlgGrowSelection::yradius()
+qint32 DlgGrowSelection::yradius()
 {
     return m_page->radiusSpinBox->value();
 }

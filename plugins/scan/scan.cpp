@@ -62,7 +62,7 @@ void Scan::slotScan()
         {
 	    KMessageBox::sorry(0L, i18n("No scan-service available"),
 			       i18n("Scanner Plugin"));
-	    kdDebug(31000) << "*** No Scan-service available, aborting!" << endl;
+	    kDebug(31000) << "*** No Scan-service available, aborting!" << endl;
 	    return;
 	}
     }

@@ -86,14 +86,14 @@ void KisSobelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
     sobel(rect, src, dst, doHorizontally, doVertically, keepSign, makeOpaque);
 }
 
-void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
+void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h)
 {
     if (y > h -1) y = h -1;
-    Q_UINT32 pixelSize = src->pixelSize();
+    quint32 pixelSize = src->pixelSize();
 
     src->readBytes( data, x, y, w, 1 );
 
-    for (Q_UINT32 b = 0; b < pixelSize; b++) {
+    for (quint32 b = 0; b < pixelSize; b++) {
         int offset = pixelSize - b;
         data[-offset] = data[b];
         data[w * pixelSize + b] = data[(w - 1) * pixelSize + b];
@@ -106,45 +106,45 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x
 void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDeviceSP dst, bool doHorizontal, bool doVertical, bool keepSign, bool makeOpaque)
 {
     QRect rect = rc; //src->exactBounds();
-    Q_UINT32 x = rect.x();
-    Q_UINT32 y = rect.y();
-    Q_UINT32 width = rect.width();
-    Q_UINT32 height = rect.height();
-    Q_UINT32 pixelSize = src->pixelSize();
+    quint32 x = rect.x();
+    quint32 y = rect.y();
+    quint32 width = rect.width();
+    quint32 height = rect.height();
+    quint32 pixelSize = src->pixelSize();
 
     setProgressTotalSteps( height );
     setProgressStage(i18n("Applying sobel filter..."),0);
 
     /*  allocate row buffers  */
-    Q_UINT8* prevRow = new Q_UINT8[ (width + 2) * pixelSize];
+    quint8* prevRow = new quint8[ (width + 2) * pixelSize];
     Q_CHECK_PTR(prevRow);
-    Q_UINT8* curRow = new Q_UINT8[ (width + 2) * pixelSize];
+    quint8* curRow = new quint8[ (width + 2) * pixelSize];
     Q_CHECK_PTR(curRow);
-    Q_UINT8* nextRow = new Q_UINT8[ (width + 2) * pixelSize];
+    quint8* nextRow = new quint8[ (width + 2) * pixelSize];
     Q_CHECK_PTR(nextRow);
-    Q_UINT8* dest = new Q_UINT8[ width  * pixelSize];
+    quint8* dest = new quint8[ width  * pixelSize];
     Q_CHECK_PTR(dest);
 
-    Q_UINT8* pr = prevRow + pixelSize;
-    Q_UINT8* cr = curRow + pixelSize;
-    Q_UINT8* nr = nextRow + pixelSize;
+    quint8* pr = prevRow + pixelSize;
+    quint8* cr = curRow + pixelSize;
+    quint8* nr = nextRow + pixelSize;
 
     prepareRow (src, pr, x, y - 1, width, height);
     prepareRow (src, cr, x, y, width, height);
 
-    Q_UINT32 counter =0;
-    Q_UINT8* d;
-    Q_UINT8* tmp;
-    Q_INT32 gradient, horGradient, verGradient;
+    quint32 counter =0;
+    quint8* d;
+    quint8* tmp;
+    qint32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution
-    for (Q_UINT32 row = 0; row < height; row++)
+    for (quint32 row = 0; row < height; row++)
         {
 
             // prepare the next row
             prepareRow (src, nr, x, row + 1, width, height);
             d = dest;
 
-            for (Q_UINT32 col = 0; col < width * pixelSize; col++)
+            for (quint32 col = 0; col < width * pixelSize; col++)
                 {
                     int positive = col + pixelSize;
                     int negative = col - pixelSize;
@@ -157,7 +157,7 @@ void KisSobelFilter::sobel(const QRect & rc, KisPaintDeviceSP src, KisPaintDevic
                                    ((pr[negative] + 2 * cr[negative] + nr[negative]) -
                                     (pr[positive] + 2 * cr[positive] + nr[positive]))
                                    : 0);
-                    gradient = (Q_INT32)((doVertical && doHorizontal) ?
+                    gradient = (qint32)((doVertical && doHorizontal) ?
                         (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0
                         : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
                         : (ROUND (QABS (horGradient + verGradient) / 4.0))));

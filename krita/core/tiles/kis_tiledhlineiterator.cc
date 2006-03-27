@@ -22,7 +22,7 @@
 #include "kis_tile_global.h"
 #include "kis_tilediterator.h"
 
-KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  Q_INT32 x, Q_INT32 y, Q_INT32 w, bool writable) :
+KisTiledHLineIterator::KisTiledHLineIterator( KisTiledDataManager *ndevice,  qint32 x, qint32 y, qint32 w, bool writable) :
     KisTiledIterator(ndevice),
     m_right(x+w-1), m_left(x)
 {
@@ -137,7 +137,7 @@ void KisTiledHLineIterator::prevTile()
     }
 }
 
-Q_INT32 KisTiledHLineIterator::nConseqHPixels() const
+qint32 KisTiledHLineIterator::nConseqHPixels() const
 {
     return m_rightInTile - m_xInTile + 1;
 }

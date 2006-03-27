@@ -64,12 +64,12 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
     if(config !=0)
     {
         KisWaveletNoiseReductionConfiguration* configWNRC = (KisWaveletNoiseReductionConfiguration*)config;
-        kdDebug() << "threshold: " << configWNRC->threshold() << endl;
+        kDebug() << "threshold: " << configWNRC->threshold() << endl;
         threshold = configWNRC->threshold();
     }
 
 
-    Q_INT32 depth = src->colorSpace()->nColorChannels();
+    qint32 depth = src->colorSpace()->nColorChannels();
 
     int size;
     int maxrectsize = (rect.height() < rect.width()) ? rect.width() : rect.height();
@@ -80,9 +80,9 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 
 
-    kdDebug(41005) << size << " " << maxrectsize << " " << rect.x() << " " << rect.y() << endl;
+    kDebug(41005) << size << " " << maxrectsize << " " << rect.x() << " " << rect.y() << endl;
 
-    kdDebug(41005) << "Transforming..." << endl;
+    kDebug(41005) << "Transforming..." << endl;
     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = 0;
     KisMathToolbox::KisWavelet* wav = 0;
@@ -101,7 +101,7 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
         return;
     }
 
-    kdDebug(41005) << "Thresholding..." << endl;
+    kDebug(41005) << "Thresholding..." << endl;
     float* fin = wav->coeffs + wav->depth*wav->size*wav->size;
     setProgressStage( i18n("Thresholding") ,progress());
     for(float* it = wav->coeffs + wav->depth; it < fin; it++)
@@ -117,7 +117,7 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
         incProgress();
     }
 
-    kdDebug(41005) << "Untransforming..." << endl;
+    kDebug(41005) << "Untransforming..." << endl;
 
     setProgressStage( i18n("Fast wavelet untransformation") ,progress());
     mathToolbox->fastWaveletUntransformation( dst, rect, wav, buff);

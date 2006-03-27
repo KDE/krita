@@ -31,9 +31,9 @@ class KisPaintLayer : public KisLayer {
     Q_OBJECT
 
 public:
-    KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisPaintDeviceSP dev);
-    KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity);
-    KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity, KisColorSpace * colorSpace);
+    KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
+    KisPaintLayer(KisImage *img, const QString& name, quint8 opacity);
+    KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KisColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 
@@ -46,25 +46,25 @@ public:
     // Called when another layer is made active
     virtual void deactivate() {};
 
-    virtual Q_INT32 x() const;
-    virtual void setX(Q_INT32 x);
+    virtual qint32 x() const;
+    virtual void setX(qint32 x);
 
-    virtual Q_INT32 y() const;
-    virtual void setY(Q_INT32 y);
+    virtual qint32 y() const;
+    virtual void setY(qint32 y);
 
     virtual QRect extent() const;
     virtual QRect exactBounds() const;
 
-    virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void paintSelection(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
     virtual void paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
-    virtual void paintMaskInactiveLayers(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
 
-    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+    virtual QImage createThumbnail(qint32 w, qint32 h);
 
     virtual bool accept(KisLayerVisitor &v)
         {
-//            kdDebug(41001) << "\tPAINT\t" << name()
+//            kDebug(41001) << "\tPAINT\t" << name()
 //                    << " dirty: " << dirty() << "\n";
             return v.visit(this);
         };

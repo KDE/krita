@@ -23,11 +23,11 @@
 #include "kis_tileddatamanager.h"
 #include "kis_tilemanager.h"
 
-const Q_INT32 KisTile::WIDTH = 64;
-const Q_INT32 KisTile::HEIGHT = 64;
+const qint32 KisTile::WIDTH = 64;
+const qint32 KisTile::HEIGHT = 64;
 
 
-KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, const Q_UINT8 *defPixel)
+KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel)
 {
     m_pixelSize = pixelSize;
     m_data = 0;
@@ -43,7 +43,7 @@ KisTile::KisTile(Q_INT32 pixelSize, Q_INT32 col, Q_INT32 row, const Q_UINT8 *def
     setData(defPixel);
 }
 
-KisTile::KisTile(const KisTile& rhs, Q_INT32 col, Q_INT32 row)
+KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
 {
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
@@ -54,7 +54,7 @@ KisTile::KisTile(const KisTile& rhs, Q_INT32 col, Q_INT32 row)
         allocate();
 
         if (rhs.m_data) {
-            memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
+            memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(quint8));
         }
 
         m_col = col;
@@ -77,7 +77,7 @@ KisTile::KisTile(const KisTile& rhs)
         allocate();
 
         if (rhs.m_data) {
-            memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
+            memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(quint8));
         }
 
         KisTileManager::instance()->registerTile(this);
@@ -110,7 +110,7 @@ void KisTile::setNext(KisTile *n)
     m_nextTile = n;
 }
 
-Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y ) const
+quint8 *KisTile::data(qint32 x, qint32 y ) const
 {
     //Q_ASSERT(m_data != 0);
     if (m_data == 0) return 0;
@@ -118,9 +118,9 @@ Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y ) const
     return m_data + m_pixelSize * ( y * WIDTH + x );
 }
 
-void KisTile::setData(const Q_UINT8 *pixel)
+void KisTile::setData(const quint8 *pixel)
 {
-    Q_UINT8 *dst = m_data;
+    quint8 *dst = m_data;
 
     addReader();
     for(int i=0; i <WIDTH * HEIGHT;i++)
@@ -136,7 +136,7 @@ void KisTile::addReader()
     if (m_nReadlock++ == 0)
         KisTileManager::instance()->ensureTileLoaded(this);
     else if (m_nReadlock < 0) {
-        kdDebug(41000) << m_nReadlock << endl;
+        kDebug(41000) << m_nReadlock << endl;
         assert(0);
     }
 }

@@ -107,7 +107,7 @@ KisFiltersIconViewItem::~KisFiltersIconViewItem()
 // ------------------------------------------------
 
 KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name)
-    : KIconView(parent, name)
+    : K3IconView(parent, name)
     , m_original(0)
     , m_profile(0)
 {
@@ -115,7 +115,7 @@ KisFiltersListView::KisFiltersListView(QWidget* parent, const char* name)
 }
 
 KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name)
-    : KIconView(parent, name)
+    : K3IconView(parent, name)
     , m_original(0)
     , m_profile(0)
 {
@@ -129,7 +129,7 @@ KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, const 
 }
 
 KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent, const char * name)
-    : KIconView(parent, name)
+    : K3IconView(parent, name)
     , m_original(device)
     , m_profile(0)
 {

@@ -52,7 +52,7 @@ K_EXPORT_COMPONENT_FACTORY( kritaimageenhancement, KritaImageEnhancementFactory(
 {
     setInstance(KritaImageEnhancementFactory::instance());
 
-    kdDebug(41006) << "Image enhancement filter plugin. Class: "
+    kDebug(41006) << "Image enhancement filter plugin. Class: "
            << className()
            << ", Parent: "
            << parent->className()

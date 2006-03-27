@@ -24,7 +24,7 @@
 #include <kmdcodec.h>
 
 namespace {
-void set16Bit (unsigned char *data, ExifValue::ByteOrder order, const Q_UINT16* value)
+void set16Bit (unsigned char *data, ExifValue::ByteOrder order, const quint16* value)
 {
     switch (order) {
         case ExifValue::BYTE_ORDER_MOTOROLA:
@@ -38,7 +38,7 @@ void set16Bit (unsigned char *data, ExifValue::ByteOrder order, const Q_UINT16* 
     }
 }
 
-void get16Bit (const unsigned char *data, ExifValue::ByteOrder order, Q_UINT16* value)
+void get16Bit (const unsigned char *data, ExifValue::ByteOrder order, quint16* value)
 {
     switch (order) {
         case ExifValue::BYTE_ORDER_MOTOROLA:
@@ -50,7 +50,7 @@ void get16Bit (const unsigned char *data, ExifValue::ByteOrder order, Q_UINT16* 
     }
 }
 
-void get32Bit (const unsigned char *data, ExifValue::ByteOrder order, Q_UINT32* value)
+void get32Bit (const unsigned char *data, ExifValue::ByteOrder order, quint32* value)
 {
     switch (order) {
         case ExifValue::BYTE_ORDER_MOTOROLA:
@@ -60,7 +60,7 @@ void get32Bit (const unsigned char *data, ExifValue::ByteOrder order, Q_UINT32* 
     }
 }
 
-void set32Bit(unsigned char *data, ExifValue::ByteOrder order, const Q_UINT32* value)
+void set32Bit(unsigned char *data, ExifValue::ByteOrder order, const quint32* value)
 {
     switch (order) {
         case ExifValue::BYTE_ORDER_MOTOROLA:
@@ -78,17 +78,17 @@ void set32Bit(unsigned char *data, ExifValue::ByteOrder order, const Q_UINT32* v
     }
 }
 
-void get64Bit (const unsigned char *data, ExifValue::ByteOrder order, Q_UINT64* value)
+void get64Bit (const unsigned char *data, ExifValue::ByteOrder order, quint64* value)
 {
     switch (order) {
         case ExifValue::BYTE_ORDER_MOTOROLA:
-            *value = (((Q_UINT64)data[0] << 56) | ((Q_UINT64)data[1] << 48) | ((Q_UINT64)data[2] << 40) | ((Q_UINT64)data[3] << 32) | ((Q_UINT64)data[4] << 24) | ((Q_UINT64)data[5] << 16) | ((Q_UINT64)data[6] << 8) | (Q_UINT64)data[7]);
+            *value = (((quint64)data[0] << 56) | ((quint64)data[1] << 48) | ((quint64)data[2] << 40) | ((quint64)data[3] << 32) | ((quint64)data[4] << 24) | ((quint64)data[5] << 16) | ((quint64)data[6] << 8) | (quint64)data[7]);
         case ExifValue::BYTE_ORDER_INTEL:
-            *value = (((Q_UINT64)data[7] << 56) | ((Q_UINT64)data[6] << 48) | ((Q_UINT64)data[5] << 40) | ((Q_UINT64)data[4] << 32) | ((Q_UINT64)data[3] << 24) | ((Q_UINT64)data[2] << 16) | ((Q_UINT64)data[1] << 8) | (Q_UINT64)data[0]);
+            *value = (((quint64)data[7] << 56) | ((quint64)data[6] << 48) | ((quint64)data[5] << 40) | ((quint64)data[4] << 32) | ((quint64)data[3] << 24) | ((quint64)data[2] << 16) | ((quint64)data[1] << 8) | (quint64)data[0]);
     }
 }
 
-void set64Bit(unsigned char *data, ExifValue::ByteOrder order, const Q_UINT64* value)
+void set64Bit(unsigned char *data, ExifValue::ByteOrder order, const quint64* value)
 {
     switch (order) {
         case ExifValue::BYTE_ORDER_MOTOROLA:
@@ -157,9 +157,9 @@ bool ExifValue::load(const QDomElement& elmt)
             {
                 if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
                 {
-                    setValue(i, (Q_UINT8)0);
+                    setValue(i, (quint8)0);
                 } else {
-                    setValue(i, (Q_UINT8) attr.toUInt());
+                    setValue(i, (quint8) attr.toUInt());
                 }
             }
             break;
@@ -171,9 +171,9 @@ bool ExifValue::load(const QDomElement& elmt)
             {
                 if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
                 {
-                    setValue(i, (Q_UINT16)0);
+                    setValue(i, (quint16)0);
                 } else {
-                    setValue(i, (Q_UINT16) attr.toUInt());
+                    setValue(i, (quint16) attr.toUInt());
                 }
             }
             break;
@@ -182,9 +182,9 @@ bool ExifValue::load(const QDomElement& elmt)
             {
                 if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
                 {
-                    setValue(i, (Q_UINT32)0);
+                    setValue(i, (quint32)0);
                 } else {
-                    setValue(i, (Q_UINT32) attr.toUInt());
+                    setValue(i, (quint32) attr.toUInt());
                 }
             }
             break;
@@ -194,15 +194,15 @@ bool ExifValue::load(const QDomElement& elmt)
                 KisExifRational r;
                 if( (attr = elmt.attribute(QString("numerator%1").arg(i) ) ).isNull() )
                 {
-                    r.numerator = (Q_UINT32)0;
+                    r.numerator = (quint32)0;
                 } else {
-                    r.numerator = (Q_UINT32) attr.toUInt();
+                    r.numerator = (quint32) attr.toUInt();
                 }
                 if( (attr = elmt.attribute(QString("denominator%1").arg(i) ) ).isNull() )
                 {
-                    r.denominator = (Q_UINT32)0;
+                    r.denominator = (quint32)0;
                 } else {
-                    r.denominator = (Q_UINT32) attr.toUInt();
+                    r.denominator = (quint32) attr.toUInt();
                 }
                 setValue(i, r);
             }
@@ -212,9 +212,9 @@ bool ExifValue::load(const QDomElement& elmt)
             {
                 if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
                 {
-                    setValue(i, (Q_INT8)0);
+                    setValue(i, (qint8)0);
                 } else {
-                    setValue(i, (Q_INT8) attr.toInt());
+                    setValue(i, (qint8) attr.toInt());
                 }
             }
             break;
@@ -233,9 +233,9 @@ bool ExifValue::load(const QDomElement& elmt)
             {
                 if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
                 {
-                    setValue(i, (Q_INT16)0);
+                    setValue(i, (qint16)0);
                 } else {
-                    setValue(i, (Q_INT16) attr.toInt());
+                    setValue(i, (qint16) attr.toInt());
                 }
             }
             break;
@@ -244,9 +244,9 @@ bool ExifValue::load(const QDomElement& elmt)
             {
                 if( (attr = elmt.attribute(QString("value%1").arg(i) ) ).isNull() )
                 {
-                    setValue(i, (Q_INT32)0);
+                    setValue(i, (qint32)0);
                 } else {
-                    setValue(i, (Q_INT32) attr.toInt());
+                    setValue(i, (qint32) attr.toInt());
                 }
             }
             break;
@@ -256,15 +256,15 @@ bool ExifValue::load(const QDomElement& elmt)
                 KisExifSRational r;
                 if( (attr = elmt.attribute(QString("numerator%1").arg(i) ) ).isNull() )
                 {
-                    r.numerator = (Q_INT32)0;
+                    r.numerator = (qint32)0;
                 } else {
-                    r.numerator = (Q_INT32) attr.toInt();
+                    r.numerator = (qint32) attr.toInt();
                 }
                 if( (attr = elmt.attribute(QString("denominator%1").arg(i) ) ).isNull() )
                 {
-                    r.denominator = (Q_UINT32)0;
+                    r.denominator = (quint32)0;
                 } else {
-                    r.denominator = (Q_UINT32) attr.toInt();
+                    r.denominator = (quint32) attr.toInt();
                 }
                 setValue(i, r);
             }
@@ -432,7 +432,7 @@ void ExifValue::setValue(const unsigned char *data, unsigned int size, ExifValue
                 ExifNumber n;
                 for(uint i = 0; i < components(); i++)
                 {
-                    n.m_sbyte = ((Q_INT8*)data)[i];
+                    n.m_sbyte = ((qint8*)data)[i];
                     setAsExifNumber( i, n);
                 }
             }
@@ -446,7 +446,7 @@ void ExifValue::setValue(const unsigned char *data, unsigned int size, ExifValue
                 ExifNumber n;
                 for(uint i = 0; i < components(); i++)
                 {
-                    get16Bit( data + 2 * i, order, (Q_UINT16*)&n.m_sshort);
+                    get16Bit( data + 2 * i, order, (quint16*)&n.m_sshort);
                     setAsExifNumber( i, n);
                 }
             }
@@ -457,7 +457,7 @@ void ExifValue::setValue(const unsigned char *data, unsigned int size, ExifValue
                 ExifNumber n;
                 for(uint i = 0; i < components(); i++)
                 {
-                    get32Bit( data + 4 * i, order, (Q_UINT32*)&n.m_slong);
+                    get32Bit( data + 4 * i, order, (quint32*)&n.m_slong);
                     setAsExifNumber( i, n);
                 }
             }
@@ -468,8 +468,8 @@ void ExifValue::setValue(const unsigned char *data, unsigned int size, ExifValue
                 ExifNumber n;
                 for(uint i = 0; i < components(); i++)
                 {
-                    get32Bit( data + 8 * i, order, (Q_UINT32*)&n.m_srational.numerator);
-                    get32Bit( data + 8 * i + 4, order, (Q_UINT32*)&n.m_srational.denominator);
+                    get32Bit( data + 8 * i, order, (quint32*)&n.m_srational.numerator);
+                    get32Bit( data + 8 * i + 4, order, (quint32*)&n.m_srational.denominator);
                     setAsExifNumber( i, n);
                 }
             }
@@ -480,7 +480,7 @@ void ExifValue::setValue(const unsigned char *data, unsigned int size, ExifValue
                 ExifNumber n;
                 for(uint i = 0; i < components(); i++)
                 {
-                    get32Bit( data + 4 * i, order, (Q_UINT32*)&n.m_float);
+                    get32Bit( data + 4 * i, order, (quint32*)&n.m_float);
                     setAsExifNumber( i, n);
                 }
             }
@@ -491,7 +491,7 @@ void ExifValue::setValue(const unsigned char *data, unsigned int size, ExifValue
                 ExifNumber n;
                 for(uint i = 0; i < components(); i++)
                 {
-                    get64Bit( data + 8 * i, order, (Q_UINT64*)&n.m_double);
+                    get64Bit( data + 8 * i, order, (quint64*)&n.m_double);
                     setAsExifNumber( i, n);
                 }
             }
@@ -558,7 +558,7 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             *data = new uchar[*size];
             for(uint i = 0; i < components(); i++)
             {
-                *(((Q_INT8*)*data) + i) = asExifNumber(i).m_sbyte;
+                *(((qint8*)*data) + i) = asExifNumber(i).m_sbyte;
             }
             return;
         case EXIF_TYPE_UNDEFINED:
@@ -574,7 +574,7 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             *data = new uchar[*size];
             for(uint i = 0; i < components(); i++)
             {
-                set16Bit( (*data) + 2 * i, order, (Q_UINT16*)&asExifNumber(i).m_sshort);
+                set16Bit( (*data) + 2 * i, order, (quint16*)&asExifNumber(i).m_sshort);
             }
             return;
         case EXIF_TYPE_SLONG:
@@ -582,7 +582,7 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             *data = new uchar[*size];
             for(uint i = 0; i < components(); i++)
             {
-                set32Bit( (*data) + 4 * i, order, (Q_UINT32*)&asExifNumber(i).m_slong);
+                set32Bit( (*data) + 4 * i, order, (quint32*)&asExifNumber(i).m_slong);
             }
             return;
         case EXIF_TYPE_SRATIONAL:
@@ -591,8 +591,8 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             for(uint i = 0; i < components(); i++)
             {
                 ExifNumber n = asExifNumber(i);
-                set32Bit( (*data) + 4 * i, order, (Q_UINT32*)&asExifNumber(i).m_srational.numerator);
-                set32Bit( (*data) + 4 * i + 4, order, (Q_UINT32*)&asExifNumber(i).m_srational.denominator);
+                set32Bit( (*data) + 4 * i, order, (quint32*)&asExifNumber(i).m_srational.numerator);
+                set32Bit( (*data) + 4 * i + 4, order, (quint32*)&asExifNumber(i).m_srational.denominator);
             }
             return;
         case EXIF_TYPE_FLOAT:
@@ -600,7 +600,7 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             *data = new uchar[*size];
             for(uint i = 0; i < components(); i++)
             {
-                set32Bit( (*data) + 4 * i, order, (Q_UINT32*)&asExifNumber(i).m_float);
+                set32Bit( (*data) + 4 * i, order, (quint32*)&asExifNumber(i).m_float);
             }
             return;
         case EXIF_TYPE_DOUBLE:
@@ -608,7 +608,7 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             *data = new uchar[*size];
             for(uint i = 0; i < components(); i++)
             {
-                set64Bit( (*data) + 4 * i, order, (Q_UINT64*)&asExifNumber(i).m_double);
+                set64Bit( (*data) + 4 * i, order, (quint64*)&asExifNumber(i).m_double);
             }
             return;
         case EXIF_TYPE_UNKNOW:

@@ -30,7 +30,7 @@ class KisPolygon;
 class KisCubismFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisCubismFilterConfiguration(Q_UINT32 tileSize, Q_UINT32 tileSaturation)
+    KisCubismFilterConfiguration(quint32 tileSize, quint32 tileSaturation)
         : KisFilterConfiguration( "cubism", 1 )
         , m_tileSize(tileSize)
         , m_tileSaturation(tileSaturation)
@@ -39,11 +39,11 @@ public:
         setProperty("tileSaturation", tileSaturation);
     };
 public:
-    inline Q_UINT32 tileSize() { return getInt("tileSize"); };
-    inline Q_UINT32 tileSaturation() {return getInt("tileSaturation"); };
+    inline quint32 tileSize() { return getInt("tileSize"); };
+    inline quint32 tileSaturation() {return getInt("tileSaturation"); };
 private:
-    Q_UINT32 m_tileSize;
-    Q_UINT32 m_tileSaturation;
+    quint32 m_tileSize;
+    quint32 m_tileSaturation;
 };
 
 class KisCubismFilter : public KisFilter
@@ -65,13 +65,13 @@ public:
     virtual KisFilterConfiguration* configuration() { return new KisCubismFilterConfiguration( 10, 10); };
 private:
     //this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
-        void randomizeIndices (Q_INT32 count, Q_INT32* indices);
-        Q_INT32 randomIntNumber(Q_INT32 lowestNumber, Q_INT32 highestNumber);
+        void randomizeIndices (qint32 count, qint32* indices);
+        qint32 randomIntNumber(qint32 lowestNumber, qint32 highestNumber);
         double randomDoubleNumber(double lowestNumber, double highestNumber);
         double   calcAlphaBlend(double *vec, double oneOverDist, double x, double y);
-        void convertSegment(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32  y2, Q_INT32 offset, Q_INT32* min, Q_INT32* max, Q_INT32 xmin, Q_INT32 xmax);
-        void fillPolyColor(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, const Q_UINT8* col, Q_UINT8* dest, QRect rect);
-        void cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 tileSize, Q_UINT32 tileSaturation);
+        void convertSegment(qint32 x1, qint32 y1, qint32 x2, qint32  y2, qint32 offset, qint32* min, qint32* max, qint32 xmin, qint32 xmax);
+        void fillPolyColor(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, const quint8* col, quint8* dest, QRect rect);
+        void cubism(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, quint32 tileSize, quint32 tileSaturation);
 
 };
 

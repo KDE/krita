@@ -22,7 +22,7 @@
 #include <qpainter.h>
 
 #include <kdebug.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 
 #include "kis_autogradient_resource.h"
@@ -38,7 +38,7 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
 {
     setMinimumHeight(30);
 
-    m_segmentMenu = new KPopupMenu();
+    m_segmentMenu = new KMenu();
     m_segmentMenu->insertItem(i18n("Split Segment"), SPLIT_SEGMENT);
     m_segmentMenu->insertItem(i18n("Duplicate Segment"), DUPLICATE_SEGMENT);
     m_segmentMenu->insertItem(i18n("Mirror Segment"), MIRROR_SEGMENT);

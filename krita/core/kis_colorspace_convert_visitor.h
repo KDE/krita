@@ -28,7 +28,7 @@
 
 class KisColorSpaceConvertVisitor :public KisLayerVisitor {
 public:
-    KisColorSpaceConvertVisitor(KisColorSpace *dstColorSpace, Q_INT32 renderingIntent);
+    KisColorSpaceConvertVisitor(KisColorSpace *dstColorSpace, qint32 renderingIntent);
     virtual ~KisColorSpaceConvertVisitor();
 
 public:
@@ -39,10 +39,10 @@ public:
     
 private:
     KisColorSpace *m_dstColorSpace;
-    Q_INT32 m_renderingIntent;
+    qint32 m_renderingIntent;
 };
 
-KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisColorSpace *dstColorSpace, Q_INT32 renderingIntent) :
+KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisColorSpace *dstColorSpace, qint32 renderingIntent) :
     KisLayerVisitor(),
     m_dstColorSpace(dstColorSpace),
     m_renderingIntent(renderingIntent)

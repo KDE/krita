@@ -84,7 +84,7 @@ void KisToolBrush::initPaint(KisEvent *e)
     super::initPaint(e);
 
     if (!m_painter) {
-        kdWarning() << "Didn't create a painter! Something is wrong!\n";
+        kWarning() << "Didn't create a painter! Something is wrong!\n";
         return;
     }
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), m_painter);

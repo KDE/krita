@@ -42,7 +42,7 @@ public:
 
     QString layerName() const;
     KisCompositeOp compositeOp() const;
-    Q_INT32 opacity() const;
+    qint32 opacity() const;
     KisID colorSpaceID() const;
     QString profileName() const;
 

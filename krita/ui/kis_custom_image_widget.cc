@@ -35,7 +35,7 @@
 #include <qtextedit.h>
 #include <KoUnitWidgets.h>
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32 defWidth, Q_INT32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
     : WdgNewImage(parent) {
     m_doc = doc;
 
@@ -61,13 +61,13 @@ void KisCustomImageWidget::buttonClicked() {
 
     QColor qc(cmbColor->color());
 
-    m_doc->newImage(txtName->text(), (Q_INT32)intWidth->value(), (Q_INT32)intHeight->value(), cs, KisColor(qc, cs), txtDescription->text(), doubleResolution->value());
+    m_doc->newImage(txtName->text(), (qint32)intWidth->value(), (qint32)intHeight->value(), cs, KisColor(qc, cs), txtDescription->text(), doubleResolution->value());
     emit documentSelected();
 }
 
-Q_UINT8 KisCustomImageWidget::backgroundOpacity() const
+quint8 KisCustomImageWidget::backgroundOpacity() const
 {
-    Q_INT32 opacity = sliderOpacity->value();
+    qint32 opacity = sliderOpacity->value();
 
     if (!opacity)
         return 0;

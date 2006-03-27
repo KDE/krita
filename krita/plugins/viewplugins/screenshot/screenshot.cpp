@@ -45,7 +45,7 @@ Screenshot::Screenshot(QObject *parent, const char *name, const QStringList &)
 {
     setInstance(KGenericFactory<Screenshot>::instance());
     setXMLFile(locate("data","kritaplugins/screenshot-krita.rc"), true);
-    KImageIO::registerFormats();
+    
 
     snapshot = new KSnapshot();
     Q_CHECK_PTR(snapshot);

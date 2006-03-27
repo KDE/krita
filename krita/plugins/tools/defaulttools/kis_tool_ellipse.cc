@@ -75,23 +75,23 @@ void KisToolEllipse::move(KisMoveEvent *event)
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize ellipse
-        if (event->state() & Qt::AltButton) {
+        if (event->state() & Qt::AltModifier) {
             KisPoint trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
-            KisPoint diag = event->pos() - (event->state() & Qt::ControlButton
+            KisPoint diag = event->pos() - (event->state() & Qt::ControlModifier
                                               ? m_dragCenter : m_dragStart);
             // circle?
-            if (event->state() & Qt::ShiftButton) {
-                double size = QMAX(fabs(diag.x()), fabs(diag.y()));
+            if (event->state() & Qt::ShiftModifier) {
+                double size = qMax(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
                 diag = KisPoint(w, h);
             }
 
             // resize around center point?
-            if (event->state() & Qt::ControlButton) {
+            if (event->state() & Qt::ControlModifier) {
                 m_dragStart = m_dragCenter - diag;
                 m_dragEnd = m_dragCenter + diag;
             } else {

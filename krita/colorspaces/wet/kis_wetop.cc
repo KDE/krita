@@ -128,7 +128,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisColorSpace * cs = device->colorSpace();
 
     if (cs->id() != KisID("WET","")) {
-        kdDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";
+        kDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";
         return;
     }
 
@@ -144,12 +144,12 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // Get the paint info (we store the strength in the otherwise unused (?) height field of
     // the paint
     // double wetness = paint.w; // XXX: Was unused
-    // strength is a double in the 0 - 2 range, but upscaled to Q_UINT16:
-    kdDebug() << "Original strength as in paint.h: " << paint.h << endl;
+    // strength is a double in the 0 - 2 range, but upscaled to quint16:
+    kDebug() << "Original strength as in paint.h: " << paint.h << endl;
     
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
 
-    kdDebug() << "Before strength: " << strength << endl;
+    kDebug() << "Before strength: " << strength << endl;
     
     if (m_strength)
         strength = strength * (strength + info.pressure) * 0.5;
@@ -158,7 +158,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     double pressure = 0.75 + 0.25 * info.pressure;
     
-    kdDebug() << "info.pressure " << info.pressure << ", local pressure: " << pressure << ", strength: " << strength << endl;
+    kDebug() << "info.pressure " << info.pressure << ", local pressure: " << pressure << ", strength: " << strength << endl;
     
     WetPack currentPack;
     WetPix currentPix;
@@ -186,7 +186,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
                 press = pressure * 0.25;
             else
                 press = -1;
-            //kdDebug() << "After mysterious line, press becomes: " << press << ", this is the same as in the orignal. Good" << endl;
+            //kDebug() << "After mysterious line, press becomes: " << press << ", this is the same as in the orignal. Good" << endl;
             // XXX - 192 is probably only useful for paper with a texture...
             eff_height = (currentData.h + currentData.w - 192.0) * (1.0 / 255.0);
             contact = (press + eff_height) * 0.2;
@@ -194,14 +194,14 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
             if (contact > 0.5)
                 contact = 1.0 - 0.5 * exp(-2.0 * contact - 1.0);
 
-            //kdDebug() << "Contact was " << old_contact << " and has become: " << contact << endl;
+            //kDebug() << "Contact was " << old_contact << " and has become: " << contact << endl;
             if (contact > 0.0001) {
                 int v;
                 double rnd = rand() * (1.0 / RAND_MAX);
 
                 v = currentPix.rd;
                 currentPix.rd = floor(v + (paint.rd * strength - v) * contact + rnd);
-                //kdDebug() << "Rd was " << v << " and has become " << currentPix.rd << endl;
+                //kDebug() << "Rd was " << v << " and has become " << currentPix.rd << endl;
                 v = currentPix.rw;
                 currentPix.rw = floor(v + (paint.rw * strength - v) * contact + rnd);
                 v = currentPix.gd;

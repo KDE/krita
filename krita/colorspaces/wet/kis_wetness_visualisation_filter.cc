@@ -48,9 +48,9 @@ void WetnessVisualisationFilter::setAction(KToggleAction* action) {
 }
 
 void WetnessVisualisationFilter::slotActivated() {
-    kdDebug(DBG_AREA_CMS) << "activated" << endl;
+    kDebug(DBG_AREA_CMS) << "activated" << endl;
     if (!m_action) {
-        kdDebug(DBG_AREA_CMS) << "no action" << endl;
+        kDebug(DBG_AREA_CMS) << "no action" << endl;
         return;
     }
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(

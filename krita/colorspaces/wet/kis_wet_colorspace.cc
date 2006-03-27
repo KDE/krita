@@ -174,7 +174,7 @@ KisWetColorSpace::~KisWetColorSpace()
 {
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile * /*profile*/)
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
@@ -201,46 +201,46 @@ void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * /*
     }
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, Q_UINT8  /*opacity*/, Q_UINT8 *dst, KisProfile * /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, quint8  /*opacity*/, quint8 *dst, KisProfile * /*profile*/)
 {
     fromQColor(c, dst);
 }
 
-Q_UINT8 KisWetColorSpace::getAlpha(const Q_UINT8 */*pixel*/) const
+quint8 KisWetColorSpace::getAlpha(const quint8 */*pixel*/) const
 {
     return OPACITY_OPAQUE;
 }
 
-void KisWetColorSpace::setAlpha(Q_UINT8 * /*pixels*/, Q_UINT8 /*alpha*/, Q_INT32 /*nPixels*/) const
+void KisWetColorSpace::setAlpha(quint8 * /*pixels*/, quint8 /*alpha*/, qint32 /*nPixels*/) const
 {
 }
 
-void KisWetColorSpace::multiplyAlpha(Q_UINT8 * /*pixels*/, Q_UINT8 /*alpha*/, Q_INT32 /*nPixels*/)
+void KisWetColorSpace::multiplyAlpha(quint8 * /*pixels*/, quint8 /*alpha*/, qint32 /*nPixels*/)
 {
 }
 
-void KisWetColorSpace::applyAlphaU8Mask(Q_UINT8 * /*pixels*/, Q_UINT8 * /*alpha*/, Q_INT32 /*nPixels*/)
+void KisWetColorSpace::applyAlphaU8Mask(quint8 * /*pixels*/, quint8 * /*alpha*/, qint32 /*nPixels*/)
 {
 }
 
-void KisWetColorSpace::applyInverseAlphaU8Mask(Q_UINT8 * /*pixels*/, Q_UINT8 * /*alpha*/, Q_INT32 /*nPixels*/)
+void KisWetColorSpace::applyInverseAlphaU8Mask(quint8 * /*pixels*/, quint8 * /*alpha*/, qint32 /*nPixels*/)
 {
 }
 
-Q_UINT8 KisWetColorSpace::scaleToU8(const Q_UINT8 * /*srcPixel*/, Q_INT32 /*channelPos*/)
+quint8 KisWetColorSpace::scaleToU8(const quint8 * /*srcPixel*/, qint32 /*channelPos*/)
 {
     return 0;
 }
 
-Q_UINT16 KisWetColorSpace::scaleToU16(const Q_UINT8 * /*srcPixel*/, Q_INT32 /*channelPos*/)
+quint16 KisWetColorSpace::scaleToU16(const quint8 * /*srcPixel*/, qint32 /*channelPos*/)
 {
     return 0;
 }
 
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * /*profile*/)
+void KisWetColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile * /*profile*/)
 {
-    Q_UINT8 * rgb = new Q_UINT8[3];
+    quint8 * rgb = new quint8[3];
     Q_CHECK_PTR(rgb);
 
     memset(rgb, 255, 3);
@@ -264,13 +264,13 @@ void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, KisProfile * /*pr
     delete[]rgb;
 }
 
-void KisWetColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * /*profile*/)
+void KisWetColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * /*profile*/)
 {
     toQColor(src, c);
     *opacity = OPACITY_OPAQUE;
 }
 
-void KisWetColorSpace::mixColors(const Q_UINT8 **/*colors*/, const Q_UINT8 */*weights*/, Q_UINT32 /*nColors*/, Q_UINT8 */*dst*/) const
+void KisWetColorSpace::mixColors(const quint8 **/*colors*/, const quint8 */*weights*/, quint32 /*nColors*/, quint8 */*dst*/) const
 {
 }
 
@@ -279,23 +279,23 @@ QValueVector<KisChannelInfo *> KisWetColorSpace::channels() const
     return m_channels;
 }
 
-Q_UINT32 KisWetColorSpace::nChannels() const
+quint32 KisWetColorSpace::nChannels() const
 {
     return 16;
 }
 
-Q_UINT32 KisWetColorSpace::nColorChannels() const
+quint32 KisWetColorSpace::nColorChannels() const
 {
     return 12;
 }
 
-Q_UINT32 KisWetColorSpace::nSubstanceChannels() const
+quint32 KisWetColorSpace::nSubstanceChannels() const
 {
     return 4;
 }
 
 
-Q_UINT32 KisWetColorSpace::pixelSize() const
+quint32 KisWetColorSpace::pixelSize() const
 {
     return 32; // This color strategy wants an unsigned short for each
            // channel, and every pixel consists of two wetpix structs
@@ -306,15 +306,15 @@ Q_UINT32 KisWetColorSpace::pixelSize() const
 
 
 // XXX: use profiles to display correctly on calibrated displays.
-QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+QImage KisWetColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                          KisProfile *  /*dstProfile*/,
-                         Q_INT32 /*renderingIntent*/, float /*exposure*/)
+                         qint32 /*renderingIntent*/, float /*exposure*/)
 {
 
     QImage img(width, height, 32);
     img.setAlphaBuffer(true);
     
-    Q_UINT8 *rgb = (Q_UINT8*) img.bits();
+    quint8 *rgb = (quint8*) img.bits();
     const WetPack* wetData = reinterpret_cast<const WetPack*>(data);
 
     // Clear to white -- the following code actually composits the contents of the
@@ -323,7 +323,7 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
     memset(rgb, 255, width * height * 4);
     // Composite the two layers in each pixelSize
 
-    Q_INT32 i = 0;
+    qint32 i = 0;
     while ( i < width * height) {
         
         // First the adsorption layers
@@ -351,30 +351,30 @@ QImage KisWetColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_I
         }
 
         i++;
-        rgb += sizeof(Q_UINT32); // Because the QImage is 4 bytes deep.
+        rgb += sizeof(quint32); // Because the QImage is 4 bytes deep.
     }
 
     return img;
 }
 
-void KisWetColorSpace::bitBlt(Q_UINT8 *dst,
-                  Q_INT32 dstRowSize,
-                  const Q_UINT8 *src,
-                  Q_INT32 srcRowStride,
-                  const Q_UINT8 */*srcAlphaMask*/,
-                  Q_INT32 /*maskRowStride*/,
-                  Q_UINT8 /*opacity*/,
-                  Q_INT32 rows,
-                  Q_INT32 cols,
+void KisWetColorSpace::bitBlt(quint8 *dst,
+                  qint32 dstRowSize,
+                  const quint8 *src,
+                  qint32 srcRowStride,
+                  const quint8 */*srcAlphaMask*/,
+                  qint32 /*maskRowStride*/,
+                  quint8 /*opacity*/,
+                  qint32 rows,
+                  qint32 cols,
                   const KisCompositeOp& op)
 {
     if (rows <= 0 || cols <= 0)
         return;
 
-    Q_UINT8 *d;
-    const Q_UINT8 *s;
+    quint8 *d;
+    const quint8 *s;
 
-    Q_INT32 linesize = pixelSize() * cols;
+    qint32 linesize = pixelSize() * cols;
     d = dst;
     s = src;
 
@@ -412,7 +412,7 @@ void KisWetColorSpace::wet_init_render_tab()
     double d;
     int a, b;
 
-    wet_render_tab = new Q_UINT32[4096];
+    wet_render_tab = new quint32[4096];
     Q_CHECK_PTR(wet_render_tab);
 
     for (i = 0; i < 4096; i++)
@@ -430,7 +430,7 @@ void KisWetColorSpace::wet_init_render_tab()
 
 }
 
-void KisWetColorSpace::wet_composite(RGBMode m, Q_UINT8 *rgb, WetPix * wet)
+void KisWetColorSpace::wet_composite(RGBMode m, quint8 *rgb, WetPix * wet)
 {
     int r, g, b;
     int d, w;
@@ -479,7 +479,7 @@ void KisWetColorSpace::wet_composite(RGBMode m, Q_UINT8 *rgb, WetPix * wet)
         rgb[0] = b;
 }
 
-void KisWetColorSpace::wet_render_wetness(Q_UINT8 * rgb, WetPack * pack)
+void KisWetColorSpace::wet_render_wetness(quint8 * rgb, WetPack * pack)
 {
     int highlight = 255 - (pack->paint.w >> 1);
 
@@ -499,20 +499,20 @@ KisCompositeOpList KisWetColorSpace::userVisiblecompositeOps() const
     return list;
 }
 
-QString KisWetColorSpace::channelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+QString KisWetColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < nChannels());
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    Q_UINT32 channelPosition = m_channels[channelIndex]->pos();
+    const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
+    quint32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(pixel[channelPosition]);
 }
 
-QString KisWetColorSpace::normalisedChannelValueText(const Q_UINT8 *U8_pixel, Q_UINT32 channelIndex) const
+QString KisWetColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < nChannels());
-    const Q_UINT16 *pixel = reinterpret_cast<const Q_UINT16 *>(U8_pixel);
-    Q_UINT32 channelPosition = m_channels[channelIndex]->pos();
+    const quint16 *pixel = reinterpret_cast<const quint16 *>(U8_pixel);
+    quint32 channelPosition = m_channels[channelIndex]->pos();
 
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }

@@ -41,8 +41,8 @@ public:
     
 public:
     Q3PtrList<QPair<double,double> > *curves;
-    Q_UINT16 *transfers[256];
-    Q_UINT16 nTransfers;
+    quint16 *transfers[256];
+    quint16 nTransfers;
 };
 
 

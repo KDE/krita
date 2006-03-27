@@ -36,11 +36,11 @@
  *  Even though the matrix has grown it may still not contain tiles at specific positions. They are created on demand
  */
 
-KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defPixel)
+KisTiledDataManager::KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel)
 {
     m_pixelSize = pixelSize;
 
-    m_defPixel = new Q_UINT8[m_pixelSize];
+    m_defPixel = new quint8[m_pixelSize];
     Q_CHECK_PTR(m_defPixel);
     memcpy(m_defPixel, defPixel, m_pixelSize);
 
@@ -54,10 +54,10 @@ KisTiledDataManager::KisTiledDataManager(Q_UINT32 pixelSize, const Q_UINT8 *defP
         m_hashTable [i] = 0;
     m_numTiles = 0;
     m_currentMemento = 0;
-    m_extentMinX = Q_INT32_MAX;
-    m_extentMinY = Q_INT32_MAX;
-    m_extentMaxX = Q_INT32_MIN;
-    m_extentMaxY = Q_INT32_MIN;
+    m_extentMinX = qint32_MAX;
+    m_extentMinY = qint32_MAX;
+    m_extentMaxX = qint32_MIN;
+    m_extentMaxY = qint32_MIN;
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
@@ -65,7 +65,7 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager & dm)
 {
     m_pixelSize = dm.m_pixelSize;
 
-    m_defPixel = new Q_UINT8[m_pixelSize];
+    m_defPixel = new quint8[m_pixelSize];
     Q_CHECK_PTR(m_defPixel);
     memcpy(m_defPixel, dm.m_defPixel, m_pixelSize);
 
@@ -123,7 +123,7 @@ KisTiledDataManager::~KisTiledDataManager()
     delete [] m_defPixel;
 }
 
-void KisTiledDataManager::setDefaultPixel(const Q_UINT8 *defPixel)
+void KisTiledDataManager::setDefaultPixel(const quint8 *defPixel)
 {
     if (defPixel == 0) return;
 
@@ -168,7 +168,7 @@ bool KisTiledDataManager::read(KoStore *store)
     //Q_ASSERT(store != 0);
 
     char str[80];
-    Q_INT32 x,y,w,h;
+    qint32 x,y,w,h;
 
     QIODevice *stream = store->device();
     if (stream == 0) return false;
@@ -178,7 +178,7 @@ bool KisTiledDataManager::read(KoStore *store)
 
     sscanf(str,"%u",&m_numTiles);
 
-    for(Q_UINT32 i = 0; i < m_numTiles; i++)
+    for(quint32 i = 0; i < m_numTiles; i++)
     {
         stream->readLine(str, 79);
         sscanf(str,"%d,%d,%d,%d",&x,&y,&w,&h);
@@ -186,9 +186,9 @@ bool KisTiledDataManager::read(KoStore *store)
         // the following is only correct as long as tile size is not changed
         // The first time we change tilesize the dimensions just read needs to be respected
         // but for now we just assume that tiles are the same size as ever.
-        Q_INT32 row = yToRow(y);
-        Q_INT32 col = xToCol(x);
-        Q_UINT32 tileHash = calcTileHash(col, row);
+        qint32 row = yToRow(y);
+        qint32 col = xToCol(x);
+        quint32 tileHash = calcTileHash(col, row);
 
         KisTile *tile = new KisTile(m_pixelSize, col, row, m_defPixel);
         Q_CHECK_PTR(tile);
@@ -203,7 +203,7 @@ bool KisTiledDataManager::read(KoStore *store)
     return true;
 }
 
-void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
+void KisTiledDataManager::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
 {
     x = m_extentMinX;
     y = m_extentMinY;
@@ -223,17 +223,17 @@ void KisTiledDataManager::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h)
 
 QRect KisTiledDataManager::extent() const
 {
-    Q_INT32 x;
-    Q_INT32 y;
-    Q_INT32 w;
-    Q_INT32 h;
+    qint32 x;
+    qint32 y;
+    qint32 w;
+    qint32 h;
 
     extent(x, y, w, h);
 
     return QRect(x, y, w, h);
 }
 
-void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
 {
     QRect newRect = QRect(x, y, w, h).normalize();
     //printRect("newRect", newRect);
@@ -275,7 +275,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
                     for (int y = 0; y < KisTile::HEIGHT; ++y) {
                         for (int x = 0; x < KisTile::WIDTH; ++x) {
                             if (!intersection.contains(x,y)) {
-                                Q_UINT8 * ptr = tile->data(x, y);
+                                quint8 * ptr = tile->data(x, y);
                                 memcpy(ptr, m_defPixel, m_pixelSize);
                             }
                         }
@@ -308,10 +308,10 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
 void KisTiledDataManager::recalculateExtent()
 {
-    m_extentMinX = Q_INT32_MAX;
-    m_extentMinY = Q_INT32_MAX;
-    m_extentMaxX = Q_INT32_MIN;
-    m_extentMaxY = Q_INT32_MIN;
+    m_extentMinX = qint32_MAX;
+    m_extentMinY = qint32_MAX;
+    m_extentMaxX = qint32_MIN;
+    m_extentMaxY = qint32_MIN;
 
     // Loop through all tiles.
     for (int tileHash = 0; tileHash < 1024; tileHash++)
@@ -326,24 +326,24 @@ void KisTiledDataManager::recalculateExtent()
     }
 }
 
-void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UINT8 clearValue)
+void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 clearValue)
 {
     if (w < 1 || h < 1) {
         return;
     }
 
-    Q_INT32 firstColumn = xToCol(x);
-    Q_INT32 lastColumn = xToCol(x + w - 1);
+    qint32 firstColumn = xToCol(x);
+    qint32 lastColumn = xToCol(x + w - 1);
 
-    Q_INT32 firstRow = yToRow(y);
-    Q_INT32 lastRow = yToRow(y + h - 1);
+    qint32 firstRow = yToRow(y);
+    qint32 lastRow = yToRow(y + h - 1);
 
     QRect clearRect(x, y, w, h);
 
-    const Q_UINT32 rowStride = KisTile::WIDTH * m_pixelSize;
+    const quint32 rowStride = KisTile::WIDTH * m_pixelSize;
 
-    for (Q_INT32 row = firstRow; row <= lastRow; ++row) {
-        for (Q_INT32 column = firstColumn; column <= lastColumn; ++column) {
+    for (qint32 row = firstRow; row <= lastRow; ++row) {
+        for (qint32 column = firstColumn; column <= lastColumn; ++column) {
 
             KisTile *tile = getTile(column, row, true);
             QRect tileRect = tile->extent();
@@ -357,8 +357,8 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UI
 
             } else {
 
-                Q_UINT32 rowsRemaining = clearTileRect.height();
-                Q_UINT8 *dst = tile->data(clearTileRect.x() - tileRect.x(), clearTileRect.y() - tileRect.y());
+                quint32 rowsRemaining = clearTileRect.height();
+                quint8 *dst = tile->data(clearTileRect.x() - tileRect.x(), clearTileRect.y() - tileRect.y());
 
                 while (rowsRemaining > 0) {
                     memset(dst, clearValue, clearTileRect.width() * m_pixelSize);
@@ -370,7 +370,7 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UI
     }
 }
 
-void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, const Q_UINT8 *clearPixel)
+void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *clearPixel)
 {
     Q_ASSERT(clearPixel != 0);
 
@@ -380,7 +380,7 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
 
     bool pixelBytesAreTheSame = true;
 
-    for (Q_UINT32 i = 0; i < m_pixelSize; ++i) {
+    for (quint32 i = 0; i < m_pixelSize; ++i) {
         if (clearPixel[i] != clearPixel[0]) {
             pixelBytesAreTheSame = false;
             break;
@@ -391,25 +391,25 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
         clear(x, y, w, h, clearPixel[0]);
     } else {
 
-        Q_INT32 firstColumn = xToCol(x);
-        Q_INT32 lastColumn = xToCol(x + w - 1);
+        qint32 firstColumn = xToCol(x);
+        qint32 lastColumn = xToCol(x + w - 1);
 
-        Q_INT32 firstRow = yToRow(y);
-        Q_INT32 lastRow = yToRow(y + h - 1);
+        qint32 firstRow = yToRow(y);
+        qint32 lastRow = yToRow(y + h - 1);
 
         QRect clearRect(x, y, w, h);
 
-        const Q_UINT32 rowStride = KisTile::WIDTH * m_pixelSize;
+        const quint32 rowStride = KisTile::WIDTH * m_pixelSize;
 
-        Q_UINT8 *clearPixelData = 0;
+        quint8 *clearPixelData = 0;
 
         if (w >= KisTile::WIDTH && h >= KisTile::HEIGHT) {
 
             // There might be a whole tile to be cleared so generate a cleared tile.
-            clearPixelData = new Q_UINT8[KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize];
+            clearPixelData = new quint8[KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize];
 
-            Q_UINT8 *dst = clearPixelData;
-            Q_UINT32 pixelsRemaining = KisTile::WIDTH;
+            quint8 *dst = clearPixelData;
+            quint32 pixelsRemaining = KisTile::WIDTH;
 
             // Generate one row
             while (pixelsRemaining > 0) {
@@ -418,7 +418,7 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
                 --pixelsRemaining;
             }
 
-            Q_UINT32 rowsRemaining = KisTile::HEIGHT - 1;
+            quint32 rowsRemaining = KisTile::HEIGHT - 1;
 
             // Copy to the rest of the rows.
             while (rowsRemaining > 0) {
@@ -430,12 +430,12 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
         } else {
 
             // Generate one row
-            Q_UINT32 maxRunLength = QMIN(w, KisTile::WIDTH);
+            quint32 maxRunLength = qMin(w, KisTile::WIDTH);
 
-            clearPixelData = new Q_UINT8[maxRunLength * m_pixelSize];
+            clearPixelData = new quint8[maxRunLength * m_pixelSize];
 
-            Q_UINT8 *dst = clearPixelData;
-            Q_UINT32 pixelsRemaining = maxRunLength;
+            quint8 *dst = clearPixelData;
+            quint32 pixelsRemaining = maxRunLength;
 
             while (pixelsRemaining > 0) {
                 memcpy(dst, clearPixel, m_pixelSize);
@@ -444,8 +444,8 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
             }
         }
 
-        for (Q_INT32 row = firstRow; row <= lastRow; ++row) {
-            for (Q_INT32 column = firstColumn; column <= lastColumn; ++column) {
+        for (qint32 row = firstRow; row <= lastRow; ++row) {
+            for (qint32 column = firstColumn; column <= lastColumn; ++column) {
 
                 KisTile *tile = getTile(column, row, true);
                 QRect tileRect = tile->extent();
@@ -459,8 +459,8 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
 
                 } else {
 
-                    Q_UINT32 rowsRemaining = clearTileRect.height();
-                    Q_UINT8 *dst = tile->data(clearTileRect.x() - tileRect.x(), clearTileRect.y() - tileRect.y());
+                    quint32 rowsRemaining = clearTileRect.height();
+                    quint8 *dst = tile->data(clearTileRect.x() - tileRect.x(), clearTileRect.y() - tileRect.y());
 
                     while (rowsRemaining > 0) {
                         memcpy(dst, clearPixelData, clearTileRect.width() * m_pixelSize);
@@ -497,21 +497,21 @@ void KisTiledDataManager::clear()
     m_numTiles = 0;
 
     // Set the extent correctly
-    m_extentMinX = Q_INT32_MAX;
-    m_extentMinY = Q_INT32_MAX;
-    m_extentMaxX = Q_INT32_MIN;
-    m_extentMaxY = Q_INT32_MIN;
+    m_extentMinX = qint32_MAX;
+    m_extentMinY = qint32_MAX;
+    m_extentMaxX = qint32_MIN;
+    m_extentMaxY = qint32_MIN;
 }
 
-void KisTiledDataManager::paste(KisDataManagerSP data,  Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
-             Q_INT32 w, Q_INT32 h)
+void KisTiledDataManager::paste(KisDataManagerSP data,  qint32 sx, qint32 sy, qint32 dx, qint32 dy,
+             qint32 w, qint32 h)
 {
     //CBR_MISSING
     sx=sy=dx=dy=w=h;data=0;
 }
 
 
-Q_UINT32 KisTiledDataManager::calcTileHash(Q_INT32 col, Q_INT32 row)
+quint32 KisTiledDataManager::calcTileHash(qint32 col, qint32 row)
 {
     return ((row << 5) + (col & 0x1F)) & 0x3FF;
 }
@@ -683,7 +683,7 @@ void KisTiledDataManager::deleteTiles(const KisMemento::DeletedTile *d)
 {
     while (d)
     {
-        Q_UINT32 tileHash = calcTileHash(d->col(), d->row());
+        quint32 tileHash = calcTileHash(d->col(), d->row());
         KisTile *curTile = m_hashTable[tileHash];
         KisTile *preTile = 0;
         while(curTile)
@@ -712,7 +712,7 @@ void KisTiledDataManager::deleteTiles(const KisMemento::DeletedTile *d)
     recalculateExtent();
 }
 
-void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32 tileHash, const KisTile *refTile)
+void KisTiledDataManager::ensureTileMementoed(qint32 col, qint32 row, quint32 tileHash, const KisTile *refTile)
 {
     if (refTile == 0) return;
     //Q_ASSERT(refTile != 0);
@@ -742,7 +742,7 @@ void KisTiledDataManager::ensureTileMementoed(Q_INT32 col, Q_INT32 row, Q_UINT32
     m_currentMemento->m_numTiles++;
 }
 
-void KisTiledDataManager::updateExtent(Q_INT32 col, Q_INT32 row)
+void KisTiledDataManager::updateExtent(qint32 col, qint32 row)
 {
     if(m_extentMinX > col * KisTile::WIDTH)
         m_extentMinX = col * KisTile::WIDTH;
@@ -754,9 +754,9 @@ void KisTiledDataManager::updateExtent(Q_INT32 col, Q_INT32 row)
         m_extentMaxY = (row+1) * KisTile::HEIGHT - 1;
 }
 
-KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess)
+KisTile *KisTiledDataManager::getTile(qint32 col, qint32 row, bool writeAccess)
 {
-    Q_UINT32 tileHash = calcTileHash(col, row);
+    quint32 tileHash = calcTileHash(col, row);
 
     // Lookup tile in hash table
     KisTile *tile = m_hashTable[tileHash];
@@ -797,7 +797,7 @@ KisTile *KisTiledDataManager::getTile(Q_INT32 col, Q_INT32 row, bool writeAccess
     return tile;
 }
 
-KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
+KisTile *KisTiledDataManager::getOldTile(qint32 col, qint32 row, KisTile *def)
 {
     KisTile *tile = 0;
 
@@ -807,7 +807,7 @@ KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
         if (!m_currentMemento->valid()) return def;
         //Q_ASSERT(m_currentMemento->valid());
 
-        Q_UINT32 tileHash = calcTileHash(col, row);
+        quint32 tileHash = calcTileHash(col, row);
         tile = m_currentMemento->m_hashTable[tileHash];
         while (tile != 0)
         {
@@ -824,41 +824,41 @@ KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
     return tile;
 }
 
-Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)
+quint8* KisTiledDataManager::pixelPtr(qint32 x, qint32 y, bool writable)
 {
-    Q_INT32 row = yToRow(y);
-    Q_INT32 col = xToCol(x);
+    qint32 row = yToRow(y);
+    qint32 col = xToCol(x);
 
     // calc limits within the tile
-    Q_INT32 yInTile = y - row * KisTile::HEIGHT;
-    Q_INT32 xInTile = x - col * KisTile::WIDTH;
-    Q_INT32 offset = m_pixelSize * (yInTile * KisTile::WIDTH + xInTile);
+    qint32 yInTile = y - row * KisTile::HEIGHT;
+    qint32 xInTile = x - col * KisTile::WIDTH;
+    qint32 offset = m_pixelSize * (yInTile * KisTile::WIDTH + xInTile);
 
     KisTile *tile = getTile(col, row, writable);
 
     return tile->data() + offset;
 }
 
-const Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)
+const quint8* KisTiledDataManager::pixel(qint32 x, qint32 y)
 {
     return pixelPtr(x, y, false);
 }
 
-Q_UINT8* KisTiledDataManager::writablePixel(Q_INT32 x, Q_INT32 y)
+quint8* KisTiledDataManager::writablePixel(qint32 x, qint32 y)
 {
     return pixelPtr(x, y, true);
 }
 
-void KisTiledDataManager::setPixel(Q_INT32 x, Q_INT32 y, const Q_UINT8 * data)
+void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 {
-    Q_UINT8 *pixel = pixelPtr(x, y, true);
+    quint8 *pixel = pixelPtr(x, y, true);
     memcpy(pixel, data, m_pixelSize);
 }
 
 
-void KisTiledDataManager::readBytes(Q_UINT8 * data,
-                    Q_INT32 x, Q_INT32 y,
-                    Q_INT32 w, Q_INT32 h)
+void KisTiledDataManager::readBytes(quint8 * data,
+                    qint32 x, qint32 y,
+                    qint32 w, qint32 h)
 {
     if (data == 0) return;
     //Q_ASSERT(data != 0);
@@ -868,32 +868,32 @@ void KisTiledDataManager::readBytes(Q_UINT8 * data,
      if (h < 0)
         h = 0;
 
-    Q_INT32 dstY = 0;
-    Q_INT32 srcY = y;
-    Q_INT32 rowsRemaining = h;
+    qint32 dstY = 0;
+    qint32 srcY = y;
+    qint32 rowsRemaining = h;
 
     while (rowsRemaining > 0) {
 
-        Q_INT32 dstX = 0;
-        Q_INT32 srcX = x;
-        Q_INT32 columnsRemaining = w;
-        Q_INT32 numContiguousSrcRows = numContiguousRows(srcY, srcX, srcX + w - 1);
+        qint32 dstX = 0;
+        qint32 srcX = x;
+        qint32 columnsRemaining = w;
+        qint32 numContiguousSrcRows = numContiguousRows(srcY, srcX, srcX + w - 1);
 
-        Q_INT32 rows = QMIN(numContiguousSrcRows, rowsRemaining);
+        qint32 rows = qMin(numContiguousSrcRows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
-            Q_INT32 numContiguousSrcColumns = numContiguousColumns(srcX, srcY, srcY + rows - 1);
+            qint32 numContiguousSrcColumns = numContiguousColumns(srcX, srcY, srcY + rows - 1);
 
-            Q_INT32 columns = QMIN(numContiguousSrcColumns, columnsRemaining);
+            qint32 columns = qMin(numContiguousSrcColumns, columnsRemaining);
 
-            const Q_UINT8 *srcData = pixel(srcX, srcY);
-            Q_INT32 srcRowStride = rowStride(srcX, srcY);
+            const quint8 *srcData = pixel(srcX, srcY);
+            qint32 srcRowStride = rowStride(srcX, srcY);
 
-            Q_UINT8 *dstData = data + ((dstX + (dstY * w)) * m_pixelSize);
-            Q_INT32 dstRowStride = w * m_pixelSize;
+            quint8 *dstData = data + ((dstX + (dstY * w)) * m_pixelSize);
+            qint32 dstRowStride = w * m_pixelSize;
 
-            for (Q_INT32 row = 0; row < rows; row++) {
+            for (qint32 row = 0; row < rows; row++) {
                 memcpy(dstData, srcData, columns * m_pixelSize);
                 dstData += dstRowStride;
                 srcData += srcRowStride;
@@ -912,9 +912,9 @@ void KisTiledDataManager::readBytes(Q_UINT8 * data,
 }
 
 
-void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
-                     Q_INT32 x, Q_INT32 y,
-                     Q_INT32 w, Q_INT32 h)
+void KisTiledDataManager::writeBytes(const quint8 * bytes,
+                     qint32 x, qint32 y,
+                     qint32 w, qint32 h)
 {
     if (bytes == 0) return;
     //Q_ASSERT(bytes != 0);
@@ -926,32 +926,32 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
     if (h < 0)
         h = 0;
 
-    Q_INT32 srcY = 0;
-    Q_INT32 dstY = y;
-    Q_INT32 rowsRemaining = h;
+    qint32 srcY = 0;
+    qint32 dstY = y;
+    qint32 rowsRemaining = h;
 
     while (rowsRemaining > 0) {
 
-        Q_INT32 srcX = 0;
-        Q_INT32 dstX = x;
-        Q_INT32 columnsRemaining = w;
-        Q_INT32 numContiguousdstRows = numContiguousRows(dstY, dstX, dstX + w - 1);
+        qint32 srcX = 0;
+        qint32 dstX = x;
+        qint32 columnsRemaining = w;
+        qint32 numContiguousdstRows = numContiguousRows(dstY, dstX, dstX + w - 1);
 
-        Q_INT32 rows = QMIN(numContiguousdstRows, rowsRemaining);
+        qint32 rows = qMin(numContiguousdstRows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
-            Q_INT32 numContiguousdstColumns = numContiguousColumns(dstX, dstY, dstY + rows - 1);
+            qint32 numContiguousdstColumns = numContiguousColumns(dstX, dstY, dstY + rows - 1);
 
-            Q_INT32 columns = QMIN(numContiguousdstColumns, columnsRemaining);
+            qint32 columns = qMin(numContiguousdstColumns, columnsRemaining);
 
-            Q_UINT8 *dstData = writablePixel(dstX, dstY);
-            Q_INT32 dstRowStride = rowStride(dstX, dstY);
+            quint8 *dstData = writablePixel(dstX, dstY);
+            qint32 dstRowStride = rowStride(dstX, dstY);
 
-            const Q_UINT8 *srcData = bytes + ((srcX + (srcY * w)) * m_pixelSize);
-            Q_INT32 srcRowStride = w * m_pixelSize;
+            const quint8 *srcData = bytes + ((srcX + (srcY * w)) * m_pixelSize);
+            qint32 srcRowStride = w * m_pixelSize;
 
-            for (Q_INT32 row = 0; row < rows; row++) {
+            for (qint32 row = 0; row < rows; row++) {
                 memcpy(dstData, srcData, columns * m_pixelSize);
                 srcData += srcRowStride;
                 dstData += dstRowStride;
@@ -968,9 +968,9 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
     }
 }
 
-Q_INT32 KisTiledDataManager::numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT32 maxY)
+qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY)
 {
-    Q_INT32 numColumns;
+    qint32 numColumns;
 
     Q_UNUSED(minY);
     Q_UNUSED(maxY);
@@ -984,9 +984,9 @@ Q_INT32 KisTiledDataManager::numContiguousColumns(Q_INT32 x, Q_INT32 minY, Q_INT
     return numColumns;
 }
 
-Q_INT32 KisTiledDataManager::numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 maxX)
+qint32 KisTiledDataManager::numContiguousRows(qint32 y, qint32 minX, qint32 maxX)
 {
-    Q_INT32 numRows;
+    qint32 numRows;
 
     Q_UNUSED(minX);
     Q_UNUSED(maxX);
@@ -1000,7 +1000,7 @@ Q_INT32 KisTiledDataManager::numContiguousRows(Q_INT32 y, Q_INT32 minX, Q_INT32 
     return numRows;
 }
 
-Q_INT32 KisTiledDataManager::rowStride(Q_INT32 x, Q_INT32 y)
+qint32 KisTiledDataManager::rowStride(qint32 x, qint32 y)
 {
     Q_UNUSED(x);
     Q_UNUSED(y);
@@ -1008,7 +1008,7 @@ Q_INT32 KisTiledDataManager::rowStride(Q_INT32 x, Q_INT32 y)
     return KisTile::WIDTH * m_pixelSize;
 }
 
-Q_INT32 KisTiledDataManager::numTiles(void) const
+qint32 KisTiledDataManager::numTiles(void) const
 {
     return m_numTiles;
 }

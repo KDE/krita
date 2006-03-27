@@ -34,10 +34,10 @@ public:
              const char* name = 0);
     ~DlgShearImage();
 
-    void setAngleX(Q_UINT32 w);
-    void setAngleY(Q_UINT32 w);
-        Q_INT32 angleX();
-        Q_INT32 angleY();
+    void setAngleX(quint32 w);
+    void setAngleY(quint32 w);
+        qint32 angleX();
+        qint32 angleY();
 
 private slots:
 

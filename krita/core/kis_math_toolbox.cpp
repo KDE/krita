@@ -46,36 +46,36 @@ KisMathToolboxFactoryRegistry::~KisMathToolboxFactoryRegistry()
 {
 }
 template<typename T>
-double toDouble(Q_UINT8* data, int channelpos )
+double toDouble(quint8* data, int channelpos )
 {
     return (float)( *((T*)(data + channelpos)) );
 }
 
-typedef double (*PtrToDouble)(Q_UINT8*, int);
+typedef double (*PtrToDouble)(quint8*, int);
 
 template<typename T>
-void fromDouble(Q_UINT8* data, int channelpos, double v )
+void fromDouble(quint8* data, int channelpos, double v )
 {
     *((T*)(data + channelpos)) = (T)v;
 }
 
-typedef void (*PtrFromDouble)(Q_UINT8*, int, double);
+typedef void (*PtrFromDouble)(quint8*, int, double);
 
 
 void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation* fr, const QRect& rect)
 {
-    Q_INT32 depth = src->colorSpace()->nColorChannels();
+    qint32 depth = src->colorSpace()->nColorChannels();
     Q3MemArray<PtrToDouble> f(depth);
     Q3ValueVector<KisChannelInfo *> cis = src->colorSpace()->channels();
-    for(Q_INT32 k = 0; k < depth; k++)
+    for(qint32 k = 0; k < depth; k++)
     {
         switch( cis[k]->channelValueType() )
         {
             case KisChannelInfo::UINT8:
-                f[k] = toDouble<Q_UINT8>;
+                f[k] = toDouble<quint8>;
                 break;
             case KisChannelInfo::UINT16:
-                f[k] = toDouble<Q_UINT16>;
+                f[k] = toDouble<quint16>;
                 break;
 #ifdef HAVE_OPENEXR		
             case KisChannelInfo::FLOAT16:
@@ -86,13 +86,13 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
                 f[k] = toDouble<float>;
                 break;
             case KisChannelInfo::INT8:
-                f[k] = toDouble<Q_INT8>;
+                f[k] = toDouble<qint8>;
                 break;
             case KisChannelInfo::INT16:
-                f[k] = toDouble<Q_INT16>;
+                f[k] = toDouble<qint16>;
                 break;
             default:
-                kdWarning() << "Unsupported value type in KisMathToolbox" << endl;
+                kWarning() << "Unsupported value type in KisMathToolbox" << endl;
                 return;
         }
     }
@@ -103,7 +103,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
         float *dstIt = fr->coeffs + (i-rect.y()) * fr->size * fr->depth;
         while( ! srcIt.isDone() )
         {
-            Q_UINT8* v1 = srcIt.rawData();
+            quint8* v1 = srcIt.rawData();
             for( int k = 0; k < depth; k++)
             {
                 *dstIt = f[k](v1, cis[k]->pos());
@@ -116,18 +116,18 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
 
 void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation* fr, const QRect& rect)
 {
-    Q_INT32 depth = dst->colorSpace()->nColorChannels();
+    qint32 depth = dst->colorSpace()->nColorChannels();
     Q3MemArray<PtrFromDouble> f(depth);
     Q3ValueVector<KisChannelInfo *> cis = dst->colorSpace()->channels();
-    for(Q_INT32 k = 0; k < depth; k++)
+    for(qint32 k = 0; k < depth; k++)
     {
         switch( cis[k]->channelValueType() )
         {
             case KisChannelInfo::UINT8:
-                f[k] = fromDouble<Q_UINT8>;
+                f[k] = fromDouble<quint8>;
                 break;
             case KisChannelInfo::UINT16:
-                f[k] = fromDouble<Q_UINT16>;
+                f[k] = fromDouble<quint16>;
                 break;
 #ifdef HAVE_OPENEXR
             case KisChannelInfo::FLOAT16:
@@ -138,13 +138,13 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
                 f[k] = fromDouble<float>;
                 break;
             case KisChannelInfo::INT8:
-                f[k] = fromDouble<Q_INT8>;
+                f[k] = fromDouble<qint8>;
                 break;
             case KisChannelInfo::INT16:
-                f[k] = fromDouble<Q_INT16>;
+                f[k] = fromDouble<qint16>;
                 break;
             default:
-                kdWarning() << "Unsupported value type in KisMathToolbox" << endl;
+                kWarning() << "Unsupported value type in KisMathToolbox" << endl;
                 return;
         }
     }
@@ -154,7 +154,7 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
         float *srcIt = fr->coeffs + (i-rect.y()) * fr->size * fr->depth;
         while( ! dstIt.isDone() )
         {
-            Q_UINT8* v1 = dstIt.rawData();
+            quint8* v1 = dstIt.rawData();
             for( int k = 0; k < depth; k++)
             {
                 f[k](v1, cis[k]->pos(), *srcIt);

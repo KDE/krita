@@ -21,7 +21,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <KoPartSelectAction.h>
 #include <qimage.h>
 
@@ -53,7 +53,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
 
     if( layer )
     {
-        static KPopupMenu submenu;
+        static KMenu submenu;
         submenu.clear();
         submenu.insertItem( SmallIconSet( "file" ), i18n( "&Layer..." ), MenuItems::NewLayer );
         submenu.insertItem( SmallIconSet( "folder" ), i18n( "&Group Layer..." ), MenuItems::NewFolder );
@@ -211,7 +211,7 @@ QImage KisLayerItem::tooltipPreview() const
     if( img.isNull() )
         return img; //so Qt doesn't complain
     img.setAlphaBuffer( true );
-    const int size = kMin( 200, kMax( img.width(), img.height() ) );
+    const int size = qMin( 200, qMax( img.width(), img.height() ) );
     return img.smoothScale( size, size, QImage::ScaleMin );
 }
 

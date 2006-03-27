@@ -35,7 +35,7 @@ class KisTransformWorker : public KisProgressSubject {
 public:
     KisTransformWorker(KisPaintDeviceSP dev, double  xscale, double  yscale,
         double  xshear, double  yshear, double rotation,
-        Q_INT32  xtranslate, Q_INT32  ytranslate,
+        qint32  xtranslate, qint32  ytranslate,
         KisProgressDisplayInterface *progress, KisFilterStrategy *filter);
     ~KisTransformWorker();
 
@@ -46,7 +46,7 @@ public:
 
 private:    
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
-    template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, double  shear, Q_INT32 dx,   KisFilterStrategy *filterStrategy);
+    template <class T> void transformPass(KisPaintDevice *src, KisPaintDevice *dst, double xscale, double  shear, qint32 dx,   KisFilterStrategy *filterStrategy);
     
     void rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
     void rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst);
@@ -56,16 +56,16 @@ private:
     KisPaintDeviceSP m_dev;
     double  m_xscale, m_yscale;
     double  m_xshear, m_yshear, m_rotation;
-    Q_INT32  m_xtranslate, m_ytranslate;
+    qint32  m_xtranslate, m_ytranslate;
     KisProgressDisplayInterface *m_progress;
     KisFilterStrategy *m_filter;
     // Implement KisProgressSubject
     bool m_cancelRequested;
     virtual void cancel() { m_cancelRequested = true; }
-    Q_INT32 m_progressTotalSteps;
-    Q_INT32 m_progressStep;
-    Q_INT32 m_progressScaler;
-    Q_INT32 m_lastProgressReport;
+    qint32 m_progressTotalSteps;
+    qint32 m_progressStep;
+    qint32 m_progressScaler;
+    qint32 m_lastProgressReport;
 };
 
 

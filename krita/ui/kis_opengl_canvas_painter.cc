@@ -320,12 +320,12 @@ void KisOpenGLCanvasPainter::setWorldXForm(bool /*enable*/)
 {
 }
 
-const QWMatrix& KisOpenGLCanvasPainter::worldMatrix() const
+const QMatrix& KisOpenGLCanvasPainter::worldMatrix() const
 {
     return m_defaultWorldMatrix;
 }
 
-void KisOpenGLCanvasPainter::setWorldMatrix(const QWMatrix& /*matrix*/, bool /*combine*/)
+void KisOpenGLCanvasPainter::setMatrix(const QMatrix& /*matrix*/, bool /*combine*/)
 {
 }
 

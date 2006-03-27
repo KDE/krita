@@ -182,7 +182,7 @@ public slots:
      */
     void slotViewTransformationChanged();
     
-    void cursorPosChanged(Q_INT32 xpos, Q_INT32 ypos);
+    void cursorPosChanged(qint32 xpos, qint32 ypos);
 
     void zoomMinus();
     void zoomPlus();

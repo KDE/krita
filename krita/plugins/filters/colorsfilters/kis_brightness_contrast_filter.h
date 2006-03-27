@@ -40,7 +40,7 @@ public:
     virtual QString toString();
     
 public:
-    Q_UINT16 transfer[256];
+    quint16 transfer[256];
     Q3PtrList<QPair<double,double> >  curve;
     KisColorAdjustment * m_adjustment;
 };

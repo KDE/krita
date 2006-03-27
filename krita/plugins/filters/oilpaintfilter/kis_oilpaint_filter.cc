@@ -58,19 +58,19 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
 {
 
     if (!configuration) {
-        kdWarning() << "No configuration object for oilpaint filter\n";
+        kWarning() << "No configuration object for oilpaint filter\n";
         return;
     }
     
     Q_UNUSED(dst);
 
-    Q_INT32 x = rect.x(), y = rect.y();
-    Q_INT32 width = rect.width();
-    Q_INT32 height = rect.height();
+    qint32 x = rect.x(), y = rect.y();
+    qint32 width = rect.width();
+    qint32 height = rect.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
-    Q_UINT32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
-    Q_UINT32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
+    quint32 brushSize = ((KisOilPaintFilterConfiguration*)configuration)->brushSize();
+    quint32 smooth = ((KisOilPaintFilterConfiguration*)configuration)->smooth();
 
 
     OilPaint(src, dst, x, y, width, height, brushSize, smooth);
@@ -97,7 +97,7 @@ void KisOilPaintFilter::OilPaint(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
 
     QRect bounds(x, y, w, h);
 
-    for (Q_INT32 yOffset = 0; yOffset < h; yOffset++) {
+    for (qint32 yOffset = 0; yOffset < h; yOffset++) {
 
         KisHLineIteratorPixel it = src->createHLineIterator(x, y + yOffset, w, false);
         KisHLineIteratorPixel dstIt = dst->createHLineIterator(x, y + yOffset, w, true);

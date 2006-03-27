@@ -25,30 +25,30 @@
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="10" isRoot="false" isAbstract="false" name="string" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="32" isRoot="false" isAbstract="false" name="void" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="34" isRoot="false" isAbstract="false" name="const KisID&amp;" elementReference="33" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="54" isRoot="false" isAbstract="false" name="const Q_UINT8*" elementReference="53" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="54" isRoot="false" isAbstract="false" name="const quint8*" elementReference="53" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="76" isRoot="false" isAbstract="false" name="const QColor&amp;" elementReference="75" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="78" isRoot="false" isAbstract="false" name="Q_UINT8*" elementReference="53" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="78" isRoot="false" isAbstract="false" name="quint8*" elementReference="53" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="90" isRoot="false" isAbstract="false" name="QColor*" elementReference="75" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="96" isRoot="false" isAbstract="false" name="QUANTUM*" elementReference="84" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="109" isRoot="false" isAbstract="false" name="KisPixel&amp;" elementReference="13" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="126" isRoot="false" isAbstract="false" name="KisAbstractColorSpace*" elementReference="26" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="151" isRoot="false" isAbstract="false" name="Q_UINT16*" elementReference="150" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="151" isRoot="false" isAbstract="false" name="quint16*" elementReference="150" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="154" isRoot="false" isAbstract="false" name="KisColorAdjustment*" elementReference="153" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="165" isRoot="false" isAbstract="false" name="const Q_UINT8**" elementReference="53" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="171" isRoot="false" isAbstract="false" name="Q_UINT8**" elementReference="53" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="173" isRoot="false" isAbstract="false" name="Q_INT32*" elementReference="44" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="165" isRoot="false" isAbstract="false" name="const quint8**" elementReference="53" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="171" isRoot="false" isAbstract="false" name="quint8**" elementReference="53" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="173" isRoot="false" isAbstract="false" name="qint32*" elementReference="44" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="202" isRoot="false" isAbstract="false" name="const KisCompositeOp&amp;" elementReference="201" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="240" isRoot="false" isAbstract="false" name="const KisAbstractColorSpace&amp;" elementReference="26" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="244" isRoot="false" isAbstract="false" name="KisAbstractColorSpace&amp;" elementReference="26" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="362" isRoot="false" isAbstract="false" name="const Q_UINT16" elementReference="150" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="569" isRoot="false" isAbstract="false" name="const Q_UINT8" elementReference="53" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="362" isRoot="false" isAbstract="false" name="const quint16" elementReference="150" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="569" isRoot="false" isAbstract="false" name="const quint8" elementReference="53" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="871" isRoot="false" isAbstract="false" name="QObject*" elementReference="870" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="873" isRoot="false" isAbstract="false" name="const char*" elementReference="4" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="875" isRoot="false" isAbstract="false" name="const QStringList&amp;" elementReference="226" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="893" isRoot="false" isAbstract="false" name="float*" elementReference="6" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1749" isRoot="false" isAbstract="false" name="WetPix*" elementReference="1639" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1753" isRoot="false" isAbstract="false" name="WetPack*" elementReference="1641" />
-    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1756" isRoot="false" isAbstract="false" name="Q_UINT32*" elementReference="20" />
+    <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1756" isRoot="false" isAbstract="false" name="quint32*" elementReference="20" />
     <UML:DataType stereotype="3" isSpecification="false" isLeaf="false" visibility="public" xmi.id="1773" isRoot="false" isAbstract="false" name="CELL_PTR" elementReference="1772" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="11" isRoot="false" isAbstract="false" name="QPainter" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="12" isRoot="false" isAbstract="false" name="KisIteratorPixel" />
@@ -65,7 +65,7 @@
      </UML:Classifier.feature>
     </UML:Class>
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="18" isRoot="false" isAbstract="false" name="KisProfile" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="20" isRoot="false" isAbstract="false" name="Q_UINT32" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="20" isRoot="false" isAbstract="false" name="quint32" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="25" isRoot="false" isAbstract="false" name="struct KisColorAdjustment" />
     <UML:Class comment="A colorspace strategy is the definition of a certain color model
 in Krita." isSpecification="false" isLeaf="false" visibility="public" xmi.id="26" isRoot="false" isAbstract="false" name="KisAbstractColorSpace" >
@@ -497,9 +497,9 @@ model together." isSpecification="false" isLeaf="false" visibility="protected" x
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="36" isRoot="false" isAbstract="false" name="DWORD" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="38" isRoot="false" isAbstract="false" name="icColorSpaceSignature" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="42" isRoot="false" isAbstract="false" name="vKisChannelInfoSP" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="44" isRoot="false" isAbstract="false" name="Q_INT32" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="44" isRoot="false" isAbstract="false" name="qint32" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="49" isRoot="false" isAbstract="false" name="bool" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="53" isRoot="false" isAbstract="false" name="Q_UINT8" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="53" isRoot="false" isAbstract="false" name="quint8" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="57" isRoot="false" isAbstract="false" name="QString" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="69" isRoot="false" isAbstract="false" name="KisCompositeOpList" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="72" isRoot="false" isAbstract="false" name="vKisProfileSP" />
@@ -507,9 +507,9 @@ model together." isSpecification="false" isLeaf="false" visibility="protected" x
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="80" isRoot="false" isAbstract="false" name="KisProfileSP" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="84" isRoot="false" isAbstract="false" name="QUANTUM" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="121" isRoot="false" isAbstract="false" name="QImage" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="150" isRoot="false" isAbstract="false" name="Q_UINT16" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="150" isRoot="false" isAbstract="false" name="quint16" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="153" isRoot="false" isAbstract="false" name="KisColorAdjustment" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="163" isRoot="false" isAbstract="false" name="Q_INT8" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="163" isRoot="false" isAbstract="false" name="qint8" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="175" isRoot="false" isAbstract="false" name="enumChannelFlags" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="201" isRoot="false" isAbstract="false" name="KisCompositeOp" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="222" isRoot="false" isAbstract="false" name="cmsHTRANSFORM" />
@@ -5047,7 +5047,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisProfile;&amp;#010;import Q_UINT32;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisProfile;&amp;#010;import quint32;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -5067,7 +5067,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="21" tag="tblock_2" canDelete="false" indentLevel="1" text="public Q_UINT32 srcCmType;" >
+          <ccfdeclarationcodeblock parent_id="21" tag="tblock_2" canDelete="false" indentLevel="1" text="public quint32 srcCmType;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -5077,12 +5077,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="23" tag="tblock_8" canDelete="false" indentLevel="1" text="public Q_UINT32 dstType;" >
+          <ccfdeclarationcodeblock parent_id="23" tag="tblock_8" canDelete="false" indentLevel="1" text="public quint32 dstType;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="24" tag="tblock_11" canDelete="false" indentLevel="1" text="public Q_UINT32 renderIntent;" >
+          <ccfdeclarationcodeblock parent_id="24" tag="tblock_11" canDelete="false" indentLevel="1" text="public quint32 renderIntent;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -5215,7 +5215,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="21" tag="tblock_2" canDelete="false" indentLevel="1" text="public Q_UINT32 srcCmType;" >
+       <ccfdeclarationcodeblock parent_id="21" tag="tblock_2" canDelete="false" indentLevel="1" text="public quint32 srcCmType;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -5255,7 +5255,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="23" tag="tblock_8" canDelete="false" indentLevel="1" text="public Q_UINT32 dstType;" >
+       <ccfdeclarationcodeblock parent_id="23" tag="tblock_8" canDelete="false" indentLevel="1" text="public quint32 dstType;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -5275,7 +5275,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="24" tag="tblock_11" canDelete="false" indentLevel="1" text="public Q_UINT32 renderIntent;" >
+       <ccfdeclarationcodeblock parent_id="24" tag="tblock_11" canDelete="false" indentLevel="1" text="public quint32 renderIntent;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -5368,7 +5368,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="20" parent_class="20" fileExt=".java" fileName="Q_UINT32" >
+    <classifiercodedocument writeOutCode="true" package="" id="20" parent_class="20" fileExt=".java" fileName="quint32" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -5382,7 +5382,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="20" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_UINT32&amp;#010;" />
+        <javacodedocumentation tag="" text="Class quint32&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -5401,7 +5401,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_UINT32 ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public quint32 ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -5525,7 +5525,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import DWORD;&amp;#010;import icColorSpaceSignature;&amp;#010;import vKisChannelInfoSP;&amp;#010;import Q_INT32;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import Q_UINT32;&amp;#010;import KisID;&amp;#010;import KisCompositeOpList;&amp;#010;import vKisProfileSP;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import QImage;&amp;#010;import Q_UINT8;&amp;#010;import Q_INT8;&amp;#010;import enumChannelFlags;&amp;#010;import cmsHTRANSFORM;&amp;#010;import QStringList;&amp;#010;import KisAbstractColorSpace.TransformMap;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import DWORD;&amp;#010;import icColorSpaceSignature;&amp;#010;import vKisChannelInfoSP;&amp;#010;import qint32;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import quint32;&amp;#010;import KisID;&amp;#010;import KisCompositeOpList;&amp;#010;import vKisProfileSP;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import QImage;&amp;#010;import quint8;&amp;#010;import qint8;&amp;#010;import enumChannelFlags;&amp;#010;import cmsHTRANSFORM;&amp;#010;import QStringList;&amp;#010;import KisAbstractColorSpace.TransformMap;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -5550,17 +5550,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="229" tag="tblock_5" canDelete="false" indentLevel="1" text="protected Q_UINT8* m_qcolordata;" >
+          <ccfdeclarationcodeblock parent_id="229" tag="tblock_5" canDelete="false" indentLevel="1" text="protected quint8* m_qcolordata;" >
            <header>
             <codecomment tag="" indentLevel="1" text="// A small buffer for conversion from and to qcolor." />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="230" tag="tblock_8" canDelete="false" indentLevel="1" text="protected Q_INT32 m_alphaPos;" >
+          <ccfdeclarationcodeblock parent_id="230" tag="tblock_8" canDelete="false" indentLevel="1" text="protected qint32 m_alphaPos;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="231" tag="tblock_11" canDelete="false" indentLevel="1" text="protected Q_INT32 m_alphaSize;" >
+          <ccfdeclarationcodeblock parent_id="231" tag="tblock_11" canDelete="false" indentLevel="1" text="protected qint32 m_alphaSize;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -5595,12 +5595,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="// Cache for existing transforms" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="245" tag="tblock_32" canDelete="false" indentLevel="1" text="private Q_UINT32 m_cachesize;" >
+          <ccfdeclarationcodeblock parent_id="245" tag="tblock_32" canDelete="false" indentLevel="1" text="private quint32 m_cachesize;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="246" tag="tblock_35" canDelete="false" indentLevel="1" text="private Q_UINT8* m_conversionCache;" >
+          <ccfdeclarationcodeblock parent_id="246" tag="tblock_35" canDelete="false" indentLevel="1" text="private quint8* m_conversionCache;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -5806,7 +5806,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="46" tag="operation_46" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="47" tag="operation_47" canDelete="false" indentLevel="1" >
@@ -5821,12 +5821,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="50" tag="operation_50" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="51" tag="operation_51" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="52" tag="operation_52" canDelete="false" indentLevel="1" >
@@ -5851,7 +5851,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="64" tag="operation_64" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_UINT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return quint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="65" tag="operation_65" canDelete="false" indentLevel="1" >
@@ -6119,7 +6119,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="// A small buffer for conversion from and to qcolor." />
        </header>
-       <ccfdeclarationcodeblock parent_id="229" tag="tblock_5" canDelete="false" indentLevel="1" text="protected Q_UINT8* m_qcolordata;" >
+       <ccfdeclarationcodeblock parent_id="229" tag="tblock_5" canDelete="false" indentLevel="1" text="protected quint8* m_qcolordata;" >
         <header>
          <codecomment tag="" indentLevel="1" text="// A small buffer for conversion from and to qcolor." />
         </header>
@@ -6139,7 +6139,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="230" tag="tblock_8" canDelete="false" indentLevel="1" text="protected Q_INT32 m_alphaPos;" >
+       <ccfdeclarationcodeblock parent_id="230" tag="tblock_8" canDelete="false" indentLevel="1" text="protected qint32 m_alphaPos;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -6159,7 +6159,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="231" tag="tblock_11" canDelete="false" indentLevel="1" text="protected Q_INT32 m_alphaSize;" >
+       <ccfdeclarationcodeblock parent_id="231" tag="tblock_11" canDelete="false" indentLevel="1" text="protected qint32 m_alphaSize;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -6299,7 +6299,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="245" tag="tblock_32" canDelete="false" indentLevel="1" text="private Q_UINT32 m_cachesize;" >
+       <ccfdeclarationcodeblock parent_id="245" tag="tblock_32" canDelete="false" indentLevel="1" text="private quint32 m_cachesize;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -6319,7 +6319,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="246" tag="tblock_35" canDelete="false" indentLevel="1" text="private Q_UINT8* m_conversionCache;" >
+       <ccfdeclarationcodeblock parent_id="246" tag="tblock_35" canDelete="false" indentLevel="1" text="private quint8* m_conversionCache;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -7073,7 +7073,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="44" parent_class="44" fileExt=".java" fileName="Q_INT32" >
+    <classifiercodedocument writeOutCode="true" package="" id="44" parent_class="44" fileExt=".java" fileName="qint32" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -7087,7 +7087,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="44" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_INT32&amp;#010;" />
+        <javacodedocumentation tag="" text="Class qint32&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -7106,7 +7106,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_INT32 ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public qint32 ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -7223,7 +7223,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="53" parent_class="53" fileExt=".java" fileName="Q_UINT8" >
+    <classifiercodedocument writeOutCode="true" package="" id="53" parent_class="53" fileExt=".java" fileName="quint8" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -7237,7 +7237,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="53" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_UINT8&amp;#010;" />
+        <javacodedocumentation tag="" text="Class quint8&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -7256,7 +7256,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_UINT8 ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public quint8 ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -7298,7 +7298,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="54" parent_class="54" fileExt=".java" fileName="const Q_UINT8*" >
+    <classifiercodedocument writeOutCode="true" package="" id="54" parent_class="54" fileExt=".java" fileName="const quint8*" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -7312,7 +7312,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="54" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Const Q_UINT8*&amp;#010;" />
+        <javacodedocumentation tag="" text="Class Const quint8*&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -7331,7 +7331,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const Q_UINT8* ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const quint8* ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -7748,7 +7748,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="78" parent_class="78" fileExt=".java" fileName="Q_UINT8*" >
+    <classifiercodedocument writeOutCode="true" package="" id="78" parent_class="78" fileExt=".java" fileName="quint8*" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -7762,7 +7762,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="78" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_UINT8*&amp;#010;" />
+        <javacodedocumentation tag="" text="Class quint8*&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -7781,7 +7781,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_UINT8* ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public quint8* ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -8348,7 +8348,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="150" parent_class="150" fileExt=".java" fileName="Q_UINT16" >
+    <classifiercodedocument writeOutCode="true" package="" id="150" parent_class="150" fileExt=".java" fileName="quint16" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -8362,7 +8362,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="150" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_UINT16&amp;#010;" />
+        <javacodedocumentation tag="" text="Class quint16&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -8381,7 +8381,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_UINT16 ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public quint16 ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -8423,7 +8423,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="151" parent_class="151" fileExt=".java" fileName="Q_UINT16*" >
+    <classifiercodedocument writeOutCode="true" package="" id="151" parent_class="151" fileExt=".java" fileName="quint16*" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -8437,7 +8437,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="151" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_UINT16*&amp;#010;" />
+        <javacodedocumentation tag="" text="Class quint16*&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -8456,7 +8456,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_UINT16* ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public quint16* ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -8648,7 +8648,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="163" parent_class="163" fileExt=".java" fileName="Q_INT8" >
+    <classifiercodedocument writeOutCode="true" package="" id="163" parent_class="163" fileExt=".java" fileName="qint8" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -8662,7 +8662,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="163" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_INT8&amp;#010;" />
+        <javacodedocumentation tag="" text="Class qint8&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -8681,7 +8681,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_INT8 ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public qint8 ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -8723,7 +8723,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="165" parent_class="165" fileExt=".java" fileName="const Q_UINT8**" >
+    <classifiercodedocument writeOutCode="true" package="" id="165" parent_class="165" fileExt=".java" fileName="const quint8**" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -8737,7 +8737,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="165" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Const Q_UINT8**&amp;#010;" />
+        <javacodedocumentation tag="" text="Class Const quint8**&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -8756,7 +8756,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const Q_UINT8** ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const quint8** ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -8798,7 +8798,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="171" parent_class="171" fileExt=".java" fileName="Q_UINT8**" >
+    <classifiercodedocument writeOutCode="true" package="" id="171" parent_class="171" fileExt=".java" fileName="quint8**" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -8812,7 +8812,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="171" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_UINT8**&amp;#010;" />
+        <javacodedocumentation tag="" text="Class quint8**&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -8831,7 +8831,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_UINT8** ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public quint8** ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -8873,7 +8873,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="173" parent_class="173" fileExt=".java" fileName="Q_INT32*" >
+    <classifiercodedocument writeOutCode="true" package="" id="173" parent_class="173" fileExt=".java" fileName="qint32*" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -8887,7 +8887,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="173" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_INT32*&amp;#010;" />
+        <javacodedocumentation tag="" text="Class qint32*&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -8906,7 +8906,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_INT32* ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public qint32* ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -9844,7 +9844,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU8BaseColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import Q_INT8;&amp;#010;import Q_UINT32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import Q_INT32;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import enumChannelFlags;&amp;#010;import KisCompositeOpList;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU8BaseColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import qint8;&amp;#010;import quint32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import qint32;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import enumChannelFlags;&amp;#010;import KisCompositeOpList;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -9995,7 +9995,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="288" tag="operation_288" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return Q_INT8  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return qint8  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="291" tag="operation_291" canDelete="false" indentLevel="1" >
@@ -10015,17 +10015,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="298" tag="operation_298" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="299" tag="operation_299" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="300" tag="operation_300" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="301" tag="operation_301" canDelete="false" indentLevel="1" >
@@ -10342,12 +10342,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
           <codecomment tag="" indentLevel="1" text="Fields" />
          </header>
          <textblocks>
-          <ccfdeclarationcodeblock parent_id="363" tag="tblock_0" canDelete="false" indentLevel="1" text="static public const Q_UINT16 U16_OPACITY_OPAQUE;" >
+          <ccfdeclarationcodeblock parent_id="363" tag="tblock_0" canDelete="false" indentLevel="1" text="static public const quint16 U16_OPACITY_OPAQUE;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="364" tag="tblock_2" canDelete="false" indentLevel="1" text="static public const Q_UINT16 U16_OPACITY_TRANSPARENT;" >
+          <ccfdeclarationcodeblock parent_id="364" tag="tblock_2" canDelete="false" indentLevel="1" text="static public const quint16 U16_OPACITY_TRANSPARENT;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -10501,7 +10501,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="363" tag="tblock_0" canDelete="false" indentLevel="1" text="static public const Q_UINT16 U16_OPACITY_OPAQUE;" >
+       <ccfdeclarationcodeblock parent_id="363" tag="tblock_0" canDelete="false" indentLevel="1" text="static public const quint16 U16_OPACITY_OPAQUE;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -10521,7 +10521,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="364" tag="tblock_2" canDelete="false" indentLevel="1" text="static public const Q_UINT16 U16_OPACITY_TRANSPARENT;" >
+       <ccfdeclarationcodeblock parent_id="364" tag="tblock_2" canDelete="false" indentLevel="1" text="static public const quint16 U16_OPACITY_TRANSPARENT;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -10609,7 +10609,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeclassfield>
      </classfields>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="362" parent_class="362" fileExt=".java" fileName="const Q_UINT16" >
+    <classifiercodedocument writeOutCode="true" package="" id="362" parent_class="362" fileExt=".java" fileName="const quint16" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -10623,7 +10623,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="362" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Const Q_UINT16&amp;#010;" />
+        <javacodedocumentation tag="" text="Class Const quint16&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -10642,7 +10642,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const Q_UINT16 ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const quint16 ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -10691,7 +10691,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU16BaseColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import Q_UINT8;&amp;#010;import Q_INT32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import Q_INT8;&amp;#010;import Q_UINT32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;&amp;#010;import Q_UINT16;&amp;#010;import cmsHTRANSFORM;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU16BaseColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import quint8;&amp;#010;import qint32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import qint8;&amp;#010;import quint32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;&amp;#010;import quint16;&amp;#010;import cmsHTRANSFORM;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -10721,27 +10721,27 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="570" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_X;" >
+          <ccfdeclarationcodeblock parent_id="570" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_X;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="571" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_Y;" >
+          <ccfdeclarationcodeblock parent_id="571" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_Y;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="572" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_Z;" >
+          <ccfdeclarationcodeblock parent_id="572" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_Z;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="573" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_ALPHA;" >
+          <ccfdeclarationcodeblock parent_id="573" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_ALPHA;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="574" tag="tblock_20" canDelete="false" indentLevel="1" text="private Q_UINT8* m_qcolordata;" >
+          <ccfdeclarationcodeblock parent_id="574" tag="tblock_20" canDelete="false" indentLevel="1" text="private quint8* m_qcolordata;" >
            <header>
             <codecomment tag="" indentLevel="1" text="// A small buffer for conversion from and to qcolor." />
            </header>
@@ -10922,7 +10922,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="411" tag="operation_411" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return Q_INT8  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return qint8  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="414" tag="operation_414" canDelete="false" indentLevel="1" >
@@ -10942,17 +10942,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="421" tag="operation_421" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="422" tag="operation_422" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="423" tag="operation_423" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="424" tag="operation_424" canDelete="false" indentLevel="1" >
@@ -11150,7 +11150,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="570" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_X;" >
+       <ccfdeclarationcodeblock parent_id="570" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_X;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -11170,7 +11170,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="571" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_Y;" >
+       <ccfdeclarationcodeblock parent_id="571" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_Y;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -11190,7 +11190,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="572" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_Z;" >
+       <ccfdeclarationcodeblock parent_id="572" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_Z;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -11210,7 +11210,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="573" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="573" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_ALPHA;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -11230,7 +11230,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="// A small buffer for conversion from and to qcolor." />
        </header>
-       <ccfdeclarationcodeblock parent_id="574" tag="tblock_20" canDelete="false" indentLevel="1" text="private Q_UINT8* m_qcolordata;" >
+       <ccfdeclarationcodeblock parent_id="574" tag="tblock_20" canDelete="false" indentLevel="1" text="private quint8* m_qcolordata;" >
         <header>
          <codecomment tag="" indentLevel="1" text="// A small buffer for conversion from and to qcolor." />
         </header>
@@ -11255,7 +11255,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import Q_UINT16;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import quint16;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -11270,22 +11270,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
           <codecomment tag="" indentLevel="1" text="Fields" />
          </header>
          <textblocks>
-          <ccfdeclarationcodeblock parent_id="374" tag="tblock_0" canDelete="false" indentLevel="1" text="public Q_UINT16 X;" >
+          <ccfdeclarationcodeblock parent_id="374" tag="tblock_0" canDelete="false" indentLevel="1" text="public quint16 X;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="375" tag="tblock_2" canDelete="false" indentLevel="1" text="public Q_UINT16 Y;" >
+          <ccfdeclarationcodeblock parent_id="375" tag="tblock_2" canDelete="false" indentLevel="1" text="public quint16 Y;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="376" tag="tblock_5" canDelete="false" indentLevel="1" text="public Q_UINT16 Z;" >
+          <ccfdeclarationcodeblock parent_id="376" tag="tblock_5" canDelete="false" indentLevel="1" text="public quint16 Z;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="377" tag="tblock_8" canDelete="false" indentLevel="1" text="public Q_UINT16 alpha;" >
+          <ccfdeclarationcodeblock parent_id="377" tag="tblock_8" canDelete="false" indentLevel="1" text="public quint16 alpha;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -11433,7 +11433,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="374" tag="tblock_0" canDelete="false" indentLevel="1" text="public Q_UINT16 X;" >
+       <ccfdeclarationcodeblock parent_id="374" tag="tblock_0" canDelete="false" indentLevel="1" text="public quint16 X;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -11453,7 +11453,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="375" tag="tblock_2" canDelete="false" indentLevel="1" text="public Q_UINT16 Y;" >
+       <ccfdeclarationcodeblock parent_id="375" tag="tblock_2" canDelete="false" indentLevel="1" text="public quint16 Y;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -11473,7 +11473,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="376" tag="tblock_5" canDelete="false" indentLevel="1" text="public Q_UINT16 Z;" >
+       <ccfdeclarationcodeblock parent_id="376" tag="tblock_5" canDelete="false" indentLevel="1" text="public quint16 Z;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -11493,7 +11493,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="377" tag="tblock_8" canDelete="false" indentLevel="1" text="public Q_UINT16 alpha;" >
+       <ccfdeclarationcodeblock parent_id="377" tag="tblock_8" canDelete="false" indentLevel="1" text="public quint16 alpha;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -11571,7 +11571,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeclassfield>
      </classfields>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="569" parent_class="569" fileExt=".java" fileName="const Q_UINT8" >
+    <classifiercodedocument writeOutCode="true" package="" id="569" parent_class="569" fileExt=".java" fileName="const quint8" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -11585,7 +11585,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="569" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Const Q_UINT8&amp;#010;" />
+        <javacodedocumentation tag="" text="Class Const quint8&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -11604,7 +11604,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const Q_UINT8 ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Const quint8 ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -11653,7 +11653,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU8BaseColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import Q_UINT8;&amp;#010;import Q_INT32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import Q_UINT32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import Q_INT8;&amp;#010;import KisCompositeOpList;&amp;#010;import cmsHTRANSFORM;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU8BaseColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import quint8;&amp;#010;import qint32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import quint32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import qint8;&amp;#010;import KisCompositeOpList;&amp;#010;import cmsHTRANSFORM;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -11683,32 +11683,32 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="663" tag="tblock_8" canDelete="false" indentLevel="1" text="private Q_UINT8* m_qcolordata;" >
+          <ccfdeclarationcodeblock parent_id="663" tag="tblock_8" canDelete="false" indentLevel="1" text="private quint8* m_qcolordata;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="664" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_CYAN;" >
+          <ccfdeclarationcodeblock parent_id="664" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_CYAN;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="665" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_MAGENTA;" >
+          <ccfdeclarationcodeblock parent_id="665" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_MAGENTA;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="666" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_YELLOW;" >
+          <ccfdeclarationcodeblock parent_id="666" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_YELLOW;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="667" tag="tblock_20" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_BLACK;" >
+          <ccfdeclarationcodeblock parent_id="667" tag="tblock_20" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_BLACK;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="668" tag="tblock_23" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_CMYK_ALPHA;" >
+          <ccfdeclarationcodeblock parent_id="668" tag="tblock_23" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_CMYK_ALPHA;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -11914,17 +11914,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="619" tag="operation_619" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="620" tag="operation_620" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="621" tag="operation_621" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="622" tag="operation_622" canDelete="false" indentLevel="1" >
@@ -12077,7 +12077,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="663" tag="tblock_8" canDelete="false" indentLevel="1" text="private Q_UINT8* m_qcolordata;" >
+       <ccfdeclarationcodeblock parent_id="663" tag="tblock_8" canDelete="false" indentLevel="1" text="private quint8* m_qcolordata;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -12097,7 +12097,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="664" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_CYAN;" >
+       <ccfdeclarationcodeblock parent_id="664" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_CYAN;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -12117,7 +12117,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="665" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_MAGENTA;" >
+       <ccfdeclarationcodeblock parent_id="665" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_MAGENTA;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -12137,7 +12137,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="666" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_YELLOW;" >
+       <ccfdeclarationcodeblock parent_id="666" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_YELLOW;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -12157,7 +12157,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="667" tag="tblock_20" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_BLACK;" >
+       <ccfdeclarationcodeblock parent_id="667" tag="tblock_20" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_BLACK;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -12177,7 +12177,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="668" tag="tblock_23" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_CMYK_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="668" tag="tblock_23" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_CMYK_ALPHA;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -12202,7 +12202,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU8BaseColorSpace;&amp;#010;import Q_UINT8;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import Q_INT32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import Q_INT8;&amp;#010;import Q_UINT32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU8BaseColorSpace;&amp;#010;import quint8;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import qint32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import qint8;&amp;#010;import quint32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -12222,12 +12222,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="861" tag="tblock_2" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_GRAY;" >
+          <ccfdeclarationcodeblock parent_id="861" tag="tblock_2" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_GRAY;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="862" tag="tblock_5" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_GRAY_ALPHA;" >
+          <ccfdeclarationcodeblock parent_id="862" tag="tblock_5" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_GRAY_ALPHA;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -12368,7 +12368,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="714" tag="operation_714" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return Q_INT8  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return qint8  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="717" tag="operation_717" canDelete="false" indentLevel="1" >
@@ -12388,17 +12388,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="724" tag="operation_724" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="725" tag="operation_725" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="726" tag="operation_726" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="727" tag="operation_727" canDelete="false" indentLevel="1" >
@@ -12551,7 +12551,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="861" tag="tblock_2" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_GRAY;" >
+       <ccfdeclarationcodeblock parent_id="861" tag="tblock_2" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_GRAY;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -12571,7 +12571,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="862" tag="tblock_5" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_GRAY_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="862" tag="tblock_5" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_GRAY_ALPHA;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -13316,7 +13316,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisF32BaseColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import Q_UINT8;&amp;#010;import Q_INT32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import Q_INT8;&amp;#010;import Q_UINT32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisF32BaseColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import quint8;&amp;#010;import qint32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import qint8;&amp;#010;import quint32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -13336,22 +13336,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1126" tag="tblock_2" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_BLUE;" >
+          <ccfdeclarationcodeblock parent_id="1126" tag="tblock_2" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_BLUE;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1127" tag="tblock_5" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_GREEN;" >
+          <ccfdeclarationcodeblock parent_id="1127" tag="tblock_5" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_GREEN;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1128" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_RED;" >
+          <ccfdeclarationcodeblock parent_id="1128" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_RED;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1129" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_ALPHA;" >
+          <ccfdeclarationcodeblock parent_id="1129" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_ALPHA;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -13512,7 +13512,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="929" tag="operation_929" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return Q_INT8  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return qint8  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="932" tag="operation_932" canDelete="false" indentLevel="1" >
@@ -13532,17 +13532,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="939" tag="operation_939" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="940" tag="operation_940" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="941" tag="operation_941" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="942" tag="operation_942" canDelete="false" indentLevel="1" >
@@ -13720,7 +13720,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1126" tag="tblock_2" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_BLUE;" >
+       <ccfdeclarationcodeblock parent_id="1126" tag="tblock_2" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_BLUE;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -13740,7 +13740,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1127" tag="tblock_5" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_GREEN;" >
+       <ccfdeclarationcodeblock parent_id="1127" tag="tblock_5" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_GREEN;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -13760,7 +13760,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1128" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_RED;" >
+       <ccfdeclarationcodeblock parent_id="1128" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_RED;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -13780,7 +13780,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1129" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="1129" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_ALPHA;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -14030,7 +14030,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU16BaseColorSpace;&amp;#010;import Q_UINT16;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import Q_UINT8;&amp;#010;import Q_INT32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import Q_INT8;&amp;#010;import Q_UINT32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU16BaseColorSpace;&amp;#010;import quint16;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import quint8;&amp;#010;import qint32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import qint8;&amp;#010;import quint32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -14045,12 +14045,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
           <codecomment tag="" indentLevel="1" text="Fields" />
          </header>
          <textblocks>
-          <ccfdeclarationcodeblock parent_id="1138" tag="tblock_0" canDelete="false" indentLevel="1" text="static public const Q_UINT16 U16_OPACITY_OPAQUE;" >
+          <ccfdeclarationcodeblock parent_id="1138" tag="tblock_0" canDelete="false" indentLevel="1" text="static public const quint16 U16_OPACITY_OPAQUE;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1139" tag="tblock_2" canDelete="false" indentLevel="1" text="static public const Q_UINT16 U16_OPACITY_TRANSPARENT;" >
+          <ccfdeclarationcodeblock parent_id="1139" tag="tblock_2" canDelete="false" indentLevel="1" text="static public const quint16 U16_OPACITY_TRANSPARENT;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -14060,22 +14060,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1382" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_BLUE;" >
+          <ccfdeclarationcodeblock parent_id="1382" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_BLUE;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1383" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_GREEN;" >
+          <ccfdeclarationcodeblock parent_id="1383" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_GREEN;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1384" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_RED;" >
+          <ccfdeclarationcodeblock parent_id="1384" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_RED;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1385" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_ALPHA;" >
+          <ccfdeclarationcodeblock parent_id="1385" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_ALPHA;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -14256,7 +14256,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="1185" tag="operation_1185" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return Q_INT8  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return qint8  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1188" tag="operation_1188" canDelete="false" indentLevel="1" >
@@ -14276,17 +14276,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="1195" tag="operation_1195" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1196" tag="operation_1196" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1197" tag="operation_1197" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1198" tag="operation_1198" canDelete="false" indentLevel="1" >
@@ -14444,7 +14444,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1138" tag="tblock_0" canDelete="false" indentLevel="1" text="static public const Q_UINT16 U16_OPACITY_OPAQUE;" >
+       <ccfdeclarationcodeblock parent_id="1138" tag="tblock_0" canDelete="false" indentLevel="1" text="static public const quint16 U16_OPACITY_OPAQUE;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -14464,7 +14464,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1139" tag="tblock_2" canDelete="false" indentLevel="1" text="static public const Q_UINT16 U16_OPACITY_TRANSPARENT;" >
+       <ccfdeclarationcodeblock parent_id="1139" tag="tblock_2" canDelete="false" indentLevel="1" text="static public const quint16 U16_OPACITY_TRANSPARENT;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -14504,7 +14504,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1382" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_BLUE;" >
+       <ccfdeclarationcodeblock parent_id="1382" tag="tblock_8" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_BLUE;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -14524,7 +14524,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1383" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_GREEN;" >
+       <ccfdeclarationcodeblock parent_id="1383" tag="tblock_11" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_GREEN;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -14544,7 +14544,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1384" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_RED;" >
+       <ccfdeclarationcodeblock parent_id="1384" tag="tblock_14" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_RED;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -14564,7 +14564,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1385" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const Q_UINT8 PIXEL_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="1385" tag="tblock_17" canDelete="false" indentLevel="1" text="static private const quint8 PIXEL_ALPHA;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -14664,7 +14664,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU8BaseColorSpace;&amp;#010;import Q_UINT8;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import Q_INT32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import Q_INT8;&amp;#010;import Q_UINT32;&amp;#010;import enumChannelFlags;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisU8BaseColorSpace;&amp;#010;import quint8;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import qint32;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import qint8;&amp;#010;import quint32;&amp;#010;import enumChannelFlags;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import KisCompositeOpList;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -14800,7 +14800,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="1435" tag="operation_1435" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return Q_INT8  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src1 &amp;#010;@param src2 &amp;#010;@return qint8  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1438" tag="operation_1438" canDelete="false" indentLevel="1" >
@@ -14825,17 +14825,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="1453" tag="operation_1453" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1454" tag="operation_1454" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1455" tag="operation_1455" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1456" tag="operation_1456" canDelete="false" indentLevel="1" >
@@ -14875,7 +14875,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="1485" tag="operation_1485" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src &amp;#010;@return Q_UINT8  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@param src &amp;#010;@return quint8  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1487" tag="operation_1487" canDelete="false" indentLevel="1" >
@@ -15253,7 +15253,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import Q_UINT16;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import quint16;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -15268,42 +15268,42 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
           <codecomment tag="" indentLevel="1" text="Fields" />
          </header>
          <textblocks>
-          <ccfdeclarationcodeblock parent_id="1643" tag="tblock_0" canDelete="false" indentLevel="1" text="public Q_UINT16 rd;" >
+          <ccfdeclarationcodeblock parent_id="1643" tag="tblock_0" canDelete="false" indentLevel="1" text="public quint16 rd;" >
            <header>
             <codecomment tag="" indentLevel="1" text="Total red channel concentration" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1644" tag="tblock_2" canDelete="false" indentLevel="1" text="public Q_UINT16 rw;" >
+          <ccfdeclarationcodeblock parent_id="1644" tag="tblock_2" canDelete="false" indentLevel="1" text="public quint16 rw;" >
            <header>
             <codecomment tag="" indentLevel="1" text="Myth-red concentration" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1645" tag="tblock_5" canDelete="false" indentLevel="1" text="public Q_UINT16 gd;" >
+          <ccfdeclarationcodeblock parent_id="1645" tag="tblock_5" canDelete="false" indentLevel="1" text="public quint16 gd;" >
            <header>
             <codecomment tag="" indentLevel="1" text="Total green channel concentration" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1646" tag="tblock_8" canDelete="false" indentLevel="1" text="public Q_UINT16 gw;" >
+          <ccfdeclarationcodeblock parent_id="1646" tag="tblock_8" canDelete="false" indentLevel="1" text="public quint16 gw;" >
            <header>
             <codecomment tag="" indentLevel="1" text="Myth-green concentration" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1647" tag="tblock_11" canDelete="false" indentLevel="1" text="public Q_UINT16 bd;" >
+          <ccfdeclarationcodeblock parent_id="1647" tag="tblock_11" canDelete="false" indentLevel="1" text="public quint16 bd;" >
            <header>
             <codecomment tag="" indentLevel="1" text="Total blue channel concentration" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1648" tag="tblock_14" canDelete="false" indentLevel="1" text="public Q_UINT16 bw;" >
+          <ccfdeclarationcodeblock parent_id="1648" tag="tblock_14" canDelete="false" indentLevel="1" text="public quint16 bw;" >
            <header>
             <codecomment tag="" indentLevel="1" text="Myth-blue concentration" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1649" tag="tblock_17" canDelete="false" indentLevel="1" text="public Q_UINT16 w;" >
+          <ccfdeclarationcodeblock parent_id="1649" tag="tblock_17" canDelete="false" indentLevel="1" text="public quint16 w;" >
            <header>
             <codecomment tag="" indentLevel="1" text="Water volume" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1650" tag="tblock_20" canDelete="false" indentLevel="1" text="public Q_UINT16 h;" >
+          <ccfdeclarationcodeblock parent_id="1650" tag="tblock_20" canDelete="false" indentLevel="1" text="public quint16 h;" >
            <header>
             <codecomment tag="" indentLevel="1" text="Height of paper surface XXX: This might just as well be a single&amp;#010;channel in our colour model that has two of&amp;#010;these wetpix structs for every paint device pixel" />
            </header>
@@ -15446,7 +15446,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="Total red channel concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1643" tag="tblock_0" canDelete="false" indentLevel="1" text="public Q_UINT16 rd;" >
+       <ccfdeclarationcodeblock parent_id="1643" tag="tblock_0" canDelete="false" indentLevel="1" text="public quint16 rd;" >
         <header>
          <codecomment tag="" indentLevel="1" text="Total red channel concentration" />
         </header>
@@ -15466,7 +15466,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="Myth-red concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1644" tag="tblock_2" canDelete="false" indentLevel="1" text="public Q_UINT16 rw;" >
+       <ccfdeclarationcodeblock parent_id="1644" tag="tblock_2" canDelete="false" indentLevel="1" text="public quint16 rw;" >
         <header>
          <codecomment tag="" indentLevel="1" text="Myth-red concentration" />
         </header>
@@ -15486,7 +15486,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="Total green channel concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1645" tag="tblock_5" canDelete="false" indentLevel="1" text="public Q_UINT16 gd;" >
+       <ccfdeclarationcodeblock parent_id="1645" tag="tblock_5" canDelete="false" indentLevel="1" text="public quint16 gd;" >
         <header>
          <codecomment tag="" indentLevel="1" text="Total green channel concentration" />
         </header>
@@ -15506,7 +15506,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="Myth-green concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1646" tag="tblock_8" canDelete="false" indentLevel="1" text="public Q_UINT16 gw;" >
+       <ccfdeclarationcodeblock parent_id="1646" tag="tblock_8" canDelete="false" indentLevel="1" text="public quint16 gw;" >
         <header>
          <codecomment tag="" indentLevel="1" text="Myth-green concentration" />
         </header>
@@ -15526,7 +15526,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="Total blue channel concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1647" tag="tblock_11" canDelete="false" indentLevel="1" text="public Q_UINT16 bd;" >
+       <ccfdeclarationcodeblock parent_id="1647" tag="tblock_11" canDelete="false" indentLevel="1" text="public quint16 bd;" >
         <header>
          <codecomment tag="" indentLevel="1" text="Total blue channel concentration" />
         </header>
@@ -15546,7 +15546,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="Myth-blue concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1648" tag="tblock_14" canDelete="false" indentLevel="1" text="public Q_UINT16 bw;" >
+       <ccfdeclarationcodeblock parent_id="1648" tag="tblock_14" canDelete="false" indentLevel="1" text="public quint16 bw;" >
         <header>
          <codecomment tag="" indentLevel="1" text="Myth-blue concentration" />
         </header>
@@ -15566,7 +15566,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="Water volume" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1649" tag="tblock_17" canDelete="false" indentLevel="1" text="public Q_UINT16 w;" >
+       <ccfdeclarationcodeblock parent_id="1649" tag="tblock_17" canDelete="false" indentLevel="1" text="public quint16 w;" >
         <header>
          <codecomment tag="" indentLevel="1" text="Water volume" />
         </header>
@@ -15586,7 +15586,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" text="Height of paper surface XXX: This might just as well be a single&amp;#010;channel in our colour model that has two of&amp;#010;these wetpix structs for every paint device pixel" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1650" tag="tblock_20" canDelete="false" indentLevel="1" text="public Q_UINT16 h;" >
+       <ccfdeclarationcodeblock parent_id="1650" tag="tblock_20" canDelete="false" indentLevel="1" text="public quint16 h;" >
         <header>
          <codecomment tag="" indentLevel="1" text="Height of paper surface XXX: This might just as well be a single&amp;#010;channel in our colour model that has two of&amp;#010;these wetpix structs for every paint device pixel" />
         </header>
@@ -16117,7 +16117,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisAbstractColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import Q_UINT32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import Q_INT32;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import Q_INT8;&amp;#010;import KisCompositeOpList;&amp;#010;import QStringList;&amp;#010;import QMap;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisAbstractColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import quint32;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import qint32;&amp;#010;import QString;&amp;#010;import QImage;&amp;#010;import qint8;&amp;#010;import KisCompositeOpList;&amp;#010;import QStringList;&amp;#010;import QMap;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -16137,7 +16137,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" />
            </header>
           </ccfdeclarationcodeblock>
-          <ccfdeclarationcodeblock parent_id="1757" tag="tblock_2" canDelete="false" indentLevel="1" text="private Q_UINT32* wet_render_tab;" >
+          <ccfdeclarationcodeblock parent_id="1757" tag="tblock_2" canDelete="false" indentLevel="1" text="private quint32* wet_render_tab;" >
            <header>
             <codecomment tag="" indentLevel="1" />
            </header>
@@ -16343,22 +16343,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="1703" tag="operation_1703" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1704" tag="operation_1704" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1705" tag="operation_1705" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1706" tag="operation_1706" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1707" tag="operation_1707" canDelete="false" indentLevel="1" >
@@ -16496,7 +16496,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <codecomment tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1757" tag="tblock_2" canDelete="false" indentLevel="1" text="private Q_UINT32* wet_render_tab;" >
+       <ccfdeclarationcodeblock parent_id="1757" tag="tblock_2" canDelete="false" indentLevel="1" text="private quint32* wet_render_tab;" >
         <header>
          <codecomment tag="" indentLevel="1" />
         </header>
@@ -16764,7 +16764,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
      </header>
      <classfields/>
     </classifiercodedocument>
-    <classifiercodedocument writeOutCode="true" package="" id="1756" parent_class="1756" fileExt=".java" fileName="Q_UINT32*" >
+    <classifiercodedocument writeOutCode="true" package="" id="1756" parent_class="1756" fileExt=".java" fileName="quint32*" >
      <textblocks>
       <codeblockwithcomments tag="packages" writeOutText="false" >
        <header>
@@ -16778,7 +16778,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
       </codeblockwithcomments>
       <javaclassdeclarationblock parent_id="1756" tag="ClassDeclBlock" canDelete="false" >
        <header>
-        <javacodedocumentation tag="" text="Class Q_UINT32*&amp;#010;" />
+        <javacodedocumentation tag="" text="Class quint32*&amp;#010;" />
        </header>
        <textblocks>
         <hierarchicalcodeblock tag="fieldsDecl" canDelete="false" indentLevel="1" >
@@ -16797,7 +16797,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             <codecomment tag="" indentLevel="1" text="Constructors" />
            </header>
            <textblocks>
-            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public Q_UINT32* ( ) { }" >
+            <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="public quint32* ( ) { }" >
              <header>
               <codecomment tag="" indentLevel="1" text="Empty Constructor" />
              </header>
@@ -17221,7 +17221,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         <codecomment tag="" writeOutText="false" />
        </header>
       </codeblockwithcomments>
-      <codeblockwithcomments tag="imports" text="&amp;#010;import KisAbstractColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import Q_INT32;&amp;#010;import QString;&amp;#010;import Q_UINT32;&amp;#010;import QImage;&amp;#010;import Q_INT8;&amp;#010;import Q_UINT8;&amp;#010;import KisCompositeOpList;" >
+      <codeblockwithcomments tag="imports" text="&amp;#010;import KisAbstractColorSpace;&amp;#010;import KisProfileSP;&amp;#010;import QUANTUM;&amp;#010;import KisPixelRO;&amp;#010;import KisPixel;&amp;#010;import vKisChannelInfoSP;&amp;#010;import bool;&amp;#010;import qint32;&amp;#010;import QString;&amp;#010;import quint32;&amp;#010;import QImage;&amp;#010;import qint8;&amp;#010;import quint8;&amp;#010;import KisCompositeOpList;" >
        <header>
         <codecomment tag="" writeOutText="false" />
        </header>
@@ -17352,22 +17352,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
             </codeoperation>
             <codeoperation parent_id="1809" tag="operation_1809" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1810" tag="operation_1810" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1811" tag="operation_1811" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1812" tag="operation_1812" canDelete="false" indentLevel="1" >
              <header>
-              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return Q_INT32  " />
+              <javacodedocumentation tag="" indentLevel="1" text="&amp;#010;@return qint32  " />
              </header>
             </codeoperation>
             <codeoperation parent_id="1813" tag="operation_1813" canDelete="false" indentLevel="1" >
@@ -24724,7 +24724,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="21" tag="tblock_1" canDelete="false" indentLevel="1" text=" Q_UINT32 srcCmType;" >
+              <ccfdeclarationcodeblock parent_id="21" tag="tblock_1" canDelete="false" indentLevel="1" text=" quint32 srcCmType;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -24734,12 +24734,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="23" tag="tblock_3" canDelete="false" indentLevel="1" text=" Q_UINT32 dstType;" >
+              <ccfdeclarationcodeblock parent_id="23" tag="tblock_3" canDelete="false" indentLevel="1" text=" quint32 dstType;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="24" tag="tblock_4" canDelete="false" indentLevel="1" text=" Q_UINT32 renderIntent;" >
+              <ccfdeclarationcodeblock parent_id="24" tag="tblock_4" canDelete="false" indentLevel="1" text=" quint32 renderIntent;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -24983,7 +24983,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="21" tag="tblock_1" canDelete="false" indentLevel="1" text=" Q_UINT32 srcCmType;" >
+       <ccfdeclarationcodeblock parent_id="21" tag="tblock_1" canDelete="false" indentLevel="1" text=" quint32 srcCmType;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -25023,7 +25023,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="23" tag="tblock_3" canDelete="false" indentLevel="1" text=" Q_UINT32 dstType;" >
+       <ccfdeclarationcodeblock parent_id="23" tag="tblock_3" canDelete="false" indentLevel="1" text=" quint32 dstType;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -25043,7 +25043,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="24" tag="tblock_4" canDelete="false" indentLevel="1" text=" Q_UINT32 renderIntent;" >
+       <ccfdeclarationcodeblock parent_id="24" tag="tblock_4" canDelete="false" indentLevel="1" text=" quint32 renderIntent;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -25269,7 +25269,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
     </classifiercodedocument>
     <classifiercodedocument writeOutCode="true" package="" id="cppheader20" parent_class="20" fileExt=".h" fileName="q_uint32" >
      <textblocks>
-      <codeblockwithcomments tag="hashDefBlock" text="#ifndef Q_UINT32_H&amp;#010;#define Q_UINT32_H" >
+      <codeblockwithcomments tag="hashDefBlock" text="#ifndef quint32_H&amp;#010;#define quint32_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -25296,7 +25296,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </codeblockwithcomments>
         <cppheaderclassdeclarationblock parent_id="20" tag="classDeclarationBlock" canDelete="false" >
          <header>
-          <cppcodedocumentation tag="" text="Class Q_UINT32&amp;#010;" />
+          <cppcodedocumentation tag="" text="Class quint32&amp;#010;" />
          </header>
          <textblocks>
           <hierarchicalcodeblock tag="publicBlock" canDelete="false" >
@@ -25320,7 +25320,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" indentLevel="1" text="Constructors" />
                </header>
                <textblocks>
-                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="Q_UINT32 ( ) { }" >
+                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="quint32 ( ) { }" >
                  <header>
                   <cppcodedocumentation tag="" indentLevel="1" text="Empty Constructor" />
                  </header>
@@ -25462,7 +25462,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </cppheaderclassdeclarationblock>
        </textblocks>
       </hierarchicalcodeblock>
-      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //Q_UINT32_H" >
+      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //quint32_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -26009,17 +26009,17 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="229" tag="tblock_2" canDelete="false" indentLevel="1" text=" Q_UINT8* m_qcolordata;" >
+              <ccfdeclarationcodeblock parent_id="229" tag="tblock_2" canDelete="false" indentLevel="1" text=" quint8* m_qcolordata;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="// A small buffer for conversion from and to qcolor." />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="230" tag="tblock_3" canDelete="false" indentLevel="1" text=" Q_INT32 m_alphaPos;" >
+              <ccfdeclarationcodeblock parent_id="230" tag="tblock_3" canDelete="false" indentLevel="1" text=" qint32 m_alphaPos;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="231" tag="tblock_4" canDelete="false" indentLevel="1" text=" Q_INT32 m_alphaSize;" >
+              <ccfdeclarationcodeblock parent_id="231" tag="tblock_4" canDelete="false" indentLevel="1" text=" qint32 m_alphaSize;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -26198,12 +26198,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" indentLevel="1" text="// Cache for existing transforms" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="245" tag="tblock_11" canDelete="false" indentLevel="1" text=" Q_UINT32 m_cachesize;" >
+              <ccfdeclarationcodeblock parent_id="245" tag="tblock_11" canDelete="false" indentLevel="1" text=" quint32 m_cachesize;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="246" tag="tblock_12" canDelete="false" indentLevel="1" text=" Q_UINT8* m_conversionCache;" >
+              <ccfdeclarationcodeblock parent_id="246" tag="tblock_12" canDelete="false" indentLevel="1" text=" quint8* m_conversionCache;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -26380,7 +26380,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="// A small buffer for conversion from and to qcolor." />
        </header>
-       <ccfdeclarationcodeblock parent_id="229" tag="tblock_2" canDelete="false" indentLevel="1" text=" Q_UINT8* m_qcolordata;" >
+       <ccfdeclarationcodeblock parent_id="229" tag="tblock_2" canDelete="false" indentLevel="1" text=" quint8* m_qcolordata;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="// A small buffer for conversion from and to qcolor." />
         </header>
@@ -26400,7 +26400,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="230" tag="tblock_3" canDelete="false" indentLevel="1" text=" Q_INT32 m_alphaPos;" >
+       <ccfdeclarationcodeblock parent_id="230" tag="tblock_3" canDelete="false" indentLevel="1" text=" qint32 m_alphaPos;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -26420,7 +26420,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="231" tag="tblock_4" canDelete="false" indentLevel="1" text=" Q_INT32 m_alphaSize;" >
+       <ccfdeclarationcodeblock parent_id="231" tag="tblock_4" canDelete="false" indentLevel="1" text=" qint32 m_alphaSize;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -26560,7 +26560,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="245" tag="tblock_11" canDelete="false" indentLevel="1" text=" Q_UINT32 m_cachesize;" >
+       <ccfdeclarationcodeblock parent_id="245" tag="tblock_11" canDelete="false" indentLevel="1" text=" quint32 m_cachesize;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -26580,7 +26580,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="246" tag="tblock_12" canDelete="false" indentLevel="1" text=" Q_UINT8* m_conversionCache;" >
+       <ccfdeclarationcodeblock parent_id="246" tag="tblock_12" canDelete="false" indentLevel="1" text=" quint8* m_conversionCache;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -27630,7 +27630,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
     </classifiercodedocument>
     <classifiercodedocument writeOutCode="true" package="" id="cppheader44" parent_class="44" fileExt=".h" fileName="q_int32" >
      <textblocks>
-      <codeblockwithcomments tag="hashDefBlock" text="#ifndef Q_INT32_H&amp;#010;#define Q_INT32_H" >
+      <codeblockwithcomments tag="hashDefBlock" text="#ifndef qint32_H&amp;#010;#define qint32_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -27657,7 +27657,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </codeblockwithcomments>
         <cppheaderclassdeclarationblock parent_id="44" tag="classDeclarationBlock" canDelete="false" >
          <header>
-          <cppcodedocumentation tag="" text="Class Q_INT32&amp;#010;" />
+          <cppcodedocumentation tag="" text="Class qint32&amp;#010;" />
          </header>
          <textblocks>
           <hierarchicalcodeblock tag="publicBlock" canDelete="false" >
@@ -27681,7 +27681,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" indentLevel="1" text="Constructors" />
                </header>
                <textblocks>
-                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="Q_INT32 ( ) { }" >
+                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="qint32 ( ) { }" >
                  <header>
                   <cppcodedocumentation tag="" indentLevel="1" text="Empty Constructor" />
                  </header>
@@ -27823,7 +27823,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </cppheaderclassdeclarationblock>
        </textblocks>
       </hierarchicalcodeblock>
-      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //Q_INT32_H" >
+      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //qint32_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -28042,7 +28042,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
     </classifiercodedocument>
     <classifiercodedocument writeOutCode="true" package="" id="cppheader53" parent_class="53" fileExt=".h" fileName="q_uint8" >
      <textblocks>
-      <codeblockwithcomments tag="hashDefBlock" text="#ifndef Q_UINT8_H&amp;#010;#define Q_UINT8_H" >
+      <codeblockwithcomments tag="hashDefBlock" text="#ifndef quint8_H&amp;#010;#define quint8_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -28069,7 +28069,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </codeblockwithcomments>
         <cppheaderclassdeclarationblock parent_id="53" tag="classDeclarationBlock" canDelete="false" >
          <header>
-          <cppcodedocumentation tag="" text="Class Q_UINT8&amp;#010;" />
+          <cppcodedocumentation tag="" text="Class quint8&amp;#010;" />
          </header>
          <textblocks>
           <hierarchicalcodeblock tag="publicBlock" canDelete="false" >
@@ -28093,7 +28093,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" indentLevel="1" text="Constructors" />
                </header>
                <textblocks>
-                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="Q_UINT8 ( ) { }" >
+                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="quint8 ( ) { }" >
                  <header>
                   <cppcodedocumentation tag="" indentLevel="1" text="Empty Constructor" />
                  </header>
@@ -28235,7 +28235,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </cppheaderclassdeclarationblock>
        </textblocks>
       </hierarchicalcodeblock>
-      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //Q_UINT8_H" >
+      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //quint8_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -29690,7 +29690,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
     </classifiercodedocument>
     <classifiercodedocument writeOutCode="true" package="" id="cppheader150" parent_class="150" fileExt=".h" fileName="q_uint16" >
      <textblocks>
-      <codeblockwithcomments tag="hashDefBlock" text="#ifndef Q_UINT16_H&amp;#010;#define Q_UINT16_H" >
+      <codeblockwithcomments tag="hashDefBlock" text="#ifndef quint16_H&amp;#010;#define quint16_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -29717,7 +29717,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </codeblockwithcomments>
         <cppheaderclassdeclarationblock parent_id="150" tag="classDeclarationBlock" canDelete="false" >
          <header>
-          <cppcodedocumentation tag="" text="Class Q_UINT16&amp;#010;" />
+          <cppcodedocumentation tag="" text="Class quint16&amp;#010;" />
          </header>
          <textblocks>
           <hierarchicalcodeblock tag="publicBlock" canDelete="false" >
@@ -29741,7 +29741,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" indentLevel="1" text="Constructors" />
                </header>
                <textblocks>
-                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="Q_UINT16 ( ) { }" >
+                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="quint16 ( ) { }" >
                  <header>
                   <cppcodedocumentation tag="" indentLevel="1" text="Empty Constructor" />
                  </header>
@@ -29883,7 +29883,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </cppheaderclassdeclarationblock>
        </textblocks>
       </hierarchicalcodeblock>
-      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //Q_UINT16_H" >
+      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //quint16_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -30102,7 +30102,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
     </classifiercodedocument>
     <classifiercodedocument writeOutCode="true" package="" id="cppheader163" parent_class="163" fileExt=".h" fileName="q_int8" >
      <textblocks>
-      <codeblockwithcomments tag="hashDefBlock" text="#ifndef Q_INT8_H&amp;#010;#define Q_INT8_H" >
+      <codeblockwithcomments tag="hashDefBlock" text="#ifndef qint8_H&amp;#010;#define qint8_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -30129,7 +30129,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </codeblockwithcomments>
         <cppheaderclassdeclarationblock parent_id="163" tag="classDeclarationBlock" canDelete="false" >
          <header>
-          <cppcodedocumentation tag="" text="Class Q_INT8&amp;#010;" />
+          <cppcodedocumentation tag="" text="Class qint8&amp;#010;" />
          </header>
          <textblocks>
           <hierarchicalcodeblock tag="publicBlock" canDelete="false" >
@@ -30153,7 +30153,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" indentLevel="1" text="Constructors" />
                </header>
                <textblocks>
-                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="Q_INT8 ( ) { }" >
+                <codeblockwithcomments tag="emptyconstructor" indentLevel="1" text="qint8 ( ) { }" >
                  <header>
                   <cppcodedocumentation tag="" indentLevel="1" text="Empty Constructor" />
                  </header>
@@ -30295,7 +30295,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
         </cppheaderclassdeclarationblock>
        </textblocks>
       </hierarchicalcodeblock>
-      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //Q_INT8_H" >
+      <codeblockwithcomments tag="hashDefBlockEnd" text="#endif //qint8_H" >
        <header>
         <cppcodedocumentation tag="" writeOutText="false" />
        </header>
@@ -32168,12 +32168,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="363" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT16 U16_OPACITY_OPAQUE;" >
+              <ccfdeclarationcodeblock parent_id="363" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint16 U16_OPACITY_OPAQUE;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="364" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT16 U16_OPACITY_TRANSPARENT;" >
+              <ccfdeclarationcodeblock parent_id="364" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint16 U16_OPACITY_TRANSPARENT;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -32373,7 +32373,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="363" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT16 U16_OPACITY_OPAQUE;" >
+       <ccfdeclarationcodeblock parent_id="363" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint16 U16_OPACITY_OPAQUE;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -32393,7 +32393,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="364" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT16 U16_OPACITY_TRANSPARENT;" >
+       <ccfdeclarationcodeblock parent_id="364" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint16 U16_OPACITY_TRANSPARENT;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -32733,22 +32733,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="570" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_X;" >
+              <ccfdeclarationcodeblock parent_id="570" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_X;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="571" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_Y;" >
+              <ccfdeclarationcodeblock parent_id="571" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_Y;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="572" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_Z;" >
+              <ccfdeclarationcodeblock parent_id="572" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_Z;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="573" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_ALPHA;" >
+              <ccfdeclarationcodeblock parent_id="573" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_ALPHA;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -32768,7 +32768,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="574" tag="tblock_7" canDelete="false" indentLevel="1" text=" Q_UINT8* m_qcolordata;" >
+              <ccfdeclarationcodeblock parent_id="574" tag="tblock_7" canDelete="false" indentLevel="1" text=" quint8* m_qcolordata;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="// A small buffer for conversion from and to qcolor." />
                </header>
@@ -32975,7 +32975,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="570" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_X;" >
+       <ccfdeclarationcodeblock parent_id="570" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_X;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -32995,7 +32995,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="571" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_Y;" >
+       <ccfdeclarationcodeblock parent_id="571" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_Y;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -33015,7 +33015,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="572" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_Z;" >
+       <ccfdeclarationcodeblock parent_id="572" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_Z;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -33035,7 +33035,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="573" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="573" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_ALPHA;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -33055,7 +33055,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="// A small buffer for conversion from and to qcolor." />
        </header>
-       <ccfdeclarationcodeblock parent_id="574" tag="tblock_7" canDelete="false" indentLevel="1" text=" Q_UINT8* m_qcolordata;" >
+       <ccfdeclarationcodeblock parent_id="574" tag="tblock_7" canDelete="false" indentLevel="1" text=" quint8* m_qcolordata;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="// A small buffer for conversion from and to qcolor." />
         </header>
@@ -33115,22 +33115,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="374" tag="tblock_0" canDelete="false" indentLevel="1" text=" Q_UINT16 X;" >
+              <ccfdeclarationcodeblock parent_id="374" tag="tblock_0" canDelete="false" indentLevel="1" text=" quint16 X;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="375" tag="tblock_1" canDelete="false" indentLevel="1" text=" Q_UINT16 Y;" >
+              <ccfdeclarationcodeblock parent_id="375" tag="tblock_1" canDelete="false" indentLevel="1" text=" quint16 Y;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="376" tag="tblock_2" canDelete="false" indentLevel="1" text=" Q_UINT16 Z;" >
+              <ccfdeclarationcodeblock parent_id="376" tag="tblock_2" canDelete="false" indentLevel="1" text=" quint16 Z;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="377" tag="tblock_3" canDelete="false" indentLevel="1" text=" Q_UINT16 alpha;" >
+              <ccfdeclarationcodeblock parent_id="377" tag="tblock_3" canDelete="false" indentLevel="1" text=" quint16 alpha;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -33389,7 +33389,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="374" tag="tblock_0" canDelete="false" indentLevel="1" text=" Q_UINT16 X;" >
+       <ccfdeclarationcodeblock parent_id="374" tag="tblock_0" canDelete="false" indentLevel="1" text=" quint16 X;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -33409,7 +33409,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="375" tag="tblock_1" canDelete="false" indentLevel="1" text=" Q_UINT16 Y;" >
+       <ccfdeclarationcodeblock parent_id="375" tag="tblock_1" canDelete="false" indentLevel="1" text=" quint16 Y;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -33429,7 +33429,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="376" tag="tblock_2" canDelete="false" indentLevel="1" text=" Q_UINT16 Z;" >
+       <ccfdeclarationcodeblock parent_id="376" tag="tblock_2" canDelete="false" indentLevel="1" text=" quint16 Z;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -33449,7 +33449,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="377" tag="tblock_3" canDelete="false" indentLevel="1" text=" Q_UINT16 alpha;" >
+       <ccfdeclarationcodeblock parent_id="377" tag="tblock_3" canDelete="false" indentLevel="1" text=" quint16 alpha;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -33799,27 +33799,27 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="664" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_CYAN;" >
+              <ccfdeclarationcodeblock parent_id="664" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_CYAN;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="665" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_MAGENTA;" >
+              <ccfdeclarationcodeblock parent_id="665" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_MAGENTA;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="666" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_YELLOW;" >
+              <ccfdeclarationcodeblock parent_id="666" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_YELLOW;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="667" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_BLACK;" >
+              <ccfdeclarationcodeblock parent_id="667" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_BLACK;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="668" tag="tblock_4" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_CMYK_ALPHA;" >
+              <ccfdeclarationcodeblock parent_id="668" tag="tblock_4" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_CMYK_ALPHA;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -33839,7 +33839,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="663" tag="tblock_8" canDelete="false" indentLevel="1" text=" Q_UINT8* m_qcolordata;" >
+              <ccfdeclarationcodeblock parent_id="663" tag="tblock_8" canDelete="false" indentLevel="1" text=" quint8* m_qcolordata;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -34056,7 +34056,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="663" tag="tblock_8" canDelete="false" indentLevel="1" text=" Q_UINT8* m_qcolordata;" >
+       <ccfdeclarationcodeblock parent_id="663" tag="tblock_8" canDelete="false" indentLevel="1" text=" quint8* m_qcolordata;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -34076,7 +34076,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="664" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_CYAN;" >
+       <ccfdeclarationcodeblock parent_id="664" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_CYAN;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -34096,7 +34096,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="665" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_MAGENTA;" >
+       <ccfdeclarationcodeblock parent_id="665" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_MAGENTA;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -34116,7 +34116,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="666" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_YELLOW;" >
+       <ccfdeclarationcodeblock parent_id="666" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_YELLOW;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -34136,7 +34136,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="667" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_BLACK;" >
+       <ccfdeclarationcodeblock parent_id="667" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_BLACK;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -34156,7 +34156,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="668" tag="tblock_4" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_CMYK_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="668" tag="tblock_4" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_CMYK_ALPHA;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -34501,12 +34501,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="861" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_GRAY;" >
+              <ccfdeclarationcodeblock parent_id="861" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_GRAY;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="862" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_GRAY_ALPHA;" >
+              <ccfdeclarationcodeblock parent_id="862" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_GRAY_ALPHA;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -34628,7 +34628,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="861" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_GRAY;" >
+       <ccfdeclarationcodeblock parent_id="861" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_GRAY;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -34648,7 +34648,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="862" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_GRAY_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="862" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_GRAY_ALPHA;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -36097,22 +36097,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="1126" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_BLUE;" >
+              <ccfdeclarationcodeblock parent_id="1126" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_BLUE;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1127" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_GREEN;" >
+              <ccfdeclarationcodeblock parent_id="1127" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_GREEN;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1128" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_RED;" >
+              <ccfdeclarationcodeblock parent_id="1128" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_RED;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1129" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_ALPHA;" >
+              <ccfdeclarationcodeblock parent_id="1129" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_ALPHA;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -36254,7 +36254,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1126" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_BLUE;" >
+       <ccfdeclarationcodeblock parent_id="1126" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_BLUE;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -36274,7 +36274,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1127" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_GREEN;" >
+       <ccfdeclarationcodeblock parent_id="1127" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_GREEN;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -36294,7 +36294,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1128" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_RED;" >
+       <ccfdeclarationcodeblock parent_id="1128" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_RED;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -36314,7 +36314,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1129" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="1129" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_ALPHA;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -36786,12 +36786,12 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="1138" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT16 U16_OPACITY_OPAQUE;" >
+              <ccfdeclarationcodeblock parent_id="1138" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint16 U16_OPACITY_OPAQUE;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1139" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT16 U16_OPACITY_TRANSPARENT;" >
+              <ccfdeclarationcodeblock parent_id="1139" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint16 U16_OPACITY_TRANSPARENT;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -37128,22 +37128,22 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="1382" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_BLUE;" >
+              <ccfdeclarationcodeblock parent_id="1382" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_BLUE;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1383" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_GREEN;" >
+              <ccfdeclarationcodeblock parent_id="1383" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_GREEN;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1384" tag="tblock_4" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_RED;" >
+              <ccfdeclarationcodeblock parent_id="1384" tag="tblock_4" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_RED;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1385" tag="tblock_5" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_ALPHA;" >
+              <ccfdeclarationcodeblock parent_id="1385" tag="tblock_5" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_ALPHA;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -37265,7 +37265,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1138" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const Q_UINT16 U16_OPACITY_OPAQUE;" >
+       <ccfdeclarationcodeblock parent_id="1138" tag="tblock_0" canDelete="false" indentLevel="1" text="static  const quint16 U16_OPACITY_OPAQUE;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -37285,7 +37285,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1139" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const Q_UINT16 U16_OPACITY_TRANSPARENT;" >
+       <ccfdeclarationcodeblock parent_id="1139" tag="tblock_1" canDelete="false" indentLevel="1" text="static  const quint16 U16_OPACITY_TRANSPARENT;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -37325,7 +37325,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1382" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_BLUE;" >
+       <ccfdeclarationcodeblock parent_id="1382" tag="tblock_2" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_BLUE;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -37345,7 +37345,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1383" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_GREEN;" >
+       <ccfdeclarationcodeblock parent_id="1383" tag="tblock_3" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_GREEN;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -37365,7 +37365,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1384" tag="tblock_4" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_RED;" >
+       <ccfdeclarationcodeblock parent_id="1384" tag="tblock_4" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_RED;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -37385,7 +37385,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1385" tag="tblock_5" canDelete="false" indentLevel="1" text="static  const Q_UINT8 PIXEL_ALPHA;" >
+       <ccfdeclarationcodeblock parent_id="1385" tag="tblock_5" canDelete="false" indentLevel="1" text="static  const quint8 PIXEL_ALPHA;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>
@@ -38730,42 +38730,42 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
               <cppcodedocumentation tag="" indentLevel="1" text="Fields" />
              </header>
              <textblocks>
-              <ccfdeclarationcodeblock parent_id="1643" tag="tblock_0" canDelete="false" indentLevel="1" text=" Q_UINT16 rd;" >
+              <ccfdeclarationcodeblock parent_id="1643" tag="tblock_0" canDelete="false" indentLevel="1" text=" quint16 rd;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="Total red channel concentration" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1644" tag="tblock_1" canDelete="false" indentLevel="1" text=" Q_UINT16 rw;" >
+              <ccfdeclarationcodeblock parent_id="1644" tag="tblock_1" canDelete="false" indentLevel="1" text=" quint16 rw;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="Myth-red concentration" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1645" tag="tblock_2" canDelete="false" indentLevel="1" text=" Q_UINT16 gd;" >
+              <ccfdeclarationcodeblock parent_id="1645" tag="tblock_2" canDelete="false" indentLevel="1" text=" quint16 gd;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="Total green channel concentration" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1646" tag="tblock_3" canDelete="false" indentLevel="1" text=" Q_UINT16 gw;" >
+              <ccfdeclarationcodeblock parent_id="1646" tag="tblock_3" canDelete="false" indentLevel="1" text=" quint16 gw;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="Myth-green concentration" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1647" tag="tblock_4" canDelete="false" indentLevel="1" text=" Q_UINT16 bd;" >
+              <ccfdeclarationcodeblock parent_id="1647" tag="tblock_4" canDelete="false" indentLevel="1" text=" quint16 bd;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="Total blue channel concentration" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1648" tag="tblock_5" canDelete="false" indentLevel="1" text=" Q_UINT16 bw;" >
+              <ccfdeclarationcodeblock parent_id="1648" tag="tblock_5" canDelete="false" indentLevel="1" text=" quint16 bw;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="Myth-blue concentration" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1649" tag="tblock_6" canDelete="false" indentLevel="1" text=" Q_UINT16 w;" >
+              <ccfdeclarationcodeblock parent_id="1649" tag="tblock_6" canDelete="false" indentLevel="1" text=" quint16 w;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="Water volume" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1650" tag="tblock_7" canDelete="false" indentLevel="1" text=" Q_UINT16 h;" >
+              <ccfdeclarationcodeblock parent_id="1650" tag="tblock_7" canDelete="false" indentLevel="1" text=" quint16 h;" >
                <header>
                 <cppcodedocumentation tag="" indentLevel="1" text="Height of paper surface XXX: This might just as well be a single&amp;#010;channel in our colour model that has two of&amp;#010;these wetpix structs for every paint device pixel" />
                </header>
@@ -39019,7 +39019,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="Total red channel concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1643" tag="tblock_0" canDelete="false" indentLevel="1" text=" Q_UINT16 rd;" >
+       <ccfdeclarationcodeblock parent_id="1643" tag="tblock_0" canDelete="false" indentLevel="1" text=" quint16 rd;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="Total red channel concentration" />
         </header>
@@ -39039,7 +39039,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="Myth-red concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1644" tag="tblock_1" canDelete="false" indentLevel="1" text=" Q_UINT16 rw;" >
+       <ccfdeclarationcodeblock parent_id="1644" tag="tblock_1" canDelete="false" indentLevel="1" text=" quint16 rw;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="Myth-red concentration" />
         </header>
@@ -39059,7 +39059,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="Total green channel concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1645" tag="tblock_2" canDelete="false" indentLevel="1" text=" Q_UINT16 gd;" >
+       <ccfdeclarationcodeblock parent_id="1645" tag="tblock_2" canDelete="false" indentLevel="1" text=" quint16 gd;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="Total green channel concentration" />
         </header>
@@ -39079,7 +39079,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="Myth-green concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1646" tag="tblock_3" canDelete="false" indentLevel="1" text=" Q_UINT16 gw;" >
+       <ccfdeclarationcodeblock parent_id="1646" tag="tblock_3" canDelete="false" indentLevel="1" text=" quint16 gw;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="Myth-green concentration" />
         </header>
@@ -39099,7 +39099,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="Total blue channel concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1647" tag="tblock_4" canDelete="false" indentLevel="1" text=" Q_UINT16 bd;" >
+       <ccfdeclarationcodeblock parent_id="1647" tag="tblock_4" canDelete="false" indentLevel="1" text=" quint16 bd;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="Total blue channel concentration" />
         </header>
@@ -39119,7 +39119,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="Myth-blue concentration" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1648" tag="tblock_5" canDelete="false" indentLevel="1" text=" Q_UINT16 bw;" >
+       <ccfdeclarationcodeblock parent_id="1648" tag="tblock_5" canDelete="false" indentLevel="1" text=" quint16 bw;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="Myth-blue concentration" />
         </header>
@@ -39139,7 +39139,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="Water volume" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1649" tag="tblock_6" canDelete="false" indentLevel="1" text=" Q_UINT16 w;" >
+       <ccfdeclarationcodeblock parent_id="1649" tag="tblock_6" canDelete="false" indentLevel="1" text=" quint16 w;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="Water volume" />
         </header>
@@ -39159,7 +39159,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" text="Height of paper surface XXX: This might just as well be a single&amp;#010;channel in our colour model that has two of&amp;#010;these wetpix structs for every paint device pixel" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1650" tag="tblock_7" canDelete="false" indentLevel="1" text=" Q_UINT16 h;" >
+       <ccfdeclarationcodeblock parent_id="1650" tag="tblock_7" canDelete="false" indentLevel="1" text=" quint16 h;" >
         <header>
          <cppcodedocumentation tag="" indentLevel="1" text="Height of paper surface XXX: This might just as well be a single&amp;#010;channel in our colour model that has two of&amp;#010;these wetpix structs for every paint device pixel" />
         </header>
@@ -40232,7 +40232,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1757" tag="tblock_1" canDelete="false" indentLevel="1" text=" Q_UINT32* wet_render_tab;" >
+              <ccfdeclarationcodeblock parent_id="1757" tag="tblock_1" canDelete="false" indentLevel="1" text=" quint32* wet_render_tab;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -40429,7 +40429,7 @@ of 1." isSpecification="false" isLeaf="false" visibility="public" xmi.id="1765" 
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1757" tag="tblock_1" canDelete="false" indentLevel="1" text=" Q_UINT32* wet_render_tab;" >
+       <ccfdeclarationcodeblock parent_id="1757" tag="tblock_1" canDelete="false" indentLevel="1" text=" quint32* wet_render_tab;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>

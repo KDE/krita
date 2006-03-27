@@ -79,12 +79,12 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), "map", i18n("&Small
 void KisSmallTilesFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* configuration, const QRect& rect)
 {
         //read the filter configuration values from the KisFilterConfiguration object
-        Q_UINT32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();
+        quint32 numberOfTiles = ((KisSmallTilesFilterConfiguration*)configuration)->numberOfTiles();
 
         createSmallTiles(src, dst, rect, numberOfTiles);
 }
 
-void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, Q_UINT32 numberOfTiles)
+void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect& rect, quint32 numberOfTiles)
 {
     if (!src) return;
     if (!dst) return;
@@ -140,11 +140,11 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
 
 //     QRect tmpRect = tmp->exactBounds();
 //
-//     for( Q_UINT32 i=0; i < numberOfTiles; i++ )
+//     for( quint32 i=0; i < numberOfTiles; i++ )
 //     {
-//         for( Q_UINT32 j=0; j < numberOfTiles; j++ )
+//         for( quint32 j=0; j < numberOfTiles; j++ )
 //         {
-//             for( Q_INT32 row = tmpRect.y(); row < tmpRect.height(); row++ )
+//             for( qint32 row = tmpRect.y(); row < tmpRect.height(); row++ )
 //             {
 //                 KisHLineIteratorPixel tmpIt = tmp->createHLineIterator(tmpRect.x(), row, tmpRect.width() , false);
 //                 KisHLineIteratorPixel dstIt = dst->createHLineIterator( tmpRect.x() + i * tmpRect.width(), row + j * tmpRect.height(), tmpRect.width() , true);

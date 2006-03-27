@@ -74,9 +74,9 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    Q_INT32 x;
+    qint32 x;
     double xFraction;
-    Q_INT32 y;
+    qint32 y;
     double yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
@@ -96,12 +96,12 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 
     m_painter->setPressure(info.pressure);
 
-    QPoint srcPoint = QPoint(x - static_cast<Q_INT32>(m_painter->duplicateOffset().x()),
-                             y - static_cast<Q_INT32>(m_painter->duplicateOffset().y()));
+    QPoint srcPoint = QPoint(x - static_cast<qint32>(m_painter->duplicateOffset().x()),
+                             y - static_cast<qint32>(m_painter->duplicateOffset().y()));
 
 
-    Q_INT32 sw = dab->extent().width();
-    Q_INT32 sh = dab->extent().height();
+    qint32 sw = dab->extent().width();
+    qint32 sh = dab->extent().height();
 
     if (srcPoint.x() < 0 )
         srcPoint.setX(0);
@@ -144,8 +144,8 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    Q_INT32 sx = dstRect.x() - x;
-    Q_INT32 sy = dstRect.y() - y;
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
     sw = dstRect.width();
     sh = dstRect.height();
     

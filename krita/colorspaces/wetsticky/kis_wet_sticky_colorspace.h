@@ -44,24 +44,24 @@ namespace WetAndSticky {
      * Defines the contents and attributes of a cell on the canvas.
      */
     typedef struct cell {
-        Q_UINT8 Qt::blue;
-        Q_UINT8 Qt::green;
-        Q_UINT8 Qt::red;
-        Q_UINT8 alpha;
+        quint8 Qt::blue;
+        quint8 Qt::green;
+        quint8 Qt::red;
+        quint8 alpha;
 
         float   hue;
         float   saturation;
         float   lightness;
 
-        Q_UINT8 liquid_content;
-        Q_UINT8 drying_rate;
-        Q_UINT8 miscibility;
+        quint8 liquid_content;
+        quint8 drying_rate;
+        quint8 miscibility;
 
         enumDirection direction;
-        Q_UINT8 strength;
+        quint8 strength;
 
-        Q_UINT8  absorbancy;  /* How much paint can this cell hold? */
-        Q_UINT8  volume;      /* The volume of paint. */
+        quint8  absorbancy;  /* How much paint can this cell hold? */
+        quint8  volume;      /* The volume of paint. */
 
     } CELL, *CELL_PTR;
 
@@ -79,69 +79,69 @@ public:
 
 
 
-    virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile *  profile = 0);
-    virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile *  profile = 0);
 
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile *  profile = 0);
-    virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile *  profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KisProfile *  profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile *  profile = 0);
 
-    virtual Q_UINT8 getAlpha(const Q_UINT8 *pixel) const;
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const;
+    virtual quint8 getAlpha(const quint8 *pixel) const;
+    virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
 
-    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
-    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels);
+    virtual void applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels);
 
-    virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
-    virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
+    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos);
+    virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
 
     virtual Q3ValueVector<KisChannelInfo *> channels() const;
     virtual bool hasAlpha() const;
-    virtual Q_INT32 nChannels() const;
-    virtual Q_INT32 nColorChannels() const;
-    virtual Q_INT32 nSubstanceChannels() const;
-    virtual Q_INT32 pixelSize() const;
+    virtual qint32 nChannels() const;
+    virtual qint32 nColorChannels() const;
+    virtual qint32 nSubstanceChannels() const;
+    virtual qint32 pixelSize() const;
 
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
+    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
-    virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+    virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                        KisProfile *  srcProfile, KisProfile *  dstProfile,
-                       Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
+                       qint32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
 
-    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
-    virtual void convolveColors(Q_UINT8** colors, Q_INT32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, Q_UINT8 *dst, Q_INT32 factor, Q_INT32 offset, Q_INT32 nColors) const;
-    virtual void invertColor(Q_UINT8 * src, Q_INT32 nPixels);
-    virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
+    virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void invertColor(quint8 * src, qint32 nPixels);
+    virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
 protected:
 
-    virtual void bitBlt(Q_UINT8 *dst,
-                Q_INT32 dstRowSize,
-                const Q_UINT8 *src,
-                Q_INT32 srcRowStride,
-                const Q_UINT8 *srcAlphaMask,
-                Q_INT32 maskRowStride,
-                Q_UINT8 opacity,
-                Q_INT32 rows,
-                Q_INT32 cols,
+    virtual void bitBlt(quint8 *dst,
+                qint32 dstRowSize,
+                const quint8 *src,
+                qint32 srcRowStride,
+                const quint8 *srcAlphaMask,
+                qint32 maskRowStride,
+                quint8 opacity,
+                qint32 rows,
+                qint32 cols,
                 const KisCompositeOp& op);
 
 
-    virtual bool convertPixelsTo(const Q_UINT8 * src, KisProfile *  srcProfile,
-                     Q_UINT8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
-                     Q_UINT32 numPixels,
-                     Q_INT32 renderingIntent = INTENT_PERCEPTUAL);
+    virtual bool convertPixelsTo(const quint8 * src, KisProfile *  srcProfile,
+                     quint8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
+                     quint32 numPixels,
+                     qint32 renderingIntent = INTENT_PERCEPTUAL);
 
 
 private:
 
-    void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
-    void compositeClear(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
-    void compositeCopy(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+    void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
+    void compositeClear(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
+    void compositeCopy(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
 
 };
 

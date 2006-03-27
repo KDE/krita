@@ -123,7 +123,7 @@ void KisGridManager::fastConfig40x40()
     m_view->updateCanvas();
 }
 
-Qt::PenStyle KisGridManager::GridDrawer::gs2style(Q_UINT32 s)
+Qt::PenStyle KisGridManager::GridDrawer::gs2style(quint32 s)
 {
     switch(s)
     {
@@ -173,22 +173,22 @@ void KisGridManager::GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
 {
     KisConfig cfg;
     
-    Q_UINT32 offsetx = cfg.getGridOffsetX();
-    Q_UINT32 offsety = cfg.getGridOffsetY();
-    Q_UINT32 hspacing = cfg.getGridHSpacing();
-    Q_UINT32 vspacing = cfg.getGridVSpacing();
-    Q_UINT32 subdivision = cfg.getGridSubdivisions() - 1;
+    quint32 offsetx = cfg.getGridOffsetX();
+    quint32 offsety = cfg.getGridOffsetY();
+    quint32 hspacing = cfg.getGridHSpacing();
+    quint32 vspacing = cfg.getGridVSpacing();
+    quint32 subdivision = cfg.getGridSubdivisions() - 1;
     //double ihspsub = hspacing / (double)subdivision;
     //double ivspsub = hspacing / (double)subdivision;
 
-    Q_INT32 imageWidth = image->width();
-    Q_INT32 imageHeight = image->height();
+    qint32 imageWidth = image->width();
+    qint32 imageHeight = image->height();
 
     // Draw vertical line
     QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
     QPen subdivisionPen = QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
-    Q_UINT32 i = 0;
-    for( Q_INT32 x = offsetx; x <= wr.right(); x +=hspacing)
+    quint32 i = 0;
+    for( qint32 x = offsetx; x <= wr.right(); x +=hspacing)
     {
         if( i == subdivision )
         {
@@ -207,7 +207,7 @@ void KisGridManager::GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
     }
     // Draw horizontal line
     i = 0;
-    for( Q_INT32 y = offsety; y <= wr.bottom(); y +=vspacing)
+    for( qint32 y = offsety; y <= wr.bottom(); y +=vspacing)
     {
         if( i == subdivision )
         {
@@ -282,7 +282,7 @@ void KisGridManager::OpenGLGridDrawer::setPen(const QPen& pen)
 #endif
 }
 
-void KisGridManager::OpenGLGridDrawer::drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2)
+void KisGridManager::OpenGLGridDrawer::drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2)
 {
 #ifdef HAVE_GL
     glBegin(GL_LINES);

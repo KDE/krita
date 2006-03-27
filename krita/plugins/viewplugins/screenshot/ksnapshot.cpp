@@ -36,7 +36,7 @@
 #include <kaccel.h>
 #include <knotifyclient.h>
 #include <khelpmenu.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kpushbutton.h>
 #include <kstartupinfo.h>
 
@@ -77,7 +77,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     haveXShape = XShapeQueryExtension( qt_xdisplay(), &tmp1, &tmp2 );
 #endif
 
-    Q3VBox *vbox = makeVBoxMainWidget();
+    KVBox *vbox = makeVBoxMainWidget();
     mainWidget = new KSnapshotWidget( vbox, "mainWidget" );
     Q_CHECK_PTR(mainWidget);
 
@@ -151,7 +151,7 @@ bool KSnapshot::save( const KUrl& url )
 
     QApplication::restoreOverrideCursor();
     if ( !ok ) {
-        kdWarning() << "KSnapshot was unable to save the snapshot" << endl;
+        kWarning() << "KSnapshot was unable to save the snapshot" << endl;
 
         QString caption = i18n("Unable to Save Image");
         QString text = i18n("KSnapshot was unable to save the image to\n%1.")

@@ -120,7 +120,7 @@ Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
     kernel.height = kernelH.size();
     kernel.width = firstline.size();
     
-    kernel.data = new Q_INT32[kernel.height * kernel.width];
+    kernel.data = new qint32[kernel.height * kernel.width];
     
     uint i = 0;
     for(Q3ValueList<QVariant>::iterator itK = kernelH.begin(); itK != kernelH.end(); itK++, i ++ )
@@ -223,7 +223,7 @@ Kross::Api::Object::Ptr Painter::setFillStyle(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Painter::setOpacity(Kross::Api::List::Ptr args)
 {
-    Q_UINT8 opacity = Kross::Api::Variant::toVariant(args->item(0)).toUInt();
+    quint8 opacity = Kross::Api::Variant::toVariant(args->item(0)).toUInt();
     m_painter->setOpacity(opacity);
     return 0;
 }

@@ -27,7 +27,7 @@
 class KisPartLayer : public KisLayer {
     typedef KisLayer super;
 public:
-    KisPartLayer(KisImage *img, const QString &name, Q_UINT8 opacity)
+    KisPartLayer(KisImage *img, const QString &name, quint8 opacity)
         : super(img, name, opacity) {}
     virtual KisPaintDeviceSP prepareProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
     virtual bool saveToXML(QDomDocument doc, QDomElement elem) = 0;

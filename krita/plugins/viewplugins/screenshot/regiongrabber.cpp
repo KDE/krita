@@ -98,7 +98,7 @@ void RegionGrabber::initGrabber()
 
   showFullScreen();
 
-  grabMouse( Qt::crossCursor );
+  grabMouse( Qt::CrossCursor );
 }
 
 void RegionGrabber::mousePressEvent( QMouseEvent *e )

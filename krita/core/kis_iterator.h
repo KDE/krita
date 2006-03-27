@@ -42,7 +42,7 @@ class KisRectIterator
 
 
 public:
-    KisRectIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32  y, Q_INT32  w, Q_INT32  h, bool writable);
+    KisRectIterator ( KisDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h, bool writable);
 
 public:
     virtual ~KisRectIterator();
@@ -52,14 +52,14 @@ public:
 
 public:
     /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-    Q_UINT8 * rawData() const;
+    quint8 * rawData() const;
 
     /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-    const Q_UINT8 * oldRawData() const;
+    const quint8 * oldRawData() const;
 
     /// Returns the number of consequtive pixels that we point at
     /// This is useful for optimizing
-    Q_INT32 nConseqPixels() const;
+    qint32 nConseqPixels() const;
 
     /// Advances a number of pixels until it reaches the end of the rect
     KisRectIterator & operator+=(int n);
@@ -71,10 +71,10 @@ public:
     bool isDone()  const;
 
      // current x position
-     Q_INT32 x() const;
+     qint32 x() const;
 
      // current y position
-     Q_INT32 y() const;
+     qint32 y() const;
 
 private:
 
@@ -86,7 +86,7 @@ class KisHLineIterator
 
 public:
 
-    KisHLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32 w, bool writable);
+    KisHLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32 w, bool writable);
 
 public:
 
@@ -96,17 +96,17 @@ public:
 
 public:
     /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-    Q_UINT8 *rawData() const;
+    quint8 *rawData() const;
 
     /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-    const Q_UINT8 *oldRawData() const;
+    const quint8 *oldRawData() const;
 
     /// Advances one pixel until it reaches the end of the line
     KisHLineIterator & operator++();
 
     /// Returns the number of consequtive horizontal pixels that we point at
     /// This is useful for optimizing
-    Q_INT32 nConseqHPixels() const;
+    qint32 nConseqHPixels() const;
 
     /// Advances a number of pixels until it reaches the end of the line
     KisHLineIterator & operator+=(int n);
@@ -118,10 +118,10 @@ public:
     bool isDone()  const;
 
     /// current x position
-    Q_INT32 x() const;
+    qint32 x() const;
 
     /// current y position
-    Q_INT32 y() const;
+    qint32 y() const;
 
     /// increment to the next row and rewind to the begining
     void nextRow();
@@ -136,7 +136,7 @@ class KisVLineIterator
 {
 
 public:
-    KisVLineIterator ( KisDataManager *dm, Q_INT32  x, Q_INT32 y, Q_INT32  h, bool writable);
+    KisVLineIterator ( KisDataManager *dm, qint32  x, qint32 y, qint32  h, bool writable);
 public:
     ~KisVLineIterator();
     KisVLineIterator(const KisVLineIterator& rhs);
@@ -144,10 +144,10 @@ public:
 
 public:
     /// returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorstrategy
-    Q_UINT8 *rawData() const;
+    quint8 *rawData() const;
 
     /// Returns a pointer to the pixel data as it was at the moment of the last memento creation.
-    const Q_UINT8 * oldRawData() const;
+    const quint8 * oldRawData() const;
 
     /// Advances one pixel until it reaches the end of the line
     KisVLineIterator & operator++();
@@ -156,10 +156,10 @@ public:
     bool isDone() const;
 
     /// current x position
-    Q_INT32 x() const;
+    qint32 x() const;
 
     /// current y position
-    Q_INT32 y() const;
+    qint32 y() const;
     
     /// increment to the next column and rewind to the begining
     void nextCol();

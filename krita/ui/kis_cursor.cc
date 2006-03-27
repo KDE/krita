@@ -38,72 +38,72 @@ KisCursor::KisCursor() {}
  */
 QCursor KisCursor::arrowCursor()
 {
-    return Qt::arrowCursor;
+    return Qt::ArrowCursor;
 }
 
 QCursor KisCursor::upArrowCursor()
 {
-    return Qt::upArrowCursor;
+    return Qt::UpArrowCursor;
 }
 
 QCursor KisCursor::crossCursor()
 {
-    return Qt::crossCursor;
+    return Qt::CrossCursor;
 }
 
 QCursor KisCursor::waitCursor()
 {
-    return Qt::waitCursor;
+    return Qt::WaitCursor;
 }
 
 QCursor KisCursor::ibeamCursor()
 {
-    return Qt::ibeamCursor;
+    return Qt::IBeamCursor;
 }
 
 QCursor KisCursor::sizeVerCursor()
 {
-    return Qt::sizeVerCursor;
+    return Qt::SizeHorCursor;
 }
 
 QCursor KisCursor::sizeHorCursor()
 {
-    return Qt::sizeHorCursor;
+    return Qt::SizeHorCursor;
 }
 
 QCursor KisCursor::sizeBDiagCursor()
 {
-    return Qt::sizeBDiagCursor;
+    return Qt::SizeBDiagCursor;
 }
 
 QCursor KisCursor::sizeFDiagCursor()
 {
-    return Qt::sizeFDiagCursor;
+    return Qt::SizeFDiagCursor;
 }
 
 QCursor KisCursor::sizeAllCursor()
 {
-    return Qt::sizeAllCursor;
+    return Qt::SizeAllCursor;
 }
 
 QCursor KisCursor::blankCursor()
 {
-    return Qt::blankCursor;
+    return Qt::BlankCursor;
 }
 
 QCursor KisCursor::splitVCursor()
 {
-    return Qt::splitVCursor;
+    return Qt::SplitVCursor;
 }
 
 QCursor KisCursor::splitHCursor()
 {
-    return Qt::splitHCursor;
+    return Qt::SplitHCursor;
 }
 
 QCursor KisCursor::pointingHandCursor()
 {
-    return Qt::pointingHandCursor;
+    return Qt::PointingHandCursor;
 }
 
 
@@ -346,8 +346,8 @@ QCursor KisCursor::load(const QString & iconName, int hotspotX, int hotspotY)
     QPainter bitmapPainter(&bitmap);
     QPainter maskPainter(&mask);
 
-    for (Q_INT32 x = 0; x < cursorImage.width(); ++x) {
-        for (Q_INT32 y = 0; y < cursorImage.height(); ++y) {
+    for (qint32 x = 0; x < cursorImage.width(); ++x) {
+        for (qint32 y = 0; y < cursorImage.height(); ++y) {
 
             QRgb pixel = cursorImage.pixel(x, y);
             

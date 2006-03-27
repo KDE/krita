@@ -89,12 +89,12 @@ KisBasicU8HistogramProducer::KisBasicU8HistogramProducer(const KisID& id, KisCol
 }
 
 QString KisBasicU8HistogramProducer::positionToString(double pos) const {
-    return QString("%1").arg(static_cast<Q_UINT8>(pos * UINT8_MAX));
+    return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
-void KisBasicU8HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs)
+void KisBasicU8HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs)
 {
-    Q_INT32 pSize = cs->pixelSize();
+    qint32 pSize = cs->pixelSize();
 
     if ( selectionMask ) {
         while (nPixels > 0) {
@@ -139,7 +139,7 @@ KisBasicU16HistogramProducer::KisBasicU16HistogramProducer(const KisID& id, KisC
 
 QString KisBasicU16HistogramProducer::positionToString(double pos) const
 {
-    return QString("%1").arg(static_cast<Q_UINT8>(pos * UINT8_MAX));
+    return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
 double KisBasicU16HistogramProducer::maximalZoom() const
@@ -147,28 +147,28 @@ double KisBasicU16HistogramProducer::maximalZoom() const
     return 1.0 / 255.0;
 }
 
-void KisBasicU16HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs)
+void KisBasicU16HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs)
 {
     // The view
-    Q_UINT16 from = static_cast<Q_UINT16>(m_from * UINT16_MAX);
-    Q_UINT16 width = static_cast<Q_UINT16>(m_width * UINT16_MAX + 0.5); // We include the end
-    Q_UINT16 to = from + width;
+    quint16 from = static_cast<quint16>(m_from * UINT16_MAX);
+    quint16 width = static_cast<quint16>(m_width * UINT16_MAX + 0.5); // We include the end
+    quint16 to = from + width;
     double factor = 255.0 / width;
 
-    Q_INT32 pSize = cs->pixelSize();
+    qint32 pSize = cs->pixelSize();
 
     if ( selectionMask ) {
-        Q_UINT16* pixel = reinterpret_cast<Q_UINT16*>(pixels);
+        quint16* pixel = reinterpret_cast<quint16*>(pixels);
         while (nPixels > 0) {
             if ( ! ((m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
                 for (int i = 0; i < m_channels; i++) {
-                    Q_UINT16 value = pixel[i];
+                    quint16 value = pixel[i];
                     if (value > to)
                         m_outRight.at(i)++;
                     else if (value < from)
                         m_outLeft.at(i)++;
                     else
-                        m_bins.at(i).at(static_cast<Q_UINT8>((value - from) * factor))++;
+                        m_bins.at(i).at(static_cast<quint8>((value - from) * factor))++;
                 }
                 m_count++;
             }
@@ -179,17 +179,17 @@ void KisBasicU16HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * se
     }
     else {
         while (nPixels > 0) {
-            Q_UINT16* pixel = reinterpret_cast<Q_UINT16*>(pixels);
+            quint16* pixel = reinterpret_cast<quint16*>(pixels);
 
             if ( ! (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) {
                 for (int i = 0; i < m_channels; i++) {
-                    Q_UINT16 value = pixel[i];
+                    quint16 value = pixel[i];
                     if (value > to)
                         m_outRight.at(i)++;
                     else if (value < from)
                         m_outLeft.at(i)++;
                     else
-                        m_bins.at(i).at(static_cast<Q_UINT8>((value - from) * factor))++;
+                        m_bins.at(i).at(static_cast<quint8>((value - from) * factor))++;
                 }
                 m_count++;
             }
@@ -216,14 +216,14 @@ double KisBasicF32HistogramProducer::maximalZoom() const {
     return 1.0 / 255.0;
 }
 
-void KisBasicF32HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs) {
+void KisBasicF32HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
     float to = from + width;
     float factor = 255.0 / width;
 
-    Q_INT32 pSize = cs->pixelSize();
+    qint32 pSize = cs->pixelSize();
 
     if ( selectionMask ) {
         while (nPixels > 0) {
@@ -237,7 +237,7 @@ void KisBasicF32HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * se
                     else if (value < from)
                         m_outLeft.at(i)++;
                     else
-                        m_bins.at(i).at(static_cast<Q_UINT8>((value - from) * factor))++;
+                        m_bins.at(i).at(static_cast<quint8>((value - from) * factor))++;
                 }
                 m_count++;
             }
@@ -260,7 +260,7 @@ void KisBasicF32HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * se
                     else if (value < from)
                         m_outLeft.at(i)++;
                     else
-                        m_bins.at(i).at(static_cast<Q_UINT8>((value - from) * factor))++;
+                        m_bins.at(i).at(static_cast<quint8>((value - from) * factor))++;
                 }
                 m_count++;
             }
@@ -289,14 +289,14 @@ double KisBasicF16HalfHistogramProducer::maximalZoom() const {
     return 1.0 / 255.0;
 }
 
-void KisBasicF16HalfHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs) {
+void KisBasicF16HalfHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
     float to = from + width;
     float factor = 255.0 / width;
 
-    Q_INT32 pSize = cs->pixelSize();
+    qint32 pSize = cs->pixelSize();
     if ( selectionMask ) {
         while (nPixels > 0) {
             half* pixel = reinterpret_cast<half*>(pixels);
@@ -308,7 +308,7 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 
                     else if (value < from)
                         m_outLeft.at(i)++;
                     else
-                        m_bins.at(i).at(static_cast<Q_UINT8>((value - from) * factor))++;
+                        m_bins.at(i).at(static_cast<quint8>((value - from) * factor))++;
                 }
                 m_count++;
             }
@@ -328,7 +328,7 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 
                     else if (value < from)
                         m_outLeft.at(i)++;
                     else
-                        m_bins.at(i).at(static_cast<Q_UINT8>((value - from) * factor))++;
+                        m_bins.at(i).at(static_cast<quint8>((value - from) * factor))++;
                 }
                 m_count++;
             }
@@ -356,7 +356,7 @@ QValueVector<KisChannelInfo *> KisGenericRGBHistogramProducer::channels() {
 }
 
 QString KisGenericRGBHistogramProducer::positionToString(double pos) const {
-    return QString("%1").arg(static_cast<Q_UINT8>(pos * UINT8_MAX));
+    return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
 double KisGenericRGBHistogramProducer::maximalZoom() const {
@@ -364,7 +364,7 @@ double KisGenericRGBHistogramProducer::maximalZoom() const {
 }
 
 
-void KisGenericRGBHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *cs)
+void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs)
 {
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;
@@ -372,7 +372,7 @@ void KisGenericRGBHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * 
     }
 
     QColor c;
-    Q_INT32 pSize = cs->pixelSize();
+    qint32 pSize = cs->pixelSize();
     if (selectionMask) {
         while (nPixels > 0) {
             if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
@@ -434,7 +434,7 @@ QValueVector<KisChannelInfo *> KisGenericLabHistogramProducer::channels() {
 }
 
 QString KisGenericLabHistogramProducer::positionToString(double pos) const {
-    return QString("%1").arg(static_cast<Q_UINT16>(pos * UINT16_MAX));
+    return QString("%1").arg(static_cast<quint16>(pos * UINT16_MAX));
 }
 
 double KisGenericLabHistogramProducer::maximalZoom() const {
@@ -442,15 +442,15 @@ double KisGenericLabHistogramProducer::maximalZoom() const {
 }
 
 
-void KisGenericLabHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels,  KisColorSpace *cs)
+void KisGenericLabHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels,  KisColorSpace *cs)
 {
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;
         m_outLeft.at(i) = 0;
     }
 
-    Q_UINT8 dst[8];
-    Q_INT32 pSize = cs->pixelSize();
+    quint8 dst[8];
+    qint32 pSize = cs->pixelSize();
 
     if (selectionMask) {
         while (nPixels > 0) {

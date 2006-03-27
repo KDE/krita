@@ -45,7 +45,7 @@ void KisConvolutionConfiguration::fromXML(const QString & s)
     m_matrix->offset = QString( matrix.attribute( "offset" ) ).toInt();
     m_matrix->factor = QString( matrix.attribute( "factor" ) ).toInt();
 
-    m_matrix->data = new Q_INT32[m_matrix->width * m_matrix->height];
+    m_matrix->data = new qint32[m_matrix->width * m_matrix->height];
 
     QStringList data = QStringList::split( ",", e.text() );
     QStringList::Iterator start = data.begin();
@@ -95,7 +95,7 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
 {
 
     if (dst != src) {
-        kdDebug() << "src != dst\n";
+        kDebug() << "src != dst\n";
         KisPainter gc(dst);
         gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
         gc.end();

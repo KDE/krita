@@ -58,7 +58,7 @@
 #include <kstdaction.h>
 #include <kinputdialog.h>
 #include <kurldrag.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 #include <ksharedptr.h>
 #include <ktoolbar.h>
@@ -322,14 +322,14 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
         if ( plugin ) {
-            kdDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
+            kDebug(41006) << "found plugin " << service->property("Name").toString() << "\n";
             insertChildClient(plugin);
         }
         else {
-            kdDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
+            kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
 	    if( errCode == KParts::ComponentFactory::ErrNoLibrary)
 	    {
-		kdWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
+		kWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
 	    }
         }
     }
@@ -671,19 +671,19 @@ void KisView::resizeEvent(QResizeEvent *)
     }
 
     KisImageSP img = currentImg();
-    Q_INT32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
-    Q_INT32 drawH;
-    Q_INT32 drawW;
-    Q_INT32 docW;
-    Q_INT32 docH;
+    qint32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
+    qint32 drawH;
+    qint32 drawW;
+    qint32 docW;
+    qint32 docH;
 
 //    if (img) {
 //        KisGuideMgr *mgr = img->guides();
 //        mgr->resize(size());
 //    }
 
-    docW = static_cast<Q_INT32>(ceil(docWidth() * zoom()));
-    docH = static_cast<Q_INT32>(ceil(docHeight() * zoom()));
+    docW = static_cast<qint32>(ceil(docWidth() * zoom()));
+    docH = static_cast<qint32>(ceil(docHeight() * zoom()));
 
     m_rulerThickness = m_RulerAction->isChecked() ? RULER_THICKNESS : 0;
     drawH = height() - m_rulerThickness;
@@ -752,8 +752,8 @@ void KisView::resizeEvent(QResizeEvent *)
         m_hScrollBarExtent = scrollBarExtent;
     }
 
-    Q_INT32 oldCanvasXOffset = m_canvasXOffset;
-    Q_INT32 oldCanvasYOffset = m_canvasYOffset;
+    qint32 oldCanvasXOffset = m_canvasXOffset;
+    qint32 oldCanvasYOffset = m_canvasYOffset;
 
     if (docW < drawW) {
         m_canvasXOffset = (drawW - docW) / 2;
@@ -778,27 +778,27 @@ void KisView::resizeEvent(QResizeEvent *)
 
         if (m_canvasPixmap.size() != QSize(drawW, drawH)) {
 
-            Q_INT32 oldCanvasWidth = m_canvasPixmap.width();
-            Q_INT32 oldCanvasHeight = m_canvasPixmap.height();
+            qint32 oldCanvasWidth = m_canvasPixmap.width();
+            qint32 oldCanvasHeight = m_canvasPixmap.height();
 
-            Q_INT32 newCanvasWidth = drawW;
-            Q_INT32 newCanvasHeight = drawH;
+            qint32 newCanvasWidth = drawW;
+            qint32 newCanvasHeight = drawH;
 
             QRegion exposedRegion = QRect(0, 0, newCanvasWidth, newCanvasHeight);
 
             // Increase size first so that we can copy the old image area to the new one.
-            m_canvasPixmap.resize(QMAX(oldCanvasWidth, newCanvasWidth), QMAX(oldCanvasHeight, newCanvasHeight));
+            m_canvasPixmap.resize(qMax(oldCanvasWidth, newCanvasWidth), qMax(oldCanvasHeight, newCanvasHeight));
 
             if (!m_canvasPixmap.isNull()) {
 
                 if (oldCanvasXOffset != m_canvasXOffset || oldCanvasYOffset != m_canvasYOffset) {
 
-                    Q_INT32 srcX;
-                    Q_INT32 srcY;
-                    Q_INT32 srcWidth;
-                    Q_INT32 srcHeight;
-                    Q_INT32 dstX;
-                    Q_INT32 dstY;
+                    qint32 srcX;
+                    qint32 srcY;
+                    qint32 srcWidth;
+                    qint32 srcHeight;
+                    qint32 dstX;
+                    qint32 dstY;
 
                     if (oldCanvasXOffset <= m_canvasXOffset) {
                         // Move to the right
@@ -851,8 +851,8 @@ void KisView::resizeEvent(QResizeEvent *)
     m_hScroll->setPageStep(drawW);
     m_hScroll->setLineStep(fontheight);
 
-    m_hRuler->setGeometry(m_rulerThickness + m_canvasXOffset, 0, QMIN(docW, drawW), m_rulerThickness);
-    m_vRuler->setGeometry(0, m_rulerThickness + m_canvasYOffset, m_rulerThickness, QMIN(docH, drawH));
+    m_hRuler->setGeometry(m_rulerThickness + m_canvasXOffset, 0, qMin(docW, drawW), m_rulerThickness);
+    m_vRuler->setGeometry(0, m_rulerThickness + m_canvasYOffset, m_rulerThickness, qMin(docH, drawH));
 
     if (m_vScroll->isVisible())
         m_vRuler->updateVisibleArea(0, m_vScroll->value());
@@ -903,12 +903,12 @@ void KisView::updateReadWrite(bool readwrite)
     layerUpdateGUI(readwrite);
 }
 
-Q_INT32 KisView::horzValue() const
+qint32 KisView::horzValue() const
 {
     return m_hScroll->value() - m_canvasXOffset;
 }
 
-Q_INT32 KisView::vertValue() const
+qint32 KisView::vertValue() const
 {
     return m_vScroll->value() - m_canvasYOffset;
 }
@@ -972,8 +972,8 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
                         QRect scaledImageRect = canvasRect;
                         scaledImageRect.moveBy(horzValue(), vertValue());
 
-                        QSize scaledImageSize(static_cast<Q_INT32>(ceil(docWidth() * zoom())),
-                                            static_cast<Q_INT32>(ceil(docHeight() * zoom())));
+                        QSize scaledImageSize(static_cast<qint32>(ceil(docWidth() * zoom())),
+                                            static_cast<qint32>(ceil(docHeight() * zoom())));
 
                         QImage image = m_image->convertToQImage(scaledImageRect, scaledImageSize,
                                                                 monitorProfile(), paintFlags, HDRExposure());
@@ -1188,7 +1188,7 @@ void KisView::updateCanvas()
     }
 }
 
-void KisView::updateCanvas(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisView::updateCanvas(qint32 x, qint32 y, qint32 w, qint32 h)
 {
     updateCanvas(QRect(x, y, w, h));
 }
@@ -1238,8 +1238,8 @@ void KisView::layerUpdateGUI(bool enable)
     KisImageSP img = currentImg();
 
     KisLayerSP layer;
-    Q_INT32 nlayers = 0;
-    Q_INT32 nvisible = 0;
+    qint32 nlayers = 0;
+    qint32 nvisible = 0;
 
     
     
@@ -1431,13 +1431,13 @@ void KisView::zoomAroundPoint(double x, double y, double zf)
 
     if (m_hScroll->isVisible()) {
         double vcx = m_canvas->width() / 2.0;
-        Q_INT32 scrollX = qRound(x * zoom() - vcx);
+        qint32 scrollX = qRound(x * zoom() - vcx);
         m_hScroll->setValue(scrollX);
     }
 
     if (m_vScroll->isVisible()) {
         double vcy = m_canvas->height() / 2.0;
-        Q_INT32 scrollY = qRound(y * zoom() - vcy);
+        qint32 scrollY = qRound(y * zoom() - vcy);
         m_vScroll->setValue(scrollY);
     }
 
@@ -1464,7 +1464,7 @@ void KisView::zoomTo(const KisRect& r)
         double wZoom = fabs(m_canvas->width() / r.width());
         double hZoom = fabs(m_canvas->height() / r.height());
 
-        double zf = kMin(wZoom, hZoom);
+        double zf = qMin(wZoom, hZoom);
 
         if (zf < KISVIEW_MIN_ZOOM) {
             zf = KISVIEW_MIN_ZOOM;
@@ -1483,17 +1483,17 @@ void KisView::zoomTo(const QRect& r)
     zoomTo(KisRect(r));
 }
 
-void KisView::zoomTo(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisView::zoomTo(qint32 x, qint32 y, qint32 w, qint32 h)
 {
     zoomTo(KisRect(x, y, w, h));
 }
 
-void KisView::zoomIn(Q_INT32 x, Q_INT32 y)
+void KisView::zoomIn(qint32 x, qint32 y)
 {
     zoomAroundPoint(x, y, nextZoomInLevel());
 }
 
-void KisView::zoomOut(Q_INT32 x, Q_INT32 y)
+void KisView::zoomOut(qint32 x, qint32 y)
 {
     zoomAroundPoint(x, y, nextZoomOutLevel());
 }
@@ -1548,7 +1548,7 @@ double KisView::fitToCanvasZoomLevel() const
         double xZoomLevel = static_cast<double>(fullCanvasWidth) / img->width();
         double yZoomLevel = static_cast<double>(fullCanvasHeight) / img->height();
 
-        return QMIN(xZoomLevel, yZoomLevel);
+        return qMin(xZoomLevel, yZoomLevel);
     }
     else {
         return 1;
@@ -1612,7 +1612,7 @@ void KisView::slotImageProperties()
             resizeCurrentImage(dlg.imageWidth(),
                                dlg.imageHeight());
         }
-        Q_INT32 opacity = dlg.opacity();
+        qint32 opacity = dlg.opacity();
         opacity = opacity * 255 / 100;
         img->setName(dlg.imageName());
         img->setColorSpace(dlg.colorSpace());
@@ -1712,7 +1712,7 @@ void KisView::saveLayerAsImage()
 
 
 
-Q_INT32 KisView::importImage(const KUrl& urlArg)
+qint32 KisView::importImage(const KUrl& urlArg)
 {
     KisImageSP currentImage = currentImg();
 
@@ -1721,7 +1721,7 @@ Q_INT32 KisView::importImage(const KUrl& urlArg)
     }
 
     KUrl::List urls;
-    Q_INT32 rc = 0;
+    qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
         QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
@@ -1874,10 +1874,10 @@ void KisView::rotateLayer(double angle)
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KisID("Triangle"));
     angle *= M_PI/180;
-    Q_INT32 w = currentImg()->width();
-    Q_INT32 h = currentImg()->height();
-    Q_INT32 tx = Q_INT32((w*cos(angle) - h*sin(angle) - w) / 2 + 0.5);
-    Q_INT32 ty = Q_INT32((h*cos(angle) + w*sin(angle) - h) / 2 + 0.5);
+    qint32 w = currentImg()->width();
+    qint32 h = currentImg()->height();
+    qint32 tx = qint32((w*cos(angle) - h*sin(angle) - w) / 2 + 0.5);
+    qint32 ty = qint32((h*cos(angle) + w*sin(angle) - h) / 2 + 0.5);
 
     KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, angle, -tx, -ty, m_progress, filter);
     tw.run();
@@ -2098,17 +2098,17 @@ void KisView::slotUpdateFullScreen(bool toggle)
     }
 }
 
-Q_INT32 KisView::docWidth() const
+qint32 KisView::docWidth() const
 {
     return currentImg() ? currentImg()->width() : 0;
 }
 
-Q_INT32 KisView::docHeight() const
+qint32 KisView::docHeight() const
 {
     return currentImg() ? currentImg()->height() : 0;
 }
 
-void KisView::scrollTo(Q_INT32 x, Q_INT32 y)
+void KisView::scrollTo(qint32 x, qint32 y)
 {
     if (m_hScroll->isVisible()) {
         m_hScroll->setValue(x);
@@ -2287,13 +2287,13 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 //        m_lastGuidePoint = mapToScreen(e->pos().floorQPoint());
 //        m_currentGuide = 0;
 //
-//        if ((e->state() & ~Qt::ShiftButton) == Qt::NoButton) {
-//            KisGuideSP gd = mgr->find(static_cast<Q_INT32>(pt.x() / zoom()), static_cast<Q_INT32>(pt.y() / zoom()), QMAX(2.0, 2.0 / zoom()));
+//        if ((e->state() & ~Qt::ShiftModifier) == Qt::NoButton) {
+//            KisGuideSP gd = mgr->find(static_cast<qint32>(pt.x() / zoom()), static_cast<qint32>(pt.y() / zoom()), qMax(2.0, 2.0 / zoom()));
 //
 //            if (gd) {
 //                m_currentGuide = gd;
 //
-//                if ((e->button() == Qt::RightButton) || ((e->button() & Qt::ShiftButton) == Qt::ShiftButton)) {
+//                if ((e->button() == Qt::RightButton) || ((e->button() & Qt::ShiftModifier) == Qt::ShiftButton)) {
 //                    if (gd->isSelected())
 //                        mgr->unselect(gd);
 //                    else
@@ -2572,7 +2572,7 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
                 cancelId
             };
 
-            KPopupMenu popup(this, "drop_popup");
+            KMenu popup(this, "drop_popup");
 
             if (urls.count() == 1) {
                 if (currentImg() != 0) {
@@ -3148,12 +3148,12 @@ void KisView::connectCurrentImg()
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {
             connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(QRect)), SLOT(slotOpenGLImageUpdated(QRect)));
-            connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
+            connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
         } else
 #endif
         {
             connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(imgUpdated(QRect)));
-            connect(m_image, SIGNAL(sigSizeChanged(Q_INT32, Q_INT32)), SLOT(slotImageSizeChanged(Q_INT32, Q_INT32)));
+            connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
         }
     }
 
@@ -3204,13 +3204,13 @@ void KisView::profileChanged(KisProfile *  /*profile*/)
     updateStatusBarProfileLabel();
 }
 
-void KisView::slotImageSizeChanged(Q_INT32 /*w*/, Q_INT32 /*h*/)
+void KisView::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 {
     resizeEvent(0);
     refreshKisCanvas();
 }
 
-void KisView::resizeCurrentImage(Q_INT32 w, Q_INT32 h, bool cropLayers)
+void KisView::resizeCurrentImage(qint32 w, qint32 h, bool cropLayers)
 {
     if (!currentImg()) return;
 
@@ -3297,7 +3297,7 @@ KisRect KisView::viewToWindow(const KisRect& rc)
     return r;
 }
 
-void KisView::viewToWindow(Q_INT32 *x, Q_INT32 *y)
+void KisView::viewToWindow(qint32 *x, qint32 *y)
 {
     if (x && y) {
         QPoint p = viewToWindow(QPoint(*x, *y));
@@ -3356,7 +3356,7 @@ KisRect KisView::windowToView(const KisRect& rc)
     return r;
 }
 
-void KisView::windowToView(Q_INT32 *x, Q_INT32 *y)
+void KisView::windowToView(qint32 *x, qint32 *y)
 {
     if (x && y) {
         QPoint p = windowToView(QPoint(*x, *y));

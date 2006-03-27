@@ -51,7 +51,7 @@ void KisRgbColorSpaceTester::testBasics()
     KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());  
     KisRgbColorSpace *cs = new KisRgbColorSpace(defProfile);
 
-    Q_UINT8 pixel[NUM_CHANNELS];
+    quint8 pixel[NUM_CHANNELS];
 
     pixel[PIXEL_RED] = 255;
     pixel[PIXEL_GREEN] = 128;
@@ -88,10 +88,10 @@ void KisRgbColorSpaceTester::testBasics()
     CHECK((uint)pixel[PIXEL_BLUE], 64u);
     CHECK((uint)pixel[PIXEL_ALPHA], 99u);
 
-    Q_UINT8 red;
-    Q_UINT8 green;
-    Q_UINT8 blue;
-    Q_UINT8 alpha;
+    quint8 red;
+    quint8 green;
+    quint8 blue;
+    quint8 alpha;
 
     cs->getPixel(pixel, &red, &green, &blue, &alpha);
     CHECK((uint)red, 128u);
@@ -107,9 +107,9 @@ void KisRgbColorSpaceTester::testMixColors()
 
 
     // Test mixColors.
-    Q_UINT8 pixel1[4];
-    Q_UINT8 pixel2[4];
-    Q_UINT8 outputPixel[4];
+    quint8 pixel1[4];
+    quint8 pixel2[4];
+    quint8 outputPixel[4];
 
     pixel1[PIXEL_RED] = 255;
     pixel1[PIXEL_GREEN] = 255;
@@ -121,8 +121,8 @@ void KisRgbColorSpaceTester::testMixColors()
     pixel2[PIXEL_BLUE] = 0;
     pixel2[PIXEL_ALPHA] = 0;
 
-    const Q_UINT8 *pixelPtrs[2];
-    Q_UINT8 weights[2];
+    const quint8 *pixelPtrs[2];
+    quint8 weights[2];
 
     pixelPtrs[0] = pixel1;
     pixelPtrs[1] = pixel2;

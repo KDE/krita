@@ -121,9 +121,9 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
             KisColorSpace* cs = dev->colorSpace();
             int pixelSize = cs->pixelSize();
 
-            Q_UINT8* data = new Q_UINT8[pixelSize];
-            Q_UINT8** pixels = new Q_UINT8*[counts[m_radius]];
-            Q_UINT8* weights = new Q_UINT8[counts[m_radius]];
+            quint8* data = new quint8[pixelSize];
+            quint8** pixels = new quint8*[counts[m_radius]];
+            quint8* weights = new quint8[counts[m_radius]];
 
             int i = 0;
             // dummy init
@@ -133,7 +133,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
                     if (x*x + y*y < m_radius * m_radius) {
                         iter = dev->createHLineIterator(pos.x() + x, pos.y() + y, 1, false);
 
-                        pixels[i] = new Q_UINT8[pixelSize];
+                        pixels[i] = new quint8[pixelSize];
                         memcpy(pixels[i], iter.rawData(), pixelSize);
 
                         if (x == 0 && y == 0) {
@@ -151,7 +151,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
                 }
             }
             // Weird, I can't do that directly :/
-            const Q_UINT8** cpixels = const_cast<const Q_UINT8**>(pixels);
+            const quint8** cpixels = const_cast<const quint8**>(pixels);
             cs->mixColors(cpixels, weights, counts[m_radius], data);
             m_pickedColor = KisColor(data, cs);
 

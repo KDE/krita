@@ -60,9 +60,9 @@ void KisEmbossFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
 
 
     //read the filter configuration values from the KisFilterConfiguration object
-    Q_UINT32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
+    quint32 embossdepth = ((KisEmbossFilterConfiguration*)configuration)->depth();
 
-    //the actual filter function from digikam. It needs a pointer to a Q_UINT8 array
+    //the actual filter function from digikam. It needs a pointer to a quint8 array
     //with the actual pixel data.
 
     Emboss(src, dst, rect, embossdepth);
@@ -108,14 +108,14 @@ void KisEmbossFilter::Emboss(KisPaintDeviceSP src, KisPaintDeviceSP dst, const Q
                 src->colorSpace()->toQColor(it.rawData(), &color1);
 
                 QColor color2;
-                Q_UINT8 opacity2;
+                quint8 opacity2;
                 src->pixel(rect.x() + x + Lim_Max(x, 1, Width), rect.y() + y + Lim_Max(y, 1, Height), &color2, &opacity2);
 
-                R = abs((int)((color1.red() - color2.red()) * Depth + (Q_UINT8_MAX / 2)));
-                G = abs((int)((color1.green() - color2.green()) * Depth + (Q_UINT8_MAX / 2)));
-                B = abs((int)((color1.blue() - color2.blue()) * Depth + (Q_UINT8_MAX / 2)));
+                R = abs((int)((color1.red() - color2.red()) * Depth + (quint8_MAX / 2)));
+                G = abs((int)((color1.green() - color2.green()) * Depth + (quint8_MAX / 2)));
+                B = abs((int)((color1.blue() - color2.blue()) * Depth + (quint8_MAX / 2)));
 
-                Gray = CLAMP((R + G + B) / 3, 0, Q_UINT8_MAX);
+                Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
 
                 dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray), dstIt.rawData());
             }

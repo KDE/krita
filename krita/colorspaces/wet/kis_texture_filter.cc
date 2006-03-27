@@ -25,14 +25,14 @@
 #include "kis_texture_painter.h"
 #include "kis_texture_filter.h"
 
-void WetPaintDevAction::act(KisPaintDeviceSP device, Q_INT32 w, Q_INT32 h) const {
+void WetPaintDevAction::act(KisPaintDeviceSP device, qint32 w, qint32 h) const {
     KisColorSpace * cs = device->colorSpace();
 
     if (cs->id() != KisID("WET","")) {
-        kdDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";
+        kDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";
         return;
     } else {
-        kdDebug(DBG_AREA_CMS) << "Wet Paint Action activated!\n";
+        kDebug(DBG_AREA_CMS) << "Wet Paint Action activated!\n";
     }
 
     // XXX if params of the painter get configurable, make them here configurable as well?

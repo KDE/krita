@@ -55,12 +55,12 @@ DlgBorderSelection::~DlgBorderSelection()
     delete m_page;
 }
 
-Q_INT32 DlgBorderSelection::xradius()
+qint32 DlgBorderSelection::xradius()
 {
     return m_page->radiusSpinBox->value();
 }
 
-Q_INT32 DlgBorderSelection::yradius()
+qint32 DlgBorderSelection::yradius()
 {
     return m_page->radiusSpinBox->value();
 }

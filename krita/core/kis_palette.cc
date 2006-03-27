@@ -54,7 +54,7 @@ namespace {
 }
 
 
-KisPalette::KisPalette(const QImage * img, Q_INT32 nColors, const QString & name)
+KisPalette::KisPalette(const QImage * img, qint32 nColors, const QString & name)
     : super(QString("")),
       m_name(name)
 {
@@ -66,7 +66,7 @@ KisPalette::KisPalette(const QImage * img, Q_INT32 nColors, const QString & name
     m_columns = 0; // Set the default value that the GIMP uses...
 }
 
-KisPalette::KisPalette(const KisPaintDeviceSP device, Q_INT32 nColors, const QString & name)
+KisPalette::KisPalette(const KisPaintDeviceSP device, qint32 nColors, const QString & name)
     : super(QString("")),
       m_name(name)
 {
@@ -79,7 +79,7 @@ KisPalette::KisPalette(const KisPaintDeviceSP device, Q_INT32 nColors, const QSt
 }
 
 
-KisPalette::KisPalette(const KisGradient * gradient, Q_INT32 nColors, const QString & name)
+KisPalette::KisPalette(const KisGradient * gradient, qint32 nColors, const QString & name)
     : super(QString("")),
       m_name(name)
 {
@@ -88,8 +88,8 @@ KisPalette::KisPalette(const KisGradient * gradient, Q_INT32 nColors, const QStr
 
     double dx, cur_x;
     QColor c;
-    Q_INT32 i;
-    Q_UINT8 opacity;
+    qint32 i;
+    quint8 opacity;
     dx = 1.0 / (nColors - 1);
 
     KisPaletteEntry e;
@@ -136,7 +136,7 @@ KisPalette::~KisPalette()
 bool KisPalette::load()
 {
     QFile file(filename());
-    file.open(IO_ReadOnly);
+    file.open(QIODevice::ReadOnly);
     m_data = file.readAll();
     file.close();
     return init();
@@ -146,7 +146,7 @@ bool KisPalette::load()
 bool KisPalette::save()
 {
     QFile file(filename());
-    if (!file.open(IO_WriteOnly | IO_Truncate)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
 
@@ -174,7 +174,7 @@ QImage KisPalette::img()
     return m_img;
 }
 
-Q_INT32 KisPalette::nColors()
+qint32 KisPalette::nColors()
 {
     return m_colors.count();
 }
@@ -186,7 +186,7 @@ bool KisPalette::init()
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
     if (s.isEmpty() || s.isNull() || s.length() < 50) {
-        kdWarning(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
+        kWarning(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
         return false;
     }
 
@@ -198,7 +198,7 @@ bool KisPalette::init()
     else if (s.startsWith("GIMP Palette"))
     {
         // XXX: No checks for wrong input yet!
-        Q_UINT32 index = 0;
+        quint32 index = 0;
 
         QStringList lines = QStringList::split("\n", s);
 
@@ -208,7 +208,7 @@ bool KisPalette::init()
 
         QString entry, channel, columns;
         QStringList c;
-        Q_INT32 r, g, b;
+        qint32 r, g, b;
         QColor color;
         KisPaletteEntry e;
 
@@ -217,25 +217,25 @@ bool KisPalette::init()
         // Read name
         if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP") )
         {
-            kdWarning(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
+            kWarning(DBG_AREA_FILE) << "Illegal Gimp palette file: " << filename() << "\n";
             return false;
         }
 
-        setName(i18n(lines[1].mid(strlen("Name: ")).stripWhiteSpace().ascii()));
+        setName(i18n(lines[1].mid(strlen("Name: ")).trimmed().ascii()));
 
         index = 2;
 
         // Read columns
         if (lines[index].startsWith("Columns: ")) {
-            columns = lines[index].mid(strlen("Columns: ")).stripWhiteSpace();;
+            columns = lines[index].mid(strlen("Columns: ")).trimmed();;
             m_columns = columns.toInt();
             index = 3;
         }
 
         // Loop over the rest of the lines
-        for (Q_UINT32 i = index; i < lines.size(); i++) {
+        for (quint32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith("#")) {
-                m_comment += lines[i].mid(1).stripWhiteSpace() + " ";
+                m_comment += lines[i].mid(1).trimmed() + " ";
             }
             else {
                 if (lines[i].contains("\t") > 0) {
@@ -243,11 +243,11 @@ bool KisPalette::init()
                     e.name = a[1];
 
                     QStringList c = QStringList::split(" ", a[0]);
-                    channel = c[0].stripWhiteSpace();
+                    channel = c[0].trimmed();
                     r = channel.toInt();
-                    channel = c[1].stripWhiteSpace();
+                    channel = c[1].trimmed();
                     g = channel.toInt();
-                    channel = c[2].stripWhiteSpace();
+                    channel = c[2].trimmed();
                     b = channel.toInt();
                     color = QColor(r, g, b);
                     e.color = color;
@@ -261,7 +261,7 @@ bool KisPalette::init()
         return true;
     }
     else if (s.length() == 768) {
-        kdWarning(DBG_AREA_FILE) << "Photoshop format palette file. Not implemented yet\n";
+        kWarning(DBG_AREA_FILE) << "Photoshop format palette file. Not implemented yet\n";
         format = FORMAT_ACT;
     }
     return false;
@@ -287,7 +287,7 @@ void KisPalette::remove(const KisPaletteEntry & c)
     }
 }
 
-KisPaletteEntry KisPalette::getColor(Q_UINT32 index)
+KisPaletteEntry KisPalette::getColor(quint32 index)
 {
     return m_colors[index];
 }

@@ -21,7 +21,7 @@
 #define UNKNOWN_INPUT_DEVICE_ID -1
 #define FIRST_INPUT_DEVICE_ID 0
 
-Q_INT32 KisInputDevice::NextInputDeviceID = FIRST_INPUT_DEVICE_ID;
+qint32 KisInputDevice::NextInputDeviceID = FIRST_INPUT_DEVICE_ID;
 
 KisInputDevice KisInputDevice::Mouse;
 KisInputDevice KisInputDevice::Stylus;

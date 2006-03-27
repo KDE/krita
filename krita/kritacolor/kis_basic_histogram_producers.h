@@ -41,19 +41,19 @@ public:
 
     virtual const KisID& id() const { return m_id; }
     virtual Q3ValueVector<KisChannelInfo *> channels() { return m_colorSpace->channels(); }
-    virtual Q_INT32 numberOfBins() { return m_nrOfBins; }
+    virtual qint32 numberOfBins() { return m_nrOfBins; }
     virtual double viewFrom() const { return m_from; }
     virtual double viewWidth() const { return m_width; }
 
-    virtual Q_INT32 count() { return m_count; }
+    virtual qint32 count() { return m_count; }
 
-    virtual Q_INT32 getBinAt(int channel, int position)
+    virtual qint32 getBinAt(int channel, int position)
         { return m_bins.at(externalToInternal(channel)).at(position); }
 
-    virtual Q_INT32 outOfViewLeft(int channel)
+    virtual qint32 outOfViewLeft(int channel)
         { return m_outLeft.at(externalToInternal(channel)); }
 
-    virtual Q_INT32 outOfViewRight(int channel)
+    virtual qint32 outOfViewRight(int channel)
         { return m_outRight.at(externalToInternal(channel)); }
 
 protected:
@@ -71,21 +71,21 @@ protected:
     }
     // not virtual since that is useless: we call it from constructor
     void makeExternalToInternal();
-    typedef Q3ValueVector<Q_UINT32> vBins;
+    typedef Q3ValueVector<quint32> vBins;
     Q3ValueVector<vBins> m_bins;
     vBins m_outLeft, m_outRight;
     double m_from, m_width;
-    Q_INT32 m_count;
+    qint32 m_count;
     int m_channels, m_nrOfBins;
     KisColorSpace *m_colorSpace;
     KisID m_id;
-    Q3ValueVector<Q_INT32> m_external;
+    Q3ValueVector<qint32> m_external;
 };
 
 class KisBasicU8HistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicU8HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const { return 1.0; }
 };
@@ -93,7 +93,7 @@ public:
 class KisBasicU16HistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicU16HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -101,7 +101,7 @@ public:
 class KisBasicF32HistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicF32HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -110,7 +110,7 @@ public:
 class KisBasicF16HalfHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicF16HalfHistogramProducer(const KisID& id, KisColorSpace *colorSpace);
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -143,7 +143,7 @@ protected:
 class KisGenericRGBHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisGenericRGBHistogramProducer();
-    virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
     virtual Q3ValueVector<KisChannelInfo *> channels();
@@ -172,7 +172,7 @@ class KisGenericLabHistogramProducer : public KisBasicHistogramProducer {
     public:
         KisGenericLabHistogramProducer();
         virtual ~KisGenericLabHistogramProducer();
-        virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
+        virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
         virtual QString positionToString(double pos) const;
         virtual double maximalZoom() const;
         virtual Q3ValueVector<KisChannelInfo *> channels();

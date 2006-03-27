@@ -80,21 +80,21 @@ public:
     };
     enum Placement { DefaultPlacement, ConstantPlacement, RandomPlacement };
     static int const MaxDim = 4;
-    //Q_INT32 step;
-    Q_INT32 ncells;
-    Q_INT32 dim;
+    //qint32 step;
+    qint32 ncells;
+    qint32 dim;
     // Apparantly only used for editing a pipe brush, which we won't at the moment
-    // Q_INT32 cols, rows;
-    // Q_INT32 cellwidth, cellheight;
+    // qint32 cols, rows;
+    // qint32 cellwidth, cellheight;
     // Aparantly the gimp doesn't use this anymore? Anyway it is a bit weird to
     // paint at someplace else than where your cursor displays it will...
     //Placement placement;
-    Q_INT32 rank[MaxDim];
+    qint32 rank[MaxDim];
     SelectionMode selection[MaxDim];
     /// The total count of brushes in each dimension (helper)
-    Q_INT32 brushesCount[MaxDim];
+    qint32 brushesCount[MaxDim];
     /// The current index in each dimension, so that the selection modes know where to start
-    Q_INT32 index[MaxDim];
+    qint32 index[MaxDim];
     /// If true, the brush won't be painted when there is no motion
     bool needsMovement;
 };
@@ -157,8 +157,8 @@ private:
     QString m_name;
     QString m_parasiteString; // Contains instructions on how to use the brush
     mutable KisPipeBrushParasite m_parasite;
-    Q_UINT32 m_numOfBrushes;
-    mutable Q_UINT32 m_currentBrush;
+    quint32 m_numOfBrushes;
+    mutable quint32 m_currentBrush;
 
     QByteArray m_data;
     mutable Q3PtrList<KisBrush> m_brushes;

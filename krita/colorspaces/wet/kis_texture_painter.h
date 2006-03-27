@@ -31,7 +31,7 @@ public:
     KisTexturePainter();
     KisTexturePainter(KisPaintDeviceSP device);
 
-    void createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    void createTexture(qint32 x, qint32 y, qint32 w, qint32 h);
 
 private:
     double m_blurh, m_height;

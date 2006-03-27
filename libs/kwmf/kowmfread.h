@@ -30,7 +30,7 @@
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
 
-#include <../kofficecore/koffice_export.h>
+#include <koffice_export.h>
 class KoWmfReadPrivate;
 
 /**

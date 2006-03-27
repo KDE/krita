@@ -41,6 +41,27 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib/kofficecore/ ${CMAKE_CURRENT_SOURCE
 # TODO remove this (wrong order) once we have per-lib variables to use like in kdelibs.
 include_directories( ${KDE4_INCLUDE_DIRS} )
 
+set(libkdgantt_SRCS
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttView.cpp         
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewEventItem.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewItem.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewItemDrag.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewSubwidgets.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewSummaryItem.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewTaskItem.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewTaskLink.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttViewTaskLinkGroup.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttMinimizeSplitter.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttSemiSizingControl.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttSizingControl.cpp
+	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttXMLTools.cpp
+	)
+	
+kde4_add_ui3_files(libkdgantt_SRCS 
+	${CMAKE_SOURCE_DIR}/kdgantt/itemAttributeDialog.ui
+	)
+
+
 add_subdirectory(libs)
 #add_subdirectory(example)
 add_subdirectory(interfaces)
@@ -56,7 +77,7 @@ add_subdirectory(kounavail)
 #add_subdirectory(kpresenter)
 #add_subdirectory(krita)
 #add_subdirectory(kspread)
-#add_subdirectory(kugar)
+add_subdirectory(kugar)
 #add_subdirectory(kword)
 #add_subdirectory(ascend)
 add_subdirectory(mimetypes)

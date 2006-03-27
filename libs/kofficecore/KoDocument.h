@@ -1091,9 +1091,6 @@ protected:
     /** @internal */
     virtual void setModified() { KParts::ReadWritePart::setModified(); }
 
-    /** @internal */
-    virtual void insertChild(QObject *o) { QObject::insertChild(o); }
-
     KoPageLayout m_pageLayout;
 
     /**
@@ -1139,6 +1136,8 @@ private slots:
     void deleteOpenPane();
 
 private:
+    virtual void insertChild(QObject *) { Q_ASSERT( 0 ); } // avoid compiler warning, but don't call deprecated insertChild() in QObject
+
     KService::Ptr nativeService();
     bool oldLoadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );

@@ -53,21 +53,22 @@
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
 #include <ksharedptr.h>
+#include <ktoolinvocation.h>
+#include <kxmlguifactory.h>
 
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <QCloseEvent>
 #include <Q3PtrList>
 #include <QEvent>
 #include <QLabel>
 #include <QResizeEvent>
-#include <ktoolinvocation.h>
 #include <QSplitter>
 #include <kxmlguifactory.h>
 #include <ktoolbar.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <ktoolbar.h>
 
 class KoPartManager : public KParts::PartManager
 {
@@ -107,7 +108,6 @@ public:
     m_splitter=0L;
     m_orientation=0L;
     m_removeView=0L;
-    m_toolbarList.setAutoDelete( true );
     m_firstTime=true;
     m_progress=0L;
     m_paDocInfo = 0;
@@ -140,6 +140,7 @@ public:
   ~KoMainWindowPrivate()
   {
     delete m_dcopObject;
+    qDeleteAll( m_toolbarList );
   }
 
   KoDocument *m_rootDoc;
@@ -153,16 +154,16 @@ public:
   QLabel * statusBarLabel;
   KProgressBar *m_progress;
 
-  Q3PtrList<KAction> m_splitViewActionList;
+  QList<KAction *> m_splitViewActionList;
   // This additional list is needed, because we don't plug
   // the first list, when an embedded view gets activated (Werner)
-  Q3PtrList<KAction> m_veryHackyActionList;
+  QList<KAction *> m_veryHackyActionList;
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
   KoMainWindowIface *m_dcopObject;
 
-  Q3PtrList <KAction> m_toolbarList;
+  QList<KAction *> m_toolbarList;
 
   bool bMainWindowGUIBuilt;
   bool m_splitted;
@@ -186,7 +187,7 @@ public:
   bool m_isExporting;
 
   KUrl m_lastExportURL;
-  Q3CString m_lastExportFormat;
+  QByteArray m_lastExportFormat;
   int m_lastExportSpecialOutputFlag;
 
   KSharedPtr<KoSpeaker> m_koSpeaker;
@@ -696,8 +697,7 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
                   .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                   i18n( "Confirm Save" ),
                   KStdGuiItem::save (),
-                  "NonNativeSaveConfirmation",
-                  true
+                  "NonNativeSaveConfirmation"
                   );
     }
     else // File --> Export
@@ -710,8 +710,7 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
                   .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                   i18n( "Confirm Export" ),
                   i18n ("Export"),
-                  "NonNativeExportConfirmation", // different to the one used for Save (above)
-                  true
+                  "NonNativeExportConfirmation" // different to the one used for Save (above)
                   );
     }
 
@@ -741,8 +740,8 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
 
     KUrl oldURL = pDoc->url();
     QString oldFile = pDoc->file();
-    Q3CString _native_format = pDoc->nativeFormatMimeType();
-    Q3CString oldOutputFormat = pDoc->outputMimeType();
+    QByteArray _native_format = pDoc->nativeFormatMimeType();
+    QByteArray oldOutputFormat = pDoc->outputMimeType();
     int oldSpecialOutputFlag = pDoc->specialOutputFlag();
     KUrl suggestedURL = pDoc->url();
 
@@ -1106,6 +1105,7 @@ void KoMainWindow::slotFileNew()
 void KoMainWindow::slotFileOpen()
 {
     KFileDialog *dialog = new KFileDialog(":OpenDialog", QString::null, this);
+    dialog->setObjectName( "file dialog" );
     if (!isImporting())
         dialog->setCaption( i18n("Open Document") );
     else
@@ -1333,12 +1333,11 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
         tb->hide();
 
     // Update the action appropriately
-    Q3PtrListIterator<KAction> it( d->m_toolbarList );
-    for ( ; it.current() ; ++it )
-        if ( !strcmp( it.current()->name(), tbName ) )
+    foreach( KAction* action, d->m_toolbarList )
+        if ( !strcmp( action->name(), tbName ) )
         {
             //kDebug(30003) << "KoMainWindow::showToolbar setChecked " << shown << endl;
-            static_cast<KToggleAction *>(it.current())->setChecked( shown );
+            static_cast<KToggleAction *>(action)->setChecked( shown );
             break;
         }
 }
@@ -1427,13 +1426,13 @@ void KoMainWindow::slotProgress(int value) {
     {
         // The statusbar might not even be created yet.
         // So check for that first, and create it if necessary
-        QObjectList *l = queryList( "QStatusBar" );
-        if ( !l || !l->first() ) {
+        QStatusBar* bar = qFindChild<QStatusBar *>( this );
+        if ( !bar ) {
             statusBar()->show();
             QApplication::sendPostedEvents( this, QEvent::ChildAdded );
-            setUpLayout();
+            // ######## KDE4 porting: removed this call:
+            // setUpLayout();
         }
-        delete l;
 
         if ( d->m_progress )
         {
@@ -1483,7 +1482,8 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     factory->removeClient( d->m_activeView );
 
     unplugActionList( "toolbarlist" );
-    d->m_toolbarList.clear(); // deletes the actions
+    qDeleteAll( d->m_toolbarList );
+    d->m_toolbarList.clear();
   }
 
   if ( !d->bMainWindowGUIBuilt )
@@ -1514,22 +1514,20 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
     // Create and plug toolbar list for Settings menu
     //QPtrListIterator<KToolBar> it = toolBarIterator();
-    Q3PtrList<QWidget> toolBarList = factory->containers( "ToolBar" );
-    Q3PtrListIterator<QWidget> it( toolBarList );
-    for ( ; it.current() ; ++it )
+    foreach ( QWidget* it, factory->containers( "ToolBar" ) )
     {
-      if ( it.current()->inherits("KToolBar") )
+      KToolBar * tb = ::qobject_cast<KToolBar *>(it);
+      if ( tb )
       {
-          KToolBar * tb = static_cast<KToolBar *>(it.current());
-          KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar").arg( tb->text() ), 0,
-                                               actionCollection(), tb->name() );
-	  act->setCheckedState(i18n("Hide %1 Toolbar").arg( tb->text() ));
+          KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar").arg( tb->windowTitle() ),
+                                                   actionCollection(), tb->name() );
+	  act->setCheckedState(i18n("Hide %1 Toolbar").arg( tb->windowTitle() ));
 	  connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
           act->setChecked ( !tb->isHidden() );
           d->m_toolbarList.append( act );
       }
       else
-          kWarning(30003) << "Toolbar list contains a " << it.current()->className() << " which is not a toolbar!" << endl;
+          kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!" << endl;
     }
     plugActionList( "toolbarlist", d->m_toolbarList );
 
@@ -1589,7 +1587,7 @@ void KoMainWindow::slotEmailFile()
         //Save the file as a temporary file
         bool const tmp_modified = rootDocument()->isModified();
         KUrl const tmp_url = rootDocument()->url();
-        Q3CString const tmp_mimetype = rootDocument()->outputMimeType();
+        QByteArray const tmp_mimetype = rootDocument()->outputMimeType();
         KTempFile tmpfile; //TODO: The temorary file should be deleted when the mail program is closed
         KUrl u;
         u.setPath(tmpfile.name());

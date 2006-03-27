@@ -153,15 +153,15 @@ public:
     }
     /// Overloaded version of addProperty that takes a char*, usually for "..."
     void addProperty( const QString& propName, const char* propValue, PropertyType type = DefaultType ) {
-        m_properties[type].insert( propName, QString::fromUtf8( propValue ), type );
+        m_properties[type].insert( propName, QString::fromUtf8( propValue ) );
     }
     /// Overloaded version of addProperty that converts an int to a string
     void addProperty( const QString& propName, int propValue, PropertyType type = DefaultType ) {
-        m_properties[type].insert( propName, QString::number( propValue ), type );
+        m_properties[type].insert( propName, QString::number( propValue ) );
     }
     /// Overloaded version of addProperty that converts a bool to a string (false/true)
     void addProperty( const QString& propName, bool propValue, PropertyType type = DefaultType ) {
-        m_properties[type].insert( propName, propValue ? "true" : "false", type );
+        m_properties[type].insert( propName, propValue ? "true" : "false" );
     }
 
     /**
@@ -279,14 +279,14 @@ private:
     QString property( const QString& propName, PropertyType type ) const {
         QMap<QString, QString>::const_iterator it = m_properties[type].find( propName );
         if ( it != m_properties[type].end() )
-            return it.data();
+            return it.value();
         return QString::null;
     }
 
     QString attribute( const QString& propName ) const {
         QMap<QString, QString>::const_iterator it = m_attributes.find( propName );
         if ( it != m_attributes.end() )
-            return it.data();
+            return it.value();
         return QString::null;
     }
 

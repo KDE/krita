@@ -173,8 +173,8 @@ public:
 class KoViewWrapperWidget : public QWidget
 {
 public:
-    KoViewWrapperWidget( QWidget *parent, const char *name )
-        : QWidget( parent, name )
+    KoViewWrapperWidget( QWidget *parent )
+        : QWidget( parent )
     {
         KGlobal::locale()->insertCatalog("koffice");
         // Tell the iconloader about share/apps/koffice/icons
@@ -258,7 +258,8 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
 
     if ( singleViewMode )
     {
-        d->m_wrapperWidget = new KoViewWrapperWidget( parentWidget, widgetName );
+        d->m_wrapperWidget = new KoViewWrapperWidget( parentWidget );
+        d->m_wrapperWidget->setObjectName( widgetName );
         setWidget( d->m_wrapperWidget );
         kDebug(30003) << "creating KoBrowserExtension" << endl;
         (void) new KoBrowserExtension( this ); // ## only if embedded into a browser?
@@ -748,7 +749,7 @@ void KoDocument::setViewBuildDocument( KoView *view, const QDomDocument &doc )
     if ( d->m_views.find( view ) == -1 )
         return;
 
-    uint viewIdx = d->m_views.at();
+    int viewIdx = d->m_views.at();
 
     if ( d->m_viewBuildDocuments.count() == viewIdx )
         d->m_viewBuildDocuments.append( doc );

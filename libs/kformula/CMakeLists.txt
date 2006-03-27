@@ -5,8 +5,8 @@ add_subdirectory( fonts )
 add_subdirectory( dtd ) 
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/lib/kotext/ 
-	${CMAKE_SOURCE_DIR}/lib//kofficeui/
+	${CMAKE_SOURCE_DIR}/libs/kotext/ 
+	${CMAKE_SOURCE_DIR}/libs/kofficeui/
 	${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 

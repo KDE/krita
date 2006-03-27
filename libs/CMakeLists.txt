@@ -1,8 +1,8 @@
 kde4_header()
 
 include_directories( 
-	${CMAKE_SOURCE_DIR}/lib/kofficeui/
-	${CMAKE_SOURCE_DIR}/lib/store/
+	${CMAKE_SOURCE_DIR}/libs/kofficeui/
+	${CMAKE_SOURCE_DIR}/libs/store/
 	${KDE4_INCLUDE_DIR} 
 	${QT_INCLUDES}  )
 

@@ -38,13 +38,13 @@ public:
    * Creates a new zoom action.
    */
   KoZoomAction( const QString& text, const QIcon& pix, 
-    const KShortcut& cut = KShortcut(), QObject* parent = 0, const char* name = 0 );
+    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
       
   /**
    * Creates a new zoom action.
    */
   KoZoomAction( const QString& text, const QString& pix, 
-    const KShortcut& cut = KShortcut(), QObject* parent = 0, const char* name = 0 );
+    const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
       
 public slots:
 

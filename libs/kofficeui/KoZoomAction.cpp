@@ -27,14 +27,14 @@
 #include <q3tl.h>
 
 KoZoomAction::KoZoomAction( const QString& text, const QIcon& pix, 
-  const KShortcut& cut, QObject* parent, const char* name ):
+  const KShortcut& cut, KActionCollection* parent, const char* name ):
   KSelectAction( text, pix, cut, parent, name )
 {
   init();
 }
       
 KoZoomAction::KoZoomAction( const QString& text, const QString& pix, 
-  const KShortcut& cut, QObject* parent, const char* name ):
+  const KShortcut& cut, KActionCollection* parent, const char* name ):
   KSelectAction( text, pix, cut, parent, name )
 {
   init();

@@ -1,0 +1,402 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KoParagDecorationTab</class>
+<author>Martin Ellis &lt;martin.ellis@kdemail.net&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KoBorderWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>626</width>
+            <height>345</height>
+        </rect>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>backgroundColorGroupBox</cstring>
+            </property>
+            <property name="title">
+                <string>Paragraph Background Color</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;Paragraph Background Color&lt;/p&gt;
+
+&lt;p&gt;The paragraph background color appears
+between the left and right margins of a
+paragraph.&lt;/p&gt;
+
+&lt;p&gt;If the text has a background color set, then
+the text background will appear 'on top' of the
+paragraph background.  In this case, the paragraph
+background will still show on parts of the paragraph
+that have no text (usually on the last line, between
+the end of the text and the margin).&lt;/p&gt;</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>lblBackgroundColor</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Background color:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>bBackgroundColor</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorButton">
+                    <property name="name">
+                        <cstring>bBackgroundColor</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>bordersGroupBox</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Borders</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;Paragraph Borders&lt;/p&gt;
+
+&lt;p&gt;The preview shows what the currently 
+selected paragraph borders will look like.&lt;/p&gt;
+
+&lt;p&gt;To &lt;i&gt;add&lt;/i&gt; a new border: Select the desired style,
+width and color.  Click the toggle button that corresponds
+to that border.&lt;/p&gt;
+
+&lt;p&gt;To &lt;i&gt;remove&lt;/i&gt; an existing border: Either click on the
+border to be removed in the preview, or click the
+toggle button corresponding to that border.&lt;/p&gt;
+
+&lt;p&gt;To &lt;i&gt;modify&lt;/i&gt; a border: Select the desired style,
+width and color, then click on the border to be
+modified in the preview.&lt;/p&gt;</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="1" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>previewLayout</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>borderPreviewLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Preview:</string>
+                            </property>
+                        </widget>
+                        <widget class="QFrame">
+                            <property name="name">
+                                <cstring>borderPreview</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>3</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>200</height>
+                                </size>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Raised</enum>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QFrame" row="0" column="0">
+                    <property name="name">
+                        <cstring>borderControlFrame</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>lblBorderWidth</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Width:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>cbBorderWidth</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KComboBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>cbBorderWidth</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KColorButton" row="2" column="1">
+                            <property name="name">
+                                <cstring>bBorderColor</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="KComboBox" row="0" column="1">
+                            <property name="name">
+                                <cstring>cbBorderStyle</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0">
+                            <property name="name">
+                                <cstring>textLabel3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Color:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>bBorderColor</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QButtonGroup" row="3" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>bordersButtonGroup</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="title">
+                                <string></string>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="KPushButton">
+                                    <property name="name">
+                                        <cstring>bBorderLeft</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap>image0</pixmap>
+                                    </property>
+                                    <property name="toggleButton">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add/remove left paragraph border</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Toggles the left paragraph border on or off.</string>
+                                    </property>
+                                </widget>
+                                <widget class="KPushButton">
+                                    <property name="name">
+                                        <cstring>bBorderRight</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap>image1</pixmap>
+                                    </property>
+                                    <property name="toggleButton">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add/remove right paragraph border</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Toggles the right paragraph border on or off.</string>
+                                    </property>
+                                </widget>
+                                <widget class="KPushButton">
+                                    <property name="name">
+                                        <cstring>bBorderTop</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap>image2</pixmap>
+                                    </property>
+                                    <property name="toggleButton">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add/remove top paragraph border</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Toggles the top paragraph border on or off.</string>
+                                    </property>
+                                </widget>
+                                <widget class="KPushButton">
+                                    <property name="name">
+                                        <cstring>bBorderBottom</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap>image3</pixmap>
+                                    </property>
+                                    <property name="toggleButton">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add/remove bottom paragraph border</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Toggles the bottom paragraph border on or off.</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>lblBorderStyle</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Style:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>cbBorderStyle</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>cbJoinBorder</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Merge with next paragraph</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Merges the border style of the current paragraph with the next paragraph</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;Merge with next paragraph&lt;/p&gt;
+
+&lt;p&gt;When this option is checked, no top or bottom borders
+will appear between consecutive paragraphs with the
+same style.  Top and Bottom borders will only appear between
+paragraphs with different styles.&lt;/p&gt;
+
+&lt;p&gt;When this option is unchecked, top and bottom borders
+always appear at the top and bottom of paragraphs with this style,
+regardless of the style of the preceeding and subsequent paragraphs.&lt;/p&gt;</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <spacer row="1" column="0">
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>250</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="106">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000003149444154388d63601805d406ffa198810c9aa0816401264a34233982aa063252dbc05117520e465d48d8668af2f20800009c621507e8d6c1420000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="109">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000003449444154388d63601805b400ff49a0ff23f1a966398a814c3814910db019c8486d03475d48b981a32ea4dc4052f2f228606000002cd115072e5ef6af0000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="103">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000002e49444154388d6360187180118bd87f4acc6122df2d030848f53239414419187521e560d4859483ff64d223150000d38311f3dc8b4ad20000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="101">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000002c49444154388d63601805b400ffc9a4e90748b571d48594db38ea42ca6d4451cf422543e180895c8da3000e00765a11f509a137610000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

@@ -1,0 +1,436 @@
+<html>
+
+<head>
+<title>PyCXX README</title>
+
+<style>
+H1, H2, H3, H4 {color: #000099;
+	background-color: lightskyblue}
+h3 {position: relative; left: 20px}
+
+p {position: relative; left: 20px; margin-right: 20px}
+pre {color: #0000cc; background-color: #eeeeee; position: relative; left: 40px; margin-right: 80px;
+	border-style: solid; border-color: black; border-width: thin}
+kbd {color: #990000}
+p cite, ol cite, ul cite {font-family: monospace; font-style: normal; font-size: normal}
+li var, pre var, p var, kbd var {color: #009900; font-style: italic}
+li samp, pre samp, p samp, kbd samp {color: #009900; font-weight: bold}
+li p {position: relative; left: 0}
+table { position: relative; left: 20px; border: solid #888888 1px; background-color: #eeeeee}
+table th {border: solid #888888 1px; background-color: #88dd88; color: black}
+table td {border: solid #888888 1px}
+table td.code {border: solid #888888 1px;font-family: monospace; font-style: normal; font-size: normal}
+p.param {background-color: #eeeeee; border-top: lightskyblue solid 4}
+</style>
+</head>
+
+<body>
+
+<h1>PyCXX -- Python C++ Extensions Support</h1>
+
+<h2>Installation using distutils</h2>
+
+<h3>Windows Installation and Demo</h3>
+<ol>
+<li>Fetch <a href="http://prdownloads.sourceforge.net/cxx/pycxx_5_3_1.tar.gz">
+http://prdownloads.sourceforge.net/cxx/pycxx_5_3_1.tar.gz</a>
+<li>Expand the archive into a directory of your choosing C:\ for example. Note: WinZip can expand .tar.gz files.
+<li>Install the PyCXX files:
+<ol>
+<li><pre>C:> cd \pycxx_5_3_1</pre>
+<li><pre>C:\pycxx_5_3_1> python setup.py install</pre>
+</ol>
+<li>Install the PyCXX Demo:
+<ol>
+<li><pre>C:> cd \PYCXX_5_3_1\Demo</pre>
+<li><pre>C:\PYCXX_5_3_1\Demo> python setup.py install</pre>
+</ol>
+<li>Run the demo:
+<ol>
+<li><pre>C:> python</pre>
+<li><pre>&gt;&gt;&gt; import CXX.example</pre>
+<li><pre>&gt;&gt;&gt; CXX.example.test()</pre>
+<li><pre>&gt;&gt;&gt; r = CXX.example.range( 11, 100, 13 )</pre>
+<li><pre>&gt;&gt;&gt; for i in r: print i</pre>
+<li><pre>...</pre>
+</ol>
+</ul>
+</ol>
+
+
+<h3>Unix Installation and Demo</h3>
+<p>Note: distutils is not available for Python 1.5.2</p>
+
+<ol>
+<li>Fetch <a href="http://prdownloads.sourceforge.net/cxx/pycxx_5_3_1.tar.gz">
+http://prdownloads.sourceforge.net/cxx/PyCXX-V5.3.0.tar.gz</a>
+<li>Login as root. root access is typically needed on Unix systems to install the PyCXX files into the Python directories.
+<li>Expand the archive into a directory of your choosing ~\ for example.
+<li>Install the PyCXX files:
+<ol>
+<li><pre># cd ~\PYCXX_5_3_1</pre>
+<li><pre># python setup.py install</pre>
+</ol>
+<li>Install the PyCXX Demo:
+<ol>
+<li><pre># cd ~\PYCXX_5_3_1\Demo</pre>
+<li><pre># python setup.py install</pre>
+</ol>
+<li>Run the demo:
+<ol>
+<li><pre>~ python</pre>
+<li><pre>&gt;&gt;&gt; import CXX.example</pre>
+<li><pre>&gt;&gt;&gt; CXX.example.test()</pre>
+<li><pre>&gt;&gt;&gt; r = CXX.example.range( 11, 100, 13 )</pre>
+<li><pre>&gt;&gt;&gt; for i in r: print i</pre>
+<li><pre>...</pre>
+</ol>
+</ul>
+</ol>
+
+<h2>Installation using Project and Makefile</h2>
+
+<p>If you cannot or do not wish to use the distutils methods to work with PyCXX a set
+of Makefiles and Project files are provided.</p>
+
+<h3>Windows Installation and Demo</h3>
+<p>
+<ol>
+<li>Fetch <a href="http://prdownloads.sourceforge.net/cxx/PyCXX-V5.3.0.tar.gz">
+http://prdownloads.sourceforge.net/cxx/pycxx_5_3_1.tar.gz</a>
+<li>Expand the archive into a directory of your choosing C:\ for example. WinZip can expand .tar.gz files.
+<li>Build the example. Using Microsoft Visual C++ 6.0 load the workspace corresponsing to the version of
+Python you wish the work with.
+<ul>
+<li>example_py15.dsw - Python 1.5.2
+<li>example_py20.dsw - Python 2.0 and 2.0.1
+<li>example_py21.dsw - Python 2.1 and 2.1.1
+<li>example_py22.dsw - Python 2.2 and its maintanence release
+<li>example_py23.dsw - Python 2.3 and its maintanence release
+</ul>
+<li>Run the example. (I'll assume you are testing Python 2.3)
+<ul>
+<li>cd c:\PYCXX_5_3_1\pyds23
+<li>c:\python21\python -c "import example;example.test()"
+</ul>
+</ol>
+</p>
+<h3>Unix Installation and Demo</h3>
+<p>
+<ol>
+<li>Fetch <a href="http://prdownloads.sourceforge.net/cxx/PyCXX-V5.3.0.tar.gz">
+http://prdownloads.sourceforge.net/cxx/PyCXX-V5.3.0.tar.gz</a>
+<li>Expand the archive into a directory of your choosing ~/ for example.
+<li>Select to makefile for your system and python version.
+<ul>
+<li>example_freebsd_py15.mak - FreeBSD Python 1.5.2 (see <a href="#note_1_5_2">note</a> below)
+<li>example_freebsd_py20.mak - FreeBSD Python 2.0, 2.0.1
+<li>example_freebsd_py21.mak - FreeBSD Python 2.1, 2.1.1
+<li>example_freebsd_py22.mak - FreeBSD Python 2.2
+<li>example_linux_py15.mak - Linux Python 1.5.2
+<li>example_linux_py20.mak - Linux Python 2.0, 2.0.1
+<li>example_linux_py21.mak - Linux Python 2.1, 2.1.1
+<li>example_linux_py22.mak - Linux Python 2.2
+</ul>
+<li>Build the example. Use GNU make<br>
+$ make -f <var>example-makefile</var> example.so
+<li>Run the example.<br>
+$ make -f <var>example-makefile</var> test
+</ol>
+</p>
+
+<p><a id="note_1_5_2">Note:</a> The Unix version of python 1.5.2 may need to be rebuilt so that C++ is support.
+If you get reports of undefined symbols like cout or cerr then its likely that python
+is not compiled and linked to support C and C++.</p>
+
+<p>To create a makefile for another vendors Unix follow these steps:</p>
+<ol>
+<li>copy one of the example make files above.
+<li>edit the variables to match your Python installation and C++ compile needs
+<li>Proceed to build and test as above.
+</ol>
+<p>Note: most of the makefile rules to build PyCXX and its example are contained in example_common.mak.
+</p>
+
+<h2>Revision History</h2>
+<h3>Version 5.3.1 (19-Jan-2005)</h3>
+<p>Support GCC4 and Microsoft .NET 2003 aka MSVC 7.1
+
+<h3>Version 5.3 (21-Oct-2004)</h3>
+<p>String object now support python string and unicode string objects.
+<p>Fix most bugs reported on SourceForge
+
+<h3>Version 5.2 (27-Nov-2003)</h3>
+<p>PyCXX supports Python version 2.3, 2.2, 2.1, 2.0 and 1.5.2 on Windows and Unix.</p>
+<p>Fixed problems with keyword functions.</p>
+<p>Improve Extension API to give access to names and docs
+<p>Support GCC 3.</p>
+<p>Added support for custom Exceptions</p>
+<p></p>
+
+<h3>Version 5.1 (2-Aug-2001)</h3>
+<p>I'm using the name PyCXX for this package, CXX is far to close to a compilers name.</p>
+
+<p>PyCXX supports Python version 2.2, 2.1.1, 2.1, 2.0, 2.0.1 and 1.5.2 on Windows and Unix.</p>
+
+<p>New in this release:</p>
+<ul>
+<li>Support for the Windows Linker /DELAYLOAD feature. Enable this feature by
+defining PY_WIN32_DELAYLOAD_PYTHON_DLL when compiling IndirectPythonInterface.cxx
+<li>Remove "CXX/Array.hxx" and associated code - its does not belong in PyCXX
+<li>Work on the docs. Mostly to clean up the HTML to allow more extensive work.
+<li>Reformated the sources to a consistent style. The mix of styles and tabs sizes
+was making working on the sources error prone.
+<li>Added workaround to setup.py to allow GCC to compile c++ code.
+<li>Added Microsoft Visual C++ 6.0 project files for 1.5, 2.0 and 2.1 builds
+<li>Added Unix make files for Linux (tested on RedHat 7.1) and FreeBSD (tested on 4.3)
+<li>Merged changes from Tom Malcolmson
+</ul>
+
+<h3>(July 9, 2000)</h3>
+<p>Renamed all header files to reflect the CXX include name space and that they are
+C++ header files.
+<p>
+<table cellspacing=0 cellpadding=3px>
+<tr><th>Old</th><th>New</th></tr>
+<tr><td>#include "CXX_Config.h"</td><td>#include "CXX/Config.hxx"</td>
+<tr><td>#include "CXX_Exception.h"</td><td>#include "CXX/Exception.hxx"</td>
+<tr><td>#include "CXX_Extensions.h"</td><td>#include "CXX/Extensions.hxx"</td>
+<tr><td>#include "CXX_Objects.h"</td><td>#include "CXX/Objects.hxx"</td>
+</table>
+
+<h3>Version 5 (May 18, 2000)</h3>
+<p>This version adds Distutils support for installation and some code cleanup.</p>
+
+<h3>Version 4 (October 11, 1999)</h3>
+
+<p>This version contains a massive revision to the part of CXX that supports creating
+extension objects and extension modules. Barry Scott contributed these changes.</p>
+
+<p>CXX has always consisted of two parts: the basic CXX_Objects.h and the more
+experimental CXX_Extensions.h. We will describe the changes to CXX_Objects first, and then
+the changes to CXX_Extensions.h.</p>
+
+<h3>Changes to CXX_Objects</h3>
+
+<h4>1. Owned option eliminates need for FromAPI in most cases</h4>
+
+<p>Object's constructor from PyObject* and method set have a new (backward compatible)
+signature:</p>
+
+<pre>
+Object (PyObject* pyob, bool owned = false);
+void set(PyObject* pyob, bool owned = false);
+</pre>
+
+<p>Users may call these with owned = true if they own the reference pyob already and want
+the Object instance to take over ownership.</p>
+
+<p>A new inline function Object asObject(PyObject* pyob) returns Object(pyob, true); thus,
+one way to construct an object from a pointer returned by the Python API is to call
+asObject on it. </p>
+
+<p>Previously a class FromAPI was provided to solve the problem of taking over an owned
+reference. FromAPI will be eliminated in the next release. It is no longer used by CXX
+itself or its demos. The new mechanism is much cleaner and more efficient.</p>
+
+<p>Other classes in CXX have been given the same &quot;owned&quot; option on their
+constructors: Int, Float, Long, Complex, SeqBase&lt;T&gt;, Tuple, List, Dict, Module,
+Callable.</p>
+
+<h4>2. Namespace support in compiler assumed</h4>
+
+<p>Since EGCS / GCC now supports namespaces and the standard library, the need for
+CXX_config.h is almost gone. We have eliminated all the macros except for one obscure one
+dealing with iterator traits in the standard library.</p>
+
+<h3>Changes to CXX_Extensions</h3>
+
+<p>The changes to CXX_Extensions.h are not backward compatible. However, they simplify
+coding so much that we think it is worth the disruption.</p>
+
+<h4>1. Creating an extension module</h4>
+
+<p>To create an extension module, you inherit from class ExtensionModule templated on
+yourself: In the constructor, you make calls to register methods of this class with Python
+as extension module methods. In this example, two methods are added (this is a simplified
+form of the example in Demo/example.cxx):</p>
+
+<pre>class example_module : public ExtensionModule&lt;example_module&gt;
+{
+public:
+    example_module()
+	: ExtensionModule&lt;example_module&gt;( &quot;example&quot; )
+	{
+	add_varargs_method(&quot;sum&quot;, &amp;example_module::ex_sum, &quot;sum(arglist) = sum of arguments&quot;);
+	add_varargs_method(&quot;test&quot;, &amp;example_module::ex_test, &quot;test(arglist) runs a test suite&quot;);
+
+	initialize( &quot;documentation for the example module&quot; );
+	}
+
+    virtual ~example_module() {}
+
+private:
+    Object ex_sum (const Tuple &amp;a) { ... }
+    Object ex_test( const Tuple &amp;a) { ... }
+};
+</pre>
+
+<p>To initialize the extension, you just instantiate one static instance (static so it
+doesn't destroy itself!):</p>
+
+<pre>
+void initexample()
+    {
+    static example_module* example = new example_module;
+    }
+</pre>
+
+<p>The methods can be written to take Tuples as arguments and return Objects. If
+exceptions occur they are trapped for you and a Python exception is generated. So, for
+example, the implementation of ex_sum might be:</p>
+
+<pre>
+Object ex_sum (const Tuple &amp;a)
+    {
+        Float f(0.0);
+        for( int i = 0; i &lt; a.length(); i++ )
+        { 
+            Float g(a[i]);
+            f = f + g;
+        }
+        return f;
+    }
+</pre>
+
+<p>class ExtensionModule contains methods to return itself as a Module object, or to
+return its dictionary.</p>
+
+<h4>Creating extension objects</h4>
+
+<p>Creating extension objects is of course harder since you must specify how the object
+behaves and give it methods. This is shown in some detail in the example range.h and range.cxx,
+with the test routine rangetest.cxx, in directory Demo.</p>
+
+<p>Here is a brief overview. You create a class that inherits from PythonExtension
+templated upon itself. You override various methods from PythonExtension to implement
+behaviors, such as getattr, sequence_item, etc. You can also add methods to the object
+that are usable from Python using a similar scheme as for module methods above. </p>
+
+<p>One of the consequences of inheriting from PythonExtension is that you are inheriting
+from PyObject itself. So your class is-a PyObject and instances of it can be passed to the
+Python C API. Note: this example uses the namespace feature of CXX. The Py:: 's are not
+required if you use the namespace instead.</p>
+
+<pre>
+class range: public Py::PythonExtension&lt;range&gt; {
+public:
+    ... constructors, etc.
+
+    ... methods
+    // initializer, see below
+    static void init_type();
+    // override functions from PythonExtension
+    virtual Py::Object repr();
+    virtual Py::Object getattr( const char *name );
+
+    virtual int sequence_length();
+    virtual Py::Object sequence_item( int i );
+    virtual Py::Object sequence_concat( const Py::Object &amp;j );
+    virtual Py::Object sequence_slice( int i, int j );
+
+    // define python methods of this object
+    Py::Object amethod (const Py::Tuple&amp; args);
+    Py::Object value (const Py::Tuple&amp; args);
+    Py::Object assign (const Py::Tuple&amp; args); 
+};
+</pre>
+
+<p>
+To initialize the type you provide a static method that you can call from some module's
+initializer. This method sets the name, doc string, and indicates which behaviors it
+supports. It then adds the methods.</p>
+
+<pre>
+void range::init_type()
+{
+    behaviors().name(&quot;range&quot;);
+    behaviors().doc(&quot;range objects: start, stop, step&quot;);
+    behaviors().supportRepr();
+    behaviors().supportGetattr();
+    behaviors().supportSequenceType();
+
+    add_varargs_method(&quot;amethod&quot;, &amp;range::amethod,
+        &quot;demonstrate how to document amethod&quot;);
+    add_varargs_method(&quot;assign&quot;, &amp;range::assign);
+    add_varargs_method(&quot;value&quot;, &amp;range::value);
+}
+</pre>
+
+<h3>Version 3 (June 18, 1999)</h3>
+
+<p>1. CXX compiles with EGCS snapshot 19990616. EGCS requires a standard library class
+random_access_iterator that is not yet available in some other compilers (such as Windows
+VC6). Therefore a new switch:</p>
+
+<p>STANDARD_LIBRARY_HAS_ITERATOR_TRAITS</p>
+
+<p>has been added to CXX_Config.h that you may need to toggle if you get an error on the
+two lines that mention random_access_iterator. The current definition is correct for VC6
+and EGCS-19990616. </p>
+
+<p>2. A new constructor was added to Module to allow construction from a string containing
+the module name. A test was added for this to the demo.</p>
+
+<h3>Version 2 (Dec. 28, 1998)</h3>
+
+<p>Fixed definition of extension type to match 1.5.2. This version will presumably not
+compile with older versions of Python. This can be fixed by using the previous version's
+definition. I did not take the time to find out what these new &quot;flags&quot; are for
+nor put in any methods to deal with them.</p>
+
+<h3>Version 1</h3>
+
+<p>This is an experimental set of files for supporting the creation of Python extensions
+in C++. </p>
+
+<p>Documentation is in progress at <a href="http://xfiles.llnl.gov">http://xfiles.llnl.gov</a>.
+</p>
+
+<p>To use CXX you use the header files in Include, such as CXX_Objects.h or
+CXX_Extensions.h. You must include the sources in Src in your sources to supply parts of
+the CXX classes required.</p>
+
+<p>A demo is included. The Setup file in this directory compiles this demo named
+&quot;example&quot;. To try the demo, which is also a test routine, you import example and
+then execute:</p>
+
+<pre>
+example.test()
+</pre>
+
+<p>You can also play with the extension object whose constructor is named &quot;range&quot;:</p>
+
+<pre>
+s = range(1, 100, 2)
+print s[2]  # should print 5
+</pre>
+
+<p>Compilation with Microsoft Visual C++ 5.0 will succeed but only if you have Service
+Pack 3 installed. Compilation has been known to succeed on a Unix system using KCC by
+using:</p>
+
+<pre>
+setenv CCC &quot;KCC -x&quot;
+</pre>
+
+<p>before running makethis.py.</p>
+
+<p>There is also a python.cxx file for making a stand-alone Python containing this
+example, as well as a similar file arraytest.cxx for testing Array.</p>
+
+<p>Comments to barry@barrys-emacs.org, please.</p>
+
+<p>Barry Scott</p>
+</body>
+</html>

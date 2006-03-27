@@ -1,0 +1,11 @@
+#
+# KFormula font mapping.
+# Unicode mapping for the esstixfourteen font. You can find it at
+# ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip
+#
+# Each line consist of a char position and its unicode value.
+#
+99, 0x2138
+97, 0x2135
+98, 0x2136
+100, 0x2137

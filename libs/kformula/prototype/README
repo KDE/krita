@@ -1,0 +1,9 @@
+
+A small prototype of the kformula engine. Needs:
+
+python2.0 (http://www.python.org) 
+PyQt2.2   (http://www.thekompany.com/projects/pykde/)
+
+Please see file ../DESIGN for details. Any feedback is welcome.
+
+Uli

@@ -1,0 +1,45 @@
+
+This is the new kformula library. It's used by the kformula part and kword.
+
+To test the library do
+make kformulatest
+./kformulatest
+
+Supported actions include:
+
+Ctrl-O                  open (to "test.xml")
+Ctrl-S                  save (from "test.xml")
+Ctrl-M			open (from "mathml.xml")
+Ctrl-Q                  quit
+
+Ctrl-Z                  undo
+Ctrl-Shift-Z            redo
+
+Ctrl-X                  cut
+Ctrl-C                  copy
+Ctrl-V                  paste
+Ctrl-A                  selectAll
+
+---
+
+Ctrl-U                  upper index (symbol/root)
+Ctrl-L                  lower index (symbol)
+
+Ctrl-1                  sum
+Ctrl-2                  product
+Ctrl-3                  integral
+Ctrl-4                  root
+Ctrl-5                  fraction
+Ctrl-6                  matrix
+Ctrl-D, Ctrl-R          remove enclosing element
+Ctrl-G                  make current letter a greek one
+
+^, _, Ctrl-^, Ctrl-_    standart indexes
+(, [, |                 brackets
+
+Text, numbers and operators are supported as well.
+
+Please note that the key bindings are for testing only. The library
+is meant to be used with KActions. Look at KFormulaDocument::createActions.
+
+See DESIGN to know the structure of the formulas

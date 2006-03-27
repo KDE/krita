@@ -1,0 +1,80 @@
+<!--    $Id$
+
+This is an XML document type definition (DTD) for the documentinfo.xml files which
+are used by all KOffice-1.1 and 1.1.1 programs, to store information about the
+document (e.g. title and abstract) and its author.
+
+ChangeLog:
+Initial version (for koffice-1.1.1) written by David Faure <faure@kde.org>.
+-->
+
+<!--
+  The document-info for a KOffice document contains one main element for each tab of
+the "Document Info" dialog. As of KOffice-1.1, this includes: author and about.
+A third page, "log" is planned for the future.
+-->
+<!ELEMENT document-info
+    (author?, about?, log?)>
+
+<!--
+  The "author" element stores information about the author of the document.
+-->
+<!ELEMENT author
+    (full-name?, initial?, title?, company?, email?, telephone?, telephone-work?, fax?, country?, postal-code?, city?, street?, position?)>
+
+<!ELEMENT full-name
+    (#PCDATA)>
+<!ELEMENT initial
+    (#PCDATA)>
+<!ELEMENT title
+    (#PCDATA)>
+<!ELEMENT company
+    (#PCDATA)>
+<!ELEMENT email
+    (#PCDATA)>
+<!ELEMENT telephone
+    (#PCDATA)>
+<!ELEMENT telephone-work
+    (#PCDATA)>
+<!ELEMENT fax
+    (#PCDATA)>
+<!ELEMENT country
+    (#PCDATA)>
+<!ELEMENT postal-code
+    (#PCDATA)>
+<!ELEMENT city
+    (#PCDATA)>
+<!ELEMENT street
+    (#PCDATA)>
+<!ELEMENT position
+    (#PCDATA)>
+
+<!--
+  The "about" element contains information about the document itself.
+  This includes an optional title for the document, and an optional abstract.
+-->
+<!ELEMENT about
+    (abstract?, title?, keyword?, subject?, initial-creator?,
+  editing-cycles?, creation-date?, date?)>
+<!ELEMENT abstract
+    (#PCDATA)>
+<!--title already defined above-->
+<!ELEMENT keyword
+    (#PCDATA)>
+<!ELEMENT subject
+    (#PCDATA)>
+<!ELEMENT initial-creator
+    (#PCDATA)>
+<!ELEMENT editing-cycles
+    (#PCDATA)>
+<!ELEMENT creation-date
+    (#PCDATA)>
+<!ELEMENT date
+    (#PCDATA)>
+
+<!--
+  The "log" element is unused at the moment.
+-->
+<!ELEMENT log
+    EMPTY>
+

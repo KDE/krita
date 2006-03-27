@@ -1,0 +1,28 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KoFontTabBase</class>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>fontPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Font</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="KFontChooser_local">
+                        <property name="name">
+                            <cstring>characterFont</cstring>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
+<layoutdefaults spacing="6" margin="11"/>
+<includes>
+	<include location="local" impldecl="in declaration">KFontDialog_local.h</include>
+</includes>
+<includehints>
+    <includehint>KFontDialog_local.h</includehint>
+</includehints>
+</UI>

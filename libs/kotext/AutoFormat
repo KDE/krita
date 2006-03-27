@@ -1,0 +1,52 @@
+Autoformat feature:
+kword and kpresenter have autoformat feature:
+-> Simple autocorrection :
+	-> Convert first letter of a sentence automatically to uppercase
+	-> Convert two uppercasecharacters to one uppercase and one lowercase
+	-> Auto format Url => when we write http://www.kde.org it replaces
+	by a link variable, we detect a url all word we start by http:// ftp://
+	mailto: news:/
+	-> Suppress double space
+	-> Suppress space at the beginning and the end of paragraph
+	-> Automatically do bold and underline formatting => when we write
+	*kde* => it replace by <bold>kde</bold> and when we write _kde_
+	it replaces by <underline>kde</underline>
+	-> Replace 1/2 to 1/2 => replace to fraction charactere it works for 
+	1/2, 1/4 3/4
+	-> Use auto-numbering for numbered paragraphs, when we start a paragraph
+	with a <number>+<space>+<text> and we press enter this paragraph and
+	next paragraph is replace by number style.
+	-> use list-formatting for bulletted paragraph, when we write "* kde" and 
+	press enter style of paragraph is replaced by bullet style. We can
+	configurate bullet.
+-> Custom Quotes : 
+	-> we can replace double quotes and simple quotes by specific
+	characters.
+-> Advanced autocorrection:
+	-> we can define word which will replace by a other word 
+	=> for example koffices by koffice, or microsoft by linux
+->Exception:
+	-> we can define list of exception word:
+		=>Do not treat as the end of a sequence 
+		==>don't upper case after specific word.
+		
+		=>there is a autoInclude. Autoformat analyse line and detect
+		when we force lower case after a '.'
+
+		=>Accept to uppercase letters :
+		=> there is a autoinclude. Autoformat analyse line and detect
+		when we force 2 uppercase letters.
+->Auto Completion:
+	->When have a manual completion by default it's CTRL+E (we can configurate
+	it into kword or kpresenter.
+	->we can save list of completion word
+	->define min word length : min equals 5
+	->define max number of completion word ( max = 500 )
+	->Append space after completion.
+
+-2002-03-27- koffice 1.1post.
+Laurent Montel <lmontel@mandrakesoft.com>
+Be carefull my english is not good, so you can change all you want in this file.
+
+
+

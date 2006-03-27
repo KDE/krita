@@ -1,0 +1,360 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KoDecorationTabBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>decorationTab</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>368</width>
+            <height>235</height>
+        </rect>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>colorGroupBox</cstring>
+            </property>
+            <property name="title">
+                <string>Colors</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textColorLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Text color:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>textKColorButton</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>backgroundColorLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Background color:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>backgroundKColorButton</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>backgroundKColorButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KColorButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>textKColorButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Text Color</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>shadowGroupBox</cstring>
+            </property>
+            <property name="title">
+                <string>Text Shadow</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>shadowColorLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Shadow color:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>shadowKColorButton</cstring>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput" row="1" column="1">
+                    <property name="name">
+                        <cstring>shadowDistanceKDoubleNumInput</cstring>
+                    </property>
+                    <property name="precision">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="KColorButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>shadowKColorButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>shadowDistanceLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Shadow &amp; distance:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>shadowDistanceSpinBox</cstring>
+                    </property>
+                </widget>
+                <spacer row="0" column="2">
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>16</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <spacer row="1" column="2">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup" row="0" column="3" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>shadowDirectionButtonGroup</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <property name="exclusive">
+                        <bool>true</bool>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <widget class="KPushButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>luShadowKPushButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image0</pixmap>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="on">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId" stdset="0">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <widget class="KPushButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>uShadowKPushButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image1</pixmap>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId" stdset="0">
+                                <number>2</number>
+                            </property>
+                        </widget>
+                        <widget class="KPushButton" row="0" column="2">
+                            <property name="name">
+                                <cstring>ruShadowKPushButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image2</pixmap>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId" stdset="0">
+                                <number>3</number>
+                            </property>
+                        </widget>
+                        <widget class="KPushButton" row="1" column="2">
+                            <property name="name">
+                                <cstring>rShadowKPushButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image3</pixmap>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId" stdset="0">
+                                <number>4</number>
+                            </property>
+                        </widget>
+                        <widget class="KPushButton" row="2" column="2">
+                            <property name="name">
+                                <cstring>rbShadowKPushButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image4</pixmap>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId" stdset="0">
+                                <number>5</number>
+                            </property>
+                        </widget>
+                        <widget class="KPushButton" row="2" column="1">
+                            <property name="name">
+                                <cstring>bShadowKPushButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image5</pixmap>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId" stdset="0">
+                                <number>6</number>
+                            </property>
+                        </widget>
+                        <widget class="KPushButton" row="2" column="0">
+                            <property name="name">
+                                <cstring>lbShadowKPushButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image6</pixmap>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId" stdset="0">
+                                <number>7</number>
+                            </property>
+                        </widget>
+                        <widget class="KPushButton" row="1" column="0">
+                            <property name="name">
+                                <cstring>lShadowKPushButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image7</pixmap>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId" stdset="0">
+                                <number>8</number>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="112">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000003749444154388d6360180594024624f67f0af4c20113f96e216ccb7f38419a01282ea5ba0b470da4ae818c0c38d216b9068e8251402400000dca0315bbc793990000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="101">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000002c49444154388d636018059402462c62ff293183897cb760072ce80214398f81062e1c35702418380a46020000ac0d021622311a270000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="112">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000003749444154388d636018059402463c72ffc9318b897cb760072ce802ff497419ba17a9eec25103290718b14c06408968aabb70148c0400000152031889836c130000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="100">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000002b49444154388d63601805c31f30a20bfc6760f84fa6018c0c0c0c0c4c94ba081d8c1a38120c1c0523010000ee1e0210bc7d1e170000000049454e44ae426082</data>
+    </image>
+    <image name="image4">
+        <data format="PNG" length="116">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000003b49444154388d63601805c31f30a20bfc6760f84fa20128663051ea2274400d03ff3320f96a50ba70a41b88910e910049e9116616d55d380a280700c2810511acdae06c0000000049454e44ae426082</data>
+    </image>
+    <image name="image5">
+        <data format="PNG" length="107">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000003249444154388d63601805c31f30a20bfc6760f84fa20128663051ea2274306ae0483090055d0023619208a8eec25140390000fabd0217e332fc180000000049454e44ae426082</data>
+    </image>
+    <image name="image6">
+        <data format="PNG" length="118">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000003d49444154388d63601805c31f30a20bfc6760f84fa20128663051ea2274c082c426c965b800d55d386a20e500390d911acb1869988181062e1c0594030091380414e0aeb3520000000049454e44ae426082</data>
+    </image>
+    <image name="image7">
+        <data format="PNG" length="96">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000002749444154388d63601805c31f3022b1ffc309d20c40368381895217a1835103478281a360240000f61e021097bbc8b20000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

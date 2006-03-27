@@ -1,0 +1,6 @@
+if test -z "$LIBKSPELL2"; then
+   echo ""
+   echo "You don't use kdelibs CVS (kspell2 not found). Spell-checking disabled."
+   echo ""
+   all_tests=bad
+fi

@@ -1,0 +1,13 @@
+Save Oasis File:
+----------------
+Done:
+-> Save/load field variables
+-> Save/load note variable 
+-> Save/load date/time style format
+
+In progress:
+-> Save/load custom variable (add info into meta.xml)
+
+Todo:
+-> Save/load mail merge variable
+

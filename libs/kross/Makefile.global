@@ -1,0 +1,2 @@
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+VER_INFO = -version-info 1:0:0

@@ -1,0 +1,16 @@
+if test -z "$RUBY_LIBDIR" -a "x$compile_kross" = "xyes" ; then
+  echo ""
+  echo "Ruby development files were not found, or Ruby <= 1.8.1 was found,"
+  echo "Ruby scripting support for KOffice will not be built. If you don't"
+  echo "need Ruby scripting, you can ignore this message."
+  echo ""
+fi
+
+if test -z "$LIBPYTHON" -a -z "$PYTHONINC" -a $"x$compile_kross" = "xyes"; then
+  echo ""
+  echo "Python developement files were not found, Python scripting support for"
+  echo "KOffice will not be built. If you don't need Python scripting, you"
+  echo "can ignore this message"
+  echo ""
+fi
+

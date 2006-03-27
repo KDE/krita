@@ -1,0 +1,104 @@
+Coordinate systems
+==================
+
+This is fun; brace yourself
+
+Document:
+    All objects have a position on the page which is described in the typographic units
+    named points.
+    There are 72 points to the inch, and these absolute coordinates simply place your 
+    objects on the page. 
+    An example; a frame is positioned on paper some 35mm from the left border of the paper and
+    some 35mm from the top of the first page. the absolute position of that frame is 100, 100
+    since 100pt equals 35mm.
+    Note that positioning is done from page 1, so when a frame is moved from page 1 to page 2 it
+    simply gets a higher Y coordinate.
+
+Zoomed: (aka Normal)
+    Every object on screen has a size, and at different zoom levels we use a different amount
+    of pixels to display the same object.
+    Our object above has a top-left position of document:(100,100). To determine where
+    this is on screen we call KoZoomHander::zoomItX(xPos) and KoZoomHander::zoomItY(yPos) to
+    retrieve the pixel positioning on screen at the current zoom level. The zoom level
+    is stored only in the zoomhandler, which is in KWord the document (an instance of KWDocument).
+    Since we are using pixel values all these values are stored in integers, they should not
+    be used to move something around, the absolute coordinate system has to be used for that.
+
+Internal:
+    The former two were mostly for objects like frames etc, not for text. Text (the individual
+    words and characters) are positioned with the layout coordinates. Layout is similar to the
+    Zoomed system, but always uses the same resolution. This resolution is sufficiently high to
+    do the layout in integers, and not really lose info.
+
+    This is the high-resolution unit in which the text layout is done,
+    currently set to 1440 DPI. Everything known the QRT classes will be in
+    this coordinate system (including the QTextFormats). When painting, we apply
+    the current zoom and resolution to find the right font size to use, and we 
+    have to catch up with rounding differences. However the position of the words
+    (i.e. layout) is the one determined previously in layout units. KoZoomHandler
+    offers methods for converting between layout units and zoom-dependent points 
+    and pixels.
+   
+    Note that the Internal coordinate system starts at the topleft corner of
+    the first text frame, (whereas the other coordinate systems start at the
+    topleft corner of the first page).
+    Also, Internal coordinates only exists within the text frames.
+    Internal coordinates can be converted to Document coordinates with
+    KWTextFrameSet::internalToDocument(), and the other way round with documentToInternal().
+
+View:
+    The same as the zoomed coordinate system, but this one can use multiple pages next to each
+    other. So 3 pages horizontal in preview mode is no problem. A frame on page 3
+    then has a higher X coordinate then the same frame on page 1 (and e.g. the same Y).
+    When converting to Zoomed the X coordinates are equals, but the Y of the frame on page
+    3 is higher than the Y of the frame on page 1.
+
+
+Document (pt values, in double, KoPoint, KoRect.)
+ |               |
+ |               |--KoZoomHander::zoomIt[XY]   and unzoomIt[XY]
+ |               |
+ |               V
+ |    Zoomed coordinates (pixel values, in int, QPoint, QRect) 
+ |    This is also called the "Normal" coordinate system.
+ |         |
+ |         |--KWViewMode::normalToView
+ |         V
+ |    View Mode (pixels values, but e.g. pages are re-arranged)
+ |    That's also the KWCanvas (scrollview)'s contents coordinates.
+ |
+ |
+ |
+ | And for text framesets, there's also :
+ |
+ |--KWTextFrameSet::documentToInternal
+ V
+Internal coordinates (the coordinates given to QRT - in "layout units")
+Note that there are pixels and pts in the layout unit system too !
+There are conversions between LU points and document points,
+but also direct conversions between LU pixels and view pixels.
+
+Font sizes
+==========
+A 12pt font will lead to a layout font of ptToLayoutUnit(12)=20*12=240pt -
+that's the value stored in the QTextFormat.
+
+However font metrics are calculated from the 100%-zoom-level font (e.g. 12pt for a 12pt font)
+and _then_ multiplied by 20, instead of loading a 240pt font for that as we did before.
+This is implemented by KoTextFormat::charWidth().
+
+On screen, at 100%, a layoutUnitToFontSize(240,false)=(240/20)*1.0=20.0pt font size will be used.
+This does NOT depend on the DPI settings. Qt takes care of pt->pixel conversion for fonts.
+
+When printing... TODO, double-check whether Qt does pt->pixel conversion correctly
+(apparently it didn't, in Qt 2).
+
+QFont multiplies by 10 and stores into a 'short'... So for QFont the maximum font size
+is 3276, and in KOffice the maximum font size in points is around 163.
+
+See also
+========
+koffice/kword/DESIGN for more kword-specific things,
+and for explanation about KoTextView (text-edit objects)
+
+David Faure <faure@kde.org>

@@ -1,0 +1,88 @@
+Changes after KOffice-1.4 (other than those done in branch too)
+=========================
+- Made OpenDocument the default format in kword and kpresenter
+- Removed support for saving in the koffice-1.1 format.
+
+Changes after KOffice-1.4-beta1
+===============================
+KOfficeCore:
+- Create backup file faster for local files
+- OASIS: fix memleak during loading (styles dom elements)
+- OASIS: correct handling of default styles (per-family)
+
+Changes after KOffice-1.3
+=========================
+KOfficeUI:
+- Fix overwriting of templates (#73537)
+- Fix loading of icons when creating templates
+- Allow template icons up to 64x64 instead of 60x60 and scale better if too big
+
+KOfficeCore:
+- Support MS-DOS EPS files directly without stripping them internally.
+- Add new info in document properties (Subject/Keywords/home-work phone)
+
+KoText:
+- Add new variable (statistic, Subject/Keywords/home-work phone/Position)
+
+Changes after KOffice-1.3-rc1
+=============================
+KOfficeCore:
+- Fixed doc/window association which led to closing all windows when closing only one.
+
+KoText:
+- Fixed rare crash when applying a format to a selection
+- Fixed painting bug in text view mode (the right side was being erased).
+- Fixed saving of left-to-right direction in RTL paragraphs
+
+KOSpell:
+- Fixed bug where the dialog wouldn't show the spell client from the config file
+
+Changes after KOffice-1.3-beta4
+===============================
+KOfficeCore:
+- Restart autosave timer when saving
+- Fixes for remote documents (authentication dialog not on top, error handling)
+- Restore ability to detect documents without extension (was broken by KDE-3.2-alpha's KZip)
+KOSpell:
+- Many stability fixes
+KoText:
+- Fixed missed hit during search-replace backwards with a single paragraph
+
+Changes after KOffice-1.3-beta3
+===============================
+KOfficeCore:
+- Fixed saving of the window size when closing
+- Cache the configuration object around kofficerc, to improve startup performance
+KoText:
+- Improve hierarchical numbering - doesn't require using a suffix of '.' anymore,
+and doesn't copy over the prefix and suffix from parent levels anymore (#40911).
+- PgUp/PgDown works better than before when "move the caret" is enabled (#45246)
+- Fixed painting of non-breakable-spaces (could show up as a visible square)
+- Implemented painting of non-breakable-spaces when "draw formatting characters" is on
+- Fixed crash (e.g. happening with 'section title' variable, #61735)
+- Fixed pasting of plain text (so that it creates new pages if necessary, #58651)
+
+Changes after KOffice-1.3-beta2
+===============================
+- Support for EPS images: works again for gs interpreters without the png16m device
+- KoText:
+  Paragraph borders now support variable width (e.g. being inside
+  DTP frames of different widths).
+
+Changes after KOffice-1.3-beta1
+===============================
+- Support for opening backup files (e.g. foo.kwd~)
+- Page Layout Dialog: validate user input to prevent nonsense (e.g. margins wider than page)
+- KoText:
+  Fixed drawing of word-by-word underline and strikeout
+  Repainting fixes (in multiline paragraphs)
+  Linespacing fixes (at-least and multiple work as advertised, added "fixed")
+  Major reduction of the memory usage per paragraph
+  Hyphenation fixes (support for breaking the same words more than once)
+  Shadow is now a character property (instead of a paragraph property)
+  More precise painting of paragraph borders
+
+Changes after KOffice-1.2
+=======================
+- New command line option: --print. Prints the document(s) passed on the command
+   line, without showing a window. Useful for scripts and servicemenus.

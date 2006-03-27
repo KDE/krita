@@ -1,0 +1,58 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KOffice" version="17">
+<MenuBar>
+ <Menu name="file" noMerge="1"><text>&amp;File</text>
+  <Action name="file_new" />
+  <Action name="file_open" />
+  <Action name="file_open_recent" />
+  <Separator />
+  <Action name="file_save" />
+  <Action name="file_save_as" />
+  <Action name="file_reload_file" />
+<!--  <Action name="file_versions_file"/> -->
+  <Separator />
+  <Action name="file_import_file" />
+  <Action name="file_export_file" />
+  <Action name="file_send_file" />
+  <Separator />
+  <Merge />
+  <Separator />
+  <Action name="file_print" />
+  <Action name="file_print_preview" />
+  <Separator />
+  <Action name="file_documentinfo" />
+  <Separator />
+  <Action name="file_close" />
+  <Action name="file_quit" />
+ </Menu>
+ <Merge />
+ <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
+  <DefineGroup name="settings_top"/>
+  <Merge/>
+<!--  <ActionList name="toolbarlist"/> -->
+  <Separator/>
+  <DefineGroup name="settings_show"/>
+  <Separator/>
+  <Action name="options_configure_keybinding"/>
+  <Action name="options_configure_toolbars"/>
+  <DefineGroup name="settings_configure"/>
+ </Menu>
+ <Menu name="help" noMerge="1"><text>&amp;Help</text>
+  <Merge />
+  <Action name="help_contents"/>
+  <Action name="help_whats_this"/>
+  <Separator/>
+  <Action name="help_report_bug"/>
+  <Separator/>
+  <Action name="help_about_app"/>
+  <Action name="help_about_kde"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>
+  <Action name="file_new" />
+  <Action name="file_open" />
+  <Action name="file_save" />
+  <Action name="file_print" />
+  <Action name="file_print_preview" />
+</ToolBar>
+</kpartgui>

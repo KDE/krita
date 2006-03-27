@@ -1,0 +1,364 @@
+
+                        The design of kformula
+                          (as we imagine it)
+
+The core of kformula is a tree of element objects that make up the
+formula which is beeing edited.
+
+The element tree itself
+#######################
+
+BasicElement
+------------
+
+All element classes are derived from this one.
+So it provides the interface that is common to all elements.
+BasicElement itself is an abstract class. You never want to create
+objects from it.
+
+Responsebilities
+(This goes for every derived element and therefore for each one.)
+
+- knows its children. Actually BasicElement doesn't have any. But it
+  already defines that children must be known by their parent.
+- knows its bounding rectangle (its size.) The children are included
+  in this rect. (The position is relative to the parent.)
+//- knows its middle line. (for alignment)
+- knows it's zero point for midline (vertical alignment) and 
+  keep open the possibility of negative positions (out of bounding rect)
+- draws itself (given a painter); children are drawn, too
+- knows all positions where the cursor is allowed to be. (see below)
+- knows its parent; The topmost element has no parent; there is a
+  implicit guaranty that the topmost element is always a
+  SequenceElement.
+- can save and load itself. different formates. (see below)
+- all children must be a SequenceElement. Except for SequenceElement's
+  children that might be of any type.
+- might have its own color.
+- might have its own font size (see below).
+
+
+SequenceElement from BasicElement
+---------------
+
+Manages a list of children. The children are aligned horizontally at
+one middle line. No gaps, no overlaps.
+
+Has no own look. It just draws all its children and is done. Except if
+its empty. It looks like an empty space then (i.e. a little square)
+
+Has n+1 valid cursor positions where n is the number of
+children. These are before, between and after the children.
+
+May contain any (type of) element as child 
+
+except SequenceElements if they contains a SequenceElement they merge 
+it in the list
+
+They can handle splitting of the sequence to allow "select an put selected item
+between parenthesis" i.e. as content child of a delimiterelement) 
+
+
+FormulaElement from SequenceElement
+--------------
+
+The only element those parent is null. The root of the element object
+tree.
+
+This is the element that is created by the KFormulaDoc and that knows
+about it. As every other element knows its parent and therefore the
+FormulaElement we get a chance to pass messages to the outside world.
+
+
+RootElement from BasicElement
+-----------
+
+contains two children. content and index. index is optional.
+
+
+IndexElement from BasicElement
+------------
+
+contains five children. content and four indexes. all indexes are
+optional. If there is no index the element might be replaced by its content.
+
+
+TextElement from BasicElement
+-----------
+
+contains one char and no children at all.
+
+
+Might have its own font and size. But preferes to use a reasonalbe
+font and size that are calculated from its parents font and a given
+scheme (see below).
+
+
+DelimiterElement from BasicElement
+----------------
+
+contains one child and draws delimiters around it. You are free to
+choose with.
+
+
+FractionElement from BasicElement
+---------------
+
+2 children: numerator, denominator
+
+
+DecorationElement from BasicElement
+-----------------
+
+A piece of art. It has one child and decorates it above (or below or
+both) with some nice decor. Some decor might be required to be as
+width as the content. There is a way to guarantee this.
+
+We could even add yet another child that can optionally be shown at
+the other side of the decoration.
+
+
+SumIntegralElement from BasicElement  //PrefixedElement
+------------------
+
+draws all sorts of mathematical symbols with three children. Above,
+below (or whereever the indices and limits go)and to the right.
+
+
+GeometryElement from BasicElement
+---------------
+
+One child.
+Draw it at a fixed position relative to parent or absolute.
+This is to do dirty things.
+
+This element must not be used, kformula will provide you everything
+without the use of this kind of element, any way for strange reasons
+you want to do things that are not usually allowed and that are not
+typical of a math formula.
+[We will decide if implement this element or not]
+
+
+MatrixElement from BasicElement
+-------------
+
+A matrix of children.
+With all align stuff, internal borders etc, matrix dots handling (i.e.
+those dots or lines that complete the matrix, not well handled in TeX),
+etc..
+
+SpaceElement from BasicElement
+------------
+
+No children at all. Provides the facility to insert horizontal spaces
+in the formula. (therefore it is similar to TextElement.)
+
+
+OperatorElement from TextElement
+---------------
+
+The element to be used for all kinds of operators. It needed because
+operators require some space before and after and are therefore no
+simple text.
+
+They can you pixamps inestead of fonts, the use of pixmaps is needed only 
+to give the user the possibilty of introduce its strange operator that we 
+do not provide as a font. There problems with the scalability but we will
+include as fonts (or vectorial images) in kformula all TeX operators so we
+hope there is no need to use pixamps for a standard use of KFormula
+
+
+
+Navigation
+##########
+
+There is a class Cursor that implements a pointer to a valid cursor
+position inside the formula structure. Each kformula view needs to
+have its own object of this class.
+
+The Cursor class uses the elements facility to travel throught the
+structure. (It gives the key to the current element and asks for the
+new position.)
+
+If the cursor points into an element this element is said to own the
+cursor. There are a few rules that describe how new cursor positions
+are calculated given the current key:
+
+- An elements cursor positions are its children. The element might not
+own the cursor except when it is owned by one of its children. The
+only exception is SequenceElement which has valid cursor positions
+before, between and after its children, too.
+
+(Therefore the cursor is always owned by a SequenceElement.)
+
+- Each element's children are ordered. If the cursor leaves one child
+the next child it. The direction depends on the key that moved the
+cursor. If there is child left the cursor is passed to the parent.
+
+- If the cursor comes from our parent the first or the last child gets
+it. Depending on the direction in which the cursor moved.
+
+Please note that because each element knows its own cursor positions
+and how to behave, it is possible for each combination of elements to
+work together correctly.
+
+
+
+Editing (undo/redo)
+###################
+
+You always use a cursor to work on the element tree. The cursor
+provides all the basic facilities that are needed to change the tree
+in any way. Its up to you to build bigger functions out of the
+cursor's primitives.
+
+The cursor's interface was designed to allow implement undo support.
+
+There are a few things that you need to know:
+
+- You are not supposed to know the elements that are stored in the
+tree. If you remove them from the tree they are yours and you are
+responsible to delete them properly. But as soon as you put them back
+its the trees business to manage them.
+
+- All the cursors operations that change the tree come in pairs. If
+you call both operations in a row (with the right parameters) you get
+back to the place you started. `insert' for example inserts one or
+more elements and selects them. `remove' removes the selected
+elements and returns them.
+
+- You can always save the current cursor position by calling
+getCursorData(). To set a cursor to a place it was before use
+setCursorData(). But note that its up to you to ensure that the
+position still exists. This means you will only want to call it if you
+are certain that the element tree is exactly the same as it was when
+you called getCursorData().
+
+- The creation of new object is not the cursors business. You do this
+yourself.
+
+- If you want to insert special elements like indexes you will have to
+ask the IndexElement in question for the cursor position where to put
+it. But please note that you might only put empty SequenceElements
+there.
+
+- Its a mistake to insert a SequenceElement at a non-special place.
+
+- After a removal the cursor might point to a strange place like a
+removed index. To get it back to point to something meaningful you
+will have to normalize() it. If the cursor is normalized it is inside a
+SequenceElement. If not its not. Most operations expect the cursor to
+be normalized.
+
+- If you remove something from a element it might become
+senseless. This means you must replace it with its main childs
+content.
+
+
+
+Syntax highlighting
+###################
+
+Everytime a sequence is edited it builds a new syntax tree. (The old
+one gets recycled :) ) The parser goes throught the sequence and
+builds a type object for every token is finds. A token consists of
+one or more elements.
+
+On drawing the elements use their types to find the right font, color
+and spacing.
+
+One nice thing about the syntax checking is that it allows us to
+replace symbol names with a more fancy graphical representation.
+
+The syntax tree is meant to support evaluation of formulas as well,
+but this is yet another story...
+
+
+
+Save and Load (Import/Export)
+#############################
+
+there are quite a few formats we want to read and write:
+
+Built in:
+- native koffice xml
+
+Import/Export filters
+- MathML 
+- C like math strings 
+- LaTeX
+
+
+
+Element templates
+#################
+
+example: you can create a template to write limits:
+it is a "lim ( )" string over 2 empty elements with an arrows that separe
+them
+
+
+
+Style templates
+###############
+
+There need to be templates that tell which font to use, how the sizes
+differ among different elements and what spaces are to be
+included. (And much more.)
+
+Your only need to choose one of them to get a reasonable good look.
+
+Therefore we pass a StyleContext to the
+FormulaElement. The StyleContext contains the font family to use, the
+normal font size, the spaces to include between certain elements and
+all sorts of context information that is needed to draw the
+formula.
+
+The elements use this information to calculate their sizes and to draw
+themselves. Each element is allowed to choose different settings for
+whatever reason. But if the formula looks ugly then its the elements
+blame.
+
+
+
+Interface templates 
+###################
+
+Decide what KAction have to be toolbars,
+what element templates must be loaded, what toolbar display....
+There will be predefined (sorry for the spelling error) templates for 
+-General...
+-Physics (Vectors , integral, partial derivative etc are preferred..)
+-Analysis (Integral and diff equation stuff)
+-Geometry (Tensor product etc)
+-Chemistry (Arrows, Periodic table external toolbar)
+-Computer science (...)
+-????
+
+
+
+Context sensibility
+###################
+
+We want a formula to look different according to its
+surroundings. (Most obviosly according to the available height and/or width.)
+
+It would be great to get something like automatic operator
+alignment. So if you type some formulas each on its own line the
+assigment operators should be automatically in a column. (If the user
+turns this on.)
+
+
+
+Fonts and font size
+###################
+
+Each elements font size is calculated starting from its parents font
+size. It knows how it differs to those.
+
+The font size might also be used to choose the pen width and other
+size dependent settings.
+
+
+Andrea Rizzi <rizzi@kde.org>
+Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>

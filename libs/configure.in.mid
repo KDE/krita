@@ -1,0 +1,57 @@
+if test -s $srcdir/inst-apps ; then
+    SUBDIRLIST=`cat $srcdir/inst-apps`
+else
+    SUBDIRLIST=`cat $srcdir/subdirs`
+fi
+
+# fallback (KDE_CREATE_SUBDIRLIST has this fallback, so I have put it here too.)
+if test -z "$SUBDIRLIST" ; then
+    SUBDIRLIST=`ls -1 $srcdir`
+fi
+
+AC_MSG_CHECKING([whether only Kexi is being built])
+KEXI_ONLY=yes
+for args in $SUBDIRLIST ; do
+    case $args in
+        lib) ;;
+        kexi) ;;
+        *) if test -d $srcdir/$args ; then 
+             KEXI_ONLY=no
+           fi
+           ;;
+    esac
+done
+AC_MSG_RESULT([$KEXI_ONLY])
+AM_CONDITIONAL(compile_kexionly, test "$KEXI_ONLY" = "yes" )
+
+AC_MSG_CHECKING([whether kopainter should be compiled])
+
+
+# first check which main application we could compile
+for args in $SUBDIRLIST ; do
+    case $args in
+        krita) COMPILE_LIB_FOR_KRITA="$args " ;;
+        karbon) COMPILE_LIB_FOR_KARBON="$args " ;;
+        kivio) COMPILE_LIB_FOR_KIVIO="$args " ;;
+    esac
+done
+
+# now remove the applications the user has asked not to compile
+for args in $DO_NOT_COMPILE ; do
+    case $args in
+        krita) COMPILE_LIB_FOR_KRITA= ;;
+        karbon) COMPILE_LIB_FOR_KARBON= ;;
+        kivio) COMPILE_LIB_FOR_KIVIO= ;;
+    esac
+done
+
+if test -n "$COMPILE_LIB_FOR_KRITA$COMPILE_LIB_FOR_KARBON$COMPILE_LIB_FOR_KIVIO" ; then
+    USERFEEDBACKCOMPILELIB="yes"
+else
+    USERFEEDBACKCOMPILELIB="no"
+fi
+
+AC_MSG_RESULT([$USERFEEDBACKCOMPILELIB])
+
+AM_CONDITIONAL(compile_lib_KOPAINTER, test "$USERFEEDBACKCOMPILELIB" = "yes" )
+

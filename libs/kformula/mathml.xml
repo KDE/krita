@@ -1,0 +1,25 @@
+<mrow>
+
+   <mtable>
+      <mtr> <mn>1</mn> <mn>0</mn> <mn>0</mn> </mtr>
+      <mtr> <mn>0</mn> <mn>1</mn> <mn>0</mn> </mtr>
+      <mtr> <mn>0</mn> <mn>0</mn> <mn>1</mn> </mtr>
+   </mtable>
+
+
+  <mi> x </mi>
+  <mo> + </mo>
+  <mrow>
+   <mfrac> 
+    <mi> y </mi>
+     <mroot>
+    	<munder>
+	  <mi> lim </mi>
+	  <mtext>x->0</mtext>
+	</munder>
+        <mn> 4 </mn>	
+     </mroot>	 	  
+  </mfrac>	
+  </mrow>
+</mrow>
+

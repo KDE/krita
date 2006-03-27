@@ -1,0 +1,33 @@
+<KrossScripting>
+    <ScriptAction 
+        name="sa1name"
+        text="ScriptAction1Text"
+        description="Some describing text"
+        interpreter="python"
+        icon="exec">
+print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+print "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    </ScriptAction>
+
+    <ScriptAction
+      name="testcase"
+      text="TestCase"
+      description="Test some common functionality."
+      interpreter="python"
+      file="testcase.py" />
+
+    <ScriptAction
+      name="testgui"
+      text="TestGUI"
+      description="Test the GUI functionality."
+      interpreter="python"
+      file="testgui.py" />
+
+    <ScriptAction
+      name="testkexidb"
+      text="TestKexiDB"
+      description="Test the kexidb binding."
+      interpreter="python"
+      file="testkexidb.py" />
+
+</KrossScripting>

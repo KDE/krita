@@ -1,0 +1,35 @@
+Filter status:
+
+IMPORT:
+
+-MathML
+ Missing good <mo> (i.e. operator) import. 
+
+-LaTeX
+ Need a parser...I'll look at formula1 parser
+ 
+-C Style (i.e. niceThisFormula(QString))
+ this is easy to do, cooming soon. 
+
+
+
+EXPORT:
+
+-LaTex:
+ Supports:
+ brackets,matrix,roots,indeces,text,operator,greekcharacters(partially),fractions
+
+ Needs:
+ AMSmath package
+ 
+ Todo:
+ Symbols and greek letters
+ Options...
+
+
+
+-C Style
+ To be done. Thinking about how to handle some things
+
+-MathML
+

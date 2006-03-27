@@ -1,0 +1,21 @@
+<dicts>
+  <dict lang="cs" encoding="ISO8859-2"/>
+  <dict lang="en" encoding="ISO8859-1"/>
+  <dict lang="hu" encoding="ISO8859-2"/>
+  <dict lang="ru" encoding="KOI8-R"/>
+  <dict lang="uk" encoding="KOI8-U"/>
+  <dict lang="da" encoding="ISO8859-1"/>
+  <dict lang="de" encoding="ISO8859-1"/>
+  <dict lang="en_CA" encoding="ISO8859-1"/>
+  <dict lang="es" encoding="ISO8859-1"/>
+  <dict lang="et" encoding="ISO8859-1"/>
+  <dict lang="fr" encoding="ISO8859-1"/>
+  <dict lang="it" encoding="ISO8859-1"/>
+  <dict lang="nl" encoding="ISO8859-1"/>
+  <dict lang="pt_BR" encoding="ISO8859-1"/>
+  <dict lang="pt" encoding="ISO8859-1"/>
+  <dict lang="pt_PT" encoding="ISO8859-1"/>
+  <dict lang="sk" encoding="ISO8859-2"/>
+  <dict lang="sl" encoding="ISO8859-2"/>
+  <dict lang="sv" encoding="ISO8859-1"/>
+</dicts>

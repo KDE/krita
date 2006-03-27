@@ -1,0 +1,35 @@
+#
+# KFormula font mapping.
+# Unicode mapping for the esstixtwo font. You can find it at
+# ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip
+#
+# Each line consist of a char position and its unicode value.
+#
+100, 0x2203
+99, 0x2200
+102, 0x2201
+108, 0x2293
+107, 0x2294
+111, 0x2227
+118, 0x22BB
+119, 0x22BC
+110, 0x2228
+104, 0x2229
+58, 0x25B4
+103, 0x222A
+57, 0x22B2
+56, 0x22B3
+43, 0x2605
+59, 0x25BE
+121, 0x2306
+60, 0x25B6
+54, 0x25B5
+167, 0x2118
+40, 0x2660
+38, 0x2661
+37, 0x2662
+41, 0x2663
+109, 0x228E
+106, 0x22D2
+105, 0x22D3
+61, 0x25C0

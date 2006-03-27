@@ -1,0 +1,6 @@
+Please use all-lowercase for new file names.
+  The current mixed casing used in kofficecore and kofficeui is too confusing
+  (koDocumentInfoDlg vs KoDocumentInfoDlg, the difference is hard to see),
+  inconsistent with the rest of KDE, and breaks the emacs shortcut for auto-inserting
+  #include statements.
+  Maybe one day we'll rename all the current mixed-case files...

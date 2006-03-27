@@ -28,7 +28,7 @@
 #include <qpixmap.h>
 //Added by qt3to4:
 #include <Q3PtrList>
-
+#include <QImageWriter>
 #include <kcommand.h>
 
 #include "contextstyle.h"
@@ -109,7 +109,7 @@ QByteArray MimeSource::encodedData ( const char *format ) const
         return latexString;
 
     if (fmt==selectionMimeType()) {
-	QByteArray d=document.toCString();
+	QByteArray d=document.toByteArray();
   	d.truncate(d.size()-1);
 	return d;
     }
@@ -132,13 +132,13 @@ QByteArray MimeSource::encodedData ( const char *format ) const
 	paint.end();
 
 	QByteArray d;
-	QBuffer buff(d);
+	QBuffer buff(&d);
 	buff.open(QIODevice::WriteOnly);
-	QImageIO io(&buff,"PPM");
+	QImageWriter io(&buff,"PPM");
 	QImage ima=pm.convertToImage();
 	ima.detach();
-	io.setImage(ima);
-	if(!io.write())
+	//io.write(ima);
+	if(!io.write(ima))
 	    return QByteArray();
 
 	buff.close();

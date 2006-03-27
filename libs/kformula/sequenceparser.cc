@@ -63,16 +63,13 @@ void SequenceParser::nextToken()
     if ( type == SEPARATOR ) {
         if ( tokenEnd < list.count() ) {
             QChar ch = getEndChar();
-            switch ( ch ) {
-            case ',':
-            case '>':
-            case ';':
-                type = NAME;
-                tokenEnd++;
-                break;
-            default:
-                readText();
-            }
+			if(ch == ',' | ch == '>' | ch == ';')
+			{
+				type = NAME;
+				readText();
+			}
+			else
+				readText();
         }
     }
     else if ( type == ORDINARY ) {

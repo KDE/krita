@@ -36,7 +36,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 #macro_additional_clean_files( ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/kofficecore/ ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 # TODO remove this (wrong order) once we have per-lib variables to use like in kdelibs.
 include_directories( ${KDE4_INCLUDE_DIRS} )
@@ -50,7 +50,7 @@ add_subdirectory(doc)
 add_subdirectory(interfaces)
 #add_subdirectory(karbon)
 #add_subdirectory(kchart)
-#add_subdirectory(kdgantt)
+add_subdirectory(kdgantt)
 #add_subdirectory(kexi)
 #add_subdirectory(kformula)
 #add_subdirectory(kivio)

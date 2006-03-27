@@ -9,9 +9,9 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 ########### next target ###############
 set(libkohyphen_SRCS 
-	${CMAKE_SOURCE_DIR}/lib/kotext/kohyphen/hnjalloc.c 
-	${CMAKE_SOURCE_DIR}/lib/kotext/kohyphen/hyphen.c 
-	${CMAKE_SOURCE_DIR}/lib/kotext/kohyphen/kohyphen.cpp
+	${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen/hnjalloc.c 
+	${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen/hyphen.c 
+	${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen/kohyphen.cpp
 	)
 
 set(kotext_LIB_SRCS ${libkohyphen_SRCS}

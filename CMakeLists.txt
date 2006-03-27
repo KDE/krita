@@ -6,12 +6,12 @@ project(koffice)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+# Always include srcdir and builddir in include path
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 # support for Dart: http://public.kitware.com/dashboard.php?name=kde
 enable_testing()
 include(CTest)
-
-# generate non-quiet makefiles
-set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # search packages used by KDE
 find_package(KDE4 REQUIRED)
@@ -35,9 +35,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 
 #macro_additional_clean_files( ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
-include_directories(
-  ${KDE4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-)
+# for config.h and <toplevel/foo.h> includes (if any?)
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+
+# TODO remove this (wrong order) once we have per-lib variables to use like in kdelibs.
+include_directories( ${KDE4_INCLUDE_DIRS} )
 
 add_subdirectory(lib)
 #add_subdirectory(ascend)

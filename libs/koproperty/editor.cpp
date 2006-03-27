@@ -127,8 +127,9 @@ class EditorPrivate
 using namespace KoProperty;
 
 Editor::Editor(QWidget *parent, bool autoSync, const char *name)
- : K3ListView(parent, name)
+ : K3ListView(parent)
 {
+	setObjectName(name);
 	d = new EditorPrivate(this);
 	d->itemDict.setAutoDelete(false);
 

@@ -28,7 +28,8 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>
-
+#include <QStringList>
+#include <QMap>
 namespace KoProperty {
 
 class Property;

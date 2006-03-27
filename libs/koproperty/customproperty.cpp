@@ -269,6 +269,8 @@ RectCustomProperty::value() const
 SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
 : CustomProperty(property)
 {
+#warning "kde4: port QVariant::SizePolicy"
+#if 0
 	if(property && (property->type() == SizePolicy) ) {
 //		QMap<QString, QVariant> spValues;
 		Q3ValueList<QVariant> keys;
@@ -305,6 +307,7 @@ SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
 			i18n("Vert. Stretch"), i18n("Vertical Stretch"),
 			SizePolicy_VerStretch, property);
 	}
+#endif	
 }
 
 SizePolicyCustomProperty::~SizePolicyCustomProperty()
@@ -352,11 +355,14 @@ SizePolicyCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 #endif		
 	}
 	else {
-		QSizePolicy v = value.toSizePolicy();
+#warning "kde4: port QVariant::QSizePolicy"			
+#if 0
+			QSizePolicy v = value.toSizePolicy();
 		m_property->child("hSizeType")->setValue(v.horData(), rememberOldValue, false);
 		m_property->child("vSizeType")->setValue(v.verData(), rememberOldValue, false);
 		m_property->child("hStretch")->setValue(v.horStretch(), rememberOldValue, false);
 		m_property->child("vStretch")->setValue(v.verStretch(), rememberOldValue, false);
+#endif		
 	}
 }
 

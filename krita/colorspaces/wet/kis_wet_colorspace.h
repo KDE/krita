@@ -20,7 +20,7 @@
 
 #include <qcolor.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 
 #include "kis_global.h"
@@ -128,7 +128,7 @@ public:
 
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
-    virtual QValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KisChannelInfo *> channels() const;
     virtual Q_UINT32 nChannels() const;
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 nSubstanceChannels() const;
@@ -142,7 +142,7 @@ public:
                        Q_INT32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
-    virtual QValueList<KisFilter*> createBackgroundFilters();
+    virtual Q3ValueList<KisFilter*> createBackgroundFilters();
     
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 

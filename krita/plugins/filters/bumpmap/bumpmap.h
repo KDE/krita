@@ -112,7 +112,7 @@ class KisBumpmapConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name = 0, WFlags f = 0 );
+    KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name = 0, Qt::WFlags f = 0 );
     virtual ~KisBumpmapConfigWidget() {};
 
     KisBumpmapConfiguration * config();

@@ -280,15 +280,15 @@ void compositeXor(Q_INT32 pixelSize,
             red=((double) (UINT8_MAX -sAlpha)*dAlpha*
                  s[PIXEL_RED]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
                  sAlpha*d[PIXEL_RED]/UINT8_MAX )/alpha ;
-            d[PIXEL_RED]=RoundSignedToQuantum(red);
+            d[PIXEL_RED]=RoundSignedToQuantum(Qt::red);
             green=((double) (UINT8_MAX -sAlpha)*dAlpha*
                    s[PIXEL_GREEN]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
                    sAlpha*d[PIXEL_GREEN]/UINT8_MAX )/alpha ;
-            d[PIXEL_GREEN]=RoundSignedToQuantum(green);
+            d[PIXEL_GREEN]=RoundSignedToQuantum(Qt::green);
             blue=((double) (UINT8_MAX -sAlpha)*dAlpha*
                   s[PIXEL_BLUE]/UINT8_MAX +(double) (UINT8_MAX -dAlpha)*
                   sAlpha*d[PIXEL_BLUE]/UINT8_MAX )/alpha ;
-            d[PIXEL_BLUE]=RoundSignedToQuantum(blue);
+            d[PIXEL_BLUE]=RoundSignedToQuantum(Qt::blue);
             d[PIXEL_ALPHA]=UINT8_MAX -RoundSignedToQuantum(alpha );
         }
         dst += dstRowSize;
@@ -327,13 +327,13 @@ void compositePlus(Q_INT32 pixelSize,
 
             red=((double) (UINT8_MAX -sAlpha)*s[PIXEL_RED]+(double)
                  (UINT8_MAX -dAlpha)*d[PIXEL_RED])/UINT8_MAX ;
-            d[PIXEL_RED]=RoundSignedToQuantum(red);
+            d[PIXEL_RED]=RoundSignedToQuantum(Qt::red);
             green=((double) (UINT8_MAX -sAlpha)*s[PIXEL_GREEN]+(double)
                    (UINT8_MAX -dAlpha)*d[PIXEL_GREEN])/UINT8_MAX ;
-            d[PIXEL_GREEN]=RoundSignedToQuantum(green);
+            d[PIXEL_GREEN]=RoundSignedToQuantum(Qt::green);
             blue=((double) (UINT8_MAX -sAlpha)*s[PIXEL_BLUE]+(double)
                   (UINT8_MAX -dAlpha)*d[PIXEL_BLUE])/UINT8_MAX ;
-            d[PIXEL_BLUE]=RoundSignedToQuantum(blue);
+            d[PIXEL_BLUE]=RoundSignedToQuantum(Qt::blue);
             alpha =((double) (UINT8_MAX -sAlpha)+
                 (double) (UINT8_MAX -dAlpha))/UINT8_MAX ;
             d[PIXEL_ALPHA]=UINT8_MAX -RoundSignedToQuantum(alpha );    
@@ -374,13 +374,13 @@ void compositeMinus(Q_INT32 pixelSize,
 
             red=((double) (UINT8_MAX -dAlpha)*d[PIXEL_RED]-
                  (double) (UINT8_MAX -sAlpha)*s[PIXEL_RED])/UINT8_MAX ;
-            d[PIXEL_RED]=RoundSignedToQuantum(red);
+            d[PIXEL_RED]=RoundSignedToQuantum(Qt::red);
             green=((double) (UINT8_MAX -dAlpha)*d[PIXEL_GREEN]-
                    (double) (UINT8_MAX -sAlpha)*s[PIXEL_GREEN])/UINT8_MAX ;
-            d[PIXEL_GREEN]=RoundSignedToQuantum(green);
+            d[PIXEL_GREEN]=RoundSignedToQuantum(Qt::green);
             blue=((double) (UINT8_MAX -dAlpha)*d[PIXEL_BLUE]-
                   (double) (UINT8_MAX -sAlpha)*s[PIXEL_BLUE])/UINT8_MAX ;
-            d[PIXEL_BLUE]=RoundSignedToQuantum(blue);
+            d[PIXEL_BLUE]=RoundSignedToQuantum(Qt::blue);
             alpha =((double) (UINT8_MAX -dAlpha)-
                 (double) (UINT8_MAX -sAlpha))/UINT8_MAX ;
             d[PIXEL_ALPHA]=UINT8_MAX -RoundSignedToQuantum(alpha );

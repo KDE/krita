@@ -20,7 +20,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qmutex.h>
 
 #include <config.h>

@@ -19,16 +19,19 @@
 #define KISDLGAdjustMENTLAYER_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3HBoxLayout>
 
 class KisFilter;
-class QIconViewItem;
+class Q3IconViewItem;
 class QLabel;
-class QHBoxLayout;
+class Q3HBoxLayout;
 class KisPreviewWidget;
 class KisFiltersListView;
 class KisFilterConfiguration;
 class KisImage;
-class QGroupBox;
+class Q3GroupBox;
 
 /**
  * Create a new adjustment layer.
@@ -65,14 +68,14 @@ protected slots:
     void slotNameChanged( const QString & );
     void slotConfigChanged();
     void refreshPreview();
-    void selectionHasChanged ( QIconViewItem * item );
+    void selectionHasChanged ( Q3IconViewItem * item );
 
 private:
     KisImage * m_image;
     KisPaintDeviceSP m_dev;
     KisFiltersListView * m_filtersList;
     KisPreviewWidget * m_preview;
-    QGroupBox * m_configWidgetHolder;
+    Q3GroupBox * m_configWidgetHolder;
     QWidget * m_currentConfigWidget;
     KisFilter* m_currentFilter;
     KLineEdit * m_layerName;

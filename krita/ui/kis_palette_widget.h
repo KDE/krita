@@ -19,7 +19,7 @@
 #ifndef __KIS_PALETTE_WIDGET_H__
 #define __KIS_PALETTE_WIDGET_H__
 
-#include <qdict.h>
+#include <q3dict.h>
 #include "kis_palette_view.h"
 
 class QComboBox;
@@ -66,10 +66,10 @@ protected:
 
 protected:
     KisPaletteView* m_view;
-    QDict<KisPalette> m_namedPaletteMap;
+    Q3Dict<KisPalette> m_namedPaletteMap;
     KisPalette * m_currentPalette;
     QComboBox *combo;
-    QScrollView *sv;
+    Q3ScrollView *sv;
     int mMinWidth;
     int mCols;
     bool init;

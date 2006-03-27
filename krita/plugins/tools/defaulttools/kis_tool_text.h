@@ -22,6 +22,8 @@
 #include "kis_tool_paint.h"
 
 #include "kis_tool_factory.h"
+//Added by qt3to4:
+#include <QLabel>
 
 class QFont;
 class QLabel;

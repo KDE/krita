@@ -19,9 +19,9 @@
 #ifndef _KIS_FILTER_MANAGER_
 #define _KIS_FILTER_MANAGER_
 
-#include "qdict.h"
+#include "q3dict.h"
 #include "qobject.h"
-#include "qptrlist.h"
+#include "q3ptrlist.h"
 #include "qsignalmapper.h"
 #include "kactionclasses.h"
 #include "kis_image.h"
@@ -70,7 +70,7 @@ private:
 
     KAction * m_reapplyAction;
 
-    QPtrList<KAction> m_filterActions;
+    Q3PtrList<KAction> m_filterActions;
     
     KisFilterConfiguration * m_lastFilterConfig;
     KisFilter * m_lastFilter;
@@ -80,7 +80,7 @@ private:
     KisIDList m_filterList; // Map the actions in the signalmapper to the filters
     QSignalMapper * m_filterMapper;
     
-    QDict<KActionMenu> m_filterActionMenus;
+    Q3Dict<KActionMenu> m_filterActionMenus;
 };
 
 #endif

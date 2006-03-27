@@ -28,6 +28,9 @@
 #include "kis_undo_adapter.h"
 
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 
 class QImage;
 class QString;
@@ -66,9 +69,9 @@ public:
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
     virtual bool loadChildren( KoStore* store);
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
-    virtual QCString mimeType() const;
+    virtual Q3CString mimeType() const;
     virtual QWidget* createCustomDocumentWidget(QWidget *parent);
-    virtual KoDocument* hitTest(const QPoint &pos, const QWMatrix& matrix = QWMatrix());
+    virtual KoDocument* hitTest(const QPoint &pos, const QMatrix& matrix = QMatrix());
 
     /**
      * Draw the image embedded in another KOffice document
@@ -206,7 +209,7 @@ private:
 
     bool m_undo;
     KoCommandHistory *m_cmdHistory;
-    QPtrList<KisCommandHistoryListener> m_undoListeners;
+    Q3PtrList<KisCommandHistoryListener> m_undoListeners;
     KisImageSP m_currentImage;
     DCOPObject *m_dcop;
     KisNameServer *m_nserver;

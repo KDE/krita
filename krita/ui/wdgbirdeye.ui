@@ -132,7 +132,7 @@
                                 <cstring>spacer6</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Vertical</enum>
+                                <enum>Qt::Vertical</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
@@ -246,7 +246,7 @@
                         <number>10</number>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                 </widget>
                 <widget class="QToolButton">

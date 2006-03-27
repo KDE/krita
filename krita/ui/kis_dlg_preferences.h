@@ -189,7 +189,7 @@ private:
     
     void initTabletDevices();
 
-    QValueVector<DeviceSettings> m_deviceSettings;
+    Q3ValueVector<DeviceSettings> m_deviceSettings;
 #endif
 };
 

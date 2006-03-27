@@ -20,6 +20,8 @@
 #define KIS_CUSTOM_BRUSH_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QShowEvent>
 
 #include "wdgcustombrush.h"
 

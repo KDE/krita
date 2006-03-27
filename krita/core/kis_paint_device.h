@@ -21,9 +21,9 @@
 #include <qcolor.h>
 #include <qobject.h>
 #include <qpixmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qrect.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 
 #include "kis_types.h"
@@ -40,7 +40,7 @@ class DCOPObject;
 class QImage;
 class QSize;
 class QPoint;
-class QWMatrix;
+class QMatrix;
 class QTimer;
 
 class KNamedCommand;
@@ -545,7 +545,7 @@ private:
 
     KisExifInfo* m_exifInfo;
 
-    QValueList<KisFilter*> m_longRunningFilters;
+    Q3ValueList<KisFilter*> m_longRunningFilters;
     QTimer * m_longRunningFilterTimer;
 };
 

@@ -46,7 +46,7 @@
                         <cstring>spacer2_2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -63,7 +63,7 @@
                         <cstring>spacer1_2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -118,7 +118,7 @@
                         <cstring>spacer3</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -198,7 +198,7 @@
                         <string></string>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="2">
@@ -215,7 +215,7 @@
                         <string></string>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -308,7 +308,7 @@
                 <string>Filter:</string>
             </property>
             <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
+                <set>Qt::AlignVCenter|Qt::AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>cmbFilterType</cstring>

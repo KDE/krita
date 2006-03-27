@@ -23,6 +23,8 @@
 
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class WdgBrightnessContrast;
 class QWidget;
@@ -39,7 +41,7 @@ public:
     
 public:
     Q_UINT16 transfer[256];
-    QPtrList<QPair<double,double> >  curve;
+    Q3PtrList<QPair<double,double> >  curve;
     KisColorAdjustment * m_adjustment;
 };
 
@@ -73,7 +75,7 @@ public:
 class KisBrightnessContrastConfigWidget : public KisFilterConfigWidget {
 
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, WFlags f = 0 );
+    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, Qt::WFlags f = 0 );
     virtual ~KisBrightnessContrastConfigWidget() {};
 
     KisBrightnessContrastFilterConfiguration * config();

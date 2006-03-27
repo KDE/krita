@@ -50,7 +50,7 @@ public:
     virtual void darken(const Q_UINT8 * src, Q_UINT8 * dst, Q_INT32 shade, bool compensate, double compensation, Q_INT32 nPixels) const;
     virtual Q_UINT8 intensity8(const Q_UINT8 * src) const;
 
-    virtual QValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KisChannelInfo *> channels() const;
     virtual Q_UINT32 nChannels() const;
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 pixelSize() const;

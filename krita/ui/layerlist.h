@@ -21,7 +21,12 @@
 #ifndef LAYERLIST_H
 #define LAYERLIST_H
 
-#include <qiconset.h>
+#include <qicon.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PtrList>
+#include <Q3ValueList>
+#include <QMouseEvent>
 #include <klistview.h>
 
 class QMouseEvent;
@@ -29,7 +34,7 @@ class QString;
 class KPopupMenu;
 class LayerItem;
 class LayerFolder;
-template<class T> class QPtrList;
+template<class T> class Q3PtrList;
 
 class LayerList: public KListView
 {
@@ -39,7 +44,7 @@ public:
     LayerList( QWidget *parent = 0, const char *name = 0 );
     virtual ~LayerList();
 
-    void addProperty( const QString &name, const QString &displayName, const QIconSet &icon = QIconSet(),
+    void addProperty( const QString &name, const QString &displayName, const QIcon &icon = QIcon(),
                       bool defaultValue = false, bool validForFolders = true );
     void addProperty( const QString &name, const QString &displayName, QPixmap enabled, QPixmap disabled,
                       bool defaultValue = false, bool validForFolders = true );
@@ -55,8 +60,8 @@ public:
     LayerItem *activeLayer() const;
     int activeLayerID() const;
 
-    QValueList<LayerItem*> selectedLayers() const;
-    QValueList<int> selectedLayerIDs() const;
+    Q3ValueList<LayerItem*> selectedLayers() const;
+    Q3ValueList<int> selectedLayerIDs() const;
 
     void makeFolder( int id );
     bool isFolder( int id ) const;
@@ -127,8 +132,8 @@ signals:
     void requestRemoveLayer( LayerItem *layer );
     void requestRemoveLayer( int id );
 
-    void requestRemoveLayers( QValueList<LayerItem*> layers );
-    void requestRemoveLayers( QValueList<int> ids );
+    void requestRemoveLayers( Q3ValueList<LayerItem*> layers );
+    void requestRemoveLayers( Q3ValueList<int> ids );
 
     void requestLayerProperties( LayerItem *layer );
     void requestLayerProperties( int id );
@@ -150,19 +155,19 @@ private:
     Private* const d;
 
 private slots:
-    void slotItemRenamed( QListViewItem *item, const QString &text, int col );
-    void slotItemMoved( QPtrList<QListViewItem>&, QPtrList<QListViewItem>&, QPtrList<QListViewItem>& );
+    void slotItemRenamed( Q3ListViewItem *item, const QString &text, int col );
+    void slotItemMoved( Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>& );
     void showContextMenu();
     void hideTip();
     void maybeTip();
 
 public: //reimplemented for internal reasons
-    virtual void setCurrentItem( QListViewItem *i );
+    virtual void setCurrentItem( Q3ListViewItem *i );
 
 protected:
     virtual void contentsMousePressEvent( QMouseEvent *e );
     virtual void contentsMouseDoubleClickEvent ( QMouseEvent *e );
-    virtual void findDrop( const QPoint &pos, QListViewItem *&parent, QListViewItem *&after );
+    virtual void findDrop( const QPoint &pos, Q3ListViewItem *&parent, Q3ListViewItem *&after );
 };
 
 class LayerItem: public KListViewItem
@@ -249,7 +254,7 @@ private:
     void init();
 
 public: //reimplemented for internal reasons
-    virtual int width( const QFontMetrics &fm, const QListView *lv, int c ) const;
+    virtual int width( const QFontMetrics &fm, const Q3ListView *lv, int c ) const;
     virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );
     virtual void setup();
     virtual void setSelected( bool selected );

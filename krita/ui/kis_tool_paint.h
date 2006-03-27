@@ -21,6 +21,12 @@
 
 #include <qcursor.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
 
 #include <koffice_export.h>
 
@@ -33,7 +39,7 @@ class QKeyEvent;
 class QComboBox;
 class QPaintEvent;
 class QRect;
-class QGridLayout;
+class Q3GridLayout;
 class KDialog;
 class KisCanvasSubject;
 class QLabel;
@@ -108,7 +114,7 @@ private:
     QCursor m_cursor;
 
     QWidget *m_optionWidget;
-    QGridLayout *m_optionWidgetLayout;
+    Q3GridLayout *m_optionWidgetLayout;
 
     QLabel *m_lbOpacity;
     KisIntSpinbox *m_slOpacity;

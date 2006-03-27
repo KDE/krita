@@ -1,3 +1,12 @@
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QTabletEvent>
+#include <QDragEnterEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QDropEvent>
 /*
  *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
  *

@@ -24,7 +24,7 @@
                 <cstring>spacer14</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -52,7 +52,7 @@
                         <cstring>spacer12_2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -73,16 +73,16 @@
                     </property>
                     <property name="color">
                         <color>
-                            <red>99</red>
-                            <green>99</green>
-                            <blue>99</blue>
+                            <Qt::red>99</Qt::red>
+                            <Qt::green>99</Qt::green>
+                            <Qt::blue>99</Qt::blue>
                         </color>
                     </property>
                     <property name="defaultColor">
                         <color>
-                            <red>99</red>
-                            <green>99</green>
-                            <blue>99</blue>
+                            <Qt::red>99</Qt::red>
+                            <Qt::green>99</Qt::green>
+                            <Qt::blue>99</Qt::blue>
                         </color>
                     </property>
                 </widget>
@@ -111,16 +111,16 @@
                     </property>
                     <property name="color">
                         <color>
-                            <red>200</red>
-                            <green>200</green>
-                            <blue>200</blue>
+                            <Qt::red>200</Qt::red>
+                            <Qt::green>200</Qt::green>
+                            <Qt::blue>200</Qt::blue>
                         </color>
                     </property>
                     <property name="defaultColor">
                         <color>
-                            <red>200</red>
-                            <green>200</green>
-                            <blue>200</blue>
+                            <Qt::red>200</Qt::red>
+                            <Qt::green>200</Qt::green>
+                            <Qt::blue>200</Qt::blue>
                         </color>
                     </property>
                 </widget>
@@ -201,7 +201,7 @@
                         <cstring>spacer15</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -366,7 +366,7 @@
                         <cstring>spacer12</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -436,7 +436,7 @@
                         <cstring>spacer11</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

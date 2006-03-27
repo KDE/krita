@@ -97,7 +97,7 @@
                         <string>100</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel" row="2" column="0">

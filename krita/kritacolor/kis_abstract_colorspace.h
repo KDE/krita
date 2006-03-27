@@ -23,6 +23,8 @@
 #include <qcolor.h>
 #include <qstringlist.h>
 #include <qpair.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include "kis_global.h"
 #include "kis_channelinfo.h"
@@ -75,7 +77,7 @@ public:
     //========== Channels =====================================================//
 
     // Return a vector describing all the channels this color model has.
-    virtual QValueVector<KisChannelInfo *> channels() const = 0;
+    virtual Q3ValueVector<KisChannelInfo *> channels() const = 0;
 
     virtual Q_UINT32 nChannels() const = 0;
 
@@ -213,7 +215,7 @@ protected:
     Q_INT32 m_alphaPos; // The position in _bytes_ of the alpha channel
     Q_INT32 m_alphaSize; // The width in _bytes_ of the alpha channel
 
-    QValueVector<KisChannelInfo *> m_channels;
+    Q3ValueVector<KisChannelInfo *> m_channels;
 
     KisColorSpaceFactoryRegistry * m_parent;
 
@@ -244,7 +246,7 @@ private:
     KisAbstractColorSpace(const KisAbstractColorSpace&);
     KisAbstractColorSpace& operator=(const KisAbstractColorSpace&);
 
-    QMemArray<Q_UINT8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
+    Q3MemArray<Q_UINT8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_H_

@@ -25,8 +25,8 @@
 #include "kis_shared_ptr_vector.h"
 
 #include <qstring.h>
-#include <qcstring.h>
-#include <qmemarray.h>
+#include <q3cstring.h>
+#include <q3memarray.h>
 
 /**
  * An data extension mechanism for Krita.

@@ -32,8 +32,8 @@ public:
 
     void createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right );
 
-    const QValueVector<double> getHandlePositions() const;
-    const QValueVector<double> getMiddleHandlePositions() const;
+    const Q3ValueVector<double> getHandlePositions() const;
+    const Q3ValueVector<double> getMiddleHandlePositions() const;
 
     /** 
      * Moves the StartOffset of the specified segment to the specified value

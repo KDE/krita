@@ -19,16 +19,19 @@
 #define KIS_DLG_ADJ_LAYER_PROPS_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3HBoxLayout>
 
 class KisFilter;
-class QIconViewItem;
+class Q3IconViewItem;
 class QLabel;
-class QHBoxLayout;
+class Q3HBoxLayout;
 class KisPreviewWidget;
 class KisFiltersListView;
 class KisFilterConfiguration;
 class KisImage;
-class QGroupBox;
+class Q3GroupBox;
 
 /**
  * Create a new adjustment layer.

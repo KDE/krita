@@ -33,6 +33,19 @@
 #include <qpixmap.h>
 #include <qstringlist.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
+#include <QLabel>
+#include <QShowEvent>
+#include <QResizeEvent>
+#include <Q3PopupMenu>
+#include <QTabletEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 #include <ksqueezedtextlabel.h>
 #include <kdebug.h>
@@ -52,13 +65,13 @@
 #include "kis_color.h"
 #include "kis_input_device.h"
 
-class QButton;
+class Q3Button;
 class QLabel;
 class QPaintEvent;
 class QScrollBar;
 class QWidget;
 class QPopup;
-class QPopupMenu;
+class Q3PopupMenu;
 
 class DCOPObject;
 class KAction;
@@ -509,7 +522,7 @@ private:
     
     KisDoc *m_doc;
     KisCanvas *m_canvas;
-    QPopupMenu * m_popup;
+    Q3PopupMenu * m_popup;
     KisPartLayerHandler* m_partHandler;
 
     KisGridManager * m_gridManager;

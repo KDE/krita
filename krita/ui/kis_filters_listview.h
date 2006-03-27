@@ -22,6 +22,9 @@
 #define _KIS_FILTERS_LIST_VIEW_H_
 
 #include <qevent.h>
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QPixmap>
 
 #include <kiconview.h>
 
@@ -59,7 +62,7 @@ class KisFiltersThumbnailThread : public KisThread
 {
 public:
 
-    KisFiltersThumbnailThread(QIconView * parent,
+    KisFiltersThumbnailThread(Q3IconView * parent,
                               KisFiltersIconViewItem * iconItem,
                               KisFilterConfiguration * config, KisFilter * filter,
                               KisPaintDeviceSP dev, const QRect & bounds,
@@ -72,7 +75,7 @@ public:
     void cancel();
 
 private:
-    QIconView * m_parent;
+    Q3IconView * m_parent;
     KisFiltersIconViewItem * m_iconItem;
     KisFilterConfiguration * m_config;
     KisFilter * m_filter;
@@ -82,9 +85,9 @@ private:
     QImage m_pixmap;
 };
 
-class KisFiltersIconViewItem : public QIconViewItem {
+class KisFiltersIconViewItem : public Q3IconViewItem {
 public:
-    KisFiltersIconViewItem( QIconView * parent, const QString & text, const QPixmap & icon,
+    KisFiltersIconViewItem( Q3IconView * parent, const QString & text, const QPixmap & icon,
                             KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
                             KisPaintDeviceSP thumb, const QRect & bounds, KisProfile * profile);
 

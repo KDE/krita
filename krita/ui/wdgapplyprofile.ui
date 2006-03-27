@@ -72,7 +72,7 @@
                         <string>The image data you want to paste does not have an ICM profile associated with it. If you do not select a profile, Krita will assume that the image data is encoded in the import profile defined in the Settings dialog.</string>
                     </property>
                     <property name="alignment">
-                        <set>WordBreak|AlignVCenter</set>
+                        <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
                     </property>
                 </widget>
                 <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">

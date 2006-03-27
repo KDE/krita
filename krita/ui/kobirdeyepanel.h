@@ -23,6 +23,10 @@
 
 #include <qrect.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
+#include <QPaintEvent>
 
 #include <KoPoint.h>
 #include <KoRect.h>
@@ -157,7 +161,7 @@ public:
                     KoCanvasAdapter * canvas,
                     QWidget * parent,
                     const char * name = 0,
-                    WFlags f = 0 );
+                    Qt::WFlags f = 0 );
 
     virtual ~KoBirdEyePanel();
 

@@ -25,7 +25,10 @@
 
 #include <qwidget.h>
 #include <qcombobox.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3HBoxLayout>
 
 #include "kis_input_device.h"
 
@@ -84,16 +87,16 @@ private:
 private:
     KisCanvasController *m_canvasController;
     QComboBox * m_cmbPaintops;
-    QHBoxLayout * m_layout;
+    Q3HBoxLayout * m_layout;
     QWidget * m_optionWidget;
     
-    QValueList<KisID> * m_paintops;
-    QValueList<KisID> * m_displayedOps;
+    Q3ValueList<KisID> * m_paintops;
+    Q3ValueList<KisID> * m_displayedOps;
 
     typedef std::map<KisInputDevice, KisID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
 
-    typedef std::map<KisInputDevice, QValueVector<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
+    typedef std::map<KisInputDevice, Q3ValueVector<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;
     InputDevicePaintopSettingsMap m_inputDevicePaintopSettings;
 };
 

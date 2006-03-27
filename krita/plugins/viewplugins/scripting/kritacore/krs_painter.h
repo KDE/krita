@@ -24,6 +24,8 @@
 #include <kis_point.h>
 #include <kis_types.h>
 #include <kis_paint_layer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class KisPainter;
 class KisFillPainter;
@@ -217,11 +219,11 @@ class Painter : public Kross::Api::Class<Painter>
     protected:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
     private:
-        inline vKisPoint createPointsVector( QValueList<QVariant> xs, QValueList<QVariant> ys)
+        inline vKisPoint createPointsVector( Q3ValueList<QVariant> xs, Q3ValueList<QVariant> ys)
         {
             vKisPoint a;
-            QValueList<QVariant>::iterator itx = xs.begin();
-            QValueList<QVariant>::iterator ity = ys.begin();
+            Q3ValueList<QVariant>::iterator itx = xs.begin();
+            Q3ValueList<QVariant>::iterator ity = ys.begin();
             for(; itx != xs.end(); ++itx, ++ity)
             {
                 a.push_back(KisPoint( (*itx).toDouble(), (*ity).toDouble()));

@@ -19,7 +19,7 @@
 #define KIS_COMPOSITE_OP_H_
 
 #include <map>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 //#include "kis_global.h"
 #include "kis_id.h"
@@ -97,6 +97,6 @@ private:
     static KisIDCompositeOpMap s_idOpMap;
 };
 
-typedef QValueList<KisCompositeOp> KisCompositeOpList;
+typedef Q3ValueList<KisCompositeOp> KisCompositeOpList;
 
 #endif // KIS_COMPOSITE_OP_H

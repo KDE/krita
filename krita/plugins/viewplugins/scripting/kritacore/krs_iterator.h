@@ -20,6 +20,8 @@
 #define KROSS_KRITACOREKRS_ITERATOR_H
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <api/class.h>
 
 #include <klocale.h>
@@ -89,9 +91,9 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                     this, &Iterator<_T_It>::isDone ) );
     
             // get/set value
-            QValueVector<KisChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();
+            Q3ValueVector<KisChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();
             QString initiales = "";
-            for(QValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
+            for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
             {
                 KisChannelInfo * ci = *itC;
                 initiales += ci->name().left(1);
@@ -219,9 +221,9 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         }
         Kross::Api::Object::Ptr getPixel(Kross::Api::List::Ptr)
         {
-            QValueVector<KisChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
-            QValueList<QVariant> pixel;
-            for(QValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
+            Q3ValueVector<KisChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
+            Q3ValueList<QVariant> pixel;
+            for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
             {
                 KisChannelInfo * ci = *itC;
                 Q_UINT8* data = (Q_UINT8*)(m_it->rawData() + ci->pos());
@@ -246,10 +248,10 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         }
         Kross::Api::Object::Ptr setPixel(Kross::Api::List::Ptr args)
         {
-            QValueList<QVariant> pixel = Kross::Api::Variant::toList( args->item(0) );
-            QValueVector<KisChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
+            Q3ValueList<QVariant> pixel = Kross::Api::Variant::toList( args->item(0) );
+            Q3ValueVector<KisChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
             uint i = 0;
-            for(QValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++, i++)
+            for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++, i++)
             {
                 KisChannelInfo * ci = *itC;
                 Q_UINT8* data = (Q_UINT8*)(m_it->rawData() + ci->pos());

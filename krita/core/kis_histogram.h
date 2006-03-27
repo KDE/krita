@@ -129,7 +129,7 @@ public:
 private:
     // Dump the histogram to debug.
     void dump();
-    QValueVector<Calculations> calculateForRange(double from, double to);
+    Q3ValueVector<Calculations> calculateForRange(double from, double to);
     Calculations calculateSingleRange(int channel, double from, double to);
 
     KisPaintDeviceSP m_device;
@@ -143,7 +143,7 @@ private:
 
     KisPaintDeviceSP m_dev;
 
-    QValueVector<Calculations> m_completeCalculations, m_selectionCalculations;
+    Q3ValueVector<Calculations> m_completeCalculations, m_selectionCalculations;
 };
 
 

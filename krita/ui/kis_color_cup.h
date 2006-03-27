@@ -21,7 +21,7 @@
 
 #include <qpushbutton.h>
 #include <qcolor.h>
-#include <qframe.h>
+#include <q3frame.h>
 
 #include <koffice_export.h>
 
@@ -31,7 +31,7 @@ class QWidget;
 class KHSSelector;
 class KValueSelector;
 
-class KisColorPopup : public QFrame {
+class KisColorPopup : public Q3Frame {
 
     Q_OBJECT
 

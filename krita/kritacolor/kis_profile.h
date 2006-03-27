@@ -26,8 +26,8 @@
 
 #include LCMS_HEADER
 
-#include <qvaluevector.h>
-#include <qcstring.h>
+#include <q3valuevector.h>
+#include <q3cstring.h>
 
 #include <kio/job.h>
 

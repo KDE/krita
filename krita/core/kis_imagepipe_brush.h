@@ -19,11 +19,13 @@
 #ifndef KIS_IMAGEPIPE_BRUSH_
 #define KIS_IMAGEPIPE_BRUSH_
 
-#include <qptrlist.h>
-#include <qvaluelist.h>
-#include <qvaluevector.h>
+#include <q3ptrlist.h>
+#include <q3valuelist.h>
+#include <q3valuevector.h>
 #include <qmap.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kio/job.h>
 
@@ -31,7 +33,7 @@
 #include "kis_brush.h"
 #include "kis_global.h"
 
-class QCString;
+class Q3CString;
 class QImage;
 class QPoint;
 class QSize;
@@ -109,8 +111,8 @@ public:
      * devices. The fact that it's a vector of a vector, is to support multidimensional
      * brushes (not yet supported!) */
     KisImagePipeBrush(const QString& name, int w, int h,
-                      QValueVector< QValueVector<KisPaintDevice*> > devices,
-                      QValueVector<KisPipeBrushParasite::SelectionMode> modes);
+                      Q3ValueVector< Q3ValueVector<KisPaintDevice*> > devices,
+                      Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes);
     virtual ~KisImagePipeBrush();
 
     virtual bool load();
@@ -159,7 +161,7 @@ private:
     mutable Q_UINT32 m_currentBrush;
 
     QByteArray m_data;
-    mutable QPtrList<KisBrush> m_brushes;
+    mutable Q3PtrList<KisBrush> m_brushes;
 
     enumBrushType m_brushType;
     

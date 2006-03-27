@@ -44,9 +44,9 @@ namespace WetAndSticky {
      * Defines the contents and attributes of a cell on the canvas.
      */
     typedef struct cell {
-        Q_UINT8 blue;
-        Q_UINT8 green;
-        Q_UINT8 red;
+        Q_UINT8 Qt::blue;
+        Q_UINT8 Qt::green;
+        Q_UINT8 Qt::red;
         Q_UINT8 alpha;
 
         float   hue;
@@ -94,7 +94,7 @@ public:
     virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
-    virtual QValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KisChannelInfo *> channels() const;
     virtual bool hasAlpha() const;
     virtual Q_INT32 nChannels() const;
     virtual Q_INT32 nColorChannels() const;

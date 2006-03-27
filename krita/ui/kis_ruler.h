@@ -20,8 +20,11 @@
 #ifndef KIS_RULER_H_
 #define KIS_RULER_H_
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QPaintEvent>
 #include <KoUnit.h>
 
 // XXX: Make this look more like the KOffice ruler -- the KOffice
@@ -32,9 +35,9 @@
 
 class QPainter;
 
-class KisRuler : public QFrame {
+class KisRuler : public Q3Frame {
     Q_OBJECT
-    typedef QFrame super;
+    typedef Q3Frame super;
 
 public:
     KisRuler(Qt::Orientation, QWidget *parent = 0, const char *name = 0);

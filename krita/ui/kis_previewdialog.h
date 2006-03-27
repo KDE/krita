@@ -22,9 +22,11 @@
 #define KIS_PREVIEWDIALOG_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
 class KisPreviewWidget;
-class QFrame;
+class Q3Frame;
 
 class KisPreviewDialog: public KDialogBase {
     typedef KDialogBase super;
@@ -35,10 +37,10 @@ public:
     ~KisPreviewDialog();
 
     KisPreviewWidget* previewWidget() { return m_preview; }
-    QFrame* container() { return m_containerFrame; }
+    Q3Frame* container() { return m_containerFrame; }
 private:
     KisPreviewWidget* m_preview;
-    QFrame* m_containerFrame;
+    Q3Frame* m_containerFrame;
 };
 
 #endif

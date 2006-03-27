@@ -29,6 +29,15 @@
 #include <qgl.h>
 #endif
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QTabletEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 #include "kis_global.h"
 #include "kis_point.h"
@@ -248,7 +257,7 @@ public:
         Q_INT32 m_toolIDAxis;
         Q_INT32 m_serialNumberAxis;
 
-        QValueVector<XAxisInfo> m_axisInfo;
+        Q3ValueVector<XAxisInfo> m_axisInfo;
 
         int m_motionNotifyEvent;
         int m_buttonPressEvent;
@@ -256,7 +265,7 @@ public:
         int m_proximityInEvent;
         int m_proximityOutEvent;
 
-        QValueVector<XEventClass> m_eventClassList;
+        Q3ValueVector<XEventClass> m_eventClassList;
     };
 
     typedef std::map<XID, X11TabletDevice> X11XIDTabletDeviceMap;
@@ -356,7 +365,7 @@ protected:
     void setUpdatesEnabled(bool updatesEnabled);
     bool isUpdatesEnabled() const;
 
-    void setFocusPolicy(QWidget::FocusPolicy focusPolicy);
+    void setFocusPolicy(Qt::FocusPolicy focusPolicy);
 
     const QCursor& cursor() const;
     void setCursor(const QCursor& cursor);

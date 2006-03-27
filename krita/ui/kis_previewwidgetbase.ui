@@ -87,7 +87,7 @@
                         <cstring>buttonGroup1</cstring>
                     </property>
                     <property name="frameShape">
-                        <enum>GroupBoxPanel</enum>
+                        <enum>QFrame::StyledPanel</enum>
                     </property>
                     <property name="title">
                         <string></string>
@@ -221,7 +221,7 @@
                         <cstring>spacer1</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

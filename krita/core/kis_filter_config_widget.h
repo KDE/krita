@@ -32,7 +32,7 @@ class KisFilterConfigWidget : public QWidget {
 
 public:
 
-    KisFilterConfigWidget(QWidget * parent, const char * name = 0, WFlags f = 0 );
+    KisFilterConfigWidget(QWidget * parent, const char * name = 0, Qt::WFlags f = 0 );
     virtual ~KisFilterConfigWidget();
 
     virtual void setConfiguration(KisFilterConfiguration * config) = 0;

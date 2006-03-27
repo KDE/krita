@@ -21,6 +21,8 @@
 #define KIS_BIRDEYE_BOX_H
 
 #include "qwidget.h"
+//Added by qt3to4:
+#include <QLabel>
 
 #include "kis_types.h"
 

@@ -52,7 +52,7 @@
                         </size>
                     </property>
                     <property name="focusPolicy">
-                        <enum>ClickFocus</enum>
+                        <enum>Qt::ClickFocus</enum>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -114,7 +114,7 @@
                                                 </font>
                                             </property>
                                             <property name="text">
-                                                <string>Left:</string>
+                                                <string>Qt::DockLeft:</string>
                                             </property>
                                         </widget>
                                         <widget class="KColorButton">
@@ -140,7 +140,7 @@
                                                 </font>
                                             </property>
                                             <property name="focusPolicy">
-                                                <enum>ClickFocus</enum>
+                                                <enum>Qt::ClickFocus</enum>
                                             </property>
                                             <property name="text">
                                                 <string></string>
@@ -169,7 +169,7 @@
                                                 </font>
                                             </property>
                                             <property name="text">
-                                                <string>Right:</string>
+                                                <string>Qt::DockRight:</string>
                                             </property>
                                         </widget>
                                         <widget class="KColorButton">
@@ -195,7 +195,7 @@
                                                 </font>
                                             </property>
                                             <property name="focusPolicy">
-                                                <enum>ClickFocus</enum>
+                                                <enum>Qt::ClickFocus</enum>
                                             </property>
                                             <property name="text">
                                                 <string></string>
@@ -246,7 +246,7 @@
                                         </font>
                                     </property>
                                     <property name="focusPolicy">
-                                        <enum>ClickFocus</enum>
+                                        <enum>Qt::ClickFocus</enum>
                                     </property>
                                     <property name="suffix">
                                         <string>%</string>
@@ -272,7 +272,7 @@
                                         </font>
                                     </property>
                                     <property name="focusPolicy">
-                                        <enum>ClickFocus</enum>
+                                        <enum>Qt::ClickFocus</enum>
                                     </property>
                                     <property name="suffix">
                                         <string>%</string>
@@ -333,7 +333,7 @@
                                 </font>
                             </property>
                             <property name="focusPolicy">
-                                <enum>ClickFocus</enum>
+                                <enum>Qt::ClickFocus</enum>
                             </property>
                         </widget>
                         <widget class="QComboBox">
@@ -360,7 +360,7 @@
                                 </font>
                             </property>
                             <property name="focusPolicy">
-                                <enum>ClickFocus</enum>
+                                <enum>Qt::ClickFocus</enum>
                             </property>
                         </widget>
                     </hbox>

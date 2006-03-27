@@ -23,8 +23,10 @@
 
 #include "kis_tool_paint.h"
 #include "kis_painter.h"
+//Added by qt3to4:
+#include <Q3GridLayout>
 
-class QGridLayout;
+class Q3GridLayout;
 class WdgGeometryOptions;
 
 class KRITACORE_EXPORT KisToolShape : public KisToolPaint {
@@ -44,7 +46,7 @@ protected:
     KisPainter::FillStyle fillStyle();
 
 private:
-    QGridLayout *m_optionLayout;
+    Q3GridLayout *m_optionLayout;
         WdgGeometryOptions *m_shapeOptionsWidget;
 };
 

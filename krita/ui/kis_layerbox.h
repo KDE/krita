@@ -22,7 +22,10 @@
 #ifndef KIS_LAYERBOX_H
 #define KIS_LAYERBOX_H
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 #include <kdebug.h>
 #include <qtimer.h>
 
@@ -30,7 +33,7 @@
 #include "kis_colorspace.h"
 
 class WdgLayerBox;
-class QButton;
+class Q3Button;
 class QPainter;
 class QWidget;
 class KIconLoader;
@@ -41,8 +44,8 @@ class KisLayerList;
 class LayerItem;
 class KisCanvasSubject;
 
-class KisLayerBox : public QFrame {
-        typedef QFrame super;
+class KisLayerBox : public Q3Frame {
+        typedef Q3Frame super;
         Q_OBJECT
 
 public:
@@ -112,7 +115,7 @@ private:
     KPopupMenu *m_newLayerMenu;
     KoPartSelectAction *m_partLayerAction;
     KisImageSP m_image;
-    QValueList<int> m_modified;
+    Q3ValueList<int> m_modified;
     WdgLayerBox *m_lst;
 
     void printKritaLayers() const;

@@ -59,7 +59,7 @@ public:
     virtual Q_UINT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
     virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
 
-    virtual QValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KisChannelInfo *> channels() const;
     virtual Q_UINT32 nChannels() const;
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 pixelSize() const;

@@ -22,10 +22,12 @@
 
 #include <qdom.h> 
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
-typedef QMemArray<Q_UINT8> UByteArray;
+typedef Q3MemArray<Q_UINT8> UByteArray;
 
 struct KisExifRational {
     Q_UINT32 numerator;

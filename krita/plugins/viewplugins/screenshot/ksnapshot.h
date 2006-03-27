@@ -26,6 +26,9 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
 
 #include <dcopclient.h>
 #include <kglobalsettings.h>
@@ -43,7 +46,7 @@ public:
     KSnapshotThumb(QWidget *parent, const char *name = 0)
         : QLabel(parent, name)
         {
-            setAlignment(AlignHCenter | AlignVCenter);
+            setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         }
     virtual ~KSnapshotThumb() {}
 

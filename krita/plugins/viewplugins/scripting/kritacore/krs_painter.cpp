@@ -27,6 +27,8 @@
 #include "krs_brush.h"
 #include "krs_color.h"
 #include "krs_pattern.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace Kross {
 
@@ -105,7 +107,7 @@ Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
         rect = r1.intersect(r2);
     }
     
-    QValueList<QVariant> kernelH = Kross::Api::Variant::toList( args->item(0) );
+    Q3ValueList<QVariant> kernelH = Kross::Api::Variant::toList( args->item(0) );
     
     QVariant firstlineVariant = *kernelH.begin();
     if(firstlineVariant.type() != QVariant::List)
@@ -113,7 +115,7 @@ Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1").arg("applyConvolution")) );
     }
     
-    QValueList<QVariant> firstline = firstlineVariant.toList();
+    Q3ValueList<QVariant> firstline = firstlineVariant.toList();
     
     kernel.height = kernelH.size();
     kernel.width = firstline.size();
@@ -121,20 +123,20 @@ Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
     kernel.data = new Q_INT32[kernel.height * kernel.width];
     
     uint i = 0;
-    for(QValueList<QVariant>::iterator itK = kernelH.begin(); itK != kernelH.end(); itK++, i ++ )
+    for(Q3ValueList<QVariant>::iterator itK = kernelH.begin(); itK != kernelH.end(); itK++, i ++ )
     {
         QVariant lineVariant = *kernelH.begin();
         if(lineVariant.type() != QVariant::List)
         {
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1").arg("applyConvolution")) );
         }
-        QValueList<QVariant> line = firstlineVariant.toList();
+        Q3ValueList<QVariant> line = firstlineVariant.toList();
         if(line.size() != kernel.width)
         {
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1").arg("applyConvolution")) );
         }
         uint j = 0;
-        for(QValueList<QVariant>::iterator itLine = line.begin(); itLine != line.end(); itLine++, j ++ )
+        for(Q3ValueList<QVariant>::iterator itLine = line.begin(); itLine != line.end(); itLine++, j ++ )
         {
             kernel.data[ j + i * kernel.width ] = (*itLine).toInt();
         }
@@ -236,8 +238,8 @@ Kross::Api::Object::Ptr Painter::setDuplicateOffset(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Painter::paintPolyline(Kross::Api::List::Ptr args)
 {
-    QValueList<QVariant> pointsX = Kross::Api::Variant::toList( args->item(0) );
-    QValueList<QVariant> pointsY = Kross::Api::Variant::toList( args->item(1) );
+    Q3ValueList<QVariant> pointsX = Kross::Api::Variant::toList( args->item(0) );
+    Q3ValueList<QVariant> pointsY = Kross::Api::Variant::toList( args->item(1) );
     if(pointsX.size() != pointsY.size())
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("the two lists should have the same size.") );
@@ -287,8 +289,8 @@ Kross::Api::Object::Ptr Painter::paintEllipse(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Painter::paintPolygon(Kross::Api::List::Ptr args)
 {
-    QValueList<QVariant> pointsX = Kross::Api::Variant::toList( args->item(0) );
-    QValueList<QVariant> pointsY = Kross::Api::Variant::toList( args->item(1) );
+    Q3ValueList<QVariant> pointsX = Kross::Api::Variant::toList( args->item(0) );
+    Q3ValueList<QVariant> pointsY = Kross::Api::Variant::toList( args->item(1) );
     if(pointsX.size() != pointsY.size())
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("the two lists should have the same size.") );

@@ -77,7 +77,7 @@
                         <string></string>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="2">
@@ -94,7 +94,7 @@
                         <string></string>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">

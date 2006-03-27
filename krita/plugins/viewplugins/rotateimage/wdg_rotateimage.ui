@@ -24,7 +24,7 @@
                 <cstring>grpDirection</cstring>
             </property>
             <property name="title">
-                <string>Direction</string>
+                <string>Qt::Orientation</string>
             </property>
             <grid>
                 <property name="name">
@@ -43,7 +43,7 @@
                                 <cstring>spacer3</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
@@ -66,7 +66,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="alignment">
-                                <set>AlignCenter</set>
+                                <set>Qt::AlignCenter</set>
                             </property>
                         </widget>
                         <spacer>
@@ -74,7 +74,7 @@
                                 <cstring>spacer1</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
@@ -97,7 +97,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="alignment">
-                                <set>AlignCenter</set>
+                                <set>Qt::AlignCenter</set>
                             </property>
                         </widget>
                         <spacer>
@@ -105,7 +105,7 @@
                                 <cstring>spacer2</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
@@ -211,7 +211,7 @@
                 <cstring>spacer4</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

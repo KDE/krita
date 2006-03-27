@@ -22,12 +22,15 @@
 #define KISDLGFILTERSPREVIEW_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3HBoxLayout>
 
 class KisView;
 class KisFilter;
-class QIconViewItem;
+class Q3IconViewItem;
 class QLabel;
-class QHBoxLayout;
+class Q3HBoxLayout;
 class KisPreviewWidget;
 class KisWdgFiltersGallery;
 class KisFiltersListView;
@@ -51,7 +54,7 @@ class KisDlgFiltersGallery : public KDialogBase
     private slots:
         void slotConfigChanged();
         void refreshPreview();
-        void selectionHasChanged ( QIconViewItem * item );
+        void selectionHasChanged ( Q3IconViewItem * item );
     private:
         KisWdgFiltersGallery* m_widget;
         KisView* m_view;

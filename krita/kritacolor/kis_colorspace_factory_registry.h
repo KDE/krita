@@ -65,9 +65,9 @@ public:
     /**
      * Return the vector of profiles for this colorspacefactory
      */
-    QValueVector<KisProfile *>  profilesFor(KisColorSpaceFactory * cs);
+    Q3ValueVector<KisProfile *>  profilesFor(KisColorSpaceFactory * cs);
 
-    QValueVector<KisProfile *>  profilesFor(KisID id);
+    Q3ValueVector<KisProfile *>  profilesFor(KisID id);
 
     /**
      * Return the colorspace + profile as named, or NULL if impossible combination.
@@ -100,7 +100,7 @@ public:
     /**
      * Get a list of KisConstructPaintDeviceAction for a colorspace
      */
-    QValueVector<KisPaintDeviceAction *> paintDeviceActionsFor(KisColorSpace* cs);
+    Q3ValueVector<KisPaintDeviceAction *> paintDeviceActionsFor(KisColorSpace* cs);
 
 private:
     KisColorSpaceFactoryRegistry();
@@ -111,7 +111,7 @@ private:
 
     QMap<QString, KisProfile * > m_profileMap;
     QMap<QString, KisColorSpace * > m_csMap;
-    typedef QValueVector<KisPaintDeviceAction *> PaintActionVector;
+    typedef Q3ValueVector<KisPaintDeviceAction *> PaintActionVector;
     QMap<KisID, PaintActionVector> m_paintDevActionMap;
     KisColorSpace *m_alphaCs;
 };

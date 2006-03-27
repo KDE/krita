@@ -22,6 +22,10 @@
 #include <qcursor.h>
 #include <qcolor.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
 
 #include "kis_global.h"
 #include "kis_types.h"

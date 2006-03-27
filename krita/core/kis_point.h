@@ -18,7 +18,7 @@
 #ifndef KIS_POINT_H_
 #define KIS_POINT_H_
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <KoPoint.h>
 
 /**
@@ -42,7 +42,7 @@ public:
     QPoint roundQPoint() const { return QPoint(qRound(x()), qRound(y())); }
 };
 
-typedef QValueVector<KisPoint> vKisPoint;
+typedef Q3ValueVector<KisPoint> vKisPoint;
 
 #endif // KIS_POINT_H_
 

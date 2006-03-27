@@ -56,7 +56,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
                         <cstring>spacer2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -100,7 +100,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
                         <number>3</number>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="tickmarks">
                         <enum>Below</enum>
@@ -116,7 +116,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
                 <cstring>spacer3</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

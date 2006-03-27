@@ -20,6 +20,8 @@
 #define KIS_CUSTOM_PATTERN_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QShowEvent>
 
 #include "wdgcustompattern.h"
 

@@ -20,7 +20,9 @@
 
 #include <qimage.h>
 #include <qcolor.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kio/job.h>
 #include <kpalette.h>
@@ -105,7 +107,7 @@ private:
     QString m_name;
     QString m_comment;
     Q_INT32 m_columns;
-    QValueVector<KisPaletteEntry> m_colors;
+    Q3ValueVector<KisPaletteEntry> m_colors;
 
 };
 #endif // KIS_PALETTE_

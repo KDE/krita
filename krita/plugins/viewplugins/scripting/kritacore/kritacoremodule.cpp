@@ -44,6 +44,8 @@
 #include "krs_image.h"
 #include "krs_pattern.h"
 #include "krs_script_progress.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 extern "C"
 {
@@ -88,11 +90,11 @@ Kross::Api::Object::Ptr KritaCoreFactory::newHSVColor(Kross::Api::List::Ptr args
 Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
 {
     KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("PatternServer");
-    QValueList<KisResource*> resources = rServer->resources();
+    Q3ValueList<KisResource*> resources = rServer->resources();
 
     QString name = Kross::Api::Variant::toString(args->item(0));
 
-    for (QValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
+    for (Q3ValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
     {
         if((*it)->name() == name)
         {
@@ -121,11 +123,11 @@ Kross::Api::Object::Ptr KritaCoreFactory::loadPattern(Kross::Api::List::Ptr args
 Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
 {
     KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("BrushServer");
-    QValueList<KisResource*> resources = rServer->resources();
+    Q3ValueList<KisResource*> resources = rServer->resources();
 
     QString name = Kross::Api::Variant::toString(args->item(0));
 
-    for (QValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
+    for (Q3ValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
     {
         if((*it)->name() == name)
         {

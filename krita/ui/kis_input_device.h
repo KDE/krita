@@ -19,14 +19,14 @@
 #ifndef KIS_INPUT_DEVICE_H_
 #define KIS_INPUT_DEVICE_H_
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 class KisInputDevice {
 public:
     KisInputDevice();
 
     static KisInputDevice allocateInputDevice();
-    static QValueVector<KisInputDevice> inputDevices();
+    static Q3ValueVector<KisInputDevice> inputDevices();
 
     friend inline bool operator==(const KisInputDevice&, const KisInputDevice&);
     friend inline bool operator!=(const KisInputDevice&, const KisInputDevice&);
@@ -52,7 +52,7 @@ private:
      Q_INT32 m_id;
 
      static Q_INT32 NextInputDeviceID;
-     static QValueVector<KisInputDevice> InputDevices;
+     static Q3ValueVector<KisInputDevice> InputDevices;
 
      static KisInputDevice Mouse;
      static KisInputDevice Stylus;

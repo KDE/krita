@@ -22,14 +22,16 @@
 
 // Qt includes.
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qcombobox.h>
 #include <qpair.h>
 #include <qtimer.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstyle.h>
 #include <qapplication.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 // Local includes.
 
@@ -43,11 +45,11 @@ SqueezedComboBoxTip::SqueezedComboBoxTip( QWidget * parent, SqueezedComboBox* na
 
 void SqueezedComboBoxTip::maybeTip( const QPoint &pos )
 {
-    QListBox* listBox = m_originalWidget->listBox();
+    Q3ListBox* listBox = m_originalWidget->listBox();
     if (!listBox)
         return;
 
-    QListBoxItem* selectedItem = listBox->itemAt( pos );
+    Q3ListBoxItem* selectedItem = listBox->itemAt( pos );
     if (selectedItem)
     {
         QRect positionToolTip = listBox->itemRect( selectedItem );

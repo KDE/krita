@@ -21,7 +21,7 @@
 #ifndef _KIS_ID_H_
 #define _KIS_ID_H_
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 
 /**
@@ -103,6 +103,6 @@ inline bool operator>(const KisID &v1, const KisID &v2)
 }
 
 
-typedef QValueList<KisID> KisIDList;
+typedef Q3ValueList<KisID> KisIDList;
 
 #endif // _KIS_ID_H_

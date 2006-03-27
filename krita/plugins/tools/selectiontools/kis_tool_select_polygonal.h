@@ -77,7 +77,7 @@ protected:
 
     bool m_dragging;
 private:
-    typedef QValueVector<KisPoint> KisPointVector;
+    typedef Q3ValueVector<KisPoint> KisPointVector;
     KisCanvasSubject *m_subject;
     KisPointVector m_points;
     KisSelectionOptions * m_optWidget;

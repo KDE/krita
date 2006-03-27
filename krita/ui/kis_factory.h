@@ -21,7 +21,7 @@
 #ifndef __kis_factory_h__
 #define __kis_factory_h__
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kparts/plugin.h>
 

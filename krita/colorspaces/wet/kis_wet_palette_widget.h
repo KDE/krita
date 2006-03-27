@@ -21,6 +21,9 @@
 
 #include "qwidget.h"
 #include "qpushbutton.h"
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
@@ -28,7 +31,7 @@
 #include <koffice_export.h>
 
 class KoFrameButton;
-class QGridLayout;
+class Q3GridLayout;
 class QColor;
 class QLabel;
 class QSpinBox;

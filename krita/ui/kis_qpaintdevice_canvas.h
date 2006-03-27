@@ -25,6 +25,15 @@
 #endif
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QTabletEvent>
+#include <QDragEnterEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QDropEvent>
 
 #include "kis_global.h"
 #include "kis_canvas.h"

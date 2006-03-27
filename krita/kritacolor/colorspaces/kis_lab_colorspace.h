@@ -42,7 +42,7 @@ public:
                 return false;
         };
 
-    virtual QValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KisChannelInfo *> channels() const;
     virtual Q_UINT32 nChannels() const;
     virtual Q_UINT32 nColorChannels() const;
     virtual Q_UINT32 pixelSize() const;

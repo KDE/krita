@@ -20,11 +20,13 @@
 #ifndef KIS_BRUSH_
 #define KIS_BRUSH_
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
 #include <qsize.h>
 #include <qimage.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kio/job.h>
 
@@ -172,7 +174,7 @@ private:
     bool m_useColorAsMask;
     bool m_hasColor;
     QImage m_img;
-    mutable QValueVector<ScaledBrush> m_scaledBrushes;
+    mutable Q3ValueVector<ScaledBrush> m_scaledBrushes;
 
     Q_INT32 m_width;
     Q_INT32 m_height;

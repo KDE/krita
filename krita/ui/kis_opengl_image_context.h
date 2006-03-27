@@ -28,7 +28,7 @@
 
 #include <qgl.h>
 #include <qobject.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <koffice_export.h>
 
@@ -134,7 +134,7 @@ private:
     static const int PREFERRED_IMAGE_TEXTURE_WIDTH = 256;
     static const int PREFERRED_IMAGE_TEXTURE_HEIGHT = 256;
 
-    QValueVector<GLuint> m_imageTextureTiles;
+    Q3ValueVector<GLuint> m_imageTextureTiles;
     int m_imageTextureTileWidth;
     int m_imageTextureTileHeight;
     int m_numImageTextureTileColumns;

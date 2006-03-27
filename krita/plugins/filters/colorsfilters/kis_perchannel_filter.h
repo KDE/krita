@@ -22,7 +22,7 @@
 #define _KIS_PERCHANNEL_FILTER_H_
 
 #include <qpair.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
@@ -40,7 +40,7 @@ public:
     virtual QString toString();
     
 public:
-    QPtrList<QPair<double,double> > *curves;
+    Q3PtrList<QPair<double,double> > *curves;
     Q_UINT16 *transfers[256];
     Q_UINT16 nTransfers;
 };
@@ -75,7 +75,7 @@ class KisPerChannelConfigWidget : public KisFilterConfigWidget {
     Q_OBJECT
 
 public:
-    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, WFlags f = 0 );
+    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name = 0, Qt::WFlags f = 0 );
     virtual ~KisPerChannelConfigWidget() {};
 
     KisPerChannelFilterConfiguration * config();
@@ -88,7 +88,7 @@ private:
     WdgPerChannel * m_page;
     KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
-    QPtrList<QPair<double,double> > *m_curves;
+    Q3PtrList<QPair<double,double> > *m_curves;
     int m_activeCh;
 };
 

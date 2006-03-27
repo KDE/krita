@@ -25,7 +25,7 @@ class KisLabelCursorPos : public QLabel {
     typedef QLabel super;
 
 public:
-    KisLabelCursorPos(QWidget *parent, const char *name = 0, WFlags f = 0);
+    KisLabelCursorPos(QWidget *parent, const char *name = 0, Qt::WFlags f = 0);
     virtual ~KisLabelCursorPos();
 
 public slots:

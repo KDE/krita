@@ -26,6 +26,8 @@
 
 #include "kis_basic_math_toolbox.h"
 #include "kis_iterators_pixel.h"
+//Added by qt3to4:
+#include <Q3MemArray>
 
 
 KisMathToolbox::KisMathToolbox(KisID id) : m_id(id)
@@ -63,8 +65,8 @@ typedef void (*PtrFromDouble)(Q_UINT8*, int, double);
 void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation* fr, const QRect& rect)
 {
     Q_INT32 depth = src->colorSpace()->nColorChannels();
-    QMemArray<PtrToDouble> f(depth);
-    QValueVector<KisChannelInfo *> cis = src->colorSpace()->channels();
+    Q3MemArray<PtrToDouble> f(depth);
+    Q3ValueVector<KisChannelInfo *> cis = src->colorSpace()->channels();
     for(Q_INT32 k = 0; k < depth; k++)
     {
         switch( cis[k]->channelValueType() )
@@ -115,8 +117,8 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
 void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation* fr, const QRect& rect)
 {
     Q_INT32 depth = dst->colorSpace()->nColorChannels();
-    QMemArray<PtrFromDouble> f(depth);
-    QValueVector<KisChannelInfo *> cis = dst->colorSpace()->channels();
+    Q3MemArray<PtrFromDouble> f(depth);
+    Q3ValueVector<KisChannelInfo *> cis = dst->colorSpace()->channels();
     for(Q_INT32 k = 0; k < depth; k++)
     {
         switch( cis[k]->channelValueType() )

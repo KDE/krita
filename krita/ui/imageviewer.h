@@ -19,8 +19,13 @@
 #ifndef PIXMAPVIEWER_H
 #define PIXMAPVIEWER_H
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPixmap>
+#include <QLabel>
+#include <QWheelEvent>
 
 class QLabel;
 
@@ -30,7 +35,7 @@ class QLabel;
  * XXX: We should add a signal that emits newly eposed rects so the filters
  *      don't have to filter everything, but just the the new bits.
  */
-class ImageViewer : public QScrollView {
+class ImageViewer : public Q3ScrollView {
     Q_OBJECT
 
 public:

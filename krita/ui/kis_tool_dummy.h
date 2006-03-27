@@ -24,6 +24,8 @@
 #include <koffice_export.h>
 
 #include "kis_point.h"
+//Added by qt3to4:
+#include <QLabel>
 
 class QLabel;
 class KisCanvasSubject;

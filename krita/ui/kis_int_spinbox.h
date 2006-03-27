@@ -23,7 +23,9 @@
 #include <qwidget.h>
 #include <qspinbox.h>
 #include <qslider.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <knumvalidator.h>
 
@@ -32,13 +34,13 @@ class QLineEdit;
 class QLayout;
 class QValidator;
 
-class KisPopupSlider : public QPopupMenu {
+class KisPopupSlider : public Q3PopupMenu {
     Q_OBJECT
 
 public:
 
-    KisPopupSlider(int minValue, int maxValue, int pageStep, int value, Orientation orientation, QWidget * parent, const char * name = 0) 
-        : QPopupMenu(parent, name)
+    KisPopupSlider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orientation, QWidget * parent, const char * name = 0) 
+        : Q3PopupMenu(parent, name)
     {
         m_slider = new QSlider(minValue, maxValue, pageStep, value, orientation, this, name);
         //m_slider->setTracking(false);

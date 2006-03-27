@@ -19,6 +19,8 @@
 #define _KIS_BOUNDARY_PAINTER_H_
 
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class KisBoundary;
 class KisCanvasPainter;

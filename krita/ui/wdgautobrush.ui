@@ -81,7 +81,7 @@
                                         <cstring>spinBoxWidth</cstring>
                                     </property>
                                     <property name="focusPolicy">
-                                        <enum>ClickFocus</enum>
+                                        <enum>Qt::ClickFocus</enum>
                                     </property>
                                     <property name="maxValue">
                                         <number>9999</number>
@@ -106,7 +106,7 @@
                                         <cstring>spinBoxHeigth</cstring>
                                     </property>
                                     <property name="focusPolicy">
-                                        <enum>ClickFocus</enum>
+                                        <enum>Qt::ClickFocus</enum>
                                     </property>
                                     <property name="maxValue">
                                         <number>9999</number>
@@ -194,7 +194,7 @@
                                         <cstring>spinBoxHorizontal</cstring>
                                     </property>
                                     <property name="focusPolicy">
-                                        <enum>ClickFocus</enum>
+                                        <enum>Qt::ClickFocus</enum>
                                     </property>
                                     <property name="maxValue">
                                         <number>9999</number>
@@ -219,7 +219,7 @@
                                         <cstring>spinBoxVertical</cstring>
                                     </property>
                                     <property name="focusPolicy">
-                                        <enum>ClickFocus</enum>
+                                        <enum>Qt::ClickFocus</enum>
                                     </property>
                                     <property name="maxValue">
                                         <number>9999</number>
@@ -255,7 +255,7 @@
                                 </size>
                             </property>
                             <property name="backgroundMode">
-                                <enum>NoBackground</enum>
+                                <enum>Qt::NoBackground</enum>
                             </property>
                             <property name="text">
                                 <string></string>
@@ -319,7 +319,7 @@
                         <cstring>comboBoxShape</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>ClickFocus</enum>
+                        <enum>Qt::ClickFocus</enum>
                     </property>
                 </widget>
                 <spacer>
@@ -327,7 +327,7 @@
                         <cstring>spacer4</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Vertical</enum>
+                        <enum>Qt::Vertical</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

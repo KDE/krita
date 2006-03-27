@@ -24,14 +24,21 @@
 #include <qwidget.h>
 #include <qcolor.h>
 #include <qpair.h>
-#include <qsortedlist.h>
+#include <q3sortedlist.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
+#include <Q3PtrList>
 #include <koffice_export.h>
 class KRITAUI_EXPORT KCurve : public QWidget
 {
 Q_OBJECT
 
 public:
-    KCurve(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+    KCurve(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
     virtual ~KCurve();
 
@@ -54,11 +61,11 @@ protected:
     void leaveEvent ( QEvent * );
     
 public:
-    static double getCurveValue(QPtrList<QPair<double,double> > &curve, double x);
+    static double getCurveValue(Q3PtrList<QPair<double,double> > &curve, double x);
     double getCurveValue(double x);
     
-    QPtrList<QPair<double,double> > getCurve();
-    void setCurve(QPtrList<QPair<double,double> >inlist);
+    Q3PtrList<QPair<double,double> > getCurve();
+    void setCurve(Q3PtrList<QPair<double,double> >inlist);
 
 private:
     double m_leftmost;
@@ -71,7 +78,7 @@ private:
     bool m_readOnlyMode;
     bool m_guideVisible;
     QColor m_colorGuide;
-    QPtrList<QPair<double,double> > m_points;
+    Q3PtrList<QPair<double,double> > m_points;
     QPixmap *m_pix;
 };
 

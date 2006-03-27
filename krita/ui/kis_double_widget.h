@@ -24,8 +24,10 @@
 
 #include <qwidget.h>
 #include <qslider.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
-class QHBoxLayout;
+class Q3HBoxLayout;
 class KDoubleSpinBox;
 
 class KisDoubleWidget : public QWidget
@@ -68,7 +70,7 @@ private:
     void init(double min, double max);
 
 protected:
-    QHBoxLayout* m_layout;
+    Q3HBoxLayout* m_layout;
     QSlider* m_slider;
     KDoubleSpinBox *m_spinBox;
 };

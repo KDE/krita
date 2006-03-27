@@ -22,6 +22,8 @@
 #define _KIS_ACCUMULATING_PRODUCER_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 #include <kis_basic_histogram_producers.h>
 #include "kis_cachedhistogram.h"
@@ -50,7 +52,7 @@ public:
 
     virtual Q_INT32 numberOfBins() { return m_source->at(0)->numberOfBins(); }
 
-    virtual QValueVector<KisChannelInfo *> channels() { return m_source->at(0)->channels(); }
+    virtual Q3ValueVector<KisChannelInfo *> channels() { return m_source->at(0)->channels(); }
 
     /// Call this when the 'source' list has changed colorspace
     virtual void changedSourceProducer() {

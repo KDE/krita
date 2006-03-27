@@ -138,7 +138,7 @@
                         <cstring>spacer1</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -237,7 +237,7 @@
                         <string>Description:</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignTop</set>
+                        <set>Qt::AlignTop</set>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>txtDescription</cstring>
@@ -293,7 +293,7 @@
                                 <number>100</number>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="tickmarks">
                                 <enum>Below</enum>
@@ -333,7 +333,7 @@
                         <cstring>spacer2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -360,7 +360,7 @@
                 <cstring>spacer3</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

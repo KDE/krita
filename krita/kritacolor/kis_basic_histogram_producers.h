@@ -19,7 +19,7 @@
 #ifndef _KIS_BASIC_HISTOGRAM_PRODUCERS_
 #define _KIS_BASIC_HISTOGRAM_PRODUCERS_
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <klocale.h>
 
 #include "config.h"
@@ -40,7 +40,7 @@ public:
     virtual void setView(double from, double size) { m_from = from; m_width = size; }
 
     virtual const KisID& id() const { return m_id; }
-    virtual QValueVector<KisChannelInfo *> channels() { return m_colorSpace->channels(); }
+    virtual Q3ValueVector<KisChannelInfo *> channels() { return m_colorSpace->channels(); }
     virtual Q_INT32 numberOfBins() { return m_nrOfBins; }
     virtual double viewFrom() const { return m_from; }
     virtual double viewWidth() const { return m_width; }
@@ -71,15 +71,15 @@ protected:
     }
     // not virtual since that is useless: we call it from constructor
     void makeExternalToInternal();
-    typedef QValueVector<Q_UINT32> vBins;
-    QValueVector<vBins> m_bins;
+    typedef Q3ValueVector<Q_UINT32> vBins;
+    Q3ValueVector<vBins> m_bins;
     vBins m_outLeft, m_outRight;
     double m_from, m_width;
     Q_INT32 m_count;
     int m_channels, m_nrOfBins;
     KisColorSpace *m_colorSpace;
     KisID m_id;
-    QValueVector<Q_INT32> m_external;
+    Q3ValueVector<Q_INT32> m_external;
 };
 
 class KisBasicU8HistogramProducer : public KisBasicHistogramProducer {
@@ -146,9 +146,9 @@ public:
     virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
-    virtual QValueVector<KisChannelInfo *> channels();
+    virtual Q3ValueVector<KisChannelInfo *> channels();
 protected:
-    QValueVector<KisChannelInfo *> m_channelsList;
+    Q3ValueVector<KisChannelInfo *> m_channelsList;
 };
 
 /** KisGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
@@ -175,9 +175,9 @@ class KisGenericLabHistogramProducer : public KisBasicHistogramProducer {
         virtual void addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * selectionMask, Q_UINT32 nPixels, KisColorSpace *colorSpace);
         virtual QString positionToString(double pos) const;
         virtual double maximalZoom() const;
-        virtual QValueVector<KisChannelInfo *> channels();
+        virtual Q3ValueVector<KisChannelInfo *> channels();
     protected:
-        QValueVector<KisChannelInfo *> m_channelsList;
+        Q3ValueVector<KisChannelInfo *> m_channelsList;
     private:
         static KisLabColorSpace* m_labCs;
 };

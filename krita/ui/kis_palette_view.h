@@ -20,7 +20,7 @@
 #ifndef __KIS_PALETTE_VIEW_H__
 #define __KIS_PALETTE_VIEW_H__
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include "kis_palette.h"
 
 class KListBox;
@@ -32,7 +32,7 @@ class KisColor;
 /**
  * A scrolling view that lists a single KisPalette
  */
-class KisPaletteView : public QScrollView
+class KisPaletteView : public Q3ScrollView
 {
     Q_OBJECT
 public:

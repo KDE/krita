@@ -20,7 +20,7 @@
 
 #include <qglobal.h>
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmutex.h>
 
 #include <ktempfile.h>
@@ -71,13 +71,13 @@ private:
     bool m_swapForbidden;
 
     struct TileInfo { KisTile *tile; bool inMem; int filePos; int size; int fsize;
-        bool validNode; QValueList<TileInfo*>::iterator node; };
+        bool validNode; Q3ValueList<TileInfo*>::iterator node; };
     typedef struct { Q_UINT8 *pointer; int filePos; int size; } FreeInfo;
     typedef QMap<KisTile*, TileInfo*> TileMap;
-    typedef QValueList<TileInfo*> TileList;
-    typedef QValueList<FreeInfo*> FreeList;
-    typedef QValueVector<FreeList> FreeListList;
-    typedef QValueList<Q_UINT8*> PoolFreeList;
+    typedef Q3ValueList<TileInfo*> TileList;
+    typedef Q3ValueList<FreeInfo*> FreeList;
+    typedef Q3ValueVector<FreeList> FreeListList;
+    typedef Q3ValueList<Q_UINT8*> PoolFreeList;
 
     TileMap m_tileMap;
     TileList m_swappableList;

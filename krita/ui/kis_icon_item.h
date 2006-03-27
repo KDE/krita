@@ -20,6 +20,8 @@
 #define KIS_ICON_ITEM_H_
 
 #include <koIconChooser.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class KisResource;
 

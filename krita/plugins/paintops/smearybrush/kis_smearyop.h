@@ -20,6 +20,8 @@
 #define KIS_SMEARYOP_H_
 
 #include "kis_paintop.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class KisPoint;
 class KisPainter;
@@ -67,8 +69,8 @@ public:
 private:
     class SmearyTuft;
     
-    QPtrList<SmearyTuft> m_rightTufts;
-    QPtrList<SmearyTuft> m_leftTufts;
+    Q3PtrList<SmearyTuft> m_rightTufts;
+    Q3PtrList<SmearyTuft> m_leftTufts;
 
 };
 

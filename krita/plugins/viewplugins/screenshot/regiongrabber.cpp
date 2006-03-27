@@ -25,16 +25,22 @@
 #include <qstyle.h>
 #include <qtimer.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QLabel>
+#include <Q3Frame>
+#include <QKeyEvent>
 
 #include <kglobalsettings.h>
 
 SizeTip::SizeTip( QWidget *parent, const char *name )
-    : QLabel( parent, name, WStyle_Customize | WX11BypassWM |
-      WStyle_StaysOnTop | WStyle_NoBorder | WStyle_Tool )
+    : QLabel( parent, name, Qt::WStyle_Customize | Qt::WX11BypassWM |
+      Qt::WStyle_StaysOnTop | Qt::WStyle_NoBorder | Qt::WStyle_Tool )
 {
   setMargin( 2 );
   setIndent( 0 );
-  setFrameStyle( QFrame::Plain | QFrame::Box );
+  setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
 
   setPalette( QToolTip::palette() );
 }
@@ -92,12 +98,12 @@ void RegionGrabber::initGrabber()
 
   showFullScreen();
 
-  grabMouse( crossCursor );
+  grabMouse( Qt::crossCursor );
 }
 
 void RegionGrabber::mousePressEvent( QMouseEvent *e )
 {
-  if ( e->button() == LeftButton )
+  if ( e->button() == Qt::LeftButton )
   {
     mouseDown = true;
     grabRect = QRect( e->pos(), e->pos() );
@@ -158,11 +164,11 @@ void RegionGrabber::drawRubber()
   QPainter p;
   p.begin( this );
   p.setRasterOp( NotROP );
-  p.setPen( QPen( color0, 1 ) );
-  p.setBrush( NoBrush );
+  p.setPen( QPen( Qt::color0, 1 ) );
+  p.setBrush( Qt::NoBrush );
 
   style().drawPrimitive( QStyle::PE_FocusRect, &p, grabRect, colorGroup(),
-      QStyle::Style_Default, QStyleOption( colorGroup().base() ) );
+      QStyle::State_None, QStyleOption( colorGroup().base() ) );
 
   p.end();
 }

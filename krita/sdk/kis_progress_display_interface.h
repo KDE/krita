@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QCustomEvent>
+#include <QEvent>
 /*
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *

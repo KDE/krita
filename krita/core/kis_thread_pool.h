@@ -20,7 +20,7 @@
 #define KIS_THREAD_POOL_
 
 #include <qthread.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmutex.h>
 
 #include "kis_thread.h"
@@ -59,9 +59,9 @@ private:
     int m_numberOfQueuedThreads;
     int m_maxThreads;
     int m_wait;
-    QPtrList<KisThread> m_threads;
-    QPtrList<KisThread> m_runningThreads;
-    QPtrList<KisThread> m_oldThreads;
+    Q3PtrList<KisThread> m_threads;
+    Q3PtrList<KisThread> m_runningThreads;
+    Q3PtrList<KisThread> m_oldThreads;
     
     static KisThreadPool * m_singleton;
 };

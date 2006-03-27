@@ -21,8 +21,10 @@
 #ifndef KIS_TOOL_POLYLINE_H_
 #define KIS_TOOL_POLYLINE_H_
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include "kis_tool_paint.h"
 #include "kis_point.h"
@@ -82,7 +84,7 @@ protected:
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-    typedef QValueVector<KisPoint> KisPointVector;
+    typedef Q3ValueVector<KisPoint> KisPointVector;
     KisPointVector m_points;
 };
 

@@ -24,6 +24,9 @@
 #endif
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PointArray>
 
 #include "kis_global.h"
 
@@ -77,8 +80,8 @@ public:
     virtual void setViewport(int x, int y, int w, int h);
 
     virtual void setWorldXForm(bool);
-    virtual const QWMatrix&worldMatrix() const;
-    virtual void setWorldMatrix(const QWMatrix&, bool combine=FALSE);
+    virtual const QMatrix&worldMatrix() const;
+    virtual void setWorldMatrix(const QMatrix&, bool combine=FALSE);
 
     virtual void saveWorldMatrix();
     virtual void restoreWorldMatrix();
@@ -94,12 +97,12 @@ public:
 
     virtual QPoint xForm(const QPoint&) const;
     virtual QRect xForm(const QRect&)	const;
-    virtual QPointArray xForm(const QPointArray&) const;
-    virtual QPointArray xForm(const QPointArray&, int index, int npoints) const;
+    virtual Q3PointArray xForm(const Q3PointArray&) const;
+    virtual Q3PointArray xForm(const Q3PointArray&, int index, int npoints) const;
     virtual QPoint xFormDev(const QPoint&) const;
     virtual QRect xFormDev(const QRect&)  const;
-    virtual QPointArray xFormDev(const QPointArray&) const;
-    virtual QPointArray xFormDev(const QPointArray&, int index, int npoints) const;
+    virtual Q3PointArray xFormDev(const Q3PointArray&) const;
+    virtual Q3PointArray xFormDev(const Q3PointArray&, int index, int npoints) const;
 
     virtual void setClipping(bool);
     virtual bool hasClipping() const;
@@ -110,7 +113,7 @@ public:
 
     virtual void drawPoint(int x, int y);
     virtual void drawPoint(const QPoint&);
-    virtual void drawPoints(const QPointArray& a, int index=0, int npoints=-1);
+    virtual void drawPoints(const Q3PointArray& a, int index=0, int npoints=-1);
     virtual void moveTo(int x, int y);
     virtual void moveTo(const QPoint&);
     virtual void lineTo(int x, int y);
@@ -133,11 +136,11 @@ public:
     virtual void drawPie(const QRect&, int a, int alen);
     virtual void drawChord(int x, int y, int w, int h, int a, int alen);
     virtual void drawChord(const QRect&, int a, int alen);
-    virtual void drawLineSegments(const QPointArray&, int index=0, int nlines=-1);
-    virtual void drawPolyline(const QPointArray&, int index=0, int npoints=-1);
-    virtual void drawPolygon(const QPointArray&, bool winding=FALSE, int index=0, int npoints=-1);
-    virtual void drawConvexPolygon(const QPointArray&, int index=0, int npoints=-1);
-    virtual void drawCubicBezier(const QPointArray&, int index=0);
+    virtual void drawLineSegments(const Q3PointArray&, int index=0, int nlines=-1);
+    virtual void drawPolyline(const Q3PointArray&, int index=0, int npoints=-1);
+    virtual void drawPolygon(const Q3PointArray&, bool winding=FALSE, int index=0, int npoints=-1);
+    virtual void drawConvexPolygon(const Q3PointArray&, int index=0, int npoints=-1);
+    virtual void drawCubicBezier(const Q3PointArray&, int index=0);
     virtual void drawPixmap(int x, int y, const QPixmap&, int sx=0, int sy=0, int sw=-1, int sh=-1);
     virtual void drawPixmap(const QPoint&, const QPixmap&, const QRect&sr);
     virtual void drawPixmap(const QPoint&, const QPixmap&);
@@ -184,7 +187,7 @@ protected:
     QBrush m_defaultBrush;
     QColor m_defaultColor;
     QPoint m_defaultBrushOrigin;
-    QWMatrix m_defaultWorldMatrix;
+    QMatrix m_defaultWorldMatrix;
 };
 
 class KisCanvasPainter {
@@ -240,8 +243,8 @@ public:
     void setViewport(int x, int y, int w, int h);
 
     void setWorldXForm(bool);
-    const QWMatrix&worldMatrix() const;
-    void setWorldMatrix(const QWMatrix&, bool combine=FALSE);
+    const QMatrix&worldMatrix() const;
+    void setWorldMatrix(const QMatrix&, bool combine=FALSE);
 
     void saveWorldMatrix();
     void restoreWorldMatrix();
@@ -257,12 +260,12 @@ public:
 
     QPoint xForm(const QPoint&) const;
     QRect xForm(const QRect&)	const;
-    QPointArray xForm(const QPointArray&) const;
-    QPointArray xForm(const QPointArray&, int index, int npoints) const;
+    Q3PointArray xForm(const Q3PointArray&) const;
+    Q3PointArray xForm(const Q3PointArray&, int index, int npoints) const;
     QPoint xFormDev(const QPoint&) const;
     QRect xFormDev(const QRect&)  const;
-    QPointArray xFormDev(const QPointArray&) const;
-    QPointArray xFormDev(const QPointArray&, int index, int npoints) const;
+    Q3PointArray xFormDev(const Q3PointArray&) const;
+    Q3PointArray xFormDev(const Q3PointArray&, int index, int npoints) const;
 
     void setClipping(bool);
     bool hasClipping() const;
@@ -273,7 +276,7 @@ public:
 
     void drawPoint(int x, int y);
     void drawPoint(const QPoint&);
-    void drawPoints(const QPointArray& a, int index=0, int npoints=-1);
+    void drawPoints(const Q3PointArray& a, int index=0, int npoints=-1);
     void moveTo(int x, int y);
     void moveTo(const QPoint&);
     void lineTo(int x, int y);
@@ -296,11 +299,11 @@ public:
     void drawPie(const QRect&, int a, int alen);
     void drawChord(int x, int y, int w, int h, int a, int alen);
     void drawChord(const QRect&, int a, int alen);
-    void drawLineSegments(const QPointArray&, int index=0, int nlines=-1);
-    void drawPolyline(const QPointArray&, int index=0, int npoints=-1);
-    void drawPolygon(const QPointArray&, bool winding=FALSE, int index=0, int npoints=-1);
-    void drawConvexPolygon(const QPointArray&, int index=0, int npoints=-1);
-    void drawCubicBezier(const QPointArray&, int index=0);
+    void drawLineSegments(const Q3PointArray&, int index=0, int nlines=-1);
+    void drawPolyline(const Q3PointArray&, int index=0, int npoints=-1);
+    void drawPolygon(const Q3PointArray&, bool winding=FALSE, int index=0, int npoints=-1);
+    void drawConvexPolygon(const Q3PointArray&, int index=0, int npoints=-1);
+    void drawCubicBezier(const Q3PointArray&, int index=0);
     void drawPixmap(int x, int y, const QPixmap&, int sx=0, int sy=0, int sw=-1, int sh=-1);
     void drawPixmap(const QPoint&, const QPixmap&, const QRect&sr);
     void drawPixmap(const QPoint&, const QPixmap&);
@@ -348,7 +351,7 @@ protected:
     QBrush m_defaultBrush;
     QColor m_defaultColor;
     QPoint m_defaultBrushOrigin;
-    QWMatrix m_defaultWorldMatrix;
+    QMatrix m_defaultWorldMatrix;
 };
 
 #endif // KIS_CANVAS_PAINTER_H_

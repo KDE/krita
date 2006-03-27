@@ -21,8 +21,8 @@
 #include <config.h>
 #include LCMS_HEADER
 
-#include <qvaluevector.h>
-#include <qvaluelist.h>
+#include <q3valuevector.h>
+#include <q3valuelist.h>
 
 #include "kis_composite_op.h"
 #include "kis_channelinfo.h"
@@ -74,7 +74,7 @@ public:
     //========== Channels =====================================================//
 
     /// Return a vector describing all the channels this color model has.
-    virtual QValueVector<KisChannelInfo *> channels() const = 0;
+    virtual Q3ValueVector<KisChannelInfo *> channels() const = 0;
 
     /**
      * The total number of channels for a single pixel in this color model
@@ -392,8 +392,8 @@ public:
      * created paint device. XXX: Currently this uses times and not
      * threads.
      */
-    virtual QValueList<KisFilter*> createBackgroundFilters()
-        { return QValueList<KisFilter*>(); };
+    virtual Q3ValueList<KisFilter*> createBackgroundFilters()
+        { return Q3ValueList<KisFilter*>(); };
 
 private:
 

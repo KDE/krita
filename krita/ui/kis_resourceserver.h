@@ -24,6 +24,8 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "kis_generic_registry.h"
 
@@ -38,7 +40,7 @@ public:
     void loadResources(QStringList filenames);
     /// Adds an already loaded resource to the server
     void addResource(KisResource* resource);
-    QValueList<KisResource*> resources();
+    Q3ValueList<KisResource*> resources();
     QString type() { return m_type; };
 
 signals:
@@ -48,7 +50,7 @@ protected:
     virtual KisResource* createResource( QString filename ) = 0;
 
 private:
-    QValueList<KisResource*> m_resources;
+    Q3ValueList<KisResource*> m_resources;
     QString m_type;
 
     bool m_loaded;

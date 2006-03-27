@@ -24,7 +24,7 @@
 #define __selecttoolfreehand_h__
 
 #include <qpoint.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 
 #include "kis_point.h"
 #include "kis_tool_non_paint.h"
@@ -72,7 +72,7 @@ protected:
 
     bool m_dragging;
 private:
-    typedef QValueVector<KisPoint> KisPointVector;
+    typedef Q3ValueVector<KisPoint> KisPointVector;
     KisCanvasSubject *m_subject;
     KisPointVector m_points;
     KisSelectionOptions * m_optWidget;

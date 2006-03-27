@@ -22,7 +22,7 @@
 #define _HISTOGRAMDOCKER_H_
 
 #include <qobject.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 #include <kparts/plugin.h>
 #include <kis_histogram_view.h>
@@ -54,7 +54,7 @@ private:
     KisView* m_view;
     KisHistogramView* m_hview;
     KisImageRasteredCache* m_cache;
-    QPopupMenu m_popup;
+    Q3PopupMenu m_popup;
     KisHistogramSP m_histogram;
     uint m_currentProducerPos;
 };

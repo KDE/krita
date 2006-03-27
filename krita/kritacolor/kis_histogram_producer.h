@@ -76,7 +76,7 @@ public:
 
     // Methods with general information about this specific producer
     virtual const KisID& id() const = 0;
-    virtual QValueVector<KisChannelInfo *> channels() = 0;
+    virtual Q3ValueVector<KisChannelInfo *> channels() = 0;
     virtual Q_INT32 numberOfBins() = 0;
     virtual QString positionToString(double pos) const = 0;
     virtual double viewFrom() const = 0;

@@ -23,7 +23,7 @@
 #include <kis_types.h>
 
 class WdgNewImage;
-class QButtonGroup;
+class Q3ButtonGroup;
 class KisID;
 
 class KisDlgImageProperties : public KDialogBase {

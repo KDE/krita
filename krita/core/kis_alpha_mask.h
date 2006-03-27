@@ -19,7 +19,7 @@
 #define KIS_ALPHA_MASK_
 
 #include <qimage.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <ksharedptr.h>
 
@@ -89,7 +89,7 @@ private:
     void computeAlpha(const QImage& img);
     void copyAlpha(const QImage& img);
 
-    QValueVector<Q_UINT8> m_data;
+    Q3ValueVector<Q_UINT8> m_data;
     Q_INT32 m_width;
     Q_INT32 m_height;
 };

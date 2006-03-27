@@ -21,9 +21,9 @@
 #ifndef _KIS_POLYGON_H_
 #define _KIS_POLYGON_H_
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
-typedef QValueVector<KisPoint> KisPointVector;
+typedef Q3ValueVector<KisPoint> KisPointVector;
 class KisPolygon : public KisPointVector
 {
         public:

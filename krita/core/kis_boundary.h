@@ -18,7 +18,7 @@
 #ifndef _KIS_BOUNDARY_H_
 #define _KIS_BOUNDARY_H_
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpair.h>
 #include <koffice_export.h>
 
@@ -45,8 +45,8 @@ private:
     KisPaintDevice* m_device;
     int m_fuzzyness;
 
-    typedef QValueList<PointPair> PointPairList;
-    typedef QValueList< PointPairList > PointPairListList;
+    typedef Q3ValueList<PointPair> PointPairList;
+    typedef Q3ValueList< PointPairList > PointPairListList;
 
     PointPairListList m_horSegments;
     PointPairListList m_vertSegments;

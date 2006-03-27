@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QResizeEvent>
 /* ============================================================
  * Author: Tom Albers <tomalbers@kde.nl>
  * Date  : 2005-01-01

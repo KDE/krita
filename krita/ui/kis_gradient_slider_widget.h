@@ -22,6 +22,10 @@
 
 #include <kpixmapio.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 class KPopupMenu;
 class KisAutogradientResource;
@@ -32,7 +36,7 @@ class KisGradientSliderWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, WFlags f = 0);
+    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WFlags f = 0);
 
 public:
     virtual void paintEvent ( QPaintEvent * );

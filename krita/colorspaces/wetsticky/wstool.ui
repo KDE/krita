@@ -40,7 +40,7 @@
                         <cstring>lblDirection</cstring>
                     </property>
                     <property name="text">
-                        <string>Direction:</string>
+                        <string>Qt::Orientation:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>intDryingRate</cstring>
@@ -54,7 +54,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Right</string>
+                            <string>Qt::DockRight</string>
                         </property>
                     </item>
                     <item>
@@ -64,7 +64,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Left</string>
+                            <string>Qt::DockLeft</string>
                         </property>
                     </item>
                     <property name="name">

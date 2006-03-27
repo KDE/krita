@@ -23,10 +23,15 @@
 #include <ktempfile.h>
 
 #include <qbitmap.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qimage.h>
 #include <qclipboard.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3MemArray>
+#include <QEvent>
+#include <QMouseEvent>
 
 #include <kaccel.h>
 #include <knotifyclient.h>
@@ -38,8 +43,8 @@
 #include <qcursor.h>
 #include <qregexp.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
-#include <qwhatsthis.h>
+#include <q3paintdevicemetrics.h>
+#include <q3whatsthis.h>
 
 #include <stdlib.h>
 
@@ -72,7 +77,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     haveXShape = XShapeQueryExtension( qt_xdisplay(), &tmp1, &tmp2 );
 #endif
 
-    QVBox *vbox = makeVBoxMainWidget();
+    Q3VBox *vbox = makeVBoxMainWidget();
     mainWidget = new KSnapshotWidget( vbox, "mainWidget" );
     Q_CHECK_PTR(mainWidget);
 
@@ -165,7 +170,7 @@ void KSnapshot::slotCopy()
 
 void KSnapshot::slotDragSnapshot()
 {
-    QDragObject *drobj = new QImageDrag(snapshot.convertToImage(), this);
+    Q3DragObject *drobj = new Q3ImageDrag(snapshot.convertToImage(), this);
     Q_CHECK_PTR(drobj);
     drobj->setPixmap(mainWidget->preview());
     drobj->dragCopy();
@@ -207,7 +212,7 @@ void KSnapshot::slotPrint()
         qApp->processEvents();
 
         QPainter painter(&printer);
-        QPaintDeviceMetrics metrics(painter.device());
+        Q3PaintDeviceMetrics metrics(painter.device());
 
         float w = snapshot.width();
         float dw = w - metrics.width();
@@ -233,7 +238,7 @@ void KSnapshot::slotPrint()
                 neww = newh/h*w;
             }
 
-            img = img.smoothScale( int(neww), int(newh), QImage::ScaleMin );
+            img = img.smoothScale( int(neww), int(newh), Qt::KeepAspectRatio );
             qApp->processEvents();
 
             int x = (metrics.width()-img.width())/2;
@@ -271,7 +276,7 @@ bool KSnapshot::eventFilter( QObject* o, QEvent* e)
         QMouseEvent* me = (QMouseEvent*) e;
         if ( QWidget::mouseGrabber() != grabber )
             return false;
-        if ( me->button() == LeftButton )
+        if ( me->button() == Qt::LeftButton )
             performGrab();
     }
     return false;
@@ -412,7 +417,7 @@ void KSnapshot::performGrab()
                 
                 //Get the masked away area.
                 QRegion maskedAway = bbox - contents;
-                QMemArray<QRect> maskedAwayRects = maskedAway.rects();
+                Q3MemArray<QRect> maskedAwayRects = maskedAway.rects();
 
                 //Construct a bitmap mask from the rectangles
                 QPainter p(&mask);

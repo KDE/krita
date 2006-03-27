@@ -18,15 +18,15 @@
 #ifndef KIS_ITEM_CHOOSER_H_
 #define KIS_ITEM_CHOOSER_H_
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qwidget.h>
 
-class QHBox;
+class Q3HBox;
 
 class KoIconChooser;
 class KoIconItem;
 
-typedef QPtrList<KoIconItem> vKoIconItem;
+typedef Q3PtrList<KoIconItem> vKoIconItem;
 
 class KisItemChooser : public QWidget {
     typedef QWidget super;
@@ -56,7 +56,7 @@ private slots:
     void slotItemSelected(KoIconItem *item);
 
 private:
-    QHBox *m_frame;
+    Q3HBox *m_frame;
     KoIconChooser *m_chooser;
 };
 

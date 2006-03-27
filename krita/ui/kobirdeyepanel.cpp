@@ -21,11 +21,17 @@
 #include <qimage.h>
 #include <qlayout.h>
 #include <qpainter.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>
 #include <qslider.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QEvent>
+#include <Q3HBoxLayout>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -54,14 +60,14 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
                                 KoCanvasAdapter * canvas,
                                 QWidget * parent,
                                 const char * name,
-                                WFlags f)
+                                Qt::WFlags f)
     : QWidget(parent, name, f)
     , m_zoomListener(zoomListener)
     , m_thumbnailProvider(thumbnailProvider)
     , m_canvas(canvas)
     , m_dragging(false)
 {
-    QHBoxLayout * l = new QHBoxLayout(this);
+    Q3HBoxLayout * l = new Q3HBoxLayout(this);
     m_page = new WdgBirdEye(this);
     m_page->zoom->setRange((int) (QMAX(1, 100 * zoomListener->getMinZoom())), (int) (100 * zoomListener->getMaxZoom()));
     m_page->zoom->setValue(100);

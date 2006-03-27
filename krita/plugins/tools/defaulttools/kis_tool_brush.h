@@ -24,14 +24,18 @@
 
 #include "kis_tool_factory.h"
 #include "koffice_export.h"
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <QEvent>
 
 class QTimer;
 class KisPoint;
-class QHBoxLayout;
+class Q3HBoxLayout;
 class QPainter;
 class QRect;
 class QCheckBox;
-class QGridLayout;
+class Q3GridLayout;
 
 class KRITACORE_EXPORT KisToolBrush : public KisToolFreehand {
     Q_OBJECT
@@ -62,7 +66,7 @@ private:
     
     Q_INT32 m_rate;
     QTimer * m_timer;
-    QGridLayout* m_optionLayout;
+    Q3GridLayout* m_optionLayout;
     QCheckBox * m_chkDirect;
 };
 

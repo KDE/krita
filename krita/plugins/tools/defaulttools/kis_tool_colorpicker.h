@@ -22,7 +22,7 @@
 
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
-#include "qvaluevector.h"
+#include "q3valuevector.h"
 
 class ColorPickerOptionsWidget;
 class KisResource;
@@ -64,7 +64,7 @@ private:
 
     ColorPickerOptionsWidget *m_optionsWidget;
     KisCanvasSubject *m_subject;
-    QValueVector<KisPalette*> m_palettes;
+    Q3ValueVector<KisPalette*> m_palettes;
 };
 
 class KisToolColorPickerFactory : public KisToolFactory {

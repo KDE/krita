@@ -19,7 +19,7 @@
 #define KIS_SELECTION_MANAGER_
 
 #include "qobject.h"
-#include "qptrlist.h"
+#include "q3ptrlist.h"
 
 #include "kis_image.h"
 #include <koffice_export.h>
@@ -129,7 +129,7 @@ private:
     KAction *m_fillPattern;
     KToggleAction *m_toggleDisplaySelection;
 
-    QPtrList<KAction> m_pluginActions;
+    Q3PtrList<KAction> m_pluginActions;
 
 };
 

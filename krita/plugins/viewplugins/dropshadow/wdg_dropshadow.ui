@@ -67,7 +67,7 @@
                 <number>80</number>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
         </widget>
         <widget class="QSpinBox" row="4" column="3">
@@ -111,7 +111,7 @@
                 <cstring>spacer7</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -139,7 +139,7 @@
                 <cstring>spacer8</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -164,7 +164,7 @@
                 <cstring>spacer9</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -189,7 +189,7 @@
                 <cstring>spacer4</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

@@ -194,7 +194,7 @@
                         <string>Contrast</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignCenter</set>
+                        <set>Qt::AlignCenter</set>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="1" column="0">
@@ -227,7 +227,7 @@
                         <string>Brightness</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignCenter</set>
+                        <set>Qt::AlignCenter</set>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="2">
@@ -248,7 +248,7 @@
                 <cstring>spacer3</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

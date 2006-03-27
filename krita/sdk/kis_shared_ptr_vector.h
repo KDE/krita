@@ -19,7 +19,7 @@
 #ifndef KIS_SHARED_PTR_VECTOR_H
 #define KIS_SHARED_PTR_VECTOR_H
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <ksharedptr.h>
 
@@ -31,9 +31,9 @@
  * expected.
  */
 template <class T>
-class KisSharedPtrVector : public QValueVector< KSharedPtr<T> >
+class KisSharedPtrVector : public Q3ValueVector< KSharedPtr<T> >
 {
-    typedef QValueVector< KSharedPtr<T> > super;
+    typedef Q3ValueVector< KSharedPtr<T> > super;
 public:
     KisSharedPtrVector() {}
 

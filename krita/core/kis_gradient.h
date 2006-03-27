@@ -24,7 +24,7 @@
 #ifndef KIS_GRADIENT_H
 #define KIS_GRADIENT_H
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qcolor.h>
 
 #include <kio/job.h>
@@ -250,7 +250,7 @@ protected:
     inline void pushSegment( KisGradientSegment* segment ) { m_segments.push_back(segment); };
     void setImage(const QImage& img);
 
-    QValueVector<KisGradientSegment *> m_segments;
+    Q3ValueVector<KisGradientSegment *> m_segments;
 
 private:
     bool init();

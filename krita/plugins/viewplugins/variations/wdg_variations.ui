@@ -37,9 +37,9 @@
         </property>
         <property name="paletteBackgroundColor">
             <color>
-                <red>166</red>
-                <green>188</green>
-                <blue>153</blue>
+                <Qt::red>166</Qt::red>
+                <Qt::green>188</Qt::green>
+                <Qt::blue>153</Qt::blue>
             </color>
         </property>
         <property name="frameShape">
@@ -122,7 +122,7 @@
                     <string>Current Pick</string>
                 </property>
                 <property name="alignment">
-                    <set>AlignCenter</set>
+                    <set>Qt::AlignCenter</set>
                 </property>
             </widget>
             <widget class="QLabel" row="1" column="0">
@@ -133,7 +133,7 @@
                     <string>Original</string>
                 </property>
                 <property name="alignment">
-                    <set>AlignCenter</set>
+                    <set>Qt::AlignCenter</set>
                 </property>
             </widget>
         </grid>
@@ -205,7 +205,7 @@
                     <cstring>slider1</cstring>
                 </property>
                 <property name="orientation">
-                    <enum>Horizontal</enum>
+                    <enum>Qt::Horizontal</enum>
                 </property>
             </widget>
             <widget class="QLabel" row="4" column="0">
@@ -263,7 +263,7 @@
                     <cstring>spacer1</cstring>
                 </property>
                 <property name="orientation">
-                    <enum>Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                 </property>
                 <property name="sizeType">
                     <enum>Expanding</enum>
@@ -295,9 +295,9 @@
                 </property>
                 <property name="paletteBackgroundColor">
                     <color>
-                        <red>166</red>
-                        <green>188</green>
-                        <blue>153</blue>
+                        <Qt::red>166</Qt::red>
+                        <Qt::green>188</Qt::green>
+                        <Qt::blue>153</Qt::blue>
                     </color>
                 </property>
                 <property name="frameShape">
@@ -349,7 +349,7 @@
                             <string>Lighter</string>
                         </property>
                         <property name="alignment">
-                            <set>AlignCenter</set>
+                            <set>Qt::AlignCenter</set>
                         </property>
                     </widget>
                     <widget class="QLabel" row="2" column="0">
@@ -391,7 +391,7 @@
                             <string>Current Pick</string>
                         </property>
                         <property name="alignment">
-                            <set>AlignCenter</set>
+                            <set>Qt::AlignCenter</set>
                         </property>
                     </widget>
                     <widget class="QLabel" row="4" column="0">
@@ -433,7 +433,7 @@
                             <string>Darker</string>
                         </property>
                         <property name="alignment">
-                            <set>AlignCenter</set>
+                            <set>Qt::AlignCenter</set>
                         </property>
                     </widget>
                 </grid>
@@ -474,9 +474,9 @@
         </property>
         <property name="paletteBackgroundColor">
             <color>
-                <red>166</red>
-                <green>188</green>
-                <blue>153</blue>
+                <Qt::red>166</Qt::red>
+                <Qt::green>188</Qt::green>
+                <Qt::blue>153</Qt::blue>
             </color>
         </property>
         <property name="frameShape">
@@ -532,7 +532,7 @@
                 <string>More Red</string>
             </property>
             <property name="alignment">
-                <set>AlignCenter</set>
+                <set>Qt::AlignCenter</set>
             </property>
         </widget>
         <widget class="QLabel">
@@ -551,7 +551,7 @@
                 <string>More Cyan</string>
             </property>
             <property name="alignment">
-                <set>AlignCenter</set>
+                <set>Qt::AlignCenter</set>
             </property>
         </widget>
         <widget class="QLabel">
@@ -609,7 +609,7 @@
                 <string>More Green</string>
             </property>
             <property name="alignment">
-                <set>AlignCenter</set>
+                <set>Qt::AlignCenter</set>
             </property>
         </widget>
         <widget class="QLabel">
@@ -745,7 +745,7 @@
                 <string>Current Pick</string>
             </property>
             <property name="alignment">
-                <set>AlignCenter</set>
+                <set>Qt::AlignCenter</set>
             </property>
         </widget>
         <widget class="QLabel">
@@ -764,7 +764,7 @@
                 <string>More Yellow</string>
             </property>
             <property name="alignment">
-                <set>AlignCenter</set>
+                <set>Qt::AlignCenter</set>
             </property>
         </widget>
         <widget class="QLabel">
@@ -864,7 +864,7 @@
                 <string>More Magenta</string>
             </property>
             <property name="alignment">
-                <set>AlignCenter</set>
+                <set>Qt::AlignCenter</set>
             </property>
         </widget>
         <widget class="QLabel">
@@ -883,7 +883,7 @@
                 <string>More Blue</string>
             </property>
             <property name="alignment">
-                <set>AlignCenter</set>
+                <set>Qt::AlignCenter</set>
             </property>
         </widget>
     </widget>

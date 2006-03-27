@@ -21,8 +21,10 @@
 
 #include <qlabel.h>
 #include <qpixmap.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include "kis_types.h"
 #include "kis_histogram_producer.h"
@@ -48,7 +50,7 @@ class KisChannelInfo;
 class KisHistogramView : public QLabel {
     Q_OBJECT
 public:
-    KisHistogramView(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
+    KisHistogramView(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
     virtual ~KisHistogramView();
 
     void setPaintDevice(KisPaintDeviceSP dev);
@@ -59,9 +61,9 @@ public:
     /** Lists all producers currently available */
     KisIDList listProducers();
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
-    void setCurrentChannels(const KisID& producerID, QValueVector<KisChannelInfo *> channels);
+    void setCurrentChannels(const KisID& producerID, Q3ValueVector<KisChannelInfo *> channels);
     /** Be careful, producer will be modified */
-    void setCurrentChannels(KisHistogramProducerSP producer, QValueVector<KisChannelInfo *> channels);
+    void setCurrentChannels(KisHistogramProducerSP producer, Q3ValueVector<KisChannelInfo *> channels);
     bool hasColor();
     void setColor(bool set);
 
@@ -86,14 +88,14 @@ private:
         KisChannelInfo * channel;
     } ComboboxInfo;
 
-    QValueVector<ComboboxInfo> m_comboInfo;
+    Q3ValueVector<ComboboxInfo> m_comboInfo;
     QPixmap m_pix;
     KisHistogramSP m_histogram;
     KisColorSpace* m_cs;
     KisHistogramProducerSP m_currentProducer;
-    QValueVector<KisChannelInfo *> m_channels;
+    Q3ValueVector<KisChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()
-    QValueVector<Q_INT32> m_channelToOffset;
+    Q3ValueVector<Q_INT32> m_channelToOffset;
     QStringList m_channelStrings;
     bool m_color;
     double m_from;

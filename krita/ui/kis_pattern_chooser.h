@@ -19,6 +19,8 @@
 #define KIS_PATTERN_CHOOSER_H_
 
 #include "kis_itemchooser.h"
+//Added by qt3to4:
+#include <QLabel>
 
 class QLabel;
 

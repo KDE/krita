@@ -714,17 +714,17 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     int firstX = d->rtl ? right - ip_first : left + ip_first;
                     if ( mx > firstX - 5 && mx < firstX + 5 &&
                          my >= 2 && my <= d->pmFirst.size().height() + 2 ) {
-                        QToolTip::add( this, i18n("First line indent") );
+                        this->setToolTip( i18n("First line indent") );
                         setCursor( Qt::ArrowCursor );
                         d->action = A_FIRST_INDENT;
                     } else if ( mx > left + ip_left - 5 && mx < left + ip_left + 5 &&
                                 my >= height() - d->pmLeft.size().height() - 2 && my <= height() - 2 ) {
-                        QToolTip::add( this, i18n("Left indent") );
+                        this->setToolTip( i18n("Left indent") );
                         setCursor( Qt::ArrowCursor );
                         d->action = A_LEFT_INDENT;
                     } else if ( mx > right - ip_right - 5 && mx < right - ip_right + 5 &&
                                 my >= height() - d->pmLeft.size().height() - 2 && my <= height() - 2 ) {
-                        QToolTip::add( this, i18n("Right indent") );
+                        this->setToolTip( i18n("Right indent") );
                         setCursor( Qt::ArrowCursor );
                         d->action = A_RIGHT_INDENT;
                     }
@@ -877,11 +877,11 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                 if ( d->flags & F_NORESIZE )
                     break;
                 if ( my > top - 5 && my < top + 5 ) {
-                    QToolTip::add( this, i18n("Top margin") );
+                    this->setToolTip( i18n("Top margin") );
                     setCursor( Qt::SizeHorCursor );
                     d->action = A_BR_TOP;
                 } else if ( my > bottom - 5 && my < bottom + 5 ) {
-                    QToolTip::add( this, i18n("Bottom margin") );
+                    this->setToolTip( i18n("Bottom margin") );
                     setCursor( Qt::SizeHorCursor );
                     d->action = A_BR_BOTTOM;
                 }

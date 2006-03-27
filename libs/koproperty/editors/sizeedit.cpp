@@ -64,7 +64,7 @@ SizeEdit::setValue(const QVariant &value, bool emitChange)
 	m_value = value;
 	m_edit->selectAll(false);
 	m_edit->setText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
-	QToolTip::add(this, QString("%1 x %2").arg(value.toSize().width()).arg(value.toSize().height()));
+	this->setToolTip( QString("%1 x %2").arg(value.toSize().width()).arg(value.toSize().height()));
 
 	if (emitChange)
 		emit valueChanged(this);

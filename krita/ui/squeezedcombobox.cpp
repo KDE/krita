@@ -157,7 +157,7 @@ QString SqueezedComboBox::squeezeText( const QString& original)
 void SqueezedComboBox::slotUpdateToolTip( int index )
 {
     QToolTip::remove(this);
-    QToolTip::add(this, m_originalItems[index]);
+    this->setToolTip( m_originalItems[index]);
 }
 
 QString SqueezedComboBox::itemHighlighted()

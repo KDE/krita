@@ -496,7 +496,7 @@ bool KoColorPanel::insertColor( const QColor& color, const QString& toolTip, boo
     // inserted color will be located
     QRect rect( mapFromPosition( m_nextPosition ) );
     insertColor( color, false ); // check only once ;)
-    QToolTip::add( this, rect, toolTip );
+    this->setToolTip( rect, toolTip );
     return true;
 }
 

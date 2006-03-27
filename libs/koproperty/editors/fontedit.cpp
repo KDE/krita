@@ -66,7 +66,7 @@ class FontEditRequester : public KFontRequester
 			layout()->remove(button());//->reparent(this, 0, QPoint(0,0));
 			delete layout();
 			button()->setText(i18n("..."));
-			QToolTip::add(button(), i18n("Change font"));
+			button()->setToolTip( i18n("Change font"));
 			button()->setFocusPolicy(NoFocus);
 			button()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 			QFontMetrics fm(button()->font());

@@ -35,7 +35,7 @@
 #include <ktoolbar.h>
 #include <qpainter.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <qapplication.h>
@@ -145,7 +145,7 @@ TKSelectColorAction::~TKSelectColorAction()
 
 void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
 {
-  Q3WhatsThis::add( b, whatsThis() );
+  b->setWhatsThis( whatsThis() );
   TKAction::initToolBarButton(b);
   b->setDelayedPopup( popupMenu() );
   updatePixmap(b);
@@ -362,7 +362,7 @@ void TKColorPanel::insertColor( const QColor& color, const QString& text )
     return;
 
   insertColor(color);
-  QToolTip::add(m_pColorDict[color.name()],text);
+  m_pColorDict[color.name()]->setToolTip(text);
 }
 
 void TKColorPanel::insertColor( const QColor& color )

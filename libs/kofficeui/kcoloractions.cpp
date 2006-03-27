@@ -20,7 +20,7 @@
 #include <kcoloractions.h>
 
 #include <q3popupmenu.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -304,10 +304,10 @@ int KSelectColorAction::plug( QWidget* w, int index )
         bar->getButton( id_ )->setName( Q3CString("toolbutton_")+name() );
 
         if ( !whatsThis().isEmpty() )
-            Q3WhatsThis::add( bar->getButton(id_), whatsThisWithIcon() );
+            bar->getButton(id_)->setWhatsThis( whatsThisWithIcon() );
 
         if ( !toolTip().isEmpty() )
-            QToolTip::add( bar->getButton(id_), toolTip() );
+            bar->getButton(id_)->setToolTip( toolTip() );
 
         addContainer( bar, id_ );
 

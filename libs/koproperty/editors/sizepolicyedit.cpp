@@ -84,7 +84,7 @@ SizePolicyEdit::setValue(const QVariant &value, bool emitChange)
 	m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.toSizePolicy().horData())).
 		arg(findDescription(value.toSizePolicy().verData())).
 		arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));
-	QToolTip::add(this, m_edit->text());
+	this->setToolTip( m_edit->text());
 
 	if (emitChange)
 		emit valueChanged(this);

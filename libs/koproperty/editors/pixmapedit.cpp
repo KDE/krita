@@ -64,7 +64,7 @@ PixmapEdit::PixmapEdit(Property *property, QWidget *parent, const char *name)
 	setHasBorders(false);
 
 	m_edit = new QLabel(this, "m_edit");
-	QToolTip::add(m_edit, i18n("Click to show image preview"));
+	m_edit->setToolTip( i18n("Click to show image preview"));
 	m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	m_edit->setMinimumHeight(5);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -73,7 +73,7 @@ PixmapEdit::PixmapEdit(Property *property, QWidget *parent, const char *name)
 	setBackgroundMode(Qt::PaletteBase);
 
 	m_button = new QPushButton(i18n("..."), this, "m_button");
-	QToolTip::add(m_button, i18n("Insert image from file"));
+	m_button->setToolTip( i18n("Insert image from file"));
 	m_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	QFontMetrics fm(m_button->font());
 	m_button->setFixedWidth(fm.width(m_button->text()+" "));

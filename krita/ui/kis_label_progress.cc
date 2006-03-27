@@ -57,7 +57,7 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, WFlags f) 
 
     m_cancelButton = new EscapeButton(this, "cancel_button");
     m_cancelButton->setIconSet(cancelIconSet);
-    QToolTip::add(m_cancelButton, i18n("Cancel"));
+    m_cancelButton->setToolTip( i18n("Cancel"));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
 
     m_bar = new KProgress(100, this);

@@ -104,7 +104,7 @@ QToolButton *KoToolBox::createButton(QWidget * parent,  const char* iconName, QS
     }
 
     if ( !tooltip.isEmpty() ) {
-        QToolTip::add( button, tooltip );
+        button->setToolTip( tooltip );
     }
     return button;
 }

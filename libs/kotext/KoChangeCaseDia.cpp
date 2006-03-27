@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 #include <q3vbox.h>
-#include <q3whatsthis.h>
+
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 
@@ -44,7 +44,7 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
 
     m_toggleCase=new QRadioButton( i18n("&Toggle case"), grp );
     m_sentenceCase=new QRadioButton( i18n("Sentence case"), grp );
-    Q3WhatsThis::add( m_sentenceCase, i18n("Convert first letter of a sentence to uppercase."));
+    m_sentenceCase->setWhatsThis( i18n("Convert first letter of a sentence to uppercase."));
 
     m_upperCase->setChecked(true);
     grp->setRadioButtonExclusive( TRUE );

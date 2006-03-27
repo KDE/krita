@@ -21,7 +21,7 @@
 
 #include <qpixmap.h>
 #include <qbitmap.h>
-#include <q3whatsthis.h>
+
 #include <qmenubar.h>
 //Added by qt3to4:
 #include <Q3PopupMenu>
@@ -139,7 +139,7 @@ int KoSelectAction::plug(QWidget* widget, int index)
     addContainer( bar, id_ );
 
     if (!whatsThis().isEmpty())
-      Q3WhatsThis::add( bar->getButton(id_), whatsThis() );
+      bar->getButton(id_)->setWhatsThis( whatsThis() );
 
     connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
 

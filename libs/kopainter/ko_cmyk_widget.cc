@@ -86,25 +86,25 @@ KoCMYKWidget::KoCMYKWidget(QWidget *parent, const char *name) : super(parent, na
     mCIn->setFixedWidth(50);
     mCIn->setFixedHeight(20);
     mCIn->setFocusPolicy( Qt::ClickFocus );
-    QToolTip::add( mCIn, i18n( "Cyan" ) );
+    mCIn->setToolTip( i18n( "Cyan" ) );
 
     mMIn = new QSpinBox(0, 255, 1, this);
     mMIn->setFixedWidth(50);
     mMIn->setFixedHeight(20);
     mMIn->setFocusPolicy( Qt::ClickFocus );
-    QToolTip::add( mMIn, i18n( "Magenta" ) );
+    mMIn->setToolTip( i18n( "Magenta" ) );
 
     mYIn = new QSpinBox(0, 255, 1, this);
     mYIn->setFixedWidth(50);
     mYIn->setFixedHeight(20);
     mYIn->setFocusPolicy( Qt::ClickFocus );
-    QToolTip::add( mYIn, i18n( "Yellow" ) );
+    mYIn->setToolTip( i18n( "Yellow" ) );
 
     mKIn = new QSpinBox(0, 255, 1, this);
     mKIn->setFixedWidth(50);
     mKIn->setFixedHeight(20);
     mKIn->setFocusPolicy( Qt::ClickFocus );
-    QToolTip::add( mKIn, i18n( "Black" ) );
+    mKIn->setToolTip( i18n( "Black" ) );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 4, 0, 0, Qt::AlignTop);
     mGrid->addWidget(mCLabel, 0, 1);

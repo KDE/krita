@@ -70,17 +70,17 @@ KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char 
     m_lst = new WdgLayerBox(this);
     setMinimumSize(m_lst->minimumSizeHint());
 
-    QToolTip::add(m_lst->bnAdd, i18n("Create new layer"));
+    m_lst->bnAdd->setToolTip( i18n("Create new layer"));
 
-    QToolTip::add(m_lst->bnDelete, i18n("Remove current layer"));
+    m_lst->bnDelete->setToolTip( i18n("Remove current layer"));
 
-    QToolTip::add(m_lst->bnRaise, i18n("Raise current layer"));
+    m_lst->bnRaise->setToolTip( i18n("Raise current layer"));
     m_lst->bnRaise->setEnabled(false);
 
     m_lst->bnLower->setEnabled(false);
-    QToolTip::add(m_lst->bnLower, i18n("Lower current layer"));
+    m_lst->bnLower->setToolTip( i18n("Lower current layer"));
 
-    QToolTip::add(m_lst->bnProperties, i18n("Properties for layer"));
+    m_lst->bnProperties->setToolTip( i18n("Properties for layer"));
 
     KIconLoader il( "krita" );
 

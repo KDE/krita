@@ -29,7 +29,7 @@
 #include <kstandarddirs.h>
 
 #include <qlayout.h>
-#include <q3whatsthis.h>
+
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
@@ -233,7 +233,7 @@ void KoAutoFormatDia::setupTab1()
             "Convert &first letter of a sentence automatically to uppercase\n"
             "(e.g. \"my house. in this town\" to \"my house. In this town\")"
             ) );
-    Q3WhatsThis::add( cbUpperCase, i18n(
+    cbUpperCase->setWhatsThis( i18n(
             "Detect when a new sentence is started and always ensure that"
             " the first character is an uppercase character."));
 
@@ -244,7 +244,7 @@ void KoAutoFormatDia::setupTab1()
     cbUpperUpper->setText( i18n(
             "Convert &two uppercase characters to one uppercase and one"
             " lowercase character\n (e.g. PErfect to Perfect)" ) );
-    Q3WhatsThis::add( cbUpperUpper, i18n(
+    cbUpperUpper->setWhatsThis( i18n(
             "All words are checked for the common mistake of holding the "
             "shift key down a bit too long. If some words must have two "
             "uppercase characters, then those exceptions should be added in "
@@ -254,7 +254,7 @@ void KoAutoFormatDia::setupTab1()
 
     cbDetectUrl=new QCheckBox( tab1 );
     cbDetectUrl->setText( i18n( "Autoformat &URLs" ) );
-    Q3WhatsThis::add( cbDetectUrl, i18n(
+    cbDetectUrl->setWhatsThis( i18n(
             "Detect when a URL (Uniform Resource Locator) is typed and "
             "provide formatting that matches the way an Internet browser "
             "would show a URL."));
@@ -263,7 +263,7 @@ void KoAutoFormatDia::setupTab1()
 
     cbIgnoreDoubleSpace=new QCheckBox( tab1 );
     cbIgnoreDoubleSpace->setText( i18n( "&Suppress double spaces" ) );
-    Q3WhatsThis::add( cbIgnoreDoubleSpace, i18n(
+    cbIgnoreDoubleSpace->setWhatsThis( i18n(
             "Make sure that more than one space cannot be typed, as this is a "
             "common mistake which is quite hard to find in formatted text."));
 
@@ -272,7 +272,7 @@ void KoAutoFormatDia::setupTab1()
     cbRemoveSpaceBeginEndLine=new QCheckBox( tab1 );
     cbRemoveSpaceBeginEndLine->setText( i18n(
             "R&emove spaces at the beginning and end of paragraphs" ) );
-    Q3WhatsThis::add( cbRemoveSpaceBeginEndLine, i18n(
+    cbRemoveSpaceBeginEndLine->setWhatsThis( i18n(
             "Keep correct formatting and indenting of sentences by "
             "automatically removing spaces typed at the beginning and end of "
             "a paragraph."));
@@ -282,7 +282,7 @@ void KoAutoFormatDia::setupTab1()
     cbAutoChangeFormat=new QCheckBox( tab1 );
     cbAutoChangeFormat->setText( i18n(
             "Automatically do &bold and underline formatting") );
-    Q3WhatsThis::add( cbAutoChangeFormat, i18n(
+    cbAutoChangeFormat->setWhatsThis( i18n(
             "When you use _underline_ or *bold*, the text between the "
             "underscores or asterisks will be converted to underlined or "
             "bold text.") );
@@ -293,7 +293,7 @@ void KoAutoFormatDia::setupTab1()
     cbAutoReplaceNumber->setText( i18n(
             "We add the 1/2 char at the %1", "Re&place 1/2... with %1..." )
             .arg( QString( "½" ) ) );
-    Q3WhatsThis::add( cbAutoReplaceNumber, i18n(
+    cbAutoReplaceNumber->setWhatsThis( i18n(
             "Most standard fraction notations will be converted when available"
             ) );
 
@@ -302,7 +302,7 @@ void KoAutoFormatDia::setupTab1()
     cbUseNumberStyle=new QCheckBox( tab1 );
     cbUseNumberStyle->setText( i18n(
             "Use &autonumbering for numbered paragraphs" ) );
-    Q3WhatsThis::add( cbUseNumberStyle, i18n(
+    cbUseNumberStyle->setWhatsThis( i18n(
             "When typing '1)' or similar in front of a paragraph, "
             "automatically convert the paragraph to use that numbering style. "
             "This has the advantage that further paragraphs will also be "
@@ -322,7 +322,7 @@ void KoAutoFormatDia::setupTab1()
     cbUseBulletStyle=new QCheckBox( tab1 );
     cbUseBulletStyle->setText( i18n(
             "Use l&ist-formatting for bulleted paragraphs" ) );
-    Q3WhatsThis::add( cbUseBulletStyle, i18n(
+    cbUseBulletStyle->setWhatsThis( i18n(
             "When typing '*' or '-' in front of a paragraph, automatically "
             "convert the paragraph to use that list-style. Using a list-style "
             "formatting means that a correct bullet is used to draw the list."
@@ -559,7 +559,7 @@ void KoAutoFormatDia::setupTab3()
              SLOT( slotAddEntry()));
 
     pbSpecialChar1 = new QPushButton( "...", tab3 );
-    QToolTip::add( pbSpecialChar1, i18n( "Insert a special character..." ) );
+    pbSpecialChar1->setToolTip( i18n( "Insert a special character..." ) );
     pbSpecialChar1->setFixedWidth( 40 );
     grid->addWidget( pbSpecialChar1, 3, 2 );
 
@@ -579,7 +579,7 @@ void KoAutoFormatDia::setupTab3()
             SLOT( slotAddEntry()));
 
     pbSpecialChar2 = new QPushButton( "...", tab3 );
-    QToolTip::add( pbSpecialChar2, i18n( "Insert a special character..." ) );
+    pbSpecialChar2->setToolTip( i18n( "Insert a special character..." ) );
     pbSpecialChar2->setFixedWidth( 40 );
     grid->addWidget( pbSpecialChar2, 3, 5 );
 

@@ -65,7 +65,7 @@ PointEdit::setValue(const QVariant &value, bool emitChange)
 	m_value = value;
 	m_edit->selectAll(false);
 	m_edit->setText(QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
-	QToolTip::add(this, QString("%1, %2").arg(value.toPoint().x()).arg(value.toPoint().y()));
+	this->setToolTip( QString("%1, %2").arg(value.toPoint().x()).arg(value.toPoint().y()));
 
 	if (emitChange)
 		emit valueChanged(this);

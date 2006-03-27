@@ -142,7 +142,7 @@ QString TKToolBarButton::text()
 
 void TKToolBarButton::modeChange()
 {
-  QToolTip::add(this,d->m_text);
+  this->setToolTip(d->m_text);
 
   int border = 3;
   int w = 2*border;

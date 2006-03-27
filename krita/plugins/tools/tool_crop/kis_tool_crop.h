@@ -65,6 +65,7 @@ public:
 public slots:
 
     virtual void activate();
+    virtual void deactivate();
 
 private:
 

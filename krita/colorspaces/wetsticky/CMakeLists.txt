@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( brushop ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############

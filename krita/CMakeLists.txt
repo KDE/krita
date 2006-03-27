@@ -10,7 +10,7 @@ add_subdirectory( plugins )
 add_subdirectory( data ) 
 add_subdirectory( pics ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############

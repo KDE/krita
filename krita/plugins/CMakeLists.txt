@@ -5,7 +5,7 @@ add_subdirectory( paintops )
 add_subdirectory( tools ) 
 add_subdirectory( viewplugins ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

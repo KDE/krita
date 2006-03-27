@@ -3,7 +3,7 @@ kde4_header()
 add_subdirectory( CXX ) 
 add_subdirectory( scripts ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############

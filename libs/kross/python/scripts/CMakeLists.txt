@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( RestrictedPython ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

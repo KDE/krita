@@ -10,7 +10,7 @@ add_subdirectory( tool_selectsimilar )
 add_subdirectory( tool_star ) 
 add_subdirectory( tool_transform ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

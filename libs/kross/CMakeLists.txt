@@ -6,7 +6,7 @@ add_subdirectory( runner )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(PYTHONSUBDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(RUBYSUBDIR)")
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

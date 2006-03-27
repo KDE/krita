@@ -14,7 +14,7 @@ add_subdirectory( smalltilesfilter )
 add_subdirectory( sobelfilter ) 
 add_subdirectory( colorsfilters ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

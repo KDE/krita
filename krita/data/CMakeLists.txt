@@ -7,7 +7,7 @@ add_subdirectory( profiles )
 add_subdirectory( palettes ) 
 add_subdirectory( images ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

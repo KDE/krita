@@ -23,8 +23,9 @@
 using namespace KoChart;
 
 WizardExtension::WizardExtension( Part *part, const char *name )
-    : QObject( part, name )
+    : QObject( part )
 {
+    setObjectName( name );
     m_part = part;
 }
 
@@ -45,10 +46,10 @@ Part::~Part()
 
 WizardExtension *Part::wizardExtension()
 {
-    QObjectListIt it( *QObject::children() );
-    for (; it.current(); ++it )
-        if ( it.current()->inherits( "KoChart::WizardExtension" ) )
-            return static_cast<WizardExtension *>( it.current() );
+    QObjectList::ConstIterator end( QObject::children().end() );
+    for (QObjectList::ConstIterator it( QObject::children().begin() ); it != end; ++it )
+      if ( (*it)->inherits( "KoChart::WizardExtension" ) )
+            return static_cast<WizardExtension *>( *it );
 
     return 0;
 }

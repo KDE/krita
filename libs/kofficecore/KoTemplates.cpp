@@ -227,7 +227,7 @@ void KoTemplateTree::readGroups() {
             QString defaultTab;
             int sortingWeight = 1000;
             if(templateDir.exists(".directory")) {
-                KSimpleConfig config(templateDir.absPath()+"/.directory", true);
+                KSimpleConfig config(templateDir.absolutePath()+"/.directory", true);
                 config.setDesktopGroup();
                 name=config.readEntry("Name");
                 defaultTab=config.readEntry("X-KDE-DefaultTab");

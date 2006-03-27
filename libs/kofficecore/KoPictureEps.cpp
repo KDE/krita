@@ -413,7 +413,7 @@ bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension
 bool KoPictureEps::save(QIODevice* io) const
 {
     // We save the raw data, to avoid damaging the file by many load/save cycles
-    Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    Q_ULONG size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }
 

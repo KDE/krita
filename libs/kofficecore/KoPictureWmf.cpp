@@ -105,7 +105,7 @@ bool KoPictureWmf::loadData(const QByteArray& array, const QString& /* extension
 bool KoPictureWmf::save(QIODevice* io) const
 {
     // We save the raw data, as the SVG supposrt in QPicture is poor
-    Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    Q_ULONG size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }
 

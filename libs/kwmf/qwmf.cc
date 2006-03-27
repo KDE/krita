@@ -1001,7 +1001,7 @@ void QWinMetaFile::createPenIndirect( long, short* parm )
     // DOESN'T WORK
 /*
     QRect devRec;
-    devRec = mPainter.xForm( mBBox );
+    devRec = mPainter.transformed( mBBox );
     width = ( parm[ 0 ] * devRec.width() ) / mBBox.width() ;
     kDebug() << "CreatePenIndirect: " <<  endl;
     kDebug() << "   log coord. : " << mBBox.width() << "   " << mBBox.height() << endl;

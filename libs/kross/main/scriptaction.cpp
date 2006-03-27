@@ -152,7 +152,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
     }
     else {
         QDir dir = QFileInfo(scriptconfigfile).dir(true);
-        d->packagepath = dir.absPath();
+        d->packagepath = dir.absolutePath();
         QFileInfo fi(dir, file);
         file = fi.absoluteFilePath();
         setEnabled(fi.exists());

@@ -99,7 +99,7 @@ void KoWmfPaint::setPen( const QPen &pen ) {
     else {
         // WMF spec : width of pen in logical coordinate
         // => width of pen proportional with device context width
-        QRect devRec = mPainter.xForm( mPainter.window() );
+        QRect devRec = mPainter.transformed( mPainter.window() );
         QRect rec = mPainter.window();
         if ( rec.width() != 0 )
             width = ( width * devRec.width() ) / rec.width() ;

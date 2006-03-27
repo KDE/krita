@@ -149,7 +149,7 @@ bool KoPictureImage::save(QIODevice* io) const
 {
     kDebug() << k_funcinfo << "writing raw data. size=" << m_rawData.size() << endl;
     // We save the raw data, to avoid damaging the file by many load/save cycles (especially for JPEG)
-    Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    Q_ULONG size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }
 

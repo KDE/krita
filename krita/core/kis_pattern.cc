@@ -118,13 +118,13 @@ bool KisPattern::save()
 
     QByteArray bytes;
     bytes.setRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
-    int wrote = file.writeBlock(bytes);
+    int wrote = file.write(bytes);
     bytes.resetRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
 
     if (wrote == -1)
         return false;
 
-    wrote = file.writeBlock(name, nameLength + 1); // Trailing 0 apparantly!
+    wrote = file.write(name, nameLength + 1); // Trailing 0 apparantly!
     if (wrote == -1)
         return false;
 
@@ -141,7 +141,7 @@ bool KisPattern::save()
         }
     }
 
-    wrote = file.writeBlock(bytes);
+    wrote = file.write(bytes);
     if (wrote == -1)
         return false;
 

@@ -404,7 +404,7 @@ void KoAutoFormatDia::setupTab2()
     pbDoubleQuote2 = new QPushButton( tab2 );
     pbDoubleQuote2->setFixedSize( pbDoubleQuote2->sizeHint() );
 
-    if (QApplication::reverseLayout()) {
+    if (QApplication::isRightToLeft()) {
         hbox->addWidget( pbDoubleQuote2 );
         hbox->addWidget( pbDoubleQuote1 );
     } else {
@@ -445,7 +445,7 @@ void KoAutoFormatDia::setupTab2()
     pbSimpleQuote2 = new QPushButton( tab2 );
     pbSimpleQuote2->setFixedSize( pbSimpleQuote2->sizeHint() );
 
-    if (QApplication::reverseLayout()) {
+    if (QApplication::isRightToLeft()) {
         hbox->addWidget( pbSimpleQuote2 );
         hbox->addWidget( pbSimpleQuote1 );
     } else {

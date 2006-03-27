@@ -127,7 +127,7 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
             return;
         }
 
-        if ((e->state() & Qt::ShiftModifier) == Qt::ShiftButton) {
+        if ((e->state() & Qt::ShiftModifier) == Qt::ShiftModifier) {
             m_endPos = straightLine(e->pos());
         } else m_endPos = e->pos();
 

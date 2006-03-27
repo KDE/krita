@@ -1095,7 +1095,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
             KoStoreDevice dev( store );
 
             QString s = doc.toString(); // this is already Utf8!
-            (void)dev.writeBlock( s.data(), s.size()-1 );
+            (void)dev.write( s.data(), s.size()-1 );
             (void)store->close();
         }
 
@@ -1128,7 +1128,7 @@ bool KoDocument::saveToStream( QIODevice * dev )
     Q3CString s = doc.toCString(); // utf8 already
     // We use QCString::size()-1 here, not the official QCString::length
     // It works here, as we are not modifying QCString as QByteArray
-    int nwritten = dev->writeBlock( s.data(), s.size()-1 );
+    int nwritten = dev->write( s.data(), s.size()-1 );
     if ( nwritten != (int)s.size()-1 )
         kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
     return nwritten == (int)s.size()-1;
@@ -1680,7 +1680,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
         // Try to find out whether it is a mime multi part file
         char buf[5];
-        if ( in.readBlock( buf, 4 ) < 4 )
+        if ( in.read( buf, 4 ) < 4 )
         {
             QApplication::restoreOverrideCursor();
             in.close();

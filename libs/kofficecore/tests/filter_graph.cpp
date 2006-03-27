@@ -112,7 +112,7 @@ int main( int /*argc*/, char ** /*argv*/ )
 
     QFile f( "graph.dot" );
     if ( f.open( QIODevice::WriteOnly ) )
-        f.writeBlock( output.data(), output.size() - 1 );
+        f.write( output.data(), output.size() - 1 );
     f.close();
     return 0;
 }

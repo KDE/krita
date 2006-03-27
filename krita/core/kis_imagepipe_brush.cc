@@ -288,7 +288,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     // Gimp Pipe Brush header format: Name\n<number of brushes> <parasite>\n
 
     // The name\n
-    if (dev->writeBlock(name, len) == -1)
+    if (dev->write(name, len) == -1)
         return false;
 
     if (dev->putch('\n') == -1)

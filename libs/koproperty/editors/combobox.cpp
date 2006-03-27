@@ -52,7 +52,7 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
 	l->addWidget(m_edit);
 
 	m_edit->setEditable(false);
-	m_edit->setInsertionPolicy(QComboBox::NoInsert);
+	m_edit->setInsertPolicy(QComboBox::NoInsert);
 	m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
 	m_edit->setAutoCompletion(true);
 #ifndef QT_ONLY

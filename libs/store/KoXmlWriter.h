@@ -234,7 +234,7 @@ private:
 
     // unused and possibly incorrect if length != size
     //inline void writeCString( const QCString& cstr ) {
-    //    m_dev->writeBlock( cstr.data(), cstr.size() - 1 );
+    //    m_dev->write( cstr.data(), cstr.size() - 1 );
     //}
 
     inline void writeCString( const char* cstr ) {

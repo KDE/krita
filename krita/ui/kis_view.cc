@@ -2293,7 +2293,7 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 //            if (gd) {
 //                m_currentGuide = gd;
 //
-//                if ((e->button() == Qt::RightButton) || ((e->button() & Qt::ShiftModifier) == Qt::ShiftButton)) {
+//                if ((e->button() == Qt::RightButton) || ((e->button() & Qt::ShiftModifier) == Qt::ShiftModifier)) {
 //                    if (gd->isSelected())
 //                        mgr->unselect(gd);
 //                    else
@@ -2322,7 +2322,7 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
         KisPoint p = viewToWindow(e->pos());
         // somewhat of a hack: we should actually test if we intersect with the scrollers,
         // but the globalPos seems to be off by a few pixels
-        if (m_vScroll->draggingSlider() || m_hScroll->draggingSlider())
+        if (m_vScroll->isSliderDown() || m_hScroll->draggingSlider())
             return;
 
         if (m_toolManager->currentTool()->wantsAutoScroll()) {

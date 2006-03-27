@@ -53,10 +53,10 @@ public:
       return 0xffffffff;
   }
 
-  virtual Q_LONG readBlock( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
-  virtual Q_LONG writeBlock( const char *data, Q_ULONG len ) { return m_store->write( data, len ); }
+  virtual Q_LONG read( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
+  virtual Q_LONG write( const char *data, Q_ULONG len ) { return m_store->write( data, len ); }
   // Not virtual, only to uncover shadow
-  Q_LONG writeBlock( const QByteArray& data ) { return QIODevice::writeBlock( data ); }
+  Q_LONG write( const QByteArray& data ) { return QIODevice::writeBlock( data ); }
 
   int getch() {
     char c[2];

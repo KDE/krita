@@ -315,13 +315,13 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
     // Write header: first bh, then the name
     QByteArray bytes;
     bytes.setRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
-    wrote = dev->writeBlock(bytes);
+    wrote = dev->write(bytes);
     bytes.resetRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
 
     if (wrote == -1)
         return false;
 
-    wrote = dev->writeBlock(name, nameLength); // No +1 for the trailing NULL it seems...
+    wrote = dev->write(name, nameLength); // No +1 for the trailing NULL it seems...
     if (wrote == -1)
         return false;
 
@@ -349,7 +349,7 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
         }
     }
 
-    wrote = dev->writeBlock(bytes);
+    wrote = dev->write(bytes);
     if (wrote == -1)
         return false;
 

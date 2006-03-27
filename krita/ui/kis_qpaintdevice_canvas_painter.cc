@@ -281,22 +281,22 @@ double KisQPaintDeviceCanvasPainter::translationY() const
 
 QPoint KisQPaintDeviceCanvasPainter::xForm(const QPoint& point) const
 {
-    return m_painter.xForm(point);
+    return m_painter.transformed(point);
 }
 
 QRect KisQPaintDeviceCanvasPainter::xForm(const QRect& r) const
 {
-    return m_painter.xForm(r);
+    return m_painter.transformed(r);
 }
 
 QPointArray KisQPaintDeviceCanvasPainter::xForm(const QPointArray& pointArray) const
 {
-    return m_painter.xForm(pointArray);
+    return m_painter.transformed(pointArray);
 }
 
 QPointArray KisQPaintDeviceCanvasPainter::xForm(const QPointArray& pointArray, int index, int npoints) const
 {
-    return m_painter.xForm(pointArray, index, npoints);
+    return m_painter.transformed(pointArray, index, npoints);
 }
 
 QPoint KisQPaintDeviceCanvasPainter::xFormDev(const QPoint& point) const

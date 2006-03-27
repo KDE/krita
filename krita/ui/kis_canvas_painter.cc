@@ -916,7 +916,7 @@ double KisCanvasPainter::translationY() const
 QPoint KisCanvasPainter::xForm(const QPoint& point) const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->xForm(point);
+        return m_canvasWidgetPainter->transformed(point);
     }
     return point;
 }
@@ -924,7 +924,7 @@ QPoint KisCanvasPainter::xForm(const QPoint& point) const
 QRect KisCanvasPainter::xForm(const QRect& r) const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->xForm(r);
+        return m_canvasWidgetPainter->transformed(r);
     }
     return r;
 }
@@ -932,7 +932,7 @@ QRect KisCanvasPainter::xForm(const QRect& r) const
 QPointArray KisCanvasPainter::xForm(const QPointArray& pointArray) const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->xForm(pointArray);
+        return m_canvasWidgetPainter->transformed(pointArray);
     }
     return pointArray;
 }
@@ -940,7 +940,7 @@ QPointArray KisCanvasPainter::xForm(const QPointArray& pointArray) const
 QPointArray KisCanvasPainter::xForm(const QPointArray& pointArray, int index, int npoints) const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->xForm(pointArray, index, npoints);
+        return m_canvasWidgetPainter->transformed(pointArray, index, npoints);
     }
     return pointArray;
 }

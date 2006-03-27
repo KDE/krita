@@ -41,6 +41,7 @@
 
 #include <kopalettemanager.h>
 
+#include <QDesktopWidget>
 
 KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const char * name)
     : QObject(view, name)
@@ -440,7 +441,7 @@ void KoPaletteManager::addPalette(KoPalette * palette, const QString & name, Qt:
 void KoPaletteManager::slotTogglePalette(int paletteIndex)
 {
     // Toggle the right palette
-    QString name = *m_widgetNames->at(paletteIndex);
+    QString name = m_widgetNames->at(paletteIndex);
     QWidget * w = m_widgets->find(name);
     QString pname = *m_currentMapping->find(name);
     KoPalette * p = m_palettes->find(pname);
@@ -552,12 +553,12 @@ void KoPaletteManager::save()
         else {
             cfg->writeEntry("dockarea", "right");
         }
-        cfg->writeEntry("place", p->place());
+        cfg->writeEntry("place", (int)p->place());
         cfg->writeEntry("x", p->x());
         cfg->writeEntry("y", p->y());
         cfg->writeEntry("height", p->height());
         cfg->writeEntry("width", p->width());
-        cfg->writeEntry("palettestyle", p->style());
+        cfg->writeEntry("palettestyle", (int)p->style());
         cfg->writeEntry("caption", p->caption());
         cfg->writeEntry("offset", p->offset());
 

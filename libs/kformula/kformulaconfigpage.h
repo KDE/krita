@@ -28,6 +28,7 @@
 #include <Q3GridLayout>
 
 #include <kdialogbase.h>
+#include <kvbox.h>
 
 #include "kformuladefs.h"
 
@@ -59,7 +60,7 @@ class KOFORMULA_EXPORT ConfigurePage : public QObject
     Q_OBJECT
 public:
 
-    ConfigurePage( Document* document, QWidget* view, KConfig* config, Q3VBox* box, char* name = 0 );
+    ConfigurePage( Document* document, QWidget* view, KConfig* config, KVBox* box, char* name = 0 );
     void apply();
     void slotDefault();
 

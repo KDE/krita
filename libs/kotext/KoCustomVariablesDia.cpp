@@ -24,7 +24,7 @@
 #include <kbuttonbox.h>
 
 #include <qcombobox.h>
-#include <q3vbox.h>
+
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <q3header.h>
@@ -32,6 +32,7 @@
 #include <Q3PtrList>
 #include <klineedit.h>
 #include <kdebug.h>
+#include <kvbox.h>
 
 /******************************************************************
  *
@@ -65,7 +66,7 @@ void KoVariableNameDia::init()
 {
     back = makeVBoxMainWidget();
 
-    Q3HBox *row1 = new Q3HBox( back );
+    KHBox *row1 = new KHBox( back );
     row1->setSpacing( KDialog::spacingHint() );
 
     QLabel *l = new QLabel( i18n( "Name:" ), row1 );
@@ -296,13 +297,13 @@ KoCustomVarDialog::KoCustomVarDialog( QWidget *parent, KoCustomVariable *var )
 void KoCustomVarDialog::init()
 {
     back = makeVBoxMainWidget();
-    Q3HBox *row1 = new Q3HBox( back );
+    KHBox *row1 = new KHBox( back );
     row1->setSpacing( KDialog::spacingHint() );
     QLabel *ln = new QLabel( i18n( "Name:" ), row1 );
     ln->setFixedSize( ln->sizeHint() );
     m_name = new KLineEdit( row1 );
 
-    Q3HBox *row2 = new Q3HBox( back );
+    KHBox *row2 = new KHBox( back );
     row2->setSpacing( KDialog::spacingHint() );
     QLabel *lv = new QLabel( i18n( "Value:" ), row2 );
     lv->setFixedSize( lv->sizeHint() );

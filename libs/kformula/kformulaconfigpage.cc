@@ -28,7 +28,7 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qstringlist.h>
-#include <q3vbox.h>
+
 #include <qwidget.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -46,6 +46,7 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <kpushbutton.h>
+#include <kvbox.h>
 
 #include "contextstyle.h"
 #include "kformulaconfigpage.h"
@@ -59,7 +60,7 @@
 KFORMULA_NAMESPACE_BEGIN
 
 
-ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, Q3VBox* box, char* name )
+ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, KVBox* box, char* name )
     : QObject( box->parent(), name ), m_document( document ), m_view( view ), m_config( config ), m_changed( false )
 {
     const ContextStyle& contextStyle = document->getContextStyle( true );

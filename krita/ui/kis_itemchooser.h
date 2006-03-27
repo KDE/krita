@@ -20,8 +20,9 @@
 
 #include <q3ptrlist.h>
 #include <qwidget.h>
+#include <kvbox.h>
 
-class Q3HBox;
+class KHBox;
 
 class KoIconChooser;
 class KoIconItem;
@@ -56,7 +57,7 @@ private slots:
     void slotItemSelected(KoIconItem *item);
 
 private:
-    Q3HBox *m_frame;
+    KHBox *m_frame;
     KoIconChooser *m_chooser;
 };
 

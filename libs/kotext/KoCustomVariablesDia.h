@@ -30,8 +30,9 @@
 #include <QCloseEvent>
 #include <k3listview.h>
 #include <koffice_export.h>
+#include <kvbox.h>
 class QComboBox;
-class Q3VBox;
+class KVBox;
 class QResizeEvent;
 class KLineEdit;
 class QCloseEvent;
@@ -59,7 +60,7 @@ protected:
     void init();
 
     QComboBox *names;
-    Q3VBox *back;
+    KVBox *back;
 };
 
 /**
@@ -125,7 +126,7 @@ protected slots:
     void slotOk();
 
 protected:
-    Q3VBox *back;
+    KVBox *back;
     KoCustomVariablesList *list;
 
 };
@@ -158,7 +159,7 @@ protected slots:
     void slotTextChanged(const QString&);
 
 protected:
-    Q3VBox *back;
+    KVBox *back;
     KLineEdit *m_name;
     KLineEdit *m_value;
 

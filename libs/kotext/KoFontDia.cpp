@@ -19,8 +19,8 @@
 
 #include "KoFontDia.h"
 
-#include <q3vbox.h>
-#include <q3hbox.h>
+
+
 
 #include "KoRichText.h"
 
@@ -38,11 +38,12 @@
 #include <knuminput.h>
 #include <KoGlobal.h>
 #include <qvgroupbox.h>
-#include <q3vbox.h>
+
 #include <qhgroupbox.h>
 #include <qhbuttongroup.h>
 #include <kcolorbutton.h>
 #include <kiconloader.h>
+#include <kvbox.h>
 
 KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
     KSpell2::Broker::Ptr broker, QWidget* parent, const char* name )
@@ -53,8 +54,8 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
-    Q3VBox *mainWidget = new Q3VBox( this );
-    Q3HBox *mainHBox = new Q3HBox( mainWidget );
+    KVBox *mainWidget = new KVBox( this );
+    KHBox *mainHBox = new KHBox( mainWidget );
 
     QTabWidget *fontTabWidget = new QTabWidget( mainHBox );
 

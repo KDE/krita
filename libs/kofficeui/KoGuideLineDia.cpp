@@ -22,14 +22,15 @@
 #include "KoGuideLineDia.h"
 
 #include <q3buttongroup.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
 
 #include <klocale.h>
 #include <KoUnitWidgets.h>
+#include <kvbox.h>
 
 
 KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, double maxPos,
@@ -68,7 +69,7 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
 
     m_vButton->setChecked( true );;
 
-    Q3HBox *hbox = new Q3HBox( vbox );
+    KHBox *hbox = new KHBox( vbox );
     QLabel *label = new QLabel( i18n( "&Position:" ), hbox );
     m_position= new KoUnitDoubleSpinBox( hbox, qMax( 0.0, m_rect.left() ), qMax( 0.0, m_rect.right() ), 1, qMax( 0.0, pos.x() ), unit );
     m_position->setFocus();

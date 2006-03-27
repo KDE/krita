@@ -30,7 +30,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
-#include <q3hbox.h>
+
 #include <qvgroupbox.h>
 #include <qhbuttongroup.h>
 //Added by qt3to4:
@@ -73,7 +73,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     QVGroupBox *formatFrame = new QVGroupBox( i18n( "Page Size" ), this );
     grid1->addWidget( formatFrame, 1, 0 );
 
-    Q3HBox *formatPageSize = new Q3HBox( formatFrame );
+    KHBox *formatPageSize = new KHBox( formatFrame );
     formatPageSize->setSpacing( KDialog::spacingHint() );
 
     // label page size
@@ -88,7 +88,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     // spacer
     formatPageSize->setStretchFactor( new QWidget( formatPageSize ), 10 );
 
-    Q3HBox *formatCustomSize = new Q3HBox( formatFrame );
+    KHBox *formatCustomSize = new KHBox( formatFrame );
     formatCustomSize->setSpacing( KDialog::spacingHint() );
 
     // label width
@@ -352,3 +352,4 @@ void KoPageLayoutSize::setColumns(KoColumns &columns) {
 }
 
 #include <KoPageLayoutSize.moc>
+#include <kvbox.h>

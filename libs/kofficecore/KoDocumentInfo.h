@@ -25,7 +25,7 @@
 #include <qmap.h>
 #include <kconfig.h>
 #include <koffice_export.h>
-
+#include <QDateTime>
 class QString;
 class QStringList;
 class QDomDocument;

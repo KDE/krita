@@ -1094,7 +1094,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
             QDomDocument doc = d->m_docInfo->save();
             KoStoreDevice dev( store );
 
-            Q3CString s = doc.toCString(); // this is already Utf8!
+            QString s = doc.toString(); // this is already Utf8!
             (void)dev.writeBlock( s.data(), s.size()-1 );
             (void)store->close();
         }

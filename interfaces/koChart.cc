@@ -47,9 +47,11 @@ Part::~Part()
 WizardExtension *Part::wizardExtension()
 {
     QObjectList::ConstIterator end( QObject::children().end() );
-    for (QObjectList::ConstIterator it( QObject::children().begin() ); it != end; ++it )
-      if ( (*it)->inherits( "KoChart::WizardExtension" ) )
-            return static_cast<WizardExtension *>( *it );
+    for (QObjectList::ConstIterator it( QObject::children().begin() ); it != end; ++it ) {
+      WizardExtension* we = ::qobject_cast<WizardExtension *>( *it );
+      if ( we )
+          return we;
+    }
 
     return 0;
 }

@@ -108,7 +108,7 @@ void KoEmbeddingFilter::endInternalEmbedding()
 
 int KoEmbeddingFilter::internalPartReference( const QString& key ) const
 {
-    QMapConstIterator<QString, PartReference> it = m_partStack.top()->m_partReferences.find( key );
+    QMap<QString, PartReference>::const_iterator it = m_partStack.top()->m_partReferences.find( key );
     if ( it == m_partStack.top()->m_partReferences.end() )
         return -1;
     return it.data().m_index;
@@ -116,7 +116,7 @@ int KoEmbeddingFilter::internalPartReference( const QString& key ) const
 
 Q3CString KoEmbeddingFilter::internalPartMimeType( const QString& key ) const
 {
-    QMapConstIterator<QString, PartReference> it = m_partStack.top()->m_partReferences.find( key );
+    QMap<QString, PartReference>::const_iterator it = m_partStack.top()->m_partReferences.find( key );
     if ( it == m_partStack.top()->m_partReferences.end() )
         return Q3CString();
     return it.data().m_mimeType;

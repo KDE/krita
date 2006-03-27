@@ -63,7 +63,7 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name ) c
     if ( factory->inherits( "KParts::Factory" ) )
       obj = static_cast<KParts::Factory *>(factory)->createPart( 0L, "", parent, name, "KoDocument" );
     else {
-      kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->className() << endl; // This shouldn't happen...
+      kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->metaObject()->className() << endl; // This shouldn't happen...
       obj = factory->create( parent, name, "KoDocument" );
     }
 
@@ -186,7 +186,7 @@ Q3ValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
     //kDebug(30500) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
     //               << "   library=" << (*it)->library() << endl;
     // Append converted offer
-    lst.append( new KoFilterEntry( *it ) );
+    lst.append( KoFilterEntry::Ptr( new KoFilterEntry( *it ) ) );
     // Next service
     it++;
   }

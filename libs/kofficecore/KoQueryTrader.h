@@ -48,7 +48,7 @@ public:
   /**
    * @return TRUE if the service pointer is null
    */
-  bool isEmpty() const { return m_service == 0L; }
+  bool isEmpty() const { return m_service.isNull(); }
 
   /**
    * @return name of the associated service

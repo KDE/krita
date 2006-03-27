@@ -93,6 +93,8 @@ void KisToolCrop::activate()
         if (!device->hasSelection()) {
             //m_rectCrop = m_subject->currentImg()->bounds();
             //validateSelection();
+            m_haveCropSelection = false;
+            m_selecting = false;
         }
         else {
 

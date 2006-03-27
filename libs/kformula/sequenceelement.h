@@ -205,25 +205,25 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Qt::Orientation);
+    virtual void normalize(FormulaCursor*, Direction);
 
     /**
      * Returns the child at the cursor.
      * Does not care about the selection.
      */
-    virtual BasicElement* getChild(FormulaCursor*, Qt::Orientation = beforeCursor);
+    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
 
     /**
      * Sets the cursor to select the child. The mark is placed before,

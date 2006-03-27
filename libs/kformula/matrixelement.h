@@ -338,10 +338,10 @@ public:
      */
     virtual void dispatchFontCommand( FontCommand* cmd );
 
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
-    virtual void normalize(FormulaCursor*, Qt::Orientation);
+    virtual void normalize(FormulaCursor*, Direction);
 
     virtual SequenceElement* getMainChild();
 

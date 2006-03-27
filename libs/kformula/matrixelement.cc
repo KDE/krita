@@ -1613,7 +1613,7 @@ void MultilineElement::dispatchFontCommand( FontCommand* cmd )
 
 void MultilineElement::insert( FormulaCursor* cursor,
                                Q3PtrList<BasicElement>& newChildren,
-                               Qt::Orientation direction )
+                               Direction direction )
 {
     MultilineSequenceElement* e = static_cast<MultilineSequenceElement*>(newChildren.take(0));
     e->setParent(this);
@@ -1631,7 +1631,7 @@ void MultilineElement::insert( FormulaCursor* cursor,
 
 void MultilineElement::remove( FormulaCursor* cursor,
                                Q3PtrList<BasicElement>& removedChildren,
-                               Qt::Orientation direction )
+                               Direction direction )
 {
     if ( content.count() == 1 ) { //&& ( cursor->getPos() == 0 ) ) {
         getParent()->selectChild(cursor, this);
@@ -1646,7 +1646,7 @@ void MultilineElement::remove( FormulaCursor* cursor,
     }
 }
 
-void MultilineElement::normalize( FormulaCursor* cursor, Qt::Orientation direction )
+void MultilineElement::normalize( FormulaCursor* cursor, Direction direction )
 {
     int pos = cursor->getPos();
     if ( ( cursor->getElement() == this ) &&

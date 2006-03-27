@@ -526,7 +526,7 @@ void SymbolElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  */
 void SymbolElement::insert(FormulaCursor* cursor,
                            Q3PtrList<BasicElement>& newChildren,
-                           Qt::Orientation direction)
+                           Direction direction)
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
@@ -566,7 +566,7 @@ void SymbolElement::insert(FormulaCursor* cursor,
  */
 void SymbolElement::remove(FormulaCursor* cursor,
                            Q3PtrList<BasicElement>& removedChildren,
-                           Qt::Orientation direction)
+                           Direction direction)
 {
     int pos = cursor->getPos();
     switch (pos) {
@@ -596,7 +596,7 @@ void SymbolElement::remove(FormulaCursor* cursor,
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void SymbolElement::normalize(FormulaCursor* cursor, Qt::Orientation direction)
+void SymbolElement::normalize(FormulaCursor* cursor, Direction direction)
 {
     if (direction == beforeCursor) {
         content->moveLeft(cursor, this);
@@ -609,7 +609,7 @@ void SymbolElement::normalize(FormulaCursor* cursor, Qt::Orientation direction)
 /**
  * Returns the child at the cursor.
  */
-BasicElement* SymbolElement::getChild(FormulaCursor* cursor, Qt::Orientation)
+BasicElement* SymbolElement::getChild(FormulaCursor* cursor, Direction)
 {
     int pos = cursor->getPos();
     switch (pos) {
@@ -662,7 +662,7 @@ void SymbolElement::setToContent(FormulaCursor* cursor)
 }
 
 
-void SymbolElement::moveToUpper(FormulaCursor* cursor, Qt::Orientation direction)
+void SymbolElement::moveToUpper(FormulaCursor* cursor, Direction direction)
 {
     if (hasUpper()) {
         if (direction == beforeCursor) {
@@ -674,7 +674,7 @@ void SymbolElement::moveToUpper(FormulaCursor* cursor, Qt::Orientation direction
     }
 }
 
-void SymbolElement::moveToLower(FormulaCursor* cursor, Qt::Orientation direction)
+void SymbolElement::moveToLower(FormulaCursor* cursor, Direction direction)
 {
     if (hasLower()) {
         if (direction == beforeCursor) {

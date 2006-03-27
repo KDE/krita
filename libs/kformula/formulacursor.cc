@@ -285,7 +285,7 @@ void FormulaCursor::goInsideElement(BasicElement* element)
  * You need to call this after each removal because the cursor
  * might point to some non existing place.
  */
-void FormulaCursor::normalize(Qt::Orientation direction)
+void FormulaCursor::normalize(Direction direction)
 {
     BasicElement* element = getElement();
     element->normalize(this, direction);
@@ -296,7 +296,7 @@ void FormulaCursor::normalize(Qt::Orientation direction)
  * Inserts the child at the current position.
  * Ignores the selection.
  */
-void FormulaCursor::insert(BasicElement* child, Qt::Orientation direction)
+void FormulaCursor::insert(BasicElement* child, Direction direction)
 {
     Q3PtrList<BasicElement> list;
     list.append(child);
@@ -304,7 +304,7 @@ void FormulaCursor::insert(BasicElement* child, Qt::Orientation direction)
 }
 
 void FormulaCursor::insert(Q3PtrList<BasicElement>& children,
-                           Qt::Orientation direction)
+                           Direction direction)
 {
     assert( !isReadOnly() );
     BasicElement* element = getElement();
@@ -318,7 +318,7 @@ void FormulaCursor::insert(Q3PtrList<BasicElement>& children,
  * for this to have any effect.
  */
 void FormulaCursor::remove(Q3PtrList<BasicElement>& children,
-                           Qt::Orientation direction)
+                           Direction direction)
 {
     assert( !isReadOnly() );
     SequenceElement* sequence = normal();
@@ -346,7 +346,7 @@ void FormulaCursor::remove(Q3PtrList<BasicElement>& children,
  * The replaced elements become the new element's main child's content.
  */
 void FormulaCursor::replaceSelectionWith(BasicElement* element,
-                                         Qt::Orientation direction)
+                                         Direction direction)
 {
     assert( !isReadOnly() );
     Q3PtrList<BasicElement> list;
@@ -382,7 +382,7 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
  * Replaces the element the cursor points to with its main child's
  * content.
  */
-BasicElement* FormulaCursor::replaceByMainChildContent(Qt::Orientation direction)
+BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
 {
     assert( !isReadOnly() );
     Q3PtrList<BasicElement> childrenList;
@@ -411,7 +411,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Qt::Orientation direction
  * This is simply another form of replaceByMainChildContent. You
  * use this one if the cursor is normalized and inside the main child.
  */
-BasicElement* FormulaCursor::removeEnclosingElement(Qt::Orientation direction)
+BasicElement* FormulaCursor::removeEnclosingElement(Direction direction)
 {
     assert( !isReadOnly() );
     BasicElement* parent = getElement()->getParent();
@@ -443,7 +443,7 @@ bool FormulaCursor::elementIsSenseless()
  *
  * Might be 0 is there is no such child.
  */
-BasicElement* FormulaCursor::getActiveChild(Qt::Orientation direction)
+BasicElement* FormulaCursor::getActiveChild(Direction direction)
 {
     return getElement()->getChild(this, direction);
 }

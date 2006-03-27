@@ -152,7 +152,7 @@ void BasicElement::moveRight(FormulaCursor* cursor, BasicElement*)
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void BasicElement::normalize(FormulaCursor* cursor, Qt::Orientation direction)
+void BasicElement::normalize(FormulaCursor* cursor, Direction direction)
 {
     BasicElement* element = getMainChild();
     if (element != 0) {

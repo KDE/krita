@@ -119,7 +119,7 @@ public:
     /**
      * Reinserts the index if it has been removed.
      */
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -127,13 +127,13 @@ public:
      *
      * We remove ourselve if we are requested to remove our content.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Qt::Orientation);
+    virtual void normalize(FormulaCursor*, Direction);
 
     // main child
     //
@@ -156,7 +156,7 @@ public:
     //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
 
     // Moves the cursor inside the index. The index has to exist.
-    void moveToIndex(FormulaCursor*, Qt::Orientation);
+    void moveToIndex(FormulaCursor*, Direction);
 
     // Sets the cursor to point to the place where the index normaly
     // is. These functions are only used if there is no such index and
@@ -213,7 +213,7 @@ private:
     class RootElementIndex : public ElementIndex {
     public:
         RootElementIndex(RootElement* p) : parent(p) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
             { parent->moveToIndex(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToIndex(cursor); }

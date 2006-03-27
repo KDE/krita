@@ -195,7 +195,7 @@ public:
      * generic add command, default implementation do nothing
      */
     KFCRemoveSelection(Container* document,
-                       Qt::Orientation dir = beforeCursor);
+                       Direction dir = beforeCursor);
 
     virtual void execute();
     virtual void unexecute();
@@ -246,7 +246,7 @@ public:
     /**
      * generic add command, default implementation do nothing
      */
-    KFCRemove(Container* document, Qt::Orientation dir);
+    KFCRemove(Container* document, Direction dir);
     ~KFCRemove();
 
     virtual void execute();
@@ -288,7 +288,7 @@ private:
 class KFCRemoveEnclosing : public Command
 {
 public:
-    KFCRemoveEnclosing(Container* document, Qt::Orientation dir);
+    KFCRemoveEnclosing(Container* document, Direction dir);
     ~KFCRemoveEnclosing();
 
     virtual void execute();

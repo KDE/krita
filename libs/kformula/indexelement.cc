@@ -868,7 +868,7 @@ void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  */
 void IndexElement::insert(FormulaCursor* cursor,
                           Q3PtrList<BasicElement>& newChildren,
-                          Qt::Orientation direction)
+                          Direction direction)
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
@@ -921,7 +921,7 @@ void IndexElement::insert(FormulaCursor* cursor,
  */
 void IndexElement::remove(FormulaCursor* cursor,
                           Q3PtrList<BasicElement>& removedChildren,
-                          Qt::Orientation direction)
+                          Direction direction)
 {
     int pos = cursor->getPos();
     switch (pos) {
@@ -975,7 +975,7 @@ void IndexElement::remove(FormulaCursor* cursor,
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void IndexElement::normalize(FormulaCursor* cursor, Qt::Orientation direction)
+void IndexElement::normalize(FormulaCursor* cursor, Direction direction)
 {
     if (direction == beforeCursor) {
         content->moveLeft(cursor, this);
@@ -1000,7 +1000,7 @@ bool IndexElement::isSenseless()
 /**
  * Returns the child at the cursor.
  */
-BasicElement* IndexElement::getChild(FormulaCursor* cursor, Qt::Orientation)
+BasicElement* IndexElement::getChild(FormulaCursor* cursor, Direction)
 {
     int pos = cursor->getPos();
     /*
@@ -1106,7 +1106,7 @@ void IndexElement::setToLowerRight(FormulaCursor* cursor)
 
 // move inside an index that exists already.
 
-void IndexElement::moveToUpperLeft(FormulaCursor* cursor, Qt::Orientation direction)
+void IndexElement::moveToUpperLeft(FormulaCursor* cursor, Direction direction)
 {
     if (hasUpperLeft()) {
         if (direction == beforeCursor) {
@@ -1118,7 +1118,7 @@ void IndexElement::moveToUpperLeft(FormulaCursor* cursor, Qt::Orientation direct
     }
 }
 
-void IndexElement::moveToUpperMiddle(FormulaCursor* cursor, Qt::Orientation direction)
+void IndexElement::moveToUpperMiddle(FormulaCursor* cursor, Direction direction)
 {
     if (hasUpperMiddle()) {
         if (direction == beforeCursor) {
@@ -1130,7 +1130,7 @@ void IndexElement::moveToUpperMiddle(FormulaCursor* cursor, Qt::Orientation dire
     }
 }
 
-void IndexElement::moveToUpperRight(FormulaCursor* cursor, Qt::Orientation direction)
+void IndexElement::moveToUpperRight(FormulaCursor* cursor, Direction direction)
 {
     if (hasUpperRight()) {
         if (direction == beforeCursor) {
@@ -1142,7 +1142,7 @@ void IndexElement::moveToUpperRight(FormulaCursor* cursor, Qt::Orientation direc
     }
 }
 
-void IndexElement::moveToLowerLeft(FormulaCursor* cursor, Qt::Orientation direction)
+void IndexElement::moveToLowerLeft(FormulaCursor* cursor, Direction direction)
 {
     if (hasLowerLeft()) {
         if (direction == beforeCursor) {
@@ -1154,7 +1154,7 @@ void IndexElement::moveToLowerLeft(FormulaCursor* cursor, Qt::Orientation direct
     }
 }
 
-void IndexElement::moveToLowerMiddle(FormulaCursor* cursor, Qt::Orientation direction)
+void IndexElement::moveToLowerMiddle(FormulaCursor* cursor, Direction direction)
 {
     if (hasLowerMiddle()) {
         if (direction == beforeCursor) {
@@ -1166,7 +1166,7 @@ void IndexElement::moveToLowerMiddle(FormulaCursor* cursor, Qt::Orientation dire
     }
 }
 
-void IndexElement::moveToLowerRight(FormulaCursor* cursor, Qt::Orientation direction)
+void IndexElement::moveToLowerRight(FormulaCursor* cursor, Direction direction)
 {
     if (hasLowerRight()) {
         if (direction == beforeCursor) {

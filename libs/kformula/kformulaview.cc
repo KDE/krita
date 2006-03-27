@@ -375,7 +375,7 @@ bool View::isEnd() const
     return cursor()->isEnd();
 }
 
-void View::eraseSelection( Qt::Orientation direction )
+void View::eraseSelection( Direction direction )
 {
     DirectedRemove r( req_remove, direction );
     container()->performRequest( &r );

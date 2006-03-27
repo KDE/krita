@@ -123,7 +123,7 @@ void KFCAdd::unexecute()
 // ******  Remove selection command
 
 KFCRemoveSelection::KFCRemoveSelection(Container *document,
-                                       Qt::Orientation direction)
+                                       Direction direction)
         : Command(i18n("Remove Selected Text"), document),
           dir(direction)
 {
@@ -180,7 +180,7 @@ void KFCReplace::unexecute()
 
 
 KFCRemove::KFCRemove(Container *document,
-                     Qt::Orientation direction)
+                     Direction direction)
         : Command(i18n("Remove Selected Text"), document),
           element(0), simpleRemoveCursor(0), dir(direction)
 {
@@ -224,7 +224,7 @@ void KFCRemove::unexecute()
 
 
 KFCRemoveEnclosing::KFCRemoveEnclosing(Container* document,
-                                       Qt::Orientation dir)
+                                       Direction dir)
         : Command(i18n("Remove Enclosing Element"), document),
           element(0), direction(dir)
 {

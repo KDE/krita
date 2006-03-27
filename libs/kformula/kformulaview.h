@@ -127,7 +127,7 @@ public:
     /** @returns whether the cursor is at the last position. */
     bool isEnd() const;
 
-    void eraseSelection( Qt::Orientation direction = beforeCursor );
+    void eraseSelection( Direction direction = beforeCursor );
     void addText( QString str );
 
 signals:

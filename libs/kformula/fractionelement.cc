@@ -295,7 +295,7 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  */
 void FractionElement::insert(FormulaCursor* cursor,
                              Q3PtrList<BasicElement>& newChildren,
-                             Qt::Orientation direction)
+                             Direction direction)
 {
     if (cursor->getPos() == denominatorPos) {
         denominator = static_cast<SequenceElement*>(newChildren.take(0));
@@ -324,7 +324,7 @@ void FractionElement::insert(FormulaCursor* cursor,
  */
 void FractionElement::remove(FormulaCursor* cursor,
                              Q3PtrList<BasicElement>& removedChildren,
-                             Qt::Orientation direction)
+                             Direction direction)
 {
     switch (cursor->getPos()) {
     case numeratorPos:

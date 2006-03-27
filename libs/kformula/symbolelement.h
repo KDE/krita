@@ -153,7 +153,7 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -166,18 +166,18 @@ public:
      *
      * The ownership of the list is passed to the caller.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Qt::Orientation);
+    virtual void normalize(FormulaCursor*, Direction);
 
     /**
      * Returns the child at the cursor.
      */
-    virtual BasicElement* getChild(FormulaCursor*, Qt::Orientation = beforeCursor);
+    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
 
     /**
      * Sets the cursor to select the child. The mark is placed before,
@@ -200,8 +200,8 @@ public:
     void setToLower(FormulaCursor* cursor);
 
     // Moves the cursor inside the index. The index has to exist.
-    void moveToUpper(FormulaCursor*, Qt::Orientation);
-    void moveToLower(FormulaCursor*, Qt::Orientation);
+    void moveToUpper(FormulaCursor*, Direction);
+    void moveToLower(FormulaCursor*, Direction);
 
     // Generic access to each index.
 
@@ -272,7 +272,7 @@ private:
     class UpperIndex : public SymbolElementIndex {
     public:
         UpperIndex(SymbolElement* parent) : SymbolElementIndex(parent) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
             { parent->moveToUpper(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToUpper(cursor); }
@@ -283,7 +283,7 @@ private:
     class LowerIndex : public SymbolElementIndex {
     public:
         LowerIndex(SymbolElement* parent) : SymbolElementIndex(parent) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
             { parent->moveToLower(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToLower(cursor); }

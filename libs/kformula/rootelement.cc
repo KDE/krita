@@ -411,7 +411,7 @@ void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  */
 void RootElement::insert(FormulaCursor* cursor,
                          Q3PtrList<BasicElement>& newChildren,
-                         Qt::Orientation direction)
+                         Direction direction)
 {
     if (cursor->getPos() == upperLeftPos) {
         index = static_cast<SequenceElement*>(newChildren.take(0));
@@ -436,7 +436,7 @@ void RootElement::insert(FormulaCursor* cursor,
  */
 void RootElement::remove(FormulaCursor* cursor,
                          Q3PtrList<BasicElement>& removedChildren,
-                         Qt::Orientation direction)
+                         Direction direction)
 {
     switch (cursor->getPos()) {
     case contentPos:
@@ -458,7 +458,7 @@ void RootElement::remove(FormulaCursor* cursor,
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void RootElement::normalize(FormulaCursor* cursor, Qt::Orientation direction)
+void RootElement::normalize(FormulaCursor* cursor, Direction direction)
 {
     if (direction == beforeCursor) {
         content->moveLeft(cursor, this);
@@ -502,7 +502,7 @@ void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 }
 
 
-void RootElement::moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
+void RootElement::moveToIndex(FormulaCursor* cursor, Direction direction)
 {
     if (hasIndex()) {
         if (direction == beforeCursor) {

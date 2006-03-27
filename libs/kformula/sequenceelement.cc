@@ -376,7 +376,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
                                   FormulaCursor* cursor, bool smallCursor,
                                   bool activeCursor )
 {
-    painter.setRasterOp( Qt::XorROP );
+    //painter.setRasterOp( Qt::XorROP );
     if ( cursor->isSelection() ) {
         const LuPixelRect& r = cursor->cursorSize;
         painter.fillRect( context.layoutUnitToPixelX( r.x() ),
@@ -409,7 +409,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
                           context.layoutUnitToPixelX( size.right() )-1,
                           context.layoutUnitToPixelY( size.bottom() )-1 );
     // This might be wrong but probably isn't.
-    painter.setRasterOp( Qt::CopyROP );
+   // painter.setRasterOp( Qt::CopyROP );
 }
 
 
@@ -708,7 +708,7 @@ void SequenceElement::goInside(FormulaCursor* cursor)
  */
 void SequenceElement::insert(FormulaCursor* cursor,
                              Q3PtrList<BasicElement>& newChildren,
-                             Qt::Orientation direction)
+                             Direction direction)
 {
     int pos = cursor->getPos();
     uint count = newChildren.count();
@@ -737,7 +737,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
  */
 void SequenceElement::remove(FormulaCursor* cursor,
                              Q3PtrList<BasicElement>& removedChildren,
-                             Qt::Orientation direction)
+                             Direction direction)
 {
     if (cursor->isSelection()) {
         int from = cursor->getSelectionStart();
@@ -808,7 +808,7 @@ void SequenceElement::removeChild(Q3PtrList<BasicElement>& removedChildren, int 
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void SequenceElement::normalize(FormulaCursor* cursor, Qt::Orientation)
+void SequenceElement::normalize(FormulaCursor* cursor, Direction)
 {
     cursor->setSelection(false);
 }
@@ -818,7 +818,7 @@ void SequenceElement::normalize(FormulaCursor* cursor, Qt::Orientation)
  * Returns the child at the cursor.
  * Does not care about the selection.
  */
-BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Qt::Orientation direction )
+BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direction )
 {
     if ( direction == beforeCursor ) {
         if ( cursor->getPos() > 0 ) {

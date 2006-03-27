@@ -133,7 +133,7 @@ void SingleContentElement::moveDown(FormulaCursor* cursor, BasicElement* /*from*
 
 void SingleContentElement::remove( FormulaCursor* cursor,
                                    Q3PtrList<BasicElement>& removedChildren,
-                                   Qt::Orientation direction )
+                                   Direction direction )
 {
     switch (cursor->getPos()) {
     case contentPos:
@@ -143,7 +143,7 @@ void SingleContentElement::remove( FormulaCursor* cursor,
     }
 }
 
-void SingleContentElement::normalize( FormulaCursor* cursor, Qt::Orientation direction )
+void SingleContentElement::normalize( FormulaCursor* cursor, Direction direction )
 {
     if (direction == beforeCursor) {
         content->moveLeft(cursor, this);

@@ -205,7 +205,7 @@ public:
     /**
      * Moves the cursor inside the index. The index has to exist.
      */
-    virtual void moveToIndex(FormulaCursor*, Qt::Orientation) = 0;
+    virtual void moveToIndex(FormulaCursor*, Direction) = 0;
 
     /**
      * Sets the cursor to point to the place where the index normaly
@@ -305,8 +305,8 @@ public:
 class DirectedRemove : public Request {
     Direction m_direction;
 public:
-    DirectedRemove( RequestID id, Qt::Orientation d ) : Request( id ), m_direction( d ) {}
-    Qt::Orientation direction() const { return m_direction; }
+    DirectedRemove( RequestID id, Direction d ) : Request( id ), m_direction( d ) {}
+    Direction direction() const { return m_direction; }
 };
 
 class TextCharRequest : public Request {

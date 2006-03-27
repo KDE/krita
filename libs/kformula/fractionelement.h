@@ -123,7 +123,7 @@ public:
     /**
      * Reinserts the denominator if it has been removed.
      */
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -134,7 +134,7 @@ public:
      * It is possible to remove the denominator. But after this we
      * are senseless and the caller is required to replace us.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
 
 
     // main child

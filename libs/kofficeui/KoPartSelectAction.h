@@ -34,11 +34,11 @@ class KOFFICEUI_EXPORT KoPartSelectAction : public KActionMenu
     Q_OBJECT
 
 public:
-    KoPartSelectAction( const QString& text, QObject* parent = 0, const char* name = 0 );
+    KoPartSelectAction( const QString& text, KActionCollection* parent = 0, const char* name = 0 );
     KoPartSelectAction( const QString& text, const QString& icon,
-                        QObject* parent = 0, const char* name = 0 );
+                        KActionCollection* parent = 0, const char* name = 0 );
     KoPartSelectAction( const QString& text, const QString& icon,
-                        QObject* receiver, const char* slot, QObject* parent, const char* name = 0 );
+                        QObject* receiver, const char* slot, KActionCollection* parent, const char* name = 0 );
 
     KoDocumentEntry documentEntry() const { return m_documentEntry; }
 

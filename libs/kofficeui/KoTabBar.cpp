@@ -599,21 +599,23 @@ void KoTabBar::ensureVisible( const QString& tab )
 
 void KoTabBar::moveTab( unsigned tab, unsigned target )
 {
+#warning "kde4: port it"
+#if 0
     QString tabName = d->tabs[ tab ];
     QStringList::Iterator it;
 
-    it = d->tabs.at( tab );
-    d->tabs.remove( it );
+    //it = d->tabs.at( tab );
+    d->tabs.removeAt(tab );
 
     if( target > tab ) target--;
-    it = d->tabs.at( target );
+    it = d->tabs.takeAt( target );
     if( target >= d->tabs.count() )
       it = d->tabs.end();
     d->tabs.insert( it, tabName );
 
     if( d->activeTab == (int)tab+1 )
         d->activeTab = target+1;
-
+#endif
     update();
 }
 
@@ -731,7 +733,9 @@ void KoTabBar::resizeEvent( QResizeEvent* )
 
 QSize KoTabBar::sizeHint() const
 {
-    return QSize( 40, style().pixelMetric( QStyle::PM_ScrollBarExtent, this ) );
+#warning "kde4: port it !"
+    //return QSize( 40, style().pixelMetric( QStyle::PM_ScrollBarExtent, this ) );
+	return QSize();
 }
 
 void KoTabBar::renameTab( const QString& old_name, const QString& new_name )

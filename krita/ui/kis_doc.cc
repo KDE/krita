@@ -213,7 +213,7 @@ bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         ok = true;
 
     } else if (ret == KoTemplateChooseDia::File) {
-        KURL url( file );
+        KUrl url( file );
         ok = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
         setEmpty();

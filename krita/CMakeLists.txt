@@ -1,0 +1,121 @@
+kde4_header()
+
+add_subdirectory( sdk ) 
+add_subdirectory( kritacolor ) 
+add_subdirectory( core ) 
+add_subdirectory( ui ) 
+add_subdirectory( dtd ) 
+add_subdirectory( colorspaces ) 
+add_subdirectory( plugins ) 
+add_subdirectory( data ) 
+add_subdirectory( pics ) 
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(kritacommon_LIB_SRCS dummy.cc )
+
+kde4_automoc(${kritacommon_LIB_SRCS})
+
+kde4_add_library(kritacommon SHARED ${kritacommon_LIB_SRCS})
+
+target_link_libraries(kritacommon  ${KDE4_KDECORE_LIBS} kritasdk kritaimage kritaui kritacolor )
+
+set_target_properties(kritacommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+install_targets(${LIB_INSTALL_DIR} kritacommon )
+
+
+########### next target ###############
+
+set(kritapart_PART_SRCS krita_part_init.cc )
+
+kde4_automoc(${kritapart_PART_SRCS})
+
+kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapart )
+
+target_link_libraries(kritapart  ${KDE4_KDECORE_LIBS} kritacommon )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 kritapart )
+
+
+########### next target ###############
+
+set(krita_KDEINIT_SRCS main.cc )
+
+kde4_automoc(${krita_KDEINIT_SRCS})
+
+kde4_add_kdeinit_executable( krita ${krita_KDEINIT_SRCS})
+
+target_link_libraries(kdeinit_krita  ${KDE4_KDECORE_LIBS} )
+
+install_targets(${LIB_INSTALL_DIR} kdeinit_krita )
+
+target_link_libraries( krita kdeinit_krita )
+install_targets(/bin krita )
+
+########### install files ###############
+
+install_files( ${XDG_APPS_DIR} FILES  krita.desktop )
+install_files( ${MIME_INSTALL_DIR}/application FILES  )
+install_files( ${SERVICES_INSTALL_DIR} FILES  kritapart.desktop )
+install_files( ${DATA_INSTALL_DIR}/krita FILES  krita.rc krita_readonly.rc )
+
+kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins kritacolor/colorspaces core/tiles  )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#INCLUDES  = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
+#
+### The common lib, shared between the part, the plugins, and the filters
+#lib_LTLIBRARIES = libkritacommon.la
+#libkritacommon_la_SOURCES = dummy.cc
+#libkritacommon_la_LDFLAGS = $(all_libraries) -version-info 1:0 -no-undefined
+#libkritacommon_la_LIBADD = sdk/libkritasdk.la core/libkritaimage.la ui/libkritaui.la kritacolor/libkritacolor.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
+#
+### The part
+#kde_module_LTLIBRARIES = libkritapart.la
+#libkritapart_la_SOURCES = krita_part_init.cc
+#libkritapart_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+#libkritapart_la_LIBADD = libkritacommon.la
+#
+#METASOURCES = AUTO
+#
+### The kdeinit loadable module and executable
+#kdeinit_LTLIBRARIES = krita.la
+#bin_PROGRAMS =
+#krita_la_SOURCES = main.cc
+#krita_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+#krita_la_LIBADD = $(LIB_KOFFICECORE)
+#
+#xdg_apps_DATA = krita.desktop
+#kdemimedir = $(kde_mimedir)/application
+#
+#rcdir = $(kde_datadir)/krita
+#rc_DATA = krita.rc krita_readonly.rc
+#
+#SUBDIRS = sdk kritacolor core ui . dtd colorspaces plugins data pics 
+## Needed to compile libkritacommon.la, which has no source files to itself
+## but everything in static libs.
+#dummy.cc:
+#	echo > dummy.cc
+#
+#messages: rc.cpp
+#	$(EXTRACTRC) `find . -name \*.ui` >> rc.cpp
+#	$(EXTRACTRC) `find . -name \*.rc` >> rc.cpp
+#	perl extracti18n.pl > i18ndata
+#	$(XGETTEXT) i18ndata rc.cpp `find . -name \*.cc -o -name \*.h` ui/kis_aboutdata.h -o $(podir)/krita.pot
+#	rm -f i18ndata
+#
+#DOXYGEN_EXCLUDE = CImg.h colorspaces plugins kritacolor/colorspaces core/tiles
+#include $(top_srcdir)/admin/Doxyfile.am
+#
+#kde_services_DATA = kritapart.desktop
+#

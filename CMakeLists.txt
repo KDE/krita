@@ -1,0 +1,73 @@
+project(koffice)
+
+# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
+# Perhaps define share/apps as ${DATA_INSTALL_DIR}
+#set(CMAKE_MODULE_PATH "${KDEDIR}/share/apps/cmake/modules/ ${CMAKE_SOURCE_DIR}/cmake/modules")
+
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+
+# support for Dart: http://public.kitware.com/dashboard.php?name=kde
+enable_testing()
+include(CTest)
+
+# generate non-quiet makefiles
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# search packages used by KDE
+find_package(KDE4 REQUIRED)
+find_package(Perl REQUIRED)
+find_package(ZLIB REQUIRED)
+
+if (APPLE)
+   find_package(Carbon REQUIRED)
+endif (APPLE)
+
+
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
+link_directories(${KDE4_LIB_DIR})
+
+
+include (MacroAdditionalCleanFiles)
+include (MacroAddFileDependencies)
+include (ConfigureChecks.cmake)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
+
+#macro_additional_clean_files( ${CMAKE_CURRENT_BINARY_DIR}/config.h )
+
+include_directories(
+  ${KDE4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+add_subdirectory(lib)
+#add_subdirectory(ascend)
+add_subdirectory(autocorrect)
+add_subdirectory(doc)
+#add_subdirectory(example)
+#add_subdirectory(filters)
+add_subdirectory(interfaces)
+#add_subdirectory(karbon)
+#add_subdirectory(kchart)
+#add_subdirectory(kdgantt)
+#add_subdirectory(kexi)
+#add_subdirectory(kformula)
+#add_subdirectory(kivio)
+#add_subdirectory(koshell)
+#add_subdirectory(kounavail)
+#add_subdirectory(kplato)
+#add_subdirectory(kpresenter)
+#add_subdirectory(krita)
+#add_subdirectory(kspread)
+#add_subdirectory(kugar)
+#add_subdirectory(kword)
+add_subdirectory(mimetypes)
+add_subdirectory(pics)
+#add_subdirectory(plugins)
+add_subdirectory(servicetypes)
+add_subdirectory(templates)
+#add_subdirectory(tools)
+MESSAGE(STATUS "Perhaps not install FindKDE4. It will conflict when we install with rpm/deb package")
+add_subdirectory( cmake )
+
+kde4_create_doxygen_docs(  )
+

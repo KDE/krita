@@ -1,0 +1,47 @@
+kde4_header()
+
+include_directories( ${CMAKE_SOURCE_DIR}/krita/sdk ${CMAKE_SOURCE_DIR}/krita/core ${CMAKE_SOURCE_DIR}/krita/kritacolor/ ${CMAKE_SOURCE_DIR}/krita/ui ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(kritascripting_LIB_SRCS kis_script_progress.cpp kis_script_monitor.cpp )
+
+kde4_automoc(${kritascripting_LIB_SRCS})
+
+kde4_add_library(kritascripting SHARED ${kritascripting_LIB_SRCS})
+
+target_link_libraries(kritascripting  ${KDE4_KDECORE_LIBS} kritacommon krossmain )
+
+set_target_properties(kritascripting PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+install_targets(${LIB_INSTALL_DIR} kritascripting )
+
+
+########### install files ###############
+
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#INCLUDES  =  -I$(top_srcdir)/krita/sdk \
+#	-I$(top_srcdir)/krita/core \
+#	-I$(top_srcdir)/krita/kritacolor/ \
+#	-I$(top_srcdir)/krita/ui \
+#	$(KROSS_INCLUDES) \
+#	$(KOFFICE_INCLUDES) \
+#	$(all_includes)
+#
+#
+#lib_LTLIBRARIES = libkritascripting.la
+#libkritascripting_la_SOURCES = kis_script_progress.cpp kis_script_monitor.cpp
+#noinst_HEADERS = kis_script_progress.h
+#
+#libkritascripting_la_LDFLAGS = -no-undefined $(all_libraries)
+#libkritascripting_la_LIBADD =  $(top_builddir)/krita/libkritacommon.la $(top_builddir)/lib/kross/main/libkrossmain.la
+#
+#KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+#
+#libkritascripting_la_METASOURCES = AUTO

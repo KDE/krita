@@ -115,10 +115,10 @@ KSnapshot::~KSnapshot()
 
 bool KSnapshot::save( const QString &filename )
 {
-    return save( KURL::fromPathOrURL( filename ));
+    return save( KUrl::fromPathOrURL( filename ));
 }
 
-bool KSnapshot::save( const KURL& url )
+bool KSnapshot::save( const KUrl& url )
 {
     QString type( KImageIO::type(url.path()) );
     if ( type.isNull() )
@@ -443,7 +443,7 @@ void KSnapshot::setTime(int newTime)
 
 void KSnapshot::setURL( const QString &url )
 {
-    KURL newURL = KURL::fromPathOrURL( url );
+    KUrl newURL = KUrl::fromPathOrURL( url );
     if ( newURL == filename )
         return;
 
@@ -468,7 +468,7 @@ void KSnapshot::exit()
     conf->writeEntry("delay",mainWidget->delay());
     conf->writeEntry("mode",mainWidget->mode());
     conf->writeEntry("includeDecorations",mainWidget->includeDecorations());
-    KURL url = filename;
+    KUrl url = filename;
     url.setPass( QString::null );
     conf->writePathEntry("filename",url.url());
 
@@ -483,7 +483,7 @@ void KSnapshot::slotOk()
     conf->writeEntry("delay",mainWidget->delay());
     conf->writeEntry("mode",mainWidget->mode());
     conf->writeEntry("includeDecorations",mainWidget->includeDecorations());
-    KURL url = filename;
+    KUrl url = filename;
     url.setPass( QString::null );
     conf->writePathEntry("filename",url.url());
 

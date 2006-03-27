@@ -1,0 +1,52 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(kritaroundcornersfilter_PART_SRCS kis_round_corners_filter_plugin.cc kis_round_corners_filter.cc )
+
+kde4_automoc(${kritaroundcornersfilter_PART_SRCS})
+
+kde4_add_plugin(kritaroundcornersfilter ${kritaroundcornersfilter_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaroundcornersfilter )
+
+target_link_libraries(kritaroundcornersfilter  ${KDE4_KDECORE_LIBS} kritacommon )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 kritaroundcornersfilter )
+
+
+########### install files ###############
+
+install_files( ${SERVICES_INSTALL_DIR} FILES  kritaroundcornersfilter.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#kde_services_DATA = kritaroundcornersfilter.desktop
+#
+#INCLUDES  = \
+#	 -I$(srcdir)/../../../sdk \
+#	-I$(srcdir)/../../../core \
+#	-I$(srcdir)/../../../kritacolor/ \
+#	-I$(srcdir)/../../../ui \
+#	$(KOFFICE_INCLUDES) \
+#	$(all_includes)
+#
+#kde_module_LTLIBRARIES = kritaroundcornersfilter.la
+#
+#kritaroundcornersfilter_la_SOURCES = kis_round_corners_filter_plugin.cc \
+#	kis_round_corners_filter.cc
+#
+#noinst_HEADERS = kis_round_corners_filter_plugin.h \
+#	kis_round_corners_filter.h
+#
+#kritaroundcornersfilter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+#kritaroundcornersfilter_la_LIBADD =  ../../../libkritacommon.la
+#
+#kritaroundcornersfilter_la_METASOURCES = AUTO

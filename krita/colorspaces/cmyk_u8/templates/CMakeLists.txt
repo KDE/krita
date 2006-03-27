@@ -1,0 +1,25 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### install files ###############
+
+install_files( ${DATA_INSTALL_DIR}/krita/icons FILES  )
+install_files( ${DATA_INSTALL_DIR}/krita/templates/cmyk/.source FILES  white_2000x800.kra )
+install_files( ${DATA_INSTALL_DIR}/krita/templates/cmyk FILES  .directory white_2000x800.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#templates_DATA = .directory white_2000x800.desktop
+#templatesdir = $(kde_datadir)/krita/templates/cmyk
+#
+#templatesrc_DATA = white_2000x800.kra
+#templatesrcdir = $(kde_datadir)/krita/templates/cmyk/.source
+#
+#templatesicon_ICON = AUTO
+#templatesicondir = $(kde_datadir)/krita/icons

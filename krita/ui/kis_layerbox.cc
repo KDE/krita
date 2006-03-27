@@ -88,11 +88,11 @@ KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char 
 
     list()->setFoldersCanBeActive(true);
 
-    list()->addProperty("visible", i18n("Visible"), loadPixmap("visible.png", il, KIcon::SizeSmallMedium),
-                                                      loadPixmap("novisible.png", il, KIcon::SizeSmallMedium), true);
+    list()->addProperty("visible", i18n("Visible"), loadPixmap("visible.png", il, K3Icon::SizeSmallMedium),
+                                                      loadPixmap("novisible.png", il, K3Icon::SizeSmallMedium), true);
 
-    list()->addProperty("locked", i18n("Locked"), loadPixmap("locked.png", il, KIcon::SizeSmallMedium),
-                                                    loadPixmap("unlocked.png", il, KIcon::SizeSmallMedium));
+    list()->addProperty("locked", i18n("Locked"), loadPixmap("locked.png", il, K3Icon::SizeSmallMedium),
+                                                    loadPixmap("unlocked.png", il, K3Icon::SizeSmallMedium));
 
 
     connect(list()->contextMenu(), SIGNAL(aboutToShow()), SLOT(slotAboutToShow()));
@@ -591,7 +591,7 @@ void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
 QPixmap KisLayerBox::loadPixmap(const QString& filename, const KIconLoader&
                                     il, int size)
 {
-    QPixmap pixmap = il.loadIcon(filename, KIcon::NoGroup, size);
+    QPixmap pixmap = il.loadIcon(filename, K3Icon::NoGroup, size);
 
     if (pixmap.isNull())
         KMessageBox::error(0, i18n("Cannot find %1").arg(filename),

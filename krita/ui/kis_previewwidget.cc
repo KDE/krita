@@ -60,17 +60,17 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     m_autoupdate = true;
     m_previewIsDisplayed = true;
 
-    btnZoomIn->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag+", KIcon::MainToolbar, 16 ));
+    btnZoomIn->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag+", K3Icon::MainToolbar, 16 ));
     connect(btnZoomIn, SIGNAL(clicked()), this, SLOT(zoomIn()));
-    btnZoomOut->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag-", KIcon::MainToolbar, 16 ));
+    btnZoomOut->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag-", K3Icon::MainToolbar, 16 ));
     connect(btnZoomOut, SIGNAL(clicked()), this, SLOT(zoomOut()));
-    btnUpdate->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "reload", KIcon::MainToolbar, 16 ));
+    btnUpdate->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "reload", K3Icon::MainToolbar, 16 ));
     connect(btnUpdate, SIGNAL(clicked()), this, SLOT(forceUpdate()));
 
     connect(radioBtnPreview, SIGNAL(toggled(bool)), this, SLOT(setPreviewDisplayed(bool)));
 
     connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
-    btnZoomOneToOne->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag1", KIcon::MainToolbar, 16 ));
+    btnZoomOneToOne->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag1", K3Icon::MainToolbar, 16 ));
     connect(btnZoomOneToOne, SIGNAL(clicked()), this, SLOT(zoomOneToOne()));
 
 

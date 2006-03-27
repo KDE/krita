@@ -1,0 +1,59 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(kritacolorspaceconversion_PART_SRCS colorspaceconversion.cc dlg_colorspaceconversion.cc )
+
+kde4_automoc(${kritacolorspaceconversion_PART_SRCS})
+
+kde4_add_ui3_files(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
+
+kde4_add_plugin(kritacolorspaceconversion ${kritacolorspaceconversion_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorspaceconversion )
+
+target_link_libraries(kritacolorspaceconversion  ${KDE4_KDECORE_LIBS} kritacommon )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 kritacolorspaceconversion )
+
+
+########### install files ###############
+
+install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  colorspaceconversion.rc )
+install_files( ${SERVICES_INSTALL_DIR} FILES  kritacolorspaceconversion.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#kritarcdir = $(kde_datadir)/kritaplugins
+#kritarc_DATA = colorspaceconversion.rc
+#
+#EXTRA_DIST = $(kritarc_DATA)
+#
+#INCLUDES  =  -I$(srcdir)/../../../sdk \
+#	-I$(srcdir)/../../../core \
+#	-I$(srcdir)/../../../kritacolor/ \
+#	-I$(srcdir)/../../../ui \
+#	-I$/../../../ui \
+#	$(KOFFICE_INCLUDES) \
+#	$(all_includes)
+#
+#
+#kde_module_LTLIBRARIES = kritacolorspaceconversion.la
+#
+#kritacolorspaceconversion_la_SOURCES = wdgconvertcolorspace.ui colorspaceconversion.cc dlg_colorspaceconversion.cc
+#noinst_HEADERS = wdgconvertcolorspace.h dlg_colorspaceconversion.h colorspaceconversion.h
+#
+#kritacolorspaceconversion_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+#kritacolorspaceconversion_la_LIBADD =  ../../../libkritacommon.la
+#
+#kritacolorspaceconversion_la_METASOURCES = AUTO
+#
+#kde_services_DATA = kritacolorspaceconversion.desktop
+#

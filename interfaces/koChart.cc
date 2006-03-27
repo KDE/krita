@@ -18,7 +18,7 @@
 
 #include "koChart.h"
 
-#include <qobjectlist.h>
+#include <qobject.h>
 
 using namespace KoChart;
 

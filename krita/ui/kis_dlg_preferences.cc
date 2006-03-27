@@ -735,22 +735,22 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 {
     QVBox *vbox;
 
-    vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", KIcon::SizeMedium ));
+    vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", K3Icon::SizeMedium ));
     m_general = new GeneralTab( vbox );
 #ifdef HAVE_GL
-    vbox = addVBoxPage ( i18n( "Display" ), i18n( "Display" ), BarIcon( "kscreensaver", KIcon::SizeMedium ));
+    vbox = addVBoxPage ( i18n( "Display" ), i18n( "Display" ), BarIcon( "kscreensaver", K3Icon::SizeMedium ));
     m_displaySettings = new DisplaySettingsTab( vbox );
 #endif
-    vbox = addVBoxPage( i18n( "Color Management"), i18n( "Color"), BarIcon( "colorize", KIcon::SizeMedium ));
+    vbox = addVBoxPage( i18n( "Color Management"), i18n( "Color"), BarIcon( "colorize", K3Icon::SizeMedium ));
     m_colorSettings = new ColorSettingsTab( vbox );
 
-    vbox = addVBoxPage( i18n( "Performance"), i18n( "Performance"), BarIcon( "fork", KIcon::SizeMedium ));
+    vbox = addVBoxPage( i18n( "Performance"), i18n( "Performance"), BarIcon( "fork", K3Icon::SizeMedium ));
     m_performanceSettings = new PerformanceTab ( vbox );
 
-    vbox = addVBoxPage ( i18n( "Tablet" ), i18n( "Tablet" ), BarIcon( "tablet", KIcon::SizeMedium ));
+    vbox = addVBoxPage ( i18n( "Tablet" ), i18n( "Tablet" ), BarIcon( "tablet", K3Icon::SizeMedium ));
     m_tabletSettings = new TabletSettingsTab( vbox );
 
-    vbox = addVBoxPage ( i18n( "Grid" ), i18n( "Grid" ), BarIcon( "grid", KIcon::SizeMedium ));
+    vbox = addVBoxPage ( i18n( "Grid" ), i18n( "Grid" ), BarIcon( "grid", K3Icon::SizeMedium ));
     m_gridSettings = new GridSettingsTab( vbox );
 
 }

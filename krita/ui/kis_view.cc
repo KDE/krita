@@ -1684,7 +1684,7 @@ void KisView::saveLayerAsImage()
 
     if (!fd.exec()) return;
 
-    KURL url = fd.selectedURL();
+    KUrl url = fd.selectedURL();
     QString mimefilter = fd.currentMimeFilter();
 
     if (url.isEmpty())
@@ -1712,7 +1712,7 @@ void KisView::saveLayerAsImage()
 
 
 
-Q_INT32 KisView::importImage(const KURL& urlArg)
+Q_INT32 KisView::importImage(const KUrl& urlArg)
 {
     KisImageSP currentImage = currentImg();
 
@@ -1720,7 +1720,7 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
         return 0;
     }
 
-    KURL::List urls;
+    KUrl::List urls;
     Q_INT32 rc = 0;
 
     if (urlArg.isEmpty()) {
@@ -1733,8 +1733,8 @@ Q_INT32 KisView::importImage(const KURL& urlArg)
     if (urls.empty())
         return 0;
 
-    for (KURL::List::iterator it = urls.begin(); it != urls.end(); ++it) {
-        KURL url = *it;
+    for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
+        KUrl url = *it;
         KisDoc d;
         d.import(url);
         KisImageSP importedImage = d.currentImage();
@@ -2561,7 +2561,7 @@ void KisView::canvasGotDragEnterEvent(QDragEnterEvent *event)
 
 void KisView::canvasGotDropEvent(QDropEvent *event)
 {
-    KURL::List urls;
+    KUrl::List urls;
 
     if (KURLDrag::decode(event, urls))
     {
@@ -2593,8 +2593,8 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
             int actionId = popup.exec(QCursor::pos());
 
             if (actionId >= 0 && actionId != cancelId) {
-                for (KURL::List::ConstIterator it = urls.begin (); it != urls.end (); ++it) {
-                    KURL url = *it;
+                for (KUrl::List::ConstIterator it = urls.begin (); it != urls.end (); ++it) {
+                    KUrl url = *it;
 
                     switch (actionId) {
                     case addLayerId:

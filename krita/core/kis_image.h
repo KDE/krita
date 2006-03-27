@@ -413,7 +413,7 @@ private:
 
 private:
 
-    KURL m_uri;
+    KUrl m_uri;
     QString m_name;
     QString m_description;
 

@@ -1,0 +1,38 @@
+kde4_header()
+
+message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TESTSDIR)")
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+
+########### install files ###############
+
+install_files( /include FILES  kis_tileddatamanager.h )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#if include_kunittest_tests
+#TESTSDIR = tests
+#endif
+#
+#SUBDIRS = . $(TESTSDIR)
+#
+#INCLUDES  = -I$(srcdir)/../ \
+#	-I$(srcdir)/../../sdk \
+#    $(KOFFICE_INCLUDES) \
+#	-I$(interfacedir) \
+#	$(all_includes)
+#
+#noinst_LTLIBRARIES = libkritatile.la
+#
+#libkritatile_la_SOURCES = kis_tiledvlineiterator.cc kis_tiledhlineiterator.cc kis_tileddatamanager.cc kis_tile.cc kis_tilediterator.cc kis_tiledrectiterator.cc kis_memento.cc kis_tilemanager.cc 
+#libkritatile_la_METASOURCES = AUTO
+#
+#include_HEADERS = \
+#    kis_tileddatamanager.h

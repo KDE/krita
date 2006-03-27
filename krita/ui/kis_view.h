@@ -383,7 +383,7 @@ private:
      * @param url the url to the image file
      * @return the number of layers added
      */
-    Q_INT32 importImage(const KURL& url = KURL());
+    Q_INT32 importImage(const KUrl& url = KUrl());
     KisFilterManager * filterManager() { return m_filterManager; }
     void setCurrentImage(KisImageSP image);
 

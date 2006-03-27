@@ -1,0 +1,51 @@
+kde4_header()
+
+add_subdirectory( performancetest ) 
+add_subdirectory( colorrange ) 
+add_subdirectory( colorspaceconversion ) 
+add_subdirectory( dropshadow ) 
+add_subdirectory( filtersgallery ) 
+add_subdirectory( histogram ) 
+add_subdirectory( histogram_docker ) 
+add_subdirectory( imagesize ) 
+add_subdirectory( modify_selection ) 
+add_subdirectory( rotateimage ) 
+add_subdirectory( screenshot ) 
+add_subdirectory( separate_channels ) 
+add_subdirectory( shearimage ) 
+
+message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SCRIPTINGDIR)")
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### install files ###############
+
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#if compile_kross
+#SCRIPTINGDIR = scripting
+#endif
+#
+#SUBDIRS = \
+#    performancetest \
+#    colorrange \
+#    colorspaceconversion \
+#    dropshadow \
+#    filtersgallery \
+#    histogram \
+#    histogram_docker \
+#    imagesize \
+#    modify_selection \
+#    rotateimage \
+#    screenshot \
+#    separate_channels \
+#    shearimage \
+#    $(SCRIPTINGDIR)
+#
+## variations
+## history_docker

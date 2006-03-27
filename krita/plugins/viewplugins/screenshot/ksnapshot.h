@@ -86,7 +86,7 @@ public:
     enum CaptureMode { FullScreen=0, WindowUnderCursor=1, Region=2 };
 
     bool save( const QString &filename );
-    bool save( const KURL& url );
+    bool save( const KUrl& url );
 
     QString url() const { return filename.url(); }
 
@@ -124,7 +124,7 @@ private:
     QPixmap snapshot;
     QTimer grabTimer;
     QWidget* grabber;
-    KURL filename;
+    KUrl filename;
     KSnapshotWidget *mainWidget;
     RegionGrabber *rgnGrab;
     bool modified;

@@ -33,6 +33,7 @@
 #include <QKeyEvent>
 
 #include <kglobalsettings.h>
+#include <QX11Info>
 
 SizeTip::SizeTip( QWidget *parent, const char *name )
     : QLabel( parent, name, Qt::WStyle_Customize | Qt::WX11BypassWM |
@@ -93,7 +94,7 @@ RegionGrabber::~RegionGrabber()
 
 void RegionGrabber::initGrabber()
 {
-  pixmap = QPixmap::grabWindow( qt_xrootwin() );
+  pixmap = QPixmap::grabWindow( QX11Info::appRootWindow() );
   setPaletteBackgroundPixmap( pixmap );
 
   showFullScreen();

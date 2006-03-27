@@ -38,6 +38,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <fixx11h.h>
+#include <QX11Info>
 
 KisProfile::KisProfile(QByteArray rawData)
     : m_rawData(rawData),
@@ -176,9 +177,9 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
     unsigned long bytes_after;
     quint8 * str;
 
-    static Atom icc_atom = XInternAtom( qt_xdisplay(), "_ICC_PROFILE", False );
+    static Atom icc_atom = XInternAtom( QX11Info::display(), "_ICC_PROFILE", False );
 
-    if  ( XGetWindowProperty ( qt_xdisplay(),
+    if  ( XGetWindowProperty ( QX11Info::display(),
                     qt_xrootwin( screen ),
                     icc_atom,
                     0,

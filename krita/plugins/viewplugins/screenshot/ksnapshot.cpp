@@ -62,6 +62,7 @@
 #endif
 
 #include <kglobal.h>
+#include <QX11Info>
 
 KSnapshot::KSnapshot(QWidget *parent, const char *name)
     : super(parent, name, false, QString::null, Ok|Cancel)
@@ -74,7 +75,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
 #ifdef HAVE_X11_EXTENSIONS_SHAPE_H
     int tmp1, tmp2;
     //Check whether the extension is available
-    haveXShape = XShapeQueryExtension( qt_xdisplay(), &tmp1, &tmp2 );
+    haveXShape = XShapeQueryExtension( QX11Info::display(), &tmp1, &tmp2 );
 #endif
 
     KVBox *vbox = makeVBoxMainWidget();
@@ -89,7 +90,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     grabber->show();
     grabber->grabMouse( waitCursor );
     
-    snapshot = QPixmap::grabWindow( qt_xrootwin() );
+    snapshot = QPixmap::grabWindow( QX11Info::appRootWindow() );
     updatePreview();
     grabber->releaseMouse();
     grabber->hide();
@@ -309,12 +310,12 @@ Window findRealWindow( Window w, int depth = 0 )
 {
     if( depth > 5 )
         return None;
-    static Atom wm_state = XInternAtom( qt_xdisplay(), "WM_STATE", False );
+    static Atom wm_state = XInternAtom( QX11Info::display(), "WM_STATE", False );
     Atom type;
     int format;
     unsigned long nitems, after;
     unsigned char* prop;
-    if( XGetWindowProperty( qt_xdisplay(), w, wm_state, 0, 0, False, AnyPropertyType,
+    if( XGetWindowProperty( QX11Info::display(), w, wm_state, 0, 0, False, AnyPropertyType,
                 &type, &format, &nitems, &after, &prop ) == Success ) {
         if( prop != NULL )
             XFree( prop );
@@ -325,7 +326,7 @@ Window findRealWindow( Window w, int depth = 0 )
     Window* children;
     unsigned int nchildren;
     Window ret = None;
-    if( XQueryTree( qt_xdisplay(), w, &root, &parent, &children, &nchildren ) != 0 ) {
+    if( XQueryTree( QX11Info::display(), w, &root, &parent, &children, &nchildren ) != 0 ) {
         for( unsigned int i = 0;
              i < nchildren && ret == None;
              ++i )
@@ -341,17 +342,17 @@ void KSnapshot::performGrab()
     grabber->releaseMouse();
     grabber->hide();
     grabTimer.stop();
-    XGrabServer( qt_xdisplay());
+    XGrabServer( QX11Info::display());
     if ( mainWidget->mode() == WindowUnderCursor ) {
         Window root;
         Window child;
         uint mask;
         int rootX, rootY, winX, winY;
-        XQueryPointer( qt_xdisplay(), qt_xrootwin(), &root, &child,
+        XQueryPointer( QX11Info::display(), QX11Info::appRootWindow(), &root, &child,
                    &rootX, &rootY, &winX, &winY,
                    &mask);
         if( child == None )
-            child = qt_xrootwin();
+            child = QX11Info::appRootWindow();
         if( !mainWidget->includeDecorations()) {
             Window real_child = findRealWindow( child );
             if( real_child != None ) // test just in case
@@ -361,7 +362,7 @@ void KSnapshot::performGrab()
         unsigned int w, h;
         unsigned int border;
         unsigned int depth;
-        XGetGeometry( qt_xdisplay(), child, &root, &x, &y,
+        XGetGeometry( QX11Info::display(), child, &root, &x, &y,
                   &w, &h, &border, &depth );
         w += 2 * border;
         h += 2 * border;
@@ -369,20 +370,20 @@ void KSnapshot::performGrab()
         Window parent;
         Window* children;
         unsigned int nchildren;
-        if( XQueryTree( qt_xdisplay(), child, &root, &parent,
+        if( XQueryTree( QX11Info::display(), child, &root, &parent,
                 &children, &nchildren ) != 0 ) {
             if( children != NULL )
                 XFree( children );
             int newx, newy;
             Window dummy;
-            if( XTranslateCoordinates( qt_xdisplay(), parent, qt_xrootwin(),
+            if( XTranslateCoordinates( QX11Info::display(), parent, QX11Info::appRootWindow(),
                            x, y, &newx, &newy, &dummy )) {
                 x = newx;
                 y = newy;
             }
         }
 
-        snapshot = QPixmap::grabWindow( qt_xrootwin(), x, y, w, h );
+        snapshot = QPixmap::grabWindow( QX11Info::appRootWindow(), x, y, w, h );
 
 #ifdef HAVE_X11_EXTENSIONS_SHAPE_H
         //No XShape - no work.
@@ -390,7 +391,7 @@ void KSnapshot::performGrab()
             QBitmap mask(w, h);
             //As the first step, get the mask from XShape.
             int count, order;
-            XRectangle* rects = XShapeGetRectangles( qt_xdisplay(), child,
+            XRectangle* rects = XShapeGetRectangles( QX11Info::display(), child,
                                  ShapeBounding, &count, &order);
             //The ShapeBounding region is the outermost shape of the window;
             //ShapeBounding - ShapeClipping is defined to be the border.
@@ -432,9 +433,9 @@ void KSnapshot::performGrab()
 #endif
     }
     else {
-        snapshot = QPixmap::grabWindow( qt_xrootwin() );
+        snapshot = QPixmap::grabWindow( QX11Info::appRootWindow() );
     }
-    XUngrabServer( qt_xdisplay());
+    XUngrabServer( QX11Info::display());
     updatePreview();
     QApplication::restoreOverrideCursor();
     modified = true;

@@ -302,7 +302,7 @@
                                 <number>20</number>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>Opacity of the background color.</string>
+                                <string>Opacity of the background color</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Opacity of the background color.</string>

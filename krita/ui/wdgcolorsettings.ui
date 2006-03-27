@@ -86,7 +86,7 @@
                                 <cstring>cmbMonitorProfile</cstring>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>The icm profile for your calibrated monitor.</string>
+                                <string>The icm profile for your calibrated monitor</string>
                             </property>
                         </widget>
                         <widget class="SqueezedComboBox">
@@ -123,7 +123,7 @@
                                 <cstring>cmbMonitorProfile</cstring>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>The icm profile for your calibrated monitor.</string>
+                                <string>The icm profile for your calibrated monitor</string>
                             </property>
                         </widget>
                         <widget class="KComboBox">

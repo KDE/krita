@@ -98,7 +98,7 @@ DCOPRef KoDocumentIface::action( const Q3CString &name )
     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
 }
 
-QCStringList KoDocumentIface::actions()
+DCOPCStringList KoDocumentIface::actions()
 {
     QCStringList res;
     Q3ValueList<KAction *> lst = m_actionProxy->actions();
@@ -556,7 +556,7 @@ void KoDocumentIface::setDocumentInfoAbstract(const QString &text)
        aboutPage->setAbstract(text);
 }
 
-QCStringList KoDocumentIface::functionsDynamic()
+DCOPCStringList KoDocumentIface::functionsDynamic()
 {
     return DCOPObject::functionsDynamic() + KDCOPPropertyProxy::functions( m_pDoc );
 }

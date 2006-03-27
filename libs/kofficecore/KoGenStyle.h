@@ -28,7 +28,7 @@ g/* This file is part of the KDE project
 #include <QString>
 #include <koffice_export.h>
 #include <KoGenStyles.h>
-class KoGenStyles;
+
 class KoXmlWriter;
 
 

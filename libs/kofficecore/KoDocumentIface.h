@@ -92,7 +92,7 @@ k_dcop:
     /**
      * @return list of actions
      */
-    QCStringList actions();
+    DCOPCStringList actions();
     /**
      * @return a map of (action name, DCOP reference)
      */
@@ -146,7 +146,7 @@ k_dcop:
     void setDocumentInfoAuthorPosition(const QString & text);
 
 public:
-    virtual QCStringList functionsDynamic();
+    virtual DCOPCStringList functionsDynamic();
     virtual bool processDynamic( const Q3CString &fun, const QByteArray &data,
                                  Q3CString& replyType, QByteArray &replyData );
 

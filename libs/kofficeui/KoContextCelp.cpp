@@ -45,6 +45,7 @@
 #include <kapplication.h>
 #include <qstring.h>
 #include <ktoolinvocation.h>
+#include <QAbstractEventDispatcher>
 
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
 		: QWidget( parent, name, Qt::WNoAutoErase )
@@ -376,7 +377,7 @@ void KoHelpWidget::timerEvent( QTimerEvent* )
 
 void KoHelpWidget::stopScrolling()
 {
-	killTimers();
+	QAbstractEventDispatcher::instance()->unregisterTimers(this);
 } // KoHelpWidget::stopScrolling
 
 KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )

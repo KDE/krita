@@ -41,7 +41,7 @@
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -64,7 +64,8 @@
 #include <QResizeEvent>
 #include <ktoolinvocation.h>
 #include <QSplitter>
-
+#include <kxmlguifactory.h>
+#include <ktoolbar.h>
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -150,7 +151,7 @@ public:
   KoView *m_activeView;
 
   QLabel * statusBarLabel;
-  KProgress *m_progress;
+  KProgressBar *m_progress;
 
   Q3PtrList<KAction> m_splitViewActionList;
   // This additional list is needed, because we don't plug
@@ -1104,7 +1105,7 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-    KFileDialog *dialog = new KFileDialog(":OpenDialog", QString::null, this, "file dialog", true);
+    KFileDialog *dialog = new KFileDialog(":OpenDialog", QString::null, this);
     if (!isImporting())
         dialog->setCaption( i18n("Open Document") );
     else
@@ -1441,13 +1442,13 @@ void KoMainWindow::slotProgress(int value) {
             d->m_progress=0L;
         }
         statusBar()->setMaximumHeight(statusBar()->height());
-        d->m_progress=new KProgress(statusBar());
+        d->m_progress=new KProgressBar(statusBar());
         //d->m_progress->setMaximumHeight(statusBar()->height());
         statusBar()->addWidget( d->m_progress, 0, true );
         d->m_progress->show();
         d->m_firstTime=false;
     }
-    d->m_progress->setProgress(value);
+    d->m_progress->setValue(value);
     kapp->processEvents();
 }
 

@@ -152,7 +152,7 @@ public:
    * @return the size of the currently opened file, -1 on error.
    * Can be used as an argument for the read methods, for instance
    */
-  qlonglong size() const;
+  qint64 size() const;
 
   /**
    * @return true if an error occurred
@@ -238,8 +238,8 @@ public:
 
   //@{
   /// See QIODevice
-  bool at( qlonglong pos ); // TODO: rename to seek()
-  qlonglong at() const; // TODO: rename to pos()
+  bool seek( qint64 pos );
+  qint64 pos() const;
   bool atEnd() const;
   //@}
 
@@ -356,7 +356,7 @@ protected:
   /// Current filename (between an open() and a close())
   QString m_sName;
   /// Current size of the file named m_sName
-  qlonglong m_iSize;
+  qint64 m_iSize;
 
   /// The stream for the current read or write operation
   QIODevice * m_stream;

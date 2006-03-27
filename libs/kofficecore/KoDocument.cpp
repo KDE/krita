@@ -63,7 +63,7 @@
 #include <qxml.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <QPixmap>
 #include <QChildEvent>
 #include <Q3PtrList>
@@ -141,8 +141,8 @@ public:
 
     KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
 
-    Q3CString mimeType; // The actual mimetype of the document
-    Q3CString outputMimeType; // The mimetype to use when saving
+    QByteArray mimeType; // The actual mimetype of the document
+    QByteArray outputMimeType; // The mimetype to use when saving
     bool m_confirmNonNativeSave [2]; // used to pop up a dialog when saving for the
                                      // first time if the file is in a foreign format
                                      // (Save/Save As, Export)
@@ -348,7 +348,7 @@ bool KoDocument::exp0rt( const KUrl & _url )
     QString oldFile = m_file;
 
     bool wasModified = isModified ();
-    Q3CString oldMimeType = mimeType ();
+    QByteArray oldMimeType = mimeType ();
 
 
     // save...
@@ -388,7 +388,7 @@ bool KoDocument::saveFile()
     const bool wasModified = isModified ();
 
     // The output format is set by koMainWindow, and by openFile
-    Q3CString outputMimeType = d->outputMimeType;
+    QByteArray outputMimeType = d->outputMimeType;
     //Q_ASSERT( !outputMimeType.isEmpty() ); // happens when using the DCOP method saveAs
     if ( outputMimeType.isEmpty() )
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
@@ -474,23 +474,23 @@ bool KoDocument::saveFile()
     return ret;
 }
 
-Q3CString KoDocument::mimeType() const
+QByteArray KoDocument::mimeType() const
 {
     return d->mimeType;
 }
 
-void KoDocument::setMimeType( const Q3CString & mimeType )
+void KoDocument::setMimeType( const QByteArray & mimeType )
 {
     d->mimeType = mimeType;
 }
 
-void KoDocument::setOutputMimeType( const Q3CString & mimeType, int specialOutputFlag )
+void KoDocument::setOutputMimeType( const QByteArray & mimeType, int specialOutputFlag )
 {
     d->outputMimeType = mimeType;
     d->m_specialOutputFlag = specialOutputFlag;
 }
 
-Q3CString KoDocument::outputMimeType() const
+QByteArray KoDocument::outputMimeType() const
 {
     return d->outputMimeType;
 }
@@ -984,8 +984,8 @@ bool KoDocument::saveNativeFormat( const QString & file )
     kDebug(30003) << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType() << endl;
     // OLD: bool oasis = d->m_specialOutputFlag == SaveAsOASIS;
     // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
-    Q3CString mimeType = d->outputMimeType;
-    Q3CString nativeOasisMime = nativeOasisMimeType();
+    QByteArray mimeType = d->outputMimeType;
+    QByteArray nativeOasisMime = nativeOasisMimeType();
     bool oasis = !mimeType.isEmpty() && ( mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" );
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
@@ -1094,8 +1094,8 @@ bool KoDocument::saveNativeFormat( const QString & file )
             QDomDocument doc = d->m_docInfo->save();
             KoStoreDevice dev( store );
 
-            QString s = doc.toString(); // this is already Utf8!
-            (void)dev.write( s.data(), s.size()-1 );
+            QByteArray s = doc.toByteArray(); // this is already Utf8!
+            (void)dev.write( s.data(), s.size() );
             (void)store->close();
         }
 
@@ -1125,13 +1125,11 @@ bool KoDocument::saveToStream( QIODevice * dev )
 {
     QDomDocument doc = saveXML();
     // Save to buffer
-    Q3CString s = doc.toCString(); // utf8 already
-    // We use QCString::size()-1 here, not the official QCString::length
-    // It works here, as we are not modifying QCString as QByteArray
-    int nwritten = dev->write( s.data(), s.size()-1 );
-    if ( nwritten != (int)s.size()-1 )
-        kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
-    return nwritten == (int)s.size()-1;
+    QByteArray s = doc.toByteArray(); // utf8 already
+    int nwritten = dev->write( s.data(), s.size() );
+    if ( nwritten != (int)s.size() )
+        kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size() << endl;
+    return nwritten == (int)s.size();
 }
 
 // Called for embedded documents
@@ -1410,7 +1408,7 @@ bool KoDocument::openFile()
     QApplication::setOverrideCursor( Qt::WaitCursor );
 
     d->m_specialOutputFlag = 0;
-    Q3CString _native_format = nativeFormatMimeType();
+    QByteArray _native_format = nativeFormatMimeType();
 
     KUrl u;
     u.setPath( m_file );
@@ -2170,19 +2168,19 @@ KService::Ptr KoDocument::nativeService()
     return m_nativeService;
 }
 
-Q3CString KoDocument::nativeFormatMimeType() const
+QByteArray KoDocument::nativeFormatMimeType() const
 {
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
-        return Q3CString();
+        return QByteArray();
     return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
 }
 
-Q3CString KoDocument::nativeOasisMimeType() const
+QByteArray KoDocument::nativeOasisMimeType() const
 {
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
-        return Q3CString();
+        return QByteArray();
     return service->property( "X-KDE-NativeOasisMimeType" ).toString().latin1();
 }
 
@@ -2212,11 +2210,11 @@ KService::Ptr KoDocument::readNativeService( KInstance *instance )
     return service;
 }
 
-Q3CString KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
+QByteArray KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
 {
     KService::Ptr service = readNativeService( instance );
     if ( !service )
-        return Q3CString();
+        return QByteArray();
 
     if ( service->property( "X-KDE-NativeMimeType" ).toString().isEmpty() )
     {
@@ -2258,7 +2256,7 @@ void KoDocument::setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcess
 }
 
 
-bool KoDocument::isNativeFormat( const Q3CString& mimetype ) const
+bool KoDocument::isNativeFormat( const QByteArray& mimetype ) const
 {
     if ( mimetype == nativeFormatMimeType() )
         return true;
@@ -2317,7 +2315,7 @@ DCOPObject * KoDocument::dcopObject()
     return d->m_dcopObject;
 }
 
-Q3CString KoDocument::dcopObjectId() const
+QByteArray KoDocument::dcopObjectId() const
 {
     return const_cast<KoDocument *>(this)->dcopObject()->objId();
 }

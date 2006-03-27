@@ -35,7 +35,6 @@
 #include <koffice_export.h>
 
 class KKbdAccessExtensionsPrivate;
-class QWidgetList;
 class KMainWindow;
 
 /** KKbdAccessExtensions is an object that improves accessibility for motor impaired users

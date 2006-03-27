@@ -29,7 +29,7 @@
 #include <q3ptrlist.h>
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3ValueList>
 #include <Q3VBoxLayout>
 
@@ -128,7 +128,7 @@ KoFilterManager::KoFilterManager( KoDocument* document ) :
 }
 
 
-KoFilterManager::KoFilterManager( const QString& url, const Q3CString& mimetypeHint,
+KoFilterManager::KoFilterManager( const QString& url, const QByteArray& mimetypeHint,
                                   KoFilterChain* const parentChain ) :
     m_document( 0 ), m_parentChain( parentChain ), m_importUrl( url ), m_importUrlMimetypeHint( mimetypeHint ),
     m_graph( "" ), d( 0 )
@@ -166,7 +166,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
 		status = KoFilter::BadConversionGraph;
 		return QString::null;
 	    }
-            Q3CString nativeFormat = m_document->nativeFormatMimeType ();
+            QByteArray nativeFormat = m_document->nativeFormatMimeType ();
 
             QApplication::setOverrideCursor( Qt::ArrowCursor );
             KoFilterChooser chooser(0,
@@ -174,7 +174,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
                                     nativeFormat);
             if (chooser.exec ())
             {
-                Q3CString f = chooser.filterSelected ().latin1();
+                QByteArray f = chooser.filterSelected ().latin1();
 
                 if (f == nativeFormat)
                 {
@@ -203,7 +203,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     KoFilterChain::Ptr chain( 0 );
     // Are we owned by a KoDocument?
     if ( m_document ) {
-        Q3CString mimeType = m_document->nativeFormatMimeType();
+        QByteArray mimeType = m_document->nativeFormatMimeType();
         QStringList extraMimes = m_document->extraNativeMimeTypes();
         int i=0, n = extraMimes.count();
         chain = m_graph.chain( this, mimeType );
@@ -240,7 +240,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     return QString::null;
 }
 
-KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, Q3CString& mimeType )
+KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArray& mimeType )
 {
     bool userCancelled = false;
 
@@ -249,7 +249,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, Q3CStrin
     m_direction = Export; // vital information!
     m_exportUrl = url;
 
-    KoFilterChain::Ptr chain = 0;
+    KoFilterChain::Ptr chain;
     if ( m_document ) {
         // We have to pick the right native mimetype as source.
         QStringList nativeMimeTypes;
@@ -317,20 +317,20 @@ namespace  // in order not to mess with the global namespace ;)
     class Vertex
     {
     public:
-        Vertex( const Q3CString& mimeType ) : m_color( White ), m_mimeType( mimeType ) {}
+        Vertex( const QByteArray& mimeType ) : m_color( White ), m_mimeType( mimeType ) {}
 
         enum Color { White, Gray, Black };
         Color color() const { return m_color; }
         void setColor( Color color ) { m_color = color; }
 
-        Q3CString mimeType() const { return m_mimeType; }
+        QByteArray mimeType() const { return m_mimeType; }
 
         void addEdge( Vertex* vertex ) { if ( vertex ) m_edges.append( vertex ); }
         Q3PtrList<Vertex> edges() const { return m_edges; }
 
     private:
         Color m_color;
-        Q3CString m_mimeType;
+        QByteArray m_mimeType;
         Q3PtrList<Vertex> m_edges;
     };
 
@@ -408,7 +408,7 @@ namespace  // in order not to mess with the global namespace ;)
             QStringList::ConstIterator importIt = impList.begin();
             const QStringList::ConstIterator importEnd = impList.end();
             for ( ; importIt != importEnd; ++importIt ) {
-                const Q3CString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
+                const QByteArray key = ( *importIt ).toLatin1();  // latin1 is okay here (werner)
                 // already there?
                 if ( !vertices[ key ] )
                     vertices.insert( key, new Vertex( key ) );
@@ -421,7 +421,7 @@ namespace  // in order not to mess with the global namespace ;)
 
                 for ( ; exportIt != exportEnd; ++exportIt ) {
                     // First make sure the export vertex is in place
-                    const Q3CString key = ( *exportIt ).latin1();  // latin1 is okay here
+                    const QByteArray key = ( *exportIt ).toLatin1();  // latin1 is okay here
                     Vertex* exp = vertices[ key ];
                     if ( !exp ) {
                         exp = new Vertex( key );
@@ -449,7 +449,7 @@ namespace  // in order not to mess with the global namespace ;)
     // This method runs a BFS on the graph to determine the connected
     // nodes. Make sure that the graph is "cleared" (the colors of the
     // nodes are all white)
-    QStringList connected( const Q3AsciiDict<Vertex>& vertices, const Q3CString& mimetype )
+    QStringList connected( const Q3AsciiDict<Vertex>& vertices, const QByteArray& mimetype )
     {
         if ( mimetype.isEmpty() )
             return QStringList();
@@ -482,7 +482,7 @@ namespace  // in order not to mess with the global namespace ;)
 
 // The static method to figure out to which parts of the
 // graph this mimetype has a connection to.
-QStringList KoFilterManager::mimeFilter( const Q3CString& mimetype, Qt::Orientation direction, const QStringList& extraNativeMimeTypes )
+QStringList KoFilterManager::mimeFilter( const QByteArray& mimetype, Direction direction, const QStringList& extraNativeMimeTypes )
 {
     //kDebug(s_area) << "mimetype=" << mimetype << " extraNativeMimeTypes=" << extraNativeMimeTypes << endl;
     Q3AsciiDict<Vertex> vertices;
@@ -571,8 +571,7 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
         }
 
         // This code is "borrowed" from klibloader ;)
-        Q3CString symname;
-        symname.sprintf("check_%s", library->name().latin1() );
+        QByteArray symname = "check_" + library->name().toLatin1();
         void* sym = library->symbol( symname );
         if ( !sym )
         {

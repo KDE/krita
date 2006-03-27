@@ -32,6 +32,7 @@
 #include <kimageio.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
+#include <QPaintDevice>
 
 
 KoGlobal* KoGlobal::s_global = 0L;
@@ -50,7 +51,7 @@ KoGlobal::KoGlobal()
     // Install the libkoffice* translations
     KGlobal::locale()->insertCatalog("koffice");
 
-    
+
 
     // Tell KStandardDirs about the koffice prefix
     KGlobal::dirs()->addPrefix(PREFIX);

@@ -351,17 +351,17 @@ Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
   return nwritten;
 }
 
-qlonglong KoStore::size() const
+qint64 KoStore::size() const
 {
   if ( !m_bIsOpen )
   {
     kWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
-    return static_cast<qlonglong>(-1);
+    return static_cast<qint64>(-1);
   }
   if ( m_mode != Read )
   {
     kWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
-    return static_cast<qlonglong>(-1);
+    return static_cast<qint64>(-1);
   }
   return m_iSize;
 }
@@ -477,7 +477,7 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
     file.write( data.data(), block );
   }
 
-  if( size() != static_cast<qlonglong>(-1) )
+  if( size() != static_cast<qint64>(-1) )
   	Q_ASSERT( total == size() );
 
   file.close();
@@ -521,12 +521,12 @@ QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &d
 }
 
 
-bool KoStore::at( qlonglong pos )
+bool KoStore::seek( qint64 pos )
 {
   return m_stream->seek( pos );
 }
 
-qlonglong KoStore::at() const
+qint64 KoStore::pos() const
 {
   return m_stream->pos();
 }

@@ -1,8 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3CString>
-#include <Q3PtrList>
-#include <Q3ValueList>
 // -*- c-basic-offset: 4 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
@@ -28,8 +23,6 @@
 #define __ko_document_h__
 
 class KoTextDocument;
-namespace std { }
-using namespace std;
 #include <qmatrix.h>
 
 #include <kparts/part.h>
@@ -39,6 +32,12 @@ using namespace std;
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <koffice_export.h>
+
+//Added by qt3to4:
+#include <QPixmap>
+#include <QByteArray>
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 class QDomElement;
 class QDomDocument;
@@ -66,7 +65,7 @@ class KoOpenPane;
 class KOFFICECORE_EXPORT KoDocument : public KParts::ReadWritePart
 {
     Q_OBJECT
-    Q_PROPERTY( Q3CString dcopObjectId READ dcopObjectId)
+    Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
     Q_PROPERTY( bool backupFile READ backupFile WRITE setBackupFile )
 
 public:
@@ -192,7 +191,7 @@ public:
      * @see KService
      * @see KDesktopFile
      */
-    static Q3CString readNativeFormatMimeType( KInstance *instance = 0 );
+    static QByteArray readNativeFormatMimeType( KInstance *instance = 0 );
 
     /**
      * Used by KoMainWindow, when no document exists yet.
@@ -225,16 +224,16 @@ public:
      * This comes from the X-KDE-NativeMimeType key in the .desktop file
      * You do NOT have to reimplement this (it is only virtual for kounavail).
      */
-    virtual Q3CString nativeFormatMimeType() const;
+    virtual QByteArray nativeFormatMimeType() const;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
      * This comes from the X-KDE-NativeOasisMimeType key in the .desktop file
      */
-    Q3CString nativeOasisMimeType() const;
+    QByteArray nativeOasisMimeType() const;
 
     /// Checks whether a given mimetype can be handled natively.
-    bool isNativeFormat( const Q3CString& mimetype ) const;
+    bool isNativeFormat( const QByteArray& mimetype ) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
@@ -256,7 +255,7 @@ public:
     /**
      * Returns the actual mimetype of the document
      */
-    Q3CString mimeType() const;
+    QByteArray mimeType() const;
 
     /**
      * @brief Sets the mime type for the document.
@@ -264,7 +263,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType( const Q3CString & mimeType );
+    void setMimeType( const QByteArray & mimeType );
 
     /**
      * @brief Set the format in which the document should be saved.
@@ -275,8 +274,8 @@ public:
      * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType( const Q3CString & mimeType, int specialOutputFlag = 0 );
-    Q3CString outputMimeType() const;
+    void setOutputMimeType( const QByteArray & mimeType, int specialOutputFlag = 0 );
+    QByteArray outputMimeType() const;
     int specialOutputFlag() const;
 
     /**
@@ -296,7 +295,7 @@ public:
     void setConfirmNonNativeSave( const bool exporting, const bool on );
 
     virtual bool wantExportConfirmation() const;
-    
+
     /**
      * Sets the error message to be shown to the user (use i18n()!)
      * when loading or saving fails.
@@ -723,7 +722,7 @@ public:
     /**
      * @return the ID of the DCOP interface for this document.
      **/
-    Q3CString dcopObjectId() const;
+    QByteArray dcopObjectId() const;
 
     /**
      * Signal the progress of operations such as loading or saving.

@@ -128,8 +128,8 @@ private:
     // The parent filter manager may be 0.
     KoFilterChain( const KoFilterManager* manager );
 
-    void appendChainLink( KoFilterEntry::Ptr filterEntry, const Q3CString& from, const Q3CString& to );
-    void prependChainLink( KoFilterEntry::Ptr filterEntry, const Q3CString& from, const Q3CString& to );
+    void appendChainLink( KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to );
+    void prependChainLink( KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to );
 
     // ### API for KoEmbeddingFilter
     // This is needed as the embedding filter might have to influence
@@ -170,7 +170,7 @@ private:
     KoStoreDevice* storageCleanupHelper( KoStore** storage );
 
     KoDocument* createDocument( const QString& file );
-    KoDocument* createDocument( const Q3CString& mimeType );
+    KoDocument* createDocument( const QByteArray& mimeType );
 
     /**
      * A small private helper class with represents one single filter
@@ -182,12 +182,12 @@ private:
 
     public:
         ChainLink( KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
-                   const Q3CString& from, const Q3CString& to );
+                   const QByteArray& from, const QByteArray& to );
 
         KoFilter::ConversionStatus invokeFilter( const ChainLink* const parentChainLink );
 
-        Q3CString from() const { return m_from; }
-        Q3CString to() const { return m_to; }
+        QByteArray from() const { return m_from; }
+        QByteArray to() const { return m_to; }
 
         // debugging
         void dump() const;
@@ -206,7 +206,7 @@ private:
 
         KoFilterChain* m_chain;
         KoFilterEntry::Ptr m_filterEntry;
-        Q3CString m_from, m_to;
+        QByteArray m_from, m_to;
 
         // This hack is only needed due to crappy Microsoft design and
         // circular dependencies in their embedded files :}
@@ -291,7 +291,7 @@ namespace KOffice
         void relax( const Vertex* predecessor, PriorityQueue<Vertex>& queue );
 
         // debugging
-        void dump( const Q3CString& indent ) const;
+        void dump( const QByteArray& indent ) const;
 
     private:
         Edge( const Edge& rhs );
@@ -313,10 +313,10 @@ namespace KOffice
     {
 
     public:
-        Vertex( const Q3CString& mimeType );
+        Vertex( const QByteArray& mimeType );
         ~Vertex() {}
 
-        Q3CString mimeType() const { return m_mimeType; }
+        QByteArray mimeType() const { return m_mimeType; }
 
         // Current "weight" of the vertex - will be "relaxed" when
         // running the shortest path algorithm. Returns true if it
@@ -347,7 +347,7 @@ namespace KOffice
         void relaxVertices( PriorityQueue<Vertex>& queue );
 
         // debugging
-        void dump( const Q3CString& indent ) const;
+        void dump( const QByteArray& indent ) const;
 
     private:
         Vertex( const Vertex& rhs );
@@ -355,7 +355,7 @@ namespace KOffice
 
         Q3PtrList<Edge> m_edges;
         const Vertex* m_predecessor;
-        Q3CString m_mimeType;
+        QByteArray m_mimeType;
         unsigned int m_weight; // "key" inside the queue
         int m_index; // position inside the queue, needed for a fast keyDecreased()
 
@@ -373,20 +373,20 @@ namespace KOffice
     {
 
     public:
-        Graph( const Q3CString& from );
+        Graph( const QByteArray& from );
         ~Graph() {}
 
         bool isValid() const { return m_graphValid; }
 
-        Q3CString sourceMimeType() const { return m_from; }
-        void setSourceMimeType( const Q3CString& from );
+        QByteArray sourceMimeType() const { return m_from; }
+        void setSourceMimeType( const QByteArray& from );
 
         // Creates a chain from "from" to the "to" mimetype
         // If the "to" mimetype isEmpty() then we try to find the
         // closest KOffice mimetype and use that as destination.
         // After such a search "to" will contain the dest. mimetype (return value)
         // if the search was successful. Might return 0!
-        KoFilterChain::Ptr chain( const KoFilterManager* manager, Q3CString& to ) const;
+        KoFilterChain::Ptr chain( const KoFilterManager* manager, QByteArray& to ) const;
 
         // debugging
         void dump() const;
@@ -397,10 +397,10 @@ namespace KOffice
 
         void buildGraph();
         void shortestPaths();
-        Q3CString findKOfficePart() const;
+        QByteArray findKOfficePart() const;
 
         Q3AsciiDict<Vertex> m_vertices;
-        Q3CString m_from;
+        QByteArray m_from;
         bool m_graphValid;
 
         class Private;

@@ -25,7 +25,7 @@
 #include <qobject.h>
 #include <qmap.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <KoFilterChain.h>
 #include <koffice_export.h>
 class KoDocument;
@@ -70,7 +70,7 @@ public:
      * @param parentChain The parent filter chain of this filter manager. Used
      *        to allow embedding for filters. Most likely you do not have to care.
      */
-    KoFilterManager( const QString& url, const Q3CString& mimetypeHint = "",
+    KoFilterManager( const QString& url, const QByteArray& mimetypeHint = "",
                      KoFilterChain* const parentChain = 0 );
 
     virtual ~KoFilterManager();
@@ -90,7 +90,7 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KoFilter::ConversionStatus exp0rt( const QString& url, Q3CString& mimeType );
+    KoFilter::ConversionStatus exp0rt( const QString& url, QByteArray& mimeType );
 
 
 
@@ -102,7 +102,7 @@ public:
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
      */
-    KOFFICECORE_EXPORT static QStringList mimeFilter( const Q3CString& mimetype, Qt::Orientation direction,
+    KOFFICECORE_EXPORT static QStringList mimeFilter( const QByteArray& mimetype, Direction direction,
                                                       const QStringList& extraNativeMimeTypes = QStringList() );
 
     /**
@@ -166,7 +166,7 @@ private:
     KoDocument* m_document;
     KoFilterChain* const m_parentChain;
     QString m_importUrl, m_exportUrl;
-    Q3CString m_importUrlMimetypeHint;  ///< suggested mimetype
+    QByteArray m_importUrlMimetypeHint;  ///< suggested mimetype
     KOffice::Graph m_graph;
     Direction m_direction;
 

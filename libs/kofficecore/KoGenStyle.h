@@ -19,15 +19,12 @@
 #ifndef KOGENSTYLE_H
 #define KOGENSTYLE_H
 
-#include <q3dict.h>
 #include <qmap.h>
 #include <q3valuevector.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <Q3CString>
 #include <QString>
 #include <koffice_export.h>
-#include <KoGenStyles.h>
+class KoGenStyles;
 
 class KoXmlWriter;
 

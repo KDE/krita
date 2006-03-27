@@ -108,7 +108,7 @@ bool KoApplication::start()
     int argsCount = args->count();
 
     KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
-    Q3CString dpiValues = koargs->getOption( "dpi" );
+    QByteArray dpiValues = koargs->getOption( "dpi" );
     if ( !dpiValues.isEmpty() ) {
         int sep = dpiValues.find( QRegExp( "[x, ]" ) );
         int dpiX;

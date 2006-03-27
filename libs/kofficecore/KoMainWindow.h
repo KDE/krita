@@ -369,7 +369,7 @@ private:
      *
      * @return true if the document should be saved
      */
-    bool exportConfirmation( const Q3CString &outputFormat );
+    bool exportConfirmation( const QByteArray &outputFormat );
 
     void saveWindowSettings();
 

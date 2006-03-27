@@ -41,7 +41,7 @@
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
-#include <kprogressbar.h>
+#include <kprogress.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -62,6 +62,8 @@
 #include <QEvent>
 #include <QLabel>
 #include <QResizeEvent>
+#include <ktoolinvocation.h>
+#include <QSplitter>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -69,8 +71,8 @@
 class KoPartManager : public KParts::PartManager
 {
 public:
-  KoPartManager( QWidget * parent, const char * name = 0L )
-    : KParts::PartManager( parent, name )
+  KoPartManager( QWidget * parent )
+    : KParts::PartManager( parent )
   {
       setSelectionPolicy( KParts::PartManager::TriState );
       setAllowNestedParts( true );
@@ -82,7 +84,7 @@ public:
   }
   virtual bool eventFilter( QObject *obj, QEvent *ev )
   {
-    if ( !obj->isWidgetType() || ::qt_cast<KoFrame *>( obj ) )
+    if ( !obj->isWidgetType() || ::qobject_cast<KoFrame *>( obj ) )
       return false;
     return KParts::PartManager::eventFilter( obj, ev );
   }
@@ -287,7 +289,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_orientation->setItems(items);
     d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
     d->m_splitViewActionList.append(d->m_orientation);
-    d->m_splitViewActionList.append(new KActionSeparator(this));
+    d->m_splitViewActionList.append(new KActionSeparator(actionCollection()));
 
     // Load list of recent files
     KConfig * config = instance ? instance->config() : KGlobal::config();
@@ -472,14 +474,11 @@ void KoMainWindow::saveRecentFiles()
     kDebug(30003) << this << " Saving recent files list into config. instance()=" << instance() << endl;
     m_recent->saveEntries( config );
     config->sync();
-    if (KMainWindow::memberList)
-    {
-        // Tell all windows to reload their list, after saving
-        // Doesn't work multi-process, but it's a start
-        KMainWindow *window = KMainWindow::memberList->first();
-        for (; window; window = KMainWindow::memberList->next())
-            static_cast<KoMainWindow *>(window)->reloadRecentFileList();
-    }
+
+    // Tell all windows to reload their list, after saving
+    // Doesn't work multi-process, but it's a start
+    foreach ( KMainWindow* window, KMainWindow::memberList())
+        static_cast<KoMainWindow *>(window)->reloadRecentFileList();
 }
 
 void KoMainWindow::reloadRecentFileList()
@@ -509,7 +508,7 @@ void KoMainWindow::updateCaption()
           if (page)
               caption = static_cast<KoDocumentInfoAbout *>(page)->title();
       }
-      const QString url = rootDocument()->url().prettyURL( 0, KUrl::StripFileProtocol );
+      const QString url = rootDocument()->url().pathOrURL();
       if ( !caption.isEmpty() && !url.isEmpty() )
           caption = QString( "%1 - %2" ).arg( caption ).arg( url );
       else if ( caption.isEmpty() )
@@ -674,14 +673,14 @@ void KoMainWindow::slotSaveCompleted()
 }
 
 // returns true if we should save, false otherwise.
-bool KoMainWindow::exportConfirmation( const Q3CString &outputFormat )
+bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
 {
     if (!rootDocument()->wantExportConfirmation()) return true;
     KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
 
     const bool neverHeardOfIt = ( mime->name() == KMimeType::defaultMimeType() );
     QString comment = neverHeardOfIt ?
-                      i18n( "%1 (unknown file type)" ).arg( outputFormat )
+                      i18n( "%1 (unknown file type)" ).arg( QString::fromLatin1(outputFormat) )
                       : mime->comment();
 
     // Warn the user
@@ -809,7 +808,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
                                       pDoc->supportedSpecialFormats() );
 
         KUrl newURL;
-        Q3CString outputFormat = _native_format;
+        QByteArray outputFormat = _native_format;
         int specialOutputFlag = 0;
         bool bOk;
         do {
@@ -1690,5 +1689,4 @@ void KoMainWindow::setDocToOpen( KoDocument *doc )
   d->m_docToOpen = doc;
 }
 
-#include <KoMainWindow.moc>
-#include <ktoolinvocation.h>
+#include "KoMainWindow.moc"

@@ -29,7 +29,8 @@ int main(int argc, char **argv)
   KSnapshot *toplevel= new KSnapshot();
   Q_CHECK_PTR(toplevel);
   app.dcopClient()->setDefaultObject( toplevel->objId() );
-  toplevel->setCaption( app.makeStdCaption("") );
+  KInstance::CaptionFlags flags = KInstance::HIGCompliantCaption;
+  toplevel->setCaption( KInstance::makeStdCaption("", flags) );
   toplevel->setIcon(SmallIcon("tool_screenshot"));
   app.setMainWidget(toplevel);
   toplevel->show();

@@ -280,7 +280,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
         //----- Read Metafile Records
         last = NULL;
         rdFunc = -1;
-        while ( !st.eof() && (rdFunc != 0) )
+        while ( !st.atEnd() && (rdFunc != 0) )
         {
             st >> rdSize;
             st >> rdFunc;
@@ -297,7 +297,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
             cmd->parm = new WORD[ rdSize ];
             last = cmd;
 
-            for ( i=0; i<rdSize && !st.eof(); i++ )
+            for ( i=0; i<rdSize && !st.atEnd(); i++ )
                 st >> cmd->parm[ i ];
 
 

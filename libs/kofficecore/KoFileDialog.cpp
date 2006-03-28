@@ -77,8 +77,8 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
     }
 
     // Insert numSpecialEntries entries with native mimetypes, for the special entries.
-    QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
-    mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, numSpecialEntries, nativeFormat );
+    for ( int i=0; i<numSpecialEntries; ++i )
+      mimeFilter.insert( 1, nativeFormat );
 
     // Fill in filter combo
     // Note: if currentFormat doesn't exist in mimeFilter, filterWidget
@@ -104,9 +104,10 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
     }
     // [Mainly KWord] Tell MS Office users that they can save in RTF!
     int i = 0;
-    for (mimeFilterIt = mimeFilter.begin (); mimeFilterIt != mimeFilter.end (); ++mimeFilterIt, i++)
+    QStringList::ConstIterator end( mimeFilter.end() );
+    for (QStringList::ConstIterator it = mimeFilter.begin(); it != end; ++it, i++)
     {
-        KMimeType::Ptr mime = KMimeType::mimeType (*mimeFilterIt);
+        KMimeType::Ptr mime = KMimeType::mimeType (*it);
         QString compatString = mime->property ("X-KDE-CompatibleApplication").toString ();
         if (!compatString.isEmpty ())
             filterWidget->changeItem (i18n ("%1 (%2 Compatible)").arg (mime->comment ()).arg (compatString), i);

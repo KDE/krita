@@ -305,7 +305,6 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   int i = 0;
   QString value;
   KFileItemList fileList;
-  fileList.setAutoDelete(false);
 
   do {
     QString key = QString("File%1").arg(i);

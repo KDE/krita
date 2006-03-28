@@ -419,7 +419,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
   {
     d->m_docInfoFile = static_cast<const KArchiveFile *>( entry );
 
-    QBuffer buffer( d->m_docInfoFile->data() );
+    QBuffer buffer( &d->m_docInfoFile->data() );
     buffer.open( QIODevice::ReadOnly );
 
     QDomDocument doc;

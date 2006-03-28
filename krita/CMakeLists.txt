@@ -1,4 +1,5 @@
 kde4_header()
+project(krita)
 
 add_subdirectory( sdk )
 add_subdirectory( kritacolor )

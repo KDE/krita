@@ -68,7 +68,7 @@ void KisToolPolygon::update (KisCanvasSubject *subject)
 void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 {
     if (m_currentImage) {
-        if (event->button() == LeftButton && event->state() != ShiftButton) {
+        if (event->button() == LeftButton && event->state() != Qt::ShiftButton) {
 
             m_dragging = true;
 
@@ -82,7 +82,7 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
                 m_dragEnd = event->pos();
                 draw();
             }
-        } else if (event->button() == LeftButton && event->state() == ShiftButton) {
+        } else if (event->button() == LeftButton && event->state() == Qt::ShiftButton) {
             finish();
         }
     }

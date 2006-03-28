@@ -194,7 +194,7 @@ DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 		if(e->type() == QEvent::KeyPress)
 		{
 			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-			if((ev->key()==Qt::Key_Up || ev->key()==Qt::Key_Down) && ev->state()!=ControlButton)
+			if((ev->key()==Qt::Key_Up || ev->key()==Qt::Key_Down) && ev->state()!=Qt::ControlButton)
 			{
 				parentWidget()->eventFilter(o, e);
 				return true;

@@ -2499,7 +2499,7 @@ void KisView::canvasGotLeaveEvent (QEvent *e)
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 {
-    //if(event->state() == ControlButton )
+    //if(event->state() == Qt::ControlButton )
     //{
         if(event->delta() / 120 != 0)
         {

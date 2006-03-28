@@ -88,10 +88,10 @@ Q3ValueList<DCOPRef> KoApplicationIface::getViews()
 Q3ValueList<DCOPRef> KoApplicationIface::getWindows()
 {
     Q3ValueList<DCOPRef> lst;
-    Q3PtrList<KMainWindow> *mainWindows = KMainWindow::memberList;
-    if ( mainWindows )
+    QList<KMainWindow*> mainWindows = KMainWindow::memberList();
+    if ( !mainWindows.isEmpty() )
     {
-      Q3PtrListIterator<KMainWindow> it( *mainWindows );
+      Q3PtrListIterator<KMainWindow*> it( mainWindows );
       for (; it.current(); ++it )
         lst.append( DCOPRef( kapp->dcopClient()->appId(),
                              static_cast<KoMainWindow *>(it.current())->dcopObject()->objId() ) );

@@ -18,8 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
 #include <qfile.h>
+#include <qimagereader.h>
+#include <qpainter.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3CString>
@@ -239,7 +240,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
             return false;
         }
 
-        QImageIO imageIO(&buf,NULL);
+        QImageReader imageIO(&buf,NULL);
 
         if (!imageIO.read())
         {

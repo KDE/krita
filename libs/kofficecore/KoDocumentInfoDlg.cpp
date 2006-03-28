@@ -350,7 +350,7 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   authorInfo->setPosition( d->m_authorWidget->leAuthorPosition->text() );
 
   KConfig* config = KoGlobal::kofficeConfig();
-  KConfigGroupSaver cgs( config, "Author" );
+  KConfigGroup cgs( config, "Author" );
   config->writeEntry("telephone", d->m_authorWidget->leTelephoneHome->text());
   config->writeEntry("telephone-work", d->m_authorWidget->leTelephoneWork->text());
   config->writeEntry("fax", d->m_authorWidget->leFax->text());

@@ -27,6 +27,7 @@
 #include <qbuffer.h>
 #include <qpainter.h>
 #include <qimage.h>
+#include <qimagereader.h>
 #include <qpixmap.h>
 #include <qapplication.h>
 #include <q3dragobject.h>
@@ -131,7 +132,7 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
     // Second, create the original image
     QBuffer buffer(m_rawData);
     buffer.open(QIODevice::ReadWrite);
-    QImageIO imageIO(&buffer,NULL);
+    QImageReader imageIO(&buffer,NULL);
 
     if (!imageIO.read())
     {

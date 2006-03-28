@@ -24,7 +24,6 @@
 #include <Q3CString>
 #include <QString>
 #include <koffice_export.h>
-class KoGenStyles;
 
 class KoGenStyles;
 class KoXmlWriter;

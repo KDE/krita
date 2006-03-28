@@ -209,7 +209,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
     else if ( ( array[0] == char( 0037 ) ) && ( array[1] == char( 0213 ) ) )
     {
         // Gzip
-        QBuffer buffer(array);
+        QBuffer buffer(&array);
         buffer.open(QIODevice::ReadOnly);
 
         const bool flag = loadCompressed( &buffer, "application/x-gzip", "tmp" );
@@ -219,7 +219,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
     else if ( ( array[0] == 'B' ) && ( array[1] == 'Z' ) && ( array[2] == 'h') )
     {
         // BZip2
-        QBuffer buffer(array);
+        QBuffer buffer(&array);
         buffer.open(QIODevice::ReadOnly);
         const bool flag = loadCompressed( &buffer, "application/x-bzip2", "tmp" );
         buffer.close();
@@ -233,7 +233,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
         // Do not trust QBuffer and do not work directly on the QByteArray array
         // DF: It would be faster to work on array here, and to create a completely
         // different QBuffer for the writing code!
-        QBuffer buf( array.copy() );
+        QBuffer buf( &array.copy() );
         if (!buf.open(QIODevice::ReadOnly))
         {
             kError(30003) << "Could not open read buffer!" << endl;
@@ -312,7 +312,7 @@ bool KoPictureShared::loadXpm(QIODevice* io)
 
     m_base=new KoPictureImage();
 
-    QBuffer buffer(array);
+    QBuffer buffer(&array);
     bool check = m_base->load(&buffer,"xpm");
     setExtension("xpm");
     return check;

@@ -972,7 +972,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     {
         kDebug(30003) << "Saving as a flat XML file." << endl;
         QFile f( file );
-        if ( f.open( QIODevice::WriteOnly /*| QIODevice::Translate*/ ) )
+        if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
         {
             bool success = saveToStream( &f );
             f.close();

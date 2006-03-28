@@ -37,7 +37,7 @@
 #include <qbuffer.h>
 #include <qdom.h>
 #include <qdir.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <qdatetime.h>
 //Added by qt3to4:
 #include <QTextStream>

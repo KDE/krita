@@ -53,7 +53,7 @@
 #include <qcheckbox.h>
 #include <qpoint.h>
 #include <qobject.h>
-#include <qvgroupbox.h>
+//#include <qvgroupbox.h>
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -804,7 +804,7 @@ void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
                           WStyle_StaysOnTop | WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WX11BypassWM );
     toolTip->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
     toolTip->setLineWidth( 1 );
-    toolTip->setAlignment( AlignLeft | AlignTop );
+    toolTip->setAlignment( Qt::AlignLeft | Qt::AlignTop );
     toolTip->move( QCursor::pos() + QPoint( 14, 14 ) );
     toolTip->adjustSize();
     QRect screen = QApplication::desktop()->screenGeometry(

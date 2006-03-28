@@ -20,7 +20,7 @@
 #include <kcoloractions.h>
 
 #include <q3popupmenu.h>
-
+#include <kauthorized.h>
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -237,7 +237,7 @@ int KSelectColorAction::plug( QWidget* w, int index )
 	kWarning() << "KSelectColorAction::plug called with 0 argument\n";
  	return -1;
     }
-    if (kapp && !KAuthorized::authorizeKAction(name()))
+    if (!KAuthorized::authorizeKAction(name()))
         return -1;
 
     if ( w->inherits("QPopupMenu") )

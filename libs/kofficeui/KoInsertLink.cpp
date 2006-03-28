@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <QDesktopWidget>
 
 #include <klineedit.h>
 #include <kurlrequester.h>

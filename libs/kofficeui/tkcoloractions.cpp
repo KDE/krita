@@ -41,8 +41,9 @@
 #include <qapplication.h>
 
 TKColorPopupMenu::TKColorPopupMenu( QWidget* parent, const char* name )
-: KMenu(parent,name)
+: KMenu(parent)
 {
+	setObjectName(name);
 }
 
 TKColorPopupMenu::~TKColorPopupMenu()
@@ -309,7 +310,7 @@ TKColorPanel::TKColorPanel( QWidget* parent, const char* name )
 : QWidget(parent,name)
 {
   d = new TKColorPanel::TKColorPanelPrivate();
-  m_activeColor = black;
+  m_activeColor = Qt::black;
 
   //m_iX = 0;  // happens in setNumCols() -> resetGrid()
   //m_iY = 0;  // anyway, so...
@@ -611,7 +612,7 @@ void TKColorPanelButton::paintEvent( QPaintEvent* ev )
 
   QPainter p(this,this);
   p.fillRect(2,2,12,12,m_Color);
-  p.setPen(gray);
+  p.setPen(Qt::gray);
   p.drawRect(2,2,12,12);
   p.end();
 }

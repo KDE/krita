@@ -58,7 +58,7 @@ void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /
 
     grid = new Q3GridLayout( page, 1, 1, 0, KDialog::spacingHint() );
 
-    charSelect = new KCharSelect( page, "", _font, _chr );
+    charSelect = new KCharSelect( page,  _font, _chr );
     connect(charSelect, SIGNAL(doubleClicked()),this, SLOT(slotDoubleClicked()));
     charSelect->resize( charSelect->sizeHint() );
     charSelect->enableFontCombo( true );

@@ -40,7 +40,8 @@ class KoSelectAction::KoSelectActionPrivate
   public:
     KoSelectActionPrivate()
     {
-      m_popup = new KMenu(0L,"KoLineStyleAction::popup");
+      m_popup = new KMenu(0L);
+	  m_popup->setObjectName("KoLineStyleAction::popup");
       m_currentSelection = 0;
     }
     

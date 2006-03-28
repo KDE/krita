@@ -121,11 +121,12 @@ double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
 
 
 KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, const char *name )
-    : KDoubleSpinBox( parent, name ), KoUnitDoubleBase( KoUnit::U_PT, 2 )
+    : KDoubleSpinBox( parent ), KoUnitDoubleBase( KoUnit::U_PT, 2 )
     , m_lowerInPoints( -9999 )
     , m_upperInPoints( 9999 )
     , m_stepInPoints( 1 )
 {
+	setObjectName(name);
     KDoubleSpinBox::setPrecision( 2 );
     m_validator = new KoUnitDoubleValidator( this, this );
     QSpinBox::setValidator( m_validator );
@@ -235,7 +236,7 @@ KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, const char *name )
 
 KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit,
     unsigned int precision, const char *name )
-    : KLineEdit( parent, name ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper ),
+    : KLineEdit( parent ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper ),
     m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
     setAlignment( Qt::AlignRight );
@@ -288,7 +289,7 @@ double KoUnitDoubleLineEdit::value( void ) const
 
 
 KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, const char *name )
-     : KComboBox( true, parent, name ), KoUnitDoubleBase( KoUnit::U_PT, 2 ), m_value( 0.0 ), m_lower( 0.0 ), m_upper( 9999.99 ), m_lowerInPoints( 0.0 ), m_upperInPoints( 9999.99 )
+     : KComboBox( true, parent ), KoUnitDoubleBase( KoUnit::U_PT, 2 ), m_value( 0.0 ), m_lower( 0.0 ), m_upper( 9999.99 ), m_lowerInPoints( 0.0 ), m_upperInPoints( 9999.99 )
 {
     lineEdit()->setAlignment( Qt::AlignRight );
     m_validator = new KoUnitDoubleValidator( this, this );

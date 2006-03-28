@@ -269,7 +269,7 @@ void KoTemplateCreateDia::slotOk() {
 
     KUrl dest;
     dest.setPath(templateDir+file+ext);
-    if ( QFile::exists( dest.prettyURL(0, KUrl::StripFileProtocol) ) )
+    if ( QFile::exists( dest.pathOrURL() ) )
     {
         do
         {

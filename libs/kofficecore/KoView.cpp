@@ -136,7 +136,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
            this, SLOT( endOperation() ) );
 
 
-  actionCollection()->setWidget( this );
+  actionCollection()->setAssociatedWidget(this);
   setupGlobalActions();
   KActionCollection *coll = actionCollection();
   /**** not needed anymore, according to David (Werner)
@@ -150,7 +150,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
   KStatusBar * sb = statusBar();
   if ( sb ) // No statusbar in e.g. konqueror
   {
-      coll->setHighlightingEnabled( true );
+      //coll->setHighlightingEnabled( true );
       connect( coll, SIGNAL( actionStatusText( const QString & ) ),
                this, SLOT( slotActionStatusText( const QString & ) ) );
       connect( coll, SIGNAL( clearStatusText() ),
@@ -618,10 +618,8 @@ void KoView::slotAutoScroll(  )
     if ( actuallyDoScroll )
     {
         int state=0;
-#if KDE_IS_VERSION(3,4,0)
-        state = kapp->keyboardMouseState();
-#endif
-
+        state = QApplication::keyboardModifiers();
+		
         pos = canvas()->mapFrom(this, pos);
         QMouseEvent * event = new QMouseEvent(QEvent::MouseMove, pos, 0, state);
 

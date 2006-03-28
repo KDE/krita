@@ -99,8 +99,8 @@ public:
     virtual void setAlphaBuffer(bool enable)
         { m_originalImage.setAlphaBuffer(enable); }
 
-    virtual QImage createAlphaMask(int conversion_flags = 0) const
-        { return m_originalImage.createAlphaMask(conversion_flags); }
+    virtual QImage createAlphaMask(Qt::ImageConversionFlags flags = Qt::AutoColor) const
+        { return m_originalImage.createAlphaMask(flags); }
 
     virtual void clearCache(void);
 

@@ -165,7 +165,7 @@ public:
 
     bool hasAlphaBuffer() const;
     void setAlphaBuffer(bool enable);
-    QImage createAlphaMask(int conversion_flags = 0) const;
+    QImage createAlphaMask(Qt::ImageConversionFlags flags = Qt::AutoColor) const;
 
     /**
      * Clear any cache

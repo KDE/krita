@@ -121,7 +121,7 @@ public:
         { return false; }
     virtual void setAlphaBuffer(bool /*enable*/)
         { }
-    virtual QImage createAlphaMask(int /*conversion_flags*/ = 0) const
+    virtual QImage createAlphaMask(Qt::ImageConversionFlags = Qt::AutoColor) const
         { return QImage(); }
 
     virtual void clearCache(void);

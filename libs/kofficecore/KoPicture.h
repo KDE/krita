@@ -211,7 +211,7 @@ public:
      *
      * @see hasAlphaBuffer() setAlphaBuffer()
      */
-    QImage createAlphaMask(int conversion_flags = 0) const;
+    QImage createAlphaMask(Qt::ImageConversionFlags flags = Qt::AutoColor) const;
 
     /**
      * @brief Clear any cache

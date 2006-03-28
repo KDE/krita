@@ -279,10 +279,10 @@ void KoPicture::setAlphaBuffer(bool enable)
         m_sharedData->setAlphaBuffer(enable);
 }
 
-QImage KoPicture::createAlphaMask(int conversion_flags) const
+QImage KoPicture::createAlphaMask(Qt::ImageConversionFlags flags) const
 {
     if (m_sharedData)
-        return m_sharedData->createAlphaMask(conversion_flags);
+        return m_sharedData->createAlphaMask(flags);
     return QImage();
 }
 

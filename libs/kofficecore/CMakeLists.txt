@@ -2,74 +2,74 @@ kde4_header()
 
 add_subdirectory( tests )
 
-include_directories( ${KOSTORE_INCLUDES} )
+include_directories( ${KOSTORE_INCLUDES} ${KWMF_INCLUDES} )
 
 ########### next target ###############
 
-set(kofficecore_LIB_SRCS 
-   KoDocument.cpp 
-   KoGlobal.cpp 
-   KoUnit.cpp 
-   KoFilterManager.cpp 
-   KoMainWindow.cpp 
-   KoApplication.cpp 
-   KoQueryTrader.cpp 
-   KoFilter.cpp 
-   KoFilterChain.cpp 
-   KoPictureKey.cpp 
-   KoPictureBase.cpp 
-   KoPicture.cpp 
-   KoPictureShared.cpp 
-   KoPictureImage.cpp 
-   KoPictureClipart.cpp 
-   KoPictureCollection.cpp 
-   KoPictureEps.cpp 
-   KoPictureWmf.cpp 
-   KoDocumentInfo.cpp 
-   KoView.cpp 
-   KoFrame.cpp 
-   KoContainerHandler.cpp 
-   KoDocumentChild.cpp 
-   KoDocumentInfoDlg.cpp 
-   KoFactory.cpp 
-   KoChild.cpp 
-   KoApplicationIface.cc 
-   KoDocumentIface.cc 
-   KoViewIface.cc 
-   KoMainWindowIface.cc 
-   kofficeversion.cc 
-   KoOasisStyles.cpp 
-   KoStyleStack.cpp 
+set(kofficecore_LIB_SRCS
+   KoDocument.cpp
+   KoGlobal.cpp
+   KoUnit.cpp
+   KoFilterManager.cpp
+   KoMainWindow.cpp
+   KoApplication.cpp
+   KoQueryTrader.cpp
+   KoFilter.cpp
+   KoFilterChain.cpp
+   KoPictureKey.cpp
+   KoPictureBase.cpp
+   KoPicture.cpp
+   KoPictureShared.cpp
+   KoPictureImage.cpp
+   KoPictureClipart.cpp
+   KoPictureCollection.cpp
+   KoPictureEps.cpp
+   KoPictureWmf.cpp
+   KoDocumentInfo.cpp
+   KoView.cpp
+   KoFrame.cpp
+   KoContainerHandler.cpp
+   KoDocumentChild.cpp
+   KoDocumentInfoDlg.cpp
+   KoFactory.cpp
+   KoChild.cpp
+   KoApplicationIface.cc
+   KoDocumentIface.cc
+   KoViewIface.cc
+   KoMainWindowIface.cc
+   kofficeversion.cc
+   KoOasisStyles.cpp
+   KoStyleStack.cpp
    KoGenStyles.cpp
    KoGenStyle.cpp
-   KoOasisSettings.cpp 
-   KoPageLayout.cpp 
-   KoFileDialog.cpp 
-   KoXmlNS.cpp 
-   KoDom.cpp 
-   Koversiondialog.cpp 
-   KoOasisStore.cpp 
-   kkbdaccessextensions.cpp 
-   KoOpenPane.cpp 
-   KoTemplates.cpp 
-   KoDetailsPane.cpp 
-   KoSpeaker.cpp 
-   KoOasisLoadingContext.cpp 
+   KoOasisSettings.cpp
+   KoPageLayout.cpp
+   KoFileDialog.cpp
+   KoXmlNS.cpp
+   KoDom.cpp
+   Koversiondialog.cpp
+   KoOasisStore.cpp
+   kkbdaccessextensions.cpp
+   KoOpenPane.cpp
+   KoTemplates.cpp
+   KoDetailsPane.cpp
+   KoSpeaker.cpp
+   KoOasisLoadingContext.cpp
    KoRect.cpp )
 
 kde4_automoc(${kofficecore_LIB_SRCS})
 
-kde4_add_ui3_files(kofficecore_LIB_SRCS 
-   koDocumentInfoAboutWidget.ui 
-   koDocumentInfoAuthorWidget.ui 
-   koDocumentInfoUserMetadataWidget.ui 
-   koDetailsPaneBase.ui 
+kde4_add_ui3_files(kofficecore_LIB_SRCS
+   koDocumentInfoAboutWidget.ui
+   koDocumentInfoAuthorWidget.ui
+   koDocumentInfoUserMetadataWidget.ui
+   koDetailsPaneBase.ui
    koOpenPaneBase.ui )
 
-kde4_add_dcop_skels(kofficecore_LIB_SRCS 
-   KoApplicationIface.h 
-   KoDocumentIface.h 
-   KoViewIface.h 
+kde4_add_dcop_skels(kofficecore_LIB_SRCS
+   KoApplicationIface.h
+   KoDocumentIface.h
+   KoViewIface.h
    KoMainWindowIface.h )
 
 kde4_add_library(kofficecore SHARED ${kofficecore_LIB_SRCS})
@@ -117,7 +117,7 @@ kde4_footer()
 #
 ######## Files
 #
-#lib_LTLIBRARIES = libkofficecore.la 
+#lib_LTLIBRARIES = libkofficecore.la
 #kde_module_LTLIBRARIES = kodocinfopropspage.la
 #
 #libkofficecore_la_SOURCES = KoDocument.cpp \

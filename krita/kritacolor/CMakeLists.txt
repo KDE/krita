@@ -22,7 +22,8 @@ set(kritacolor_LIB_SRCS
    kis_u8_base_colorspace.cc 
    kis_u16_base_colorspace.cc 
    kis_f32_base_colorspace.cc 
-   $(OPENEXR_SOURCES) )
+   )
+   #$(OPENEXR_SOURCES) )
 
 kde4_automoc(${kritacolor_LIB_SRCS})
 

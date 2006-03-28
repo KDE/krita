@@ -58,7 +58,7 @@ bool KoPictureWmf::isNull(void) const
     return m_clipart.isNull();
 }
 
-void KoPictureWmf::drawQPicture(Q3Picture& clipart, QPainter& painter,
+void KoPictureWmf::drawQPicture(QPicture& clipart, QPainter& painter,
     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
     kDebug(30003) << "Drawing KoPictureWmf " << this << endl;
@@ -126,7 +126,7 @@ QPixmap KoPictureWmf::generatePixmap(const QSize& size, bool /*smoothScale*/)
 
     if ( m_originalSize.width() && m_originalSize.height() )
         p.scale( (double)pixmap.width() / (double)m_originalSize.width(), (double)pixmap.height() / (double)m_originalSize.height() );
-    p.drawPicture( m_clipart );
+    p.drawPicture( 0, 0, m_clipart );
     p.end();
     return pixmap;
 }

@@ -1,4 +1,4 @@
-/* 
+/*
 *   This file is part of the KDE/KOffice project.
 *   Copyright (C) 2005, Gary Cramblitt <garycramblitt@comcast.net>
 *
@@ -26,6 +26,7 @@
 #include <qcursor.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
+#include <qmenu.h>
 #include <qmenubar.h>
 #include <qlabel.h>
 #include <q3button.h>
@@ -44,7 +45,6 @@
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
-#include <Q3PopupMenu>
 
 // KDE includes.
 #include <kapplication.h>
@@ -252,30 +252,26 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     }
     else
     if (w->inherits("QPopupMenu")) {
-        Q3PopupMenu* popupMenu = dynamic_cast<Q3PopupMenu *>(w);
-        if (pos == QPoint()) {
-            for (uint i = 0; i < popupMenu->count(); ++i)
-                if (popupMenu->isItemActive(popupMenu->idAt(i))) {
-                    id = popupMenu->idAt(i);
-                    break;
-                }
-        } else
-            id = popupMenu->idAt(popupMenu->mapFromGlobal(pos));
-        if ( id != -1 )
-            text = popupMenu->text(id);
+        QMenu* popupMenu = dynamic_cast<QMenu *>(w);
+        QAction* action;
+        if (pos == QPoint())
+            action = popupMenu->activeAction();
+        else
+            action = popupMenu->actionAt(popupMenu->mapFromGlobal(pos));
+        if ( action )
+            text = action->text();
     }
     else
     if (w->inherits("QTabBar")) {
         QTabBar* tabBar = dynamic_cast<QTabBar *>(w);
-        QTab* tab = 0;
+        int index = 0;
         if (pos == QPoint())
-            tab = tabBar->tabAt(tabBar->currentTab());
-        else
-            tab = tabBar->selectTab(tabBar->mapFromGlobal(pos));
-        if (tab) {
-            id = tab->identifier();
-            text = tab->text();
-        }
+            index = tabBar->currentIndex();
+        // TODO Need way to figure out the index underneath mouse pointer.
+/*        else
+            tab = tabBar->selectTab(tabBar->mapFromGlobal(pos));*/
+        if ( index )
+            text = tabBar->tabText( index );
     }
     else
     if (w->inherits("QListView")) {
@@ -377,10 +373,10 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     else
     if (w->inherits("QComboBox"))
         text = dynamic_cast<QComboBox *>(w)->currentText();
-    else 
+    else
     if (w->inherits("QLineEdit"))
         text = dynamic_cast<QLineEdit *>(w)->text();
-    else 
+    else
     if (w->inherits("QTextEdit"))
         text = dynamic_cast<Q3TextEdit *>(w)->text();
     else

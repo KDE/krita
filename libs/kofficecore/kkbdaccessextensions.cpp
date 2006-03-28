@@ -346,9 +346,10 @@ void KKbdAccessExtensions::prevHandle()
         rewind = (d->handleNdx < 1);
         if (rewind) {
             QWidgetList* allWidgets = getAllPanels();
-            allWidgets->findRef(panel);
+            int index = allWidgets->indexOf(panel);
             panel = 0;
-            if (allWidgets->current()) panel = allWidgets->prev();
+            if (index > 0)
+                panel = allWidgets->at(index-1);
             delete allWidgets;
             if (panel) {
                 if (qobject_cast<QSplitter*>( panel ))
@@ -555,13 +556,10 @@ void KKbdAccessExtensions::displayAccessKeys()
 {
     // Build a list of valid access keys that don't collide with shortcuts.
     QString availableAccessKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
-    Q3PtrList<KXMLGUIClient> allClients = d->mainWindow->factory()->clients();
-    Q3PtrListIterator<KXMLGUIClient> it( allClients );
-    KXMLGUIClient *client;
-    while( (client=it.current()) !=0 )
+    QList<KXMLGUIClient*> allClients = d->mainWindow->factory()->clients();
+    foreach ( KXMLGUIClient* client, allClients )
     {
-        ++it;
-        KActionPtrList actions = client->actionCollection()->actions();
+        QList<KAction*> actions = client->actionCollection()->actions();
         for (int j = 0; j < (int)actions.count(); j++) {
             KAction* action = actions[j];
             KShortcut sc = action->shortcut();
@@ -577,14 +575,15 @@ void KKbdAccessExtensions::displayAccessKeys()
     }
     // Find all visible, focusable widgets and create a QLabel for each.  Don't exceed
     // available list of access keys.
-    QWidgetList* allWidgets = kapp->allWidgets();
-    QWidget* widget = allWidgets->first();
+    QWidgetList allWidgets = kapp->allWidgets();
     int accessCount = 0;
     int maxAccessCount = availableAccessKeys.length();
     int overlap = 20;
     QPoint prevGlobalPos = QPoint(-overlap, -overlap);
-    while (widget && (accessCount < maxAccessCount)) {
-        if (widget->isVisible() && widget->isFocusEnabled() ) {
+    foreach ( QWidget* widget, allWidgets ) {
+        if (accessCount >= maxAccessCount)
+            break;
+        if (widget->isVisible() && widget->focusPolicy() != Qt::NoFocus ) {
             QRect r = widget->rect();
             QPoint p(r.x(), r.y());
             // Don't display an access key if within overlap pixels of previous one.
@@ -607,7 +606,6 @@ void KKbdAccessExtensions::displayAccessKeys()
                 prevGlobalPos = globalPos;
             }
         }
-        widget = allWidgets->next();
     }
     if (accessCount > 0) {
         // Sort the access keys from left to right and down the screen.

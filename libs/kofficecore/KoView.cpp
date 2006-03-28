@@ -209,7 +209,7 @@ void KoView::setPartManager( KParts::PartManager *manager )
 {
   d->m_manager = manager;
   if ( !koDocument()->isSingleViewMode() &&
-       manager->parts()->containsRef( koDocument() ) == 0 ) // is there another view registered?
+       !manager->parts().contains( koDocument() ) ) // is there another view registered?
   {
     d->m_registered = true; // no, so we have to register now and ungregister again in the DTOR
     manager->addPart( koDocument(), false );
@@ -619,7 +619,7 @@ void KoView::slotAutoScroll(  )
     {
         int state=0;
         state = QApplication::keyboardModifiers();
-		
+
         pos = canvas()->mapFrom(this, pos);
         QMouseEvent * event = new QMouseEvent(QEvent::MouseMove, pos, 0, state);
 

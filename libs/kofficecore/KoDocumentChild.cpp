@@ -355,11 +355,10 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
     {
         KoDocument *parent = parentDocument();
 
-        if ( parent->manager() && parent->manager()->parts() )
+        KParts::PartManager* manager = parent->manager();
+        if ( manager && !manager->parts().isEmpty() )
         {
-            KParts::PartManager *manager = parent->manager();
-
-            if ( !manager->parts()->containsRef( d->m_doc ) &&
+            if ( !manager->parts().contains( d->m_doc ) &&
                  !parent->isSingleViewMode() )
                 manager->addPart( d->m_doc, false );
         }
@@ -374,7 +373,7 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL, con
 {
     // We don't need a trader query here. We're looking for a very specific component.
     KService::Ptr serv = KService::serviceByDesktopName( "kounavail" );
-    if ( serv == 0L )
+    if ( serv.isNull() )
     {
         kWarning(30003) << "ERROR: service kounavail not found " << endl;
         return false;
@@ -479,7 +478,7 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
             e.setAttribute( "url", d->m_doc->url().path().mid( 1 ) );
             kDebug() << "KoDocumentChild::save url=" << d->m_doc->url().path().mid( 1 ) << endl;
         }
-        e.setAttribute( "mime", d->m_doc->nativeFormatMimeType() );
+        e.setAttribute( "mime", QString( d->m_doc->nativeFormatMimeType() ) );
         kDebug() << "KoDocumentChild::save mime=" << d->m_doc->nativeFormatMimeType() << endl;
         QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
         rect.setAttribute( "x", geometry().left() );

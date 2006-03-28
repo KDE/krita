@@ -266,7 +266,7 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
 bool KoPictureEps::extractPostScriptStream( void )
 {
     kDebug(30003) << "KoPictureEps::extractPostScriptStream" << endl;
-    QDataStream data( m_rawData, QIODevice::ReadOnly );
+    QDataStream data( &m_rawData, QIODevice::ReadOnly );
     data.setByteOrder( QDataStream::LittleEndian );
     quint32 magic, offset, length;
     data >> magic;

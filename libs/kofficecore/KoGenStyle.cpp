@@ -24,6 +24,20 @@
 #include <Q3ValueList>
 
 
+// Returns -1, 0 (equal) or 1
+static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, QString>& map2 )
+{
+  QMap<QString, QString>::const_iterator it = map1.begin();
+  QMap<QString, QString>::const_iterator oit = map2.begin();
+  for ( ; it != map1.end(); ++it, ++oit ) { // both maps have been checked for size already
+    if ( it.key() != oit.key() )
+      return it.key() < oit.key() ? -1 : +1;
+    if ( it.data() != oit.data() )
+      return it.data() < oit.data() ? -1 : +1;
+  }
+  return 0; // equal
+}
+
 
 KoGenStyle::KoGenStyle( int type, const char* familyName,
                         const QString& parentName )
@@ -255,18 +269,4 @@ bool KoGenStyle::operator==( const KoGenStyle &other ) const
             return false;
     }
     return true;
-}
-
-// Returns -1, 0 (equal) or 1
-static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, QString>& map2 )
-{
-  QMap<QString, QString>::const_iterator it = map1.begin();
-  QMap<QString, QString>::const_iterator oit = map2.begin();
-  for ( ; it != map1.end(); ++it, ++oit ) { // both maps have been checked for size already
-    if ( it.key() != oit.key() )
-      return it.key() < oit.key() ? -1 : +1;
-    if ( it.data() != oit.data() )
-      return it.data() < oit.data() ? -1 : +1;
-  }
-  return 0; // equal
 }

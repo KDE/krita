@@ -231,7 +231,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
     <includehint>ktextbrowser.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>

@@ -47,7 +47,7 @@ SymbolFontHelper::SymbolFontHelper()
 */
 
 QChar SymbolFontHelper::unicodeFromSymbolFont( QChar pos ) const
-{
+{		
     if ( compatibility.contains( pos ) ) {
         return compatibility[ pos.latin1() ];
     }

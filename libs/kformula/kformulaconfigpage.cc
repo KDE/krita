@@ -379,7 +379,7 @@ bool ConfigurePage::selectFont( QFont & font )
 
     KFontChooser::getFontList( list, KFontChooser::SmoothScalableFonts );
 
-    KFontDialog dlg( m_view, 0, false, true, list );
+    KFontDialog dlg( m_view, false, true, list );
     dlg.setFont( font );
 
     int result = dlg.exec();

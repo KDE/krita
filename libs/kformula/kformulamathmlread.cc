@@ -1617,7 +1617,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
             }
             else if ( type == "integer" ) {
                 QString base = element.attribute( "base" );
-                if ( !base ) {
+                if ( !base.isEmpty() ) {
                     impl->createTextElements( element.text().trimmed(),
                                               docnode );
                 }

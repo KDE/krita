@@ -84,7 +84,7 @@ private:
     /**
      * symbol font char -> unicode mapping.
      */
-    QMap<uchar, QChar> compatibility;
+    QMap<QChar, QChar> compatibility;
 
     /**
      * All greek letters that are known.

@@ -211,7 +211,7 @@ void KoSpeaker::readConfig(KConfig* config)
     if (config->readBoolEntry("SpeakWhatsThis", false)) d->m_speakFlags |= SpeakWhatsThis;
     if (config->readBoolEntry("SpeakDisabled", true)) d->m_speakFlags |= SpeakDisabled;
     if (config->readBoolEntry("SpeakAccelerators", true)) d->m_speakFlags |= SpeakAccelerator;
-    d->m_timeout = config->readNumEntry("PollingInterval", 600);
+    d->m_timeout = config->readEntry("PollingInterval", 600);
     d->m_acceleratorPrefix = config->readEntry("AcceleratorPrefixWord", i18n("Accelerator"));
     if (d->m_speakFlags & (SpeakPointerWidget | SpeakFocusWidget)) {
         if (startKttsd()) {

@@ -231,7 +231,7 @@ void KoTemplateTree::readGroups() {
                 config.setDesktopGroup();
                 name=config.readEntry("Name");
                 defaultTab=config.readEntry("X-KDE-DefaultTab");
-                sortingWeight=config.readNumEntry("X-KDE-SortingWeight", 1000);
+                sortingWeight=config.readEntry("X-KDE-SortingWeight", 1000);
                 //kDebug() << "name: " << name <<endl;
             }
             KoTemplateGroup *g=new KoTemplateGroup(name, *it+*tdirIt+QChar('/'), sortingWeight);

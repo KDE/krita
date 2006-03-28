@@ -49,7 +49,7 @@ kde4_footer()
 #
 #INCLUDES= $(KOFFICECORE_INCLUDES) -I$(srcdir) $(all_includes)
 #libkwmf_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
-## We use kdecore for kDebug :)
+## We use kdecore for kdDebug :)
 #libkwmf_la_LIBADD = $(LIB_KDECORE)
 #
 ######## Files

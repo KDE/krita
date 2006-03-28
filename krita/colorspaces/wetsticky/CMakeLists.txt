@@ -1,6 +1,6 @@
 kde4_header()
 
-add_subdirectory( brushop ) 
+add_subdirectory( brushop )
 
 
 

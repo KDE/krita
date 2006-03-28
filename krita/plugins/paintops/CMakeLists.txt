@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( defaultpaintops ) 
-add_subdirectory( smearybrush ) 
+add_subdirectory( defaultpaintops )
+add_subdirectory( smearybrush )
 
 
 

@@ -14,7 +14,7 @@ kde4_add_plugin(kritasmearybrush ${kritasmearybrush_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritasmearybrush )
 
-target_link_libraries(kritasmearybrush  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritasmearybrush  ${KDE4_KDECORE_LIBS} kritacommon kopainter kofficecore )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kritasmearybrush )
 

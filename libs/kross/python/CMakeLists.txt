@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( CXX ) 
-add_subdirectory( scripts ) 
+add_subdirectory( CXX )
+add_subdirectory( scripts )
 
 
 

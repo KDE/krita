@@ -1,6 +1,6 @@
 kde4_header()
 
-add_subdirectory( tiles ) 
+add_subdirectory( tiles )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TESTSDIR)")
 
@@ -66,7 +66,7 @@ kde4_add_dcop_skels(kritaimage_LIB_SRCS kis_paint_device_iface.h kis_image_iface
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage  ${KDE4_KDECORE_LIBS} kritasdk kritacolor kritatile )
+target_link_libraries(kritaimage  ${KDE4_KDECORE_LIBS} kritasdk kritacolor kritatile kofficecore kopainter )
 
 set_target_properties(kritaimage PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kritaimage )

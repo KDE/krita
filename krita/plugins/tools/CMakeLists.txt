@@ -1,14 +1,14 @@
 kde4_header()
 
-add_subdirectory( defaulttools ) 
-add_subdirectory( selectiontools ) 
-add_subdirectory( tool_crop ) 
-add_subdirectory( tool_filter ) 
-add_subdirectory( tool_polygon ) 
-add_subdirectory( tool_polyline ) 
-add_subdirectory( tool_selectsimilar ) 
-add_subdirectory( tool_star ) 
-add_subdirectory( tool_transform ) 
+add_subdirectory( defaulttools )
+add_subdirectory( selectiontools )
+add_subdirectory( tool_crop )
+add_subdirectory( tool_filter )
+add_subdirectory( tool_polygon )
+add_subdirectory( tool_polyline )
+add_subdirectory( tool_selectsimilar )
+add_subdirectory( tool_star )
+add_subdirectory( tool_transform )
 
 
 

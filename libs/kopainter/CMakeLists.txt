@@ -23,7 +23,7 @@ kde4_automoc(${kopainter_LIB_SRCS})
 
 kde4_add_library(kopainter SHARED ${kopainter_LIB_SRCS})
 
-target_link_libraries(kopainter  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kopainter  ${KDE4_KDECORE_LIBS} kofficeui )
 
 set_target_properties(kopainter PROPERTIES VERSION 2.0.0 SOVERSION 2 )
 install_targets(${LIB_INSTALL_DIR} kopainter )

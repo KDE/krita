@@ -1,11 +1,11 @@
 kde4_header()
 
-add_subdirectory( brushes ) 
-add_subdirectory( patterns ) 
-add_subdirectory( gradients ) 
-add_subdirectory( profiles ) 
-add_subdirectory( palettes ) 
-add_subdirectory( images ) 
+add_subdirectory( brushes )
+add_subdirectory( patterns )
+add_subdirectory( gradients )
+add_subdirectory( profiles )
+add_subdirectory( palettes )
+add_subdirectory( images )
 
 
 

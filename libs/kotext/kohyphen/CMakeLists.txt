@@ -1,6 +1,6 @@
 kde4_header()
 
-add_subdirectory( hyphdicts ) 
+add_subdirectory( hyphdicts )
 
 
 

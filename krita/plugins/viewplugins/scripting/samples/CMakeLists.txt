@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( python ) 
-add_subdirectory( ruby ) 
+add_subdirectory( python )
+add_subdirectory( ruby )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/scriptingcore/main ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 

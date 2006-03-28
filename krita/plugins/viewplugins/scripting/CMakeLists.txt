@@ -1,8 +1,8 @@
 kde4_header()
 
-add_subdirectory( kritascripting ) 
-add_subdirectory( kritacore ) 
-add_subdirectory( samples ) 
+add_subdirectory( kritascripting )
+add_subdirectory( kritacore )
+add_subdirectory( samples )
 
 include_directories( ${CMAKE_SOURCE_DIR}/krita/sdk ${CMAKE_SOURCE_DIR}/krita/core ${CMAKE_SOURCE_DIR}/krita/kritacolor/ ${CMAKE_SOURCE_DIR}/krita/ui ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 

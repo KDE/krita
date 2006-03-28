@@ -1,8 +1,8 @@
 kde4_header()
 
-add_subdirectory( api ) 
-add_subdirectory( main ) 
-add_subdirectory( runner ) 
+add_subdirectory( api )
+add_subdirectory( main )
+add_subdirectory( runner )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(PYTHONSUBDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(RUBYSUBDIR)")

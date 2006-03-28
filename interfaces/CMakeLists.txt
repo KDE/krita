@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${KOFFICECORE_INCLUDES} ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kchart/kdchart   )
 
 
 ########### next target ###############
@@ -11,7 +11,7 @@ kde4_automoc(${kochart_LIB_SRCS})
 
 kde4_add_library(kochart SHARED ${kochart_LIB_SRCS})
 
-target_link_libraries(kochart  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kochart  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set_target_properties(kochart PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kochart )

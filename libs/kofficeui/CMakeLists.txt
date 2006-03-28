@@ -1,9 +1,9 @@
 kde4_header()
 
-add_subdirectory( tests ) 
-add_subdirectory( pics ) 
+add_subdirectory( tests )
+add_subdirectory( pics )
 
-include_directories(${KOFFICECORE_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############
@@ -53,7 +53,7 @@ kde4_add_ui3_files(kofficeui_LIB_SRCS KoGeneralPropertyUi.ui KoPageLayoutColumns
 
 kde4_add_library(kofficeui SHARED ${kofficeui_LIB_SRCS})
 
-target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set_target_properties(kofficeui PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 install_targets(${LIB_INSTALL_DIR} kofficeui )

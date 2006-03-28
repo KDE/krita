@@ -11,7 +11,7 @@ kde4_automoc(${propertytest_SRCS})
 
 kde4_add_executable(propertytest ${propertytest_SRCS})
 
-target_link_libraries(propertytest  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(propertytest  ${KDE4_KDECORE_LIBS} koproperty )
 
 
 ########### install files ###############

@@ -1,6 +1,6 @@
 kde4_header()
 
-add_subdirectory( scan ) 
+add_subdirectory( scan )
 
 
 

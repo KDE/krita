@@ -1,14 +1,14 @@
 kde4_header()
 
-add_subdirectory( sdk ) 
-add_subdirectory( kritacolor ) 
-add_subdirectory( core ) 
-add_subdirectory( ui ) 
-add_subdirectory( dtd ) 
-add_subdirectory( colorspaces ) 
-add_subdirectory( plugins ) 
-add_subdirectory( data ) 
-add_subdirectory( pics ) 
+add_subdirectory( sdk )
+add_subdirectory( kritacolor )
+add_subdirectory( core )
+add_subdirectory( ui )
+add_subdirectory( dtd )
+add_subdirectory( colorspaces )
+add_subdirectory( plugins )
+add_subdirectory( data )
+add_subdirectory( pics )
 
 
 
@@ -21,7 +21,7 @@ kde4_automoc(${kritacommon_LIB_SRCS})
 
 kde4_add_library(kritacommon SHARED ${kritacommon_LIB_SRCS})
 
-target_link_libraries(kritacommon  ${KDE4_KDECORE_LIBS} kritasdk kritaimage kritaui kritacolor )
+target_link_libraries(kritacommon  ${KDE4_KDECORE_LIBS} kritasdk kritaimage kritaui kritacolor kofficeui kopainter kopalette )
 
 set_target_properties(kritacommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kritacommon )
@@ -50,7 +50,7 @@ kde4_automoc(${krita_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( krita ${krita_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_krita  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_krita  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_krita )
 

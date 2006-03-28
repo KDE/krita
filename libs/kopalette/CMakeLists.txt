@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories(${KOFFICECORE_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############
@@ -15,7 +15,7 @@ kde4_automoc(${kopalette_LIB_SRCS})
 
 kde4_add_library(kopalette SHARED ${kopalette_LIB_SRCS})
 
-target_link_libraries(kopalette  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kopalette  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set_target_properties(kopalette PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kopalette )

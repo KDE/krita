@@ -121,7 +121,7 @@ SymbolAction::SymbolAction( const QString& text, const KShortcut& cut,
 
 int SymbolAction::plug( QWidget* w, int index )
 {
-    if (kapp && !KAuthorized::authorizeKAction(name()))
+    if (!KAuthorized::authorizeKAction(name()))
         return -1;
     if ( w->inherits( "KToolBar" ) )
     {

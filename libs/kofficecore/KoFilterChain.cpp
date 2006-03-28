@@ -99,26 +99,37 @@ void KoFilterChain::ChainLink::setupCommunication( const KoFilter* const parentF
     if ( !parent || !child )
         return;
 
-    setupConnections( parentFilter, parent->signalNames(), m_filter, child->slotNames() );
-    setupConnections( m_filter, child->signalNames(), parentFilter, parent->slotNames() );
+    setupConnections( parentFilter, m_filter );
+    setupConnections( m_filter, parentFilter );
 }
 
-void KoFilterChain::ChainLink::setupConnections( const KoFilter* sender, const Q3StrList& sigs,
-                                                 const KoFilter* receiver, const Q3StrList& sl0ts ) const
+void KoFilterChain::ChainLink::setupConnections( const KoFilter* sender, const KoFilter* receiver ) const
 {
-    QStrListIterator signalIt( sigs );
-    for ( ; signalIt.current(); ++signalIt ) {
-        if ( strncmp( signalIt.current(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN ) == 0 ) {
-            QStrListIterator slotIt( sl0ts );
-            for ( ; slotIt.current(); ++slotIt ) {
-                if ( strncmp( slotIt.current(), SLOT_PREFIX, SLOT_PREFIX_LEN ) == 0 ) {
-                    if ( strcmp( signalIt.current() + SIGNAL_PREFIX_LEN, slotIt.current() + SLOT_PREFIX_LEN ) == 0 ) {
+    const QMetaObject* const parent = sender->metaObject();
+    const QMetaObject* const child = receiver->metaObject();
+    if ( !parent || !child )
+        return;
+
+    int senderMethodCount = parent->methodCount();
+    for ( int i=0; i < senderMethodCount; ++i ) {
+        QMetaMethod signal = parent->method( i );
+        if ( signal.methodType() != QMetaMethod::Signal )
+            continue;
+        // ### untested (QMetaMethod::signature())
+        if ( strncmp( signal.signature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN ) == 0 ) {
+            int receiverMethodCount = child->methodCount();
+            for ( int j=0; j < receiverMethodCount; ++j ) {
+                QMetaMethod slot = child->method( j );
+                if ( slot.methodType() != QMetaMethod::Slot )
+                    continue;
+                if ( strncmp( slot.signature(), SLOT_PREFIX, SLOT_PREFIX_LEN ) == 0 ) {
+                  if ( strcmp( signal.signature() + SIGNAL_PREFIX_LEN, slot.signature() + SLOT_PREFIX_LEN ) == 0 ) {
                         QByteArray signalString;
                         signalString.setNum( QSIGNAL_CODE );
-                        signalString += signalIt.current();
+                        signalString += signal.signature();
                         QByteArray slotString;
                         slotString.setNum( QSLOT_CODE );
-                        slotString += slotIt.current();
+                        slotString += slot.signature();
                         QObject::connect( sender, signalString, receiver, slotString );
                     }
                 }
@@ -764,19 +775,19 @@ namespace KOffice {
     KoFilterChain::Ptr Graph::chain( const KoFilterManager* manager, QByteArray& to ) const
     {
         if ( !isValid() || !manager )
-            return 0;
+            return KoFilterChain::Ptr();
 
         if ( to.isEmpty() ) {  // if the destination is empty we search the closest KOffice part
             to = findKOfficePart();
             if ( to.isEmpty() )  // still empty? strange stuff...
-                return 0;
+                return KoFilterChain::Ptr();
         }
 
         const Vertex* vertex = m_vertices[ to ];
         if ( !vertex || vertex->key() == UINT_MAX )
-            return 0;
+            return KoFilterChain::Ptr();
 
-        KoFilterChain::Ptr ret = new KoFilterChain( manager );
+        KoFilterChain::Ptr ret( new KoFilterChain( manager ) );
 
         // Fill the filter chain with all filters on the path
         const Vertex* tmp = vertex->predecessor();

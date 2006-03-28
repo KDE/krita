@@ -201,8 +201,7 @@ private:
         ChainLink& operator=( const ChainLink& rhs );
 
         void setupCommunication( const KoFilter* const parentFilter ) const;
-        void setupConnections( const KoFilter* sender, const Q3StrList& sigs,
-                               const KoFilter* receiver, const Q3StrList& sl0ts ) const;
+        void setupConnections( const KoFilter* sender, const KoFilter* receiver ) const;
 
         KoFilterChain* m_chain;
         KoFilterEntry::Ptr m_filterEntry;

@@ -84,7 +84,7 @@ void KisPartLayerHandler::gotButtonReleaseEvent(KisButtonReleaseEvent* event) {
 }
 
 void KisPartLayerHandler::gotKeyPressEvent(QKeyEvent* event) {
-    if (event->key() == Key_Escape) {
+    if (event->key() == Qt::Key_Escape) {
         done();
     } else {
         emit sigGotKeyPressEvent(event);

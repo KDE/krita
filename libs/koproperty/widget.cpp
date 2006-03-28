@@ -137,13 +137,13 @@ Widget::eventFilter(QObject*, QEvent* e)
 
 		/* moved in Editor
 		if (item) {
-			if(ev->key() == Key_Up && ev->state() != ControlButton)
+			if(ev->key() == Qt::Key_Up && ev->state() != ControlButton)
 			{
 				if(item->itemAbove())
 					list->setCurrentItem(item->itemAbove());
 				return true;
 			}
-			else if(ev->key() == Key_Down && ev->state() != ControlButton)
+			else if(ev->key() == Qt::Key_Down && ev->state() != ControlButton)
 			{
 				if(item->itemBelow())
 					list->setCurrentItem(item->itemBelow());

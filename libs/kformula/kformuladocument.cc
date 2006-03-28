@@ -514,7 +514,7 @@ void DocumentWrapper::createActions( KActionCollection* collection )
 
     m_addGenericUpperAction = new KAction(i18n("Add Upper Index"),
                                       "gsup",
-                                              /*CTRL + Key_U*/0,
+                                              /*CTRL + Qt::Key_U*/0,
                                       this, SLOT(addGenericUpperIndex()),
                                       collection, "formula_addupperindex");
     m_addGenericLowerAction = new KAction(i18n("Add Lower Index"),
@@ -588,11 +588,11 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     //m_syntaxHighlightingAction->setChecked( m_contextStyle->syntaxHighlighting() );
 
     m_formatBoldAction = new KToggleAction( i18n( "&Bold" ), "text_bold",
-                                                0, //CTRL + Key_B,
+                                                0, //CTRL + Qt::Key_B,
                                                 this, SLOT( textBold() ),
                                                 collection, "formula_format_bold" );
     m_formatItalicAction = new KToggleAction( i18n( "&Italic" ), "text_italic",
-                                                  0, //CTRL + Key_I,
+                                                  0, //CTRL + Qt::Key_I,
                                                   this, SLOT( textItalic() ),
                                                   collection, "formula_format_italic" );
     m_formatBoldAction->setEnabled( false );
@@ -638,7 +638,7 @@ void DocumentWrapper::createActions( KActionCollection* collection )
 
     m_insertSymbolAction = new KAction(i18n("Insert Symbol"),
                                            "key_enter",
-                                           /*CTRL + Key_I*/0,
+                                           /*CTRL + Qt::Key_I*/0,
                                            this, SLOT(insertSymbol()),
                                            collection, "formula_insertsymbol");
     m_symbolNamesAction = new SymbolAction(i18n("Symbol Names"),

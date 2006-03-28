@@ -488,11 +488,11 @@ void KoContextHelpPopup::keyPressEvent( QKeyEvent* e )
 {
 	switch ( e->key() )
 	{
-/*		case Key_Up:
+/*		case Qt::Key_Up:
 				m_helpViewer->startScrollingUp();
 			break;
 
-		case Key_Down:
+		case Qt::Key_Down:
 				m_helpViewer->startScrollingDown();
 			break;*/
 		case Qt::Key_Up:
@@ -509,8 +509,8 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 {
 	switch ( e->key() )
 	{
-		/*case Key_Up:
-		case Key_Down:
+		/*case Qt::Key_Up:
+		case Qt::Key_Down:
 				m_helpViewer->stopScrolling();
 			break;*/
 

@@ -380,10 +380,10 @@ public:
   KoDocumentInfo *m_info;
   KoDocumentInfoDlg *m_dlg;
   KUrl m_url;
-  KTarGz *m_src;
-  KTarGz *m_dst;
+  KTar *m_src;
+  KTar *m_dst;
 
-  const KTarFile *m_docInfoFile;
+  const KArchiveFile *m_docInfoFile;
 };
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
@@ -404,20 +404,20 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
 #ifdef __GNUC__
 #warning TODO port this to KoStore !!!
 #endif
-  d->m_src = new KTarGz( d->m_url.path(), "application/x-gzip" );
+  d->m_src = new KTar( d->m_url.path(), "application/x-gzip" );
 
   if ( !d->m_src->open( QIODevice::ReadOnly ) )
     return;
 
-  const KTarDirectory *root = d->m_src->directory();
+  const KArchiveDirectory *root = d->m_src->directory();
   if ( !root )
     return;
 
-  const KTarEntry *entry = root->entry( "documentinfo.xml" );
+  const KArchiveEntry *entry = root->entry( "documentinfo.xml" );
 
   if ( entry && entry->isFile() )
   {
-    d->m_docInfoFile = static_cast<const KTarFile *>( entry );
+    d->m_docInfoFile = static_cast<const KArchiveFile *>( entry );
 
     QBuffer buffer( d->m_docInfoFile->data() );
     buffer.open( QIODevice::ReadOnly );
@@ -444,7 +444,7 @@ KoDocumentInfoPropsPage::~KoDocumentInfoPropsPage()
 
 void KoDocumentInfoPropsPage::applyChanges()
 {
-  const KTarDirectory *root = d->m_src->directory();
+  const KArchiveDirectory *root = d->m_src->directory();
   if ( !root )
     return;
 
@@ -463,7 +463,7 @@ void KoDocumentInfoPropsPage::applyChanges()
   if ( !tempFile.close() )
     return;
 
-  d->m_dst = new KTarGz( tempFile.name(), "application/x-gzip" );
+  d->m_dst = new KTar( tempFile.name(), "application/x-gzip" );
 
   if ( !d->m_dst->open( QIODevice::WriteOnly ) )
     return;
@@ -485,7 +485,7 @@ void KoDocumentInfoPropsPage::applyChanges()
   QStringList::ConstIterator end = entries.end();
   for (; it != end; ++it )
   {
-    const KTarEntry *entry = root->entry( *it );
+    const KArchiveEntry *entry = root->entry( *it );
 
     assert( entry );
 
@@ -524,7 +524,7 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *en
   kDebug( 30003 ) << "copy " << entry->name() << endl;
   if ( entry->isFile() )
   {
-    const KTarFile *file = static_cast<const KTarFile *>( entry );
+    const KArchiveFile *file = static_cast<const KArchiveFile *>( entry );
     kDebug( 30003 ) << "file :" << entry->name() << endl;
     kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
     d->m_dst->writeFile( path + entry->name(), entry->user(), entry->group(),
@@ -533,7 +533,7 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *en
   }
   else
   {
-    const KTarDirectory *dir = static_cast<const KTarDirectory *>( entry );
+    const KArchiveDirectory *dir = static_cast<const KArchiveDirectory*>( entry );
     kDebug( 30003 ) << "dir : " << entry->name() << endl;
     kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
 

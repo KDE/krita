@@ -16,12 +16,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoGenStyle.h"
-#include <KoXmlWriter.h>
 #include <float.h>
-#include <kdebug.h>
+
 //Added by qt3to4:
 #include <Q3ValueList>
+
+#include <kdebug.h>
+
+#include <KoXmlWriter.h>
+#include "KoGenStyles.h"
+
+#include "KoGenStyle.h"
 
 
 // Returns -1, 0 (equal) or 1

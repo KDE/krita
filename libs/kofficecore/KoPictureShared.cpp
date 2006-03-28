@@ -20,6 +20,7 @@
 
 #include <qfile.h>
 #include <qimagereader.h>
+#include <qimagewriter.h>
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -233,21 +234,20 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
         // Do not trust QBuffer and do not work directly on the QByteArray array
         // DF: It would be faster to work on array here, and to create a completely
         // different QBuffer for the writing code!
-        QBuffer buf( &array.copy() );
+        QBuffer buf( &array );
         if (!buf.open(QIODevice::ReadOnly))
         {
             kError(30003) << "Could not open read buffer!" << endl;
             return false;
         }
 
-        QImageReader imageIO(&buf,NULL);
-
-        if (!imageIO.read())
+        QImageReader imageReader( &buf );
+        QImage image = imageReader.read();
+        if ( image.isNull() )
         {
             kError(30003) << "Could not read image!" << endl;
             return false;
         }
-
         buf.close();
 
         if ( !buf.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
@@ -256,10 +256,9 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
             return false;
         }
 
-        imageIO.setIODevice(&buf);
-        imageIO.setFormat("PNG");
+        QImageWriter imageWriter( &buf, "PNG" );
 
-        if (!imageIO.write())
+        if ( !imageWriter.write( image ) )
         {
             kError(30003) << "Could not write converted image!" << endl;
             return false;

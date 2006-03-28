@@ -130,18 +130,18 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
 {
     m_rawData=array;
     // Second, create the original image
-    QBuffer buffer(m_rawData);
+    QBuffer buffer( &m_rawData );
     buffer.open(QIODevice::ReadWrite);
-    QImageReader imageIO(&buffer,NULL);
+    QImageReader imageReader( &buffer );
 
-    if (!imageIO.read())
+    QImage image = imageReader.read();
+    buffer.close();
+    if ( image.isNull() )
     {
-        buffer.close();
         kError(30003) << "Image could not be loaded!" << endl;
         return false;
     }
-    buffer.close();
-    m_originalImage=imageIO.image();
+    m_originalImage = image;
 
     return true;
 }

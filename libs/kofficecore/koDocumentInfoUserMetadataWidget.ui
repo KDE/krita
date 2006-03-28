@@ -156,7 +156,7 @@
                         <string>Time:</string>
                     </property>
                 </widget>
-                <widget class="KTimeWidget" row="3" column="1">
+                <widget class="QTimeEdit" row="3" column="1">
                     <property name="name">
                         <cstring>wTime</cstring>
                     </property>
@@ -232,7 +232,6 @@
     <includehint>knuminput.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>ktimewidget.h</includehint>
     <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
     <includehint>ktimewidget.h</includehint>

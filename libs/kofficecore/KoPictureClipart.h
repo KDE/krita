@@ -21,7 +21,7 @@
 #define __koPictureClipart_h__
 
 #include <qstring.h>
-#include <q3picture.h>
+#include <qpicture.h>
 //Added by qt3to4:
 #include <QPixmap>
 
@@ -94,10 +94,10 @@ protected:
      * @internal
      * Draw a QPicture
      */
-    void drawQPicture(Q3Picture& clipart, QPainter& painter,
+    void drawQPicture(QPicture& clipart, QPainter& painter,
         int x, int y, int width, int height, int sx, int sy, int sw, int sh);
 protected:
-    Q3Picture m_clipart; ///< The clipart as QPicture
+    QPicture m_clipart; ///< The clipart as QPicture
     QByteArray m_rawData; ///< Copy of the loaded image file
 };
 

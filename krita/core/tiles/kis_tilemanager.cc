@@ -66,7 +66,7 @@ KisTileManager::KisTileManager() {
 
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("");
-    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  500);
+    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  4000);
     m_swappiness = cfg->readNumEntry("swappiness", 100);
 
     m_tileSize = KisTile::WIDTH * KisTile::HEIGHT;

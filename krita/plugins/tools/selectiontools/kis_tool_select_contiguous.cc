@@ -224,7 +224,7 @@ QWidget* KisToolSelectContiguous::optionWidget()
 
 void KisToolSelectContiguous::slotSetSampleMerged(int state)
 {
-    if (state == QButton::NoChange)
+    if (state == QCheckBox::NoChange)
         return;
     m_sampleMerged = (state == QButton::On);
 }

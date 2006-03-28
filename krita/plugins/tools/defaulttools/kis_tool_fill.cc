@@ -190,21 +190,21 @@ void KisToolFill::slotSetThreshold(int threshold)
 
 void KisToolFill::slotSetUsePattern(int state)
 {
-    if (state == QButton::NoChange)
+    if (state == QCheckBox::NoChange)
         return;
     m_usePattern = (state == QButton::On);
 }
 
 void KisToolFill::slotSetSampleMerged(int state)
 {
-    if (state == QButton::NoChange)
+    if (state == QCheckBox::NoChange)
         return;
     m_sampleMerged = (state == QButton::On);
 }
 
 void KisToolFill::slotSetFillSelection(int state)
 {
-    if (state == QButton::NoChange)
+    if (state == QCheckBox::NoChange)
         return;
     m_fillOnlySelection = (state == QButton::On);
 }

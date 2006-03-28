@@ -19,6 +19,9 @@
 */
 
 #include "config.h"
+
+#include <qpaintdevice.h>
+
 #include <KoGlobal.h>
 #include <kdebug.h>
 #include <qfont.h>

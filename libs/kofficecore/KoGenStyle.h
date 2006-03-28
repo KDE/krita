@@ -26,8 +26,8 @@
 #include <koffice_export.h>
 class KoGenStyles;
 
+class KoGenStyles;
 class KoXmlWriter;
-
 
 /**
  * A generic style, i.e. basically a collection of properties and a name.

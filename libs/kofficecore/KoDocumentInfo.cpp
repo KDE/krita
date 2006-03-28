@@ -151,16 +151,13 @@ QStringList KoDocumentInfo::pages() const
 {
     QStringList ret;
 
-    const QObjectList *list = children();
-    if ( list )
+    const QList<QObject*> list = children();
+    QList<QObject*>::ConstIterator it( list.begin() );
+    QList<QObject*>::ConstIterator end( list.end() );
+    while ( it != end )
     {
-        QObjectListIt it( *list );
-        QObject *obj;
-        while ( ( obj = it.current() ) )
-        {
-            ret.prepend( obj->name() );
-            ++it;
-        }
+        ret.prepend( (*it)->name() );
+        ++it;
     }
 
     return ret;
@@ -219,7 +216,7 @@ void KoDocumentInfoAuthor::initParameters()
 {
     KConfig* config = KoGlobal::kofficeConfig();
     if ( config->hasGroup( "Author" ) ) {
-        KConfigGroupSaver cgs( config, "Author" );
+        KConfigGroup cgs( config, "Author" );
         m_telephoneHome=config->readEntry( "telephone" );
         m_telephoneWork=config->readEntry( "telephone-work" );
         m_fax=config->readEntry( "fax" );

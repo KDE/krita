@@ -21,6 +21,8 @@
 #ifndef __KoMainWindowIface_h__
 #define __KoMainWindowIface_h__
 
+#include <qmap.h>
+
 #include <dcopobject.h>
 #include <dcopref.h>
 //Added by qt3to4:

@@ -20,6 +20,8 @@
 #ifndef __KoDocumentIface_h__
 #define __KoDocumentIface_h__
 
+#include <qmap.h>
+
 #include <dcopobject.h>
 #include <q3valuelist.h>
 //Added by qt3to4:

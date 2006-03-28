@@ -65,7 +65,7 @@ private:
 private:
     static KisTileManager *m_singleton;
     KTempFile m_tempFile;
-    int m_fileSize;
+    off_t m_fileSize;
     // For use when any swap-allocating function failed; the risk of swap allocating failing
     // again is too big, and we'd clutter the logs with kdWarnings otherwise
     bool m_swapForbidden;

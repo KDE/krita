@@ -278,7 +278,7 @@ void KisTileManager::toSwap(TileInfo* info) {
 
         if (data == 0) { // No position found or free, create a new
             long pagesize = sysconf(_SC_PAGESIZE);
-            int newsize = m_fileSize + info->size;
+            off_t newsize = m_fileSize + info->size;
             newsize = newsize + newsize % pagesize;
 
             if (ftruncate(m_tempFile.handle(), newsize)) {

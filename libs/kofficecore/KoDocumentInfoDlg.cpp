@@ -501,8 +501,8 @@ void KoDocumentInfoPropsPage::applyChanges()
       buffer.close();
 
       kDebug( 30003 ) << "writing documentinfo.xml" << endl;
-      d->m_dst->writeFile( "documentinfo.xml", entry->user(), entry->group(), buffer.buffer().size(),
-                           buffer.buffer().data() );
+      d->m_dst->writeFile( "documentinfo.xml", entry->user(), entry->group(),
+                           buffer.buffer().data(), buffer.buffer().size() );
 
       docInfoSaved = true;
     }
@@ -528,8 +528,7 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *en
     kDebug( 30003 ) << "file :" << entry->name() << endl;
     kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
     d->m_dst->writeFile( path + entry->name(), entry->user(), entry->group(),
-                         file->size(),
-                         file->data().data() );
+                         file->data().data(), file->size() );
   }
   else
   {

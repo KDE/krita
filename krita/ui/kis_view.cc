@@ -243,7 +243,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     KisConfig cfg;
     
     m_currentColorChooserDisplay = KisID("BLA");
-    setFocusPolicy( QWidget::StrongFocus );
+    setFocusPolicy( Qt::StrongFocus );
 
     // Must come before input devices are referenced as this detects them.
 #ifdef Q_WS_X11
@@ -3109,7 +3109,7 @@ void KisView::scrollV(int value)
 void KisView::setupCanvas()
 {
     m_canvas = new KisCanvas(this, "kis_canvas");
-    m_canvas->setFocusPolicy( QWidget::StrongFocus );
+    m_canvas->setFocusPolicy( Qt::StrongFocus );
     QObject::connect(m_canvas, SIGNAL(sigGotButtonPressEvent(KisButtonPressEvent*)), this, SLOT(canvasGotButtonPressEvent(KisButtonPressEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent*)), this, SLOT(canvasGotButtonReleaseEvent(KisButtonReleaseEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent*)), this, SLOT(canvasGotDoubleClickEvent(KisDoubleClickEvent*)));

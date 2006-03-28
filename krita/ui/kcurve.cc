@@ -61,7 +61,7 @@ KCurve::KCurve(QWidget *parent, const char *name, WFlags f)
     p->first = 1.0; p->second=1.0;
     m_points.append(p);
     m_points.setAutoDelete(true);
-    setFocusPolicy(QWidget::StrongFocus);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 KCurve::~KCurve()

@@ -28,6 +28,7 @@ Comment[sr]=Алатни прикључак за Krita-у
 Comment[sr@Latn]=Alatni priključak za Krita-u
 Comment[sv]=Verktygsinsticksprogram för Krita
 Comment[uk]=Втулок інструментів для Krita
+Comment[uz]=Krita учун восита плагини
 Comment[zh_CN]=Krita 工具插件
 [PropertyDef::X-Krita-Version]
 Type=int

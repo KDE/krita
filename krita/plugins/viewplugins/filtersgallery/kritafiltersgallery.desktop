@@ -20,6 +20,7 @@ Name[sl]=Galerija filtrov
 Name[sr]=Галерија филтера
 Name[sr@Latn]=Galerija filtera
 Name[sv]=Filtrergalleri
+Name[uz]=Филтерлар тўплами
 Name[zh_CN]=滤镜库
 ServiceTypes=Krita/ViewPlugin
 Type=Service

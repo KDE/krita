@@ -54,8 +54,8 @@ public:
    *
    * @see #gadgetHitTest
    */
-  enum Gadget { NoGadget, TopLeftCorner, TopMid, TopRightCorner, MidLeft, MidRight,
-		BottomLeftCorner, BottomMid, BottomRightCorner, Move };
+  enum Gadget { NoGadget, TopLeft, TopMid, TopRight, MidLeft, MidRight,
+		BottomLeft, BottomMid, BottomRight, Move };
 
   KoChild( QObject *parent = 0, const char *name = 0 );
   virtual ~KoChild();

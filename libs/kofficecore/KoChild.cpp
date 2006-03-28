@@ -344,20 +344,20 @@ KoChild::Gadget KoChild::gadgetHitTest( const QPoint &p )
     return NoGadget;
 
   if ( QRegion( pointArray( QRect( -5, -5, 5, 5 ) ) ).contains( p ) )
-      return Qt::TopLeftCorner;
+      return TopLeft;
   if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3, -5, 5, 5 ) ) ).contains( p ) )
       return TopMid;
   if ( QRegion( pointArray( QRect( d->m_geometry.width(), -5, 5, 5 ) ) ).contains( p ) )
-      return Qt::TopRightCorner;
+      return TopRight;
   if ( QRegion( pointArray( QRect( -5, d->m_geometry.height() / 2 - 3, 5, 5 ) ) ).contains( p ) )
       return MidLeft;
   if ( QRegion( pointArray( QRect( -5, d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
-      return Qt::BottomLeftCorner;
+      return BottomLeft;
   if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3,
 				   d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
     return BottomMid;
   if ( QRegion( pointArray( QRect( d->m_geometry.width(), d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
-      return Qt::BottomRightCorner;
+      return BottomRight;
   if ( QRegion( pointArray( QRect( d->m_geometry.width(),
 				   d->m_geometry.height() / 2 - 3, 5, 5 ) ) ).contains( p ) )
     return MidRight;

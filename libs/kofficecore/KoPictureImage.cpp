@@ -79,7 +79,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     // Use QImage::scale if we have fastMode==true
     if ( fastMode )
     {
-        m_cachedPixmap.convertFromImage(m_originalImage.scale( size ), QPixmap::Color); // Always color or else B/W can be reversed
+        m_cachedPixmap.convertFromImage(m_originalImage.scaled( size ), QPixmap::Color); // Always color or else B/W can be reversed
         m_cacheIsInFastMode=true;
     }
     else

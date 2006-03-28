@@ -179,7 +179,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
     {
         //kDebug(30003) << "fixing size to " << size.width() << "x" << size.height()
         //          << " (was " << image.width() << "x" << image.height() << ")" << endl;
-        image = image.scale( size ); // hmm, smoothScale instead?
+        image = image.scaled( size ); // hmm, smoothScale instead?
     }
     kDebug(30003) << "Image parameters: " << image.width() << "x" << image.height() << "x" << image.depth() << endl;
     return 1; // success
@@ -213,7 +213,7 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const 
         kDebug(30003) << "Fast scaling!" << endl;
         // Slower than caching a QImage, but faster than re-sampling!
         QImage image( m_cachedPixmap.convertToImage() );
-        m_cachedPixmap=image.scale( size );
+        m_cachedPixmap=image.scaled( size );
         m_cacheIsInFastMode=true;
         m_cachedSize=size;
     }

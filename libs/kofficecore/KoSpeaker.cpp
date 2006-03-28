@@ -205,12 +205,12 @@ void KoSpeaker::readConfig(KConfig* config)
     d->m_timer = 0;
     config->setGroup("TTS");
     d->m_speakFlags = 0;
-    if (config->readBoolEntry("SpeakPointerWidget", false)) d->m_speakFlags |= SpeakPointerWidget;
-    if (config->readBoolEntry("SpeakFocusWidget", false)) d->m_speakFlags |= SpeakFocusWidget;
-    if (config->readBoolEntry("SpeakTooltips", true)) d->m_speakFlags |= SpeakTooltip;
-    if (config->readBoolEntry("SpeakWhatsThis", false)) d->m_speakFlags |= SpeakWhatsThis;
-    if (config->readBoolEntry("SpeakDisabled", true)) d->m_speakFlags |= SpeakDisabled;
-    if (config->readBoolEntry("SpeakAccelerators", true)) d->m_speakFlags |= SpeakAccelerator;
+    if (config->readEntry("SpeakPointerWidget", false)) d->m_speakFlags |= SpeakPointerWidget;
+    if (config->readEntry("SpeakFocusWidget", false)) d->m_speakFlags |= SpeakFocusWidget;
+    if (config->readEntry("SpeakTooltips", true)) d->m_speakFlags |= SpeakTooltip;
+    if (config->readEntry("SpeakWhatsThis", false)) d->m_speakFlags |= SpeakWhatsThis;
+    if (config->readEntry("SpeakDisabled", true)) d->m_speakFlags |= SpeakDisabled;
+    if (config->readEntry("SpeakAccelerators", true)) d->m_speakFlags |= SpeakAccelerator;
     d->m_timeout = config->readEntry("PollingInterval", 600);
     d->m_acceleratorPrefix = config->readEntry("AcceleratorPrefixWord", i18n("Accelerator"));
     if (d->m_speakFlags & (SpeakPointerWidget | SpeakFocusWidget)) {

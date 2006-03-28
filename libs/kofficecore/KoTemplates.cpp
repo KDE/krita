@@ -279,8 +279,8 @@ void KoTemplateTree::readTemplates() {
                            QFile::exists(*it+icon)) // allow icons from icontheme
                             icon=*it+icon;
                         //kDebug() << "icon2: " << icon << endl;
-                        hidden=config.readBoolEntry("X-KDE-Hidden", false);
-                        defaultTemplate = config.readBoolEntry("X-KDE-DefaultTemplate", false);
+                        hidden=config.readEntry("X-KDE-Hidden", false);
+                        defaultTemplate = config.readEntry("X-KDE-DefaultTemplate", false);
                         measureSystem=config.readEntry("X-KDE-MeasureSystem").lower();
                         //kDebug() << "hidden: " << hidden_str << endl;
                         templatePath=config.readPathEntry("URL");

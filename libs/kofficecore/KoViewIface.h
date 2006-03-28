@@ -48,7 +48,7 @@ public:
 k_dcop:
     DCOPRef action( const Q3CString &name );
     DCOPCStringList actions();
-    QMap<Q3CString,DCOPRef> actionMap();
+    QMap<DCOPCString,DCOPRef> actionMap();
 
 protected:
     KoView *m_pView;

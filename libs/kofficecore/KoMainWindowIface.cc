@@ -58,7 +58,7 @@ DCOPCStringList KoMainWindowIface::actions()
     return res;
 }
 
-QMap<Q3CString,DCOPRef> KoMainWindowIface::actionMap()
+QMap<DCOPCString,DCOPRef> KoMainWindowIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }

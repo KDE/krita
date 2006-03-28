@@ -28,7 +28,7 @@
 KoFileDialog::KoFileDialog(const QString& startDir, const QString& filter,
                            QWidget *parent, const char *name,
                            bool modal)
-    : KFileDialog( startDir, filter, parent, name, modal )
+    : KFileDialog( startDir, filter, parent )
 {
     connect( filterWidget, SIGNAL( activated( int) ),
              this, SLOT( slotChangedfilter( int ) ) );

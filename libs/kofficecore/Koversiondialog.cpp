@@ -49,7 +49,8 @@ KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
 
   Q3GridLayout *grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
 
-  list=new K3ListView(page,  "versionlist");
+  list=new K3ListView(page);
+  list->setObjectName(  "versionlist");
   list->addColumn(i18n("Date & Time"));
   list->addColumn(i18n("Saved By"));
   list->addColumn(i18n("Comment"));

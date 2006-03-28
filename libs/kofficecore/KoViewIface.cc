@@ -73,7 +73,7 @@ DCOPCStringList KoViewIface::actions()
     return res;
 }
 
-QMap<Q3CString,DCOPRef> KoViewIface::actionMap()
+QMap<DCOPCString,DCOPRef> KoViewIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }

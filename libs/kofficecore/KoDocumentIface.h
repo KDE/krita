@@ -96,7 +96,7 @@ k_dcop:
     /**
      * @return a map of (action name, DCOP reference)
      */
-    QMap<Q3CString,DCOPRef> actionMap();
+    QMap<DCOPCString,DCOPRef> actionMap();
 
     /**
      * Saves the document under its existing filename
@@ -147,8 +147,8 @@ k_dcop:
 
 public:
     virtual DCOPCStringList functionsDynamic();
-    virtual bool processDynamic( const Q3CString &fun, const QByteArray &data,
-                                 Q3CString& replyType, QByteArray &replyData );
+    virtual bool processDynamic( const DCOPCString &fun, const QByteArray &data,
+                                 DCOPCString& replyType, QByteArray &replyData );
 
 protected:
     KoDocument * m_pDoc;

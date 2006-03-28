@@ -110,7 +110,7 @@ DCOPCStringList KoDocumentIface::actions()
     return res;
 }
 
-QMap<Q3CString,DCOPRef> KoDocumentIface::actionMap()
+QMap<DCOPCString,DCOPRef> KoDocumentIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }
@@ -561,8 +561,8 @@ DCOPCStringList KoDocumentIface::functionsDynamic()
     return DCOPObject::functionsDynamic() + KDCOPPropertyProxy::functions( m_pDoc );
 }
 
-bool KoDocumentIface::processDynamic( const Q3CString &fun, const QByteArray &data,
-                                      Q3CString& replyType, QByteArray &replyData )
+bool KoDocumentIface::processDynamic( const DCOPCString &fun, const QByteArray &data,
+                                      DCOPCString& replyType, QByteArray &replyData )
 {
     if ( KDCOPPropertyProxy::isPropertyRequest( fun, m_pDoc ) )
         return KDCOPPropertyProxy::processPropertyRequest( fun, data, replyType, replyData, m_pDoc );

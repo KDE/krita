@@ -510,10 +510,10 @@ QString KoSpeaker::getKttsdVersion()
         if (!d->m_versionChecked) {
             DCOPClient *client = kapp->dcopClient();
             QByteArray  data;
-            Q3CString    replyType;
+            DCOPCString    replyType;
             QByteArray  replyData;
             if ( client->call("kttsd", "KSpeech", "version()", data, replyType, replyData, true) ) {
-                QDataStream arg(replyData, QIODevice::ReadOnly);
+                QDataStream arg(&replyData, QIODevice::ReadOnly);
                 arg >> d->m_kttsdVersion;
                 kDebug() << "KoSpeaker::startKttsd: KTTSD version = " << d->m_kttsdVersion << endl;
             }
@@ -528,9 +528,9 @@ void KoSpeaker::sayScreenReaderOutput(const QString &msg, const QString &talker)
     if (msg.isEmpty()) return;
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    Q3CString    replyType;
+	DCOPCString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, QIODevice::WriteOnly);
+    QDataStream arg(&data, QIODevice::WriteOnly);
     arg << msg << talker;
     if ( !client->call("kttsd", "KSpeech", "sayScreenReaderOutput(QString,QString)",
         data, replyType, replyData, true) ) {
@@ -543,16 +543,16 @@ uint KoSpeaker::setText(const QString &text, const QString &talker)
     if (text.isEmpty()) return 0;
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    Q3CString    replyType;
+    DCOPCString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, QIODevice::WriteOnly);
+    QDataStream arg(&data, QIODevice::WriteOnly);
     arg << text << talker;
     uint jobNum = 0;
     if ( !client->call("kttsd", "KSpeech", "setText(QString,QString)",
         data, replyType, replyData, true) ) {
         kDebug() << "KoSpeaker::sayText: failed" << endl;
     } else {
-        QDataStream arg2(replyData, QIODevice::ReadOnly);
+        QDataStream arg2(&replyData, QIODevice::ReadOnly);
         arg2 >> jobNum;
     }
     return jobNum;
@@ -563,16 +563,16 @@ int KoSpeaker::appendText(const QString &text, uint jobNum /*=0*/)
     if (text.isEmpty()) return 0;
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    Q3CString    replyType;
+   	DCOPCString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, QIODevice::WriteOnly);
+    QDataStream arg(&data, QIODevice::WriteOnly);
     arg << text << jobNum;
     int partNum = 0;
     if ( !client->call("kttsd", "KSpeech", "appendText(QString,uint)",
         data, replyType, replyData, true) ) {
         kDebug() << "KoSpeaker::appendText: failed" << endl;
     } else {
-        QDataStream arg2(replyData, QIODevice::ReadOnly);
+        QDataStream arg2(&replyData, QIODevice::ReadOnly);
         arg2 >> partNum;
     }
     return partNum;
@@ -582,9 +582,9 @@ void KoSpeaker::startText(uint jobNum /*=0*/)
 {
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    Q3CString    replyType;
+    DCOPCString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, QIODevice::WriteOnly);
+    QDataStream arg(&data, QIODevice::WriteOnly);
     arg << jobNum;
     if ( !client->call("kttsd", "KSpeech", "startText(uint)",
         data, replyType, replyData, true) ) {
@@ -596,9 +596,9 @@ void KoSpeaker::removeText(uint jobNum /*=0*/)
 {
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    Q3CString    replyType;
+    DCOPCString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, QIODevice::WriteOnly);
+    QDataStream arg(&data, QIODevice::WriteOnly);
     arg << jobNum;
     if ( !client->call("kttsd", "KSpeech", "removeText(uint)",
         data, replyType, replyData, true) ) {

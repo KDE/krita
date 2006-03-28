@@ -21,7 +21,7 @@
 #include "kis_exif_value.h"
 
 #include <kdebug.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 
 namespace {
 void set16Bit (unsigned char *data, ExifValue::ByteOrder order, const quint16* value)

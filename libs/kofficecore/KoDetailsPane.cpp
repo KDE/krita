@@ -212,7 +212,7 @@ void KoTemplatesPane::alwaysUseClicked()
 
   if(!m_alwaysUseCheckBox->isChecked()) {
     KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
-    cfgGrp.writeEntry("AlwaysUseTemplate", QString::null);
+    cfgGrp.writeEntry("AlwaysUseTemplate", QString());
     d->m_alwaysUseTemplate = QString::null;
   } else {
     d->m_alwaysUseTemplate = item->text(2);

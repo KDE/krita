@@ -298,8 +298,11 @@ void KoOpenPane::selectionChanged(Q3ListViewItem* item)
 
 void KoOpenPane::saveSplitterSizes(KoDetailsPaneBase* /*sender*/, const Q3ValueList<int>& sizes)
 {
+#warning "kde4: port it"		
+#if 0		
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   cfgGrp.writeEntry("DetailsPaneSplitterSizes", sizes);
+#endif  
 }
 
 void KoOpenPane::itemClicked(Q3ListViewItem* item)

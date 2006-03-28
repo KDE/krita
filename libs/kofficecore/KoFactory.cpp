@@ -32,8 +32,9 @@ public:
 };
 
 KoFactory::KoFactory( QObject *parent, const char *name )
-  : KParts::Factory( parent, name )
+  : KParts::Factory( parent )
 {
+	setObjectName(name);
   //d = new KoFactoryPrivate;
 }
 

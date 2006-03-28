@@ -172,9 +172,9 @@ QString KoBorder::saveFoBorder() const
 void KoBorder::save( QDomElement & elem ) const
 {
     if (color.isValid()) {
-        elem.setAttribute("red", color.Qt::red());
-        elem.setAttribute("green", color.Qt::green());
-        elem.setAttribute("blue", color.Qt::blue());
+        elem.setAttribute("red", color.red());
+        elem.setAttribute("green", color.green());
+        elem.setAttribute("blue", color.blue());
     }
     elem.setAttribute("style", static_cast<int>( m_style ));
     elem.setAttribute("width", ptPenWidth);

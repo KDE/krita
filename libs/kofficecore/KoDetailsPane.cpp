@@ -325,7 +325,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
       KUrl url(path);
 
       if(name.isEmpty())
-        name = url.filename();
+        name = url.fileName();
 
       if(!url.isLocalFile() || QFile::exists(url.path())) {
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);

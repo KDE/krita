@@ -27,6 +27,7 @@
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qtooltip.h>
+#include <kxmlguifactory.h>
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <QKeyEvent>

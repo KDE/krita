@@ -48,7 +48,7 @@ void KisDoubleWidget::init(double min, double max)
     m_spinBox = new KDoubleSpinBox(min, max, 0.05, 0, 2, this, "spinbox");
     connect(m_spinBox, SIGNAL(valueChanged(double)), this, SLOT(setSliderValue(double)));
 
-    m_slider = new QSlider(static_cast<int>(min * 100 + 0.5), static_cast<int>(max * 100 + 0.5), 1, 0, QSlider::Horizontal, this, "sld");
+    m_slider = new QSlider(static_cast<int>(min * 100 + 0.5), static_cast<int>(max * 100 + 0.5), 1, 0, Qt::Horizontal, this, "sld");
     connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
     connect(m_slider, SIGNAL(sliderPressed()), SIGNAL(sliderPressed()));
     connect(m_slider, SIGNAL(sliderReleased()), SIGNAL(sliderReleased()));

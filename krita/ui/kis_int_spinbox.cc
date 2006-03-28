@@ -85,7 +85,7 @@ void KisIntSpinbox::init(int val)
     d->m_numinput->setSuffix("%");
     l->addWidget( d->m_numinput );
 
-    d->m_slider = new KisPopupSlider(0, 100, 10, val, QSlider::Horizontal, this);
+    d->m_slider = new KisPopupSlider(0, 100, 10, val, Qt::Horizontal, this);
     d->m_slider->setFrameStyle(QFrame::Panel|QFrame::Raised);
 
     d->m_arrow = new KArrowButton(this, Qt::DownArrow);

@@ -33,7 +33,7 @@ bool KoWmfPaint::play( QPaintDevice& target, bool relativeCoord )
     if ( mPainter.isActive() ) return false;
     mTarget = &target;
     mRelativeCoord = relativeCoord;
-        
+
     // Play the wmf file
     return KoWmfRead::play( );
 }
@@ -66,7 +66,7 @@ bool KoWmfPaint::end() {
         // Draw 2 invisible points
         // because QPicture::setBoundingRect() doesn't give expected result (QT3.1.2)
         // setBoundingRect( boundingRect() );
-//        mPainter.setPen( Qt::NoPen ); 
+//        mPainter.setPen( Qt::NoPen );
 //        mPainter.drawPoint( rec.left(), rec.top() );
 //        mPainter.drawPoint( rec.right(), rec.bottom() );
     }
@@ -92,7 +92,7 @@ void KoWmfPaint::setFont( const QFont &font ) {
 void KoWmfPaint::setPen( const QPen &pen ) {
     QPen p = pen;
     int width = pen.width();
-    
+
     if ( mTarget->isExtDev() ) {
         width = 0;
     }
@@ -106,7 +106,7 @@ void KoWmfPaint::setPen( const QPen &pen ) {
         else
             width = 0;
     }
-    
+
     p.setWidth( width );
     mPainter.setPen( p );
 }
@@ -132,8 +132,8 @@ void KoWmfPaint::setBackgroundMode( Qt::BGMode mode ) {
 }
 
 
-void KoWmfPaint::setRasterOp( Qt::RasterOp op ) {
-    mPainter.setRasterOp( op );
+void KoWmfPaint::setCompositionMode( QPainter::CompositionMode mode ) {
+    mPainter.setCompositionMode( mode );
 }
 
 
@@ -149,7 +149,7 @@ void KoWmfPaint::setWindowOrg( int left, int top ) {
         double dx = mInternalWorldMatrix.dx();
         double dy = mInternalWorldMatrix.dy();
 
-        // translation : Don't use setWindow() 
+        // translation : Don't use setWindow()
         mInternalWorldMatrix.translate( -dx, -dy );
         mPainter.translate( -dx, -dy );
         mInternalWorldMatrix.translate( -left, -top );
@@ -258,7 +258,7 @@ void KoWmfPaint::drawPolygon( const Q3PointArray &pa, bool winding ) {
 
 void KoWmfPaint::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding ) {
     Q3PointArray *pa;
-    
+
     mPainter.save();
     QBrush brush = mPainter.brush();
 

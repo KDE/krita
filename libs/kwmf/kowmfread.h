@@ -107,7 +107,7 @@ public:
     // Drawing attributes/modes
     virtual void  setBackgroundColor( const QColor & ) = 0;
     virtual void  setBackgroundMode( Qt::BGMode ) = 0;
-    virtual void  setRasterOp( Qt::RasterOp ) = 0;
+    virtual void  setCompositionMode( QPainter::CompositionMode ) = 0;
 
     // Change logical Coordinate
     // some wmf files call those functions several times in the middle of a drawing

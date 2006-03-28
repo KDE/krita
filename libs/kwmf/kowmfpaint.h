@@ -24,7 +24,7 @@
 #include <Q3PtrList>
 
 #include "kowmfread.h"
-#include <../kofficecore/koffice_export.h>
+#include <koffice_export.h>
 /**
  * KoWmfPaint inherits the abstract class KoWmfRead
  * and redirects WMF actions onto a QPaintDevice.
@@ -75,7 +75,7 @@ private:
     // Drawing attributes/modes
     void  setBackgroundColor( const QColor& c );
     void  setBackgroundMode( Qt::BGMode mode );
-    void  setRasterOp( Qt::RasterOp op );
+    void  setCompositionMode( QPainter::CompositionMode mode );
 
     /**
      * Change logical Coordinate

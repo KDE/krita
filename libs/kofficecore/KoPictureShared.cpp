@@ -28,7 +28,7 @@
 #include <kurl.h>
 #include <kfilterdev.h>
 #include <kio/netaccess.h>
-
+#include <QBuffer>
 #include "KoPictureKey.h"
 #include "KoPictureBase.h"
 #include "KoPictureImage.h"
@@ -36,7 +36,7 @@
 #include "KoPictureClipart.h"
 #include "KoPictureWmf.h"
 #include "KoPictureShared.h"
-#include <kmdcodec.h>
+#include <kcodecs.h>
 
 
 KoPictureShared::KoPictureShared(void) : m_base(NULL)

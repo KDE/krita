@@ -403,6 +403,7 @@ private:
 
 class KisColorSpaceFactory {
 public:
+	virtual ~KisColorSpaceFactory() {}
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.

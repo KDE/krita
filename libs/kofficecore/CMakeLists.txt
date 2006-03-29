@@ -53,7 +53,6 @@ set(kofficecore_LIB_SRCS
    KoOpenPane.cpp
    KoTemplates.cpp
    KoDetailsPane.cpp
-   KoSpeaker.cpp
    KoOasisLoadingContext.cpp
    KoRect.cpp )
 
@@ -99,7 +98,7 @@ install_targets(${LIB_INSTALL_DIR}/kde4 kodocinfopropspage )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kodocinfopropspage.desktop )
 install_files( ${DATA_INSTALL_DIR}/koffice FILES  koffice_shell.rc )
-install_files( /include FILES  KoContainerHandler.h  	KoFilter.h KoFilterChain.h  	KoGlobal.h KoUnit.h KoDocument.h  	KoMainWindow.h  	KoApplication.h KoQueryTrader.h  	KoFilterManager.h  	KoDocumentInfo.h  	KoView.h KoFrame.h KoDocumentChild.h  	KoDocumentInfoDlg.h KoFactory.h KoChild.h  	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h  	KoPictureKey.h KoPicture.h KoPictureCollection.h kofficeversion.h KoOasisStyles.h  	KoStyleStack.h KoGenStyles.h KoOasisSettings.h KoPageLayout.h KoXmlNS.h KoDom.h Koversiondialog.h  	kkbdaccessextensions.h KoOpenPane.h  	KoSpeaker.h KoOasisLoadingContext.h  	KoPoint.h KoGenStyles.h )
+install_files( /include FILES  KoContainerHandler.h  	KoFilter.h KoFilterChain.h  	KoGlobal.h KoUnit.h KoDocument.h  	KoMainWindow.h  	KoApplication.h KoQueryTrader.h  	KoFilterManager.h  	KoDocumentInfo.h  	KoView.h KoFrame.h KoDocumentChild.h  	KoDocumentInfoDlg.h KoFactory.h KoChild.h  	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h  	KoPictureKey.h KoPicture.h KoPictureCollection.h kofficeversion.h KoOasisStyles.h  	KoStyleStack.h KoGenStyles.h KoOasisSettings.h KoPageLayout.h KoXmlNS.h KoDom.h Koversiondialog.h  	kkbdaccessextensions.h KoOpenPane.h  	KoOasisLoadingContext.h  	KoPoint.h KoGenStyles.h )
 
 kde4_footer()
 

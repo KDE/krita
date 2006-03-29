@@ -381,7 +381,7 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     int totalh = qRound( zoomIt(d->layout.ptHeight) );
     // Clip rect - this gives basically always a rect like (2,2,width-2,height-2)
-    QRect paintRect = _painter->clipRegion( QPainter::CoordPainter ).boundingRect();
+    QRect paintRect = _painter->clipRegion().boundingRect();
     // Ruler rect
     QRect rulerRect( 0, -diffy, width(), totalh );
 

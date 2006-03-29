@@ -197,12 +197,12 @@ void KoWmfPaint::setMatrix( const QMatrix &wm, bool combine ) {
 
 
 void KoWmfPaint::setClipRegion( const QRegion &rec ) {
-    mPainter.setClipRegion( rec, QPainter::CoordPainter );
+    mPainter.setClipRegion( rec );
 }
 
 
 QRegion KoWmfPaint::clipRegion() {
-    return mPainter.clipRegion( QPainter::CoordPainter );
+    return mPainter.clipRegion();
 }
 
 
@@ -267,7 +267,7 @@ void KoWmfPaint::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding 
     for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
         region = region.eor( *pa );
     }
-    mPainter.setClipRegion( region, QPainter::CoordPainter );
+    mPainter.setClipRegion( region );
 
     // fill polygons
     if ( brush != Qt::NoBrush ) {

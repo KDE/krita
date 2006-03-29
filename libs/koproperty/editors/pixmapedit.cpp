@@ -132,7 +132,7 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
 {
 	QRect r2(r);
 	r2.setHeight(r2.height()+1);
-	p->setClipRect(r2, QPainter::CoordPainter);
+	p->setClipRect(r2);
 	p->setClipping(true);
 	p->eraseRect(r2);
 	if (value.toPixmap().isNull())
@@ -162,8 +162,8 @@ PixmapEdit::selectPixmapFileName()
 #ifdef Q_WS_WIN
 	QString recentDir;
 	QString fileName = Q3FileDialog::getOpenFileName(
-		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(), 
-		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
+		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(),
+		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)),
 		this, 0, caption);
 #else
 	KUrl url( KFileDialog::getImageOpenURL(

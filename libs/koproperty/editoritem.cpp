@@ -55,7 +55,7 @@ class EditorItemPrivate
 using namespace KoProperty;
 
 EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, Q3ListViewItem *after)
- : K3ListViewItem(parent, after, 
+ : K3ListViewItem(parent, after,
 	property->captionForDisplaying().isEmpty() ? property->name() : property->captionForDisplaying())
 {
 	d = new EditorItemPrivate();
@@ -129,7 +129,7 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 #else
 		K3ListViewItem::paintCell(p, cg, column, width, align);
 #endif
-		p->fillRect(parent() ? 0 : 50, 0, width, height()-1, 
+		p->fillRect(parent() ? 0 : 50, 0, width, height()-1,
 			QBrush(isSelected() ? cg.highlight() : backgroundColor()));
 		p->setPen(isSelected() ? cg.highlightedText() : cg.text());
 		int delta = -20+KPROPEDITOR_ITEM_MARGIN;
@@ -146,8 +146,8 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 				delta += KPROPEDITOR_ITEM_MARGIN*5;
 		}
 		p->drawText(
-			QRect(delta,2, width+listView()->columnWidth(1)-KPROPEDITOR_ITEM_MARGIN*2, height()), 
-			Qt::AlignLeft | Qt::AlignTop /*| Qt::TextSingleLine*/, text(0)); 
+			QRect(delta,2, width+listView()->columnWidth(1)-KPROPEDITOR_ITEM_MARGIN*2, height()),
+			Qt::AlignLeft | Qt::AlignTop /*| Qt::TextSingleLine*/, text(0));
 
 		p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
 		p->drawLine(width-1, 0, width-1, height()-1);
@@ -168,7 +168,7 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 		Widget *widget = d->editor->createWidgetForProperty(d->property, false /*don't change Widget::property() */);
 		if(widget) {
 			QRect r(0, 0, d->editor->header()->sectionSize(1), height() - (widget->hasBorders() ? 1 : 2));
-			p->setClipRect(r, QPainter::CoordPainter);
+			p->setClipRect(r);
 			p->setClipping(true);
 			widget->drawViewer(p, icg, r, d->property->value());
 			p->setClipping(false);
@@ -245,7 +245,7 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 //		}
 
 		//sorry, but we need to draw text here again
-		font.setBold( dynamic_cast<EditorGroupItem*>(item) 
+		font.setBold( dynamic_cast<EditorGroupItem*>(item)
 			|| (static_cast<EditorItem*>(item)->property() && static_cast<EditorItem*>(item)->property()->isModified()) );
 		p->setFont(font);
 		p->setPen(item->isSelected() ? cg.highlightedText() : cg.text());
@@ -263,27 +263,27 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 		}
 
 		if (!dynamic_cast<EditorDummyItem*>(item->parent()))
-			p->drawText(QRect(delta+1,0, w+listView()->columnWidth(1), item->height()), 
-			Qt::AlignLeft | Qt::AlignVCenter /*| Qt::TextSingleLine*/, item->text(0)); 
+			p->drawText(QRect(delta+1,0, w+listView()->columnWidth(1), item->height()),
+			Qt::AlignLeft | Qt::AlignVCenter /*| Qt::TextSingleLine*/, item->text(0));
 
 		if(item->firstChild())  {
 			//! \todo make BRANCHBOX_SIZE configurable?
 			KStyle* kstyle = dynamic_cast<KStyle*>(&listView()->style());
-			const int lh = item->height(); 
+			const int lh = item->height();
 			const int marg = (lh -2 - BRANCHBOX_SIZE) / 2;
 			int xmarg = marg;
 			if (dynamic_cast<EditorGroupItem*>(item))
 				xmarg = xmarg * 10 / 14 -1;
 			if (kstyle) {
-				kstyle->drawKStylePrimitive( 
-					KStyle::KPE_ListViewExpander, p, listView(), 
+				kstyle->drawKStylePrimitive(
+					KStyle::KPE_ListViewExpander, p, listView(),
 					QRect( xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE ), cg, item->isOpen() ? 0 : QStyle::State_On,
 						QStyleOption::Default);
 			}
 			else {//draw by hand
 				p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
 				p->drawRect(xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE);
-				p->fillRect(xmarg+1, marg + 1, BRANCHBOX_SIZE-2, BRANCHBOX_SIZE-2, 
+				p->fillRect(xmarg+1, marg + 1, BRANCHBOX_SIZE-2, BRANCHBOX_SIZE-2,
 					item->listView()->paletteBackgroundColor());
 				p->setPen( item->listView()->paletteForegroundColor() );
 				p->drawLine(xmarg+2, marg+BRANCHBOX_SIZE/2, xmarg+BRANCHBOX_SIZE-3, marg+BRANCHBOX_SIZE/2);
@@ -326,7 +326,7 @@ EditorItem::compare( Q3ListViewItem *i, int col, bool ascending ) const
 //		kopropertydbg << d->property->name() << " " << d->property->sortingKey() << " | "
 //			<< static_cast<EditorItem*>(i)->property()->name() << " "
 //			<< static_cast<EditorItem*>(i)->property()->sortingKey() << endl;
-		return d->property->sortingKey() 
+		return d->property->sortingKey()
 			- ((dynamic_cast<EditorItem*>(i) && dynamic_cast<EditorItem*>(i)->property()) ? dynamic_cast<EditorItem*>(i)->property()->sortingKey() : 0);
 	}
 
@@ -378,8 +378,8 @@ EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int 
 		K3ListViewItem::paintCell(p, cg, column, width, align);
 #endif*/
 	p->setPen(cg.text());
-	p->drawText(QRect(0,0, width+listView()->columnWidth(1), height()), 
-		Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, text(0)); 
+	p->drawText(QRect(0,0, width+listView()->columnWidth(1), height()),
+		Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, text(0));
 }
 
 void

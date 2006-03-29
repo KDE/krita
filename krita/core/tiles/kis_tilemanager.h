@@ -18,6 +18,8 @@
 #ifndef KIS_TILEMANAGER_H_
 #define KIS_TILEMANAGER_H_
 
+#include <sys/types.h>
+
 #include <qglobal.h>
 #include <qmap.h>
 #include <qvaluelist.h>

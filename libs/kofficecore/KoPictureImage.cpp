@@ -26,6 +26,7 @@
 
 #include <qbuffer.h>
 #include <qpainter.h>
+#include <qprinter.h>
 #include <qimage.h>
 #include <qimagereader.h>
 #include <qpixmap.h>
@@ -34,8 +35,6 @@
 
 KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
 {
-    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
-    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 }
 
 KoPictureImage::~KoPictureImage(void)
@@ -96,7 +95,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     if ( !width || !height )
         return;
     QSize origSize = getOriginalSize();
-    const bool scaleImage = painter.device()->isExtDev() // we are printing
+    const bool scaleImage = dynamic_cast<QPrinter*>(painter.device()) != 0 // we are printing
         && ((width <= origSize.width()) || (height <= origSize.height()));
     if( scaleImage )
     {

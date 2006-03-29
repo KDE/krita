@@ -23,6 +23,7 @@
 
 #include <qbuffer.h>
 #include <qpainter.h>
+#include <qprinter.h>
 #include <q3paintdevicemetrics.h>
 #include <qfile.h>
 #include <qtextstream.h>
@@ -48,8 +49,6 @@
 
 KoPictureEps::KoPictureEps(void) : m_psStreamStart(0), m_psStreamLength(0), m_cacheIsInFastMode(true)
 {
-    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
-    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 }
 
 KoPictureEps::~KoPictureEps(void)
@@ -244,7 +243,7 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
     Q3PaintDeviceMetrics metrics (painter.device());
     kDebug(30003) << "Metrics: X: " << metrics.logicalDpiX() << " x Y: " << metrics.logicalDpiX() << " (in KoPictureEps::draw)" << endl;
 
-    if ( painter.device()->isExtDev() ) // Is it an external device (i.e. printer)
+    if ( dynamic_cast<QPrinter*>(painter.device()) ) // Is it an external device (i.e. printer)
     {
         kDebug(30003) << "Drawing for a printer (in KoPictureEps::draw)" << endl;
         // For printing, always re-sample the image, as a printer has never the same resolution than a display.

@@ -53,7 +53,7 @@ noinst_HEADERS = kis_aboutdata.h imageviewer.h layerlist.h kcurve.h \
 		kis_custom_brush.h kis_custom_pattern.h kis_custom_image_widget.h \
 		kis_dlg_adjustment_layer.h kis_grid_manager.h kis_dlg_adj_layer_props.h squeezedcombobox.h
 
-include_HEADERS = kis_cmb_composite.h kis_cmb_idlist.h kis_color_cup.h kis_config.h \
+include_HEADERS = kis_canvas_painter.h kis_cmb_composite.h kis_cmb_idlist.h kis_color_cup.h kis_config.h \
 		kis_cursor.h kis_doc.h kis_doc_iface.h \
 		kis_double_click_event.h kis_double_widget.h kis_filter_manager.h \
 		kis_gradient_chooser.h kis_gradient_slider_widget.h kis_histogram_view.h kis_icon_item.h \

@@ -21,7 +21,6 @@
 #include <qimage.h>
 #include <qmessagebox.h>
 #include <qbuffer.h>
-#include <kmultipledrag.h>
 #include <klocale.h>
 
 #include "kdebug.h"

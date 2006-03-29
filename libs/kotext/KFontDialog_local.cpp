@@ -338,8 +338,8 @@ KFontChooser_local::KFontChooser_local(QWidget *parent, const char *name,
     setSizeIsRelative( *sizeIsRelativeState );
 
   KConfig *config = KGlobal::config();
-  KConfigGroupSaver saver(config, QString::fromLatin1("General"));
-  showXLFDArea(config->readBoolEntry(QString::fromLatin1("fontSelectorShowXLFD"), false));
+  KConfigGroup group(config, QString::fromLatin1("General"));
+  showXLFDArea(group.readBoolEntry(QString::fromLatin1("fontSelectorShowXLFD"), false));
 }
 
 KFontChooser_local::~KFontChooser_local()

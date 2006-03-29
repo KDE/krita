@@ -1394,13 +1394,13 @@ Q3CString KoDateVariable::formatStr(int & correct)
     KConfig* config = KoGlobal::kofficeConfig();
     if( config->hasGroup("Date format history") )
     {
-        KConfigGroupSaver cgs( config, "Date format history");
-        const int noe=config->readNumEntry("Number Of Entries", 5);
+        KConfigGroup configGroup( config, "Date format history");
+        const int noe=configGroup.readNumEntry("Number Of Entries", 5);
         for(int i=0;i<noe;i++)
         {
             QString num;
             num.setNum(i);
-            const QString tmpString(config->readEntry("Last Used"+num));
+            const QString tmpString(configGroup.readEntry("Last Used"+num));
             if(tmpString.startsWith("locale"))
                 continue;
             else if(stringList.contains(tmpString))
@@ -1441,7 +1441,7 @@ Q3CString KoDateVariable::formatStr(int & correct)
     {
         QString num;
         num.setNum(i);
-        config->writeEntry("Last Used"+num, stringList[i]);
+        configGroup.writeEntry("Last Used"+num, stringList[i]);
     }
     config->sync();
     delete dialog;
@@ -1606,13 +1606,13 @@ Q3CString KoTimeVariable::formatStr(int & _correct)
     int count=0;
     if( config->hasGroup("Time format history") )
     {
-        KConfigGroupSaver cgs( config, "Time format history" );
-        const int noe=config->readNumEntry("Number Of Entries", 5);
+        KConfigGroup configGroup( config, "Time format history" );
+        const int noe=configGroup.readNumEntry("Number Of Entries", 5);
         for(int i=0;i<noe;i++)
         {
             QString num;
             num.setNum(i);
-            QString tmpString(config->readEntry("Last Used"+num));
+            QString tmpString(configGroup.readEntry("Last Used"+num));
             if(tmpString.startsWith("locale"))
                 continue;
             else if(stringList.contains(tmpString))
@@ -1651,7 +1651,7 @@ Q3CString KoTimeVariable::formatStr(int & _correct)
     {
         QString num;
         num.setNum(i);
-        config->writeEntry("Last Used"+num, stringList[i]);
+        configGroup.writeEntry("Last Used"+num, stringList[i]);
     }
     config->sync();
     delete dialog;

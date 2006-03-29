@@ -190,8 +190,8 @@ void KoCompletion::saveSettings() {
 
 void KoCompletion::slotSaveCompletionEntry() {
     KConfig config("kofficerc");
-    KConfigGroupSaver cgs( &config, "Completion Word" );
-    config.writeEntry( "list", m_listCompletion );
+    KConfigGroup configGroup( &config, "Completion Word" );
+    configGroup.writeEntry( "list", m_listCompletion );
     config.sync();
     KMessageBox::information( this, i18n(
             "Completion list saved.\nIt will be used for all documents "

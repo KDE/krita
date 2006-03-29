@@ -30,7 +30,6 @@
 #include "KoFileDialog.h"
 #include "Koversiondialog.h"
 #include "kkbdaccessextensions.h"
-#include "KoSpeaker.h"
 
 #include <kprinter.h>
 #include <kdeversion.h>
@@ -52,7 +51,6 @@
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
-#include <ksharedptr.h>
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
 
@@ -128,14 +126,6 @@ public:
     m_windowSizeDirty = false;
     m_lastExportSpecialOutputFlag = 0;
 
-    // TTS accessibility enhancement (only if KDE 3.4 or later and KTTSD daemon is installed.)
-    if (KoSpeaker::isKttsdInstalled()) {
-        if (kospeaker)
-            m_koSpeaker = kospeaker;
-        else
-            m_koSpeaker = new KoSpeaker();
-    } else
-        m_koSpeaker = 0;
   }
   ~KoMainWindowPrivate()
   {
@@ -189,8 +179,6 @@ public:
   KUrl m_lastExportURL;
   QByteArray m_lastExportFormat;
   int m_lastExportSpecialOutputFlag;
-
-  KSharedPtr<KoSpeaker> m_koSpeaker;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )

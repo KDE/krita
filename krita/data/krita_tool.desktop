@@ -20,6 +20,7 @@ Comment[ms]=Plugin alat Krita
 Comment[nb]=Krita-programtillegg for verktøy
 Comment[nl]=Gereedschapsplugin voor Krita
 Comment[nn]=Krita-programtillegg for verktøy
+Comment[pl]=Wtyczka narzędzi dla Krita
 Comment[pt]='Plugin' de ferramentas do Krita
 Comment[pt_BR]=Plugin de ferramenta para o Krita
 Comment[ru]=Инструмент Krita
@@ -27,6 +28,7 @@ Comment[sr]=Алатни прикључак за Krita-у
 Comment[sr@Latn]=Alatni priključak za Krita-u
 Comment[sv]=Verktygsinsticksprogram för Krita
 Comment[uk]=Втулок інструментів для Krita
+Comment[uz]=Krita учун восита плагини
 Comment[zh_CN]=Krita 工具插件
 [PropertyDef::X-Krita-Version]
 Type=int

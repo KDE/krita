@@ -20,6 +20,7 @@ Comment[ms]=Plugin penapis Krita
 Comment[nb]=Krita-programtillegg for filter
 Comment[nl]=Filterplugin voor Krita
 Comment[nn]=Krita-programtillegg for filter
+Comment[pl]=Wtyczka filtrów dla Krita
 Comment[pt]='Plugin' de filtragem do Krita
 Comment[pt_BR]=Plugin de filtro para o Krita
 Comment[sl]=Vstavek za filtriranje za Krito
@@ -27,6 +28,7 @@ Comment[sr]=Филтерски прикључак за Krita-у
 Comment[sr@Latn]=Filterski priključak za Krita-u
 Comment[sv]=Insticksprogram med filter för Krita
 Comment[uk]=Втулок фільтра для Krita
+Comment[uz]=Krita учун филтер плагини
 Comment[zh_CN]=Krita 过滤器插件
 [PropertyDef::X-Krita-Version]
 Type=int

@@ -73,7 +73,7 @@ kde4_add_dcop_skels(kofficecore_LIB_SRCS
 
 kde4_add_library(kofficecore SHARED ${kofficecore_LIB_SRCS})
 
-target_link_libraries(kofficecore  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kofficecore  ${KDE4_KPARTS_LIBS} kstore kabc ${KDE4_KDEPRINT_LIBS} kwmf)
 
 set_target_properties(kofficecore PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 install_targets(${LIB_INSTALL_DIR} kofficecore )

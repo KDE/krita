@@ -26,11 +26,12 @@
 class QDomElement;
 class KoZoomHandler;
 class QPainter;
+class QRect;
 
 /**
  * This class represents a border - for anything, like paragraph, or frame
  */
-class KOTEXT_EXPORT KoBorder : public Qt
+class KOTEXT_EXPORT KoBorder
 {
     friend class KoTextCursor;
 public:

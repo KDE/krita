@@ -481,7 +481,7 @@ bool KoTextFormatterCore::format()
                 {
                     // (combine lineStart->baseLine/lineStart->h and tmpBaseLine/tmph)
                     int belowBaseLine = qMax( lineStart->h - lineStart->baseLine, tmph - tmpBaseLine );
-                    lineStart->baseLine = qMax( lineStart->baseLine, tmpBaseLine );
+                    lineStart->baseLine = qMax( (int)lineStart->baseLine, tmpBaseLine );
                     lineStart->h = lineStart->baseLine + belowBaseLine;
                     lineStart->w = dw;
 
@@ -651,7 +651,7 @@ bool KoTextFormatterCore::format()
             kDebug(32500) << "Breakable character: combining " << lineStart->baseLine << "/" << lineStart->h << " with " << tmpBaseLine << "/" << tmph << endl;
 #endif
             int belowBaseLine = qMax( lineStart->h - lineStart->baseLine, tmph - tmpBaseLine );
-            lineStart->baseLine = qMax( lineStart->baseLine, tmpBaseLine );
+            lineStart->baseLine = qMax( (int)lineStart->baseLine, tmpBaseLine );
             lineStart->h = lineStart->baseLine + belowBaseLine;
             lineStart->w = dw;
 #ifdef DEBUG_FORMATTER_VERT
@@ -779,7 +779,7 @@ bool KoTextFormatterCore::format()
 #endif
         // (combine lineStart and tmpBaseLine/tmph)
         int belowBaseLine = qMax( lineStart->h - lineStart->baseLine, tmph - tmpBaseLine );
-        lineStart->baseLine = qMax( lineStart->baseLine, tmpBaseLine );
+        lineStart->baseLine = qMax( (int)lineStart->baseLine, tmpBaseLine );
         lineStart->h = lineStart->baseLine + belowBaseLine;
         lineStart->w = dw;
 #ifdef DEBUG_FORMATTER_WIDTH
@@ -857,9 +857,12 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
     KoTextParagLineStart* ret = 0;
+#if 0 // TODO RTL SUPPORT
     if( string->isBidi() ) {
         ret = koBidiReorderLine( zh, parag, string, line, startChar, lastChar, align, space );
-    } else {
+    } else
+#endif
+    {
         int start = (startChar - &string->at(0));
         int last = (lastChar - &string->at(0) );
 
@@ -966,6 +969,8 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
     return ret;
 }
 
+// TODO RTL SUPPORT
+#if 0
 // collects one line of the paragraph and transforms it to visual order
 KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
     KoTextZoomHandler *zh,
@@ -1122,6 +1127,7 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
     delete runs;
     return ls;
 }
+#endif
 
 void KoTextFormatter::postFormat( KoTextParag* parag )
 {

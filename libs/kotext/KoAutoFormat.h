@@ -175,9 +175,9 @@ public:
 
     void configAppendSpace( bool b);
 
-    void configMinWordLength( uint val );
+    void configMinWordLength( int val );
 
-    void configNbMaxCompletionWord( uint val );
+    void configNbMaxCompletionWord( int val );
 
     void configAddCompletionWord( bool b );
 
@@ -246,10 +246,10 @@ public:
     bool getConfigAppendSpace() const
     { return m_completionAppendSpace; }
 
-    uint getConfigMinWordLength() const
+    int getConfigMinWordLength() const
     { return m_minCompletionWordLength; }
 
-    uint getConfigNbMaxCompletionWord() const
+    int getConfigNbMaxCompletionWord() const
     { return m_nbMaxCompletionWord; }
 
     bool getConfigAddCompletionWord() const
@@ -410,10 +410,10 @@ private:
     QStringList m_upperCaseExceptions;
     QStringList m_twoUpperLetterException;
 
-    uint m_maxFindLength;
-    uint m_minCompletionWordLength;
-    uint m_nbMaxCompletionWord;
-    uint m_countMaxWords;
+    int m_maxFindLength;
+    int m_minCompletionWordLength;
+    int m_nbMaxCompletionWord;
+    int m_countMaxWords;
     QStringList m_cacheNameOfDays;
     KoCompletionBox *m_completionBox;
     KeyCompletionAction m_keyCompletionAction;

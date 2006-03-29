@@ -184,7 +184,7 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering,
     const QDomElement listStyle = context.listStyleStack().currentListStyle();
     const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
     const QDomElement listStyleTextProperties = context.listStyleStack().currentListStyleTextProperties();
-    loadOasisListStyle( listStyle, listStyleProperties, listStyleTextProperties, 
+    loadOasisListStyle( listStyle, listStyleProperties, listStyleTextProperties,
                         restartNumbering, orderedList, heading, level, loadingStyle );
 }
 
@@ -324,7 +324,7 @@ void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool incl
     if ( includeLevelAndProperties ) // false when called for footnotes-configuration
     {
         listLevelWriter.startElement( "style:list-level-properties" );
-        listLevelWriter.addAttribute( "fo:text-align", KoParagLayout::saveOasisAlignment( (Qt::AlignmentFlags)m_align ) );
+        listLevelWriter.addAttribute( "fo:text-align", KoParagLayout::saveOasisAlignment( (Qt::AlignmentFlag)m_align ) );
         // OASIS has other style properties: text:space-before (indent), text:min-label-width (TODO),
         // text:min-label-distance, style:font-name (for bullets), image size and vertical alignment.
         listLevelWriter.endElement(); // style:list-level-properties
@@ -715,7 +715,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     if ( m_displayLevels > 1 && m_numbering != NUM_NONE )
     {
         KoTextParag* p = parent( paragraph );
-        int displayLevels = qMin( m_displayLevels, m_depth+1 ); // can't be >depth+1
+        int displayLevels = qMin( (int)m_displayLevels, m_depth+1 ); // can't be >depth+1
         for ( int level = 1 ; level < displayLevels ; ++level ) {
             //kDebug() << "additional level=" << level << "/" << displayLevels-1 << endl;
             if ( p )
@@ -931,7 +931,7 @@ int KoParagCounter::fromAlphaUpperNumber( const QString &string )
     const int len = string.length();
     for (int i = 0; i < len; i++)
     {
-        const int add = char(string[i]) - 'A' + 1;
+        const int add = (string[i]).toLatin1() - 'A' + 1;
 
         if (add >= 1 && add <= 26) // _not_ < 26
             ret = ret * 26 + add;
@@ -952,7 +952,7 @@ int KoParagCounter::fromAlphaLowerNumber( const QString &string )
     const int len = string.length();
     for (int i = 0; i < len; i++)
     {
-        const int add = char(string[i]) - 'a' + 1;
+        const int add = (string[i]).toLatin1() - 'a' + 1;
 
         if (add >= 1 && add <= 26) // _not_ < 26
             ret = ret * 26 + add;

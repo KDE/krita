@@ -1131,7 +1131,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         if ( !prefix.isEmpty() )
         {
             if ( rtl )
-                prefix.prepend( ' ' /*the space before the bullet in RTL mode*/ );
+                prefix.prepend( ' ' /*the space before the bullet in RightToLeft mode*/ );
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height, prefix[0] );
 
             int posY =y + base - format->offsetFromBaseLine();
@@ -1216,7 +1216,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         {
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, counterWidth, y, height, counterText[0] );
 
-            counterText += ' ' /*the space after the bullet (before in RTL mode)*/;
+            counterText += ' ' /*the space after the bullet (before in RightToLeft mode)*/;
 
             int posY =y + base - format->offsetFromBaseLine();
             //we must move to bottom text because we create
@@ -1845,9 +1845,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
         }
     }
 
-    QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
+    Qt::LayoutDirection dir = rightToLeft ? Qt::RightToLeft : Qt::LeftToRight;
 
-    if ( dir != QPainter::RTL && start + len == length() ) // don't draw the last character (trailing space)
+    if ( dir != Qt::RightToLeft && start + len == length() ) // don't draw the last character (trailing space)
     {
        len--;
        if ( len <= 0 )
@@ -1865,7 +1865,8 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
             int sy = format->shadowY( zh );
             if ( sy < 0)
                 posY -= sy;
-	    painter.drawText( startX, posY, str, start, len, dir );
+	    // TODO RTL painter.drawText( startX, posY, str, start, len, dir );
+            painter.drawText( startX, posY, str, start, len );
 #ifdef BIDI_DEBUG
 	    painter.save();
 	    painter.setPen ( Qt::red );
@@ -1887,7 +1888,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
             int sy = format->shadowY( zh );
             if ( sy < 0)
                 posY -= sy;
-	    painter.drawText( startX, posY, str, start, len, dir );
+	    painter.drawText( startX, posY, str, start, len /*TODO , dir*/ );
 	} else if ( format->vAlign() == KoTextFormat::AlignSubScript ) {
             int posY =lastY + baseLine + ( painter.fontMetrics().height() / 6 );
             //we must move to bottom text because we create
@@ -1895,7 +1896,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
             int sy = format->shadowY( zh );
             if ( sy < 0)
                 posY -= sy;
-	    painter.drawText( startX, posY, str, start, len, dir );
+	    painter.drawText( startX, posY, str, start, len /*TODO , dir*/ );
 	} else if ( format->vAlign() == KoTextFormat::AlignCustom ) {
             int posY = lastY + baseLine - format->offsetFromBaseLine();
             //we must move to bottom text because we create
@@ -1903,7 +1904,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
             int sy = format->shadowY( zh );
             if ( sy < 0)
                 posY -= sy;
-	    painter.drawText( startX, posY, str, start, len, dir );
+	    painter.drawText( startX, posY, str, start, len /*TODO , dir */ );
 	}
     }
     if ( str[ start ] == '\t' && m_tabCache.contains( start ) ) {
@@ -2642,7 +2643,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoTextZoo
 
 }
 
-// ### is this method correct for RTL text?
+// ### is this method correct for RightToLeft text?
 QString KoTextParag::toString( int from, int length ) const
 {
     QString str;

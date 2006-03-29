@@ -14,8 +14,9 @@ set(libkohyphen_SRCS
 	${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen/kohyphen.cpp
 	)
 
+#   KoComplexText.cpp  not compiled
+
 set(kotext_LIB_SRCS ${libkohyphen_SRCS}
-   KoComplexText.cpp 
    KoRichText.cpp 
    KoTextZoomHandler.cpp 
    KoBorder.cpp 

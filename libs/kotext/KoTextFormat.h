@@ -117,9 +117,9 @@ public:
         Hyphenation = 131072,
         UnderLineWidth = 262144,
 
-	Font = Bold | Italic | Qt::TextUnderline | Family | Size,
+	Font = Bold | Italic | Underline | Family | Size,
         // Format means "everything"
-	Format = Font | Color | Misspelled | VAlign | Qt::TextStrikeOut | TextBackgroundColor |
+	Format = Font | Color | Misspelled | VAlign | StrikeOut | TextBackgroundColor |
                  ExtendUnderLine | Language | ShadowText | OffsetFromBaseLine |
                  WordByWord | Attribute | Hyphenation | UnderLineWidth
     };

@@ -1,6 +1,6 @@
 //KoTextFormatter test (also for profiling purposes), GPL v2, David Faure <faure@kde.org>
 
-#include <kapplication.h>
+#include <qapplication.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -202,7 +202,7 @@ void KoTextFormatterTest::counterAndBigChar()
 
 int main (int argc, char ** argv)
 {
-    KApplication app(argc, argv, "KoTextFormatter test");
+    QApplication app(argc, argv);
 
     // Don't let locale settings lead to different hyphenation output
     KGlobal::locale()->setLanguage( QString::fromLatin1( "en_US" ) );

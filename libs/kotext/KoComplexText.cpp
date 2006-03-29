@@ -554,7 +554,7 @@ static inline int getShape( const QChar * /* base */, uchar cell, int shape,
     return ch;
 }
 
-QString KoComplexText::shapedString(const QString& uc, int from, int len, QPainter::TextDirection dir, const QFontMetrics *fm )
+QString KoComplexText::shapedString(const QString& uc, int from, int len, QPainter::LayoutDirection dir, const QFontMetrics *fm )
 {
     if( len < 0 )
 	len = uc.length() - from;

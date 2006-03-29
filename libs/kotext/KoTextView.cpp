@@ -37,13 +37,11 @@
 #include <kcommand.h>
 #include <kbookmarkmanager.h>
 #include <kbookmark.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 
 #include <qapplication.h>
 #include <qtimer.h>
 #include <qclipboard.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 #include <QKeyEvent>
 #include <Q3ValueList>
 #include <QMouseEvent>
@@ -271,7 +269,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         clearUndoRedoInfo = FALSE;
         break;
     case Qt::Key_F16: // Copy key on Sun keyboards
-        emit copy();
+        emit copy(QClipboard::Clipboard);
         break;
     case Qt::Key_F18:  // Paste key on Sun keyboards
         emit paste();
@@ -369,7 +367,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 		switch ( e->key() )
 	      {
 		case Qt::Key_F16: // Copy key on Sun keyboards
-		  copy();
+		  emit copy(QClipboard::Clipboard);
 		  break;
 		case Qt::Key_A:
 		  moveCursor( MoveLineStart, e->state() & Qt::ShiftModifier );
@@ -381,7 +379,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 		  textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionKill );
 		  break;
 		case Qt::Key_Insert:
-		  copy();
+		  emit copy(QClipboard::Clipboard);
 		  break;
 		case Qt::Key_Space:
 		  insertNonbreakingSpace();
@@ -431,12 +429,12 @@ void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
     }
 }
 
-void KoTextView::handleImStartEvent( QIMEvent * )
+void KoTextView::handleImStartEvent( QInputMethodEvent * )
 {
     // nothing to do
 }
 
-void KoTextView::handleImComposeEvent( QIMEvent * e )
+void KoTextView::handleImComposeEvent( QInputMethodEvent * e )
 {
     // remove old preedit
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
@@ -447,14 +445,14 @@ void KoTextView::handleImComposeEvent( QIMEvent * e )
     // insert preedit
     int preeditStartIdx = m_cursor->index();
     textDocument()->setSelectionStart( KoTextDocument::InputMethodPreedit, m_cursor );
-    textObject()->insert( m_cursor, m_currentFormat, e->text(), i18n("Insert Text"),
+    textObject()->insert( m_cursor, m_currentFormat, e->preeditString(), i18n("Insert Text"),
                           KoTextDocument::Standard,
                           KoTextObject::DoNotRepaint/* DO NOT REPAINT CURSOR! */ );
     textDocument()->setSelectionEnd( KoTextDocument::InputMethodPreedit, m_cursor );
 
     // selection
-    int preeditSelStart = preeditStartIdx + e->cursorPos();
-    int preeditSelEnd   = preeditSelStart + e->selectionLength();
+    int preeditSelStart = preeditStartIdx /* TODO ?! + e->cursorPos() */;
+    int preeditSelEnd   = preeditSelStart /* TODO ?! + e->selectionLength()*/;
     m_cursor->setIndex( preeditSelStart );
     textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
     m_cursor->setIndex( preeditSelEnd );
@@ -468,7 +466,7 @@ void KoTextView::handleImComposeEvent( QIMEvent * e )
     textObject()->selectionChangedNotify();
 }
 
-void KoTextView::handleImEndEvent( QIMEvent * e )
+void KoTextView::handleImEndEvent( QInputMethodEvent * e )
 {
     // remove old preedit
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
@@ -476,7 +474,7 @@ void KoTextView::handleImEndEvent( QIMEvent * e )
     if ( textDocument()->hasSelection( KoTextDocument::InputMethodPreedit ) )
         textDocument()->removeSelectedText( KoTextDocument::InputMethodPreedit, m_cursor );
 
-    insertText( e->text() );
+    insertText( e->commitString() );
 
     textObject()->emitUpdateUI( true );
     textObject()->emitShowCursor();
@@ -639,10 +637,7 @@ KoTextCursor KoTextView::selectParagUnderCursor( const KoTextCursor& cursor, int
     if ( copyAndNotify )
     {
         textObject()->selectionChangedNotify();
-        // Copy the selection.
-        QApplication::clipboard()->setSelectionMode( true );
-        emit copy();
-        QApplication::clipboard()->setSelectionMode( false );
+        emit copy(QClipboard::Selection);
     }
     return c2;
 }
@@ -804,10 +799,7 @@ void KoTextView::handleMouseReleaseEvent()
 
         textObject()->selectionChangedNotify();
 
-        // Copy the selection.
-        QApplication::clipboard()->setSelectionMode( true );
-        emit copy();
-        QApplication::clipboard()->setSelectionMode( false );
+        emit copy(QClipboard::Selection);
     }
 
     inDoubleClick = FALSE;
@@ -827,10 +819,7 @@ void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i )
     inDoubleClick = TRUE;
     *m_cursor = selectWordUnderCursor( *m_cursor );
     textObject()->selectionChangedNotify();
-    // Copy the selection.
-    QApplication::clipboard()->setSelectionMode( true );
-    emit copy();
-    QApplication::clipboard()->setSelectionMode( false );
+    emit copy(QClipboard::Selection);
 
     possibleTripleClick=true;
 
@@ -1085,7 +1074,7 @@ KoLinkVariable * KoTextView::linkVariable()
     return dynamic_cast<KoLinkVariable *>(variable());
 }
 
-Q3PtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QString& word, bool & _singleWord )
+QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, const QString& word, bool & _singleWord )
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
@@ -1116,7 +1105,7 @@ Q3PtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QS
     }
 
     if ( text.isEmpty() || textObject()->protectContent()) // Nothing to apply a tool to
-        return Q3PtrList<KAction>();
+        return QList<KAction *>();
 
     // Any tool that works on plain text is relevant
     Q3ValueList<KDataToolInfo> tools;
@@ -1200,7 +1189,7 @@ bool KoTextView::openLink( KoLinkVariable* variable )
     KUrl url( variable->url() );
     if( url.isValid() )
     {
-        (void) new KRun( url );
+        (void) new KRun( url, 0 /*widget*/ );
         return true;
     }
     else
@@ -1448,10 +1437,8 @@ void KoTextView::copyTextOfComment()
     {
         KUrl::List lst;
         lst.append( var->note() );
-        QApplication::clipboard()->setSelectionMode(true);
-        QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
-        QApplication::clipboard()->setSelectionMode(false);
-        QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
+        QApplication::clipboard()->setData( new K3URLDrag(lst, 0), QClipboard::Selection );
+        QApplication::clipboard()->setData( new K3URLDrag(lst, 0), QClipboard::Clipboard );
     }
 }
 
@@ -1513,10 +1500,8 @@ void KoTextView::copyLink()
     {
         KUrl::List lst;
         lst.append( var->url() );
-        QApplication::clipboard()->setSelectionMode(true);
-        QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
-        QApplication::clipboard()->setSelectionMode(false);
-        QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
+        QApplication::clipboard()->setData( new K3URLDrag(lst, 0), QClipboard::Selection );
+        QApplication::clipboard()->setData( new K3URLDrag(lst, 0), QClipboard::Clipboard );
     }
 }
 

@@ -51,7 +51,6 @@
 #include <QPixmap>
 #include <Q3CString>
 #include <Q3GridLayout>
-#include "KoComplexText.h"
 
 #include <koffice_export.h>
 class KoXmlWriter;
@@ -77,6 +76,8 @@ class KoParagVisitor;
 class KoTextDocCommand;
 class KoXmlWriter;
 class KoSavingContext;
+
+#define QT_NO_COMPLEXTEXT
 
 #include <q3memarray.h>
 #include "KoParagLayout.h"
@@ -140,7 +141,7 @@ private:
 	return *this;
     }
     KoTextStringChar( const KoTextStringChar & ); // copy-constructor, forbidden
-    friend class KoComplexText;
+    //friend class KoComplexText;
     friend class KoTextParag;
 };
 
@@ -389,6 +390,7 @@ private:
 };
 #endif
 
+#if 0
 class KoTextHorizontalLine : public KoTextCustomItem
 {
 public:
@@ -407,6 +409,7 @@ private:
     QColor color;
 
 };
+#endif
 
 #if defined(Q_TEMPLATEDLL)
 #ifndef Q_MOC_RUN
@@ -773,7 +776,7 @@ protected:
     //					       KoTextStringChar *last, int align = AlignAuto, int space = 0 );
     //KoTextStringChar
 
-#ifndef QT_NO_COMPLEXTEXT
+#if 0 //ndef QT_NO_COMPLEXTEXT
     virtual KoTextParagLineStart *bidiReorderLine( KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line, KoTextStringChar *start,
 						    KoTextStringChar *last, int align, int space );
 #endif

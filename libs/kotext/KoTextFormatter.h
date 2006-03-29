@@ -75,11 +75,13 @@ protected:
         KoTextZoomHandler *zh,
         KoTextParag * /*parag*/, KoTextString *string, KoTextParagLineStart *line,
         KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space );
-
+ // TODO RTL SUPPORT
+#if 0
     KoTextParagLineStart *koBidiReorderLine(
         KoTextZoomHandler *zh,
         KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
         KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space );
+#endif
 
     void moveChar( KoTextStringChar& chr, KoTextZoomHandler *zh,
                    int deltaX, int deltaPixelX );

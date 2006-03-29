@@ -91,7 +91,7 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
     }
 
     unsigned int i=0;
-    for( Q3ValueList<QString>::ConstIterator it = followingStyles.begin(); it != followingStyles.end(); ++it, ++i ) {
+    for( QStringList::ConstIterator it = followingStyles.begin(); it != followingStyles.end(); ++it, ++i ) {
         const QString followingStyleName = *it;
 	if ( !followingStyleName.isEmpty() ) {
             KoParagStyle * style = findStyle( followingStyleName );
@@ -150,7 +150,7 @@ void KoStyleCollection::importStyles( const KoStyleCollection& styleCollection )
         style = addStyle( style );
     }
 
-    QMapIterator<QString, QString> itFollow = followStyle.begin();
+    QMap<QString, QString>::iterator itFollow = followStyle.begin();
     for ( ; itFollow != followStyle.end(); ++itFollow )
     {
         KoParagStyle * style = findStyle(itFollow.key());
@@ -244,7 +244,7 @@ void KoStyleCollection::printDebug() const
         kDebug() << "Style " << style << "  " << style->name() << "  isOutline=" << style->isOutline() << endl;
         kDebug() << "   format: " << style->format().key() <<endl;
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
-        kDebug() << "  align: " << s_align[(Qt::AlignmentFlags)style->paragLayout().alignment] << endl;
+        kDebug() << "  align: " << s_align[(Qt::Alignment)style->paragLayout().alignment] << endl;
         if ( style->paragLayout().counter )
             kDebug() << "  counter level=" << style->paragLayout().counter->depth() << endl;
 

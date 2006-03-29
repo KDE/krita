@@ -40,7 +40,7 @@ void check_hyphenation( const QStringList& tests, const QStringList& results, co
 
 int main (int argc, char ** argv)
 {
-    KApplication app(argc, argv, "KoHyphenator test");
+    QApplication app(argc, argv);
 
     try {
         hypher = KoHyphenator::self();

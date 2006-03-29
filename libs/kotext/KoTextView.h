@@ -27,7 +27,6 @@
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include <Q3PtrList>
 #include <KoRuler.h> // for KoTabulatorList
 #include <KoTextObject.h> // for KoTextView
 #include <koffice_export.h>
@@ -46,6 +45,7 @@ class KoLinkVariable;
 class KoVariable;
 class KoTextViewIface;
 #include "KoRichText.h"
+#include <QClipboard>
 class KoBorder;
 class KoParagStyle;
 
@@ -118,9 +118,9 @@ public:
     void focusOutEvent();
     void handleKeyPressEvent( QKeyEvent * e, QWidget *, const QPoint& );
     void handleKeyReleaseEvent( QKeyEvent * e );
-    void handleImStartEvent( QIMEvent * e );
-    void handleImComposeEvent( QIMEvent * e );
-    void handleImEndEvent( QIMEvent * e );
+    void handleImStartEvent( QInputMethodEvent * e );
+    void handleImComposeEvent( QInputMethodEvent * e );
+    void handleImEndEvent( QInputMethodEvent * e );
     // iPoint is in Layout Unit pixels
     // return true if we add new parag with "insert direct cursor"
     bool handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint, bool canStartDrag = true, bool insertDirectCursor = false );
@@ -137,7 +137,7 @@ public:
     QString wordUnderCursor( const KoTextCursor& cursor );
 
     /** Return the list of actions from data-tools. Used to populate a RMB popupmenu usually. */
-    Q3PtrList<KAction> dataToolActionList( KInstance * instance, const QString& word, bool & _singleWord );
+    QList<KAction *> dataToolActionList( KInstance * instance, const QString& word, bool & _singleWord );
 
     void insertSoftHyphen();
     void insertLineBreak();
@@ -203,7 +203,7 @@ protected slots:
     virtual void startDrag() = 0;
     void slotToolActivated( const KDataToolInfo & info, const QString & command );
 signals:
-    void copy();
+    void copy(QClipboard::Mode mode);
     void cut();
     void paste();
 

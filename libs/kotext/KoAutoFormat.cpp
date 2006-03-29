@@ -242,9 +242,9 @@ void KoAutoFormat::updateMaxWords()
     for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
     {
         QString tmp = *it;
-        uint maxword = 1;
+        int maxword = 1;
 
-        for (uint i=0; i < (uint)tmp.length(); i++)
+        for (int i=0; i < (int)tmp.length(); i++)
                 if ( tmp.at(i).isSpace() || tmp.at(i).isPunct() )
                         maxword++;
         if (maxword >  m_countMaxWords )
@@ -271,51 +271,51 @@ void KoAutoFormat::readConfig(bool force)
     KConfigGroup configGroup( config, "AutoFormat" );
     //when we force don't load format language.
     if ( !force)
-        m_autoFormatLanguage = configGroup.readEntry("formatLanguage", QString::null);
+        m_autoFormatLanguage = configGroup.readEntry("formatLanguage", QString());
 
-    m_convertUpperCase = configGroup.readBoolEntry( "ConvertUpperCase", false );
-    m_convertUpperUpper = configGroup.readBoolEntry( "ConvertUpperUpper", false );
-    m_includeTwoUpperLetterException = configGroup.readBoolEntry( "includeTwoLetterException", false );
-    m_includeAbbreviation = configGroup.readBoolEntry( "includeAbbreviation", false );
+    m_convertUpperCase = configGroup.readEntry( "ConvertUpperCase", false );
+    m_convertUpperUpper = configGroup.readEntry( "ConvertUpperUpper", false );
+    m_includeTwoUpperLetterException = configGroup.readEntry( "includeTwoLetterException", false );
+    m_includeAbbreviation = configGroup.readEntry( "includeAbbreviation", false );
 
-    m_advancedAutoCorrect = configGroup.readBoolEntry( "AdvancedAutocorrect", true );
-    m_bAutoCorrectionWithFormat = configGroup.readBoolEntry( "AutoCorrectionWithFormat",false );
-    m_bCapitalizeNameOfDays = configGroup.readBoolEntry( "CapitalizeNameOfDays",false );
+    m_advancedAutoCorrect = configGroup.readEntry( "AdvancedAutocorrect", true );
+    m_bAutoCorrectionWithFormat = configGroup.readEntry( "AutoCorrectionWithFormat",false );
+    m_bCapitalizeNameOfDays = configGroup.readEntry( "CapitalizeNameOfDays",false );
 
-    m_autoDetectUrl = configGroup.readBoolEntry("AutoDetectUrl",false);
-    m_ignoreDoubleSpace = configGroup.readBoolEntry("IgnoreDoubleSpace", true);
-    m_removeSpaceBeginEndLine = configGroup.readBoolEntry("RemoveSpaceBeginEndLine", true);
+    m_autoDetectUrl = configGroup.readEntry("AutoDetectUrl",false);
+    m_ignoreDoubleSpace = configGroup.readEntry("IgnoreDoubleSpace", true);
+    m_removeSpaceBeginEndLine = configGroup.readEntry("RemoveSpaceBeginEndLine", true);
 
-    m_useBulletStyle = configGroup.readBoolEntry("UseBulletStyle",false);
+    m_useBulletStyle = configGroup.readEntry("UseBulletStyle",false);
     QString tmp = configGroup.readEntry( "BulletStyle", "" );
     m_bulletStyle = tmp.isEmpty() ? QChar() : tmp[0];
 
-    m_autoChangeFormat = configGroup.readBoolEntry( "AutoChangeFormat", false );
+    m_autoChangeFormat = configGroup.readEntry( "AutoChangeFormat", false );
 
-    m_autoReplaceNumber = configGroup.readBoolEntry( "AutoReplaceNumber", true );
+    m_autoReplaceNumber = configGroup.readEntry( "AutoReplaceNumber", true );
 
-    m_useAutoNumberStyle = configGroup.readBoolEntry( "AutoNumberStyle", false );
+    m_useAutoNumberStyle = configGroup.readEntry( "AutoNumberStyle", false );
 
 
     QString beginDoubleQuote = configGroup.readEntry( "TypographicQuotesBegin" );
     QString endDoubleQuote = configGroup.readEntry( "TypographicQuotesEnd" );
 
-    m_typographicDoubleQuotes.replace = configGroup.readBoolEntry( "TypographicQuotesEnabled", false );
+    m_typographicDoubleQuotes.replace = configGroup.readEntry( "TypographicQuotesEnabled", false );
 
     QString begin = configGroup.readEntry( "TypographicSimpleQuotesBegin" );
     QString end = configGroup.readEntry( "TypographicSimpleQuotesEnd" );
-    m_typographicSimpleQuotes.replace = configGroup.readBoolEntry( "TypographicSimpleQuotesEnabled", false );
+    m_typographicSimpleQuotes.replace = configGroup.readEntry( "TypographicSimpleQuotesEnabled", false );
 
-    m_bAutoSuperScript = configGroup.readBoolEntry( "AutoSuperScript", true );
+    m_bAutoSuperScript = configGroup.readEntry( "AutoSuperScript", true );
 
     config->setGroup( "completion" );
-    m_completion = configGroup.readBoolEntry( "completion", false );
+    m_completion = configGroup.readEntry( "completion", false );
 
-    m_completionAppendSpace = configGroup.readBoolEntry( "CompletionAppendSpace", false );
+    m_completionAppendSpace = configGroup.readEntry( "CompletionAppendSpace", false );
     m_minCompletionWordLength = configGroup.readUnsignedNumEntry( "CompletionMinWordLength", 5 );
     m_nbMaxCompletionWord = configGroup.readUnsignedNumEntry( "NbMaxCompletionWord", 100 );
-    m_addCompletionWord = configGroup.readBoolEntry( "AddCompletionWord", true );
-    m_toolTipCompletion = configGroup.readBoolEntry( "ToolTipCompletion", true );
+    m_addCompletionWord = configGroup.readEntry( "AddCompletionWord", true );
+    m_toolTipCompletion = configGroup.readEntry( "ToolTipCompletion", true );
     m_keyCompletionAction = ( KoAutoFormat::KeyCompletionAction )configGroup.readUnsignedNumEntry( "CompletionKeyAction", 0 );
 
     if ( force )
@@ -437,7 +437,7 @@ void KoAutoFormat::readAutoCorrectConfig()
     if(!upper.isNull())
     {
         QDomNodeList nl = upper.childNodes();
-        for(uint i = 0; i < nl.count(); i++)
+        for(int i = 0; i < nl.count(); i++)
         {
             m_upperCaseExceptions+= nl.item(i).toElement().attribute("exception");
         }
@@ -447,7 +447,7 @@ void KoAutoFormat::readAutoCorrectConfig()
     if(!twoUpper.isNull())
     {
         QDomNodeList nl = twoUpper.childNodes();
-        for(uint i = 0; i < nl.count(); i++)
+        for(int i = 0; i < nl.count(); i++)
         {
             m_twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
         }
@@ -457,7 +457,7 @@ void KoAutoFormat::readAutoCorrectConfig()
     if(!superScript.isNull())
     {
         QDomNodeList nl = superScript.childNodes();
-        for(uint i = 0; i < nl.count() ; i++) {
+        for(int i = 0; i < nl.count() ; i++) {
             //bug in qmap we overwrite = false doesn't work
             //so we can't add multiple "othernb"
             m_superScriptEntries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("super")),FALSE );
@@ -523,7 +523,7 @@ void KoAutoFormat::loadAutoCorrection( const QDomElement & _de, bool _allLanguag
     {
         QDomNodeList nl = item.childNodes();
         m_maxFindLength=nl.count();
-        for(uint i = 0; i < m_maxFindLength; i++) {
+        for(int i = 0; i < m_maxFindLength; i++) {
             loadEntry( nl.item(i).toElement(), _allLanguages);
         }
     }
@@ -928,12 +928,12 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
         else
         {
                 QStringList wordlist, new_wordlist;
-                for (uint i=1; i <= m_countMaxWords; i++ )
+                for (int i=1; i <= m_countMaxWords; i++ )
                 {
                         lastWord = getLastWord(i, parag, index+1);
                         wordlist += m_listCompletion->substringCompletion( lastWord ); //find all completion words that contains lastWord
                 }
-                uint maxlength = 0;
+                int maxlength = 0;
                 for ( QStringList::ConstIterator it = wordlist.begin(); it != wordlist.end(); ++it ) // several completion words were found
                 {
                   if ( (*it).startsWith( lastWord, false ) && new_wordlist.find(*it) == new_wordlist.end() ) //the completion words that begin with lastWord
@@ -951,7 +951,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                 else
                 {
                   //we must extract the common part of the completions
-                  for (uint i = lastWord.length(); i<maxlength && !part; i++) //iterate through all completion words
+                  for (int i = lastWord.length(); i<maxlength && !part; i++) //iterate through all completion words
                   {
                     QChar ch = new_wordlist.first().at(i);
                     for (QStringList::ConstIterator it = new_wordlist.begin(); it != new_wordlist.end(); ++it )
@@ -995,7 +995,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
             if ( m_completionAppendSpace && !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) && !part)
             {
                 //find the first word
-                for (uint i=1; i < word.length(); i++)
+                for (int i=1; i < word.length(); i++)
                         if ( word.at(i).isSpace() || word.at(i).isPunct() )
                         {
                                word.truncate(i);
@@ -1047,7 +1047,7 @@ void KoAutoFormat::showToolTipBox(KoTextParag *parag,  int index, QWidget *widge
     if( m_completion && m_toolTipCompletion)
     {
         QString lastWord, word;
-        for (uint i=1; i <= m_countMaxWords; i++ )
+        for (int i=1; i <= m_countMaxWords; i++ )
         {
                 lastWord = getLastWord(i, parag, index+1);
                 word=m_listCompletion->makeCompletion( lastWord );
@@ -1056,7 +1056,7 @@ void KoAutoFormat::showToolTipBox(KoTextParag *parag,  int index, QWidget *widge
         }
         if( !word.isEmpty() && word!=lastWord )
         {
-            uint const length = lastWord.length();
+            int const length = lastWord.length();
             if (length<=3)
                 return;
             word=lastWord+word.right(word.length()-length);
@@ -1253,7 +1253,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
         {
                 QString completionWord("");
                 QChar ch;
-                for (uint i=0;i<lastWord.length();i++)
+                for (int i=0;i<lastWord.length();i++)
                 {
                         ch = lastWord.at(i);
                         if (ch.isPunct() && ch!='-' && ch!='=' )
@@ -1978,7 +1978,7 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
     {
         QString number=word.mid(0,word.length()-1);
         bool ok;
-        uint val=number.toUInt(&ok);
+        int val=number.toInt(&ok);
         if( ok )
         {
             KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (use number style)"));
@@ -2300,12 +2300,12 @@ void KoAutoFormat::configAppendSpace( bool b)
     m_completionAppendSpace= b;
 }
 
-void KoAutoFormat::configMinWordLength( uint val )
+void KoAutoFormat::configMinWordLength( int val )
 {
    m_minCompletionWordLength = val;
 }
 
-void KoAutoFormat::configNbMaxCompletionWord( uint val )
+void KoAutoFormat::configNbMaxCompletionWord( int val )
 {
     m_nbMaxCompletionWord = val;
 }

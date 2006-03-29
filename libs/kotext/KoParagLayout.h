@@ -98,7 +98,7 @@ public:
     char pageBreaking;    // Page breaking flags
     char direction;       // QChar::Direction
     /// Alignment flag (AlignAuto/AlignLeft/AlignRight/AlignJustify)
-    char alignment; // Qt::AlignmentFlags
+    char alignment; // Qt::AlignmentFlag
     KoBorder leftBorder, rightBorder, topBorder, bottomBorder;
 
     /// The background color of the paragraph
@@ -154,9 +154,9 @@ public:
     void saveOasis( KoGenStyle& gs, KoSavingContext& context, bool savingStyle ) const;
 
     /// Convert an alignment string into an alignment flag (load)
-    static Qt::AlignmentFlags loadOasisAlignment( const Q3CString& str );
+    static Qt::AlignmentFlag loadOasisAlignment( const Q3CString& str );
     /// Convert an alignment flag into an alignment string (save)
-    static Q3CString saveOasisAlignment( Qt::AlignmentFlags alignment );
+    static Q3CString saveOasisAlignment( Qt::AlignmentFlag alignment );
 
 private:
     static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue) {

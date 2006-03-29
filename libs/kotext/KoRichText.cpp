@@ -38,7 +38,7 @@
 #include "KoTextParag.h"
 
 #include <q3paintdevicemetrics.h>
-#include "qdrawutil.h" // for KoTextHorizontalLine
+//#include "qdrawutil.h" // for KoTextHorizontalLine
 //Added by qt3to4:
 #include <Q3MemArray>
 #include <Q3PtrList>
@@ -1244,17 +1244,22 @@ void KoTextString::checkBidi() const
     const KoTextStringChar *end = start + length;
 
     // determines the properties we need for layouting
-    QTextEngine textEngine( toString(), 0 );
-    textEngine.direction = (QChar::Direction) dir;
-    textEngine.itemize(QTextEngine::SingleLine);
-    const QCharAttributes *ca = textEngine.attributes() + length-1;
+    QTextLayout textLayout( toString() );
+
+    //textEngine.direction = (QChar::Direction) dir; TODO
+    QTextLine line = textLayout.createLine();
+    Q_ASSERT(line.isValid()); // TODO error checking
     KoTextStringChar *ch = (KoTextStringChar *)end - 1;
+#if 0 // TODO RTL
+    const QCharAttributes *ca = textEngine.attributes() + length-1;
     QScriptItem *item = &textEngine.items[textEngine.items.size()-1];
     unsigned char bidiLevel = item->analysis.bidiLevel;
     if ( bidiLevel )
         that->bidi = TRUE;
+#endif
     int pos = length-1;
     while ( ch >= start ) {
+#if 0 // TODO RTL
         if ( item->position > pos ) {
             --item;
             Q_ASSERT( item >= &textEngine.items[0] );
@@ -1263,14 +1268,14 @@ void KoTextString::checkBidi() const
             if ( bidiLevel )
                 that->bidi = TRUE;
         }
-        ch->softBreak = ca->softBreak;
-        ch->whiteSpace = ca->whiteSpace;
-        ch->charStop = ca->charStop;
-        ch->wordStop = ca->wordStop;
-        //ch->bidiLevel = bidiLevel;
-        ch->rightToLeft = (bidiLevel%2);
+#endif
+        // TODO ch->softBreak = ca->softBreak;
+        ch->whiteSpace = QChar( data[pos].c ).isSpace();
+        ch->charStop = textLayout.isValidCursorPosition( pos );
+        // TODO ch->wordStop = ca->wordStop;
+        //ch->rightToLeft = (bidiLevel%2);
         --ch;
-        --ca;
+        //--ca;
         --pos;
     }
 
@@ -1280,7 +1285,7 @@ void KoTextString::checkBidi() const
     } else if ( dir == QChar::DirL ) {
         that->rightToLeft = FALSE;
     } else {
-	that->rightToLeft = (textEngine.direction == QChar::DirR);
+	that->rightToLeft = FALSE; // TODO RTL: (textEngine.direction == QChar::DirR);
     }
 }
 
@@ -1487,6 +1492,7 @@ KoTextFormatterBase::KoTextFormatterBase()
 #include <iostream>
 #endif
 
+#if 0
 // collects one line of the paragraph and transforms it to visual order
 KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
 							KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
@@ -1605,6 +1611,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
     delete runs;
     return ls;
 }
+#endif
 
 bool KoTextFormatterBase::isStretchable( KoTextString *string, int pos ) const
 {

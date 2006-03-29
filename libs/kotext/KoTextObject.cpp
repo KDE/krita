@@ -1765,9 +1765,9 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
         d->afterFormattingEmitted = false;
 
         int viewsBottom = 0;
-        QMapIterator<QWidget *, int> mapIt = m_mapViewAreas.begin();
+        QMap<QWidget *, int>::const_iterator mapIt = m_mapViewAreas.begin();
         for ( ; mapIt != m_mapViewAreas.end() ; ++mapIt )
-            viewsBottom = qMax( viewsBottom, mapIt.data() );
+            viewsBottom = qMax( viewsBottom, mapIt.value() );
 
 #ifdef DEBUG_FORMAT_MORE
         kDebug(32500) << "formatMore " << name()
@@ -2039,7 +2039,7 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
             text=text.lower();
             break;
         case KoChangeCaseDia::TitleCase:
-            for(uint i=0;i<text.length();i++)
+            for(int i=0;i<text.length();i++)
             {
                 if(text.at(i)!=' ')
                 {
@@ -2063,7 +2063,7 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
             }
             break;
         case KoChangeCaseDia::SentenceCase:
-            for(uint i=0;i<text.length();i++)
+            for(int i=0;i<text.length();i++)
             {
                 if(text.at(i)!=' ')
                 {
@@ -2279,7 +2279,7 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
             progress->setProgress(progress->progress()+1);
             // MA: resizing if KWStatisticsDialog does not work correct with this enabled, don't know why
             kapp->processEvents();
-            if ( progress->wasCancelled() )
+            if ( progress->wasCanceled() )
                 return false;
         }
         // start of a table

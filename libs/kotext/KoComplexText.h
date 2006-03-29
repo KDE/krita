@@ -38,31 +38,18 @@
 #ifndef QCOMPLEXTEXT_H
 #define QCOMPLEXTEXT_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists for the convenience
-// of Qt Remote Control. This header file may change from version to
-// version without notice, or even be removed.
-//
-// We mean it.
-//
-//
+#include <koffice_export.h>
 
-#ifndef QT_H
 #include <qstring.h>
 #include <q3pointarray.h>
 #include <qfont.h>
 #include <qpainter.h>
 #include <q3ptrlist.h>
 #include <q3shared.h>
-#endif // QT_H
-
-#ifndef QT_NO_COMPLEXTEXT
+#include <QPainter>
 
 // bidi helper classes. Internal to Qt
-struct Q_EXPORT KoBidiStatus {
+struct KOTEXT_EXPORT KoBidiStatus {
     KoBidiStatus() {
 	eor = QChar::DirON;
 	lastStrong = QChar::DirON;
@@ -73,7 +60,7 @@ struct Q_EXPORT KoBidiStatus {
     QChar::Direction last;
 };
 
-struct Q_EXPORT KoBidiContext : public Q3Shared {
+struct KOTEXT_EXPORT KoBidiContext : public Q3Shared {
     // ### ref and deref parent?
     KoBidiContext( uchar level, QChar::Direction embedding, KoBidiContext *parent = 0, bool override = FALSE );
     ~KoBidiContext();
@@ -85,7 +72,7 @@ struct Q_EXPORT KoBidiContext : public Q3Shared {
     KoBidiContext *parent;
 };
 
-struct Q_EXPORT KoBidiControl {
+struct KOTEXT_EXPORT KoBidiControl {
     KoBidiControl() { context = 0; }
     KoBidiControl( KoBidiContext *c, KoBidiStatus s)
     { context = c; if( context ) context->ref(); status = s; }
@@ -95,7 +82,7 @@ struct Q_EXPORT KoBidiControl {
     KoBidiStatus status;
 };
 
-struct Q_EXPORT KoTextRun {
+struct KOTEXT_EXPORT KoTextRun {
     KoTextRun(int _start, int _stop, KoBidiContext *context, QChar::Direction dir);
 
     int start;
@@ -104,7 +91,7 @@ struct Q_EXPORT KoTextRun {
     uchar level;
 };
 
-class Q_EXPORT KoComplexText {
+class KOTEXT_EXPORT KoComplexText {
 public:
     enum Shape {
 	XIsolated,
@@ -115,7 +102,7 @@ public:
     static Shape glyphVariant( const QString &str, int pos);
     static Shape glyphVariantLogical( const QString &str, int pos);
 
-    static QString shapedString( const QString &str, int from = 0, int len = -1, QPainter::TextDirection dir = QPainter::Auto, const QFontMetrics *fm = 0);
+    static QString shapedString( const QString &str, int from = 0, int len = -1, QPainter::LayoutDirection dir = QPainter::Auto, const QFontMetrics *fm = 0);
     static QChar shapedCharacter(const QString &str, int pos, const QFontMetrics *fm = 0);
 
     // positions non spacing marks relative to the base character at position pos.
@@ -125,7 +112,5 @@ public:
 						QChar::Direction basicDir = QChar::DirON );
     static QString bidiReorderString( const QString &str, QChar::Direction basicDir = QChar::DirON );
 };
-
-#endif //QT_NO_COMPLEXTEXT
 
 #endif

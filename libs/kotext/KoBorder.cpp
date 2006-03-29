@@ -19,8 +19,7 @@
 
 #include "KoBorder.h"
 #include <qdom.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <kdebug.h>
 #include "KoZoomHandler.h"
 #include "KoTextFormat.h"
@@ -30,8 +29,8 @@
 
 static const struct BorderStyle {
     Qt::PenStyle penStyle;
-    Q3CString oasisName;
-    Q3CString uiStringStyle;
+    QByteArray oasisName;
+    QByteArray uiStringStyle;
 } s_borderStyles[] = {
     { Qt::SolidLine, "solid", "_________" }, // SOLID
     { Qt::DashLine, "dashed", "___ ___ __" }, // DASH
@@ -114,7 +113,7 @@ void KoBorder::loadFoBorder( const QString& border )
 
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
-    Q3CString _style = border.section(' ', 1, 1).latin1();
+    QByteArray _style = border.section(' ', 1, 1).latin1();
     QString _color = border.section(' ', 2, 2);
 
     //TODO: let the user choose a more precise border width (in the current unit)

@@ -410,7 +410,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
 }
 
 //static
-Qt::AlignmentFlags KoParagLayout::loadOasisAlignment( const Q3CString& str )
+Qt::AlignmentFlag KoParagLayout::loadOasisAlignment( const Q3CString& str )
 {
     return
         str == "left" ? Qt::AlignLeft :
@@ -424,7 +424,7 @@ Qt::AlignmentFlags KoParagLayout::loadOasisAlignment( const Q3CString& str )
 }
 
 //static
-Q3CString KoParagLayout::saveOasisAlignment( Qt::AlignmentFlags alignment )
+Q3CString KoParagLayout::saveOasisAlignment( Qt::AlignmentFlag alignment )
 {
    return alignment == Qt::AlignLeft ? "left" :
        alignment == Qt::AlignRight ? "right" :
@@ -803,7 +803,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
 
 void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool savingStyle ) const
 {
-    gs.addProperty( "fo:text-align", saveOasisAlignment( (Qt::AlignmentFlags)alignment ).data() );
+    gs.addProperty( "fo:text-align", saveOasisAlignment( (Qt::AlignmentFlag)alignment ).data() );
     // Don't save the direction for a style, if "auto", so that the
     // auto-determination of direction based on first char, works.
     if ( !savingStyle || (QChar::Direction) direction != QChar::DirON )

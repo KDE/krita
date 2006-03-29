@@ -29,6 +29,7 @@
 #include <qstring.h>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
+#include <QPainter>
 
 #include <koffice_export.h>
 class KoWmfReadPrivate;

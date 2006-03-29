@@ -24,6 +24,7 @@
 #include <qmatrix.h>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
+#include <qpainter.h>
 #include <qdatastream.h>
 #include <kdebug.h>
 
@@ -68,7 +69,8 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
     }
 
     // load into buffer
-    mBuffer = new QBuffer( array );
+    QByteArray nonConstArray( array ); // hack
+    mBuffer = new QBuffer( &nonConstArray );
     mBuffer->open( QIODevice::ReadOnly );
 
     // read and check the header
@@ -952,7 +954,7 @@ void KoWmfReadPrivate::createFontIndirect( quint32 size, QDataStream& stream )
         // font name
         int    maxChar = (size-12) * 2;
         char*  nameFont = new char[maxChar];
-        stream.readRawBytes( nameFont, maxChar );
+        stream.readRawData( nameFont, maxChar );
         handle->font.setFamily( nameFont );
         delete[] nameFont;
     }
@@ -1213,7 +1215,7 @@ QPainter::CompositionMode  KoWmfReadPrivate::winToQtComposition( quint32 param )
     if ( i < 15 )
         return koWmfOpTab32[ i ].qtRasterOp;
     else
-        return Qt::CopyROP;
+        return QPainter::CompositionMode_SourceOver;
 }
 
 
@@ -1231,7 +1233,7 @@ bool KoWmfReadPrivate::dibToBmp( QImage& bmp, QDataStream& stream, quint32 size 
 
     QByteArray pattern( sizeBmp );       // BMP header and DIB data
     pattern.fill(0);
-    stream.readRawBytes( &pattern[ 14 ], size );
+    stream.readRawData( pattern.data() + 14, size );
 
     // add BMP header
     BMPFILEHEADER* bmpHeader;

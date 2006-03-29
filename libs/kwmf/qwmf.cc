@@ -462,18 +462,14 @@ void QWinMetaFile::setWindowExt( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::lineTo( long, short* parm )
 {
-  QPainterPath path;
-  path.lineTo( parm[ 1 ], parm[ 0 ] );
-  mPainter.drawPath( path );
+  mLastPos = QPoint( parm[ 1 ], parm[ 0 ] );
 }
 
 
 //-----------------------------------------------------------------------------
 void QWinMetaFile::moveTo( long, short* parm )
 {
-  QPainterPath path;
-  path.moveTo( parm[ 1 ], parm[ 0 ] );
-  mPainter.drawPath( path );
+  mPainter.drawLine( mLastPos, QPoint( parm[1], parm[0] ) );
 }
 
 
@@ -755,9 +751,8 @@ void QWinMetaFile::extTextOut( long num, short* parm )
     mPainter.save();
 
     if ( mTextAlign & 0x01 ) {       // (left, top) position = current logical position
-        QPoint pos = mPainter.pos();
-        x = pos.x();
-        y = pos.y();
+        x = mLastPos.x();
+        y = mLastPos.y();
     }
     else {                           // (left, top) position = parameters
         x = parm[ 1 ];

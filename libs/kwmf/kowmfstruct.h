@@ -7,6 +7,7 @@
 
 #include <qglobal.h>
 #include <qnamespace.h>
+#include <QPainter>
 
 #define APMHEADER_KEY 0x9AC6CDD7
 #define ENHMETA_SIGNATURE       0x464D4520

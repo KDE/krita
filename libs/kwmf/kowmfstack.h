@@ -29,18 +29,18 @@ class KoWmfRead;
 
 /**
  * WMF file allows manipulation on a stack of object.
- * It's possile to create, delete or select an object.
+ * It's possible to create, delete or select an object.
  */
 class KoWmfHandle
 {
 public:
+    virtual ~KoWmfHandle() {}
     virtual void apply( KoWmfRead * ) = 0;
 };
 
 class KoWmfBrushHandle: public KoWmfHandle
 {
 public:
-    virtual ~KoWmfBrushHandle() {};
     virtual void apply( KoWmfRead * );
     QBrush brush;
 };
@@ -48,7 +48,6 @@ public:
 class KoWmfPenHandle: public KoWmfHandle
 {
 public:
-    virtual ~KoWmfPenHandle() {};
     virtual void apply( KoWmfRead * );
     QPen pen;
 };
@@ -56,7 +55,6 @@ public:
 class KoWmfPatternBrushHandle: public KoWmfHandle
 {
 public:
-    virtual ~KoWmfPatternBrushHandle() {};
     virtual void apply( KoWmfRead * );
     QBrush brush;
     QPixmap image;
@@ -65,7 +63,6 @@ public:
 class KoWmfFontHandle: public KoWmfHandle
 {
 public:
-    virtual ~KoWmfFontHandle() {};
     virtual void apply( KoWmfRead * );
     QFont font;
     int rotation;

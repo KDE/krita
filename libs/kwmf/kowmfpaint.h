@@ -124,6 +124,7 @@ private:
     bool  mRelativeCoord;
     // memorisation of WMF matrix transformation (in relative coordinate)
     QMatrix  mInternalWorldMatrix;
+    QPoint mLastPos;
 
 };
 

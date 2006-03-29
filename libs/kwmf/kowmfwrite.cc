@@ -409,9 +409,9 @@ void KoWmfWrite::pointArray( const Q3PointArray &pa ) {
 quint32 KoWmfWrite::winColor( QColor color ) {
     quint32 c;
 
-    c = (color.Qt::red() & 0xFF);
-    c += ( (color.Qt::green() & 0xFF) << 8 );
-    c += ( (color.Qt::blue() & 0xFF) << 16 );
+    c = (color.red() & 0xFF);
+    c += ( (color.green() & 0xFF) << 8 );
+    c += ( (color.blue() & 0xFF) << 16 );
 
     return c;
 }

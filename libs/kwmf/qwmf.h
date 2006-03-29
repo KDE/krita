@@ -226,6 +226,7 @@ protected:
     WinObjHandle** mObjHandleTab;
     Q3PointArray mPoints;
     int mDpi;
+    QPoint mLastPos;
 };
 
 #endif /*qwmf_h*/

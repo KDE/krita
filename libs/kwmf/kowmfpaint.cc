@@ -22,6 +22,7 @@
 //Added by qt3to4:
 #include <Q3PointArray>
 #include <Q3PtrList>
+#include <QPrinter>
 
 KoWmfPaint::KoWmfPaint() : KoWmfRead() {
     mTarget = 0;
@@ -93,18 +94,21 @@ void KoWmfPaint::setPen( const QPen &pen ) {
     QPen p = pen;
     int width = pen.width();
 
-    if ( mTarget->isExtDev() ) {
+    if ( dynamic_cast<QPrinter *>( mTarget ) ) {
         width = 0;
     }
     else {
         // WMF spec : width of pen in logical coordinate
         // => width of pen proportional with device context width
-        QRect devRec = mPainter.transformed( mPainter.window() );
         QRect rec = mPainter.window();
+        // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
+#if 0
+        QRect devRec = rec * mPainter.matrix();
         if ( rec.width() != 0 )
             width = ( width * devRec.width() ) / rec.width() ;
         else
             width = 0;
+#endif
     }
 
     p.setWidth( width );
@@ -207,12 +211,12 @@ QRegion KoWmfPaint::clipRegion() {
 
 
 void KoWmfPaint::moveTo( int x, int y ) {
-    mPainter.moveTo( x, y );
+    mLastPos = QPoint( x, y );
 }
 
 
 void KoWmfPaint::lineTo( int x, int y ) {
-    mPainter.lineTo( x, y );
+    mPainter.drawLine( mLastPos, QPoint( x, y ) );
 }
 
 

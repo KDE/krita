@@ -53,7 +53,7 @@
 #include <qcheckbox.h>
 #include <qpoint.h>
 #include <qobject.h>
-//#include <qvgroupbox.h>
+#include <QDesktopWidget>
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -71,7 +71,7 @@ class MyFileDialog : public KFileDialog
                 QWidget *parent=0,
                 const char *name=0,
                 bool modal=0)
-            :  KFileDialog (startDir, filter, parent, name, modal),
+            :  KFileDialog (startDir, filter, parent),
         m_slotOkCalled( false ) {}
 
         KUrl currentURL()
@@ -398,7 +398,6 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 
     d->m_jwidget = new KJanusWidget(
 	    widgetbase,
-	    "kjanuswidget",
 	    KJanusWidget::IconList);
     layout->addWidget(d->m_jwidget,0,0);
 
@@ -671,7 +670,7 @@ void KoTemplateChooseDia::slotOk()
 	else
 	{
 	    kWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
-	    grp.writeEntry( "LastReturnType", QString::null );
+	    grp.writeEntry( "LastReturnType", QString() );
 	}
 	KDialogBase::slotOk();
     }
@@ -798,7 +797,7 @@ void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
     // KFileIconView would need a virtual method for deciding if a tooltip should be shown,
     // and another one for deciding what's the text of the tooltip...
     const KFileItem *fi = ( (KFileIconViewItem*)item )->fileInfo();
-    QString toolTipText = fi->url().prettyURL( 0, KUrl::StripFileProtocol );
+    QString toolTipText = fi->url().pathOrURL( );
     toolTip = new QLabel( QString::fromLatin1(" %1 ").arg(toolTipText), 0,
                           "myToolTip",
                           WStyle_StaysOnTop | WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WX11BypassWM );

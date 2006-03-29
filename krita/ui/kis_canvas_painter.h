@@ -30,6 +30,7 @@
 
 #include "kis_global.h"
 
+class KisCanvas;
 class KisCanvasWidget;
 
 class KisCanvasWidgetPainter {

@@ -72,11 +72,6 @@ set(libkdgantt_SRCS
 	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttSizingControl.cpp
 	${CMAKE_SOURCE_DIR}/kdgantt/KDGanttXMLTools.cpp
 	)
-	
-kde4_add_ui3_files(libkdgantt_SRCS 
-	${CMAKE_SOURCE_DIR}/kdgantt/itemAttributeDialog.ui
-	)
-
 
 add_subdirectory(libs)
 #add_subdirectory(example)

@@ -40,11 +40,11 @@ struct WmfPlaceableHeader;
  * QWinMetaFile is a WMF viewer based on QT toolkit
  * How to use QWinMetaFile :
  * <pre>
- * #include "qwmf.h"
+ * #include "qwmf.h"
  * QWinMetaFile wmf;
  * QPicture pic;     // or QImage pic;
  * if ( wmf.load( filename )
- *    wmf.paint( &pic );
+ *    wmf.paint( &pic );
  * </pre>
  */
 
@@ -69,7 +69,7 @@ public:
      *
      * @return true on success.
      */
-    virtual bool paint( const QPaintDevice* target, bool absolute=false );
+    virtual bool paint( QPaintDevice* target, bool absolute=false );
 
     /**
      * @return true if the metafile is placeable.
@@ -201,8 +201,8 @@ protected:
     void deleteHandle( int );
 
     /** Convert windows rasterOp in QT rasterOp */
-    Qt::RasterOp winToQtRaster( short parm ) const;
-    Qt::RasterOp winToQtRaster( long parm ) const;
+    QPainter::CompositionMode winToQtComposition( short parm ) const;
+    QPainter::CompositionMode winToQtComposition( long parm ) const;
 
     /** Converts DIB to BMP */
     bool dibToBmp( QImage& bmp, const char* dib, long size);

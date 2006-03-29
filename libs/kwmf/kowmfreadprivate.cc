@@ -102,7 +102,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
         st >> pheader.checksum;
         checksum = calcCheckSum( &pheader );
         if ( pheader.checksum!=checksum ) {
-            return false;  
+            return false;
         }
         st >> header.fileType;
         st >> header.headerSize;
@@ -276,7 +276,7 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
             st >> size >> numFunction;
 
             /**
-             * mapping between n° function and index of table 'metaFuncTab'
+             * mapping between n function and index of table 'metaFuncTab'
              * lower 8 digits of the function => entry in the table
              */
             numFunction &= 0xFF;
@@ -286,7 +286,7 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
             if ( (numFunction > 111) || (koWmfFunc[ numFunction ].method == 0) ) {
                 // function outside WMF specification
                 kDebug() << "KoWmfReadPrivate::paint : BROKEN WMF file" << endl;
-                mValid = false;    
+                mValid = false;
                 break;
             }
 
@@ -364,7 +364,7 @@ void KoWmfReadPrivate::setWindowExt( quint32, QDataStream& stream )
 void KoWmfReadPrivate::OffsetWindowOrg( quint32, QDataStream &stream )
 {
     qint16 offTop, offLeft;
-    
+
     stream >> offTop >> offLeft;
     mReadWmf->setWindowOrg( mWindow.left() + offLeft, mWindow.top() + offTop );
     mWindow.setLeft( mWindow.left() + offLeft );
@@ -376,7 +376,7 @@ void KoWmfReadPrivate::ScaleWindowExt( quint32, QDataStream &stream )
 {
     qint16 width, height;
     qint16 heightDenom, heightNum, widthDenom, widthNum;
-    
+
     stream >> heightDenom >> heightNum >> widthDenom >> widthNum;
 
     if ( ( widthDenom != 0 ) && ( heightDenom != 0 ) ) {
@@ -440,7 +440,7 @@ void KoWmfReadPrivate::polyPolygon( quint32, QDataStream& stream )
     Q3PtrList<Q3PointArray> listPa;
 
     stream >> numberPoly;
-    
+
     listPa.setAutoDelete( true );
     for ( int i=0 ; i < numberPoly ; i++ ) {
         stream >> sizePoly;
@@ -587,8 +587,8 @@ void KoWmfReadPrivate::setPixel( quint32, QDataStream& stream )
 
     stream >> color >> top >> left;
 
-    QPen oldPen = mReadWmf->pen();    
-    QPen pen = oldPen;    
+    QPen oldPen = mReadWmf->pen();
+    QPen pen = oldPen;
     pen.setColor( qtColor( color ) );
     mReadWmf->setPen( pen );
     mReadWmf->moveTo( left, top );
@@ -602,7 +602,7 @@ void KoWmfReadPrivate::setRop( quint32, QDataStream& stream )
     quint16  rop;
 
     stream >> rop;
-    mReadWmf->setRasterOp( winToQtRaster( rop ) );
+    mReadWmf->setCompositionMode( winToQtComposition( rop ) );
 }
 
 
@@ -666,7 +666,7 @@ void KoWmfReadPrivate::excludeClipRect( quint32, QDataStream& stream )
 void KoWmfReadPrivate::setTextColor( quint32, QDataStream& stream )
 {
     quint32 color;
-    
+
     stream >> color;
     mTextColor = qtColor( color );
 }
@@ -720,7 +720,7 @@ void KoWmfReadPrivate::dibBitBlt( quint32 size, QDataStream& stream )
         QImage bmpSrc;
 
         if ( dibToBmp( bmpSrc, stream, (size - 11) * 2 ) ) {
-            mReadWmf->setRasterOp( winToQtRaster( raster )  );
+            mReadWmf->setCompositionMode( winToQtComposition( raster )  );
 
             mReadWmf->save();
             if ( widthSrc < 0 ) {
@@ -755,7 +755,7 @@ void KoWmfReadPrivate::dibStretchBlt( quint32 size, QDataStream& stream )
     stream >> heightDst >> widthDst >> topDst >> leftDst;
 
     if ( dibToBmp( bmpSrc, stream, (size - 13) * 2 ) ) {
-        mReadWmf->setRasterOp( winToQtRaster( raster )  );
+        mReadWmf->setCompositionMode( winToQtComposition( raster )  );
 
         mReadWmf->save();
         if ( widthDst < 0 ) {
@@ -790,7 +790,7 @@ void KoWmfReadPrivate::stretchDib( quint32 size, QDataStream& stream )
     stream >> heightDst >> widthDst >> topDst >> leftDst;
 
     if ( dibToBmp( bmpSrc, stream, (size - 14) * 2 ) ) {
-        mReadWmf->setRasterOp( winToQtRaster( raster )  );
+        mReadWmf->setCompositionMode( winToQtComposition( raster )  );
 
         mReadWmf->save();
         if ( widthDst < 0 ) {
@@ -815,7 +815,7 @@ void KoWmfReadPrivate::stretchDib( quint32 size, QDataStream& stream )
 void KoWmfReadPrivate::dibCreatePatternBrush( quint32 size, QDataStream& stream )
 {
     KoWmfPatternBrushHandle* handle = new KoWmfPatternBrushHandle;
-    
+
     if ( addHandle( handle ) ) {
         quint32 arg;
         QImage bmpSrc;
@@ -1188,16 +1188,16 @@ void KoWmfReadPrivate::xyToAngle( int xStart, int yStart, int xEnd, int yEnd, in
 }
 
 
-Qt::RasterOp  KoWmfReadPrivate::winToQtRaster( quint16 param ) const
+QPainter::CompositionMode KoWmfReadPrivate::winToQtComposition( quint16 param ) const
 {
     if ( param < 17 )
         return koWmfOpTab16[ param ];
     else
-        return Qt::CopyROP;
+        return QPainter::CompositionMode_Source;
 }
 
 
-Qt::RasterOp  KoWmfReadPrivate::winToQtRaster( quint32 param ) const
+QPainter::CompositionMode  KoWmfReadPrivate::winToQtComposition( quint32 param ) const
 {
     /* TODO: Ternary raster operations
     0x00C000CA  dest = (source AND pattern)

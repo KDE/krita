@@ -192,8 +192,8 @@ private:
     void xyToAngle( int xStart, int yStart, int xEnd, int yEnd, int& angle, int& aLength );
 
     /** Convert windows rasterOp in QT rasterOp */
-    Qt::RasterOp winToQtRaster( quint16 param ) const;
-    Qt::RasterOp winToQtRaster( quint32 param ) const;
+    QPainter::CompositionMode winToQtComposition( quint16 param ) const;
+    QPainter::CompositionMode winToQtComposition( quint32 param ) const;
 
     /** Converts DIB to BMP */
     bool dibToBmp( QImage& bmp, QDataStream& stream, quint32 size);

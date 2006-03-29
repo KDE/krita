@@ -22,6 +22,7 @@
 #include <qfileinfo.h>
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <qpainterpath.h>
 #include <qdatastream.h>
 #include <qapplication.h>
 #include <qbuffer.h>
@@ -152,7 +153,7 @@ bool QWinMetaFile::load( const QString &filename )
     QByteArray ba = file.readAll();
     file.close();
 
-    QBuffer buffer( ba );
+    QBuffer buffer( &ba );
     buffer.open( QIODevice::ReadOnly );
     return load( buffer );
 }
@@ -332,7 +333,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
 
 
 //-----------------------------------------------------------------------------
-bool QWinMetaFile::paint( const QPaintDevice* aTarget, bool absolute )
+bool QWinMetaFile::paint( QPaintDevice* aTarget, bool absolute )
 {
     int idx, i;
     WmfCmd* cmd;
@@ -461,14 +462,18 @@ void QWinMetaFile::setWindowExt( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::lineTo( long, short* parm )
 {
-    mPainter.lineTo( parm[ 1 ], parm[ 0 ] );
+  QPainterPath path;
+  path.lineTo( parm[ 1 ], parm[ 0 ] );
+  mPainter.drawPath( path );
 }
 
 
 //-----------------------------------------------------------------------------
 void QWinMetaFile::moveTo( long, short* parm )
 {
-    mPainter.moveTo( parm[ 1 ], parm[ 0 ] );
+  QPainterPath path;
+  path.moveTo( parm[ 1 ], parm[ 0 ] );
+  mPainter.drawPath( path );
 }
 
 
@@ -641,7 +646,7 @@ void QWinMetaFile::setPixel( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setRop( long, short* parm )
 {
-    mPainter.setRasterOp( winToQtRaster( parm[ 0 ] ) );
+    mPainter.setCompositionMode( winToQtComposition( parm[ 0 ] ) );
 }
 
 
@@ -803,7 +808,7 @@ void QWinMetaFile::dibBitBlt( long num, short* parm )
         if ( dibToBmp( bmpSrc, (char*)&parm[ 8 ], (num - 8) * 2 ) ) {
             long raster = toDWord( parm );
 
-            mPainter.setRasterOp( winToQtRaster( raster )  );
+            mPainter.setCompositionMode( winToQtComposition( raster )  );
 
             // wmf file allow negative width or height
             mPainter.save();
@@ -833,7 +838,7 @@ void QWinMetaFile::dibStretchBlt( long num, short* parm )
     if ( dibToBmp( bmpSrc, (char*)&parm[ 10 ], (num - 10) * 2 ) ) {
         long raster = toDWord( parm );
 
-        mPainter.setRasterOp( winToQtRaster( raster )  );
+        mPainter.setCompositionMode( winToQtComposition( raster )  );
 
         // wmf file allow negative width or height
         mPainter.save();
@@ -862,7 +867,7 @@ void QWinMetaFile::stretchDib( long num, short* parm )
     if ( dibToBmp( bmpSrc, (char*)&parm[ 11 ], (num - 11) * 2 ) ) {
         long raster = toDWord( parm );
 
-        mPainter.setRasterOp( winToQtRaster( raster )  );
+        mPainter.setCompositionMode( winToQtComposition( raster )  );
 
         // wmf file allow negative width or height
         mPainter.save();
@@ -1165,25 +1170,38 @@ void QWinMetaFile::deleteHandle( int idx )
 }
 
 //-----------------------------------------------------------------------------
-Qt::RasterOp  QWinMetaFile::winToQtRaster( short parm ) const
+QPainter::CompositionMode QWinMetaFile::winToQtComposition( short parm ) const
 {
-    static const Qt::RasterOp opTab[] =
+    static const QPainter::CompositionMode opTab[] =
     {
-        Qt::CopyROP,
-        Qt::ClearROP, Qt::NandROP, Qt::NotAndROP, Qt::NotCopyROP,
-        Qt::AndNotROP, Qt::NotROP, Qt::XorROP, Qt::NorROP,
-        Qt::AndROP, Qt::NotXorROP, Qt::NopROP, Qt::NotOrROP,
-        Qt::CopyROP, Qt::OrNotROP, Qt::OrROP, Qt::SetROP
+        // ### untested (conversion from Qt::RasterOp)
+        QPainter::CompositionMode_Source, // Qt::CopyROP
+        QPainter::CompositionMode_Clear, // Qt::ClearROP
+        QPainter::CompositionMode_SourceOut, // Qt::NandROP
+        QPainter::CompositionMode_SourceOut, // Qt::NotAndROP
+        QPainter::CompositionMode_DestinationOut, // Qt::NotCopyROP
+        QPainter::CompositionMode_DestinationOut, // Qt::AndNotROP
+        QPainter::CompositionMode_DestinationOut, // Qt::NotROP
+        QPainter::CompositionMode_Xor, // Qt::XorROP
+        QPainter::CompositionMode_Source, // Qt::NorROP
+        QPainter::CompositionMode_SourceIn, // Qt::AndROP
+        QPainter::CompositionMode_SourceIn, // Qt::NotXorROP
+        QPainter::CompositionMode_Destination, // Qt::NopROP
+        QPainter::CompositionMode_Destination, // Qt::NotOrROP
+        QPainter::CompositionMode_Source, // Qt::CopyROP
+        QPainter::CompositionMode_Source, // Qt::OrNotROP
+        QPainter::CompositionMode_SourceOver, // Qt::OrROP
+        QPainter::CompositionMode_Source // Qt::SetROP
     };
 
     if ( parm > 0 && parm <= 16 )
         return opTab[ parm ];
     else
-        return Qt::CopyROP;
+        return QPainter::CompositionMode_Source;
 }
 
 //-----------------------------------------------------------------------------
-Qt::RasterOp  QWinMetaFile::winToQtRaster( long parm ) const
+QPainter::CompositionMode  QWinMetaFile::winToQtComposition( long parm ) const
 {
     /* TODO: Ternary raster operations
     0x00C000CA  dest = (source AND pattern)
@@ -1193,24 +1211,25 @@ Qt::RasterOp  QWinMetaFile::winToQtRaster( long parm ) const
     static const struct OpTab
     {
         long winRasterOp;
-        Qt::RasterOp qtRasterOp;
+        QPainter::CompositionMode qtRasterOp;
     } opTab[] =
     {
-        { 0x00CC0020, Qt::CopyROP },
-        { 0x00EE0086, Qt::OrROP },
-        { 0x008800C6, Qt::AndROP },
-        { 0x00660046, Qt::XorROP },
-        { 0x00440328, Qt::AndNotROP },
-        { 0x00330008, Qt::NotCopyROP },
-        { 0x001100A6, Qt::NandROP },
-        { 0x00C000CA, Qt::CopyROP },
-        { 0x00BB0226, Qt::NotOrROP },
-        { 0x00F00021, Qt::CopyROP },
-        { 0x00FB0A09, Qt::CopyROP },
-        { 0x005A0049, Qt::CopyROP },
-        { 0x00550009, Qt::NotROP },
-        { 0x00000042, Qt::ClearROP },
-        { 0x00FF0062, Qt::SetROP }
+      // ### untested (conversion from Qt::RasterOp)
+      { 0x00CC0020, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x00EE0086, QPainter::CompositionMode_SourceOver }, // OrROP
+      { 0x008800C6, QPainter::CompositionMode_SourceIn }, // AndROP
+      { 0x00660046, QPainter::CompositionMode_Xor }, // XorROP
+      { 0x00440328, QPainter::CompositionMode_DestinationOut }, // AndNotROP
+      { 0x00330008, QPainter::CompositionMode_DestinationOut }, // NotCopyROP
+      { 0x001100A6, QPainter::CompositionMode_SourceOut }, // NandROP
+      { 0x00C000CA, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x00BB0226, QPainter::CompositionMode_Destination }, // NotOrROP
+      { 0x00F00021, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x00FB0A09, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x005A0049, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x00550009, QPainter::CompositionMode_DestinationOut }, // NotROP
+      { 0x00000042, QPainter::CompositionMode_Clear }, // ClearROP
+      { 0x00FF0062, QPainter::CompositionMode_Source } // SetROP
     };
 
     int i;
@@ -1221,7 +1240,7 @@ Qt::RasterOp  QWinMetaFile::winToQtRaster( long parm ) const
     if ( i < 15 )
         return opTab[ i ].qtRasterOp;
     else
-        return Qt::CopyROP;
+        return QPainter::CompositionMode_Source;
 }
 
 //-----------------------------------------------------------------------------

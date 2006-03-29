@@ -88,33 +88,47 @@ struct WmfEnhMetaRecord
     static const struct OpTab
     {
         quint32  winRasterOp;
-        Qt::RasterOp  qtRasterOp;
+        QPainter::CompositionMode  qtRasterOp;
     } koWmfOpTab32[] =
     {
-        { 0x00CC0020, Qt::CopyROP },
-        { 0x00EE0086, Qt::OrROP },
-        { 0x008800C6, Qt::AndROP },
-        { 0x00660046, Qt::XorROP },
-        { 0x00440328, Qt::AndNotROP },
-        { 0x00330008, Qt::NotCopyROP },
-        { 0x001100A6, Qt::NandROP },
-        { 0x00C000CA, Qt::CopyROP },
-        { 0x00BB0226, Qt::NotOrROP },
-        { 0x00F00021, Qt::CopyROP },
-        { 0x00FB0A09, Qt::CopyROP },
-        { 0x005A0049, Qt::CopyROP },
-        { 0x00550009, Qt::NotROP },
-        { 0x00000042, Qt::ClearROP },
-        { 0x00FF0062, Qt::SetROP }
+      // ### untested (conversion from Qt::RasterOp)
+      { 0x00CC0020, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x00EE0086, QPainter::CompositionMode_SourceOver }, // OrROP
+      { 0x008800C6, QPainter::CompositionMode_SourceIn }, // AndROP
+      { 0x00660046, QPainter::CompositionMode_Xor }, // XorROP
+      { 0x00440328, QPainter::CompositionMode_DestinationOut }, // AndNotROP
+      { 0x00330008, QPainter::CompositionMode_DestinationOut }, // NotCopyROP
+      { 0x001100A6, QPainter::CompositionMode_SourceOut }, // NandROP
+      { 0x00C000CA, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x00BB0226, QPainter::CompositionMode_Destination }, // NotOrROP
+      { 0x00F00021, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x00FB0A09, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x005A0049, QPainter::CompositionMode_Source }, // CopyROP
+      { 0x00550009, QPainter::CompositionMode_DestinationOut }, // NotROP
+      { 0x00000042, QPainter::CompositionMode_Clear }, // ClearROP
+      { 0x00FF0062, QPainter::CompositionMode_Source } // SetROP
     };
 
-    static const Qt::RasterOp koWmfOpTab16[] =
+    static const QPainter::CompositionMode koWmfOpTab16[] =
     {
-        Qt::CopyROP,
-        Qt::ClearROP, Qt::NandROP, Qt::NotAndROP, Qt::NotCopyROP,
-        Qt::AndNotROP, Qt::NotROP, Qt::XorROP, Qt::NorROP,
-        Qt::AndROP, Qt::NotXorROP, Qt::NopROP, Qt::NotOrROP,
-        Qt::CopyROP, Qt::OrNotROP, Qt::OrROP, Qt::SetROP
+      // ### untested (conversion from Qt::RasterOp)
+      QPainter::CompositionMode_Source, // CopyROP
+      QPainter::CompositionMode_Clear, // ClearROP
+      QPainter::CompositionMode_SourceOut, // NandROP
+      QPainter::CompositionMode_SourceOut, // NotAndROP
+      QPainter::CompositionMode_DestinationOut, // NotCopyROP
+      QPainter::CompositionMode_DestinationOut, // AndNotROP
+      QPainter::CompositionMode_DestinationOut, // NotROP
+      QPainter::CompositionMode_Xor, // XorROP
+      QPainter::CompositionMode_Source, // NorROP
+      QPainter::CompositionMode_SourceIn, // AndROP
+      QPainter::CompositionMode_SourceIn, //NotXorROP
+      QPainter::CompositionMode_Destination, // NopROP
+      QPainter::CompositionMode_Destination, // NotOrROP
+      QPainter::CompositionMode_Source, // CopyROP
+      QPainter::CompositionMode_Source, // OrNotROP
+      QPainter::CompositionMode_SourceOver, // OrROP
+      QPainter::CompositionMode_Source // SetROP
     };
 
     static const Qt::BrushStyle koWmfHatchedStyleBrush[] =

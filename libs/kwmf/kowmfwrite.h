@@ -83,7 +83,7 @@ public:
     // Drawing attributes/modes
     void  setBackgroundColor( const QColor& r );
     void  setBackgroundMode( Qt::BGMode );
-    void  setRasterOp( Qt::RasterOp );
+    void  setCompositionMode( QPainter::CompositionMode );
 
     // Change logical Coordinate
     void  setWindow( int left, int top , int width, int height );
@@ -129,8 +129,8 @@ private:
     void angleToxy( int& xStart, int& yStart, int& xEnd, int& yEnd, int a, int alen );
 
     /** Convert windows rasterOp in QT rasterOp */
-    quint16 qtRasterToWin16( Qt::RasterOp op ) const;
-    quint32 qtRasterToWin32( Qt::RasterOp op ) const;
+    quint16 qtRasterToWin16( QPainter::CompositionMode op ) const;
+    quint32 qtRasterToWin32( QPainter::CompositionMode op ) const;
 
 
 private:

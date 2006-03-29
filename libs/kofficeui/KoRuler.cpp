@@ -163,7 +163,7 @@ void KoRuler::setMousePos( int mx, int my )
     if ( !showMPos || ( mx == mposX && my == mposY ) ) return;
 
     QPainter p( this );
-    p.setRasterOp( Qt::NotROP );
+    p.setCompositionMode( QPainter::CompositionMode_DestinationOut );
 
     if ( orientation == Qt::Horizontal ) {
         if ( hasToDelete )
@@ -517,7 +517,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 
             if ( d->canvas ) {
                 QPainter p( d->canvas );
-                p.setRasterOp( Qt::NotROP );
+                p.setCompositionMode( QPainter::CompositionMode_DestinationOut );
                 p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
                 p.end();
             }
@@ -605,7 +605,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 
         if ( d->canvas ) {
             QPainter p( d->canvas );
-            p.setRasterOp( Qt::NotROP );
+            p.setCompositionMode( QPainter::CompositionMode_DestinationOut );
             p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
             p.end();
         }
@@ -831,7 +831,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             if (d->rtl) newValue = unZoomIt(pw) - newValue;
                             if(newValue == d->currTab.ptPos) break; // no change
                             QPainter p( d->canvas );
-                            p.setRasterOp( Qt::NotROP );
+                            p.setCompositionMode( QPainter::CompositionMode_DestinationOut );
                             // prevent 1st drawLine when we just created a new tab
                             // (it's a NOT line)
                             double pt;
@@ -891,7 +891,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     case A_BR_TOP: {
                         if ( d->canvas && my < bottom-20 && my+diffy-2 > 0) {
                             QPainter p( d->canvas );
-                            p.setRasterOp( Qt::NotROP );
+                            p.setCompositionMode( QPainter::CompositionMode_DestinationOut );
                             p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
                             p.drawLine( 0, my, d->canvas->width(), my );
                             p.end();
@@ -906,7 +906,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     case A_BR_BOTTOM: {
                         if ( d->canvas && my > top+20 && my+diffy < ph-2) {
                             QPainter p( d->canvas );
-                            p.setRasterOp( Qt::NotROP );
+                            p.setCompositionMode( QPainter::CompositionMode_DestinationOut );
                             p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
                             p.drawLine( 0, my, d->canvas->width(), my );
                             p.end();
@@ -1090,7 +1090,7 @@ void KoRuler::searchTab(int mx) {
 void KoRuler::drawLine(int oldX, int newX) {
 
     QPainter p( d->canvas );
-    p.setRasterOp( Qt::NotROP );
+    p.setCompositionMode( QPainter::CompositionMode_DestinationOut );
     p.drawLine( oldX, 0, oldX, d->canvas->height() );
     if(newX!=-1)
         p.drawLine( newX, 0, newX, d->canvas->height() );

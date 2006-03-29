@@ -47,8 +47,8 @@ public:
 
 
 KoWmfWrite::KoWmfWrite( const QString& fileName ) {
-    d = new KoWmfWritePrivate;    
-    
+    d = new KoWmfWritePrivate;
+
     d->mDpi = 1024;
     d->mMaxRecordSize = 0;
     d->mFileOut.setName( fileName );
@@ -59,8 +59,8 @@ KoWmfWrite::~KoWmfWrite() {
 }
 
 
-void KoWmfWrite::setDefaultDpi( int dpi ) { 
-    d->mDpi = dpi; 
+void KoWmfWrite::setDefaultDpi( int dpi ) {
+    d->mDpi = dpi;
 }
 
 
@@ -68,7 +68,7 @@ void KoWmfWrite::setDefaultDpi( int dpi ) {
 // Virtual Painter => create the WMF
 
 bool KoWmfWrite::begin() {
-    
+
     if ( !d->mFileOut.open( QIODevice::WriteOnly ) )
     {
         kDebug() << "Cannot open file " << QFile::encodeName(d->mFileOut.name()) << endl;
@@ -112,7 +112,7 @@ bool KoWmfWrite::end() {
     pheader.bottom = d->mBBox.bottom();
     pheader.inch = d->mDpi;
     checksum = KoWmfReadPrivate::calcCheckSum( &pheader );
-    
+
     // write headers
     d->mFileOut.at( 0 );
     d->mSt << (quint32)0x9AC6CDD7 << (quint16)0;
@@ -122,7 +122,7 @@ bool KoWmfWrite::end() {
     d->mSt << (quint16)6 << (quint32)d->mMaxRecordSize << (quint16)0;
 
     d->mFileOut.close();
-    
+
     return true;
 }
 
@@ -205,7 +205,7 @@ void KoWmfWrite::setBackgroundMode( Qt::BGMode mode ) {
 }
 
 
-void KoWmfWrite::setRasterOp( Qt::RasterOp op ) {
+void KoWmfWrite::setCompositionMode( QPainter::CompositionMode op ) {
     d->mSt << (quint32)5 << (quint16)0x0104 << (quint32)qtRasterToWin32( op );
 }
 
@@ -262,7 +262,7 @@ void KoWmfWrite::drawRoundRect( int left, int top, int width, int height , int r
 
     d->mSt << (quint32)9 << (quint16)0x061C << (quint16)heightCorner << (quint16)widthCorner;
     d->mSt << (quint16)rec.bottom() << (quint16)rec.right() << (quint16)rec.top() << (quint16)rec.left();
-    
+
     d->mMaxRecordSize = qMax( d->mMaxRecordSize, 9 );
 }
 
@@ -282,7 +282,7 @@ void KoWmfWrite::drawArc( int left, int top, int width, int height , int a, int 
     angleToxy( offXStart, offYStart, offXEnd, offYEnd, a, alen );
     xCenter = left + (width / 2);
     yCenter = top + (height / 2);
-    
+
     d->mSt << (quint32)11 << (quint16)0x0817;
     d->mSt << (quint16)(yCenter + offYEnd) << (quint16)(xCenter + offXEnd);
     d->mSt << (quint16)(yCenter + offYStart) << (quint16)(xCenter + offXStart);
@@ -318,7 +318,7 @@ void KoWmfWrite::drawChord( int left, int top, int width, int height , int a, in
     angleToxy( offXStart, offYStart, offXEnd, offYEnd, a, alen );
     xCenter = left + (width / 2);
     yCenter = top + (height / 2);
-    
+
     d->mSt << (quint32)11 << (quint16)0x0830;
     d->mSt << (quint16)(yCenter + offYEnd) << (quint16)(xCenter + offXEnd);
     d->mSt << (quint16)(yCenter + offYStart) << (quint16)(xCenter + offXStart);
@@ -331,7 +331,7 @@ void KoWmfWrite::drawChord( int left, int top, int width, int height , int a, in
 
 void KoWmfWrite::drawPolyline( const Q3PointArray &pa ) {
     int size = 4 + (pa.size() * 2);
-    
+
     d->mSt << (quint32)size << (quint16)0x0325 << (quint16)pa.size();
     pointArray( pa );
 
@@ -341,10 +341,10 @@ void KoWmfWrite::drawPolyline( const Q3PointArray &pa ) {
 
 void KoWmfWrite::drawPolygon( const Q3PointArray &pa, bool  ) {
     int size = 4 + (pa.size() * 2);
-    
+
     d->mSt << (quint32)size << (quint16)0x0324 << (quint16)pa.size();
     pointArray( pa );
-    
+
     d->mMaxRecordSize = qMax( d->mMaxRecordSize, size );
 }
 
@@ -378,7 +378,7 @@ void KoWmfWrite::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool ) {
 void KoWmfWrite::drawImage( int , int , const QImage &, int , int , int , int  ) {
 /*
     QImage img;
-    
+
     img = image;
     img.setFormat( "BMP" );
 
@@ -419,10 +419,10 @@ quint32 KoWmfWrite::winColor( QColor color ) {
 
 void KoWmfWrite::angleToxy( int &xStart, int &yStart, int &xEnd, int &yEnd, int a, int alen ) {
     double angleStart, angleLength;
-    
+
     angleStart = ((double)a * 3.14166) / 2880;
     angleLength = ((double)alen * 3.14166) / 2880;
-    
+
     xStart = (int)(cos(angleStart) * 50);
     yStart = -(int)(sin(angleStart) * 50);
     xEnd = (int)(cos(angleLength) * 50);
@@ -430,7 +430,7 @@ void KoWmfWrite::angleToxy( int &xStart, int &yStart, int &xEnd, int &yEnd, int 
 }
 
 
-quint16  KoWmfWrite::qtRasterToWin16( Qt::RasterOp op ) const {
+quint16  KoWmfWrite::qtRasterToWin16( QPainter::CompositionMode op ) const {
     int i;
 
     for ( i=0 ; i < 17 ; i++ ) {
@@ -444,7 +444,7 @@ quint16  KoWmfWrite::qtRasterToWin16( Qt::RasterOp op ) const {
 }
 
 
-quint32  KoWmfWrite::qtRasterToWin32( Qt::RasterOp op ) const {
+quint32  KoWmfWrite::qtRasterToWin32( QPainter::CompositionMode op ) const {
     int i;
 
     for ( i=0 ; i < 15 ; i++ ) {

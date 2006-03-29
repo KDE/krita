@@ -64,12 +64,12 @@ void KWmf::brushSet(
 unsigned KWmf::getColour(
     S32 colour)
 {
-    unsigned Qt::red, Qt::green, Qt::blue;
+    unsigned red, green, blue;
 
-    Qt::red = colour & 255;
-    Qt::green = (colour >> 8) & 255;
-    Qt::blue = (colour >> 16) & 255;
-    return (Qt::red << 16) + (Qt::green << 8) + Qt::blue;
+    red = colour & 255;
+    green = (colour >> 8) & 255;
+    blue = (colour >> 16) & 255;
+    return (red << 16) + (green << 8) + blue;
 }
 
 void KWmf::genericArc(
@@ -291,7 +291,7 @@ void KWmf::invokeHandler(
             QDataStream *body;
 
             operands.readRawBytes(record->data(), words * 2);
-            body = new QDataStream(*record, QIODevice::ReadOnly);
+            body = new QDataStream(record, QIODevice::ReadOnly);
             body->setByteOrder(QDataStream::LittleEndian);
             (this->*result)(words, *body);
             delete body;

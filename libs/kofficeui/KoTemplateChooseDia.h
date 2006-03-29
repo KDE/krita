@@ -51,14 +51,14 @@ class KoTCDIconCanvas : public KIconCanvas
     Q_OBJECT
     public:
 	KoTCDIconCanvas( QWidget *parent = 0, const char *name = 0L )
-	    : KIconCanvas( parent, name ) {}
+	    : KIconCanvas( parent ) {}
 
 	bool isCurrentValid() { return currentItem(); }
 	Q3IconViewItem * load(KoTemplateGroup *group, const QString& name, KInstance* instance);
 
     protected:
 	virtual void keyPressEvent( QKeyEvent *e ) {
-	    if ( e->key() == Key_Return || e->key() == Key_Enter )
+	    if ( e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter )
 		e->ignore();
 	    else
 		KIconCanvas::keyPressEvent( e );

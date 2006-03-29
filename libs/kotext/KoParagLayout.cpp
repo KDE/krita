@@ -538,6 +538,8 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
 
             KoTabulator tab;
             tab.ptPos = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString::null ) );
+            // Tab stop positions in the XML are relative to the left-margin
+            tab.ptPos += layout.margins[Q3StyleSheetItem::MarginLeft];
             if ( type == "center" )
                 tab.type = T_CENTER;
             else if ( type == "right" )
@@ -846,7 +848,9 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool sa
     for ( ; it != m_tabList.end() ; it++ )
     {
         tabsWriter.startElement( "style:tab-stop" );
-        tabsWriter.addAttributePt( "style:position", (*it).ptPos );
+        // Tab stop positions in the XML are relative to the left-margin
+        double pos = (*it).ptPos - margins[Q3StyleSheetItem::MarginLeft];
+        tabsWriter.addAttributePt( "style:position", pos );
 
         switch ( (*it).type ) {
         case T_LEFT:

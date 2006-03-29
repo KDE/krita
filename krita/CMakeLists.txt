@@ -1,6 +1,8 @@
 kde4_header()
 project(krita)
 
+include_directories( ${CMAKE_SOURCE_DIR}/krita/sdk/ )
+
 add_subdirectory( sdk )
 add_subdirectory( kritacolor )
 add_subdirectory( core )

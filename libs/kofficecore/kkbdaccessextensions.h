@@ -168,8 +168,8 @@ class KSortedLabel
 public:
     KSortedLabel(QLabel* l);
     KSortedLabel();    // default constructor
-    bool operator<( KSortedLabel l);
-    QLabel* label() { return m_l; }
+    bool operator<( const KSortedLabel& l) const;
+    QLabel* label() const { return m_l; }
 
 private:
     QLabel* m_l;

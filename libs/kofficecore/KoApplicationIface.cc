@@ -93,7 +93,7 @@ Q3ValueList<DCOPRef> KoApplicationIface::getWindows()
     {
         foreach ( KMainWindow* mainWindow, mainWindows )
             lst.append( DCOPRef( kapp->dcopClient()->appId(),
-                        static_cast<KoMainWindow*>(mainWindow->dcopObject()->objId() ) );
+                        static_cast<KoMainWindow*>(mainWindow)->dcopObject()->objId() ) );
     }
     return lst;
 }

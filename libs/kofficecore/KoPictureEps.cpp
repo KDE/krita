@@ -290,7 +290,7 @@ bool KoPictureEps::extractPostScriptStream( void )
 QString KoPictureEps::readLine( const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr )
 {
     QString strLine;
-    const uint finish = qMin( start + length, array.size() );
+    const uint finish = qMin( start + length, (uint) array.size() );
     for ( ; pos < finish; ++pos ) // We are starting at pos
     {
         const char ch = array[ pos ]; // Read one character

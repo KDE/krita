@@ -663,7 +663,7 @@ KSortedLabel::KSortedLabel(QLabel* l) :
 KSortedLabel::KSortedLabel() :
     m_l(0) { }
 
-bool KSortedLabel::operator<( KSortedLabel l )
+bool KSortedLabel::operator<( const KSortedLabel& l ) const
 {
     QPoint p1 = m_l->mapToGlobal(m_l->pos());
     QPoint p2 = l.label()->mapToGlobal(l.label()->pos());

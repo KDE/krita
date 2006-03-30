@@ -26,7 +26,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-
+#include <khbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qradiobutton.h>

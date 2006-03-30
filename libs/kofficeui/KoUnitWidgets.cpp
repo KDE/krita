@@ -301,7 +301,7 @@ KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, const char *name )
 
 KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit,
      unsigned int precision, const char *name )
-     : KComboBox( true, parent, name ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper ),
+     : KComboBox( true, parent ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper ),
      m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
     lineEdit()->setAlignment( Qt::AlignRight );

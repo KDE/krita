@@ -21,6 +21,7 @@
 #include <config.h>
 #include LCMS_HEADER
 
+#include <QImage>
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 

@@ -8,7 +8,7 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TESTSDIR)")
 
 ########### next target ###############
 
-set(kritaimage_LIB_SRCS 
+set(kritaimage_LIB_SRCS ${libkritasdk_SRCS} 
    kis_adjustment_layer.cc 
    kis_alpha_mask.cc 
    kis_autobrush_resource.cc 

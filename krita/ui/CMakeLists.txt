@@ -5,7 +5,7 @@ kde4_header()
 
 ########### next target ###############
 
-set(kritaui_LIB_SRCS 
+set(kritaui_LIB_SRCS ${libkritasdk_SRCS} 
    kis_histogram_view.cc 
    imageviewer.cc 
    kcurve.cc 

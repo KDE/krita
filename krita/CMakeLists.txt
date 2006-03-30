@@ -1,6 +1,10 @@
 kde4_header()
 project(krita)
 
+set(libkritasdk_SRCS 
+	${CMAKE_SOURCE_DIR}/krita/sdk/kis_progress_subject.cc
+	)
+
 include_directories( ${CMAKE_SOURCE_DIR}/krita/sdk/ )
 
 add_subdirectory( sdk )

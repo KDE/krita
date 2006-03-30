@@ -93,9 +93,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
   m_previewLabel->installEventFilter(this);
   m_documentList->installEventFilter(this);
   setFocusProxy(m_documentList);
-#if KDE_IS_VERSION(3,4,0)
   m_documentList->setShadeSortColumn(false);
-#endif
 
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);

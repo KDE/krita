@@ -167,12 +167,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 
 void KisToolSelectSimilar::slotTimer()
 {
-#if KDE_IS_VERSION(3,4,0)
     int state = kapp->keyboardMouseState() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
-#else
-    int state = kapp->keyboardModifiers() & (KApplication::ShiftModifier
-            |KApplication::ControlModifier|KApplication::Modifier1);
-#endif
     enumSelectionMode action;
 
     if (state == Qt::ShiftModifier)

@@ -128,12 +128,7 @@ void KisToolZoom::deactivate()
 
 void KisToolZoom::slotTimer()
 {
-#if KDE_IS_VERSION(3,4,0)
     int state = kapp->keyboardMouseState() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
-#else
-    int state = kapp->keyboardModifiers() & (KApplication::ShiftModifier
-            |KApplication::ControlModifier|KApplication::Modifier1);
-#endif
 
     if (state & Qt::ControlModifier) {
         m_subject->canvasController()->setCanvasCursor(m_minusCursor);

@@ -38,11 +38,7 @@
 #include <kstandarddirs.h>
 #include <ktoolbar.h>
 
-#if KDE_IS_VERSION(3, 4, 0)
-  // The KNewStuffSecure we use internaly for the GetHotNewStuff-functionality
-  // was introduced with KDE 3.4.
-  #define KROSS_SUPPORT_NEWSTUFF
-#endif
+#define KROSS_SUPPORT_NEWSTUFF
 
 #ifdef KROSS_SUPPORT_NEWSTUFF
   #include <knewstuff/provider.h>

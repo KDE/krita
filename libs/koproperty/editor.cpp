@@ -160,9 +160,7 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	setColumnWidthMode(0, Q3ListView::Maximum);
 	setFullWidth(true);
 	setShowSortIndicator(false);
-#if KDE_IS_VERSION(3,3,9)
 	setShadeSortColumn(false);
-#endif
 	setTooltipColumn(0);
 	setSorting(0);
 	setItemMargin(KPROPEDITOR_ITEM_MARGIN);

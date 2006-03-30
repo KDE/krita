@@ -71,7 +71,7 @@ public:
       	        layer->undoAdapter()->addCommand(cmd);
     	    }
         }
-        layer->setDirty();
+        layer->setDirty(dev->image()->bounds());
         return true;
     };
 

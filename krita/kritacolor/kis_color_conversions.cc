@@ -51,6 +51,10 @@ void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V)
         min = B;
 
     int delta = max - min;
+
+    // To prevent division by zero later on.
+    if (delta == 0) delta = 1;
+    
     *V = max; // value
     *S = max ? (510 * delta + max) / ( 2 * max) : 0; // saturation
     

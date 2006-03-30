@@ -55,6 +55,7 @@ void get32Bit (const unsigned char *data, ExifValue::ByteOrder order, Q_UINT32* 
     switch (order) {
         case ExifValue::BYTE_ORDER_MOTOROLA:
             *value = ((data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]);
+            break;
         case ExifValue::BYTE_ORDER_INTEL:
             *value = ((data[3] << 24) | (data[2] << 16) | (data[1] << 8) | data[0]);
     }
@@ -83,6 +84,7 @@ void get64Bit (const unsigned char *data, ExifValue::ByteOrder order, Q_UINT64* 
     switch (order) {
         case ExifValue::BYTE_ORDER_MOTOROLA:
             *value = (((Q_UINT64)data[0] << 56) | ((Q_UINT64)data[1] << 48) | ((Q_UINT64)data[2] << 40) | ((Q_UINT64)data[3] << 32) | ((Q_UINT64)data[4] << 24) | ((Q_UINT64)data[5] << 16) | ((Q_UINT64)data[6] << 8) | (Q_UINT64)data[7]);
+            break;
         case ExifValue::BYTE_ORDER_INTEL:
             *value = (((Q_UINT64)data[7] << 56) | ((Q_UINT64)data[6] << 48) | ((Q_UINT64)data[5] << 40) | ((Q_UINT64)data[4] << 32) | ((Q_UINT64)data[3] << 24) | ((Q_UINT64)data[2] << 16) | ((Q_UINT64)data[1] << 8) | (Q_UINT64)data[0]);
     }

@@ -148,9 +148,6 @@ void KisOpenGLCanvasPainter::setPenStyle(Qt::PenStyle penStyle)
             lineStipple = 0;
             break;
         default:
-        case Qt::SolidLine:
-            lineStipple = 0xffff;
-            break;
         case Qt::DashLine:
             lineStipple = 0x3fff;
             break;

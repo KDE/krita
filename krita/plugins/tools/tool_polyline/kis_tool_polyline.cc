@@ -260,11 +260,12 @@ QString KisToolPolyline::quickHelp() const
 
 void KisToolPolyline::keyPress(QKeyEvent *e)
 {
-    if (e->key()==Qt::Key_Escape);
-    // erase old lines on canvas
-    draw();
-    m_dragging = false;
-    m_points.clear();
+    if (e->key()==Qt::Key_Escape) {
+        // erase old lines on canvas
+        draw();
+        m_dragging = false;
+        m_points.clear();
+    }
 }
 
 #include "kis_tool_polyline.moc"

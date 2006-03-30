@@ -241,7 +241,7 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
 KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, const char * name) :
         QObject(0, name), KShared(), m_exifInfo(0)
 {
-    Q_ASSERT( colorSpace );
+    
     m_longRunningFilterTimer = 0;
     m_dcop = 0;
 
@@ -261,11 +261,13 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
         m_colorSpace = colorSpace;
     }
 
+    Q_ASSERT( m_colorSpace );
+    
     m_pixelSize = m_colorSpace->pixelSize();
     m_nChannels = m_colorSpace->nChannels();
 
     Q_UINT8* defPixel = new Q_UINT8[ m_pixelSize ];
-    colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
+    m_colorSpace->fromQColor(Qt::black, OPACITY_TRANSPARENT, defPixel);
 
     m_datamanager = new KisDataManager(m_pixelSize, defPixel);
     delete [] defPixel;
@@ -273,7 +275,7 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, con
     m_extentIsValid = true;
 
     
-    m_longRunningFilters = colorSpace->createBackgroundFilters();
+    m_longRunningFilters = m_colorSpace->createBackgroundFilters();
     if (!m_longRunningFilters.isEmpty()) {
         m_longRunningFilterTimer = new QTimer(this);
         connect(m_longRunningFilterTimer, SIGNAL(timeout()), this, SLOT(runBackgroundFilters()));

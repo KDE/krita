@@ -208,12 +208,12 @@ void KisToolManager::setCurrentTool(KisTool *tool)
 
         tool->action()->setChecked( true );
         tool->action()->activate();
-
+        m_toolBox->slotSetTool(tool->name());
     } else {
         m_inputDeviceToolMap[m_controller->currentInputDevice()] = 0;
         m_controller->setCanvasCursor(KisCursor::arrowCursor());
     }
-    m_toolBox->slotSetTool(tool->name());
+
 }
 
 void KisToolManager::setCurrentTool( const QString & toolName )

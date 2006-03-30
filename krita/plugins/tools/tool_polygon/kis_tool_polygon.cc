@@ -240,11 +240,12 @@ void KisToolPolygon::setup(KActionCollection *collection)
 
 void KisToolPolygon::keyPress(QKeyEvent *e)
 {
-    if (e->key()==Qt::Key_Escape);
-    // erase old lines on canvas
-    draw();
-    m_dragging = false;
-    m_points.clear();
+    if (e->key()==Qt::Key_Escape) {
+        // erase old lines on canvas
+        draw();
+        m_dragging = false;
+        m_points.clear();
+    }
 }
 
 

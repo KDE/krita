@@ -20,6 +20,7 @@ Name[sr]=Прикључак за раздвајање канала
 Name[sr@Latn]=Priključak za razdvajanje kanala
 Name[sv]=Insticksprogram för separata kanaler
 Name[uk]=Втулок розділення каналів
+Name[uz]=Каналларни ажратиш учун плагин
 Name[zh_CN]=独立通道插件
 ServiceTypes=Krita/ViewPlugin
 Type=Service

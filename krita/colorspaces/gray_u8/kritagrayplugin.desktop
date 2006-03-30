@@ -68,6 +68,7 @@ Comment[sr@Latn]=Model boja za slike u 8-bitnim sivim nijansama
 Comment[sv]=Färgmodell för 8-bitars gråskalebilder
 Comment[ta]=8-பிட் பழுப்புநிற பிம்பங்களுக்கு வண்ண மாதிரி
 Comment[tr]=8-bit griton görüntüler için renk modeli.
+Comment[uk]=Модель кольору зображень відтінків сірого (8-бітів)
 Comment[zh_CN]=8 位灰度图像的色彩模型
 ServiceTypes=Krita/ColorSpace
 Type=Service

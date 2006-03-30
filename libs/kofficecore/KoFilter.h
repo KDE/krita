@@ -82,7 +82,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KoFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert( const Q3CString& from, const Q3CString& to ) = 0;
+    virtual ConversionStatus convert( const QByteArray& from, const QByteArray& to ) = 0;
 
 signals:
     /**

@@ -8,7 +8,19 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TESTSDIR)")
 
 ########### next target ###############
 
-set(kritaimage_LIB_SRCS ${libkritasdk_SRCS} 
+set(libkritatile_SRCS 
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tiledvlineiterator.cc 
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tiledhlineiterator.cc 
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tileddatamanager.cc 
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tile.cc 
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tilediterator.cc 
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tiledrectiterator.cc 
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_memento.cc 
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tilemanager.cc
+)
+
+
+set(kritaimage_LIB_SRCS ${libkritasdk_SRCS}  ${libkritatile_SRCS}
    kis_adjustment_layer.cc 
    kis_alpha_mask.cc 
    kis_autobrush_resource.cc 
@@ -66,7 +78,7 @@ kde4_add_dcop_skels(kritaimage_LIB_SRCS kis_paint_device_iface.h kis_image_iface
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage  ${KDE4_KDECORE_LIBS} kritasdk kritacolor kritatile kofficecore kopainter )
+target_link_libraries(kritaimage  ${KDE4_KDECORE_LIBS} kritacolor kofficecore kopainter )
 
 set_target_properties(kritaimage PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kritaimage )

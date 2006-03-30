@@ -22,8 +22,10 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qspinbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kaction.h>
 #include <klocale.h>
@@ -77,7 +79,7 @@ void KisToolColorPicker::update(KisCanvasSubject *subject)
 void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 {
     if (m_subject) {
-        if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton)
+        if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
         KisImageSP img;
@@ -164,7 +166,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
         displayPickedColor();
 
         if (m_updateColor) {
-            if (e->button() == QMouseEvent::LeftButton)
+            if (e->button() == Qt::LeftButton)
                 m_subject->setFGColor(m_pickedColor);
             else
                 m_subject->setBGColor(m_pickedColor);
@@ -190,7 +192,7 @@ void KisToolColorPicker::displayPickedColor()
 {
     if (m_pickedColor.data() && m_optionsWidget) {
 
-        QValueVector<KisChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
+        Q3ValueVector<KisChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
 
         for (int i = channels.count() - 1; i >= 0 ; --i) {
@@ -202,7 +204,7 @@ void KisToolColorPicker::displayPickedColor()
                 channelValueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), i);
             }
 
-            m_optionsWidget->listViewChannels->insertItem(new QListViewItem(m_optionsWidget->listViewChannels,
+            m_optionsWidget->listViewChannels->insertItem(new Q3ListViewItem(m_optionsWidget->listViewChannels,
                                                 channels[i]->name(),
                                                 channelValueText));
         }
@@ -248,7 +250,7 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
         return m_optionsWidget;
     }
 
-    QValueList<KisResource*> palettes = srv->resources();
+    Q3ValueList<KisResource*> palettes = srv->resources();
 
     for(uint i = 0; i < palettes.count(); i++) {
         KisPalette* palette = dynamic_cast<KisPalette*>(*palettes.at(i));

@@ -22,6 +22,9 @@
 #include <qimage.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QShowEvent>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>

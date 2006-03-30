@@ -17,9 +17,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qframe.h>
-#include <qhbox.h>
-#include <qgroupbox.h>
+#include <q3frame.h>
+#include <q3hbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
 
 #include "kis_previewwidget.h"
@@ -28,10 +28,10 @@
 KisPreviewDialog::KisPreviewDialog( QWidget *  parent, const char * name, bool modal, const QString &caption)
     : super (parent, name, modal, caption, Ok | Cancel, Ok)
 {
-    QHBox* layout = new QHBox(this);
+    Q3HBox* layout = new Q3HBox(this);
     layout->setSpacing( 6 );
 
-    m_containerFrame = new QFrame( layout, "container" );
+    m_containerFrame = new Q3Frame( layout, "container" );
 
     m_preview = new KisPreviewWidget( layout, "previewWidget" );
 

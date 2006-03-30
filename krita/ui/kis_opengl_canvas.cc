@@ -19,6 +19,15 @@
 #include "kis_canvas.h"
 #include "kis_opengl_canvas.h"
 #include "kis_opengl_canvas_painter.h"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QTabletEvent>
+#include <QDragEnterEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QDropEvent>
 
 #ifdef HAVE_GL
 KisOpenGLCanvasWidget::KisOpenGLCanvasWidget(QWidget *parent, const char *name, QGLWidget *sharedContextWidget)

@@ -141,7 +141,7 @@ void KisToolFill::buttonPress(KisButtonPressEvent *e)
 {
     if (!m_subject) return;
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
-    if (e->button() != QMouseEvent::LeftButton) return;
+    if (e->button() != Qt::LeftButton) return;
     int x, y;
     x = e->pos().floorX();
     y = e->pos().floorY();
@@ -192,21 +192,21 @@ void KisToolFill::slotSetUsePattern(int state)
 {
     if (state == QCheckBox::NoChange)
         return;
-    m_usePattern = (state == QButton::On);
+    m_usePattern = (state == QCheckBox::On);
 }
 
 void KisToolFill::slotSetSampleMerged(int state)
 {
     if (state == QCheckBox::NoChange)
         return;
-    m_sampleMerged = (state == QButton::On);
+    m_sampleMerged = (state == QCheckBox::On);
 }
 
 void KisToolFill::slotSetFillSelection(int state)
 {
     if (state == QCheckBox::NoChange)
         return;
-    m_fillOnlySelection = (state == QButton::On);
+    m_fillOnlySelection = (state == QCheckBox::On);
 }
 
 void KisToolFill::setup(KActionCollection *collection)

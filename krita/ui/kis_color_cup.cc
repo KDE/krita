@@ -24,7 +24,7 @@
 #include <qclipboard.h>
 #include <qcolor.h>
 #include <qdrawutil.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
@@ -32,7 +32,9 @@
 #include <qstyle.h>
 #include <qtooltip.h>
 #include <qwidget.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <kcolordialog.h>
 #include <klocale.h>
@@ -44,12 +46,12 @@
 #include <kis_color_cup.h>
 
 KisColorPopup::KisColorPopup(QColor c, QWidget * parent, const char * name)
-    : QFrame(parent, name, WType_Popup | WStyle_Customize | WStyle_NoBorder)
+    : Q3Frame(parent, name, Qt::WType_Popup | Qt::WStyle_Customize | Qt::WStyle_NoBorder)
 {
     m_color = c;
     setMargin(4);
-    setFocusPolicy(StrongFocus);
-    QHBoxLayout * l  = new QHBoxLayout(this);
+    setFocusPolicy(Qt::StrongFocus);
+    Q3HBoxLayout * l  = new Q3HBoxLayout(this);
     l->add(m_khsSelector = new KHSSelector(this));
     m_khsSelector->setMinimumSize(140, 7);
     l->add(m_valueSelector = new KValueSelector(this));

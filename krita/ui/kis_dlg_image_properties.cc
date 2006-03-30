@@ -15,15 +15,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qslider.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qcheckbox.h>
 
 #include <klocale.h>
@@ -140,7 +140,7 @@ KisColorSpace * KisDlgImageProperties::colorSpace()
 
 KisProfile * KisDlgImageProperties::profile()
 {
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
+    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
     quint32 index = m_page->cmbProfile->currentItem();
 
     if (index < profileList.count()) {
@@ -156,8 +156,8 @@ void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
 
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     m_page->cmbProfile->clear();
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        QValueVector<KisProfile *> ::iterator it;
+    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+        Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page->cmbProfile->insertItem((*it)->productName());
     }

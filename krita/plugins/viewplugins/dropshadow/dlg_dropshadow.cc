@@ -20,10 +20,10 @@
 
 #include <qradiobutton.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qbutton.h>
+#include <q3button.h>
 #include <qcolor.h>
 
 #include <klocale.h>

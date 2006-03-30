@@ -22,6 +22,8 @@
 #include "qlayout.h"
 #include "qcheckbox.h"
 #include "qpushbutton.h"
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include "knuminput.h"
 
@@ -29,13 +31,13 @@
 #include "kis_cimgconfig_widget.h"
 #include "kis_cimg_filter.h"
 
-KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, const char * name, WFlags f)
+KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, const char * name, Qt::WFlags f)
     : KisFilterConfigWidget(parent, name, f)
 {
     m_page = new WdgCImg(this);
     Q_CHECK_PTR(m_page);
 
-    QHBoxLayout * l = new QHBoxLayout(this);
+    Q3HBoxLayout * l = new Q3HBoxLayout(this);
     Q_CHECK_PTR(l);
 
     l->add(m_page);

@@ -25,10 +25,14 @@
 #include <qapplication.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qwidget.h>
 #include <qevent.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QKeyEvent>
+#include <Q3PopupMenu>
 
 #include <ktoolbar.h>
 #include <kmainwindow.h>
@@ -62,7 +66,7 @@
 #include "kis_text_brush.h"
 #endif
 KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name)
-    : QPopupMenu(parent, name)
+    : Q3PopupMenu(parent, name)
 {
     setFocusPolicy(StrongFocus);
 }
@@ -219,11 +223,11 @@ void KisControlFrame::createBrushesChooser(KisView * view)
 
     m_brushChooserPopup = new KisPopupFrame(m_brushWidget, "brush_chooser_popup");
 
-    QHBoxLayout * l = new QHBoxLayout(m_brushChooserPopup, 2, 2, "brushpopuplayout");
+    Q3HBoxLayout * l = new Q3HBoxLayout(m_brushChooserPopup, 2, 2, "brushpopuplayout");
 
     QTabWidget * m_brushesTab = new QTabWidget(m_brushChooserPopup, "brushestab");
     m_brushesTab->setTabShape(QTabWidget::Triangular);
-    m_brushesTab->setFocusPolicy(QWidget::NoFocus);
+    m_brushesTab->setFocusPolicy(Qt::NoFocus);
     m_brushesTab->setFont(m_font);
     m_brushesTab->setMargin(1);
 
@@ -271,11 +275,11 @@ void KisControlFrame::createPatternsChooser(KisView * view)
 {
     m_patternChooserPopup = new KisPopupFrame(m_patternWidget, "pattern_chooser_popup");
 
-    QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup, 2, 2, "patternpopuplayout");
+    Q3HBoxLayout * l2 = new Q3HBoxLayout(m_patternChooserPopup, 2, 2, "patternpopuplayout");
 
     QTabWidget * m_patternsTab = new QTabWidget(m_patternChooserPopup, "patternstab");
     m_patternsTab->setTabShape(QTabWidget::Triangular);
-    m_patternsTab->setFocusPolicy(QWidget::NoFocus);
+    m_patternsTab->setFocusPolicy(Qt::NoFocus);
     m_patternsTab->setFont(m_font);
     m_patternsTab->setMargin(1);
     l2->add( m_patternsTab );
@@ -312,11 +316,11 @@ void KisControlFrame::createGradientsChooser(KisView * view)
 {
     m_gradientChooserPopup = new KisPopupFrame(m_gradientWidget, "gradient_chooser_popup");
 
-    QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup, 2, 2, "gradientpopuplayout");
+    Q3HBoxLayout * l2 = new Q3HBoxLayout(m_gradientChooserPopup, 2, 2, "gradientpopuplayout");
 
     QTabWidget * m_gradientTab = new QTabWidget(m_gradientChooserPopup, "gradientstab");
     m_gradientTab->setTabShape(QTabWidget::Triangular);
-    m_gradientTab->setFocusPolicy(QWidget::NoFocus);
+    m_gradientTab->setFocusPolicy(Qt::NoFocus);
     m_gradientTab->setFont(m_font);
     m_gradientTab->setMargin(1);
 

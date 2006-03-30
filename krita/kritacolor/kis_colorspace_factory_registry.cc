@@ -107,15 +107,15 @@ KisProfile *  KisColorSpaceFactoryRegistry::getProfileByName(const QString & nam
     return m_profileMap[name];
 }
 
-QValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisID id)
+Q3ValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisID id)
 {
     return profilesFor(get(id));
 }
 
-QValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSpaceFactory * csf)
+Q3ValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSpaceFactory * csf)
 {
 
-    QValueVector<KisProfile *>  profiles;
+    Q3ValueVector<KisProfile *>  profiles;
 
     QMap<QString, KisProfile * >::Iterator it;
     for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
@@ -139,7 +139,7 @@ void KisColorSpaceFactoryRegistry::addPaintDeviceAction(KisColorSpace* cs,
     m_paintDevActionMap[cs->id()].append(action);
 }
 
-QValueVector<KisPaintDeviceAction *>
+Q3ValueVector<KisPaintDeviceAction *>
 KisColorSpaceFactoryRegistry::paintDeviceActionsFor(KisColorSpace* cs) {
     return m_paintDevActionMap[cs->id()];
 }

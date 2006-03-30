@@ -23,6 +23,9 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QShowEvent>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -124,8 +127,8 @@ void KisCustomBrush::createBrush() {
     }
 
     // For each layer in the current image, create a new image, and add it to the list
-    QValueVector< QValueVector<KisPaintDevice*> > devices;
-    devices.push_back(QValueVector<KisPaintDevice*>());
+    Q3ValueVector< Q3ValueVector<KisPaintDevice*> > devices;
+    devices.push_back(Q3ValueVector<KisPaintDevice*>());
     int w = img->width();
     int h = img->height();
 
@@ -138,7 +141,7 @@ void KisCustomBrush::createBrush() {
             devices.at(0).push_back(paint->paintDevice());
         layer = layer->nextSibling();
     }
-    QValueVector<KisPipeBrushParasite::SelectionMode> modes;
+    Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes;
 
     switch(comboBox2->currentItem()) {
         case 0: modes.push_back(KisPipeBrushParasite::Constant); break;

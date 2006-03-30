@@ -24,6 +24,9 @@
 #include "kis_canvas_controller.h"
 #include "kis_tool_controller.h"
 #include "kis_tool_non_paint.h"
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
 
 KisToolNonPaint::KisToolNonPaint(const QString & UIName)
     : super(UIName)

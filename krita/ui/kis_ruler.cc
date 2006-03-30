@@ -18,6 +18,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 #include "kdebug.h"
 
@@ -39,7 +43,7 @@ const char *KisRuler::m_nums[] = {
     "XX   XXXXXX XXX     XXX   XXXXXX XXX    XXXX   XXXXX XXXXX   XXXX  XXX"
 };
 
-KisRuler::KisRuler(Qt::Orientation o, QWidget *parent, const char *name) : super(parent, name, WRepaintNoErase | WResizeNoErase), m_pixmapNums(m_nums)
+KisRuler::KisRuler(Qt::Orientation o, QWidget *parent, const char *name) : super(parent, name, Qt::WNoAutoErase | Qt::WResizeNoErase), m_pixmapNums(m_nums)
 {
     setBackgroundMode(NoBackground);
     setFrameStyle(Box | Sunken);

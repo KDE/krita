@@ -26,7 +26,7 @@
 
 #include <qpoint.h>
 #include <qspinbox.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <klocale.h>
 #include <kiconloader.h>

@@ -23,6 +23,8 @@
 #include LCMS_HEADER
 
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -178,7 +180,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile * /*p
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
-    int h = getH(c.red(), c.green(), c.blue());
+    int h = getH(c.Qt::red(), c.Qt::green(), c.Qt::blue());
     int delta = 256;
     int key = 0;
     QMap<int, WetPix>::Iterator it;
@@ -274,7 +276,7 @@ void KisWetColorSpace::mixColors(const quint8 **/*colors*/, const quint8 */*weig
 {
 }
 
-QValueVector<KisChannelInfo *> KisWetColorSpace::channels() const
+Q3ValueVector<KisChannelInfo *> KisWetColorSpace::channels() const
 {
     return m_channels;
 }
@@ -517,9 +519,9 @@ QString KisWetColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, qui
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT16_MAX);
 }
 
-QValueList<KisFilter *> KisWetColorSpace::createBackgroundFilters()
+Q3ValueList<KisFilter *> KisWetColorSpace::createBackgroundFilters()
 {
-    QValueList<KisFilter *> filterList;
+    Q3ValueList<KisFilter *> filterList;
     KisFilter * f = new WetPhysicsFilter();
     filterList << f;
     return filterList;

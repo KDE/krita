@@ -18,7 +18,7 @@
 #include <limits.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qslider.h>
 #include <qstring.h>
 #include <klineedit.h>
@@ -39,7 +39,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                      qint32 opacity,
                      const KisCompositeOp& compositeOp,
                      const KisColorSpace * colorSpace,
-                     QWidget *parent, const char *name, WFlags f)
+                     QWidget *parent, const char *name, Qt::WFlags f)
     : super(parent, name, f, name, Ok | Cancel)
 {
     m_page = new WdgLayerProperties(this);

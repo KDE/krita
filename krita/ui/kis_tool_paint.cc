@@ -21,8 +21,14 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -129,11 +135,11 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     m_cmbComposite = new KisCmbComposite(m_optionWidget);
     connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 
-    QVBoxLayout* verticalLayout = new QVBoxLayout(m_optionWidget);
+    Q3VBoxLayout* verticalLayout = new Q3VBoxLayout(m_optionWidget);
     verticalLayout->setMargin(0);
     verticalLayout->setSpacing(3);
     
-    m_optionWidgetLayout = new QGridLayout(verticalLayout, 2, 3, 6);
+    m_optionWidgetLayout = new Q3GridLayout(verticalLayout, 2, 3, 6);
 
     m_optionWidgetLayout->addWidget(m_lbOpacity, 0, 0);
     m_optionWidgetLayout->addWidget(m_slOpacity, 0, 1);
@@ -147,7 +153,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
         QPushButton* push = new QPushButton(SmallIconSet( "help" ), "", m_optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
-        QHBoxLayout* hLayout = new QHBoxLayout(m_optionWidget);
+        Q3HBoxLayout* hLayout = new Q3HBoxLayout(m_optionWidget);
         hLayout->addWidget(push);
         hLayout->addItem(new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Fixed));
         verticalLayout->addLayout(hLayout);
@@ -253,7 +259,7 @@ void KisToolPaint::updateCompositeOpComboBox()
 }
 
 void KisToolPaint::slotPopupQuickHelp() {
-    QWhatsThis::display(quickHelp());
+    Q3WhatsThis::display(quickHelp());
 }
 
 #include "kis_tool_paint.moc"

@@ -19,12 +19,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qbutton.h>
+#include <q3button.h>
 #include <qtoolbutton.h>
 #include <qbrush.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpoint.h>
@@ -35,6 +35,10 @@
 #include <qwidget.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QPixmap>
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -64,7 +68,7 @@
 KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char *name)
     : super(parent, name), m_image(0)
 {
-    QVBoxLayout *vbox = new QVBoxLayout(this);
+    Q3VBoxLayout *vbox = new Q3VBoxLayout(this);
     vbox->setAutoAdd(true);
 
     m_lst = new WdgLayerBox(this);
@@ -262,7 +266,7 @@ void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)
     for (KisLayerSP layer = rootLayer->firstChild(); layer; layer = layer->nextSibling())
         layer->accept(visitor);
     m_modified.clear();
-    for (QListViewItemIterator it(list()->lastItem()); *it; --it)
+    for (Q3ListViewItemIterator it(list()->lastItem()); *it; --it)
         m_modified.append(static_cast<LayerItem*>(*it)->id());
     updateUI();
 }
@@ -498,7 +502,7 @@ void KisLayerBox::slotAddMenuActivated(int type)
 
 void KisLayerBox::slotRmClicked()
 {
-    QValueList<int> l = list()->selectedLayerIDs();
+    Q3ValueList<int> l = list()->selectedLayerIDs();
     if (l.count() < 2 && list()->activeLayer() && !l.contains(list()->activeLayer()->id()))
     {
         l.clear();
@@ -514,7 +518,7 @@ void KisLayerBox::slotRmClicked()
 
 void KisLayerBox::slotRaiseClicked()
 {
-    QValueList<int> l = list()->selectedLayerIDs();
+    Q3ValueList<int> l = list()->selectedLayerIDs();
     if (l.count() < 2 && list()->activeLayer() && !l.contains(list()->activeLayer()->id()))
     {
         l.clear();
@@ -541,7 +545,7 @@ void KisLayerBox::slotRaiseClicked()
 
 void KisLayerBox::slotLowerClicked()
 {
-    QValueList<LayerItem*> l = list()->selectedLayers();
+    Q3ValueList<LayerItem*> l = list()->selectedLayers();
     if (l.count() < 2 && list()->activeLayer() && !l.contains(list()->activeLayer()))
     {
         l.clear();
@@ -605,7 +609,7 @@ void KisLayerBox::markModified(KisLayer* layer)
     if( !layer )
         return;
 
-    QValueList<int> v;
+    Q3ValueList<int> v;
     while (layer && layer != m_image->rootLayer().data())
     {
         v.append(layer->id());

@@ -22,9 +22,12 @@
 #include <qpixmap.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qscrollbar.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
 
 #include <kdebug.h>
 
@@ -38,13 +41,13 @@
 #include "kis_basic_histogram_producers.h"
 #include "kis_paint_device.h"
 
-KisHistogramView::KisHistogramView(QWidget *parent, const char *name, WFlags f)
+KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags f)
     : QLabel(parent, name, f)
 {
     // This is needed until we can computationally scale it well. Until then, this is needed
     // And when we have it, it won't hurt to have it around
     setScaledContents(true);
-    setFrameShape(QFrame::Box); // Draw a box around ourselves
+    setFrameShape(Q3Frame::Box); // Draw a box around ourselves
 }
 
 KisHistogramView::~KisHistogramView()
@@ -120,14 +123,14 @@ KisIDList KisHistogramView::listProducers()
     return KisIDList();
 }
 
-void KisHistogramView::setCurrentChannels(const KisID& producerID, QValueVector<KisChannelInfo *> channels)
+void KisHistogramView::setCurrentChannels(const KisID& producerID, Q3ValueVector<KisChannelInfo *> channels)
 {
     setCurrentChannels(
         KisHistogramProducerFactoryRegistry::instance()->get(producerID)->generate(),
         channels);
 }
 
-void KisHistogramView::setCurrentChannels(KisHistogramProducerSP producer, QValueVector<KisChannelInfo *> channels)
+void KisHistogramView::setCurrentChannels(KisHistogramProducerSP producer, Q3ValueVector<KisChannelInfo *> channels)
 {
     m_currentProducer = producer;
     m_currentProducer->setView(m_from, m_width);
@@ -143,7 +146,7 @@ void KisHistogramView::setCurrentChannels(KisHistogramProducerSP producer, QValu
         return;
     }
 
-    QValueVector<KisChannelInfo *> producerChannels = m_currentProducer->channels();
+    Q3ValueVector<KisChannelInfo *> producerChannels = m_currentProducer->channels();
 
     for (uint i = 0; i < channels.count(); i++) {
         // Also makes sure the channel is actually in the producer's list
@@ -197,7 +200,7 @@ void KisHistogramView::setActiveChannel(int channel)
         m_histogram->setChannel(0); // Set a default channel, just being nice
     } else {
         m_color = false;
-        QValueVector<KisChannelInfo *> channels = m_currentProducer->channels();
+        Q3ValueVector<KisChannelInfo *> channels = m_currentProducer->channels();
         for (uint i = 0; i < channels.count(); i++) {
             KisChannelInfo* channel = channels.at(i);
             if (channel->name() == info.channel->name()) {
@@ -249,7 +252,7 @@ void KisHistogramView::addProducerChannels(KisHistogramProducerSP producer) {
         info.isProducer = true;
         info.producer = producer;
         // channel not used for a producer
-        QValueVector<KisChannelInfo *> channels = info.producer->channels();
+        Q3ValueVector<KisChannelInfo *> channels = info.producer->channels();
         int count = channels.count();
         m_comboInfo.append(info);
         m_channelStrings.append(producer->id() . name());

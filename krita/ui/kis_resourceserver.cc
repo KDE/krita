@@ -23,6 +23,8 @@
 #include <qstringlist.h>
 #include <qthread.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -82,10 +84,10 @@ void KisResourceServerBase::loadResources(QStringList filenames)
     m_loaded = true;
 }
 
-QValueList<KisResource*> KisResourceServerBase::resources()
+Q3ValueList<KisResource*> KisResourceServerBase::resources()
 {
     if(!m_loaded) {
-        return QValueList<KisResource*>();
+        return Q3ValueList<KisResource*>();
     }
 
     return m_resources;

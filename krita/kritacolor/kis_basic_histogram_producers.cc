@@ -66,7 +66,7 @@ void KisBasicHistogramProducer::makeExternalToInternal() {
     // This function assumes that the pixel is has no 'gaps'. That is to say: if we start
     // at byte 0, we can get to the end of the pixel by adding consecutive size()s of
     // the channels
-    QValueVector<KisChannelInfo *> c = channels();
+    Q3ValueVector<KisChannelInfo *> c = channels();
     uint count = c.count();
     int currentPos = 0;
 
@@ -351,7 +351,7 @@ KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
     m_channelsList.append(new KisChannelInfo(i18n("B"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,0,255)));
 }
 
-QValueVector<KisChannelInfo *> KisGenericRGBHistogramProducer::channels() {
+Q3ValueVector<KisChannelInfo *> KisGenericRGBHistogramProducer::channels() {
     return m_channelsList;
 }
 
@@ -377,9 +377,9 @@ void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * se
         while (nPixels > 0) {
             if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
                 cs->toQColor(pixels, &c);
-                m_bins.at(0).at(c.red())++;
-                m_bins.at(1).at(c.green())++;
-                m_bins.at(2).at(c.blue())++;
+                m_bins.at(0).at(c.Qt::red())++;
+                m_bins.at(1).at(c.Qt::green())++;
+                m_bins.at(2).at(c.Qt::blue())++;
 
                 m_count++;
             }
@@ -394,9 +394,9 @@ void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * se
 
             if ( !(m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) {
                 cs->toQColor(pixels, &c);
-                m_bins.at(0).at(c.red())++;
-                m_bins.at(1).at(c.green())++;
-                m_bins.at(2).at(c.blue())++;
+                m_bins.at(0).at(c.Qt::red())++;
+                m_bins.at(1).at(c.Qt::green())++;
+                m_bins.at(2).at(c.Qt::blue())++;
 
                 m_count++;
             }
@@ -429,7 +429,7 @@ KisGenericLabHistogramProducer::~KisGenericLabHistogramProducer()
     delete m_channelsList[2];
 }
 
-QValueVector<KisChannelInfo *> KisGenericLabHistogramProducer::channels() {
+Q3ValueVector<KisChannelInfo *> KisGenericLabHistogramProducer::channels() {
     return m_channelsList;
 }
 

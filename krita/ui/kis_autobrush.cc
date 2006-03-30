@@ -24,6 +24,9 @@
 #include <qimage.h>
 #include <qcombobox.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
 
 
 KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)

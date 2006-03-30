@@ -18,6 +18,8 @@
  */
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include <koIconChooser.h>
 #include "kis_iconwidget.h"
 
@@ -71,7 +73,7 @@ void KisIconWidget::drawButtonLabel(QPainter *p)
             p->drawPixmap(x, y, thumbpix, 0, 0, itemWidth, itemHeight);
         }
 
-        p->setPen(gray);
+        p->setPen(Qt::gray);
         p->drawRect(0, 0, cw + 1, ch + 1);
     }
 }

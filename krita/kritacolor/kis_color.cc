@@ -159,12 +159,12 @@ void KisColor::dump() const
 {
 
     //kDebug(DBG_AREA_CMS) << "KisColor (" << this << "), " << m_colorSpace->id().name() << "\n";
-    QValueVector<KisChannelInfo *> channels = m_colorSpace->channels();
+    Q3ValueVector<KisChannelInfo *> channels = m_colorSpace->channels();
 
-    QValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
-    QValueVector<KisChannelInfo *>::const_iterator end = channels.end();
+    Q3ValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
+    Q3ValueVector<KisChannelInfo *>::const_iterator end = channels.end();
 
-    for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
+    for (Q3ValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
     {
         KisChannelInfo * ch = (*it);
         // XXX: setNum always takes a byte.

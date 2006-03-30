@@ -19,9 +19,11 @@
  */
 #include <qwidget.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpixmap.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -54,12 +56,12 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
 
     setCaption(i18n("Painter's Toolchest"));
     m_optionWidget = 0;
-    m_paintops = new QValueList<KisID>();
-    m_displayedOps = new QValueList<KisID>();
+    m_paintops = new Q3ValueList<KisID>();
+    m_displayedOps = new Q3ValueList<KisID>();
 
     m_cmbPaintops = new QComboBox(this, "KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
-    m_layout = new QHBoxLayout(this, 1, 1);
+    m_layout = new Q3HBoxLayout(this, 1, 1);
     m_layout->addWidget(m_cmbPaintops);
 
     connect(this, SIGNAL(selected(const KisID &, const KisPaintOpSettings *)), view, SLOT(paintopActivated(const KisID &, const KisPaintOpSettings *)));
@@ -104,8 +106,8 @@ void KisPaintopBox::slotItemSelected(int index)
 
 void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
 {
-    QValueList<KisID>::iterator it = m_paintops->begin();
-    QValueList<KisID>::iterator end = m_paintops->end();
+    Q3ValueList<KisID>::iterator it = m_paintops->begin();
+    Q3ValueList<KisID>::iterator end = m_paintops->end();
     m_displayedOps->clear();
     m_cmbPaintops->clear();
 
@@ -218,13 +220,13 @@ KisID KisPaintopBox::defaultPaintop(const KisInputDevice& inputDevice)
 
 const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KisID & paintop, const KisInputDevice & inputDevice)
 {
-    QValueVector<KisPaintOpSettings *> settingsArray;
+    Q3ValueVector<KisPaintOpSettings *> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(inputDevice);
 
     if (it == m_inputDevicePaintopSettings.end()) {
         // Create settings for each paintop.
 
-        for (QValueList<KisID>::const_iterator pit = m_paintops->begin(); pit != m_paintops->end(); ++pit) {
+        for (Q3ValueList<KisID>::const_iterator pit = m_paintops->begin(); pit != m_paintops->end(); ++pit) {
             KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(*pit, this, inputDevice);
             settingsArray.append(settings);
             if (settings && settings->widget()) {

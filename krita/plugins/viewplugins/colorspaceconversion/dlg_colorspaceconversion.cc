@@ -22,7 +22,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -79,8 +79,8 @@ void DlgColorSpaceConversion::fillCmbDestProfile(const KisID & s)
 {
     m_page->cmbDestProfile->clear();
 
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor(s);
-        QValueVector<KisProfile *> ::iterator it;
+    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor(s);
+        Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page->cmbDestProfile->insertItem((*it)->productName());
 

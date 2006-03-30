@@ -61,13 +61,13 @@ KisGrayColorSpace::~KisGrayColorSpace()
 
 void KisGrayColorSpace::setPixel(quint8 *pixel, quint8 gray, quint8 alpha) const
 {
-    pixel[PIXEL_GRAY] = gray;
+    pixel[PIXEL_GRAY] = Qt::gray;
     pixel[PIXEL_GRAY_ALPHA] = alpha;
 }
 
 void KisGrayColorSpace::getPixel(const quint8 *pixel, quint8 *gray, quint8 *alpha) const
 {
-    *gray = pixel[PIXEL_GRAY];
+    *Qt::gray = pixel[PIXEL_GRAY];
     *alpha = pixel[PIXEL_GRAY_ALPHA];
 }
 
@@ -175,7 +175,7 @@ quint8 KisGrayColorSpace::intensity8(const quint8 * src) const
     return src[PIXEL_GRAY];
 }
 
-QValueVector<KisChannelInfo *> KisGrayColorSpace::channels() const
+Q3ValueVector<KisChannelInfo *> KisGrayColorSpace::channels() const
 {
     return m_channels;
 }

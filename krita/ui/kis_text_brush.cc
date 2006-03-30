@@ -21,6 +21,8 @@
 #include <qspinbox.h>
 #include <qcheckbox.h> 
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kfontdialog.h>
 

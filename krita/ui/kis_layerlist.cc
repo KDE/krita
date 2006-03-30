@@ -24,6 +24,8 @@
 #include <kmenu.h>
 #include <KoPartSelectAction.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
@@ -75,7 +77,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
 
 void KisLayerList::menuActivated( int id, LayerItem *layer )
 {
-    const QValueList<LayerItem*> selected = selectedLayers();
+    const Q3ValueList<LayerItem*> selected = selectedLayers();
     LayerItem *parent = ( layer && layer->isFolder() ) ? layer : 0;
     LayerItem *after = 0;
     if( layer && !parent )
@@ -99,7 +101,7 @@ void KisLayerList::menuActivated( int id, LayerItem *layer )
             break;
         case MenuItems::RemoveLayer:
             {
-                QValueList<int> ids;
+                Q3ValueList<int> ids;
                 for( int i = 0, n = selected.count(); i < n; ++i )
                 {
                     ids.append( selected[i]->id() );
@@ -212,7 +214,7 @@ QImage KisLayerItem::tooltipPreview() const
         return img; //so Qt doesn't complain
     img.setAlphaBuffer( true );
     const int size = qMin( 200, qMax( img.width(), img.height() ) );
-    return img.smoothScale( size, size, QImage::ScaleMin );
+    return img.smoothScale( size, size, Qt::KeepAspectRatio );
 }
 
 //void KisLayerItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );

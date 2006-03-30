@@ -23,7 +23,7 @@
 #include <qobject.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 #include <qpoint.h>
 #include <qlabel.h>
 #include <qwidget.h>

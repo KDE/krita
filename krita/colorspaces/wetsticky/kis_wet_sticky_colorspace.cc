@@ -89,7 +89,7 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     setDefaultProfile( 0 );
 
 #ifdef WSDEBUG
-    QValueVector<KisChannelInfo *>_it it;
+    Q3ValueVector<KisChannelInfo *>_it it;
     int i = 0;
     for (it = m_channels.begin(); it != m_channels.end(); ++it)
     {
@@ -112,13 +112,13 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile
     CELL_PTR p = (CELL_PTR) dst;
     quint8 r, g, b;
 
-    r = c.red();
-    g = c.green();
-    b = c.blue();
+    r = c.Qt::red();
+    g = c.Qt::green();
+    b = c.Qt::blue();
 
-    p -> red = r;
-    p -> green = g;
-    p -> blue = b;
+    p -> Qt::red = r;
+    p -> Qt::green = g;
+    p -> Qt::blue = b;
     p -> alpha = OPACITY_OPAQUE;
 
     rgb_to_hls(r, g, b, &p->hue, &p->lightness, &p->saturation);
@@ -135,10 +135,10 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile
 
 #ifdef WSDEBUG
     kDebug(DBG_AREA_CMS) << "qcolor: "
-        << " r: " << c.red() << " b: " << c.blue() << " g: " << c.red()
-        << " native color: (" << QString().setNum(p->red) << ", "
-                              << QString().setNum(p->green) << ", "
-                              << QString().setNum(p->blue) << ", "
+        << " r: " << c.Qt::red() << " b: " << c.Qt::blue() << " g: " << c.Qt::red()
+        << " native color: (" << QString().setNum(p->Qt::red) << ", "
+                              << QString().setNum(p->Qt::green) << ", "
+                              << QString().setNum(p->Qt::blue) << ", "
                               << QString().setNum(p->alpha) << ") "
         << ", hls: (" << p->hue << ", "
                       << p->lightness << ", "
@@ -173,10 +173,10 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 
 
 #ifdef WSDEBUG
     kDebug(DBG_AREA_CMS) << "qcolor: "
-        << " r: " << c.red() << " b: " << c.blue() << " g: " << c.red() << " opacity: " << opacity
-        << " native color: (" << QString().setNum(p->red) << ", "
-                              << QString().setNum(p->green) << ", "
-                              << QString().setNum(p->blue) << ", "
+        << " r: " << c.Qt::red() << " b: " << c.Qt::blue() << " g: " << c.Qt::red() << " opacity: " << opacity
+        << " native color: (" << QString().setNum(p->Qt::red) << ", "
+                              << QString().setNum(p->Qt::green) << ", "
+                              << QString().setNum(p->Qt::blue) << ", "
                               << QString().setNum(p->alpha) << ") "
         << ", hls: (" << p->hue << ", "
                       << p->lightness << ", "
@@ -188,11 +188,11 @@ void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile *
 {
     CELL_PTR p = (CELL_PTR) src;
 
-    c -> setRgb(p -> red,
-            p -> green,
-            p -> blue);
+    c -> setRgb(p -> Qt::red,
+            p -> Qt::green,
+            p -> Qt::blue);
 #ifdef WSDEBUG
-    kDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+    kDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->Qt::red() << " b: " << c->Qt::blue() << " g: " << c->Qt::red() << "\n";
 #endif
 }
 
@@ -207,7 +207,7 @@ void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opac
 
     *opacity = p -> alpha;
 #ifdef WSDEBUG
-    kDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->red() << " b: " << c->blue() << " g: " << c->red() << "\n";
+    kDebug(DBG_AREA_CMS) << "Created qcolor from wet & sticky: " << " r: " << c->Qt::red() << " b: " << c->Qt::blue() << " g: " << c->Qt::red() << "\n";
 #endif
 }
 
@@ -260,7 +260,7 @@ quint16 KisWetStickyColorSpace::scaleToU16(const quint8 * srcPixel, qint32 chann
 }
 
 
-QValueVector<KisChannelInfo *> KisWetStickyColorSpace::channels() const
+Q3ValueVector<KisChannelInfo *> KisWetStickyColorSpace::channels() const
 {
     return m_channels;
 }
@@ -312,9 +312,9 @@ QImage KisWetStickyColorSpace::convertToQImage(const quint8 *data, qint32 width,
         const quint8 PIXEL_ALPHA = 3;
 
         *( j + PIXEL_ALPHA ) = p -> alpha;
-        *( j + PIXEL_RED )   = p -> red;
-        *( j + PIXEL_GREEN ) = p -> green;
-        *( j + PIXEL_BLUE )  = p -> blue;
+        *( j + PIXEL_RED )   = p -> Qt::red;
+        *( j + PIXEL_GREEN ) = p -> Qt::green;
+        *( j + PIXEL_BLUE )  = p -> Qt::blue;
 
         p++;
         i++;
@@ -338,9 +338,9 @@ bool KisWetStickyColorSpace::convertPixelsTo(const quint8 * src, KisProfile *  /
     while ( i < numPixels ) {
         cp = (CELL_PTR) (src + i);
 
-        c.setRgb(cp -> red,
-             cp -> green,
-             cp -> blue);
+        c.setRgb(cp -> Qt::red,
+             cp -> Qt::green,
+             cp -> Qt::blue);
 
         dstColorSpace -> fromQColor(c, cp -> alpha, (dst + j), dstProfile);
 
@@ -400,11 +400,11 @@ void KisWetStickyColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStr
 
 #ifdef WSDEBUG
             kDebug(DBG_AREA_CMS) << "Source: " << rows << ", " << columns << " color: " <<
-                srcCell->red << ", " << srcCell->blue << ", " << srcCell->green << ", " << srcCell->alpha << ", " << srcCell->volume << "\n";
+                srcCell->Qt::red << ", " << srcCell->Qt::blue << ", " << srcCell->Qt::green << ", " << srcCell->alpha << ", " << srcCell->volume << "\n";
 
 
             kDebug(DBG_AREA_CMS) << "Destination: "  << rows << ", " << columns << " color: " <<
-                dstCell->red << ", " << dstCell->blue << ", " << dstCell->green << ", " << dstCell->alpha << ", " << dstCell->volume << "\n";
+                dstCell->Qt::red << ", " << dstCell->Qt::blue << ", " << dstCell->Qt::green << ", " << dstCell->alpha << ", " << dstCell->volume << "\n";
 
 #endif
 
@@ -447,9 +447,9 @@ void KisWetStickyColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStr
                     if (srcBlend == OPACITY_OPAQUE) {
                         memcpy(dst, src, 3); //XXX: First three bytes for rgb?
                     } else {
-                        dstCell->red = UINT8_BLEND(srcCell->red, dstCell->red, srcBlend);
-                        dstCell->green = UINT8_BLEND(srcCell->green, dstCell->green, srcBlend);
-                        dstCell->blue = UINT8_BLEND(srcCell->blue, dstCell->blue, srcBlend);
+                        dstCell->Qt::red = UINT8_BLEND(srcCell->Qt::red, dstCell->Qt::red, srcBlend);
+                        dstCell->Qt::green = UINT8_BLEND(srcCell->Qt::green, dstCell->Qt::green, srcBlend);
+                        dstCell->Qt::blue = UINT8_BLEND(srcCell->Qt::blue, dstCell->Qt::blue, srcBlend);
                     }
                 }
             }
@@ -500,11 +500,11 @@ QString KisWetStickyColorSpace::channelValueText(const quint8 *U8_pixel, quint32
 
     switch (channelIndex) {
     case BLUE_CHANNEL_INDEX:
-        return QString().setNum(pixel -> blue);
+        return QString().setNum(pixel -> Qt::blue);
     case GREEN_CHANNEL_INDEX:
-        return QString().setNum(pixel -> green);
+        return QString().setNum(pixel -> Qt::green);
     case RED_CHANNEL_INDEX:
-        return QString().setNum(pixel -> red);
+        return QString().setNum(pixel -> Qt::red);
     case ALPHA_CHANNEL_INDEX:
         return QString().setNum(pixel -> alpha);
     case HUE_CHANNEL_INDEX:
@@ -556,11 +556,11 @@ QString KisWetStickyColorSpace::normalisedChannelValueText(const quint8 *U8_pixe
 
     switch (channelIndex) {
     case BLUE_CHANNEL_INDEX:
-        return QString().setNum(static_cast<float>(pixel -> blue) / UINT8_MAX);
+        return QString().setNum(static_cast<float>(pixel -> Qt::blue) / UINT8_MAX);
     case GREEN_CHANNEL_INDEX:
-        return QString().setNum(static_cast<float>(pixel -> green) / UINT8_MAX);
+        return QString().setNum(static_cast<float>(pixel -> Qt::green) / UINT8_MAX);
     case RED_CHANNEL_INDEX:
-        return QString().setNum(static_cast<float>(pixel -> red) / UINT8_MAX);
+        return QString().setNum(static_cast<float>(pixel -> Qt::red) / UINT8_MAX);
     case ALPHA_CHANNEL_INDEX:
         return QString().setNum(static_cast<float>(pixel -> alpha) / UINT8_MAX);
     case HUE_CHANNEL_INDEX:

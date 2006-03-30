@@ -166,7 +166,7 @@ void KisLabColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, bo
 }
 
 
-QValueVector<KisChannelInfo *> KisLabColorSpace::channels() const
+Q3ValueVector<KisChannelInfo *> KisLabColorSpace::channels() const
 {
     return m_channels;
 }

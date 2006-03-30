@@ -28,7 +28,7 @@ using namespace std;
 
 #include <qradiobutton.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qlabel.h>
 #include <qcombobox.h>
 

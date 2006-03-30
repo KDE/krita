@@ -26,6 +26,8 @@
 
 #include <qpoint.h>
 #include <qspinbox.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -82,7 +84,7 @@ void KisPixelizeFilter::pixelize(KisPaintDeviceSP src, KisPaintDeviceSP dst, int
     if (!dst) return;
 
     qint32 pixelSize = src->pixelSize();
-    QMemArray<qint32> average(  pixelSize );
+    Q3MemArray<qint32> average(  pixelSize );
 
     qint32 count;
 

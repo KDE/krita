@@ -174,7 +174,7 @@ void KisCmykColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KisColor
     delete [] tmp;
 }
 
-QValueVector<KisChannelInfo *> KisCmykColorSpace::channels() const
+Q3ValueVector<KisChannelInfo *> KisCmykColorSpace::channels() const
 {
     return m_channels;
 }

@@ -21,6 +21,11 @@
 #include <qtoolbutton.h>
 #include <qcursor.h>
 #include <qeventloop.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QLabel>
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -45,12 +50,12 @@ public:
     }
 };
 
-KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, WFlags f) : super(parent, name, f)
+KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, Qt::WFlags f) : super(parent, name, f)
 {
     m_subject = 0;
     m_modal = false;
 
-    QHBoxLayout *box = new QHBoxLayout(this);
+    Q3HBoxLayout *box = new Q3HBoxLayout(this);
     box->setAutoAdd(true);
 
     QIcon cancelIconSet = SmallIconSet("stop");

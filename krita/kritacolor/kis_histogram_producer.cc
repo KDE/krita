@@ -18,6 +18,8 @@
 
 #include "kis_histogram_producer.h"
 #include "kis_basic_histogram_producers.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KisHistogramProducerFactoryRegistry* KisHistogramProducerFactoryRegistry::m_singleton = 0;
 
@@ -41,7 +43,7 @@ KisIDList KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
         KisColorSpace* colorSpace) const
 {
     KisIDList list;
-    QValueList<float> preferredList;
+    Q3ValueList<float> preferredList;
     storageMap::const_iterator it = m_storage.begin();
     storageMap::const_iterator endit = m_storage.end();
     // O(n^2), can't this be done better? (But preferrably not by looking up the preferredness
@@ -49,8 +51,8 @@ KisIDList KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
     while( it != endit ) {
         if (it->second->isCompatibleWith(colorSpace)) {
             float preferred = it->second->preferrednessLevelWith(colorSpace);
-            QValueList<float>::iterator pit = preferredList.begin();
-            QValueList<float>::iterator pend = preferredList.end();
+            Q3ValueList<float>::iterator pit = preferredList.begin();
+            Q3ValueList<float>::iterator pend = preferredList.end();
             KisIDList::iterator lit = list.begin();
 
             while (pit != pend && preferred <= *pit) {

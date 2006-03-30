@@ -23,6 +23,8 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -120,7 +122,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 
     addOptionWidgetOption(m_cbFilter, lbFilter);
 
-    m_optionLayout = new QGridLayout(widget, 1, 1, 0, 6);
+    m_optionLayout = new Q3GridLayout(widget, 1, 1, 0, 6);
     Q_CHECK_PTR(m_optionLayout);
     super::addOptionWidgetLayout(m_optionLayout);
 

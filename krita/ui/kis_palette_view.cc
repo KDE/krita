@@ -63,15 +63,15 @@
 #include "kis_palette.h"
 
 KisPaletteView::KisPaletteView(QWidget *parent, const char* name, int minWidth, int cols)
-    : QScrollView( parent, name ), mMinWidth(minWidth), mCols(cols)
+    : Q3ScrollView( parent, name ), mMinWidth(minWidth), mCols(cols)
 {
     m_cells = 0;
     m_currentPalette = 0;
 
     QSize cellSize = QSize( mMinWidth, 50);
 
-    setHScrollBarMode(QScrollView::AlwaysOff);
-    setVScrollBarMode(QScrollView::AlwaysOn);
+    setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    setVScrollBarMode(Q3ScrollView::AlwaysOn);
 
     QSize minSize = QSize(verticalScrollBar()->width(), 0);
     minSize += QSize(frameWidth(), 0);

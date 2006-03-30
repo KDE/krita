@@ -24,6 +24,8 @@
 #include <qpainter.h>
 #include <qspinbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -234,7 +236,7 @@ QWidget* KisToolStar::createOptionWidget(QWidget* parent)
 
     m_optWidget->ratioSpinBox->setValue(m_innerOuterRatio);
 
-    QGridLayout *optionLayout = new QGridLayout(widget, 1, 1);
+    Q3GridLayout *optionLayout = new Q3GridLayout(widget, 1, 1);
     super::addOptionWidgetLayout(optionLayout);
 
     optionLayout->addWidget(m_optWidget, 0, 0);

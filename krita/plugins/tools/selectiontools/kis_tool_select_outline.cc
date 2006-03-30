@@ -24,6 +24,8 @@
 #include <qregion.h>
 #include <qwidget.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -82,7 +84,7 @@ void KisToolSelectOutline::update (KisCanvasSubject *subject)
 
 void KisToolSelectOutline::buttonPress(KisButtonPressEvent *event)
 {
-    if (event->button() == LeftButton) {
+    if (event->button() == Qt::LeftButton) {
         m_dragging = true;
 
         m_dragStart = event->pos();
@@ -108,7 +110,7 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject)
         return;
 
-    if (m_dragging && event->button() == LeftButton) {
+    if (m_dragging && event->button() == Qt::LeftButton) {
         m_dragging = false;
         deactivate();
 
@@ -271,7 +273,7 @@ QWidget* KisToolSelectOutline::createOptionWidget(QWidget* parent)
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    Q3VBoxLayout * l = dynamic_cast<Q3VBoxLayout*>(m_optWidget->layout());
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     return m_optWidget;

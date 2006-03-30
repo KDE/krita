@@ -21,6 +21,8 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include "kis_cursor.h"
 #include "kis_canvas_painter.h"

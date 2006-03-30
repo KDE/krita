@@ -109,8 +109,8 @@ KisHistogram::Calculations KisHistogram::selectionCalculations() {
     return m_selectionCalculations.at(m_channel);
 }
 
-QValueVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to) {
-    QValueVector<Calculations> calculations;
+Q3ValueVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to) {
+    Q3ValueVector<Calculations> calculations;
     uint count = m_producer->channels().count();
 
     for (uint i = 0; i < count; i++) {

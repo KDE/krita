@@ -25,6 +25,9 @@
 #include <qlabel.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -87,7 +90,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
         KisPaintDeviceSP dev;
         QPoint pos;
 
-        if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton)
+        if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
         if (!(img = m_subject->currentImg()))
@@ -187,12 +190,12 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setCaption(i18n("Contiguous Area Selection"));
 
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    Q3VBoxLayout * l = dynamic_cast<Q3VBoxLayout*>(m_optWidget->layout());
     l->setSpacing( 6 );
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-    QHBoxLayout * hbox = new QHBoxLayout(l);
+    Q3HBoxLayout * hbox = new Q3HBoxLayout(l);
     Q_CHECK_PTR(hbox);
 
     QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
@@ -226,7 +229,7 @@ void KisToolSelectContiguous::slotSetSampleMerged(int state)
 {
     if (state == QCheckBox::NoChange)
         return;
-    m_sampleMerged = (state == QButton::On);
+    m_sampleMerged = (state == QCheckBox::On);
 }
 
 #include "kis_tool_select_contiguous.moc"

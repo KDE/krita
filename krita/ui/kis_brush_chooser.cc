@@ -18,6 +18,9 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
 #include <klocale.h>
 #include <koIconChooser.h>
 
@@ -41,12 +44,12 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbName = new QLabel(this);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this, 2, -1, "main layout");
+    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(this, 2, -1, "main layout");
 
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(chooserWidget(), 10);
 
-    QGridLayout *spacingLayout = new QGridLayout( 2, 2);
+    Q3GridLayout *spacingLayout = new Q3GridLayout( 2, 2);
 
     mainLayout->addLayout(spacingLayout, 1);
 

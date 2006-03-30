@@ -22,6 +22,8 @@
 
 #include "dlg_variations.h"
 #include "wdg_variations.h"
+//Added by qt3to4:
+#include <QPixmap>
 
 
 DlgVariations::DlgVariations( QWidget *  parent,

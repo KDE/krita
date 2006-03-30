@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -66,7 +66,7 @@ void KisItemChooser::addItem(KoIconItem *item)
 
 void KisItemChooser::addItems(const vKoIconItem& items)
 {
-    QPtrListIterator<KoIconItem> itr(items);
+    Q3PtrListIterator<KoIconItem> itr(items);
 
     for (itr.toFirst(); itr.current(); ++itr)
         m_chooser->addItem(itr.current());

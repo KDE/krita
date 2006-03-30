@@ -27,19 +27,32 @@
 
 // Qt
 #include <qapplication.h>
-#include <qbutton.h>
+#include <q3button.h>
 #include <qcursor.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
 #include <qspinbox.h>
-#include <qdockarea.h>
+#include <q3dockarea.h>
 #include <qstringlist.h>
 #include <qstyle.h>
-#include <qpopupmenu.h>
-#include <qvaluelist.h>
+#include <q3popupmenu.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <Q3MemArray>
+#include <QShowEvent>
+#include <QTabletEvent>
+#include <QChildEvent>
+#include <QKeyEvent>
+#include <QWheelEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QLabel>
 
 // KDE
 #include <kis_meta_registry.h>
@@ -358,7 +371,7 @@ KisView::~KisView()
 }
 
 
-static Qt::Dock stringToDock( const QString& attrPosition )
+static Qt::ToolBarDock stringToDock( const QString& attrPosition )
 {
     KToolBar::Dock dock = KToolBar::DockTop;
     if ( !attrPosition.isEmpty() ) {
@@ -386,7 +399,7 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
         m_toolBox->setLabel(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 
-        Dock dock = stringToDock( element.attribute( "position" ).lower() );
+        Qt::ToolBarDock dock = stringToDock( element.attribute( "position" ).lower() );
 
         mainWindow()->addDockWindow( m_toolBox, dock, false);
         mainWindow()->moveDockWindow( m_toolBox, dock, false, 0, 0 );
@@ -456,10 +469,10 @@ void KisView::setupScrollBars()
 {
     m_scrollX = 0;
     m_scrollY = 0;
-    m_vScroll = new QScrollBar(QScrollBar::Vertical, this);
+    m_vScroll = new QScrollBar(Qt::Vertical, this);
     Q_CHECK_PTR(m_vScroll);
 
-    m_hScroll = new QScrollBar(QScrollBar::Horizontal, this);
+    m_hScroll = new QScrollBar(Qt::Horizontal, this);
     Q_CHECK_PTR(m_hScroll);
 
     m_vScroll->setGeometry(width() - 16, 20, 16, height() - 36);
@@ -835,7 +848,7 @@ void KisView::resizeEvent(QResizeEvent *)
 
             if (!m_canvasPixmap.isNull() && !exposedRegion.isEmpty()) {
 
-                QMemArray<QRect> rects = exposedRegion.rects();
+                Q3MemArray<QRect> rects = exposedRegion.rects();
 
                 for (unsigned int i = 0; i < rects.count(); i++) {
                     QRect r = rects[i];
@@ -935,7 +948,7 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
                     QRegion rg(vr);
                     rg -= QRegion(windowToView(QRect(0, 0, img->width(), img->height())));
 
-                    QMemArray<QRect> rects = rg.rects();
+                    Q3MemArray<QRect> rects = rg.rects();
 
                     for (unsigned int i = 0; i < rects.count(); i++) {
                         QRect er = rects[i];
@@ -1001,7 +1014,7 @@ void KisView::paintQPaintDeviceView(const QRegion& canvasRegion)
     Q_ASSERT(m_canvas->QPaintDeviceWidget() != 0);
 
     if (m_canvas->QPaintDeviceWidget() != 0 && !m_canvasPixmap.isNull()) {
-        QMemArray<QRect> rects = canvasRegion.rects();
+        Q3MemArray<QRect> rects = canvasRegion.rects();
 
         for (unsigned int i = 0; i < rects.count(); i++) {
             QRect r = rects[i];
@@ -1044,7 +1057,7 @@ void KisView::paintOpenGLView(const QRect& canvasRect)
 
     QColor widgetBackgroundColor = colorGroup().mid();
 
-    glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
+    glClearColor(widgetBackgroundColor.Qt::red() / 255.0, widgetBackgroundColor.Qt::green() / 255.0, widgetBackgroundColor.Qt::blue() / 255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     KisImageSP img = currentImg();
@@ -1643,8 +1656,8 @@ void KisView::slotEditPalette()
     if (!srv) {
         return;
     }
-    QValueList<KisResource*> resources = srv->resources();
-    QValueList<KisPalette*> palettes;
+    Q3ValueList<KisResource*> resources = srv->resources();
+    Q3ValueList<KisPalette*> palettes;
 
     for(uint i = 0; i < resources.count(); i++) {
         KisPalette* palette = dynamic_cast<KisPalette*>(*resources.at(i));
@@ -2314,7 +2327,7 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 
         if (m_popup == 0 && factory()) {
             Q_ASSERT(factory());
-            m_popup = (QPopupMenu *)factory()->container("image_popup", this);
+            m_popup = (Q3PopupMenu *)factory()->container("image_popup", this);
         }
         if (m_popup) m_popup->popup(e->globalPos().roundQPoint());
     }
@@ -3449,7 +3462,7 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
         break;
     }
 #ifdef EXTENDED_X11_TABLET_SUPPORT
-    case QEvent::ChildInserted:
+    case QEvent::ChildAdded:
     {
         QChildEvent *childEvent = static_cast<QChildEvent *>(e);
         QObject *child = childEvent->child();
@@ -3787,8 +3800,8 @@ void KisView::createDockers()
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
-    QValueList<KisResource*> resources = rServer->resources();
-    QValueList<KisResource*>::iterator it;
+    Q3ValueList<KisResource*> resources = rServer->resources();
+    Q3ValueList<KisResource*>::iterator it;
     for ( it = resources.begin(); it != resources.end(); ++it ) {
         m_palettewidget->slotAddPalette( *it );
     }

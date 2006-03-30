@@ -20,7 +20,7 @@
  */
 #include "kis_dlg_filtersgallery.h"
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qdatetime.h>
@@ -52,7 +52,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     
     setMainWidget(m_widget);
     // Initialize filters list
-    connect(m_widget->filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
+    connect(m_widget->filtersList , SIGNAL(selectionChanged(Q3IconViewItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
     // Initialize configWidgetHolder
     m_widget->configWidgetHolder->setColumnLayout ( 0, Qt::Horizontal );
     //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -74,7 +74,7 @@ KisDlgFiltersGallery::~KisDlgFiltersGallery()
 {
 }
 
-void KisDlgFiltersGallery::selectionHasChanged ( QIconViewItem * item )
+void KisDlgFiltersGallery::selectionHasChanged ( Q3IconViewItem * item )
 {
     KisFiltersIconViewItem* kisitem = (KisFiltersIconViewItem*) item;
     m_currentFilter = kisitem->filter();

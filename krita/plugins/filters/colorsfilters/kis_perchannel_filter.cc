@@ -23,6 +23,9 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3HBoxLayout>
 
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
@@ -39,7 +42,7 @@
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
 {
-    curves = new QSortedList<QPair<double,double> >[n];
+    curves = new Q3SortedList<QPair<double,double> >[n];
     for(int i=0;i<n;i++) {
         transfers[i] = new quint16[256];
 
@@ -71,7 +74,7 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
                 QDomNode curvesNode = e.firstChild();
                 int count = 0;
                 nTransfers = e.attribute("number").toUShort();
-                curves = new QSortedList<QPair<double,double> >[nTransfers];
+                curves = new Q3SortedList<QPair<double,double> >[nTransfers];
                 while (!curvesNode.isNull()) {
                     QDomElement curvesElement = curvesNode.toElement();
                     if (!curvesElement.isNull() && 
@@ -128,7 +131,7 @@ QString KisPerChannelFilterConfiguration::toString()
     c.setAttribute("name", "curves");
     for (int i = 0; i < nTransfers; ++i) {
         QDomElement t = doc.createElement("curve");
-        QPtrList<QPair<double,double> > curve = curves[i];
+        Q3PtrList<QPair<double,double> > curve = curves[i];
         QString sCurve;
         QPair<double,double> * pair;
         for ( pair = curve.first(); pair; pair = curve.next() ) {
@@ -283,17 +286,17 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
     m_page->kCurve->setPixmap(pix);
 }
 
-KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name, WFlags f)
+KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name, Qt::WFlags f)
     : KisFilterConfigWidget(parent, name, f)
 {
     int i;
     int height;
     m_page = new WdgPerChannel(this);
-    QHBoxLayout * l = new QHBoxLayout(this);
+    Q3HBoxLayout * l = new Q3HBoxLayout(this);
     Q_CHECK_PTR(l);
 
     m_dev = dev;
-    m_curves = new QSortedList<QPair<double,double> >[m_dev->colorSpace()->nColorChannels()];
+    m_curves = new Q3SortedList<QPair<double,double> >[m_dev->colorSpace()->nColorChannels()];
     m_activeCh = 0;
     for(unsigned int ch=0; ch <m_dev->colorSpace()->nColorChannels(); ch++)
     {
@@ -306,7 +309,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
 
     // Fill in the channel chooser
-    QValueVector<KisChannelInfo *> channels = dev->colorSpace()->channels();
+    Q3ValueVector<KisChannelInfo *> channels = dev->colorSpace()->channels();
     for(unsigned int val=0; val < dev->colorSpace()->nColorChannels(); val++)
         m_page->cmbChannel->insertItem(channels.at(val)->name());
     connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));

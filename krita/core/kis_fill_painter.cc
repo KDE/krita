@@ -27,12 +27,12 @@
 #include "qfontmetrics.h"
 #include "qpen.h"
 #include "qregion.h"
-#include "qwmatrix.h"
+#include "qmatrix.h"
 #include <qimage.h>
 #include <qmap.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 #include <qrect.h>
 #include <qstring.h>
 

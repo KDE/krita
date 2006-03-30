@@ -17,7 +17,7 @@
  */
 #include <math.h>
 #include <qapplication.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qrect.h>
 
 #include <kdebug.h>

@@ -121,9 +121,9 @@ KisAbstractColorSpace::~KisAbstractColorSpace()
 
 void KisAbstractColorSpace::fromQColor(const QColor& color, quint8 *dst, KisProfile * profile)
 {
-    m_qcolordata[2] = color.red();
-    m_qcolordata[1] = color.green();
-    m_qcolordata[0] = color.blue();
+    m_qcolordata[2] = color.Qt::red();
+    m_qcolordata[1] = color.Qt::green();
+    m_qcolordata[0] = color.Qt::blue();
 
 
     if (profile == 0) {
@@ -530,9 +530,9 @@ void KisAbstractColorSpace::convolveColors(quint8** colors, qint32 * kernelValue
             QColor c;
             quint8 opacity;
             const_cast<KisAbstractColorSpace *>(this)->toQColor( *colors, &c, &opacity );
-            totalRed += c.red() * weight;
-            totalGreen += c.green() * weight;
-            totalBlue += c.blue() * weight;
+            totalRed += c.Qt::red() * weight;
+            totalGreen += c.Qt::green() * weight;
+            totalBlue += c.Qt::blue() * weight;
             totalAlpha += opacity * weight;
         }
         colors++;
@@ -636,7 +636,7 @@ void KisAbstractColorSpace::bitBlt(quint8 *dst,
         quint32 len = pixelSize() * rows * cols;
 
         // If our conversion cache is too small, extend it.
-        if (!m_conversionCache.resize( len, QGArray::SpeedOptim )) {
+        if (!m_conversionCache.resize( len, Q3GArray::SpeedOptim )) {
             kWarning() << "Could not allocate enough memory for the conversion!\n";
             // XXX: We should do a slow, pixel by pixel bitblt here...
             abort();

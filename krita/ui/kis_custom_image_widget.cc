@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <qpushbutton.h>
 #include <qslider.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <KoUnitWidgets.h>
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
@@ -86,8 +86,8 @@ void KisCustomImageWidget::fillCmbProfiles(const KisID & s)
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     if (csf == 0) return;
 
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        QValueVector<KisProfile *> ::iterator it;
+    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+        Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             cmbProfile->insertItem((*it)->productName());
     }

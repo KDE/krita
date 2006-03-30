@@ -27,7 +27,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qdatetime.h>
 
 #include <klocale.h>
@@ -220,7 +220,7 @@ void PerfTest::slotPerfTest()
         Q_CHECK_PTR(d);
 
         d->setCaption("Performance test results");
-        QTextEdit * e = new QTextEdit(d);
+        Q3TextEdit * e = new Q3TextEdit(d);
         Q_CHECK_PTR(e);
         d->setMainWidget(e);
         e->setText(report);

@@ -17,6 +17,8 @@
  */
 
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -184,7 +186,7 @@ void KisSelection::paintUniformSelectionRegion(QImage img, const QRect& imageRec
         QRegion region = uniformRegion & QRegion(imageRect);
 
         if (!region.isEmpty()) {
-            QMemArray<QRect> rects = region.rects();
+            Q3MemArray<QRect> rects = region.rects();
 
             for (unsigned int i = 0; i < rects.count(); i++) {
                 QRect r = rects[i];

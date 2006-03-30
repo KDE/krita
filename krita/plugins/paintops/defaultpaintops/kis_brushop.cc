@@ -25,6 +25,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <kdebug.h>
 
@@ -53,7 +55,7 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     : super(parent)
 {
     m_optionsWidget = new QWidget(parent, "brush option widget");
-    QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
+    Q3HBoxLayout * l = new Q3HBoxLayout(m_optionsWidget);
     l->setAutoAdd(true);
     m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionsWidget);
     m_size =  new QCheckBox(i18n("size"), m_optionsWidget);

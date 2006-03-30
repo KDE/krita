@@ -26,6 +26,8 @@
 #include <qpainter.h>
 #include <qrect.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -137,7 +139,7 @@ void KisToolBrush::leave(QEvent */*e*/) {
 
 void KisToolBrush::slotSetPaintingMode( int mode )
 {
-    if (mode == QButton::On) {
+    if (mode == QCheckBox::On) {
         // Direct painting
         m_paintIncremental = true;
     }
@@ -154,7 +156,7 @@ QWidget* KisToolBrush::createOptionWidget(QWidget* parent)
     m_chkDirect->setChecked(true);
     connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
     
-    m_optionLayout = new QGridLayout(widget, 3, 2, 0, 6);
+    m_optionLayout = new Q3GridLayout(widget, 3, 2, 0, 6);
     Q_CHECK_PTR(m_optionLayout);
 
     super::addOptionWidgetLayout(m_optionLayout);

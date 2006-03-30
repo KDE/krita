@@ -33,6 +33,8 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -67,10 +69,10 @@ KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
 
     m_currentPalette = 0;
 
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
 
     combo = new QComboBox( false, this );
-    combo->setFocusPolicy( QWidget::ClickFocus );
+    combo->setFocusPolicy( Qt::ClickFocus );
     layout->addWidget(combo);
 
     m_view = new KisPaletteView(this, 0, minWidth, cols);

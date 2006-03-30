@@ -24,6 +24,8 @@
 #include <qregion.h>
 #include <qwidget.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -91,7 +93,7 @@ void KisToolSelectPolygonal::update (KisCanvasSubject *subject)
 
 void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
 {
-    if (event->button() == LeftButton) {
+    if (event->button() == Qt::LeftButton) {
         m_dragging = true;
 
         if (m_points.isEmpty())
@@ -104,7 +106,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
             m_dragEnd = event->pos();
             draw();
         }
-    } else if (event->button() == LeftButton && event->state() == Qt::ShiftButton) {
+    } else if (event->button() == Qt::LeftButton && event->state() == Qt::ShiftModifier) {
         finish();
     }
 }
@@ -191,12 +193,12 @@ void KisToolSelectPolygonal::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject)
         return;
 
-    if (m_dragging && event->button() == LeftButton)  {
+    if (m_dragging && event->button() == Qt::LeftButton)  {
         m_dragging = false;
         m_points.append (m_dragEnd);
     }
 
-    if (m_dragging && event->button() == RightButton) {
+    if (m_dragging && event->button() == Qt::RightButton) {
 
         }
 }
@@ -290,7 +292,7 @@ QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    Q3VBoxLayout * l = dynamic_cast<Q3VBoxLayout*>(m_optWidget->layout());
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     return m_optWidget;

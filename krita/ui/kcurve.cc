@@ -31,6 +31,11 @@
 #include <qrect.h> 
 #include <qfont.h> 
 #include <qfontmetrics.h> 
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QPaintEvent>
+#include <Q3PtrList>
 
 // KDE includes.
 
@@ -42,7 +47,7 @@
 
 #include "kcurve.h"
 
-KCurve::KCurve(QWidget *parent, const char *name, WFlags f)
+KCurve::KCurve(QWidget *parent, const char *name, Qt::WFlags f)
             : QWidget(parent, name, f)
 {
     m_grab_point     = NULL;
@@ -357,7 +362,7 @@ double KCurve::getCurveValue(double x)
     return getCurveValue(m_points, x);
 }
 
-double KCurve::getCurveValue(QPtrList<QPair<double,double> > &curve, double x)
+double KCurve::getCurveValue(Q3PtrList<QPair<double,double> > &curve, double x)
 {
     double t;
     QPair<double,double> *p;
@@ -411,9 +416,9 @@ double KCurve::getCurveValue(QPtrList<QPair<double,double> > &curve, double x)
     return val;
 }
 
-QPtrList<QPair<double,double> > KCurve::getCurve()
+Q3PtrList<QPair<double,double> > KCurve::getCurve()
 {
-    QPtrList<QPair<double,double> > outlist;
+    Q3PtrList<QPair<double,double> > outlist;
     QPair<double,double> *p;
     QPair<double,double> *outpoint;
 
@@ -427,7 +432,7 @@ QPtrList<QPair<double,double> > KCurve::getCurve()
     return outlist;
 }
 
-void KCurve::setCurve(QPtrList<QPair<double,double> >inlist)
+void KCurve::setCurve(Q3PtrList<QPair<double,double> >inlist)
 {
     QPair<double,double> *p;
     QPair<double,double> *inpoint;

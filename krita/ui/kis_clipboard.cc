@@ -21,6 +21,8 @@
 #include <qimage.h>
 #include <qmessagebox.h>
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <klocale.h>
 
 #include "kdebug.h"
@@ -80,7 +82,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
 
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
-    QCString mimeType("application/x-krita-selection");
+    Q3CString mimeType("application/x-krita-selection");
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
@@ -122,7 +124,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
     qimg = selection->convertToQImage(monitorProfile);
 
-    QImageDrag *qimgDrag = new QImageDrag(qimg);
+    Q3ImageDrag *qimgDrag = new Q3ImageDrag(qimg);
     KMultipleDrag *multiDrag = new KMultipleDrag();
     if ( !qimg.isNull() )
         multiDrag->addDragObject( qimgDrag );
@@ -139,7 +141,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
 KisPaintDeviceSP KisClipboard::clip()
 {
     QClipboard *cb = QApplication::clipboard();
-    QCString mimeType("application/x-krita-selection");
+    Q3CString mimeType("application/x-krita-selection");
     QMimeSource *cbData = cb->data();
 
     if(cbData && cbData->provides(mimeType))
@@ -213,7 +215,7 @@ void KisClipboard::clipboardDataChanged()
         QClipboard *cb = QApplication::clipboard();
         QImage qimg = cb->image();
         QMimeSource *cbData = cb->data();
-        QCString mimeType("application/x-krita-selection");
+        Q3CString mimeType("application/x-krita-selection");
 
         if(cbData && cbData->provides(mimeType))
             m_hasClip = true;
@@ -235,7 +237,7 @@ QSize KisClipboard::clipSize()
 {
 
     QClipboard *cb = QApplication::clipboard();
-    QCString mimeType("application/x-krita-selection");
+    Q3CString mimeType("application/x-krita-selection");
     QMimeSource *cbData = cb->data();
 
     KisPaintDeviceSP clip;

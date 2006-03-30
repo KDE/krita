@@ -59,6 +59,15 @@
 **********************************************************************/
 
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QTabletEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 #include "kis_canvas.h"
 #include "kis_cursor.h"
@@ -1157,7 +1166,7 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     Q_CHECK_PTR(m_canvasWidget);
     QWidget *widget = dynamic_cast<QWidget *>(m_canvasWidget);
 
-    widget->setBackgroundMode(QWidget::NoBackground);
+    widget->setBackgroundMode(Qt::NoBackground);
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
     m_canvasWidget->enableMoveEventCompressionHint(m_enableMoveEventCompressionHint);
@@ -1332,7 +1341,7 @@ void KisCanvas::updateGeometry()
     dynamic_cast<QWidget *>(m_canvasWidget)->updateGeometry();
 }
 
-void KisCanvas::setFocusPolicy(QWidget::FocusPolicy focusPolicy)
+void KisCanvas::setFocusPolicy(Qt::FocusPolicy focusPolicy)
 {
     Q_ASSERT(m_canvasWidget);
     dynamic_cast<QWidget *>(m_canvasWidget)->setFocusPolicy(focusPolicy);

@@ -20,6 +20,12 @@
 #include "kis_gradient_slider_widget.h"
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <Q3PointArray>
+#include <QPaintEvent>
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -30,7 +36,7 @@
 #define MARGIN 5
 #define HANDLE_SIZE 10
 
-KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, WFlags f )
+KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, Qt::WFlags f )
     : QWidget( parent, name, f),
     m_currentSegment(0),
     m_selectedSegment(0),
@@ -80,8 +86,8 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
             painter.fillRect( selection, QBrush( colorGroup().highlight() ) );
         }
 
-        QPointArray triangle(3);
-        QValueVector<double> handlePositions = m_autogradientResource->getHandlePositions();
+        Q3PointArray triangle(3);
+        Q3ValueVector<double> handlePositions = m_autogradientResource->getHandlePositions();
         int position;
         painter.setBrush( QBrush( Qt::black) );
         for (uint i = 0; i < handlePositions.count(); i++)
@@ -93,7 +99,7 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
             painter.drawPolygon(triangle);
         }
         painter.setBrush( QBrush( Qt::white ) );
-        QValueVector<double> middleHandlePositions = m_autogradientResource->getMiddleHandlePositions();
+        Q3ValueVector<double> middleHandlePositions = m_autogradientResource->getMiddleHandlePositions();
         for (uint i = 0; i < middleHandlePositions.count(); i++)
         {
             position = qRound( middleHandlePositions[i] * (double)(width()-12) ) + 6;
@@ -109,7 +115,7 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
 void KisGradientSliderWidget::mousePressEvent( QMouseEvent * e )
 {
     QWidget::mousePressEvent( e );
-    if( ( e->y() < MARGIN || e->y() > height() - MARGIN ) || ( e->x() < MARGIN || e->x() > width() - MARGIN ) || e-> button() != LeftButton )
+    if( ( e->y() < MARGIN || e->y() > height() - MARGIN ) || ( e->x() < MARGIN || e->x() > width() - MARGIN ) || e-> button() != Qt::LeftButton )
         return;
     double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
     KisGradientSegment* segment = 0;

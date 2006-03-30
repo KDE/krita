@@ -21,6 +21,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 
@@ -39,7 +41,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char 
 
     this->setCaption(caption);
 
-    QVBoxLayout *widgetLayout = new QVBoxLayout(this, m_nbboolWidgets + 1);
+    Q3VBoxLayout *widgetLayout = new Q3VBoxLayout(this, m_nbboolWidgets + 1);
 
     m_boolWidgets = new QCheckBox*[ m_nbboolWidgets ];
 

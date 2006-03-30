@@ -85,7 +85,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     quint32 numberOfChannels = src->nChannels();
     KisColorSpace * srcCs  = src->colorSpace();
-    QValueVector<KisChannelInfo *> channels = srcCs->channels();
+    Q3ValueVector<KisChannelInfo *> channels = srcCs->channels();
 
     // Use the flattened image, if required
     switch(sourceOps) {
@@ -99,15 +99,15 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     vKisPaintDeviceSP layers;
 
-    QValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
-    QValueVector<KisChannelInfo *>::const_iterator end = channels.end();
+    Q3ValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
+    Q3ValueVector<KisChannelInfo *>::const_iterator end = channels.end();
 
 
     QRect rect = src->exactBounds();
 
     int i = 0;
     quint32 channelIndex = 0;
-    for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex)
+    for (Q3ValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex)
     {
 
         KisChannelInfo * ch = (*it);
@@ -238,7 +238,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 break;
         }
 
-        for (QValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
+        for (Q3ValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
         {
 
             KisChannelInfo * ch = (*it);

@@ -19,6 +19,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kdialogbase.h>
 
@@ -49,7 +51,7 @@ KisGradientChooser::KisGradientChooser(KisView * view, QWidget *parent, const ch
     KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, this, "autogradient");
     connect(m_customGradient, SIGNAL(clicked()), autogradient, SLOT(show()));
     
-    QVBoxLayout *mainLayout = new QVBoxLayout(this, 2, -1, "main layout");
+    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(this, 2, -1, "main layout");
     
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(chooserWidget(), 10);

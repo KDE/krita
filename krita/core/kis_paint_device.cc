@@ -17,11 +17,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <qrect.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qimage.h>
 #include <qdatetime.h>
 #include <qapplication.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qtimer.h>
 
 #include <kcommand.h>
@@ -304,8 +304,8 @@ KisPaintDevice::~KisPaintDevice()
 {
     delete m_dcop;
     delete m_longRunningFilterTimer;
-    QValueList<KisFilter*>::iterator it;
-    QValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
+    Q3ValueList<KisFilter*>::iterator it;
+    Q3ValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
     for (it = m_longRunningFilters.begin(); it != end; ++it) {
         KisFilter * f = (*it);
         delete f;
@@ -1147,8 +1147,8 @@ void KisPaintDevice::runBackgroundFilters()
 {
     QRect rc = exactBounds();
     if (!m_longRunningFilters.isEmpty()) {
-        QValueList<KisFilter*>::iterator it;
-        QValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
+        Q3ValueList<KisFilter*>::iterator it;
+        Q3ValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
         for (it = m_longRunningFilters.begin(); it != end; ++it) {
             (*it)->process(this, this, 0, rc);
         }

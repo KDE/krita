@@ -65,7 +65,7 @@ void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManage
     if (!m_dummyTool)
         m_dummyTool = KisToolDummyFactory().createTool(actionCollection);
 
-    QValueVector<KisInputDevice> inputDevices = KisInputDevice::inputDevices();
+    Q3ValueVector<KisInputDevice> inputDevices = KisInputDevice::inputDevices();
 
     for (quint32 inputDevice = 0; inputDevice < inputDevices.count(); inputDevice++) {
         m_inputDeviceToolSetMap[inputDevices[inputDevice]] = KisToolRegistry::instance()->createTools(actionCollection, m_subject);

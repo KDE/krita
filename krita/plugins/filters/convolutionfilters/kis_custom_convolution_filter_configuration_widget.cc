@@ -20,6 +20,8 @@
 
 #include <qlayout.h>
 #include <qspinbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 
@@ -37,7 +39,7 @@
 KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* /*nfilter*/, QWidget * parent, const char * name)
     : KisFilterConfigWidget ( parent, name )
 {
-    QGridLayout *widgetLayout = new QGridLayout(this, 2, 1);
+    Q3GridLayout *widgetLayout = new Q3GridLayout(this, 2, 1);
     Q_CHECK_PTR(widgetLayout);
 
 //     QPushButton *bnRefresh = new QPushButton(i18n("Refresh Preview"), this, "bnrefresh");

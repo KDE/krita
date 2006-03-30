@@ -22,6 +22,8 @@
 #include "kis_resource.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
+//Added by qt3to4:
+#include <QPixmap>
 
 #define THUMB_SIZE 30
 

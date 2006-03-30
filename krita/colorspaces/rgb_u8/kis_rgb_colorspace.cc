@@ -62,17 +62,17 @@ KisRgbColorSpace::~KisRgbColorSpace()
 
 void KisRgbColorSpace::setPixel(quint8 *pixel, quint8 red, quint8 green, quint8 blue, quint8 alpha) const
 {
-    pixel[PIXEL_RED] = red;
-    pixel[PIXEL_GREEN] = green;
-    pixel[PIXEL_BLUE] = blue;
+    pixel[PIXEL_RED] = Qt::red;
+    pixel[PIXEL_GREEN] = Qt::green;
+    pixel[PIXEL_BLUE] = Qt::blue;
     pixel[PIXEL_ALPHA] = alpha;
 }
 
 void KisRgbColorSpace::getPixel(const quint8 *pixel, quint8 *red, quint8 *green, quint8 *blue, quint8 *alpha) const
 {
-    *red = pixel[PIXEL_RED];
-    *green = pixel[PIXEL_GREEN];
-    *blue = pixel[PIXEL_BLUE];
+    *Qt::red = pixel[PIXEL_RED];
+    *Qt::green = pixel[PIXEL_GREEN];
+    *Qt::blue = pixel[PIXEL_BLUE];
     *alpha = pixel[PIXEL_ALPHA];
 }
 
@@ -194,7 +194,7 @@ quint8 KisRgbColorSpace::intensity8(const quint8 * src) const
     return (quint8)((src[PIXEL_RED] * 0.30 + src[PIXEL_GREEN] * 0.59 + src[PIXEL_BLUE] * 0.11) + 0.5);
 }
 
-QValueVector<KisChannelInfo *> KisRgbColorSpace::channels() const
+Q3ValueVector<KisChannelInfo *> KisRgbColorSpace::channels() const
 {
     return m_channels;
 }

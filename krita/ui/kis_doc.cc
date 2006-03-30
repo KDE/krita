@@ -24,10 +24,12 @@
 #include <qdom.h>
 #include <qimage.h>
 #include <qpainter.h>
-#include <qtl.h>
+#include <q3tl.h>
 #include <qstringlist.h>
 #include <qwidget.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // KDE
 #include <dcopobject.h>
@@ -168,7 +170,7 @@ KisDoc::~KisDoc()
     delete m_dcop;
 }
 
-QCString KisDoc::mimeType() const
+Q3CString KisDoc::mimeType() const
 {
     return APP_MIMETYPE;
 }
@@ -347,7 +349,7 @@ bool KisDoc::loadXML(QIODevice *, const QDomDocument& doc)
 }
 
 bool KisDoc::loadChildren(KoStore* store) {
-    QPtrListIterator<KoDocumentChild> it(children());
+    Q3PtrListIterator<KoDocumentChild> it(children());
     for( ; it.current(); ++it ) {
         if (!it.current()->loadDocument(store)) {
             return false;
@@ -902,7 +904,7 @@ bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColor
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
-    QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+    Q3ValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry()->paintDeviceActionsFor(cs);
     for (uint i = 0; i < actions.count(); i++)
         actions.at(i)->act(layer->paintDevice(), img->width(), img->height());

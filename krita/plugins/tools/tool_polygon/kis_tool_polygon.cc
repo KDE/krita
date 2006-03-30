@@ -23,6 +23,8 @@
 
 #include <qpainter.h>
 #include <qspinbox.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -68,7 +70,7 @@ void KisToolPolygon::update (KisCanvasSubject *subject)
 void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
 {
     if (m_currentImage) {
-        if (event->button() == LeftButton && event->state() != Qt::ShiftButton) {
+        if (event->button() == LeftButton && event->state() != Qt::ShiftModifier) {
 
             m_dragging = true;
 
@@ -82,7 +84,7 @@ void KisToolPolygon::buttonPress(KisButtonPressEvent *event)
                 m_dragEnd = event->pos();
                 draw();
             }
-        } else if (event->button() == LeftButton && event->state() == Qt::ShiftButton) {
+        } else if (event->button() == LeftButton && event->state() == Qt::ShiftModifier) {
             finish();
         }
     }

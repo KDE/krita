@@ -21,6 +21,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <knuminput.h>
 #include <kis_filter_config_widget.h>
@@ -66,7 +68,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
 
     this->setCaption(caption);
 
-    QGridLayout *widgetLayout = new QGridLayout(this, m_nbdoubleWidgets + 1, 3);
+    Q3GridLayout *widgetLayout = new Q3GridLayout(this, m_nbdoubleWidgets + 1, 3);
     widgetLayout->setColStretch ( 1, 1 );
 
     m_doubleWidgets = new KisDelayedActionDoubleInput*[ m_nbdoubleWidgets ];

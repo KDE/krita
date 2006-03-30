@@ -24,7 +24,7 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qsize.h>
-#include <qtl.h>
+#include <q3tl.h>
 #include <qapplication.h>
 #include <qthread.h>
 #include <qdatetime.h>
@@ -1088,7 +1088,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         if (player != 0) {
 
             // XXX: This should also be done whenever a layer grows!
-            QValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+            Q3ValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
             for (uint i = 0; i < actions.count(); i++) {
                 actions.at(i)->act(player.data()->paintDevice(), width(), height());

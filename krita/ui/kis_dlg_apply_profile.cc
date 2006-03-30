@@ -18,7 +18,7 @@
 
 #include <qcombobox.h>
 #include <klocale.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 
 #include "kis_factory.h"
 #include "kis_colorspace_factory_registry.h"
@@ -84,8 +84,8 @@ void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     if (csf == 0) return;
 
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        QValueVector<KisProfile *> ::iterator it;
+    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+        Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             m_page->cmbProfile->insertItem((*it)->productName());
     }

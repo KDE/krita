@@ -29,8 +29,10 @@
 #include <qlabel.h>
 #include <qapplication.h>
 #include <qcolor.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QWheelEvent>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -135,7 +137,7 @@ void KisPreviewWidget::slotUpdate()
         int w, h;
         w = (int) ceil(r.width() * m_zoom );
         h = (int) ceil(r.height() * m_zoom );
-        m_scaledPreview = m_scaledPreview.smoothScale (w,h, QImage::ScaleMax);
+        m_scaledPreview = m_scaledPreview.smoothScale (w,h, Qt::KeepAspectRatioByExpanding);
     }
     if(m_previewIsDisplayed)
     {

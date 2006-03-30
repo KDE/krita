@@ -39,7 +39,7 @@ KisToolDummy::KisToolDummy()
     m_subject = 0;
     m_dragging = false;
     m_optionWidget = 0;
-    setCursor(QCursor::forbiddenCursor);
+    setCursor(Qt::forbiddenCursor);
 }
 
 KisToolDummy::~KisToolDummy()

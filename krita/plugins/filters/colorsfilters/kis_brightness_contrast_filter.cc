@@ -31,6 +31,8 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"
@@ -245,13 +247,13 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
     setProgressDone();
 }
 
-KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name, WFlags f)
+KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const char * name, Qt::WFlags f)
     : KisFilterConfigWidget(parent, name, f)
 {
     int i;
     int height;
     m_page = new WdgBrightnessContrast(this);
-    QHBoxLayout * l = new QHBoxLayout(this);
+    Q3HBoxLayout * l = new Q3HBoxLayout(this);
     Q_CHECK_PTR(l);
 
     //Hide these buttons and labels as they are not implemented in 1.5

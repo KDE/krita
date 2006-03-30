@@ -24,13 +24,16 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
 
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kis_cursor.h>
 
 ImageViewer::ImageViewer(QWidget *widget, const char * name)
-    : QScrollView(widget, name)
+    : Q3ScrollView(widget, name)
     , m_isDragging(false)
     , m_image(QPixmap())
 {

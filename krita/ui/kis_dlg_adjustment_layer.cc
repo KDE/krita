@@ -17,9 +17,11 @@
  */
 #include <klocale.h>
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -75,7 +77,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
 
     setCaption(caption);
     QWidget * page = new QWidget(this, "page widget");
-    QGridLayout * grid = new QGridLayout(page, 3, 2, 0, 6);
+    Q3GridLayout * grid = new Q3GridLayout(page, 3, 2, 0, 6);
     setMainWidget(page);
 
     QLabel * lblName = new QLabel(i18n("Layer name:"), page, "lblName");
@@ -86,7 +88,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
     m_filtersList = new KisFiltersListView(m_dev, page, "dlgadjustment.filtersList");
-    connect(m_filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
+    connect(m_filtersList , SIGNAL(selectionChanged(Q3IconViewItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
     grid->addMultiCellWidget(m_filtersList, 1, 2, 0, 0);
 
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
@@ -95,7 +97,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
     grid->addWidget(m_preview, 1, 1);
 
-    m_configWidgetHolder = new QGroupBox(i18n("Configuration"), page, "currentConfigWidget");
+    m_configWidgetHolder = new Q3GroupBox(i18n("Configuration"), page, "currentConfigWidget");
     m_configWidgetHolder->setColumnLayout(0, Qt::Horizontal);
     grid->addWidget(m_configWidgetHolder, 2, 1);
 
@@ -153,7 +155,7 @@ void KisDlgAdjustmentLayer::refreshPreview()
     cmd.unexecute();
 }
 
-void KisDlgAdjustmentLayer::selectionHasChanged ( QIconViewItem * item )
+void KisDlgAdjustmentLayer::selectionHasChanged ( Q3IconViewItem * item )
 {
     KisFiltersIconViewItem* kisitem = (KisFiltersIconViewItem*) item;
 

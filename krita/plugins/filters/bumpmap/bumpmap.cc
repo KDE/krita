@@ -33,10 +33,12 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qstring.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -250,7 +252,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
     // ---------------------- Load initial three bumpmap scanlines
 
     KisColorSpace * srcCs = src->colorSpace();
-    QValueVector<KisChannelInfo *> channels = srcCs->channels();
+    Q3ValueVector<KisChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
     quint8 * bm_row1 = new quint8[bm_w];
@@ -473,7 +475,7 @@ QString KisBumpmapConfiguration::toString()
     return KisFilterConfiguration::toString();
 }
 
-KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name, WFlags f)
+KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDeviceSP dev, QWidget * parent, const char * name, Qt::WFlags f)
     : KisFilterConfigWidget(parent, name, f),
       m_filter(filter),
       m_device(dev)
@@ -482,7 +484,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
     Q_ASSERT(m_device);
 
     m_page = new WdgBumpmap(this);
-    QHBoxLayout * l = new QHBoxLayout(this);
+    Q3HBoxLayout * l = new Q3HBoxLayout(this);
     Q_CHECK_PTR(l);
 
     l->add(m_page);

@@ -19,6 +19,8 @@
 #include <qwidget.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <kcolorbutton.h>
 #include <qlayout.h>
 
@@ -39,7 +41,7 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent, KisCanvasSubject * sub
     m_page = new WdgSelectionOptions(this);
     Q_CHECK_PTR(m_page);
 
-    QVBoxLayout * l = new QVBoxLayout(this);
+    Q3VBoxLayout * l = new Q3VBoxLayout(this);
     l->addWidget(m_page);
 
     connect(m_page->cmbAction, SIGNAL(activated(int)), this, SIGNAL(actionChanged(int)));

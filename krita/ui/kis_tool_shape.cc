@@ -20,6 +20,8 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,7 +46,7 @@ QWidget* KisToolShape::createOptionWidget(QWidget* parent)
     m_shapeOptionsWidget = new WdgGeometryOptions(0);
     Q_CHECK_PTR(m_shapeOptionsWidget);
 
-    m_optionLayout = new QGridLayout(widget, 2, 1);
+    m_optionLayout = new Q3GridLayout(widget, 2, 1);
    // super::addOptionWidgetLayout(m_optionLayout);
 
     m_shapeOptionsWidget->cmbFill->reparent(widget, QPoint(0,0), true);

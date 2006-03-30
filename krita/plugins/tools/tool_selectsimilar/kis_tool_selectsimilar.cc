@@ -24,6 +24,9 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 #include <kapplication.h>
 #include <kaction.h>
@@ -130,7 +133,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         QPoint pos;
         quint8 opacity = OPACITY_OPAQUE;
 
-        if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton)
+        if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton)
             return;
 
         if (!(img = m_subject->currentImg()))
@@ -232,7 +235,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
 
     m_optWidget->setCaption(i18n("Similar Selection"));
 
-    QVBoxLayout * l = new QVBoxLayout(m_optWidget, 0, 6);
+    Q3VBoxLayout * l = new Q3VBoxLayout(m_optWidget, 0, 6);
     Q_CHECK_PTR(l);
 
     m_selectionOptionsWidget = new KisSelectionOptions(m_optWidget, m_subject);
@@ -241,7 +244,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
     l->addWidget(m_selectionOptionsWidget);
     connect (m_selectionOptionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-    QHBoxLayout * hbox = new QHBoxLayout(l);
+    Q3HBoxLayout * hbox = new Q3HBoxLayout(l);
     Q_CHECK_PTR(hbox);
 
     QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);

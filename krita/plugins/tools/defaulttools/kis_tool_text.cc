@@ -26,7 +26,9 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qfontmetrics.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <kaction.h>
 #include <kinputdialog.h>
@@ -69,7 +71,7 @@ void KisToolText::update(KisCanvasSubject *subject)
 
 void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+    if (m_subject && e->button() == Qt::LeftButton) {
         KisImageSP img = m_subject->currentImg();
 
         bool ok;
@@ -145,7 +147,7 @@ QWidget* KisToolText::createOptionWidget(QWidget* parent)
 
     m_lbFont = new QLabel(i18n("Font: "), widget);
 
-    QHBox *fontBox = new QHBox(widget);
+    Q3HBox *fontBox = new Q3HBox(widget);
     m_lbFontName = new KSqueezedTextLabel(QString(m_font.family() + ", %1")
         .arg(m_font.pointSize()), fontBox);
     m_btnMoreFonts = new QPushButton("...", fontBox);

@@ -30,9 +30,12 @@
 #include <qpoint.h>
 #include <qsize.h>
 #include <qimage.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qmap.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -105,7 +108,7 @@ bool KisPattern::save()
     // Version is 1 for now...
 
     GimpPatternHeader ph;
-    QCString utf8Name = name().utf8();
+    Q3CString utf8Name = name().utf8();
     char const* name = utf8Name.data();
     int nameLength = qstrlen(name);
 
@@ -160,7 +163,7 @@ bool KisPattern::init()
     // load Gimp patterns
     GimpPatternHeader bh;
     qint32 k;
-    QValueVector<char> name;
+    Q3ValueVector<char> name;
 
     if (sizeof(GimpPatternHeader) > m_data.size()) {
         return false;

@@ -23,7 +23,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qapplication.h>
 #include <qcursor.h>
 

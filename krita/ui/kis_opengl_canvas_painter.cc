@@ -27,6 +27,9 @@
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_opengl_canvas_painter.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PointArray>
 
 KisOpenGLCanvasPainter::KisOpenGLCanvasPainter()
 : m_active(false), m_widget(0)
@@ -379,12 +382,12 @@ QRect KisOpenGLCanvasPainter::xForm(const QRect& r) const
     return r;
 }
 
-QPointArray KisOpenGLCanvasPainter::xForm(const QPointArray& pointArray) const
+Q3PointArray KisOpenGLCanvasPainter::xForm(const Q3PointArray& pointArray) const
 {
     return pointArray;
 }
 
-QPointArray KisOpenGLCanvasPainter::xForm(const QPointArray& pointArray, int /*index*/, int /*npoints*/) const
+Q3PointArray KisOpenGLCanvasPainter::xForm(const Q3PointArray& pointArray, int /*index*/, int /*npoints*/) const
 {
     return pointArray;
 }
@@ -399,12 +402,12 @@ QRect KisOpenGLCanvasPainter::xFormDev(const QRect& r) const
     return r;
 }
 
-QPointArray KisOpenGLCanvasPainter::xFormDev(const QPointArray& pointArray) const
+Q3PointArray KisOpenGLCanvasPainter::xFormDev(const Q3PointArray& pointArray) const
 {
     return pointArray;
 }
 
-QPointArray KisOpenGLCanvasPainter::xFormDev(const QPointArray& pointArray, int /*index*/, int /*npoints*/) const
+Q3PointArray KisOpenGLCanvasPainter::xFormDev(const Q3PointArray& pointArray, int /*index*/, int /*npoints*/) const
 {
     return pointArray;
 }
@@ -447,7 +450,7 @@ void KisOpenGLCanvasPainter::drawPoint(const QPoint& point)
     drawPoint(point.x(), point.y());
 }
 
-void KisOpenGLCanvasPainter::drawPoints(const QPointArray& pointArray, int index, int npoints)
+void KisOpenGLCanvasPainter::drawPoints(const Q3PointArray& pointArray, int index, int npoints)
 {
     int firstPointIndex = index;
 
@@ -561,7 +564,7 @@ void KisOpenGLCanvasPainter::drawEllipse(int x, int y, int w, int h)
     QRect r(x, y, w, h);
     r = r.normalize();
 
-    QPointArray points;
+    Q3PointArray points;
 
     points.makeEllipse(r.x(), r.y(), r.width(), r.height());
     drawPoints(points);
@@ -596,11 +599,11 @@ void KisOpenGLCanvasPainter::drawChord(const QRect& /*r*/, int /*a*/, int /*alen
 {
 }
 
-void KisOpenGLCanvasPainter::drawLineSegments(const QPointArray& /*pointArray*/, int /*index*/, int /*nlines*/)
+void KisOpenGLCanvasPainter::drawLineSegments(const Q3PointArray& /*pointArray*/, int /*index*/, int /*nlines*/)
 {
 }
 
-void KisOpenGLCanvasPainter::drawPolyline(const QPointArray& pointArray, int index, int npoints)
+void KisOpenGLCanvasPainter::drawPolyline(const Q3PointArray& pointArray, int index, int npoints)
 {
     int firstPointIndex = index;
 
@@ -636,15 +639,15 @@ void KisOpenGLCanvasPainter::drawPolyline(const QPointArray& pointArray, int ind
     glEnd();
 }
 
-void KisOpenGLCanvasPainter::drawPolygon(const QPointArray& /*pointArray*/, bool /*winding*/, int /*index*/, int /*npoints*/)
+void KisOpenGLCanvasPainter::drawPolygon(const Q3PointArray& /*pointArray*/, bool /*winding*/, int /*index*/, int /*npoints*/)
 {
 }
 
-void KisOpenGLCanvasPainter::drawConvexPolygon(const QPointArray& /*pointArray*/, int /*index*/, int /*npoints*/)
+void KisOpenGLCanvasPainter::drawConvexPolygon(const Q3PointArray& /*pointArray*/, int /*index*/, int /*npoints*/)
 {
 }
 
-void KisOpenGLCanvasPainter::drawCubicBezier(const QPointArray& /*pointArray*/, int /*index*/)
+void KisOpenGLCanvasPainter::drawCubicBezier(const Q3PointArray& /*pointArray*/, int /*index*/)
 {
 }
 

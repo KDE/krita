@@ -17,6 +17,8 @@
  */
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <klocale.h>
 #include <koIconChooser.h>
 
@@ -30,7 +32,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : super(
 {
     m_lbName = new QLabel(this);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this, 2, -1, "main layout");
+    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(this, 2, -1, "main layout");
 
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(chooserWidget(), 10);

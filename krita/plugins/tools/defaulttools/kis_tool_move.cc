@@ -21,6 +21,8 @@
 
 #include <stdlib.h>
 #include <qpoint.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 #include <kaction.h>
 #include <klocale.h>
 #include <qcolor.h>

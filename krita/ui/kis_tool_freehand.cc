@@ -79,7 +79,7 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
-    if (e->button() == QMouseEvent::LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         
         
         if (!m_currentImage->bounds().contains(e->pos().floorQPoint())) return;
@@ -115,7 +115,7 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 
 void KisToolFreehand::buttonRelease(KisButtonReleaseEvent* e)
 {
-    if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT) {
+    if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
     }
 }

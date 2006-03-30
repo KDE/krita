@@ -29,7 +29,7 @@ KisInputDevice KisInputDevice::Eraser;
 KisInputDevice KisInputDevice::Puck;
 KisInputDevice KisInputDevice::Unknown(UNKNOWN_INPUT_DEVICE_ID);
 
-QValueVector<KisInputDevice> KisInputDevice::InputDevices;
+Q3ValueVector<KisInputDevice> KisInputDevice::InputDevices;
 
 KisInputDevice::KisInputDevice()
 {
@@ -62,7 +62,7 @@ void KisInputDevice::allocateDefaultDevicesIfNeeded()
     }
 }
 
-QValueVector<KisInputDevice> KisInputDevice::inputDevices()
+Q3ValueVector<KisInputDevice> KisInputDevice::inputDevices()
 {
     allocateDefaultDevicesIfNeeded();
 

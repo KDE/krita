@@ -24,13 +24,16 @@
 #include <qclipboard.h>
 #include <qcolor.h>
 #include <qdrawutil.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qspinbox.h>
 #include <qstyle.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -50,9 +53,9 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
 {
     m_subject = 0;
 
-    QVBoxLayout * vl = new QVBoxLayout(this, 0, -1, "main layout");
+    Q3VBoxLayout * vl = new Q3VBoxLayout(this, 0, -1, "main layout");
 
-    QGridLayout * l = new QGridLayout(vl, 2, 8, 2, "color wells grid");
+    Q3GridLayout * l = new Q3GridLayout(vl, 2, 8, 2, "color wells grid");
 
     KisColorCup * b;
     int WIDTH = 24;
@@ -163,7 +166,7 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
     b->setFixedSize(WIDTH, HEIGHT);
     connect(b, SIGNAL(changed(const QColor &)), SLOT(slotFGColorSelected(const QColor &)));
 
-    QGridLayout * g2 = new QGridLayout(vl, 2, 2);
+    Q3GridLayout * g2 = new Q3GridLayout(vl, 2, 2);
     
     QLabel * label = new QLabel(i18n("Paint strength:"), this);
     g2->addWidget(label, 0, 0);

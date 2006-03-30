@@ -22,7 +22,7 @@
  */
 
 #include <math.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <kis_point.h>
 

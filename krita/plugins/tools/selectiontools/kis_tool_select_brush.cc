@@ -23,6 +23,8 @@
 #include <qlayout.h>
 #include <qwidget.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -146,7 +148,7 @@ QWidget* KisToolSelectBrush::createOptionWidget(QWidget* parent)
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setCaption(i18n("Selection Brush"));
 
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    Q3VBoxLayout * l = dynamic_cast<Q3VBoxLayout*>(m_optWidget->layout());
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     return m_optWidget;

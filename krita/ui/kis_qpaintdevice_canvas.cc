@@ -21,6 +21,15 @@
 #include "kis_canvas_painter.h"
 #include "kis_qpaintdevice_canvas.h"
 #include "kis_qpaintdevice_canvas_painter.h"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QTabletEvent>
+#include <QDragEnterEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QDropEvent>
 
 KisQPaintDeviceCanvasWidget::KisQPaintDeviceCanvasWidget(QWidget *parent, const char *name)
     : QWidget(parent, name)

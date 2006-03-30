@@ -59,7 +59,7 @@ KisXyzColorSpace::~KisXyzColorSpace()
 }
 
 
-QValueVector<KisChannelInfo *> KisXyzColorSpace::channels() const
+Q3ValueVector<KisChannelInfo *> KisXyzColorSpace::channels() const
 {
     return m_channels;
 }

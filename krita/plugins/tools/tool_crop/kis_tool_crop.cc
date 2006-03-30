@@ -28,6 +28,8 @@
 #include <qpen.h>
 #include <qpushbutton.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -461,8 +463,8 @@ void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
         gc.drawLine(startx,endy + m_handleSize / 2 + 1, startx, controller->kiscanvas()->height());
         gc.drawLine(endx,0,endx,starty - m_handleSize / 2);
         gc.drawLine(endx + m_handleSize / 2 + 1,starty, controller->kiscanvas()->width(), starty);
-        QMemArray <QRect> rects = m_handlesRegion.rects ();
-        for (QMemArray <QRect>::ConstIterator it = rects.begin (); it != rects.end (); ++it)
+        Q3MemArray <QRect> rects = m_handlesRegion.rects ();
+        for (Q3MemArray <QRect>::ConstIterator it = rects.begin (); it != rects.end (); ++it)
         {
             gc.fillRect (*it, Qt::black);
         }
@@ -835,7 +837,7 @@ qint32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         {
             m_dx = startx - currentViewPoint.x() ;
         }
-        return Left;
+        return Qt::DockLeft;
     }
     else if ( toQRect ( endx - m_handleSize / 2.0 , starty + ( endy - starty - m_handleSize ) / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) )
     {
@@ -843,7 +845,7 @@ qint32 KisToolCrop::mouseOnHandle(QPoint currentViewPoint)
         {
             m_dx = endx-currentViewPoint.x();
         }
-        return Right;
+        return Qt::DockRight;
     }
     else if ( toQRect ( startx , starty, endx - startx , endy - starty ).contains( currentViewPoint ) )
     {

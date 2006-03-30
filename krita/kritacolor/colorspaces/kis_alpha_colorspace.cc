@@ -96,7 +96,7 @@ void KisAlphaColorSpace::mixColors(const quint8 **colors, const quint8 *weights,
     }
 }
 
-QValueVector<KisChannelInfo *> KisAlphaColorSpace::channels() const
+Q3ValueVector<KisChannelInfo *> KisAlphaColorSpace::channels() const
 {
     return m_channels;
 }

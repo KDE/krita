@@ -17,9 +17,12 @@
  */
 #include <klocale.h>
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -80,7 +83,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
 
     setCaption(caption);
     QWidget * page = new QWidget(this, "page widget");
-    QHBoxLayout * layout = new QHBoxLayout(page, 0, 6);
+    Q3HBoxLayout * layout = new Q3HBoxLayout(page, 0, 6);
     setMainWidget(page);
 
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
@@ -89,8 +92,8 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
     layout->addWidget(m_preview, 1, 1);
 
-    QVBoxLayout *v1 = new QVBoxLayout( layout );
-    QHBoxLayout *hl = new QHBoxLayout( v1 );
+    Q3VBoxLayout *v1 = new Q3VBoxLayout( layout );
+    Q3HBoxLayout *hl = new Q3HBoxLayout( v1 );
 
     QLabel * lblName = new QLabel(i18n("Layer name:"), page, "lblName");
     hl->addWidget(lblName, 0, 0);

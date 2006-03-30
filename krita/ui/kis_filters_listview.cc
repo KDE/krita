@@ -25,6 +25,8 @@
 #include "qtimer.h"
 #include "qpainter.h"
 #include "qpixmap.h"
+//Added by qt3to4:
+#include <QCustomEvent>
 
 #include <kglobalsettings.h>
 
@@ -40,7 +42,7 @@
 
 // ------------------------------------------------
 
-KisFiltersThumbnailThread::KisFiltersThumbnailThread(QIconView * parent, KisFiltersIconViewItem * iconItem, KisFilterConfiguration * config, KisFilter * filter, KisPaintDeviceSP dev, const QRect & bounds, KisProfile * profile)
+KisFiltersThumbnailThread::KisFiltersThumbnailThread(Q3IconView * parent, KisFiltersIconViewItem * iconItem, KisFilterConfiguration * config, KisFilter * filter, KisPaintDeviceSP dev, const QRect & bounds, KisProfile * profile)
     : m_parent(parent)
     , m_iconItem(iconItem)
     , m_config(config)
@@ -87,10 +89,10 @@ void KisFiltersThumbnailThread::cancel()
 
 // ------------------------------------------------
 
-KisFiltersIconViewItem::KisFiltersIconViewItem(QIconView * parent, const QString & text, const QPixmap & icon,
+KisFiltersIconViewItem::KisFiltersIconViewItem(Q3IconView * parent, const QString & text, const QPixmap & icon,
                                                KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
                                                KisPaintDeviceSP thumb, const QRect & bounds, KisProfile * profile)
-    : QIconViewItem(parent, text, icon)
+    : Q3IconViewItem(parent, text, icon)
     , m_id(id)
     , m_filter(filter)
     , m_filterconfig(filterConfig)
@@ -141,7 +143,7 @@ void KisFiltersListView::init()
 {
     setCaption(i18n("Filters List"));
     setItemsMovable(false);
-    setSelectionMode(QIconView::Single);
+    setSelectionMode(Q3IconView::Single);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding ));
     setMinimumWidth(160);
 

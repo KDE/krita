@@ -23,7 +23,7 @@
 #endif
 
 #include <qbitmap.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
 #include <qlabel.h>
@@ -33,10 +33,12 @@
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qtoolbutton.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #ifdef HAVE_GL
 #include <qgl.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #endif
 
 #include <KoImageResource.h>
@@ -114,7 +116,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     // XXX: Make sure only profiles that fit the specified color model
     // are shown in the profile combos
 
-    QGridLayout * l = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout * l = new Q3GridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
     l->setMargin(0);
     m_page = new WdgColorSettings(this);
     l->addWidget( m_page, 0, 0);
@@ -164,8 +166,8 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
     if ( !csf )
     return;
 
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        QValueVector<KisProfile *> ::iterator it;
+    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+        Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             if ((*it)->deviceClass() == icSigDisplayClass)
                 m_page->cmbMonitorProfile->insertItem((*it)->productName());
@@ -183,8 +185,8 @@ void ColorSettingsTab::refillPrintProfiles(const KisID & s)
     if ( !csf )
         return;
 
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        QValueVector<KisProfile *> ::iterator it;
+    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+        Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             if ((*it)->deviceClass() == icSigOutputClass)
                 m_page->cmbPrintProfile->insertItem((*it)->productName());
@@ -733,7 +735,7 @@ void GridSettingsTab::linkSpacingToggled(bool b)
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default /*| Apply*/, Ok, parent, name, true, true )
 {
-    QVBox *vbox;
+    Q3VBox *vbox;
 
     vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", K3Icon::SizeMedium ));
     m_general = new GeneralTab( vbox );

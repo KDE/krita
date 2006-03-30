@@ -21,6 +21,8 @@
 #include <qthread.h>
 #include <qapplication.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 #include "kis_accumulating_producer.h"
 
@@ -71,7 +73,7 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
 
     uint count = m_source->m_source->count(); // Talk about bad naming schemes...
     KisCachedHistogramObserver::Producers* source = m_source->m_source;
-    QValueVector<vBins>& bins = m_source->m_bins;
+    Q3ValueVector<vBins>& bins = m_source->m_bins;
     int channels = m_source->m_channels;
     int nrOfBins = m_source->m_nrOfBins;
 

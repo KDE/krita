@@ -34,10 +34,13 @@
 #include <qslider.h>
 #include <qstyle.h>
 #include <qlabel.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3Frame>
 
 #include <knuminput.h>
 #include <kglobal.h>
@@ -76,7 +79,7 @@ KisIntSpinbox::KisIntSpinbox(const QString & /*label*/, int val, QWidget *parent
 void KisIntSpinbox::init(int val)
 {
     d = new KisIntSpinboxPrivate( );
-    QBoxLayout * l = new QHBoxLayout( this );
+    Q3BoxLayout * l = new Q3HBoxLayout( this );
 
     l->insertStretch(0, 1);
     d->m_numinput = new KIntSpinBox(0, 100, 1, val, 10, this, "KisIntSpinbox::KIntSpinBox");
@@ -86,7 +89,7 @@ void KisIntSpinbox::init(int val)
     l->addWidget( d->m_numinput );
 
     d->m_slider = new KisPopupSlider(0, 100, 10, val, Qt::Horizontal, this);
-    d->m_slider->setFrameStyle(QFrame::Panel|QFrame::Raised);
+    d->m_slider->setFrameStyle(Q3Frame::Panel|Q3Frame::Raised);
 
     d->m_arrow = new KArrowButton(this, Qt::DownArrow);
     d->m_arrow->setPopup(d->m_slider);

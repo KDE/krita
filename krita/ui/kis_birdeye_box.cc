@@ -22,6 +22,9 @@
 #include "qpixmap.h"
 #include "qpainter.h"
 #include "qimage.h"
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 #include "config.h"
 #include LCMS_HEADER
 #include "klocale.h"
@@ -178,7 +181,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
         , m_view(view)
         , m_subject(view->canvasSubject())
 {
-    QVBoxLayout * l = new QVBoxLayout(this);
+    Q3VBoxLayout * l = new Q3VBoxLayout(this);
 
     m_image = m_subject->currentImg();
 
@@ -193,7 +196,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
     l->addWidget(m_birdEyePanel);
 
-    QHBoxLayout * hl = new QHBoxLayout(l);
+    Q3HBoxLayout * hl = new Q3HBoxLayout(l);
 
     m_exposureLabel = new QLabel(i18n("Exposure:"), this);
     hl->addWidget(m_exposureLabel);

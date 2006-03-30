@@ -87,7 +87,7 @@ void KisToolLine::buttonPress(KisButtonPressEvent *e)
 
     if (!m_subject->currentBrush()) return;
 
-    if (e->button() == QMouseEvent::LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_dragging = true;
         //KisCanvasController *controller = m_subject->canvasController();
         m_startPos = e->pos(); //controller->windowToView(e->pos());
@@ -116,7 +116,7 @@ void KisToolLine::move(KisMoveEvent *e)
 
 void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_dragging && e->button() == QMouseEvent::LeftButton) {
+    if (m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;
         KisCanvasController *controller = m_subject->canvasController();
         KisImageSP img = m_subject->currentImg();

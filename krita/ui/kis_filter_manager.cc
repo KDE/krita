@@ -18,9 +18,11 @@
 
 #include "qsignalmapper.h"
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qcursor.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include <kmessagebox.h>
 #include <kguiitem.h>
 
@@ -352,7 +354,7 @@ void KisFilterManager::slotApplyFilter(int i)
 
         connect(m_lastDialog->previewWidget(), SIGNAL(updated()), this, SLOT(refreshPreview()));
 
-        QGridLayout *widgetLayout = new QGridLayout((QWidget *)m_lastDialog->container(), 1, 1);
+        Q3GridLayout *widgetLayout = new Q3GridLayout((QWidget *)m_lastDialog->container(), 1, 1);
 
         widgetLayout->addWidget(m_lastWidget, 0 , 0);
 

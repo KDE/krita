@@ -91,7 +91,7 @@ void KisToolGradient::buttonPress(KisButtonPressEvent *e)
         return;
     }
 
-    if (e->button() == QMouseEvent::LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_dragging = true;
         m_startPos = e->pos();
         m_endPos = e->pos();
@@ -118,7 +118,7 @@ void KisToolGradient::move(KisMoveEvent *e)
 
 void KisToolGradient::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_dragging && e->button() == QMouseEvent::LeftButton) {
+    if (m_dragging && e->button() == Qt::LeftButton) {
 
         KisCanvasController *controller = m_subject->canvasController();
         KisImageSP img = m_subject->currentImg();

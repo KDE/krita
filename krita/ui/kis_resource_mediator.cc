@@ -24,6 +24,8 @@
 #include "kis_itemchooser.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_mediator.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
                      QObject *parent,
@@ -42,8 +44,8 @@ KisResourceMediator::~KisResourceMediator()
 void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
 {
     // Add the initially loaded items
-    QValueList<KisResource*> resources = rServer->resources();
-    QValueList<KisResource*>::iterator it;
+    Q3ValueList<KisResource*> resources = rServer->resources();
+    Q3ValueList<KisResource*>::iterator it;
     for ( it = resources.begin(); it != resources.end(); ++it )
         rServerAddedResource( *it );
 

@@ -33,11 +33,13 @@
 
 #include <qimage.h>
 #include <qpoint.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qfile.h>
 #include <qregexp.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -158,8 +160,8 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : super(filename)
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
-                                     QValueVector< QValueVector<KisPaintDevice*> > devices,
-                                     QValueVector<KisPipeBrushParasite::SelectionMode> modes)
+                                     Q3ValueVector< Q3ValueVector<KisPaintDevice*> > devices,
+                                     Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes)
     : super("")
 {
     Q_ASSERT(devices.count() == modes.count());
@@ -207,7 +209,7 @@ bool KisImagePipeBrush::init()
 
     // XXX: This stuff is in utf-8, too.
     // The first line contains the name -- this means we look until we arrive at the first newline
-    QValueVector<char> line1;
+    Q3ValueVector<char> line1;
 
     quint32 i = 0;
 
@@ -222,7 +224,7 @@ bool KisImagePipeBrush::init()
     // The second line contains the number of brushes, separated by a space from the parasite
 
     // XXX: This stuff is in utf-8, too.
-     QValueVector<char> line2;
+     Q3ValueVector<char> line2;
      while (m_data[i] != '\n' && i < m_data.size()) {
         line2.append(m_data[i]);
          i++;
@@ -273,7 +275,7 @@ bool KisImagePipeBrush::save()
 
 bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
 {
-    QCString utf8Name = name().utf8(); // Names in v2 brushes are in UTF-8
+    Q3CString utf8Name = name().utf8(); // Names in v2 brushes are in UTF-8
     char const* name = utf8Name.data();
     int len = qstrlen(name);
 
@@ -434,10 +436,10 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const {
     // The obvious way of cloning each brush in this one doesn't work for some reason...
 
     // XXX Multidimensionals not supported yet, change together with the constructor...
-    QValueVector< QValueVector<KisPaintDevice*> > devices;
-    QValueVector<KisPipeBrushParasite::SelectionMode> modes;
+    Q3ValueVector< Q3ValueVector<KisPaintDevice*> > devices;
+    Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes;
 
-    devices.push_back(QValueVector<KisPaintDevice*>());
+    devices.push_back(Q3ValueVector<KisPaintDevice*>());
     modes.push_back(m_parasite.selection[0]);
 
     for (uint i = 0; i < m_brushes.count(); i++) {

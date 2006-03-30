@@ -72,7 +72,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
     CHECK(cs->nColorChannels(), NUM_COLOUR_CHANNELS);
     CHECK(cs->pixelSize(), NUM_CHANNELS * CHANNEL_SIZE);
 
-    QValueVector<KisChannelInfo *> channels = cs->channels();
+    Q3ValueVector<KisChannelInfo *> channels = cs->channels();
 
     // Red
     CHECK(channels[0]->pos(), PIXEL_RED * CHANNEL_SIZE);

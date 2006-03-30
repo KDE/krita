@@ -17,6 +17,8 @@
  */
 #include <qpixmap.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "kis_colorspace.h"
 #include "kis_iterators_pixel.h"
@@ -45,7 +47,7 @@ void KisBoundary::generateBoundary(int w, int h) {
         bool darkTop;
         bool darkBot;
 
-        m_horSegments.append(QValueList<PointPair>());
+        m_horSegments.append(Q3ValueList<PointPair>());
 
         while (!topIt.isDone()) {
             darkTop = cs->getAlpha(topIt.rawData());
@@ -66,7 +68,7 @@ void KisBoundary::generateBoundary(int w, int h) {
         bool darkLeft;
         bool darkRight;
 
-        m_vertSegments.append(QValueList<PointPair>());
+        m_vertSegments.append(Q3ValueList<PointPair>());
 
         while (!leftIt.isDone()) {
             darkLeft = cs->getAlpha(leftIt.rawData());

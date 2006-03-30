@@ -90,7 +90,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Qt::Orientation _orientati
     : Q3Frame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
       m_unit( _unit )
 {
-    setWFlags( Qt::WResizeNoErase | Qt::WNoAutoErase );
+    setWindowFlags( Qt::WResizeNoErase | Qt::WNoAutoErase );
     setFrameStyle( Q3Frame::StyledPanel );
 
     d=new KoRulerPrivate();

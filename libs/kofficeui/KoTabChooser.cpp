@@ -49,7 +49,7 @@ public:
 KoTabChooser::KoTabChooser( QWidget *parent, int _flags )
     : Q3Frame( parent, "" )
 {
-    setFrameStyle( QFrame::StyledPanel );
+    setFrameStyle( Q3Frame::StyledPanel );
     flags = _flags;
     d=new KoTabChooserPrivate();
 

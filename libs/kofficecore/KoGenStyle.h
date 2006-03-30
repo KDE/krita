@@ -21,7 +21,6 @@
 
 #include <qmap.h>
 #include <q3valuevector.h>
-#include <Q3CString>
 #include <QString>
 #include <koffice_export.h>
 
@@ -300,7 +299,7 @@ private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
     int m_type;
-    Q3CString m_familyName;
+    QByteArray m_familyName;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_properties[N_NumTypes];

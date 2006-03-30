@@ -28,7 +28,6 @@
 //Added by qt3to4:
 #include <QLabel>
 #include <QResizeEvent>
-#include <Q3CString>
 #include <Q3PtrList>
 #include <QCloseEvent>
 

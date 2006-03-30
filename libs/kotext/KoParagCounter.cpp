@@ -236,7 +236,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                 m_style = STYLE_BOXBULLET;
                 break;
             default:
-                kWarning() << "Unhandled bullet code 0x" << QString::number( (uint)m_customBulletChar.unicode(), 16 ) << endl;
+                kDebug() << "Unhandled bullet code 0x" << QString::number( (uint)m_customBulletChar.unicode(), 16 ) << endl;
                 // fallback
             case 0x2794: // arrow
             case 0x2717: // cross

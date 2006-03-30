@@ -1846,15 +1846,17 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
     if ( emitAfterFormatting )
     {
         d->afterFormattingEmitted = true;
-        bool abort = false;
-        // Check if we need more space - for proper default value of 'abort'
+        bool needMoreSpace = false;
+        // Check if we need more space
         if ( ( bottom > m_availableHeight ) ||   // this parag is already off page
              ( m_lastFormatted && bottom + m_lastFormatted->rect().height() > m_availableHeight ) ) // or next parag will be off page
-            abort = true;
+            needMoreSpace = true;
+        // default value of 'abort' depends on need more space
+        bool abort = needMoreSpace;
         emit afterFormatting( bottom, m_lastFormatted, &abort );
         if ( abort )
             return false;
-        else if ( m_lastFormatted ) // we got more space, keep formatting then
+        else if ( needMoreSpace && m_lastFormatted ) // we got more space, keep formatting then
             return formatMore( 2 );
     }
 

@@ -620,6 +620,19 @@ KisCanvasWidget::X11TabletDevice::X11TabletDevice(const XDeviceInfo *deviceInfo)
     }
 }
 
+bool KisCanvasWidget::X11TabletDevice::needsFindingActiveByProximity() const
+{
+    // Devices that Qt is aware of will generate QTabletEvents which the view
+    // can use to determine if the device is active. We only need to check
+    // using proximity for other devices which do not generate QTabletEvents.
+    if (m_inputDevice == KisInputDevice::stylus() || m_inputDevice == KisInputDevice::eraser()
+        || m_inputDevice == KisInputDevice::puck()) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 void KisCanvasWidget::X11TabletDevice::setEnabled(bool enabled)
 {
     m_enabled = enabled;
@@ -1075,6 +1088,10 @@ KisInputDevice KisCanvasWidget::findActiveInputDevice()
 
     for (it = X11TabletDeviceMap.begin(); it != X11TabletDeviceMap.end(); ++it) {
         const X11TabletDevice& tabletDevice = (*it).second;
+
+        if (!tabletDevice.needsFindingActiveByProximity()) {
+            continue;
+        }
 
         XDeviceState *deviceState = XQueryDeviceState(QApplication::desktop()->x11Display(),
                                                       tabletDevice.xDevice());

@@ -78,7 +78,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         KisColorSpace* colorSpaceWet = new KisWetColorSpace(f, 0);
 
         KisColorSpaceFactory * csf = new KisWetColorSpaceFactory();
-        Q_CHECK_PTR(colorSpaceWet);
+         Q_CHECK_PTR(colorSpaceWet);
 
         // colorspace
         f->add(csf);
@@ -110,7 +110,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
 
         // Create the wet palette
         KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
-        Q_CHECK_PTR(w);
+         Q_CHECK_PTR(w);
 
         w->setCaption(i18n("Watercolors"));
 

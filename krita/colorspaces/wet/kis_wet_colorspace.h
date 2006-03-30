@@ -119,25 +119,25 @@ public:
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile = 0);
 
     virtual Q_UINT8 getAlpha(const Q_UINT8 * pixel) const;
-    virtual void setAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const;
-    virtual void multiplyAlpha(Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
+    virtual void setAlpha( Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels) const;
+    virtual void multiplyAlpha( Q_UINT8 * pixels, Q_UINT8 alpha, Q_INT32 nPixels);
 
-    virtual void applyAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
-    virtual void applyInverseAlphaU8Mask(Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyAlphaU8Mask( Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
+    virtual void applyInverseAlphaU8Mask( Q_UINT8 * pixels, Q_UINT8 * alpha, Q_INT32 nPixels);
 
     virtual Q_UINT8 scaleToU8(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
-    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+    virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights,  Q_UINT32 nColors, Q_UINT8 *dst) const;
 
     virtual QValueVector<KisChannelInfo *> channels() const;
-    virtual Q_UINT32 nChannels() const;
-    virtual Q_UINT32 nColorChannels() const;
-    virtual Q_UINT32 nSubstanceChannels() const;
-    virtual Q_UINT32 pixelSize() const;
+    virtual  Q_UINT32 nChannels() const;
+    virtual  Q_UINT32 nColorChannels() const;
+    virtual  Q_UINT32 nSubstanceChannels() const;
+    virtual  Q_UINT32 pixelSize() const;
 
-    virtual QString channelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
-    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel, Q_UINT32 channelIndex) const;
+    virtual QString channelValueText(const Q_UINT8 *pixel,  Q_UINT32 channelIndex) const;
+    virtual QString normalisedChannelValueText(const Q_UINT8 *pixel,  Q_UINT32 channelIndex) const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                        KisProfile *  dstProfile,
@@ -162,7 +162,7 @@ public:
         dst->w = src1->w + src2->w;
     }
 protected:
-    virtual void bitBlt(Q_UINT8 *dst,
+    virtual void bitBlt( Q_UINT8 *dst,
             Q_INT32 dstRowSize,
             const Q_UINT8 *src,
             Q_INT32 srcRowStride,
@@ -182,10 +182,10 @@ private:
     typedef enum { RGB, BGR } RGBMode;
     void wet_composite(RGBMode m, Q_UINT8 *rgb, WetPix * wet);
 
-    void wet_render_wetness(Q_UINT8 * rgb, WetPack * pack);
+    void wet_render_wetness( Q_UINT8 * rgb, WetPack * pack);
 
 private:
-    Q_UINT32 * wet_render_tab;
+     Q_UINT32 * wet_render_tab;
 
     QStringList m_paintNames;
     QMap<int, WetPix> m_conversionMap;
@@ -207,7 +207,7 @@ public:
     /**
      * lcms colorspace type definition.
      */
-    virtual Q_UINT32 colorSpaceType() { return 0; };
+    virtual  Q_UINT32 colorSpaceType() { return 0; };
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; };
 

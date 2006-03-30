@@ -44,7 +44,7 @@ KisTexturePainter::KisTexturePainter(KisPaintDeviceSP device) : super(device)
     m_blurh = 0.7;
 }
 
-void KisTexturePainter::createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
+void KisTexturePainter::createTexture( Q_INT32 x,  Q_INT32 y,  Q_INT32 w,  Q_INT32 h)
 {
     double hscale = 128 * m_height / RAND_MAX;
 
@@ -56,7 +56,7 @@ void KisTexturePainter::createTexture(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h
         while (!i.isDone()) {
             WetPack* pack = reinterpret_cast<WetPack*>(i.rawData());
             WetPix* w = &(pack->adsorb);
-            w->h = (Q_UINT16)floor(128 + hscale * rand());
+            w->h = ( Q_UINT16)floor(128 + hscale * rand());
             ++i;
         }
     }

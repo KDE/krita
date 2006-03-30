@@ -40,7 +40,7 @@ class KRITAUI_EXPORT KisWetPaletteWidget
      : public QWidget,
        public KisCanvasObserver
 {
-    Q_OBJECT
+     Q_OBJECT
     typedef QWidget super;
 
 public:

@@ -54,32 +54,15 @@ public:
     virtual bool supportsPreview() { return false; }
     virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
     virtual bool workWith(KisColorSpace* cs) { return (cs->id() == KisID("WET")); };
-    
-private:
-
-    void flow(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
-    void dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
-
-    // Move stuff from the upperlayer to the lower layer. This is filter-level stuff.
-    void adsorb(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r);
-
-    // NOTE: this does not set the height fields
-    void combinePixels (WetPixDbl *dst, WetPixDbl *src1, WetPixDbl *src2);
-    void dilutePixel (WetPixDbl *dst, WetPix *src, double dilution);
-    void reducePixel (WetPixDbl *dst, WetPix *src, double dilution);
-
-    /*
-     * Allows visualization of adsorption by rotating the hue 120 degrees
-     * layer-merge combining. src1 is the top layer
-     *
-     * This does not set the dst h or w fields.
-     */
-    void mergePixel (WetPixDbl *dst, WetPixDbl *src1, double dilution1, WetPixDbl *src2);
-
 
 private:
 
-    Q_INT32 m_adsorbCount;
+    // Move paint from the paint part of the pixel to the adsorb part.
+    void adsorbPixel(WetPix * paint, WetPix * adsorb);
+
+private:
+
+     Q_INT32 m_adsorbCount;
 
 
 };

@@ -30,7 +30,7 @@ class WetPaintDevAction : public KisPaintDeviceAction {
 public:
     virtual ~WetPaintDevAction() {}
 
-    virtual void act(KisPaintDeviceSP device, Q_INT32 w = 0, Q_INT32 h = 0) const;
+    virtual void act(KisPaintDeviceSP device,  Q_INT32 w = 0,  Q_INT32 h = 0) const;
     virtual QString name() const { return i18n("Wet Texture"); }
     virtual QString description() const { return i18n("Add a texture to the wet canvas"); }
 };

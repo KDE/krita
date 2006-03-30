@@ -25,7 +25,7 @@
 #include "kis_texture_painter.h"
 #include "kis_texture_filter.h"
 
-void WetPaintDevAction::act(KisPaintDeviceSP device, Q_INT32 w, Q_INT32 h) const {
+void WetPaintDevAction::act(KisPaintDeviceSP device,  Q_INT32 w,  Q_INT32 h) const {
     KisColorSpace * cs = device->colorSpace();
 
     if (cs->id() != KisID("WET","")) {

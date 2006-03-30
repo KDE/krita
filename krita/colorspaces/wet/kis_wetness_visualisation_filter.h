@@ -29,7 +29,7 @@ class KisView;
 
 class WetnessVisualisationFilter : public QObject
 {
-Q_OBJECT
+ Q_OBJECT
 public:
     WetnessVisualisationFilter(KisView* view);
     virtual ~WetnessVisualisationFilter() {}

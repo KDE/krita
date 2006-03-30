@@ -40,356 +40,203 @@ WetPhysicsFilter::WetPhysicsFilter()
     m_adsorbCount = 0;
 }
 
-void WetPhysicsFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
+
+void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& r)
 {
-    // XXX: It would be nice be able to interleave this, instead of having the same loop over
-    //      our pixels three times.
-    //flow(src, dst, rect);
-    if (m_adsorbCount++ == 2) {
-        // XXX I think we could combine dry and adsorb, yes
-        adsorb(src, dst, rect);
-        dry(src, dst, rect);
-        m_adsorbCount = 0;
-    }
-}
+     kdDebug() << "Wetphysics filter called " << dst->name() << ", " << r << endl;
+    /*
+      This is actually a kind of convolution filter. Use the slow but clear way of convolving
+      until I get the physics right; then move to the faster way of convolving from the convolution
+      painter.
+    */
+    
+    // Loop through all pixels
+    KisHLineIterator topIt = dst->createHLineIterator(r.x(), r.y(), r.width(), true);
+    KisHLineIterator midIt = dst->createHLineIterator(r.x() + 1, r.y(), r.width(), true);
+    KisHLineIterator botIt = dst->createHLineIterator(r.x() + 2, r.y(), r.width(), true);
 
+    
+    // Old pixel values
+    const WetPack * topLeftOld = reinterpret_cast<const WetPack*>(topIt.oldRawData());
+    WetPack * topLeft = reinterpret_cast<WetPack*>(topIt.rawData());
+    ++topIt;
+    const WetPack * topMidOld = reinterpret_cast<const WetPack*>(topIt.oldRawData());
+    WetPack * topMid = reinterpret_cast<WetPack*>(topIt.rawData());
+    ++topIt;
+    const WetPack * topRightOld = reinterpret_cast<const WetPack*>(topIt.oldRawData());
+    WetPack * topRight = reinterpret_cast<WetPack*>(topIt.rawData());
+    
+    const WetPack * curLeftOld = reinterpret_cast<const WetPack*>(midIt.oldRawData());
+    WetPack * curLeft = reinterpret_cast<WetPack*>(midIt.rawData());
+    ++midIt;
+    const WetPack * currentOld = reinterpret_cast<const WetPack*>(midIt.oldRawData());
+    WetPack * current = reinterpret_cast<WetPack*>(midIt.rawData());
+    ++midIt;
+    const WetPack * curRightOld = reinterpret_cast<const WetPack*>(midIt.oldRawData());
+    WetPack * curRight = reinterpret_cast<WetPack*>(midIt.rawData());
+    
+    const WetPack * botLeftOld = reinterpret_cast<const WetPack*>(botIt.oldRawData());
+    WetPack * botLeft = reinterpret_cast<WetPack*>(botIt.rawData());
+    ++botIt;
+    const WetPack * botMidOld = reinterpret_cast<const WetPack*>(botIt.oldRawData());
+    WetPack * botMid = reinterpret_cast<WetPack*>(botIt.rawData());
+    ++botIt;
+    const WetPack * botRightOld = reinterpret_cast<const WetPack*>(botIt.oldRawData());
+    WetPack * botRight = reinterpret_cast<WetPack*>(botIt.rawData());
+    
+    int x = r.x();
+    int y = r.y();
+    while (y < r.height()) {
+        WetPix paint = current->paint;
+        WetPix adsorb = current->adsorb;
 
-void WetPhysicsFilter::flow(KisPaintDeviceSP src, KisPaintDeviceSP /*dst*/, const QRect & r)
-{
-    /* XXX: Is this like a convolution operation? BSAR */
-    int width = r.width();
-    int height = r.height();
+        // Only wet pixels can attract wetness -- this simulates the boundary
+        // between wet and dry areas and the surface tension of waterdrops. I hope.
+        if (paint.w > 0) {
 
-    /* width of a line in a layer in pixel units, not in bytes -- used to move to the next
-       line in the fluid masks below */
-    int rs = width; // rowstride
+            // Dry a little: just subtract 1 from the wetness, if there's still wetness. Whether this is
+            // accurate remains to be seen. This simulates drying to the air, not adsorbing wetness into
+            // the paper.
+            paint.w -= 1;
 
-    double * flow_t  = new double[width * height];
-    Q_CHECK_PTR(flow_t);
-
-    double * flow_b  = new double[width * height];
-    Q_CHECK_PTR(flow_b);
-
-    double * flow_l  = new double[width * height];
-    Q_CHECK_PTR(flow_l);
-
-    double * flow_r  = new double[width * height];
-    Q_CHECK_PTR(flow_r);
-
-    double * fluid   = new double[width * height];
-    Q_CHECK_PTR(fluid);
-
-    double * outflow = new double[width * height];
-    Q_CHECK_PTR(outflow);
-
-    // Height of the paper surface. Do we also increase height because of paint deposits?
-    int my_height;
-
-    // Flow to the top, bottom, left, right of the currentpixel
-    double ft, fb, fl, fr;
-
-    // Temporary pixel constructs
-    WetPixDbl wet_mix, wet_tmp;
-
-    // XXX If the flow touches areas that have not been initialized with a height field yet,
-    // create a heigth field.
-
-    // We need three iterators, because we're working on a five-point convolution kernel (no corner pixels are being used)
-
-    // First iteration: compute fluid deposits around the paper.
-    Q_INT32 dx, dy;
-    dx = r.x();
-    dy = r.y();
-
-    int ix = width + 1; // keeps track where we are in the one-dimensional arrays
-
-    for (Q_INT32 y2 = 1; y2 < height - 1; ++y2) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(dx, dy + y2, width, false);
-        KisHLineIteratorPixel upIt = src->createHLineIterator(dx + 1, dy + y2 - 1, width - 2, false);
-        KisHLineIteratorPixel downIt = src->createHLineIterator(dx + 1, dy + y2 + 1, width - 2, false);
-
-        // .paint is the first field in our wetpack, so this is ok (even though not nice)
-        WetPix left = *(reinterpret_cast<WetPix*>(srcIt.rawData()));
-        ++srcIt;
-        WetPix current = *(reinterpret_cast<WetPix*>(srcIt.rawData()));
-        ++srcIt;
-        WetPix right = *(reinterpret_cast<WetPix*>(srcIt.rawData()));
-        WetPix up, down;
-
-        while (!srcIt.isDone()) {
-            up = *(reinterpret_cast<WetPix*>(upIt.rawData()));
-            down = *(reinterpret_cast<WetPix*>(downIt.rawData()));
-
-            if (current.w > 0) {
-                my_height = current.h + current.w;
-                ft = (up.h + up.w) - my_height;
-                fb = (down.h + down.w) - my_height;
-                fl = (left.h + left.w) - my_height;
-                fr = (right.h + right.w) - my_height;
-
-                fluid[ix] = 0.4 * sqrt(current.w * 1.0 / 255.0);
-
-                /* smooth out the flow a bit */
-                flow_t[ix] = CLAMP(0.1 * (10 + ft * 0.75 - fb * 0.25), 0, 1);
-
-                flow_b[ix] = CLAMP(0.1 * (10 + fb * 0.75 - ft * 0.25), 0, 1);
-
-                flow_l[ix] = CLAMP(0.1 * (10 + fl * 0.75 - fr * 0.25), 0, 1);
-
-                flow_r[ix] = CLAMP(0.1 * (10 + fr * 0.75 - fl * 0.25), 0, 1);
-
-                outflow[ix] = 0;
+            // Adsorb: this means that the pigment is glued onto the paper. In real terms: pigment gets
+            // transfered to the adsorp layer. We don't yet simulate the reverse, although that's possible
+            // with real watercolor paint.
+            adsorbPixel(&paint, &adsorb);
+            
+            // Flow to the lower parts
+            if (paint.h < topLeft->paint.h) {
             }
-
-            ++srcIt;
-            ++upIt;
-            ++downIt;
-            ix++;
-            left = current;
-            current = right;
-            right = *(reinterpret_cast<WetPix*>(srcIt.rawData()));
-        }
-        ix+=2; // one for the last pixel on the line, and one for the first of the next line
-    }
-    // Second iteration: Reduce flow in dry areas
-    ix = width + 1;
-
-    for (Q_INT32 y2 = 1; y2 < height - 1; ++y2) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(dx + 1, dy + y2, width - 2, false);
-        while (!srcIt.isDone()) {
-            if ((reinterpret_cast<WetPix*>(srcIt.rawData()))->w > 0) {
-                /* reduce flow in dry areas */
-                flow_t[ix] *= fluid[ix] * fluid[ix - rs];
-                outflow[ix - rs] += flow_t[ix];
-                flow_b[ix] *= fluid[ix] * fluid[ix + rs];
-                outflow[ix + rs] += flow_b[ix];
-                flow_l[ix] *= fluid[ix] * fluid[ix - 1];
-                outflow[ix - 1] += flow_l[ix];
-                flow_r[ix] *= fluid[ix] * fluid[ix + 1];
-                outflow[ix + 1] += flow_r[ix];
+            if (paint.h < topMid->paint.h) {
             }
-            ++srcIt;
-            ix++;
-        }
-        ix += 2;
-    }
-
-    // Third iteration: Combine the paint from the flow areas.
-    ix = width + 1;
-    for (Q_INT32 y2 = 1; y2 < height - 1; ++y2) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(dx, dy + y2, width, false);
-        KisHLineIteratorPixel upIt = src->createHLineIterator(dx + 1, dy + y2 - 1, width - 2, false);
-        KisHLineIteratorPixel downIt = src->createHLineIterator(dx + 1, dy + y2 + 1, width - 2, false);
-
-        KisHLineIteratorPixel dstIt = src->createHLineIterator(dx + 1, dy + y2, width - 2, true);
-
-        WetPix left = *(reinterpret_cast<const WetPix*>(srcIt.oldRawData()));
-        ++srcIt;
-        WetPix current = *(reinterpret_cast<const WetPix*>(srcIt.oldRawData()));
-        ++srcIt;
-        WetPix right = *(reinterpret_cast<const WetPix*>(srcIt.oldRawData()));
-        WetPix up, down;
-
-        while (!srcIt.isDone()) {
-            up = *(reinterpret_cast<const WetPix*>(upIt.oldRawData()));
-            down = *(reinterpret_cast<const WetPix*>(downIt.oldRawData()));
-
-            if ((reinterpret_cast<WetPix*>(srcIt.rawData()))->w > 0) {
-                reducePixel(&wet_mix, &current, 1 - outflow[ix]);
-                reducePixel(&wet_tmp, &up, flow_t[ix]);
-                combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-                reducePixel(&wet_tmp, &down, flow_b[ix]);
-                combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-                reducePixel(&wet_tmp, &left, flow_l[ix]);
-                combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-                reducePixel(&wet_tmp, &right, flow_r[ix]);
-                combinePixels(&wet_mix, &wet_mix, &wet_tmp);
-                WetPix* target = reinterpret_cast<WetPix*>(dstIt.rawData());
-                wetPixFromDouble(target, &wet_mix);
+            if (paint.h < topRight->paint.h) {
             }
-            ++srcIt;
-            ++dstIt;
-            ++upIt;
-            ++downIt;
-            ix++;
-
-            left = current;
-            current = right;
-            right = *(reinterpret_cast<const WetPix*>(srcIt.oldRawData()));
-        }
-        ix += 2;
-    }
-
-    delete[] flow_t;
-    delete[] flow_b;
-    delete[] flow_l;
-    delete[] flow_r;
-    delete[] fluid;
-    delete[] outflow;
-}
-
-void WetPhysicsFilter::dry(KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect & r)
-{
-    for (Q_INT32 y = 0; y < r.height(); y++) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), false);
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x(), r.y() + y, r.width(), true);
-
-        Q_UINT16 w;
-        while (!srcIt.isDone()) {
-            // Two wet pixels in one KisWetColorSpace pixels.
-
-            WetPack pack = *(reinterpret_cast<WetPack*>(srcIt.rawData()));
-            WetPix* p = &(pack.paint);
-
-            w = p->w; // no -1 here because we work on unsigned ints!
-
-            if (w > 0)
-                p->w = w - 1;
-            else
-                p->w = 0;
-
-            *(reinterpret_cast<WetPack*>(dstIt.rawData())) = pack;
-
-            ++dstIt;
-            ++srcIt;
-        }
-    }
-}
-
-void WetPhysicsFilter::adsorb(KisPaintDeviceSP src, KisPaintDeviceSP /*dst*/, const QRect & r)
-{
-    for (Q_INT32 y = 0; y < r.height(); y++) {
-        KisHLineIteratorPixel srcIt = src->createHLineIterator(r.x(), r.y() + y, r.width(), true);
-
-        double ads;
-
-        WetPixDbl wet_top;
-        WetPixDbl wet_bot;
-
-        WetPack * pack;
-        Q_UINT16 w;
-
-        while (!srcIt.isDone()) {
-            // Two wet pixels in one KisWetColorSpace pixels.
-            pack = reinterpret_cast<WetPack*>(srcIt.rawData());
-            WetPix* paint = &pack->paint;
-            WetPix* adsorb = &pack->adsorb;
-
-            /* do adsorption */
-            w = paint->w;
-
-            if (w == 0) {
-                ++srcIt;
+            if (paint.h < curLeft->paint.h) {
             }
-            else {
-
-                ads = 0.5 / QMAX(w, 1);
-
-                wetPixToDouble(&wet_top, paint);
-                wetPixToDouble(&wet_bot, adsorb);
-
-                mergePixel(&wet_bot, &wet_top, ads, &wet_bot);
-                wetPixFromDouble(adsorb, &wet_bot);
-
-                paint->rd *= (Q_UINT16)(1 - ads);
-                paint->rw *= (Q_UINT16)(1 - ads);
-                paint->gd *= (Q_UINT16)(1 - ads);
-                paint->gw *= (Q_UINT16)(1 - ads);
-                paint->bd *= (Q_UINT16)(1 - ads);
-                paint->bw *= (Q_UINT16)(1 - ads);
-
-                ++srcIt;
+            if (paint.h < curRight->paint.h) {
             }
+            if (paint.h < botLeft->paint.h) {
+            }
+            if (paint.h < botMid->paint.h) {
+            }
+            if (paint.h < botRight->paint.h) {
+            }
+            
         }
+
+        ++x;
+        
+        if (x == r.width() - r.x()) {
+            topIt.nextRow();
+            midIt.nextRow();
+            botIt.nextRow();
+            //kdDebug() << "Done one row: " << y << "\n";
+            x = 0;
+            ++y;
+        }
+
+        ++topIt;
+        ++midIt;
+        ++botIt;
+        
+        topLeftOld = topMidOld;
+        topLeft = topMid;
+        topMidOld = topRightOld;
+        topMid = topRight;
+        topRightOld = reinterpret_cast<const WetPack*>(topIt.oldRawData());
+        topRight = reinterpret_cast<WetPack*>(topIt.rawData());
+    
+        curLeftOld = currentOld;
+        curLeft = current;
+        currentOld = curRightOld;
+        current = curRight;
+        curRightOld = reinterpret_cast<const WetPack*>(midIt.oldRawData());
+        curRight = reinterpret_cast<WetPack*>(midIt.rawData());
+    
+        botLeftOld = botMidOld;
+        botLeft = botMid;
+        botMidOld = botRightOld;
+        botMid = botRight;
+        botRightOld = reinterpret_cast<const WetPack*>(botIt.oldRawData());
+        botRight = reinterpret_cast<WetPack*>(botIt.rawData());
+        
+    
     }
+
 }
 
-void WetPhysicsFilter::combinePixels (WetPixDbl *dst, WetPixDbl *src1, WetPixDbl *src2)
+void WetPhysicsFilter::adsorbPixel(WetPix * paint, WetPix * adsorb)
 {
-    dst->rd = src1->rd + src2->rd;
-    dst->rw = src1->rw + src2->rw;
-    dst->gd = src1->gd + src2->gd;
-    dst->gw = src1->gw + src2->gw;
-    dst->bd = src1->bd + src2->bd;
-    dst->bw = src1->bw + src2->bw;
-    dst->w = src1->w + src2->w;
-}
+    WetPixDbl wet_top;
+    WetPixDbl wet_bot;
+    double ads;
+    
+    ads = 0.5 / QMAX(paint->w, 1);
+    
+    wetPixToDouble(&wet_top, paint);
+    wetPixToDouble(&wet_bot, adsorb);
 
-void WetPhysicsFilter::dilutePixel (WetPixDbl *dst, WetPix *src, double dilution)
-{
-    double scale = dilution * (1.0 / 8192.0);
-
-    dst->rd = src->rd * scale;
-    dst->rw = src->rw * scale;
-    dst->gd = src->gd * scale;
-    dst->gw = src->gw * scale;
-    dst->bd = src->bd * scale;
-    dst->bw = src->bw * scale;
-    dst->w = src->w * (1.0 / 8192.0);
-    dst->h = src->h * (1.0 / 8192.0);
-}
-
-
-void WetPhysicsFilter::reducePixel (WetPixDbl *dst, WetPix *src, double dilution)
-{
-    dilutePixel(dst, src, dilution);
-    dst->w *= dilution;
-}
-
-void WetPhysicsFilter::mergePixel (WetPixDbl *dst, WetPixDbl *src1, double dilution1,
-                                   WetPixDbl *src2)
-{
     double d1, w1, d2, w2;
     double ed1, ed2;
 
-    if (src1->rd < 1e-4) {
-        dst->rd = src2->rd;
-        dst->rw = src2->rw;
-    } else if (src2->rd < 1e-4) {
-        dst->rd = src1->rd * dilution1;
-        dst->rw = src1->rw * dilution1;
+    if (wet_top.rd < 0.0001) {
+        // wet_bot.rd = wet_bot.rd;
+        // wet_bot.rw = wet_bot.rw;
+    } else if (wet_bot.rd < 0.0001) {
+        wet_bot.rd = wet_top.rd * ads;
+        wet_bot.rw = wet_top.rw * ads;
     } else {
-        d1 = src1->rd;
-        w1 = src1->rw;
-        d2 = src2->rd;
-        w2 = src2->rw;
-        dst->rd = d1 * dilution1 + d2;
-        ed1 = exp(-d1 * dilution1);
+        d1 = wet_top.rd;
+        w1 = wet_top.rw;
+        d2 = wet_bot.rd;
+        w2 = wet_bot.rw;
+        wet_bot.rd = d1 * ads + d2;
+        ed1 = exp(-d1 * ads);
         ed2 = exp(-d2);
-        dst->rw = dst->rd * ((1 - ed1) * w1 / d1 + ed1 * (1 - ed2) * w2 / d2) /  (1 - ed1 * ed2);
+        wet_bot.rw = wet_bot.rd * ((1 - ed1) * w1 / d1 + ed1 * (1 - ed2) * w2 / d2) / (1 - ed1 * ed2);
     }
 
-    if (src1->gd < 1e-4) {
-        dst->gd = src2->gd;
-        dst->gw = src2->gw;
-    } else if (src2->gd < 1e-4) {
-        dst->gd = src1->gd * dilution1;
-        dst->gw = src1->gw * dilution1;
+    if (wet_top.gd < 0.0001) {
+        //wet_bot.gd = wet_bot.gd;
+        //wet_bot.gw = wet_bot.gw;
+    } else if (wet_bot.gd < 0.0001) {
+        wet_bot.gd = wet_top.gd * ads;
+        wet_bot.gw = wet_top.gw * ads;
     } else {
-        d1 = src1->gd;
-        w1 = src1->gw;
-        d2 = src2->gd;
-        w2 = src2->gw;
-        dst->gd = d1 * dilution1 + d2;
-        ed1 = exp(-d1 * dilution1);
+        d1 = wet_top.gd;
+        w1 = wet_top.gw;
+        d2 = wet_bot.gd;
+        w2 = wet_bot.gw;
+        wet_bot.gd = d1 * ads + d2;
+        ed1 = exp(-d1 * ads);
         ed2 = exp(-d2);
-        dst->gw = dst->gd * ((1 - ed1) * w1 / d1 + ed1 * (1 - ed2) * w2 / d2) / (1 - ed1 * ed2);
+        wet_bot.gw = wet_bot.gd * ((1 - ed1) * w1 / d1 + ed1 * (1 - ed2) * w2 / d2) / (1 - ed1 * ed2);
     }
 
-    if (src1->bd < 1e-4) {
-        dst->bd = src2->bd;
-        dst->bw = src2->bw;
-    } else if (src2->bd < 1e-4) {
-        dst->bd = src1->bd * dilution1;
-        dst->bw = src1->bw * dilution1;
+    if (wet_top.bd < 0.0001) {
+        //wet_bot.bd = wet_bot.bd;
+        //wet_bot.bw = wet_bot.bw;
+    } else if (wet_bot.bd < 0.0001) {
+        wet_bot.bd = wet_top.bd * ads;
+        wet_bot.bw = wet_top.bw * ads;
     } else {
-        d1 = src1->bd;
-        w1 = src1->bw;
-        d2 = src2->bd;
-        w2 = src2->bw;
-        dst->bd = d1 * dilution1 + d2;
-        ed1 = exp(-d1 * dilution1);
+        d1 = wet_top.bd;
+        w1 = wet_top.bw;
+        d2 = wet_bot.bd;
+        w2 = wet_bot.bw;
+        wet_bot.bd = d1 * ads + d2;
+        ed1 = exp(-d1 * ads);
         ed2 = exp(-d2);
-        dst->bw = dst->bd * ((1 - ed1) * w1 / d1 + ed1 * (1 - ed2) * w2 / d2) / (1 - ed1 * ed2);
+        wet_bot.bw = wet_bot.bd * ((1 - ed1) * w1 / d1 + ed1 * (1 - ed2) * w2 / d2) / (1 - ed1 * ed2);
     }
+    
+    wetPixFromDouble(adsorb, &wet_bot);
+
+    paint->rd *= ( Q_UINT16)(1 - ads);
+    paint->rw *= ( Q_UINT16)(1 - ads);
+    paint->gd *= ( Q_UINT16)(1 - ads);
+    paint->gw *= ( Q_UINT16)(1 - ads);
+    paint->bd *= ( Q_UINT16)(1 - ads);
+    paint->bw *= ( Q_UINT16)(1 - ads);
+
 }

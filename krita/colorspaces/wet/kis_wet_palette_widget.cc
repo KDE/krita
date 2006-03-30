@@ -192,14 +192,14 @@ void KisWetPaletteWidget::update(KisCanvasSubject *subject)
 void KisWetPaletteWidget::slotFGColorSelected(const QColor& c)
 {
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("WET", ""), ""));
-    Q_ASSERT(cs);
+     Q_ASSERT(cs);
 
     WetPack pack;
-    Q_UINT8* data = reinterpret_cast<Q_UINT8*>(&pack);
+    Q_UINT8* data = reinterpret_cast< Q_UINT8*>(&pack);
     cs->fromQColor(c, data);
     pack.paint.w = 15 * m_wetness->value();
     // upscale from double to uint16:
-    pack.paint.h = static_cast<Q_UINT16>(m_strength->value() * (double)(0xffff/2));
+    pack.paint.h = static_cast< Q_UINT16>(m_strength->value() * (double)(0xffff/2));
     KisColor color(data, cs);
 
     if(m_subject)
@@ -212,14 +212,14 @@ void KisWetPaletteWidget::slotWetnessChanged(int n)
         return;
 
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("WET", ""), ""));
-    Q_ASSERT(cs);
+     Q_ASSERT(cs);
 
     KisColor color = m_subject->fgColor();
     color.convertTo(cs);
     WetPack pack = *(reinterpret_cast<WetPack*>(color.data()));
     pack.paint.w = 15 * n;
 
-    color.setColor(reinterpret_cast<Q_UINT8*>(&pack), cs);
+    color.setColor(reinterpret_cast<  Q_UINT8*>(&pack), cs);
     m_subject->setFGColor(color);
 }
 
@@ -230,14 +230,14 @@ void KisWetPaletteWidget::slotStrengthChanged(double n)
 
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
             KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("WET", ""), ""));
-    Q_ASSERT(cs);
+     Q_ASSERT(cs);
 
     KisColor color = m_subject->fgColor();
     color.convertTo(cs);
     WetPack pack = *(reinterpret_cast<WetPack*>(color.data()));
-    pack.paint.h = static_cast<Q_UINT16>(n * (double)(0xffff/2)); // upscale from double to uint16
+    pack.paint.h = static_cast< Q_UINT16>(n * (double)(0xffff/2)); // upscale from double to uint16
 
-    color.setColor(reinterpret_cast<Q_UINT8*>(&pack), cs);
+    color.setColor(reinterpret_cast<  Q_UINT8*>(&pack), cs);
     m_subject->setFGColor(color);
 }
 

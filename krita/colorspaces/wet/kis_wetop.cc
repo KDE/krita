@@ -60,10 +60,10 @@ bool KisWetOpSettings::varyStrength() const
 KisPaintOp * KisWetOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
 {
     const KisWetOpSettings *wetopSettings = dynamic_cast<const KisWetOpSettings *>(settings);
-    Q_ASSERT(settings == 0 || wetopSettings != 0);
+     Q_ASSERT(settings == 0 || wetopSettings != 0);
 
     KisPaintOp * op = new KisWetOp(wetopSettings, painter);
-    Q_CHECK_PTR(op);
+     Q_CHECK_PTR(op);
     return op;
 }
 
@@ -105,7 +105,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (!m_painter->device()) return;
 
     KisBrush *brush = m_painter->brush();
-    Q_ASSERT(brush);
+     Q_ASSERT(brush);
 
     if (! brush->canPaintFor(info) )
         return;
@@ -145,13 +145,20 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // the paint
     // double wetness = paint.w; // XXX: Was unused
     // strength is a double in the 0 - 2 range, but upscaled to Q_UINT16:
-    double strength = 16.0 * static_cast<double>(paint.h) / (double)(0xffff);
+    kdDebug() << "Original strength as in paint.h: " << paint.h << endl;
+    
+    double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
+
+    kdDebug() << "Before strength: " << strength << endl;
+    
     if (m_strength)
         strength = strength * (strength + info.pressure) * 0.5;
     else
         strength = strength * (strength + PRESSURE_DEFAULT) * 0.5;
 
-    //kdDebug() << "Strength: " << strength << endl;
+    double pressure = 0.75 + 0.25 * info.pressure;
+    
+    kdDebug() << "info.pressure " << info.pressure << ", local pressure: " << pressure << ", strength: " << strength << endl;
     
     WetPack currentPack;
     WetPix currentPix;
@@ -176,45 +183,41 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
             // Hardcoded threshold for the dab 'strength': above it, it will get painted
             if (*dabIt.rawData() > 125)
-                press = info.pressure * 0.25;
+                press = pressure * 0.25;
             else
                 press = -1;
-
-//            kdDebug() << "Rawdata: " << *dabIt.rawData() << endl;
-//            kdDebug() << "Press: " << press << endl;
-            
+            //kdDebug() << "After mysterious line, press becomes: " << press << ", this is the same as in the orignal. Good" << endl;
             // XXX - 192 is probably only useful for paper with a texture...
             eff_height = (currentData.h + currentData.w - 192.0) * (1.0 / 255.0);
-//            kdDebug() << "eff_height: " << eff_height << endl;
             contact = (press + eff_height) * 0.2;
-//            kdDebug() << "contact: " << contact << endl;
+            double old_contact = contact;
             if (contact > 0.5)
                 contact = 1.0 - 0.5 * exp(-2.0 * contact - 1.0);
-            if (press != -1 && currentData.h < 161) {
-                //kdDebug() << contact << " " << press << " " << eff_height << endl;
-            }
+
+            //kdDebug() << "Contact was " << old_contact << " and has become: " << contact << endl;
             if (contact > 0.0001) {
                 int v;
                 double rnd = rand() * (1.0 / RAND_MAX);
 
                 v = currentPix.rd;
-                currentPix.rd = (Q_UINT16) floor(v + (paint.rd * strength - v) * contact + rnd);
+                currentPix.rd = floor(v + (paint.rd * strength - v) * contact + rnd);
+                //kdDebug() << "Rd was " << v << " and has become " << currentPix.rd << endl;
                 v = currentPix.rw;
-                currentPix.rw = (Q_UINT16) floor(v + (paint.rw * strength - v) * contact + rnd);
+                currentPix.rw = floor(v + (paint.rw * strength - v) * contact + rnd);
                 v = currentPix.gd;
-                currentPix.gd = (Q_UINT16) floor(v + (paint.gd * strength - v) * contact + rnd);
+                currentPix.gd = floor(v + (paint.gd * strength - v) * contact + rnd);
                 v = currentPix.gw;
-                currentPix.gw = (Q_UINT16) floor(v + (paint.gw * strength - v) * contact + rnd);
+                currentPix.gw = floor(v + (paint.gw * strength - v) * contact + rnd);
                 v = currentPix.bd;
-                currentPix.bd = (Q_UINT16) floor(v + (paint.bd * strength - v) * contact + rnd);
+                currentPix.bd = floor(v + (paint.bd * strength - v) * contact + rnd);
                 v = currentPix.bw;
-                currentPix.bw = (Q_UINT16) floor(v + (paint.bw * strength - v) * contact + rnd);
+                currentPix.bw = floor(v + (paint.bw * strength - v) * contact + rnd);
                 v = currentPix.w;
                 if (m_wetness)
-                    currentPix.w = (Q_UINT16)(CLAMP(floor(
-                          v + (paint.w * (0.5 + info.pressure) - v) * contact + rnd), 0, 512));
+                    currentPix.w = (CLAMP(floor(
+                          v + (paint.w * (0.5 + pressure) - v) * contact + rnd), 0, 512));
                 else
-                    currentPix.w = (Q_UINT16) floor(v + (paint.w - v) * contact + rnd);
+                    currentPix.w = floor(v + (paint.w - v) * contact + rnd);
 
                 currentPack.paint = currentPix;
                 *(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;

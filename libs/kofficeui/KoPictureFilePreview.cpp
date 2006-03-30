@@ -44,7 +44,9 @@ class KoPictureFilePreviewWidget : public Q3ScrollView
 {
 public:
     KoPictureFilePreviewWidget( QWidget *parent )
-        : Q3ScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
+        : Q3ScrollView( parent ) {
+        viewport()->setBackgroundRole( Qt::Base );
+    }
 
     bool setPicture( const KUrl& url )
     {

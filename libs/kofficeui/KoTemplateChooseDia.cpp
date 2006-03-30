@@ -61,6 +61,7 @@
 #include <Q3GridLayout>
 #include <Q3Frame>
 #include <QLabel>
+#include <QGroupBox>
 
 class MyFileDialog : public KFileDialog
 {
@@ -165,7 +166,7 @@ class KoTemplateChooseDiaPrivate {
 	// choose a template
 	KJanusWidget * m_jwidget;
 	KFileIconView *m_recent;
-	QVGroupBox * boxdescription;
+	QGroupBox * boxdescription;
 	KTextEdit * textedit;
 
 	// choose a file
@@ -229,7 +230,7 @@ KoTemplateChooseDia::~KoTemplateChooseDia()
 // Keep in sync with KoMainWindow::chooseNewDocument
 static bool cancelQuits() {
     bool onlyDoc = !KoDocument::documentList() || KoDocument::documentList()->count() <= 1;
-    bool onlyMainWindow = !KMainWindow::memberList || KMainWindow::memberList->count() <= 1;
+    bool onlyMainWindow = KMainWindow::memberList().count() <= 1;
     return onlyDoc && onlyMainWindow && kapp->instanceName() != "koshell"; // hack for koshell
 }
 
@@ -363,24 +364,15 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, Q3GridLayout * l
     d->m_filedialog->reparent( widgetbase , point );
     //d->m_filedialog->setOperationMode( KFileDialog::Opening);
 
-    QObjectList *l = d->m_filedialog->queryList( "QPushButton" );
-    QObjectListIt childit( *l );
-    QObject *obj;
-    while ( (obj = childit.current()) != 0 ) {
-	++childit;
-	((QPushButton*)obj)->hide();
-    }
-    delete l;
+    const QList<QPushButton *> buttons = qFindChildren<QPushButton *>( d->m_filedialog );
+    foreach( QPushButton* button, buttons )
+        button->hide();
 
     d->m_filedialog->setSizeGripEnabled ( FALSE );
 
-    QStringList mimeFilter = KoFilterManager::mimeFilter( d->m_format, KoFilterManager::Import );
-    QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
-    for ( QStringList::ConstIterator it = d->m_extraNativeMimeTypes.begin();
-          it != d->m_extraNativeMimeTypes.end(); ++it ) {
-        mimeFilterIt = mimeFilter.insert( mimeFilterIt, *it );
-        ++mimeFilterIt;
-    }
+    const QStringList mimeFilter = KoFilterManager::mimeFilter( d->m_format,
+                                                                KoFilterManager::Import,
+                                                                d->m_extraNativeMimeTypes );
     d->m_filedialog->setMimeFilter( mimeFilter );
 
     connect(d->m_filedialog, SIGNAL(  okClicked() ),
@@ -401,7 +393,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 	    KJanusWidget::IconList);
     layout->addWidget(d->m_jwidget,0,0);
 
-    d->boxdescription = new QVGroupBox(
+    d->boxdescription = new QGroupBox(
 	    i18n("Selected Template"),
 	    widgetbase,
 	    "boxdescription");
@@ -459,8 +451,9 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 	entriesnumber++;
     }
 
-    d->boxdescription->setInsideMargin ( 3 );
-    d->boxdescription->setInsideSpacing ( 3 );
+    // Disabled during Qt4 porting. Is this needed? Maybe set margin/spacing on layout?
+    //d->boxdescription->setInsideMargin ( 3 );
+    //d->boxdescription->setInsideSpacing ( 3 );
 
     d->textedit = new KTextEdit( d->boxdescription );
     d->textedit->setReadOnly(1);
@@ -477,7 +470,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 	d->m_jwidget->showPage(templateNum);
     else if ( defaultTemplateGroup != -1)
 	d->m_jwidget->showPage(defaultTemplateGroup);
-    
+
 
     // Set the initially selected template, possibly from the last usage of the dialog
     currentChanged(itemtoselect);
@@ -794,10 +787,9 @@ void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
     // Mostly duplicated from KFileIconView, because it only shows tooltips
     // for truncated icon texts, and we want tooltips on all icons,
     // with the full path...
-    // KFileIconView would need a virtual method for deciding if a tooltip should be shown,
-    // and another one for deciding what's the text of the tooltip...
     const KFileItem *fi = ( (KFileIconViewItem*)item )->fileInfo();
     QString toolTipText = fi->url().pathOrURL( );
+#if 0 // qt3 code
     toolTip = new QLabel( QString::fromLatin1(" %1 ").arg(toolTipText), 0,
                           "myToolTip",
                           WStyle_StaysOnTop | WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WX11BypassWM );
@@ -817,6 +809,10 @@ void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
     toolTip->setFont( QToolTip::font() );
     toolTip->setPalette( QToolTip::palette(), TRUE );
     toolTip->show();
+#endif
+
+    QToolTip::showText(QCursor::pos() + QPoint( 14, 14 ), QString::fromLatin1(" %1 ").arg(toolTipText), this);
+
 }
 
 void KoTCDRecentFilesIconView::removeToolTip()

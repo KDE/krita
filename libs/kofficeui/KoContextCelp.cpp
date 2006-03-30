@@ -541,7 +541,7 @@ void KoContextHelpAction::updateHelp( const QString& title, const QString& text,
 
 void KoContextHelpAction::closePopup()
 {
-	activate();
+	activate(Trigger);
 	setChecked( false ); // For a unknown reason, this is needed...
 } // KoContextHelpAction::closePopup
 

@@ -152,6 +152,7 @@ public:
         X11TabletDevice(const XDeviceInfo *deviceInfo);
 
         bool mightBeTabletDevice() const { return m_mightBeTabletDevice; }
+        bool needsFindingActiveByProximity() const;
 
         XID id() const { return m_deviceId; }
         XDevice *xDevice() const { return m_XDevice; }

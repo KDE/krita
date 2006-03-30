@@ -24,8 +24,6 @@
 #include <q3ptrlist.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <koffice_export.h>
 
 class KInstance;
@@ -110,11 +108,11 @@ private:
 class KoTemplateTree {
 
 public:
-    KoTemplateTree(const Q3CString &templateType, KInstance *instance,
+    KoTemplateTree(const QByteArray &templateType, KInstance *instance,
 		   bool readTree=false);
     ~KoTemplateTree() {}
 
-    Q3CString templateType() const { return m_templateType; }
+    QByteArray templateType() const { return m_templateType; }
     KInstance *instance() const { return m_instance; }
     void readTemplateTree();
     void writeTemplateTree();
@@ -137,7 +135,7 @@ private:
     void writeTemplate(KoTemplate *t, KoTemplateGroup *group,
 		       const QString &localDir);
 
-    Q3CString m_templateType;
+    QByteArray m_templateType;
     KInstance *m_instance;
     Q3PtrList<KoTemplateGroup> m_groups;
     KoTemplateGroup *m_defaultGroup;

@@ -26,7 +26,6 @@
 #include <kdebug.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 //#define DEBUG_STYLESTACK
 
@@ -295,5 +294,5 @@ QString KoStyleStack::userStyleDisplayName( const QString& family ) const
 
 void KoStyleStack::setTypeProperties( const char* typeProperties )
 {
-    m_propertiesTagName = typeProperties == 0 ? Q3CString( "properties" ) : ( Q3CString( typeProperties ) + "-properties" );
+    m_propertiesTagName = typeProperties == 0 ? QByteArray( "properties" ) : ( QByteArray( typeProperties ) + "-properties" );
 }

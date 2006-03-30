@@ -25,7 +25,6 @@
 #include <dcopobject.h>
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <dcopref.h>
 #include <koffice_export.h>
 class KoDocument;
@@ -52,7 +51,7 @@ public:
      * Generate a name for this interface. Automatically used if name=0 is
      * passed to the constructor
      */
-    static Q3CString newIfaceName();
+    static DCOPCString newIfaceName();
 
 k_dcop:
     /**
@@ -90,7 +89,7 @@ k_dcop:
     /**
      * DCOP-action proxy
      */
-    DCOPRef action( const Q3CString &name );
+    DCOPRef action( const DCOPCString &name );
     /**
      * @return list of actions
      */
@@ -110,7 +109,7 @@ k_dcop:
      */
     void saveAs( const QString & url );
 
-    void setOutputMimeType( const Q3CString & mimetype );
+    void setOutputMimeType( const QByteArray & mimetype );
 
     QString documentInfoAuthorName() const;
     QString documentInfoEmail() const;

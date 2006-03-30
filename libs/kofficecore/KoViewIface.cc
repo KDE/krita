@@ -28,13 +28,12 @@
 #include <kaction.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 //static
-Q3CString KoViewIface::newIfaceName()
+DCOPCString KoViewIface::newIfaceName()
 {
     static int s_viewIFNumber = 0;
-    Q3CString name; name.setNum( s_viewIFNumber++ ); name.prepend("View-");
+    DCOPCString name; name.setNum( s_viewIFNumber++ ); name.prepend("View-");
     return name;
 }
 
@@ -56,7 +55,7 @@ KoViewIface::~KoViewIface()
     delete m_actionProxy;
 }
 
-DCOPRef KoViewIface::action( const Q3CString &name )
+DCOPRef KoViewIface::action( const DCOPCString &name )
 {
     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
 }

@@ -30,19 +30,18 @@
 #include <kdcoppropertyproxy.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 #include <Q3PtrList>
 
 //static
-Q3CString KoDocumentIface::newIfaceName()
+DCOPCString KoDocumentIface::newIfaceName()
 {
     static int s_docIFNumber = 0;
-    Q3CString name; name.setNum( s_docIFNumber++ ); name.prepend("Document-");
+    DCOPCString name; name.setNum( s_docIFNumber++ ); name.prepend("Document-");
     return name;
 }
 
 KoDocumentIface::KoDocumentIface( KoDocument * doc, const char * name )
-    : DCOPObject( name ? Q3CString(name) : newIfaceName() )
+    : DCOPObject( name ? DCOPCString(name) : newIfaceName() )
 {
   m_pDoc = doc;
   m_actionProxy = new KDCOPActionProxy( doc->actionCollection(), this );
@@ -93,7 +92,7 @@ DCOPRef KoDocumentIface::view( int idx )
   return DCOPRef( kapp->dcopClient()->appId(), obj->objId() );
 }
 
-DCOPRef KoDocumentIface::action( const Q3CString &name )
+DCOPRef KoDocumentIface::action( const DCOPCString &name )
 {
     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
 }
@@ -126,7 +125,7 @@ void KoDocumentIface::saveAs( const QString & url )
     m_pDoc->waitSaveComplete(); // see ReadWritePart
 }
 
-void KoDocumentIface::setOutputMimeType( const Q3CString & mimetype )
+void KoDocumentIface::setOutputMimeType( const QByteArray& mimetype )
 {
     m_pDoc->setOutputMimeType( mimetype );
 }

@@ -36,9 +36,6 @@
 #include <kdebug.h>
 
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3CString>
-
 #include <assert.h>
 
 // Define the protocol used here for embedded documents' URL
@@ -434,7 +431,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     // OOo uses a trailing slash for the path to embedded objects (== directories)
     if ( !path.endsWith( "/" ) )
         path += '/';
-    Q3CString mimetype = d->m_doc->nativeOasisMimeType();
+    QByteArray mimetype = d->m_doc->nativeOasisMimeType();
     if ( mimetype.isEmpty() )
         mimetype = d->m_doc->nativeFormatMimeType();
     manifestWriter->addManifestEntry( path, mimetype );

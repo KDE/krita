@@ -41,7 +41,6 @@
 #include <qdatetime.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
 
 #include <kabc/addressee.h>
 #include <kabc/stdaddressbook.h>
@@ -471,7 +470,7 @@ void KoDocumentInfoPropsPage::applyChanges()
   KMimeType::Ptr mimeType = KMimeType::findByURL( d->m_url, 0, true );
   if ( mimeType && dynamic_cast<KFilterDev *>( d->m_dst->device() ) != 0 )
   {
-      Q3CString appIdentification( "KOffice " ); // We are limited in the number of chars.
+      QByteArray appIdentification( "KOffice " ); // We are limited in the number of chars.
       appIdentification += mimeType->name().latin1();
       appIdentification += '\004'; // Two magic bytes to make the identification
       appIdentification += '\006'; // more reliable (DF)

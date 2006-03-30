@@ -23,7 +23,6 @@
 #include <qimage.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
 
 #include <kdesktopfile.h>
 #include <ksimpleconfig.h>
@@ -130,7 +129,7 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 }
 
 
-KoTemplateTree::KoTemplateTree(const Q3CString &templateType,
+KoTemplateTree::KoTemplateTree(const QByteArray &templateType,
                                KInstance *instance, bool readTree) :
     m_templateType(templateType), m_instance(instance), m_defaultGroup(0L),
     m_defaultTemplate(0L) {

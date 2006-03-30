@@ -21,8 +21,6 @@
 #include <config.h>
 #include <qfile.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <dcopclient.h>
 #include <KoApplicationIface.h>
 #include <KoQueryTrader.h>

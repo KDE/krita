@@ -27,7 +27,6 @@
 #include <kdcopactionproxy.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 KoMainWindowIface::KoMainWindowIface( KoMainWindow *mainwindow )
     : DCOPObject( mainwindow )
@@ -41,7 +40,7 @@ KoMainWindowIface::~KoMainWindowIface()
     delete m_actionProxy;
 }
 
-DCOPRef KoMainWindowIface::action( const Q3CString &name )
+DCOPRef KoMainWindowIface::action( const DCOPCString &name )
 {
     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
 }

@@ -24,8 +24,6 @@
 #include <qstring.h>
 #include <qiodevice.h>
 #include <qpixmap.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "KoPictureKey.h"
 
@@ -100,7 +98,7 @@ public:
     Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
     bool load(QIODevice* io, const QString& extension);
-    bool loadFromBase64( const Q3CString& str );
+    bool loadFromBase64( const QByteArray& str );
 
     /**
      * Save picture into a QIODevice

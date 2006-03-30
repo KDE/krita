@@ -25,8 +25,6 @@
 #include <q3valuelist.h>
 #include <qdom.h>
 #include <q3valuestack.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kdemacros.h>
 
@@ -187,7 +185,7 @@ private:
      */
     Q3ValueList<QDomElement> m_stack;
 
-    Q3CString m_propertiesTagName;
+    QByteArray m_propertiesTagName;
 
     const char* m_styleNSURI;
     const char* m_foNSURI;

@@ -28,7 +28,6 @@
 
 #include "koffice_export.h"
 //Added by qt3to4:
-#include <Q3CString>
 
 class KDCOPActionProxy;
 class KoView;
@@ -45,10 +44,10 @@ public:
 
     // Generate a name for this interface. Automatically used if
     // the first constructor is used.
-    static Q3CString newIfaceName();
+    static DCOPCString newIfaceName();
 
 k_dcop:
-    DCOPRef action( const Q3CString &name );
+    DCOPRef action( const DCOPCString &name );
     DCOPCStringList actions();
     QMap<DCOPCString,DCOPRef> actionMap();
 

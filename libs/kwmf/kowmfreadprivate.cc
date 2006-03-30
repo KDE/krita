@@ -428,7 +428,7 @@ void KoWmfReadPrivate::polygon( quint32, QDataStream& stream )
 
     stream >> num;
 
-    Q3PointArray pa( num );
+    QPolygon pa( num );
 
     pointArray( stream, pa );
     mReadWmf->drawPolygon( pa, mWinding );
@@ -439,18 +439,18 @@ void KoWmfReadPrivate::polyPolygon( quint32, QDataStream& stream )
 {
     quint16 numberPoly;
     quint16 sizePoly;
-    Q3PtrList<Q3PointArray> listPa;
+    Q3PtrList<QPolygon> listPa;
 
     stream >> numberPoly;
 
     listPa.setAutoDelete( true );
     for ( int i=0 ; i < numberPoly ; i++ ) {
         stream >> sizePoly;
-        listPa.append( new Q3PointArray( sizePoly ) );
+        listPa.append( new QPolygon( sizePoly ) );
     }
 
     // list of point array
-    Q3PointArray *pa;
+    QPolygon *pa;
     for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
         pointArray( stream, *pa );
     }
@@ -466,7 +466,7 @@ void KoWmfReadPrivate::polyline( quint32, QDataStream& stream )
     quint16 num;
 
     stream >> num;
-    Q3PointArray pa( num );
+    QPolygon pa( num );
 
     pointArray( stream, pa );
     mReadWmf->drawPolyline( pa );
@@ -1165,7 +1165,7 @@ void KoWmfReadPrivate::deleteHandle( int idx )
 }
 
 
-void KoWmfReadPrivate::pointArray( QDataStream& stream, Q3PointArray& pa )
+void KoWmfReadPrivate::pointArray( QDataStream& stream, QPolygon& pa )
 {
     qint16 left, top;
     int  i, max;

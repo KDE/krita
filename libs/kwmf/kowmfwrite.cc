@@ -20,7 +20,7 @@
 #include <qfile.h>
 #include <qdatastream.h>
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QPolygon>
 #include <Q3PtrList>
 
 #include <kdebug.h>
@@ -329,7 +329,7 @@ void KoWmfWrite::drawChord( int left, int top, int width, int height , int a, in
 }
 
 
-void KoWmfWrite::drawPolyline( const Q3PointArray &pa ) {
+void KoWmfWrite::drawPolyline( const QPolygon &pa ) {
     int size = 4 + (pa.size() * 2);
 
     d->mSt << (quint32)size << (quint16)0x0325 << (quint16)pa.size();
@@ -339,7 +339,7 @@ void KoWmfWrite::drawPolyline( const Q3PointArray &pa ) {
 }
 
 
-void KoWmfWrite::drawPolygon( const Q3PointArray &pa, bool  ) {
+void KoWmfWrite::drawPolygon( const QPolygon &pa, bool  ) {
     int size = 4 + (pa.size() * 2);
 
     d->mSt << (quint32)size << (quint16)0x0324 << (quint16)pa.size();
@@ -349,9 +349,9 @@ void KoWmfWrite::drawPolygon( const Q3PointArray &pa, bool  ) {
 }
 
 
-void KoWmfWrite::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool ) {
+void KoWmfWrite::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool ) {
 
-    Q3PointArray *pa;
+    QPolygon *pa;
     int sizeArrayPoly = 0;
 
     for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
@@ -396,7 +396,7 @@ void KoWmfWrite::drawText( int , int , int , int , int , const QString& , double
 //-----------------------------------------------------------------------------
 // Utilities and conversion Qt --> Wmf
 
-void KoWmfWrite::pointArray( const Q3PointArray &pa ) {
+void KoWmfWrite::pointArray( const QPolygon &pa ) {
     int  left, top, i, max;
 
     for ( i=0, max=pa.size() ; i < max ; i++ ) {

@@ -22,7 +22,7 @@
 #include <qobject.h>
 #include <qmatrix.h>
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QPolygon>
 #include <koffice_export.h>
 
 /**
@@ -91,7 +91,7 @@ public:
    *         The points are transformed with the
    *         passed matrix.
    */
-  virtual Q3PointArray pointArray( const QMatrix &matrix = QMatrix() ) const;
+  virtual QPolygon pointArray( const QMatrix &matrix = QMatrix() ) const;
 
   /**
    * Tests whether the part contains a certain point. The point is
@@ -208,7 +208,7 @@ public:
    * @return the frame geometry including a border (6 pixels) as a point
    *         array with 4 points, one for each corner, transformed by given matrix.
    */
-  virtual Q3PointArray framePointArray( const QMatrix &matrix = QMatrix() ) const;
+  virtual QPolygon framePointArray( const QMatrix &matrix = QMatrix() ) const;
 
   /**
    * @return the current transformation of this child as matrix.
@@ -250,7 +250,7 @@ public:
   /**
    * @return the backed up geometry transformed by given matrix.
    */
-  virtual Q3PointArray oldPointArray( const QMatrix &matrix );
+  virtual QPolygon oldPointArray( const QMatrix &matrix );
 
   /**
    * Marks this child as either transparent or not.
@@ -297,7 +297,7 @@ protected:
    *  @param matrix the transformation of r.
    *  @param r the rectangle for which the point array should be created.
    */
-  virtual Q3PointArray pointArray( const QRect& r, const QMatrix& matrix = QMatrix() ) const;
+  virtual QPolygon pointArray( const QRect& r, const QMatrix& matrix = QMatrix() ) const;
 
   /**
    * Stores the current transformation of this child into a matrix.

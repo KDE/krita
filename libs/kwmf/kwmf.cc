@@ -651,7 +651,7 @@ void KWmf::opLineTo(
     QPoint lineTo;
 
     lineTo = normalisePoint(operands);
-    Q3PointArray points(2);
+    QPolygon points(2);
     points.setPoint(0, m_lineFrom);
     points.setPoint(1, lineTo);
     gotPolyline(m_dc, points);
@@ -762,7 +762,7 @@ void KWmf::opPolygon(
     S16 tmp;
 
     operands >> tmp;
-    Q3PointArray points(tmp);
+    QPolygon points(tmp);
 
     for (int i = 0; i < tmp; i++)
     {
@@ -778,7 +778,7 @@ void KWmf::opPolyline(
     S16 tmp;
 
     operands >> tmp;
-    Q3PointArray points(tmp);
+    QPolygon points(tmp);
 
     for (int i = 0; i < tmp; i++)
     {
@@ -797,7 +797,7 @@ void KWmf::opRectangle(
     topLeft = normalisePoint(operands);
     size = normaliseSize(operands);
     QRect rect(topLeft, size);
-    Q3PointArray points(4);
+    QPolygon points(4);
 
     points.setPoint(0, topLeft);
     points.setPoint(1, rect.topRight());

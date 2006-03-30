@@ -21,7 +21,7 @@
 
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QPolygon>
 
 #include <kdebug.h>
 
@@ -46,7 +46,7 @@ public:
   double m_scaleY;
   QMatrix m_matrix;
   bool m_lock;
-  Q3PointArray m_old;
+  QPolygon m_old;
   bool m_transparent;
   int m_contentsX;
   int m_contentsY;
@@ -101,7 +101,7 @@ QRegion KoChild::region( const QMatrix &matrix ) const
   return QRegion( pointArray( matrix ) );
 }
 
-Q3PointArray KoChild::pointArray( const QMatrix &matrix ) const
+QPolygon KoChild::pointArray( const QMatrix &matrix ) const
 {
   return pointArray( QRect( 0, 0, d->m_geometry.width(), d->m_geometry.height() ), matrix );
 }
@@ -238,14 +238,14 @@ QRect KoChild::contentRect() const
                 int(d->m_geometry.height() / d->m_scaleY) );
 }
 
-Q3PointArray KoChild::framePointArray( const QMatrix &matrix ) const
+QPolygon KoChild::framePointArray( const QMatrix &matrix ) const
 {
   return pointArray( QRect( -6, -6, d->m_geometry.width() + 12, d->m_geometry.height() + 12 ), matrix );
 }
 
 QRegion KoChild::frameRegion( const QMatrix &matrix, bool solid ) const
 {
-  const Q3PointArray arr = framePointArray( matrix );
+  const QPolygon arr = framePointArray( matrix );
   const QRegion frameReg( arr );
 
   if ( solid )
@@ -255,14 +255,14 @@ QRegion KoChild::frameRegion( const QMatrix &matrix, bool solid ) const
   return frameReg.subtract( reg );
 }
 
-Q3PointArray KoChild::pointArray( const QRect &r, const QMatrix &matrix ) const
+QPolygon KoChild::pointArray( const QRect &r, const QMatrix &matrix ) const
 {
   QPoint topleft = d->m_matrix.map( QPoint( r.left(), r.top() ) );
   QPoint topright = d->m_matrix.map( QPoint( r.right(), r.top() ) );
   QPoint bottomleft = d->m_matrix.map( QPoint( r.left(), r.bottom() ) );
   QPoint bottomright = d->m_matrix.map( QPoint( r.right(), r.bottom() ) );
 
-  Q3PointArray arr( 4 );
+  QPolygon arr( 4 );
   arr.setPoint( 0, topleft );
   arr.setPoint( 1, topright );
   arr.setPoint( 2, bottomright );
@@ -318,9 +318,9 @@ bool KoChild::locked() const
   return d->m_lock;
 }
 
-Q3PointArray KoChild::oldPointArray( const QMatrix &matrix )
+QPolygon KoChild::oldPointArray( const QMatrix &matrix )
 {
-  Q3PointArray arr = d->m_old;
+  QPolygon arr = d->m_old;
 
   for( int i = 0; i < 4; ++i )
       arr.setPoint( i, matrix.map( arr.point( i ) ) );

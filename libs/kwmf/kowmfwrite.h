@@ -103,11 +103,11 @@ public:
     void  drawArc( int left, int top, int width, int height, int a, int alen );
     void  drawPie( int left, int top, int width, int height, int a, int alen );
     void  drawChord( int left, int top, int width, int height, int a, int alen );
-    void  drawPolyline( const Q3PointArray& pa );
-    void  drawPolygon( const Q3PointArray& pa, bool winding=FALSE );
+    void  drawPolyline( const QPolygon& pa );
+    void  drawPolygon( const QPolygon& pa, bool winding=FALSE );
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    void  drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding=FALSE );
+    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=FALSE );
     void  drawImage( int left, int top, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing functions
@@ -120,7 +120,7 @@ private:
     // Utilities and conversion Qt --> Wmf
 
     /** Convert QPointArray into qint16 position (result in mSt) */
-    void pointArray( const Q3PointArray& pa );
+    void pointArray( const QPolygon& pa );
 
     /** Convertion between windows color and QColor */
     quint32 winColor( QColor color );

@@ -32,10 +32,10 @@ DESCRIPTION
 
 #include <q3valuestack.h>
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QPolygon>
 #include <koffice_export.h>
 class QDataStream;
-class Q3PointArray;
+class QPolygon;
 
 class KOWMF_EXPORT KWmf
 {
@@ -89,13 +89,13 @@ protected:
         unsigned stopAngle) = 0;
     virtual void gotPolygon(
         const DrawContext &dc,
-        const Q3PointArray &points) = 0;
+        const QPolygon &points) = 0;
     virtual void gotPolyline(
         const DrawContext &dc,
-        const Q3PointArray &points) = 0;
+        const QPolygon &points) = 0;
     virtual void gotRectangle(
         const DrawContext &dc,
-        const Q3PointArray &points) = 0;
+        const QPolygon &points) = 0;
 
 private:
     // Debug support.

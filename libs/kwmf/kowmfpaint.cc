@@ -20,7 +20,7 @@
 
 #include "kowmfpaint.h"
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QPolygon>
 #include <Q3PtrList>
 #include <QPrinter>
 
@@ -250,18 +250,18 @@ void KoWmfPaint::drawChord( int x, int y, int w, int h, int a, int alen ) {
 }
 
 
-void KoWmfPaint::drawPolyline( const Q3PointArray &pa ) {
+void KoWmfPaint::drawPolyline( const QPolygon &pa ) {
     mPainter.drawPolyline( pa );
 }
 
 
-void KoWmfPaint::drawPolygon( const Q3PointArray &pa, bool winding ) {
+void KoWmfPaint::drawPolygon( const QPolygon &pa, bool winding ) {
     mPainter.drawPolygon( pa, winding );
 }
 
 
-void KoWmfPaint::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding ) {
-    Q3PointArray *pa;
+void KoWmfPaint::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding ) {
+    QPolygon *pa;
 
     mPainter.save();
     QBrush brush = mPainter.brush();

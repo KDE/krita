@@ -28,7 +28,7 @@
 #include <qbuffer.h>
 #include <qstring.h>
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QPolygon>
 
 #include "kowmfstruct.h"
 #include "kowmfstack.h"
@@ -182,7 +182,7 @@ private:
     void deleteHandle( int );
 
     /** Convert QINT16 points into QPointArray */
-    void pointArray( QDataStream& stream, Q3PointArray& pa );
+    void pointArray( QDataStream& stream, QPolygon& pa );
 
     /** Convertion between windows color and QColor */
     QColor qtColor( quint32 color ) const

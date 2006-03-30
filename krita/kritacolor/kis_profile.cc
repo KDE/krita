@@ -180,7 +180,7 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
     static Atom icc_atom = XInternAtom( QX11Info::display(), "_ICC_PROFILE", False );
 
     if  ( XGetWindowProperty ( QX11Info::display(),
-                    qt_xrootwin( screen ),
+                    QX11Info::appRootWindow( screen ),
                     icc_atom,
                     0,
                     INT_MAX,

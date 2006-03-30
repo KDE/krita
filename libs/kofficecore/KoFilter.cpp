@@ -21,7 +21,6 @@
 
 #include <qfile.h>
 //Added by qt3to4:
-#include <Q3CString>
 
 #include <kurl.h>
 #include <kmimetype.h>
@@ -66,7 +65,7 @@ KoEmbeddingFilter::KoEmbeddingFilter() : KoFilter()
     m_partStack.push( new PartState() );
 }
 
-int KoEmbeddingFilter::embedPart( const Q3CString& from, Q3CString& to,
+int KoEmbeddingFilter::embedPart( const QByteArray& from, QByteArray& to,
                                   KoFilter::ConversionStatus& status, const QString& key )
 {
     ++( m_partStack.top()->m_lruPartIndex );
@@ -88,7 +87,7 @@ int KoEmbeddingFilter::embedPart( const Q3CString& from, Q3CString& to,
     return lruPartIndex();
 }
 
-void KoEmbeddingFilter::startInternalEmbedding( const QString& key, const Q3CString& mimeType )
+void KoEmbeddingFilter::startInternalEmbedding( const QString& key, const QByteArray& mimeType )
 {
     filterChainEnterDirectory( QString::number( ++( m_partStack.top()->m_lruPartIndex ) ) );
     PartReference ref( lruPartIndex(), mimeType );
@@ -114,15 +113,15 @@ int KoEmbeddingFilter::internalPartReference( const QString& key ) const
     return it.data().m_index;
 }
 
-Q3CString KoEmbeddingFilter::internalPartMimeType( const QString& key ) const
+QByteArray KoEmbeddingFilter::internalPartMimeType( const QString& key ) const
 {
     QMap<QString, PartReference>::const_iterator it = m_partStack.top()->m_partReferences.find( key );
     if ( it == m_partStack.top()->m_partReferences.end() )
-        return Q3CString();
+        return QByteArray();
     return it.data().m_mimeType;
 }
 
-KoEmbeddingFilter::PartReference::PartReference( int index, const Q3CString& mimeType ) :
+KoEmbeddingFilter::PartReference::PartReference( int index, const QByteArray& mimeType ) :
     m_index( index ), m_mimeType( mimeType )
 {
 }

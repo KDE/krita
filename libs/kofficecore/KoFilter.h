@@ -23,8 +23,6 @@
 #include <qobject.h>
 #include <qmap.h>
 #include <q3ptrstack.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <koffice_export.h>
 class QIODevice;
 class KoFilterChain;
@@ -199,7 +197,7 @@ protected:
      * @return The number of the part (can be used to refer to the part from
      *         within the embedding filter).
      */
-    int embedPart( const Q3CString& from, Q3CString& to,
+    int embedPart( const QByteArray& from, QByteArray& to,
                    KoFilter::ConversionStatus& status,
                    const QString& key = QString::null );
 
@@ -213,7 +211,7 @@ protected:
      * @param key The key we use to store reference/mimetype of your new part
      * @param mimeType The mimetype of the part you're about to embed
      */
-    void startInternalEmbedding( const QString& key, const Q3CString& mimeType );
+    void startInternalEmbedding( const QString& key, const QByteArray& mimeType );
 
     /**
      * This method signals the end of an internal embedding session.
@@ -242,7 +240,7 @@ protected:
      * @return The mimetype, might be empty if the part matching
      *         the given key doesn't exist.
      */
-    Q3CString internalPartMimeType( const QString& key ) const;
+    QByteArray internalPartMimeType( const QString& key ) const;
 
 private:
     /**
@@ -252,11 +250,11 @@ private:
      */
     struct PartReference
     {
-        PartReference( int index = -1, const Q3CString& mimeType = "" );
+        PartReference( int index = -1, const QByteArray& mimeType = "" );
         bool isValid() const;
 
         int m_index;
-        Q3CString m_mimeType;
+        QByteArray m_mimeType;
     };
 
     /**

@@ -22,7 +22,6 @@
 #include <qfile.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
 
 #include <kdebug.h>
 #include <kurl.h>
@@ -215,7 +214,7 @@ bool KoPicture::loadFromFile(const QString& fileName)
     return m_sharedData->loadFromFile(fileName);
 }
 
-bool KoPicture::loadFromBase64( const Q3CString& str )
+bool KoPicture::loadFromBase64( const QByteArray& str )
 {
     createSharedData();
     return m_sharedData->loadFromBase64( str );

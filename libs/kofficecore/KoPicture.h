@@ -23,8 +23,6 @@
 #include <qstring.h>
 #include <qiodevice.h>
 #include <qpixmap.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <koffice_export.h>
 
 #include "KoPictureKey.h"
@@ -162,7 +160,7 @@ public:
     /**
      * Load the picture from base64-encoded data
      */
-    bool loadFromBase64(const Q3CString& str);
+    bool loadFromBase64(const QByteArray& str);
 
     /**
      * Load a potentially broken XPM file (for old files of KPresenter)

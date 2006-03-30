@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoContextCelp.h"
+#include "KoContextHelp.h"
 
 #include <qpainter.h>
 #include <qregion.h>

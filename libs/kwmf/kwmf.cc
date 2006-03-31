@@ -28,7 +28,7 @@ DESCRIPTION
 #include <math.h>
 #include <qfile.h>
 #include <q3pointarray.h>
-#include <kwmf.h>
+#include "kwmf.h"
 #include <qrect.h>
 
 #define PI (3.14159265358979323846)

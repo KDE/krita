@@ -605,4 +605,4 @@ void KoContextHelpDocker::setContextHelp( const QString& title, const QString& t
 	m_helpViewer->setText( text );
 } // KoContextHelpDocker::updateHelp
 
-#include "KoContextCelp.moc"
+#include "KoContextHelp.moc"

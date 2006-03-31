@@ -1,5 +1,8 @@
 kde4_header()
 
+include_directories(  ${KOFFICEUI_INCLUDES} )
+
+
 add_subdirectory( kohyphen ) 
 add_subdirectory( tests ) 
 

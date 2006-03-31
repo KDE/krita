@@ -253,7 +253,6 @@ static void importTextPosition( const QString& text_position, double fontSize, K
         lst.pop_front();
         if ( !lst.isEmpty() )
             textSize = lst.front().trimmed();
-        Q_ASSERT( lst.count() == 1 );
         // Workaround bug in KOffice-1.4: it saved '0% 66%' for normal text
         if ( context.generator().startsWith( "KOffice/1.4" )
              && text_position.startsWith( "0%" ) ) {

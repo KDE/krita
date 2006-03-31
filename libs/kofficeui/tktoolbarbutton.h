@@ -214,7 +214,7 @@ private:
   QPixmap defaultPixmap;
   QPixmap activePixmap;
   QPixmap disabledPixmap;
-  virtual void setIcon(const QPixmap &p) { Q3Button::setIcon(p); }
+  virtual void setIcon(const QPixmap &p) { setIcon(p); }
   class TKToolBarButtonPrivate;
   TKToolBarButtonPrivate *d;
 

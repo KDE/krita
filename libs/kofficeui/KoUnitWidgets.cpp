@@ -35,7 +35,7 @@
 
 
 KoUnitDoubleValidator::KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name )
-: KDoubleValidator( parent, name ), m_base( base )
+: KDoubleValidator( parent ), m_base( base )
 {
 }
 
@@ -129,7 +129,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, const char *name )
 	setObjectName(name);
     KDoubleSpinBox::setPrecision( 2 );
     m_validator = new KoUnitDoubleValidator( this, this );
-    QSpinBox::setValidator( m_validator );
+    setValidator( m_validator );
     setAcceptLocalizedNumbers( true );
     setUnit( KoUnit::U_PT );
 
@@ -144,13 +144,13 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
 						    KoUnit::Unit unit, 
 						    unsigned int precision, 
 						    const char *name )
-    : KDoubleSpinBox( lower, upper, step, value, precision, parent, name ),
+    : KDoubleSpinBox( lower, upper, step, value, parent, precision ),
       KoUnitDoubleBase( unit, precision ),
     m_lowerInPoints( lower ), m_upperInPoints( upper ), m_stepInPoints( step )
 {
     m_unit = KoUnit::U_PT;
     m_validator = new KoUnitDoubleValidator( this, this );
-    QSpinBox::setValidator( m_validator );
+    setValidator( m_validator );
     setAcceptLocalizedNumbers( true );
     setUnit( unit );
     changeValue( value );
@@ -224,7 +224,7 @@ void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
 
 
 KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, const char *name )
-    : KLineEdit( parent, name ), KoUnitDoubleBase( KoUnit::U_PT, 2 ), m_value( 0.0 ), m_lower( 0.0 ), m_upper( 9999.99 ),
+    : KLineEdit( parent ), KoUnitDoubleBase( KoUnit::U_PT, 2 ), m_value( 0.0 ), m_lower( 0.0 ), m_upper( 9999.99 ),
     m_lowerInPoints( 0.0 ), m_upperInPoints( 9999.99 )
 {
     setAlignment( Qt::AlignRight );

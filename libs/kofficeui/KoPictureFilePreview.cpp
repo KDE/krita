@@ -28,6 +28,7 @@
 #include <qfileinfo.h>
 #include <qpainter.h>
 #include <q3scrollview.h>
+#include <QPalette>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
@@ -45,7 +46,7 @@ class KoPictureFilePreviewWidget : public Q3ScrollView
 public:
     KoPictureFilePreviewWidget( QWidget *parent )
         : Q3ScrollView( parent ) {
-        viewport()->setBackgroundRole( Qt::Base );
+        viewport()->setBackgroundRole( QPalette::Base );
     }
 
     bool setPicture( const KUrl& url )

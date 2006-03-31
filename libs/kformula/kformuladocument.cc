@@ -379,11 +379,11 @@ void DocumentWrapper::document( Document* document, bool init )
     m_config->setGroup("General");
     if ( m_hasActions )
     {
-        m_syntaxHighlightingAction->setChecked( m_config->readBoolEntry("syntaxHighlighting", true ) );
+        m_syntaxHighlightingAction->setChecked( m_config->readEntry("syntaxHighlighting", true ) );
         if ( !m_syntaxHighlightingAction->isChecked() )
             toggleSyntaxHighlighting();
     }
-    else if ( m_config->readBoolEntry("syntaxHighlighting", true ) )
+    else if ( m_config->readEntry("syntaxHighlighting", true ) )
     {
         m_document->m_contextStyle->setSyntaxHighlighting( true );
         // Only to notify all views. We don't expect to get new values.

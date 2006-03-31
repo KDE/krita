@@ -166,7 +166,7 @@ void ContextStyle::readConfig( KConfig* config, bool init )
     errorColor    = config->readColorEntry( "errorColor",    &errorColor );
     helpColor     = config->readColorEntry( "helpColor",     &helpColor );
 
-    m_syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting", true );
+    m_syntaxHighlighting = config->readEntry( "syntaxHighlighting", true );
 }
 
 void ContextStyle::setZoomAndResolution( int zoom, int dpiX, int dpiY )

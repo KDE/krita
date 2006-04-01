@@ -23,6 +23,7 @@
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qdrawutil.h>
+#include <QStyleOption>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>
@@ -30,13 +31,13 @@
 #include <kapplication.h>
 
 TKComboBox::TKComboBox(QWidget* parent, const char* name)
-: QComboBox(false,parent,name)
+: Q3ComboBox(false,parent,name)
 {
 }
 
 
 TKComboBox::TKComboBox( bool isEditable, QWidget* parent, const char* name )
-: QComboBox(isEditable,parent,name)
+: Q3ComboBox(isEditable,parent,name)
 {
 }
 
@@ -89,12 +90,15 @@ void TKComboBox::paintEvent(QPaintEvent*)
 
   QPixmap pixmap(arrow_down);
 
-
-  style().drawControl( QStyle::CE_PushButton, &p, this, QRect( bx, by, bw, bh ), colorGroup() );
-  style().drawItem( &p, QRect( bx, by, bw, bh), Qt::AlignCenter, colorGroup(), isEnabled(), &pixmap, QString::null );
+  QStyleOption styleOption(QStyleOption::Version, QStyleOption::SO_Button);
+  styleOption.rect = QRect(bx, by, bw, bh);
+  style()->drawControl( QStyle::CE_PushButton, &styleOption, &p, this);
+  style()->drawItemPixmap( &p, QRect( bx, by, bw, bh), Qt::AlignCenter, pixmap );
 
   if ( hasFocus()) {
-    style().drawPrimitive( QStyle::PE_FocusRect, &p, fr, g );
+    styleOption.type = QStyleOption::SO_FocusRect;
+    styleOption.rect = fr;
+    style()->drawPrimitive( QStyle::PE_FrameFocusRect, &styleOption, &p );
   }
 
   if (!editable()) {

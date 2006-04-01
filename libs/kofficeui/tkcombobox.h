@@ -20,10 +20,10 @@
 #ifndef TKCOMBOBOX_H
 #define TKCOMBOBOX_H
 
-#include <qcombobox.h>
+#include <q3combobox.h>
 //Added by qt3to4:
 #include <QPaintEvent>
-class TKComboBox : public QComboBox
+class TKComboBox : public Q3ComboBox
 { Q_OBJECT
 public:
   TKComboBox(QWidget* parent=0, const char* name=0);

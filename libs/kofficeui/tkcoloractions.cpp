@@ -52,7 +52,7 @@ TKColorPopupMenu::~TKColorPopupMenu()
 
 void TKColorPopupMenu::updateItemSize()
 {
-  styleChange(style());
+  styleChange(*style());
 }
 /****************************************************************************************/
 class TKSelectColorActionPrivate
@@ -66,7 +66,7 @@ public:
 };
 
 
-TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name, bool menuDefaultColor )
+TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, KActionCollection* parent, const char* name, bool menuDefaultColor )
 : TKAction(parent,name)
 {
     d=new TKSelectColorActionPrivate();
@@ -79,7 +79,9 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObjec
 
 TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
                                           QObject* receiver, const char* slot,
-                                          QObject* parent, const char* name, bool menuDefaultColor)
+                                          KActionCollection* parent,
+					  const char* name,
+					  bool menuDefaultColor)
 : TKAction(parent,name)
 {
     d=new TKSelectColorActionPrivate();
@@ -93,6 +95,7 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
 
 void TKSelectColorAction::init()
 {
+#if 0
   m_pStandardColor = new TKColorPanel();
   m_pRecentColor = new TKColorPanel();
 
@@ -102,26 +105,27 @@ void TKSelectColorAction::init()
   connect(m_pRecentColor,SIGNAL(reject()),SLOT(panelReject()));
 
   m_pRecentColor->clear();
-
+#endif
   m_pMenu = new TKColorPopupMenu();
+#if 0
   m_pMenu->insertItem(m_pStandardColor);
   m_pMenu->insertSeparator();
   m_pMenu->insertItem(m_pRecentColor);
   m_pMenu->insertSeparator();
-
+#endif
   switch (m_type) {
     case TextColor:
-      m_pMenu->insertItem(i18n("More Text Colors..."),this,SLOT(selectColorDialog()));
+      m_pMenu->addAction(i18n("More Text Colors..."),this,SLOT(selectColorDialog()));
       setCurrentColor(Qt::black);
       setIcon("textcolor");
       break;
     case LineColor:
-      m_pMenu->insertItem(i18n("More Line Colors..."),this,SLOT(selectColorDialog()));
+      m_pMenu->addAction(i18n("More Line Colors..."),this,SLOT(selectColorDialog()));
       setCurrentColor(Qt::black);
       setIcon("color_line");
       break;
     case FillColor:
-      m_pMenu->insertItem(i18n("More Fill Colors..."),this,SLOT(selectColorDialog()));
+      m_pMenu->addAction(i18n("More Fill Colors..."),this,SLOT(selectColorDialog()));
       setCurrentColor(Qt::white);
       setIcon("color_fill");
       break;
@@ -130,8 +134,8 @@ void TKSelectColorAction::init()
   }
   if(d->defaultColorMenu)
   {
-      m_pMenu->insertSeparator();
-      m_pMenu->insertItem(i18n("Default Color"),this,SLOT(defaultColor()));
+      m_pMenu->addSeparator();
+      m_pMenu->addAction(i18n("Default Color"),this,SLOT(defaultColor()));
   }
 
   connect(m_pStandardColor,SIGNAL(sizeChanged()),m_pMenu,SLOT(updateItemSize()));
@@ -166,6 +170,7 @@ void TKSelectColorAction::setDefaultColor(const QColor &_col)
 
 void TKSelectColorAction::updatePixmap()
 {
+#if 0
   for( int id = 0; id < containerCount(); ++id ) {
     QWidget* w = container(id);
     if ( w->inherits("KToolBar") ) {
@@ -198,6 +203,7 @@ void TKSelectColorAction::updatePixmap()
         setIconSet( pix );
     }
   }
+#endif
 }
 
 void TKSelectColorAction::updatePixmap(TKToolBarButton* b)
@@ -610,7 +616,7 @@ void TKColorPanelButton::paintEvent( QPaintEvent* ev )
 {
   Q3Frame::paintEvent(ev);
 
-  QPainter p(this,this);
+  QPainter p(this);
   p.fillRect(2,2,12,12,m_Color);
   p.setPen(Qt::gray);
   p.drawRect(2,2,12,12);

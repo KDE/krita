@@ -21,7 +21,6 @@
 
 #include <qtimer.h>
 #include <qtooltip.h>
-#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qdrawutil.h>
@@ -35,6 +34,7 @@
 #include <kiconeffect.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
+#include <kmenu.h>
 
 // Delay in ms before delayed popup pops up
 #define POPUP_DELAY 500
@@ -86,7 +86,7 @@ public:
   TK::IconMode m_iconMode;
 
   QTimer     *m_delayTimer;
-  Q3PopupMenu *m_popup;
+  KMenu *m_popup;
 
   KInstance  *m_instance;
 };
@@ -254,7 +254,7 @@ void TKToolBarButton::setDisabledPixmap( const QPixmap &pixmap )
   QToolButton::setPixmap( isEnabled() ? defaultPixmap : disabledPixmap );
 }
 
-void TKToolBarButton::setPopup(Q3PopupMenu *p)
+void TKToolBarButton::setPopup(KMenu *p)
 {
   d->m_popup = p;
   d->m_popup->setFont(KGlobalSettings::toolBarFont());
@@ -263,12 +263,12 @@ void TKToolBarButton::setPopup(Q3PopupMenu *p)
   modeChange();
 }
 
-Q3PopupMenu *TKToolBarButton::popup()
+KMenu *TKToolBarButton::popup()
 {
   return d->m_popup;
 }
 
-void TKToolBarButton::setDelayedPopup (Q3PopupMenu *p, bool toggle )
+void TKToolBarButton::setDelayedPopup (KMenu *p, bool toggle )
 {
   d->m_isPopup = true;
   setToggle(toggle);

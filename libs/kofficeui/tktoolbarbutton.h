@@ -31,8 +31,9 @@
 
 class KToolBar;
 class KInstance;
-class Q3PopupMenu;
+class KMenu;
 class QPainter;
+class QIcon;
 
 class TKToolBarButton : public QToolButton
 { Q_OBJECT
@@ -153,7 +154,7 @@ public:
   /**
    * Return a pointer to this button's popup menu (if it exists)
    */
-  Q3PopupMenu *popup();
+  KMenu *popup();
 
   /**
    * Give this button a popup menu.  There will not be a delay when
@@ -162,7 +163,7 @@ public:
    *
    * @param p The new popup menu
    */
-  void setPopup (Q3PopupMenu *p);
+  void setPopup (KMenu *p);
 
   /**
    * Gives this button a delayed popup menu.
@@ -178,7 +179,7 @@ public:
    * @param p the new popup menu
    * @param toggle if true, makes the button "sticky" (toggled)
    */
-  void setDelayedPopup(Q3PopupMenu *p, bool toggle = false);
+  void setDelayedPopup(KMenu *p, bool toggle = false);
 
   QPixmap getActivePixmap() const;
 

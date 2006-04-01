@@ -23,6 +23,7 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+#include <QToolBar>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3HBoxLayout>
@@ -30,6 +31,7 @@
 #include <ktoolbar.h>
 #include <kiconloader.h>
 
+#if 0
 #define SET_FOR_ALL_CONTAINER(WIDGET_TYPE,METHOD_NAME,VALUE)             \
   for( int id = 0; id < containerCount(); ++id ) {                       \
     QWidget* w = container(id);                                          \
@@ -43,17 +45,32 @@
       }                                                                  \
     }                                                                    \
   }
+#endif
 
-TKAction::TKAction(QObject* parent, const char* name)
+TKAction::TKAction(KActionCollection* parent, const char* name)
 : KAction( "", 0, parent, name )
 {
   m_imode = TK::IconOnly;
+  
+  setToolBarWidgetFactory(this);
 }
 
 TKAction::~TKAction()
 {
 }
 
+QWidget* TKAction::createToolBarWidget(QToolBar* parent)
+{
+  TKToolBarButton* button = new TKToolBarButton(
+		  icon().pixmap(parent->iconSize()), iconText(),
+		  parent, name());
+  button->setIconMode(m_imode);
+  initToolBarButton(button);
+
+  return button;
+}
+
+#if 0
 int TKAction::plug(QWidget* widget, int index)
 {
   if ( widget->inherits("KToolBar") ) {
@@ -80,6 +97,7 @@ int TKAction::plug(QWidget* widget, int index)
   }
   return KAction::plug(widget,index);
 }
+#endif
 
 void TKAction::initToolBarButton(TKToolBarButton* button)
 {
@@ -94,7 +112,9 @@ TK::IconMode TKAction::iconMode()
 void TKAction::setIconMode(TK::IconMode mode)
 {
   m_imode = mode;
+#if 0
   SET_FOR_ALL_CONTAINER(TKToolBarButton,setIconMode,mode)
+#endif
 }
 
 void TKAction::setText(const QString& text)
@@ -105,12 +125,13 @@ void TKAction::setText(const QString& text)
 
 void TKAction::setIcon(const QString& icon)
 {
-  KAction::setIcon(icon);
+  KAction::setIconName(icon);
   updateLayout();
 }
 
 void TKAction::updateLayout()
 {
+#if 0
   int len = containerCount();
   for( int id = 0; id < len; ++id ) {
     QWidget* w = container( id );
@@ -121,6 +142,7 @@ void TKAction::updateLayout()
       }
     }
   }
+#endif
 }
 
 QWidget* TKAction::createLayout(QWidget* parent, QWidget* children)
@@ -157,11 +179,14 @@ void TKAction::updateLayout(QWidget* base)
     textLabel->hide();
 
   QPixmap pix;
+
+#if 0
   if (hasIcon())
     pix = iconSet(K3Icon::Small).pixmap();
 
   if (!icon().isEmpty())
     pix = BarIcon(icon());
+#endif
 
   if (!pix.isNull() && m_imode != TK::TextOnly) {
     pixLabel->setPixmap(pix);
@@ -174,7 +199,7 @@ void TKAction::updateLayout(QWidget* base)
                        (pixLabel->isVisible() ? pixLabel->sizeHint().width():0) );
 }
 /******************************************************************************/
-TKBaseSelectAction::TKBaseSelectAction( QObject* parent, const char* name )
+TKBaseSelectAction::TKBaseSelectAction( KActionCollection* parent, const char* name )
 : TKAction(parent,name)
 {
   m_current = 0;
@@ -185,6 +210,19 @@ TKBaseSelectAction::~TKBaseSelectAction()
 {
 }
 
+QWidget* TKBaseSelectAction::createToolBarWidget(QToolBar* parent)
+{
+  TKComboBox* combo = new TKComboBox(m_editable, parent);
+  initComboBox(combo);
+  combo->setMinimumWidth(combo->sizeHint().width());
+  QWidget* base = createLayout(parent, combo);
+
+  setCurrentItem(currentItem());
+  
+  return base;
+}
+
+#if 0
 int TKBaseSelectAction::plug(QWidget* widget, int index)
 {
   if ( widget->inherits("KToolBar") )
@@ -208,6 +246,7 @@ int TKBaseSelectAction::plug(QWidget* widget, int index)
   }
   return -1;
 }
+#endif
 
 int TKBaseSelectAction::currentItem()
 {
@@ -222,7 +261,9 @@ void TKBaseSelectAction::initComboBox(TKComboBox* cb)
 void TKBaseSelectAction::setEditable(bool editable)
 {
   m_editable = editable;
+#if 0
   SET_FOR_ALL_CONTAINER(TKComboBox,setEditable,editable)
+#endif
 }
 
 bool TKBaseSelectAction::isEditable()
@@ -233,7 +274,9 @@ bool TKBaseSelectAction::isEditable()
 void TKBaseSelectAction::setCurrentItem(int index)
 {
   m_current = index;
+#if 0
   SET_FOR_ALL_CONTAINER(TKComboBox,setCurrentItem,index)
+#endif
 }
 
 void TKBaseSelectAction::slotActivated(int id)
@@ -251,7 +294,7 @@ void TKBaseSelectAction::activate(int id)
   emit activated(id);
 }
 /******************************************************************************/
-TKSelectAction::TKSelectAction( QObject* parent, const char* name )
+TKSelectAction::TKSelectAction( KActionCollection* parent, const char* name )
 : TKBaseSelectAction(parent,name)
 {
 }
@@ -277,8 +320,10 @@ void TKSelectAction::setItems(const QStringList& lst )
   m_list = lst;
   m_current = -1;
 
+#if 0
   SET_FOR_ALL_CONTAINER(TKComboBox,clear, )
   SET_FOR_ALL_CONTAINER(TKComboBox,insertStringList,lst)
+#endif
 
   // Disable if empty and not editable
   setEnabled ( lst.count() > 0 || m_editable );
@@ -291,12 +336,16 @@ QStringList TKSelectAction::items() const
 
 void TKSelectAction::clear()
 {
+#if 0
   SET_FOR_ALL_CONTAINER(TKComboBox,clear, )
+#endif
 }
 
 void TKSelectAction::setEditText(const QString& text)
 {
+#if 0
   SET_FOR_ALL_CONTAINER(TKComboBox,setEditText,text)
+#endif
 }
 
 #undef SET_FOR_ALL_CONTAINER

@@ -57,10 +57,10 @@ public:
     Color
   };
 
-  TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name, bool menuDefaultColor=false);
+  TKSelectColorAction( const QString& text, Type type, KActionCollection* parent, const char* name, bool menuDefaultColor=false);
   TKSelectColorAction( const QString& text, Type type,
                        QObject* receiver, const char* slot,
-                       QObject* parent, const char* name,bool menuDefaultColor=false );
+                       KActionCollection* parent, const char* name,bool menuDefaultColor=false );
 
   virtual ~TKSelectColorAction();
 

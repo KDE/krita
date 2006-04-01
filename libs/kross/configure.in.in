@@ -28,6 +28,7 @@ if test "x$compile_kross" = "xyes" ; then
     RUBY_ARCHDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"archdir"@:>@)'`
     RUBY_SITEARCHDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitearchdir"@:>@)'`
     RUBY_SITEDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitelibdir"@:>@)'`
+    RUBY_INCLUDEDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"rubyincludedir"@:>@)'`
     RUBY_LIBDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"libdir"@:>@)'`
     RUBY_LIBRUBYARG=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"LIBRUBYARG_SHARED"@:>@)'`
     RUBY_ENABLESHARED=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"ENABLE_SHARED"@:>@)'`
@@ -35,18 +36,26 @@ if test "x$compile_kross" = "xyes" ; then
                    archdir $RUBY_ARCHDIR,
                    sitearchdir $RUBY_SITEARCHDIR,
                    sitedir $RUBY_SITEDIR,
+                   includedir $RUBY_INCLUDEDIR,
                    libdir $RUBY_LIBDIR,
                    librubyarg $RUBY_LIBRUBYARG,
                    rubysharedenabled $RUBY_ENABLESHARED])
     AC_SUBST(RUBY_ARCHDIR)
     AC_SUBST(RUBY_SITEARCHDIR)
     AC_SUBST(RUBY_SITEDIR)
+    AC_SUBST(RUBY_INCLUDEDIR)
     AC_SUBST(RUBY_LIBDIR)
     AC_SUBST(RUBY_LIBRUBYARG)
     AC_SUBST(RUBY_ENABLESHARED)
 
     AC_MSG_CHECKING(for Ruby header)
-    if test ! -r $RUBY_ARCHDIR/ruby.h; then
+
+    if test ! -r $RUBY_INCLUDEDIR/ruby.h; then
+      # if $RUBY_INCLUDEDIR is not valid try to use $RUBY_ARCHDIR
+      RUBY_INCLUDEDIR=$RUBY_ARCHDIR
+    fi
+
+    if test ! -r $RUBY_INCLUDEDIR/ruby.h; then
       RUBY_LIBDIR=""
       AC_MSG_RESULT([not found])
     else
@@ -67,7 +76,7 @@ if test "x$compile_kross" = "xyes" ; then
           AC_LANG_SAVE
           AC_LANG_CPLUSPLUS
           ac_save_CXXFLAGS="$CXXFLAGS"
-          CXXFLAGS="$CXXFLAGS -I$RUBY_ARCHDIR"
+          CXXFLAGS="$CXXFLAGS -I$RUBY_INCLUDEDIR"
           AC_CACHE_VAL(ruby_build,
           [
             AC_TRY_COMPILE([

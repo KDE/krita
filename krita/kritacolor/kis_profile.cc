@@ -28,12 +28,12 @@
 #include <qtextstream.h>
 #include <qfile.h>
 
+#include <ksharedptr.h>
 #include <kdebug.h>
 
 #include "kis_profile.h"
 #include "kis_global.h"
 
-#include "ksharedptr.h"
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -69,7 +69,8 @@ KisProfile::KisProfile(const cmsHPROFILE profile)
 
     // Make a raw data image ready for saving
     _cmsSaveProfileToMem(m_profile, 0, &bytesNeeded); // calc size
-    if(m_rawData.resize(bytesNeeded))
+    m_rawData.resize(bytesNeeded);
+    if(m_rawData.size() >= (int)bytesNeeded)
     {
         _cmsSaveProfileToMem(m_profile, m_rawData.data(), &bytesNeeded); // fill buffer
         cmsHPROFILE newprofile = cmsOpenProfileFromMem(m_rawData.data(), (DWORD) bytesNeeded);
@@ -164,9 +165,9 @@ KisAnnotationSP KisProfile::annotation() const
     // XXX we hardcode icc, this is correct for lcms?
     // XXX productName(), or just "ICC Profile"?
     if (!m_rawData.isEmpty())
-        return new KisAnnotation("icc", productName(), m_rawData);
+        return KisAnnotationSP(new KisAnnotation("icc", productName(), m_rawData));
     else
-        return 0;
+        return KisAnnotationSP(0);
 }
 
 KisProfile *  KisProfile::getScreenProfile (int screen)
@@ -196,8 +197,8 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
                     (unsigned char **) &str)
                 ) {
 
-        QByteArray bytes (nitems);
-        bytes.assign((char*)str, (quint32)nitems);
+        QByteArray bytes (nitems, '\0');
+        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         return new KisProfile(bytes);
     } else {

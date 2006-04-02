@@ -20,7 +20,7 @@
 #define KISGLOBAL_H_
 
 #include <config.h>
-#include LCMS_HEADER
+#include <lcms.h>
 #include <limits.h>
 #include <qglobal.h>
 #include <kglobal.h>

@@ -21,7 +21,7 @@
 #include <kglobal.h>
 
 #include <config.h>
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include <kis_colorspace_factory_registry.h>
 #include <kis_math_toolbox.h>

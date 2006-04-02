@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include <qimage.h>
 

@@ -19,7 +19,7 @@
 #define KIS_COLORSPACE_H_
 
 #include <config.h>
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include <QImage>
 #include <q3valuevector.h>

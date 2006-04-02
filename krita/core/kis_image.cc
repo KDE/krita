@@ -19,7 +19,7 @@
 #include <math.h>
 
 #include <config.h>
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include <qimage.h>
 #include <qpainter.h>

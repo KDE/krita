@@ -26,7 +26,7 @@
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include "config.h"
-#include LCMS_HEADER
+#include <lcms.h>
 #include "klocale.h"
 
 #include "kis_view.h"

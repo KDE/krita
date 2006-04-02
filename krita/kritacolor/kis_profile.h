@@ -24,7 +24,7 @@
 
 #include <config.h>
 
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include <q3valuevector.h>
 #include <q3cstring.h>

@@ -22,7 +22,7 @@
 #include <cfloat>
 #include <cmath>
 #include <config.h>
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include <qimage.h>
 #include <qtextstream.h>

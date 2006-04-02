@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <config.h>
 
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include "kis_global.h"
 #include "kis_config.h"

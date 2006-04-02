@@ -21,6 +21,7 @@
 #define KROSS_API_OBJECT_H
 
 #include <qstring.h>
+#include <qstringlist.h>
 #include <q3valuelist.h>
 #include <qmap.h>
 #include <qvariant.h>
@@ -71,7 +72,7 @@ namespace Kross { namespace Api {
              * \param parent The parent \a Object or NULL if
              *        this object doesn't has an parent.
              */
-            explicit Object(const QString& name, Object::Ptr parent = 0);
+            explicit Object(const QString& name, Object::Ptr parent = Object::Ptr());
 
             /**
              * Destructor.

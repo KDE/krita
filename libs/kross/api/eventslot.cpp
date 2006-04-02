@@ -25,7 +25,7 @@
 #include <qmetaobject.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <private/qucom_p.h> // for the Qt QUObject API.
+//#include <private/qucom_p.h> // for the Qt QUObject API.
 
 using namespace Kross::Api;
 
@@ -51,6 +51,7 @@ Object::Ptr EventSlot::call(const QString& /*name*/, List::Ptr arguments)
     kDebug() << QString("EventSlot::call() name=%1 m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) << endl;
 #endif
 
+/*TODO
     QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
 
     if(n.startsWith("1")) // Remove prefix of SLOT-macros
@@ -63,8 +64,8 @@ Object::Ptr EventSlot::call(const QString& /*name*/, List::Ptr arguments)
     QUObject* uo = QtObject::toQUObject(n, arguments);
     m_receiver->qt_invoke(slotid, uo); // invoke the slot
     delete [] uo;
-
-    return new Variant(true, "Kross::Api::EventSlot::Bool");
+*/
+    return Object::Ptr(new Variant(true, "Kross::Api::EventSlot::Bool"));
 }
 
 /*

@@ -61,7 +61,7 @@ namespace Kross { namespace Api {
             operator const QString& () { return getValue().asString(); }
             operator Q3CString () { return getValue().toCString(); }
             operator const Q3CString () { return getValue().toCString(); }
-            operator const Q3CString& () { return getValue().asCString(); }
+            //operator const Q3CString& () { return getValue().asCString(); }
             operator const QVariant& () { return getValue(); }
 
             /**
@@ -101,7 +101,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a QVariant converted object.
              */
-            static const QVariant& toVariant(Object::Ptr object);
+            static const QVariant toVariant(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into

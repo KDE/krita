@@ -173,16 +173,16 @@ Object::Ptr ScriptContainer::execute()
 {
     if(! d->script)
         if(! initialize())
-            return 0;
+            return Object::Ptr();
 
     if(hadException())
-        return 0;
+        return Object::Ptr();
 
     Object::Ptr r = d->script->execute();
     if(d->script->hadException()) {
         setException( d->script->getException() );
         finalize();
-        return 0;
+        return Object::Ptr();
     }
     return r;
 }
@@ -196,22 +196,22 @@ Object::Ptr ScriptContainer::callFunction(const QString& functionname, List::Ptr
 {
     if(! d->script)
         if(! initialize())
-            return 0;
+            return Object::Ptr();
 
     if(hadException())
-        return 0;
+        return Object::Ptr();
 
     if(functionname.isEmpty()) {
-        setException( new Exception(QString(i18n("No functionname defined for ScriptContainer::callFunction()."))) );
+        setException( Exception::Ptr(new Exception(QString(i18n("No functionname defined for ScriptContainer::callFunction().")))) );
         finalize();
-        return 0;
+        return Object::Ptr();
     }
 
     Object::Ptr r = d->script->callFunction(functionname, arguments);
     if(d->script->hadException()) {
         setException( d->script->getException() );
         finalize();
-        return 0;
+        return Object::Ptr();
     }
     return r;
 }
@@ -225,16 +225,16 @@ Object::Ptr ScriptContainer::classInstance(const QString& classname)
 {
     if(! d->script)
         if(! initialize())
-            return 0;
+            return Object::Ptr();
 
     if(hadException())
-        return 0;
+        return Object::Ptr();
 
     Object::Ptr r = d->script->classInstance(classname);
     if(d->script->hadException()) {
         setException( d->script->getException() );
         finalize();
-        return 0;
+        return Object::Ptr();
     }
     return r;
 }
@@ -249,14 +249,14 @@ bool ScriptContainer::initialize()
         if(d->interpretername.isNull()) {
             d->interpretername = Manager::scriptManager()->getInterpreternameForFile( d->scriptfile );
             if(d->interpretername.isNull()) {
-                setException( new Exception(QString(i18n("Failed to determinate interpreter for scriptfile '%1'")).arg(d->scriptfile)) );
+                setException( Exception::Ptr(new Exception(QString(i18n("Failed to determinate interpreter for scriptfile '%1'")).arg(d->scriptfile))) );
                 return false;
             }
         }
 
         QFile f( d->scriptfile );
         if(! f.open(QIODevice::ReadOnly)) {
-            setException( new Exception(QString(i18n("Failed to open scriptfile '%1'")).arg(d->scriptfile)) );
+            setException( Exception::Ptr(new Exception(QString(i18n("Failed to open scriptfile '%1'")).arg(d->scriptfile))) );
             return false;
         }
         d->code = QString( f.readAll() );
@@ -265,13 +265,13 @@ bool ScriptContainer::initialize()
 
     Interpreter* interpreter = Manager::scriptManager()->getInterpreter(d->interpretername);
     if(! interpreter) {
-        setException( new Exception(QString(i18n("Unknown interpreter '%1'")).arg(d->interpretername)) );
+        setException( Exception::Ptr(new Exception(QString(i18n("Unknown interpreter '%1'")).arg(d->interpretername))) );
         return false;
     }
 
     d->script = interpreter->createScript(this);
     if(! d->script) {
-        setException( new Exception(QString(i18n("Failed to create script for interpreter '%1'")).arg(d->interpretername)) );
+        setException( Exception::Ptr(new Exception(QString(i18n("Failed to create script for interpreter '%1'")).arg(d->interpretername))) );
         return false;
     }
     if(d->script->hadException()) {
@@ -279,7 +279,7 @@ bool ScriptContainer::initialize()
         finalize();
         return false;
     }
-    setException( 0 ); // clear old exception
+    setException( Exception::Ptr() ); // clear old exception
 
     return true;
 }

@@ -116,7 +116,7 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
 #endif
 
     if(name.isEmpty()) // return a self-reference if no functionname is defined.
-        return this;
+        return Object::Ptr(this);
 
     // if name is defined try to get the matching child and pass the call to it.
     Object::Ptr object = getChild(name);
@@ -127,6 +127,6 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
 
     // If there exists no such object return NULL.
     kDebug() << QString("Object '%1' has no callable object named '%2'.").arg(getName()).arg(name) << endl;
-    return 0;
+    return Object::Ptr();
 }
 

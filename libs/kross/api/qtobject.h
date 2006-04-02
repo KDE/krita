@@ -95,6 +95,7 @@ namespace Kross { namespace Api {
             /// The wrapped QObject.
             QObject* m_object;
 
+#if 0
             // QProperty's
 
             /// Return a list of property names.
@@ -128,6 +129,7 @@ namespace Kross { namespace Api {
             Kross::Api::Object::Ptr connectSignal(Kross::Api::List::Ptr);
             /// Disconnect signal from QObject slot.
             Kross::Api::Object::Ptr disconnectSignal(Kross::Api::List::Ptr);
+#endif
 
     };
 

@@ -25,7 +25,7 @@
 #include <qmetaobject.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <private/qucom_p.h> // for the Qt QUObject API.
+//#include <private/qucom_p.h> // for the Qt QUObject API.
 
 using namespace Kross::Api;
 
@@ -51,6 +51,7 @@ Object::Ptr EventSignal::call(const QString& /*name*/, KSharedPtr<List> argument
     kDebug() << QString("EventSignal::call() name=%1 m_signal=%2 arguments=%3").arg(name).arg(m_signal).arg(arguments->toString()) << endl;
 #endif
 
+/*TODO
     QString n = m_signal;
 
     if(n.startsWith("2")) // Remove prefix of SIGNAL-macros
@@ -63,6 +64,6 @@ Object::Ptr EventSignal::call(const QString& /*name*/, KSharedPtr<List> argument
     QUObject* uo = QtObject::toQUObject(n, arguments);
     m_sender->qt_emit(signalid, uo); // emit the signal
     delete [] uo;
-
-    return new Variant(true, "Kross::Api::EventSignal::Bool");
+*/
+    return Object::Ptr(new Variant(true, "Kross::Api::EventSignal::Bool"));
 }

@@ -59,7 +59,7 @@ const QString MainModule::getClassName() const
 
 bool MainModule::hadException()
 {
-    return d->exception != 0;
+    return d->exception != Exception::Ptr();
 }
 
 Exception::Ptr MainModule::getException()
@@ -79,44 +79,44 @@ bool MainModule::hasChild(const QString& name) const
 
 EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, Q3CString signal)
 {
-    EventSignal* event = new EventSignal(name, this, sender, signal);
-    if(! addChild(event)) {
-        kWarning() << QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) << endl;
-        return 0;
+    EventSignal* event = new EventSignal(name, Object::Ptr(this), sender, signal);
+    if(! addChild(Object::Ptr(event))) {
+        //kWarning() << QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) << endl;
+        return EventSignal::Ptr();
     }
-    return event;
+    return EventSignal::Ptr(event);
 }
 
 EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, Q3CString slot)
 {
-    EventSlot* event = new EventSlot(name, this, receiver, slot);
-    if(! addChild(event)) {
-        kWarning() << QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) << endl;
+    EventSlot* event = new EventSlot(name, Object::Ptr(this), receiver, slot);
+    if(! addChild(Object::Ptr(event))) {
+        //kWarning() << QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) << endl;
         delete event;
-        return 0;
+        return EventSlot::Ptr();
     }
-    return event;
+    return EventSlot::Ptr(event);
 }
 
 QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
-    QtObject* qtobject = new QtObject(this, object, name);
-    if(! addChild(qtobject)) {
-        kWarning() << QString("Failed to add QObject name='%1'").arg(object->name()) << endl;
+    QtObject* qtobject = new QtObject(Object::Ptr(this), object, name);
+    if(! addChild(Object::Ptr(qtobject))) {
+        //kWarning() << QString("Failed to add QObject name='%1'").arg(object->name()) << endl;
         delete qtobject;
-        return 0;
+        return QtObject::Ptr();
     }
-    return qtobject;
+    return QtObject::Ptr(qtobject);
 }
 
 EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
-    EventAction* event = new EventAction(name, this, action);
-    if(! addChild(event)) {
-        kWarning() << QString("Failed to add KAction name='%1'").arg(action->name()) << endl;
+    EventAction* event = new EventAction(name, Object::Ptr(this), action);
+    if(! addChild(Object::Ptr(event))) {
+        //kWarning() << QString("Failed to add KAction name='%1'").arg(action->name()) << endl;
         delete event;
-        return 0;
+        return EventAction::Ptr();
     }
-    return event;
+    return EventAction::Ptr(event);
 }
 

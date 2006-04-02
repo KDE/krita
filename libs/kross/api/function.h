@@ -32,6 +32,7 @@ namespace Kross { namespace Api {
     {
         public:
             virtual Object::Ptr call(List::Ptr) = 0;
+            virtual ~Function() {}
     };
 
     template<class INSTANCE>

@@ -78,9 +78,9 @@ const QString Variant::getVariantType(Object::Ptr object)
     }
 }
 
-const QVariant& Variant::toVariant(Object::Ptr object)
+const QVariant Variant::toVariant(Object::Ptr object)
 {
-    return Object::fromObject<Variant>( object.data() )->getValue();
+    return Object::fromObject<Variant>( object )->getValue();
 }
 
 const QString Variant::toString(Object::Ptr object)
@@ -143,7 +143,7 @@ Q3ValueList<QVariant> Variant::toList(Object::Ptr object)
 {
     if(object->getClassName() == "Kross::Api::List") {
         Q3ValueList<QVariant> l;
-        Q3ValueList<Object::Ptr> list = Object::fromObject<List>( object.data() )->getValue();
+        Q3ValueList<Object::Ptr> list = Object::fromObject<List>( object )->getValue();
         for(Q3ValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
             l.append( toVariant(*it) );
         return l;

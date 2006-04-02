@@ -54,7 +54,7 @@ namespace Kross { namespace Api {
              * \param parent The parent this class is child of
              *        or NULL if this class has no parent.
              */
-            Class(const QString& name, Object::Ptr parent = 0)
+            Class(const QString& name, Object::Ptr parent = Object::Ptr())
                 : Event<T>(name, parent)
             {
             }

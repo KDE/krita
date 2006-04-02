@@ -39,7 +39,7 @@ Script::~Script()
 
 bool Script::hadException()
 {
-    return m_exception != 0;
+    return m_exception != Exception::Ptr();
 }
 
 Exception::Ptr Script::getException()

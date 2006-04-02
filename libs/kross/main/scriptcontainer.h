@@ -172,7 +172,7 @@ namespace Kross { namespace Api {
              * \return \a Object instance representing
              *        the functioncall returnvalue.
              */
-            KSharedPtr<Object> callFunction(const QString& functionname, KSharedPtr<List> arguments = 0);
+            KSharedPtr<Object> callFunction(const QString& functionname, KSharedPtr<List> arguments = KSharedPtr<List>());
 
             /**
              * Return a list of classes.

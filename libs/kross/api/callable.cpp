@@ -141,8 +141,7 @@ argend = ( argit == arglist.end() );
 Object::Ptr Callable::hasChild(List::Ptr args)
 {
     //kDebug() << QString("Kross::Api::Callable::hasChild() getName()=%1").arg(getName()) << endl;
-    return new Variant( Object::hasChild( Variant::toString(args->item(0)) ),
-                        "Kross::Api::Callable::hasChild::Bool" );
+    return Object::Ptr( new Variant(Object::hasChild( Variant::toString(args->item(0)) )) );
 }
 
 Object::Ptr Callable::getChild(List::Ptr args)
@@ -162,13 +161,13 @@ Object::Ptr Callable::getChildrenList(List::Ptr)
     QMap<QString, Object::Ptr>::Iterator it( children.begin() );
     for(; it != children.end(); ++it)
         list.append( it.key() );
-    return new Variant(list);
+    return Object::Ptr(new Variant(list));
 }
 
 Object::Ptr Callable::getChildrenDict(List::Ptr)
 {
     //kDebug()<<"Kross::Api::Callable::getChildrenDict()"<<endl;
-    return new Dict(Object::getChildren(), "Kross::Api::Callable::getChildrenDict::Dict");
+    return Object::Ptr(new Dict(Object::getChildren()));
 }
 
 Object::Ptr Callable::callChild(List::Ptr args)

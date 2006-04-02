@@ -42,6 +42,6 @@ Object::Ptr EventScript::call(const QString& name, KSharedPtr<List> arguments)
 {
     kDebug() << QString("EventScript::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) << endl;
     //TODO
-    return 0;
+    return Object::Ptr();
 }
 

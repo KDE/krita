@@ -65,7 +65,7 @@ namespace Kross { namespace Api {
              *        this exception object doesn't has a
              *        parent.
              */
-            Exception(const QString& error, long lineno = -1, Object::Ptr parent = 0);
+            Exception(const QString& error, long lineno = -1, Object::Ptr parent = Object::Ptr());
 
             /**
              * Destructor.

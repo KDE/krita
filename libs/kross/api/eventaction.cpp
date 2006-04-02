@@ -60,29 +60,29 @@ Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
 
 Object::Ptr EventAction::getText(List::Ptr)
 {
-    return new Variant(m_action->text(), "Kross::Api::EventAction::getText::String");
+    return Object::Ptr(new Variant(m_action->text()));
 }
 
 Object::Ptr EventAction::setText(List::Ptr args)
 {
     m_action->setText( Variant::toString(args->item(0)) );
-    return 0;
+    return Object::Ptr();
 }
 
 Object::Ptr EventAction::isEnabled(List::Ptr)
 {
-    return new Variant(m_action->isEnabled(), "Kross::Api::EventAction::isEnabled::Bool");
+    return Object::Ptr(new Variant(m_action->isEnabled()));
 }
 
 Object::Ptr EventAction::setEnabled(List::Ptr args)
 {
     m_action->setEnabled( Variant::toBool(args->item(0)) );
-    return 0;
+    return Object::Ptr();
 }
 
 Object::Ptr EventAction::activate(List::Ptr)
 {
-    m_action->activate();
-    return 0;
+    m_action->activate( QAction::Trigger );
+    return Object::Ptr();
 }
 

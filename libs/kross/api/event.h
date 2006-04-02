@@ -78,8 +78,9 @@ namespace Kross { namespace Api {
              */
             virtual ~Event()
             {
-                for(QMapIterator<QString, Function* > it = m_functions.begin(); it != m_functions.end(); ++it)
-                    delete it.data();
+                QMapIterator<QString, Function* > it(m_functions);
+                while(it.hasNext())
+                    delete it.next().value();
             }
 
             /**
@@ -227,7 +228,7 @@ namespace Kross { namespace Api {
 
                 if(name.isNull()) {
                     // If no name is defined, we return a reference to our instance.
-                    return this;
+                    return Object::Ptr(this);
                 }
 
                 // Redirect the call to the Kross::Api::Callable we are inheritated from.

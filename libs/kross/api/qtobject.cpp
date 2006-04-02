@@ -34,7 +34,7 @@
 //#include <qglobal.h>
 //#include <qobjectdefs.h>
 #include <qmetaobject.h>
-#include <private/qucom_p.h> // for the Qt QUObject API.
+//#include <private/qucom_p.h> // for the Qt QUObject API.
 
 using namespace Kross::Api;
 
@@ -42,6 +42,7 @@ QtObject::QtObject(Object::Ptr parent, QObject* object, const QString& name)
     : Kross::Api::Class<QtObject>(name.isEmpty() ? object->name() : name, parent)
     , m_object(object)
 {
+/*TODO
     // Walk through the signals and slots the QObject has
     // and attach them as events to this QtObject.
 
@@ -89,6 +90,7 @@ QtObject::QtObject(Object::Ptr parent, QObject* object, const QString& name)
             << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("disconnect", &QtObject::disconnectSignal,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+*/
 }
 
 QtObject::~QtObject()
@@ -104,6 +106,8 @@ QObject* QtObject::getObject()
 {
     return m_object;
 }
+
+#if 0
 
 QUObject* QtObject::toQUObject(const QString& signature, List::Ptr arguments)
 {
@@ -259,3 +263,4 @@ Kross::Api::Object::Ptr QtObject::disconnectSignal(Kross::Api::List::Ptr)
     return 0;
 }
 
+#endif

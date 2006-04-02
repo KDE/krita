@@ -148,7 +148,7 @@ InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
     return d->interpreterinfos[interpretername];
 }
 
-const QString& Manager::getInterpreternameForFile(const QString& file)
+const QString Manager::getInterpreternameForFile(const QString& file)
 {
     QRegExp rx;
     rx.setWildcard(true);
@@ -170,15 +170,15 @@ ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
     //ScriptContainer script(this, scriptname);
     //d->m_scriptcontainers.replace(scriptname, scriptcontainer);
 
-    return scriptcontainer;
+    return ScriptContainer::Ptr(scriptcontainer);
 }
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
 {
-    setException(0); // clear previous exceptions
+    setException( Exception::Ptr() ); // clear previous exceptions
 
     if(! d->interpreterinfos.contains(interpretername)) {
-        setException( new Exception(QString(i18n("No such interpreter '%1'")).arg(interpretername)) );
+        setException( Exception::Ptr(new Exception(QString(i18n("No such interpreter '%1'")).arg(interpretername))) );
         return 0;
     }
 
@@ -208,7 +208,7 @@ bool Manager::addModule(Module::Ptr module)
 
 Module::Ptr Manager::loadModule(const QString& modulename)
 {
-    Module::Ptr module = 0;
+    Module::Ptr module;
 
     if(d->modules.contains(modulename)) {
         module = d->modules[modulename];
@@ -222,7 +222,7 @@ Module::Ptr Manager::loadModule(const QString& modulename)
     KLibrary* lib = loader->globalLibrary( modulename.latin1() );
     if(! lib) {
         kWarning() << QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) << endl;
-        return 0;
+        return Module::Ptr();
     }
     kDebug() << QString("Successfully loaded module '%1'").arg(modulename) << endl;
 
@@ -231,7 +231,7 @@ Module::Ptr Manager::loadModule(const QString& modulename)
 
     if(! func) {
         kWarning() << QString("Failed to determinate init function in module '%1'").arg(modulename) << endl;
-        return 0;
+        return Module::Ptr();
     }
 
     try {
@@ -239,13 +239,13 @@ Module::Ptr Manager::loadModule(const QString& modulename)
     }
     catch(Kross::Api::Exception::Ptr e) {
         kWarning() << e->toString() << endl;
-        module = 0;
+        module = Module::Ptr();
     }
     lib->unload();
 
     if(! module) {
         kWarning() << QString("Failed to load module '%1'").arg(modulename) << endl;
-        return 0;
+        return Module::Ptr();
     }
 
     // Don't remember module cause we like to have freeing it handled by the caller.

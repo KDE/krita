@@ -104,7 +104,7 @@ namespace Kross { namespace Api {
              *        to execute the file or QString::null if we failed
              *        to determinate a matching interpreter for the file.
              */
-            const QString& getInterpreternameForFile(const QString& file);
+            const QString getInterpreternameForFile(const QString& file);
 
             /**
              * Return the existing \a ScriptContainer with scriptname

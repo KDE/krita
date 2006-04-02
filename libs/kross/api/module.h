@@ -67,9 +67,9 @@ namespace Kross { namespace Api {
              * Method to load from \a Kross::Api::Object inherited classes
              * this module implements from within other modules.
              */
-            virtual Kross::Api::Object::Ptr get(const QString& /*name*/, void* /*pointer*/ = 0)
+            virtual Object::Ptr get(const QString& /*name*/, void* /*pointer*/ = 0)
             {
-                return 0;
+                return Object::Ptr();
             }
 
     };

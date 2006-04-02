@@ -377,9 +377,9 @@ void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * se
         while (nPixels > 0) {
             if ( !((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) ) {
                 cs->toQColor(pixels, &c);
-                m_bins.at(0).at(c.Qt::red())++;
-                m_bins.at(1).at(c.Qt::green())++;
-                m_bins.at(2).at(c.Qt::blue())++;
+                m_bins.at(0).at(c.red())++;
+                m_bins.at(1).at(c.green())++;
+                m_bins.at(2).at(c.blue())++;
 
                 m_count++;
             }
@@ -394,9 +394,9 @@ void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * se
 
             if ( !(m_skipTransparent && cs->getAlpha(pixels) == OPACITY_TRANSPARENT)) {
                 cs->toQColor(pixels, &c);
-                m_bins.at(0).at(c.Qt::red())++;
-                m_bins.at(1).at(c.Qt::green())++;
-                m_bins.at(2).at(c.Qt::blue())++;
+                m_bins.at(0).at(c.red())++;
+                m_bins.at(1).at(c.green())++;
+                m_bins.at(2).at(c.blue())++;
 
                 m_count++;
             }

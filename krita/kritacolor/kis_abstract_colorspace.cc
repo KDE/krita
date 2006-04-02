@@ -121,9 +121,9 @@ KisAbstractColorSpace::~KisAbstractColorSpace()
 
 void KisAbstractColorSpace::fromQColor(const QColor& color, quint8 *dst, KisProfile * profile)
 {
-    m_qcolordata[2] = color.Qt::red();
-    m_qcolordata[1] = color.Qt::green();
-    m_qcolordata[0] = color.Qt::blue();
+    m_qcolordata[2] = color.red();
+    m_qcolordata[1] = color.green();
+    m_qcolordata[0] = color.blue();
 
 
     if (profile == 0) {
@@ -179,7 +179,7 @@ void KisAbstractColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opaci
 
 void KisAbstractColorSpace::getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex)
 {
-    if (channelIndex < m_channels.count()) {
+    if (channelIndex < (quint32)m_channels.count()) {
 
         fromQColor(Qt::black, OPACITY_TRANSPARENT, dstPixel);
 
@@ -530,9 +530,9 @@ void KisAbstractColorSpace::convolveColors(quint8** colors, qint32 * kernelValue
             QColor c;
             quint8 opacity;
             const_cast<KisAbstractColorSpace *>(this)->toQColor( *colors, &c, &opacity );
-            totalRed += c.Qt::red() * weight;
-            totalGreen += c.Qt::green() * weight;
-            totalBlue += c.Qt::blue() * weight;
+            totalRed += c.red() * weight;
+            totalGreen += c.green() * weight;
+            totalBlue += c.blue() * weight;
             totalAlpha += opacity * weight;
         }
         colors++;
@@ -586,9 +586,9 @@ void KisAbstractColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shad
             qint32 r, g, b;
 
             if (compensate) {
-                r = static_cast<qint32>( qMin(255, (c.red() * shade) / (compensation * 255)));
-                g = static_cast<qint32>( qMin(255, (c.green() * shade) / (compensation * 255)));
-                b = static_cast<qint32>( qMin(255, (c.blue() * shade) / (compensation * 255)));
+                r = static_cast<qint32>( qMin(255, static_cast<qint32>((c.red() * shade) / (compensation * 255))));
+                g = static_cast<qint32>( qMin(255, static_cast<qint32>((c.green() * shade) / (compensation * 255))));
+                b = static_cast<qint32>( qMin(255, static_cast<qint32>((c.blue() * shade) / (compensation * 255))));
             }
             else {
                 r = static_cast<qint32>( qMin(255, (c.red() * shade / 255)));

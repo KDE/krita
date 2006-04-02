@@ -28,7 +28,6 @@ set(kofficeui_LIB_SRCS
    KoCharSelectDia.cpp 
    KoInsertLink.cpp 
    KoEditPath.cpp 
-   KoCommandHistory.cpp 
    KoSelectAction.cpp 
    Kolinewidthaction.cpp 
    Kolinestyleaction.cpp 

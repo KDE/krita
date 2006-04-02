@@ -51,7 +51,7 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
                     tmp,page, "list_editor" , false, KEditListBox::Add|KEditListBox::Remove );
 
     grid->addMultiCellWidget(m_listpath, 0, 4, 0, 0);
-    m_listpath->listBox()->insertStringList(QStringList::split(QString(";"), _path));
+    m_listpath->setItems(QStringList::split(QString(";"), _path));
     setFocus();
     resize( 500, 300);
 }
@@ -59,11 +59,15 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
 QString KoEditPathDia::newPath()const
 {
     QString tmp;
-    for (int i = 0; i <(int)m_listpath->listBox()->count(); i++)
+    QStringList items = m_listpath->items();
+    QStringList::iterator it = items.begin();
+    QStringList::iterator endIt = items.end();
+
+    for (; it != endIt; ++it)
     {
-        if ( i!=0)
+        if (!tmp.isEmpty())
             tmp +=";";
-        tmp += m_listpath->listBox()->text( i );
+        tmp += *it;
     }
     return tmp;
 }

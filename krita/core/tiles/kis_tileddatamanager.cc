@@ -528,10 +528,10 @@ KisMementoSP KisTiledDataManager::getMemento()
 
 void KisTiledDataManager::rollback(KisMementoSP memento)
 {
-    if (memento == 0) return;
+    if (memento.isNull()) return;
     //Q_ASSERT(memento != 0);
 
-    if (m_currentMemento != 0) {
+    if (!m_currentMemento.isNull()) {
         // Undo means our current memento is no longer valid so remove it.
         m_currentMemento = 0;
     }
@@ -615,10 +615,10 @@ void KisTiledDataManager::rollback(KisMementoSP memento)
 
 void KisTiledDataManager::rollforward(KisMementoSP memento)
 {
-    if (memento == 0) return;
+    if (memento.isNull()) return;
     //Q_ASSERT(memento != 0);
 
-    if (m_currentMemento != 0) {
+    if (!m_currentMemento.isNull()) {
         // Redo means our current memento is no longer valid so remove it.
         m_currentMemento = 0;
     }

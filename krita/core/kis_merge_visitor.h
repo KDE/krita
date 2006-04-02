@@ -55,7 +55,7 @@ public:
     virtual bool visit(KisPaintLayer *layer)
     {
         
-        if (m_projection == 0) {
+        if (m_projection.isNull()) {
             return false;
         }
         
@@ -86,7 +86,7 @@ public:
     virtual bool visit(KisGroupLayer *layer)
     {
         
-        if (m_projection == 0) {
+        if (m_projection.isNull()) {
             return false;
         }
         
@@ -121,7 +121,7 @@ public:
         kDebug(41010) << "Visiting on part layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
         
-        if (m_projection == 0) {
+        if (m_projection.isNull()) {
             return false;
         }
         if (!layer->visible())
@@ -154,7 +154,7 @@ public:
         kDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
         
-        if (m_projection == 0) {
+        if (m_projection.isNull()) {
             return true;
         }
         
@@ -165,16 +165,16 @@ public:
         if (!cfg) return false;
 
         
-        KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
+        KisFilterSP f = KisFilterRegistry::instance()->get( cfg->name() );
         if (!f) return false;
         
         KisSelectionSP selection = layer->selection();
 
         // Copy of the projection -- use the copy-on-write trick.
-        KisPaintDeviceSP tmp = new KisPaintDevice(*m_projection);
+        KisPaintDeviceSP tmp = KisPaintDeviceSP(new KisPaintDevice(*m_projection));
 
         // If there's a selection, only keep the selected bits
-        if (selection != 0) {
+        if (!selection.isNull()) {
             tmp->setSelection(selection);
         }
         

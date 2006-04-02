@@ -26,12 +26,12 @@
 #include <climits>
 #include <strings.h>
 
-#include "qbrush.h"
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <qbrush.h>
+#include <qfontinfo.h>
+#include <qfontmetrics.h>
+#include <qpen.h>
+#include <qregion.h>
+#include <qmatrix.h>
 #include <qimage.h>
 #include <qmap.h>
 #include <qpainter.h>
@@ -154,7 +154,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         qint32 sx, qint32 sy,
                         qint32 sw, qint32 sh)
 {
-    if (srcdev == 0) {
+    if (srcdev.isNull()) {
         return;
     }
 
@@ -241,11 +241,11 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
                   qint32 sx, qint32 sy,
                   qint32 sw, qint32 sh)
 {
-    if (srcdev == 0) return;
+    if (srcdev.isNull()) return;
 
-    if (seldev == 0) return;
+    if (seldev.isNull()) return;
 
-    if (m_device == 0) return;
+    if (m_device.isNull()) return;
 
     if (seldev->isTotallyUnselected(QRect(dx, dy, sw, sh))) {
 /*
@@ -348,7 +348,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
                   qint32 sx, qint32 sy,
                   qint32 sw, qint32 sh)
 {
-    if (m_device == 0) return;
+    if (m_device.isNull()) return;
     if (!m_device->hasSelection()) {
         bitBlt(dx, dy, op, srcdev, opacity, sx, sy, sw, sh);
     }
@@ -777,7 +777,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    KisPaintDeviceSP polygon = new KisPaintDevice(m_device->colorSpace(), "polygon");
+    KisPaintDeviceSP polygon = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "polygon"));
     Q_CHECK_PTR(polygon);
 
     KisFillPainter fillPainter(polygon);
@@ -808,7 +808,7 @@ void KisPainter::fillPolygon(const vKisPoint& points, FillStyle fillStyle)
         break;
     }
 
-    KisSelectionSP polygonMask = new KisSelection(polygon);
+    KisSelectionSP polygonMask = KisSelectionSP(new KisSelection(polygon));
 
     for (y=y0; y<=y1; y++) {        /* step through scanlines */
         /* scanline y is at y+.5 in continuous coordinates */

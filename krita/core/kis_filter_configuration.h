@@ -50,7 +50,9 @@ public:
      * Deep copy the filter configFile
      */
     KisFilterConfiguration(const KisFilterConfiguration & rhs);
-            
+
+    virtual ~KisFilterConfiguration() {}
+
 public:
 
     /**

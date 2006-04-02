@@ -19,7 +19,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "qwidget.h"
+#include <qwidget.h>
+
 #include "kis_painter.h"
 #include "kis_layer.h"
 #include "kis_types.h"
@@ -54,7 +55,7 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
     // the target layer. We only use a real temporary layer for things
     // like filter tools.
 
-    KisPaintDeviceSP dab = new KisPaintDevice(cs, "dab");
+    KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
     Q_CHECK_PTR(dab);
 
     KisColor kc = m_painter->paintColor();

@@ -76,7 +76,7 @@ protected:
     void rollforward(KisMementoSP memento);
 
     // For debugging use.
-    bool hasCurrentMemento() const { return m_currentMemento != 0; }
+    bool hasCurrentMemento() const { return !m_currentMemento.isNull(); }
 
 protected:
     /**

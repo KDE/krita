@@ -89,7 +89,7 @@ KisThreadPool * KisThreadPool::instance()
     }
     else {
 
-        if (KisThreadPool::m_singleton->finished()) {
+        if (KisThreadPool::m_singleton->isFinished()) {
             delete KisThreadPool::m_singleton;
             KisThreadPool::m_singleton = 0;
             KisThreadPool::m_singleton = new KisThreadPool();
@@ -167,7 +167,7 @@ void KisThreadPool::run()
             m_poolMutex.lock();
             for ( KisThread * t = m_runningThreads.first(); t; t = m_runningThreads.next()) {
                 if (t) {
-                    if (t->finished()) {
+                    if (t->isFinished()) {
                         m_runningThreads.remove(t);
                         m_numberOfRunningThreads--;
                         m_oldThreads.append(t);

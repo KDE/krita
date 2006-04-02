@@ -201,12 +201,12 @@ bool KisBrush::init()
     if (bh.version == 1) {
         // Version 1 has no magic number or spacing, so the name
         // is at a different offset. Character encoding is undefined.
-        const char *text = &m_data[sizeof(GimpBrushV1Header)];
+        const char *text = &(m_data.constData()[sizeof(GimpBrushV1Header)]);
         name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
     } else {
         // ### Version = 3->cinepaint; may be float16 data!
         // Version >=2: UTF-8 encoding is used
-        name = QString::fromUtf8(&m_data[sizeof(GimpBrushHeader)],
+        name = QString::fromUtf8(&(m_data.constData()[sizeof(GimpBrushHeader)]),
                                   bh.header_size - sizeof(GimpBrushHeader));
     }
 
@@ -391,7 +391,7 @@ KisAlphaMaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX,
     findScaledBrushes(scale, &aboveBrush,  &belowBrush);
     Q_ASSERT(aboveBrush != 0);
 
-    KisAlphaMaskSP outputMask = 0;
+    KisAlphaMaskSP outputMask = KisAlphaMaskSP(0);
 
     if (belowBrush != 0) {
         // We're in between two masks. Interpolate between them.
@@ -465,18 +465,18 @@ KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintI
 	    quint8 * p = iter.rawData();
 
             QRgb pixel = outputImage.pixel(x, y);
-            int Qt::red = qRed(pixel);
-            int Qt::green = qGreen(pixel);
-            int Qt::blue = qBlue(pixel);
+            int red = qRed(pixel);
+            int green = qGreen(pixel);
+            int blue = qBlue(pixel);
             int alpha = qAlpha(pixel);
 
             // Scaled images are in pre-multiplied alpha form so
             // divide by alpha.
 	    // channel order is BGRA
             if (alpha != 0) {
-                p[2] = (Qt::red * 255) / alpha;
-                p[1] = (Qt::green * 255) / alpha;
-		p[0] = (Qt::blue * 255) / alpha;
+                p[2] = (red * 255) / alpha;
+                p[1] = (green * 255) / alpha;
+		p[0] = (blue * 255) / alpha;
 		p[3] = alpha;
             }
 
@@ -484,7 +484,7 @@ KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintI
         }
     }
 
-    return layer;
+    return KisPaintDeviceSP(layer);
 }
 
 void KisBrush::setHotSpot(KisPoint pt)
@@ -564,7 +564,7 @@ void KisBrush::createScaledBrushes() const
             scaledImage = scaleImage(scaledImage, width, height);
         }
 
-        KisAlphaMaskSP scaledMask = new KisAlphaMask(scaledImage, hasColor());
+        KisAlphaMaskSP scaledMask = KisAlphaMaskSP(new KisAlphaMask(scaledImage, hasColor()));
         Q_CHECK_PTR(scaledMask);
 
         double xScale = static_cast<double>(width) / m_img.width();
@@ -628,7 +628,7 @@ KisAlphaMaskSP KisBrush::scaleMask(const ScaledBrush *srcBrush, double scale, do
     int dstWidth = static_cast<int>(ceil(scale * width())) + 1;
     int dstHeight = static_cast<int>(ceil(scale * height())) + 1;
 
-    KisAlphaMaskSP dstMask = new KisAlphaMask(dstWidth, dstHeight);
+    KisAlphaMaskSP dstMask = KisAlphaMaskSP(new KisAlphaMask(dstWidth, dstHeight));
     Q_CHECK_PTR(dstMask);
 
     KisAlphaMaskSP srcMask = srcBrush->mask();
@@ -746,15 +746,15 @@ QImage KisBrush::scaleImage(const ScaledBrush *srcBrush, double scale, double su
             double b = 1 - yInterp;
 
             // Bi-linear interpolation. Image is pre-multiplied by alpha.
-            int Qt::red = static_cast<int>(a * b * qRed(topLeft)
+            int red = static_cast<int>(a * b * qRed(topLeft)
                 + a * (1 - b) * qRed(bottomLeft)
                 + (1 - a) * b * qRed(topRight)
                 + (1 - a) * (1 - b) * qRed(bottomRight) + 0.5);
-            int Qt::green = static_cast<int>(a * b * qGreen(topLeft)
+            int green = static_cast<int>(a * b * qGreen(topLeft)
                 + a * (1 - b) * qGreen(bottomLeft)
                 + (1 - a) * b * qGreen(topRight)
                 + (1 - a) * (1 - b) * qGreen(bottomRight) + 0.5);
-            int Qt::blue = static_cast<int>(a * b * qBlue(topLeft)
+            int blue = static_cast<int>(a * b * qBlue(topLeft)
                 + a * (1 - b) * qBlue(bottomLeft)
                 + (1 - a) * b * qBlue(topRight)
                 + (1 - a) * (1 - b) * qBlue(bottomRight) + 0.5);
@@ -763,28 +763,28 @@ QImage KisBrush::scaleImage(const ScaledBrush *srcBrush, double scale, double su
                 + (1 - a) * b * qAlpha(topRight)
                 + (1 - a) * (1 - b) * qAlpha(bottomRight) + 0.5);
 
-            if (Qt::red < 0) {
-                Qt::red = 0;
+            if (red < 0) {
+                red = 0;
             }
             else
-            if (Qt::red > 255) {
-                Qt::red = 255;
+            if (red > 255) {
+                red = 255;
             }
 
-            if (Qt::green < 0) {
-                Qt::green = 0;
+            if (green < 0) {
+                green = 0;
             }
             else
-            if (Qt::green > 255) {
-                Qt::green = 255;
+            if (green > 255) {
+                green = 255;
             }
 
-            if (Qt::blue < 0) {
-                Qt::blue = 0;
+            if (blue < 0) {
+                blue = 0;
             }
             else
-            if (Qt::blue > 255) {
-                Qt::blue = 255;
+            if (blue > 255) {
+                blue = 255;
             }
 
             if (alpha < 0) {
@@ -863,15 +863,15 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
                 int alpha;
 
                 if (srcImage.hasAlphaBuffer()) {
-                    Qt::red = static_cast<int>(a * b * qRed(topLeft)         * qAlpha(topLeft)
+                    red = static_cast<int>(a * b * qRed(topLeft)         * qAlpha(topLeft)
                         + a * (1 - b) * qRed(bottomLeft)             * qAlpha(bottomLeft)
                         + (1 - a) * b * qRed(topRight)               * qAlpha(topRight)
                         + (1 - a) * (1 - b) * qRed(bottomRight)      * qAlpha(bottomRight) + 0.5);
-                    Qt::green = static_cast<int>(a * b * qGreen(topLeft)     * qAlpha(topLeft)
+                    green = static_cast<int>(a * b * qGreen(topLeft)     * qAlpha(topLeft)
                         + a * (1 - b) * qGreen(bottomLeft)           * qAlpha(bottomLeft)
                         + (1 - a) * b * qGreen(topRight)             * qAlpha(topRight)
                         + (1 - a) * (1 - b) * qGreen(bottomRight)    * qAlpha(bottomRight) + 0.5);
-                    Qt::blue = static_cast<int>(a * b * qBlue(topLeft)       * qAlpha(topLeft)
+                    blue = static_cast<int>(a * b * qBlue(topLeft)       * qAlpha(topLeft)
                         + a * (1 - b) * qBlue(bottomLeft)            * qAlpha(bottomLeft)
                         + (1 - a) * b * qBlue(topRight)              * qAlpha(topRight)
                         + (1 - a) * (1 - b) * qBlue(bottomRight)     * qAlpha(bottomRight) + 0.5);
@@ -881,49 +881,49 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
                         + (1 - a) * (1 - b) * qAlpha(bottomRight) + 0.5);
 
                     if (alpha != 0) {
-                        Qt::red /= alpha;
-                        Qt::green /= alpha;
-                        Qt::blue /= alpha;
+                        red /= alpha;
+                        green /= alpha;
+                        blue /= alpha;
                     }
                 }
                 else {
-                    Qt::red = static_cast<int>(a * b * qRed(topLeft)
+                    red = static_cast<int>(a * b * qRed(topLeft)
                         + a * (1 - b) * qRed(bottomLeft)
                         + (1 - a) * b * qRed(topRight)
                         + (1 - a) * (1 - b) * qRed(bottomRight) + 0.5);
-                    Qt::green = static_cast<int>(a * b * qGreen(topLeft)
+                    green = static_cast<int>(a * b * qGreen(topLeft)
                         + a * (1 - b) * qGreen(bottomLeft)
                         + (1 - a) * b * qGreen(topRight)
                         + (1 - a) * (1 - b) * qGreen(bottomRight) + 0.5);
-                    Qt::blue = static_cast<int>(a * b * qBlue(topLeft)
+                    blue = static_cast<int>(a * b * qBlue(topLeft)
                         + a * (1 - b) * qBlue(bottomLeft)
                         + (1 - a) * b * qBlue(topRight)
                         + (1 - a) * (1 - b) * qBlue(bottomRight) + 0.5);
                     alpha = 255;
                 }
 
-                if (Qt::red < 0) {
-                    Qt::red = 0;
+                if (red < 0) {
+                    red = 0;
                 }
                 else
-                if (Qt::red > 255) {
-                    Qt::red = 255;
+                if (red > 255) {
+                    red = 255;
                 }
 
-                if (Qt::green < 0) {
-                    Qt::green = 0;
+                if (green < 0) {
+                    green = 0;
                 }
                 else
-                if (Qt::green > 255) {
-                    Qt::green = 255;
+                if (green > 255) {
+                    green = 255;
                 }
 
-                if (Qt::blue < 0) {
-                    Qt::blue = 0;
+                if (blue < 0) {
+                    blue = 0;
                 }
                 else
-                if (Qt::blue > 255) {
-                    Qt::blue = 255;
+                if (blue > 255) {
+                    blue = 255;
                 }
 
                 if (alpha < 0) {
@@ -934,7 +934,7 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
                     alpha = 255;
                 }
 
-                scaledImage.setPixel(dstX, dstY, qRgba(Qt::red, Qt::green, Qt::blue, alpha));
+                scaledImage.setPixel(dstX, dstY, qRgba(red, green, blue, alpha));
             }
         }
 
@@ -979,7 +979,7 @@ KisAlphaMaskSP KisBrush::scaleSinglePixelMask(double scale, quint8 maskValue, do
     int srcHeight = 1;
     int dstWidth = 2;
     int dstHeight = 2;
-    KisAlphaMaskSP outputMask = new KisAlphaMask(dstWidth, dstHeight);
+    KisAlphaMaskSP outputMask = KisAlphaMaskSP(new KisAlphaMask(dstWidth, dstHeight));
     Q_CHECK_PTR(outputMask);
 
     double a = subPixelX;
@@ -1040,15 +1040,15 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
             QRgb bottomRight = (x < srcWidth && y < srcHeight) ? pixel : qRgba(0, 0, 0, 0);
 
             // Bi-linear interpolation. Images are in pre-multiplied form.
-            int Qt::red = static_cast<int>(a * b * qRed(topLeft)
+            int red = static_cast<int>(a * b * qRed(topLeft)
                 + a * (1 - b) * qRed(bottomLeft)
                 + (1 - a) * b * qRed(topRight)
                 + (1 - a) * (1 - b) * qRed(bottomRight) + 0.5);
-            int Qt::green = static_cast<int>(a * b * qGreen(topLeft)
+            int green = static_cast<int>(a * b * qGreen(topLeft)
                 + a * (1 - b) * qGreen(bottomLeft)
                 + (1 - a) * b * qGreen(topRight)
                 + (1 - a) * (1 - b) * qGreen(bottomRight) + 0.5);
-            int Qt::blue = static_cast<int>(a * b * qBlue(topLeft)
+            int blue = static_cast<int>(a * b * qBlue(topLeft)
                 + a * (1 - b) * qBlue(bottomLeft)
                 + (1 - a) * b * qBlue(topRight)
                 + (1 - a) * (1 - b) * qBlue(bottomRight) + 0.5);
@@ -1063,32 +1063,32 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
 
             // Apply to the colour channels too since we are
             // storing pre-multiplied by alpha.
-            Qt::red = static_cast<int>(Qt::red * scale * scale + 0.5);
-            Qt::green = static_cast<int>(Qt::green * scale * scale + 0.5);
-            Qt::blue = static_cast<int>(Qt::blue * scale * scale + 0.5);
+            red = static_cast<int>(red * scale * scale + 0.5);
+            green = static_cast<int>(green * scale * scale + 0.5);
+            blue = static_cast<int>(blue * scale * scale + 0.5);
 
-            if (Qt::red < 0) {
-                Qt::red = 0;
+            if (red < 0) {
+                red = 0;
             }
             else
-            if (Qt::red > 255) {
-                Qt::red = 255;
+            if (red > 255) {
+                red = 255;
             }
 
-            if (Qt::green < 0) {
-                Qt::green = 0;
+            if (green < 0) {
+                green = 0;
             }
             else
-            if (Qt::green > 255) {
-                Qt::green = 255;
+            if (green > 255) {
+                green = 255;
             }
 
-            if (Qt::blue < 0) {
-                Qt::blue = 0;
+            if (blue < 0) {
+                blue = 0;
             }
             else
-            if (Qt::blue > 255) {
-                Qt::blue = 255;
+            if (blue > 255) {
+                blue = 255;
             }
 
             if (alpha < 0) {
@@ -1123,33 +1123,33 @@ QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double 
             QRgb image2pixel = image2.pixel(x, y);
 
             // Images are in pre-multiplied alpha format.
-            int Qt::red = static_cast<int>((1 - t) * qRed(image1pixel) + t * qRed(image2pixel) + 0.5);
-            int Qt::green = static_cast<int>((1 - t) * qGreen(image1pixel) + t * qGreen(image2pixel) + 0.5);
-            int Qt::blue = static_cast<int>((1 - t) * qBlue(image1pixel) + t * qBlue(image2pixel) + 0.5);
+            int red = static_cast<int>((1 - t) * qRed(image1pixel) + t * qRed(image2pixel) + 0.5);
+            int green = static_cast<int>((1 - t) * qGreen(image1pixel) + t * qGreen(image2pixel) + 0.5);
+            int blue = static_cast<int>((1 - t) * qBlue(image1pixel) + t * qBlue(image2pixel) + 0.5);
             int alpha = static_cast<int>((1 - t) * qAlpha(image1pixel) + t * qAlpha(image2pixel) + 0.5);
 
-            if (Qt::red < 0) {
-                Qt::red = 0;
+            if (red < 0) {
+                red = 0;
             }
             else
-            if (Qt::red > 255) {
-                Qt::red = 255;
+            if (red > 255) {
+                red = 255;
             }
 
-            if (Qt::green < 0) {
-                Qt::green = 0;
+            if (green < 0) {
+                green = 0;
             }
             else
-            if (Qt::green > 255) {
-                Qt::green = 255;
+            if (green > 255) {
+                green = 255;
             }
 
-            if (Qt::blue < 0) {
-                Qt::blue = 0;
+            if (blue < 0) {
+                blue = 0;
             }
             else
-            if (Qt::blue > 255) {
-                Qt::blue = 255;
+            if (blue > 255) {
+                blue = 255;
             }
 
             if (alpha < 0) {
@@ -1194,16 +1194,16 @@ KisBrush::ScaledBrush::ScaledBrush(KisAlphaMaskSP scaledMask, const QImage& scal
 
                 QRgb pixel = m_image.pixel(x, y);
 
-                int Qt::red = qRed(pixel);
-                int Qt::green = qGreen(pixel);
-                int Qt::blue = qBlue(pixel);
+                int red = qRed(pixel);
+                int green = qGreen(pixel);
+                int blue = qBlue(pixel);
                 int alpha = qAlpha(pixel);
 
-                Qt::red = (Qt::red * alpha) / 255;
-                Qt::green = (Qt::green * alpha) / 255;
-                Qt::blue = (Qt::blue * alpha) / 255;
+                red = (red * alpha) / 255;
+                green = (green * alpha) / 255;
+                blue = (blue * alpha) / 255;
 
-                m_image.setPixel(x, y, qRgba(Qt::red, Qt::green, Qt::blue, alpha));
+                m_image.setPixel(x, y, qRgba(red, green, blue, alpha));
             }
         }
     }
@@ -1278,7 +1278,7 @@ void KisBrush::generateBoundary() {
         }
     }
 
-    m_boundary = new KisBoundary(dev);
+    m_boundary = new KisBoundary(dev.data());
     m_boundary->generateBoundary(w, h);
 }
 

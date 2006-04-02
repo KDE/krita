@@ -110,7 +110,7 @@ QImage KisSelection::maskImage()
 }
 void KisSelection::select(QRect r)
 {
-    KisFillPainter painter(this);
+    KisFillPainter painter(KisPaintDeviceSP(this));
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     painter.fillRect(r, KisColor(Qt::white, cs), MAX_SELECTED);
     qint32 x, y, w, h;
@@ -119,7 +119,7 @@ void KisSelection::select(QRect r)
 
 void KisSelection::clear(QRect r)
 {
-    KisFillPainter painter(this);
+    KisFillPainter painter(KisPaintDeviceSP(this));
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     painter.fillRect(r, KisColor(Qt::white, cs), MIN_SELECTED);
 }
@@ -205,7 +205,7 @@ void KisSelection::paintUniformSelectionRegion(QImage img, const QRect& imageRec
                         quint8 srcAlpha = qAlpha(srcPixel);
 
                         srcGrey = UINT8_MULT(srcGrey, srcAlpha);
-                        quint8 dstAlpha = qMax(srcAlpha, 192);
+                        quint8 dstAlpha = qMax(srcAlpha, quint8(192));
 
                         QRgb dstPixel = qRgba(128 + srcGrey, 128 + srcGrey, 165 + srcGrey, dstAlpha);
                         *imagePixel = dstPixel;
@@ -312,7 +312,7 @@ void KisSelection::paintSelection(QImage img, qint32 imageRectX, qint32 imageRec
     
                         // Stop unselected transparent areas from appearing the same
                         // as selected transparent areas.
-                        quint8 dstAlpha = qMax(srcAlpha, 192);
+                        quint8 dstAlpha = qMax(srcAlpha, quint8(192));
     
                         // now for a simple outline based on 4-connectivity
                         if (left != MIN_SELECTED || right != MIN_SELECTED || above != MIN_SELECTED || below != MIN_SELECTED) {
@@ -514,7 +514,7 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
 
                         // Stop unselected transparent areas from appearing the same
                         // as selected transparent areas.
-                        quint8 dstAlpha = qMax(srcAlpha, 192);
+                        quint8 dstAlpha = qMax(srcAlpha, quint8(192));
 
                         // now for a simple outline based on 4-connectivity
                         if (left != MIN_SELECTED || right != MIN_SELECTED || above != MIN_SELECTED || below != MIN_SELECTED) {

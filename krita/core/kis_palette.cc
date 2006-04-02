@@ -71,7 +71,7 @@ KisPalette::KisPalette(const KisPaintDeviceSP device, qint32 nColors, const QStr
       m_name(name)
 {
     Q_ASSERT(nColors > 0);
-    Q_ASSERT(device != 0);
+    Q_ASSERT(!device.isNull());
 
 
     // XXX: Implement

@@ -72,6 +72,11 @@ set(kritaimage_LIB_SRCS ${libkritasdk_SRCS}  ${libkritatile_SRCS}
    kis_exif_value.cc 
    kis_filter_strategy.h )
 
+include_directories(${CMAKE_SOURCE_DIR}/krita/kritacolor)
+include_directories(${CMAKE_SOURCE_DIR}/krita/core/tiles)
+
+include_directories(${KOPAINTER_INCLUDES})
+
 kde4_automoc(${kritaimage_LIB_SRCS})
 
 kde4_add_dcop_skels(kritaimage_LIB_SRCS kis_paint_device_iface.h kis_image_iface.h )

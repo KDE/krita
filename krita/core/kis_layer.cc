@@ -345,7 +345,7 @@ void KisLayer::setDirty(bool propagate)
     if (propagate && m_parent && rc.isValid()) m_parent->setDirty(m_dirtyRect);
 
     if (m_image && rc.isValid()) {
-        m_image->notifyLayerUpdated(this, rc);
+        m_image->notifyLayerUpdated(KisLayerSP(this), rc);
     }
 }
 
@@ -360,7 +360,7 @@ void KisLayer::setDirty(const QRect & rc, bool propagate)
         m_parent->setDirty(m_dirtyRect);
 
     if (m_image && rc.isValid()) {
-        m_image->notifyLayerUpdated(this, rc);
+        m_image->notifyLayerUpdated(KisLayerSP(this), rc);
     }
 }
 
@@ -372,14 +372,14 @@ KisGroupLayerSP KisLayer::parent() const
 KisLayerSP KisLayer::prevSibling() const
 {
     if (!parent())
-        return 0;
+        return KisLayerSP(0);
     return parent()->at(index() - 1);
 }
 
 KisLayerSP KisLayer::nextSibling() const
 {
     if (!parent())
-        return 0;
+        return KisLayerSP(0);
     return parent()->at(index() + 1);
 }
 
@@ -392,27 +392,27 @@ void KisLayer::setIndex(int i)
 {
     if (!parent())
         return;
-    parent()->setIndex(this, i);
+    parent()->setIndex(KisLayerSP(this), i);
 }
 
 KisLayerSP KisLayer::findLayer(const QString& n) const
 {
     if (name() == n)
-        return const_cast<KisLayer*>(this); //HACK any less ugly way? findLayer() is conceptually const...
+        return KisLayerSP(const_cast<KisLayer*>(this)); //HACK any less ugly way? findLayer() is conceptually const...
     for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
         if (KisLayerSP found = layer->findLayer(n))
             return found;
-    return 0;
+    return KisLayerSP(0);
 }
 
 KisLayerSP KisLayer::findLayer(int i) const
 {
     if (id() == i)
-        return const_cast<KisLayer*>(this); //HACK
+        return KisLayerSP(const_cast<KisLayer*>(this)); //HACK
     for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
         if (KisLayerSP found = layer->findLayer(i))
             return found;
-    return 0;
+    return KisLayerSP(0);
 }
 
 int KisLayer::numLayers(int flags) const
@@ -454,12 +454,12 @@ void KisLayer::setOpacity(quint8 val)
 
 KNamedCommand *KisLayer::setOpacityCommand(quint8 newOpacity)
 {
-    return new KisLayerOpacityCommand(this, opacity(), newOpacity);
+    return new KisLayerOpacityCommand(KisLayerSP(this), opacity(), newOpacity);
 }
 
 KNamedCommand *KisLayer::setOpacityCommand(quint8 prevOpacity, quint8 newOpacity)
 {
-    return new KisLayerOpacityCommand(this, prevOpacity, newOpacity);
+    return new KisLayerOpacityCommand(KisLayerSP(this), prevOpacity, newOpacity);
 }
 
 const bool KisLayer::visible() const
@@ -483,7 +483,7 @@ void KisLayer::setVisible(bool v)
 
 KNamedCommand *KisLayer::setVisibleCommand(bool newVisibility)
 {
-    return new KisLayerVisibilityCommand(this, newVisibility);
+    return new KisLayerVisibilityCommand(KisLayerSP(this), newVisibility);
 }
 
 bool KisLayer::locked() const
@@ -515,7 +515,7 @@ void KisLayer::setTemporary(bool t)
 
 KNamedCommand *KisLayer::setLockedCommand(bool newLocked)
 {
-    return new KisLayerLockedCommand(this, newLocked);
+    return new KisLayerLockedCommand(KisLayerSP(this), newLocked);
 }
 
 QString KisLayer::name() const
@@ -545,12 +545,12 @@ void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
 
 KNamedCommand *KisLayer::setCompositeOpCommand(const KisCompositeOp& newCompositeOp)
 {
-    return new KisLayerCompositeOpCommand(this, compositeOp(), newCompositeOp);
+    return new KisLayerCompositeOpCommand(KisLayerSP(this), compositeOp(), newCompositeOp);
 }
 
 KNamedCommand *KisLayer::moveCommand(QPoint oldPosition, QPoint newPosition)
 {
-    return new KisLayerOffsetCommand(this, oldPosition, newPosition);
+    return new KisLayerOffsetCommand(KisLayerSP(this), oldPosition, newPosition);
 }
 
 KisUndoAdapter *KisLayer::undoAdapter() const
@@ -575,13 +575,13 @@ void KisLayer::paintSelection(QImage &, const QRect&, const QSize&, const QSize&
 
 QImage KisLayer::createThumbnail(qint32, qint32)
 {
-    return 0;
+    return QImage();
 }
 
 void KisLayer::notifyPropertyChanged()
 {
     if(image() && !signalsBlocked())
-        image()->notifyPropertyChanged(this);
+        image()->notifyPropertyChanged(KisLayerSP(this));
 }
 
 #include "kis_layer.moc"

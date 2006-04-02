@@ -579,7 +579,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
             m_gradient->colorAt(t, &color, &opacity);
 
             layer.setPixel(x - startx, y - starty,
-                           qRgba(color.Qt::red(), color.Qt::green(), color.Qt::blue(), opacity));
+                           qRgba(color.red(), color.green(), color.blue(), opacity));
 
             pixelsProcessed++;
 
@@ -625,9 +625,9 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
                                 QColor color(*(pixelPos +2), *(pixelPos + 1), *pixelPos);
                                 quint8 opacity = *(pixelPos + 3);
 
-                                double dRed = (color.Qt::red() * opacity - thisPixel.Qt::red() * thisPixelOpacity) / 65535.0;
-                                double dGreen = (color.Qt::green() * opacity - thisPixel.Qt::green() * thisPixelOpacity) / 65535.0;
-                                double dBlue = (color.Qt::blue() * opacity - thisPixel.Qt::blue() * thisPixelOpacity) / 65535.0;
+                                double dRed = (color.red() * opacity - thisPixel.red() * thisPixelOpacity) / 65535.0;
+                                double dGreen = (color.green() * opacity - thisPixel.green() * thisPixelOpacity) / 65535.0;
+                                double dBlue = (color.blue() * opacity - thisPixel.blue() * thisPixelOpacity) / 65535.0;
 
                                 #define SQRT_3 1.7320508
 
@@ -669,19 +669,19 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
                             m_gradient->colorAt(t, &color, &opacity);
 
-                            totalRed += color.Qt::red();
-                            totalGreen += color.Qt::green();
-                            totalBlue += color.Qt::blue();
+                            totalRed += color.red();
+                            totalGreen += color.green();
+                            totalBlue += color.blue();
                             totalOpacity += opacity;
                         }
                     }
 
-                    int Qt::red = totalRed / (numSamples * numSamples);
-                    int Qt::green = totalGreen / (numSamples * numSamples);
-                    int Qt::blue = totalBlue / (numSamples * numSamples);
+                    int red = totalRed / (numSamples * numSamples);
+                    int green = totalGreen / (numSamples * numSamples);
+                    int blue = totalBlue / (numSamples * numSamples);
                     int opacity = totalOpacity / (numSamples * numSamples);
 
-                    layer.setPixel(x - startx, y - starty, qRgba(Qt::red, Qt::green, Qt::blue, opacity));
+                    layer.setPixel(x - startx, y - starty, qRgba(red, green, blue, opacity));
                 }
 
                 pixelsProcessed++;
@@ -707,7 +707,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
 
     if (!m_cancelRequested) {
         kDebug() << "Have we got a selection? " << m_device->hasSelection() << endl;
-        KisPaintDeviceSP dev = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temporary device for gradient");
+        KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temporary device for gradient"));
         dev->writeBytes(layer.bits(), startx, starty, width, height);
         bltSelection(startx, starty, m_compositeOp, dev, m_opacity, startx, starty, width, height);
     }

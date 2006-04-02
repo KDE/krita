@@ -20,10 +20,12 @@
 #define KIS_LAYER_H_
 
 #include <qobject.h>
+
+#include "koffice_export.h"
+
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "kis_composite_op.h"
-#include <koffice_export.h>
 
 class KNamedCommand;
 class QPainter;
@@ -129,10 +131,10 @@ public:
     virtual uint childCount() const { return 0; }
 
     /// Returns the first child layer of this layer (if it supports that).
-    virtual KisLayerSP firstChild() const { return 0; }
+    virtual KisLayerSP firstChild() const { return KisLayerSP(0); }
 
     /// Returns the last child layer of this layer (if it supports that).
-    virtual KisLayerSP lastChild() const { return 0; }
+    virtual KisLayerSP lastChild() const { return KisLayerSP(0); }
 
     /// Recursively searches this layer and any child layers for a layer with the specified name.
     virtual KisLayerSP findLayer(const QString& name) const;

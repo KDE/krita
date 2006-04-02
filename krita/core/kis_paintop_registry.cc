@@ -105,7 +105,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 
 KisPaintOpSettings * KisPaintOpRegistry::settings(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const
 {
-    KisPaintOpFactory* f = get(id);
+    KisPaintOpFactorySP f = get(id);
     if (f)
         return f->settings( parent, inputDevice );
 

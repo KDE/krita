@@ -66,12 +66,12 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) : KisLayer(rhs)
 
 KisLayerSP KisPaintLayer::clone() const
 {
-    return new KisPaintLayer(*this);
+    return KisLayerSP(new KisPaintLayer(*this));
 }
 
 KisPaintLayer::~KisPaintLayer()
 {
-    if (m_paintdev != 0) {
+    if (!m_paintdev.isNull()) {
         m_paintdev->setParentLayer(0);
     }
 }

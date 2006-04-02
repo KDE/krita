@@ -89,7 +89,7 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         // of channels. This makes undo very tricky, but so be it.
         // XXX: Make this more generic for after 1.6, when we'll have many
         // channel-specific filters. 
-        KisFilter * f = KisFilterRegistry::instance()->get("perchannel");
+        KisFilterSP f = KisFilterRegistry::instance()->get("perchannel");
         layer->setFilter(f->configuration());
     }
     layer->resetCache();

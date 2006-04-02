@@ -22,7 +22,9 @@
 #include <config.h>
 #include <lcms.h>
 #include <limits.h>
-#include <qglobal.h>
+
+#include <QString>
+
 #include <kglobal.h>
 
 #define KRITA_VERSION VERSION

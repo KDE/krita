@@ -340,7 +340,7 @@ QDomElement ExifValue::save(QDomDocument& doc)
             data.setRawData((char*)value.data(), value.size());
             QByteArray encodedData;
             KCodecs::base64Encode( data, encodedData );
-            elmt.setAttribute("value", encodedData);
+            elmt.setAttribute("value", QString(encodedData));
         }
             break;
         case EXIF_TYPE_SSHORT:

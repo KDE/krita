@@ -29,8 +29,8 @@
 #include <qtextstream.h>
 #include <qfile.h>
 
-#include <koColor.h>
-#include <kogradientmanager.h>
+#include "koColor.h"
+#include "kogradientmanager.h"
 
 #include <kdebug.h>
 #include <klocale.h>

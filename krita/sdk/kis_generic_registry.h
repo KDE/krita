@@ -91,7 +91,7 @@ public:
      */
     _T get(const KisID& name) const
     {
-        _T p = 0;
+        _T p = _T(0);
         typename storageMap::const_iterator it = m_storage.find(name);
         if (it != m_storage.end()) {
             p = it->second;

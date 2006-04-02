@@ -53,7 +53,7 @@ KisTransaction::~KisTransaction()
 
 void KisTransaction::execute()
 {
-    Q_ASSERT(m_private->m_memento != 0);
+    Q_ASSERT(!m_private->m_memento.isNull());
 
     m_private->m_device->rollforward(m_private->m_memento);
 
@@ -62,13 +62,13 @@ void KisTransaction::execute()
     m_private->m_memento->extent(x,y,width,height);
     rc.setRect(x + m_private->m_device->getX(), y + m_private->m_device->getY(), width, height);
 
-    KisLayerSP l = m_private->m_device->parentLayer();
+    KisLayer *l = m_private->m_device->parentLayer();
     if (l) l->setDirty(rc);
 }
 
 void KisTransaction::unexecute()
 {
-    Q_ASSERT(m_private->m_memento != 0);
+    Q_ASSERT(!m_private->m_memento.isNull());
     m_private->m_device->rollback(m_private->m_memento);
 
     QRect rc;
@@ -76,14 +76,14 @@ void KisTransaction::unexecute()
     m_private->m_memento->extent(x,y,width,height);
     rc.setRect(x + m_private->m_device->getX(), y + m_private->m_device->getY(), width, height);
 
-    KisLayerSP l = m_private->m_device->parentLayer();
+    KisLayer *l = m_private->m_device->parentLayer();
     if (l) l->setDirty(rc);
 
 }
 
 void KisTransaction::unexecuteNoUpdate()
 {
-    Q_ASSERT(m_private->m_memento != 0);
+    Q_ASSERT(!m_private->m_memento.isNull());
 
     m_private->m_device->rollback(m_private->m_memento);
 }

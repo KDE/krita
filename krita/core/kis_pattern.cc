@@ -182,7 +182,7 @@ bool KisPattern::init()
     }
 
     name.resize(bh.header_size - sizeof(GimpPatternHeader));
-    memcpy(&name[0], &m_data[sizeof(GimpPatternHeader)], name.size());
+    memcpy(&name[0], &(m_data.constData()[sizeof(GimpPatternHeader)]), name.size());
 
     if (name[name.size() - 1]) {
         return false;
@@ -285,7 +285,7 @@ KisPaintDeviceSP KisPattern::image(KisColorSpace * colorSpace) {
         return (*it);
 
     // If not, create one
-    KisPaintDeviceSP layer = new KisPaintDevice(colorSpace, "pattern");
+    KisPaintDeviceSP layer = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "pattern"));
 
     Q_CHECK_PTR(layer);
 

@@ -19,13 +19,14 @@
 #include <qdir.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kinstance.h>
 
 #include <config.h>
 #include <lcms.h>
 
-#include <kis_colorspace_factory_registry.h>
-#include <kis_math_toolbox.h>
-#include <kis_meta_registry.h>
+#include "kis_colorspace_factory_registry.h"
+#include "kis_math_toolbox.h"
+#include "kis_meta_registry.h"
 
 KisMetaRegistry * KisMetaRegistry::m_singleton = 0;
 

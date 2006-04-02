@@ -19,7 +19,11 @@
 
 #ifndef KIS_COLORSPACE_FACTORY_REGISTRY_H_
 #define KIS_COLORSPACE_FACTORY_REGISTRY_H_
-#include "qobject.h"
+
+#include <QObject>
+#include <QMap>
+#include <QString>
+
 #include "kis_generic_registry.h"
 #include "kis_colorspace.h"
 

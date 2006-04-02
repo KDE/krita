@@ -60,14 +60,14 @@
 
 KisKernelSP KisKernel::fromQImage(const QImage& img)
 {
-    KisKernelSP k = new KisKernel;
+    KisKernelSP k = KisKernelSP(new KisKernel);
     k->width = img.width();
     k->height = img.height();
     k->offset = 0;
     uint count = k->width * k->height;
     k->data = new qint32[count];
     qint32* itData = k->data;
-    quint8* itImg = img.bits();
+    const quint8* itImg = img.bits();
     k->factor = 0;
     for(uint i = 0; i < count; ++i , ++itData, ++itImg)
     {

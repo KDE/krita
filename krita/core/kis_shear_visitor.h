@@ -50,14 +50,14 @@ public:
         KisTransaction* t = 0;
 
         if (m_undo && m_undo->undo())
-            t = new KisTransaction("", dev.data());
+            t = new KisTransaction("", dev);
 
         //Doesn't do anything, internally transforms x and y shear to 0 each :-///
         //KisTransformWorker w(dev, 1.0, 1.0, m_xshear, m_yshear, 0, 0, 0, m_progress, strategy);
         //w.run();
 
         KisRotateVisitor v;
-        v.visitKisPaintDevice(dev);
+        v.visitKisPaintDevice(dev.data());
         v.shear(m_xshear, m_yshear, m_progress);
 
         if (m_undo && m_undo->undo())

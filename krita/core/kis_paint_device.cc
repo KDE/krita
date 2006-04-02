@@ -381,7 +381,7 @@ void KisPaintDevice::move(qint32 x, qint32 y)
 
     setDirty(dirtyRect);
 
-    emit positionChanged(this);
+    emit positionChanged(KisPaintDeviceSP(this));
 }
 
 void KisPaintDevice::move(const QPoint& pt)
@@ -391,7 +391,7 @@ void KisPaintDevice::move(const QPoint& pt)
 
 KNamedCommand * KisPaintDevice::moveCommand(qint32 x, qint32 y)
 {
-    KNamedCommand * cmd = new MoveCommand(this, QPoint(m_x, m_y), QPoint(x, y));
+    KNamedCommand * cmd = new MoveCommand(KisPaintDeviceSP(this), QPoint(m_x, m_y), QPoint(x, y));
     Q_CHECK_PTR(cmd);
     cmd->execute();
     return cmd;
@@ -659,7 +659,7 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIn
     setData(dst.m_datamanager, dstColorSpace);
 
     if (undoAdapter() && undoAdapter()->undo()) {
-        undoAdapter()->addCommand(new KisConvertLayerTypeCmd(undoAdapter(), this, oldData, oldColorSpace, m_datamanager, m_colorSpace));
+        undoAdapter()->addCommand(new KisConvertLayerTypeCmd(undoAdapter(), KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_colorSpace));
     }
 }
 
@@ -767,7 +767,7 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, qint32 x1, qint
 
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h)
 {
-    KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace(), "thumbnail");
+    KisPaintDeviceSP thumbnail = KisPaintDeviceSP(new KisPaintDevice(colorSpace(), "thumbnail"));
     thumbnail->clear();
 
     int srcw, srch;
@@ -863,25 +863,25 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
 KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, bool writable)
 {
     if(hasSelection())
-        return KisRectIteratorPixel(this, m_datamanager, m_selection->m_datamanager, left, top, w, h, m_x, m_y, writable);
+        return KisRectIteratorPixel(this, m_datamanager.data(), m_selection->m_datamanager.data(), left, top, w, h, m_x, m_y, writable);
     else
-        return KisRectIteratorPixel(this, m_datamanager, NULL, left, top, w, h, m_x, m_y, writable);
+        return KisRectIteratorPixel(this, m_datamanager.data(), NULL, left, top, w, h, m_x, m_y, writable);
 }
 
 KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, qint32 w, bool writable)
 {
     if(hasSelection())
-        return KisHLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, w, m_x, m_y, writable);
+        return KisHLineIteratorPixel(this, m_datamanager.data(), m_selection->m_datamanager.data(), x, y, w, m_x, m_y, writable);
     else
-        return KisHLineIteratorPixel(this, m_datamanager, NULL, x, y, w, m_x, m_y, writable);
+        return KisHLineIteratorPixel(this, m_datamanager.data(), NULL, x, y, w, m_x, m_y, writable);
 }
 
 KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h, bool writable)
 {
     if(hasSelection())
-        return KisVLineIteratorPixel(this, m_datamanager, m_selection->m_datamanager, x, y, h, m_x, m_y, writable);
+        return KisVLineIteratorPixel(this, m_datamanager.data(), m_selection->m_datamanager.data(), x, y, h, m_x, m_y, writable);
     else
-        return KisVLineIteratorPixel(this, m_datamanager, NULL, x, y, h, m_x, m_y, writable);
+        return KisVLineIteratorPixel(this, m_datamanager.data(), NULL, x, y, h, m_x, m_y, writable);
 
 }
 
@@ -905,7 +905,7 @@ KisSelectionSP KisPaintDevice::selection()
         m_selectionDeselected = false;
     }
     else if (!m_selection) {
-        m_selection = new KisSelection(this);
+        m_selection = KisSelectionSP(new KisSelection(KisPaintDeviceSP(this)));
         Q_CHECK_PTR(m_selection);
         m_selection->setX(m_x);
         m_selection->setY(m_y);
@@ -943,18 +943,18 @@ void KisPaintDevice::reselect()
 
 void KisPaintDevice::addSelection(KisSelectionSP selection) {
 
-    KisPainter painter(this->selection().data());
+    KisPainter painter(KisPaintDeviceSP(this->selection().data()));
     QRect r = selection->selectedExactRect();
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, selection.data(), r.x(), r.y(), r.width(), r.height());
+    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
     painter.end();
 }
 
 void KisPaintDevice::subtractSelection(KisSelectionSP selection) {
-    KisPainter painter(this->selection().data());
+    KisPainter painter(KisPaintDeviceSP(this->selection().data()));
     selection->invert();
 
     QRect r = selection->selectedExactRect();
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_ERASE, selection.data(), r.x(), r.y(), r.width(), r.height());
+    painter.bitBlt(r.x(), r.y(), COMPOSITE_ERASE, KisPaintDeviceSP(selection.data()), r.x(), r.y(), r.width(), r.height());
     
     selection->invert();
     painter.end();
@@ -1018,7 +1018,7 @@ KisSelectionSP KisPaintDevice::setSelection( KisSelectionSP selection)
         m_hasSelection = true;
         return oldSelection;
     }
-    else return 0;
+    else return KisSelectionSP(0);
 }
 
 bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c, quint8 *opacity)
@@ -1150,7 +1150,7 @@ void KisPaintDevice::runBackgroundFilters()
         Q3ValueList<KisFilter*>::iterator it;
         Q3ValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
         for (it = m_longRunningFilters.begin(); it != end; ++it) {
-            (*it)->process(this, this, 0, rc);
+            (*it)->process(KisPaintDeviceSP(this), KisPaintDeviceSP(this), 0, rc);
         }
     }
     if (m_parentLayer) m_parentLayer->setDirty(rc);

@@ -25,7 +25,7 @@ KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisPaintDevi
     m_device(device),
     m_hadSelection(device->hasSelection())
 {
-    m_selTransaction = new KisTransaction(name, device->selection().data());
+    m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(device->selection().data()));
     if(! m_hadSelection) {
         m_device->deselect(); // let us not be the cause of select
     }

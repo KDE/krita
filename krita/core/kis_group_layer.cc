@@ -54,7 +54,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
 
 KisLayerSP KisGroupLayer::clone() const
 {
-    return new KisGroupLayer(*this);
+    return KisLayerSP(new KisGroupLayer(*this));
 }
 
 KisGroupLayer::~KisGroupLayer()
@@ -84,8 +84,8 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
 {
     // We don't have a parent, and we've got only one child: abuse the child's
     // paint device as the projection if the child is visible and 100% opaque
-    if (parent() == 0 && childCount() == 1) {
-        KisPaintLayerSP l = dynamic_cast<KisPaintLayer*>(firstChild().data());
+    if (parent().isNull() && childCount() == 1) {
+        KisPaintLayerSP l = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(firstChild().data()));
         if (l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible() && l->opacity() == OPACITY_OPAQUE) {
             l->setClean(rect);
             setClean(rect);
@@ -133,9 +133,9 @@ KisLayerSP KisGroupLayer::lastChild() const
 
 KisLayerSP KisGroupLayer::at(int index) const
 {
-    if (childCount() && index >= 0 && kClamp(uint(index), uint(0), childCount() - 1) == uint(index))
+    if (childCount() && index >= 0 && qBound(uint(0), uint(index), childCount() - 1) == uint(index))
         return m_layers.at(reverseIndex(index));
-    return 0;
+    return KisLayerSP(0);
 }
 
 int KisGroupLayer::index(KisLayerSP layer) const
@@ -156,7 +156,7 @@ void KisGroupLayer::setIndex(KisLayerSP layer, int index)
 
 bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
 {
-    if (x < 0 || kClamp(uint(x), uint(0), childCount()) != uint(x) ||
+    if (x < 0 || qBound(uint(0), uint(x), childCount()) != uint(x) ||
         newLayer->parent() || m_layers.contains(newLayer))
     {
         kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
@@ -189,7 +189,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, KisLayerSP aboveThis)
 
 bool KisGroupLayer::removeLayer(int x)
 {
-    if (x >= 0 && kClamp(uint(x), uint(0), childCount() - 1) == uint(x))
+    if (x >= 0 && qBound(uint(0), uint(x), childCount() - 1) == uint(x))
     {
         uint index(x);
         for (uint i = childCount() - 1; i > index; i--)
@@ -305,24 +305,24 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     // No child -- clear the projection. Without children, a group layer is empty.
     if (!child) m_projection->clear();
 
-    KisLayerSP startWith = 0;
-    KisAdjustmentLayerSP adjLayer = 0;
-    KisLayerSP tmpPaintLayer = 0;
+    KisLayerSP startWith = KisLayerSP(0);
+    KisAdjustmentLayerSP adjLayer = KisAdjustmentLayerSP(0);
+    KisLayerSP tmpPaintLayer = KisLayerSP(0);
 
     // If this is the rootlayer, don't do anything with adj. layers that are below the
     // first paintlayer
-    bool gotPaintLayer = (parent() != 0);
+    bool gotPaintLayer = (!parent().isNull());
 
     // Look through all the child layers, searching for the first dirty layer
     // if it's found, and if we have found an adj. layer before the the dirty layer,
     // composite from the first adjustment layer searching back from the first dirty layer
     while (child) {
-        KisAdjustmentLayerSP tmpAdjLayer = dynamic_cast<KisAdjustmentLayer*>(child.data());
+        KisAdjustmentLayerSP tmpAdjLayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(child.data()));
         if (tmpAdjLayer) {
             if (gotPaintLayer) {
                 // If this adjustment layer is dirty, start compositing with the
                 // previous layer, if there's one.
-                if (tmpAdjLayer->dirty(rc) && adjLayer != 0 && adjLayer->visible()) {
+                if (tmpAdjLayer->dirty(rc) && !adjLayer.isNull() && adjLayer->visible()) {
                     startWith = adjLayer->prevSibling();
                     break;
                 }
@@ -341,7 +341,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             // A non-adjustmentlayer that's dirty; if there's an adjustmentlayer
             // with a cache, we'll start from there.
             if (child->dirty(rc)) {
-                if (adjLayer != 0 && adjLayer->visible()) {
+                if (!adjLayer.isNull() && adjLayer->visible()) {
                     // the first layer on top of the adj. layer
                     startWith = adjLayer->prevSibling();
                 }
@@ -355,16 +355,16 @@ void KisGroupLayer::updateProjection(const QRect & rc)
         child = child->prevSibling();
     }
 
-    if (adjLayer != 0 && startWith == 0 && gotPaintLayer && adjLayer->prevSibling()) {
+    if (!adjLayer.isNull() && startWith.isNull() && gotPaintLayer && adjLayer->prevSibling()) {
         startWith = adjLayer->prevSibling();
     }
 
     // No adj layer -- all layers inside the group must be recomposited
-    if (adjLayer == 0) {
+    if (adjLayer.isNull()) {
         startWith = lastChild();
     }
 
-    if (startWith == 0) {
+    if (startWith.isNull()) {
         return;
     }
 
@@ -372,7 +372,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 
     // Fill the projection either with the cached data, or erase it.
     KisFillPainter gc(m_projection);
-    if (adjLayer != 0) {
+    if (!adjLayer.isNull()) {
         gc.bitBlt(rc.left(), rc.top(),
                   COMPOSITE_COPY, adjLayer->cachedPaintDevice(), OPACITY_OPAQUE,
                   rc.left(), rc.top(), rc.width(), rc.height());

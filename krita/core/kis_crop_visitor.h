@@ -57,7 +57,7 @@ public:
         KisPaintDeviceSP dev = layer->paintDevice();
         KisSelectedTransaction * t = 0;
         if (layer->undoAdapter() && layer->undoAdapter()->undo())
-            t = new KisSelectedTransaction(i18n("Crop"), dev.data());
+            t = new KisSelectedTransaction(i18n("Crop"), dev);
 
         dev->crop(m_rect);
 

@@ -22,9 +22,9 @@
 
 #include <ksharedptr.h>
 
-#include <kis_tile.h>
-#include <kis_tileddatamanager.h>
-#include <koffice_export.h>
+#include "kis_tile.h"
+#include "kis_tileddatamanager.h"
+#include "koffice_export.h"
 /**
  * The KisIterator class iterates through the pixels of a KisPaintDevice hiding the tile structure
  */

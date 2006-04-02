@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <qmutex.h>
 #include <qthread.h>
@@ -375,7 +376,7 @@ void KisTileManager::doSwapping()
 
 #if 1 // enable this to enable swapping
 
-    quint32 count = qMin(m_swappableList.size(), m_swappiness);
+    quint32 count = qMin(m_swappableList.size(), (int)m_swappiness);
 
     for (quint32 i = 0; i < count; i++) {
         toSwap(m_swappableList.front());

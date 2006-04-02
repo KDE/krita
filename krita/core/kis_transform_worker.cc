@@ -227,7 +227,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     if(src->hasSelection())
         dstSelection = dst->selection();
     else
-        dstSelection = new KisSelection(dst); // essentially a dummy to be deleted
+        dstSelection = KisSelectionSP(new KisSelection(KisPaintDeviceSP(dst))); // essentially a dummy to be deleted
 
     calcDimensions <T>(src, srcStart, srcLen, firstLine, numLines);
 
@@ -343,7 +343,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         }
 
         T dstIt = createIterator <T>(dst, dstStart, lineNum, dstLen);
-        T dstSelIt = createIterator <T>(dstSelection, dstStart, lineNum, dstLen);
+        T dstSelIt = createIterator <T>(dstSelection.data(), dstStart, lineNum, dstLen);
 
         i=0;
         while(!dstIt.isDone())
@@ -411,9 +411,9 @@ bool KisTransformWorker::run()
     else
         r = m_dev->exactBounds();
 
-    KisPaintDeviceSP tmpdev1 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev1");;
-    KisPaintDeviceSP tmpdev2 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2");;
-    KisPaintDeviceSP tmpdev3 = new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2");;
+    KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev1"));
+    KisPaintDeviceSP tmpdev2 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2"));
+    KisPaintDeviceSP tmpdev3 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(),"transform_tmpdev2"));
     KisPaintDeviceSP srcdev = m_dev;
 
     double xscale = m_xscale;
@@ -474,7 +474,7 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    transformPass <KisHLineIteratorPixel>(srcdev, tmpdev2, xscale, yscale*xshear, 0, m_filter);
+    transformPass <KisHLineIteratorPixel>(srcdev.data(), tmpdev2.data(), xscale, yscale*xshear, 0, m_filter);
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
 
@@ -483,7 +483,7 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    transformPass <KisVLineIteratorPixel>(tmpdev2, tmpdev3, yscale, yshear, ytranslate, m_filter);
+    transformPass <KisVLineIteratorPixel>(tmpdev2.data(), tmpdev3.data(), yscale, yshear, ytranslate, m_filter);
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
 
@@ -492,7 +492,7 @@ bool KisTransformWorker::run()
         return false;
     }
 
-    transformPass <KisHLineIteratorPixel>(tmpdev3, m_dev, 1.0, xshear, xtranslate, m_filter);
+    transformPass <KisHLineIteratorPixel>(tmpdev3.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter);
     if (m_dev->parentLayer()) {
         m_dev->parentLayer()->setDirty();
     }

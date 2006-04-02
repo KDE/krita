@@ -111,7 +111,7 @@ void KisRotateVisitor::shear(double angleX, double angleY, KisProgressDisplayInt
 
 KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)
 {
-    KisPaintDeviceSP dst = new KisPaintDevice(src->colorSpace(), "rotateright90");
+    KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "rotateright90"));
     dst->setX(src->getX());
     dst->setY(src->getY());
 
@@ -139,7 +139,7 @@ KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)
 
 KisPaintDeviceSP KisRotateVisitor::rotateLeft90(KisPaintDeviceSP src)
 {
-    KisPaintDeviceSP dst = new KisPaintDevice(src->colorSpace(), "rotateleft90");
+    KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "rotateleft90"));
 
     qint32 pixelSize = src->pixelSize();
     QRect r = src->exactBounds();
@@ -167,7 +167,7 @@ KisPaintDeviceSP KisRotateVisitor::rotateLeft90(KisPaintDeviceSP src)
 
 KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
 {
-    KisPaintDeviceSP dst = new KisPaintDevice(src->colorSpace(), "rotate180");
+    KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "rotate180"));
     dst->setX(src->getX());
     dst->setY(src->getY());
 
@@ -275,7 +275,7 @@ KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, Ki
 
 KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 {
-    KisPaintDeviceSP dst = new KisPaintDevice(src->colorSpace(), "xShear");
+    KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "xShear"));
     dst->setX(src->getX());
     dst->setY(src->getY());
 
@@ -323,7 +323,7 @@ KisPaintDeviceSP KisRotateVisitor::xShear(KisPaintDeviceSP src, double shearX)
 
 KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
 {
-    KisPaintDeviceSP dst = new KisPaintDevice(src->colorSpace(), "yShear");
+    KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "yShear"));
     dst->setX(src->getX());
     dst->setY(src->getY());
 

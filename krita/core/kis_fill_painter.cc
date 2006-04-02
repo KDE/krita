@@ -130,7 +130,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPatte
         while (x < x1 + w) {
             sw = qMin((x1 + w) - x, pattern->width() - sx);
 
-            bitBlt(x, y, m_compositeOp, patternLayer.data(), m_opacity, sx, sy, sw, sh);
+            bitBlt(x, y, m_compositeOp, patternLayer, m_opacity, sx, sy, sw, sh);
             x += sw; sx = 0;
         }
 
@@ -146,9 +146,9 @@ void KisFillPainter::fillColor(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorSpace(), "filled");
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled"));
     Q_CHECK_PTR(filled);
-    KisFillPainter painter(filled.data());
+    KisFillPainter painter(filled);
     painter.fillRect(0, 0, m_width, m_height, m_paintColor);
     painter.end();
 
@@ -159,9 +159,9 @@ void KisFillPainter::fillPattern(int startX, int startY) {
     genericFillStart(startX, startY);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = new KisPaintDevice(m_device->colorSpace(), "filled");
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(m_device->colorSpace(), "filled"));
     Q_CHECK_PTR(filled);
-    KisFillPainter painter(filled.data());
+    KisFillPainter painter(filled);
     painter.fillRect(0, 0, m_width, m_height, m_pattern);
     painter.end();
 
@@ -226,14 +226,14 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
-        return new KisSelection(m_device);
+        return KisSelectionSP(new KisSelection(m_device));
 
-    KisPaintDeviceSP sourceDevice = 0;
+    KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
 
     // sample merged?
     if (m_sampleMerged) {
         if (!m_device->image()) {
-            return new KisSelection(m_device);
+            return KisSelectionSP(new KisSelection(m_device));
         }
         sourceDevice = m_device->image()->mergedImage();
     } else {
@@ -242,7 +242,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
 
     m_size = m_width * m_height;
 
-    KisSelectionSP selection = new KisSelection(m_device);
+    KisSelectionSP selection = KisSelectionSP(new KisSelection(m_device));
     KisColorSpace * colorSpace = selection->colorSpace();
     KisColorSpace * devColorSpace = sourceDevice->colorSpace();
 
@@ -263,7 +263,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     emit notifyProgressStage(i18n("Making fill outline..."), 0);
 
     bool hasSelection = m_careForSelection && sourceDevice->hasSelection();
-    KisSelectionSP srcSel = 0;
+    KisSelectionSP srcSel = KisSelectionSP(0);
     if (hasSelection)
         srcSel = sourceDevice->selection();
 

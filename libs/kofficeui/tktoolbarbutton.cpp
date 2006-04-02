@@ -25,6 +25,7 @@
 #include <qpainter.h>
 #include <qdrawutil.h>
 #include <qstyle.h>
+#include <QStyleOptionToolButton>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
@@ -356,14 +357,14 @@ void TKToolBarButton::drawButton( QPainter* p )
 #define DRAW_PIXMAP_AND_TEXT \
   int x = 3;\
   if (pixmap()) {\
-    style().drawItem( p, QRect( x, 0, pixmap()->width(), height() ), Qt::AlignCenter, colorGroup(), isEnabled(), pixmap(), QString::null );\
+    style()->drawItemPixmap( p, QRect( x, 0, pixmap()->width(), height() ), Qt::AlignCenter, *pixmap() );\
     if (d->m_iconMode==TK::IconAndText && !d->m_text.isEmpty()) {\
       x += pixmap()->width() + 3;\
     }\
   }\
   if ((d->m_iconMode==TK::IconAndText||d->m_iconMode==TK::TextOnly) && !d->m_text.isEmpty()) {\
     QFontMetrics fm(KGlobalSettings::toolBarFont());\
-    style().drawItem( p, QRect( x, 0, fm.width(d->m_text), height() ), Qt::AlignCenter, colorGroup(), isEnabled(), 0, d->m_text );\
+    style()->drawItemText( p, QRect( x, 0, fm.width(d->m_text), height() ), Qt::AlignCenter, palette(), isEnabled(), d->m_text );\
   }
 
   const char* arrow[] = {
@@ -376,6 +377,8 @@ void TKToolBarButton::drawButton( QPainter* p )
   "...#..."};
   QPixmap arrow_pix(arrow);
   bool f = d->m_isOn || isDown();
+  QStyleOptionToolButton styleOption;
+  styleOption.initFrom(this);
 
     if (d->m_popup && !d->m_isToggle)
     {
@@ -387,20 +390,25 @@ void TKToolBarButton::drawButton( QPainter* p )
             if (d->m_isRaised)	flags |= QStyle::State_Raised;
             if (hasFocus())	flags |= QStyle::State_HasFocus;
 
-            style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( 0, 0, width()-12, height() ), colorGroup(), flags, QStyle::SC_ToolButton );
-            style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( width()-13, 0, 13, height() ), colorGroup(), flags, QStyle::SC_ToolButton );
-            style().drawItem( p, QRect( width()-13, 0, 13, height() ), Qt::AlignCenter, colorGroup(), isEnabled(), &arrow_pix, QString::null );
+	    styleOption.rect = QRect(0, 0, width() - 12, height());
+	    styleOption.subControls = QStyle::SC_ToolButton;
+            style()->drawComplexControl( QStyle::CC_ToolButton, &styleOption, p, this );
+	    styleOption.rect = QRect(width() - 13, 0, 13, height());
+	    styleOption.features = QStyleOptionToolButton::Menu;
+            style()->drawComplexControl( QStyle::CC_ToolButton, &styleOption, p, this );
             if ( d->m_isRaised )
-                qDrawShadeLine( p, width()-12, 0, width()-12, height(), colorGroup(), true );
+                qDrawShadeLine( p, width()-12, 0, width()-12, height(), palette(), true );
             DRAW_PIXMAP_AND_TEXT
         } else {
-            style().drawControl( QStyle::CE_PushButton, p, this, QRect( 0, 0, width(), height() ), isEnabled() ? colorGroup() : palette().disabled(), f );
+            styleOption.rect = QRect(0, 0, width(), height());
+            style()->drawControl( QStyle::CE_PushButton, &styleOption, p, this );
             DRAW_PIXMAP_AND_TEXT
             int z = f ? 1:0;
             p->drawPixmap(width()-11+z,(height()-4)/2+z ,arrow_pix);
         }
     } else {
-        style().drawControl( QStyle::CE_PushButton, p, this, QRect( 0, 0, width(), height() ), isEnabled() ? colorGroup() : palette().disabled(), f );
+	styleOption.rect = QRect(0, 0, width(), height());
+        style()->drawControl( QStyle::CE_PushButton, &styleOption, p, this );
         DRAW_PIXMAP_AND_TEXT
     }
 }

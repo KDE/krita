@@ -1,4 +1,4 @@
-include $(top_srcdir)/lib/kross/Makefile.global
+include $(top_srcdir)/libs/kross/Makefile.global
 
 INCLUDES = -I$(top_srcdir)/lib/kross -I$(RUBY_INCLUDEDIR) $(all_includes)
 METASOURCES = AUTO

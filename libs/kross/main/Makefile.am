@@ -1,4 +1,4 @@
-include $(top_srcdir)/lib/kross/Makefile.global
+include $(top_srcdir)/libs/kross/Makefile.global
 
 lib_LTLIBRARIES = libkrossmain.la
 

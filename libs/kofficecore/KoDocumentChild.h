@@ -21,6 +21,7 @@
 
 #include <KoChild.h>
 #include <koffice_export.h>
+class KoView;
 class QDomDocument;
 class QDomElement;
 class KUrl;
@@ -72,9 +73,9 @@ public:
    *
    * @see KoDocument
    */
-  virtual KoDocument *parentDocument() const; // TODO: remove virtual, makes no sense
+  KoDocument *parentDocument() const;
 
-  virtual KoDocument* hitTest( const QPoint& p, const QMatrix& _matrix = QMatrix() );
+  virtual KoDocument* hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix = QMatrix() );
 
   /**
    * @note Can be empty (which is why it doesn't return a const KUrl &)
@@ -171,7 +172,8 @@ protected: // Should be private, but KWord needs access to the variables
 
 private:
   bool createUnavailDocument( KoStore* store, bool doOpenURL, const QString& mimeType );
-  bool loadDocumentInternal( KoStore* _store, const KoDocumentEntry& e, bool doOpenURL, bool oasis );
+  bool createAndLoadDocument( KoStore* store, bool doOpenURL, bool oasis, const QString& mimeType );
+  bool finishLoadingDocument( KoStore* store, KoDocument* doc, bool doOpenURL, bool oasis );
 
 private:
   KoDocumentChildPrivate *d;

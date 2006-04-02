@@ -127,9 +127,13 @@ bool KoApplication::start()
 
     // No argument -> create an empty document
     if ( !argsCount ) {
-        KoDocument* doc = entry.createDoc( 0, "Document" );
-        if ( !doc )
+        QString errorMsg;
+        KoDocument* doc = entry.createDoc( &errorMsg, 0, "Document" );
+        if ( !doc ) {
+            if ( !errorMsg.isEmpty() )
+                KMessageBox::error( 0, errorMsg );
             return false;
+        }
         KoMainWindow *shell = new KoMainWindow( doc->instance() );
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
@@ -157,7 +161,8 @@ bool KoApplication::start()
         for(int i=0; i < argsCount; i++ )
         {
             // For now create an empty document
-            KoDocument* doc = entry.createDoc( 0 );
+            QString errorMsg;
+            KoDocument* doc = entry.createDoc( &errorMsg, 0 );
             if ( doc )
             {
                 // show a shell asap

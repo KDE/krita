@@ -40,7 +40,7 @@ class KOFFICECORE_EXPORT KoDocumentEntry
 
 public:
   KoDocumentEntry() { m_service = 0L; } // for QValueList
-  KoDocumentEntry( KService::Ptr service );
+  explicit KoDocumentEntry( KService::Ptr service );
   ~KoDocumentEntry() { }
 
   KService::Ptr service() const { return m_service; }
@@ -70,7 +70,7 @@ public:
    *  Uses the factory of the component to create
    *  a document. If that is not possible, 0 is returned.
    */
-  KoDocument* createDoc( KoDocument* parent = 0, const char* name = 0 ) const;
+  KoDocument* createDoc( QString* errorMsg = 0, KoDocument* parent = 0, const char* name = 0 ) const;
 
   /**
    *  This function will query ksycoca to find all available components.

@@ -19,6 +19,7 @@
 #include "KoOasisLoadingContext.h"
 #include <KoOasisStore.h>
 #include <KoOasisStyles.h>
+#include <KoStore.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <KoDom.h>
@@ -105,15 +106,18 @@ void KoOasisLoadingContext::parseMeta() const
 {
     if ( !m_metaXmlParsed && m_store )
     {
-        QDomDocument metaDoc;
-        KoOasisStore oasisStore( m_store );
-        QString errorMsg;
-        if ( oasisStore.loadAndParse( "meta.xml", metaDoc, errorMsg ) ) {
-            QDomNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
-            QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
-            QDomElement generator = KoDom::namedItemNS( office, KoXmlNS::meta, "generator" );
-            if ( !generator.isNull() )
-                m_generator = generator.text();
+        if ( m_store->hasFile( "meta.xml" ) )
+        {
+            QDomDocument metaDoc;
+            KoOasisStore oasisStore( m_store );
+            QString errorMsg;
+            if ( oasisStore.loadAndParse( "meta.xml", metaDoc, errorMsg ) ) {
+                QDomNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
+                QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
+                QDomElement generator = KoDom::namedItemNS( office, KoXmlNS::meta, "generator" );
+                if ( !generator.isNull() )
+                    m_generator = generator.text();
+            }
         }
         m_metaXmlParsed = true;
     }

@@ -480,7 +480,8 @@ void KoMainWindow::reloadRecentFileList()
 KoDocument* KoMainWindow::createDoc() const
 {
     KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
-    return entry.createDoc();
+    QString errorMsg;
+    return entry.createDoc( &errorMsg );
 }
 
 void KoMainWindow::updateCaption()
@@ -1099,7 +1100,6 @@ void KoMainWindow::slotFileOpen()
     else
         dialog->setCaption( i18n("Import Document") );
 
-    // The few lines below need to be kept in sync with KoTemplateChooseDia::setupFileDialog
     const QStringList mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
                                                                 KoFilterManager::Import,
                                                                 KoDocument::readExtraNativeMimeTypes() );

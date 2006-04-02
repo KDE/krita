@@ -714,13 +714,13 @@ KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
     return 0L;
 }
 
-KoDocument* KoDocument::hitTest( const QPoint &pos, const QMatrix &matrix )
+KoDocument* KoDocument::hitTest( const QPoint &pos, KoView* view, const QMatrix &matrix )
 {
     // Call KoDocumentChild::hitTest for any child document
     Q3PtrListIterator<KoDocumentChild> it( d->m_children );
     for (; it.current(); ++it )
     {
-        KoDocument *doc = it.current()->hitTest( pos, matrix );
+        KoDocument *doc = it.current()->hitTest( pos, view, matrix );
         if ( doc )
             return doc;
     }

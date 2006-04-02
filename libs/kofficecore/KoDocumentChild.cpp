@@ -106,7 +106,7 @@ KoDocument* KoDocumentChild::parentDocument() const
   return d->m_parent;
 }
 
-KoDocument* KoDocumentChild::hitTest( const QPoint &p, const QMatrix &_matrix )
+KoDocument* KoDocumentChild::hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix )
 {
   if ( !region( _matrix ).contains( p ) || !d->m_doc )
     return 0L;
@@ -115,7 +115,7 @@ KoDocument* KoDocumentChild::hitTest( const QPoint &p, const QMatrix &_matrix )
   m = matrix() * m;
   m.scale( xScaling(), yScaling() );
 
-  return d->m_doc->hitTest( p, m );
+  return d->m_doc->hitTest( p, view, m );
 }
 
 void KoDocumentChild::loadOasis( const QDomElement &frameElement, const QDomElement& objectElement )
@@ -200,24 +200,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
     if ( m_tmpMimeType == "application/x-killustrator" )
         m_tmpMimeType = "application/x-kontour";
 
-    KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
-    if ( e.isEmpty() )
-    {
-        kWarning(30003) << "Could not create child document with type " << m_tmpMimeType << endl;
-        bool res = createUnavailDocument( store, true, m_tmpMimeType );
-        if ( res )
-        {
-            // Try to turn the mimetype name into its comment
-            QString mimeName = m_tmpMimeType;
-            KMimeType::Ptr mime = KMimeType::mimeType( m_tmpMimeType );
-            if ( mime->name() != KMimeType::defaultMimeType() )
-                mimeName = mime->comment();
-            d->m_doc->setProperty( "unavailReason", i18n( "No handler found for %1" ).arg( mimeName ) );
-        }
-        return res;
-    }
-
-    return loadDocumentInternal( store, e, true /*open url*/, false /*not oasis*/ );
+    return createAndLoadDocument( store, true /*open url*/, false /*not oasis*/, m_tmpMimeType );
 }
 
 bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& manifestDoc )
@@ -239,6 +222,18 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& man
         return false;
     }
 
+    const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
+    if ( !oasis ) {
+        m_tmpURL += "/maindoc.xml";
+        kDebug() << " m_tmpURL adjusted to " << m_tmpURL << endl;
+    }
+    return createAndLoadDocument( store, true /*open url*/, oasis, mimeType );
+}
+
+bool KoDocumentChild::createAndLoadDocument( KoStore* store, bool doOpenURL, bool oasis, const QString& mimeType )
+{
+    kDebug(30003) << "KoDocumentChild::loadDocumentInternal doOpenURL=" << doOpenURL << " m_tmpURL=" << m_tmpURL << endl;
+    QString errorMsg;
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
     if ( e.isEmpty() )
     {
@@ -256,22 +251,21 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& man
         return res;
     }
 
-    const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
-    if ( !oasis ) {
-        m_tmpURL += "/maindoc.xml";
-        kDebug() << " m_tmpURL adjusted to " << m_tmpURL << endl;
-    }
-    return loadDocumentInternal( store, e, true /*open url*/, oasis );
-}
-
-bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntry& e, bool doOpenURL, bool oasis )
-{
-    kDebug(30003) << "KoDocumentChild::loadDocumentInternal doOpenURL=" << doOpenURL << " m_tmpURL=" << m_tmpURL << endl;
-    KoDocument * doc = e.createDoc( d->m_parent );
+    KoDocument * doc = e.createDoc( &errorMsg, d->m_parent );
     if (!doc) {
         kWarning(30003) << "createDoc failed" << endl;
-        return false;
+        bool res = createUnavailDocument( store, true, mimeType );
+        if ( res )
+        {
+            d->m_doc->setProperty( "unavailReason", i18n( "Error loading %1:\n%2" ).arg( e.service()->library(), errorMsg ) );
     }
+        return res;
+    }
+    return finishLoadingDocument( store, doc, doOpenURL, oasis );
+}
+
+bool KoDocumentChild::finishLoadingDocument( KoStore* store, KoDocument* doc, bool doOpenURL, bool oasis )
+{
     setDocument( doc, m_tmpGeometry );
 
     bool res = true;
@@ -376,7 +370,13 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL, con
         return false;
     }
     KoDocumentEntry e( serv );
-    if ( !loadDocumentInternal( store, e, doOpenURL, false ) )
+    if ( e.isEmpty() )
+        return false;
+    QString errorMsg;
+    KoDocument * doc = e.createDoc( &errorMsg, d->m_parent );
+    if ( !doc )
+        return false;
+    if ( !finishLoadingDocument( store, doc, doOpenURL, false ) )
         return false;
     d->m_doc->setProperty( "mimetype", mimeType );
     return true;

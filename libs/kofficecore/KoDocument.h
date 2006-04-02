@@ -367,16 +367,18 @@ public:
      *  of this part. If no child document contains this point, then
      *  a pointer to this document is returned.
      *
-     *  This function has to be overloaded if the document features child documents.
+     *  This method can to be reimplemented if the document features child documents.
      *
      *  @param pos is in (unzoomed) document coordinates
+     *  @param the view in which we are testing for a hit. This is used to implement
+     *         logic like "only hit an embedded object if it's selected in the current view"
      *  @param matrix transforms points from the documents coordinate system
      *         to the coordinate system of the requested point. This is used by
      *         transformed child documents, see KoDocumentChild/KoChild.
      *
      *  @return Pointer to the document under the mouse at that position
      */
-    virtual KoDocument *hitTest( const QPoint &pos, const QMatrix& matrix = QMatrix() );
+    virtual KoDocument *hitTest( const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix() );
 
     /**
      *  Paints the whole document into the given painter object.

@@ -24,6 +24,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <QAction>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3ValueList>
@@ -46,32 +47,31 @@ class KoGuides::Popup : public KMenu
 public: 
     Popup( KoGuides * guides )
     {
-        m_title = insertTitle( i18n( "Guide Line" ) );
-        m_delete = insertItem( i18n( "&Delete" ), guides, SLOT( slotRemove() ) );
-        m_seperator = insertSeparator();
-        m_pos = insertItem( i18n( "&Set Position..." ), guides, SLOT( slotChangePosition() ) );
+        setTitle( i18n( "Guide Line" ) );
+        m_delete = addAction( i18n( "&Delete" ), guides, SLOT( slotRemove() ) );
+        m_seperator = addSeparator();
+        m_pos = addAction( i18n( "&Set Position..." ), guides, SLOT( slotChangePosition() ) );
     }
 
     void update( int count )
     {
         if ( count == 1 )
         {
-            changeTitle( m_title, i18n( "Guide Line" ) );
-            setItemVisible( m_seperator, true );
-            setItemVisible( m_pos, true );
+            setTitle( i18n( "Guide Line" ) );
+            m_seperator->setVisible( true );
+            m_pos->setVisible( true );
         }
         else
         {
-            changeTitle( m_title, i18n( "Guide Lines" ) );
-            setItemVisible( m_seperator, false );
-            setItemVisible( m_pos, false );
+            setTitle( i18n( "Guide Lines" ) );
+            m_seperator->setVisible( false );
+            m_pos->setVisible( false );
         }
     }
 private:
-    int m_title;
-    int m_delete;
-    int m_seperator;
-    int m_pos;
+    QAction* m_delete;
+    QAction* m_seperator;
+    QAction* m_pos;
 };
 
 const KoGuides::SnapStatus KoGuides::SNAP_NONE = 0;

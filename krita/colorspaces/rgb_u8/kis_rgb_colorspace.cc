@@ -1286,6 +1286,7 @@ void KisRgbColorSpace::bitBlt(Q_UINT8 *dst,
         break;
     case COMPOSITE_IN:
         compositeIn(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
+        break;
     case COMPOSITE_OUT:
         compositeOut(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
         break;

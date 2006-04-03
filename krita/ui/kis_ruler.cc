@@ -178,7 +178,6 @@ void KisRuler::drawRuler()
     Q_INT32 st2 = 0;
     Q_INT32 st3 = 0;
     Q_INT32 st4 = 0;
-    Q_INT32 stt = 0;
 
     if (!m_pixmapBuffer)
         return;
@@ -197,19 +196,15 @@ void KisRuler::drawRuler()
             st2 = 5;
             st3 = 10;
             st4 = 25;
-            stt = 100;
             break;
         case KoUnit::U_CM:
         case KoUnit::U_PI:
         case KoUnit::U_INCH:
+        default:
             st1 = 1;
             st2 = 2;
             st3 = 5;
             st4 = 10;
-            stt = 1;
-            break;
-        default:
-            break;
     }
 
     bool s1 = KoUnit::fromUserValue(st1, m_unit) * m_zoom > 3.0;

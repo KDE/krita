@@ -1501,7 +1501,7 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
         }
         selection->writeBytes(out, layerSize.x(), layerSize.y() + y, layerSize.width(), 1);
     }
-    delete out;
+    delete [] out;
 
     for (Q_INT32 i = 0; i < 3; i++)
         delete buf[i];
@@ -1531,9 +1531,10 @@ void KisSelectionManager::border(Q_INT32 xradius, Q_INT32 yradius)
 
 void KisSelectionManager::computeBorder (Q_INT32  *circ, Q_INT32  xradius, Q_INT32  yradius)
 {
-  Q_INT32 i;
-  Q_INT32 diameter = xradius * 2 + 1;
-  double tmp;
+    Q_ASSERT(xradius != 0);
+    Q_INT32 i;
+    Q_INT32 diameter = xradius * 2 + 1;
+    double tmp;
 
     for (i = 0; i < diameter; i++)
     {

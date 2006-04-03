@@ -124,7 +124,6 @@ void KisBasicU8HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * sel
             }
 
             pixels += pSize;
-            selectionMask++;
             nPixels--;
         }
     }
@@ -194,7 +193,6 @@ void KisBasicU16HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * se
                 m_count++;
             }
             pixels += pSize;
-            selectionMask++;
             nPixels--;
 
         }
@@ -266,7 +264,6 @@ void KisBasicF32HistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * se
             }
 
             pixels += pSize;
-            selectionMask++;
             nPixels--;
 
         }
@@ -333,7 +330,6 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 
                 m_count++;
             }
             pixels += pSize;
-            selectionMask++;
             nPixels--;
         }
     }
@@ -401,7 +397,6 @@ void KisGenericRGBHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * 
                 m_count++;
             }
             pixels += pSize;
-            selectionMask++;
             nPixels--;
         }
     }
@@ -478,7 +473,6 @@ void KisGenericLabHistogramProducer::addRegionToBin(Q_UINT8 * pixels, Q_UINT8 * 
                 m_count++;
             }
             pixels += pSize;
-            selectionMask++;
             nPixels--;
         }
     }

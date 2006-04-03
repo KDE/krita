@@ -279,7 +279,7 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 				kstyle->drawKStylePrimitive(
 					KStyle::KPE_ListViewExpander, p, listView(),
 					QRect( xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE ), cg, item->isOpen() ? 0 : QStyle::State_On,
-						QStyleOption::Default);
+						QStyleOption::SO_Default);
 			}
 			else {//draw by hand
 				p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );

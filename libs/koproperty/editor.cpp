@@ -85,7 +85,7 @@ class EditorPrivate
 			previouslyCollapsedGroupItem = 0;
 			childFormPreviouslyCollapsedGroupItem = 0;
 			slotPropertyChanged_enabled = true;
-			QObject::connect(&changeSetLaterTimer, SIGNAL(timeout()), 
+			QObject::connect(&changeSetLaterTimer, SIGNAL(timeout()),
 				editor, SLOT(changeSetLater()));
 		}
 		~EditorPrivate()
@@ -189,7 +189,7 @@ void
 Editor::fill()
 {
 	setUpdatesEnabled(false);
-	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+	qApp->processEvents(QEventLoop::AllEvents);
 	hideEditor();
 	K3ListView::clear();
 	d->itemDict.clear();
@@ -286,7 +286,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 		//especially for the GUI stuff, so let's do delayed work
 		d->setListLater_list = set;
 		d->preservePrevSelection_preservePrevSelection = preservePrevSelection;
-		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+		qApp->processEvents(QEventLoop::AllEvents);
 		if (!d->setListLater_set) {
 			d->setListLater_set = true;
 			d->changeSetLaterTimer.start(10, true);
@@ -361,7 +361,7 @@ void Editor::selectItemLater()
 void
 Editor::changeSetLater()
 {
-	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+	qApp->processEvents(QEventLoop::AllEvents);
 	if (kapp->hasPendingEvents())
 		return;
 	d->setListLater_set = false;
@@ -381,7 +381,7 @@ Editor::clear(bool editorOnly)
 	d->itemToSelectLater = 0;
 
 	if(!editorOnly) {
-		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+		qApp->processEvents(QEventLoop::AllEvents);
 		clearWidgetCache();
 		K3ListView::clear();
 		d->itemDict.clear();
@@ -641,12 +641,12 @@ Editor::clearWidgetCache()
 void
 Editor::updateEditorGeometry(bool forceUndoButtonSettings, bool undoButtonVisible)
 {
-	updateEditorGeometry(d->currentItem, d->currentWidget, 
+	updateEditorGeometry(d->currentItem, d->currentWidget,
 		forceUndoButtonSettings, undoButtonVisible);
 }
 
 void
-Editor::updateEditorGeometry(EditorItem *item, Widget* widget, 
+Editor::updateEditorGeometry(EditorItem *item, Widget* widget,
   bool forceUndoButtonSettings, bool undoButtonVisible)
 {
 	if(!item || !widget)
@@ -672,7 +672,7 @@ Editor::updateEditorGeometry(EditorItem *item, Widget* widget,
 
 	moveChild(widget, r.x(), r.y());
 	widget->resize(r.size());
-	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+	qApp->processEvents(QEventLoop::AllEvents);
 }
 
 void
@@ -711,7 +711,7 @@ Editor::showUndoButton( bool show )
 	}
 
 	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
-	d->undoButton->move(geometry.x() + geometry.width() 
+	d->undoButton->move(geometry.x() + geometry.width()
 		-((d->currentWidget && d->currentWidget->hasBorders())?1:0)/*editor is moved by 1 to left*/
 		- d->undoButton->width(), p.y());
 //  if (d->currentWidget) {

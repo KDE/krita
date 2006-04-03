@@ -931,7 +931,7 @@ Editor::updateFont()
 bool
 Editor::event( QEvent * e )
 {
-	if (e->type()==QEvent::ParentFontChange) {
+	if (e->type()==QEvent::FontChange) {
 		updateFont();
 	}
 	return K3ListView::event(e);

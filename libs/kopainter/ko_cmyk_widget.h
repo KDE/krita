@@ -65,8 +65,8 @@ signals:
     /**
      * Emitted when the current color is changed.
      */
-    virtual void sigFgColorChanged(const QColor & c);
-    virtual void sigBgColorChanged(const QColor & c);
+    void sigFgColorChanged(const QColor & c);
+    void sigBgColorChanged(const QColor & c);
 
 
 protected slots:

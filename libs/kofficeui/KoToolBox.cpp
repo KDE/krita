@@ -26,6 +26,7 @@
 #include <qpixmap.h>
 #include <q3toolbar.h>
 #include <q3dockwindow.h>
+#include <Q3BoxLayout>
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -47,10 +48,10 @@
 #endif
 
 KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes )
-    : KToolBar( mainWin, Qt::DockLeft, false, name, true, true), m_instance(instance)
+    : KToolBar( mainWin, Qt::LeftToolBarArea, false, true, true ),
+    m_instance( instance )
 {
-    setFullSize( false );
-    setMargin(2);
+    setObjectName(name);
 
     m_buttonGroup = new Q3ButtonGroup( 0L );
     m_buttonGroup->setExclusive( true );
@@ -81,7 +82,7 @@ void KoToolBox::slotButtonPressed( int id )
     if( id != m_buttonGroup->selectedId() && m_buttonGroup->selected() ) {
         m_buttonGroup->selected()->setDown( false );
     }
-    m_idToActionMap.at(id)->activate();
+    m_idToActionMap.at(id)->trigger();
 
 }
 
@@ -93,13 +94,12 @@ void KoToolBox::registerTool( KAction *tool, int toolType, quint32 priority )
     (*tl)[prio] = tool;
 }
 
-QToolButton *KoToolBox::createButton(QWidget * parent,  const char* iconName, QString tooltip)
+QToolButton *KoToolBox::createButton(QWidget * parent, const QIcon& icon, QString tooltip)
 {
     QToolButton *button = new QToolButton(parent);
 
-    if ( iconName != "" ) {
-        QPixmap pixmap = BarIcon( iconName, m_instance );
-        button->setPixmap( pixmap );
+    if ( !icon.isNull() ) {
+        button->setIcon(icon);
         button->setToggleButton( true );
     }
 
@@ -127,7 +127,7 @@ void KoToolBox::setupTools()
             KAction *tool = it.data();
             if(! tool)
                 continue;
-            QToolButton *bn = createButton(tools->getNextParent(), tool->icon().latin1(), tool->toolTip());
+            QToolButton *bn = createButton(tools->getNextParent(), tool->icon(), tool->toolTip());
             tools->add(bn);
             m_buttonGroup->insert( bn, id++ );
             m_idToActionMap.append( tool );
@@ -143,11 +143,13 @@ void KoToolBox::setupTools()
 
 void KoToolBox::setOrientation ( Qt::Orientation o )
 {
+#if 0
     if ( barPos() == Floating ) { // when floating, make it a standing toolbox.
         o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
     }
+#endif
 
-    Q3DockWindow::setOrientation( o );
+    QToolBar::setOrientation( o );
 
     for (uint i = 0; i < m_toolBoxes.count(); ++i) {
         ToolArea *t = m_toolBoxes.at(i);
@@ -169,7 +171,7 @@ void KoToolBox::enableTools(bool enable)
 
         ToolList::Iterator it;
         for ( it = tl->begin(); it != tl->end(); ++it )
-            if (it != 0 && it.data())
+            if (it.data())
                 it.data()->setEnabled(enable);
     }
     m_buttonGroup->setEnabled(enable);

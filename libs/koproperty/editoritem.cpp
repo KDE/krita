@@ -29,6 +29,7 @@
 #include <qpixmap.h>
 #include <q3header.h>
 #include <qstyle.h>
+#include <qstyleoption.h>
 
 #ifdef QT_ONLY
 #else
@@ -268,7 +269,7 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 
 		if(item->firstChild())  {
 			//! \todo make BRANCHBOX_SIZE configurable?
-			KStyle* kstyle = dynamic_cast<KStyle*>(&listView()->style());
+			KStyle* kstyle = dynamic_cast<KStyle*>(listView()->style());
 			const int lh = item->height();
 			const int marg = (lh -2 - BRANCHBOX_SIZE) / 2;
 			int xmarg = marg;

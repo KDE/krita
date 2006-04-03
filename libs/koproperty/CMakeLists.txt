@@ -1,43 +1,43 @@
 kde4_header()
 
-add_subdirectory( editors ) 
-add_subdirectory( test ) 
+add_subdirectory( editors )
+add_subdirectory( test )
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/kofficecore ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
-set(libkopropertyeditors_SRCS 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/booledit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/coloredit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/combobox.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/cursoredit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/dateedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/datetimeedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/dummywidget.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/fontedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/linestyledit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/pixmapedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/pointedit.cpp
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/rectedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/sizeedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/sizepolicyedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/spinbox.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/stringedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/stringlistedit.cpp
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/symbolcombo.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/timeedit.cpp 
-	${CMAKE_SOURCE_DIR}/lib/kopropert/editors/urledit.cpp
+set(libkopropertyeditors_SRCS
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/booledit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/coloredit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/combobox.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/cursoredit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/dateedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/datetimeedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/dummywidget.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/fontedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/linestyledit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/pixmapedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/pointedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/rectedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/sizeedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/sizepolicyedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/spinbox.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/stringedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/stringlistedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/symbolcombo.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/timeedit.cpp
+	${CMAKE_SOURCE_DIR}/libs/kopropert/editors/urledit.cpp
 )
 
 ########### next target ###############
 
 set(koproperty_LIB_SRCS ${libkopropertyeditors_SRC}
-   property.cpp 
-   customproperty.cpp 
-   set.cpp 
-   editor.cpp 
-   editoritem.cpp 
-   factory.cpp 
+   property.cpp
+   customproperty.cpp
+   set.cpp
+   editor.cpp
+   editoritem.cpp
+   factory.cpp
    widget.cpp )
 
 kde4_automoc(${koproperty_LIB_SRCS})
@@ -60,7 +60,7 @@ kde4_footer()
 
 #original Makefile.am contents follow:
 
-#INCLUDES = -I$(srcdir)/editors -I$(top_srcdir)/lib/kofficecore $(all_includes)
+#INCLUDES = -I$(srcdir)/editors -I$(top_srcdir)/libs/kofficecore $(all_includes)
 #
 #lib_LTLIBRARIES =  libkoproperty.la
 #

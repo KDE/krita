@@ -39,12 +39,12 @@ class IntSpinBox : public KIntSpinBox
 	Q_OBJECT
 
 	public:
-		IntSpinBox(int lower, int upper, int step, int value, int base=10, 
+		IntSpinBox(int lower, int upper, int step, int value, int base=10,
 			IntEdit *parent=0, const char *name=0);
 		virtual ~IntSpinBox() {;}
-	
+
 		virtual bool eventFilter(QObject *o, QEvent *e);
-		QLineEdit * editor () const { return KIntSpinBox::editor(); }
+		QLineEdit * lineEdit() const { return KIntSpinBox::lineEdit(); }
 };
 
 class KOPROPERTY_EXPORT IntEdit : public Widget
@@ -78,12 +78,12 @@ class DoubleSpinBox : public KDoubleSpinBox
 
 	public:
 		//! \todo Support setting precision limits, step, etc.
-		DoubleSpinBox(double lower, double upper, double step, double value=0, 
+		DoubleSpinBox(double lower, double upper, double step, double value=0,
 			int precision=2, DoubleEdit *parent=0);
 		virtual ~DoubleSpinBox() {;}
 
 		virtual bool eventFilter(QObject *o, QEvent *e);
-		QLineEdit * editor () const { return KDoubleSpinBox::editor(); }
+		QLineEdit * lineEdit() const { return KDoubleSpinBox::lineEdit(); }
 
 	public slots:
 		virtual void setValue ( double value );

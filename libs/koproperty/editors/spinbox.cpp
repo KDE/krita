@@ -44,8 +44,8 @@ using namespace KoProperty;
 IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntEdit *parent, const char *name)
 : KIntSpinBox(lower, upper, step, value, base, parent, name)
 {
-	editor()->setAlignment(Qt::AlignLeft);
-	installEventFilter(editor());
+	lineEdit()->setAlignment(Qt::AlignLeft);
+	installEventFilter(lineEdit());
 	installEventFilter(this);
 	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
 	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
@@ -57,7 +57,7 @@ IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntE
 bool
 IntSpinBox::eventFilter(QObject *o, QEvent *e)
 {
-	if(o == editor())
+	if(o == lineEdit())
 	{
 		if(e->type() == QEvent::KeyPress)
 		{
@@ -69,7 +69,7 @@ IntSpinBox::eventFilter(QObject *o, QEvent *e)
 			}
 		}
 	}
-	if ((o == editor() || o == this || o->parent() == this) 
+	if ((o == lineEdit() || o == this || o->parent() == this)
 		&& e->type() == QEvent::Wheel && static_cast<IntEdit*>(parentWidget())->isReadOnly())
 	{
 		return true; //avoid value changes for read-only widget
@@ -164,7 +164,7 @@ void
 IntEdit::setReadOnlyInternal(bool readOnly)
 {
 	//disable editor and spin widget
-	m_edit->editor()->setReadOnly(readOnly);
+	m_edit->lineEdit()->setReadOnly(readOnly);
 	updateSpinWidgets();
 	if (readOnly)
 		setLeavesTheSpaceForRevertButton(false);
@@ -176,8 +176,8 @@ IntEdit::setReadOnlyInternal(bool readOnly)
 DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double value, int precision, DoubleEdit *parent)
 : KDoubleSpinBox(lower, upper, step, value, precision, parent)
 {
-	editor()->setAlignment(Qt::AlignLeft);
-	installEventFilter(editor());
+	lineEdit()->setAlignment(Qt::AlignLeft);
+	installEventFilter(lineEdit());
 	installEventFilter(this);
 	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
 	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
@@ -189,7 +189,7 @@ DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double va
 bool
 DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 {
-	if(o == editor())
+	if(o == lineEdit())
 	{
 		if(e->type() == QEvent::KeyPress)
 		{
@@ -201,7 +201,7 @@ DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 			}
 		}
 	}
-	if ((o == editor() || o == this || o->parent() == this) 
+	if ((o == lineEdit() || o == this || o->parent() == this)
 		&& e->type() == QEvent::Wheel && static_cast<IntEdit*>(parentWidget())->isReadOnly())
 	{
 		return true; //avoid value changes for read-only widget
@@ -313,7 +313,7 @@ void
 DoubleEdit::setReadOnlyInternal(bool readOnly)
 {
 	//disable editor and spin widget
-	m_edit->editor()->setReadOnly(readOnly);
+	m_edit->lineEdit()->setReadOnly(readOnly);
 	updateSpinWidgets();
 	if (readOnly)
 		setLeavesTheSpaceForRevertButton(false);

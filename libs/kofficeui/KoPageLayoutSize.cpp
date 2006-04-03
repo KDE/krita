@@ -31,8 +31,8 @@
 #include <qlayout.h>
 #include <qradiobutton.h>
 
-#include <qvgroupbox.h>
-#include <qhbuttongroup.h>
+#include <Q3GroupBox>
+#include <Q3ButtonGroup>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3HBoxLayout>
@@ -70,7 +70,8 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     }
 
     // -------------- page size -----------------
-    QVGroupBox *formatFrame = new QVGroupBox( i18n( "Page Size" ), this );
+    Q3GroupBox *formatFrame = new Q3GroupBox( i18n( "Page Size" ), this );
+    formatFrame->setOrientation( Qt::Vertical ),
     grid1->addWidget( formatFrame, 1, 0 );
 
     KHBox *formatPageSize = new KHBox( formatFrame );
@@ -112,7 +113,8 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     connect( epgHeight, SIGNAL( valueChangedPt(double ) ), this, SLOT( heightChanged(double) ) );
 
     // --------------- orientation ---------------
-    m_orientGroup = new Q3HButtonGroup( i18n( "Orientation" ), this );
+    m_orientGroup = new Q3ButtonGroup( i18n( "Orientation" ), this );
+    m_orientGroup->setOrientation( Qt::Horizontal );
     m_orientGroup->setInsideSpacing( KDialog::spacingHint() );
     grid1->addWidget( m_orientGroup, 2, 0 );
 
@@ -129,9 +131,9 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     connect( m_orientGroup, SIGNAL (clicked (int)), this, SLOT( orientationChanged(int) ));
 
     // --------------- page margins ---------------
-    QVGroupBox *marginsFrame = new QVGroupBox( i18n( "Margins" ), this );
+    Q3GroupBox *marginsFrame = new Q3GroupBox( i18n( "Margins" ), this );
     marginsFrame->setColumnLayout( 0, Qt::Vertical );
-    marginsFrame->setMargin( KDialog::marginHint() );
+    marginsFrame->layout()->setMargin( KDialog::marginHint() );
     grid1->addWidget( marginsFrame, 3, 0 );
 
     Q3GridLayout *marginsLayout = new Q3GridLayout( marginsFrame->layout(), 3, 3,

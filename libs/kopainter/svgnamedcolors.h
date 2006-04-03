@@ -1,9 +1,9 @@
 
-#define TORGB( Qt::red, Qt::green, Qt::blue ) \
+#define TORGB( red, green, blue ) \
 { \
-	r = Qt::red; \
-	b = Qt::blue; \
-	g = Qt::green; \
+	r = red; \
+	b = blue; \
+	g = green; \
 }
 
 void svgNamedColorToRGB( QString rgbColor, int &r, int &g, int &b )

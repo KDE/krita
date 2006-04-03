@@ -96,7 +96,7 @@ KoGradient* KoGradientManager::loadKritaGradient(QFile* file)
 	QByteArray m_data = file->readAll();
 	file->close();
 
-	QTextIStream fileContent(m_data);
+	QTextStream fileContent(m_data, QIODevice::ReadOnly);
 	fileContent.setEncoding(QTextStream::UnicodeUTF8);
 
 	QString header = fileContent.readLine();
@@ -170,7 +170,7 @@ KoGradient* KoGradientManager::loadKritaGradient(QFile* file)
 		stop->midpoint = middleOffset;
 		stop->offset = leftOffset;
 
-		stop->Qt::color1 = leftRed;
+		stop->color1 = leftRed;
 		stop->color2 = leftGreen;
 		stop->color3 = leftBlue;
 		stop->color4 = 0.0;
@@ -185,7 +185,7 @@ KoGradient* KoGradientManager::loadKritaGradient(QFile* file)
 			lastStop->opacity = rightAlpha;
 			lastStop->midpoint = middleOffset;
 			lastStop->offset = rightOffset;
-			lastStop->Qt::color1 = rightRed;
+			lastStop->color1 = rightRed;
 			lastStop->color2 = rightGreen;
 			lastStop->color3 = rightBlue;
 			lastStop->color4 = 0.0;
@@ -268,7 +268,7 @@ KoGradient* KoGradientManager::parseKarbonGradient(const QDomElement& element)
 				switch(e.attribute("colorSpace").toUShort())
 				{
 					case 1:	// cmyk
-						stop->Qt::color1 = e.attribute( "v1", "0.0" ).toFloat();
+						stop->color1 = e.attribute( "v1", "0.0" ).toFloat();
 						stop->color2 = e.attribute( "v2", "0.0" ).toFloat();
 						stop->color3 = e.attribute( "v3", "0.0" ).toFloat();
 						stop->color4 = e.attribute( "v4", "0.0" ).toFloat();
@@ -276,7 +276,7 @@ KoGradient* KoGradientManager::parseKarbonGradient(const QDomElement& element)
 						stop->interpolation = interpolation_linear;
 						break;
 					case 2: // hsv
-						stop->Qt::color1 = e.attribute( "v1", "0.0" ).toFloat();
+						stop->color1 = e.attribute( "v1", "0.0" ).toFloat();
 						stop->color2 = e.attribute( "v2", "0.0" ).toFloat();
 						stop->color3 = e.attribute( "v3", "0.0" ).toFloat();
 						stop->color4 = 0.0;
@@ -284,7 +284,7 @@ KoGradient* KoGradientManager::parseKarbonGradient(const QDomElement& element)
 						stop->interpolation = interpolation_linear;
 						break;
 					case 3: // gray
-						stop->Qt::color1 = e.attribute( "v1", "0.0" ).toFloat();
+						stop->color1 = e.attribute( "v1", "0.0" ).toFloat();
 						stop->color2 = 0.0;
 						stop->color3 = 0.0;
 						stop->color4 = 0.0;
@@ -292,7 +292,7 @@ KoGradient* KoGradientManager::parseKarbonGradient(const QDomElement& element)
 						stop->interpolation = interpolation_linear;
 						break;
 					default: // rgb
-						stop->Qt::color1 = e.attribute( "v1", "0.0" ).toFloat();
+						stop->color1 = e.attribute( "v1", "0.0" ).toFloat();
 						stop->color2 = e.attribute( "v2", "0.0" ).toFloat();
 						stop->color3 = e.attribute( "v3", "0.0" ).toFloat();
 						stop->color4 = 0.0;
@@ -498,9 +498,9 @@ KoGradient* KoGradientManager::parseSvgGradient(const QDomElement& element)
 
 			stop->offset = off;
 			stop->midpoint = 0.5;
-			stop->Qt::color1 = c.Qt::red() / 255.0;
-			stop->color2 = c.Qt::green() / 255.0;
-			stop->color3 = c.Qt::blue() / 255.0;
+			stop->color1 = c.red() / 255.0;
+			stop->color2 = c.green() / 255.0;
+			stop->color3 = c.blue() / 255.0;
 			stop->color4 = 0.0;
 			stop->colorType = color_type_rgb;
 			stop->interpolation = interpolation_linear;

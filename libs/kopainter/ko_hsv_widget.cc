@@ -101,7 +101,7 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name
     //setFixedSize(mGrid -> minimumSize());
     m_autovalue = true; // So on the initial selection of h or v, s gets set to 255.
 
-    update(Qt::black, Qt::white);
+    update(QColor(Qt::black), QColor(Qt::white));
 }
 
 void KoHSVWidget::slotHChanged(int h)

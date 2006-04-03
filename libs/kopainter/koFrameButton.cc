@@ -25,9 +25,9 @@
 #include <QLabel>
 
 KoFrameButton::KoFrameButton(QWidget *parent, const char *name):
-QLabel(parent, name)
+QLabel(parent)
 {
-  setAutoResize(true);
+  setObjectName(name);
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
   setMaximumHeight(8);
@@ -36,8 +36,9 @@ QLabel(parent, name)
 }
 
 KoFrameButton::KoFrameButton(const QString &text, QWidget *parent, const char *name):
-QLabel(parent, name)
+QLabel(parent)
 {
+  setObjectName(name);
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
   setText(text);
@@ -47,8 +48,9 @@ QLabel(parent, name)
 }
 
 KoFrameButton::KoFrameButton(const QPixmap &pixmap, QWidget *parent, const char *name):
-QLabel(parent, name)
+QLabel(parent)
 {
+  setObjectName(name);
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
   setPixmap(pixmap);
@@ -101,6 +103,7 @@ void KoFrameButton::setText(const QString &t)
 {
   mText = t;
   QLabel::setText(t);
+  setFixedSize(QLabel::sizeHint());
 }
 
 #include "koFrameButton.moc"

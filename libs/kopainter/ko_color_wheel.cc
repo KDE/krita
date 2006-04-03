@@ -31,9 +31,9 @@
 
 #define pi 3.14159265
 
-KoColorWheel::KoColorWheel( QWidget *parent, const char *name ): KXYSelector( parent, name )
+KoColorWheel::KoColorWheel( QWidget *parent, const char *name ): KXYSelector( parent )
 {
-
+    setObjectName(name);
 }
 
 void KoColorWheel::resizeEvent( QResizeEvent * )

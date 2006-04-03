@@ -14,9 +14,9 @@ add_subdirectory( koproperty )
 add_subdirectory( kotext ) 
 add_subdirectory( kformula ) 
 add_subdirectory( kopalette ) 
+add_subdirectory( kopainter ) 
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KROSSDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KOPAINTERDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KROSSDIR)")
 
 

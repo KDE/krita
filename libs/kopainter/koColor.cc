@@ -91,9 +91,9 @@ KoColor::KoColor(int c, int m, int y, int k)
 
 KoColor::KoColor(const QColor &c)
 {
-  mR = c.Qt::red();
-  mG = c.Qt::green();
-  mB = c.Qt::blue();
+  mR = c.red();
+  mG = c.green();
+  mB = c.blue();
   mNative = csRGB;
   rgbChanged();
 }
@@ -300,7 +300,7 @@ void KoColor::setCMYK(int C, int M, int Y, int K)
 
 void KoColor::setNamedColor(const QString &name)
 {
-  switch(name[0])
+  switch(name[0].toLatin1())
   {
   case '#':
     mR = (hex2int(name[1]) << 4) + hex2int(name[2]);
@@ -342,9 +342,9 @@ void KoColor::setNamedColor(const QString &name)
 
 void KoColor::setColor(const QColor &c)
 {
-  mR = c.Qt::red();
-  mG = c.Qt::green();
-  mB = c.Qt::blue();
+  mR = c.red();
+  mG = c.green();
+  mB = c.blue();
   mNative = csRGB;
   rgbChanged();
 }
@@ -626,9 +626,9 @@ int KoColor::hex2int(QChar c)
   if(c.isDigit())
     return c.digitValue();
   else if('A' <= c && c <= 'F')
-    return c - 'A' + 10;
+    return c.toLatin1() - 'A' + 10;
   else if('a' <= c && c <= 'f')
-    return c - 'a' + 10;
+    return c.toLatin1() - 'a' + 10;
   else
     return 0;
 }

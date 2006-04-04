@@ -73,12 +73,13 @@ Widget::Widget(Property *property, QWidget *parent, const char *name)
 Widget::~Widget()
 {
 	delete d;
+	d = 0;
 }
 
 Property*
 Widget::property() const
 {
-	return d->property;
+	return d ? d->property : 0; //for sanity
 }
 
 void

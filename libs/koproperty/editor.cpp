@@ -486,7 +486,7 @@ Editor::slotPropertyReset(Set& set, Property& property)
 void
 Editor::slotWidgetValueChanged(Widget *widget)
 {
-	if(!widget || !d->set || (d->set && d->set->isReadOnly()) || (widget && widget->isReadOnly()))
+	if(!widget || !d->set || (d->set && d->set->isReadOnly()) || (widget && widget->isReadOnly()) || !widget->property())
 		return;
 
 	d->insideSlotValueChanged = true;
@@ -498,8 +498,10 @@ Editor::slotWidgetValueChanged(Widget *widget)
 
 	if(sync) {
 		d->slotPropertyChanged_enabled = false;
+		QGuardedPtr<Widget> pWidget = widget; //safe, widget can be destroyed in the meantime
 		widget->property()->setValue(value);
-		showUndoButton( widget->property()->isModified() );
+		if (pWidget)
+		  showUndoButton( pWidget->property()->isModified() );
 		d->slotPropertyChanged_enabled = true;
 	}
 

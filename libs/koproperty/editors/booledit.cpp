@@ -57,7 +57,8 @@ BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
 }
 
 BoolEdit::~BoolEdit()
-{}
+{
+}
 
 QVariant
 BoolEdit::value() const
@@ -127,7 +128,8 @@ BoolEdit::eventFilter(QObject* watched, QEvent* e)
     if(e->type() == QEvent::KeyPress) {
         QKeyEvent* ev = static_cast<QKeyEvent*>(e);
         if(ev->key() == Qt::Key_Space) {
-            m_toggle->toggle();
+            if (m_toggle)
+                m_toggle->toggle();
             return true;
         }
     }

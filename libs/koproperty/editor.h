@@ -109,7 +109,7 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 		void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
 
 		/*! Updates property in the list when new value is selected in the editor.*/
-		void slotWidgetValueChanged(Widget *widget);
+		void slotWidgetValueChanged(Widget* widget);
 
 		/*! Called when the user presses Enter to accet the input
 		   (only applies when autoSync() == false).*/

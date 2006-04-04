@@ -42,7 +42,7 @@ PointEdit::PointEdit(Property *property, QWidget *parent, const char *name)
 	m_edit->setFocusPolicy(Qt::NoFocus);
 //	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
 	m_edit->setPaletteBackgroundColor(palette().active().base());
-	m_edit->setWordWrap( Q3TextEdit::NoWrap );
+	m_edit->setLineWrapMode( QTextEdit::NoWrap );
 //	m_edit->setBackgroundMode(Qt::PaletteBase);
 //	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
@@ -63,7 +63,7 @@ void
 PointEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->selectAll(false);
+	m_edit->selectAll();
 	m_edit->setText(QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
 	this->setToolTip( QString("%1, %2").arg(value.toPoint().x()).arg(value.toPoint().y()));
 

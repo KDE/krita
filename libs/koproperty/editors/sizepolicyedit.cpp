@@ -81,9 +81,9 @@ void
 SizePolicyEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.toSizePolicy().horData())).
-		arg(findDescription(value.toSizePolicy().verData())).
-		arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));
+	m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horData())).
+		arg(findDescription(value.value<QSizePolicy>().verData())).
+		arg(value.value<QSizePolicy>().horStretch()).arg(value.value<QSizePolicy>().verStretch()));
 	this->setToolTip( m_edit->text());
 
 	if (emitChange)
@@ -98,9 +98,9 @@ SizePolicyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
 	QRect rect(r);
 	rect.setBottom(r.bottom()+1);
 	Widget::drawViewer(p, cg, rect, 
-		QString("%1/%2/%3/%4").arg(findDescription(value.toSizePolicy().horData())).
-		arg(findDescription(value.toSizePolicy().verData())).
-		arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));
+		QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horData())).
+		arg(findDescription(value.value<QSizePolicy>().verData())).
+		arg(value.value<QSizePolicy>().horStretch()).arg(value.value<QSizePolicy>().verStretch()));
 }
 
 QString

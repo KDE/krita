@@ -26,7 +26,7 @@
 
 #include <kmainwindow.h>
 
-#include <koproperty/set.h>
+#include "set.h"
 
 /**
  * @short Application Main Window

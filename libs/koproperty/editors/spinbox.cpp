@@ -42,16 +42,16 @@
 using namespace KoProperty;
 
 IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntEdit *parent, const char *name)
-: KIntSpinBox(lower, upper, step, value, base, parent, name)
+: KIntSpinBox(lower, upper, step, value, parent, base)
 {
+	setObjectName(name);
 	lineEdit()->setAlignment(Qt::AlignLeft);
 	installEventFilter(lineEdit());
 	installEventFilter(this);
-	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
-	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
+	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
+	QAbstractSpinBox* spin = static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin)
 		spin->installEventFilter(this);
-	delete spinwidgets;
 }
 
 bool
@@ -151,13 +151,11 @@ IntEdit::slotValueChanged(int)
 void
 IntEdit::updateSpinWidgets()
 {
-	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
-	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
+	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
+	QAbstractSpinBox* spin = static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin) {
-		spin->setUpEnabled(!isReadOnly());
-		spin->setDownEnabled(!isReadOnly());
+		spin->setReadOnly(isReadOnly());
 	}
-	delete spinwidgets;
 }
 
 void
@@ -174,16 +172,15 @@ IntEdit::setReadOnlyInternal(bool readOnly)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double value, int precision, DoubleEdit *parent)
-: KDoubleSpinBox(lower, upper, step, value, precision, parent)
+: KDoubleSpinBox(lower, upper, step, value, parent, precision)
 {
 	lineEdit()->setAlignment(Qt::AlignLeft);
 	installEventFilter(lineEdit());
 	installEventFilter(this);
-	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
-	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
+	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
+	QAbstractSpinBox* spin = static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin)
 		spin->installEventFilter(this);
-	delete spinwidgets;
 }
 
 bool
@@ -300,13 +297,11 @@ DoubleEdit::slotValueChanged(double)
 void
 DoubleEdit::updateSpinWidgets()
 {
-	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
-	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
+	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
+	QAbstractSpinBox* spin = static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin) {
-		spin->setUpEnabled(!isReadOnly());
-		spin->setDownEnabled(!isReadOnly());
+		spin->setReadOnly(isReadOnly());
 	}
-	delete spinwidgets;
 }
 
 void

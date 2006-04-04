@@ -43,7 +43,7 @@ SymbolCombo::SymbolCombo(Property *property, QWidget *parent, const char *name)
 	Q3HBoxLayout *l = new Q3HBoxLayout(this);
 
 	m_edit = new QLineEdit(this);
-	m_edit->setLineWidth(0);
+//	m_edit->setLineWidth(0);
 	m_edit->setReadOnly(true);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);

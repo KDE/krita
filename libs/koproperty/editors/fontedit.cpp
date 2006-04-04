@@ -59,7 +59,7 @@ class FontEditRequester : public KFontRequester
 			label()->setFrameShape(Q3Frame::Box);
 			label()->setIndent(-1);
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
-			label()->setFocusPolicy(ClickFocus);
+			label()->setFocusPolicy(Qt::ClickFocus);
 			KAcceleratorManager::setNoAccel(label());
 #endif
 			layout()->remove(label());
@@ -67,7 +67,7 @@ class FontEditRequester : public KFontRequester
 			delete layout();
 			button()->setText(i18n("..."));
 			button()->setToolTip( i18n("Change font"));
-			button()->setFocusPolicy(NoFocus);
+			button()->setFocusPolicy(Qt::NoFocus);
 			button()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 			QFontMetrics fm(button()->font());
 			button()->setFixedWidth(fm.width(button()->text()+" "));
@@ -105,7 +105,7 @@ FontEdit::value() const
 
 static QString sampleText(const QVariant &value)
 {
-	QFontInfo fi(value.toFont());
+	QFontInfo fi(value.value<QFont>());
 	return fi.family() + (fi.bold() ? " " + i18n("Bold") : QString("")) +
 		(fi.italic() ? " " + i18n("Italic") : QString::null) +
 		" " + QString::number(fi.pointSize());
@@ -115,7 +115,7 @@ void
 FontEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_edit->blockSignals(true);
-	m_edit->setFont(value.toFont());
+	m_edit->setFont(value.value<QFont>());
 	m_edit->blockSignals(false);
 	m_edit->setSampleText(sampleText(value));
 	if (emitChange)
@@ -126,7 +126,7 @@ void
 FontEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVariant &value)
 {
 	p->eraseRect(r);
-	p->setFont(value.toFont());
+	p->setFont(value.value<QFont>());
 	QRect r2(r);
 	r2.setLeft(r2.left()+KPROPEDITOR_ITEM_MARGIN);
 	r2.setBottom(r2.bottom()+1);

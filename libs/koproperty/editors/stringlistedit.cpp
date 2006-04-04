@@ -52,7 +52,7 @@ StringListEdit::StringListEdit(Property *property, QWidget *parent, const char *
 	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
 
 	m_edit = new QLineEdit(this);
-	m_edit->setLineWidth(0);
+//	m_edit->setLineWidth(0);
 	m_edit->setReadOnly(true);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);

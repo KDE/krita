@@ -34,6 +34,7 @@
 #include <q3filedialog.h>
 #include <qtooltip.h>
 #include <qapplication.h>
+#include <QDesktopWidget>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
@@ -104,7 +105,7 @@ PixmapEdit::value() const
 void
 PixmapEdit::setValue(const QVariant &value, bool emitChange)
 {
-	m_pixmap = value.toPixmap();
+	m_pixmap = value.value<QPixmap>();
 	if (m_pixmap.isNull() || (m_pixmap.height()<=height())) {
 		m_edit->setPixmap(m_pixmap);
 		m_previewPixmap = m_pixmap;
@@ -135,11 +136,11 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
 	p->setClipRect(r2);
 	p->setClipping(true);
 	p->eraseRect(r2);
-	if (value.toPixmap().isNull())
+	if (value.value<QPixmap>().isNull())
 		return;
 	if (m_recentlyPainted!=value) {
 		m_recentlyPainted = value;
-		m_scaledPixmap = value.toPixmap();
+		m_scaledPixmap = value.value<QPixmap>();
 		QImage img(m_scaledPixmap.convertToImage());
 		img = img.smoothScale(r.size()+QSize(0,2), Qt::KeepAspectRatio);
 		m_scaledPixmap.convertFromImage(img);

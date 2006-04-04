@@ -28,11 +28,12 @@
 #include <q3datetimeedit.h>
 #include <qcursor.h>
 #include <qapplication.h>
+#include <QDesktopWidget>
 //Added by qt3to4:
 #include <Q3CString>
 
-#include <koproperty/property.h>
-#include <koproperty/editor.h>
+#include <property.h>
+#include <editor.h>
 
 #include "test.h"
 

@@ -30,7 +30,7 @@
 #include <qpushbutton.h>
 #include <qpixmap.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QEvent>
 #else
@@ -42,7 +42,7 @@ using namespace KoProperty;
 ColorButton::ColorButton(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
+	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
 #ifdef QT_ONLY
 	m_edit = new QPushButton(this);
 	connect(m_edit, SIGNAL(clicked()), this, SLOT(selectColor()));
@@ -82,7 +82,7 @@ ColorButton::setValue(const QVariant &value, bool emitChange)
 	m_edit->setIconSet(px);
 #else
 	m_edit->blockSignals(true);
-	m_edit->setColor(value.toColor());
+	m_edit->setColor(value.value<QColor>());
 	m_edit->blockSignals(false);
 #endif
 	if (emitChange)
@@ -94,7 +94,7 @@ ColorButton::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const 
 {
 	p->eraseRect(r);
 
-	p->setBrush(value.toColor());
+	p->setBrush(value.value<QColor>());
 	p->setPen(Qt::SolidLine);
 	QRect r2(r);
 	r2.setTopLeft(r.topLeft() + QPoint(5,5));

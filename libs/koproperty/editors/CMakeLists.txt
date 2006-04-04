@@ -1,7 +1,35 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/koproperty ${CMAKE_SOURCE_DIR}/lib/kofficecore ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty ${CMAKE_SOURCE_DIR}/lib/kofficecore ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
+set(libkopropertyeditors_SRCS
+        booledit.cpp
+        coloredit.cpp
+        combobox.cpp
+        cursoredit.cpp
+        dateedit.cpp
+        datetimeedit.cpp
+        dummywidget.cpp
+        fontedit.cpp
+        linestyledit.cpp
+        pixmapedit.cpp
+        pointedit.cpp
+        rectedit.cpp
+        sizeedit.cpp
+        sizepolicyedit.cpp
+        spinbox.cpp
+        stringedit.cpp
+        stringlistedit.cpp
+        symbolcombo.cpp
+        timeedit.cpp
+        urledit.cpp
+)
+
+kde4_automoc(${libkopropertyeditors_SRCS})
+
+kde4_add_library(kopropertyeditors STATIC ${libkopropertyeditors_SRCS})
+
+target_link_libraries(kopropertyeditors ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
 

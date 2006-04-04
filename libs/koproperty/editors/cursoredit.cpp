@@ -124,13 +124,13 @@ CursorEdit::value() const
 void
 CursorEdit::setValue(const QVariant &value, bool emitChange)
 {
-	ComboBox::setValue(value.toCursor().shape(), emitChange);
+	ComboBox::setValue(value.value<QCursor>().shape(), emitChange);
 }
 
 void
 CursorEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	ComboBox::drawViewer(p, cg, r, value.toCursor().shape());
+	ComboBox::drawViewer(p, cg, r, value.value<QCursor>().shape());
 }
 
 void

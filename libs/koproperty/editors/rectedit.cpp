@@ -40,7 +40,7 @@ RectEdit::RectEdit(Property *property, QWidget *parent, const char *name)
 	m_edit = new KActiveLabel(this);
 	m_edit->setFocusPolicy(Qt::NoFocus);
 	m_edit->setPaletteBackgroundColor(palette().active().base());
-	m_edit->setWordWrap( Q3TextEdit::NoWrap );
+	m_edit->setLineWrapMode( QTextEdit::NoWrap );
 	m_edit->setMinimumHeight(5);
 	setEditor(m_edit);
 //	setFocusWidget(m_edit);
@@ -59,7 +59,7 @@ void
 RectEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->selectAll(false);
+	m_edit->selectAll();
 	m_edit->setText(QString(RECTEDIT_MASK).arg(value.toRect().x()).
 		arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
 	this->setToolTip( i18n("Position: %1, %2\nSize: %3 x %4").arg(value.toRect().x()).

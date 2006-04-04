@@ -269,17 +269,19 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 
 		if(item->firstChild())  {
 			//! \todo make BRANCHBOX_SIZE configurable?
-			KStyle* kstyle = dynamic_cast<KStyle*>(listView()->style());
+			KStyle* kstyle = 0; //dynamic_cast<KStyle*>(listView()->style());
 			const int lh = item->height();
 			const int marg = (lh -2 - BRANCHBOX_SIZE) / 2;
 			int xmarg = marg;
 			if (dynamic_cast<EditorGroupItem*>(item))
 				xmarg = xmarg * 10 / 14 -1;
 			if (kstyle) {
+#if 0
 				kstyle->drawKStylePrimitive(
 					KStyle::KPE_ListViewExpander, p, listView(),
 					QRect( xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE ), cg, item->isOpen() ? 0 : QStyle::State_On,
 						QStyleOption::SO_Default);
+#endif
 			}
 			else {//draw by hand
 				p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );

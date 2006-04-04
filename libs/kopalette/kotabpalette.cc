@@ -16,15 +16,15 @@
  */
 
 
-#include <q3dockwindow.h>
+#include <QDockWidget>
 
 #include <ktabwidget.h>
 #include <kdebug.h>
 
-#include <KoView.h>
+#include "KoView.h"
 
-#include <kopalette.h>
-#include <kotabpalette.h>
+#include "kopalette.h"
+#include "kotabpalette.h"
 #include "kopalettemanager.h"
 
 KoTabPalette::KoTabPalette(QWidget * parent, const char * name)

@@ -153,13 +153,13 @@ public:
      * a location for the palette in the saved settings, then move it there
      * instead of the specified location.
      */
-    virtual void placePalette(const QString & name, Qt::ToolBarDock location = Qt::DockRight);
+    virtual void placePalette(const QString & name, Qt::DockWidgetArea location = Qt::RightDockWidgetArea);
 
     /**
      * Add a palette; this can be used to add palettes other than those in the two
      * default styles.
      */
-     virtual void addPalette(KoPalette * palette, const QString & name, Qt::ToolBarDock location = Qt::DockRight);
+     virtual void addPalette(KoPalette * palette, const QString & name, Qt::DockWidgetArea location = Qt::RightDockWidgetArea);
 
      /**
       * Sets all palettes to the specified fixed width

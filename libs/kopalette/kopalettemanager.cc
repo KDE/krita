@@ -32,14 +32,14 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-#include <KoView.h>
-#include <KoMainWindow.h>
+#include "KoView.h"
+#include "KoMainWindow.h"
 
-#include <kopalette.h>
-#include <kotabpalette.h>
-#include <kotoolboxpalette.h>
+#include "kopalette.h"
+#include "kotabpalette.h"
+#include "kotoolboxpalette.h"
 
-#include <kopalettemanager.h>
+#include "kopalettemanager.h"
 
 #include <QDesktopWidget>
 
@@ -360,7 +360,7 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
     return palette;
 }
 
-void KoPaletteManager::placePalette(const QString & name, Qt::ToolBarDock location)
+void KoPaletteManager::placePalette(const QString & name, Qt::DockWidgetArea location)
 {
     Q_ASSERT(!name.isNull());
     KoPalette * palette = m_palettes->find(name);
@@ -381,55 +381,50 @@ void KoPaletteManager::placePalette(const QString & name, Qt::ToolBarDock locati
         int y = cfg->readNumEntry("y", 0);
         int offset = cfg->readNumEntry("offset", 0);
         palette->setGeometry(x, y, width, height);
-        palette->setOffset(offset);
+//        palette->setOffset(offset); TODO Port this somehow
         if (dockarea == "left" && place == 0) {
-            location = Qt::DockLeft;
+            location = Qt::LeftDockWidgetArea;
         }
         else if (dockarea == "right" && place == 0) {
-            location = Qt::DockRight;
+            location = Qt::RightDockWidgetArea;
         }
+#if 0
         else {
             location = Qt::DockTornOff;
         }
+#endif
     }
 
     cfg->setGroup("");
     m_dockability = (enumKoDockability) cfg->readNumEntry("palettesdockability");
 
-    // Top and bottom will never accept docks
-    m_view->mainWindow()->topDock()->setAcceptDockWindow(palette, false);
-    m_view->mainWindow()->bottomDock()->setAcceptDockWindow(palette, false);
-
     // Left and right may accept docks. The height of the screen is important
     int h = qApp->desktop()->height();
     switch (m_dockability) {
         case (DOCK_ENABLED):
-            m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
-            m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
-            m_view->mainWindow()->addDockWindow(palette, location);
+	    palette->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                     Qt::RightDockWidgetArea);
             break;
         case (DOCK_DISABLED):
-            m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, false);
-            m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, false);
-            m_view->mainWindow()->addDockWindow(palette, Qt::DockTornOff);
+	    palette->setAllowedAreas(0);
+	    palette->setFloating(true);
             break;
         case (DOCK_SMART):
             if (h > 768) {
-                m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
-                m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
-                m_view->mainWindow()->addDockWindow(palette, location);
+		palette->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                         Qt::RightDockWidgetArea);
             }
             else {
-                m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, false);
-                m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, false);
-                m_view->mainWindow()->addDockWindow(palette, Qt::DockTornOff);
+		palette->setAllowedAreas(0);
+		palette->setFloating(true);
            }
             break;
-    };
-    m_view->mainWindow()->lineUpDockWindows();
+    }
+
+    m_view->mainWindow()->addDockWidget(location, palette);
 }
 
-void KoPaletteManager::addPalette(KoPalette * palette, const QString & name, Qt::ToolBarDock location)
+void KoPaletteManager::addPalette(KoPalette * palette, const QString & name, Qt::DockWidgetArea location)
 {
     Q_ASSERT(palette);
     Q_ASSERT(!name.isNull());
@@ -547,20 +542,20 @@ void KoPaletteManager::save()
 
         cfg->setGroup("palette-" + itP.currentKey());
 
-        if ( m_view->mainWindow()->dockWidgetArea (p->area()) == Qt::LeftDockWidgetArea) {
+        if ( m_view->mainWindow()->dockWidgetArea (p) == Qt::LeftDockWidgetArea) {
             cfg->writeEntry("dockarea", "left");
         }
         else {
             cfg->writeEntry("dockarea", "right");
         }
-        cfg->writeEntry("place", (int)p->place());
+//        cfg->writeEntry("place", (int)p->place()); TODO Port this somehow
         cfg->writeEntry("x", p->x());
         cfg->writeEntry("y", p->y());
         cfg->writeEntry("height", p->height());
         cfg->writeEntry("width", p->width());
         cfg->writeEntry("palettestyle", (int)p->style());
         cfg->writeEntry("caption", p->caption());
-        cfg->writeEntry("offset", p->offset());
+//        cfg->writeEntry("offset", p->offset()); TODO Port this somehow
 
         // XXX: I dare say that it is immediately visible that I never have had
         //      any formal training in algorithms. BSAR.

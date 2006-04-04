@@ -17,12 +17,12 @@
  */
 
 
-#include <q3dockwindow.h>
-#include <qtoolbox.h>
+#include <QDockWidget>
+#include <QToolBox>
 
-#include <kopalette.h>
-#include <kopalettemanager.h>
-#include <kotoolboxpalette.h>
+#include "kopalette.h"
+#include "kopalettemanager.h"
+#include "kotoolboxpalette.h"
 
 KoToolBoxPalette::KoToolBoxPalette(QWidget * parent, const char * name)
     : KoPalette(parent, name)

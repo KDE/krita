@@ -15,8 +15,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QDockWidget>
 #include <qwidget.h>
-#include <q3dockwindow.h>
 #include <qvariant.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>
@@ -40,20 +40,14 @@
 #include "kopalette.h"
 
 KoPalette::KoPalette(QWidget * parent, const char * name)
-    : Q3DockWindow(parent, name)
+    : QDockWidget(parent)
 {
-
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
+    setObjectName(name);
     KAcceleratorManager::setNoAccel(this);
-#endif
-    setCloseMode( Q3DockWindow::Never);
-    setResizeEnabled(true);
-    setOpaqueMoving(true);
+    setFeatures(QDockWidget::DockWidgetMovable |
+                QDockWidget::DockWidgetFloatable);
     setFocusPolicy(Qt::NoFocus);
-    setVerticallyStretchable(false);
-    setHorizontallyStretchable(false);
 
-    setNewLine(true);
     layout() -> setSpacing(0);
     layout() -> setMargin(0);
 

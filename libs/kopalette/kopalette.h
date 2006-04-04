@@ -18,7 +18,7 @@
 #ifndef _KO_PALETTE_
 #define _KO_PALETTE_
 
-#include <q3dockwindow.h>
+#include <QDockWidget>
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>
@@ -36,7 +36,7 @@
  * There is currently no titlebar with a shade button; I hope to be
  * able to use QDockWidget's toggle view action for that.
  */
-class KOPALETTE_EXPORT KoPalette : public Q3DockWindow {
+class KOPALETTE_EXPORT KoPalette : public QDockWidget {
 
 Q_OBJECT
 

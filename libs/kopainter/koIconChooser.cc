@@ -19,7 +19,7 @@
 */
 
 #include <kdebug.h>
-#include <koIconChooser.h>
+#include "koIconChooser.h"
 #include <kglobal.h>
 
 #include <qpainter.h>

@@ -33,8 +33,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koFrameButton.h>
-#include <koColorSlider.h>
+#include "koFrameButton.h"
+#include "koColorSlider.h"
 #include <kcolordialog.h>
 
 KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name)

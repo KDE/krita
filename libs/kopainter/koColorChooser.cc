@@ -32,8 +32,8 @@
 #include <kiconloader.h>
 #include <kcolordialog.h>
 #include <ktabctl.h>
-#include <koFrameButton.h>
-#include <koColorSlider.h>
+#include "koFrameButton.h"
+#include "koColorSlider.h"
 
 KoColorChooser::KoColorChooser(QWidget *parent, const char *name) : QWidget(parent, name)
 {

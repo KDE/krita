@@ -28,11 +28,11 @@
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <koFrameButton.h>
-#include <koColorSlider.h>
+#include "koFrameButton.h"
+#include "koColorSlider.h"
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
-#include <koColor.h>
+#include "koColor.h"
 #include <kdebug.h>
 #include <klocale.h>
 

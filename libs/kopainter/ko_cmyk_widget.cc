@@ -35,8 +35,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <koFrameButton.h>
-#include <koColorSlider.h>
+#include "koFrameButton.h"
+#include "koColorSlider.h"
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
 

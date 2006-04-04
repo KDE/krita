@@ -29,8 +29,8 @@
 
 #include <kdebug.h>
 
-#include <koFrameButton.h>
-#include <koColorSlider.h>
+#include "koFrameButton.h"
+#include "koColorSlider.h"
 #include <kcolordialog.h>
 
 KoGrayWidget::KoGrayWidget(QWidget *parent, const char *name) : super(parent, name)

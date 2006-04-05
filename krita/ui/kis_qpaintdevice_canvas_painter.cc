@@ -152,15 +152,15 @@ void KisQPaintDeviceCanvasPainter::setBackgroundMode(Qt::BGMode bgMode)
     m_painter.setBackgroundMode(bgMode);
 }
 
-Qt::RasterOp KisQPaintDeviceCanvasPainter::rasterOp() const
-{
-    return m_painter.rasterOp();
-}
+// Qt::RasterOp KisQPaintDeviceCanvasPainter::rasterOp() const
+// {
+//     return m_painter.rasterOp();
+// }
 
-void KisQPaintDeviceCanvasPainter::setRasterOp(Qt::RasterOp rasterOp)
-{
-    m_painter.setRasterOp(rasterOp);
-}
+// void KisQPaintDeviceCanvasPainter::setRasterOp(Qt::RasterOp rasterOp)
+// {
+//     m_painter.setRasterOp(rasterOp);
+// }
 
 const QPoint& KisQPaintDeviceCanvasPainter::brushOrigin() const
 {

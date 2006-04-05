@@ -254,7 +254,7 @@ void KisToolSelectElliptical::paintOutline(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
-        RasterOp op = gc.rasterOp();
+        //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::DotLine);
         QPoint start;
@@ -264,10 +264,10 @@ void KisToolSelectElliptical::paintOutline(KisCanvasPainter& gc, const QRect&)
         start = controller->windowToView(m_startPos).floorQPoint();
         end = controller->windowToView(m_endPos).floorQPoint();
 
-        gc.setRasterOp(Qt::NotROP);
+        //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
         gc.drawEllipse(QRect(start, end));
-        gc.setRasterOp(op);
+        //gc.setRasterOp(op);
         gc.setPen(old);
     }
 }

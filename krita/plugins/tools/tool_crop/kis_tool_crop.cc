@@ -405,7 +405,7 @@ void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject && (m_selecting || m_haveCropSelection)) {
         KisCanvasController *controller = m_subject->canvasController();
-        RasterOp op = gc.rasterOp();
+        //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
         pen.setWidth(1);
@@ -416,7 +416,7 @@ void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
         start = controller->windowToView(m_rectCrop.topLeft());
         end = controller->windowToView(m_rectCrop.bottomRight());
 
-        gc.setRasterOp(Qt::NotROP);
+        //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
         //draw handles
         m_handlesRegion = handles(QRect(start, end));
@@ -470,7 +470,7 @@ void KisToolCrop::paintOutlineWithHandles(KisCanvasPainter& gc, const QRect&)
         }
 
 
-        gc.setRasterOp(op);
+        //gc.setRasterOp(op);
         gc.setPen(old);
     }
 }

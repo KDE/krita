@@ -164,7 +164,7 @@ void RegionGrabber::drawRubber()
 {
   QPainter p;
   p.begin( this );
-  p.setRasterOp( NotROP );
+  //p.setRasterOp( NotROP );
   p.setPen( QPen( Qt::color0, 1 ) );
   p.setBrush( Qt::NoBrush );
 

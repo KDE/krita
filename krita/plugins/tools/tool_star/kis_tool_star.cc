@@ -163,7 +163,7 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
     startPos = controller->windowToView(start);
     endPos = controller->windowToView(end);
 
-    p.setRasterOp(Qt::NotROP);
+    //p.setRasterOp(Qt::NotROP);
 
     vKisPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
 

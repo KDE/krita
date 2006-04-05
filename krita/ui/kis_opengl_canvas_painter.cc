@@ -251,14 +251,14 @@ void KisOpenGLCanvasPainter::setBackgroundMode(Qt::Qt::BGMode /*bgMode*/)
 {
 }
 
-Qt::Qt::RasterOp KisOpenGLCanvasPainter::rasterOp() const
-{
-    return Qt::CopyROP;
-}
+// Qt::Qt::RasterOp KisOpenGLCanvasPainter::rasterOp() const
+// {
+//     return Qt::CopyROP;
+// }
 
-void KisOpenGLCanvasPainter::setRasterOp(Qt::RasterOp /*rasterOp*/)
-{
-}
+// void KisOpenGLCanvasPainter::setRasterOp(Qt::RasterOp /*rasterOp*/)
+// {
+// }
 
 const QPoint& KisOpenGLCanvasPainter::brushOrigin() const
 {

@@ -309,7 +309,7 @@ void KisToolFreehand::paintOutline(const KisPoint& point) {
 
         KisPoint hotSpot = brush->hotSpot();
 
-        gc.setRasterOp(Qt::NotROP);
+        //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
         gc.setViewport(0, 0, static_cast<qint32>(canvas->width() * m_subject->zoomFactor()),
                        static_cast<qint32>(canvas->height() * m_subject->zoomFactor()));

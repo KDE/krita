@@ -214,14 +214,14 @@ void KisToolGradient::paintLine(KisCanvasPainter& gc)
         KisPoint start = controller->windowToView(m_startPos);
         KisPoint end = controller->windowToView(m_endPos);
 
-        RasterOp op = gc.rasterOp();
+        //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
 
-        gc.setRasterOp(Qt::NotROP);
+        //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
         gc.drawLine(start.floorQPoint(), end.floorQPoint());
-        gc.setRasterOp(op);
+        //gc.setRasterOp(op);
         gc.setPen(old);
     }
 }

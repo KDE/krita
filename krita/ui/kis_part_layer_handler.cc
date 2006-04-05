@@ -50,7 +50,7 @@ void KisPartLayerHandler::gotMoveEvent(KisMoveEvent* event) {
     }
 
     KisCanvasPainter painter(m_view->getCanvasController()->kiscanvas());
-    painter.setRasterOp( NotROP );
+    //painter.setRasterOp( NotROP );
 
     // erase old lines
     QRect r(m_start, m_end);

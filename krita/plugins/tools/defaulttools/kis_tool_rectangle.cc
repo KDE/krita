@@ -161,7 +161,7 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
     KisCanvas *canvas = controller->kiscanvas();
     KisCanvasPainter p (canvas);
 
-    p.setRasterOp (Qt::NotROP);
+    //p.setRasterOp (Qt::NotROP);
     p.drawRect (QRect (controller->windowToView (start).floorQPoint(), controller->windowToView (end).floorQPoint()));
     p.end ();
 }

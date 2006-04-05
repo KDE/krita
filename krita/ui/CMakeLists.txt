@@ -125,6 +125,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/krita/kritacolor 
 	${CMAKE_SOURCE_DIR}/krita/sdk
 	${KOFFICEUI_INCLUDES}
+	${KOPAINTER_INCLUDES}
 	)
 
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )

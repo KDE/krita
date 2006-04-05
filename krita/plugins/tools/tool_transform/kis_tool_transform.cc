@@ -665,7 +665,7 @@ void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
-        RasterOp op = gc.rasterOp();
+        //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
         pen.setWidth(1);
@@ -677,7 +677,7 @@ void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
         QPoint bottomleft = controller->windowToView(m_bottomleft);
         QPoint bottomright = controller->windowToView(m_bottomright);
 
-        gc.setRasterOp(Qt::NotROP);
+        //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
         gc.drawRect(topleft.x()-4, topleft.y()-4, 8, 8);
         gc.drawLine(topleft.x(), topleft.y(), (topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2);
@@ -695,7 +695,7 @@ void KisToolTransform::paintOutline(KisCanvasPainter& gc, const QRect&)
         gc.drawLine(bottomleft.x(), bottomleft.y(), (topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2);
         gc.drawRect((topleft.x()+bottomleft.x())/2-4, (topleft.y()+bottomleft.y())/2-4, 8, 8);
         gc.drawLine((topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2, topleft.x(), topleft.y());
-        gc.setRasterOp(op);
+        //gc.setRasterOp(op);
         gc.setPen(old);
     }
 }

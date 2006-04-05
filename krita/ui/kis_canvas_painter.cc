@@ -120,14 +120,14 @@ void KisCanvasWidgetPainter::setBackgroundMode(Qt::Qt::BGMode /*bgMode*/)
 {
 }
 
-Qt::Qt::RasterOp KisCanvasWidgetPainter::rasterOp() const
-{
-    return Qt::CopyROP;
-}
+// Qt::Qt::RasterOp KisCanvasWidgetPainter::rasterOp() const
+// {
+//     return Qt::CopyROP;
+// }
 
-void KisCanvasWidgetPainter::setRasterOp(Qt::RasterOp /*rasterOp*/)
-{
-}
+// void KisCanvasWidgetPainter::setRasterOp(Qt::RasterOp /*rasterOp*/)
+// {
+// }
 
 const QPoint& KisCanvasWidgetPainter::brushOrigin() const
 {
@@ -725,20 +725,20 @@ void KisCanvasPainter::setBackgroundMode(Qt::BGMode bgMode)
     }
 }
 
-Qt::RasterOp KisCanvasPainter::rasterOp() const
-{
-    if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->rasterOp();
-    }
-    return Qt::CopyROP;
-}
+// Qt::RasterOp KisCanvasPainter::rasterOp() const
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         return m_canvasWidgetPainter->rasterOp();
+//     }
+//     return Qt::CopyROP;
+// }
 
-void KisCanvasPainter::setRasterOp(Qt::RasterOp rasterOp)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->setRasterOp(rasterOp);
-    }
-}
+// void KisCanvasPainter::setRasterOp(Qt::RasterOp rasterOp)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->setRasterOp(rasterOp);
+//     }
+// }
 
 const QPoint& KisCanvasPainter::brushOrigin() const
 {

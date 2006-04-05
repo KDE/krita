@@ -202,7 +202,7 @@ void KisToolLine::paintLine(KisCanvasPainter& gc, const QRect&)
 {
     if (m_subject) {
         KisCanvasController *controller = m_subject->canvasController();
-        RasterOp op = gc.rasterOp();
+        //RasterOp op = gc.rasterOp();
         QPen old = gc.pen();
         QPen pen(Qt::SolidLine);
         KisPoint start;
@@ -219,10 +219,10 @@ void KisToolLine::paintLine(KisCanvasPainter& gc, const QRect&)
 //          end.setY((end.y() - start.y()));
 //         start *= m_subject->zoomFactor();
 //         end *= m_subject->zoomFactor();
-        gc.setRasterOp(Qt::NotROP);
+        //gc.setRasterOp(Qt::NotROP);
         gc.setPen(pen);
         gc.drawLine(start.floorQPoint(), end.floorQPoint());
-        gc.setRasterOp(op);
+        //gc.setRasterOp(op);
         gc.setPen(old);
     }
 }

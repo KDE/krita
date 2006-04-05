@@ -232,7 +232,7 @@ void KisToolSelectPolygonal::draw(KisCanvasPainter& gc)
     QPen pen(Qt::white, 0, Qt::DotLine);
 
     gc.setPen(pen);
-        gc.setRasterOp(Qt::XorROP);
+    //gc.setRasterOp(Qt::XorROP);
 
     KisCanvasController *controller = m_subject->canvasController();
     KisPoint start, end;

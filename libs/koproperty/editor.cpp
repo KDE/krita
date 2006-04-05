@@ -498,7 +498,7 @@ Editor::slotWidgetValueChanged(Widget *widget)
 
 	if(sync) {
 		d->slotPropertyChanged_enabled = false;
-		QGuardedPtr<Widget> pWidget = widget; //safe, widget can be destroyed in the meantime
+		QPointer<Widget> pWidget = widget; //safe, widget can be destroyed in the meantime
 		widget->property()->setValue(value);
 		if (pWidget)
 		  showUndoButton( pWidget->property()->isModified() );

@@ -121,12 +121,13 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
       continue;
 
     K3ListViewItem* item = new K3ListViewItem(m_documentList, t->name(), t->description(), t->file());
-    QImage icon = t->loadPicture(instance).convertToImage();
-    icon = icon.smoothScale(64, 64, Qt::KeepAspectRatio);
-    icon.setAlphaBuffer(true);
+    QPixmap preview = t->loadPicture(instance);
+    QImage icon = preview.toImage();
+    icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    icon.convertToFormat(QImage::Format_ARGB32);
     icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
-    item->setPixmap(0, QPixmap(icon));
-    item->setPixmap(2, t->loadPicture(instance));
+    item->setPixmap(0, QPixmap::fromImage(icon));
+    item->setPixmap(2, preview);
 
     if(d->m_alwaysUseTemplate == t->file()) {
       selectItem = item;
@@ -163,14 +164,15 @@ void KoTemplatesPane::selectionChanged(Q3ListViewItem* item)
     m_alwaysUseCheckBox->setEnabled(true);
     m_titleLabel->setText(item->text(0));
     m_previewLabel->setPixmap(*(item->pixmap(2)));
-    m_detailsLabel->setText(item->text(1));
+    m_detailsLabel->setHtml(item->text(1));
     m_alwaysUseCheckBox->setChecked(item->text(2) == d->m_alwaysUseTemplate);
   } else {
     m_openButton->setEnabled(false);
     m_alwaysUseCheckBox->setEnabled(false);
     m_alwaysUseCheckBox->setChecked(false);
-    m_titleLabel->setText(QString::null);
+    m_titleLabel->clear();
     m_previewLabel->setPixmap(QPixmap());
+    m_detailsLabel->clear();
   }
 }
 
@@ -243,7 +245,7 @@ bool KoTemplatesPane::eventFilter(QObject* watched, QEvent* e)
   }
 
   if(watched == m_documentList) {
-    if((e->type() == QEvent::Resize) && isShown()) {
+    if((e->type() == QEvent::Resize) && isVisible()) {
       emit splitterResized(this, m_splitter->sizes());
     }
   }
@@ -314,7 +316,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 
       // Support for kdelibs-3.5's new RecentFiles format: name[url]
       if(path.endsWith("]")) {
-        int pos = path.find("[");
+        int pos = path.indexOf("[");
         name = path.mid(0, pos - 1);
         path = path.mid(pos + 1, path.length() - pos - 2);
       }
@@ -330,10 +332,10 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
         KoFileListItem* item = new KoFileListItem(m_documentList,
             m_documentList->lastItem(), name, url.url(), fileItem);
         //center all icons in 64x64 area
-        QImage icon = fileItem->pixmap(64).convertToImage();
-        icon.setAlphaBuffer(true);
+        QImage icon = fileItem->pixmap(64).toImage();
+        icon.convertToFormat(QImage::Format_ARGB32);
         icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
-        item->setPixmap(0, QPixmap(icon));
+        item->setPixmap(0, QPixmap::fromImage(icon));
         item->setPixmap(2, fileItem->pixmap(128));
       }
     }
@@ -382,15 +384,15 @@ void KoRecentDocumentsPane::selectionChanged(Q3ListViewItem* item)
       details += i18n("File access date and time. %1 is date time", "<tr><td><b>Accessed:</b></td><td>%1</td></tr>")
           .arg(fileItem->timeString(KIO::UDS_ACCESS_TIME));
       details += "</table></center>";
-      m_detailsLabel->setText(details);
+      m_detailsLabel->setHtml(details);
     } else {
-      m_detailsLabel->setText(QString::null);
+      m_detailsLabel->clear();
     }
   } else {
     m_openButton->setEnabled(false);
-    m_titleLabel->setText(QString::null);
+    m_titleLabel->clear();
     m_previewLabel->setPixmap(QPixmap());
-    m_detailsLabel->setText(QString::null);
+    m_detailsLabel->clear();
   }
 }
 
@@ -426,11 +428,11 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
   while(it.current()) {
     if(it.current()->text(1) == fileItem->url().url()) {
       it.current()->setPixmap(2, preview);
-      QImage icon = preview.convertToImage();
-      icon = icon.smoothScale(64, 64, Qt::KeepAspectRatio);
-      icon.setAlphaBuffer(true);
+      QImage icon = preview.toImage();
+      icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+      icon.convertToFormat(QImage::Format_ARGB32);
       icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
-      it.current()->setPixmap(0, QPixmap(icon));
+      it.current()->setPixmap(0, QPixmap::fromImage(icon));
 
       if(it.current()->isSelected()) {
         m_previewLabel->setPixmap(preview);
@@ -460,7 +462,7 @@ bool KoRecentDocumentsPane::eventFilter(QObject* watched, QEvent* e)
   }
 
   if(watched == m_documentList) {
-    if((e->type() == QEvent::Resize) && isShown()) {
+    if((e->type() == QEvent::Resize) && isVisible()) {
       emit splitterResized(this, m_splitter->sizes());
     }
   }

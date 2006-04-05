@@ -23,6 +23,8 @@
 #include <qbuffer.h>
 //Added by qt3to4:
 #include <Q3CString>
+
+#include <k3multipledrag.h>
 #include <klocale.h>
 
 #include "kdebug.h"
@@ -125,7 +127,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     qimg = selection->convertToQImage(monitorProfile);
 
     Q3ImageDrag *qimgDrag = new Q3ImageDrag(qimg);
-    KMultipleDrag *multiDrag = new KMultipleDrag();
+    K3MultipleDrag *multiDrag = new K3MultipleDrag();
     if ( !qimg.isNull() )
         multiDrag->addDragObject( qimgDrag );
     KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
@@ -146,7 +148,8 @@ KisPaintDeviceSP KisClipboard::clip()
 
     if(cbData && cbData->provides(mimeType))
     {
-        QBuffer buffer(cbData->encodedData(mimeType));
+        QByteArray encodedData = cbData->encodedData(mimeType);
+        QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
         KisProfile *profile=0;
 
@@ -182,7 +185,7 @@ KisPaintDeviceSP KisClipboard::clip()
         QImage qimg = cb->image();
 
         if (qimg.isNull())
-            return 0;
+            return KisPaintDeviceSP(0);
 
         KisConfig cfg;
 
@@ -243,8 +246,8 @@ QSize KisClipboard::clipSize()
     KisPaintDeviceSP clip;
     
     if(cbData && cbData->provides(mimeType)) {
-        
-        QBuffer buffer(cbData->encodedData(mimeType));
+        QByteArray encodedData = cbData->encodedData(mimeType);
+        QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
         KisProfile *profile=0;
 

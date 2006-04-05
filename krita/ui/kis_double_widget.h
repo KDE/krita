@@ -43,7 +43,7 @@ public:
     double value() const;
     void setRange(double min, double max);
 
-    void setTickmarks(QSlider::TickSetting tickMarks);
+    void setTickmarks(QSlider::TickPosition tickMarks);
     void setTickInterval(double tickInterval);
     double tickInterval() const;
 

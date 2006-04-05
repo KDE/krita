@@ -109,10 +109,10 @@ public:
 
     virtual void setClipping(bool);
     virtual bool hasClipping() const;
-    virtual QRegion clipRegion(QPainter::CoordinateMode = QPainter::CoordDevice) const;
-    virtual void setClipRect(const QRect&, QPainter::CoordinateMode = QPainter::CoordDevice);
-    virtual void setClipRect(int x, int y, int w, int h, QPainter::CoordinateMode = QPainter::CoordDevice);
-    virtual void setClipRegion(const QRegion&, QPainter::CoordinateMode = QPainter::CoordDevice);
+    virtual QRegion clipRegion() const;
+    virtual void setClipRect(const QRect&);
+    virtual void setClipRect(int x, int y, int w, int h);
+    virtual void setClipRegion(const QRegion&);
 
     virtual void drawPoint(int x, int y);
     virtual void drawPoint(const QPoint&);
@@ -164,20 +164,20 @@ public:
     virtual void eraseRect(int x, int y, int w, int h);
     virtual void eraseRect(const QRect&);
 
-    virtual void drawText(int x, int y, const QString&, int len = -1, QPainter::TextDirection dir = QPainter::Auto);
-    virtual void drawText(const QPoint&, const QString&, int len = -1, QPainter::TextDirection dir = QPainter::Auto);
-
-    virtual void drawText(int x, int y, const QString&, int pos, int len, QPainter::TextDirection dir = QPainter::Auto);
-    virtual void drawText(const QPoint&p, const QString&, int pos, int len, QPainter::TextDirection dir = QPainter::Auto);
-
-    virtual void drawText(int x, int y, int w, int h, int flags, const QString&, int len = -1, QRect *br=0, QTextParag **intern=0);
-    virtual void drawText(const QRect&, int flags, const QString&, int len = -1, QRect *br=0, QTextParag **intern=0);
-
-    virtual void drawTextItem(int x, int y, const QTextItem&ti, int textflags = 0);
-    virtual void drawTextItem(const QPoint& p, const QTextItem&ti, int textflags = 0);
-
-    virtual QRect boundingRect(int x, int y, int w, int h, int flags, const QString&, int len = -1, QTextParag **intern=0);
-    virtual QRect boundingRect(const QRect&, int flags, const QString&, int len = -1, QTextParag **intern=0);
+//     virtual void drawText(int x, int y, const QString&, int len = -1, QPainter::TextDirection dir = QPainter::Auto);
+//     virtual void drawText(const QPoint&, const QString&, int len = -1, QPainter::TextDirection dir = QPainter::Auto);
+//
+//     virtual void drawText(int x, int y, const QString&, int pos, int len, QPainter::TextDirection dir = QPainter::Auto);
+//     virtual void drawText(const QPoint&p, const QString&, int pos, int len, QPainter::TextDirection dir = QPainter::Auto);
+//
+//     virtual void drawText(int x, int y, int w, int h, int flags, const QString&, int len = -1, QRect *br=0, QTextParag **intern=0);
+//     virtual void drawText(const QRect&, int flags, const QString&, int len = -1, QRect *br=0, QTextParag **intern=0);
+//
+//     virtual void drawTextItem(int x, int y, const QTextItem&ti, int textflags = 0);
+//     virtual void drawTextItem(const QPoint& p, const QTextItem&ti, int textflags = 0);
+//
+//     virtual QRect boundingRect(int x, int y, int w, int h, int flags, const QString&, int len = -1, QTextParag **intern=0);
+//     virtual QRect boundingRect(const QRect&, int flags, const QString&, int len = -1, QTextParag **intern=0);
 
     virtual int	tabStops() const;
     virtual void setTabStops(int);

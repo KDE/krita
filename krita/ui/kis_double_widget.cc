@@ -86,7 +86,7 @@ void KisDoubleWidget::setRange(double min, double max)
     m_slider->setRange(static_cast<int>(min * 100 + 0.5), static_cast<int>(max * 100 + 0.5));
 }
 
-void KisDoubleWidget::setTickmarks(QSlider::TickSetting tickSetting)
+void KisDoubleWidget::setTickmarks(QSlider::TickPosition tickSetting)
 {
     m_slider->setTickmarks(tickSetting);
 }

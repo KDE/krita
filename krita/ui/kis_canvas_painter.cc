@@ -111,12 +111,12 @@ void KisCanvasWidgetPainter::setBackgroundColor(const QColor& /*color*/)
 {
 }
 
-Qt::Qt::BGMode KisCanvasWidgetPainter::backgroundMode() const
+Qt::BGMode KisCanvasWidgetPainter::backgroundMode() const
 {
     return Qt::TransparentMode;
 }
 
-void KisCanvasWidgetPainter::setBackgroundMode(Qt::Qt::BGMode /*bgMode*/)
+void KisCanvasWidgetPainter::setBackgroundMode(Qt::BGMode /*bgMode*/)
 {
 }
 
@@ -283,20 +283,20 @@ bool KisCanvasWidgetPainter::hasClipping() const
     return true;
 }
 
-QRegion KisCanvasWidgetPainter::clipRegion(QPainter::CoordinateMode /*mode*/) const
+QRegion KisCanvasWidgetPainter::clipRegion() const
 {
     return QRegion();
 }
 
-void KisCanvasWidgetPainter::setClipRect(const QRect& /*r*/, QPainter::CoordinateMode /*mode*/)
+void KisCanvasWidgetPainter::setClipRect(const QRect& /*r*/)
 {
 }
 
-void KisCanvasWidgetPainter::setClipRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, QPainter::CoordinateMode /*mode*/)
+void KisCanvasWidgetPainter::setClipRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/)
 {
 }
 
-void KisCanvasWidgetPainter::setClipRegion(const QRegion& /*rgn*/, QPainter::CoordinateMode /*mode*/)
+void KisCanvasWidgetPainter::setClipRegion(const QRegion& /*rgn*/)
 {
 }
 
@@ -480,47 +480,47 @@ void KisCanvasWidgetPainter::eraseRect(const QRect& /*r*/)
 {
 }
 
-void KisCanvasWidgetPainter::drawText(int /*x*/, int /*y*/, const QString& /*text*/, int /*len*/, QPainter::TextDirection /*dir*/)
-{
-}
-
-void KisCanvasWidgetPainter::drawText(const QPoint& /*point*/, const QString& /*text*/, int /*len*/, QPainter::TextDirection /*dir*/)
-{
-}
-
-void KisCanvasWidgetPainter::drawText(int /*x*/, int /*y*/, const QString& /*text*/, int /*pos*/, int /*len*/, QPainter::TextDirection /*dir*/)
-{
-}
-
-void KisCanvasWidgetPainter::drawText(const QPoint& /*point*/, const QString& /*text*/, int /*pos*/, int /*len*/, QPainter::TextDirection /*dir*/)
-{
-}
-
-void KisCanvasWidgetPainter::drawText(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*flags*/, const QString& /*text*/, int /*len*/, QRect */*br*/, QTextParag **/*intern*/)
-{
-}
-
-void KisCanvasWidgetPainter::drawText(const QRect& /*r*/, int /*flags*/, const QString& /*text*/, int /*len*/, QRect */*br*/, QTextParag **/*intern*/)
-{
-}
-
-void KisCanvasWidgetPainter::drawTextItem(int /*x*/, int /*y*/, const QTextItem& /*ti*/, int /*textflags*/)
-{
-}
-
-void KisCanvasWidgetPainter::drawTextItem(const QPoint& /*p*/, const QTextItem& /*ti*/, int /*textflags*/)
-{
-}
-
-QRect KisCanvasWidgetPainter::boundingRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*flags*/, const QString& /*text*/, int /*len*/, QTextParag **/*intern*/)
-{
-    return QRect();
-}
-
-QRect KisCanvasWidgetPainter::boundingRect(const QRect& /*r*/, int /*flags*/, const QString& /*text*/, int /*len*/, QTextParag **/*intern*/)
-{
-    return QRect();
-}
+// void KisCanvasWidgetPainter::drawText(int /*x*/, int /*y*/, const QString& /*text*/, int /*len*/, QPainter::TextDirection /*dir*/)
+// {
+// }
+//
+// void KisCanvasWidgetPainter::drawText(const QPoint& /*point*/, const QString& /*text*/, int /*len*/, QPainter::TextDirection /*dir*/)
+// {
+// }
+//
+// void KisCanvasWidgetPainter::drawText(int /*x*/, int /*y*/, const QString& /*text*/, int /*pos*/, int /*len*/, QPainter::TextDirection /*dir*/)
+// {
+// }
+//
+// void KisCanvasWidgetPainter::drawText(const QPoint& /*point*/, const QString& /*text*/, int /*pos*/, int /*len*/, QPainter::TextDirection /*dir*/)
+// {
+// }
+//
+// void KisCanvasWidgetPainter::drawText(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*flags*/, const QString& /*text*/, int /*len*/, QRect */*br*/, QTextParag **/*intern*/)
+// {
+// }
+//
+// void KisCanvasWidgetPainter::drawText(const QRect& /*r*/, int /*flags*/, const QString& /*text*/, int /*len*/, QRect */*br*/, QTextParag **/*intern*/)
+// {
+// }
+//
+// void KisCanvasWidgetPainter::drawTextItem(int /*x*/, int /*y*/, const QTextItem& /*ti*/, int /*textflags*/)
+// {
+// }
+//
+// void KisCanvasWidgetPainter::drawTextItem(const QPoint& /*p*/, const QTextItem& /*ti*/, int /*textflags*/)
+// {
+// }
+//
+// QRect KisCanvasWidgetPainter::boundingRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*flags*/, const QString& /*text*/, int /*len*/, QTextParag **/*intern*/)
+// {
+//     return QRect();
+// }
+//
+// QRect KisCanvasWidgetPainter::boundingRect(const QRect& /*r*/, int /*flags*/, const QString& /*text*/, int /*len*/, QTextParag **/*intern*/)
+// {
+//     return QRect();
+// }
 
 int	KisCanvasWidgetPainter::tabStops() const
 {
@@ -919,7 +919,7 @@ double KisCanvasPainter::translationY() const
 QPoint KisCanvasPainter::xForm(const QPoint& point) const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->transformed(point);
+        return m_canvasWidgetPainter->xForm(point);
     }
     return point;
 }
@@ -927,7 +927,7 @@ QPoint KisCanvasPainter::xForm(const QPoint& point) const
 QRect KisCanvasPainter::xForm(const QRect& r) const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->transformed(r);
+        return m_canvasWidgetPainter->xForm(r);
     }
     return r;
 }
@@ -935,7 +935,7 @@ QRect KisCanvasPainter::xForm(const QRect& r) const
 Q3PointArray KisCanvasPainter::xForm(const Q3PointArray& pointArray) const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->transformed(pointArray);
+        return m_canvasWidgetPainter->xForm(pointArray);
     }
     return pointArray;
 }
@@ -943,7 +943,7 @@ Q3PointArray KisCanvasPainter::xForm(const Q3PointArray& pointArray) const
 Q3PointArray KisCanvasPainter::xForm(const Q3PointArray& pointArray, int index, int npoints) const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->transformed(pointArray, index, npoints);
+        return m_canvasWidgetPainter->xForm(pointArray, index, npoints);
     }
     return pointArray;
 }
@@ -995,32 +995,32 @@ bool KisCanvasPainter::hasClipping() const
     return true;
 }
 
-QRegion KisCanvasPainter::clipRegion(QPainter::CoordinateMode mode) const
+QRegion KisCanvasPainter::clipRegion() const
 {
     if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->clipRegion(mode);
+        return m_canvasWidgetPainter->clipRegion();
     }
     return QRegion();
 }
 
-void KisCanvasPainter::setClipRect(const QRect& r, QPainter::CoordinateMode mode)
+void KisCanvasPainter::setClipRect(const QRect& r)
 {
     if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->setClipRect(r, mode);
+        m_canvasWidgetPainter->setClipRect(r);
     }
 }
 
-void KisCanvasPainter::setClipRect(int x, int y, int w, int h, QPainter::CoordinateMode mode)
+void KisCanvasPainter::setClipRect(int x, int y, int w, int h)
 {
     if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->setClipRect(x, y, w, h, mode);
+        m_canvasWidgetPainter->setClipRect(x, y, w, h);
     }
 }
 
-void KisCanvasPainter::setClipRegion(const QRegion& rgn, QPainter::CoordinateMode mode)
+void KisCanvasPainter::setClipRegion(const QRegion& rgn)
 {
     if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->setClipRegion(rgn, mode);
+        m_canvasWidgetPainter->setClipRegion(rgn);
     }
 }
 
@@ -1339,77 +1339,77 @@ void KisCanvasPainter::eraseRect(const QRect& r)
     }
 }
 
-void KisCanvasPainter::drawText(int x, int y, const QString& text, int len, QPainter::TextDirection dir)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->drawText(x, y, text, len, dir);
-    }
-}
-
-void KisCanvasPainter::drawText(const QPoint& point, const QString& text, int len, QPainter::TextDirection dir)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->drawText(point, text, len, dir);
-    }
-}
-
-void KisCanvasPainter::drawText(int x, int y, const QString& text, int pos, int len, QPainter::TextDirection dir)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->drawText(x, y, text, pos, len, dir);
-    }
-}
-
-void KisCanvasPainter::drawText(const QPoint& point, const QString& text, int pos, int len, QPainter::TextDirection dir)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->drawText(point, text, pos, len, dir);
-    }
-}
-
-void KisCanvasPainter::drawText(int x, int y, int w, int h, int flags, const QString& text, int len, QRect *br, QTextParag **intern)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->drawText(x, y, w, h, flags, text, len, br, intern);
-    }
-}
-
-void KisCanvasPainter::drawText(const QRect& r, int flags, const QString& text, int len, QRect *br, QTextParag **intern)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->drawText(r, flags, text, len, br, intern);
-    }
-}
-
-void KisCanvasPainter::drawTextItem(int x, int y, const QTextItem& ti, int textflags)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->drawTextItem(x, y, ti, textflags);
-    }
-}
-
-void KisCanvasPainter::drawTextItem(const QPoint& p, const QTextItem& ti, int textflags)
-{
-    if (m_canvasWidgetPainter != 0) {
-        m_canvasWidgetPainter->drawTextItem(p, ti, textflags);
-    }
-}
-
-QRect KisCanvasPainter::boundingRect(int x, int y, int w, int h, int flags, const QString& text, int len, QTextParag **intern)
-{
-    if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->boundingRect(x, y, w, h, flags, text, len, intern);
-    }
-    return QRect();
-}
-
-QRect KisCanvasPainter::boundingRect(const QRect& r, int flags, const QString& text, int len, QTextParag **intern)
-{
-    if (m_canvasWidgetPainter != 0) {
-        return m_canvasWidgetPainter->boundingRect(r, flags, text, len, intern);
-    }
-    return QRect();
-}
+// void KisCanvasPainter::drawText(int x, int y, const QString& text, int len, QPainter::TextDirection dir)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->drawText(x, y, text, len, dir);
+//     }
+// }
+//
+// void KisCanvasPainter::drawText(const QPoint& point, const QString& text, int len, QPainter::TextDirection dir)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->drawText(point, text, len, dir);
+//     }
+// }
+//
+// void KisCanvasPainter::drawText(int x, int y, const QString& text, int pos, int len, QPainter::TextDirection dir)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->drawText(x, y, text, pos, len, dir);
+//     }
+// }
+//
+// void KisCanvasPainter::drawText(const QPoint& point, const QString& text, int pos, int len, QPainter::TextDirection dir)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->drawText(point, text, pos, len, dir);
+//     }
+// }
+//
+// void KisCanvasPainter::drawText(int x, int y, int w, int h, int flags, const QString& text, int len, QRect *br, QTextParag **intern)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->drawText(x, y, w, h, flags, text, len, br, intern);
+//     }
+// }
+//
+// void KisCanvasPainter::drawText(const QRect& r, int flags, const QString& text, int len, QRect *br, QTextParag **intern)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->drawText(r, flags, text, len, br, intern);
+//     }
+// }
+//
+// void KisCanvasPainter::drawTextItem(int x, int y, const QTextItem& ti, int textflags)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->drawTextItem(x, y, ti, textflags);
+//     }
+// }
+//
+// void KisCanvasPainter::drawTextItem(const QPoint& p, const QTextItem& ti, int textflags)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         m_canvasWidgetPainter->drawTextItem(p, ti, textflags);
+//     }
+// }
+//
+// QRect KisCanvasPainter::boundingRect(int x, int y, int w, int h, int flags, const QString& text, int len, QTextParag **intern)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         return m_canvasWidgetPainter->boundingRect(x, y, w, h, flags, text, len, intern);
+//     }
+//     return QRect();
+// }
+//
+// QRect KisCanvasPainter::boundingRect(const QRect& r, int flags, const QString& text, int len, QTextParag **intern)
+// {
+//     if (m_canvasWidgetPainter != 0) {
+//         return m_canvasWidgetPainter->boundingRect(r, flags, text, len, intern);
+//     }
+//     return QRect();
+// }
 
 int	KisCanvasPainter::tabStops() const
 {

@@ -23,7 +23,6 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 #include <kaction.h>
 
 #include "scriptcontainer.h"
@@ -95,6 +94,8 @@ namespace Kross { namespace Api {
              * something else in the rc-file.
              */
             int version() const;
+
+            QString name() const;
 
             /**
              * \return the description for this \a ScriptAction has.
@@ -205,7 +206,7 @@ namespace Kross { namespace Api {
              * A map of \a ScriptAction shared pointers used to access
              * the actions with there name.
              */
-            QMap<Q3CString, ScriptAction::Ptr> m_actions;
+            QMap<QString, ScriptAction::Ptr> m_actions;
 
             /**
              * A KActionMenu which could be used to display the
@@ -257,7 +258,7 @@ namespace Kross { namespace Api {
              * \return the \a ScriptAction instance which has the name \p name
              * or NULL if there exists no such action.
              */
-            ScriptAction::Ptr action(const Q3CString& name) { return m_actions[name]; }
+            ScriptAction::Ptr action(const QString& name) { return m_actions[name]; }
 
             /**
              * \return a list of actions.
@@ -276,7 +277,7 @@ namespace Kross { namespace Api {
                 m_dirty = true;
                 m_actions[ action->name() ] = action;
                 m_list.append(action);
-                m_actionmenu->insert(action);
+                m_actionmenu->insert(action.data());
                 action->attach(this);
             }
 
@@ -287,7 +288,7 @@ namespace Kross { namespace Api {
                 m_dirty = true;
                 m_actions.remove(action->name());
                 m_list.remove(action);
-                m_actionmenu->remove(action);
+                m_actionmenu->remove(action.data());
                 action->detach(this);
             }
 
@@ -297,7 +298,7 @@ namespace Kross { namespace Api {
              */
             void clear() {
                 for(Q3ValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it) {
-                    m_actionmenu->remove(*it);
+                    m_actionmenu->remove( (*it).data() );
                     (*it)->detach(this);
                 }
                 m_list.clear();

@@ -224,7 +224,7 @@ bool ScriptGUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, 
     QDomNodeList nodelist = document.elementsByTagName("ScriptAction");
     uint nodelistcount = nodelist.count();
     for(uint i = 0; i < nodelistcount; i++) {
-        ScriptAction::Ptr action = new ScriptAction(scriptconfigfile, nodelist.item(i).toElement());
+        ScriptAction::Ptr action = ScriptAction::Ptr( new ScriptAction(scriptconfigfile, nodelist.item(i).toElement()) );
 
         if(installedcollection) {
             ScriptAction::Ptr otheraction = installedcollection->action( action->name() );
@@ -286,8 +286,8 @@ void ScriptGUIClient::successfullyExecuted()
         ScriptActionCollection* executedcollection = d->collections["executedscripts"];
         if(executedcollection) {
             ScriptAction* actionptr = const_cast< ScriptAction* >( action );
-            executedcollection->detach(actionptr);
-            executedcollection->attach(actionptr);
+            executedcollection->detach(KSharedPtr<ScriptAction>(actionptr));
+            executedcollection->attach(KSharedPtr<ScriptAction>(actionptr));
             emit collectionChanged(executedcollection);
         }
     }
@@ -312,7 +312,7 @@ KUrl ScriptGUIClient::openScriptFile(const QString& caption)
         mimetypes.append( it.data()->getMimeTypes().join(" ").trimmed() );
 
     KFileDialog* filedialog = new KFileDialog(
-        QString::null, // startdir
+        "", // startdir
         mimetypes.join(" "), // filter
         0, // parent widget
         "ScriptGUIClientFileDialog", // name

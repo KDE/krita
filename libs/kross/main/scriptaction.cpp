@@ -27,6 +27,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <kurl.h>
+#include <kicon.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -40,6 +41,9 @@ namespace Kross { namespace Api {
     class ScriptActionPrivate
     {
         public:
+
+            QString name;
+
             /**
             * The packagepath is the directory that belongs to this
             * \a ScriptAction instance. If this \a ScriptAction points
@@ -97,7 +101,7 @@ ScriptAction::ScriptAction(const QString& file)
     if(url.isLocalFile()) {
         setFile(file);
         setText(url.fileName());
-        setIcon(KMimeType::iconNameForURL(url));
+        setIcon(KIcon(KMimeType::iconNameForURL(url)));
     }
     else {
         setText(file);
@@ -108,7 +112,7 @@ ScriptAction::ScriptAction(const QString& file)
 }
 
 ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& element)
-    : KAction()
+    : KAction(0, "ScriptAction")
     , Kross::Api::ScriptContainer()
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
@@ -148,7 +152,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         setCode( element.text().trimmed() );
         if(description.isNull())
             description = text;
-        ScriptContainer::setName(name);
+        d->name = name;
     }
     else {
         QDir dir = QFileInfo(scriptconfigfile).dir(true);
@@ -163,13 +167,13 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
             description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);
         else
             description += QString("<br>%1").arg(file);
-        ScriptContainer::setName(file);
+        d->name = file;
     }
 
-    KAction::setName(name.latin1());
+    d->name = name;
     KAction::setText(text);
     setDescription(description);
-    KAction::setIcon(icon);
+    KAction::setIcon(KIcon(icon));
 
     // connect signal
     connect(this, SIGNAL(activated()), this, SLOT(activate()));
@@ -185,6 +189,11 @@ ScriptAction::~ScriptAction()
 int ScriptAction::version() const
 {
     return d->version;
+}
+
+QString ScriptAction::name() const
+{
+    return d->name;
 }
 
 const QString ScriptAction::getDescription() const
@@ -228,7 +237,7 @@ void ScriptAction::detach(ScriptActionCollection* collection)
 void ScriptAction::detachAll()
 {
     for(Q3ValueList<ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
-        (*it)->detach( this );
+        (*it)->detach( KSharedPtr<ScriptAction>(this) );
 }
 
 void ScriptAction::activate()

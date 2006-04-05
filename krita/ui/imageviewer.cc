@@ -53,7 +53,7 @@ void ImageViewer::setImage(QImage & image)
 
 void ImageViewer::contentsMousePressEvent(QMouseEvent *event)
 {
-    if(LeftButton == event->button()) {
+    if(Qt::LeftButton == event->button()) {
         setCursor(KisCursor::closedHandCursor());
         m_currentPos = event->globalPos();
         m_isDragging = true;
@@ -62,7 +62,7 @@ void ImageViewer::contentsMousePressEvent(QMouseEvent *event)
 
 void ImageViewer::contentsMouseReleaseEvent(QMouseEvent *event)
 {
-    if(LeftButton == event->button()) {
+    if(Qt::LeftButton == event->button()) {
         setCursor(KisCursor::handCursor());
         m_currentPos = event->globalPos();
         m_isDragging = false;

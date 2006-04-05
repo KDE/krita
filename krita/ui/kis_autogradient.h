@@ -26,7 +26,7 @@ class KisResource;
 class KisGradientSegment;
 class KisAutogradientResource;
 
-class KisAutogradient : public KisWdgAutogradient
+class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
 {
     Q_OBJECT
 

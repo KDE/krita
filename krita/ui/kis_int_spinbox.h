@@ -44,13 +44,15 @@ public:
     {
         m_slider = new QSlider(minValue, maxValue, pageStep, value, orientation, this, name);
         //m_slider->setTracking(false);
-        insertItem(m_slider);
+#warning kde4 port
+        // Can't insert widgets into QMenu at the moment.
+        //insertItem(m_slider);
         connect(m_slider, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
     }
     void setTickInterval(int i) { m_slider->setTickInterval(i); }
     void setRange(int minValue, int maxValue) { m_slider->setRange(minValue, maxValue); }
     void setValue(int val) { m_slider->setValue(val); }
-    void setTickmarks(QSlider::TickSetting t) { m_slider->setTickmarks(t); }
+    void setTickmarks(QSlider::TickPosition t) { m_slider->setTickmarks(t); }
     int lineStep () const{ return m_slider->lineStep(); }
     int minValue () const{ return m_slider->minValue(); }
     int maxValue () const{ return m_slider->maxValue(); }

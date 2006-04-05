@@ -20,7 +20,6 @@
 #ifndef _KIS_WDG_GRADIENT_SLIDER_H_
 #define _KIS_WDG_GRADIENT_SLIDER_H_
 
-#include <kpixmapio.h>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QContextMenuEvent>
@@ -72,7 +71,6 @@ private:
         REMOVE_SEGMENT
     };
 
-    KPixmapIO m_pixmapIO;
     KisAutogradientResource* m_autogradientResource;
     KisGradientSegment* m_currentSegment;
     KisGradientSegment* m_selectedSegment;

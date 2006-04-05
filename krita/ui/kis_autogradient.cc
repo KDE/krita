@@ -32,8 +32,10 @@
 
 /****************************** KisAutogradient ******************************/
 
-KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QString& caption) : KisWdgAutogradient(parent, name)
+KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QString& caption) : QWidget(parent)
 {
+    setObjectName(name);
+    setupUi(this);
     setCaption(caption);
     m_autogradientResource = new KisAutogradientResource();
     m_autogradientResource->createSegment( INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 1.0, 0.5, Qt::black, Qt::white );

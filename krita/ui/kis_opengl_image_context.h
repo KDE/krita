@@ -18,9 +18,7 @@
 #ifndef KIS_OPENGL_IMAGE_CONTEXT_H_
 #define KIS_OPENGL_IMAGE_CONTEXT_H_
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #ifdef HAVE_GL
 

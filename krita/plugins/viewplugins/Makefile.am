@@ -4,7 +4,6 @@ endif
 
 SUBDIRS = \
     performancetest \
-    substrate \
     colorrange \
     colorspaceconversion \
     dropshadow \

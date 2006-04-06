@@ -1,4 +1,4 @@
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -D_POSIX_C_SOURCE=199309L
 
 kde_services_DATA = kritacimg.desktop
 

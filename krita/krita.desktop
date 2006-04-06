@@ -30,6 +30,7 @@ GenericName[sv]=Målning och bildredigering
 GenericName[uk]=Малювання і редагування зображень
 GenericName[uz]=Расмлар билан ишлайдиган дастур
 GenericName[zh_CN]=绘图和图像编辑
+Comment=Edit and paint images
 MimeType=application/x-krita
 Type=Application
 Icon=krita

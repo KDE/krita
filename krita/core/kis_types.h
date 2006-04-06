@@ -67,6 +67,9 @@ typedef KSharedPtr<KisSelection> KisSelectionSP;
 class KisBackground;
 typedef KSharedPtr<KisBackground> KisBackgroundSP;
 
+class KisSubstrate;
+typedef KSharedPtr<KisSubstrate> KisSubstrateSP;
+
 class KisHistogram;
 typedef KSharedPtr<KisHistogram> KisHistogramSP;
 

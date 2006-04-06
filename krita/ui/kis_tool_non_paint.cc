@@ -52,14 +52,6 @@ void KisToolNonPaint::deactivate()
 {
 }
 
-void KisToolNonPaint::enter(QEvent *)
-{
-}
-
-void KisToolNonPaint::leave(QEvent *)
-{
-}
-
 void KisToolNonPaint::buttonPress(KisButtonPressEvent *)
 {
 }

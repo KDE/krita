@@ -53,6 +53,9 @@ Regressions
 
 ? saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale (actually it's not a regression, saving to both 8bits and 16bits jpeg with the same build is impossible with libjpeg)
 ? zooming in leaves display artefacts (see Bart's mail)
+? rotate is broken for large images
+? rotate visitor is used where transform visitor should be used
+? undoing a rotation when a selection is active leads to weird results
 
 Painting with filters
 

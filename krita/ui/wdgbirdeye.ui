@@ -256,6 +256,9 @@
                     <property name="text">
                         <string>1:1</string>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Zoom to 100%</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>

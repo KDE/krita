@@ -22,6 +22,7 @@
 #include <qvaluelist.h>
 #include <qpixmap.h>
 #include <qlayout.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -59,6 +60,7 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
 
     m_cmbPaintops = new QComboBox(this, "KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
+    QToolTip::add(m_cmbPaintops, i18n("Styles of painting for the painting tools"));
     m_layout = new QHBoxLayout(this, 1, 1);
     m_layout->addWidget(m_cmbPaintops);
 

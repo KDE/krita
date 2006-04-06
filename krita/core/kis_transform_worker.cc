@@ -86,6 +86,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
 
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
 {
+    kdDebug() << "rotateLeft90 called\n";
     KisSelectionSP dstSelection;
     Q_INT32 pixelSize = src->pixelSize();
     QRect r;

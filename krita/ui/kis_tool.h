@@ -81,8 +81,6 @@ public:
      */
     virtual void setup(KActionCollection *collection) = 0;
 
-    virtual void enter(QEvent *e) = 0;
-    virtual void leave(QEvent *e) = 0;
     virtual void buttonPress(KisButtonPressEvent *e) = 0;
     virtual void move(KisMoveEvent *e) = 0;
     virtual void buttonRelease(KisButtonReleaseEvent *e) = 0;

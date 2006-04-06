@@ -6,6 +6,7 @@ Name[hi]=के-रिता
 Name[lo]=ກຣິຕາ
 Exec=krita %U
 DocPath=krita/index.html
+Comment=Edit and paint images
 GenericName=Painting and Image Editing
 GenericName[ca]=Programa d'edició d'imatges
 GenericName[da]=Maling & billedredigering

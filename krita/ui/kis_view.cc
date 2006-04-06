@@ -2487,14 +2487,10 @@ void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
 
 void KisView::canvasGotEnterEvent(QEvent *e)
 {
-    if (m_toolManager->currentTool())
-        m_toolManager->currentTool()->enter(e);
 }
 
 void KisView::canvasGotLeaveEvent (QEvent *e)
 {
-    if (m_toolManager->currentTool())
-        m_toolManager->currentTool()->leave(e);
 }
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)

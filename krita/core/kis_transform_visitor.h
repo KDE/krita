@@ -102,6 +102,23 @@ public:
 
     virtual bool visit(KisAdjustmentLayer* layer)
     {
+        KisPaintDeviceSP dev = layer->selection().data();
+        
+        KisTransaction * t = 0;
+
+        if (m_img->undo()) {
+            t = new KisTransaction(i18n("Rotate Layer"), dev);
+            Q_CHECK_PTR(t);
+        }
+
+        KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter);
+        tw.run();
+
+        if (m_img->undo()) {
+            m_img->undoAdapter()->addCommand(t);
+        }
+        layer->setDirty();
+        
         layer->resetCache();
         return true;
     }

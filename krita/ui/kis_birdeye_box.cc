@@ -25,6 +25,7 @@
 #include "config.h"
 #include LCMS_HEADER
 #include "klocale.h"
+#include "qtooltip.h"
 
 #include "kis_view.h"
 #include "kis_doc.h"
@@ -201,7 +202,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     m_exposureDoubleWidget = new KisDoubleWidget(-10, 10, this);
     m_exposureDoubleWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     hl->addWidget(m_exposureDoubleWidget);
-
+    QToolTip::add(m_exposureDoubleWidget, i18n("Select the exposure (stops) for HDR images"));
     l->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 
     m_exposureDoubleWidget->setPrecision(1);

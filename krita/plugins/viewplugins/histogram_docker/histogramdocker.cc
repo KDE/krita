@@ -17,6 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -67,6 +68,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
 
 
         m_hview = new KisHistogramView(m_view);
+        QToolTip::add(m_hview, i18n("Right-click to select histogram type"));
         m_hview->setHistogram(m_histogram);
         m_hview->setColor(true);
         m_hview->setCurrentChannels(m_producer, m_producer->channels());

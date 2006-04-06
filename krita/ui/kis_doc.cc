@@ -844,7 +844,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 KisImageSP KisDoc::newImage(const QString& name, Q_INT32 width, Q_INT32 height, KisColorSpace * colorstrategy)
 {
     if (!init())
-        return false;
+        return 0;
 
     setUndo(false);
 

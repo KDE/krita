@@ -890,7 +890,7 @@ bool LayerItem::contains(const LayerItem *item)
     QListViewItemIterator it(this);
 
     while (it.current()) {
-        if (it.current() == item) {
+        if (static_cast<const LayerItem *>(it.current()) == item) {
             return true;
         }
         ++it;

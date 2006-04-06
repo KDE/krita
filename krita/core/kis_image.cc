@@ -53,6 +53,7 @@
 #include "kis_paint_layer.h"
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_background.h"
+#include "kis_substrate.h"
 #include "kis_nameserver.h"
 #include "kis_undo_adapter.h"
 #include "kis_merge_visitor.h"
@@ -70,9 +71,10 @@
 class KisImage::KisImagePrivate {
 public:
     KisColor backgroundColor;
-    Q_UINT32     lockCount;
-    bool sizeChangedWhileLocked;
-    bool selectionChangedWhileLocked;
+    Q_UINT32 lockCount;
+    bool     sizeChangedWhileLocked;
+    bool     selectionChangedWhileLocked;
+    KisSubstrateSP substrate;
 };
 
 
@@ -630,7 +632,7 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_private->lockCount = 0;
     m_private->sizeChangedWhileLocked = false;
     m_private->selectionChangedWhileLocked = false;
-
+    m_private->substrate = 0;
     m_adapter = adapter;
 
     m_nserver = new KisNameServer(i18n("Layer %1"), 1);

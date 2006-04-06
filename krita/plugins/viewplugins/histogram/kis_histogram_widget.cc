@@ -24,6 +24,7 @@
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qscrollbar.h>
+#include <qtooltip.h>
 
 #include <kdebug.h>
 
@@ -53,7 +54,7 @@ void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev)
 {
     grpType->disconnect(this);
     cmbChannel->disconnect(this);
-
+    
     m_histogramView->setPaintDevice(dev);
     setActiveChannel(0); // So we have the colored one if there are colors
 

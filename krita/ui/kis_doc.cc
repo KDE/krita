@@ -285,7 +285,7 @@ QDomDocument KisDoc::saveXML()
     QDomElement root = doc.documentElement();
 
     root.setAttribute("editor", "Krita");
-    root.setAttribute("depth", sizeof(quint8));
+    root.setAttribute("depth", (uint)sizeof(quint8));
     root.setAttribute("syntaxVersion", "1");
 
     root.appendChild(saveImage(doc, m_currentImage));
@@ -403,12 +403,12 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
     if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
         if ((name = element.attribute("name")).isNull())
-            return 0;
+            return KisImageSP(0);
         if ((attr = element.attribute("width")).isNull())
-            return 0;
+            return KisImageSP(0);
         width = attr.toInt();
         if ((attr = element.attribute("height")).isNull())
-            return 0;
+            return KisImageSP(0);
         height = attr.toInt();
 
         description = element.attribute("description");
@@ -443,17 +443,17 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         if (cs == 0) {
             kWarning(DBG_AREA_FILE) << "Could not open colorspace\n";
-            return 0;
+            return KisImageSP(0);
         }
 
         img = new KisImage(this, width, height, cs, name);
         img->blockSignals(true); // Don't send out signals while we're building the image
         Q_CHECK_PTR(img);
-        connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
+        connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
         img->setDescription(description);
         img->setResolution(xres, yres);
 
-        loadLayers(element, img, img->rootLayer().data());
+        loadLayers(element, img, img->rootLayer());
 
     }
 
@@ -479,7 +479,7 @@ void KisDoc::loadLayers(const QDomElement& element, KisImageSP img, KisGroupLaye
                     }
                     else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of layers.
-                        img->addLayer(layer, parent, 0);
+                        img->addLayer(layer, parent, KisLayerSP(0));
                     }
                 }
             }
@@ -502,19 +502,19 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     bool locked;
 
     if ((name = element.attribute("name")).isNull())
-        return 0;
+        return KisLayerSP(0);
 
     if ((attr = element.attribute("x")).isNull())
-        return 0;
+        return KisLayerSP(0);
     x = attr.toInt();
 
     if ((attr = element.attribute("y")).isNull())
-        return 0;
+        return KisLayerSP(0);
 
     y = attr.toInt();
 
     if ((attr = element.attribute("opacity")).isNull())
-        return 0;
+        return KisLayerSP(0);
 
     if ((opacity = attr.toInt()) < 0 || opacity > quint8_MAX)
         opacity = OPACITY_OPAQUE;
@@ -530,7 +530,7 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
     }
 
     if (!compositeOp.isValid()) {
-        return 0;
+        return KisLayerSP(0);
     }
 
     if ((attr = element.attribute("visible")).isNull())
@@ -551,16 +551,16 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
         return loadPaintLayer(element, img, name, x, y, opacity, visible, locked, compositeOp);
 
     if(attr == "grouplayer")
-        return loadGroupLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
+        return KisLayerSP(loadGroupLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data());
 
     if(attr == "adjustmentlayer")
-        return loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
+        return KisLayerSP(loadAdjustmentLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data());
 
     if(attr == "partlayer")
-        return loadPartLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data();
+        return KisLayerSP(loadPartLayer(element, img, name, x, y, opacity, visible, locked, compositeOp).data());
 
     kWarning(DBG_AREA_FILE) << "Specified layertype is not recognised\n";
-    return 0;
+    return KisLayerSP(0);
 }
 
 
@@ -581,7 +581,7 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
         // use default profile - it will be replaced later in completLoading
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(colorspacename,"");
 
-    layer = new KisPaintLayer(img, name, opacity, cs);
+    layer = new KisPaintLayer(img.data(), name, opacity, cs);
     Q_CHECK_PTR(layer);
 
     layer->setCompositeOp(compositeOp);
@@ -604,7 +604,7 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
             layer->paintDevice()->exifInfo()->load(e);
         }
     }
-    return layer.data();
+    return KisLayerSP(layer.data());
 }
 
 KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
@@ -614,7 +614,7 @@ KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP im
     QString attr;
     KisGroupLayerSP layer;
 
-    layer = new KisGroupLayer(img, name, opacity);
+    layer = new KisGroupLayer(img.data(), name, opacity);
     Q_CHECK_PTR(layer);
 
     layer->setCompositeOp(compositeOp);
@@ -639,19 +639,19 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
     if ((filtername = element.attribute("filtername")).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
         kWarning(DBG_AREA_FILE) << "No filter in adjustment layer" << endl;
-        return 0;
+        return KisAdjustmentLayerSP(0);
     }
 
-    KisFilter * f = KisFilterRegistry::instance()->get(filtername);
+    KisFilterSP f = KisFilterRegistry::instance()->get(filtername);
     if (!f) {
         kWarning(DBG_AREA_FILE) << "No filter for filtername " << filtername << "\n";
-        return 0; // XXX: We don't have this filter. We should warn about it!
+        return KisAdjustmentLayerSP(0); // XXX: We don't have this filter. We should warn about it!
     }
 
     KisFilterConfiguration * kfc = f->configuration();
 
     // We'll load the configuration and the selection later.
-    layer = new KisAdjustmentLayer(img, name, kfc, 0);
+    layer = KisAdjustmentLayerSP(new KisAdjustmentLayer(img, name, kfc, KisSelectionSP(0)));
     Q_CHECK_PTR(layer);
 
     layer->setCompositeOp(compositeOp);
@@ -679,13 +679,13 @@ KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
 
     if (partElement.isNull()) {
         kWarning() << "loadPartLayer failed with partElement isNull" << endl;
-        return 0;
+        return KisPartLayerSP(0);
     }
 
     child->load(partElement);
     insertChild(child);
 
-    KisPartLayerSP layer = new KisPartLayerImpl(img, child);
+    KisPartLayerSP layer = KisPartLayerSP(new KisPartLayerImpl(img, child));
     Q_CHECK_PTR(layer);
 
     layer->setCompositeOp(compositeOp);
@@ -778,7 +778,7 @@ bool KisDoc::completeLoading(KoStore *store)
         store->open(location);
         data = store->read(store->size());
         store->close();
-        (m_currentImage)->addAnnotation(new KisAnnotation("exif", "", data));
+        (m_currentImage)->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
     }
     // icc profile
     location = external ? QString::null : uri;

@@ -735,7 +735,7 @@ void GridSettingsTab::linkSpacingToggled(bool b)
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default /*| Apply*/, Ok, parent, name, true, true )
 {
-    Q3VBox *vbox;
+    KVBox *vbox;
 
     vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", K3Icon::SizeMedium ));
     m_general = new GeneralTab( vbox );

@@ -218,7 +218,7 @@ private:
     qint32 m_conversionDepth;
     int m_ioProgressTotalSteps;
     int m_ioProgressBase;
-    QMap<KisLayerSP, QString> m_layerFilenames; // temp storage during load
+    QMap<KisLayer *, QString> m_layerFilenames; // temp storage during load
     
 };
 

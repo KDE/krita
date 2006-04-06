@@ -34,7 +34,7 @@
 
 class KisLoadVisitor : public KisLayerVisitor {
 public:
-    KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayerSP, QString> &layerFilenames) :
+    KisLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames) :
         KisLayerVisitor(),
         m_layerFilenames(layerFilenames)
     {
@@ -94,7 +94,7 @@ public:
 
     virtual bool visit(KisGroupLayer *layer)
     {
-        KisLoadVisitor visitor(m_img,m_store ,m_layerFilenames);
+        KisLoadVisitor visitor(m_img, m_store, m_layerFilenames);
 
         if(m_external)
             visitor.setExternalUri(m_uri);
@@ -125,7 +125,7 @@ public:
         location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".selection";
         if (m_store->hasFile(location)) {
             m_store->open(location);
-            KisSelectionSP selection = new KisSelection();
+            KisSelectionSP selection = KisSelectionSP(new KisSelection());
             if (!selection->read(m_store)) {
                 selection->disconnect();
                 m_store->close();
@@ -145,7 +145,7 @@ public:
             m_store->open(location);
             data = m_store->read(m_store->size());
             m_store->close();
-            if (data) {
+            if (!data.isEmpty()) {
                 KisFilterConfiguration * kfc = layer->filter();
                 kfc->fromXML(QString(data));
             }
@@ -160,7 +160,7 @@ private:
     KoStore *m_store;
     bool m_external;
     QString m_uri;
-    QMap<KisLayerSP, QString> m_layerFilenames;
+    QMap<KisLayer *, QString> m_layerFilenames;
 };
 
 #endif // KIS_LOAD_VISITOR_H_

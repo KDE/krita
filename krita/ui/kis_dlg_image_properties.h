@@ -21,10 +21,18 @@
 #include <kdialogbase.h>
 
 #include <kis_types.h>
+#include "wdgnewimage.h"
 
-class WdgNewImage;
 class Q3ButtonGroup;
 class KisID;
+
+class WdgNewImage : public QWidget, public Ui::WdgNewImage
+{
+    Q_OBJECT
+
+    public:
+        WdgNewImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 class KisDlgImageProperties : public KDialogBase {
     typedef KDialogBase super;

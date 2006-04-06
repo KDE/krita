@@ -46,6 +46,15 @@ class KisID;
 /**
  *  "General"-tab for preferences dialog
  */
+
+class WdgGeneralSettings : public QWidget, public Ui::WdgGeneralSettings
+{
+    Q_OBJECT
+
+    public:
+        WdgGeneralSettings(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
+
 class GeneralTab : public WdgGeneralSettings
 {
     Q_OBJECT
@@ -86,6 +95,15 @@ public:
 /**
  *  "Performance"-tab for preferences dialog
  */
+
+class WdgPerformanceSettings : public QWidget, public Ui::WdgPerformanceSettings
+{
+    Q_OBJECT
+
+    public:
+        WdgPerformanceSettings(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
+
 class PerformanceTab : public WdgPerformanceSettings
 {
 Q_OBJECT
@@ -218,6 +236,15 @@ protected slots:
 /**
  *  Grid settings tab for preferences dialog
  */
+
+class WdgGridSettingsBase : public QWidget, public Ui::WdgGridSettingsBase
+{
+    Q_OBJECT
+
+    public:
+        WdgGridSettingsBase(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
 class GridSettingsTab : public WdgGridSettingsBase {
     Q_OBJECT
     public:

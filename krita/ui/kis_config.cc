@@ -17,6 +17,8 @@
  */
 #include <limits.h>
 
+#include <QFont>
+
 #include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -132,7 +134,7 @@ enumCursorStyle KisConfig::getDefaultCursorStyle() const
 
 void KisConfig::setCursorStyle(enumCursorStyle style)
 {
-    m_cfg->writeEntry("cursorStyleDef", style);
+    m_cfg->writeEntry("cursorStyleDef", (int)style);
 }
 
 
@@ -330,14 +332,14 @@ float KisConfig::dockerFontSize()
 
 float KisConfig::getDefaultDockerFontSize()
 {
-    float ps = qMin(9, KGlobalSettings::generalFont().pointSize() * 0.8);
+    float ps = qMin((double)9, KGlobalSettings::generalFont().pointSize() * 0.8);
     if (ps < 6) ps = 6;
     return ps;
 }
 
 void KisConfig::setDockerFontSize(float size)
 {
-    m_cfg->writeEntry("palettefontsize", size);
+    m_cfg->writeEntry("palettefontsize", (double)size);
 }
 
 quint32 KisConfig::getGridMainStyle()

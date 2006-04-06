@@ -42,6 +42,7 @@
 #include <klocale.h>
 #include <koFrameButton.h>
 #include <kactioncollection.h>
+#include <kactionclasses.h>
 
 #include "kis_resourceserver.h"
 #include "kis_controlframe.h"
@@ -68,7 +69,7 @@
 KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name)
     : Q3PopupMenu(parent, name)
 {
-    setFocusPolicy(StrongFocus);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void KisPopupFrame::keyPressEvent(QKeyEvent * e)

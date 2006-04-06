@@ -85,36 +85,39 @@ void KisColorCup::slotClicked()
 
 QSize KisColorCup::sizeHint() const
 {
-    return style().sizeFromContents(QStyle::CT_PushButton, this, QSize(24, 24)).
-            expandedTo(QApplication::globalStrut());
+#warning kde4 port
+    // The style api has changed a bit. Disabled for now.
+    return QSize(24, 24);
+//     return style().sizeFromContents(QStyle::CT_PushButton, this, QSize(24, 24)).
+//             expandedTo(QApplication::globalStrut());
 }
 
-void KisColorCup::drawButtonLabel( QPainter *painter )
+void KisColorCup::drawButtonLabel( QPainter */*painter*/ )
 {
-    int x, y, w, h;
-    QRect r = style().subRect( QStyle::SR_PushButtonContents, this );
-    r.rect(&x, &y, &w, &h);
-
-    int margin = 2; //style().pixelMetric( QStyle::PM_ButtonMargin, this );
-    x += margin;
-    y += margin;
-    w -= 2*margin;
-    h -= 2*margin;
-
-    if (isOn() || isDown()) {
-        x += style().pixelMetric( QStyle::PM_ButtonShiftHorizontal, this );
-        y += style().pixelMetric( QStyle::PM_ButtonShiftVertical, this );
-    }
-
-    qDrawShadePanel( painter, x, y, w, h, colorGroup(), true, 1, NULL);
-    if ( m_color.isValid() )
-        painter->fillRect( x+1, y+1, w-2, h-2, m_color );
-
-    if ( hasFocus() ) {
-        QRect focusRect = style().subRect( QStyle::SR_PushButtonFocusRect, this );
-        style().drawPrimitive( QStyle::PE_FocusRect, painter, focusRect, colorGroup() );
-    }
-
+//     int x, y, w, h;
+//     QRect r = style().subRect( QStyle::SR_PushButtonContents, this );
+//     r.rect(&x, &y, &w, &h);
+//
+//     int margin = 2; //style().pixelMetric( QStyle::PM_ButtonMargin, this );
+//     x += margin;
+//     y += margin;
+//     w -= 2*margin;
+//     h -= 2*margin;
+//
+//     if (isOn() || isDown()) {
+//         x += style().pixelMetric( QStyle::PM_ButtonShiftHorizontal, this );
+//         y += style().pixelMetric( QStyle::PM_ButtonShiftVertical, this );
+//     }
+//
+//     qDrawShadePanel( painter, x, y, w, h, colorGroup(), true, 1, NULL);
+//     if ( m_color.isValid() )
+//         painter->fillRect( x+1, y+1, w-2, h-2, m_color );
+//
+//     if ( hasFocus() ) {
+//         QRect focusRect = style().subRect( QStyle::SR_PushButtonFocusRect, this );
+//         style().drawPrimitive( QStyle::PE_FocusRect, painter, focusRect, colorGroup() );
+//     }
+//
 }
 
 #include "kis_color_cup.moc"

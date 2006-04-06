@@ -26,6 +26,7 @@
 
 #include <kcursor.h>
 #include <kiconloader.h>
+#include <kinstance.h>
 #include <kstandarddirs.h>
 
 #include "kis_cursor.h"

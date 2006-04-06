@@ -19,8 +19,8 @@
 #ifndef KIS_CUSTOM_IMAGE_WIDGET_H
 #define KIS_CUSTOM_IMAGE_WIDGET_H
 
-#include <wdgnewimage.h>
 #include "kis_global.h"
+#include "kis_dlg_image_properties.h"
 
 class KisDoc;
 class KisID;

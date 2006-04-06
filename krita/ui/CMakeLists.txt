@@ -99,11 +99,8 @@ kde4_add_ui3_files(kritaui_LIB_SRCS
    wdgbirdeye.ui 
    wdgcolorsettings.ui 
    wdgdisplaysettings.ui 
-   wdggeneralsettings.ui 
    wdglayerproperties.ui 
    wdglayerbox.ui 
-   wdgnewimage.ui 
-   wdgperformancesettings.ui 
    wdgselectionoptions.ui 
    wdgshapeoptions.ui 
    wdgpressuresettings.ui 
@@ -112,12 +109,15 @@ kde4_add_ui3_files(kritaui_LIB_SRCS
    wdgcustompattern.ui 
    wdgtextbrush.ui 
    wdgpalettechooser.ui 
-   wdggridsettings.ui 
    wdgtabletdevicesettings.ui 
    wdgtabletsettings.ui )
 
 kde4_add_ui_files(kritaui_LIB_SRCS 
 	wdgautogradient.ui
+	wdgnewimage.ui 
+	wdggeneralsettings.ui 
+	wdgperformancesettings.ui 
+	wdggridsettings.ui 
 	)
 
 include_directories(
@@ -126,6 +126,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/krita/sdk
 	${KOFFICEUI_INCLUDES}
 	${KOPAINTER_INCLUDES}
+	${KOPALETTE_INCLUDES}
 	)
 
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )

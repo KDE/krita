@@ -1,183 +1,162 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgGeneralSettings</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgGeneralSettings</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgGeneralSettings</class>
+  <widget class="QWidget" name="WdgGeneralSettings" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>335</width>
+        <height>209</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>335</width>
-            <height>209</height>
-        </rect>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout1</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Cursor shape:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>m_cmbCursorShape</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <item>
-                                <property name="text">
-                                    <string>Tool Icon</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Crosshair</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Arrow</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Brush Outline</string>
-                                </property>
-                            </item>
-                            <property name="name">
-                                <cstring>m_cmbCursorShape</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <layout class="QVBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <layout class="QHBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <widget class="QLabel" name="textLabel1" >
+                  <property name="text" >
+                    <string>&amp;Cursor shape:</string>
+                  </property>
+                  <property name="buddy" stdset="0" >
+                    <cstring>m_cmbCursorShape</cstring>
+                  </property>
                 </widget>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>grpDockability</cstring>
+              </item>
+              <item>
+                <widget class="QComboBox" name="m_cmbCursorShape" >
+                  <item>
+                    <property name="text" >
+                      <string>Tool Icon</string>
                     </property>
-                    <property name="title">
-                        <string>Palette Behavior</string>
+                  </item>
+                  <item>
+                    <property name="text" >
+                      <string>Crosshair</string>
                     </property>
-                    <property name="exclusive">
-                        <bool>true</bool>
+                  </item>
+                  <item>
+                    <property name="text" >
+                      <string>Arrow</string>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>radioAllowDocking</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Allow &amp;docking</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>radioDisallowDocking</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Allow only &amp;floating</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>radioSmartDocking</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Allow docking only on &amp;large screens</string>
-                            </property>
-                        </widget>
-                    </vbox>
+                  </item>
+                  <item>
+                    <property name="text" >
+                      <string>Brush Outline</string>
+                    </property>
+                  </item>
                 </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout2</cstring>
+              </item>
+            </layout>
+          </item>
+          <item>
+            <widget class="Q3ButtonGroup" name="grpDockability" >
+              <property name="title" >
+                <string>Palette Behavior</string>
+              </property>
+              <property name="exclusive" >
+                <bool>true</bool>
+              </property>
+              <layout class="QVBoxLayout" >
+                <item>
+                  <widget class="QRadioButton" name="radioAllowDocking" >
+                    <property name="text" >
+                      <string>Allow &amp;docking</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Palette font size:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>numDockerFontSize</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KIntNumInput">
-                            <property name="name">
-                                <cstring>numDockerFontSize</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QRadioButton" name="radioDisallowDocking" >
+                    <property name="text" >
+                      <string>Allow only &amp;floating</string>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QRadioButton" name="radioSmartDocking" >
+                    <property name="text" >
+                      <string>Allow docking only on &amp;large screens</string>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </widget>
+          </item>
+          <item>
+            <layout class="QHBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <widget class="QLabel" name="textLabel1_2" >
+                  <property name="text" >
+                    <string>&amp;Palette font size:</string>
+                  </property>
+                  <property name="buddy" stdset="0" >
+                    <cstring>numDockerFontSize</cstring>
+                  </property>
                 </widget>
-            </vbox>
-        </widget>
-        <spacer row="0" column="1">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>41</width>
-                    <height>20</height>
-                </size>
-            </property>
+              </item>
+              <item>
+                <widget class="KIntNumInput" name="numDockerFontSize" />
+              </item>
+            </layout>
+          </item>
+        </layout>
+      </item>
+      <item row="0" column="1" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>41</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </spacer>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>41</height>
-                </size>
-            </property>
+      </item>
+      <item row="1" column="0" >
+        <spacer name="spacer2" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>41</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <customwidgets>
+	  <customwidget>
+		  <class>KIntNumInput</class>
+		  <extends>QWidget</extends>
+		  <header>knuminput.h</header>
+		  <container>1</container>
+		  <pixmap></pixmap>
+	  </customwidget>
+  </customwidgets>
+</ui>

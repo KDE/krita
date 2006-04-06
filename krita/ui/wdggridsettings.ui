@@ -1,482 +1,426 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgGridSettingsBase</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgGridSettingsBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgGridSettingsBase</class>
+  <widget class="QWidget" name="WdgGridSettingsBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>422</width>
+        <height>233</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>422</width>
-            <height>233</height>
-        </rect>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>spacer14</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>31</height>
-                </size>
-            </property>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item row="2" column="0" >
+        <spacer name="spacer14" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>31</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QGroupBox" row="0" column="1">
-            <property name="name">
-                <cstring>groupBox9</cstring>
-            </property>
-            <property name="title">
-                <string>Colors</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+      </item>
+      <item row="0" column="1" >
+        <widget class="Q3GroupBox" name="groupBox9" >
+          <property name="title" >
+            <string>Colors</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item rowspan="2" row="0" column="2" colspan="1" >
+              <spacer name="spacer12_2" >
+                <property name="sizeHint" >
+                  <size>
+                    <width>16</width>
+                    <height>20</height>
+                  </size>
                 </property>
-                <spacer row="0" column="2" rowspan="2" colspan="1">
-                    <property name="name">
-                        <cstring>spacer12_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>16</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="KColorButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>colorMain</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="color">
-                        <color>
-                            <Qt::red>99</Qt::red>
-                            <Qt::green>99</Qt::green>
-                            <Qt::blue>99</Qt::blue>
-                        </color>
-                    </property>
-                    <property name="defaultColor">
-                        <color>
-                            <Qt::red>99</Qt::red>
-                            <Qt::green>99</Qt::green>
-                            <Qt::blue>99</Qt::blue>
-                        </color>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Subdivision:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel2_4</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Main:</string>
-                    </property>
-                </widget>
-                <widget class="KColorButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>colorSubdivision</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="color">
-                        <color>
-                            <Qt::red>200</Qt::red>
-                            <Qt::green>200</Qt::green>
-                            <Qt::blue>200</Qt::blue>
-                        </color>
-                    </property>
-                    <property name="defaultColor">
-                        <color>
-                            <Qt::red>200</Qt::red>
-                            <Qt::green>200</Qt::green>
-                            <Qt::blue>200</Qt::blue>
-                        </color>
-                    </property>
-                </widget>
-            </grid>
+                <property name="sizeType" >
+                  <enum>Expanding</enum>
+                </property>
+                <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                </property>
+              </spacer>
+            </item>
+            <item row="0" column="1" >
+              <widget class="KColorButton" name="colorMain" >
+                <property name="text" >
+                  <string/>
+                </property>
+                <property name="color" >
+                  <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                  </color>
+                </property>
+                <property name="defaultColor" >
+                  <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                  </color>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="textLabel3" >
+                <property name="text" >
+                  <string>Subdivision:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="0" >
+              <widget class="QLabel" name="textLabel2_4" >
+                <property name="text" >
+                  <string>Main:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="1" >
+              <widget class="KColorButton" name="colorSubdivision" >
+                <property name="text" >
+                  <string/>
+                </property>
+                <property name="color" >
+                  <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                  </color>
+                </property>
+                <property name="defaultColor" >
+                  <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                  </color>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>groupBox5</cstring>
-            </property>
-            <property name="title">
-                <string>Styles</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+      </item>
+      <item row="0" column="0" >
+        <widget class="Q3GroupBox" name="groupBox5" >
+          <property name="title" >
+            <string>Styles</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="0" >
+              <widget class="QLabel" name="textLabel4" >
+                <property name="text" >
+                  <string>Main:</string>
                 </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel4</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Main:</string>
-                    </property>
-                </widget>
-                <widget class="KComboBox" row="0" column="1">
-                    <item>
-                        <property name="text">
-                            <string>Lines</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Dashed Lines</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Dots</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>selectMainStyle</cstring>
-                    </property>
-                    <property name="currentItem">
-                        <number>0</number>
-                    </property>
-                </widget>
-                <widget class="KComboBox" row="1" column="1">
-                    <item>
-                        <property name="text">
-                            <string>Lines</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Dashed Lines</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Dots</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>selectSubdivisionStyle</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel5</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Subdivision:</string>
-                    </property>
-                </widget>
-                <spacer row="0" column="2">
-                    <property name="name">
-                        <cstring>spacer15</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>34</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </grid>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="KComboBox" name="selectMainStyle" >
+                <property name="currentItem" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <property name="text" >
+                    <string>Lines</string>
+                  </property>
+                </item>
+                <item>
+                  <property name="text" >
+                    <string>Dashed Lines</string>
+                  </property>
+                </item>
+                <item>
+                  <property name="text" >
+                    <string>Dots</string>
+                  </property>
+                </item>
+              </widget>
+            </item>
+            <item row="1" column="1" >
+              <widget class="KComboBox" name="selectSubdivisionStyle" >
+                <item>
+                  <property name="text" >
+                    <string>Lines</string>
+                  </property>
+                </item>
+                <item>
+                  <property name="text" >
+                    <string>Dashed Lines</string>
+                  </property>
+                </item>
+                <item>
+                  <property name="text" >
+                    <string>Dots</string>
+                  </property>
+                </item>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="textLabel5" >
+                <property name="text" >
+                  <string>Subdivision:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="2" >
+              <spacer name="spacer15" >
+                <property name="sizeHint" >
+                  <size>
+                    <width>34</width>
+                    <height>20</height>
+                  </size>
+                </property>
+                <property name="sizeType" >
+                  <enum>Expanding</enum>
+                </property>
+                <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                </property>
+              </spacer>
+            </item>
+          </layout>
         </widget>
-        <widget class="QGroupBox" row="1" column="0">
-            <property name="name">
-                <cstring>groupBox3</cstring>
-            </property>
-            <property name="title">
-                <string>Spacing</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+      </item>
+      <item row="1" column="0" >
+        <widget class="Q3GroupBox" name="groupBox3" >
+          <property name="title" >
+            <string>Spacing</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="0" >
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0">
-                    <property name="name">
-                        <cstring>layout8</cstring>
+                <item>
+                  <layout class="QGridLayout" >
+                    <property name="margin" >
+                      <number>0</number>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout6</cstring>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>textLabel2</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>1</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap>image0</pixmap>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>textLabel2_2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap>image1</pixmap>
-                                    </property>
-                                </widget>
-                                <widget class="KIntNumInput" row="1" column="1">
-                                    <property name="name">
-                                        <cstring>intVSpacing</cstring>
-                                    </property>
-                                    <property name="value">
-                                        <number>10</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                </widget>
-                                <widget class="KIntNumInput" row="0" column="1">
-                                    <property name="name">
-                                        <cstring>intHSpacing</cstring>
-                                    </property>
-                                    <property name="value">
-                                        <number>10</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                </widget>
-                            </grid>
-                        </widget>
-                        <widget class="QToolButton">
-                            <property name="name">
-                                <cstring>bnLinkSpacing</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>16</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>16</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="toggleButton">
-                                <bool>true</bool>
-                            </property>
-                            <property name="on">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget" row="1" column="0">
-                    <property name="name">
-                        <cstring>layout9</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Subdivision:</string>
-                            </property>
-                        </widget>
-                        <widget class="KIntNumInput">
-                            <property name="name">
-                                <cstring>intSubdivision</cstring>
-                            </property>
-                            <property name="value">
-                                <number>2</number>
-                            </property>
-                            <property name="minValue">
-                                <number>1</number>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <spacer row="0" column="1">
-                    <property name="name">
-                        <cstring>spacer12</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>41</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </grid>
-        </widget>
-        <widget class="QGroupBox" row="1" column="1">
-            <property name="name">
-                <cstring>groupBox3_2</cstring>
-            </property>
-            <property name="title">
-                <string>Offset</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel2_3</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
+                    <item row="0" column="0" >
+                      <widget class="QLabel" name="textLabel2" >
+                        <property name="sizePolicy" >
+                          <sizepolicy>
                             <hsizetype>1</hsizetype>
                             <vsizetype>1</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
-                        </sizepolicy>
+                          </sizepolicy>
+                        </property>
+                        <property name="text" >
+                          <string/>
+                        </property>
+                        <property name="pixmap" >
+                          <pixmap>image0</pixmap>
+                        </property>
+                      </widget>
+                    </item>
+                    <item row="1" column="0" >
+                      <widget class="QLabel" name="textLabel2_2" >
+                        <property name="text" >
+                          <string/>
+                        </property>
+                        <property name="pixmap" >
+                          <pixmap>image1</pixmap>
+                        </property>
+                      </widget>
+                    </item>
+                    <item row="1" column="1" >
+                      <widget class="KIntNumInput" name="intVSpacing" >
+                        <property name="value" >
+                          <number>10</number>
+                        </property>
+                        <property name="minimum" >
+                          <number>0</number>
+                        </property>
+                      </widget>
+                    </item>
+                    <item row="0" column="1" >
+                      <widget class="KIntNumInput" name="intHSpacing" >
+                        <property name="value" >
+                          <number>10</number>
+                        </property>
+                        <property name="minimum" >
+                          <number>0</number>
+                        </property>
+                      </widget>
+                    </item>
+                  </layout>
+                </item>
+                <item>
+                  <widget class="QToolButton" name="bnLinkSpacing" >
+                    <property name="sizePolicy" >
+                      <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                      </sizepolicy>
                     </property>
-                    <property name="text">
-                        <string>X:</string>
+                    <property name="minimumSize" >
+                      <size>
+                        <width>16</width>
+                        <height>0</height>
+                      </size>
                     </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel2_2_2</cstring>
+                    <property name="maximumSize" >
+                      <size>
+                        <width>16</width>
+                        <height>32767</height>
+                      </size>
                     </property>
-                    <property name="text">
-                        <string>Y:</string>
+                    <property name="text" >
+                      <string/>
                     </property>
-                </widget>
-                <widget class="KIntNumInput" row="1" column="1">
-                    <property name="name">
-                        <cstring>intOffsetY</cstring>
+                    <property name="checkable" >
+                      <bool>true</bool>
                     </property>
-                    <property name="minValue">
-                        <number>0</number>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+            <item row="1" column="0" >
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QLabel" name="textLabel1" >
+                    <property name="text" >
+                      <string>Subdivision:</string>
                     </property>
-                </widget>
-                <widget class="KIntNumInput" row="0" column="1">
-                    <property name="name">
-                        <cstring>intOffsetX</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="KIntNumInput" name="intSubdivision" >
+                    <property name="value" >
+                      <number>2</number>
                     </property>
-                    <property name="minValue">
-                        <number>0</number>
+                    <property name="minimum" >
+                      <number>1</number>
                     </property>
-                </widget>
-                <spacer row="0" column="2">
-                    <property name="name">
-                        <cstring>spacer11</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </grid>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+            <item row="0" column="1" >
+              <spacer name="spacer12" >
+                <property name="sizeHint" >
+                  <size>
+                    <width>41</width>
+                    <height>20</height>
+                  </size>
+                </property>
+                <property name="sizeType" >
+                  <enum>Expanding</enum>
+                </property>
+                <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                </property>
+              </spacer>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="236">89504e470d0a1a0a0000000d49484452000000190000001a0806000000427df7cd000000b3494441544889dd963112c420084581d97acdfd4f29b9005b3913135050d722bf54f0018223e6ccf06f7db4c594be4d27e63304a190f525885e20154433f646ea050d6512d516887af10075c922f5d7e4ca24da4d439059f803721c4946a1962f798c6641d4da5c05421101445c06b82a6746804d73822202cc67956289a0c89a937b77596790b638abfb59d4da5c017840664196aff97679deab62d39bfcf73cf5ef8160ef4bb4e2e7627657e4909eb694eb071e3b4da9ba4f1ddb0000000049454e44ae426082</data>
+      </item>
+      <item row="1" column="1" >
+        <widget class="Q3GroupBox" name="groupBox3_2" >
+          <property name="title" >
+            <string>Offset</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="0" >
+              <widget class="QLabel" name="textLabel2_3" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="text" >
+                  <string>X:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="textLabel2_2_2" >
+                <property name="text" >
+                  <string>Y:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="1" >
+              <widget class="KIntNumInput" name="intOffsetY" >
+                <property name="minimum" >
+                  <number>0</number>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="KIntNumInput" name="intOffsetX" >
+                <property name="minimum" >
+                  <number>0</number>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="2" >
+              <spacer name="spacer11" >
+                <property name="sizeHint" >
+                  <size>
+                    <width>20</width>
+                    <height>20</height>
+                  </size>
+                </property>
+                <property name="sizeType" >
+                  <enum>Expanding</enum>
+                </property>
+                <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                </property>
+              </spacer>
+            </item>
+          </layout>
+        </widget>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
+    <customwidget>
+      <class>KComboBox</class>
+      <extends>QComboBox</extends>
+      <header>kcombobox.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+    <customwidget>
+	    <class>KIntNumInput</class>
+	    <extends>QWidget</extends>
+	    <header>knuminput.h</header>
+	    <container>1</container>
+	    <pixmap></pixmap>
+  </customwidget>
+  </customwidgets>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="236" >89504e470d0a1a0a0000000d49484452000000190000001a0806000000427df7cd000000b3494441544889dd963112c420084581d97acdfd4f29b9005b3913135050d722bf54f0018223e6ccf06f7db4c594be4d27e63304a190f525885e20154433f646ea050d6512d516887af10075c922f5d7e4ca24da4d439059f803721c4946a1962f798c6641d4da5c05421101445c06b82a6746804d73822202cc67956289a0c89a937b77596790b638abfb59d4da5c017840664196aff97679deab62d39bfcf73cf5ef8160ef4bb4e2e7627657e4909eb694eb071e3b4da9ba4f1ddb0000000049454e44ae426082</data>
     </image>
-    <image name="image1">
-        <data format="PNG" length="242">89504e470d0a1a0a0000000d49484452000000190000001a0806000000427df7cd000000b9494441544889dd95410ec4200845b1e9ba78ff538a176056260c5181569bccfca590ff2a204da510ecd601008078ed8778953372cec8db20d23c0a72417aa611900999997941a795500a256d2acf7a434354bf212d4927ebc488a417518d4dd75d0dcbb5f2ed983d59f101af94eb7f20d39e3c1963136299f7e2b361f89d9e8c6ed16efc4ee3892a205ecb9adc24fdcc176ffd4b9839e9b896592eb9d623b1106464e605b821da340200086e61afb91ea2a377e89577e57f00357f504513c00b590000000049454e44ae426082</data>
+    <image name="image1" >
+      <data format="PNG" length="242" >89504e470d0a1a0a0000000d49484452000000190000001a0806000000427df7cd000000b9494441544889dd95410ec4200845b1e9ba78ff538a176056260c5181569bccfca590ff2a204da510ecd601008078ed8778953372cec8db20d23c0a72417aa611900999997941a795500a256d2acf7a434354bf212d4927ebc488a417518d4dd75d0dcbb5f2ed983d59f101af94eb7f20d39e3c1963136299f7e2b361f89d9e8c6ed16efc4ee3892a205ecb9adc24fdcc176ffd4b9839e9b896592eb9d623b1106464e605b821da340200086e61afb91ea2a377e89577e57f00357f504513c00b590000000049454e44ae426082</data>
     </image>
-</images>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kcolorbutton.h</includehint>
-    <includehint>kcolorbutton.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
-</UI>
+  </images>
+</ui>

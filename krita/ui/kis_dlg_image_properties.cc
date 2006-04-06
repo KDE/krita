@@ -42,7 +42,6 @@
 #include "kis_id.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
-#include "wdgnewimage.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
     : super(parent, name, true, "", Ok | Cancel)

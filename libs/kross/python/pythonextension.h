@@ -59,7 +59,7 @@ namespace Kross { namespace Python {
              * \param object The \a Kross::Api::Object object
              *        this instance is the wrapper for.
              */
-            explicit PythonExtension(Kross::Api::Object::Ptr object);
+            explicit PythonExtension(Kross::Api::Object* object);
 
             /**
              * Destructor.
@@ -106,7 +106,7 @@ namespace Kross { namespace Python {
              * \param tuple The Py::Tuple to convert.
              * \return The to a Kross::Api::List converted Py::Tuple .
              */
-            static Kross::Api::List::Ptr toObject(const Py::Tuple& tuple);
+            static Kross::Api::List* toObject(const Py::Tuple& tuple);
 
             /**
              * Converts a \a Py::List into a \a Kross::Api::List .
@@ -114,7 +114,7 @@ namespace Kross { namespace Python {
              * \param list The Py::List to convert.
              * \return The to a Kross::Api::List converted Py::List .
              */
-            static Kross::Api::List::Ptr toObject(const Py::List& list);
+            static Kross::Api::List* toObject(const Py::List& list);
 
             /**
              * Converts a \a Py::Dict into a \a Kross::Api::Dict .
@@ -122,7 +122,7 @@ namespace Kross { namespace Python {
              * \param dict The Py::Dict to convert.
              * \return The to a Kross::Api::Dict converted Py::Dict .
              */
-            static Kross::Api::Dict::Ptr toObject(const Py::Dict& dict);
+            static Kross::Api::Dict* toObject(const Py::Dict& dict);
 
             /**
              * Converts a \a Py::Object into a \a Kross::Api::Object.
@@ -130,7 +130,7 @@ namespace Kross { namespace Python {
              * \param object The Py::Object to convert.
              * \return The to a Kross::Api::Object converted Py::Object.
              */
-            static Kross::Api::Object::Ptr toObject(const Py::Object& object);
+            static Kross::Api::Object* toObject(const Py::Object& object);
 
             /**
              * Converts a QString to a Py::Object. If
@@ -164,6 +164,14 @@ namespace Kross { namespace Python {
              * \param list The QValueList to convert.
              * \return The to a Py::List converted QValueList.
              */
+            static const Py::List toPyObject(const QList<QVariant>& list);
+
+            /**
+             * Converts a QValueList to a Py::List.
+             *
+             * \param list The QValueList to convert.
+             * \return The to a Py::List converted QValueList.
+             */
             static const Py::List toPyObject(const Q3ValueList<QVariant>& list);
 
             /**
@@ -180,7 +188,7 @@ namespace Kross { namespace Python {
              * \param object The Kross::Api::Object to convert.
              * \return The to a Py::Object converted Kross::Api::Object.
              */
-            static const Py::Object toPyObject(Kross::Api::Object::Ptr object);
+            static const Py::Object toPyObject(Kross::Api::Object* object);
 
             /**
              * Converts a \a Kross::Api::List into a Py::Tuple.
@@ -188,7 +196,7 @@ namespace Kross { namespace Python {
              * \param list The Kross::Api::List to convert.
              * \return The to a Py::Tuple converted Kross::Api::List.
              */
-            static const Py::Tuple toPyTuple(Kross::Api::List::Ptr list);
+            static const Py::Tuple toPyTuple(Kross::Api::List* list);
 
             /// The \a Kross::Api::Object this PythonExtension wraps.
             Kross::Api::Object::Ptr m_object;

@@ -89,7 +89,7 @@ namespace Kross { namespace Python {
             void finalize();
 
             /// \return a \a Kross::Api::Exception instance.
-            Kross::Api::Exception::Ptr toException(const QString& error);
+            Kross::Api::Exception* toException(const QString& error);
     };
 
 }}

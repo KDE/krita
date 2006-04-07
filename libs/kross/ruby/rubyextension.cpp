@@ -25,7 +25,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-#include "api/list.h"
+#include "../api/list.h"
 
 #include "rubyconfig.h"
 
@@ -82,13 +82,13 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
                 krossdebug( QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) );
 #endif
-                result = object->getChild(funcname)->call(QString::null, new Api::List(argsList));
+                result = object->getChild(funcname)->call(QString::null, Api::List::Ptr(new Api::List(argsList)));
             }
             else {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
                 krossdebug( QString("Kross::Ruby::RubyExtension::method_missing try to call function with name '%1' in object '%2'.").arg(funcname).arg(object->getName()) );
 #endif
-                result = object->call(funcname, new Api::List(argsList));
+                result = object->call(funcname, Api::List::Ptr(new Api::List(argsList)));
             }
         } catch(Kross::Api::Exception::Ptr exception)
         {
@@ -98,7 +98,8 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
             throw convertFromException(exception);
         }  catch(...)
         {
-            throw convertFromException(new Kross::Api::Exception( "Unknow error" )); // TODO: fix //i18n
+            Kross::Api::Exception::Ptr e = Kross::Api::Exception::Ptr( new Kross::Api::Exception( "Unknow error" ) );
+            throw convertFromException(e); // TODO: fix //i18n
         }
     } catch(VALUE v) {
          rb_exc_raise(v );

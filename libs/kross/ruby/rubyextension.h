@@ -21,10 +21,10 @@
 
 #include <ruby.h>
 
-#include <api/class.h>
-#include <api/dict.h>
-#include <api/list.h>
-#include <api/object.h>
+#include "../api/class.h"
+#include "../api/dict.h"
+#include "../api/list.h"
+#include "../api/object.h"
 //Added by qt3to4:
 #include <Q3ValueList>
 

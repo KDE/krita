@@ -19,7 +19,7 @@
 
 #include "rubymodule.h"
 
-#include <api/object.h>
+#include "../api/object.h"
 
 #include "rubyconfig.h"
 #include "rubyextension.h"
@@ -31,13 +31,13 @@ namespace Ruby {
 class RubyModulePrivate {
     friend class RubyModule;
     /// The \a Kross::Api::Module this RubyExtension wraps.
-    Kross::Api::Module* m_module;
+    Kross::Api::Module::Ptr m_module;
 
 };
 
 RubyModule::RubyModule(Kross::Api::Module* mod, QString modname) : d(new RubyModulePrivate)
 {
-    d->m_module = mod;
+    d->m_module = Kross::Api::Module::Ptr(mod);
     modname = modname.left(1).upper() + modname.right(modname.length() - 1 );
     krossdebug(QString("Module: %1").arg(modname));
     VALUE rmodule = rb_define_module(modname.ascii());
@@ -60,8 +60,7 @@ VALUE RubyModule::method_missing(int argc, VALUE *argv, VALUE self)
     VALUE rubyObjectModule = rb_funcall( self, rb_intern("const_get"), 1, ID2SYM(rb_intern("MODULEOBJ")) );
     RubyModule* objectModule;
     Data_Get_Struct(rubyObjectModule, RubyModule, objectModule);
-    Kross::Api::Object::Ptr object = (Kross::Api::Object*)objectModule->d->m_module;
-    
+    Kross::Api::Object::Ptr object = dynamic_cast<Kross::Api::Object*>( objectModule->d->m_module.data() );
     return RubyExtension::call_method(object, argc, argv);
 }
 

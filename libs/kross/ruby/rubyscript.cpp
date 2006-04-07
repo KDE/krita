@@ -24,7 +24,7 @@
 #include <rubysig.h>
 #include <node.h>
 
-#include <main/scriptcontainer.h>
+#include "../main/scriptcontainer.h"
 
 #include "rubyconfig.h"
 #include "rubyextension.h"

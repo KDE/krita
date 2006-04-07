@@ -160,9 +160,9 @@ void PythonScript::initialize()
     }
     catch(Py::Exception& e) {
         QString err = Py::value(e).as_string().c_str();
-        Kross::Api::Exception::Ptr exception = toException( QString("Failed to compile python code: %1").arg(err) );
+        Kross::Api::Exception* exception = toException( QString("Failed to compile python code: %1").arg(err) );
         e.clear(); // exception is handled. clear it now.
-        throw exception;
+        throw Kross::Api::Exception::Ptr(exception);
     }
 }
 
@@ -179,7 +179,7 @@ void PythonScript::finalize()
     d->m_classes.clear();
 }
 
-Kross::Api::Exception::Ptr PythonScript::toException(const QString& error)
+Kross::Api::Exception* PythonScript::toException(const QString& error)
 {
     PyObject *type, *value, *traceback;
     PyObject *lineobj = 0;
@@ -227,7 +227,7 @@ Kross::Api::Exception::Ptr PythonScript::toException(const QString& error)
     for(Py::List::size_type i = 0; i < tblength; ++i)
         tb.append( Py::Object(tblist[i]).as_string().c_str() );
 
-    Kross::Api::Exception::Ptr exception = new Kross::Api::Exception(error, line);;
+    Kross::Api::Exception* exception = new Kross::Api::Exception(error, line);;
     if(tb.count() > 0)
         exception->setTrace( tb.join("\n") );
     return exception;
@@ -316,8 +316,8 @@ Kross::Api::Object::Ptr PythonScript::execute()
             }
         }
 
-        Kross::Api::Object::Ptr r = PythonExtension::toObject(result);
-        return r;
+        Kross::Api::Object* r = PythonExtension::toObject(result);
+        return Kross::Api::Object::Ptr(r);
     }
     catch(Py::Exception& e) {
         try {
@@ -326,22 +326,22 @@ Kross::Api::Object::Ptr PythonScript::execute()
                 errobj = Py::type(e);
             QString err = errobj.as_string().c_str();
 
-            Kross::Api::Exception::Ptr exception = toException( QString("Failed to execute python code: %1").arg(err) );
+            Kross::Api::Exception* exception = toException( QString("Failed to execute python code: %1").arg(err) );
             e.clear(); // exception is handled. clear it now.
             setException( exception );
         }
         catch(Py::Exception& e) {
             QString err = Py::value(e).as_string().c_str();
-            Kross::Api::Exception::Ptr exception = toException( QString("Failed to execute python code: %1").arg(err) );
+            Kross::Api::Exception* exception = toException( QString("Failed to execute python code: %1").arg(err) );
             e.clear(); // exception is handled. clear it now.
             setException( exception );
         }
     }
     catch(Kross::Api::Exception::Ptr e) {
-        setException(e);
+        setException(e.data());
     }
 
-    return 0; // return nothing if exception got thrown.
+    return Kross::Api::Object::Ptr(0); // return nothing if exception got thrown.
 }
 
 Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::Api::List::Ptr args)
@@ -352,11 +352,12 @@ Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::A
                  .arg(args ? QString::number(args->count()) : QString("NULL")) );
 #endif
 
-    if(hadException()) return 0; // abort if we had an unresolved exception.
+    if(hadException()) // abort if we had an unresolved exception.
+        return Kross::Api::Object::Ptr(0);
 
     if(! d->m_module) {
         setException( new Kross::Api::Exception(QString("Script not initialized.")) );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
 
     try {
@@ -375,8 +376,8 @@ Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::A
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function is not callable.")) );
 
         // Call the function.
-        Py::Object result = funcobject.apply(PythonExtension::toPyTuple(args));
-        return PythonExtension::toObject(result);
+        Py::Object result = funcobject.apply(PythonExtension::toPyTuple(args.data()));
+        return Kross::Api::Object::Ptr( PythonExtension::toObject(result) );
     }
     catch(Py::Exception& e) {
         QString err = Py::value(e).as_string().c_str();
@@ -384,10 +385,10 @@ Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::A
         setException( new Kross::Api::Exception(QString("Python Exception: %1").arg(err)) );
     }
     catch(Kross::Api::Exception::Ptr e) {
-        setException(e);
+        setException(e.data());
     }
 
-    return 0; // return nothing if exception got thrown.
+    return Kross::Api::Object::Ptr(0); // return nothing if exception got thrown.
 }
 
 const QStringList& PythonScript::getClassNames()
@@ -399,11 +400,12 @@ const QStringList& PythonScript::getClassNames()
 
 Kross::Api::Object::Ptr PythonScript::classInstance(const QString& name)
 {
-    if(hadException()) return 0; // abort if we had an unresolved exception.
+    if(hadException()) // abort if we had an unresolved exception.
+        return Kross::Api::Object::Ptr(0);
 
     if(! d->m_module) {
         setException( new Kross::Api::Exception(QString("Script not initialized.")) );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
 
     try {
@@ -423,17 +425,17 @@ Kross::Api::Object::Ptr PythonScript::classInstance(const QString& name)
 #ifdef KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
         krossdebug( QString("PythonScript::classInstance() inst='%1'").arg(classobject.as_string().c_str()) );
 #endif
-        return PythonExtension::toObject(classobject);
+        return Kross::Api::Object::Ptr( PythonExtension::toObject(classobject) );
     }
     catch(Py::Exception& e) {
         QString err = Py::value(e).as_string().c_str();
         e.clear(); // exception is handled. clear it now.
-        setException( Kross::Api::Exception::Ptr( new Kross::Api::Exception(err) ) );
+        setException( new Kross::Api::Exception(err) );
     }
     catch(Kross::Api::Exception::Ptr e) {
-        setException(e);
+        setException(e.data());
     }
 
-    return 0; // return nothing if exception got thrown.
+    return Kross::Api::Object::Ptr(0); // return nothing if exception got thrown.
 }
 

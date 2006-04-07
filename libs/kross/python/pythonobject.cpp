@@ -77,7 +77,7 @@ Kross::Api::Object::Ptr PythonObject::call(const QString& name, Kross::Api::List
         Py::Object result(r, true);
 
         //krossdebug( QString("PythonObject::call(%1) call return value = '%2'").arg(name).arg(result.as_string().c_str()) );
-        return PythonExtension::toObject(result);
+        return Kross::Api::Object::Ptr( PythonExtension::toObject(result) );
     }
     /*TODO??? ELSE create class instance for class-definitions???
     Kross::Api::ClassBase* clazz = new Kross::Api::ClassBase("", this);

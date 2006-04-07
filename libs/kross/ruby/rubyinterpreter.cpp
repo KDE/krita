@@ -23,9 +23,9 @@
 #include <qregexp.h>
 #include <ksharedptr.h>
 
-#include <api/exception.h>
-#include <api/module.h>
-#include <main/manager.h>
+#include "../api/exception.h"
+#include "../api/module.h"
+#include "../main/manager.h"
 
 #include "rubyconfig.h"
 #include "rubyextension.h"

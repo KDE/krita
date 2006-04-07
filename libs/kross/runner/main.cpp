@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     KCmdLineArgs::init(argc, argv, &about);
     // Tell which options are supported and parse them.
     static KCmdLineOptions options[] = {
-        { "+file", I18N_NOOP("Scriptfile"), 0 },
+        { "+file", "Scriptfile", 0 },
         KCmdLineLastOption
     };
     KCmdLineArgs::addCmdLineOptions(options);
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
     }
 
     // Create KApplication instance.
-    app = new KApplication( /* allowStyles */ true, /* GUIenabled */ true );
+    app = new KApplication( /* GUIenabled */ true );
 
     //QString interpretername = args->getOption("interpreter");
     //QString scriptfilename = args->getOption("scriptfile");

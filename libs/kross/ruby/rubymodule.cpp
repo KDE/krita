@@ -20,6 +20,7 @@
 #include "rubymodule.h"
 
 #include "../api/object.h"
+#include "../api/module.h"
 
 #include "rubyconfig.h"
 #include "rubyextension.h"
@@ -60,7 +61,7 @@ VALUE RubyModule::method_missing(int argc, VALUE *argv, VALUE self)
     VALUE rubyObjectModule = rb_funcall( self, rb_intern("const_get"), 1, ID2SYM(rb_intern("MODULEOBJ")) );
     RubyModule* objectModule;
     Data_Get_Struct(rubyObjectModule, RubyModule, objectModule);
-    Kross::Api::Object::Ptr object = dynamic_cast<Kross::Api::Object*>( objectModule->d->m_module.data() );
+    Kross::Api::Object::Ptr object = Kross::Api::Object::Ptr( dynamic_cast<Kross::Api::Object*>( objectModule->d->m_module.data() ) );
     return RubyExtension::call_method(object, argc, argv);
 }
 

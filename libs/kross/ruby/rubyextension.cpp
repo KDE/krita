@@ -59,7 +59,7 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
     krossdebug("Converting self to Kross::Api::Object");
 #endif
     
-    Kross::Api::Object::Ptr object = toObject( self );
+    Kross::Api::Object::Ptr object = Kross::Api::Object::Ptr( toObject( self ) );
     return RubyExtension::call_method(object, argc, argv);
 }
 
@@ -72,7 +72,7 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
 #endif
     for(int i = 1; i < argc; i++)
     {
-        Kross::Api::Object::Ptr obj = toObject(argv[i]);
+        Kross::Api::Object::Ptr obj = Kross::Api::Object::Ptr( toObject(argv[i]) );
         if(obj) argsList.append(obj);
     }
     Kross::Api::Object::Ptr result;
@@ -118,7 +118,7 @@ void RubyExtension::delete_object(void* object)
 void RubyExtension::delete_exception(void* object)
 {
     Kross::Api::Exception* exc = static_cast<Kross::Api::Exception*>(object);
-    exc->_KShared_unref();
+    //exc->_KShared_unref(); //TODO
 }
 
     
@@ -142,7 +142,7 @@ int RubyExtension::convertHash_i(VALUE key, VALUE value, VALUE  vmap)
     Data_Get_Struct(vmap, mStrObj, map);
     if (key != Qundef)
     {
-        Kross::Api::Object::Ptr o = RubyExtension::toObject( value );
+        Kross::Api::Object::Ptr o = Kross::Api::Object::Ptr( RubyExtension::toObject( value ) );
         if(o) map->replace(STR2CSTR(key), o);
     }
     return ST_CONTINUE;
@@ -161,7 +161,7 @@ bool RubyExtension::isOfObjectType(VALUE value)
 }
 
 
-Kross::Api::Exception::Ptr RubyExtension::convertToException(VALUE value)
+Kross::Api::Exception* RubyExtension::convertToException(VALUE value)
 {
     if( isOfExceptionType(value) )
     {
@@ -178,12 +178,12 @@ VALUE RubyExtension::convertFromException(Kross::Api::Exception::Ptr exc)
     {
         RubyExtensionPrivate::s_krossException = rb_define_class("KrossException", rb_eRuntimeError);
     }
-    exc->_KShared_ref();
+    //exc->_KShared_ref(); //TODO
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossException, 0, RubyExtension::delete_exception, exc.data() );
 }
 
 
-Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
+Kross::Api::Object* RubyExtension::toObject(VALUE value)
 {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
     krossdebug(QString("RubyExtension::toObject of type %1").arg(TYPE(value)));
@@ -199,8 +199,7 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
             {
                 RubyExtension* objectExtension;
                 Data_Get_Struct(value, RubyExtension, objectExtension);
-                Kross::Api::Object::Ptr object = objectExtension->d->m_object;
-                return object;
+                return objectExtension->d->m_object.data();
             } else {
                 krosswarning("Cannot yet convert standard ruby type to kross object");
                 return 0;
@@ -215,8 +214,8 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
             Q3ValueList<Kross::Api::Object::Ptr> l;
             for(int i = 0; i < RARRAY(value)->len; i++)
             {
-                Kross::Api::Object::Ptr o = toObject( rb_ary_entry( value , i ) );
-                if(o) l.append(o);
+                Kross::Api::Object* o = toObject( rb_ary_entry( value , i ) );
+                if(o) l.append( Kross::Api::Object::Ptr(o) );
             }
             return new Kross::Api::List(l);
         }
@@ -291,6 +290,13 @@ VALUE RubyExtension::toVALUE(Q3ValueList<QVariant> list)
     return l;
 }
 
+VALUE RubyExtension::toVALUE(QList<QVariant> list)
+{
+    VALUE l = rb_ary_new();
+    for(QList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
+        rb_ary_push(l, toVALUE(*it));
+    return l;
+}
 
 VALUE RubyExtension::toVALUE(const QVariant& variant)
 {
@@ -311,7 +317,7 @@ VALUE RubyExtension::toVALUE(const QVariant& variant)
         case QVariant::DateTime:
         case QVariant::ByteArray:
         case QVariant::BitArray:
-        case QVariant::CString:
+        //case QVariant::CString:
         case QVariant::String:
             return toVALUE(variant.toString());
         case QVariant::StringList:

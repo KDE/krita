@@ -88,7 +88,7 @@ class RubyExtension{
          * Convert a ruby object to the exception type.
          * @return 0 if the object wasn't an exception.
          */
-        static Kross::Api::Exception::Ptr convertToException(VALUE obj);
+        static Kross::Api::Exception* convertToException(VALUE obj);
         /**
          * Wrap an exception in a ruby object.
          */
@@ -102,7 +102,7 @@ class RubyExtension{
          * \param object The ruby VALUE to convert.
          * \return The to a Kross::Api::Object converted Py::Object.
          */
-        static Kross::Api::Object::Ptr toObject(VALUE value);
+        static Kross::Api::Object* toObject(VALUE value);
         /**
          * Converts a QString to a VALUE. If
          * the QString isNull() then a "" will
@@ -130,8 +130,18 @@ class RubyExtension{
          * Converts a QValueList to a VALUE.
          * \param list The QValueList to convert.
          * \return The converted QValueList.
+         *
+         * \deprecated Qt3
          */
         static VALUE toVALUE(Q3ValueList<QVariant> list);
+
+        /**
+         * Converts a QList to a VALUE.
+         * \param list The QValueList to convert.
+         * \return The converted QValueList.
+         */
+        static VALUE toVALUE(QList<QVariant> list);
+
         /**
          * Converts a QVariant to a VALUE.
          * \param variant The QVariant to convert.

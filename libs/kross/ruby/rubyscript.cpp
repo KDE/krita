@@ -141,7 +141,7 @@ Kross::Api::Object::Ptr RubyScript::execute()
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     krossdebug("Execution is finished");
 #endif
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api::List::Ptr args)
@@ -157,7 +157,7 @@ Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api
     }
     selectScript();
     unselectScript();
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 const QStringList& RubyScript::getClassNames()
@@ -184,7 +184,7 @@ Kross::Api::Object::Ptr RubyScript::classInstance(const QString& name)
     }
     selectScript();
     unselectScript();
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 

@@ -163,7 +163,7 @@ int main(int argc, char **argv)
     QString scriptfilename = args->getOption("scriptfile");
 
     QFile f(QFile::encodeName(scriptfilename));
-    if(f.exists() && f.open(IO_ReadOnly)) {
+    if(f.exists() && f.open(QIODevice::ReadOnly)) {
         QString scriptcode = f.readAll();
         f.close();
 

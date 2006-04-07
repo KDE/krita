@@ -19,6 +19,8 @@
 
 #include "testplugin.h"
 #include "testobject.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 /************************************************************************
  * TestPluginObject
@@ -91,7 +93,7 @@ void TestPluginObject::voiduintfunc(uint) {}
 int TestPluginObject::intfunc(int i) { return i; }
 bool TestPluginObject::boolfunc(bool b) { return b; }
 double TestPluginObject::doublefunc(double d) { return d; }
-QCString TestPluginObject::cstringfunc(const QCString& s) { return s; }
+Q3CString TestPluginObject::cstringfunc(const Q3CString& s) { return s; }
 QString TestPluginObject::stringfunc(const QString& s) { return s; }
 QStringList TestPluginObject::stringlistfunc(const QStringList& sl) { return sl; }
 QVariant TestPluginObject::variantfunc(const QVariant& v) { return v; }

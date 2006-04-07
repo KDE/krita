@@ -28,6 +28,8 @@
 
 #include <qobject.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class TestPluginObject : public Kross::Api::Class<TestPluginObject>
 {
@@ -42,7 +44,7 @@ class TestPluginObject : public Kross::Api::Class<TestPluginObject>
         int intfunc(int);
         bool boolfunc(bool);
         double doublefunc(double);
-        QCString cstringfunc(const QCString&);
+        Q3CString cstringfunc(const Q3CString&);
         QString stringfunc(const QString&);
         QStringList stringlistfunc(const QStringList&);
         QVariant variantfunc(const QVariant&);

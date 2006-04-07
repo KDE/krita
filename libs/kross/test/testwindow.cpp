@@ -21,12 +21,12 @@
 #include "testplugin.h"
 
 #include <qlabel.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qvgroupbox.h>
 //#include <qhgroupbox.h>
 #include <qcombobox.h>
 #include <qdir.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 
 #include <ktextedit.h>
 #include <kpushbutton.h>
@@ -68,7 +68,7 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     if(scriptsaction) scriptsaction->plug(menuFile);
     //menuFile->insertItem( ( (KActionMenu*)m_scriptextension->action("scripts") )->popupMenu() );
 
-    QVBox* mainbox = new QVBox(this);
+    Q3VBox* mainbox = new Q3VBox(this);
 
     QVGroupBox* interpretergrpbox = new QVGroupBox("Interpreter", mainbox);
     QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
@@ -78,10 +78,10 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
 
     QVGroupBox* scriptgrpbox = new QVGroupBox("Scripting code", mainbox);
     m_codeedit = new KTextEdit(m_scriptcode, QString::null, scriptgrpbox);
-    m_codeedit->setWordWrap(QTextEdit::NoWrap);
+    m_codeedit->setWordWrap(Q3TextEdit::NoWrap);
     m_codeedit->setTextFormat(Qt::PlainText);
 
-    QHBox* btnbox = new QHBox(mainbox);
+    Q3HBox* btnbox = new Q3HBox(mainbox);
     KPushButton* execbtn = new KPushButton("Execute", btnbox);
     connect(execbtn, SIGNAL(clicked()), this, SLOT(execute()));
 

@@ -22,7 +22,7 @@
 #include <koOpenPaneBase.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3ValueList>
+#include <QList>
 
 class KoCustomDocumentCreator;
 class KConfig;
@@ -60,7 +60,7 @@ class KoOpenPane : public KoOpenPaneBase
     void itemClicked(Q3ListViewItem* item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
-    void saveSplitterSizes(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
+    void saveSplitterSizes(KoDetailsPaneBase* sender, const QList<int>& sizes);
 
   signals:
     void openExistingFile(const QString&);
@@ -70,7 +70,7 @@ class KoOpenPane : public KoOpenPaneBase
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
     /// Emitted when one of the detail panes have changed it's splitter
-    void splitterResized(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
+    void splitterResized(KoDetailsPaneBase* sender, const QList<int>& sizes);
 
   protected:
     void initRecentDocs();

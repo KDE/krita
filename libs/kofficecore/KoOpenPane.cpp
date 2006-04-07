@@ -71,7 +71,7 @@ class KoSectionListItem : public Q3ListViewItem
         Q3ListViewItem::paintCell(p, cg, column, width, align);
       } else {
         int ypos = (height() - 2) / 2;
-        QPen pen(cg.foreground(), 2);
+        QPen pen(cg.windowText(), 2);
         p->setPen(pen);
         p->drawLine(0, ypos, width, ypos);
       }
@@ -126,13 +126,13 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
     m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
   }
 
-  Q3ValueList<int> sizes;
+  QList<int> sizes;
   sizes << 20 << width() - 20;
   m_splitter->setSizes(sizes);
 
   // Set the sizes of the details pane splitters
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
-  sizes = cfgGrp.readIntListEntry("DetailsPaneSplitterSizes");
+  sizes = cfgGrp.readEntry("DetailsPaneSplitterSizes", sizes);
   emit splitterResized(0, sizes);
 
   connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3ValueList<int>&)),
@@ -172,10 +172,10 @@ void KoOpenPane::initRecentDocs()
   KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_instance);
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
   Q3ListViewItem* item = addPane(i18n("Recent Documents"), "fileopen", recentDocPane, 0);
-  connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3ValueList<int>&)),
-          this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3ValueList<int>&)));
-  connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3ValueList<int>&)),
-          recentDocPane, SLOT(resizeSplitter(KoDetailsPaneBase*, const Q3ValueList<int>&)));
+  connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPaneBase*, const QList<int>&)),
+          this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3List<int>&)));
+  connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3List<int>&)),
+          recentDocPane, SLOT(resizeSplitter(KoDetailsPaneBase*, const QList<int>&)));
 
   KoSectionListItem* separator = new KoSectionListItem(m_sectionList, "", 1);
   separator->setEnabled(false);
@@ -193,7 +193,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
 
   if(!templateType.isEmpty())
   {
-    KoTemplateTree templateTree(templateType.local8Bit(), d->m_instance, true);
+    KoTemplateTree templateTree(templateType.toLocal8Bit(), d->m_instance, true);
 
     for (KoTemplateGroup *group = templateTree.first(); group != 0L; group = templateTree.next()) {
       if (group->isHidden()) {
@@ -207,10 +207,10 @@ void KoOpenPane::initTemplates(const QString& templateType)
               this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
       connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
               pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*, const QString&)));
-      connect(pane, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3ValueList<int>&)),
-              this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3ValueList<int>&)));
-      connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3ValueList<int>&)),
-              pane, SLOT(resizeSplitter(KoDetailsPaneBase*, const Q3ValueList<int>&)));
+      connect(pane, SIGNAL(splitterResized(KoDetailsPaneBase*, const QList<int>&)),
+              this, SIGNAL(splitterResized(KoDetailsPaneBase*, const QList<int>&)));
+      connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const QList<int>&)),
+              pane, SLOT(resizeSplitter(KoDetailsPaneBase*, const QList<int>&)));
       Q3ListViewItem* item = addPane(group->name(), group->first()->loadPicture(d->m_instance),
                                     pane, group->sortingWeight() + templateOffset);
 
@@ -271,15 +271,15 @@ Q3ListViewItem* KoOpenPane::addPane(const QString& title, const QPixmap& icon, Q
   KoSectionListItem* listItem = new KoSectionListItem(m_sectionList, title, sortWeight, id);
 
   if(!icon.isNull()) {
-    QImage image = icon.convertToImage();
+    QImage image = icon.toImage();
 
     if((image.width() > 48) || (image.height() > 48)) {
-      image = image.smoothScale(48, 48, Qt::KeepAspectRatio);
+      image = image.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    image.setAlphaBuffer(true);
+    image.convertToFormat(QImage::Format_ARGB32);
     image = image.copy((image.width() - 48) / 2, (image.height() - 48) / 2, 48, 48);
-    listItem->setPixmap(0, QPixmap(image));
+    listItem->setPixmap(0, QPixmap::fromImage(image));
   }
 
   return listItem;
@@ -296,13 +296,10 @@ void KoOpenPane::selectionChanged(Q3ListViewItem* item)
   m_widgetStack->raiseWidget(section->widgetIndex());
 }
 
-void KoOpenPane::saveSplitterSizes(KoDetailsPaneBase* /*sender*/, const Q3ValueList<int>& sizes)
-{
-#warning "kde4: port it"		
-#if 0		
+void KoOpenPane::saveSplitterSizes(KoDetailsPaneBase* /*sender*/, const QList<int>& sizes)
+{		
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
-  cfgGrp.writeEntry("DetailsPaneSplitterSizes", sizes);
-#endif  
+  cfgGrp.writeEntry("DetailsPaneSplitterSizes", sizes);  
 }
 
 void KoOpenPane::itemClicked(Q3ListViewItem* item)

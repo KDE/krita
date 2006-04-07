@@ -24,7 +24,7 @@
 #include "koDetailsPaneBase.h"
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3ValueList>
+#include <QList>
 #include <QEvent>
 
 class KoTemplateGroup;
@@ -73,10 +73,10 @@ class KoTemplatesPane : public KoDetailsPaneBase
     /// Emited when the always use checkbox is selected
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
-    void splitterResized(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
+    void splitterResized(KoDetailsPaneBase* sender, const QList<int>& sizes);
 
   public slots:
-    void resizeSplitter(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
+    void resizeSplitter(KoDetailsPaneBase* sender, const QList<int>& sizes);
 
   protected slots:
     void selectionChanged(Q3ListViewItem* item);
@@ -114,10 +114,10 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
   signals:
     void openFile(const QString&);
 
-    void splitterResized(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
+    void splitterResized(KoDetailsPaneBase* sender, const QList<int>& sizes);
 
   public slots:
-    void resizeSplitter(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
+    void resizeSplitter(KoDetailsPaneBase* sender, const QList<int>& sizes);
 
   protected slots:
     void selectionChanged(Q3ListViewItem* item);

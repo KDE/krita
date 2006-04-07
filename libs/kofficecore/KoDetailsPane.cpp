@@ -253,7 +253,7 @@ bool KoTemplatesPane::eventFilter(QObject* watched, QEvent* e)
   return false;
 }
 
-void KoTemplatesPane::resizeSplitter(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes)
+void KoTemplatesPane::resizeSplitter(KoDetailsPaneBase* sender, const QList<int>& sizes)
 {
   if(sender == this)
     return;
@@ -470,7 +470,7 @@ bool KoRecentDocumentsPane::eventFilter(QObject* watched, QEvent* e)
   return false;
 }
 
-void KoRecentDocumentsPane::resizeSplitter(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes)
+void KoRecentDocumentsPane::resizeSplitter(KoDetailsPaneBase* sender, const QList<int>& sizes)
 {
   if(sender == this)
     return;

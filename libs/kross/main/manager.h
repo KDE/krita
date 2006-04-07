@@ -155,7 +155,7 @@ namespace Kross { namespace Api {
              *        failed. The loaded Module isn't added to the global
              *        shared list of modules.
              */
-            Module::Ptr loadModule(const QString& modulename);
+            Module* loadModule(const QString& modulename);
 
         private:
             /// Private d-pointer class.

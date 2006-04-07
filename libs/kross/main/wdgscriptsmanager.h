@@ -20,7 +20,8 @@
 #define WDGSCRIPTSMANAGER_H
 
 #include "main/scriptaction.h"
-#include "main/wdgscriptsmanagerbase.h"
+
+#include <q3listview.h>
 
 class Scripting;
 
@@ -32,11 +33,11 @@ class WdgScriptsManagerPrivate;
 /**
 @author Cyrille Berger
 */
-class WdgScriptsManager : public WdgScriptsManagerBase
+class WdgScriptsManager : public QWidget
 {
     Q_OBJECT
     public:
-        WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
+        WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent = 0, const char* name = 0);
         ~WdgScriptsManager();
     public slots:
         void slotLoadScript();

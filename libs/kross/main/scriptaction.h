@@ -101,6 +101,11 @@ namespace Kross { namespace Api {
              */
             const QString getName() const;
 
+           /**
+             * Set the unique name this action will be accessible as.
+             */
+            void setName(const QString& name);
+
             /**
              * \return the description for this \a ScriptAction has.
              */

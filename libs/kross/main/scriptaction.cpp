@@ -185,9 +185,14 @@ int ScriptAction::version() const
     return d->version;
 }
 
-const QString getName() const
+const QString ScriptAction::getName() const
 {
     return d->name;
+}
+
+void ScriptAction::setName(const QString& name)
+{
+    d->name = name;
 }
 
 const QString ScriptAction::getDescription() const
@@ -231,7 +236,7 @@ void ScriptAction::detach(ScriptActionCollection* collection)
 void ScriptAction::detachAll()
 {
     for(Q3ValueList<ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
-        (*it)->detach( this );
+        (*it)->detach( ScriptAction::Ptr(this) );
 }
 
 void ScriptAction::activate()

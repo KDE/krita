@@ -23,6 +23,7 @@
 #include "wdgscriptsmanager.h"
 
 #include <kapplication.h>
+#include <kdialogbase.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
@@ -222,7 +223,7 @@ bool ScriptGUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, 
     QDomNodeList nodelist = document.elementsByTagName("ScriptAction");
     uint nodelistcount = nodelist.count();
     for(uint i = 0; i < nodelistcount; i++) {
-        ScriptAction::Ptr action = new ScriptAction(scriptconfigfile, nodelist.item(i).toElement());
+        ScriptAction::Ptr action = ScriptAction::Ptr( new ScriptAction(scriptconfigfile, nodelist.item(i).toElement()) );
 
         if(installedcollection) {
             ScriptAction::Ptr otheraction = installedcollection->action( action->name() );
@@ -284,8 +285,8 @@ void ScriptGUIClient::successfullyExecuted()
         ScriptActionCollection* executedcollection = d->collections["executedscripts"];
         if(executedcollection) {
             ScriptAction* actionptr = const_cast< ScriptAction* >( action );
-            executedcollection->detach(actionptr);
-            executedcollection->attach(actionptr);
+            executedcollection->detach( ScriptAction::Ptr(actionptr) );
+            executedcollection->attach( ScriptAction::Ptr(actionptr) );
             emit collectionChanged(executedcollection);
         }
     }
@@ -310,11 +311,10 @@ KUrl ScriptGUIClient::openScriptFile(const QString& caption)
         mimetypes.append( it.data()->getMimeTypes().join(" ").stripWhiteSpace() );
 
     KFileDialog* filedialog = new KFileDialog(
-        QString::null, // startdir
+        QString(), // startdir
         mimetypes.join(" "), // filter
-        0, // parent widget
-        "ScriptGUIClientFileDialog", // name
-        true // modal
+        0, // widget
+        0 // parent
     );
     if(! caption.isNull())
         filedialog->setCaption(caption);
@@ -329,7 +329,7 @@ bool ScriptGUIClient::loadScriptFile()
     if(url.isValid()) {
         ScriptActionCollection* loadedcollection = d->collections["loadedscripts"];
         if(loadedcollection) {
-            ScriptAction::Ptr action = new ScriptAction( url.path() );
+            ScriptAction::Ptr action = ScriptAction::Ptr( new ScriptAction( url.path() ) );
             connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
                     this, SLOT( executionFailed(const QString&, const QString&) ));
             connect(action.data(), SIGNAL( success() ),
@@ -356,7 +356,7 @@ bool ScriptGUIClient::executeScriptFile(const QString& file)
 {
     krossdebug( QString("Kross::Api::ScriptGUIClient::executeScriptFile() file='%1'").arg(file) );
 
-    ScriptAction::Ptr action = new ScriptAction(file);
+    ScriptAction::Ptr action = ScriptAction::Ptr( new ScriptAction(file) );
     return executeScriptAction(action);
 }
 

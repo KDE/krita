@@ -22,8 +22,7 @@
 #include <qfileinfo.h>
 #include <q3header.h>
 #include <qobject.h>
-#include <qtooltip.h>
-//Added by qt3to4:
+//#include <qtooltip.h>
 #include <QPixmap>
 #include <Q3ValueList>
 
@@ -31,32 +30,23 @@
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <ktoolbar.h>
 
-#if KDE_IS_VERSION(3, 4, 0)
-  // The KNewStuffSecure we use internaly for the GetHotNewStuff-functionality
-  // was introduced with KDE 3.4.
-  #define KROSS_SUPPORT_NEWSTUFF
-#endif
-
-#ifdef KROSS_SUPPORT_NEWSTUFF
-  #include <knewstuff/provider.h>
-  #include <knewstuff/engine.h>
-  #include <knewstuff/downloaddialog.h>
-  #include <knewstuff/knewstuffsecure.h>
-#endif
+#include <knewstuff/provider.h>
+#include <knewstuff/engine.h>
+#include <knewstuff/downloaddialog.h>
+#include <knewstuff/knewstuffsecure.h>
 
 #include "scriptguiclient.h"
 #include "scriptaction.h"
 
 namespace Kross { namespace Api {
 
-#ifdef KROSS_SUPPORT_NEWSTUFF
 class ScriptNewStuff : public KNewStuffSecure
 {
     public:
@@ -68,7 +58,6 @@ class ScriptNewStuff : public KNewStuffSecure
         ScriptGUIClient* m_scripguiclient;
         virtual void installResource() { m_scripguiclient->installScriptPackage( m_tarName ); }
 };
-#endif
 
 class ListItem : public Q3ListViewItem
 {
@@ -87,10 +76,12 @@ class ListItem : public Q3ListViewItem
         //ScriptActionMenu* actionMenu() const { return m_menu; }
 };
 
+/*
 class ToolTip : public QToolTip
 {
     public:
-        ToolTip(KListView* parent) : QToolTip(parent->viewport()), m_parent(parent) {}
+        ToolTip(K3ListView* parent)
+            : QToolTip(parent->viewport()), m_parent(parent) {}
         virtual ~ToolTip () { remove(m_parent->viewport()); }
     protected:
         virtual void maybeTip(const QPoint& p) {
@@ -103,91 +94,70 @@ class ToolTip : public QToolTip
             }
         }
     private:
-        KListView* m_parent;
+        K3ListView* m_parent;
 };
+*/
 
 class WdgScriptsManagerPrivate
 {
     friend class WdgScriptsManager;
+
+    K3ListView* m_listview;
+
     ScriptGUIClient* m_scripguiclient;
-    ToolTip* m_tooltip;
-#ifdef KROSS_SUPPORT_NEWSTUFF
+    //ToolTip* m_tooltip;
     ScriptNewStuff* newstuff;
-#endif
+
     //enum { LoadBtn = 0, UnloadBtn, InstallBtn, UninstallBtn, ExecBtn, NewStuffBtn };
+
+    KPushButton *btnExec, *btnLoad, *btnUnload, *btnInstall, *btnUninstall, *btnNewStuff;
 };
 
-WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name, Qt::WFlags fl )
-    : WdgScriptsManagerBase(parent, name, fl)
-    , d(new WdgScriptsManagerPrivate)
+WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name)
+    : QWidget(parent, name)
+    , d( new WdgScriptsManagerPrivate() )
 {
     d->m_scripguiclient = scr;
-    d->m_tooltip = new ToolTip(scriptsList);
-#ifdef KROSS_SUPPORT_NEWSTUFF
+    //d->m_tooltip = new ToolTip(d->m_listview);
     d->newstuff = 0;
-#endif
 
-    scriptsList->header()->hide();
-    //scriptsList->header()->setClickEnabled(false);
-    scriptsList->setAllColumnsShowFocus(true);
-    //scriptsList->setRootIsDecorated(true);
-    scriptsList->setSorting(-1);
-    scriptsList->addColumn("text");
-    //scriptsList->setColumnWidthMode(1, QListView::Manual);
+    d->m_listview = new K3ListView(this);
+    d->m_listview->header()->hide();
+    d->m_listview->setAllColumnsShowFocus(true);
+    d->m_listview->setSorting(-1);
+    d->m_listview->addColumn("");
+
+    d->btnExec = new KPushButton(KIcon("player_play"), i18n("Execute"), this);
+    d->btnLoad = new KPushButton(KIcon("fileopen"), i18n("Load"), this);
+    d->btnUnload = new KPushButton(KIcon("fileclose"), i18n("Unload"), this);
+    d->btnInstall = new KPushButton(KIcon("fileimport"), i18n("Install"), this);
+    d->btnUninstall = new KPushButton(KIcon("fileclose"), i18n("Uninstall"), this);
+    d->btnNewStuff = new KPushButton(KIcon("knewstuff"), i18n("Get New Scripts"), this);
 
     slotFillScriptsList();
 
     slotSelectionChanged(0);
-    connect(scriptsList, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotSelectionChanged(Q3ListViewItem*)));
+    connect(d->m_listview, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotSelectionChanged(Q3ListViewItem*)));
 
-    btnExec->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "exec", KIcon::MainToolbar, 16 ));
-    connect(btnExec, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
-    btnLoad->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileopen", KIcon::MainToolbar, 16 ));
-    connect(btnLoad, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
-    btnUnload->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", KIcon::MainToolbar, 16 ));
-    connect(btnUnload, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
-    btnInstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileimport", KIcon::MainToolbar, 16 ));
-    connect(btnInstall, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
-    btnUninstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", KIcon::MainToolbar, 16 ));
-    connect(btnUninstall, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
-#ifdef KROSS_SUPPORT_NEWSTUFF
-    btnNewStuff->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "knewstuff", KIcon::MainToolbar, 16 ));
-    connect(btnNewStuff, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
-#endif
-/*
-    toolBar->setIconText( KToolBar::IconTextRight );
+    connect(d->btnExec, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
+    connect(d->btnLoad, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
+    connect(d->btnUnload, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
+    connect(d->btnInstall, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
+    connect(d->btnUninstall, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
+    connect(d->btnNewStuff, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
 
-    toolBar->insertButton("exec", WdgScriptsManagerPrivate::ExecBtn, false, i18n("Execute"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::ExecBtn, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
-    toolBar->insertLineSeparator();
-    toolBar->insertButton("fileopen", WdgScriptsManagerPrivate::LoadBtn, true, i18n("Load"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::LoadBtn, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
-    toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UnloadBtn, false, i18n("Unload"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::UnloadBtn, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
-    toolBar->insertLineSeparator();
-    toolBar->insertButton("fileimport", WdgScriptsManagerPrivate::InstallBtn, true, i18n("Install"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::InstallBtn, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
-    toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UninstallBtn, false, i18n("Uninstall"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::UninstallBtn, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
-#ifdef KROSS_SUPPORT_NEWSTUFF
-    toolBar->insertLineSeparator();
-    toolBar->insertButton("knewstuff", WdgScriptsManagerPrivate::NewStuffBtn, true, i18n("Get More Scripts"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::NewStuffBtn, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
-#endif
-*/
-    connect(scr, SIGNAL( collectionChanged(ScriptActionCollection*) ),
-            this, SLOT( slotFillScriptsList() ));
+    connect(scr, SIGNAL( collectionChanged(ScriptActionCollection*) ), this, SLOT( slotFillScriptsList() ));
 }
 
 WdgScriptsManager::~WdgScriptsManager()
 {
-    delete d->m_tooltip;
+    //delete d->m_tooltip;
     delete d;
 }
 
 void WdgScriptsManager::slotFillScriptsList()
 {
-    scriptsList->clear();
+    d->m_listview->clear();
 
     addItem( d->m_scripguiclient->getActionCollection("executedscripts") );
     addItem( d->m_scripguiclient->getActionCollection("loadedscripts") );
@@ -199,7 +169,7 @@ void WdgScriptsManager::addItem(ScriptActionCollection* collection)
     if(! collection)
         return;
 
-    ListItem* i = new ListItem(scriptsList, collection);
+    ListItem* i = new ListItem(d->m_listview, collection);
     i->setText(0, collection->actionMenu()->text());
     i->setOpen(true);
 
@@ -219,16 +189,18 @@ Q3ListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, Q3ListViewI
     //i->setText(1, action->getDescription()); // FIXME: i18nise it for ko2.0
     //i->setText(2, action->name());
 
+/*
     QPixmap pm;
     if(action->hasIcon()) {
         KIconLoader* icons = KGlobal::iconLoader();
-        pm = icons->loadIconSet(action->icon(), KIcon::Small).pixmap(QIcon::Small, QIcon::Active);
+        pm = icons->loadIconSet(action->icon().name(), KIcon::Small).pixmap(QIcon::Small, QIcon::Active);
     }
     else {
         pm = action->iconSet(KIcon::Small, 16).pixmap(QIcon::Small, QIcon::Active);
     }
     if(! pm.isNull())
         i->setPixmap(0, pm); // display the icon
+*/
 
     return i;
 }
@@ -237,13 +209,9 @@ void WdgScriptsManager::slotSelectionChanged(Q3ListViewItem* item)
 {
     ListItem* i = dynamic_cast<ListItem*>(item);
     Kross::Api::ScriptActionCollection* installedcollection = d->m_scripguiclient->getActionCollection("installedscripts");
-
-    //toolBar->setItemEnabled(WdgScriptsManagerPrivate::ExecBtn, i && i->action());
-    //toolBar->setItemEnabled(WdgScriptsManagerPrivate::UninstallBtn, i && i->action() && i->collection() == installedcollection);
-    //toolBar->setItemEnabled(WdgScriptsManagerPrivate::UnloadBtn, i && i->action() && i->collection() != installedcollection);
-    btnExec->setEnabled(i && i->action());
-    btnUnload->setEnabled(i && i->action() && i->collection() != installedcollection);
-    btnUninstall->setEnabled(i && i->action() && i->collection() == installedcollection);
+    d->btnExec->setEnabled(i && i->action());
+    d->btnUnload->setEnabled(i && i->action() && i->collection() != installedcollection);
+    d->btnUninstall->setEnabled(i && i->action() && i->collection() == installedcollection);
 }
 
 void WdgScriptsManager::slotLoadScript()
@@ -255,11 +223,10 @@ void WdgScriptsManager::slotLoadScript()
 void WdgScriptsManager::slotInstallScript()
 {
     KFileDialog* filedialog = new KFileDialog(
-        QString::null, // startdir
+        "", // startdir
         "*.tar.gz *.tgz *.bz2", // filter
-        this, // parent widget
-        "WdgScriptsManagerInstallFileDialog", // name
-        true // modal
+        this, // widget
+        this // parent
     );
     filedialog->setCaption( i18n("Install Script Package") );
 
@@ -276,7 +243,7 @@ void WdgScriptsManager::slotInstallScript()
 
 void WdgScriptsManager::slotUninstallScript()
 {
-    ListItem* item = dynamic_cast<ListItem*>( scriptsList->currentItem() );
+    ListItem* item = dynamic_cast<ListItem*>( d->m_listview->currentItem() );
     if( !item || !item->action() )
         return;
 
@@ -285,7 +252,7 @@ void WdgScriptsManager::slotUninstallScript()
         return;
 
     const QString packagepath = item->action()->getPackagePath();
-    if( !packagepath)
+    if(packagepath.isEmpty())
         return;
 
     if( KMessageBox::warningContinueCancel(0,
@@ -306,14 +273,14 @@ void WdgScriptsManager::slotUninstallScript()
 
 void WdgScriptsManager::slotExecuteScript()
 {
-    ListItem* item = dynamic_cast<ListItem*>( scriptsList->currentItem() );
+    ListItem* item = dynamic_cast<ListItem*>( d->m_listview->currentItem() );
     if(item && item->action())
         item->action()->activate();
 }
 
 void WdgScriptsManager::slotUnloadScript()
 {
-    ListItem* item = dynamic_cast<ListItem*>( scriptsList->currentItem() );
+    ListItem* item = dynamic_cast<ListItem*>( d->m_listview->currentItem() );
     if(item && item->action()) {
         item->collection()->detach( item->action() );
         slotFillScriptsList();
@@ -322,7 +289,6 @@ void WdgScriptsManager::slotUnloadScript()
 
 void WdgScriptsManager::slotGetNewScript()
 {
-#ifdef KROSS_SUPPORT_NEWSTUFF
     const QString appname = KApplication::kApplication()->name();
     const QString type = QString("%1/script").arg(appname);
 
@@ -341,7 +307,6 @@ void WdgScriptsManager::slotGetNewScript()
 
     p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
     d->exec();
-#endif
 }
 
 void WdgScriptsManager::slotResourceInstalled()

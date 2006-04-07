@@ -84,12 +84,19 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         {
             // navigate in the iterator
             this->addFunction("next",
-                new Kross::Api::ConstFunction0< Iterator<_T_It> >(
-                    this, &Iterator<_T_It>::next ) );
+                new Kross::Api::ProxyFunction<
+                    Iterator<_T_It>, // instance
+                    bool (Iterator<_T_It>::*)(), // method
+                    Kross::Api::Variant // return-value
+                >(this, &Iterator<_T_It>::next));
+
             this->addFunction("isDone",
-                new Kross::Api::ConstFunction0< Iterator<_T_It> >(
-                    this, &Iterator<_T_It>::isDone ) );
-    
+                new Kross::Api::ProxyFunction<
+                    Iterator<_T_It>, // instance
+                    bool (Iterator<_T_It>::*)(), // method
+                    Kross::Api::Variant // return-value
+                >(this, &Iterator<_T_It>::isDone));
+
             // get/set value
             Q3ValueVector<KisChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();
             QString initiales = "";
@@ -101,26 +108,26 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                 {
                     case KisChannelInfo::UINT8:
                         this->addFunction("get"+ci->name(),
-                            new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::getChannelUINT8, ci->pos() ) );
                         this->addFunction("set"+ci->name(),
-                            new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::setChannelUINT8, ci->pos() ) );
                         break;
                     case KisChannelInfo::UINT16:
                         this->addFunction("get"+ci->name(),
-                            new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::getChannelUINT16, ci->pos() ) );
                         this->addFunction("set"+ci->name(),
-                            new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::setChannelUINT16, ci->pos() ) );
                         break;
                     case KisChannelInfo::FLOAT32:
                         this->addFunction("get"+ci->name(),
-                            new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::getChannelFLOAT, ci->pos() ) );
                         this->addFunction("set"+ci->name(),
-                            new Kross::Api::VarFunction1< Iterator<_T_It> , uint >(
+                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::setChannelFLOAT, ci->pos() ) );
                         break;
                     default:
@@ -174,17 +181,17 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         /**
          * Increment the positon, and go to the next pixel.
          */
-        Kross::Api::Object::Ptr next()
+        bool next()
         {
             ++(*m_it);
-            return new Kross::Api::Variant(m_it->isDone());
+            return m_it->isDone();
         }
         /**
          * Return true if the iterator is at the end, and that no more pixels are available.
          */
-        Kross::Api::Object::Ptr isDone()
+        bool isDone()
         {
-            return new Kross::Api::Variant(m_it->isDone());
+            return m_it->isDone();
         }
         Kross::Api::Object::Ptr getChannelUINT8(Kross::Api::List::Ptr, uint channelpos)
         {

@@ -84,18 +84,17 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         {
             // navigate in the iterator
             this->addFunction("next",
-                new Kross::Api::ProxyFunction<
-                    Iterator<_T_It>, // instance
-                    bool (Iterator<_T_It>::*)(), // method
-                    Kross::Api::Variant // return-value
-                >(this, &Iterator<_T_It>::next));
-
+                new Kross::Api::ProxyFunction<
+                    Iterator<_T_It>, // instance
+                    bool (Iterator<_T_It>::*)(), // method
+                    Kross::Api::Variant // return-value
+                >(this, &Iterator<_T_It>::next));
             this->addFunction("isDone",
-                new Kross::Api::ProxyFunction<
-                    Iterator<_T_It>, // instance
-                    bool (Iterator<_T_It>::*)(), // method
-                    Kross::Api::Variant // return-value
-                >(this, &Iterator<_T_It>::isDone));
+                new Kross::Api::ProxyFunction<
+                    Iterator<_T_It>, // instance
+                    bool (Iterator<_T_It>::*)(), // method
+                    Kross::Api::Variant // return-value
+                >(this, &Iterator<_T_It>::isDone));
 
             // get/set value
             Q3ValueVector<KisChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();

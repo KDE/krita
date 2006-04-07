@@ -61,9 +61,9 @@ const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
         }
         const int maxHeightWidth = 128; // ### TODO: some people would surely like to have 128x128
         if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
-            img = img.smoothScale( maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatioByExpanding );
+            img = img.scaled( maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation );
         }
-        m_pixmap.convertFromImage(img);
+        m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
         m_pixmap = instance->iconLoader()->loadIcon( m_picture, K3Icon::Desktop, 128 );
@@ -164,7 +164,7 @@ void KoTemplateTree::writeTemplateTree() {
             }
             else {
                 //kDebug() << "hidden" << endl;
-                if(group->dirs().count()==1 && !group->dirs().grep(localDir).isEmpty()) {
+                if(group->dirs().count()==1 && group->dirs().contains(localDir)) {
                     //kDebug() << "local only" << endl;
                     KIO::NetAccess::del(group->dirs().first(), 0);
                     //kDebug() << "removing: " << group->dirs().first() << endl;
@@ -251,7 +251,7 @@ void KoTemplateTree::readTemplates() {
             if( !d.exists() )
                 continue;
             QStringList files=d.entryList( QDir::Files | QDir::Readable, QDir::Name );
-            for(unsigned int i=0; i<files.count(); ++i) {
+            for(int i = 0; i < files.count(); ++i) {
                 QString filePath = *it + files[i];
                 //kDebug() << "filePath: " << filePath << endl;
                 QString icon;
@@ -280,7 +280,7 @@ void KoTemplateTree::readTemplates() {
                         //kDebug() << "icon2: " << icon << endl;
                         hidden=config.readEntry("X-KDE-Hidden", false);
                         defaultTemplate = config.readEntry("X-KDE-DefaultTemplate", false);
-                        measureSystem=config.readEntry("X-KDE-MeasureSystem").lower();
+                        measureSystem=config.readEntry("X-KDE-MeasureSystem").toLower();
                         //kDebug() << "hidden: " << hidden_str << endl;
                         templatePath=config.readPathEntry("URL");
                         //kDebug() << "Link to : " << templatePath << endl;
@@ -359,7 +359,7 @@ namespace KoTemplates {
 QString trimmed(const QString &string) {
 
     QString ret;
-    for(unsigned int i=0; i<string.length(); ++i) {
+    for(int i = 0; i < string.length(); ++i) {
         QChar tmp(string[i]);
         if(!tmp.isSpace())
             ret+=tmp;

@@ -25,7 +25,6 @@
 #include <qstring.h>
 #include <qvariant.h>
 #include <qobject.h>
-//#include <kdebug.h>
 #include <ksharedptr.h>
 
 namespace Kross { namespace Api {
@@ -84,7 +83,7 @@ namespace Kross { namespace Api {
              * \return the unique name this ScriptContainer is
              * reachable as.
              */
-            const QString& getName() const;
+            QString getName() const;
 
             /**
              * Set the name this ScriptContainer is reachable as.
@@ -94,7 +93,7 @@ namespace Kross { namespace Api {
             /**
              * Return the scriptcode this ScriptContainer holds.
              */
-            const QString& getCode() const;
+            QString getCode() const;
 
             /**
              * Set the scriptcode this ScriptContainer holds.
@@ -105,7 +104,7 @@ namespace Kross { namespace Api {
              * \return the name of the interpreter used
              * on \a execute.
              */
-            const QString& getInterpreterName() const;
+            QString getInterpreterName() const;
 
             /**
              * Set the name of the interpreter used
@@ -117,7 +116,7 @@ namespace Kross { namespace Api {
              * \return the filename which will be executed
              * on \a execute.
              */
-            const QString& getFile() const;
+            QString getFile() const;
 
             /**
              * Set the filename which will be executed
@@ -144,7 +143,7 @@ namespace Kross { namespace Api {
              * the \a Manager options are seeked for the \p name and
              * if not found either the \p defaultvalue is returned.
              */
-            const QVariant& getOption(const QString name, QVariant defaultvalue = QVariant(), bool recursive = false);
+            QVariant getOption(const QString name, QVariant defaultvalue = QVariant(), bool recursive = false);
 
             /**
              * Set the \a Interpreter::Option value.
@@ -177,7 +176,7 @@ namespace Kross { namespace Api {
             /**
              * Return a list of classes.
              */
-            const QStringList getClassNames();
+            QStringList getClassNames();
 
             /**
              * Create and return a new class instance.

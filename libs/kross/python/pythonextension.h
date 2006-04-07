@@ -21,6 +21,7 @@
 #define KROSS_PYTHON_EXTENSION_H
 
 #include "pythonconfig.h"
+
 #include "../api/object.h"
 #include "../api/list.h"
 #include "../api/dict.h"

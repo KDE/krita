@@ -28,7 +28,6 @@
 #include <qstring.h>
 #include <q3valuelist.h>
 #include <ksharedptr.h>
-#include <kdebug.h>
 
 namespace Kross { namespace Api {
 
@@ -57,7 +56,7 @@ namespace Kross { namespace Api {
              * \param arglist A list of arguments the callable
              *       object expects if it got called.
              */
-            Callable(const QString& name, Object::Ptr parent, const ArgumentList& arglist);
+            Callable(const QString& name, Object* parent, const ArgumentList& arglist);
 
             /**
              * Destructor.

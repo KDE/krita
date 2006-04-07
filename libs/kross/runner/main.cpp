@@ -26,7 +26,6 @@
 #include <qfile.h>
 
 // KDE
-#include <kdebug.h>
 #include <kinstance.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>

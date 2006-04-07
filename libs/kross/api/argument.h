@@ -57,7 +57,7 @@ namespace Kross { namespace Api {
              *
              * \return Name of the class this argument expects.
              */
-            const QString& getClassName();
+            const QString getClassName();
 
             /**
              * Return the optional default \a Object this class

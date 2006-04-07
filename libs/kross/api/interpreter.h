@@ -22,7 +22,6 @@
 
 #include <qstring.h>
 #include <qmap.h>
-#include <kdebug.h>
 
 #include "object.h"
 
@@ -90,7 +89,7 @@ namespace Kross { namespace Api {
             /**
              * \return the name of the interpreter. For example "python" or "kjs".
              */
-            const QString& getInterpretername();
+            const QString getInterpretername();
 
             /**
              * \return the file-wildcard used to determinate by this interpreter 
@@ -98,7 +97,7 @@ namespace Kross { namespace Api {
              * KGlobal::dirs()->findAllResources() as filtermask. For example
              * python just defines it as "*py".
              */
-            const QString& getWildcard();
+            const QString getWildcard();
 
             /**
              * List of mimetypes this interpreter supports.
@@ -123,7 +122,7 @@ namespace Kross { namespace Api {
              * doesn't exists an option with such a name, the \p defaultvalue 
              * is returned.
              */
-            const QVariant& getOptionValue(const QString name, QVariant defaultvalue = QVariant());
+            const QVariant getOptionValue(const QString name, QVariant defaultvalue = QVariant());
 
             /**
              * \return a map of options.

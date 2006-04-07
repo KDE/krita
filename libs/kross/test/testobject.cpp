@@ -21,8 +21,6 @@
 
 #include <iostream> // for std::out
 
-#include <kdebug.h>
-
 TestObject::TestObject()
     : QObject(0, "TestObject")
 {
@@ -31,8 +29,6 @@ TestObject::TestObject()
 TestObject::TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptcontainer)
     : QObject(parent, "TestObject")
 {
-    //kDebug() << "TestObject::TestObject Constructor." << endl;
-
     connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
     connect(this, SIGNAL(stdoutSignal(const QString&)), this, SLOT(stdoutSlot(const QString&)));
     connect(this, SIGNAL(stderrSignal(const QString&)), this, SLOT(stderrSlot(const QString&)));
@@ -48,58 +44,57 @@ TestObject::TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptc
 
 TestObject::~TestObject()
 {
-    //kDebug() << "TestObject::~TestObject Destructor." << endl;
 }
 
 uint TestObject::func1(uint i)
 {
-    kDebug() << "CALLED => TestObject::func1 i=" << i << endl;
+    krossdebug(QString("CALLED => TestObject::func1 i=%1").arg(i) );
     return i;
 }
 
 void TestObject::func2(QString s, int i)
 {
-    kDebug() << "CALLED => TestObject::func2 s=" << s << " i=" << i << endl;
+    krossdebug(QString("CALLED => TestObject::func2 s=%1 i=%2").arg(s).arg(i));
 }
 
 QString TestObject::func3(QString s, int i)
 {
-    kDebug() << "CALLED => TestObject::func3 s=" << s << " i=" << i << endl;
+    krossdebug(QString("CALLED => TestObject::func3 s=%1 i=%2").arg(s).arg(i));
     return s;
 }
 
 const QString& TestObject::func4(const QString& s, int i) const
 {
-    kDebug() << "CALLED => TestObject::func4 s=" << s << " i=" << i << endl;
+    krossdebug(QString("CALLED => TestObject::func4 s=" << s << " i=" << i << endl;
     return s;
 }
 
 void TestObject::testSlot()
 {
-    kDebug() << "TestObject::testSlot called" << endl;
+    krossdebug("TestObject::testSlot called");
     emit testSignal();
     emit testSignalString("This is the emitted TestObject::testSignalString(const QString&)");
 }
 
 void TestObject::testSlot2()
 {
-    kDebug() << "TestObject::testSlot2 called" << endl;
+    krossdebug("TestObject::testSlot2 called");
 }
 
 void TestObject::testSignalSlot()
 {
-    kDebug() << "TestObject::testSignalSlot called" << endl;
+    krossdebug("TestObject::testSignalSlot called");
 }
 
 void TestObject::stdoutSlot(const QString& s)
 {
-    kDebug() << "<stdout> " << s << endl;
+    krossdebug(QString("stdout: %1").arg(s));
     //std::cout << "<stdout> " << s.latin1() << std::endl;
 }
 
 void TestObject::stderrSlot(const QString& s)
 {
-    kDebug() << "<stderr> " << s << endl;
+    krossdebug(QString("stderr: %1").arg(s));
     //std::cout << "<stderr> " << s.latin1() << std::endl;
 }
 

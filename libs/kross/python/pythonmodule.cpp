@@ -21,7 +21,6 @@
 #include "pythoninterpreter.h"
 
 #include <qregexp.h>
-#include <kdebug.h>
 
 using namespace Kross::Python;
 
@@ -53,7 +52,7 @@ PythonModule::PythonModule(PythonInterpreter* interpreter)
     , d(new PythonModulePrivate())
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
-    kDebug() << QString("Kross::Python::PythonModule::Constructor") << endl;
+    krossdebug( QString("Kross::Python::PythonModule::Constructor") );
 #endif
 
     d->m_interpreter = interpreter;
@@ -66,7 +65,7 @@ PythonModule::PythonModule(PythonInterpreter* interpreter)
 PythonModule::~PythonModule()
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
-    kDebug() << QString("Kross::Python::PythonModule::Destructor name='%1'").arg(name().c_str()) << endl;
+    krossdebug( QString("Kross::Python::PythonModule::Destructor name='%1'").arg(name().c_str()) );
 #endif
 
     delete d;
@@ -82,16 +81,17 @@ Py::Object PythonModule::import(const Py::Tuple& args)
     if(args.size() > 0) {
         QString modname = args[0].as_string().c_str();
         if(modname.startsWith("kross")) {
-            kDebug() << QString("Kross::Python::PythonModule::import() module=%1").arg(modname) << endl;
-
+#ifdef KROSS_PYTHON_MODULE_DEBUG
+            krossdebug( QString("Kross::Python::PythonModule::import() module=%1").arg(modname) );
+#endif
             if( modname.find( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
-                kWarning() << QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) << endl;
+                krosswarning( QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) );
             }
             else {
                 Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule(modname);
                 if(module)
                     return PythonExtension::toPyObject( Kross::Api::Object::Ptr(module) );
-                kWarning() << QString("Loading of Kross module '%1' failed.").arg(modname) << endl;
+                krosswarning( QString("Loading of Kross module '%1' failed.").arg(modname) );
             }
 
         }

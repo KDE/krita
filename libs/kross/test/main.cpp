@@ -39,7 +39,6 @@
 #include <qfile.h>
 
 // KDE
-#include <kdebug.h>
 #include <kinstance.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -100,19 +99,16 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         /*Kross::Api::Object* o =*/ scriptcontainer->execute();
 
         // Call a function.
-        //kDebug()<<"--------------------------"<<endl;
         //scriptcontainer->callFunction("testobjectCallback" /*, Kross::Api::List* functionarguments */);
 
         // Call a class.
         /*
-        kDebug()<<"--------------------------"<<endl;
         Kross::Api::Object* testclassinstance = scriptcontainer->classInstance("testClass");
         if(testclassinstance) {
             QValueList<Kross::Api::Object*> ll;
             Kross::Api::Object* instancecallresult = testclassinstance->call("testClassFunction1", Kross::Api::List::create(ll));
-            //kDebug() << QString("testClass.testClassFunction1 returnvalue => '%1'").arg( instancecallresult.toString() ) << endl;
+            //krossdebug( QString("testClass.testClassFunction1 returnvalue => '%1'").arg( instancecallresult.toString() ) );
         }
-        kDebug()<<"--------------------------"<<endl;
         */
 
 
@@ -136,7 +132,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         sc2->execute();
     }
     catch(Kross::Api::Exception& e) {
-        kDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
+        krossdebug( QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) );
     }
     //delete sc2;
 */
@@ -167,7 +163,7 @@ int main(int argc, char **argv)
     QString scriptfilename = args->getOption("scriptfile");
 
     QFile f(QFile::encodeName(scriptfilename));
-    if(f.exists() && f.open(QIODevice::ReadOnly)) {
+    if(f.exists() && f.open(IO_ReadOnly)) {
         QString scriptcode = f.readAll();
         f.close();
 
@@ -185,7 +181,7 @@ int main(int argc, char **argv)
         }
     }
     else {
-        kWarning() << "Failed to load scriptfile: " << scriptfilename << endl;
+        krosswarning( QString("Failed to load scriptfile: %1").arg(scriptfilename) );
         result = -1;
     }
 

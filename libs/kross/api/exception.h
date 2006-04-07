@@ -65,7 +65,7 @@ namespace Kross { namespace Api {
              *        this exception object doesn't has a
              *        parent.
              */
-            Exception(const QString& error, long lineno = -1, Object::Ptr parent = Object::Ptr());
+            Exception(const QString& error, long lineno = -1, Object* parent = 0);
 
             /**
              * Destructor.
@@ -81,13 +81,13 @@ namespace Kross { namespace Api {
             /**
              * \return the error message.
              */
-            const QString& getError() const;
+            const QString getError() const;
 
             /**
              * \return a more detailed tracemessage or QString::null if
              * there is no trace avaiable.
              */
-            const QString& getTrace() const;
+            const QString getTrace() const;
 
             /**
              * Set a more detailed tracemessage.

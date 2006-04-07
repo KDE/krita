@@ -19,8 +19,6 @@
 
 #include "testaction.h"
 
-#include <kdebug.h>
-
 TestAction::TestAction(Kross::Api::ScriptContainer::Ptr scriptcontainer)
     : QWidget()
 {
@@ -41,11 +39,11 @@ TestAction::~TestAction()
 
 void TestAction::activatedAction1()
 {
-    kDebug() << "TestAction::activatedAction1()" << endl;
+    krossdebug("TestAction::activatedAction1()");
 }
 
 void TestAction::activatedAction2()
 {
-    kDebug() << "TestAction::activatedAction2()" << endl;
+    krossdebug("TestAction::activatedAction2()");
 }
 

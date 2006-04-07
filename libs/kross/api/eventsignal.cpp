@@ -25,11 +25,10 @@
 #include <qmetaobject.h>
 //Added by qt3to4:
 #include <Q3CString>
-//#include <private/qucom_p.h> // for the Qt QUObject API.
 
 using namespace Kross::Api;
 
-EventSignal::EventSignal(const QString& name, Object::Ptr parent, QObject* sender, Q3CString signal)
+EventSignal::EventSignal(const QString& name, Object* parent, QObject* sender, Q3CString signal)
     : Event<EventSignal>(name, parent)
     , m_sender(sender)
     , m_signal(signal) //QObject::normalizeSignalSlot(signal)
@@ -48,10 +47,11 @@ const QString EventSignal::getClassName() const
 Object::Ptr EventSignal::call(const QString& /*name*/, KSharedPtr<List> arguments)
 {
 #ifdef KROSS_API_EVENTSIGNAL_CALL_DEBUG
-    kDebug() << QString("EventSignal::call() name=%1 m_signal=%2 arguments=%3").arg(name).arg(m_signal).arg(arguments->toString()) << endl;
+    krossdebug( QString("EventSignal::call() name=%1 m_signal=%2 arguments=%3").arg(name).arg(m_signal).arg(arguments->toString()) );
 #endif
 
-/*TODO
+///\todo implement new QMetaObject-stuff
+/*
     QString n = m_signal;
 
     if(n.startsWith("2")) // Remove prefix of SIGNAL-macros
@@ -64,6 +64,8 @@ Object::Ptr EventSignal::call(const QString& /*name*/, KSharedPtr<List> argument
     QUObject* uo = QtObject::toQUObject(n, arguments);
     m_sender->qt_emit(signalid, uo); // emit the signal
     delete [] uo;
+
+    return new Variant(true, "Kross::Api::EventSignal::Bool");
 */
-    return Object::Ptr(new Variant(true, "Kross::Api::EventSignal::Bool"));
+    return Object::Ptr();
 }

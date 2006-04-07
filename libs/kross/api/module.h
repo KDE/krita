@@ -21,7 +21,6 @@
 #define KROSS_API_MODULE_H
 
 #include <qstring.h>
-#include <kdebug.h>
 
 #include "class.h"
 
@@ -52,7 +51,7 @@ namespace Kross { namespace Api {
             explicit Module(const QString& name)
                 : Class<Module>(name)
             {
-                kDebug() << QString("Kross::Api::Module %1 created").arg(name) << endl;
+                krossdebug( QString("Kross::Api::Module %1 created").arg(name) );
             }
 
             /**
@@ -60,7 +59,7 @@ namespace Kross { namespace Api {
              */
             virtual ~Module()
             {
-                kDebug() << QString("Kross::Api::Module %1 destroyed").arg(getName()) << endl;
+                krossdebug( QString("Kross::Api::Module %1 destroyed").arg(getName()) );
             }
 
             /**

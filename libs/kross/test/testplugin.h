@@ -37,17 +37,21 @@ class TestPluginObject : public Kross::Api::Class<TestPluginObject>
         virtual const QString getClassName() const;
 
     private:
-        uint internalfunc1(uint);
+        uint uintfunc(uint);
+        void voiduintfunc(uint);
+        int intfunc(int);
+        bool boolfunc(bool);
+        double doublefunc(double);
+        QCString cstringfunc(const QCString&);
+        QString stringfunc(const QString&);
+        QStringList stringlistfunc(const QStringList&);
+        QVariant variantfunc(const QVariant&);
 
-        Kross::Api::Object::Ptr func1(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr func2(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr func3(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr func4(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr func5(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr func6(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr func7(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr func8(Kross::Api::List::Ptr);
-        Kross::Api::Object::Ptr func9(Kross::Api::List::Ptr);
+        TestPluginObject* objectfunc(TestPluginObject* obj);
+
+        QString stringstringfunc(const QString&, const QString&);
+        uint uintdoublestringfunc(uint, double, const QString&);
+        QStringList stringlistbooluintdouble(const QStringList&, bool, uint, double);
 };
 
 class TestObject;

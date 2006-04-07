@@ -56,7 +56,7 @@ namespace Kross { namespace Api {
              * \param slot The slot of the receiver which this
              *       EventSlot points to.
              */
-            EventSlot(const QString& name, Object::Ptr parent, QObject* receiver, Q3CString slot);
+            EventSlot(const QString& name, Object* parent, QObject* receiver, Q3CString slot);
 
             /**
              * Destructor.
@@ -72,7 +72,7 @@ namespace Kross { namespace Api {
 /*
         private:
             EventManager* m_eventmanager;
-            QPointer<QObject> m_sender;
+            QGuardedPtr<QObject> m_sender;
             QCString m_signal;
             QCString m_slot;
             QString m_function;

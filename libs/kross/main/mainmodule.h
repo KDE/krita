@@ -86,7 +86,7 @@ namespace Kross { namespace Api {
             /**
              * \return the \a Exception this module throwed.
              */
-            Exception::Ptr getException();
+            Exception* getException();
 
             /**
              * Set the \a Exception this module throwed.
@@ -95,7 +95,7 @@ namespace Kross { namespace Api {
              *       NULL if you like to clear exception and to let
              *       \a hadException() return false.
              */
-            void setException(Exception::Ptr exception);
+            void setException(Exception* exception);
 
             /**
              * Returns if the defined child is avaible.
@@ -117,7 +117,7 @@ namespace Kross { namespace Api {
              * \return the newly added \a EventSignal instance
              *       which is now a child of this \a MainModule
              */
-            EventSignal::Ptr addSignal(const QString& name, QObject* sender, Q3CString signal);
+//            EventSignal::Ptr addSignal(const QString& name, QObject* sender, Q3CString signal);
 
             /**
              * Add a Qt slot to the \a Module by creating
@@ -132,7 +132,7 @@ namespace Kross { namespace Api {
              * \return the newly added \a EventSlot instance
              *       which is now a child of this \a MainModule
              */
-            EventSlot::Ptr addSlot(const QString& name, QObject* receiver, Q3CString slot);
+//            EventSlot::Ptr addSlot(const QString& name, QObject* receiver, Q3CString slot);
 
             /**
              * Add a \a QObject to the eventcollection. All

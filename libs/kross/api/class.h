@@ -24,7 +24,6 @@
 //#include <qvaluelist.h>
 //#include <qmap.h>
 #include <qobject.h>
-#include <kdebug.h>
 
 //#include "../main/krossconfig.h"
 #include "object.h"
@@ -48,13 +47,18 @@ namespace Kross { namespace Api {
         public:
 
             /**
+             * Shared pointer to implement reference-counting.
+             */
+            typedef KSharedPtr<T> Ptr;
+
+            /**
              * Constructor.
              *
              * \param name The name this class has.
              * \param parent The parent this class is child of
              *        or NULL if this class has no parent.
              */
-            Class(const QString& name, Object::Ptr parent = Object::Ptr())
+            Class(const QString& name, Object* parent = 0)
                 : Event<T>(name, parent)
             {
             }
@@ -66,10 +70,16 @@ namespace Kross { namespace Api {
             {
             }
 
+            template<typename TYPE>
+            static Object::Ptr toObject(TYPE t) { return t; }
+
+            operator T* () { return (T*)this; }
+            //operator Ptr () { return (T*)this; }
+
             /*
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
-                kDebug() << QString("Class::call(%1)").arg(name) << endl;
+                krossdebug( QString("Class::call(%1)").arg(name) );
                 return Event<T>::call(name, arguments);
             }
             */

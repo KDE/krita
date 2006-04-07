@@ -20,9 +20,14 @@
 #ifndef KROSS_PYTHON_CONFIG_H
 #define KROSS_PYTHON_CONFIG_H
 
+#include "../main/krossconfig.h"
+
 // Prevent warnings
 #if defined(_XOPEN_SOURCE)
-#undef _XOPEN_SOURCE
+  #undef _XOPEN_SOURCE
+#endif
+#if defined(_POSIX_C_SOURCE)
+  #undef _POSIX_C_SOURCE
 #endif
 
 // The Python.h needs to be included first.
@@ -69,7 +74,7 @@ namespace Python {
     // this number only if you really know what you're doing.
     #define KROSS_PYTHON_VERSION 1
 
-    // Enable kDebug()-debugging for Kross::Python::PythonScript
+    // Enable debugging for Kross::Python::PythonScript
     //#define KROSS_PYTHON_SCRIPT_CTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_DTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_INIT_DEBUG
@@ -78,10 +83,10 @@ namespace Python {
     //#define KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
     //#define KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
 
-    // Enable kDebug()-debugging for Kross::Python::PythonModule
+    // Enable debugging for Kross::Python::PythonModule
     //#define KROSS_PYTHON_MODULE_DEBUG
 
-    // Enable kDebug()-debugging for Kross::Python::PythonExtension
+    // Enable debugging for Kross::Python::PythonExtension
     //#define KROSS_PYTHON_EXTENSION_CTOR_DEBUG
     //#define KROSS_PYTHON_EXTENSION_DTOR_DEBUG
 

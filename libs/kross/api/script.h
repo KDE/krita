@@ -70,14 +70,14 @@ namespace Kross { namespace Api {
             /**
              * \return the \a Exception the script throwed.
              */
-            Exception::Ptr getException();
+            Exception* getException();
 
             /**
              * Set a new exception this script throwed.
              *
              * \param e The \a Exception .
              */
-            void setException(Exception::Ptr e);
+            void setException(Exception* e);
 
             /**
              * Clear previous exceptions. If called \a hadException()

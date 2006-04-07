@@ -21,20 +21,18 @@
 #include "testplugin.h"
 
 #include <qlabel.h>
-
+#include <qvbox.h>
 #include <qvgroupbox.h>
 //#include <qhgroupbox.h>
 #include <qcombobox.h>
 #include <qdir.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 
 #include <ktextedit.h>
 #include <kpushbutton.h>
-#include <kmenu.h>
+#include <kpopupmenu.h>
 #include <kmenubar.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
-#include <kvbox.h>
 
 TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode)
     : KMainWindow()
@@ -45,17 +43,17 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     manager->addModule( new TestPluginModule("krosstestpluginmodule") );
     m_scriptcontainer = manager->getScriptContainer("test");
 
-    KMenu *menuFile = new KMenu( this );
+    KPopupMenu *menuFile = new KPopupMenu( this );
     menuBar()->insertItem( "&File", menuFile );
 
     m_scriptextension = new Kross::Api::ScriptGUIClient(this, this);
 
     QString file = KGlobal::dirs()->findResource("appdata", "testscripting.rc");
     if(file.isNull())
-        file = QDir(QDir::currentPath()).filePath("testscripting.rc");
-    else kDebug()<<"-------------------------222222"<<endl;
+        file = QDir(QDir::currentDirPath()).filePath("testscripting.rc");
+    else krossdebug("-------------------------222222");
 
-    kDebug()<<"XML-file: "<<file<<endl;
+    krossdebug(QString("XML-file: %1").arg(file));
     m_scriptextension->setXMLFile(file);
 
     //menuFile->insertSeparator();
@@ -70,7 +68,7 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     if(scriptsaction) scriptsaction->plug(menuFile);
     //menuFile->insertItem( ( (KActionMenu*)m_scriptextension->action("scripts") )->popupMenu() );
 
-    KVBox* mainbox = new KVBox(this);
+    QVBox* mainbox = new QVBox(this);
 
     QVGroupBox* interpretergrpbox = new QVGroupBox("Interpreter", mainbox);
     QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
@@ -80,10 +78,10 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
 
     QVGroupBox* scriptgrpbox = new QVGroupBox("Scripting code", mainbox);
     m_codeedit = new KTextEdit(m_scriptcode, QString::null, scriptgrpbox);
-    m_codeedit->setWordWrap(Q3TextEdit::NoWrap);
+    m_codeedit->setWordWrap(QTextEdit::NoWrap);
     m_codeedit->setTextFormat(Qt::PlainText);
 
-    KHBox* btnbox = new KHBox(mainbox);
+    QHBox* btnbox = new QHBox(mainbox);
     KPushButton* execbtn = new KPushButton("Execute", btnbox);
     connect(execbtn, SIGNAL(clicked()), this, SLOT(execute()));
 
@@ -101,11 +99,11 @@ void TestWindow::execute()
     m_scriptcontainer->setCode(m_codeedit->text());
     Kross::Api::Object::Ptr result = m_scriptcontainer->execute();
     if(m_scriptcontainer->hadException()) {
-        kDebug() << "EXCEPTION => " << m_scriptcontainer->getException()->toString() << endl;
+        krossdebug( QString("EXCEPTION => %1").arg(m_scriptcontainer->getException()->toString());
     }
     else {
         QString s = result ? result->toString() : QString::null;
-        kDebug() << "DONE => " << s << endl;
+        krossdebug( QString("DONE => %1").arg(s) );
     }
 }
 

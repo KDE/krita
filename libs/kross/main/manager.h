@@ -24,7 +24,6 @@
 #include <qstringlist.h>
 #include <qmap.h>
 //#include <qvariant.h>
-//#include <kdebug.h>
 #include <ksharedptr.h>
 
 class QObject;

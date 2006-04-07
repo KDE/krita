@@ -42,7 +42,7 @@ namespace Kross { namespace Api {
      * This class publishs all SIGNAL's, SLOT's and Q_PROPERTY's
      * the QObject has.
      */
-    class QtObject : public Kross::Api::Class<QtObject>
+    class QtObject : public Class<QtObject>
     {
         public:
 
@@ -62,7 +62,7 @@ namespace Kross { namespace Api {
              *       instance has. If not defined then the
              *       \a QObject::name() will be used.
              */
-            QtObject(Object::Ptr parent, QObject* object, const QString& name = QString::null);
+            QtObject(Object* parent, QObject* object, const QString& name = QString::null);
 
             /**
              * Destructor.
@@ -95,7 +95,8 @@ namespace Kross { namespace Api {
             /// The wrapped QObject.
             QObject* m_object;
 
-#if 0
+///\todo implement new QMetaObject-stuff
+/*
             // QProperty's
 
             /// Return a list of property names.
@@ -129,7 +130,7 @@ namespace Kross { namespace Api {
             Kross::Api::Object::Ptr connectSignal(Kross::Api::List::Ptr);
             /// Disconnect signal from QObject slot.
             Kross::Api::Object::Ptr disconnectSignal(Kross::Api::List::Ptr);
-#endif
+*/
 
     };
 

@@ -39,21 +39,21 @@ Script::~Script()
 
 bool Script::hadException()
 {
-    return m_exception != Exception::Ptr();
+    return m_exception.data() != 0;
 }
 
-Exception::Ptr Script::getException()
+Exception* Script::getException()
 {
-    return m_exception;
+    return m_exception.data();
 }
 
-void Script::setException(Exception::Ptr e)
+void Script::setException(Exception* e)
 {
-    m_exception = e;
+    m_exception = Exception::Ptr(e);
 }
 
 void Script::clearException()
 {
-    m_exception = 0;
+    m_exception = Exception::Ptr(0);
 }
 

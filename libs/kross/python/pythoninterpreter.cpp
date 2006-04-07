@@ -25,7 +25,6 @@
 #include "../api/variant.h"
 
 #include <kglobal.h>
-#include <kdebug.h>
 #include <kstandarddirs.h>
 
 #if defined(Q_WS_WIN)
@@ -51,7 +50,7 @@ extern "C"
             return new Kross::Python::PythonInterpreter(info);
         }
         catch(Kross::Api::Exception::Ptr e) {
-            kWarning() << "krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception." << endl;
+            Kross::krosswarning("krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception.");
         }
         return 0;
     }
@@ -123,14 +122,14 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
     // Set the extended sys.path.
     PySys_SetPath( (char*) path.latin1() );
 
-    kDebug() << "Python ProgramName: " << Py_GetProgramName() << endl;
-    kDebug() << "Python ProgramFullPath: " << Py_GetProgramFullPath() << endl;
-    kDebug() << "Python Version: " << Py_GetVersion() << endl;
-    kDebug() << "Python Platform: " << Py_GetPlatform() << endl;
-    kDebug() << "Python Prefix: " << Py_GetPrefix() << endl;
-    kDebug() << "Python ExecPrefix: " << Py_GetExecPrefix() << endl;
-    kDebug() << "Python Path: " << Py_GetPath() << endl;
-    kDebug() << "Python System Path: " << path << endl;
+    krossdebug(QString("Python ProgramName: %1").arg(Py_GetProgramName()));
+    krossdebug(QString("Python ProgramFullPath: %1").arg(Py_GetProgramFullPath()));
+    krossdebug(QString("Python Version: %1").arg(Py_GetVersion()));
+    krossdebug(QString("Python Platform: %1").arg(Py_GetPlatform()));
+    krossdebug(QString("Python Prefix: %1").arg(Py_GetPrefix()));
+    krossdebug(QString("Python ExecPrefix: %1").arg(Py_GetExecPrefix()));
+    krossdebug(QString("Python Path: %1").arg(Py_GetPath()));
+    krossdebug(QString("Python System Path: %1").arg(path));
 
     // Initialize the main module.
     d->mainmodule = new PythonModule(this);

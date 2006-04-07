@@ -25,7 +25,7 @@
 
 using namespace Kross::Api;
 
-EventAction::EventAction(const QString& name, Object::Ptr parent, KAction* action)
+EventAction::EventAction(const QString& name, Object* parent, KAction* action)
     : Event<EventAction>(name.isEmpty() ? action->name() : name, parent)
     , m_action(action)
 {
@@ -52,7 +52,7 @@ const QString EventAction::getClassName() const
 /*
 Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
 {
-    kDebug() << QString("=============> EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) << endl;
+    krossdebug( QString("=============> EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) );
     //TODO
     return 0;
 }
@@ -60,7 +60,7 @@ Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
 
 Object::Ptr EventAction::getText(List::Ptr)
 {
-    return Object::Ptr(new Variant(m_action->text()));
+    return Object::Ptr( new Variant(m_action->text()) );
 }
 
 Object::Ptr EventAction::setText(List::Ptr args)
@@ -71,7 +71,7 @@ Object::Ptr EventAction::setText(List::Ptr args)
 
 Object::Ptr EventAction::isEnabled(List::Ptr)
 {
-    return Object::Ptr(new Variant(m_action->isEnabled()));
+    return Object::Ptr( new Variant(m_action->isEnabled()) );
 }
 
 Object::Ptr EventAction::setEnabled(List::Ptr args)

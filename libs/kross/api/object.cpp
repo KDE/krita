@@ -24,29 +24,27 @@
 #include "event.h"
 #include "exception.h"
 
-#include <kdebug.h>
-
 using namespace Kross::Api;
 
-Object::Object(const QString& name, Object::Ptr parent)
+Object::Object(const QString& name, Object* parent)
     : KShared()
     , m_name(name)
     , m_parent(parent)
 {
 #ifdef KROSS_API_OBJECT_CTOR_DEBUG
-    kDebug() << QString("Kross::Api::Object::Constructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) << endl;
+    krossdebug( QString("Kross::Api::Object::Constructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) );
 #endif
 }
 
 Object::~Object()
 {
 #ifdef KROSS_API_OBJECT_DTOR_DEBUG
-    kDebug() << QString("Kross::Api::Object::Destructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) << endl;
+    krossdebug( QString("Kross::Api::Object::Destructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) );
 #endif
     //removeAllChildren(); // not needed cause we use KShared to handle ref-couting and freeing.
 }
 
-const QString& Object::getName() const
+const QString Object::getName() const
 {
     return m_name;
 }
@@ -81,8 +79,8 @@ bool Object::addChild(Object::Ptr object, const QString& name)
     QString n = name.isNull() ? object->getName() : name;
 
 #ifdef KROSS_API_OBJECT_ADDCHILD_DEBUG
-    kDebug() << QString("Kross::Api::Object::addChild() object.name='%2' object.classname='%3'")
-        .arg(n).arg(object->getClassName()) << endl;
+    krossdebug( QString("Kross::Api::Object::addChild() object.name='%2' object.classname='%3'")
+        .arg(n).arg(object->getClassName()) );
 #endif
 
     if(n.isEmpty()) // prevent invalid items.
@@ -96,7 +94,7 @@ bool Object::addChild(Object::Ptr object, const QString& name)
 void Object::removeChild(const QString& name)
 {
 #ifdef KROSS_API_OBJECT_REMCHILD_DEBUG
-    kDebug() << QString("Kross::Api::Object::removeChild() name='%1'").arg(name) << endl;
+    krossdebug( QString("Kross::Api::Object::removeChild() name='%1'").arg(name) );
 #endif
     m_children.remove(name);
 }
@@ -104,7 +102,7 @@ void Object::removeChild(const QString& name)
 void Object::removeAllChildren()
 {
 #ifdef KROSS_API_OBJECT_REMCHILD_DEBUG
-    kDebug() << "Kross::Api::Object::removeAllChildren()" << endl;
+    krossdebug( "Kross::Api::Object::removeAllChildren()" );
 #endif
     m_children.clear();
 }
@@ -112,7 +110,7 @@ void Object::removeAllChildren()
 Object::Ptr Object::call(const QString& name, List::Ptr arguments)
 {
 #ifdef KROSS_API_OBJECT_CALL_DEBUG
-    kDebug() << QString("Kross::Api::Object::call(%1) name=%2 class=%3").arg(name).arg(getName()).arg(getClassName()) << endl;
+    krossdebug( QString("Kross::Api::Object::call(%1) name=%2 class=%3").arg(name).arg(getName()).arg(getClassName()) );
 #endif
 
     if(name.isEmpty()) // return a self-reference if no functionname is defined.
@@ -126,7 +124,7 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
     }
 
     // If there exists no such object return NULL.
-    kDebug() << QString("Object '%1' has no callable object named '%2'.").arg(getName()).arg(name) << endl;
+    krossdebug( QString("Object '%1' has no callable object named '%2'.").arg(getName()).arg(name) );
     return Object::Ptr();
 }
 

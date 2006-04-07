@@ -22,6 +22,7 @@
 
 #include "../main/krossconfig.h"
 #include "object.h"
+#include "variant.h"
 #include "list.h"
 
 #include <qstring.h>
@@ -29,73 +30,118 @@
 namespace Kross { namespace Api {
 
     /**
-     * The ProxyValue template-class is used to represent a single
-     * value (returnvalue or argument) of a \a ProxyFunction .
+     * \internal used struct to translate an argument-value dynamicly.
      */
-    template< class OBJECT, typename TYPE >
-    class ProxyValue
-    {
-        public:
+    template<class OBJ>
+    struct ProxyArgTranslator {
+        OBJ* m_object;
+        ProxyArgTranslator(Kross::Api::Object* obj) {
+            m_object = Kross::Api::Object::fromObject<OBJ>(obj);
+        }
+        template<typename T>
+        inline operator T () {
+            return m_object->operator T();
+        }
+    };
 
-            /**
-             * The C/C++ type of the value. This could be something
-             * like a int, uint or a const QString&.
-             */
-            typedef TYPE type;
-
-            /**
-             * The \a Kross::Api::Object or a from it inherited class
-             * that we should use internaly to wrap the C/C++ type. This
-             * could be e.g. a \a Kross::Api::Variant to wrap an uint.
-             */
-            typedef OBJECT object;
+    /**
+     * \internal used struct to translate a return-value dynamicly.
+     */
+    struct ProxyRetTranslator {
+        template<class RETURNOBJ, typename TYPE>
+        inline static Object::Ptr cast(TYPE t) {
+            return RETURNOBJ::toObject(t);
+        }
     };
 
     /**
      * The ProxyFunction template-class is used to publish any C/C++
      * method (not only slots) of a struct or class instance as a
-     * a \a Kross::Api::Function to Kross.
+     * a \a Function to Kross.
      *
      * With this class we don't need to have a method-wrapper for
      * each single function what a) should reduce the code needed for
      * wrappers and b) is more typesafe cause the connection to the
      * C/C++ method is done on compiletime.
+     *
+     * Example how a ProxyFunction may got used;
+     * @code
+     * #include "../api/class.h"
+     * #include "../api/proxy.h"
+     * // The class which should be published.
+     * class MyClass : public Kross::Api::Class<MyClass> {
+     *     public:
+     *         MyClass(const QString& name) : Kross::Api::Class<MyClass>(name) {
+     *             // publish the function myfunc, so that scripting-code is able
+     *             // to call that method.
+     *             this->addProxyFunction <
+     *                 Kross::Api::Variant, // the uint returnvalue is handled with Variant.
+     *                 Kross::Api::Variant, // the QString argument is handled with Variant too.
+     *                 MyClass // the MyClass* is handled implicit by our class.
+     *             > ( "myfuncname", // the name the function should be published as.
+     *                 this, // pointer to the class-instance which has the method.
+     *                 &TestPluginObject::myfunc ); // pointer to the method itself.
+     *         }
+     *         virtual ~MyClass() {}
+     *         virtual const QString getClassName() const { return "MyClass"; }
+     *     private:
+     *         uint myfunc(const QCString&, MyClass* myotherclass) {
+     *             // This method will be published to the scripting backend. So, scripting
+     *             // code is able to call this method.
+     *         }
+     * }
+     * @endcode
      */
     template< class INSTANCE, // the objectinstance
               typename METHOD, // the method-signature
-              class RET  = ProxyValue<Kross::Api::Object,void>, // returnvalue
-              class ARG1 = ProxyValue<Kross::Api::Object,void>, // first argument
-              class ARG2 = ProxyValue<Kross::Api::Object,void>, // second argument
-              class ARG3 = ProxyValue<Kross::Api::Object,void>, // forth argument
-              class ARG4 = ProxyValue<Kross::Api::Object,void> > // fifth argument
+              class RETURNOBJ,// = Kross::Api::Object, // return-value
+              class ARG1OBJ = Kross::Api::Object, // first parameter-value
+              class ARG2OBJ = Kross::Api::Object, // second parameter-value
+              class ARG3OBJ = Kross::Api::Object, // theird parameter-value
+              class ARG4OBJ = Kross::Api::Object // forth parameter-value
+    >
     class ProxyFunction : public Function
     {
+            template<class PROXYFUNC, typename RETURNTYPE>
+            friend struct ProxyFunctionCaller;
         private:
             /// Pointer to the objectinstance which method should be called.
             INSTANCE* m_instance;
             /// Pointer to the method which should be called.
             const METHOD m_method;
 
+            /// First default argument.
+            KSharedPtr<ARG1OBJ> m_defarg1;
+            /// Second default argument.
+            KSharedPtr<ARG2OBJ> m_defarg2;
+            /// Theird default argument.
+            KSharedPtr<ARG3OBJ> m_defarg3;
+            /// Forth default argument.
+            KSharedPtr<ARG4OBJ> m_defarg4;
+
             /**
-             * Internal used struct that does the execution of the wrapped method.
+             * \internal used struct that does the execution of the wrapped
+             * method.
              */
-            template<class PROXYFUNC, typename RETURNRYPE>
+            template<class PROXYFUNC, typename RETURNTYPE>
             struct ProxyFunctionCaller {
-                inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2, typename ARG3::type arg3, typename ARG4::type arg4) {
-                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2,arg3,arg4) );
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2, Kross::Api::Object* arg3, Kross::Api::Object* arg4) {
+                    return ProxyRetTranslator::cast<RETURNTYPE>(
+                        ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG2OBJ>(arg2), ProxyArgTranslator<ARG3OBJ>(arg3), ProxyArgTranslator<ARG4OBJ>(arg4) )
+                    );
                 }
             };
 
             /**
-             * Template-specialization of the \a ProxyFunctionCaller above which
-             * handles void-returnvalues. We need to handle this special case
-             * seperatly cause compilers deny to return void.
+             * \internal template-specialization of the \a ProxyFunctionCaller
+             * above which handles void-returnvalues. We need to handle this
+             * special case seperatly cause compilers deny to return void :-/
              */
             template<class PROXYFUNC>
             struct ProxyFunctionCaller<PROXYFUNC, void> {
-                inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2, typename ARG3::type arg3, typename ARG4::type arg4) {
-                    ( (self->m_instance)->*(self->m_method) )(arg1,arg2,arg3,arg4);
-                    return 0;
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2, Kross::Api::Object* arg3, Kross::Api::Object* arg4) {
+                    ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG1OBJ>(arg2), ProxyArgTranslator<ARG3OBJ>(arg3), ProxyArgTranslator<ARG4OBJ>(arg4) );
+                    return 0; // void return-value
                 }
             };
 
@@ -108,8 +154,8 @@ namespace Kross { namespace Api {
              *        belongs to.
              * \param method The method-pointer.
              */
-            ProxyFunction(INSTANCE* instance, const METHOD& method)
-                : m_instance(instance), m_method(method) {}
+            ProxyFunction(INSTANCE* instance, const METHOD& method, ARG1OBJ* defarg1 = 0, ARG2OBJ* defarg2 = 0, ARG3OBJ* defarg3 = 0, ARG4OBJ* defarg4 = 0)
+                : m_instance(instance), m_method(method), m_defarg1(defarg1), m_defarg2(defarg2), m_defarg3(defarg3), m_defarg4(defarg4) {}
 
             /**
              * This method got called if the wrapped method should be executed.
@@ -121,155 +167,162 @@ namespace Kross { namespace Api {
              *        if the function has void as returnvalue).
              */
             Object::Ptr call(List::Ptr args) {
-                return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this,
-                    Kross::Api::Object::fromObject<typename ARG1::object>(args->item(0))->operator typename ARG1::type(),
-                    Kross::Api::Object::fromObject<typename ARG2::object>(args->item(1))->operator typename ARG2::type(),
-                    Kross::Api::Object::fromObject<typename ARG3::object>(args->item(2))->operator typename ARG3::type(),
-                    Kross::Api::Object::fromObject<typename ARG4::object>(args->item(3))->operator typename ARG4::type()
+                return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this,
+                    args->item(0, m_defarg1),
+                    args->item(1, m_defarg2),
+                    args->item(2, m_defarg3),
+                    args->item(3, m_defarg4)
                 );
             }
-
-            template<class PROXYFUNC, typename RETURNRYPE>
-            friend struct ProxyFunctionCaller;
     };
 
     /**
-     * Template-specialization of the \a ProxyFunction above with 3 arguments.
+     * Template-specialization of the \a ProxyFunction above with three arguments.
      */
-    template<class INSTANCE, typename METHOD, class RET, class ARG1, class ARG2, class ARG3>
-    class ProxyFunction<INSTANCE, METHOD, RET, ARG1, ARG2, ARG3 > : public Function
+    template<class INSTANCE, typename METHOD, class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class ARG3OBJ>
+    class ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ, ARG3OBJ> : public Function
     {
+            template<class PROXYFUNC, typename RETURNTYPE>
+            friend struct ProxyFunctionCaller;
         private:
             INSTANCE* m_instance;
             const METHOD m_method;
+            KSharedPtr<ARG1OBJ> m_defarg1;
+            KSharedPtr<ARG2OBJ> m_defarg2;
+            KSharedPtr<ARG3OBJ> m_defarg3;
 
-            template<class PROXYFUNC, typename RETURNRYPE>
+            template<class PROXYFUNC, typename RETURNTYPE>
             struct ProxyFunctionCaller {
-                inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2, typename ARG3::type arg3) {
-                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2,arg3) );
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2, Kross::Api::Object* arg3) {
+                    return ProxyRetTranslator::cast<RETURNTYPE>(
+                        ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG2OBJ>(arg2), ProxyArgTranslator<ARG3OBJ>(arg3) )
+                    );
                 }
             };
 
             template<class PROXYFUNC>
             struct ProxyFunctionCaller<PROXYFUNC, void> {
-                inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2, typename ARG3::type arg3) {
-                    ( (self->m_instance)->*(self->m_method) )(arg1,arg2,arg3);
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2, Kross::Api::Object* arg3) {
+                    ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG2OBJ>(arg2), ProxyArgTranslator<ARG3OBJ>(arg3) );
                     return 0;
                 }
             };
 
         public:
-            ProxyFunction(INSTANCE* instance, const METHOD& method)
-                : m_instance(instance), m_method(method) {}
+            ProxyFunction(INSTANCE* instance, const METHOD& method, ARG1OBJ* defarg1 = 0, ARG2OBJ* defarg2 = 0, ARG3OBJ* defarg3 = 0)
+                : m_instance(instance), m_method(method), m_defarg1(defarg1), m_defarg2(defarg2), m_defarg3(defarg3) {}
             Object::Ptr call(List::Ptr args) {
-                return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this,
-                    Kross::Api::Object::fromObject<typename ARG1::object>(args->item(0))->operator typename ARG1::type(),
-                    Kross::Api::Object::fromObject<typename ARG2::object>(args->item(1))->operator typename ARG2::type(),
-                    Kross::Api::Object::fromObject<typename ARG3::object>(args->item(2))->operator typename ARG3::type()
+                return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this,
+                    args->item(0, m_defarg1), args->item(1, m_defarg2), args->item(2, m_defarg3)
                 );
             }
-
-            template<class PROXYFUNC, typename RETURNRYPE>
-            friend struct ProxyFunctionCaller;
     };
 
     /**
-     * Template-specialization of the \a ProxyFunction above with 2 arguments.
+     * Template-specialization of the \a ProxyFunction above with two arguments.
      */
-    template<class INSTANCE, typename METHOD, class RET, class ARG1, class ARG2>
-    class ProxyFunction<INSTANCE, METHOD, RET, ARG1, ARG2 > : public Function
+    template<class INSTANCE, typename METHOD, class RETURNOBJ, class ARG1OBJ, class ARG2OBJ>
+    class ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ> : public Function
     {
+            template<class PROXYFUNC, typename RETURNTYPE>
+            friend struct ProxyFunctionCaller;
         private:
             INSTANCE* m_instance;
             const METHOD m_method;
+            KSharedPtr<ARG1OBJ> m_defarg1;
+            KSharedPtr<ARG2OBJ> m_defarg2;
 
-            template<class PROXYFUNC, typename RETURNRYPE>
+            template<class PROXYFUNC, typename RETURNTYPE>
             struct ProxyFunctionCaller {
-                inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2) {
-                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2) );
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2) {
+                    return ProxyRetTranslator::cast<RETURNTYPE>(
+                        ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG2OBJ>(arg2) )
+                    );
                 }
             };
 
             template<class PROXYFUNC>
             struct ProxyFunctionCaller<PROXYFUNC, void> {
-                inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2) {
-                    ( (self->m_instance)->*(self->m_method) )(arg1,arg2);
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2) {
+                    ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG2OBJ>(arg2) );
                     return 0;
                 }
             };
 
         public:
-            ProxyFunction(INSTANCE* instance, const METHOD& method)
-                : m_instance(instance), m_method(method) {}
+            ProxyFunction(INSTANCE* instance, const METHOD& method, ARG1OBJ* defarg1 = 0, ARG2OBJ* defarg2 = 0)
+                : m_instance(instance), m_method(method), m_defarg1(defarg1), m_defarg2(defarg2) {}
             Object::Ptr call(List::Ptr args) {
-                return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this,
-                    Kross::Api::Object::fromObject<typename ARG1::object>(args->item(0))->operator typename ARG1::type(),
-                    Kross::Api::Object::fromObject<typename ARG2::object>(args->item(1))->operator typename ARG2::type()
+                return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this,
+                    args->item(0, m_defarg1), args->item(1, m_defarg2)
                 );
             }
-
-            template<class PROXYFUNC, typename RETURNRYPE>
-            friend struct ProxyFunctionCaller;
     };
 
     /**
      * Template-specialization of the \a ProxyFunction above with one argument.
      */
-    template<class INSTANCE, typename METHOD, class RET, class ARG1>
-    class ProxyFunction<INSTANCE, METHOD, RET, ARG1 > : public Function
+    template<class INSTANCE, typename METHOD, class RETURNOBJ, class ARG1OBJ>
+    class ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ> : public Function
     {
+            template<class PROXYFUNC, typename RETURNTYPE>
+            friend struct ProxyFunctionCaller;
         private:
             INSTANCE* m_instance;
             const METHOD m_method;
+            KSharedPtr<ARG1OBJ> m_defarg1;
 
-            template<class PROXYFUNC, typename RETURNRYPE>
+            template<class PROXYFUNC, typename RETURNTYPE>
             struct ProxyFunctionCaller {
-                inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1) {
-                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )(arg1) );
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1) {
+                    return ProxyRetTranslator::cast<RETURNTYPE>(
+                        ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1) )
+                    );
                 }
             };
 
             template<class PROXYFUNC>
             struct ProxyFunctionCaller<PROXYFUNC, void> {
-                inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1) {
-                    ( (self->m_instance)->*(self->m_method) )(arg1);
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1) {
+                    ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1) );
                     return 0;
                 }
             };
 
         public:
-            ProxyFunction(INSTANCE* instance, const METHOD& method)
-                : m_instance(instance), m_method(method) {}
+            ProxyFunction(INSTANCE* instance, const METHOD& method, ARG1OBJ* defarg1 = 0)
+                : m_instance(instance), m_method(method), m_defarg1(defarg1) {}
             Object::Ptr call(List::Ptr args) {
-                return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this,
-                    Kross::Api::Object::fromObject<typename ARG1::object>(args->item(0))->operator typename ARG1::type()
+                return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this,
+                    args->item(0, m_defarg1)
                 );
             }
-
-            template<class PROXYFUNC, typename RETURNRYPE>
-	    friend struct ProxyFunctionCaller;
     };
 
     /**
      * Template-specialization of the \a ProxyFunction above with no arguments.
      */
-    template<class INSTANCE, typename METHOD, class RET>
-    class ProxyFunction<INSTANCE, METHOD, RET > : public Function
+    template<class INSTANCE, typename METHOD, class RETURNOBJ>
+    class ProxyFunction<INSTANCE, METHOD, RETURNOBJ> : public Function
     {
+            template<class PROXYFUNC, typename RETURNTYPE>
+            friend struct ProxyFunctionCaller;
         private:
             INSTANCE* m_instance;
             const METHOD m_method;
 
-            template<class PROXYFUNC, typename RETURNRYPE>
+            template<class PROXYFUNC, typename RETURNTYPE>
             struct ProxyFunctionCaller {
                 inline static Object::Ptr exec(PROXYFUNC* self) {
-                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )() );
+                    return ProxyRetTranslator::cast<RETURNTYPE>(
+                        ( (self->m_instance)->*(self->m_method) )()
+                    );
                 }
             };
 
             template<class PROXYFUNC>
             struct ProxyFunctionCaller<PROXYFUNC, void> {
-                inline static Object::Ptr exec(PROXYFUNC* self) {
+                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1) {
                     ( (self->m_instance)->*(self->m_method) )();
                     return 0;
                 }
@@ -279,11 +332,8 @@ namespace Kross { namespace Api {
             ProxyFunction(INSTANCE* instance, const METHOD& method)
                 : m_instance(instance), m_method(method) {}
             Object::Ptr call(List::Ptr) {
-                return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this);
+                return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this);
             }
-
-            template<class PROXYFUNC, typename RETURNRYPE>
-            friend struct ProxyFunctionCaller;
     };
 
 }}

@@ -43,7 +43,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            EventScript(const QString& name, Object::Ptr parent);
+            EventScript(const QString& name, Object* parent);
 
             /**
              * Destructor.

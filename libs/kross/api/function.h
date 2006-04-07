@@ -28,74 +28,76 @@
 
 namespace Kross { namespace Api {
 
+    /**
+     * The base class for functions. Classes like \a Function0 and
+     * \a ProxyFunction inheritate this class.
+     */
     class Function
     {
         public:
+
+            /**
+             * Each function needs to implement the call-method which will
+             * be executed if the function itself should be executed.
+             */
             virtual Object::Ptr call(List::Ptr) = 0;
+
+            /**
+             * Destructor.
+             */
             virtual ~Function() {}
     };
 
+    /**
+     * This class implements the most abstract way to work with functions. It
+     * implements pointing to functions of the form
+     * @code
+     * Kross::Api::Object::Ptr myfunc(Kross::Api::List::Ptr)
+     * @endcode
+     * where a low-level \a Object got returned that represents the returnvalue
+     * of the function-call, and a \a List instance is passed that may contain
+     * optional \a Object instances as parameters.
+     */
     template<class INSTANCE>
-    class ConstFunction0 : public Function
-    {
-        private:
-            typedef Object::Ptr(INSTANCE::*Method)();
-            INSTANCE* m_instance;
-            Method m_method;
-        public:
-            ConstFunction0(INSTANCE* instance, Method method)
-                : m_instance(instance), m_method(method) {}
-            Object::Ptr call(List::Ptr)
-                { return (m_instance->*m_method)(); }
-    };
-
-    template<class INSTANCE, typename P1>
-    class ConstFunction1 : public Function
-    {
-        private:
-            typedef Object::Ptr(INSTANCE::*Method)(P1);
-            INSTANCE* m_instance;
-            Method m_method;
-            P1 m_p1;
-        public:
-            ConstFunction1(INSTANCE* instance, Method method, P1 p1)
-                : m_instance(instance), m_method(method), m_p1(p1) {}
-            Object::Ptr call(List::Ptr)
-                { return (m_instance->*m_method)(m_p1); }
-    };
-
-    template<class INSTANCE, typename P1, typename P2>
-    class ConstFunction2 : public Function
-    {
-        private:
-            typedef Object::Ptr(INSTANCE::*Method)(P1, P2);
-            INSTANCE* m_instance;
-            Method m_method;
-            P1 m_p1;
-            P2 m_p2;
-        public:
-            ConstFunction2(INSTANCE* instance, Method method, P1 p1, P2 p2)
-                : m_instance(instance), m_method(method), m_p1(p1), m_p2(p2) {}
-            Object::Ptr call(List::Ptr)
-                { return (m_instance->*m_method)(m_p1, m_p2); }
-    };
-
-    template<class INSTANCE>
-    class VarFunction0 : public Function
+    class Function0 : public Function
     {
         private:
             typedef Object::Ptr(INSTANCE::*Method)(List::Ptr);
             INSTANCE* m_instance;
             Method m_method;
         public:
-            VarFunction0(INSTANCE* instance, Method method)
+            Function0(INSTANCE* instance, Method method)
                 : m_instance(instance), m_method(method) {}
             Object::Ptr call(List::Ptr args)
                 { return (m_instance->*m_method)(args); }
     };
 
+    /**
+     * Specialization of the \a Function0 which takes as additional parameter
+     * a const-value. This const-value will be hidden for the scripting backend
+     * and is only passed through on function-call.
+     *
+     * So, this class could be as example used to point to a function like;
+     * @code
+     * Kross::Api::Object::Ptr myfunc(Kross::Api::List::Ptr, int myinteger)
+     * @endcode
+     * and then we are able to point to the function with something like
+     * @code
+     * this->addFunction("myfunctionname",
+     *     new Kross::Api::Function1< MYCLASS, int >(
+     *         this, // pointer to an instance of MYCLASS
+     *         &MYCLASS::myfunction, // the method which should be wrapped
+     *         17 // the const-value we like to pass to the function.
+     *         ) );
+     * @endcode
+     * The defined integer myinteger which has the value 17 will be passed
+     * transparently to myfunc. The scripting-backend won't know that there
+     * exists such an additional integer at all. So, it's hidden and the user
+     * aka the scripting code won't be able to manipulate that additional
+     * value.
+     */
     template<class INSTANCE, typename P1>
-    class VarFunction1 : public Function
+    class Function1 : public Function
     {
         private:
             typedef Object::Ptr(INSTANCE::*Method)(List::Ptr, P1);
@@ -103,14 +105,17 @@ namespace Kross { namespace Api {
             Method m_method;
             P1 m_p1;
         public:
-            VarFunction1(INSTANCE* instance, Method method, P1 p1)
+            Function1(INSTANCE* instance, Method method, P1 p1)
                 : m_instance(instance), m_method(method), m_p1(p1) {}
             Object::Ptr call(List::Ptr args)
                 { return (m_instance->*m_method)(args, m_p1); }
     };
 
+    /**
+     * Same as \a Function1 but with 2 additional parameters.
+     */
     template<class INSTANCE, typename P1, typename P2>
-    class VarFunction2 : public Function
+    class Function2 : public Function
     {
         private:
             typedef Object::Ptr(INSTANCE::*Method)(List::Ptr, P1, P2);
@@ -119,7 +124,7 @@ namespace Kross { namespace Api {
             P1 m_p1;
             P2 m_p2;
         public:
-            VarFunction2(INSTANCE* instance, Method method, P1 p1, P2 p2)
+            Function2(INSTANCE* instance, Method method, P1 p1, P2 p2)
                 : m_instance(instance), m_method(method), m_p1(p1), m_p2(p2) {}
             Object::Ptr call(List::Ptr args)
                 { return (m_instance->*m_method)(args, m_p1, m_p2); }

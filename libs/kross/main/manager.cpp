@@ -32,7 +32,6 @@
 #include <qfile.h>
 #include <qregexp.h>
 
-#include <kdebug.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kstaticdeleter.h>
@@ -121,7 +120,7 @@ Manager::Manager()
                                                      )
                                  );
     } else {
-        kDebug() << "Ruby interpreter for kross in unavailable" << endl;
+        krossdebug("Ruby interpreter for kross in unavailable");
     }
 #endif
 }
@@ -170,15 +169,15 @@ ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
     //ScriptContainer script(this, scriptname);
     //d->m_scriptcontainers.replace(scriptname, scriptcontainer);
 
-    return ScriptContainer::Ptr(scriptcontainer);
+    return ScriptContainer::Ptr( scriptcontainer );
 }
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
 {
-    setException( Exception::Ptr() ); // clear previous exceptions
+    setException(0); // clear previous exceptions
 
     if(! d->interpreterinfos.contains(interpretername)) {
-        setException( Exception::Ptr(new Exception(QString(i18n("No such interpreter '%1'")).arg(interpretername))) );
+        setException( new Exception(QString(i18n("No such interpreter '%1'")).arg(interpretername)) );
         return 0;
     }
 
@@ -215,22 +214,22 @@ Module::Ptr Manager::loadModule(const QString& modulename)
         if(module)
             return module;
         else
-            kDebug() << QString("Manager::loadModule(%1) =======> Modulename registered, but module is invalid!").arg(modulename) << endl;
+            krossdebug( QString("Manager::loadModule(%1) =======> Modulename registered, but module is invalid!").arg(modulename) );
     }
 
     KLibLoader* loader = KLibLoader::self();
     KLibrary* lib = loader->globalLibrary( modulename.latin1() );
     if(! lib) {
-        kWarning() << QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) << endl;
+        krosswarning( QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) );
         return Module::Ptr();
     }
-    kDebug() << QString("Successfully loaded module '%1'").arg(modulename) << endl;
+    krossdebug( QString("Successfully loaded module '%1'").arg(modulename) );
 
     def_module_func func;
     func = (def_module_func) lib->symbol("init_module");
 
     if(! func) {
-        kWarning() << QString("Failed to determinate init function in module '%1'").arg(modulename) << endl;
+        krosswarning( QString("Failed to determinate init function in module '%1'").arg(modulename) );
         return Module::Ptr();
     }
 
@@ -238,20 +237,20 @@ Module::Ptr Manager::loadModule(const QString& modulename)
         module = (Kross::Api::Module*) (func)(this);
     }
     catch(Kross::Api::Exception::Ptr e) {
-        kWarning() << e->toString() << endl;
+        krosswarning( e->toString() );
         module = Module::Ptr();
     }
     lib->unload();
 
     if(! module) {
-        kWarning() << QString("Failed to load module '%1'").arg(modulename) << endl;
+        krosswarning( QString("Failed to load module '%1'").arg(modulename) );
         return Module::Ptr();
     }
 
     // Don't remember module cause we like to have freeing it handled by the caller.
     //d->modules.replace(modulename, module);
 
-    //kDebug() << QString("Kross::Api::Manager::loadModule modulename='%1' module='%2'").arg(modulename).arg(module->toString()) << endl;
+    //krossdebug( QString("Kross::Api::Manager::loadModule modulename='%1' module='%2'").arg(modulename).arg(module->toString()) );
     return module;
 }
 

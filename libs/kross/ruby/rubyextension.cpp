@@ -49,14 +49,14 @@ VALUE RubyExtensionPrivate::s_krossException = 0;
 VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-    kDebug() << "method_missing(argc, argv, self)" << endl;
+    krossdebug("method_missing(argc, argv, self)");
 #endif
     if(argc < 1)
     {
         return 0;
     }
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-    kDebug() << "Converting self to Kross::Api::Object" << endl;
+    krossdebug("Converting self to Kross::Api::Object");
 #endif
     
     Kross::Api::Object::Ptr object = toObject( self );
@@ -68,7 +68,7 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
     QString funcname = rb_id2name(SYM2ID(argv[0]));
     Q3ValueList<Api::Object::Ptr> argsList;
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-    kDebug() << "Building arguments list for function : " << funcname << " there are " << (argc-1) << " arguments." << endl;
+    krossdebug(QString("Building arguments list for function: %1 there are %2 arguments.").arg(funcname).arg(argc-1));
 #endif
     for(int i = 1; i < argc; i++)
     {
@@ -80,20 +80,20 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
         try { // We can't let a C++ exceptions propagate in the C mechanism
             if(object->hasChild(funcname)) {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                kDebug() << QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) << endl;
+                krossdebug( QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) );
 #endif
                 result = object->getChild(funcname)->call(QString::null, new Api::List(argsList));
             }
             else {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-                kDebug() << QString("Kross::Ruby::RubyExtension::method_missing try to call function with name '%1' in object '%2'.").arg(funcname).arg(object->getName()) << endl;
+                krossdebug( QString("Kross::Ruby::RubyExtension::method_missing try to call function with name '%1' in object '%2'.").arg(funcname).arg(object->getName()) );
 #endif
                 result = object->call(funcname, new Api::List(argsList));
             }
         } catch(Kross::Api::Exception::Ptr exception)
         {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-            kDebug() << "c++ exception catched, raise a ruby error" << endl;
+            krossdebug("c++ exception catched, raise a ruby error");
 #endif
             throw convertFromException(exception);
         }  catch(...)
@@ -108,7 +108,7 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
 
 void RubyExtension::delete_object(void* object)
 {
-    kDebug() << "delete_object" << endl;
+    krossdebug("delete_object");
     RubyExtension* obj = static_cast<RubyExtension*>(object);
     if(obj)
         delete obj;
@@ -129,7 +129,7 @@ RubyExtension::RubyExtension(Kross::Api::Object::Ptr object) : d(new RubyExtensi
 
 RubyExtension::~RubyExtension()
 {
-    kDebug() << "Delete RubyExtension" << endl;
+    krossdebug("Delete RubyExtension");
     delete d;
 }
 
@@ -185,14 +185,14 @@ VALUE RubyExtension::convertFromException(Kross::Api::Exception::Ptr exc)
 Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
 {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-    kDebug() << "RubyExtension::toObject of type " << TYPE(value) << endl;
+    krossdebug(QString("RubyExtension::toObject of type %1").arg(TYPE(value)));
 #endif
     switch( TYPE( value ) )
     {
         case T_DATA:
         {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-            kDebug() << "Object is a Kross Object" << endl;
+            krossdebug("Object is a Kross Object");
 #endif
             if( isOfObjectType(value) )
             {
@@ -201,7 +201,7 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
                 Kross::Api::Object::Ptr object = objectExtension->d->m_object;
                 return object;
             } else {
-                kWarning() << "Cannot yet convert standard ruby type to kross object" << endl;
+                krosswarning("Cannot yet convert standard ruby type to kross object");
                 return 0;
             }
         }
@@ -252,7 +252,7 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
         case T_MODULE:
         case T_ICLASS:
         case T_CLASS:
-            kWarning() << QString("This ruby type '%1' cannot be converted to a Kross::Api::Object").arg(TYPE(value)) << endl;
+            krosswarning(QString("This ruby type '%1' cannot be converted to a Kross::Api::Object").arg(TYPE(value)));
         default:
         case T_NIL:
             return 0;
@@ -330,7 +330,7 @@ VALUE RubyExtension::toVALUE(const QVariant& variant)
         case QVariant::ULongLong:
             return UINT2NUM((unsigned long)variant.toULongLong());
         default: {
-            kWarning() << QString("Kross::Ruby::RubyExtension::toVALUE(QVariant) Not possible to convert the QVariant type '%1' to a VALUE.").arg(variant.typeName()) << endl;
+            krosswarning( QString("Kross::Ruby::RubyExtension::toVALUE(QVariant) Not possible to convert the QVariant type '%1' to a VALUE.").arg(variant.typeName()) );
             return Qundef;
         }
     }

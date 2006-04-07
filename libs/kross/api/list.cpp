@@ -19,8 +19,6 @@
 
 #include "list.h"
 #include "exception.h"
-
-#include <kdebug.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -49,14 +47,16 @@ const QString List::toString()
     return (s.endsWith(", ") ? s.left(s.length() - 2) : s) + "]";
 }
 
-Object::Ptr List::item(uint idx)
+Object* List::item(int idx, Object* defaultobject)
 {
     Q3ValueList<Object::Ptr>& list = getValue();
     if(idx >= list.count()) {
-        kDebug() << "List::item index=" << idx << " is out of bounds. Raising TypeException." << endl;
+        if(defaultobject)
+            return defaultobject;
+        krossdebug( QString("List::item index=%1 is out of bounds. Raising TypeException.").arg(idx) );
         throw Exception::Ptr( new Exception(QString("List-index %1 out of bounds.").arg(idx)) );
     }
-    return list[idx];
+    return list[idx].data();
 }
 
 uint List::count()

@@ -31,14 +31,18 @@
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
-#include <k3listview.h>
+#include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <ktoolbar.h>
 
-#define KROSS_SUPPORT_NEWSTUFF
+#if KDE_IS_VERSION(3, 4, 0)
+  // The KNewStuffSecure we use internaly for the GetHotNewStuff-functionality
+  // was introduced with KDE 3.4.
+  #define KROSS_SUPPORT_NEWSTUFF
+#endif
 
 #ifdef KROSS_SUPPORT_NEWSTUFF
   #include <knewstuff/provider.h>
@@ -86,7 +90,7 @@ class ListItem : public Q3ListViewItem
 class ToolTip : public QToolTip
 {
     public:
-        ToolTip(K3ListView* parent) : QToolTip(parent->viewport()), m_parent(parent) {}
+        ToolTip(KListView* parent) : QToolTip(parent->viewport()), m_parent(parent) {}
         virtual ~ToolTip () { remove(m_parent->viewport()); }
     protected:
         virtual void maybeTip(const QPoint& p) {
@@ -99,7 +103,7 @@ class ToolTip : public QToolTip
             }
         }
     private:
-        K3ListView* m_parent;
+        KListView* m_parent;
 };
 
 class WdgScriptsManagerPrivate
@@ -136,18 +140,18 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     slotSelectionChanged(0);
     connect(scriptsList, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotSelectionChanged(Q3ListViewItem*)));
 
-    btnExec->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "exec", K3Icon::MainToolbar, 16 ));
+    btnExec->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "exec", KIcon::MainToolbar, 16 ));
     connect(btnExec, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
-    btnLoad->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileopen", K3Icon::MainToolbar, 16 ));
+    btnLoad->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileopen", KIcon::MainToolbar, 16 ));
     connect(btnLoad, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
-    btnUnload->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", K3Icon::MainToolbar, 16 ));
+    btnUnload->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", KIcon::MainToolbar, 16 ));
     connect(btnUnload, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
-    btnInstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileimport", K3Icon::MainToolbar, 16 ));
+    btnInstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileimport", KIcon::MainToolbar, 16 ));
     connect(btnInstall, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
-    btnUninstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", K3Icon::MainToolbar, 16 ));
+    btnUninstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", KIcon::MainToolbar, 16 ));
     connect(btnUninstall, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
 #ifdef KROSS_SUPPORT_NEWSTUFF
-    btnNewStuff->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "knewstuff", K3Icon::MainToolbar, 16 ));
+    btnNewStuff->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "knewstuff", KIcon::MainToolbar, 16 ));
     connect(btnNewStuff, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
 #endif
 /*
@@ -218,10 +222,10 @@ Q3ListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, Q3ListViewI
     QPixmap pm;
     if(action->hasIcon()) {
         KIconLoader* icons = KGlobal::iconLoader();
-        pm = icons->loadIconSet(action->icon(), K3Icon::Small).pixmap(QIcon::Small, QIcon::Active);
+        pm = icons->loadIconSet(action->icon(), KIcon::Small).pixmap(QIcon::Small, QIcon::Active);
     }
     else {
-        pm = action->iconSet(K3Icon::Small, 16).pixmap(QIcon::Small, QIcon::Active);
+        pm = action->iconSet(KIcon::Small, 16).pixmap(QIcon::Small, QIcon::Active);
     }
     if(! pm.isNull())
         i->setPixmap(0, pm); // display the icon
@@ -263,7 +267,7 @@ void WdgScriptsManager::slotInstallScript()
         return;
 
     if(! d->m_scripguiclient->installScriptPackage( filedialog->selectedURL().path() )) {
-        kWarning() << "Failed to install scriptpackage" << endl;
+        krosswarning("Failed to install scriptpackage");
         return;
     }
 
@@ -293,7 +297,7 @@ void WdgScriptsManager::slotUninstallScript()
     }
 
     if(! d->m_scripguiclient->uninstallScriptPackage(packagepath)) {
-        kWarning() << "Failed to uninstall scriptpackage" << endl;
+        krosswarning("Failed to uninstall scriptpackage");
         return;
     }
 

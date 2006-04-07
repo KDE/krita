@@ -24,7 +24,7 @@
 
 using namespace Kross::Api;
 
-EventScript::EventScript(const QString& name, Object::Ptr parent)
+EventScript::EventScript(const QString& name, Object* parent)
     : Event<EventScript>(name, parent)
 {
 }
@@ -40,7 +40,7 @@ const QString EventScript::getClassName() const
 
 Object::Ptr EventScript::call(const QString& name, KSharedPtr<List> arguments)
 {
-    kDebug() << QString("EventScript::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) << endl;
+    krossdebug( QString("EventScript::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) );
     //TODO
     return Object::Ptr();
 }

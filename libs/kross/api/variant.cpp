@@ -21,7 +21,6 @@
 #include "list.h"
 
 #include <klocale.h>
-#include <kdebug.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -46,6 +45,7 @@ const QString Variant::toString()
     return getValue().toString();
 }
 
+/*
 const QString Variant::getVariantType(Object::Ptr object)
 {
     switch( toVariant(object).type() ) {
@@ -53,14 +53,11 @@ const QString Variant::getVariantType(Object::Ptr object)
         case QVariant::CString:
         case QVariant::String:
             return "Kross::Api::Variant::String";
-
         case QVariant::Map:
             return "Kross::Api::Variant::Dict";
-
         case QVariant::StringList:
         case QVariant::List:
             return "Kross::Api::Variant::List";
-
         case QVariant::Double:
             //return "Kross::Api::Variant::Double";
         case QVariant::UInt: 
@@ -69,21 +66,20 @@ const QString Variant::getVariantType(Object::Ptr object)
         case QVariant::ULongLong:
         case QVariant::Int:
             return "Kross::Api::Variant::Integer";
-
         case QVariant::Bool:
             return "Kross::Api::Variant::Bool";
-
         default: //Date, Time, DateTime, ByteArray, BitArray, Rect, Size, Color, Invalid, etc.
             return "Kross::Api::Variant";
     }
 }
+*/
 
-const QVariant Variant::toVariant(Object::Ptr object)
+const QVariant& Variant::toVariant(Object* object)
 {
     return Object::fromObject<Variant>( object )->getValue();
 }
 
-const QString Variant::toString(Object::Ptr object)
+const QString Variant::toString(Object* object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::String))
@@ -91,7 +87,7 @@ const QString Variant::toString(Object::Ptr object)
     return variant.toString();
 }
 
-int Variant::toInt(Object::Ptr object)
+int Variant::toInt(Object* object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::Int))
@@ -99,7 +95,7 @@ int Variant::toInt(Object::Ptr object)
     return variant.toInt();
 }
 
-uint Variant::toUInt(Object::Ptr object)
+uint Variant::toUInt(Object* object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::UInt))
@@ -107,7 +103,7 @@ uint Variant::toUInt(Object::Ptr object)
     return variant.toUInt();
 }
 
-double Variant::toDouble(Object::Ptr object)
+double Variant::toDouble(Object* object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::Double))
@@ -115,7 +111,7 @@ double Variant::toDouble(Object::Ptr object)
     return variant.toDouble();
 }
 
-qlonglong Variant::toLLONG(Object::Ptr object)
+qlonglong Variant::toLLONG(Object* object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::LongLong))
@@ -123,7 +119,7 @@ qlonglong Variant::toLLONG(Object::Ptr object)
     return variant.toLongLong();
 }
 
-qulonglong Variant::toULLONG(Object::Ptr object)
+qulonglong Variant::toULLONG(Object* object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::ULongLong))
@@ -131,7 +127,7 @@ qulonglong Variant::toULLONG(Object::Ptr object)
     return variant.toULongLong();
 }
 
-bool Variant::toBool(Object::Ptr object)
+bool Variant::toBool(Object* object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::Bool))
@@ -139,13 +135,28 @@ bool Variant::toBool(Object::Ptr object)
     return variant.toBool();
 }
 
-Q3ValueList<QVariant> Variant::toList(Object::Ptr object)
+QStringList Variant::toStringList(Object* object)
+{
+    if(object->getClassName() == "Kross::Api::List") {
+        QStringList l;
+        QList<Object::Ptr> list = Object::fromObject<List>( object )->getValue();
+        for(QList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+            l.append( toString( (*it).data() ) );
+        return l;
+    }
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::StringList))
+        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::StringList expected, but got '%1'.").arg(variant.typeName()).latin1()) );
+    return variant.toStringList();
+}
+
+Q3ValueList<QVariant> Variant::toList(Object* object)
 {
     if(object->getClassName() == "Kross::Api::List") {
         Q3ValueList<QVariant> l;
         Q3ValueList<Object::Ptr> list = Object::fromObject<List>( object )->getValue();
         for(Q3ValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
-            l.append( toVariant(*it) );
+            l.append( toVariant( (*it).data() ) );
         return l;
     }
     const QVariant& variant = toVariant(object);

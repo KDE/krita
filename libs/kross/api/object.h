@@ -72,7 +72,7 @@ namespace Kross { namespace Api {
              * \param parent The parent \a Object or NULL if
              *        this object doesn't has an parent.
              */
-            explicit Object(const QString& name, Object::Ptr parent = Object::Ptr());
+            explicit Object(const QString& name, Object* parent = 0);
 
             /**
              * Destructor.
@@ -84,7 +84,7 @@ namespace Kross { namespace Api {
              *
              * \return Name of this object.
              */
-            const QString& getName() const;
+            const QString getName() const;
 
             /**
              * Return the class name. This could be something
@@ -196,13 +196,24 @@ namespace Kross { namespace Api {
              * \return The to a instance from template type T
              *         casted Object.
              */
-            template<class T> static T* fromObject(Object::Ptr object)
+            template<class T> static T* fromObject(Object* object)
             {
-                T* t = (T*) object.data();
+                T* t = (T*) object;
                 if(! t)
                     throw KSharedPtr<Exception>( new Exception(QString("Object \"%1\" invalid.").arg(object ? object->getClassName() : "")) );
                 return t;
             }
+
+            /**
+             * This method got used by the \a ProxyFunction classes
+             * to translate an unknown \p TYPE to a \a Object instance.
+             * Classes like \a Value or \a ListT or \a Class are
+             * overwriting this method to transparently translate these
+             * passed type while this method just assumes that the
+             * type is already a \a Object instance.
+             */
+            template<typename TYPE>
+            static Object::Ptr toObject(TYPE t) { return t; }
 
         private:
             /// Name of this object.

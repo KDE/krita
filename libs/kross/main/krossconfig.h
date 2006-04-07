@@ -20,6 +20,8 @@
 #ifndef KROSS_MAIN_KROSSCONFIG_H
 #define KROSS_MAIN_KROSSCONFIG_H
 
+#include <qstring.h>
+
 /**
  * The Kross scripting bridge to embed scripting functionality
  * into an application.
@@ -46,6 +48,27 @@
  * \sa http://www.dipe.org/kross
  */
 namespace Kross {
+
+    /// Debugging enabled.
+    #define KROSS_DEBUG_ENABLED
+
+    #ifdef KROSS_DEBUG_ENABLED
+
+        /**
+         * Debugging function.
+         */
+        void krossdebug(const QString &s);
+
+        /**
+         * Warning function.
+         */
+        void krosswarning(const QString &s);
+
+    #else
+        // Define these to an empty statement if debugging is disabled.
+        #define krossdebug(x)
+        #define krosswarning(x)
+    #endif
 
     /**
      * The common Kross API used as common codebase.

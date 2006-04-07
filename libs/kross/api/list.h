@@ -45,6 +45,12 @@ namespace Kross { namespace Api {
              */
             typedef KSharedPtr<List> Ptr;
 
+            operator QStringList () {
+                //QValueList<Object::Ptr> getValue()
+                krossdebug("999999999999 ...........................");
+                return QStringList();
+            }
+
             /**
              * Constructor.
              *
@@ -77,9 +83,14 @@ namespace Kross { namespace Api {
              *
              * \throw TypeException If index is out of bounds.
              * \param idx The QValueList-index.
+             * \param defaultobject The default \a Object which should
+             *        be used if there exists no item with such an
+             *        index. This \a Object instance will be returned
+             *        if not NULL and if the index is out of bounds. If
+             *        its NULL a \a TypeException will be thrown.
              * \return The \a Object instance.
              */
-            Object::Ptr item(uint idx);
+            Object* item(int idx, Object* defaultobject = 0);
 
             /**
              * Return the number of items in the QValueList this
@@ -97,19 +108,24 @@ namespace Kross { namespace Api {
              */
             void append(Object::Ptr object);
 
+            template<typename TYPE>
+            static Object::Ptr toObject(TYPE t) { return t; }
     };
 
     /**
-     * This template class extends the \a List class with a more
-     * generic way to deal with lists.
+     * This template class extends the \a List class with
+     * generic functionality to deal with lists.
      */
-    template< class OBJECT, class TYPE >
+    template< class OBJECT >
     class ListT : public List
     {
         public:
-            ListT(Q3ValueList<TYPE> values) : List(values) {}
+            ListT() : List() {}
+            ListT(Q3ValueList<OBJECT> values) : List(values) {}
 
-            ListT(Q3IntDict<TYPE> values) : List() {
+            template< typename TYPE >
+            ListT(Q3IntDict<TYPE> values) : List()
+            {
                 Q3IntDictIterator<TYPE> it( values );
                 TYPE *t;
                 while( (t = it.current()) != 0 ) {
@@ -118,8 +134,10 @@ namespace Kross { namespace Api {
                 }
             }
 
-            ListT(const Q3PtrList<TYPE> values) : List() {
-                Q3PtrListIterator<TYPE> it( values );
+            template< typename TYPE >
+            ListT(const Q3PtrList<TYPE> values) : List()
+            {
+                Q3PtrListIterator<TYPE> it(values);
                 TYPE *t;
                 while( (t = it.current()) != 0 ) {
                     this->append( new OBJECT(t) );
@@ -128,6 +146,12 @@ namespace Kross { namespace Api {
             }
 
             virtual ~ListT() {}
+
+            template<typename TYPE>
+            static Object::Ptr toObject(TYPE t)
+            {
+                return new ListT(t);
+            }
     };
 
 }}

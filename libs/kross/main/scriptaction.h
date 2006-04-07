@@ -23,6 +23,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <Q3CString>
 #include <kaction.h>
 
 #include "scriptcontainer.h"
@@ -95,7 +96,10 @@ namespace Kross { namespace Api {
              */
             int version() const;
 
-            QString name() const;
+            /**
+             * \return the unique name this action will be accessible as.
+             */
+            const QString getName() const;
 
             /**
              * \return the description for this \a ScriptAction has.
@@ -206,7 +210,7 @@ namespace Kross { namespace Api {
              * A map of \a ScriptAction shared pointers used to access
              * the actions with there name.
              */
-            QMap<QString, ScriptAction::Ptr> m_actions;
+            QMap<Q3CString, ScriptAction::Ptr> m_actions;
 
             /**
              * A KActionMenu which could be used to display the
@@ -258,7 +262,7 @@ namespace Kross { namespace Api {
              * \return the \a ScriptAction instance which has the name \p name
              * or NULL if there exists no such action.
              */
-            ScriptAction::Ptr action(const QString& name) { return m_actions[name]; }
+            ScriptAction::Ptr action(const Q3CString& name) { return m_actions[name]; }
 
             /**
              * \return a list of actions.

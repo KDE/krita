@@ -45,13 +45,13 @@ extern "C"
     void* krossinterpreter(Kross::Api::InterpreterInfo* info)
     {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
-    kDebug() << "krossinterpreter(info)" << endl;
+        krossdebug("krossinterpreter(info)");
 #endif
         try {
             return new Kross::Ruby::RubyInterpreter(info);
         }
         catch(Kross::Api::Exception::Ptr e) {
-            kWarning() << "krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception." << endl;
+            Kross::krosswarning("krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception.");
         }
         return 0;
     }
@@ -73,7 +73,7 @@ RubyInterpreterPrivate* RubyInterpreter::d = 0;
 RubyInterpreter::RubyInterpreter(Kross::Api::InterpreterInfo* info): Kross::Api::Interpreter(info)
 {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
-    kDebug() << "RubyInterpreter::RubyInterpreter(info)" << endl;
+    krossdebug("RubyInterpreter::RubyInterpreter(info)");
 #endif
     if(d == 0)
     {
@@ -117,13 +117,13 @@ void RubyInterpreter::finalizeRuby()
 VALUE RubyInterpreter::require (VALUE obj, VALUE name)
 {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
-    kDebug() << "RubyInterpreter::require(obj,name)" << endl;
+    krossdebug("RubyInterpreter::require(obj,name)");
 #endif
     QString modname = StringValuePtr(name);
     if(modname.startsWith("kross")) {
-        kDebug() << QString("RubyInterpreter::require() module=%1").arg(modname) << endl;
+        krossdebug( QString("RubyInterpreter::require() module=%1").arg(modname) );
         if( modname.find( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
-            kWarning() << QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) << endl;
+            krosswarning( QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) );
         }
         else {
             Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule(modname);
@@ -136,7 +136,7 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
 //                     rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
                 return Qtrue;
             }
-            kWarning() << QString("Loading of Kross module '%1' failed.").arg(modname) << endl;
+            krosswarning( QString("Loading of Kross module '%1' failed.").arg(modname) );
         }
     } else {
         return rb_f_require(obj, name);

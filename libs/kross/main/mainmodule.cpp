@@ -18,8 +18,6 @@
  ***************************************************************************/
 
 #include "mainmodule.h"
-
-#include <kdebug.h>
 //Added by qt3to4:
 #include <Q3CString>
 
@@ -59,17 +57,17 @@ const QString MainModule::getClassName() const
 
 bool MainModule::hadException()
 {
-    return d->exception != Exception::Ptr();
+    return d->exception.data() != 0;
 }
 
-Exception::Ptr MainModule::getException()
+Exception* MainModule::getException()
 {
-    return d->exception;
+    return d->exception.data();
 }
 
-void MainModule::setException(Exception::Ptr exception)
+void MainModule::setException(Exception* exception)
 {
-    d->exception = exception;
+    d->exception = Exception::Ptr(exception);
 }
 
 bool MainModule::hasChild(const QString& name) const
@@ -77,11 +75,13 @@ bool MainModule::hasChild(const QString& name) const
     return Object::hasChild(name);
 }
 
+///\todo implement new QMetaObject-stuff
+/*
 EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, Q3CString signal)
 {
-    EventSignal* event = new EventSignal(name, Object::Ptr(this), sender, signal);
-    if(! addChild(Object::Ptr(event))) {
-        //kWarning() << QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) << endl;
+    EventSignal* event = new EventSignal(name, this, sender, signal);
+    if(! addChild( Object::Ptr(event) )) {
+        krosswarning( QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) );
         return EventSignal::Ptr();
     }
     return EventSignal::Ptr(event);
@@ -89,20 +89,21 @@ EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, Q3C
 
 EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, Q3CString slot)
 {
-    EventSlot* event = new EventSlot(name, Object::Ptr(this), receiver, slot);
-    if(! addChild(Object::Ptr(event))) {
-        //kWarning() << QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) << endl;
+    EventSlot* event = new EventSlot(name, this, receiver, slot);
+    if(! addChild( Object::Ptr(event) )) {
+        krosswarning( QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) );
         delete event;
         return EventSlot::Ptr();
     }
     return EventSlot::Ptr(event);
 }
+*/
 
 QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
-    QtObject* qtobject = new QtObject(Object::Ptr(this), object, name);
-    if(! addChild(Object::Ptr(qtobject))) {
-        //kWarning() << QString("Failed to add QObject name='%1'").arg(object->name()) << endl;
+    QtObject* qtobject = new QtObject(this, object, name);
+    if(! addChild( Object::Ptr(qtobject) )) {
+        krosswarning( QString("Failed to add QObject name='%1'").arg(object->name()) );
         delete qtobject;
         return QtObject::Ptr();
     }
@@ -111,9 +112,9 @@ QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 
 EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
-    EventAction* event = new EventAction(name, Object::Ptr(this), action);
-    if(! addChild(Object::Ptr(event))) {
-        //kWarning() << QString("Failed to add KAction name='%1'").arg(action->name()) << endl;
+    EventAction* event = new EventAction(name, this, action);
+    if(! addChild( Object::Ptr(event) )) {
+        krosswarning( QString("Failed to add KAction name='%1'").arg(action->name()) );
         delete event;
         return EventAction::Ptr();
     }

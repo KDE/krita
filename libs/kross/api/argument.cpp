@@ -32,7 +32,7 @@ Argument::~Argument()
 {
 }
 
-const QString& Argument::getClassName()
+const QString Argument::getClassName()
 {
     return m_classname;
 }

@@ -29,7 +29,6 @@
 #include <qobject.h>
 //Added by qt3to4:
 #include <Q3CString>
-//#include <kdebug.h>
 #include <ksharedptr.h>
 
 #include "event.h"
@@ -53,7 +52,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            EventSignal(const QString& name, Object::Ptr parent, QObject* sender, Q3CString signal);
+            EventSignal(const QString& name, Object* parent, QObject* sender, Q3CString signal);
 
             /**
              * Destructor.

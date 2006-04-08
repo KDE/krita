@@ -28,11 +28,14 @@
 #include <koffice_export.h>
 #include <ktoolbar.h>
 
+class Q3ButtonGroup;
+class Q3GridLayout;
+class Q3BoxLayout;
 class QWidget;
+
 class KAction;
 class KMainWindow;
 class KDualColorButton;
-class Q3GridLayout;
 class ToolArea;
 
 

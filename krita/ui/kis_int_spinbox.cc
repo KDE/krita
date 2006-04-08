@@ -82,14 +82,15 @@ void KisIntSpinbox::init(int val)
     Q3BoxLayout * l = new Q3HBoxLayout( this );
 
     l->insertStretch(0, 1);
-    d->m_numinput = new KIntSpinBox(0, 100, 1, val, 10, this, "KisIntSpinbox::KIntSpinBox");
+    d->m_numinput = new KIntSpinBox(0, 100, 1, val, this);
+    d->m_numinput->setObjectName("KisIntSpinbox::KIntSpinBox");
 
     d->m_numinput->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     d->m_numinput->setSuffix("%");
     l->addWidget( d->m_numinput );
 
     d->m_slider = new KisPopupSlider(0, 100, 10, val, Qt::Horizontal, this);
-    d->m_slider->setFrameStyle(Q3Frame::Panel|Q3Frame::Raised);
+    //d->m_slider->setFrameStyle(Q3Frame::Panel|Q3Frame::Raised); Qt4
 
     d->m_arrow = new KArrowButton(this, Qt::DownArrow);
     d->m_arrow->setPopup(d->m_slider);

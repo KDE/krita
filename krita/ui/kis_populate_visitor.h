@@ -96,7 +96,7 @@ class KisPopulateVisitor: public KisLayerVisitor
         {
             if (!layer) return 0;
 
-            KisImageSP img = layer->image();
+            KisImageSP img = KisImageSP(layer->image());
             if (!img) return 0;
                         
             KisLayerItem *item;
@@ -106,10 +106,10 @@ class KisPopulateVisitor: public KisLayerVisitor
             else {
                 item = new KisLayerItem(m_widget, layer); 
             }
-            if (layer == img->activeLayer()) {
+            if (layer == img->activeLayer().data()) {
                 item->setActive();
             }
-            m_layersAdded.append(layer);
+            m_layersAdded.append(KisLayerSP(layer));
             return item;
         }
 };

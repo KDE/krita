@@ -29,8 +29,9 @@
 #include <klocale.h>
 
 KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const char * name)
-    : KDoubleNumInput(parent, name)
+    : KDoubleNumInput(parent)
 {
+    setObjectName(name);
     m_timer = new QTimer(this, name);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotValueChanged()));
     connect(this, SIGNAL(valueChanged( double )), SLOT(slotTimeToUpdate()));

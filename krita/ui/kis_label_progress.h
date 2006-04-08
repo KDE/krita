@@ -25,7 +25,7 @@
 #include "kis_progress_display_interface.h"
 
 class QToolButton;
-class KProgress;
+class QProgressBar;
 
 class KisLabelProgress : public QLabel, public KisProgressDisplayInterface {
     Q_OBJECT
@@ -56,7 +56,7 @@ private:
     void reset();
 
     KisProgressSubject *m_subject;
-    KProgress *m_bar;
+    QProgressBar *m_bar;
     QToolButton *m_cancelButton;
     bool m_modal;
 };

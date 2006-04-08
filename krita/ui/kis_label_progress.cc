@@ -26,11 +26,11 @@
 #include <QLabel>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QProgressBar>
 
 #include <kdebug.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kprogressbar.h>
 #include <kiconloader.h>
 
 #include "kis_progress_subject.h"
@@ -65,7 +65,7 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, Qt::WFlags
     m_cancelButton->setToolTip( i18n("Cancel"));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
 
-    m_bar = new KProgress(100, this);
+    m_bar = new QProgressBar(this);
 }
 
 KisLabelProgress::~KisLabelProgress()

@@ -37,8 +37,10 @@ class QEvent;
 class QKeyEvent;
 class QRect;
 class QWidget;
+class QActionGroup;
+
 class KActionCollection;
-class KRadioAction;
+class KAction;
 class KDialog;
 class KisBrush;
 class KisGradient;
@@ -104,7 +106,7 @@ public:
      * @return the current configuration widget.
      */
     virtual QWidget* optionWidget();
-    KRadioAction *action() const { return m_action; }
+    KAction *action() const { return m_action; }
 
     /**
      * Return true if this tool wants auto canvas-scrolling to 
@@ -115,7 +117,7 @@ public:
     // Methods for integration with karbon-style toolbox
     virtual quint32 priority() { return 0; }
     virtual enumToolType toolType() { return TOOL_FREEHAND; }
-    virtual QString icon() { return m_action->icon(); }
+    virtual QIcon icon() { return m_action->icon(); }
     virtual QString quickHelp() const { return ""; }
 
 public slots:
@@ -135,13 +137,19 @@ private:
     KisTool& operator=(const KisTool&);
 
 protected:
-    KRadioAction *m_action;
+    /**
+     * The exclusive action group that all tools belong to.
+     */
+    QActionGroup *actionGroup() const;
+
+    KAction *m_action;
     bool m_ownAction;
 
 private:
     class KisToolPrivate;
     KisToolPrivate * d;
-    
+
+    static QActionGroup *toolActionGroup;
 };
 
 #endif // KIS_TOOL_H_

@@ -242,12 +242,12 @@ void KisOpenGLCanvasPainter::setBackgroundColor(const QColor& /*color*/)
 {
 }
 
-Qt::Qt::BGMode KisOpenGLCanvasPainter::backgroundMode() const
+Qt::BGMode KisOpenGLCanvasPainter::backgroundMode() const
 {
     return Qt::TransparentMode;
 }
 
-void KisOpenGLCanvasPainter::setBackgroundMode(Qt::Qt::BGMode /*bgMode*/)
+void KisOpenGLCanvasPainter::setBackgroundMode(Qt::BGMode /*bgMode*/)
 {
 }
 
@@ -421,20 +421,20 @@ bool KisOpenGLCanvasPainter::hasClipping() const
     return true;
 }
 
-QRegion KisOpenGLCanvasPainter::clipRegion(QPainter::CoordinateMode /*mode*/) const
+QRegion KisOpenGLCanvasPainter::clipRegion() const
 {
     return QRegion();
 }
 
-void KisOpenGLCanvasPainter::setClipRect(const QRect& /*r*/, QPainter::CoordinateMode /*mode*/)
+void KisOpenGLCanvasPainter::setClipRect(const QRect& /*r*/)
 {
 }
 
-void KisOpenGLCanvasPainter::setClipRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, QPainter::CoordinateMode /*mode*/)
+void KisOpenGLCanvasPainter::setClipRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/)
 {
 }
 
-void KisOpenGLCanvasPainter::setClipRegion(const QRegion& /*rgn*/, QPainter::CoordinateMode /*mode*/)
+void KisOpenGLCanvasPainter::setClipRegion(const QRegion& /*rgn*/)
 {
 }
 
@@ -714,47 +714,47 @@ void KisOpenGLCanvasPainter::eraseRect(const QRect& /*r*/)
 {
 }
 
-void KisOpenGLCanvasPainter::drawText(int /*x*/, int /*y*/, const QString& /*text*/, int /*len*/, QPainter::TextDirection /*dir*/)
-{
-}
-
-void KisOpenGLCanvasPainter::drawText(const QPoint& /*point*/, const QString& /*text*/, int /*len*/, QPainter::TextDirection /*dir*/)
-{
-}
-
-void KisOpenGLCanvasPainter::drawText(int /*x*/, int /*y*/, const QString& /*text*/, int /*pos*/, int /*len*/, QPainter::TextDirection /*dir*/)
-{
-}
-
-void KisOpenGLCanvasPainter::drawText(const QPoint& /*point*/, const QString& /*text*/, int /*pos*/, int /*len*/, QPainter::TextDirection /*dir*/)
-{
-}
-
-void KisOpenGLCanvasPainter::drawText(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*flags*/, const QString& /*text*/, int /*len*/, QRect */*br*/, QTextParag **/*intern*/)
-{
-}
-
-void KisOpenGLCanvasPainter::drawText(const QRect& /*r*/, int /*flags*/, const QString& /*text*/, int /*len*/, QRect */*br*/, QTextParag **/*intern*/)
-{
-}
-
-void KisOpenGLCanvasPainter::drawTextItem(int /*x*/, int /*y*/, const QTextItem& /*ti*/, int /*textflags*/)
-{
-}
-
-void KisOpenGLCanvasPainter::drawTextItem(const QPoint& /*p*/, const QTextItem& /*ti*/, int /*textflags*/)
-{
-}
-
-QRect KisOpenGLCanvasPainter::boundingRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*flags*/, const QString& /*text*/, int /*len*/, QTextParag **/*intern*/)
-{
-    return QRect();
-}
-
-QRect KisOpenGLCanvasPainter::boundingRect(const QRect& /*r*/, int /*flags*/, const QString& /*text*/, int /*len*/, QTextParag **/*intern*/)
-{
-    return QRect();
-}
+// void KisOpenGLCanvasPainter::drawText(int /*x*/, int /*y*/, const QString& /*text*/, int /*len*/, QPainter::TextDirection /*dir*/)
+// {
+// }
+//
+// void KisOpenGLCanvasPainter::drawText(const QPoint& /*point*/, const QString& /*text*/, int /*len*/, QPainter::TextDirection /*dir*/)
+// {
+// }
+//
+// void KisOpenGLCanvasPainter::drawText(int /*x*/, int /*y*/, const QString& /*text*/, int /*pos*/, int /*len*/, QPainter::TextDirection /*dir*/)
+// {
+// }
+//
+// void KisOpenGLCanvasPainter::drawText(const QPoint& /*point*/, const QString& /*text*/, int /*pos*/, int /*len*/, QPainter::TextDirection /*dir*/)
+// {
+// }
+//
+// void KisOpenGLCanvasPainter::drawText(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*flags*/, const QString& /*text*/, int /*len*/, QRect */*br*/, QTextParag **/*intern*/)
+// {
+// }
+//
+// void KisOpenGLCanvasPainter::drawText(const QRect& /*r*/, int /*flags*/, const QString& /*text*/, int /*len*/, QRect */*br*/, QTextParag **/*intern*/)
+// {
+// }
+//
+// void KisOpenGLCanvasPainter::drawTextItem(int /*x*/, int /*y*/, const QTextItem& /*ti*/, int /*textflags*/)
+// {
+// }
+//
+// void KisOpenGLCanvasPainter::drawTextItem(const QPoint& /*p*/, const QTextItem& /*ti*/, int /*textflags*/)
+// {
+// }
+//
+// QRect KisOpenGLCanvasPainter::boundingRect(int /*x*/, int /*y*/, int /*w*/, int /*h*/, int /*flags*/, const QString& /*text*/, int /*len*/, QTextParag **/*intern*/)
+// {
+//     return QRect();
+// }
+//
+// QRect KisOpenGLCanvasPainter::boundingRect(const QRect& /*r*/, int /*flags*/, const QString& /*text*/, int /*len*/, QTextParag **/*intern*/)
+// {
+//     return QRect();
+// }
 
 int	KisOpenGLCanvasPainter::tabStops() const
 {

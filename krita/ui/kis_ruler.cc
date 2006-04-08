@@ -45,7 +45,7 @@ const char *KisRuler::m_nums[] = {
 
 KisRuler::KisRuler(Qt::Orientation o, QWidget *parent, const char *name) : super(parent, name, Qt::WNoAutoErase | Qt::WResizeNoErase), m_pixmapNums(m_nums)
 {
-    setBackgroundMode(NoBackground);
+    setBackgroundMode(Qt::NoBackground);
     setFrameStyle(Box | Sunken);
     setLineWidth(1);
     setMidLineWidth(0);
@@ -76,7 +76,7 @@ void KisRuler::initMarker(qint32 w, qint32 h)
 
     m_pixmapMarker.resize(w, h);
     p.begin(&m_pixmapMarker);
-    p.setPen(blue);
+    p.setPen(QColor(Qt::blue));
     p.eraseRect(0, 0, w, h);
     p.drawLine(0, 0, w - 1, h - 1);
     p.end();

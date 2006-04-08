@@ -72,8 +72,7 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
         QImage img = m_autogradientResource->generatePreview(width()- 2* MARGIN - 2, height()- 2* MARGIN - HANDLE_SIZE - 2);
         QPixmap pixmap(img.width(), img.height());
         if (!img.isNull()) {
-            m_pixmapIO.putImage(&pixmap, 0, 0, &img);
-            painter.drawPixmap( MARGIN + 1, MARGIN + 1, pixmap, 0, 0, pixmap.width(), pixmap.height());
+            painter.drawImage( MARGIN + 1, MARGIN + 1, img);
         }
 
         painter.fillRect( MARGIN + 1, height()- MARGIN - HANDLE_SIZE, width() - 2 * MARGIN, HANDLE_SIZE, QBrush( Qt::white ) );
@@ -109,7 +108,7 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
             painter.drawPolygon(triangle);
         }
     }
-    bitBlt( this, 0, 0, &pixmap, 0, 0, pixmap.width(), pixmap.height(), Qt::CopyROP);
+    bitBlt( this, 0, 0, &pixmap, 0, 0, pixmap.width(), pixmap.height());
 }
 
 void KisGradientSliderWidget::mousePressEvent( QMouseEvent * e )

@@ -552,7 +552,7 @@ KisCanvasPainter::KisCanvasPainter(KisCanvas *canvas)
     m_canvasWidgetPainter = canvas->createPainter();
 }
 
-KisCanvasPainter::KisCanvasPainter(const QPaintDevice *paintDevice)
+KisCanvasPainter::KisCanvasPainter(QPaintDevice *paintDevice)
 {
     m_canvasWidgetPainter = new KisQPaintDeviceCanvasPainter(paintDevice);
 }
@@ -569,7 +569,7 @@ bool KisCanvasPainter::begin(KisCanvas *canvas, bool unclipped)
     return m_canvasWidgetPainter->begin(canvas->canvasWidget(), unclipped);
 }
 
-bool KisCanvasPainter::begin(const QPaintDevice *paintDevice, bool unclipped)
+bool KisCanvasPainter::begin(QPaintDevice *paintDevice, bool unclipped)
 {
     delete m_canvasWidgetPainter;
     m_canvasWidgetPainter = new KisQPaintDeviceCanvasPainter();

@@ -34,6 +34,7 @@
 #include <kacceleratormanager.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kinstance.h>
 
 #include <kis_paintop_registry.h>
 #include <kis_view.h>

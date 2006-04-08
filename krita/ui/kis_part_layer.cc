@@ -62,7 +62,7 @@ KisChildDoc::~KisChildDoc ()
 
 
 KisPartLayerImpl::KisPartLayerImpl(KisImageSP img, KisChildDoc * doc)
-    : super(img, i18n("Embedded Document"), OPACITY_OPAQUE), m_doc(doc)
+    : super(img.data(), i18n("Embedded Document"), OPACITY_OPAQUE), m_doc(doc)
 {
     m_cache = new KisPaintDevice(
             KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""), name().latin1() );
@@ -74,7 +74,7 @@ KisPartLayerImpl::~KisPartLayerImpl()
 }
 
 KisLayerSP KisPartLayerImpl::clone() const {
-    return new KisPartLayerImpl(image(), childDoc());
+    return KisLayerSP(new KisPartLayerImpl(KisImageSP(image()), childDoc()));
 }
 
 // Called when the layer is made active
@@ -145,7 +145,7 @@ void KisPartLayerImpl::paintSelection(QImage &img, qint32 x, qint32 y, qint32 w,
 
 KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection, const QRect& r)
 {
-    if (!m_doc || !m_doc->document() || m_activated) return 0;
+    if (!m_doc || !m_doc->document() || m_activated) return KisPaintDeviceSP(0);
 
     m_cache->clear();
 

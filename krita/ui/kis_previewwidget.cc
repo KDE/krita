@@ -37,6 +37,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
+#include <kinstance.h>
 
 #include <kis_cursor.h>
 #include <kis_colorspace.h>
@@ -162,7 +163,7 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
 {
     if (!m_origDevice) return;
     if (!m_preview) return;
-    if (m_scaledPreview == 0) return;
+    if (m_scaledPreview.isNull()) return;
 
     m_previewIsDisplayed = v;
     if(m_previewIsDisplayed)

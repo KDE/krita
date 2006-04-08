@@ -195,12 +195,12 @@ class KisCanvasPainter {
 public:
     KisCanvasPainter();
     KisCanvasPainter(KisCanvas *canvas);
-    KisCanvasPainter(const QPaintDevice *paintDevice);
+    KisCanvasPainter(QPaintDevice *paintDevice);
 
     ~KisCanvasPainter();
 
     bool begin(KisCanvas *canvas, bool unclipped = false);
-    bool begin(const QPaintDevice *paintDevice, bool unclipped = false);
+    bool begin(QPaintDevice *paintDevice, bool unclipped = false);
 
     bool end();
 

@@ -35,10 +35,10 @@
 class KisQPaintDeviceCanvasPainter : public KisCanvasWidgetPainter {
 public:
     KisQPaintDeviceCanvasPainter();
-    KisQPaintDeviceCanvasPainter(const QPaintDevice *paintDevice);
+    KisQPaintDeviceCanvasPainter(QPaintDevice *paintDevice);
     virtual ~KisQPaintDeviceCanvasPainter();
 
-    bool begin(const QPaintDevice* paintDevice, bool unclipped = false);
+    bool begin(QPaintDevice* paintDevice, bool unclipped = false);
 
     virtual bool begin(KisCanvasWidget *canvasWidget, bool unclipped = false);
     virtual bool end();

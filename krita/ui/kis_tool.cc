@@ -20,6 +20,7 @@
 #include <qstring.h>
 #include <kaction.h>
 #include <qlabel.h>
+#include <QActionGroup>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,6 +35,8 @@ public:
     QString uiname;
     QLabel * optionWidget;
 };
+
+QActionGroup *KisTool::toolActionGroup = 0;
 
 KisTool::KisTool(const QString & name)
 {
@@ -65,5 +68,14 @@ QWidget* KisTool::createOptionWidget(QWidget* parent)
 QWidget* KisTool::optionWidget()
 {
     return d->optionWidget;
+}
+
+QActionGroup *KisTool::actionGroup() const
+{
+    if (toolActionGroup == 0) {
+        //XXX: Do we need a parent?
+        toolActionGroup = new QActionGroup(0);
+    }
+    return toolActionGroup;
 }
 

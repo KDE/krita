@@ -32,7 +32,7 @@ KisDocIface::KisDocIface( KisDoc *doc_ )
 
 DCOPRef  KisDocIface::currentImage()
 {
-    KisImage *img = m_doc->currentImage();
+    KisImage *img = m_doc->currentImage().data();
     if( !img )
         return DCOPRef();
     else

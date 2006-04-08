@@ -17,15 +17,18 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include <qimage.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+
 #include <kaboutdata.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kinstance.h>
+
 #include <KoPartSelectAction.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
@@ -40,7 +43,7 @@
 KisLayerList::KisLayerList( QWidget *parent, const char *name )
     : super( parent, name )
 {
-    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear", this );
+    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear"/*, this - KDE4*/);
 }
 
 static const int ADJUSTMENT_LAYER = 5384; //hack?

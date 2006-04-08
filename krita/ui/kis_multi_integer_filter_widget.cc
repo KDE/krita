@@ -28,11 +28,12 @@
 #include <klocale.h>
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const char * name)
-        : KIntNumInput(parent, name)
+        : KIntNumInput(parent)
 {
-        m_timer = new QTimer(this, name);
-        connect(m_timer, SIGNAL(timeout()), SLOT(slotValueChanged()));
-        connect(this, SIGNAL(valueChanged( int )), SLOT(slotTimeToUpdate()));
+    setObjectName(name);
+    m_timer = new QTimer(this, name);
+    connect(m_timer, SIGNAL(timeout()), SLOT(slotValueChanged()));
+    connect(this, SIGNAL(valueChanged( int )), SLOT(slotTimeToUpdate()));
 }
 
 void KisDelayedActionIntegerInput::slotTimeToUpdate()

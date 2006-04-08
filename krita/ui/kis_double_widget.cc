@@ -47,7 +47,8 @@ KisDoubleWidget::~KisDoubleWidget()
 
 void KisDoubleWidget::init(double min, double max)
 {
-    m_spinBox = new KDoubleSpinBox(min, max, 0.05, 0, 2, this, "spinbox");
+    m_spinBox = new KDoubleSpinBox(min, max, 0.05, 0, this);
+    m_spinBox->setObjectName("spinbox");
     connect(m_spinBox, SIGNAL(valueChanged(double)), this, SLOT(setSliderValue(double)));
 
     m_slider = new QSlider(static_cast<int>(min * 100 + 0.5), static_cast<int>(max * 100 + 0.5), 1, 0, Qt::Horizontal, this, "sld");
@@ -140,9 +141,9 @@ void KisDoubleWidget::setTracking(bool tracking)
     m_slider->setTracking(tracking);
 }
 
-bool KisDoubleWidget::tracking() const
+bool KisDoubleWidget::hasTracking() const
 {
-    return m_slider->tracking();
+    return m_slider->hasTracking();
 }
 
 #include "kis_double_widget.moc"

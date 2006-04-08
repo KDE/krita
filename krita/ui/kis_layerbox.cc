@@ -127,7 +127,7 @@ KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char 
     m_newLayerMenu->insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), PAINT_LAYER );
     m_newLayerMenu->insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), GROUP_LAYER );
     m_newLayerMenu->insertItem( SmallIconSet( "tool_filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
-    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear", this );
+    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear" /*, this - KDE4*/);
     m_partLayerAction->plug( m_newLayerMenu );
     connect(m_partLayerAction, SIGNAL(activated()), this, SLOT(slotAddMenuActivated()));
     connect(m_newLayerMenu, SIGNAL(activated(int)), this, SLOT(slotAddMenuActivated(int)));
@@ -169,16 +169,16 @@ void KisLayerBox::setImage(KisImageSP img)
 
     if (img)
     {
-        connect(img, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
-        connect(img, SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayerAdded(KisLayerSP)));
-        connect(img, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
+        connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
+        connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayerAdded(KisLayerSP)));
+        connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(slotLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
-        connect(img, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)),
+        connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)),
                 this, SLOT(slotLayerPropertiesChanged(KisLayerSP)));
-        connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
+        connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                 this, SLOT(slotLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)));
-        connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
-        connect(img, SIGNAL(sigLayerUpdated(KisLayerSP, QRect)), this, SLOT(slotLayerUpdated(KisLayerSP, QRect)));
+        connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
+        connect(img.data(), SIGNAL(sigLayerUpdated(KisLayerSP, QRect)), this, SLOT(slotLayerUpdated(KisLayerSP, QRect)));
         slotLayersChanged(img->rootLayer());
         updateThumbnails();
     }
@@ -218,7 +218,7 @@ void KisLayerBox::slotLayerAdded(KisLayerSP layer)
     }
 
     for (vKisLayerSP::iterator it = layersAdded.begin(); it != layersAdded.end(); ++it) {
-        markModified(*it);
+        markModified((*it).data());
     }
     updateUI();
 }
@@ -227,7 +227,7 @@ void KisLayerBox::slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP wasParent, 
 {
     list()->removeLayer(layer->id());
     m_modified.remove(layer->id());
-    markModified(wasParent);
+    markModified(wasParent.data());
     updateUI();
 }
 
@@ -243,8 +243,8 @@ void KisLayerBox::slotLayerMoved(KisLayerSP layer, KisGroupLayerSP wasParent, Ki
 
     list()->moveLayer(layer->id(), parentID, siblingID);
 
-    markModified(layer->parent());
-    markModified(wasParent);
+    markModified(layer->parent().data());
+    markModified(wasParent.data());
     updateUI();
 }
 
@@ -255,7 +255,7 @@ void KisLayerBox::slotLayerPropertiesChanged(KisLayerSP layer)
         Q_ASSERT(item->layer() == layer.data());
         item->sync();
         updateUI();
-        markModified(layer);
+        markModified(layer.data());
     }
 }
 
@@ -273,7 +273,7 @@ void KisLayerBox::slotLayersChanged(KisGroupLayerSP rootLayer)
 
 void KisLayerBox::slotLayerUpdated(KisLayerSP layer, QRect)
 {
-    markModified(layer);
+    markModified(layer.data());
 }
 
 void KisLayerBox::slotLayerActivated(LayerItem* item)
@@ -281,7 +281,7 @@ void KisLayerBox::slotLayerActivated(LayerItem* item)
     if (item)
         m_image->activate(m_image->findLayer(item->id()));
     else
-        m_image->activate(0);
+        m_image->activate(KisLayerSP(0));
     updateUI();
 }
 
@@ -311,11 +311,11 @@ void KisLayerBox::slotLayerMoved(LayerItem* item, LayerItem*, LayerItem*)
         parent = dynamic_cast<KisGroupLayer*>(m_image->findLayer(item->parent()->id()).data());
     if( !parent )
         parent = m_image->rootLayer();
-    KisLayerSP above = 0;
+    KisLayerSP above;
     if (item->nextSibling())
         above = m_image->findLayer(item->nextSibling()->id());
     if (layer)
-        m_image->moveLayer(layer, parent.data(), above);
+        m_image->moveLayer(layer, parent, above);
     updateUI();
 }
 
@@ -324,9 +324,9 @@ void KisLayerBox::slotRequestNewLayer(LayerItem* p, LayerItem* after)
     KisLayer* l = m_image->rootLayer().data();
     if (p)
         l = m_image->findLayer(p->id()).data();
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+    KisGroupLayerSP parent = KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(l));
 
-    KisLayerSP above = 0;
+    KisLayerSP above;
     if (after && after->nextSibling())
         above = m_image->findLayer(after->nextSibling()->id());
     else if (after)
@@ -343,9 +343,9 @@ void KisLayerBox::slotRequestNewFolder(LayerItem* p, LayerItem* after)
     KisLayer* l = m_image->rootLayer().data(); //FIXME I hate copy-pasting like this.
     if (p)
         l = m_image->findLayer(p->id()).data();
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+    KisGroupLayerSP parent = KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(l));
 
-    KisLayerSP above = 0;
+    KisLayerSP above;
     if (after && after->nextSibling())
         above = m_image->findLayer(after->nextSibling()->id());
     else if (after)
@@ -362,9 +362,9 @@ void KisLayerBox::slotRequestNewAdjustmentLayer(LayerItem* p, LayerItem* after)
     KisLayer* l = m_image->rootLayer().data(); //FIXME here too.
     if (p)
         l = m_image->findLayer(p->id()).data();
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+    KisGroupLayerSP parent = KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(l));
 
-    KisLayerSP above = 0;
+    KisLayerSP above;
     if (after && after->nextSibling())
         above = m_image->findLayer(after->nextSibling()->id());
     else if (after)
@@ -381,9 +381,9 @@ void KisLayerBox::slotRequestNewObjectLayer(LayerItem* p, LayerItem* after, cons
     KisLayer* l = m_image->rootLayer().data(); //FIXME and here.
     if (p)
         l = m_image->findLayer(p->id()).data();
-    KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(l);
+    KisGroupLayerSP parent = KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(l));
 
-    KisLayerSP above = 0;
+    KisLayerSP above;
     if (after && after->nextSibling())
         above = m_image->findLayer(after->nextSibling()->id());
     else if (after)
@@ -529,7 +529,7 @@ void KisLayerBox::slotRaiseClicked()
     if( l.count() == 1 && layer == layer->parent()->firstChild() && layer->parent() != m_image->rootLayer())
     {
         if (KisGroupLayerSP grandparent = layer->parent()->parent())
-            m_image->moveLayer(layer, grandparent, layer->parent().data());
+            m_image->moveLayer(layer, grandparent, KisLayerSP(layer->parent().data()));
     }
     else
     {
@@ -613,7 +613,7 @@ void KisLayerBox::markModified(KisLayer* layer)
     while (layer && layer != m_image->rootLayer().data())
     {
         v.append(layer->id());
-        layer = layer->parent();
+        layer = layer->parent().data();
     }
     for (int i = v.count() - 1; i >= 0; --i)
         if (!m_modified.contains(v[i]))
@@ -623,24 +623,24 @@ void KisLayerBox::markModified(KisLayer* layer)
 void KisLayerBox::printKritaLayers() const
 {
     static int indent = 0;
-    static KisLayer *root = 0;
+    static KisLayerSP root;
     if( !root )
-        root = m_image->rootLayer();
+        root = KisLayerSP(m_image->rootLayer().data());
     if( !root )
         return;
     QString s = root->name();
-    if( dynamic_cast<KisGroupLayer*>( root ) )
+    if( dynamic_cast<KisGroupLayer*>( root.data() ) )
         s = QString("[%1]").arg( s );
-    if( m_image->activeLayer().data() == root )
+    if( m_image->activeLayer() == root )
         s.prepend("*");
     kDebug() << (QString().fill(' ', indent) +  s) << endl;
-    for (KisLayer* layer = root->firstChild(); layer; layer = layer->nextSibling())
+    for (KisLayerSP layer = root->firstChild(); layer; layer = layer->nextSibling())
     {
         indent += 2;
         root = layer;
         printKritaLayers();
         indent -= 2;
-        root = layer->parent();
+        root = KisLayerSP(layer->parent().data());
     }
 }
 

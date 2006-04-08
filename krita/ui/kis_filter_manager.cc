@@ -79,7 +79,7 @@ KisFilterManager::~KisFilterManager()
 
 void KisFilterManager::setup(KActionCollection * ac)
 {
-    KisFilter * f = 0;
+    KisFilterSP f;
     int i = 0;
 
     // Only create the submenu's we've actually got filters for.
@@ -202,7 +202,7 @@ void KisFilterManager::updateGUI()
     KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
     
     bool enable =  !(layer->locked() || !layer->visible() || partLayer);
-    KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>( layer.data());
+    KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>( layer.data()));
     if(!player)
     {
         enable = false;
@@ -217,7 +217,7 @@ void KisFilterManager::updateGUI()
     KAction * a;
     int i = 0;
     for (a = m_filterActions.first(); a; a = m_filterActions.next() , i++) {
-        KisFilter* filter = KisFilterRegistry::instance()->get(m_filterList[i]);
+        KisFilterSP filter = KisFilterRegistry::instance()->get(m_filterList[i]);
         if(player && filter->workWith( player->paintDevice()->colorSpace()))
         {
             a->setEnabled(enable);
@@ -302,7 +302,7 @@ void KisFilterManager::slotApplyFilter(int i)
     KisFilterConfiguration * oldConfig = m_lastFilterConfig;
     KisFilter * oldFilter = m_lastFilter;
 
-    m_lastFilter = KisFilterRegistry::instance()->get(m_filterList[i]);
+    m_lastFilter = KisFilterRegistry::instance()->get(m_filterList[i]).data();
 
     if (!m_lastFilter) {
         m_lastFilter = oldFilter;

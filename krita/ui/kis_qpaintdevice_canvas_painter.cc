@@ -27,7 +27,7 @@ KisQPaintDeviceCanvasPainter::KisQPaintDeviceCanvasPainter()
 {
 }
 
-KisQPaintDeviceCanvasPainter::KisQPaintDeviceCanvasPainter(const QPaintDevice *paintDevice)
+KisQPaintDeviceCanvasPainter::KisQPaintDeviceCanvasPainter(QPaintDevice *paintDevice)
     : m_painter(paintDevice)
 {
 }
@@ -36,20 +36,20 @@ KisQPaintDeviceCanvasPainter::~KisQPaintDeviceCanvasPainter()
 {
 }
 
-bool KisQPaintDeviceCanvasPainter::begin(KisCanvasWidget *canvasWidget, bool unclipped)
+bool KisQPaintDeviceCanvasPainter::begin(KisCanvasWidget *canvasWidget, bool /*unclipped*/)
 {
     QWidget *widget = dynamic_cast<QWidget *>(canvasWidget);
 
     if (widget != 0) {
-        return m_painter.begin(widget, unclipped);
+        return m_painter.begin(widget);
     } else {
         return false;
     }
 }
 
-bool KisQPaintDeviceCanvasPainter::begin(const QPaintDevice* paintDevice, bool unclipped)
+bool KisQPaintDeviceCanvasPainter::begin(QPaintDevice* paintDevice, bool /*unclipped*/)
 {
-    return m_painter.begin(paintDevice, unclipped);
+    return m_painter.begin(paintDevice);
 }
 
 bool KisQPaintDeviceCanvasPainter::end()
@@ -129,7 +129,7 @@ void KisQPaintDeviceCanvasPainter::setBrush(const QColor& color)
 
 QPoint KisQPaintDeviceCanvasPainter::pos() const
 {
-    return m_painter.pos();
+    return QPoint();
 }
 
 const QColor& KisQPaintDeviceCanvasPainter::backgroundColor() const
@@ -142,7 +142,7 @@ void KisQPaintDeviceCanvasPainter::setBackgroundColor(const QColor& color)
     m_painter.setBackgroundColor(color);
 }
 
-Qt::Qt::BGMode KisQPaintDeviceCanvasPainter::backgroundMode() const
+Qt::BGMode KisQPaintDeviceCanvasPainter::backgroundMode() const
 {
     return m_painter.backgroundMode();
 }
@@ -239,12 +239,12 @@ void KisQPaintDeviceCanvasPainter::setMatrix(const QMatrix& matrix, bool combine
 
 void KisQPaintDeviceCanvasPainter::saveWorldMatrix()
 {
-    m_painter.saveWorldMatrix();
+    //m_painter.saveWorldMatrix();
 }
 
 void KisQPaintDeviceCanvasPainter::restoreWorldMatrix()
 {
-    m_painter.restoreWorldMatrix();
+    //m_painter.restoreWorldMatrix();
 }
 
 void KisQPaintDeviceCanvasPainter::scale(double sx, double sy)
@@ -284,22 +284,22 @@ double KisQPaintDeviceCanvasPainter::translationY() const
 
 QPoint KisQPaintDeviceCanvasPainter::xForm(const QPoint& point) const
 {
-    return m_painter.transformed(point);
+    return m_painter.xForm(point);
 }
 
 QRect KisQPaintDeviceCanvasPainter::xForm(const QRect& r) const
 {
-    return m_painter.transformed(r);
+    return m_painter.xForm(r);
 }
 
 Q3PointArray KisQPaintDeviceCanvasPainter::xForm(const Q3PointArray& pointArray) const
 {
-    return m_painter.transformed(pointArray);
+    return m_painter.xForm(pointArray);
 }
 
 Q3PointArray KisQPaintDeviceCanvasPainter::xForm(const Q3PointArray& pointArray, int index, int npoints) const
 {
-    return m_painter.transformed(pointArray, index, npoints);
+    return m_painter.xForm(pointArray, index, npoints);
 }
 
 QPoint KisQPaintDeviceCanvasPainter::xFormDev(const QPoint& point) const
@@ -332,24 +332,24 @@ bool KisQPaintDeviceCanvasPainter::hasClipping() const
     return m_painter.hasClipping();
 }
 
-QRegion KisQPaintDeviceCanvasPainter::clipRegion(QPainter::CoordinateMode mode) const
+QRegion KisQPaintDeviceCanvasPainter::clipRegion() const
 {
-    return m_painter.clipRegion(mode);
+    return m_painter.clipRegion();
 }
 
-void KisQPaintDeviceCanvasPainter::setClipRect(const QRect& r, QPainter::CoordinateMode mode)
+void KisQPaintDeviceCanvasPainter::setClipRect(const QRect& r)
 {
-    m_painter.setClipRect(r, mode);
+    m_painter.setClipRect(r);
 }
 
-void KisQPaintDeviceCanvasPainter::setClipRect(int x, int y, int w, int h, QPainter::CoordinateMode mode)
+void KisQPaintDeviceCanvasPainter::setClipRect(int x, int y, int w, int h)
 {
-    m_painter.setClipRect(x, y, w, h, mode);
+    m_painter.setClipRect(x, y, w, h);
 }
 
-void KisQPaintDeviceCanvasPainter::setClipRegion(const QRegion& rgn, QPainter::CoordinateMode mode)
+void KisQPaintDeviceCanvasPainter::setClipRegion(const QRegion& rgn)
 {
-    m_painter.setClipRegion(rgn, mode);
+    m_painter.setClipRegion(rgn);
 }
 
 void KisQPaintDeviceCanvasPainter::drawPoint(int x, int y)
@@ -369,22 +369,22 @@ void KisQPaintDeviceCanvasPainter::drawPoints(const Q3PointArray& pointArray, in
 
 void KisQPaintDeviceCanvasPainter::moveTo(int x, int y)
 {
-    m_painter.moveTo(x, y);
+    //m_painter.moveTo(x, y);
 }
 
 void KisQPaintDeviceCanvasPainter::moveTo(const QPoint& point)
 {
-    m_painter.moveTo(point);
+    //m_painter.moveTo(point);
 }
 
 void KisQPaintDeviceCanvasPainter::lineTo(int x, int y)
 {
-    m_painter.lineTo(x, y);
+    //m_painter.lineTo(x, y);
 }
 
 void KisQPaintDeviceCanvasPainter::lineTo(const QPoint& point)
 {
-    m_painter.lineTo(point);
+    //m_painter.lineTo(point);
 }
 
 void KisQPaintDeviceCanvasPainter::drawLine(int x1, int y1, int x2, int y2)
@@ -409,22 +409,22 @@ void KisQPaintDeviceCanvasPainter::drawRect(const QRect& r)
 
 void KisQPaintDeviceCanvasPainter::drawWinFocusRect(int x, int y, int w, int h)
 {
-    m_painter.drawWinFocusRect(x, y, w, h);
+    //m_painter.drawWinFocusRect(x, y, w, h);
 }
 
 void KisQPaintDeviceCanvasPainter::drawWinFocusRect(int x, int y, int w, int h, const QColor& bgColor)
 {
-    m_painter.drawWinFocusRect(x, y, w, h, bgColor);
+    //m_painter.drawWinFocusRect(x, y, w, h, bgColor);
 }
 
 void KisQPaintDeviceCanvasPainter::drawWinFocusRect(const QRect& r)
 {
-    m_painter.drawWinFocusRect(r);
+    //m_painter.drawWinFocusRect(r);
 }
 
 void KisQPaintDeviceCanvasPainter::drawWinFocusRect(const QRect& r, const QColor& bgColor)
 {
-    m_painter.drawWinFocusRect(r, bgColor);
+    //m_painter.drawWinFocusRect(r, bgColor);
 }
 
 void KisQPaintDeviceCanvasPainter::drawRoundRect(int x, int y, int w, int h, int xRnd, int yRnd)
@@ -524,17 +524,17 @@ void KisQPaintDeviceCanvasPainter::drawPixmap(const QRect& r, const QPixmap& pix
 
 void KisQPaintDeviceCanvasPainter::drawImage(int x, int y, const QImage& image, int sx, int sy, int sw, int sh, int conversionFlags)
 {
-    m_painter.drawImage(x, y, image, sx, sy, sw, sh, conversionFlags);
+    m_painter.drawImage(x, y, image, sx, sy, sw, sh);
 }
 
 void KisQPaintDeviceCanvasPainter::drawImage(const QPoint& point, const QImage& image, const QRect& sr, int conversionFlags)
 {
-    m_painter.drawImage(point, image, sr, conversionFlags);
+    m_painter.drawImage(point, image, sr);
 }
 
 void KisQPaintDeviceCanvasPainter::drawImage(const QPoint& point, const QImage& image, int conversion_flags)
 {
-    m_painter.drawImage(point, image, conversion_flags);
+    m_painter.drawImage(point, image);
 }
 
 void KisQPaintDeviceCanvasPainter::drawImage(const QRect& r, const QImage& image)
@@ -577,74 +577,72 @@ void KisQPaintDeviceCanvasPainter::eraseRect(const QRect& r)
     m_painter.eraseRect(r);
 }
 
-void KisQPaintDeviceCanvasPainter::drawText(int x, int y, const QString& text, int len, QPainter::TextDirection dir)
-{
-    m_painter.drawText(x, y, text, len, dir);
-}
-
-void KisQPaintDeviceCanvasPainter::drawText(const QPoint& point, const QString& text, int len, QPainter::TextDirection dir)
-{
-    m_painter.drawText(point, text, len, dir);
-}
-
-void KisQPaintDeviceCanvasPainter::drawText(int x, int y, const QString& text, int pos, int len, QPainter::TextDirection dir)
-{
-    m_painter.drawText(x, y, text, pos, len, dir);
-}
-
-void KisQPaintDeviceCanvasPainter::drawText(const QPoint& point, const QString& text, int pos, int len, QPainter::TextDirection dir)
-{
-    m_painter.drawText(point, text, pos, len, dir);
-}
-
-void KisQPaintDeviceCanvasPainter::drawText(int x, int y, int w, int h, int flags, const QString& text, int len, QRect *br, QTextParag **intern)
-{
-    m_painter.drawText(x, y, w, h, flags, text, len, br, intern);
-}
-
-void KisQPaintDeviceCanvasPainter::drawText(const QRect& r, int flags, const QString& text, int len, QRect *br, QTextParag **intern)
-{
-    m_painter.drawText(r, flags, text, len, br, intern);
-}
-
-void KisQPaintDeviceCanvasPainter::drawTextItem(int x, int y, const QTextItem& ti, int textflags)
-{
-    m_painter.drawTextItem(x, y, ti, textflags);
-}
-
-void KisQPaintDeviceCanvasPainter::drawTextItem(const QPoint& p, const QTextItem& ti, int textflags)
-{
-    m_painter.drawTextItem(p, ti, textflags);
-}
-
-QRect KisQPaintDeviceCanvasPainter::boundingRect(int x, int y, int w, int h, int flags, const QString& text, int len, QTextParag **intern)
-{
-    return m_painter.boundingRect(x, y, w, h, flags, text, len, intern);
-}
-
-QRect KisQPaintDeviceCanvasPainter::boundingRect(const QRect& r, int flags, const QString& text, int len, QTextParag **intern)
-{
-    return m_painter.boundingRect(r, flags, text, len, intern);
-}
+// void KisQPaintDeviceCanvasPainter::drawText(int x, int y, const QString& text, int len, QPainter::TextDirection dir)
+// {
+//     m_painter.drawText(x, y, text, len, dir);
+// }
+//
+// void KisQPaintDeviceCanvasPainter::drawText(const QPoint& point, const QString& text, int len, QPainter::TextDirection dir)
+// {
+//     m_painter.drawText(point, text, len, dir);
+// }
+//
+// void KisQPaintDeviceCanvasPainter::drawText(int x, int y, const QString& text, int pos, int len, QPainter::TextDirection dir)
+// {
+//     m_painter.drawText(x, y, text, pos, len, dir);
+// }
+//
+// void KisQPaintDeviceCanvasPainter::drawText(const QPoint& point, const QString& text, int pos, int len, QPainter::TextDirection dir)
+// {
+//     m_painter.drawText(point, text, pos, len, dir);
+// }
+//
+// void KisQPaintDeviceCanvasPainter::drawText(int x, int y, int w, int h, int flags, const QString& text, int len, QRect *br, QTextParag **intern)
+// {
+//     m_painter.drawText(x, y, w, h, flags, text, len, br, intern);
+// }
+//
+// void KisQPaintDeviceCanvasPainter::drawText(const QRect& r, int flags, const QString& text, int len, QRect *br, QTextParag **intern)
+// {
+//     m_painter.drawText(r, flags, text, len, br, intern);
+// }
+//
+// void KisQPaintDeviceCanvasPainter::drawTextItem(int x, int y, const QTextItem& ti, int textflags)
+// {
+//     m_painter.drawTextItem(x, y, ti, textflags);
+// }
+//
+// void KisQPaintDeviceCanvasPainter::drawTextItem(const QPoint& p, const QTextItem& ti, int textflags)
+// {
+//     m_painter.drawTextItem(p, ti, textflags);
+// }
+//
+// QRect KisQPaintDeviceCanvasPainter::boundingRect(int x, int y, int w, int h, int flags, const QString& text, int len, QTextParag **intern)
+// {
+//     return m_painter.boundingRect(x, y, w, h, flags, text, len, intern);
+// }
+//
+// QRect KisQPaintDeviceCanvasPainter::boundingRect(const QRect& r, int flags, const QString& text, int len, QTextParag **intern)
+// {
+//     return m_painter.boundingRect(r, flags, text, len, intern);
+// }
 
 int	KisQPaintDeviceCanvasPainter::tabStops() const
 {
-    return m_painter.tabStops();
+    return 0;
 }
 
-void KisQPaintDeviceCanvasPainter::setTabStops(int ts)
+void KisQPaintDeviceCanvasPainter::setTabStops(int )
 {
-    m_painter.setTabStops(ts);
 }
 
 int	*KisQPaintDeviceCanvasPainter::tabArray() const
 {
-    return m_painter.tabArray();
+    return 0;
 }
 
-void KisQPaintDeviceCanvasPainter::setTabArray(int *ts)
+void KisQPaintDeviceCanvasPainter::setTabArray(int *)
 {
-    m_painter.setTabArray(ts);
 }
 
 

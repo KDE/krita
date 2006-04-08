@@ -267,8 +267,8 @@ void KisSelectionManager::updateGUI()
     }
 
     KisImageSP img = m_parent->currentImg();
-    KisLayerSP l = 0;
-    KisPaintDeviceSP dev = 0;
+    KisLayerSP l;
+    KisPaintDeviceSP dev;
 
     bool enable = false;
     if (img && img->activeDevice() && img->activeLayer()) {
@@ -286,7 +286,7 @@ void KisSelectionManager::updateGUI()
 
     m_cut->setEnabled(enable);
     m_cutToNewLayer->setEnabled(enable);
-    m_selectAll->setEnabled(img != 0);
+    m_selectAll->setEnabled(!img.isNull());
     m_deselect->setEnabled(enable);
     m_clear->setEnabled(enable);
     m_fillForegroundColor->setEnabled(enable);
@@ -308,7 +308,7 @@ void KisSelectionManager::updateGUI()
 
     KAction * a;
     for (a = m_pluginActions.first(); a; a = m_pluginActions.next()) {
-        a->setEnabled(img != 0);
+        a->setEnabled(!img.isNull());
     }
 
     // You can copy from locked layers and paste the clip into a new layer, even when
@@ -319,8 +319,8 @@ void KisSelectionManager::updateGUI()
     }
 
     m_copy->setEnabled(enable);
-    m_paste->setEnabled(img != 0 && m_clipboard->hasClip());
-    m_pasteNew->setEnabled(img != 0 && m_clipboard->hasClip());
+    m_paste->setEnabled(!img.isNull() && m_clipboard->hasClip());
+    m_pasteNew->setEnabled(!img.isNull() && m_clipboard->hasClip());
     m_toNewLayer->setEnabled(enable);
 
     m_parent->updateStatusBarSelectionLabel();
@@ -376,7 +376,7 @@ void KisSelectionManager::copy()
 
     QRect r = selection->selectedExactRect();
 
-    KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace(), "clip");
+    KisPaintDeviceSP clip = KisPaintDeviceSP(new KisPaintDevice(dev->colorSpace(), "clip"));
     Q_CHECK_PTR(clip);
 
     KisColorSpace * cs = clip->colorSpace();
@@ -413,12 +413,12 @@ void KisSelectionManager::copy()
 KisLayerSP KisSelectionManager::paste()
 {
     KisImageSP img = m_parent->currentImg();
-    if (!img) return 0;
+    if (!img) return KisLayerSP(0);
 
     KisPaintDeviceSP clip = m_clipboard->clip();
 
     if (clip) {
-        KisPaintLayer *layer = new KisPaintLayer(img, img->nextLayerName() + "(pasted)", OPACITY_OPAQUE);
+        KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName() + "(pasted)", OPACITY_OPAQUE);
         Q_CHECK_PTR(layer);
 
         QRect r = clip->exactBounds();
@@ -445,11 +445,11 @@ KisLayerSP KisSelectionManager::paste()
             if (dlg->exec() == QDialog::Accepted)
                 layer->convertTo(img->colorSpace());
 */
-        img->addLayer(layer, img->rootLayer(), img->activeLayer());
+        img->addLayer(KisLayerSP(layer), img->rootLayer(), img->activeLayer());
 
-        return layer;
+        return KisLayerSP(layer);
     }
-    return 0;
+    return KisLayerSP(0);
 }
 
 void KisSelectionManager::pasteNew()
@@ -470,14 +470,14 @@ void KisSelectionManager::pasteNew()
     Q_ASSERT(doc->undoAdapter() != 0);
     doc->undoAdapter()->setUndo(false);
 
-    KisImageSP img = new KisImage(doc->undoAdapter(), r.width(), r.height(), clip->colorSpace(), "Pasted");
-    KisPaintLayer *layer = new KisPaintLayer(img, clip->name(), OPACITY_OPAQUE, clip->colorSpace());
+    KisImageSP img = KisImageSP(new KisImage(doc->undoAdapter(), r.width(), r.height(), clip->colorSpace(), "Pasted"));
+    KisPaintLayer *layer = new KisPaintLayer(img.data(), clip->name(), OPACITY_OPAQUE, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
     p.bitBlt(0, 0, COMPOSITE_COPY, clip, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
     p.end();
 
-    img->addLayer(layer, img->rootLayer(), 0);
+    img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
     doc->setCurrentImage(img);
 
     doc->undoAdapter()->setUndo(true);
@@ -560,7 +560,7 @@ void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, cons
 
     KisSelectionSP selection = dev->selection();
 
-    KisPaintDeviceSP filled = new KisPaintDevice(dev->colorSpace());
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(dev->colorSpace()));
     KisFillPainter painter(filled);
 
     if (fillWithPattern) {
@@ -694,9 +694,9 @@ void KisSelectionManager::feather()
     // XXX: we should let gaussian blur & others influence alpha channels as well
     // (on demand of the caller)
 
-    KisConvolutionPainter painter(selection.data());
+    KisConvolutionPainter painter(KisPaintDeviceSP(selection.data()));
 
-    KisKernelSP k = new KisKernel();
+    KisKernelSP k = KisKernelSP(new KisKernel());
     k->width = 3;
     k->height = 3;
     k->factor = 16;

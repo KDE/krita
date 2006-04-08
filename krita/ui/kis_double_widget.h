@@ -52,7 +52,7 @@ public:
     void setPageStep(double step);
 
     void setTracking(bool tracking);
-    bool tracking() const;
+    bool hasTracking() const;
 
 signals:
     void valueChanged(double);

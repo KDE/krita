@@ -815,8 +815,8 @@ QWidget* KisDoc::createCustomDocumentWidget(QWidget *parent)
 }
 
 
-KoDocument* KisDoc::hitTest(const QPoint &pos, const QMatrix& matrix) {
-    KoDocument* doc = super::hitTest(pos, matrix);
+KoDocument* KisDoc::hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix) {
+    KoDocument* doc = super::hitTest(pos, view, matrix);
     if (doc && doc != this) {
         // We hit a child document. We will only acknowledge we hit it, if the hit child
         // is the currently active parts layer.
@@ -846,15 +846,15 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 KisImageSP KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * colorstrategy)
 {
     if (!init())
-        return false;
+        return KisImageSP(0);
 
     setUndo(false);
 
-    KisImageSP img = new KisImage(this, width, height, colorstrategy, name);
+    KisImageSP img = KisImageSP(new KisImage(this, width, height, colorstrategy, name));
     Q_CHECK_PTR(img);
-    connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
+    connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
 
-    KisPaintLayer *layer = new KisPaintLayer(img, img->nextLayerName(), OPACITY_OPAQUE,colorstrategy);
+    KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorstrategy);
     Q_CHECK_PTR(layer);
 
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
@@ -864,8 +864,8 @@ KisImageSP KisDoc::newImage(const QString& name, qint32 width, qint32 height, Ki
     painter.fillRect(0, 0, width, height, KisColor(Qt::white, cs), OPACITY_OPAQUE);
     painter.end();
 
-    img->addLayer(layer, img->rootLayer(), 0);
-    img->activate(layer);
+    img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
+    img->activate(KisLayerSP(layer));
 
     m_currentImage = img;
 
@@ -891,12 +891,12 @@ bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColor
 
     img = new KisImage(this, width, height, cs, name);
     Q_CHECK_PTR(img);
-    connect( img, SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
+    connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
     img->setResolution(imgResolution, imgResolution);
     img->setDescription(imgDescription);
     img->setProfile(cs->getProfile());
 
-    layer = new KisPaintLayer(img, img->nextLayerName(), OPACITY_OPAQUE, cs);
+    layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, cs);
     Q_CHECK_PTR(layer);
 
     KisFillPainter painter;
@@ -910,8 +910,8 @@ bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColor
         actions.at(i)->act(layer->paintDevice(), img->width(), img->height());
 
     img->setBackgroundColor(bgColor);
-    img->addLayer(layer, img->rootLayer(), 0);
-    img->activate(layer);
+    img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
+    img->activate(KisLayerSP(layer));
 
     m_currentImage = img;
 

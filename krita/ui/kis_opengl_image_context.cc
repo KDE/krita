@@ -98,9 +98,9 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
 
     createImageTextureTiles();
 
-    connect(m_image, SIGNAL(sigImageUpdated(QRect)),
+    connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)),
             SLOT(slotImageUpdated(QRect)));
-    connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)),
+    connect(m_image.data(), SIGNAL(sigSizeChanged(qint32, qint32)),
             SLOT(slotImageSizeChanged(qint32, qint32)));
 
     updateImageTextureTiles(m_image->bounds());
@@ -115,7 +115,7 @@ KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image,
 
             kDebug(41001) << "Sharing image context from map\n";
 
-            KisOpenGLImageContextSP context = (*it).second;
+            KisOpenGLImageContextSP context = KisOpenGLImageContextSP((*it).second);
             context->setMonitorProfile(monitorProfile);
 
             return context;
@@ -125,12 +125,12 @@ KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image,
 
             kDebug(41001) << "Added shareable context to map\n";
 
-            return imageContext;
+            return KisOpenGLImageContextSP(imageContext);
         }
     } else {
         kDebug(41001) << "Creating non-shareable image context\n";
 
-        return new KisOpenGLImageContext(image, monitorProfile);
+        return KisOpenGLImageContextSP(new KisOpenGLImageContext(image, monitorProfile));
     }
 }
 
@@ -185,7 +185,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
                                                                      m_monitorProfile, m_exposure);
 
                 if (m_displaySelection) {
-                    if (m_image->activeLayer() != 0) {
+                    if (!m_image->activeLayer().isNull()) {
                         m_image->activeLayer()->paintSelection(tileUpdateImage,
                                                                    tileUpdateRect.x(), tileUpdateRect.y(),
                                                                    tileUpdateRect.width(), tileUpdateRect.height());

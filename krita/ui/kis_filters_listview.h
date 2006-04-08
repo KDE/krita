@@ -82,7 +82,7 @@ private:
     KisPaintDeviceSP m_dev;
     const QRect m_bounds;
     KisProfile * m_profile;
-    QImage m_pixmap;
+    QImage m_image;
 };
 
 class KisFiltersIconViewItem : public Q3IconViewItem {

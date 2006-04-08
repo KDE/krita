@@ -12,6 +12,9 @@
             <height>265</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>KisWdgCustomBrush</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -88,7 +91,7 @@
                         </property>
                     </item>
                     <property name="name">
-                        <cstring>style</cstring>
+                        <cstring>brushStyle</cstring>
                     </property>
                 </widget>
             </grid>
@@ -114,7 +117,7 @@
                         <cstring>spacer2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -153,7 +156,7 @@
                         <cstring>spacer1</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

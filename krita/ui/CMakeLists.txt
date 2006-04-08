@@ -1,11 +1,7 @@
 kde4_header()
 
-
-
-
-########### next target ###############
-
-set(kritaui_LIB_SRCS ${libkritasdk_SRCS} 
+set(kritaui_LIB_SRCS
+   ${libkritasdk_SRCS}
    kis_histogram_view.cc 
    imageviewer.cc 
    kcurve.cc 
@@ -87,7 +83,8 @@ set(kritaui_LIB_SRCS ${libkritasdk_SRCS}
    kis_input_device.cc 
    kis_part_layer_handler.cc 
    kis_dlg_adj_layer_props.cc 
-   squeezedcombobox.cpp )
+   squeezedcombobox.cpp 
+   )
 
 kde4_automoc(${kritaui_LIB_SRCS})
 
@@ -96,7 +93,6 @@ kde4_add_ui3_files(kritaui_LIB_SRCS
    kis_previewwidgetbase.ui 
    wdgapplyprofile.ui 
    wdgautobrush.ui 
-   wdgbirdeye.ui 
    wdgcolorsettings.ui 
    wdgdisplaysettings.ui 
    wdglayerproperties.ui 
@@ -118,6 +114,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 	wdggeneralsettings.ui 
 	wdgperformancesettings.ui 
 	wdggridsettings.ui 
+	wdgbirdeye.ui 
 	)
 
 include_directories(
@@ -133,7 +130,7 @@ kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS})
 
-target_link_libraries(kritaui  ${KDE4_KDECORE_LIBS} kritasdk kritaimage kritacolor kofficeui kopainter kopalette )
+target_link_libraries(kritaui ${KDE4_KDECORE_LIBS} kritaimage kritacolor kofficeui kopainter kopalette )
 
 set_target_properties(kritaui PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kritaui )

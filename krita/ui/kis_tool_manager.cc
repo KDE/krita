@@ -73,7 +73,7 @@ void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManage
 
     m_tools = m_inputDeviceToolSetMap[KisInputDevice::mouse()];
     for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
-        KisTool * t = *it;
+        KisToolSP t = *it;
         if (!t) continue;
         toolbox->registerTool( t->action(), t->toolType(), t->priority() );
     }
@@ -103,7 +103,7 @@ void KisToolManager::resetToolBox(KoToolBox * toolbox)
 
     m_tools = m_inputDeviceToolSetMap[KisInputDevice::mouse()];
     for (vKisTool_it it = m_tools.begin(); it != m_tools.end(); ++it) {
-        KisTool * t = *it;
+        KisToolSP t = *it;
         if (!t) continue;
         m_toolBox->registerTool( t->action(), t->toolType(), t->priority() );
     }
@@ -133,7 +133,7 @@ void KisToolManager::updateGUI()
     if (!m_toolBox) return;
 
     KisImageSP img = m_subject->currentImg();
-    KisLayerSP l = 0;
+    KisLayerSP l = KisLayerSP(0);
 
     bool enable = false;
 
@@ -207,7 +207,7 @@ void KisToolManager::setCurrentTool(KisTool *tool)
         m_subject->notifyObservers();
 
         tool->action()->setChecked( true );
-        tool->action()->activate();
+        tool->action()->activate(QAction::Trigger);
 
     } else {
         m_inputDeviceToolMap[m_controller->currentInputDevice()] = 0;
@@ -240,9 +240,9 @@ void KisToolManager::setToolForInputDevice(KisInputDevice oldDevice, KisInputDev
     if (vit != m_inputDeviceToolSetMap.end()) {
         vKisTool& oldTools = (*vit).second;
         for (vKisTool::iterator it = oldTools.begin(); it != oldTools.end(); ++it) {
-            KisTool *tool = *it;
+            KisToolSP tool = *it;
             KAction *toolAction = tool->action();
-            toolAction->disconnect(SIGNAL(activated()), tool, SLOT(activate()));
+            toolAction->disconnect(SIGNAL(activated()), tool.data(), SLOT(activate()));
         }
     }
     KisTool *oldTool = currentTool();
@@ -260,9 +260,9 @@ void KisToolManager::setToolForInputDevice(KisInputDevice oldDevice, KisInputDev
     vKisTool& tools = (*vit).second;
 
     for (vKisTool::iterator it = tools.begin(); it != tools.end(); ++it) {
-        KisTool *tool = *it;
+        KisToolSP tool = *it;
         KAction *toolAction = tool->action();
-        connect(toolAction, SIGNAL(activated()), tool, SLOT(activate()));
+        connect(toolAction, SIGNAL(activated()), tool.data(), SLOT(activate()));
     }
 }
 
@@ -270,7 +270,7 @@ void KisToolManager::activateCurrentTool()
 {
     KisTool * t = currentTool();
     if (t && t->action()) {
-        t->action()->activate();
+        t->action()->activate(QAction::Trigger);
     }
 }
 
@@ -289,9 +289,9 @@ KisTool * KisToolManager::findTool(const QString &toolName, KisInputDevice input
     const vKisTool& tools = (*vit).second;
 
     for (vKisTool::const_iterator it = tools.begin(); it != tools.end(); ++it) {
-        KisTool *t = *it;
+        KisToolSP t = *it;
         if (t->name() == toolName) {
-            tool = t;
+            tool = t.data();
             break;
         }
     }

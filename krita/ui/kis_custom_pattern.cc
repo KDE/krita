@@ -114,7 +114,7 @@ void KisCustomPattern::createPattern() {
     if (!img)
         return;
 
-    m_pattern = new KisPattern(img->mergedImage(), 0, 0, img->width(), img->height());
+    m_pattern = new KisPattern(img->mergedImage().data(), 0, 0, img->width(), img->height());
 }
 
 

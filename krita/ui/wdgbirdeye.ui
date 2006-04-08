@@ -1,301 +1,266 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgBirdEye</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgBirdEye</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgBirdEye</class>
+  <widget class="QWidget" name="WdgBirdEye" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>188</width>
+        <height>126</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>188</width>
-            <height>126</height>
-        </rect>
+    <property name="sizePolicy" >
+      <sizepolicy>
+        <hsizetype>1</hsizetype>
+        <vsizetype>1</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+      </sizepolicy>
     </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>1</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
+    <property name="windowTitle" >
+      <string>Overview</string>
     </property>
-    <property name="caption">
-        <string>Overview</string>
-    </property>
-    <property name="layoutMargin" stdset="0">
-    </property>
-    <property name="layoutSpacing" stdset="0">
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>0</number>
-        </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout4</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>1</number>
-                </property>
-                <property name="spacing">
-                    <number>1</number>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout10</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>lblX</cstring>
-                            </property>
-                            <property name="text">
-                                <string>X:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>txtX</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="frameShape">
-                                <enum>NoFrame</enum>
-                            </property>
-                            <property name="frameShadow">
-                                <enum>Plain</enum>
-                            </property>
-                            <property name="text">
-                                <string>00000</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>lblY</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Y:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>txtY</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="frameShape">
-                                <enum>NoFrame</enum>
-                            </property>
-                            <property name="frameShadow">
-                                <enum>Plain</enum>
-                            </property>
-                            <property name="text">
-                                <string>00000</string>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer6</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Qt::Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </vbox>
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <property name="spacing" >
+        <number>0</number>
+      </property>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>1</number>
+          </property>
+          <property name="spacing" >
+            <number>1</number>
+          </property>
+          <item>
+            <layout class="QVBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <widget class="QLabel" name="lblX" >
+                  <property name="text" >
+                    <string>X:</string>
+                  </property>
                 </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>view</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>2</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>75</width>
-                            <height>75</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>200</width>
-                            <height>75</height>
-                        </size>
-                    </property>
-                    <property name="mouseTracking">
-                        <bool>true</bool>
-                    </property>
-                    <property name="frameShape">
-                        <enum>Box</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
+              </item>
+              <item>
+                <widget class="QLabel" name="txtX" >
+                  <property name="minimumSize" >
+                    <size>
+                      <width>50</width>
+                      <height>0</height>
+                    </size>
+                  </property>
+                  <property name="maximumSize" >
+                    <size>
+                      <width>50</width>
+                      <height>32767</height>
+                    </size>
+                  </property>
+                  <property name="frameShape" >
+                    <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow" >
+                    <enum>QFrame::Plain</enum>
+                  </property>
+                  <property name="text" >
+                    <string>00000</string>
+                  </property>
                 </widget>
-            </hbox>
-        </widget>
-        <widget class="KToolBar">
-            <property name="name">
-                <cstring>toolbar</cstring>
-            </property>
-            <property name="maximumSize">
+              </item>
+              <item>
+                <widget class="QLabel" name="lblY" >
+                  <property name="text" >
+                    <string>Y:</string>
+                  </property>
+                </widget>
+              </item>
+              <item>
+                <widget class="QLabel" name="txtY" >
+                  <property name="minimumSize" >
+                    <size>
+                      <width>50</width>
+                      <height>0</height>
+                    </size>
+                  </property>
+                  <property name="maximumSize" >
+                    <size>
+                      <width>50</width>
+                      <height>32767</height>
+                    </size>
+                  </property>
+                  <property name="frameShape" >
+                    <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow" >
+                    <enum>QFrame::Plain</enum>
+                  </property>
+                  <property name="text" >
+                    <string>00000</string>
+                  </property>
+                </widget>
+              </item>
+              <item>
+                <spacer name="spacer6" >
+                  <property name="sizeHint" >
+                    <size>
+                      <width>20</width>
+                      <height>20</height>
+                    </size>
+                  </property>
+                  <property name="sizeType" >
+                    <enum>Expanding</enum>
+                  </property>
+                  <property name="orientation" >
+                    <enum>Qt::Vertical</enum>
+                  </property>
+                </spacer>
+              </item>
+            </layout>
+          </item>
+          <item>
+            <widget class="Q3Frame" name="view" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>7</hsizetype>
+                  <vsizetype>0</vsizetype>
+                  <horstretch>2</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <property name="minimumSize" >
                 <size>
-                    <width>32767</width>
-                    <height>32</height>
+                  <width>75</width>
+                  <height>75</height>
                 </size>
-            </property>
+              </property>
+              <property name="maximumSize" >
+                <size>
+                  <width>200</width>
+                  <height>75</height>
+                </size>
+              </property>
+              <property name="mouseTracking" >
+                <bool>true</bool>
+              </property>
+              <property name="frameShape" >
+                <enum>Box</enum>
+              </property>
+              <property name="frameShadow" >
+                <enum>Raised</enum>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item>
+        <widget class="KToolBar" name="toolbar" >
+          <property name="maximumSize" >
+            <size>
+              <width>32767</width>
+              <height>32</height>
+            </size>
+          </property>
         </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout4</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>1</number>
-                </property>
-                <property name="spacing">
-                    <number>1</number>
-                </property>
-                <widget class="KIntSpinBox">
-                    <property name="name">
-                        <cstring>zoom</cstring>
-                    </property>
-                    <property name="suffix">
-                        <string></string>
-                    </property>
-                    <property name="maxValue">
-                        <number>1600</number>
-                    </property>
-                    <property name="minValue">
-                        <number>10</number>
-                    </property>
-                    <property name="lineStep">
-                        <number>10</number>
-                    </property>
-                </widget>
-                <widget class="QSlider">
-                    <property name="name">
-                        <cstring>slZoom</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>1</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="maxValue">
-                        <number>19</number>
-                    </property>
-                    <property name="pageStep">
-                        <number>1</number>
-                    </property>
-                    <property name="value">
-                        <number>10</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                </widget>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>bn100</cstring>
-                    </property>
-                    <property name="text">
-                        <string>1:1</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<customwidgets>
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>1</number>
+          </property>
+          <property name="spacing" >
+            <number>1</number>
+          </property>
+          <item>
+            <widget class="KIntSpinBox" name="zoom" >
+              <property name="suffix" >
+                <string/>
+              </property>
+              <property name="maxValue" >
+                <number>1600</number>
+              </property>
+              <property name="minValue" >
+                <number>10</number>
+              </property>
+              <property name="lineStep" >
+                <number>10</number>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QSlider" name="slZoom" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>1</hsizetype>
+                  <vsizetype>0</vsizetype>
+                  <horstretch>1</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <property name="maximum" >
+                <number>19</number>
+              </property>
+              <property name="pageStep" >
+                <number>1</number>
+              </property>
+              <property name="value" >
+                <number>10</number>
+              </property>
+              <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QToolButton" name="bn100" >
+              <property name="text" >
+                <string>1:1</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>BarIcon</pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>KToolBar</class>
-        <header location="local">ktoolbar.h</header>
-        <sizehint>
-            <width>20</width>
-            <height>100</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
+      <class>KToolBar</class>
+      <extends></extends>
+      <header location="local" >ktoolbar.h</header>
+      <sizehint>
+        <width>20</width>
+        <height>100</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
     </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="730">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002a149444154388db595df4b536118c73f3bdbecf8036c4e41f2c6695022045e486e90b721e4ba126f1a0966627f4108512004a197fd0586588220980a9a068be63abaa884cc1f6d30a7e29cfb216dceb39d9d2e2cf3c74997e417de97972fbc9fe77d1e789e57e772b9384d369b4d3deab95c2edd497784b3404ff20f460650fff732fc0ee0f5bc241298252dc710f4174e4be4908cb9661439cefa7c0fb71eee79fbe0486096b5af3d644e4e50537a3de880b4f2c7db07a7e51819156e77fe3b1860b4bb1095d871f0c1f4239108068381f84e9cc58545c6c7c78946a3d45dafa3b4b414511411f34456d756e9eded65706090924a076bdf9e1f071fd4c0c000c15010f7b49bc93793b4de6ba5abab0bd3451300bbbbbb783e7a08ac04d858dfd0cc4013dcdedebe7f368a462449a2ff553fcd4dcdf87c3eba7bba71bbdcf8fd7e8a8a8ab20703d4d6d6d2f1a00383d180b9c84c85a58282fc027c3e1ff537ea71dc71303a36caf6f6367d2ffab203773eeaa4e1660336ab8db49226c798839c9211f402b22c53535383cd6ac35261c1eff76b82353b4fafd7a3a80a899d048220904aa588842324779278bd5e9cef9cc41371ca2e9511de0a675f8ae1a161cc2633e5e5e5980a4d0882c06678133157243f2f9f85a50526a62698fb32c78c674613acf962dfb28fd05688443c41329944de95997e3fcdc8e8088b4b8bb85d6e42c110f6463b5557aab207c77ec458febe8c3fe067657585542a85d566c5bbecc5fdc18de5b285603088925168b9db927d294451c4e9745275b50a7ba39dc44e8292e212daeeb7517dad9aa9b7534833129224d1d4d4a409de9f6e9fc61eabaf9f9d7d9a7d1e7ba20e3dd5986e8a1c47c75ecf97543ab45ff117e5e416138f7af790474bb13edf435a0195d8a19ecf46eaaf2d9339609ed7a03ff56b3aabce0dfc13238259bff00a6d890000000049454e44ae426082</data>
+    <customwidget>
+      <class>KIntSpinBox</class>
+      <extends>QSpinBox</extends>
+      <header>knuminput.h</header>
+      <container>1</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="730" >89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002a149444154388db595df4b536118c73f3bdbecf8036c4e41f2c6695022045e486e90b721e4ba126f1a0966627f4108512004a197fd0586588220980a9a068be63abaa884cc1f6d30a7e29cfb216dceb39d9d2e2cf3c74997e417de97972fbc9fe77d1e789e57e772b9384d369b4d3deab95c2edd497784b3404ff20f460650fff732fc0ee0f5bc241298252dc710f4174e4be4908cb9661439cefa7c0fb71eee79fbe0486096b5af3d644e4e50537a3de880b4f2c7db07a7e51819156e77fe3b1860b4bb1095d871f0c1f4239108068381f84e9cc58545c6c7c78946a3d45dafa3b4b414511411f34456d756e9eded65706090924a076bdf9e1f071fd4c0c000c15010f7b49bc93793b4de6ba5abab0bd3451300bbbbbb783e7a08ac04d858dfd0cc4013dcdedebe7f368a462449a2ff553fcd4dcdf87c3eba7bba71bbdcf8fd7e8a8a8ab20703d4d6d6d2f1a00383d180b9c84c85a58282fc027c3e1ff537ea71dc71303a36caf6f6367d2ffab203773eeaa4e1660336ab8db49226c798839c9211f402b22c53535383cd6ac35261c1eff76b82353b4fafd7a3a80a899d048220904aa588842324779278bd5e9cef9cc41371ca2e9511de0a675f8ae1a161cc2633e5e5e5980a4d0882c06678133157243f2f9f85a50526a62698fb32c78c674613acf962dfb28fd05688443c41329944de95997e3fcdc8e8088b4b8bb85d6e42c110f6463b5557aab207c77ec458febe8c3fe067657585542a85d566c5bbecc5fdc18de5b285603088925168b9db927d294451c4e9745275b50a7ba39dc44e8292e212daeeb7517dad9aa9b7534833129224d1d4d4a409de9f6e9fc61eabaf9f9d7d9a7d1e7ba20e3dd5986e8a1c47c75ecf97543ab45ff117e5e416138f7af790474bb13edf435a0195d8a19ecf46eaaf2d9339609ed7a03ff56b3aabce0dfc13238259bff00a6d890000000049454e44ae426082</data>
     </image>
-</images>
-<includes>
-    <include location="local" impldecl="in declaration">kiconloader.h</include>
-</includes>
-<slots>
-    <slot>zoomChanged(int)</slot>
-    <slot>zoomMinus()</slot>
-    <slot>zoomPlus()</slot>
-</slots>
-<pixmapfunction>BarIcon</pixmapfunction>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>ktoolbar.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
-</UI>
+  </images>
+  <includes>
+    <include location="local" >kiconloader.h</include>
+  </includes>
+</ui>

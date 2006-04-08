@@ -56,7 +56,7 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString&
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUseBrush()));
 //    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
-    connect(style, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
+    connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(stateChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
 }
 
@@ -88,7 +88,7 @@ void KisCustomBrush::slotAddPredefined() {
     QString dir = KGlobal::dirs()->saveLocation("data", "krita/brushes");
     QString extension;
 
-    if (style->currentItem() == 0) {
+    if (brushStyle->currentItem() == 0) {
         extension = ".gbr";
     } else {
         extension = ".gih";
@@ -119,8 +119,8 @@ void KisCustomBrush::createBrush() {
     if (!img)
         return;
 
-    if (style->currentItem() == 0) {
-        m_brush = new KisBrush(img->mergedImage(), 0, 0, img->width(), img->height());
+    if (brushStyle->currentItem() == 0) {
+        m_brush = new KisBrush(img->mergedImage().data(), 0, 0, img->width(), img->height());
         if (colorAsMask->isChecked())
             m_brush->makeMaskImage();
         return;
@@ -134,12 +134,12 @@ void KisCustomBrush::createBrush() {
 
     // We only loop over the rootLayer. Since we actually should have a layer selection
     // list, no need to elaborate on that here and now
-    KisLayer* layer = img->rootLayer()->firstChild();
+    KisLayer* layer = img->rootLayer()->firstChild().data();
     while (layer) {
         KisPaintLayer* paint = 0;
         if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
-            devices.at(0).push_back(paint->paintDevice());
-        layer = layer->nextSibling();
+            devices.at(0).push_back(paint->paintDevice().data());
+        layer = layer->nextSibling().data();
     }
     Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes;
 

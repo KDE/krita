@@ -174,7 +174,7 @@ void KisToolFreehand::initPaint(KisEvent *)
             //if (m_tempLayer == 0) {
                 // XXX ugly! hacky! We'd like to cache the templayer, but that makes sure
                 // the layer is never really removed from its parent group because of shared pointers
-                m_tempLayer = new KisPaintLayer(m_currentImage, "temp", OPACITY_OPAQUE);
+                m_tempLayer = new KisPaintLayer(m_currentImage.data(), "temp", OPACITY_OPAQUE);
                 m_tempLayer->setTemporary(true);
                 // Yuck, what an ugly cast!
                 m_target = (dynamic_cast<KisPaintLayer*>(m_tempLayer.data()))->paintDevice();
@@ -185,7 +185,7 @@ void KisToolFreehand::initPaint(KisEvent *)
 
             m_tempLayer->setVisible(true);
 
-            currentImage()->addLayer(m_tempLayer, m_currentImage->activeLayer()->parent().data(), m_currentImage->activeLayer());
+            currentImage()->addLayer(m_tempLayer, m_currentImage->activeLayer()->parent(), m_currentImage->activeLayer());
 
         } else {
             m_target = device;

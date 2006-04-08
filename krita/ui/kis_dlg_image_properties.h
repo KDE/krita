@@ -25,6 +25,8 @@
 
 class Q3ButtonGroup;
 class KisID;
+class KisColorSpace;
+class KisProfile;
 
 class WdgNewImage : public QWidget, public Ui::WdgNewImage
 {

@@ -46,6 +46,14 @@
 #include "kobirdeyepanel.h"
 #include "kis_int_spinbox.h"
 
+class WdgBirdEye : public QWidget, public Ui::WdgBirdEye
+{
+    Q_OBJECT
+
+    public:
+        WdgBirdEye(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
+
 KoCanvasAdapter::KoCanvasAdapter() {}
 KoCanvasAdapter::~KoCanvasAdapter() {}
 
@@ -68,17 +76,17 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
     , m_dragging(false)
 {
     Q3HBoxLayout * l = new Q3HBoxLayout(this);
-    m_page = new WdgBirdEye(this);
-    m_page->zoom->setRange((int) (qMax(1, 100 * zoomListener->getMinZoom())), (int) (100 * zoomListener->getMaxZoom()));
+    m_page = new WdgBirdEye(this, "birdeye_panel");
+    m_page->zoom->setRange((int) (qMax(1, (int)(100 * zoomListener->getMinZoom()))), (int) (100 * zoomListener->getMaxZoom()));
     m_page->zoom->setValue(100);
     m_page->zoom->setSuffix("%");
 
-    m_page->toolbar->setIconSize(16);
+    m_page->toolbar->setIconSize(QSize(16, 16));
     m_page->view->installEventFilter(this);
     m_page->view->setBackgroundMode(Qt::NoBackground);
 
-    m_zoomIn = new KAction( i18n("Zoom In"), "birdeye_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
-    m_zoomOut = new KAction( i18n("Zoom Out"), "birdeye_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
+    m_zoomIn = new KAction( i18n("Zoom In"), "birdeye_zoom_plus", 0, this, SLOT(zoomPlus()), 0, "zoomIn" );
+    m_zoomOut = new KAction( i18n("Zoom Out"), "birdeye_zoom_minus", 0, this, SLOT(zoomMinus()), 0, "zoomOut" );
 
     l->addWidget(m_page);
 
@@ -340,7 +348,7 @@ bool KoBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
         QMouseEvent* me = (QMouseEvent*)ev;
         QPoint thumbnailPos = viewToThumbnail(me->pos());
 
-        if (me->button() == LeftButton) {
+        if (me->button() == Qt::LeftButton) {
             handleMousePress(thumbnailPos);
         }
 
@@ -351,7 +359,7 @@ bool KoBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
 
         QMouseEvent* me = (QMouseEvent*)ev;
 
-        if (me->button() == LeftButton) {
+        if (me->button() == Qt::LeftButton) {
             m_dragging = false;
         }
 
@@ -603,7 +611,7 @@ void KoBirdEyePanel::renderView()
                              thumbnailY + m_visibleAreaInThumbnail.y() - 1, 
                              m_visibleAreaInThumbnail.width() + 2, 
                              m_visibleAreaInThumbnail.height() + 2);
-            painter.setPen(Qt::red.light());
+            painter.setPen(QColor(Qt::red).light());
             painter.drawRect(thumbnailX + m_visibleAreaInThumbnail.x() - 2, 
                              thumbnailY + m_visibleAreaInThumbnail.y() - 2, 
                              m_visibleAreaInThumbnail.width() + 4, 

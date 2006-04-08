@@ -92,7 +92,7 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
 
         KisTool * tool = f->createTool(ac);
         subject->attach(tool);
-        tools.push_back(tool);
+        tools.push_back(KisToolSP(tool));
     }
 
     subject->notifyObservers();

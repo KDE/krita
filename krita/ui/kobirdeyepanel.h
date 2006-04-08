@@ -111,7 +111,7 @@ class KoThumbnailAdapter
     public:
     
         KoThumbnailAdapter();
-        ~KoThumbnailAdapter();
+        virtual ~KoThumbnailAdapter();
         
         /**
          * Returns the size of the document in pixels.

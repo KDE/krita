@@ -95,7 +95,7 @@ void KisCustomPalette::slotAddNew() {
     QString name = KInputDialog::getText(i18n("Add Color to Palette"),
                                          i18n("Color name (optional):"),
                                          QString::null, &ok,
-                                         0, 0, &validator);
+                                         0, &validator);
     if (!ok)
         return;
 

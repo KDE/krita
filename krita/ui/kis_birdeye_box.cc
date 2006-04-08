@@ -222,7 +222,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
     connect(m_subject->document(), SIGNAL(sigCommandExecuted()), SLOT(slotDocCommandExecuted()));
 
     if (m_image) {
-        connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
+        connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
     }
 }
 
@@ -244,9 +244,9 @@ void KisBirdEyeBox::setImage(KisImageSP image)
     m_birdEyePanel->setThumbnailProvider(ktp);
 
     if (m_image) {
-        connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
-        connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
-        connect(m_image, SIGNAL(sigColorSpaceChanged(KisColorSpace *)), SLOT(slotImageColorSpaceChanged(KisColorSpace *)));
+        connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
+        connect(m_image.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
+        connect(m_image.data(), SIGNAL(sigColorSpaceChanged(KisColorSpace *)), SLOT(slotImageColorSpaceChanged(KisColorSpace *)));
         m_birdEyePanel->slotUpdate(m_image->bounds());
         slotImageColorSpaceChanged(m_image->colorSpace());
     }

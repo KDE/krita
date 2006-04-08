@@ -51,18 +51,18 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     : KDialogBase(parent, name, true, "", Ok | Cancel)
 {
     Q_ASSERT( layer );
-    m_layer = layer;
+    m_layer = layer.data();
 
     KisLayerSP next = layer->nextSibling();
     Q_ASSERT( next );
 
     m_currentConfiguration = layer->filter();
-    m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name());
+    m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name()).data();
     if (!m_currentFilter) {
         kWarning() << "No filter specified!\n";
     }
 
-    KisPaintDeviceSP dev = 0;
+    KisPaintDeviceSP dev = KisPaintDeviceSP(0);
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(next.data());
     if (pl) {
@@ -90,7 +90,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     m_preview->slotSetDevice( dev );
 
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
-    layout->addWidget(m_preview, 1, 1);
+    layout->addWidget(m_preview, 1, Qt::AlignLeft);
 
     Q3VBoxLayout *v1 = new Q3VBoxLayout( layout );
     Q3HBoxLayout *hl = new Q3HBoxLayout( v1 );
@@ -98,10 +98,11 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     QLabel * lblName = new QLabel(i18n("Layer name:"), page, "lblName");
     hl->addWidget(lblName, 0, 0);
 
-    m_layerName = new KLineEdit(page, "m_layerName");
+    m_layerName = new KLineEdit(page);
+    m_layerName->setObjectName("m_layerName");
     m_layerName->setText(layerName);
     m_layerName->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-    hl->addWidget(m_layerName, 0, 1);
+    hl->addWidget(m_layerName, 0, Qt::AlignLeft);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
     if ( m_currentFilter ) {
@@ -168,8 +169,8 @@ void KisDlgAdjLayerProps::refreshPreview()
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
     QRect rect = layer->extent();
-    KisTransaction cmd("Temporary transaction", layer.data());
-    m_currentFilter->process(layer.data(), layer.data(), config, rect);
+    KisTransaction cmd("Temporary transaction", layer);
+    m_currentFilter->process(layer, layer, config, rect);
     m_preview->slotUpdate();
     cmd.unexecute();
 }

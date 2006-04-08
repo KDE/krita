@@ -70,7 +70,7 @@
 #include <kstatusbar.h>
 #include <kstdaction.h>
 #include <kinputdialog.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <ksharedptr.h>
@@ -80,6 +80,7 @@
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kparts/event.h>
+#include <kxmlguifactory.h>
 
 // KOffice
 #include <KoPartSelectAction.h>
@@ -92,12 +93,19 @@
 #include <ko_rgb_widget.h>
 #include <kopalettemanager.h>
 #include <kopalette.h>
+#include <KoToolBox.h>
 
 // Local
+
+#include "kis_canvas.h"
+
+#ifdef Q_WS_X11
+#include <fixx11h.h>
+#endif
+
 #include "kis_brush.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
-#include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_color.h"
 #include "kis_colorspace_factory_registry.h"
@@ -132,7 +140,6 @@
 #include "kis_palette.h"
 #include "kis_ruler.h"
 #include "kis_selection.h"
-#include "KoToolBox.h"
 #include "kis_tool.h"
 #include "kis_tool_manager.h"
 #include "kis_transaction.h"
@@ -172,8 +179,6 @@
 
 #include "kis_custom_palette.h"
 #include "wdgpalettechooser.h"
-
-#include <fixx11h.h>
 
 // Time in ms that must pass after a tablet event before a mouse event is allowed to
 // change the input device to the mouse. This is needed because mouse events are always
@@ -371,22 +376,23 @@ KisView::~KisView()
 }
 
 
-static Qt::ToolBarDock stringToDock( const QString& attrPosition )
+static Qt::ToolBarArea stringToDock( const QString& attrPosition )
 {
-    KToolBar::Dock dock = KToolBar::DockTop;
+    Qt::ToolBarArea dock = Qt::TopToolBarArea;
     if ( !attrPosition.isEmpty() ) {
         if ( attrPosition == "top" )
-            dock = Qt::DockTop;
+            dock = Qt::TopToolBarArea;
         else if ( attrPosition == "left" )
-            dock = Qt::DockLeft;
+            dock = Qt::LeftToolBarArea;
         else if ( attrPosition == "right" )
-            dock = Qt::DockRight;
+            dock = Qt::RightToolBarArea;
         else if ( attrPosition == "bottom" )
-            dock = Qt::DockBottom;
-        else if ( attrPosition == "floating" )
+            dock = Qt::BottomToolBarArea;
+#warning kde4 port
+        /*else if ( attrPosition == "floating" )
             dock = Qt::DockTornOff;
         else if ( attrPosition == "flat" )
-            dock = Qt::DockMinimized;
+            dock = Qt::DockMinimized;*/
     }
     return dock;
 }
@@ -399,10 +405,10 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
         m_toolBox->setLabel(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 
-        Qt::ToolBarDock dock = stringToDock( element.attribute( "position" ).lower() );
+        Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).lower() );
 
-        mainWindow()->addDockWindow( m_toolBox, dock, false);
-        mainWindow()->moveDockWindow( m_toolBox, dock, false, 0, 0 );
+        mainWindow()->addToolBar(dock, m_toolBox);
+        //mainWindow()->moveDockWindow( m_toolBox, dock, false, 0, 0 );
     }
 
     return KXMLGUIBuilder::createContainer( parent, index, element, id );
@@ -684,7 +690,7 @@ void KisView::resizeEvent(QResizeEvent *)
     }
 
     KisImageSP img = currentImg();
-    qint32 scrollBarExtent = style().pixelMetric(QStyle::PM_ScrollBarExtent);
+    qint32 scrollBarExtent = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
     qint32 drawH;
     qint32 drawW;
     qint32 docW;
@@ -1033,9 +1039,9 @@ void KisView::updateOpenGLCanvas(const QRect& imageRect)
     KisImageSP img = currentImg();
 
     if (img && m_paintViewEnabled) {
-        Q_ASSERT(m_OpenGLImageContext != 0);
+        Q_ASSERT(!m_OpenGLImageContext.isNull());
 
-        if (m_OpenGLImageContext != 0) {
+        if (!m_OpenGLImageContext.isNull()) {
             m_OpenGLImageContext->update(imageRect);
         }
     }
@@ -1057,7 +1063,7 @@ void KisView::paintOpenGLView(const QRect& canvasRect)
 
     QColor widgetBackgroundColor = colorGroup().mid();
 
-    glClearColor(widgetBackgroundColor.Qt::red() / 255.0, widgetBackgroundColor.Qt::green() / 255.0, widgetBackgroundColor.Qt::blue() / 255.0, 1.0);
+    glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     KisImageSP img = currentImg();
@@ -1690,7 +1696,8 @@ void KisView::saveLayerAsImage()
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
     QString mimelist = listMimeFilter.join(" ");
 
-    KFileDialog fd (QString::null, mimelist, this, "Export Layer", true);
+    KFileDialog fd (QString(), mimelist, this);
+    fd.setObjectName("Export Layer");
     fd.setCaption(i18n("Export Layer"));
     fd.setMimeFilter(listMimeFilter);
     fd.setOperationMode(KFileDialog::Saving);
@@ -1715,9 +1722,9 @@ void KisView::saveLayerAsImage()
     KisDoc d;
     d.prepareForImport();
 
-    KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name());
+    KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name()));
     d.setCurrentImage( dst );
-    dst->addLayer(l->clone(),dst->rootLayer(),0);
+    dst->addLayer(l->clone(),dst->rootLayer(),KisLayerSP(0));
 
     d.setOutputMimeType(mimefilter.latin1());
     d.exp0rt(url);
@@ -1753,9 +1760,9 @@ qint32 KisView::importImage(const KUrl& urlArg)
         KisImageSP importedImage = d.currentImage();
 
         if (importedImage) {
-            KisLayerSP importedImageLayer = importedImage->rootLayer().data();
+            KisLayerSP importedImageLayer = KisLayerSP(importedImage->rootLayer().data());
 
-            if (importedImageLayer != 0) {
+            if (!importedImageLayer.isNull()) {
 
                 if (importedImageLayer->numLayers() == 2) {
                     // Don't import the root if this is not a layered image (1 group layer
@@ -1766,18 +1773,18 @@ qint32 KisView::importImage(const KUrl& urlArg)
 
                 importedImageLayer->setName(url.prettyURL());
 
-                KisGroupLayerSP parent = 0;
+                KisGroupLayerSP parent = KisGroupLayerSP(0);
                 KisLayerSP currentActiveLayer = currentImage->activeLayer();
 
                 if (currentActiveLayer) {
                     parent = currentActiveLayer->parent();
                 }
 
-                if (parent == 0) {
+                if (parent.isNull()) {
                     parent = currentImage->rootLayer();
                 }
 
-                currentImage->addLayer(importedImageLayer.data(), parent, currentActiveLayer);
+                currentImage->addLayer(importedImageLayer, parent, currentActiveLayer);
                 rc += importedImageLayer->numLayers();
             }
         }
@@ -2099,7 +2106,7 @@ void KisView::slotUpdateFullScreen(bool toggle)
 {
     if (KoView::shell()) {
 
-        uint newState = KoView::shell()->windowState();
+        Qt::WindowStates newState = KoView::shell()->windowState();
 
         if (toggle) {
             newState |= Qt::WindowFullScreen;
@@ -2565,7 +2572,7 @@ void KisView::canvasGotDragEnterEvent(QDragEnterEvent *event)
 
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
-    if (KURLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
+    if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
         accept = true;
     }
 
@@ -2576,48 +2583,51 @@ void KisView::canvasGotDropEvent(QDropEvent *event)
 {
     KUrl::List urls;
 
-    if (KURLDrag::decode(event, urls))
+    if (K3URLDrag::decode(event, urls))
     {
         if (urls.count() > 0) {
-            enum enumActionId {
-                addLayerId = 1,
-                addDocumentId = 2,
-                cancelId
-            };
 
-            KMenu popup(this, "drop_popup");
+            KMenu popup(this);
+            popup.setObjectName("drop_popup");
+
+            KAction insertAsNewLayer(i18n("Insert as New Layer"), 0, "insert_as_new_layer");
+            KAction insertAsNewLayers(i18n("Insert as New Layers"), 0, "insert_as_new_layers");
+
+            KAction openInNewDocument(i18n("Open in New Document"), 0, "open_in_new_document");
+            KAction openInNewDocuments(i18n("Open in New Documents"), 0, "open_in_new_documents");
+
+            KAction cancel(i18n("Cancel"), 0, "cancel");
 
             if (urls.count() == 1) {
-                if (currentImg() != 0) {
-                    popup.insertItem(i18n("Insert as New Layer"), addLayerId);
+                if (!currentImg().isNull()) {
+                    popup.addAction(&insertAsNewLayer);
                 }
-                popup.insertItem(i18n("Open in New Document"), addDocumentId);
+                popup.addAction(&openInNewDocument);
             }
             else {
-                if (currentImg() != 0) {
-                    popup.insertItem(i18n("Insert as New Layers"), addLayerId);
+                if (!currentImg().isNull()) {
+                    popup.addAction(&insertAsNewLayers);
                 }
-                popup.insertItem(i18n("Open in New Documents"), addDocumentId);
+                popup.addAction(&openInNewDocuments);
             }
 
-            popup.insertSeparator();
-            popup.insertItem(i18n("Cancel"), cancelId);
+            (void)popup.addSeparator();
+            popup.addAction(&cancel);
 
-            int actionId = popup.exec(QCursor::pos());
+            QAction *action = popup.exec(QCursor::pos());
 
-            if (actionId >= 0 && actionId != cancelId) {
+            if (action != 0 && action != &cancel) {
                 for (KUrl::List::ConstIterator it = urls.begin (); it != urls.end (); ++it) {
                     KUrl url = *it;
 
-                    switch (actionId) {
-                    case addLayerId:
+                    if (action == &insertAsNewLayer || action == &insertAsNewLayers) {
                         importImage(url);
-                        break;
-                    case addDocumentId:
+                    } else {
+                        Q_ASSERT(action == &openInNewDocument || action == &openInNewDocuments);
+
                         if (shell() != 0) {
                             shell()->openDocument(url);
                         }
-                        break;
                     }
                 }
             }
@@ -2646,7 +2656,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
     }
 
 
-    if (KisAdjustmentLayerSP alayer = dynamic_cast<KisAdjustmentLayer*>(layer.data()))
+    if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data())))
     {
         KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), this, "dlgadjlayerprops");
         if (dlg.exec() == QDialog::Accepted)
@@ -2689,7 +2699,7 @@ void KisView::layerAdd()
         addLayer(img->activeLayer()->parent(), img->activeLayer());
     }
     else if (img)
-        addLayer(static_cast<KisGroupLayer*>(img->rootLayer().data()), 0);
+        addLayer(img->rootLayer(), KisLayerSP(0));
 }
 
 void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
@@ -2705,10 +2715,10 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
         if (dlg.exec() == QDialog::Accepted) {
             KisColorSpace* cs = KisMetaRegistry::instance()-> csRegistry() ->
                     getColorSpace(dlg.colorSpaceID(),dlg.profileName());
-            KisLayerSP layer = new KisPaintLayer(img, dlg.layerName(), dlg.opacity(), cs);
+            KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), dlg.layerName(), dlg.opacity(), cs));
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
-                img->addLayer(layer, parent.data(), above);
+                img->addLayer(layer, parent, above);
                 updateCanvas();
             } else {
                 KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -2732,10 +2742,10 @@ void KisView::addGroupLayer(KisGroupLayerSP parent, KisLayerSP above)
         dlg.setColorSpaceEnabled(false);
 
         if (dlg.exec() == QDialog::Accepted) {
-            KisLayerSP layer = new KisGroupLayer(img, dlg.layerName(), dlg.opacity());
+            KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), dlg.layerName(), dlg.opacity()));
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());
-                img->addLayer(layer, parent.data(), above);
+                img->addLayer(layer, parent, above);
                 updateCanvas();
             } else {
                 KMessageBox::error(this, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -2784,7 +2794,7 @@ void KisView::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
     KisImageSP img = currentImg();
     if (!img) return;
 
-    KoDocument* doc = entry.createDoc(m_doc);
+    KoDocument* doc = entry.createDoc(0, m_doc);
     if ( !doc )
         return;
 
@@ -2797,7 +2807,7 @@ void KisView::insertPart(const QRect& viewRect, const KoDocumentEntry& entry,
 
     KisPartLayerImpl* partLayer = new KisPartLayerImpl(img, childDoc);
     partLayer->setDocType(entry.service()->genericName());
-    img->addLayer(partLayer, parent, above);
+    img->addLayer(KisLayerSP(partLayer), parent, above);
     m_doc->setModified(true);
 
     reconnectAfterPartInsert();
@@ -2858,9 +2868,9 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above)
         }
     }
 
-    KisDlgAdjustmentLayer dlg(img, img->nextLayerName(), i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
+    KisDlgAdjustmentLayer dlg(img.data(), img->nextLayerName(), i18n("New Adjustment Layer"), this, "dlgadjustmentlayer");
     if (dlg.exec() == QDialog::Accepted) {
-        KisSelectionSP selection = 0;
+        KisSelectionSP selection = KisSelectionSP(0);
         if (dev->hasSelection()) {
             selection = dev->selection();
         }
@@ -2883,7 +2893,7 @@ void KisView::addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const
     if (!img) return;
 
     KisAdjustmentLayer * l = new KisAdjustmentLayer(img, name, filter, selection);
-    img->addLayer(l, parent, above);
+    img->addLayer(KisLayerSP(l), parent, above);
 }
 
 void KisView::slotChildActivated(bool a) {
@@ -2916,7 +2926,7 @@ void KisView::layerRemove()
                 layer->parent()->setDirty(layer->extent());
 
             updateCanvas();
-            layerUpdateGUI(img->activeLayer() != 0);
+            layerUpdateGUI(!img->activeLayer().isNull());
         }
     }
 }
@@ -2935,7 +2945,7 @@ void KisView::layerDuplicate()
 
     KisLayerSP dup = active->clone();
     dup->setName(QString(i18n("Duplicate of '%1'")).arg(active->name()));
-    img->addLayer(dup, active->parent().data(), active);
+    img->addLayer(dup, active->parent(), active);
     if (dup) {
         img->activate( dup );
         updateCanvas();
@@ -3140,33 +3150,33 @@ void KisView::setupCanvas()
 void KisView::connectCurrentImg()
 {
     if (m_image) {
-        connect(m_image, SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
-        connect(m_image, SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
-        connect(m_image, SIGNAL(sigColorSpaceChanged(KisColorSpace *)), this, SLOT(updateStatusBarProfileLabel()));
-        connect(m_image, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
+        connect(m_image.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
+        connect(m_image.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
+        connect(m_image.data(), SIGNAL(sigColorSpaceChanged(KisColorSpace *)), this, SLOT(updateStatusBarProfileLabel()));
+        connect(m_image.data(), SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
-        connect(m_image, SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(layersUpdated()));
-        connect(m_image, SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
-        connect(m_image, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
-        connect(m_image, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
-        connect(m_image, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(layersUpdated()));
-        connect(m_image, SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(updateCanvas()));
-        connect(m_image, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(layersUpdated()));
+        connect(m_image.data(), SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image.data(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(layersUpdated()));
+        connect(m_image.data(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(updateCanvas()));
+        connect(m_image.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(layersUpdated()));
 
         KisConnectPartLayerVisitor v(m_image, this, true);
         m_image->rootLayer()->accept(v);
-        connect(m_image, SIGNAL(sigLayerAdded(KisLayerSP)),
+        connect(m_image.data(), SIGNAL(sigLayerAdded(KisLayerSP)),
                 SLOT(handlePartLayerAdded(KisLayerSP)));
 
 #ifdef HAVE_GL
-        if (m_OpenGLImageContext != 0) {
-            connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(QRect)), SLOT(slotOpenGLImageUpdated(QRect)));
-            connect(m_OpenGLImageContext, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
+        if (!m_OpenGLImageContext.isNull()) {
+            connect(m_OpenGLImageContext.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotOpenGLImageUpdated(QRect)));
+            connect(m_OpenGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
         } else
 #endif
         {
-            connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(imgUpdated(QRect)));
-            connect(m_image, SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
+            connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(imgUpdated(QRect)));
+            connect(m_image.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
         }
     }
 
@@ -3178,15 +3188,15 @@ void KisView::disconnectCurrentImg()
 {
     if (m_image) {
         m_image->disconnect(this);
-        m_layerBox->setImage(0);
-        m_birdEyeBox->setImage(0);
+        m_layerBox->setImage(KisImageSP(0));
+        m_birdEyeBox->setImage(KisImageSP(0));
 
         KisConnectPartLayerVisitor v(m_image, this, false);
         m_image->rootLayer()->accept(v);
     }
 
 #ifdef HAVE_GL
-    if (m_OpenGLImageContext != 0) {
+    if (!m_OpenGLImageContext.isNull()) {
         m_OpenGLImageContext->disconnect(this);
     }
 #endif
@@ -3199,7 +3209,7 @@ void KisView::handlePartLayerAdded(KisLayerSP layer)
         return;
 
     connect(this, SIGNAL(childActivated(KoDocumentChild*)),
-            layer, SLOT(childActivated(KoDocumentChild*)));
+            layer.data(), SLOT(childActivated(KoDocumentChild*)));
 }
 
 void KisView::imgUpdated(QRect rc)
@@ -3469,16 +3479,16 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
 
         child->installEventFilter(this);
 
-        QObjectList *objectList = child->queryList("QWidget");
-        QObjectListIt it(*objectList);
-        QObject *obj;
+        QList<QWidget *> objectList = child->findChildren<QWidget *>();
 
-        while ((obj = it.current()) != 0) {
-           obj->installEventFilter(this);
-           ++it;
+        for (QList<QWidget *>::iterator it = objectList.begin(); it != objectList.end(); ++it) {
+
+            QObject *obj = *it;
+
+            if (obj != 0) {
+               obj->installEventFilter(this);
+            }
         }
-
-        delete objectList;
     }
 #endif
     default:

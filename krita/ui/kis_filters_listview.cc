@@ -22,9 +22,11 @@
 #include "kis_filters_listview.h"
 
 #include <qapplication.h>
-#include "qtimer.h"
-#include "qpainter.h"
-#include "qpixmap.h"
+#include <qtimer.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <QTime>
+
 //Added by qt3to4:
 #include <QCustomEvent>
 
@@ -62,21 +64,21 @@ void KisFiltersThumbnailThread::run()
 {
     if (m_canceled) return;
 
-    KisPaintDeviceSP thumbPreview = new KisPaintDevice(*m_dev);
+    KisPaintDeviceSP thumbPreview = KisPaintDeviceSP(new KisPaintDevice(*m_dev));
     m_filter->disableProgress();
     m_filter->process(thumbPreview, thumbPreview, m_config, m_bounds);
 
     if (!m_canceled) {
-        m_pixmap = thumbPreview->convertToQImage(m_profile);
+        m_image = thumbPreview->convertToQImage(m_profile);
 
-        qApp->postEvent(m_parent, new KisThumbnailDoneEvent (m_iconItem, m_pixmap));
+        qApp->postEvent(m_parent, new KisThumbnailDoneEvent (m_iconItem, m_image));
 
     }
 }
 
 QPixmap KisFiltersThumbnailThread::pixmap()
 {
-    return m_pixmap;
+    return QPixmap::fromImage(m_image);
 }
 
 void KisFiltersThumbnailThread::cancel()
@@ -169,7 +171,7 @@ void KisFiltersListView::setCurrentFilter(KisID filter)
 void KisFiltersListView::buildPreview()
 {
     QTime t;
-    if(m_original== 0)
+    if(m_original.isNull())
         return;
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
@@ -198,7 +200,7 @@ void KisFiltersListView::buildPreview()
                 itc != configlist.end();
                 itc++)
             {
-                KisFiltersIconViewItem * icon = new KisFiltersIconViewItem( this, (*it).name(), pm, *it, f, *itc, m_thumb, bounds, m_profile );
+                KisFiltersIconViewItem * icon = new KisFiltersIconViewItem( this, (*it).name(), pm, *it, f.data(), *itc, m_thumb, bounds, m_profile );
                 //KisThreadPool::instance()->enqueue(icon->thread());
                 icon->thread()->runDirectly(); 
             }

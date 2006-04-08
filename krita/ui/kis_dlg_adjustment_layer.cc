@@ -83,7 +83,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     QLabel * lblName = new QLabel(i18n("Layer name:"), page, "lblName");
     grid->addWidget(lblName, 0, 0);
 
-    m_layerName = new KLineEdit(page, "m_layerName");
+    m_layerName = new KLineEdit(page);
+    m_layerName->setObjectName("m_layerName");
     grid->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
@@ -146,11 +147,11 @@ void KisDlgAdjustmentLayer::refreshPreview()
 {
     KisPaintDeviceSP layer =  m_preview->getDevice();
 
-    KisTransaction cmd("Temporary transaction", layer.data());
+    KisTransaction cmd("Temporary transaction", layer);
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
     QRect rect = layer->extent();
-    m_currentFilter->process(layer.data(), layer.data(), config, rect);
+    m_currentFilter->process(layer, layer, config, rect);
     m_preview->slotUpdate();
     cmd.unexecute();
 }

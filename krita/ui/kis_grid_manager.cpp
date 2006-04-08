@@ -276,7 +276,7 @@ void KisGridManager::OpenGLGridDrawer::setPen(const QPen& pen)
 
     QColor penColor = pen.color();
 
-    glColor3ub(penColor.Qt::red(), penColor.Qt::green(), penColor.Qt::blue());
+    glColor3ub(penColor.red(), penColor.green(), penColor.blue());
 #else
     Q_UNUSED(pen);
 #endif

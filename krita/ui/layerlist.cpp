@@ -87,7 +87,7 @@ public:
     int itemHeight;
     Q3ValueList<LayerProperty> properties;
     KMenu contextMenu;
-    LayerToolTip *tooltip;
+    //LayerToolTip *tooltip; XXX
 
     Private( QWidget *parent, LayerList *list );
     ~Private();
@@ -110,167 +110,169 @@ public:
 };
 
 static const int MAX_SIZE = 256;
-class LayerToolTip: public QToolTip, public Q3Frame
-{
-    LayerList *m_list;
-    LayerItem *m_item;
-    QPoint m_pos;
-    QTimer m_timer;
-    QImage m_img;
-
-public:
-    LayerToolTip( QWidget *parent, LayerList *list )
-        : QToolTip( parent ),
-          Q3Frame( 0, 0, Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WStyle_StaysOnTop | Qt::WX11BypassWM | Qt::WNoAutoErase ),
-          m_list( list )
-    {
-        Q3Frame::setPalette( QToolTip::palette() );
-        connect( &m_timer, SIGNAL( timeout() ), m_list, SLOT( hideTip() ) );
-        qApp->installEventFilter( this );
-    }
-
-    virtual void maybeTip( const QPoint &pos )
-    {
-        m_pos = pos;
-        LayerItem *prev = m_item;
-        m_item = static_cast<LayerItem*>(m_list->itemAt( m_pos ));
-        if( QToolTip::parentWidget() && m_list->showToolTips() && m_item )
-        {
-            if( m_item != prev )
-                hideTip();
-            showTip();
-        }
-        else
-            hideTip();
-    }
-
-    void showTip()
-    {
-        m_img = m_item->tooltipPreview();
-        m_timer.start( 15000, true );
-        if( !isVisible() || sizeHint() != size() )
-        {
-            resize( sizeHint() );
-            position();
-        }
-        if( !isVisible() )
-            show();
-        else
-            update();
-    }
-
-    void hideTip()
-    {
-        if( !isVisible() )
-            return;
-        Q3Frame::hide();
-        QToolTip::hide();
-        m_timer.stop();
-        m_img.reset();
-        m_list->triggerUpdate();
-    }
-
-    virtual void drawContents( QPainter *painter )
-    {
-        QPixmap buf( width(), height() );
-        QPainter p( &buf );
-        buf.fill( colorGroup().background() );
-        p.setPen( colorGroup().foreground() );
-        p.drawRect( buf.rect() );
-
-        Q3SimpleRichText text( m_item->tooltip(), QToolTip::font() );
-        text.setWidth( QCOORD_MAX );
-
-        p.translate( 5, 5 );
-        if( !m_img.isNull() )
-        {
-            if( m_img.width() > MAX_SIZE || m_img.height() > MAX_SIZE )
-                m_img = m_img.scale( MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio );
-            int y = 0;
-            if( m_img.height() < text.height() )
-                y = text.height()/2 - m_img.height()/2;
-            p.drawImage( 0, y, m_img );
-            p.drawRect( -1, y-1, m_img.width()+2, m_img.height()+2 );
-            p.translate( m_img.width() + 10, 0 );
-        }
-
-        text.draw( &p, 0, 0, rect(), colorGroup() );
-
-        painter->drawPixmap( 0, 0, buf );
-    }
-
-    virtual QSize sizeHint() const
-    {
-        if( !m_item )
-            return QSize( 0, 0 );
-
-        Q3SimpleRichText text( m_item->tooltip(), QToolTip::font() );
-        text.setWidth( QCOORD_MAX );
-
-        int width = text.widthUsed();
-        if( !m_img.isNull() )
-            width += qMin( m_img.width(), MAX_SIZE ) + 10;
-        width += 10;
-
-        int height = text.height();
-        if( !m_img.isNull() && qMin( m_img.height(), MAX_SIZE ) > height )
-            height = qMin( m_img.height(), MAX_SIZE );
-        height += 10;
-
-        return QSize( width, height );
-    }
-
-    void position()
-    {
-        const QRect drect = QApplication::desktop()->availableGeometry( QToolTip::parentWidget() );
-        const QSize size = sizeHint();
-        const int width = size.width(), height = size.height();
-        const QRect tmp = m_item->rect();
-        const QRect irect( m_list->viewport()->mapToGlobal( m_list->contentsToViewport(tmp.topLeft()) ), tmp.size() );
-
-        int y;
-        if( irect.bottom() + height < drect.bottom() )
-            y = irect.bottom();
-        else
-            y = qMax( drect.top(), irect.top() - height );
-
-        int x = qMax( drect.x(), QToolTip::parentWidget()->mapToGlobal( m_pos ).x() - width/2 );
-        if( x + width > drect.right() )
-            x = drect.right() - width;
-
-        move( x, y );
-    }
-
-    virtual bool eventFilter( QObject *, QEvent *e )
-    {
-        if( isVisible() )
-            switch ( e->type() )
-            {
-                case QEvent::KeyPress:
-                case QEvent::KeyRelease:
-                case QEvent::MouseButtonPress:
-                case QEvent::MouseButtonRelease:
-                //case QEvent::MouseMove:
-                case QEvent::FocusIn:
-                case QEvent::FocusOut:
-                case QEvent::Wheel:
-                case QEvent::Leave:
-                    hideTip();
-                default: break;
-            }
-
-        return false;
-    }
-};
+#warning kde4 port to new tool tip api
+// class LayerToolTip: public QToolTip, public Q3Frame
+// {
+//     LayerList *m_list;
+//     LayerItem *m_item;
+//     QPoint m_pos;
+//     QTimer m_timer;
+//     QImage m_img;
+//
+// public:
+//     LayerToolTip( QWidget *parent, LayerList *list )
+//         : QToolTip( parent ),
+//           Q3Frame( 0, 0, Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WStyle_StaysOnTop | Qt::WX11BypassWM | Qt::WNoAutoErase ),
+//           m_list( list )
+//     {
+//         Q3Frame::setPalette( QToolTip::palette() );
+//         connect( &m_timer, SIGNAL( timeout() ), m_list, SLOT( hideTip() ) );
+//         qApp->installEventFilter( this );
+//     }
+//
+//     virtual void maybeTip( const QPoint &pos )
+//     {
+//         m_pos = pos;
+//         LayerItem *prev = m_item;
+//         m_item = static_cast<LayerItem*>(m_list->itemAt( m_pos ));
+//         if( QToolTip::parentWidget() && m_list->showToolTips() && m_item )
+//         {
+//             if( m_item != prev )
+//                 hideTip();
+//             showTip();
+//         }
+//         else
+//             hideTip();
+//     }
+//
+//     void showTip()
+//     {
+//         m_img = m_item->tooltipPreview();
+//         m_timer.start( 15000, true );
+//         if( !isVisible() || sizeHint() != size() )
+//         {
+//             resize( sizeHint() );
+//             position();
+//         }
+//         if( !isVisible() )
+//             show();
+//         else
+//             update();
+//     }
+//
+//     void hideTip()
+//     {
+//         if( !isVisible() )
+//             return;
+//         Q3Frame::hide();
+//         QToolTip::hide();
+//         m_timer.stop();
+//         m_img.reset();
+//         m_list->triggerUpdate();
+//     }
+//
+//     virtual void drawContents( QPainter *painter )
+//     {
+//         QPixmap buf( width(), height() );
+//         QPainter p( &buf );
+//         buf.fill( colorGroup().background() );
+//         p.setPen( colorGroup().foreground() );
+//         p.drawRect( buf.rect() );
+//
+//         Q3SimpleRichText text( m_item->tooltip(), QToolTip::font() );
+//         text.setWidth( QCOORD_MAX );
+//
+//         p.translate( 5, 5 );
+//         if( !m_img.isNull() )
+//         {
+//             if( m_img.width() > MAX_SIZE || m_img.height() > MAX_SIZE )
+//                 m_img = m_img.scale( MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio );
+//             int y = 0;
+//             if( m_img.height() < text.height() )
+//                 y = text.height()/2 - m_img.height()/2;
+//             p.drawImage( 0, y, m_img );
+//             p.drawRect( -1, y-1, m_img.width()+2, m_img.height()+2 );
+//             p.translate( m_img.width() + 10, 0 );
+//         }
+//
+//         text.draw( &p, 0, 0, rect(), colorGroup() );
+//
+//         painter->drawPixmap( 0, 0, buf );
+//     }
+//
+//     virtual QSize sizeHint() const
+//     {
+//         if( !m_item )
+//             return QSize( 0, 0 );
+//
+//         Q3SimpleRichText text( m_item->tooltip(), QToolTip::font() );
+//         text.setWidth( QCOORD_MAX );
+//
+//         int width = text.widthUsed();
+//         if( !m_img.isNull() )
+//             width += qMin( m_img.width(), MAX_SIZE ) + 10;
+//         width += 10;
+//
+//         int height = text.height();
+//         if( !m_img.isNull() && qMin( m_img.height(), MAX_SIZE ) > height )
+//             height = qMin( m_img.height(), MAX_SIZE );
+//         height += 10;
+//
+//         return QSize( width, height );
+//     }
+//
+//     void position()
+//     {
+//         const QRect drect = QApplication::desktop()->availableGeometry( QToolTip::parentWidget() );
+//         const QSize size = sizeHint();
+//         const int width = size.width(), height = size.height();
+//         const QRect tmp = m_item->rect();
+//         const QRect irect( m_list->viewport()->mapToGlobal( m_list->contentsToViewport(tmp.topLeft()) ), tmp.size() );
+//
+//         int y;
+//         if( irect.bottom() + height < drect.bottom() )
+//             y = irect.bottom();
+//         else
+//             y = qMax( drect.top(), irect.top() - height );
+//
+//         int x = qMax( drect.x(), QToolTip::parentWidget()->mapToGlobal( m_pos ).x() - width/2 );
+//         if( x + width > drect.right() )
+//             x = drect.right() - width;
+//
+//         move( x, y );
+//     }
+//
+//     virtual bool eventFilter( QObject *, QEvent *e )
+//     {
+//         if( isVisible() )
+//             switch ( e->type() )
+//             {
+//                 case QEvent::KeyPress:
+//                 case QEvent::KeyRelease:
+//                 case QEvent::MouseButtonPress:
+//                 case QEvent::MouseButtonRelease:
+//                 //case QEvent::MouseMove:
+//                 case QEvent::FocusIn:
+//                 case QEvent::FocusOut:
+//                 case QEvent::Wheel:
+//                 case QEvent::Leave:
+//                     hideTip();
+//                 default: break;
+//             }
+//
+//         return false;
+//     }
+// };
 
 LayerList::Private::Private( QWidget *parent, LayerList *list )
-    : activeLayer( 0 ), foldersCanBeActive( false ), previewsShown( false ), itemHeight( 32 ),
-      tooltip( new LayerToolTip( parent, list ) ) { }
+    : activeLayer( 0 ), foldersCanBeActive( false ), previewsShown( false ), itemHeight( 32 )
+// ,tooltip( new LayerToolTip( parent, list ) ) XXX
+{ }
 
 LayerList::Private::~Private()
 {
-    delete tooltip;
-    tooltip = 0;
+//     delete tooltip; XXX
+//     tooltip = 0;
 }
 
 static int getID()
@@ -279,7 +281,7 @@ static int getID()
     return id--;
 }
 
-static QSize iconSize() { return QIcon::iconSize( QIcon::Small ); }
+static QSize iconSize() { return QIcon::pixmapSize( QIcon::Small ); }
 
 
 ///////////////
@@ -287,8 +289,9 @@ static QSize iconSize() { return QIcon::iconSize( QIcon::Small ); }
 ///////////////
 
 LayerList::LayerList( QWidget *parent, const char *name )
-    : super( parent, name ), d( new Private( viewport(), this ) )
+    : super( parent ), d( new Private( viewport(), this ) )
 {
+    setObjectName(name);
     setSelectionMode( Q3ListView::Extended );
     setRootIsDecorated( true );
     setSorting( -1 );
@@ -719,17 +722,18 @@ void LayerList::showContextMenu()
         setCurrentItem( layer );
     d->contextMenu.clear();
     constructMenu( layer );
-    menuActivated( d->contextMenu.exec( QCursor::pos() ), layer );
+#warning kde4 port
+    //menuActivated( d->contextMenu.exec( QCursor::pos() ), layer );
 }
 
 void LayerList::hideTip()
 {
-    d->tooltip->hideTip();
+    //d->tooltip->hideTip(); XXX
 }
 
 void LayerList::maybeTip()
 {
-    d->tooltip->maybeTip( d->tooltip->QToolTip::parentWidget()->mapFromGlobal( QCursor::pos() ) );
+    //d->tooltip->maybeTip( d->tooltip->QToolTip::parentWidget()->mapFromGlobal( QCursor::pos() ) ); XXX
 }
 
 void LayerList::constructMenu( LayerItem *layer )

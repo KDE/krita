@@ -20,7 +20,9 @@ set(libkritatile_SRCS
 )
 
 
-set(kritaimage_LIB_SRCS ${libkritasdk_SRCS}  ${libkritatile_SRCS}
+set(kritaimage_LIB_SRCS 
+   ${libkritasdk_SRCS}
+   ${libkritatile_SRCS}
    kis_adjustment_layer.cc 
    kis_alpha_mask.cc 
    kis_autobrush_resource.cc 

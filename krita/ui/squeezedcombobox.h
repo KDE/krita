@@ -43,32 +43,32 @@ class SqueezedComboBox;
  * 
  * @author Tom Albers
  */
-class SqueezedComboBoxTip : public QToolTip
-{
-public:
-    /**
-     * Constructor. An example call (as done in
-     * SqueezedComboBox::SqueezedComboBox):
-     * @code
-     * t = new SqueezedComboBoxTip( this->listBox()->viewport(), this );
-     * @endcode
-     * 
-     * @param parent parent widget (viewport)
-     * @param name parent widget
-     */
-    SqueezedComboBoxTip( QWidget *parent, SqueezedComboBox *name );
-
-protected:
-    /**
-     * Reimplemented version from QToolTip which shows the
-     * tooltip when needed.
-     * @param  pos the point where the mouse currently is
-     */
-    void maybeTip( const QPoint& pos );
-
-private:
-    SqueezedComboBox*        m_originalWidget;
-};
+// class SqueezedComboBoxTip : public QToolTip
+// {
+// public:
+//     /**
+//      * Constructor. An example call (as done in
+//      * SqueezedComboBox::SqueezedComboBox):
+//      * @code
+//      * t = new SqueezedComboBoxTip( this->listBox()->viewport(), this );
+//      * @endcode
+//      *
+//      * @param parent parent widget (viewport)
+//      * @param name parent widget
+//      */
+//     SqueezedComboBoxTip( QWidget *parent, SqueezedComboBox *name );
+//
+// protected:
+//     /**
+//      * Reimplemented version from QToolTip which shows the
+//      * tooltip when needed.
+//      * @param  pos the point where the mouse currently is
+//      */
+//     void maybeTip( const QPoint& pos );
+//
+// private:
+//     SqueezedComboBox*        m_originalWidget;
+// };
 
 /** @class SqueezedComboBox
  *
@@ -132,7 +132,7 @@ private:
 
     QMap<int,QString>   m_originalItems;
     QTimer*             m_timer;
-    SqueezedComboBoxTip*      m_tooltip;
+    //SqueezedComboBoxTip*      m_tooltip; XXX
 };
 
 #endif // SQUEEZEDCOMBOBOX_H

@@ -19,8 +19,9 @@
 #define KIS_OPENGL_IMAGE_CONTEXT_H_
 
 #include <config.h>
+#include <config-krita.h>
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 
 #include <map>
 
@@ -129,8 +130,8 @@ private:
 
     GLuint m_backgroundTexture;
 
-    static const int PREFERRED_IMAGE_TEXTURE_WIDTH = 256;
-    static const int PREFERRED_IMAGE_TEXTURE_HEIGHT = 256;
+    static const int PREFERRED_IMAGE_TEXTURE_WIDTH;
+    static const int PREFERRED_IMAGE_TEXTURE_HEIGHT;
 
     Q3ValueVector<GLuint> m_imageTextureTiles;
     int m_imageTextureTileWidth;
@@ -148,7 +149,7 @@ private:
     static ImageContextMap imageContextMap;
 };
 
-#endif // HAVE_GL
+#endif // HAVE_OPENGL
 
 #endif // KIS_OPENGL_IMAGE_CONTEXT_H_
 

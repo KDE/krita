@@ -19,9 +19,7 @@
 #ifndef KIS_QPAINTDEVICE_CANVAS_PAINTER_H_
 #define KIS_QPAINTDEVICE_CANVAS_PAINTER_H_
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #include <qwidget.h>
 #include <qpainter.h>

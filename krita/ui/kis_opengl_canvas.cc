@@ -29,7 +29,7 @@
 #include <QPaintEvent>
 #include <QDropEvent>
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 KisOpenGLCanvasWidget::KisOpenGLCanvasWidget(QWidget *parent, const char *name, QGLWidget *sharedContextWidget)
     : QGLWidget(KisOpenGLCanvasFormat, parent, name, sharedContextWidget)
 {
@@ -132,5 +132,5 @@ void KisOpenGLCanvasWidget::selectTabletDeviceEvents()
 }
 #endif
 
-#endif // HAVE_GL
+#endif // HAVE_OPENGL
 

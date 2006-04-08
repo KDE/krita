@@ -19,9 +19,7 @@
 #ifndef KIS_CANVAS_PAINTER_H_
 #define KIS_CANVAS_PAINTER_H_
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #include <qpainter.h>
 //Added by qt3to4:

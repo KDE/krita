@@ -1154,7 +1154,7 @@ KisCanvas::~KisCanvas()
     delete m_canvasWidget;
 }
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 void KisCanvas::createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidget)
 #else
 void KisCanvas::createCanvasWidget(bool useOpenGL)
@@ -1162,7 +1162,7 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
 {
     delete m_canvasWidget;
 
-#ifndef HAVE_GL
+#ifndef HAVE_OPENGL
     useOpenGL = false;
 #else
     if (useOpenGL && !QGLFormat::hasOpenGL()) {
@@ -1211,7 +1211,7 @@ void KisCanvas::createQPaintDeviceCanvas()
 	createCanvasWidget(QPAINTDEVICE_CANVAS_WIDGET);
 }
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 void KisCanvas::createOpenGLCanvas(QGLWidget *sharedContextWidget)
 {
     createCanvasWidget(OPENGL_CANVAS_WIDGET, sharedContextWidget);
@@ -1240,7 +1240,7 @@ QWidget *KisCanvas::QPaintDeviceWidget() const
     }
 }
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 QGLWidget *KisCanvas::OpenGLWidget() const
 {
     if (m_useOpenGL) {

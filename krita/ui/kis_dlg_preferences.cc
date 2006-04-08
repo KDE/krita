@@ -18,9 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <config-krita.h>
 
 #include <qbitmap.h>
 #include <q3buttongroup.h>
@@ -35,7 +34,7 @@
 #include <qtoolbutton.h>
 #include <q3vbox.h>
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 #include <qgl.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -627,7 +626,7 @@ void TabletSettingsTab::applyTabletDeviceSettings()
 DisplaySettingsTab::DisplaySettingsTab( QWidget *parent, const char *name)
     : WdgDisplaySettings( parent, name )
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     KisConfig cfg;
 
     if (!QGLFormat::hasOpenGL()) {
@@ -739,7 +738,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
 
     vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", K3Icon::SizeMedium ));
     m_general = new GeneralTab( vbox );
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     vbox = addVBoxPage ( i18n( "Display" ), i18n( "Display" ), BarIcon( "kscreensaver", K3Icon::SizeMedium ));
     m_displaySettings = new DisplaySettingsTab( vbox );
 #endif

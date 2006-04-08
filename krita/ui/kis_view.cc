@@ -97,6 +97,9 @@
 
 // Local
 
+#include <kis_config.h>
+#include <config-krita.h>
+
 #include "kis_canvas.h"
 
 #ifdef Q_WS_X11
@@ -109,7 +112,6 @@
 #include "kis_canvas_painter.h"
 #include "kis_color.h"
 #include "kis_colorspace_factory_registry.h"
-#include "kis_config.h"
 #include "kis_controlframe.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
@@ -1035,7 +1037,7 @@ void KisView::paintQPaintDeviceView(const QRegion& canvasRegion)
 
 void KisView::updateOpenGLCanvas(const QRect& imageRect)
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     KisImageSP img = currentImg();
 
     if (img && m_paintViewEnabled) {
@@ -1052,7 +1054,7 @@ void KisView::updateOpenGLCanvas(const QRect& imageRect)
 
 void KisView::paintOpenGLView(const QRect& canvasRect)
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     if (!m_canvas->isUpdatesEnabled()) {
         return;
     }
@@ -1240,7 +1242,7 @@ void KisView::refreshKisCanvas()
 
 void KisView::selectionDisplayToggled(bool displaySelection)
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     if (m_canvas->isOpenGLCanvas()) {
         if (m_OpenGLImageContext) {
             m_OpenGLImageContext->setSelectionDisplayEnabled(displaySelection);
@@ -1970,7 +1972,7 @@ void KisView::mergeLayer()
 
 void KisView::preferences()
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     bool canvasWasOpenGL = m_canvas->isOpenGLCanvas();
 #endif
 
@@ -1980,7 +1982,7 @@ void KisView::preferences()
         m_paletteManager->slotResetFont();
         resetMonitorProfile();
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
         if (cfg.useOpenGL() != canvasWasOpenGL) {
 
             disconnectCurrentImg();
@@ -3168,7 +3170,7 @@ void KisView::connectCurrentImg()
         connect(m_image.data(), SIGNAL(sigLayerAdded(KisLayerSP)),
                 SLOT(handlePartLayerAdded(KisLayerSP)));
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
         if (!m_OpenGLImageContext.isNull()) {
             connect(m_OpenGLImageContext.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotOpenGLImageUpdated(QRect)));
             connect(m_OpenGLImageContext.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
@@ -3195,7 +3197,7 @@ void KisView::disconnectCurrentImg()
         m_image->rootLayer()->accept(v);
     }
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     if (!m_OpenGLImageContext.isNull()) {
         m_OpenGLImageContext->disconnect(this);
     }
@@ -3640,7 +3642,7 @@ void KisView::setCurrentImage(KisImageSP image)
 
     KisConfig cfg;
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     if (cfg.useOpenGL()) {
         m_OpenGLImageContext = KisOpenGLImageContext::getImageContext(image, monitorProfile());
         m_canvas->createOpenGLCanvas(m_OpenGLImageContext->sharedContextWidget());

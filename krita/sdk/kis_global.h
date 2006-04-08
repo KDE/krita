@@ -20,6 +20,7 @@
 #define KISGLOBAL_H_
 
 #include <config.h>
+#include <config-krita.h>
 #include <lcms.h>
 #include <limits.h>
 

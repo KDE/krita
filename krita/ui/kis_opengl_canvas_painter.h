@@ -22,11 +22,10 @@
 #ifndef KIS_OPENGL_CANVAS_PAINTER_H_
 #define KIS_OPENGL_CANVAS_PAINTER_H_
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <config-krita.h>
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 
 #include <qwidget.h>
 #include <qgl.h>
@@ -209,7 +208,7 @@ protected:
     QGLWidget *m_widget;
 };
 
-#endif // HAVE_GL
+#endif // HAVE_OPENGL
 
 #endif // KIS_OPENGL_CANVAS_PAINTER_H_
 

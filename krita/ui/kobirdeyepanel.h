@@ -31,11 +31,20 @@
 #include <KoPoint.h>
 #include <KoRect.h>
 
+#include "wdgbirdeye.h"
+
 class QPixmap;
 class KAction;
 class KoDocument;
 class WdgBirdEye;
 
+class WdgBirdEye : public QWidget, public Ui::WdgBirdEye
+{
+    Q_OBJECT
+
+    public:
+        WdgBirdEye(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
 
 class KoCanvasAdapter {
 

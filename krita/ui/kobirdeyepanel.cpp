@@ -42,17 +42,8 @@
 
 #include <KoDocument.h>
 
-#include "wdgbirdeye.h"
 #include "kobirdeyepanel.h"
 #include "kis_int_spinbox.h"
-
-class WdgBirdEye : public QWidget, public Ui::WdgBirdEye
-{
-    Q_OBJECT
-
-    public:
-        WdgBirdEye(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
-};
 
 KoCanvasAdapter::KoCanvasAdapter() {}
 KoCanvasAdapter::~KoCanvasAdapter() {}

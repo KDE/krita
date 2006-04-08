@@ -20,12 +20,11 @@
 #ifndef KIS_CANVAS_H_
 #define KIS_CANVAS_H_
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <config-krita.h>
 
 #include <qwidget.h>
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 #include <qgl.h>
 #endif
 #include <qpainter.h>
@@ -352,11 +351,11 @@ protected:
     // One of these will be valid, the other null. In Qt3, using a QPainter on
     // a QGLWidget is not reliable.
     QWidget *QPaintDeviceWidget() const;
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     QGLWidget *OpenGLWidget() const;
 #endif
     void createQPaintDeviceCanvas();
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     void createOpenGLCanvas(QGLWidget *sharedContextWidget);
 #endif
     void show();
@@ -375,7 +374,7 @@ protected:
     KisCanvasWidget *canvasWidget() const;
 
 protected:
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     void createCanvasWidget(bool useOpenGL, QGLWidget *sharedContextWidget = 0);
 #else
     void createCanvasWidget(bool useOpenGL);

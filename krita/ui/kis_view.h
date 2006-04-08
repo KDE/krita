@@ -23,9 +23,8 @@
 #ifndef KIS_VIEW_H_
 #define KIS_VIEW_H_
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <config-krita.h>
 
 #include <list>
 
@@ -621,7 +620,7 @@ private:
     QPixmap m_canvasPixmap;
     bool m_toolIsPainting;
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     // OpenGL context for the current image, containing textures
     // shared between multiple views.
     KisOpenGLImageContextSP m_OpenGLImageContext;

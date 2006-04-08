@@ -28,11 +28,10 @@
 #ifndef KIS_OPENGL_CANVAS_H_
 #define KIS_OPENGL_CANVAS_H_
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <config-krita.h>
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 
 #include <qwidget.h>
 #include <qgl.h>
@@ -75,7 +74,7 @@ protected:
     bool x11Event(XEvent *event);
 #endif // Q_WS_X11
 };
-#endif // HAVE_GL
+#endif // HAVE_OPENGL
 
 #endif // KIS_OPENGL_CANVAS_H_
 

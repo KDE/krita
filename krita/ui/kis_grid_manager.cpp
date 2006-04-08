@@ -18,11 +18,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <config-krita.h>
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 #include <qgl.h>
 #endif
 
@@ -226,21 +225,21 @@ void KisGridManager::GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
 
 KisGridManager::OpenGLGridDrawer::OpenGLGridDrawer()
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     glPushAttrib(GL_ALL_ATTRIB_BITS);
 #endif
 }
 
 KisGridManager::OpenGLGridDrawer::~OpenGLGridDrawer()
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     glPopAttrib();
 #endif
 }
 
 void KisGridManager::OpenGLGridDrawer::setPen(const QPen& pen)
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     Qt::PenStyle penStyle = pen.style();
 
     if (penStyle == Qt::SolidLine) {
@@ -284,7 +283,7 @@ void KisGridManager::OpenGLGridDrawer::setPen(const QPen& pen)
 
 void KisGridManager::OpenGLGridDrawer::drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2)
 {
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
     glBegin(GL_LINES);
     glVertex2i(x1, y1);
     glVertex2i(x2, y2);

@@ -16,11 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <config-krita.h>
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 
 #include <kdebug.h>
 
@@ -774,5 +773,5 @@ void KisOpenGLCanvasPainter::setTabArray(int */*ts*/)
 {
 }
 
-#endif // HAVE_GL
+#endif // HAVE_OPENGL
 

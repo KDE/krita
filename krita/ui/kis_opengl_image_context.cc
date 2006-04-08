@@ -16,11 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
+#include <config-krita.h>
 
-#ifdef HAVE_GL
+#ifdef HAVE_OPENGL
 
 #include <kdebug.h>
 #include <ksharedptr.h>
@@ -41,6 +40,9 @@ QGLWidget *KisOpenGLImageContext::SharedContextWidget = 0;
 int KisOpenGLImageContext::SharedContextWidgetRefCount = 0;
 
 KisOpenGLImageContext::ImageContextMap KisOpenGLImageContext::imageContextMap;
+
+const int KisOpenGLImageContext::PREFERRED_IMAGE_TEXTURE_WIDTH = 256;
+const int KisOpenGLImageContext::PREFERRED_IMAGE_TEXTURE_HEIGHT = 256;
 
 KisOpenGLImageContext::KisOpenGLImageContext()
 {
@@ -367,5 +369,5 @@ void KisOpenGLImageContext::slotImageSizeChanged(qint32 w, qint32 h)
 
 #include "kis_opengl_image_context.moc"
 
-#endif // HAVE_GL
+#endif // HAVE_OPENGL
 

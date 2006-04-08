@@ -47,6 +47,15 @@ if (SHOULD_BUILD_KRITA)
         message(STATUS "   hardware accelerated rendering.")
     endif(NOT HAVE_OPENGL)
 
+    macro_optional_find_package(X11)
+
+    if(X11_Xinput_FOUND)
+        set(HAVE_XINPUTEXT 1)
+        message(STATUS "Found XInput extension")
+    else(X11_Xinput_FOUND)
+        set(HAVE_XINPUTEXT 0)
+    endif(X11_Xinput_FOUND)
+
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-krita.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krita.h)
 
     # For config-krita.h

@@ -4,5 +4,5 @@
 #cmakedefine HAVE_OPENGL 1
 
 /* Define if you have the X11 Input Extension */
-/*#define HAVE_XINPUTEXT 1*/
+#cmakedefine HAVE_XINPUTEXT 1
 

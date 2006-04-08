@@ -148,6 +148,11 @@ if(HAVE_OPENGL)
         )
 endif(HAVE_OPENGL)
 
+if(HAVE_XINPUTEXT)
+    include_directories(${X11_Xinput_INCLUDE_PATH})
+    target_link_libraries(kritaui ${X11_Xinput_LIB})
+endif(HAVE_XINPUTEXT)
+
 set_target_properties(kritaui PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kritaui )
 

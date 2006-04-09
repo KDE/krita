@@ -1,0 +1,84 @@
+Background, paper, layers, blobs
+
+An image in Krita is imposed upon a plane. Perhaps, using OpenGL,
+we'll be able to rotate and elevate that plane at the users' whim.
+If we can elevate the plane, there will be a direction of gravity
+that naturalistic media can play with. Note: Wet & Sticky make it
+possible to "paint" gravity. This looks like a fun feature, but
+that needs to be done per-layer, and not for the whole image.
+
+The plane is represented by the checkered background. Ideally,
+we'd be able to set the color of the checks & the size, and the
+size shouldn't change with the zoomlevel. The checks are one
+pattern, repeated for the whole image:
+
+O#
+#O
+
+Placed on the plane is optionally the substrate -- a naturalistic
+representation of canvas, linen, paper, board, wood, levkas. Or
+something weird, kopper, rock, sand... There is one substrate
+per image. The substrate can be a small texture repeated for the
+whole image, or as big as the image -- the latter is important
+if we want to make it possible to perturb the substrate (think scoring
+lines into levkas or erasing through the paper).
+
+Provisionally, the substrate has the following properties:
+
+height
+smoothness
+absorbency
+reflectiveness
+
+(Of course, layers below the current layer can influence these values
+for layers on top of them.)
+
+I have a hunch that the effect of these properties are really easy to 
+render using OpenGL, but not so easy using plain QPainter. In any case,
+media layers will need to know these values at every pixel. We need
+a really easy & fast way to acquire them.
+
+We need to avoid the Corel Painter feature where you can use a naturalistic
+paper and then paint away the paper structure, mixing the color of the paper
+with your paint as if the paper were paint. So, we need to separate paper
+and paint thoroughly.
+
+On top of the substrate and background are the layers themselves.
+Some layers are just color; others contain media. Media means color,
+but possibly in a kubelka-munk colorspace, and properties like:
+
+height
+graininess
+viscosity
+wetness
+smoothness
+absorbency
+stickiness (i.e, charcoal isn't sticky at all, acryl paints very
+sticky)
+
+Note: Impasto models thick, 3-d paint, where tufts of thick oipaint can
+cast shadows...
+
+Ordinary color layers (Shoup layers in the terminology of Cockshott) can
+make use of the substrate parameters using special paint ops, and ordinary
+color can be painted on a media layer, but the ordinary color paintops
+do not deposit the above properties. Media paint just leaves color on the 
+color layers. We need to avoid at all costs the Corel Painter effect where
+trying to use a pencil on a watercolor layer causes a nasty flow-impeding
+useless error box to popup.
+
+Media and ordinary layers can be grouped and mixed at will, together with adjustment
+layers. Adjustment layers can also be attached to selection masks, per layer.
+
+The composited layers is either scaled and color corrected, or color corrected and
+then scaled, depending on whether the zoom > 100% or < 100%.
+
+Note: do we need a visualisation layer on top of the layers for things
+like wetness, reflectiveness, height? Perhaps this is the right place for that.
+We need perhaps to add a light source or two, in OpenGL mode... I think
+we do.
+
+On top of the layers are what Xara calls blobs: the temporary droppings of
+tools, like rubber bands, vector paths, brush shape cursors.
+
+

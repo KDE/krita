@@ -261,7 +261,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     Q_ASSERT(parent);
 
     KisConfig cfg;
-    
+
     m_currentColorChooserDisplay = KisID("BLA");
     setFocusPolicy( Qt::StrongFocus );
 
@@ -280,7 +280,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
     if (cfg.fixDockerWidth()) m_paletteManager->setFixedWidth( 360 );
-    
+
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
@@ -1262,8 +1262,8 @@ void KisView::layerUpdateGUI(bool enable)
     qint32 nlayers = 0;
     qint32 nvisible = 0;
 
-    
-    
+
+
     if (img) {
         layer = img->activeLayer();
         nlayers = img->nlayers();
@@ -1271,7 +1271,7 @@ void KisView::layerUpdateGUI(bool enable)
     }
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
-        
+
     if (pl && ( m_currentColorChooserDisplay != KisID("BLA") ||
                 pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay)) {
         if (pl->paintDevice()->colorSpace()->id() == KisID("WET")) {
@@ -1315,9 +1315,9 @@ void KisView::layerUpdateGUI(bool enable)
 
     KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
     if (partLayer) {
-        setCanvasCursor( KisCursor::arrowCursor() ); 
+        setCanvasCursor( KisCursor::arrowCursor() );
     }
-    
+
     if (img && img->activeDevice())
         emit currentColorSpaceChanged(img->activeDevice()->colorSpace());
 
@@ -2507,18 +2507,6 @@ void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
     }
 }
 
-void KisView::canvasGotEnterEvent(QEvent *e)
-{
-    if (m_toolManager->currentTool())
-        m_toolManager->currentTool()->enter(e);
-}
-
-void KisView::canvasGotLeaveEvent (QEvent *e)
-{
-    if (m_toolManager->currentTool())
-        m_toolManager->currentTool()->leave(e);
-}
-
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 {
     //if(event->state() == Qt::ControlButton )
@@ -3140,8 +3128,6 @@ void KisView::setupCanvas()
     QObject::connect(m_canvas, SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent*)), this, SLOT(canvasGotDoubleClickEvent(KisDoubleClickEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotMoveEvent(KisMoveEvent*)), this, SLOT(canvasGotMoveEvent(KisMoveEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotPaintEvent(QPaintEvent*)), this, SLOT(canvasGotPaintEvent(QPaintEvent*)));
-    QObject::connect(m_canvas, SIGNAL(sigGotEnterEvent(QEvent*)), this, SLOT(canvasGotEnterEvent(QEvent*)));
-    QObject::connect(m_canvas, SIGNAL(sigGotLeaveEvent(QEvent*)), this, SLOT(canvasGotLeaveEvent(QEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotMouseWheelEvent(QWheelEvent*)), this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotKeyPressEvent(QKeyEvent*)), this, SLOT(canvasGotKeyPressEvent(QKeyEvent*)));
     QObject::connect(m_canvas, SIGNAL(sigGotKeyReleaseEvent(QKeyEvent*)), this, SLOT(canvasGotKeyReleaseEvent(QKeyEvent*)));

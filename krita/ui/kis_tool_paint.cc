@@ -88,14 +88,6 @@ void KisToolPaint::deactivate()
 {
 }
 
-void KisToolPaint::enter(QEvent *)
-{
-}
-
-void KisToolPaint::leave(QEvent *)
-{
-}
-
 void KisToolPaint::buttonPress(KisButtonPressEvent *)
 {
 }
@@ -138,7 +130,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     Q3VBoxLayout* verticalLayout = new Q3VBoxLayout(m_optionWidget);
     verticalLayout->setMargin(0);
     verticalLayout->setSpacing(3);
-    
+
     m_optionWidgetLayout = new Q3GridLayout(verticalLayout, 2, 3, 6);
 
     m_optionWidgetLayout->addWidget(m_lbOpacity, 0, 0);
@@ -222,7 +214,7 @@ void KisToolPaint::activate()
 
         if (controller)
             controller->setCurrentTool(this);
-            
+
         updateCompositeOpComboBox();
 
         KisConfig cfg;

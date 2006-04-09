@@ -50,6 +50,7 @@ Painterly core stuff
 ?  * make required changes in core to do painterly stuff
 ?  * Sumi-e brush tool
 ?  * Natural media tools (chalk, ink, oil, watercolour -- fun!)
+R  * Substrate architecture
 
 
 Printing and WYSIWYG

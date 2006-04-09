@@ -95,8 +95,6 @@ public:
 
 signals:
     void sigGotPaintEvent(QPaintEvent*);
-    void sigGotEnterEvent(QEvent*);
-    void sigGotLeaveEvent(QEvent*);
     void sigGotMouseWheelEvent(QWheelEvent*);
     void sigGotKeyPressEvent(QKeyEvent*);
     void sigGotKeyReleaseEvent(QKeyEvent*);
@@ -114,8 +112,6 @@ protected:
     void widgetGotMouseDoubleClickEvent(QMouseEvent *event);
     void widgetGotMouseMoveEvent(QMouseEvent *event);
     void widgetGotTabletEvent(QTabletEvent *event);
-    void widgetGotEnterEvent(QEvent *event );
-    void widgetGotLeaveEvent(QEvent *event);
     void widgetGotWheelEvent(QWheelEvent *event);
     void widgetGotKeyPressEvent(QKeyEvent *event);
     void widgetGotKeyReleaseEvent(QKeyEvent *event);

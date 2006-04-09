@@ -62,6 +62,7 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
 
     m_cmbPaintops = new QComboBox(this, "KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
+    m_cmbPaintops->setToolTip("Styles of painting for the painting tools");
     m_layout = new Q3HBoxLayout(this, 1, 1);
     m_layout->addWidget(m_cmbPaintops);
 

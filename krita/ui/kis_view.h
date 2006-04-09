@@ -442,8 +442,6 @@ private slots:
     void canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e);
     void canvasGotDoubleClickEvent(KisDoubleClickEvent *e);
     void canvasGotPaintEvent(QPaintEvent *e);
-    void canvasGotEnterEvent(QEvent *e);
-    void canvasGotLeaveEvent(QEvent *e);
     void canvasGotMouseWheelEvent(QWheelEvent *e);
     void canvasGotKeyPressEvent(QKeyEvent*);
     void canvasGotKeyReleaseEvent(QKeyEvent*);

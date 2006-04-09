@@ -242,16 +242,6 @@ void KisCanvasWidget::widgetGotTabletEvent(QTabletEvent *e)
     }
 }
 
-void KisCanvasWidget::widgetGotEnterEvent(QEvent *e)
-{
-    emit sigGotEnterEvent(e);
-}
-
-void KisCanvasWidget::widgetGotLeaveEvent(QEvent *e)
-{
-    emit sigGotLeaveEvent(e);
-}
-
 void KisCanvasWidget::widgetGotWheelEvent(QWheelEvent *e)
 {
     emit sigGotMouseWheelEvent(e);
@@ -804,10 +794,10 @@ void KisCanvasWidget::X11TabletDevice::writeSettingsToConfig()
 void KisCanvasWidget::X11TabletDevice::enableEvents(QWidget *widget) const
 {
     if (!m_eventClassList.isEmpty()) {
-        int result = XSelectExtensionEvent(widget->x11AppDisplay(), widget->handle(), 
-                                           const_cast<XEventClass*>(&m_eventClassList[0]), 
+        int result = XSelectExtensionEvent(widget->x11AppDisplay(), widget->handle(),
+                                           const_cast<XEventClass*>(&m_eventClassList[0]),
                                            m_eventClassList.count());
-    
+
         if (result != Success) {
             kDebug(41001) << "Failed to select extension events for " << m_name << endl;
         }
@@ -831,8 +821,8 @@ double KisCanvasWidget::X11TabletDevice::translateAxisValue(int value, const XAx
 
 KisCanvasWidget::X11TabletDevice::State::State(const KisPoint& pos, double pressure, const KisVector2D& tilt, double wheel,
                                                quint32 toolID, quint32 serialNumber)
-    : m_pos(pos), 
-      m_pressure(pressure), 
+    : m_pos(pos),
+      m_pressure(pressure),
       m_tilt(tilt),
       m_wheel(wheel),
       m_toolID(toolID),
@@ -845,7 +835,7 @@ KisCanvasWidget::X11TabletDevice::State KisCanvasWidget::X11TabletDevice::transl
     KisPoint pos(0, 0);
 
     if (m_xAxis != NoAxis && m_yAxis != NoAxis) {
-        pos = KisPoint(translateAxisValue(axisData[m_xAxis], m_axisInfo[m_xAxis]), 
+        pos = KisPoint(translateAxisValue(axisData[m_xAxis], m_axisInfo[m_xAxis]),
                        translateAxisValue(axisData[m_yAxis], m_axisInfo[m_yAxis]));
     }
 
@@ -860,7 +850,7 @@ KisCanvasWidget::X11TabletDevice::State KisCanvasWidget::X11TabletDevice::transl
     quint32 serialNumber = 0;
 
     if (m_xTiltAxis != NoAxis) {
-        // Latest wacom driver returns the tool id and serial number in 
+        // Latest wacom driver returns the tool id and serial number in
         // the upper 16 bits of the x and y tilts and wheel.
         int xTiltAxisValue = (qint16)(axisData[m_xTiltAxis] & 0xffff);
         toolID = ((quint32)axisData[m_xTiltAxis] >> 16) & 0xffff;
@@ -1098,9 +1088,9 @@ KisInputDevice KisCanvasWidget::findActiveInputDevice()
 
         // If your the laptop sleeps, and you remove the mouse from the usb
         // port, then on wake-up Krita can crash because the above call will
-        // return 0. 
+        // return 0.
         if (!deviceState) continue;
-        
+
         const XInputClass *inputClass = deviceState->data;
         bool deviceIsInProximity = false;
 

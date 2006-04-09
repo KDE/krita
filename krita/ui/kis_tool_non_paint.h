@@ -58,8 +58,6 @@ public:
     virtual void paint(KisCanvasPainter& gc);
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
 
-    virtual void enter(QEvent *e);
-    virtual void leave(QEvent *e);
     virtual void buttonPress(KisButtonPressEvent *e);
     virtual void move(KisMoveEvent *e);
     virtual void buttonRelease(KisButtonReleaseEvent *e);

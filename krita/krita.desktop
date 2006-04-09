@@ -30,6 +30,7 @@ GenericName[uk]=Малювання і редагування зображень
 GenericName[uz]=Расмлар билан ишлайдиган дастур
 GenericName[zh_CN]=绘图和图像编辑
 MimeType=application/x-krita
+Comment=Edit and paint images
 Type=Application
 Icon=krita
 Categories=Qt;KDE;Office;Graphics;

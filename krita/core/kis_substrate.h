@@ -29,10 +29,11 @@ struct KisSubstratePixel {
     float height;      // absolute height of the current position
     float smoothness;  // determines how easily the painting tool "slips" over the surface
     float absorbency;  // determines how much wetness the substrate can absorb. XXX: How about speed of absorbing?
-    float r;           //.Red component of reflectivity
-    float g;           // Green component of reflectivity
-    float b;           // Blue component of reflectivity
-    float transmittance; // Similar to alpha. XXX: Ask Leonardo about this.
+    float density;     // XXX?
+    Q_UINT8 r;           //.Red component of reflectivity
+    Q_UINT8 g;           // Green component of reflectivity
+    Q_UINT8 b;           // Blue component of reflectivity
+    Q_UINT8 alpha;     // For composition with the background
 };
 
 /**

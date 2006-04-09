@@ -6,6 +6,7 @@ kde4_header()
 ########### next target ###############
 
 set(krossmain_LIB_SRCS 
+   krossconfig.cpp
    mainmodule.cpp 
    scriptcontainer.cpp 
    manager.cpp 

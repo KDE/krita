@@ -41,8 +41,9 @@
 K_EXPORT_COMPONENT_FACTORY( kritascreenshot, KGenericFactory<Screenshot>( "krita" ) )
 
 Screenshot::Screenshot(QObject *parent, const char *name, const QStringList &)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(KGenericFactory<Screenshot>::instance());
     setXMLFile(locate("data","kritaplugins/screenshot-krita.rc"), true);
     

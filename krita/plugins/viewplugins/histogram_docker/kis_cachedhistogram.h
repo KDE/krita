@@ -35,7 +35,7 @@ public:
     {
         m_producer = m_factory->generate();
         if (add)
-            m_producers->append(m_producer);
+            m_producers->append(m_producer.data());
     }
     virtual ~KisCachedHistogramObserver() {}
 

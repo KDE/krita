@@ -49,8 +49,9 @@ typedef KGenericFactory<KritaFiltersGallery> KritaFiltersGalleryFactory;
 K_EXPORT_COMPONENT_FACTORY( kritafiltersgallery, KritaFiltersGalleryFactory( "krita" ) )
 
 KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const char *name, const QStringList &)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+    setObjectName(name);
 
     if ( parent->inherits("KisView") )
     {

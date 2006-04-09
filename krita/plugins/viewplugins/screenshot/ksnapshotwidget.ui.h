@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
 /****************************************************************************
 ** ui.h extension file, included from the uic-generated form implementation.
 **

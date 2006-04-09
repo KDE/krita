@@ -249,14 +249,15 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
             }
 
             if (outputOps == TO_LAYERS) {
-                KisPaintLayerSP l = new KisPaintLayer( image, ch->name(), OPACITY_OPAQUE, *deviceIt);
-                image->addLayer( dynamic_cast<KisLayer*>(l.data()), image->rootLayer(), 0);
+                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer( image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
+                image->addLayer(KisLayerSP(l.data()), image->rootLayer(), KisLayerSP(0));
             }
             else {
                 QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
                 QString mimelist = listMimeFilter.join(" ");
 
-                KFileDialog fd (QString::null, mimelist, m_view, "Export Layer", true);
+                KFileDialog fd (QString(), mimelist, m_view);
+                fd.setObjectName("Export Layer");
                 fd.setCaption(i18n("Export Layer") + "(" + ch->name() + ")");
                 fd.setMimeFilter(listMimeFilter);
                 fd.setOperationMode(KFileDialog::Saving);
@@ -269,15 +270,15 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 if (url.isEmpty())
                     return;
 
-                KisPaintLayerSP l = new KisPaintLayer( image, ch->name(), OPACITY_OPAQUE, *deviceIt);
+                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer( image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
                 QRect r = l->exactBounds();
 
                 KisDoc d;
                 d.prepareForImport();
 
-                KisImageSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name());
+                KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
                 d.setCurrentImage( dst );
-                dst->addLayer(l->clone(), dst->rootLayer(), 0);
+                dst->addLayer(l->clone(), dst->rootLayer(), KisLayerSP(0));
 
                 d.setOutputMimeType(mimefilter.latin1());
                 d.exp0rt(url);

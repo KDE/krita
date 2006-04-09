@@ -25,7 +25,11 @@ install_targets(${LIB_INSTALL_DIR}/kde4 kritadefaultpaintops )
 ########### install files ###############
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritadefaultpaintops.desktop )
-install_files(  FILES  airbrush.png  	paintbrush.png  	eraser.png  	pencil.png )
+install_files( ${DATA_INSTALL_DIR}/krita/images FILES 
+    airbrush.png 
+    paintbrush.png 
+    eraser.png 
+    pencil.png )
 
 kde4_footer()
 

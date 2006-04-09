@@ -60,7 +60,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     
     if (m_view->canvasSubject()->currentImg() && m_view->canvasSubject()->currentImg()->activeDevice())
     {
-        m_widget->previewWidget->slotSetDevice( m_view->canvasSubject()->currentImg()->activeDevice().data() );
+        m_widget->previewWidget->slotSetDevice( m_view->canvasSubject()->currentImg()->activeDevice() );
     }
     connect( m_widget->previewWidget, SIGNAL(updated()), this, SLOT(refreshPreview()));
     resize( minimumSizeHint());
@@ -87,7 +87,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( Q3IconViewItem * item )
         m_labelNoCW->hide();
     }
     KisImageSP img = m_view->canvasSubject()->currentImg();
-    KisPaintLayerSP activeLayer = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
+    KisPaintLayerSP activeLayer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->activeLayer().data()));
     
     if (activeLayer)
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());
@@ -120,11 +120,11 @@ void KisDlgFiltersGallery::refreshPreview( )
 {
     KisPaintDeviceSP layer =  m_widget->previewWidget->getDevice();
 
-    KisTransaction cmd("Temporary transaction", layer.data());
+    KisTransaction cmd("Temporary transaction", layer);
     KisFilterConfiguration* config = m_currentFilter->configuration(m_currentConfigWidget);
 
     QRect rect = layer->exactBounds();
-    m_currentFilter->process(layer.data(), layer.data(), config, rect);
+    m_currentFilter->process(layer, layer, config, rect);
     m_widget->previewWidget->slotUpdate();
     cmd.unexecute();
 

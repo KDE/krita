@@ -53,8 +53,9 @@ typedef KGenericFactory<Histogram> HistogramFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogram, HistogramFactory( "krita" ) )
 
 Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
 
     if ( parent->inherits("KisView") ) {
 
@@ -65,15 +66,15 @@ Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
 
         m_view = (KisView*) parent;
         if (KisImageSP img = m_view->canvasSubject()->currentImg()) {
-            connect(img, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(img, SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(img, SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(img, SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), this, SLOT(slotLayersChanged()));
-            connect(img, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
+            connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigLayerAdded(KisLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), this, SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                     this, SLOT(slotLayersChanged()));
-            connect(img, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
+            connect(img.data(), SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)),
                     this, SLOT(slotLayersChanged()));
-            m_img = img;
+            m_img = img.data();
         }
     }
 }

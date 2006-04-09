@@ -5,7 +5,7 @@ kde4_header()
 
 ########### install files ###############
 
-install_files(  FILES  previewfilter.png )
+install_files( ${DATA_INSTALL_DIR}/krita/images FILES previewfilter.png )
 
 kde4_footer()
 

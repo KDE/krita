@@ -46,8 +46,9 @@ typedef KGenericFactory<KritaHistogramDocker> KritaHistogramDockerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogramdocker, KritaHistogramDockerFactory( "krita" ) )
 
 KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, const QStringList&)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+    setObjectName(name);
 
     if ( parent->inherits("KisView") ) {
         m_view = dynamic_cast<KisView*>(parent);
@@ -69,7 +70,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
         m_hview = new KisHistogramView(m_view);
         m_hview->setHistogram(m_histogram);
         m_hview->setColor(true);
-        m_hview->setCurrentChannels(m_producer, m_producer->channels());
+        m_hview->setCurrentChannels(KisHistogramProducerSP(m_producer), m_producer->channels());
         m_hview->setFixedSize(256, 100); // XXX if not it keeps expanding
         m_hview->setCaption(i18n("Histogram"));
 
@@ -80,7 +81,7 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, co
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
         connect(&m_popup, SIGNAL(activated(int)),
                 this, SLOT(producerChanged(int)));
-        connect(img, SIGNAL(sigColorSpaceChanged(KisColorSpace*)),
+        connect(img.data(), SIGNAL(sigColorSpaceChanged(KisColorSpace*)),
                 this, SLOT(colorSpaceChanged(KisColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
@@ -134,12 +135,13 @@ void KritaHistogramDocker::producerChanged(int pos)
 
     // use dummy layer as a source; we are not going to actually use or need it
     // All of these are SP, no need to delete them afterwards
-    m_histogram = new KisHistogram( new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "dummy histogram"), m_producer, LOGARITHMIC);
+    m_histogram = new KisHistogram( KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "dummy histogram")), 
+                                    KisHistogramProducerSP(m_producer), LOGARITHMIC);
 
     if (m_hview) {
         m_hview->setHistogram(m_histogram);
         m_hview->setColor(true);
-        m_hview->setCurrentChannels(m_producer, m_producer->channels());
+        m_hview->setCurrentChannels(KisHistogramProducerSP(m_producer), m_producer->channels());
 
         connect(m_cache, SIGNAL(cacheUpdated()),
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));

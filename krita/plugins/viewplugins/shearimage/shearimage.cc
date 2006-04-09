@@ -52,8 +52,9 @@ K_EXPORT_COMPONENT_FACTORY( kritashearimage, ShearImageFactory( "krita" ) )
 
 // XXX: this plugin could also provide layer scaling/resizing
 ShearImage::ShearImage(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     if ( parent->inherits("KisView") )
     {
         setInstance(ShearImageFactory::instance());

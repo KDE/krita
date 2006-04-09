@@ -88,7 +88,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
         image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
     }
 
-    KisPaintDeviceSP shadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"" ), "Shadow");
+    KisPaintDeviceSP shadowDev = KisPaintDeviceSP(new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"" ), "Shadow"));
     KisPaintDeviceSP bShadowDev;
     KisRgbColorSpace *rgb8cs = static_cast<KisRgbColorSpace *>(shadowDev->colorSpace());
 
@@ -126,8 +126,8 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
         if (image->activeLayer())
             parent = image->activeLayer()->parent().data();
 
-        KisPaintLayerSP l = new KisPaintLayer(image, i18n("Drop Shadow"), opacity, shadowDev);
-        image->addLayer( l.data(), parent, src->siblingBelow() );
+        KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), i18n("Drop Shadow"), opacity, shadowDev));
+        image->addLayer( KisLayerSP(l.data()), parent, src->siblingBelow() );
 
         if (allowResize)
         {

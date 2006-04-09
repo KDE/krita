@@ -21,6 +21,7 @@
 #include <kio/netaccess.h>
 #include <ksavefile.h>
 #include <ktempfile.h>
+#include <kvbox.h>
 
 #include <qbitmap.h>
 #include <q3dragobject.h>
@@ -67,7 +68,7 @@
 KSnapshot::KSnapshot(QWidget *parent, const char *name)
     : super(parent, name, false, QString::null, Ok|Cancel)
 {
-    grabber = new QWidget( 0, 0, WStyle_Customize | WX11BypassWM );
+    grabber = new QWidget( 0, 0, Qt::WStyle_Customize | Qt::WX11BypassWM );
     Q_CHECK_PTR(grabber);
     grabber->move( -1000, -1000 );
     grabber->installEventFilter( this );
@@ -88,7 +89,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     connect( mainWidget, SIGNAL( printClicked() ), SLOT( slotPrint() ) );
 
     grabber->show();
-    grabber->grabMouse( waitCursor );
+    grabber->grabMouse( Qt::waitCursor );
     
     snapshot = QPixmap::grabWindow( QX11Info::appRootWindow() );
     updatePreview();
@@ -126,9 +127,16 @@ bool KSnapshot::save( const QString &filename )
 
 bool KSnapshot::save( const KUrl& url )
 {
-    QString type( KImageIO::type(url.path()) );
-    if ( type.isNull() )
+    KMimeType::Ptr mimeType = KMimeType::findByURL(url);
+    QStringList types(KImageIO::typeForMime(mimeType->name()));
+
+    QString type;
+
+    if (types.isEmpty()) {
         type = "PNG";
+    } else {
+        type = types.at(0);
+    }
 
     bool ok = false;
 
@@ -193,7 +201,7 @@ void KSnapshot::slotGrab()
             grabTimer.start( mainWidget->delay() * 1000, true );
         else {
             grabber->show();
-            grabber->grabMouse( crossCursor );
+            grabber->grabMouse( Qt::crossCursor );
         }
     }
 }

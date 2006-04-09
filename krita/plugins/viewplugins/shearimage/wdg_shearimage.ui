@@ -34,10 +34,10 @@
                     <property name="name">
                         <cstring>shearAngleX</cstring>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>-45</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>45</number>
                     </property>
                     <property name="suffix">
@@ -62,10 +62,10 @@
                             <height>100</height>
                         </size>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>-45</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>45</number>
                     </property>
                     <property name="suffix">
@@ -88,15 +88,16 @@
     </grid>
 </widget>
 <customwidgets>
+	<customwidget>
+		<class>KIntNumInput</class>
+		<extends>QWidget</extends>
+		<header>knuminput.h</header>
+		<container>1</container>
+		<pixmap></pixmap>
+	</customwidget>
 </customwidgets>
 <tabstops>
     <tabstop>shearAngleX</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
 </UI>

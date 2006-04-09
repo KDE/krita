@@ -47,9 +47,9 @@ KisImageRasteredCache::KisImageRasteredCache(KisView* view, Observer* o)
 
     imageSizeChanged(img->width(), img->height());
 
-    connect(img, SIGNAL(sigImageUpdated(QRect)),
+    connect(img.data(), SIGNAL(sigImageUpdated(QRect)),
             this, SLOT(imageUpdated(QRect)));
-    connect(img, SIGNAL(sigSizeChanged(qint32, qint32)),
+    connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)),
             this, SLOT(imageSizeChanged(qint32, qint32)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }

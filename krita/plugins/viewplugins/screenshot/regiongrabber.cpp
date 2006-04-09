@@ -168,8 +168,9 @@ void RegionGrabber::drawRubber()
   p.setPen( QPen( Qt::color0, 1 ) );
   p.setBrush( Qt::NoBrush );
 
-  style().drawPrimitive( QStyle::PE_FocusRect, &p, grabRect, colorGroup(),
-      QStyle::State_None, QStyleOption( colorGroup().base() ) );
+#warning kde4 port
+//   style()->drawPrimitive( QStyle::PE_FocusRect, &p, grabRect, colorGroup(),
+//       QStyle::State_None, QStyleOption( colorGroup().base() ) );
 
   p.end();
 }

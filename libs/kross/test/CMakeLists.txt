@@ -7,7 +7,6 @@ kde4_header()
 
 set(krosstest_SRCS 
    testobject.cpp 
-   testaction.cpp 
    testplugin.cpp 
    testwindow.cpp 
    main.cpp )

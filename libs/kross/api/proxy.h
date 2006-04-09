@@ -141,7 +141,7 @@ namespace Kross { namespace Api {
             struct ProxyFunctionCaller<PROXYFUNC, void> {
                 inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2, Kross::Api::Object* arg3, Kross::Api::Object* arg4) {
                     ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG1OBJ>(arg2), ProxyArgTranslator<ARG3OBJ>(arg3), ProxyArgTranslator<ARG4OBJ>(arg4) );
-                    return 0; // void return-value
+                    return Object::Ptr(0); // void return-value
                 }
             };
 
@@ -168,10 +168,10 @@ namespace Kross { namespace Api {
              */
             Object::Ptr call(List::Ptr args) {
                 return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this,
-                    args->item(0, m_defarg1),
-                    args->item(1, m_defarg2),
-                    args->item(2, m_defarg3),
-                    args->item(3, m_defarg4)
+                    args->item(0, m_defarg1.data()),
+                    args->item(1, m_defarg2.data()),
+                    args->item(2, m_defarg3.data()),
+                    args->item(3, m_defarg4.data())
                 );
             }
     };
@@ -204,7 +204,7 @@ namespace Kross { namespace Api {
             struct ProxyFunctionCaller<PROXYFUNC, void> {
                 inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2, Kross::Api::Object* arg3) {
                     ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG2OBJ>(arg2), ProxyArgTranslator<ARG3OBJ>(arg3) );
-                    return 0;
+                    return Object::Ptr(0);
                 }
             };
 
@@ -213,7 +213,9 @@ namespace Kross { namespace Api {
                 : m_instance(instance), m_method(method), m_defarg1(defarg1), m_defarg2(defarg2), m_defarg3(defarg3) {}
             Object::Ptr call(List::Ptr args) {
                 return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this,
-                    args->item(0, m_defarg1), args->item(1, m_defarg2), args->item(2, m_defarg3)
+                    args->item(0, m_defarg1.data()),
+                    args->item(1, m_defarg2.data()),
+                    args->item(2, m_defarg3.data())
                 );
             }
     };
@@ -245,7 +247,7 @@ namespace Kross { namespace Api {
             struct ProxyFunctionCaller<PROXYFUNC, void> {
                 inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1, Kross::Api::Object* arg2) {
                     ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1), ProxyArgTranslator<ARG2OBJ>(arg2) );
-                    return 0;
+                    return Object::Ptr(0);
                 }
             };
 
@@ -254,7 +256,8 @@ namespace Kross { namespace Api {
                 : m_instance(instance), m_method(method), m_defarg1(defarg1), m_defarg2(defarg2) {}
             Object::Ptr call(List::Ptr args) {
                 return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this,
-                    args->item(0, m_defarg1), args->item(1, m_defarg2)
+                    args->item(0, m_defarg1.data()),
+                    args->item(1, m_defarg2.data())
                 );
             }
     };
@@ -285,7 +288,7 @@ namespace Kross { namespace Api {
             struct ProxyFunctionCaller<PROXYFUNC, void> {
                 inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1) {
                     ( (self->m_instance)->*(self->m_method) )( ProxyArgTranslator<ARG1OBJ>(arg1) );
-                    return 0;
+                    return Object::Ptr(0);
                 }
             };
 
@@ -294,7 +297,7 @@ namespace Kross { namespace Api {
                 : m_instance(instance), m_method(method), m_defarg1(defarg1) {}
             Object::Ptr call(List::Ptr args) {
                 return ProxyFunctionCaller<ProxyFunction, RETURNOBJ>::exec(this,
-                    args->item(0, m_defarg1)
+                    args->item(0, m_defarg1.data())
                 );
             }
     };
@@ -324,7 +327,7 @@ namespace Kross { namespace Api {
             struct ProxyFunctionCaller<PROXYFUNC, void> {
                 inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1) {
                     ( (self->m_instance)->*(self->m_method) )();
-                    return 0;
+                    return Object::Ptr(0);
                 }
             };
 

@@ -102,7 +102,7 @@ EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, Q3CSt
 QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
     QtObject* qtobject = new QtObject(this, object, name);
-    if(! addChild( Object::Ptr(qtobject) )) {
+    if(! addChild(qtobject)) {
         krosswarning( QString("Failed to add QObject name='%1'").arg(object->name()) );
         delete qtobject;
         return QtObject::Ptr();
@@ -113,7 +113,7 @@ QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
     EventAction* event = new EventAction(name, this, action);
-    if(! addChild( Object::Ptr(event) )) {
+    if(! addChild(event)) {
         krosswarning( QString("Failed to add KAction name='%1'").arg(action->name()) );
         delete event;
         return EventAction::Ptr();

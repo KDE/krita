@@ -78,10 +78,16 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     setInstance( ScriptGUIClient::instance() );
 
     // action to execute a scriptfile.
-    new KAction(i18n("Execute Script File..."), 0, 0, this, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
+    KAction* execfileaction = new KAction(i18n("Execute Script File..."), actionCollection(), "executescriptfile");
+    //i18n("Execute Script File..."), 0, 0, this, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
+    connect(execfileaction, SIGNAL(triggered(Qt::MouseButtons, Qt::KeyboardModifiers)),
+            this, SLOT(executeScriptFile()));
 
     // acion to show the ScriptManagerGUI dialog.
-    new KAction(i18n("Scripts Manager..."), 0, 0, this, SLOT(showScriptManager()), actionCollection(), "configurescripts");
+    KAction* manageraction =  new KAction(i18n("Scripts Manager..."), actionCollection(), "configurescripts");
+    //i18n("Scripts Manager..."), 0, 0, this, SLOT(showScriptManager()), actionCollection(), "configurescripts");
+    connect(manageraction, SIGNAL(triggered(Qt::MouseButtons, Qt::KeyboardModifiers)),
+            this, SLOT(showScriptManager()));
 
     // The predefined ScriptActionCollection's this ScriptGUIClient provides.
     d->collections.replace("installedscripts",

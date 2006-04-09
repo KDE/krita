@@ -74,7 +74,7 @@ QMap<QString, Object::Ptr> Object::getChildren() const
     return m_children;
 }
 
-bool Object::addChild(Object::Ptr object, const QString& name)
+bool Object::addChild(Object* object, const QString& name)
 {
     QString n = name.isNull() ? object->getName() : name;
 
@@ -87,7 +87,7 @@ bool Object::addChild(Object::Ptr object, const QString& name)
         return false; //throw Exception::Ptr( new Exception( QString("Failed to add child object to object '%1'. Invalid name for class '%2'.").arg(getName()).arg(object->getClassName()) ) );
 
     object->m_parent = this;
-    m_children.replace(n, object);
+    m_children.replace(n, Object::Ptr(object));
     return true;
 }
 

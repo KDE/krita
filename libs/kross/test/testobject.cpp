@@ -48,53 +48,53 @@ TestObject::~TestObject()
 
 uint TestObject::func1(uint i)
 {
-    krossdebug(QString("CALLED => TestObject::func1 i=%1").arg(i) );
+    Kross::krossdebug(QString("CALLED => TestObject::func1 i=%1").arg(i) );
     return i;
 }
 
 void TestObject::func2(QString s, int i)
 {
-    krossdebug(QString("CALLED => TestObject::func2 s=%1 i=%2").arg(s).arg(i));
+    Kross::krossdebug(QString("CALLED => TestObject::func2 s=%1 i=%2").arg(s).arg(i));
 }
 
 QString TestObject::func3(QString s, int i)
 {
-    krossdebug(QString("CALLED => TestObject::func3 s=%1 i=%2").arg(s).arg(i));
+    Kross::krossdebug(QString("CALLED => TestObject::func3 s=%1 i=%2").arg(s).arg(i));
     return s;
 }
 
 const QString& TestObject::func4(const QString& s, int i) const
 {
-    krossdebug(QString("CALLED => TestObject::func4 s=" << s << " i=" << i << endl;
+    Kross::krossdebug(QString("CALLED => TestObject::func4 s=%1 i=%2").arg(s).arg(i));
     return s;
 }
 
 void TestObject::testSlot()
 {
-    krossdebug("TestObject::testSlot called");
+    Kross::krossdebug("TestObject::testSlot called");
     emit testSignal();
     emit testSignalString("This is the emitted TestObject::testSignalString(const QString&)");
 }
 
 void TestObject::testSlot2()
 {
-    krossdebug("TestObject::testSlot2 called");
+    Kross::krossdebug("TestObject::testSlot2 called");
 }
 
 void TestObject::testSignalSlot()
 {
-    krossdebug("TestObject::testSignalSlot called");
+    Kross::krossdebug("TestObject::testSignalSlot called");
 }
 
 void TestObject::stdoutSlot(const QString& s)
 {
-    krossdebug(QString("stdout: %1").arg(s));
+    Kross::krossdebug(QString("stdout: %1").arg(s));
     //std::cout << "<stdout> " << s.latin1() << std::endl;
 }
 
 void TestObject::stderrSlot(const QString& s)
 {
-    krossdebug(QString("stderr: %1").arg(s));
+    Kross::krossdebug(QString("stderr: %1").arg(s));
     //std::cout << "<stderr> " << s.latin1() << std::endl;
 }
 

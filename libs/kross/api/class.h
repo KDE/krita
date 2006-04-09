@@ -71,7 +71,7 @@ namespace Kross { namespace Api {
             }
 
             template<typename TYPE>
-            static Object::Ptr toObject(TYPE t) { return t; }
+            static Object::Ptr toObject(TYPE t) { return Object::Ptr(t); }
 
             operator T* () { return (T*)this; }
             //operator Ptr () { return (T*)this; }

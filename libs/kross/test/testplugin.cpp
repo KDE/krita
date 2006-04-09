@@ -19,8 +19,6 @@
 
 #include "testplugin.h"
 #include "testobject.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 /************************************************************************
  * TestPluginObject
@@ -40,8 +38,8 @@ TestPluginObject::TestPluginObject(const QString& name)
         ("boolfunc", this, &TestPluginObject::boolfunc);
     this->addProxyFunction< Kross::Api::Variant, Kross::Api::Variant >
         ("doublefunc", this, &TestPluginObject::doublefunc);
-    this->addProxyFunction< Kross::Api::Variant, Kross::Api::Variant >
-        ("cstringfunc", this, &TestPluginObject::cstringfunc);
+    /*this->addProxyFunction< Kross::Api::Variant, Kross::Api::Variant >
+        ("cstringfunc", this, &TestPluginObject::cstringfunc);*/
     this->addProxyFunction< Kross::Api::Variant, Kross::Api::Variant >
         ("stringfunc", this, &TestPluginObject::stringfunc);
     this->addProxyFunction< Kross::Api::Variant, Kross::Api::Variant >
@@ -93,7 +91,7 @@ void TestPluginObject::voiduintfunc(uint) {}
 int TestPluginObject::intfunc(int i) { return i; }
 bool TestPluginObject::boolfunc(bool b) { return b; }
 double TestPluginObject::doublefunc(double d) { return d; }
-Q3CString TestPluginObject::cstringfunc(const Q3CString& s) { return s; }
+//Q3CString TestPluginObject::cstringfunc(const Q3CString& s) { return s; }
 QString TestPluginObject::stringfunc(const QString& s) { return s; }
 QStringList TestPluginObject::stringlistfunc(const QStringList& sl) { return sl; }
 QVariant TestPluginObject::variantfunc(const QVariant& v) { return v; }
@@ -111,7 +109,7 @@ TestPluginModule::TestPluginModule(const QString& name)
     , m_testobject( new TestObject() )
 
 {
-    addChild( new TestPluginObject("testpluginobject1") );
+    addChild(new TestPluginObject("testpluginobject1"));
 
     // Let's wrap a whole instance and it's methodfunctions.
     Kross::Api::Event<TestObject> *testobjectclass =

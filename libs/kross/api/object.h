@@ -144,7 +144,7 @@ namespace Kross { namespace Api {
              * \return true if the Object was added successfully
              *         else false.
              */
-            bool addChild(Object::Ptr object, const QString& name = QString::null);
+            bool addChild(Object* object, const QString& name = QString::null);
 
             /**
              * Remove an existing child.

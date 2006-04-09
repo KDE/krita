@@ -22,15 +22,13 @@
 
 #include <qlabel.h>
 #include <q3vbox.h>
-#include <qvgroupbox.h>
-//#include <qhgroupbox.h>
+#include <qmenu.h>
+#include <qgroupbox.h>
 #include <qcombobox.h>
 #include <qdir.h>
-#include <q3popupmenu.h>
 
 #include <ktextedit.h>
 #include <kpushbutton.h>
-#include <kpopupmenu.h>
 #include <kmenubar.h>
 #include <kstandarddirs.h>
 
@@ -40,10 +38,10 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     , m_scriptcode(scriptcode)
 {
     Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
-    manager->addModule( new TestPluginModule("krosstestpluginmodule") );
+    manager->addModule( Kross::Api::Module::Ptr(new TestPluginModule("krosstestpluginmodule")) );
     m_scriptcontainer = manager->getScriptContainer("test");
 
-    KPopupMenu *menuFile = new KPopupMenu( this );
+    QMenu *menuFile = new QMenu( this );
     menuBar()->insertItem( "&File", menuFile );
 
     m_scriptextension = new Kross::Api::ScriptGUIClient(this, this);
@@ -51,9 +49,9 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     QString file = KGlobal::dirs()->findResource("appdata", "testscripting.rc");
     if(file.isNull())
         file = QDir(QDir::currentDirPath()).filePath("testscripting.rc");
-    else krossdebug("-------------------------222222");
+    else Kross::krossdebug("-------------------------222222");
 
-    krossdebug(QString("XML-file: %1").arg(file));
+    Kross::krossdebug(QString("XML-file: %1").arg(file));
     m_scriptextension->setXMLFile(file);
 
     //menuFile->insertSeparator();
@@ -66,19 +64,21 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
 
     KAction* scriptsaction = m_scriptextension->action("installedscripts");
     if(scriptsaction) scriptsaction->plug(menuFile);
-    //menuFile->insertItem( ( (KActionMenu*)m_scriptextension->action("scripts") )->popupMenu() );
 
     Q3VBox* mainbox = new Q3VBox(this);
 
-    QVGroupBox* interpretergrpbox = new QVGroupBox("Interpreter", mainbox);
+    QGroupBox* interpretergrpbox = new QGroupBox("Interpreter", mainbox);
+    interpretergrpbox->setAlignment(Qt::AlignTop);
     QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
     m_interpretercombo = new QComboBox(interpretergrpbox);
     m_interpretercombo->insertStringList(interpreters);
     m_interpretercombo->setCurrentText(interpretername);
 
-    QVGroupBox* scriptgrpbox = new QVGroupBox("Scripting code", mainbox);
-    m_codeedit = new KTextEdit(m_scriptcode, QString::null, scriptgrpbox);
-    m_codeedit->setWordWrap(Q3TextEdit::NoWrap);
+    QGroupBox* scriptgrpbox = new QGroupBox("Scripting code", mainbox);
+    scriptgrpbox->setAlignment(Qt::AlignTop);
+    m_codeedit = new KTextEdit(scriptgrpbox);
+    m_codeedit->setText(m_scriptcode);
+    m_codeedit->setWordWrapMode(QTextOption::NoWrap);
     m_codeedit->setTextFormat(Qt::PlainText);
 
     Q3HBox* btnbox = new Q3HBox(mainbox);
@@ -99,11 +99,11 @@ void TestWindow::execute()
     m_scriptcontainer->setCode(m_codeedit->text());
     Kross::Api::Object::Ptr result = m_scriptcontainer->execute();
     if(m_scriptcontainer->hadException()) {
-        krossdebug( QString("EXCEPTION => %1").arg(m_scriptcontainer->getException()->toString());
+        Kross::krossdebug( QString("EXCEPTION => %1").arg(m_scriptcontainer->getException()->toString()) );
     }
     else {
         QString s = result ? result->toString() : QString::null;
-        krossdebug( QString("DONE => %1").arg(s) );
+        Kross::krossdebug( QString("DONE => %1").arg(s) );
     }
 }
 

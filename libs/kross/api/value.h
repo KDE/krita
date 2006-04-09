@@ -66,7 +66,7 @@ namespace Kross { namespace Api {
             //operator V& () { return m_value; }
 
             template<typename TYPE>
-            static Object::Ptr toObject(TYPE t) { return new T(t); }
+            static Object::Ptr toObject(TYPE t) { return Object::Ptr( new T(t) ); }
 
 #if 0
 //do we need it anyway?

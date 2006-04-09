@@ -30,7 +30,6 @@
 //#include "../kexidb/kexidbmodule.h"
 
 #include "testobject.h"
-#include "testaction.h"
 #include "testwindow.h"
 #include "testplugin.h"
 
@@ -53,9 +52,9 @@ KApplication *app = 0;
 
 static KCmdLineOptions options[] =
 {
-    { "interpreter <interpretername>", I18N_NOOP("Name of the interpreter being used"), "python" },
-    { "scriptfile <filename>", I18N_NOOP("Script file to execute with the defined interpreter"), "testcase.py" },
-    { "gui", I18N_NOOP("Start the GUI; otherwise the command line application is used."), 0 },
+    { "interpreter <interpretername>", "Name of the interpreter being used", "python" },
+    { "scriptfile <filename>", "Script file to execute with the defined interpreter", "testcase.py" },
+    { "gui", "Start the GUI; otherwise the command line application is used.", 0 },
 
     //{ "functionname <functioname>", I18N_NOOP("Execute the function in the defined script file."), "" },
     //{ "functionargs <functioarguments>", I18N_NOOP("List of arguments to pass to the function on execution."), "" },
@@ -77,7 +76,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         // able to access from within scripts. You don't need to take
         // care of freeing them cause that will be done by Kross.
         // Modules are shared between the ScriptContainer instances.
-        manager->addModule( new TestPluginModule("krosstestpluginmodule") );
+        manager->addModule( Kross::Api::Module::Ptr(new TestPluginModule("krosstestpluginmodule")) );
 
         // To represent a script that should be executed Kross uses
         // the Script container class. You are able to fill them with
@@ -93,7 +92,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         TestObject* testobject = new TestObject(app, scriptcontainer);
         manager->addQObject( testobject );
 
-        /*TestAction* testaction =*/ new TestAction(scriptcontainer);
+        //TestAction* testaction = new TestAction(scriptcontainer);
         //manager->addQObject( testaction );
 
         /*Kross::Api::Object* o =*/ scriptcontainer->execute();
@@ -176,12 +175,12 @@ int main(int argc, char **argv)
             result = app->exec();
         }
         else {
-            app = new KApplication(true, true);
+            app = new KApplication(true);
             runInterpreter(interpretername, scriptcode);
         }
     }
     else {
-        krosswarning( QString("Failed to load scriptfile: %1").arg(scriptfilename) );
+        Kross::krosswarning( QString("Failed to load scriptfile: %1").arg(scriptfilename) );
         result = -1;
     }
 

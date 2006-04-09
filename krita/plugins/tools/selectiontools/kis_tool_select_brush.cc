@@ -92,7 +92,7 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
     }
     KisSelectionSP selection = dev->selection();
 
-    m_painter = new KisPainter(selection.data());
+    m_painter = new KisPainter(KisPaintDeviceSP(selection.data()));
     Q_CHECK_PTR(m_painter);
     m_painter->setPaintColor(KisColor(Qt::black, selection->colorSpace()));
     m_painter->setBrush(m_subject->currentBrush());
@@ -128,16 +128,16 @@ void KisToolSelectBrush::endPaint()
 
 void KisToolSelectBrush::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Selection Brush"),
+        m_action = new KAction(i18n("&Selection Brush"),
                         "tool_brush_selection", "Ctrl+Shift+B", this,
                         SLOT(activate()), collection,
                         name());
         Q_CHECK_PTR(m_action);
         m_action->setToolTip(i18n("Paint a selection"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

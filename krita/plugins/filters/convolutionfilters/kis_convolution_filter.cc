@@ -117,7 +117,7 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
 
 KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*)
 {
-    return new KisConvolutionConfiguration( id().id(), m_matrix );
+    return new KisConvolutionConfiguration( id().id(), m_matrix.data() );
 }
 
 #include "kis_convolution_filter.moc"

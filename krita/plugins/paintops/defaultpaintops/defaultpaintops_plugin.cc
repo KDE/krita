@@ -42,9 +42,11 @@ K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( 
 
 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
-     setInstance(DefaultPaintOpsPluginFactory::instance());
+    setObjectName(name);
+
+    setInstance(DefaultPaintOpsPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )
@@ -52,11 +54,11 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, 
         KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
         // Add hard-coded paint ops. Plugin paintops will add
         // themselves in the plugin initialization code.
-        r->add ( new KisAirbrushOpFactory );
-        r->add ( new KisBrushOpFactory );
-        r->add ( new KisDuplicateOpFactory );
-        r->add ( new KisEraseOpFactory );
-        r->add ( new KisPenOpFactory );
+        r->add (KisPaintOpFactorySP( new KisAirbrushOpFactory ));
+        r->add (KisPaintOpFactorySP( new KisBrushOpFactory ));
+        r->add (KisPaintOpFactorySP( new KisDuplicateOpFactory ));
+        r->add (KisPaintOpFactorySP( new KisEraseOpFactory ));
+        r->add (KisPaintOpFactorySP( new KisPenOpFactory ));
     }
 
 }

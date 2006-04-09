@@ -167,7 +167,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
 
 void KisToolSelectSimilar::slotTimer()
 {
-    int state = kapp->keyboardMouseState() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
+    int state = QApplication::keyboardModifiers() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
     enumSelectionMode action;
 
     if (state == Qt::ShiftModifier)
@@ -196,13 +196,13 @@ void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
 
 void KisToolSelectSimilar::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Similar Selection"), "tool_similar_selection", "Ctrl+E", this, SLOT(activate()), collection, name());
+        m_action = new KAction(i18n("&Similar Selection"), "tool_similar_selection", "Ctrl+E", this, SLOT(activate()), collection, name());
         Q_CHECK_PTR(m_action);
         m_action->setToolTip(i18n("Select similar colors"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }
@@ -247,8 +247,9 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
 
     hbox->addWidget(lbl);
 
-    KIntNumInput * input = new KIntNumInput(m_optWidget, "fuzziness");
+    KIntNumInput * input = new KIntNumInput(m_optWidget);
     Q_CHECK_PTR(input);
+    input->setObjectName("fuzziness");
 
     input->setRange(0, 200, 10, true);
     input->setValue(20);

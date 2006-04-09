@@ -92,7 +92,7 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     qint32 maskHeight = mask->height();
 
     // Create a temporary paint device
-    KisPaintDeviceSP tmpDev = new KisPaintDevice(colorSpace, "filterop tmpdev");
+    KisPaintDeviceSP tmpDev = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "filterop tmpdev"));
     Q_CHECK_PTR(tmpDev);
 
     // Copy the layer data onto the new paint device
@@ -137,11 +137,11 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     qint32 sh = dstRect.height();
 
     if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev.data(),
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev.data(), m_painter->opacity(), sx, sy, sw, sh);
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), tmpDev, m_painter->opacity(), sx, sy, sw, sh);
     }
 
     m_painter->addDirtyRect(dstRect);

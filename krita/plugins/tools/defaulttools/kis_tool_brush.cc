@@ -112,15 +112,15 @@ void KisToolBrush::endPaint()
 void KisToolBrush::setup(KActionCollection *collection)
 {
 
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Brush"),
+        m_action = new KAction(i18n("&Brush"),
                                     "tool_freehand", Qt::Key_B, this,
                                     SLOT(activate()), collection,
                                     name());
         m_action->setToolTip(i18n("Draw freehand"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

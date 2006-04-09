@@ -140,10 +140,10 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 
 void KisToolSelectContiguous::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Contiguous Area Selection"),
+        m_action = new KAction(i18n("&Contiguous Area Selection"),
                         "tool_contiguous_selection" ,
                         0,
                         this,
@@ -152,7 +152,7 @@ void KisToolSelectContiguous::setup(KActionCollection *collection)
                         name());
         Q_CHECK_PTR(m_action);
         m_action->setToolTip(i18n("Select a contiguous area"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }
@@ -201,8 +201,9 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
     QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
     hbox->addWidget(lbl);
 
-    KIntNumInput * input = new KIntNumInput(m_optWidget, "fuzziness");
+    KIntNumInput * input = new KIntNumInput(m_optWidget);
     Q_CHECK_PTR(input);
+    input->setObjectName("fuzziness");
 
     input->setRange(0, 200, 10, true);
     input->setValue(20);

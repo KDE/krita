@@ -48,8 +48,9 @@ typedef KGenericFactory<KritaImageEnhancement> KritaImageEnhancementFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimageenhancement, KritaImageEnhancementFactory( "krita" ) )
 
         KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const char *name, const QStringList &)
-  : KParts::Plugin(parent, name)
+  : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(KritaImageEnhancementFactory::instance());
 
     kDebug(41006) << "Image enhancement filter plugin. Class: "
@@ -62,8 +63,8 @@ K_EXPORT_COMPONENT_FACTORY( kritaimageenhancement, KritaImageEnhancementFactory(
     if ( parent->inherits("KisFilterRegistry") )
     {
         KisFilterRegistry * r = dynamic_cast<KisFilterRegistry*>(parent);
-        r->add(new KisSimpleNoiseReducer());
-        r->add(new KisWaveletNoiseReduction());
+        r->add(KisFilterSP(new KisSimpleNoiseReducer()));
+        r->add(KisFilterSP(new KisWaveletNoiseReduction()));
     }
 }
 

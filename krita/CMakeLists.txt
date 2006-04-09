@@ -67,6 +67,10 @@ if (SHOULD_BUILD_KRITA)
     include_directories(${CMAKE_SOURCE_DIR}/krita/kritacolor)
     include_directories(${CMAKE_SOURCE_DIR}/krita/kritacolor/colorspaces)
     include_directories(${CMAKE_SOURCE_DIR}/krita/ui)
+    include_directories(${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_u8)
+
+    # For generated files from .ui
+    include_directories(${CMAKE_BINARY_DIR}/krita/ui)
 
     include_directories(${KOPAINTER_INCLUDES})
     include_directories(${KOFFICEUI_INCLUDES})

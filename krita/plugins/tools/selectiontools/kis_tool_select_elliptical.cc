@@ -119,7 +119,7 @@ void KisToolSelectElliptical::buttonPress(KisButtonPressEvent *e)
     if (m_subject) {
         KisImageSP img = m_subject->currentImg();
 
-        if (img && img->activeDevice() && e->button() == LeftButton) {
+        if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = e->pos();
             m_selecting = true;
@@ -164,7 +164,7 @@ void KisToolSelectElliptical::move(KisMoveEvent *e)
 
 void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
 {
-     if (m_subject && m_selecting && e->button() == LeftButton) {
+     if (m_subject && m_selecting && e->button() == Qt::LeftButton) {
 
         paintOutline();
 
@@ -204,7 +204,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                 QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
                 rc = rc.normalize();
                 
-                KisSelectionSP tmpSel = new KisSelection(dev);
+                KisSelectionSP tmpSel = KisSelectionSP(new KisSelection(dev));
                 KisAutobrushCircleShape shape(rc.width(),rc.height(), 1, 1);
                 quint8 value;
                 for (int y = 0; y <= rc.height(); y++)
@@ -279,10 +279,10 @@ void KisToolSelectElliptical::slotSetAction(int action) {
 
 void KisToolSelectElliptical::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Elliptical Selection"),
+        m_action = new KAction(i18n("&Elliptical Selection"),
                         "tool_elliptical_selection" ,
                         Qt::Key_J,
                         this,
@@ -291,7 +291,7 @@ void KisToolSelectElliptical::setup(KActionCollection *collection)
                         name());
         Q_CHECK_PTR(m_action);
         m_action->setToolTip(i18n("Select an elliptical area"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

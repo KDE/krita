@@ -62,7 +62,7 @@ void KisToolEllipse::update (KisCanvasSubject *subject)
 
 void KisToolEllipse::buttonPress(KisButtonPressEvent *event)
 {
-    if (m_currentImage && event->button() == LeftButton) {
+    if (m_currentImage && event->button() == Qt::LeftButton) {
         m_dragging = true;
         m_dragStart = m_dragCenter = m_dragEnd = event->pos();
         draw(m_dragStart, m_dragEnd);
@@ -110,7 +110,7 @@ void KisToolEllipse::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject || !m_currentImage)
         return;
 
-    if (m_dragging && event->button() == LeftButton) {
+    if (m_dragging && event->button() == Qt::LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         m_dragging = false;
@@ -165,12 +165,12 @@ void KisToolEllipse::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolEllipse::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F7));
-        m_action = new KRadioAction(i18n("&Ellipse"),
+        shortcut.append(KKeySequence(KKey(Qt::Key_F7)));
+        m_action = new KAction(i18n("&Ellipse"),
                                     "tool_ellipse",
                                     shortcut,
                                     this,
@@ -178,7 +178,7 @@ void KisToolEllipse::setup(KActionCollection *collection)
                                     collection,
                                     name());
         m_action->setToolTip(i18n("Draw an ellipse"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

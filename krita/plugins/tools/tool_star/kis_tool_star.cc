@@ -75,7 +75,7 @@ void KisToolStar::update (KisCanvasSubject *subject)
 
 void KisToolStar::buttonPress(KisButtonPressEvent *event)
 {
-    if (m_currentImage && event->button() == LeftButton) {
+    if (m_currentImage && event->button() == Qt::LeftButton) {
         m_dragging = true;
         m_dragStart = event->pos();
         m_dragEnd = event->pos();
@@ -107,7 +107,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject || !m_currentImage)
         return;
 
-    if (m_dragging && event->button() == LeftButton) {
+    if (m_dragging && event->button() == Qt::LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         m_dragging = false;
@@ -177,12 +177,12 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolStar::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F9));
-        m_action = new KRadioAction(i18n("&Star"),
+        shortcut.append(KKeySequence(KKey(Qt::Key_F9)));
+        m_action = new KAction(i18n("&Star"),
                                     "tool_star",
                                     shortcut,
                                     this,
@@ -192,7 +192,7 @@ void KisToolStar::setup(KActionCollection *collection)
         Q_CHECK_PTR(m_action);
 
         m_action->setToolTip(i18n("Draw a star"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

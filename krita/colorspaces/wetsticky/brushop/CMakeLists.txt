@@ -1,11 +1,10 @@
 kde4_header()
 
-
-
-
-########### next target ###############
-
-set(kritawsbrushpaintop_PART_SRCS dummy.cpp )
+set(kritawsbrushpaintop_PART_SRCS 
+    dummy.cpp
+    wsbrushpaintop_plugin.cc
+    kis_wsbrushop.cc
+    )
 
 kde4_automoc(${kritawsbrushpaintop_PART_SRCS})
 

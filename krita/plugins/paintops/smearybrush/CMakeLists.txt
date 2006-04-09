@@ -1,11 +1,10 @@
 kde4_header()
 
-
-
-
-########### next target ###############
-
-set(kritasmearybrush_PART_SRCS dummy.cpp )
+set(kritasmearybrush_PART_SRCS 
+    dummy.cpp
+    smearybrush.cc
+    kis_smearyop.cc
+    )
 
 kde4_automoc(${kritasmearybrush_PART_SRCS})
 

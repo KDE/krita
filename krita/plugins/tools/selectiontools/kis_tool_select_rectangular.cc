@@ -116,7 +116,7 @@ void KisToolSelectRectangular::buttonPress(KisButtonPressEvent *e)
     if (m_subject) {
         KisImageSP img = m_subject->currentImg();
 
-        if (img && img->activeDevice() && e->button() == LeftButton) {
+        if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
             clearSelection();
             m_startPos = m_endPos = m_centerPos = e->pos();
             m_selecting = true;
@@ -160,7 +160,7 @@ void KisToolSelectRectangular::move(KisMoveEvent *e)
 
 void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_subject && m_selecting && e->button() == LeftButton) {
+    if (m_subject && m_selecting && e->button() == Qt::LeftButton) {
 
         paintOutline();
 
@@ -205,7 +205,7 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
                         selection->invert();
                 }
 
-                KisSelectionSP tmpSel = new KisSelection(dev);
+                KisSelectionSP tmpSel = KisSelectionSP(new KisSelection(dev));
                 tmpSel->select(rc);
                 switch(m_selectAction)
                 {
@@ -276,10 +276,10 @@ void KisToolSelectRectangular::slotSetAction(int action) {
 
 void KisToolSelectRectangular::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Rectangular Selection"),
+        m_action = new KAction(i18n("&Rectangular Selection"),
                         "tool_rect_selection",
                         Qt::Key_R,
                         this,
@@ -287,7 +287,7 @@ void KisToolSelectRectangular::setup(KActionCollection *collection)
                         collection,
                         name());
         Q_CHECK_PTR(m_action);
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Select a rectangular area"));
         m_ownAction = true;
     }

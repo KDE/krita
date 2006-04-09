@@ -45,14 +45,15 @@ typedef KGenericFactory<KritaExample> KritaExampleFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )
 
 KritaExample::KritaExample(QObject *parent, const char *name, const QStringList &)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(KritaExampleFactory::instance());
 
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(new KisFilterInvert());
+        manager->add(KisFilterSP(new KisFilterInvert()));
     }
 }
 
@@ -66,8 +67,8 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), "adjust", i18n("&Invert"))
 
 void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& rect)
 {
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
+    Q_ASSERT(!src.isNull());
+    Q_ASSERT(!dst.isNull());
 
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);

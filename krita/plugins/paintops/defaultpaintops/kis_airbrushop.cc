@@ -139,11 +139,11 @@ void KisAirbrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info
     qint32 sh = dstRect.height();
 
     if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(),
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(), m_painter->opacity(), sx, sy, sw, sh);
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
     }
 
     m_painter->addDirtyRect(dstRect);

@@ -51,8 +51,9 @@ typedef KGenericFactory<ColorRange> ColorRangeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorrange, ColorRangeFactory( "krita" ) )
 
 ColorRange::ColorRange(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
 
     if (parent->inherits("KisView")) {
         setInstance(ColorRangeFactory::instance());

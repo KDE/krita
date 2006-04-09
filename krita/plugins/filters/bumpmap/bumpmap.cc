@@ -72,14 +72,15 @@ typedef KGenericFactory<KritaBumpmap> KritaBumpmapFactory;
 K_EXPORT_COMPONENT_FACTORY( kritabumpmap, KritaBumpmapFactory( "krita" ) )
 
 KritaBumpmap::KritaBumpmap(QObject *parent, const char *name, const QStringList &)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(KritaBumpmapFactory::instance());
 
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(new KisFilterBumpmap());
+        manager->add(KisFilterSP(new KisFilterBumpmap()));
     }
 }
 
@@ -187,7 +188,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     if (!config->bumpmap.isNull() && src->image()) {
         KisLayerSP l = src->image()->findLayer(config->bumpmap);
-        KisPaintDeviceSP bumplayer = 0;
+        KisPaintDeviceSP bumplayer = KisPaintDeviceSP(0);
 
         KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(l.data());
         if (pl) {
@@ -213,12 +214,12 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
         }
         else {
             bmRect = rect;
-            bumpmap = src;
+            bumpmap = src.data();
         }
      }
      else {
          bmRect = rect;
-         bumpmap = src;
+         bumpmap = src.data();
     }
 
 
@@ -321,7 +322,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
                     }
                     else {
                         shade = (qint32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
-                        shade = (qint32)(shade + qMax(0, (255 * compensation - shade)) * config->ambient / 255);
+                        shade = (qint32)(shade + qMax(0, (int)((255 * compensation - shade)) * config->ambient / 255));
                     }
                 }
 

@@ -1,11 +1,10 @@
 kde4_header()
 
-
-
-
-########### next target ###############
-
-set(kritatoolpolygon_PART_SRCS dummy.cpp )
+set(kritatoolpolygon_PART_SRCS 
+    dummy.cpp 
+    tool_polygon.cc
+    kis_tool_polygon.cc 
+    )
 
 kde4_automoc(${kritatoolpolygon_PART_SRCS})
 

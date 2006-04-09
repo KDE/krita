@@ -72,12 +72,12 @@ void KisQPaintDeviceCanvasWidget::tabletEvent(QTabletEvent *e)
 
 void KisQPaintDeviceCanvasWidget::enterEvent(QEvent *e)
 {
-    widgetGotEnterEvent(e);
+    //widgetGotEnterEvent(e);
 }
 
 void KisQPaintDeviceCanvasWidget::leaveEvent(QEvent *e)
 {
-    widgetGotLeaveEvent(e);
+    //widgetGotLeaveEvent(e);
 }
 
 void KisQPaintDeviceCanvasWidget::wheelEvent(QWheelEvent *e)

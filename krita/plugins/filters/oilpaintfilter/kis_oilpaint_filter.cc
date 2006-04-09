@@ -169,9 +169,9 @@ uint KisOilPaintFilter::MostFrequentColor (KisPaintDeviceSP src, const QRect& bo
             // Swapping red and blue here is done because that gives the same
             // output as digikam, even though it might be interpreted as a bug
             // in both applications.
-            int b = c.Qt::red();
-            int g = c.Qt::green();
-            int r = c.Qt::blue();
+            int b = c.red();
+            int g = c.green();
+            int r = c.blue();
 
             I = (uint)(GetIntensity (r, g, b) * Scale);
             IntensityCount[I]++;

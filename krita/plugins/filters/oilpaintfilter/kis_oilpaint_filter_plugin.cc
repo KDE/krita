@@ -26,13 +26,14 @@
 typedef KGenericFactory<KisOilPaintFilterPlugin> KisOilPaintFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaoilpaintfilter, KisOilPaintFilterPluginFactory( "krita" ) )
 
-KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
+KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(KisOilPaintFilterPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(new KisOilPaintFilter());
+        manager->add(KisFilterSP(new KisOilPaintFilter()));
     }
 
 }

@@ -81,7 +81,7 @@ bool KisToolFill::flood(int startX, int startY)
     if (!device) return false;
 
     if (m_fillOnlySelection) {
-        KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace(),  "filled");
+        KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(),  "filled"));
         KisFillPainter painter(filled);
         // XXX: The fillRect methods should either set the dirty rect or return it,
         // so we don't have to blit over all of the image, but only the part that's
@@ -157,7 +157,8 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
     QWidget *widget = super::createOptionWidget(parent);
 
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
-    m_slThreshold = new KIntNumInput( widget, "int_widget");
+    m_slThreshold = new KIntNumInput( widget);
+    m_slThreshold->setObjectName("int_widget");
     m_slThreshold->setRange( 0, 255);
     m_slThreshold->setValue(m_threshold);
     connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
@@ -211,10 +212,10 @@ void KisToolFill::slotSetFillSelection(int state)
 
 void KisToolFill::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Fill"),
+        m_action = new KAction(i18n("&Fill"),
                         "color_fill",
                         Qt::Key_F,
                         this,
@@ -222,7 +223,7 @@ void KisToolFill::setup(KActionCollection *collection)
                         collection,
                         name());
         m_action->setToolTip(i18n("Contiguous fill"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

@@ -43,8 +43,9 @@ K_EXPORT_COMPONENT_FACTORY( kritatooltransform, ToolTransformFactory( "krita" ) 
 
 
 ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(ToolTransformFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )
@@ -52,7 +53,7 @@ ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringLis
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
         KisToolTransformFactory * f = new KisToolTransformFactory();
         Q_CHECK_PTR(f);
-        r->add(f);
+        r->add(KisToolFactorySP(f));
     }
 
 }

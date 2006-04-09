@@ -128,7 +128,7 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
                 selection->clear();
             }
 
-            KisPainter painter(selection.data());
+            KisPainter painter(KisPaintDeviceSP(selection.data()));
 
             painter.setPaintColor(KisColor(Qt::black, selection->colorSpace()));
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -247,10 +247,10 @@ void KisToolSelectOutline::deactivate()
 
 void KisToolSelectOutline::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Outline Selection"),
+        m_action = new KAction(i18n("&Outline Selection"),
                         "tool_outline_selection",
                         0,
                         this,
@@ -258,7 +258,7 @@ void KisToolSelectOutline::setup(KActionCollection *collection)
                         collection,
                         name());
         Q_CHECK_PTR(m_action);
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Select an outline"));
         m_ownAction = true;
     }

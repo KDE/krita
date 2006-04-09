@@ -139,7 +139,7 @@ void KisToolSelectPolygonal::finish()
             selection->clear();
         }
 
-        KisPainter painter(selection.data());
+        KisPainter painter(KisPaintDeviceSP(selection.data()));
         painter.setPaintColor(KisColor(Qt::black, selection->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
@@ -266,10 +266,10 @@ void KisToolSelectPolygonal::draw(KisCanvasPainter& gc)
 
 void KisToolSelectPolygonal::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Polygonal Selection"),
+        m_action = new KAction(i18n("&Polygonal Selection"),
                         "tool_polygonal_selection" ,
                         0,
                         this,
@@ -277,7 +277,7 @@ void KisToolSelectPolygonal::setup(KActionCollection *collection)
                         collection,
                         name());
         Q_CHECK_PTR(m_action);
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Select a polygonal area"));
         m_ownAction = true;
     }

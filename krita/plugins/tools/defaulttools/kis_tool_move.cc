@@ -60,7 +60,7 @@ void KisToolMove::update(KisCanvasSubject *subject)
 
 void KisToolMove::buttonPress(KisButtonPressEvent *e)
 {
-    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+    if (m_subject && e->button() == Qt::LeftButton) {
         QPoint pos = e->pos().floorQPoint();
         KisImageSP img = m_subject->currentImg();
         KisLayerSP dev;
@@ -80,17 +80,17 @@ void KisToolMove::move(KisMoveEvent *e)
 
 void KisToolMove::buttonRelease(KisButtonReleaseEvent *e)
 {
-    if (m_subject && e->button() == QMouseEvent::LeftButton) {
+    if (m_subject && e->button() == Qt::LeftButton) {
         m_strategy.endDrag(e->pos().floorQPoint());
     }
 }
 
 void KisToolMove::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Move"),
+        m_action = new KAction(i18n("&Move"),
                         "move",
                         Qt::SHIFT+Qt::Key_V,
                         this,
@@ -98,7 +98,7 @@ void KisToolMove::setup(KActionCollection *collection)
                         collection,
                         name());
         m_action->setToolTip(i18n("Move"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

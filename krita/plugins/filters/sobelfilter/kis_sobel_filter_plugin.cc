@@ -27,13 +27,14 @@ typedef KGenericFactory<KisSobelFilterPlugin> KisSobelFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritasobelfilter, KisSobelFilterPluginFactory( "krita" ) )
 
 KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(KisSobelFilterPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(new KisSobelFilter());
+        manager->add(KisFilterSP(new KisSobelFilter()));
     }
 }
 

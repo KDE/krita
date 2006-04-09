@@ -34,7 +34,7 @@ KisKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
                           qint32 i6, qint32 i7, qint32 i8,
                           qint32 factor, qint32 offset )
 {
-    KisKernelSP kernel = new KisKernel();
+    KisKernelSP kernel = KisKernelSP(new KisKernel());
     kernel->width = 3;
     kernel->height = 3;
 
@@ -61,25 +61,26 @@ typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFactory( "krita" ) )
 
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const char *name, const QStringList &)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(KritaConvolutionFiltersFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(new KisGaussianBlurFilter());
-        manager->add(new KisSharpenFilter());
-        manager->add(new KisMeanRemovalFilter());
-        manager->add(new KisEmbossLaplascianFilter());
-        manager->add(new KisEmbossInAllDirectionsFilter());
-        manager->add(new KisEmbossHorizontalVerticalFilter());
-        manager->add(new KisEmbossVerticalFilter());
-        manager->add(new KisEmbossHorizontalFilter());
-        manager->add(new KisTopEdgeDetectionFilter());
-        manager->add(new KisRightEdgeDetectionFilter());
-        manager->add(new KisBottomEdgeDetectionFilter());
-        manager->add(new KisLeftEdgeDetectionFilter());
-        manager->add(new KisCustomConvolutionFilter());
+        manager->add(KisFilterSP(new KisGaussianBlurFilter()));
+        manager->add(KisFilterSP(new KisSharpenFilter()));
+        manager->add(KisFilterSP(new KisMeanRemovalFilter()));
+        manager->add(KisFilterSP(new KisEmbossLaplascianFilter()));
+        manager->add(KisFilterSP(new KisEmbossInAllDirectionsFilter()));
+        manager->add(KisFilterSP(new KisEmbossHorizontalVerticalFilter()));
+        manager->add(KisFilterSP(new KisEmbossVerticalFilter()));
+        manager->add(KisFilterSP(new KisEmbossHorizontalFilter()));
+        manager->add(KisFilterSP(new KisTopEdgeDetectionFilter()));
+        manager->add(KisFilterSP(new KisRightEdgeDetectionFilter()));
+        manager->add(KisFilterSP(new KisBottomEdgeDetectionFilter()));
+        manager->add(KisFilterSP(new KisLeftEdgeDetectionFilter()));
+        manager->add(KisFilterSP(new KisCustomConvolutionFilter()));
     }
 }
 

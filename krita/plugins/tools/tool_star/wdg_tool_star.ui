@@ -114,6 +114,13 @@
     </sizepolicy>
     <pixmap>image4</pixmap>
 </customwidget>
+<customwidget>
+	<class>KIntSpinBox</class>
+	<extends>QSpinBox</extends>
+	<header>knuminput.h</header>
+	<container>1</container>
+	<pixmap></pixmap>
+</customwidget>
 </customwidgets>
 <images>
     <image name="image4">
@@ -121,8 +128,4 @@
     </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
 </UI>

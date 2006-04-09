@@ -180,9 +180,9 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
         qint32 x = it.x() - rect.x();
         qint32 y = it.y() - rect.y();
 
-        img(x, y, 0) = color.Qt::red();
-        img(x, y, 1) = color.Qt::green();
-        img(x, y, 2) = color.Qt::blue();
+        img(x, y, 0) = color.red();
+        img(x, y, 1) = color.green();
+        img(x, y, 2) = color.blue();
 
         ++it;
     }

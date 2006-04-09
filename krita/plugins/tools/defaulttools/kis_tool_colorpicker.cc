@@ -213,12 +213,12 @@ void KisToolColorPicker::displayPickedColor()
 
 void KisToolColorPicker::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Color Picker"), "colorpicker", Qt::Key_P, this, SLOT(activate()), collection, name());
+        m_action = new KAction(i18n("&Color Picker"), "colorpicker", Qt::Key_P, this, SLOT(activate()), collection, name());
         m_action->setToolTip(i18n("Color picker"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

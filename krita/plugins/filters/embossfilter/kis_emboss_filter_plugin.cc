@@ -25,13 +25,14 @@
 typedef KGenericFactory<KisEmbossFilterPlugin> KisEmbossFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaembossfilter, KisEmbossFilterPluginFactory( "krita" ) )
 
-KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
+KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(KisEmbossFilterPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(new KisEmbossFilter());
+        manager->add(KisFilterSP(new KisEmbossFilter()));
     }
 }
 

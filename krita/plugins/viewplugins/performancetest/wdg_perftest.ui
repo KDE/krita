@@ -180,10 +180,10 @@
                     <property name="value">
                         <number>10</number>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>0</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>1000000</number>
                     </property>
                 </widget>
@@ -276,8 +276,12 @@
     <tabstop>intTestCount</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
+<customwidgets>
+	<customwidget>
+		<class>KIntNumInput</class>
+		<header location="local">knuminput.h</header>
+		<container>1</container>
+		<pixmap></pixmap>
+	</customwidget>
+</customwidgets>
 </UI>

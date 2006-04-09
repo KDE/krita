@@ -248,7 +248,7 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
     if (m_subject) {
         KisImageSP img = m_subject->currentImg();
 
-        if (img && img->activeDevice() && e->button() == LeftButton) {
+        if (img && img->activeDevice() && e->button() == Qt::LeftButton) {
             switch(m_function)
             {
                 case ROTATE:
@@ -263,28 +263,28 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
                     break;
                 case TOPSCALE:
                     m_clickoffset = e->pos().floorQPoint()
-                            - QPoint((m_topleft + m_topright)/2);
+                            - QPoint((m_topleft + m_topright)/2.0);
                     break;
                 case TOPRIGHTSCALE:
                     m_clickoffset = e->pos().floorQPoint() - m_topright;
                     break;
                 case RIGHTSCALE:
                     m_clickoffset = e->pos().floorQPoint()
-                            - QPoint((m_topright + m_bottomright)/2);
+                            - QPoint((m_topright + m_bottomright)/2.0);
                     break;
                 case BOTTOMRIGHTSCALE:
                     m_clickoffset = e->pos().floorQPoint() - m_bottomright;
                     break;
                 case BOTTOMSCALE:
                     m_clickoffset = e->pos().floorQPoint()
-                            - QPoint((m_bottomleft + m_bottomright)/2);
+                            - QPoint((m_bottomleft + m_bottomright)/2.0);
                     break;
                 case BOTTOMLEFTSCALE:
                     m_clickoffset = e->pos().floorQPoint() - m_bottomleft;
                     break;
                 case LEFTSCALE:
                     m_clickoffset = e->pos().floorQPoint()
-                            - QPoint((m_topleft + m_bottomleft)/2);
+                            - QPoint((m_topleft + m_bottomleft)/2.0);
                     break;
                 case TOPLEFTSCALE:
                     m_clickoffset = e->pos().floorQPoint() - m_topleft;
@@ -587,19 +587,19 @@ void KisToolTransform::move(KisMoveEvent *e)
 
             int handleradius = int( 25 / (m_subject->zoomFactor() * m_subject->zoomFactor()) );
 
-            if(distsq(mousePos, (m_topleft + m_topright)/2)<=handleradius)
+            if(distsq(mousePos, (m_topleft + m_topright)/2.0)<=handleradius)
                 m_function = TOPSCALE;
             if(distsq(mousePos, m_topright)<=handleradius)
                 m_function = TOPRIGHTSCALE;
-            if(distsq(mousePos, (m_topright + m_bottomright)/2)<=handleradius)
+            if(distsq(mousePos, (m_topright + m_bottomright)/2.0)<=handleradius)
                 m_function = RIGHTSCALE;
             if(distsq(mousePos, m_bottomright)<=handleradius)
                 m_function = BOTTOMRIGHTSCALE;
-            if(distsq(mousePos, (m_bottomleft + m_bottomright)/2)<=handleradius)
+            if(distsq(mousePos, (m_bottomleft + m_bottomright)/2.0)<=handleradius)
                 m_function = BOTTOMSCALE;
             if(distsq(mousePos, m_bottomleft)<=handleradius)
                 m_function = BOTTOMLEFTSCALE;
-            if(distsq(mousePos, (m_topleft + m_bottomleft)/2)<=handleradius)
+            if(distsq(mousePos, (m_topleft + m_bottomleft)/2.0)<=handleradius)
                 m_function = LEFTSCALE;
             if(distsq(mousePos, m_topleft)<=handleradius)
                 m_function = TOPLEFTSCALE;
@@ -730,8 +730,8 @@ void KisToolTransform::transform()
         QRect rc = m_origSelection->extent();
         rc = rc.normalize();
         img->activeDevice()->selection()->clear();
-        KisPainter sgc(img->activeDevice()->selection().data());
-        sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origSelection.data(), rc.x(), rc.y(), rc.width(), rc.height());
+        KisPainter sgc(KisPaintDeviceSP(img->activeDevice()->selection().data()));
+        sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, KisPaintDeviceSP(m_origSelection.data()), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
     }
     else
@@ -844,10 +844,10 @@ QWidget* KisToolTransform::optionWidget()
 
 void KisToolTransform::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Transform"),
+        m_action = new KAction(i18n("&Transform"),
                         "transform",
                         0,
                         this,
@@ -856,7 +856,7 @@ void KisToolTransform::setup(KActionCollection *collection)
                         name());
         Q_CHECK_PTR(m_action);
         m_action->setToolTip(i18n("Transform a layer or a selection"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

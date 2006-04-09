@@ -75,10 +75,10 @@
                     <property name="value">
                         <number>45</number>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>5</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>90</number>
                     </property>
                 </widget>
@@ -89,10 +89,10 @@
                     <property name="value">
                         <number>0.8</number>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>0.1</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>10</number>
                     </property>
                 </widget>
@@ -103,10 +103,10 @@
                     <property name="value">
                         <number>3</number>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>0.1</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>10</number>
                     </property>
                 </widget>
@@ -168,7 +168,7 @@
                     <property name="value">
                         <number>0.1</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>100</number>
                     </property>
                 </widget>
@@ -179,7 +179,7 @@
                     <property name="value">
                         <number>0.9</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>100</number>
                     </property>
                 </widget>
@@ -190,7 +190,7 @@
                     <property name="value">
                         <number>20</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>500</number>
                     </property>
                 </widget>
@@ -201,7 +201,7 @@
                     <property name="value">
                         <number>1.4</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>10</number>
                     </property>
                 </widget>
@@ -252,10 +252,10 @@
                     <property name="value">
                         <number>1</number>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>1</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>16</number>
                     </property>
                 </widget>
@@ -264,6 +264,18 @@
     </grid>
 </widget>
 <customwidgets>
+	<customwidget>
+		<class>KIntNumInput</class>
+		<header>knuminput.h</header>
+		<container>1</container>
+		<pixmap></pixmap>
+	</customwidget>
+	<customwidget>
+		<class>KDoubleNumInput</class>
+		<header>knuminput.h</header>
+		<container>1</container>
+		<pixmap></pixmap>
+	</customwidget>
 </customwidgets>
 <tabstops>
     <tabstop>numDetail</tabstop>
@@ -278,21 +290,5 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

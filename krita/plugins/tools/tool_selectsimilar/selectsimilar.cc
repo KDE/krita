@@ -42,14 +42,15 @@ typedef KGenericFactory<SelectSimilar> SelectSimilarFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatoolselectsimilar, SelectSimilarFactory( "krita" ) )
 
 SelectSimilar::SelectSimilar(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(SelectSimilarFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>(parent);
-        r->add(new KisToolSelectSimilarFactory());
+        r->add(KisToolFactorySP(new KisToolSelectSimilarFactory()));
     }
 }
 

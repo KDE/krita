@@ -346,6 +346,20 @@ layer, the current layer will be used.</string>
     </grid>
 </widget>
 <customwidgets>
+	<customwidget>
+		<class>KIntSpinBox</class>
+		<extends>QSpinBox</extends>
+		<header>knuminput.h</header>
+		<container>1</container>
+		<pixmap></pixmap>
+	</customwidget>
+	<customwidget>
+		<class>KDoubleSpinBox</class>
+		<extends>QSpinBox</extends>
+		<header>knuminput.h</header>
+		<container>1</container>
+		<pixmap></pixmap>
+	</customwidget>
 </customwidgets>
 <tabstops>
     <tabstop>txtSourceLayer</tabstop>
@@ -363,13 +377,4 @@ layer, the current layer will be used.</string>
     <tabstop>bnRefresh</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
 </UI>

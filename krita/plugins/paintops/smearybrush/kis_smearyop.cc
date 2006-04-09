@@ -130,7 +130,7 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceSP dab = new KisPaintDevice(colorSpace, "smeary dab");
+    KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "smeary dab"));
     Q_CHECK_PTR(dab);
 
     m_painter->setPressure(info.pressure);
@@ -162,11 +162,11 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     vr.normalize();
 
     if (m_source->hasSelection()) {
-        m_painter->bltSelection(x - 32, y - 32, m_painter->compositeOp(), dab.data(),
+        m_painter->bltSelection(x - 32, y - 32, m_painter->compositeOp(), dab,
                                 m_source->selection(), m_painter->opacity(), x - 32, y -32, 64, 64);
     }
     else {
-        m_painter->bitBlt(x - 32, y - 32, m_painter->compositeOp(), dab.data(), m_painter->opacity(), x - 32, y -32, 64, 64);
+        m_painter->bitBlt(x - 32, y - 32, m_painter->compositeOp(), dab, m_painter->opacity(), x - 32, y -32, 64, 64);
     }
 
     m_painter->addDirtyRect(QRect(x -32, y -32, 64, 64));

@@ -34,15 +34,16 @@ typedef KGenericFactory<SmearyBrush> SmearyBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritasmearybrush, SmearyBrushFactory("kritacore"))
 
 SmearyBrush::SmearyBrush(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(SmearyBrushFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )
     {
         KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
-        r->add ( new KisSmearyOpFactory );
+        r->add (KisPaintOpFactorySP(new KisSmearyOpFactory));
     }
 
 }

@@ -43,14 +43,15 @@ K_EXPORT_COMPONENT_FACTORY( kritatoolstar, ToolStarFactory( "krita" ) )
 
 
 ToolStar::ToolStar(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(ToolStarFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );
-        r->add(new KisToolStarFactory());
+        r->add(KisToolFactorySP(new KisToolStarFactory()));
     }
 
 }

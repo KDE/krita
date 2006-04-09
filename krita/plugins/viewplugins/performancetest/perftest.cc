@@ -79,8 +79,9 @@ typedef KGenericFactory<PerfTest> PerfTestFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaperftest, PerfTestFactory( "krita" ) )
 
 PerfTest::PerfTest(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     if ( parent->inherits("KisView") )
     {
         setInstance(PerfTestFactory::instance());
@@ -278,17 +279,17 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     // ------------------------------------------------------------------------------
     // Small
 
-    KisPaintDeviceSP small = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "small blit");
+    KisPaintDeviceSP small = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "small blit"));
     Q_CHECK_PTR(small);
 
-    KisFillPainter pf(small.data()) ;
+    KisFillPainter pf(small) ;
     pf.fillRect(0, 0, 32, 32, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     pf.end();
 
     t.restart();
     KisPainter p(img->activeDevice());
     for (quint32 i = 0; i < testCount; ++i) {
-        p.bitBlt(0, 0, op, small.data(),0,0,32, 32);
+        p.bitBlt(0, 0, op, small, 0, 0, 32, 32);
     }
     p.end();
 
@@ -301,17 +302,17 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
 
     // ------------------------------------------------------------------------------
     // Medium
-    KisPaintDeviceSP medium = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "medium blit");
+    KisPaintDeviceSP medium = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "medium blit"));
     Q_CHECK_PTR(medium);
 
-    pf.begin(medium.data()) ;
+    pf.begin(medium);
     pf.fillRect(0, 0, 64 * 3, 64 * 3, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     pf.end();
 
     t.restart();
-    p.begin(img->activeDevice().data());
+    p.begin(img->activeDevice());
     for (quint32 i = 0; i < testCount; ++i) {
-        p.bitBlt(0, 0, op, medium.data(),0,0,96, 96);
+        p.bitBlt(0, 0, op, medium, 0, 0, 96, 96);
     }
     p.end();
 
@@ -324,17 +325,17 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
 
     // ------------------------------------------------------------------------------
     // Big
-    KisPaintDeviceSP big = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "big blit");
+    KisPaintDeviceSP big = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "big blit"));
     Q_CHECK_PTR(big);
 
-    pf.begin(big.data()) ;
+    pf.begin(big) ;
     pf.fillRect(0, 0, 800, 800, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     pf.end();
 
     t.restart();
-    p.begin(img->activeDevice().data());
+    p.begin(img->activeDevice());
     for (quint32 i = 0; i < testCount; ++i) {
-        p.bitBlt(0, 0, op, big.data(),0,0,800,800);
+        p.bitBlt(0, 0, op, big, 0, 0, 800, 800);
 
     }
     p.end();
@@ -348,16 +349,16 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     // ------------------------------------------------------------------------------
     // Outside
 
-    KisPaintDeviceSP outside = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "outside blit");
+    KisPaintDeviceSP outside = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "outside blit"));
     Q_CHECK_PTR(outside);
-    pf.begin(outside.data()) ;
+    pf.begin(outside) ;
     pf.fillRect(0, 0, 500, 500, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     pf.end();
 
     t.restart();
-    p.begin(img->activeDevice().data());
+    p.begin(img->activeDevice());
     for (quint32 i = 0; i < testCount; ++i) {
-        p.bitBlt(600, 600, op, outside.data(),0,0,500,500);
+        p.bitBlt(600, 600, op, outside, 0, 0, 500, 500);
 
     }
     p.end();
@@ -370,19 +371,19 @@ QString PerfTest::doBlit(const KisCompositeOp& op,
     // ------------------------------------------------------------------------------
     // Small with varied source opacity
 
-    KisPaintDeviceSP small_with_alpha = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "small blit with alpha");
+    KisPaintDeviceSP small_with_alpha = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace,""), "small blit with alpha"));
     Q_CHECK_PTR(small_with_alpha);
 
-    pf.begin(small_with_alpha.data()) ;
+    pf.begin(small_with_alpha) ;
     pf.fillRect(0, 0, 32, 32, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()), OPACITY_TRANSPARENT);
     pf.fillRect(4, 4, 24, 24, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()), OPACITY_OPAQUE / 2);
     pf.fillRect(8, 8, 16, 16, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()), OPACITY_OPAQUE);
     pf.end();
 
     t.restart();
-    p.begin(img->activeDevice().data());
+    p.begin(img->activeDevice());
     for (quint32 i = 0; i < testCount; ++i) {
-        p.bitBlt(0, 0, op, small_with_alpha.data(), 0, 0, 32, 32);
+        p.bitBlt(0, 0, op, small_with_alpha, 0, 0, 32, 32);
     }
     p.end();
 
@@ -412,7 +413,7 @@ QString PerfTest::fillTest(quint32 testCount)
         KisPaintDeviceSP l = img->activeDevice();
 
         // Rect fill
-        KisFillPainter p(l.data());
+        KisFillPainter p(l);
         QTime t;
         t.restart();
         for (quint32 i = 0; i < testCount; ++i) {
@@ -564,11 +565,7 @@ QString PerfTest::pixelTest(quint32 testCount)
 
     }
 
-
-
-
     return report;
-
 }
 
 QString PerfTest::shapeTest(quint32 testCount)
@@ -600,10 +597,9 @@ QString PerfTest::rotateTest(quint32 testCount)
         for (uint i = 0; i < testCount; ++i) {
             for (double angle = 0; angle < 360; ++angle) {
                 kDebug() << "Rotating " << (*it).name() << " at " << angle << " degrees\n";
-                KisImage * img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
+                KisImageSP img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
                 img->rotate(angle, m_view->canvasSubject()->progressDisplay());
                 kDebug() << "Size: " << img->projection()->extent() << endl;
-                delete img;
             }
         }
         report = report.append(QString("    rotated  1000 x 1000 pixels over 360 degrees, degree by degree, %1 times: %2\n").arg(testCount).arg(t.elapsed()));
@@ -629,7 +625,7 @@ QString PerfTest::colorConversionTest(quint32 testCount)
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
 
-        KisImage * img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
+        KisImageSP img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
 
         QTime t;
 
@@ -646,9 +642,6 @@ QString PerfTest::colorConversionTest(quint32 testCount)
             report = report.append(QString("    converted from " + (*it).name() + " to " + (*it2).name() + " 1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
 
         }
-
-        delete img;
-
     }
     return report;
 
@@ -678,7 +671,7 @@ QString PerfTest::filterTest(quint32 testCount)
             kDebug() << "test filter " << f->id().name() << " on " << img->colorSpace()->id().name() << endl;
             for (quint32 i = 0; i < testCount; ++i) {
                 f->enableProgress();
-                f->process(l.data(), l.data(), f->configuration(f->createConfigurationWidget(m_view, l.data())), QRect(0, 0, 1000, 1000));
+                f->process(l, l, f->configuration(f->createConfigurationWidget(m_view, l)), QRect(0, 0, 1000, 1000));
                 f->disableProgress();
             }
             report = report.append(QString("    filtered " + (*it).name() + "1000 x 1000 pixels %1 times: %2\n").arg(testCount).arg(t.elapsed()));
@@ -713,7 +706,7 @@ QString PerfTest::readBytesTest(quint32 testCount)
 
     // On tiles with data
 
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -740,7 +733,7 @@ QString PerfTest::writeBytesTest(quint32 testCount)
     KisDoc * doc = m_view->canvasSubject()->document();
     KisImageSP img = doc->newImage("Writebytes ", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
     KisPaintDeviceSP l = img->activeDevice();
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -798,7 +791,7 @@ QString hlineRO(KisDoc * doc, quint32 testCount)
     KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
     KisPaintDeviceSP l = img->activeDevice();
 
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -856,7 +849,7 @@ QString hlineWR(KisDoc * doc, quint32 testCount)
     KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
     KisPaintDeviceSP l = img->activeDevice();
 
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -912,7 +905,7 @@ QString vlineRO(KisDoc * doc, quint32 testCount)
     KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
     KisPaintDeviceSP l = img->activeDevice();
 
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -966,7 +959,7 @@ QString vlineWR(KisDoc * doc, quint32 testCount)
     KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
     KisPaintDeviceSP l = img->activeDevice();
 
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -1015,7 +1008,7 @@ QString rectRO(KisDoc * doc, quint32 testCount)
     KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
     KisPaintDeviceSP l = img->activeDevice();
 
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -1061,7 +1054,7 @@ QString rectWR(KisDoc * doc, quint32 testCount)
     KisImageSP img = doc->newImage("", 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""),""));
     KisPaintDeviceSP l = img->activeDevice();
 
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 1000, 1000, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -1121,7 +1114,7 @@ QString PerfTest::paintViewTest(quint32 testCount)
 
     KisPaintDeviceSP l = img->activeDevice();
 
-    KisFillPainter p(l.data());
+    KisFillPainter p(l);
     p.fillRect(0, 0, 512, 512, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
@@ -1145,14 +1138,14 @@ QString PerfTest::paintViewTest(quint32 testCount)
     img->newLayer("layer 2", OPACITY_OPAQUE);
     l = img->activeDevice();
 
-    p.begin(l.data());
+    p.begin(l);
     p.fillRect(0, 0, 512, 512, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 
     img->newLayer("layer 3", OPACITY_OPAQUE);
     l = img->activeDevice();
 
-    p.begin(l.data());
+    p.begin(l);
     p.fillRect(0, 0, 512, 512, KisColor(Qt::black, KisMetaRegistry::instance()->csRegistry()->getRGB8()));
     p.end();
 

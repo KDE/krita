@@ -70,7 +70,7 @@ void KisToolPolyline::update (KisCanvasSubject *subject)
 void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
 {
     if (m_currentImage) {
-        if (event->button() == LeftButton && event->state() != Qt::ShiftModifier ) {
+        if (event->button() == Qt::LeftButton && event->state() != Qt::ShiftModifier ) {
 
             m_dragging = true;
 
@@ -84,7 +84,7 @@ void KisToolPolyline::buttonPress(KisButtonPressEvent *event)
                 m_dragEnd = event->pos();
                 draw();
             }
-        } else if (event->button() == LeftButton && event->state() == Qt::ShiftModifier ) {
+        } else if (event->button() == Qt::LeftButton && event->state() == Qt::ShiftModifier ) {
             finish();
         }
     }
@@ -156,12 +156,12 @@ void KisToolPolyline::buttonRelease(KisButtonReleaseEvent *event)
         if (!m_subject || !m_currentImage)
             return;
 
-        if (m_dragging && event->button() == LeftButton)  {
+        if (m_dragging && event->button() == Qt::LeftButton)  {
                 m_dragging = false;
                 m_points.append (m_dragEnd);
     }
 
-    if (m_dragging && event->button() == RightButton) {
+    if (m_dragging && event->button() == Qt::RightButton) {
 
         }
 }
@@ -235,12 +235,12 @@ void KisToolPolyline::draw(KisCanvasPainter& gc)
 
 void KisToolPolyline::setup(KActionCollection *collection)
 {
-        m_action = static_cast<KRadioAction *>(collection->action(name()));
+        m_action = collection->action(name());
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F9));
-        m_action = new KRadioAction(i18n("&Polyline"),
+        shortcut.append(KKeySequence(KKey(Qt::Key_F9)));
+        m_action = new KAction(i18n("&Polyline"),
                         "polyline",
                         shortcut,
                         this,
@@ -250,7 +250,7 @@ void KisToolPolyline::setup(KActionCollection *collection)
         Q_CHECK_PTR(m_action);
 
         m_action->setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
         }
 }

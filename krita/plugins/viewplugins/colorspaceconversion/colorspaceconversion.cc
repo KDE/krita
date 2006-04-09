@@ -59,8 +59,9 @@ K_EXPORT_COMPONENT_FACTORY( kritacolorspaceconversion, ColorSpaceConversionFacto
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
 
     if ( parent->inherits("KisView") )
     {

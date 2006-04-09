@@ -229,15 +229,15 @@ void KisToolLine::paintLine(KisCanvasPainter& gc, const QRect&)
 
 void KisToolLine::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Line"),
+        m_action = new KAction(i18n("&Line"),
                         "tool_line", Qt::Key_L, this,
                         SLOT(activate()), collection,
                         name());
         m_action->setToolTip(i18n("Draw a line"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

@@ -1,11 +1,14 @@
 kde4_header()
 
-
-
-
-########### next target ###############
-
-set(kritadefaultpaintops_PART_SRCS dummy.cpp )
+set(kritadefaultpaintops_PART_SRCS 
+    dummy.cpp
+	defaultpaintops_plugin.cc
+	kis_airbrushop.cc
+	kis_brushop.cc
+	kis_duplicateop.cc
+	kis_eraseop.cc
+	kis_penop.cc
+    )
 
 kde4_automoc(${kritadefaultpaintops_PART_SRCS})
 

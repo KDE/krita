@@ -64,16 +64,16 @@ KisToolFilter::~KisToolFilter()
 
 void KisToolFilter::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Filter Brush"),
+        m_action = new KAction(i18n("&Filter Brush"),
                         "tool_filter", 0, this,
                         SLOT(activate()), collection,
                         name());
         Q_CHECK_PTR(m_action);
         m_action->setToolTip(i18n("Paint with filters"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }
@@ -135,7 +135,7 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 void KisToolFilter::changeFilter( const KisID & id)
 {
     m_filter =  KisFilterRegistry::instance()->get( id );
-    Q_ASSERT(m_filter != 0);
+    Q_ASSERT(!m_filter.isNull());
     if( m_filterConfigurationWidget != 0 )
     {
         m_optionLayout->remove ( m_filterConfigurationWidget );

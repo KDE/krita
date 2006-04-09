@@ -44,7 +44,7 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
     if ( widget == 0 )
     {
         // Create the identity matrix:
-        KisKernelSP kernel = new KisKernel();
+        KisKernelSP kernel = KisKernelSP(new KisKernel());
         kernel->width = 3;
         kernel->height = 3;
 
@@ -62,12 +62,12 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
         kernel->data[7] = 0;
         kernel->data[8] = 0;
 
-        return new KisConvolutionConfiguration( "custom convolution", kernel );
+        return new KisConvolutionConfiguration( "custom convolution", kernel.data() );
         
     } else {
 
         // Create the identity matrices:
-        KisKernelSP kernel = new KisKernel();
+        KisKernelSP kernel = KisKernelSP(new KisKernel());
         kernel->width = 3;
         kernel->height = 3;
 
@@ -88,6 +88,6 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
         kernel->factor = mw->spinBoxFactor->value();
         kernel->offset = mw->spinBoxOffset->value();
 
-        return new KisConvolutionConfiguration( "custom convolution",  kernel );
+        return new KisConvolutionConfiguration( "custom convolution",  kernel.data() );
     }
 }

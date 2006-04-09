@@ -78,12 +78,12 @@ void KisOpenGLCanvasWidget::tabletEvent(QTabletEvent *e)
 
 void KisOpenGLCanvasWidget::enterEvent(QEvent *e)
 {
-    widgetGotEnterEvent(e);
+    //widgetGotEnterEvent(e);
 }
 
 void KisOpenGLCanvasWidget::leaveEvent(QEvent *e)
 {
-    widgetGotLeaveEvent(e);
+    //widgetGotLeaveEvent(e);
 }
 
 void KisOpenGLCanvasWidget::wheelEvent(QWheelEvent *e)

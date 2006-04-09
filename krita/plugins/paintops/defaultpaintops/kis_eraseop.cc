@@ -96,7 +96,7 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
 
-    KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace(), "erase op dab");
+    KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(), "erase op dab"));
     Q_CHECK_PTR(dab);
 
     qint32 maskWidth = mask->width();
@@ -128,11 +128,11 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     qint32 sh = dstRect.height();
 
     if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(),
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab.data(), m_painter->opacity(), sx, sy, sw, sh);
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, m_painter->opacity(), sx, sy, sw, sh);
     }
 
     m_painter->addDirtyRect(dstRect);

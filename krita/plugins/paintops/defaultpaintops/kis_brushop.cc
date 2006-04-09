@@ -150,7 +150,7 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceSP dab = 0;
+    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
     quint8 origOpacity = m_painter->opacity();
     KisColor origColor = m_painter->paintColor();
@@ -194,11 +194,11 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     qint32 sh = dstRect.height();
     
     if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(),
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(), m_painter->opacity(), sx, sy, sw, sh);
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
     }
     m_painter->addDirtyRect(dstRect);
 

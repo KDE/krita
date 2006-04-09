@@ -223,6 +223,13 @@
         </sizepolicy>
         <pixmap>image0</pixmap>
     </customwidget>
+    <customwidget>
+	    <class>KIntSpinBox</class>
+	    <extends>QSpinBox</extends>
+	    <header>knuminput.h</header>
+	    <container>1</container>
+	    <pixmap></pixmap>
+    </customwidget>
 </customwidgets>
 <images>
     <image name="image0">
@@ -236,8 +243,4 @@
     <tabstop>intEndY</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>kis_cmb_idlist.h</includehint>
-</includehints>
 </UI>

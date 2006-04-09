@@ -105,11 +105,11 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
 
         qint32 height = boundingRect.height();
         qint32 width = boundingRect.width();
-        KisPaintLayer *layer = new KisPaintLayer(img, '"' + text + '"', OPACITY_OPAQUE);
+        KisPaintLayer *layer = new KisPaintLayer(img.data(), '"' + text + '"', OPACITY_OPAQUE);
         KisGroupLayerSP parent = img->rootLayer();
         if (img->activeLayer())
             parent = img->activeLayer()->parent();
-        img->addLayer(layer, parent, img->activeLayer());
+        img->addLayer(KisLayerSP(layer), parent, img->activeLayer());
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 QRgb pixel = image.pixel(x, y);
@@ -161,17 +161,17 @@ QWidget* KisToolText::createOptionWidget(QWidget* parent)
 
 void KisToolText::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("T&ext"), 
+        m_action = new KAction(i18n("T&ext"), 
                         "tool_text", 
                         Qt::SHIFT+Qt::Key_T, 
                         this,
                         SLOT(activate()),
                         collection,
                         name());
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Text"));
         m_ownAction = true;
     }

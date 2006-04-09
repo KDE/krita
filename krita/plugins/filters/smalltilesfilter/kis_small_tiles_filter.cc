@@ -94,9 +94,9 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     int w = static_cast<int>(srcRect.width() / numberOfTiles);
     int h = static_cast<int>(srcRect.height() / numberOfTiles);
 
-    KisPaintDeviceSP tile = 0;
+    KisPaintDeviceSP tile = KisPaintDeviceSP(0);
     if (src->hasSelection()) {
-        KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace(), "selected bit");
+        KisPaintDeviceSP tmp = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace(), "selected bit"));
         KisPainter gc(tmp);
         gc.bltSelection(0, 0, COMPOSITE_COPY, src, OPACITY_OPAQUE, rect.x(), rect.y(), rect.width(), rect.height());
         tile = src->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
@@ -104,9 +104,9 @@ void KisSmallTilesFilter::createSmallTiles(KisPaintDeviceSP src, KisPaintDeviceS
     else {
         tile = src->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
     }
-    if (tile == 0) return;
+    if (tile.isNull()) return;
 
-    KisPaintDeviceSP scratch = new KisPaintDevice(src->colorSpace());
+    KisPaintDeviceSP scratch = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace()));
 
     KisPainter gc(scratch);
 

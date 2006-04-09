@@ -80,7 +80,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
     // Create painter
     KisPaintDeviceSP dev = m_currentImage->activeDevice();
     
-    if (dev == 0) return;
+    if (dev.isNull()) return;
     
     if (m_painter)
         delete m_painter;
@@ -91,7 +91,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
     }
     KisSelectionSP selection = dev->selection();
 
-    m_painter = new KisPainter(selection.data());
+    m_painter = new KisPainter(KisPaintDeviceSP(selection.data()));
     Q_CHECK_PTR(m_painter);
     m_painter->beginTransaction(i18n("Selection Eraser"));
     m_painter->setPaintColor(KisColor(Qt::white, selection->colorSpace()));
@@ -112,16 +112,16 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 
 void KisToolSelectEraser::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("Selection &Eraser"),
+        m_action = new KAction(i18n("Selection &Eraser"),
                         "tool_eraser_selection", "Ctrl+Shift+E", this,
                         SLOT(activate()), collection,
                         name());
         Q_CHECK_PTR(m_action);
         m_action->setToolTip(i18n("Erase parts of a selection"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

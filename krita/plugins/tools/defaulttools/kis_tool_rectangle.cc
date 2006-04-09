@@ -63,7 +63,7 @@ void KisToolRectangle::update (KisCanvasSubject *subject)
 
 void KisToolRectangle::buttonPress(KisButtonPressEvent *event)
 {
-    if (m_currentImage && event->button() == LeftButton) {
+    if (m_currentImage && event->button() == Qt::LeftButton) {
         m_dragging = true;
         m_dragStart = m_dragCenter = m_dragEnd = event->pos();
         draw(m_dragStart, m_dragEnd);
@@ -117,7 +117,7 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
     KisPaintDeviceSP device = m_currentImage->activeDevice ();
     if (!device) return;
         
-    if (m_dragging && event->button() == LeftButton) {
+    if (m_dragging && event->button() == Qt::LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         m_dragging = false;
@@ -168,10 +168,10 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolRectangle::setup(KActionCollection *collection)
 {
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
+    m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Rectangle"),
+        m_action = new KAction(i18n("&Rectangle"),
                         "tool_rectangle",
                         Qt::Key_F6,
                         this,
@@ -179,7 +179,7 @@ void KisToolRectangle::setup(KActionCollection *collection)
                         collection,
                         name());
         m_action->setToolTip(i18n("Draw a rectangle"));
-        m_action->setExclusiveGroup("tools");
+        m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
 }

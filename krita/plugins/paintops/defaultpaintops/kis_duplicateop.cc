@@ -83,7 +83,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     splitCoordinate(pt.y(), &y, &yFraction);
     xFraction = yFraction = 0.0;
 
-    KisPaintDeviceSP dab = 0;
+    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
     if (brush->brushType() == IMAGE ||
         brush->brushType() == PIPE_IMAGE) {
@@ -109,7 +109,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
 
-    KisPaintDeviceSP srcdev = new KisPaintDevice(dab->colorSpace(), "duplicate source dev");
+    KisPaintDeviceSP srcdev = KisPaintDeviceSP(new KisPaintDevice(dab->colorSpace(), "duplicate source dev"));
     Q_CHECK_PTR(srcdev);
 
     // First, copy the source data on the temporary device:
@@ -121,12 +121,12 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     dab->convertTo(KisMetaRegistry::instance()->csRegistry()->getAlpha8());
 
     // Add the dab as selection to the srcdev
-    KisPainter copySelection(srcdev->selection().data());
+    KisPainter copySelection(KisPaintDeviceSP(srcdev->selection().data()));
     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
     copySelection.end();
 
     // copy the srcdev onto a new device, after applying the dab selection
-    KisPaintDeviceSP target = new KisPaintDevice(srcdev->colorSpace(), "duplicate target dev");
+    KisPaintDeviceSP target = KisPaintDeviceSP(new KisPaintDevice(srcdev->colorSpace(), "duplicate target dev"));
     copyPainter.begin(target);
 
     copyPainter.bltSelection(0, 0, COMPOSITE_OVER, srcdev, srcdev->selection(),
@@ -150,11 +150,11 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     sh = dstRect.height();
     
     if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(),
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab.data(), m_painter->opacity(), sx, sy, sw, sh);
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
     }
 
     m_painter->addDirtyRect(dstRect);

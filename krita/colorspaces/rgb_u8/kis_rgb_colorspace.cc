@@ -62,17 +62,17 @@ KisRgbColorSpace::~KisRgbColorSpace()
 
 void KisRgbColorSpace::setPixel(quint8 *pixel, quint8 red, quint8 green, quint8 blue, quint8 alpha) const
 {
-    pixel[PIXEL_RED] = Qt::red;
-    pixel[PIXEL_GREEN] = Qt::green;
-    pixel[PIXEL_BLUE] = Qt::blue;
+    pixel[PIXEL_RED] = red;
+    pixel[PIXEL_GREEN] = green;
+    pixel[PIXEL_BLUE] = blue;
     pixel[PIXEL_ALPHA] = alpha;
 }
 
 void KisRgbColorSpace::getPixel(const quint8 *pixel, quint8 *red, quint8 *green, quint8 *blue, quint8 *alpha) const
 {
-    *Qt::red = pixel[PIXEL_RED];
-    *Qt::green = pixel[PIXEL_GREEN];
-    *Qt::blue = pixel[PIXEL_BLUE];
+    *red = pixel[PIXEL_RED];
+    *green = pixel[PIXEL_GREEN];
+    *blue = pixel[PIXEL_BLUE];
     *alpha = pixel[PIXEL_ALPHA];
 }
 
@@ -175,9 +175,9 @@ void KisRgbColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, bo
 
     while (nPixels--) {
         if (compensate) {
-            dst[PIXEL_RED]  = (qint8) qMin(255,((src[PIXEL_RED] * shade) / (compensation * 255)));
-            dst[PIXEL_GREEN]  = (qint8) qMin(255,((src[PIXEL_GREEN] * shade) / (compensation * 255)));
-            dst[PIXEL_BLUE]  = (qint8) qMin(255,((src[PIXEL_BLUE] * shade) / (compensation * 255)));
+            dst[PIXEL_RED]  = (qint8) qMin(255,(int)((src[PIXEL_RED] * shade) / (compensation * 255)));
+            dst[PIXEL_GREEN]  = (qint8) qMin(255,(int)((src[PIXEL_GREEN] * shade) / (compensation * 255)));
+            dst[PIXEL_BLUE]  = (qint8) qMin(255,(int)((src[PIXEL_BLUE] * shade) / (compensation * 255)));
         }
         else {
             dst[PIXEL_RED]  = (qint8) qMin(255, (src[PIXEL_RED] * shade / 255));

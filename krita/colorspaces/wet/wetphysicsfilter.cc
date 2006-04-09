@@ -171,7 +171,7 @@ void WetPhysicsFilter::adsorbPixel(WetPix * paint, WetPix * adsorb)
     WetPixDbl wet_bot;
     double ads;
     
-    ads = 0.5 / qMax(paint->w, 1);
+    ads = 0.5 / qMax(paint->w, (quint16)1);
     
     wetPixToDouble(&wet_top, paint);
     wetPixToDouble(&wet_bot, adsorb);

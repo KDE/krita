@@ -87,18 +87,18 @@ void KisLmsF32ColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KisProfile 
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
-    dst->longWave = computeLong(c.Qt::red(),c.Qt::green(),c.Qt::blue());
-    dst->middleWave = computeMiddle(c.Qt::red(),c.Qt::green(),c.Qt::blue());
-    dst->shortWave = computeShort(c.Qt::red(),c.Qt::green(),c.Qt::blue());
+    dst->longWave = computeLong(c.red(),c.green(),c.blue());
+    dst->middleWave = computeMiddle(c.red(),c.green(),c.blue());
+    dst->shortWave = computeShort(c.red(),c.green(),c.blue());
 }
 
 void KisLmsF32ColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KisProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
-    dst->longWave = computeLong(c.Qt::red(),c.Qt::green(),c.Qt::blue());
-    dst->middleWave = computeMiddle(c.Qt::red(),c.Qt::green(),c.Qt::blue());
-    dst->shortWave = computeShort(c.Qt::red(),c.Qt::green(),c.Qt::blue());
+    dst->longWave = computeLong(c.red(),c.green(),c.blue());
+    dst->middleWave = computeMiddle(c.red(),c.green(),c.blue());
+    dst->shortWave = computeShort(c.red(),c.green(),c.blue());
     dst->alpha = UINT8_TO_FLOAT(opacity);
 }
 

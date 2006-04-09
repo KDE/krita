@@ -35,8 +35,9 @@ K_EXPORT_COMPONENT_FACTORY( krita_cmyk_u16_plugin, CMYKU16PluginFactory( "krita"
 
 
 CMYKU16Plugin::CMYKU16Plugin(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(CMYKU16PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

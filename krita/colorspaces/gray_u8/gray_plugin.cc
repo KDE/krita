@@ -38,9 +38,10 @@ K_EXPORT_COMPONENT_FACTORY( kritagrayplugin, GrayPluginFactory( "kritacore" ) )
 
 
 GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
-           setInstance(GrayPluginFactory::instance());
+    setObjectName(name);
+    setInstance(GrayPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

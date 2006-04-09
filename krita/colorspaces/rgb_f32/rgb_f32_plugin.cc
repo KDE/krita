@@ -36,8 +36,9 @@ K_EXPORT_COMPONENT_FACTORY( krita_rgb_f32_plugin, RGBF32PluginFactory( "krita" )
 
 
 RGBF32Plugin::RGBF32Plugin(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(RGBF32PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

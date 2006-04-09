@@ -170,7 +170,7 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
     
     QLabel * label = new QLabel(i18n("Paint strength:"), this);
     g2->addWidget(label, 0, 0);
-    m_strength = new KDoubleNumInput(0.0, 2.0, 1.0, 0.1, 1, this);
+    m_strength = new KDoubleNumInput(0.0, 2.0, 1.0, this, 0.1, 1);
     m_strength->setRange(0.0, 2.0, 0.1, true);
     connect(m_strength, SIGNAL(valueChanged(double)), this,  SLOT(slotStrengthChanged(double)));
     g2->addWidget(m_strength, 0, 1);
@@ -182,8 +182,7 @@ KisWetPaletteWidget::KisWetPaletteWidget(QWidget *parent, const char *name) : su
     m_wetness->setRange(0, 16, true);
     g2->addWidget(m_wetness, 1, 1);
 
-    g2->addItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
-
+    g2->addItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum), 2, 0);
 }
 
 void KisWetPaletteWidget::update(KisCanvasSubject *subject)

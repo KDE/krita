@@ -127,7 +127,7 @@ public:
     KisBasicHistogramProducerFactory(const KisID& id, KisColorSpace *colorSpace)
         : KisHistogramProducerFactory(id), m_cs(colorSpace) {}
     virtual ~KisBasicHistogramProducerFactory() {}
-    virtual KisHistogramProducerSP generate() { return new T(id(), m_cs); }
+    virtual KisHistogramProducerSP generate() { return KisHistogramProducerSP(new T(id(), m_cs)); }
     virtual bool isCompatibleWith(KisColorSpace* colorSpace) const { return colorSpace->id() == m_cs->id(); }
     virtual float preferrednessLevelWith(KisColorSpace* /*colorSpace*/) const { return 1.0; }
 protected:

@@ -61,8 +61,26 @@ if (SHOULD_BUILD_KRITA)
     # For config-krita.h
     include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+    include_directories(${CMAKE_SOURCE_DIR}/krita/core)
+    include_directories(${CMAKE_SOURCE_DIR}/krita/core/tiles)
+    include_directories(${CMAKE_SOURCE_DIR}/krita/sdk)
+    include_directories(${CMAKE_SOURCE_DIR}/krita/kritacolor)
+    include_directories(${CMAKE_SOURCE_DIR}/krita/kritacolor/colorspaces)
+    include_directories(${CMAKE_SOURCE_DIR}/krita/ui)
+
+    include_directories(${KOPAINTER_INCLUDES})
+    include_directories(${KOFFICEUI_INCLUDES})
+    include_directories(${KOPALETTE_INCLUDES})
+
     include_directories(${LCMS_INCLUDE_DIR})
-    include_directories(${CMAKE_SOURCE_DIR}/krita/sdk/)
+
+if(HAVE_OPENGL)
+    include_directories(${OPENGL_INCLUDE_DIR})
+endif(HAVE_OPENGL)
+
+if(HAVE_XINPUTEXT)
+    include_directories(${X11_Xinput_INCLUDE_PATH})
+endif(HAVE_XINPUTEXT)
     
     add_subdirectory( sdk )
     add_subdirectory( kritacolor )

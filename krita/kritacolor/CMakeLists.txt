@@ -31,8 +31,6 @@ set(kritacolor_LIB_SRCS
 #   ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/kis_xyz_colorspace.cc
 #   ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/kis_xyz_colorspace.h
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/colorspaces)
-
 kde4_automoc(${kritacolor_LIB_SRCS})
 
 kde4_add_dcop_skels(kritacolor_LIB_SRCS kis_colorspace_iface.h )

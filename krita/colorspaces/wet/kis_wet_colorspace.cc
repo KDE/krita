@@ -180,7 +180,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile * /*p
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
-    int h = getH(c.Qt::red(), c.Qt::green(), c.Qt::blue());
+    int h = getH(c.red(), c.green(), c.blue());
     int delta = 256;
     int key = 0;
     QMap<int, WetPix>::Iterator it;

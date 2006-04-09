@@ -117,15 +117,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 	wdgbirdeye.ui 
 	)
 
-include_directories(
-	${CMAKE_SOURCE_DIR}/krita/core 
-	${CMAKE_SOURCE_DIR}/krita/kritacolor 
-	${CMAKE_SOURCE_DIR}/krita/sdk
-	${KOFFICEUI_INCLUDES}
-	${KOPAINTER_INCLUDES}
-	${KOPALETTE_INCLUDES}
-	)
-
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS})
@@ -141,7 +132,6 @@ target_link_libraries(kritaui
 	)
 
 if(HAVE_OPENGL)
-    include_directories(${OPENGL_INCLUDE_DIR})
     target_link_libraries(kritaui 
         ${OPENGL_LIBRARIES}
         ${QT_QTOPENGL_LIBRARY}
@@ -149,7 +139,6 @@ if(HAVE_OPENGL)
 endif(HAVE_OPENGL)
 
 if(HAVE_XINPUTEXT)
-    include_directories(${X11_Xinput_INCLUDE_PATH})
     target_link_libraries(kritaui ${X11_Xinput_LIB})
 endif(HAVE_XINPUTEXT)
 

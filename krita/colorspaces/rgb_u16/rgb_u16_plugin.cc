@@ -35,8 +35,9 @@ K_EXPORT_COMPONENT_FACTORY( krita_rgb_u16_plugin, RGBU16PluginFactory( "krita" )
 
 
 RGBU16Plugin::RGBU16Plugin(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(RGBU16PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

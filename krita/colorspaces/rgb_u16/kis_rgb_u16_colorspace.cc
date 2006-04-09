@@ -65,9 +65,9 @@ void KisRgbU16ColorSpace::setPixel(quint8 *dst, quint16 red, quint16 green, quin
 {
     Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
 
-    dstPixel->Qt::red = Qt::red;
-    dstPixel->Qt::green = Qt::green;
-    dstPixel->Qt::blue = Qt::blue;
+    dstPixel->red = red;
+    dstPixel->green = green;
+    dstPixel->blue = blue;
     dstPixel->alpha = alpha;
 }
 
@@ -75,9 +75,9 @@ void KisRgbU16ColorSpace::getPixel(const quint8 *src, quint16 *red, quint16 *gre
 {
     const Pixel *srcPixel = reinterpret_cast<const Pixel *>(src);
 
-    *Qt::red = srcPixel->Qt::red;
-    *Qt::green = srcPixel->Qt::green;
-    *Qt::blue = srcPixel->Qt::blue;
+    *red = srcPixel->red;
+    *green = srcPixel->green;
+    *blue = srcPixel->blue;
     *alpha = srcPixel->alpha;
 }
 
@@ -92,9 +92,9 @@ void KisRgbU16ColorSpace::mixColors(const quint8 **colors, const quint8 *weights
         quint32 alpha = pixel->alpha;
         quint32 alphaTimesWeight = UINT16_MULT(alpha, UINT8_TO_UINT16(*weights));
 
-        totalRed += UINT16_MULT(pixel->Qt::red, alphaTimesWeight);
-        totalGreen += UINT16_MULT(pixel->Qt::green, alphaTimesWeight);
-        totalBlue += UINT16_MULT(pixel->Qt::blue, alphaTimesWeight);
+        totalRed += UINT16_MULT(pixel->red, alphaTimesWeight);
+        totalGreen += UINT16_MULT(pixel->green, alphaTimesWeight);
+        totalBlue += UINT16_MULT(pixel->blue, alphaTimesWeight);
         newAlpha += alphaTimesWeight;
 
         weights++;
@@ -113,9 +113,9 @@ void KisRgbU16ColorSpace::mixColors(const quint8 **colors, const quint8 *weights
         totalBlue = UINT16_DIVIDE(totalBlue, newAlpha);
     }
 
-    dstPixel->Qt::red = totalRed;
-    dstPixel->Qt::green = totalGreen;
-    dstPixel->Qt::blue = totalBlue;
+    dstPixel->red = totalRed;
+    dstPixel->green = totalGreen;
+    dstPixel->blue = totalBlue;
 }
 
 
@@ -131,9 +131,9 @@ void KisRgbU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues, 
         qint32 weight = *kernelValues;
 
         if (weight != 0) {
-            totalRed += pixel->Qt::red * weight;
-            totalGreen += pixel->Qt::green * weight;
-            totalBlue += pixel->Qt::blue * weight;
+            totalRed += pixel->red * weight;
+            totalGreen += pixel->green * weight;
+            totalBlue += pixel->blue * weight;
             totalAlpha +=pixel->alpha * weight;
         }
         colors++;
@@ -143,9 +143,9 @@ void KisRgbU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues, 
     Pixel * p = reinterpret_cast< Pixel *>( dst );
 
     if (channelFlags & KisChannelInfo::FLAG_COLOR) {
-        p->Qt::red = CLAMP( ( totalRed / factor) + offset, 0, quint16_MAX);
-        p->Qt::green = CLAMP( ( totalGreen / factor) + offset, 0, quint16_MAX);
-        p->Qt::blue = CLAMP( ( totalBlue / factor) + offset, 0, quint16_MAX);
+        p->red = CLAMP( ( totalRed / factor) + offset, 0, quint16_MAX);
+        p->green = CLAMP( ( totalGreen / factor) + offset, 0, quint16_MAX);
+        p->blue = CLAMP( ( totalBlue / factor) + offset, 0, quint16_MAX);
     }
     if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
         p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, quint16_MAX);
@@ -160,9 +160,9 @@ void KisRgbU16ColorSpace::invertColor(quint8 * src, qint32 nPixels)
     while (nPixels--)
     {
         Pixel * p = reinterpret_cast< Pixel *>( src );
-        p->Qt::red = quint16_MAX - p->Qt::red;
-        p->Qt::green = quint16_MAX - p->Qt::green;
-        p->Qt::blue = quint16_MAX - p->Qt::blue;
+        p->red = quint16_MAX - p->red;
+        p->green = quint16_MAX - p->green;
+        p->blue = quint16_MAX - p->blue;
         src += psize;
     }
 }
@@ -171,7 +171,7 @@ quint8 KisRgbU16ColorSpace::intensity8(const quint8 * src) const
 {
     const Pixel * p = reinterpret_cast<const Pixel *>( src );
     
-    return UINT16_TO_UINT8(static_cast<quint16>((p->Qt::red * 0.30 + p->Qt::green * 0.59 + p->Qt::blue * 0.11) + 0.5));
+    return UINT16_TO_UINT8(static_cast<quint16>((p->red * 0.30 + p->green * 0.59 + p->blue * 0.11) + 0.5));
 }
 
 
@@ -445,7 +445,7 @@ void KisRgbU16ColorSpace::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride
             quint16 dstColor = dst[channel];
 
             srcColor = qMin(((UINT16_MAX - dstColor) * (UINT16_MAX + 1u)) / (srcColor + 1u), UINT16_MAX);
-            srcColor = kClamp(UINT16_MAX - srcColor, 0u, UINT16_MAX);
+            srcColor = qBound(0u, UINT16_MAX - srcColor, UINT16_MAX);
 
             quint16 newColor = UINT16_BLEND(srcColor, dstColor, srcBlend);
 

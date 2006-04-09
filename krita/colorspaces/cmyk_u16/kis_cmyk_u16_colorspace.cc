@@ -69,10 +69,10 @@ void KisCmykU16ColorSpace::mixColors(const quint8 **colors, const quint8 *weight
         quint32 alpha = pixel->alpha;
         quint32 alphaTimesWeight = UINT16_MULT(alpha, UINT8_TO_UINT16(*weights));
 
-        totalCyan += UINT16_MULT(pixel->Qt::cyan, alphaTimesWeight);
-        totalMagenta += UINT16_MULT(pixel->Qt::magenta, alphaTimesWeight);
-        totalYellow += UINT16_MULT(pixel->Qt::yellow, alphaTimesWeight);
-        totalBlack += UINT16_MULT(pixel->Qt::black, alphaTimesWeight);
+        totalCyan += UINT16_MULT(pixel->cyan, alphaTimesWeight);
+        totalMagenta += UINT16_MULT(pixel->magenta, alphaTimesWeight);
+        totalYellow += UINT16_MULT(pixel->yellow, alphaTimesWeight);
+        totalBlack += UINT16_MULT(pixel->black, alphaTimesWeight);
         newAlpha += alphaTimesWeight;
 
         weights++;
@@ -92,10 +92,10 @@ void KisCmykU16ColorSpace::mixColors(const quint8 **colors, const quint8 *weight
         totalBlack = UINT16_DIVIDE(totalBlack, newAlpha);
     }
 
-    dstPixel->Qt::cyan = totalCyan;
-    dstPixel->Qt::magenta = totalMagenta;
-    dstPixel->Qt::yellow = totalYellow;
-    dstPixel->Qt::black = totalBlack;
+    dstPixel->cyan = totalCyan;
+    dstPixel->magenta = totalMagenta;
+    dstPixel->yellow = totalYellow;
+    dstPixel->black = totalBlack;
 }
 
 void KisCmykU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
@@ -109,10 +109,10 @@ void KisCmykU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues,
         qint32 weight = *kernelValues;
 
         if (weight != 0) {
-            totalCyan += pixel->Qt::cyan * weight;
-            totalMagenta += pixel->Qt::magenta * weight;
-            totalYellow += pixel->Qt::yellow * weight;
-            totalK += pixel->Qt::black * weight;
+            totalCyan += pixel->cyan * weight;
+            totalMagenta += pixel->magenta * weight;
+            totalYellow += pixel->yellow * weight;
+            totalK += pixel->black * weight;
             totalAlpha += pixel->alpha * weight;
         }
         colors++;
@@ -122,10 +122,10 @@ void KisCmykU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues,
     Pixel * p = reinterpret_cast< Pixel *>( dst );
 
     if (channelFlags & KisChannelInfo::FLAG_COLOR) {
-        p->Qt::cyan = CLAMP( ( totalCyan / factor) + offset, 0, quint16_MAX);
-        p->Qt::magenta = CLAMP( ( totalMagenta / factor) + offset, 0, quint16_MAX);
-        p->Qt::yellow = CLAMP( ( totalYellow / factor) + offset, 0, quint16_MAX);
-        p->Qt::black = CLAMP( ( totalK / factor) + offset, 0, quint16_MAX);
+        p->cyan = CLAMP( ( totalCyan / factor) + offset, 0, quint16_MAX);
+        p->magenta = CLAMP( ( totalMagenta / factor) + offset, 0, quint16_MAX);
+        p->yellow = CLAMP( ( totalYellow / factor) + offset, 0, quint16_MAX);
+        p->black = CLAMP( ( totalK / factor) + offset, 0, quint16_MAX);
     }
     if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
         p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, quint16_MAX);
@@ -140,10 +140,10 @@ void KisCmykU16ColorSpace::invertColor(quint8 * src, qint32 nPixels)
     while (nPixels--)
     {
         Pixel * p = reinterpret_cast< Pixel *>( src );
-        p->Qt::cyan = quint16_MAX - p->Qt::cyan;
-        p->Qt::magenta = quint16_MAX - p->Qt::magenta;
-        p->Qt::yellow = quint16_MAX - p->Qt::yellow;
-        p->Qt::black = quint16_MAX - p->Qt::black;
+        p->cyan = quint16_MAX - p->cyan;
+        p->magenta = quint16_MAX - p->magenta;
+        p->yellow = quint16_MAX - p->yellow;
+        p->black = quint16_MAX - p->black;
         src += psize;
     }
 }

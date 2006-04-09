@@ -115,7 +115,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (!m_size)
         inf.pressure = PRESSURE_DEFAULT;
 
-    KisPaintDeviceSP dab = 0;
+    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), inf);

@@ -61,13 +61,13 @@ KisGrayColorSpace::~KisGrayColorSpace()
 
 void KisGrayColorSpace::setPixel(quint8 *pixel, quint8 gray, quint8 alpha) const
 {
-    pixel[PIXEL_GRAY] = Qt::gray;
+    pixel[PIXEL_GRAY] = gray;
     pixel[PIXEL_GRAY_ALPHA] = alpha;
 }
 
 void KisGrayColorSpace::getPixel(const quint8 *pixel, quint8 *gray, quint8 *alpha) const
 {
-    *Qt::gray = pixel[PIXEL_GRAY];
+    *gray = pixel[PIXEL_GRAY];
     *alpha = pixel[PIXEL_GRAY_ALPHA];
 }
 
@@ -160,7 +160,7 @@ void KisGrayColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, b
 
     while (nPixels--) {
         if (compensate) {
-            dst[PIXEL_GRAY]  = (qint8) qMin(255,((src[PIXEL_GRAY] * shade) / (compensation * 255)));
+            dst[PIXEL_GRAY]  = (qint8) qMin(255, (int)((((src[PIXEL_GRAY] * shade) / (compensation * 255)))));
         }
         else {
             dst[PIXEL_GRAY]  = (qint8) qMin(255, (src[PIXEL_GRAY] * shade / 255));
@@ -743,7 +743,7 @@ void KisGrayColorSpace::compositeBurn(quint8 *dstRowStart, qint32 dstRowStride, 
                     quint8 dstColor = dst[channel];
 
                     srcColor = qMin(((UINT8_MAX - dstColor) * (UINT8_MAX + 1)) / (srcColor + 1), UINT8_MAX);
-                    srcColor = kClamp(UINT8_MAX - srcColor, 0u, UINT8_MAX);
+                    srcColor = qBound(0u, UINT8_MAX - srcColor, UINT8_MAX);
 
                     quint8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 

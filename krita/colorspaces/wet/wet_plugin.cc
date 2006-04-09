@@ -67,8 +67,9 @@ K_EXPORT_COMPONENT_FACTORY( kritawetplugin, WetPluginFactory( "kritacore" ) )
 
 
 WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(WetPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.
@@ -89,7 +90,7 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
                 (KisID("WETHISTO", i18n("Wet Histogram")), colorSpaceWet) );
 
         // wet brush op
-        KisPaintOpRegistry::instance()->add(new KisWetOpFactory);
+        KisPaintOpRegistry::instance()->add(KisPaintOpFactorySP(new KisWetOpFactory));
 
         // Dry filter
         // KisFilterRegistry::instance()->add( new WetPhysicsFilter() );

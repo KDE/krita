@@ -98,7 +98,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 
             cfg->setGroup("palette-" + (*it));
 
-            enumKoPaletteStyle style = (enumKoPaletteStyle)cfg->readNumEntry("style", 0);
+            enumKoPaletteStyle style = (enumKoPaletteStyle)cfg->readEntry("style", 0);
             QString caption = cfg->readEntry("caption", "");
 
             createPalette((*it), caption, style);
@@ -374,12 +374,12 @@ void KoPaletteManager::placePalette(const QString & name, Qt::DockWidgetArea loc
         cfg->setGroup("palette-" + name);
         QString dockarea = cfg->readEntry("dockarea", "right");
         QString caption = cfg->readEntry("caption", "");
-        int height = cfg->readNumEntry("height", 120);
-        int place = cfg->readNumEntry("place", 0);
-        int width = cfg->readNumEntry("width", 200);
-        int x = cfg->readNumEntry("x", 0);
-        int y = cfg->readNumEntry("y", 0);
-        int offset = cfg->readNumEntry("offset", 0);
+        int height = cfg->readEntry("height", 120);
+        int place = cfg->readEntry("place", 0);
+        int width = cfg->readEntry("width", 200);
+        int x = cfg->readEntry("x", 0);
+        int y = cfg->readEntry("y", 0);
+        int offset = cfg->readEntry("offset", 0);
         palette->setGeometry(x, y, width, height);
 //        palette->setOffset(offset); TODO Port this somehow
         if (dockarea == "left" && place == 0) {
@@ -396,7 +396,7 @@ void KoPaletteManager::placePalette(const QString & name, Qt::DockWidgetArea loc
     }
 
     cfg->setGroup("");
-    m_dockability = (enumKoDockability) cfg->readNumEntry("palettesdockability");
+    m_dockability = (enumKoDockability) cfg->readEntry("palettesdockability",0);
 
     // Left and right may accept docks. The height of the screen is important
     int h = qApp->desktop()->height();

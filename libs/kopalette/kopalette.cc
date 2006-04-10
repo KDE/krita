@@ -62,7 +62,7 @@ void KoPalette::resetFont()
     cfg->setGroup("");
     m_font  = KGlobalSettings::generalFont();
     float ps = qMin(9.0, KGlobalSettings::generalFont().pointSize() * 0.8);
-    ps = cfg->readNumEntry("palettefontsize", (int)ps);
+    ps = cfg->readEntry("palettefontsize", (int)ps);
     if (ps < 6) ps = 6;
     m_font.setPointSize((int)ps);
     setFont(m_font);

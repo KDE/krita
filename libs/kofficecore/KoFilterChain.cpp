@@ -935,7 +935,7 @@ namespace KOffice {
                 QString key = *it;
                 if ( !key.isEmpty() ) {
                     Vertex* tmp = m_vertices[ key.latin1() ];
-                    if ( tmp && tmp->key() < v->key() )
+                    if ( !v || ( tmp && tmp->key() < v->key() ) )
                         v = tmp;
                 }
             }

@@ -924,14 +924,13 @@ bool KoDocument::saveExternalChildren()
     }
 
     //kDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
-    KoDocument *doc;
     KoDocumentChild *ch;
     Q3PtrListIterator<KoDocumentChild> it = children();
     for (; (ch = it.current()); ++it )
     {
         if ( !ch->isDeleted() )
         {
-            doc = ch->document();
+            KoDocument* doc = ch->document();
             if ( doc && doc->isStoredExtern() && doc->isModified() )
             {
                 kDebug(30003)<<" save external doc='"<<url().url()<<"'"<<endl;
@@ -941,7 +940,7 @@ bool KoDocument::saveExternalChildren()
             }
             //kDebug(30003)<<k_funcinfo<<" not modified doc='"<<url().url()<<"'"<<endl;
             // save possible external docs inside doc
-            if ( !doc->saveExternalChildren() )
+            if ( doc && !doc->saveExternalChildren() )
                 return false;
         }
     }

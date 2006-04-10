@@ -579,6 +579,8 @@ bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
 
     if ( !newdoc )
         newdoc = createDoc();
+    if ( !newdoc )
+        return false;
 
     d->m_firstTime=true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -586,7 +588,7 @@ bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
     connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
     newdoc->addShell( this ); // used by openURL
     bool openRet = (!isImporting ()) ? newdoc->openURL(url) : newdoc->import(url);
-    if(!newdoc || !openRet)
+    if(!openRet)
     {
         newdoc->removeShell(this);
         delete newdoc;

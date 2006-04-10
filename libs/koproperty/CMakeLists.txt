@@ -3,7 +3,7 @@ kde4_header()
 add_subdirectory( editors )
 add_subdirectory( test )
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty/editors ${KOFFICECORE_INCLUDES} )
 
 
 set(libkopropertyeditors_SRCS

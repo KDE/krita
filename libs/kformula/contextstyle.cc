@@ -159,12 +159,12 @@ void ContextStyle::readConfig( KConfig* config, bool init )
 
     // There's no gui right anymore but I'll leave it here...
     config->setGroup( "kformula Color" );
-    defaultColor  = config->readColorEntry( "defaultColor",  &defaultColor );
-    numberColor   = config->readColorEntry( "numberColor",   &numberColor );
-    operatorColor = config->readColorEntry( "operatorColor", &operatorColor );
-    emptyColor    = config->readColorEntry( "emptyColor",    &emptyColor );
-    errorColor    = config->readColorEntry( "errorColor",    &errorColor );
-    helpColor     = config->readColorEntry( "helpColor",     &helpColor );
+    defaultColor  = config->readEntry( "defaultColor",  defaultColor );
+    numberColor   = config->readEntry( "numberColor",   numberColor );
+    operatorColor = config->readEntry( "operatorColor", operatorColor );
+    emptyColor    = config->readEntry( "emptyColor",    emptyColor );
+    errorColor    = config->readEntry( "errorColor",    errorColor );
+    helpColor     = config->readEntry( "helpColor",     helpColor );
 
     m_syntaxHighlighting = config->readEntry( "syntaxHighlighting", true );
 }

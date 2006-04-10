@@ -169,7 +169,7 @@ void KisToolEllipse::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KKeySequence(KKey(Qt::Key_F7)));
+        shortcut.append(KKeySequence(Qt::Key_F7));
         m_action = new KAction(i18n("&Ellipse"),
                                     "tool_ellipse",
                                     shortcut,

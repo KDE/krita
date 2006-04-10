@@ -381,10 +381,12 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         case 2: // KoParagLayout::SD_UP:
         case 3: // KoParagLayout::SD_RIGHT_UP:
             distanceX = - shadowDistance;
+            break;
         case 7: // KoParagLayout::SD_LEFT_BOTTOM:
         case 6: // KoParagLayout::SD_BOTTOM:
         case 5: // KoParagLayout::SD_RIGHT_BOTTOM:
             distanceX = shadowDistance;
+            break;
         }
         switch ( shadowDirection )
         {
@@ -392,10 +394,12 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         case 8: // KoParagLayout::SD_LEFT:
         case 1: //KoParagLayout::SD_LEFT_UP:
             distanceY = - shadowDistance;
+            break;
         case 3: // KoParagLayout::SD_RIGHT_UP:
         case 4: // KoParagLayout::SD_RIGHT:
         case 5: // KoParagLayout::SD_RIGHT_BOTTOM:
             distanceY = shadowDistance;
+            break;
         }
         if ( !shadowCssCompat )
             shadowCssCompat = new QString;

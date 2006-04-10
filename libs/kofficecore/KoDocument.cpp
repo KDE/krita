@@ -1637,9 +1637,9 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, QDomDo
         kError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
-        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4" )
-                              .arg( filename ).arg( errorLine ).arg( errorColumn )
-                              .arg( i18n ( "QXml", errorMsg.utf8() ) );
+        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4" 
+                              ,filename  ,errorLine, errorColumn ,
+                              i18n ( "QXml", errorMsg ));
         store->close();
         return false;
     }

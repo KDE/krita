@@ -258,7 +258,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     d->m_veryHackyActionList.append(
         new KAction(i18n("&Close All Views"), "fileclose",
-                    "ctrl+shift+w", this, SLOT(slotCloseAllViews()),
+                    Qt::CTRL+Qt::SHIFT+Qt::Key_W, this, SLOT(slotCloseAllViews()),
                     actionCollection(), "view_closeallviews") );
 
     // set up the action list for the splitter stuff

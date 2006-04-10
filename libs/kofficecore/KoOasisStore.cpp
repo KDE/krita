@@ -167,8 +167,8 @@ bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QSt
         kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
                        << " In line: " << errorLine << ", column: " << errorColumn << endl
                        << " Error message: " << errorMsg << endl;
-        errorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3" )
-                       .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg.utf8() ) );
+        errorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3" 
+                       ,errorLine ,errorColumn ,i18n ( "QXml", errorMsg ) );
     }
     else
     {

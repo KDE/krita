@@ -379,10 +379,10 @@ void KoRecentDocumentsPane::selectionChanged(Q3ListViewItem* item)
     if(static_cast<KoFileListItem*>(item)->fileItem()) {
       KFileItem* fileItem = static_cast<KoFileListItem*>(item)->fileItem();
       QString details = "<center><table border=\"0\">";
-      details += i18n("File modification date and time. %1 is date time", "<tr><td><b>Modified:</b></td><td>%1</td></tr>")
-          .arg(fileItem->timeString(KIO::UDS_MODIFICATION_TIME));
-      details += i18n("File access date and time. %1 is date time", "<tr><td><b>Accessed:</b></td><td>%1</td></tr>")
-          .arg(fileItem->timeString(KIO::UDS_ACCESS_TIME));
+      details += i18nc("File modification date and time. %1 is date time", "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
+          QString(fileItem->timeString(KIO::UDS_MODIFICATION_TIME)));
+      details += i18nc("File access date and time. %1 is date time", "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
+          QString(fileItem->timeString(KIO::UDS_ACCESS_TIME)));
       details += "</table></center>";
       m_detailsLabel->setHtml(details);
     } else {

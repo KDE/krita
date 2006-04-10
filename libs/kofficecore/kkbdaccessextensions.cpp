@@ -208,8 +208,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
         KShortcut revSc = d->revAction->shortcut();
         KShortcut accessKeysSc = d->accessKeysAction->shortcut();
         QKeyEvent* kev = dynamic_cast<QKeyEvent *>(e);
-        KKey k = KKey(kev);
-        KShortcut sc = KShortcut(k);
+        KShortcut sc = KShortcut(kev->key());
         // kDebug() << "KKbdAccessExtensions::eventFilter: Key press " << sc << endl;
         if (!d->accessKeyLabels) {
             if (sc == fwdSc) {
@@ -222,7 +221,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
             }
         }
         if (d->panel) {
-            if (k == KKey(Qt::Key_Escape))
+            if (kev->key() == Qt::Key_Escape)
                 exitSizing();
             else
                 resizePanelFromKey(kev->key(), kev->state());
@@ -238,7 +237,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
             return true;
         }
         if (d->accessKeyLabels) {
-            if (k == KKey(Qt::Key_Escape)) {
+            if (kev->key() == Qt::Key_Escape) {
                 delete d->accessKeyLabels;
                 d->accessKeyLabels = 0;
             } else
@@ -564,7 +563,7 @@ void KKbdAccessExtensions::displayAccessKeys()
             KAction* action = actions[j];
             KShortcut sc = action->shortcut();
             for (int i = 0; i < (int)sc.count(); i++) {
-                KKeySequence seq = sc.seq(i);
+                QKeySequence seq = sc.seq(i);
                 if (seq.count() == 1) {
                     QString s = seq.toString();
                     if (availableAccessKeys.contains(s))

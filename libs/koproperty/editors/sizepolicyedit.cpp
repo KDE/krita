@@ -55,13 +55,13 @@ SizePolicyEdit::SizePolicyEdit(Property *property, QWidget *parent, const char *
 
 	if(!m_spValues) {
 		m_spValues = new QMap<QString, QVariant>();
-		(*m_spValues)[i18n("Size Policy", "Fixed")] = QSizePolicy::Fixed;
-		(*m_spValues)[i18n("Size Policy", "Minimum")] = QSizePolicy::Minimum;
-		(*m_spValues)[i18n("Size Policy", "Maximum")] = QSizePolicy::Maximum;
-		(*m_spValues)[i18n("Size Policy", "Preferred")] = QSizePolicy::Preferred;
-		(*m_spValues)[i18n("Size Policy", "Expanding")] = QSizePolicy::Expanding;
-		(*m_spValues)[i18n("Size Policy", "Minimum Expanding")] = QSizePolicy::MinimumExpanding;
-		(*m_spValues)[i18n("Size Policy", "Ignored")] = QSizePolicy::Ignored;
+		(*m_spValues)[i18nc("Size Policy", "Fixed")] = QSizePolicy::Fixed;
+		(*m_spValues)[i18nc("Size Policy", "Minimum")] = QSizePolicy::Minimum;
+		(*m_spValues)[i18nc("Size Policy", "Maximum")] = QSizePolicy::Maximum;
+		(*m_spValues)[i18nc("Size Policy", "Preferred")] = QSizePolicy::Preferred;
+		(*m_spValues)[i18nc("Size Policy", "Expanding")] = QSizePolicy::Expanding;
+		(*m_spValues)[i18nc("Size Policy", "Minimum Expanding")] = QSizePolicy::MinimumExpanding;
+		(*m_spValues)[i18nc("Size Policy", "Ignored")] = QSizePolicy::Ignored;
 	}
 }
 

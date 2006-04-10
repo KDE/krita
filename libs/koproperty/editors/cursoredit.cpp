@@ -86,22 +86,22 @@ CursorEdit::CursorEdit(Property *property, QWidget *parent, const char *name)
 			<< Qt::ForbiddenCursor
 			<< Qt::WhatsThisCursor;
 		QStringList strings;
-		strings << i18n("Mouse Cursor Shape", "No Cursor")
-			<< i18n("Mouse Cursor Shape", "Arrow")
-			<< i18n("Mouse Cursor Shape", "Up Arrow")
-			<< i18n("Mouse Cursor Shape", "Cross")
-			<< i18n("Mouse Cursor Shape", "Waiting")
-			<< i18n("Mouse Cursor Shape", "I")
-			<< i18n("Mouse Cursor Shape", "Size Vertical")
-			<< i18n("Mouse Cursor Shape", "Size Horizontal")
-			<< i18n("Mouse Cursor Shape", "Size Slash")
-			<< i18n("Mouse Cursor Shape", "Size Backslash")
-			<< i18n("Mouse Cursor Shape", "Size All")
-			<< i18n("Mouse Cursor Shape", "Split Vertical")
-			<< i18n("Mouse Cursor Shape", "Split Horizontal")
-			<< i18n("Mouse Cursor Shape", "Pointing Hand")
-			<< i18n("Mouse Cursor Shape", "Forbidden")
-			<< i18n("Mouse Cursor Shape", "What's This?");
+		strings << i18nc("Mouse Cursor Shape", "No Cursor")
+			<< i18nc("Mouse Cursor Shape", "Arrow")
+			<< i18nc("Mouse Cursor Shape", "Up Arrow")
+			<< i18nc("Mouse Cursor Shape", "Cross")
+			<< i18nc("Mouse Cursor Shape", "Waiting")
+			<< i18nc("Mouse Cursor Shape", "I")
+			<< i18nc("Mouse Cursor Shape", "Size Vertical")
+			<< i18nc("Mouse Cursor Shape", "Size Horizontal")
+			<< i18nc("Mouse Cursor Shape", "Size Slash")
+			<< i18nc("Mouse Cursor Shape", "Size Backslash")
+			<< i18nc("Mouse Cursor Shape", "Size All")
+			<< i18nc("Mouse Cursor Shape", "Split Vertical")
+			<< i18nc("Mouse Cursor Shape", "Split Horizontal")
+			<< i18nc("Mouse Cursor Shape", "Pointing Hand")
+			<< i18nc("Mouse Cursor Shape", "Forbidden")
+			<< i18nc("Mouse Cursor Shape", "What's This?");
 		m_cursorListData = new Property::ListData(keys, strings);
 	}
 

@@ -74,7 +74,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 
     if ( palettesShown) {
         m_toggleShowHidePalettes = new KToggleAction(i18n("Hide All Palette Windows"),
-                                    "CTRL+Qt::SHIFT+H", this,
+                                    Qt::CTRL+Qt::SHIFT+Qt::Key_H, this,
                                     SLOT(slotToggleAllPalettes()),
                                     m_actionCollection, "toggleAllPaletteWindows");
 
@@ -82,7 +82,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     }
     else {
         m_toggleShowHidePalettes = new KToggleAction(i18n("Show Palette Windows Again"),
-                                    "CTRL+Qt::SHIFT+H", this,
+                                    Qt::CTRL+Qt::SHIFT+Qt::Key_H, this,
                                     SLOT(slotToggleAllPalettes()),
                                     m_actionCollection, "toggleAllPaletteWindows");
 

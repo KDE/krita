@@ -199,7 +199,7 @@ void KisToolSelectSimilar::setup(KActionCollection *collection)
     m_action = collection->action(name());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Similar Selection"), "tool_similar_selection", "Ctrl+E", this, SLOT(activate()), collection, name());
+        m_action = new KAction(i18n("&Similar Selection"), "tool_similar_selection", Qt::CTRL+Qt::Key_E, this, SLOT(activate()), collection, name());
         Q_CHECK_PTR(m_action);
         m_action->setToolTip(i18n("Select similar colors"));
         m_action->setActionGroup(actionGroup());

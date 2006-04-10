@@ -20,7 +20,7 @@
 #ifndef _KIS_AUTOGRADIENT_H_
 #define _KIS_AUTOGRADIENT_H_
 
-#include "wdgautogradient.h"
+#include "ui_wdgautogradient.h"
 
 class KisResource;
 class KisGradientSegment;

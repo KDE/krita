@@ -139,39 +139,39 @@ void KisSelectionManager::setup(KActionCollection * collection)
                 "clear");
 
     m_reselect = new KAction(i18n("&Reselect"),
-                0, "Ctrl+Shift+D",
+                0, Qt::CTRL+Qt::SHIFT+Qt::Key_D,
                 this, SLOT(reselect()),
                 collection, "reselect");
 
     m_invert = new KAction(i18n("&Invert"),
-                0, "Ctrl+I",
+                0, Qt::CTRL+Qt::Key_I,
                 this, SLOT(invert()),
                 collection, "invert");
 
 
     m_toNewLayer = new KAction(i18n("Copy Selection to New Layer"),
-                0, "Ctrl+J",
+                0, Qt::CTRL+Qt::Key_J,
                 this, SLOT(copySelectionToNewLayer()),
                 collection, "copy_selection_to_new_layer");
 
 
     m_cutToNewLayer = new KAction(i18n("Cut Selection to New Layer"),
-            0, "Ctrl+Shift+J",
+            0, Qt::CTRL+Qt::SHIFT+Qt::Key_J,
             this, SLOT(cutToNewLayer()),
             collection, "cut_selection_to_new_layer");
 
     m_feather = new KAction(i18n("Feather"),
-                0, "Ctrl+Alt+D",
+                0, Qt::CTRL+Qt::ALT+Qt::Key_D,
                 this, SLOT(feather()),
                 collection, "feather");
 
     m_fillForegroundColor = new KAction(i18n("Fill with Foreground Color"),
-                                             "Alt+backspace", this,
+                                             Qt::ALT+Qt::Key_Backspace, this,
                                              SLOT(fillForegroundColor()),
                                              collection,
                                              "fill_selection_foreground_color");
     m_fillBackgroundColor = new KAction(i18n("Fill with Background Color"),
-                                             "backspace", this,
+                                             Qt::Key_Backspace, this,
                                              SLOT(fillBackgroundColor()),
                                              collection,
                                              "fill_selection_background_color");
@@ -181,7 +181,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
                                              collection,
                                              "fill_selection_pattern");
 
-    m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"), "Ctrl+h", this, SLOT(toggleDisplaySelection()), collection, "toggle_display_selection");
+    m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"), Qt::CTRL+Qt::Key_H, this, SLOT(toggleDisplaySelection()), collection, "toggle_display_selection");
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 

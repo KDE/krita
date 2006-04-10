@@ -181,7 +181,7 @@ void KisToolStar::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KKeySequence(Qt::Key_F9));
+        shortcut.append(Qt::Key_F9);
         m_action = new KAction(i18n("&Star"),
                                     "tool_star",
                                     shortcut,

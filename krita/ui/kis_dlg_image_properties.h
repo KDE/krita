@@ -21,7 +21,7 @@
 #include <kdialogbase.h>
 
 #include <kis_types.h>
-#include "wdgnewimage.h"
+#include "ui_wdgnewimage.h"
 
 class Q3ButtonGroup;
 class KisID;

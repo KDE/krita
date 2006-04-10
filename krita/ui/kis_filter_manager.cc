@@ -153,7 +153,7 @@ void KisFilterManager::setup(KActionCollection * ac)
     }
 
     m_reapplyAction = new KAction(i18n("Apply Filter Again"),
-                "Ctrl+Shift+F",
+                Qt::CTRL+Qt::SHIFT+Qt::Key_F,
                 this, SLOT(slotApply()),
                 ac, "filter_apply_again");
     

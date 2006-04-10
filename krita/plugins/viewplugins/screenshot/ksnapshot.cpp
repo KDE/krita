@@ -104,14 +104,15 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
 
     connect( &grabTimer, SIGNAL( timeout() ), this, SLOT(  grabTimerDone() ) );
 
-    KAccel* accel = new KAccel(this);
-    Q_CHECK_PTR(accel);
-    accel->insert(KStdAccel::Print, this, SLOT(slotPrint()));
-    accel->insert(KStdAccel::New, this, SLOT(slotGrab()));
-
-    accel->insert( "Print2", Qt::Key_P, this, SLOT(slotPrint()));
-    accel->insert( "New2", Qt::Key_N, this, SLOT(slotGrab()));
-    accel->insert( "New3", Qt::Key_Space, this, SLOT(slotGrab()));
+#warning kde4 port
+//     KAccel* accel = new KAccel(this);
+//     Q_CHECK_PTR(accel);
+//     accel->insert(KStdAccel::Print, this, SLOT(slotPrint()));
+//     accel->insert(KStdAccel::New, this, SLOT(slotGrab()));
+//
+//     accel->insert( "Print2", Qt::Key_P, this, SLOT(slotPrint()));
+//     accel->insert( "New2", Qt::Key_N, this, SLOT(slotGrab()));
+//     accel->insert( "New3", Qt::Key_Space, this, SLOT(slotGrab()));
 
     mainWidget->btnNew->setFocus();
 }

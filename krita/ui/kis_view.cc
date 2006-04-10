@@ -627,13 +627,13 @@ void KisView::setupActions()
     // view actions
     m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
     m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
-    m_actualPixels = new KAction(i18n("Actual Pixels"), "Ctrl+0", this, SLOT(slotActualPixels()), actionCollection(), "actual_pixels");
+    m_actualPixels = new KAction(i18n("Actual Pixels"), Qt::CTRL+Qt::Key_0, this, SLOT(slotActualPixels()), actionCollection(), "actual_pixels");
     m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
     m_actualSize->setEnabled(false);
     m_fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
 
     // layer actions
-    m_layerAdd = new KAction(i18n("&Add..."), "Ctrl+Shift+N", this, SLOT(layerAdd()), actionCollection(), "insert_layer");
+    m_layerAdd = new KAction(i18n("&Add..."), Qt::CTRL+Qt::SHIFT+Qt::Key_N, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
 
     m_actionPartLayer = new KoPartSelectAction( i18n( "&Object Layer" ), "frame_query",
                                                     this, SLOT( addPartLayer() ),
@@ -648,24 +648,24 @@ void KisView::setupActions()
     m_layerRm = new KAction(i18n("&Remove"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
     m_layerDup = new KAction(i18n("Duplicate"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
     m_layerHide = new KAction(i18n("&Hide/Show"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
-    m_layerRaise = new KAction(i18n("Raise"), "raise", "Ctrl+]", this, SLOT(layerRaise()), actionCollection(), "raiselayer");
-    m_layerLower = new KAction(i18n("Lower"), "lower", "Ctrl+[", this, SLOT(layerLower()), actionCollection(), "lowerlayer");
-    m_layerTop = new KAction(i18n("To Top"), "bring_forward", "Ctrl+Shift+]", this, SLOT(layerFront()), actionCollection(), "toplayer");
-    m_layerBottom = new KAction(i18n("To Bottom"), "send_backward", "Ctrl+Shift+[", this, SLOT(layerBack()), actionCollection(), "bottomlayer");
+    m_layerRaise = new KAction(i18n("Raise"), "raise", Qt::CTRL+Qt::Key_BracketRight, this, SLOT(layerRaise()), actionCollection(), "raiselayer");
+    m_layerLower = new KAction(i18n("Lower"), "lower", Qt::CTRL+Qt::Key_BracketLeft, this, SLOT(layerLower()), actionCollection(), "lowerlayer");
+    m_layerTop = new KAction(i18n("To Top"), "bring_forward", Qt::CTRL+Qt::SHIFT+Qt::Key_BracketRight, this, SLOT(layerFront()), actionCollection(), "toplayer");
+    m_layerBottom = new KAction(i18n("To Bottom"), "send_backward", Qt::CTRL+Qt::SHIFT+Qt::Key_BracketLeft, this, SLOT(layerBack()), actionCollection(), "bottomlayer");
     m_layerProperties = new KAction(i18n("Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
     (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
-    m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), "filesave", this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
+    m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), "filesave", 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
     (void)new KAction(i18n("Flip on &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
     (void)new KAction(i18n("Flip on &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
     // image actions
-    m_imgFlatten = new KAction(i18n("&Flatten image"), "Ctrl+Shift+E", this, SLOT(flattenImage()), actionCollection(), "flatten_image");
-    m_imgMergeLayer = new KAction(i18n("&Merge with Layer Below"), "Ctrl+E", this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
+    m_imgFlatten = new KAction(i18n("&Flatten image"), Qt::CTRL+Qt::SHIFT+Qt::Key_E, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
+    m_imgMergeLayer = new KAction(i18n("&Merge with Layer Below"), Qt::CTRL+Qt::Key_E, this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
 
     // setting actions
     KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
-    m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), "Ctrl+R", this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
+    m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), Qt::CTRL+Qt::Key_R, this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
     m_RulerAction->setChecked(cfg.showRulers());
     m_RulerAction->setCheckedState(i18n("Hide Rulers"));
     m_RulerAction->setWhatsThis( i18n("The rulers show the horizontal and vertical positions of the mouse on the image "

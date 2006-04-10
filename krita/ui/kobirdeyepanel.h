@@ -31,7 +31,7 @@
 #include <KoPoint.h>
 #include <KoRect.h>
 
-#include "wdgbirdeye.h"
+#include "ui_wdgbirdeye.h"
 
 class QPixmap;
 class KAction;

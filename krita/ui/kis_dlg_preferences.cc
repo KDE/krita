@@ -66,8 +66,8 @@
 #include "kis_canvas.h"
 
 #include "wdgcolorsettings.h"
-#include "wdgperformancesettings.h"
-#include "wdggeneralsettings.h"
+#include "ui_wdgperformancesettings.h"
+#include "ui_wdggeneralsettings.h"
 
 // for the performance update
 #include "tiles/kis_tilemanager.h"

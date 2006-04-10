@@ -51,17 +51,17 @@ KisGridManager::~KisGridManager()
 
 void KisGridManager::setup(KActionCollection * collection)
 {
-    m_toggleGrid = new KToggleAction(i18n("Show Grid"), "", this, SLOT(toggleGrid()), collection, "view_toggle_grid");
+    m_toggleGrid = new KToggleAction(i18n("Show Grid"), 0, this, SLOT(toggleGrid()), collection, "view_toggle_grid");
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
     m_toggleGrid->setChecked(false);
 
     // Fast grid config
-    m_gridFastConfig1x1 = new KAction(i18n("1x1"), 0, "", this, SLOT(fastConfig1x1()), collection, "view_fast_grid_1x1");
-    m_gridFastConfig2x2 = new KAction(i18n("2x2"), 0, "", this, SLOT(fastConfig2x2()), collection, "view_fast_grid_2x2");
-    m_gridFastConfig5x5 = new KAction(i18n("5x5"), 0, "", this, SLOT(fastConfig5x5()), collection, "view_fast_grid_5x5");
-    m_gridFastConfig10x10 = new KAction(i18n("10x10"), 0, "", this, SLOT(fastConfig10x10()), collection, "view_fast_grid_10x10");
-    m_gridFastConfig20x20 = new KAction(i18n("20x20"), 0, "", this, SLOT(fastConfig20x20()), collection, "view_fast_grid_20x20");
-    m_gridFastConfig40x40 = new KAction(i18n("40x40"), 0, "", this, SLOT(fastConfig40x40()), collection, "view_fast_grid_40x40");
+    m_gridFastConfig1x1 = new KAction(i18n("1x1"), 0, 0, this, SLOT(fastConfig1x1()), collection, "view_fast_grid_1x1");
+    m_gridFastConfig2x2 = new KAction(i18n("2x2"), 0, 0, this, SLOT(fastConfig2x2()), collection, "view_fast_grid_2x2");
+    m_gridFastConfig5x5 = new KAction(i18n("5x5"), 0, 0, this, SLOT(fastConfig5x5()), collection, "view_fast_grid_5x5");
+    m_gridFastConfig10x10 = new KAction(i18n("10x10"), 0, 0, this, SLOT(fastConfig10x10()), collection, "view_fast_grid_10x10");
+    m_gridFastConfig20x20 = new KAction(i18n("20x20"), 0, 0, this, SLOT(fastConfig20x20()), collection, "view_fast_grid_20x20");
+    m_gridFastConfig40x40 = new KAction(i18n("40x40"), 0, 0, this, SLOT(fastConfig40x40()), collection, "view_fast_grid_40x40");
 }
 
 void KisGridManager::updateGUI()

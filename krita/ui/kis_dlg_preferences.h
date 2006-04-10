@@ -29,12 +29,12 @@
 
 #include "kis_canvas.h"
 
-#include "wdggeneralsettings.h"
+#include "ui_wdggeneralsettings.h"
 #include "wdgtabletsettings.h"
 #include "wdgtabletdevicesettings.h"
-#include "wdgperformancesettings.h"
+#include "ui_wdgperformancesettings.h"
 #include "wdgdisplaysettings.h"
-#include "wdggridsettings.h"
+#include "ui_wdggridsettings.h"
 
 class QLineEdit;
 class QCheckBox;

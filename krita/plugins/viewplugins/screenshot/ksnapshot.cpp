@@ -34,7 +34,7 @@
 #include <QEvent>
 #include <QMouseEvent>
 
-#include <kaccel.h>
+
 #include <knotifyclient.h>
 #include <khelpmenu.h>
 #include <kmenu.h>

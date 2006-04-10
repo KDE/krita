@@ -401,7 +401,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 
     // config
     KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
-    int templateNum = grp.readNumEntry( "TemplateTab", -1 );
+    int templateNum = grp.readEntry( "TemplateTab", -1 );
     QString templateName = grp.readPathEntry( "TemplateName" );
 	if ( templateName.isEmpty() && d->tree->defaultTemplate() )
 		templateName = d->tree->defaultTemplate()->name(); //select the default template for the app

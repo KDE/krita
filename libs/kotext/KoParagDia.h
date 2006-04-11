@@ -25,11 +25,8 @@
 #include <qstringlist.h>
 #include <q3ptrlist.h>
 #include <q3stylesheet.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
 #include <QKeyEvent>
 #include <QLabel>
-#include <Q3VBoxLayout>
 #include <QMouseEvent>
 #include <KoRuler.h>
 #include <KoUnit.h>
@@ -41,7 +38,8 @@
 #include <knuminput.h>
 #include <q3groupbox.h>
 #include <koffice_export.h>
-#include <Q3ListBox>
+
+class QListWidget;
 class KoTextZoomHandler;
 class KButtonBox;
 class KPushButton;
@@ -55,7 +53,6 @@ class KoSpinBox;
 class Q3ButtonGroup;
 class QCheckBox;
 class QComboBox;
-class Q3GridLayout;
 class Q3GroupBox;
 class QLabel;
 class Q3ListBox;
@@ -79,9 +76,9 @@ class KOTEXT_EXPORT KoParagLayoutWidget : public QWidget
 {
     Q_OBJECT
 public:
-    // Constructor: parent widget, flag (PD_SOMETHING) and name
-    KoParagLayoutWidget( int flag, QWidget * parent, const char * name = 0 )
-        : QWidget( parent, name ), m_flag( flag )
+    // Constructor: flag (PD_SOMETHING) and parent widget
+    KoParagLayoutWidget( int flag, QWidget * parent )
+        : QWidget( parent ), m_flag( flag )
     {
     }
     virtual ~KoParagLayoutWidget() {}
@@ -114,7 +111,7 @@ class KOTEXT_EXPORT KoIndentSpacingWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent,const char * name = 0 );
+    KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent );
     virtual ~KoIndentSpacingWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -157,7 +154,7 @@ class KOTEXT_EXPORT KoParagAlignWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagAlignWidget(bool breakLine, QWidget * parent, const char * name = 0 );
+    KoParagAlignWidget( bool breakLine, QWidget * parent );
     virtual ~KoParagAlignWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -190,7 +187,7 @@ class KOTEXT_EXPORT KoParagDecorationWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagDecorationWidget( QWidget * parent, const char * name = 0 );
+    KoParagDecorationWidget( QWidget * parent );
     virtual ~KoParagDecorationWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -234,14 +231,14 @@ private:
     // Borders
     KoBorder m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
     bool m_joinBorder;
-    
+
     /**
      * Update a border that has been clicked in the border preview.
      *
      * If there is no border already at the clicked @p position, then
      * create a border at that position using the selected width,color and
      * style.
-     * 
+     *
      * If the clicked border is already on, and it is different to the
      * selected width, color or style, then update it to match the
      * current selection.  If it's the same, then remove the border.
@@ -266,7 +263,7 @@ class KOTEXT_EXPORT KoCounterStyleWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoCounterStyleWidget( bool displayDepth= true, bool onlyStyleTypeLetter = false, bool disableAll=false, QWidget* parent = 0, const char* name = 0 );
+    KoCounterStyleWidget( bool displayDepth= true, bool onlyStyleTypeLetter = false, bool disableAll=false, QWidget* parent = 0 );
 
     class StyleRepresenter {
         public:
@@ -324,7 +321,7 @@ protected:
 private:
     Q3GroupBox *gStyle;
     Q3PtrList <StyleRepresenter> stylesList;
-    Q3ListBox *lstStyle;
+    QListWidget *lstStyle;
     KoParagCounter m_counter;
     QLineEdit *sSuffix, *sPrefix;
     QPushButton *bCustom;
@@ -348,7 +345,7 @@ class KOTEXT_EXPORT KoParagCounterWidget : public KoParagLayoutWidget
     Q_OBJECT
 public:
 
-    KoParagCounterWidget( bool disableAll=false ,QWidget * parent=0L, const char * name = 0 );
+    KoParagCounterWidget( bool disableAll=false, QWidget * parent = 0 );
     virtual ~KoParagCounterWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -392,7 +389,7 @@ class KoTabulatorsLineEdit : public KoUnitDoubleSpinBox
     Q_OBJECT
 public:
     KoTabulatorsLineEdit( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2 );
 
 protected:
     virtual void keyPressEvent ( QKeyEvent * );
@@ -407,7 +404,7 @@ class KOTEXT_EXPORT KoParagTabulatorsWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagTabulatorsWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent, const char * name = 0 );
+    KoParagTabulatorsWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent );
     virtual ~KoParagTabulatorsWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -468,7 +465,7 @@ class KoStylePreview : public Q3GroupBox
     Q_OBJECT
 
 public:
-    KoStylePreview( const QString &title, const QString &text, QWidget *parent, const char* name = 0 );
+    KoStylePreview( const QString &title, const QString &text, QWidget *parent );
     virtual ~KoStylePreview();
 
     /** Apply the given @p style to the preview.
@@ -503,7 +500,7 @@ public:
     /**
      * breakLine : kpresenter didn't used this attibute, kword use it.
      */
-    KoParagDia( QWidget*, const char*, int flags, KoUnit::Unit unit, double _frameWidth=-1,bool breakLine=true, bool disableAll = false);
+    KoParagDia( QWidget*, int flags, KoUnit::Unit unit, double _frameWidth=-1,bool breakLine=true, bool disableAll = false);
     ~KoParagDia();
 
     /** Flags passed to constructor */

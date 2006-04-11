@@ -60,9 +60,11 @@
 #include <qapplication.h>
 #include <q3widgetstack.h>
 #include <q3tl.h>
+#include <QListWidget>
+#include <Q3ListBox>
 
-KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, bool disableAll, QWidget * parent, const char* name  )
-    :QWidget( parent, name ),
+KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, bool disableAll, QWidget * parent  )
+    :QWidget( parent ),
     stylesList()
 {
     noSignals = true;
@@ -75,10 +77,10 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
 
     makeCounterRepresenterList( stylesList, onlyStyleTypeLetter );
 
-    lstStyle = new Q3ListBox( gStyle, "styleListBox" );
+    lstStyle = new QListWidget( gStyle );
     grid->addMultiCellWidget( lstStyle, 1, 11, 0, 0);
     fillStyleCombo();
-    connect( lstStyle, SIGNAL( selectionChanged() ), this, SLOT( numStyleChanged() ) );
+    connect( lstStyle, SIGNAL( itemSelectionChanged() ), this, SLOT( numStyleChanged() ) );
 
 
     QLabel *lPrefix = new QLabel( gStyle, "lPrefix" );
@@ -135,14 +137,14 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     lStart->setBuddy( spnStart );
     grid->addWidget( spnStart, 2, 2);
 
-    lAlignment = new QLabel( gStyle, "lAlignment" );
+    lAlignment = new QLabel( gStyle );
     lAlignment->setText( i18n( "Counter alignment:" ) );
     grid->addWidget( lAlignment, 2, 3 );
 
-    cbAlignment = new KComboBox( gStyle, "cbAlignment" );
-    cbAlignment->insertItem(i18n("Align Auto"));
-    cbAlignment->insertItem(i18n("Align Left"));
-    cbAlignment->insertItem(i18n("Align Right"));
+    cbAlignment = new KComboBox( gStyle );
+    cbAlignment->addItem(i18n("Align Auto"));
+    cbAlignment->addItem(i18n("Align Left"));
+    cbAlignment->addItem(i18n("Align Right"));
     cbAlignment->setCurrentItem(0);
     grid->addWidget( cbAlignment, 2, 4 );
 
@@ -258,25 +260,25 @@ void KoCounterStyleWidget::changeKWSpinboxType(KoParagCounter::Style st) {
 void KoCounterStyleWidget::fillStyleCombo(KoParagCounter::Numbering type) {
     if(lstStyle==NULL) return;
     noSignals=true;
-    unsigned int cur = lstStyle->currentItem();
+    unsigned int cur = lstStyle->currentRow();
     lstStyle->clear();
     Q3PtrListIterator<StyleRepresenter> style( stylesList );
     while ( style.current() ) {
         if(style.current()->style() == KoParagCounter::STYLE_NONE) {
             if(type == KoParagCounter::NUM_NONE)
-                lstStyle->insertItem( style.current()->name() );
+                lstStyle->addItem( style.current()->name() );
         }
         else if(type == KoParagCounter::NUM_LIST || !style.current()->isBullet())
             if(type != KoParagCounter::NUM_NONE)
-                lstStyle->insertItem( style.current()->name() );
+                lstStyle->addItem( style.current()->name() );
         ++style;
     }
 
     if(styleBuffer <= lstStyle->count())
-        lstStyle->setCurrentItem(styleBuffer);
+        lstStyle->setCurrentRow(styleBuffer);
     else
         if(cur <= lstStyle->count())
-            lstStyle->setCurrentItem(cur);
+            lstStyle->setCurrentRow(cur);
 
     if(cur > lstStyle->count()) {
         styleBuffer = cur;
@@ -289,7 +291,7 @@ void KoCounterStyleWidget::displayStyle( KoParagCounter::Style style )
     unsigned int i = 0;
     while ( stylesList.count() > i && stylesList.at(i)->style() != style )
         ++i;
-    lstStyle->setCurrentItem(i);
+    lstStyle->setCurrentRow(i);
 
     bCustom->setText( m_counter.customBulletCharacter() );
     if ( !m_counter.customBulletFont().isEmpty() )
@@ -377,7 +379,7 @@ void KoCounterStyleWidget::selectCustomBullet() {
     unsigned int i = 0;
     while ( stylesList.count() > i && stylesList.at(i)->style() != KoParagCounter::STYLE_CUSTOMBULLET )
         ++i;
-    lstStyle->setCurrentItem(i);
+    lstStyle->setCurrentRow(i);
 
     QString f = m_counter.customBulletFont();
     if ( f.isEmpty() )
@@ -399,7 +401,7 @@ void KoCounterStyleWidget::numStyleChanged() {
         return;
     // We selected another style from the list box.
     styleBuffer = 999;
-    StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
+    StyleRepresenter *sr = stylesList.at(lstStyle->currentRow());
     emit changeStyle( sr->style() );
     m_counter.setStyle( sr->style() );
     bool isNumbered = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
@@ -412,8 +414,8 @@ void KoCounterStyleWidget::numStyleChanged() {
 
 
 
-KoSpinBox::KoSpinBox( QWidget * parent, const char * name )
-    : QSpinBox(parent,name)
+KoSpinBox::KoSpinBox( QWidget * parent )
+    : QSpinBox( parent )
 {
     m_Etype=NONE;
     //max value supported by roman number
@@ -423,18 +425,16 @@ KoSpinBox::~KoSpinBox( )
 {
 }
 
-KoSpinBox::KoSpinBox( int minValue, int maxValue, int step ,
-           QWidget * parent , const char * name  )
-    : QSpinBox(minValue, maxValue,step ,
-           parent , name)
+KoSpinBox::KoSpinBox( int minValue, int maxValue, int step, QWidget * parent )
+    : QSpinBox( minValue, maxValue, step, parent )
 {
-    m_Etype=NONE;
+    m_Etype = NONE;
 }
 
-void KoSpinBox::setCounterType(counterType _type)
+void KoSpinBox::setCounterType(CounterType _type)
 {
-    m_Etype=_type;
-    editor()->setText(mapValueToText(value()));
+    m_Etype = _type;
+    lineEdit()->setText(mapValueToText(value()));
 }
 
 
@@ -504,8 +504,8 @@ int KoSpinBox::mapTextToValue( bool * ok )
 /* class KPagePreview                                            */
 /******************************************************************/
 
-KPagePreview::KPagePreview( QWidget* parent, const char* name )
-    : Q3GroupBox( i18n( "Preview" ), parent, name )
+KPagePreview::KPagePreview( QWidget* parent )
+    : Q3GroupBox( i18n( "Preview" ), parent )
 {
     left = 0;
     right = 0;
@@ -531,22 +531,22 @@ void KPagePreview::drawContents( QPainter* p )
     int spc = convert(spacing);
 
     // draw page
-    p->setPen( QPen( black ) );
-    p->setBrush( QBrush( black ) );
+    p->setPen( QPen( Qt::black ) );
+    p->setBrush( QBrush( Qt::black ) );
 
     p->drawRect( _x + 1, _y + 1, wid, hei );
 
-    p->setBrush( QBrush( white ) );
+    p->setBrush( QBrush( Qt::white ) );
     p->drawRect( _x, _y, wid, hei );
 
     // draw parags
-    p->setPen( NoPen );
-    p->setBrush( QBrush( lightGray ) );
+    p->setPen( Qt::NoPen );
+    p->setBrush( QBrush( Qt::lightGray ) );
 
     for ( int i = 1; i <= 4; i++ )
         p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
 
-    p->setBrush( QBrush( darkGray ) );
+    p->setBrush( QBrush( Qt::darkGray ) );
 
     for ( int i = 5; i <= 8; i++ )
       {
@@ -556,7 +556,7 @@ void KPagePreview::drawContents( QPainter* p )
 	if(rect.width ()>=0)
 	  p->drawRect( rect );
       }
-    p->setBrush( QBrush( lightGray ) );
+    p->setBrush( QBrush( Qt::lightGray ) );
 
     for ( int i = 9; i <= 12; i++ )
         p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + 3 * spc +
@@ -578,8 +578,8 @@ int KPagePreview::convert(double input) {
 /* class KPagePreview2                                           */
 /******************************************************************/
 
-KPagePreview2::KPagePreview2( QWidget* parent, const char* name )
-    : Q3GroupBox( i18n( "Preview" ), parent, name )
+KPagePreview2::KPagePreview2( QWidget* parent )
+    : Q3GroupBox( i18n( "Preview" ), parent )
 {
     align = Qt::AlignLeft;
 }
@@ -592,22 +592,22 @@ void KPagePreview2::drawContents( QPainter* p )
     int _y = ( height() - hei ) / 2;
 
     // draw page
-    p->setPen( QPen( black ) );
-    p->setBrush( QBrush( black ) );
+    p->setPen( QPen( Qt::black ) );
+    p->setBrush( QBrush( Qt::black ) );
 
     p->drawRect( _x + 1, _y + 1, wid, hei );
 
-    p->setBrush( QBrush( white ) );
+    p->setBrush( QBrush( Qt::white ) );
     p->drawRect( _x, _y, wid, hei );
 
     // draw parags
-    p->setPen( NoPen );
-    p->setBrush( QBrush( lightGray ) );
+    p->setPen( Qt::NoPen );
+    p->setBrush( QBrush( Qt::lightGray ) );
 
     for ( int i = 1; i <= 4; i++ )
         p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
 
-    p->setBrush( QBrush( darkGray ) );
+    p->setBrush( QBrush( Qt::darkGray ) );
 
     int __x = 0, __w = 0;
     for ( int i = 5; i <= 8; i++ ) {
@@ -623,7 +623,6 @@ void KPagePreview2::drawContents( QPainter* p )
         }
 
         switch ( align ) {
-            case Qt::AlignLeft:
             case Qt::AlignLeft:
                 __x = _x + 6;
                 break;
@@ -643,7 +642,7 @@ void KPagePreview2::drawContents( QPainter* p )
         p->drawRect( __x, _y + 6 + ( i - 1 ) * 12 + 2 + ( i - 5 ), __w, 6 );
     }
 
-    p->setBrush( QBrush( lightGray ) );
+    p->setBrush( QBrush( Qt::lightGray ) );
 
     for ( int i = 9; i <= 12; i++ )
         p->drawRect( _x + 6, _y + 6 + ( i - 1 ) * 12 + 2 + 3, wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
@@ -655,8 +654,8 @@ void KPagePreview2::drawContents( QPainter* p )
 /******************************************************************/
 
 
-KoBorderPreview::KoBorderPreview( QWidget* parent, const char* name )
-    :Q3Frame(parent,name)
+KoBorderPreview::KoBorderPreview( QWidget* parent )
+    :Q3Frame(parent)
 {
 }
 
@@ -779,8 +778,8 @@ QPen KoBorderPreview::setBorderPen( KoBorder _brd )
 /******************************************************************/
 /* Class: KoStylePreview. Previewing text with style ;)           */
 /******************************************************************/
-KoStylePreview::KoStylePreview( const QString& title, const QString& text, QWidget* parent, const char* name )
-    : Q3GroupBox( title, parent, name )
+KoStylePreview::KoStylePreview( const QString& title, const QString& text, QWidget* parent )
+    : Q3GroupBox( title, parent )
 {
     setMinimumHeight(80);
     m_zoomHandler = new KoTextZoomHandler;
@@ -801,14 +800,14 @@ void KoStylePreview::setCounter( const KoParagCounter & counter )
 {
     KoTextParag * parag = m_textdoc->firstParag();
     parag->setCounter( counter );
-    repaint( true );
+    update();
 }
 
 void KoStylePreview::setStyle( KoParagStyle * style )
 {
     KoTextParag * parag = m_textdoc->firstParag();
     parag->applyStyle( style );
-    repaint(true);
+    update();
 }
 
 void KoStylePreview::drawContents( QPainter *painter )
@@ -849,8 +848,8 @@ void KoStylePreview::drawContents( QPainter *painter )
     painter->restore();
 }
 
-KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameWidth,QWidget * parent, const char * name )
-        : KoParagLayoutWidget( KoParagDia::PD_SPACING, parent, name ), m_unit( unit )
+KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent )
+        : KoParagLayoutWidget( KoParagDia::PD_SPACING, parent ), m_unit( unit )
 {
     QString unitName = KoUnit::unitName( m_unit );
     Q3GridLayout *mainGrid = new Q3GridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
@@ -923,13 +922,13 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
 
     cSpacing = new QComboBox( false, spacingFrame, "" );
     // Keep order in sync with lineSpacingType() and display()
-    cSpacing->insertItem( i18nc( "Line spacing value", "Single" ) );
-    cSpacing->insertItem( i18nc( "Line spacing value", "1.5 Lines" ) );
-    cSpacing->insertItem( i18nc( "Line spacing value", "Double" ) );
-    cSpacing->insertItem( i18nc( "Proportional") ); // LS_MULTIPLE, called Proportional like in OO
-    cSpacing->insertItem( i18n( "Line Distance (%1)" ,unitName) ); // LS_CUSTOM
-    cSpacing->insertItem( i18n( "At Least (%1)" ,unitName) );
-    cSpacing->insertItem( i18n( "Fixed (%1)" ,unitName) ); // LS_FIXED
+    cSpacing->addItem( i18nc( "Line spacing value", "Single" ) );
+    cSpacing->addItem( i18nc( "Line spacing value", "1.5 Lines" ) );
+    cSpacing->addItem( i18nc( "Line spacing value", "Double" ) );
+    cSpacing->addItem( i18n( "Proportional") ); // LS_MULTIPLE, called Proportional like in OO
+    cSpacing->addItem( i18n( "Line Distance (%1)" ,unitName) ); // LS_CUSTOM
+    cSpacing->addItem( i18n( "At Least (%1)" ,unitName) );
+    cSpacing->addItem( i18n( "Fixed (%1)" ,unitName) ); // LS_FIXED
 
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
@@ -987,7 +986,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     mainGrid->addWidget( pSpaceFrame, 2, 0 );
 
     // --------------- preview --------------------
-    prev1 = new KPagePreview( this, "KPagePreview" );
+    prev1 = new KPagePreview( this );
     mainGrid->addMultiCellWidget( prev1, 0, mainGrid->numRows()-1, 1, 1 );
 
     mainGrid->setColStretch( 1, 1 );
@@ -1046,7 +1045,7 @@ KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
 double KoIndentSpacingWidget::lineSpacing() const
 {
     return (lineSpacingType() == KoParagLayout::LS_MULTIPLE)
-                               ? qMax( 1.0, eSpacingPercent->value() ) / 100.0
+                               ? qMax( 1, eSpacingPercent->value() ) / 100.0
                                : qMax( 0.0, eSpacing->value() );
 }
 
@@ -1194,12 +1193,12 @@ void KoIndentSpacingWidget::afterChanged( double _val )
 }
 
 
-KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent, const char * name )
-        : KoParagLayoutWidget( KoParagDia::PD_ALIGN, parent, name )
+KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent )
+        : KoParagLayoutWidget( KoParagDia::PD_ALIGN, parent )
 {
     Q3GridLayout *grid = new Q3GridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    Q3VGroupBox * AlignGroup = new Q3VGroupBox( i18n( "Alignment" ), this );
+    QGroupBox * AlignGroup = new QGroupBox( i18n( "Alignment" ), this );
 
     rLeft = new QRadioButton( i18n( "&Left" ), AlignGroup );
     connect( rLeft, SIGNAL( clicked() ), this, SLOT( alignLeft() ) );
@@ -1239,7 +1238,7 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent, const 
     endFramePage->setEnabled(breakLine);
 
     // --------------- preview --------------------
-    prev2 = new KPagePreview2( this, "KPagePreview2" );
+    prev2 = new KPagePreview2( this );
     grid->addMultiCellWidget( prev2, 0, 2, 1, 1 );
 
     // --------------- main grid ------------------
@@ -1345,25 +1344,24 @@ void KoParagAlignWidget::clearAligns()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-KoParagDecorationWidget::KoParagDecorationWidget( QWidget * parent,
-                                                    const char * name )
-    : KoParagLayoutWidget( KoParagDia::PD_DECORATION, parent, name )
+KoParagDecorationWidget::KoParagDecorationWidget( QWidget * parent )
+    : KoParagLayoutWidget( KoParagDia::PD_DECORATION, parent )
 {
     Q3VBoxLayout *tabLayout = new Q3VBoxLayout( this );
     wDeco = new KoParagDecorationTab( this );
     tabLayout->add( wDeco );
 
     // Set up Border Style combo box
-    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::SOLID ) );
-    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DASH ) );
-    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DOT ) );
-    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT ) );
-    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT_DOT ) );
-    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DOUBLE_LINE  ) );
+    wDeco->cbBorderStyle->addItem( KoBorder::getStyle( KoBorder::SOLID ) );
+    wDeco->cbBorderStyle->addItem( KoBorder::getStyle( KoBorder::DASH ) );
+    wDeco->cbBorderStyle->addItem( KoBorder::getStyle( KoBorder::DOT ) );
+    wDeco->cbBorderStyle->addItem( KoBorder::getStyle( KoBorder::DASH_DOT ) );
+    wDeco->cbBorderStyle->addItem( KoBorder::getStyle( KoBorder::DASH_DOT_DOT ) );
+    wDeco->cbBorderStyle->addItem( KoBorder::getStyle( KoBorder::DOUBLE_LINE  ) );
 
     // Set up Border Width combo box
     for( unsigned int i = 1; i <= 10; i++ )
-        wDeco->cbBorderWidth->insertItem(QString::number(i));
+        wDeco->cbBorderWidth->addItem(QString::number(i));
 
     // Setup the border toggle buttons, and merge checkbox
     connect( wDeco->bBorderLeft, SIGNAL( toggled( bool ) ),
@@ -1580,8 +1578,8 @@ void KoParagDecorationWidget::brdJoinToggled( bool _on ) {
 ////////////////////////////////////////////////////////////////////////////////
 
 
-KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, const char * name )
-    : KoParagLayoutWidget( KoParagDia::PD_NUMBERING, parent, name )
+KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent )
+    : KoParagLayoutWidget( KoParagDia::PD_NUMBERING, parent )
 {
 
     Q3VBoxLayout *Form1Layout = new Q3VBoxLayout( this );
@@ -1634,7 +1632,8 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, c
     Form1Layout->addWidget( m_styleWidget );
 
 
-    preview = new KoStylePreview( i18n( "Preview" ), i18n("Normal paragraph text"), this, "counter preview" );
+    preview = new KoStylePreview( i18n( "Preview" ), i18n("Normal paragraph text"), this );
+    preview->setObjectName( "counter preview" );
     Form1Layout->addWidget( preview );
     if ( disableAll)
     {
@@ -1691,7 +1690,7 @@ void KoParagCounterWidget::display( const KoParagLayout & lay ) {
 
 void KoParagCounterWidget::updatePreview() {
     preview->setCounter(m_counter);
-    preview->repaint(true);
+    preview->update();
 }
 
 void KoParagCounterWidget::save( KoParagLayout & lay ) {
@@ -1706,8 +1705,8 @@ void KoParagCounterWidget::save( KoParagLayout & lay ) {
         lay.counter = new KoParagCounter( m_counter );
 }
 
-KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget *parent, double lower, double upper, double step, double value /*= 0.0*/, KoUnit::Unit unit /*= KoUnit::U_PT*/, unsigned int precision /*= 2*/, const char *name /*= 0*/ )
-    : KoUnitDoubleSpinBox ( parent, lower, upper, step, value, unit, precision, name )
+KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget *parent, double lower, double upper, double step, double value /*= 0.0*/, KoUnit::Unit unit /*= KoUnit::U_PT*/, unsigned int precision /*= 2*/ )
+    : KoUnitDoubleSpinBox ( parent, lower, upper, step, value, unit, precision )
 {
     setRange( 0, 9999, 1, false);
 }
@@ -1723,8 +1722,8 @@ void KoTabulatorsLineEdit::keyPressEvent ( QKeyEvent *ke )
     KoUnitDoubleSpinBox::keyPressEvent (ke);
 }
 
-KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double frameWidth,QWidget * parent, const char * name )
-    : KoParagLayoutWidget( KoParagDia::PD_TABS, parent, name ), m_unit(unit) {
+KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double frameWidth, QWidget * parent )
+    : KoParagLayoutWidget( KoParagDia::PD_TABS, parent ), m_unit(unit) {
     QString length;
     if(frameWidth==-1) {
         frameWidth=9999;
@@ -1840,12 +1839,12 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     fillingGrid->addWidget( TextLabel2, 0, 0 );
 
     cFilling = new QComboBox( FALSE, gTabLeader);
-    cFilling->insertItem( i18n( "Blank" ) );
-    cFilling->insertItem( "_ _ _ _ _ _"); // DOT
-    cFilling->insertItem( "_________");   // SOLID
-    cFilling->insertItem( "___ ___ __");  // DASH
-    cFilling->insertItem( "___ _ ___ _"); // DASH_DOT
-    cFilling->insertItem( "___ _ _ ___"); // DASH_DOT_DOT
+    cFilling->addItem( i18n( "Blank" ) );
+    cFilling->addItem( "_ _ _ _ _ _"); // DOT
+    cFilling->addItem( "_________");   // SOLID
+    cFilling->addItem( "___ ___ __");  // DASH
+    cFilling->addItem( "___ _ ___ _"); // DASH_DOT
+    cFilling->addItem( "___ _ _ ___"); // DASH_DOT_DOT
     TextLabel2->setBuddy( cFilling );
     fillingGrid->addWidget( cFilling, 0, 1 );
 
@@ -2132,9 +2131,9 @@ QString KoParagTabulatorsWidget::tabName() {
 /******************************************************************/
 /* Class: KoParagDia                                              */
 /******************************************************************/
-KoParagDia::KoParagDia( QWidget* parent, const char* name,
+KoParagDia::KoParagDia( QWidget* parent,
                         int flags, KoUnit::Unit unit, double _frameWidth, bool breakLine, bool disableAll )
-    : KDialogBase(Tabbed, QString::null, Ok | Cancel | User1 | Apply, Ok, parent, name, true )
+    : KDialogBase(Tabbed, QString::null, Ok | Cancel | User1 | Apply, Ok, parent )
 {
     m_decorationsWidget = 0;
     m_flags = flags;
@@ -2143,31 +2142,31 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
     if ( m_flags & PD_SPACING )
     {
         KVBox * page = addVBoxPage( i18n( "Indent && S&pacing" ) );
-        m_indentSpacingWidget = new KoIndentSpacingWidget( unit,_frameWidth,page, "indent-spacing" );
+        m_indentSpacingWidget = new KoIndentSpacingWidget( unit, _frameWidth, page );
         m_indentSpacingWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_ALIGN )
     {
         KVBox * page = addVBoxPage( i18n( "General &Layout" ) );
-        m_alignWidget = new KoParagAlignWidget( breakLine, page, "align" );
+        m_alignWidget = new KoParagAlignWidget( breakLine, page );
         m_alignWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_DECORATION )
     {
         KVBox * page = addVBoxPage( i18n( "D&ecorations" ) );
-        m_decorationsWidget = new KoParagDecorationWidget( page, "decorations");
+        m_decorationsWidget = new KoParagDecorationWidget( page);
         m_decorationsWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_NUMBERING )
     {
         KVBox * page = addVBoxPage( i18n( "B&ullets/Numbers" ) );
-        m_counterWidget = new KoParagCounterWidget( disableAll , page, "numbers" );
+        m_counterWidget = new KoParagCounterWidget( disableAll, page );
         m_counterWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_TABS )
     {
         KVBox * page = addVBoxPage( i18n( "&Tabulators" ) );
-        m_tabulatorsWidget = new KoParagTabulatorsWidget( unit,_frameWidth, page, "tabs");
+        m_tabulatorsWidget = new KoParagTabulatorsWidget( unit, _frameWidth, page );
         m_tabulatorsWidget->layout()->setMargin(0);
     }
 

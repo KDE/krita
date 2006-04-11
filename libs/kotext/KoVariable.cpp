@@ -1601,6 +1601,7 @@ Q3CString KoTimeVariable::formatStr(int & _correct)
     Q3CString string;
     QStringList stringList;
     KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
+    dialog->setWindowTitle( i18n( "TimeFormat", "This Dialog Allows You to Set the Format of the Time Variable" ) );
     TimeFormatWidget* widget=new TimeFormatWidget(dialog);
     dialog->setMainWidget(widget);
     KConfig* config = KoGlobal::kofficeConfig();

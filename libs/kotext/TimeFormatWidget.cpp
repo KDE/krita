@@ -1,4 +1,4 @@
-#include "timedateformatwidget.h"
+#include "ui_timedateformatwidget.h"
 #include "TimeFormatWidget.h"
 #include "TimeFormatWidget.moc"
 #include <qdatetime.h>
@@ -14,43 +14,35 @@
 #include <knuminput.h>
 #include <KoVariable.h>
 
-/*
- *  Constructs a TimeFormatWidget which is a child of 'parent', with the
- *  name 'name' and widget flags set to 'f'
- */
-TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, Qt::WFlags fl )
-    : TimeDateFormatWidgetPrototype( parent, name, fl )
+TimeFormatWidget::TimeFormatWidget( QWidget* parent )
+    : QWidget( parent ),
+      m_ui( new Ui_TimeDateFormatWidgetPrototype )
 {
-    setCaption( i18n( "TimeFormat", "This Dialog Allows You to Set the Format of the Time Variable" ) );
-
     QStringList listTimeFormat = KoVariableTimeFormat::staticTranslatedFormatPropsList();
-    combo1->insertStringList(listTimeFormat);
+    m_ui->combo1->addItems(listTimeFormat);
 
-    combo2->insertItem( i18n( "Hour" ) );
-    combo2->insertItem( i18n( "Hour (2 digits)" ) );
-    combo2->insertItem( i18n( "Minute" ) );
-    combo2->insertItem( i18n( "Minute (2 digits)" ) );
-    combo2->insertItem( i18n( "Second" ) );
-    combo2->insertItem( i18n( "Second (2 digits)" ) );
-    combo2->insertItem( i18n( "Millisecond (3 digits)" ) );
-    combo2->insertItem( i18n( "am/pm" ) );
-    combo2->insertItem( i18n( "AM/PM" ) );
-    combo2->setCurrentItem( 0 );
+    m_ui->combo2->addItem( i18n( "Hour" ) );
+    m_ui->combo2->addItem( i18n( "Hour (2 digits)" ) );
+    m_ui->combo2->addItem( i18n( "Minute" ) );
+    m_ui->combo2->addItem( i18n( "Minute (2 digits)" ) );
+    m_ui->combo2->addItem( i18n( "Second" ) );
+    m_ui->combo2->addItem( i18n( "Second (2 digits)" ) );
+    m_ui->combo2->addItem( i18n( "Millisecond (3 digits)" ) );
+    m_ui->combo2->addItem( i18n( "am/pm" ) );
+    m_ui->combo2->addItem( i18n( "AM/PM" ) );
+    m_ui->combo2->setCurrentIndex( 0 );
 
-    label_correction->setText(i18n("Correct in Minutes"));
-    connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
-    connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
-    connect( combo1, SIGNAL(textChanged ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
-    connect( KIntNumInput1, SIGNAL(valueChanged(int)), this, SLOT( slotOffsetChanged(int)));
+    m_ui->label_correction->setText(i18n("Correct in Minutes"));
+    connect( m_ui->CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
+    connect( m_ui->combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
+    connect( m_ui->combo1, SIGNAL(textChanged ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
+    connect( m_ui->KIntNumInput1, SIGNAL(valueChanged(int)), this, SLOT( slotOffsetChanged(int)));
     slotPersonalizeChanged(false);
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
 TimeFormatWidget::~TimeFormatWidget()
 {
-    // no need to delete child widgets, Qt does it all for us
+    delete m_ui;
 }
 
 /*
@@ -68,36 +60,36 @@ void TimeFormatWidget::slotOffsetChanged(int)
 
 void TimeFormatWidget::slotPersonalizeChanged(bool b)
 {
-    combo2->setEnabled(b);
-    combo1->setEditable(b);
-    TextLabel1->setEnabled(b);
+    m_ui->combo2->setEnabled(b);
+    m_ui->combo1->setEditable(b);
+    m_ui->TextLabel1->setEnabled(b);
     updateLabel();
 
 }
 
 void TimeFormatWidget::comboActivated()
 {
-    QString string=combo2->currentText();
+    QString string=m_ui->combo2->currentText();
     if(string==i18n("Hour"))
-        combo1->lineEdit()->insert("h");
+        m_ui->combo1->lineEdit()->insert("h");
     else if(string==i18n("Hour (2 digits)"))
-        combo1->lineEdit()->insert("hh");
+        m_ui->combo1->lineEdit()->insert("hh");
     else if(string==i18n("Minute"))
-        combo1->lineEdit()->insert("m");
+        m_ui->combo1->lineEdit()->insert("m");
     else if(string==i18n("Minute (2 digits)"))
-        combo1->lineEdit()->insert("mm");
+        m_ui->combo1->lineEdit()->insert("mm");
     else if(string==i18n("Second"))
-        combo1->lineEdit()->insert("s");
+        m_ui->combo1->lineEdit()->insert("s");
     else if(string==i18n("Second (2 digits)"))
-        combo1->lineEdit()->insert("ss");
+        m_ui->combo1->lineEdit()->insert("ss");
     else if(string==i18n("Millisecond (3 digits)"))
-        combo1->lineEdit()->insert("zzz");
+        m_ui->combo1->lineEdit()->insert("zzz");
     else if(string==i18n("AM/PM"))
-        combo1->lineEdit()->insert("AP");
+        m_ui->combo1->lineEdit()->insert("AP");
     else if(string==i18n("am/pm"))
-        combo1->lineEdit()->insert("ap");
+        m_ui->combo1->lineEdit()->insert("ap");
     updateLabel();
-    combo1->setFocus();
+    m_ui->combo1->setFocus();
 }
 
 /*
@@ -109,14 +101,14 @@ void TimeFormatWidget::updateLabel()
     format.setFormatProperties( resultString() );
 
     QTime ct = QTime::currentTime().addSecs(correctValue()); // ### TODO: dialog says correct in *minutes*
-    label->setText( format.convert( ct ) );
+    m_ui->label->setText( format.convert( ct ) );
 }
 
-QString TimeFormatWidget::resultString()
+QString TimeFormatWidget::resultString() const
 {
-    const QString lookup(combo1->currentText());
+    const QString lookup(m_ui->combo1->currentText());
     const QStringList listTranslated( KoVariableTimeFormat::staticTranslatedFormatPropsList() );
-    const int index = listTranslated.findIndex(lookup);
+    const int index = listTranslated.indexOf(lookup);
     if (index==-1)
         return (lookup); // Either costum or non-locale
 
@@ -124,16 +116,11 @@ QString TimeFormatWidget::resultString()
 
     // Lookup untranslated format
     const QStringList listRaw( KoVariableTimeFormat::staticFormatPropsList() );
-
-    QStringList::ConstIterator it( listRaw.at(index) );
-    Q_ASSERT( it != listRaw.end() );
-    if ( it != listRaw.end() )
-        return *it;
-    kError(32500) << "Internal error: could not find correcponding time format: " << lookup << endl;
-    return QString::null; // Something is wrong, give back a default
+    Q_ASSERT( index < listRaw.count() );
+    return listRaw.at( index );
 }
 
-int TimeFormatWidget::correctValue()
+int TimeFormatWidget::correctValue() const
 {
-    return KIntNumInput1->value()*60;
+    return m_ui->KIntNumInput1->value()*60;
 }

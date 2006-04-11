@@ -41,17 +41,17 @@ class KoSpinBox : public QSpinBox
     Q_OBJECT
 
 public:
-    enum counterType{ NONE,NUM,ALPHAB_L,ALPHAB_U,ROM_NUM_L,ROM_NUM_U};
+    enum CounterType{ NONE,NUM,ALPHAB_L,ALPHAB_U,ROM_NUM_L,ROM_NUM_U};
 
     KoSpinBox( int minValue, int maxValue, int step = 1,
-           QWidget * parent = 0, const char * name = 0 );
-    KoSpinBox( QWidget * parent = 0, const char * name = 0 );
+           QWidget * parent = 0 );
+    KoSpinBox( QWidget * parent = 0 );
     virtual ~KoSpinBox();
     virtual QString mapValueToText( int value );
     virtual int mapTextToValue( bool * ok );
-    void setCounterType(counterType _type);
+    void setCounterType(CounterType _type);
  private:
-    counterType m_Etype;
+    CounterType m_Etype;
 
 };
 
@@ -63,21 +63,21 @@ class KPagePreview : public Q3GroupBox
     Q_OBJECT
 
 public:
-    KPagePreview( QWidget*, const char* = 0L );
+    KPagePreview( QWidget* );
     ~KPagePreview() {}
 
     void setLeft( double _left )
-    { left = _left; repaint( false ); }
+    { left = _left; update(); }
     void setRight( double _right )
-    { right = _right; repaint( false ); }
+    { right = _right; update(); }
     void setFirst( double _first )
-    { first = _first; repaint( false ); }
+    { first = _first; update(); }
     void setSpacing( double _spacing )
-    { spacing = _spacing; repaint( false ); }
+    { spacing = _spacing; update(); }
     void setBefore( double _before )
-    { before = _before; repaint( false ); }
+    { before = _before; update(); }
     void setAfter( double _after )
-    { after = _after; repaint( false ); }
+    { after = _after; update(); }
 
 protected:
     void drawContents( QPainter* );
@@ -96,11 +96,11 @@ class KPagePreview2 : public Q3GroupBox
     Q_OBJECT
 
 public:
-    KPagePreview2( QWidget*, const char* = 0L );
+    KPagePreview2( QWidget* );
     ~KPagePreview2() {}
 
     void setAlign( int _align )
-    { align = _align; repaint( false ); }
+    { align = _align; update(); }
 
 protected:
     void drawContents( QPainter* );
@@ -118,21 +118,21 @@ class KoBorderPreview : public Q3Frame/*QGroupBox*/
     Q_OBJECT
 
 public:
-    KoBorderPreview( QWidget*, const char* = 0L );
+    KoBorderPreview( QWidget* );
     ~KoBorderPreview() {}
 
     KoBorder leftBorder()const { return m_leftBorder; }
-    void setLeftBorder( const KoBorder& _leftBorder ) 
-	{ m_leftBorder = _leftBorder; repaint( true ); }
+    void setLeftBorder( const KoBorder& _leftBorder )
+	{ m_leftBorder = _leftBorder; update(); }
     KoBorder rightBorder() const { return m_rightBorder; }
     void setRightBorder( const KoBorder& _rightBorder )
-	{ m_rightBorder = _rightBorder; repaint( true ); }
+	{ m_rightBorder = _rightBorder; update(); }
     KoBorder topBorder()const { return m_topBorder; }
     void setTopBorder( const KoBorder& _topBorder )
-	{ m_topBorder = _topBorder; repaint( true ); }
+	{ m_topBorder = _topBorder; update(); }
     KoBorder bottomBorder()const { return m_bottomBorder; }
     void setBottomBorder( const KoBorder& _bottomBorder )
-	{ m_bottomBorder = _bottomBorder; repaint( true ); }
+	{ m_bottomBorder = _bottomBorder; update(); }
 
     void setBorder( KoBorder::BorderType which, const KoBorder& border);
 

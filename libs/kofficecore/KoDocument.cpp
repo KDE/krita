@@ -51,18 +51,17 @@
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
 
-#include <qbuffer.h>
-#include <qcursor.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qimage.h>
-#include <qmap.h>
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qxml.h>
-#include <qlayout.h>
-//Added by qt3to4:
+#include <QBuffer>
+#include <QCursor>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QImage>
+#include <QMap>
+#include <QPainter>
+#include <QTimer>
+#include <QXmlSimpleReader>
+#include <QLayout>
 #include <QByteArray>
 #include <QPixmap>
 #include <QChildEvent>
@@ -190,6 +189,7 @@ public:
 
     virtual void resizeEvent( QResizeEvent * )
     {
+	// use "findChild<QWidget *> " ?? for qt4
         QObject *wid = child( 0, "QWidget" );
         if ( wid )
             static_cast<QWidget *>(wid)->setGeometry( 0, 0, width(), height() );
@@ -241,7 +241,7 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
     s_documentList->append(this);
 
     d = new Private;
-    m_bEmpty = TRUE;
+    m_bEmpty = true;
     connect( &d->m_autoSaveTimer, SIGNAL( timeout() ), this, SLOT( slotAutoSave() ) );
     setAutoSave( s_defaultAutoSave );
     d->m_bSingleViewMode = singleViewMode;
@@ -820,7 +820,7 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
                manager->activeWidget() == (QWidget *)view ) )
         {
             // painter.setClipRegion( rgn );
-            painter.setClipping( FALSE );
+            painter.setClipping( false );
 
             painter.setPen( Qt::black );
             painter.fillRect( -5, -5, w + 10, 5, Qt::white );
@@ -850,7 +850,7 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
                 painter.fillRect( w, h / 2 - 3, 5, 5, color );
             }
 
-            painter.setClipping( TRUE );
+            painter.setClipping( true );
         }
     }
 }
@@ -886,7 +886,7 @@ bool KoDocument::saveChildren( KoStore* _store )
             {
                 //kDebug(30003) << "KoDocument::saveChildren internal url: /" << i << endl;
                 if ( !childDoc->saveToStore( _store, QString::number( i++ ) ) )
-                    return FALSE;
+                    return false;
 
                 if (!isExporting ())
                     childDoc->setModified( false );
@@ -1178,11 +1178,8 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 bool KoDocument::saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter )
 {
     const QPixmap pix = generatePreview( QSize( 128, 128 ) );
-    QImage preview ( pix.convertToImage().convertDepth( 32, Qt::ColorOnly ) );
-    if ( !preview.hasAlphaBuffer() )
-    {
-        preview.setAlphaBuffer( true );
-    }
+    QImage preview ( pix.toImage().convertToFormat( QImage::Format_ARGB32, Qt::ColorOnly ) );
+   
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io ( store );
     if ( !io.open( QIODevice::WriteOnly ) )
@@ -1199,7 +1196,7 @@ bool KoDocument::savePreview( KoStore* store )
 {
     QPixmap pix = generatePreview(QSize(256, 256));
     // Reducing to 8bpp reduces file sizes quite a lot.
-    const QImage preview ( pix.convertToImage().convertDepth( 8, Qt::AvoidDither | Qt::DiffuseDither) );
+    const QImage preview( pix.toImage().convertToFormat( QImage::Format_Indexed8, Qt::AvoidDither | Qt::DiffuseDither ) );
     KoStoreDevice io ( store );
     if ( !io.open( QIODevice::WriteOnly ) )
         return false;
@@ -1226,7 +1223,6 @@ QPixmap KoDocument::generatePreview( const QSize& size )
 
     double ratio = docWidth / docHeight;
 
-    QPixmap pix;
     int previewWidth, previewHeight;
     if (ratio > 1.0)
     {
@@ -1239,7 +1235,7 @@ QPixmap KoDocument::generatePreview( const QSize& size )
         previewHeight = (int) pixmapSize;
     }
 
-    pix.resize((int)docWidth, (int)docHeight);
+    QPixmap pix( (int)docWidth, (int)docHeight );
 
     pix.fill( QColor( 245, 245, 245 ) );
 
@@ -1250,10 +1246,7 @@ QPixmap KoDocument::generatePreview( const QSize& size )
     paintEverything(p, rc, false);
     p.end();
 
-    // ### TODO: why re-convert it to a QPixmap, when mostly it will be re-converted back to a QImage in the calling function
-    pix.convertFromImage(pix.convertToImage().smoothScale(previewWidth, previewHeight));
-
-    return pix;
+    return pix.scaled(QSize(previewWidth, previewHeight), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 QString KoDocument::autoSaveFile( const QString & path ) const
@@ -1454,7 +1447,7 @@ bool KoDocument::openFile()
         return false;
     }
 
-    if ( !isNativeFormat( typeName.latin1() ) ) {
+    if ( !isNativeFormat( typeName.toLatin1() ) ) {
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
         KoFilter::ConversionStatus status;
@@ -1607,7 +1600,7 @@ bool KoDocument::openFile()
 // shared between openFile and koMainWindow's "create new empty document" code
 void KoDocument::setMimeTypeAfterLoading( const QString& mimeType )
 {
-    d->mimeType = mimeType.latin1();
+    d->mimeType = mimeType.toLatin1();
 
     d->outputMimeType = d->mimeType;
 
@@ -1668,7 +1661,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     bool isRawXML = false;
     if ( d->m_specialOutputFlag != SaveAsDirectoryStore ) // Don't try to open a directory ;)
     {
-        in.setName(file);
+        in.setFileName(file);
         if ( !in.open( QIODevice::ReadOnly ) )
         {
             QApplication::restoreOverrideCursor();
@@ -1692,7 +1685,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     // Is it plain XML?
     if ( isRawXML )
     {
-        in.at(0);
+        in.seek( 0 );
         QString errorMsg;
         int errorLine;
         int errorColumn;
@@ -1710,7 +1703,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
             d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3" )
-                                  .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) );
+                                  .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.toUtf8() ) );
             res=false;
         }
 
@@ -1941,7 +1934,7 @@ void KoDocument::setModified( bool mod )
     KParts::ReadWritePart::setModified( mod );
 
     if ( mod ) {
-        m_bEmpty = FALSE;
+        m_bEmpty = false;
     } else {
         // When saving this document, all non-external child documents get saved too.
         Q3PtrListIterator<KoDocumentChild> it = children();
@@ -2173,7 +2166,7 @@ QByteArray KoDocument::nativeFormatMimeType() const
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
         return QByteArray();
-    return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
+    return service->property( "X-KDE-NativeMimeType" ).toString().toLatin1();
 }
 
 QByteArray KoDocument::nativeOasisMimeType() const
@@ -2181,7 +2174,7 @@ QByteArray KoDocument::nativeOasisMimeType() const
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
         return QByteArray();
-    return service->property( "X-KDE-NativeOasisMimeType" ).toString().latin1();
+    return service->property( "X-KDE-NativeOasisMimeType" ).toString().toLatin1();
 }
 
 
@@ -2229,7 +2222,7 @@ QByteArray KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
         }
     }
 
-    return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
+    return service->property( "X-KDE-NativeMimeType" ).toString().toLatin1();
 }
 
 QStringList KoDocument::readExtraNativeMimeTypes( KInstance *instance ) //static
@@ -2244,15 +2237,15 @@ void KoDocument::setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcess
 {
     if ( namespaceProcessing )
     {
-        reader.setFeature( "http://xml.org/sax/features/namespaces", TRUE );
-        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", FALSE );
+        reader.setFeature( "http://xml.org/sax/features/namespaces", true );
+        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", false );
     }
     else
     {
-        reader.setFeature( "http://xml.org/sax/features/namespaces", FALSE );
-        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", TRUE );
+        reader.setFeature( "http://xml.org/sax/features/namespaces", false );
+        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", true );
     }
-    reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", TRUE );
+    reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", true );
 }
 
 

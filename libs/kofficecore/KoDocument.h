@@ -23,7 +23,12 @@
 #define __ko_document_h__
 
 class KoTextDocument;
-#include <qmatrix.h>
+#include <QMatrix>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QByteArray>
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 #include <kparts/part.h>
 #include <kurl.h>
@@ -33,11 +38,6 @@ class KoTextDocument;
 #include <KoPageLayout.h>
 #include <koffice_export.h>
 
-//Added by qt3to4:
-#include <QPixmap>
-#include <QByteArray>
-#include <Q3PtrList>
-#include <Q3ValueList>
 
 class QDomElement;
 class QDomDocument;

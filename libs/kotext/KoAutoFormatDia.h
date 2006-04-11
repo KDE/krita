@@ -26,10 +26,12 @@
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <KoAutoFormat.h>
+#include <k3listview.h>
+
 class QCheckBox;
 class KCharSelect;
 class QComboBox;
-
+class Q3ListBox;
 
 /**
  *

@@ -29,7 +29,7 @@ class KoLanguageTab : public KoLanguageTabBase
     Q_OBJECT
 
 public:
-    KoLanguageTab( KSpell2::Broker::Ptr broker = 0, QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
+    KoLanguageTab( KSpell2::Broker::Ptr broker = KSpell2::Broker::Ptr(), QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
     ~KoLanguageTab();
 
     QString getLanguage() const;

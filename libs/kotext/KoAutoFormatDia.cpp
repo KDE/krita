@@ -42,7 +42,7 @@
 #include <QLabel>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
-
+#include <Q3ListBox>
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
 {
@@ -290,9 +290,9 @@ void KoAutoFormatDia::setupTab1()
     vbox->addWidget(cbAutoChangeFormat);
 
     cbAutoReplaceNumber=new QCheckBox( tab1 );
-    cbAutoReplaceNumber->setText( i18n(
-            "We add the 1/2 char at the %1", "Re&place 1/2... with %1..." )
-            .arg( QString( "½" ) ) );
+    cbAutoReplaceNumber->setText( i18nc(
+            "We add the 1/2 char at the %1", "Re&place 1/2... with %1...",
+            QString( "½" )  ));
     cbAutoReplaceNumber->setWhatsThis( i18n(
             "Most standard fraction notations will be converted when available"
             ) );

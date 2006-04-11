@@ -47,7 +47,7 @@ public:
     /// If your application supports spell-checking, pass here the KSpell2 Broker
     /// so that the font dialog can show which languages are supported for spellchecking.
     KoFontDia( const KoTextFormat& initialFormat,
-               KSpell2::Broker::Ptr broker = 0,
+               KSpell2::Broker::Ptr broker = KSpell2::Broker::Ptr(),
                QWidget* parent = 0, const char* name = 0 );
 
     int changedFlags() const { return m_changedFlags; }

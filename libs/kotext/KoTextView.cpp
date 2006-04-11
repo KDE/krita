@@ -178,14 +178,14 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
     }*/
 
     bool clearUndoRedoInfo = TRUE;
-    if ( KShortcut( KKey( e ) ) == KStdAccel::deleteWordBack() )
+    if ( KShortcut(  e->key() ) == KStdAccel::deleteWordBack() )
     {
         if ( m_cursor->parag()->string()->isRightToLeft() )
             deleteWordRight();
         else
             deleteWordLeft();
         clearUndoRedoInfo = TRUE;
-    } else if ( KShortcut( KKey( e ) ) == KStdAccel::deleteWordForward() )
+    } else if ( KShortcut( e->key() ) == KStdAccel::deleteWordForward() )
     {
         if ( m_cursor->parag()->string()->isRightToLeft() )
             deleteWordLeft();

@@ -25,7 +25,7 @@
 #include <kfiledialog.h>
 #include <koffice_export.h>
 #include "KoDocument.h"
-//Added by qt3to4:
+
 #include <QLabel>
 #include <QResizeEvent>
 #include <Q3PtrList>

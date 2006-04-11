@@ -54,7 +54,7 @@
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
 
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <Q3PtrList>
@@ -251,7 +251,8 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_sendfile->setEnabled( false);
     d->m_paCloseFile->setEnabled( false);
 
-    d->m_splitter=new QSplitter(Qt::Vertical, this, "mw-splitter");
+    d->m_splitter = new QSplitter( Qt::Vertical, this );
+    d->m_splitter->setObjectName( "mw-splitter" );
     setCentralWidget( d->m_splitter );
     // Keyboard accessibility enhancements.
     new KKbdAccessExtensions(this, "mw-panelSizer");
@@ -737,7 +738,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
     KUrl suggestedURL = pDoc->url();
 
     QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export, pDoc->extraNativeMimeTypes() );
-    if (mimeFilter.findIndex (oldOutputFormat) < 0 && !isExporting())
+    if( !mimeFilter.contains(oldOutputFormat) < 0 && !isExporting() )
     {
         kDebug(30003) << "KoMainWindow::saveDocument no export filter for '" << oldOutputFormat << "'" << endl;
 
@@ -748,7 +749,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
         QString suggestedFilename = suggestedURL.fileName ();
         if ( !suggestedFilename.isEmpty () ) // ".kwd" looks strange for a name
         {
-            int c = suggestedFilename.findRev ('.');
+            int c = suggestedFilename.lastIndexOf('.');
 
             KMimeType::Ptr mime = KMimeType::mimeType( _native_format );
             QString ext = mime->property( "X-KDE-NativeExtension" ).toString();
@@ -806,7 +807,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
             bOk=true;
             if(dialog->exec()==QDialog::Accepted) {
                 newURL=dialog->selectedURL();
-                outputFormat=dialog->currentMimeFilter().latin1();
+                outputFormat=dialog->currentMimeFilter().toLatin1();
                 specialOutputFlag = dialog->specialEntrySelected();
                 kDebug(30003) << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
 
@@ -1288,7 +1289,7 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
 {
   //kDebug(30003) << "KoMainWindow::slotToolbarToggled " << sender()->name() << " toggle=" << true << endl;
   // The action (sender) and the toolbar have the same name
-  KToolBar * bar = toolBar( sender()->name() );
+  KToolBar * bar = toolBar( sender()->objectName() );
   if (bar)
   {
     if (toggle)
@@ -1300,7 +1301,7 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
         saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
   }
   else
-    kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->name() << " not found!" << endl;
+    kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!" << endl;
 }
 
 bool KoMainWindow::toolbarIsVisible(const char *tbName)
@@ -1324,7 +1325,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
 
     // Update the action appropriately
     foreach( KAction* action, d->m_toolbarList )
-        if ( !strcmp( action->name(), tbName ) )
+        if ( action->objectName() != tbName )
         {
             //kDebug(30003) << "KoMainWindow::showToolbar setChecked " << shown << endl;
             static_cast<KToggleAction *>(action)->setChecked( shown );
@@ -1433,7 +1434,7 @@ void KoMainWindow::slotProgress(int value) {
         statusBar()->setMaximumHeight(statusBar()->height());
         d->m_progress=new KProgressBar(statusBar());
         //d->m_progress->setMaximumHeight(statusBar()->height());
-        statusBar()->addWidget( d->m_progress, 0, true );
+        statusBar()->addPermanentWidget( d->m_progress );
         d->m_progress->show();
         d->m_firstTime=false;
     }
@@ -1510,7 +1511,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
       if ( tb )
       {
           KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar").arg( tb->windowTitle() ),
-                                                   actionCollection(), tb->name() );
+                                                   actionCollection(), tb->objectName().toUtf8() );
 	  act->setCheckedState(i18n("Hide %1 Toolbar").arg( tb->windowTitle() ));
 	  connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
           act->setChecked ( !tb->isHidden() );
@@ -1540,7 +1541,7 @@ QLabel * KoMainWindow::statusBarLabel()
   if ( !d->statusBarLabel )
   {
     d->statusBarLabel = new QLabel( statusBar() );
-    statusBar()->addWidget( d->statusBarLabel, 1, true );
+    statusBar()->addPermanentWidget( d->statusBarLabel, 1 );
   }
   return d->statusBarLabel;
 }

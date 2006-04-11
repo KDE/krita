@@ -691,6 +691,10 @@ void KisView::resizeEvent(QResizeEvent *)
         startInitialZoomTimerIfReady();
     }
 
+    if (m_canvas == 0 || m_RulerAction == 0 || m_hScroll == 0 || m_vScroll == 0) {
+        return;
+    }
+
     KisImageSP img = currentImg();
     qint32 scrollBarExtent = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
     qint32 drawH;

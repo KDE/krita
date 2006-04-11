@@ -459,7 +459,7 @@ void KoTextParag::format( int start, bool doMove )
     }
 
     //firstFormat = FALSE; //// unused
-    if ( formatterWorked > 0 ) // only if it worked, i.e. we had some width to format it
+    if ( formatterWorked ) // only if it worked, i.e. we had some width to format it
     {
         m_invalid = false;
     }

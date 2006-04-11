@@ -1388,6 +1388,7 @@ Q3CString KoDateVariable::formatStr(int & correct)
     Q3CString string;
     QStringList stringList;
     KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
+    dialog->setWindowTitle( i18n( "DateFormat", "Format of Date Variable" ) );
     DateFormatWidget* widget=new DateFormatWidget(dialog);
     int count=0;
     dialog->setMainWidget(widget);

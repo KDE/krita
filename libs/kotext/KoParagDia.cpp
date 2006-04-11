@@ -51,7 +51,6 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qhbuttongroup.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <kvbox.h>
@@ -936,7 +935,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
     sSpacingStack = new Q3WidgetStack( spacingFrame );
-    
+
     eSpacing = new KoUnitDoubleSpinBox( spacingFrame, 0, 9999, CM_TO_POINT(1),
 					0.0, m_unit );
     eSpacing->setRange( 0, 9999, 1, false);
@@ -945,7 +944,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     eSpacingPercent->setRange( 0, 1000, 10, false );
     eSpacingPercent->setSuffix( " %" );
     connect( eSpacingPercent, SIGNAL( valueChanged( int ) ), this, SLOT( spacingChanged( int ) ) );
-    
+
     sSpacingStack->addWidget( eSpacing );
     sSpacingStack->addWidget( eSpacingPercent );
     spacingGrid->addWidget( sSpacingStack, 1, 1 );

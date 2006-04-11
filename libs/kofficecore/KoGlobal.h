@@ -22,12 +22,14 @@
 #ifndef koGlobal_h
 #define koGlobal_h
 
-#include <qstringlist.h>
-#include <qfont.h>
-#include <qmap.h>
-class KConfig;
+#include <QStringList>
+#include <QFont>
+#include <QMap>
 
 #include <koffice_export.h>
+
+class KConfig;
+
 class KOFFICECORE_EXPORT KoGlobal
 {
 public:

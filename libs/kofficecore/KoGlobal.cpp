@@ -20,12 +20,12 @@
 
 #include "config.h"
 
-#include <qpaintdevice.h>
+#include <QPaintDevice>
+#include <QFont>
+#include <QFontInfo>
 
 #include <KoGlobal.h>
 #include <kdebug.h>
-#include <qfont.h>
-#include <qfontinfo.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -35,7 +35,6 @@
 #include <kimageio.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <QPaintDevice>
 
 
 KoGlobal* KoGlobal::s_global = 0L;
@@ -53,8 +52,6 @@ KoGlobal::KoGlobal()
 {
     // Install the libkoffice* translations
     KGlobal::locale()->insertCatalog("koffice");
-
-
 
     // Tell KStandardDirs about the koffice prefix
     KGlobal::dirs()->addPrefix(PREFIX);
@@ -143,9 +140,9 @@ void KoGlobal::createListOfLanguages()
     {
         // Extract the language tag from the directory name
         QString tag = *it;
-        int index = tag.findRev('/');
+        int index = tag.lastIndexOf('/');
         tag = tag.left(index);
-        index = tag.findRev('/');
+        index = tag.lastIndexOf('/');
         tag = tag.mid(index+1);
 
         if ( seenLanguages.find( tag ) == seenLanguages.end() ) {
@@ -182,7 +179,7 @@ QString KoGlobal::languageFromTag( const QString &langTag )
     QMap<QString,QString>::ConstIterator it = map.begin();
     const QMap<QString,QString>::ConstIterator end = map.end();
     for ( ; it != end; ++it )
-        if ( it.data() == langTag )
+        if ( it.value() == langTag )
             return it.key();
 
     // Language code not found. Better return the code (tag) than nothing.

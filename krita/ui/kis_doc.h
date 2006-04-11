@@ -38,7 +38,7 @@ class QString;
 class DCOPObject;
 class KCommand;
 
-class KoCommandHistory;
+class KCommandHistory;
 class KMacroCommand;
 
 class KisProfile;
@@ -208,7 +208,7 @@ private:
 private:
 
     bool m_undo;
-    KoCommandHistory *m_cmdHistory;
+    KCommandHistory *m_cmdHistory;
     Q3PtrList<KisCommandHistoryListener> m_undoListeners;
     KisImageSP m_currentImage;
     DCOPObject *m_dcop;

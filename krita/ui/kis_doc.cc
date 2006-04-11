@@ -259,7 +259,7 @@ bool KisDoc::init()
         m_nserver = 0;
     }
 
-    m_cmdHistory = new KoCommandHistory(actionCollection(), true);
+    m_cmdHistory = new KCommandHistory(actionCollection(), true);
     Q_CHECK_PTR(m_cmdHistory);
 
     connect(m_cmdHistory, SIGNAL(documentRestored()), this, SLOT(slotDocumentRestored()));

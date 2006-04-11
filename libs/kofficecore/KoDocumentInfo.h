@@ -21,8 +21,8 @@
 #ifndef KO_DOCUMENT_INFO_H
 #define KO_DOCUMENT_INFO_H
 
-#include <qobject.h>
-#include <qmap.h>
+#include <QObject>
+#include <QMap>
 #include <kconfig.h>
 #include <koffice_export.h>
 #include <QDateTime>

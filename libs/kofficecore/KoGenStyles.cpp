@@ -79,7 +79,7 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
         s.name = styleName;
         m_styleArray.append( s );
     }
-    return it.data();
+    return it.value();
 }
 
 QString KoGenStyles::makeUniqueName( const QString& base, int flags ) const

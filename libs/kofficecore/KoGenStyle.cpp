@@ -18,7 +18,6 @@
 
 #include <float.h>
 
-//Added by qt3to4:
 #include <Q3ValueList>
 
 #include <kdebug.h>
@@ -37,8 +36,8 @@ static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, Q
   for ( ; it != map1.end(); ++it, ++oit ) { // both maps have been checked for size already
     if ( it.key() != oit.key() )
       return it.key() < oit.key() ? -1 : +1;
-    if ( it.data() != oit.data() )
-      return it.data() < oit.data() ? -1 : +1;
+    if ( it.value() != oit.value() )
+      return it.value() < oit.value() ? -1 : +1;
   }
   return 0; // equal
 }
@@ -63,8 +62,8 @@ void KoGenStyle::writeStyleProperties( KoXmlWriter* writer, PropertyType i,
         QMap<QString, QString>::const_iterator it = m_properties[i].begin();
         const QMap<QString, QString>::const_iterator end = m_properties[i].end();
         for ( ; it != end; ++it ) {
-            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
-                writer->addAttribute( it.key().utf8(), it.data().utf8() );
+            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.value() )
+                writer->addAttribute( it.key().toUtf8(), it.value().toUtf8() );
         }
         writer->endElement();
     }
@@ -86,7 +85,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
                 // get family from parent style, just in case
                 // Note: this is saving code, don't convert to attributeNS!
                 const_cast<KoGenStyle *>( this )->
-                    m_familyName = parentStyle->attribute( "style:family" ).latin1();
+                    m_familyName = parentStyle->attribute( "style:family" ).toLatin1();
                 //kDebug(30003) << "Got familyname " << m_familyName << " from parent" << endl;
             }
             writer->addAttribute( "style:parent-style-name", m_parentName );
@@ -120,10 +119,10 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
     for ( ; it != m_attributes.end(); ++it ) {
         bool writeit = true;
         if ( parentStyle && it.key() != "style:family" // always write the family out
-             && parentStyle->attribute( it.key() ) == it.data() )
+             && parentStyle->attribute( it.key() ) == it.value() )
             writeit = false;
         if ( writeit )
-            writer->addAttribute( it.key().utf8(), it.data().utf8() );
+            writer->addAttribute( it.key().toUtf8(), it.value().toUtf8() );
     }
     bool createPropertiesTag = propertiesElementName && propertiesElementName[0] != '\0';
     KoGenStyle::PropertyType i = KoGenStyle::DefaultType;
@@ -134,13 +133,13 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
         it = m_properties[i].begin();
         for ( ; it != m_properties[i].end(); ++it ) {
             if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
-                writer->addAttribute( it.key().utf8(), it.data().utf8() );
+                writer->addAttribute( it.key().toUtf8(), it.value().toUtf8() );
         }
         i = KoGenStyle::ChildElement;
         it = m_properties[i].begin();
         for ( ; it != m_properties[i].end(); ++it ) {
-            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() ) {
-                writer->addCompleteElement( it.data().utf8() );
+            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.value() ) {
+                writer->addCompleteElement( it.value().toUtf8() );
             }
         }
         if ( createPropertiesTag )
@@ -159,7 +158,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
             writer->startElement( "style:map" );
             QMap<QString, QString>::const_iterator it = m_maps[i].begin();
             for ( ; it != m_maps[i].end(); ++it ) {
-                writer->addAttribute( it.key().utf8(), it.data().utf8() );
+                writer->addAttribute( it.key().toUtf8(), it.value().toUtf8() );
             }
             writer->endElement(); // style:map
         }
@@ -190,32 +189,32 @@ void KoGenStyle::printDebug() const
     int i = DefaultType;
     kDebug() << m_properties[i].count() << " properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.value() << endl;
     }
     i = TextType;
     kDebug() << m_properties[i].count() << " text properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.value() << endl;
     }
     i = ParagraphType;
     kDebug() << m_properties[i].count() << " paragraph properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.value() << endl;
     }
     i = ChildElement;
     kDebug() << m_properties[i].count() << " child elements." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.value() << endl;
     }
     kDebug() << m_attributes.count() << " attributes." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_attributes.begin(); it != m_attributes.end(); ++it ) {
-        kDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.value() << endl;
     }
     kDebug() << m_maps.count() << " maps." << endl;
     for ( uint i = 0; i < m_maps.count(); ++i ) {
         kDebug() << "map " << i << ":" << endl;
         for( QMap<QString,QString>::ConstIterator it = m_maps[i].begin(); it != m_maps[i].end(); ++it ) {
-            kDebug() << "     " << it.key() << " = " << it.data() << endl;
+            kDebug() << "     " << it.key() << " = " << it.value() << endl;
         }
     }
     kDebug() << endl;

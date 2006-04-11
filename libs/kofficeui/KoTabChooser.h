@@ -50,7 +50,7 @@ public:
     ~KoTabChooser();
 
     int getCurrTabType() { return currType; }
-    
+
     /**
      * put m_bReadWrite to true as default
      * and used setReadWrite(false) to make in readOnly mode
@@ -73,10 +73,10 @@ protected:
     KoTabChooserPrivate *d;
 
 protected slots:
-    void rbLeft() { currType = TAB_LEFT; repaint( true ); }
-    void rbCenter() { currType = TAB_CENTER; repaint( true ); }
-    void rbRight() { currType = TAB_RIGHT; repaint( true ); }
-    void rbDecPoint() { currType = TAB_DEC_PNT; repaint( true ); }
+    void rbLeft() { currType = TAB_LEFT; update(); }
+    void rbCenter() { currType = TAB_CENTER; update(); }
+    void rbRight() { currType = TAB_RIGHT; update(); }
+    void rbDecPoint() { currType = TAB_DEC_PNT; update(); }
 
 };
 

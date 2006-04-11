@@ -97,7 +97,7 @@ void KoTabChooser::mousePressEvent( QMouseEvent *e )
 	    else if ( flags & TAB_RIGHT ) currType = TAB_RIGHT;
 	} break;
 	}
-	repaint( true );
+	update();
     } break;
     case Qt::RightButton: {
 	QPoint pnt( QCursor::pos() );

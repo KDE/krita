@@ -25,4 +25,11 @@
 <includehints>
     <includehint>KFontDialog_local.h</includehint>
 </includehints>
+<customwidgets>
+    <customwidget>
+        <class>KFontChooser_local</class>
+        <header location="local">KFontDialog_local.h</header>
+        <container>0</container>
+    </customwidget>
+</customwidgets>
 </UI>

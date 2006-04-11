@@ -23,15 +23,13 @@
 #include <KoFilterManager.h>
 #include <KoFilterManager_p.h>
 
-#include <qfile.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QFile>
+#include <QLabel>
+#include <QVBoxLayout>
 #include <q3ptrlist.h>
-#include <qapplication.h>
-//Added by qt3to4:
+#include <QApplication>
 #include <QByteArray>
 #include <Q3ValueList>
-#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -57,19 +55,18 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
                    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, true),
     m_mimeTypes (mimeTypes)
 {
-    setInitialSize (QSize (300, 350));
+    setInitialSize( QSize (300, 350) );
 
     QWidget *page = new QWidget (this);
     setMainWidget (page);
 
-    // looks too squashed together without * 2
-    Q3VBoxLayout *layout = new Q3VBoxLayout (page, marginHint (), spacingHint () * 2);
-
-    QLabel *filterLabel = new QLabel (i18n ("Select a filter:"), page, "filterlabel");
-    layout->addWidget (filterLabel);
-
+    QLabel *filterLabel = new QLabel( i18n ("Select a filter:"), page );
     m_filterList = new KListBox (page, "filterlist");
+    
+    QVBoxLayout *layout = new QVBoxLayout( page );
+    layout->addWidget (filterLabel);
     layout->addWidget (m_filterList);
+    page->setLayout( layout );
 
     Q_ASSERT (!m_mimeTypes.isEmpty ());
     for (QStringList::ConstIterator it = m_mimeTypes.begin ();
@@ -82,7 +79,7 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
 
     if (nativeFormat == "application/x-kword")
     {
-        const int index = m_mimeTypes.findIndex ("text/plain");
+        const int index = m_mimeTypes.indexOf( "text/plain" );
         if (index > -1)
             m_filterList->setCurrentItem (index);
     }
@@ -154,7 +151,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
         return QString::null;
     }
 
-    m_graph.setSourceMimeType( t->name().latin1() );  // .latin1() is okay here (Werner)
+    m_graph.setSourceMimeType( t->name().toLatin1() );  // .latin1() is okay here (Werner)
     if ( !m_graph.isValid() ) {
         bool userCancelled = false;
 
@@ -174,7 +171,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
                                     nativeFormat);
             if (chooser.exec ())
             {
-                QByteArray f = chooser.filterSelected ().latin1();
+                QByteArray f = chooser.filterSelected ().toLatin1();
 
                 if (f == nativeFormat)
                 {
@@ -208,7 +205,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
         int i=0, n = extraMimes.count();
         chain = m_graph.chain( this, mimeType );
         while( !chain && i<n) {
-            mimeType = extraMimes[i].utf8();
+            mimeType = extraMimes[i].toUtf8();
             chain = m_graph.chain( this, mimeType );
             ++i;
         }
@@ -259,7 +256,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArr
         const QStringList::ConstIterator end = nativeMimeTypes.end();
         for ( ; !chain && it != end; ++it )
         {
-            m_graph.setSourceMimeType( (*it).latin1() );
+            m_graph.setSourceMimeType( (*it).toLatin1() );
             if ( m_graph.isValid() )
                 chain = m_graph.chain( this, mimeType );
         }
@@ -276,7 +273,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArr
             kError(s_area) << "No mimetype found for " << m_importUrl << endl;
             return KoFilter::BadMimeType;
         }
-        m_graph.setSourceMimeType( t->name().latin1() );
+        m_graph.setSourceMimeType( t->name().toLatin1() );
 
         if ( !m_graph.isValid() ) {
             kWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
@@ -284,7 +281,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArr
             QApplication::setOverrideCursor( Qt::ArrowCursor );
             KoFilterChooser chooser(0, KoFilterManager::mimeFilter ());
             if (chooser.exec ())
-                m_graph.setSourceMimeType (chooser.filterSelected ().latin1 ());
+                m_graph.setSourceMimeType (chooser.filterSelected ().toLatin1 ());
             else
                 userCancelled = true;
 
@@ -359,7 +356,7 @@ namespace  // in order not to mess with the global namespace ;)
             const QStringList::ConstIterator end = nativeMimeTypes.end();
             for ( ; it != end; ++it )
                 if ( !(*it).isEmpty() )
-                    vertices.insert( (*it).latin1(), new Vertex( (*it).latin1() ) );
+                    vertices.insert( (*it).toLatin1(), new Vertex( (*it).toLatin1() ) );
             ++partIt;
         }
 
@@ -372,28 +369,25 @@ namespace  // in order not to mess with the global namespace ;)
             QStringList impList; // Import list
             QStringList expList; // Export list
 
-            const QStringList::Iterator stopEnd = stopList.end();
             // Now we have to exclude the "stop" mimetypes (in the right direction!)
             if ( direction == KoFilterManager::Import ) {
                 // Import: "stop" mime type should not appear in export
-                QStringList::ConstIterator testIt = ( *it )->export_.begin();
-                QStringList::ConstIterator testEnd = ( *it )->export_.end();
-                for ( ; testIt != testEnd ; ++testIt ) {
-                    if ( stopList.find( *testIt ) == stopEnd ) {
-                        expList.append( *testIt );
-                    }
-                }
+		foreach( QString testIt, ( *it )->export_ )
+		{
+	          if( !stopList.contains( testIt ) )
+		    expList.append( testIt );
+		}
+
                 impList = ( *it )->import;
             }
             else {
                 // Export: "stop" mime type should not appear in import
-                QStringList::ConstIterator testIt = ( *it )->import.begin();
-                const QStringList::ConstIterator testEnd = ( *it )->import.end();
-                for ( ; testIt != testEnd ; ++testIt ) {
-                    if ( stopList.find( *testIt ) == stopEnd ) {
-                        impList.append( *testIt );
-                    }
-                }
+		foreach( QString testIt, (*it)->import )
+		{
+		  if( !stopList.contains( testIt ) )
+		    impList.append( testIt );
+		}
+		
                 expList = ( *it )->export_;
             }
 
@@ -434,10 +428,10 @@ namespace  // in order not to mess with the global namespace ;)
                     importIt = impList.begin(); // ### TODO: why only the first one?
                     if ( direction == KoFilterManager::Import ) {
                         for ( ; importIt != importEnd; ++importIt )
-                            exp->addEdge( vertices[ ( *importIt ).latin1() ] );
+                            exp->addEdge( vertices[ ( *importIt ).toLatin1() ] );
                     } else {
                         for ( ; importIt != importEnd; ++importIt )
-                            vertices[ ( *importIt ).latin1() ]->addEdge( exp );
+                            vertices[ ( *importIt ).toLatin1() ]->addEdge( exp );
                     }
                 }
             }
@@ -498,13 +492,17 @@ QStringList KoFilterManager::mimeFilter( const QByteArray& mimetype, Direction d
     QStringList lst = nativeMimeTypes;
 
     // Now look for filters which output each of those natives mimetypes
-    for( QStringList::ConstIterator natit = nativeMimeTypes.begin(); natit != nativeMimeTypes.end(); ++natit ) {
-        const QStringList outMimes = connected( vertices, (*natit).latin1() );
-        //kDebug(s_area) << k_funcinfo << "output formats connected to mime " << *natit << " : " << outMimes << endl;
-        for ( QStringList::ConstIterator mit = outMimes.begin(); mit != outMimes.end(); ++mit )
-            if ( lst.find( *mit ) == lst.end() ) // append only if not there already. Qt4: QSet<QString>?
-                lst.append( *mit );
+    foreach( QString natit, nativeMimeTypes )
+    {
+       const QStringList outMimes = connected( vertices, natit.toLatin1() );
+     //kDebug(s_area) << k_funcinfo << "output formats connected to mime " << natit << " : " << outMimes << endl;
+      foreach( QString mit, outMimes )
+      {
+        if ( !lst.contains( mit ) ) // append only if not there already. Qt4: QSet<QString>?
+          lst.append( mit );
+      }  
     }
+    
     return lst;
 }
 
@@ -534,13 +532,13 @@ QStringList KoFilterManager::mimeFilter()
         const QStringList::ConstIterator end = nativeMimeTypes.end();
         for ( ; it != end; ++it )
             if ( !(*it).isEmpty() )
-                v->addEdge( vertices[ (*it).latin1() ] );
+                v->addEdge( vertices[ (*it).toLatin1() ] );
         ++partIt;
     }
     QStringList result = connected( vertices, "supercalifragilistic/x-pialadocious" );
 
     // Finally we have to get rid of our fake mimetype again
-    result.remove( "supercalifragilistic/x-pialadocious" );
+    result.removeAll( "supercalifragilistic/x-pialadocious" );
     return result;
 }
 

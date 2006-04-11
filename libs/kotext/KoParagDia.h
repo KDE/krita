@@ -42,6 +42,7 @@
 #include <q3groupbox.h>
 #include <qvgroupbox.h>
 #include <koffice_export.h>
+#include <Q3ListBox>
 class KoTextZoomHandler;
 class KButtonBox;
 class KPushButton;

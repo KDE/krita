@@ -529,8 +529,8 @@ void KoAutoFormatDia::setupTab3()
         }
     }
     autoFormatLanguage->insertStringList(lst);
-
-    connect(autoFormatLanguage->listBox(), SIGNAL(selected ( const QString & )), this, SLOT(changeAutoformatLanguage(const QString & )));
+#warning "kde4: port it"
+    //connect(autoFormatLanguage->listBox(), SIGNAL(selected ( const QString & )), this, SLOT(changeAutoformatLanguage(const QString & )));
 
     grid->addMultiCellWidget( autoFormatLanguage, 0, 0, 4, 6 );
     QLabel *lblAutoFormatLanguage = new QLabel( i18n("Replacements and exceptions for language:"), tab3);

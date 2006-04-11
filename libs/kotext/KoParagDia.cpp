@@ -54,7 +54,7 @@
 #include <qhbuttongroup.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <q3hbox.h>
 #include <qtooltip.h>
 #include <qlayout.h>
@@ -868,9 +868,9 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     if(frameWidth==-1) {
         frameWidth=9999;
     } else {
-        length=i18n("Frame width: %1 %2")
-		.arg(KoUnit::toUserStringValue(frameWidth,m_unit))
-		.arg(KoUnit::unitName(m_unit));
+        length=i18n("Frame width: %1 %2"
+		,KoUnit::toUserStringValue(frameWidth,m_unit)
+		,KoUnit::unitName(m_unit));
         frameWidth=KoUnit::toUserValue(frameWidth,m_unit);
     }
 
@@ -924,13 +924,13 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
 
     cSpacing = new QComboBox( false, spacingFrame, "" );
     // Keep order in sync with lineSpacingType() and display()
-    cSpacing->insertItem( i18n( "Line spacing value", "Single" ) );
-    cSpacing->insertItem( i18n( "Line spacing value", "1.5 Lines" ) );
-    cSpacing->insertItem( i18n( "Line spacing value", "Double" ) );
-    cSpacing->insertItem( i18n( "Proportional") ); // LS_MULTIPLE, called Proportional like in OO
-    cSpacing->insertItem( i18n( "Line Distance (%1)" ).arg(unitName) ); // LS_CUSTOM
-    cSpacing->insertItem( i18n( "At Least (%1)" ).arg(unitName) );
-    cSpacing->insertItem( i18n( "Fixed (%1)").arg(unitName) ); // LS_FIXED
+    cSpacing->insertItem( i18nc( "Line spacing value", "Single" ) );
+    cSpacing->insertItem( i18nc( "Line spacing value", "1.5 Lines" ) );
+    cSpacing->insertItem( i18nc( "Line spacing value", "Double" ) );
+    cSpacing->insertItem( i18nc( "Proportional") ); // LS_MULTIPLE, called Proportional like in OO
+    cSpacing->insertItem( i18n( "Line Distance (%1)" ,unitName) ); // LS_CUSTOM
+    cSpacing->insertItem( i18n( "At Least (%1)" ,unitName) );
+    cSpacing->insertItem( i18n( "Fixed (%1)" ,unitName) ); // LS_FIXED
 
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
@@ -1130,7 +1130,7 @@ void KoIndentSpacingWidget::leftChanged( double _val )
 {
     prev1->setLeft( KoUnit::fromUserValue( _val, m_unit ) );
     // The minimum first-line margin is -leftMargin() (where leftMargin>=0)
-    eFirstLine->setMinValue( -qMax( 0, _val ) );
+    eFirstLine->setMinValue( -qMax( 0.0, _val ) );
 }
 
 void KoIndentSpacingWidget::rightChanged( double _val )
@@ -1269,7 +1269,6 @@ void KoParagAlignWidget::display( const KoParagLayout & lay )
     clearAligns();
     switch ( align ) {
         case Qt::AlignLeft: // see KoView::setAlign
-        case Qt::AlignLeft:
             rLeft->setChecked( true );
             break;
         case Qt::AlignHCenter:

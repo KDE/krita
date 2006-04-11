@@ -1,6 +1,7 @@
 kde4_header()
 
 set(kritacolorsfilters_PART_SRCS
+    colorsfilters.cc
     kis_perchannel_filter.cc
     kis_brightness_contrast_filter.cc
     )

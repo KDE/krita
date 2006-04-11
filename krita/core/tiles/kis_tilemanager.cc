@@ -395,7 +395,7 @@ void KisTileManager::printInfo()
     kDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
     kDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
     kDebug(DBG_AREA_TILES) << "Freelists information\n";
-    for (uint i = 0; i < m_freeLists.capacity(); i++) {
+    for (uint i = 0; i < m_freeLists.count(); i++) {
         if ( ! m_freeLists[i].empty() ) {
             kDebug(DBG_AREA_TILES) << m_freeLists[i].size()
                     << " elements in the freelist for pixelsize " << i << "\n";

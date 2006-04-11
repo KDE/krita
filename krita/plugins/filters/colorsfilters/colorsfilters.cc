@@ -55,16 +55,17 @@ typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) )
 
 ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringList &)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+    setObjectName(name);
     setInstance(ColorsFiltersFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(new KisBrightnessContrastFilter());
-        manager->add(new KisAutoContrast());
-        manager->add(new KisPerChannelFilter());
-        manager->add(new KisDesaturateFilter());
+        manager->add(KisFilterSP(new KisBrightnessContrastFilter()));
+        manager->add(KisFilterSP(new KisAutoContrast()));
+        manager->add(KisFilterSP(new KisPerChannelFilter()));
+        manager->add(KisFilterSP(new KisDesaturateFilter()));
     }
 }
 
@@ -88,7 +89,7 @@ bool KisAutoContrast::workWith(KisColorSpace* cs)
 void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* , const QRect& rect)
 {
     // initialize
-    KisHistogramProducerSP producer = new KisGenericLabHistogramProducer();
+    KisHistogramProducerSP producer = KisHistogramProducerSP(new KisGenericLabHistogramProducer());
     KisHistogram histogram(src, producer, LINEAR);
     int minvalue = int(255*histogram.calculations().getMin() + 0.5);
     int maxvalue = int(255*histogram.calculations().getMax() + 0.5);
@@ -151,7 +152,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
             cfg->transfer[i] = 0xFFFF;
     }
 
-    KisSelectionSP dstSel = 0;
+    KisSelectionSP dstSel;
     if (dst != src) {
         KisPainter gc(dst);
         gc.bitBlt(rect.x(), rect.y(), COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());

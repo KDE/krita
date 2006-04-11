@@ -1609,7 +1609,7 @@ void KoTextFormat::setLanguage( const QString & _lang)
 QStringList KoTextFormat::underlineTypeList()
 {
     QStringList lst;
-    lst <<i18n("Underline Style", "None");
+    lst <<i18nc("Underline Style", "None");
     lst <<i18n("Single");
     lst <<i18n("Double");
     lst <<i18n("Simple Bold");
@@ -1620,7 +1620,7 @@ QStringList KoTextFormat::underlineTypeList()
 QStringList KoTextFormat::strikeOutTypeList()
 {
     QStringList lst;
-    lst <<i18n("Strikeout Style", "None");
+    lst <<i18nc("Strikeout Style", "None");
     lst <<i18n("Single");
     lst <<i18n("Double");
     lst <<i18n("Simple Bold");

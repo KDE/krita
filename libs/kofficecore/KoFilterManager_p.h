@@ -19,8 +19,8 @@
 #ifndef __koFilterManager_p_h__
 #define __koFilterManager_p_h__
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 #include <kdialogbase.h>
 

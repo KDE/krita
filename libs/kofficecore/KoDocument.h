@@ -457,14 +457,6 @@ public:
     enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded, InitDocEmpty };
 
     /**
-     * Initializes an empty document (display the template dialog!).
-     * You have to overload this method to initialize all your document variables.
-     * @param flags see InitDocFlags
-     * @param parentWidget the widget this document belongs with
-     */
-    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0) = 0;
-
-    /**
      * Creates and shows the start up widget.
      * @param parent the KoMainWindow used as parent for the widget.
      * @param alwaysShow always show the widget even if the user has configured it to not show.

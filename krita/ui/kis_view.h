@@ -469,7 +469,7 @@ private slots:
     void addPartLayer(KisGroupLayerSP parent, KisLayerSP above, const KoDocumentEntry& entry);
     void addAdjustmentLayer();
     void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above);
-    void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection = 0);
+    void addAdjustmentLayer(KisGroupLayerSP parent, KisLayerSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
     void layerRemove();
     void layerDuplicate();
     void layerRaise();

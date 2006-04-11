@@ -36,9 +36,10 @@
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>
+#endif
+
 //Added by qt3to4:
 #include <Q3GridLayout>
-#endif
 
 #include <KoImageResource.h>
 

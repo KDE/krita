@@ -284,6 +284,13 @@
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
+<customwidgets>
+    <customwidget>
+        <class>KDoubleSpinBox</class>
+        <header location="global">knuminput.h</header>
+        <container>0</container>
+    </customwidget>
+</customwidgets>
 <includes>
     <include location="global" impldecl="in declaration">knuminput.h</include>
     <include location="global" impldecl="in declaration">klocale.h</include>

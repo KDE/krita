@@ -342,6 +342,13 @@
     </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>
+<customwidgets>
+    <customwidget>
+        <class>KDoubleNumInput</class>
+        <header location="global">knuminput.h</header>
+        <container>0</container>
+    </customwidget>
+</customwidgets>
 <includehints>
     <includehint>kcolorbutton.h</includehint>
     <includehint>kcolorbutton.h</includehint>

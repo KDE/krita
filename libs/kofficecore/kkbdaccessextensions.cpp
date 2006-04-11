@@ -18,15 +18,15 @@
 */
 
 // Qt includes
-#include <qsplitter.h>
+#include <QSplitter>
 #include <q3dockwindow.h>
 #include <q3dockarea.h>
-#include <qevent.h>
-#include <qcursor.h>
-#include <qobject.h>
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qtooltip.h>
+#include <QEvent>
+#include <QCursor>
+#include <QObject>
+#include <QWidget>
+#include <QLabel>
+#include <QToolTip>
 #include <kxmlguifactory.h>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -166,7 +166,7 @@ class KKbdAccessExtensionsPrivate
 };
 
 KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* name) :
-    QObject(parent, name)
+    QObject( parent )
 {
     // kDebug() << "KKbdAccessExtensions::KKbdAccessExtensions: running." << endl;
     d = new KKbdAccessExtensionsPrivate;
@@ -224,7 +224,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
             if (kev->key() == Qt::Key_Escape)
                 exitSizing();
             else
-                resizePanelFromKey(kev->key(), kev->state());
+                resizePanelFromKey( kev->key(), kev->modifiers() );
             // Eat the key.
             return true;
         }
@@ -267,7 +267,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
         QSize s = d->icon->delta();
         int dx = s.width();
         int dy = s.height();
-        resizePanel(dx, dy, me->state());
+        resizePanel( dx, dy, me->button() );
         me->accept();
         showIcon();
         return true;
@@ -590,7 +590,8 @@ void KKbdAccessExtensions::displayAccessKeys()
             QPoint diffPos = globalPos - prevGlobalPos;
             if (diffPos.manhattanLength() > overlap) {
                 accessCount++;
-                QLabel* lab=new QLabel(widget, "", widget, 0, Qt::WDestructiveClose);
+                QLabel* lab = new QLabel( widget, Qt::WDestructiveClose );
+		lab->setBuddy( widget );
                 lab->setPalette(QToolTip::palette());
                 lab->setLineWidth(2);
                 lab->setFrameStyle(Q3Frame::Box | Q3Frame::Plain);

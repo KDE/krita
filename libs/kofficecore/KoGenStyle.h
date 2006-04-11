@@ -19,7 +19,7 @@
 #ifndef KOGENSTYLE_H
 #define KOGENSTYLE_H
 
-#include <qmap.h>
+#include <QMap>
 #include <q3valuevector.h>
 #include <QString>
 #include <koffice_export.h>

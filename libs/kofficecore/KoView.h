@@ -19,8 +19,8 @@
 #ifndef __koView_h__
 #define __koView_h__
 
-#include <qwidget.h>
-#include <qpointer.h>
+#include <QWidget>
+#include <QPointer>
 //Added by qt3to4:
 #include <QCustomEvent>
 

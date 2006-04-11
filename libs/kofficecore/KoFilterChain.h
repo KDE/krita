@@ -22,7 +22,7 @@
 #include <q3cstring.h>
 #include <q3asciidict.h>
 #include <q3ptrlist.h>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3StrList>
 

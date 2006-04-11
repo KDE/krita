@@ -32,8 +32,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <qobject.h>
-#include <qdatetime.h>
 #include "KoXmlNS.h"
 
 /*****************************************
@@ -42,8 +40,8 @@
  *
  *****************************************/
 
-KoDocumentInfo::KoDocumentInfo( QObject* parent, const char* name )
-    : QObject( parent, name )
+KoDocumentInfo::KoDocumentInfo( QObject* parent, const char* /*name*/ )
+    : QObject( parent )
 {
     (void)new KoDocumentInfoUserMetadata( this );
     (void)new KoDocumentInfoAuthor( this );
@@ -142,9 +140,7 @@ bool KoDocumentInfo::saveOasis( KoStore* store )
 
 KoDocumentInfoPage* KoDocumentInfo::page( const QString& name ) const
 {
-    QObject* obj = const_cast<KoDocumentInfo*>(this)->child( name.latin1() );
-
-    return (KoDocumentInfoPage*)obj;
+    return findChild<KoDocumentInfoPage*>( name );
 }
 
 QStringList KoDocumentInfo::pages() const
@@ -156,7 +152,7 @@ QStringList KoDocumentInfo::pages() const
     QList<QObject*>::ConstIterator end( list.end() );
     while ( it != end )
     {
-        ret.prepend( (*it)->name() );
+        ret.prepend( (*it)->objectName() );
         ++it;
     }
 
@@ -191,8 +187,8 @@ QString KoDocumentInfo::creator() const
  *
  *****************************************/
 
-KoDocumentInfoPage::KoDocumentInfoPage( QObject* parent, const char* name )
-    : QObject( parent, name )
+KoDocumentInfoPage::KoDocumentInfoPage( QObject* parent, const char* /*name*/ )
+    : QObject( parent )
 {
 }
 
@@ -898,7 +894,7 @@ bool KoDocumentInfoUserMetadata::saveOasis( KoXmlWriter &xmlWriter )
   {
     xmlWriter.startElement( "meta:user-defined");
     xmlWriter.addAttribute( "meta:name", it.key() );
-    xmlWriter.addTextNode( it.data() );
+    xmlWriter.addTextNode( it.value() );
     xmlWriter.endElement();
   }
   return true;

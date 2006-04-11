@@ -19,7 +19,7 @@
 
 #include <KoFilter.h>
 
-#include <qfile.h>
+#include <QFile>
 //Added by qt3to4:
 
 #include <kurl.h>
@@ -29,7 +29,7 @@
 #include <KoFilterManager.h>
 
 
-KoFilter::KoFilter() : QObject( 0, 0 ), m_chain( 0 )
+KoFilter::KoFilter() : QObject( 0 ), m_chain( 0 )
 {
 }
 
@@ -110,7 +110,7 @@ int KoEmbeddingFilter::internalPartReference( const QString& key ) const
     QMap<QString, PartReference>::const_iterator it = m_partStack.top()->m_partReferences.find( key );
     if ( it == m_partStack.top()->m_partReferences.end() )
         return -1;
-    return it.data().m_index;
+    return it.value().m_index;
 }
 
 QByteArray KoEmbeddingFilter::internalPartMimeType( const QString& key ) const
@@ -118,7 +118,7 @@ QByteArray KoEmbeddingFilter::internalPartMimeType( const QString& key ) const
     QMap<QString, PartReference>::const_iterator it = m_partStack.top()->m_partReferences.find( key );
     if ( it == m_partStack.top()->m_partReferences.end() )
         return QByteArray();
-    return it.data().m_mimeType;
+    return it.value().m_mimeType;
 }
 
 KoEmbeddingFilter::PartReference::PartReference( int index, const QByteArray& mimeType ) :

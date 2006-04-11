@@ -16,7 +16,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qmetaobject.h>
+#include <QMetaObject>
+#include <QMetaMethod>
 //Added by qt3to4:
 #include <Q3StrList>
 #include <Q3ValueList>
@@ -633,7 +634,7 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
         return 0;
     }
 
-    KoDocument *doc = createDocument( QByteArray( t->name().latin1() ) );
+    KoDocument *doc = createDocument( QByteArray( t->name().toLatin1() ) );
 
     if ( !doc || !doc->loadNativeFormat( file ) ) {
         kError( 30500 ) << "Couldn't load from the file" << endl;
@@ -828,7 +829,7 @@ namespace KOffice {
             QStringList::ConstIterator end = nativeMimeTypes.end();
             for ( ; it != end; ++it )
                 if ( !(*it).isEmpty() )
-                    m_vertices.insert( (*it).latin1(), new Vertex( (*it).latin1() ) );
+                    m_vertices.insert( (*it).toLatin1(), new Vertex( (*it).toLatin1() ) );
             ++partIt;
         }
 
@@ -841,7 +842,7 @@ namespace KOffice {
             QStringList::ConstIterator importIt = ( *it )->import.begin();
             QStringList::ConstIterator importEnd = ( *it )->import.end();
             for ( ; importIt != importEnd; ++importIt ) {
-                const QByteArray key = ( *importIt ).latin1();  // latin1 is okay here (werner)
+                const QByteArray key = ( *importIt ).toLatin1();  // latin1 is okay here (werner)
                 // already there?
                 if ( !m_vertices[ key ] )
                     m_vertices.insert( key, new Vertex( key ) );
@@ -854,7 +855,7 @@ namespace KOffice {
 
                 for ( ; exportIt != exportEnd; ++exportIt ) {
                     // First make sure the export vertex is in place
-                    const QByteArray key = ( *exportIt ).latin1();  // latin1 is okay here
+                    const QByteArray key = ( *exportIt ).toLatin1();  // latin1 is okay here
                     Vertex* exp = m_vertices[ key ];
                     if ( !exp ) {
                         exp = new Vertex( key );
@@ -863,7 +864,7 @@ namespace KOffice {
                     // Then create the appropriate edges
                     importIt = ( *it )->import.begin();
                     for ( ; importIt != importEnd; ++importIt )
-                        m_vertices[ ( *importIt ).latin1() ]->addEdge( new Edge( exp, *it ) );
+                        m_vertices[ ( *importIt ).toLatin1() ]->addEdge( new Edge( exp, *it ) );
                 }
             }
             else
@@ -919,7 +920,7 @@ namespace KOffice {
             QStringList::ConstIterator end = nativeMimeTypes.end();
             for ( ; !v && it != end; ++it )
                 if ( !(*it).isEmpty() )
-                    v = m_vertices[ ( *it ).latin1() ];
+                    v = m_vertices[ ( *it ).toLatin1() ];
             ++partIt;
         }
         if ( !v )
@@ -934,7 +935,7 @@ namespace KOffice {
             for ( ; !v && it != end; ++it ) {
                 QString key = *it;
                 if ( !key.isEmpty() ) {
-                    Vertex* tmp = m_vertices[ key.latin1() ];
+                    Vertex* tmp = m_vertices[ key.toLatin1() ];
                     if ( !v || ( tmp && tmp->key() < v->key() ) )
                         v = tmp;
                 }

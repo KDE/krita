@@ -88,7 +88,11 @@ public:
       {
             if ( !m_visible )
             {
-                sb->addWidget( m_widget, m_stretch, m_permanent );
+                if( m_permanent )
+		    sb->addPermanentWidget( m_widget, m_stretch );
+		else
+		    sb->addWidget( m_widget, m_stretch );
+
                 m_visible = true;
                 m_widget->show();
             }
@@ -112,8 +116,8 @@ public:
   bool m_inOperation; //in the middle of an operation (no screen refreshing)?
 };
 
-KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
- : QWidget( parent, name )
+KoView::KoView( KoDocument *document, QWidget *parent, const char* /*name*/ )	
+ : QWidget( parent )
 {
   Q_ASSERT( document );
 
@@ -228,10 +232,10 @@ KAction *KoView::action( const QDomElement &element ) const
   static const QString &attrName = KGlobal::staticQString( "name" );
   QString name = element.attribute( attrName );
 
-  KAction *act = KXMLGUIClient::action( name.utf8() );
+  KAction *act = KXMLGUIClient::action( name.toUtf8() );
 
   if ( !act )
-    act = d->m_doc->KXMLGUIClient::action( name.utf8() );
+    act = d->m_doc->KXMLGUIClient::action( name.toUtf8() );
 
   return act;
 }
@@ -617,11 +621,9 @@ void KoView::slotAutoScroll(  )
 
     if ( actuallyDoScroll )
     {
-        int state=0;
-        state = QApplication::keyboardModifiers();
-
         pos = canvas()->mapFrom(this, pos);
-        QMouseEvent * event = new QMouseEvent(QEvent::MouseMove, pos, 0, state);
+        QMouseEvent* event = new QMouseEvent( QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton,
+	                                          	QApplication::keyboardModifiers());
 
         QApplication::postEvent( canvas(), event );
         emit autoScroll( scrollDistance );
@@ -693,14 +695,14 @@ void KoView::slotActionStatusText( const QString &text )
 {
   KStatusBar *sb = statusBar();
   if ( sb )
-      sb->message( text );
+      sb->showMessage( text );
 }
 
 void KoView::slotClearStatusText()
 {
   KStatusBar *sb = statusBar();
   if ( sb )
-      sb->clear();
+      sb->clearMessage();
 }
 
 DCOPObject *KoView::dcopObject()

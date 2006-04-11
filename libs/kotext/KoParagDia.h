@@ -40,7 +40,6 @@
 #include "KoParagCounter.h"
 #include <knuminput.h>
 #include <q3groupbox.h>
-#include <qvgroupbox.h>
 #include <koffice_export.h>
 #include <Q3ListBox>
 class KoTextZoomHandler;

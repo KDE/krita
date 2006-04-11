@@ -997,12 +997,12 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
 
 double KoIndentSpacingWidget::leftIndent() const
 {
-    return qMax(0, eLeft->value() );
+    return qMax(0.0, eLeft->value() );
 }
 
 double KoIndentSpacingWidget::rightIndent() const
 {
-    return qMax(0,eRight->value() );
+    return qMax(0.0,eRight->value() );
 }
 
 double KoIndentSpacingWidget::firstLineIndent() const
@@ -1012,12 +1012,12 @@ double KoIndentSpacingWidget::firstLineIndent() const
 
 double KoIndentSpacingWidget::spaceBeforeParag() const
 {
-    return qMax(0, eBefore->value() );
+    return qMax(0.0, eBefore->value() );
 }
 
 double KoIndentSpacingWidget::spaceAfterParag() const
 {
-    return qMax(0, eAfter->value() );
+    return qMax(0.0, eAfter->value() );
 }
 
 KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
@@ -1047,8 +1047,8 @@ KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
 double KoIndentSpacingWidget::lineSpacing() const
 {
     return (lineSpacingType() == KoParagLayout::LS_MULTIPLE)
-                               ? qMax( 1, eSpacingPercent->value() ) / 100.0
-                               : qMax( 0, eSpacing->value() );
+                               ? qMax( 1.0, eSpacingPercent->value() ) / 100.0
+                               : qMax( 0.0, eSpacing->value() );
 }
 
 
@@ -1105,7 +1105,7 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     }
 
     updateLineSpacing( _type );
-    eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? qMax( 1, _spacing )
+    eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? qMax( 1.0, _spacing )
                         : KoUnit::toUserValue( _spacing, m_unit ) );
     eSpacingPercent->setValue( ( _type == KoParagLayout::LS_MULTIPLE ) ? qRound( _spacing * 100 ) : 100 );
 }
@@ -1200,7 +1200,7 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent, const 
 {
     Q3GridLayout *grid = new Q3GridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QVGroupBox * AlignGroup = new QVGroupBox( i18n( "Alignment" ), this );
+    Q3VGroupBox * AlignGroup = new Q3VGroupBox( i18n( "Alignment" ), this );
 
     rLeft = new QRadioButton( i18n( "&Left" ), AlignGroup );
     connect( rLeft, SIGNAL( clicked() ), this, SLOT( alignLeft() ) );
@@ -2083,7 +2083,7 @@ void KoParagTabulatorsWidget::updateFilling(int selected) {
 
 void KoParagTabulatorsWidget::updateWidth() {
     KoTabulator *selectedTab = &m_tabList[lstTabs->currentItem()];
-    selectedTab->ptWidth = qMax( 0, eWidth->value() );
+    selectedTab->ptWidth = qMax( 0.0, eWidth->value() );
 }
 
 void KoParagTabulatorsWidget::sortLists() {

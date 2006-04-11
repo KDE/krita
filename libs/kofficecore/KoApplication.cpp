@@ -19,8 +19,8 @@
 
 #include "KoApplication.h"
 #include <config.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 #include <dcopclient.h>
 #include <KoApplicationIface.h>
 #include <KoQueryTrader.h>
@@ -108,7 +108,7 @@ bool KoApplication::start()
     KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
     QString dpiValues = QString::fromLatin1( koargs->getOption( "dpi" ) );
     if ( !dpiValues.isEmpty() ) {
-        int sep = dpiValues.find( QRegExp( "[x, ]" ) );
+        int sep = dpiValues.indexOf( QRegExp( "[x, ]" ) );
         int dpiX;
         int dpiY = 0;
         bool ok = true;

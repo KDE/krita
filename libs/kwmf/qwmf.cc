@@ -19,16 +19,18 @@
 
 #include <math.h>
 #include <assert.h>
-#include <qfileinfo.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qpainterpath.h>
-#include <qdatastream.h>
-#include <qapplication.h>
-#include <qbuffer.h>
+
+#include <QFileInfo>
+#include <QPixmap>
+#include <QPainter>
+#include <QPainterPath>
+#include <QDataStream>
+#include <QApplication>
+#include <QBuffer>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QPolygon>
+
 #include <kdebug.h>
 
 bool qwmfDebug = false;
@@ -213,10 +215,10 @@ bool QWinMetaFile::load( QBuffer &buffer )
                       << (pheader.checksum==checksum?"ok":"wrong") << " )" << endl;
         }
     }
-    else buffer.at( 0 );
+    else buffer.reset();
 
     //----- Read as enhanced metafile header
-    filePos = buffer.at();
+    filePos = buffer.pos();
     st >> eheader.iType;
     st >> eheader.nSize;
     st >> eheader.rclBounds.left;
@@ -261,7 +263,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
     else // no, not enhanced
     {
         //----- Read as standard metafile header
-        buffer.at( filePos );
+        buffer.seek( filePos );
         st >> header.mtType;
         st >> header.mtHeaderSize;
         st >> header.mtVersion;
@@ -348,7 +350,7 @@ bool QWinMetaFile::paint( QPaintDevice* aTarget, bool absolute )
     for ( i=MAX_OBJHANDLE-1; i>=0; i-- )
         mObjHandleTab[ i ] = NULL;
 
-    mPainter.resetXForm();
+    mPainter.resetMatrix();
     mWinding = false;
     mAbsoluteCoord = absolute;
 
@@ -483,10 +485,13 @@ void QWinMetaFile::ellipse( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::polygon( long, short* parm )
 {
-    QPolygon* pa;
+    QPolygon* pa;              // causing a memleck ???
 
     pa = pointArray( parm[ 0 ], &parm[ 1 ] );
-    mPainter.drawPolygon( *pa, mWinding );
+    if( mWinding )
+      mPainter.drawPolygon( *pa, Qt::WindingFill );
+    else
+      mPainter.drawPolygon( *pa, Qt::OddEvenFill );
 }
 
 
@@ -617,7 +622,7 @@ void QWinMetaFile::setPolyFillMode( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setBkColor( long, short* parm )
 {
-    mPainter.setBackgroundColor( color( parm ) );
+    mPainter.setBackground( QBrush( color( parm ) ) );
 }
 
 
@@ -891,8 +896,8 @@ void QWinMetaFile::dibCreatePatternBrush( long num, short* parm )
     QImage bmpSrc;
 
     if ( dibToBmp( bmpSrc, (char*)&parm[ 2 ], (num - 2) * 2 ) ) {
-        handle->image = bmpSrc;
-        handle->brush.setPixmap( handle->image );
+        handle->image = QPixmap::fromImage( bmpSrc );
+        handle->brush.setTexture( handle->image );
     }
 }
 
@@ -1251,7 +1256,8 @@ bool QWinMetaFile::dibToBmp( QImage& bmp, const char* dib, long size )
 
     int sizeBmp = size + 14;
 
-    QByteArray pattern( sizeBmp );       // BMP header and DIB data
+    QByteArray pattern;       // BMP header and DIB data
+    pattern.resize( sizeBmp );
     pattern.fill(0);
     memcpy( &pattern[ 14 ], dib, size );
 

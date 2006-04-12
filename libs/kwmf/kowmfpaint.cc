@@ -127,7 +127,7 @@ void KoWmfPaint::setBrush( const QBrush &brush ) {
 
 
 void KoWmfPaint::setBackgroundColor( const QColor &c ) {
-    mPainter.setBackgroundColor( c );
+    mPainter.setBackground( QBrush( c ) );
 }
 
 
@@ -256,7 +256,10 @@ void KoWmfPaint::drawPolyline( const QPolygon &pa ) {
 
 
 void KoWmfPaint::drawPolygon( const QPolygon &pa, bool winding ) {
-    mPainter.drawPolygon( pa, winding );
+    if( winding )
+	mPainter.drawPolygon( pa, Qt::WindingFill );
+    else
+	mPainter.drawPolygon( pa, Qt::OddEvenFill );
 }
 
 
@@ -282,8 +285,12 @@ void KoWmfPaint::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding ) {
     mPainter.setClipping( false );
     if ( mPainter.pen().style() != Qt::NoPen ) {
         mPainter.setBrush( Qt::NoBrush );
-        for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
-            mPainter.drawPolygon( *pa, winding );
+        for ( pa = listPa.first() ; pa ; pa = listPa.next() ) 
+	{
+	    if( winding )
+	        mPainter.drawPolygon( *pa, Qt::WindingFill );
+	    else
+		mPainter.drawPolygon( *pa, Qt::OddEvenFill );
         }
     }
 

@@ -17,8 +17,8 @@
 */
 
 #include <math.h>
-#include <qfile.h>
-#include <qdatastream.h>
+#include <QFile>
+#include <QDataStream>
 //Added by qt3to4:
 #include <QPolygon>
 #include <Q3PtrList>
@@ -51,7 +51,7 @@ KoWmfWrite::KoWmfWrite( const QString& fileName ) {
 
     d->mDpi = 1024;
     d->mMaxRecordSize = 0;
-    d->mFileOut.setName( fileName );
+    d->mFileOut.setFileName( fileName );
 }
 
 KoWmfWrite::~KoWmfWrite() {
@@ -71,7 +71,7 @@ bool KoWmfWrite::begin() {
 
     if ( !d->mFileOut.open( QIODevice::WriteOnly ) )
     {
-        kDebug() << "Cannot open file " << QFile::encodeName(d->mFileOut.name()) << endl;
+        kDebug() << "Cannot open file " << QFile::encodeName(d->mFileOut.fileName()) << endl;
         return false;
     }
     d->mSt.setDevice( &d->mFileOut );
@@ -114,7 +114,7 @@ bool KoWmfWrite::end() {
     checksum = KoWmfReadPrivate::calcCheckSum( &pheader );
 
     // write headers
-    d->mFileOut.at( 0 );
+    d->mFileOut.reset();
     d->mSt << (quint32)0x9AC6CDD7 << (quint16)0;
     d->mSt << (qint16)d->mBBox.left() << (qint16)d->mBBox.top() << (qint16)d->mBBox.right() << (qint16)d->mBBox.bottom();
     d->mSt << (quint16)d->mDpi << (quint32)0 << checksum;

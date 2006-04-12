@@ -26,10 +26,10 @@ DESCRIPTION
 
 #include <kdebug.h>
 #include <math.h>
-#include <qfile.h>
+#include <QFile>
 #include <q3pointarray.h>
 #include "kwmf.h"
-#include <qrect.h>
+#include <QRect>
 
 #define PI (3.14159265358979323846)
 
@@ -287,10 +287,11 @@ void KWmf::invokeHandler(
 
         if (words)
         {
-            QByteArray *record = new QByteArray(words * 2);
+            QByteArray *record = new QByteArray();
+	    record->resize( words*2 );
             QDataStream *body;
 
-            operands.readRawBytes(record->data(), words * 2);
+            operands.readRawData(record->data(), words * 2);
             body = new QDataStream(record, QIODevice::ReadOnly);
             body->setByteOrder(QDataStream::LittleEndian);
             (this->*result)(words, *body);
@@ -351,7 +352,7 @@ bool KWmf::parse(
     bool isPlaceable;
     bool isEnhanced;
 
-    startedAt = stream.device()->at();
+    startedAt = stream.device()->pos();
     stream.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
 
     for (int i = 0; i < s_maxHandles; i++)
@@ -477,7 +478,7 @@ bool KWmf::parse(
     }
     else
     {
-        stream.device()->at(startedAt);
+        stream.device()->seek(startedAt);
         m_dpi = (unsigned)((double)576 / m_dpi);
         m_windowOrgX = 0;
         m_windowOrgY = 0;
@@ -487,7 +488,7 @@ bool KWmf::parse(
 
     //----- Read as enhanced metafile header
 
-    fileAt = stream.device()->at();
+    fileAt = stream.device()->pos();
     stream >> eheader.iType;
     stream >> eheader.nSize;
     stream >> eheader.rclBounds.left;
@@ -539,7 +540,7 @@ bool KWmf::parse(
     {
         //    debug("WMF Header");
         //----- Read as standard metafile header
-        stream.device()->at(fileAt);
+        stream.device()->seek(fileAt);
         stream >> header.mtType;
         stream >> header.mtHeaderSize;
         stream >> header.mtVersion;
@@ -558,7 +559,7 @@ bool KWmf::parse(
         */
     }
 
-    walk((size - (stream.device()->at() - startedAt)) / 2, stream);
+    walk((size - (stream.device()->pos() - startedAt)) / 2, stream);
     return true;
 }
 

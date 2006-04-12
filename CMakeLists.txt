@@ -1,20 +1,10 @@
 project(koffice)
 
-# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-# Perhaps define share/apps as ${DATA_INSTALL_DIR}
-#set(CMAKE_MODULE_PATH "${KDEDIR}/share/apps/cmake/modules/ ${CMAKE_SOURCE_DIR}/cmake/modules")
-
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
-
-# Always include srcdir and builddir in include path
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# support for Dart: http://public.kitware.com/dashboard.php?name=kde
-enable_testing()
-include(CTest)
 
 # search packages used by KDE
 find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 

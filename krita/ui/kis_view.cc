@@ -44,7 +44,7 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
-#include <Q3MemArray>
+#include <QVector>
 #include <QShowEvent>
 #include <QTabletEvent>
 #include <QChildEvent>
@@ -860,7 +860,7 @@ void KisView::resizeEvent(QResizeEvent *)
 
             if (!m_canvasPixmap.isNull() && !exposedRegion.isEmpty()) {
 
-                Q3MemArray<QRect> rects = exposedRegion.rects();
+                QVector<QRect> rects = exposedRegion.rects();
 
                 for (unsigned int i = 0; i < rects.count(); i++) {
                     QRect r = rects[i];
@@ -960,7 +960,7 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
                     QRegion rg(vr);
                     rg -= QRegion(windowToView(QRect(0, 0, img->width(), img->height())));
 
-                    Q3MemArray<QRect> rects = rg.rects();
+                    QVector<QRect> rects = rg.rects();
 
                     for (unsigned int i = 0; i < rects.count(); i++) {
                         QRect er = rects[i];
@@ -1026,7 +1026,7 @@ void KisView::paintQPaintDeviceView(const QRegion& canvasRegion)
     Q_ASSERT(m_canvas->QPaintDeviceWidget() != 0);
 
     if (m_canvas->QPaintDeviceWidget() != 0 && !m_canvasPixmap.isNull()) {
-        Q3MemArray<QRect> rects = canvasRegion.rects();
+        QVector<QRect> rects = canvasRegion.rects();
 
         for (unsigned int i = 0; i < rects.count(); i++) {
             QRect r = rects[i];

@@ -30,7 +30,7 @@
 #include <q3vbox.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3MemArray>
+#include <QVector>
 #include <QEvent>
 #include <QMouseEvent>
 
@@ -427,7 +427,7 @@ void KSnapshot::performGrab()
                 
                 //Get the masked away area.
                 QRegion maskedAway = bbox - contents;
-                Q3MemArray<QRect> maskedAwayRects = maskedAway.rects();
+                QVector<QRect> maskedAwayRects = maskedAway.rects();
 
                 //Construct a bitmap mask from the rectangles
                 QPainter p(&mask);

@@ -1,0 +1,53 @@
+Alexander Prodoukine's comments about filters and some useful links:
+
+1. Cropping. Most of my pictures go to web, which is why after
+cropping I still have to make an additional step and resize them. It
+would be great to be able to save and reuse cropping presets. For
+example:
+
+- Web landscape (800x533px, 72 dpi)
+- Web portrait (533x800px, 72 dpi)
+
+plus some presets for printing with larger Width and Height values and
+300dpi. Using ratio spinbox isn't that comfortable - I do it since the
+first release of GIMP 2.3.x with new cropping tool and I'm not very
+fond of it.
+
+Thus required changes would be:
+
+- add dpi value to cropping tool;
+- add ability to resize by cropping (BSAR: this is done by the transform tool);
+- add presets mechanism.
+
+Earlier I wrote about composition hints as guide lines while cropping.
+
+2. Sharpening. Only simple non-adjustable sharpening tool is available
+at the moment. It works for large images, but doesn't work for small
+ones (images look oversharped), and one always needs applying some
+sharpening after downscaling a photo.
+
+It would be great having USM (Unsharp Mask) as adjustable layer.
+
+Some useful info on unsharp masking:
+
+http://www.photo.net/bboard/q-and-a-fetch-msg.tcl?msg_id=3D000Qi5
+http://www.earthboundlight.com/phototips/unsharp-mask.html
+http://home.planet.nl/~astro.ccd.scholten/processing_E.htm
+
+3. Colorization. There is no colorization, neither as destructive
+filter, nor as adjustment layer. This is a quite helpful filter when
+you have lots of shots from a concert - because lighting on stage is
+colored, pictures never look the way you see them and it's barely
+fixable. Some people like it and some - difinitely not :)
+
+(Not perchannel adj)
+
+http://static.flickr.com/49/126866213_4b8ac93e19.jpg
+http://static.flickr.com/52/126343654_a8bc3243dd.jpg
+
+ee http://docs.gimp.org/en/gimp-tool-colorize.html for details.
+
+4. Soft glow filter. Makes skin look softer, essential feature for
+female portraits retouching :)
+
+http://hans.breuer.org/gimp/pdb/plug_in.html#plug_in_softglow

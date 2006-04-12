@@ -19,13 +19,15 @@
 */
 
 #include <math.h>
-#include <qfileinfo.h>
-#include <qimage.h>
-#include <qmatrix.h>
+
+#include <QFileInfo>
+#include <QImage>
+#include <QMatrix>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
-#include <qpainter.h>
-#include <qdatastream.h>
+#include <QPainter>
+#include <QDataStream>
+#include <QByteArray>
 #include <kdebug.h>
 
 #include "kowmfreadprivate.h"
@@ -121,9 +123,9 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
         mDpi = pheader.inch;
     }
     else {
-        mBuffer->at( 0 );
+        mBuffer->reset();
         //----- Read as enhanced metafile header
-        filePos = mBuffer->at();
+        filePos = mBuffer->pos();
         st >> eheader.recordType;
         st >> eheader.recordSize;
         st >> eheader.boundsLeft;
@@ -153,7 +155,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
         else {
             //----- Read as standard metafile header
             mStandard = true;
-            mBuffer->at( filePos );
+            mBuffer->seek( filePos );
             st >> header.fileType;
             st >> header.headerSize;
             st >> header.version;
@@ -164,7 +166,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
             mNbrObject = header.numOfObjects;
         }
     }
-    mOffsetFirstRecord = mBuffer->at();
+    mOffsetFirstRecord = mBuffer->pos();
 
     //----- Test header validity
     if ( ((header.headerSize == 9) && (header.numOfParameters == 0)) || (mPlaceable) ) {
@@ -183,7 +185,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
 
         // search functions setWindowOrg and setWindowExt
         while ( numFunction ) {
-            filePos = mBuffer->at();
+            filePos = mBuffer->pos();
             st >> size >> numFunction;
 
             if ( size == 0 ) {
@@ -223,7 +225,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
                     if ( height > mBBox.height() ) mBBox.setHeight( height );
                 }
             }
-            mBuffer->at( filePos + (size<<1) );
+            mBuffer->seek( filePos + (size<<1) );
             // ## shouldn't we break from the loop as soon as we found what we were looking for?
         }
     }
@@ -269,12 +271,12 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
     mWindow = mBBox;
     if ( mReadWmf->begin() ) {
         // play wmf functions
-        mBuffer->at( mOffsetFirstRecord );
+        mBuffer->seek( mOffsetFirstRecord );
         numFunction = j = 1;
         mWinding = false;
 
         while ( ( numFunction ) && ( !mStackOverflow ) ) {
-            bufferOffset = mBuffer->at();
+            bufferOffset = mBuffer->pos();
             st >> size >> numFunction;
 
             /**
@@ -296,7 +298,7 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
                 // debug mode
                 if ( (j+12) > mNbrFunc ) {
                     // output last 12 functions
-                    int offBuff = mBuffer->at();
+                    int offBuff = mBuffer->pos();
                     quint16 param;
 
                     kDebug() <<  j << " : " << numFunction << " : ";
@@ -305,7 +307,7 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
                         kDebug() <<  param << " ";
                     }
                     kDebug() <<  endl;
-                    mBuffer->at( offBuff );
+                    mBuffer->seek( offBuff );
                 }
                 if ( j >= mNbrFunc ) {
                     break;
@@ -316,7 +318,7 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
             // execute the function
             (this->*koWmfFunc[ numFunction ].method)( size, st );
 
-            mBuffer->at( bufferOffset + (size<<1) );
+            mBuffer->seek( bufferOffset + (size<<1) );
         }
 
         mReadWmf->end();
@@ -824,8 +826,8 @@ void KoWmfReadPrivate::dibCreatePatternBrush( quint32 size, QDataStream& stream 
 
         stream >> arg;
         if ( dibToBmp( bmpSrc, stream, (size - 5) * 2 ) ) {
-            handle->image = bmpSrc;
-            handle->brush.setPixmap( handle->image );
+            handle->image = QPixmap::fromImage( bmpSrc );
+            handle->brush.setTexture( handle->image );
         }
         else {
             kDebug() << "KoWmfReadPrivate::dibCreatePatternBrush : incorrect DIB image" << endl;
@@ -1231,7 +1233,8 @@ bool KoWmfReadPrivate::dibToBmp( QImage& bmp, QDataStream& stream, quint32 size 
 
     int sizeBmp = size + 14;
 
-    QByteArray pattern( sizeBmp );       // BMP header and DIB data
+    QByteArray pattern;           // BMP header and DIB data
+    pattern.resize( sizeBmp );
     pattern.fill(0);
     stream.readRawData( pattern.data() + 14, size );
 

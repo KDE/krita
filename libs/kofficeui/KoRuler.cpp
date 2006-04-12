@@ -423,12 +423,14 @@ void KoRuler::drawVertical( QPainter *_painter )
 
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
             str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
-            int textheight = fm.height();
             int textwidth = fm.width( str );
+            int yOffset = qRound(i) - diffy + qRound(textwidth * 0.5);
+            if(yOffset > paintRect.bottom())
+                break; // stop drawing when outside the to-paint-region
+            int textheight = fm.height();
             maxheight = qMax( maxheight, textwidth );
             p.save();
-            p.translate( qRound(( width() - textheight ) * 0.5),
-                         qRound(i) - diffy + qRound(textwidth * 0.5) );
+            p.translate( qRound(( width() - textheight ) * 0.5), yOffset);
             p.rotate( -90 );
             p.drawText( 0, 0, textwidth + 1, textheight, Qt::AlignLeft | Qt::AlignTop, str );
             p.restore();
@@ -438,8 +440,10 @@ void KoRuler::drawVertical( QPainter *_painter )
         if ( dist > maxheight + 2 )
         {
             for ( double i = dist * 0.5;i <= (double)totalh;i += dist ) {
-                int ii=qRound(i);
-                p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
+                int ii=qRound(i) - diffy;
+                if(ii > paintRect.bottom())
+                    break; // stop drawing when outside the to-paint-region
+                p.drawLine( 7, ii, width() - 7, ii);
             }
         }
 
@@ -447,8 +451,10 @@ void KoRuler::drawVertical( QPainter *_painter )
         if ( dist * 0.5 > maxheight + 2 )
         {
             for ( double i = dist * 0.25;i <=(double)totalh;i += dist *0.5 ) {
-                int ii=qRound(i);
-                p.drawLine( 9, ii - diffy, width() - 9, ii - diffy );
+                int ii=qRound(i) - diffy;
+                if(ii > paintRect.bottom())
+                    break; // stop drawing when outside the to-paint-region
+                p.drawLine( 9, ii, width() - 9, ii);
             }
         }
 

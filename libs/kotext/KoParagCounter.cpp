@@ -135,7 +135,7 @@ void KoParagCounter::load( QDomElement & element )
     else if ( s[0].isDigit() )
         m_startNumber = s.toInt();
     else // support for very-old files
-        m_startNumber = s.lower()[0].latin1() - 'a' + 1;
+        m_startNumber = s.lower()[0].toLatin1() - 'a' + 1;
     s = element.attribute("display-levels");
     if ( !s.isEmpty() )
         m_displayLevels = qMin( s.toInt(), m_depth+1 ); // can't be > depth+1

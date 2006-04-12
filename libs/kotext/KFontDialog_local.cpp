@@ -491,8 +491,8 @@ void KFontChooser_local::family_chosen_slot(const QString& family)
         pos = style.find("Oblique");
         if(pos >=0) style = style.replace(pos,7,i18n("Italic"));
         if(!styleListBox->findItem(style)) {
-            styleListBox->insertItem(i18n(style.utf8()));
-            currentStyles.insert(i18n(style.utf8()), *it);
+            styleListBox->insertItem(i18n(style.toUtf8()));
+            currentStyles.insert(i18n(style.toUtf8()), *it);
         }
     }
     if(styleListBox->count()==0) {

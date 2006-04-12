@@ -260,7 +260,7 @@ Q3CString KoVariableDateFormat::key() const
 
 Q3CString KoVariableDateFormat::getKey( const QString& props ) const
 {
-    return Q3CString("DATE") + props.utf8();
+    return Q3CString("DATE") + props.toUtf8();
 }
 
 void KoVariableDateFormat::load( const Q3CString &key )
@@ -364,7 +364,7 @@ Q3CString KoVariableTimeFormat::key() const
 
 Q3CString KoVariableTimeFormat::getKey( const QString& props ) const
 {
-    return Q3CString("TIME") + props.utf8();
+    return Q3CString("TIME") + props.toUtf8();
 }
 
 // Used by KoVariableFormatCollection::popupActionList(), to apply all formats
@@ -415,7 +415,7 @@ Q3CString KoVariableStringFormat::key() const
 
 Q3CString KoVariableStringFormat::getKey( const QString& props ) const
 {
-    return Q3CString("STRING") + props.utf8();
+    return Q3CString("STRING") + props.toUtf8();
 }
 
 ////
@@ -438,7 +438,7 @@ Q3CString KoVariableNumberFormat::key() const
 
 Q3CString KoVariableNumberFormat::getKey( const QString& props ) const
 {
-    return Q3CString("NUMB") + props.utf8();
+    return Q3CString("NUMB") + props.toUtf8();
 }
 
 ////
@@ -608,7 +608,7 @@ Q3PtrList<KAction> KoVariableCollection::popupActionList() const
             format->setFormatProperties( *it ); // temporary change
             QString text = format->convert( m_varSelected->varValue() );
             // We store the raw format as the action name
-            KToggleAction * act = new KToggleAction(text, KShortcut(), 0, (*it).utf8());
+            KToggleAction * act = new KToggleAction(text, KShortcut(), 0, (*it).toUtf8());
             connect( act, SIGNAL(activated()), this, SLOT(slotChangeFormat()) );
             if ( (*it) == currentFormat )
                 act->setChecked( true );
@@ -838,7 +838,7 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
 
 KoVariable* KoVariableCollection::loadOasisFieldCreateVariable( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context, const QString &key, int type )
 {
-    KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_formatCollection->format( key.latin1() );
+    KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_formatCollection->format( key.toLatin1() );
     // If varFormat is 0 (no key specified), the default format will be used.
 
     KoVariable* var = createVariable( type, -1, m_formatCollection, varFormat, textdoc, context.koDocument(), 0 /*correct*/, true );
@@ -1427,7 +1427,7 @@ Q3CString KoDateVariable::formatStr(int & correct)
 
     if(dialog->exec()==QDialog::Accepted)
     {
-        string = widget->resultString().utf8();
+        string = widget->resultString().toUtf8();
         correct = widget->correctValue();
     }
     else
@@ -1638,7 +1638,7 @@ Q3CString KoTimeVariable::formatStr(int & _correct)
     }
     if(dialog->exec()==QDialog::Accepted)
     {
-        string = widget->resultString().utf8();
+        string = widget->resultString().toUtf8();
         _correct = widget->correctValue();
     }
     else

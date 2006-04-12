@@ -445,7 +445,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
 
     // code from OoWriterImport::writeLayout
     if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "text-align" ) ) {
-        Q3CString align = context.styleStack().attributeNS( KoXmlNS::fo, "text-align" ).latin1();
+        Q3CString align = context.styleStack().attributeNS( KoXmlNS::fo, "text-align" ).toLatin1();
         layout.alignment = loadOasisAlignment( align );
     }
 
@@ -581,7 +581,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
                 if ( !leaderChar.isEmpty() )
                 {
                     QChar ch = leaderChar[0];
-                    switch (ch.latin1()) {
+                    switch (ch.toLatin1()) {
                     case '.':
                         tab.filling = TF_DOTS; break;
                     case '-':

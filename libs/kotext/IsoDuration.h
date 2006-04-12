@@ -62,7 +62,7 @@ static int ISODurationToMinutes( const QString& str )
     int currentNum = 0;
     while ( idx < len ) {
         if ( str[idx].isDigit() )
-            currentNum = currentNum * 10 + str[idx].latin1() - '0';
+            currentNum = currentNum * 10 + str[idx].toLatin1() - '0';
         else {
             if ( str[idx] == 'D' )
                 minutes += 24 * 60 * currentNum;
@@ -92,7 +92,7 @@ static int ISODurationToDays( const QString& str )
     int currentNum = 0;
     while ( idx < len ) {
         if ( str[idx].isDigit() )
-            currentNum = currentNum * 10 + str[idx].latin1() - '0';
+            currentNum = currentNum * 10 + str[idx].toLatin1() - '0';
         else {
             if ( str[idx] == 'Y' )
                 days += 365 * currentNum;

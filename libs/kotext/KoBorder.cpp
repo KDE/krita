@@ -113,7 +113,7 @@ void KoBorder::loadFoBorder( const QString& border )
 
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
-    QByteArray _style = border.section(' ', 1, 1).latin1();
+    QByteArray _style = border.section(' ', 1, 1).toLatin1();
     QString _color = border.section(' ', 2, 2);
 
     //TODO: let the user choose a more precise border width (in the current unit)

@@ -824,7 +824,7 @@ void KoAutoFormatDia::slotfind( const QString & )
     KoAutoFormatEntry *entry = m_docAutoFormat->findFormatEntry(m_find->text());
     if ( entry )
     {
-        m_replace->setText(entry->replace().latin1());
+        m_replace->setText(entry->replace().toLatin1());
         pbAdd->setText(i18n("&Modify"));
         m_pListView->setCurrentItem(m_pListView->findItem(m_find->text(),0));
 

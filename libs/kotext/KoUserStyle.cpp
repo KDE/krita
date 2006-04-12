@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 KoUserStyle::KoUserStyle( const QString & name )
-    : m_name( name ), m_displayName( i18n( "Style name", name.utf8() ) )
+    : m_name( name ), m_displayName( i18n( "Style name", name.toUtf8() ) )
 {
 }
 

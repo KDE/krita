@@ -6,3 +6,6 @@
 /* Define if you have the X11 Input Extension */
 #cmakedefine HAVE_XINPUTEXT 1
 
+/* Define if you have powf */
+#cmakedefine HAVE_POWF 1
+

@@ -56,6 +56,12 @@ if (SHOULD_BUILD_KRITA)
         set(HAVE_XINPUTEXT 0)
     endif(X11_Xinput_FOUND)
 
+    if(UNIX)
+        set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
+    endif(UNIX)
+
+    check_function_exists(powf HAVE_POWF)
+
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-krita.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krita.h)
 
     # For config-krita.h

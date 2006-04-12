@@ -74,7 +74,7 @@ class ExifValue {
         };
         ExifValue() : m_ifd(-1), m_type(EXIF_TYPE_UNKNOW), m_components(0), m_value(0) { }
         ExifValue(ExifType type, unsigned char *data, unsigned int size, int ifd, uint components, ExifValue::ByteOrder order);
-        
+       	virtual ~ExifValue() {} 
         virtual bool load(const QDomElement& elmt);
         virtual QDomElement save(QDomDocument& doc);
 

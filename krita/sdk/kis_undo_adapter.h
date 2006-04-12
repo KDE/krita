@@ -35,7 +35,7 @@ class KisCommandHistoryListener {
 public:
 
     KisCommandHistoryListener(){};
-    
+   	virtual ~KisCommandHistoryListener() {} 
     virtual void notifyCommandAdded(KCommand * cmd) = 0;
     virtual void notifyCommandExecuted(KCommand * cmd) = 0;
 };

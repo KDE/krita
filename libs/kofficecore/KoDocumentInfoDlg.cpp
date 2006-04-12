@@ -33,12 +33,12 @@
 #include <unistd.h>
 #include <assert.h>
 
-#include <qlabel.h>
-#include <qbuffer.h>
-#include <qdom.h>
-#include <qdir.h>
+#include <QLabel>
+#include <QBuffer>
+#include <QDom>
+#include <QDir>
 #include <kvbox.h>
-#include <qdatetime.h>
+#include <QDateTime>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -51,10 +51,10 @@
 #include <kdebug.h>
 #include <ktempfile.h>
 #include <kmimetype.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <k3listview.h>
 #include <q3grid.h>
-#include <qmap.h>
+#include <QMap>
 #include <kfilterdev.h>
 #include <klineedit.h>
 #include <ktextedit.h>
@@ -471,7 +471,7 @@ void KoDocumentInfoPropsPage::applyChanges()
   if ( mimeType && dynamic_cast<KFilterDev *>( d->m_dst->device() ) != 0 )
   {
       QByteArray appIdentification( "KOffice " ); // We are limited in the number of chars.
-      appIdentification += mimeType->name().latin1();
+      appIdentification += mimeType->name().toLatin1();
       appIdentification += '\004'; // Two magic bytes to make the identification
       appIdentification += '\006'; // more reliable (DF)
       d->m_dst->setOrigFileName( appIdentification );

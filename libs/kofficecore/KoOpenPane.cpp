@@ -20,14 +20,14 @@
 #include "KoOpenPane.h"
 
 #include <q3vbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3header.h>
 #include <q3widgetstack.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3valuelist.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpen.h>
+#include <QImage>
+#include <QPainter>
+#include <QPen>
 //Added by qt3to4:
 #include <QPixmap>
 

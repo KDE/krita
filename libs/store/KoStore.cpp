@@ -599,7 +599,7 @@ QString KoStore::expandEncodedDirectory( QString intern ) const
     intern = intern.mid( pos + 1 ); // remove the dir we just processed
   }
 
-  if ( QChar(intern.at(0)).isDigit() )
+  if ( !intern.isEmpty() && QChar(intern.at(0)).isDigit() )
     result += "part";
   result += intern;
   return result;

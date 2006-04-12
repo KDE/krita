@@ -35,7 +35,6 @@
 
 #include <QLabel>
 #include <QBuffer>
-#include <QDom>
 #include <QDir>
 #include <kvbox.h>
 #include <QDateTime>

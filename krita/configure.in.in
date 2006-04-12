@@ -99,3 +99,10 @@ AC_HAVE_GL( [], [] )
 
 # --- End of OpenGL check ---
 
+# Check for powf.
+
+AC_CHECK_FUNC(powf, [have_powf="yes"], [AC_CHECK_LIB(m, powf, [have_powf="yes"], [have_powf="no"])])
+
+if test "$have_powf" = 'yes'; then
+  AC_DEFINE([HAVE_POWF], 1, [Define to 1 if your system has powf in <maths.h>])
+fi

@@ -173,7 +173,9 @@ signals:
      * Emitted every time a command is executed
      * (whether by addCommand, undo or redo).
      * You can use this to update the GUI, for instance.
-     * @param command was executed
+     *
+     * @param cmd pointer to the command that was executed
+     * @todo document who owns that pointer
      */
     void commandExecuted(KCommand *cmd);
 

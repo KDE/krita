@@ -370,7 +370,7 @@ public:
      *  This method can to be reimplemented if the document features child documents.
      *
      *  @param pos is in (unzoomed) document coordinates
-     *  @param the view in which we are testing for a hit. This is used to implement
+     *  @param view the view in which we are testing for a hit. This is used to implement
      *         logic like "only hit an embedded object if it's selected in the current view"
      *  @param matrix transforms points from the documents coordinate system
      *         to the coordinate system of the requested point. This is used by

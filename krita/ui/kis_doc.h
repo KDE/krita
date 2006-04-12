@@ -29,7 +29,6 @@
 
 #include <koffice_export.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <Q3PtrList>
 
 class QImage;
@@ -69,7 +68,7 @@ public:
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
     virtual bool loadChildren( KoStore* store);
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
-    virtual Q3CString mimeType() const;
+    virtual QByteArray mimeType() const;
     virtual QWidget* createCustomDocumentWidget(QWidget *parent);
     virtual KoDocument* hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix());
 

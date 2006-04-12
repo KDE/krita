@@ -28,8 +28,6 @@
 #include <qstringlist.h>
 #include <qwidget.h>
 #include <q3paintdevicemetrics.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 // KDE
 #include <dcopobject.h>
@@ -170,7 +168,7 @@ KisDoc::~KisDoc()
     delete m_dcop;
 }
 
-Q3CString KisDoc::mimeType() const
+QByteArray KisDoc::mimeType() const
 {
     return APP_MIMETYPE;
 }

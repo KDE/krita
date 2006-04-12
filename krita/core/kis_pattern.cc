@@ -35,7 +35,6 @@
 #include <qfile.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -108,7 +107,7 @@ bool KisPattern::save()
     // Version is 1 for now...
 
     GimpPatternHeader ph;
-    Q3CString utf8Name = name().utf8();
+    QByteArray utf8Name = name().utf8();
     char const* name = utf8Name.data();
     int nameLength = qstrlen(name);
 

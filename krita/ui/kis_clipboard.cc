@@ -21,8 +21,6 @@
 #include <qimage.h>
 #include <qmessagebox.h>
 #include <qbuffer.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <k3multipledrag.h>
 #include <klocale.h>
@@ -84,7 +82,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
 
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
-    Q3CString mimeType("application/x-krita-selection");
+    QByteArray mimeType("application/x-krita-selection");
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
@@ -143,7 +141,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
 KisPaintDeviceSP KisClipboard::clip()
 {
     QClipboard *cb = QApplication::clipboard();
-    Q3CString mimeType("application/x-krita-selection");
+    QByteArray mimeType("application/x-krita-selection");
     QMimeSource *cbData = cb->data();
 
     if(cbData && cbData->provides(mimeType))
@@ -218,7 +216,7 @@ void KisClipboard::clipboardDataChanged()
         QClipboard *cb = QApplication::clipboard();
         QImage qimg = cb->image();
         QMimeSource *cbData = cb->data();
-        Q3CString mimeType("application/x-krita-selection");
+        QByteArray mimeType("application/x-krita-selection");
 
         if(cbData && cbData->provides(mimeType))
             m_hasClip = true;
@@ -240,7 +238,7 @@ QSize KisClipboard::clipSize()
 {
 
     QClipboard *cb = QApplication::clipboard();
-    Q3CString mimeType("application/x-krita-selection");
+    QByteArray mimeType("application/x-krita-selection");
     QMimeSource *cbData = cb->data();
 
     KisPaintDeviceSP clip;

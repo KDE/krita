@@ -24,8 +24,6 @@
 #include <q3valuevector.h>
 #include <qmap.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kio/job.h>
 
@@ -33,7 +31,6 @@
 #include "kis_brush.h"
 #include "kis_global.h"
 
-class Q3CString;
 class QImage;
 class QPoint;
 class QSize;

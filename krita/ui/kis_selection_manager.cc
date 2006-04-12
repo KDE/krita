@@ -20,8 +20,6 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qcolor.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -463,7 +461,7 @@ void KisSelectionManager::pasteNew()
         return;
     }
 
-    const Q3CString mimetype = KoDocument::readNativeFormatMimeType();
+    const QByteArray mimetype = KoDocument::readNativeFormatMimeType();
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( mimetype );
     KisDoc * doc = (KisDoc*) entry.createDoc();
 

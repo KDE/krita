@@ -35,8 +35,6 @@
 #include <qimage.h>
 #include <qpoint.h>
 #include <q3valuevector.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -295,7 +293,7 @@ bool KisBrush::save()
 bool KisBrush::saveToDevice(QIODevice* dev) const
 {
     GimpBrushHeader bh;
-    Q3CString utf8Name = name().utf8(); // Names in v2 brushes are in UTF-8
+    QByteArray utf8Name = name().utf8(); // Names in v2 brushes are in UTF-8
     char const* name = utf8Name.data();
     int nameLength = qstrlen(name);
     int wrote;

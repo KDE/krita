@@ -1388,7 +1388,7 @@ Q3CString KoDateVariable::formatStr(int & correct)
     Q3CString string;
     QStringList stringList;
     KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
-    dialog->setWindowTitle( i18n( "DateFormat", "Format of Date Variable" ) );
+    dialog->setWindowTitle( i18nc( "DateFormat", "Format of Date Variable" ) );
     DateFormatWidget* widget=new DateFormatWidget(dialog);
     int count=0;
     dialog->setMainWidget(widget);
@@ -1401,7 +1401,7 @@ Q3CString KoDateVariable::formatStr(int & correct)
         {
             QString num;
             num.setNum(i);
-            const QString tmpString(configGroup.readEntry("Last Used"+num));
+            const QString tmpString(configGroup.readEntry("Last Used"+num,QString()));
             if(tmpString.startsWith("locale"))
                 continue;
             else if(stringList.contains(tmpString))
@@ -1601,7 +1601,7 @@ Q3CString KoTimeVariable::formatStr(int & _correct)
     Q3CString string;
     QStringList stringList;
     KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
-    dialog->setWindowTitle( i18n( "TimeFormat", "This Dialog Allows You to Set the Format of the Time Variable" ) );
+    dialog->setWindowTitle( i18nc( "TimeFormat", "This Dialog Allows You to Set the Format of the Time Variable" ) );
     TimeFormatWidget* widget=new TimeFormatWidget(dialog);
     dialog->setMainWidget(widget);
     KConfig* config = KoGlobal::kofficeConfig();
@@ -1614,7 +1614,7 @@ Q3CString KoTimeVariable::formatStr(int & _correct)
         {
             QString num;
             num.setNum(i);
-            QString tmpString(configGroup.readEntry("Last Used"+num));
+            QString tmpString(configGroup.readEntry("Last Used"+num,QString()));
             if(tmpString.startsWith("locale"))
                 continue;
             else if(stringList.contains(tmpString))

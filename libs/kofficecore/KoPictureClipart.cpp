@@ -19,9 +19,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qbuffer.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QBuffer>
+#include <QPainter>
+#include <QPixmap>
 
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -109,7 +109,7 @@ bool KoPictureClipart::loadData(const QByteArray& array, const QString& extensio
 bool KoPictureClipart::save(QIODevice* io) const
 {
     // We save the raw data, as the SVG supposrt in QPicture is poor
-    Q_ULONG size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    qint64 size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }
 
@@ -125,7 +125,7 @@ QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/
     QPainter p;
 
     p.begin( &pixmap );
-    p.setBackgroundColor( Qt::white );
+    p.setBackground( QBrush( Qt::white ) );
     pixmap.fill( Qt::white );
 
     QRect br = m_clipart.boundingRect();

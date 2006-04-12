@@ -26,8 +26,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-#include <qregexp.h>
-#include <qdom.h>
+#include <QRegExp>
 
 QStringList KoUnit::listOfUnitName()
 {
@@ -153,7 +152,7 @@ double KoUnit::parseValue( QString value, double defaultVal )
     if( value.isEmpty() )
         return defaultVal;
 
-    int index = value.find( QRegExp( "[a-z]+$" ) );
+    int index = value.indexOf( QRegExp( "[a-z]+$" ) );
     if ( index == -1 )
         return value.toDouble();
 

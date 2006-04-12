@@ -20,7 +20,7 @@
 #include <KoFrame.h>
 #include <KoView.h>
 
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -53,15 +53,16 @@ public:
   KoFrame::State m_state;
 };
 
-KoFrame::KoFrame( QWidget *parent, const char *name )
- : QWidget( parent, name )
+KoFrame::KoFrame( QWidget *parent, const char* /*name*/ )
+ : QWidget( parent )
 {
   d = new KoFramePrivate;
   d->m_state = Inactive;
   d->m_mode = -1;
   d->m_view = 0;
 
-  setBackgroundColor( Qt::white );
+  setPalette( QPalette( Qt::white ) );
+  setBackgroundRole( QPalette::Button );
   setMouseTracking( true );
 }
 

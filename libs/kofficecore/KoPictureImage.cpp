@@ -24,13 +24,13 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 
-#include <qbuffer.h>
-#include <qpainter.h>
-#include <qprinter.h>
-#include <qimage.h>
-#include <qimagereader.h>
-#include <qpixmap.h>
-#include <qapplication.h>
+#include <QBuffer>
+#include <QPainter>
+#include <QPrinter>
+#include <QImage>
+#include <QImageReader>
+#include <QPixmap>
+#include <QApplication>
 #include <q3dragobject.h>
 
 KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
@@ -78,12 +78,14 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     // Use QImage::scale if we have fastMode==true
     if ( fastMode )
     {
-        m_cachedPixmap.convertFromImage(m_originalImage.scaled( size ), QPixmap::Color); // Always color or else B/W can be reversed
+        m_cachedPixmap = QPixmap::fromImage( m_originalImage.scaled( size ), Qt::ColorOnly );
+       	// Always color or else B/W can be reversed
         m_cacheIsInFastMode=true;
     }
     else
     {
-        m_cachedPixmap.convertFromImage(m_originalImage.smoothScale( size ), QPixmap::Color); // Always color or else B/W can be reversed
+        m_cachedPixmap = QPixmap::fromImage( m_originalImage.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ), Qt::ColorOnly );
+       	// Always color or else B/W can be reversed
         m_cacheIsInFastMode=false;
     }
     m_cachedSize=size;
@@ -149,8 +151,8 @@ bool KoPictureImage::save(QIODevice* io) const
 {
     kDebug() << k_funcinfo << "writing raw data. size=" << m_rawData.size() << endl;
     // We save the raw data, to avoid damaging the file by many load/save cycles (especially for JPEG)
-    Q_ULONG size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
-    return (size==m_rawData.size());
+    qint64 size = io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    return ( size==m_rawData.size() );
 }
 
 QSize KoPictureImage::getOriginalSize(void) const
@@ -183,12 +185,12 @@ Q3DragObject* KoPictureImage::dragObject( QWidget *dragSource, const char *name 
 QImage KoPictureImage::generateImage(const QSize& size)
 {
     // We do not cache the image, as we will seldom need it again.
-    return m_originalImage.smoothScale( size );
+    return m_originalImage.scaled ( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 }
 
 void KoPictureImage::clearCache(void)
 {
-    m_cachedPixmap.resize(0, 0);
+    m_cachedPixmap = QPixmap();
     m_cacheIsInFastMode=true;
     m_cachedSize=QSize();
 }

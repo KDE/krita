@@ -21,8 +21,7 @@
 #define __koPictureImage_h__
 
 #include "KoPictureBase.h"
-#include <qstring.h>
-//Added by qt3to4:
+#include <QString>
 #include <QPixmap>
 
 class KoPictureImagePrivate;

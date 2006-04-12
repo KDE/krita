@@ -19,10 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qbuffer.h>
-#include <qpainter.h>
+#include <QBuffer>
+#include <QPainter>
 #include <q3picture.h>
-#include <qpixmap.h>
+#include <QPixmap>
 
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -101,9 +101,9 @@ bool KoPictureWmf::loadData(const QByteArray& array, const QString& /* extension
 
 bool KoPictureWmf::save(QIODevice* io) const
 {
-    // We save the raw data, as the SVG supposrt in QPicture is poor
-    Q_ULONG size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
-    return (size==m_rawData.size());
+    // We save the raw data, as the SVG support in QPicture is poor
+    qint64 size = io->write( m_rawData ); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    return ( size==m_rawData.size() );
 }
 
 QSize KoPictureWmf::getOriginalSize(void) const
@@ -118,7 +118,7 @@ QPixmap KoPictureWmf::generatePixmap(const QSize& size, bool /*smoothScale*/)
     QPainter p;
 
     p.begin( &pixmap );
-    p.setBackgroundColor( Qt::white );
+    p.setBackground( QBrush( Qt::white ) );
     pixmap.fill( Qt::white );
 
     if ( m_originalSize.width() && m_originalSize.height() )

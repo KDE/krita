@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qfile.h>
-#include <qimagereader.h>
-#include <qimagewriter.h>
-#include <qpainter.h>
+#include <QFile>
+#include <QImageReader>
+#include <QImageWriter>
+#include <QPainter>
 //Added by qt3to4:
 #include <QPixmap>
 
@@ -295,13 +295,13 @@ bool KoPictureShared::loadXpm(QIODevice* io)
     // Old KPresenter XPM files have char(1) instead of some "
     // Therefore we need to treat XPM separately
 
-    QByteArray array=io->readAll();
+    QByteArray array = io->readAll();
 
     // As XPM files are normally only ASCII files, we can replace it without problems
 
     int pos=0;
 
-    while ((pos=array.find(char(1),pos))!=-1)
+    while ( (pos = array.indexOf( char(1), pos ) )!=-1)
     {
         array[pos]='"';
     }
@@ -344,7 +344,7 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     delete m_base;
     m_base=NULL;
 
-    const QString mode=newMode.lower();
+    const QString mode = newMode.toLower();
 
     if ((mode=="svg") || (mode=="qpic"))
     {
@@ -394,7 +394,7 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
 {
     kDebug(30003) << "KoPictureShared::load(QIODevice*, const QString&) " << extension << endl;
     bool flag=false;
-    QString ext(extension.lower());
+    QString ext( extension.toLower() );
     if (ext=="wmf")
         flag=loadWmf(io);
     else if (ext=="tmp") // ### TODO: also remote scripts need this, don't they?
@@ -438,7 +438,7 @@ bool KoPictureShared::loadFromFile(const QString& fileName)
         return false;
 
     bool flag = false;
-    const int pos=fileName.findRev('.');
+    const int pos = fileName.lastIndexOf('.');
     if (pos==-1)
     {
         kDebug(30003) << "File with no extension!" << endl;

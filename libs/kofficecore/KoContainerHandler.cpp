@@ -53,10 +53,10 @@ public:
 
         m_geometryStart = child->geometry();
         m_matrix = child->matrix() * matrix;
-        m_invertParentMatrix = matrix.invert();
+        m_invertParentMatrix = matrix.inverted();
 
         bool ok = true;
-        m_invert = m_matrix.invert( &ok );
+        m_invert = m_matrix.inverted( &ok );
         Q_ASSERT( ok );
         m_mouseStart = m_invert.map( m_invertParentMatrix.map( point ) );
     }
@@ -216,7 +216,7 @@ public:
     KoPartMoveHandlerPrivate( const QMatrix& matrix, KoView* view, KoChild* child,
                             const QPoint& point) : m_view(view), m_dragChild(child),
                                                    m_parentMatrix(matrix) {
-        m_invertParentMatrix = matrix.invert();
+        m_invertParentMatrix = matrix.inverted();
         m_mouseDragStart = m_invertParentMatrix.map( point );
         m_geometryDragStart = m_dragChild->geometry();
         m_rotationDragStart = m_dragChild->rotationPoint();

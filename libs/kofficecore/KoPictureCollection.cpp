@@ -19,8 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qdom.h>
-//Added by qt3to4:
 #include <Q3ValueList>
 
 #include <kdebug.h>
@@ -262,14 +260,14 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
     for ( ; it != storeMap.end(); ++it )
     {
         KoPicture c = findPicture(it.key());
-        if (!c.isNull())
+        if(!c.isNull())
         {
             // Do not load a file that we already have!
             //kDebug(30003) << store << endl;
             continue;
         }
-        QString u(it.data());
-        if (u.isEmpty())
+        QString u( it.value() );
+        if( u.isEmpty() )
         {
             // old naming I suppose ?
             u=it.key().toString();
@@ -277,17 +275,17 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
 
         KoPicture picture;
 
-        if (!store->open( u ))
+        if( !store->open( u ))
         {
             u.prepend( "file:" );
             if (!store->open( u ))
             {
-                kWarning(30003) << "Could load neither from store nor from file: " << it.data() << endl;
+                kWarning(30003) << "Could load neither from store nor from file: " << it.value() << endl;
                 return;
             }
         }
 
-        const int pos=u.findRev('.');
+        const int pos = u.lastIndexOf( '.' );
         if (pos==-1)
         {
             kError(30003) << "File with no extension! Not supported!" << endl;
@@ -321,6 +319,6 @@ void KoPictureCollection::assignUniqueIds()
     Iterator it;
     for ( it = begin(); it != end(); ++it, ++idx )
     {
-        it.data().assignPictureId(idx);
+        it.value().assignPictureId(idx);
     }
 }

@@ -21,16 +21,16 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#include <qbuffer.h>
-#include <qpainter.h>
-#include <qprinter.h>
+#include <QBuffer>
+#include <QPainter>
+#include <QPrinter>
 #include <q3paintdevicemetrics.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qregexp.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qapplication.h>
+#include <QFile>
+#include <QTextStream>
+#include <QRegExp>
+#include <QImage>
+#include <QPixmap>
+#include <QApplication>
 #include <q3dragobject.h>
 
 #include <kglobal.h>
@@ -208,8 +208,8 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const 
     {
         kDebug(30003) << "Fast scaling!" << endl;
         // Slower than caching a QImage, but faster than re-sampling!
-        QImage image( m_cachedPixmap.convertToImage() );
-        m_cachedPixmap=image.scaled( size );
+        QImage image( m_cachedPixmap.toImage() );
+        m_cachedPixmap = QPixmap::fromImage( image.scaled( size ) );
         m_cacheIsInFastMode=true;
         m_cachedSize=size;
     }
@@ -219,7 +219,7 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const 
         time.start();
 
         QApplication::setOverrideCursor( Qt::WaitCursor );
-        m_cachedPixmap = scaleWithGhostScript( size, resolutionx, resolutiony );
+        m_cachedPixmap = QPixmap::fromImage( scaleWithGhostScript( size, resolutionx, resolutiony ) );
         QApplication::restoreOverrideCursor();
         m_cacheIsInFastMode=false;
         m_cachedSize=size;
@@ -387,7 +387,7 @@ bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension
     }
     // Floating point values are not allowed in a Bounding Box, but ther are many such files out there...
     QRegExp exp("(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)");
-    if ( exp.search(line) == -1 )
+    if ( !line.contains( exp ) )
     {
         // ### TODO: it might be an "(atend)" and the bounding box is in the trailer
         // (but GhostScript 7.07 does not support a bounding box in the trailer.)
@@ -409,7 +409,7 @@ bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension
 bool KoPictureEps::save(QIODevice* io) const
 {
     // We save the raw data, to avoid damaging the file by many load/save cycles
-    Q_ULONG size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    qint64 size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }
 
@@ -437,7 +437,7 @@ QImage KoPictureEps::generateImage(const QSize& size)
 
 void KoPictureEps::clearCache(void)
 {
-    m_cachedPixmap.resize(0, 0);
+    m_cachedPixmap = QPixmap();
     m_cacheIsInFastMode=true;
     m_cachedSize=QSize();
 }

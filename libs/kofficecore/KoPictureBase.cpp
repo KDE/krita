@@ -27,9 +27,9 @@
 #include <kglobal.h>
 
 #include <kcodecs.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <q3picture.h>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <q3dragobject.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -135,7 +135,7 @@ Q3DragObject* KoPictureBase::dragObject( QWidget * dragSource, const char * name
 
 QImage KoPictureBase::generateImage(const QSize& size)
 {
-    return generatePixmap(size,true).convertToImage();
+    return generatePixmap(size,true).toImage();
 }
 
 void KoPictureBase::clearCache(void)

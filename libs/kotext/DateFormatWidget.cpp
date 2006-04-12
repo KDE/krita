@@ -165,3 +165,14 @@ int DateFormatWidget::correctValue()
 {
     return m_ui->KIntNumInput1->value();
 }
+
+QComboBox *DateFormatWidget::combo1()
+{
+		return m_ui->combo1;
+}
+
+QComboBox *DateFormatWidget::combo2()
+{
+	return m_ui->combo2;
+}
+		

@@ -13,7 +13,8 @@ public:
     ~DateFormatWidget();
     QString resultString();
     int correctValue();
-
+	QComboBox *combo1();
+	QComboBox *combo2();
 public slots:
     void updateLabel();
     void comboActivated();

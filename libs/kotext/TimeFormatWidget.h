@@ -13,6 +13,8 @@ public:
     ~TimeFormatWidget();
     QString resultString() const;
     int correctValue() const;
+    QComboBox *combo1();
+    QComboBox *combo2();
 public slots:
     void updateLabel();
     void comboActivated();

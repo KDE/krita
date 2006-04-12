@@ -124,3 +124,14 @@ int TimeFormatWidget::correctValue() const
 {
     return m_ui->KIntNumInput1->value()*60;
 }
+
+QComboBox *DateFormatWidget::combo1()
+{
+        return m_ui->combo1;
+}
+
+QComboBox *DateFormatWidget::combo2()
+{
+    return m_ui->combo2;
+}
+

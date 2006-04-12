@@ -1416,11 +1416,11 @@ Q3CString KoDateVariable::formatStr(int & correct)
     }
     if(!stringList.isEmpty())
     {
-        widget->combo1->insertItem("---");
-        widget->combo1->insertStringList(stringList);
+        widget->combo1()->insertItem("---");
+        widget->combo1()->insertStringList(stringList);
     }
     if(false) { // ### TODO: select the last used item
-        QComboBox *combo= widget->combo1;
+        QComboBox *combo= widget->combo1();
         combo->setCurrentItem(combo->count() -1);
         widget->updateLabel();
     }
@@ -1628,12 +1628,12 @@ Q3CString KoTimeVariable::formatStr(int & _correct)
     }
     if(!stringList.isEmpty())
     {
-        widget->combo1->insertItem("---");
-        widget->combo1->insertStringList(stringList);
+        widget->combo1()->insertItem("---");
+        widget->combo1()->insertStringList(stringList);
     }
     if(false) // ### TODO: select the last used item
     {
-        QComboBox *combo= widget->combo1;
+        QComboBox *combo= widget->combo1();
         combo->setCurrentItem(combo->count() -1);
     }
     if(dialog->exec()==QDialog::Accepted)

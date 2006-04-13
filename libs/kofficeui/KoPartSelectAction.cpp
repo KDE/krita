@@ -58,7 +58,7 @@ void KoPartSelectAction::init()
 	if (!serv->genericName().isEmpty()) {
 	    KAction *action = new KAction( serv->genericName().replace('&',"&&"), serv->icon(), 0,
                                        this, SLOT( slotActionActivated() ),
-                                       parentCollection(), serv->name().latin1() );
+                                       parentCollection(), serv->name().toLatin1() );
     	    insert( action );
 	}
     }
@@ -68,7 +68,7 @@ void KoPartSelectAction::init()
 // Called when selecting a part
 void KoPartSelectAction::slotActionActivated()
 {
-    QString servName = QString::fromLatin1( sender()->name() );
+    QString servName = sender()->objectName();
     KService::Ptr serv = KService::serviceByName( servName );
     m_documentEntry = KoDocumentEntry( serv );
     emit activated();

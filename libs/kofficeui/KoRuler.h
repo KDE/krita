@@ -25,7 +25,7 @@
 #define koRuler_h
 
 #include <q3frame.h>
-#include <qpixmap.h>
+#include <QPixmap>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3ValueList>

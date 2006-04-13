@@ -52,7 +52,7 @@
 #include <qdom.h>
 #include <qradiobutton.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QString>
 #include <Q3PtrList>
 
 #include "IsoDuration.h"
@@ -253,19 +253,19 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
     return tmp;
 }
 
-Q3CString KoVariableDateFormat::key() const
+QString KoVariableDateFormat::key() const
 {
     return getKey( m_strFormat );
 }
 
-Q3CString KoVariableDateFormat::getKey( const QString& props ) const
+QString KoVariableDateFormat::getKey( const QString& props ) const
 {
-    return Q3CString("DATE") + props.toUtf8();
+    return QString("DATE") + props.toUtf8();
 }
 
-void KoVariableDateFormat::load( const Q3CString &key )
+void KoVariableDateFormat::load( const QString &key )
 {
-    Q3CString params( key.mid( 4 ) ); // skip "DATE"
+    QString params( key.mid( 4 ) ); // skip "DATE"
     if ( !params.isEmpty() )
     {
         if (params[0] == '1' || params[0] == '0') // old m_bShort crap
@@ -336,9 +336,9 @@ KoVariableTimeFormat::KoVariableTimeFormat() : KoVariableFormat()
 {
 }
 
-void KoVariableTimeFormat::load( const Q3CString &key )
+void KoVariableTimeFormat::load( const QString &key )
 {
-    Q3CString params( key.mid( 4 ) );
+    QString params( key.mid( 4 ) );
     if ( !params.isEmpty() )
 	m_strFormat = QString::fromUtf8(params);
 }
@@ -357,14 +357,14 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
     return time.toTime().toString(m_strFormat);
 }
 
-Q3CString KoVariableTimeFormat::key() const
+QString KoVariableTimeFormat::key() const
 {
     return getKey( m_strFormat );
 }
 
-Q3CString KoVariableTimeFormat::getKey( const QString& props ) const
+QString KoVariableTimeFormat::getKey( const QString& props ) const
 {
-    return Q3CString("TIME") + props.toUtf8();
+    return QString("TIME") + props.toUtf8();
 }
 
 // Used by KoVariableFormatCollection::popupActionList(), to apply all formats
@@ -407,15 +407,15 @@ QString KoVariableStringFormat::convert( const QVariant & string ) const
     return string.toString();
 }
 
-Q3CString KoVariableStringFormat::key() const
+QString KoVariableStringFormat::key() const
 {
     return getKey( QString::null );
     // TODO prefix & suffix
 }
 
-Q3CString KoVariableStringFormat::getKey( const QString& props ) const
+QString KoVariableStringFormat::getKey( const QString& props ) const
 {
-    return Q3CString("STRING") + props.toUtf8();
+    return QString("STRING") + props.toUtf8();
 }
 
 ////
@@ -431,14 +431,14 @@ QString KoVariableNumberFormat::convert( const QVariant &value ) const
     return QString::number( value.toInt() );
 }
 
-Q3CString KoVariableNumberFormat::key() const
+QString KoVariableNumberFormat::key() const
 {
     return getKey(QString::null);
 }
 
-Q3CString KoVariableNumberFormat::getKey( const QString& props ) const
+QString KoVariableNumberFormat::getKey( const QString& props ) const
 {
-    return Q3CString("NUMB") + props.toUtf8();
+    return QString("NUMB") + props.toUtf8();
 }
 
 ////
@@ -448,7 +448,7 @@ KoVariableFormatCollection::KoVariableFormatCollection()
     m_dict.setAutoDelete( true );
 }
 
-KoVariableFormat * KoVariableFormatCollection::format( const Q3CString &key )
+KoVariableFormat * KoVariableFormatCollection::format( const QString &key )
 {
     KoVariableFormat *f = m_dict[ key.data() ];
     if (f)
@@ -457,12 +457,12 @@ KoVariableFormat * KoVariableFormatCollection::format( const Q3CString &key )
         return createFormat( key );
 }
 
-KoVariableFormat * KoVariableFormatCollection::createFormat( const Q3CString &key )
+KoVariableFormat * KoVariableFormatCollection::createFormat( const QString &key )
 {
     kDebug(32500) << "KoVariableFormatCollection: creating format for key=" << key << endl;
     KoVariableFormat * format = 0L;
     // The first 4 chars identify the class
-    Q3CString type = key.left(4);
+    QString type = key.left(4);
     if ( type == "DATE" )
         format = new KoVariableDateFormat();
     else if ( type == "TIME" )
@@ -583,7 +583,7 @@ Q3PtrList<KAction> KoVariableCollection::popupActionList() const
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {
             // We store the subtype number as the action name
-            Q3CString name; name.setNum(i);
+            QString name; name.setNum(i);
             KToggleAction * act = new KToggleAction( *it, KShortcut(), 0, name );
             connect( act, SIGNAL(activated()), this, SLOT(slotChangeSubType()) );
             if ( i == m_varSelected->subType() )
@@ -624,7 +624,7 @@ Q3PtrList<KAction> KoVariableCollection::popupActionList() const
 void KoVariableCollection::slotChangeSubType()
 {
     KAction * act = (KAction *)(sender());
-    int menuNumber = Q3CString(act->name()).toInt();
+    int menuNumber = QString(act->name()).toInt();
     int newSubType = m_varSelected->variableSubType(menuNumber);
     kDebug(32500) << "slotChangeSubType: menuNumber=" << menuNumber << " newSubType=" << newSubType << endl;
     if ( m_varSelected->subType() != newSubType )
@@ -653,7 +653,7 @@ void KoVariableCollection::slotChangeFormat()
 KoVariable * KoVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat, bool /*loadFootNote*/ )
 {
     Q_ASSERT( coll == m_formatCollection ); // why do we need a parameter ?!?
-    Q3CString string;
+    QString string;
     QStringList stringList;
     if ( varFormat == 0L )
     {
@@ -666,7 +666,7 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
             {
-                Q3CString result = KoDateVariable::formatStr(_correct);
+                QString result = KoDateVariable::formatStr(_correct);
                 if ( result.isNull() )//we cancel insert variable
                     return 0L;
                 varFormat = coll->format( result );
@@ -680,7 +680,7 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
                 varFormat = coll->format( KoTimeVariable::defaultFormat() );
             else
             {
-                Q3CString result = KoTimeVariable::formatStr(_correct);
+                QString result = KoTimeVariable::formatStr(_correct);
                 if ( result.isNull() )//we cancel insert variable
                     return 0L;
                 varFormat = coll->format( result );
@@ -1340,8 +1340,9 @@ void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
         // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
         const QString dateValue = elem.attributeNS( KoXmlNS::text, "date-value", QString::null);
         QDateTime dt;
-        if ( !dateValue.isEmpty() ) // avoid QDate warning
-            dt = QDate::fromString(dateValue, Qt::ISODate);
+#warning "kde4 port it"		
+        //if ( !dateValue.isEmpty() ) // avoid QDate warning
+            //dt = QDate::fromString(dateValue, Qt::ISODate);
 
         bool fixed = (elem.hasAttributeNS( KoXmlNS::text, "fixed") && elem.attributeNS( KoXmlNS::text, "fixed", QString::null)=="true");
         if (!dt.isValid())
@@ -1378,14 +1379,14 @@ QStringList KoDateVariable::subTypeList()
     return KoDateVariable::actionTexts();
 }
 
-Q3CString KoDateVariable::defaultFormat()
+QString KoDateVariable::defaultFormat()
 {
-    return Q3CString("DATE") + "locale";
+    return QString("DATE") + "locale";
 }
 
-Q3CString KoDateVariable::formatStr(int & correct)
+QString KoDateVariable::formatStr(int & correct)
 {
-    Q3CString string;
+    QString string;
     QStringList stringList;
     KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
     dialog->setWindowTitle( i18nc( "DateFormat", "Format of Date Variable" ) );
@@ -1442,11 +1443,12 @@ Q3CString KoDateVariable::formatStr(int & correct)
     {
         QString num;
         num.setNum(i);
-        configGroup.writeEntry("Last Used"+num, stringList[i]);
+#warning "kde4: port it"		
+        //configGroup.writeEntry("Last Used"+num, stringList[i]);
     }
     config->sync();
     delete dialog;
-    return Q3CString("DATE") + string;
+    return QString("DATE") + string;
 }
 
 /******************************************************************/
@@ -1596,9 +1598,9 @@ QStringList KoTimeVariable::subTypeList()
     return KoTimeVariable::actionTexts();
 }
 
-Q3CString KoTimeVariable::formatStr(int & _correct)
+QString KoTimeVariable::formatStr(int & _correct)
 {
-    Q3CString string;
+    QString string;
     QStringList stringList;
     KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
     dialog->setWindowTitle( i18nc( "TimeFormat", "This Dialog Allows You to Set the Format of the Time Variable" ) );
@@ -1653,16 +1655,17 @@ Q3CString KoTimeVariable::formatStr(int & _correct)
     {
         QString num;
         num.setNum(i);
-        configGroup.writeEntry("Last Used"+num, stringList[i]);
+#warning "kde4 port it"		
+        //configGroup.writeEntry("Last Used"+num, stringList[i]);
     }
     config->sync();
     delete dialog;
-    return Q3CString("TIME"+string );
+    return QString("TIME"+string );
 }
 
-Q3CString KoTimeVariable::defaultFormat()
+QString KoTimeVariable::defaultFormat()
 {
-    return Q3CString(Q3CString("TIME")+Q3CString("locale") );
+    return QString(QString("TIME")+QString("locale") );
 }
 
 

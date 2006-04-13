@@ -27,7 +27,7 @@
 #include <qmap.h>
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QString>
 #include <Q3ValueList>
 #include <kaction.h>
 #include "KoRichText.h"
@@ -130,17 +130,17 @@ public:
      * Return a key describing this format.
      * Used for the flyweight pattern in KoVariableFormatCollection
      */
-    virtual Q3CString key() const = 0;
+    virtual QString key() const = 0;
     /**
      * @return the key for a given set of properties.
      * Use this key to lookup the format in the "variable format" collection.
      * @param props properties of this format, e.g. DD/MM/YYYY for a date format.
      */
-    virtual Q3CString getKey( const QString& props ) const = 0;
+    virtual QString getKey( const QString& props ) const = 0;
     /**
      * Create a format from this key.
      */
-    virtual void load( const Q3CString &key ) = 0;
+    virtual void load( const QString &key ) = 0;
     /**
      * Use this format to convert a piece of data into a string.
      */
@@ -174,9 +174,9 @@ class KOTEXT_EXPORT KoVariableDateFormat : public KoVariableFormat
 public:
     KoVariableDateFormat();
     virtual QString convert(const QVariant& data ) const;
-    virtual Q3CString key() const;
-    virtual Q3CString getKey( const QString& props ) const;
-    virtual void load( const Q3CString &key );
+    virtual QString key() const;
+    virtual QString getKey( const QString& props ) const;
+    virtual void load( const QString &key );
 
     /// Set the format string (e.g. DDMMYYYY)
     virtual void setFormatProperties( const QString& props ) {
@@ -206,9 +206,9 @@ class KOTEXT_EXPORT KoVariableTimeFormat : public KoVariableFormat
 public:
     KoVariableTimeFormat();
     virtual QString convert(const QVariant& data ) const;
-    virtual Q3CString key() const;
-    virtual Q3CString getKey( const QString& props ) const;
-    virtual void load( const Q3CString & /*key*/ );
+    virtual QString key() const;
+    virtual QString getKey( const QString& props ) const;
+    virtual void load( const QString & /*key*/ );
 
     /// Set the format string (e.g. hh:mm:ss)
     virtual void setFormatProperties( const QString& props ) {
@@ -239,9 +239,9 @@ class KoVariableStringFormat : public KoVariableFormat
 public:
     KoVariableStringFormat() : KoVariableFormat() {}
     virtual QString convert(const QVariant& data ) const;
-    virtual Q3CString key() const;
-    virtual Q3CString getKey( const QString& props ) const;
-    virtual void load( const Q3CString & /*key*/ ) {}
+    virtual QString key() const;
+    virtual QString getKey( const QString& props ) const;
+    virtual void load( const QString & /*key*/ ) {}
 };
 
 
@@ -250,9 +250,9 @@ class KOTEXT_EXPORT KoVariableNumberFormat : public KoVariableFormat
 public:
     KoVariableNumberFormat() : KoVariableFormat() {}
     virtual QString convert(const QVariant& data ) const;
-    virtual Q3CString key() const;
-    virtual Q3CString getKey( const QString& props ) const;
-    virtual void load( const Q3CString & /*key*/ ) {}
+    virtual QString key() const;
+    virtual QString getKey( const QString& props ) const;
+    virtual void load( const QString & /*key*/ ) {}
 };
 
 
@@ -275,12 +275,12 @@ public:
     /**
      * Find or create the format for the given @p key
      */
-    KoVariableFormat *format( const Q3CString &key );
+    KoVariableFormat *format( const QString &key );
 
     // TODO Refcounting and removing unused formats
     // Not critical, that we don't delete unused formats until closing the doc...
 protected:
-    KoVariableFormat *createFormat( const Q3CString &key );
+    KoVariableFormat *createFormat( const QString &key );
 
 private:
     Q3AsciiDict<KoVariableFormat> m_dict;
@@ -488,11 +488,11 @@ public:
     /**
      * Ask the user and return the date format string with prefix "DATE"
      */
-    static Q3CString formatStr( int & correct );
+    static QString formatStr( int & correct );
     /**
      * Return the default date format for old file.
      */
-    static Q3CString defaultFormat();
+    static QString defaultFormat();
 
 protected:
     short int m_subtype;
@@ -533,11 +533,11 @@ public:
     /**
      * Returns the time format string with prefix "TIME"
      */
-    static Q3CString formatStr(int & _correct);
+    static QString formatStr(int & _correct);
     /**
      * Return the default date format for old file.
      */
-    static Q3CString defaultFormat();
+    static QString defaultFormat();
 
 protected:
     short int m_subtype;

@@ -203,11 +203,15 @@ void KisPainter::bitBlt(Q_INT32 dx, Q_INT32 dy,
             Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns);
             columns = QMIN(columns, columnsRemaining);
 
-            const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
             Q_INT32 srcRowStride = srcdev->rowStride(srcX, srcY);
+            //const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
+            KisHLineIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns, false);
+            const Q_UINT8 *srcData = srcIt.rawData();
 
-            Q_UINT8 *dstData = m_device->writablePixel(dstX, dstY);
+            //Q_UINT8 *dstData = m_device->writablePixel(dstX, dstY);
             Q_INT32 dstRowStride = m_device->rowStride(dstX, dstY);
+            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns, true);
+            Q_UINT8 *dstData = dstIt.rawData();
 
 
             m_colorSpace->bitBlt(dstData,
@@ -308,14 +312,20 @@ void KisPainter::bltSelection(Q_INT32 dx, Q_INT32 dy,
             columns = QMIN(numContiguousSelColumns, columns);
             columns = QMIN(columns, columnsRemaining);
 
-            Q_UINT8 *dstData = m_device->writablePixel(dstX, dstY);
+            //Q_UINT8 *dstData = m_device->writablePixel(dstX, dstY);
             Q_INT32 dstRowStride = m_device->rowStride(dstX, dstY);
+            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns, true);
+            Q_UINT8 *dstData = dstIt.rawData();
 
-            const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
+            //const Q_UINT8 *srcData = srcdev->pixel(srcX, srcY);
             Q_INT32 srcRowStride = srcdev->rowStride(srcX, srcY);
+            KisHLineIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns, false);
+            const Q_UINT8 *srcData = srcIt.rawData();
 
-            const Q_UINT8 *selData = seldev->pixel(dstX, dstY);
+            //const Q_UINT8 *selData = seldev->pixel(dstX, dstY);
             Q_INT32 selRowStride = seldev->rowStride(dstX, dstY);
+            KisHLineIteratorPixel selIt = seldev->createHLineIterator(dstX, dstY, columns, false);
+            const Q_UINT8 *selData = selIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
                                    dstRowStride,

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
+ *  Copyright (c) 2005-2006 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 
 #include <qmutex.h>
 #include <qthread.h>
+#include <qfile.h>
 
 #include <kstaticdeleter.h>
 #include <kglobal.h>
@@ -66,7 +67,7 @@ KisTileManager::KisTileManager() {
 
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("");
-    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  500);
+    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  4000);
     m_swappiness = cfg->readNumEntry("swappiness", 100);
 
     m_tileSize = KisTile::WIDTH * KisTile::HEIGHT;
@@ -89,8 +90,6 @@ KisTileManager::~KisTileManager() {
                 FreeList::iterator end = (*listsIt).end();
 
                 while (it != end) {
-                    // munmap it
-                    munmap((*it)->pointer, (*it)->size);
                     delete *it;
                     ++it;
                 }
@@ -132,7 +131,9 @@ void KisTileManager::registerTile(KisTile* tile)
     TileInfo* info = new TileInfo();
     info->tile = tile;
     info->inMem = true;
-    info->filePos = -1;
+    info->mmapped = false;
+    info->onFile = false;
+    info->filePos = 0;
     info->size = tile->WIDTH * tile->HEIGHT * tile->m_pixelSize;
     info->fsize = 0; // the size in the file
     info->validNode = true;
@@ -162,18 +163,24 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 
     TileInfo* info = m_tileMap[tile];
 
-    if (info->filePos >= 0) { // It is mmapped
+    if (info->onFile) { // It was once mmapped
         // To freelist
         FreeInfo* freeInfo = new FreeInfo();
-        freeInfo->pointer = tile->m_data;
         freeInfo->filePos = info->filePos;
         freeInfo->size = info->fsize;
         uint pixelSize = (info->size / m_tileSize);
+
+        // It is still mmapped?
+        if (info->mmapped) {
+            // munmap it
+            munmap(info->tile->m_data, info->size);
+            m_bytesInMem -= info->size;
+            m_currentInMem--;
+        }
+
         if (m_freeLists.capacity() <= pixelSize)
             m_freeLists.resize(pixelSize + 1);
         m_freeLists[pixelSize].push_back(freeInfo);
-
-        madvise(info->tile->m_data, info->fsize, MADV_DONTNEED);
 
         // the KisTile will attempt to delete its data. This is of course silly when
         // it was mmapped. So change the m_data to NULL, which is safe to delete
@@ -198,7 +205,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
     m_swapMutex->unlock();
 }
 
-void KisTileManager::ensureTileLoaded(KisTile* tile)
+void KisTileManager::ensureTileLoaded(const KisTile* tile)
 {
 
     m_swapMutex->lock();
@@ -216,7 +223,7 @@ void KisTileManager::ensureTileLoaded(KisTile* tile)
     m_swapMutex->unlock();
 }
 
-void KisTileManager::maySwapTile(KisTile* tile)
+void KisTileManager::maySwapTile(const KisTile* tile)
 {
 
     m_swapMutex->lock();
@@ -235,15 +242,23 @@ void KisTileManager::fromSwap(TileInfo* info)
 {
     m_swapMutex->lock();
 
-    //Q_ASSERT(!info->inMem);
     if (info->inMem) return;
 
     doSwapping();
 
-    // ### check return value!
-    madvise(info->tile->m_data, info->size, MADV_WILLNEED);
+    Q_ASSERT(info->onFile);
+    Q_ASSERT(!info->mmapped);
+
+    if (!kritaMmap(info->tile->m_data, 0, info->size, PROT_READ | PROT_WRITE, MAP_SHARED,
+                   m_tempFile.handle(), info->filePos)) {
+        kdWarning() << "fromSwap failed!" << endl;
+        m_swapMutex->unlock();
+        return;
+    }
 
     info->inMem = true;
+    info->mmapped = true;
+
     m_currentInMem++;
     m_bytesInMem += info->size;
 
@@ -251,34 +266,36 @@ void KisTileManager::fromSwap(TileInfo* info)
 }
 
 void KisTileManager::toSwap(TileInfo* info) {
-
     m_swapMutex->lock();
 
     //Q_ASSERT(info->inMem);
     if (!info || !info->inMem) return;
 
-    if (info->filePos < 0) {
+    KisTile *tile = info->tile;
+
+    if (!info->onFile) {
         // This tile is not yet in the file. Save it there
-        // ### check return values of mmap functions!
-        KisTile *tile = info->tile;
-        Q_UINT8* data = 0;
         uint pixelSize = (info->size / m_tileSize);
+        bool foundFree = false;
+
         if (m_freeLists.capacity() > pixelSize) {
             if (!m_freeLists[pixelSize].empty()) {
                 // found one
                 FreeList::iterator it = m_freeLists[pixelSize].begin();
-                data = (*it)->pointer;
+
                 info->filePos = (*it)->filePos;
                 info->fsize = (*it)->size;
 
                 delete *it;
                 m_freeLists[pixelSize].erase(it);
+
+                foundFree = true;
             }
         }
 
-        if (data == 0) { // No position found or free, create a new
+        if (!foundFree) { // No position found or free, create a new
             long pagesize = sysconf(_SC_PAGESIZE);
-            int newsize = m_fileSize + info->size;
+            off_t newsize = m_fileSize + info->size;
             newsize = newsize + newsize % pagesize;
 
             if (ftruncate(m_tempFile.handle(), newsize)) {
@@ -307,43 +324,33 @@ void KisTileManager::toSwap(TileInfo* info) {
                 return;
             }
 
-            data = (Q_UINT8*) mmap(0, info->size,
-                                   PROT_READ | PROT_WRITE,
-                                   MAP_SHARED,
-                                   m_tempFile.handle(), m_fileSize);
-
-            // Same here for warning and GUI
-            if (data == (Q_UINT8*)-1) {
-                kdWarning(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're probably going to crash very soon now...\n";
-
-                // Try to ignore what happened and carry on, but unlikely that we'll get
-                // much further, since the file resizing went OK and this is memory-related...
-                if (errno == ENOMEM) {
-                    kdWarning(DBG_AREA_TILES) << "mmap failed with E NOMEM! This means that "
-                            << "either there are no more memory mappings available for Krita, "
-                            << "or that there is no more memory available!" << endl;
-                }
-
-                kdWarning(DBG_AREA_TILES) << "Trying to continue anyway (no guarantees)" << endl;
-                kdWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
-                kdDebug(DBG_AREA_TILES) << "Failed mmap info: "
-                        << "tried mapping " << info->size << " bytes"
-                        << "to a " << m_fileSize << " bytes file" << endl;
-                printInfo();
-
-                m_swapForbidden = true;
-                m_swapMutex->unlock();
-                return;
-            }
-
             info->fsize = info->size;
             info->filePos = m_fileSize;
             m_fileSize = newsize;
         }
 
-        madvise(data, info->fsize, MADV_WILLNEED);
-        memcpy(data, tile->m_data, info->size);
-        madvise(data, info->fsize, MADV_DONTNEED);
+        //memcpy(data, tile->m_data, info->size);
+        QFile* file = m_tempFile.file();
+        if(!file) {
+            kdWarning() << "Opening the file as QFile failed" << endl;
+            m_swapForbidden = true;
+            m_swapMutex->unlock();
+            return;
+        }
+
+        if(!file->at(info->filePos)) {
+            kdWarning() << "Seek to position FAILED!: " << info->filePos << endl;
+            m_swapForbidden = true;
+            m_swapMutex->unlock();
+            return;
+        }
+
+        if (file->writeBlock(reinterpret_cast<const char *>(tile->m_data), info->size) == -1) {
+            kdWarning() << "Write to file FAILED!: " << info->filePos << endl;
+            m_swapForbidden = true;
+            m_swapMutex->unlock();
+            return;
+        }
 
         m_poolMutex->lock();
         if (isPoolTile(tile->m_data, tile->m_pixelSize))
@@ -352,12 +359,20 @@ void KisTileManager::toSwap(TileInfo* info) {
             delete[] tile->m_data;
         m_poolMutex->unlock();
 
-        tile->m_data = data;
+        tile->m_data = 0;
     } else {
-        madvise(info->tile->m_data, info->fsize, MADV_DONTNEED);
+        //madvise(info->tile->m_data, info->fsize, MADV_DONTNEED);
+        Q_ASSERT(info->mmapped);
+
+        // munmap it
+        munmap(tile->m_data, info->size);
+        tile->m_data = 0;
     }
 
     info->inMem = false;
+    info->mmapped = false;
+    info->onFile = true;
+
     m_currentInMem--;
     m_bytesInMem -= info->size;
 
@@ -377,7 +392,7 @@ void KisTileManager::doSwapping()
 
     Q_UINT32 count = QMIN(m_swappableList.size(), m_swappiness);
 
-    for (Q_UINT32 i = 0; i < count; i++) {
+    for (Q_UINT32 i = 0; i < count && !m_swapForbidden; i++) {
         toSwap(m_swappableList.front());
         m_swappableList.front()->validNode = false;
         m_swappableList.pop_front();
@@ -407,6 +422,8 @@ void KisTileManager::printInfo()
                     << ", pixelSize: " << m_poolPixelSizes[i] << endl;
         }
     }
+    if (m_swapForbidden)
+        kdDebug(DBG_AREA_TILES) << "Something was wrong with the swap, see above for details" << endl;
     kdDebug(DBG_AREA_TILES) << endl;
 }
 
@@ -500,4 +517,36 @@ void KisTileManager::configChanged() {
     m_swapMutex->lock();
     doSwapping();
     m_swapMutex->unlock();
+}
+
+bool KisTileManager::kritaMmap(Q_UINT8*& result, void *start, size_t length,
+                               int prot, int flags, int fd, off_t offset) {
+    result = (Q_UINT8*) mmap(start, length, prot, flags, fd, offset);
+
+            // Same here for warning and GUI
+    if (result == (Q_UINT8*)-1) {
+        kdWarning(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're probably going to crash very soon now...\n";
+
+        // Try to ignore what happened and carry on, but unlikely that we'll get
+        // much further, since the file resizing went OK and this is memory-related...
+        if (errno == ENOMEM) {
+            kdWarning(DBG_AREA_TILES) << "mmap failed with E NOMEM! This means that "
+                    << "either there are no more memory mappings available for Krita, "
+                    << "or that there is no more memory available!" << endl;
+        }
+
+        kdWarning(DBG_AREA_TILES) << "Trying to continue anyway (no guarantees)" << endl;
+        kdWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
+        kdDebug(DBG_AREA_TILES) << "Failed mmap info: "
+                << "tried mapping " << length << " bytes"
+                << "to a " << m_fileSize << " bytes file" << endl;
+        printInfo();
+
+        // Be nice
+        result = 0;
+
+        return false;
+    }
+
+    return true;
 }

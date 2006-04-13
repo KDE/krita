@@ -36,6 +36,17 @@ typedef KSharedPtr<KisDataManager> KisDataManagerSP;
 class KisTiledIterator;
 class KoStore;
 
+class KisTileDataWrapper : public KShared {
+    KisTile* m_tile;
+    Q_INT32 m_offset;
+public:
+    KisTileDataWrapper(KisTile* tile, Q_INT32 offset);
+    virtual ~KisTileDataWrapper();
+    Q_UINT8* data() const { return m_tile->data() + m_offset; }
+};
+
+typedef KSharedPtr<KisTileDataWrapper> KisTileDataWrapperSP;
+
 /**
  * KisTiledDataManager implements the interface that KisDataManager defines
  *
@@ -185,6 +196,7 @@ private:
     Q_INT32 yToRow(Q_INT32 y) const;
     void getContiguousColumnsAndRows(Q_INT32 x, Q_INT32 y, Q_INT32 *columns, Q_INT32 *rows);
     Q_UINT8* pixelPtr(Q_INT32 x, Q_INT32 y, bool writable);
+    KisTileDataWrapperSP pixelPtrSafe(Q_INT32 x, Q_INT32 y, bool writable);
 };
 
 

@@ -53,6 +53,11 @@ KisTile::KisTile(const KisTile& rhs, Q_INT32 col, Q_INT32 row)
 
         allocate();
 
+        // If we ensure it's loaded, we won't need to modify the tiles with addReader and so,
+        // which modify the constness much more explicitly than this one, that only does it
+        // implicitly (that is, it has a non-const copy of the pointer tile somewhere)
+        KisTileManager::instance()->ensureTileLoaded(&rhs);
+        assert(rhs.m_data);
         if (rhs.m_data) {
             memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
         }
@@ -76,6 +81,9 @@ KisTile::KisTile(const KisTile& rhs)
 
         allocate();
 
+        // Ditto as above
+        KisTileManager::instance()->ensureTileLoaded(&rhs);
+        assert(rhs.m_data);
         if (rhs.m_data) {
             memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
         }
@@ -112,17 +120,18 @@ void KisTile::setNext(KisTile *n)
 
 Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y ) const
 {
-    //Q_ASSERT(m_data != 0);
+    Q_ASSERT(m_data != 0);
+    //addReader(); [!] const!
     if (m_data == 0) return 0;
+    //removeReader(); [!]
 
     return m_data + m_pixelSize * ( y * WIDTH + x );
 }
 
 void KisTile::setData(const Q_UINT8 *pixel)
 {
-    Q_UINT8 *dst = m_data;
-
     addReader();
+    Q_UINT8 *dst = m_data;
     for(int i=0; i <WIDTH * HEIGHT;i++)
     {
         memcpy(dst, pixel, m_pixelSize);
@@ -139,6 +148,7 @@ void KisTile::addReader()
         kdDebug(41000) << m_nReadlock << endl;
         assert(0);
     }
+    assert(m_data);
 }
 
 void KisTile::removeReader()

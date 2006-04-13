@@ -350,11 +350,10 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UI
 
             QRect clearTileRect = clearRect & tileRect;
 
+            tile->addReader();
             if (clearTileRect == tileRect) {
-
                 // Clear whole tile
                 memset(tile->data(), clearValue, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
-
             } else {
 
                 Q_UINT32 rowsRemaining = clearTileRect.height();
@@ -366,6 +365,7 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UI
                     --rowsRemaining;
                 }
             }
+            tile->removeReader();
         }
     }
 }
@@ -826,6 +826,13 @@ KisTile *KisTiledDataManager::getOldTile(Q_INT32 col, Q_INT32 row, KisTile *def)
 
 Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)
 {
+    // Ahem, this is a bit not as good. The point is, this function needs the tile data,
+    // but it might be swapped out. This code swaps it in, but at function exit it might
+    // be swapped out again! THIS MAKES THE RETURNED POINTER QUITE VOLATILE
+    return pixelPtrSafe(x, y, writable) -> data();
+}
+
+KisTileDataWrapperSP KisTiledDataManager::pixelPtrSafe(Q_INT32 x, Q_INT32 y, bool writable) {
     Q_INT32 row = yToRow(y);
     Q_INT32 col = xToCol(x);
 
@@ -836,7 +843,7 @@ Q_UINT8* KisTiledDataManager::pixelPtr(Q_INT32 x, Q_INT32 y, bool writable)
 
     KisTile *tile = getTile(col, row, writable);
 
-    return tile->data() + offset;
+    return new KisTileDataWrapper(tile, offset);
 }
 
 const Q_UINT8* KisTiledDataManager::pixel(Q_INT32 x, Q_INT32 y)
@@ -887,7 +894,8 @@ void KisTiledDataManager::readBytes(Q_UINT8 * data,
 
             Q_INT32 columns = QMIN(numContiguousSrcColumns, columnsRemaining);
 
-            const Q_UINT8 *srcData = pixel(srcX, srcY);
+            KisTileDataWrapperSP tileData = pixelPtrSafe(srcX, srcY, false);
+            const Q_UINT8 *srcData = tileData -> data();
             Q_INT32 srcRowStride = rowStride(srcX, srcY);
 
             Q_UINT8 *dstData = data + ((dstX + (dstY * w)) * m_pixelSize);
@@ -945,7 +953,9 @@ void KisTiledDataManager::writeBytes(const Q_UINT8 * bytes,
 
             Q_INT32 columns = QMIN(numContiguousdstColumns, columnsRemaining);
 
-            Q_UINT8 *dstData = writablePixel(dstX, dstY);
+            //Q_UINT8 *dstData = writablePixel(dstX, dstY);
+            KisTileDataWrapperSP tileData = pixelPtrSafe(dstX, dstY, true);
+            Q_UINT8 *dstData = tileData->data();
             Q_INT32 dstRowStride = rowStride(dstX, dstY);
 
             const Q_UINT8 *srcData = bytes + ((srcX + (srcY * w)) * m_pixelSize);
@@ -1013,3 +1023,13 @@ Q_INT32 KisTiledDataManager::numTiles(void) const
     return m_numTiles;
 }
 
+KisTileDataWrapper::KisTileDataWrapper(KisTile* tile, Q_INT32 offset)
+    : m_tile(tile), m_offset(offset)
+{
+    m_tile->addReader();
+}
+
+KisTileDataWrapper::~KisTileDataWrapper()
+{
+    m_tile->removeReader();
+}

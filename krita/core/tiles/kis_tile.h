@@ -55,7 +55,7 @@ public:
 
     void setNext(KisTile *);
     KisTile *getNext() const { return m_nextTile; }
-    
+
     /// Functions that are needed for locking the tiles into memory for caching
     void addReader();
     void removeReader();

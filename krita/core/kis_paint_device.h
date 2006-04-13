@@ -229,12 +229,12 @@ public:
     /**
      * Get a read-only pointer to pixel (x, y).
      */
-    const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y);
+    const Q_UINT8* pixel(Q_INT32 x, Q_INT32 y) KDE_DEPRECATED;
 
     /**
      * Get a read-write pointer to pixel (x, y).
      */
-    Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y);
+    Q_UINT8* writablePixel(Q_INT32 x, Q_INT32 y) KDE_DEPRECATED;
 
     /**
      *   Converts the paint device to a different colorspace

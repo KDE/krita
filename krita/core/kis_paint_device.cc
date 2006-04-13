@@ -404,6 +404,7 @@ KNamedCommand * KisPaintDevice::moveCommand(Q_INT32 x, Q_INT32 y)
 void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
     m_datamanager->extent(x, y, w, h);
+    kdDebug() << x << " " << y << " ;; " << m_x << endl;
     x += m_x;
     y += m_y;
 }
@@ -647,8 +648,14 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, Q_INT32 renderingI
             Q_INT32 columns = QMIN(numContiguousDstColumns, numContiguousSrcColumns);
             columns = QMIN(columns, columnsRemaining);
 
-            const Q_UINT8 *srcData = pixel(column, row);
-            Q_UINT8 *dstData = dst.writablePixel(column, row);
+            //const Q_UINT8 *srcData = pixel(column, row);
+            //Q_UINT8 *dstData = dst.writablePixel(column, row);
+            KisHLineIteratorPixel srcIt = createHLineIterator(column, row, columns, false);
+            KisHLineIteratorPixel dstIt = dst.createHLineIterator(column, row, columns, true);
+
+            const Q_UINT8 *srcData = srcIt.rawData();
+            Q_UINT8 *dstData = dstIt.rawData();
+
 
             m_colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent);
 
@@ -709,7 +716,7 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     if (img.bitOrder() == QImage::LittleEndian) {
 	img = img.convertBitOrder(QImage::BigEndian);
     }
-
+    kdDebug() << k_funcinfo << img.bitOrder()<< endl;
     // Krita likes bgra (convertDepth returns *this is the img is alread 32 bits)
     img = img.convertDepth( 32 );
 #if 0
@@ -1054,7 +1061,9 @@ bool KisPaintDevice::pixel(Q_INT32 x, Q_INT32 y, KisColor * kc)
 
 KisColor KisPaintDevice::colorAt(Q_INT32 x, Q_INT32 y)
 {
-    return KisColor(m_datamanager->pixel(x - m_x, y - m_y), m_colorSpace);
+    //return KisColor(m_datamanager->pixel(x - m_x, y - m_y), m_colorSpace);
+    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
+    return KisColor(iter.rawData(), m_colorSpace);
 }
 
 bool KisPaintDevice::setPixel(Q_INT32 x, Q_INT32 y, const QColor& c, Q_UINT8  opacity)

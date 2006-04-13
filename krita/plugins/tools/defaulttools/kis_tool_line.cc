@@ -129,13 +129,17 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
 
         if ((e->state() & Qt::ShiftButton) == Qt::ShiftButton) {
             m_endPos = straightLine(e->pos());
-        } else m_endPos = e->pos();
+        }
+        else {
+            m_endPos = e->pos();
+        }
 
         KisPaintDeviceSP device;
         if (m_currentImage &&
             (device = m_currentImage->activeDevice()) &&
             m_subject &&
-            m_subject->currentBrush()) {
+            m_subject->currentBrush())
+        {
             delete m_painter;
             m_painter = new KisPainter( device );
             Q_CHECK_PTR(m_painter);
@@ -163,8 +167,8 @@ void KisToolLine::buttonRelease(KisButtonReleaseEvent *e)
             delete m_painter;
             m_painter = 0;
         } else {
-            // m_painter can be 0 here...!!!
-            controller->updateCanvas(m_painter->dirtyRect()); // Removes the last remaining line.
+            if (m_painter)
+                controller->updateCanvas(m_painter->dirtyRect()); // Removes the last remaining line.
         }
     }
 

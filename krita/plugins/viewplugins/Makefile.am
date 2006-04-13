@@ -3,7 +3,6 @@ SCRIPTINGDIR = scripting
 endif
 
 SUBDIRS = \
-    performancetest \
     colorrange \
     colorspaceconversion \
     dropshadow \
@@ -18,4 +17,5 @@ SUBDIRS = \
     $(SCRIPTINGDIR)
 
 # variations
+# performancetest
 # history_docker

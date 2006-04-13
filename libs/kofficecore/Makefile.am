@@ -49,7 +49,7 @@ include_HEADERS = KoContainerHandler.h \
 	KoPictureKey.h KoPicture.h KoPictureCollection.h kofficeversion.h KoOasisStyles.h \
 	KoStyleStack.h KoGenStyles.h KoOasisSettings.h KoPageLayout.h KoXmlNS.h KoDom.h Koversiondialog.h \
 	kkbdaccessextensions.h \
-	koffice_export.h KoOpenPane.h \
+	KoOpenPane.h \
 	KoOasisLoadingContext.h \
 	KoPoint.h
 

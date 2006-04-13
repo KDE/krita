@@ -1112,6 +1112,9 @@ protected:
 
     /**
      * Creates the open widget showed at application start up.
+     * @param parent the parent widget
+     * @param instance the KInstance to be used for KConfig data
+     * @param templateType the template-type (group) that should be selected on creation.
      * @since 1.5
      */
     KoOpenPane* createOpenPane( QWidget* parent, KInstance* instance,

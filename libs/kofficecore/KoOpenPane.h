@@ -39,6 +39,12 @@ class KoOpenPane : public KoOpenPaneBase
   Q_OBJECT
 
   public:
+    /**
+     * Constructor
+     * @param parent the parent widget
+     * @param instance the KInstance to be used for KConfig data
+     * @param templateType the template-type (group) that should be selected on creation.
+     */
     KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType = QString::null);
     virtual ~KoOpenPane();
 
@@ -74,6 +80,10 @@ class KoOpenPane : public KoOpenPaneBase
 
   protected:
     void initRecentDocs();
+     /**
+      * Populate the list with all templates the user can choose.
+      * @param templateType the template-type (group) that should be selected on creation.
+      */
     void initTemplates(const QString& templateType);
 
   private:

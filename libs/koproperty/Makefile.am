@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/editors -I$(top_srcdir)/lib/kofficecore $(all_includes)
+INCLUDES = -I$(srcdir)/editors -I$(top_srcdir)/libs/kofficecore $(all_includes)
 
 lib_LTLIBRARIES =  libkoproperty.la
 

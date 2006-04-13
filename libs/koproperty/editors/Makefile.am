@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/koproperty -I$(top_srcdir)/lib/kofficecore $(all_includes)
+INCLUDES = -I$(top_srcdir)/libs/koproperty -I$(top_srcdir)/libs/kofficecore $(all_includes)
 
 noinst_LTLIBRARIES =  libkopropertyeditors.la
 libkopropertyeditors_la_LIBADD =  $(LIB_KDEUI) $(LIB_KIO)

@@ -18,13 +18,12 @@
 */
 
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3multilineedit.h>
-#include <qpushbutton.h>
-#include <qtoolbutton.h>
-#include <qapplication.h>
-#include <qlayout.h>
+#include <QPushButton>
+#include <QToolButton>
+#include <QApplication>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
@@ -47,7 +46,7 @@ KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  Q3GridLayout *grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
+  Q3GridLayout* grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
 
   list=new K3ListView(page);
   list->setObjectName(  "versionlist");

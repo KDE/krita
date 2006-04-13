@@ -82,7 +82,7 @@ public:
 
 KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, const char *name,
                                       KDialogBase *dialog )
-: QObject( parent, "docinfodlg" )
+: QObject( parent )
 {
   d = new KoDocumentInfoDlgPrivate;
   d->m_info = docInfo;
@@ -204,8 +204,8 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   KVBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
   d->m_authorWidget = new KoDocumentInfoAuthorWidget( page );
   d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "personal", K3Icon::Desktop, 48 ) );
-  d->m_authorWidget->pbLoadKABC->setIconSet( QIcon( KGlobal::iconLoader()->loadIcon( "kaddressbook", K3Icon::Small ) ) );
-  d->m_authorWidget->pbDelete->setIconSet( QIcon( KGlobal::iconLoader()->loadIcon( "eraser", K3Icon::Small ) ) );
+  d->m_authorWidget->pbLoadKABC->setIcon( QIcon( KGlobal::iconLoader()->loadIcon( "kaddressbook", K3Icon::Small ) ) );
+  d->m_authorWidget->pbDelete->setIcon( QIcon( KGlobal::iconLoader()->loadIcon( "eraser", K3Icon::Small ) ) );
 
   d->m_authorWidget->leFullName->setText( authorInfo->fullName() );
   d->m_authorWidget->leInitial->setText( authorInfo->initial() );
@@ -257,7 +257,7 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
   KVBox *page = d->m_dialog->addVBoxPage( i18n( "General" ) );
   d->m_aboutWidget = new KoDocumentInfoAboutWidget( page );
-  d->m_aboutWidget->pbReset->setIconSet( QIcon( KGlobal::iconLoader()->loadIcon( "reload", K3Icon::Small ) ) );
+  d->m_aboutWidget->pbReset->setIcon( QIcon( KGlobal::iconLoader()->loadIcon( "reload", K3Icon::Small ) ) );
   KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
   if ( doc )
   {
@@ -273,7 +273,7 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
   d->m_aboutWidget->leDocTitle->setText( aboutInfo->title() );
   d->m_aboutWidget->leDocSubject->setText( aboutInfo->subject() );
   d->m_aboutWidget->leDocKeywords->setText( aboutInfo->keywords() );
-  d->m_aboutWidget->meDocAbstract->setText( aboutInfo->abstract() );
+  d->m_aboutWidget->meDocAbstract->setPlainText( aboutInfo->abstract() );
 
   connect( d->m_aboutWidget->leDocTitle, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
@@ -301,7 +301,7 @@ void KoDocumentInfoDlg::addUserMetadataPage( KoDocumentInfoUserMetadata *userMet
     for ( it = userMetadataInfo->metadataList()->begin(); it != userMetadataInfo->metadataList()->end(); ++it )
     {
         QString name = it.key();
-        QString value = it.data();
+        QString value = it.value();
         K3ListViewItem* it = new K3ListViewItem( d->m_metaWidget->metaListView, name, value );
         it->setPixmap( 0, KGlobal::iconLoader()->loadIcon( "text", K3Icon::Small ) );
     }
@@ -364,7 +364,7 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )
   aboutInfo->setTitle( d->m_aboutWidget->leDocTitle->text() );
   aboutInfo->setSubject( d->m_aboutWidget->leDocSubject->text() );
   aboutInfo->setKeywords( d->m_aboutWidget->leDocKeywords->text() );
-  aboutInfo->setAbstract( d->m_aboutWidget->meDocAbstract->text() );
+  aboutInfo->setAbstract( d->m_aboutWidget->meDocAbstract->toPlainText() );
 }
 
 void KoDocumentInfoDlg::save( KoDocumentInfoUserMetadata* )

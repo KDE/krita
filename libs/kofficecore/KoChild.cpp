@@ -19,7 +19,7 @@
 
 #include <KoChild.h>
 
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QPolygon>
 
@@ -52,8 +52,8 @@ public:
   int m_contentsY;
 };
 
-KoChild::KoChild( QObject *parent, const char *name )
-: QObject( parent, name )
+KoChild::KoChild( QObject *parent, const char* /*name*/ )
+: QObject( parent )
 {
   d = new KoChildPrivate;
 
@@ -125,9 +125,9 @@ void KoChild::setClipRegion( QPainter &painter, bool combine )
 {
   painter.setClipping( true );
   if ( combine && !painter.clipRegion().isEmpty() )
-    painter.setClipRegion( region( painter.worldMatrix() ).intersect( painter.clipRegion() ) );
+    painter.setClipRegion( region( painter.matrix() ).intersect( painter.clipRegion() ) );
   else
-    painter.setClipRegion( region( painter.worldMatrix() ) );
+    painter.setClipRegion( region( painter.matrix() ) );
 }
 
 void KoChild::setScaling( double x, double y )
@@ -220,7 +220,7 @@ void KoChild::transform( QPainter &painter )
 {
     setClipRegion( painter, true );
 
-    QMatrix m = painter.worldMatrix();
+    QMatrix m = painter.matrix();
     m = d->m_matrix * m;
     m.scale( d->m_scaleX, d->m_scaleY );
     painter.setMatrix( m );

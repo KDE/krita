@@ -132,7 +132,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
             writer->startElement( propertiesElementName ); // e.g. paragraph-properties
         it = m_properties[i].begin();
         for ( ; it != m_properties[i].end(); ++it ) {
-            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
+            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.value() )
                 writer->addAttribute( it.key().toUtf8(), it.value().toUtf8() );
         }
         i = KoGenStyle::ChildElement;

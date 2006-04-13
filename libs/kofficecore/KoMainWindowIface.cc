@@ -52,7 +52,7 @@ DCOPCStringList KoMainWindowIface::actions()
     Q3ValueList<KAction *>::ConstIterator it = lst.begin();
     Q3ValueList<KAction *>::ConstIterator end = lst.end();
     for (; it != end; ++it )
-        res.append( (*it)->name() );
+        res.append( (*it)->objectName().toUtf8() );
 
     return res;
 }

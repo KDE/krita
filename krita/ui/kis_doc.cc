@@ -50,7 +50,6 @@
 #include <KoStoreDevice.h>
 #include <KoTemplateChooseDia.h>
 #include <KoApplication.h>
-#include <KoCommandHistory.h>
 
 // Local
 #include <kis_clipboard.h>

@@ -61,7 +61,8 @@ KisFactory::KisFactory( QObject* parent, const char* name )
     KisToolRegistry::instance();
     KisPaintOpRegistry::instance();
     KisFilterRegistry::instance();
-    KisResourceServerRegistry::instance();
+#warning kde4 port
+    //KisResourceServerRegistry::instance();
 
 
 

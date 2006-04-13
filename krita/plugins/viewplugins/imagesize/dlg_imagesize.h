@@ -25,6 +25,16 @@
 class KisFilterStrategy;
 class WdgImageSize;
 
+#include "ui_wdg_imagesize.h"
+
+class WdgImageSize : public QWidget, public Ui::WdgImageSize
+{
+    Q_OBJECT
+
+    public:
+        WdgImageSize(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
 /**
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.

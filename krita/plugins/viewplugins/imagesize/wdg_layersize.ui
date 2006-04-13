@@ -1,234 +1,216 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgLayerSize</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgLayerSize</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgLayerSize</class>
+  <widget class="QWidget" name="WdgLayerSize" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>391</width>
+        <height>224</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>391</width>
-            <height>224</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Image Size</string>
     </property>
-    <property name="caption">
-        <string>Image Size</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>grpPixelDimensions</cstring>
-            </property>
-            <property name="title">
-                <string>&amp;Pixel Dimensions</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item rowspan="1" row="0" column="0" colspan="2" >
+        <widget class="Q3ButtonGroup" name="grpPixelDimensions" >
+          <property name="title" >
+            <string>&amp;Pixel Dimensions</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="1" >
+              <widget class="QLabel" name="lblWidth" >
+                <property name="text" >
+                  <string>&amp;Width:</string>
                 </property>
-                <widget class="QLabel" row="0" column="1">
-                    <property name="name">
-                        <cstring>lblWidth</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Width:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>intWidth</cstring>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="2" column="2">
-                    <property name="name">
-                        <cstring>intHeight</cstring>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="2">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Height:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>intHeight</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="1">
-                    <property name="name">
-                        <cstring>lblWidthOriginal</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>WinPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="alignment">
-                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="2">
-                    <property name="name">
-                        <cstring>lblHeightOriginal</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>WinPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="alignment">
-                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>lblOrignal</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Original:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>lblNew</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;New:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>intWidth</cstring>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="2" column="1">
-                    <property name="name">
-                        <cstring>intWidth</cstring>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="3" column="1">
-                    <property name="name">
-                        <cstring>intWidthPercent</cstring>
-                    </property>
-                    <property name="value">
-                        <number>100</number>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                    <property name="referencePoint">
-                        <number>100</number>
-                    </property>
-                    <property name="suffix">
-                        <string>%</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="3" column="2">
-                    <property name="name">
-                        <cstring>intHeightPercent</cstring>
-                    </property>
-                    <property name="value">
-                        <number>100</number>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                    <property name="suffix">
-                        <string>%</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>lblPercent</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Percent:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>intWidthPercent</cstring>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>chkConstrain</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Constrain proportions</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-            </grid>
+                <property name="buddy" stdset="0" >
+                  <cstring>intWidth</cstring>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="2" >
+              <widget class="KIntNumInput" name="intHeight" >
+                <property name="minimum" >
+                  <number>0</number>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="2" >
+              <widget class="QLabel" name="textLabel2" >
+                <property name="text" >
+                  <string>&amp;Height:</string>
+                </property>
+                <property name="buddy" stdset="0" >
+                  <cstring>intHeight</cstring>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="1" >
+              <widget class="QLabel" name="lblWidthOriginal" >
+                <property name="frameShape" >
+                  <enum>QFrame::WinPanel</enum>
+                </property>
+                <property name="frameShadow" >
+                  <enum>QFrame::Sunken</enum>
+                </property>
+                <property name="text" >
+                  <string/>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="2" >
+              <widget class="QLabel" name="lblHeightOriginal" >
+                <property name="frameShape" >
+                  <enum>QFrame::WinPanel</enum>
+                </property>
+                <property name="frameShadow" >
+                  <enum>QFrame::Sunken</enum>
+                </property>
+                <property name="text" >
+                  <string/>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="lblOrignal" >
+                <property name="text" >
+                  <string>Original:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="0" >
+              <widget class="QLabel" name="lblNew" >
+                <property name="text" >
+                  <string>&amp;New:</string>
+                </property>
+                <property name="buddy" stdset="0" >
+                  <cstring>intWidth</cstring>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="1" >
+              <widget class="KIntNumInput" name="intWidth" >
+                <property name="minimum" >
+                  <number>0</number>
+                </property>
+              </widget>
+            </item>
+            <item row="3" column="1" >
+              <widget class="KIntNumInput" name="intWidthPercent" >
+                <property name="value" >
+                  <number>100</number>
+                </property>
+                <property name="minimum" >
+                  <number>0</number>
+                </property>
+                <property name="referencePoint" >
+                  <number>100</number>
+                </property>
+                <property name="suffix" >
+                  <string>%</string>
+                </property>
+              </widget>
+            </item>
+            <item row="3" column="2" >
+              <widget class="KIntNumInput" name="intHeightPercent" >
+                <property name="value" >
+                  <number>100</number>
+                </property>
+                <property name="minimum" >
+                  <number>0</number>
+                </property>
+                <property name="suffix" >
+                  <string>%</string>
+                </property>
+              </widget>
+            </item>
+            <item row="3" column="0" >
+              <widget class="QLabel" name="lblPercent" >
+                <property name="text" >
+                  <string>&amp;Percent:</string>
+                </property>
+                <property name="buddy" stdset="0" >
+                  <cstring>intWidthPercent</cstring>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="4" column="0" colspan="3" >
+              <widget class="QCheckBox" name="chkConstrain" >
+                <property name="text" >
+                  <string>&amp;Constrain proportions</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>lblFilterType</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Filter:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>cmbFilterType</cstring>
-            </property>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QLabel" name="lblFilterType" >
+          <property name="text" >
+            <string>&amp;Filter:</string>
+          </property>
+          <property name="buddy" stdset="0" >
+            <cstring>cmbFilterType</cstring>
+          </property>
         </widget>
-        <widget class="KisCmbIDList" row="1" column="1">
-            <property name="name">
-                <cstring>cmbFilterType</cstring>
-            </property>
-        </widget>
-    </grid>
-</widget>
-<customwidgets>
+      </item>
+      <item row="1" column="1" >
+        <widget class="KisCmbIDList" name="cmbFilterType" />
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>KisCmbIDList</class>
-        <header location="local">kis_cmb_idlist.h</header>
-        <sizehint>
-            <width>1</width>
-            <height>24</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
+      <class>KisCmbIDList</class>
+      <extends></extends>
+      <header location="local" >kis_cmb_idlist.h</header>
+      <sizehint>
+        <width>1</width>
+        <height>24</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
     </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="1002">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b149444154388dad945f4c5b551cc73fe7dc4b7b4bcba0762d45c43114323599ee6192609c51d883892ce083f1718b3ebb185f8dc91e972cf39d2d2a2f1af664b6f1e0fe3863a0718969700eb0c52142da0242a1bd6d696f7bcff101585203ceb8fd9ece39f99dcff9fe7edf939f88c562ec465f5f9fe609442c161362173c3e3eae7b7a7ac8e7f36432196cdbfe4f907c3e4f2291201e8fe338cec3737357e9e8e828aded1e229d650e1f2d51754b082110124c13a4dc5ea341eb9dc284c0558a853f3ce8cb0677ef500fde7d39d2596679e326597b8e9abb85d7a770ab16ab6983ec5a05b487a70e36f0f4e10afe408d6a558310980108478dba4a1e8233990c5d474b64ed39aa3a8fe5f3317fbf81dbd70bccfeb205947632fd74f6589c1c6ea2f70d03a58ba0c1f2c9bdc1b66de3b8256a6e11cbe7e3ee1d181b590124fe2693aeee08d223c82c3a2c24b7b874bec8f26288774f7bd054504aef0dde6e99c0eb83f9fb266323cb80a27fb0958141836044605a2ee5523393371cc646fee2da37195aa35d0c0c5b4859ac03d7e91712dcaac5adab3650a3ff9d08ef7dd8404bb48869e5d958b5b87dadc4c9a1464e9f0d0326df7ebd86bd2e310cb1bf62d384d59441f2d70a070e1c60e09489929b988681bdd9cc97170bcc4c65595f71f8e0e3301337fc24a7732467831875a47f289652b0be5e4151e6d07316c1b0c0340d8ab92023e76d66a6b2840e36d2fb7a13fee632475e6edc367ea98a90fb98b7dd6310ca0328a44761582e1bab41befabcc0ec940d28bc5e93b68e064cab84e1d9beaeb48934eac1f53b01c1b000fca496aa54b61a99fcde61662a4b4b4b23d1680be9d426173e4df3602a48ea411989a4fd590f52a8fd156b05ed9d350e3defe3cfdf4b4c7ce770ea7d3fb9f520afbe1620daeee5c26735d20b9b9cfb6811a754a439e4e5c5639a4caa1e5caf586bfc0197b78702005cb9b4cae4cd3267ce8638fe964bd72b393e39d74928d242617303a756a37f284447770dcdbffc6384a05a85de1306e9a52057c7527c7131c3c42d3f475eb2303c82d4fc3276d6811db37efeb148723082d9b08f79f97c1e5729109a9a28307cc622d2d6cdf52b2b24efe548dedb00142009862cfa879ee1a71f6cec928353511472fbf4389148b0b0e0c108081412458dfe21c9f11351e67e7358595468246d1d1e5e38a6e9e851bc39d84ab502a669331dafec0d8ec7e3e8cb06e1a881d727d1ae40180a434a8c9db129a54126ad48a7358c2b4c5352c8c374bcccdab2bb37d8719cba79fab8211f9df218e0582c261e95f8bfc04f1a1e8bc5c4dfe0a190172af6a9690000000049454e44ae426082</data>
-    </image>
-</images>
-<tabstops>
+    <customwidget>
+	    <class>KIntNumInput</class>
+	    <extends>QWidget</extends>
+	    <header>knuminput.h</header>
+	    <container>1</container>
+	    <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
+  <tabstops>
     <tabstop>intWidth</tabstop>
     <tabstop>intHeight</tabstop>
     <tabstop>intWidthPercent</tabstop>
     <tabstop>intHeightPercent</tabstop>
     <tabstop>chkConstrain</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-</includehints>
-</UI>
+  </tabstops>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="1002" >89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b149444154388dad945f4c5b551cc73fe7dc4b7b4bcba0762d45c43114323599ee6192609c51d883892ce083f1718b3ebb185f8dc91e972cf39d2d2a2f1af664b6f1e0fe3863a0718969700eb0c52142da0242a1bd6d696f7bcff101585203ceb8fd9ece39f99dcff9fe7edf939f88c562ec465f5f9fe609442c161362173c3e3eae7b7a7ac8e7f36432196cdbfe4f907c3e4f2291201e8fe338cec3737357e9e8e828aded1e229d650e1f2d51754b082110124c13a4dc5ea341eb9dc284c0558a853f3ce8cb0677ef500fde7d39d2596679e326597b8e9abb85d7a770ab16ab6983ec5a05b487a70e36f0f4e10afe408d6a558310980108478dba4a1e8233990c5d474b64ed39aa3a8fe5f3317fbf81dbd70bccfeb205947632fd74f6589c1c6ea2f70d03a58ba0c1f2c9bdc1b66de3b8256a6e11cbe7e3ee1d181b590124fe2693aeee08d223c82c3a2c24b7b874bec8f26288774f7bd054504aef0dde6e99c0eb83f9fb266323cb80a27fb0958141836044605a2ee5523393371cc646fee2da37195aa35d0c0c5b4859ac03d7e91712dcaac5adab3650a3ff9d08ef7dd8404bb48869e5d958b5b87dadc4c9a1464e9f0d0326df7ebd86bd2e310cb1bf62d384d59441f2d70a070e1c60e09489929b988681bdd9cc97170bcc4c65595f71f8e0e3301337fc24a7732467831875a47f289652b0be5e4151e6d07316c1b0c0340d8ab92023e76d66a6b2840e36d2fb7a13fee632475e6edc367ea98a90fb98b7dd6310ca0328a44761582e1bab41befabcc0ec940d28bc5e93b68e064cab84e1d9beaeb48934eac1f53b01c1b000fca496aa54b61a99fcde61662a4b4b4b23d1680be9d426173e4df3602a48ea411989a4fd590f52a8fd156b05ed9d350e3defe3cfdf4b4c7ce770ea7d3fb9f520afbe1620daeee5c26735d20b9b9cfb6811a754a439e4e5c5639a4caa1e5caf586bfc0197b78702005cb9b4cae4cd3267ce8638fe964bd72b393e39d74928d242617303a756a37f284447770dcdbffc6384a05a85de1306e9a52057c7527c7131c3c42d3f475eb2303c82d4fc3276d6811db37efeb148723082d9b08f79f97c1e5729109a9a28307cc622d2d6cdf52b2b24efe548dedb00142009862cfa879ee1a71f6cec928353511472fbf4389148b0b0e0c108081412458dfe21c9f11351e67e7358595468246d1d1e5e38a6e9e851bc39d84ab502a669331dafec0d8ec7e3e8cb06e1a881d727d1ae40180a434a8c9db129a54126ad48a7358c2b4c5352c8c374bcccdab2bb37d8719cba79fab8211f9df218e0582c261e95f8bfc04f1a1e8bc5c4dfe0a190172af6a9690000000049454e44ae426082</data>
+    </image>
+  </images>
+</ui>

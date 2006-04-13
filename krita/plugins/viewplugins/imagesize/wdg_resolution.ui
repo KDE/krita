@@ -1,152 +1,129 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgResolution</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgResolution</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgResolution</class>
+  <widget class="QWidget" name="WdgResolution" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>487</width>
+        <height>265</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>487</width>
-            <height>265</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Image Resolution</string>
     </property>
-    <property name="caption">
-        <string>Image Resolution</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>grpSize</cstring>
-            </property>
-            <property name="title">
-                <string>Print Size</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item rowspan="1" row="1" column="0" colspan="2" >
+        <widget class="Q3GroupBox" name="grpSize" >
+          <property name="title" >
+            <string>Print Size</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="1" column="0" >
+              <widget class="QLabel" name="lblHeight" >
+                <property name="text" >
+                  <string>Height:</string>
                 </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>lblHeight</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Height:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>lblWidth</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Width:</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="0" column="1">
-                    <property name="name">
-                        <cstring>intWidth</cstring>
-                    </property>
-                    <property name="suffix">
-                        <string> "</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="1" column="1">
-                    <property name="name">
-                        <cstring>intHeight</cstring>
-                    </property>
-                    <property name="suffix">
-                        <string> "</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>grpResolution</cstring>
-            </property>
-            <property name="title">
-                <string>Image Resolution</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+              </widget>
+            </item>
+            <item row="0" column="0" >
+              <widget class="QLabel" name="lblWidth" >
+                <property name="text" >
+                  <string>Width:</string>
                 </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>lblScreen</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Screen resolution:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="1">
-                    <property name="name">
-                        <cstring>lblScreenResolution</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>Panel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="text">
-                        <string>100</string>
-                    </property>
-                    <property name="alignment">
-                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>lblYResolution</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Image Y resolution:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>lblImageXRes</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Image X resolution:</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="1" column="1">
-                    <property name="name">
-                        <cstring>intXRes</cstring>
-                    </property>
-                    <property name="suffix">
-                        <string> dpi</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="2" column="1">
-                    <property name="name">
-                        <cstring>intYRes</cstring>
-                    </property>
-                    <property name="suffix">
-                        <string> dpi</string>
-                    </property>
-                </widget>
-            </grid>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="KIntNumInput" name="intWidth" >
+                <property name="suffix" >
+                  <string> "</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="1" >
+              <widget class="KIntNumInput" name="intHeight" >
+                <property name="suffix" >
+                  <string> "</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<customwidgets>
+      </item>
+      <item rowspan="1" row="0" column="0" colspan="2" >
+        <widget class="Q3GroupBox" name="grpResolution" >
+          <property name="title" >
+            <string>Image Resolution</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="0" >
+              <widget class="QLabel" name="lblScreen" >
+                <property name="text" >
+                  <string>Screen resolution:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="QLabel" name="lblScreenResolution" >
+                <property name="frameShape" >
+                  <enum>QFrame::Panel</enum>
+                </property>
+                <property name="frameShadow" >
+                  <enum>QFrame::Sunken</enum>
+                </property>
+                <property name="text" >
+                  <string>100</string>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="0" >
+              <widget class="QLabel" name="lblYResolution" >
+                <property name="text" >
+                  <string>Image Y resolution:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="lblImageXRes" >
+                <property name="text" >
+                  <string>Image X resolution:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="1" >
+              <widget class="KIntNumInput" name="intXRes" >
+                <property name="suffix" >
+                  <string> dpi</string>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="1" >
+              <widget class="KIntNumInput" name="intYRes" >
+                <property name="suffix" >
+                  <string> dpi</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <customwidgets>
+  	<customwidget>
+	  <class>KIntNumInput</class>
+	  <extends>QWidget</extends>
+	  <header>knuminput.h</header>
+	  <container>1</container>
+	  <pixmap></pixmap>
+  	</customwidget>
 </customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
-</UI>
+</ui>

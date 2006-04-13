@@ -56,14 +56,15 @@ typedef KGenericFactory<ImageSize> ImageSizeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
 
 ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+    setObjectName(name);
     if ( parent->inherits("KisView") )
     {
         setInstance(ImageSizeFactory::instance());
         setXMLFile(locate("data","kritaplugins/imagesize.rc"), true);
 
-        (void) new KAction(i18n("Change &Image Size..."), 0, "Shift-s", this, SLOT(slotImageSize()), actionCollection(), "imagesize");
+        (void) new KAction(i18n("Change &Image Size..."), 0, Qt::SHIFT+Qt::Key_S, this, SLOT(slotImageSize()), actionCollection(), "imagesize");
         (void) new KAction(i18n("Change &Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");
 
 

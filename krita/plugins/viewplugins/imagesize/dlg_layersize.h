@@ -23,7 +23,16 @@
 
 #include <kdialogbase.h>
 
-class WdgLayerSize;
+#include "ui_wdg_layersize.h"
+
+class WdgLayerSize : public QWidget, public Ui::WdgLayerSize
+{
+    Q_OBJECT
+
+    public:
+        WdgLayerSize(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
 class KisFilterStrategy;
 
 class DlgLayerSize: public KDialogBase {

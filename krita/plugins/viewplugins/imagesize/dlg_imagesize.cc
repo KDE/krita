@@ -40,8 +40,6 @@ using namespace std;
 #include <kis_filter_strategy.h>
 
 #include "dlg_imagesize.h"
-#include "wdg_imagesize.h"
-
 
 // XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
@@ -51,8 +49,9 @@ DlgImageSize::DlgImageSize( QWidget *  parent,
 {
     m_lock = false;
 
-    m_page = new WdgImageSize(this, "image_size");
+    m_page = new WdgImageSize(this);
     Q_CHECK_PTR(m_page);
+    m_page->setObjectName("image_size");
 
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->cmbFilterType->setCurrentText("Mitchell");
@@ -103,7 +102,7 @@ void DlgImageSize::setWidthPercent(quint32 w)
 
 void DlgImageSize::setMaximumWidth(quint32 w)
 {
-    m_page->intWidth->setMaxValue(w);
+    m_page->intWidth->setMaximum(w);
     m_maxW = w;
 }
 
@@ -140,7 +139,7 @@ void DlgImageSize::setHeightPercent(quint32 h)
 
 void DlgImageSize::setMaximumHeight(quint32 h)
 {
-    m_page->intHeight->setMaxValue(h);
+    m_page->intHeight->setMaximum(h);
     m_maxH = h;
 }
 

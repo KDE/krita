@@ -41,8 +41,6 @@ using namespace std;
 #include <kis_filter_strategy.h>
 
 #include "dlg_layersize.h"
-#include "wdg_layersize.h"
-
 
 // XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
@@ -52,8 +50,9 @@ DlgLayerSize::DlgLayerSize( QWidget *  parent,
 {
     m_lock = false;
 
-    m_page = new WdgLayerSize(this, "layer_size");
+    m_page = new WdgLayerSize(this);
     Q_CHECK_PTR(m_page);
+    m_page->setObjectName("layer_size");
     
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->cmbFilterType->setCurrentText("Mitchell");
@@ -99,7 +98,7 @@ void DlgLayerSize::setWidthPercent(quint32 w)
 
 void DlgLayerSize::setMaximumWidth(quint32 w)
 {
-    m_page->intWidth->setMaxValue(w);
+    m_page->intWidth->setMaximum(w);
     m_maxW = w;
 }
 
@@ -134,7 +133,7 @@ void DlgLayerSize::setHeightPercent(quint32 h)
 
 void DlgLayerSize::setMaximumHeight(quint32 h)
 {
-    m_page->intHeight->setMaxValue(h);
+    m_page->intHeight->setMaximum(h);
     m_maxH = h;
 }
 

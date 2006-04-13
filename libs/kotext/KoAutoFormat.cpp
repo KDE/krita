@@ -1019,6 +1019,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
             // -> go right
 
             txtObj->emitShowCursor();
+            removeToolTipCompletion();
             return true;
         }
     }

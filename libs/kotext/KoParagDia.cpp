@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
+   Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -526,7 +527,7 @@ void KPagePreview::drawContents( QPainter* p )
     int dr = convert(right);
 
     //first+left because firstlineIndent is relative to leftIndent
-    int df = convert(first) + dl;
+    int df = convert(first + left);
 
     int spc = convert(spacing);
 
@@ -785,6 +786,22 @@ KoStylePreview::KoStylePreview( const QString& title, const QString& text, QWidg
     m_zoomHandler = new KoTextZoomHandler;
     QFont font = KoGlobal::defaultFont();
     m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( font, QColor(), KGlobal::locale()->language(), false ) );
+
+    class MyFlow : public KoTextFlow {
+        public:
+            MyFlow(QWidget *parent, KoTextZoomHandler *zoom) {
+                m_parent = parent;
+                m_zoomHandler = zoom;
+            }
+            int availableHeight() const {
+                return m_zoomHandler->pixelToLayoutUnitY(m_parent->height());
+            }
+        private:
+            QWidget *m_parent;
+            KoTextZoomHandler *m_zoomHandler;
+    };
+
+    m_textdoc->setFlow( new MyFlow(this, m_zoomHandler) );
     //m_textdoc->setWidth( KoTextZoomHandler::ptToLayoutUnitPt( 1000 ) );
     KoTextParag * parag = m_textdoc->firstParag();
     parag->insert( 0, text );
@@ -883,31 +900,31 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
     }
 
     QLabel * lLeft = new QLabel( i18n("&Left:"), indentFrame );
-    lLeft->setAlignment( Qt::AlignRight );
-    indentGrid->addWidget( lLeft, 2, 0 );
+    lLeft->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    indentGrid->addWidget( lLeft, 1, 0 );
 
     eLeft = new KoUnitDoubleSpinBox( indentFrame, 0, 9999, 1, 0.0, m_unit );
     lLeft->setBuddy( eLeft );
-    indentGrid->addWidget( eLeft, 2, 1 );
-    connect( eLeft, SIGNAL( valueChanged(double ) ), this, SLOT( leftChanged( double ) ) );
+    indentGrid->addWidget( eLeft, 1, 1 );
+    connect( eLeft, SIGNAL( valueChangedPt(double ) ), this, SLOT( leftChanged( double ) ) );
 
     QLabel * lRight = new QLabel( i18n("&Right:"), indentFrame );
-    lRight->setAlignment( Qt::AlignRight );
-    indentGrid->addWidget( lRight, 3, 0 );
+    lRight->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    indentGrid->addWidget( lRight, 2, 0 );
 
     eRight = new KoUnitDoubleSpinBox( indentFrame, 0, 9999, 1, 0.0, m_unit );
     lRight->setBuddy( eRight );
-    indentGrid->addWidget( eRight, 3, 1 );
-    connect( eRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged( double ) ) );
+    indentGrid->addWidget( eRight, 2, 1 );
+    connect( eRight, SIGNAL( valueChangedPt( double ) ), this, SLOT( rightChanged( double ) ) );
 
     QLabel * lFirstLine = new QLabel( i18n("&First line:"), indentFrame );
-    lFirstLine->setAlignment( Qt::AlignRight );
-    indentGrid->addWidget( lFirstLine, 4, 0 );
+    lFirstLine->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    indentGrid->addWidget( lFirstLine, 3, 0 );
 
     eFirstLine = new KoUnitDoubleSpinBox( indentFrame, -9999, 9999, 1, 0.0, m_unit );
     lFirstLine->setBuddy( eFirstLine );
-    connect( eFirstLine, SIGNAL( valueChanged( double ) ), this, SLOT( firstChanged( double ) ) );
-    indentGrid->addWidget( eFirstLine, 4, 1 );
+    connect( eFirstLine, SIGNAL( valueChangedPt( double ) ), this, SLOT( firstChanged( double ) ) );
+    indentGrid->addWidget( eFirstLine, 3, 1 );
 
     // grid row spacing
     indentGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
@@ -1124,21 +1141,21 @@ QString KoIndentSpacingWidget::tabName()
     return i18n( "Indent && S&pacing" );
 }
 
-void KoIndentSpacingWidget::leftChanged( double _val )
+void KoIndentSpacingWidget::leftChanged( double val )
 {
-    prev1->setLeft( KoUnit::fromUserValue( _val, m_unit ) );
+    prev1->setLeft( val );
     // The minimum first-line margin is -leftMargin() (where leftMargin>=0)
-    eFirstLine->setMinValue( -qMax( 0.0, _val ) );
+    eFirstLine->setMinValue( -QMAX( 0, val ) );
 }
 
-void KoIndentSpacingWidget::rightChanged( double _val )
+void KoIndentSpacingWidget::rightChanged( double val )
 {
-    prev1->setRight( KoUnit::fromUserValue( _val, m_unit ) );
+    prev1->setRight( val );
 }
 
-void KoIndentSpacingWidget::firstChanged( double _val )
+void KoIndentSpacingWidget::firstChanged( double val )
 {
-    prev1->setFirst( KoUnit::fromUserValue( _val, m_unit ) );
+    prev1->setFirst( val );
 }
 
 void KoIndentSpacingWidget::updateLineSpacing( KoParagLayout::SpacingType _type )

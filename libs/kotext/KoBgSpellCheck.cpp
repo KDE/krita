@@ -176,7 +176,8 @@ void KoBgSpellCheck::markWord( KoTextParag* parag, int pos, int length, bool mis
 
 void KoBgSpellCheck::checkerContinue()
 {
-    d->backSpeller->continueChecking();
+    if(enabled())
+        d->backSpeller->continueChecking();
 }
 
 void KoBgSpellCheck::spellCheckerDone()

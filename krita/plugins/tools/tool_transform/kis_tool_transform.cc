@@ -202,6 +202,7 @@ void KisToolTransform::initHandles()
     KisImageSP img = m_subject->currentImg();
 
     KisPaintDeviceSP dev = img->activeDevice();
+    if (!dev ) return;
 
     // Create a lazy copy of the current state
     m_origDevice = new KisPaintDevice(*dev.data());

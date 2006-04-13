@@ -81,13 +81,12 @@ void KisToolSelectContiguous::activate()
 void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 {
     if (m_subject) {
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         KisImageSP img;
         KisPaintDeviceSP dev;
         QPoint pos;
 
-        if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton)
+        if (e->button() != QMouseEvent::LeftButton && e->button() != QMouseEvent::RightButton) 
             return;
 
         if (!(img = m_subject->currentImg()))
@@ -98,6 +97,7 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
         if (!dev || !img->activeLayer()->visible())
             return;
 
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         pos = QPoint(e->pos().floorX(), e->pos().floorY());
 

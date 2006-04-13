@@ -979,13 +979,31 @@ KisPaintDeviceSP KisImage::activeDevice()
     }
     else if (KisGroupLayer * layer = dynamic_cast<KisGroupLayer*>(m_activeLayer.data())) {
         // Find first child
-        KisLayer * child = layer->lastChild();
+        KisLayerSP child = layer->lastChild();
         while(child)
         {
-            if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data())) {
+            if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(child.data())) {
                 return layer->paintDevice();
             }
             child = child->prevSibling();
+        }
+        KisLayerSP sibling = layer->nextSibling();
+        while (sibling) {
+            if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(sibling.data())) {
+                return layer->paintDevice();
+            }
+            sibling = sibling->nextSibling();
+        }
+    }
+    else if (KisLayerSP layer = m_activeLayer) {
+        // A weird layer -- let's not return it, but a sibling
+        KisLayerSP sibling = layer->nextSibling();
+        kdDebug() << "sibling: " << sibling->name();
+        while (sibling) {
+            if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(sibling.data())) {
+                return layer->paintDevice();
+            }
+            sibling = sibling->nextSibling();
         }
     }
     // XXX: We're buggered!

@@ -135,8 +135,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   sizes = cfgGrp.readEntry("DetailsPaneSplitterSizes", sizes);
   emit splitterResized(0, sizes);
 
-  connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3ValueList<int>&)),
-          this, SLOT(saveSplitterSizes(KoDetailsPaneBase*, const Q3ValueList<int>&)));
+  connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const QList<int>&)),
+          this, SLOT(saveSplitterSizes(KoDetailsPaneBase*, const QList<int>&)));
 }
 
 KoOpenPane::~KoOpenPane()
@@ -173,8 +173,8 @@ void KoOpenPane::initRecentDocs()
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
   Q3ListViewItem* item = addPane(i18n("Recent Documents"), "fileopen", recentDocPane, 0);
   connect(recentDocPane, SIGNAL(splitterResized(KoDetailsPaneBase*, const QList<int>&)),
-          this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3List<int>&)));
-  connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const Q3List<int>&)),
+          this, SIGNAL(splitterResized(KoDetailsPaneBase*, const QList<int>&)));
+  connect(this, SIGNAL(splitterResized(KoDetailsPaneBase*, const QList<int>&)),
           recentDocPane, SLOT(resizeSplitter(KoDetailsPaneBase*, const QList<int>&)));
 
   KoSectionListItem* separator = new KoSectionListItem(m_sectionList, "", 1);

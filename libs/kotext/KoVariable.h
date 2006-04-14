@@ -20,12 +20,12 @@
 #ifndef kovariable_h
 #define kovariable_h
 
-#include <qstring.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QDateTime>
 #include <q3asciidict.h>
 #include <q3ptrlist.h>
-#include <qmap.h>
-#include <qobject.h>
+#include <QMap>
+#include <QObject>
 //Added by qt3to4:
 #include <QString>
 #include <Q3ValueList>

@@ -46,11 +46,11 @@
 #include <kcalendarsystem.h>
 #include <kaboutdata.h>
 
-#include <qstringlist.h>
-#include <qcombobox.h>
+#include <QStringList>
+#include <QComboBox>
 #include <q3valuelist.h>
-#include <qdom.h>
-#include <qradiobutton.h>
+
+#include <QRadioButton>
 //Added by qt3to4:
 #include <QString>
 #include <Q3PtrList>
@@ -237,13 +237,13 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
     if ( !dateTime.isValid() )
         return i18n("No date set"); // e.g. old KWord documents
 
-    if (m_strFormat.lower() == "locale" || m_strFormat.isEmpty())
+    if (m_strFormat.toLower() == "locale" || m_strFormat.isEmpty())
         return KGlobal::locale()->formatDate( dateTime.date(), false );
-    else if ( m_strFormat.lower() == "localeshort" )
+    else if ( m_strFormat.toLower() == "localeshort" )
         return KGlobal::locale()->formatDate( dateTime.date(), true );
-    else if ( m_strFormat.lower() == "localedatetime" )
+    else if ( m_strFormat.toLower() == "localedatetime" )
         return KGlobal::locale()->formatDateTime( dateTime, false );
-    else if ( m_strFormat.lower() == "localedatetimeshort" )
+    else if ( m_strFormat.toLower() == "localedatetimeshort" )
         return KGlobal::locale()->formatDateTime( dateTime, true );
 
     QString tmp ( dateTime.toString(m_strFormat) );
@@ -270,7 +270,7 @@ void KoVariableDateFormat::load( const QString &key )
     {
         if (params[0] == '1' || params[0] == '0') // old m_bShort crap
             params = params.mid(1); // skip it
-        m_strFormat = QString::fromUtf8( params );
+        m_strFormat = params;
     }
 }
 
@@ -340,7 +340,7 @@ void KoVariableTimeFormat::load( const QString &key )
 {
     QString params( key.mid( 4 ) );
     if ( !params.isEmpty() )
-	m_strFormat = QString::fromUtf8(params);
+	m_strFormat = params;
 }
 
 QString KoVariableTimeFormat::convert( const QVariant & time ) const
@@ -352,7 +352,7 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
         return QString::null;
     }
 
-    if( m_strFormat.lower() == "locale" || m_strFormat.isEmpty() )
+    if( m_strFormat.toLower() == "locale" || m_strFormat.isEmpty() )
 	return KGlobal::locale()->formatTime( time.toTime() );
     return time.toTime().toString(m_strFormat);
 }
@@ -450,7 +450,7 @@ KoVariableFormatCollection::KoVariableFormatCollection()
 
 KoVariableFormat * KoVariableFormatCollection::format( const QString &key )
 {
-    KoVariableFormat *f = m_dict[ key.data() ];
+    KoVariableFormat *f = m_dict[ key.toLatin1() ];
     if (f)
         return f;
     else
@@ -475,7 +475,7 @@ KoVariableFormat * KoVariableFormatCollection::createFormat( const QString &key 
     if ( format )
     {
         format->load( key );
-        m_dict.insert( format->key() /* not 'key', it could be incomplete */, format );
+        m_dict.insert( format->key().toLatin1()/* not 'key', it could be incomplete */, format );
     }
     return format;
 }
@@ -624,7 +624,7 @@ Q3PtrList<KAction> KoVariableCollection::popupActionList() const
 void KoVariableCollection::slotChangeSubType()
 {
     KAction * act = (KAction *)(sender());
-    int menuNumber = QString(act->name()).toInt();
+    int menuNumber = act->objectName().toInt();
     int newSubType = m_varSelected->variableSubType(menuNumber);
     kDebug(32500) << "slotChangeSubType: menuNumber=" << menuNumber << " newSubType=" << newSubType << endl;
     if ( m_varSelected->subType() != newSubType )
@@ -639,7 +639,7 @@ void KoVariableCollection::slotChangeSubType()
 void KoVariableCollection::slotChangeFormat()
 {
     KAction * act = (KAction *)(sender());
-    QString newFormat = QString::fromUtf8(act->name());
+    QString newFormat = act->objectName();
     QString oldFormat = m_varSelected->variableFormat()->formatProperties();
     if (oldFormat != newFormat )
     {
@@ -1309,19 +1309,19 @@ void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
     }
     QString value(  m_varFormat->formatProperties() );
     bool klocaleFormat = false;
-    if ( value.lower() == "locale" ||
+    if ( value.toLower() == "locale" ||
          value.isEmpty() ||
-         value.lower() == "localeshort" ||
-         value.lower() == "localedatetime" ||
-         value.lower() == "localedatetimeshort" )
+         value.toLower() == "localeshort" ||
+         value.toLower() == "localedatetime" ||
+         value.toLower() == "localedatetimeshort" )
     {
-        if ( value.lower() == "locale" || value.isEmpty())
+        if ( value.toLower() == "locale" || value.isEmpty())
             value =  KGlobal::locale()->dateFormat();
-        else if ( value.lower() == "localeshort" )
+        else if ( value.toLower() == "localeshort" )
             value = KGlobal::locale()->dateFormatShort();
-        else if ( value.lower() == "localedatetime" )
+        else if ( value.toLower() == "localedatetime" )
             value =  QString( "%1 %2" ).arg( KGlobal::locale()->dateFormat() ).arg( KGlobal::locale()->timeFormat() );
-        else if ( value.lower() == "localedatetimeshort" )
+        else if ( value.toLower() == "localedatetimeshort" )
             value =  QString( "%1 %2" ).arg( KGlobal::locale()->dateFormatShort() ).arg( KGlobal::locale()->timeFormat() );
         klocaleFormat = true;
     }
@@ -1417,12 +1417,12 @@ QString KoDateVariable::formatStr(int & correct)
     }
     if(!stringList.isEmpty())
     {
-        widget->combo1()->insertItem("---");
-        widget->combo1()->insertStringList(stringList);
+        widget->combo1()->addItem("---");
+        widget->combo1()->addItems(stringList);
     }
     if(false) { // ### TODO: select the last used item
         QComboBox *combo= widget->combo1();
-        combo->setCurrentItem(combo->count() -1);
+        combo->setCurrentIndex(combo->count() -1);
         widget->updateLabel();
     }
 
@@ -1437,7 +1437,7 @@ QString KoDateVariable::formatStr(int & correct)
         return 0;
     }
     config->setGroup("Date format history");
-    stringList.remove(string);
+    stringList.removeAll(string);
     stringList.prepend(string);
     for(int i=0;i<=count;i++)
     {
@@ -1572,7 +1572,7 @@ void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
 
     QString value(  m_varFormat->formatProperties() );
     bool klocaleFormat = false;
-    if ( value.lower() == "locale" )
+    if ( value.toLower() == "locale" )
     {
         value = KGlobal::locale()->timeFormat();
         klocaleFormat = true;
@@ -1630,13 +1630,13 @@ QString KoTimeVariable::formatStr(int & _correct)
     }
     if(!stringList.isEmpty())
     {
-        widget->combo1()->insertItem("---");
-        widget->combo1()->insertStringList(stringList);
+        widget->combo1()->addItem("---");
+        widget->combo1()->addItems(stringList);
     }
     if(false) // ### TODO: select the last used item
     {
         QComboBox *combo= widget->combo1();
-        combo->setCurrentItem(combo->count() -1);
+        combo->setCurrentIndex( combo->count() -1 );
     }
     if(dialog->exec()==QDialog::Accepted)
     {
@@ -1649,7 +1649,7 @@ QString KoTimeVariable::formatStr(int & _correct)
         return 0;
     }
     config->setGroup("Time format history");
-    stringList.remove(string);
+    stringList.removeAll( string );
     stringList.prepend(string);
     for(int i=0;i<=count;i++)
     {
@@ -2231,7 +2231,7 @@ void KoFieldVariable::recalc()
         case VST_FILENAMEWITHOUTEXTENSION:
         {
             QString file=m_doc->url().fileName();
-            int pos=file.findRev(".");
+            int pos = file.lastIndexOf(".");
             if(pos !=-1)
                 value=file.mid(0,pos);
             else
@@ -2554,7 +2554,7 @@ void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
     writer.startElement( "dc:date" );
     writer.addTextNode( m_createdNoteDate.toString(Qt::ISODate) );
     writer.endElement();
-    QStringList text = QStringList::split( "\n", m_varValue.toString() );
+    QStringList text = m_varValue.toString().split( "\n" );
     for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
         writer.startElement( "text:p" );
         writer.addTextNode( *it );

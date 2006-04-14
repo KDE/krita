@@ -20,6 +20,7 @@
 #include "KoTextParag.h"
 #include "KoTextView.h"
 #include <kfinddialog.h>
+#include <kfind.h>
 #include <kdebug.h>
 #include <assert.h>
 //Added by qt3to4:

@@ -24,7 +24,7 @@
 #include <QContextMenuEvent>
 #include <QPixmap>
 #include <QMouseEvent>
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QPaintEvent>
 
 #include <kdebug.h>
@@ -85,7 +85,7 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
             painter.fillRect( selection, QBrush( colorGroup().highlight() ) );
         }
 
-        Q3PointArray triangle(3);
+        QPolygon triangle(3);
         Q3ValueVector<double> handlePositions = m_autogradientResource->getHandlePositions();
         int position;
         painter.setBrush( QBrush( Qt::black) );

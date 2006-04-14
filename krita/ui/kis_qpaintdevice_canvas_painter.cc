@@ -21,7 +21,7 @@
 #include "kis_qpaintdevice_canvas_painter.h"
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3PointArray>
+#include <QPolygon>
 
 KisQPaintDeviceCanvasPainter::KisQPaintDeviceCanvasPainter()
 {
@@ -292,12 +292,12 @@ QRect KisQPaintDeviceCanvasPainter::xForm(const QRect& r) const
     return m_painter.xForm(r);
 }
 
-Q3PointArray KisQPaintDeviceCanvasPainter::xForm(const Q3PointArray& pointArray) const
+QPolygon KisQPaintDeviceCanvasPainter::xForm(const QPolygon& pointArray) const
 {
     return m_painter.xForm(pointArray);
 }
 
-Q3PointArray KisQPaintDeviceCanvasPainter::xForm(const Q3PointArray& pointArray, int index, int npoints) const
+QPolygon KisQPaintDeviceCanvasPainter::xForm(const QPolygon& pointArray, int index, int npoints) const
 {
     return m_painter.xForm(pointArray, index, npoints);
 }
@@ -312,12 +312,12 @@ QRect KisQPaintDeviceCanvasPainter::xFormDev(const QRect& r) const
     return m_painter.xFormDev(r);
 }
 
-Q3PointArray KisQPaintDeviceCanvasPainter::xFormDev(const Q3PointArray& pointArray) const
+QPolygon KisQPaintDeviceCanvasPainter::xFormDev(const QPolygon& pointArray) const
 {
     return m_painter.xFormDev(pointArray);
 }
 
-Q3PointArray KisQPaintDeviceCanvasPainter::xFormDev(const Q3PointArray& pointArray, int index, int npoints) const
+QPolygon KisQPaintDeviceCanvasPainter::xFormDev(const QPolygon& pointArray, int index, int npoints) const
 {
     return m_painter.xFormDev(pointArray, index, npoints);
 }
@@ -362,7 +362,7 @@ void KisQPaintDeviceCanvasPainter::drawPoint(const QPoint& point)
     m_painter.drawPoint(point);
 }
 
-void KisQPaintDeviceCanvasPainter::drawPoints(const Q3PointArray& pointArray, int index, int npoints)
+void KisQPaintDeviceCanvasPainter::drawPoints(const QPolygon& pointArray, int index, int npoints)
 {
     m_painter.drawPoints(pointArray, index, npoints);
 }
@@ -477,27 +477,27 @@ void KisQPaintDeviceCanvasPainter::drawChord(const QRect& r, int a, int alen)
     m_painter.drawChord(r, a, alen);
 }
 
-void KisQPaintDeviceCanvasPainter::drawLineSegments(const Q3PointArray& pointArray, int index, int nlines)
+void KisQPaintDeviceCanvasPainter::drawLineSegments(const QPolygon& pointArray, int index, int nlines)
 {
     m_painter.drawLineSegments(pointArray, index, nlines);
 }
 
-void KisQPaintDeviceCanvasPainter::drawPolyline(const Q3PointArray& pointArray, int index, int npoints)
+void KisQPaintDeviceCanvasPainter::drawPolyline(const QPolygon& pointArray, int index, int npoints)
 {
     m_painter.drawPolyline(pointArray, index, npoints);
 }
 
-void KisQPaintDeviceCanvasPainter::drawPolygon(const Q3PointArray& pointArray, bool winding, int index, int npoints)
+void KisQPaintDeviceCanvasPainter::drawPolygon(const QPolygon& pointArray, bool winding, int index, int npoints)
 {
     m_painter.drawPolygon(pointArray, winding, index, npoints);
 }
 
-void KisQPaintDeviceCanvasPainter::drawConvexPolygon(const Q3PointArray& pointArray, int index, int npoints)
+void KisQPaintDeviceCanvasPainter::drawConvexPolygon(const QPolygon& pointArray, int index, int npoints)
 {
     m_painter.drawConvexPolygon(pointArray, index, npoints);
 }
 
-void KisQPaintDeviceCanvasPainter::drawCubicBezier(const Q3PointArray& pointArray, int index)
+void KisQPaintDeviceCanvasPainter::drawCubicBezier(const QPolygon& pointArray, int index)
 {
     m_painter.drawCubicBezier(pointArray, index);
 }

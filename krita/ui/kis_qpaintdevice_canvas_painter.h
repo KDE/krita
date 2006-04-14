@@ -25,7 +25,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3PointArray>
+#include <QPolygon>
 
 #include "kis_global.h"
 #include "kis_canvas_painter.h"
@@ -98,12 +98,12 @@ public:
 
     virtual QPoint xForm(const QPoint&) const;
     virtual QRect xForm(const QRect&)	const;
-    virtual Q3PointArray xForm(const Q3PointArray&) const;
-    virtual Q3PointArray xForm(const Q3PointArray&, int index, int npoints) const;
+    virtual QPolygon xForm(const QPolygon&) const;
+    virtual QPolygon xForm(const QPolygon&, int index, int npoints) const;
     virtual QPoint xFormDev(const QPoint&) const;
     virtual QRect xFormDev(const QRect&)  const;
-    virtual Q3PointArray xFormDev(const Q3PointArray&) const;
-    virtual Q3PointArray xFormDev(const Q3PointArray&, int index, int npoints) const;
+    virtual QPolygon xFormDev(const QPolygon&) const;
+    virtual QPolygon xFormDev(const QPolygon&, int index, int npoints) const;
 
     virtual void setClipping(bool);
     virtual bool hasClipping() const;
@@ -114,7 +114,7 @@ public:
 
     virtual void drawPoint(int x, int y);
     virtual void drawPoint(const QPoint&);
-    virtual void drawPoints(const Q3PointArray& a, int index=0, int npoints=-1);
+    virtual void drawPoints(const QPolygon& a, int index=0, int npoints=-1);
     virtual void moveTo(int x, int y);
     virtual void moveTo(const QPoint&);
     virtual void lineTo(int x, int y);
@@ -137,11 +137,11 @@ public:
     virtual void drawPie(const QRect&, int a, int alen);
     virtual void drawChord(int x, int y, int w, int h, int a, int alen);
     virtual void drawChord(const QRect&, int a, int alen);
-    virtual void drawLineSegments(const Q3PointArray&, int index=0, int nlines=-1);
-    virtual void drawPolyline(const Q3PointArray&, int index=0, int npoints=-1);
-    virtual void drawPolygon(const Q3PointArray&, bool winding=FALSE, int index=0, int npoints=-1);
-    virtual void drawConvexPolygon(const Q3PointArray&, int index=0, int npoints=-1);
-    virtual void drawCubicBezier(const Q3PointArray&, int index=0);
+    virtual void drawLineSegments(const QPolygon&, int index=0, int nlines=-1);
+    virtual void drawPolyline(const QPolygon&, int index=0, int npoints=-1);
+    virtual void drawPolygon(const QPolygon&, bool winding=FALSE, int index=0, int npoints=-1);
+    virtual void drawConvexPolygon(const QPolygon&, int index=0, int npoints=-1);
+    virtual void drawCubicBezier(const QPolygon&, int index=0);
     virtual void drawPixmap(int x, int y, const QPixmap&, int sx=0, int sy=0, int sw=-1, int sh=-1);
     virtual void drawPixmap(const QPoint&, const QPixmap&, const QRect&sr);
     virtual void drawPixmap(const QPoint&, const QPixmap&);

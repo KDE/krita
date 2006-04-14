@@ -21,7 +21,7 @@
 #include "kis_qpaintdevice_canvas_painter.h"
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3PointArray>
+#include <QPolygon>
 
 KisCanvasWidgetPainter::KisCanvasWidgetPainter()
 {
@@ -244,12 +244,12 @@ QRect KisCanvasWidgetPainter::xForm(const QRect& r) const
     return r;
 }
 
-Q3PointArray KisCanvasWidgetPainter::xForm(const Q3PointArray& pointArray) const
+QPolygon KisCanvasWidgetPainter::xForm(const QPolygon& pointArray) const
 {
     return pointArray;
 }
 
-Q3PointArray KisCanvasWidgetPainter::xForm(const Q3PointArray& pointArray, int /*index*/, int /*npoints*/) const
+QPolygon KisCanvasWidgetPainter::xForm(const QPolygon& pointArray, int /*index*/, int /*npoints*/) const
 {
     return pointArray;
 }
@@ -264,12 +264,12 @@ QRect KisCanvasWidgetPainter::xFormDev(const QRect& r) const
     return r;
 }
 
-Q3PointArray KisCanvasWidgetPainter::xFormDev(const Q3PointArray& pointArray) const
+QPolygon KisCanvasWidgetPainter::xFormDev(const QPolygon& pointArray) const
 {
     return pointArray;
 }
 
-Q3PointArray KisCanvasWidgetPainter::xFormDev(const Q3PointArray& pointArray, int /*index*/, int /*npoints*/) const
+QPolygon KisCanvasWidgetPainter::xFormDev(const QPolygon& pointArray, int /*index*/, int /*npoints*/) const
 {
     return pointArray;
 }
@@ -308,7 +308,7 @@ void KisCanvasWidgetPainter::drawPoint(const QPoint& /*point*/)
 {
 }
 
-void KisCanvasWidgetPainter::drawPoints(const Q3PointArray& /*pointArray*/, int /*index*/, int /*npoints*/)
+void KisCanvasWidgetPainter::drawPoints(const QPolygon& /*pointArray*/, int /*index*/, int /*npoints*/)
 {
 }
 
@@ -400,23 +400,23 @@ void KisCanvasWidgetPainter::drawChord(const QRect& /*r*/, int /*a*/, int /*alen
 {
 }
 
-void KisCanvasWidgetPainter::drawLineSegments(const Q3PointArray& /*pointArray*/, int /*index*/, int /*nlines*/)
+void KisCanvasWidgetPainter::drawLineSegments(const QPolygon& /*pointArray*/, int /*index*/, int /*nlines*/)
 {
 }
 
-void KisCanvasWidgetPainter::drawPolyline(const Q3PointArray& /*pointArray*/, int /*index*/, int /*npoints*/)
+void KisCanvasWidgetPainter::drawPolyline(const QPolygon& /*pointArray*/, int /*index*/, int /*npoints*/)
 {
 }
 
-void KisCanvasWidgetPainter::drawPolygon(const Q3PointArray& /*pointArray*/, bool /*winding*/, int /*index*/, int /*npoints*/)
+void KisCanvasWidgetPainter::drawPolygon(const QPolygon& /*pointArray*/, bool /*winding*/, int /*index*/, int /*npoints*/)
 {
 }
 
-void KisCanvasWidgetPainter::drawConvexPolygon(const Q3PointArray& /*pointArray*/, int /*index*/, int /*npoints*/)
+void KisCanvasWidgetPainter::drawConvexPolygon(const QPolygon& /*pointArray*/, int /*index*/, int /*npoints*/)
 {
 }
 
-void KisCanvasWidgetPainter::drawCubicBezier(const Q3PointArray& /*pointArray*/, int /*index*/)
+void KisCanvasWidgetPainter::drawCubicBezier(const QPolygon& /*pointArray*/, int /*index*/)
 {
 }
 
@@ -932,7 +932,7 @@ QRect KisCanvasPainter::xForm(const QRect& r) const
     return r;
 }
 
-Q3PointArray KisCanvasPainter::xForm(const Q3PointArray& pointArray) const
+QPolygon KisCanvasPainter::xForm(const QPolygon& pointArray) const
 {
     if (m_canvasWidgetPainter != 0) {
         return m_canvasWidgetPainter->xForm(pointArray);
@@ -940,7 +940,7 @@ Q3PointArray KisCanvasPainter::xForm(const Q3PointArray& pointArray) const
     return pointArray;
 }
 
-Q3PointArray KisCanvasPainter::xForm(const Q3PointArray& pointArray, int index, int npoints) const
+QPolygon KisCanvasPainter::xForm(const QPolygon& pointArray, int index, int npoints) const
 {
     if (m_canvasWidgetPainter != 0) {
         return m_canvasWidgetPainter->xForm(pointArray, index, npoints);
@@ -964,7 +964,7 @@ QRect KisCanvasPainter::xFormDev(const QRect& r) const
     return r;
 }
 
-Q3PointArray KisCanvasPainter::xFormDev(const Q3PointArray& pointArray) const
+QPolygon KisCanvasPainter::xFormDev(const QPolygon& pointArray) const
 {
     if (m_canvasWidgetPainter != 0) {
         return m_canvasWidgetPainter->xFormDev(pointArray);
@@ -972,7 +972,7 @@ Q3PointArray KisCanvasPainter::xFormDev(const Q3PointArray& pointArray) const
     return pointArray;
 }
 
-Q3PointArray KisCanvasPainter::xFormDev(const Q3PointArray& pointArray, int index, int npoints) const
+QPolygon KisCanvasPainter::xFormDev(const QPolygon& pointArray, int index, int npoints) const
 {
     if (m_canvasWidgetPainter != 0) {
         return m_canvasWidgetPainter->xFormDev(pointArray, index, npoints);
@@ -1038,7 +1038,7 @@ void KisCanvasPainter::drawPoint(const QPoint& point)
     }
 }
 
-void KisCanvasPainter::drawPoints(const Q3PointArray& pointArray, int index, int npoints)
+void KisCanvasPainter::drawPoints(const QPolygon& pointArray, int index, int npoints)
 {
     if (m_canvasWidgetPainter != 0) {
         m_canvasWidgetPainter->drawPoints(pointArray, index, npoints);
@@ -1199,35 +1199,35 @@ void KisCanvasPainter::drawChord(const QRect& r, int a, int alen)
     }
 }
 
-void KisCanvasPainter::drawLineSegments(const Q3PointArray& pointArray, int index, int nlines)
+void KisCanvasPainter::drawLineSegments(const QPolygon& pointArray, int index, int nlines)
 {
     if (m_canvasWidgetPainter != 0) {
         m_canvasWidgetPainter->drawLineSegments(pointArray, index, nlines);
     }
 }
 
-void KisCanvasPainter::drawPolyline(const Q3PointArray& pointArray, int index, int npoints)
+void KisCanvasPainter::drawPolyline(const QPolygon& pointArray, int index, int npoints)
 {
     if (m_canvasWidgetPainter != 0) {
         m_canvasWidgetPainter->drawPolyline(pointArray, index, npoints);
     }
 }
 
-void KisCanvasPainter::drawPolygon(const Q3PointArray& pointArray, bool winding, int index, int npoints)
+void KisCanvasPainter::drawPolygon(const QPolygon& pointArray, bool winding, int index, int npoints)
 {
     if (m_canvasWidgetPainter != 0) {
         m_canvasWidgetPainter->drawPolygon(pointArray, winding, index, npoints);
     }
 }
 
-void KisCanvasPainter::drawConvexPolygon(const Q3PointArray& pointArray, int index, int npoints)
+void KisCanvasPainter::drawConvexPolygon(const QPolygon& pointArray, int index, int npoints)
 {
     if (m_canvasWidgetPainter != 0) {
         m_canvasWidgetPainter->drawConvexPolygon(pointArray, index, npoints);
     }
 }
 
-void KisCanvasPainter::drawCubicBezier(const Q3PointArray& pointArray, int index)
+void KisCanvasPainter::drawCubicBezier(const QPolygon& pointArray, int index)
 {
     if (m_canvasWidgetPainter != 0) {
         m_canvasWidgetPainter->drawCubicBezier(pointArray, index);

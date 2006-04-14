@@ -178,42 +178,44 @@ void KisToolManager::updateGUI()
 void KisToolManager::setCurrentTool(KisTool *tool)
 {
     KisTool *oldTool = currentTool();
-    KisCanvas * canvas = (KisCanvas*)m_controller->kiscanvas();
 
+    if (tool != oldTool) {
+        KisCanvas * canvas = (KisCanvas*)m_controller->kiscanvas();
 
-    if (oldTool)
-    {
-        oldTool->deactivate();
-        oldTool->action()->setChecked( false );
+        if (oldTool)
+        {
+            oldTool->deactivate();
+            oldTool->action()->setChecked( false );
 
-        m_paletteManager->removeWidget(krita::TOOL_OPTION_WIDGET);
-    }
-
-    if (tool) {
-
-        if (!tool->optionWidget()) {
-            tool->createOptionWidget(0);
+            m_paletteManager->removeWidget(krita::TOOL_OPTION_WIDGET);
         }
-        QWidget * w = tool->optionWidget();
-        
-        if (w)
-            m_paletteManager->addWidget(w, krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
-        m_inputDeviceToolMap[m_controller->currentInputDevice()] = tool;
-        m_controller->setCanvasCursor(tool->cursor());
+        if (tool) {
 
-        canvas->enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
+            if (!tool->optionWidget()) {
+                tool->createOptionWidget(0);
+            }
+            QWidget * w = tool->optionWidget();
 
-        m_subject->notifyObservers();
+            if (w)
+                m_paletteManager->addWidget(w, krita::TOOL_OPTION_WIDGET, krita::CONTROL_PALETTE );
 
-        tool->action()->setChecked( true );
-        tool->action()->activate(QAction::Trigger);
+            m_inputDeviceToolMap[m_controller->currentInputDevice()] = tool;
+            m_controller->setCanvasCursor(tool->cursor());
 
-    } else {
-        m_inputDeviceToolMap[m_controller->currentInputDevice()] = 0;
-        m_controller->setCanvasCursor(KisCursor::arrowCursor());
+            canvas->enableMoveEventCompressionHint(dynamic_cast<KisToolNonPaint *>(tool) != NULL);
+
+            m_subject->notifyObservers();
+
+            tool->action()->setChecked( true );
+            tool->action()->activate(QAction::Trigger);
+
+        } else {
+            m_inputDeviceToolMap[m_controller->currentInputDevice()] = 0;
+            m_controller->setCanvasCursor(KisCursor::arrowCursor());
+        }
+        m_toolBox->slotSetTool(tool->name());
     }
-    m_toolBox->slotSetTool(tool->name());
 }
 
 void KisToolManager::setCurrentTool( const QString & toolName )

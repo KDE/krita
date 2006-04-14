@@ -301,15 +301,17 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     setInstance(KisFactory::instance(), false);
     setClientBuilder( this );
 
-#warning kde4 port
-  /*  if (!doc->isReadWrite())
+    if (!doc->isReadWrite())
         setXMLFile("krita_readonly.rc");
     else
-        setXMLFile("krita.rc");*/
+        setXMLFile("krita.rc");
 
     KStdAction::keyBindings( mainWindow()->guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
 
     createLayerBox();
+
+    //XXX: Logic for this needs updating for Qt4. Enable painting from start for now.
+    m_paintViewEnabled = true;
 
     setupCanvas();
     m_canvas->hide();
@@ -391,11 +393,10 @@ static Qt::ToolBarArea stringToDock( const QString& attrPosition )
             dock = Qt::RightToolBarArea;
         else if ( attrPosition == "bottom" )
             dock = Qt::BottomToolBarArea;
-#warning kde4 port
-        /*else if ( attrPosition == "floating" )
-            dock = Qt::DockTornOff;
-        else if ( attrPosition == "flat" )
-            dock = Qt::DockMinimized;*/
+        else if ( attrPosition == "floating" || attrPosition == "flat") {
+            //XXX: Not supported in Qt4. Remove these settings.
+            dock = Qt::TopToolBarArea;
+        }
     }
     return dock;
 }

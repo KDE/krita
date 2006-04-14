@@ -40,22 +40,20 @@
 #include <kcompletion.h>
 #include <kcalendarsystem.h>
 
-#include <qfile.h>
-#include <qlabel.h>
-#include <qtooltip.h>
+#include <QFile>
+#include <QLabel>
+#include <QToolTip>
 #include <q3whatsthis.h>
-#include <qdom.h>
-#include <qregexp.h>
-//Added by qt3to4:
+#include <QRegExp>
 #include <QTextStream>
 #include <Q3Frame>
 #include <QMouseEvent>
 
 
-KoCompletionBox::KoCompletionBox( QWidget * parent, const char * name, Qt::WFlags f)
-  : QLabel(parent,name,f)
+KoCompletionBox::KoCompletionBox( QWidget * parent, const char* /*name*/, Qt::WFlags f)
+  : QLabel( parent,f )
 {
-  setBackgroundColor(QColor("#FFFFE6"));
+//  setBackground(QColor("#FFFFE6"));    still needed in Qt4 ??
   setFocusPolicy(Qt::NoFocus);
   setFrameShape(Q3Frame::Box);
 }
@@ -173,7 +171,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     KLocale klocale(m_doc->instance()->instanceName());
     for (int i = 1; i <=7; i++)
     {
-        m_cacheNameOfDays.append(klocale.calendar()->weekDayName( i ).lower());
+        m_cacheNameOfDays.append(klocale.calendar()->weekDayName( i ).toLower());
     }
 }
 
@@ -460,7 +458,7 @@ void KoAutoFormat::readAutoCorrectConfig()
         for(int i = 0; i < nl.count() ; i++) {
             //bug in qmap we overwrite = false doesn't work
             //so we can't add multiple "othernb"
-            m_superScriptEntries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("super")),FALSE );
+            m_superScriptEntries.insertMulti( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("super")) );
         }
     }
 
@@ -714,7 +712,7 @@ void KoAutoFormat::saveConfig()
     {
 	data = doc.createElement("superscript");
 	data.setAttribute("find", it2.key());
-	data.setAttribute("super", it2.data().replace());
+	data.setAttribute("super", it2.value().replace());
 	super.appendChild(data);
     }
     begin.appendChild(super);
@@ -737,11 +735,11 @@ void KoAutoFormat::saveConfig()
     begin.appendChild(simpleQuote);
     QFile f;
     if ( m_autoFormatLanguage.isEmpty())
-        f.setName(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
+        f.setFileName(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
     else
-        f.setName(locateLocal("data", "koffice/autocorrect/"+m_autoFormatLanguage + ".xml",m_doc->instance()));
+        f.setFileName(locateLocal("data", "koffice/autocorrect/"+m_autoFormatLanguage + ".xml",m_doc->instance()));
     if(!f.open(QIODevice::WriteOnly)) {
-        kWarning()<<"Error during saving autoformat to " << f.name() << endl;
+        kWarning()<<"Error during saving autoformat to " << f.fileName() << endl;
 	return;
     }
     QTextStream ts(&f);
@@ -856,7 +854,7 @@ void KoAutoFormat::addAutoFormatEntry( const QString &key, const QString &replac
     KoAutoFormatEntry *findEntry = m_entries.find( key);
     if ( findEntry )
     {
-        if ( findEntry->replace().lower() == replace.lower() )
+        if ( findEntry->replace().toLower() == replace.toLower() )
             return;
     }
 
@@ -920,7 +918,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
     {
         bool part=false;
         QString lastWord, word;
-        if (m_completionBox && m_completionBox->isShown() ) //word completion with the tool-tip box
+        if (m_completionBox && m_completionBox->isVisible() ) //word completion with the tool-tip box
         {
                 word = m_completionBox->text();
                 lastWord = m_completionBox->lastWord();
@@ -934,13 +932,13 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                         wordlist += m_listCompletion->substringCompletion( lastWord ); //find all completion words that contains lastWord
                 }
                 int maxlength = 0;
-                for ( QStringList::ConstIterator it = wordlist.begin(); it != wordlist.end(); ++it ) // several completion words were found
+		foreach( QString tmp, wordlist )    // several completion words were found
                 {
-                  if ( (*it).startsWith( lastWord, false ) && new_wordlist.find(*it) == new_wordlist.end() ) //the completion words that begin with lastWord
-                  {
-                    if ( (*it).length() > maxlength )
-                      maxlength = (*it).length();
-                    new_wordlist.append(*it);
+                  if ( tmp.startsWith( lastWord, Qt::CaseInsensitive ) && tmp == new_wordlist.back() )
+		  {      //the completion words that begin with lastWord
+                    if ( tmp.length() > maxlength )
+                      maxlength = tmp.length();
+                    new_wordlist.append( tmp );
                     //kDebug() << "adding word completion:" << *it << endl;
                   }
                 }
@@ -954,11 +952,11 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                   for (int i = lastWord.length(); i<maxlength && !part; i++) //iterate through all completion words
                   {
                     QChar ch = new_wordlist.first().at(i);
-                    for (QStringList::ConstIterator it = new_wordlist.begin(); it != new_wordlist.end(); ++it )
+		    foreach( QString tmp, new_wordlist )
                     {
-                      if ( (*it).at(i).lower() != ch.lower() )
+                      if ( tmp.at(i).toLower() != ch.toLower() )
                       {
-                        word = (*it).left(i); //the completion word is truncated here
+                        word = tmp.left(i); //the completion word is truncated here
                         //kDebug() << "set the word completion to:" << word << endl;
                         part=true; // completion of a part of a word; a space-character after the completion should not be inserted
                         break;
@@ -1028,7 +1026,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
 
 bool KoAutoFormat::doToolTipCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, int keyPressed )
 {
-    if( m_completion && m_toolTipCompletion && m_completionBox && m_completionBox->isShown() )
+    if( m_completion && m_toolTipCompletion && m_completionBox && m_completionBox->isVisible() )
     {
         if ( ( keyPressed == Qt::Key_Return && m_keyCompletionAction==Enter )
              || ( keyPressed == Qt::Key_Enter && m_keyCompletionAction==Enter )
@@ -1070,7 +1068,7 @@ void KoAutoFormat::showToolTipBox(KoTextParag *parag,  int index, QWidget *widge
             int const height = m_completionBox->sizeHint().height();
             m_completionBox->move( show_pos.x(), show_pos.y() - height );
 
-            if (!m_completionBox->isShown() )
+            if (!m_completionBox->isVisible() )
             {
                 m_completionBox->show();
                 widget->setFocus();
@@ -1082,7 +1080,7 @@ void KoAutoFormat::showToolTipBox(KoTextParag *parag,  int index, QWidget *widge
 }
 void KoAutoFormat::removeToolTipCompletion()
 {
-    if (m_completion && m_toolTipCompletion && m_completionBox && m_completionBox->isShown())
+    if (m_completion && m_toolTipCompletion && m_completionBox && m_completionBox->isVisible())
         m_completionBox->hide();
 }
 
@@ -1541,7 +1539,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
                            + punct;
                            kDebug() << "text: " << text << endl;
             // text has the word at the end of the 'sentence', including the termination. Example: "Mr."
-            beginningOfSentence = (m_upperCaseExceptions.findIndex(text)==-1); // Ok if we can't find it
+            beginningOfSentence = ( !m_upperCaseExceptions.contains( text ) ); // Ok if we can't find it
         }
 
         if ( beginningOfSentence )
@@ -1552,7 +1550,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
             textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
             cursor.setIndex( start + 1 );
             textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
-            cmd = txtObj->replaceSelectionCommand( textEditCursor, QString( firstChar.upper() ),
+            cmd = txtObj->replaceSelectionCommand( textEditCursor, QString( firstChar.toUpper() ),
                                                    i18n("Autocorrect (capitalize first letter)"),
                                                    KoTextDocument::HighlightSelection );
             bNeedMove = true;
@@ -1568,7 +1566,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
             // Check next letter - we still want to be able to write fully uppercase words...
             backCursor.setIndex( backCursor.index() + 1 );
             QChar thirdChar = backCursor.parag()->at( backCursor.index() )->c;
-            if ( isLower( thirdChar ) && (m_twoUpperLetterException.findIndex(word)==-1))
+            if ( isLower( thirdChar ) && ( !m_twoUpperLetterException.contains( word ) ) )
             {
                 // Ok, convert
                 KoTextCursor cursor( parag->document() );
@@ -1578,7 +1576,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
                 cursor.setIndex( start + 2 );
                 textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
-                QString replacement = word[1].lower();
+                QString replacement = word[1].toLower();
                 cmd = txtObj->replaceSelectionCommand( textEditCursor, replacement,
                                                        i18n("Autocorrect"),
                                                        KoTextDocument::HighlightSelection );
@@ -1644,13 +1642,13 @@ void KoAutoFormat::detectStartOfLink(KoTextParag * parag, int const index, bool 
         word.append( s->at( i ).c );
     }
 
-    if (word.find("http")!=-1 || word.find("https")!=-1 || word.find("mailto")!=-1 || word.find("ftp")!=-1 || word.find("file")!=-1
-        || word.find("news")!=-1 || word.find('@')!=-1)
+    if( word.contains("http") || word.contains("https") || word.contains("mailto") || word.contains("ftp") || word.contains("file")
+		              || word.contains("news") || word.contains('@') )
                 m_ignoreUpperCase=true;
     else
     {
-        int const tmp_pos=word.find("www.");
-        if (tmp_pos!=-1 && (word.find('.',tmp_pos+4)!=-1 || insertedDot) )
+        int const tmp_pos=word.indexOf("www.");
+        if (tmp_pos!=-1 && (word.indexOf('.',tmp_pos+4)!=-1 || insertedDot) )
                m_ignoreUpperCase=true;
     }
 }
@@ -1659,35 +1657,35 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
 {
     kDebug() << "link:" << word << endl;
     char link_type = 0;
-    int pos = word.find("http://");
-    int tmp_pos = word.find("https://");
+    int pos = word.indexOf("http://");
+    int tmp_pos = word.indexOf("https://");
     if(tmp_pos<pos && tmp_pos!=-1)
           pos = tmp_pos;
-    tmp_pos = word.find("mailto:/");
+    tmp_pos = word.indexOf("mailto:/");
     if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1)
           pos = tmp_pos;
-    tmp_pos = word.find("ftp://");
+    tmp_pos = word.indexOf("ftp://");
     if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1)
           pos = tmp_pos;
-    tmp_pos = word.find("ftp.");
+    tmp_pos = word.indexOf("ftp.");
     if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1)
     {
           pos = tmp_pos;
           link_type = 3;
     }
-    tmp_pos = word.find("file:/");
+    tmp_pos = word.indexOf("file:/");
     if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1)
           pos = tmp_pos;
-    tmp_pos = word.find("news:");
+    tmp_pos = word.indexOf("news:");
     if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1)
           pos = tmp_pos;
-    tmp_pos = word.find("www.");
-    if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1 && word.find('.',tmp_pos+4)!=-1 )
+    tmp_pos = word.indexOf("www.");
+    if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1 && word.indexOf('.',tmp_pos+4)!=-1 )
     {
           pos = tmp_pos;
           link_type = 2;
     }
-    tmp_pos = word.find('@');
+    tmp_pos = word.indexOf('@');
     if ( pos == -1 && tmp_pos != -1 )
     {
           pos = tmp_pos-1;
@@ -1782,10 +1780,10 @@ void KoAutoFormat::doAutoIncludeUpperUpper(KoTextCursor* /*textEditCursor*/, KoT
                 break;
             word.append( ch );
         }
-        if( word.length() > 2 && word.left(2)==word.left(2).upper() && word.at(3)!=word.at(3).upper() )
+        if( word.length() > 2 && word.left(2) == word.left(2).toUpper() && word.at(3) != word.at(3).toUpper() )
         {
-            if ( m_twoUpperLetterException.findIndex(word )==-1)
-                m_twoUpperLetterException.append( word);
+            if ( !m_twoUpperLetterException.contains( word ) )
+                m_twoUpperLetterException.append( word );
         }
         i+=word.length();
     }
@@ -1819,9 +1817,9 @@ void KoAutoFormat::doAutoIncludeAbbreviation(KoTextCursor* /*textEditCursor*/, K
                     break;
                 wordAfter.append( ch );
             }
-            if( word.length()>1 && !wordAfter.isEmpty() && wordAfter.at(0)==wordAfter.at(0).lower())
+            if( word.length()>1 && !wordAfter.isEmpty() && wordAfter.at(0)==wordAfter.at(0).toLower())
             {
-                if ( m_upperCaseExceptions.findIndex(word )==-1)
+                if ( !m_upperCaseExceptions.contains( word ) )
                     m_upperCaseExceptions.append( word );
             }
         }
@@ -2114,23 +2112,23 @@ KCommand *KoAutoFormat::doCapitalizeNameOfDays( KoTextCursor* textEditCursor, Ko
 {
     //m_cacheNameOfDays
     //todo
-    int pos = m_cacheNameOfDays.findIndex( word.lower() );
+    int pos = m_cacheNameOfDays.indexOf( word.toLower() );
     if ( pos == -1 )
         return 0L;
     KoTextDocument * textdoc = parag->textDocument();
     QString replaceStr= m_cacheNameOfDays[pos];
     int start = index - replaceStr.length();
     int length = replaceStr.length();
-    if( word.at(0).isLetter() && word.at(0)==word.at(0).lower() )
+    if( word.at(0).isLetter() && word.at(0) == word.at(0).toLower() )
     {
         KoTextCursor cursor( parag->document() );
         cursor.setParag( parag );
         cursor.setIndex( start );
         textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setIndex( start + length );
-        QString replacement = replaceStr.at(0).upper() + replaceStr.right( length-1 );
+        QString replacement = replaceStr.at(0).toUpper() + replaceStr.right( length-1 );
         textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
-        QString cmdName=i18n("Capitalize Name of Days");
+        QString cmdName = i18n("Capitalize Name of Days");
         KCommand *cmd =txtObj->replaceSelectionCommand( textEditCursor, replacement,
                                                         cmdName,
                                                         KoTextDocument::HighlightSelection );
@@ -2151,14 +2149,14 @@ KCommand *KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextP
     {
         if( it.key()==word)
         {
-            replace = it.data().replace();
+            replace = it.value().replace();
             found = true;
             break;
         }
         else if ( it.key()=="othernb")
         {
-            QString tmp = it.data().replace();
-            int pos = word.find( tmp );
+            QString tmp = it.value().replace();
+            int pos = word.indexOf( tmp );
             if( pos != -1)
             {
                 if( pos + tmp.length() == word.length())
@@ -2319,14 +2317,14 @@ void KoAutoFormat::configAddCompletionWord( bool b )
 
 bool KoAutoFormat::isUpper( const QChar &c )
 {
-    return c.lower() != c;
+    return c.isUpper();
 }
 
 bool KoAutoFormat::isLower( const QChar &c )
 {
     // Note that this is not the same as !isUpper !
     // For instance '1' is not lower nor upper,
-    return c.upper() != c;
+    return c.isLower();
 }
 
 bool KoAutoFormat::isMark( const QChar &c )

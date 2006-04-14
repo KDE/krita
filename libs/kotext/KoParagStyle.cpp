@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qdom.h>
 
 KoCharStyle::KoCharStyle( const QString & name )
     : KoUserStyle( name )
@@ -114,7 +113,7 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
     QDomElement nameElem = parentElem.namedItem("NAME").toElement();
     if ( !nameElem.isNull() ) {
         m_name = nameElem.attribute("value");
-        m_displayName = i18n( "Style name", m_name.toUtf8() );
+        m_displayName = i18n( "Style name", m_name );
     } else
         kWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
@@ -220,7 +219,7 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
 
     // try to preserve existing internal name, if it looks adequate (no spaces)
     // ## TODO: check XML-Schemacs NCName conformity
-    bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
+    bool nameIsConform = !m_name.isEmpty() && !m_name.contains( ' ' );
     QString newName;
     if ( nameIsConform )
         newName = genStyles.lookup( gs, m_name, KoGenStyles::DontForceNumbering );

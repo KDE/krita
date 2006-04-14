@@ -1,16 +1,16 @@
 #include "ui_timedateformatwidget.h"
 #include "TimeFormatWidget.h"
 #include "TimeFormatWidget.moc"
-#include <qdatetime.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QDateTime>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QLabel>
 #include <q3buttongroup.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <knuminput.h>
 #include <KoVariable.h>
 
@@ -125,12 +125,12 @@ int TimeFormatWidget::correctValue() const
     return m_ui->KIntNumInput1->value()*60;
 }
 
-QComboBox *DateFormatWidget::combo1()
+QComboBox *TimeFormatWidget::combo1()
 {
         return m_ui->combo1;
 }
 
-QComboBox *DateFormatWidget::combo2()
+QComboBox *TimeFormatWidget::combo2()
 {
     return m_ui->combo2;
 }

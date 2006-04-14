@@ -86,7 +86,7 @@ kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
-target_link_libraries(kotext  ${KDE4_KSPELL2_LIBS} kutils )
+target_link_libraries(kotext  ${KDE4_KSPELL2_LIBS} kutils kofficecore kofficeui )
 
 set_target_properties(kotext PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 install_targets(${LIB_INSTALL_DIR} kotext )

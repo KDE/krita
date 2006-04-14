@@ -1614,18 +1614,18 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent )
     numberingGroupLayout->setMargin( KDialog::marginHint() );
 
     // What type of numbering is required?
-    QRadioButton *rNone = new QRadioButton( gNumbering, "rNone" );
+    QRadioButton *rNone = new QRadioButton( gNumbering );
     rNone->setText( i18n( "&None" ) );
     numberingGroupLayout->addWidget( rNone );
 
     gNumbering->insert( rNone , KoParagCounter::NUM_NONE);
 
-    QRadioButton *rList = new QRadioButton( gNumbering, "rList" );
+    QRadioButton *rList = new QRadioButton( gNumbering );
     rList->setText( i18n( "&List" ) );
     gNumbering->insert( rList , KoParagCounter::NUM_LIST);
     numberingGroupLayout->addWidget( rList );
 
-    QRadioButton *rChapter = new QRadioButton( gNumbering, "rChapter" );
+    QRadioButton *rChapter = new QRadioButton( gNumbering );
     rChapter->setText( i18n( "Chapt&er" ) );
     gNumbering->insert( rChapter , KoParagCounter::NUM_CHAPTER);
     numberingGroupLayout->addWidget( rChapter );
@@ -1855,7 +1855,8 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     TextLabel2->setAlignment( Qt::AlignRight );
     fillingGrid->addWidget( TextLabel2, 0, 0 );
 
-    cFilling = new QComboBox( FALSE, gTabLeader);
+    cFilling = new QComboBox( gTabLeader);
+    cFilling->setEditable( false );
     cFilling->addItem( i18n( "Blank" ) );
     cFilling->addItem( "_ _ _ _ _ _"); // DOT
     cFilling->addItem( "_________");   // SOLID
@@ -2020,18 +2021,18 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
     }
     switch( selectedTab->filling) {
         case TF_DOTS:
-            cFilling->setCurrentItem(1); break;
+            cFilling->setCurrentIndex(1); break;
         case TF_LINE:
-            cFilling->setCurrentItem(2); break;
+            cFilling->setCurrentIndex(2); break;
         case TF_DASH:
-            cFilling->setCurrentItem(3); break;
+            cFilling->setCurrentIndex(3); break;
         case TF_DASH_DOT:
-            cFilling->setCurrentItem(4); break;
+            cFilling->setCurrentIndex(4); break;
         case TF_DASH_DOT_DOT:
-            cFilling->setCurrentItem(5); break;
+            cFilling->setCurrentIndex(5); break;
         case TF_BLANK:
         default:
-            cFilling->setCurrentItem(0);
+            cFilling->setCurrentIndex(0);
     }
     eWidth->setValue( selectedTab->ptWidth );
     sTabPos->setValue( KoUnit::toUserValue(selectedTab->ptPos, m_unit));

@@ -128,9 +128,9 @@ void CustomItemsMap::insertItems( const KoTextCursor & startCursor, int size )
         CustomItemsMap::Iterator it = find( i );
         if ( it != end() )
         {
-            kDebug(32500) << "CustomItemsMap::insertItems setting custom item " << it.data() << endl;
-            cursor.parag()->setCustomItem( cursor.index(), it.data(), 0 );
-            it.data()->setDeleted( false );
+            kDebug(32500) << "CustomItemsMap::insertItems setting custom item " << it.value() << endl;
+            cursor.parag()->setCustomItem( cursor.index(), it.value(), 0 );
+            it.value()->setDeleted( false );
         }
         cursor.gotoRight();
     }
@@ -138,10 +138,9 @@ void CustomItemsMap::insertItems( const KoTextCursor & startCursor, int size )
 
 void CustomItemsMap::deleteAll( KMacroCommand *macroCmd )
 {
-    Iterator it = begin();
-    for ( ; it != end(); ++it )
+    KoTextCustomItem* item;	
+    foreach( item, *this )
     {
-        KoTextCustomItem * item = it.data();
         KCommand * itemCmd = item->deleteCommand();
         if ( itemCmd && macroCmd )
         {

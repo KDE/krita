@@ -37,12 +37,13 @@
 #include <kcommand.h>
 #include <kbookmarkmanager.h>
 #include <kbookmark.h>
-#include <k3urldrag.h>
+#include <kurl.h>
 
-#include <qapplication.h>
-#include <qtimer.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QTimer>
+#include <QClipboard>
 #include <QKeyEvent>
+#include <QMimeData>
 #include <Q3ValueList>
 #include <QMouseEvent>
 
@@ -203,36 +204,36 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             // correct semantics and movement for BiDi and non BiDi text.
             CursorAction a;
             if ( m_cursor->parag()->string()->isRightToLeft() == (e->key() == Qt::Key_Right) )
-                a = e->state() & Qt::ControlModifier ? MoveWordBackward : MoveBackward;
+                a = e->modifiers() & Qt::ControlModifier ? MoveWordBackward : MoveBackward;
             else
-                a = e->state() & Qt::ControlModifier ? MoveWordForward : MoveForward;
-            moveCursor( a, e->state() & Qt::ShiftModifier );
+                a = e->modifiers() & Qt::ControlModifier ? MoveWordForward : MoveForward;
+            moveCursor( a, e->modifiers() & Qt::ShiftModifier );
         }
         break;
     }
     case Qt::Key_Up:
-        moveCursor( e->state() & Qt::ControlModifier ? MoveParagUp : MoveUp, e->state() & Qt::ShiftModifier );
+        moveCursor( e->modifiers() & Qt::ControlModifier ? MoveParagUp : MoveUp, e->modifiers() & Qt::ShiftModifier );
         break;
     case Qt::Key_Down:
-        moveCursor( e->state() & Qt::ControlModifier ? MoveParagDown : MoveDown, e->state() & Qt::ShiftModifier );
+        moveCursor( e->modifiers() & Qt::ControlModifier ? MoveParagDown : MoveDown, e->modifiers() & Qt::ShiftModifier );
         break;
     case Qt::Key_Home:
-        moveCursor( e->state() & Qt::ControlModifier ? MoveHome : MoveLineStart, e->state() & Qt::ShiftModifier );
+        moveCursor( e->modifiers() & Qt::ControlModifier ? MoveHome : MoveLineStart, e->modifiers() & Qt::ShiftModifier );
         break;
     case Qt::Key_End:
         if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
-            moveCursor( e->state() & Qt::ControlModifier ? MoveEnd : MoveLineEnd, e->state() & Qt::ShiftModifier );
+            moveCursor( e->modifiers() & Qt::ControlModifier ? MoveEnd : MoveLineEnd, e->modifiers() & Qt::ShiftModifier );
         break;
     case Qt::Key_PageUp:
-        moveCursor( e->state() & Qt::ControlModifier ? MovePgUp : MoveViewportUp, e->state() & Qt::ShiftModifier );
+        moveCursor( e->modifiers() & Qt::ControlModifier ? MovePgUp : MoveViewportUp, e->modifiers() & Qt::ShiftModifier );
         break;
     case Qt::Key_PageDown:
-        moveCursor( e->state() & Qt::ControlModifier ? MovePgDown : MoveViewportDown, e->state() & Qt::ShiftModifier );
+        moveCursor( e->modifiers() & Qt::ControlModifier ? MovePgDown : MoveViewportDown, e->modifiers() & Qt::ShiftModifier );
         break;
     case Qt::Key_Return: case Qt::Key_Enter:
 
         if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
-            if ( (e->state() & (Qt::ShiftModifier|Qt::ControlModifier)) == 0 )
+            if ( (e->modifiers() & (Qt::ShiftModifier|Qt::ControlModifier)) == 0 )
             {
                 if ( textObject()->hasSelection() )
                     textObject()->removeSelectedText( m_cursor );
@@ -256,7 +257,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         clearUndoRedoInfo = FALSE;
         break;
     case Qt::Key_Backtab:
-      if (e->state() & Qt::ShiftModifier && m_cursor->parag() && m_cursor->atParagStart() && m_cursor->parag()->counter() && textDecreaseIndent())
+      if (e->modifiers() & Qt::ShiftModifier && m_cursor->parag() && m_cursor->atParagStart() && m_cursor->parag()->counter() && textDecreaseIndent())
 	break;
       break;
     case Qt::Key_Backspace:
@@ -313,8 +314,8 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             }
             if ( e->text().length() &&
                  ( !e->ascii() || e->ascii() >= 32 ) ||
-                 ( e->text() == "\t" && !( e->state() & Qt::ControlModifier ) ) ) {
-                clearUndoRedoInfo = FALSE;
+                 ( e->text() == "\t" && !( e->modifiers() & Qt::ControlModifier ) ) ) {
+                clearUndoRedoInfo = false;
                 QString text = e->text();
 
                 if ( d->m_backSpeller ) {
@@ -322,7 +323,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
                 }
 
                 // Alt+123 feature
-                if ( ( e->state() & Qt::AltModifier ) && text[0].isDigit() )
+                if ( ( e->modifiers() & Qt::AltModifier ) && text[0].isDigit() )
                 {
                     while ( text[0].isDigit() ) {
                         d->appendDigit( text[0].digitValue() );
@@ -337,7 +338,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
                         QChar *c = (QChar *)text.unicode();
                         int l = text.length();
                         while( l-- ) {
-                            if ( c->mirrored() )
+                            if ( c->hasMirrored() )
                                 *c = c->mirroredChar();
                             c++;
                         }
@@ -363,17 +364,17 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             // and a kaccel makes it hard to
             else
 	    {
-	      if ( e->state() & Qt::ControlModifier )
+	      if ( e->modifiers() & Qt::ControlModifier )
 		switch ( e->key() )
 	      {
 		case Qt::Key_F16: // Copy key on Sun keyboards
 		  emit copy(QClipboard::Clipboard);
 		  break;
 		case Qt::Key_A:
-		  moveCursor( MoveLineStart, e->state() & Qt::ShiftModifier );
+		  moveCursor( MoveLineStart, e->modifiers() & Qt::ShiftModifier );
 		  break;
 		case Qt::Key_E:
-		  moveCursor( MoveLineEnd, e->state() & Qt::ShiftModifier );
+		  moveCursor( MoveLineEnd, e->modifiers() & Qt::ShiftModifier );
 		  break;
 		case Qt::Key_K:
 		  textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionKill );
@@ -710,21 +711,22 @@ bool KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
     if ( canStartDrag && textdoc->inSelection( KoTextDocument::Standard, iPoint ) ) {
         mightStartDrag = TRUE;
         m_textobj->emitShowCursor();
-        dragStartTimer->start( QApplication::startDragTime(), TRUE );
+	dragStartTimer->setSingleShot( true );
+        dragStartTimer->start( QApplication::startDragTime() );
         dragStartPos = e->pos();
         return addParag;
     }
 
     bool redraw = FALSE;
     if ( textdoc->hasSelection( KoTextDocument::Standard ) ) {
-        if ( !( e->state() & Qt::ShiftModifier ) ) {
+        if ( !( e->modifiers() & Qt::ShiftModifier ) ) {
             redraw = textdoc->removeSelection( KoTextDocument::Standard );
             textdoc->setSelectionStart( KoTextDocument::Standard, m_cursor );
         } else {
             redraw = textdoc->setSelectionEnd( KoTextDocument::Standard, m_cursor ) || redraw;
         }
     } else {
-        if ( !( e->state() & Qt::ShiftModifier ) ) {
+        if ( !( e->modifiers() & Qt::ShiftModifier ) ) {
             textdoc->setSelectionStart( KoTextDocument::Standard, m_cursor );
         } else {
             textdoc->setSelectionStart( KoTextDocument::Standard, &oldCursor );
@@ -1082,7 +1084,7 @@ QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, const QStr
     if ( textObject()->hasSelection() )
     {
         text = textObject()->selectedText();
-        if ( text.find(' ') == -1 && text.find('\t') == -1 && text.find(KoTextObject::customItemChar()) == -1 )
+        if ( !text.contains(' ') && !text.contains('\t') && !text.contains(KoTextObject::customItemChar()) )
         {
             m_singleWord = true;
         }
@@ -1090,7 +1092,7 @@ QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, const QStr
          {
             m_singleWord = false;
             //laurent : don't try to search thesaurus when we have a customItemChar.
-            if( text.find(KoTextObject::customItemChar())!=-1)
+            if( text.contains( KoTextObject::customItemChar() ) )
                 text = QString::null;
         }
     }
@@ -1437,8 +1439,10 @@ void KoTextView::copyTextOfComment()
     {
         KUrl::List lst;
         lst.append( var->note() );
-        QApplication::clipboard()->setData( new K3URLDrag(lst, 0), QClipboard::Selection );
-        QApplication::clipboard()->setData( new K3URLDrag(lst, 0), QClipboard::Clipboard );
+	QStringList tmp = lst.toStringList();
+//	how to get a QList<QUrl> ??
+//        QApplication::clipboard()->setMimeData( (new QMimeData)->setUrls(tmp), QClipboard::Selection );
+//        QApplication::clipboard()->setMimeData( (new QMimeData)->setUrls(tmp), QClipboard::Clipboard );
     }
 }
 
@@ -1500,8 +1504,9 @@ void KoTextView::copyLink()
     {
         KUrl::List lst;
         lst.append( var->url() );
-        QApplication::clipboard()->setData( new K3URLDrag(lst, 0), QClipboard::Selection );
-        QApplication::clipboard()->setData( new K3URLDrag(lst, 0), QClipboard::Clipboard );
+//      how to get a QList<QUrl> for QMimeData  
+//	QApplication::clipboard()->setMimeData( (new QMimeData)->setUrls(lst), QClipboard::Selection );
+//      QApplication::clipboard()->setMimeData( (new QMimeData)->setUrls(lst), QClipboard::Clipboard );
     }
 }
 

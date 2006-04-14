@@ -95,9 +95,9 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
 
 void TKSelectColorAction::init()
 {
-#if 0
   m_pStandardColor = new TKColorPanel();
   m_pRecentColor = new TKColorPanel();
+#if 0
 
   connect(m_pStandardColor,SIGNAL(colorSelected(const QColor&)),SLOT(panelColorSelected(const QColor&)));
   connect(m_pStandardColor,SIGNAL(reject()),SLOT(panelReject()));

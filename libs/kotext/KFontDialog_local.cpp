@@ -28,18 +28,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qfile.h>
-#include <qfont.h>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QFile>
+#include <QFont>
 #include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qscrollbar.h>
-#include <qstringlist.h>
-#include <qfontdatabase.h>
+#include <QLabel>
+#include <QLayout>
+#include <QScrollBar>
+#include <QStringList>
+#include <QFontDatabase>
 #include <q3whatsthis.h>
-#include <qtooltip.h>
+#include <QToolTip>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3ValueList>
@@ -100,7 +100,7 @@ public:
 KFontChooser_local::KFontChooser_local(QWidget *parent, const char *name,
 			   bool onlyFixed, const QStringList &fontList,
 			   bool makeFrame, int visibleListSize, bool diff,
-                           QCheckBox::ToggleState *sizeIsRelativeState )
+                           Qt::CheckState *sizeIsRelativeState )
   : QWidget(parent, name), usingFixed(onlyFixed)
 {
   charsetsCombo = 0;
@@ -393,22 +393,22 @@ QColor KFontChooser_local::backgroundColor() const
   return d->m_palette.color( QPalette::Active, QColorGroup::Base );
 }
 
-void KFontChooser_local::setSizeIsRelative( QCheckBox::ToggleState relative )
+void KFontChooser_local::setSizeIsRelative( Qt::CheckState relative )
 {
   // check or uncheck or gray out the "relative" checkbox
   if( sizeIsRelativeCheckBox ) {
     if( QCheckBox::NoChange == relative )
       sizeIsRelativeCheckBox->setNoChange();
     else
-      sizeIsRelativeCheckBox->setChecked(  QCheckBox::On == relative );
+      sizeIsRelativeCheckBox->setChecked(  Qt::Checked == relative );
   }
 }
 
-QCheckBox::ToggleState KFontChooser_local::sizeIsRelative() const
+Qt::CheckState KFontChooser_local::sizeIsRelative() const
 {
   return sizeIsRelativeCheckBox
-       ? sizeIsRelativeCheckBox->state()
-       : QCheckBox::NoChange;
+       ? sizeIsRelativeCheckBox->checkState()
+       : Qt::Unchecked;
 }
 
 QSize KFontChooser_local::sizeHint( void ) const
@@ -484,11 +484,11 @@ void KFontChooser_local::family_chosen_slot(const QString& family)
     currentStyles.clear();
     for ( QStringList::Iterator it = styles.begin(); it != styles.end(); ++it ) {
         QString style = *it;
-        int pos = style.find("Plain");
+        int pos = style.indexOf("Plain");
         if(pos >=0) style = style.replace(pos,5,i18n("Regular"));
-        pos = style.find("Normal");
+        pos = style.indexOf("Normal");
         if(pos >=0) style = style.replace(pos,6,i18n("Regular"));
-        pos = style.find("Oblique");
+        pos = style.indexOf("Oblique");
         if(pos >=0) style = style.replace(pos,7,i18n("Italic"));
         if(!styleListBox->findItem(style)) {
             styleListBox->insertItem(i18n(style.toUtf8()));
@@ -584,7 +584,7 @@ void KFontChooser_local::setupDisplay()
 {
   // Calling familyListBox->setCurrentItem() causes the value of selFont
   // to change, so we save the family, style and size beforehand.
-  QString family = selFont.family().lower();
+  QString family = selFont.family().toLower();
   int style = (selFont.bold() ? 2 : 0) + (selFont.italic() ? 1 : 0);
   int size = selFont.pointSize();
   if (size == -1)
@@ -595,7 +595,7 @@ void KFontChooser_local::setupDisplay()
 
   numEntries = familyListBox->count();
   for (i = 0; i < numEntries; i++) {
-    if (family == familyListBox->text(i).lower()) {
+    if (family == familyListBox->text(i).toLower()) {
       familyListBox->setCurrentItem(i);
       break;
     }
@@ -608,7 +608,7 @@ void KFontChooser_local::setupDisplay()
     {
       family = family.left(family.find('[')).trimmed();
       for (i = 0; i < numEntries; i++) {
-        if (family == familyListBox->text(i).lower()) {
+        if (family == familyListBox->text(i).toLower()) {
           familyListBox->setCurrentItem(i);
           break;
         }
@@ -621,7 +621,7 @@ void KFontChooser_local::setupDisplay()
   {
     QString fallback = family+" [";
     for (i = 0; i < numEntries; i++) {
-      if (familyListBox->text(i).lower().startsWith(fallback)) {
+      if (familyListBox->text(i).toLower().startsWith(fallback)) {
         familyListBox->setCurrentItem(i);
         break;
       }
@@ -632,7 +632,7 @@ void KFontChooser_local::setupDisplay()
   if ( (i == numEntries) )
   {
     for (i = 0; i < numEntries; i++) {
-      if (familyListBox->text(i).lower().startsWith(family)) {
+      if (familyListBox->text(i).toLower().startsWith(family)) {
         familyListBox->setCurrentItem(i);
         break;
       }
@@ -703,10 +703,10 @@ void KFontChooser_local::addFont( QStringList &list, const char *xfont )
   QString font = QString::fromLatin1(ptr + 1);
 
   int pos;
-  if ( ( pos = font.find( '-' ) ) > 0 ) {
+  if ( ( pos = font.indexOf( '-' ) ) > 0 ) {
     font.truncate( pos );
 
-    if ( font.find( QString::fromLatin1("open look"), 0, false ) >= 0 )
+    if ( font.indexOf( QString::fromLatin1("open look"), 0, Qt::CaseInsensitive ) >= 0 )
       return;
 
     QStringList::Iterator it = list.begin();
@@ -752,7 +752,7 @@ void KFontChooser_local::showXLFDArea(bool show)
 KFontDialog_local::KFontDialog_local( QWidget *parent, const char* name,
 			  bool onlyFixed, bool modal,
 			  const QStringList &fontList, bool makeFrame, bool diff,
-                          QCheckBox::ToggleState *sizeIsRelativeState )
+                          Qt::CheckState *sizeIsRelativeState )
   : KDialogBase( parent, name, modal, i18n("Select Font"), Ok|Cancel, Ok )
 {
   chooser = new KFontChooser_local( this, "fontChooser",
@@ -764,7 +764,7 @@ KFontDialog_local::KFontDialog_local( QWidget *parent, const char* name,
 
 int KFontDialog_local::getFontDiff( QFont &theFont, int &diffFlags, bool onlyFixed,
                              QWidget *parent, bool makeFrame,
-                             QCheckBox::ToggleState *sizeIsRelativeState )
+                             Qt::CheckState *sizeIsRelativeState )
 {
   KFontDialog_local dlg( parent, "Font Selector", onlyFixed, true, QStringList(),
 		   makeFrame, true, sizeIsRelativeState );
@@ -783,7 +783,7 @@ int KFontDialog_local::getFontDiff( QFont &theFont, int &diffFlags, bool onlyFix
 
 int KFontDialog_local::getFont( QFont &theFont, bool onlyFixed,
                           QWidget *parent, bool makeFrame,
-                          QCheckBox::ToggleState *sizeIsRelativeState )
+                          Qt::CheckState *sizeIsRelativeState )
 {
   KFontDialog_local dlg( parent, "Font Selector", onlyFixed, true, QStringList(),
 		   makeFrame, false, sizeIsRelativeState );
@@ -803,7 +803,7 @@ int KFontDialog_local::getFont( QFont &theFont, bool onlyFixed,
 int KFontDialog_local::getFontAndText( QFont &theFont, QString &theString,
 				 bool onlyFixed, QWidget *parent,
 				 bool makeFrame,
-                                 QCheckBox::ToggleState *sizeIsRelativeState )
+                                 Qt::CheckState *sizeIsRelativeState )
 {
   KFontDialog_local dlg( parent, "Font and Text Selector", onlyFixed, true,
 		   QStringList(), makeFrame, false, sizeIsRelativeState );

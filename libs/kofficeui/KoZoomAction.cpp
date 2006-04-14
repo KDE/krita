@@ -26,19 +26,19 @@
 #include <klocale.h>
 #include <q3tl.h>
 
-KoZoomAction::KoZoomAction( const QString& text, const QIcon& pix, 
+KoZoomAction::KoZoomAction( const QString& text, const QIcon& pix,
   const KShortcut& cut, KActionCollection* parent, const char* name ):
   KSelectAction( text, pix, cut, parent, name )
 {
   init();
 }
-      
-KoZoomAction::KoZoomAction( const QString& text, const QString& pix, 
+
+KoZoomAction::KoZoomAction( const QString& text, const QString& pix,
   const KShortcut& cut, KActionCollection* parent, const char* name ):
   KSelectAction( text, pix, cut, parent, name )
 {
   init();
-  
+
 }
 
 void KoZoomAction::setZoom( const QString& text )
@@ -46,34 +46,34 @@ void KoZoomAction::setZoom( const QString& text )
   bool ok = false;
   QString t = text;
   int zoom = t.remove( '%' ).toInt( &ok );
-  
+
   // where we'll store sorted new zoom values
   Q3ValueList<int> list;
   if( zoom > 10 ) list.append( zoom );
-  
+
   // "Captured" non-empty sequence of digits
-  QRegExp regexp("(\\d+)"); 
-  
+  QRegExp regexp("(\\d+)");
+
   const QStringList itemsList( items() );
   for( QStringList::ConstIterator it = itemsList.begin(); it != itemsList.end(); ++it )
   {
     regexp.search( *it );
     const int val=regexp.cap(1).toInt( &ok );
-    
+
     //zoom : limit inferior=10
     if( ok && val>9 && list.contains( val )==0 )
       list.append( val );
   }
-  
+
   qHeapSort( list );
 
   // update items with new sorted zoom values
   QStringList values;
   for (Q3ValueList<int>::Iterator it = list.begin(); it != list.end(); ++it )
-    values.append( i18n("%1%").arg(*it) );
+    values.append( i18n("%1%", *it) );
   setItems( values );
-  
-  QString zoomStr = i18n("%1%").arg( zoom );
+
+  QString zoomStr = i18n("%1%",  zoom );
   setCurrentItem( values.findIndex( zoomStr ) );
 }
 
@@ -91,25 +91,25 @@ void KoZoomAction::activated( const QString& text )
 void KoZoomAction::init()
 {
   setEditable( true );
-    
+
   QStringList values;
-  values << i18n("%1%").arg("33");
-  values << i18n("%1%").arg("50");
-  values << i18n("%1%").arg("75");
-  values << i18n("%1%").arg("100");
-  values << i18n("%1%").arg("125");
-  values << i18n("%1%").arg("150");
-  values << i18n("%1%").arg("200");
-  values << i18n("%1%").arg("250");
-  values << i18n("%1%").arg("350");
-  values << i18n("%1%").arg("400");
-  values << i18n("%1%").arg("450");
-  values << i18n("%1%").arg("500");
+  values << i18n("%1%", QString("33"));
+  values << i18n("%1%", QString("50"));
+  values << i18n("%1%", QString("75"));
+  values << i18n("%1%", QString("100"));
+  values << i18n("%1%", QString("125"));
+  values << i18n("%1%", QString("150"));
+  values << i18n("%1%", QString("200"));
+  values << i18n("%1%", QString("250"));
+  values << i18n("%1%", QString("350"));
+  values << i18n("%1%", QString("400"));
+  values << i18n("%1%", QString("450"));
+  values << i18n("%1%", QString("500"));
   setItems( values );
-  
-  setCurrentItem( values.findIndex( i18n("%1%").arg( 100 ) ) );
-  
-  connect( this, SIGNAL( activated( const QString& ) ), 
+
+  setCurrentItem( values.findIndex( i18n("%1%",  100 ) ) );
+
+  connect( this, SIGNAL( activated( const QString& ) ),
     SLOT( activated( const QString& ) ) );
 }
 

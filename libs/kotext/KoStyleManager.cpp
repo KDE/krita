@@ -41,6 +41,7 @@
 #include <Q3ValueList>
 #include <QResizeEvent>
 #include <Q3VBoxLayout>
+#include <Q3ListBox>
 
 /******************************************************************/
 /* Class: KoStyleManager                                          */

@@ -21,8 +21,9 @@
 
 #include <q3vbox.h>
 
-#include <q3buttongroup.h>
-#include <qradiobutton.h>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QRadioButton>
 
 #include "KoChangeCaseDia.h"
 
@@ -34,21 +35,24 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
     setCaption( i18n("Change Case") );
     KVBox *page = makeVBoxMainWidget();
 
-    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Case" ),page );
-    grp->setRadioButtonExclusive( TRUE );
+    QGroupBox *grp = new QGroupBox( i18n( "Case" ), this ); // page is not possible
     grp->layout();
-    m_upperCase=new QRadioButton( i18n("&Uppercase"), grp );
-    m_lowerCase=new QRadioButton( i18n("&Lowercase"), grp );
+    m_upperCase = new QRadioButton( i18n("&Uppercase"), grp );
+    m_lowerCase = new QRadioButton( i18n("&Lowercase"), grp );
+    m_titleCase = new QRadioButton( i18n("T&itle case"), grp );
+    m_toggleCase = new QRadioButton( i18n("&Toggle case"), grp );
+    m_sentenceCase = new QRadioButton( i18n("Sentence case"), grp );
 
-    m_titleCase=new QRadioButton( i18n("T&itle case"), grp );
-
-    m_toggleCase=new QRadioButton( i18n("&Toggle case"), grp );
-    m_sentenceCase=new QRadioButton( i18n("Sentence case"), grp );
+    QButtonGroup* btnGroup = new QButtonGroup( this );   // page is not possible
+    btnGroup->addButton( m_upperCase );
+    btnGroup->addButton( m_lowerCase );
+    btnGroup->addButton( m_titleCase );
+    btnGroup->addButton( m_toggleCase );
+    btnGroup->addButton( m_sentenceCase );
+    
     m_sentenceCase->setWhatsThis( i18n("Convert first letter of a sentence to uppercase."));
 
     m_upperCase->setChecked(true);
-    grp->setRadioButtonExclusive( TRUE );
-
 }
 
 KoChangeCaseDia::TypeOfCase KoChangeCaseDia::getTypeOfCase()

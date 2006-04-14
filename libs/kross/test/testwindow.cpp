@@ -20,12 +20,12 @@
 #include "testwindow.h"
 #include "testplugin.h"
 
-#include <qlabel.h>
-#include <q3vbox.h>
-#include <qmenu.h>
-#include <qgroupbox.h>
-#include <qcombobox.h>
-#include <qdir.h>
+#include <QLabel>
+#include <QMenu>
+#include <QGroupBox>
+#include <QComboBox>
+#include <QDir>
+#include <QVBoxLayout>
 
 #include <ktextedit.h>
 #include <kpushbutton.h>
@@ -65,24 +65,29 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     KAction* scriptsaction = m_scriptextension->action("installedscripts");
     if(scriptsaction) scriptsaction->plug(menuFile);
 
-    Q3VBox* mainbox = new Q3VBox(this);
+    QWidget* mainbox = new QWidget(this);
+    QVBoxLayout* layout = new QVBoxLayout(mainbox);
 
     QGroupBox* interpretergrpbox = new QGroupBox("Interpreter", mainbox);
-    interpretergrpbox->setAlignment(Qt::AlignTop);
+    layout->addWidget(interpretergrpbox);
+    new QVBoxLayout(interpretergrpbox);
     QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
     m_interpretercombo = new QComboBox(interpretergrpbox);
+    interpretergrpbox->layout()->addWidget(m_interpretercombo);
     m_interpretercombo->insertStringList(interpreters);
     m_interpretercombo->setCurrentText(interpretername);
 
     QGroupBox* scriptgrpbox = new QGroupBox("Scripting code", mainbox);
-    scriptgrpbox->setAlignment(Qt::AlignTop);
+    layout->addWidget(scriptgrpbox);
+    new QVBoxLayout(scriptgrpbox);
     m_codeedit = new KTextEdit(scriptgrpbox);
+    scriptgrpbox->layout()->addWidget(m_codeedit);
     m_codeedit->setText(m_scriptcode);
     m_codeedit->setWordWrapMode(QTextOption::NoWrap);
     m_codeedit->setTextFormat(Qt::PlainText);
 
-    Q3HBox* btnbox = new Q3HBox(mainbox);
-    KPushButton* execbtn = new KPushButton("Execute", btnbox);
+    KPushButton* execbtn = new KPushButton("Execute", mainbox);
+    layout->addWidget(execbtn);
     connect(execbtn, SIGNAL(clicked()), this, SLOT(execute()));
 
     setCentralWidget(mainbox);

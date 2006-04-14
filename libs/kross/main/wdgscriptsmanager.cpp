@@ -22,9 +22,11 @@
 #include <qfileinfo.h>
 #include <q3header.h>
 #include <qobject.h>
+#include <QMenu>
 //#include <qtooltip.h>
 #include <QPixmap>
 #include <Q3ValueList>
+#include <QVBoxLayout>
 
 #include <kapplication.h>
 #include <kdeversion.h>
@@ -108,9 +110,7 @@ class WdgScriptsManagerPrivate
     //ToolTip* m_tooltip;
     ScriptNewStuff* newstuff;
 
-    //enum { LoadBtn = 0, UnloadBtn, InstallBtn, UninstallBtn, ExecBtn, NewStuffBtn };
-
-    KPushButton *btnExec, *btnLoad, *btnUnload, *btnInstall, *btnUninstall, *btnNewStuff;
+    KAction *btnExec, *btnLoad, *btnUnload, *btnInstall, *btnUninstall, *btnNewStuff;
 };
 
 WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name)
@@ -121,31 +121,50 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     //d->m_tooltip = new ToolTip(d->m_listview);
     d->newstuff = 0;
 
+    QVBoxLayout* layout = new QVBoxLayout(this);
     d->m_listview = new K3ListView(this);
+    layout->addWidget(d->m_listview);
     d->m_listview->header()->hide();
     d->m_listview->setAllColumnsShowFocus(true);
     d->m_listview->setSorting(-1);
     d->m_listview->addColumn("");
 
-    d->btnExec = new KPushButton(KIcon("player_play"), i18n("Execute"), this);
-    d->btnLoad = new KPushButton(KIcon("fileopen"), i18n("Load"), this);
-    d->btnUnload = new KPushButton(KIcon("fileclose"), i18n("Unload"), this);
-    d->btnInstall = new KPushButton(KIcon("fileimport"), i18n("Install"), this);
-    d->btnUninstall = new KPushButton(KIcon("fileclose"), i18n("Uninstall"), this);
-    d->btnNewStuff = new KPushButton(KIcon("knewstuff"), i18n("Get New Scripts"), this);
+    KActionCollection* collection = new KActionCollection(this);
+    QMenu* menu = new QMenu(d->m_listview);
+
+    d->btnExec = new KAction(KIcon("player_play"), i18n("Execute"), collection, "execute");
+    menu->addAction(d->btnExec);
+    connect(d->btnExec, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)),
+            this, SLOT(slotExecuteScript()));
+
+    d->btnLoad = new KAction(KIcon("fileopen"), i18n("Load"), collection, "load");
+    menu->addAction(d->btnLoad);
+    connect(d->btnLoad, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)),
+            this, SLOT(slotLoadScript()));
+
+    d->btnUnload = new KAction(KIcon("fileclose"), i18n("Unload"), collection, "unload");
+    menu->addAction(d->btnUnload);
+    connect(d->btnUnload, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)),
+            this, SLOT(slotUnloadScript()));
+
+    d->btnInstall = new KAction(KIcon("fileimport"), i18n("Install"), collection, "install");
+    menu->addAction(d->btnInstall);
+    connect(d->btnInstall, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)),
+            this, SLOT(slotInstallScript()));
+
+    d->btnUninstall = new KAction(KIcon("fileclose"), i18n("Uninstall"), collection, "uninstall");
+    menu->addAction(d->btnUninstall);
+    connect(d->btnUninstall, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)),
+            this, SLOT(slotUninstallScript()));
+
+    d->btnNewStuff = new KAction(KIcon("knewstuff"), i18n("Get New Scripts"), collection, "newscripts");
+    menu->addAction(d->btnNewStuff);
+    connect(d->btnNewStuff, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)),
+            this, SLOT(slotGetNewScript()));
 
     slotFillScriptsList();
-
     slotSelectionChanged(0);
     connect(d->m_listview, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotSelectionChanged(Q3ListViewItem*)));
-
-    connect(d->btnExec, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
-    connect(d->btnLoad, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
-    connect(d->btnUnload, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
-    connect(d->btnInstall, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
-    connect(d->btnUninstall, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
-    connect(d->btnNewStuff, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
-
     connect(scr, SIGNAL( collectionChanged(ScriptActionCollection*) ), this, SLOT( slotFillScriptsList() ));
 }
 

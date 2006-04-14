@@ -156,8 +156,10 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         file = fi.absFilePath();
         setEnabled(fi.exists());
         setFile(file);
-        if(icon.isNull())
-            icon = KMimeType::iconForURL( KUrl(file) );
+        if(icon.isNull()) {
+            Kross::krossdebug( QString("FILE => %1").arg(file) );
+            icon = KMimeType::iconForURL( KUrl::fromPath(file) );
+        }
         if(description.isEmpty())
             description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);
         else

@@ -19,14 +19,13 @@
 #include "KoOasisStyles.h"
 #include <KoXmlWriter.h>
 #include <kdebug.h>
-#include <qdom.h>
 #include "KoDom.h"
 #include "KoXmlNS.h"
 #include "KoGenStyles.h"
-#include <qbuffer.h>
+#include <QBuffer>
 #include <kglobal.h>
 #include <klocale.h>
-#include <qbrush.h>
+#include <QBrush>
 #include <KoStyleStack.h>
 
 class KoOasisStyles::Private
@@ -1092,7 +1091,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
                 beforeSeparator = false;
             else if (  format[0]=='0' && !beforeSeparator )
                 decimalplace++;
-            else if ( format[0].lower()=='e' )
+            else if ( format[0].toLower()=='e' )
             {
                 format.remove( 0, 1 );
                 if ( format[0]=='+' )

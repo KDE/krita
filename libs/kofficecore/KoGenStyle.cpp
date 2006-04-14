@@ -150,7 +150,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
     writeStyleProperties( writer, KoGenStyle::ParagraphType, "style:paragraph-properties", parentStyle );
 
     // And now the style maps
-    for ( uint i = 0; i < m_maps.count(); ++i ) {
+    for ( int i = 0; i < m_maps.count(); ++i ) {
         bool writeit = true;
         if ( parentStyle && compareMap( m_maps[i], parentStyle->m_maps[i] ) == 0 )
             writeit = false;
@@ -211,7 +211,7 @@ void KoGenStyle::printDebug() const
         kDebug() << "     " << it.key() << " = " << it.value() << endl;
     }
     kDebug() << m_maps.count() << " maps." << endl;
-    for ( uint i = 0; i < m_maps.count(); ++i ) {
+    for ( int i = 0; i < m_maps.count(); ++i ) {
         kDebug() << "map " << i << ":" << endl;
         for( QMap<QString,QString>::ConstIterator it = m_maps[i].begin(); it != m_maps[i].end(); ++it ) {
             kDebug() << "     " << it.key() << " = " << it.value() << endl;
@@ -240,7 +240,7 @@ bool KoGenStyle::operator<( const KoGenStyle &other ) const
     int comp = compareMap( m_attributes, other.m_attributes );
     if ( comp != 0 )
         return comp < 0;
-    for ( uint i = 0 ; i < m_maps.count() ; ++i ) {
+    for ( int i = 0 ; i < m_maps.count() ; ++i ) {
         int comp = compareMap( m_maps[i], other.m_maps[i] );
         if ( comp != 0 )
             return comp < 0;
@@ -267,7 +267,7 @@ bool KoGenStyle::operator==( const KoGenStyle &other ) const
     int comp = compareMap( m_attributes, other.m_attributes );
     if ( comp != 0 )
         return false;
-    for ( uint i = 0 ; i < m_maps.count() ; ++i ) {
+    for ( int i = 0 ; i < m_maps.count() ; ++i ) {
         int comp = compareMap( m_maps[i], other.m_maps[i] );
         if ( comp != 0 )
             return false;

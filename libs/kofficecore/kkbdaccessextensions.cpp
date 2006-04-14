@@ -150,7 +150,7 @@ class KKbdAccessExtensionsPrivate
         // Index of current handle of the panel.  When panel is a QDockWindow:
         //      1 = size horizontally
         //      2 = size vertically
-        uint handleNdx;
+        int handleNdx;
 
         // Sizing icon.
         KPanelKbdSizerIcon* icon;
@@ -165,7 +165,7 @@ class KKbdAccessExtensionsPrivate
         KMainWindow* mainWindow;
 };
 
-KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* name) :
+KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* /*name*/) :
     QObject( parent )
 {
     // kDebug() << "KKbdAccessExtensions::KKbdAccessExtensions: running." << endl;

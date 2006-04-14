@@ -25,8 +25,7 @@
 #define __KKBDACCESSEXTENSIONS_H__
 
 // Qt includes.
-#include <qobject.h>
-//Added by qt3to4:
+#include <QObject>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QEvent>

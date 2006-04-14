@@ -264,7 +264,7 @@ bool KoPictureEps::extractPostScriptStream( void )
     kDebug(30003) << "KoPictureEps::extractPostScriptStream" << endl;
     QDataStream data( &m_rawData, QIODevice::ReadOnly );
     data.setByteOrder( QDataStream::LittleEndian );
-    quint32 magic, offset, length;
+    qint32 magic, offset, length;
     data >> magic;
     data >> offset;
     data >> length;
@@ -273,7 +273,7 @@ bool KoPictureEps::extractPostScriptStream( void )
         kError(30003) << "Length of PS stream is zero!" << endl;
         return false;
     }
-    if ( offset+length>m_rawData.size() )
+    if ( offset+length > m_rawData.size() )
     {
         kError(30003) << "Data stream of the EPSF file is longer than file: " << offset << "+" << length << ">" << m_rawData.size() << endl;
         return false;

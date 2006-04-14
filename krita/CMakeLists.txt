@@ -64,33 +64,39 @@ if (SHOULD_BUILD_KRITA)
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-krita.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krita.h)
 
-    # For config-krita.h
-    include_directories(${CMAKE_CURRENT_BINARY_DIR})
+    set(KRITA_INCLUDES
+        # For config-krita.h
+        ${CMAKE_CURRENT_BINARY_DIR}
 
-    include_directories(${CMAKE_SOURCE_DIR}/krita/core)
-    include_directories(${CMAKE_SOURCE_DIR}/krita/core/tiles)
-    include_directories(${CMAKE_SOURCE_DIR}/krita/sdk)
-    include_directories(${CMAKE_SOURCE_DIR}/krita/kritacolor)
-    include_directories(${CMAKE_SOURCE_DIR}/krita/kritacolor/colorspaces)
-    include_directories(${CMAKE_SOURCE_DIR}/krita/ui)
-    include_directories(${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_u8)
+        ${CMAKE_SOURCE_DIR}/krita/core
+        ${CMAKE_SOURCE_DIR}/krita/core/tiles
+        ${CMAKE_SOURCE_DIR}/krita/sdk
+        ${CMAKE_SOURCE_DIR}/krita/kritacolor
+        ${CMAKE_SOURCE_DIR}/krita/kritacolor/colorspaces
+        ${CMAKE_SOURCE_DIR}/krita/ui
+        ${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_u8
 
-    # For generated files from .ui
-    include_directories(${CMAKE_BINARY_DIR}/krita/ui)
+        # For generated files from .ui
+        ${CMAKE_BINARY_DIR}/krita/ui
 
-    include_directories(${KOPAINTER_INCLUDES})
-    include_directories(${KOFFICEUI_INCLUDES})
-    include_directories(${KOPALETTE_INCLUDES})
+        ${KOPAINTER_INCLUDES}
+        ${KOFFICEUI_INCLUDES}
+        ${KOPALETTE_INCLUDES}
+        ${LCMS_INCLUDE_DIR}
 
-    include_directories(${LCMS_INCLUDE_DIR})
+        # 'Export' this for use by filters
+        CACHE INTERNAL ""
+        )
 
-if(HAVE_OPENGL)
-    include_directories(${OPENGL_INCLUDE_DIR})
-endif(HAVE_OPENGL)
+    include_directories(${KRITA_INCLUDES})
 
-if(HAVE_XINPUTEXT)
-    include_directories(${X11_Xinput_INCLUDE_PATH})
-endif(HAVE_XINPUTEXT)
+    if(HAVE_OPENGL)
+        include_directories(${OPENGL_INCLUDE_DIR})
+    endif(HAVE_OPENGL)
+
+    if(HAVE_XINPUTEXT)
+        include_directories(${X11_Xinput_INCLUDE_PATH})
+    endif(HAVE_XINPUTEXT)
     
     add_subdirectory( sdk )
     add_subdirectory( kritacolor )

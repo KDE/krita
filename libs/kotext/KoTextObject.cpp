@@ -35,8 +35,8 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-#include <qtimer.h>
-#include <qregexp.h>
+#include <QTimer>
+#include <QRegExp>
 #include <q3progressdialog.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -64,8 +64,8 @@ public:
 KoTextObject::KoTextObject( KoTextZoomHandler *zh, const QFont& defaultFont,
                             const QString &defaultLanguage, bool hyphenation,
                             KoParagStyle* defaultStyle, int tabStopWidth,
-                            QObject* parent, const char *name )
-    : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
+                            QObject* parent, const char* /*name*/ )
+    : QObject( parent ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
     textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage, hyphenation ) );
     if ( tabStopWidth != -1 )
@@ -74,8 +74,8 @@ KoTextObject::KoTextObject( KoTextZoomHandler *zh, const QFont& defaultFont,
 }
 
 KoTextObject::KoTextObject( KoTextDocument* _textdoc, KoParagStyle* defaultStyle,
-                            QObject* parent, const char *name )
- : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
+                            QObject* parent, const char* /*name*/ )
+ : QObject( parent ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
     textdoc = _textdoc;
     init();
@@ -283,7 +283,7 @@ void KoTextObject::UndoRedoInfo::clear()
                     CustomItemsMap::Iterator it = customItemsMap.begin();
                     for ( ; it != customItemsMap.end(); ++it )
                     {
-                        KoTextCustomItem * item = it.data();
+                        KoTextCustomItem * item = it.value();
                         KCommand * itemCmd = item->createCommand();
                         if ( itemCmd )
                             placeHolderCmd->addCommand( itemCmd );
@@ -506,7 +506,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
         if ( cursor->parag() )
         {
                 QString last_line = cursor->parag()->toString();
-                last_line.remove(0,last_line.find(' ')+1);
+                last_line.remove(0,last_line.indexOf(' ')+1);
 
                 if( last_line.isEmpty() && cursor->parag()->counter() && cursor->parag()->counter()->numbering() == KoParagCounter::NUM_LIST ) //if the previous line the in paragraph is empty
                 {
@@ -667,7 +667,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         // Some custom items (e.g. variables) depend on the format
         CustomItemsMap::Iterator it = customItemsMap.begin();
         for ( ; it != customItemsMap.end(); ++it )
-            it.data()->resize();
+            it.value()->resize();
     }
 
     // Speed optimization: if we only type a char, and it doesn't
@@ -748,7 +748,8 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
     QRegExp crlf( QString::fromLatin1("\r\n") );
     t.replace( crlf, QChar('\n') );
     // Convert non-printable chars
-    for ( int i=0; (uint) i<t.length(); i++ ) {
+    for ( int i=0; i < t.length(); i++ )
+    {
         if ( t[ i ] < ' ' && t[ i ] != '\n' && t[ i ] != '\t' )
             t[ i ] = ' ';
     }
@@ -1041,7 +1042,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
             // Some custom items (e.g. variables) depend on the format
             CustomItemsMap::Iterator it = undoRedoInfo.customItemsMap.begin();
             for ( ; it != undoRedoInfo.customItemsMap.end(); ++it )
-                it.data()->resize();
+                it.value()->resize();
         }
         KoTextFormatCommand *cmd = new KoTextFormatCommand(
             textdoc, id, index, eid, eindex, undoRedoInfo.text.rawData(),
@@ -1704,7 +1705,7 @@ void KoTextObject::selectionChangedNotify( bool enableActions /* = true */)
 
 void KoTextObject::setViewArea( QWidget* w, int maxY )
 {
-    m_mapViewAreas.replace( w, maxY );
+    m_mapViewAreas.insert( w, maxY );
 }
 
 void KoTextObject::setLastFormattedParag( KoTextParag *parag )
@@ -1755,7 +1756,8 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
 
     if ( count == 0 )
     {
-        formatTimer->start( interval, TRUE );
+	formatTimer->setSingleShot( true );    
+        formatTimer->start( interval );
         return true;
     }
 
@@ -1863,7 +1865,8 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
     // Now let's see when we'll need to get back here.
     if ( m_lastFormatted )
     {
-        formatTimer->start( interval, TRUE );
+	formatTimer->setSingleShot( true );    
+        formatTimer->start( interval );
 #ifdef DEBUG_FORMAT_MORE
         kDebug(32500) << name() << " formatMore: will have to format more. formatTimer->start with interval=" << interval << endl;
 #endif
@@ -1903,7 +1906,8 @@ void KoTextObject::typingStarted()
 
 void KoTextObject::typingDone()
 {
-    startTimer->start( 100, TRUE );
+    startTimer->setSingleShot( true );	
+    startTimer->start( 100 );
 }
 
 
@@ -2038,10 +2042,10 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
     switch(_type)
     {
         case KoChangeCaseDia::UpperCase:
-            text=text.upper();
+            text=text.toUpper();
             break;
         case KoChangeCaseDia::LowerCase:
-            text=text.lower();
+            text=text.toLower();
             break;
         case KoChangeCaseDia::TitleCase:
             for(int i=0;i<text.length();i++)
@@ -2050,20 +2054,20 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
                 {
                     QChar prev = text.at(qMax(i-1,0));
                     if(i==0 || prev  == ' ' || prev == '\n' || prev == '\t')
-                        text=text.replace(i, 1, text.at(i).upper() );
+                        text=text.replace(i, 1, text.at(i).toUpper() );
                     else
-                        text=text.replace(i, 1, text.at(i).lower() );
+                        text=text.replace(i, 1, text.at(i).toLower() );
                 }
             }
             break;
         case KoChangeCaseDia::ToggleCase:
-            for(uint i=0;i<text.length();i++)
+            for( int i=0; i<text.length(); i++ )
             {
                 QString repl=QString(text.at(i));
-                if(text.at(i)!=text.at(i).upper())
-                    repl=repl.upper();
-                else if(text.at(i).lower()!=text.at(i))
-                    repl=repl.lower();
+                if( text.at(i) != text.at(i).toUpper() )
+                    repl = repl.toUpper();
+                else if( text.at(i).toLower() != text.at(i) )
+                    repl = repl.toLower();
                 text=text.replace(i, 1, repl );
             }
             break;
@@ -2074,7 +2078,7 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
                 {
                     QChar prev = text.at(qMax(i-1,0));
                     if(i==0 || prev == '\n' ||prev.isPunct())
-                        text=text.replace(i, 1, text.at(i).upper() );
+                        text = text.replace(i, 1, text.at(i).toUpper() );
                 }
             }
             break;
@@ -2314,7 +2318,7 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
         }
 
         // Character count
-        for ( uint i = 0 ; i < s.length() - ( hasTrailingSpace ? 1 : 0 ) ; ++i )
+        for ( int i = 0 ; i < s.length() - ( hasTrailingSpace ? 1 : 0 ) ; ++i )
         {
             QChar ch = s[i];
             ++charsWithSpace;
@@ -2329,11 +2333,11 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
         // one that's too low.
         // IMPORTANT: please test any changes against demos/statistics.kwd
         QRegExp re("\\s+");
-        QStringList wordlist = QStringList::split(re, s);
+        QStringList wordlist = s.split( re );
         words += wordlist.count();
-        re.setCaseSensitive(false);
-        for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it ) {
-            QString word = *it;
+        re.setCaseSensitivity( Qt::CaseInsensitive );
+	foreach( QString word, wordlist )
+        {
             re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
             word.remove(re);
             if ( word.length() <= 3 ) {  // extension to the original algorithm
@@ -2343,24 +2347,28 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
             re.setPattern("e$");
             word.remove(re);
             re.setPattern("[^aeiouy]+");
-            QStringList syls = QStringList::split(re, word);
+            QStringList syls = word.split( re );
             int word_syllables = 0;
-            for ( QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it ) {
-                if( word.find(*it, 0, false) != -1 )
+	    foreach( QString tmp, subs_syl )
+            {
+                if( word.contains( tmp, Qt::CaseInsensitive) )
                     word_syllables--;
             }
-            for ( QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it ) {
-                re.setPattern(*it);
-                if( word.find(re) != -1 )
+	    foreach( QString tmp, subs_syl_regexp )
+	    {
+                re.setPattern( tmp );
+                if( word.contains( re ) )
                     word_syllables--;
             }
-            for ( QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it ) {
-                if( word.find(*it, 0, false) != -1 )
+	    foreach( QString tmp, add_syl )
+            {
+                if( word.contains( tmp, Qt::CaseInsensitive ) )
                     word_syllables++;
             }
-            for ( QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it ) {
-                re.setPattern(*it);
-                if( word.find(re) != -1 )
+	    foreach( QString tmp, add_syl_regexp )
+            {
+                re.setPattern( tmp );
+                if( word.contains( re ) )
                     word_syllables++;
             }
             word_syllables += syls.count();
@@ -2368,7 +2376,7 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
                 word_syllables = 1;
             syllables += word_syllables;
         }
-        re.setCaseSensitive(true);
+        re.setCaseSensitivity( Qt::CaseSensitive );
 
         // Sentence count
         // Clean up for better result, destroys the original text but we only want to count
@@ -2383,7 +2391,7 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
         s.replace(re, "0,0");
         re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
         s.replace(re, "*");
-        for ( uint i = 0 ; i < s.length() ; ++i )
+        for ( int i = 0 ; i < s.length() ; ++i )
         {
             QChar ch = s[i];
             if ( KoAutoFormat::isMark( ch ) )

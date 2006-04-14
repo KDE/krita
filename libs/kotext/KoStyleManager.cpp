@@ -28,20 +28,19 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include <qtabwidget.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QTabWidget>
+#include <QPushButton>
+#include <QLabel>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QLayout>
+#include <QListWidget>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3PtrList>
 #include <Q3Frame>
 #include <Q3ValueList>
 #include <QResizeEvent>
-#include <Q3VBoxLayout>
-#include <Q3ListBox>
 
 /******************************************************************/
 /* Class: KoStyleManager                                          */
@@ -106,8 +105,11 @@ KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
     newTab->setWidget( new KoParagTabulatorsWidget( unit, -1, newTab ) );
     addTab( newTab );
 
-    Q3ListBoxItem * item = m_stylesList->findItem( activeStyleName );
-    m_stylesList->setCurrentItem( item ? m_stylesList->index(item) : 0 );
+    QList<QListWidgetItem *> tmp = m_stylesList->findItems( activeStyleName, Qt::MatchExactly );
+    if( !tmp.isEmpty() )
+      m_stylesList->setCurrentItem( tmp.first() );
+    else
+      m_stylesList->setCurrentRow( 0 );
 
     noSignals=false;
     switchStyle();
@@ -129,7 +131,7 @@ KoStyleManager::~KoStyleManager()
 void KoStyleManager::addTab( KoStyleManagerTab * tab )
 {
     m_tabsList.append( tab );
-    m_tabs->insertTab( tab, tab->tabName() );
+    m_tabs->addTab( tab, tab->tabName() );
     tab->layout()->activate();
 }
 
@@ -139,8 +141,8 @@ void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
     Q3GridLayout *frame1Layout = new Q3GridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
     numStyles = styleCollection.count();
-    m_stylesList = new Q3ListBox( frame1, "stylesList" );
-    m_stylesList->insertStringList( styleCollection.displayNameList() );
+    m_stylesList = new QListWidget( frame1 );
+    m_stylesList->addItems( styleCollection.displayNameList() );
 
     const Q3ValueList<KoUserStyle*> styleList = styleCollection.styleList();
     for ( Q3ValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
@@ -155,24 +157,24 @@ void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
 
 
-    m_moveUpButton = new QPushButton( frame1, "moveUpButton" );
-    m_moveUpButton->setIconSet( SmallIconSet( "up" ) );
+    m_moveUpButton = new QPushButton( frame1 );
+    m_moveUpButton->setIcon( SmallIconSet( "up" ) );
     connect( m_moveUpButton, SIGNAL( clicked() ), this, SLOT( moveUpStyle() ) );
     frame1Layout->addWidget( m_moveUpButton, 1, 1 );
 
-    m_moveDownButton = new QPushButton( frame1, "moveDownButton" );
-    m_moveDownButton->setIconSet( SmallIconSet( "down" ) );
+    m_moveDownButton = new QPushButton( frame1 );
+    m_moveDownButton->setIcon( SmallIconSet( "down" ) );
     connect( m_moveDownButton, SIGNAL( clicked() ), this, SLOT( moveDownStyle() ) );
     frame1Layout->addWidget( m_moveDownButton, 1, 0 );
 
 
-    m_deleteButton = new QPushButton( frame1, "deleteButton" );
+    m_deleteButton = new QPushButton( frame1 );
     m_deleteButton->setText( i18n( "&Delete" ) );
     connect( m_deleteButton, SIGNAL( clicked() ), this, SLOT( deleteStyle() ) );
 
     frame1Layout->addWidget( m_deleteButton, 2, 1 );
 
-    m_newButton = new QPushButton( frame1, "newButton" );
+    m_newButton = new QPushButton( frame1 );
     m_newButton->setText( i18n( "New" ) );
     connect( m_newButton, SIGNAL( clicked() ), this, SLOT( addStyle() ) );
 
@@ -205,7 +207,8 @@ void KoStyleManager::addGeneralTab( int flags ) {
 
     tabLayout->addWidget( nameLabel, 0, 0 );
 
-    m_styleCombo = new QComboBox( FALSE, tab, "styleCombo" );
+    m_styleCombo = new QComboBox( tab );
+    m_styleCombo->setEditable( false ); 
 
     tabLayout->addWidget( m_styleCombo, 1, 1 );
 
@@ -215,7 +218,8 @@ void KoStyleManager::addGeneralTab( int flags ) {
 
     tabLayout->addWidget( nextStyleLabel, 1, 0 );
 
-    m_inheritCombo = new QComboBox( FALSE, tab, "inheritCombo" );
+    m_inheritCombo = new QComboBox( tab );
+    m_inheritCombo->setEditable( false );
     tabLayout->addWidget( m_inheritCombo, 2, 1 );
 
     QLabel *inheritStyleLabel = new QLabel( tab );
@@ -234,17 +238,18 @@ void KoStyleManager::addGeneralTab( int flags ) {
         d->cbIncludeInTOC = 0;
     }
 
-    d->preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog. And, what about the cat, one may ask? Well, the cat is playing cards with the mouse, the bird and the fish. It is, to say the least a hell of a party!" ), tab, "stylepreview" );
+    d->preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog. And, what about the cat, one may ask? Well, the cat is playing cards with the mouse, the bird and the fish. It is, to say the least a hell of a party!" ), tab );
 
     tabLayout->addMultiCellWidget( d->preview, row, row, 0, 1 );
 
-    m_tabs->insertTab( tab, i18n( "General" ) );
+    m_tabs->addTab( tab, i18n( "General" ) );
 
-    m_inheritCombo->insertItem( i18n("<None>"));
+    m_inheritCombo->addItem( i18n("<None>") );
 
-    for ( unsigned int i = 0; i < m_stylesList->count(); i++ ) {
-        m_styleCombo->insertItem( m_stylesList->text(i));
-        m_inheritCombo->insertItem( m_stylesList->text(i));
+    for ( int i = 0; i < m_stylesList->count(); i++ )
+    {
+        m_styleCombo->addItem( m_stylesList->item(i)->text() );
+        m_inheritCombo->addItem( m_stylesList->item(i)->text() );
     }
 
 }
@@ -258,7 +263,7 @@ void KoStyleManager::switchStyle() {
         save();
 
     m_currentStyle = 0L;
-    int num = styleIndex( m_stylesList->currentItem() );
+    int num = styleIndex( m_stylesList->currentRow() );
     kDebug(32500) << "KoStyleManager::switchStyle switching to " << num << endl;
     if(m_origStyles.at(num) == m_changedStyles.at(num)) {
         m_currentStyle = new KoParagStyle( *m_origStyles.at(num) );
@@ -319,8 +324,8 @@ void KoStyleManager::updateGUI() {
     QString followingName = m_currentStyle->followingStyle() ? m_currentStyle->followingStyle()->displayName() : QString::null;
     kDebug(32500) << "KoStyleManager::updateGUI updating combo to " << followingName << endl;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
-        if ( m_styleCombo->text( i ) == followingName ) {
-            m_styleCombo->setCurrentItem( i );
+        if ( m_styleCombo->itemText( i ) == followingName ) {
+            m_styleCombo->setCurrentIndex( i );
             kDebug(32500) << "found at " << i << endl;
             break;
         }
@@ -329,23 +334,23 @@ void KoStyleManager::updateGUI() {
     QString inheritName = m_currentStyle->parentStyle() ? m_currentStyle->parentStyle()->displayName() : QString::null;
     kDebug(32500) << "KoStyleManager::updateGUI updating combo to " << inheritName << endl;
     for ( int i = 0; i < m_inheritCombo->count(); i++ ) {
-        if ( m_inheritCombo->text( i ) == inheritName ) {
-            m_inheritCombo->setCurrentItem( i );
+        if ( m_inheritCombo->itemText( i ) == inheritName ) {
+            m_inheritCombo->setCurrentIndex( i );
             kDebug(32500) << "found at " << i << endl;
             break;
         }
         else
-            m_inheritCombo->setCurrentItem( 0 );//none !!!
+            m_inheritCombo->setCurrentIndex( 0 );//none !!!
     }
 
     if ( d->cbIncludeInTOC )
         d->cbIncludeInTOC->setChecked( m_currentStyle->isOutline() );
 
     // update delete button (can't delete first style);
-    m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
+    m_deleteButton->setEnabled(m_stylesList->currentRow() != 0);
 
-    m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
-    m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
+    m_moveUpButton->setEnabled(m_stylesList->currentRow() != 0);
+    m_moveDownButton->setEnabled(m_stylesList->currentRow()!=(int)m_stylesList->count()-1);
 
     updatePreview();
 }
@@ -353,7 +358,7 @@ void KoStyleManager::updateGUI() {
 void KoStyleManager::updatePreview()
 {
     d->preview->setStyle(m_currentStyle);
-    d->preview->repaint(true);
+    d->preview->update();
 }
 
 void KoStyleManager::save() {
@@ -370,7 +375,7 @@ void KoStyleManager::save() {
             m_currentStyle->setDisplayName( m_nameString->text() );
         }
 
-        int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
+        int indexNextStyle = styleIndex( m_styleCombo->currentIndex() );
         m_currentStyle->setFollowingStyle( m_origStyles.at( indexNextStyle ) ); // point to orig, not changed! (#47377)
         m_currentStyle->setParentStyle( style( m_inheritCombo->currentText() ) );
         if ( d->cbIncludeInTOC )
@@ -418,10 +423,10 @@ void KoStyleManager::addStyle() {
     noSignals=true;
     m_origStyles.append(0L);
     m_changedStyles.append(m_currentStyle);
-    m_stylesList->insertItem( str );
-    m_styleCombo->insertItem( str );
-    m_inheritCombo->insertItem( str );
-    m_stylesList->setCurrentItem( m_stylesList->count() - 1 );
+    m_stylesList->addItem( str );
+    m_styleCombo->addItem( str );
+    m_inheritCombo->addItem( str );
+    m_stylesList->setCurrentRow( m_stylesList->count() - 1 );
     noSignals=false;
     m_styleOrder << m_currentStyle->name();
 
@@ -453,11 +458,11 @@ void KoStyleManager::updateInheritStyle( KoParagStyle *s )
 
 void KoStyleManager::deleteStyle() {
 
-    unsigned int cur = styleIndex( m_stylesList->currentItem() );
-    unsigned int curItem = m_stylesList->currentItem();
-    QString name = m_stylesList->currentText();
+    unsigned int cur = styleIndex( m_stylesList->currentRow() );
+    unsigned int curItem = m_stylesList->currentRow();
+    QString name = m_stylesList->currentItem()->text();
     KoParagStyle *s = m_changedStyles.at(cur);
-    m_styleOrder.remove( s->name());
+    m_styleOrder.removeAll( s->name());
     updateFollowingStyle( s );
     updateInheritStyle( s );
     Q_ASSERT( s == m_currentStyle );
@@ -468,13 +473,13 @@ void KoStyleManager::deleteStyle() {
 
     // Done with noSignals still false, so that when m_stylesList changes the current item
     // we display it automatically
-    m_stylesList->removeItem(curItem);
+    m_stylesList->takeItem(curItem);
     m_styleCombo->removeItem(curItem);
 
-    m_inheritCombo->listBox()->removeItem( m_inheritCombo->listBox()->index(m_inheritCombo->listBox()->findItem(name )));
+    m_inheritCombo->removeItem( m_inheritCombo->findText( name ) );
 
     numStyles--;
-    m_stylesList->setSelected( m_stylesList->currentItem(), true );
+    m_stylesList->setItemSelected( m_stylesList->currentItem(), true );
 }
 
 void KoStyleManager::moveUpStyle()
@@ -483,21 +488,21 @@ void KoStyleManager::moveUpStyle()
     if ( m_currentStyle )
         save();
     const QString currentStyleName = m_currentStyle->name();
-    const QString currentStyleDisplayName = m_stylesList->currentText();
-    int pos2 = m_styleOrder.findIndex( currentStyleName );
+    const QString currentStyleDisplayName = m_stylesList->currentItem()->text();
+    int pos2 = m_styleOrder.indexOf( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.remove( m_styleOrder.at(pos2));
-        m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName);
+        m_styleOrder.removeAll( m_styleOrder.at(pos2));
+        m_styleOrder.insert( pos2-1, currentStyleName);
     }
 
-    int pos = m_stylesList->currentItem();
+    int pos = m_stylesList->currentRow();
     noSignals=true;
-    m_stylesList->changeItem( m_stylesList->text( pos-1 ), pos );
-    m_styleCombo->changeItem( m_stylesList->text( pos-1 ), pos );
+    m_stylesList->item( pos )->setText( m_stylesList->item( pos-1 )->text() );  
+    m_styleCombo->setItemText( pos, m_stylesList->item( pos-1 )->text() );
 
-    m_stylesList->changeItem( currentStyleDisplayName, pos-1 );
-    m_styleCombo->changeItem( currentStyleDisplayName, pos-1 );
+    m_stylesList->item(pos-1)->setText( currentStyleDisplayName );
+    m_styleCombo->setItemText( pos-1, currentStyleDisplayName );
 
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
@@ -511,20 +516,20 @@ void KoStyleManager::moveDownStyle()
     if ( m_currentStyle )
         save();
     const QString currentStyleName = m_currentStyle->name();
-    const QString currentStyleDisplayName = m_stylesList->currentText();
-    int pos2 = m_styleOrder.findIndex( currentStyleName );
+    const QString currentStyleDisplayName = m_stylesList->currentItem()->text();
+    int pos2 = m_styleOrder.indexOf( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.remove( m_styleOrder.at(pos2));
-        m_styleOrder.insert( m_styleOrder.at(pos2+1), currentStyleName);
+        m_styleOrder.removeAll( m_styleOrder.at(pos2));
+        m_styleOrder.insert( pos2+1, currentStyleName);
     }
 
-    int pos = m_stylesList->currentItem();
+    int pos = m_stylesList->currentRow();
     noSignals=true;
-    m_stylesList->changeItem( m_stylesList->text( pos+1 ), pos );
-    m_styleCombo->changeItem( m_stylesList->text( pos+1 ), pos );
-    m_stylesList->changeItem( currentStyleDisplayName, pos+1 );
-    m_styleCombo->changeItem( currentStyleDisplayName, pos+1 );
+    m_stylesList->item( pos )->setText( m_stylesList->item( pos+1 )->text() );
+    m_styleCombo->setItemText( pos, m_stylesList->item( pos+1 )->text() );
+    m_stylesList->item( pos+1 )->setText( currentStyleDisplayName );
+    m_styleCombo->setItemText( pos+1, currentStyleDisplayName );
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
 
@@ -605,21 +610,21 @@ void KoStyleManager::renameStyle(const QString &theText) {
     if(noSignals) return;
     noSignals=true;
 
-    int index = m_stylesList->currentItem();
+    int index = m_stylesList->currentRow();
     kDebug(32500) << "KoStyleManager::renameStyle " << index << " to " << theText << endl;
 
     // rename only in the GUI, not even in the underlying objects (save() does it).
     kDebug(32500) << "KoStyleManager::renameStyle before " << m_styleCombo->currentText() << endl;
-    m_styleCombo->changeItem( theText, index );
-    m_inheritCombo->changeItem( theText, index+1 );
+    m_styleCombo->setItemText( index, theText );
+    m_inheritCombo->setItemText( index+1, theText );
     //m_styleOrder[index]=theText; // not needed anymore, we use internal names
     kDebug(32500) << "KoStyleManager::renameStyle after " << m_styleCombo->currentText() << endl;
-    m_stylesList->changeItem( theText, index );
+    m_stylesList->item( index )->setText( theText );
 
     // Check how many styles with that name we have now
     int synonyms = 0;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
-        if ( m_styleCombo->text( i ) == m_stylesList->currentText() )
+        if ( m_styleCombo->currentText() == m_stylesList->currentItem()->text() )
             ++synonyms;
     }
     Q_ASSERT( synonyms > 0 ); // should have found 'index' at least !
@@ -633,8 +638,8 @@ void KoStyleManager::renameStyle(const QString &theText) {
     m_stylesList->setEnabled( state );
     if ( state )
     {
-        m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
-        m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
+        m_moveUpButton->setEnabled(m_stylesList->currentRow() != 0);
+        m_moveDownButton->setEnabled(m_stylesList->currentRow()!=(int)m_stylesList->count()-1);
     }
     else
     {
@@ -648,8 +653,7 @@ void KoStyleManager::renameStyle(const QString &theText) {
 KoStyleParagTab::KoStyleParagTab( QWidget * parent )
     : KoStyleManagerTab( parent )
 {
-    ( new Q3VBoxLayout( this ) )->setAutoAdd( true );
-    m_widget = 0L;
+     m_widget = 0L;
 }
 
 void KoStyleParagTab::update()
@@ -676,14 +680,13 @@ void KoStyleParagTab::resizeEvent( QResizeEvent *e )
 KoStyleFontTab::KoStyleFontTab( QWidget * parent )
     : KoStyleManagerTab( parent )
 {
-	( new Q3VBoxLayout( this ) )->setAutoAdd( true );
 	QTabWidget *fontTabContainer = new QTabWidget( this );
 
 	m_fontTab = new KoFontTab( KFontChooser::SmoothScalableFonts, this );
 	m_decorationTab = new KoDecorationTab( this );
 	m_highlightingTab = new KoHighlightingTab( this );
 	m_layoutTab = new KoLayoutTab( true, this );
-	m_languageTab = new KoLanguageTab( 0, this );
+	m_languageTab = new KoLanguageTab( );
 
 	fontTabContainer->addTab( m_fontTab, i18n( "Font" ) );
 	fontTabContainer->addTab( m_decorationTab, i18n( "Decoration" ) );

@@ -21,7 +21,7 @@
 #define kostylist_h
 
 #include <kdialogbase.h>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QResizeEvent>
@@ -42,9 +42,9 @@ class KoStyleEditor;
 class KoStyleManagerTab;
 class QCheckBox;
 class QComboBox;
+class QListWidget;
 class Q3GridLayout;
 class QLineEdit;
-class Q3ListBox;
 class QPushButton;
 class QTabWidget;
 class QWidget;
@@ -87,7 +87,7 @@ protected:
 
 private:
     QTabWidget *m_tabs;
-    Q3ListBox *m_stylesList;
+    QListWidget* m_stylesList;
     QLineEdit *m_nameString;
     QComboBox *m_styleCombo;
     QPushButton *m_deleteButton;

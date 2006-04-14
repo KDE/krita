@@ -1098,6 +1098,7 @@ void KoMainWindow::slotFileOpen()
 {
     KFileDialog *dialog = new KFileDialog(":OpenDialog", QString::null, this);
     dialog->setObjectName( "file dialog" );
+    dialog->setMode(KFile::File);
     if (!isImporting())
         dialog->setCaption( i18n("Open Document") );
     else

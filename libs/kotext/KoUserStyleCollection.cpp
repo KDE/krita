@@ -19,8 +19,7 @@
 #include "KoUserStyleCollection.h"
 #include "KoUserStyle.h"
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+
 
 KoUserStyleCollection::KoUserStyleCollection( const QString& prefix )
     : m_prefix( prefix ),
@@ -133,12 +132,14 @@ void KoUserStyleCollection::removeStyle ( KoUserStyle *style ) {
 
 void KoUserStyleCollection::updateStyleListOrder( const QStringList &lst )
 {
-    Q3ValueList<KoUserStyle *> orderStyle;
-    for ( QStringList::const_iterator it = lst.begin(); it != lst.end(); ++it )
+    QList<KoUserStyle *> orderStyle;
+    QString tmpString;
+    KoUserStyle* style = 0;
+    foreach( tmpString, lst )
     {
-        KoUserStyle* style = findStyle( *it, QString::null );
-        if ( style )
-            orderStyle.append( style );
+	style = findStyle( tmpString, QString::null );
+        if( style )
+	    orderStyle.append( style );
         else
             kWarning(32500) << "updateStyleListOrder: style " << *it << " not found!" << endl;
     }

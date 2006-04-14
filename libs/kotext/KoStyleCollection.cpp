@@ -29,9 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qdom.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 KoStyleCollection::KoStyleCollection()
     : KoUserStyleCollection( "paragsty" )
@@ -90,9 +88,11 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
                        << styleList().count() << " styles in styleList" << endl;
     }
 
-    unsigned int i=0;
-    for( QStringList::ConstIterator it = followingStyles.begin(); it != followingStyles.end(); ++it, ++i ) {
-        const QString followingStyleName = *it;
+    unsigned int i = 0;
+    QString tmpString;
+    foreach( tmpString, followingStyles )
+    {
+        const QString followingStyleName = tmpString;
 	if ( !followingStyleName.isEmpty() ) {
             KoParagStyle * style = findStyle( followingStyleName );
 	    if ( style )
@@ -113,20 +113,24 @@ void KoStyleCollection::saveOasis( KoGenStyles& styles, int styleType, KoSavingC
     // ## This is mostly a hack due to lack of proper style inheritance.
     // Once that's implemented, default to 'styles derive from Standard', but save normally.
     QString refStyleName;
-
-    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
-        KoParagStyle* style = static_cast<KoParagStyle *>( *styleIt );
+    
+    KoUserStyle* tmpStyle = 0;
+    foreach( tmpStyle, m_styleList )
+    {
+        KoParagStyle* style = static_cast<KoParagStyle *>( tmpStyle );
         style->saveStyle( styles, styleType, refStyleName, context );
         kDebug() << k_funcinfo << "Saved style " << style->displayName() << " to OASIS format as " << style->name() << endl;
         if ( refStyleName.isEmpty() ) // i.e. first style
             refStyleName = style->name();
     }
+    tmpStyle = 0;
     // Now edit the kogenstyle and set the next-style-name. This works here
     // because the style's m_name is already unique so there's no risk of
     // "two styles being only different due to their following-style"; the
     // display-name will also be different, and will ensure they get two kogenstyles.
-    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
-        KoParagStyle* style = static_cast<KoParagStyle *>( *styleIt );
+    foreach( tmpStyle, m_styleList )
+    {
+        KoParagStyle* style = static_cast<KoParagStyle *>( tmpStyle );
         if ( style->followingStyle() && style->followingStyle() != style ) {
             const QString fsname = style->followingStyle()->name();
             KoGenStyle* gs = styles.styleForModification( style->name() );
@@ -198,8 +202,10 @@ Q3ValueVector<KoParagStyle *> KoStyleCollection::outlineStyles() const
 
 KoParagStyle* KoStyleCollection::outlineStyleForLevel( int level ) const
 {
-    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
-        KoParagStyle* style = static_cast<KoParagStyle *>( *styleIt );
+    KoUserStyle* tmpStyle = 0;	
+    foreach( tmpStyle, m_styleList )
+    {
+        KoParagStyle* style = static_cast<KoParagStyle *>( tmpStyle );
         if ( style->isOutline() && style->paragLayout().counter )
         {
             int styleLevel = style->paragLayout().counter->depth();
@@ -212,8 +218,10 @@ KoParagStyle* KoStyleCollection::outlineStyleForLevel( int level ) const
 
 KoParagStyle* KoStyleCollection::numberedStyleForLevel( int level ) const
 {
-    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
-        KoParagStyle* style = static_cast<KoParagStyle *>( *styleIt );
+    KoUserStyle* tmpStyle = 0;	
+    foreach( tmpStyle, m_styleList )
+    {
+        KoParagStyle* style = static_cast<KoParagStyle *>( tmpStyle );
         KoParagCounter* counter = style->paragLayout().counter;
         if ( !style->isOutline() && counter
              && counter->numbering() != KoParagCounter::NUM_NONE
@@ -235,8 +243,11 @@ KoParagStyle* KoStyleCollection::defaultStyle() const
 #ifndef NDEBUG
 void KoStyleCollection::printDebug() const
 {
-    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
-        KoParagStyle* style = static_cast<KoParagStyle *>( *styleIt );
+    KoParagStyle* style = 0;	
+    KoUserStyle* tmpStyle = 0;	
+    foreach( tmpStyle, m_styleList )
+    {
+	style = static_cast<KoParagStyle *>( tmpStyle );
 
         // short version:
         // kDebug() << style << "  " << style->name() << "    " << style->displayName() << "  followingStyle=" << style->followingStyle() << endl;

@@ -107,7 +107,7 @@ void KoDecorationTab::setShadow( double shadowDistanceX, double shadowDistanceY,
     dist = qMax( QABS(shadowDistanceX), QABS(shadowDistanceY) );
     shadowDistanceKDoubleNumInput->setValue( dist );
 
-    shadowKColorButton->setColor( shadowColor.isValid() ? shadowColor: gray  );
+    shadowKColorButton->setColor( shadowColor.isValid() ? shadowColor: Qt::gray  );
 
 }
 

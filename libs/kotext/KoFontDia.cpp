@@ -29,18 +29,18 @@
 #include <kdebug.h>
 
 #include <q3groupbox.h>
-#include <qpushbutton.h>
-#include <qtabwidget.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QLabel>
+#include <QComboBox>
+#include <QRadioButton>
+#include <QCheckBox>
 #include <knuminput.h>
 #include <KoGlobal.h>
-#include <qvgroupbox.h>
+#include <QGroupBox>
 
-#include <qhgroupbox.h>
-#include <qhbuttongroup.h>
+
+#include <QButtonGroup>
 #include <kcolorbutton.h>
 #include <kiconloader.h>
 #include <kvbox.h>

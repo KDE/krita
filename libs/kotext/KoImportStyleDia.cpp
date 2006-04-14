@@ -19,25 +19,25 @@
 
 #include <klocale.h>
 #include <q3vbox.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include "KoImportStyleDia.h"
 
 #include <kdebug.h>
-#include <qlabel.h>
+#include <QLabel>
 
 KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel|User1, Ok, true )
 {
     setCaption( i18n("Import Styles") );
     m_currentCollection = currentCollection;
-    KVBox *page = makeVBoxMainWidget();
-    new QLabel(i18n("Select styles to import:"), page);
-    m_listStyleName = new Q3ListBox( page );
+//    KVBox *page = makeVBoxMainWidget();
+    new QLabel(i18n("Select styles to import:"), this);
+    m_listStyleName = new Q3ListBox( this );
     m_listStyleName->setSelectionMode( Q3ListBox::Multi );
     enableButtonOK( m_listStyleName->count() != 0 );
     setButtonText( KDialogBase::User1, i18n("Load...") );

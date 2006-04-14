@@ -21,11 +21,11 @@
 #include <q3vbox.h>
 #include <q3multilineedit.h>
 #include "KoCommentDia.h"
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QPushButton>
 #include <kglobal.h>
-#include <qdatetime.h>
-#include <qlabel.h>
+#include <QDateTime>
+#include <QLabel>
 #include <kdebug.h>
 
 KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString & _authorName, const QString &_createNote, const char *name )
@@ -33,15 +33,15 @@ KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString
 {
     setCaption( i18n("Edit Comment") );
     authorName = _authorName;
-    KVBox *page = makeVBoxMainWidget();
+//    KVBox *page = makeVBoxMainWidget();
     kDebug()<<"_createNote :"<<_createNote<<endl;
     if ( !_createNote.isEmpty() )
-        new QLabel( _createNote, page );
+        new QLabel( _createNote, this );
 
-    m_multiLine = new Q3MultiLineEdit( page );
+    m_multiLine = new Q3MultiLineEdit( this );
     m_multiLine->setText( _note );
     m_multiLine->setFocus();
-    pbAddAuthorName = new QPushButton(i18n("Add Author Name"),page);
+    pbAddAuthorName = new QPushButton(i18n("Add Author Name"),this);
     if ( authorName.isEmpty() )
         pbAddAuthorName->setEnabled( false );
     else

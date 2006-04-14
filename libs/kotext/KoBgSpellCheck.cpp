@@ -41,7 +41,7 @@ using namespace KSpell2;
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-#include <qtimer.h>
+#include <QTimer>
 #include <q3ptrdict.h>
 
 // #define DEBUG_BGSPELLCHECKING

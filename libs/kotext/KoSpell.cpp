@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qtimer.h>
+#include <QTimer>
 
 //#define DEBUG_SPELL
 
@@ -50,8 +50,8 @@ public:
 };
 
 KoSpell::KoSpell( const Broker::Ptr& broker,  QObject *parent,
-                  const char *name )
-    : BackgroundChecker( broker, parent, name )
+                  const char* /*name*/ )
+    : BackgroundChecker( broker, parent )
 {
     d = new Private;
     d->parag = 0;

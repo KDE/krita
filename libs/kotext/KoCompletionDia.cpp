@@ -25,12 +25,12 @@
 #include <kcompletion.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3vbox.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QComboBox>
 #include <q3groupbox.h>
 #include <q3whatsthis.h>
 
@@ -38,8 +38,8 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
     : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1,
       Ok, true, KGuiItem( i18n( "&Reset" ), "undo" ) )
 {
-    KVBox *page = makeVBoxMainWidget();
-    m_widget = new KoCompletion(page, autoFormat);
+//    KVBox *page = makeVBoxMainWidget();
+    m_widget = new KoCompletion( this, autoFormat);
     m_widget->layout()->setMargin(0);
     connect( this, SIGNAL( user1Clicked() ), m_widget, SLOT(slotResetConf()));
     setButtonWhatsThis(Ok,i18n("This will save your options."));
@@ -64,7 +64,7 @@ KoCompletion::KoCompletion(QWidget *parent, KoAutoFormat *autoFormat) : KoComple
     lst << i18n( "Space" );
     lst << i18n( "End" );
     lst << i18n( "Right" );
-    m_completionKeyAction->insertStringList( lst );
+    m_completionKeyAction->addItems( lst );
 
     connect( m_lbListCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
     connect( m_lbListCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
@@ -105,29 +105,29 @@ void KoCompletion::slotResetConf() {
     switch( m_docAutoFormat->getConfigKeyAction() )
     {
     case KoAutoFormat::Enter:
-        m_completionKeyAction->setCurrentItem( 0 );
+        m_completionKeyAction->setCurrentIndex( 0 );
         break;
     case KoAutoFormat::Tab:
-        m_completionKeyAction->setCurrentItem( 1 );
+        m_completionKeyAction->setCurrentIndex( 1 );
         break;
     case KoAutoFormat::Space:
-        m_completionKeyAction->setCurrentItem( 2 );
+        m_completionKeyAction->setCurrentIndex( 2 );
         break;
     case KoAutoFormat::End:
-        m_completionKeyAction->setCurrentItem( 3 );
+        m_completionKeyAction->setCurrentIndex( 3 );
         break;
     case KoAutoFormat::Right:
-        m_completionKeyAction->setCurrentItem( 4 );
+        m_completionKeyAction->setCurrentIndex( 4 );
         break;
     default:
-        m_completionKeyAction->setCurrentItem( 0 );
+        m_completionKeyAction->setCurrentIndex( 0 );
     }
     changeButtonStatus();
 }
 
 void KoCompletion::slotAddCompletionEntry() {
     bool ok;
-    QString const newWord = KInputDialog::getText( i18n("Add Completion Entry"), i18n("Enter entry:"), QString::null, &ok, this ).lower();
+    QString const newWord = KInputDialog::getText( i18n("Add Completion Entry"), i18n("Enter entry:"), QString::null, &ok, this ).toLower();
     if ( ok )
     {
         if ( !m_listCompletion.contains( newWord ))
@@ -145,7 +145,7 @@ void KoCompletion::slotRemoveCompletionEntry() {
     QString text = m_lbListCompletion->currentText();
     if( !text.isEmpty() )
     {
-        m_listCompletion.remove( text );
+        m_listCompletion.removeAll( text );
         m_lbListCompletion->removeItem( m_lbListCompletion->currentItem () );
         if( m_lbListCompletion->count()==0 )
             pbRemoveCompletionEntry->setEnabled( false );
@@ -166,7 +166,7 @@ void KoCompletion::saveSettings() {
 
     m_docAutoFormat->getCompletion()->setItems( m_listCompletion );
     m_docAutoFormat->updateMaxWords();
-    switch( m_completionKeyAction->currentItem() ) {
+    switch( m_completionKeyAction->currentIndex() ) {
         case 1:
             m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Tab );
             break;

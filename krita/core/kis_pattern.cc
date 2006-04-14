@@ -30,10 +30,8 @@
 #include <qpoint.h>
 #include <qsize.h>
 #include <qimage.h>
-#include <q3valuevector.h>
 #include <qmap.h>
 #include <qfile.h>
-//Added by qt3to4:
 #include <QTextStream>
 
 #include <kdebug.h>
@@ -81,13 +79,7 @@ bool KisPattern::load()
 
     QFile file(filename());
     file.open(QIODevice::ReadOnly);
-    QByteArray data = file.readAll();
-    if (!data.isEmpty()) {
-        qint32 startPos = m_data.size();
-
-        m_data.resize(m_data.size() + data.count());
-        memcpy(&m_data[startPos], data.data(), data.count());
-    }
+    m_data = file.readAll();
     file.close();
     return init();
 }
@@ -118,10 +110,9 @@ bool KisPattern::save()
     ph.bytes = htonl(4);
     ph.magic_number = htonl(GimpPatternMagic);
 
-    QByteArray bytes;
-    bytes.setRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
+    QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
     int wrote = file.write(bytes);
-    bytes.resetRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
+    bytes.clear();
 
     if (wrote == -1)
         return false;
@@ -162,13 +153,13 @@ bool KisPattern::init()
     // load Gimp patterns
     GimpPatternHeader bh;
     qint32 k;
-    Q3ValueVector<char> name;
+    QByteArray name;
 
     if (sizeof(GimpPatternHeader) > m_data.size()) {
         return false;
     }
 
-    memcpy(&bh, &m_data[0], sizeof(GimpPatternHeader));
+    memcpy(&bh, m_data, sizeof(GimpPatternHeader));
     bh.header_size = ntohl(bh.header_size);
     bh.version = ntohl(bh.version);
     bh.width = ntohl(bh.width);
@@ -181,13 +172,13 @@ bool KisPattern::init()
     }
 
     name.resize(bh.header_size - sizeof(GimpPatternHeader));
-    memcpy(&name[0], &(m_data.constData()[sizeof(GimpPatternHeader)]), name.size());
+    memcpy(name.data(), m_data.constData() + sizeof(GimpPatternHeader), name.size());
 
     if (name[name.size() - 1]) {
         return false;
     }
 
-    setName(i18n(&name[0]));
+    setName(i18n(name));
 
     if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
         return false;

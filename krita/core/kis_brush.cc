@@ -34,7 +34,6 @@
 #include <qfile.h>
 #include <qimage.h>
 #include <qpoint.h>
-#include <q3valuevector.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -99,9 +98,9 @@ KisBrush::KisBrush(const QString& filename,
     m_spacing = DEFAULT_SPACING;
     m_boundary = 0;
 
-    m_data.setRawData(data.data() + dataPos, data.size() - dataPos);
+    m_data = QByteArray::fromRawData(data.data() + dataPos, data.size() - dataPos);
     init();
-    m_data.resetRawData(data.data() + dataPos, data.size() - dataPos);
+    m_data.clear();
     dataPos += m_header_size + (width() * height() * m_bytes);
 }
 
@@ -154,11 +153,11 @@ bool KisBrush::init()
 {
     GimpBrushHeader bh;
 
-    if (sizeof(GimpBrushHeader) > m_data.size()) {
+    if (sizeof(GimpBrushHeader) > (uint)m_data.size()) {
         return false;
     }
 
-    memcpy(&bh, &m_data[0], sizeof(GimpBrushHeader));
+    memcpy(&bh, m_data, sizeof(GimpBrushHeader));
     bh.header_size = ntohl(bh.header_size);
     m_header_size = bh.header_size;
 
@@ -188,7 +187,7 @@ bool KisBrush::init()
 
     setSpacing(bh.spacing / 100.0);
 
-    if (bh.header_size > m_data.size() || bh.header_size == 0) {
+    if (bh.header_size > (uint)m_data.size() || bh.header_size == 0) {
         return false;
     }
 
@@ -197,12 +196,12 @@ bool KisBrush::init()
     if (bh.version == 1) {
         // Version 1 has no magic number or spacing, so the name
         // is at a different offset. Character encoding is undefined.
-        const char *text = &(m_data.constData()[sizeof(GimpBrushV1Header)]);
+        const char *text = m_data.constData()+sizeof(GimpBrushV1Header);
         name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header));
     } else {
         // ### Version = 3->cinepaint; may be float16 data!
         // Version >=2: UTF-8 encoding is used
-        name = QString::fromUtf8(&(m_data.constData()[sizeof(GimpBrushHeader)]),
+        name = QString::fromUtf8(m_data.constData()+sizeof(GimpBrushHeader),
                                   bh.header_size - sizeof(GimpBrushHeader));
     }
 
@@ -311,10 +310,9 @@ bool KisBrush::saveToDevice(QIODevice* dev) const
     bh.spacing = htonl(static_cast<quint32>(spacing() * 100.0));
 
     // Write header: first bh, then the name
-    QByteArray bytes;
-    bytes.setRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
+    QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
     wrote = dev->write(bytes);
-    bytes.resetRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
+    bytes.clear();
 
     if (wrote == -1)
         return false;

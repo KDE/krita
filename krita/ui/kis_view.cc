@@ -329,8 +329,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     layersUpdated();
 
-#warning kde4 port
-   // m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
+    m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
 
     // Load all plugins
     KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
@@ -3802,14 +3801,13 @@ void KisView::createDockers()
             this, SLOT(slotSetFGQColor(const QColor &)));
     // No BGColor or reverse slotFGChanged->palette connections, since that's not useful here
 
-#warning kde4 port
-/*    KisResourceServerBase* rServer;
+    KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
     Q3ValueList<KisResource*> resources = rServer->resources();
     Q3ValueList<KisResource*>::iterator it;
     for ( it = resources.begin(); it != resources.end(); ++it ) {
         m_palettewidget->slotAddPalette( *it );
-    }*/
+    }
     connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), this, SLOT(slotSetFGColor(const KisColor &)));
     m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);
 }

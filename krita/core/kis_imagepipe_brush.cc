@@ -205,7 +205,7 @@ bool KisImagePipeBrush::init()
 
     // XXX: This stuff is in utf-8, too.
     // The first line contains the name -- this means we look until we arrive at the first newline
-    Q3ValueVector<char> line1;
+    QByteArray line1;
 
     quint32 i = 0;
 
@@ -213,26 +213,26 @@ bool KisImagePipeBrush::init()
         line1.append(m_data[i]);
         i++;
     }
-    setName(i18n(QString::fromUtf8(&line1[0], i).ascii()));
+    setName(i18n(QString::fromUtf8(line1, line1.size()).ascii()));
 
     i++; // Skip past the first newline
 
     // The second line contains the number of brushes, separated by a space from the parasite
 
     // XXX: This stuff is in utf-8, too.
-     Q3ValueVector<char> line2;
-     while (m_data[i] != '\n' && i < m_data.size()) {
+    QByteArray line2;
+    while (m_data[i] != '\n' && i < m_data.size()) {
         line2.append(m_data[i]);
-         i++;
-     }
+        i++;
+    }
 
-    QString paramline = QString::fromUtf8((&line2[0]), line2.size());
+    QString paramline = QString::fromUtf8(line2, line2.size());
     quint32 m_numOfBrushes = paramline.left(paramline.find(' ')).toUInt();
     m_parasite = paramline.mid(paramline.find(' ') + 1);
     i++; // Skip past the second newline
 
-     quint32 numOfBrushes = 0;
-      while (numOfBrushes < m_numOfBrushes && i < m_data.size()){
+    quint32 numOfBrushes = 0;
+    while (numOfBrushes < m_numOfBrushes && i < m_data.size()){
         KisBrush * brush = new KisBrush(name() + "_" + numOfBrushes,
                         m_data,
                         i);
@@ -240,9 +240,9 @@ bool KisImagePipeBrush::init()
 
         m_brushes.append(brush);
 
-         numOfBrushes++;
-     }
-
+        numOfBrushes++;
+    }
+    
     if (!m_brushes.isEmpty()) {
         setValid(true);
         if (m_brushes.at( 0 )->brushType() == MASK) {

@@ -200,12 +200,14 @@ Kross::Api::Object* PythonExtension::toObject(const Py::Object& object)
 
     if( PyType_IsSubtype(type,&PyString_Type) ) {
 #ifdef Py_USING_UNICODE
+	/*
         if(type == &PyUnicode_Type) {
             Py::unicodestring u = Py::String(object).as_unicodestring();
             std::string s;
             std::copy(u.begin(), u.end(), std::back_inserter(s));
             return new Kross::Api::Variant(s.c_str());
         }
+	*/
 #endif
         return new Kross::Api::Variant(object.as_string().c_str());
     }

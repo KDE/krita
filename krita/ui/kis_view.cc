@@ -1824,16 +1824,15 @@ void KisView::mirrorLayerX()
     KisPaintDeviceSP dev = currentImg()->activeDevice();
     if (!dev) return;
 
-    KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
-    if ((currentImg()->undo())) {
+    if (undoAdapter() && undoAdapter()->undo()) {
         t = new KisTransaction(i18n("Mirror Layer X"), dev);
         Q_CHECK_PTR(t);
     }
 
     dev->mirrorX();
 
-    if (undo) undoAdapter()->addCommand(t);
+    if (t) undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
     layersUpdated();
@@ -1846,16 +1845,15 @@ void KisView::mirrorLayerY()
     KisPaintDeviceSP dev = currentImg()->activeDevice();
     if (!dev) return;
 
-    KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
-    if ((currentImg()->undo())) {
+    if (undoAdapter() && undoAdapter()->undo()) {
         t = new KisTransaction(i18n("Mirror Layer Y"), dev);
         Q_CHECK_PTR(t);
     }
 
     dev->mirrorY();
 
-    if (undo) undoAdapter()->addCommand(t);
+    if (t) undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
     layersUpdated();
@@ -1869,9 +1867,8 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
     KisPaintDeviceSP dev = currentImg()->activeDevice();
     if (!dev) return;
 
-    KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
-    if ((currentImg()->undo())) {
+    if (undoAdapter() && undoAdapter()->undo()) {
         t = new KisTransaction(i18n("Scale Layer"), dev);
         Q_CHECK_PTR(t);
     }
@@ -1879,7 +1876,7 @@ void KisView::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy
     KisTransformWorker worker(dev, sx, sy, 0, 0, 0.0, 0, 0, m_progress, filterStrategy);
     worker.run();
 
-    if (undo) undoAdapter()->addCommand(t);
+    if (t) undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
     layersUpdated();
@@ -1893,9 +1890,8 @@ void KisView::rotateLayer(double angle)
     KisPaintDeviceSP dev = currentImg()->activeDevice();
     if (!dev) return;
 
-    KisUndoAdapter * undo = 0;
     KisTransaction * t = 0;
-    if ((currentImg()->undo())) {
+    if (undoAdapter() && undoAdapter()->undo()) {
         t = new KisTransaction(i18n("Rotate Layer"), dev);
         Q_CHECK_PTR(t);
     }
@@ -1910,7 +1906,7 @@ void KisView::rotateLayer(double angle)
     KisTransformWorker tw(dev, 1.0, 1.0, 0, 0, angle, -tx, -ty, m_progress, filter);
     tw.run();
 
-    if (undo) undoAdapter()->addCommand(t);
+    if (t) undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
     layersUpdated();

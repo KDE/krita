@@ -39,7 +39,7 @@ public slots:
     void slotSetItem(KoIconItem& item);
 
 protected:
-    virtual void drawButtonLabel(QPainter *gc);
+    virtual void paintEvent(QPaintEvent *);
 
 private:
     KoIconItem *m_item;

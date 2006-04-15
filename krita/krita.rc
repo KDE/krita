@@ -2,8 +2,8 @@
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="koffice_undo"/>
-  <Action name="koffice_redo"/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
@@ -136,8 +136,8 @@
 </MenuBar>
 
 <ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
-  <Action name="koffice_undo"/>
-  <Action name="koffice_redo"/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
@@ -173,8 +173,8 @@
  <Separator/>
  <Action name="duplicate_layer"/>
  <Separator/>
- <Action name="koffice_undo"/>
- <Action name="koffice_redo"/>
+ <Action name="edit_undo"/>
+ <Action name="edit_redo"/>
  <Separator/>
  <Action name="cut"/>
  <Action name="copy"/>

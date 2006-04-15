@@ -19,6 +19,7 @@
 
 #include <q3listbox.h>
 #include <qpainter.h>
+#include <Q3ComboBox>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3MemArray>
@@ -41,7 +42,7 @@ KFORMULA_NAMESPACE_BEGIN
 class SymbolComboItem : public Q3ListBoxItem
 {
 public:
-    SymbolComboItem( const QString&, const QFont&, uchar, QComboBox* combo );
+    SymbolComboItem( const QString&, const QFont&, uchar, Q3ComboBox* combo );
     virtual ~SymbolComboItem();
 
     virtual int width( const Q3ListBox* ) const;
@@ -51,7 +52,7 @@ protected:
     virtual void paint( QPainter *p );
 
 private:
-    QComboBox *m_combo;
+    Q3ComboBox *m_combo;
     QString m_name;
     QFont m_font;
     uchar m_symbol;
@@ -62,7 +63,7 @@ private:
 int SymbolComboItem::widest = 0;
 
 SymbolComboItem::SymbolComboItem( const QString &name, const QFont &font,
-                                  uchar symbol, QComboBox *combo )
+                                  uchar symbol, Q3ComboBox *combo )
     : Q3ListBoxItem( combo->listBox() ),
       m_combo( combo ),
       m_name( name ),
@@ -105,7 +106,7 @@ void SymbolComboItem::paint( QPainter *p )
 /*
  * The symbol action *
  */
-SymbolAction::SymbolAction( QObject* parent, const char* name )
+SymbolAction::SymbolAction( KActionCollection* parent, const char* name )
     : KSelectAction( parent, name )
 {
     setEditable( FALSE );
@@ -162,8 +163,8 @@ void SymbolAction::updateItems( int id )
     QWidget *w = container( id );
     if ( w->inherits( "KToolBar" ) ) {
         QWidget *r = static_cast<KToolBar*>( w )->getWidget( itemId( id ) );
-        if ( r->inherits( "QComboBox" ) ) {
-            QComboBox *cb = static_cast<QComboBox*>( r );
+        if ( r->inherits( "Q3ComboBox" ) ) {
+            Q3ComboBox *cb = static_cast<Q3ComboBox*>( r );
             cb->clear();
 
             for( uint i = 0; i < items().count(); ++i ) {

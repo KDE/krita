@@ -20,7 +20,7 @@ set(kformulalib_LIB_SRCS
    indexelement.cc 
    kformulacontainer.cc 
    sequenceelement.cc 
-   #textelement.cc 
+   textelement.cc 
    bracketelement.cc 
    matrixelement.cc 
    fractionelement.cc 

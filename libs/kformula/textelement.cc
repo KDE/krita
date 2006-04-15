@@ -245,12 +245,13 @@ QChar TextElement::getRealCharacter(const ContextStyle& context)
         const FontStyle& fontStyle = context.fontStyle();
         const AlphaTable* alphaTable = fontStyle.alphaTable();
         if ( alphaTable != 0 ) {
-            AlphaTableEntry ate = alphaTable->entry( character,
-                                                     charFamily(),
-                                                     charStyle() );
-            if ( ate.valid() ) {
-                return ate.pos;
-            }
+#warning "port it"				
+            //AlphaTableEntry ate = alphaTable->entry( character,
+            //                                         charFamily(),
+             //                                        charStyle() );
+            //if ( ate.valid() ) {
+            //    return ate.pos;
+            //}
         }
         return character;
     }
@@ -266,12 +267,13 @@ QFont TextElement::getFont(const ContextStyle& context)
         const FontStyle& fontStyle = context.fontStyle();
         const AlphaTable* alphaTable = fontStyle.alphaTable();
         if ( alphaTable != 0 ) {
-            AlphaTableEntry ate = alphaTable->entry( character,
-                                                     charFamily(),
-                                                     charStyle() );
-            if ( ate.valid() ) {
-                return ate.font;
-            }
+#warning "kde4: port it"
+            //AlphaTableEntry ate = alphaTable->entry( character,
+            //                                         charFamily(),
+            //                                         charStyle() );
+            //if ( ate.valid() ) {
+            //    return ate.font;
+            //}
         }
         QFont font;
         if (getElementType() != 0) {

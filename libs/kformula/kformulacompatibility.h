@@ -20,8 +20,7 @@
 #ifndef KFORMULACOMPATIBILITY_H
 #define KFORMULACOMPATIBILITY_H
 
-#include <qdom.h>
-#include <qstring.h>
+#include <QString>
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -66,7 +65,7 @@ private:
     /**
      * current pos
      */
-    uint pos;
+    int pos;
 };
 
 KFORMULA_NAMESPACE_END

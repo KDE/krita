@@ -19,7 +19,7 @@
 */
 
 #include <q3ptrlist.h>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3MemArray>
@@ -70,9 +70,9 @@ int FormulaList::compareItems( Q3PtrCollection::Item a, Q3PtrCollection::Item b 
 }
 
 
-Document::Document( QObject *parent, const char *name,
+Document::Document( QObject *parent, const char* /*name*/,
                     const QStringList &/*args*/ )
-    : QObject( parent, name ), m_wrapper( 0 ), m_formula( 0 )
+    : QObject( parent ), m_wrapper( 0 ), m_formula( 0 )
 {
     m_contextStyle = new ContextStyle;
     SequenceElement::setCreationStrategy( &creationStrategy );
@@ -1035,7 +1035,7 @@ void DocumentWrapper::textItalic()
 void DocumentWrapper::delimiterLeft()
 {
     QString left = m_leftBracket->currentText();
-    switch ( left.at(0).latin1() ) {
+    switch ( left.at(0).toLatin1() ) {
     case '[':
     case ']':
     case '{':
@@ -1046,7 +1046,7 @@ void DocumentWrapper::delimiterLeft()
     case ')':
     case '/':
     case '\\':
-        m_leftBracketChar = static_cast<SymbolType>( left.at(0).latin1() );
+        m_leftBracketChar = static_cast<SymbolType>( left.at(0).toLatin1() );
         break;
     case '|':
         m_leftBracketChar = LeftLineBracket;
@@ -1060,7 +1060,7 @@ void DocumentWrapper::delimiterLeft()
 void DocumentWrapper::delimiterRight()
 {
     QString right = m_rightBracket->currentText();
-    switch ( right.at(0).latin1() ) {
+    switch ( right.at(0).toLatin1() ) {
     case '[':
     case ']':
     case '{':
@@ -1071,7 +1071,7 @@ void DocumentWrapper::delimiterRight()
     case ')':
     case '/':
     case '\\':
-        m_rightBracketChar = static_cast<SymbolType>( right.at(0).latin1() );
+        m_rightBracketChar = static_cast<SymbolType>( right.at(0).toLatin1() );
         break;
     case '|':
         m_rightBracketChar = RightLineBracket;

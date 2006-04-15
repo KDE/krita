@@ -21,13 +21,12 @@
 #ifndef KFORMULACONTAINER_H
 #define KFORMULACONTAINER_H
 
-#include <qclipboard.h>
-#include <qdom.h>
-#include <qimage.h>
+#include <QClipboard>
+#include <QImage>
 #include <q3ptrlist.h>
-#include <qobject.h>
+#include <QObject>
 #include <q3ptrstack.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QKeyEvent>
@@ -174,7 +173,7 @@ public:
      * Draws the whole thing.
      */
     void draw( QPainter& painter, const QRect& r,
-               const QColorGroup& cg, bool edit=false );
+               const QPalette& palette, bool edit=false );
 
     /**
      * Draws the whole thing.

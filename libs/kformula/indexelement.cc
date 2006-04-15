@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -432,7 +432,7 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
     if (content->isTextOnly()) {
         luPt mySize = style.getAdjustedSize( tstyle );
         QFont font = style.getDefaultFont();
-        font.setPointSizeFloat( style.layoutUnitPtToPt( mySize ) );
+        font.setPointSizeF( style.layoutUnitPtToPt( mySize ) );
 
         QFontMetrics fm(font);
         LuPixelRect bound = fm.boundingRect('x');
@@ -1264,32 +1264,32 @@ bool IndexElement::readContentFromDom(QDomNode& node)
            !(upperLeftRead && upperMiddleRead && upperRightRead &&
              lowerLeftRead && lowerMiddleRead && lowerRightRead)) {
 
-        if (!upperLeftRead && (node.nodeName().upper() == "UPPERLEFT")) {
+        if (!upperLeftRead && (node.nodeName().toUpper() == "UPPERLEFT")) {
             upperLeftRead = buildChild( upperLeft=new SequenceElement( this ), node, "UPPERLEFT" );
             if ( !upperLeftRead ) return false;
         }
 
-        if (!upperMiddleRead && (node.nodeName().upper() == "UPPERMIDDLE")) {
+        if (!upperMiddleRead && (node.nodeName().toUpper() == "UPPERMIDDLE")) {
             upperMiddleRead = buildChild( upperMiddle=new SequenceElement( this ), node, "UPPERMIDDLE" );
             if ( !upperMiddleRead ) return false;
         }
 
-        if (!upperRightRead && (node.nodeName().upper() == "UPPERRIGHT")) {
+        if (!upperRightRead && (node.nodeName().toUpper() == "UPPERRIGHT")) {
             upperRightRead = buildChild( upperRight=new SequenceElement( this ), node, "UPPERRIGHT" );
             if ( !upperRightRead ) return false;
         }
 
-        if (!lowerLeftRead && (node.nodeName().upper() == "LOWERLEFT")) {
+        if (!lowerLeftRead && (node.nodeName().toUpper() == "LOWERLEFT")) {
             lowerLeftRead = buildChild( lowerLeft=new SequenceElement( this ), node, "LOWERLEFT" );
             if ( !lowerLeftRead ) return false;
         }
 
-        if (!lowerMiddleRead && (node.nodeName().upper() == "LOWERMIDDLE")) {
+        if (!lowerMiddleRead && (node.nodeName().toUpper() == "LOWERMIDDLE")) {
             lowerMiddleRead = buildChild( lowerMiddle=new SequenceElement( this ), node, "LOWERMIDDLE" );
             if ( !lowerMiddleRead ) return false;
         }
 
-        if (!lowerRightRead && (node.nodeName().upper() == "LOWERRIGHT")) {
+        if (!lowerRightRead && (node.nodeName().toUpper() == "LOWERRIGHT")) {
             lowerRightRead = buildChild( lowerRight=new SequenceElement( this ), node, "LOWERRIGHT" );
             if ( !lowerRightRead ) return false;
         }

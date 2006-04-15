@@ -20,8 +20,8 @@
 
 #include <iostream>
 
-#include <qpainter.h>
-#include <qtimer.h>
+#include <QPainter>
+#include <QTimer>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QFocusEvent>
@@ -258,14 +258,14 @@ void View::wheelEvent( QWheelEvent* event, const PtPoint& pos )
 
 void View::mousePressEvent( QMouseEvent* event, const LuPixelPoint& pos )
 {
-    int flags = movementFlag( event->state() );
+    int flags = movementFlag( event->modifiers() );
     cursor()->mousePress( pos, flags );
     emitCursorChanged();
 }
 
 void View::mouseReleaseEvent( QMouseEvent* event, const LuPixelPoint& pos )
 {
-    int flags = movementFlag( event->state() );
+    int flags = movementFlag( event->modifiers() );
     cursor()->mouseRelease( pos, flags );
     emitCursorChanged();
 }
@@ -279,7 +279,7 @@ void View::mouseDoubleClickEvent( QMouseEvent*, const LuPixelPoint& )
 
 void View::mouseMoveEvent( QMouseEvent* event, const LuPixelPoint& pos )
 {
-    int flags = movementFlag( event->state() );
+    int flags = movementFlag( event->modifiers() );
     cursor()->mouseMove( pos, flags );
     emitCursorChanged();
 }

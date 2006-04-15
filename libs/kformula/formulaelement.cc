@@ -19,7 +19,7 @@
 */
 
 #include <iostream>
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QKeyEvent>
 
@@ -274,7 +274,7 @@ bool FormulaElement::readContentFromDom(QDomNode& node)
 
 void FormulaElement::convertNames( QDomNode node )
 {
-    if ( node.isElement() && ( node.nodeName().upper() == "TEXT" ) ) {
+    if ( node.isElement() && ( node.nodeName().toUpper() == "TEXT" ) ) {
         QDomNamedNodeMap attr = node.attributes();
         QDomAttr ch = attr.namedItem( "CHAR" ).toAttr();
         if ( ch.value() == "\\" ) {
@@ -287,7 +287,7 @@ void FormulaElement::convertNames( QDomNode node )
             while ( inName ) {
                 inName = false;
                 QDomNode n = nameseq.nextSibling();
-                if ( n.isElement() && ( n.nodeName().upper() == "TEXT" ) ) {
+                if ( n.isElement() && ( n.nodeName().toUpper() == "TEXT" ) ) {
                     attr = n.attributes();
                     ch = attr.namedItem( "CHAR" ).toAttr();
                     if ( ch.value().at( 0 ).isLetter() ) {

@@ -21,8 +21,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <qpainter.h>
-#include <qpaintdevice.h>
+#include <QPainter>
+#include <QPaintDevice>
 #include <q3valuestack.h>
 //Added by qt3to4:
 #include <QKeyEvent>
@@ -899,7 +899,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     case req_addText: {
         KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextRequest* tr = static_cast<TextRequest*>( request );
-        for ( uint i = 0; i < tr->text().length(); i++ ) {
+        for ( int i = 0; i < tr->text().length(); i++ ) {
             command->addElement( creationStrategy->createTextElement( tr->text()[i] ) );
         }
         return command;
@@ -1104,7 +1104,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         if ((element != 0) && !element->isSymbol()) {
             cursor->selectActiveElement();
             const SymbolTable& table = container->document()->getSymbolTable();
-            if (table.greekLetters().find(element->getCharacter()) != -1) {
+            if (table.greekLetters().contains(element->getCharacter())) {
                 KFCReplace* command = new KFCReplace( i18n( "Change Char to Symbol" ), container );
                 TextElement* symbol = creationStrategy->createTextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
                 command->addElement( symbol );
@@ -1162,7 +1162,7 @@ KCommand* SequenceElement::input( Container* container, QKeyEvent* event )
     }
     else {
         int action = event->key();
-        int state = event->state();
+        int state = event->modifiers();
         MoveFlag flag = movementFlag(state);
 
 	switch ( action ) {
@@ -1333,7 +1333,7 @@ bool SequenceElement::buildChildrenFromDom(Q3PtrList<BasicElement>& list, QDomNo
         if (n.isElement()) {
             QDomElement e = n.toElement();
             BasicElement* child = 0;
-            QString tag = e.tagName().upper();
+            QString tag = e.tagName().toUpper();
 
             child = createElement(tag);
             if (child != 0) {
@@ -1665,7 +1665,7 @@ BasicElement* NameSequence::replaceElement( const SymbolTable& table )
         return new TextElement( ch, true );
     }
     else {
-        ch = table.unicode( i18n( name.latin1() ) );
+        ch = table.unicode( i18n( name.toLatin1() ) );
         if ( !ch.isNull() ) {
             return new TextElement( ch, true );
         }

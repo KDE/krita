@@ -21,11 +21,11 @@
 #ifndef KFORMULADOCUMENT_H
 #define KFORMULADOCUMENT_H
 
-#include <qdom.h>
-#include <qobject.h>
+#include <QObject>
+#include <QDomDocument>
 #include <q3ptrlist.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 #include <kaction.h>
 #include <kcommand.h>

@@ -18,14 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qapplication.h>
-#include <qdom.h>
-#include <qevent.h>
-#include <qfile.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qtextstream.h>
+#include <QApplication>
+#include <QEvent>
+#include <QFile>
+#include <QPainter>
+#include <QPixmap>
+#include <QString>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <QKeyEvent>
@@ -295,9 +294,9 @@ const SymbolTable& Container::getSymbolTable() const
 }
 
 
-void Container::draw( QPainter& painter, const QRect& r, const QColorGroup& cg, bool edit )
+void Container::draw( QPainter& painter, const QRect& r, const QPalette& palette, bool edit )
 {
-    painter.fillRect( r, cg.base() );
+    painter.fillRect( r, palette.base() );
     draw( painter, r, edit );
 }
 
@@ -343,9 +342,10 @@ void Container::paste()
     if (!hasValidCursor())
         return;
     QClipboard* clipboard = QApplication::clipboard();
-    const QMimeSource* source = clipboard->data();
-    if (source->provides( MimeSource::selectionMimeType() )) {
-        QByteArray data = source->encodedData( MimeSource::selectionMimeType() );
+    const QMimeData* source = clipboard->mimeData();
+    if (source->hasFormat( MimeSource::selectionMimeType() ))
+    {
+        QByteArray data = source->data( MimeSource::selectionMimeType() );
         QDomDocument formula;
         formula.setContent(data);
         paste( formula, i18n("Paste") );
@@ -374,11 +374,14 @@ void Container::copy()
 {
     // read-only cursors are fine for copying.
     FormulaCursor* cursor = activeCursor();
-    if (cursor != 0) {
+    if (cursor != 0)
+    {
         QDomDocument formula = document()->createDomDocument();
         cursor->copy( formula );
         QClipboard* clipboard = QApplication::clipboard();
-        clipboard->setData(new MimeSource(document(), formula));
+	QMimeData* data = new QMimeData();
+	data->setData(MimeSource::selectionMimeType(), formula.toByteArray() );
+        clipboard->setMimeData( data );
     }
 }
 
@@ -607,7 +610,7 @@ QImage Container::drawImage( int width, int height )
     paint.end();
     context.setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     //return pm.convertToImage().smoothScale( width, height );
-    return pm.convertToImage();
+    return pm.toImage();
 }
 
 QString Container::texString()

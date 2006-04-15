@@ -108,7 +108,7 @@ void CMStyle::installFonts()
             if (!KIO::NetAccess::exists("fonts:/Personal/" + *it + ".ttf", true, NULL))
                 urlList.append(locate("data", "kformula/fonts/" + *it + ".ttf"));
         }
-        KIO::copy(urlList, "fonts:/Personal/", false);
+        KIO::copy(urlList, KUrl("fonts:/Personal/"), false);
         KMessageBox::information(qApp->mainWidget(), 
                                  i18n("Some fonts have been installed to assure that symbols in formulas are properly visualized. You must restart the application in order so that changes take effect"));
     }

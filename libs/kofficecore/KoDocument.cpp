@@ -1179,7 +1179,7 @@ bool KoDocument::saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter )
 {
     const QPixmap pix = generatePreview( QSize( 128, 128 ) );
     QImage preview ( pix.toImage().convertToFormat( QImage::Format_ARGB32, Qt::ColorOnly ) );
-   
+
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io ( store );
     if ( !io.open( QIODevice::WriteOnly ) )
@@ -1629,7 +1629,7 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, QDomDo
         kError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
-        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4" 
+        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4"
                               ,filename  ,errorLine, errorColumn ,
                               i18n ( "QXml", errorMsg ));
         store->close();
@@ -1972,7 +1972,7 @@ int KoDocument::queryCloseDia()
         name = i18n( "Untitled" );
 
     int res = KMessageBox::warningYesNoCancel( 0L,
-                    i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>" ).arg(name));
+                    i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name ) );
 
     switch(res)
     {

@@ -1027,7 +1027,7 @@ bool KoMainWindow::queryClose()
             name = i18n( "Untitled" );
 
         int res = KMessageBox::warningYesNoCancel( this,
-                        i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>" ).arg(name),
+                        i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name ),
                         QString::null,
                         KStdGuiItem::save(),
                         KStdGuiItem::discard());

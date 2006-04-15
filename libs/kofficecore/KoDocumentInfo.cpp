@@ -187,9 +187,10 @@ QString KoDocumentInfo::creator() const
  *
  *****************************************/
 
-KoDocumentInfoPage::KoDocumentInfoPage( QObject* parent, const char* /*name*/ )
+KoDocumentInfoPage::KoDocumentInfoPage( QObject* parent, const char* name )
     : QObject( parent )
 {
+    setObjectName(name);
 }
 
 /*****************************************

@@ -793,6 +793,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
             dialog->setCaption( i18n("Export Document As") );
 
         dialog->setOperationMode( KFileDialog::Saving );
+        dialog->setMode(KFile::File);
         dialog->setSpecialMimeFilter( mimeFilter,
                                       isExporting() ? d->m_lastExportFormat : pDoc->mimeType(),
                                       isExporting() ? d->m_lastExportSpecialOutputFlag : oldSpecialOutputFlag,

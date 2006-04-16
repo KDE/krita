@@ -20,8 +20,8 @@
 
 #ifndef kounit_h
 #define kounit_h
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 #include <math.h> // for floor
 #include <koffice_export.h>
 

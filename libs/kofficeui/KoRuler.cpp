@@ -22,20 +22,20 @@
 /******************************************************************/
 
 #include "KoRuler.h"
+
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <qcursor.h>
-#include <qpainter.h>
-#include <q3popupmenu.h>
-#include <qtooltip.h>
-//Added by qt3to4:
+#include <KoPageLayout.h>
+
+#include <QCursor>
+#include <QPainter>
+#include <QMenu>
+#include <QToolTip>
 #include <QPixmap>
-#include <Q3Frame>
 #include <QResizeEvent>
 #include <QMouseEvent>
-#include <KoPageLayout.h>
 #include <q3tl.h>
 
 class KoRulerPrivate {
@@ -59,8 +59,17 @@ public:
     KoTabulator currTab;
     // The action we're currently doing - basically only valid between press and release time
     KoRuler::Action action;
-    Q3PopupMenu *rb_menu;
-    int mRemoveTab, mPageLayout; // menu item ids
+    QMenu* rb_menu;
+    QAction* mRemoveTab;
+    QAction* mPageLayout;
+    QAction* mUnitMMAction;
+    QAction* mUnitPTAction;
+    QAction* mUnitINCHAction;
+    QAction* mUnitCMAction;
+    QAction* mUnitDMAction;
+    QAction* mUnitPIAction;
+    QAction* mUnitDDAction;
+    QAction* mUnitCCAction;
     int frameEnd;
     double i_right;
     bool m_bReadWrite;
@@ -87,11 +96,11 @@ const int KoRuler::F_NORESIZE = 8;
 /*================================================================*/
 KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Qt::Orientation _orientation,
                  const KoPageLayout& _layout, int _flags, KoUnit::Unit _unit, KoTabChooser *_tabChooser )
-    : Q3Frame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
+    : QFrame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
       m_unit( _unit )
 {
     setWindowFlags( Qt::WResizeNoErase | Qt::WNoAutoErase );
-    setFrameStyle( Q3Frame::StyledPanel );
+    setFrameStyle( QFrame::StyledPanel );
 
     d=new KoRulerPrivate();
 
@@ -154,7 +163,7 @@ KoRuler::~KoRuler()
 
 void KoRuler::setPageLayoutMenuItemEnabled(bool b)
 {
-    d->rb_menu->setItemEnabled(d->mPageLayout, b);
+    d->mPageLayout->setEnabled( b );
 }
 
 /*================================================================*/
@@ -215,12 +224,12 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     // Use a double-buffer pixmap
     QPainter p( &buffer );
-    p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
+    p.fillRect( 0, 0, width(), height(), QBrush( palette().window() ) );
 
     int totalw = qRound( zoomIt(d->layout.ptWidth) );
     QString str;
 
-    p.setBrush( colorGroup().brush( QColorGroup::Base ) );
+    p.setBrush( palette().base() );
 
     // Draw white rect
     QRect r;
@@ -313,7 +322,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     // Show the mouse position
     if ( d->action == A_NONE && showMPos ) {
-        p.setPen( colorGroup().color( QColorGroup::Text ) );
+        p.setPen( palette().text().color() );
         p.drawLine( mposX, 1, mposX, height() - 1 );
     }
     hasToDelete = false;
@@ -331,7 +340,7 @@ void KoRuler::drawTabs( QPainter &_painter )
 {
     int ptPos = 0;
 
-    _painter.setPen( QPen( colorGroup().color( QColorGroup::Text ), 2, Qt::SolidLine ) );
+    _painter.setPen( QPen( palette().text(), 2, Qt::SolidLine ) );
     // Check if we're in a mousemove event, removing a tab.
     // In that case, we'll have to skip drawing that one.
     bool willRemove = d->mousePressed && willRemoveTab( d->oldMy ) && d->currTab.type != T_INVALID;
@@ -362,7 +371,7 @@ void KoRuler::drawTabs( QPainter &_painter )
             _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
             _painter.drawLine( ptPos + 20 / 2, 4, ptPos + 20 / 2, height() - 4 );
             _painter.fillRect( ptPos + 20 / 2 + 2, height() - 9, 3, 3,
-                               colorGroup().color( QColorGroup::Text ) );
+                               palette().text() );
         } break;
         default: break;
         }
@@ -377,7 +386,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     resize( qMax( fm.height() + 4, 20 ), height() );
 
     QPainter p( &buffer );
-    p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
+    p.fillRect( 0, 0, width(), height(), QBrush( palette().window() ) );
 
     int totalh = qRound( zoomIt(d->layout.ptHeight) );
     // Clip rect - this gives basically always a rect like (2,2,width-2,height-2)
@@ -388,7 +397,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     if ( paintRect.intersects( rulerRect ) )  {
         QString str;
 
-        p.setBrush( colorGroup().brush( QColorGroup::Base ) );
+        p.setBrush( palette().base() );
 
         // Draw white rect
         QRect r;
@@ -472,7 +481,7 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     // Show the mouse position
     if ( d->action == A_NONE && showMPos ) {
-        p.setPen( colorGroup().color( QColorGroup::Text ) );
+        p.setPen( palette().text().color() );
         p.drawLine( 1, mposY, width() - 1, mposY );
     }
     hasToDelete = false;
@@ -494,9 +503,9 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
     switch ( e->button() ) {
     case Qt::RightButton:
         if(d->currTab.type == T_INVALID || !(d->flags & F_TABS))
-            d->rb_menu->setItemEnabled(d->mRemoveTab, false);
+            d->mRemoveTab->setEnabled( false );
         else
-            d->rb_menu->setItemEnabled(d->mRemoveTab, true);
+            d->mRemoveTab->setEnabled( true );
         d->rb_menu->popup( QCursor::pos() );
         d->action = A_NONE;
         d->mousePressed = false;
@@ -638,22 +647,23 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         }
         if ( willRemoveTab( e->y() ) )
         {
-            d->tabList.remove(d->currTab);
+            d->tabList.removeAll(d->currTab);
         }
         qHeapSort( d->tabList );
 
         // Delete the new tabulator if it is placed on top of another.
-        KoTabulatorList::ConstIterator tmpTab=d->tabList.begin();
         int count=0;
-        while(tmpTab!=d->tabList.end()) {
-            if( equals( (*tmpTab).ptPos, d->currTab.ptPos ) ) {
+	foreach( KoTabulator tmpTab, d->tabList )
+	{
+            if( equals( tmpTab.ptPos, d->currTab.ptPos ) )
+	    {
                 count++;
-                if(count > 1) {
-                    d->tabList.remove(d->currTab);
+                if(count > 1)
+	       	{
+                  d->tabList.removeAll(d->currTab);
                     break;
                 }
             }
-            tmpTab++;
         }
         //searchTab( e->x() ); // DF: why set currTab here?
         emit tabListChanged( d->tabList );
@@ -690,7 +700,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     int my = e->y();
     my = my+diffy < 0 ? 0 : my;
 
-    QToolTip::remove( this);
     switch ( orientation ) {
         case Qt::Horizontal: {
             if ( !d->mousePressed ) {
@@ -741,7 +750,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             } else {
                 // Calculate the new value.
                 int newPos=mx;
-                if( newPos!=right && gridSize!=0.0 && (e->state() & Qt::ShiftModifier)==0) { // apply grid.
+                if( newPos!=right && gridSize!=0.0 && (e->modifiers() & Qt::ShiftModifier)==0) { // apply grid.
                     double grid=zoomIt(gridSize * 16);
                     newPos=qRound( ((newPos * 16 / grid) * grid) / 16 );
                 }
@@ -849,10 +858,9 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                                 p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
                             }
 
-                            KoTabulatorList::Iterator it = d->tabList.find( d->currTab );
-                            Q_ASSERT( it != d->tabList.end() );
-                            if ( it != d->tabList.end() )
-                                (*it).ptPos = newValue;
+                            Q_ASSERT( d->tabList.contains( d->currTab ) );
+                            if ( d->tabList.contains( d->currTab ) )
+                                d->tabList[ d->tabList.indexOf( d->currTab ) ].ptPos = newValue;
                             d->currTab.ptPos = newValue;
 
                             pt = applyRtlAndZoom( newValue );
@@ -942,8 +950,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 
 void KoRuler::resizeEvent( QResizeEvent *e )
 {
-    Q3Frame::resizeEvent( e );
-    buffer.resize( size() );
+    QFrame::resizeEvent( e );
+    buffer = QPixmap( size() );
 }
 
 void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
@@ -960,8 +968,8 @@ void KoRuler::handleDoubleClick()
     if ( d->tabChooser && ( d->flags & F_TABS ) ) {
         // Double-click and mousePressed inserted a tab -> need to remove it
         if ( d->tabChooser->getCurrTabType() != 0 && d->removeTab.type != T_INVALID && !d->tabList.isEmpty()) {
-            uint c = d->tabList.count();
-            d->tabList.remove( d->removeTab );
+            int c = d->tabList.count();
+            d->tabList.removeAll( d->removeTab );
             Q_ASSERT( d->tabList.count() < c );
 
             d->removeTab.type = T_INVALID;
@@ -1011,28 +1019,39 @@ double KoRuler::makeIntern( double _v )
 
 void KoRuler::setupMenu()
 {
-    d->rb_menu = new Q3PopupMenu();
+    d->rb_menu = new QMenu();
     Q_CHECK_PTR( d->rb_menu );
-    for ( uint i = 0 ; i <= KoUnit::U_LASTUNIT ; ++i )
-    {
-        KoUnit::Unit unit = static_cast<KoUnit::Unit>( i );
-        d->rb_menu->insertItem( KoUnit::unitDescription( unit ), i /*as id*/ );
-        if ( m_unit == unit )
-            d->rb_menu->setItemChecked( i, true );
-    }
+    
+    d->mUnitMMAction = d->rb_menu->addAction( KoUnit::unitDescription( KoUnit::U_MM ) );
+    d->mUnitPTAction = d->rb_menu->addAction( KoUnit::unitDescription( KoUnit::U_PT ) );
+    d->mUnitINCHAction = d->rb_menu->addAction( KoUnit::unitDescription( KoUnit::U_INCH ) );
+    d->mUnitCMAction = d->rb_menu->addAction( KoUnit::unitDescription( KoUnit::U_CM ) );
+    d->mUnitDMAction = d->rb_menu->addAction( KoUnit::unitDescription( KoUnit::U_DM ) );
+    d->mUnitPIAction = d->rb_menu->addAction( KoUnit::unitDescription( KoUnit::U_PI ) );
+    d->mUnitDDAction = d->rb_menu->addAction( KoUnit::unitDescription( KoUnit::U_DD ) );
+    d->mUnitCCAction = d->rb_menu->addAction( KoUnit::unitDescription( KoUnit::U_CC ) );
+
+    actionOfUnit( m_unit )->setChecked( false );
+    
     connect( d->rb_menu, SIGNAL( activated( int ) ), SLOT( slotMenuActivated( int ) ) );
 
-    d->rb_menu->insertSeparator();
-    d->mPageLayout=d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
-    d->rb_menu->insertSeparator();
-    d->mRemoveTab=d->rb_menu->insertItem(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
-    d->rb_menu->setItemEnabled( d->mRemoveTab, false );
+    d->rb_menu->addSeparator();
+    d->mPageLayout = d->rb_menu->addAction(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
+    d->rb_menu->addSeparator();
+    d->mRemoveTab = d->rb_menu->addAction(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
+    d->mRemoveTab->setEnabled( false );
 }
 
 void KoRuler::uncheckMenu()
 {
-    for ( uint i = 0 ; i <= KoUnit::U_LASTUNIT ; ++i )
-        d->rb_menu->setItemChecked( i, false );
+    d->mUnitMMAction->setChecked( false );	
+    d->mUnitPTAction->setChecked( false );
+    d->mUnitINCHAction->setChecked( false );
+    d->mUnitCMAction->setChecked( false );	
+    d->mUnitDMAction->setChecked( false );
+    d->mUnitPIAction->setChecked( false );
+    d->mUnitDDAction->setChecked( false );	
+    d->mUnitCCAction->setChecked( false );
 }
 
 void KoRuler::setUnit( const QString& _unit )
@@ -1044,7 +1063,7 @@ void KoRuler::setUnit( KoUnit::Unit unit )
 {
     m_unit = unit;
     uncheckMenu();
-    d->rb_menu->setItemChecked( m_unit, true );
+    actionOfUnit( m_unit )->setChecked( true );
     update();
 }
 
@@ -1066,7 +1085,7 @@ bool KoRuler::willRemoveTab( int y ) const
 
 void KoRuler::rbRemoveTab() {
 
-    d->tabList.remove( d->currTab );
+    d->tabList.removeAll( d->currTab );
     d->currTab.type = T_INVALID;
     emit tabListChanged( d->tabList );
     update();
@@ -1203,6 +1222,38 @@ void KoRuler::setPageLayout( const KoPageLayout& _layout )
 {
     d->layout = _layout;
     update();
+}
+
+QAction* KoRuler::actionOfUnit( KoUnit::Unit unit ) const
+{
+    switch( unit )
+    {
+	    case KoUnit::U_MM:
+		 return d->mUnitMMAction;
+		 break;
+	    case KoUnit::U_PT:
+	         return d->mUnitPTAction;
+	         break;
+	    case KoUnit::U_INCH:
+	         return d->mUnitINCHAction;
+		 break;
+	    case KoUnit::U_CM:
+		 return d->mUnitCMAction;
+		 break;
+	    case KoUnit::U_DM:
+		 return d->mUnitDMAction;
+		 break;
+	    case KoUnit::U_PI:
+		 return d->mUnitPIAction;
+		 break;
+	    case KoUnit::U_DD:
+		 return d->mUnitDDAction;
+		 break;
+	    case KoUnit::U_CC:
+                 return d->mUnitCCAction;
+                 break;		 
+    }
+    return 0;
 }
 
 #include "KoRuler.moc"

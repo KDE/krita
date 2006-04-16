@@ -24,11 +24,10 @@
 #ifndef koRuler_h
 #define koRuler_h
 
-#include <q3frame.h>
+#include <QFrame>
 #include <QPixmap>
-//Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QResizeEvent>
 
 #include <kdemacros.h>
@@ -39,6 +38,7 @@
 
 class KoPageLayout;
 class QPainter;
+class QAction;
 
 enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3, T_INVALID = -1 };
 enum KoTabulatorFilling { TF_BLANK = 0, TF_DOTS = 1, TF_LINE = 2, TF_DASH = 3, TF_DASH_DOT = 4, TF_DASH_DOT_DOT = 5};
@@ -88,7 +88,7 @@ struct KoTabulator {
     }
 };
 
-typedef Q3ValueList<KoTabulator> KoTabulatorList;
+typedef QList<KoTabulator> KoTabulatorList;
 
 class KoRulerPrivate;
 
@@ -102,7 +102,7 @@ class KoRulerPrivate;
  * It also offers a popupmenu upon right-clicking, for changing the unit,
  * the page layout, or removing a tab.
  */
-class KOFFICEUI_EXPORT KoRuler : public Q3Frame
+class KOFFICEUI_EXPORT KoRuler : public QFrame
 {
     Q_OBJECT
     friend class KoRulerPrivate; // for the Action enum
@@ -312,6 +312,7 @@ private:
     double unZoomItRtl( int pixValue ) const;
     double lineDistance() const;
     bool willRemoveTab( int y ) const;
+    QAction* actionOfUnit( KoUnit::Unit unit ) const;
 
     KoRulerPrivate *d;
 

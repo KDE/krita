@@ -527,6 +527,8 @@ Q3ValueList<KoVariable *> KoVariableCollection::recalcVariables(int type)
         {
             QVariant oldValue = variable->varValue();
             variable->recalc();
+            if(variable->height == 0)
+                variable->resize();
             if ( variable->varValue() != oldValue )
                 modifiedVariables.append( variable );
             KoTextParag * parag = variable->paragraph();

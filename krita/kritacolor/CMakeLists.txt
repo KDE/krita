@@ -7,6 +7,14 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TESTSDIR)")
 
 
 ########### next target ###############
+set(FILE_OPENEXR_SOURCES)
+set(LINK_OPENEXR_LIB)
+if(OPENEXR_FOUND)
+	set(FILE_OPENEXR_SOURCES kis_f16half_base_colorspace.cc) 
+	include_directories(${OPENEXR_INCLUDE_DIR})
+	set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
+endif(OPENEXR_FOUND)
+
 
 set(kritacolor_LIB_SRCS 
    kis_color.cc 
@@ -22,7 +30,7 @@ set(kritacolor_LIB_SRCS
    kis_u8_base_colorspace.cc 
    kis_u16_base_colorspace.cc 
    kis_f32_base_colorspace.cc 
-
+	${FILE_OPENEXR_SOURCES}
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/kis_alpha_colorspace.cc
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/kis_alpha_colorspace.h
    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/kis_lab_colorspace.cc
@@ -37,7 +45,7 @@ kde4_add_dcop_skels(kritacolor_LIB_SRCS kis_colorspace_iface.h )
 
 kde4_add_library(kritacolor SHARED ${kritacolor_LIB_SRCS})
 
-target_link_libraries(kritacolor ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES})
+target_link_libraries(kritacolor ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB})
 
 set_target_properties(kritacolor PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kritacolor )

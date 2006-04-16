@@ -10,7 +10,9 @@ add_subdirectory( cmyk_u16 )
 add_subdirectory( lms_f32 )
 add_subdirectory( wet )
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(HALF_SUBDIRS)")
+if(OPENEXR_FOUND)
+	add_subdirectory( rgb_f16half )
+endif(OPENEXR_FOUND)
 
 
 

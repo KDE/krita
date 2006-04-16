@@ -36,8 +36,9 @@ K_EXPORT_COMPONENT_FACTORY( krita_rgb_f16half_plugin, RGBF16HalfPluginFactory( "
 
 
 RGBF16HalfPlugin::RGBF16HalfPlugin(QObject *parent, const char *name, const QStringList &)
-    : KParts::Plugin(parent, name)
+    : KParts::Plugin(parent)
 {
+	setObjectName(name);
     setInstance(RGBF16HalfPluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

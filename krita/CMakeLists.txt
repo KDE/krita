@@ -64,6 +64,13 @@ if (SHOULD_BUILD_KRITA)
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-krita.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krita.h)
 
+	set(LINK_OPENEXR_LIB)
+	if(OPENEXR_FOUND)
+    	include_directories(${OPENEXR_INCLUDE_DIR})
+    	set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
+	endif(OPENEXR_FOUND)
+
+
     set(KRITA_INCLUDES
         # For config-krita.h
         ${CMAKE_CURRENT_BINARY_DIR}

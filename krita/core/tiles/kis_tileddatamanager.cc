@@ -353,7 +353,9 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UI
             tile->addReader();
             if (clearTileRect == tileRect) {
                 // Clear whole tile
+                tile->addReader();
                 memset(tile->data(), clearValue, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
+                tile->removeReader();
             } else {
 
                 Q_UINT32 rowsRemaining = clearTileRect.height();
@@ -455,11 +457,13 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
                 if (clearTileRect == tileRect) {
 
                     // Clear whole tile
+                    tile->addReader();
                     memcpy(tile->data(), clearPixelData, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
-
+                    tile->removeReader();
                 } else {
 
                     Q_UINT32 rowsRemaining = clearTileRect.height();
+                    tile->addReader();
                     Q_UINT8 *dst = tile->data(clearTileRect.x() - tileRect.x(), clearTileRect.y() - tileRect.y());
 
                     while (rowsRemaining > 0) {
@@ -467,6 +471,7 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, cons
                         dst += rowStride;
                         --rowsRemaining;
                     }
+                    tile->removeReader();
                 }
             }
         }

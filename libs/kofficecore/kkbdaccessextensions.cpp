@@ -171,12 +171,15 @@ KKbdAccessExtensions::KKbdAccessExtensions(KMainWindow* parent, const char* /*na
     // kDebug() << "KKbdAccessExtensions::KKbdAccessExtensions: running." << endl;
     d = new KKbdAccessExtensionsPrivate;
     d->mainWindow = parent;
-    d->fwdAction = new KAction(i18n("Resize Panel Forward"), KShortcut("F8"),
-        0, 0, parent->actionCollection(), "resize_panel_forward");
-    d->revAction = new KAction(i18n("Resize Panel Reverse"), KShortcut("Shift+F8"),
-        0, 0, parent->actionCollection(), "resize_panel_reverse");
-    d->accessKeysAction = new KAction(i18n("Access Keys"), KShortcut("Alt+F8"),
-        0, 0, parent->actionCollection(), "access_keys");
+    d->fwdAction = new KAction(i18n("Resize Panel Forward"),
+                               parent->actionCollection(), "resize_panel_forward");
+    d->fwdAction->setShortcut(KShortcut("F8"));
+    d->revAction = new KAction(i18n("Resize Panel Reverse"),
+                               parent->actionCollection(), "resize_panel_reverse");
+    d->revAction->setShortcut(KShortcut("Shift+F8"));
+    d->accessKeysAction = new KAction(i18n("Access Keys"),
+                                      parent->actionCollection(), "access_keys");
+    d->accessKeysAction->setShortcut(KShortcut("Alt+F8"));
     // "Disable" the shortcuts so we can see them in eventFilter.
     d->fwdAction->setEnabled(false);
     d->revAction->setEnabled(false);

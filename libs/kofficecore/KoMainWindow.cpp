@@ -215,26 +215,27 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paCloseFile = KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
     KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
-    d->m_reloadfile = new KAction( i18n( "Reload"), 0,
-                    this, SLOT( slotReloadFile() ),
-                    actionCollection(), "file_reload_file");
+    d->m_reloadfile = new KAction( i18n( "Reload"),
+                                   actionCollection(), "file_reload_file");
+    connect( d->m_reloadfile, SIGNAL( triggered(bool) ), this, SLOT( slotReloadFile() ) );
 
-    d->m_versionsfile = new KAction( i18n( "Versions..."), 0,
-                    this, SLOT( slotVersionsFile() ),
-                    actionCollection(), "file_versions_file");
+    d->m_versionsfile = new KAction( i18n( "Versions..."),
+                                     actionCollection(), "file_versions_file");
+    connect( d->m_versionsfile, SIGNAL( triggered(bool) ), this, SLOT( slotVersionsFile() ) );
 
-    d->m_importFile = new KAction( i18n( "I&mport..." ), 0, // clashing accel key :(
-                    this, SLOT( slotImportFile() ),
-                    actionCollection(), "file_import_file");
-    d->m_exportFile = new KAction( i18n( "E&xport..." ), 0,
-                    this, SLOT( slotExportFile() ),
-                    actionCollection(), "file_export_file");
+    d->m_importFile = new KAction( i18n( "I&mport..." ),
+                                   actionCollection(), "file_import_file");
+    connect( d->m_importFile, SIGNAL( triggered(bool) ), this, SLOT( slotImportFile() ) );
+
+    d->m_exportFile = new KAction( i18n( "E&xport..." ),
+                                   actionCollection(), "file_export_file");
+    connect( d->m_exportFile, SIGNAL( triggered(bool) ), this, SLOT( slotExportFile() ) );
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->m_paDocInfo = new KAction( i18n( "&Document Information" ), "documentinfo", 0,
-                        this, SLOT( slotDocumentInfo() ),
-                        actionCollection(), "file_documentinfo" );
+    d->m_paDocInfo = new KAction( KIcon("documentinfo"), i18n( "&Document Information" ),
+                                  actionCollection(), "file_documentinfo" );
+    connect( d->m_paDocInfo, SIGNAL( triggered(bool) ), this, SLOT( slotDocumentInfo() ) );
 
     KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
     KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
@@ -256,24 +257,29 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     setCentralWidget( d->m_splitter );
     // Keyboard accessibility enhancements.
     new KKbdAccessExtensions(this, "mw-panelSizer");
+
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    d->m_veryHackyActionList.append(
-        new KAction(i18n("&Close All Views"), "fileclose",
-                    Qt::CTRL+Qt::SHIFT+Qt::Key_W, this, SLOT(slotCloseAllViews()),
-                    actionCollection(), "view_closeallviews") );
+    KAction* closeAllViews = new KAction( KIcon("fileclose"), i18n("&Close All Views"),
+                                          actionCollection(), "view_closeallviews" );
+    closeAllViews->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W);
+    connect( closeAllViews, SIGNAL(triggered(bool)), this, SLOT(slotCloseAllViews()) );
+    d->m_veryHackyActionList.append(closeAllViews);
 
     // set up the action list for the splitter stuff
-    d->m_splitViewActionList.append(new KAction(i18n("&Split View"), "view_split", 0,
-        this, SLOT(slotSplitView()),
-        actionCollection(), "view_split"));
-    d->m_removeView=new KAction(i18n("&Remove View"), "view_remove", 0,
-        this, SLOT(slotRemoveView()),
-        actionCollection(), "view_rm_splitter");
+    KAction* splitView = new KAction( KIcon("view_split"), i18n("&Split View"),
+                                     actionCollection(), "view_split");
+    connect( splitView, SIGNAL(triggered(bool)), this, SLOT(slotSplitView()) );
+    d->m_splitViewActionList.append(splitView);
+
+    d->m_removeView = new KAction( KIcon("view_remove"), i18n("&Remove View"),
+                                   actionCollection(), "view_rm_splitter");
+    connect( d->m_removeView, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()) );
     d->m_splitViewActionList.append(d->m_removeView);
     d->m_removeView->setEnabled(false);
-    d->m_orientation=new KSelectAction(i18n("Splitter &Orientation"), "view_orientation", 0,
-        this, SLOT(slotSetOrientation()),
-        actionCollection(), "view_splitter_orientation");
+
+    d->m_orientation = new KSelectAction( KIcon("view_orientation"), i18n("Splitter &Orientation"),
+                                          actionCollection(), "view_splitter_orientation");
+    connect( d->m_orientation, SIGNAL(triggered(bool)), this, SLOT(slotSetOrientation()) );
     QStringList items;
     items << i18n("&Vertical")
           << i18n("&Horizontal");

@@ -389,7 +389,7 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
 	buttonLayout = new Q3HBoxLayout( layout );
 	//layout->addLayout( buttonLayout, 2, 0 );
-	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 2, 1, 1 );
+	layout->addWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 3, 1 );
 	buttonLayout->add( m_close = new KoTinyButton( KoTinyButton::Close, this ) );
 	buttonLayout->add( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
 	layout->addColSpacing( 2, 2 );
@@ -553,7 +553,7 @@ KoContextHelpWidget::KoContextHelpWidget( QWidget* parent, const char* name )
 	Q3GridLayout* layout = new Q3GridLayout( this );
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
-	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 1, 1 );
+	layout->addWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 2, 1 );
 	layout->setMargin( 2 );
 	layout->setSpacing( 1 );
 	layout->setRowStretch( 1, 1 );
@@ -583,7 +583,7 @@ KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 	Q3GridLayout* layout = new Q3GridLayout( mainWidget );
 	layout->addWidget( m_helpIcon = new QLabel( mainWidget ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( mainWidget ), 1, 0 );
-	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", mainWidget ), 0, 1, 1, 1 );
+	layout->addWidget( m_helpViewer = new KoHelpWidget( "", mainWidget ), 0, 1, 2, 1 );
 	layout->setMargin( 2 );
 	layout->setSpacing( 1 );
 	layout->setRowStretch( 1, 1 );

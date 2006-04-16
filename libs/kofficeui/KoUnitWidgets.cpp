@@ -137,12 +137,12 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, const char *name )
 }
 
 
-KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, 
+KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
 						    double lower, double upper,
-						    double step, 
-						    double value, 
-						    KoUnit::Unit unit, 
-						    unsigned int precision, 
+						    double step,
+						    double value,
+						    KoUnit::Unit unit,
+						    unsigned int precision,
 						    const char *name )
     : KDoubleSpinBox( lower, upper, step, value, parent, precision ),
       KoUnitDoubleBase( unit, precision ),
@@ -400,7 +400,7 @@ KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, const char 
 
     m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnit( 0.0, KoUnit::U_PT ), KoUnit::ptToUnit( 9999.99, KoUnit::U_PT ), 0.0, KoUnit::U_PT, 2, name );
     connect( m_combo, SIGNAL( valueChanged( double ) ), this, SIGNAL( valueChanged( double ) ) );
-    layout->addMultiCellWidget( m_combo, 0, 1, 2, 2 );
+    layout->addWidget( m_combo, 0, 2, 2, 1 );
 }
 
 KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value,
@@ -424,7 +424,7 @@ KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lowe
 
     m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnit( lower, unit ), KoUnit::ptToUnit( upper, unit ), value, unit, precision, name );
     connect( m_combo, SIGNAL( valueChanged( double ) ), this, SIGNAL( valueChanged( double ) ) );
-    layout->addMultiCellWidget( m_combo, 0, 1, 2, 2 );
+    layout->addWidget( m_combo, 0, 2, 2, 1 );
 }
 
 void

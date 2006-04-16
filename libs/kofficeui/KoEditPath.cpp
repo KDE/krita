@@ -50,7 +50,7 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
     m_listpath =  new KEditListBox( i18n("Expression Path"),
                     tmp,page, "list_editor" , false, KEditListBox::Add|KEditListBox::Remove );
 
-    grid->addMultiCellWidget(m_listpath, 0, 4, 0, 0);
+    grid->addWidget(m_listpath, 0, 0, 5, 1);
     m_listpath->setItems(QStringList::split(QString(";"), _path));
     setFocus();
     resize( 500, 300);

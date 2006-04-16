@@ -161,7 +161,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
 
     // ------------- preview -----------
     pgPreview = new KoPagePreview( this, "Preview", m_layout );
-    grid1->addMultiCellWidget( pgPreview, 1, 3, 1, 1 );
+    grid1->addWidget( pgPreview, 1, 1, 3, 1 );
 
     // ------------- spacers -----------
     QWidget* spacer1 = new QWidget( this );

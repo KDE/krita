@@ -310,7 +310,7 @@ void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
     headGrid->addWidget( eHeadRight, 1, 2 );
     eHeadRight->setText( hf.headRight );
 
-    grid2->addMultiCellWidget( gHead, 0, 1, 0, 1 );
+    grid2->addWidget( gHead, 0, 2, 1, 1 );
 
     // ------------- footer ---------------
     Q3GroupBox *gFoot = new Q3GroupBox( 0, Qt::Vertical, i18n( "Foot Line" ), tab2 );
@@ -339,24 +339,24 @@ void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
     footGrid->addWidget( eFootRight, 1, 2 );
     eFootRight->setText( hf.footRight );
 
-    grid2->addMultiCellWidget( gFoot, 2, 3, 0, 1 );
+    grid2->addWidget( gFoot, 2, 0, 2, 2 );
 
     QLabel *lMacros2 = new QLabel( i18n( "You can insert several tags in the text:" ), tab2 );
-    grid2->addMultiCellWidget( lMacros2, 4, 4, 0, 1 );
+    grid2->addWidget( lMacros2, 4, 0, 1, 2 );
 
     QLabel *lMacros3 = new QLabel( i18n("<qt><ul><li>&lt;sheet&gt; The sheet name</li>"
                            "<li>&lt;page&gt; The current page</li>"
                            "<li>&lt;pages&gt; The total number of pages</li>"
                            "<li>&lt;name&gt; The filename or URL</li>"
                            "<li>&lt;file&gt; The filename with complete path or the URL</li></ul></qt>"), tab2 );
-    grid2->addMultiCellWidget( lMacros3, 5, 6, 0, 0, Qt::AlignTop );
+    grid2->addWidget( lMacros3, 5, 0, 2, 1, Qt::AlignTop );
 
     QLabel *lMacros4 = new QLabel( i18n("<qt><ul><li>&lt;time&gt; The current time</li>"
                            "<li>&lt;date&gt; The current date</li>"
                            "<li>&lt;author&gt; Your full name</li>"
                            "<li>&lt;org&gt; Your organization</li>"
                            "<li>&lt;email&gt; Your email address</li></ul></qt>"), tab2 );
-    grid2->addMultiCellWidget( lMacros4, 5, 6, 1, 1, Qt::AlignTop );
+    grid2->addWidget( lMacros4, 5, 1, 2, 1, Qt::AlignTop );
 }
 
 /*================================================================*/

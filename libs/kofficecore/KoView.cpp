@@ -116,7 +116,7 @@ public:
   bool m_inOperation; //in the middle of an operation (no screen refreshing)?
 };
 
-KoView::KoView( KoDocument *document, QWidget *parent, const char* /*name*/ )	
+KoView::KoView( KoDocument *document, QWidget *parent, const char* /*name*/ )
  : QWidget( parent )
 {
   Q_ASSERT( document );
@@ -631,10 +631,11 @@ void KoView::slotAutoScroll(  )
 }
 
 
-void KoView::setupGlobalActions() {
-    actionNewView = new KAction( i18n( "&New View" ), "window_new", 0,
-        this, SLOT( newView() ),
-        actionCollection(), "view_newview" );
+void KoView::setupGlobalActions()
+{
+  actionNewView = new KAction( KIcon("window_new"), i18n( "&New View" ),
+                               actionCollection(), "view_newview" );
+  connect( actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()) );
 }
 
 void KoView::setupPrinter( KPrinter & )

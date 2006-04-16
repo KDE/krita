@@ -764,7 +764,7 @@ QDomDocument KoDocument::viewBuildDocument( KoView *view )
     if ( d->m_views.find( view ) == -1 )
         return res;
 
-    uint viewIdx = d->m_views.at();
+    int viewIdx = d->m_views.at();
 
     if ( viewIdx >= d->m_viewBuildDocuments.count() )
         return res;

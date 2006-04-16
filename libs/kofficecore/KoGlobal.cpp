@@ -23,6 +23,7 @@
 #include <QPaintDevice>
 #include <QFont>
 #include <QFontInfo>
+#include <QX11Info>
 
 #include <KoGlobal.h>
 #include <kdebug.h>
@@ -63,8 +64,8 @@ KoGlobal::KoGlobal()
     // but we have no widget here (and moving this to KoView wouldn't allow
     // using this from the document easily).
 #ifdef Q_WS_X11
-    m_dpiX = QPaintDevice::x11AppDpiX();
-    m_dpiY = QPaintDevice::x11AppDpiY();
+    m_dpiX = QX11Info::appDpiX();
+    m_dpiY = QX11Info::appDpiY();
 #else
     m_dpiX = 75;
     m_dpiY = 75;

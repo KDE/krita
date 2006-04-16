@@ -24,9 +24,9 @@
 #include <QPushButton>
 #include <QToolButton>
 #include <QApplication>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+
 #include <kiconloader.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -46,7 +46,9 @@ KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  Q3GridLayout* grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
+  QGridLayout* grid1 = new QGridLayout( page );
+  grid1->setMargin(KDialog::marginHint());
+  grid1->setSpacing(KDialog::spacingHint());
 
   list=new K3ListView(page);
   list->setObjectName(  "versionlist");
@@ -54,7 +56,7 @@ KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
   list->addColumn(i18n("Saved By"));
   list->addColumn(i18n("Comment"));
 
-  grid1->addMultiCellWidget(list,0,8,0,0);
+  grid1->addWidget(list,0,0,9,1);
 
   m_pAdd=new QPushButton(i18n("&Add"),page);
   grid1->addWidget(m_pAdd,1,2);
@@ -130,7 +132,9 @@ KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, const QString &/
     QWidget* page = new QWidget( this );
     setMainWidget( page );
 
-    Q3HBoxLayout *grid1 = new Q3HBoxLayout( page,KDialog::marginHint(), KDialog::spacingHint());
+    QHBoxLayout *grid1 = new QHBoxLayout( page );
+    grid1->setMargin(KDialog::marginHint());
+    grid1->setSpacing(KDialog::spacingHint());
 
     m_multiline=new Q3MultiLineEdit(page, "multiline");
     grid1->addWidget( m_multiline );

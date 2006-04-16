@@ -22,8 +22,7 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -304,8 +303,11 @@ QWidget* KisToolSelectElliptical::createOptionWidget(QWidget* parent)
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-    Q3VBoxLayout * l = dynamic_cast<Q3VBoxLayout*>(m_optWidget->layout());
-    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    Q_ASSERT(l);
+    if (l) {
+        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    }
 
     return m_optWidget;
 }

@@ -22,8 +22,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidget.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -132,8 +131,11 @@ QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setCaption(i18n("Selection Eraser"));
 
-    Q3VBoxLayout * l = dynamic_cast<Q3VBoxLayout*>(m_optWidget->layout());
-    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    Q_ASSERT(l);
+    if (l) {
+        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    }
 
     return m_optWidget;
 }

@@ -25,9 +25,8 @@
 #include <qlabel.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -190,33 +189,36 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setCaption(i18n("Contiguous Area Selection"));
 
-    Q3VBoxLayout * l = dynamic_cast<Q3VBoxLayout*>(m_optWidget->layout());
-    l->setSpacing( 6 );
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    Q_ASSERT(l);
+    if (l) {
+        l->setSpacing( 6 );
 
-    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+        connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(l);
-    Q_CHECK_PTR(hbox);
+        QHBoxLayout * hbox = new QHBoxLayout(l);
+        Q_CHECK_PTR(hbox);
 
-    QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
-    hbox->addWidget(lbl);
+        QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
+        hbox->addWidget(lbl);
 
-    KIntNumInput * input = new KIntNumInput(m_optWidget);
-    Q_CHECK_PTR(input);
-    input->setObjectName("fuzziness");
+        KIntNumInput * input = new KIntNumInput(m_optWidget);
+        Q_CHECK_PTR(input);
+        input->setObjectName("fuzziness");
 
-    input->setRange(0, 200, 10, true);
-    input->setValue(20);
-    hbox->addWidget(input);
-    connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+        input->setRange(0, 200, 10, true);
+        input->setValue(20);
+        hbox->addWidget(input);
+        connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
-    QCheckBox* samplemerged = new QCheckBox(i18n("Sample merged"), m_optWidget);
-    l->addWidget( samplemerged );
-    samplemerged->setChecked(m_sampleMerged);
-    connect(samplemerged, SIGNAL(stateChanged(int)),
-            this, SLOT(slotSetSampleMerged(int)));
+        QCheckBox* samplemerged = new QCheckBox(i18n("Sample merged"), m_optWidget);
+        l->addWidget( samplemerged );
+        samplemerged->setChecked(m_sampleMerged);
+        connect(samplemerged, SIGNAL(stateChanged(int)),
+                this, SLOT(slotSetSampleMerged(int)));
 
-    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    }
     
     return m_optWidget;
 }

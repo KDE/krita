@@ -132,6 +132,7 @@ void KoToolBox::setupTools()
             m_buttonGroup->insert( bn, id++ );
             m_idToActionMap.append( tool );
         }
+        tools->show();
         addSeparator();
         m_toolBoxes.append(tools);
     }

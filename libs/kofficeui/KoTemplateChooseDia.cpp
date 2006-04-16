@@ -46,19 +46,19 @@
 #include <kapplication.h>
 #include <kaboutdata.h>
 
-#include <qapplication.h>
-#include <qlayout.h>
-#include <qtabwidget.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qpoint.h>
-#include <qobject.h>
+#include <QApplication>
+#include <QLayout>
+#include <QTabWidget>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPoint>
+#include <QObject>
 #include <QDesktopWidget>
-#include <qtooltip.h>
+#include <QToolTip>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QHideEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3Frame>
 #include <QLabel>
 #include <QGroupBox>
@@ -305,7 +305,7 @@ KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() const {
 
 /*================================================================*/
 // private
-void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, Q3GridLayout * layout)
+void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * layout)
 {
 
         d->m_recent = new KoTCDRecentFilesIconView(widgetbase, "recent files");
@@ -326,7 +326,7 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, Q3GridLayout *
                     QString s = value;
                     if ( s.endsWith("]") )
                     {
-                        int pos = s.find("[");
+                        int pos = s.indexOf("[");
                         s = s.mid( pos + 1, s.length() - pos - 2);
                     }
                     KUrl url(s);
@@ -349,7 +349,7 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, Q3GridLayout *
 
 /*================================================================*/
 // private
-void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, Q3GridLayout * layout)
+void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * layout)
 {
     QString dir = QString::null;
     QPoint point( 0, 0 );
@@ -361,7 +361,7 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, Q3GridLayout * l
 	    false);
 
     layout->addWidget(d->m_filedialog,0,0);
-    d->m_filedialog->reparent( widgetbase , point );
+    d->m_filedialog->setParent( widgetbase );
     //d->m_filedialog->setOperationMode( KFileDialog::Opening);
 
     const QList<QPushButton *> buttons = qFindChildren<QPushButton *>( d->m_filedialog );
@@ -385,7 +385,7 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, Q3GridLayout * l
 
 /*================================================================*/
 // private
-void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout * layout)
+void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout)
 {
 
     d->m_jwidget = new KJanusWidget(
@@ -395,8 +395,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 
     d->boxdescription = new QGroupBox(
 	    i18n("Selected Template"),
-	    widgetbase,
-	    "boxdescription");
+	    widgetbase );
     layout->addWidget(d->boxdescription, 1, 0 );
 
     // config
@@ -426,11 +425,11 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 		group->name(),
 		group->first()->loadPicture(d->m_instance));
 
-	Q3GridLayout * layout = new Q3GridLayout(frame);
+	QGridLayout* layout = new QGridLayout(frame);
 	KoTCDIconCanvas *canvas = new KoTCDIconCanvas( frame );
 	layout->addWidget(canvas,0,0);
 
-	canvas->setBackgroundColor( colorGroup().base() );
+	canvas->setBackgroundRole( QPalette::Base );
 	canvas->setResizeMode(Q3IconView::Adjust);
 	canvas->setWordWrapIconText( true );
 	canvas->show();
@@ -457,7 +456,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 
     d->textedit = new KTextEdit( d->boxdescription );
     d->textedit->setReadOnly(1);
-    d->textedit->setText(descriptionText(i18n("Empty Document"), i18n("Creates an empty document")));
+    d->textedit->setPlainText(descriptionText(i18n("Empty Document"), i18n("Creates an empty document")));
     d->textedit->setLineWidth(0);
     d->textedit->setMaximumHeight(50);
 
@@ -492,7 +491,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
     else
     {
         d->m_nodiag->setTristate();
-        d->m_nodiag->setNoChange();
+        d->m_nodiag->setCheckState( Qt::PartiallyChecked );
     }
 }
 
@@ -501,7 +500,9 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 void KoTemplateChooseDia::setupDialog()
 {
 
-    Q3GridLayout *maingrid=new Q3GridLayout( d->m_mainwidget, 1, 1, 2, 6);
+    QGridLayout *maingrid = new QGridLayout( d->m_mainwidget );
+    maingrid->setMargin( 2 );
+    maingrid->setSpacing( 6 );
     KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
 
     if (d->m_dialogType == Everything)
@@ -533,25 +534,30 @@ void KoTemplateChooseDia::setupDialog()
 	}
 
 	if ( cancelQuits() )
-	    setButtonCancel( KStdGuiItem::quit() );
+	    setButtonGuiItem( KDialog::Cancel, KStdGuiItem::quit() ); 
 
-	d->tabWidget = new QTabWidget( d->m_mainwidget, "tabWidget" );
+	d->tabWidget = new QTabWidget( d->m_mainwidget );
 	maingrid->addWidget( d->tabWidget, 0, 0 );
 
 	// new document
-	d->newTab = new QWidget( d->tabWidget, "newTab" );
-	d->tabWidget->insertTab( d->newTab, i18n( "&Create Document" ) );
-	Q3GridLayout * newTabLayout = new Q3GridLayout( d->newTab, 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
+	d->newTab = new QWidget( d->tabWidget );
+	d->tabWidget->addTab( d->newTab, i18n( "&Create Document" ) );
+	QGridLayout * newTabLayout = new QGridLayout( d->newTab );
+	newTabLayout->setMargin( KDialogBase::marginHint() );
+	newTabLayout->setSpacing( KDialogBase::spacingHint() );
 
 	// existing document
-	d->existingTab = new QWidget( d->tabWidget, "existingTab" );
-	d->tabWidget->insertTab( d->existingTab, i18n( "Open &Existing Document" ) );
-	Q3GridLayout * existingTabLayout = new Q3GridLayout( d->existingTab, 1, 1, 0, KDialog::spacingHint());
+	d->existingTab = new QWidget( d->tabWidget );
+	d->tabWidget->addTab( d->existingTab, i18n( "Open &Existing Document" ) );
+	QGridLayout * existingTabLayout = new QGridLayout( d->existingTab );
+	existingTabLayout->setSpacing( KDialog::spacingHint() );
 
         // recent document
-        d->recentTab = new QWidget( d->tabWidget, "recentTab" );
-        d->tabWidget->insertTab( d->recentTab, i18n( "Open &Recent Document" ) );
-        Q3GridLayout * recentTabLayout = new Q3GridLayout( d->recentTab, 1, 1, KDialogBase::marginHint(), KDialog::spacingHint());
+        d->recentTab = new QWidget( d->tabWidget );
+        d->tabWidget->addTab( d->recentTab, i18n( "Open &Recent Document" ) );
+        QGridLayout * recentTabLayout = new QGridLayout( d->recentTab );
+	recentTabLayout->setMargin( KDialogBase::marginHint() );
+	recentTabLayout->setSpacing( KDialog::spacingHint() );
 
 	setupTemplateDialog(d->newTab, newTabLayout);
 	setupFileDialog(d->existingTab, existingTabLayout);
@@ -559,11 +565,11 @@ void KoTemplateChooseDia::setupDialog()
 
 	QString tabhighlighted = grp.readEntry("LastReturnType");
 	if ( tabhighlighted == "Template" )
-	    d->tabWidget->setCurrentPage(0); // CreateDocument tab
+	    d->tabWidget->setCurrentIndex(0); // CreateDocument tab
 	else if (tabhighlighted == "File" )
-	    d->tabWidget->setCurrentPage(2); // RecentDocument tab
+	    d->tabWidget->setCurrentIndex(2); // RecentDocument tab
 	else
-		d->tabWidget->setCurrentPage(0); // Default setting: CreateDocument tab
+		d->tabWidget->setCurrentIndex(0); // Default setting: CreateDocument tab
     }
     else
     {
@@ -591,7 +597,7 @@ void KoTemplateChooseDia::currentChanged( Q3IconViewItem * item)
 	Q3IconView* canvas =  item->iconView();
 
 	// set text in the textarea
-	d->textedit->setText( descriptionText(
+	d->textedit->setPlainText( descriptionText(
 				item->text(),
 				((KoTCDIconViewItem *) item)->getDescr()
 				));
@@ -652,10 +658,10 @@ void KoTemplateChooseDia::slotOk()
 	    {
 		// The checkbox m_nodiag is in tri-state mode for new documents
 		// fixes bug:77542
-		if (d->m_nodiag->state() == QCheckBox::On) {
+		if (d->m_nodiag->checkState() == Qt::Checked) {
 		    grp.writeEntry( "NoStartDlg", "yes");
 		}
-		else if (d->m_nodiag->state() == QCheckBox::Off) {
+		else if (d->m_nodiag->checkState() == Qt::Unchecked) {
 		    grp.writeEntry( "NoStartDlg", "no");
 		}
 	    }
@@ -678,7 +684,7 @@ bool KoTemplateChooseDia::collectInfo()
     // to determine what tab is selected in "Everything" mode
     bool newTabSelected = false;
     if ( d->m_dialogType == Everything)
-	if ( d->tabWidget->currentPage() == d->newTab )
+	if ( d->tabWidget->currentWidget() == d->newTab )
 	    newTabSelected = true;
 
     // is it a template or a file ?
@@ -695,7 +701,7 @@ bool KoTemplateChooseDia::collectInfo()
     else if ( d->m_dialogType != OnlyTemplates )
     {
 	// a file is chosen
-	if (d->m_dialogType == Everything && d->tabWidget->currentPage() == d->recentTab)
+	if (d->m_dialogType == Everything && d->tabWidget->currentWidget() == d->recentTab)
 	{
 		// Recent file
 		KFileItem * item = d->m_recent->currentFileItem();

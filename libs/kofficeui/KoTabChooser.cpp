@@ -22,12 +22,11 @@
 /******************************************************************/
 
 #include <KoTabChooser.h>
-#include <qpainter.h>
-#include <q3popupmenu.h>
-#include <qcursor.h>
-//Added by qt3to4:
+
+#include <QPainter>
+#include <QMenu>
+#include <QCursor>
 #include <QMouseEvent>
-#include <Q3Frame>
 
 #include <klocale.h>
 
@@ -47,9 +46,9 @@ public:
 
 /*================================================================*/
 KoTabChooser::KoTabChooser( QWidget *parent, int _flags )
-    : Q3Frame( parent, "" )
+    : QFrame( parent )
 {
-    setFrameStyle( Q3Frame::StyledPanel );
+    setFrameStyle( QFrame::StyledPanel );
     flags = _flags;
     d=new KoTabChooserPrivate();
 
@@ -102,19 +101,19 @@ void KoTabChooser::mousePressEvent( QMouseEvent *e )
     case Qt::RightButton: {
 	QPoint pnt( QCursor::pos() );
 
-	rb_menu->setItemChecked( mLeft, false );
-	rb_menu->setItemChecked( mCenter, false );
-	rb_menu->setItemChecked( mRight, false );
-	rb_menu->setItemChecked( mDecPoint, false );
+	mLeft->setChecked( false );
+	mCenter->setChecked( false );
+	mRight->setChecked( false );
+	mDecPoint->setChecked( false );
 
 	switch ( currType ) {
-	case TAB_LEFT: rb_menu->setItemChecked( mLeft, true );
+	case TAB_LEFT: mLeft->setChecked( true );
 	    break;
-	case TAB_CENTER: rb_menu->setItemChecked( mCenter, true );
+	case TAB_CENTER: mCenter->setChecked( true );
 	    break;
-	case TAB_RIGHT: rb_menu->setItemChecked( mRight, true );
+	case TAB_RIGHT: mRight->setChecked( true );
 	    break;
-	case TAB_DEC_PNT: rb_menu->setItemChecked( mDecPoint, true );
+	case TAB_DEC_PNT: mDecPoint->setChecked( true );
 	    break;
 	}
 
@@ -156,13 +155,12 @@ void KoTabChooser::drawContents( QPainter *painter )
 /*================================================================*/
 void KoTabChooser::setupMenu()
 {
-    rb_menu = new Q3PopupMenu();
+    rb_menu = new QMenu();
     Q_CHECK_PTR( rb_menu );
-    mLeft = rb_menu->insertItem( i18n( "Tabulator &Left" ), this, SLOT( rbLeft() ) );
-    mCenter = rb_menu->insertItem( i18n( "Tabulator &Center" ), this, SLOT( rbCenter() ) );
-    mRight = rb_menu->insertItem( i18n( "Tabulator &Right" ), this, SLOT( rbRight() ) );
-    mDecPoint =  rb_menu->insertItem( i18n( "Tabulator &Decimal Point" ), this, SLOT( rbDecPoint() ) );
-    rb_menu->setCheckable( false );
+    mLeft = rb_menu->addAction( i18n( "Tabulator &Left" ), this, SLOT( rbLeft() ) );
+    mCenter = rb_menu->addAction( i18n( "Tabulator &Center" ), this, SLOT( rbCenter() ) );
+    mRight = rb_menu->addAction( i18n( "Tabulator &Right" ), this, SLOT( rbRight() ) );
+    mDecPoint =  rb_menu->addAction( i18n( "Tabulator &Decimal Point" ), this, SLOT( rbDecPoint() ) );
 }
 
 KoTabChooser::~KoTabChooser() {

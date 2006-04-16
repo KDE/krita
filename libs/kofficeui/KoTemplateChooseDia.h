@@ -31,7 +31,6 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QHideEvent>
-#include <Q3GridLayout>
 #include <QKeyEvent>
 #include <Q3CString>
 
@@ -40,7 +39,7 @@
 class KoTCDIconViewItem;
 class KoTemplateTree;
 class KoTemplateGroup;
-class Q3GridLayout;
+class QGridLayout;
 
 /**
  * Our reimplementation of KIconCanvas used within the template-chooser dialog.
@@ -239,9 +238,9 @@ private:
 
     QString descriptionText(const QString &name, const QString &description);
     void setupDialog();
-    void setupTemplateDialog(QWidget * widgetbase, Q3GridLayout * layout);
-    void setupFileDialog(QWidget * widgetbase, Q3GridLayout * layout);
-    void setupRecentDialog(QWidget * widgetbase, Q3GridLayout * layout);
+    void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);
+    void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);
+    void setupRecentDialog(QWidget * widgetbase, QGridLayout * layout);
     bool collectInfo();
     bool noStartupDlg() const;
 

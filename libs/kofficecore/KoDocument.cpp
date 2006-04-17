@@ -1264,7 +1264,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
     }
     else
     {
-        KUrl url = KUrl::fromPathOrURL( path );
+        KUrl url = KUrl::fromPath( path );
         Q_ASSERT( url.isLocalFile() );
         QString dir = url.directory(false);
         QString filename = url.fileName();

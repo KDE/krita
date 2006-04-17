@@ -20,26 +20,33 @@
 #include <KoPageLayoutHeader.moc>
 #include <KoUnitWidgets.h>
 
-#include <qlayout.h>
-#include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QCheckBox>
+#include <QHBoxLayout>
 
 KoPageLayoutHeader::KoPageLayoutHeader(QWidget *parent, KoUnit::Unit unit, const KoKWHeaderFooter &kwhf)
-    : KoPageLayoutHeaderBase(parent) {
+    : QWidget(parent)
+{
     m_headerFooters = kwhf;
-    Q3HBoxLayout *lay = new Q3HBoxLayout(headerSpacingPane);
-    m_headerSpacing = new KoUnitDoubleSpinBox( headerSpacingPane, 0.0, 999.0, 0.5, kwhf.ptHeaderBodySpacing, unit );
-    lay->addWidget(m_headerSpacing);
+    
+    m_headerSpacing = new KoUnitDoubleSpinBox( grpHeader, 0.0, 999.0, 0.5, kwhf.ptHeaderBodySpacing, unit );
+    m_footerSpacing = new KoUnitDoubleSpinBox( grpFooter, 0.0, 999.0, 0.5, kwhf.ptFooterBodySpacing, unit );
+    m_footnoteSpacing = new KoUnitDoubleSpinBox( grpFootEndnote, 0.0, 999.0, 0.5, kwhf.ptFootNoteBodySpacing, unit );
 
-    lay = new Q3HBoxLayout(footerSpacingPane);
-    m_footerSpacing = new KoUnitDoubleSpinBox( footerSpacingPane, 0.0, 999.0, 0.5, kwhf.ptFooterBodySpacing, unit );
-    lay->addWidget(m_footerSpacing);
-
-    lay = new Q3HBoxLayout(footnotePane);
-    m_footnoteSpacing = new KoUnitDoubleSpinBox( footnotePane, 0.0, 999.0, 0.5, kwhf.ptFootNoteBodySpacing, unit );
-    lay->addWidget(m_footnoteSpacing);
-
+    QHBoxLayout* lay = new QHBoxLayout( grpHeader );
+    lay->addWidget( lblHeaderDesc );
+    lay->addWidget( m_headerSpacing );
+    lay->setAlignment( m_headerSpacing, Qt::AlignRight );
+    
+    lay = new QHBoxLayout( grpFooter );
+    lay->addWidget( lblFooterDesc );
+    lay->addWidget( m_footerSpacing );
+    lay->setAlignment( m_footerSpacing, Qt::AlignRight );
+    
+    lay = new QHBoxLayout( grpFootEndnote );
+    lay->addWidget( lblFootEndnoteDesc );
+    lay->addWidget( m_footnoteSpacing );
+    lay->setAlignment( m_footnoteSpacing, Qt::AlignRight );
+   
     if ( kwhf.header == HF_FIRST_DIFF || kwhf.header == HF_FIRST_EO_DIFF )
         rhFirst->setChecked( true );
     if ( kwhf.header == HF_EO_DIFF || kwhf.header == HF_FIRST_EO_DIFF )
@@ -48,6 +55,8 @@ KoPageLayoutHeader::KoPageLayoutHeader(QWidget *parent, KoUnit::Unit unit, const
         rfFirst->setChecked( true );
     if ( kwhf.footer == HF_EO_DIFF || kwhf.footer == HF_FIRST_EO_DIFF )
         rfEvenOdd->setChecked( true );
+
+    setupUi( this );
 }
 
 const KoKWHeaderFooter& KoPageLayoutHeader::headerFooter() {

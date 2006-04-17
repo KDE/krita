@@ -20,13 +20,14 @@
 #ifndef kopagelayoutsize_h
 #define kopagelayoutsize_h
 
-#include <q3groupbox.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
 #include <kdialogbase.h>
 #include "KoPageLayout.h"
 #include "KoPageLayoutDia.h"
 
+class QGroupBox;
+class QButtonGroup;
 class QComboBox;
 class KoUnitDoubleSpinBox;
 class KoPageLayoutColumns;
@@ -34,7 +35,8 @@ class KoPageLayoutColumns;
 /**
  * This class is a widget that shows the KoPageLayout data structure and allows the user to change it.
  */
-class KoPageLayoutSize : public QWidget {
+class KoPageLayoutSize : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -90,7 +92,8 @@ protected:
     KoUnitDoubleSpinBox *ebrTop;
     KoUnitDoubleSpinBox *ebrBottom;
     KoPagePreview *pgPreview;
-    Q3ButtonGroup *m_orientGroup;
+    QGroupBox *m_orientBox;
+    QButtonGroup* m_orientGroup;
 
 protected slots:
     void formatChanged( int );

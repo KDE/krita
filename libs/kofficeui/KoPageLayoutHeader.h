@@ -21,16 +21,18 @@
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
-#include "KoPageLayoutHeaderBase.h"
+#include "ui_KoPageLayoutHeaderBase.h"
 
-class QWidget;
+#include <QWidget>
+
 class KoUnitDoubleSpinBox;
 class KoPagePreview;
 
 /**
  * This class is a widget that shows the KoKWHeaderFooter data structure and allows the user to change it.
  */
-class KoPageLayoutHeader : public KoPageLayoutHeaderBase {
+class KoPageLayoutHeader : public QWidget, public Ui::KoPageLayoutHeaderBase
+{
     Q_OBJECT
 
 public:

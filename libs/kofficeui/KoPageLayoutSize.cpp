@@ -27,38 +27,41 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <khbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
 
-#include <Q3GroupBox>
-#include <Q3ButtonGroup>
-//Added by qt3to4:
+#include <QLabel>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QButtonGroup>
+#include <QGroupBox>
 #include <QPixmap>
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 
 KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns,  bool unitChooser, bool enableBorders)
-    : QWidget(parent), m_blockSignals(false) {
+    : QWidget(parent), m_blockSignals(false)
+{
     m_layout = layout;
     m_unit = unit;
 
-    Q3GridLayout *grid1 = new Q3GridLayout( this, 5, 2, 0, KDialog::spacingHint() );
+    QGridLayout *grid1 = new QGridLayout( this );
+    grid1->setSpacing( KDialog::spacingHint() );
     if ( unitChooser ) {
-        // ------------- unit _______________
-        QWidget* unitFrame = new QWidget( this );
+        // ------------- unit---------------
+	QWidget* unitFrame = new QWidget( this );
         grid1->addWidget( unitFrame, 0, 0, Qt::AlignLeft );
-        Q3BoxLayout* unitLayout = new Q3HBoxLayout( unitFrame, 0, KDialog::spacingHint() );
+        QHBoxLayout* unitLayout = new QHBoxLayout( unitFrame );
+	unitLayout->setSpacing( KDialog::spacingHint() );
 
         // label unit
         QLabel *lpgUnit = new QLabel( i18n( "Unit:" ), unitFrame );
         unitLayout->addWidget( lpgUnit, 0, Qt::AlignRight | Qt::AlignVCenter );
 
         // combo unit
-        QComboBox *cpgUnit = new QComboBox( false, unitFrame, "cpgUnit" );
+        QComboBox *cpgUnit = new QComboBox( unitFrame );
+	cpgUnit->setEditable( false );
         lpgUnit->setBuddy( cpgUnit );
-        cpgUnit->insertStringList( KoUnit::listOfUnitName() );
-        cpgUnit->setCurrentItem( unit );
+        cpgUnit->addItems( KoUnit::listOfUnitName() );
+        cpgUnit->setCurrentIndex( unit );
         unitLayout->addWidget( cpgUnit, 0, Qt::AlignLeft | Qt::AlignVCenter );
         connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( setUnitInt( int ) ) );
     }
@@ -70,8 +73,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     }
 
     // -------------- page size -----------------
-    Q3GroupBox *formatFrame = new Q3GroupBox( i18n( "Page Size" ), this );
-    formatFrame->setOrientation( Qt::Vertical ),
+    QGroupBox *formatFrame = new QGroupBox( i18n( "Page Size" ), this );
     grid1->addWidget( formatFrame, 1, 0 );
 
     KHBox *formatPageSize = new KHBox( formatFrame );
@@ -81,8 +83,9 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     QLabel *lpgFormat = new QLabel( i18n( "&Size:" ), formatPageSize );
 
     // combo size
-    cpgFormat = new QComboBox( false, formatPageSize, "cpgFormat" );
-    cpgFormat->insertStringList( KoPageFormat::allFormats() );
+    cpgFormat = new QComboBox( formatPageSize );
+    cpgFormat->setEditable( false );
+    cpgFormat->addItems( KoPageFormat::allFormats() );
     lpgFormat->setBuddy( cpgFormat );
     connect( cpgFormat, SIGNAL( activated( int ) ), this, SLOT( formatChanged( int ) ) );
 
@@ -113,31 +116,31 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     connect( epgHeight, SIGNAL( valueChangedPt(double ) ), this, SLOT( heightChanged(double) ) );
 
     // --------------- orientation ---------------
-    m_orientGroup = new Q3ButtonGroup( i18n( "Orientation" ), this );
-    m_orientGroup->setOrientation( Qt::Horizontal );
-    m_orientGroup->setInsideSpacing( KDialog::spacingHint() );
-    grid1->addWidget( m_orientGroup, 2, 0 );
+    m_orientBox = new QGroupBox( i18n( "Orientation" ), this );
+    m_orientGroup = new QButtonGroup( m_orientBox );
+    grid1->addWidget( m_orientBox, 2, 0 );
 
-    QLabel* lbPortrait = new QLabel( m_orientGroup );
+    QLabel* lbPortrait = new QLabel( m_orientBox );
     lbPortrait->setPixmap( QPixmap( UserIcon( "koPortrait" ) ) );
     lbPortrait->setMaximumWidth( lbPortrait->pixmap()->width() );
-    new QRadioButton( i18n("&Portrait"), m_orientGroup );
 
-    QLabel* lbLandscape = new QLabel( m_orientGroup );
+    QLabel* lbLandscape = new QLabel( m_orientBox );
     lbLandscape->setPixmap( QPixmap( UserIcon( "koLandscape" ) ) );
     lbLandscape->setMaximumWidth( lbLandscape->pixmap()->width() );
-    new QRadioButton( i18n("La&ndscape"), m_orientGroup );
+
+    m_orientGroup->addButton( new QRadioButton( i18n("&Portrait"), m_orientBox ) );
+    m_orientGroup->addButton( new QRadioButton( i18n("La&ndscape"), m_orientBox ) );
 
     connect( m_orientGroup, SIGNAL (clicked (int)), this, SLOT( orientationChanged(int) ));
 
     // --------------- page margins ---------------
-    Q3GroupBox *marginsFrame = new Q3GroupBox( i18n( "Margins" ), this );
-    marginsFrame->setColumnLayout( 0, Qt::Vertical );
+    QGroupBox *marginsFrame = new QGroupBox( i18n( "Margins" ), this );
     marginsFrame->layout()->setMargin( KDialog::marginHint() );
     grid1->addWidget( marginsFrame, 3, 0 );
 
-    Q3GridLayout *marginsLayout = new Q3GridLayout( marginsFrame->layout(), 3, 3,
-       KDialog::spacingHint() );
+    QGridLayout *marginsLayout = new QGridLayout( marginsFrame );
+    marginsLayout->setSpacing( KDialog::spacingHint() );
+    marginsFrame->setLayout( marginsLayout );
 
     // left margin
     ebrLeft = new KoUnitDoubleSpinBox( marginsFrame, "Left" );
@@ -203,9 +206,9 @@ void KoPageLayoutSize::updatePreview() {
 
 void KoPageLayoutSize::setValues() {
     // page format
-    cpgFormat->setCurrentItem( m_layout.format );
+    cpgFormat->setCurrentIndex( m_layout.format );
     // orientation
-    m_orientGroup->setButton( m_layout.orientation == PG_PORTRAIT ? 0: 1 );
+    m_orientGroup->button( m_layout.orientation == PG_PORTRAIT ? 0: 1 )->setChecked( true );
 
     setUnit( m_unit );
     updatePreview();

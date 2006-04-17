@@ -33,27 +33,21 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qlineedit.h>
-#include <q3buttongroup.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <q3hbox.h>
-//#include <qvgroupbox.h>
-//#include <qhbuttongroup.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QPainter>
+#include <QLineEdit>
+#include <QButtonGroup>
+#include <QRadioButton>
+#include <QCheckBox>
+
 
 /******************************************************************/
 /* class KoPagePreview                                            */
 /******************************************************************/
 
 /*===================== constrcutor ==============================*/
-KoPagePreview::KoPagePreview( QWidget* parent, const char *name, const KoPageLayout& layout )
-    : Q3GroupBox( i18n( "Page Preview" ), parent, name )
+KoPagePreview::KoPagePreview( QWidget* parent, const char* /*name*/, const KoPageLayout& layout )
+    : QGroupBox( i18n( "Page Preview" ), parent )
 {
     setPageLayout( layout );
     columns = 1;
@@ -87,14 +81,14 @@ void KoPagePreview::setPageLayout( const KoPageLayout &layout )
     m_textFrameWidth = m_pageWidth - ( layout.ptLeft + layout.ptRight ) * resolutionX * z;
     m_textFrameHeight = m_pageHeight - ( layout.ptTop + layout.ptBottom ) * resolutionY * z;
 
-    repaint( true );
+    update();
 }
 
 /*=================== set layout =================================*/
 void KoPagePreview::setPageColumns( const KoColumns &_columns )
 {
     columns = _columns.columns;
-    repaint( true );
+    update();
 }
 
 /*======================== draw contents =========================*/
@@ -255,10 +249,11 @@ const KoKWHeaderFooter& KoPageLayoutDia::headerFooter()
 /*================ setup page size & margins tab ==================*/
 void KoPageLayoutDia::setupTab1( bool enableBorders )
 {
-    QWidget *tab1 = addPage(i18n( "Page Size && &Margins" ));
-    Q3HBoxLayout *lay = new Q3HBoxLayout(tab1);
+    QWidget* tab1 = addPage(i18n( "Page Size && &Margins" ));
+    QHBoxLayout *lay = new QHBoxLayout(tab1);
     m_pageSizeTab = new KoPageLayoutSize(tab1, m_layout, m_unit, m_column, !(flags & DISABLE_UNIT), enableBorders );
     lay->addWidget(m_pageSizeTab);
+    tab1->setLayout( lay );
     m_pageSizeTab->show();
     connect (m_pageSizeTab, SIGNAL( propertyChange(KoPageLayout&)),
             this, SLOT (sizeUpdated( KoPageLayout&)));
@@ -281,13 +276,13 @@ void KoPageLayoutDia::sizeUpdated(KoPageLayout &layout) {
 void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
 {
     QWidget *tab2 = addPage(i18n( "H&eader && Footer" ));
-    Q3GridLayout *grid2 = new Q3GridLayout( tab2, 7, 2, 0, KDialog::spacingHint() );
+    QGridLayout *grid2 = new QGridLayout( tab2 );
+    grid2->setSpacing( KDialog::spacingHint() );
 
     // ------------- header ---------------
-    Q3GroupBox *gHead = new Q3GroupBox( 0, Qt::Vertical, i18n( "Head Line" ), tab2 );
-    gHead->layout()->setSpacing(KDialog::spacingHint());
-    gHead->layout()->setMargin(KDialog::marginHint());
-    Q3GridLayout *headGrid = new Q3GridLayout( gHead->layout(), 2, 3 );
+    QGroupBox *gHead = new QGroupBox( i18n( "Head Line" ), tab2 );
+    QGridLayout *headGrid = new QGridLayout( gHead );
+    gHead->setLayout( headGrid );
 
     QLabel *lHeadLeft = new QLabel( i18n( "Left:" ), gHead );
     headGrid->addWidget( lHeadLeft, 0, 0 );
@@ -313,10 +308,9 @@ void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
     grid2->addWidget( gHead, 0, 2, 1, 1 );
 
     // ------------- footer ---------------
-    Q3GroupBox *gFoot = new Q3GroupBox( 0, Qt::Vertical, i18n( "Foot Line" ), tab2 );
-    gFoot->layout()->setSpacing(KDialog::spacingHint());
-    gFoot->layout()->setMargin(KDialog::marginHint());
-    Q3GridLayout *footGrid = new Q3GridLayout( gFoot->layout(), 2, 3 );
+    QGroupBox *gFoot = new QGroupBox( i18n( "Foot Line" ), tab2 );
+    QGridLayout *footGrid = new QGridLayout( gFoot );
+    gFoot->setLayout( footGrid );
 
     QLabel *lFootLeft = new QLabel( i18n( "Left:" ), gFoot );
     footGrid->addWidget( lFootLeft, 0, 0 );
@@ -363,7 +357,7 @@ void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
 void KoPageLayoutDia::setupTab3()
 {
     QWidget *tab3 = addPage(i18n( "Col&umns" ));
-    Q3HBoxLayout *lay = new Q3HBoxLayout(tab3);
+    QHBoxLayout *lay = new QHBoxLayout(tab3);
     m_columnsTab = new KoPageLayoutColumns(tab3, m_column, m_unit, m_layout);
     m_columnsTab->layout()->setMargin(0);
     lay->addWidget(m_columnsTab);
@@ -383,7 +377,7 @@ void KoPageLayoutDia::columnsUpdated(KoColumns &columns) {
 void KoPageLayoutDia::setupTab4(const KoKWHeaderFooter kwhf )
 {
     QWidget *tab4 = addPage(i18n( "H&eader && Footer" ));
-    Q3HBoxLayout *lay = new Q3HBoxLayout(tab4);
+    QHBoxLayout *lay = new QHBoxLayout(tab4);
     m_headerTab = new KoPageLayoutHeader(tab4, m_unit, kwhf);
     m_headerTab->layout()->setMargin(0);
     lay->addWidget(m_headerTab);

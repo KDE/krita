@@ -492,6 +492,8 @@ void QWinMetaFile::polygon( long, short* parm )
       mPainter.drawPolygon( *pa, Qt::WindingFill );
     else
       mPainter.drawPolygon( *pa, Qt::OddEvenFill );
+
+    delete pa;
 }
 
 
@@ -1255,11 +1257,9 @@ bool QWinMetaFile::dibToBmp( QImage& bmp, const char* dib, long size )
     }  BMPFILEHEADER;
 
     int sizeBmp = size + 14;
-
     QByteArray pattern;       // BMP header and DIB data
-    pattern.resize( sizeBmp );
-    pattern.fill(0);
-    memcpy( &pattern[ 14 ], dib, size );
+    pattern.fill( 0, sizeBmp );  //resize and fill
+    pattern.insert( 14, QByteArray::fromRawData(dib, size) );
 
     // add BMP header
     BMPFILEHEADER* bmpHeader;

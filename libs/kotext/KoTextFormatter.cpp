@@ -387,7 +387,7 @@ bool KoTextFormatterCore::format()
                     Q_ASSERT( maxlen <= hylen );
                     // If this word was already hyphenated (at the previous line),
                     // don't break it there again. We can only break after firstChar.
-                    int minPos = qMax( 0, (firstChar - &string->at(0)) - wordStart );
+                    int minPos = qMax( 0, int(firstChar - &string->at(0)) - wordStart );
 
                     // Check hyphenation positions from the end
                     for ( int hypos = maxlen-1 ; hypos >= minPos ; --hypos )

@@ -133,6 +133,7 @@ void KoToolBox::setupTools()
             m_idToActionMap.append( tool );
         }
         tools->show();
+        addWidget(tools);
         addSeparator();
         m_toolBoxes.append(tools);
     }

@@ -1960,7 +1960,7 @@ void KoParagTabulatorsWidget::newClicked() {
             newTab.type=m_tabList[selected].type;
             newTab.filling=m_tabList[selected].filling;
             newTab.ptWidth=m_tabList[selected].ptWidth;
-            m_tabList.insert(m_tabList.at(selected), newTab);
+            m_tabList.insert(selected, newTab);
             lstTabs->insertItem( tabToString(newTab), selected);
             lstTabs->setCurrentItem(lstTabs->findItem(tabToString(newTab)));
             sortLists();

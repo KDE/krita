@@ -570,19 +570,19 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     // This has to be the type list, not the style list (we need the "no underline" case).
     // Of course we could even have both...
     m_underlineItem->addItems( KoTextFormat::underlineTypeList() );
-    m_underlineItem->setCurrentRow( (int)m_ctx->m_underline );
+    m_underlineItem->setCurrentIndex( (int)m_ctx->m_underline );
 
     m_checkStrikeOut= new QCheckBox( i18n( "Strikeout:" ), page);
 
     m_strikeOutItem = new QComboBox( page );
     m_strikeOutItem->addItems( KoTextFormat::strikeOutTypeList() );
-    m_strikeOutItem->setCurrentRow( (int)m_ctx->m_strikeOut );
+    m_strikeOutItem->setCurrentIndex( (int)m_ctx->m_strikeOut );
 
 
     m_checkFontAttribute = new QCheckBox( i18n( "Capitalization:" ), page);
     m_fontAttributeItem = new QComboBox( page );
     m_fontAttributeItem->addItems( KoTextFormat::fontAttributeList() );
-    m_fontAttributeItem->setCurrentRow( (int)m_ctx->m_attribute );
+    m_fontAttributeItem->setCurrentIndex( (int)m_ctx->m_attribute );
 
     m_checkLanguage = new QCheckBox( i18n( "Language:" ), page);
     m_languageItem = new QComboBox( page );
@@ -638,7 +638,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_vertAlignItem->addItem( i18n( "Normal" ) );
     m_vertAlignItem->addItem( i18n( "Subscript" ) );
     m_vertAlignItem->addItem( i18n( "Superscript" ) );
-    m_vertAlignItem->setCurrentRow( (int)m_ctx->m_vertAlign );
+    m_vertAlignItem->setCurrentIndex( (int)m_ctx->m_vertAlign );
 
     m_grid->addWidget( m_checkFamily, 1, 0 );
     m_grid->addWidget( m_checkSize, 2, 0 );
@@ -827,11 +827,11 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_size = m_sizeItem->cleanText().toInt();
     m_ctx->m_color = m_colorItem->color();
     m_ctx->m_backGroundColor = m_bgColorItem->color();
-    m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentRow();
-    m_ctx->m_underline = (KoTextFormat::UnderlineType)m_underlineItem->currentRow();
-    m_ctx->m_strikeOut = (KoTextFormat::StrikeOutType)m_strikeOutItem->currentRow();
-    m_ctx->m_attribute = (KoTextFormat::AttributeStyle)m_fontAttributeItem->currentRow();
-    m_ctx->m_language = KoGlobal::listTagOfLanguages()[m_languageItem->currentRow()];
+    m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentIndex();
+    m_ctx->m_underline = (KoTextFormat::UnderlineType)m_underlineItem->currentIndex();
+    m_ctx->m_strikeOut = (KoTextFormat::StrikeOutType)m_strikeOutItem->currentIndex();
+    m_ctx->m_attribute = (KoTextFormat::AttributeStyle)m_fontAttributeItem->currentIndex();
+    m_ctx->m_language = KoGlobal::listTagOfLanguages()[m_languageItem->currentIndex()];
 
     m_ctx->m_options = options;
 }

@@ -121,7 +121,7 @@ void KoTextIterator::init( const Q3ValueList<KoTextObject *> & lstObjects, KoTex
         // always set the ending point
         m_lastParag = forw ? lastParag : firstParag;
         m_lastIndex = forw ? lastIndex : firstIndex;
-        m_currentTextObj = forw ? m_lstObjects.begin() : m_lstObjects.fromLast();
+        m_currentTextObj = forw ? m_lstObjects.at(0) : m_lstObjects.fromLast();
     }
 
     assert( *m_currentTextObj ); // all branches set it

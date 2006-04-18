@@ -154,7 +154,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
     setAcceptLocalizedNumbers( true );
     setUnit( unit );
     changeValue( value );
-    setLineStep( 0.5 );
+    setSingleStep( 0.5 );
 
     connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
 }
@@ -178,7 +178,7 @@ KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
     double oldvalue = KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
     KDoubleSpinBox::setMinimum( KoUnit::toUserValue( m_lowerInPoints, unit ) );
     KDoubleSpinBox::setMaximum( KoUnit::toUserValue( m_upperInPoints, unit ) );
-    KDoubleSpinBox::setLineStep( KoUnit::toUserValue( m_stepInPoints, unit ) );
+    KDoubleSpinBox::setSingleStep( KoUnit::toUserValue( m_stepInPoints, unit ) );
     KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
     m_unit = unit;
     setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
@@ -204,13 +204,13 @@ void KoUnitDoubleSpinBox::setMaximum( double max )
 void KoUnitDoubleSpinBox::setLineStep( double step )
 {
   m_stepInPoints = KoUnit::toUserValue(step, KoUnit::U_PT );
-  KDoubleSpinBox::setLineStep( step );
+  KDoubleSpinBox::setSingleStep( step );
 }
 
 void KoUnitDoubleSpinBox::setLineStepPt( double step )
 {
   m_stepInPoints = step;
-  KDoubleSpinBox::setLineStep( KoUnit::toUserValue( m_stepInPoints, m_unit ) );
+  KDoubleSpinBox::setSingleStep( KoUnit::toUserValue( m_stepInPoints, m_unit ) );
 }
 
 void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )

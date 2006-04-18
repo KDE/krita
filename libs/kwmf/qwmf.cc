@@ -56,6 +56,7 @@ public:
 class WinObjHandle
 {
 public:
+	virtual ~WinObjHandle() {}
     virtual void apply( QPainter& p ) = 0;
 };
 

@@ -25,14 +25,14 @@
 #include "KoTabBar.h"
 
 #include <qdrawutil.h>
-#include <qpainter.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qstyle.h>
-#include <qtimer.h>
-#include <qtoolbutton.h>
+#include <QPainter>
+#include <QString>
+#include <QStringList>
+#include <QStyle>
+#include <QTimer>
+#include <QToolButton>
 #include <q3valuevector.h>
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QWheelEvent>
 #include <QPixmap>
@@ -198,10 +198,10 @@ void KoTabBarPrivate::layoutTabs()
     {
         // left to right
         int x = 0;
-        for( unsigned c = 0; c < tabs.count(); c++ )
+        for( int c = 0; c < tabs.count(); c++ )
         {
             QRect rect;
-            if( (int)c >= firstTab-1 )
+            if( c >= firstTab-1 )
             {
                 QString text = tabs[ c ];
                 int tw = fm.width( text ) + 4;
@@ -212,7 +212,7 @@ void KoTabBarPrivate::layoutTabs()
         }
 
         lastTab = tabRects.count();
-        for( unsigned i = 0; i < tabRects.count(); i++ )
+        for( int i = 0; i < tabRects.count(); i++ )
             if( tabRects[i].right()-10+offset > tabbar->width() )
             {
                 lastTab = i;
@@ -223,10 +223,10 @@ void KoTabBarPrivate::layoutTabs()
     {
         // right to left
         int x = tabbar->width() - offset;
-        for( unsigned c = 0; c < tabs.count(); c++ )
+        for( int c = 0; c < tabs.count(); c++ )
         {
             QRect rect;
-            if( (int)c >= firstTab-1 )
+            if( c >= firstTab-1 )
             {
                 QString text = tabs[ c ];
                 int tw = fm.width( text ) + 4;
@@ -237,7 +237,7 @@ void KoTabBarPrivate::layoutTabs()
         }
 
         lastTab = tabRects.count();
-        for( unsigned i = tabRects.count()-1; i>0; i-- )
+        for( int i = tabRects.count()-1; i>0; i-- )
             if( tabRects[i].left() > 0 )
             {
                 lastTab = i+1;
@@ -248,7 +248,7 @@ void KoTabBarPrivate::layoutTabs()
 
 int KoTabBarPrivate::tabAt( const QPoint& pos )
 {
-    for( unsigned i = 0; i < tabRects.count(); i++ )
+    for( int i = 0; i < tabRects.count(); i++ )
     {
       QRect rect = tabRects[ i ];
       if( rect.isNull() ) continue;
@@ -280,20 +280,21 @@ void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& te
     painter.save();
 
     // fill it first  
-    QBrush bg = tabbar->colorGroup().background();
-    if( active ) bg = tabbar->colorGroup().base();
+    QBrush bg = tabbar->palette().background();
+    if( active )
+       bg = tabbar->palette().base();
     painter.setBrush( bg );
     painter.setPen( QPen( Qt::NoPen ) );
     painter.drawPolygon( polygon );
 
     // draw the lines
-    painter.setPen( tabbar->colorGroup().dark() );
+    painter.setPen( tabbar->palette().color( QPalette::Dark) );
     if( !active )
       painter.drawLine( rect.x()-25, rect.y(), rect.right()+25, rect.top() );
     // Qt4: painter.setRenderHint( QPainter::Antialiasing );
     painter.drawPolyline( polygon );
 
-    painter.setPen( tabbar->colorGroup().buttonText() );
+    painter.setPen( tabbar->palette().color( QPalette::ButtonText ) );
     QFont f = painter.font();
     if( active ) f.setBold( true );
     painter.setFont( f );
@@ -324,24 +325,24 @@ void KoTabBarPrivate::layoutButtons()
     if( !reverseLayout )
     {
         scrollFirstButton->setGeometry( 0, 0, bw, bw );
-        scrollFirstButton->setPixmap( arrow_leftmost_xpm );
+        scrollFirstButton->setIcon( QIcon( arrow_leftmost_xpm ) );
         scrollBackButton->setGeometry( bw, 0, bw, bw );
-        scrollBackButton->setPixmap( arrow_left_xpm );
+        scrollBackButton->setIcon( QIcon( arrow_left_xpm ) );
         scrollForwardButton->setGeometry( bw*2, 0, bw, bw );
-        scrollForwardButton->setPixmap( arrow_right_xpm );
+        scrollForwardButton->setIcon( QIcon( arrow_right_xpm ) );
         scrollLastButton->setGeometry( bw*3, 0, bw, bw );
-        scrollLastButton->setPixmap( arrow_rightmost_xpm );
+        scrollLastButton->setIcon( QIcon( arrow_rightmost_xpm ) );
     }
     else
     {
         scrollFirstButton->setGeometry( w-bw, 0, bw, bw );
-        scrollFirstButton->setPixmap( arrow_rightmost_xpm );
+        scrollFirstButton->setIcon( QIcon( arrow_rightmost_xpm ) );
         scrollBackButton->setGeometry( w-2*bw, 0, bw, bw );
-        scrollBackButton->setPixmap( arrow_right_xpm );
+        scrollBackButton->setIcon( QIcon( arrow_right_xpm ) );
         scrollForwardButton->setGeometry( w-3*bw, 0, bw, bw );
-        scrollForwardButton->setPixmap( arrow_left_xpm );
+        scrollForwardButton->setIcon( QIcon( arrow_left_xpm ) );
         scrollLastButton->setGeometry( w-4*bw, 0, bw, bw );
-        scrollLastButton->setPixmap( arrow_leftmost_xpm );
+        scrollLastButton->setIcon( QIcon( arrow_leftmost_xpm ) );
     }
  }
 
@@ -354,8 +355,8 @@ void KoTabBarPrivate::updateButtons()
 }
 
 // creates a new tabbar
-KoTabBar::KoTabBar( QWidget* parent, const char* name )
-    : QWidget( parent, name, Qt::WResizeNoErase | Qt::WNoAutoErase )
+KoTabBar::KoTabBar( QWidget* parent, const char* /*name*/ )
+    : QWidget( parent, Qt::WResizeNoErase | Qt::WNoAutoErase )
 {
     d = new KoTabBarPrivate;
     d->tabbar = this;
@@ -403,13 +404,13 @@ void KoTabBar::addTab( const QString& text )
 // removes a tab
 void KoTabBar::removeTab( const QString& text )
 {
-    int i = d->tabs.findIndex( text );
+    int i = d->tabs.indexOf( text );
     if ( i == -1 ) return;
 
     if ( d->activeTab == i + 1 )
         d->activeTab = 0;
 
-    d->tabs.remove( text );
+    d->tabs.removeAll( text );
 
     update();
 }
@@ -464,7 +465,7 @@ void KoTabBar::setTabs( const QStringList& list )
 
     if( !left.isNull() )
     {
-        d->firstTab = d->tabs.findIndex( left ) + 1;
+        d->firstTab = d->tabs.indexOf( left ) + 1;
         if( d->firstTab > (int)d->tabs.count() )
             d->firstTab = 1;
         if( d->firstTab <= 0 )
@@ -553,7 +554,7 @@ void KoTabBar::scrollLast()
     {
         int fullWidth = d->tabRects[ d->tabRects.count()-1 ].right();
         int delta = fullWidth - width() + d->offset;
-        for( unsigned i = 0; i < d->tabRects.count(); i++ )
+        for( int i = 0; i < d->tabRects.count(); i++ )
             if( d->tabRects[i].x() > delta )
             {
                 d->firstTab = i+1;
@@ -579,7 +580,7 @@ void KoTabBar::scrollLast()
 
 void KoTabBar::ensureVisible( const QString& tab )
 {
-    int i = d->tabs.findIndex( tab );
+    int i = d->tabs.indexOf( tab );
     if ( i == -1 )
         return;
     i++;
@@ -597,31 +598,27 @@ void KoTabBar::ensureVisible( const QString& tab )
             scrollForward();
 }
 
-void KoTabBar::moveTab( unsigned tab, unsigned target )
+void KoTabBar::moveTab( int tab, int target )
 {
-#warning "kde4: port it"
-#if 0
-    QString tabName = d->tabs[ tab ];
-    QStringList::Iterator it;
+    QString tabName = d->tabs.takeAt( tab );
 
-    //it = d->tabs.at( tab );
-    d->tabs.removeAt(tab );
+    if( target > tab )
+	target--;
 
-    if( target > tab ) target--;
-    it = d->tabs.takeAt( target );
     if( target >= d->tabs.count() )
-      it = d->tabs.end();
-    d->tabs.insert( it, tabName );
-
-    if( d->activeTab == (int)tab+1 )
+	d->tabs.append( tabName );
+    else
+        d->tabs.insert( target, tabName );
+	
+    if( d->activeTab == tab+1 )
         d->activeTab = target+1;
-#endif
+
     update();
 }
 
 void KoTabBar::setActiveTab( const QString& text )
 {
-    int i = d->tabs.findIndex( text );
+    int i = d->tabs.indexOf( text );
     if ( i == -1 )
         return;
 
@@ -663,16 +660,16 @@ void KoTabBar::paintEvent( QPaintEvent* )
 {
     if ( d->tabs.count() == 0 )
     {
-        erase();
+        update();
         return;
     }
 
     QPainter painter;
     QPixmap pm( size() );
-    pm.fill( colorGroup().background() );
-    painter.begin( &pm, this );
+    pm.fill( palette().color( QPalette::Window ) );
+    painter.begin( &pm );
 
-    painter.setPen( colorGroup().dark() );
+    painter.setPen( palette().color(QPalette::Dark) );
     painter.drawLine( 0, 0, width(), 0 );
 
     if( !d->reverseLayout )
@@ -714,14 +711,16 @@ void KoTabBar::paintEvent( QPaintEvent* )
             d->drawMoveMarker( painter, x, rect.y() );
         }
     }
-
     painter.end();
+      
+    painter.begin( this );
     
     if( !d->reverseLayout )
-         bitBlt( this, d->offset, 0, &pm );
+         painter.drawPixmap( d->offset, 0, pm );
     else
-         bitBlt( this, 0, 0, &pm );
-
+         painter.drawPixmap( 0, 0, pm );
+    
+    painter.end();
 }
 
 void KoTabBar::resizeEvent( QResizeEvent* )
@@ -740,8 +739,7 @@ QSize KoTabBar::sizeHint() const
 
 void KoTabBar::renameTab( const QString& old_name, const QString& new_name )
 {
-    QStringList::Iterator it = d->tabs.find( old_name );
-    (*it) = new_name;
+    d->tabs.replace( d->tabs.indexOf( old_name ), new_name );
 
     update();
 }
@@ -758,7 +756,7 @@ void KoTabBar::mousePressEvent( QMouseEvent* ev )
 {
     if ( d->tabs.count() == 0 )
     {
-        erase();
+        update();
         return;
     }
 
@@ -871,8 +869,8 @@ void KoTabBar::wheelEvent( QWheelEvent * e )
 {
   if ( d->tabs.count() == 0 )
   {
-    erase();
-    return;
+      update();
+      return;
   }
 
   // Currently one wheel movement is a delta of 120.

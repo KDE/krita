@@ -25,9 +25,8 @@
 #ifndef kotabbar_h
 #define kotabbar_h
 
-#include <qwidget.h>
-#include <qstringlist.h>
-//Added by qt3to4:
+#include <QWidget>
+#include <QStringList>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QResizeEvent>
@@ -179,7 +178,7 @@ public slots:
      * Example 2: for these tabs: X - Y - Z, moveTab(0,3) will
      * move tab X after tab Z so that the result is Y - Z - X.
      */
-    void moveTab( unsigned tab, unsigned target );
+    void moveTab( int tab, int target );
 
     /**
      * Scrolls one tab back. Does nothing if the leftmost tab (rightmost tab

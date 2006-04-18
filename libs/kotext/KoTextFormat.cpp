@@ -1310,7 +1310,7 @@ QString KoTextFormat::displayedString( const QString& str )const
     case ATT_SMALL_CAPS:
         return str.upper();
     case ATT_LOWER:
-        return str.lower();
+        return str.toLower();
     default:
         kDebug(32500)<<" Error in AttributeStyle \n";
         return str;
@@ -1328,7 +1328,7 @@ QChar KoTextFormat::displayedChar( QChar c )const
     case ATT_UPPER:
         return c.upper();
     case ATT_LOWER:
-        return c.lower();
+        return c.toLower();
     default:
         kDebug(32500)<<" Error in AttributeStyle \n";
         return c;

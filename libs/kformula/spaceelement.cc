@@ -134,16 +134,16 @@ bool SpaceElement::readAttributesFromDom( QDomElement element )
     }
     QString widthStr = element.attribute( "WIDTH" );
     if( !widthStr.isNull() ) {
-        if ( widthStr.lower() == "quad" ) {
+        if ( widthStr.toLower() == "quad" ) {
             spaceWidth = QUAD;
         }
-        else if ( widthStr.lower() == "thick" ) {
+        else if ( widthStr.toLower() == "thick" ) {
             spaceWidth = THICK;
         }
-        else if ( widthStr.lower() == "medium" ) {
+        else if ( widthStr.toLower() == "medium" ) {
             spaceWidth = MEDIUM;
         }
-        else if ( widthStr.lower() == "negthin" ) {
+        else if ( widthStr.toLower() == "negthin" ) {
             spaceWidth = NEGTHIN;
         }
         else {

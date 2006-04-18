@@ -498,23 +498,23 @@ void KoTextViewIface::setBottomBorderWidth( double _witdh )
 void KoTextViewIface::changeCaseOfText( const QString & caseType)
 {
     KCommand *cmd=0L;
-    if( caseType.lower() == "uppercase" )
+    if( caseType.toLower() == "uppercase" )
     {
         cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
     }
-    else if( caseType.lower() =="lowercase" )
+    else if( caseType.toLower() =="lowercase" )
     {
         cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
     }
-    else if( caseType.lower() =="titlecase" )
+    else if( caseType.toLower() =="titlecase" )
     {
         cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
     }
-    else if( caseType.lower() =="togglecase" )
+    else if( caseType.toLower() =="togglecase" )
     {
         cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
     }
-    else if ( caseType.lower() =="sentencecase" )
+    else if ( caseType.toLower() =="sentencecase" )
     {
         cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::SentenceCase );
 

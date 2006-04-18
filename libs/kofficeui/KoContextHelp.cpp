@@ -390,8 +390,8 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	buttonLayout = new Q3HBoxLayout( layout );
 	//layout->addLayout( buttonLayout, 2, 0 );
 	layout->addWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 3, 1 );
-	buttonLayout->add( m_close = new KoTinyButton( KoTinyButton::Close, this ) );
-	buttonLayout->add( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
+	buttonLayout->addWidget( m_close = new KoTinyButton( KoTinyButton::Close, this ) );
+	buttonLayout->addWidget( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
 	layout->addColSpacing( 2, 2 );
 	layout->addRowSpacing( 3, 2 );
 	layout->setMargin( 3 );

@@ -41,7 +41,7 @@ KoGradient* KoGradientManager::loadGradient(const QString& filename)
 	const int result=filename.findRev('.');
 	if (result>=0)
 	{
-		strExt=filename.mid(result).lower();
+		strExt=filename.mid(result).toLower();
 	}
 
 	QFile f(filename);

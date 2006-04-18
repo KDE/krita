@@ -124,10 +124,10 @@ void KoParagCounter::load( QDomElement & element )
     m_depth = element.attribute("depth").toInt();
     m_customBulletChar = QChar( element.attribute("bullet").toInt() );
     m_prefix = element.attribute("lefttext");
-    if ( m_prefix.lower() == "(null)" ) // very old kword thing
+    if ( m_prefix.toLower() == "(null)" ) // very old kword thing
         m_prefix = QString::null;
     m_suffix = element.attribute("righttext");
-    if ( m_suffix.lower() == "(null)" )
+    if ( m_suffix.toLower() == "(null)" )
         m_suffix = QString::null;
     QString s = element.attribute("start");
     if ( s.isEmpty() )
@@ -135,7 +135,7 @@ void KoParagCounter::load( QDomElement & element )
     else if ( s[0].isDigit() )
         m_startNumber = s.toInt();
     else // support for very-old files
-        m_startNumber = s.lower()[0].toLatin1() - 'a' + 1;
+        m_startNumber = s.toLower()[0].toLatin1() - 'a' + 1;
     s = element.attribute("display-levels");
     if ( !s.isEmpty() )
         m_displayLevels = qMin( s.toInt(), m_depth+1 ); // can't be > depth+1
@@ -665,7 +665,7 @@ QString KoParagCounter::levelText( const KoTextParag *paragraph )
             text = makeAlphaUpperNumber( m_cache.number );
             break;
         case STYLE_ROM_NUM_L:
-            text = makeRomanNumber( m_cache.number ).lower();
+            text = makeRomanNumber( m_cache.number ).toLower();
             break;
         case STYLE_ROM_NUM_U:
             text = makeRomanNumber( m_cache.number ).upper();

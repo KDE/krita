@@ -148,7 +148,7 @@ QString KoFontDiaPreview::formatCapitalisation( const QString &string )
     case KoTextFormat::ATT_UPPER :
         return string.upper();
     case KoTextFormat::ATT_LOWER :
-        return string.lower();
+        return string.toLower();
     case KoTextFormat::ATT_SMALL_CAPS :
         return string.upper();
     default:

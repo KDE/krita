@@ -477,16 +477,16 @@ int KoSpinBox::mapTextToValue( bool * ok )
             ret = txt.toInt ( ok );
             break;
         case ALPHAB_L:
-            ret = KoParagCounter::fromAlphaLowerNumber( txt.lower() );
+            ret = KoParagCounter::fromAlphaLowerNumber( txt.toLower() );
             break;
         case ALPHAB_U:
             ret = KoParagCounter::fromAlphaUpperNumber( txt.upper() );
             break;
         case ROM_NUM_L:
-            ret = KoParagCounter::fromRomanNumber( txt.lower() );
+            ret = KoParagCounter::fromRomanNumber( txt.toLower() );
             break;
         case ROM_NUM_U:
-            ret = KoParagCounter::fromRomanNumber( txt.lower() ); // _not_ upper()
+            ret = KoParagCounter::fromRomanNumber( txt.toLower() ); // _not_ upper()
             break;
         case NONE:
         default:
@@ -1366,7 +1366,7 @@ KoParagDecorationWidget::KoParagDecorationWidget( QWidget * parent )
 {
     Q3VBoxLayout *tabLayout = new Q3VBoxLayout( this );
     wDeco = new KoParagDecorationTab( this );
-    tabLayout->add( wDeco );
+    tabLayout->addWidget( wDeco );
 
     // Set up Border Style combo box
     wDeco->cbBorderStyle->addItem( KoBorder::getStyle( KoBorder::SOLID ) );

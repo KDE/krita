@@ -56,7 +56,7 @@
 #include <QDesktopWidget>
 #include <QToolTip>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <QHideEvent>
 #include <QGridLayout>
 #include <Q3Frame>
@@ -126,8 +126,8 @@ private:
 
 class KoTemplateChooseDiaPrivate {
     public:
-	KoTemplateChooseDiaPrivate(const Q3CString& templateType, KInstance* instance,
-                                   const Q3CString &format,
+	KoTemplateChooseDiaPrivate(const QByteArray& templateType, KInstance* instance,
+                                   const QByteArray &format,
                                    const QString &nativeName,
                                    const QStringList& extraNativeMimeTypes,
                                    const KoTemplateChooseDia::DialogType &dialogType) :
@@ -142,9 +142,9 @@ class KoTemplateChooseDiaPrivate {
 
 	~KoTemplateChooseDiaPrivate() {}
 
-	Q3CString m_templateType;
+	QByteArray m_templateType;
 	KInstance* m_instance;
-	Q3CString m_format;
+	QByteArray m_format;
 	QString m_nativeName;
         QStringList m_extraNativeMimeTypes;
 
@@ -186,11 +186,11 @@ class KoTemplateChooseDiaPrivate {
 
 /*================================================================*/
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* instance,
-                                         const Q3CString &format,
+                                         const QByteArray &format,
                                          const QString &nativeName,
                                          const QStringList &extraNativeMimeTypes,
                                          const DialogType &dialogType,
-                                         const Q3CString& templateType) :
+                                         const QByteArray& templateType) :
     KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialogBase::Cancel,
                 KDialogBase::Ok)
 {
@@ -236,11 +236,11 @@ static bool cancelQuits() {
 
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
                                                             const KoTemplateChooseDia::DialogType &dialogType,
-                                                            const Q3CString& templateType,
+                                                            const QByteArray& templateType,
                                                             QWidget* parent)
 {
     const QString nativeName = instance->aboutData()->programName();
-    const Q3CString format = KoDocument::readNativeFormatMimeType( instance );
+    const QByteArray format = KoDocument::readNativeFormatMimeType( instance );
     const QStringList extraNativeMimeTypes = KoDocument::readExtraNativeMimeTypes( instance );
     // Maybe the above two can be combined into one call, for speed:
     //KoDocument::getNativeMimeTypeInfo( instance, nativeName, extraNativeMimeTypes );
@@ -249,11 +249,11 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance,
 }
 
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
-                                       const Q3CString &format,
+                                       const QByteArray &format,
                                        const QString &nativeName,
                                        const QStringList& extraNativeMimeTypes,
                                        const DialogType &dialogType,
-                                       const Q3CString& templateType,
+                                       const QByteArray& templateType,
                                        QWidget* parent )
 {
     KoTemplateChooseDia *dlg = new KoTemplateChooseDia(

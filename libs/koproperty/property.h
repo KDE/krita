@@ -26,7 +26,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QStringList>
-#include <Q3CString>
+#include <QByteArray>
 #include "koproperty_global.h"
 
 template<class U> class Q3AsciiDict;
@@ -209,19 +209,19 @@ class KOPROPERTY_EXPORT Property
 		 If \a caption contains newline characters, caption() will return \a caption with substituted 
 		 these with spaces. captionForDisplaying() is used to get original caption text usable 
 		 (with newline, if any) for displaying within a property editor. */
-		Property(const Q3CString &name, const QVariant &value = QVariant(),
+		Property(const QByteArray &name, const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = Auto, Property* parent = 0);
 
 		/*! Constructs property of \ref ValueFromList type. */
-		Property(const Q3CString &name, const QStringList &keys, const QStringList &strings, 
+		Property(const QByteArray &name, const QStringList &keys, const QStringList &strings, 
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = ValueFromList, Property* parent = 0);
 
 		/*! Constructs property of \ref ValueFromList type.
 		 This is overload of the above ctor added for convenience. */
-		Property(const Q3CString &name, ListData* listData,
+		Property(const QByteArray &name, ListData* listData,
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = ValueFromList, Property* parent = 0);
@@ -232,10 +232,10 @@ class KOPROPERTY_EXPORT Property
 		~Property();
 
 		/*! \return the internal name of the property (that's used in List).*/
-		Q3CString name() const;
+		QByteArray name() const;
 
 		/*! Sets the internal name of the property.*/
-		void setName(const Q3CString &name);
+		void setName(const QByteArray &name);
 
 		/*! \return the caption of the property.*/
 		QString caption() const;
@@ -300,7 +300,7 @@ class KOPROPERTY_EXPORT Property
 		const Q3ValueList<Property*>*  children() const;
 
 		/*! \return a child property for \a name, or NULL if there is no property with that name. */
-		Property* child(const Q3CString &name);
+		Property* child(const QByteArray &name);
 
 		/*! \return parent property for this property, or NULL if there is no parent property. */
 		Property* parent() const;

@@ -26,7 +26,7 @@
 #include "KoTextDocument.h"
 #include <koffice_export.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3MemArray>
 #include <Q3ValueList>
 
@@ -221,7 +221,7 @@ public:
     static const char * acceptSelectionMimeType();
     /// Check if the mimesource @p mime provides one of the OASIS mimetypes,
     /// and if so, return it. Otherwise return an empty string.
-    static Q3CString providesOasis( QMimeSource* mime );
+    static QByteArray providesOasis( QMimeSource* mime );
 
     void setNeedSpellCheck(bool b);
     bool needSpellCheck() const { return m_needsSpellCheck;}

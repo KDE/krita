@@ -23,7 +23,7 @@
 #include <KoRuler.h> // for KoTabulatorList
 #include <qdom.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include "KoBorder.h"
 #include <koffice_export.h>
 class KoSavingContext;
@@ -154,9 +154,9 @@ public:
     void saveOasis( KoGenStyle& gs, KoSavingContext& context, bool savingStyle ) const;
 
     /// Convert an alignment string into an alignment flag (load)
-    static Qt::AlignmentFlag loadOasisAlignment( const Q3CString& str );
+    static Qt::AlignmentFlag loadOasisAlignment( const QByteArray& str );
     /// Convert an alignment flag into an alignment string (save)
-    static Q3CString saveOasisAlignment( Qt::AlignmentFlag alignment );
+    static QByteArray saveOasisAlignment( Qt::AlignmentFlag alignment );
 
 private:
     static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue) {

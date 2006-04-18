@@ -49,7 +49,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3GridLayout>
 
 #include <koffice_export.h>
@@ -789,7 +789,7 @@ private:
     bool unused; // for future extensions
 
 #ifdef HAVE_THAI_BREAKS
-    static Q3CString *thaiCache;
+    static QByteArray *thaiCache;
     static KoTextString *cachedString;
     static ThBreakIterator *thaiIt;
 #endif

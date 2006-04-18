@@ -34,7 +34,7 @@
 #include <qbuffer.h>
 #include <qcolor.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <float.h>
 #include <q3tl.h>
@@ -414,7 +414,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
 }
 
 //static
-Qt::AlignmentFlag KoParagLayout::loadOasisAlignment( const Q3CString& str )
+Qt::AlignmentFlag KoParagLayout::loadOasisAlignment( const QByteArray& str )
 {
     return
         str == "left" ? Qt::AlignLeft :
@@ -428,7 +428,7 @@ Qt::AlignmentFlag KoParagLayout::loadOasisAlignment( const Q3CString& str )
 }
 
 //static
-Q3CString KoParagLayout::saveOasisAlignment( Qt::AlignmentFlag alignment )
+QByteArray KoParagLayout::saveOasisAlignment( Qt::AlignmentFlag alignment )
 {
    return alignment == Qt::AlignLeft ? "left" :
        alignment == Qt::AlignRight ? "right" :
@@ -445,7 +445,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
 
     // code from OoWriterImport::writeLayout
     if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "text-align" ) ) {
-        Q3CString align = context.styleStack().attributeNS( KoXmlNS::fo, "text-align" ).toLatin1();
+        QByteArray align = context.styleStack().attributeNS( KoXmlNS::fo, "text-align" ).toLatin1();
         layout.alignment = loadOasisAlignment( align );
     }
 

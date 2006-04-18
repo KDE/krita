@@ -28,7 +28,7 @@
 #include <QResizeEvent>
 #include <QKeyEvent>
 #include <QEvent>
-#include <Q3CString>
+#include <QByteArray>
 #include "koproperty_global.h"
 
 #ifdef QT_ONLY
@@ -154,7 +154,7 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 		void clearWidgetCache();
 
 		void fill();
-		void addItem(const Q3CString &name, EditorItem *parent);
+		void addItem(const QByteArray &name, EditorItem *parent);
 
 		void showUndoButton( bool show );
 

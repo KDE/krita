@@ -37,7 +37,7 @@
 #include <qeventloop.h>
 #include <qtimer.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <QEvent>
 #include <QKeyEvent>
 #include <Q3ValueList>
@@ -209,8 +209,8 @@ Editor::fill()
 	if(map.count() == 1) { // one group (default one), so don't show groups
 //		EditorGroupItem *hiddenGroupItem = new EditorGroupItem(d->topItem, "");
 
-		Q3ValueList<Q3CString> props = map.begin().data();
-		Q3ValueList<Q3CString>::ConstIterator it = props.constBegin();
+		Q3ValueList<QByteArray> props = map.begin().data();
+		Q3ValueList<QByteArray>::ConstIterator it = props.constBegin();
 		for( ; it != props.constEnd(); ++it)
 			addItem(*it, d->topItem);
 
@@ -221,7 +221,7 @@ Editor::fill()
 			if(!it.key().isEmpty() && !it.data().isEmpty() && map.count() > 1)
 				groupItem = new EditorGroupItem(d->topItem, d->set->groupDescription(it.key()) );
 
-			Q3ValueList<Q3CString>::ConstIterator it2 = it.data().constBegin();
+			Q3ValueList<QByteArray>::ConstIterator it2 = it.data().constBegin();
 			for( ; it2 != it.data().constEnd(); ++it2)
 				addItem(*it2, groupItem);
 		}
@@ -242,7 +242,7 @@ Editor::fill()
 }
 
 void
-Editor::addItem(const Q3CString &name, EditorItem *parent)
+Editor::addItem(const QByteArray &name, EditorItem *parent)
 {
 	if(!d->set || !d->set->contains(name))
 		return;
@@ -302,7 +302,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 		d->set->disconnect(this);
 	}
 
-	Q3CString selectedPropertyName1, selectedPropertyName2;
+	QByteArray selectedPropertyName1, selectedPropertyName2;
 	if (preservePrevSelection) {
 		//try to find prev. selection:
 		//1. in new list's prev. selection

@@ -32,7 +32,6 @@
 #include <QPixmap>
 #include <q3dragobject.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <QBuffer>
 static int s_useSlowResizeMode = -1; // unset
 
@@ -99,7 +98,7 @@ bool KoPictureBase::saveAsBase64( KoXmlWriter& writer ) const
     buffer.open(QIODevice::ReadWrite);
     if ( !save( &buffer ) )
         return false;
-    Q3CString encoded = KCodecs::base64Encode( buffer.buffer() );
+    QByteArray encoded = KCodecs::base64Encode( buffer.buffer() );
     writer.addTextNode( encoded );
     return true;
 }

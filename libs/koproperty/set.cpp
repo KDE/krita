@@ -25,7 +25,7 @@
 #include <q3asciidict.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 //#include <qvaluelist.h>
 
 #ifdef QT_ONLY
@@ -53,14 +53,14 @@ class SetPrivate
 	//groups of properties:
 	// list of group name: (list of property names)
 	StringListMap propertiesOfGroup;
-	QMap<Q3CString, QString>  groupsDescription;
+	QMap<QByteArray, QString>  groupsDescription;
 	// map of property: group
-	QMap<Property*, Q3CString> groupForProperty;
+	QMap<Property*, QByteArray> groupForProperty;
 
 	bool ownProperty : 1;
 	bool readOnly : 1;
 //	static Property nonConstNull;
-	Q3CString prevSelection;
+	QByteArray prevSelection;
 	QString typeName;
 /*
 	bool contains(const QCString &name)
@@ -123,13 +123,13 @@ Set::Iterator::operator *()
 	return current();
 }
 
-Q3CString
+QByteArray
 Set::Iterator::currentKey()
 {
 	if (iterator)
 		return iterator->currentKey();
 
-	return Q3CString();
+	return QByteArray();
 }
 
 Property*
@@ -179,7 +179,7 @@ Set::~Set()
 /////////////////////////////////////////////////////
 
 void
-Set::addProperty(Property *property, Q3CString group)
+Set::addProperty(Property *property, QByteArray group)
 {
 	if (group.isEmpty())
 		group = "common";
@@ -220,7 +220,7 @@ Set::removeProperty(Property *property)
 }
 
 void
-Set::removeProperty(const Q3CString &name)
+Set::removeProperty(const QByteArray &name)
 {
 	if(name.isNull())
 		return;
@@ -241,7 +241,7 @@ Set::clear()
 /////////////////////////////////////////////////////
 
 void
-Set::addToGroup(const Q3CString &group, Property *property)
+Set::addToGroup(const QByteArray &group, Property *property)
 {
 	if(!property)
 		return;
@@ -251,7 +251,7 @@ Set::addToGroup(const Q3CString &group, Property *property)
 		return;
 
 	if(!d->propertiesOfGroup.contains(group)) { // group doesn't exist
-		Q3ValueList<Q3CString> l;
+		Q3ValueList<QByteArray> l;
 		l.append(property->name());
 		d->propertiesOfGroup.insert(group, l);
 	}
@@ -266,7 +266,7 @@ Set::removeFromGroup(Property *property)
 {
 	if(!property)
 		return;
-	Q3CString group = d->groupForProperty[property];
+	QByteArray group = d->groupForProperty[property];
 	d->propertiesOfGroup[group].remove(property->name());
 	d->groupForProperty.remove(property);
 }
@@ -278,13 +278,13 @@ Set::groups()
 }
 
 void
-Set::setGroupDescription(const Q3CString &group, const QString desc)
+Set::setGroupDescription(const QByteArray &group, const QString desc)
 {
 	d->groupsDescription[group] = desc;
 }
 
 QString
-Set::groupDescription(const Q3CString &group)
+Set::groupDescription(const QByteArray &group)
 {
 	if(d->groupsDescription.contains(group))
 		return d->groupsDescription[group];
@@ -318,13 +318,13 @@ Set::setReadOnly(bool readOnly)
 }
 
 bool
-Set::contains(const Q3CString &name)
+Set::contains(const QByteArray &name)
 {
 	return d->dict.find(name);
 }
 
 Property&
-Set::property(const Q3CString &name)
+Set::property(const QByteArray &name)
 {
 	Property *p = d->dict[name];
 	if (p)
@@ -338,7 +338,7 @@ Set::property(const Q3CString &name)
 }
 
 Property&
-Set::operator[](const Q3CString &name)
+Set::operator[](const QByteArray &name)
 {
 	return property(name);
 }
@@ -367,7 +367,7 @@ Set::operator= (const Set &l)
 }
 
 void
-Set::changeProperty(const Q3CString &property, const QVariant &value)
+Set::changeProperty(const QByteArray &property, const QVariant &value)
 {
 	Property *p = d->dict[property];
 	if(p)
@@ -390,14 +390,14 @@ Set::debug()
 		it.current()->debug();
 }
 
-Q3CString
+QByteArray
 Set::prevSelection() const
 {
 	return d->prevSelection;
 }
 
 void
-Set::setPrevSelection(const Q3CString &prevSelection)
+Set::setPrevSelection(const QByteArray &prevSelection)
 {
 	d->prevSelection = prevSelection;
 }
@@ -437,7 +437,7 @@ void Buffer::initialSet(const Set *set)
 	//deep copy of set
 	for(Property::DictIterator it(set->d->dict); it.current(); ++it) {
 		Property *prop = new Property( *it.current() );
-		Q3CString group = set->d->groupForProperty[it.current()];
+		QByteArray group = set->d->groupForProperty[it.current()];
 		QString groupDesc = set->d->groupsDescription[ group ];
 		setGroupDescription( group, groupDesc );
 		addProperty( prop, group );
@@ -470,7 +470,7 @@ void Buffer::intersect(const Set *set)
 void Buffer::intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop)
 {
 	Q_UNUSED(set);
-	Q3CString propertyName = prop.name();
+	QByteArray propertyName = prop.name();
 	if ( !contains( propertyName ) )
 		return;
 
@@ -484,7 +484,7 @@ void Buffer::intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop
 void Buffer::intersectedReset(KoProperty::Set& set, KoProperty::Property& prop)
 {
 	Q_UNUSED(set);
-	Q3CString propertyName = prop.name();
+	QByteArray propertyName = prop.name();
 	if ( !contains( propertyName ) )
 		return;
 

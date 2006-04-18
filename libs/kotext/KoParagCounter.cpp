@@ -30,7 +30,7 @@
 #include <qdom.h>
 #include <qbuffer.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 static KoTextParag * const INVALID_PARAG = (KoTextParag *)-1;
 
@@ -831,10 +831,10 @@ KoTextFormat* KoParagCounter::counterFormat( const KoTextParag *paragraph )
 
 ///
 
-const Q3CString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-const Q3CString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-const Q3CString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-const Q3CString RNThousands[] = {"", "m", "mm", "mmm"};
+const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+const QByteArray RNThousands[] = {"", "m", "mm", "mmm"};
 
 QString KoParagCounter::makeRomanNumber( int n )
 {
@@ -885,26 +885,26 @@ int KoParagCounter::fromRomanNumber( const QString &string )
 
     for (int base = 1000; base >= 1 && stringStart < stringLen; base /= 10)
     {
-        const Q3CString *rn;
+        const QByteArray *rn;
         int rnNum;
         switch (base)
         {
             case 1000:
                 rn = RNThousands;
-                rnNum = sizeof (RNThousands) / sizeof (const Q3CString);
+                rnNum = sizeof (RNThousands) / sizeof (const QByteArray);
                 break;
             case 100:
                 rn = RNHundreds;
-                rnNum = sizeof (RNHundreds) / sizeof (const Q3CString);
+                rnNum = sizeof (RNHundreds) / sizeof (const QByteArray);
                 break;
             case 10:
                 rn = RNTens;
-                rnNum = sizeof (RNTens) / sizeof (const Q3CString);
+                rnNum = sizeof (RNTens) / sizeof (const QByteArray);
                 break;
             case 1:
             default:
                 rn = RNUnits;
-                rnNum = sizeof (RNUnits) / sizeof (const Q3CString);
+                rnNum = sizeof (RNUnits) / sizeof (const QByteArray);
                 break;
         }
 

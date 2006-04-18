@@ -34,7 +34,7 @@
 #include <qpointer.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 #include <QStringList>
 namespace KoProperty {
 
@@ -74,7 +74,7 @@ class PropertyPrivate
 		}
 
 	int type;
-	Q3CString name;
+	QByteArray name;
 	QString captionForDisplaying;
 	QString* caption;
 	QString description;
@@ -90,7 +90,7 @@ class PropertyPrivate
 	bool readOnly : 1;
 	bool visible : 1;
 	int autosync;
-	QMap<Q3CString, QVariant> options;
+	QMap<QByteArray, QVariant> options;
 
 	CustomProperty *custom;
 	//! Flag used to allow CustomProperty to use setValue()
@@ -174,7 +174,7 @@ KoProperty::createValueListFromStringLists(const QStringList &keys, const QStrin
 */
 
 
-Property::Property(const Q3CString &name, const QVariant &value,
+Property::Property(const QByteArray &name, const QVariant &value,
 	const QString &caption, const QString &description,
 	int type, Property* parent)
  : d( new PropertyPrivate() )
@@ -195,7 +195,7 @@ Property::Property(const Q3CString &name, const QVariant &value,
 	setValue(value, false);
 }
 
-Property::Property(const Q3CString &name, const QStringList &keys, const QStringList &strings,
+Property::Property(const QByteArray &name, const QStringList &keys, const QStringList &strings,
 	const QVariant &value, const QString &caption, const QString &description, 
 	int type, Property* parent)
  : d( new PropertyPrivate() )
@@ -213,7 +213,7 @@ Property::Property(const Q3CString &name, const QStringList &keys, const QString
 	setValue(value, false);
 }
 
-Property::Property(const Q3CString &name, ListData* listData, 
+Property::Property(const QByteArray &name, ListData* listData, 
 	const QVariant &value, const QString &caption, const QString &description, 
 	int type, Property* parent)
  : d( new PropertyPrivate() )
@@ -248,14 +248,14 @@ Property::~Property()
 	d = 0;
 }
 
-Q3CString
+QByteArray
 Property::name() const
 {
 	return d->name;
 }
 
 void
-Property::setName(const Q3CString &name)
+Property::setName(const QByteArray &name)
 {
 	d->name = name;
 }
@@ -636,7 +636,7 @@ Property::children() const
 }
 
 Property*
-Property::child(const Q3CString &name)
+Property::child(const QByteArray &name)
 {
 	Q3ValueList<Property*>::ConstIterator endIt = d->children->constEnd();
 	for(Q3ValueList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {

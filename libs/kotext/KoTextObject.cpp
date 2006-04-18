@@ -39,7 +39,7 @@
 #include <QRegExp>
 #include <q3progressdialog.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3MemArray>
 #include <Q3ValueList>
 
@@ -2437,7 +2437,7 @@ const char * KoTextObject::acceptSelectionMimeType()
     return "application/vnd.oasis.opendocument.";
 }
 
-Q3CString KoTextObject::providesOasis( QMimeSource* mime )
+QByteArray KoTextObject::providesOasis( QMimeSource* mime )
 {
     const char* fmt;
     const char* acceptMimeType = acceptSelectionMimeType();

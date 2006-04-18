@@ -36,7 +36,7 @@
 #include <QPixmap>
 #include <Q3HBoxLayout>
 #include <Q3Frame>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <ktempfile.h>
 #include <klineedit.h>
@@ -103,7 +103,7 @@ public:
  *
  ****************************************************************************/
 
-KoTemplateCreateDia::KoTemplateCreateDia( const Q3CString &templateType, KInstance *instance,
+KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) :
     KDialogBase( parent, "template create dia", true, i18n( "Create Template" ),
                  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_file(file), m_pixmap(pix) {
@@ -206,7 +206,7 @@ void KoTemplateCreateDia::slotSelectionChanged()
     }
 }
 
-void KoTemplateCreateDia::createTemplate( const Q3CString &templateType, KInstance *instance,
+void KoTemplateCreateDia::createTemplate( const QByteArray &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) {
 
     KoTemplateCreateDia *dia = new KoTemplateCreateDia( templateType, instance, file, pix, parent );

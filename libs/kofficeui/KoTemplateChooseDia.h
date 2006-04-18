@@ -32,7 +32,7 @@
 #include <QPixmap>
 #include <QHideEvent>
 #include <QKeyEvent>
-#include <Q3CString>
+#include <QByteArray>
 
 // KoTCD : KoTemplateChooseDia
 
@@ -175,17 +175,17 @@ public:
      */
     static ReturnType choose(KInstance* instance, QString &file,
                              const DialogType &dialogType,
-                             const Q3CString& templateType,
+                             const QByteArray& templateType,
                              QWidget* parent);
 
 private:
     /// Ditto, with extraNativeMimeTypes added
     static ReturnType choose(KInstance* instance, QString &file,
-                             const Q3CString &format,
+                             const QByteArray &format,
                              const QString &nativeName,
                              const QStringList& extraNativeMimeTypes,
                              const DialogType &dialogType=Everything,
-                             const Q3CString& templateType="",
+                             const QByteArray& templateType="",
                              QWidget* parent = 0);
 public:
 
@@ -227,11 +227,11 @@ private:
      * @return The return type (see above)
      */
     KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* instance,
-                        const Q3CString &format,
+                        const QByteArray &format,
                         const QString &nativeName,
                         const QStringList &extraNativeMimeTypes,
                         const DialogType &dialogType=Everything,
-                        const Q3CString& templateType="");
+                        const QByteArray& templateType="");
 
 private:
     KoTemplateChooseDiaPrivate *d;

@@ -169,7 +169,7 @@ LineStyleEdit::value() const
 void
 LineStyleEdit::setValue(const QVariant &value, bool emitChange)
 {
-	if (!value.canCast(QVariant::Int))
+	if (!value.canConvert(QVariant::Int))
 		return;
 	if ((value.toInt() > 5) || (value.toInt() < 0))
 		return;
@@ -186,7 +186,7 @@ LineStyleEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, cons
 {
 	p->eraseRect(r);
 
-	if (!value.canCast(QVariant::Int))
+	if (!value.canConvert(QVariant::Int))
 		return;
 
 	QPixmap px;

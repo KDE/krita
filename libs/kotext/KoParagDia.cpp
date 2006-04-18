@@ -112,7 +112,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
         spnDepth->hide();
 
     spnDisplayLevels = new QSpinBox( 0, 15, 1, gStyle );
-    spnDisplayLevels->setMinValue( 1 );
+    spnDisplayLevels->setMinimum( 1 );
     if ( displayDepth )
         grid->addWidget( spnDisplayLevels, 3, 4 );
     else
@@ -134,7 +134,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     grid->addMultiCellLayout(customCharBox, 4, 4, 1, 4, Qt::AlignLeft);
 
     spnStart = new KoSpinBox( gStyle );
-    spnStart->setMinValue ( 1);
+    spnStart->setMinimum ( 1);
     lStart->setBuddy( spnStart );
     grid->addWidget( spnStart, 2, 2);
 
@@ -420,7 +420,7 @@ KoSpinBox::KoSpinBox( QWidget * parent )
 {
     m_Etype=NONE;
     //max value supported by roman number
-    setMaxValue ( 3999 );
+    setMaximum ( 3999 );
 }
 KoSpinBox::~KoSpinBox( )
 {
@@ -1145,7 +1145,7 @@ void KoIndentSpacingWidget::leftChanged( double val )
 {
     prev1->setLeft( val );
     // The minimum first-line margin is -leftMargin() (where leftMargin>=0)
-    eFirstLine->setMinValue( -QMAX( 0.0, val ) );
+    eFirstLine->setMinimum( -QMAX( 0.0, val ) );
 }
 
 void KoIndentSpacingWidget::rightChanged( double val )

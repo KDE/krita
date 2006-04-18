@@ -122,10 +122,10 @@ public:
     double value( void ) const;
 
     /// Set minimum value in points.
-    void setMinValue(double min);
+    void setMinimum(double min);
 
     /// Set maximum value in points.
-    void setMaxValue(double max);
+    void setMaximum(double max);
 
     /// Set step size in the current unit.
     void setLineStep(double step);

@@ -176,8 +176,8 @@ void
 KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
     double oldvalue = KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
-    KDoubleSpinBox::setMinValue( KoUnit::toUserValue( m_lowerInPoints, unit ) );
-    KDoubleSpinBox::setMaxValue( KoUnit::toUserValue( m_upperInPoints, unit ) );
+    KDoubleSpinBox::setMinimum( KoUnit::toUserValue( m_lowerInPoints, unit ) );
+    KDoubleSpinBox::setMaximum( KoUnit::toUserValue( m_upperInPoints, unit ) );
     KDoubleSpinBox::setLineStep( KoUnit::toUserValue( m_stepInPoints, unit ) );
     KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
     m_unit = unit;
@@ -189,16 +189,16 @@ double KoUnitDoubleSpinBox::value( void ) const
     return KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
 }
 
-void KoUnitDoubleSpinBox::setMinValue( double min )
+void KoUnitDoubleSpinBox::setMinimum( double min )
 {
   m_lowerInPoints = min;
-  KDoubleSpinBox::setMinValue( KoUnit::toUserValue( m_lowerInPoints, m_unit ) );
+  KDoubleSpinBox::setMinimum( KoUnit::toUserValue( m_lowerInPoints, m_unit ) );
 }
 
-void KoUnitDoubleSpinBox::setMaxValue( double max )
+void KoUnitDoubleSpinBox::setMaximum( double max )
 {
   m_upperInPoints = max;
-  KDoubleSpinBox::setMaxValue( KoUnit::toUserValue( m_upperInPoints, m_unit ) );
+  KDoubleSpinBox::setMaximum( KoUnit::toUserValue( m_upperInPoints, m_unit ) );
 }
 
 void KoUnitDoubleSpinBox::setLineStep( double step )
@@ -215,8 +215,8 @@ void KoUnitDoubleSpinBox::setLineStepPt( double step )
 
 void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
 {
-  setMinValue( min );
-  setMaxValue( max );
+  setMinimum( min );
+  setMaximum( max );
   setLineStepPt( step );
 }
 

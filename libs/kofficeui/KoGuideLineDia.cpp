@@ -102,8 +102,8 @@ void KoGuideLineDia::slotOrientationChanged()
     {
         if ( m_hButton->isChecked() )
         {
-            m_position->setMinValue( qMax( 0.0, m_rect.top() ) );
-            m_position->setMaxValue( qMax( 0.0, m_rect.bottom() ) );
+            m_position->setMinimum( qMax( 0.0, m_rect.top() ) );
+            m_position->setMaximum( qMax( 0.0, m_rect.bottom() ) );
             if ( ! m_positionChanged )
             {
                 disconnect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );
@@ -113,8 +113,8 @@ void KoGuideLineDia::slotOrientationChanged()
         }
         else if ( m_vButton->isChecked() )
         {
-            m_position->setMinValue( qMax( 0.0, m_rect.left() ) );
-            m_position->setMaxValue( qMax( 0.0, m_rect.right() ) );
+            m_position->setMinimum( qMax( 0.0, m_rect.left() ) );
+            m_position->setMaximum( qMax( 0.0, m_rect.right() ) );
             if ( ! m_positionChanged )
             {
                 disconnect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );

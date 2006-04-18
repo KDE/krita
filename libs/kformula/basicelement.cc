@@ -228,7 +228,7 @@ bool BasicElement::buildChild( SequenceElement* child, QDomNode node, QString na
 {
     if (node.isElement()) {
         QDomElement e = node.toElement();
-        if (e.tagName().upper() == name) {
+        if (e.tagName().toUpper() == name) {
             QDomNode nodeInner = e.firstChild();
             if (nodeInner.isElement()) {
                 QDomElement element = nodeInner.toElement();

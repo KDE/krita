@@ -146,11 +146,11 @@ QString KoFontDiaPreview::formatCapitalisation( const QString &string )
     case KoTextFormat::ATT_NONE :
         return string;
     case KoTextFormat::ATT_UPPER :
-        return string.upper();
+        return string.toUpper();
     case KoTextFormat::ATT_LOWER :
         return string.toLower();
     case KoTextFormat::ATT_SMALL_CAPS :
-        return string.upper();
+        return string.toUpper();
     default:
         return string;
     }

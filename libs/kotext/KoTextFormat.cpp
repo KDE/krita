@@ -1197,7 +1197,7 @@ int KoTextFormat::charWidth( const KoTextZoomHandler* zh, bool applyZoom, const 
     if( /*r < 0x06 || r > 0x1f*/ r < 0x06 || (r > 0x1f && !(r > 0xd7 && r < 0xe0)) )
     {
         // Small caps -> we can't use the cached font metrics from KoTextFormat
-        if ( attributeFont() == KoTextFormat::ATT_SMALL_CAPS && c->c.upper() != c->c )
+        if ( attributeFont() == KoTextFormat::ATT_SMALL_CAPS && c->c.toUpper() != c->c )
         {
             pixelww = QFontMetrics( smallCapsFont( zh, applyZoom ) ).width( displayedChar( c->c ) );
         }
@@ -1225,7 +1225,7 @@ int KoTextFormat::charWidth( const KoTextZoomHandler* zh, bool applyZoom, const 
     }
     else {
         // Complex text. We need some hacks to get the right metric here
-        bool smallCaps = ( attributeFont() == KoTextFormat::ATT_SMALL_CAPS && c->c.upper() != c->c );
+        bool smallCaps = ( attributeFont() == KoTextFormat::ATT_SMALL_CAPS && c->c.toUpper() != c->c );
         const QFontMetrics& fontMetrics = smallCaps ? smallCapsFont( zh, applyZoom ) : applyZoom ? screenFontMetrics( zh ) : refFontMetrics();
         QString str;
         int pos = 0;
@@ -1308,7 +1308,7 @@ QString KoTextFormat::displayedString( const QString& str )const
         return str;
     case ATT_UPPER:
     case ATT_SMALL_CAPS:
-        return str.upper();
+        return str.toUpper();
     case ATT_LOWER:
         return str.toLower();
     default:
@@ -1326,7 +1326,7 @@ QChar KoTextFormat::displayedChar( QChar c )const
         return c;
     case ATT_SMALL_CAPS:
     case ATT_UPPER:
-        return c.upper();
+        return c.toUpper();
     case ATT_LOWER:
         return c.toLower();
     default:

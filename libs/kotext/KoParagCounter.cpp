@@ -668,7 +668,7 @@ QString KoParagCounter::levelText( const KoTextParag *paragraph )
             text = makeRomanNumber( m_cache.number ).toLower();
             break;
         case STYLE_ROM_NUM_U:
-            text = makeRomanNumber( m_cache.number ).upper();
+            text = makeRomanNumber( m_cache.number ).toUpper();
             break;
         case STYLE_CUSTOM:
             ////// TODO

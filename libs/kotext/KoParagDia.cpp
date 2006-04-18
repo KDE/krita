@@ -456,7 +456,7 @@ QString KoSpinBox::mapValueToText( int value )
         case ROM_NUM_L:
             return KoParagCounter::makeRomanNumber( value );
         case ROM_NUM_U:
-            return KoParagCounter::makeRomanNumber( value ).upper();
+            return KoParagCounter::makeRomanNumber( value ).toUpper();
         case NONE:
         default:
             return QString::null;
@@ -480,13 +480,13 @@ int KoSpinBox::mapTextToValue( bool * ok )
             ret = KoParagCounter::fromAlphaLowerNumber( txt.toLower() );
             break;
         case ALPHAB_U:
-            ret = KoParagCounter::fromAlphaUpperNumber( txt.upper() );
+            ret = KoParagCounter::fromAlphaUpperNumber( txt.toUpper() );
             break;
         case ROM_NUM_L:
             ret = KoParagCounter::fromRomanNumber( txt.toLower() );
             break;
         case ROM_NUM_U:
-            ret = KoParagCounter::fromRomanNumber( txt.toLower() ); // _not_ upper()
+            ret = KoParagCounter::fromRomanNumber( txt.toLower() ); // _not_ toUpper()
             break;
         case NONE:
         default:
@@ -1722,8 +1722,8 @@ void KoParagCounterWidget::save( KoParagLayout & lay ) {
         lay.counter = new KoParagCounter( m_counter );
 }
 
-KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget *parent, double lower, double upper, double step, double value /*= 0.0*/, KoUnit::Unit unit /*= KoUnit::U_PT*/, unsigned int precision /*= 2*/ )
-    : KoUnitDoubleSpinBox ( parent, lower, upper, step, value, unit, precision )
+KoTabulatorsLineEdit::KoTabulatorsLineEdit( QWidget *parent, double lower, double toUpper, double step, double value /*= 0.0*/, KoUnit::Unit unit /*= KoUnit::U_PT*/, unsigned int precision /*= 2*/ )
+    : KoUnitDoubleSpinBox ( parent, lower, toUpper, step, value, unit, precision )
 {
     setRange( 0, 9999, 1, false);
 }

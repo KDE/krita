@@ -241,7 +241,7 @@ bool KoGuides::mouseReleaseEvent( QMouseEvent *e )
         if ( m_guideLines[GL_SELECTED].count() == 1 )
         {
             int x1, y1, x2, y2;
-            m_view->canvas()->rect().coords( &x1, &y1, &x2, &y2 );
+            m_view->canvas()->rect().getCoords( &x1, &y1, &x2, &y2 );
             QPoint gp( m_view->canvas()->mapFromGlobal( e->globalPos() ) );
             if ( m_guideLines[GL_SELECTED].first()->orientation == Qt::Vertical )
             {

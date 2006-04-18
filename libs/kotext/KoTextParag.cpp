@@ -2318,7 +2318,7 @@ void KoTextParag::printRTDebug( int info )
         kWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
     //if ( !next() )
     //    kDebug(32500) << "  next is 0L" << endl;
-    kDebug(32500) << "  Style: " << style() << " " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
+    kDebug(32500) << "  Style: " << style() << " " << ( style() ? style()->name().toLocal8Bit().data() : "NO STYLE" ) << endl;
     kDebug(32500) << "  Text: '" << str->toString() << "'" << endl;
     if ( info == 0 ) // paragraph info
     {

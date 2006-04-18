@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritashearimage )
 
 target_link_libraries(kritashearimage  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritashearimage )
+install_targets(${PLUGIN_INSTALL_DIR} kritashearimage )
 
 
 ########### install files ###############

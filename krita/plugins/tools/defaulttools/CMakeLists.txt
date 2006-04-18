@@ -26,7 +26,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadefaulttools )
 
 target_link_libraries(kritadefaulttools  ${KDE4_KDECORE_LIBS} kritacommon kopainter kofficecore )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritadefaulttools )
+install_targets(${PLUGIN_INSTALL_DIR} kritadefaulttools )
 
 
 ########### install files ###############

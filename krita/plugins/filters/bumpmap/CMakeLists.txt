@@ -14,7 +14,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritabumpmap )
 
 target_link_libraries(kritabumpmap  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritabumpmap )
+install_targets(${PLUGIN_INSTALL_DIR} kritabumpmap )
 
 
 ########### install files ###############

@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorrange )
 
 target_link_libraries(kritacolorrange  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritacolorrange )
+install_targets(${PLUGIN_INSTALL_DIR} kritacolorrange )
 
 
 ########### install files ###############

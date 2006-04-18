@@ -29,7 +29,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_lms_f32_plugin )
 
 target_link_libraries(krita_lms_f32_plugin  ${KDE4_KDECORE_LIBS} krita_lms_f32 kritacolor )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 krita_lms_f32_plugin )
+install_targets(${PLUGIN_INSTALL_DIR} krita_lms_f32_plugin )
 
 
 ########### install files ###############

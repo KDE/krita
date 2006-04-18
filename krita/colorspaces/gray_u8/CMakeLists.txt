@@ -32,7 +32,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritagrayplugin )
 
 target_link_libraries(kritagrayplugin  ${KDE4_KDECORE_LIBS} kritagrayscale kritacolor )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritagrayplugin )
+install_targets(${PLUGIN_INSTALL_DIR} kritagrayplugin )
 
 
 ########### install files ###############

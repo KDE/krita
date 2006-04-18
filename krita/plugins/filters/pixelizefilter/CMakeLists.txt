@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapixelizefilter )
 
 target_link_libraries(kritapixelizefilter  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritapixelizefilter )
+install_targets(${PLUGIN_INSTALL_DIR} kritapixelizefilter )
 
 
 ########### install files ###############

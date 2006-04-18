@@ -32,7 +32,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritargbplugin )
 
 target_link_libraries(kritargbplugin  ${KDE4_KDECORE_LIBS} kritargb kritacolor )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritargbplugin )
+install_targets(${PLUGIN_INSTALL_DIR} kritargbplugin )
 
 
 ########### install files ###############

@@ -91,7 +91,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kodocinfopropspage )
 
 target_link_libraries(kodocinfopropspage  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kodocinfopropspage )
+install_targets(${PLUGIN_INSTALL_DIR} kodocinfopropspage )
 
 
 ########### install files ###############

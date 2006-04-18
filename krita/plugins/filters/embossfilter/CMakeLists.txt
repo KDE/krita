@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaembossfilter )
 
 target_link_libraries(kritaembossfilter  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritaembossfilter )
+install_targets(${PLUGIN_INSTALL_DIR} kritaembossfilter )
 
 
 ########### install files ###############

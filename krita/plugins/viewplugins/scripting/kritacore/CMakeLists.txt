@@ -28,7 +28,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskritacore )
 
 target_link_libraries(krosskritacore  ${KDE4_KDECORE_LIBS} krossapi krossmain kritacommon kritascripting )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 krosskritacore )
+install_targets(${PLUGIN_INSTALL_DIR} krosskritacore )
 
 
 ########### install files ###############

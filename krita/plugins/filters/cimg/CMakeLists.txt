@@ -18,7 +18,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacimg )
 
 target_link_libraries(kritacimg  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritacimg )
+install_targets(${PLUGIN_INSTALL_DIR} kritacimg )
 
 
 ########### install files ###############

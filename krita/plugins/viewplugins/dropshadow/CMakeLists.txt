@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadropshadow )
 
 target_link_libraries(kritadropshadow  ${KDE4_KDECORE_LIBS} kritacommon kritargb )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritadropshadow )
+install_targets(${PLUGIN_INSTALL_DIR} kritadropshadow )
 
 
 ########### install files ###############

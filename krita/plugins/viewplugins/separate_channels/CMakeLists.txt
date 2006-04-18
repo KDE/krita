@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaseparatechannels )
 
 target_link_libraries(kritaseparatechannels  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritaseparatechannels )
+install_targets(${PLUGIN_INSTALL_DIR} kritaseparatechannels )
 
 
 ########### install files ###############

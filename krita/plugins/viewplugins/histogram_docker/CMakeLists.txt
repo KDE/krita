@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritahistogramdocker )
 
 target_link_libraries(kritahistogramdocker  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritahistogramdocker )
+install_targets(${PLUGIN_INSTALL_DIR} kritahistogramdocker )
 
 
 ########### install files ###############

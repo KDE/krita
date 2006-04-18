@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritasmalltilesfilter )
 
 target_link_libraries(kritasmalltilesfilter  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritasmalltilesfilter )
+install_targets(${PLUGIN_INSTALL_DIR} kritasmalltilesfilter )
 
 
 ########### install files ###############

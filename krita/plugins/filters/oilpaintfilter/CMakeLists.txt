@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaoilpaintfilter )
 
 target_link_libraries(kritaoilpaintfilter  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritaoilpaintfilter )
+install_targets(${PLUGIN_INSTALL_DIR} kritaoilpaintfilter )
 
 
 ########### install files ###############

@@ -19,7 +19,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorsfilters )
 
 target_link_libraries(kritacolorsfilters  ${KDE4_KDECORE_LIBS} kritacommon)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritacolorsfilters )
+install_targets(${PLUGIN_INSTALL_DIR} kritacolorsfilters )
 
 
 ########### install files ###############

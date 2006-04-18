@@ -13,7 +13,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolpolygon )
 
 target_link_libraries(kritatoolpolygon  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritatoolpolygon )
+install_targets(${PLUGIN_INSTALL_DIR} kritatoolpolygon )
 
 
 ########### install files ###############

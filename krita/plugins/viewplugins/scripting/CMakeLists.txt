@@ -19,7 +19,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritascripting )
 
 target_link_libraries(kritascripting  ${KDE4_KDECORE_LIBS} kritacommon krossmain kritascripting )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritascripting )
+install_targets(${PLUGIN_INSTALL_DIR} kritascripting )
 
 
 ########### install files ###############

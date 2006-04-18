@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolstar )
 
 target_link_libraries(kritatoolstar  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritatoolstar )
+install_targets(${PLUGIN_INSTALL_DIR} kritatoolstar )
 
 
 ########### install files ###############

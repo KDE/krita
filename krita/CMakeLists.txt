@@ -143,7 +143,7 @@ if (SHOULD_BUILD_KRITA)
     
     target_link_libraries(kritapart  ${KDE4_KDECORE_LIBS} kritacommon )
     
-    install_targets(${LIB_INSTALL_DIR}/kde4 kritapart )
+    install_targets(${PLUGIN_INSTALL_DIR} kritapart )
     
     
     ########### next target ###############

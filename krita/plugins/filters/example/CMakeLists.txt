@@ -10,7 +10,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaexample )
 
 target_link_libraries(kritaexample  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritaexample )
+install_targets(${PLUGIN_INSTALL_DIR} kritaexample )
 
 
 ########### install files ###############

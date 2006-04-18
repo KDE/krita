@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritavariations )
 
 target_link_libraries(kritavariations  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritavariations )
+install_targets(${PLUGIN_INSTALL_DIR} kritavariations )
 
 
 ########### install files ###############

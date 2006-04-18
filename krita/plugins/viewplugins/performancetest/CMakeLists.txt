@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaperftest )
 
 target_link_libraries(kritaperftest  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritaperftest )
+install_targets(${PLUGIN_INSTALL_DIR} kritaperftest )
 
 
 ########### install files ###############

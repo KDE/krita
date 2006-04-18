@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_rgb_u16_plugin )
 
 target_link_libraries(krita_rgb_u16_plugin  ${KDE4_KDECORE_LIBS} krita_rgb_u16 kritacolor )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 krita_rgb_u16_plugin )
+install_targets(${PLUGIN_INSTALL_DIR} krita_rgb_u16_plugin )
 
 
 ########### install files ###############

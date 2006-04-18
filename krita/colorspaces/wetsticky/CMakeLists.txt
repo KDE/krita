@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritawsplugin )
 
 target_link_libraries(kritawsplugin  ${KDE4_KDECORE_LIBS} kritacolor )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritawsplugin )
+install_targets(${PLUGIN_INSTALL_DIR} kritawsplugin )
 
 
 ########### install files ###############

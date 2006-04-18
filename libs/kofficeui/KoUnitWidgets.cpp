@@ -23,9 +23,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-//Added by qt3to4:
+#include <QPushButton>
 #include <Q3GridLayout>
 #include <QEvent>
 
@@ -34,7 +32,7 @@
 //                          Support classes
 
 
-KoUnitDoubleValidator::KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name )
+KoUnitDoubleValidator::KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char* /*name*/ )
 : KDoubleValidator( parent ), m_base( base )
 {
 }
@@ -47,7 +45,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     QValidator::State result = Acceptable;
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
-    const int res = regexp.search( s );
+    const int res = s.indexOf( regexp );
 
     if ( res == -1 )
     {
@@ -58,7 +56,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 
     // ### TODO: are all the QString::trimmed really necessary?
     const QString number ( s.left( res ).trimmed() );
-    const QString unitName ( regexp.cap( 1 ).trimmed().lower() );
+    const QString unitName ( regexp.cap( 1 ).trimmed().toLower() );
 
     kDebug(30004) << "Split:" << number << ":" << unitName << ":" << endl;
 
@@ -143,7 +141,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
 						    double value,
 						    KoUnit::Unit unit,
 						    unsigned int precision,
-						    const char *name )
+						    const char* /*name*/ )
     : KDoubleSpinBox( lower, upper, step, value, parent, precision ),
       KoUnitDoubleBase( unit, precision ),
     m_lowerInPoints( lower ), m_upperInPoints( upper ), m_stepInPoints( step )
@@ -223,7 +221,7 @@ void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
 // ----------------------------------------------------------------
 
 
-KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, const char *name )
+KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, const char* /*name*/ )
     : KLineEdit( parent ), KoUnitDoubleBase( KoUnit::U_PT, 2 ), m_value( 0.0 ), m_lower( 0.0 ), m_upper( 9999.99 ),
     m_lowerInPoints( 0.0 ), m_upperInPoints( 9999.99 )
 {
@@ -235,7 +233,7 @@ KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, const char *name )
 }
 
 KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit,
-    unsigned int precision, const char *name )
+    unsigned int precision, const char* /*name*/ )
     : KLineEdit( parent ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper ),
     m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
@@ -288,7 +286,7 @@ double KoUnitDoubleLineEdit::value( void ) const
 // ----------------------------------------------------------------
 
 
-KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, const char *name )
+KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, const char* /*name*/ )
      : KComboBox( true, parent ), KoUnitDoubleBase( KoUnit::U_PT, 2 ), m_value( 0.0 ), m_lower( 0.0 ), m_upper( 9999.99 ), m_lowerInPoints( 0.0 ), m_upperInPoints( 9999.99 )
 {
     lineEdit()->setAlignment( Qt::AlignRight );
@@ -300,7 +298,7 @@ KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, const char *name )
 }
 
 KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value, KoUnit::Unit unit,
-     unsigned int precision, const char *name )
+     unsigned int precision, const char* /*name*/ )
      : KComboBox( true, parent ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper ),
      m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
@@ -331,7 +329,7 @@ KoUnitDoubleComboBox::updateValue( double value )
 void
 KoUnitDoubleComboBox::insertItem( double value, int index )
 {
-    KComboBox::insertItem( getVisibleText( value ), index );
+    KComboBox::insertItem( index, getVisibleText( value ) );
 }
 
 void
@@ -339,7 +337,7 @@ KoUnitDoubleComboBox::slotActivated( int index )
 {
     double oldvalue = m_value;
     bool ok;
-    double value = toDouble( text( index ), &ok );
+    double value = toDouble( itemText( index ), &ok );
     m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
     if( m_value != oldvalue )
         emit valueChanged( m_value );

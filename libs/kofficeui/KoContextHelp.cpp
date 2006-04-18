@@ -19,11 +19,11 @@
 
 #include "KoContextHelp.h"
 
-#include <qpainter.h>
-#include <qregion.h>
-#include <qfont.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QPainter>
+#include <QRegion>
+#include <QFont>
+#include <QLabel>
+#include <QLayout>
 #include <q3simplerichtext.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -43,18 +43,18 @@
 #include <kiconloader.h>
 #include <kcursor.h>
 #include <kapplication.h>
-#include <qstring.h>
+#include <QString>
 #include <ktoolinvocation.h>
 #include <QAbstractEventDispatcher>
 
-KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
-		: QWidget( parent, name, Qt::WNoAutoErase )
+KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* /*name*/ )
+		: QWidget( parent, Qt::WNoAutoErase )
 {
 	QFont f( font() );
 	f.setPointSize( f.pointSize() + 2 );
 	f.setBold( true );
 	setFont( f );
-	setBackgroundMode( Qt::PaletteLight );
+	setBackgroundRole( QPalette::Light );
 } // KoVerticalLabel::KoVerticalLabel
 
 KoVerticalLabel::~KoVerticalLabel()
@@ -71,10 +71,9 @@ void KoVerticalLabel::setText( const QString& text )
 
 void KoVerticalLabel::paintEvent( QPaintEvent* )
 {
-	KPixmap pm;
-	pm.resize( height(), width() );
+	KPixmap pm( height(), width() );
 	QPainter p( &pm );
-	p.fillRect( 0, 0, height(), width(), colorGroup().background() );
+	p.fillRect( 0, 0, height(), width(), palette().window() );
 	p.setFont( font() );
 	p.drawText( 0, 0, height(), width(), Qt::AlignCenter, m_text );
 	p.end();
@@ -91,10 +90,10 @@ KoHelpNavButton::KoHelpNavButton( NavDirection d, QWidget* parent )
 		: QWidget( parent )
 {
 	m_pressed = false;
-	m_bitmap = QBitmap( 8, 4, ( d == Up ? upbits : downbits ), true );
+	m_bitmap = QBitmap::fromData( QSize(8, 4), ( d == Up ? upbits : downbits ) );
 	m_bitmap.setMask( m_bitmap );
 	setFixedSize( 8, 6 );
-	setBackgroundMode( Qt::PaletteLight );
+	setBackgroundRole( QPalette::Light );
 } // KoHelpNavButton::KoHelpNavButton
 
 void KoHelpNavButton::paintEvent( QPaintEvent* )
@@ -103,9 +102,9 @@ void KoHelpNavButton::paintEvent( QPaintEvent* )
 	if ( isEnabled() )
 	{
 		if ( m_pressed )
-			p.setPen( colorGroup().highlight() );
+			p.setPen( palette().color( QPalette::Highlight ) );
 		else
-			p.setPen( colorGroup().text() );
+			p.setPen( palette().color( QPalette::Text ));
 		p.drawPixmap( 1, 1, m_bitmap );
 	}
 } // KoHelpNavButton::paintEvent
@@ -138,15 +137,15 @@ KoTinyButton::KoTinyButton( Action a, QWidget* parent )
 	switch ( a )
 	{
 		case Sticky:
-				m_bitmap = QBitmap( 5, 5, notstickybits, true );
+			m_bitmap = QBitmap::fromData( QSize( 5, 5 ), notstickybits );
 			break;
 
 		default:
-			m_bitmap = QBitmap( 5, 5, closebits, true );
+			m_bitmap = QBitmap::fromData( QSize(5, 5), closebits );
 	}
 	m_bitmap.setMask( m_bitmap );
 	setMinimumSize( 7, 7 );
-	setBackgroundMode( Qt::PaletteBackground );
+	setBackgroundRole( QPalette::Window );
 } // KoTinyButton::KoTinyButton
 
 void KoTinyButton::paintEvent( QPaintEvent* )
@@ -155,9 +154,9 @@ void KoTinyButton::paintEvent( QPaintEvent* )
 	if ( isEnabled() )
 	{
 		if ( m_pressed )
-			p.setPen( colorGroup().highlight() );
+			p.setPen( palette().color( QPalette::Highlight ) );
 		else
-			p.setPen( colorGroup().text() );
+			p.setPen( palette().color( QPalette::Text ) );
 		p.drawPixmap( width() / 2 - 2, 1, m_bitmap );
 	}
 } // KoTinyButton::paintEvent
@@ -184,7 +183,7 @@ void KoTinyButton::mouseReleaseEvent( QMouseEvent* )
 			//switch ( m_action )
 			//{
 			//	case Sticky:
-						m_bitmap = QBitmap( 5, 5, ( m_toggled ? stickybits : notstickybits ), true );
+				m_bitmap = QBitmap::fromData( QSize( 5, 5), ( m_toggled ? stickybits : notstickybits ) );
 			//}
 			m_bitmap.setMask( m_bitmap );
 		}
@@ -196,7 +195,7 @@ KoHelpView::KoHelpView( QWidget* parent )
 		: QWidget( parent )
 {
 	currentText = 0L;
-	setBackgroundMode( Qt::PaletteLight );
+	setBackgroundRole( QPalette::Light );
 	parent->installEventFilter( this );
 	setMouseTracking( true );
 } // KoHelpView::KoHelpView
@@ -240,7 +239,7 @@ void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 			QString helpapp=currentAnchor.right(currentAnchor.length()-7);
 			QString helpanchor;
 			int pos;
-			if ((pos=helpapp.find("#"))!=-1) {
+			if ((pos=helpapp.indexOf("#"))!=-1) {
 				helpanchor=helpapp.right(helpapp.length()-pos-1);
 				helpapp=helpapp.left(pos);
 			}
@@ -278,26 +277,25 @@ bool KoHelpView::eventFilter( QObject*, QEvent* e )
 void KoHelpView::paintEvent( QPaintEvent* )
 {
 	QPainter p( this );
-	currentText->draw( &p, 0, 0, QRect(), colorGroup() );
+	currentText->draw( &p, 0, 0, QRect(), palette() );
 } // KoHelpView::paintEvent
 
 KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 		: QWidget( parent )
 {
-	Q3GridLayout* layout = new Q3GridLayout( this, 3, 3 );
+	QGridLayout* layout = new QGridLayout( this );
 	layout->setMargin( 2 );
 	layout->addWidget( m_upButton = new KoHelpNavButton( KoHelpNavButton::Up, this ), 0, 1, Qt::AlignHCenter );
 	layout->addWidget( m_helpViewport = new QWidget( this ), 1, 1 );
 	layout->addWidget( m_downButton = new KoHelpNavButton( KoHelpNavButton::Down, this ), 2, 1, Qt::AlignHCenter );
-	layout->addColSpacing( 0, 5 );
-	layout->addColSpacing( 2, 5 );
+	layout->setSpacing( 5 );
 	layout->setColumnStretch( 1, 1 );
 
 	m_helpView = new KoHelpView( m_helpViewport );
-	m_helpViewport->setBackgroundMode( Qt::PaletteLight );
+	m_helpViewport->setBackgroundRole( QPalette::Light );
 	setText( help );
 
-	setBackgroundMode( Qt::PaletteLight );
+	setBackgroundRole( QPalette::Light );
 
 	connect( m_upButton, SIGNAL( pressed() ), this, SLOT( startScrollingUp() ) );
 	connect( m_downButton, SIGNAL( pressed() ), this, SLOT( startScrollingDown() ) );
@@ -381,7 +379,7 @@ void KoHelpWidget::stopScrolling()
 } // KoHelpWidget::stopScrolling
 
 KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
-		: QWidget( parent, "", Qt::WType_Dialog | Qt::WStyle_Customize | Qt::WStyle_NoBorder )
+		: QWidget( parent, Qt::WType_Dialog | Qt::WStyle_Customize | Qt::WStyle_NoBorder )
 {
 	Q3GridLayout* layout = new Q3GridLayout( this );
 	Q3HBoxLayout* buttonLayout;
@@ -392,8 +390,6 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	layout->addWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 3, 1 );
 	buttonLayout->addWidget( m_close = new KoTinyButton( KoTinyButton::Close, this ) );
 	buttonLayout->addWidget( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
-	layout->addColSpacing( 2, 2 );
-	layout->addRowSpacing( 3, 2 );
 	layout->setMargin( 3 );
 	layout->setSpacing( 1 );
 	layout->setRowStretch( 1, 1 );
@@ -463,7 +459,7 @@ void KoContextHelpPopup::resizeEvent( QResizeEvent* )
 void KoContextHelpPopup::paintEvent( QPaintEvent* )
 {
 	QPainter p( this );
-	p.fillRect( 0, 0, width(), height(), colorGroup().light() );
+	p.fillRect( 0, 0, width(), height(), palette().light() );
 	p.setPen( Qt::black );
 	p.drawRect( 0, 0, width(), height() );
 	p.fillRect( width() - 3, 0, width() - 1, height() - 1, Qt::black );
@@ -546,10 +542,10 @@ void KoContextHelpAction::closePopup()
 } // KoContextHelpAction::closePopup
 
 
-KoContextHelpWidget::KoContextHelpWidget( QWidget* parent, const char* name )
-		: QWidget( parent, name )
+KoContextHelpWidget::KoContextHelpWidget( QWidget* parent, const char* /*name*/ )
+		: QWidget( parent )
 {
-	setCaption( i18n( "Context Help" ) );
+	setWindowTitle( i18n( "Context Help" ) );
 	Q3GridLayout* layout = new Q3GridLayout( this );
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
@@ -578,7 +574,7 @@ void KoContextHelpWidget::setContextHelp( const QString& title, const QString& t
 KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 		: Q3DockWindow( parent, name )
 {
-	setCaption( i18n( "Context Help" ) );
+	setWindowTitle( i18n( "Context Help" ) );
 	QWidget* mainWidget = new QWidget( this );
 	Q3GridLayout* layout = new Q3GridLayout( mainWidget );
 	layout->addWidget( m_helpIcon = new QLabel( mainWidget ), 0, 0 );

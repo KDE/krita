@@ -1819,7 +1819,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
 #if 0
     QFontInfo fi( font );
-    kDebug(32500) << "KoTextParag::drawParagStringInternal requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << "pt (format font: " << format->font().pointSizeFloat() << "pt)" << endl;
+    kDebug(32500) << "KoTextParag::drawParagStringInternal requested font " << font.pointSizeF() << " using font " << fi.pointSize() << "pt (format font: " << format->font().pointSizeFloat() << "pt)" << endl;
     QFontMetrics fm( font );
     kDebug(32500) << "Real font: " << fi.family() << ". Font height in pixels: " << fm.height() << endl;
 #endif

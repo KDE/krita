@@ -399,7 +399,7 @@ void KoTextFormat::load( KoOasisContext& context )
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
         double pointSize = styleStack.fontSize();
-        fn.setPointSizeFloat( pointSize );
+        fn.setPointSizeF( pointSize );
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
         QString fontWeight = styleStack.attributeNS( KoXmlNS::fo, "font-weight" );
@@ -469,7 +469,7 @@ void KoTextFormat::load( KoOasisContext& context )
     d->m_relativeTextSize = 0.58;
     d->m_offsetFromBaseLine = 0;
     if( styleStack.hasAttributeNS( KoXmlNS::style, "text-position")) { // OO 3.10.7
-        importTextPosition( styleStack.attributeNS( KoXmlNS::style, "text-position"), fn.pointSizeFloat(),
+        importTextPosition( styleStack.attributeNS( KoXmlNS::style, "text-position"), fn.pointSizeF(),
                             va, d->m_relativeTextSize, d->m_offsetFromBaseLine, context );
     }
     // Small caps, lowercase, uppercase
@@ -608,7 +608,7 @@ void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context, KoTextFormat 
     {
         QString textPos;
         if ( d->m_offsetFromBaseLine != 0 )
-            textPos = QString::number( 100 * d->m_offsetFromBaseLine / fn.pointSizeFloat() ) + '%';
+            textPos = QString::number( 100 * d->m_offsetFromBaseLine / fn.pointSizeF() ) + '%';
         else if ( va == AlignSuperScript ) textPos = "super";
         else if ( va == AlignSubScript ) textPos = "sub";
         else textPos = "0%"; // AlignNormal
@@ -1108,11 +1108,11 @@ float KoTextFormat::refPointSize() const
 QFont KoTextFormat::refFont() const
 {
     float pointSize = refPointSize();
-    if ( !d->m_refFont || pointSize != d->m_refFont->pointSizeFloat() )
+    if ( !d->m_refFont || pointSize != d->m_refFont->pointSizeF() )
     {
         delete d->m_refFont;
         d->m_refFont = new QFont( font() );
-        d->m_refFont->setPointSizeFloat( pointSize );
+        d->m_refFont->setPointSizeF( pointSize );
         delete d->m_refFontMetrics;
         d->m_refFontMetrics = 0;
         //kDebug(32500) << "KoTextFormat::refFont created new font with size " << pointSize << endl;
@@ -1128,12 +1128,12 @@ QFont KoTextFormat::screenFont( const KoTextZoomHandler* zh ) const
     // We have to do this very dynamically, because 2 views could be painting the same
     // stuff, with different zoom levels. So no absolute caching possible.
     /*if ( d->m_screenFont )
-      kDebug(32500) << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;*/
-    if ( !d->m_screenFont || qAbs( pointSize - d->m_screenFont->pointSizeFloat() ) > 1E-4 )
+      kDebug(32500) << " d->m_screenFont->pointSizeF()=" << d->m_screenFont->pointSizeFloat() << endl;*/
+    if ( !d->m_screenFont || qAbs( pointSize - d->m_screenFont->pointSizeF() ) > 1E-4 )
     {
         delete d->m_screenFont;
         d->m_screenFont = new QFont( font() );
-        d->m_screenFont->setPointSizeFloat( pointSize );
+        d->m_screenFont->setPointSizeF( pointSize );
         delete d->m_screenFontMetrics;
         d->m_screenFontMetrics = 0;
         //kDebug(32500) << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
@@ -1147,7 +1147,7 @@ const QFontMetrics& KoTextFormat::screenFontMetrics( const KoTextZoomHandler* zh
 
     if ( !d->m_screenFontMetrics ) // not calculated, or invalidated by screenFont above
     {
-        //kDebug(32500) << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;
+        //kDebug(32500) << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFont->pointSizeF()=" << d->m_screenFont->pointSizeFloat() << endl;
         d->m_screenFontMetrics = new QFontMetrics( f );
         //kDebug(32500) << "KoTextFormat::screenFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_screenFontMetrics->height() << endl;
     }
@@ -1160,7 +1160,7 @@ const QFontMetrics& KoTextFormat::refFontMetrics() const
 
     if ( !d->m_refFontMetrics )
     {
-        //kDebug(32500) << this << " KoTextFormat::refFontMetrics pointSize=" << pointSize << " d->m_refFont->pointSizeFloat()=" << d->m_refFont->pointSizeFloat() << endl;
+        //kDebug(32500) << this << " KoTextFormat::refFontMetrics pointSize=" << pointSize << " d->m_refFont->pointSizeF()=" << d->m_refFont->pointSizeFloat() << endl;
         d->m_refFontMetrics = new QFontMetrics( f );
         //kDebug(32500) << "KoTextFormat::refFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_refFontMetrics->height() << endl;
     }
@@ -1172,7 +1172,7 @@ QFont KoTextFormat::smallCapsFont( const KoTextZoomHandler* zh, bool applyZoom )
     QFont font = applyZoom ? screenFont( zh ) : refFont();
     QFontMetrics fm = refFontMetrics(); // only used for proportions, so applyZoom doesn't matter
     double pointSize = font.pointSize() * ((double)fm.boundingRect("x").height()/(double)fm.boundingRect("X").height());
-    font.setPointSizeFloat( pointSize );
+    font.setPointSizeF( pointSize );
     return font;
 }
 

@@ -186,7 +186,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
     }
     //Set the display font. m_font is untouched by the modifications of capitalisation
     displayFont = m_font;
-    displayFont.setPointSizeFloat( m_font.pointSize() * capitalisationCoeff );
+    displayFont.setPointSizeF( m_font.pointSize() * capitalisationCoeff );
 
 // format the string in case Small Caps
     displayText = formatCapitalisation( m_text );
@@ -197,7 +197,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
 
     if ( br.width() > contentsRect().width() || br.height() > contentsRect().height() ) {
         displayText = formatCapitalisation( i18n( "Font too large for the preview pane" ) );
-        displayFont.setPointSizeFloat( 14 * capitalisationCoeff );
+        displayFont.setPointSizeF( 14 * capitalisationCoeff );
     }
 
     QFontMetrics fm1( displayFont );
@@ -209,19 +209,19 @@ void KoFontDiaPreview::drawContents( QPainter* p )
     int subSuperOffset = 0;
     switch ( m_subSuper ) {
         case 0: //normal
-            displayFont.setPointSizeFloat( displayFont.pointSize() * m_relativeSize );
+            displayFont.setPointSizeF( displayFont.pointSize() * m_relativeSize );
             subSuperOffset = -( m_offset );
             break;
         case 1: //subscript
-            displayFont.setPointSizeFloat( displayFont.pointSize() * m_relativeSize );
+            displayFont.setPointSizeF( displayFont.pointSize() * m_relativeSize );
             subSuperOffset = fm1.height() / 6;
             break;
         case 2: //superscript
-            displayFont.setPointSizeFloat( displayFont.pointSize() * m_relativeSize );
+            displayFont.setPointSizeF( displayFont.pointSize() * m_relativeSize );
             subSuperOffset = 0 - ( fm1.height() / 2 );
             break;
         default:
-            displayFont.setPointSizeFloat( displayFont.pointSize() * m_relativeSize );
+            displayFont.setPointSizeF( displayFont.pointSize() * m_relativeSize );
             subSuperOffset = 0 - m_offset;
             break;
     }

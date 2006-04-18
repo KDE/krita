@@ -576,8 +576,8 @@ void KoStyleManager::apply() {
             {
                 int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
                 int formatChanged = orig->format().compare( changed->format() );
-                //kDebug(32500) << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
-                //kDebug(32500) << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
+                //kDebug(32500) << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeF() << endl;
+                //kDebug(32500) << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeF() << endl;
 
                 // Copy everything from changed to orig
                 *orig = *changed;

@@ -1007,7 +1007,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
         {
             origFontSize = format->pointSize();
             format->setPointSize( zoomedFontSize( origFontSize ) );
-            //kDebug(32500) << "KoTextObject::setFormatCommand format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
+            //kDebug(32500) << "KoTextObject::setFormatCommand format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeF() << endl;
         }
 #endif
         // Remove ref to current format, if caller wanted that

@@ -73,7 +73,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     Q3GridLayout* grid = new Q3GridLayout( gbox->layout(), 5, 3 );
     grid->setSpacing( KDialog::spacingHint() );
 
-    grid->setColStretch(1, 1);
+    grid->setColumnStretch(1, 1);
 
     defaultFont = contextStyle.getDefaultFont();
     nameFont = contextStyle.getNameFont();

@@ -1006,7 +1006,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
     prev1 = new KPagePreview( this );
     mainGrid->addMultiCellWidget( prev1, 0, mainGrid->numRows()-1, 1, 1 );
 
-    mainGrid->setColStretch( 1, 1 );
+    mainGrid->setColumnStretch( 1, 1 );
     //mainGrid->setRowStretch( 4, 1 );
 }
 
@@ -1259,7 +1259,7 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent )
     grid->addMultiCellWidget( prev2, 0, 2, 1, 1 );
 
     // --------------- main grid ------------------
-    grid->setColStretch( 1, 1 );
+    grid->setColumnStretch( 1, 1 );
     grid->setRowStretch( 1, 1 );
 }
 

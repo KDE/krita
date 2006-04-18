@@ -291,7 +291,7 @@ KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 	layout->addWidget( m_downButton = new KoHelpNavButton( KoHelpNavButton::Down, this ), 2, 1, Qt::AlignHCenter );
 	layout->addColSpacing( 0, 5 );
 	layout->addColSpacing( 2, 5 );
-	layout->setColStretch( 1, 1 );
+	layout->setColumnStretch( 1, 1 );
 
 	m_helpView = new KoHelpView( m_helpViewport );
 	m_helpViewport->setBackgroundMode( Qt::PaletteLight );

@@ -263,7 +263,7 @@ KFontChooser_local::KFontChooser_local(QWidget *parent, const char *name,
     sizeIsRelativeCheckBox->setTristate( diff );
     Q3GridLayout *sizeLayout2 = new Q3GridLayout( 3,2, KDialog::spacingHint()/2, "sizeLayout2" );
     gridLayout->addLayout(sizeLayout2, row, 2);
-    sizeLayout2->setColStretch( 1, 1 ); // to prevent text from eating the right border
+    sizeLayout2->setColumnStretch( 1, 1 ); // to prevent text from eating the right border
     sizeLayout2->addMultiCellWidget( sizeOfFont, 0, 0, 0, 1);
     sizeLayout2->addMultiCellWidget(sizeListBox, 1,1, 0,1);
     sizeLayout2->addWidget(sizeIsRelativeCheckBox, 2, 0, Qt::AlignLeft);

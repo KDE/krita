@@ -632,7 +632,7 @@ void KoAutoFormatDia::initTab3()
     {
         initialLanguage=m_autoFormat.getConfigAutoFormatLanguage( );
         if ( initialLanguage.isEmpty() )
-            autoFormatLanguage->setCurrentItem(0);
+            autoFormatLanguage->setCurrentIndex(0);
         else
         {
             KoExceptionLanguageName::Iterator it = exceptionLanguageName.begin();

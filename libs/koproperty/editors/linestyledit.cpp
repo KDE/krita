@@ -175,7 +175,7 @@ LineStyleEdit::setValue(const QVariant &value, bool emitChange)
 		return;
 
 	m_edit->blockSignals(true);
-	m_edit->setCurrentItem(value.toInt());
+	m_edit->setCurrentIndex(value.toInt());
 	m_edit->blockSignals(false);
 	if (emitChange)
 		emit valueChanged(this);

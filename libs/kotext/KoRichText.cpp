@@ -50,7 +50,7 @@
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <private/qtextengine_p.h>
+//#include <private/qtextengine_p.h>
 
 //#define DEBUG_COLLECTION
 //#define DEBUG_TABLE_RENDERING
@@ -1243,6 +1243,7 @@ void KoTextString::checkBidi() const
     const KoTextStringChar *start = data.data();
     const KoTextStringChar *end = start + length;
 
+#if 0  //KoText porting
     // determines the properties we need for layouting
     QTextLayout textLayout( toString() );
 
@@ -1250,13 +1251,6 @@ void KoTextString::checkBidi() const
     QTextLine line = textLayout.createLine();
     Q_ASSERT(line.isValid()); // TODO error checking
     KoTextStringChar *ch = (KoTextStringChar *)end - 1;
-#if 0 // TODO RTL
-    const QCharAttributes *ca = textEngine.attributes() + length-1;
-    QScriptItem *item = &textEngine.items[textEngine.items.size()-1];
-    unsigned char bidiLevel = item->analysis.bidiLevel;
-    if ( bidiLevel )
-        that->bidi = TRUE;
-#endif
     int pos = length-1;
     while ( ch >= start ) {
 #if 0 // TODO RTL
@@ -1287,6 +1281,7 @@ void KoTextString::checkBidi() const
     } else {
 	that->rightToLeft = FALSE; // TODO RTL: (textEngine.direction == QChar::DirR);
     }
+#endif
 }
 
 Q3MemArray<KoTextStringChar> KoTextString::subString( int start, int len ) const

@@ -70,7 +70,7 @@ namespace {
  * palette names. To see the menu entries, add a the following line
  * to your .rc file:
  *
- * <Action name="view_palette_action_menu"/>
+ * &lt;Action name="view_palette_action_menu"/&gt;
  *
  * There are two styles: one that uses tabs and one that uses the vertical
  * QToolBox style to separate and show individual widgets. By implementing

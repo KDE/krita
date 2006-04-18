@@ -306,7 +306,7 @@ void Document::setEnabled( bool enabled )
 }
 
 
-KoCommandHistory* Document::getHistory() const
+KCommandHistory* Document::getHistory() const
 {
     return m_wrapper->getHistory();
 }
@@ -341,7 +341,7 @@ void Document::introduceWrapper( DocumentWrapper* wrapper, bool init )
 
 DocumentWrapper::DocumentWrapper( KConfig* config,
                                   KActionCollection* collection,
-                                  KoCommandHistory* history )
+                                  KCommandHistory* history )
     : m_document( 0 ),
       m_leftBracketChar( LeftRoundBracket ),
       m_rightBracketChar( RightRoundBracket ),
@@ -392,10 +392,10 @@ void DocumentWrapper::document( Document* document, bool init )
 }
 
 
-void DocumentWrapper::setCommandStack( KoCommandHistory* history )
+void DocumentWrapper::setCommandStack( KCommandHistory* history )
 {
     if ( history == 0 ) {
-        m_history = new KoCommandHistory;
+        m_history = new KCommandHistory;
         m_ownHistory = true;
     }
     else {

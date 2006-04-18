@@ -30,7 +30,7 @@
 #include <kaction.h>
 #include <kcommand.h>
 #include <kconfig.h>
-#include <KoCommandHistory.h>
+#include <kcommand.h>
 //#include "KoCommandHistory.h"
 #include "kformuladefs.h"
 
@@ -167,7 +167,7 @@ public:
     /**
      * @returns our undo stack so the formulas can use it.
      */
-    KoCommandHistory* getHistory() const;
+    KCommandHistory* getHistory() const;
 
     /**
      * @returns the documents symbol table
@@ -275,11 +275,11 @@ public:
 
     DocumentWrapper( KConfig* config,
                      KActionCollection* collection,
-                     KoCommandHistory* history = 0 );
+                     KCommandHistory* history = 0 );
     ~DocumentWrapper();
 
     KConfig* config() { return m_config; }
-    KoCommandHistory* history() { return m_history; }
+    KCommandHistory* history() { return m_history; }
 
     /**
      * @return the document we are using.
@@ -349,7 +349,7 @@ public:
 
     void updateConfig();
 
-    KoCommandHistory* getHistory() const { return m_history; }
+    KCommandHistory* getHistory() const { return m_history; }
 
     void undo();
     void redo();
@@ -413,7 +413,7 @@ private:
 
     void createActions( KActionCollection* collection );
     void initSymbolNamesAction();
-    void setCommandStack( KoCommandHistory* history );
+    void setCommandStack( KCommandHistory* history );
 
     bool hasFormula() { return m_document->hasFormula(); }
     Container* formula() { return m_document->m_formula; }
@@ -471,7 +471,7 @@ private:
     QString m_selectedName;
 
     KConfig* m_config;
-    KoCommandHistory* m_history;
+    KCommandHistory* m_history;
 
     /**
      * Tells whether we are responsible to remove our history.

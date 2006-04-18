@@ -33,7 +33,6 @@
 
 #include <kcommand.h>
 //#include <KoCommandHistory.h>
-#include "KoCommandHistory.h"
 #include "kformuladefs.h"
 
 class QColorGroup;
@@ -389,7 +388,7 @@ public:
 
 protected:
 
-    KoCommandHistory* getHistory() const;
+    KCommandHistory* getHistory() const;
 
     /**
      * @returns the root of our element tree. That's the formula's structure.

@@ -49,7 +49,7 @@ kde4_automoc(${kformulalib_LIB_SRCS})
 
 kde4_add_library(kformulalib SHARED ${kformulalib_LIB_SRCS})
 
-target_link_libraries(kformulalib  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kformulalib  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} kotext kofficeui)
 
 set_target_properties(kformulalib PROPERTIES VERSION 4.0.0 SOVERSION 4 )
 install_targets(${LIB_INSTALL_DIR} kformulalib )

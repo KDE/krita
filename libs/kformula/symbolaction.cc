@@ -114,7 +114,7 @@ SymbolAction::SymbolAction( KActionCollection* parent, const char* name )
 
 SymbolAction::SymbolAction( const QString& text, const KShortcut& cut,
                             const QObject* receiver, const char* slot,
-                            QObject* parent, const char* name )
+                            KActionCollection* parent, const char* name )
     : KSelectAction( text, cut, receiver, slot, parent, name )
 {
     setEditable( FALSE );
@@ -126,7 +126,9 @@ int SymbolAction::plug( QWidget* w, int index )
         return -1;
     if ( w->inherits( "KToolBar" ) )
     {
-        KToolBar* bar = static_cast<KToolBar*>( w );
+#warning "kde4: port it"			
+#if 0
+			KToolBar* bar = static_cast<KToolBar*>( w );
         int id_ = KAction::getToolButtonID();
         KComboBox *cb = new KComboBox( bar );
         connect( cb, SIGNAL( activated( const QString & ) ),
@@ -142,8 +144,10 @@ int SymbolAction::plug( QWidget* w, int index )
         updateItems( containerCount() - 1 );
 
         return containerCount() - 1;
+#endif
+		return 0;
     }
-    else return KSelectAction::plug( w, index );
+    else return KSelectAction::plug( w, index );	
 }
 
 void SymbolAction::setSymbols( const QStringList &names, const Q3ValueList<QFont>& fonts,
@@ -162,6 +166,8 @@ void SymbolAction::updateItems( int id )
 {
     QWidget *w = container( id );
     if ( w->inherits( "KToolBar" ) ) {
+#warning "kde4: port it"			
+#if 0			
         QWidget *r = static_cast<KToolBar*>( w )->getWidget( itemId( id ) );
         if ( r->inherits( "Q3ComboBox" ) ) {
             Q3ComboBox *cb = static_cast<Q3ComboBox*>( r );
@@ -173,6 +179,7 @@ void SymbolAction::updateItems( int id )
             }
             cb->setMinimumWidth( cb->sizeHint().width() );
         }
+#endif		
     }
 }
 

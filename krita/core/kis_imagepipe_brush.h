@@ -154,7 +154,7 @@ private:
     QString m_name;
     QString m_parasiteString; // Contains instructions on how to use the brush
     mutable KisPipeBrushParasite m_parasite;
-    quint32 m_numOfBrushes;
+    qint32 m_numOfBrushes;
     mutable quint32 m_currentBrush;
 
     QByteArray m_data;

@@ -35,7 +35,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
 {
     m_filterConfig = kfc;
     setSelection( selection );
-    m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.latin1());
+    m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.toLatin1());
     Q_ASSERT(m_cachedPaintDev);
 }
 
@@ -65,7 +65,7 @@ KisLayerSP KisAdjustmentLayer::clone() const
 
 void KisAdjustmentLayer::resetCache()
 {
-    m_cachedPaintDev = new KisPaintDevice(image()->colorSpace(), name().latin1());
+    m_cachedPaintDev = new KisPaintDevice(image()->colorSpace(), name().toLatin1());
 }
 
 KisFilterConfiguration * KisAdjustmentLayer::filter()

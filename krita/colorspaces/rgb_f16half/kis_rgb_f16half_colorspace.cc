@@ -269,8 +269,7 @@ QImage KisRgbF16HalfColorSpace::convertToQImage(const quint8 *dataU8, qint32 wid
 {
     const half *data = reinterpret_cast<const half *>(dataU8);
 
-    QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
-    img.setAlphaBuffer(true);
+    QImage img = QImage(width, height, QImage::Format_ARGB32);
 
     qint32 i = 0;
     uchar *j = img.bits();

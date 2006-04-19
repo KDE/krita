@@ -549,8 +549,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
     qint32 endx = startx + width - 1;
     qint32 endy = starty + height - 1;
 
-    QImage layer (width, height, 32);
-    layer.setAlphaBuffer(true);
+    QImage layer(width, height, QImage::Format_ARGB32);
 
     int pixelsProcessed = 0;
     int lastProgressPercent = 0;

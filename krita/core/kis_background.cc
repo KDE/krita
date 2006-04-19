@@ -22,8 +22,7 @@
 KisBackground::KisBackground()
     : KShared()
 {
-    m_patternTile = QImage(PATTERN_WIDTH, PATTERN_HEIGHT, 32);
-    m_patternTile.setAlphaBuffer(false);
+    m_patternTile = QImage(PATTERN_WIDTH, PATTERN_HEIGHT, QImage::Format_RGB32);
 
     for (int y = 0; y < PATTERN_HEIGHT; y++)
     {

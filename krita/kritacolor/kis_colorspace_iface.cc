@@ -25,7 +25,7 @@
 #include <dcopclient.h>
 
 KisColorSpaceIface::KisColorSpaceIface( KisColorSpace * parent )
-	: DCOPObject(parent->id().id().latin1())
+	: DCOPObject(parent->id().id().toLatin1())
 {
 	m_parent = parent;
 }

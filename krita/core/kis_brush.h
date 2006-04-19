@@ -63,7 +63,7 @@ public:
     /// Load brush from the specified data, at position dataPos, and set the filename
     KisBrush(const QString& filename,
          const QByteArray & data,
-         quint32 & dataPos);
+         qint32 & dataPos);
     /// Load brush from the specified paint device, in the specified region
     KisBrush(KisPaintDevice* image, int x, int y, int w, int h);
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)

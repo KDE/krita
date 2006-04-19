@@ -56,7 +56,7 @@ KisGradient::KisGradient(const QString& file) : super(file)
 
 KisGradient::~KisGradient()
 {
-    for (uint i = 0; i < m_segments.count(); i++) {
+    for (int i = 0; i < m_segments.count(); i++) {
         delete m_segments[i];
         m_segments[i] = 0;
     }
@@ -154,7 +154,7 @@ KisGradientSegment *KisGradient::segmentAt(double t) const
 
     KisGradientSegment *segment = 0;
 
-    for (uint i = 0; i < m_segments.count(); i++) {
+    for (int i = 0; i < m_segments.count(); i++) {
         if (t > m_segments[i]->startOffset() - DBL_EPSILON && t < m_segments[i]->endOffset() + DBL_EPSILON) {
             segment = m_segments[i];
             break;
@@ -178,7 +178,7 @@ void KisGradient::colorAt(double t, QColor *color, quint8 *opacity) const
 
 QImage KisGradient::generatePreview(int width, int height) const
 {
-    QImage img(width, height, 32);
+    QImage img(width, height, QImage::Format_RGB32);
 
     for (int y = 0; y < img.height(); y++) {
         for (int x = 0; x < img.width(); x++) {

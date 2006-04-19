@@ -36,7 +36,7 @@ const Q3ValueVector<double> KisAutogradientResource::getHandlePositions() const
     Q3ValueVector<double> handlePositions;
 
     handlePositions.push_back(m_segments[0]->startOffset());
-    for (uint i = 0; i < m_segments.count(); i++)
+    for (int i = 0; i < m_segments.count(); i++)
     {
         handlePositions.push_back(m_segments[i]->endOffset());
     }
@@ -47,7 +47,7 @@ const Q3ValueVector<double> KisAutogradientResource::getMiddleHandlePositions() 
 {
     Q3ValueVector<double> middleHandlePositions;
 
-    for (uint i = 0; i < m_segments.count(); i++)
+    for (int i = 0; i < m_segments.count(); i++)
     {
         middleHandlePositions.push_back(m_segments[i]->middleOffset());
     }

@@ -235,9 +235,9 @@ QRect KisTiledDataManager::extent() const
 
 void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
 {
-    QRect newRect = QRect(x, y, w, h).normalize();
+    QRect newRect = QRect(x, y, w, h).normalized();
     //printRect("newRect", newRect);
-    QRect oldRect = QRect(m_extentMinX, m_extentMinY, m_extentMaxX - m_extentMinX + 1, m_extentMaxY - m_extentMinY + 1).normalize();
+    QRect oldRect = QRect(m_extentMinX, m_extentMinY, m_extentMaxX - m_extentMinX + 1, m_extentMaxY - m_extentMinY + 1).normalized();
     //printRect("oldRect", oldRect);
 
     // Do nothing if the desired size is bigger than we currently are: that is handled by the autoextending automatically

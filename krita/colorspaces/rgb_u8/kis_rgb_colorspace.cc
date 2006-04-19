@@ -220,8 +220,7 @@ QImage KisRgbColorSpace::convertToQImage(const quint8 *data, qint32 width, qint3
 
 {
     Q_ASSERT(data);
-    QImage img = QImage(const_cast<quint8 *>(data), width, height, 32, 0, 0, QImage::LittleEndian);
-    img.setAlphaBuffer(true);
+    QImage img = QImage(const_cast<quint8 *>(data), width, height, QImage::Format_ARGB32);
     // XXX: The previous version of this code used the quantum data directly
     // as an optimisation. We're introducing a copy overhead here which could
     // be factored out again if needed.

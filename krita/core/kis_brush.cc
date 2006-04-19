@@ -89,7 +89,7 @@ KisBrush::KisBrush(const QString& filename) : super(filename)
 
 KisBrush::KisBrush(const QString& filename,
            const QByteArray& data,
-           quint32 & dataPos) : super(filename)
+           qint32 & dataPos) : super(filename)
 {
     m_brushType = INVALID;
     m_ownData = false;
@@ -205,9 +205,23 @@ bool KisBrush::init()
                                   bh.header_size - sizeof(GimpBrushHeader));
     }
 
-    setName(i18n(name.ascii())); // Ascii? And what with real UTF-8 chars?
+    setName(i18n(name.toAscii())); // Ascii? And what with real UTF-8 chars?
 
-    if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
+    if (bh.width == 0 || bh.height == 0) {
+        return false;
+    }
+
+    QImage::Format imageFormat;
+
+    if (bh.bytes == 1) {
+        imageFormat = QImage::Format_RGB32;
+    } else {
+        imageFormat = QImage::Format_ARGB32;
+    }
+
+    m_img = QImage(bh.width, bh.height, imageFormat);
+
+    if (m_img.isNull()) {
         return false;
     }
 
@@ -216,7 +230,7 @@ bool KisBrush::init()
     if (bh.bytes == 1) {
         // Grayscale
 
-        if (static_cast<quint32>(k + bh.width * bh.height) > m_data.size()) {
+        if (static_cast<qint32>(k + bh.width * bh.height) > m_data.size()) {
             return false;
         }
 
@@ -232,12 +246,11 @@ bool KisBrush::init()
     } else if (bh.bytes == 4) {
         // RGBA
 
-        if (static_cast<quint32>(k + (bh.width * bh.height * 4)) > m_data.size()) {
+        if (static_cast<qint32>(k + (bh.width * bh.height * 4)) > m_data.size()) {
             return false;
         }
 
         m_brushType = IMAGE;
-        m_img.setAlphaBuffer(true);
         m_hasColor = true;
 
         for (quint32 y = 0; y < bh.height; y++) {
@@ -272,7 +285,7 @@ bool KisBrush::initFromPaintDev(KisPaintDevice* image, int x, int y, int w, int 
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
     setImage(image->convertToQImage(0, x, y, w, h));
-    setName(image->name());
+    setName(image->objectName());
 
     m_brushType = IMAGE;
     m_hasColor = true;
@@ -292,7 +305,7 @@ bool KisBrush::save()
 bool KisBrush::saveToDevice(QIODevice* dev) const
 {
     GimpBrushHeader bh;
-    QByteArray utf8Name = name().utf8(); // Names in v2 brushes are in UTF-8
+    QByteArray utf8Name = name().toUtf8(); // Names in v2 brushes are in UTF-8
     char const* name = utf8Name.data();
     int nameLength = qstrlen(name);
     int wrote;
@@ -694,8 +707,7 @@ QImage KisBrush::scaleImage(const ScaledBrush *srcBrush, double scale, double su
     int dstWidth = static_cast<int>(ceil(scale * width())) + 1;
     int dstHeight = static_cast<int>(ceil(scale * height())) + 1;
 
-    QImage dstImage(dstWidth, dstHeight, 32);
-    dstImage.setAlphaBuffer(true);
+    QImage dstImage(dstWidth, dstHeight, QImage::Format_ARGB32);
 
     const QImage srcImage = srcBrush->image();
 
@@ -810,13 +822,12 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
     if (xScale > 2 + DBL_EPSILON || yScale > 2 + DBL_EPSILON || xScale < 1 - DBL_EPSILON || yScale < 1 - DBL_EPSILON) {
         // smoothScale gives better results when scaling an image up
         // or scaling it to less than half size.
-        scaledImage = srcImage.smoothScale(width, height);
+        scaledImage = srcImage.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
         //filename = QString("smoothScale_%1x%2.png").arg(width).arg(height);
     }
     else {
-        scaledImage.create(width, height, 32);
-        scaledImage.setAlphaBuffer(srcImage.hasAlphaBuffer());
+        scaledImage = QImage(width, height, srcImage.format());
 
         for (int dstY = 0; dstY < height; dstY++) {
             for (int dstX = 0; dstX < width; dstX++) {
@@ -856,7 +867,7 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
                 int Qt::blue;
                 int alpha;
 
-                if (srcImage.hasAlphaBuffer()) {
+                if (srcImage.hasAlphaChannel()) {
                     red = static_cast<int>(a * b * qRed(topLeft)         * qAlpha(topLeft)
                         + a * (1 - b) * qRed(bottomLeft)             * qAlpha(bottomLeft)
                         + (1 - a) * b * qRed(topRight)               * qAlpha(topRight)
@@ -942,7 +953,7 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
 
 void KisBrush::findScaledBrushes(double scale, const ScaledBrush **aboveBrush, const ScaledBrush **belowBrush) const
 {
-    uint current = 0;
+    int current = 0;
 
     while (true) {
         *aboveBrush = &(m_scaledBrushes[current]);
@@ -1019,8 +1030,7 @@ QImage KisBrush::scaleSinglePixelImage(double scale, QRgb pixel, double subPixel
     int dstWidth = 2;
     int dstHeight = 2;
 
-    QImage outputImage(dstWidth, dstHeight, 32);
-    outputImage.setAlphaBuffer(true);
+    QImage outputImage(dstWidth, dstHeight, QImage::Format_ARGB32);
 
     double a = subPixelX;
     double b = subPixelY;
@@ -1108,8 +1118,7 @@ QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double 
     int width = image1.width();
     int height = image1.height();
 
-    QImage outputImage(width, height, 32);
-    outputImage.setAlphaBuffer(true);
+    QImage outputImage(width, height, QImage::Format_ARGB32);
 
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
@@ -1286,8 +1295,7 @@ void KisBrush::makeMaskImage() {
     if (!hasColor())
         return;
 
-    QImage img;
-    img.create(width(), height(), 32);
+    QImage img(width(), height(), QImage::Format_RGB32);
 
     if (m_img.width() == img.width() && m_img.height() == img.height()) {
         for (int x = 0; x < width(); x++) {

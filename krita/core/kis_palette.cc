@@ -153,7 +153,7 @@ bool KisPalette::save()
     // In any case, we don't use Columns...
     stream << "GIMP Palette\nName: " << name() << "\nColumns: " << m_columns << "\n#\n";
 
-    for (uint i = 0; i < m_colors.size(); i++) {
+    for (int i = 0; i < m_colors.size(); i++) {
         const KisPaletteEntry& entry = m_colors.at(i);
         QColor c = entry.color;
         stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
@@ -198,7 +198,7 @@ bool KisPalette::init()
         // XXX: No checks for wrong input yet!
         quint32 index = 0;
 
-        QStringList lines = QStringList::split("\n", s);
+        QStringList lines = s.split("\n", QString::SkipEmptyParts);
 
         if (lines.size() < 3) {
             return false;
@@ -219,7 +219,7 @@ bool KisPalette::init()
             return false;
         }
 
-        setName(i18n(lines[1].mid(strlen("Name: ")).trimmed().ascii()));
+        setName(i18n(lines[1].mid(strlen("Name: ")).trimmed().toAscii()));
 
         index = 2;
 
@@ -231,16 +231,16 @@ bool KisPalette::init()
         }
 
         // Loop over the rest of the lines
-        for (quint32 i = index; i < lines.size(); i++) {
+        for (qint32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith("#")) {
                 m_comment += lines[i].mid(1).trimmed() + " ";
             }
             else {
                 if (lines[i].contains("\t") > 0) {
-                    QStringList a = QStringList::split("\t", lines[i]);
+                    QStringList a = lines[i].split("\t", QString::SkipEmptyParts);
                     e.name = a[1];
 
-                    QStringList c = QStringList::split(" ", a[0]);
+                    QStringList c = a[0].split(" ", QString::SkipEmptyParts);
                     channel = c[0].trimmed();
                     r = channel.toInt();
                     channel = c[1].trimmed();

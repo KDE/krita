@@ -21,7 +21,7 @@
 
 void KisAutobrushShape::createBrush( QImage* img)
 {
-    img->create(m_w, m_h, 32);
+    *img = QImage(m_w, m_h, QImage::Format_ARGB32);
     for(int j = 0; j < m_h; j++)
     {
         for(int i = 0; i < m_w; i++)

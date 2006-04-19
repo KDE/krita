@@ -65,7 +65,7 @@ KisPattern::KisPattern(KisPaintDevice* image, int x, int y, int w, int h)
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
     setImage(image->convertToQImage(0, x, y, w, h));
-    setName(image->name());
+    setName(image->objectName());
 }
 
 KisPattern::~KisPattern()
@@ -99,7 +99,7 @@ bool KisPattern::save()
     // Version is 1 for now...
 
     GimpPatternHeader ph;
-    QByteArray utf8Name = name().utf8();
+    QByteArray utf8Name = name().toUtf8();
     char const* name = utf8Name.data();
     int nameLength = qstrlen(name);
 
@@ -155,7 +155,7 @@ bool KisPattern::init()
     qint32 k;
     QByteArray name;
 
-    if (sizeof(GimpPatternHeader) > m_data.size()) {
+    if ((int)sizeof(GimpPatternHeader) > m_data.size()) {
         return false;
     }
 
@@ -167,7 +167,7 @@ bool KisPattern::init()
     bh.bytes = ntohl(bh.bytes);
     bh.magic_number = ntohl(bh.magic_number);
 
-    if (bh.header_size > m_data.size() || bh.header_size == 0) {
+    if ((int)bh.header_size > m_data.size() || bh.header_size == 0) {
         return false;
     }
 
@@ -180,7 +180,21 @@ bool KisPattern::init()
 
     setName(i18n(name));
 
-    if (bh.width == 0 || bh.height == 0 || !m_img.create(bh.width, bh.height, 32)) {
+    if (bh.width == 0 || bh.height == 0) {
+        return false;
+    }
+
+    QImage::Format imageFormat;
+
+    if (bh.bytes == 1 || bh.bytes == 3) {
+        imageFormat = QImage::Format_RGB32;
+    } else {
+        imageFormat = QImage::Format_ARGB32;
+    }
+
+    m_img = QImage(bh.width, bh.height, imageFormat);
+
+    if (m_img.isNull()) {
         return false;
     }
 
@@ -192,14 +206,13 @@ bool KisPattern::init()
 
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
-                if (static_cast<quint32>(k) > m_data.size()) {
+                if (k > m_data.size()) {
                     kDebug(DBG_AREA_FILE) << "failed in gray\n";
                     return false;
                 }
 
                 val = m_data[k];
                 m_img.setPixel(x, y, qRgb(val, val, val));
-                m_img.setAlphaBuffer(false);
             }
         }
     } else if (bh.bytes == 2) {
@@ -208,7 +221,7 @@ bool KisPattern::init()
         qint32 alpha;
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
-                if (static_cast<quint32>(k + 2) > m_data.size()) {
+                if (k + 2 > m_data.size()) {
                     kDebug(DBG_AREA_FILE) << "failed in grayA\n";
                     return false;
                 }
@@ -216,14 +229,13 @@ bool KisPattern::init()
                 val = m_data[k];
                 alpha = m_data[k++];
                 m_img.setPixel(x, y, qRgba(val, val, val, alpha));
-                m_img.setAlphaBuffer(true);
             }
         }
     } else if (bh.bytes == 3) {
         // RGB without alpha
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
-                if (static_cast<quint32>(k + 3) > m_data.size()) {
+                if (k + 3 > m_data.size()) {
                     kDebug(DBG_AREA_FILE) << "failed in RGB\n";
                     return false;
                 }
@@ -232,14 +244,13 @@ bool KisPattern::init()
                               m_data[k + 1],
                               m_data[k + 2]));
                 k += 3;
-                m_img.setAlphaBuffer(false);
             }
         }
     } else if (bh.bytes == 4) {
         // Has alpha
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
-                if (static_cast<quint32>(k + 4) > m_data.size()) {
+                if (k + 4 > m_data.size()) {
                     kDebug(DBG_AREA_FILE) << "failed in RGBA\n";
                     return false;
                 }
@@ -249,7 +260,6 @@ bool KisPattern::init()
                                m_data[k + 2],
                                m_data[k + 3]));
                 k += 4;
-                m_img.setAlphaBuffer(true);
             }
         }
     } else {

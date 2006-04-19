@@ -881,7 +881,7 @@ void KisPainter::paintPolygon(const vKisPoint& points)
         if (points.count() > 1) {
             double distance = -1;
 
-            for (uint i = 0; i < points.count() - 1; i++) {
+            for (int i = 0; i < points.count() - 1; i++) {
                 distance = paintLine(points[i], PRESSURE_DEFAULT, 0, 0, points[i + 1], PRESSURE_DEFAULT, 0, 0, distance);
             }
             paintLine(points[points.count() - 1], PRESSURE_DEFAULT, 0, 0, points[0], PRESSURE_DEFAULT, 0, 0, distance);

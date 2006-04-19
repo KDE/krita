@@ -682,8 +682,7 @@ QImage KisAbstractColorSpace::convertToQImage(const quint8 *data, qint32 width, 
                                               qint32 renderingIntent, float /*exposure*/)
 
 {
-    QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
-    img.setAlphaBuffer( true );
+    QImage img = QImage(width, height, QImage::Format_ARGB32);
 
     KisColorSpace * dstCS;
 

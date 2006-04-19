@@ -85,11 +85,11 @@ QString KisFilterConfiguration::toString()
     QMap<QString, QVariant>::Iterator it;
     for ( it = m_properties.begin(); it != m_properties.end(); ++it ) {
         QDomElement e = doc.createElement( "property" );
-        e.setAttribute( "name", it.key().latin1() );
-        QVariant v = it.data();
+        e.setAttribute( "name", QString(it.key().toLatin1()) );
+        QVariant v = it.value();
         e.setAttribute( "type", v.typeName() );
-        QString s = v.asString();
-        QDomText text = doc.createCDATASection(v.asString() ); // XXX: Unittest this!
+        QString s = v.toString();
+        QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
         e.appendChild(text);
         root.appendChild(e);
     }
@@ -143,7 +143,7 @@ int KisFilterConfiguration::getInt(const QString & name, int def)
 {
     QVariant v = getProperty(name);
     if (v.isValid())
-        return v.asInt();
+        return v.toInt();
     else
         return def;
 
@@ -153,7 +153,7 @@ double KisFilterConfiguration::getDouble(const QString & name, double def)
 {
     QVariant v = getProperty(name);
     if (v.isValid())
-        return v.asDouble();
+        return v.toDouble();
     else
         return def;
 }
@@ -162,7 +162,7 @@ bool KisFilterConfiguration::getBool(const QString & name, bool def)
 {
     QVariant v = getProperty(name);
     if (v.isValid())
-        return v.asBool();
+        return v.toBool();
     else
         return def;
 }
@@ -171,7 +171,7 @@ QString KisFilterConfiguration::getString(const QString & name, QString def)
 {
     QVariant v = getProperty(name);
     if (v.isValid())
-        return v.asString();
+        return v.toString();
     else
         return def;
 }

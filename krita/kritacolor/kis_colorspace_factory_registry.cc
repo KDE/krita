@@ -119,7 +119,7 @@ Q3ValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorS
 
     QMap<QString, KisProfile * >::Iterator it;
     for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
-        KisProfile *  profile = it.data();
+        KisProfile *  profile = it.value();
         if (profile->colorSpaceSignature() == csf->colorSpaceSignature()) {
             profiles.push_back(profile);
         }

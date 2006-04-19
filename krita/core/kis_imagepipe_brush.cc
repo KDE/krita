@@ -55,11 +55,11 @@
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 {
     needsMovement = false;
-    QRegExp basicSplitter(" ", true);
-    QRegExp parasiteSplitter(":", true);
-    QStringList parasites = QStringList::split(basicSplitter, source);
-    for (uint i = 0; i < parasites.count(); i++) {
-        QStringList splitted = QStringList::split(parasiteSplitter, parasites.at(i));
+    QRegExp basicSplitter(" ");
+    QRegExp parasiteSplitter(":");
+    QStringList parasites = source.split(basicSplitter, QString::SkipEmptyParts);
+    for (int i = 0; i < parasites.count(); i++) {
+        QStringList splitted = parasites.at(i).split(parasiteSplitter, QString::SkipEmptyParts);
         if (splitted.count() != 2) {
             kWarning(41001) << "Wrong count for this parasite key/value:" << parasites.at(i) << endl;
             continue;
@@ -175,7 +175,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
 
     m_parasite.setBrushesCount();
 
-    for (uint i = 0; i < devices.at(0).count(); i++) {
+    for (int i = 0; i < devices.at(0).count(); i++) {
         m_brushes.append(new KisBrush(devices.at(0).at(i), 0, 0, w, h));
     }
 
@@ -207,13 +207,13 @@ bool KisImagePipeBrush::init()
     // The first line contains the name -- this means we look until we arrive at the first newline
     QByteArray line1;
 
-    quint32 i = 0;
+    qint32 i = 0;
 
     while (m_data[i] != '\n' && i < m_data.size()) {
         line1.append(m_data[i]);
         i++;
     }
-    setName(i18n(QString::fromUtf8(line1, line1.size()).ascii()));
+    setName(i18n(QString::fromUtf8(line1, line1.size()).toAscii()));
 
     i++; // Skip past the first newline
 
@@ -227,13 +227,13 @@ bool KisImagePipeBrush::init()
     }
 
     QString paramline = QString::fromUtf8(line2, line2.size());
-    quint32 m_numOfBrushes = paramline.left(paramline.find(' ')).toUInt();
-    m_parasite = paramline.mid(paramline.find(' ') + 1);
+    qint32 m_numOfBrushes = paramline.left(paramline.indexOf(' ')).toUInt();
+    m_parasite = paramline.mid(paramline.indexOf(' ') + 1);
     i++; // Skip past the second newline
 
-    quint32 numOfBrushes = 0;
+    qint32 numOfBrushes = 0;
     while (numOfBrushes < m_numOfBrushes && i < m_data.size()){
-        KisBrush * brush = new KisBrush(name() + "_" + numOfBrushes,
+        KisBrush * brush = new KisBrush(name() + "_" + QString().setNum(numOfBrushes),
                         m_data,
                         i);
         Q_CHECK_PTR(brush);
@@ -271,7 +271,7 @@ bool KisImagePipeBrush::save()
 
 bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
 {
-    QByteArray utf8Name = name().utf8(); // Names in v2 brushes are in UTF-8
+    QByteArray utf8Name = name().toUtf8(); // Names in v2 brushes are in UTF-8
     char const* name = utf8Name.data();
     int len = qstrlen(name);
 
@@ -289,14 +289,14 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     if (dev->write(name, len) == -1)
         return false;
 
-    if (dev->putch('\n') == -1)
+    if (dev->putChar('\n') == -1)
         return false;
 
     // Write the parasite (also writes number of brushes)
     if (!m_parasite.saveToDevice(dev))
         return false;
 
-    if (dev->putch('\n') == -1)
+    if (dev->putChar('\n') == -1)
         return false;
 
     // <gbr brushes>

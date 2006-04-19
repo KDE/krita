@@ -75,8 +75,8 @@ KisTileManager::KisTileManager() {
 
     counter = 0;
 
-    m_poolMutex = new QMutex(true);
-    m_swapMutex = new QMutex(true);
+    m_poolMutex = new QMutex(QMutex::Recursive);
+    m_swapMutex = new QMutex(QMutex::Recursive);
 }
 
 KisTileManager::~KisTileManager() {
@@ -169,7 +169,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
         freeInfo->pointer = tile->m_data;
         freeInfo->filePos = info->filePos;
         freeInfo->size = info->fsize;
-        uint pixelSize = (info->size / m_tileSize);
+        int pixelSize = (info->size / m_tileSize);
         if (m_freeLists.capacity() <= pixelSize)
             m_freeLists.resize(pixelSize + 1);
         m_freeLists[pixelSize].push_back(freeInfo);
@@ -192,7 +192,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
     m_bytesTotal -= info->size;
 
     delete info;
-    m_tileMap.erase(tile);
+    m_tileMap.remove(tile);
 
     doSwapping();
 
@@ -263,7 +263,7 @@ void KisTileManager::toSwap(TileInfo* info) {
         // ### check return values of mmap functions!
         KisTile *tile = info->tile;
         quint8* data = 0;
-        uint pixelSize = (info->size / m_tileSize);
+        int pixelSize = (info->size / m_tileSize);
         if (m_freeLists.capacity() > pixelSize) {
             if (!m_freeLists[pixelSize].empty()) {
                 // found one
@@ -395,7 +395,7 @@ void KisTileManager::printInfo()
     kDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
     kDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
     kDebug(DBG_AREA_TILES) << "Freelists information\n";
-    for (uint i = 0; i < m_freeLists.count(); i++) {
+    for (int i = 0; i < m_freeLists.count(); i++) {
         if ( ! m_freeLists[i].empty() ) {
             kDebug(DBG_AREA_TILES) << m_freeLists[i].size()
                     << " elements in the freelist for pixelsize " << i << "\n";

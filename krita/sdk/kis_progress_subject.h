@@ -27,7 +27,7 @@ class KRITAUI_EXPORT KisProgressSubject : public QObject {
 
 protected:
     KisProgressSubject() {};
-    KisProgressSubject(QObject * parent, const char * name) : QObject(parent, name) {};
+    KisProgressSubject(QObject * parent, const char * name) : QObject(parent) { setObjectName(name); }
     virtual ~KisProgressSubject();
 
 public:

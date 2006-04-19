@@ -268,8 +268,7 @@ QImage KisRgbF32ColorSpace::convertToQImage(const quint8 *dataU8, qint32 width, 
 {
     const float *data = reinterpret_cast<const float *>(dataU8);
 
-    QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
-    img.setAlphaBuffer(true);
+    QImage img = QImage(width, height, QImage::Format_ARGB32);
 
     qint32 i = 0;
     uchar *j = img.bits();

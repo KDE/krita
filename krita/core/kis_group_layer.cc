@@ -36,7 +36,7 @@ KisGroupLayer::KisGroupLayer(KisImage *img, const QString &name, quint8 opacity)
     m_x(0),
     m_y(0)
 {
-    m_projection = new KisPaintDevice(this, img->colorSpace(), name.latin1());
+    m_projection = new KisPaintDevice(this, img->colorSpace(), name.toLatin1());
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
@@ -77,7 +77,7 @@ void KisGroupLayer::setDirty(const QRect & rc, bool propagate)
 
 void KisGroupLayer::resetProjection()
 {
-    m_projection = new KisPaintDevice(this, image()->colorSpace(), name().latin1());
+    m_projection = new KisPaintDevice(this, image()->colorSpace(), name().toLatin1());
 }
 
 KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)

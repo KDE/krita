@@ -55,8 +55,9 @@ typedef KGenericFactory<Scripting> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
 
 Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+	setObjectName(name);
     setInstance(KritaScriptingFactory::instance());
 
 

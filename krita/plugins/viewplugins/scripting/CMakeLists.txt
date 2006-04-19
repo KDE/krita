@@ -4,7 +4,14 @@ add_subdirectory( kritascripting )
 add_subdirectory( kritacore )
 add_subdirectory( samples )
 
-include_directories( ${CMAKE_SOURCE_DIR}/krita/sdk ${CMAKE_SOURCE_DIR}/krita/core ${CMAKE_SOURCE_DIR}/krita/kritacolor/ ${CMAKE_SOURCE_DIR}/krita/ui ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories(
+	${KROSS_INCLUDES}
+	${CMAKE_SOURCE_DIR}/krita/sdk 
+	${CMAKE_SOURCE_DIR}/krita/core 
+	${CMAKE_SOURCE_DIR}/krita/kritacolor/ 
+	${CMAKE_SOURCE_DIR}/krita/ui 
+	${KDE4_INCLUDE_DIR} 
+	${QT_INCLUDES}  )
 
 
 ########### next target ###############
@@ -13,13 +20,14 @@ set(kritascripting_PART_SRCS scripting.cc)
 
 kde4_automoc(${kritascripting_PART_SRCS})
 
-kde4_add_plugin(kritascripting ${kritascripting_PART_SRCS})
+kde4_add_plugin(kritascripting_plug ${kritascripting_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritascripting )
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritascripting_plug )
+set_target_properties(kritascripting_plug PROPERTIES OUTPUT_NAME kritascripting)
 
-target_link_libraries(kritascripting  ${KDE4_KDECORE_LIBS} kritacommon krossmain kritascripting )
+target_link_libraries(kritascripting_plug  ${KDE4_KDECORE_LIBS} kritacommon krossmain kritascripting )
 
-install_targets(${PLUGIN_INSTALL_DIR} kritascripting )
+install_targets(${PLUGIN_INSTALL_DIR} kritascripting_plug )
 
 
 ########### install files ###############

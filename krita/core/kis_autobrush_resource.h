@@ -23,6 +23,7 @@
 
 class KisAutobrushShape {
     public:
+		virtual ~KisAutobrushShape(){}
         KisAutobrushShape(qint32 w, qint32 h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv)
         { };
         void createBrush( QImage* img);
@@ -34,6 +35,7 @@ class KisAutobrushShape {
 
 class KisAutobrushCircleShape : public KisAutobrushShape {
     public:
+		virtual ~KisAutobrushCircleShape(){}
         KisAutobrushCircleShape(qint32 w, qint32 h, double fh, double fv);
     public:
         virtual qint8 valueAt(qint32 x, qint32 y);
@@ -50,6 +52,7 @@ class KisAutobrushCircleShape : public KisAutobrushShape {
 
 class KisAutobrushRectShape : public KisAutobrushShape {
     public:
+		virtual ~KisAutobrushRectShape() {}
         KisAutobrushRectShape(qint32 w, qint32 h, double fh, double fv);
     protected:
         virtual qint8 valueAt(qint32 x, qint32 y);
@@ -60,6 +63,7 @@ class KisAutobrushRectShape : public KisAutobrushShape {
 class KisAutobrushResource : public KisBrush
 {
     public:
+		virtual ~KisAutobrushResource() {}
         KisAutobrushResource(QImage& img) : KisBrush("")
         {
             setImage(img);

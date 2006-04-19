@@ -21,6 +21,7 @@
 
 #include <ruby.h>
 
+#include "../api/krossconfig.h"
 #include "../api/class.h"
 #include "../api/dict.h"
 #include "../api/list.h"

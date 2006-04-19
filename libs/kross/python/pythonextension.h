@@ -22,6 +22,7 @@
 
 #include "pythonconfig.h"
 
+#include "../api/krossconfig.h"
 #include "../api/object.h"
 #include "../api/list.h"
 #include "../api/dict.h"

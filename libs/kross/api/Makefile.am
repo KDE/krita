@@ -2,6 +2,7 @@ include $(top_srcdir)/libs/kross/Makefile.global
 apiincludedir=$(includedir)/kross/api
 
 apiinclude_HEADERS = \
+    krossconfig.h \
     argument.h \
     callable.h \
     class.h \
@@ -26,6 +27,7 @@ apiinclude_HEADERS = \
 lib_LTLIBRARIES = libkrossapi.la
 
 libkrossapi_la_SOURCES = \
+    krossconfig.cpp \
     object.cpp \
     variant.cpp \
     list.cpp \

@@ -25,7 +25,7 @@
 #include "../api/eventsignal.h"
 //#include "../api/script.h"
 
-#include "krossconfig.h"
+#include "../api/krossconfig.h"
 #include "scriptcontainer.h"
 
 #include <qobject.h>

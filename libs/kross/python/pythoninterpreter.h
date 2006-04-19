@@ -21,6 +21,8 @@
 #define KROSS_PYTHON_INTERPRETER_H
 
 #include "pythonconfig.h"
+
+#include "../api/krossconfig.h"
 #include "../api/object.h"
 #include "../api/interpreter.h"
 #include "../main/manager.h"

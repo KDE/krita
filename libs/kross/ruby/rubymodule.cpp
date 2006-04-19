@@ -19,6 +19,7 @@
 
 #include "rubymodule.h"
 
+#include "../api/krossconfig.h"
 #include "../api/object.h"
 #include "../api/module.h"
 

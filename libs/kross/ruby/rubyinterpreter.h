@@ -21,6 +21,7 @@
 
 #include <ruby.h>
 
+#include "../api/krossconfig.h"
 #include "../api/interpreter.h"
 
 namespace Kross {

@@ -20,6 +20,7 @@
 #ifndef KROSS_RUBYRUBYSCRIPT_H
 #define KROSS_RUBYRUBYSCRIPT_H
 
+#include "../api/krossconfig.h"
 #include "../api/script.h"
 
 namespace Kross {

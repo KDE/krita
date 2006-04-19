@@ -20,7 +20,7 @@
 #ifndef KROSS_API_PROXY_H
 #define KROSS_API_PROXY_H
 
-#include "../main/krossconfig.h"
+#include "krossconfig.h"
 #include "object.h"
 #include "variant.h"
 #include "list.h"

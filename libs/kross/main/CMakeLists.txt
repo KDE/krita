@@ -1,12 +1,15 @@
 kde4_header()
 
 
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/kross/
+	${CMAKE_SOURCE_DIR}/libs/kross/api/
+)
 
 
 ########### next target ###############
 
 set(krossmain_LIB_SRCS 
-   krossconfig.cpp
    mainmodule.cpp 
    scriptcontainer.cpp 
    manager.cpp 
@@ -26,6 +29,6 @@ install_targets(${LIB_INSTALL_DIR} krossmain )
 
 ########### install files ###############
 
-install_files( /include/kross/main FILES  krossconfig.h      mainmodule.h      manager.h      scriptaction.h      scriptcontainer.h      scriptguiclient.h      wdgscriptsmanager.h  )
+install_files( /include/kross/main FILES  mainmodule.h      manager.h      scriptaction.h      scriptcontainer.h      scriptguiclient.h      wdgscriptsmanager.h  )
 
 kde4_footer()

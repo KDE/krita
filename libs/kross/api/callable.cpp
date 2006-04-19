@@ -21,7 +21,7 @@
 #include "variant.h"
 #include "dict.h"
 
-#include "../main/krossconfig.h"
+#include "krossconfig.h"
 //Added by qt3to4:
 #include <Q3ValueList>
 

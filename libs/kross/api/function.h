@@ -20,7 +20,7 @@
 #ifndef KROSS_API_FUNCTION_H
 #define KROSS_API_FUNCTION_H
 
-#include "../main/krossconfig.h"
+#include "krossconfig.h"
 #include "object.h"
 #include "list.h"
 

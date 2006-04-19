@@ -20,7 +20,7 @@
 #ifndef KROSS_API_EVENT_H
 #define KROSS_API_EVENT_H
 
-#include "../main/krossconfig.h"
+#include "krossconfig.h"
 #include "object.h"
 #include "argument.h"
 #include "callable.h"

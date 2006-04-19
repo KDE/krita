@@ -19,7 +19,7 @@
 #ifndef WDGSCRIPTSMANAGER_H
 #define WDGSCRIPTSMANAGER_H
 
-#include "main/scriptaction.h"
+#include <main/scriptaction.h>
 
 #include <q3listview.h>
 

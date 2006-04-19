@@ -430,56 +430,55 @@ void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
     }
 }
 
-void KoTextView::handleImStartEvent( QInputMethodEvent * )
+void KoTextView::handleInputMethodEvent( QInputMethodEvent * e )
 {
-    // nothing to do
-}
+#if 0 // Qt4: TODO PORTING
+    if ( ... compose ... )
+    {
+        // remove old preedit
+        if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+            textDocument()->removeSelection( KoTextDocument::Standard );
+        if ( textDocument()->hasSelection( KoTextDocument::InputMethodPreedit ) )
+            textDocument()->removeSelectedText( KoTextDocument::InputMethodPreedit, m_cursor );
 
-void KoTextView::handleImComposeEvent( QInputMethodEvent * e )
-{
-    // remove old preedit
-    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
-        textDocument()->removeSelection( KoTextDocument::Standard );
-    if ( textDocument()->hasSelection( KoTextDocument::InputMethodPreedit ) )
-        textDocument()->removeSelectedText( KoTextDocument::InputMethodPreedit, m_cursor );
+        // insert preedit
+        int preeditStartIdx = m_cursor->index();
+        textDocument()->setSelectionStart( KoTextDocument::InputMethodPreedit, m_cursor );
+        textObject()->insert( m_cursor, m_currentFormat, e->preeditString(), i18n("Insert Text"),
+                              KoTextDocument::Standard,
+                              KoTextObject::DoNotRepaint/* DO NOT REPAINT CURSOR! */ );
+        textDocument()->setSelectionEnd( KoTextDocument::InputMethodPreedit, m_cursor );
 
-    // insert preedit
-    int preeditStartIdx = m_cursor->index();
-    textDocument()->setSelectionStart( KoTextDocument::InputMethodPreedit, m_cursor );
-    textObject()->insert( m_cursor, m_currentFormat, e->preeditString(), i18n("Insert Text"),
-                          KoTextDocument::Standard,
-                          KoTextObject::DoNotRepaint/* DO NOT REPAINT CURSOR! */ );
-    textDocument()->setSelectionEnd( KoTextDocument::InputMethodPreedit, m_cursor );
+        // selection
+        int preeditSelStart = preeditStartIdx /* TODO ?! + e->cursorPos() */;
+        int preeditSelEnd   = preeditSelStart /* TODO ?! + e->selectionLength()*/;
+        m_cursor->setIndex( preeditSelStart );
+        textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
+        m_cursor->setIndex( preeditSelEnd );
+        textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
 
-    // selection
-    int preeditSelStart = preeditStartIdx /* TODO ?! + e->cursorPos() */;
-    int preeditSelEnd   = preeditSelStart /* TODO ?! + e->selectionLength()*/;
-    m_cursor->setIndex( preeditSelStart );
-    textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
-    m_cursor->setIndex( preeditSelEnd );
-    textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
+        // set cursor pos
+        m_cursor->setIndex( preeditSelStart );
 
-    // set cursor pos
-    m_cursor->setIndex( preeditSelStart );
+        textObject()->emitUpdateUI( true );
+        textObject()->emitShowCursor();
+        textObject()->selectionChangedNotify();
+    }
+    else if ( ... end ... )
+    {
+        // remove old preedit
+        if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+            textDocument()->removeSelection( KoTextDocument::Standard  );
+        if ( textDocument()->hasSelection( KoTextDocument::InputMethodPreedit ) )
+            textDocument()->removeSelectedText( KoTextDocument::InputMethodPreedit, m_cursor );
 
-    textObject()->emitUpdateUI( true );
-    textObject()->emitShowCursor();
-    textObject()->selectionChangedNotify();
-}
+        insertText( e->commitString() );
 
-void KoTextView::handleImEndEvent( QInputMethodEvent * e )
-{
-    // remove old preedit
-    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
-        textDocument()->removeSelection( KoTextDocument::Standard  );
-    if ( textDocument()->hasSelection( KoTextDocument::InputMethodPreedit ) )
-        textDocument()->removeSelectedText( KoTextDocument::InputMethodPreedit, m_cursor );
-
-    insertText( e->commitString() );
-
-    textObject()->emitUpdateUI( true );
-    textObject()->emitShowCursor();
-    textObject()->selectionChangedNotify();
+        textObject()->emitUpdateUI( true );
+        textObject()->emitShowCursor();
+        textObject()->selectionChangedNotify();
+    }
+#endif
 }
 
 void KoTextView::completion()
@@ -1504,7 +1503,7 @@ void KoTextView::copyLink()
     {
         KUrl::List lst;
         lst.append( var->url() );
-//      how to get a QList<QUrl> for QMimeData  
+//      how to get a QList<QUrl> for QMimeData
 //	QApplication::clipboard()->setMimeData( (new QMimeData)->setUrls(lst), QClipboard::Selection );
 //      QApplication::clipboard()->setMimeData( (new QMimeData)->setUrls(lst), QClipboard::Clipboard );
     }

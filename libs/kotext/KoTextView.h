@@ -118,9 +118,7 @@ public:
     void focusOutEvent();
     void handleKeyPressEvent( QKeyEvent * e, QWidget *, const QPoint& );
     void handleKeyReleaseEvent( QKeyEvent * e );
-    void handleImStartEvent( QInputMethodEvent * e );
-    void handleImComposeEvent( QInputMethodEvent * e );
-    void handleImEndEvent( QInputMethodEvent * e );
+    void handleInputMethodEvent( QInputMethodEvent * e );
     // iPoint is in Layout Unit pixels
     // return true if we add new parag with "insert direct cursor"
     bool handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint, bool canStartDrag = true, bool insertDirectCursor = false );

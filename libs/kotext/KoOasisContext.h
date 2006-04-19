@@ -146,7 +146,7 @@ public:
         QString name;
         int pos;
         bool startEqualsEnd;
-        bool operator<( BookmarkPosition& rhs ) const {
+        bool operator<( const BookmarkPosition& rhs ) const {
             return pos < rhs.pos;
         }
     };

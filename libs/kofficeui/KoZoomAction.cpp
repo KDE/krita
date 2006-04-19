@@ -18,10 +18,10 @@
 
 #include <KoZoomAction.h>
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qregexp.h>
-#include <q3valuelist.h>
+#include <QString>
+#include <QStringList>
+#include <QRegExp>
+#include <QList>
 
 #include <klocale.h>
 #include <q3tl.h>
@@ -48,16 +48,17 @@ void KoZoomAction::setZoom( const QString& text )
   int zoom = t.remove( '%' ).toInt( &ok );
 
   // where we'll store sorted new zoom values
-  Q3ValueList<int> list;
-  if( zoom > 10 ) list.append( zoom );
+  QList<int> list;
+  if( zoom > 10 )
+     list.append( zoom );
 
   // "Captured" non-empty sequence of digits
   QRegExp regexp("(\\d+)");
 
   const QStringList itemsList( items() );
-  for( QStringList::ConstIterator it = itemsList.begin(); it != itemsList.end(); ++it )
+  foreach( QString tmp, itemsList )
   {
-    regexp.search( *it );
+    regexp.indexIn( tmp );
     const int val=regexp.cap(1).toInt( &ok );
 
     //zoom : limit inferior=10
@@ -69,12 +70,12 @@ void KoZoomAction::setZoom( const QString& text )
 
   // update items with new sorted zoom values
   QStringList values;
-  for (Q3ValueList<int>::Iterator it = list.begin(); it != list.end(); ++it )
-    values.append( i18n("%1%", *it) );
+  foreach( int value, list )
+    values.append( i18n("%1%", value) );
   setItems( values );
 
   QString zoomStr = i18n("%1%",  zoom );
-  setCurrentItem( values.findIndex( zoomStr ) );
+  setCurrentItem( values.indexOf( zoomStr ) );
 }
 
 void KoZoomAction::setZoom( int zoom )
@@ -107,7 +108,7 @@ void KoZoomAction::init()
   values << i18n("%1%", QString("500"));
   setItems( values );
 
-  setCurrentItem( values.findIndex( i18n("%1%",  100 ) ) );
+  setCurrentItem( values.indexOf( i18n("%1%",  100 ) ) );
 
   connect( this, SIGNAL( activated( const QString& ) ),
     SLOT( activated( const QString& ) ) );

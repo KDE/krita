@@ -223,7 +223,7 @@ namespace {
 
         QRect currentBounds = m_layer->exactBounds();
         QRect oldBounds = currentBounds;
-        oldBounds.moveBy(oldpos.x() - newpos.x(), oldpos.y() - newpos.y());
+        oldBounds.translate(oldpos.x() - newpos.x(), oldpos.y() - newpos.y());
 
         m_updateRect = currentBounds | oldBounds;
     }
@@ -267,7 +267,7 @@ static int getID()
 
 
 KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
-    QObject(0, name.latin1()),
+    QObject(0),
     KShared(),
     m_id(getID()),
     m_index(-1),
@@ -280,6 +280,7 @@ KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
     m_image(img),
     m_compositeOp(COMPOSITE_OVER)
 {
+    setObjectName(name);
 }
 
 KisLayer::KisLayer(const KisLayer& rhs) :

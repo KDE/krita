@@ -20,8 +20,9 @@
 
 
 KisFilterConfigWidget::KisFilterConfigWidget(QWidget * parent, const char * name, Qt::WFlags f)
-    : QWidget(parent, name, f) 
+    : QWidget(parent, f) 
 {
+    setObjectName(name);
 }
 
 KisFilterConfigWidget::~KisFilterConfigWidget()

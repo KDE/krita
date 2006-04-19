@@ -27,7 +27,7 @@
 #include <dcopclient.h>
 
 KisImageIface::KisImageIface( KisImage * img )
-    : DCOPObject(img->name().utf8())
+    : DCOPObject(img->name().toUtf8())
 {
     m_img = img;
 }

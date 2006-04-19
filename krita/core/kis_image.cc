@@ -511,8 +511,9 @@ namespace {
 }
 
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KisColorSpace * colorSpace, const QString& name)
-    : QObject(0, name.latin1()), KShared()
+    : QObject(0), KShared()
 {
+    setObjectName(name);
     init(adapter, width, height, colorSpace, name);
     setName(name);
     m_dcop = 0L;
@@ -1092,7 +1093,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
             // XXX: This should also be done whenever a layer grows!
             Q3ValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
-            for (uint i = 0; i < actions.count(); i++) {
+            for (int i = 0; i < actions.count(); i++) {
                 actions.at(i)->act(player.data()->paintDevice(), width(), height());
             }
         }
@@ -1337,7 +1338,6 @@ void KisImage::renderToPainter(qint32 x1,
 
     if (paintFlags & PAINT_BACKGROUND) {
         m_bkg->paintBackground(img, x1, y1);
-        img.setAlphaBuffer(false);
     }
 
     if (paintFlags & PAINT_SELECTION) {
@@ -1451,7 +1451,6 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
 
     if (paintFlags & PAINT_BACKGROUND) {
         m_bkg->paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
-        image.setAlphaBuffer(false);
     }
 
     if (paintFlags & PAINT_SELECTION) {

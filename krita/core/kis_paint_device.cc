@@ -197,9 +197,10 @@ namespace {
 
 }
 
-KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
-        QObject(0, name), KShared(), m_exifInfo(0)
+KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, QString name) :
+        QObject(0), KShared(), m_exifInfo(0)
 {
+    setObjectName(name);
     if (colorSpace == 0) {
         kWarning(41001) << "Cannot create paint device without colorstrategy!\n";
         return;
@@ -232,9 +233,10 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, const char * name) :
 
 }
 
-KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, const char * name) :
-        QObject(0, name), KShared(), m_exifInfo(0)
+KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, QString name) :
+        QObject(0), KShared(), m_exifInfo(0)
 {
+    setObjectName(name);
     Q_ASSERT( colorSpace );
     m_longRunningFilterTimer = 0;
     m_dcop = 0;
@@ -280,7 +282,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
             Q_CHECK_PTR(m_datamanager);
         }
         else {
-            kWarning() << "rhs " << rhs.name() << " has no datamanager\n";
+            kWarning() << "rhs " << rhs.objectName() << " has no datamanager\n";
         }
         m_extentIsValid = rhs.m_extentIsValid;
         m_x = rhs.m_x;
@@ -516,7 +518,8 @@ void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 
 void KisPaintDevice::crop(QRect r)
 {
-    r.moveBy(-m_x, -m_y); m_datamanager->setExtent(r);
+    r.translate(-m_x, -m_y); 
+    m_datamanager->setExtent(r);
 }
 
 void KisPaintDevice::clear()
@@ -616,7 +619,7 @@ bool KisPaintDevice::read(KoStore *store)
 
 void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent)
 {
-    kDebug(41004) << "Converting " << name() << " to " << dstColorSpace->id().id() << " from "
+    kDebug(41004) << "Converting " << objectName() << " to " << dstColorSpace->id().id() << " from "
               << m_colorSpace->id().id() << "\n";
     if ( (colorSpace()->id() == dstColorSpace->id()) )
     {
@@ -701,13 +704,9 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
 {
     QImage img = image;
 
-    // Krita is little-endian inside.
-    if (img.bitOrder() == QImage::LittleEndian) {
-	img = img.convertBitOrder(QImage::BigEndian);
+    if (img.format() != QImage::Format_ARGB32) {
+        img = img.convertToFormat(QImage::Format_ARGB32);
     }
-
-    // Krita likes bgra (convertDepth returns *this is the img is alread 32 bits)
-    img = img.convertDepth( 32 );
 #if 0
     // XXX: Apply import profile
     if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")) {
@@ -845,7 +844,7 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
 
     QColor c;
     quint8 opacity;
-    QImage img(w,h,32);
+    QImage img(w, h, QImage::Format_ARGB32);
 
     for (qint32 y=0; y < h; ++y) {
         qint32 iY = (y * srch ) / h;

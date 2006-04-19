@@ -45,7 +45,7 @@ ImageViewer::ImageViewer(QWidget *widget, const char * name)
 
 void ImageViewer::setImage(QImage & image)
 {
-    m_image = QPixmap(image);
+    m_image = QPixmap::fromImage(image);
     m_label->setPixmap(m_image);
     resizeContents( m_image.width(), m_image.height() );
     repaintContents(false);

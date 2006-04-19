@@ -45,7 +45,8 @@ qint32 KisPaintDeviceIface::nChannels() const
 
 QByteArray KisPaintDeviceIface::readBytes(qint32 x, qint32 y, qint32 w, qint32 h)
 {
-    QByteArray b (w * h * m_parent->pixelSize());
+    QByteArray b;
+    b.resize(w * h * m_parent->pixelSize());
 
     m_parent->readBytes((quint8*)b.data(), x, y, w, h);
     return b;

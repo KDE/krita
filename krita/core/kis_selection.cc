@@ -37,7 +37,7 @@
 #include "kis_selection.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), (QString("selection for ") + dev->name()).latin1())
+    : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), QString("selection for ") + dev->objectName())
     , m_parentPaintDevice(dev)
 {
     Q_ASSERT(dev);
@@ -85,14 +85,14 @@ QImage KisSelection::maskImage()
     if (m_parentPaintDevice) {
 
         m_parentPaintDevice->exactBounds(x, y, w, h);
-        img = QImage(w, h, 32);
+        img = QImage(w, h, QImage::Format_RGB32);
     }
     else {
         x = 0;
         y = 0;
         w = image()->width();
         h = image()->width();
-        img = QImage(w, h, 32);
+        img = QImage(w, h, QImage::Format_RGB32);
     }
 
     for (y2 = y; y2 < h - y; ++y2) {

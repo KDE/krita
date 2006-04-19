@@ -92,7 +92,6 @@ kde4_add_ui3_files(kritaui_LIB_SRCS
    kis_matrix_widget.ui 
    kis_previewwidgetbase.ui 
    wdgapplyprofile.ui 
-   wdgautobrush.ui 
    wdgcolorsettings.ui 
    wdgdisplaysettings.ui 
    wdglayerproperties.ui 
@@ -109,6 +108,7 @@ kde4_add_ui3_files(kritaui_LIB_SRCS
    wdgtabletsettings.ui )
 
 kde4_add_ui_files(kritaui_LIB_SRCS 
+    wdgautobrush.ui 
 	wdgautogradient.ui
 	wdgnewimage.ui 
 	wdggeneralsettings.ui 

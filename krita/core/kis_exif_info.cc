@@ -57,7 +57,7 @@ QDomElement KisExifInfo::save(QDomDocument& doc)
     QDomElement elmt = doc.createElement("ExifInfo");
     for( KisExifInfo::evMap::const_iterator it = begin(); it != end(); ++it)
     {
-        ExifValue ev = it.data();
+        ExifValue ev = it.value();
         QDomElement evD = ev.save( doc);
         evD.setAttribute("name", it.key());
         elmt.appendChild(evD);

@@ -48,8 +48,9 @@
 #include "kcurve.h"
 
 KCurve::KCurve(QWidget *parent, const char *name, Qt::WFlags f)
-            : QWidget(parent, name, f)
+            : QWidget(parent, f)
 {
+    setObjectName(name);
     m_grab_point     = NULL;
     m_readOnlyMode   = false;
     m_guideVisible   = false;
@@ -57,7 +58,8 @@ KCurve::KCurve(QWidget *parent, const char *name, Qt::WFlags f)
     m_pix = NULL;
     
     setMouseTracking(true);
-    setPaletteBackgroundColor(Qt::NoBackground);
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_OpaquePaintEvent);
     setMinimumSize(150, 50);
     QPair<double,double> *p = new QPair<double,double>;
     p->first = 0.0; p->second=0.0;
@@ -78,21 +80,21 @@ void KCurve::reset(void)
 {
     m_grab_point   = NULL;    
     m_guideVisible = false;
-    repaint(false);
+    repaint();
 }
 
 void KCurve::setCurveGuide(QColor color)
 {
     m_guideVisible = true;
     m_colorGuide   = color;
-    repaint(false);
+    repaint();
 }
 
 void KCurve::setPixmap(QPixmap pix)
 {
     if (m_pix) delete m_pix;
     m_pix = new QPixmap(pix);
-    repaint(false);
+    repaint();
 }
 
 void KCurve::keyPressEvent(QKeyEvent *e)
@@ -118,7 +120,7 @@ void KCurve::keyPressEvent(QKeyEvent *e)
             m_points.remove(m_grab_point);
         }
         m_grab_point = closest_point;
-        repaint(false);
+        repaint();
     }
     else
         QWidget::keyPressEvent(e);
@@ -135,17 +137,18 @@ void KCurve::paintEvent(QPaintEvent *)
     
     // Drawing selection or all histogram values.
     // A QPixmap is used for enable the double buffering.
-    
+    //XXX: KDE4 widgets are automatically double buffered.
     QPixmap pm(size());
     QPainter p1;
-    p1.begin(&pm, this);
+    p1.begin(&pm);
+    p1.initFrom(this);
     
     //  draw background
     if(m_pix)
     {
         p1.scale(1.0*wWidth/m_pix->width(), 1.0*wHeight/m_pix->height());
         p1.drawPixmap(0, 0, *m_pix);
-        p1.resetXForm();
+        p1.resetMatrix();
     }
     else
         pm.fill();
@@ -206,7 +209,8 @@ void KCurve::paintEvent(QPaintEvent *)
     }
     
     p1.end();
-    bitBlt(this, 0, 0, &pm);
+    QPainter p2(this);
+    p2.drawPixmap(0, 0, pm);
 }
 
 void KCurve::mousePressEvent ( QMouseEvent * e )
@@ -286,7 +290,7 @@ void KCurve::mousePressEvent ( QMouseEvent * e )
         }
         p = m_points.next();
     }
-    repaint(false);
+    repaint();
 }
 
 void KCurve::mouseReleaseEvent ( QMouseEvent * e )
@@ -298,7 +302,7 @@ void KCurve::mouseReleaseEvent ( QMouseEvent * e )
     
     setCursor( KCursor::arrowCursor() );    
     m_dragging = false;
-    repaint(false);
+    repaint();
     emit modified();
 }
 
@@ -354,7 +358,7 @@ void KCurve::mouseMoveEvent ( QMouseEvent * e )
         emit modified();
     }
         
-    repaint(false);
+    repaint();
 }
 
 double KCurve::getCurveValue(double x)

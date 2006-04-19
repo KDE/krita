@@ -22,8 +22,16 @@
 #include <qobject.h>
 //Added by qt3to4:
 #include <QResizeEvent>
-#include "wdgautobrush.h"
+#include "ui_wdgautobrush.h"
 #include <kis_autobrush_resource.h>
+
+class KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrush
+{
+    Q_OBJECT
+
+    public:
+        KisWdgAutobrush(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
 
 class KisAutobrush : public KisWdgAutobrush
 {

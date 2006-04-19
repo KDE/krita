@@ -187,7 +187,7 @@ template <> void calcDimensions <KisHLineIteratorPixel>
     if(dev->hasSelection())
     {
         QRect r = dev->selection()->selectedExactRect();
-        r.rect(&srcStart, &firstLine, &srcLen, &numLines);
+        r.getRect(&srcStart, &firstLine, &srcLen, &numLines);
     }
     else
         dev->exactBounds(srcStart, firstLine, srcLen, numLines);
@@ -199,7 +199,7 @@ template <> void calcDimensions <KisVLineIteratorPixel>
     if(dev->hasSelection())
     {
         QRect r = dev->selection()->selectedExactRect();
-        r.rect(&firstLine, &srcStart, &numLines, &srcLen);
+        r.getRect(&firstLine, &srcStart, &numLines, &srcLen);
     }
     else
         dev->exactBounds(firstLine, srcStart, numLines, srcLen);

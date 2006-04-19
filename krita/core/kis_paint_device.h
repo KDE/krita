@@ -83,7 +83,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisColorSpace * colorSpace, const char * name = 0);
+    KisPaintDevice(KisColorSpace * colorSpace, QString name = QString());
 
     /**
      * Create a new paint device with the specified colorspace. The
@@ -93,7 +93,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisLayer *parentLayer, KisColorSpace * colorSpace, const char * name = 0);
+    KisPaintDevice(KisLayer *parentLayer, KisColorSpace * colorSpace, QString name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();

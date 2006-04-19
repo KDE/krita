@@ -222,7 +222,7 @@ bool ExifValue::load(const QDomElement& elmt)
         {
             QString instr = elmt.attribute("value");
             QByteArray out;
-            QByteArray in = instr.utf8();
+            QByteArray in = instr.toUtf8();
             KCodecs::base64Decode( in, out);
             out.resize(out.size() - 2 );
             setAsUndefined((uchar*)out.data(), out.size() );
@@ -336,8 +336,7 @@ QDomElement ExifValue::save(QDomDocument& doc)
         case EXIF_TYPE_UNDEFINED:
         {
             UByteArray value = asUndefined();
-            QByteArray data(value.size());
-            data.setRawData((char*)value.data(), value.size());
+            QByteArray data = QByteArray::fromRawData((char*)value.data(), value.size());
             QByteArray encodedData;
             KCodecs::base64Encode( data, encodedData );
             elmt.setAttribute("value", QString(encodedData));
@@ -519,7 +518,7 @@ void ExifValue::convertToData(unsigned char ** data, unsigned int* size, ExifVal
             *size = str.length();
             *data = new uchar[ *size ];
             uchar* ptr = *data;
-            memcpy(ptr, str.ascii(), (*size)*sizeof(uchar));
+            memcpy(ptr, str.toAscii(), (*size)*sizeof(uchar));
         }
         return;
         break;

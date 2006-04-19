@@ -928,7 +928,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
 
     // grid row spacing
     indentGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
-    for ( int i = 1 ; i < indentGrid->numRows() ; ++i )
+    for ( int i = 1 ; i < indentGrid->rowCount() ; ++i )
         indentGrid->setRowStretch( i, 1 );
     mainGrid->addWidget( indentFrame, 0, 0 );
 
@@ -967,7 +967,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
 
     // grid row spacing
     spacingGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
-    for ( int i = 1 ; i < spacingGrid->numRows() ; ++i )
+    for ( int i = 1 ; i < spacingGrid->rowCount() ; ++i )
         spacingGrid->setRowStretch( i, 1 );
     mainGrid->addWidget( spacingFrame, 1, 0 );
 
@@ -998,13 +998,13 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
 
     // grid row spacing
     pSpaceGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
-    for ( int i = 1 ; i < pSpaceGrid->numRows() ; ++i )
+    for ( int i = 1 ; i < pSpaceGrid->rowCount() ; ++i )
         pSpaceGrid->setRowStretch( i, 1 );
     mainGrid->addWidget( pSpaceFrame, 2, 0 );
 
     // --------------- preview --------------------
     prev1 = new KPagePreview( this );
-    mainGrid->addMultiCellWidget( prev1, 0, mainGrid->numRows()-1, 1, 1 );
+    mainGrid->addMultiCellWidget( prev1, 0, mainGrid->rowCount()-1, 1, 1 );
 
     mainGrid->setColumnStretch( 1, 1 );
     //mainGrid->setRowStretch( 4, 1 );
@@ -1247,9 +1247,9 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent )
     endFramePageGrid->addWidget( cHardBreakAfter, 3, 0 );
 
     endFramePageGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
-    for ( int i = 0 ; i < endFramePageGrid->numRows()-1 ; ++i )
+    for ( int i = 0 ; i < endFramePageGrid->rowCount()-1 ; ++i )
         endFramePageGrid->setRowStretch( 0, 0 );
-    endFramePageGrid->setRowStretch( endFramePageGrid->numRows()-1, 1 );
+    endFramePageGrid->setRowStretch( endFramePageGrid->rowCount()-1, 1 );
     grid->addWidget( endFramePage, 2, 0 );
 
     endFramePage->setEnabled(breakLine);

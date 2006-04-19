@@ -1,10 +1,15 @@
 kde4_header()
+macro_optional_find_package(KROSS)
 
 include_directories( 
 	${CMAKE_SOURCE_DIR}/libs/kofficeui/
 	${CMAKE_SOURCE_DIR}/libs/store/
 	${KDE4_INCLUDE_DIR} 
 	${QT_INCLUDES}  )
+# Laurent: need to detect ruby/python
+if(KOFFICE_ENABLE_SCRIPTING)
+	add_subdirectory(kross)
+endif(KOFFICE_ENABLE_SCRIPTING)
 
 add_subdirectory( store ) 
 add_subdirectory( kwmf ) 
@@ -16,7 +21,6 @@ add_subdirectory( kformula )
 add_subdirectory( kopalette ) 
 add_subdirectory( kopainter ) 
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KROSSDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KROSSDIR)")
 
 

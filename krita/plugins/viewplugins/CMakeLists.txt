@@ -14,8 +14,9 @@ add_subdirectory( screenshot )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SCRIPTINGDIR)")
-
+if(KOFFICE_ENABLE_SCRIPTING)
+	add_subdirectory(scripting)
+endif(KOFFICE_ENABLE_SCRIPTING)	
 
 
 ########### install files ###############

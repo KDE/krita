@@ -208,7 +208,7 @@ void KoStyleManager::addGeneralTab( int flags ) {
     tabLayout->addWidget( nameLabel, 0, 0 );
 
     m_styleCombo = new QComboBox( tab );
-    m_styleCombo->setEditable( false ); 
+    m_styleCombo->setEditable( false );
 
     tabLayout->addWidget( m_styleCombo, 1, 1 );
 
@@ -492,13 +492,13 @@ void KoStyleManager::moveUpStyle()
     int pos2 = m_styleOrder.indexOf( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.removeAll( m_styleOrder.at(pos2));
+        m_styleOrder.removeAt(pos2);
         m_styleOrder.insert( pos2-1, currentStyleName);
     }
 
     int pos = m_stylesList->currentRow();
     noSignals=true;
-    m_stylesList->item( pos )->setText( m_stylesList->item( pos-1 )->text() );  
+    m_stylesList->item( pos )->setText( m_stylesList->item( pos-1 )->text() );
     m_styleCombo->setItemText( pos, m_stylesList->item( pos-1 )->text() );
 
     m_stylesList->item(pos-1)->setText( currentStyleDisplayName );
@@ -520,7 +520,7 @@ void KoStyleManager::moveDownStyle()
     int pos2 = m_styleOrder.indexOf( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.removeAll( m_styleOrder.at(pos2));
+        m_styleOrder.removeAt( pos2 );
         m_styleOrder.insert( pos2+1, currentStyleName);
     }
 

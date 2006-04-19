@@ -40,7 +40,9 @@ const QString EventScript::getClassName() const
 
 Object::Ptr EventScript::call(const QString& name, KSharedPtr<List> arguments)
 {
-    krossdebug( QString("EventScript::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) );
+#ifdef KROSS_API_EVENT_CALL_DEBUG
+	krossdebug( QString("EventScript::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) );
+#endif	
     //TODO
     return Object::Ptr();
 }

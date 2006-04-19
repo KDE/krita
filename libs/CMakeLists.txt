@@ -7,6 +7,7 @@ include_directories(
 	${KDE4_INCLUDE_DIR} 
 	${QT_INCLUDES}  )
 # Laurent: need to detect ruby/python
+MESSAGE(STATUS "KOFFICE_ENABLE_SCRIPTING :<${KOFFICE_ENABLE_SCRIPTING}>")
 if(KOFFICE_ENABLE_SCRIPTING)
 	add_subdirectory(kross)
 endif(KOFFICE_ENABLE_SCRIPTING)

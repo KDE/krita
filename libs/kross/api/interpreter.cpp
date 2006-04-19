@@ -94,9 +94,9 @@ Interpreter* InterpreterInfo::getInterpreter()
 {
     if(m_interpreter) // buffered
         return m_interpreter;
-
+#ifdef KROSS_API_EVENT_CALL_DEBUG
     krossdebug( QString("Loading the interpreter library for %1").arg(m_interpretername) );
-
+#endif
     // Load the krosspython library.
     KLibLoader *libloader = KLibLoader::self();
 
@@ -127,7 +127,9 @@ Interpreter* InterpreterInfo::getInterpreter()
         else {
             // Job done. The library is loaded and our Interpreter* points
             // to the external Kross::Python::Interpreter* instance.
+#ifdef KROSS_API_EVENT_CALL_DEBUG 
             krossdebug("Successfully loaded Interpreter instance from library.");
+#endif
         }
     }
 

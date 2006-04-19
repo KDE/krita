@@ -122,9 +122,10 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
         //FIXME namespace, e.g. "mychild1.mychild2.myfunction"
         return object->call(name, arguments);
     }
-
+#ifdef KROSS_API_OBJECT_CALL_DEBUG
     // If there exists no such object return NULL.
     krossdebug( QString("Object '%1' has no callable object named '%2'.").arg(getName()).arg(name) );
+#endif
     return Object::Ptr();
 }
 

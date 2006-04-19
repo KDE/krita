@@ -1,10 +1,16 @@
 kde4_header()
+macro_optional_find_package(PythonLibs)
+
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 add_subdirectory( api )
 add_subdirectory( main )
 add_subdirectory( runner )
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(PYTHONSUBDIR)")
+if(PYTHON_FRAMEWORK_INCLUDES)
+	add_subdirectory(python)
+endif(PYTHON_FRAMEWORK_INCLUDES)		
+
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(RUBYSUBDIR)")
 
 

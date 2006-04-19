@@ -234,6 +234,9 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     scale = int(floatscale*srcLen);
     scaleDenom = srcLen;
 
+    if(scaleDenom == 0)
+        return;
+
     qint32 support = filterStrategy->intSupport();
     qint32 dstLen, dstStart;
     qint32 invfscale = 256;

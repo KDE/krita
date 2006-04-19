@@ -1,14 +1,26 @@
 kde4_header()
 
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/kross/api/
+	${PYTHON_INCLUDE_PATH}
+)
+
+
+
 add_subdirectory( CXX )
 add_subdirectory( scripts )
 
 
-
+set(libkrosspythoncxx_SRCS 
+    ${CMAKE_SOURCE_DIR}/libs/kross/python/CXX/cxxsupport.cxx 
+    ${CMAKE_SOURCE_DIR}/libs/kross/python/CXX/cxx_extensions.cxx 
+    ${CMAKE_SOURCE_DIR}/libs/kross/python/CXX/cxxextensions.c 
+    ${CMAKE_SOURCE_DIR}/libs/kross/python/CXX/IndirectPythonInterface.cxx
+	)
 
 ########### next target ###############
 
-set(krosspython_PART_SRCS 
+set(krosspython_PART_SRCS ${libkrosspythoncxx_SRCS}
    pythonextension.cpp 
    pythonmodule.cpp 
    pythonobject.cpp 
@@ -22,7 +34,7 @@ kde4_add_plugin(krosspython ${krosspython_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosspython )
 
-target_link_libraries(krosspython  ${KDE4_KDECORE_LIBS} krosspythoncxx krossapi krossmain )
+target_link_libraries(krosspython  ${KDE4_KDECORE_LIBS} krossapi krossmain ${PYTHON_LIBRARIES})
 
 install_targets(${PLUGIN_INSTALL_DIR} krosspython )
 

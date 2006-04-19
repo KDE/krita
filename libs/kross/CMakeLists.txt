@@ -7,9 +7,10 @@ add_subdirectory( api )
 add_subdirectory( main )
 add_subdirectory( runner )
 
-if(PYTHON_FRAMEWORK_INCLUDES)
+MESSAGE(STATUS "s :PYTHON_INCLUDE_PATH :<${PYTHON_INCLUDE_PATH}")
+if(PYTHON_INCLUDE_PATH)
 	add_subdirectory(python)
-endif(PYTHON_FRAMEWORK_INCLUDES)		
+endif(PYTHON_INCLUDE_PATH)		
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(RUBYSUBDIR)")
 

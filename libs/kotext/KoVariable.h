@@ -329,7 +329,7 @@ public:
     KoVariable *selectedVariable()const {return m_varSelected;}
 
     /// List of KActions to put into the popupmenu on a variable
-    Q3PtrList<KAction> popupActionList() const;
+    QList<KAction*> popupActionList() const;
 
  protected slots:
     // This is here because variables and formats are not QObjects

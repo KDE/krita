@@ -573,9 +573,9 @@ void KoVariableCollection::setVariableSelected(KoVariable * var)
 }
 
 // TODO change to QValueList<KAction *>, but only once plugActionList takes that
-Q3PtrList<KAction> KoVariableCollection::popupActionList() const
+QList<KAction*> KoVariableCollection::popupActionList() const
 {
-    Q3PtrList<KAction> listAction;
+    QList<KAction*> listAction;
     // Insert list of actions that change the subtype
     const QStringList subTypeList = m_varSelected->subTypeList();
     kDebug() << k_funcinfo << "current subtype=" << m_varSelected->subType() << endl;

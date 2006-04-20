@@ -35,10 +35,10 @@
  * user-visible, translated string that can be used in the 
  * user interface.
  */
-template<typename _T>
+template<typename T>
 class KisGenericRegistry {
 protected:
-    typedef std::map<KisID, _T> storageMap;
+    typedef std::map<KisID, T> storageMap;
 public:
     KisGenericRegistry() { };
     virtual ~KisGenericRegistry() { };
@@ -46,9 +46,9 @@ public:
 
     /**
      * add an object to the registry
-     * @param item the item to add (NOTE: _T must have an KisID id() function)
+     * @param item the item to add (NOTE: T must have an KisID id() function)
      */
-    void add(_T item)
+    void add(T item)
     {
         m_storage.insert( typename storageMap::value_type( item->id(), item) );
     }
@@ -57,7 +57,7 @@ public:
      * @param id the id of the object
      * @param item the item
      */
-    void add(KisID id, _T item)
+    void add(KisID id, T item)
     {
         m_storage.insert(typename storageMap::value_type(id, item));
     }
@@ -65,9 +65,9 @@ public:
      * This function remove an item from the registry
      * @return the object which have been remove from the registry and which can be safely delete
      */
-    _T remove(const KisID& name)
+    T remove(const KisID& name)
     {
-        _T p = 0;
+        T p = 0;
         typename storageMap::iterator it = m_storage.find(name);
         if (it != m_storage.end()) {
             m_storage.erase(it);
@@ -80,18 +80,18 @@ public:
      * @param id the identifiant of the object
      * @return the object which have been remove from the registry and which can be safely delete
      */
-    _T remove(const QString& id)
+    T remove(const QString& id)
     {
         return remove(KisID(id,""));
     }
     /**
      * This function allow to get an object from its KisID
      * @param name the KisID of the object
-     * @return _T the object
+     * @return T the object
      */
-    _T get(const KisID& name) const
+    T get(const KisID& name) const
     {
-        _T p = _T(0);
+        T p = T(0);
         typename storageMap::const_iterator it = m_storage.find(name);
         if (it != m_storage.end()) {
             p = it->second;
@@ -103,7 +103,7 @@ public:
      * Get a single entry based on the identifying part of KisID, not the
      * the descriptive part.
      */
-    _T get(const QString& id) const
+    T get(const QString& id) const
     {
         return get(KisID(id, ""));
     }

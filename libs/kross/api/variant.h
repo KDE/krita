@@ -56,11 +56,11 @@ namespace Kross { namespace Api {
             inline operator int () { return getValue().toInt(); }
             inline operator uint () { return getValue().toUInt(); }
             inline operator double () { return getValue().toDouble(); }
-            inline operator const char* () { return getValue().toString().latin1(); }
+            inline operator const char* () { return getValue().toString().toLatin1().data(); }
 
             inline operator QString () { return getValue().toString(); }
             inline operator const QString () { return getValue().toString(); }
-            inline operator const QString& () { return getValue().asString(); }
+            inline operator const QString& () { return getValue().toString(); }
 
             //inline operator Q3CString () { return getValue().toCString(); }
             //inline operator const Q3CString () { return getValue().toCString(); }

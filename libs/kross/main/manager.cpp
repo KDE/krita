@@ -212,7 +212,7 @@ Module* Manager::loadModule(const QString& modulename)
     }
 
     KLibLoader* loader = KLibLoader::self();
-    KLibrary* lib = loader->globalLibrary( modulename.latin1() );
+    KLibrary* lib = loader->globalLibrary( modulename.toLatin1().data() );
     if(! lib) {
         krosswarning( QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) );
         return 0;

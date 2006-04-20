@@ -120,7 +120,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
 */
     }
     catch(Kross::Api::Exception::Ptr e) {
-        std::cout << QString("EXCEPTION %1").arg(e->toString()).latin1() << std::endl;
+        std::cout << QString("EXCEPTION %1").arg(e->toString()).toLatin1().data() << std::endl;
     }
 
 /*TESTCASE

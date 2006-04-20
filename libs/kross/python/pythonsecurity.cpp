@@ -123,9 +123,9 @@ PyObject* PythonSecurity::compile_restricted(const QString& source, const QStrin
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function '%1' is not callable.").arg("compile_restricted")) );
 
         Py::Tuple args(3);
-        args[0] = Py::String(source.utf8());
-        args[1] = Py::String(filename.utf8());
-        args[2] = Py::String(mode.utf8());
+        args[0] = Py::String(source.toUtf8());
+        args[1] = Py::String(filename.toUtf8());
+        args[2] = Py::String(mode.toUtf8());
 
         Py::Object result = funcobject.apply(args);
 

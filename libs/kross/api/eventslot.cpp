@@ -44,10 +44,13 @@ const QString EventSlot::getClassName() const
     return "Kross::Api::EventSlot";
 }
 
-Object::Ptr EventSlot::call(const QString& /*name*/, List::Ptr arguments)
+Object::Ptr EventSlot::call(const QString& name, List::Ptr arguments)
 {
 #ifdef KROSS_API_EVENTSLOT_CALL_DEBUG
     krossdebug( QString("EventSlot::call() name=%1 m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) );
+#else
+    Q_UNUSED(name);
+    Q_UNUSED(arguments);
 #endif
 
 ///\todo implement new QMetaObject-stuff
@@ -57,7 +60,7 @@ Object::Ptr EventSlot::call(const QString& /*name*/, List::Ptr arguments)
     if(n.startsWith("1")) // Remove prefix of SLOT-macros
         n.remove(0,1);
 
-    int slotid = m_receiver->metaObject()->findSlot(n.latin1(), false);
+    int slotid = m_receiver->metaObject()->findSlot(n.toLatin1().data(), false);
     if(slotid < 0)
         throw Exception::Ptr( new Exception(QString("No such slot '%1'.").arg(n)) );
 
@@ -83,7 +86,7 @@ QCString EventSlot::getSlot(const QCString& signal)
     QString signalname = signature.left(startpos);
     QString params = signature.mid(startpos + 1, endpos - startpos - 1);
     //QStringList paramlist = QStringList::split(",", params);
-    QCString slot = QString("callback(" + params + ")").latin1(); //normalizeSignalSlot();
+    QCString slot = QString("callback(" + params + ")").toLatin1().data(); //normalizeSignalSlot();
 
     QMetaObject* mo = metaObject();
     int slotid = mo->findSlot(slot, false);

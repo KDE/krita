@@ -52,11 +52,11 @@ int runScriptFile(const QString& scriptfile)
     // Read the scriptfile
     QFile f(QFile::encodeName(scriptfile));
     if(! f.exists()) {
-        std::cerr << "No such scriptfile: " << scriptfile.latin1() << std::endl;
+        std::cerr << "No such scriptfile: " << scriptfile.toLatin1().data() << std::endl;
         return ERROR_NOSUCHFILE;
     }
     if(! f.open(QIODevice::ReadOnly)) {
-        std::cerr << "Failed to open scriptfile: " << scriptfile.latin1() << std::endl;
+        std::cerr << "Failed to open scriptfile: " << scriptfile.toLatin1().data() << std::endl;
         return ERROR_OPENFAILED;
     }
     QString scriptcode = f.readAll();
@@ -66,7 +66,7 @@ int runScriptFile(const QString& scriptfile)
     Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
     Kross::Api::InterpreterInfo* interpreterinfo = manager->getInterpreterInfo( manager->getInterpreternameForFile(scriptfile) );
     if(! interpreterinfo) {
-        std::cerr << "No interpreter for file: " << scriptfile.latin1() << std::endl;
+        std::cerr << "No interpreter for file: " << scriptfile.toLatin1().data() << std::endl;
         return ERROR_NOINTERPRETER;
     }
 
@@ -82,13 +82,13 @@ int runScriptFile(const QString& scriptfile)
             // We had an exception.
             QString errormessage = scriptcontainer->getException()->getError();
             QString tracedetails = scriptcontainer->getException()->getTrace();
-            std::cerr << QString("%2\n%1").arg(tracedetails).arg(errormessage).latin1() << std::endl;
+            std::cerr << QString("%2\n%1").arg(tracedetails).arg(errormessage).toLatin1().data() << std::endl;
             return ERROR_EXCEPTION;
         }
     }
     catch(Kross::Api::Exception::Ptr e) {
         // Normaly that shouldn't be the case...
-        std::cerr << QString("EXCEPTION %1").arg(e->toString()).latin1() << std::endl;
+        std::cerr << QString("EXCEPTION %1").arg(e->toString()).toLatin1().data() << std::endl;
         return ERROR_UNHALDEDEXCEPTION;
     }
     return ERROR_OK;

@@ -42,6 +42,9 @@ Object::Ptr EventScript::call(const QString& name, KSharedPtr<List> arguments)
 {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
 	krossdebug( QString("EventScript::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) );
+#else
+	Q_UNUSED(name);
+	Q_UNUSED(arguments);
 #endif	
     //TODO
     return Object::Ptr();

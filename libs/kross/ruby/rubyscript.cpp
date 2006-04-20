@@ -78,7 +78,7 @@ void RubyScript::compile()
     critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
     ruby_in_eval++;
-    d->m_compile = rb_compile_string((char*) m_scriptcontainer->getName().latin1(), src, 0);
+    d->m_compile = rb_compile_string((char*) m_scriptcontainer->getName().toLatin1().data(), src, 0);
     ruby_in_eval--;
     rb_thread_critical = critical;
 

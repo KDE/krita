@@ -25,16 +25,41 @@
 #include <qstring.h>
 #include <qobject.h>
 
-// Forward-declaration of the builtin Qt QUObject struct.
-struct QUObject;
-
 namespace Kross { namespace Api {
 
     // Forward declarations.
     class Object;
     class Variant;
     class ScriptContainer;
-    class ScriptContrainer;
+
+/*
+    class ClassInfo : public ::Kross::Api::Class<ClassInfo>
+    {
+        public:
+            ClassInfo(const QMetaClassInfo& info) : ::Kross::Api::Class<ClassInfo>() {
+                this->addProxyFunction<QString>("name", info, QMetaClassInfo::name);
+                this->addProxyFunction<QString>("value", info, QMetaClassInfo::value);
+            }
+            virtual ~ClassInfo() {}
+            virtual const QString getClassName() const { return "Kross::Qt::ClassInfo"; }
+    };
+
+    class Method : public ::Kross::Api::Class<Method>
+    {
+        public:
+            Method() : ::Kross::Api::Class<Method>() {}
+            virtual ~Method() {}
+            virtual const QString getClassName() const { return "Kross::Qt::Method"; }
+    };
+
+    class Property : public ::Kross::Api::Class<Property>
+    {
+        public:
+            Property() : ::Kross::Api::Class<Property>() {}
+            virtual ~Property() {}
+            virtual const QString getClassName() const { return "Kross::Qt::Property"; }
+    };
+*/
 
     /**
      * Class to wrap \a QObject or inherited instances.
@@ -54,15 +79,14 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
-             * \param parent The \a QObject instance this
+             * \param parent The \a Object instance this
              *        class is children of.
              * \param object The \a QObject instance this
              *        class wraps.
-             * \param name The unique name this \a QtObject
-             *       instance has. If not defined then the
-             *       \a QObject::name() will be used.
+             * \param name The name this \a QtObject instance
+             *        will be published under.
              */
-            QtObject(Object* parent, QObject* object, const QString& name = QString::null);
+            QtObject(Object* parent, QObject* object, const QString& name);
 
             /**
              * Destructor.
@@ -77,19 +101,8 @@ namespace Kross { namespace Api {
              *
              * \return The wrapped QObject.
              */
-            QObject* getObject();
+            QObject* getObject() const;
 
-            /**
-            * Build a Qt QUObject struct out of the Qt signal or
-            * slot signature and the passed \a List arguments.
-            *
-            * \throw RuntimeException If the try to translate \p arguments
-            *       failed.
-            * \param signature The Qt signal or slot signature.
-            * \param arguments The optional \a List of arguments.
-            * \return A QUObject array.
-            */
-            static QUObject* toQUObject(const QString& signature, List::Ptr arguments);
 
         private:
             /// The wrapped QObject.

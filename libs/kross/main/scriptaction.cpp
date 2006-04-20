@@ -90,7 +90,7 @@ namespace Kross { namespace Api {
 }}
 
 ScriptAction::ScriptAction(const QString& file)
-    : KAction(0, file.latin1())
+    : KAction(0, file.toLatin1().data())
     , Kross::Api::ScriptContainer(file)
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {

@@ -261,7 +261,7 @@ Kross::Api::Object* RubyExtension::toObject(VALUE value)
 
 VALUE RubyExtension::toVALUE(const QString& s)
 {
-    return s.isNull() ? rb_str_new2("") : rb_str_new2(s.latin1());
+    return s.isNull() ? rb_str_new2("") : rb_str_new2(s.toLatin1().data());
 }
 
 VALUE RubyExtension::toVALUE(QStringList list)

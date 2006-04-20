@@ -89,13 +89,13 @@ void TestObject::testSignalSlot()
 void TestObject::stdoutSlot(const QString& s)
 {
     Kross::krossdebug(QString("stdout: %1").arg(s));
-    //std::cout << "<stdout> " << s.latin1() << std::endl;
+    //std::cout << "<stdout> " << s.toLatin1().data() << std::endl;
 }
 
 void TestObject::stderrSlot(const QString& s)
 {
     Kross::krossdebug(QString("stderr: %1").arg(s));
-    //std::cout << "<stderr> " << s.latin1() << std::endl;
+    //std::cout << "<stderr> " << s.toLatin1().data() << std::endl;
 }
 
 //#include "testobject.moc"

@@ -57,7 +57,7 @@ Object::Ptr EventSignal::call(const QString& /*name*/, KSharedPtr<List> argument
     if(n.startsWith("2")) // Remove prefix of SIGNAL-macros
         n.remove(0,1);
 
-    int signalid = m_sender->metaObject()->findSignal(n.latin1(), false);
+    int signalid = m_sender->metaObject()->findSignal(n.toLatin1().data(), false);
     if(signalid < 0)
         throw new Exception(QString("No such signal '%1'.").arg(n));
 

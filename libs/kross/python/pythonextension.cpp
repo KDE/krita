@@ -87,7 +87,7 @@ Py::Object PythonExtension::getattr(const char* n)
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
                 krossdebug( QString("Kross::Python::PythonExtension::getattr name='%1' callable='%2'").arg(n).arg(*it) );
 #endif
-                methods.append(Py::String( (*it).latin1() ));
+                methods.append(Py::String( (*it).toLatin1().data() ));
             }
             return methods;
         }
@@ -100,7 +100,7 @@ Py::Object PythonExtension::getattr(const char* n)
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
                 krossdebug( QString("Kross::Python::PythonExtension::getattr n='%1' child='%2'").arg(n).arg(it.key()) );
 #endif
-                members.append(Py::String( it.key().latin1() ));
+                members.append(Py::String( it.key().toLatin1().data() ));
             }
             return members;
         }
@@ -244,7 +244,7 @@ const Py::Object PythonExtension::toPyObject(const QString& s)
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     krossdebug( QString("Kross::Python::PythonExtension::toPyObject(QString)") );
 #endif
-    return s.isNull() ? Py::String() : Py::String(s.latin1());
+    return s.isNull() ? Py::String() : Py::String(s.toLatin1().data());
 }
 
 const Py::List PythonExtension::toPyObject(const QStringList& list)
@@ -265,7 +265,7 @@ const Py::Dict PythonExtension::toPyObject(const QMap<QString, QVariant>& map)
 #endif
     Py::Dict d;
     for(QMap<QString, QVariant>::ConstIterator it = map.constBegin(); it != map.constEnd(); ++it)
-        d.setItem(it.key().latin1(), toPyObject(it.data()));
+        d.setItem(it.key().toLatin1().data(), toPyObject(it.data()));
     return d;
 }
 
@@ -382,7 +382,7 @@ const Py::Object PythonExtension::toPyObject(Kross::Api::Object* object)
         Kross::Api::Dict* dict = static_cast<Kross::Api::Dict*>( object );
         QMap<QString, Kross::Api::Object::Ptr> valuedict = dict->getValue();
         for(QMap<QString, Kross::Api::Object::Ptr>::Iterator it = valuedict.begin(); it != valuedict.end(); ++it) {
-            const char* n = it.key().latin1();
+            const char* n = it.key().toLatin1().data();
             pydict[ n ] = toPyObject( it.data().data() ); // recursive
         }
         return pydict;
@@ -446,7 +446,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
         krosswarning( QString("Kross::Api::Exception in Kross::Python::PythonExtension::proxyhandler %1").arg(err) );
         // Don't throw here cause it will end in a crash depp in python. The
         // error is already handled anyway.
-        //throw Py::Exception( (char*) e->toString().latin1() );
+        //throw Py::Exception( (char*) e->toString().toLatin1().data() );
     }
 
     return Py_None;

@@ -100,7 +100,7 @@ Interpreter* InterpreterInfo::getInterpreter()
     // Load the krosspython library.
     KLibLoader *libloader = KLibLoader::self();
 
-    KLibrary* library = libloader->globalLibrary( m_library.latin1() );
+    KLibrary* library = libloader->globalLibrary( m_library.toLatin1().data() );
     if(! library) {
         /*
         setException(

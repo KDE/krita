@@ -120,7 +120,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
         path.append(*appit + PYPATHDELIMITER);
 
     // Set the extended sys.path.
-    PySys_SetPath( (char*) path.latin1() );
+    PySys_SetPath( (char*) path.toLatin1().data() );
 
     krossdebug(QString("Python ProgramName: %1").arg(Py_GetProgramName()));
     krossdebug(QString("Python ProgramFullPath: %1").arg(Py_GetProgramFullPath()));
@@ -176,7 +176,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
         "Importer()\n"
         ;
 
-    PyObject* pyrun = PyRun_String(s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
+    PyObject* pyrun = PyRun_String(s.toLatin1().data(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str())) );

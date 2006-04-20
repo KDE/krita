@@ -189,10 +189,8 @@ public:
 
     virtual void resizeEvent( QResizeEvent * )
     {
-	// use "findChild<QWidget *> " ?? for qt4
-        QObject *wid = child( 0, "QWidget" );
-        if ( wid )
-            static_cast<QWidget *>(wid)->setGeometry( 0, 0, width(), height() );
+        QWidget *wid = findChild<QWidget *>( "" );
+        wid->setGeometry( 0, 0, width(), height() );
     }
 
     virtual void childEvent( QChildEvent *ev )

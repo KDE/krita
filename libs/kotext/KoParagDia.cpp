@@ -74,7 +74,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     gStyle = new Q3GroupBox( i18n( "St&yle" ), this, "styleLayout" );
     vbox->addWidget( gStyle);
     Q3GridLayout * grid = new Q3GridLayout(gStyle, 12, 5, KDialog::marginHint(), KDialog::spacingHint());
-    grid->addRowSpacing(0, fontMetrics().height()/2);
+    grid->addItem( new QSpacerItem( 0, fontMetrics().height()/2), 0, 0 );
 
     makeCounterRepresenterList( stylesList, onlyStyleTypeLetter );
 
@@ -927,7 +927,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
     indentGrid->addWidget( eFirstLine, 3, 1 );
 
     // grid row spacing
-    indentGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
+    indentGrid->addItem( new QSpacerItem( 0, fontMetrics().height() / 2 ), 0, 0 ); // groupbox title
     for ( int i = 1 ; i < indentGrid->rowCount() ; ++i )
         indentGrid->setRowStretch( i, 1 );
     mainGrid->addWidget( indentFrame, 0, 0 );
@@ -966,7 +966,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
     spacingGrid->addWidget( sSpacingStack, 1, 1 );
 
     // grid row spacing
-    spacingGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
+    spacingGrid->addItem( new QSpacerItem( 0, fontMetrics().height() / 2 ), 0, 0 ); // groupbox title
     for ( int i = 1 ; i < spacingGrid->rowCount() ; ++i )
         spacingGrid->setRowStretch( i, 1 );
     mainGrid->addWidget( spacingFrame, 1, 0 );
@@ -997,7 +997,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
     pSpaceGrid->addWidget( eAfter, 2, 1 );
 
     // grid row spacing
-    pSpaceGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
+    pSpaceGrid->addItem( new QSpacerItem( 0, fontMetrics().height() / 2 ), 0, 0 ); // groupbox title
     for ( int i = 1 ; i < pSpaceGrid->rowCount() ; ++i )
         pSpaceGrid->setRowStretch( i, 1 );
     mainGrid->addWidget( pSpaceFrame, 2, 0 );
@@ -1246,7 +1246,7 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent )
     cHardBreakAfter = new QCheckBox( i18n("Insert break after paragraph"),endFramePage);
     endFramePageGrid->addWidget( cHardBreakAfter, 3, 0 );
 
-    endFramePageGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
+    endFramePageGrid->addItem( new QSpacerItem( 0, fontMetrics().height() / 2 ), 0, 0 ); // groupbox title
     for ( int i = 0 ; i < endFramePageGrid->rowCount()-1 ; ++i )
         endFramePageGrid->setRowStretch( 0, 0 );
     endFramePageGrid->setRowStretch( endFramePageGrid->rowCount()-1, 1 );
@@ -1960,7 +1960,7 @@ void KoParagTabulatorsWidget::newClicked() {
             newTab.type=m_tabList[selected].type;
             newTab.filling=m_tabList[selected].filling;
             newTab.ptWidth=m_tabList[selected].ptWidth;
-            m_tabList.insert(m_tabList.at(selected), newTab);
+            m_tabList.insert(selected, newTab);
             lstTabs->insertItem( tabToString(newTab), selected);
             lstTabs->setCurrentItem(lstTabs->findItem(tabToString(newTab)));
             sortLists();

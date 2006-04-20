@@ -121,7 +121,7 @@ KFontChooser_local::KFontChooser_local(QWidget *parent, const char *name,
     page = new Q3GroupBox( i18n("Requested Font"), this );
     topLayout->addWidget(page);
     gridLayout = new Q3GridLayout( page, 5, 3, KDialog::marginHint(), KDialog::spacingHint() );
-    gridLayout->addRowSpacing( 0, fontMetrics().lineSpacing() );
+    gridLayout->addItem( new QSpacerItem( 0, fontMetrics().lineSpacing() ), 0, 0 );
     row = 1;
   }
   else

@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <QKeyEvent>
-
+#include <QDomElement>
 #include <kcommand.h>
 //#include <KoCommandHistory.h>
 #include "kformuladefs.h"

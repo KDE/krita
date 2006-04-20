@@ -1,7 +1,7 @@
 kde4_header()
 
 
-include_directories( ${KDE4_INCLUDES} )
+include_directories( ${KOFFICECORE_INCLUDES} )
 
 
 ########### next target ###############

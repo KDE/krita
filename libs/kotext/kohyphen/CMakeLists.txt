@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( hyphdicts )
 
-include_directories( ${KDE4_INCLUDES} )
+include_directories( ${KOFFICECORE_INCLUDES} )
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 

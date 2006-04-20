@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kchart/kdchart   )
+include_directories( ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOFFICECORE_INCLUDES} )
 
 
 ########### next target ###############

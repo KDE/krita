@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( tests )
 
-include_directories( ${KWMF_INCLUDES} ${KDE4_INCLUDES} )
+include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} )
 
 ########### next target ###############
 

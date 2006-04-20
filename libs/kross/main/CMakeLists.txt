@@ -1,11 +1,8 @@
 kde4_header()
 
-include_directories( ${KDE4_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/kross/ ${CMAKE_SOURCE_DIR}/libs/kross/api/ )
+include_directories( ${KOFFICECORE_INCLUDES} )
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}/libs/kross/
-	${CMAKE_SOURCE_DIR}/libs/kross/api/
-)
 
 ########### next target ###############
 

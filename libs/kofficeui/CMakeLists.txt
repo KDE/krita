@@ -3,7 +3,7 @@ kde4_header()
 add_subdirectory( pics )
 
 
-include_directories( ${KDE4_INCLUDES} )
+include_directories( ${KOFFICECORE_INCLUDES} )
 
 
 ########### next target ###############

@@ -7,7 +7,7 @@ add_subdirectory( dtd )
 include_directories(
 	${CMAKE_SOURCE_DIR}/libs/kotext/
 	${CMAKE_SOURCE_DIR}/libs/kofficeui/
-	${KDE4_INCLUDES} )
+	${KOFFICECORE_INCLUDES} )
 
 
 ########### next target ###############

@@ -29,17 +29,10 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
-# kofficecore and store are in the include path everywhere.
-# But don't use KOFFICECORE_INCLUDES here since it includes KDE4_INCLUDES,
-# which has to be last.
-include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_BINARY_DIR}/libs/kofficecore
-                     ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store )
-
-# Additional dirs that individual CMakeLists.txt files can request:
 # kostore is at the bottom of stack, so it has the dependency on the kde4 includes.
-set(KOSTORE_INCLUDES ${KDE4_INCLUDES})
+set(KOSTORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store ${KDE4_INCLUDES})
 # kofficecore depends on kostore
-set(KOFFICECORE_INCLUDES ${KOSTORE_INCLUDES})
+set(KOFFICECORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_BINARY_DIR}/libs/kofficecore ${KOSTORE_INCLUDES})
 # kofficeui depends on kofficecore
 set(KOFFICEUI_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kofficeui ${CMAKE_BINARY_DIR}/libs/kofficeui ${KOFFICECORE_INCLUDES})
 

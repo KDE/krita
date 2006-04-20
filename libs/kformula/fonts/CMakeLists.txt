@@ -5,7 +5,7 @@ kde4_header()
 
 ########### install files ###############
 
-install_files(  FILES  cmbx10.ttf cmex10.ttf cmmi10.ttf cmr10.ttf cmsy10.ttf msam10.ttf msbm10.ttf )
+install_files( ${DATA_INSTALL_DIR}/kformula/fonts FILES  cmbx10.ttf cmex10.ttf cmmi10.ttf cmr10.ttf cmsy10.ttf msam10.ttf msbm10.ttf )
 
 kde4_footer()
 

@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${KOTEXT_INCLUDES} ${KOFFICECORE_INCLUDES} )
+include_directories( ${KOTEXT_INCLUDES} )
 
 
 ########### next target ###############

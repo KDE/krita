@@ -1,7 +1,6 @@
 kde4_header()
 
-
-include_directories(${CMAKE_SOURCE_DIR}/libs/koproperty)
+include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty ${KDE4_INCLUDES} )
 
 ########### next target ###############
 

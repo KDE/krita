@@ -3,6 +3,7 @@ kde4_header()
 add_subdirectory( tests )
 
 
+include_directories( ${KDE4_INCLUDES} )
 
 
 ########### next target ###############

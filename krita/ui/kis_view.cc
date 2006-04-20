@@ -1061,7 +1061,7 @@ void KisView::updateOpenGLCanvas(const QRect& imageRect)
 void KisView::paintOpenGLView(const QRect& canvasRect)
 {
 #ifdef HAVE_OPENGL
-    if (!m_canvas->isUpdatesEnabled()) {
+    if (!m_canvas->updatesEnabled()) {
         return;
     }
 
@@ -2353,7 +2353,7 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
             enableAutoScroll();
         }
 
-        KisButtonPressEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->state());
+        KisButtonPressEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
         m_toolManager->currentTool()->buttonPress(&ev);
     }
 }
@@ -2405,7 +2405,7 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
     } else
 #endif
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
-        KisMoveEvent ev(e->device(), wp, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->state());
+        KisMoveEvent ev(e->device(), wp, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->buttons(), e->modifiers());
 
         m_toolManager->currentTool()->move(&ev);
     }
@@ -2436,7 +2436,7 @@ int KisView::bottomBorder() const
 
 void KisView::mouseMoveEvent(QMouseEvent *e)
 {
-    KisMoveEvent ke(currentInputDevice(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->state());
+    KisMoveEvent ke(currentInputDevice(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->buttons(), e->modifiers());
     canvasGotMoveEvent(&ke);
 }
 
@@ -2471,7 +2471,7 @@ void KisView::canvasGotButtonReleaseEvent(KisButtonReleaseEvent *e)
 //    } else
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e->pos());
-        KisButtonReleaseEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->state());
+        KisButtonReleaseEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
 
         disableAutoScroll();
         if (m_toolManager->currentTool()) {
@@ -2501,7 +2501,7 @@ void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
 
     if (e->device() == currentInputDevice() && m_toolManager->currentTool()) {
         KisPoint p = viewToWindow(e->pos());
-        KisDoubleClickEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->state());
+        KisDoubleClickEvent ev(e->device(), p, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->button(), e->buttons(), e->modifiers());
 
         if (m_toolManager->currentTool()) {
             m_toolManager->currentTool()->doubleClick(&ev);
@@ -3046,7 +3046,7 @@ void KisView::scrollH(int value)
     int xShift = m_scrollX - value;
     m_scrollX = value;
 
-    if (m_canvas->isUpdatesEnabled()) {
+    if (m_canvas->updatesEnabled()) {
         if (xShift > 0) {
 
             if (m_canvas->isOpenGLCanvas()) {
@@ -3087,7 +3087,7 @@ void KisView::scrollV(int value)
     int yShift = m_scrollY - value;
     m_scrollY = value;
 
-    if (m_canvas->isUpdatesEnabled()) {
+    if (m_canvas->updatesEnabled()) {
         if (yShift > 0) {
 
             if (m_canvas->isOpenGLCanvas()) {

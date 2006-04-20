@@ -134,8 +134,9 @@ protected:
     // we receive all move events, so that painting follows the mouse's motion
     // accurately.
     bool x11Event(XEvent *event, Display *x11Display, WId winId, QPoint widgetOriginPos);
-    static Qt::ButtonState translateX11ButtonState(int state);
-    static Qt::ButtonState translateX11Button(unsigned int button);
+    static Qt::KeyboardModifiers translateX11KeyboardModifiers(int state);
+    static Qt::MouseButtons translateX11MouseButtons(int state);
+    static Qt::MouseButton translateX11Button(unsigned int button);
 
     static bool X11SupportInitialised;
 
@@ -313,10 +314,9 @@ public:
     void update(const QRect& r);
     void update(int x, int y, int width, int height);
     void repaint();
-    void repaint(bool erase);
-    void repaint(int x, int y, int width, int height, bool erase = true);
-    void repaint(const QRect& r, bool erase = true);
-    void repaint(const QRegion& r, bool erase = true);
+    void repaint(int x, int y, int width, int height);
+    void repaint(const QRect& r);
+    void repaint(const QRegion& r);
 
     void updateGeometry();
 
@@ -359,11 +359,11 @@ protected:
     void setGeometry(int x, int y, int width, int height);
 
     void setUpdatesEnabled(bool updatesEnabled);
-    bool isUpdatesEnabled() const;
+    bool updatesEnabled() const;
 
     void setFocusPolicy(Qt::FocusPolicy focusPolicy);
 
-    const QCursor& cursor() const;
+    QCursor cursor() const;
     void setCursor(const QCursor& cursor);
 
     KisCanvasWidgetPainter *createPainter();

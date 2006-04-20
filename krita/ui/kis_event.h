@@ -34,7 +34,10 @@ public:
     };
 
     KisEvent() : m_type(UnknownEvent), m_device(KisInputDevice::unknown()) {}
-    KisEvent(enumEventType type, KisInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState state) : m_type(type), m_device(device), m_pos(pos), m_globalPos(globalPos), m_pressure(pressure), m_xTilt(xTilt), m_yTilt(yTilt), m_state(state) {}
+    KisEvent(enumEventType type, KisInputDevice device, const KisPoint& pos, const KisPoint& globalPos, 
+             double pressure, double xTilt, double yTilt, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
+        : m_type(type), m_device(device), m_pos(pos), m_globalPos(globalPos), m_pressure(pressure), 
+          m_xTilt(xTilt), m_yTilt(yTilt), m_buttons(buttons), m_modifiers(modifiers) {}
 
     enumEventType type() const { return m_type; }
     KisInputDevice device() const { return m_device; }
@@ -45,7 +48,8 @@ public:
     double pressure() const { return m_pressure; }
     double xTilt() const { return m_xTilt; }
     double yTilt() const { return m_yTilt; }
-    Qt::ButtonState state() const { return m_state; }
+    Qt::MouseButtons buttons() const { return m_buttons; }
+    Qt::KeyboardModifiers modifiers() const { return m_modifiers; }
 
 protected:
     enumEventType m_type;
@@ -55,7 +59,8 @@ protected:
     double m_pressure;
     double m_xTilt;
     double m_yTilt;
-    Qt::ButtonState m_state;
+    Qt::MouseButtons m_buttons;
+    Qt::KeyboardModifiers m_modifiers;
 };
 
 #endif // KIS_EVENT_H_

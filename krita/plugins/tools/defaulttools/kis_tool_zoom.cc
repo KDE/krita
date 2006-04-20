@@ -104,7 +104,7 @@ void KisToolZoom::buttonRelease(KisButtonReleaseEvent *e)
         QPoint delta = m_endPos - m_startPos;
 
         if (sqrt(delta.x() * delta.x() + delta.y() * delta.y()) < 10) {
-            if (e->state() & Qt::ControlModifier) {
+            if (e->modifiers() & Qt::ControlModifier) {
                 controller->zoomOut(m_endPos.x(), m_endPos.y());
             } else {
                 controller->zoomIn(m_endPos.x(), m_endPos.y());

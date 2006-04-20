@@ -24,7 +24,10 @@ class KisButtonReleaseEvent : public KisButtonEvent {
     typedef KisButtonEvent super;
 public:
     KisButtonReleaseEvent() {}
-    KisButtonReleaseEvent(KisInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(ButtonReleaseEvent, device, pos, globalPos, pressure, xTilt, yTilt, button, state) {}
+    KisButtonReleaseEvent(KisInputDevice device, const KisPoint& pos, const KisPoint& globalPos, 
+                          double pressure, double xTilt, double yTilt, Qt::MouseButton button, 
+                          Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers) 
+        : super(ButtonReleaseEvent, device, pos, globalPos, pressure, xTilt, yTilt, button, buttons, modifiers) {}
 };
 
 #endif // KIS_BUTTON_RELEASE_EVENT_H_

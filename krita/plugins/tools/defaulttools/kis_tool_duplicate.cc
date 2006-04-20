@@ -61,7 +61,7 @@ void KisToolDuplicate::activate()
 
 void KisToolDuplicate::buttonPress(KisButtonPressEvent *e)
 {
-    if (e->state() == Qt::ShiftModifier) {
+    if (e->modifiers() == Qt::ShiftModifier) {
         m_position = e->pos();
         m_isOffsetNotUptodate = true;
     } else {

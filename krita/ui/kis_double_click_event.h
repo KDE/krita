@@ -24,7 +24,10 @@ class KisDoubleClickEvent : public KisButtonEvent {
     typedef KisButtonEvent super;
 public:
     KisDoubleClickEvent() {}
-    KisDoubleClickEvent(KisInputDevice device, const KisPoint& pos, const KisPoint& globalPos, double pressure, double xTilt, double yTilt, Qt::ButtonState button, Qt::ButtonState state) : super(DoubleClickEvent, device, pos, globalPos, pressure, xTilt, yTilt, button, state) {}
+    KisDoubleClickEvent(KisInputDevice device, const KisPoint& pos, const KisPoint& globalPos, 
+                        double pressure, double xTilt, double yTilt, Qt::MouseButton button, Qt::MouseButtons buttons, 
+                        Qt::KeyboardModifiers modifiers) 
+        : super(DoubleClickEvent, device, pos, globalPos, pressure, xTilt, yTilt, button, buttons, modifiers) {}
 };
 
 #endif // KIS_DOUBLE_CLICK_EVENT_H_

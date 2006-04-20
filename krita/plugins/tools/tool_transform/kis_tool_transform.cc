@@ -393,7 +393,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
 
                 // enforce same acpect if shift button is pressed
-                if(e->state() & Qt::ShiftModifier)
+                if(e->modifiers() & Qt::ShiftModifier)
                 {
                     if(m_scaleX>0) // handle the mirrored cases
                         m_scaleX = fabs(m_scaleY);
@@ -411,7 +411,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
 
                 // enforce same aspect if shift button is pressed
-                if(e->state() & Qt::ShiftModifier)
+                if(e->modifiers() & Qt::ShiftModifier)
                 {
                     if(m_scaleX < m_scaleY)
                     {
@@ -438,7 +438,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_scaleX = (newX - dx) / (m_endPos.x() - m_org_cenX);
 
                 // enforce same acpect if shift button is pressed
-                if(e->state() & Qt::ShiftModifier)
+                if(e->modifiers() & Qt::ShiftModifier)
                 {
                     if(m_scaleY>0) // handle the mirrored cases
                         m_scaleY = fabs(m_scaleX);
@@ -456,7 +456,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
 
                 // enforce same acpect if shift button is pressed
-                if(e->state() & Qt::ShiftModifier)
+                if(e->modifiers() & Qt::ShiftModifier)
                 {
                     if(m_scaleX < m_scaleY)
                     {
@@ -483,7 +483,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
 
                 // enforce same acpect if shift button is pressed
-                if(e->state() & Qt::ShiftModifier)
+                if(e->modifiers() & Qt::ShiftModifier)
                 {
                     if(m_scaleX>0) // handle the mirrored cases
                         m_scaleX = fabs(m_scaleY);
@@ -501,7 +501,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_scaleY = (newY - dy) / (m_endPos.y() - m_org_cenY);
 
                 // enforce same acpect if shift button is pressed
-                if(e->state() & Qt::ShiftModifier)
+                if(e->modifiers() & Qt::ShiftModifier)
                 {
                     if(m_scaleX < m_scaleY)
                     {
@@ -528,7 +528,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_scaleX = (newX - dx) / (m_startPos.x() - m_org_cenX);
 
                 // enforce same acpect if shift button is pressed
-                if(e->state() & Qt::ShiftModifier)
+                if(e->modifiers() & Qt::ShiftModifier)
                 {
                     if(m_scaleY>0) // handle the mirrored cases
                         m_scaleY = fabs(m_scaleX);
@@ -546,7 +546,7 @@ void KisToolTransform::move(KisMoveEvent *e)
                 m_scaleY = (newY - dy) / (m_startPos.y() - m_org_cenY);
 
                 // enforce same acpect if shift button is pressed
-                if(e->state() & Qt::ShiftModifier)
+                if(e->modifiers() & Qt::ShiftModifier)
                 {
                     if(m_scaleX < m_scaleY)
                     {

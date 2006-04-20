@@ -86,6 +86,7 @@
 
 #include <qdesktopwidget.h>
 #include <qapplication.h>
+#include <QX11Info>
 
 #include <X11/keysym.h>
 
@@ -174,25 +175,25 @@ void KisCanvasWidget::widgetGotPaintEvent(QPaintEvent *e)
 
 void KisCanvasWidget::widgetGotMousePressEvent(QMouseEvent *e)
 {
-    KisButtonPressEvent ke(KisInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->button(), e->state());
+    KisButtonPressEvent ke(KisInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->button(), e->buttons(), e->modifiers());
     buttonPressEvent(&ke);
 }
 
 void KisCanvasWidget::widgetGotMouseReleaseEvent(QMouseEvent *e)
 {
-    KisButtonReleaseEvent ke(KisInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->button(), e->state());
+    KisButtonReleaseEvent ke(KisInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->button(), e->buttons(), e->modifiers());
     buttonReleaseEvent(&ke);
 }
 
 void KisCanvasWidget::widgetGotMouseDoubleClickEvent(QMouseEvent *e)
 {
-    KisDoubleClickEvent ke(KisInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->button(), e->state());
+    KisDoubleClickEvent ke(KisInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->button(), e->buttons(), e->modifiers());
     doubleClickEvent(&ke);
 }
 
 void KisCanvasWidget::widgetGotMouseMoveEvent(QMouseEvent *e)
 {
-    KisMoveEvent ke(KisInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->state());
+    KisMoveEvent ke(KisInputDevice::mouse(), e->pos(), e->globalPos(), PRESSURE_DEFAULT, 0, 0, e->buttons(), e->modifiers());
     moveEvent(&ke);
 }
 
@@ -214,19 +215,19 @@ void KisCanvasWidget::widgetGotTabletEvent(QTabletEvent *e)
         break;
     }
 
-    double pressure = correctPressureScale( e->pressure() ) / 255.0;
+    double pressure = correctPressureScale(static_cast<qint32>(e->pressure() * 255)) / 255.0;
 
     if (e->type() == QEvent::TabletPress) {
-        KisButtonPressEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::LeftButton, Qt::NoButton);
+        KisButtonPressEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::LeftButton, Qt::NoButton, e->modifiers());
         translateTabletEvent(&ke);
     }
     else
     if (e->type() == QEvent::TabletRelease) {
-        KisButtonReleaseEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::LeftButton, Qt::NoButton);
+        KisButtonReleaseEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::LeftButton, Qt::NoButton, e->modifiers());
         translateTabletEvent(&ke);
     }
     else {
-        KisMoveEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::NoButton);
+        KisMoveEvent ke(device, e->pos(), e->globalPos(), pressure, e->xTilt(), e->yTilt(), Qt::NoButton, e->modifiers());
         translateTabletEvent(&ke);
 #ifdef Q_WS_X11
         // Fix the problem that when you change from using a tablet device to the mouse,
@@ -324,14 +325,14 @@ void KisCanvasWidget::translateTabletEvent(KisEvent *e)
 
         // Use pressure threshold to detect 'left button' press/release
         if (e->pressure() >= PRESSURE_THRESHOLD && previousPressure < PRESSURE_THRESHOLD) {
-            KisButtonPressEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->state());
+            KisButtonPressEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->buttons(), e->modifiers());
             buttonPressEvent(&ke);
         } else if (e->pressure() < PRESSURE_THRESHOLD && previousPressure >= PRESSURE_THRESHOLD) {
-            KisButtonReleaseEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->state());
+            KisButtonReleaseEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), Qt::LeftButton, e->buttons(), e->modifiers());
             buttonReleaseEvent(&ke);
         } else {
             if (!checkThresholdOnly) {
-                KisMoveEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->state());
+                KisMoveEvent ke(e->device(), e->pos(), e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->buttons(), e->modifiers());
                 moveEvent(&ke);
             }
         }
@@ -349,7 +350,7 @@ void KisCanvasWidget::initX11Support()
 
     X11SupportInitialised = true;
 
-    Display *x11Display = QApplication::desktop()->x11Display();
+    Display *x11Display = QX11Info::display();
 
     // Look at the modifier mapping and get the correct masks for alt/meta
     XModifierKeymap *map = XGetModifierMapping(x11Display);
@@ -403,7 +404,7 @@ void KisCanvasWidget::initX11Support()
 
                 tabletDevice.readSettingsFromConfig();
 
-                QString lowerCaseName = tabletDevice.name().lower();
+                QString lowerCaseName = tabletDevice.name().toLower();
 
                 // Find the devices that Qt will use as its stylus and eraser devices.
                 if (!foundStylus || !foundEraser) {
@@ -458,31 +459,39 @@ void KisCanvasWidget::initX11Support()
 #endif // EXTENDED_X11_TABLET_SUPPORT
 }
 
-Qt::ButtonState KisCanvasWidget::translateX11ButtonState(int state)
+Qt::KeyboardModifiers KisCanvasWidget::translateX11KeyboardModifiers(int state)
 {
-    int buttonState = 0;
+    Qt::KeyboardModifiers modifiers = Qt::NoModifier;
 
-    if (state & Button1Mask)
-        buttonState |= Qt::LeftButton;
-    if (state & Button2Mask)
-        buttonState |= Qt::MidButton;
-    if (state & Button3Mask)
-        buttonState |= Qt::RightButton;
     if (state & ShiftMask)
-        buttonState |= Qt::ShiftModifier;
+        modifiers |= Qt::ShiftModifier;
     if (state & ControlMask)
-        buttonState |= Qt::ControlModifier;
+        modifiers |= Qt::ControlModifier;
     if (state & X11AltMask)
-        buttonState |= Qt::AltModifier;
+        modifiers |= Qt::AltModifier;
     if (state & X11MetaMask)
-        buttonState |= Qt::MetaModifier;
+        modifiers |= Qt::MetaModifier;
 
-    return static_cast<Qt::ButtonState>(buttonState);
+    return modifiers;
 }
 
-Qt::ButtonState KisCanvasWidget::translateX11Button(unsigned int X11Button)
+Qt::MouseButtons KisCanvasWidget::translateX11MouseButtons(int state)
 {
-    Qt::ButtonState qtButton;
+    Qt::MouseButtons buttons = Qt::NoButton;
+
+    if (state & Button1Mask)
+       buttons |= Qt::LeftButton;
+    if (state & Button2Mask)
+       buttons |= Qt::MidButton;
+    if (state & Button3Mask)
+       buttons |= Qt::RightButton;
+
+    return buttons;
+}
+
+Qt::MouseButton KisCanvasWidget::translateX11Button(unsigned int X11Button)
+{
+    Qt::MouseButton qtButton;
 
     switch (X11Button) {
     case Button1:
@@ -572,7 +581,7 @@ KisCanvasWidget::X11TabletDevice::X11TabletDevice(const XDeviceInfo *deviceInfo)
     m_proximityInEvent = -1;
     m_proximityOutEvent = -1;
 
-    m_XDevice = XOpenDevice(QApplication::desktop()->x11Display(), m_deviceId);
+    m_XDevice = XOpenDevice(QX11Info::display(), m_deviceId);
 
     if (m_XDevice != NULL) {
         for (int i = 0; i < m_XDevice->num_classes; i++) {
@@ -794,7 +803,7 @@ void KisCanvasWidget::X11TabletDevice::writeSettingsToConfig()
 void KisCanvasWidget::X11TabletDevice::enableEvents(QWidget *widget) const
 {
     if (!m_eventClassList.isEmpty()) {
-        int result = XSelectExtensionEvent(widget->x11AppDisplay(), widget->handle(),
+        int result = XSelectExtensionEvent(QX11Info::display(), widget->handle(),
                                            const_cast<XEventClass*>(&m_eventClassList[0]),
                                            m_eventClassList.count());
 
@@ -910,9 +919,10 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
 
             if (globalPos.x() != m_lastRootX || globalPos.y() != m_lastRootY) {
 
-                int state = translateX11ButtonState(motion.state);
+                Qt::KeyboardModifiers modifiers = translateX11KeyboardModifiers(motion.state);
+                Qt::MouseButtons buttons = translateX11MouseButtons(motion.state);
                 QPoint pos(motion.x, motion.y);
-                QMouseEvent e(QEvent::MouseMove, pos, globalPos, Qt::NoButton, state);
+                QMouseEvent e(QEvent::MouseMove, pos, globalPos, Qt::NoButton, buttons, modifiers);
 
                 widgetGotMouseMoveEvent(&e);
             }
@@ -933,8 +943,9 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
         // Tablet event.
         int deviceId;
         const int *axisData;
-        Qt::ButtonState button;
-        Qt::ButtonState buttonState;
+        Qt::MouseButton button;
+        Qt::KeyboardModifiers modifiers;
+        Qt::MouseButtons buttons;
 
         if (event->type == X11DeviceMotionNotifyEvent) {
             // Tablet move
@@ -972,7 +983,8 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
             deviceId = motion->deviceid;
             axisData = motion->axis_data;
             button = Qt::NoButton;
-            buttonState = translateX11ButtonState(motion->state);
+            buttons = translateX11MouseButtons(motion->state);
+            modifiers = translateX11KeyboardModifiers(motion->state);
         }
         else
         if (event->type == X11DeviceButtonPressEvent) {
@@ -981,7 +993,8 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
             deviceId = buttonPressed->deviceid;
             axisData = buttonPressed->axis_data;
             button = translateX11Button(buttonPressed->button);
-            buttonState = translateX11ButtonState(buttonPressed->state);
+            buttons = translateX11MouseButtons(buttonPressed->state);
+            modifiers = translateX11KeyboardModifiers(buttonPressed->state);
 
             if (QApplication::activePopupWidget() == 0) {
                 XEvent mouseEvent;
@@ -1004,7 +1017,8 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
             deviceId = buttonReleased->deviceid;
             axisData = buttonReleased->axis_data;
             button = translateX11Button(buttonReleased->button);
-            buttonState = translateX11ButtonState(buttonReleased->state);
+            buttons = translateX11MouseButtons(buttonReleased->state);
+            modifiers = translateX11KeyboardModifiers(buttonReleased->state);
 
             if (QApplication::activePopupWidget() == 0) {
                 XEvent mouseEvent;
@@ -1041,16 +1055,18 @@ bool KisCanvasWidget::x11Event(XEvent *event, Display *x11Display, WId winId, QP
                 KisVector2D tilt(deviceState.tilt().x() * 60, deviceState.tilt().y() * 60);
 
                 if (event->type == X11DeviceMotionNotifyEvent) {
-                    KisMoveEvent e(tabletDevice.inputDevice(), pos, globalPos, deviceState.pressure(), tilt.x(), tilt.y(), buttonState);
+                    KisMoveEvent e(tabletDevice.inputDevice(), pos, globalPos, deviceState.pressure(), tilt.x(), tilt.y(), buttons, modifiers);
                     translateTabletEvent(&e);
                 }
                 else
                 if (event->type == X11DeviceButtonPressEvent) {
-                    KisButtonPressEvent e(tabletDevice.inputDevice(), pos, globalPos, deviceState.pressure(), tilt.x(), tilt.y(), button, buttonState);
+                    KisButtonPressEvent e(tabletDevice.inputDevice(), pos, globalPos, deviceState.pressure(), tilt.x(), tilt.y(), 
+                                          button, buttons, modifiers);
                     translateTabletEvent(&e);
                 }
                 else {
-                    KisButtonReleaseEvent e(tabletDevice.inputDevice(), pos, globalPos, deviceState.pressure(), tilt.x(), tilt.y(), button, buttonState);
+                    KisButtonReleaseEvent e(tabletDevice.inputDevice(), pos, globalPos, deviceState.pressure(), tilt.x(), tilt.y(), 
+                                            button, buttons, modifiers);
                     translateTabletEvent(&e);
                 }
             }
@@ -1083,7 +1099,7 @@ KisInputDevice KisCanvasWidget::findActiveInputDevice()
             continue;
         }
 
-        XDeviceState *deviceState = XQueryDeviceState(QApplication::desktop()->x11Display(),
+        XDeviceState *deviceState = XQueryDeviceState(QX11Info::display(),
                                                       tabletDevice.xDevice());
 
         // If your the laptop sleeps, and you remove the mouse from the usb
@@ -1161,11 +1177,11 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     }
 
     if (useOpenGL) {
-        m_canvasWidget = new KisOpenGLCanvasWidget(m_parent, m_name.latin1(), sharedContextWidget);
+        m_canvasWidget = new KisOpenGLCanvasWidget(m_parent, m_name.toLatin1(), sharedContextWidget);
     } else
 #endif
     {
-        m_canvasWidget = new KisQPaintDeviceCanvasWidget(m_parent, m_name.latin1());
+        m_canvasWidget = new KisQPaintDeviceCanvasWidget(m_parent, m_name.toLatin1());
     }
 
     m_useOpenGL = useOpenGL;
@@ -1173,7 +1189,8 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     Q_CHECK_PTR(m_canvasWidget);
     QWidget *widget = dynamic_cast<QWidget *>(m_canvasWidget);
 
-    widget->setBackgroundMode(Qt::NoBackground);
+    widget->setAutoFillBackground(false);
+    widget->setAttribute(Qt::WA_OpaquePaintEvent);
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
     m_canvasWidget->enableMoveEventCompressionHint(m_enableMoveEventCompressionHint);
@@ -1306,34 +1323,28 @@ void KisCanvas::repaint()
     dynamic_cast<QWidget *>(m_canvasWidget)->repaint();
 }
 
-void KisCanvas::repaint(bool erase)
+void KisCanvas::repaint(int x, int y, int width, int height)
 {
     Q_ASSERT(m_canvasWidget);
-    dynamic_cast<QWidget *>(m_canvasWidget)->repaint(erase);
+    dynamic_cast<QWidget *>(m_canvasWidget)->repaint(x, y, width, height);
 }
 
-void KisCanvas::repaint(int x, int y, int width, int height, bool erase)
+void KisCanvas::repaint(const QRect& r)
 {
     Q_ASSERT(m_canvasWidget);
-    dynamic_cast<QWidget *>(m_canvasWidget)->repaint(x, y, width, height, erase);
+    dynamic_cast<QWidget *>(m_canvasWidget)->repaint(r);
 }
 
-void KisCanvas::repaint(const QRect& r, bool erase)
+void KisCanvas::repaint(const QRegion& r)
 {
     Q_ASSERT(m_canvasWidget);
-    dynamic_cast<QWidget *>(m_canvasWidget)->repaint(r, erase);
+    dynamic_cast<QWidget *>(m_canvasWidget)->repaint(r);
 }
 
-void KisCanvas::repaint(const QRegion& r, bool erase)
+bool KisCanvas::updatesEnabled() const
 {
     Q_ASSERT(m_canvasWidget);
-    dynamic_cast<QWidget *>(m_canvasWidget)->repaint(r, erase);
-}
-
-bool KisCanvas::isUpdatesEnabled() const
-{
-    Q_ASSERT(m_canvasWidget);
-    return dynamic_cast<QWidget *>(m_canvasWidget)->isUpdatesEnabled();
+    return dynamic_cast<QWidget *>(m_canvasWidget)->updatesEnabled();
 }
 
 void KisCanvas::setUpdatesEnabled(bool updatesEnabled)
@@ -1354,7 +1365,7 @@ void KisCanvas::setFocusPolicy(Qt::FocusPolicy focusPolicy)
     dynamic_cast<QWidget *>(m_canvasWidget)->setFocusPolicy(focusPolicy);
 }
 
-const QCursor& KisCanvas::cursor() const
+QCursor KisCanvas::cursor() const
 {
     Q_ASSERT(m_canvasWidget);
     return dynamic_cast<QWidget *>(m_canvasWidget)->cursor();
@@ -1387,7 +1398,7 @@ bool KisCanvas::cursorIsOverCanvas() const
     Q_ASSERT(canvasWidget != 0);
 
     if (canvasWidget) {
-        if (QApplication::widgetAt(QCursor::pos(), true) == canvasWidget) {
+        if (QApplication::widgetAt(QCursor::pos()) == canvasWidget) {
             return true;
         }
     }

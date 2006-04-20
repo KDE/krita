@@ -105,7 +105,7 @@ void KisToolSelectPolygonal::buttonPress(KisButtonPressEvent *event)
             m_dragEnd = event->pos();
             draw();
         }
-    } else if (event->button() == Qt::LeftButton && event->state() == Qt::ShiftModifier) {
+    } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier) {
         finish();
     }
 }

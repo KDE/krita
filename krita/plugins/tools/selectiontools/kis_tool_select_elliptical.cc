@@ -132,15 +132,15 @@ void KisToolSelectElliptical::move(KisMoveEvent *e)
     if (m_subject && m_selecting) {
         paintOutline();
         // move (alt) or resize ellipse
-        if (e->state() & Qt::AltModifier) {
+        if (e->modifiers() & Qt::AltModifier) {
             KisPoint trans = e->pos() - m_endPos;
             m_startPos += trans;
             m_endPos += trans;
         } else {
-            KisPoint diag = e->pos() - (e->state() & Qt::ControlModifier
+            KisPoint diag = e->pos() - (e->modifiers() & Qt::ControlModifier
                     ? m_centerPos : m_startPos);
             // circle?
-            if (e->state() & Qt::ShiftModifier) {
+            if (e->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
@@ -148,7 +148,7 @@ void KisToolSelectElliptical::move(KisMoveEvent *e)
             }
 
             // resize around center point?
-            if (e->state() & Qt::ControlModifier) {
+            if (e->modifiers() & Qt::ControlModifier) {
                 m_startPos = m_centerPos - diag;
                 m_endPos = m_centerPos + diag;
             } else {

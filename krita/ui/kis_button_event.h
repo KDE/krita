@@ -23,7 +23,7 @@
 class KisButtonEvent : public KisEvent {
     typedef KisEvent super;
 public:
-    Qt::ButtonState button() const { return m_button; }
+    Qt::MouseButton button() const { return m_button; }
     
 protected:
     KisButtonEvent() {}
@@ -33,12 +33,13 @@ protected:
                    const KisPoint& globalPos,
                    double pressure,
                    double xTilt, double yTilt,
-                   Qt::ButtonState button,
-                   Qt::ButtonState state)
-    : super(type, device, pos, globalPos, pressure, xTilt, yTilt, state)
+                   Qt::MouseButton button,
+                   Qt::MouseButtons buttons,
+                   Qt::KeyboardModifiers modifiers)
+    : super(type, device, pos, globalPos, pressure, xTilt, yTilt, buttons, modifiers)
     , m_button(button) {}
 
-    Qt::ButtonState m_button;
+    Qt::MouseButton m_button;
 };
 
 #endif // KIS_BUTTON_EVENT_H_

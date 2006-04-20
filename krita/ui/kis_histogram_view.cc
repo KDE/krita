@@ -42,8 +42,9 @@
 #include "kis_paint_device.h"
 
 KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags f)
-    : QLabel(parent, name, f)
+    : QLabel(parent, f)
 {
+    setObjectName(name);
     // This is needed until we can computationally scale it well. Until then, this is needed
     // And when we have it, it won't hurt to have it around
     setScaledContents(true);
@@ -148,9 +149,9 @@ void KisHistogramView::setCurrentChannels(KisHistogramProducerSP producer, Q3Val
 
     Q3ValueVector<KisChannelInfo *> producerChannels = m_currentProducer->channels();
 
-    for (uint i = 0; i < channels.count(); i++) {
+    for (int i = 0; i < channels.count(); i++) {
         // Also makes sure the channel is actually in the producer's list
-        for (uint j = 0; j < producerChannels.count(); j++) {
+        for (int j = 0; j < producerChannels.count(); j++) {
             if (channels.at(i)->name() == producerChannels.at(j)->name()) {
                 m_channelToOffset.append(m_channels.count()); // The first we append maps to 0
                 m_channels.append(channels.at(i));
@@ -195,13 +196,13 @@ void KisHistogramView::setActiveChannel(int channel)
     if (info.isProducer) {
         m_color = true;
         m_channels = m_currentProducer->channels();
-        for (uint i = 0; i < m_channels.count(); i++)
+        for (int i = 0; i < m_channels.count(); i++)
             m_channelToOffset.append(i);
         m_histogram->setChannel(0); // Set a default channel, just being nice
     } else {
         m_color = false;
         Q3ValueVector<KisChannelInfo *> channels = m_currentProducer->channels();
-        for (uint i = 0; i < channels.count(); i++) {
+        for (int i = 0; i < channels.count(); i++) {
             KisChannelInfo* channel = channels.at(i);
             if (channel->name() == info.channel->name()) {
                 m_channels.append(channel);
@@ -234,7 +235,7 @@ void KisHistogramView::setChannels()
         KisGenericRGBHistogramProducerFactory f;
         addProducerChannels(f.generate());
     } else {
-        for (uint i = 0; i < list.count(); i++) {
+        for (int i = 0; i < list.count(); i++) {
             KisID id(*(list.at(i)));
             addProducerChannels( KisHistogramProducerFactoryRegistry::instance()->get(id)->generate() );
         }
@@ -298,13 +299,13 @@ void KisHistogramView::updateHistogram()
 
     // First we iterate once, so that we have the overall maximum. This is a bit inefficient,
     // but not too much since the histogram caches the calculations
-    for (uint chan = 0; chan < m_channels.count(); chan++) {
+    for (int chan = 0; chan < m_channels.count(); chan++) {
         m_histogram->setChannel(m_channelToOffset.at(chan));
         if ((double)m_histogram->calculations().getHighest() > highest)
             highest = (double)m_histogram->calculations().getHighest();
     }
 
-    for (uint chan = 0; chan < m_channels.count(); chan++) {
+    for (int chan = 0; chan < m_channels.count(); chan++) {
         QColor color;
         m_histogram->setChannel(m_channelToOffset.at(chan));
 

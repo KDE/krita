@@ -76,15 +76,15 @@ void KisToolRectangle::move(KisMoveEvent *event)
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
         // move (alt) or resize rectangle
-        if (event->state() & Qt::AltModifier) {
+        if (event->modifiers() & Qt::AltModifier) {
             KisPoint trans = event->pos() - m_dragEnd;
             m_dragStart += trans;
             m_dragEnd += trans;
         } else {
-            KisPoint diag = event->pos() - (event->state() & Qt::ControlModifier
+            KisPoint diag = event->pos() - (event->modifiers() & Qt::ControlModifier
                     ? m_dragCenter : m_dragStart);
             // square?
-            if (event->state() & Qt::ShiftModifier) {
+            if (event->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
                 double w = diag.x() < 0 ? -size : size;
                 double h = diag.y() < 0 ? -size : size;
@@ -92,7 +92,7 @@ void KisToolRectangle::move(KisMoveEvent *event)
             }
 
             // resize around center point?
-            if (event->state() & Qt::ControlModifier) {
+            if (event->modifiers() & Qt::ControlModifier) {
                 m_dragStart = m_dragCenter - diag;
                 m_dragEnd = m_dragCenter + diag;
             } else {

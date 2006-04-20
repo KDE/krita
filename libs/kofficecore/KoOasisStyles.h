@@ -97,6 +97,10 @@ public:
         QString formatStr;
         QString prefix;
         QString suffix;
+        enum { Number, Scientific, Fraction, Currency, Percentage,
+               Date, Time, Boolean, Text } type;
+        int precision;
+        QString currencySymbol;
     };
 
     typedef QMap<QString, NumericStyleFormat> DataFormatsMap;
@@ -108,8 +112,9 @@ public:
     static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
     static QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
     static QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+    static QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
     static QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
-    static QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+    static QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &symbol, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
     static QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
 
     static void saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush );

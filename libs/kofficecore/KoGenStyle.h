@@ -50,7 +50,7 @@ public:
            STYLE_MASTER = 3,
            STYLE_LIST = 4,
            STYLE_AUTO_LIST = 5,
-           // 6 is available
+           STYLE_NUMERIC_NUMBER = 6,
            STYLE_NUMERIC_DATE = 7,
            STYLE_NUMERIC_TIME = 8,
            STYLE_NUMERIC_FRACTION = 9,

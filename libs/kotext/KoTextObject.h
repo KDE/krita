@@ -218,10 +218,10 @@ public:
     virtual ~KoTextObject();
 
 
-    static const char * acceptSelectionMimeType();
+    static QString acceptSelectionMimeType();
     /// Check if the mimesource @p mime provides one of the OASIS mimetypes,
     /// and if so, return it. Otherwise return an empty string.
-    static QByteArray providesOasis( QMimeSource* mime );
+    static QString providesOasis( QMimeData* mime );
 
     void setNeedSpellCheck(bool b);
     bool needSpellCheck() const { return m_needsSpellCheck;}

@@ -1756,7 +1756,7 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
 
     if ( count == 0 )
     {
-	formatTimer->setSingleShot( true );    
+	formatTimer->setSingleShot( true );
         formatTimer->start( interval );
         return true;
     }
@@ -1865,7 +1865,7 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
     // Now let's see when we'll need to get back here.
     if ( m_lastFormatted )
     {
-	formatTimer->setSingleShot( true );    
+	formatTimer->setSingleShot( true );
         formatTimer->start( interval );
 #ifdef DEBUG_FORMAT_MORE
         kDebug(32500) << name() << " formatMore: will have to format more. formatTimer->start with interval=" << interval << endl;
@@ -1906,7 +1906,7 @@ void KoTextObject::typingStarted()
 
 void KoTextObject::typingDone()
 {
-    startTimer->setSingleShot( true );	
+    startTimer->setSingleShot( true );
     startTimer->start( 100 );
 }
 
@@ -2432,23 +2432,23 @@ KoVariable* KoTextObject::variableAtPosition( KoTextParag* parag, int index ) co
     return 0;
 }
 
-const char * KoTextObject::acceptSelectionMimeType()
+QString KoTextObject::acceptSelectionMimeType()
 {
-    return "application/vnd.oasis.opendocument.";
+    return QString::fromLatin1( "application/vnd.oasis.opendocument." );
 }
 
-QByteArray KoTextObject::providesOasis( QMimeSource* mime )
+QString KoTextObject::providesOasis( QMimeData* mime )
 {
-    const char* fmt;
-    const char* acceptMimeType = acceptSelectionMimeType();
-    for ( int i = 0; (fmt = mime->format(i)); ++i )
+    const QString acceptMimeType = acceptSelectionMimeType();
+    const QStringList formats = mime->formats();
+    foreach( const QString format, formats )
     {
-        if ( QString( fmt ).startsWith( acceptMimeType ) )
+        if ( format.startsWith( acceptMimeType ) )
         {
-            return fmt;
+            return format;
         }
     }
-    return "";
+    return QString();
 }
 
 #ifndef NDEBUG

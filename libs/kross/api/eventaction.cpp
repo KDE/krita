@@ -26,7 +26,7 @@
 using namespace Kross::Api;
 
 EventAction::EventAction(const QString& name, Object* parent, KAction* action)
-    : Event<EventAction>(name.isEmpty() ? action->name() : name, parent)
+    : Event<EventAction>(name.isEmpty() ? action->objectName() : name, parent)
     , m_action(action)
 {
     addFunction("getText", &EventAction::getText);

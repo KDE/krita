@@ -91,10 +91,10 @@ Manager::Manager()
     QString pythonlib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_PYTHON_LIBRARY) );
     if(! pythonlib.isEmpty()) { // If the Kross Python plugin exists we offer it as supported scripting language.
         InterpreterInfo::Option::Map pythonoptions;
-        pythonoptions.replace("restricted",
-            new InterpreterInfo::Option("Restricted", "Restricted Python interpreter", QVariant(false,0))
+        pythonoptions.insert("restricted",
+            new InterpreterInfo::Option("Restricted", "Restricted Python interpreter", QVariant(false))
         );
-        d->interpreterinfos.replace("python",
+        d->interpreterinfos.insert("python",
             new InterpreterInfo("python",
                 pythonlib, // library
                 "*.py", // file filter-wildcard
@@ -108,10 +108,10 @@ Manager::Manager()
     QString rubylib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_RUBY_LIBRARY) );
     if(! rubylib.isEmpty()) { // If the Kross Ruby plugin exists we offer it as supported scripting language.
       InterpreterInfo::Option::Map rubyoptions;
-      rubyoptions.replace("safelevel",
+      rubyoptions.insert("safelevel",
                           new InterpreterInfo::Option("safelevel", "Level of safety of the Ruby interpreter", QVariant(0)) // 0 -> unsafe, 4 -> very safe
                            );
-      d->interpreterinfos.replace("ruby",
+      d->interpreterinfos.insert("ruby",
                                   new InterpreterInfo("ruby",
                                       rubylib, // library
                                       "*.rb", // file filter-wildcard
@@ -128,7 +128,7 @@ Manager::Manager()
 Manager::~Manager()
 {
     for(QMap<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it)
-        delete it.data();
+        delete it.value();
     delete d;
 }
 
@@ -150,10 +150,10 @@ InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
 const QString Manager::getInterpreternameForFile(const QString& file)
 {
     QRegExp rx;
-    rx.setWildcard(true);
+    rx.setPatternSyntax(QRegExp::Wildcard);
     for(QMap<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it) {
         rx.setPattern((*it)->getWildcard());
-        if( file.find(rx) >= 0 )
+        if( file.contains(rx) )
             return (*it)->getInterpretername();
     }
     return QString::null;
@@ -167,7 +167,7 @@ ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
     //    return d->m_scriptcontainers[scriptname];
     ScriptContainer* scriptcontainer = new ScriptContainer(scriptname);
     //ScriptContainer script(this, scriptname);
-    //d->m_scriptcontainers.replace(scriptname, scriptcontainer);
+    //d->m_scriptcontainers.insert(scriptname, scriptcontainer);
 
     return ScriptContainer::Ptr( scriptcontainer );
 }
@@ -201,7 +201,7 @@ bool Manager::addModule(Module::Ptr module)
 {
     QString name = module->getName();
     //if( d->modules.contains(name) ) return false;
-    d->modules.replace(name, module);
+    d->modules.insert(name, module);
     return true;
 }
 
@@ -243,7 +243,7 @@ Module* Manager::loadModule(const QString& modulename)
     }
 
     // Don't remember module cause we like to have freeing it handled by the caller.
-    //d->modules.replace(modulename, module);
+    //d->modules.insert(modulename, module);
 
     //krossdebug( QString("Kross::Api::Manager::loadModule modulename='%1' module='%2'").arg(modulename).arg(module->toString()) );
     return module;

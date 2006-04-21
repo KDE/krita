@@ -41,7 +41,7 @@ const QString Dict::toString()
     QString s = "[";
     QMap<QString, Object::Ptr> list = getValue();
     for(QMap<QString, Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
-        s += "'" + it.key() + "' = '" + it.data()->toString() + "', ";
+        s += "'" + it.key() + "' = '" + it.value()->toString() + "', ";
     return (s.endsWith(", ") ? s.left(s.length() - 2) : s) + "]";
 }
 

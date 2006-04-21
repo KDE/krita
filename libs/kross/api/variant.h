@@ -60,7 +60,7 @@ namespace Kross { namespace Api {
 
             inline operator QString () { return getValue().toString(); }
             inline operator const QString () { return getValue().toString(); }
-            inline operator const QString& () { return getValue().toString(); }
+            //inline operator const QString& () { return getValue().toString(); }
 
             //inline operator Q3CString () { return getValue().toCString(); }
             //inline operator const Q3CString () { return getValue().toCString(); }

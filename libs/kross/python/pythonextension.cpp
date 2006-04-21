@@ -173,7 +173,7 @@ Kross::Api::Dict* PythonExtension::toObject(const Py::Dict& dict)
     uint length = l.length();
     for(Py::List::size_type i = 0; i < length; ++i) {
         const char* n = l[i].str().as_string().c_str();
-        map.replace(n, Kross::Api::Object::Ptr(toObject(dict[n])));
+        map.insert(n, Kross::Api::Object::Ptr(toObject(dict[n])));
     }
     return new Kross::Api::Dict(map);
 }

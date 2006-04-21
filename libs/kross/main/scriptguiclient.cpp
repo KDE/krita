@@ -90,11 +90,11 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
             this, SLOT(showScriptManager()));
 
     // The predefined ScriptActionCollection's this ScriptGUIClient provides.
-    d->collections.replace("installedscripts",
+    d->collections.insert("installedscripts",
         new ScriptActionCollection(i18n("Scripts"), actionCollection(), "installedscripts") );
-    d->collections.replace("loadedscripts",
+    d->collections.insert("loadedscripts",
         new ScriptActionCollection(i18n("Loaded"), actionCollection(), "loadedscripts") );
-    d->collections.replace("executedscripts",
+    d->collections.insert("executedscripts",
         new ScriptActionCollection(i18n("History"), actionCollection(), "executedscripts") );
 
     reloadInstalledScripts();
@@ -104,7 +104,7 @@ ScriptGUIClient::~ScriptGUIClient()
 {
     krossdebug( QString("ScriptGUIClient::~ScriptGUIClient() Dtor") );
     for(QMap<QString, ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
-        delete it.data();
+        delete it.value();
     delete d;
 }
 
@@ -126,7 +126,7 @@ QMap<QString, ScriptActionCollection*> ScriptGUIClient::getActionCollections()
 void ScriptGUIClient::addActionCollection(const QString& name, ScriptActionCollection* collection)
 {
     removeActionCollection(name);
-    d->collections.replace(name, collection);
+    d->collections.insert(name, collection);
 }
 
 bool ScriptGUIClient::removeActionCollection(const QString& name)
@@ -232,7 +232,7 @@ bool ScriptGUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, 
         ScriptAction::Ptr action = ScriptAction::Ptr( new ScriptAction(scriptconfigfile, nodelist.item(i).toElement()) );
 
         if(installedcollection) {
-            ScriptAction::Ptr otheraction = installedcollection->action( action->name() );
+            ScriptAction::Ptr otheraction = installedcollection->action( action->objectName() );
             if(otheraction) {
                 // There exists already an action with the same name. Use the versionnumber
                 // to see if one of them is newer and if that's the case display only
@@ -252,7 +252,7 @@ bool ScriptGUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, 
                 else {
                     // else just print a warning and fall through (so, install the action
                     // and don't care any longer of the duplicated name)...
-                    krosswarning( QString("Kross::Api::ScriptGUIClient::loadScriptConfigDocument: There exists already a scriptaction with name \"%1\". Added anyway...").arg(action->name()) );
+                    krosswarning( QString("Kross::Api::ScriptGUIClient::loadScriptConfigDocument: There exists already a scriptaction with name \"%1\". Added anyway...").arg(action->objectName()) );
                 }
             }
             installedcollection->attach( action );
@@ -314,7 +314,7 @@ KUrl ScriptGUIClient::openScriptFile(const QString& caption)
     QStringList mimetypes;
     QMap<QString, InterpreterInfo*> infos = Manager::scriptManager()->getInterpreterInfos();
     for(QMap<QString, InterpreterInfo*>::Iterator it = infos.begin(); it != infos.end(); ++it)
-        mimetypes.append( it.data()->getMimeTypes().join(" ").stripWhiteSpace() );
+        mimetypes.append( it.value()->getMimeTypes().join(" ").trimmed() );
 
     KFileDialog* filedialog = new KFileDialog(
         QString(), // startdir

@@ -144,7 +144,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         setInterpreterName( interpreter );
 
     if(file.isNull()) {
-        setCode( element.text().stripWhiteSpace() );
+        setCode( element.text().trimmed() );
         if(description.isNull())
             description = text;
         ScriptContainer::setName(name);

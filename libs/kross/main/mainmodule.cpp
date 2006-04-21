@@ -103,7 +103,7 @@ QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
     QtObject* qtobject = new QtObject(this, object, name);
     if(! addChild(qtobject)) {
-        krosswarning( QString("Failed to add QObject name='%1'").arg(object->name()) );
+        krosswarning( QString("Failed to add QObject name='%1'").arg(object->objectName()) );
         delete qtobject;
         return QtObject::Ptr();
     }
@@ -114,7 +114,7 @@ EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
     EventAction* event = new EventAction(name, this, action);
     if(! addChild(event)) {
-        krosswarning( QString("Failed to add KAction name='%1'").arg(action->name()) );
+        krosswarning( QString("Failed to add KAction name='%1'").arg(action->objectName()) );
         delete event;
         return EventAction::Ptr();
     }

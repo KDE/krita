@@ -47,8 +47,9 @@ InterpreterInfo::InterpreterInfo(const QString& interpretername, const QString& 
 
 InterpreterInfo::~InterpreterInfo()
 {
-    for(Option::Map::Iterator it = m_options.begin(); it != m_options.end(); ++it)
-        delete it.data();
+    for(Option::Map::Iterator it = m_options.begin(); it != m_options.end(); ++it) {
+        delete it.value();
+    }
 
     delete m_interpreter;
     m_interpreter = 0;

@@ -308,7 +308,7 @@ void WdgScriptsManager::slotUnloadScript()
 
 void WdgScriptsManager::slotGetNewScript()
 {
-    const QString appname = KApplication::kApplication()->name();
+    const QString appname = KApplication::kApplication()->objectName();
     const QString type = QString("%1/script").arg(appname);
 
     if(! d->newstuff) {

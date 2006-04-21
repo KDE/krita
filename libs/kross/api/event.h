@@ -103,7 +103,7 @@ namespace Kross { namespace Api {
             void addFunction(const QString& name, FunctionPtr function, const ArgumentList& arglist = ArgumentList())
             {
                 Q_UNUSED(arglist);
-                m_functions.replace(name, new Function0<T>(static_cast<T*>(this), function));
+                m_functions.insert(name, new Function0<T>(static_cast<T*>(this), function));
             }
 
             /**
@@ -120,7 +120,7 @@ namespace Kross { namespace Api {
              */
             void addFunction(const QString& name, Function* function)
             {
-                m_functions.replace(name, function);
+                m_functions.insert(name, function);
             }
 
             /**
@@ -130,7 +130,7 @@ namespace Kross { namespace Api {
             template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class ARG3OBJ, class ARG4OBJ, class INSTANCE, typename METHOD>
             inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0, ARG3OBJ* arg3 = 0, ARG4OBJ* arg4 = 0)
             {
-                m_functions.replace(name,
+                m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ, ARG3OBJ, ARG4OBJ>
                         (instance, method, arg1, arg2, arg3, arg4)
                 );
@@ -140,7 +140,7 @@ namespace Kross { namespace Api {
             template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class ARG3OBJ, class INSTANCE, typename METHOD>
             inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0, ARG3OBJ* arg3 = 0)
             {
-                m_functions.replace(name,
+                m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ, ARG3OBJ>
                         (instance, method, arg1, arg2, arg3)
                 );
@@ -150,7 +150,7 @@ namespace Kross { namespace Api {
             template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class INSTANCE, typename METHOD>
             inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0)
             {
-                m_functions.replace(name,
+                m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ>
                         (instance, method, arg1, arg2)
                 );
@@ -160,7 +160,7 @@ namespace Kross { namespace Api {
             template<class RETURNOBJ, class ARG1OBJ, class INSTANCE, typename METHOD>
             inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0)
             {
-                m_functions.replace(name,
+                m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ>
                         (instance, method, arg1)
                 );
@@ -170,7 +170,7 @@ namespace Kross { namespace Api {
             template<class RETURNOBJ, class INSTANCE, typename METHOD>
             inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
             {
-                m_functions.replace(name,
+                m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ>
                         (instance, method)
                 );

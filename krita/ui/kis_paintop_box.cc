@@ -49,9 +49,7 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     : super (parent, name),
       m_canvasController(view->getCanvasController())
 {
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
     KAcceleratorManager::setNoAccel(this);
-#endif
 
     Q_ASSERT(m_canvasController != 0);
 

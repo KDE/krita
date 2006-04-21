@@ -1,6 +1,8 @@
 kde4_header()
 macro_optional_find_package(PythonLibs)
 
+include_directories( ${KOFFICECORE_INCLUDES} )
+
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 add_subdirectory( api )

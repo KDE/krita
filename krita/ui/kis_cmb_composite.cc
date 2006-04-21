@@ -26,8 +26,10 @@
 #include "kis_cmb_composite.h"
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
-    : super( false, parent, name )
+    : super(parent)
 {
+    setObjectName(name);
+    setEditable(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
     connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
 }
@@ -40,14 +42,14 @@ void KisCmbComposite::setCompositeOpList(const KisCompositeOpList & list)
 {
     super::clear();
     m_list = list;
-    KisCompositeOpList::iterator it;
-        for( it = m_list.begin(); it != m_list.end(); ++it )
-        insertItem((*it).id().name());
+
+    for(int i = 0; i < m_list.count(); ++i)
+        addItem(m_list.at(i).id().name());
 }
 
 KisCompositeOp KisCmbComposite::currentItem() const
 {
-    quint32 i = super::currentItem();
+    qint32 i = super::currentIndex();
     if (i > m_list.count()) return KisCompositeOp();
 
     return m_list[i];
@@ -55,30 +57,33 @@ KisCompositeOp KisCmbComposite::currentItem() const
 
 void KisCmbComposite::setCurrentItem(const KisCompositeOp& op)
 {
-    if (m_list.find(op) != m_list.end()) {
-        super::setCurrentText(op.id().name());
+    qint32 index = m_list.indexOf(op);
+
+    if (index != -1) {
+        super::setCurrentIndex(index);
     }
 }
 
 void KisCmbComposite::setCurrentText(const QString & s)
 {
-    KisCompositeOpList::iterator it;
-        for( it = m_list.begin(); it != m_list.end(); ++it )
-        if ((*it).id().id() == s) {
-            super::setCurrentText((*it).id().name());
+    for (int i = 0; i < m_list.count(); ++i) {
+        if (m_list.at(i).id().id() == s) {
+            super::setCurrentIndex(i);
+            break;
         }
+    }
 }
 
 void KisCmbComposite::slotOpActivated(int i)
 {
-    if ((quint32)i > m_list.count()) return;
+    if (i > m_list.count()) return;
 
     emit activated(m_list[i]);
 }
 
 void KisCmbComposite::slotOpHighlighted(int i)
 {
-    if ((quint32)i > m_list.count()) return;
+    if (i > m_list.count()) return;
 
     emit highlighted(m_list[i]);
 }

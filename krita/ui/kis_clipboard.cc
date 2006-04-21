@@ -22,7 +22,6 @@
 #include <qmessagebox.h>
 #include <qbuffer.h>
 
-#include <k3multipledrag.h>
 #include <klocale.h>
 
 #include "kdebug.h"
@@ -100,7 +99,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     // ColorSpace id of layer data
     if (store->open("colorspace")) {
         QString csName = selection->colorSpace()->id().id();
-        store->write(csName.ascii(), strlen(csName.ascii()));
+        store->write(csName.toAscii(), strlen(csName.toAscii()));
         store->close();
     }
 
@@ -124,29 +123,31 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
     qimg = selection->convertToQImage(monitorProfile);
 
-    Q3ImageDrag *qimgDrag = new Q3ImageDrag(qimg);
-    K3MultipleDrag *multiDrag = new K3MultipleDrag();
-    if ( !qimg.isNull() )
-        multiDrag->addDragObject( qimgDrag );
-    KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
-    storeDrag->setEncodedData( buffer.buffer() );
-    multiDrag->addDragObject( storeDrag );
+    QMimeData *mimeData = new QMimeData;
+    Q_CHECK_PTR(mimeData);
 
+    if (mimeData) {
+        if (!qimg.isNull()) {
+            mimeData->setImageData(qimg);
+        }
 
-    QClipboard *cb = QApplication::clipboard();
-    cb->setData(multiDrag);
-    m_pushedClipboard = true;
+        mimeData->setData(mimeType, buffer.buffer());
+
+        m_pushedClipboard = true;
+        QClipboard *cb = QApplication::clipboard();
+        cb->setMimeData(mimeData);
+    }
 }
 
 KisPaintDeviceSP KisClipboard::clip()
 {
     QClipboard *cb = QApplication::clipboard();
     QByteArray mimeType("application/x-krita-selection");
-    QMimeSource *cbData = cb->data();
+    const QMimeData *cbData = cb->mimeData();
 
-    if(cbData && cbData->provides(mimeType))
+    if (cbData && cbData->hasFormat(mimeType))
     {
-        QByteArray encodedData = cbData->encodedData(mimeType);
+        QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
         KisProfile *profile=0;
@@ -215,10 +216,10 @@ void KisClipboard::clipboardDataChanged()
         m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
         QImage qimg = cb->image();
-        QMimeSource *cbData = cb->data();
+        const QMimeData *cbData = cb->mimeData();
         QByteArray mimeType("application/x-krita-selection");
 
-        if(cbData && cbData->provides(mimeType))
+        if (cbData && cbData->hasFormat(mimeType))
             m_hasClip = true;
 
         if (!qimg.isNull())
@@ -239,12 +240,12 @@ QSize KisClipboard::clipSize()
 
     QClipboard *cb = QApplication::clipboard();
     QByteArray mimeType("application/x-krita-selection");
-    QMimeSource *cbData = cb->data();
+    const QMimeData *cbData = cb->mimeData();
 
     KisPaintDeviceSP clip;
     
-    if(cbData && cbData->provides(mimeType)) {
-        QByteArray encodedData = cbData->encodedData(mimeType);
+    if (cbData && cbData->hasFormat(mimeType)) {
+        QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
         KisProfile *profile=0;
@@ -282,8 +283,6 @@ QSize KisClipboard::clipSize()
         QImage qimg = cb->image();
         return qimg.size();
     }
-;
-
 }
 
 #include "kis_clipboard.moc"

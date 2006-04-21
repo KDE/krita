@@ -19,11 +19,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <q3hbox.h>
 #include <qlayout.h>
 #include <qslider.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include <knuminput.h>
 
@@ -56,7 +54,10 @@ void KisDoubleWidget::init(double min, double max)
     connect(m_slider, SIGNAL(sliderPressed()), SIGNAL(sliderPressed()));
     connect(m_slider, SIGNAL(sliderReleased()), SIGNAL(sliderReleased()));
 
-    m_layout = new Q3HBoxLayout(this, 0, -1, "hbox layout");
+    m_layout = new QHBoxLayout(this);
+    m_layout->setObjectName("hbox layout");
+    m_layout->setMargin(0);
+    m_layout->setSpacing(0);
 
     m_layout->addWidget(m_slider);
     m_layout->addSpacing(5);

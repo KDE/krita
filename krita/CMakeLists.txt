@@ -87,8 +87,8 @@ if (SHOULD_BUILD_KRITA)
         ${CMAKE_BINARY_DIR}/krita/ui
 
         ${KOPAINTER_INCLUDES}
-        ${KOFFICEUI_INCLUDES}
         ${KOPALETTE_INCLUDES}
+        ${KOFFICEUI_INCLUDES}
         ${LCMS_INCLUDE_DIR}
 
         # 'Export' this for use by filters

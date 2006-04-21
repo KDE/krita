@@ -36,6 +36,11 @@
 #include "kis_tile.h"
 #include "kis_tilemanager.h"
 
+// see Bug 125439 - Work on Solaris
+#ifdef Q_OS_SOLARIS
+extern "C" int madvise(caddr_t, size_t, int);
+#endif
+
 // Note: the cache file doesn't get deleted when we crash and so :(
 
 KisTileManager* KisTileManager::m_singleton = 0;

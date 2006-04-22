@@ -21,7 +21,8 @@
 
 #include <qpushbutton.h>
 #include <qcolor.h>
-#include <q3frame.h>
+#include <QFrame>
+#include <QStyleOption>
 
 #include <koffice_export.h>
 
@@ -31,14 +32,14 @@ class QWidget;
 class KHSSelector;
 class KValueSelector;
 
-class KisColorPopup : public Q3Frame {
+class KisColorPopup : public QFrame {
 
     Q_OBJECT
 
 public:
 
     KisColorPopup(QColor color, QWidget * w, const char * name);
-    virtual ~KisColorPopup() {};
+    virtual ~KisColorPopup() {}
 
 signals:
 
@@ -57,33 +58,25 @@ class KRITAUI_EXPORT KisColorCup : public QPushButton {
     Q_OBJECT
 
 public:
-
     KisColorCup(QWidget * parent, const char * name = 0);
+    virtual ~KisColorCup() {}
     
-    virtual ~KisColorCup() {};
-    
-    QColor color() { return m_color; };
+    QColor color() { return m_color; }
     
 signals:
-
     void changed(const QColor &);
 
 public:
-
     QSize sizeHint() const;
 
 public slots:
-
     void setColor(const QColor & c);
 
-
 private slots:
-    
     void slotClicked();
 
 protected:
-
-    virtual void drawButtonLabel( QPainter *p );
+    void paintEvent(QPaintEvent *e);
 
 private:
 

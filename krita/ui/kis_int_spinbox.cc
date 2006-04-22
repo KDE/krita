@@ -137,22 +137,22 @@ void KisIntSpinbox::setRange(int lower, int upper, int /*step*/)
 
 void KisIntSpinbox::setMinValue(int min)
 {
-    setRange(min, maxValue(), d->m_slider->lineStep());
+    setRange(min, maxValue(), d->m_slider->singleStep());
 }
 
 int KisIntSpinbox::minValue() const
 {
-    return d->m_slider->minValue();
+    return d->m_slider->minimum();
 }
 
 void KisIntSpinbox::setMaxValue(int max)
 {
-    setRange(minValue(), max, d->m_slider->lineStep());
+    setRange(minValue(), max, d->m_slider->singleStep());
 }
 
 int KisIntSpinbox::maxValue() const
 {
-    return d->m_slider->maxValue();
+    return d->m_slider->maximum();
 }
 
 KisIntSpinbox::~KisIntSpinbox()

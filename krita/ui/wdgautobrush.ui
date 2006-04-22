@@ -27,7 +27,7 @@
             <number>0</number>
           </property>
           <item>
-            <widget class="Q3GroupBox" name="grpSize" >
+            <widget class="QGroupBox" name="grpSize" >
               <property name="title" >
                 <string>&amp;Size</string>
               </property>
@@ -133,7 +133,7 @@
             </widget>
           </item>
           <item>
-            <widget class="Q3GroupBox" name="grpFade" >
+            <widget class="QGroupBox" name="grpFade" >
               <property name="title" >
                 <string>&amp;Fade</string>
               </property>

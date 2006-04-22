@@ -1,172 +1,169 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>WdgApplyProfile</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgApplyProfile</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>538</width>
-            <height>312</height>
-        </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>3</hsizetype>
-            <vsizetype>3</vsizetype>
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>WdgApplyProfile</class>
+ <widget class="QWidget" name="WdgApplyProfile" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>495</width>
+    <height>362</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>3</hsizetype>
+    <vsizetype>3</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox1" >
+     <property name="title" >
+      <string>Apply Profile</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="textLabel1" >
+        <property name="text" >
+         <string>The image data you want to paste does not have an ICM profile associated with it. If you do not select a profile, Krita will assume that the image data is encoded in the import profile defined in the Settings dialog.</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="wordWrap" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="lblProfile" >
+          <property name="text" >
+           <string>&amp;Profiles:</string>
+          </property>
+          <property name="buddy" >
+           <cstring>cmbProfile</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="SqueezedComboBox" name="cmbProfile" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>0</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="grpRenderIntent" >
+        <property name="toolTip" >
+         <string/>
         </property>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>groupBox1</cstring>
-            </property>
-            <property name="title">
-                <string>Apply Profile</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>lblProfile</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Profiles:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>cmbProfile</cstring>
-                    </property>
-                </widget>
-                <widget class="SqueezedComboBox" row="1" column="1">
-                    <item>
-                        <property name="text">
-                            <string>None</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>cmbProfile</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>The image data you want to paste does not have an ICM profile associated with it. If you do not select a profile, Krita will assume that the image data is encoded in the import profile defined in the Settings dialog.</string>
-                    </property>
-                    <property name="alignment">
-                        <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
-                    </property>
-                </widget>
-                <widget class="QButtonGroup" row="2" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>grpRenderIntent</cstring>
-                    </property>
-                    <property name="title">
-                        <string>&amp;Rendering Intent</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string></string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Rendering intent determines the bias in the color conversion.</string>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton" row="1" column="0">
-                            <property name="name">
-                                <cstring>radioRelativeColorimetric</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Relative colorimetric</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Within and outside gamut; same as Absolute Colorimetric. White point changed to result in neutral grays.</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="2" column="0">
-                            <property name="name">
-                                <cstring>radioSaturation</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Saturation</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Hue and saturation maintained with lightness sacrificed to maintain saturation. White point changed to result in neutral grays. Intended for business graphics (make it colorful charts, graphs, overheads, ...)</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="3" column="0">
-                            <property name="name">
-                                <cstring>radioButton4</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Absolute colorimetric</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Within the destination device gamut; hue, lightness and saturation are maintained. Outside the gamut; hue and lightness are maintained, saturation is sacrificed. White point for source and destination; unchanged. Intended for spot colors (Pantone, TruMatch, logo colors, ...)</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>radioPerceptual</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Perceptual</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>Hue hopefully maintained (but not required), lightness and saturation sacrificed to maintain the perceived color. White point changed to result in neutral grays. Intended for images.</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </grid>
-        </widget>
-    </grid>
-</widget>
-<customwidgets>
-    <customwidget>
-    <class>SqueezedComboBox</class>
-    <header location="local">squeezedcombobox.h</header>
-    <sizehint>
-        <width>-1</width>
-        <height>i24</height>
-    </sizehint>
-    <container>0</container>
-    <sizepolicy>
-        <hordata>3</hordata>
-        <verdata>0</verdata>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-    </sizepolicy>
-    <pixmap>image0</pixmap>
-    </customwidget>
-</customwidgets>
-<images>
-  <image name="image0">
-    <data format="PNG" length="870">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000032d49444154388db59531681c4714863f892dde8004b320c32e3870020b74458a6b0f5458e581c016a809a8496b42208454098604d2c4904a6954a410511ae752085b858c1208dc35221244b00119f60ac12ee860062c980719708a95a248f129459cd7cceeccf0edb76fff61a706830197d5ed765ff3166a30184c4d5d829fed3c7bdd5e6ce3bda71a5738ef301802e1d6d179477152303c1842bc822797a64fbf7b4a9a43be00ada817cb0e12011c2611205ccd73755f9c087c6b19bef0d7c100f5b8267d07caf10fe8ab9210156320fc01be16aa5a11043307f30b20a21041019985f48ef2f7fa0becc68e80475fd584e831b396f210f67795c3831a4940a3228925bb27f4d652ba4b01a199b73342f3981be0ca57745042ac30c632d853b6373d44b056c8ef0922508d94d14be59b2f4aeaf58cd5751069e06f3436890114332b9487d0bf80f61e64dc5f813c3790045453f67703fd4d4f7f6b4496b5597e689044af194f5f5e841800210478bee3d1a8f41e64acbe0f69ae6852e1cf0ccf7f74f4d652defbc042226c6f55e8f89f91bb6e9c387c9d521c9558db988a3416fe3c67e32b4779ec7167f0e8939ce19ea7fc5d298a80c875f03563930855ed2081bc05e91d5014ef53363eaf288e3d6285ee520a338e76c7a251a94e41e30470d3631004a262672e3eca59cec6978ef2b889979d11f2bb904af3be92081a416e28dfe831983920b1142345d5b0ff2234a6334276d7321ad53c795c511ca654a5a251996f19b83d158ef602b45a423d52f67703abeb29ee4ce9de4fc93378f218462f6b3efdb042cf3d59666977a0aa6fe9310888d25b13342afd4dcffeaee3d147399da540ab13f8f8b39c2cb3f8710d11ba2b96f9c57fcd7180287497a03ecde86f8dd8fe1a867b9ef6bb1612a84a871f6bd35b94e217a53832589970f2dcd85d9c7d4580d57521cbdaf4bfaf288e95e268d4ec8e60e72ccb0f2dbffea454e71e8d29f57882717152509482a48d8924b0bc12e82ee51445a03a6da079cbd0eec0fc22142b06620e89a3fc8d3783870743d814d2bc8994aa6ff286472e764902e5a96f72bbd3b4c37b280e95aa9e604c84e1cf978b37c74935797d7ae2ca7fac6968fe51ff0bf86dc30783c1d49f0baa9bb819e612310000000049454e44ae426082</data>
-  </image>
-</images>
-<tabstops>
-    <tabstop>cmbProfile</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+        <property name="whatsThis" >
+         <string>Rendering intent determines the bias in the color conversion.</string>
+        </property>
+        <property name="title" >
+         <string>Rendering Intent</string>
+        </property>
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>9</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QRadioButton" name="radioPerceptual" >
+           <property name="whatsThis" >
+            <string>Hue hopefully maintained (but not required), lightness and saturation sacrificed to maintain the perceived color. White point changed to result in neutral grays. Intended for images.</string>
+           </property>
+           <property name="text" >
+            <string>Perceptual</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioRelativeColorimetric" >
+           <property name="whatsThis" >
+            <string>Within and outside gamut; same as Absolute Colorimetric. White point changed to result in neutral grays.</string>
+           </property>
+           <property name="text" >
+            <string>Relative colorimetric</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioSaturation" >
+           <property name="whatsThis" >
+            <string>Hue and saturation maintained with lightness sacrificed to maintain saturation. White point changed to result in neutral grays. Intended for business graphics (make it colorful charts, graphs, overheads, ...)</string>
+           </property>
+           <property name="text" >
+            <string>Saturation</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioAbsoluteColorimetric" >
+           <property name="whatsThis" >
+            <string>Within the destination device gamut; hue, lightness and saturation are maintained. Outside the gamut; hue and lightness are maintained, saturation is sacrificed. White point for source and destination; unchanged. Intended for spot colors (Pantone, TruMatch, logo colors, ...)</string>
+           </property>
+           <property name="text" >
+            <string>Absolute colorimetric</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>SqueezedComboBox</class>
+   <extends></extends>
+   <header>squeezedcombobox.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>cmbProfile</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

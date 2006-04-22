@@ -18,7 +18,7 @@
 
 #include <qcombobox.h>
 #include <klocale.h>
-#include <q3buttongroup.h>
+#include <QButtonGroup>
 
 #include "kis_factory.h"
 #include "kis_colorspace_factory_registry.h"
@@ -31,14 +31,13 @@
 #include <kis_meta_registry.h>
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
-#include "wdgapplyprofile.h"
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.
 KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
-    : super(parent, name, true, "", Ok | Cancel)
+    : super(parent, "", Ok | Cancel)
 {
-
-    setCaption(i18n("Apply Image Profile to Clipboard Data"));
+    setObjectName(name);
+    setWindowTitle(i18n("Apply Image Profile to Clipboard Data"));
     m_page = new WdgApplyProfile(this);
 
     setMainWidget(m_page);
@@ -46,9 +45,21 @@ KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
 
     // XXX: This is BAD! (bsar)
     fillCmbProfiles(KisID("RGBA", ""));
-    KisConfig cfg;
-    m_page->grpRenderIntent->setButton(cfg.renderIntent());
 
+    m_intentButtonGroup = new QButtonGroup(this);
+
+    m_intentButtonGroup->addButton(m_page->radioPerceptual, INTENT_PERCEPTUAL);
+    m_intentButtonGroup->addButton(m_page->radioRelativeColorimetric, INTENT_RELATIVE_COLORIMETRIC);
+    m_intentButtonGroup->addButton(m_page->radioSaturation, INTENT_SATURATION);
+    m_intentButtonGroup->addButton(m_page->radioAbsoluteColorimetric, INTENT_ABSOLUTE_COLORIMETRIC);
+
+    KisConfig cfg;
+    QAbstractButton *currentIntentButton = m_intentButtonGroup->button(cfg.renderIntent());
+    Q_ASSERT(currentIntentButton);
+
+    if (currentIntentButton) {
+        currentIntentButton->setChecked(true);
+    }
 }
 
 KisDlgApplyProfile::~KisDlgApplyProfile()
@@ -68,7 +79,7 @@ KisProfile *  KisDlgApplyProfile::profile() const
 
 int KisDlgApplyProfile::renderIntent() const
 {
-    return m_page->grpRenderIntent->selectedId();
+    return m_intentButtonGroup->checkedId();
 }
 
 
@@ -87,9 +98,9 @@ void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
     Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-            m_page->cmbProfile->insertItem((*it)->productName());
+            m_page->cmbProfile->addSqueezedItem((*it)->productName());
     }
-    m_page->cmbProfile->setCurrentText(csf->defaultProfile());
+    m_page->cmbProfile->setCurrentIndexFromText(csf->defaultProfile());
 }
 
 #include "kis_dlg_apply_profile.moc"

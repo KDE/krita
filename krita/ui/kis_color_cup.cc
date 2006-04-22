@@ -24,7 +24,6 @@
 #include <qclipboard.h>
 #include <qcolor.h>
 #include <qdrawutil.h>
-#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
@@ -32,9 +31,8 @@
 #include <qstyle.h>
 #include <qtooltip.h>
 #include <qwidget.h>
-#include <q3frame.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QFrame>
+#include <QHBoxLayout>
 
 #include <kcolordialog.h>
 #include <klocale.h>
@@ -46,15 +44,16 @@
 #include <kis_color_cup.h>
 
 KisColorPopup::KisColorPopup(QColor c, QWidget * parent, const char * name)
-    : Q3Frame(parent, name, Qt::WType_Popup | Qt::WStyle_Customize | Qt::WStyle_NoBorder)
+    : QFrame(parent, Qt::Popup | Qt::FramelessWindowHint)
 {
+    setObjectName(name);
     m_color = c;
-    setMargin(4);
+    setContentsMargins(4, 4, 4, 4);
     setFocusPolicy(Qt::StrongFocus);
-    Q3HBoxLayout * l  = new Q3HBoxLayout(this);
-    l->add(m_khsSelector = new KHSSelector(this));
+    QHBoxLayout * l  = new QHBoxLayout(this);
+    l->addWidget(m_khsSelector = new KHSSelector(this));
     m_khsSelector->setMinimumSize(140, 7);
-    l->add(m_valueSelector = new KValueSelector(this));
+    l->addWidget(m_valueSelector = new KValueSelector(this));
     m_valueSelector->setMinimumSize(26, 70);
     m_khsSelector->show();
     m_valueSelector->show();
@@ -62,8 +61,9 @@ KisColorPopup::KisColorPopup(QColor c, QWidget * parent, const char * name)
 }
 
 KisColorCup::KisColorCup(QWidget * parent, const char * name)
-    : QPushButton(parent, name)
+    : QPushButton(parent)
 {
+    setObjectName(name);
     m_color = Qt::black;
     m_popup = new KisColorPopup(m_color, this, "colorpopup");
     connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
@@ -85,39 +85,51 @@ void KisColorCup::slotClicked()
 
 QSize KisColorCup::sizeHint() const
 {
-#warning kde4 port
-    // The style api has changed a bit. Disabled for now.
-    return QSize(24, 24);
-//     return style().sizeFromContents(QStyle::CT_PushButton, this, QSize(24, 24)).
-//             expandedTo(QApplication::globalStrut());
+    QStyleOptionButton option;
+    option.initFrom(this);
+
+    return style()->sizeFromContents(QStyle::CT_PushButton, &option, QSize(24, 24), this).
+	  	expandedTo(QApplication::globalStrut());
 }
 
-void KisColorCup::drawButtonLabel( QPainter */*painter*/ )
+void KisColorCup::paintEvent(QPaintEvent *)
 {
-//     int x, y, w, h;
-//     QRect r = style().subRect( QStyle::SR_PushButtonContents, this );
-//     r.rect(&x, &y, &w, &h);
-//
-//     int margin = 2; //style().pixelMetric( QStyle::PM_ButtonMargin, this );
-//     x += margin;
-//     y += margin;
-//     w -= 2*margin;
-//     h -= 2*margin;
-//
-//     if (isOn() || isDown()) {
-//         x += style().pixelMetric( QStyle::PM_ButtonShiftHorizontal, this );
-//         y += style().pixelMetric( QStyle::PM_ButtonShiftVertical, this );
-//     }
-//
-//     qDrawShadePanel( painter, x, y, w, h, colorGroup(), true, 1, NULL);
-//     if ( m_color.isValid() )
-//         painter->fillRect( x+1, y+1, w-2, h-2, m_color );
-//
-//     if ( hasFocus() ) {
-//         QRect focusRect = style().subRect( QStyle::SR_PushButtonFocusRect, this );
-//         style().drawPrimitive( QStyle::PE_FocusRect, painter, focusRect, colorGroup() );
-//     }
-//
+    QPainter painter(this);
+
+    QStyleOptionButton option;
+    option.initFrom(this);
+
+    style()->drawControl(QStyle::CE_PushButtonBevel, &option, &painter, this);
+
+    int x, y, w, h;
+    QRect r = style()->subElementRect(QStyle::SE_PushButtonContents, &option, this);
+    r.getRect(&x, &y, &w, &h);
+
+    int margin = 3; //style().pixelMetric( QStyle::PM_ButtonMargin, this );
+    x += margin;
+    y += margin;
+    w -= 2*margin;
+    h -= 2*margin;
+
+    if (isChecked() || isDown()) {
+        x += style()->pixelMetric(QStyle::PM_ButtonShiftHorizontal);
+        y += style()->pixelMetric(QStyle::PM_ButtonShiftVertical);
+    }
+
+    qDrawShadePanel(&painter, x, y, w, h, palette(), true, 1, NULL);
+    if (m_color.isValid())
+        painter.fillRect(x + 1, y + 1, w - 2, h - 2, m_color);
+
+    if (hasFocus()) {
+        QRect focusRect = style()->subElementRect(QStyle::SE_PushButtonFocusRect, &option, this);
+
+        QStyleOptionFocusRect optionFocusRect;
+        optionFocusRect.initFrom(this);
+        optionFocusRect.rect = focusRect;
+        optionFocusRect.backgroundColor = palette().background().color();
+
+        style()->drawPrimitive(QStyle::PE_FrameFocusRect, &optionFocusRect, &painter, this);
+    }
 }
 
 #include "kis_color_cup.moc"

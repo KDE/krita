@@ -22,8 +22,7 @@
 #ifndef __kis_controlframe_h__
 #define __kis_controlframe_h__
 
-#include <q3popupmenu.h>
-//Added by qt3to4:
+#include <QMenu>
 #include <QKeyEvent>
 
 #include <ktoolbar.h>
@@ -52,7 +51,7 @@ class KisResourceMediator;
 class KisPaintopBox;
 class KisView;
 
-class KisPopupFrame : public Q3PopupMenu {
+class KisPopupFrame : public QMenu {
 
     Q_OBJECT
 
@@ -106,6 +105,7 @@ private:
 
     QTabWidget * m_brushesTab;
     QTabWidget * m_gradientTab;
+    QTabWidget * m_patternsTab;
 
     KisIconWidget *m_brushWidget;
     KisIconWidget *m_patternWidget;

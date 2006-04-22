@@ -24,14 +24,13 @@
 #include <qimage.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QResizeEvent>
 
 
 KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& caption) : KisWdgAutobrush(parent, name)
 {
-    setCaption(caption);
+    setWindowTitle(caption);
 
     m_linkSize = true;
     m_linkFade = true;
@@ -43,16 +42,16 @@ KisAutobrush::KisAutobrush(QWidget *parent, const char* name, const QString& cap
     connect(bnLinkFade, SIGNAL(toggled(bool)), this, SLOT(linkFadeToggled( bool )));
     
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
-    spinBoxWidth->setMinValue(1);
+    spinBoxWidth->setMinimum(1);
     connect(spinBoxWidth,SIGNAL(valueChanged(int)),this,SLOT(spinBoxWidthChanged(int)));
-    spinBoxHeigth->setMinValue(1);
+    spinBoxHeigth->setMinimum(1);
     connect(spinBoxHeigth,SIGNAL(valueChanged(int)),this,SLOT(spinBoxHeigthChanged(int)));
-    spinBoxHorizontal->setMinValue(0);
+    spinBoxHorizontal->setMinimum(0);
     connect(spinBoxHorizontal,SIGNAL(valueChanged(int)),this,SLOT(spinBoxHorizontalChanged(int)));
-    spinBoxVertical->setMinValue(0);
+    spinBoxVertical->setMinimum(0);
     connect(spinBoxVertical,SIGNAL(valueChanged(int)),this,SLOT(spinBoxVerticalChanged(int)));
 
-    m_brsh = new QImage(1,1,32);
+    m_brsh = new QImage(1, 1, QImage::Format_RGB32);
     Q_CHECK_PTR(m_brsh);
 
     paramChanged();
@@ -79,7 +78,7 @@ void KisAutobrush::paramChanged()
     qint32 fv = qMin( spinBoxHeigth->value()/2, spinBoxVertical->value() );
     KisAutobrushShape* kas;
 
-    if(comboBoxShape->currentItem() == 0) // use index compare instead of comparing a translatable string
+    if(comboBoxShape->currentIndex() == 0) // use index compare instead of comparing a translatable string
     {
         kas = new KisAutobrushCircleShape(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
         Q_CHECK_PTR(kas);
@@ -106,11 +105,11 @@ void KisAutobrush::paramChanged()
     }
     if( coeff < 1.0)
     {
-        pi = pi.smoothScale( (int)(coeff * pi.width()) , (int)(coeff * pi.height()));
+        pi = pi.scaled( (int)(coeff * pi.width()) , (int)(coeff * pi.height()),  Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     
-    p.convertFromImage(pi);
-    brushPreview->setPixmap(p);
+    p = QPixmap::fromImage(pi);
+    brushPreview->setIcon(QIcon(p));
     KisAutobrushResource * resource = new KisAutobrushResource(*m_brsh);
     Q_CHECK_PTR(resource);
 
@@ -119,21 +118,21 @@ void KisAutobrush::paramChanged()
 }
 void KisAutobrush::spinBoxWidthChanged(int a)
 {
-    spinBoxHorizontal->setMaxValue(a/2);
+    spinBoxHorizontal->setMaximum(a/2);
     if(m_linkSize)
     {
         spinBoxHeigth->setValue(a);
-        spinBoxVertical->setMaxValue(a/2);
+        spinBoxVertical->setMaximum(a/2);
     }
     this->paramChanged();
 }
 void KisAutobrush::spinBoxHeigthChanged(int a)
 {
-    spinBoxVertical->setMaxValue(a/2);
+    spinBoxVertical->setMaximum(a/2);
     if(m_linkSize)
     {
         spinBoxWidth->setValue(a);
-        spinBoxHorizontal->setMaxValue(a/2);
+        spinBoxHorizontal->setMaximum(a/2);
     }
     this->paramChanged();
 }
@@ -156,10 +155,10 @@ void KisAutobrush::linkSizeToggled(bool b)
 
     KoImageResource kir;
     if (b) {
-        bnLinkSize->setPixmap(kir.chain());
+        bnLinkSize->setIcon(QIcon(kir.chain()));
     }
     else {
-        bnLinkSize->setPixmap(kir.chainBroken());
+        bnLinkSize->setIcon(QIcon(kir.chainBroken()));
     }
 }
 
@@ -169,10 +168,10 @@ void KisAutobrush::linkFadeToggled(bool b)
 
     KoImageResource kir;
     if (b) {
-        bnLinkFade->setPixmap(kir.chain());
+        bnLinkFade->setIcon(QIcon(kir.chain()));
     }
     else {
-        bnLinkFade->setPixmap(kir.chainBroken());
+        bnLinkFade->setIcon(QIcon(kir.chainBroken()));
     }
 }
 

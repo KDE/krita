@@ -42,7 +42,12 @@ public:
     KisPopupSlider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orientation, QWidget * parent, const char * name = 0) 
         : Q3PopupMenu(parent, name)
     {
-        m_slider = new QSlider(minValue, maxValue, pageStep, value, orientation, this, name);
+        m_slider = new QSlider(orientation, this);
+        m_slider->setObjectName(name);
+        m_slider->setMinimum(minValue);
+        m_slider->setMaximum(maxValue);
+        m_slider->setPageStep(pageStep);
+        m_slider->setValue(value);
         //m_slider->setTracking(false);
 #warning kde4 port
         // Can't insert widgets into QMenu at the moment.
@@ -52,10 +57,10 @@ public:
     void setTickInterval(int i) { m_slider->setTickInterval(i); }
     void setRange(int minValue, int maxValue) { m_slider->setRange(minValue, maxValue); }
     void setValue(int val) { m_slider->setValue(val); }
-    void setTickmarks(QSlider::TickPosition t) { m_slider->setTickmarks(t); }
-    int lineStep () const{ return m_slider->lineStep(); }
-    int minValue () const{ return m_slider->minValue(); }
-    int maxValue () const{ return m_slider->maxValue(); }
+    void setTickPosition(QSlider::TickPosition t) { m_slider->setTickPosition(t); }
+    int singleStep () const{ return m_slider->singleStep(); }
+    int minimum () const{ return m_slider->minimum(); }
+    int maximum () const{ return m_slider->maximum(); }
     int value () const{ return m_slider->value(); }
     QSlider *m_slider;
 

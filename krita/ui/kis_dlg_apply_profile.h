@@ -20,11 +20,20 @@
 
 #include <kdialogbase.h>
 
-class KisID;
-class WdgApplyProfile;
+#include "ui_wdgapplyprofile.h"
 
-class KisDlgApplyProfile : public KDialogBase {
-    typedef KDialogBase super;
+class KisID;
+
+class WdgApplyProfile : public QWidget, public Ui::WdgApplyProfile
+{
+    Q_OBJECT
+
+    public:
+        WdgApplyProfile(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class KisDlgApplyProfile : public KDialog {
+    typedef KDialog super;
 
     Q_OBJECT
 
@@ -40,7 +49,7 @@ public:
     void fillCmbProfiles(const KisID & s);
 
 private:
-
+    QButtonGroup *m_intentButtonGroup;
     WdgApplyProfile * m_page;
 };
 

@@ -38,6 +38,7 @@
 #include "kis_histogram.h"
 #include "kis_basic_histogram_producers.h"
 #include "kis_painter.h"
+#include "kis_id.h"
 
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
@@ -339,7 +340,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     KisIDList keys =
         KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
     KisHistogramProducerFactory *hpf;
-    hpf = KisHistogramProducerFactoryRegistry::instance()->get(*(keys.at(0)));
+    hpf = KisHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
     m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
 
     setActiveChannel(0);

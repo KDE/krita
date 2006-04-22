@@ -111,11 +111,25 @@ QSize SqueezedComboBox::sizeHint() const
 void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index)
 {
     m_originalItems[index] = newItem;
-    insertItem( squeezeText(newItem), index );
+    insertItem(index, squeezeText(newItem));
 
     // if this is the first item, set the tooltip.
     if (index == 0)
         slotUpdateToolTip(0);
+}
+
+void SqueezedComboBox::addSqueezedItem(const QString& newItem)
+{
+    insertSqueezedItem(newItem, count());
+}
+
+void SqueezedComboBox::setCurrentIndexFromText(const QString& itemText)
+{
+    QString squeezedText = squeezeText(itemText);
+    qint32 itemIndex = findText(squeezedText);
+    if (itemIndex >= 0) {
+        setCurrentIndex(itemIndex);
+    }
 }
 
 void SqueezedComboBox::resizeEvent ( QResizeEvent * )

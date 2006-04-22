@@ -89,32 +89,33 @@ set(kritaui_LIB_SRCS
 kde4_automoc(${kritaui_LIB_SRCS})
 
 kde4_add_ui3_files(kritaui_LIB_SRCS 
-   kis_matrix_widget.ui 
-   kis_previewwidgetbase.ui 
-   wdgapplyprofile.ui 
-   wdgcolorsettings.ui 
-   wdgdisplaysettings.ui 
-   wdglayerproperties.ui 
-   wdglayerbox.ui 
-   wdgselectionoptions.ui 
-   wdgshapeoptions.ui 
-   wdgpressuresettings.ui 
-   wdgcustombrush.ui 
-   wdgcustompalette.ui 
-   wdgcustompattern.ui 
-   wdgtextbrush.ui 
-   wdgpalettechooser.ui 
-   wdgtabletdevicesettings.ui 
-   wdgtabletsettings.ui )
+    kis_matrix_widget.ui 
+    kis_previewwidgetbase.ui 
+    wdgcolorsettings.ui 
+    wdgdisplaysettings.ui 
+    wdglayerproperties.ui 
+    wdglayerbox.ui 
+    wdgselectionoptions.ui 
+    wdgshapeoptions.ui 
+    wdgpressuresettings.ui 
+    wdgcustompalette.ui 
+    wdgtextbrush.ui 
+    wdgpalettechooser.ui 
+    wdgtabletdevicesettings.ui 
+    wdgtabletsettings.ui
+    )
 
 kde4_add_ui_files(kritaui_LIB_SRCS 
     wdgautobrush.ui 
-	wdgautogradient.ui
-	wdgnewimage.ui 
-	wdggeneralsettings.ui 
-	wdgperformancesettings.ui 
-	wdggridsettings.ui 
-	wdgbirdeye.ui 
+    wdgautogradient.ui
+    wdgnewimage.ui 
+    wdggeneralsettings.ui 
+    wdgperformancesettings.ui 
+    wdggridsettings.ui 
+    wdgbirdeye.ui 
+    wdgapplyprofile.ui 
+    wdgcustombrush.ui 
+    wdgcustompattern.ui 
 	)
 
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )

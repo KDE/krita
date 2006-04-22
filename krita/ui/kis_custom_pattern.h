@@ -20,15 +20,22 @@
 #define KIS_CUSTOM_PATTERN_H_
 
 #include <qobject.h>
-//Added by qt3to4:
 #include <QShowEvent>
 
-#include "wdgcustompattern.h"
+#include "ui_wdgcustompattern.h"
 
 
 class KisResource;
 class KisView;
 class KisResourceServerBase;
+
+class KisWdgCustomPattern : public QWidget, public Ui::KisWdgCustomPattern
+{
+    Q_OBJECT
+
+    public:
+        KisWdgCustomPattern(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
 
 class KisCustomPattern : public KisWdgCustomPattern
 {

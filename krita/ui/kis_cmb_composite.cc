@@ -50,7 +50,7 @@ void KisCmbComposite::setCompositeOpList(const KisCompositeOpList & list)
 KisCompositeOp KisCmbComposite::currentItem() const
 {
     qint32 i = super::currentIndex();
-    if (i > m_list.count()) return KisCompositeOp();
+    if (i > m_list.count() - 1) return KisCompositeOp();
 
     return m_list[i];
 }
@@ -59,7 +59,7 @@ void KisCmbComposite::setCurrentItem(const KisCompositeOp& op)
 {
     qint32 index = m_list.indexOf(op);
 
-    if (index != -1) {
+    if (index >= 0) {
         super::setCurrentIndex(index);
     }
 }
@@ -76,14 +76,14 @@ void KisCmbComposite::setCurrentText(const QString & s)
 
 void KisCmbComposite::slotOpActivated(int i)
 {
-    if (i > m_list.count()) return;
+    if (i > m_list.count() - 1) return;
 
     emit activated(m_list[i]);
 }
 
 void KisCmbComposite::slotOpHighlighted(int i)
 {
-    if (i > m_list.count()) return;
+    if (i > m_list.count() - 1) return;
 
     emit highlighted(m_list[i]);
 }

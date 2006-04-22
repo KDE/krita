@@ -41,6 +41,7 @@
 #include "histogramdocker.h"
 #include "kis_imagerasteredcache.h"
 #include "kis_accumulating_producer.h"
+#include "kis_id.h"
 
 typedef KGenericFactory<KritaHistogramDocker> KritaHistogramDockerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogramdocker, KritaHistogramDockerFactory( "krita" ) )
@@ -123,7 +124,7 @@ void KritaHistogramDocker::producerChanged(int pos)
     KisIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
-    m_factory = KisHistogramProducerFactoryRegistry::instance()->get(*(keys.at(pos)));
+    m_factory = KisHistogramProducerFactoryRegistry::instance()->get(keys.at(pos));
 
     KisCachedHistogramObserver observer(&m_producers, m_factory, 0, 0, 0, 0, false);
 
@@ -164,7 +165,7 @@ void KritaHistogramDocker::colorSpaceChanged(KisColorSpace* cs)
     m_currentProducerPos = 0;
 
     for (uint i = 0; i < keys.count(); i++) {
-        KisID id(*(keys.at(i)));
+        KisID id(keys.at(i));
         m_popup . insertItem(id.name(), static_cast<int>(i));
     }
 

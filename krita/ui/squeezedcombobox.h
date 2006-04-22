@@ -111,6 +111,20 @@ public:
     void insertSqueezedItem(const QString& newItem, int index);
 
     /**
+     * Append an item.
+     * @param newItem the original (long version) of the item which needs
+     *                to be added to the combobox
+     */
+    void addSqueezedItem(const QString& newItem);
+
+    /**
+     * Set the current item to the one matching the given text.
+     * 
+     * @param itemText the original (long version) of the item text
+     */
+    void setCurrentIndexFromText(const QString& itemText);
+
+    /**
      * This method returns the full text (not squeezed) of the currently
      * highlighted item.
      * @return full text of the highlighted item

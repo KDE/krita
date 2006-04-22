@@ -236,7 +236,7 @@ void KisHistogramView::setChannels()
         addProducerChannels(f.generate());
     } else {
         for (int i = 0; i < list.count(); i++) {
-            KisID id(*(list.at(i)));
+            KisID id(list.at(i));
             addProducerChannels( KisHistogramProducerFactoryRegistry::instance()->get(id)->generate() );
         }
     }

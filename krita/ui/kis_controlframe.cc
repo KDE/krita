@@ -25,14 +25,13 @@
 #include <qapplication.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
-#include <q3frame.h>
+#include <QFrame>
 #include <qwidget.h>
 #include <qevent.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QKeyEvent>
-#include <Q3PopupMenu>
+#include <QMenu>
 
 #include <ktoolbar.h>
 #include <kmainwindow.h>
@@ -67,8 +66,9 @@
 #include "kis_text_brush.h"
 #endif
 KisPopupFrame::KisPopupFrame(QWidget * parent, const char* name)
-    : Q3PopupMenu(parent, name)
+    : QMenu(parent)
 {
+    setObjectName(name);
     setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -86,7 +86,7 @@ void KisPopupFrame::keyPressEvent(QKeyEvent * e)
 
 
 KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, const char* name )
-    : QObject(view, name)
+    : QObject(view)
     //: KToolBar ( window, Qt::DockTop, false, name, true, true )
     , m_view(view)
     , m_brushWidget(0)
@@ -100,13 +100,14 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
     , m_gradientMediator(0)
     , m_paintopBox(0)
 {
-
+    setObjectName(name);
     KisConfig cfg;
     m_font  = KGlobalSettings::generalFont();
     m_font.setPointSize((int)cfg.dockerFontSize());
 
     m_brushWidget = new KisIconWidget(view, "brushes");
-    m_brushWidget->setTextLabel( i18n("Brush Shapes") );
+    m_brushWidget->setText( i18n("Brush Shapes") );
+    m_brushWidget->setToolTip( i18n("Brush Shapes") );
     // XXX: An action without a slot -- that's silly, what kind of action could we use here?
     KAction * action = new KWidgetAction(m_brushWidget,
                                          i18n("&Brush"),
@@ -118,7 +119,8 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
 
 
     m_patternWidget = new KisIconWidget(view, "patterns");
-    m_patternWidget->setTextLabel( i18n("Fill Patterns") );
+    m_patternWidget->setText( i18n("Fill Patterns") );
+    m_patternWidget->setToolTip( i18n("Fill Patterns") );
     action = new KWidgetAction(m_patternWidget,
                                i18n("&Patterns"),
                                0,
@@ -128,7 +130,8 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
                                "patterns");
 
     m_gradientWidget = new KisIconWidget(view, "gradients");
-    m_gradientWidget->setTextLabel( i18n("Gradients") );
+    m_gradientWidget->setText( i18n("Gradients") );
+    m_gradientWidget->setToolTip( i18n("Gradients") );
     action = new KWidgetAction(m_gradientWidget,
                                i18n("&Gradients"),
                                0,
@@ -154,12 +157,12 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
     createPatternsChooser(m_view);
     createGradientsChooser(m_view);
 
-    m_brushWidget->setPopup(m_brushChooserPopup);
-    m_brushWidget->setPopupDelay(1);
-    m_patternWidget->setPopup(m_patternChooserPopup);
-    m_patternWidget->setPopupDelay(1);
-    m_gradientWidget->setPopup(m_gradientChooserPopup);
-    m_gradientWidget->setPopupDelay(1);
+    m_brushWidget->setMenu(m_brushChooserPopup);
+    m_brushWidget->setPopupMode(QToolButton::InstantPopup);
+    m_patternWidget->setMenu(m_patternChooserPopup);
+    m_patternWidget->setPopupMode(QToolButton::InstantPopup);
+    m_gradientWidget->setMenu(m_gradientChooserPopup);
+    m_gradientWidget->setPopupMode(QToolButton::InstantPopup);
 }
 
 
@@ -224,15 +227,19 @@ void KisControlFrame::createBrushesChooser(KisView * view)
 
     m_brushChooserPopup = new KisPopupFrame(m_brushWidget, "brush_chooser_popup");
 
-    Q3HBoxLayout * l = new Q3HBoxLayout(m_brushChooserPopup, 2, 2, "brushpopuplayout");
+    QHBoxLayout * l = new QHBoxLayout(m_brushChooserPopup);
+    l->setObjectName("brushpopuplayout");
+    l->setMargin(2);
+    l->setSpacing(2);
 
-    QTabWidget * m_brushesTab = new QTabWidget(m_brushChooserPopup, "brushestab");
+    m_brushesTab = new QTabWidget(m_brushChooserPopup);
+    m_brushesTab->setObjectName("brushestab");
     m_brushesTab->setTabShape(QTabWidget::Triangular);
     m_brushesTab->setFocusPolicy(Qt::NoFocus);
     m_brushesTab->setFont(m_font);
-    m_brushesTab->setMargin(1);
+    m_brushesTab->setContentsMargins(1, 1, 1, 1);
 
-    l->add(m_brushesTab);
+    l->addWidget(m_brushesTab);
 
     KisBrushChooser * m_brushChooser = new KisBrushChooser(m_brushesTab, "brush_chooser");
     m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
@@ -276,14 +283,18 @@ void KisControlFrame::createPatternsChooser(KisView * view)
 {
     m_patternChooserPopup = new KisPopupFrame(m_patternWidget, "pattern_chooser_popup");
 
-    Q3HBoxLayout * l2 = new Q3HBoxLayout(m_patternChooserPopup, 2, 2, "patternpopuplayout");
+    QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup);
+    l2->setObjectName("patternpopuplayout");
+    l2->setMargin(2);
+    l2->setSpacing(2);
 
-    QTabWidget * m_patternsTab = new QTabWidget(m_patternChooserPopup, "patternstab");
+    m_patternsTab = new QTabWidget(m_patternChooserPopup);
+    m_patternsTab->setObjectName("patternstab");
     m_patternsTab->setTabShape(QTabWidget::Triangular);
     m_patternsTab->setFocusPolicy(Qt::NoFocus);
     m_patternsTab->setFont(m_font);
-    m_patternsTab->setMargin(1);
-    l2->add( m_patternsTab );
+    m_patternsTab->setContentsMargins(1, 1, 1, 1);
+    l2->addWidget( m_patternsTab );
 
     KisPatternChooser * chooser = new KisPatternChooser(m_patternChooserPopup, "pattern_chooser");
     chooser->setFont(m_font);
@@ -317,19 +328,23 @@ void KisControlFrame::createGradientsChooser(KisView * view)
 {
     m_gradientChooserPopup = new KisPopupFrame(m_gradientWidget, "gradient_chooser_popup");
 
-    Q3HBoxLayout * l2 = new Q3HBoxLayout(m_gradientChooserPopup, 2, 2, "gradientpopuplayout");
+    QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup);
+    l2->setObjectName("gradientpopuplayout");
+    l2->setMargin(2);
+    l2->setSpacing(2);
 
-    QTabWidget * m_gradientTab = new QTabWidget(m_gradientChooserPopup, "gradientstab");
+    m_gradientTab = new QTabWidget(m_gradientChooserPopup);
+    m_gradientTab->setObjectName("gradientstab");
     m_gradientTab->setTabShape(QTabWidget::Triangular);
     m_gradientTab->setFocusPolicy(Qt::NoFocus);
     m_gradientTab->setFont(m_font);
-    m_gradientTab->setMargin(1);
+    m_gradientTab->setContentsMargins(1, 1, 1, 1);
 
-    l2->add( m_gradientTab);
+    l2->addWidget( m_gradientTab);
 
-    KisGradientChooser * m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup, "gradient_chooser");
+    m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup, "gradient_chooser");
     m_gradientChooser->setFont(m_font);
-    m_gradientChooser->setMinimumSize(200, 150);
+    m_gradientChooser->setMinimumSize(400, 150);
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
     m_gradientMediator = new KisResourceMediator( m_gradientChooser, view);

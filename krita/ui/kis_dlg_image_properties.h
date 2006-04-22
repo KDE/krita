@@ -18,12 +18,11 @@
 #ifndef KIS_DLG_IMAGE_PROPERTIES_H_
 #define KIS_DLG_IMAGE_PROPERTIES_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <kis_types.h>
 #include "ui_wdgnewimage.h"
 
-class Q3ButtonGroup;
 class KisID;
 class KisColorSpace;
 class KisProfile;
@@ -36,8 +35,8 @@ class WdgNewImage : public QWidget, public Ui::WdgNewImage
         WdgNewImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
-class KisDlgImageProperties : public KDialogBase {
-    typedef KDialogBase super;
+class KisDlgImageProperties : public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

@@ -344,7 +344,7 @@ void KisControlFrame::createGradientsChooser(KisView * view)
 
     m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup, "gradient_chooser");
     m_gradientChooser->setFont(m_font);
-    m_gradientChooser->setMinimumSize(400, 150);
+    m_gradientChooser->setMinimumSize(200, 150);
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
     m_gradientMediator = new KisResourceMediator( m_gradientChooser, view);

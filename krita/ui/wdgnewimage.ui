@@ -72,12 +72,9 @@
     </layout>
    </item>
    <item row="4" column="0" >
-    <widget class="Q3GroupBox" name="grpContents" >
+    <widget class="QGroupBox" name="grpContents" >
      <property name="title" >
       <string>Contents</string>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -87,7 +84,7 @@
        <number>6</number>
       </property>
       <item row="2" column="1" >
-       <widget class="Q3TextEdit" name="txtDescription" />
+       <widget class="QTextEdit" name="txtDescription" />
       </item>
       <item row="0" column="0" >
        <widget class="QLabel" name="lblColor" >
@@ -126,7 +123,7 @@
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="Q3Frame" name="opacityPanel" >
+       <widget class="QFrame" name="opacityPanel" >
         <property name="frameShape" >
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -186,12 +183,9 @@
     </widget>
    </item>
    <item row="3" column="0" >
-    <widget class="Q3GroupBox" name="grpMode" >
+    <widget class="QGroupBox" name="grpMode" >
      <property name="title" >
       <string>Mode</string>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -230,12 +224,9 @@
     </widget>
    </item>
    <item row="2" column="0" >
-    <widget class="Q3GroupBox" name="grpImage" >
+    <widget class="QGroupBox" name="grpImage" >
      <property name="title" >
       <string>&amp;Image Size</string>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -339,13 +330,6 @@
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>Q3TextEdit</class>
-   <extends></extends>
-   <header>q3textedit.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>SqueezedComboBox</class>
    <extends>QComboBox</extends>
    <header>squeezedcombobox.h</header>
@@ -363,20 +347,6 @@
    <class>KIntNumInput</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends></extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends></extends>
-   <header>Qt3Support/Q3Frame</header>
    <container>1</container>
    <pixmap></pixmap>
   </customwidget>

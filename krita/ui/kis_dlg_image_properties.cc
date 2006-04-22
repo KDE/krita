@@ -44,9 +44,9 @@
 #include "squeezedcombobox.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
-    : super(parent, name, true, "", Ok | Cancel)
+    : super(parent, "", Ok | Cancel)
 {
-
+    setObjectName(name);
     setCaption(i18n("Image Properties"));
     m_page = new WdgNewImage(this);
 
@@ -67,9 +67,9 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     //m_page->cmbColorSpaces->hide();
     //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());
     KisIDList colorSpaces = KisMetaRegistry::instance()->csRegistry()->listKeys();
-    KisIDList::iterator i = colorSpaces.find(KisID("WET",""));
-    if (i != colorSpaces.end()) {
-        colorSpaces.remove(i);
+    qint32 i = colorSpaces.indexOf(KisID("WET",""));
+    if (i >= 0) {
+        colorSpaces.removeAt(i);
     }
     m_page->cmbColorSpaces->setIDList(colorSpaces);
     m_page->cmbColorSpaces->setCurrent(image->colorSpace()->id());
@@ -77,10 +77,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     fillCmbProfiles(image->colorSpace()->id());
 
     if (image->getProfile()) {
-        m_page->cmbProfile->setCurrentText(image->getProfile()->productName());
+        m_page->cmbProfile->setCurrentIndexFromText(image->getProfile()->productName());
     }
     else {
-        m_page->cmbProfile->setCurrentItem(0);
+        m_page->cmbProfile->setCurrentIndex(0);
     }
 
     m_page->sliderOpacity->setEnabled(false); // XXX re-enable when figured out a way to do this
@@ -129,7 +129,7 @@ double KisDlgImageProperties::resolution()
 
 QString KisDlgImageProperties::description()
 {
-    return m_page->txtDescription->text();
+    return m_page->txtDescription->toPlainText();
 }
 
 KisColorSpace * KisDlgImageProperties::colorSpace()
@@ -140,7 +140,7 @@ KisColorSpace * KisDlgImageProperties::colorSpace()
 KisProfile * KisDlgImageProperties::profile()
 {
     Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
-    quint32 index = m_page->cmbProfile->currentItem();
+    qint32 index = m_page->cmbProfile->currentIndex();
 
     if (index < profileList.count()) {
         return profileList.at(index);
@@ -158,10 +158,8 @@ void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
     Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        m_page->cmbProfile->insertItem((*it)->productName());
+        m_page->cmbProfile->addSqueezedItem((*it)->productName());
     }
-
-
 }
 
 #include "kis_dlg_image_properties.moc"

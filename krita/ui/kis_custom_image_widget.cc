@@ -46,7 +46,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 
     doubleResolution->setValue(resolution);
 
     cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
-    cmbColorSpaces->setCurrentText(defColorSpaceName);
+    cmbColorSpaces->setCurrent(defColorSpaceName);
 
     connect(cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
@@ -89,9 +89,9 @@ void KisCustomImageWidget::fillCmbProfiles(const KisID & s)
     Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-            cmbProfile->insertItem((*it)->productName());
+            cmbProfile->addSqueezedItem((*it)->productName());
     }
-    cmbProfile->setCurrentText(csf->defaultProfile());
+    cmbProfile->setCurrent(csf->defaultProfile());
 }
 
 #include "kis_custom_image_widget.moc"

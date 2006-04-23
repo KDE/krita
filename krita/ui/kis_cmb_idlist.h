@@ -45,7 +45,7 @@ public:
 public:
     void setIDList(const KisIDList & list);
     void setCurrent(const KisID id);
-    void setCurrentText(const QString & s);
+    void setCurrent(const QString & s);
 
     KisID currentItem() const;
 
@@ -60,6 +60,8 @@ private slots:
     void slotIDHighlighted(int i);
 
 private:
+    // Prevent the deprecated Qt3 method being called. Use setCurrent instead.
+    void setCurrentText(const QString & s);
 
     KisIDList m_list;
 

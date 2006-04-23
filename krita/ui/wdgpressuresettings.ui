@@ -1,66 +1,57 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgPressureSettings</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgPressureSettings</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgPressureSettings</class>
+  <widget class="QWidget" name="WdgPressureSettings" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>510</width>
+        <height>87</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>510</width>
-            <height>87</height>
-        </rect>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <spacer row="1" column="1">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>89</height>
-                </size>
-            </property>
+    <layout class="QGridLayout" >
+      <item row="1" column="1" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>21</width>
+              <height>89</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel3</cstring>
-            </property>
-            <property name="text">
-                <string>Softer</string>
-            </property>
+      </item>
+      <item row="0" column="0" >
+        <widget class="QLabel" name="textLabel3" >
+          <property name="text" >
+            <string>Softer</string>
+          </property>
         </widget>
-        <widget class="QLabel" row="0" column="2">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="text">
-                <string>Firmer</string>
-            </property>
+      </item>
+      <item row="0" column="2" >
+        <widget class="QLabel" name="textLabel2" >
+          <property name="text" >
+            <string>Firmer</string>
+          </property>
         </widget>
-        <widget class="QSlider" row="0" column="1">
-            <property name="name">
-                <cstring>slPressure</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>NoMarks</enum>
-            </property>
+      </item>
+      <item row="0" column="1" >
+        <widget class="QSlider" name="slPressure" >
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </widget>
-    </grid>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>

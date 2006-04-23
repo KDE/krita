@@ -190,7 +190,7 @@ KisPaintDeviceSP KisClipboard::clip()
 
         quint32 behaviour = cfg.pasteBehaviour();
 
-        if(behaviour==2)
+        if (behaviour == PASTE_ASK)
         {
             // Ask user each time
             behaviour = QMessageBox::question(0,i18n("Pasting data from simple source"),i18n("The image data you are trying to paste has no colour profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"),i18n("As &Web"),i18n("As on &Monitor"));
@@ -198,7 +198,7 @@ KisPaintDeviceSP KisClipboard::clip()
 
         KisColorSpace * cs;
         QString profileName("");
-        if(behaviour==1)
+        if (behaviour == PASTE_ASSUME_MONITOR)
             profileName = cfg.monitorProfile();
 
         cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""), profileName);

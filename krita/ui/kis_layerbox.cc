@@ -437,7 +437,7 @@ void KisLayerBox::slotAboutToShow()
 void KisLayerBox::slotSetCompositeOp(const KisCompositeOp& compositeOp)
 {
     m_lst->cmbComposite->blockSignals(true);
-    m_lst->cmbComposite->setCurrentItem(compositeOp);
+    m_lst->cmbComposite->setCurrent(compositeOp);
     m_lst->cmbComposite->blockSignals(false);
 }
 

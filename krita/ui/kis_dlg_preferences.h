@@ -30,16 +30,18 @@
 #include "kis_canvas.h"
 
 #include "ui_wdggeneralsettings.h"
-#include "wdgtabletsettings.h"
-#include "wdgtabletdevicesettings.h"
+#include "ui_wdgtabletsettings.h"
+#include "ui_wdgtabletdevicesettings.h"
 #include "ui_wdgperformancesettings.h"
-#include "wdgdisplaysettings.h"
+#include "ui_wdgdisplaysettings.h"
 #include "ui_wdggridsettings.h"
+#include "ui_wdgcolorsettings.h"
+#include "ui_wdgperformancesettings.h"
+#include "ui_wdggeneralsettings.h"
 
 class QLineEdit;
 class QCheckBox;
 class KUrlRequester;
-class WdgColorSettings;
 class KisCmbIDList;
 class KisID;
 
@@ -68,10 +70,19 @@ public:
     float dockerFontSize();
     
     void setDefault();
-
+private:
+    QButtonGroup m_dockabilityGroup;
 };
 
 //=======================
+
+class WdgColorSettings : public QWidget, public Ui::WdgColorSettings
+{
+    Q_OBJECT
+
+    public:
+        WdgColorSettings(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 class ColorSettingsTab : public QWidget
 {
@@ -89,6 +100,7 @@ private slots:
 public:
     void setDefault();
     WdgColorSettings * m_page;
+    QButtonGroup m_pasteBehaviourGroup;
 };
 
 
@@ -117,6 +129,21 @@ public:
 
 //=======================
 
+class WdgTabletSettings : public QWidget, public Ui::WdgTabletSettings
+{
+    Q_OBJECT
+
+    public:
+        WdgTabletSettings(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class WdgTabletDeviceSettings : public QWidget, public Ui::WdgTabletDeviceSettings
+{
+    Q_OBJECT
+
+    public:
+        WdgTabletDeviceSettings(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 /**
  *  Tablet settings tab for preferences dialog
@@ -188,8 +215,8 @@ private:
         qint32 m_serialNumberAxis;
     };
 
-    class TabletDeviceSettingsDialog : public KDialogBase {
-        typedef KDialogBase super;
+    class TabletDeviceSettingsDialog : public KDialog {
+        typedef KDialog super;
     
     public:
         TabletDeviceSettingsDialog(const QString& deviceName,
@@ -213,6 +240,13 @@ private:
 
 //=======================
 
+class WdgDisplaySettings : public QWidget, public Ui::WdgDisplaySettings
+{
+    Q_OBJECT
+
+    public:
+        WdgDisplaySettings(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
 
 /**
  *  Display settings tab for preferences dialog
@@ -231,7 +265,6 @@ protected slots:
 };
 
 //=======================
-
 
 /**
  *  Grid settings tab for preferences dialog

@@ -1,90 +1,77 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgDisplaySettings</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgDisplaySettings</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgDisplaySettings</class>
+  <widget class="QWidget" name="WdgDisplaySettings" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>374</width>
+        <height>154</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>374</width>
-            <height>154</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Display</string>
     </property>
-    <property name="caption">
-        <string>Display</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>spacer3</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>50</height>
-                </size>
-            </property>
+    <layout class="QGridLayout" >
+      <item row="1" column="0" >
+        <spacer name="spacer3" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>50</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QButtonGroup" row="0" column="0">
-            <property name="name">
-                <cstring>buttonGroup1</cstring>
-            </property>
-            <property name="title">
-                <string>OpenGL</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+      </item>
+      <item row="0" column="0" >
+        <widget class="QGroupBox" name="buttonGroup1" >
+          <property name="title" >
+            <string>OpenGL</string>
+          </property>
+          <layout class="QHBoxLayout" >
+            <item>
+              <layout class="QVBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
                 </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4</cstring>
+                <item>
+                  <widget class="QCheckBox" name="cbUseOpenGL" >
+                    <property name="text" >
+                      <string>Enable OpenGL</string>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>cbUseOpenGL</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Enable OpenGL</string>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>121</width>
-                            <height>31</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+            <item>
+              <spacer name="spacer4" >
+                <property name="sizeHint" >
+                  <size>
+                    <width>121</width>
+                    <height>31</height>
+                  </size>
+                </property>
+                <property name="sizeType" >
+                  <enum>Expanding</enum>
+                </property>
+                <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                </property>
+              </spacer>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+</ui>

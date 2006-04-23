@@ -22,7 +22,6 @@
 #include <config-krita.h>
 
 #include <qbitmap.h>
-#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
 #include <qlabel.h>
@@ -32,14 +31,11 @@
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qtoolbutton.h>
-#include <q3vbox.h>
+#include <QGridLayout>
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>
 #endif
-
-//Added by qt3to4:
-#include <Q3GridLayout>
 
 #include <KoImageResource.h>
 
@@ -53,6 +49,7 @@
 #include <kurlrequester.h>
 
 #include "squeezedcombobox.h"
+#include "kis_clipboard.h"
 #include "kis_cmb_idlist.h"
 #include "kis_colorspace.h"
 #include "kis_colorspace_factory_registry.h"
@@ -66,21 +63,28 @@
 
 #include "kis_canvas.h"
 
-#include "wdgcolorsettings.h"
-#include "ui_wdgperformancesettings.h"
-#include "ui_wdggeneralsettings.h"
-
 // for the performance update
 #include "tiles/kis_tilemanager.h"
 
 GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
     : WdgGeneralSettings( _parent, _name )
 {
-
     KisConfig cfg;
 
-    m_cmbCursorShape->setCurrentItem(cfg.cursorStyle());
-    grpDockability->setButton(cfg.dockability());
+    m_dockabilityGroup.addButton(radioAllowDocking, DOCK_ENABLED);
+    m_dockabilityGroup.addButton(radioDisallowDocking, DOCK_DISABLED);
+    m_dockabilityGroup.addButton(radioSmartDocking, DOCK_SMART);
+
+    kDebug() << "Dock is " << cfg.dockability() << endl;
+
+
+    QAbstractButton *button = m_dockabilityGroup.button(cfg.dockability());
+    Q_ASSERT(button);
+    if (button) {
+        button->setChecked(true);
+    }
+
+    m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     numDockerFontSize->setValue((int)cfg.dockerFontSize());
 }
 
@@ -88,19 +92,23 @@ void GeneralTab::setDefault()
 {
     KisConfig cfg;
 
-    m_cmbCursorShape->setCurrentItem( cfg.getDefaultCursorStyle());
-    grpDockability->setButton(cfg.getDefaultDockability());
+    m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
+    QAbstractButton *button = m_dockabilityGroup.button(cfg.getDefaultDockability());
+    Q_ASSERT(button);
+    if (button) {
+        button->setChecked(true);
+    }
     numDockerFontSize->setValue((int)(cfg.getDefaultDockerFontSize()));
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
 {
-    return (enumCursorStyle)m_cmbCursorShape->currentItem();
+    return (enumCursorStyle)m_cmbCursorShape->currentIndex();
 }
 
 enumKoDockability GeneralTab::dockability()
 {
-    return (enumKoDockability)grpDockability->selectedId();
+    return (enumKoDockability)m_dockabilityGroup.checkedId();
 }
 
 float GeneralTab::dockerFontSize()
@@ -111,12 +119,15 @@ float GeneralTab::dockerFontSize()
 //---------------------------------------------------------------------------------------------------
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
-    : QWidget(parent, name)
+    : QWidget(parent)
 {
+    setObjectName(name);
+
     // XXX: Make sure only profiles that fit the specified color model
     // are shown in the profile combos
 
-    Q3GridLayout * l = new Q3GridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout * l = new QGridLayout(this);
+    l->setSpacing(KDialog::spacingHint());
     l->setMargin(0);
     m_page = new WdgColorSettings(this);
     l->addWidget( m_page, 0, 0);
@@ -124,21 +135,32 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     KisConfig cfg;
 
     m_page->cmbWorkingColorSpace->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
-    m_page->cmbWorkingColorSpace->setCurrentText(cfg.workingColorSpace());
+    m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
     m_page->cmbPrintingColorSpace->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
-    m_page->cmbPrintingColorSpace->setCurrentText(cfg.printerColorSpace());
+    m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
 
     refillMonitorProfiles(KisID("RGBA", ""));
     refillPrintProfiles(KisID(cfg.printerColorSpace(), ""));
 
     if(m_page->cmbMonitorProfile->contains(cfg.monitorProfile()))
-        m_page->cmbMonitorProfile->setCurrentText(cfg.monitorProfile());
+        m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
     if(m_page->cmbPrintProfile->contains(cfg.printerProfile()))
-        m_page->cmbPrintProfile->setCurrentText(cfg.printerProfile());
+        m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
-    m_page->grpPasteBehaviour->setButton(cfg.pasteBehaviour());
-    m_page->cmbMonitorIntent->setCurrentItem(cfg.renderIntent());
+
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteAsk, PASTE_ASK);
+
+    QAbstractButton *button = m_pasteBehaviourGroup.button(cfg.pasteBehaviour());
+    Q_ASSERT(button);
+
+    if (button) {
+        button->setChecked(true);
+    }
+
+    m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
     connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KisID &)),
             this, SLOT(refillPrintProfiles(const KisID &)));
@@ -146,14 +168,20 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
 void ColorSettingsTab::setDefault()
 {
-    m_page->cmbWorkingColorSpace->setCurrentText("RGBA");
+    m_page->cmbWorkingColorSpace->setCurrent("RGBA");
 
-    m_page->cmbPrintingColorSpace->setCurrentText("CMYK");
+    m_page->cmbPrintingColorSpace->setCurrent("CMYK");
     refillPrintProfiles(KisID("CMYK", ""));
 
     m_page->chkBlackpoint->setChecked(false);
-    m_page->cmbMonitorIntent->setCurrentItem(INTENT_PERCEPTUAL);
-    m_page->grpPasteBehaviour->setButton(2);
+    m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
+
+    QAbstractButton *button = m_pasteBehaviourGroup.button(PASTE_ASK);
+    Q_ASSERT(button);
+
+    if (button) {
+        button->setChecked(true);
+    }
 }
 
 
@@ -170,10 +198,10 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
         Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             if ((*it)->deviceClass() == icSigDisplayClass)
-                m_page->cmbMonitorProfile->insertItem((*it)->productName());
+                m_page->cmbMonitorProfile->addSqueezedItem((*it)->productName());
     }
 
-    m_page->cmbMonitorProfile->setCurrentText(csf->defaultProfile());
+    m_page->cmbMonitorProfile->setCurrent(csf->defaultProfile());
 }
 
 void ColorSettingsTab::refillPrintProfiles(const KisID & s)
@@ -189,10 +217,10 @@ void ColorSettingsTab::refillPrintProfiles(const KisID & s)
         Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             if ((*it)->deviceClass() == icSigOutputClass)
-                m_page->cmbPrintProfile->insertItem((*it)->productName());
+                m_page->cmbPrintProfile->addSqueezedItem((*it)->productName());
     }
 
-    m_page->cmbPrintProfile->setCurrentText(csf->defaultProfile());
+    m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -219,8 +247,9 @@ void PerformanceTab::setDefault()
 //---------------------------------------------------------------------------------------------------
 
 TabletSettingsTab::TabletSettingsTab( QWidget *parent, const char *name)
-    : WdgTabletSettings( parent, name )
+    : WdgTabletSettings( parent )
 {
+    setObjectName(name);
     KisConfig cfg;
     // XXX: Bad me -- hard-coded constant.
     slPressure->setValue( 100 - cfg.getPressureCorrection() );
@@ -394,9 +423,9 @@ qint32 TabletSettingsTab::DeviceSettings::serialNumberAxis() const
 
 TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const QString& deviceName, DeviceSettings settings, 
                                                                           QWidget *parent, const char *name)
-    : super(parent, name, true, "", Ok | Cancel)
+    : super(parent, i18n("Configure %1").arg(deviceName), Ok | Cancel)
 {
-    setCaption(i18n("Configure %1").arg(deviceName));
+    setObjectName(name);
 
     m_page = new WdgTabletDeviceSettings(this);
 
@@ -408,71 +437,71 @@ TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const 
 
         axisString.setNum(axis);
 
-        m_page->cbX->insertItem(axisString);
-        m_page->cbY->insertItem(axisString);
-        m_page->cbPressure->insertItem(axisString);
-        m_page->cbXTilt->insertItem(axisString);
-        m_page->cbYTilt->insertItem(axisString);
-        m_page->cbWheel->insertItem(axisString);
-//         m_page->cbToolID->insertItem(axisString);
-//         m_page->cbSerialNumber->insertItem(axisString);
+        m_page->cbX->addItem(axisString);
+        m_page->cbY->addItem(axisString);
+        m_page->cbPressure->addItem(axisString);
+        m_page->cbXTilt->addItem(axisString);
+        m_page->cbYTilt->addItem(axisString);
+        m_page->cbWheel->addItem(axisString);
+//         m_page->cbToolID->addItem(axisString);
+//         m_page->cbSerialNumber->addItem(axisString);
     }
 
-    m_page->cbX->insertItem(i18n("None"));
-    m_page->cbY->insertItem(i18n("None"));
-    m_page->cbPressure->insertItem(i18n("None"));
-    m_page->cbXTilt->insertItem(i18n("None"));
-    m_page->cbYTilt->insertItem(i18n("None"));
-    m_page->cbWheel->insertItem(i18n("None"));
-//     m_page->cbToolID->insertItem(i18n("None"));
-//     m_page->cbSerialNumber->insertItem(i18n("None"));
+    m_page->cbX->addItem(i18n("None"));
+    m_page->cbY->addItem(i18n("None"));
+    m_page->cbPressure->addItem(i18n("None"));
+    m_page->cbXTilt->addItem(i18n("None"));
+    m_page->cbYTilt->addItem(i18n("None"));
+    m_page->cbWheel->addItem(i18n("None"));
+//     m_page->cbToolID->addItem(i18n("None"));
+//     m_page->cbSerialNumber->addItem(i18n("None"));
 
     if (settings.xAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-        m_page->cbX->setCurrentItem(settings.xAxis());
+        m_page->cbX->setCurrentIndex(settings.xAxis());
     } else {
-        m_page->cbX->setCurrentItem(settings.numAxes());
+        m_page->cbX->setCurrentIndex(settings.numAxes());
     }
 
     if (settings.yAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-        m_page->cbY->setCurrentItem(settings.yAxis());
+        m_page->cbY->setCurrentIndex(settings.yAxis());
     } else {
-        m_page->cbY->setCurrentItem(settings.numAxes());
+        m_page->cbY->setCurrentIndex(settings.numAxes());
     }
 
     if (settings.pressureAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-        m_page->cbPressure->setCurrentItem(settings.pressureAxis());
+        m_page->cbPressure->setCurrentIndex(settings.pressureAxis());
     } else {
-        m_page->cbPressure->setCurrentItem(settings.numAxes());
+        m_page->cbPressure->setCurrentIndex(settings.numAxes());
     }
 
     if (settings.xTiltAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-        m_page->cbXTilt->setCurrentItem(settings.xTiltAxis());
+        m_page->cbXTilt->setCurrentIndex(settings.xTiltAxis());
     } else {
-        m_page->cbXTilt->setCurrentItem(settings.numAxes());
+        m_page->cbXTilt->setCurrentIndex(settings.numAxes());
     }
 
     if (settings.yTiltAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-        m_page->cbYTilt->setCurrentItem(settings.yTiltAxis());
+        m_page->cbYTilt->setCurrentIndex(settings.yTiltAxis());
     } else {
-        m_page->cbYTilt->setCurrentItem(settings.numAxes());
+        m_page->cbYTilt->setCurrentIndex(settings.numAxes());
     }
 
     if (settings.wheelAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-        m_page->cbWheel->setCurrentItem(settings.wheelAxis());
+        m_page->cbWheel->setCurrentIndex(settings.wheelAxis());
     } else {
-        m_page->cbWheel->setCurrentItem(settings.numAxes());
+        m_page->cbWheel->setCurrentIndex(settings.numAxes());
     }
 
 //     if (settings.toolIDAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-//         m_page->cbToolID->setCurrentItem(settings.toolIDAxis());
+//         m_page->cbToolID->setCurrentIndex(settings.toolIDAxis());
 //     } else {
-//         m_page->cbToolID->setCurrentItem(settings.numAxes());
+//         m_page->cbToolID->setCurrentIndex(settings.numAxes());
 //     }
 //
 //     if (settings.serialNumberAxis() != KisCanvasWidget::X11TabletDevice::NoAxis) {
-//         m_page->cbSerialNumber->setCurrentItem(settings.serialNumberAxis());
+//         m_page->cbSerialNumber->setCurrentIndex(settings.serialNumberAxis());
 //     } else {
-//         m_page->cbSerialNumber->setCurrentItem(settings.numAxes());
+//         m_page->cbSerialNumber->setCurrentIndex(settings.numAxes());
 //     }
 
     m_settings = settings;
@@ -487,50 +516,50 @@ TabletSettingsTab::DeviceSettings TabletSettingsTab::TabletDeviceSettingsDialog:
 {
     const qint32 noAxis = m_settings.numAxes();
 
-    if (m_page->cbX->currentItem() != noAxis ) {
-        m_settings.setXAxis(m_page->cbX->currentItem());
+    if (m_page->cbX->currentIndex() != noAxis ) {
+        m_settings.setXAxis(m_page->cbX->currentIndex());
     } else {
         m_settings.setXAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
     }
 
-    if (m_page->cbY->currentItem() != noAxis ) {
-        m_settings.setYAxis(m_page->cbY->currentItem());
+    if (m_page->cbY->currentIndex() != noAxis ) {
+        m_settings.setYAxis(m_page->cbY->currentIndex());
     } else {
         m_settings.setYAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
     }
 
-    if (m_page->cbPressure->currentItem() != noAxis ) {
-        m_settings.setPressureAxis(m_page->cbPressure->currentItem());
+    if (m_page->cbPressure->currentIndex() != noAxis ) {
+        m_settings.setPressureAxis(m_page->cbPressure->currentIndex());
     } else {
         m_settings.setPressureAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
     }
 
-    if (m_page->cbXTilt->currentItem() != noAxis ) {
-        m_settings.setXTiltAxis(m_page->cbXTilt->currentItem());
+    if (m_page->cbXTilt->currentIndex() != noAxis ) {
+        m_settings.setXTiltAxis(m_page->cbXTilt->currentIndex());
     } else {
         m_settings.setXTiltAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
     }
 
-    if (m_page->cbYTilt->currentItem() != noAxis ) {
-        m_settings.setYTiltAxis(m_page->cbYTilt->currentItem());
+    if (m_page->cbYTilt->currentIndex() != noAxis ) {
+        m_settings.setYTiltAxis(m_page->cbYTilt->currentIndex());
     } else {
         m_settings.setYTiltAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
     }
 
-    if (m_page->cbWheel->currentItem() != noAxis ) {
-        m_settings.setWheelAxis(m_page->cbWheel->currentItem());
+    if (m_page->cbWheel->currentIndex() != noAxis ) {
+        m_settings.setWheelAxis(m_page->cbWheel->currentIndex());
     } else {
         m_settings.setWheelAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
     }
 
-//     if (m_page->cbToolID->currentItem() != noAxis ) {
-//         m_settings.setToolIDAxis(m_page->cbToolID->currentItem());
+//     if (m_page->cbToolID->currentIndex() != noAxis ) {
+//         m_settings.setToolIDAxis(m_page->cbToolID->currentIndex());
 //     } else {
 //         m_settings.setToolIDAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
 //     }
 //
-//     if (m_page->cbSerialNumber->currentItem() != noAxis ) {
-//         m_settings.setSerialNumberAxis(m_page->cbSerialNumber->currentItem());
+//     if (m_page->cbSerialNumber->currentIndex() != noAxis ) {
+//         m_settings.setSerialNumberAxis(m_page->cbSerialNumber->currentIndex());
 //     } else {
 //         m_settings.setSerialNumberAxis(KisCanvasWidget::X11TabletDevice::NoAxis);
 //     }
@@ -557,11 +586,11 @@ void TabletSettingsTab::initTabletDevices()
             m_deviceSettings.append(DeviceSettings(&device, device.enabled(), device.xAxis(), device.yAxis(), 
                                                    device.pressureAxis(), device.xTiltAxis(), device.yTiltAxis(), device.wheelAxis(),
                                                    device.toolIDAxis(), device.serialNumberAxis()));
-            cbTabletDevice->insertItem(device.name());
+            cbTabletDevice->addItem(device.name());
         }
         slotActivateDevice(0);
     } else {
-        cbTabletDevice->insertItem(i18n("No devices detected"));
+        cbTabletDevice->addItem(i18n("No devices detected"));
         cbTabletDevice->setEnabled(false);
         chkEnableTabletDevice->setEnabled(false);
         btnConfigureTabletDevice->setEnabled(false);
@@ -579,23 +608,23 @@ void TabletSettingsTab::slotActivateDevice(int deviceIndex)
 void TabletSettingsTab::slotSetDeviceEnabled(bool enabled)
 {
     btnConfigureTabletDevice->setEnabled(enabled);
-    m_deviceSettings[cbTabletDevice->currentItem()].setEnabled(enabled);
+    m_deviceSettings[cbTabletDevice->currentIndex()].setEnabled(enabled);
 }
 
 void TabletSettingsTab::slotConfigureDevice()
 {
-    TabletDeviceSettingsDialog dialog(cbTabletDevice->currentText(), m_deviceSettings[cbTabletDevice->currentItem()],
+    TabletDeviceSettingsDialog dialog(cbTabletDevice->currentText(), m_deviceSettings[cbTabletDevice->currentIndex()],
                                       this, "TabletDeviceSettings");
 
     if (dialog.exec() == QDialog::Accepted)
     {
-        m_deviceSettings[cbTabletDevice->currentItem()] = dialog.settings();
+        m_deviceSettings[cbTabletDevice->currentIndex()] = dialog.settings();
     }
 }
 
 void TabletSettingsTab::applyTabletDeviceSettings()
 {
-    for (quint32 deviceIndex = 0; deviceIndex < m_deviceSettings.count(); ++deviceIndex) {
+    for (qint32 deviceIndex = 0; deviceIndex < m_deviceSettings.count(); ++deviceIndex) {
         m_deviceSettings[deviceIndex].applySettings();
     }
 }
@@ -662,8 +691,8 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool /*isChecked*/)
 GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
 {
     KisConfig cfg;
-    selectMainStyle->setCurrentItem(cfg.getGridMainStyle());
-    selectSubdivisionStyle->setCurrentItem(cfg.getGridSubdivisionStyle());
+    selectMainStyle->setCurrentIndex(cfg.getGridMainStyle());
+    selectSubdivisionStyle->setCurrentIndex(cfg.getGridSubdivisionStyle());
     
     colorMain->setColor(cfg.getGridMainColor());
     colorSubdivision->setColor(cfg.getGridSubdivisionColor());
@@ -686,8 +715,8 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
 void GridSettingsTab::setDefault()
 {
     KisConfig cfg;
-    selectMainStyle->setCurrentItem(0);
-    selectSubdivisionStyle->setCurrentItem(1);
+    selectMainStyle->setCurrentIndex(0);
+    selectSubdivisionStyle->setCurrentIndex(1);
     
     colorMain->setColor(QColor(99,99,99));
     colorSubdivision->setColor(QColor(199,199,199));
@@ -722,10 +751,10 @@ void GridSettingsTab::linkSpacingToggled(bool b)
     
     KoImageResource kir;
     if (b) {
-        bnLinkSpacing->setPixmap(kir.chain());
+        bnLinkSpacing->setIcon(QIcon(kir.chain()));
     }
     else {
-        bnLinkSpacing->setPixmap(kir.chainBroken());
+        bnLinkSpacing->setIcon(QIcon(kir.chainBroken()));
     }
 }
 
@@ -791,8 +820,8 @@ bool PreferencesDialog::editPreferences()
         cfg.setPrinterProfile( dialog->m_colorSettings->m_page->cmbPrintProfile->currentText());
 
         cfg.setUseBlackPointCompensation( dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
-        cfg.setPasteBehaviour( dialog->m_colorSettings->m_page->grpPasteBehaviour->selectedId());
-        cfg.setRenderIntent( dialog->m_colorSettings->m_page->cmbMonitorIntent->currentItem());
+        cfg.setPasteBehaviour( dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
+        cfg.setRenderIntent( dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 
         // it's scaled from 0 - 6, but the config is in 0 - 300
         cfg.setSwappiness(dialog->m_performanceSettings->m_swappiness->value() * 50);
@@ -806,8 +835,8 @@ bool PreferencesDialog::editPreferences()
         //cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
     
         // Grid settings
-        cfg.setGridMainStyle( dialog->m_gridSettings->selectMainStyle->currentItem() );
-        cfg.setGridSubdivisionStyle( dialog->m_gridSettings->selectSubdivisionStyle->currentItem() );
+        cfg.setGridMainStyle( dialog->m_gridSettings->selectMainStyle->currentIndex() );
+        cfg.setGridSubdivisionStyle( dialog->m_gridSettings->selectSubdivisionStyle->currentIndex() );
 
         cfg.setGridMainColor( dialog->m_gridSettings->colorMain->color() );
         cfg.setGridSubdivisionColor(dialog->m_gridSettings->colorSubdivision->color() );

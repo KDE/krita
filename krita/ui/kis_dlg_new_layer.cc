@@ -62,7 +62,7 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 
     // ColorSpace
     m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
-    m_page->cmbColorSpaces->setCurrentText(colorSpaceID.id());
+    m_page->cmbColorSpaces->setCurrent(colorSpaceID.id());
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
@@ -70,7 +70,7 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 
     // Init profiles
     fillCmbProfiles(m_page->cmbColorSpaces->currentItem());
-    m_page->cmbProfile->setCurrentIndexFromText(profilename);
+    m_page->cmbProfile->setCurrent(profilename);
 
     // Init composite op
     fillCmbComposite(m_page->cmbColorSpaces->currentItem());
@@ -104,7 +104,7 @@ void NewLayerDialog::fillCmbProfiles(const KisID & s)
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             m_page->cmbProfile->addSqueezedItem((*it)->productName());
     }
-    m_page->cmbProfile->setCurrentIndexFromText(csf->defaultProfile());
+    m_page->cmbProfile->setCurrent(csf->defaultProfile());
 }
 
 void NewLayerDialog::fillCmbComposite(const KisID & s)

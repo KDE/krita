@@ -54,7 +54,7 @@ DlgImageSize::DlgImageSize( QWidget *  parent,
     m_page->setObjectName("image_size");
 
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_page->cmbFilterType->setCurrentText("Mitchell");
+    m_page->cmbFilterType->setCurrent("Mitchell");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());

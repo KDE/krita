@@ -1,193 +1,149 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgTabletDeviceSettings</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgTabletDeviceSettings</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgTabletDeviceSettings</class>
+  <widget class="QWidget" name="WdgTabletDeviceSettings" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>363</width>
+        <height>386</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>363</width>
-            <height>386</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Configure Tablet Device</string>
     </property>
-    <property name="caption">
-        <string>Configure Tablet Device</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>90</height>
-                </size>
-            </property>
+    <layout class="QGridLayout" >
+      <item row="1" column="0" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>21</width>
+              <height>90</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>groupBox3</cstring>
-            </property>
-            <property name="title">
-                <string>Axes</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+      </item>
+      <item row="0" column="0" >
+        <widget class="QGroupBox" name="groupBox3" >
+          <property name="title" >
+            <string>Axes</string>
+          </property>
+          <layout class="QVBoxLayout" >
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
                 </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4</cstring>
+                <item>
+                  <widget class="QLabel" name="textLabel1_2" >
+                    <property name="text" >
+                      <string>X:</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>X:</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>cbX</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4_4</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QComboBox" name="cbX" />
+                </item>
+              </layout>
+            </item>
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QLabel" name="textLabel1_2_4" >
+                    <property name="text" >
+                      <string>Y:</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2_4</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Y:</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>cbY</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4_2</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QComboBox" name="cbY" />
+                </item>
+              </layout>
+            </item>
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QLabel" name="textLabel1_2_2" >
+                    <property name="text" >
+                      <string>Pressure:</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Pressure:</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>cbPressure</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4_3</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QComboBox" name="cbPressure" />
+                </item>
+              </layout>
+            </item>
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QLabel" name="textLabel1_2_3" >
+                    <property name="text" >
+                      <string>X tilt:</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2_3</cstring>
-                            </property>
-                            <property name="text">
-                                <string>X tilt:</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>cbXTilt</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4_6</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QComboBox" name="cbXTilt" />
+                </item>
+              </layout>
+            </item>
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QLabel" name="textLabel1_2_6" >
+                    <property name="text" >
+                      <string>Y tilt:</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2_6</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Y tilt:</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>cbYTilt</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4_5</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QComboBox" name="cbYTilt" />
+                </item>
+              </layout>
+            </item>
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QLabel" name="textLabel1_2_5" >
+                    <property name="text" >
+                      <string>Wheel:</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2_5</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Wheel:</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>cbWheel</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QComboBox" name="cbWheel" />
+                </item>
+              </layout>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+</ui>

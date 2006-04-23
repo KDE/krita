@@ -122,7 +122,7 @@ public:
      * 
      * @param itemText the original (long version) of the item text
      */
-    void setCurrentIndexFromText(const QString& itemText);
+    void setCurrent(const QString& itemText);
 
     /**
      * This method returns the full text (not squeezed) of the currently
@@ -143,6 +143,12 @@ private slots:
 private:
     void resizeEvent ( QResizeEvent * );
     QString squeezeText( const QString& original);
+
+    // Prevent these from being used.
+    void setCurrentText(const QString& itemText);
+    void insertItem(const QString &text);
+    void insertItem(qint32 index, const QString &text);
+    void addItem(const QString &text);
 
     QMap<int,QString>   m_originalItems;
     QTimer*             m_timer;

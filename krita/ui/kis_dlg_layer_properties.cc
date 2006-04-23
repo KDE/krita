@@ -65,7 +65,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->intOpacity->setValue(opacity);
 
     m_page->cmbComposite->setCompositeOpList(colorSpace->userVisiblecompositeOps());
-    m_page->cmbComposite->setCurrentItem(compositeOp);
+    m_page->cmbComposite->setCurrent(compositeOp);
 
     slotNameChanged( m_page->editName->text() );
 }

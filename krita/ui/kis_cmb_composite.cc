@@ -55,7 +55,7 @@ KisCompositeOp KisCmbComposite::currentItem() const
     return m_list[i];
 }
 
-void KisCmbComposite::setCurrentItem(const KisCompositeOp& op)
+void KisCmbComposite::setCurrent(const KisCompositeOp& op)
 {
     qint32 index = m_list.indexOf(op);
 
@@ -64,7 +64,7 @@ void KisCmbComposite::setCurrentItem(const KisCompositeOp& op)
     }
 }
 
-void KisCmbComposite::setCurrentText(const QString & s)
+void KisCmbComposite::setCurrent(const QString & s)
 {
     for (int i = 0; i < m_list.count(); ++i) {
         if (m_list.at(i).id().id() == s) {

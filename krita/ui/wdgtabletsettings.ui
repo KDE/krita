@@ -1,154 +1,122 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgTabletSettings</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgTabletSettings</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgTabletSettings</class>
+  <widget class="QWidget" name="WdgTabletSettings" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>510</width>
+        <height>268</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>510</width>
-            <height>268</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Tablet</string>
     </property>
-    <property name="caption">
-        <string>Tablet</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>groupBox3</cstring>
-            </property>
-            <property name="title">
-                <string>Pressure</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <widget class="QGroupBox" name="groupBox3" >
+          <property name="title" >
+            <string>Pressure</string>
+          </property>
+          <layout class="QHBoxLayout" >
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
                 </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout3</cstring>
+                <item>
+                  <widget class="QLabel" name="textLabel3" >
+                    <property name="text" >
+                      <string>Softer</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel3</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Softer</string>
-                            </property>
-                        </widget>
-                        <widget class="QSlider">
-                            <property name="name">
-                                <cstring>slPressure</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="tickmarks">
-                                <enum>NoMarks</enum>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Firmer</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </hbox>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QSlider" name="slPressure" >
+                    <property name="orientation" >
+                      <enum>Qt::Horizontal</enum>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QLabel" name="textLabel2" >
+                    <property name="text" >
+                      <string>Firmer</string>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+          </layout>
         </widget>
-        <widget class="QGroupBox" row="1" column="0">
-            <property name="name">
-                <cstring>grpTabletDevices</cstring>
-            </property>
-            <property name="title">
-                <string>Tablet Devices</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QGroupBox" name="grpTabletDevices" >
+          <property name="title" >
+            <string>Tablet Devices</string>
+          </property>
+          <layout class="QVBoxLayout" >
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
                 </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4</cstring>
+                <item>
+                  <widget class="QLabel" name="textLabel1" >
+                    <property name="text" >
+                      <string>Device:</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Device:</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>cbTabletDevice</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout5</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QComboBox" name="cbTabletDevice" />
+                </item>
+              </layout>
+            </item>
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QCheckBox" name="chkEnableTabletDevice" >
+                    <property name="text" >
+                      <string>Enable</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>chkEnableTabletDevice</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Enable</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>btnConfigureTabletDevice</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Configure...</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="btnConfigureTabletDevice" >
+                    <property name="text" >
+                      <string>Configure...</string>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+          </layout>
         </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>90</height>
-                </size>
-            </property>
+      </item>
+      <item row="2" column="0" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>21</width>
+              <height>90</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+</ui>

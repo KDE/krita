@@ -60,12 +60,9 @@
             </layout>
           </item>
           <item>
-            <widget class="Q3ButtonGroup" name="grpDockability" >
+            <widget class="QGroupBox" name="grpDockability" >
               <property name="title" >
                 <string>Palette Behavior</string>
-              </property>
-              <property name="exclusive" >
-                <bool>true</bool>
               </property>
               <layout class="QVBoxLayout" >
                 <item>
@@ -149,7 +146,6 @@
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
   <customwidgets>
 	  <customwidget>
 		  <class>KIntNumInput</class>

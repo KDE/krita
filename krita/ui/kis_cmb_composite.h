@@ -50,8 +50,8 @@ class KRITAUI_EXPORT KisCmbComposite : public QComboBox
     KisCompositeOp currentItem() const;
 
     void setCompositeOpList(const KisCompositeOpList& list);
-    void setCurrentItem(const KisCompositeOp& op);
-    void setCurrentText(const QString & s);
+    void setCurrent(const KisCompositeOp& op);
+    void setCurrent(const QString & s);
 
 signals:
 
@@ -64,6 +64,9 @@ private slots:
     void slotOpHighlighted(int i);
 
 private:
+    // Prevent deprectated Qt3 method from being called. Use setCurrent instead.
+    void setCurrentText(const QString & s);
+
     KisCompositeOpList m_list;
 };
 

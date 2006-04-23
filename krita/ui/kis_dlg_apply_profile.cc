@@ -100,7 +100,7 @@ void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
             m_page->cmbProfile->addSqueezedItem((*it)->productName());
     }
-    m_page->cmbProfile->setCurrentIndexFromText(csf->defaultProfile());
+    m_page->cmbProfile->setCurrent(csf->defaultProfile());
 }
 
 #include "kis_dlg_apply_profile.moc"

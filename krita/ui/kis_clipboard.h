@@ -27,6 +27,12 @@
 
 class QImage;
 
+enum enumPasteBehaviour {
+    PASTE_ASSUME_WEB,
+    PASTE_ASSUME_MONITOR,
+    PASTE_ASK
+};
+
 /**
  * The Krita clipboard is a clipboard that can store paint devices
  * instead of just qimage's.

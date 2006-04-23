@@ -91,17 +91,12 @@ kde4_automoc(${kritaui_LIB_SRCS})
 kde4_add_ui3_files(kritaui_LIB_SRCS 
     kis_matrix_widget.ui 
     kis_previewwidgetbase.ui 
-    wdgcolorsettings.ui 
-    wdgdisplaysettings.ui 
     wdglayerbox.ui 
     wdgselectionoptions.ui 
     wdgshapeoptions.ui 
-    wdgpressuresettings.ui 
     wdgcustompalette.ui 
     wdgtextbrush.ui 
     wdgpalettechooser.ui 
-    wdgtabletdevicesettings.ui 
-    wdgtabletsettings.ui
     )
 
 kde4_add_ui_files(kritaui_LIB_SRCS 
@@ -116,6 +111,11 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgcustombrush.ui 
     wdgcustompattern.ui 
     wdglayerproperties.ui 
+    wdgcolorsettings.ui 
+    wdgdisplaysettings.ui 
+    wdgpressuresettings.ui 
+    wdgtabletdevicesettings.ui 
+    wdgtabletsettings.ui
 	)
 
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )

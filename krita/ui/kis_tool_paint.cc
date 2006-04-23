@@ -244,7 +244,7 @@ void KisToolPaint::updateCompositeOpComboBox()
                 if (compositeOps.find(m_compositeOp) == compositeOps.end()) {
                     m_compositeOp = COMPOSITE_OVER;
                 }
-                m_cmbComposite->setCurrentItem(m_compositeOp);
+                m_cmbComposite->setCurrent(m_compositeOp);
             }
         }
     }

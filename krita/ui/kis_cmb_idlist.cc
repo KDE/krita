@@ -71,7 +71,7 @@ void KisCmbIDList::setCurrent(const KisID id)
     }
 }
 
-void KisCmbIDList::setCurrentText(const QString & s)
+void KisCmbIDList::setCurrent(const QString & s)
 {
     for (qint32 i = 0; i < m_list.count(); ++i) {
         if (m_list.at(i).id() == s) {

@@ -813,7 +813,7 @@ QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
     m_optWidget->cmbFilter->clear();
     m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
 
-    m_optWidget->cmbFilter->setCurrentText("Mitchell");
+    m_optWidget->cmbFilter->setCurrent("Mitchell");
     connect(m_optWidget->cmbFilter, SIGNAL(activated(const KisID &)),
         this, SLOT(slotSetFilter(const KisID &)));
 

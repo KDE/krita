@@ -2437,7 +2437,7 @@ QString KoTextObject::acceptSelectionMimeType()
     return QString::fromLatin1( "application/vnd.oasis.opendocument." );
 }
 
-QString KoTextObject::providesOasis( QMimeData* mime )
+QString KoTextObject::providesOasis( const QMimeData* mime )
 {
     const QString acceptMimeType = acceptSelectionMimeType();
     const QStringList formats = mime->formats();

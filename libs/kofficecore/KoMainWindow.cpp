@@ -502,9 +502,7 @@ void KoMainWindow::updateCaption()
       // Get caption from document info (title(), in about page)
       if ( rootDocument()->documentInfo() )
       {
-          KoDocumentInfoPage * page = rootDocument()->documentInfo()->page( QString::fromLatin1("about") );
-          if (page)
-              caption = static_cast<KoDocumentInfoAbout *>(page)->title();
+          caption = rootDocument()->documentInfo()->aboutInfo( "title" );
       }
       const QString url = rootDocument()->url().pathOrURL();
       if ( !caption.isEmpty() && !url.isEmpty() )
@@ -1025,7 +1023,7 @@ bool KoMainWindow::queryClose()
         QString name;
         if ( rootDocument()->documentInfo() )
         {
-            name = rootDocument()->documentInfo()->title();
+            name = rootDocument()->documentInfo()->aboutInfo( "title" );
         }
         if ( name.isEmpty() )
             name = rootDocument()->url().fileName();
@@ -1155,10 +1153,9 @@ void KoMainWindow::slotDocumentInfo()
   if ( !docInfo )
     return;
 
-  KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg( docInfo, this, "documentInfoDlg" );
+  KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg( this, docInfo );
   if ( dlg->exec() )
   {
-    dlg->save();
     rootDocument()->setModified( true );
     rootDocument()->setTitleModified();
   }
@@ -1191,7 +1188,7 @@ void KoMainWindow::print(bool quick) {
     }
 
     KPrinter printer( true /*, QPrinter::HighResolution*/ );
-    QString title = rootView()->koDocument()->documentInfo()->title();
+    QString title = rootView()->koDocument()->documentInfo()->aboutInfo( "title" );
     QString fileName = rootView()->koDocument()->url().fileName();
 
     // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)

@@ -132,41 +132,17 @@ void KoDocumentIface::setOutputMimeType( const QByteArray& mimetype )
 
 QString KoDocumentIface::documentInfoAuthorName() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->fullName();
+    return m_pDoc->documentInfo()->authorInfo( "creator" );
 }
 
 QString KoDocumentIface::documentInfoEmail() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->email();
+    return m_pDoc->documentInfo()->authorInfo( "email" );
 }
 
 QString KoDocumentIface::documentInfoCompanyName() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->company();
+    return m_pDoc->documentInfo()->authorInfo( "company" );
 }
 
 QString KoDocumentIface::documentInfoTelephone() const
@@ -177,248 +153,97 @@ QString KoDocumentIface::documentInfoTelephone() const
 
 QString KoDocumentIface::documentInfoTelephoneWork() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->telephoneWork();
+    return m_pDoc->documentInfo()->authorInfo( "telephone-work" );
 }
 
 QString KoDocumentIface::documentInfoTelephoneHome() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->telephoneHome();
+    return m_pDoc->documentInfo()->authorInfo( "telephone-home" );
 }
 
 
 QString KoDocumentIface::documentInfoFax() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->fax();
+    return m_pDoc->documentInfo()->authorInfo( "fax" );
 
 }
 QString KoDocumentIface::documentInfoCountry() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->country();
+    return m_pDoc->documentInfo()->authorInfo( "country" );
 
 }
 QString KoDocumentIface::documentInfoPostalCode() const
 {
-        KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->postalCode();
+    return m_pDoc->documentInfo()->authorInfo( "postal-code" );
 
 }
 QString KoDocumentIface::documentInfoCity() const
 {
-        KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->city();
-
+    return m_pDoc->documentInfo()->authorInfo( "city" );
 }
 
 QString KoDocumentIface::documentInfoInitial() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->initial();
+    return m_pDoc->documentInfo()->authorInfo( "initial" );
 }
 
 QString KoDocumentIface::documentInfoAuthorPostion() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->position();
+    return m_pDoc->documentInfo()->authorInfo( "position" );
 }
-
 
 QString KoDocumentIface::documentInfoStreet() const
 {
-        KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return authorPage->street();
-
+    return m_pDoc->documentInfo()->authorInfo( "street" );
 }
 
 QString KoDocumentIface::documentInfoTitle() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-    {
-        kWarning() << "'About' page not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return aboutPage->title();
-
+    return m_pDoc->documentInfo()->aboutInfo( "title" );
 }
 
 QString KoDocumentIface::documentInfoAbstract() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-    {
-        kWarning() << "'About' page not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return aboutPage->abstract();
+    return m_pDoc->documentInfo()->aboutInfo( "comments" );
 }
 
 QString KoDocumentIface::documentInfoKeywords() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-    {
-        kWarning() << "'About' page not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return aboutPage->keywords();
+    return m_pDoc->documentInfo()->aboutInfo( "keywords" );
 }
 
 QString KoDocumentIface::documentInfoSubject() const
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-    {
-        kWarning() << "'About' page not found in documentInfo !" << endl;
-        return QString::null;
-    }
-    else
-        return aboutPage->subject();
+    return m_pDoc->documentInfo()->aboutInfo( "subject" );
 }
 void KoDocumentIface::setDocumentInfoKeywords(const QString & text )
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-    {
-        kWarning() << "'About' page not found in documentInfo !" << endl;
-    }
-    else
-       aboutPage->setKeywords(text);
+    m_pDoc->documentInfo()->setAboutInfo( "keywords", text );
 }
 
 void KoDocumentIface::setDocumentInfoSubject(const QString & text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-    {
-        kWarning() << "'About' page not found in documentInfo !" << endl;
-    }
-    else
-       aboutPage->setSubject(text);
+    m_pDoc->documentInfo()->setAboutInfo( "subject", text );
 }
 
 void KoDocumentIface::setDocumentInfoAuthorName(const QString & text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setFullName(text);
-
+    m_pDoc->documentInfo()->setAuthorInfo( "creator", text );
 }
 
 void KoDocumentIface::setDocumentInfoEmail(const QString &text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setEmail(text);
+    m_pDoc->documentInfo()->setAuthorInfo( "email", text );
 }
 
 void KoDocumentIface::setDocumentInfoCompanyName(const QString &text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setCompany(text);
+    m_pDoc->documentInfo()->setAuthorInfo( "company", text );
 }
 
 void KoDocumentIface::setDocumentInfoAuthorPosition(const QString &text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setPosition(text);
+    m_pDoc->documentInfo()->setAuthorInfo( "position", text );
 }
 
 
@@ -430,129 +255,52 @@ void KoDocumentIface::setDocumentInfoTelephone(const QString &text)
 
 void KoDocumentIface::setDocumentInfoTelephoneWork(const QString &text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setTelephoneWork(text);
+    m_pDoc->documentInfo()->setAuthorInfo( "telephone-work", text );
 }
 
 void KoDocumentIface::setDocumentInfoTelephoneHome(const QString &text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setTelephoneHome(text);
+    m_pDoc->documentInfo()->setAuthorInfo( "telephone", text );
 }
-
 
 void KoDocumentIface::setDocumentInfoFax(const QString &text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setFax(text);
+    m_pDoc->documentInfo()->setAuthorInfo( "fax", text );
 }
 
 void KoDocumentIface::setDocumentInfoCountry(const QString &text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setCountry(text);
-
+    m_pDoc->documentInfo()->setAuthorInfo( "country", text );
 }
 
 void KoDocumentIface::setDocumentInfoTitle(const QString & text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-    {
-        kWarning() << "'About' page not found in documentInfo !" << endl;
-    }
-    else
-        aboutPage->setTitle(text);
+    m_pDoc->documentInfo()->setAboutInfo( "title", text );
 }
 
 void KoDocumentIface::setDocumentInfoPostalCode(const QString &text)
 {
-        KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setPostalCode(text);
-
+    m_pDoc->documentInfo()->setAuthorInfo( "postal-code", text );
 }
-
 
 void KoDocumentIface::setDocumentInfoCity(const QString & text)
 {
-        KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setCity(text);
+    m_pDoc->documentInfo()->setAuthorInfo( "city", text );
 }
 
 void KoDocumentIface::setDocumentInfoInitial(const QString & text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setInitial(text);
+    m_pDoc->documentInfo()->setAuthorInfo( "initial", text );
 }
-
 
 void KoDocumentIface::setDocumentInfoStreet(const QString &text)
 {
-        KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-    {
-        kWarning() << "Author information not found in documentInfo !" << endl;
-    }
-    else
-        authorPage->setStreet(text);
-
+    m_pDoc->documentInfo()->setAuthorInfo( "street", text );
 }
-
 
 void KoDocumentIface::setDocumentInfoAbstract(const QString &text)
 {
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    if ( !aboutPage )
-    {
-        kWarning() << "'About' page not found in documentInfo !" << endl;
-    }
-    else
-       aboutPage->setAbstract(text);
+    m_pDoc->documentInfo()->setAboutInfo( "comments", text );
 }
 
 DCOPCStringList KoDocumentIface::functionsDynamic()

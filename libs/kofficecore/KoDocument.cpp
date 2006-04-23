@@ -263,7 +263,7 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
         (void) new KoBrowserExtension( this ); // ## only if embedded into a browser?
     }
 
-    d->m_docInfo = new KoDocumentInfo( this, "document info" );
+    d->m_docInfo = new KoDocumentInfo( this );
 
     m_pageLayout.ptWidth = 0;
     m_pageLayout.ptHeight = 0;
@@ -1795,7 +1795,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
     {
         //kDebug( 30003 ) << "cannot open document info" << endl;
         delete d->m_docInfo;
-        d->m_docInfo = new KoDocumentInfo( this, "document info" );
+        d->m_docInfo = new KoDocumentInfo( this );
     }
 
     bool res = completeLoading( store );
@@ -1961,7 +1961,7 @@ int KoDocument::queryCloseDia()
     QString name;
     if ( documentInfo() )
     {
-        name = documentInfo()->title();
+        name = documentInfo()->aboutInfo( "title" );
     }
     if ( name.isEmpty() )
         name = url().fileName();
@@ -2050,9 +2050,7 @@ void KoDocument::setTitleModified()
         // Get caption from document info (title(), in about page)
         if ( documentInfo() )
         {
-            KoDocumentInfoPage * page = documentInfo()->page( QString::fromLatin1("about") );
-            if (page)
-                caption = static_cast<KoDocumentInfoAbout *>(page)->title();
+            caption = documentInfo()->aboutInfo( "title" );
         }
         if ( caption.isEmpty() )
             caption = url().pathOrURL();             // Fall back to document URL

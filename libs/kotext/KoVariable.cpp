@@ -2255,37 +2255,36 @@ void KoFieldVariable::recalc()
         case VST_INITIAL:
         {
             KoDocumentInfo * info = m_doc->documentInfo();
-            KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-            if ( !authorPage )
+            if ( !info )
                 kWarning() << "Author information not found in documentInfo !" << endl;
             else
             {
                 if ( m_subtype == VST_AUTHORNAME )
-                    value = authorPage->fullName();
+                    value = info->authorInfo( "creator" );
                 else if ( m_subtype == VST_EMAIL )
-                    value = authorPage->email();
+                    value = info->authorInfo( "email" );
                 else if ( m_subtype == VST_COMPANYNAME )
-                    value = authorPage->company();
+                    value = info->authorInfo( "company" );
                 else if ( m_subtype == VST_TELEPHONE_WORK )
-                    value = authorPage->telephoneWork();
+                    value = info->authorInfo( "telephone-work" );
                 else if ( m_subtype == VST_TELEPHONE_HOME )
-                    value = authorPage->telephoneHome();
+                    value = info->authorInfo( "telephone" );
                 else if ( m_subtype == VST_FAX )
-                    value = authorPage->fax();
+                    value = info->authorInfo( "fax" );
                 else if ( m_subtype == VST_COUNTRY )
-                    value = authorPage->country();
+                    value = info->authorInfo( "country" );
                 else if ( m_subtype == VST_POSTAL_CODE )
-                    value = authorPage->postalCode();
+                    value = info->authorInfo( "postal-code" );
                 else if ( m_subtype == VST_CITY )
-                    value = authorPage->city();
+                    value = info->authorInfo( "city" );
                 else if ( m_subtype == VST_STREET )
-                    value = authorPage->street();
+                    value = info->authorInfo( "street" );
                 else if ( m_subtype == VST_AUTHORTITLE )
-                    value = authorPage->title();
+                    value = info->authorInfo( "title" );
                 else if ( m_subtype == VST_INITIAL )
-                    value = authorPage->initial();
+                    value = info->authorInfo( "initial" );
                 else if ( m_subtype == VST_AUTHORPOSITION )
-                    value = authorPage->position();
+                    value = info->authorInfo( "position" );
             }
         }
         break;
@@ -2295,19 +2294,19 @@ void KoFieldVariable::recalc()
     case VST_KEYWORDS:
         {
             KoDocumentInfo * info = m_doc->documentInfo();
-            KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-            if ( !aboutPage )
+
+            if ( !info )
                 kWarning() << "'About' page not found in documentInfo !" << endl;
             else
             {
                 if ( m_subtype == VST_TITLE )
-                    value = aboutPage->title();
+                    value = info->aboutInfo( "title" );
                 else if ( m_subtype == VST_SUBJECT )
-                    value = aboutPage->subject();
+                    value = info->aboutInfo( "subject" );
                 else if ( m_subtype == VST_KEYWORDS )
-                    value = aboutPage->keywords();
+                    value = info->aboutInfo( "keyword" );
                 else
-                    value = aboutPage->abstract();
+                    value = info->aboutInfo( "comments" );
             }
         }
         break;

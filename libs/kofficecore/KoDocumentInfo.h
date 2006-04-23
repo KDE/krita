@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
    Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,173 +24,170 @@
 
 #include <QObject>
 #include <QMap>
+#include <QString>
+#include <QStringList>
+
 #include <kconfig.h>
 #include <koffice_export.h>
-#include <QDateTime>
-class QString;
-class QStringList;
+
 class QDomDocument;
 class QDomElement;
 class QDomNode;
-class QDateTime;
 class KoStore;
-class KoDocumentInfoPage;
 class KoXmlWriter;
 
+/**
+ * @short The class containing all meta information about a document
+ *
+ * @author Torben Weis <weis@kde.org>
+ * @author David Faure <faure@kde.org>
+ * @author Martin Pfeiffer <hubipete@gmx.net>
+ * @see KoDocumentInfoDlg
+ *
+ * This class contains the meta information for a document. They are
+ * stored in two QMap and can be accessed through setAuthorInfo(),
+ * setAboutInfo(), aboutInfo() and authorInfo().
+ */
 class KOFFICECORE_EXPORT KoDocumentInfo : public QObject
 {
-    Q_OBJECT
-public:
-    KoDocumentInfo( QObject* parent = 0, const char* name = 0 );
-    virtual ~KoDocumentInfo();
+  Q_OBJECT
 
-    bool load( const QDomDocument& doc );
+  public:
+    /**
+     * The constructor
+     * @param parent a pointer to the parent object
+     */
+    KoDocumentInfo( QObject* parent = 0 );
+
+    /** The destructor */
+    ~KoDocumentInfo();
+
+    /**
+     * Load the KoDocumentInfo from an OASIS document
+     * @param metaDoc the QDomDocument with the metaInformation
+     * @return true if success
+     */
     bool loadOasis( const QDomDocument& metaDoc );
 
-    QDomDocument save();
+    /**
+     * Save the KoDocumentInfo to an OASIS document
+     * @param store a pointer to a KoStore to save in
+     * @return true if success
+     */
     bool saveOasis( KoStore* store );
 
     /**
-     * This info has an accessor because it's the most commonly used.
-     * Equivalent to page("about")->title() (but checking that the page exists)
+     * Load the KoDocumentInfo from an KOffice-1.3 DomDocument
+     * @param doc the QDomDocument to load from
+     * @return true if success
      */
-    QString title() const;
-    QString creator() const;
+    bool load( const QDomDocument& doc );
 
-    KoDocumentInfoPage* page( const QString& name ) const;
-    QStringList pages() const;
-    void documentInfochanged() { emit sigDocumentInfoModifed();}
- signals:
-    void sigDocumentInfoModifed();
-};
+    /**
+     * Save the KoDocumentInfo to an KOffice-1.3 DomDocument
+     * @return the QDomDocument to which was saved
+     */
+    QDomDocument save();
 
-class KOFFICECORE_EXPORT KoDocumentInfoPage : public QObject
-{
-public:
-    KoDocumentInfoPage( QObject *parent, const char* name );
+    /**
+     * Set information about the author
+     * @param info the kind of information to set
+     * @param data the data to set for this information
+     */
+    void setAuthorInfo( const QString& info, const QString& data );
 
-    virtual bool load( const QDomElement& e ) = 0;
-    virtual QDomElement save( QDomDocument& doc ) = 0;
-    virtual bool loadOasis( const QDomNode& metaDoc ) = 0;
-    virtual bool saveOasis( KoXmlWriter &xmlWriter ) = 0;
-};
+    /**
+     * Obtain information about the author
+     * @param info the kind of information to obtain
+     * @return a QString with the information
+     */
+    QString authorInfo( const QString& info ) const;
 
-class KOFFICECORE_EXPORT KoDocumentInfoAuthor : public KoDocumentInfoPage
-{
-    Q_OBJECT
-public:
-    KoDocumentInfoAuthor( KoDocumentInfo* info );
-    ~KoDocumentInfoAuthor();
+    /**
+     * Set information about the document
+     * @param info the kind of information to set
+     * @param data the data to set for this information
+     */
+    void setAboutInfo( const QString& info, const QString& data );
 
-    virtual bool load( const QDomElement& e );
-    virtual QDomElement save( QDomDocument& doc );
-    virtual bool loadOasis( const QDomNode& metaDoc );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter );
+    /**
+     * Obtain information about the document
+     * @param info the kind of information to obtain
+     * @return a QString with the information
+     */
+    QString aboutInfo( const QString& info ) const;
 
-    QString fullName() const;
-    QString initial() const;
-    QString title() const;
-    QString company() const;
-    QString email() const;
-    QString telephoneHome() const;
-    QString telephoneWork() const;
-    QString fax() const;
-    QString country() const;
-    QString postalCode() const;
-    QString city() const;
-    QString street() const;
-    QString position() const;
-
-    void setFullName( const QString& n );
-    void setTitle( const QString& n );
-    void setCompany( const QString& n );
-    void setEmail( const QString& n );
-    void setTelephoneHome( const QString& n );
-    void setTelephoneWork( const QString& n );
-    void setFax( const QString& n );
-    void setCountry( const QString& n );
-    void setPostalCode( const QString& n );
-    void setCity( const QString& n );
-    void setStreet( const QString& n );
-    void setInitial( const QString& n );
-    void setPosition( const QString& n );
-    void initParameters();
-
-private:
-    QString m_fullName;
-    QString m_title;
-    QString m_company;
-    QString m_email;
-    QString m_telephoneHome;
-    QString m_telephoneWork;
-    QString m_fax;
-    QString m_country;
-    QString m_postalCode;
-    QString m_city;
-    QString m_street;
-    QString m_initial;
-    QString m_position;
-    KConfig *m_emailCfg;
-};
-
-class KOFFICECORE_EXPORT KoDocumentInfoAbout : public KoDocumentInfoPage
-{
-    Q_OBJECT
-public:
-    KoDocumentInfoAbout( KoDocumentInfo* info );
-
-    virtual bool load( const QDomElement& e );
-    virtual QDomElement save( QDomDocument& doc );
-    virtual bool loadOasis( const QDomNode& metaDoc );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter );
-
-    QString title() const;
-    QString abstract() const;
-    QString subject() const;
-    QString keywords() const;
-    QString initialCreator() const;
-    QString editingCycles() const;
-    QString creationDate() const;
-    QString modificationDate() const;
-
-    void setKeywords( const QString &n );
-    void setSubject( const QString& n );
-
-    void setTitle( const QString& n );
-    void setAbstract( const QString& n );
-    void saveParameters();
-
-public slots:
+    /** Resets part of the meta data */
     void resetMetaData();
 
-private:
-    KoDocumentInfo* m_docInfo;
-    QString m_title;
-    QString m_abstract;
-    QString m_keywords;
-    QString m_subject;
-    QString m_initialCreator;
-    QDateTime m_creationDate;
-    QDateTime m_modificationDate;
-    int m_editingCycles;
-};
+  private:
+    /**
+     * Load the information about the document from an OASIS file
+     * @param metaDoc a reference to the information node
+     * @return true if success
+     */
+    bool loadOasisAboutInfo( const QDomNode& metaDoc );
 
-class KOFFICECORE_EXPORT KoDocumentInfoUserMetadata : public KoDocumentInfoPage
-{
-    Q_OBJECT
-public:
-    KoDocumentInfoUserMetadata( KoDocumentInfo* info );
+    /**
+     * Save the information about the document to an OASIS file
+     * @param xmlWriter a reference to the KoXmlWriter to write in
+     * @return true if success
+     */
+    bool saveOasisAboutInfo( KoXmlWriter &xmlWriter );
 
-    virtual bool load( const QDomElement& e );
-    virtual QDomElement save( QDomDocument& doc );
-    virtual bool loadOasis( const QDomNode& metaDoc );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter );
+    /**
+     * Load the information about the document from a KOffice-1.3 file
+     * @param e the element to load from
+     * @return true if success
+     */
+    bool loadAboutInfo( const QDomElement& e );
 
-    QMap<QString, QString>* metadataList() { return &m_metaList; }
+    /**
+     * Save the information about the document to a KOffice-1.3 file
+     * @param doc the QDomDocument to save in
+     * @return the QDomElement to which was saved
+     */
+    QDomElement saveAboutInfo( QDomDocument& doc );
 
-private:
-    QMap<QString, QString>  m_metaList;
-    QStringList             m_reserved;
+    /**
+     * Load the information about the document from an OASIS file
+     * @param metaDoc a reference to the information node
+     * @return true if success
+     */
+    bool loadOasisAuthorInfo( const QDomNode& metaDoc );
+
+    /**
+     * Load the information about the document from a KOffice-1.3 file
+     * @param e the element to load from
+     * @return true if success
+     */
+    bool loadAuthorInfo( const QDomElement& e );
+
+    /**
+     * Save the information about the author to a KOffice-1.3 file
+     * @param doc the QDomDocument to save in
+     * @return the QDomElement to which was saved
+     */
+    QDomElement saveAuthorInfo( QDomDocument& doc );
+
+    /**
+     * Save the information about the document to an OASIS file
+     * @param xmlWriter a reference to the KoXmlWriter to write in
+     * @return true if success
+     */
+    bool saveOasisAuthorInfo( KoXmlWriter &xmlWriter );
+
+    /** Takes care of saving the per-editing-cycle data correctly */
+    void saveParameters();
+
+    /** A QStringList containing all tags for the document information */
+    QStringList m_aboutTags;
+    /** A QStringList containing all tags for the author information */
+    QStringList m_authorTags;
+    /** The map containing information about the author */
+    QMap<QString, QString> m_authorInfo;
+    /** The map containing information about the document */
+    QMap<QString, QString> m_aboutInfo;
 };
 
 #endif

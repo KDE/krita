@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2000 Simon Hausmann <hausmann@kde.org>
-
-   $Id$
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,128 +15,234 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "KoDocumentInfoDlg.h"
+
+#include "ui_koDocumentInfoAboutWidget.h"
+#include "ui_koDocumentInfoAuthorWidget.h"
 #include "KoDocumentInfo.h"
-#include "koDocumentInfoAboutWidget.h"
-#include "koDocumentInfoAuthorWidget.h"
-#include "koDocumentInfoUserMetadataWidget.h"
 #include "KoDocument.h"
-
-#include <KoGlobal.h>
-#include <KoStore.h>
-
-#include <sys/stat.h>
-#include <unistd.h>
-#include <assert.h>
-
-#include <QLabel>
-#include <QBuffer>
-#include <QDir>
-#include <kvbox.h>
-#include <QDateTime>
-//Added by qt3to4:
-#include <QTextStream>
-
+#include <kmimetype.h>
+#include <klocale.h>
+#include <kglobal.h>
 #include <kabc/addressee.h>
 #include <kabc/stdaddressbook.h>
-#include <kdeversion.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <ktar.h>
-#include <kdebug.h>
-#include <ktempfile.h>
-#include <kmimetype.h>
-#include <QLayout>
-#include <k3listview.h>
-#include <q3grid.h>
-#include <QMap>
-#include <kfilterdev.h>
-#include <klineedit.h>
-#include <ktextedit.h>
+#include <KoGlobal.h>
 #include <kiconloader.h>
-#include <kpushbutton.h>
-#include <klocale.h>
+#include <kmessagebox.h>
+
+#include <QLabel>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QPixmap>
+#include <QDateTime>
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
-public:
-  KoDocumentInfoDlgPrivate()
-  {
-  }
-  ~KoDocumentInfoDlgPrivate()
-  {
-  }
+  public:
+      KoDocumentInfoDlgPrivate()
+      {}
+      ~KoDocumentInfoDlgPrivate()
+      {}
 
-  KoDocumentInfo *m_info;
-  KoDocumentInfoAboutWidget *m_aboutWidget;
-  KoDocumentInfoAuthorWidget *m_authorWidget;
-  KoDocumentInfoUserMetadataWidget *m_metaWidget;
-
-  bool m_bDeleteDialog;
-  KDialogBase *m_dialog;
+      KoDocumentInfo* m_info;
+      Ui::KoDocumentInfoAboutWidget* m_aboutUi;
+      Ui::KoDocumentInfoAuthorWidget* m_authorUi;
 };
 
-KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, const char *name,
-                                      KDialogBase *dialog )
-: QObject( parent )
+
+
+
+KoDocumentInfoDlg::KoDocumentInfoDlg( QWidget* parent, KoDocumentInfo* docInfo )
+     : KDialogBase( KDialogBase::Tabbed, i18n( "Document Information" ),
+       KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, parent )
 {
   d = new KoDocumentInfoDlgPrivate;
   d->m_info = docInfo;
+  
+  setInitialSize( QSize( 500, 500 ) );
 
-  d->m_dialog = dialog;
-  d->m_bDeleteDialog = false;
+  d->m_aboutUi = new Ui::KoDocumentInfoAboutWidget();
+  d->m_aboutUi->setupUi( addPage( i18n( "General" ) ) );
+  initAboutTab();
 
-  if ( !dialog )
-  {
-    d->m_dialog = new KDialogBase( KDialogBase::Tabbed,
-                                   i18n( "Document Information" ),
-                                   KDialogBase::Ok | KDialogBase::Cancel,
-                                   KDialogBase::Ok, parent, name, true, false );
-    d->m_dialog->setInitialSize( QSize( 500, 500 ) );
-    d->m_bDeleteDialog = true;
-  }
+  d->m_authorUi = new Ui::KoDocumentInfoAuthorWidget();
+  d->m_authorUi->setupUi( addPage( i18n( "Author" ) ) );
+  initAuthorTab();
 
-  QStringList pages = docInfo->pages();
-  QStringList::ConstIterator it = pages.begin();
-  QStringList::ConstIterator end = pages.end();
-  for (; it != end; ++it )
-  {
-    KoDocumentInfoPage *pg = docInfo->page( *it );
-    if ( pg->inherits( "KoDocumentInfoAuthor" ) )
-      addAuthorPage( static_cast<KoDocumentInfoAuthor *>( pg ) );
-    else if ( pg->inherits( "KoDocumentInfoAbout" ) )
-      addAboutPage( static_cast<KoDocumentInfoAbout *>( pg ) );
-/*    else if ( pg->inherits( "KoDocumentInfoUserMetadata" ) )
-      addUserMetadataPage( static_cast<KoDocumentInfoUserMetadata *>( pg ) );*/
-  }
+  connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
 {
-  if ( d->m_bDeleteDialog )
-    delete d->m_dialog;
-
+  delete d->m_authorUi;
+  delete d->m_aboutUi;
   delete d;
 }
 
-int KoDocumentInfoDlg::exec()
+void KoDocumentInfoDlg::initAboutTab()
 {
-  return d->m_dialog->exec();
+  KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
+  if( !doc )
+    return;
+
+  d->m_aboutUi->leFileName->setText( doc->file() );
+  QPixmap p = KMimeType::mimeType( doc->mimeType() )->pixmap( K3Icon::Desktop, 48 );
+  d->m_aboutUi->lblPixmap->setPixmap( p );
+
+  d->m_aboutUi->leTitle->setText( d->m_info->aboutInfo( "title" ) );
+  d->m_aboutUi->leSubject->setText( d->m_info->aboutInfo( "subject" ) );
+
+  if( d->m_info->aboutInfo( "keyword" ).isEmpty() )
+    d->m_aboutUi->leKeywords->setText( i18n("Use ';' (Example: Office;KDE;KOffice)" ) );
+  else
+    d->m_aboutUi->leKeywords->setText( d->m_info->aboutInfo( "keyword" ) );
+
+  d->m_aboutUi->meComments->setPlainText( d->m_info->aboutInfo( "comments" ) );
+
+  d->m_aboutUi->lblType->setText( KMimeType::mimeType( doc->mimeType() )->comment() );
+
+  if ( !d->m_info->aboutInfo( "creation-date" ).isEmpty() )
+  {
+    QDateTime t = QDateTime::fromString( d->m_info->aboutInfo( "creation-date" ),
+                                                                        Qt::ISODate );
+    QString s = KGlobal::locale()->formatDateTime( t );
+    d->m_aboutUi->lblCreated->setText( s + ", " +
+                                      d->m_info->aboutInfo( "initial-creator" ) );
+  }
+
+  if ( !d->m_info->aboutInfo( "date" ).isEmpty() )
+  {
+    QDateTime t = QDateTime::fromString( d->m_info->aboutInfo( "date" ), Qt::ISODate );
+    QString s = KGlobal::locale()->formatDateTime( t );
+    d->m_aboutUi->lblModified->setText( s + ", " + d->m_info->authorInfo( "creator" ) );
+  }
+
+  d->m_aboutUi->lblRevision->setText( d->m_info->aboutInfo( "editing-cycles" ) );
+
+  connect( d->m_aboutUi->pbReset, SIGNAL( clicked() ),
+                            this, SLOT( slotResetMetaData() ) );
 }
 
-KDialogBase *KoDocumentInfoDlg::dialog() const
+void KoDocumentInfoDlg::initAuthorTab()
 {
-  return d->m_dialog;
+  QPixmap p = KGlobal::iconLoader()->loadIcon( "personal", K3Icon::Desktop, 48 );
+  d->m_authorUi->lblAuthor->setPixmap( p );
+  p = KGlobal::iconLoader()->loadIcon( "kaddressbook", K3Icon::Small );
+  d->m_authorUi->pbLoadKABC->setIcon( QIcon( p ) );
+  p= KGlobal::iconLoader()->loadIcon( "eraser", K3Icon::Small );
+  d->m_authorUi->pbDelete->setIcon( QIcon( p ) );
+
+  d->m_authorUi->leFullName->setText( d->m_info->authorInfo( "creator" ) );
+  d->m_authorUi->leInitials->setText( d->m_info->authorInfo( "initial" ) );
+  d->m_authorUi->leTitle->setText( d->m_info->authorInfo( "author-title" ) );
+  d->m_authorUi->leCompany->setText( d->m_info->authorInfo( "company" ) );
+  d->m_authorUi->leEmail->setText( d->m_info->authorInfo( "email" ) );
+  d->m_authorUi->lePhoneWork->setText( d->m_info->authorInfo( "telephone-work" ) );
+  d->m_authorUi->lePhoneHome->setText( d->m_info->authorInfo( "telephone" ) );
+  d->m_authorUi->leFax->setText( d->m_info->authorInfo( "fax" ) );
+  d->m_authorUi->leCountry->setText( d->m_info->authorInfo( "country" ) );
+  d->m_authorUi->lePostal->setText( d->m_info->authorInfo( "postal-code" ) );
+  d->m_authorUi->leCity->setText( d->m_info->authorInfo( "city" ) );
+  d->m_authorUi->leStreet->setText( d->m_info->authorInfo( "street" ) );
+  d->m_authorUi->lePosition->setText( d->m_info->authorInfo( "position" ) );
+
+  connect( d->m_authorUi->pbLoadKABC, SIGNAL( clicked() ),
+                                        this, SLOT( slotLoadFromKABC() ) );
+  connect( d->m_authorUi->pbDelete, SIGNAL( clicked() ),
+                                        this, SLOT( slotDeleteAuthorInfo() ) );
 }
 
-void KoDocumentInfoDlg::loadFromKABC()
+void KoDocumentInfoDlg::slotApply()
+{
+  saveAboutData();
+  saveAuthorData();
+}
+
+void KoDocumentInfoDlg::saveAboutData()
+{
+  if( d->m_aboutUi->leKeywords->text() !=
+                  i18n( "Use ';' (Example: Office;KDE;KOffice)" ) )
+    d->m_info->setAboutInfo( "keyword", d->m_aboutUi->leKeywords->text() );
+
+  d->m_info->setAboutInfo( "title", d->m_aboutUi->leTitle->text() );
+  d->m_info->setAboutInfo( "subject", d->m_aboutUi->leSubject->text() );
+  d->m_info->setAboutInfo( "comments", d->m_aboutUi->meComments->toPlainText() );
+}
+
+void KoDocumentInfoDlg::saveAuthorData()
+{
+  d->m_info->setAuthorInfo( "creator", d->m_authorUi->leFullName->text() );
+  d->m_info->setAuthorInfo( "initial", d->m_authorUi->leInitials->text() );
+  d->m_info->setAuthorInfo( "title", d->m_authorUi->leTitle->text() );
+  d->m_info->setAuthorInfo( "company", d->m_authorUi->leCompany->text() );
+  d->m_info->setAuthorInfo( "email", d->m_authorUi->leEmail->text() );
+  d->m_info->setAuthorInfo( "telephone-work", d->m_authorUi->lePhoneWork->text() );
+  d->m_info->setAuthorInfo( "telephone", d->m_authorUi->lePhoneHome->text() );
+  d->m_info->setAuthorInfo( "fax", d->m_authorUi->leFax->text() );
+  d->m_info->setAuthorInfo( "country", d->m_authorUi->leCountry->text() );
+  d->m_info->setAuthorInfo( "postal-code", d->m_authorUi->lePostal->text() );
+  d->m_info->setAuthorInfo( "city", d->m_authorUi->leCity->text() );
+  d->m_info->setAuthorInfo( "street", d->m_authorUi->leStreet->text() );
+  d->m_info->setAuthorInfo( "position", d->m_authorUi->lePosition->text() );
+
+  KConfig* config = KoGlobal::kofficeConfig();
+  KConfigGroup cgs( config, "Author" );
+  config->writeEntry("telephone", d->m_authorUi->lePhoneHome->text());
+  config->writeEntry("telephone-work", d->m_authorUi->lePhoneWork->text());
+  config->writeEntry("fax", d->m_authorUi->leFax->text());
+  config->writeEntry("country",d->m_authorUi->leCountry->text());
+  config->writeEntry("postal-code",d->m_authorUi->lePostal->text());
+  config->writeEntry("city",  d->m_authorUi->leCity->text());
+  config->writeEntry("street", d->m_authorUi->leStreet->text());
+  config->sync();
+}
+
+void KoDocumentInfoDlg::slotResetMetaData()
+{
+  d->m_info->resetMetaData();
+
+  if ( !d->m_info->aboutInfo( "creation-date" ).isEmpty() )
+  {
+    QDateTime t = QDateTime::fromString( d->m_info->aboutInfo( "creation-date" ),
+                                                                        Qt::ISODate );
+    QString s = KGlobal::locale()->formatDateTime( t );
+    d->m_aboutUi->lblCreated->setText( s + ", " +
+                                      d->m_info->aboutInfo( "initial-creator" ) );
+  }
+
+  if ( !d->m_info->aboutInfo( "date" ).isEmpty() )
+  {
+    QDateTime t = QDateTime::fromString( d->m_info->aboutInfo( "date" ), Qt::ISODate );
+    QString s = KGlobal::locale()->formatDateTime( t );
+    d->m_aboutUi->lblModified->setText( s + ", " + d->m_info->authorInfo( "creator" ) );
+  }
+
+  d->m_aboutUi->lblRevision->setText( d->m_info->aboutInfo( "editing-cycles" ) );
+}
+
+void KoDocumentInfoDlg::slotDeleteAuthorInfo()
+{
+  d->m_authorUi->leFullName->clear();
+  d->m_authorUi->leInitials->clear();
+  d->m_authorUi->leTitle->clear();
+  d->m_authorUi->leCompany->clear();
+  d->m_authorUi->leEmail->clear();
+  d->m_authorUi->lePhoneHome->clear();
+  d->m_authorUi->lePhoneWork->clear();
+  d->m_authorUi->leFax->clear();
+  d->m_authorUi->leCountry->clear();
+  d->m_authorUi->lePostal->clear();
+  d->m_authorUi->leCity->clear();
+  d->m_authorUi->leStreet->clear();
+}
+
+void KoDocumentInfoDlg::slotLoadFromKABC()
 {
   KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
-                             ( KABC::StdAddressBook::self() );
-
+                                              ( KABC::StdAddressBook::self() );
   if ( !ab )
     return;
 
@@ -145,411 +250,30 @@ void KoDocumentInfoDlg::loadFromKABC()
   if ( addr.isEmpty() )
   {
     KMessageBox::sorry( 0L, i18n( "No personal contact data set, please use the option \
-                                  \"Set as Personal Contact Data\" from the \"Edit\" menu in KAddressbook to set one." ) );
+                                  \"Set as Personal Contact Data\" from the \"Edit\"     menu in KAddressbook to set one." ) );
     return;
   }
 
-  d->m_authorWidget->leFullName->setText( addr.formattedName() );
-  d->m_authorWidget->leInitial->setText( addr.givenName()[ 0 ] + ". " +
+  d->m_authorUi->leFullName->setText( addr.formattedName() );
+  d->m_authorUi->leInitials->setText( addr.givenName()[ 0 ] + ". " +
                            addr.familyName()[ 0 ] + "." );
-  d->m_authorWidget->leAuthorTitle->setText( addr.title() );
-  d->m_authorWidget->leCompany->setText( addr.organization() );
-  d->m_authorWidget->leEmail->setText( addr.preferredEmail() );
+  d->m_authorUi->leTitle->setText( addr.title() );
+  d->m_authorUi->leCompany->setText( addr.organization() );
+  d->m_authorUi->leEmail->setText( addr.preferredEmail() );
 
   KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Home );
-  d->m_authorWidget->leTelephoneHome->setText( phone.number() );
+  d->m_authorUi->lePhoneHome->setText( phone.number() );
   phone = addr.phoneNumber( KABC::PhoneNumber::Work );
-  d->m_authorWidget->leTelephoneWork->setText( phone.number() );
+  d->m_authorUi->lePhoneWork->setText( phone.number() );
 
   phone = addr.phoneNumber( KABC::PhoneNumber::Fax );
-  d->m_authorWidget->leFax->setText( phone.number() );
+  d->m_authorUi->leFax->setText( phone.number() );
 
   KABC::Address a = addr.address( KABC::Address::Home );
-  d->m_authorWidget->leCountry->setText( a.country() );
-  d->m_authorWidget->lePostalCode->setText( a.postalCode() );
-  d->m_authorWidget->leCity->setText( a.locality() );
-  d->m_authorWidget->leStreet->setText( a.street() );
-
-  emit changed();
+  d->m_authorUi->leCountry->setText( a.country() );
+  d->m_authorUi->lePostal->setText( a.postalCode() );
+  d->m_authorUi->leCity->setText( a.locality() );
+  d->m_authorUi->leStreet->setText( a.street() );
 }
-
-void KoDocumentInfoDlg::deleteInfo()
-{
-  d->m_authorWidget->leFullName->setText( QString::null );
-  d->m_authorWidget->leInitial->setText( QString::null );
-  d->m_authorWidget->leAuthorTitle->setText( QString::null );
-  d->m_authorWidget->leCompany->setText( QString::null );
-  d->m_authorWidget->leEmail->setText( QString::null );
-  d->m_authorWidget->leTelephoneHome->setText( QString::null );
-  d->m_authorWidget->leTelephoneWork->setText( QString::null );
-  d->m_authorWidget->leFax->setText( QString::null );
-  d->m_authorWidget->leCountry->setText( QString::null );
-  d->m_authorWidget->lePostalCode->setText( QString::null );
-  d->m_authorWidget->leCity->setText( QString::null );
-  d->m_authorWidget->leStreet->setText( QString::null );
-  emit changed();
-}
-
-void KoDocumentInfoDlg::resetMetaData()
-{
-  QString s = KGlobal::locale()->formatDateTime( QDateTime::currentDateTime() );
-  d->m_aboutWidget->labelCreated->setText( s + ", " + d->m_info->creator() );
-  d->m_aboutWidget->labelModified->setText( "" );
-  d->m_aboutWidget->labelRevision->setText( "0" );
-  emit changed();
-}
-
-void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
-{
-  KVBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
-  d->m_authorWidget = new KoDocumentInfoAuthorWidget( page );
-  d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "personal", K3Icon::Desktop, 48 ) );
-  d->m_authorWidget->pbLoadKABC->setIcon( QIcon( KGlobal::iconLoader()->loadIcon( "kaddressbook", K3Icon::Small ) ) );
-  d->m_authorWidget->pbDelete->setIcon( QIcon( KGlobal::iconLoader()->loadIcon( "eraser", K3Icon::Small ) ) );
-
-  d->m_authorWidget->leFullName->setText( authorInfo->fullName() );
-  d->m_authorWidget->leInitial->setText( authorInfo->initial() );
-  d->m_authorWidget->leAuthorTitle->setText( authorInfo->title() );
-  d->m_authorWidget->leCompany->setText( authorInfo->company() );
-  d->m_authorWidget->leEmail->setText( authorInfo->email() );
-  d->m_authorWidget->leTelephoneWork->setText( authorInfo->telephoneWork() );
-  d->m_authorWidget->leTelephoneHome->setText( authorInfo->telephoneHome() );
-  d->m_authorWidget->leFax->setText( authorInfo->fax() );
-  d->m_authorWidget->leCountry->setText( authorInfo->country() );
-  d->m_authorWidget->lePostalCode->setText( authorInfo->postalCode() );
-  d->m_authorWidget->leCity->setText( authorInfo->city() );
-  d->m_authorWidget->leStreet->setText( authorInfo->street() );
-  d->m_authorWidget->leAuthorPosition->setText( authorInfo->position() );
-
-  connect( d->m_authorWidget->leFullName, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leInitial, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leAuthorTitle, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leCompany, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leEmail, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leTelephoneWork, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leTelephoneHome, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leFax, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leCountry, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->lePostalCode, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leCity, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leStreet, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->leAuthorPosition, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_authorWidget->pbLoadKABC, SIGNAL( clicked() ),
-           this, SLOT( loadFromKABC() ) );
-  connect( d->m_authorWidget->pbDelete, SIGNAL( clicked() ),
-           this, SLOT( deleteInfo() ) );
-}
-
-void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
-{
-  KVBox *page = d->m_dialog->addVBoxPage( i18n( "General" ) );
-  d->m_aboutWidget = new KoDocumentInfoAboutWidget( page );
-  d->m_aboutWidget->pbReset->setIcon( QIcon( KGlobal::iconLoader()->loadIcon( "reload", K3Icon::Small ) ) );
-  KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
-  if ( doc )
-  {
-    d->m_aboutWidget->leDocFile->setText( doc->file() );
-    d->m_aboutWidget->labelType->setText( KMimeType::mimeType( doc->mimeType() )->comment() );
-    d->m_aboutWidget->pixmapLabel->setPixmap( KMimeType::mimeType( doc->mimeType() )->pixmap( K3Icon::Desktop, 48 ) );
-  }
-  if ( aboutInfo->creationDate() != QString::null )
-    d->m_aboutWidget->labelCreated->setText( aboutInfo->creationDate() + ", " + aboutInfo->initialCreator() );
-  if ( aboutInfo->modificationDate() != QString::null )
-    d->m_aboutWidget->labelModified->setText( aboutInfo->modificationDate() + ", " + d->m_info->creator() );
-  d->m_aboutWidget->labelRevision->setText( aboutInfo->editingCycles() );
-  d->m_aboutWidget->leDocTitle->setText( aboutInfo->title() );
-  d->m_aboutWidget->leDocSubject->setText( aboutInfo->subject() );
-  d->m_aboutWidget->leDocKeywords->setText( aboutInfo->keywords() );
-  d->m_aboutWidget->meDocAbstract->setPlainText( aboutInfo->abstract() );
-
-  connect( d->m_aboutWidget->leDocTitle, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_aboutWidget->meDocAbstract, SIGNAL( textChanged() ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_aboutWidget->leDocSubject, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_aboutWidget->leDocKeywords, SIGNAL( textChanged( const QString & ) ),
-           this, SIGNAL( changed() ) );
-  connect( d->m_aboutWidget->pbReset, SIGNAL( clicked() ),
-           aboutInfo, SLOT( resetMetaData() ) );
-  connect( d->m_aboutWidget->pbReset, SIGNAL( clicked() ),
-           this, SLOT( resetMetaData() ) );
-}
-
-void KoDocumentInfoDlg::addUserMetadataPage( KoDocumentInfoUserMetadata *userMetadataInfo )
-{
-  KVBox *page = d->m_dialog->addVBoxPage( i18n( "User-Defined Metadata" ) );
-  d->m_metaWidget = new KoDocumentInfoUserMetadataWidget( page );
-
-  d->m_metaWidget->metaListView->addColumn( "Name" );
-  d->m_metaWidget->metaListView->setFullWidth( true );
-
-  QMap<QString, QString>::iterator it;
-    for ( it = userMetadataInfo->metadataList()->begin(); it != userMetadataInfo->metadataList()->end(); ++it )
-    {
-        QString name = it.key();
-        QString value = it.value();
-        K3ListViewItem* it = new K3ListViewItem( d->m_metaWidget->metaListView, name, value );
-        it->setPixmap( 0, KGlobal::iconLoader()->loadIcon( "text", K3Icon::Small ) );
-    }
-}
-
-void KoDocumentInfoDlg::save()
-{
-  QStringList pages = d->m_info->pages();
-  QStringList::ConstIterator it = pages.begin();
-  QStringList::ConstIterator end = pages.end();
-  bool saveInfo=false;
-  for (; it != end; ++it )
-  {
-    KoDocumentInfoPage *pg = d->m_info->page( *it );
-    if ( pg->inherits( "KoDocumentInfoAuthor" ) )
-    {
-        saveInfo=true;
-        save( static_cast<KoDocumentInfoAuthor *>( pg ) );
-    }
-    else if ( pg->inherits( "KoDocumentInfoAbout" ) )
-    {
-        saveInfo=true;
-        save( static_cast<KoDocumentInfoAbout *>( pg ) );
-    }
-  }
-  if(saveInfo)
-      d->m_info->documentInfochanged();
-}
-
-void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
-{
-  authorInfo->setFullName( d->m_authorWidget->leFullName->text() );
-  authorInfo->setInitial( d->m_authorWidget->leInitial->text() );
-  authorInfo->setTitle( d->m_authorWidget->leAuthorTitle->text() );
-  authorInfo->setCompany( d->m_authorWidget->leCompany->text() );
-  authorInfo->setEmail( d->m_authorWidget->leEmail->text() );
-  authorInfo->setTelephoneWork( d->m_authorWidget->leTelephoneWork->text() );
-  authorInfo->setTelephoneHome( d->m_authorWidget->leTelephoneHome->text() );
-  authorInfo->setFax( d->m_authorWidget->leFax->text() );
-  authorInfo->setCountry( d->m_authorWidget->leCountry->text() );
-  authorInfo->setPostalCode( d->m_authorWidget->lePostalCode->text() );
-  authorInfo->setCity( d->m_authorWidget->leCity->text() );
-  authorInfo->setStreet( d->m_authorWidget->leStreet->text() );
-  authorInfo->setPosition( d->m_authorWidget->leAuthorPosition->text() );
-
-  KConfig* config = KoGlobal::kofficeConfig();
-  KConfigGroup cgs( config, "Author" );
-  config->writeEntry("telephone", d->m_authorWidget->leTelephoneHome->text());
-  config->writeEntry("telephone-work", d->m_authorWidget->leTelephoneWork->text());
-  config->writeEntry("fax", d->m_authorWidget->leFax->text());
-  config->writeEntry("country",d->m_authorWidget->leCountry->text());
-  config->writeEntry("postal-code",d->m_authorWidget->lePostalCode->text());
-  config->writeEntry("city",  d->m_authorWidget->leCity->text());
-  config->writeEntry("street", d->m_authorWidget->leStreet->text());
-  config->sync();
-}
-
-void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )
-{
-  aboutInfo->setTitle( d->m_aboutWidget->leDocTitle->text() );
-  aboutInfo->setSubject( d->m_aboutWidget->leDocSubject->text() );
-  aboutInfo->setKeywords( d->m_aboutWidget->leDocKeywords->text() );
-  aboutInfo->setAbstract( d->m_aboutWidget->meDocAbstract->toPlainText() );
-}
-
-void KoDocumentInfoDlg::save( KoDocumentInfoUserMetadata* )
-{
-    // FIXME
-}
-
-class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate
-{
-public:
-  KoDocumentInfo *m_info;
-  KoDocumentInfoDlg *m_dlg;
-  KUrl m_url;
-  KTar *m_src;
-  KTar *m_dst;
-
-  const KArchiveFile *m_docInfoFile;
-};
-
-KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
-                                                  const char *,
-                                                  const QStringList & )
-: KPropsDlgPlugin( props )
-{
-  d = new KoDocumentInfoPropsPagePrivate;
-  d->m_info = new KoDocumentInfo( this, "docinfo" );
-  d->m_url = props->item()->url();
-  d->m_dlg = 0;
-
-  if ( !d->m_url.isLocalFile() )
-    return;
-
-  d->m_dst = 0;
-
-#ifdef __GNUC__
-#warning TODO port this to KoStore !!!
-#endif
-  d->m_src = new KTar( d->m_url.path(), "application/x-gzip" );
-
-  if ( !d->m_src->open( QIODevice::ReadOnly ) )
-    return;
-
-  const KArchiveDirectory *root = d->m_src->directory();
-  if ( !root )
-    return;
-
-  const KArchiveEntry *entry = root->entry( "documentinfo.xml" );
-
-  if ( entry && entry->isFile() )
-  {
-    d->m_docInfoFile = static_cast<const KArchiveFile *>( entry );
-
-    QBuffer buffer( &d->m_docInfoFile->data() );
-    buffer.open( QIODevice::ReadOnly );
-
-    QDomDocument doc;
-    doc.setContent( &buffer );
-
-    d->m_info->load( doc );
-  }
-
-  d->m_dlg = new KoDocumentInfoDlg( d->m_info, 0, 0, props );
-  connect( d->m_dlg, SIGNAL( changed() ),
-           this, SIGNAL( changed() ) );
-}
-
-KoDocumentInfoPropsPage::~KoDocumentInfoPropsPage()
-{
-  delete d->m_info;
-  delete d->m_src;
-  delete d->m_dst;
-  delete d->m_dlg;
-  delete d;
-}
-
-void KoDocumentInfoPropsPage::applyChanges()
-{
-  const KArchiveDirectory *root = d->m_src->directory();
-  if ( !root )
-    return;
-
-  struct stat statBuff;
-
-  if ( stat( QFile::encodeName( d->m_url.path() ), &statBuff ) != 0 )
-    return;
-
-  KTempFile tempFile( d->m_url.path(), QString::null, statBuff.st_mode );
-
-  tempFile.setAutoDelete( true );
-
-  if ( tempFile.status() != 0 )
-    return;
-
-  if ( !tempFile.close() )
-    return;
-
-  d->m_dst = new KTar( tempFile.name(), "application/x-gzip" );
-
-  if ( !d->m_dst->open( QIODevice::WriteOnly ) )
-    return;
-
-  KMimeType::Ptr mimeType = KMimeType::findByURL( d->m_url, 0, true );
-  if ( mimeType && dynamic_cast<KFilterDev *>( d->m_dst->device() ) != 0 )
-  {
-      QByteArray appIdentification( "KOffice " ); // We are limited in the number of chars.
-      appIdentification += mimeType->name().toLatin1();
-      appIdentification += '\004'; // Two magic bytes to make the identification
-      appIdentification += '\006'; // more reliable (DF)
-      d->m_dst->setOrigFileName( appIdentification );
-  }
-
-  bool docInfoSaved = false;
-
-  QStringList entries = root->entries();
-  QStringList::ConstIterator it = entries.begin();
-  QStringList::ConstIterator end = entries.end();
-  for (; it != end; ++it )
-  {
-    const KArchiveEntry *entry = root->entry( *it );
-
-    assert( entry );
-
-    if ( entry->name() == "documentinfo.xml" ||
-         ( !docInfoSaved && !entries.contains( "documentinfo.xml" ) ) )
-    {
-      d->m_dlg->save();
-
-      QBuffer buffer;
-      buffer.open( QIODevice::WriteOnly );
-      QTextStream str( &buffer );
-      str << d->m_info->save();
-      buffer.close();
-
-      kDebug( 30003 ) << "writing documentinfo.xml" << endl;
-      d->m_dst->writeFile( "documentinfo.xml", entry->user(), entry->group(),
-                           buffer.buffer().data(), buffer.buffer().size() );
-
-      docInfoSaved = true;
-    }
-    else
-      copy( QString::null, entry );
-  }
-
-  d->m_dst->close();
-
-  QDir dir;
-  dir.rename( tempFile.name(), d->m_url.path() );
-
-  delete d->m_dst;
-  d->m_dst = 0;
-}
-
-void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *entry )
-{
-  kDebug( 30003 ) << "copy " << entry->name() << endl;
-  if ( entry->isFile() )
-  {
-    const KArchiveFile *file = static_cast<const KArchiveFile *>( entry );
-    kDebug( 30003 ) << "file :" << entry->name() << endl;
-    kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
-    d->m_dst->writeFile( path + entry->name(), entry->user(), entry->group(),
-                         file->data().data(), file->size() );
-  }
-  else
-  {
-    const KArchiveDirectory *dir = static_cast<const KArchiveDirectory*>( entry );
-    kDebug( 30003 ) << "dir : " << entry->name() << endl;
-    kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
-
-    QString p = path + entry->name();
-    if ( p != "/" )
-    {
-      d->m_dst->writeDir( p, entry->user(), entry->group() );
-      p.append( "/" );
-    }
-
-    QStringList entries = dir->entries();
-    QStringList::ConstIterator it = entries.begin();
-    QStringList::ConstIterator end = entries.end();
-    for (; it != end; ++it )
-      copy( p, dir->entry( *it ) );
-  }
-}
-
-/* vim: sw=2 et
- */
 
 #include "KoDocumentInfoDlg.moc"

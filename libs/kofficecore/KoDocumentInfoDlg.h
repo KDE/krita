@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2000 Simon Hausmann <hausmann@kde.org>
-
-   $Id$
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,64 +21,68 @@
 #ifndef __koDocumentInfoDlg_h__
 #define __koDocumentInfoDlg_h__
 
-#include <kpropertiesdialog.h>
 #include <koffice_export.h>
+#include <kdialogbase.h>
 
-class KDialogBase;
 class KoDocumentInfo;
-class KoDocumentInfoAuthor;
-class KoDocumentInfoAbout;
-class KoDocumentInfoUserMetadata;
-class KArchiveEntry;
 
-class KOFFICECORE_EXPORT KoDocumentInfoDlg : public QObject
+/**
+ * @short The dialog that shows information about the document
+ * @author Simon Hausmann <hausmann@kde.org>
+ * @author Martin Pfeiffer <hubipete@gmx.net>
+ * @see KoDocumentInfo
+ *
+ * This dialog is invoked by KoMainWindow and shows the content
+ * of the given KoDocumentInfo class. It consists of several pages,
+ * one showing general information about the document and an other
+ * showing information about the author.
+ * This dialog implements only things that are stored in the OASIS
+ * meta.xml file and therefore available through the KoDocumentInfo
+ * class.
+ * The widgets shown in the tabs are koDocumentInfoAboutWidget and
+ * koDocumentInfoAuthorWidget. This class here is derived from 
+ * KDialogBase and uses it in the TabbedMode.
+ */
+
+class KOFFICECORE_EXPORT KoDocumentInfoDlg : public KDialogBase
 {
   Q_OBJECT
-public:
-  KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent = 0, const char *name = 0,
-		     KDialogBase *dialog = 0 );
-  virtual ~KoDocumentInfoDlg();
 
-  int exec();
-  KDialogBase *dialog() const;
+  public:
+    /**
+     * The constructor
+     * @param parent a pointer to the parent widget
+     * @param docInfo a pointer to the shown KoDocumentInfo
+     */
+    KoDocumentInfoDlg( QWidget *parent, KoDocumentInfo* docInfo );
 
-  void save();
+    /** The destructor */
+    virtual ~KoDocumentInfoDlg();
 
-signals:
-  void changed();
+  public slots:
+    /** Connected to the applyClicked() signal */
+    void slotApply();
 
-private slots:
-  void loadFromKABC();
-  void deleteInfo();
-  void resetMetaData();
+  private slots:
+    /** Connected with clicked() from pbReset - Reset parts of the metadata */
+    void slotResetMetaData();
+    /** Connected with clicked() from pbDelete - Delete all author metadata */
+    void slotDeleteAuthorInfo();
+    /** Connected with clicked() from pbLoadKABC - Load metadata from KABC */
+    void slotLoadFromKABC();
 
-private:
-  void addAuthorPage( KoDocumentInfoAuthor *authorInfo );
-  void addAboutPage( KoDocumentInfoAbout *aboutInfo );
-  void addUserMetadataPage( KoDocumentInfoUserMetadata *userMetadataInfo );
+  private:
+    /** Sets up the aboutWidget and fills the widgets with content */
+    void initAboutTab();
+    /** Sets up the authorWidget and fills the widgets with content */
+    void initAuthorTab();
+    /** Saves the changed data back to the KoDocumentInfo class */
+    void saveAboutData();
+    /** Saves the changed data back to the KoDocumentInfo class */
+    void saveAuthorData();
 
-  void save( KoDocumentInfoAuthor *authorInfo );
-  void save( KoDocumentInfoAbout *aboutInfo );
-  void save( KoDocumentInfoUserMetadata *userMetadataInfo );
-
-  class KoDocumentInfoDlgPrivate;
-  KoDocumentInfoDlgPrivate *d;
-};
-
-class KOFFICECORE_EXPORT KoDocumentInfoPropsPage : public KPropsDlgPlugin
-{
-  Q_OBJECT
-public:
-  KoDocumentInfoPropsPage( KPropertiesDialog *props, const char *name = 0,
-                           const QStringList & = QStringList() );
-  virtual ~KoDocumentInfoPropsPage();
-
-  virtual void applyChanges();
-
-private:
-  void copy( const QString &path, const KArchiveEntry *entry );
-  class KoDocumentInfoPropsPagePrivate;
-  KoDocumentInfoPropsPagePrivate *d;
+    class KoDocumentInfoDlgPrivate;
+    KoDocumentInfoDlgPrivate *d;
 };
 
 #endif

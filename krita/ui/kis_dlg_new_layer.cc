@@ -18,7 +18,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <q3groupbox.h>
+#include <QGroupBox>
 #include <qlabel.h>
 #include <qlayout.h>
 
@@ -33,24 +33,23 @@
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 #include "kis_dlg_new_layer.h"
-#include <kis_meta_registry.h>
+#include "kis_meta_registry.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_profile.h"
 #include "kis_colorspace.h"
-#include "wdglayerproperties.h"
 #include "kis_int_spinbox.h"
+#include "kis_dlg_layer_properties.h"
 
 NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
                    const QString & profilename,
                    const QString & deviceName,
                    QWidget *parent,
                    const char *name)
-    : super(parent, name, true, "", Ok | Cancel)
+    : super(parent, i18n("New Layer"), Ok | Cancel)
 {
+    setObjectName(name);
     m_page = new WdgLayerProperties(this);
     m_page->layout()->setMargin(0);
-
-    setCaption(i18n("New Layer"));
 
     setMainWidget(m_page);
 
@@ -71,7 +70,7 @@ NewLayerDialog::NewLayerDialog(const KisID colorSpaceID,
 
     // Init profiles
     fillCmbProfiles(m_page->cmbColorSpaces->currentItem());
-    m_page->cmbProfile->setCurrentText(profilename);
+    m_page->cmbProfile->setCurrentIndexFromText(profilename);
 
     // Init composite op
     fillCmbComposite(m_page->cmbColorSpaces->currentItem());
@@ -103,9 +102,9 @@ void NewLayerDialog::fillCmbProfiles(const KisID & s)
     Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
         Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-            m_page->cmbProfile->insertItem((*it)->productName());
+            m_page->cmbProfile->addSqueezedItem((*it)->productName());
     }
-    m_page->cmbProfile->setCurrentText(csf->defaultProfile());
+    m_page->cmbProfile->setCurrentIndexFromText(csf->defaultProfile());
 }
 
 void NewLayerDialog::fillCmbComposite(const KisID & s)

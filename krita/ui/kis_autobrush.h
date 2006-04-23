@@ -20,8 +20,8 @@
 #define _KIS_AUTOBRUSH_H_
 
 #include <qobject.h>
-//Added by qt3to4:
 #include <QResizeEvent>
+
 #include "ui_wdgautobrush.h"
 #include <kis_autobrush_resource.h>
 

@@ -18,15 +18,24 @@
 #ifndef KIS_DLG_LAYER_PROPERTIES_H_
 #define KIS_DLG_LAYER_PROPERTIES_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
+
+#include "ui_wdglayerproperties.h"
 
 class QWidget;
-class WdgLayerProperties;
 class KisCompositeOp;
 class KisColorSpace;
 
-class KisDlgLayerProperties : public KDialogBase {
-    typedef KDialogBase super;
+class WdgLayerProperties : public QWidget, public Ui::WdgLayerProperties
+{
+    Q_OBJECT
+
+    public:
+        WdgLayerProperties(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class KisDlgLayerProperties : public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

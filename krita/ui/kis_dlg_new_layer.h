@@ -17,10 +17,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef  KIS_DLG_NEW_LAYER_H_
+#ifndef KIS_DLG_NEW_LAYER_H_
 #define KIS_DLG_NEW_LAYER_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "kis_composite_op.h"
 #include <kis_global.h>
@@ -29,8 +29,8 @@ class QWidget;
 class KisPaintDevice;
 class WdgLayerProperties;
 
-class NewLayerDialog : public KDialogBase {
-    typedef KDialogBase super;
+class NewLayerDialog : public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

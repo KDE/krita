@@ -93,7 +93,6 @@ kde4_add_ui3_files(kritaui_LIB_SRCS
     kis_previewwidgetbase.ui 
     wdgcolorsettings.ui 
     wdgdisplaysettings.ui 
-    wdglayerproperties.ui 
     wdglayerbox.ui 
     wdgselectionoptions.ui 
     wdgshapeoptions.ui 
@@ -116,6 +115,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgapplyprofile.ui 
     wdgcustombrush.ui 
     wdgcustompattern.ui 
+    wdglayerproperties.ui 
 	)
 
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )

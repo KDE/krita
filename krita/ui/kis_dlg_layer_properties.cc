@@ -27,7 +27,6 @@
 #include <knuminput.h>
 #include "kis_global.h"
 #include "squeezedcombobox.h"
-#include "wdglayerproperties.h"
 #include "kis_dlg_layer_properties.h"
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"
@@ -40,14 +39,14 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                      const KisCompositeOp& compositeOp,
                      const KisColorSpace * colorSpace,
                      QWidget *parent, const char *name, Qt::WFlags f)
-    : super(parent, name, f, name, Ok | Cancel)
+    : super(parent, i18n("Layer Properties"), Ok | Cancel, f)
 {
+    setObjectName(name);
     m_page = new WdgLayerProperties(this);
     m_page->layout()->setMargin(0);
 
     opacity = int((opacity * 100.0) / 255 + 0.5);
 
-    setCaption(i18n("Layer Properties"));
     setMainWidget(m_page);
 
     m_page->editName->setText(deviceName);
@@ -59,7 +58,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     QString profilename;
     if (KisProfile* profile = const_cast<KisColorSpace *>(colorSpace)->getProfile())
         profilename = profile->productName();
-    m_page->cmbProfile->insertItem(profilename);
+    m_page->cmbProfile->addSqueezedItem(profilename);
     m_page->cmbProfile->setEnabled(false);
 
     m_page->intOpacity->setRange(0, 100, 13);

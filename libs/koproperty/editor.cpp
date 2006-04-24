@@ -475,9 +475,11 @@ Editor::slotPropertyReset(Set& set, Property& property)
 		// prop not in the dict, might be a child prop.
 		if(!item && property.parent())
 			item = d->itemDict[property.parent()->name()];
-		repaintItem(item);
-		for(Q3ListViewItem *it = item->firstChild(); it; it = it->nextSibling())
-			repaintItem(it);
+		if (item) {
+			repaintItem(item);
+			for(Q3ListViewItem *it = item->firstChild(); it; it = it->nextSibling())
+				repaintItem(it);
+		}
 	}
 
 	showUndoButton( false );

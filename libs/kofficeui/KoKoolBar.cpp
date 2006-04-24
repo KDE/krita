@@ -20,17 +20,16 @@
 #include <KoKoolBar.h>
 #include <kiconloader.h>
 
-#include <qpainter.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
+#include <QPainter>
+#include <QPushButton>
 #include <QPixmap>
 #include <Q3Frame>
 #include <QResizeEvent>
 
 static int g_koKoolBarId = 0;
 
-KoKoolBar::KoKoolBar( QWidget *_parent, const char *_name ) :
-  QWidget( _parent, _name ), m_iActiveGroup( -1 )
+KoKoolBar::KoKoolBar( QWidget *_parent, const char* /*_name*/ ) :
+  QWidget( _parent ), m_iActiveGroup( -1 )
 {
   m_mapGroups.setAutoDelete( true );
   m_pBox = new KoKoolBarBox( this );
@@ -222,7 +221,7 @@ KoKoolBarBox::KoKoolBarBox( KoKoolBar *_bar ) :
   setFrameShape( StyledPanel );
   setFrameShadow( Sunken );
   // setBackgroundMode( PaletteBase );
-  setBackgroundColor( colorGroup().background() );
+  setBackgroundRole( QPalette::Window );
 }
 
 void KoKoolBarBox::setActiveGroup( KoKoolBarGroup *_grp )
@@ -248,13 +247,13 @@ void KoKoolBarBox::resizeEvent( QResizeEvent * )
     if ( m_pButtonUp == 0L )
     {
       m_pButtonUp = new QPushButton( this );
-      m_pButtonUp->setPixmap( QPixmap( UserIcon( "koKoolBarUp" ) ) );
+      m_pButtonUp->setIcon(  UserIcon( "koKoolBarUp" ) );
       connect( m_pButtonUp, SIGNAL( clicked() ), this, SLOT( scrollUp() ) );
     }
     if ( m_pButtonDown == 0L )
     {
       m_pButtonDown = new QPushButton( this );
-      m_pButtonDown->setPixmap( QPixmap( UserIcon( "koKoolBarDown" ) ) );
+      m_pButtonDown->setIcon( UserIcon( "koKoolBarDown" ) );
       connect( m_pButtonDown, SIGNAL( clicked() ), this, SLOT( scrollDown() ) );
     }
     m_pButtonUp->show();

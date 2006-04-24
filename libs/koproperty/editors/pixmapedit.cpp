@@ -24,16 +24,16 @@
 #include "property.h"
 
 #include <qlayout.h>
-#include <qpainter.h>
-#include <qlabel.h>
-#include <qcursor.h>
-#include <qpushbutton.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qimage.h>
+#include <QPainter>
+#include <QLabel>
+#include <QCursor>
+#include <QPushButton>
+#include <QFont>
+#include <QFontMetrics>
+#include <QImage>
 #include <q3filedialog.h>
-#include <qtooltip.h>
-#include <qapplication.h>
+#include <QToolTip>
+#include <QApplication>
 #include <QDesktopWidget>
 //Added by qt3to4:
 #include <QPixmap>
@@ -64,24 +64,24 @@ PixmapEdit::PixmapEdit(Property *property, QWidget *parent, const char *name)
 {
 	setHasBorders(false);
 
-	m_edit = new QLabel(this, "m_edit");
+	m_edit = new QLabel(this);
 	m_edit->setToolTip( i18n("Click to show image preview"));
 	m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	m_edit->setMinimumHeight(5);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	m_edit->setBackgroundMode(Qt::PaletteBase);
+	m_edit->setBackgroundRole(QPalette::Base);
 	m_edit->setMouseTracking(true);
-	setBackgroundMode(Qt::PaletteBase);
+	setBackgroundRole(QPalette::Base);
 
-	m_button = new QPushButton(i18n("..."), this, "m_button");
+	m_button = new QPushButton(i18n("..."), this);
 	m_button->setToolTip( i18n("Insert image from file"));
 	m_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	QFontMetrics fm(m_button->font());
 	m_button->setFixedWidth(fm.width(m_button->text()+" "));
 	m_button->setFocusPolicy(Qt::NoFocus);
 
-	m_popup = new QLabel(0, "m_popup", Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WX11BypassWM|Qt::WStyle_StaysOnTop);
-	m_popup->setPaletteBackgroundColor(m_popup->palette().active().base());
+	m_popup = new QLabel(0, Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WX11BypassWM|Qt::WStyle_StaysOnTop);
+	m_popup->setBackgroundRole( QPalette::Base );
 	m_popup->setFrameStyle(Q3Frame::Plain|Q3Frame::Box);
 	m_popup->setMargin(2);
 	m_popup->setLineWidth(1);
@@ -111,17 +111,17 @@ PixmapEdit::setValue(const QVariant &value, bool emitChange)
 		m_previewPixmap = m_pixmap;
 	}
 	else {
-		QImage img(m_pixmap.convertToImage());
-		if (!QRect(QPoint(0,0), m_edit->size()*3).contains(m_pixmap.rect())) {
-			img = img.smoothScale(m_edit->size()*3, Qt::KeepAspectRatio);
-			m_previewPixmap.convertFromImage(img);//preview pixmap is a bit larger
+		QImage img( m_pixmap.toImage() );
+		if (!QRect(QPoint(0,0), m_edit->size()*3).contains(m_pixmap.rect()))
+	       	{
+			img = img.scaled( m_edit->size()*3, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+			m_previewPixmap = QPixmap::fromImage(img);//preview pixmap is a bit larger
 		}
-		else {
-			m_previewPixmap = m_pixmap;
-		}
-		img = img.smoothScale(m_edit->size(), Qt::KeepAspectRatio);
-		QPixmap pm;
-		pm.convertFromImage(img);
+		else
+	       	        m_previewPixmap = m_pixmap;
+		
+		img = img.scaled( m_edit->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+		QPixmap pm = QPixmap::fromImage( img );
 		m_edit->setPixmap(pm);
 	}
 	if (emitChange)
@@ -141,9 +141,9 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
 	if (m_recentlyPainted!=value) {
 		m_recentlyPainted = value;
 		m_scaledPixmap = value.value<QPixmap>();
-		QImage img(m_scaledPixmap.convertToImage());
-		img = img.smoothScale(r.size()+QSize(0,2), Qt::KeepAspectRatio);
-		m_scaledPixmap.convertFromImage(img);
+		QImage img(m_scaledPixmap.toImage());
+		img = img.scaled(r.size()+QSize(0,2), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+		m_scaledPixmap = QPixmap::fromImage(img);
 	}
 	p->drawPixmap(r.topLeft().x(), //+KPROPEDITOR_ITEM_MARGIN,
 		r.topLeft().y()+(r.height()-m_scaledPixmap.height())/2+1, m_scaledPixmap);

@@ -547,7 +547,7 @@ Editor::slotClicked(Q3ListViewItem *it)
 		return;
 
 	EditorItem *item = static_cast<EditorItem*>(it);
-	Property *p = item ? item->property() : 0;
+	Property *p = item->property();
 	if(!p)
 		return;
 

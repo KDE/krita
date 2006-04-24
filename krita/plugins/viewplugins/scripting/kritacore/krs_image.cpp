@@ -61,19 +61,19 @@ Kross::Api::Object::Ptr Image::getActivePaintLayer(Kross::Api::List::Ptr)
     KisPaintLayer* activePaintLayer = dynamic_cast<KisPaintLayer*>(m_image->activeLayer().data());
     if(activePaintLayer )
     {
-        return new PaintLayer(activePaintLayer, m_doc);
+        return Kross::Api::Object::Ptr(new PaintLayer(KisPaintLayerSP(activePaintLayer), m_doc));
     } else {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("The active layer is not paintable.") );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
 }
 Kross::Api::Object::Ptr Image::getWidth(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_image->width());
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_image->width()));
 }
 Kross::Api::Object::Ptr Image::getHeight(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_image->height());
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_image->height()));
 }
 Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
 {
@@ -81,15 +81,15 @@ Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
     if(!dstCS)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(Kross::Api::Variant::toString(args->item(0))) ) );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
     m_image->convertTo(dstCS);
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr Image::colorSpaceId(Kross::Api::List::Ptr )
 {
-    return new Kross::Api::Variant( m_image->colorSpace()->id().id() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_image->colorSpace()->id().id() ));
 }
 
 
@@ -109,14 +109,14 @@ Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
     KisPaintLayer* layer;
     if(cs)
     {
-        layer = new KisPaintLayer(m_image, name, opacity, cs);
+        layer = new KisPaintLayer(m_image.data(), name, opacity, cs);
     } else {
-        layer = new KisPaintLayer(m_image, name, opacity);
+        layer = new KisPaintLayer(m_image.data(), name, opacity);
     }
     layer->setVisible(true);
 
-    m_image->addLayer(layer, m_image->rootLayer(), 0);
-    return new PaintLayer(layer);
+    m_image->addLayer(KisLayerSP(layer), m_image->rootLayer(), KisLayerSP(0));
+    return Kross::Api::Object::Ptr(new PaintLayer(KisPaintLayerSP(layer)));
 
 }
 
@@ -125,7 +125,7 @@ Kross::Api::Object::Ptr Image::scale(Kross::Api::List::Ptr args)
     double cw = Kross::Api::Variant::toDouble(args->item(0));
     double ch = Kross::Api::Variant::toDouble(args->item(1));
     m_image->scale( cw, ch, 0, KisFilterStrategyRegistry::instance()->get( "Mitchell") );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 Kross::Api::Object::Ptr Image::resize(Kross::Api::List::Ptr args)
 {
@@ -139,7 +139,7 @@ Kross::Api::Object::Ptr Image::resize(Kross::Api::List::Ptr args)
         y = Kross::Api::Variant::toInt(args->item(3));
     }
     m_image->resize( nw, nh, x, y );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 

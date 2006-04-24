@@ -54,48 +54,48 @@ const QString Histogram::getClassName() const {
 Kross::Api::Object::Ptr Histogram::setChannel(Kross::Api::List::Ptr args)
 {
     m_histogram->setChannel(Kross::Api::Variant::toUInt(args->item(0)));
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 Kross::Api::Object::Ptr Histogram::getChannel(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->channel());
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->channel()));
 }
 Kross::Api::Object::Ptr Histogram::getMax(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->calculations().getMax());
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getMax()));
 }
 Kross::Api::Object::Ptr Histogram::getMin(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->calculations().getMin() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getMin() ));
 }
 Kross::Api::Object::Ptr Histogram::getHighest(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->calculations().getHighest() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getHighest() ));
 }
 Kross::Api::Object::Ptr Histogram::getLowest(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->calculations().getLowest() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getLowest() ));
 }
 Kross::Api::Object::Ptr Histogram::getMean(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->calculations().getMean() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getMean() ));
 }
 Kross::Api::Object::Ptr Histogram::getCount(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->calculations().getCount() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getCount() ));
 }
 Kross::Api::Object::Ptr Histogram::getTotal(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->calculations().getTotal() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getTotal() ));
 }
 Kross::Api::Object::Ptr Histogram::getValue(Kross::Api::List::Ptr args)
 {
-    return new Kross::Api::Variant( m_histogram->getValue( Kross::Api::Variant::toUInt(args->item(0)) ) );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->getValue( Kross::Api::Variant::toUInt(args->item(0)) ) ));
 }
 
 Kross::Api::Object::Ptr Histogram::getNumberOfBins(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( m_histogram->producer()->numberOfBins() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->producer()->numberOfBins() ));
 }
 
 

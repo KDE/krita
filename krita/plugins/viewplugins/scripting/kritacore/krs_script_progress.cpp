@@ -41,25 +41,25 @@ ScriptProgress::~ScriptProgress()
 Kross::Api::Object::Ptr ScriptProgress::setProgressTotalSteps(Kross::Api::List::Ptr args)
 {
     m_script->setProgressTotalSteps( Kross::Api::Variant::toUInt(args->item(0)) );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr ScriptProgress::setProgress(Kross::Api::List::Ptr args)
 {
     m_script->setProgress( Kross::Api::Variant::toUInt(args->item(0)) );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr ScriptProgress::incProgress(Kross::Api::List::Ptr)
 {
     m_script->incProgress();
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr ScriptProgress::setProgressStage(Kross::Api::List::Ptr args)
 {
     m_script->setProgressStage( Kross::Api::Variant::toString(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)) );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 }

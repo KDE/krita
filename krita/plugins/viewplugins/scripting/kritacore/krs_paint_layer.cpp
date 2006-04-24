@@ -69,42 +69,42 @@ const QString PaintLayer::getClassName() const {
 
 Kross::Api::Object::Ptr PaintLayer::createRectIterator(Kross::Api::List::Ptr args)
 {
-    return new Iterator<KisRectIteratorPixel>(
+    return Kross::Api::Object::Ptr(new Iterator<KisRectIteratorPixel>(
             paintLayer()->paintDevice()->createRectIterator(Kross::Api::Variant::toUInt(args->item(0)),
                                         Kross::Api::Variant::toUInt(args->item(1)),
                                         Kross::Api::Variant::toUInt(args->item(2)),
                                         Kross::Api::Variant::toUInt(args->item(3)), true),
-            paintLayer());
+            paintLayer()));
 }
 Kross::Api::Object::Ptr PaintLayer::createHLineIterator(Kross::Api::List::Ptr args)
 {
-    return new Iterator<KisHLineIteratorPixel>(
+    return Kross::Api::Object::Ptr(new Iterator<KisHLineIteratorPixel>(
             paintLayer()->paintDevice()->createHLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
                                         Kross::Api::Variant::toUInt(args->item(1)),
                                         Kross::Api::Variant::toUInt(args->item(2)), true),
-            paintLayer());
+            paintLayer()));
 }
 Kross::Api::Object::Ptr PaintLayer::createVLineIterator(Kross::Api::List::Ptr args)
 {
-    return new Iterator<KisVLineIteratorPixel>(
+    return Kross::Api::Object::Ptr(new Iterator<KisVLineIteratorPixel>(
             paintLayer()->paintDevice()->createVLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
                                         Kross::Api::Variant::toUInt(args->item(1)),
                                         Kross::Api::Variant::toUInt(args->item(2)), true),
-            paintLayer());
+            paintLayer()));
 }
 Kross::Api::Object::Ptr PaintLayer::getWidth(Kross::Api::List::Ptr)
 {
     QRect r1 = paintLayer()->extent();
     QRect r2 = paintLayer()->image()->bounds();
     QRect rect = r1.intersect(r2);
-    return new Kross::Api::Variant(rect.width());
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(rect.width()));
 }
 Kross::Api::Object::Ptr PaintLayer::getHeight(Kross::Api::List::Ptr)
 {
     QRect r1 = paintLayer()->extent();
     QRect r2 = paintLayer()->image()->bounds();
     QRect rect = r1.intersect(r2);
-    return new Kross::Api::Variant(rect.height());
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(rect.height()));
 }
 
 Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
@@ -131,16 +131,16 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
     }
     if(factory && factory->isCompatibleWith( paintLayer()->paintDevice()->colorSpace() ))
     {
-        return new Histogram( paintLayer().data(), factory->generate() , type);
+        return Kross::Api::Object::Ptr(new Histogram( paintLayer(), factory->generate() , type));
     } else {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("createHistogram") + "\n" + i18n("The histogram %1 is not available").arg(histoname) ) );
     }
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr PaintLayer::createPainter(Kross::Api::List::Ptr )
 {
-    return new Painter(paintLayer());
+    return Kross::Api::Object::Ptr(new Painter(paintLayer()));
 }
 
 Kross::Api::Object::Ptr PaintLayer::beginPainting(Kross::Api::List::Ptr args)
@@ -152,7 +152,7 @@ Kross::Api::Object::Ptr PaintLayer::beginPainting(Kross::Api::List::Ptr args)
     }
     m_cmd = new KisTransaction(name, paintLayer()->paintDevice());
     Q_CHECK_PTR(m_cmd);
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr PaintLayer::endPainting(Kross::Api::List::Ptr)
@@ -166,7 +166,7 @@ Kross::Api::Object::Ptr PaintLayer::endPainting(Kross::Api::List::Ptr)
     {
         paintLayer()->image()->undoAdapter()->addCommand(m_cmd);
     }
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr args)
@@ -176,15 +176,15 @@ Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr ar
     {
         // FIXME: inform user
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("convertToColorspace") + "\n" + i18n("Colorspace %1 is not available, please check your installation.").arg(Kross::Api::Variant::toString(args->item(0))) ) );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
     paintLayer()->paintDevice()->convertTo(dstCS);
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr PaintLayer::colorSpaceId(Kross::Api::List::Ptr )
 {
-    return new Kross::Api::Variant( paintLayer()->paintDevice()->colorSpace()->id().id() );
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( paintLayer()->paintDevice()->colorSpace()->id().id() ));
 }
 
 
@@ -193,15 +193,15 @@ Kross::Api::Object::Ptr PaintLayer::fastWaveletTransformation(Kross::Api::List::
     KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxID() );
     QRect rect = paintLayer()->exactBounds();
     KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintLayer()->paintDevice(), rect);
-    return new Wavelet(wav);
+    return Kross::Api::Object::Ptr(new Wavelet(wav));
 }
 Kross::Api::Object::Ptr PaintLayer::fastWaveletUntransformation(Kross::Api::List::Ptr args)
 {
-    Wavelet* wav = (Wavelet*)args->item(0).data();
+    Wavelet* wav = (Wavelet*)args->item(0);
     KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxID() );
     QRect rect = paintLayer()->exactBounds();
     mathToolbox->fastWaveletUntransformation( paintLayer()->paintDevice(), rect, wav->wavelet() );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 

@@ -134,7 +134,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                         break;
                 }
             }
-            initiales = initiales.upper();
+            initiales = initiales.toUpper();
             // set/get general
             addFunction("set" + initiales, &Iterator::setPixel, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") );
             addFunction("get" + initiales, &Iterator::getPixel);
@@ -167,7 +167,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
             bool compensate = (args->count() == 2);
             double compensation = compensate ? Kross::Api::Variant::toDouble( args->item(2) ) : 0.;
             m_layer->paintDevice()->colorSpace()->darken(m_it->rawData(), m_it->rawData(), shade, compensate, compensation, 1);
-            return 0;
+            return Kross::Api::Object::Ptr(0);
         }
         /**
          * Invert the color of a pixel.
@@ -175,7 +175,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         Kross::Api::Object::Ptr invertColor(Kross::Api::List::Ptr )
         {
             m_layer->paintDevice()->colorSpace()->invertColor(m_it->rawData(), 1);
-            return 0;
+            return Kross::Api::Object::Ptr(0);
         }
         /**
          * Increment the positon, and go to the next pixel.
@@ -195,40 +195,40 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         Kross::Api::Object::Ptr getChannelUINT8(Kross::Api::List::Ptr, uint channelpos)
         {
             quint8* data = (quint8*)(m_it->rawData() + channelpos);
-            return new Kross::Api::Variant( * data);
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant( * data));
         }
         Kross::Api::Object::Ptr setChannelUINT8(Kross::Api::List::Ptr args, uint channelpos)
         {
             quint8* data = (quint8*)(m_it->rawData() + channelpos); //*(uint*)channelpos);
             *data = Kross::Api::Variant::toUInt( args->item(0) );
-            return 0;
+            return Kross::Api::Object::Ptr(0);
         }
         Kross::Api::Object::Ptr getChannelUINT16(Kross::Api::List::Ptr, uint channelpos)
         {
             quint16* data = (quint16*)(m_it->rawData() + channelpos);
-            return new Kross::Api::Variant( * data);
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant( * data));
         }
         Kross::Api::Object::Ptr setChannelUINT16(Kross::Api::List::Ptr args, uint channelpos)
         {
             quint16* data = (quint16*)(m_it->rawData() + channelpos);
             *data =  Kross::Api::Variant::toUInt( args->item(0) );
-            return 0;
+            return Kross::Api::Object::Ptr(0);
         }
         Kross::Api::Object::Ptr getChannelFLOAT(Kross::Api::List::Ptr, uint channelpos)
         {
             float* data = (float*)(m_it->rawData() + channelpos);
-            return new Kross::Api::Variant( * data);
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant( * data));
         }
         Kross::Api::Object::Ptr setChannelFLOAT(Kross::Api::List::Ptr args, uint channelpos)
         {
             float* data = (float*)(m_it->rawData() + channelpos);
             *data = Kross::Api::Variant::toUInt( args->item(0) );
-            return 0;
+            return Kross::Api::Object::Ptr(0);
         }
         Kross::Api::Object::Ptr getPixel(Kross::Api::List::Ptr)
         {
             Q3ValueVector<KisChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
-            Q3ValueList<QVariant> pixel;
+            QList<QVariant> pixel;
             for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
             {
                 KisChannelInfo * ci = *itC;
@@ -250,7 +250,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                         break;
                 }
             }
-            return new Kross::Api::Variant( pixel);
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant( pixel));
         }
         Kross::Api::Object::Ptr setPixel(Kross::Api::List::Ptr args)
         {
@@ -278,7 +278,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                         break;
                 }
             }
-            return 0;
+            return Kross::Api::Object::Ptr(0);
         }
     private:
         virtual void invalidateIterator()

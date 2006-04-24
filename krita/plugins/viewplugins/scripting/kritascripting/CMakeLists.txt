@@ -1,14 +1,5 @@
 kde4_header()
 
-include_directories( 
-	${KROSS_INCLUDES}
-	${CMAKE_SOURCE_DIR}/krita/sdk 
-	${CMAKE_SOURCE_DIR}/krita/core 
-	${CMAKE_SOURCE_DIR}/krita/kritacolor/ 
-	${CMAKE_SOURCE_DIR}/krita/ui 
-	${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
 ########### next target ###############
 
 set(kritascripting_LIB_SRCS kis_script_progress.cpp kis_script_monitor.cpp )

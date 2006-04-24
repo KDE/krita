@@ -1,16 +1,25 @@
 kde4_header()
 
-include_directories(
-	${KROSS_INCLUDES}
-	${CMAKE_SOURCE_DIR}/core 
-	${CMAKE_SOURCE_DIR}/krita/plugins/viewplugins/scripting/kritascripting 
-	${CMAKE_SOURCE_DIR}/krita 
-	${CMAKE_SOURCE_DIR}/krita/ui 
-	${CMAKE_SOURCE_DIR}/krita/core 
-	${CMAKE_SOURCE_DIR}/krita/sdk 
-	${CMAKE_SOURCE_DIR}/krita/kritacolor 
-	${KDE4_INCLUDE_DIR} 
-	${QT_INCLUDES}  )
+#create the moc files and add them to the list of sources
+#usage: KDE_ADD_MOC_FILES(foo_SRCS ${moc_headers})
+MACRO(tmp_ADD_MOC_FILES _sources)
+   FOREACH (_current_FILE ${ARGN})
+
+      GET_FILENAME_COMPONENT(_tmp_FILE ${_current_FILE} ABSOLUTE)
+
+      GET_FILENAME_COMPONENT(_basename ${_tmp_FILE} NAME_WE)
+      SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.moc.cpp)
+
+      ADD_CUSTOM_COMMAND(OUTPUT ${_moc}
+         COMMAND ${QT_MOC_EXECUTABLE}
+         ARGS ${_tmp_FILE} -o ${_moc}
+         DEPENDS ${_tmp_FILE}
+      )
+
+      SET(${_sources} ${${_sources}} ${_moc})
+
+   ENDFOREACH (_current_FILE)
+ENDMACRO(tmp_ADD_MOC_FILES)
 
 
 ########### next target ###############
@@ -28,13 +37,18 @@ set(krosskritacore_PART_SRCS
    krs_pattern.cpp 
    krs_filter.cpp 
    krs_filter_configuration.cpp 
-   krs_wavelet.cpp )
+   krs_wavelet.cpp
+   )
 
 kde4_automoc(${krosskritacore_PART_SRCS})
+
+tmp_add_moc_files(krosskritacore_PART_SRCS krs_iterator.h)
 
 kde4_add_plugin(krosskritacore ${krosskritacore_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskritacore )
+
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 target_link_libraries(krosskritacore  ${KDE4_KDECORE_LIBS} krossapi krossmain kritacommon kritascripting )
 

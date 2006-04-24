@@ -20,6 +20,7 @@
 #define KIS_LAYER_H_
 
 #include <qobject.h>
+#include <QRect>
 
 #include "koffice_export.h"
 

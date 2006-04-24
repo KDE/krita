@@ -80,11 +80,11 @@ KritaCoreFactory::KritaCoreFactory(QString packagePath) : Kross::Api::Event<Krit
 Kross::Api::Object::Ptr KritaCoreFactory::newRGBColor(Kross::Api::List::Ptr args)
 {
     Color* c = new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Rgb);
-    return c;
+    return Kross::Api::Object::Ptr(c);
 }
 Kross::Api::Object::Ptr KritaCoreFactory::newHSVColor(Kross::Api::List::Ptr args)
 {
-    return new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Hsv);
+    return Kross::Api::Object::Ptr(new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Hsv));
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
@@ -98,11 +98,11 @@ Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
     {
         if((*it)->name() == name)
         {
-            return new Pattern(dynamic_cast<KisPattern*>(*it), true);
+            return Kross::Api::Object::Ptr(new Pattern(dynamic_cast<KisPattern*>(*it), true));
         }
     }
     throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(  i18n("Unknown pattern") ) );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 
 }
 
@@ -112,11 +112,11 @@ Kross::Api::Object::Ptr KritaCoreFactory::loadPattern(Kross::Api::List::Ptr args
     KisPattern* pattern = new KisPattern(filename);
     if(pattern->load())
     {
-        return new Pattern( pattern, false );
+        return Kross::Api::Object::Ptr(new Pattern( pattern, false ));
     } else {
         delete pattern;
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Unknown pattern") ) );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
 }
 
@@ -131,11 +131,11 @@ Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
     {
         if((*it)->name() == name)
         {
-            return new Brush(dynamic_cast<KisBrush*>(*it), true);
+            return Kross::Api::Object::Ptr(new Brush(dynamic_cast<KisBrush*>(*it), true));
         }
     }
     throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Unknown brush") ) );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::loadBrush(Kross::Api::List::Ptr args)
@@ -144,25 +144,25 @@ Kross::Api::Object::Ptr KritaCoreFactory::loadBrush(Kross::Api::List::Ptr args)
     KisBrush* brush = new KisBrush(filename);
     if(brush->load())
     {
-        return new Brush( brush, false );
+        return Kross::Api::Object::Ptr(new Brush( brush, false ));
     } else {
         delete brush;
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Unknown brush") ) );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::getFilter(Kross::Api::List::Ptr args)
 {
     QString name = Kross::Api::Variant::toString(args->item(0));
-    KisFilter* filter = KisFilterRegistry::instance()->get(name);
-    return new Filter(filter);
+    KisFilter* filter = KisFilterRegistry::instance()->get(name).data();
+    return Kross::Api::Object::Ptr(new Filter(filter));
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr args)
 {
-    uint w = qMax(1, Kross::Api::Variant::toUInt(args->item(0)));
-    uint h = qMax(1, Kross::Api::Variant::toUInt(args->item(1)));
+    uint w = qMax(1u, Kross::Api::Variant::toUInt(args->item(0)));
+    uint h = qMax(1u, Kross::Api::Variant::toUInt(args->item(1)));
     uint hf = 0;
     uint vf = 0;
     if( args.count() > 2)
@@ -173,12 +173,12 @@ Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr a
     KisAutobrushShape* kas = new KisAutobrushCircleShape(w, h, hf, vf);
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
-    return new Brush(new KisAutobrushResource(*brsh), false);
+    return Kross::Api::Object::Ptr(new Brush(new KisAutobrushResource(*brsh), false));
 }
 Kross::Api::Object::Ptr KritaCoreFactory::newRectBrush(Kross::Api::List::Ptr args)
 {
-    uint w = qMax(1, Kross::Api::Variant::toUInt(args->item(0)));
-    uint h = qMax(1, Kross::Api::Variant::toUInt(args->item(1)));
+    uint w = qMax(1u, Kross::Api::Variant::toUInt(args->item(0)));
+    uint h = qMax(1u, Kross::Api::Variant::toUInt(args->item(1)));
     uint hf = 0;
     uint vf = 0;
     if( args.count() > 2)
@@ -189,7 +189,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::newRectBrush(Kross::Api::List::Ptr arg
     KisAutobrushShape* kas = new KisAutobrushRectShape(w, h, hf, vf);
     QImage* brsh = new QImage();
     kas->createBrush(brsh);
-    return new Brush(new KisAutobrushResource(*brsh), false);;
+    return Kross::Api::Object::Ptr(new Brush(new KisAutobrushResource(*brsh), false));
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
@@ -201,21 +201,21 @@ Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
     if( w < 0 || h < 0)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Invalid image size") ) );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csname, ""), "");
     if(!cs)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( QString(i18n("Colorspace %0 is not available, please check your installation.")).arg(csname ) ) );
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
 
-    return new Image(new KisImage(0,w,h, cs, name));
+    return Kross::Api::Object::Ptr(new Image(KisImageSP(new KisImage(0,w,h, cs, name))));
 }
 
 Kross::Api::Object::Ptr KritaCoreFactory::getPackagePath(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_packagePath);
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_packagePath));
 }
 
 KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
@@ -226,7 +226,7 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
     kDebug(41011) << " there are " << children.size() << endl;
     for(QMap<QString, Object::Ptr>::const_iterator it = children.begin(); it != children.end(); it++)
     {
-        kDebug(41011) << it.key() << " " << it.data() << endl;
+        kDebug(41011) << it.key() << " " << it.value() << endl;
     }
 
     // Wrap doc

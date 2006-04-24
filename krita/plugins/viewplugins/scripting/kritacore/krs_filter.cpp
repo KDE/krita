@@ -45,12 +45,12 @@ const QString Filter::getClassName() const {
 
 Kross::Api::Object::Ptr Filter::getFilterConfiguration(Kross::Api::List::Ptr )
 {
-     return m_config;
+     return Kross::Api::Object::Ptr(m_config);
 }
 
 Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
 {
-    PaintLayer* src = (PaintLayer*)args->item(0).data();
+    PaintLayer* src = (PaintLayer*)args->item(0);
     if(!m_filter->workWith( src->paintLayer()->paintDevice()->colorSpace()))
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("process") ) );
@@ -69,7 +69,7 @@ Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
         rect = r1.intersect(r2);
     }
     m_filter->process( src->paintLayer()->paintDevice(), src->paintLayer()->paintDevice(), m_config->filterConfiguration(), rect );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 }

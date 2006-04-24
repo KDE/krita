@@ -54,7 +54,7 @@ Kross::Api::Object::Ptr Wavelet::getNCoeff(Kross::Api::List::Ptr args)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("getNCoeff") + "\n" + i18n("Index out of bound") ) );
     }
-    return new Kross::Api::Variant(*(m_wavelet->coeffs + n ));
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(*(m_wavelet->coeffs + n )));
 }
 
 Kross::Api::Object::Ptr Wavelet::setNCoeff(Kross::Api::List::Ptr args)
@@ -66,7 +66,7 @@ Kross::Api::Object::Ptr Wavelet::setNCoeff(Kross::Api::List::Ptr args)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("setNCoeff") + "\n" + i18n("Index out of bound") ) );
     }
     *(m_wavelet->coeffs + n ) = v;
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr Wavelet::getXYCoeff(Kross::Api::List::Ptr args)
@@ -77,7 +77,7 @@ Kross::Api::Object::Ptr Wavelet::getXYCoeff(Kross::Api::List::Ptr args)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("getXYCoeff") + "\n" + i18n("Index out of bound") ) );
     }
-    return new Kross::Api::Variant(*(m_wavelet->coeffs  + (x + y * m_wavelet->size ) * m_wavelet->depth ));
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(*(m_wavelet->coeffs  + (x + y * m_wavelet->size ) * m_wavelet->depth )));
 }
 
 Kross::Api::Object::Ptr Wavelet::setXYCoeff(Kross::Api::List::Ptr args)
@@ -90,22 +90,22 @@ Kross::Api::Object::Ptr Wavelet::setXYCoeff(Kross::Api::List::Ptr args)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("setXYCoeff") + "\n" + i18n("Index out of bound") ));
     }
     *(m_wavelet->coeffs + (x + y * m_wavelet->size ) * m_wavelet->depth ) = v;
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr Wavelet::getDepth(Kross::Api::List::Ptr /*args*/)
 {
-    return new Kross::Api::Variant(m_wavelet->depth);
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_wavelet->depth));
 }
 
 Kross::Api::Object::Ptr Wavelet::getSize(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_wavelet->size);
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_wavelet->size));
 }
 
 Kross::Api::Object::Ptr Wavelet::getNumCoeffs(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_numCoeff);
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_numCoeff));
 }
 
 

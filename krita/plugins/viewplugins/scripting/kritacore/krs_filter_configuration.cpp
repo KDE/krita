@@ -47,7 +47,7 @@ Kross::Api::Object::Ptr FilterConfiguration::setProperty(Kross::Api::List::Ptr a
     QString name = Kross::Api::Variant::toString(args->item(0));
     QVariant value = Kross::Api::Variant::toVariant(args->item(1));
     m_fConfig->setProperty(name, value);
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 Kross::Api::Object::Ptr FilterConfiguration::getProperty(Kross::Api::List::Ptr args)
 {
@@ -55,9 +55,9 @@ Kross::Api::Object::Ptr FilterConfiguration::getProperty(Kross::Api::List::Ptr a
     QVariant value;
     if(m_fConfig->getProperty( name, value))
     {
-        return new Kross::Api::Variant(value);
+        return Kross::Api::Object::Ptr(new Kross::Api::Variant(value));
     } else {
-        return 0;
+        return Kross::Api::Object::Ptr(0);
     }
 }
 
@@ -65,7 +65,7 @@ Kross::Api::Object::Ptr FilterConfiguration::fromXML(Kross::Api::List::Ptr args)
 {
     QString xml = Kross::Api::Variant::toString(args->item(0));
     m_fConfig->fromXML( xml );
-    return 0;
+    return Kross::Api::Object::Ptr(0);
 }
 
 }

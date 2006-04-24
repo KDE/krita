@@ -39,7 +39,7 @@ const QString Doc::getClassName() const {
 
 Kross::Api::Object::Ptr Doc::getImage(Kross::Api::List::Ptr)
 {
-    return new Image(m_doc->currentImage(), m_doc);
+    return Kross::Api::Object::Ptr(new Image(m_doc->currentImage(), m_doc));
 }
 
 }

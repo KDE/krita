@@ -359,7 +359,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 
   d->m_previewJob = KIO::filePreview(fileList, 200, 200);
 
-  connect(d->m_previewJob, SIGNAL(result(KIO::Job*)), this, SLOT(previewResult(KIO::Job*)));
+  connect(d->m_previewJob, SIGNAL(result(KJob*)), this, SLOT(previewResult(KJob*)));
   connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
           this, SLOT(updatePreview(const KFileItem*, const QPixmap&)));
 }
@@ -411,7 +411,7 @@ void KoRecentDocumentsPane::openFile(Q3ListViewItem* item)
     emit openFile(item->text(1));
 }
 
-void KoRecentDocumentsPane::previewResult(KIO::Job* job)
+void KoRecentDocumentsPane::previewResult(KJob* job)
 {
   if(d->m_previewJob == job)
     d->m_previewJob = 0;

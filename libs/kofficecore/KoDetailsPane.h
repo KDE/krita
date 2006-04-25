@@ -35,10 +35,7 @@ class KoRecentDocumentsPanePrivate;
 class KoRichTextListItemPrivate;
 class KFileItem;
 class QPixmap;
-
-namespace KIO {
-  class Job;
-}
+class KJob;
 
 class KoTemplatesPanePrivate;
 
@@ -124,7 +121,7 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
     void openFile();
     void openFile(Q3ListViewItem* item);
 
-    void previewResult(KIO::Job* job);
+    void previewResult(KJob* job);
     void updatePreview(const KFileItem* fileItem, const QPixmap& preview);
 
     void changePalette();

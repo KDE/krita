@@ -47,6 +47,7 @@ class KOPROPERTY_EXPORT ComboBox : public Widget
 
 	protected slots:
 		void slotValueChanged(int value);
+		void slotTextChanged(const QString&);
 
 	protected:
 		virtual void setReadOnlyInternal(bool readOnly);

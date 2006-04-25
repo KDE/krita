@@ -51,7 +51,13 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);
 
-	m_edit->setEditable(false);
+	// If the boolean-option "editable" is true, the CombBox will
+	// be editable. If that#s the case, we return a string on
+	// value() and expected a string on setValue() rather then
+	// the integer index of the selected item.
+	QVariant v = property->option("editable");
+	bool editable = ( !v.isNull() && v.canCast(QVariant::Bool) && v.toBool() );
+	m_edit->setEditable(editable);
 	m_edit->setInsertPolicy(QComboBox::NoInsert);
 	m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
 	m_edit->setAutoCompletion(true);
@@ -65,7 +71,10 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
 //not needed for combo	setLeavesTheSpaceForRevertButton(true);
 
 	setFocusWidget(m_edit);
-	connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
+	if(editable)
+		connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
+	else
+		connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 }
 
 ComboBox::~ComboBox()
@@ -75,10 +84,15 @@ ComboBox::~ComboBox()
 QVariant
 ComboBox::value() const
 {
+	if(m_edit->editable()) {
+		return QVariant( m_edit->currentText() );
+	}
+
 	if (!property()->listData()) {
 		kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
 		return QVariant();
 	}
+
 	const int idx = m_edit->currentItem();
 	if (idx<0 || idx>=(int)property()->listData()->keys.count())
 		return QVariant();
@@ -91,30 +105,37 @@ ComboBox::value() const
 void
 ComboBox::setValue(const QVariant &value, bool emitChange)
 {
-	if (!property()->listData()) {
-		kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
-		return;
-	}
 	if (!m_setValueEnabled)
 		return;
-	int idx = property()->listData()->keys.findIndex( value );
-	if (idx>=0 && idx<m_edit->count()) {
-		m_edit->setCurrentItem(idx);
+
+	if(m_edit->editable()) {
+		m_edit->setCurrentText(value.toString());
 	}
 	else {
-		if (idx<0) {
-			kopropertywarn << "ComboBox::setValue(): NO SUCH KEY '" << value.toString() 
-				<< "' (property '" << property()->name() << "')" << endl;
-		} else {
-			QStringList list;
-			for (int i=0; i<m_edit->count(); i++)
-				list += m_edit->text(i);
-			kopropertywarn << "ComboBox::setValue(): NO SUCH INDEX WITHIN COMBOBOX: " << idx 
-				<< " count=" << m_edit->count() << " value='" << value.toString() 
-				<< "' (property '" << property()->name() << "')\nActual combobox contents: "
-				<< list << endl;
+		if (!property()->listData()) {
+			kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
+			return;
 		}
-		m_edit->setCurrentText(QString::null);
+
+		int idx = property()->listData()->keys.findIndex( value );
+		if (idx>=0 && idx<m_edit->count()) {
+			m_edit->setCurrentItem(idx);
+		}
+		else {
+			if (idx<0) {
+				kopropertywarn << "ComboBox::setValue(): NO SUCH KEY '" << value.toString() 
+					<< "' (property '" << property()->name() << "')" << endl;
+			} else {
+				QStringList list;
+				for (int i=0; i<m_edit->count(); i++)
+					list += m_edit->text(i);
+				kopropertywarn << "ComboBox::setValue(): NO SUCH INDEX WITHIN COMBOBOX: " << idx 
+					<< " count=" << m_edit->count() << " value='" << value.toString() 
+					<< "' (property '" << property()->name() << "')\nActual combobox contents: "
+					<< list << endl;
+			}
+			m_edit->setCurrentText(QString::null);
+		}
 	}
 
 	if(value.isNull())
@@ -131,10 +152,15 @@ void
 ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 	QString txt;
-	if (property()->listData()) {
-		const int idx = property()->listData()->keys.findIndex( value );
-		if (idx>=0)
-			txt = property()->listData()->names[ idx ];
+	if(m_edit->editable()) {
+		txt = value.toString();
+	}
+	else {
+		if (property()->listData()) {
+			const int idx = property()->listData()->keys.findIndex( value );
+			if (idx>=0)
+				txt = property()->listData()->names[ idx ];
+		}
 	}
 
 	Widget::drawViewer(p, cg, r, txt); //keyForValue(value));
@@ -178,6 +204,12 @@ ComboBox::setProperty(Property *prop)
 
 void
 ComboBox::slotValueChanged(int)
+{
+	emit valueChanged(this);
+}
+
+void
+ComboBox::slotTextChanged(const QString&)
 {
 	emit valueChanged(this);
 }

@@ -69,7 +69,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("palettes");
 
-    bool palettesShown = cfg->readBoolEntry("palettesshown", true);
+    bool palettesShown = cfg->readEntry("palettesshown", true);
     KToggleAction * m_toggleShowHidePalettes;
 
     if ( palettesShown) {
@@ -155,7 +155,7 @@ void KoPaletteManager::addWidget(QWidget * widget,
         cfg->setGroup("palettetab-" + name);
 
         pname = cfg->readEntry("docker");
-        visible = cfg->readBoolEntry("visible");
+        visible = cfg->readEntry("visible",true);
     }
 
     KoPalette * palette = m_palettes->find(pname);
@@ -197,7 +197,7 @@ void KoPaletteManager::addWidget(QWidget * widget,
     else
     {
         cfg->setGroup("palettes");
-        if( cfg->readBoolEntry("palettesshown", shown))
+        if( cfg->readEntry("palettesshown", shown))
         {
             if (visible)
             {

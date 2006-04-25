@@ -16,9 +16,6 @@ if(KOFFICE_ENABLE_SCRIPTING)
 	add_subdirectory(kross)
 endif(KOFFICE_ENABLE_SCRIPTING)
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KROSSDIR)")
-
-
 ########### install files ###############
 
 

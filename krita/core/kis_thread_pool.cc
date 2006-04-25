@@ -31,7 +31,7 @@ KisThreadPool::KisThreadPool()
 
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("");
-    m_maxThreads = cfg->readNumEntry("maxthreads",  10);
+    m_maxThreads = cfg->readEntry("maxthreads",  10);
     m_numberOfRunningThreads = 0;
     m_numberOfQueuedThreads = 0;
     m_wait = 200;

@@ -67,8 +67,8 @@ KisTileManager::KisTileManager() {
 
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("");
-    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  500);
-    m_swappiness = cfg->readNumEntry("swappiness", 100);
+    m_maxInMem = cfg->readEntry("maxtilesinmem",  500);
+    m_swappiness = cfg->readEntry("swappiness", 100);
 
     m_tileSize = KisTile::WIDTH * KisTile::HEIGHT;
     m_freeLists.reserve(8);
@@ -495,8 +495,8 @@ void KisTileManager::reclaimTileToPool(quint8* data, qint32 pixelSize) {
 void KisTileManager::configChanged() {
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("");
-    m_maxInMem = cfg->readNumEntry("maxtilesinmem",  4000);
-    m_swappiness = cfg->readNumEntry("swappiness", 100);
+    m_maxInMem = cfg->readEntry("maxtilesinmem",  4000);
+    m_swappiness = cfg->readEntry("swappiness", 100);
 
     m_swapMutex->lock();
     doSwapping();

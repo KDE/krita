@@ -704,7 +704,7 @@ cmsHTRANSFORM KisAbstractColorSpace::createTransform(KisColorSpace * dstColorSpa
                              qint32 renderingIntent)
 {
     KConfig * cfg = KGlobal::config();
-    bool bpCompensation = cfg->readBoolEntry("useBlackPointCompensation", false);
+    bool bpCompensation = cfg->readEntry("useBlackPointCompensation", false);
 
     int flags = 0;
 

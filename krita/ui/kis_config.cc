@@ -63,7 +63,7 @@ KisConfig::~KisConfig()
 
 bool KisConfig::fixDockerWidth() const
 {
-    return m_cfg->readBoolEntry("fixDockerWidth", true);
+    return m_cfg->readEntry("fixDockerWidth", true);
 }
 
 void KisConfig::setFixedDockerWidth(bool fix)
@@ -73,7 +73,7 @@ void KisConfig::setFixedDockerWidth(bool fix)
 
 bool KisConfig::undoEnabled() const
 {
-    return m_cfg->readBoolEntry("undoEnabled", true);
+    return m_cfg->readEntry("undoEnabled", true);
 }
 
 void KisConfig::setUndoEnabled(bool undo)
@@ -84,7 +84,7 @@ void KisConfig::setUndoEnabled(bool undo)
 
 qint32 KisConfig::defUndoLimit() const
 {
-    return m_cfg->readNumEntry("undolimit", DEFAULT_UNDO_LIMIT);
+    return m_cfg->readEntry("undolimit", DEFAULT_UNDO_LIMIT);
 }
 
 void KisConfig::defUndoLimit(qint32 limit)
@@ -94,17 +94,17 @@ void KisConfig::defUndoLimit(qint32 limit)
 
 qint32 KisConfig::defImgWidth() const
 {
-    return m_cfg->readNumEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
+    return m_cfg->readEntry("imgWidthDef", IMG_DEFAULT_WIDTH);
 }
 
 qint32 KisConfig::defImgHeight() const
 {
-    return m_cfg->readNumEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
+    return m_cfg->readEntry("imgHeightDef", IMG_DEFAULT_HEIGHT);
 }
 
 double KisConfig::defImgResolution() const
 {
-    return m_cfg->readDoubleNumEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION);
+    return m_cfg->readEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION);
 }
 
 void KisConfig::defImgWidth(qint32 width)
@@ -124,7 +124,7 @@ void KisConfig::defImgResolution(double res)
 
 enumCursorStyle KisConfig::cursorStyle() const
 {
-    return (enumCursorStyle) m_cfg->readNumEntry("cursorStyleDef", DEFAULT_CURSOR_STYLE);
+    return (enumCursorStyle) m_cfg->readEntry("cursorStyleDef", int(DEFAULT_CURSOR_STYLE));
 }
 
 enumCursorStyle KisConfig::getDefaultCursorStyle() const
@@ -184,7 +184,7 @@ void KisConfig::setPrinterProfile(QString printerProfile)
 
 bool KisConfig::useBlackPointCompensation() const
 {
-    return m_cfg->readBoolEntry("useBlackPointCompensation", false);
+    return m_cfg->readEntry("useBlackPointCompensation", false);
 }
 
 void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
@@ -195,7 +195,7 @@ void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
 
 bool KisConfig::showRulers() const
 {
-    return m_cfg->readBoolEntry("showrulers", false);
+    return m_cfg->readEntry("showrulers", false);
 }
 
 void KisConfig::setShowRulers(bool rulers)
@@ -206,7 +206,7 @@ void KisConfig::setShowRulers(bool rulers)
 
 qint32 KisConfig::pasteBehaviour() const
 {
-    return m_cfg->readNumEntry("pasteBehaviour", 2);
+    return m_cfg->readEntry("pasteBehaviour", 2);
 }
 
 void KisConfig::setPasteBehaviour(qint32 renderIntent)
@@ -217,7 +217,7 @@ void KisConfig::setPasteBehaviour(qint32 renderIntent)
 
 qint32 KisConfig::renderIntent() const
 {
-    return m_cfg->readNumEntry("renderIntent", INTENT_PERCEPTUAL);
+    return m_cfg->readEntry("renderIntent", INTENT_PERCEPTUAL);
 }
 
 void KisConfig::setRenderIntent(qint32 renderIntent)
@@ -227,7 +227,7 @@ void KisConfig::setRenderIntent(qint32 renderIntent)
 
 bool KisConfig::useOpenGL() const
 {
-    return m_cfg->readBoolEntry("useOpenGL", false);
+    return m_cfg->readEntry("useOpenGL", false);
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL)
@@ -237,7 +237,7 @@ void KisConfig::setUseOpenGL(bool useOpenGL)
 
 bool KisConfig::useOpenGLShaders() const
 {
-    return m_cfg->readBoolEntry("useOpenGLShaders", false);
+    return m_cfg->readEntry("useOpenGLShaders", false);
 }
 
 void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
@@ -247,7 +247,7 @@ void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
 
 qint32 KisConfig::maxNumberOfThreads()
 {
-    return m_cfg->readNumEntry("maxthreads", DEFAULT_MAX_THREADS);
+    return m_cfg->readEntry("maxthreads", DEFAULT_MAX_THREADS);
 }
 
 void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
@@ -257,7 +257,7 @@ void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
 
 qint32 KisConfig::maxTilesInMem() const
 {
-    return m_cfg->readNumEntry("maxtilesinmem", DEFAULT_MAX_TILES_MEM);
+    return m_cfg->readEntry("maxtilesinmem", DEFAULT_MAX_TILES_MEM);
 }
 
 void KisConfig::setMaxTilesInMem(qint32 tiles)
@@ -267,7 +267,7 @@ void KisConfig::setMaxTilesInMem(qint32 tiles)
 
 qint32 KisConfig::swappiness() const
 {
-    return m_cfg->readNumEntry("swappiness", DEFAULT_SWAPPINESS);
+    return m_cfg->readEntry("swappiness", DEFAULT_SWAPPINESS);
 }
 
 void KisConfig::setSwappiness(qint32 swappiness)
@@ -277,7 +277,7 @@ void KisConfig::setSwappiness(qint32 swappiness)
 
 qint32 KisConfig::getPressureCorrection()
 {
-    return m_cfg->readNumEntry( "pressurecorrection", DEFAULT_PRESSURE_CORRECTION );
+    return m_cfg->readEntry( "pressurecorrection", DEFAULT_PRESSURE_CORRECTION );
 }
 
 void KisConfig::setPressureCorrection( qint32 correction )
@@ -292,7 +292,7 @@ qint32 KisConfig::getDefaultPressureCorrection()
 
 bool KisConfig::tabletDeviceEnabled(const QString& tabletDeviceName) const
 {
-    return m_cfg->readBoolEntry("TabletDevice" + tabletDeviceName + "Enabled", false);
+    return m_cfg->readEntry("TabletDevice" + tabletDeviceName + "Enabled", false);
 }
 
 void KisConfig::setTabletDeviceEnabled(const QString& tabletDeviceName, bool enabled)
@@ -302,7 +302,7 @@ void KisConfig::setTabletDeviceEnabled(const QString& tabletDeviceName, bool ena
 
 qint32 KisConfig::tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 defaultAxis) const
 {
-    return m_cfg->readNumEntry("TabletDevice" + tabletDeviceName + axisName, defaultAxis);
+    return m_cfg->readEntry("TabletDevice" + tabletDeviceName + axisName, defaultAxis);
 }
 
 void KisConfig::setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 axis) const
@@ -317,7 +317,7 @@ void KisConfig::setDockability( qint32 dockability )
 
 qint32 KisConfig::dockability()
 {
-    return m_cfg->readNumEntry("palettesdockability", DEFAULT_DOCKABILITY);
+    return m_cfg->readEntry("palettesdockability", DEFAULT_DOCKABILITY);
 }
 
 qint32 KisConfig::getDefaultDockability()
@@ -327,7 +327,7 @@ qint32 KisConfig::getDefaultDockability()
 
 float KisConfig::dockerFontSize()
 {
-    return (float) m_cfg->readNumEntry("palettefontsize", (int)getDefaultDockerFontSize());
+    return (float) m_cfg->readEntry("palettefontsize", (int)getDefaultDockerFontSize());
 }
 
 float KisConfig::getDefaultDockerFontSize()
@@ -344,7 +344,7 @@ void KisConfig::setDockerFontSize(float size)
 
 quint32 KisConfig::getGridMainStyle()
 {
-    quint32 v = m_cfg->readNumEntry("gridmainstyle", 0);
+    quint32 v = m_cfg->readEntry("gridmainstyle", 0);
     if (v > 2)
         v = 2;
     return v;
@@ -357,7 +357,7 @@ void KisConfig::setGridMainStyle(quint32 v)
 
 quint32 KisConfig::getGridSubdivisionStyle()
 {
-    quint32 v = m_cfg->readNumEntry("gridsubdivisionstyle", 1);
+    quint32 v = m_cfg->readEntry("gridsubdivisionstyle", 1);
     if (v > 2) v = 2;
     return v;
 }
@@ -369,7 +369,8 @@ void KisConfig::setGridSubdivisionStyle(quint32 v)
 
 QColor KisConfig::getGridMainColor()
 {
-    return m_cfg->readColorEntry("gridmaincolor", new QColor(99,99,99));
+	QColor col(99,99,99);
+    return m_cfg->readEntry("gridmaincolor", col);
 }
 
 void KisConfig::setGridMainColor(QColor v)
@@ -379,7 +380,8 @@ void KisConfig::setGridMainColor(QColor v)
 
 QColor KisConfig::getGridSubdivisionColor()
 {
-    return m_cfg->readColorEntry("gridsubdivisioncolor", new QColor(150,150,150));
+	QColor col(150,150,150);
+    return m_cfg->readEntry("gridsubdivisioncolor",col);
 }
 
 void KisConfig::setGridSubdivisionColor(QColor v)
@@ -389,7 +391,7 @@ void KisConfig::setGridSubdivisionColor(QColor v)
 
 quint32 KisConfig::getGridHSpacing()
 {
-    qint32 v = m_cfg->readNumEntry("gridhspacing", 10);
+    qint32 v = m_cfg->readEntry("gridhspacing", 10);
     return (quint32)qMax(1, v );
 }
 
@@ -400,7 +402,7 @@ void KisConfig::setGridHSpacing(quint32 v)
 
 quint32 KisConfig::getGridVSpacing()
 {
-    qint32 v = m_cfg->readNumEntry("gridvspacing", 10);
+    qint32 v = m_cfg->readEntry("gridvspacing", 10);
     return (quint32)qMax(1, v );
 }
 
@@ -411,7 +413,7 @@ void KisConfig::setGridVSpacing(quint32 v)
 
 quint32 KisConfig::getGridSubdivisions()
 {
-    qint32 v = m_cfg->readNumEntry("gridsubsivisons", 2);
+    qint32 v = m_cfg->readEntry("gridsubsivisons", 2);
     return (quint32)qMax(1, v );
 }
 
@@ -422,7 +424,7 @@ void KisConfig::setGridSubdivisions(quint32 v)
 
 quint32 KisConfig::getGridOffsetX()
 {
-    qint32 v = m_cfg->readNumEntry("gridoffsetx", 0);
+    qint32 v = m_cfg->readEntry("gridoffsetx", 0);
     return (quint32)qMax(0, v );
 }
 
@@ -433,7 +435,7 @@ void KisConfig::setGridOffsetX(quint32 v)
 
 quint32 KisConfig::getGridOffsetY()
 {
-    qint32 v = m_cfg->readNumEntry("gridoffsety", 0);
+    qint32 v = m_cfg->readEntry("gridoffsety", 0);
     return (quint32)qMax(0, v );
 }
 

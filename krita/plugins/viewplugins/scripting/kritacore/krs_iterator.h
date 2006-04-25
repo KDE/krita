@@ -39,6 +39,7 @@ namespace KritaCore {
 //<beurk> stupid Qt which doesn't support templated QObject
 class IteratorMemoryManaged {
     public:
+		virtual ~IteratorMemoryManaged() {}
         virtual void invalidateIterator() = 0;
 };
     

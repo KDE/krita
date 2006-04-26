@@ -1,6 +1,6 @@
 kde4_header()
 macro_optional_find_package(PythonLibs)
-
+macro_optional_find_package(RUBY)
 include_directories( ${KOFFICECORE_INCLUDES} )
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
@@ -14,7 +14,11 @@ if(PYTHON_INCLUDE_PATH)
 	add_subdirectory(python)
 endif(PYTHON_INCLUDE_PATH)		
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(RUBYSUBDIR)")
+# Laurent: perhaps add new search info
+if(RUBY_INCLUDE_PATH)
+	add_subdirectory(ruby)
+endif(RUBY_INCLUDE_PATH)
+
 
 
 

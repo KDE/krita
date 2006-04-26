@@ -1608,7 +1608,8 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent )
     gNumbering->setColumnLayout(0, Qt::Vertical );
     gNumbering->layout()->setSpacing( 0 );
     gNumbering->layout()->setMargin( 0 );
-    Q3HBoxLayout *numberingGroupLayout = new Q3HBoxLayout( gNumbering->layout() );
+    Q3HBoxLayout *numberingGroupLayout = new Q3HBoxLayout();
+    gNumbering->layout()->addItem( numberingGroupLayout );
     numberingGroupLayout->setAlignment( Qt::AlignTop );
     numberingGroupLayout->setSpacing( KDialog::spacingHint() );
     numberingGroupLayout->setMargin( KDialog::marginHint() );
@@ -1774,7 +1775,8 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     gPosition->setColumnLayout(0, Qt::Vertical );
     gPosition->layout()->setSpacing( 0 );
     gPosition->layout()->setMargin( 0 );
-    Q3VBoxLayout* GroupBox2Layout = new Q3VBoxLayout( gPosition->layout() );
+    Q3VBoxLayout* GroupBox2Layout = new Q3VBoxLayout();
+    gPosition->layout()->addItem( GroupBox2Layout );
     GroupBox2Layout->setAlignment( Qt::AlignTop );
     GroupBox2Layout->setSpacing( KDialog::spacingHint() );
     GroupBox2Layout->setMargin( KDialog::marginHint() );
@@ -1802,7 +1804,8 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     bgAlign->setColumnLayout(0, Qt::Vertical );
     bgAlign->layout()->setSpacing( 0 );
     bgAlign->layout()->setMargin( 0 );
-    Q3VBoxLayout* ButtonGroup1Layout = new Q3VBoxLayout( bgAlign->layout() );
+    Q3VBoxLayout* ButtonGroup1Layout = new Q3VBoxLayout();
+    bgAlign->layout()->addItem( ButtonGroup1Layout );
     ButtonGroup1Layout->setAlignment( Qt::AlignTop );
     ButtonGroup1Layout->setSpacing( KDialog::spacingHint() );
     ButtonGroup1Layout->setMargin( KDialog::marginHint() );

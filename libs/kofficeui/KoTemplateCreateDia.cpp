@@ -156,7 +156,8 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     d->m_default->setChecked(true);
     connect(d->m_default, SIGNAL(clicked()), this, SLOT(slotDefault()));
     pixlayout->addWidget(d->m_default);
-    Q3HBoxLayout *custombox=new Q3HBoxLayout(pixlayout);
+    Q3HBoxLayout *custombox=new Q3HBoxLayout();
+    pixlayout->addItem(custombox);
     d->m_custom=new QRadioButton(i18n("Custom"), pixbox);
     d->m_custom->setChecked(false);
     connect(d->m_custom, SIGNAL(clicked()), this, SLOT(slotCustom()));
@@ -168,7 +169,8 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     pixlayout->addStretch(1);
     label=new QLabel(i18n("Preview:"), pixbox);
     pixlayout->addWidget(label);
-    Q3HBoxLayout *previewbox=new Q3HBoxLayout(pixlayout);
+    Q3HBoxLayout *previewbox=new Q3HBoxLayout();
+    pixlayout->addItem(previewbox);
     previewbox->addStretch(10);
     d->m_preview=new QLabel(pixbox); // setPixmap() -> auto resize?
     previewbox->addWidget(d->m_preview);

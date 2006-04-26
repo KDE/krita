@@ -42,7 +42,9 @@ using namespace KoProperty;
 ColorButton::ColorButton(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+	QHBoxLayout *l = new QHBoxLayout(this);
+	l->setSpacing(0);
+	l->setMargin(0);
 #ifdef QT_ONLY
 	m_edit = new QPushButton(this);
 	connect(m_edit, SIGNAL(clicked()), this, SLOT(selectColor()));

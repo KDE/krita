@@ -1,8 +1,10 @@
 kde4_header()
 
 add_subdirectory( colorspaces )
+if(KUNITTEST_FOUND)
+    add_subdirectory(tests)
+endif(KUNITTEST_FOUND)
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TESTSDIR)")
 
 
 

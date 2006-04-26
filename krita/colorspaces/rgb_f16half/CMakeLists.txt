@@ -1,7 +1,9 @@
 kde4_header()
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TESTSDIR)")
 include_directories( ${OPENEXR_INCLUDE_DIR})
+if(KUNITTEST_FOUND)
+    add_subdirectory(tests)
+endif(KUNITTEST_FOUND)
 
 
 ########### next target ###############

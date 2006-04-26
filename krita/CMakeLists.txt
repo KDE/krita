@@ -3,6 +3,8 @@ project(krita)
 
 find_package(LCMS)
 
+macro_optional_find_package(Kunittest)
+
 set(REQUIRED_LCMS_VERSION 112)
 
 if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})

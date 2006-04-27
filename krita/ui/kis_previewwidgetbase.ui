@@ -1,283 +1,232 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>PreviewWidgetBase</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>PreviewWidgetBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>PreviewWidgetBase</class>
+  <widget class="QWidget" name="PreviewWidgetBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>588</width>
+        <height>500</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>588</width>
-            <height>500</height>
-        </rect>
+    <property name="sizePolicy" >
+      <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>7</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+      </sizepolicy>
     </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>7</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
+    <property name="minimumSize" >
+      <size>
+        <width>0</width>
+        <height>0</height>
+      </size>
     </property>
-    <property name="minimumSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
+    <property name="windowTitle" >
+      <string>PreviewWidgetBase</string>
     </property>
-    <property name="caption">
-        <string>PreviewWidgetBase</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item row="0" column="0" >
+        <widget class="QGroupBox" name="m_groupBox" >
+          <property name="title" >
+            <string>Preview</string>
+          </property>
+          <layout class="QVBoxLayout" >
+            <item>
+              <widget class="ImageViewer" name="m_preview" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="minimumSize" >
+                  <size>
+                    <width>200</width>
+                    <height>150</height>
+                  </size>
+                </property>
+                <property name="maximumSize" >
+                  <size>
+                    <width>1000</width>
+                    <height>1000</height>
+                  </size>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item row="1" column="0" >
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
             <number>0</number>
-        </property>
-        <widget class="QGroupBox" row="0" column="0">
-            <property name="name">
-                <cstring>m_groupBox</cstring>
-            </property>
-            <property name="title">
-                <string>Preview</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="ImageViewer">
-                    <property name="name">
-                        <cstring>m_preview</cstring>
+          </property>
+          <item>
+            <widget class="QGroupBox" name="buttonGroup1" >
+              <property name="title" >
+                <string/>
+              </property>
+              <layout class="QHBoxLayout" >
+                <item>
+                  <widget class="QRadioButton" name="radioBtnPreview" >
+                    <property name="text" >
+                      <string>Pr&amp;eview</string>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                    <property name="checked" >
+                      <bool>true</bool>
                     </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>200</width>
-                            <height>150</height>
-                        </size>
+                    <property name="toolTip" stdset="0" >
+                      <string>Preview modified layer</string>
                     </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>1000</width>
-                            <height>1000</height>
-                        </size>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QRadioButton" name="radioBtnOriginal" >
+                    <property name="text" >
+                      <string>Ori&amp;ginal</string>
                     </property>
+                    <property name="toolTip" stdset="0" >
+                      <string>Show original layer</string>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </widget>
+          </item>
+          <item>
+            <layout class="QVBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <layout class="QHBoxLayout" >
+                  <property name="margin" >
+                    <number>0</number>
+                  </property>
+                  <item>
+                    <widget class="KPushButton" name="btnZoomOut" >
+                      <property name="text" >
+                        <string/>
+                      </property>
+                      <property name="shortcut" >
+                        <string/>
+                      </property>
+                      <property name="toolTip" stdset="0" >
+                        <string>Zoom Out</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="KPushButton" name="btnZoomIn" >
+                      <property name="text" >
+                        <string/>
+                      </property>
+                      <property name="shortcut" >
+                        <string/>
+                      </property>
+                      <property name="toolTip" stdset="0" >
+                        <string>Zoom In</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="KPushButton" name="btnZoomOneToOne" >
+                      <property name="text" >
+                        <string/>
+                      </property>
+                      <property name="shortcut" >
+                        <string/>
+                      </property>
+                      <property name="toolTip" stdset="0" >
+                        <string>1 : 1</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="KPushButton" name="btnUpdate" >
+                      <property name="text" >
+                        <string/>
+                      </property>
+                      <property name="shortcut" >
+                        <string/>
+                      </property>
+                      <property name="toolTip" stdset="0" >
+                        <string>Update preview</string>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </item>
+              <item>
+                <widget class="QCheckBox" name="checkBoxAutoUpdate" >
+                  <property name="text" >
+                    <string>&amp;Autoupdate</string>
+                  </property>
+                  <property name="shortcut" >
+                    <string>Alt+A</string>
+                  </property>
+                  <property name="checked" >
+                    <bool>true</bool>
+                  </property>
+                  <property name="toolTip" stdset="0" >
+                    <string>Automatically update the preview whenever the filter settings change</string>
+                  </property>
                 </widget>
-            </vbox>
-        </widget>
-        <widget class="QLayoutWidget" row="1" column="0">
-            <property name="name">
-                <cstring>layout10</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>buttonGroup1</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>QFrame::StyledPanel</enum>
-                    </property>
-                    <property name="title">
-                        <string></string>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>radioBtnPreview</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Pr&amp;eview</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Preview modified layer</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>radioBtnOriginal</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Ori&amp;ginal</string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Show original layer</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout5</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout4</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="KPushButton">
-                                    <property name="name">
-                                        <cstring>btnZoomOut</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Zoom Out</string>
-                                    </property>
-                                </widget>
-                                <widget class="KPushButton">
-                                    <property name="name">
-                                        <cstring>btnZoomIn</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Zoom In</string>
-                                    </property>
-                                </widget>
-                                <widget class="KPushButton">
-                                    <property name="name">
-                                        <cstring>btnZoomOneToOne</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>1 : 1</string>
-                                    </property>
-                                </widget>
-                                <widget class="KPushButton">
-                                    <property name="name">
-                                        <cstring>btnUpdate</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                    <property name="accel">
-                                        <string></string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Update preview</string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>checkBoxAutoUpdate</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Autoupdate</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Automatically update the preview whenever the filter settings change</string>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>16</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
-        </widget>
-    </grid>
-</widget>
-<customwidgets>
+              </item>
+            </layout>
+          </item>
+          <item>
+            <spacer name="spacer1" >
+              <property name="sizeHint" >
+                <size>
+                  <width>16</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>ImageViewer</class>
-        <header location="local">imageviewer.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
-        <signal>moved(QPoint)</signal>
-        <signal>moving(QPoint)</signal>
-        <signal>startMoving(QPoint)</signal>
-        <slot access="public" specifier="">zoomIn()</slot>
-        <slot access="public" specifier="">slot()</slot>
-        <slot access="public" specifier="">zoomOut()</slot>
-        <slot access="public" specifier="">slot()</slot>
-        <slot access="public" specifier="">slot()</slot>
-        <slot access="public" specifier="">slotMoving(QPoint)</slot>
-        <slot access="public" specifier="">slotMoved(QPoint)</slot>
-        <slot access="public" specifier="">slot()</slot>
-        <slot access="public" specifier="">slotStartMoving(QPoint)</slot>
+      <class>ImageViewer</class>
+      <extends></extends>
+      <header location="local" >imageviewer.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
     </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+  </customwidgets>
+  <images>
+    <image name="image0" >
+      <data format="XBM.GZ" length="79" >789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
     </image>
-</images>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>imageviewer.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-</includehints>
-</UI>
+  </images>
+</ui>

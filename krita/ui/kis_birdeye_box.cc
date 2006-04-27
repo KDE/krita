@@ -17,17 +17,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "qlayout.h"
-#include "qlabel.h"
-#include "qpixmap.h"
-#include "qpainter.h"
-#include "qimage.h"
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include "config.h"
 #include <lcms.h>
-#include "klocale.h"
+
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qimage.h>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+
+#include <klocale.h>
 
 #include "kis_view.h"
 #include "kis_doc.h"
@@ -177,11 +177,13 @@ namespace {
 }
 
 KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
-    : QWidget(parent, name)
+    : QWidget(parent)
         , m_view(view)
         , m_subject(view->canvasSubject())
 {
-    Q3VBoxLayout * l = new Q3VBoxLayout(this);
+    setObjectName(name);
+
+    QVBoxLayout * l = new QVBoxLayout(this);
 
     m_image = m_subject->currentImg();
 
@@ -196,7 +198,8 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
     l->addWidget(m_birdEyePanel);
 
-    Q3HBoxLayout * hl = new Q3HBoxLayout(l);
+    QHBoxLayout * hl = new QHBoxLayout();
+    l->addLayout(hl);
 
     m_exposureLabel = new QLabel(i18n("Exposure:"), this);
     hl->addWidget(m_exposureLabel);
@@ -210,7 +213,7 @@ KisBirdEyeBox::KisBirdEyeBox(KisView * view, QWidget* parent, const char* name)
 
     m_exposureDoubleWidget->setPrecision(1);
     m_exposureDoubleWidget->setValue(0);
-    m_exposureDoubleWidget->setLineStep(0.1);
+    m_exposureDoubleWidget->setSingleStep(0.1);
     m_exposureDoubleWidget->setPageStep(1);
 
     connect(m_exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));

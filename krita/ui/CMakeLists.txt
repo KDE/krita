@@ -90,7 +90,6 @@ kde4_automoc(${kritaui_LIB_SRCS})
 
 kde4_add_ui3_files(kritaui_LIB_SRCS 
     kis_matrix_widget.ui 
-    kis_previewwidgetbase.ui 
     wdglayerbox.ui 
     wdgselectionoptions.ui 
     wdgshapeoptions.ui 
@@ -116,6 +115,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgpressuresettings.ui 
     wdgtabletdevicesettings.ui 
     wdgtabletsettings.ui
+    kis_previewwidgetbase.ui 
 	)
 
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )

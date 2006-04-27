@@ -17,21 +17,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <q3frame.h>
-#include <q3hbox.h>
-#include <q3groupbox.h>
+#include <QFrame>
 #include <qlayout.h>
+
+#include <khbox.h>
 
 #include "kis_previewwidget.h"
 #include "kis_previewdialog.h"
 
-KisPreviewDialog::KisPreviewDialog( QWidget *  parent, const char * name, bool modal, const QString &caption)
-    : super (parent, name, modal, caption, Ok | Cancel, Ok)
+KisPreviewDialog::KisPreviewDialog(QWidget *  parent, const char * name, const QString caption)
+    : super(parent, caption, Ok | Cancel)
 {
-    Q3HBox* layout = new Q3HBox(this);
+    setObjectName(name);
+    KHBox* layout = new KHBox(this);
     layout->setSpacing( 6 );
 
-    m_containerFrame = new Q3Frame( layout, "container" );
+    m_containerFrame = new QFrame( layout );
+    m_containerFrame->setObjectName("container");
 
     m_preview = new KisPreviewWidget( layout, "previewWidget" );
 

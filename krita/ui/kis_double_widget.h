@@ -41,12 +41,12 @@ public:
     double value() const;
     void setRange(double min, double max);
 
-    void setTickmarks(QSlider::TickPosition tickMarks);
+    void setTickPosition(QSlider::TickPosition tickPosition);
     void setTickInterval(double tickInterval);
     double tickInterval() const;
 
     void setPrecision(int precision);
-    void setLineStep(double step);
+    void setSingleStep(double step);
     void setPageStep(double step);
 
     void setTracking(bool tracking);

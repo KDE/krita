@@ -18,11 +18,10 @@
 
 #include "qsignalmapper.h"
 #include <qlayout.h>
-#include <q3frame.h>
+#include <QFrame>
 #include <qcursor.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <kmessagebox.h>
 #include <kguiitem.h>
 
@@ -152,10 +151,9 @@ void KisFilterManager::setup(KActionCollection * ac)
         
     }
 
-    m_reapplyAction = new KAction(i18n("Apply Filter Again"),
-                Qt::CTRL+Qt::SHIFT+Qt::Key_F,
-                this, SLOT(slotApply()),
-                ac, "filter_apply_again");
+    m_reapplyAction = new KAction(i18n("Apply Filter Again"), ac, "filter_apply_again");
+    m_reapplyAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_F);
+    connect(m_reapplyAction, SIGNAL(triggered()), this , SLOT(slotApply()));
     
     m_reapplyAction->setEnabled(false);
 
@@ -167,20 +165,21 @@ void KisFilterManager::setup(KActionCollection * ac)
         if (!f) break;
 
         // Create action
-        KAction * a = new KAction(f->menuEntry(), 0, m_filterMapper, SLOT(map()), ac,
-                                  QString("krita_filter_%1").arg((*it) . id()).ascii());
+        KAction * a = new KAction(f->menuEntry(), ac, QString("krita_filter_%1").arg((*it).id()).toAscii());
+        connect(a, SIGNAL(triggered()), m_filterMapper, SLOT(map()));
+                                  
 
         // Add action to the right submenu
         KActionMenu * m = m_filterActionMenus.find( f->menuCategory() );
         if (m) {
-            m->insert(a);
+            m->addAction(a);
         }
         else {
             if (!other) {
                 other = new KActionMenu(i18n("Other"), ac, "misc_filters");
                 m_filterActionMenus.insert("other", am);
             }
-            other->insert(a);
+            other->addAction(a);
         }
 
         // Add filter to list of filters for mapper
@@ -341,7 +340,7 @@ void KisFilterManager::slotApplyFilter(int i)
     m_lastFilter->disableProgress();
 
     // Create the config dialog
-    m_lastDialog = new KisPreviewDialog(m_view, m_lastFilter->id().name().ascii(), true, m_lastFilter->id().name());
+    m_lastDialog = new KisPreviewDialog(m_view, m_lastFilter->id().name().toAscii(), m_lastFilter->id().name());
     Q_CHECK_PTR(m_lastDialog);
     m_lastWidget = m_lastFilter->createConfigurationWidget( (QWidget*)m_lastDialog->container(), dev );
 
@@ -354,7 +353,7 @@ void KisFilterManager::slotApplyFilter(int i)
 
         connect(m_lastDialog->previewWidget(), SIGNAL(updated()), this, SLOT(refreshPreview()));
 
-        Q3GridLayout *widgetLayout = new Q3GridLayout((QWidget *)m_lastDialog->container(), 1, 1);
+        QGridLayout *widgetLayout = new QGridLayout(m_lastDialog->container());
 
         widgetLayout->addWidget(m_lastWidget, 0 , 0);
 

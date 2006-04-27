@@ -26,10 +26,9 @@
 #include <qtoolbutton.h>
 #include <qslider.h>
 #include <qcursor.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <QEvent>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QMouseEvent>
 
@@ -60,13 +59,15 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
                                 QWidget * parent,
                                 const char * name,
                                 Qt::WFlags f)
-    : QWidget(parent, name, f)
+    : QWidget(parent, f)
     , m_zoomListener(zoomListener)
     , m_thumbnailProvider(thumbnailProvider)
     , m_canvas(canvas)
     , m_dragging(false)
 {
-    Q3HBoxLayout * l = new Q3HBoxLayout(this);
+    setObjectName(name);
+
+    QHBoxLayout * l = new QHBoxLayout(this);
     m_page = new WdgBirdEye(this, "birdeye_panel");
     m_page->zoom->setRange((int) (qMax(1, (int)(100 * zoomListener->getMinZoom()))), (int) (100 * zoomListener->getMaxZoom()));
     m_page->zoom->setValue(100);
@@ -74,10 +75,14 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
 
     m_page->toolbar->setIconSize(QSize(16, 16));
     m_page->view->installEventFilter(this);
-    m_page->view->setBackgroundMode(Qt::NoBackground);
+    m_page->view->setAutoFillBackground(false);
+    m_page->view->setAttribute(Qt::WA_OpaquePaintEvent);
 
-    m_zoomIn = new KAction( i18n("Zoom In"), "birdeye_zoom_plus", 0, this, SLOT(zoomPlus()), 0, "zoomIn" );
-    m_zoomOut = new KAction( i18n("Zoom Out"), "birdeye_zoom_minus", 0, this, SLOT(zoomMinus()), 0, "zoomOut" );
+    m_zoomIn = new KAction(KIcon("birdeye_zoom_plus"), i18n("Zoom In"), 0, "zoomIn");
+    connect(m_zoomIn, SIGNAL(triggered()), this, SLOT(zoomPlus()));
+
+    m_zoomOut = new KAction(KIcon("birdeye_zoom_minus"), i18n("Zoom Out"), 0, "zoomOut");
+    connect(m_zoomOut, SIGNAL(triggered()), this, SLOT(zoomMinus()));
 
     l->addWidget(m_page);
 
@@ -243,7 +248,7 @@ void KoBirdEyePanel::slotUpdate(const QRect & r)
 
                 QPainter painter(&m_thumbnail);
 
-                painter.fillRect(thumbnailRect, colorGroup().mid());
+                painter.fillRect(thumbnailRect, palette().mid());
                 painter.drawImage(thumbnailRect.x(), thumbnailRect.y(), thumbnailImage);
             }
         }
@@ -448,7 +453,7 @@ void KoBirdEyePanel::handleMouseMoveAction(QPoint p)
             break;
         }
         case DragHandleCentre: {
-            thumbnailRect.moveBy(dx, dy);
+            thumbnailRect.translate(dx, dy);
             break;
         }
         default:
@@ -545,7 +550,7 @@ void KoBirdEyePanel::makeThumbnailRectVisible(const QRect& r)
 
 void KoBirdEyePanel::resizeViewEvent(QSize size)
 {
-    m_viewBuffer.resize(size);
+    m_viewBuffer = QPixmap(size);
     fitThumbnailToView();
     slotUpdate(QRect(0, 0, m_documentSize.width(), m_documentSize.height()));
 }
@@ -574,7 +579,7 @@ void KoBirdEyePanel::fitThumbnailToView()
         }
     }
 
-    m_thumbnail.resize(thumbnailWidth, thumbnailHeight);
+    m_thumbnail = QPixmap(thumbnailWidth, thumbnailHeight);
     updateVisibleArea();
 }
 
@@ -588,7 +593,7 @@ void KoBirdEyePanel::renderView()
 
         QPainter painter(&m_viewBuffer);
 
-        painter.fillRect(0, 0, m_viewBuffer.width(), m_viewBuffer.height(), colorGroup().mid());
+        painter.fillRect(0, 0, m_viewBuffer.width(), m_viewBuffer.height(), palette().mid());
 
         if (!m_thumbnail.isNull()) {
 
@@ -616,7 +621,9 @@ void KoBirdEyePanel::paintViewEvent(QPaintEvent *e)
     Q_ASSERT(!m_viewBuffer.isNull());
 
     if (!m_viewBuffer.isNull()) {
-        bitBlt(m_page->view, e->rect().x(), e->rect().y(), &m_viewBuffer, 
+        QPainter p(m_page->view);
+
+        p.drawPixmap(e->rect().x(), e->rect().y(), m_viewBuffer, 
                e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height());
     }
 }

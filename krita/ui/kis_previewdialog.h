@@ -21,26 +21,24 @@
 #ifndef KIS_PREVIEWDIALOG_H
 #define KIS_PREVIEWDIALOG_H
 
-#include <kdialogbase.h>
-//Added by qt3to4:
-#include <Q3Frame>
+#include <kdialog.h>
 
 class KisPreviewWidget;
-class Q3Frame;
+class QFrame;
 
-class KisPreviewDialog: public KDialogBase {
-    typedef KDialogBase super;
+class KisPreviewDialog: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:
-    KisPreviewDialog( QWidget* parent = 0, const char* name = 0, bool modal = false, const QString &caption=QString::null);
+    KisPreviewDialog(QWidget* parent = 0, const char* name = 0, const QString caption = QString());
     ~KisPreviewDialog();
 
     KisPreviewWidget* previewWidget() { return m_preview; }
-    Q3Frame* container() { return m_containerFrame; }
+    QFrame* container() { return m_containerFrame; }
 private:
     KisPreviewWidget* m_preview;
-    Q3Frame* m_containerFrame;
+    QFrame* m_containerFrame;
 };
 
 #endif

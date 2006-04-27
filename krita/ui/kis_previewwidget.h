@@ -24,15 +24,23 @@
 
 #include <qimage.h>
 #include <qevent.h>
-//Added by qt3to4:
 #include <QWheelEvent>
 
 #include "kis_types.h"
 
-#include "kis_previewwidgetbase.h"
+#include "ui_kis_previewwidgetbase.h"
 
 class QWidget;
 class KisProfile;
+
+class PreviewWidgetBase : public QWidget, public Ui::PreviewWidgetBase
+{
+    Q_OBJECT
+
+    public:
+        PreviewWidgetBase(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
+
 /**
  * A widget that can be used by plugins to show a preview of the effect of the
  * plugin to the user. This is a convenience class thand handily packs a source and a

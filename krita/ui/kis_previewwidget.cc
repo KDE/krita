@@ -29,9 +29,7 @@
 #include <qlabel.h>
 #include <qapplication.h>
 #include <qcolor.h>
-#include <q3groupbox.h>
 #include <qcursor.h>
-//Added by qt3to4:
 #include <QWheelEvent>
 
 #include <kdebug.h>
@@ -53,7 +51,6 @@
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 
-#include "kis_previewwidgetbase.h"
 #include "kis_previewwidget.h"
 #include "imageviewer.h"
 

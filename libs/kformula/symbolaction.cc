@@ -42,7 +42,7 @@ KFORMULA_NAMESPACE_BEGIN
 class SymbolComboItem : public Q3ListBoxItem
 {
 public:
-    SymbolComboItem( const QString&, const QFont&, uchar, Q3ComboBox* combo );
+    SymbolComboItem( const QString&, const QFont&, QChar, Q3ComboBox* combo );
     virtual ~SymbolComboItem();
 
     virtual int width( const Q3ListBox* ) const;
@@ -55,7 +55,7 @@ private:
     Q3ComboBox *m_combo;
     QString m_name;
     QFont m_font;
-    uchar m_symbol;
+    QChar m_symbol;
 
     static int widest;
 };
@@ -63,7 +63,7 @@ private:
 int SymbolComboItem::widest = 0;
 
 SymbolComboItem::SymbolComboItem( const QString &name, const QFont &font,
-                                  uchar symbol, Q3ComboBox *combo )
+                                  QChar symbol, Q3ComboBox *combo )
     : Q3ListBoxItem( combo->listBox() ),
       m_combo( combo ),
       m_name( name ),
@@ -151,7 +151,7 @@ int SymbolAction::plug( QWidget* w, int index )
 }
 
 void SymbolAction::setSymbols( const QStringList &names, const Q3ValueList<QFont>& fonts,
-                               const Q3MemArray<uchar>& chars )
+                               const Q3MemArray<QChar>& chars )
 {
     m_fonts = fonts;
     m_chars = chars;

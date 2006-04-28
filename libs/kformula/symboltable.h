@@ -46,18 +46,18 @@ public:
     /**
      * Defaults for all arguments are provided so it can be used in a QMap.
      */
-    CharTableEntry( CharClass cl=ORDINARY, char font=0, uchar ch=0 )
+    CharTableEntry( CharClass cl=ORDINARY, char font=0, QChar ch=0 )
         : m_charClass( static_cast<char>( cl ) ), m_font( font ), m_character( ch ) {}
 
     char font() const { return m_font; }
-    uchar character() const { return m_character; }
+    QChar character() const { return m_character; }
     CharClass charClass() const { return static_cast<CharClass>( m_charClass ); }
 
 private:
 
     char m_charClass;
     char m_font;
-    uchar m_character;
+    QChar m_character;
 };
 
 
@@ -119,7 +119,7 @@ public:
 
     const CharTableEntry& entry( QChar symbol, CharStyle style=normalChar ) const;
     QFont font( QChar symbol, CharStyle style=normalChar ) const;
-    uchar character( QChar symbol, CharStyle style=normalChar ) const;
+    QChar character( QChar symbol, CharStyle style=normalChar ) const;
     CharClass charClass( QChar symbol, CharStyle style=normalChar ) const;
 
     /**

@@ -19,6 +19,7 @@ static InternFontTable cmbx10Map[] = {
     { 0x0398, 0xa3, ORDINARY, boldChar },
     { 0x0394, 0xa2, ORDINARY, boldChar },
     { 0x0393, 0xa1, ORDINARY, boldChar },
+    { 0x2260, 0x2260, ORDINARY, boldChar},
     { 0, 0, ORDINARY, normalChar }
 };
 
@@ -182,6 +183,7 @@ static InternFontTable cmmi10Map[] = {
     { 0x03D5, 0x27, ORDINARY, italicChar },
     { 0x2323, 0x5e, ORDINARY, italicChar },
     { 0x03D6, 0x24, ORDINARY, italicChar },
+    { 0x2260, 0x2260, ORDINARY, italicChar },
     { 0, 0, ORDINARY, normalChar }
 };
 
@@ -316,6 +318,7 @@ static InternFontTable cmr10Map[] = {
     { 0xFB03, 0xb1, ORDINARY, normalChar },
     { 0xFB00, 0xae, ORDINARY, normalChar },
     { 0xFB01, 0xaf, ORDINARY, normalChar },
+    { 0x2260, 0x2260, ORDINARY, normalChar },
     { 0, 0, ORDINARY, normalChar }
 };
 
@@ -582,6 +585,7 @@ static InternFontTable msam10Map[] = {
     { 0x25C0, 0x4a, ORDINARY, normalChar },
     { 0x21B1, 0xc2, RELATION, normalChar },
     { 0x21B0, 0xc1, RELATION, normalChar },
+    { 0x2260, 0x2260, ORDINARY, normalChar },
     { 0, 0, ORDINARY, normalChar }
 };
 
@@ -706,6 +710,7 @@ static InternFontTable msbm10Map[] = {
     { 0xEB0F, 0x3d, ORDINARY, normalChar },
     { 0x21B7, 0x79, RELATION, normalChar },
     { 0x21B6, 0x78, RELATION, normalChar },
+    { 0x2260, 0x2260, ORDINARY, normalChar },
     { 0, 0, ORDINARY, normalChar }
 };
 

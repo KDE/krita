@@ -146,7 +146,7 @@ QFont SymbolTable::font( QChar symbol, CharStyle style ) const
 }
 
 
-uchar SymbolTable::character( QChar symbol, CharStyle style ) const
+QChar SymbolTable::character( QChar symbol, CharStyle style ) const
 {
     return entry( symbol, style ).character();
 }

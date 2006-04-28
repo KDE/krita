@@ -155,7 +155,7 @@ enum CharFamily {
  */
 struct InternFontTable {
     short unicode;
-    uchar pos;
+    QChar pos;
     CharClass cl;
     CharStyle style;
 };

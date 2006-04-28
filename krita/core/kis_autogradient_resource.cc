@@ -31,9 +31,9 @@ void KisAutogradientResource::createSegment( int interpolation, int colorInterpo
 
 }
 
-const Q3ValueVector<double> KisAutogradientResource::getHandlePositions() const
+const QList<double> KisAutogradientResource::getHandlePositions() const
 {
-    Q3ValueVector<double> handlePositions;
+    QList<double> handlePositions;
 
     handlePositions.push_back(m_segments[0]->startOffset());
     for (int i = 0; i < m_segments.count(); i++)
@@ -43,9 +43,9 @@ const Q3ValueVector<double> KisAutogradientResource::getHandlePositions() const
     return handlePositions;
 }
 
-const Q3ValueVector<double> KisAutogradientResource::getMiddleHandlePositions() const
+const QList<double> KisAutogradientResource::getMiddleHandlePositions() const
 {
-    Q3ValueVector<double> middleHandlePositions;
+    QList<double> middleHandlePositions;
 
     for (int i = 0; i < m_segments.count(); i++)
     {
@@ -56,7 +56,7 @@ const Q3ValueVector<double> KisAutogradientResource::getMiddleHandlePositions() 
 
 void KisAutogradientResource::moveSegmentStartOffset( KisGradientSegment* segment, double t)
 {
-    Q3ValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
+    QList<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
     if ( it != m_segments.end() )
     {
         if ( it == m_segments.begin() )
@@ -81,7 +81,7 @@ void KisAutogradientResource::moveSegmentStartOffset( KisGradientSegment* segmen
 
 void KisAutogradientResource::moveSegmentEndOffset( KisGradientSegment* segment, double t)
 {
-    Q3ValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
+    QList<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
     if ( it != m_segments.end() )
     {
         if ( it+1 == m_segments.end() )
@@ -120,7 +120,7 @@ void KisAutogradientResource::moveSegmentMiddleOffset( KisGradientSegment* segme
 void KisAutogradientResource::splitSegment( KisGradientSegment* segment )
 {
     Q_ASSERT(segment != 0);
-    Q3ValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
+    QList<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
     if ( it != m_segments.end() )
     {
         KisGradientSegment* newSegment = new KisGradientSegment(
@@ -140,7 +140,7 @@ void KisAutogradientResource::splitSegment( KisGradientSegment* segment )
 void KisAutogradientResource::duplicateSegment( KisGradientSegment* segment )
 {
     Q_ASSERT(segment != 0);
-    Q3ValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
+    QList<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
     if ( it != m_segments.end() )
     {
         double middlePostionPercentage = ( segment->middleOffset() - segment->startOffset() ) / segment->length();
@@ -181,7 +181,7 @@ KisGradientSegment* KisAutogradientResource::removeSegment( KisGradientSegment* 
     Q_ASSERT(segment != 0);
     if( m_segments.count() < 2 )
         return 0;
-    Q3ValueVector<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
+    QList<KisGradientSegment*>::iterator it = qFind( m_segments.begin(), m_segments.end(), segment );
     if ( it != m_segments.end() )
     {
         double middlePostionPercentage;

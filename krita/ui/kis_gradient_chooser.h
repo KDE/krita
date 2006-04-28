@@ -18,26 +18,24 @@
 #ifndef KIS_GRADIENT_CHOOSER_H_
 #define KIS_GRADIENT_CHOOSER_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "kis_itemchooser.h"
-//Added by qt3to4:
-#include <QLabel>
 
 class QLabel;
 class QPushButton;
 class KisView;
 
-class KisCustomGradientDialog : public KDialogBase {
+class KisCustomGradientDialog : public KDialog {
 
     Q_OBJECT
 
 public:
 
     KisCustomGradientDialog(KisView * view, QWidget * parent, const char *name);
-    
+
 private:
-    
+
     KisAutogradient * m_page;
 
 };

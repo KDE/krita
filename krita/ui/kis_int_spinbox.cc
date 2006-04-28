@@ -21,35 +21,25 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-#include <assert.h>
-#include <math.h>
-#include <algorithm>
-
 #include <qtimer.h>
 #include <qapplication.h>
 #include <qsize.h>
 #include <qslider.h>
 #include <qstyle.h>
 #include <qlabel.h>
-#include <q3popupmenu.h>
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qvalidator.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3Frame>
+#include <QHBoxLayout>
+#include <QFrame>
 
 #include <knuminput.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <karrowbutton.h>
+#include <knumvalidator.h>
 
-#include "kdialog.h"
-#include "knumvalidator.h"
 #include "kis_int_spinbox.h"
 
 class KisIntSpinbox::KisIntSpinboxPrivate {
@@ -65,21 +55,25 @@ public:
 
 
 KisIntSpinbox::KisIntSpinbox(QWidget *parent, const char *name)
-    : QWidget(parent, name)
+    : QWidget(parent)
 {
+    setObjectName(name);
     init(0);
 }
 
 KisIntSpinbox::KisIntSpinbox(const QString & /*label*/, int val, QWidget *parent, const char *name)
-    : QWidget(parent, name)
+    : QWidget(parent)
 {
+    setObjectName(name);
     init(val);
 }
 
 void KisIntSpinbox::init(int val)
 {
     d = new KisIntSpinboxPrivate( );
-    Q3BoxLayout * l = new Q3HBoxLayout( this );
+    d->m_timer.setSingleShot(true);
+
+    QHBoxLayout * l = new QHBoxLayout( this );
 
     l->insertStretch(0, 1);
     d->m_numinput = new KIntSpinBox(0, 100, 1, val, this);
@@ -93,7 +87,7 @@ void KisIntSpinbox::init(int val)
     //d->m_slider->setFrameStyle(Q3Frame::Panel|Q3Frame::Raised); Qt4
 
     d->m_arrow = new KArrowButton(this, Qt::DownArrow);
-    d->m_arrow->setPopup(d->m_slider);
+    d->m_arrow->setMenu(d->m_slider);
     d->m_arrow->setMaximumHeight( fontMetrics().height() + 4);
     d->m_arrow->setEnabled(true); // Why is the arrow still gray?
 
@@ -115,8 +109,7 @@ void KisIntSpinbox::init(int val)
 void KisIntSpinbox::spinboxValueChanged(int val)
 {
     setValue(val);
-    d->m_timer.start(300, true);
-
+    d->m_timer.start(300);
 }
 
 void KisIntSpinbox::sliderValueChanged(int val)

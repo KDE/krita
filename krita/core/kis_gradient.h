@@ -24,7 +24,7 @@
 #ifndef KIS_GRADIENT_H
 #define KIS_GRADIENT_H
 
-#include <q3valuevector.h>
+#include <QList>
 #include <qcolor.h>
 
 #include <kio/job.h>
@@ -243,14 +243,14 @@ public:
     virtual QImage generatePreview(int width, int height) const;
 
     void colorAt(double t, QColor *color, quint8 *opacity) const;
-    
+
     KisGradientSegment *segmentAt(double t) const;
 
 protected:
     inline void pushSegment( KisGradientSegment* segment ) { m_segments.push_back(segment); };
     void setImage(const QImage& img);
 
-    Q3ValueVector<KisGradientSegment *> m_segments;
+    QList<KisGradientSegment *> m_segments;
 
 private:
     bool init();

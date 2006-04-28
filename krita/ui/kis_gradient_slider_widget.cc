@@ -20,7 +20,6 @@
 #include "kis_gradient_slider_widget.h"
 
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QPixmap>
 #include <QMouseEvent>
@@ -30,6 +29,7 @@
 #include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
+#include <kaction.h>
 
 #include "kis_autogradient_resource.h"
 
@@ -37,19 +37,23 @@
 #define HANDLE_SIZE 10
 
 KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, Qt::WFlags f )
-    : QWidget( parent, name, f),
+    : QWidget( parent, f),
     m_currentSegment(0),
     m_selectedSegment(0),
     m_drag(0)
 {
+    setObjectName(name);
     setMinimumHeight(30);
 
     m_segmentMenu = new KMenu();
-    m_segmentMenu->insertItem(i18n("Split Segment"), SPLIT_SEGMENT);
-    m_segmentMenu->insertItem(i18n("Duplicate Segment"), DUPLICATE_SEGMENT);
-    m_segmentMenu->insertItem(i18n("Mirror Segment"), MIRROR_SEGMENT);
-    m_segmentMenu->insertItem(i18n("Remove Segment"), REMOVE_SEGMENT);
-    connect( m_segmentMenu, SIGNAL( activated(int) ), SLOT( slotMenuAction(int) ) );
+    m_segmentMenu->addAction(i18n("Split Segment"), this, SLOT(slotSplitSegment()));
+    m_segmentMenu->addAction(i18n("Duplicate Segment"), this, SLOT(slotDuplicateSegment()));
+    m_segmentMenu->addAction(i18n("Mirror Segment"), this, SLOT(slotMirrorSegment()));
+
+    m_removeSegmentAction = new KAction(i18n("Remove Segment"), 0, "remove_segment");
+    connect(m_removeSegmentAction, SIGNAL(triggered()), this, SLOT(slotRemoveSegment()));
+
+    m_segmentMenu->addAction(m_removeSegmentAction);
 }
 
 void KisGradientSliderWidget::setGradientResource( KisAutogradientResource* agr)
@@ -62,9 +66,8 @@ void KisGradientSliderWidget::setGradientResource( KisAutogradientResource* agr)
 void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
 {
     QWidget::paintEvent( pe );
-    QPixmap pixmap( width(), height() );
-    pixmap.fill( colorGroup().background() );
-    QPainter painter( &pixmap );
+    QPainter painter(this);
+    painter.fillRect(rect(), palette ().background());
     painter.setPen( Qt::black );
     painter.drawRect( MARGIN, MARGIN, width() - 2 * MARGIN, height()- 2 * MARGIN - HANDLE_SIZE );
     if(m_autogradientResource)
@@ -82,14 +85,14 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
                     height()- HANDLE_SIZE - MARGIN,
                     qRound( ( m_selectedSegment->endOffset() - m_selectedSegment->startOffset() )*(double)(width()-12) ),
                     HANDLE_SIZE );
-            painter.fillRect( selection, QBrush( colorGroup().highlight() ) );
+            painter.fillRect( selection, QBrush( palette().highlight() ) );
         }
 
         QPolygon triangle(3);
-        Q3ValueVector<double> handlePositions = m_autogradientResource->getHandlePositions();
+        QList<double> handlePositions = m_autogradientResource->getHandlePositions();
         int position;
         painter.setBrush( QBrush( Qt::black) );
-        for (uint i = 0; i < handlePositions.count(); i++)
+        for (int i = 0; i < handlePositions.count(); i++)
         {
             position = qRound( handlePositions[i] * (double)( width()-12) ) + 6;
             triangle[0] = QPoint(position, height() - HANDLE_SIZE - MARGIN );
@@ -98,8 +101,8 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
             painter.drawPolygon(triangle);
         }
         painter.setBrush( QBrush( Qt::white ) );
-        Q3ValueVector<double> middleHandlePositions = m_autogradientResource->getMiddleHandlePositions();
-        for (uint i = 0; i < middleHandlePositions.count(); i++)
+        QList<double> middleHandlePositions = m_autogradientResource->getMiddleHandlePositions();
+        for (int i = 0; i < middleHandlePositions.count(); i++)
         {
             position = qRound( middleHandlePositions[i] * (double)(width()-12) ) + 6;
             triangle[0] = QPoint(position, height()-HANDLE_SIZE - MARGIN);
@@ -108,7 +111,6 @@ void KisGradientSliderWidget::paintEvent ( QPaintEvent* pe )
             painter.drawPolygon(triangle);
         }
     }
-    bitBlt( this, 0, 0, &pixmap, 0, 0, pixmap.width(), pixmap.height());
 }
 
 void KisGradientSliderWidget::mousePressEvent( QMouseEvent * e )
@@ -160,7 +162,7 @@ void KisGradientSliderWidget::mousePressEvent( QMouseEvent * e )
             emit sigSelectedSegment( m_selectedSegment );
         }
     }
-    repaint(false);
+    repaint();
 }
 
 void KisGradientSliderWidget::mouseReleaseEvent ( QMouseEvent * e )
@@ -191,34 +193,41 @@ void KisGradientSliderWidget::mouseMoveEvent( QMouseEvent * e )
     if ( m_drag != NO_DRAG)
         emit sigChangedSegment( m_currentSegment );
 
-    repaint(false);
+    repaint();
 }
 
 void KisGradientSliderWidget::contextMenuEvent( QContextMenuEvent * e )
 {
-    m_segmentMenu->setItemEnabled( REMOVE_SEGMENT, m_autogradientResource->removeSegmentPossible() );
-    m_segmentMenu->popup( e->globalPos());
+    m_removeSegmentAction->setEnabled(m_autogradientResource->removeSegmentPossible());
+    m_segmentMenu->popup(e->globalPos());
 }
 
-void KisGradientSliderWidget::slotMenuAction( int id )
+void KisGradientSliderWidget::slotSplitSegment()
 {
-    switch( id )
-    {
-        case SPLIT_SEGMENT:
-            m_autogradientResource->splitSegment( m_selectedSegment );
-            break;
-        case DUPLICATE_SEGMENT:
-            m_autogradientResource->duplicateSegment( m_selectedSegment );
-            break;
-        case MIRROR_SEGMENT:
-            m_autogradientResource->mirrorSegment( m_selectedSegment );
-            break;
-        case REMOVE_SEGMENT:
-            m_selectedSegment = m_autogradientResource->removeSegment( m_selectedSegment );
-            break;
-    }
+    m_autogradientResource->splitSegment( m_selectedSegment );
     emit sigSelectedSegment( m_selectedSegment );
-    repaint(false);
+    repaint();
+}
+
+void KisGradientSliderWidget::slotDuplicateSegment()
+{
+    m_autogradientResource->duplicateSegment( m_selectedSegment );
+    emit sigSelectedSegment( m_selectedSegment );
+    repaint();
+}
+
+void KisGradientSliderWidget::slotMirrorSegment()
+{
+    m_autogradientResource->mirrorSegment( m_selectedSegment );
+    emit sigSelectedSegment( m_selectedSegment );
+    repaint();
+}
+
+void KisGradientSliderWidget::slotRemoveSegment()
+{
+    m_selectedSegment = m_autogradientResource->removeSegment( m_selectedSegment );
+    emit sigSelectedSegment( m_selectedSegment );
+    repaint();
 }
 
 #include "kis_gradient_slider_widget.moc"

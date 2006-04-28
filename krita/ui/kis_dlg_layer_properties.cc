@@ -16,15 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <limits.h>
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <q3groupbox.h>
 #include <qslider.h>
 #include <qstring.h>
+
 #include <klineedit.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <knuminput.h>
+
 #include "kis_global.h"
 #include "squeezedcombobox.h"
 #include "kis_dlg_layer_properties.h"

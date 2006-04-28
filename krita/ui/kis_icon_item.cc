@@ -64,28 +64,28 @@ void KisIconItem::updatePixmaps()
                 float yFactor = (float)((float)(float)picH / (float)picW);
 
                 ysize = (qint32)(yFactor * (float)THUMB_SIZE);
-            
-                if (ysize > THUMB_SIZE) 
+
+                if (ysize > THUMB_SIZE)
                     ysize = THUMB_SIZE;
             } else if (picW < picH) {
                 float xFactor = (float)((float)picW / (float)picH);
 
                 xsize = (qint32)(xFactor * (float)THUMB_SIZE);
 
-                if (xsize > THUMB_SIZE) 
+                if (xsize > THUMB_SIZE)
                     xsize = THUMB_SIZE;
             }
 
-            thumb = thumb.smoothScale(xsize, ysize);
+            thumb = thumb.scaled(xsize, ysize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
             if (!thumb.isNull()) {
-                m_thumb = QPixmap(thumb);
+                m_thumb = QPixmap::fromImage(thumb);
                 validThumb = !m_thumb.isNull();
             }
         }
 
-        img = img.convertDepth(32);
-        m_pixmap = QPixmap(img);
+        img = img.convertToFormat(QImage::Format_RGB32);
+        m_pixmap = QPixmap::fromImage(img);
         validPixmap = true;
     }
 }

@@ -21,11 +21,10 @@
 #define _KIS_WDG_GRADIENT_SLIDER_H_
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QContextMenuEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
 
+class KAction;
 class KMenu;
 class KisAutogradientResource;
 class KisGradientSegment;
@@ -53,7 +52,10 @@ protected:
     virtual void contextMenuEvent( QContextMenuEvent * e );
 
 private slots:
-    void slotMenuAction(int id);
+    void slotSplitSegment();
+    void slotDuplicateSegment();
+    void slotMirrorSegment();
+    void slotRemoveSegment();
 
 private:
 
@@ -76,6 +78,7 @@ private:
     KisGradientSegment* m_selectedSegment;
     KMenu* m_segmentMenu;
     int m_drag;
+    KAction *m_removeSegmentAction;
 };
 
 #endif

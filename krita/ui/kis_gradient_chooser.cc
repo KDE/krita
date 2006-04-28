@@ -15,18 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <klocale.h>
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
-#include <kdialogbase.h>
+#include <klocale.h>
 
 #include <koIconChooser.h>
-#include <kis_view.h>
 
+#include "kis_view.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
 #include "kis_gradient.h"
@@ -35,8 +34,10 @@
 #include "kis_gradient_chooser.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KisView * view, QWidget * parent, const char *name)
-    : KDialogBase(parent, name, false, i18n("Custom Gradient"), Close)
+    : KDialog(parent, i18n("Custom Gradient"), Close)
 {
+    setObjectName(name);
+    setModal(false);
     m_page = new KisAutogradient(this, "autogradient", i18n("Custom Gradient"));
     setMainWidget(m_page);
     connect(m_page, SIGNAL(activatedResource(KisResource *)), view, SLOT(gradientActivated(KisResource*)));
@@ -45,18 +46,19 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView * view, QWidget * paren
 KisGradientChooser::KisGradientChooser(KisView * view, QWidget *parent, const char *name) : super(parent, name)
 {
     m_lbName = new QLabel(this);
-    
-    m_customGradient = new QPushButton(i18n("Custom Gradient..."), this, "custom gradient button");
-    
+
+    m_customGradient = new QPushButton(i18n("Custom Gradient..."), this);
+    m_customGradient->setObjectName("custom gradient button");
+
     KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, this, "autogradient");
     connect(m_customGradient, SIGNAL(clicked()), autogradient, SLOT(show()));
-    
-    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(this, 2, -1, "main layout");
-    
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setObjectName("main layout");
+    mainLayout->setMargin(2);
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(chooserWidget(), 10);
     mainLayout->addWidget(m_customGradient, 10);
-
 }
 
 KisGradientChooser::~KisGradientChooser()

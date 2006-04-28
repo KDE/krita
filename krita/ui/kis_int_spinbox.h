@@ -23,25 +23,25 @@
 #include <qwidget.h>
 #include <qspinbox.h>
 #include <qslider.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
 #include <QLabel>
 
 #include <knumvalidator.h>
+#include <kmenu.h>
 
 class QLabel;
 class QLineEdit;
 class QLayout;
 class QValidator;
 
-class KisPopupSlider : public Q3PopupMenu {
+class KisPopupSlider : public KMenu {
     Q_OBJECT
 
 public:
 
-    KisPopupSlider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orientation, QWidget * parent, const char * name = 0) 
-        : Q3PopupMenu(parent, name)
+    KisPopupSlider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orientation, QWidget * parent, const char * name = 0)
+        : KMenu(parent)
     {
+        setObjectName(name);
         m_slider = new QSlider(orientation, this);
         m_slider->setObjectName(name);
         m_slider->setMinimum(minValue);
@@ -92,7 +92,7 @@ public:
     /**
      * Constructs an input control for integer values
      * with base 10 and initial value 0.
-     * 
+     *
      * @param parent parent QWidget
      * @param name   internal name for this widget
      */
@@ -100,7 +100,7 @@ public:
     /**
      * Constructor
      * It constructs a QSpinBox that allows the input of integer numbers
-     * in the range of -INT_MAX to +INT_MAX. 
+     * in the range of -INT_MAX to +INT_MAX.
      * To enforce the value being in a range, use setRange().
      *
      * @param label the tabel (may contain &, and my be empty)
@@ -116,7 +116,7 @@ public:
      *
      */
     virtual ~KisIntSpinbox();
-    
+
    /**
      * @return the current value.
      */
@@ -166,7 +166,7 @@ public slots:
     void sliderValueChanged(int val);
 
     void slotTimeout();
-    
+
 signals:
 
     /**

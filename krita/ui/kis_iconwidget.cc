@@ -18,13 +18,13 @@
  */
 
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <koIconChooser.h>
 #include "kis_iconwidget.h"
 
-KisIconWidget::KisIconWidget(QWidget *parent, const char *name) : super(parent, name)
+KisIconWidget::KisIconWidget(QWidget *parent, const char *name) : super(parent)
 {
+    setObjectName(name);
     m_item = 0;
 }
 

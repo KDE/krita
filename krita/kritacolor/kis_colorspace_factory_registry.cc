@@ -17,13 +17,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kdebug.h"
+#include <kdebug.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+
 #include "kis_debug_areas.h"
 #include "kis_colorspace.h"
 #include "kis_profile.h"
@@ -107,15 +108,14 @@ KisProfile *  KisColorSpaceFactoryRegistry::getProfileByName(const QString & nam
     return m_profileMap[name];
 }
 
-Q3ValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisID id)
+QList<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisID id)
 {
     return profilesFor(get(id));
 }
 
-Q3ValueVector<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSpaceFactory * csf)
+QList<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSpaceFactory * csf)
 {
-
-    Q3ValueVector<KisProfile *>  profiles;
+    QList<KisProfile *>  profiles;
 
     QMap<QString, KisProfile * >::Iterator it;
     for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
@@ -139,7 +139,7 @@ void KisColorSpaceFactoryRegistry::addPaintDeviceAction(KisColorSpace* cs,
     m_paintDevActionMap[cs->id()].append(action);
 }
 
-Q3ValueVector<KisPaintDeviceAction *>
+QList<KisPaintDeviceAction *>
 KisColorSpaceFactoryRegistry::paintDeviceActionsFor(KisColorSpace* cs) {
     return m_paintDevActionMap[cs->id()];
 }

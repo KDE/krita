@@ -17,11 +17,10 @@
  */
 #include <klocale.h>
 
-#include <q3groupbox.h>
+#include <QGroupBox>
 #include <qlabel.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -47,12 +46,14 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
                                              const QString & caption,
                                              QWidget *parent,
                                              const char *name)
-    : KDialogBase(parent, name, true, "", Ok | Cancel)
+    : KDialog(parent, caption, Ok | Cancel)
     , m_image(img)
     , m_currentFilter(0)
     , m_customName(false)
     , m_freezeName(false)
 {
+    setObjectName(name);
+
     Q_ASSERT(img);
 
     KisLayerSP activeLayer = img->activeLayer();
@@ -75,12 +76,13 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
         }
     }
 
-    setCaption(caption);
     QWidget * page = new QWidget(this, "page widget");
-    Q3GridLayout * grid = new Q3GridLayout(page, 3, 2, 0, 6);
+    QGridLayout * grid = new QGridLayout(page);
+    grid->setSpacing(6);
     setMainWidget(page);
 
-    QLabel * lblName = new QLabel(i18n("Layer name:"), page, "lblName");
+    QLabel * lblName = new QLabel(i18n("Layer name:"), page);
+    lblName->setObjectName("lblName");
     grid->addWidget(lblName, 0, 0);
 
     m_layerName = new KLineEdit(page);
@@ -90,7 +92,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
 
     m_filtersList = new KisFiltersListView(m_dev, page, "dlgadjustment.filtersList");
     connect(m_filtersList , SIGNAL(selectionChanged(Q3IconViewItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
-    grid->addMultiCellWidget(m_filtersList, 1, 2, 0, 0);
+    grid->addWidget(m_filtersList, 1, 0, 2, 1);
 
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
     m_preview->slotSetDevice( m_dev );
@@ -98,8 +100,10 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
     grid->addWidget(m_preview, 1, 1);
 
-    m_configWidgetHolder = new Q3GroupBox(i18n("Configuration"), page, "currentConfigWidget");
-    m_configWidgetHolder->setColumnLayout(0, Qt::Horizontal);
+    m_configWidgetHolder = new QGroupBox(i18n("Configuration"), page);
+    m_configWidgetHolder->setObjectName("currentConfigWidget");
+    QVBoxLayout *configWidgetHolderLayout = new QVBoxLayout();
+    m_configWidgetHolder->setLayout(configWidgetHolderLayout);
     grid->addWidget(m_configWidgetHolder, 2, 1);
 
     m_labelNoConfigWidget = new QLabel(i18n("No configuration options are available for this filter"),

@@ -16,47 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <QComboBox>
+#include <QVBoxLayout>
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qdrawutil.h>
-#include <qevent.h>
-#include <qfile.h>
-#include <qimage.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qpainter.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qtimer.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <kiconloader.h>
-#include <klistbox.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kseparator.h>
-#include <kpalette.h>
-#include <kimageeffect.h>
-
-#include <kcolordialog.h>
-#include <k3colordrag.h>
-#include <config.h>
 #include <kdebug.h>
 
-#include <kis_meta_registry.h>
-#include <kis_color.h>
-#include <kis_factory.h>
-#include <kis_colorspace_factory_registry.h>
 #include "kis_palette_widget.h"
 #include "kis_resource.h"
 #include "kis_palette.h"
@@ -69,9 +33,9 @@ KisPaletteWidget::KisPaletteWidget( QWidget *parent, int minWidth, int cols)
 
     m_currentPalette = 0;
 
-    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
+    QVBoxLayout *layout = new QVBoxLayout( this );
 
-    combo = new QComboBox( false, this );
+    combo = new QComboBox( this );
     combo->setFocusPolicy( Qt::ClickFocus );
     layout->addWidget(combo);
 
@@ -124,20 +88,13 @@ void KisPaletteWidget::setPalette( const QString &_paletteName )
 
     if (combo->currentText() != paletteName)
     {
-        bool found = false;
-        for(int i = 0; i < combo->count(); i++)
-        {
-            if (combo->text(i) == paletteName)
-            {
-                combo->setCurrentItem(i);
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            combo->insertItem(paletteName);
-            combo->setCurrentItem(combo->count()-1);
+        int i = combo->findText(paletteName);
+
+        if (i >= 0) {
+            combo->setCurrentIndex(i);
+        } else {
+            combo->addItem(paletteName);
+            combo->setCurrentIndex(combo->count() - 1);
         }
     }
 
@@ -148,14 +105,16 @@ void KisPaletteWidget::slotAddPalette(KisResource * palette)
 {
     KisPalette * p = dynamic_cast<KisPalette*>(palette);
 
-    m_namedPaletteMap.insert(palette->name(), p);
+    if (p) {
+        m_namedPaletteMap.insert(palette->name(), p);
 
-    combo->insertItem(palette->name());
+        combo->addItem(palette->name());
 
-    if (!init) {
-        combo->setCurrentItem(0);
-        setPalette(combo ->currentText());
-        init = true;
+        if (!init) {
+            combo->setCurrentIndex(0);
+            setPalette(combo ->currentText());
+            init = true;
+        }
     }
 }
 

@@ -131,7 +131,7 @@ public:
 
             if (m_store->open(location)) {
                 QString s = layer->filter()->toString();
-                m_store->write(s.utf8(), qstrlen(s.utf8()));
+                m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
                 m_store->close();
             }
         }

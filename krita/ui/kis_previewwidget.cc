@@ -60,17 +60,17 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
     m_autoupdate = true;
     m_previewIsDisplayed = true;
 
-    btnZoomIn->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag+", K3Icon::MainToolbar, 16 ));
+    btnZoomIn->setIcon(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag+", K3Icon::MainToolbar, 16 ));
     connect(btnZoomIn, SIGNAL(clicked()), this, SLOT(zoomIn()));
-    btnZoomOut->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag-", K3Icon::MainToolbar, 16 ));
+    btnZoomOut->setIcon(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag-", K3Icon::MainToolbar, 16 ));
     connect(btnZoomOut, SIGNAL(clicked()), this, SLOT(zoomOut()));
-    btnUpdate->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "reload", K3Icon::MainToolbar, 16 ));
+    btnUpdate->setIcon(KGlobal::instance()->iconLoader()->loadIconSet( "reload", K3Icon::MainToolbar, 16 ));
     connect(btnUpdate, SIGNAL(clicked()), this, SLOT(forceUpdate()));
 
     connect(radioBtnPreview, SIGNAL(toggled(bool)), this, SLOT(setPreviewDisplayed(bool)));
 
     connect(checkBoxAutoUpdate, SIGNAL(toggled(bool)), this, SLOT(slotSetAutoUpdate(bool)));
-    btnZoomOneToOne->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag1", K3Icon::MainToolbar, 16 ));
+    btnZoomOneToOne->setIcon(KGlobal::instance()->iconLoader()->loadIconSet( "viewmag1", K3Icon::MainToolbar, 16 ));
     connect(btnZoomOneToOne, SIGNAL(clicked()), this, SLOT(zoomOneToOne()));
 
 
@@ -94,7 +94,7 @@ void KisPreviewWidget::forceUpdate()
     if (!m_origDevice) return;
     if(m_previewIsDisplayed)
     {
-        m_groupBox->setTitle(m_origDevice->name());
+        m_groupBox->setTitle(m_origDevice->objectName());
         emit updated();
     }
 }
@@ -113,7 +113,7 @@ void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
 
     QRect r = dev->exactBounds();
 
-    m_groupBox->setTitle(i18n("Preview: ") + dev->name());
+    m_groupBox->setTitle(i18n("Preview: ") + dev->objectName());
     m_previewIsDisplayed = true;
 
     m_zoom = (double)m_preview->width() / (double)r.width();
@@ -135,7 +135,7 @@ void KisPreviewWidget::slotUpdate()
         int w, h;
         w = (int) ceil(r.width() * m_zoom );
         h = (int) ceil(r.height() * m_zoom );
-        m_scaledPreview = m_scaledPreview.smoothScale (w,h, Qt::KeepAspectRatioByExpanding);
+        m_scaledPreview = m_scaledPreview.scaled(w, h, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
     }
     if(m_previewIsDisplayed)
     {
@@ -165,10 +165,10 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
     m_previewIsDisplayed = v;
     if(m_previewIsDisplayed)
     {
-        m_groupBox->setTitle(i18n("Preview: ") + m_origDevice->name());
+        m_groupBox->setTitle(i18n("Preview: ") + m_origDevice->objectName());
         m_preview->setImage(m_scaledPreview);
     } else {
-        m_groupBox->setTitle(i18n("Original: ") + m_origDevice->name());
+        m_groupBox->setTitle(i18n("Original: ") + m_origDevice->objectName());
         m_preview->setImage(m_scaledOriginal);
     }
 }
@@ -197,12 +197,12 @@ bool KisPreviewWidget::zoomChanged()
 
     if(m_zoom < 1.0) // if m_zoom > 1.0, we will scale after applying the filter
     {
-        m_previewDevice = m_origDevice->createThumbnailDevice(w, h); 
+        m_previewDevice = m_origDevice->createThumbnailDevice(w, h);
     }
     else {
         m_previewDevice = new KisPaintDevice( *m_origDevice );
     }
-    
+
     m_scaledOriginal = m_previewDevice->convertToQImage(m_profile, 0, 0, w, h);
 
 
@@ -210,7 +210,7 @@ bool KisPreviewWidget::zoomChanged()
     {
         m_preview->setImage(m_scaledOriginal);
     }
-    
+
     emit updated();
 
     QApplication::restoreOverrideCursor();

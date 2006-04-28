@@ -139,7 +139,7 @@ KisColorSpace * KisDlgImageProperties::colorSpace()
 
 KisProfile * KisDlgImageProperties::profile()
 {
-    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
+    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
     qint32 index = m_page->cmbProfile->currentIndex();
 
     if (index < profileList.count()) {
@@ -152,13 +152,12 @@ KisProfile * KisDlgImageProperties::profile()
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
 void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
 {
-
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     m_page->cmbProfile->clear();
-    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        Q3ValueVector<KisProfile *> ::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        m_page->cmbProfile->addSqueezedItem((*it)->productName());
+    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+
+    foreach (KisProfile *profile, profileList) {
+        m_page->cmbProfile->addSqueezedItem(profile->productName());
     }
 }
 

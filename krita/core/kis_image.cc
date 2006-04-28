@@ -1091,7 +1091,7 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
         if (!player.isNull()) {
 
             // XXX: This should also be done whenever a layer grows!
-            Q3ValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+            QList<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry()->paintDeviceActionsFor(player->paintDevice()->colorSpace());
             for (int i = 0; i < actions.count(); i++) {
                 actions.at(i)->act(player.data()->paintDevice(), width(), height());

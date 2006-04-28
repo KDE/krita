@@ -65,7 +65,7 @@ KisPartLayerImpl::KisPartLayerImpl(KisImageSP img, KisChildDoc * doc)
     : super(img.data(), i18n("Embedded Document"), OPACITY_OPAQUE), m_doc(doc)
 {
     m_cache = new KisPaintDevice(
-            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""), name().latin1() );
+            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""), name().toLatin1() );
     m_activated = false;
 }
 
@@ -112,7 +112,7 @@ void KisPartLayerImpl::setX(qint32 x) {
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
     // since the part is not necesarily started at (0,0)
-    rect.moveBy(x - this->x(), 0);
+    rect.translate(x - this->x(), 0);
     m_doc->setGeometry(rect);
 }
 
@@ -121,7 +121,7 @@ void KisPartLayerImpl::setY(qint32 y) {
 
     // KisPaintDevice::move moves to absolute coordinates, not relative. Work around that here,
     // since the part is not necesarily started at (0,0)
-    rect.moveBy(0, y - this->y());
+    rect.translate(0, y - this->y());
     m_doc->setGeometry(rect);
 }
 
@@ -157,17 +157,17 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
     // We know the embedded part's size through the ChildDoc
     // We move it to (0,0), since that is what we will start painting from in paintEverything.
     QRect embedRect(intersection);
-    embedRect.moveBy(- exactBounds().x(), - exactBounds().y());
+    embedRect.translate(- exactBounds().x(), - exactBounds().y());
     QRect paintRect(exactBounds());
-    paintRect.moveBy(- exactBounds().x(), - exactBounds().y());
+    paintRect.translate(- exactBounds().x(), - exactBounds().y());
 
-    QPixmap pm1(projection->convertToQImage(0 /*srgb XXX*/,
+    QPixmap pm1 = QPixmap::fromImage(projection->convertToQImage(0 /*srgb XXX*/,
                                               intersection.x(), intersection.y(),
                                               intersection.width(), intersection.height()));
     QPixmap pm2(extent().width(), extent().height());
-    copyBlt(&pm2, embedRect.x(), embedRect.y(), &pm1,
-             0, 0, embedRect.width(), embedRect.height());
     QPainter painter(&pm2);
+
+    painter.drawPixmap(embedRect.x(), embedRect.y(), pm1, 0, 0, embedRect.width(), embedRect.height());
     painter.setClipRect(embedRect);
 
     // KWord's KWPartFrameSet::drawFrameContents has some interesting remarks concerning
@@ -177,9 +177,11 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
     // Paint transparent, no zoom:
     m_doc->document()->paintEverything(painter, paintRect, true);
 
-    copyBlt(&pm1, 0, 0, &pm2,
-             embedRect.x(), embedRect.y(), embedRect.width(), embedRect.height());
-    QImage qimg = pm1.convertToImage();
+    painter.end();
+    painter.begin(&pm1);
+
+    painter.drawPixmap(0, 0, pm2, embedRect.x(), embedRect.y(), embedRect.width(), embedRect.height());
+    QImage qimg = pm1.toImage();
 
     //assume the part is sRGB for now, and that "" is sRGB
     // And we need to paint offsetted
@@ -197,7 +199,7 @@ QImage KisPartLayerImpl::createThumbnail(qint32 w, qint32 h) {
 
     painter.scale(w / bounds.width(), h / bounds.height());
     m_doc->document()->paintEverything(painter, bounds);
-    QImage qimg = pm.convertToImage();
+    QImage qimg = pm.toImage();
 
     return qimg;
 }

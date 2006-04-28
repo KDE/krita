@@ -314,8 +314,7 @@ void KisOpenGLImageContext::createImageTextureTiles()
     //XXX: will be float/half with shaders
     #define RGBA_BYTES_PER_PIXEL 4
 
-    QByteArray emptyTilePixelData(m_imageTextureTileWidth * m_imageTextureTileHeight * RGBA_BYTES_PER_PIXEL);
-    emptyTilePixelData.fill(0);
+    QByteArray emptyTilePixelData(m_imageTextureTileWidth * m_imageTextureTileHeight * RGBA_BYTES_PER_PIXEL, 0);
 
     for (int tileIndex = 0; tileIndex < numImageTextureTiles; ++tileIndex) {
 
@@ -328,7 +327,7 @@ void KisOpenGLImageContext::createImageTextureTiles()
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_imageTextureTileWidth, m_imageTextureTileHeight, 0,
-              GL_BGRA, GL_UNSIGNED_BYTE, &emptyTilePixelData[0]);
+              GL_BGRA, GL_UNSIGNED_BYTE, emptyTilePixelData.data());
     }
 }
 

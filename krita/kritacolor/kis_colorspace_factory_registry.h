@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QList>
 #include <QString>
 
 #include "kis_generic_registry.h"
@@ -67,11 +68,11 @@ public:
     KisProfile *  getProfileByName(const QString & name);
 
     /**
-     * Return the vector of profiles for this colorspacefactory
+     * Return the list of profiles for this colorspacefactory
      */
-    Q3ValueVector<KisProfile *>  profilesFor(KisColorSpaceFactory * cs);
+    QList<KisProfile *>  profilesFor(KisColorSpaceFactory * cs);
 
-    Q3ValueVector<KisProfile *>  profilesFor(KisID id);
+    QList<KisProfile *>  profilesFor(KisID id);
 
     /**
      * Return the colorspace + profile as named, or NULL if impossible combination.
@@ -104,7 +105,7 @@ public:
     /**
      * Get a list of KisConstructPaintDeviceAction for a colorspace
      */
-    Q3ValueVector<KisPaintDeviceAction *> paintDeviceActionsFor(KisColorSpace* cs);
+    QList<KisPaintDeviceAction *> paintDeviceActionsFor(KisColorSpace* cs);
 
 private:
     KisColorSpaceFactoryRegistry();
@@ -115,8 +116,8 @@ private:
 
     QMap<QString, KisProfile * > m_profileMap;
     QMap<QString, KisColorSpace * > m_csMap;
-    typedef Q3ValueVector<KisPaintDeviceAction *> PaintActionVector;
-    QMap<KisID, PaintActionVector> m_paintDevActionMap;
+    typedef QList<KisPaintDeviceAction *> PaintActionList;
+    QMap<KisID, PaintActionList> m_paintDevActionMap;
     KisColorSpace *m_alphaCs;
 };
 

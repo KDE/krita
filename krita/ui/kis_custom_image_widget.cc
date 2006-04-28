@@ -86,10 +86,10 @@ void KisCustomImageWidget::fillCmbProfiles(const KisID & s)
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     if (csf == 0) return;
 
-    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        Q3ValueVector<KisProfile *> ::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-            cmbProfile->addSqueezedItem((*it)->productName());
+    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+
+    foreach (KisProfile *profile, profileList) {
+        cmbProfile->addSqueezedItem(profile->productName());
     }
     cmbProfile->setCurrent(csf->defaultProfile());
 }

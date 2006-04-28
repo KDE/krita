@@ -20,8 +20,7 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -46,11 +45,15 @@ QWidget* KisToolShape::createOptionWidget(QWidget* parent)
     m_shapeOptionsWidget = new WdgGeometryOptions(0);
     Q_CHECK_PTR(m_shapeOptionsWidget);
 
-    m_optionLayout = new Q3GridLayout(widget, 2, 1);
+    m_optionLayout = new QGridLayout(widget);
    // super::addOptionWidgetLayout(m_optionLayout);
 
-    m_shapeOptionsWidget->cmbFill->reparent(widget, QPoint(0,0), true);
-    m_shapeOptionsWidget->textLabel3->reparent(widget, QPoint(0,0), true);
+    m_shapeOptionsWidget->cmbFill->setParent(widget);
+    m_shapeOptionsWidget->cmbFill->move(QPoint(0, 0));
+    m_shapeOptionsWidget->cmbFill->show();
+    m_shapeOptionsWidget->textLabel3->setParent(widget);
+    m_shapeOptionsWidget->textLabel3->move(QPoint(0, 0));
+    m_shapeOptionsWidget->textLabel3->show();
     addOptionWidgetOption(m_shapeOptionsWidget->cmbFill, m_shapeOptionsWidget->textLabel3);
 
     return widget;
@@ -59,7 +62,7 @@ QWidget* KisToolShape::createOptionWidget(QWidget* parent)
 KisPainter::FillStyle KisToolShape::fillStyle(void)
 {
     if (m_shapeOptionsWidget) {
-        return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget->cmbFill->currentItem());
+        return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget->cmbFill->currentIndex());
     } else {
         return KisPainter::FillStyleNone;
     }

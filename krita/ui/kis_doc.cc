@@ -901,9 +901,9 @@ bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColor
     painter.fillRect(0, 0, width, height, bgColor, opacity);
     painter.end();
 
-    Q3ValueVector<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
+    QList<KisPaintDeviceAction *> actions = KisMetaRegistry::instance() ->
                 csRegistry()->paintDeviceActionsFor(cs);
-    for (uint i = 0; i < actions.count(); i++)
+    for (int i = 0; i < actions.count(); i++)
         actions.at(i)->act(layer->paintDevice(), img->width(), img->height());
 
     img->setBackgroundColor(bgColor);

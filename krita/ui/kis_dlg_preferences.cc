@@ -194,11 +194,11 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
     if ( !csf )
     return;
 
-    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        Q3ValueVector<KisProfile *> ::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-            if ((*it)->deviceClass() == icSigDisplayClass)
-                m_page->cmbMonitorProfile->addSqueezedItem((*it)->productName());
+    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+
+    foreach (KisProfile *profile, profileList) {
+        if (profile->deviceClass() == icSigDisplayClass)
+            m_page->cmbMonitorProfile->addSqueezedItem(profile->productName());
     }
 
     m_page->cmbMonitorProfile->setCurrent(csf->defaultProfile());
@@ -213,11 +213,11 @@ void ColorSettingsTab::refillPrintProfiles(const KisID & s)
     if ( !csf )
         return;
 
-    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        Q3ValueVector<KisProfile *> ::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-            if ((*it)->deviceClass() == icSigOutputClass)
-                m_page->cmbPrintProfile->addSqueezedItem((*it)->productName());
+    QList<KisProfile *> profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+
+    foreach (KisProfile *profile, profileList) {
+        if (profile->deviceClass() == icSigOutputClass)
+            m_page->cmbPrintProfile->addSqueezedItem(profile->productName());
     }
 
     m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());

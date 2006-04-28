@@ -21,9 +21,8 @@
 
 #include <qcursor.h>
 #include <qlayout.h>
-//Added by qt3to4:
 #include <QLabel>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QPaintEvent>
@@ -39,13 +38,13 @@ class QKeyEvent;
 class QComboBox;
 class QPaintEvent;
 class QRect;
-class Q3GridLayout;
+class QGridLayout;
 class KDialog;
 class KisCanvasSubject;
 class QLabel;
 class KisCmbComposite;
 class KisIntSpinbox;
-        
+
 enum enumBrushMode {
     PAINT,
     PAINT_STYLUS,
@@ -112,7 +111,7 @@ private:
     QCursor m_cursor;
 
     QWidget *m_optionWidget;
-    Q3GridLayout *m_optionWidgetLayout;
+    QGridLayout *m_optionWidgetLayout;
 
     QLabel *m_lbOpacity;
     KisIntSpinbox *m_slOpacity;

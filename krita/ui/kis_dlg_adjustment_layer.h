@@ -18,25 +18,23 @@
 #ifndef KISDLGAdjustMENTLAYER_H
 #define KISDLGAdjustMENTLAYER_H
 
-#include <kdialogbase.h>
-//Added by qt3to4:
+#include <kdialog.h>
 #include <QLabel>
-#include <Q3HBoxLayout>
 
 class KisFilter;
 class Q3IconViewItem;
 class QLabel;
-class Q3HBoxLayout;
+class QHBoxLayout;
 class KisPreviewWidget;
 class KisFiltersListView;
 class KisFilterConfiguration;
 class KisImage;
-class Q3GroupBox;
+class QGroupBox;
 
 /**
  * Create a new adjustment layer.
  */
-class KisDlgAdjustmentLayer : public KDialogBase
+class KisDlgAdjustmentLayer : public KDialog
 {
 
     Q_OBJECT
@@ -64,7 +62,7 @@ public:
     QString layerName() const;
 
 protected slots:
-    
+
     void slotNameChanged( const QString & );
     void slotConfigChanged();
     void refreshPreview();
@@ -75,7 +73,7 @@ private:
     KisPaintDeviceSP m_dev;
     KisFiltersListView * m_filtersList;
     KisPreviewWidget * m_preview;
-    Q3GroupBox * m_configWidgetHolder;
+    QGroupBox * m_configWidgetHolder;
     QWidget * m_currentConfigWidget;
     KisFilter* m_currentFilter;
     KLineEdit * m_layerName;

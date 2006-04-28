@@ -79,10 +79,10 @@ void DlgColorSpaceConversion::fillCmbDestProfile(const KisID & s)
 {
     m_page->cmbDestProfile->clear();
 
-    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor(s);
-        Q3ValueVector<KisProfile *> ::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        m_page->cmbDestProfile->addSqueezedItem((*it)->productName());
+    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor(s);
+
+    foreach (KisProfile *profile, profileList) {
+        m_page->cmbDestProfile->addSqueezedItem(profile->productName());
 
     }
 }

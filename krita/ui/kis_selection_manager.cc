@@ -114,11 +114,9 @@ void KisSelectionManager::setup(KActionCollection * collection)
                 "paste");
 
     m_pasteNew = new KAction(i18n("Paste into &New Image"),
-                0, 0,
-                this, SLOT(pasteNew()),
                 collection,
                 "paste_new");
-
+    connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
     m_selectAll = KStdAction::selectAll(this,
                     SLOT(selectAll()),
@@ -137,87 +135,90 @@ void KisSelectionManager::setup(KActionCollection * collection)
                 "clear");
 
     m_reselect = new KAction(i18n("&Reselect"),
-                0, Qt::CTRL+Qt::SHIFT+Qt::Key_D,
-                this, SLOT(reselect()),
-                collection, "reselect");
+                             collection,
+                             "reselect");
+    m_reselect->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_D);
+    connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
     m_invert = new KAction(i18n("&Invert"),
-                0, Qt::CTRL+Qt::Key_I,
-                this, SLOT(invert()),
-                collection, "invert");
-
+                           collection,
+                           "invert");
+    m_invert->setShortcut(Qt::CTRL+Qt::Key_I);
+    connect(m_invert, SIGNAL(triggered()), this, SLOT(invert()));
 
     m_toNewLayer = new KAction(i18n("Copy Selection to New Layer"),
-                0, Qt::CTRL+Qt::Key_J,
-                this, SLOT(copySelectionToNewLayer()),
-                collection, "copy_selection_to_new_layer");
-
+                               collection,
+                               "copy_selection_to_new_layer");
+    m_toNewLayer->setShortcut(Qt::CTRL+Qt::Key_J);
+    connect(m_toNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer = new KAction(i18n("Cut Selection to New Layer"),
-            0, Qt::CTRL+Qt::SHIFT+Qt::Key_J,
-            this, SLOT(cutToNewLayer()),
-            collection, "cut_selection_to_new_layer");
+                                  collection,
+                                  "cut_selection_to_new_layer");
+    m_cutToNewLayer->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_J);
+    connect(m_cutToNewLayer, SIGNAL(triggered()), this, SLOT(cutToNewLayer()));
 
     m_feather = new KAction(i18n("Feather"),
-                0, Qt::CTRL+Qt::ALT+Qt::Key_D,
-                this, SLOT(feather()),
-                collection, "feather");
+                            collection,
+                            "feather");
+    m_feather->setShortcut(Qt::CTRL+Qt::ALT+Qt::Key_D);
+    connect(m_feather, SIGNAL(triggered()), this, SLOT(feather()));
 
     m_fillForegroundColor = new KAction(i18n("Fill with Foreground Color"),
-                                             Qt::ALT+Qt::Key_Backspace, this,
-                                             SLOT(fillForegroundColor()),
                                              collection,
                                              "fill_selection_foreground_color");
+    m_fillForegroundColor->setShortcut(Qt::ALT+Qt::Key_Backspace);
+    connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
+
     m_fillBackgroundColor = new KAction(i18n("Fill with Background Color"),
-                                             Qt::Key_Backspace, this,
-                                             SLOT(fillBackgroundColor()),
                                              collection,
                                              "fill_selection_background_color");
-    m_fillPattern = new KAction(i18n("Fill with Pattern"),
-                                             0, this,
-                                             SLOT(fillPattern()),
-                                             collection,
-                                             "fill_selection_pattern");
+    m_fillBackgroundColor->setShortcut(Qt::Key_Backspace);
+    connect(m_fillBackgroundColor, SIGNAL(triggered()), this, SLOT(fillBackgroundColor()));
 
-    m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"), Qt::CTRL+Qt::Key_H, this, SLOT(toggleDisplaySelection()), collection, "toggle_display_selection");
+    m_fillPattern = new KAction(i18n("Fill with Pattern"),
+                                collection,
+                                "fill_selection_pattern");
+    connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
+
+    m_toggleDisplaySelection = new KToggleAction(i18n("Display Selection"),
+                                                 collection,
+                                                 "toggle_display_selection");
+    m_toggleDisplaySelection->setShortcut(Qt::CTRL+Qt::Key_H);
+    connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
+
     m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 
-    m_border =
-        new KAction(i18n("Border..."),
-                0, 0,
-                this, SLOT(border()),
-                collection, "border");
-    m_expand =
-        new KAction(i18n("Expand..."),
-                0, 0,
-                this, SLOT(expand()),
-                collection, "expand");
+    m_border = new KAction(i18n("Border..."),
+                           collection,
+                           "border");
+    connect(m_border, SIGNAL(triggered()), this, SLOT(border()));
 
-    m_smooth =
-        new KAction(i18n("Smooth..."),
-                0, 0,
-                this, SLOT(smooth()),
-                collection, "smooth");
+    m_expand = new KAction(i18n("Expand..."),
+                           collection,
+                           "expand");
+    connect(m_expand, SIGNAL(triggered()), this, SLOT(expand()));
 
+    m_smooth = new KAction(i18n("Smooth..."),
+                           collection,
+                           "smooth");
+    connect(m_smooth, SIGNAL(triggered()), this, SLOT(smooth()));
 
-    m_contract =
-        new KAction(i18n("Contract..."),
-                0, 0,
-                this, SLOT(contract()),
-                collection, "contract");
-    m_similar =
-        new KAction(i18n("Similar"),
-                0, 0,
-                this, SLOT(similar()),
-                collection, "similar");
+    m_contract = new KAction(i18n("Contract..."),
+                             collection,
+                             "contract");
+    connect(m_contract, SIGNAL(triggered()), this, SLOT(contract()));
 
+    m_similar = new KAction(i18n("Similar"),
+                            collection,
+                            "similar");
+    connect(m_similar, SIGNAL(triggered()), this, SLOT(similar()));
 
-    m_transform
-        = new KAction(i18n("Transform..."),
-                  0, 0,
-                  this, SLOT(transform()),
-                  collection, "transform_selection");
+    m_transform = new KAction(i18n("Transform..."),
+                              collection,
+                              "transform_selection");
+    connect(m_transform, SIGNAL(triggered()), this, SLOT(transform()));
 
 
 //     m_load
@@ -275,7 +276,7 @@ void KisSelectionManager::updateGUI()
 
 
         KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(l.data());
-        
+
         enable = l && dev&& dev->hasSelection() && !l->locked() && l->visible() && (partLayer==0);
 
         if(dev)
@@ -469,7 +470,7 @@ void KisSelectionManager::pasteNew()
     doc->undoAdapter()->setUndo(false);
 
     KisImageSP img = KisImageSP(new KisImage(doc->undoAdapter(), r.width(), r.height(), clip->colorSpace(), "Pasted"));
-    KisPaintLayer *layer = new KisPaintLayer(img.data(), clip->name(), OPACITY_OPAQUE, clip->colorSpace());
+    KisPaintLayer *layer = new KisPaintLayer(img.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
     p.bitBlt(0, 0, COMPOSITE_COPY, clip, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
@@ -492,7 +493,7 @@ void KisSelectionManager::selectAll()
 
     KisPaintDeviceSP dev = img->activeDevice();
     if (!dev) return;
-    
+
     KisSelectedTransaction * t = 0;
     if (img->undo()) t = new KisSelectedTransaction(i18n("Select &All"), dev);
     Q_CHECK_PTR(t);

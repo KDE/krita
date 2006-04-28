@@ -1,17 +1,17 @@
 # - Find Image Magick
-# This module finds if ImageMagick tools are installed and determines 
+# This module finds if ImageMagick tools are installed and determines
 # where the executables are. This code sets the following variables:
 #
-#  IMAGEMAGICK_CONVERT_EXECUTABLE   = 
-#     the full path to the 'convert' utility 
-#  IMAGEMAGICK_MOGRIFY_EXECUTABLE   = 
-#     the full path to the 'mogrify' utility 
-#  IMAGEMAGICK_IMPORT_EXECUTABLE    = 
-#     the full path to the 'import'  utility 
-#  IMAGEMAGICK_MONTAGE_EXECUTABLE   = 
-#     the full path to the 'montage' utility 
-#  IMAGEMAGICK_COMPOSITE_EXECUTABLE = 
-#     the full path to the 'composite' utility 
+#  IMAGEMAGICK_CONVERT_EXECUTABLE   =
+#     the full path to the 'convert' utility
+#  IMAGEMAGICK_MOGRIFY_EXECUTABLE   =
+#     the full path to the 'mogrify' utility
+#  IMAGEMAGICK_IMPORT_EXECUTABLE    =
+#     the full path to the 'import'  utility
+#  IMAGEMAGICK_MONTAGE_EXECUTABLE   =
+#     the full path to the 'montage' utility
+#  IMAGEMAGICK_COMPOSITE_EXECUTABLE =
+#     the full path to the 'composite' utility
 #
 #  IMAGEMAGICK_INCLUDE_DIR, Where to find the ImageMagick headers.
 #  IMAGEMAGICK_LIBRARIES, The libraries needed to use ImageMagick.
@@ -91,7 +91,7 @@ find_program(MAGICK_CONFIG_EXECUTABLE
 set(IMAGEMAGICK_FOUND FALSE)
 
 if(MAGICK_CONFIG_EXECUTABLE)
-   find_path(IMAGEMAGICK_INCLUDE_DIR Magick
+   find_path(IMAGEMAGICK_INCLUDE_DIR magick/api.h
       /usr/include
       /usr/local/include
       /opt/local/include

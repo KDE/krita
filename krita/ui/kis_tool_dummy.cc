@@ -35,7 +35,7 @@
 KisToolDummy::KisToolDummy()
     : super(i18n("No Active Tool"))
 {
-    setName("tool_dummy");
+    setObjectName("tool_dummy");
     m_subject = 0;
     m_dragging = false;
     m_optionWidget = 0;
@@ -84,10 +84,12 @@ void KisToolDummy::buttonRelease(KisButtonReleaseEvent *e)
 
 void KisToolDummy::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Dummy"), "tool_dummy", Qt::SHIFT+Qt::Key_H, this, SLOT(activate()), collection, name());
+        m_action = new KAction(i18n("&Dummy"), "tool_dummy", collection, objectName());
+        m_action->setShortcut(Qt::SHIFT+Qt::Key_H);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
     }
@@ -97,7 +99,7 @@ void KisToolDummy::setup(KActionCollection *collection)
 QWidget* KisToolDummy::createOptionWidget(QWidget* parent)
 {
     m_optionWidget = new QLabel(i18n("Layer is locked or invisible."), parent);
-    m_optionWidget->setCaption(i18n("No Active Tool"));
+    m_optionWidget->setWindowTitle(i18n("No Active Tool"));
     m_optionWidget->setAlignment(Qt::AlignCenter);
     return m_optionWidget;
 }

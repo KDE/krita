@@ -22,11 +22,11 @@
 
 class KisLabelZoom : public QLabel {
     Q_OBJECT
-        
-    KisLabelZoom( QWidget *parent, const char *name = 0, Qt::WFlags f = 0 ) :
-        QLabel( parent, name, f ) {}
+
+    KisLabelZoom( QWidget *parent, const char *name = 0) :
+        QLabel( parent ) { setObjectName(name); }
     virtual ~KisLabelZoom() {}
-        
+
 };
 
 #endif // KIS_LABEL_ZOOM_H_

@@ -55,10 +55,9 @@ void KisResourceServerBase::loadResources(QStringList filenames)
 {
     QStringList uniqueFiles;
 
-    while( !filenames.empty() )
+    while (!filenames.empty())
     {
-
-        QString front = *filenames.begin();
+        QString front = filenames.first();
         filenames.pop_front();
 
         QString fname = QFileInfo(front).fileName();
@@ -66,11 +65,11 @@ void KisResourceServerBase::loadResources(QStringList filenames)
         // XXX: Don't load resources with the same filename. Actually, we should look inside
         //      the resource to find out whether they are really the same, but for now this
         //      will prevent the same brush etc. showing up twice.
-        if (uniqueFiles.empty() || uniqueFiles.find(fname) == uniqueFiles.end()) {
+        if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
             uniqueFiles.append(fname);
             KisResource *resource;
             resource = createResource(front);
-            if(resource->load() && resource->valid())
+            if (resource->load() && resource->valid())
             {
                 m_resources.append(resource);
                 Q_CHECK_PTR(resource);
@@ -84,10 +83,10 @@ void KisResourceServerBase::loadResources(QStringList filenames)
     m_loaded = true;
 }
 
-Q3ValueList<KisResource*> KisResourceServerBase::resources()
+QList<KisResource*> KisResourceServerBase::resources()
 {
     if(!m_loaded) {
-        return Q3ValueList<KisResource*>();
+        return QList<KisResource*>();
     }
 
     return m_resources;
@@ -131,13 +130,11 @@ private:
 
 QStringList getFileNames( QString extensions, QString type )
 {
-    QStringList extensionList = QStringList::split(":", extensions);
+    QStringList extensionList = extensions.split(":");
     QStringList fileNames;
 
-    QStringList::Iterator it;
-    for ( it = extensionList.begin(); it != extensionList.end(); ++it ) {
-        QString s = (*it);
-        fileNames += KisFactory::instance()->dirs()->findAllResources(type.ascii(), (*it));
+    foreach (QString extension, extensionList) {
+        fileNames += KisFactory::instance()->dirs()->findAllResources(type.toAscii(), extension);
     }
     return fileNames;
 }

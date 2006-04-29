@@ -17,11 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_canvas.h"
-#include "kis_canvas_painter.h"
-#include "kis_qpaintdevice_canvas.h"
-#include "kis_qpaintdevice_canvas_painter.h"
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QTabletEvent>
 #include <QDragEnterEvent>
@@ -31,9 +26,19 @@
 #include <QPaintEvent>
 #include <QDropEvent>
 
+#ifdef Q_WS_X11
+#include <QX11Info>
+#endif
+
+#include "kis_canvas.h"
+#include "kis_canvas_painter.h"
+#include "kis_qpaintdevice_canvas.h"
+#include "kis_qpaintdevice_canvas_painter.h"
+
 KisQPaintDeviceCanvasWidget::KisQPaintDeviceCanvasWidget(QWidget *parent, const char *name)
-    : QWidget(parent, name)
+    : QWidget(parent)
 {
+    QWidget::setObjectName(name);
 }
 
 KisQPaintDeviceCanvasWidget::~KisQPaintDeviceCanvasWidget()
@@ -70,12 +75,12 @@ void KisQPaintDeviceCanvasWidget::tabletEvent(QTabletEvent *e)
     widgetGotTabletEvent(e);
 }
 
-void KisQPaintDeviceCanvasWidget::enterEvent(QEvent *e)
+void KisQPaintDeviceCanvasWidget::enterEvent(QEvent *)
 {
     //widgetGotEnterEvent(e);
 }
 
-void KisQPaintDeviceCanvasWidget::leaveEvent(QEvent *e)
+void KisQPaintDeviceCanvasWidget::leaveEvent(QEvent *)
 {
     //widgetGotLeaveEvent(e);
 }
@@ -109,7 +114,7 @@ void KisQPaintDeviceCanvasWidget::dropEvent(QDropEvent *e)
 
 bool KisQPaintDeviceCanvasWidget::x11Event(XEvent *event)
 {
-    return KisCanvasWidget::x11Event(event, x11Display(), winId(), mapToGlobal(QPoint(0, 0)));
+    return KisCanvasWidget::x11Event(event, QX11Info::display(), winId(), mapToGlobal(QPoint(0, 0)));
 }
 
 #endif // Q_WS_X11

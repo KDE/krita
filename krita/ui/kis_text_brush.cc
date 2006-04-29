@@ -15,11 +15,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #include <qfontmetrics.h>
 #include <qpainter.h>
 #include <qspinbox.h>
-#include <qcheckbox.h> 
+#include <qcheckbox.h>
 #include <qlabel.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -42,14 +42,14 @@ void KisTextBrushResource::updateBrush()
 	p.setPen(Qt::black);
 	p.drawText(0, metric.ascent(), m_txt );
 	p.end();
-	setImage(px.convertToImage ());
+	setImage(px.toImage());
 }
 
-KisTextBrush::KisTextBrush(QWidget *parent, const char* name, const QString& caption) 
-	: KisWdgTextBrush(parent, name), 
+KisTextBrush::KisTextBrush(QWidget *parent, const char* name, const QString& caption)
+	: KisWdgTextBrush(parent, name),
 	  m_textBrushResource(new KisTextBrushResource())
 {
-	setCaption(caption);
+	setWindowTitle(caption);
 	connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
 	connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
 	m_font = font();

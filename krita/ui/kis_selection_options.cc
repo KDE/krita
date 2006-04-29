@@ -52,12 +52,12 @@ KisSelectionOptions::~KisSelectionOptions()
 
 int KisSelectionOptions::action()
 {
-    return m_page->cmbAction->currentItem();
+    return m_page->cmbAction->currentIndex();
 }
 
 void KisSelectionOptions::slotActivated()
 {
-    
+
     if (!m_subject) return;
     KisImageSP img = m_subject->currentImg();
     if (!img) return;

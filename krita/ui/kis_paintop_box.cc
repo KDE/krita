@@ -19,11 +19,9 @@
  */
 #include <qwidget.h>
 #include <qstring.h>
-#include <q3valuelist.h>
 #include <qpixmap.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -46,22 +44,25 @@
 #include "kis_paintop_box.h"
 
 KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name)
-    : super (parent, name),
+    : super (parent),
       m_canvasController(view->getCanvasController())
 {
+    setObjectName(name);
+
     KAcceleratorManager::setNoAccel(this);
 
     Q_ASSERT(m_canvasController != 0);
 
-    setCaption(i18n("Painter's Toolchest"));
+    setWindowTitle(i18n("Painter's Toolchest"));
     m_optionWidget = 0;
-    m_paintops = new Q3ValueList<KisID>();
-    m_displayedOps = new Q3ValueList<KisID>();
 
-    m_cmbPaintops = new QComboBox(this, "KisPaintopBox::m_cmbPaintops");
+    m_cmbPaintops = new QComboBox(this);
+    m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
     m_cmbPaintops->setToolTip("Styles of painting for the painting tools");
-    m_layout = new Q3HBoxLayout(this, 1, 1);
+    m_layout = new QHBoxLayout(this);
+    m_layout->setMargin(1);
+    m_layout->setSpacing(1);
     m_layout->addWidget(m_cmbPaintops);
 
     connect(this, SIGNAL(selected(const KisID &, const KisPaintOpSettings *)), view, SLOT(paintopActivated(const KisID &, const KisPaintOpSettings *)));
@@ -84,49 +85,43 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
 
 KisPaintopBox::~KisPaintopBox()
 {
-    delete m_paintops;
-    delete m_displayedOps;
 }
 
 void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
 {
-    m_paintops->append(paintop);
+    m_paintops.append(paintop);
 }
 
 void KisPaintopBox::slotItemSelected(int index)
 {
-    if ((uint)index > m_displayedOps->count()) {
-        return;
+    if (index < m_displayedOps.count()) {
+        KisID paintop = m_displayedOps.at(index);
+
+        setCurrentPaintop(paintop);
     }
-
-    KisID paintop = *m_displayedOps->at(index);
-
-    setCurrentPaintop(paintop);
 }
 
 void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
 {
-    Q3ValueList<KisID>::iterator it = m_paintops->begin();
-    Q3ValueList<KisID>::iterator end = m_paintops->end();
-    m_displayedOps->clear();
+    m_displayedOps.clear();
     m_cmbPaintops->clear();
 
-    for ( ; it != end; ++it ) {
-        if (KisPaintOpRegistry::instance()->userVisible(*it, cs)) {
-            QPixmap pm = paintopPixmap(*it);
+    foreach (KisID paintopId, m_paintops) {
+        if (KisPaintOpRegistry::instance()->userVisible(paintopId, cs)) {
+
+            QPixmap pm = paintopPixmap(paintopId);
+
             if (pm.isNull()) {
-                QPixmap p = QPixmap( 16, 16 );
-                p.fill();
-                m_cmbPaintops->insertItem(p,  (*it).name());
+                pm = QPixmap(16, 16);
+                pm.fill();
             }
-            else {
-                m_cmbPaintops->insertItem(pm, (*it).name());
-            }
-            m_displayedOps->append(*it);
+
+            m_cmbPaintops->addItem(QIcon(pm), paintopId.name());
+            m_displayedOps.append(paintopId);
         }
     }
 
-    int index = m_displayedOps->findIndex(currentPaintop());
+    int index = m_displayedOps.indexOf(currentPaintop());
 
     if (index == -1) {
         // Must change the paintop as the current one is not supported
@@ -134,8 +129,8 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
         index = 0;
     }
 
-    m_cmbPaintops->setCurrentItem( index );
-    slotItemSelected( index );
+    m_cmbPaintops->setCurrentIndex(index);
+    slotItemSelected(index);
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KisID & paintop)
@@ -162,23 +157,23 @@ void KisPaintopBox::slotInputDeviceChanged(const KisInputDevice & inputDevice)
         paintop = (*it).second;
     }
 
-    int index = m_displayedOps->findIndex(paintop);
+    int index = m_displayedOps.indexOf(paintop);
 
     if (index == -1) {
         // Must change the paintop as the current one is not supported
         // by the new colourspace.
         index = 0;
-        paintop = *m_displayedOps->at(index);
+        paintop = m_displayedOps.at(index);
     }
 
-    m_cmbPaintops->setCurrentItem(index);
+    m_cmbPaintops->setCurrentIndex(index);
     setCurrentPaintop(paintop);
 }
 
 void KisPaintopBox::updateOptionWidget()
 {
     if (m_optionWidget != 0) {
-        m_layout->remove(m_optionWidget);
+        m_layout->removeWidget(m_optionWidget);
         m_optionWidget->hide();
         m_layout->invalidate();
     }
@@ -220,14 +215,14 @@ KisID KisPaintopBox::defaultPaintop(const KisInputDevice& inputDevice)
 
 const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KisID & paintop, const KisInputDevice & inputDevice)
 {
-    Q3ValueVector<KisPaintOpSettings *> settingsArray;
+    QList<KisPaintOpSettings *> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(inputDevice);
 
     if (it == m_inputDevicePaintopSettings.end()) {
         // Create settings for each paintop.
 
-        for (Q3ValueList<KisID>::const_iterator pit = m_paintops->begin(); pit != m_paintops->end(); ++pit) {
-            KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(*pit, this, inputDevice);
+        foreach (KisID paintopId, m_paintops) {
+            KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice);
             settingsArray.append(settings);
             if (settings && settings->widget()) {
                 settings->widget()->hide();
@@ -238,8 +233,8 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KisID & paintop, 
         settingsArray = (*it).second;
     }
 
-    const int index = m_paintops->findIndex(paintop);
-    if (index >= 0 && index < (int)settingsArray.count())
+    const int index = m_paintops.indexOf(paintop);
+    if (index >= 0 && index < settingsArray.count())
         return settingsArray[index];
     else
         return 0;

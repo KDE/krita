@@ -46,7 +46,7 @@ KisCustomPalette::KisCustomPalette(QWidget *parent, const char* name, const QStr
     m_mediator = 0;
     m_server = 0;
     m_editMode = false;
-    setCaption(caption);
+    setWindowTitle(caption);
 
     m_palette = new KisPalette();
     m_ownPalette = true;
@@ -128,7 +128,7 @@ void KisCustomPalette::slotAddPredefined() {
         KTempFile file(dir, extension);
         file.close(); // If we don't, and palette->save first, it might get truncated!
 
-        // Save it to that file 
+        // Save it to that file
         m_palette->setFilename(file.name());
     } else {
         // The filename is already set

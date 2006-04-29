@@ -22,18 +22,17 @@
 #ifndef KIS_LAYERBOX_H
 #define KIS_LAYERBOX_H
 
-#include <q3frame.h>
-//Added by qt3to4:
+#include <QFrame>
 #include <QPixmap>
-#include <Q3ValueList>
-#include <kdebug.h>
+#include <QList>
 #include <qtimer.h>
+
+#include <kdebug.h>
 
 #include "kis_types.h"
 #include "kis_colorspace.h"
 
 class WdgLayerBox;
-class Q3Button;
 class QPainter;
 class QWidget;
 class KIconLoader;
@@ -44,8 +43,8 @@ class KisLayerList;
 class LayerItem;
 class KisCanvasSubject;
 
-class KisLayerBox : public Q3Frame {
-        typedef Q3Frame super;
+class KisLayerBox : public QFrame {
+        typedef QFrame super;
         Q_OBJECT
 
 public:
@@ -98,11 +97,15 @@ private slots:
     void slotRequestLayerProperties(LayerItem* layer);
 
     void slotAboutToShow();
-    void slotAddMenuActivated(int type = OBJECT_LAYER);
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
     void slotPropertiesClicked();
+
+    void slotNewLayer();
+    void slotNewGroupLayer();
+    void slotNewAdjustmentLayer();
+    void slotNewPartLayer();
 
     void updateThumbnails();
 
@@ -111,11 +114,12 @@ private:
     QPixmap loadPixmap(const QString& filename, const KIconLoader& il, int size);
     KisLayerList* list() const;
     void markModified(KisLayer *layer);
+    void getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above);
 
     KMenu *m_newLayerMenu;
     KoPartSelectAction *m_partLayerAction;
     KisImageSP m_image;
-    Q3ValueList<int> m_modified;
+    QList<int> m_modified;
     WdgLayerBox *m_lst;
 
     void printKritaLayers() const;

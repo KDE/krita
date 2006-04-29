@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <q3vbox.h>
+
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -25,8 +25,9 @@
 #include "kis_global.h"
 #include "kis_icon_item.h"
 
-KisItemChooser::KisItemChooser(QWidget *parent, const char *name) : super(parent, name)
+KisItemChooser::KisItemChooser(QWidget *parent, const char *name) : super(parent)
 {
+    setObjectName(name);
 /*    m_frame = new QVBox(this);
     m_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
     m_chooser = new KoIconChooser(QSize(30,30), this, "icon_chooser", true);
@@ -66,10 +67,8 @@ void KisItemChooser::addItem(KoIconItem *item)
 
 void KisItemChooser::addItems(const vKoIconItem& items)
 {
-    Q3PtrListIterator<KoIconItem> itr(items);
-
-    for (itr.toFirst(); itr.current(); ++itr)
-        m_chooser->addItem(itr.current());
+    foreach (KoIconItem *item, items)
+        m_chooser->addItem(item);
 }
 
 QWidget *KisItemChooser::chooserWidget() const

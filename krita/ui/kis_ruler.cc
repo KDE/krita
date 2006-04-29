@@ -18,12 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QPaintEvent>
 
-#include "kdebug.h"
+#include <kdebug.h>
 
 #include "kis_ruler.h"
 
@@ -43,9 +42,12 @@ const char *KisRuler::m_nums[] = {
     "XX   XXXXXX XXX     XXX   XXXXXX XXX    XXXX   XXXXX XXXXX   XXXX  XXX"
 };
 
-KisRuler::KisRuler(Qt::Orientation o, QWidget *parent, const char *name) : super(parent, name, Qt::WNoAutoErase | Qt::WResizeNoErase), m_pixmapNums(m_nums)
+KisRuler::KisRuler(Qt::Orientation o, QWidget *parent, const char *name)
+    : super(parent, Qt::WNoAutoErase | Qt::WResizeNoErase), m_pixmapNums(m_nums)
 {
-    setBackgroundMode(Qt::NoBackground);
+    setObjectName(name);
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_OpaquePaintEvent);
     setFrameStyle(Box | Sunken);
     setLineWidth(1);
     setMidLineWidth(0);
@@ -74,7 +76,7 @@ void KisRuler::initMarker(qint32 w, qint32 h)
 {
     QPainter p;
 
-    m_pixmapMarker.resize(w, h);
+    m_pixmapMarker = QPixmap(w, h);
     p.begin(&m_pixmapMarker);
     p.setPen(QColor(Qt::blue));
     p.eraseRect(0, 0, w, h);
@@ -137,7 +139,8 @@ void KisRuler::updatePointer(qint32 x, qint32 y)
                 repaint(m_currentPosition, 1, MARKER_WIDTH, MARKER_HEIGHT);
 
             if (x != -1) {
-                bitBlt(this, x, 1, &m_pixmapMarker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+                QPainter painter(this);
+                painter.drawPixmap(x, 1, m_pixmapMarker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
                 m_currentPosition = x;
             }
         } else {
@@ -145,7 +148,8 @@ void KisRuler::updatePointer(qint32 x, qint32 y)
                 repaint(1, m_currentPosition, MARKER_HEIGHT, MARKER_WIDTH);
 
             if (y != -1) {
-                bitBlt(this, 1, y, &m_pixmapMarker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+                QPainter painter(this);
+                painter.drawPixmap(1, y, m_pixmapMarker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
                 m_currentPosition = y;
             }
         }
@@ -169,7 +173,9 @@ void KisRuler::paintEvent(QPaintEvent *e)
     if (m_pixmapBuffer) {
         const QRect& rect = e->rect();
 
-        bitBlt(this, rect.topLeft(), m_pixmapBuffer, rect);
+        QPainter painter(this);
+
+        painter.drawPixmap(rect.topLeft(), *m_pixmapBuffer, rect);
         super::paintEvent(e);
     }
 }
@@ -188,8 +194,8 @@ void KisRuler::drawRuler()
         return;
 
     p.begin(m_pixmapBuffer);
-    p.setPen(colorGroup().text());
-    p.setBackgroundColor(colorGroup().base());
+    p.setPen(palette().color(QPalette::Text));
+    p.setBackground(palette().base());
     p.eraseRect(0, 0, m_pixmapBuffer->width(), m_pixmapBuffer->height());
 
     switch (m_unit) {
@@ -359,7 +365,7 @@ void KisRuler::drawNums(QPainter *p, qint32 x, qint32 y, QString& num, bool orie
     else
         y -= 8;
 
-    for (quint32 k = 0; k < num.length(); k++) {
+    for (qint32 k = 0; k < num.length(); k++) {
         qint32 st = num.at(k).digitValue() * 7;
 
         p->drawPixmap(x, y, m_pixmapNums, st, 0, 7, 7);

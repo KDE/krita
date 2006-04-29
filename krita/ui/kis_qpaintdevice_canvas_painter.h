@@ -65,7 +65,6 @@ public:
     virtual void setBackgroundMode(Qt::BGMode);
     //virtual Qt::RasterOp rasterOp()	const;
     //virtual void setRasterOp(Qt::RasterOp);
-    virtual const QPoint&brushOrigin() const;
     virtual void setBrushOrigin(int x, int y);
     virtual void setBrushOrigin(const QPoint&);
 

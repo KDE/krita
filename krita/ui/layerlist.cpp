@@ -17,24 +17,20 @@
   Boston, MA 02110-1301, USA.
 */
 
-
 #include "layerlist.h"
 
 #include <qtooltip.h>
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <qimage.h>
-#include <q3header.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <q3simplerichtext.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 #include <QEvent>
-#include <Q3Frame>
-#include <Q3ValueList>
+#include <QFrame>
+#include <QList>
 #include <QMouseEvent>
+#include <Q3Header>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -85,7 +81,7 @@ public:
     bool foldersCanBeActive;
     bool previewsShown;
     int itemHeight;
-    Q3ValueList<LayerProperty> properties;
+    QList<LayerProperty> properties;
     KMenu contextMenu;
     //LayerToolTip *tooltip; XXX
 
@@ -98,7 +94,7 @@ class LayerItem::Private
 public:
     bool isFolder;
     int id;
-    Q3ValueList<bool> properties;
+    QList<bool> properties;
     QImage *previewImage;
     bool previewChanged;
     QPixmap scaledPreview;
@@ -313,8 +309,8 @@ LayerList::LayerList( QWidget *parent, const char *name )
 
     connect( this, SIGNAL( itemRenamed( Q3ListViewItem*, const QString&, int ) ),
                  SLOT( slotItemRenamed( Q3ListViewItem*, const QString&, int ) ) );
-    connect( this, SIGNAL( moved( Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>& ) ),
-             SLOT( slotItemMoved( Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>& ) ) );
+    connect( this, SIGNAL( moved( QList<Q3ListViewItem*>&, QList<Q3ListViewItem*>&, QList<Q3ListViewItem*>& ) ),
+             SLOT( slotItemMoved( QList<Q3ListViewItem*>&, QList<Q3ListViewItem*>&, QList<Q3ListViewItem*>& ) ) );
     connect( this, SIGNAL( onItem( Q3ListViewItem* ) ), SLOT( hideTip() ) );
     connect( this, SIGNAL( onViewport() ), SLOT( hideTip() ) );
 }
@@ -385,12 +381,12 @@ int LayerList::activeLayerID() const
     return -1;
 }
 
-Q3ValueList<LayerItem*> LayerList::selectedLayers() const
+QList<LayerItem*> LayerList::selectedLayers() const
 {
     if( !firstChild() )
-        return Q3ValueList<LayerItem*>();
+        return QList<LayerItem*>();
 
-    Q3ValueList<LayerItem*> layers;
+    QList<LayerItem*> layers;
     for( LayerItemIterator it( firstChild() ); *it; ++it )
         if( (*it)->isSelected() )
             layers.append( *it );
@@ -398,10 +394,10 @@ Q3ValueList<LayerItem*> LayerList::selectedLayers() const
     return layers;
 }
 
-Q3ValueList<int> LayerList::selectedLayerIDs() const
+QList<int> LayerList::selectedLayerIDs() const
 {
-    const Q3ValueList<LayerItem*> layers = selectedLayers();
-    Q3ValueList<int> ids;
+    const QList<LayerItem*> layers = selectedLayers();
+    QList<int> ids;
     for( int i = 0, n = layers.count(); i < n; ++i )
         ids.append( layers[i]->id() );
 
@@ -756,7 +752,7 @@ void LayerList::constructMenu( LayerItem *layer )
 
 void LayerList::menuActivated( int id, LayerItem *layer )
 {
-    const Q3ValueList<LayerItem*> selected = selectedLayers();
+    const QList<LayerItem*> selected = selectedLayers();
 
     LayerItem *parent = ( layer && layer->isFolder() ) ? layer : 0;
     LayerItem *after = 0;
@@ -777,7 +773,7 @@ void LayerList::menuActivated( int id, LayerItem *layer )
             break;
         case MenuItems::RemoveLayer:
             {
-                Q3ValueList<int> ids;
+                QList<int> ids;
                 for( int i = 0, n = selected.count(); i < n; ++i )
                 {
                     ids.append( selected[i]->id() );
@@ -812,7 +808,7 @@ void LayerList::slotItemRenamed( Q3ListViewItem *item, const QString &text, int 
     emit displayNameChanged( static_cast<LayerItem*>( item )->id(), text );
 }
 
-void LayerList::slotItemMoved( Q3PtrList<Q3ListViewItem> &items, Q3PtrList<Q3ListViewItem> &/*afterBefore*/, Q3PtrList<Q3ListViewItem> &afterNow )
+void LayerList::slotItemMoved( QList<Q3ListViewItem*> &items, QList<Q3ListViewItem*> &/*afterBefore*/, QList<Q3ListViewItem*> &afterNow )
 {
     for( int i = 0, n = items.count(); i < n; ++i )
     {
@@ -1082,7 +1078,7 @@ QRect LayerItem::textRect() const
 
 QRect LayerItem::iconsRect() const
 {
-    const Q3ValueList<LayerProperty> &lp = listView()->d->properties;
+    const QList<LayerProperty> &lp = listView()->d->properties;
     int propscount = 0;
     for( int i = 0, n = lp.count(); i < n; ++i )
         if( !lp[i].enabledIcon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
@@ -1118,7 +1114,7 @@ void LayerItem::drawIcons( QPainter *p, const QColorGroup &/*cg*/, const QRect &
     p->translate( r.left(), r.top() );
 
     int x = 0;
-    const Q3ValueList<LayerProperty> &lp = listView()->d->properties;
+    const QList<LayerProperty> &lp = listView()->d->properties;
     for( int i = 0, n = lp.count(); i < n; ++i )
         if( !lp[i].enabledIcon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )
         {
@@ -1196,7 +1192,7 @@ bool LayerItem::mousePressEvent( QMouseEvent *e )
         int x = e->pos().x() - ir.left();
         if( x % ( iconWidth + listView()->itemMargin() ) < iconWidth ) //it's on an icon, not a margin
         {
-            const Q3ValueList<LayerProperty> &lp = listView()->d->properties;
+            const QList<LayerProperty> &lp = listView()->d->properties;
             int p = -1;
             for( int i = 0, n = lp.count(); i < n; ++i )
             {
@@ -1260,7 +1256,7 @@ int LayerItem::width( const QFontMetrics &fm, const Q3ListView *lv, int c ) cons
     if( c != 0 )
         return super::width( fm, lv, c );
 
-    const Q3ValueList<LayerProperty> &lp = listView()->d->properties;
+    const QList<LayerProperty> &lp = listView()->d->properties;
     int propscount = 0;
     for( int i = 0, n = d->properties.count(); i < n; ++i )
         if( !lp[i].enabledIcon.isNull() && ( !multiline() || !isFolder() || lp[i].validForFolders ) )

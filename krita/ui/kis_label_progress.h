@@ -32,7 +32,7 @@ class KisLabelProgress : public QLabel, public KisProgressDisplayInterface {
     typedef QLabel super;
 
 public:
-    KisLabelProgress(QWidget *parent, const char *name = 0, Qt::WFlags f = 0);
+    KisLabelProgress(QWidget *parent, const char *name = 0);
     virtual ~KisLabelProgress();
 
 public:

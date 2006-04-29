@@ -21,25 +21,26 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <knuminput.h>
 #include <kis_filter_config_widget.h>
 #include <klocale.h>
 
-KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const char * name)
+KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, QString name)
     : KDoubleNumInput(parent)
 {
     setObjectName(name);
-    m_timer = new QTimer(this, name);
+    m_timer = new QTimer(this);
+    m_timer->setObjectName(name);
+    m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotValueChanged()));
     connect(this, SIGNAL(valueChanged( double )), SLOT(slotTimeToUpdate()));
 }
 
 void KisDelayedActionDoubleInput::slotTimeToUpdate()
 {
-    m_timer->start(50, true);
+    m_timer->start(50);
 }
 
 void KisDelayedActionDoubleInput::slotValueChanged()
@@ -67,16 +68,16 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
 {
     qint32 m_nbdoubleWidgets = dwparam.size();
 
-    this->setCaption(caption);
+    this->setWindowTitle(caption);
 
-    Q3GridLayout *widgetLayout = new Q3GridLayout(this, m_nbdoubleWidgets + 1, 3);
-    widgetLayout->setColStretch ( 1, 1 );
+    QGridLayout *widgetLayout = new QGridLayout(this);
+    widgetLayout->setColumnStretch(1, 1);
 
     m_doubleWidgets = new KisDelayedActionDoubleInput*[ m_nbdoubleWidgets ];
 
     for( qint32 i = 0; i < m_nbdoubleWidgets; ++i)
     {
-        m_doubleWidgets[i] = new KisDelayedActionDoubleInput(this, dwparam[i].name.ascii());
+        m_doubleWidgets[i] = new KisDelayedActionDoubleInput(this, dwparam[i].name);
         m_doubleWidgets[i]->setRange( dwparam[i].min, dwparam[i].max );
         m_doubleWidgets[i]->setValue( dwparam[i].initvalue );
         m_doubleWidgets[i]->cancelDelayedSignal();
@@ -95,9 +96,9 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(QWidget * parent, const c
 
 void KisMultiDoubleFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
-    
+
     for (int i = 0; i < m_nbdoubleWidgets ; ++i) {
-        double val = config->getDouble(m_doubleWidgets[i]->name());
+        double val = config->getDouble(m_doubleWidgets[i]->objectName());
         m_doubleWidgets[i]->setValue(val);
         m_doubleWidgets[i]->cancelDelayedSignal();
     }

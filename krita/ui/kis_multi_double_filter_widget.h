@@ -26,26 +26,23 @@
 
 class KisDelayedActionDoubleInput : public KDoubleNumInput
 {
-
     Q_OBJECT
-            
-    public:
-        
-        KisDelayedActionDoubleInput(QWidget * parent, const char * name);
 
-        void cancelDelayedSignal();
+public:
+    KisDelayedActionDoubleInput(QWidget * parent, QString name);
 
-    private slots:
-        void slotValueChanged();
-        void slotTimeToUpdate();
+    void cancelDelayedSignal();
 
-    signals:
-    
-        void valueChangedDelayed(double value);
-    
-    private:
- 
-        QTimer * m_timer;
+private slots:
+    void slotValueChanged();
+    void slotTimeToUpdate();
+
+signals:
+    void valueChangedDelayed(double value);
+
+private:
+
+    QTimer * m_timer;
 };
 
 

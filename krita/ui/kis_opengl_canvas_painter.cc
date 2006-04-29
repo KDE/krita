@@ -99,7 +99,7 @@ void KisOpenGLCanvasPainter::updateViewTransformation()
     glOrtho(0, m_widget->width(), m_widget->height(), 0, -1, 1);
 
     glTranslatef(m_viewport.x(), m_viewport.y(), 0.0);
-    glScalef(static_cast<float>(m_viewport.width()) / m_window.width(), 
+    glScalef(static_cast<float>(m_viewport.width()) / m_window.width(),
              static_cast<float>(m_viewport.height()) / m_window.height(),
              1.0);
     glTranslatef(-m_window.x(), -m_window.y(), 0.0);
@@ -561,7 +561,7 @@ void KisOpenGLCanvasPainter::drawRoundRect(const QRect& /*r*/, int /*xRnd*/, int
 void KisOpenGLCanvasPainter::drawEllipse(int x, int y, int w, int h)
 {
     QRect r(x, y, w, h);
-    r = r.normalize();
+    r = r.normalized();
 
     Q3PointArray points;
 

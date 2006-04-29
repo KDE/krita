@@ -23,7 +23,7 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
+
 #include <QPixmap>
 #include <QShowEvent>
 #include <kglobal.h>
@@ -47,7 +47,7 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const char* name, const QString&
 {
     Q_ASSERT(m_view);
     m_mediator = 0;
-    setCaption(caption);
+    setWindowTitle(caption);
 
     m_brush = 0;
 
@@ -96,7 +96,7 @@ void KisCustomBrush::slotAddPredefined() {
     KTempFile file(dir, extension);
     file.close(); // If we don't, and brush->save first, it might get truncated!
 
-    // Save it to that file 
+    // Save it to that file
     m_brush->setFilename(file.name());
 
     // Add it to the brush server, so that it automatically gets to the mediators, and

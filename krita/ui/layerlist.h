@@ -22,10 +22,8 @@
 #define LAYERLIST_H
 
 #include <qicon.h>
-//Added by qt3to4:
 #include <QPixmap>
-#include <Q3PtrList>
-#include <Q3ValueList>
+#include <QList>
 #include <QMouseEvent>
 #include <k3listview.h>
 
@@ -34,7 +32,6 @@ class QString;
 class KMenu;
 class LayerItem;
 class LayerFolder;
-template<class T> class Q3PtrList;
 
 class LayerList: public K3ListView
 {
@@ -60,8 +57,8 @@ public:
     LayerItem *activeLayer() const;
     int activeLayerID() const;
 
-    Q3ValueList<LayerItem*> selectedLayers() const;
-    Q3ValueList<int> selectedLayerIDs() const;
+    QList<LayerItem*> selectedLayers() const;
+    QList<int> selectedLayerIDs() const;
 
     void makeFolder( int id );
     bool isFolder( int id ) const;
@@ -132,8 +129,8 @@ signals:
     void requestRemoveLayer( LayerItem *layer );
     void requestRemoveLayer( int id );
 
-    void requestRemoveLayers( Q3ValueList<LayerItem*> layers );
-    void requestRemoveLayers( Q3ValueList<int> ids );
+    void requestRemoveLayers( QList<LayerItem*> layers );
+    void requestRemoveLayers( QList<int> ids );
 
     void requestLayerProperties( LayerItem *layer );
     void requestLayerProperties( int id );
@@ -156,7 +153,7 @@ private:
 
 private slots:
     void slotItemRenamed( Q3ListViewItem *item, const QString &text, int col );
-    void slotItemMoved( Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>& );
+    void slotItemMoved( QList<Q3ListViewItem *>&, QList<Q3ListViewItem *>&, QList<Q3ListViewItem *>& );
     void showContextMenu();
     void hideTip();
     void maybeTip();

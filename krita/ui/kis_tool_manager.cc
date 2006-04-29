@@ -65,9 +65,9 @@ void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManage
     if (!m_dummyTool)
         m_dummyTool = KisToolDummyFactory().createTool(actionCollection);
 
-    Q3ValueVector<KisInputDevice> inputDevices = KisInputDevice::inputDevices();
+    QList<KisInputDevice> inputDevices = KisInputDevice::inputDevices();
 
-    for (quint32 inputDevice = 0; inputDevice < inputDevices.count(); inputDevice++) {
+    for (qint32 inputDevice = 0; inputDevice < inputDevices.count(); inputDevice++) {
         m_inputDeviceToolSetMap[inputDevices[inputDevice]] = KisToolRegistry::instance()->createTools(actionCollection, m_subject);
     }
 
@@ -86,10 +86,7 @@ void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManage
         setCurrentTool(t);
     }
     setup = true;
-        
 }
-
-
 
 void KisToolManager::youAintGotNoToolBox()
 {
@@ -139,7 +136,7 @@ void KisToolManager::updateGUI()
 
 
     KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(l.data());
-    
+
     if (img) {
         l = img->activeLayer();
         enable = l && !l->locked() && l->visible() && (partLayer == 0);
@@ -214,7 +211,7 @@ void KisToolManager::setCurrentTool(KisTool *tool)
             m_inputDeviceToolMap[m_controller->currentInputDevice()] = 0;
             m_controller->setCanvasCursor(KisCursor::arrowCursor());
         }
-        m_toolBox->slotSetTool(tool->name());
+        m_toolBox->slotSetTool(tool->objectName());
     }
 }
 
@@ -292,7 +289,7 @@ KisTool * KisToolManager::findTool(const QString &toolName, KisInputDevice input
 
     for (vKisTool::const_iterator it = tools.begin(); it != tools.end(); ++it) {
         KisToolSP t = *it;
-        if (t->name() == toolName) {
+        if (t->objectName() == toolName) {
             tool = t.data();
             break;
         }

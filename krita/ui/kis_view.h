@@ -32,7 +32,7 @@
 #include <qpixmap.h>
 #include <qstringlist.h>
 #include <qtimer.h>
-//Added by qt3to4:
+
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QEvent>
@@ -41,11 +41,11 @@
 #include <QLabel>
 #include <QShowEvent>
 #include <QResizeEvent>
-#include <Q3PopupMenu>
 #include <QTabletEvent>
 #include <QDragEnterEvent>
 #include <QMouseEvent>
 
+#include <kmenu.h>
 #include <ksqueezedtextlabel.h>
 #include <kdebug.h>
 #include <kxmlguibuilder.h>
@@ -64,13 +64,11 @@
 #include "kis_color.h"
 #include "kis_input_device.h"
 
-class Q3Button;
 class QLabel;
 class QPaintEvent;
 class QScrollBar;
 class QWidget;
 class QPopup;
-class Q3PopupMenu;
 
 class DCOPObject;
 class KAction;
@@ -78,6 +76,7 @@ class KActionMenu;
 class KPrinter;
 class KToggleAction;
 class KToolBar;
+class KMenu;
 
 class KoPartSelectAction;
 class KoDocumentEntry;
@@ -277,7 +276,7 @@ private:
     virtual KisDoc * document() const;
 
     inline KisGridManager * gridManager() { return m_gridManager; }
-    
+
     inline KisSelectionManager * selectionManager() { return m_selectionManager; }
 
     KoPaletteManager * paletteManager();
@@ -301,7 +300,7 @@ private slots:
 
 private:
     virtual KisCanvas *kiscanvas() const;
-    
+
     virtual qint32 horzValue() const;
     virtual qint32 vertValue() const;
 
@@ -391,7 +390,7 @@ private:
      * Import an image as a layer. If there is more than
      * one layer in the image, import all of them as separate
      * layers.
-     * 
+     *
      * @param url the url to the image file
      * @return the number of layers added
      */
@@ -479,7 +478,7 @@ private slots:
     void flattenImage();
     void mergeLayer();
     void saveLayerAsImage();
-    
+
     void slotUpdateFullScreen(bool toggle);
     void showRuler();
 
@@ -514,12 +513,12 @@ private slots:
 private:
 
     bool m_panning;
-    
+
     KisTool * m_oldTool;
-    
+
     KisDoc *m_doc;
     KisCanvas *m_canvas;
-    Q3PopupMenu * m_popup;
+    KMenu *m_popup;
     KisPartLayerHandler* m_partHandler;
 
     KisGridManager * m_gridManager;

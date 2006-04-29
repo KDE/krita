@@ -16,10 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_canvas.h"
-#include "kis_opengl_canvas.h"
-#include "kis_opengl_canvas_painter.h"
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QTabletEvent>
 #include <QDragEnterEvent>
@@ -29,10 +25,19 @@
 #include <QPaintEvent>
 #include <QDropEvent>
 
+#ifdef Q_WS_X11
+#include <QX11Info>
+#endif
+
+#include "kis_canvas.h"
+#include "kis_opengl_canvas.h"
+#include "kis_opengl_canvas_painter.h"
+
 #ifdef HAVE_OPENGL
 KisOpenGLCanvasWidget::KisOpenGLCanvasWidget(QWidget *parent, const char *name, QGLWidget *sharedContextWidget)
-    : QGLWidget(KisOpenGLCanvasFormat, parent, name, sharedContextWidget)
+    : QGLWidget(KisOpenGLCanvasFormat, parent, sharedContextWidget)
 {
+    QGLWidget::setObjectName(name);
     if (isSharing()) {
         kDebug(41001) << "Created QGLWidget with sharing\n";
     } else {
@@ -76,12 +81,12 @@ void KisOpenGLCanvasWidget::tabletEvent(QTabletEvent *e)
     widgetGotTabletEvent(e);
 }
 
-void KisOpenGLCanvasWidget::enterEvent(QEvent *e)
+void KisOpenGLCanvasWidget::enterEvent(QEvent *)
 {
     //widgetGotEnterEvent(e);
 }
 
-void KisOpenGLCanvasWidget::leaveEvent(QEvent *e)
+void KisOpenGLCanvasWidget::leaveEvent(QEvent *)
 {
     //widgetGotLeaveEvent(e);
 }
@@ -115,7 +120,7 @@ void KisOpenGLCanvasWidget::dropEvent(QDropEvent *e)
 
 bool KisOpenGLCanvasWidget::x11Event(XEvent *event)
 {
-    return KisCanvasWidget::x11Event(event, x11Display(), winId(), mapToGlobal(QPoint(0, 0)));
+    return KisCanvasWidget::x11Event(event, QX11Info::display(), winId(), mapToGlobal(QPoint(0, 0)));
 }
 
 #endif // Q_WS_X11

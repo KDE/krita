@@ -21,8 +21,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 
@@ -34,24 +33,26 @@ KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, QString nlabel, QStrin
 
 }
 
-KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char * name, const char * caption, vKisBoolWidgetParam iwparam) : 
+KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char * name, const char * caption, vKisBoolWidgetParam iwparam) :
     KisFilterConfigWidget( parent, name )
 {
     qint32 m_nbboolWidgets = iwparam.size();
 
-    this->setCaption(caption);
+    this->setWindowTitle(caption);
 
-    Q3VBoxLayout *widgetLayout = new Q3VBoxLayout(this, m_nbboolWidgets + 1);
+    QVBoxLayout *widgetLayout = new QVBoxLayout(this);
+    widgetLayout->setMargin(m_nbboolWidgets + 1);
 
     m_boolWidgets = new QCheckBox*[ m_nbboolWidgets ];
 
     for( qint32 i = 0; i < m_nbboolWidgets; ++i)
     {
-        m_boolWidgets[i] = new QCheckBox( this, iwparam[i].name.ascii());
-        m_boolWidgets[i]->setChecked( iwparam[i].initvalue );
-        m_boolWidgets[i]->setText( iwparam[i].label );
+        m_boolWidgets[i] = new QCheckBox(this);
+        m_boolWidgets[i]->setObjectName(iwparam[i].name);
+        m_boolWidgets[i]->setChecked(iwparam[i].initvalue);
+        m_boolWidgets[i]->setText(iwparam[i].label);
         connect(m_boolWidgets[i], SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
-        widgetLayout->add( m_boolWidgets[i]);
+        widgetLayout->addWidget(m_boolWidgets[i]);
     }
 //     QSpacerItem * sp = new QSpacerItem(1, 1);
     widgetLayout->addStretch();
@@ -60,9 +61,9 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char 
 
 void KisMultiBoolFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
-    
+
     for (int i = 0; i < m_nbboolWidgets; ++i) {
-        double val = config->getBool(m_boolWidgets[i]->name());
+        double val = config->getBool(m_boolWidgets[i]->objectName());
         m_boolWidgets[i]->setChecked(val);
     }
 }

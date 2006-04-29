@@ -19,12 +19,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <q3button.h>
 #include <qtoolbutton.h>
 #include <qbrush.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
-#include <q3hbox.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpoint.h>
@@ -35,10 +33,9 @@
 #include <qwidget.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPixmap>
-#include <Q3ValueList>
+#include <QList>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -48,6 +45,7 @@
 #include <kiconloader.h>
 #include <kicontheme.h>
 #include <klocale.h>
+#include <khbox.h>
 
 #include <KoPartSelectAction.h>
 
@@ -66,13 +64,14 @@
 #include "kis_layerbox.h"
 
 KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char *name)
-    : super(parent, name), m_image(0)
+    : super(parent), m_image(0)
 {
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(this);
-    vbox->setAutoAdd(true);
+    setObjectName(name);
+    QVBoxLayout *vbox = new QVBoxLayout(this);
 
     m_lst = new WdgLayerBox(this);
     setMinimumSize(m_lst->minimumSizeHint());
+    vbox->addWidget(m_lst);
 
     m_lst->bnAdd->setToolTip( i18n("Create new layer"));
 
@@ -122,16 +121,16 @@ KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char 
                     SLOT(slotRequestLayerProperties(LayerItem*)));
 
     m_newLayerMenu = new KMenu(this);
-    m_lst->bnAdd->setPopup(m_newLayerMenu);
-    m_lst->bnAdd->setPopupDelay(1);
-    m_newLayerMenu->insertItem( SmallIconSet( "filenew" ), i18n( "&New Layer..." ), PAINT_LAYER );
-    m_newLayerMenu->insertItem( SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), GROUP_LAYER );
-    m_newLayerMenu->insertItem( SmallIconSet( "tool_filter" ), i18n( "New &Adjustment Layer..." ), ADJUSTMENT_LAYER );
-    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear" /*, this - KDE4*/);
-    m_partLayerAction->plug( m_newLayerMenu );
-    connect(m_partLayerAction, SIGNAL(activated()), this, SLOT(slotAddMenuActivated()));
-    connect(m_newLayerMenu, SIGNAL(activated(int)), this, SLOT(slotAddMenuActivated(int)));
+    m_lst->bnAdd->setMenu(m_newLayerMenu);
+    m_lst->bnAdd->setPopupMode(QToolButton::InstantPopup);
 
+    m_newLayerMenu->addAction(SmallIconSet( "filenew" ), i18n( "&New Layer..." ), this, SLOT(slotNewLayer()));
+    m_newLayerMenu->addAction(SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), this, SLOT(slotNewGroupLayer()));
+    m_newLayerMenu->addAction(SmallIconSet( "tool_filter" ), i18n( "New &Adjustment Layer..." ), this, SLOT(slotNewAdjustmentLayer()));
+
+    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear" /*, this - KDE4*/);
+    m_newLayerMenu->addAction(m_partLayerAction);
+    connect(m_partLayerAction, SIGNAL(triggered()), this, SLOT(slotNewPartLayer()));
 
     connect(m_lst->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     connect(m_lst->bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
@@ -226,7 +225,7 @@ void KisLayerBox::slotLayerAdded(KisLayerSP layer)
 void KisLayerBox::slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP)
 {
     list()->removeLayer(layer->id());
-    m_modified.remove(layer->id());
+    m_modified.removeAll(layer->id());
     markModified(wasParent.data());
     updateUI();
 }
@@ -462,14 +461,9 @@ void KisLayerBox::clear()
     updateUI();
 }
 
-void KisLayerBox::slotAddMenuActivated(int type)
+void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above)
 {
-    if(type == -1)
-        return;
-
     KisGroupLayerSP root = m_image->rootLayer();
-    KisGroupLayerSP parent;
-    KisLayerSP above;
     if (KisLayerSP active = m_image->activeLayer())
     {
         parent = root;
@@ -482,27 +476,51 @@ void KisLayerBox::slotAddMenuActivated(int type)
         parent = root;
         above = m_image->rootLayer()->firstChild();
     }
+}
 
-    switch (type)
-    {
-        case PAINT_LAYER:
-            emit sigRequestLayer(parent, above);
-            break;
-        case GROUP_LAYER:
-            emit sigRequestGroupLayer(parent, above);
-            break;
-        case ADJUSTMENT_LAYER:
-            emit sigRequestAdjustmentLayer(parent, above);
-            break;
-        case OBJECT_LAYER:
-        default: //goddamned Qt doesn't emit activated for default-assigned IDs, so this does nothing
-            emit sigRequestPartLayer(parent, above, m_partLayerAction->documentEntry());
-    }
+void KisLayerBox::slotNewLayer()
+{
+    KisGroupLayerSP parent;
+    KisLayerSP above;
+
+    getNewLayerLocation(parent, above);
+
+    emit sigRequestLayer(parent, above);
+}
+
+void KisLayerBox::slotNewGroupLayer()
+{
+    KisGroupLayerSP parent;
+    KisLayerSP above;
+
+    getNewLayerLocation(parent, above);
+
+    emit sigRequestGroupLayer(parent, above);
+}
+
+void KisLayerBox::slotNewAdjustmentLayer()
+{
+    KisGroupLayerSP parent;
+    KisLayerSP above;
+
+    getNewLayerLocation(parent, above);
+
+    emit sigRequestAdjustmentLayer(parent, above);
+}
+
+void KisLayerBox::slotNewPartLayer()
+{
+    KisGroupLayerSP parent;
+    KisLayerSP above;
+
+    getNewLayerLocation(parent, above);
+
+    emit sigRequestPartLayer(parent, above, m_partLayerAction->documentEntry());
 }
 
 void KisLayerBox::slotRmClicked()
 {
-    Q3ValueList<int> l = list()->selectedLayerIDs();
+    QList<int> l = list()->selectedLayerIDs();
     if (l.count() < 2 && list()->activeLayer() && !l.contains(list()->activeLayer()->id()))
     {
         l.clear();
@@ -511,14 +529,14 @@ void KisLayerBox::slotRmClicked()
 
     for (int i = 0, n = l.count(); i < n; ++i)
     {
-        m_modified.remove(l[i]);
+        m_modified.removeAll(l[i]);
         m_image->removeLayer(m_image->findLayer(l[i]));
     }
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
-    Q3ValueList<int> l = list()->selectedLayerIDs();
+    QList<int> l = list()->selectedLayerIDs();
     if (l.count() < 2 && list()->activeLayer() && !l.contains(list()->activeLayer()->id()))
     {
         l.clear();
@@ -545,7 +563,7 @@ void KisLayerBox::slotRaiseClicked()
 
 void KisLayerBox::slotLowerClicked()
 {
-    Q3ValueList<LayerItem*> l = list()->selectedLayers();
+    QList<LayerItem*> l = list()->selectedLayers();
     if (l.count() < 2 && list()->activeLayer() && !l.contains(list()->activeLayer()))
     {
         l.clear();
@@ -609,7 +627,7 @@ void KisLayerBox::markModified(KisLayer* layer)
     if( !layer )
         return;
 
-    Q3ValueList<int> v;
+    QList<int> v;
     while (layer && layer != m_image->rootLayer().data())
     {
         v.append(layer->id());

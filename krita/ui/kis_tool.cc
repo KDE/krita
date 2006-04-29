@@ -29,7 +29,7 @@
 #include "kis_tool.moc"
 
 
-class KisTool::KisToolPrivate 
+class KisTool::KisToolPrivate
 {
 public:
     QString uiname;
@@ -58,9 +58,9 @@ KisTool::~KisTool()
 
 QWidget* KisTool::createOptionWidget(QWidget* parent)
 {
-    
+
     d->optionWidget = new QLabel(i18n("No options for %1.").arg(d->uiname), parent);
-    d->optionWidget->setCaption(d->uiname);
+    d->optionWidget->setWindowTitle(d->uiname);
     d->optionWidget->setAlignment(Qt::AlignCenter);
     return d->optionWidget;
 }

@@ -27,17 +27,13 @@
 
 // Qt
 #include <qapplication.h>
-#include <q3button.h>
 #include <qcursor.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
 #include <qspinbox.h>
-#include <q3dockarea.h>
 #include <qstringlist.h>
 #include <qstyle.h>
-#include <q3popupmenu.h>
-#include <q3valuelist.h>
 #include <qstringlist.h>
 #include <qobject.h>
 //Added by qt3to4:
@@ -406,10 +402,10 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
     if( element.attribute( "name" ) == "ToolBox" )
     {
         m_toolBox = new KoToolBox(mainWindow(), "ToolBox", KisFactory::instance(), NUMBER_OF_TOOLTYPES);
-        m_toolBox->setLabel(i18n("Krita"));
+        m_toolBox->setWindowTitle(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 
-        Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).lower() );
+        Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).toLower() );
 
         mainWindow()->addToolBar(dock, m_toolBox);
         //mainWindow()->moveDockWindow( m_toolBox, dock, false, 0, 0 );
@@ -445,7 +441,7 @@ KoPaletteManager * KisView::paletteManager()
 void KisView::createLayerBox()
 {
     m_layerBox = new KisLayerBox(this);
-    m_layerBox->setCaption(i18n("Layers"));
+    m_layerBox->setWindowTitle(i18n("Layers"));
 
     connect(m_layerBox, SIGNAL(sigRequestLayer(KisGroupLayerSP, KisLayerSP)),
             this, SLOT(addLayer(KisGroupLayerSP, KisLayerSP)));
@@ -622,52 +618,91 @@ void KisView::setupActions()
     m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
-    m_imgProperties = new KAction(i18n("Image Properties..."), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
+    m_imgProperties = new KAction(i18n("Image Properties..."), actionCollection(), "img_properties");
+    connect(m_imgProperties, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
+
     m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
-    m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
+    m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), actionCollection(), "resizeimgtolayer");
+    connect(m_imgResizeToLayer, SIGNAL(triggered()), this, SLOT(imgResizeToActiveLayer()));
 
     // view actions
     m_zoomIn = KStdAction::zoomIn(this, SLOT(slotZoomIn()), actionCollection(), "zoom_in");
     m_zoomOut = KStdAction::zoomOut(this, SLOT(slotZoomOut()), actionCollection(), "zoom_out");
-    m_actualPixels = new KAction(i18n("Actual Pixels"), Qt::CTRL+Qt::Key_0, this, SLOT(slotActualPixels()), actionCollection(), "actual_pixels");
+    m_actualPixels = new KAction(i18n("Actual Pixels"), actionCollection(), "actual_pixels");
+    m_actualPixels->setShortcut(Qt::CTRL+Qt::Key_0);
+    connect(m_actualPixels, SIGNAL(triggered()), this, SLOT(slotActualPixels()));
+
     m_actualSize = KStdAction::actualSize(this, SLOT(slotActualSize()), actionCollection(), "actual_size");
     m_actualSize->setEnabled(false);
     m_fitToCanvas = KStdAction::fitToPage(this, SLOT(slotFitToCanvas()), actionCollection(), "fit_to_canvas");
 
     // layer actions
-    m_layerAdd = new KAction(i18n("&Add..."), Qt::CTRL+Qt::SHIFT+Qt::Key_N, this, SLOT(layerAdd()), actionCollection(), "insert_layer");
+    m_layerAdd = new KAction(i18n("&Add..."), actionCollection(), "insert_layer");
+    m_layerAdd->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_N);
+    connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
 
     m_actionPartLayer = new KoPartSelectAction( i18n( "&Object Layer" ), "frame_query",
                                                     this, SLOT( addPartLayer() ),
                                                     actionCollection(), "insert_part_layer" );
 
+    m_actionAdjustmentLayer = new KAction(i18n( "&Adjustment Layer" ), actionCollection(), "insert_adjustment_layer");
+    connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
 
-    m_actionAdjustmentLayer = new KAction( i18n( "&Adjustment Layer" ), 0,
-            this, SLOT( addAdjustmentLayer() ),
-            actionCollection(), "insert_adjustment_layer" );
+    m_layerRm = new KAction(i18n("&Remove"), actionCollection(), "remove_layer");
+    connect(m_layerRm, SIGNAL(triggered()), this, SLOT(layerRemove()));
 
+    m_layerDup = new KAction(i18n("Duplicate"), actionCollection(), "duplicate_layer");
+    connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
-    m_layerRm = new KAction(i18n("&Remove"), 0, this, SLOT(layerRemove()), actionCollection(), "remove_layer");
-    m_layerDup = new KAction(i18n("Duplicate"), 0, this, SLOT(layerDuplicate()), actionCollection(), "duplicate_layer");
-    m_layerHide = new KAction(i18n("&Hide/Show"), 0, this, SLOT(layerToggleVisible()), actionCollection(), "hide_layer");
-    m_layerRaise = new KAction(i18n("Raise"), "raise", Qt::CTRL+Qt::Key_BracketRight, this, SLOT(layerRaise()), actionCollection(), "raiselayer");
-    m_layerLower = new KAction(i18n("Lower"), "lower", Qt::CTRL+Qt::Key_BracketLeft, this, SLOT(layerLower()), actionCollection(), "lowerlayer");
-    m_layerTop = new KAction(i18n("To Top"), "bring_forward", Qt::CTRL+Qt::SHIFT+Qt::Key_BracketRight, this, SLOT(layerFront()), actionCollection(), "toplayer");
-    m_layerBottom = new KAction(i18n("To Bottom"), "send_backward", Qt::CTRL+Qt::SHIFT+Qt::Key_BracketLeft, this, SLOT(layerBack()), actionCollection(), "bottomlayer");
-    m_layerProperties = new KAction(i18n("Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
-    (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
-    m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), "filesave", 0, this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
-    (void)new KAction(i18n("Flip on &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
-    (void)new KAction(i18n("Flip on &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
+    m_layerHide = new KAction(i18n("&Hide/Show"), actionCollection(), "hide_layer");
+    connect(m_layerHide, SIGNAL(triggered()), this, SLOT(layerToggleVisible()));
+
+    m_layerRaise = new KAction(KIcon("raise"), i18n("Raise"), actionCollection(), "raiselayer");
+    m_layerRaise->setShortcut(Qt::CTRL+Qt::Key_BracketRight);
+    connect(m_layerRaise, SIGNAL(triggered()), this, SLOT(layerRaise()));
+
+    m_layerLower = new KAction(KIcon("lower"), i18n("Lower"), actionCollection(), "lowerlayer");
+    m_layerLower->setShortcut(Qt::CTRL+Qt::Key_BracketLeft);
+    connect(m_layerLower, SIGNAL(triggered()), this, SLOT(layerLower()));
+
+    m_layerTop = new KAction(KIcon("bring_forward"), i18n ("To Top"), actionCollection(), "toplayer");
+    m_layerTop->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketRight);
+    connect(m_layerTop, SIGNAL(triggered()), this, SLOT(layerFront()));
+
+    m_layerBottom = new KAction(KIcon("send_backward"), i18n("To Bottom"), actionCollection(), "bottomlayer");
+    m_layerBottom->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketLeft);
+    connect(m_layerBottom, SIGNAL(triggered()), this, SLOT(layerBack()));
+
+    m_layerProperties = new KAction(i18n("Properties..."), actionCollection(), "layer_properties");
+    connect(m_layerProperties, SIGNAL(triggered()), this, SLOT(layerProperties()));
+
+    KAction *action = new KAction(i18n("I&nsert Image as Layer..."), actionCollection(), "insert_image_as_layer");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
+
+    m_layerSaveAs = new KAction(KIcon("filesave"), i18n("Save Layer as Image..."), actionCollection(), "save_layer_as_image");
+    connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
+
+    action = new KAction(KIcon("view_left_right"), i18n ("Flip on &X Axis"), actionCollection(), "mirrorLayerX");
+    connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerX()));
+
+    action = new KAction(KIcon("view_top_bottom"), i18n("Flip on &Y Axis"), actionCollection(), "mirrorLayerY");
+    connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerY()));
 
     // image actions
-    m_imgFlatten = new KAction(i18n("&Flatten image"), Qt::CTRL+Qt::SHIFT+Qt::Key_E, this, SLOT(flattenImage()), actionCollection(), "flatten_image");
-    m_imgMergeLayer = new KAction(i18n("&Merge with Layer Below"), Qt::CTRL+Qt::Key_E, this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
+    m_imgFlatten = new KAction(i18n("&Flatten image"), actionCollection(), "flatten_image");
+    m_imgFlatten->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
+    connect(m_imgFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
+
+    m_imgMergeLayer = new KAction(i18n("&Merge with Layer Below"), actionCollection(), "merge_layer");
+    m_imgMergeLayer->setShortcut(Qt::CTRL+Qt::Key_E);
+    connect(m_imgMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
     // setting actions
     KStdAction::preferences(this, SLOT(preferences()), actionCollection(), "preferences");
 
-    m_RulerAction = new KToggleAction( i18n( "Show Rulers" ), Qt::CTRL+Qt::Key_R, this, SLOT( showRuler() ), actionCollection(), "view_ruler" );
+    m_RulerAction = new KToggleAction(i18n( "Show Rulers" ), actionCollection(), "view_ruler");
+    m_RulerAction->setShortcut(Qt::CTRL+Qt::Key_R);
+    connect(m_RulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
     m_RulerAction->setChecked(cfg.showRulers());
     m_RulerAction->setCheckedState(i18n("Hide Rulers"));
     m_RulerAction->setWhatsThis( i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
@@ -677,14 +712,14 @@ void KisView::setupActions()
     //m_guideAction = new KToggleAction( i18n( "Guide Lines" ), 0, this, SLOT( viewGuideLines() ), actionCollection(), "view_guidelines" );
 
     // Add new palette
-    new KAction(i18n("Add New Palette..."), 0, this, SLOT(slotAddPalette()),
-                actionCollection(), "add_palette");
-    new KAction(i18n("Edit Palette..."), 0, this, SLOT(slotEditPalette()),
-                actionCollection(), "edit_palette");
+    action = new KAction(i18n("Add New Palette..."), actionCollection(), "add_palette");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotAddPalette()));
+
+    action = new KAction(i18n("Edit Palette..."), actionCollection(), "edit_palette");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
 
     // XXX: This triggers a repaint of the image, but way too early
     //showRuler();
-
 }
 
 void KisView::resizeEvent(QResizeEvent *)
@@ -813,10 +848,12 @@ void KisView::resizeEvent(QResizeEvent *)
 
             QRegion exposedRegion = QRect(0, 0, newCanvasWidth, newCanvasHeight);
 
-            // Increase size first so that we can copy the old image area to the new one.
-            m_canvasPixmap.resize(qMax(oldCanvasWidth, newCanvasWidth), qMax(oldCanvasHeight, newCanvasHeight));
+            QPixmap oldPixmap = m_canvasPixmap;
+            m_canvasPixmap = QPixmap(newCanvasWidth, newCanvasHeight);
 
             if (!m_canvasPixmap.isNull()) {
+
+                // Copy the old image area to the new one.
 
                 if (oldCanvasXOffset != m_canvasXOffset || oldCanvasYOffset != m_canvasYOffset) {
 
@@ -851,20 +888,20 @@ void KisView::resizeEvent(QResizeEvent *)
                         srcHeight = newCanvasHeight;
                     }
 
-                    bitBlt(&m_canvasPixmap, dstX, dstY, &m_canvasPixmap, srcX, srcY, srcWidth, srcHeight);
+                    QPainter painter(&m_canvasPixmap);
+
+                    painter.drawPixmap(dstX, dstY, oldPixmap, srcX, srcY, srcWidth, srcHeight);
                     exposedRegion -= QRegion(QRect(dstX, dstY, srcWidth, srcHeight));
                 } else {
                     exposedRegion -= QRegion(QRect(0, 0, oldCanvasWidth, oldCanvasHeight));
                 }
             }
 
-            m_canvasPixmap.resize(newCanvasWidth, newCanvasHeight);
-
             if (!m_canvasPixmap.isNull() && !exposedRegion.isEmpty()) {
 
                 QVector<QRect> rects = exposedRegion.rects();
 
-                for (unsigned int i = 0; i < rects.count(); i++) {
+                for (int i = 0; i < rects.count(); i++) {
                     QRect r = rects[i];
                     updateQPaintDeviceCanvas(viewToWindow(r));
                 }
@@ -874,9 +911,9 @@ void KisView::resizeEvent(QResizeEvent *)
 
     int fontheight = QFontMetrics(KGlobalSettings::generalFont()).height() * 3;
     m_vScroll->setPageStep(drawH);
-    m_vScroll->setLineStep(fontheight);
+    m_vScroll->setSingleStep(fontheight);
     m_hScroll->setPageStep(drawW);
-    m_hScroll->setLineStep(fontheight);
+    m_hScroll->setSingleStep(fontheight);
 
     m_hRuler->setGeometry(m_rulerThickness + m_canvasXOffset, 0, qMin(docW, drawW), m_rulerThickness);
     m_vRuler->setGeometry(0, m_rulerThickness + m_canvasYOffset, m_rulerThickness, qMin(docH, drawH));
@@ -964,9 +1001,9 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
 
                     QVector<QRect> rects = rg.rects();
 
-                    for (unsigned int i = 0; i < rects.count(); i++) {
+                    for (int i = 0; i < rects.count(); i++) {
                         QRect er = rects[i];
-                        gc.fillRect(er, colorGroup().mid());
+                        gc.fillRect(er, palette().mid());
                     }
                     wr &= QRect(0, 0, img->width(), img->height());
                 }
@@ -986,7 +1023,7 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
 
                     if (zoom() > 1.0 - EPSILON) {
 
-                        gc.setWorldXForm(true);
+                        gc.setMatrixEnabled(true);
                         gc.translate(-horzValue(), -vertValue());
                         gc.scale(zoomFactor(), zoomFactor());
 
@@ -997,7 +1034,7 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
 
                         QRect canvasRect = windowToView(wr);
                         QRect scaledImageRect = canvasRect;
-                        scaledImageRect.moveBy(horzValue(), vertValue());
+                        scaledImageRect.translate(horzValue(), vertValue());
 
                         QSize scaledImageSize(static_cast<qint32>(ceil(docWidth() * zoom())),
                                             static_cast<qint32>(ceil(docHeight() * zoom())));
@@ -1008,7 +1045,7 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
                         gc.drawImage(canvasRect.topLeft(), image, image.rect());
 
                         // Set up for the grid drawer.
-                        gc.setWorldXForm(true);
+                        gc.setMatrixEnabled(true);
                         gc.translate(-horzValue(), -vertValue());
                         gc.scale(zoomFactor(), zoomFactor());
                     }
@@ -1017,7 +1054,7 @@ void KisView::updateQPaintDeviceCanvas(const QRect& imageRect)
                 }
 //                    paintGuides();
             } else {
-                gc.fillRect(vr, colorGroup().mid());
+                gc.fillRect(vr, palette().mid());
             }
         }
     }
@@ -1030,11 +1067,11 @@ void KisView::paintQPaintDeviceView(const QRegion& canvasRegion)
     if (m_canvas->QPaintDeviceWidget() != 0 && !m_canvasPixmap.isNull()) {
         QVector<QRect> rects = canvasRegion.rects();
 
-        for (unsigned int i = 0; i < rects.count(); i++) {
+        for (int i = 0; i < rects.count(); i++) {
             QRect r = rects[i];
 
-            bitBlt(m_canvas->QPaintDeviceWidget(), r.x(), r.y(), &m_canvasPixmap,
-                   r.x(), r.y(), r.width(), r.height());
+            QPainter painter(m_canvas->QPaintDeviceWidget());
+            painter.drawPixmap(r.x(), r.y(), m_canvasPixmap, r.x(), r.y(), r.width(), r.height());
         }
 
         paintToolOverlay(canvasRegion);
@@ -1069,7 +1106,7 @@ void KisView::paintOpenGLView(const QRect& canvasRect)
 
     glDrawBuffer(GL_BACK);
 
-    QColor widgetBackgroundColor = colorGroup().mid();
+    QColor widgetBackgroundColor = palette().color(QPalette::Mid);
 
     glClearColor(widgetBackgroundColor.red() / 255.0, widgetBackgroundColor.green() / 255.0, widgetBackgroundColor.blue() / 255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -1657,8 +1694,8 @@ void KisView::slotInsertImageAsLayer()
 
 void KisView::slotAddPalette()
 {
-    KDialogBase* base = new KDialogBase(this, 0, true, i18n("Add Palette"), KDialogBase::Ok | KDialogBase::Cancel);
-    KisCustomPalette* p = new KisCustomPalette(base, "add palette", i18n("Add Palette"), this);
+    KDialog *base = new KDialog(this, i18n("Add Palette"), KDialog::Ok | KDialog::Cancel);
+    KisCustomPalette *p = new KisCustomPalette(base, "add palette", i18n("Add Palette"), this);
     base->setMainWidget(p);
     base->show();
 }
@@ -1670,11 +1707,11 @@ void KisView::slotEditPalette()
     if (!srv) {
         return;
     }
-    Q3ValueList<KisResource*> resources = srv->resources();
-    Q3ValueList<KisPalette*> palettes;
+    QList<KisResource*> resources = srv->resources();
+    QList<KisPalette*> palettes;
 
-    for(uint i = 0; i < resources.count(); i++) {
-        KisPalette* palette = dynamic_cast<KisPalette*>(*resources.at(i));
+    foreach (KisResource *resource, resources) {
+        KisPalette* palette = dynamic_cast<KisPalette*>(resource);
 
         chooser.paletteList->insertItem(palette->name());
         palettes.append(palette);
@@ -1690,11 +1727,11 @@ void KisView::slotEditPalette()
         return;
     }
 
-    KDialogBase* base = new KDialogBase(this, 0, true, i18n("Edit Palette") , KDialogBase::Ok);
+    KDialog* base = new KDialog(this, i18n("Edit Palette") , KDialogBase::Ok);
     KisCustomPalette* cp = new KisCustomPalette(base, "edit palette",
             i18n("Edit Palette"), this);
     cp->setEditMode(true);
-    cp->setPalette(*palettes.at(index));
+    cp->setPalette(palettes.at(index));
     base->setMainWidget(cp);
     base->show();
 }
@@ -1734,11 +1771,9 @@ void KisView::saveLayerAsImage()
     d.setCurrentImage( dst );
     dst->addLayer(l->clone(),dst->rootLayer(),KisLayerSP(0));
 
-    d.setOutputMimeType(mimefilter.latin1());
+    d.setOutputMimeType(mimefilter.toLatin1());
     d.exp0rt(url);
 }
-
-
 
 qint32 KisView::importImage(const KUrl& urlArg)
 {
@@ -2338,7 +2373,7 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
 
         if (m_popup == 0 && factory()) {
             Q_ASSERT(factory());
-            m_popup = (Q3PopupMenu *)factory()->container("image_popup", this);
+            m_popup = (KMenu *)factory()->container("image_popup", this);
         }
         if (m_popup) m_popup->popup(e->globalPos().roundQPoint());
     }
@@ -3800,10 +3835,10 @@ void KisView::createDockers()
 
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("PaletteServer");
-    Q3ValueList<KisResource*> resources = rServer->resources();
-    Q3ValueList<KisResource*>::iterator it;
-    for ( it = resources.begin(); it != resources.end(); ++it ) {
-        m_palettewidget->slotAddPalette( *it );
+    QList<KisResource*> resources = rServer->resources();
+
+    foreach (KisResource *resource, resources) {
+        m_palettewidget->slotAddPalette(resource);
     }
     connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), this, SLOT(slotSetFGColor(const KisColor &)));
     m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);

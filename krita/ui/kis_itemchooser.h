@@ -18,7 +18,7 @@
 #ifndef KIS_ITEM_CHOOSER_H_
 #define KIS_ITEM_CHOOSER_H_
 
-#include <q3ptrlist.h>
+#include <QList>
 #include <qwidget.h>
 #include <kvbox.h>
 
@@ -27,7 +27,7 @@ class KHBox;
 class KoIconChooser;
 class KoIconItem;
 
-typedef Q3PtrList<KoIconItem> vKoIconItem;
+typedef QList<KoIconItem *> vKoIconItem;
 
 class KisItemChooser : public QWidget {
     typedef QWidget super;

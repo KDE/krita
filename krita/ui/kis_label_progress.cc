@@ -21,8 +21,7 @@
 #include <qtoolbutton.h>
 #include <qcursor.h>
 #include <qeventloop.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QEvent>
@@ -41,7 +40,7 @@ class EscapeButton : public QToolButton {
 
 public:
 
-    EscapeButton(QWidget * parent, const char * name) : QToolButton(parent, name) {};
+    EscapeButton(QWidget * parent, const char * name) : QToolButton(parent) { setObjectName(name); }
 
     void keyReleaseEvent(QKeyEvent *e)
     {
@@ -50,22 +49,24 @@ public:
     }
 };
 
-KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name, Qt::WFlags f) : super(parent, name, f)
+KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name) : super(parent)
 {
+    setObjectName(name);
     m_subject = 0;
     m_modal = false;
 
-    Q3HBoxLayout *box = new Q3HBoxLayout(this);
-    box->setAutoAdd(true);
+    QHBoxLayout *box = new QHBoxLayout(this);
 
     QIcon cancelIconSet = SmallIconSet("stop");
 
     m_cancelButton = new EscapeButton(this, "cancel_button");
-    m_cancelButton->setIconSet(cancelIconSet);
+    box->addWidget(m_cancelButton);
+    m_cancelButton->setIcon(cancelIconSet);
     m_cancelButton->setToolTip( i18n("Cancel"));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
 
     m_bar = new QProgressBar(this);
+    box->addWidget(m_bar);
 }
 
 KisLabelProgress::~KisLabelProgress()

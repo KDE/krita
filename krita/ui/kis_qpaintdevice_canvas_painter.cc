@@ -162,10 +162,10 @@ void KisQPaintDeviceCanvasPainter::setBackgroundMode(Qt::BGMode bgMode)
 //     m_painter.setRasterOp(rasterOp);
 // }
 
-const QPoint& KisQPaintDeviceCanvasPainter::brushOrigin() const
-{
-    return m_painter.brushOrigin();
-}
+// const QPoint& KisQPaintDeviceCanvasPainter::brushOrigin() const
+// {
+//     return m_painter.brushOrigin();
+// }
 
 void KisQPaintDeviceCanvasPainter::setBrushOrigin(int x, int y)
 {

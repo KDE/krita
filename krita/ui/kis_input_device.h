@@ -19,14 +19,14 @@
 #ifndef KIS_INPUT_DEVICE_H_
 #define KIS_INPUT_DEVICE_H_
 
-#include <q3valuevector.h>
+#include <QList>
 
 class KisInputDevice {
 public:
     KisInputDevice();
 
     static KisInputDevice allocateInputDevice();
-    static Q3ValueVector<KisInputDevice> inputDevices();
+    static QList<KisInputDevice> inputDevices();
 
     friend inline bool operator==(const KisInputDevice&, const KisInputDevice&);
     friend inline bool operator!=(const KisInputDevice&, const KisInputDevice&);
@@ -34,11 +34,11 @@ public:
     friend inline bool operator<(const KisInputDevice &, const KisInputDevice &);
     friend inline bool operator>(const KisInputDevice &, const KisInputDevice &);
 
-    static KisInputDevice mouse();     // Standard mouse                
-    static KisInputDevice stylus();    // Wacom stylus via QTabletEvent 
-    static KisInputDevice eraser();    // Wacom eraser via QTabletEvent 
-    static KisInputDevice puck();      // Wacom puck via QTabletEvent   
-    static KisInputDevice unknown();   
+    static KisInputDevice mouse();     // Standard mouse
+    static KisInputDevice stylus();    // Wacom stylus via QTabletEvent
+    static KisInputDevice eraser();    // Wacom eraser via QTabletEvent
+    static KisInputDevice puck();      // Wacom puck via QTabletEvent
+    static KisInputDevice unknown();
 
 private:
     KisInputDevice(qint32 id) : m_id(id) {}
@@ -52,7 +52,7 @@ private:
      qint32 m_id;
 
      static qint32 NextInputDeviceID;
-     static Q3ValueVector<KisInputDevice> InputDevices;
+     static QList<KisInputDevice> InputDevices;
 
      static KisInputDevice Mouse;
      static KisInputDevice Stylus;
@@ -62,12 +62,12 @@ private:
 };
 
 inline bool operator==(const KisInputDevice &a, const KisInputDevice &b)
-{ 
-    return a.id() == b.id(); 
+{
+    return a.id() == b.id();
 }
 
 inline bool operator!=(const KisInputDevice &a, const KisInputDevice &b)
-{ 
+{
     return a.id() != b.id();
 }
 

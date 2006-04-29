@@ -15,6 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include <QList>
+
 #include <koIconChooser.h>
 
 #include "kdebug.h"
@@ -24,13 +27,13 @@
 #include "kis_itemchooser.h"
 #include "kis_resourceserver.h"
 #include "kis_resource_mediator.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
                      QObject *parent,
-                     const char *name) : super(parent, name), m_chooser(chooser)
+                     const char *name) : super(parent), m_chooser(chooser)
 {
+    setObjectName(name);
+
     Q_ASSERT(chooser);
     m_activeItem = 0;
 
@@ -44,10 +47,10 @@ KisResourceMediator::~KisResourceMediator()
 void KisResourceMediator::connectServer(KisResourceServerBase* rServer)
 {
     // Add the initially loaded items
-    Q3ValueList<KisResource*> resources = rServer->resources();
-    Q3ValueList<KisResource*>::iterator it;
-    for ( it = resources.begin(); it != resources.end(); ++it )
-        rServerAddedResource( *it );
+    QList<KisResource*> resources = rServer->resources();
+
+    foreach (KisResource *resource, resources)
+        rServerAddedResource(resource);
 
     // And connect to the server permanently, so that we may recieve updates afterwards
     connect(rServer, SIGNAL(resourceAdded(KisResource*)),
@@ -66,7 +69,7 @@ KisResource *KisResourceMediator::currentResource() const
 
 KisIconItem *KisResourceMediator::itemFor(KisResource *r) const
 {
-    if(m_items.contains(r))
+    if (m_items.contains(r))
     {
         return m_items[r];
     }
@@ -104,10 +107,10 @@ void KisResourceMediator::setActiveItem(KoIconItem *item)
 void KisResourceMediator::rServerAddedResource(KisResource *resource)
 {
     if (resource && resource->valid()) {
-        
+
         KisIconItem *item = new KisIconItem(resource);
         Q_CHECK_PTR(item);
-        
+
         m_items[resource] = item;
 
         m_chooser->addItem(item);

@@ -80,7 +80,7 @@ void KisLayerList::constructMenu( LayerItem *layer )
 
 void KisLayerList::menuActivated( int id, LayerItem *layer )
 {
-    const Q3ValueList<LayerItem*> selected = selectedLayers();
+    const QList<LayerItem*> selected = selectedLayers();
     LayerItem *parent = ( layer && layer->isFolder() ) ? layer : 0;
     LayerItem *after = 0;
     if( layer && !parent )
@@ -104,7 +104,7 @@ void KisLayerList::menuActivated( int id, LayerItem *layer )
             break;
         case MenuItems::RemoveLayer:
             {
-                Q3ValueList<int> ids;
+                QList<int> ids;
                 for( int i = 0, n = selected.count(); i < n; ++i )
                 {
                     ids.append( selected[i]->id() );

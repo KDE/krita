@@ -29,10 +29,10 @@ class KisDelayedActionIntegerInput : public KIntNumInput
 {
 
     Q_OBJECT
-            
+
 public:
-        
-    KisDelayedActionIntegerInput(QWidget * parent, const char * name);
+
+    KisDelayedActionIntegerInput(QWidget * parent, QString name);
 
     void cancelDelayedSignal();
 
@@ -41,11 +41,11 @@ private slots:
     void slotTimeToUpdate();
 
 signals:
-    
+
     void valueChangedDelayed(int value);
-    
+
 private:
- 
+
         QTimer * m_timer;
 };
 
@@ -68,11 +68,11 @@ public:
     KisMultiIntegerFilterWidget(QWidget * parent,  const char * name, const char *caption, vKisIntegerWidgetParam iwparam);
 
     virtual void setConfiguration(KisFilterConfiguration * config);
-    
+
 public:
     inline qint32 nbValues() { return m_nbintegerWidgets; };
     inline qint32 valueAt( qint32 i ) { return m_integerWidgets[i]->value(); };
-    
+
 private:
     qint32 m_nbintegerWidgets;
     KisDelayedActionIntegerInput** m_integerWidgets;

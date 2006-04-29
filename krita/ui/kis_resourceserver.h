@@ -24,8 +24,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include "kis_generic_registry.h"
 
@@ -40,8 +39,8 @@ public:
     void loadResources(QStringList filenames);
     /// Adds an already loaded resource to the server
     void addResource(KisResource* resource);
-    Q3ValueList<KisResource*> resources();
-    QString type() { return m_type; };
+    QList<KisResource*> resources();
+    QString type() { return m_type; }
 
 signals:
     void resourceAdded(KisResource*);
@@ -50,31 +49,26 @@ protected:
     virtual KisResource* createResource( QString filename ) = 0;
 
 private:
-    Q3ValueList<KisResource*> m_resources;
+    QList<KisResource*> m_resources;
     QString m_type;
 
     bool m_loaded;
 
 };
 
-
 template <class T> class KisResourceServer : public KisResourceServerBase {
     typedef KisResourceServerBase super;
 
 public:
-    KisResourceServer(QString type) :super( type ) {}
-    virtual ~KisResourceServer(){}
+    KisResourceServer(QString type) :super(type) {}
+    virtual ~KisResourceServer() {}
 
 private:
-    KisResource* createResource( QString filename ){return new T(filename);}
+    KisResource* createResource(QString filename) { return new T(filename); }
 };
-
-
-
 
 class KisResourceServerRegistry : public KisGenericRegistry<KisResourceServerBase*>
 {
-
 public:
     virtual ~KisResourceServerRegistry();
 
@@ -82,11 +76,10 @@ public:
 
 private:
     KisResourceServerRegistry();
-     KisResourceServerRegistry(const KisResourceServerRegistry&);
-     KisResourceServerRegistry operator=(const KisResourceServerRegistry&);
+    KisResourceServerRegistry(const KisResourceServerRegistry&);
+    KisResourceServerRegistry operator=(const KisResourceServerRegistry&);
 
     static KisResourceServerRegistry *m_singleton;
 };
-
 
 #endif // KIS_RESOURCESERVER_H_

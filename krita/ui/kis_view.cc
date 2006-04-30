@@ -273,6 +273,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_inputDevice = KisInputDevice::mouse();
 
     connect(&m_initialZoomTimer, SIGNAL(timeout()), SLOT(slotInitialZoomTimeout()));
+    m_initialZoomTimer.setSingleShot(true);
 
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
     if (cfg.fixDockerWidth()) m_paletteManager->setFixedWidth( 360 );
@@ -2381,7 +2382,7 @@ void KisView::canvasGotButtonPressEvent(KisButtonPressEvent *e)
         KisPoint p = viewToWindow(e->pos());
         // somewhat of a hack: we should actually test if we intersect with the scrollers,
         // but the globalPos seems to be off by a few pixels
-        if (m_vScroll->isSliderDown() || m_hScroll->draggingSlider())
+        if (m_vScroll->isSliderDown() || m_hScroll->isSliderDown())
             return;
 
         if (m_toolManager->currentTool()->wantsAutoScroll()) {
@@ -2595,15 +2596,13 @@ void KisView::canvasGotKeyReleaseEvent(QKeyEvent *event)
 
 void KisView::canvasGotDragEnterEvent(QDragEnterEvent *event)
 {
-    bool accept = false;
-
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
     if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
-        accept = true;
+        event->accept();
+    } else {
+        event->ignore();
     }
-
-    event->accept(accept);
 }
 
 void KisView::canvasGotDropEvent(QDropEvent *event)
@@ -3088,8 +3087,9 @@ void KisView::scrollH(int value)
                 paintOpenGLView(QRect(0, 0, m_canvas->width(), m_canvas->height()));
             } else {
                 QRect drawRect(0, 0, xShift, m_canvasPixmap.height());
+                QPainter painter(&m_canvasPixmap);
 
-                bitBlt(&m_canvasPixmap, xShift, 0, &m_canvasPixmap, 0, 0, m_canvasPixmap.width() - xShift, m_canvasPixmap.height());
+                painter.drawPixmap(xShift, 0, m_canvasPixmap, 0, 0, m_canvasPixmap.width() - xShift, m_canvasPixmap.height());
 
                 updateQPaintDeviceCanvas(viewToWindow(drawRect));
                 m_canvas->repaint();
@@ -3101,8 +3101,9 @@ void KisView::scrollH(int value)
             if (m_canvas->isOpenGLCanvas()) {
                 paintOpenGLView(QRect(0, 0, m_canvas->width(), m_canvas->height()));
             } else {
-                bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, -xShift, 0, m_canvasPixmap.width() + xShift, m_canvasPixmap.height());
+                QPainter painter(&m_canvasPixmap);
 
+                painter.drawPixmap(0, 0, m_canvasPixmap, -xShift, 0, m_canvasPixmap.width() + xShift, m_canvasPixmap.height());
                 updateQPaintDeviceCanvas(viewToWindow(drawRect));
                 m_canvas->repaint();
             }
@@ -3129,8 +3130,9 @@ void KisView::scrollV(int value)
                 paintOpenGLView(QRect(0, 0, m_canvas->width(), m_canvas->height()));
             } else {
                 QRect drawRect(0, 0, m_canvasPixmap.width(), yShift);
+                QPainter painter(&m_canvasPixmap);
 
-                bitBlt(&m_canvasPixmap, 0, yShift, &m_canvasPixmap, 0, 0, m_canvasPixmap.width(), m_canvasPixmap.height() - yShift);
+                painter.drawPixmap(0, yShift, m_canvasPixmap, 0, 0, m_canvasPixmap.width(), m_canvasPixmap.height() - yShift);
 
                 updateQPaintDeviceCanvas(viewToWindow(drawRect));
                 m_canvas->repaint();
@@ -3141,9 +3143,9 @@ void KisView::scrollV(int value)
                 paintOpenGLView(QRect(0, 0, m_canvas->width(), m_canvas->height()));
             } else {
                 QRect drawRect(0, m_canvasPixmap.height() + yShift, m_canvasPixmap.width(), -yShift);
+                QPainter painter(&m_canvasPixmap);
 
-                bitBlt(&m_canvasPixmap, 0, 0, &m_canvasPixmap, 0, -yShift, m_canvasPixmap.width(), m_canvasPixmap.height() + yShift);
-
+                painter.drawPixmap(0, 0, m_canvasPixmap, 0, -yShift, m_canvasPixmap.width(), m_canvasPixmap.height() + yShift);
                 updateQPaintDeviceCanvas(viewToWindow(drawRect));
                 m_canvas->repaint();
             }
@@ -3795,11 +3797,11 @@ void KisView::createDockers()
 {
 
     m_birdEyeBox = new KisBirdEyeBox(this);
-    m_birdEyeBox->setCaption(i18n("Overview"));
+    m_birdEyeBox->setWindowTitle(i18n("Overview"));
     m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
 
     m_hsvwidget = new KoHSVWidget(this, "hsv");
-    m_hsvwidget->setCaption(i18n("HSV"));
+    m_hsvwidget->setWindowTitle(i18n("HSV"));
 
     connect(m_hsvwidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
     connect(m_hsvwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
@@ -3808,7 +3810,7 @@ void KisView::createDockers()
     m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX, 0, PALETTE_DOCKER, true);
 
     m_rgbwidget = new KoRGBWidget(this, "rgb");
-    m_rgbwidget->setCaption(i18n("RGB"));
+    m_rgbwidget->setWindowTitle(i18n("RGB"));
     connect(m_rgbwidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
     connect(m_rgbwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setFgColor(const QColor &)));
@@ -3816,7 +3818,7 @@ void KisView::createDockers()
     m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
 
     m_graywidget = new KoGrayWidget(this, "gray");
-    m_graywidget->setCaption(i18n("Gray"));
+    m_graywidget->setWindowTitle(i18n("Gray"));
     connect(m_graywidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
     connect(m_graywidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_graywidget, SLOT(setFgColor(const QColor &)));
@@ -3828,7 +3830,7 @@ void KisView::createDockers()
     emit sigBGQColorChanged(m_bg.toQColor());
 
     m_palettewidget = new KisPaletteWidget(this);
-    m_palettewidget->setCaption(i18n("Palettes"));
+    m_palettewidget->setWindowTitle(i18n("Palettes"));
     connect(m_palettewidget, SIGNAL(colorSelected(const QColor &)),
             this, SLOT(slotSetFGQColor(const QColor &)));
     // No BGColor or reverse slotFGChanged->palette connections, since that's not useful here
@@ -3847,9 +3849,9 @@ void KisView::createDockers()
 QPoint KisView::applyViewTransformations(const QPoint& p) const {
     QPoint point(windowToView(p));
 
-    if (m_hRuler->isShown())
+    if (!m_hRuler->isHidden())
         point.ry() += m_hRuler->height();
-    if (m_vRuler -> isShown())
+    if (!m_vRuler->isHidden())
         point.rx() += m_vRuler->width();
 
     return point;
@@ -3860,9 +3862,9 @@ QPoint KisView::reverseViewTransformations(const QPoint& p) const {
     // Hence, zoom ourselves, like super would
     // viewToWindow doesn't take the rulers into account, do that ourselves
     QPoint point(p);
-    if (m_hRuler -> isShown())
+    if (!m_hRuler->isHidden())
         point.ry() -= m_hRuler -> height();
-    if (m_vRuler -> isShown())
+    if (!m_vRuler->isHidden())
         point.rx() -= m_vRuler -> width();
 
     return viewToWindow(point);
@@ -3893,7 +3895,7 @@ void KisView::slotLoadingFinished()
 void KisView::startInitialZoomTimerIfReady()
 {
     if (m_imageLoaded && m_showEventReceived && m_guiActivateEventReceived) {
-        m_initialZoomTimer.start(250, true);
+        m_initialZoomTimer.start(250);
     }
 }
 

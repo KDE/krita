@@ -54,12 +54,12 @@ void KisPartLayerHandler::gotMoveEvent(KisMoveEvent* event) {
 
     // erase old lines
     QRect r(m_start, m_end);
-    r = r.normalize();
+    r = r.normalized();
     if (!r.isEmpty())
         painter.drawRect(r);
 
     m_end = event->pos().roundQPoint();
-    r = QRect(m_start, m_end).normalize();
+    r = QRect(m_start, m_end).normalized();
 
     painter.drawRect(r);
     painter.end();
@@ -81,7 +81,7 @@ void KisPartLayerHandler::gotButtonReleaseEvent(KisButtonReleaseEvent* event) {
 
     QRect r(m_start, m_end);
 
-    m_view->insertPart(r.normalize(), m_entry, m_parent, m_above);
+    m_view->insertPart(r.normalized(), m_entry, m_parent, m_above);
     // We will get deleted by the view through the above
 }
 

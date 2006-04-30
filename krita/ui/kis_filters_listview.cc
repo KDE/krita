@@ -143,7 +143,7 @@ KisFiltersListView::KisFiltersListView(KisPaintDeviceSP device, QWidget* parent,
 
 void KisFiltersListView::init()
 {
-    setCaption(i18n("Filters List"));
+    setWindowTitle(i18n("Filters List"));
     setItemsMovable(false);
     setSelectionMode(Q3IconView::Single);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding ));
@@ -182,7 +182,7 @@ void KisFiltersListView::buildPreview()
     QRect bounds = m_thumb->exactBounds();
     QPixmap pm(bounds.width(), bounds.height());
     QPainter gc(&pm);
-    gc.fillRect(0, 0, bounds.width(), bounds.height(), backgroundColor());
+    gc.fillRect(0, 0, bounds.width(), bounds.height(), palette().background());
     gc.end();
 
     t.start();
@@ -202,7 +202,7 @@ void KisFiltersListView::buildPreview()
             {
                 KisFiltersIconViewItem * icon = new KisFiltersIconViewItem( this, (*it).name(), pm, *it, f.data(), *itc, m_thumb, bounds, m_profile );
                 //KisThreadPool::instance()->enqueue(icon->thread());
-                icon->thread()->runDirectly(); 
+                icon->thread()->runDirectly();
             }
         }
     }

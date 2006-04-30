@@ -17,12 +17,9 @@
  */
 #include <klocale.h>
 
-#include <q3groupbox.h>
 #include <qlabel.h>
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -48,8 +45,10 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
                                          const QString & caption,
                                          QWidget *parent,
                                          const char *name)
-    : KDialogBase(parent, name, true, "", Ok | Cancel)
+    : KDialog(parent, "", Ok | Cancel)
 {
+    setObjectName(name);
+
     Q_ASSERT( layer );
     m_layer = layer.data();
 
@@ -82,8 +81,11 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     }
 
     setCaption(caption);
-    QWidget * page = new QWidget(this, "page widget");
-    Q3HBoxLayout * layout = new Q3HBoxLayout(page, 0, 6);
+    QWidget * page = new QWidget(this);
+    page->setObjectName("page widget");
+    QHBoxLayout * layout = new QHBoxLayout(page);
+    layout->setMargin(0);
+    layout->setSpacing(6);
     setMainWidget(page);
 
     m_preview = new KisPreviewWidget(page, "dlgadjustment.preview");
@@ -92,10 +94,13 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     connect( m_preview, SIGNAL(updated()), this, SLOT(refreshPreview()));
     layout->addWidget(m_preview, 1, Qt::AlignLeft);
 
-    Q3VBoxLayout *v1 = new Q3VBoxLayout( layout );
-    Q3HBoxLayout *hl = new Q3HBoxLayout( v1 );
+    QVBoxLayout *v1 = new QVBoxLayout( );
+    layout->addLayout(v1);
+    QHBoxLayout *hl = new QHBoxLayout( );
+    v1->addLayout(hl);
 
-    QLabel * lblName = new QLabel(i18n("Layer name:"), page, "lblName");
+    QLabel * lblName = new QLabel(i18n("Layer name:"), page);
+    lblName->setObjectName("lblName");
     hl->addWidget(lblName, 0, 0);
 
     m_layerName = new KLineEdit(page);

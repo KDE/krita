@@ -61,7 +61,7 @@ void KisCustomImageWidget::buttonClicked() {
 
     QColor qc(cmbColor->color());
 
-    m_doc->newImage(txtName->text(), (qint32)intWidth->value(), (qint32)intHeight->value(), cs, KisColor(qc, cs), txtDescription->text(), doubleResolution->value());
+    m_doc->newImage(txtName->text(), (qint32)intWidth->value(), (qint32)intHeight->value(), cs, KisColor(qc, cs), txtDescription->toPlainText(), doubleResolution->value());
     emit documentSelected();
 }
 

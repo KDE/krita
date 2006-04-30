@@ -44,7 +44,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 {
     Q_ASSERT(m_view);
     m_mediator = 0;
-    setCaption(caption);
+    setWindowTitle(caption);
 
     m_pattern = 0;
 
@@ -67,7 +67,7 @@ void KisCustomPattern::slotUpdateCurrentPattern(int) {
     delete m_pattern;
     if (m_view->canvasSubject() && m_view->canvasSubject()->currentImg()) {
         createPattern();
-        preview->setPixmap(QPixmap(m_pattern->img()));
+        preview->setPixmap(QPixmap::fromImage(m_pattern->img()));
     } else {
         m_pattern = 0;
     }
@@ -89,7 +89,7 @@ void KisCustomPattern::slotAddPredefined() {
     KTempFile file(dir, ".pat");
     file.close(); // If we don't, and pattern->save first, it might get truncated!
 
-    // Save it to that file 
+    // Save it to that file
     m_pattern->setFilename(file.name());
 
     // Add it to the pattern server, so that it automatically gets to the mediators, and

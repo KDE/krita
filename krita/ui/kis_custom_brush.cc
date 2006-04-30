@@ -72,7 +72,7 @@ void KisCustomBrush::slotUpdateCurrentBrush(int) {
     delete m_brush;
     if (m_view->canvasSubject() && m_view->canvasSubject()->currentImg()) {
         createBrush();
-        preview->setPixmap(QPixmap(m_brush->img()));
+        preview->setPixmap(QPixmap::fromImage(m_brush->img()));
     } else {
         m_brush = 0;
     }
@@ -88,7 +88,7 @@ void KisCustomBrush::slotAddPredefined() {
     QString dir = KGlobal::dirs()->saveLocation("data", "krita/brushes");
     QString extension;
 
-    if (brushStyle->currentItem() == 0) {
+    if (brushStyle->currentIndex() == 0) {
         extension = ".gbr";
     } else {
         extension = ".gih";
@@ -119,7 +119,7 @@ void KisCustomBrush::createBrush() {
     if (!img)
         return;
 
-    if (brushStyle->currentItem() == 0) {
+    if (brushStyle->currentIndex() == 0) {
         m_brush = new KisBrush(img->mergedImage().data(), 0, 0, img->width(), img->height());
         if (colorAsMask->isChecked())
             m_brush->makeMaskImage();
@@ -143,7 +143,7 @@ void KisCustomBrush::createBrush() {
     }
     Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes;
 
-    switch(comboBox2->currentItem()) {
+    switch(comboBox2->currentIndex()) {
         case 0: modes.push_back(KisPipeBrushParasite::Constant); break;
         case 1: modes.push_back(KisPipeBrushParasite::Random); break;
         case 2: modes.push_back(KisPipeBrushParasite::Incremental); break;

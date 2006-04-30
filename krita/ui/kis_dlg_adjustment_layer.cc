@@ -76,7 +76,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
         }
     }
 
-    QWidget * page = new QWidget(this, "page widget");
+    QWidget * page = new QWidget(this);
+    page->setObjectName("page widget");
     QGridLayout * grid = new QGridLayout(page);
     grid->setSpacing(6);
     setMainWidget(page);
@@ -108,7 +109,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
 
     m_labelNoConfigWidget = new QLabel(i18n("No configuration options are available for this filter"),
                                         m_configWidgetHolder);
-    m_configWidgetHolder->layout()->add(m_labelNoConfigWidget);
+    m_configWidgetHolder->layout()->addWidget(m_labelNoConfigWidget);
     m_labelNoConfigWidget->hide();
 
     resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
@@ -168,7 +169,7 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( Q3IconViewItem * item )
 
     if ( m_currentConfigWidget != 0 )
     {
-        m_configWidgetHolder->layout()->remove(m_currentConfigWidget);
+        m_configWidgetHolder->layout()->removeWidget(m_currentConfigWidget);
 
         delete m_currentConfigWidget;
         m_currentConfigWidget = 0;
@@ -185,7 +186,7 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( Q3IconViewItem * item )
 
     if (m_currentConfigWidget != 0)
     {
-        m_configWidgetHolder->layout()->add(m_currentConfigWidget);
+        m_configWidgetHolder->layout()->addWidget(m_currentConfigWidget);
         m_currentConfigWidget->show();
         connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
     } else {

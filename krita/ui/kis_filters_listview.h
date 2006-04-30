@@ -21,9 +21,7 @@
 #ifndef _KIS_FILTERS_LIST_VIEW_H_
 #define _KIS_FILTERS_LIST_VIEW_H_
 
-#include <qevent.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QEvent>
 #include <QPixmap>
 
 #include <k3iconview.h>
@@ -43,18 +41,17 @@ class KisFiltersIconViewItem;
 class KisFiltersListView;
 class KisThreadPool;
 
-class KisThumbnailDoneEvent : public QCustomEvent
+class KisThumbnailDoneEvent : public QEvent
 {
 public:
 
     KisThumbnailDoneEvent(KisFiltersIconViewItem * iconItem, const QImage & img)
-        : QCustomEvent(QEvent::User + 1969)
+        : QEvent(static_cast<QEvent::Type>(QEvent::User + 1969))
         , m_iconItem(iconItem)
-        , m_image(img) {};
+        , m_image(img) {}
 
     KisFiltersIconViewItem * m_iconItem;
     QImage m_image;
-
 };
 
 
@@ -69,7 +66,7 @@ public:
                               KisProfile * profile);
 
     ~KisFiltersThumbnailThread();
-    
+
     virtual void run();
     QPixmap pixmap();
     void cancel();
@@ -98,7 +95,7 @@ public:
 
     void resetThread() { m_thread = 0; };
     KisThread * thread() { return m_thread; }
-    
+
 private:
     KisID m_id;
     KisFilter* m_filter;
@@ -109,21 +106,21 @@ private:
 class KisFiltersListView : public K3IconView {
 
 public:
-    
+
     KisFiltersListView(QWidget* parent, const char* name = 0);
     KisFiltersListView(KisLayerSP layer, QWidget* parent, const char * name = 0) KDE_DEPRECATED;
     KisFiltersListView(KisPaintDeviceSP layer, QWidget* parent, const char * name = 0);
-        
+
     virtual void customEvent(QCustomEvent *);
 
     private:
-    
+
     void init();
-    
+
 public:
     void setLayer(KisLayerSP layer) KDE_DEPRECATED;
     void setProfile(KisProfile * profile) { m_profile = profile; };
-    
+
     inline void setPaintDevice(KisPaintDeviceSP pd) {
         if( pd != m_original)
         {
@@ -135,7 +132,7 @@ public:
     void setCurrentFilter(KisID filter);
 
 private:
-    
+
     KisPaintDeviceSP m_original;
     KisImageSP m_imgthumb;
     KisPaintDeviceSP m_thumb;

@@ -63,6 +63,7 @@
 #include "koffice_export.h"
 #include "kis_color.h"
 #include "kis_input_device.h"
+#include "ui_wdgpalettechooser.h"
 
 class QLabel;
 class QPaintEvent;
@@ -646,6 +647,14 @@ protected:
     friend class KisSelectionManager;
     friend class KisFilterManager;
     friend class KisGridManager;
+};
+
+class KisPaletteChooser : public QDialog, public Ui::KisPaletteChooser
+{
+    Q_OBJECT
+
+    public:
+        KisPaletteChooser(QWidget *parent) : QDialog(parent) { setupUi(this); }
 };
 
 #endif // KIS_VIEW_H_

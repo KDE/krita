@@ -178,7 +178,6 @@
 #include "kis_grid_manager.h"
 
 #include "kis_custom_palette.h"
-#include "wdgpalettechooser.h"
 
 // Time in ms that must pass after a tablet event before a mouse event is allowed to
 // change the input device to the mouse. This is needed because mouse events are always
@@ -1716,7 +1715,7 @@ void KisView::slotEditPalette()
     foreach (KisResource *resource, resources) {
         KisPalette* palette = dynamic_cast<KisPalette*>(resource);
 
-        chooser.paletteList->insertItem(palette->name());
+        chooser.paletteList->addItem(palette->name());
         palettes.append(palette);
     }
 
@@ -1724,7 +1723,7 @@ void KisView::slotEditPalette()
         return;
     }
 
-    int index = chooser.paletteList->currentItem();
+    int index = chooser.paletteList->currentRow();
     if (index < 0) {
         KMessageBox::error(this, i18n("No palette selected."), i18n("Palette"));
         return;

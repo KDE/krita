@@ -94,7 +94,6 @@ kde4_add_ui3_files(kritaui_LIB_SRCS
     wdgshapeoptions.ui
     wdgcustompalette.ui
     wdgtextbrush.ui
-    wdgpalettechooser.ui
     )
 
 kde4_add_ui_files(kritaui_LIB_SRCS
@@ -117,6 +116,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     kis_previewwidgetbase.ui
     kis_matrix_widget.ui
     wdglayerbox.ui
+    wdgpalettechooser.ui
 	)
 
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )

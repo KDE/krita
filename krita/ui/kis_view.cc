@@ -96,6 +96,8 @@
 #include <kis_config.h>
 #include <config-krita.h>
 
+#include "kis_layerlist.h" // XXX: TODO Work out why this is needed here to fix compilation.
+
 #include "kis_canvas.h"
 
 #ifdef Q_WS_X11

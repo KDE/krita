@@ -1,192 +1,123 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KisMatrixWidget</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>KisMatrixWidget</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KisMatrixWidget</class>
+  <widget class="QWidget" name="KisMatrixWidget" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>191</width>
+        <height>115</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>191</width>
-            <height>115</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Matrix Widget</string>
     </property>
-    <property name="caption">
-        <string>Matrix Widget</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QSpinBox" row="0" column="0">
-            <property name="name">
-                <cstring>m11</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <widget class="QSpinBox" name="m11" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="0" column="2">
-            <property name="name">
-                <cstring>m13</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
+      </item>
+      <item row="0" column="2" >
+        <widget class="QSpinBox" name="m13" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="0" column="1">
-            <property name="name">
-                <cstring>m12</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
+      </item>
+      <item row="0" column="1" >
+        <widget class="QSpinBox" name="m12" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="1" column="2">
-            <property name="name">
-                <cstring>m23</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
+      </item>
+      <item row="1" column="2" >
+        <widget class="QSpinBox" name="m23" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="1" column="0">
-            <property name="name">
-                <cstring>m21</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QSpinBox" name="m21" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="1" column="1">
-            <property name="name">
-                <cstring>m22</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
-            <property name="value">
-                <number>1</number>
-            </property>
+      </item>
+      <item row="1" column="1" >
+        <widget class="QSpinBox" name="m22" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
+          <property name="value" >
+            <number>1</number>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="2" column="0">
-            <property name="name">
-                <cstring>m31</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
+      </item>
+      <item row="2" column="0" >
+        <widget class="QSpinBox" name="m31" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="2" column="1">
-            <property name="name">
-                <cstring>m32</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
+      </item>
+      <item row="2" column="1" >
+        <widget class="QSpinBox" name="m32" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="2" column="2">
-            <property name="name">
-                <cstring>m33</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
+      </item>
+      <item row="2" column="2" >
+        <widget class="QSpinBox" name="m33" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
         </widget>
-        <spacer row="3" column="1">
-            <property name="name">
-                <cstring>spacer4</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>41</height>
-                </size>
-            </property>
+      </item>
+      <item row="3" column="1" >
+        <spacer name="spacer4" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>41</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <spacer row="1" column="3">
-            <property name="name">
-                <cstring>spacer5</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>20</height>
-                </size>
-            </property>
+      </item>
+      <item row="1" column="3" >
+        <spacer name="spacer5" >
+          <property name="sizeHint" >
+            <size>
+              <width>21</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<connections>
-    <connection>
-        <sender>m11</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-    <connection>
-        <sender>m12</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-    <connection>
-        <sender>m13</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-    <connection>
-        <sender>m21</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-    <connection>
-        <sender>m22</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-    <connection>
-        <sender>m23</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-    <connection>
-        <sender>m31</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-    <connection>
-        <sender>m32</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-    <connection>
-        <sender>m33</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KisMatrixWidget</receiver>
-        <slot>spinboxValueChanged()</slot>
-    </connection>
-</connections>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <tabstops>
     <tabstop>m11</tabstop>
     <tabstop>m12</tabstop>
     <tabstop>m13</tabstop>
@@ -196,15 +127,5 @@
     <tabstop>m31</tabstop>
     <tabstop>m32</tabstop>
     <tabstop>m33</tabstop>
-</tabstops>
-<includes>
-    <include location="local" impldecl="in implementation">kis_matrix_widget.ui.h</include>
-</includes>
-<signals>
-    <signal>valueChanged()</signal>
-</signals>
-<slots>
-    <slot access="private">spinboxValueChanged()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+</ui>

@@ -52,7 +52,6 @@
 #include "kis_layerlist.h"
 #include "kis_cmb_composite.h"
 #include "kis_int_spinbox.h"
-#include "wdglayerbox.h"
 #include "kis_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"

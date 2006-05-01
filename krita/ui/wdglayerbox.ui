@@ -1,299 +1,278 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgLayerBox</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgLayerBox</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgLayerBox</class>
+  <widget class="QWidget" name="WdgLayerBox" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>352</width>
+        <height>542</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>352</width>
-            <height>542</height>
-        </rect>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <property name="spacing" >
+        <number>0</number>
+      </property>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
             <number>0</number>
-        </property>
-        <property name="spacing">
+          </property>
+          <item>
+            <widget class="KisCmbComposite" name="cmbComposite" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>3</hsizetype>
+                  <vsizetype>0</vsizetype>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <property name="minimumSize" >
+                <size>
+                  <width>0</width>
+                  <height>10</height>
+                </size>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>Blending mode</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="KisIntSpinbox" name="intOpacity" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>0</hsizetype>
+                  <vsizetype>5</vsizetype>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item>
+        <widget class="KisLayerList" name="listLayers" />
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
             <number>0</number>
-        </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KisCmbComposite">
-                    <property name="name">
-                        <cstring>cmbComposite</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>0</width>
-                            <height>10</height>
-                        </size>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Blending mode</string>
-                    </property>
-                </widget>
-                <widget class="KisIntSpinbox">
-                    <property name="name">
-                        <cstring>intOpacity</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="KisLayerList">
-            <property name="name">
-                <cstring>listLayers</cstring>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout6</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>bnAdd</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>22</width>
-                            <height>22</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>18</width>
-                            <height>18</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>image0</iconset>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Create a new layer</string>
-                    </property>
-                </widget>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>bnLower</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>22</width>
-                            <height>22</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>18</width>
-                            <height>18</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>image1</iconset>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Move layer down</string>
-                    </property>
-                </widget>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>bnRaise</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>22</width>
-                            <height>22</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>18</width>
-                            <height>18</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>image2</iconset>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Move layer up</string>
-                    </property>
-                </widget>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>bnProperties</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>22</width>
-                            <height>22</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>18</width>
-                            <height>18</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>...</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>View or change the layer properties</string>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer3</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>bnDelete</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>22</width>
-                            <height>22</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>18</width>
-                            <height>18</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>image3</iconset>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Delete the layer</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<customwidgets>
+          </property>
+          <item>
+            <widget class="QToolButton" name="bnAdd" >
+              <property name="minimumSize" >
+                <size>
+                  <width>22</width>
+                  <height>22</height>
+                </size>
+              </property>
+              <property name="maximumSize" >
+                <size>
+                  <width>18</width>
+                  <height>18</height>
+                </size>
+              </property>
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="icon" >
+                <iconset>image0</iconset>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>Create a new layer</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QToolButton" name="bnLower" >
+              <property name="minimumSize" >
+                <size>
+                  <width>22</width>
+                  <height>22</height>
+                </size>
+              </property>
+              <property name="maximumSize" >
+                <size>
+                  <width>18</width>
+                  <height>18</height>
+                </size>
+              </property>
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="icon" >
+                <iconset>image1</iconset>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>Move layer down</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QToolButton" name="bnRaise" >
+              <property name="minimumSize" >
+                <size>
+                  <width>22</width>
+                  <height>22</height>
+                </size>
+              </property>
+              <property name="maximumSize" >
+                <size>
+                  <width>18</width>
+                  <height>18</height>
+                </size>
+              </property>
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="icon" >
+                <iconset>image2</iconset>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>Move layer up</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QToolButton" name="bnProperties" >
+              <property name="minimumSize" >
+                <size>
+                  <width>22</width>
+                  <height>22</height>
+                </size>
+              </property>
+              <property name="maximumSize" >
+                <size>
+                  <width>18</width>
+                  <height>18</height>
+                </size>
+              </property>
+              <property name="text" >
+                <string>...</string>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>View or change the layer properties</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <spacer name="spacer3" >
+              <property name="sizeHint" >
+                <size>
+                  <width>20</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <widget class="QToolButton" name="bnDelete" >
+              <property name="minimumSize" >
+                <size>
+                  <width>22</width>
+                  <height>22</height>
+                </size>
+              </property>
+              <property name="maximumSize" >
+                <size>
+                  <width>18</width>
+                  <height>18</height>
+                </size>
+              </property>
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="icon" >
+                <iconset>image3</iconset>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>Delete the layer</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>KisCmbComposite</class>
-        <header location="local">kis_cmb_composite.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image4</pixmap>
+      <class>KisCmbComposite</class>
+      <extends></extends>
+      <header location="local" >kis_cmb_composite.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image4</pixmap>
     </customwidget>
     <customwidget>
-        <class>KisLayerList</class>
-        <header location="local">kis_layerlist.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image4</pixmap>
+      <class>KisLayerList</class>
+      <extends></extends>
+      <header location="local" >kis_layerlist.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image4</pixmap>
     </customwidget>
     <customwidget>
-        <class>KisIntSpinbox</class>
-        <header location="global">kis_int_spinbox.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image4</pixmap>
+      <class>KisIntSpinbox</class>
+      <extends></extends>
+      <header location="global" >kis_int_spinbox.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image4</pixmap>
     </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="405">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000015c49444154388d8592c1aec22010450f94561bbfcda53f60d77e927fe0ca4d5dfb3126d59586b44271780b539eedab7924041866eebd7341c51801381c0e1160384fc7e97462bfdfab69dc0c9b18239bcd265d586b71ced1340dc6bcd3aaaa8a53103d4b071445419ee7e4799e62ebf59aaaaa4612bf02006459465114a985e3f108c076bb4d2066bef45decbdc71883738edd6ec7e572e17abd723e9fff57a094a2280ab4d6e479ceed76e37ebf638c41a95f1bbe2ad05aa7b5ef7b9c732c160b5eafd7286f164044e8ba8ee7f349d334586b59ad56946549dff7a3a7fe0320228808de7b1e8f072242599600841092b2af005a6bdab6c55a0bc072b924840080730e111979f0c7c410026ddba2b54e7330eef34f7c55e0bd9ffdce5a6b628c6459368e4f13bbae1b154d59638c2382d91606234524f52f222967d603a514defbc43cb83db04ddd1f46f2a0ae6beaba26c638621840945209ecf3fe07b32fb7352555170c0000000049454e44ae426082</data>
+  </customwidgets>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="405" >89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000015c49444154388d8592c1aec22010450f94561bbfcda53f60d77e927fe0ca4d5dfb3126d59586b44271780b539eedab7924041866eebd7341c51801381c0e1160384fc7e97462bfdfab69dc0c9b18239bcd265d586b71ced1340dc6bcd3aaaa8a53103d4b071445419ee7e4799e62ebf59aaaaa4612bf02006459465114a985e3f108c076bb4d2066bef45decbdc71883738edd6ec7e572e17abd723e9fff57a094a2280ab4d6e479ceed76e37ebf638c41a95f1bbe2ad05aa7b5ef7b9c732c160b5eafd7286f164044e8ba8ee7f349d334586b59ad56946549dff7a3a7fe0320228808de7b1e8f072242599600841092b2af005a6bdab6c55a0bc072b924840080730e111979f0c7c410026ddba2b54e7330eef34f7c55e0bd9ffdce5a6b628c6459368e4f13bbae1b154d59638c2382d91606234524f52f222967d603a514defbc43cb83db04ddd1f46f2a0ae6beaba26c638621840945209ecf3fe07b32fb7352555170c0000000049454e44ae426082</data>
     </image>
-    <image name="image1">
-        <data format="PNG" length="274">89504e470d0a1a0a0000000d49484452000000160000001208060000005f252e2d000000d949444154388ded94210e84301045ffdfecb5b0582c24681a2c1a8e00b24d3900774063d11c0314d8594543a06cd6ace39b9974326f7e3a4d2922f8875e7fa13ee0a3debec33ccf050048625f2e49008088b87c97d69a27841f4c124551b8fc0c3b0e8ba2e877c722a29aa6b1699a5e404765590692ca6bcef78e876140d77519491b86a1d751599600a08c316d100497faedf292246901a8beef31cf33966571b1aa2a07bdebbf0593441cc72d49358e23d675c5b66da8eb1a22a2b4d6b7d0afe0235c44d4344db0d682a432c6b4e7fbbef43e7fc503bee8030549631e4f2cf51e0000000049454e44ae426082</data>
+    <image name="image1" >
+      <data format="PNG" length="274" >89504e470d0a1a0a0000000d49484452000000160000001208060000005f252e2d000000d949444154388ded94210e84301045ffdfecb5b0582c24681a2c1a8e00b24d3900774063d11c0314d8594543a06cd6ace39b9974326f7e3a4d2922f8875e7fa13ee0a3debec33ccf050048625f2e49008088b87c97d69a27841f4c124551b8fc0c3b0e8ba2e877c722a29aa6b1699a5e404765590692ca6bcef78e876140d77519491b86a1d751599600a08c316d100497faedf292246901a8beef31cf33966571b1aa2a07bdebbf0593441cc72d49358e23d675c5b66da8eb1a22a2b4d6b7d0afe0235c44d4344db0d682a432c6b4e7fbbef43e7fc503bee8030549631e4f2cf51e0000000049454e44ae426082</data>
     </image>
-    <image name="image2">
-        <data format="PNG" length="275">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000da49444154388dcd92310e83300c45bfab5e872b709ca0b03022b13130b123251720e21830700060820db18623b84b5dd1a22eedd0fe29b6e2e76f27c4ccf84697afaaff02709543dbb62022c84e9c738a994dd77520a2a8aa2a2b7799196118be77e09c53004c5996e8fb1e008cd65a4931119d4790a474cef31cebba62db36344df3801c8b4f0eeaba56004c966598e719de7b78efb1ef3bacb50060e23856c7a72709ee749324099665395995384d531051340c837d05b0d61ad334bdddb8a8280a8ce3484f802008583a1d252e5ef327c0a7fafd4ffc3de006c2bf7b9f44bff3680000000049454e44ae426082</data>
+    <image name="image2" >
+      <data format="PNG" length="275" >89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000da49444154388dcd92310e83300c45bfab5e872b709ca0b03022b13130b123251720e21830700060820db18623b84b5dd1a22eedd0fe29b6e2e76f27c4ccf84697afaaff02709543dbb62022c84e9c738a994dd77520a2a8aa2a2b7799196118be77e09c53004c5996e8fb1e008cd65a4931119d4790a474cef31cebba62db36344df3801c8b4f0eeaba56004c966598e719de7b78efb1ef3bacb50060e23856c7a72709ee749324099665395995384d531051340c837d05b0d61ad334bdddb8a8280a8ce3484f802008583a1d252e5ef327c0a7fafd4ffc3de006c2bf7b9f44bff3680000000049454e44ae426082</data>
     </image>
-    <image name="image3">
-        <data format="PNG" length="312">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000ff49444154388da592318e84300c459f4773072e0105b7a1e10020eeb0ecd57205e8e9902221100851e2a9321b3261a5d5ba89127f3ddbdf1155e53ff1bc4b6459a621bcef7b0975e244755d7fa96a0b20f2a103c0694504634cdbf7fdf7d34bb64551902409499260adc55acbbaae8808aacab22cecfbce711c18635ae0072022344d43cc13077067740480aaaab42c4bf23c679a26b66d631806c671e4380ee679669a268c316f3f1e612557c581fd02eeddf7e802f0c54e749e671414058433fa77d75db8a10b20acaeaaef0eee220ab8081ebf4ba21ef86d3be37c636f4d0c2336bf0ffa008406f926c63604c1470248d354fd5dc736d3759ddc02fe1a2f646fb86fb4737d520000000049454e44ae426082</data>
+    <image name="image3" >
+      <data format="PNG" length="312" >89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000000ff49444154388da592318e84300c459f4773072e0105b7a1e10020eeb0ecd57205e8e9902221100851e2a9321b3261a5d5ba89127f3ddbdf1155e53ff1bc4b6459a621bcef7b0975e244755d7fa96a0b20f2a103c0694504634cdbf7fdf7d34bb64551902409499260adc55acbbaae8808aacab22cecfbce711c18635ae0072022344d43cc13077067740480aaaab42c4bf23c679a26b66d631806c671e4380ee679669a268c316f3f1e612557c581fd02eeddf7e802f0c54e749e671414058433fa77d75db8a10b20acaeaaef0eee220ab8081ebf4ba21ef86d3be37c636f4d0c2336bf0ffa008406f926c63604c1470248d354fd5dc736d3759ddc02fe1a2f646fb86fb4737d520000000049454e44ae426082</data>
     </image>
-    <image name="image4">
-        <data format="PNG" length="1002">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b149444154388dad945f4c5b551cc73fe7dc4b7b4bcba0762d45c43114323599ee6192609c51d883892ce083f1718b3ebb185f8dc91e972cf39d2d2a2f1af664b6f1e0fe3863a0718969700eb0c52142da0242a1bd6d696f7bcff101585203ceb8fd9ece39f99dcff9fe7edf939f88c562ec465f5f9fe609442c161362173c3e3eae7b7a7ac8e7f36432196cdbfe4f907c3e4f2291201e8fe338cec3737357e9e8e828aded1e229d650e1f2d51754b082110124c13a4dc5ea341eb9dc284c0558a853f3ce8cb0677ef500fde7d39d2596679e326597b8e9abb85d7a770ab16ab6983ec5a05b487a70e36f0f4e10afe408d6a558310980108478dba4a1e8233990c5d474b64ed39aa3a8fe5f3317fbf81dbd70bccfeb205947632fd74f6589c1c6ea2f70d03a58ba0c1f2c9bdc1b66de3b8256a6e11cbe7e3ee1d181b590124fe2693aeee08d223c82c3a2c24b7b874bec8f26288774f7bd054504aef0dde6e99c0eb83f9fb266323cb80a27fb0958141836044605a2ee5523393371cc646fee2da37195aa35d0c0c5b4859ac03d7e91712dcaac5adab3650a3ff9d08ef7dd8404bb48869e5d958b5b87dadc4c9a1464e9f0d0326df7ebd86bd2e310cb1bf62d384d59441f2d70a070e1c60e09489929b988681bdd9cc97170bcc4c65595f71f8e0e3301337fc24a7732467831875a47f289652b0be5e4151e6d07316c1b0c0340d8ab92023e76d66a6b2840e36d2fb7a13fee632475e6edc367ea98a90fb98b7dd6310ca0328a44761582e1bab41befabcc0ec940d28bc5e93b68e064cab84e1d9beaeb48934eac1f53b01c1b000fca496aa54b61a99fcde61662a4b4b4b23d1680be9d426173e4df3602a48ea411989a4fd590f52a8fd156b05ed9d350e3defe3cfdf4b4c7ce770ea7d3fb9f520afbe1620daeee5c26735d20b9b9cfb6811a754a439e4e5c5639a4caa1e5caf586bfc0197b78702005cb9b4cae4cd3267ce8638fe964bd72b393e39d74928d242617303a756a37f284447770dcdbffc6384a05a85de1306e9a52057c7527c7131c3c42d3f475eb2303c82d4fc3276d6811db37efeb148723082d9b08f79f97c1e5729109a9a28307cc622d2d6cdf52b2b24efe548dedb00142009862cfa879ee1a71f6cec928353511472fbf4389148b0b0e0c108081412458dfe21c9f11351e67e7358595468246d1d1e5e38a6e9e851bc39d84ab502a669331dafec0d8ec7e3e8cb06e1a881d727d1ae40180a434a8c9db129a54126ad48a7358c2b4c5352c8c374bcccdab2bb37d8719cba79fab8211f9df218e0582c261e95f8bfc04f1a1e8bc5c4dfe0a190172af6a9690000000049454e44ae426082</data>
+    <image name="image4" >
+      <data format="PNG" length="1002" >89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b149444154388dad945f4c5b551cc73fe7dc4b7b4bcba0762d45c43114323599ee6192609c51d883892ce083f1718b3ebb185f8dc91e972cf39d2d2a2f1af664b6f1e0fe3863a0718969700eb0c52142da0242a1bd6d696f7bcff101585203ceb8fd9ece39f99dcff9fe7edf939f88c562ec465f5f9fe609442c161362173c3e3eae7b7a7ac8e7f36432196cdbfe4f907c3e4f2291201e8fe338cec3737357e9e8e828aded1e229d650e1f2d51754b082110124c13a4dc5ea341eb9dc284c0558a853f3ce8cb0677ef500fde7d39d2596679e326597b8e9abb85d7a770ab16ab6983ec5a05b487a70e36f0f4e10afe408d6a558310980108478dba4a1e8233990c5d474b64ed39aa3a8fe5f3317fbf81dbd70bccfeb205947632fd74f6589c1c6ea2f70d03a58ba0c1f2c9bdc1b66de3b8256a6e11cbe7e3ee1d181b590124fe2693aeee08d223c82c3a2c24b7b874bec8f26288774f7bd054504aef0dde6e99c0eb83f9fb266323cb80a27fb0958141836044605a2ee5523393371cc646fee2da37195aa35d0c0c5b4859ac03d7e91712dcaac5adab3650a3ff9d08ef7dd8404bb48869e5d958b5b87dadc4c9a1464e9f0d0326df7ebd86bd2e310cb1bf62d384d59441f2d70a070e1c60e09489929b988681bdd9cc97170bcc4c65595f71f8e0e3301337fc24a7732467831875a47f289652b0be5e4151e6d07316c1b0c0340d8ab92023e76d66a6b2840e36d2fb7a13fee632475e6edc367ea98a90fb98b7dd6310ca0328a44761582e1bab41befabcc0ec940d28bc5e93b68e064cab84e1d9beaeb48934eac1f53b01c1b000fca496aa54b61a99fcde61662a4b4b4b23d1680be9d426173e4df3602a48ea411989a4fd590f52a8fd156b05ed9d350e3defe3cfdf4b4c7ce770ea7d3fb9f520afbe1620daeee5c26735d20b9b9cfb6811a754a439e4e5c5639a4caa1e5caf586bfc0197b78702005cb9b4cae4cd3267ce8638fe964bd72b393e39d74928d242617303a756a37f284447770dcdbffc6384a05a85de1306e9a52057c7527c7131c3c42d3f475eb2303c82d4fc3276d6811db37efeb148723082d9b08f79f97c1e5729109a9a28307cc622d2d6cdf52b2b24efe548dedb00142009862cfa879ee1a71f6cec928353511472fbf4389148b0b0e0c108081412458dfe21c9f11351e67e7358595468246d1d1e5e38a6e9e851bc39d84ab502a669331dafec0d8ec7e3e8cb06e1a881d727d1ae40180a434a8c9db129a54126ad48a7358c2b4c5352c8c374bcccdab2bb37d8719cba79fab8211f9df218e0582c261e95f8bfc04f1a1e8bc5c4dfe0a190172af6a9690000000049454e44ae426082</data>
     </image>
-</images>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </images>
+</ui>

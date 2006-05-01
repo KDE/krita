@@ -176,7 +176,7 @@ void KisLayerItem::sync()
 bool KisLayerItem::updatePreview()
 {
     m_preview = m_layer->createThumbnail( height()*2, height()*2 );
-    m_preview.setAlphaBuffer( true );
+    m_preview = m_preview.convertToFormat(QImage::Format_ARGB32);
     previewChanged();
     return !m_preview.isNull();
 }
@@ -215,9 +215,9 @@ QImage KisLayerItem::tooltipPreview() const
     QImage img = m_layer->createThumbnail( 400, 400 );
     if( img.isNull() )
         return img; //so Qt doesn't complain
-    img.setAlphaBuffer( true );
+    img = img.convertToFormat(QImage::Format_ARGB32);
     const int size = qMin( 200, qMax( img.width(), img.height() ) );
-    return img.smoothScale( size, size, Qt::KeepAspectRatio );
+    return img.scaled( size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 }
 
 //void KisLayerItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int align );

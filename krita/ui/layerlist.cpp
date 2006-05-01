@@ -31,6 +31,7 @@
 #include <QList>
 #include <QMouseEvent>
 #include <Q3Header>
+#include <QStyle>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -277,9 +278,6 @@ static int getID()
     return id--;
 }
 
-static QSize iconSize() { return QIcon::pixmapSize( QIcon::Small ); }
-
-
 ///////////////
 // LayerList //
 ///////////////
@@ -323,7 +321,8 @@ LayerList::~LayerList()
 void LayerList::addProperty( const QString &name, const QString &displayName, const QIcon &icon,
                              bool defaultValue, bool validForFolders )
 {
-    addProperty( name, displayName, icon.pixmap( QIcon::Small, QIcon::Normal ), icon.pixmap( QIcon::Small, QIcon::Disabled ), defaultValue, validForFolders );
+    QSize size = iconSize();
+    addProperty( name, displayName, icon.pixmap( size, QIcon::Normal ), icon.pixmap( size, QIcon::Disabled ), defaultValue, validForFolders );
 }
 
 void LayerList::addProperty( const QString &name, const QString &displayName, QPixmap enabled, QPixmap disabled,
@@ -669,7 +668,7 @@ void LayerList::contentsMousePressEvent( QMouseEvent *e )
 
     if( item )
     {
-        QMouseEvent m( QEvent::MouseButtonPress, item->mapFromListView( e->pos() ), e->button(), e->state() );
+        QMouseEvent m( QEvent::MouseButtonPress, item->mapFromListView( e->pos() ), e->button(), e->buttons(), e->modifiers() );
         if( !item->mousePressEvent( &m ) )
             super::contentsMousePressEvent( e );
     }
@@ -840,6 +839,11 @@ void LayerList::setCurrentItem( Q3ListViewItem *item )
         setActiveLayer( static_cast<LayerItem*>(item) );
 }
 
+QSize LayerList::iconSize() const
+{
+    int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
+    return QSize(size, size);
+}
 
 ///////////////
 // LayerItem //
@@ -1097,11 +1101,11 @@ QRect LayerItem::previewRect() const
     return QRect( 0, 0, listView()->previewsShown() ? height() : 0, height() );
 }
 
-void LayerItem::drawText( QPainter *p, const QColorGroup &cg, const QRect &r )
+void LayerItem::drawText( QPainter *p, const QPalette &cg, const QRect &r )
 {
     p->translate( r.left(), r.top() );
 
-    p->setPen( isSelected() ? cg.highlightedText() : cg.text() );
+    p->setPen( isSelected() ? cg.color(QPalette::HighlightedText) : cg.color(QPalette::Text));
 
     const QString text = KStringHandler::rPixelSqueeze( displayName(), p->fontMetrics(), r.width() );
     p->drawText( listView()->itemMargin(), 0, r.width(), r.height(), Qt::AlignLeft | Qt::AlignTop, text );
@@ -1109,7 +1113,7 @@ void LayerItem::drawText( QPainter *p, const QColorGroup &cg, const QRect &r )
     p->translate( -r.left(), -r.top() );
 }
 
-void LayerItem::drawIcons( QPainter *p, const QColorGroup &/*cg*/, const QRect &r )
+void LayerItem::drawIcons( QPainter *p, const QPalette &/*cg*/, const QRect &r )
 {
     p->translate( r.left(), r.top() );
 
@@ -1126,7 +1130,7 @@ void LayerItem::drawIcons( QPainter *p, const QColorGroup &/*cg*/, const QRect &
     p->translate( -r.left(), -r.top() );
 }
 
-void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect &r )
+void LayerItem::drawPreview( QPainter *p, const QPalette &/*cg*/, const QRect &r )
 {
     if( !showPreview() )
         return;
@@ -1134,8 +1138,8 @@ void LayerItem::drawPreview( QPainter *p, const QColorGroup &/*cg*/, const QRect
     if( d->previewChanged || r.size() != d->previewSize )
     {      //TODO handle width() != height()
         const int size = qMin( r.width(), qMax( previewImage()->width(), previewImage()->height() ) );
-        const QImage i = previewImage()->smoothScale( size, size, Qt::KeepAspectRatio );
-        d->scaledPreview.convertFromImage( i );
+        const QImage i = previewImage()->scaled( size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        d->scaledPreview = QPixmap::fromImage( i );
         d->previewOffset.setX( r.width()/2 - i.width()/2 );
         d->previewOffset.setY( r.height()/2 - i.height()/2 );
 
@@ -1178,7 +1182,7 @@ bool LayerItem::mousePressEvent( QMouseEvent *e )
 {
     if( e->button() == Qt::RightButton )
     {
-        if ( !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::ShiftModifier) )
+        if ( !(e->modifiers() & Qt::ControlModifier) && !(e->modifiers() & Qt::ShiftModifier) )
             setActive();
         QTimer::singleShot( 0, listView(), SLOT( showContextMenu() ) );
         return false;
@@ -1215,7 +1219,7 @@ bool LayerItem::mousePressEvent( QMouseEvent *e )
         return true;
     }
 
-    if ( !(e->state() & Qt::ControlModifier) && !(e->state() & Qt::ShiftModifier) )
+    if ( !(e->modifiers() & Qt::ControlModifier) && !(e->modifiers() & Qt::ShiftModifier) )
         setActive();
 
     return false;
@@ -1283,20 +1287,23 @@ void LayerItem::paintCell( QPainter *painter, const QColorGroup &cg, int column,
 
     p.setFont( font() );
 
-    const QColorGroup cg_ = isEnabled() ? listView()->palette().active() : listView()->palette().disabled();
+    const QPalette::ColorGroup cg_ = isEnabled() ? QPalette::Active : QPalette::Disabled;
 
-    const QColor bg = isSelected()  ? cg_.highlight()
+    const QColor bg = isSelected()  ? listView()->palette().color(cg_, QPalette::Highlight)
                     : isAlternate() ? listView()->alternateBackground()
-                    : listView()->viewport()->backgroundColor();
+                    : listView()->viewport()->palette().color(QPalette::Window);
 
     buf.fill( bg );
 
     if( pixmap( 0 ) )
         p.drawPixmap( previewRect().right() + listView()->itemMargin(), 0, *pixmap( 0 ) );
 
-    drawText( &p, cg_, textRect() );
-    drawIcons( &p, cg_, iconsRect() );
-    drawPreview( &p, cg_, previewRect() );
+    QPalette palette = listView()->palette();
+    palette.setCurrentColorGroup(cg_);
+
+    drawText( &p, palette, textRect() );
+    drawIcons( &p, palette, iconsRect() );
+    drawPreview( &p, palette, previewRect() );
 
     painter->drawPixmap( 0, 0, buf );
 }
@@ -1314,6 +1321,11 @@ void LayerItem::setSelected( bool selected )
     super::setSelected( selected );
 }
 
+QSize LayerItem::iconSize() const
+{
+    int size = listView()->style()->pixelMetric( QStyle::PM_SmallIconSize );
+    return QSize(size, size);
+}
 
 /////////////////////////
 // Convenience Methods //

@@ -32,7 +32,16 @@
 #include "kis_types.h"
 #include "kis_colorspace.h"
 
-class WdgLayerBox;
+#include "ui_wdglayerbox.h"
+
+class WdgLayerBox : public QWidget, public Ui::WdgLayerBox
+{
+    Q_OBJECT
+
+public:
+    WdgLayerBox(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
 class QPainter;
 class QWidget;
 class KIconLoader;

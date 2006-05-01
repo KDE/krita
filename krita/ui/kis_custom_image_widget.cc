@@ -17,9 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <kis_custom_image_widget.h>
-#include <kis_doc.h>
-#include <kis_meta_registry.h>
+#include <qpushbutton.h>
+#include <qslider.h>
+
+#include <kcolorcombo.h>
+#include <kdebug.h>
+
+#include "KoUnitWidgets.h"
+
+#include "kis_custom_image_widget.h"
+#include "kis_doc.h"
+#include "kis_meta_registry.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_profile.h"
 #include "kis_colorspace.h"
@@ -27,13 +35,6 @@
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 #include "kis_color.h"
-#include <kcolorcombo.h>
-
-#include <kdebug.h>
-#include <qpushbutton.h>
-#include <qslider.h>
-#include <q3textedit.h>
-#include <KoUnitWidgets.h>
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
     : WdgNewImage(parent) {

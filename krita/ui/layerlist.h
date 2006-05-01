@@ -165,6 +165,7 @@ protected:
     virtual void contentsMousePressEvent( QMouseEvent *e );
     virtual void contentsMouseDoubleClickEvent ( QMouseEvent *e );
     virtual void findDrop( const QPoint &pos, Q3ListViewItem *&parent, Q3ListViewItem *&after );
+    QSize iconSize() const;
 };
 
 class LayerItem: public K3ListViewItem
@@ -224,9 +225,9 @@ protected:
     virtual QRect iconsRect() const;
     virtual QRect previewRect() const;
 
-    virtual void drawText( QPainter *p, const QColorGroup &cg, const QRect &r );
-    virtual void drawIcons( QPainter *p, const QColorGroup &cg, const QRect &r );
-    virtual void drawPreview( QPainter *p, const QColorGroup &cg, const QRect &r );
+    virtual void drawText( QPainter *p, const QPalette &cg, const QRect &r );
+    virtual void drawIcons( QPainter *p, const QPalette &cg, const QRect &r );
+    virtual void drawPreview( QPainter *p, const QPalette &cg, const QRect &r );
 
     bool multiline() const;
     bool showPreview() const;
@@ -239,6 +240,8 @@ protected:
 
     virtual QImage *previewImage() const;
     virtual QImage tooltipPreview() const;
+
+    QSize iconSize() const;
 
 private:
     typedef K3ListViewItem super;

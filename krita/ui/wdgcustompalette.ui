@@ -1,88 +1,76 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KisWdgCustomPalette</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>KisWdgCustomPalette</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KisWdgCustomPalette</class>
+  <widget class="QWidget" name="KisWdgCustomPalette" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>282</width>
+        <height>384</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>282</width>
-            <height>384</height>
-        </rect>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>palettename</cstring>
-            </property>
-            <property name="text">
-                <string>Unnamed</string>
-            </property>
+    <layout class="QVBoxLayout" >
+      <item>
+        <widget class="QLineEdit" name="palettename" >
+          <property name="text" >
+            <string>Unnamed</string>
+          </property>
         </widget>
-        <widget class="KisPaletteView">
-            <property name="name">
-                <cstring>view</cstring>
-            </property>
+      </item>
+      <item>
+        <widget class="KisPaletteView" name="view" />
+      </item>
+      <item>
+        <widget class="QPushButton" name="addColor" >
+          <property name="text" >
+            <string>Add New Color...</string>
+          </property>
         </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>addColor</cstring>
-            </property>
-            <property name="text">
-                <string>Add New Color...</string>
-            </property>
+      </item>
+      <item>
+        <widget class="QPushButton" name="removeColor" >
+          <property name="enabled" >
+            <bool>true</bool>
+          </property>
+          <property name="text" >
+            <string>Remove Selected Color</string>
+          </property>
         </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>removeColor</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="text">
-                <string>Remove Selected Color</string>
-            </property>
+      </item>
+      <item>
+        <widget class="QPushButton" name="addPalette" >
+          <property name="text" >
+            <string>Add to Predefined Palettes</string>
+          </property>
         </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>addPalette</cstring>
-            </property>
-            <property name="text">
-                <string>Add to Predefined Palettes</string>
-            </property>
-        </widget>
-    </vbox>
-</widget>
-<customwidgets>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>KisPaletteView</class>
-        <header location="local">kis_palette_view.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
+      <class>KisPaletteView</class>
+      <extends></extends>
+      <header location="local" >kis_palette_view.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
     </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="1003">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b249444154388db5944d4c5c5518869f73ce9db9cc40f929cc30300e18129a50685268a28291982e1a2175212eaab1c49d3f8971e7aec6aedb54a32b435dd8685cb8c0c4b8b0feb421b7bd8186a069d23209144b18cb0c02f3732ff3c3ccbdd705a571941213f1dd9d93739ef37e6fbeef08d334d9d5d0d090c701c8344d2176c1a6697a5d5d5dd8b64d2a95c2b2ac7f05b12c8b783c8e6118d8b6fd685fdb753a39394928e2a7c55724d693a7e214104220242805520a84d8b9e4790f0b1302c7751958f1e30534be9fa41a0c60db362dbe227f64af91b6e7719c2dfc0117a71c603da591de2882a7d3d4ec27122b10acad50aeb88044d542b84de3af7ab44aa55274f4e449dbf354bc347aa096fbf37e7efa2ecbad1b36907d78b289de8120232f37726250c3f52cf0a026a0f6065b9645d929e038167aa096d91b307171059034b5f8e9e9eb44fa052b4b25eeccd9dc99cb71f6ad082fbea2e351c075bdbdc13b9109fc01b83fef63e2e232e03076b68393231a0dcd024daf502c1e66e67a89cb971ef0e5a74bb4b61e6378248094b92ab0ac024b70ca017ef8360394187b2dc6d8b89ffa500e4d4f93d9083275d5e6f9913ade3dd70ee87c7d25c95646a25415aadab152b09ed4f8c5cc130a853839eac3951b684a61e70ef3f9c739668c24eba912afbfddc6d4d506e6a6d7b8b7d082aa8eb8dab19482cdcd220e36dd3dc19df23545de0a71f952861923493456cfd3cf36123c54a0b7bf0e8064621b21f7712c040857071ca4eea0f40a99f510573ec971cb48030e811a1faded3e94be85f2fb00703d1ff26f96ab9f011a5b04d0c4f26fdb948a754c1b25668c2491483d5d5d611617d6b8f0fe32cb779b492ce65168b4c774a4701eefd8f3a02d56e6e8f13aeefe9a63fa5a89d1970e91d908f3d46003e1480d173e28b37827c9b977348ab92ce16890237d1ec907ee3e8e3d8f60d0e1f4583d009f7d9860662acff89bad1c1faad0717493f7ce7713ed8cb0995c255f2a317a26427b67198f6a70f51c0a41b902279ed1187f23cc17130b7c74de65eac77a7a8f05517e41e2deefa4930576db60fa7a8ee1535134df3e93e7b82e0817476439fd6a9070a49f6fbe4a3077739db99b15c001146dd13a46cf1cc1f83943c62e51de76b0738fc9381e8f3390f0236b252e124999e11724fd833196164bacadb87848224fe874f779b43fe9f2dca928956d505a96dbb3f9bdc18661e00534c26d1a7a40e13912a11c9454280da41048a9915c75585df500074d53d816dc9edd229528ef0db66dbbea3ffdaffa471f1f28d8344df1bf800f1a6e9aa6f813c39885bc050f269c0000000049454e44ae426082</data>
+  </customwidgets>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="1003" >89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b249444154388db5944d4c5c5518869f73ce9db9cc40f929cc30300e18129a50685268a28291982e1a2175212eaab1c49d3f8971e7aec6aedb54a32b435dd8685cb8c0c4b8b0feb421b7bd8186a069d23209144b18cb0c02f3732ff3c3ccbdd705a571941213f1dd9d93739ef37e6fbeef08d334d9d5d0d090c701c8344d2176c1a6697a5d5d5dd8b64d2a95c2b2ac7f05b12c8b783c8e6118d8b6fd685fdb753a39394928e2a7c55724d693a7e214104220242805520a84d8b9e4790f0b1302c7751958f1e30534be9fa41a0c60db362dbe227f64af91b6e7719c2dfc0117a71c603da591de2882a7d3d4ec27122b10acad50aeb88044d542b84de3af7ab44aa55274f4e449dbf354bc347aa096fbf37e7efa2ecbad1b36907d78b289de8120232f37726250c3f52cf0a026a0f6065b9645d929e038167aa096d91b307171059034b5f8e9e9eb44fa052b4b25eeccd9dc99cb71f6ad082fbea2e351c075bdbdc13b9109fc01b83fef63e2e232e03076b68393231a0dcd024daf502c1e66e67a89cb971ef0e5a74bb4b61e6378248094b92ab0ac024b70ca017ef8360394187b2dc6d8b89ffa500e4d4f93d9083275d5e6f9913ade3dd70ee87c7d25c95646a25415aadab152b09ed4f8c5cc130a853839eac3951b684a61e70ef3f9c739668c24eba912afbfddc6d4d506e6a6d7b8b7d082aa8eb8dab19482cdcd220e36dd3dc19df23545de0a71f952861923493456cfd3cf36123c54a0b7bf0e8064621b21f7712c040857071ca4eea0f40a99f510573ec971cb48030e811a1faded3e94be85f2fb00703d1ff26f96ab9f011a5b04d0c4f26fdb948a754c1b25668c2491483d5d5d611617d6b8f0fe32cb779b492ce65168b4c774a4701eefd8f3a02d56e6e8f13aeefe9a63fa5a89d1970e91d908f3d46003e1480d173e28b37827c9b977348ab92ce16890237d1ec907ee3e8e3d8f60d0e1f4583d009f7d9860662acff89bad1c1faad0717493f7ce7713ed8cb0995c255f2a317a26427b67198f6a70f51c0a41b902279ed1187f23cc17130b7c74de65eac77a7a8f05517e41e2deefa4930576db60fa7a8ee1535134df3e93e7b82e0817476439fd6a9070a49f6fbe4a3077739db99b15c001146dd13a46cf1cc1f83943c62e51de76b0738fc9381e8f3390f0236b252e124999e11724fd833196164bacadb87848224fe874f779b43fe9f2dca928956d505a96dbb3f9bdc18661e00534c26d1a7a40e13912a11c9454280da41048a9915c75585df500074d53d816dc9edd229528ef0db66dbbea3ffdaffa471f1f28d8344df1bf800f1a6e9aa6f813c39885bc050f269c0000000049454e44ae426082</data>
     </image>
-</images>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kis_palette_view.h</includehint>
-</includehints>
-</UI>
+  </images>
+</ui>

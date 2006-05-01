@@ -21,13 +21,21 @@
 
 #include <qobject.h>
 
-#include "wdgcustompalette.h"
+#include "ui_wdgcustompalette.h"
 
 
 class KisResource;
 class KisView;
 class KisPalette;
 class KisResourceServerBase;
+
+class KisWdgCustomPalette : public QWidget, public Ui::KisWdgCustomPalette
+{
+    Q_OBJECT
+
+    public:
+        KisWdgCustomPalette(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
 
 class KisCustomPalette : public KisWdgCustomPalette
 {

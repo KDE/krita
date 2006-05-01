@@ -89,7 +89,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 
 KisToolSelectSimilar::KisToolSelectSimilar()
     : super(i18n("Select Similar Colors"))
 {
-    setName("tool_select_similar");
+    setObjectName("tool_select_similar");
     m_addCursor = KisCursor::load("tool_similar_selection_plus_cursor.png", 1, 21);
     m_subtractCursor = KisCursor::load("tool_similar_selection_minus_cursor.png", 1, 21);
     setCursor(m_addCursor);
@@ -195,11 +195,16 @@ void KisToolSelectSimilar::setPickerCursor(enumSelectionMode action)
 
 void KisToolSelectSimilar::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Similar Selection"), "tool_similar_selection", Qt::CTRL+Qt::Key_E, this, SLOT(activate()), collection, name());
+        m_action = new KAction(KIcon("tool_similar_selection"),
+                               i18n("&Similar Selection"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        m_action->setShortcut(Qt::CTRL+Qt::Key_E);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Select similar colors"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -227,10 +232,12 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
     m_optWidget = new QWidget(parent);
     Q_CHECK_PTR(m_optWidget);
 
-    m_optWidget->setCaption(i18n("Similar Selection"));
+    m_optWidget->setWindowTitle(i18n("Similar Selection"));
 
-    QVBoxLayout * l = new QVBoxLayout(m_optWidget, 0, 6);
+    QVBoxLayout * l = new QVBoxLayout(m_optWidget);
     Q_CHECK_PTR(l);
+    l->setMargin(0);
+    l->setSpacing(6);
 
     m_selectionOptionsWidget = new KisSelectionOptions(m_optWidget, m_subject);
     Q_CHECK_PTR(m_selectionOptionsWidget);
@@ -238,8 +245,9 @@ QWidget* KisToolSelectSimilar::createOptionWidget(QWidget* parent)
     l->addWidget(m_selectionOptionsWidget);
     connect (m_selectionOptionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-    QHBoxLayout * hbox = new QHBoxLayout(l);
+    QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR(hbox);
+    l->addLayout(hbox);
 
     QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
     Q_CHECK_PTR(lbl);

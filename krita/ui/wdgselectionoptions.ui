@@ -1,64 +1,56 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgSelectionOptions</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgSelectionOptions</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgSelectionOptions</class>
+  <widget class="QWidget" name="WdgSelectionOptions" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>180</width>
+        <height>34</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>180</width>
-            <height>34</height>
-        </rect>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <property name="spacing" >
+        <number>0</number>
+      </property>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="spacing" >
+            <number>6</number>
+          </property>
+          <property name="margin" >
             <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>0</number>
-        </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout1</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+          </property>
+          <item>
+            <widget class="QLabel" name="lblAction" >
+              <property name="text" >
+                <string>Action:</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QComboBox" name="cmbAction" >
+              <item>
+                <property name="text" >
+                  <string>Add</string>
                 </property>
-                <property name="spacing">
-                    <number>6</number>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>Subtract</string>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>lblAction</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Action:</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <item>
-                        <property name="text">
-                            <string>Add</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Subtract</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>cmbAction</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+              </item>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+</ui>

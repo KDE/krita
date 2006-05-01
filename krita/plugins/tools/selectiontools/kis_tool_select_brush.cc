@@ -51,7 +51,7 @@
 KisToolSelectBrush::KisToolSelectBrush()
         : super(i18n("SelectBrush"))
 {
-    setName("tool_select_brush");
+    setObjectName("tool_select_brush");
     m_optWidget = 0;
     setCursor(KisCursor::load("tool_brush_selection_cursor.png", 5, 5));
     m_paintOnSelection = true;
@@ -71,7 +71,7 @@ void KisToolSelectBrush::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectBrush::initPaint(KisEvent* /*e*/) 
+void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 {
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
@@ -109,7 +109,7 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 #endif
 }
 
-void KisToolSelectBrush::endPaint() 
+void KisToolSelectBrush::endPaint()
 {
     m_mode = HOVER;
     if (m_currentImage && m_currentImage->activeLayer()) {
@@ -127,14 +127,15 @@ void KisToolSelectBrush::endPaint()
 
 void KisToolSelectBrush::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Selection Brush"),
-                        "tool_brush_selection", Qt::CTRL+Qt::SHIFT+Qt::Key_B, this,
-                        SLOT(activate()), collection,
-                        name());
+        m_action = new KAction(KIcon("tool_brush_selection"), i18n("&Selection Brush"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        m_action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Paint a selection"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -145,7 +146,7 @@ QWidget* KisToolSelectBrush::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setCaption(i18n("Selection Brush"));
+    m_optWidget->setWindowTitle(i18n("Selection Brush"));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);

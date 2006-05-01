@@ -52,7 +52,7 @@
 KisToolSelectRectangular::KisToolSelectRectangular()
     : super(i18n("Rectangular Select Tool"))
 {
-    setName("tool_select_rectangular");
+    setObjectName("tool_select_rectangular");
     setCursor(KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6));
     m_subject = 0;
     m_selecting = false;
@@ -187,12 +187,12 @@ void KisToolSelectRectangular::buttonRelease(KisButtonReleaseEvent *e)
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 KisPaintDeviceSP dev = img->activeDevice();
                 bool hasSelection = dev->hasSelection();
-                
+
                 KisSelectedTransaction *t = 0;
                 if (img->undo())  t = new KisSelectedTransaction(i18n("Rectangular Selection"), dev);
                 KisSelectionSP selection = dev->selection();
                 QRect rc(m_startPos.floorQPoint(), m_endPos.floorQPoint());
-                rc = rc.normalize();
+                rc = rc.normalized();
 
                 // We don't want the border of the 'rectangle' to be included in our selection
                 rc.setSize(rc.size() - QSize(1,1));
@@ -275,17 +275,16 @@ void KisToolSelectRectangular::slotSetAction(int action) {
 
 void KisToolSelectRectangular::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Rectangular Selection"),
-                        "tool_rect_selection",
-                        Qt::Key_R,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("tool_rect_selection"),
+                               i18n("&Rectangular Selection"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        m_action->setShortcut(Qt::Key_R);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Select a rectangular area"));
         m_ownAction = true;
@@ -296,7 +295,7 @@ QWidget* KisToolSelectRectangular::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setCaption(i18n("Rectangular Selection"));
+    m_optWidget->setWindowTitle(i18n("Rectangular Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

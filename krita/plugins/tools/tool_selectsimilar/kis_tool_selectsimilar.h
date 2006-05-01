@@ -21,12 +21,9 @@
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
 #include <kis_selection.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 
 class KisCanvasSubject;
 class QWidget;
-class Q3VBoxLayout;
 class QCheckBox;
 class KisIntSpinbox;
 

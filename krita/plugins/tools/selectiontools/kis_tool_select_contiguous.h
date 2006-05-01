@@ -26,14 +26,13 @@
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
 #include <kis_selection.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 
-class KisCanvasSubject;
 class QWidget;
-class Q3VBoxLayout;
+class QVBoxLayout;
 class QCheckBox;
+
 class KisSelectionOptions;
+class KisCanvasSubject;
 
 /**
  * The 'magic wand' selection tool -- in fact just
@@ -82,11 +81,11 @@ public:
     KisToolSelectContiguousFactory() : super() {};
     virtual ~KisToolSelectContiguousFactory(){};
 
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolSelectContiguous(); 
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolSelectContiguous();
         Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+        t->setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("contiguousselect", i18n("Contiguous Select Tool")); }
 };

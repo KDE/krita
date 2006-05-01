@@ -20,12 +20,10 @@
 #include <qradiobutton.h>
 #include <qcombobox.h>
 #include <QVBoxLayout>
-#include <kcolorbutton.h>
 #include <qlayout.h>
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
-#include "wdgselectionoptions.h"
 #include "kis_selection_options.h"
 #include "kis_types.h"
 #include "kis_layer.h"

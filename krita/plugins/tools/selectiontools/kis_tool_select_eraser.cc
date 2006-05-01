@@ -49,7 +49,7 @@
 KisToolSelectEraser::KisToolSelectEraser()
         : super(i18n("SelectEraser"))
 {
-    setName("tool_select_eraser");
+    setObjectName("tool_select_eraser");
     setCursor(KisCursor::load("tool_eraser_selection_cursor.png", 5, 5));
     m_optWidget = 0;
     m_paintOnSelection = true;
@@ -69,7 +69,7 @@ void KisToolSelectEraser::activate()
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectEraser::initPaint(KisEvent */*e*/) 
+void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 {
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
 
@@ -78,9 +78,9 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 
     // Create painter
     KisPaintDeviceSP dev = m_currentImage->activeDevice();
-    
+
     if (dev.isNull()) return;
-    
+
     if (m_painter)
         delete m_painter;
     if(! dev->hasSelection())
@@ -111,14 +111,16 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
 
 void KisToolSelectEraser::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("Selection &Eraser"),
-                        "tool_eraser_selection", Qt::CTRL+Qt::SHIFT+Qt::Key_E, this,
-                        SLOT(activate()), collection,
-                        name());
+        m_action = new KAction(KIcon("tool_eraser_selection"),
+                               i18n("Selection &Eraser"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        m_action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Erase parts of a selection"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -129,7 +131,7 @@ QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setCaption(i18n("Selection Eraser"));
+    m_optWidget->setWindowTitle(i18n("Selection Eraser"));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);

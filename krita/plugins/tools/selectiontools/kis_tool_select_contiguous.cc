@@ -56,7 +56,7 @@
 
 KisToolSelectContiguous::KisToolSelectContiguous() : super(i18n("Contiguous Select"))
 {
-    setName("tool_select_contiguous");
+    setObjectName("tool_select_contiguous");
     m_subject = 0;
     m_optWidget = 0;
     m_fuzziness = 20;
@@ -109,29 +109,29 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
         KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y());
         KisSelectedTransaction *t = 0;
         if (img->undo()) t = new KisSelectedTransaction(i18n("Contiguous Area Selection"), dev);
-        
+
         if (!dev->hasSelection()) {
             dev->selection()->clear();
             if(m_selectAction==SELECTION_SUBTRACT)
                 selection->invert();
         }
-        
+
         switch (m_selectAction) {
             case SELECTION_SUBTRACT:
                 dev->subtractSelection(selection);
                 break;
             case SELECTION_ADD:
-            default: 
+            default:
                 dev->addSelection(selection);
                 break;
 
         }
-        
+
         dev->emitSelectionChanged();
 
         if (img->undo())
             img->undoAdapter()->addCommand(t);
-            
+
         QApplication::restoreOverrideCursor();
     }
 
@@ -139,17 +139,15 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
 
 void KisToolSelectContiguous::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Contiguous Area Selection"),
-                        "tool_contiguous_selection" ,
-                        0,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("tool_contiguous_selection"),
+                               i18n("&Contiguous Area Selection"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Select a contiguous area"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -187,7 +185,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setCaption(i18n("Contiguous Area Selection"));
+    m_optWidget->setWindowTitle(i18n("Contiguous Area Selection"));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);
@@ -196,8 +194,9 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 
         connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
-        QHBoxLayout * hbox = new QHBoxLayout(l);
+        QHBoxLayout * hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
+        l->addLayout(hbox);
 
         QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
         hbox->addWidget(lbl);
@@ -219,7 +218,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget(QWidget* parent)
 
         l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
     }
-    
+
     return m_optWidget;
 }
 

@@ -52,7 +52,7 @@
 KisToolSelectOutline::KisToolSelectOutline()
     : super(i18n("Select Outline"))
 {
-    setName("tool_select_outline");
+    setObjectName("tool_select_outline");
     setCursor(KisCursor::load("tool_outline_selection_cursor.png", 5, 5));
 
     m_subject = 0;
@@ -246,17 +246,15 @@ void KisToolSelectOutline::deactivate()
 
 void KisToolSelectOutline::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Outline Selection"),
-                        "tool_outline_selection",
-                        0,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("tool_outline_selection"),
+                               i18n("&Outline Selection"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Select an outline"));
         m_ownAction = true;
@@ -268,7 +266,7 @@ QWidget* KisToolSelectOutline::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setCaption(i18n("Outline Selection"));
+    m_optWidget->setWindowTitle(i18n("Outline Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

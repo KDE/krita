@@ -52,7 +52,7 @@
 KisToolSelectPolygonal::KisToolSelectPolygonal()
     : super(i18n("Select Polygonal"))
 {
-    setName("tool_select_polygonal");
+    setObjectName("tool_select_polygonal");
     setCursor(KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6));
 
     m_subject = 0;
@@ -265,17 +265,15 @@ void KisToolSelectPolygonal::draw(KisCanvasPainter& gc)
 
 void KisToolSelectPolygonal::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Polygonal Selection"),
-                        "tool_polygonal_selection" ,
-                        0,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("tool_polygonal_selection"),
+                               i18n("&Polygonal Selection"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Select a polygonal area"));
         m_ownAction = true;
@@ -287,7 +285,7 @@ QWidget* KisToolSelectPolygonal::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setCaption(i18n("Polygonal Selection"));
+    m_optWidget->setWindowTitle(i18n("Polygonal Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

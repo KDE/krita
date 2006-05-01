@@ -50,7 +50,7 @@
 KisToolSelectElliptical::KisToolSelectElliptical()
     : super(i18n("Elliptical Select"))
 {
-    setName("tool_select_elliptical");
+    setObjectName("tool_select_elliptical");
     setCursor(KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6));
 
     m_subject = 0;
@@ -201,8 +201,8 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                         dev->selection()->invert();
                 }
                 QRect rc( m_startPos.floorQPoint(), m_endPos.floorQPoint());
-                rc = rc.normalize();
-                
+                rc = rc.normalized();
+
                 KisSelectionSP tmpSel = KisSelectionSP(new KisSelection(dev));
                 KisAutobrushCircleShape shape(rc.width(),rc.height(), 1, 1);
                 quint8 value;
@@ -221,7 +221,7 @@ void KisToolSelectElliptical::buttonRelease(KisButtonReleaseEvent *e)
                         dev->subtractSelection(tmpSel);
                         break;
                 }
-                
+
                 if(hasSelection)
                     dev->emitSelectionChanged(rc);
                 else
@@ -278,17 +278,16 @@ void KisToolSelectElliptical::slotSetAction(int action) {
 
 void KisToolSelectElliptical::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Elliptical Selection"),
-                        "tool_elliptical_selection" ,
-                        Qt::Key_J,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("tool_elliptical_selection"),
+                               i18n("&Elliptical Selection"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        m_action->setShortcut(Qt::Key_J);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Select an elliptical area"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -299,7 +298,7 @@ QWidget* KisToolSelectElliptical::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setCaption(i18n("Elliptical Selection"));
+    m_optWidget->setWindowTitle(i18n("Elliptical Selection"));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

@@ -23,8 +23,17 @@
 
 #include "koffice_export.h"
 
+#include "ui_wdgselectionoptions.h"
+
 class KisCanvasSubject;
-class WdgSelectionOptions;
+
+class WdgSelectionOptions : public QWidget, public Ui::WdgSelectionOptions
+{
+    Q_OBJECT
+
+    public:
+        WdgSelectionOptions(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 /**
  */
@@ -36,7 +45,7 @@ class KRITAUI_EXPORT KisSelectionOptions : public QWidget
     typedef QWidget super;
 
 public:
-    KisSelectionOptions( QWidget *parent, KisCanvasSubject * subject);
+    KisSelectionOptions(QWidget *parent, KisCanvasSubject * subject);
     virtual ~KisSelectionOptions();
 
     int action();

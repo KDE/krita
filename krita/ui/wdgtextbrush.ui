@@ -1,158 +1,139 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KisWdgTextBrush</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>KisWdgTextBrush</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KisWdgTextBrush</class>
+  <widget class="QWidget" name="KisWdgTextBrush" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>317</width>
+        <height>89</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>317</width>
-            <height>89</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Text</string>
     </property>
-    <property name="caption">
-        <string>Text</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout9</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>labelText</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Text:</string>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit">
-                            <property name="name">
-                                <cstring>lineEdit</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>120</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>The Quick Brown Fox Jumps Over The Lazy Dog</string>
-                            </property>
-                        </widget>
-                    </hbox>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <layout class="QVBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <layout class="QHBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <widget class="QLabel" name="labelText" >
+                  <property name="text" >
+                    <string>Text:</string>
+                  </property>
                 </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout10</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>lblFont</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Font:</string>
-                            </property>
-                        </widget>
-                        <widget class="QToolButton">
-                            <property name="name">
-                                <cstring>bnFont</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>...</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                    </hbox>
+              </item>
+              <item>
+                <widget class="KLineEdit" name="lineEdit" >
+                  <property name="minimumSize" >
+                    <size>
+                      <width>120</width>
+                      <height>0</height>
+                    </size>
+                  </property>
+                  <property name="font" >
+                    <font>
+                      <family></family>
+                      <pointsize>0</pointsize>
+                      <weight>0</weight>
+                      <italic>false</italic>
+                      <bold>false</bold>
+                      <underline>false</underline>
+                      <strikeout>false</strikeout>
+                    </font>
+                  </property>
+                  <property name="text" >
+                    <string>The Quick Brown Fox Jumps Over The Lazy Dog</string>
+                  </property>
                 </widget>
-            </vbox>
-        </widget>
-        <spacer row="0" column="1">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Minimum</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>121</width>
-                    <height>20</height>
-                </size>
-            </property>
+              </item>
+            </layout>
+          </item>
+          <item>
+            <layout class="QHBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <widget class="QLabel" name="lblFont" >
+                  <property name="sizePolicy" >
+                    <sizepolicy>
+                      <hsizetype>5</hsizetype>
+                      <vsizetype>5</vsizetype>
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                    </sizepolicy>
+                  </property>
+                  <property name="text" >
+                    <string>Font:</string>
+                  </property>
+                </widget>
+              </item>
+              <item>
+                <widget class="QToolButton" name="bnFont" >
+                  <property name="sizePolicy" >
+                    <sizepolicy>
+                      <hsizetype>0</hsizetype>
+                      <vsizetype>0</vsizetype>
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                    </sizepolicy>
+                  </property>
+                  <property name="text" >
+                    <string>...</string>
+                  </property>
+                  <property name="shortcut" >
+                    <string/>
+                  </property>
+                </widget>
+              </item>
+            </layout>
+          </item>
+        </layout>
+      </item>
+      <item row="0" column="1" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>121</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Minimum</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </spacer>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Minimum</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>31</height>
-                </size>
-            </property>
+      </item>
+      <item row="1" column="0" >
+        <spacer name="spacer2" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>31</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Minimum</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<slots>
-    <slot access="private">boldButtonClicked()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>klineedit.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+</ui>

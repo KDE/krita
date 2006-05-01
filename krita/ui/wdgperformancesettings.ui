@@ -113,7 +113,6 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
   <customwidgets>
 	  <customwidget>
 		  <class>KIntNumInput</class>

@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_TEXT_BRUSH_H_ 
+#ifndef _KIS_TEXT_BRUSH_H_
 #define _KIS_TEXT_BRUSH_H_
 
-#include "wdgtextbrush.h"
+#include "ui_wdgtextbrush.h"
 #include "kis_brush.h"
 
 class KisTextBrushResource : public KisBrush
@@ -46,6 +46,14 @@ class KisTextBrushResource : public KisBrush
 		QString m_txt;
 };
 
+class KisWdgTextBrush : public QWidget, public Ui::KisWdgTextBrush
+{
+    Q_OBJECT
+
+    public:
+        KisWdgTextBrush(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
+
 class KisTextBrush : public KisWdgTextBrush
 {
 	Q_OBJECT
@@ -63,8 +71,5 @@ private:
 	KisTextBrushResource* m_textBrushResource;
 	QFont m_font;
 };
-
-
-
 
 #endif

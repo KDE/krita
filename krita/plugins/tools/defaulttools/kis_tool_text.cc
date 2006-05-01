@@ -19,17 +19,16 @@
 #include <qfont.h>
 #include <qrect.h>
 #include <qimage.h>
-#include <qlayout.h> 
+#include <qlayout.h>
 #include <qwidget.h>
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qfontmetrics.h>
-#include <q3hbox.h>
-//Added by qt3to4:
 #include <QLabel>
 
+#include <khbox.h>
 #include <kaction.h>
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -54,7 +53,7 @@
 KisToolText::KisToolText()
     : super(i18n("Text"))
 {
-    setName("tool_text");
+    setObjectName("tool_text");
     m_subject = 0;
     setCursor(KisCursor::load("tool_text_cursor.png", 6, 6));
 }
@@ -86,12 +85,12 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
         }
 
         QFontMetrics metrics(m_font);
-        QRect boundingRect = metrics.boundingRect(text).normalize();
+        QRect boundingRect = metrics.boundingRect(text).normalized();
         int xB = - boundingRect.x();
         int yB = - boundingRect.y();
 
         if (boundingRect.x() < 0 || boundingRect.y() < 0)
-            boundingRect.moveBy(- boundingRect.x(), - boundingRect.y());
+            boundingRect.translate(- boundingRect.x(), - boundingRect.y());
 
         QPixmap pixels(boundingRect.width(), boundingRect.height());
         {
@@ -101,7 +100,7 @@ void KisToolText::buttonRelease(KisButtonReleaseEvent *e)
             paint.setBrush(QBrush(Qt::black));
             paint.drawText(xB, yB, text);
         }
-        QImage image = pixels.convertToImage();
+        QImage image = pixels.toImage();
 
         qint32 height = boundingRect.height();
         qint32 width = boundingRect.width();
@@ -147,7 +146,7 @@ QWidget* KisToolText::createOptionWidget(QWidget* parent)
 
     m_lbFont = new QLabel(i18n("Font: "), widget);
 
-    Q3HBox *fontBox = new Q3HBox(widget);
+    KHBox *fontBox = new KHBox(widget);
     m_lbFontName = new KSqueezedTextLabel(QString(m_font.family() + ", %1")
         .arg(m_font.pointSize()), fontBox);
     m_btnMoreFonts = new QPushButton("...", fontBox);
@@ -161,16 +160,15 @@ QWidget* KisToolText::createOptionWidget(QWidget* parent)
 
 void KisToolText::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("T&ext"), 
-                        "tool_text", 
-                        Qt::SHIFT+Qt::Key_T, 
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("tool_text"),
+                               i18n("T&ext"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::SHIFT+Qt::Key_T);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Text"));
         m_ownAction = true;

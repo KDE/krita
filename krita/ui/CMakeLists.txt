@@ -89,10 +89,6 @@ set(kritaui_LIB_SRCS
 
 kde4_automoc(${kritaui_LIB_SRCS})
 
-kde4_add_ui3_files(kritaui_LIB_SRCS
-    wdgtextbrush.ui
-    )
-
 kde4_add_ui_files(kritaui_LIB_SRCS
     wdgautobrush.ui
     wdgautogradient.ui
@@ -117,6 +113,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgselectionoptions.ui
     wdgshapeoptions.ui
     wdgcustompalette.ui
+    wdgtextbrush.ui
 	)
 
 kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )

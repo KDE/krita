@@ -22,16 +22,12 @@
 #include "kis_tool_paint.h"
 
 #include "kis_tool_factory.h"
-//Added by qt3to4:
-#include <QLabel>
 
 class QFont;
 class QLabel;
 class QWidget;
 class QPushButton;
 class KSqueezedTextLabel;
-
-
 
 class KisToolText : public KisToolPaint {
     typedef KisToolPaint super;
@@ -64,12 +60,12 @@ class KisToolTextFactory : public KisToolFactory {
 public:
     KisToolTextFactory() : super() {};
     virtual ~KisToolTextFactory(){};
-    
+
     virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolText(); 
+        KisTool * t =  new KisToolText();
         Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+        t->setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("text", i18n("Text Tool")); }
 };

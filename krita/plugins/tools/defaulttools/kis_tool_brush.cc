@@ -26,8 +26,7 @@
 #include <qpainter.h>
 #include <qrect.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -51,7 +50,7 @@
 KisToolBrush::KisToolBrush()
         : super(i18n("Brush"))
 {
-    setName("tool_brush");
+    setObjectName("tool_brush");
     setCursor(KisCursor::load("tool_freehand_cursor.png", 5, 5));
     m_rate = 100; // Conveniently hardcoded for now
     m_timer = new QTimer(this);
@@ -91,7 +90,7 @@ void KisToolBrush::initPaint(KisEvent *e)
     }
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), m_painter);
     if (!op) return;
-    
+
     m_subject->canvasController()->kiscanvas()->update(); // remove the outline
 
     painter()->setPaintOp(op); // And now the painter owns the op and will destroy it.
@@ -112,13 +111,15 @@ void KisToolBrush::endPaint()
 void KisToolBrush::setup(KActionCollection *collection)
 {
 
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Brush"),
-                                    "tool_freehand", Qt::Key_B, this,
-                                    SLOT(activate()), collection,
-                                    name());
+        m_action = new KAction(KIcon("tool_freehand"),
+                               i18n("&Brush"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::Key_B);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw freehand"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -152,12 +153,16 @@ void KisToolBrush::slotSetPaintingMode( int mode )
 QWidget* KisToolBrush::createOptionWidget(QWidget* parent)
 {
     QWidget *widget = super::createOptionWidget(parent);
-    m_chkDirect = new QCheckBox(i18n("Paint directly"), widget, "chkDirect");
+    m_chkDirect = new QCheckBox(i18n("Paint directly"), widget);
+    m_chkDirect->setObjectName("chkDirect");
     m_chkDirect->setChecked(true);
     connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
-    
-    m_optionLayout = new Q3GridLayout(widget, 3, 2, 0, 6);
+
+    m_optionLayout = new QGridLayout(widget);
     Q_CHECK_PTR(m_optionLayout);
+
+    m_optionLayout->setMargin(0);
+    m_optionLayout->setSpacing(6);
 
     super::addOptionWidgetLayout(m_optionLayout);
     m_optionLayout->addWidget(m_chkDirect, 0, 0);

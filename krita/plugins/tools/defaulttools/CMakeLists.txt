@@ -18,7 +18,7 @@ set(kritadefaulttools_PART_SRCS
 
 kde4_automoc(${kritadefaulttools_PART_SRCS})
 
-kde4_add_ui3_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui)
+kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui)
 
 kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
 
@@ -83,7 +83,7 @@ kde4_footer()
 #	kis_tool_move.h \
 #	kis_tool_zoom.h \
 #	kis_tool_ellipse.h \
-#	kis_tool_pan.h 
+#	kis_tool_pan.h
 #
 #
 #kritadefaulttools_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

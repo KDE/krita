@@ -19,23 +19,17 @@
 #ifndef KIS_TOOL_BRUSH_H_
 #define KIS_TOOL_BRUSH_H_
 
+#include "koffice_export.h"
 
 #include "kis_tool_freehand.h"
-
 #include "kis_tool_factory.h"
-#include "koffice_export.h"
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
-#include <QEvent>
 
 class QTimer;
 class KisPoint;
-class Q3HBoxLayout;
 class QPainter;
 class QRect;
 class QCheckBox;
-class Q3GridLayout;
+class QGridLayout;
 
 class KRITACORE_EXPORT KisToolBrush : public KisToolFreehand {
     Q_OBJECT
@@ -51,7 +45,7 @@ public:
     QWidget* createOptionWidget(QWidget* parent);
 
 protected:
-    
+
     virtual void initPaint(KisEvent *e);
     virtual void endPaint();
     virtual void move(KisMoveEvent *e);
@@ -63,10 +57,10 @@ private slots:
     void slotSetPaintingMode( int mode );
 
 private:
-    
+
     qint32 m_rate;
     QTimer * m_timer;
-    Q3GridLayout* m_optionLayout;
+    QGridLayout* m_optionLayout;
     QCheckBox * m_chkDirect;
 };
 
@@ -75,12 +69,12 @@ class KisToolBrushFactory : public KisToolFactory {
 public:
     KisToolBrushFactory() : super() {};
     virtual ~KisToolBrushFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolBrush(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolBrush();
         Q_CHECK_PTR(t);
-        t->setup(ac); 
-        return t; 
+        t->setup(ac);
+        return t;
     }
     virtual KisID id() { return KisID("brush", i18n("Brush Tool")); }
 };

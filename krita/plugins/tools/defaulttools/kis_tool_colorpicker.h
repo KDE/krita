@@ -20,13 +20,22 @@
 #ifndef KIS_TOOL_COLOR_PICKER_H_
 #define KIS_TOOL_COLOR_PICKER_H_
 
+#include <QList>
+
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
-#include "q3valuevector.h"
+#include "ui_wdgcolorpicker.h"
 
-class ColorPickerOptionsWidget;
 class KisResource;
 class KisPalette;
+
+class ColorPickerOptionsWidget : public QWidget, public Ui::ColorPickerOptionsWidget
+{
+    Q_OBJECT
+
+    public:
+        ColorPickerOptionsWidget(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 class KisToolColorPicker : public KisToolNonPaint {
 
@@ -64,7 +73,7 @@ private:
 
     ColorPickerOptionsWidget *m_optionsWidget;
     KisCanvasSubject *m_subject;
-    Q3ValueVector<KisPalette*> m_palettes;
+    QList<KisPalette*> m_palettes;
 };
 
 class KisToolColorPickerFactory : public KisToolFactory {
@@ -72,11 +81,11 @@ class KisToolColorPickerFactory : public KisToolFactory {
 public:
     KisToolColorPickerFactory() : super() {};
     virtual ~KisToolColorPickerFactory(){};
-    
-    virtual KisTool * createTool(KActionCollection * ac) { 
-        KisTool * t =  new KisToolColorPicker(); 
+
+    virtual KisTool * createTool(KActionCollection * ac) {
+        KisTool * t =  new KisToolColorPicker();
         Q_CHECK_PTR(t);
-        t->setup(ac); 
+        t->setup(ac);
         return t;
     }
     virtual KisID id() { return KisID("colorpicker", i18n("Color Picker")); }

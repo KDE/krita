@@ -22,10 +22,9 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3listview.h>
 #include <qspinbox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QListWidget>
+#include <QList>
 
 #include <kaction.h>
 #include <klocale.h>
@@ -45,7 +44,6 @@
 #include "kis_color.h"
 #include "kis_resourceserver.h"
 #include "kis_palette.h"
-#include "wdgcolorpicker.h"
 
 namespace {
     // The location of the sample all visible layers in the combobox
@@ -55,7 +53,7 @@ namespace {
 KisToolColorPicker::KisToolColorPicker()
     : super (i18n("Color Picker"))
 {
-    setName("tool_colorpicker");
+    setObjectName("tool_colorpicker");
     setCursor(KisCursor::pickerCursor());
     m_optionsWidget = 0;
     m_subject = 0;
@@ -91,7 +89,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
 
         if (!dev) return;
 
-        bool sampleMerged = m_optionsWidget->cmbSources->currentItem() == SAMPLE_MERGED;
+        bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
         if (!sampleMerged) {
             if (!img->activeLayer())
             {
@@ -178,7 +176,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
             ent.color = m_pickedColor.toQColor();
             // We don't ask for a name, too intrusive here
 
-            KisPalette* palette = m_palettes.at(m_optionsWidget-> cmbPalette->currentItem());
+            KisPalette* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
             palette->add(ent);
 
             if (!palette->save()) {
@@ -204,19 +202,24 @@ void KisToolColorPicker::displayPickedColor()
                 channelValueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), i);
             }
 
-            m_optionsWidget->listViewChannels->insertItem(new Q3ListViewItem(m_optionsWidget->listViewChannels,
-                                                channels[i]->name(),
-                                                channelValueText));
+            QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
+            item->setText(0, channels[i]->name());
+            item->setText(1, channelValueText);
         }
     }
 }
 
 void KisToolColorPicker::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Color Picker"), "colorpicker", Qt::Key_P, this, SLOT(activate()), collection, name());
+        m_action = new KAction(KIcon("colorpicker"),
+                               i18n("&Color Picker"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::Key_P);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Color picker"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -229,13 +232,13 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
 
     m_optionsWidget->cbUpdateCurrentColour->setChecked(m_updateColor);
 
-    m_optionsWidget->cmbSources->setCurrentItem(0);
+    m_optionsWidget->cmbSources->setCurrentIndex(0);
 
     m_optionsWidget->cbNormaliseValues->setChecked(m_normaliseValues);
     m_optionsWidget->cbPalette->setChecked(m_addPalette);
     m_optionsWidget->radius->setValue(m_radius);
 
-    m_optionsWidget->listViewChannels->setSorting(-1);
+    m_optionsWidget->listViewChannels->setSortingEnabled(false);
 
     connect(m_optionsWidget->cbUpdateCurrentColour, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
     connect(m_optionsWidget->cbNormaliseValues, SIGNAL(toggled(bool)), SLOT(slotSetNormaliseValues(bool)));
@@ -250,12 +253,12 @@ QWidget* KisToolColorPicker::createOptionWidget(QWidget* parent)
         return m_optionsWidget;
     }
 
-    Q3ValueList<KisResource*> palettes = srv->resources();
+    QList<KisResource*> palettes = srv->resources();
 
-    for(uint i = 0; i < palettes.count(); i++) {
-        KisPalette* palette = dynamic_cast<KisPalette*>(*palettes.at(i));
+    foreach (KisResource *resource, palettes) {
+        KisPalette* palette = dynamic_cast<KisPalette*>(resource);
         if (palette) {
-            m_optionsWidget->cmbPalette->insertItem(palette->name());
+            m_optionsWidget->cmbPalette->addItem(palette->name());
             m_palettes.append(palette);
         }
     }
@@ -293,7 +296,7 @@ void KisToolColorPicker::slotChangeRadius(int value) {
 void KisToolColorPicker::slotAddPalette(KisResource* resource) {
     KisPalette* palette = dynamic_cast<KisPalette*>(resource);
     if (palette) {
-        m_optionsWidget-> cmbPalette->insertItem(palette->name());
+        m_optionsWidget->cmbPalette->addItem(palette->name());
         m_palettes.append(palette);
     }
 }

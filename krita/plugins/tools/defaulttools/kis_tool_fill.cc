@@ -52,7 +52,7 @@
 KisToolFill::KisToolFill()
     : super(i18n("Fill"))
 {
-    setName("tool_fill");
+    setObjectName("tool_fill");
     m_subject = 0;
     m_oldColor = 0;
     m_threshold = 15;
@@ -212,16 +212,15 @@ void KisToolFill::slotSetFillSelection(int state)
 
 void KisToolFill::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Fill"),
-                        "color_fill",
-                        Qt::Key_F,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("color_fill"),
+                               i18n("&Fill"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::Key_F);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Contiguous fill"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

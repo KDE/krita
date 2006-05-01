@@ -1,167 +1,143 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>ColorPickerOptionsWidget</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>ColorPickerOptionsWidget</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>263</width>
-            <height>307</height>
-        </rect>
-    </property>
-    <property name="caption">
-        <string>Color Picker</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>0</number>
-        </property>
-        <widget class="QComboBox">
-            <item>
-                <property name="text">
-                    <string>Sample All Visible Layers</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Current Layer</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>cmbSources</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>200</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>200</width>
-                    <height>32767</height>
-                </size>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>cbUpdateCurrentColour</cstring>
-            </property>
-            <property name="text">
-                <string>Update current color</string>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout2</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>cbPalette</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Add to palette:</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <property name="name">
-                        <cstring>cmbPalette</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>cbNormaliseValues</cstring>
-            </property>
-            <property name="text">
-                <string>Show colors as percentages</string>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout1</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Sample radius:</string>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>radius</cstring>
-                    </property>
-                    <property name="maxValue">
-                        <number>9</number>
-                    </property>
-                    <property name="minValue">
-                        <number>1</number>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QListView">
-            <column>
-                <property name="text">
-                    <string>Channel</string>
-                </property>
-                <property name="clickable">
-                    <bool>false</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Value</string>
-                </property>
-                <property name="clickable">
-                    <bool>false</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>listViewChannels</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="selectionMode">
-                <enum>NoSelection</enum>
-            </property>
-        </widget>
-    </vbox>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>ColorPickerOptionsWidget</class>
+ <widget class="QWidget" name="ColorPickerOptionsWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>263</width>
+    <height>307</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Color Picker</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="5" column="0" >
+    <widget class="QTreeWidget" name="listViewChannels" >
+     <property name="columnCount" >
+      <number>2</number>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Channel</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Value</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="textLabel1" >
+       <property name="text" >
+        <string>Sample radius:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="radius" >
+       <property name="maximum" >
+        <number>9</number>
+       </property>
+       <property name="minimum" >
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QCheckBox" name="cbNormaliseValues" >
+     <property name="text" >
+      <string>Show colors as percentages</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="cbPalette" >
+       <property name="text" >
+        <string>Add to palette:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cmbPalette" />
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QCheckBox" name="cbUpdateCurrentColour" >
+     <property name="text" >
+      <string>Update current color</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QComboBox" name="cmbSources" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>200</width>
+       <height>32767</height>
+      </size>
+     </property>
+     <item>
+      <property name="text" >
+       <string>Sample All Visible Layers</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Current Layer</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

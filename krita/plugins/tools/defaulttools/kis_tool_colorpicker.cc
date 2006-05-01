@@ -193,7 +193,7 @@ void KisToolColorPicker::displayPickedColor()
         Q3ValueVector<KisChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
 
-        for (int i = channels.count() - 1; i >= 0 ; --i) {
+        for (int i = 0; i < channels.count(); ++i) {
             QString channelValueText;
 
             if (m_normaliseValues) {

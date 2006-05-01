@@ -45,7 +45,7 @@ KisToolEllipse::KisToolEllipse()
       m_dragging (false),
       m_currentImage (0)
 {
-    setName("tool_ellipse");
+    setObjectName("tool_ellipse");
     setCursor(KisCursor::load("tool_ellipse_cursor.png", 6, 6));
 }
 
@@ -165,18 +165,17 @@ void KisToolEllipse::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolEllipse::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
         shortcut.append(Qt::Key_F7);
-        m_action = new KAction(i18n("&Ellipse"),
-                                    "tool_ellipse",
-                                    shortcut,
-                                    this,
-                                    SLOT(activate()),
-                                    collection,
-                                    name());
+        m_action = new KAction(KIcon("tool_ellipse"),
+                               i18n("&Ellipse"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(shortcut);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw an ellipse"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

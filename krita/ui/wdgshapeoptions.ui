@@ -1,98 +1,92 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgGeometryOptions</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgGeometryOptions</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgGeometryOptions</class>
+  <widget class="QWidget" name="WdgGeometryOptions" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>275</width>
+        <height>31</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>275</width>
-            <height>31</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Geometry Options</string>
     </property>
-    <property name="caption">
-        <string>Geometry Options</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>2</number>
-        </property>
-        <property name="spacing">
-            <number>2</number>
-        </property>
-        <spacer row="1" column="2">
-            <property name="name">
-                <cstring>spacer9</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>2</number>
+      </property>
+      <property name="spacing" >
+        <number>2</number>
+      </property>
+      <item row="1" column="2" >
+        <spacer name="spacer9" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>16</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel3</cstring>
-            </property>
-            <property name="text">
-                <string>Fill:</string>
-            </property>
+      </item>
+      <item row="0" column="0" >
+        <widget class="QLabel" name="textLabel3" >
+          <property name="text" >
+            <string>Fill:</string>
+          </property>
         </widget>
-        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
-            <item>
-                <property name="text">
-                    <string>Not Filled</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Foreground Color</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Background Color</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Pattern</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>cmbFill</cstring>
+      </item>
+      <item rowspan="1" row="0" column="1" colspan="2" >
+        <widget class="QComboBox" name="cmbFill" >
+          <item>
+            <property name="text" >
+              <string>Not Filled</string>
             </property>
+          </item>
+          <item>
+            <property name="text" >
+              <string>Foreground Color</string>
+            </property>
+          </item>
+          <item>
+            <property name="text" >
+              <string>Background Color</string>
+            </property>
+          </item>
+          <item>
+            <property name="text" >
+              <string>Pattern</string>
+            </property>
+          </item>
         </widget>
-        <spacer row="0" column="3" rowspan="2" colspan="1">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>20</height>
-                </size>
-            </property>
+      </item>
+      <item rowspan="2" row="0" column="3" colspan="1" >
+        <spacer name="spacer2" >
+          <property name="sizeHint" >
+            <size>
+              <width>21</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>

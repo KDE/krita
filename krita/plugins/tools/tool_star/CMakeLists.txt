@@ -6,8 +6,8 @@ set(kritatoolstar_PART_SRCS
     )
 
 kde4_automoc(${kritatoolstar_PART_SRCS})
-    
-kde4_add_ui3_files(kritatoolstar_PART_SRCS wdg_tool_star.ui)
+
+kde4_add_ui_files(kritatoolstar_PART_SRCS wdg_tool_star.ui)
 
 kde4_add_plugin(kritatoolstar ${kritatoolstar_PART_SRCS})
 
@@ -43,14 +43,14 @@ kde4_footer()
 #kritatoolstar_la_SOURCES = \
 #	wdg_tool_star.ui \
 #        tool_star.cc \
-#	kis_tool_star.cc 
+#	kis_tool_star.cc
 #
 ## Install this plugin in the KDE modules directory
 #kde_module_LTLIBRARIES = kritatoolstar.la
 #
 #noinst_HEADERS = \
 #	tool_star.h \
-#	kis_tool_star.h 
+#	kis_tool_star.h
 #
 #kritatoolstar_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 #kritatoolstar_la_LIBADD =  ../../../libkritacommon.la

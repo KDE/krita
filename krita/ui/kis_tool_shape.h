@@ -23,9 +23,17 @@
 
 #include "kis_tool_paint.h"
 #include "kis_painter.h"
+#include "ui_wdgshapeoptions.h"
 
 class QGridLayout;
-class WdgGeometryOptions;
+
+class WdgGeometryOptions : public QWidget, public Ui::WdgGeometryOptions
+{
+    Q_OBJECT
+
+    public:
+        WdgGeometryOptions(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 class KRITACORE_EXPORT KisToolShape : public KisToolPaint {
 

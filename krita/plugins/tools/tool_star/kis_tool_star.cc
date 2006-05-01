@@ -24,8 +24,7 @@
 #include <qpainter.h>
 #include <qspinbox.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -49,14 +48,13 @@
 #include "kis_int_spinbox.h"
 
 #include "kis_tool_star.h"
-#include "wdg_tool_star.h"
 
 KisToolStar::KisToolStar()
     : super(i18n("Star")),
       m_dragging (false),
       m_currentImage (0)
 {
-    setName("tool_star");
+    setObjectName("tool_star");
     setCursor(KisCursor::load("tool_star_cursor.png", 6, 6));
     m_innerOuterRatio=40;
     m_vertices=5;
@@ -120,7 +118,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
 
         if (!m_currentImage->activeDevice())
             return;
-        
+
         KisPaintDeviceSP device = m_currentImage->activeDevice ();;
         KisPainter painter (device);
         if (m_currentImage->undo()) painter.beginTransaction (i18n("Star"));
@@ -138,7 +136,7 @@ void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
         vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
 
         painter.paintPolygon(coord);
-        
+
         device->setDirty( painter.dirtyRect() );
         notifyModified();
 
@@ -167,7 +165,7 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
 
     vKisPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
 
-    for (uint i = 0; i < points.count() - 1; i++) {
+    for (int i = 0; i < points.count() - 1; i++) {
         p.drawLine(points[i].floorQPoint(), points[i + 1].floorQPoint());
     }
     p.drawLine(points[points.count() - 1].floorQPoint(), points[0].floorQPoint());
@@ -177,20 +175,18 @@ void KisToolStar::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolStar::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
         shortcut.append(Qt::Key_F9);
-        m_action = new KAction(i18n("&Star"),
-                                    "tool_star",
-                                    shortcut,
-                                    this,
-                                    SLOT(activate()),
-                                    collection,
-                                    name());
+        m_action = new KAction(KIcon("tool_star"),
+                               i18n("&Star"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
-
+        m_action->setShortcut(shortcut);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a star"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -236,7 +232,7 @@ QWidget* KisToolStar::createOptionWidget(QWidget* parent)
 
     m_optWidget->ratioSpinBox->setValue(m_innerOuterRatio);
 
-    Q3GridLayout *optionLayout = new Q3GridLayout(widget, 1, 1);
+    QGridLayout *optionLayout = new QGridLayout(widget);
     super::addOptionWidgetLayout(optionLayout);
 
     optionLayout->addWidget(m_optWidget, 0, 0);

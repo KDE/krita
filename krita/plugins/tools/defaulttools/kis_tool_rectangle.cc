@@ -46,7 +46,7 @@ KisToolRectangle::KisToolRectangle()
           m_dragging (false),
           m_currentImage (0)
 {
-    setName("tool_rectangle");
+    setObjectName("tool_rectangle");
     setCursor(KisCursor::load("tool_rectangle_cursor.png", 6, 6));
 }
 
@@ -113,10 +113,10 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
 
     if (!m_currentImage)
         return;
-    
+
     KisPaintDeviceSP device = m_currentImage->activeDevice ();
     if (!device) return;
-        
+
     if (m_dragging && event->button() == Qt::LeftButton) {
         // erase old lines on canvas
         draw(m_dragStart, m_dragEnd);
@@ -128,10 +128,10 @@ void KisToolRectangle::buttonRelease(KisButtonReleaseEvent *event)
         if (!m_currentImage)
             return;
 
-        
+
         KisPainter painter (device);
         if (m_currentImage->undo()) painter.beginTransaction (i18n ("Rectangle"));
-        
+
         painter.setPaintColor(m_subject->fgColor());
         painter.setBackgroundColor(m_subject->bgColor());
         painter.setFillStyle(fillStyle());
@@ -168,16 +168,15 @@ void KisToolRectangle::draw(const KisPoint& start, const KisPoint& end )
 
 void KisToolRectangle::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Rectangle"),
-                        "tool_rectangle",
-                        Qt::Key_F6,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("tool_rectangle"),
+                               i18n("&Rectangle"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::Key_F6);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a rectangle"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

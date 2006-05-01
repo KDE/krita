@@ -52,7 +52,7 @@ KisToolPolygon::KisToolPolygon()
           m_dragging (false),
           m_currentImage (0)
 {
-    setName("tool_polygon");
+    setObjectName("tool_polygon");
     setCursor(KisCursor::load("tool_polygon_cursor.png", 6, 6));
 }
 
@@ -98,7 +98,7 @@ void KisToolPolygon::finish()
 
     KisPaintDeviceSP device = m_currentImage->activeDevice ();
     if (!device) return;
-    
+
     KisPainter painter (device);
     if (m_currentImage->undo()) painter.beginTransaction (i18n ("Polygon"));
 
@@ -220,21 +220,19 @@ void KisToolPolygon::draw(KisCanvasPainter& gc)
 
 void KisToolPolygon::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
-    
+    m_action = collection->action(objectName());
+
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
         shortcut.append(Qt::Key_F9);
-        
-        m_action = new KAction(i18n("&Polygon"),
-                        "tool_polygon",
-                        shortcut,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+
+        m_action = new KAction(KIcon("tool_polygon"),
+                               i18n("&Polygon"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
-        
+        m_action->setShortcut(shortcut);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setActionGroup(actionGroup());
         m_action->setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
         m_ownAction = true;

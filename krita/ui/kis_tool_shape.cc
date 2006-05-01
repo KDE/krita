@@ -26,7 +26,6 @@
 #include <klocale.h>
 
 #include "kis_tool_shape.h"
-#include "wdgshapeoptions.h"
 
 KisToolShape::KisToolShape(const QString& UIName) : super(UIName)
 {

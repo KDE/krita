@@ -22,13 +22,21 @@
 #define KIS_TOOL_STAR_H_
 
 #include "kis_tool_shape.h"
+#include "ui_wdg_tool_star.h"
 
 class KisCanvas;
 class KisDoc;
 class KisPainter;
 class KisView;
 class KisRect;
-class WdgToolStar;
+
+class WdgToolStar : public QWidget, public Ui::WdgToolStar
+{
+    Q_OBJECT
+
+    public:
+        WdgToolStar(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 class KisToolStar : public KisToolShape {
 
@@ -39,17 +47,17 @@ public:
     KisToolStar();
     virtual ~KisToolStar();
 
-        //
-        // KisCanvasObserver interface
-        //
+    //
+    // KisCanvasObserver interface
+    //
 
-        virtual void update (KisCanvasSubject *subject);
+    virtual void update (KisCanvasSubject *subject);
 
-        virtual QWidget* createOptionWidget(QWidget* parent);
+    virtual QWidget* createOptionWidget(QWidget* parent);
 
-        //
-        // KisToolPaint interface
-        //
+    //
+    // KisToolPaint interface
+    //
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
@@ -71,9 +79,9 @@ protected:
     bool m_dragging;
     KisImageSP m_currentImage;
 private:
-        vKisPoint starCoordinates(int N, double mx, double my, double x, double y);
-        qint32 m_innerOuterRatio;
-        qint32 m_vertices;
+    vKisPoint starCoordinates(int N, double mx, double my, double x, double y);
+    qint32 m_innerOuterRatio;
+    qint32 m_vertices;
     WdgToolStar* m_optWidget;
 };
 

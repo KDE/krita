@@ -28,7 +28,7 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QPaintEvent>
-#include <QPixmap>
+#include <kpixmap.h>
 #include <koffice_export.h>
 class SliderWidget;
 
@@ -39,13 +39,13 @@ public:
   KoColorFrame(QWidget *parent = 0L);
 
   const QColor colorAt(const QPoint &p);
-  
+
 protected:
   void drawContents(QPainter *p);
   void mousePressEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void mouseReleaseEvent(QMouseEvent *e);
-  
+
 public slots:
   void slotSetColor1(const QColor &c);
   void slotSetColor2(const QColor &c);
@@ -57,7 +57,7 @@ signals:
 protected:
   QColor mC1;
   QColor mC2;
-  QPixmap mPixmap;
+  KPixmap mPixmap;
   QImage  mImage;
   bool mColorChanged;
   bool mPixChanged;
@@ -75,7 +75,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void paintEvent(QPaintEvent *);
-  
+
 signals:
   void positionChanged(int);
 
@@ -97,7 +97,7 @@ public:
 protected:
   void resizeEvent(QResizeEvent *);
   void mousePressEvent(QMouseEvent *);
-  
+
 public slots:
   void slotSetColor1(const QColor &c);
   void slotSetColor2(const QColor &c);

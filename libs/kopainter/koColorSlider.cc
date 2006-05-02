@@ -19,9 +19,9 @@
 
 #include "koColorSlider.h"
 
-#include <qpainter.h>
-#include <qcursor.h>
-#include <qpen.h>
+#include <QPainter>
+#include <QCursor>
+#include <QPen>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3Frame>

@@ -20,8 +20,8 @@
 #ifndef FONTSTYLE_H
 #define FONTSTYLE_H
 
-#include <qstring.h>
-#include <qfont.h>
+#include <QString>
+#include <QFont>
 
 #include "contextstyle.h"
 #include "kformuladefs.h"
@@ -178,10 +178,10 @@ protected:
                         luPixel x, luPixel y, luPt height, QChar ch );
 
     void calcCharSize( const ContextStyle& style, QFont f,
-                       luPt height, uchar c );
+                       luPt height, QChar c );
     void drawCharacter( QPainter& painter, const ContextStyle& style,
                         QFont f,
-                        luPixel x, luPixel y, luPt height, uchar c );
+                        luPixel x, luPixel y, luPt height, QChar c );
 
     void calcRoundBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );
     void calcCurlyBracket( const ContextStyle& style, const QChar chars[], luPt height, luPt charHeight );

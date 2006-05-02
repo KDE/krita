@@ -17,9 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
-#include <qpen.h>
-#include <qfontdatabase.h>
+#include <QPainter>
+#include <QPen>
+#include <QFontDatabase>
+#include <QChar>
 
 #include "fontstyle.h"
 
@@ -41,7 +42,7 @@ static bool fontAvailable( const QString& fontName )
     if ( QFontInfo( QFont( fontName ) ).family().lower() == fontName.lower() )
 #endif
     QFontDatabase db;
-    if ( db.families().findIndex( fontName ) != -1 ) // ## TODO remove foundry from families list?
+    if ( db.families().contains( fontName ) ) // ## TODO remove foundry from families list?
         return true;
     else {
         kWarning(39001) << "Font '" << fontName << "' not found" << endl;
@@ -227,7 +228,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
 void Artwork::calcCharSize( const ContextStyle& style, luPt height, QChar ch )
 {
     //QFont f = style.getSymbolFont();
-    uchar c = style.symbolTable().character( ch );
+    QChar c = style.symbolTable().character( ch );
     QFont f = style.symbolTable().font( ch );
     calcCharSize( style, f, height, c );
 }
@@ -237,16 +238,16 @@ void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style,
                              luPixel x, luPixel y,
                              luPt height, QChar ch )
 {
-    uchar c = style.symbolTable().character( ch );
+    QChar c = style.symbolTable().character( ch );
     QFont f = style.symbolTable().font( ch );
     drawCharacter( painter, style, f, x, y, height, c );
 }
 
 
 void Artwork::calcCharSize( const ContextStyle& style, QFont f,
-                            luPt height, uchar c )
+                            luPt height, QChar c )
 {
-    f.setPointSizeFloat( style.layoutUnitPtToPt( height ) );
+    f.setPointSizeF( style.layoutUnitPtToPt( height ) );
     //f.setPointSize( height );
     QFontMetrics fm(f);
     setWidth( style.ptToLayoutUnitPt( fm.width( c ) ) );
@@ -258,32 +259,31 @@ void Artwork::calcCharSize( const ContextStyle& style, QFont f,
 
 void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style,
                              QFont f,
-                             luPixel x, luPixel y, luPt height, uchar c )
+                             luPixel x, luPixel y, luPt height, QChar c )
 {
-    f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
+    f.setPointSizeF( style.layoutUnitToFontSize( height, false ) );
 
     painter.setFont( f );
     painter.drawText( style.layoutUnitToPixelX( x ),
-                      style.layoutUnitToPixelY( y+getBaseline() ),
-                      QString( QChar( c ) ) );
+                      style.layoutUnitToPixelY( y+getBaseline() ), QString( c ) );
 }
 
 
 void Artwork::calcRoundBracket( const ContextStyle& style, const QChar chars[],
                                 luPt height, luPt charHeight )
 {
-    uchar uppercorner = style.symbolTable().character( chars[0] );
-    uchar lowercorner = style.symbolTable().character( chars[1] );
+    QChar uppercorner = style.symbolTable().character( chars[0] );
+    QChar lowercorner = style.symbolTable().character( chars[1] );
     //uchar line = style.symbolTable().character( chars[2] );
 
     QFont f = style.symbolTable().font( chars[0] );
-    f.setPointSizeFloat( style.layoutUnitPtToPt( charHeight ) );
+    f.setPointSizeF( style.layoutUnitPtToPt( charHeight ) );
     QFontMetrics fm( f );
     LuPtRect upperBound = fm.boundingRect( uppercorner );
     LuPtRect lowerBound = fm.boundingRect( lowercorner );
     //LuPtRect lineBound = fm.boundingRect( line );
 
-    setWidth( style.ptToLayoutUnitPt( fm.width( QChar( uppercorner ) ) ) );
+    setWidth( style.ptToLayoutUnitPt( fm.width( uppercorner ) ) );
     luPt edgeHeight = style.ptToLayoutUnitPt( upperBound.height()+lowerBound.height() );
     //luPt lineHeight = style.ptToLayoutUnitPt( lineBound.height() );
 
@@ -294,9 +294,9 @@ void Artwork::calcRoundBracket( const ContextStyle& style, const QChar chars[],
 void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
                                    luPixel x, luPixel y, luPt charHeight )
 {
-    uchar uppercorner = style.symbolTable().character( chars[0] );
-    uchar lowercorner = style.symbolTable().character( chars[1] );
-    uchar line = style.symbolTable().character( chars[2] );
+    QChar uppercorner = style.symbolTable().character( chars[0] );
+    QChar lowercorner = style.symbolTable().character( chars[1] );
+    QChar line = style.symbolTable().character( chars[2] );
 
     QFont f = style.symbolTable().font( chars[0] );
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
@@ -342,10 +342,10 @@ void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const
 void Artwork::calcCurlyBracket( const ContextStyle& style, const QChar chars[],
                                 luPt height, luPt charHeight )
 {
-    uchar uppercorner = style.symbolTable().character( chars[0] );
-    uchar lowercorner = style.symbolTable().character( chars[1] );
+    QChar uppercorner = style.symbolTable().character( chars[0] );
+    QChar lowercorner = style.symbolTable().character( chars[1] );
     //uchar line = style.symbolTable().character( chars[2] );
-    uchar middle = style.symbolTable().character( chars[3] );
+    QChar middle = style.symbolTable().character( chars[3] );
 
     QFont f = style.symbolTable().font( chars[0] );
     f.setPointSizeFloat( style.layoutUnitPtToPt( charHeight ) );
@@ -373,10 +373,10 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
 
-    uchar uppercorner = style.symbolTable().character( chars[0] );
-    uchar lowercorner = style.symbolTable().character( chars[1] );
-    uchar line = style.symbolTable().character( chars[2] );
-    uchar middle = style.symbolTable().character( chars[3] );
+    QChar uppercorner = style.symbolTable().character( chars[0] );
+    QChar lowercorner = style.symbolTable().character( chars[1] );
+    QChar line = style.symbolTable().character( chars[2] );
+    QChar middle = style.symbolTable().character( chars[3] );
 
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -391,11 +391,11 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
     //p.setPen(Qt::gray);
     //p.drawRect(x, y, upperBound.width() + offset, height);
 
-    p.drawText( ptX, ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
+    p.drawText( ptX, ptY-upperBound.top(), QString( uppercorner ) );
     p.drawText( ptX, ptY+(height-middleBound.height())/2-middleBound.top(),
-                QString( QChar( middle ) ) );
+                QString( middle ) );
     p.drawText( ptX, ptY+height-lowerBound.top()-lowerBound.height(),
-                QString( QChar( lowercorner ) ) );
+                QString( lowercorner ) );
 
     // for printing
     // If the world was perfect and the urw-symbol font correct

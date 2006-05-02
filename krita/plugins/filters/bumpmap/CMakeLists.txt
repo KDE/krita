@@ -6,7 +6,7 @@ set(kritabumpmap_PART_SRCS
 
 kde4_automoc(${kritabumpmap_PART_SRCS})
 
-kde4_add_ui3_files(kritabumpmap_PART_SRCS wdgbumpmap.ui)
+kde4_add_ui_files(kritabumpmap_PART_SRCS wdgbumpmap.ui)
 
 kde4_add_plugin(kritabumpmap ${kritabumpmap_PART_SRCS})
 
@@ -42,6 +42,6 @@ kde4_footer()
 #noinst_HEADERS = bumpmap.h
 #
 #kritabumpmap_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kritabumpmap_la_LIBADD =  ../../../libkritacommon.la 
+#kritabumpmap_la_LIBADD =  ../../../libkritacommon.la
 #
 #kritabumpmap_la_METASOURCES = AUTO

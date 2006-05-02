@@ -146,20 +146,20 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     // double wetness = paint.w; // XXX: Was unused
     // strength is a double in the 0 - 2 range, but upscaled to quint16:
     kDebug() << "Original strength as in paint.h: " << paint.h << endl;
-    
+
     double strength = 2.0 * static_cast<double>(paint.h) / (double)(0xffff);
 
     kDebug() << "Before strength: " << strength << endl;
-    
+
     if (m_strength)
         strength = strength * (strength + info.pressure) * 0.5;
     else
         strength = strength * (strength + PRESSURE_DEFAULT) * 0.5;
 
     double pressure = 0.75 + 0.25 * info.pressure;
-    
+
     kDebug() << "info.pressure " << info.pressure << ", local pressure: " << pressure << ", strength: " << strength << endl;
-    
+
     WetPack currentPack;
     WetPix currentPix;
     double eff_height;
@@ -190,7 +190,7 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
             // XXX - 192 is probably only useful for paper with a texture...
             eff_height = (currentData.h + currentData.w - 192.0) * (1.0 / 255.0);
             contact = (press + eff_height) * 0.2;
-            double old_contact = contact;
+            //double old_contact = contact;
             if (contact > 0.5)
                 contact = 1.0 - 0.5 * exp(-2.0 * contact - 1.0);
 
@@ -200,24 +200,24 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
                 double rnd = rand() * (1.0 / RAND_MAX);
 
                 v = currentPix.rd;
-                currentPix.rd = floor(v + (paint.rd * strength - v) * contact + rnd);
+                currentPix.rd = (quint16)floor(v + (paint.rd * strength - v) * contact + rnd);
                 //kDebug() << "Rd was " << v << " and has become " << currentPix.rd << endl;
                 v = currentPix.rw;
-                currentPix.rw = floor(v + (paint.rw * strength - v) * contact + rnd);
+                currentPix.rw = (quint16)floor(v + (paint.rw * strength - v) * contact + rnd);
                 v = currentPix.gd;
-                currentPix.gd = floor(v + (paint.gd * strength - v) * contact + rnd);
+                currentPix.gd = (quint16)floor(v + (paint.gd * strength - v) * contact + rnd);
                 v = currentPix.gw;
-                currentPix.gw = floor(v + (paint.gw * strength - v) * contact + rnd);
+                currentPix.gw = (quint16)floor(v + (paint.gw * strength - v) * contact + rnd);
                 v = currentPix.bd;
-                currentPix.bd = floor(v + (paint.bd * strength - v) * contact + rnd);
+                currentPix.bd = (quint16)floor(v + (paint.bd * strength - v) * contact + rnd);
                 v = currentPix.bw;
-                currentPix.bw = floor(v + (paint.bw * strength - v) * contact + rnd);
+                currentPix.bw = (quint16)floor(v + (paint.bw * strength - v) * contact + rnd);
                 v = currentPix.w;
                 if (m_wetness)
-                    currentPix.w = (CLAMP(floor(
+                    currentPix.w = (quint16)(CLAMP(floor(
                           v + (paint.w * (0.5 + pressure) - v) * contact + rnd), 0, 512));
                 else
-                    currentPix.w = floor(v + (paint.w - v) * contact + rnd);
+                    currentPix.w = (quint16)floor(v + (paint.w - v) * contact + rnd);
 
                 currentPack.paint = currentPix;
                 *(reinterpret_cast<WetPack*>(it.rawData())) = currentPack;
@@ -229,3 +229,6 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     m_painter->addDirtyRect(QRect(xStart, yStart, maskW, maskH));
 }
+
+#include "kis_wetop.moc"
+

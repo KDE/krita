@@ -33,12 +33,11 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qstring.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -62,7 +61,6 @@
 #include <kis_group_layer.h>
 #include <kis_adjustment_layer.h>
 
-#include "wdgbumpmap.h"
 #include "bumpmap.h"
 
 #define MOD(x, y) \
@@ -429,29 +427,29 @@ void KisBumpmapConfiguration::fromXML(const QString & s)
     QVariant v;
 
     v = getProperty("bumpmap");
-    if (v.isValid()) { bumpmap = v.asString(); }
+    if (v.isValid()) { bumpmap = v.toString(); }
     v = getProperty("azimuth");
-    if (v.isValid()) { azimuth = v.asDouble(); }
+    if (v.isValid()) { azimuth = v.toDouble(); }
     v = getProperty("elevation");
-    if (v.isValid()) { elevation = v.asDouble();}
+    if (v.isValid()) { elevation = v.toDouble();}
     v = getProperty("depth");
-    if (v.isValid()) { depth = v.asDouble(); }
+    if (v.isValid()) { depth = v.toDouble(); }
     v = getProperty("xofs");
-    if (v.isValid()) { xofs = v.asInt(); }
+    if (v.isValid()) { xofs = v.toInt(); }
     v = getProperty("yofs");
-    if (v.isValid()) { yofs = v.asInt();}
+    if (v.isValid()) { yofs = v.toInt();}
     v = getProperty("waterlevel");
-    if (v.isValid()) { waterlevel = v.asInt();}
+    if (v.isValid()) { waterlevel = v.toInt();}
     v = getProperty("ambient");
-    if (v.isValid()) { ambient = v.asInt();}
+    if (v.isValid()) { ambient = v.toInt();}
     v = getProperty("compensate");
-    if (v.isValid()) { compensate = v.asBool(); }
+    if (v.isValid()) { compensate = v.toBool(); }
     v = getProperty("invert");
-    if (v.isValid()) { invert = v.asBool(); }
+    if (v.isValid()) { invert = v.toBool(); }
     v = getProperty("tiled");
-    if (v.isValid()) { tiled = v.asBool();}
+    if (v.isValid()) { tiled = v.toBool();}
     v = getProperty("type");
-    if (v.isValid()) { type = (enumBumpmapType)v.asInt(); }
+    if (v.isValid()) { type = (enumBumpmapType)v.toInt(); }
 
 }
 
@@ -485,10 +483,10 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(KisFilter * filter, KisPaintDevic
     Q_ASSERT(m_device);
 
     m_page = new WdgBumpmap(this);
-    Q3HBoxLayout * l = new Q3HBoxLayout(this);
+    QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
-    l->add(m_page);
+    l->addWidget(m_page);
     m_filter->setAutoUpdate(false);
     m_page->txtSourceLayer->setText( "" );
     connect( m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
@@ -508,7 +506,15 @@ KisBumpmapConfiguration * KisBumpmapConfigWidget::config()
     cfg->compensate = m_page->chkCompensate->isChecked();
     cfg->invert = m_page->chkInvert->isChecked();
     cfg->tiled = m_page->chkTiled->isChecked();
-    cfg->type = (enumBumpmapType)m_page->grpType->selectedId();
+
+    if (m_page->radioLinear->isChecked()) {
+        cfg->type = LINEAR;
+    } else if (m_page->radioSpherical->isChecked()) {
+        cfg->type = SPHERICAL;
+    } else {
+        Q_ASSERT(m_page->radioSinusoidal->isChecked());
+        cfg->type = SINUSOIDAL;
+    }
 
     return cfg;
 }
@@ -529,8 +535,19 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * config)
     m_page->chkCompensate->setChecked(cfg->compensate);
     m_page->chkInvert->setChecked(cfg->invert);
     m_page->chkTiled->setChecked(cfg->tiled);
-    m_page->grpType->setButton(cfg->type);
 
+    switch (cfg->type) {
+    default:
+    case LINEAR:
+        m_page->radioLinear->setChecked(true);
+        break;
+    case SPHERICAL:
+        m_page->radioSpherical->setChecked(true);
+        break;
+    case SINUSOIDAL:
+        m_page->radioSinusoidal->setChecked(true);
+        break;
+    }
 }
 
 #include "bumpmap.moc"

@@ -22,11 +22,19 @@
 #include "kis_paintop.h"
 #include "kis_types.h"
 #include "kis_colorspace.h"
-#include "wdgpressure.h"
+#include "ui_wdgpressure.h"
 
 class KisPoint;
 class KisPainter;
 class KisInputDevice;
+
+class WetPaintOptions : public QWidget, public Ui::WetPaintOptions
+{
+    Q_OBJECT
+
+    public:
+        WetPaintOptions(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
 
 class KisWetOpFactory : public KisPaintOpFactory  {
 public:

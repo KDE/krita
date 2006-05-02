@@ -19,22 +19,14 @@
 #ifndef KIS_WET_PALETTE_WIDGET_H
 #define KIS_WET_PALETTE_WIDGET_H
 
-#include "qwidget.h"
-#include "qpushbutton.h"
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3GridLayout>
+#include <qwidget.h>
+#include <qpushbutton.h>
+
+#include <koffice_export.h>
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"
 
-#include <koffice_export.h>
-
-class KoFrameButton;
-class Q3GridLayout;
-class QColor;
-class QLabel;
-class QSpinBox;
 class QColor;
 class KIntNumInput;
 class KDoubleNumInput;
@@ -63,8 +55,6 @@ private:
     KisCanvasSubject *m_subject;
     KDoubleNumInput* m_strength;
     KIntNumInput* m_wetness;
-
-
 };
 
 #endif

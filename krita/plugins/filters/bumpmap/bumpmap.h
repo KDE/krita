@@ -29,7 +29,15 @@
 #include <kis_filter.h>
 #include "kis_filter_config_widget.h"
 
-class WdgBumpMap;
+#include "ui_wdgbumpmap.h"
+
+class WdgBumpmap : public QWidget, public Ui::WdgBumpmap
+{
+    Q_OBJECT
+
+    public:
+        WdgBumpmap(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 namespace krita {
 
@@ -42,8 +50,6 @@ namespace krita {
 }
 
 using namespace krita;
-
-
 
 class KritaBumpmap : public KParts::Plugin
 {
@@ -84,11 +90,11 @@ public:
 class KisBumpmapConfiguration : public KisFilterConfiguration {
 
 public:
-    
+
     KisBumpmapConfiguration();
     virtual void fromXML( const QString&  );
     virtual QString toString();
-    
+
 public:
 
     QString bumpmap;
@@ -103,7 +109,7 @@ public:
     bool    invert;
     bool    tiled;
     enumBumpmapType type;
-        
+
 };
 
 

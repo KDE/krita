@@ -23,7 +23,6 @@
 #include <qobject.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <q3dockwindow.h>
 #include <qpoint.h>
 #include <qlabel.h>
 #include <qwidget.h>
@@ -106,14 +105,17 @@ WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
         m_view = dynamic_cast<KisView*>(parent);
         // Wetness visualisation
         WetnessVisualisationFilter * wf = new WetnessVisualisationFilter(m_view);
-        wf->setAction(new KToggleAction(i18n("Wetness Visualisation"), 0, 0, wf,
-                        SLOT(slotActivated()), actionCollection(), "wetnessvisualisation"));
+
+        KToggleAction *action = new KToggleAction(i18n("Wetness Visualisation"), actionCollection(), "wetnessvisualisation");
+        connect(action, SIGNAL(triggered()), wf, SLOT(slotActivated()));
+
+        wf->setAction(action);
 
         // Create the wet palette
         KisWetPaletteWidget * w = new KisWetPaletteWidget(m_view);
         Q_CHECK_PTR(w);
 
-        w->setCaption(i18n("Watercolors"));
+        w->setWindowTitle(i18n("Watercolors"));
 
         m_view->canvasSubject()->paletteManager()->addWidget(w, "watercolor docker", krita::COLORBOX, INT_MAX, PALETTE_DOCKER,  false);
         m_view->canvasSubject()->attach(w);

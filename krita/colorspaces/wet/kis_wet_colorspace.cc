@@ -253,8 +253,8 @@ void KisWetColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile * /*pro
     rgb[0] = 128 + (wp->adsorb.h / 4);
     rgb[1] = 128 + (wp->adsorb.h / 4);
     rgb[2] = 128 + (wp->adsorb.h / 4);
-    
-    
+
+
     // First the adsorption layer
     wet_composite(RGB, rgb, &wp->adsorb);
 
@@ -312,10 +312,8 @@ QImage KisWetColorSpace::convertToQImage(const quint8 *data, qint32 width, qint3
                          KisProfile *  /*dstProfile*/,
                          qint32 /*renderingIntent*/, float /*exposure*/)
 {
+    QImage img(width, height, QImage::Format_ARGB32);
 
-    QImage img(width, height, 32);
-    img.setAlphaBuffer(true);
-    
     quint8 *rgb = (quint8*) img.bits();
     const WetPack* wetData = reinterpret_cast<const WetPack*>(data);
 
@@ -327,7 +325,7 @@ QImage KisWetColorSpace::convertToQImage(const quint8 *data, qint32 width, qint3
 
     qint32 i = 0;
     while ( i < width * height) {
-        
+
         // First the adsorption layers
         WetPack* wp = const_cast<WetPack*>(&wetData[i]); // XXX don't do these things!
         // XXX Probably won't work on MSB archs!
@@ -335,7 +333,7 @@ QImage KisWetColorSpace::convertToQImage(const quint8 *data, qint32 width, qint3
         rgb[1] = 128 + (wp->adsorb.h / 4);
         rgb[2] = 128 + (wp->adsorb.h / 4);
         rgb[3] = OPACITY_OPAQUE;
-        
+
         wet_composite(BGR, rgb, &(wp->adsorb));
         // Then the paint layer (which comes first in our double-packed pixel)
         wet_composite(BGR, rgb, &(wp->paint));

@@ -43,19 +43,19 @@ WetPhysicsFilter::WetPhysicsFilter()
 
 void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, KisFilterConfiguration* /*config*/, const QRect& r)
 {
-     kDebug() << "Wetphysics filter called " << dst->name() << ", " << r << endl;
+     kDebug() << "Wetphysics filter called " << dst->objectName() << ", " << r << endl;
     /*
       This is actually a kind of convolution filter. Use the slow but clear way of convolving
       until I get the physics right; then move to the faster way of convolving from the convolution
       painter.
     */
-    
+
     // Loop through all pixels
     KisHLineIterator topIt = dst->createHLineIterator(r.x(), r.y(), r.width(), true);
     KisHLineIterator midIt = dst->createHLineIterator(r.x() + 1, r.y(), r.width(), true);
     KisHLineIterator botIt = dst->createHLineIterator(r.x() + 2, r.y(), r.width(), true);
 
-    
+
     // Old pixel values
     const WetPack * topLeftOld = reinterpret_cast<const WetPack*>(topIt.oldRawData());
     WetPack * topLeft = reinterpret_cast<WetPack*>(topIt.rawData());
@@ -65,7 +65,7 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
     ++topIt;
     const WetPack * topRightOld = reinterpret_cast<const WetPack*>(topIt.oldRawData());
     WetPack * topRight = reinterpret_cast<WetPack*>(topIt.rawData());
-    
+
     const WetPack * curLeftOld = reinterpret_cast<const WetPack*>(midIt.oldRawData());
     WetPack * curLeft = reinterpret_cast<WetPack*>(midIt.rawData());
     ++midIt;
@@ -74,7 +74,7 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
     ++midIt;
     const WetPack * curRightOld = reinterpret_cast<const WetPack*>(midIt.oldRawData());
     WetPack * curRight = reinterpret_cast<WetPack*>(midIt.rawData());
-    
+
     const WetPack * botLeftOld = reinterpret_cast<const WetPack*>(botIt.oldRawData());
     WetPack * botLeft = reinterpret_cast<WetPack*>(botIt.rawData());
     ++botIt;
@@ -83,7 +83,7 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
     ++botIt;
     const WetPack * botRightOld = reinterpret_cast<const WetPack*>(botIt.oldRawData());
     WetPack * botRight = reinterpret_cast<WetPack*>(botIt.rawData());
-    
+
     int x = r.x();
     int y = r.y();
     while (y < r.height()) {
@@ -103,7 +103,7 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
             // transfered to the adsorp layer. We don't yet simulate the reverse, although that's possible
             // with real watercolor paint.
             adsorbPixel(&paint, &adsorb);
-            
+
             // Flow to the lower parts
             if (paint.h < topLeft->paint.h) {
             }
@@ -121,11 +121,11 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
             }
             if (paint.h < botRight->paint.h) {
             }
-            
+
         }
 
         ++x;
-        
+
         if (x == r.width() - r.x()) {
             topIt.nextRow();
             midIt.nextRow();
@@ -138,29 +138,29 @@ void WetPhysicsFilter::process(KisPaintDeviceSP /*src*/, KisPaintDeviceSP dst, K
         ++topIt;
         ++midIt;
         ++botIt;
-        
+
         topLeftOld = topMidOld;
         topLeft = topMid;
         topMidOld = topRightOld;
         topMid = topRight;
         topRightOld = reinterpret_cast<const WetPack*>(topIt.oldRawData());
         topRight = reinterpret_cast<WetPack*>(topIt.rawData());
-    
+
         curLeftOld = currentOld;
         curLeft = current;
         currentOld = curRightOld;
         current = curRight;
         curRightOld = reinterpret_cast<const WetPack*>(midIt.oldRawData());
         curRight = reinterpret_cast<WetPack*>(midIt.rawData());
-    
+
         botLeftOld = botMidOld;
         botLeft = botMid;
         botMidOld = botRightOld;
         botMid = botRight;
         botRightOld = reinterpret_cast<const WetPack*>(botIt.oldRawData());
         botRight = reinterpret_cast<WetPack*>(botIt.rawData());
-        
-    
+
+
     }
 
 }
@@ -170,9 +170,9 @@ void WetPhysicsFilter::adsorbPixel(WetPix * paint, WetPix * adsorb)
     WetPixDbl wet_top;
     WetPixDbl wet_bot;
     double ads;
-    
+
     ads = 0.5 / qMax(paint->w, (quint16)1);
-    
+
     wetPixToDouble(&wet_top, paint);
     wetPixToDouble(&wet_bot, adsorb);
 
@@ -229,7 +229,7 @@ void WetPhysicsFilter::adsorbPixel(WetPix * paint, WetPix * adsorb)
         ed2 = exp(-d2);
         wet_bot.bw = wet_bot.bd * ((1 - ed1) * w1 / d1 + ed1 * (1 - ed2) * w2 / d2) / (1 - ed1 * ed2);
     }
-    
+
     wetPixFromDouble(adsorb, &wet_bot);
 
     paint->rd *= (quint16)(1 - ads);

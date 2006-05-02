@@ -152,11 +152,11 @@ void View::calcCursor()
 }
 
 
-void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
+void View::draw(QPainter& painter, const QRect& rect, const QPalette& palette)
 {
 //     kDebug( DEBUGID ) << "View::draw: " << rect.x() << " " << rect.y() << " "
 //                      << rect.width() << " " << rect.height() << endl;
-    container()->draw( painter, rect, cg, true );
+    container()->draw( painter, rect, palette, true );
     if ( cursorVisible() ) {
         cursor()->draw( painter, contextStyle(), smallCursor(), activeCursor() );
     }

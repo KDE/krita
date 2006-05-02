@@ -21,9 +21,9 @@
 #ifndef KFORMULAVIEW_H
 #define KFORMULAVIEW_H
 
-#include <qevent.h>
-#include <qobject.h>
-#include <qrect.h>
+#include <QEvent>
+#include <QObject>
+#include <QRect>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QWheelEvent>
@@ -32,8 +32,6 @@
 
 #include "kformuladefs.h"
 #include "contextstyle.h"
-
-class QColorGroup;
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -96,7 +94,7 @@ public:
 
     void calcCursor();
 
-    void draw(QPainter& painter, const QRect& rect, const QColorGroup& cg);
+    void draw(QPainter& painter, const QRect& rect, const QPalette& palette );
     void draw(QPainter& painter, const QRect& rect);
 
     /**

@@ -37,7 +37,6 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-#include <kpixmap.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -71,7 +70,7 @@ void KoVerticalLabel::setText( const QString& text )
 
 void KoVerticalLabel::paintEvent( QPaintEvent* )
 {
-	KPixmap pm( height(), width() );
+	QPixmap pm( height(), width() );
 	QPainter p( &pm );
 	p.fillRect( 0, 0, height(), width(), palette().window() );
 	p.setFont( font() );

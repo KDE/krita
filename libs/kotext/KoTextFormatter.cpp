@@ -876,10 +876,6 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
             int toAddPix = zh->layoutUnitToPixelX( space );
             for ( int j = last; j >= start; --j ) {
                 KoTextStringChar &chr = string->at( j );
-                //// Start at last tab, if any - BR #40472.
-                if ( chr.c == '\t' ) {
-                    break;
-                }
                 moveChar( chr, zh, space, toAddPix );
             }
         } else if ( align & Qt::AlignJustify ) {

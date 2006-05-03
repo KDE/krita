@@ -33,7 +33,7 @@ struct KisBoolWidgetParam {
     bool initvalue;
     QString label;
     QString name;
-    
+
 };
 
 typedef std::vector<KisBoolWidgetParam> vKisBoolWidgetParam;
@@ -42,7 +42,7 @@ class KRITA_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiBoolFilterWidget(QWidget * parent,  const char * name, const char *caption, vKisBoolWidgetParam iwparam);
+    KisMultiBoolFilterWidget(QWidget * parent,  const char * name, QString caption, vKisBoolWidgetParam iwparam);
     virtual void setConfiguration(KisFilterConfiguration * cfg);
 public:
     inline qint32 nbValues() { return m_nbboolWidgets; };

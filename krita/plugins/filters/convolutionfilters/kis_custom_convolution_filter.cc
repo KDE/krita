@@ -26,7 +26,6 @@
 
 #include "kis_convolution_painter.h"
 #include "kis_custom_convolution_filter_configuration_widget.h"
-#include "kis_custom_convolution_filter_configuration_base_widget.h"
 #include "kis_matrix_widget.h"
 
 
@@ -63,7 +62,7 @@ KisFilterConfiguration * KisCustomConvolutionFilter::configuration(QWidget* nwid
         kernel->data[8] = 0;
 
         return new KisConvolutionConfiguration( "custom convolution", kernel.data() );
-        
+
     } else {
 
         // Create the identity matrices:

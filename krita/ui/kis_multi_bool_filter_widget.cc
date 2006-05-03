@@ -33,7 +33,7 @@ KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, QString nlabel, QStrin
 
 }
 
-KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char * name, const char * caption, vKisBoolWidgetParam iwparam) :
+KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(QWidget * parent, const char * name, QString caption, vKisBoolWidgetParam iwparam) :
     KisFilterConfigWidget( parent, name )
 {
     qint32 m_nbboolWidgets = iwparam.size();

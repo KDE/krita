@@ -19,15 +19,13 @@
  *
  * Ported from the CImg Gimp plugin by Victor Stinner and David Tschumperlé.
  */
-#include "qlayout.h"
-#include "qcheckbox.h"
-#include "qpushbutton.h"
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <qlayout.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
+#include <QHBoxLayout>
 
-#include "knuminput.h"
+#include <knuminput.h>
 
-#include "wdg_cimg.h"
 #include "kis_cimgconfig_widget.h"
 #include "kis_cimg_filter.h"
 
@@ -37,12 +35,12 @@ KisCImgconfigWidget::KisCImgconfigWidget(KisFilter* nfilter, QWidget * parent, c
     m_page = new WdgCImg(this);
     Q_CHECK_PTR(m_page);
 
-    Q3HBoxLayout * l = new Q3HBoxLayout(this);
+    QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
-    l->add(m_page);
+    l->addWidget(m_page);
     nfilter->setAutoUpdate(false);
-    
+
 //     connect(  m_page->bnRefresh, SIGNAL(clicked()), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numDetail, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));
     connect( m_page->numGradient, SIGNAL(valueChanged (double)), SIGNAL(sigPleaseUpdatePreview()));

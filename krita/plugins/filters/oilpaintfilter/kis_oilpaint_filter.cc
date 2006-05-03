@@ -61,7 +61,7 @@ void KisOilPaintFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
         kWarning() << "No configuration object for oilpaint filter\n";
         return;
     }
-    
+
     Q_UNUSED(dst);
 
     qint32 x = rect.x(), y = rect.y();
@@ -233,7 +233,7 @@ KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* pa
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size"), "brushSize" ) );
     param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth"), "smooth" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
 }
 
 KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget)

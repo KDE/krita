@@ -13,7 +13,7 @@ set(kritaconvolutionfilters_PART_SRCS
 
 kde4_automoc(${kritaconvolutionfilters_PART_SRCS})
 
-kde4_add_ui3_files(kritaconvolutionfilters_PART_SRCS kis_custom_convolution_filter_configuration_base_widget.ui )
+kde4_add_ui_files(kritaconvolutionfilters_PART_SRCS kis_custom_convolution_filter_configuration_base_widget.ui )
 
 kde4_add_plugin(kritaconvolutionfilters ${kritaconvolutionfilters_PART_SRCS})
 

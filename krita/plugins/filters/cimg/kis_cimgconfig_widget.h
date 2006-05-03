@@ -22,10 +22,18 @@
 #ifndef _KIS_CIMGCONFIG_WIDGET_
 #define _KIS_CIMGCONFIG_WIDGET_
 
-#include "wdg_cimg.h"
+#include "ui_wdg_cimg.h"
 #include "kis_cimg_filter.h"
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
+
+class WdgCImg : public QWidget, public Ui::WdgCImg
+{
+    Q_OBJECT
+
+    public:
+        WdgCImg(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 class KisCImgconfigWidget : public KisFilterConfigWidget {
 

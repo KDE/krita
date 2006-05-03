@@ -17,9 +17,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "qdom.h"
-#include "klocale.h"
-#include "kdebug.h"
+#include <qdom.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "kis_painter.h"
 #include "kis_convolution_filter.h"
@@ -47,7 +47,7 @@ void KisConvolutionConfiguration::fromXML(const QString & s)
 
     m_matrix->data = new qint32[m_matrix->width * m_matrix->height];
 
-    QStringList data = QStringList::split( ",", e.text() );
+    QStringList data = e.text().split( "," );
     QStringList::Iterator start = data.begin();
     QStringList::Iterator end = data.end();
     int i = 0;

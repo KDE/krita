@@ -37,7 +37,7 @@ KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 0, 100, 50, i18n("Threshold"), "threshold" ) );
     param.push_back( KisIntegerWidgetParam( 0, 10, 1, i18n("Window size"), "windowsize") );
-    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
 }
 
 KisFilterConfiguration* KisSimpleNoiseReducer::configuration(QWidget* nwidget)
@@ -71,7 +71,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     }
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
-    
+
     qint32 depth = src->colorSpace()->nColorChannels();
     QRect extends = src->exactBounds();
     int lastx = extends.width() - windowsize;
@@ -109,7 +109,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
                 }
                 ++neighbourgh_srcIt;
             }
-            
+
             // Count the number of time that the data is too much different from is neighbourgh
             int pixelsnb = lx * ly - 1;
 

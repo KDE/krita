@@ -63,7 +63,7 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 
 
 KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
                                                          const char * name,
-                                                         const char * caption,
+                                                         QString caption,
                                                          vKisIntegerWidgetParam iwparam)
     : KisFilterConfigWidget( parent, name )
 {

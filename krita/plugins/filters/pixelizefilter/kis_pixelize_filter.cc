@@ -170,7 +170,7 @@ KisFilterConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* pa
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel width"), "pixelWidth" ) );
     param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Pixel height"), "pixelHeight" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
 }
 
 KisFilterConfiguration* KisPixelizeFilter::configuration(QWidget* nwidget)

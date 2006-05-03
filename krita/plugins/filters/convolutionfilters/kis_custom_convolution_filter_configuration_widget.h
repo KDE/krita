@@ -20,11 +20,19 @@
 #define _KIS_CUSTOM_CONVOLUTION_FILTER_CONFIGURATION_WIDGET_H_
 
 #include "kis_filter_config_widget.h"
+#include "ui_kis_custom_convolution_filter_configuration_base_widget.h"
 
 class QWidget;
-class KisCustomConvolutionFilterConfigurationBaseWidget;
 class KisMatrixWidget;
 class KisFilter;
+
+class KisCustomConvolutionFilterConfigurationBaseWidget : public QWidget, public Ui::KisCustomConvolutionFilterConfigurationBaseWidget
+{
+    Q_OBJECT
+
+    public:
+        KisCustomConvolutionFilterConfigurationBaseWidget(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 class KisCustomConvolutionFilterConfigurationWidget : public KisFilterConfigWidget
 {

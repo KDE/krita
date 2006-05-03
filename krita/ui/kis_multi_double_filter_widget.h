@@ -61,7 +61,7 @@ class KRITA_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiDoubleFilterWidget(QWidget * parent, const char * name, const char * caption, vKisDoubleWidgetParam dwparam);
+    KisMultiDoubleFilterWidget(QWidget * parent, const char * name, QString caption, vKisDoubleWidgetParam dwparam);
     virtual void setConfiguration(KisFilterConfiguration * cfg);
 public:
     inline qint32 nbValues() { return m_nbdoubleWidgets; };

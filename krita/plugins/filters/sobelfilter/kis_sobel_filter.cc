@@ -202,7 +202,7 @@ KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* paren
     param.push_back( KisBoolWidgetParam( true, i18n("Sobel vertically"), "doVertically" ) );
     param.push_back( KisBoolWidgetParam( true, i18n("Keep sign of result"), "keepSign" ) );
     param.push_back( KisBoolWidgetParam( true, i18n("Make image opaque"), "makeOpaque" ) );
-    return new KisMultiBoolFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    return new KisMultiBoolFilterWidget(parent, id().id().toAscii(), id().id(), param );
 }
 
 KisFilterConfiguration* KisSobelFilter::configuration(QWidget* nwidget)

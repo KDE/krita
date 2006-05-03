@@ -418,7 +418,7 @@ KisFilterConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* p
     param.push_back( KisIntegerWidgetParam( 1, 200, 80, i18n("Drop size"), "dropsize" ) );
     param.push_back( KisIntegerWidgetParam( 1, 500, 80, i18n("Number"), "number" ) );
     param.push_back( KisIntegerWidgetParam( 1, 100, 30, i18n("Fish eyes"), "fishEyes" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
 }
 
 KisFilterConfiguration* KisRainDropsFilter::configuration(QWidget* nwidget)

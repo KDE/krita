@@ -156,7 +156,7 @@ KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* pare
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth"), "depth" ) );
-    KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
     Q_CHECK_PTR(w);
     return w;
 }

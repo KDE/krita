@@ -42,7 +42,7 @@ KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWid
 {
     vKisDoubleWidgetParam param;
     param.push_back( KisDoubleWidgetParam( 0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold"), "threshold" ) );
-    return new KisMultiDoubleFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    return new KisMultiDoubleFilterWidget(parent, id().id().toAscii(), id().id(), param );
 }
 
 KisFilterConfiguration* KisWaveletNoiseReduction::configuration(QWidget* nwidget )
@@ -60,7 +60,7 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP src, KisPaintDeviceSP ds
 {
 
     float threshold = 1.0;
-    
+
     if(config !=0)
     {
         KisWaveletNoiseReductionConfiguration* configWNRC = (KisWaveletNoiseReductionConfiguration*)config;

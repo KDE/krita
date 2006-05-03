@@ -143,7 +143,7 @@ KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget
 {
     vKisIntegerWidgetParam param;
     param.push_back( KisIntegerWidgetParam( 2, 100, 30, i18n("Radius"), "radius" ) );
-    return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+    return new KisMultiIntegerFilterWidget(parent, id().id().toAscii(), id().id(), param );
 }
 
 KisFilterConfiguration* KisRoundCornersFilter::configuration(QWidget* nwidget)

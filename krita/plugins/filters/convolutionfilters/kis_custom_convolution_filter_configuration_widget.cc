@@ -20,8 +20,7 @@
 
 #include <qlayout.h>
 #include <qspinbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <klocale.h>
 
@@ -33,13 +32,12 @@
 #include "kis_filter_configuration.h"
 #include "kis_colorspace.h"
 #include "kis_convolution_filter.h"
-#include "kis_custom_convolution_filter_configuration_base_widget.h"
 #include "kis_matrix_widget.h"
 
 KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigurationWidget( KisFilter* /*nfilter*/, QWidget * parent, const char * name)
     : KisFilterConfigWidget ( parent, name )
 {
-    Q3GridLayout *widgetLayout = new Q3GridLayout(this, 2, 1);
+    QGridLayout *widgetLayout = new QGridLayout(this);
     Q_CHECK_PTR(widgetLayout);
 
 //     QPushButton *bnRefresh = new QPushButton(i18n("Refresh Preview"), this, "bnrefresh");
@@ -54,7 +52,7 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
     m_ccfcws = new KisCustomConvolutionFilterConfigurationBaseWidget((QWidget*)this);
     Q_CHECK_PTR(m_ccfcws);
 
-    widgetLayout->addMultiCellWidget(m_ccfcws, 1, 1, 0, 1);
+    widgetLayout->addWidget(m_ccfcws, 1, 0, 1, 1);
 
 //     connect( bnRefresh, SIGNAL(clicked()), nfilter, SLOT(refreshPreview()));
     connect( m_ccfcws->matrixWidget, SIGNAL(valueChanged()), SIGNAL(sigPleaseUpdatePreview()));
@@ -65,7 +63,7 @@ KisCustomConvolutionFilterConfigurationWidget::KisCustomConvolutionFilterConfigu
 void KisCustomConvolutionFilterConfigurationWidget::setConfiguration(KisFilterConfiguration * cfg)
 {
     KisConvolutionConfiguration * config = dynamic_cast<KisConvolutionConfiguration*>(cfg);
-    
+
     if (config->matrix()->width != 3 || config->matrix()->height != 3) return;
 
     m_ccfcws->spinBoxOffset->setValue(config->matrix()->offset);

@@ -138,9 +138,9 @@ void KoReplaceDia::slotOk()
     KReplaceDialog::slotOk();
 
     // Save the current state back into the context required.
-    m_findUI->setCtxOptions( KReplaceDialog::options() );
+    m_findUI->setCtxHistory( findHistory() );
     if ( optionFindSelected() )
-        m_findUI->setCtxHistory( findHistory() );
+        m_findUI->setCtxOptions( KReplaceDialog::options() );
 
     m_replaceUI->setCtxHistory( replacementHistory() );
     if ( optionReplaceSelected() )

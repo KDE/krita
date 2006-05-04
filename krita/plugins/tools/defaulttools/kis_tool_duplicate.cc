@@ -41,10 +41,10 @@
 #include "kis_canvas_painter.h"
 #include "kis_boundary_painter.h"
 
-KisToolDuplicate::KisToolDuplicate() 
+KisToolDuplicate::KisToolDuplicate()
     : super(i18n("Duplicate Brush")), m_isOffsetNotUptodate(true), m_position(QPoint(-1,-1))
 {
-    setName("tool_duplicate");
+    setObjectName("tool_duplicate");
     m_subject = 0;
     setCursor(KisCursor::load("tool_duplicate_cursor.png", 5, 5));
 }
@@ -74,13 +74,15 @@ void KisToolDuplicate::buttonPress(KisButtonPressEvent *e)
 
 void KisToolDuplicate::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Duplicate Brush"),
-                        "stamp", Qt::Key_C, this,
-                        SLOT(activate()), collection,
-                        name());
+        m_action = new KAction(KIcon("stamp"),
+                               i18n("&Duplicate Brush"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::Key_C);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Duplicate parts of the image. Shift-click to select the point to duplicate from to begin."));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

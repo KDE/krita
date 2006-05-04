@@ -30,8 +30,6 @@
 #include "kis_types.h"
 #include "kis_gradient_painter.h"
 #include "kis_tool_factory.h"
-//Added by qt3to4:
-#include <QLabel>
 
 class KIntNumInput;
 class KDoubleNumInput;
@@ -43,8 +41,6 @@ class QLabel;
 class QPoint;
 class QWidget;
 class QCheckBox;
-
-
 
 class KisToolGradient : public KisToolPaint {
 

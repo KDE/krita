@@ -23,8 +23,7 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -53,7 +52,7 @@
 KisToolFilter::KisToolFilter()
     : super(i18n("Filter Brush")), m_filterConfigurationWidget(0)
 {
-    setName("tool_filter");
+    setObjectName("tool_filter");
     m_subject = 0;
     setCursor(KisCursor::load("tool_filter_cursor.png", 5, 5));
 }
@@ -64,14 +63,15 @@ KisToolFilter::~KisToolFilter()
 
 void KisToolFilter::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Filter Brush"),
-                        "tool_filter", 0, this,
-                        SLOT(activate()), collection,
-                        name());
+        m_action = new KAction(KIcon("tool_filter"),
+                               i18n("&Filter Brush"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        connect(m_action, SIGNAL(triggered()),this, SLOT(activate()));
         m_action->setToolTip(i18n("Paint with filters"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;
@@ -84,7 +84,7 @@ void KisToolFilter::initPaint(KisEvent *e)
     // the canvas, others cannot handle that and need a temporary layer
     // so they can work on the old data before painting started.
     m_paintIncremental = m_filter->supportsIncrementalPainting();
-    
+
     super::initPaint(e);
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("filter", 0, painter());
     op->setSource ( m_source );
@@ -122,8 +122,10 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
 
     addOptionWidgetOption(m_cbFilter, lbFilter);
 
-    m_optionLayout = new Q3GridLayout(widget, 1, 1, 0, 6);
+    m_optionLayout = new QGridLayout(widget);
     Q_CHECK_PTR(m_optionLayout);
+    m_optionLayout->setMargin(0);
+    m_optionLayout->setSpacing(6);
     super::addOptionWidgetLayout(m_optionLayout);
 
     connect(m_cbFilter, SIGNAL(activated ( const KisID& )), this, SLOT( changeFilter( const KisID& ) ) );
@@ -138,7 +140,7 @@ void KisToolFilter::changeFilter( const KisID & id)
     Q_ASSERT(!m_filter.isNull());
     if( m_filterConfigurationWidget != 0 )
     {
-        m_optionLayout->remove ( m_filterConfigurationWidget );
+        m_optionLayout->removeWidget( m_filterConfigurationWidget );
         delete m_filterConfigurationWidget;
     }
 
@@ -148,7 +150,7 @@ void KisToolFilter::changeFilter( const KisID & id)
     m_filterConfigurationWidget = m_filter->createConfigurationWidget( optionWidget(), m_source );
     if( m_filterConfigurationWidget != 0 )
     {
-        m_optionLayout->addMultiCellWidget ( m_filterConfigurationWidget, 2, 2, 0, 1 );
+        m_optionLayout->addWidget ( m_filterConfigurationWidget, 2, 0, 1, 2 );
         m_filterConfigurationWidget->show();
     }
 }

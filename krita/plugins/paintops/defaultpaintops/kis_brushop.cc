@@ -25,8 +25,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include <kdebug.h>
 
@@ -54,14 +53,18 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings, Kis
 KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     : super(parent)
 {
-    m_optionsWidget = new QWidget(parent, "brush option widget");
-    Q3HBoxLayout * l = new Q3HBoxLayout(m_optionsWidget);
-    l->setAutoAdd(true);
+    m_optionsWidget = new QWidget(parent);
+    m_optionsWidget->setObjectName("brush option widget");
+    QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
     m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionsWidget);
+    l->addWidget(m_pressureVariation);
     m_size =  new QCheckBox(i18n("size"), m_optionsWidget);
     m_size->setChecked(true);
+    l->addWidget(m_size);
     m_opacity = new QCheckBox(i18n("opacity"), m_optionsWidget);
+    l->addWidget(m_opacity);
     m_darken = new QCheckBox(i18n("darken"), m_optionsWidget);
+    l->addWidget(m_darken);
 }
 
 bool KisBrushOpSettings::varySize() const
@@ -128,12 +131,12 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     if (!m_painter->device()) return;
 
     KisBrush *brush = m_painter->brush();
-    
+
     Q_ASSERT(brush);
     if (!brush) return;
     if (! brush->canPaintFor(adjustedInfo) )
         return;
-    
+
     KisPaintDeviceSP device = m_painter->device();
 
     KisPoint hotSpot = brush->hotSpot(adjustedInfo);
@@ -181,18 +184,18 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     KisImage * image = device->image();
-    
+
     if (image != 0) {
         dstRect &= image->bounds();
     }
-    
+
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
-    
+
     if (m_source->hasSelection()) {
         m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);

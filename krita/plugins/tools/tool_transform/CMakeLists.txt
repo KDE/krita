@@ -7,7 +7,7 @@ set(kritatooltransform_PART_SRCS
 
 kde4_automoc(${kritatooltransform_PART_SRCS})
 
-kde4_add_ui3_files(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
+kde4_add_ui_files(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 
 kde4_add_plugin(kritatooltransform ${kritatooltransform_PART_SRCS})
 
@@ -43,14 +43,14 @@ kde4_footer()
 #kritatooltransform_la_SOURCES = \
 #	wdg_tool_transform.ui \
 #	tool_transform.cc \
-#	kis_tool_transform.cc 
+#	kis_tool_transform.cc
 #
 ## Install this plugin in the KDE modules directory
 #kde_module_LTLIBRARIES = kritatooltransform.la
 #
 #noinst_HEADERS = \
 #	tool_transform.h \
-#	kis_tool_transform.h 
+#	kis_tool_transform.h
 #
 #kritatooltransform_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 #kritatooltransform_la_LIBADD =  ../../../libkritacommon.la

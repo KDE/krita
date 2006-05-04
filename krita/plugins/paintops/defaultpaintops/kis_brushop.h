@@ -24,8 +24,6 @@
 #define KIS_BRUSHOP_H_
 
 #include "kis_paintop.h"
-//Added by qt3to4:
-#include <QLabel>
 
 class QWidget;
 class QCheckBox;

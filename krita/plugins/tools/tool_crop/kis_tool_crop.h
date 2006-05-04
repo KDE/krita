@@ -23,12 +23,22 @@
 
 #include <qpoint.h>
 #include <qregion.h>
+
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
 
+#include "ui_wdg_tool_crop.h"
+
 class QRect;
 class QCursor;
-class WdgToolCrop;
+
+class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
+{
+    Q_OBJECT
+
+    public:
+        WdgToolCrop(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 /**
  * Crop tool
@@ -91,7 +101,7 @@ private slots:
     void setRatio(double ratio);
 
     inline QRect realRectCrop() { QRect r = m_rectCrop; r.setSize(r.size() - QSize(1,1)); return r; }
-    
+
 private:
     void updateWidgetValues(bool updateratio = true);
     KisCanvasSubject *m_subject;

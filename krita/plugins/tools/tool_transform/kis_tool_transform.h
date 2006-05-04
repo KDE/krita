@@ -28,10 +28,19 @@
 #include <kis_tool_factory.h>
 #include <kis_undo_adapter.h>
 
+#include "ui_wdg_tool_transform.h"
+
 class KisTransaction;
-class WdgToolTransform;
 class KisID;
 class KisFilterStrategy;
+
+class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
+{
+    Q_OBJECT
+
+    public:
+        WdgToolTransform(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 /**
  * Transform tool
@@ -123,7 +132,7 @@ private:
     KisFilterStrategy *m_filter;
 
     WdgToolTransform *m_optWidget;
-    
+
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
 

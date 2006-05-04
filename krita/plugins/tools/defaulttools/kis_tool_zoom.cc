@@ -38,7 +38,7 @@
 KisToolZoom::KisToolZoom()
     : super(i18n("Zoom Tool"))
 {
-    setName("tool_zoom");
+    setObjectName("tool_zoom");
     m_subject = 0;
     m_dragging = false;
     m_startPos = QPoint(0, 0);
@@ -173,10 +173,15 @@ void KisToolZoom::paintOutline(KisCanvasPainter& gc, const QRect&)
 
 void KisToolZoom::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Zoom"), "viewmag", Qt::Key_Z, this, SLOT(activate()), collection, name());
+        m_action = new KAction(KIcon("viewmag"),
+                               i18n("&Zoom"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::Key_Z);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Zoom"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

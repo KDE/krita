@@ -21,11 +21,12 @@
 
 #include <stdlib.h>
 #include <qpoint.h>
-//Added by qt3to4:
+#include <qcolor.h>
 #include <QMouseEvent>
+
 #include <kaction.h>
 #include <klocale.h>
-#include <qcolor.h>
+
 #include "kis_canvas_subject.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
@@ -42,7 +43,7 @@
 KisToolMove::KisToolMove()
     : super(i18n("Move Tool"))
 {
-    setName("tool_move");
+    setObjectName("tool_move");
     m_subject = 0;
     setCursor(KisCursor::moveCursor());
 }
@@ -87,16 +88,15 @@ void KisToolMove::buttonRelease(KisButtonReleaseEvent *e)
 
 void KisToolMove::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Move"),
-                        "move",
-                        Qt::SHIFT+Qt::Key_V,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("move"),
+                               i18n("&Move"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::SHIFT+Qt::Key_V);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Move"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

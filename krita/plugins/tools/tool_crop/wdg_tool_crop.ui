@@ -1,221 +1,194 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgToolCrop</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgToolCrop</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgToolCrop</class>
+  <widget class="QWidget" name="WdgToolCrop" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>346</width>
+        <height>123</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>346</width>
-            <height>123</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Crop</string>
     </property>
-    <property name="caption">
-        <string>Crop</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <property name="spacing" >
+        <number>0</number>
+      </property>
+      <item>
+        <layout class="QGridLayout" >
+          <property name="margin" >
             <number>0</number>
-        </property>
-        <property name="spacing">
+          </property>
+          <property name="spacing" >
+            <number>3</number>
+          </property>
+          <item row="0" column="0" >
+            <widget class="QLabel" name="textLabel1" >
+              <property name="text" >
+                <string>X:</string>
+              </property>
+              <property name="buddy" stdset="0" >
+                <cstring>isbX</cstring>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="1" >
+            <widget class="KIntSpinBox" name="intX" >
+              <property name="maximum" >
+                <number>1000000000</number>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="3" >
+            <widget class="KIntSpinBox" name="intHeight" >
+              <property name="maximum" >
+                <number>1000000000</number>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="2" >
+            <widget class="QCheckBox" name="boolWidth" >
+              <property name="text" >
+                <string>W&amp;idth:</string>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>Will keep the width of the crop constant</string>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="3" >
+            <widget class="KIntSpinBox" name="intWidth" >
+              <property name="maximum" >
+                <number>1000000000</number>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="1" >
+            <widget class="KIntSpinBox" name="intY" >
+              <property name="maximum" >
+                <number>1000000000</number>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="2" >
+            <widget class="QCheckBox" name="boolHeight" >
+              <property name="text" >
+                <string>&amp;Height:</string>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>Will keep the height of the crop constant</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="0" >
+            <widget class="QLabel" name="textLabel3" >
+              <property name="text" >
+                <string>Y:</string>
+              </property>
+              <property name="buddy" stdset="0" >
+                <cstring>isbY</cstring>
+              </property>
+            </widget>
+          </item>
+          <item row="2" column="3" >
+            <widget class="KDoubleNumInput" name="doubleRatio" >
+              <property name="precision" >
+                <number>2</number>
+              </property>
+            </widget>
+          </item>
+          <item row="2" column="2" >
+            <widget class="QCheckBox" name="boolRatio" >
+              <property name="text" >
+                <string>R&amp;atio:</string>
+              </property>
+              <property name="toolTip" stdset="0" >
+                <string>Will keep the ratio constant</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
             <number>0</number>
-        </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+          </property>
+          <item>
+            <widget class="QComboBox" name="cmbType" >
+              <property name="currentIndex" >
+                <number>1</number>
+              </property>
+              <item>
+                <property name="text" >
+                  <string>Layer</string>
                 </property>
-                <property name="margin">
-                    <number>0</number>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>Image</string>
                 </property>
-                <property name="spacing">
-                    <number>3</number>
-                </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>X:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>isbX</cstring>
-                    </property>
-                </widget>
-                <widget class="KIntSpinBox" row="0" column="1">
-                    <property name="name">
-                        <cstring>intX</cstring>
-                    </property>
-                    <property name="maxValue">
-                        <number>1000000000</number>
-                    </property>
-                </widget>
-                <widget class="KIntSpinBox" row="1" column="3">
-                    <property name="name">
-                        <cstring>intHeight</cstring>
-                    </property>
-                    <property name="maxValue">
-                        <number>1000000000</number>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="0" column="2">
-                    <property name="name">
-                        <cstring>boolWidth</cstring>
-                    </property>
-                    <property name="text">
-                        <string>W&amp;idth:</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Will keep the width of the crop constant</string>
-                    </property>
-                </widget>
-                <widget class="KIntSpinBox" row="0" column="3">
-                    <property name="name">
-                        <cstring>intWidth</cstring>
-                    </property>
-                    <property name="maxValue">
-                        <number>1000000000</number>
-                    </property>
-                </widget>
-                <widget class="KIntSpinBox" row="1" column="1">
-                    <property name="name">
-                        <cstring>intY</cstring>
-                    </property>
-                    <property name="maxValue">
-                        <number>1000000000</number>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="2">
-                    <property name="name">
-                        <cstring>boolHeight</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Height:</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Will keep the height of the crop constant</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Y:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>isbY</cstring>
-                    </property>
-                </widget>
-                <widget class="KDoubleNumInput" row="2" column="3">
-                    <property name="name">
-                        <cstring>doubleRatio</cstring>
-                    </property>
-                    <property name="precision">
-                        <number>2</number>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="2" column="2">
-                    <property name="name">
-                        <cstring>boolRatio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>R&amp;atio:</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Will keep the ratio constant</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout9</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <widget class="QComboBox">
-                    <item>
-                        <property name="text">
-                            <string>Layer</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Image</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>cmbType</cstring>
-                    </property>
-                    <property name="currentItem">
-                        <number>1</number>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>bnCrop</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Crop</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
+              </item>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="bnCrop" >
+              <property name="text" >
+                <string>&amp;Crop</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item>
+        <spacer name="spacer2" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>16</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-    </vbox>
-</widget>
-<customwidgets>
-	<customwidget>
-		<class>KIntSpinBox</class>
-		<extends>QSpinBox</extends>
-		<header>knuminput.h</header>
-		<container>1</container>
-		<pixmap></pixmap>
-	</customwidget>
-	<customwidget>
-		<class>KDoubleNumInput</class>
-		<header>knuminput.h</header>
-		<container>1</container>
-		<pixmap></pixmap>
-	</customwidget>
-</customwidgets>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <customwidgets>
+    <customwidget>
+      <class>KIntSpinBox</class>
+      <extends>QSpinBox</extends>
+      <header>knuminput.h</header>
+      <container>1</container>
+      <pixmap></pixmap>
+    </customwidget>
+    <customwidget>
+      <class>KDoubleNumInput</class>
+      <extends></extends>
+      <header>knuminput.h</header>
+      <container>1</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
+  <tabstops>
     <tabstop>intX</tabstop>
     <tabstop>intY</tabstop>
     <tabstop>intWidth</tabstop>
     <tabstop>intHeight</tabstop>
     <tabstop>cmbType</tabstop>
     <tabstop>bnCrop</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+</ui>

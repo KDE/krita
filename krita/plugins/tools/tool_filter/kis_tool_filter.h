@@ -23,11 +23,9 @@
 
 #include "kis_tool_freehand.h"
 #include "kis_tool_factory.h"
-//Added by qt3to4:
-#include <Q3GridLayout>
 
 class QComboBox;
-class Q3GridLayout;
+class QGridLayout;
 class KisEvent;
 class KisFilterConfigurationWidget;
 class KisButtonPressEvent;
@@ -57,7 +55,7 @@ protected:
 private:
     KisFilterSP m_filter;
     QWidget* m_filterConfigurationWidget;
-    Q3GridLayout* m_optionLayout;
+    QGridLayout* m_optionLayout;
     KisCmbIDList * m_cbFilter;
 };
 

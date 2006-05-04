@@ -51,7 +51,7 @@ KisToolGradient::KisToolGradient()
     : super(i18n("Gradient")),
       m_dragging( false )
 {
-    setName("tool_gradient");
+    setObjectName("tool_gradient");
     setCursor(KisCursor::load("tool_gradient_cursor.png", 6, 6));
 
     m_startPos = KisPoint(0, 0);
@@ -183,7 +183,7 @@ KisPoint KisToolGradient::straightLine(KisPoint point)
 {
     KisPoint comparison = point - m_startPos;
     KisPoint result;
-    
+
     if ( fabs(comparison.x()) > fabs(comparison.y())) {
         result.setX(point.x());
         result.setY(m_startPos.y());
@@ -191,7 +191,7 @@ KisPoint KisToolGradient::straightLine(KisPoint point)
         result.setX( m_startPos.x() );
         result.setY( point.y() );
     }
-    
+
     return result;
 }
 
@@ -234,23 +234,26 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
     m_lbShape = new QLabel(i18n("Shape:"), widget);
     m_lbRepeat = new QLabel(i18n("Repeat:"), widget);
 
-    m_ckReverse = new QCheckBox(i18n("Reverse"), widget, "reverse_check");
+    m_ckReverse = new QCheckBox(i18n("Reverse"), widget);
+    m_ckReverse->setObjectName("reverse_check");
     connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
 
-    m_cmbShape = new QComboBox(false, widget, "shape_combo");
+    m_cmbShape = new QComboBox(widget);
+    m_cmbShape->setObjectName("shape_combo");
     connect(m_cmbShape, SIGNAL(activated(int)), this, SLOT(slotSetShape(int)));
-    m_cmbShape->insertItem(i18n("Linear"));
-    m_cmbShape->insertItem(i18n("Bi-Linear"));
-    m_cmbShape->insertItem(i18n("Radial"));
-    m_cmbShape->insertItem(i18n("Square"));
-    m_cmbShape->insertItem(i18n("Conical"));
-    m_cmbShape->insertItem(i18n("Conical Symmetric"));
+    m_cmbShape->addItem(i18n("Linear"));
+    m_cmbShape->addItem(i18n("Bi-Linear"));
+    m_cmbShape->addItem(i18n("Radial"));
+    m_cmbShape->addItem(i18n("Square"));
+    m_cmbShape->addItem(i18n("Conical"));
+    m_cmbShape->addItem(i18n("Conical Symmetric"));
 
-    m_cmbRepeat = new QComboBox(false, widget, "repeat_combo");
+    m_cmbRepeat = new QComboBox(widget);
+    m_cmbRepeat->setObjectName("repeat_combo");
     connect(m_cmbRepeat, SIGNAL(activated(int)), this, SLOT(slotSetRepeat(int)));
-    m_cmbRepeat->insertItem(i18n("None"));
-    m_cmbRepeat->insertItem(i18n("Forwards"));
-    m_cmbRepeat->insertItem(i18n("Alternating"));
+    m_cmbRepeat->addItem(i18n("None"));
+    m_cmbRepeat->addItem(i18n("Forwards"));
+    m_cmbRepeat->addItem(i18n("Alternating"));
 
     addOptionWidgetOption(m_cmbShape, m_lbShape);
 
@@ -262,7 +265,7 @@ QWidget* KisToolGradient::createOptionWidget(QWidget* parent)
 
     m_slAntiAliasThreshold = new KDoubleNumInput(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
-    m_slAntiAliasThreshold->setRange( 0, 1); 
+    m_slAntiAliasThreshold->setRange( 0, 1);
     m_slAntiAliasThreshold->setValue(m_antiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 
@@ -293,13 +296,15 @@ void KisToolGradient::slotSetAntiAliasThreshold(double value)
 
 void KisToolGradient::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Gradient"),
-                        "tool_gradient", Qt::Key_G, this,
-                        SLOT(activate()), collection,
-                        name());
+        m_action = new KAction(KIcon("tool_gradient"),
+                               i18n("&Gradient"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::Key_G);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a gradient"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

@@ -28,8 +28,6 @@
 #include <qpen.h>
 #include <qpushbutton.h>
 #include <qrect.h>
-//Added by qt3to4:
-#include <Q3MemArray>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -54,7 +52,6 @@
 #include <kis_crop_visitor.h>
 
 #include "kis_tool_crop.h"
-#include "wdg_tool_crop.h"
 
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
@@ -64,7 +61,7 @@
 KisToolCrop::KisToolCrop()
     : super(i18n("Crop"))
 {
-    setName("tool_crop");
+    setObjectName("tool_crop");
     m_cropCursor = KisCursor::load("tool_crop_cursor.png", 6, 6);
     setCursor(m_cropCursor);
     m_subject = 0;
@@ -208,7 +205,7 @@ void KisToolCrop::move(KisMoveEvent *e)
                     QPoint pos = e->pos().floorQPoint();
                     if( m_mouseOnHandleType == Inside )
                     {
-                        m_rectCrop.moveBy( ( m_dragStop.x() - m_dragStart.x() ),  ( m_dragStop.y() - m_dragStart.y() ) );
+                        m_rectCrop.translate( ( m_dragStop.x() - m_dragStart.x() ),  ( m_dragStop.y() - m_dragStart.y() ) );
                         if( m_rectCrop.left() < 0 )
                         {
                             m_rectCrop.moveLeft( 0 );
@@ -486,11 +483,11 @@ void KisToolCrop::crop() {
     if (!img)
         return;
 
-    QRect rc =  realRectCrop().normalize();
+    QRect rc =  realRectCrop().normalized();
 
 
     // The visitor adds the undo steps to the macro
-    if (m_optWidget->cmbType->currentItem() == 0) {
+    if (m_optWidget->cmbType->currentIndex() == 0) {
         // The layer(s) under the current layer will take care of adding
         // undo information to the Crop macro.
         if (img->undo())
@@ -562,7 +559,7 @@ void KisToolCrop::setCropWidth(int w)
     } else {
         setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
     }
-    
+
     validateSelection();
     paintOutlineWithHandles();
 
@@ -585,7 +582,7 @@ void KisToolCrop::setCropHeight(int h)
     } else {
         setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
     }
-    
+
     validateSelection();
     paintOutlineWithHandles();
 
@@ -682,18 +679,15 @@ QWidget* KisToolCrop::optionWidget()
 
 void KisToolCrop::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Crop"),
-                                    "crop",
-                                    0,
-                                    this,
-                                    SLOT(activate()),
-                                    collection,
-                                    name());
+        m_action = new KAction(KIcon("crop"),
+                               i18n("&Crop"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
-
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Crop an area"));
         m_action->setActionGroup(actionGroup());
 

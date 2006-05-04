@@ -53,7 +53,6 @@
 #include <kis_transform_worker.h>
 
 #include "kis_tool_transform.h"
-#include "wdg_tool_transform.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 
@@ -131,7 +130,7 @@ namespace {
 KisToolTransform::KisToolTransform()
     : super(i18n("Transform"))
 {
-    setName("tool_transform");
+    setObjectName("tool_transform");
     setCursor(KisCursor::selectCursor());
     m_subject = 0;
     m_selecting = false;
@@ -212,7 +211,7 @@ void KisToolTransform::initHandles()
         KisSelectionSP sel = dev->selection();
         m_origSelection = new KisSelection(*sel.data());
         QRect r = sel->selectedExactRect();
-        r.rect(&x, &y, &w, &h);
+        r.getRect(&x, &y, &w, &h);
     }
     else {
         dev->exactBounds(x,y,w,h);
@@ -718,7 +717,7 @@ void KisToolTransform::transform()
 
     // Copy the original state back.
     QRect rc = m_origDevice->extent();
-    rc = rc.normalize();
+    rc = rc.normalized();
     img->activeDevice()->clear();
     KisPainter gc(img->activeDevice());
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
@@ -728,7 +727,7 @@ void KisToolTransform::transform()
     if(m_origSelection)
     {
         QRect rc = m_origSelection->extent();
-        rc = rc.normalize();
+        rc = rc.normalized();
         img->activeDevice()->selection()->clear();
         KisPainter sgc(KisPaintDeviceSP(img->activeDevice()->selection().data()));
         sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, KisPaintDeviceSP(m_origSelection.data()), rc.x(), rc.y(), rc.width(), rc.height());
@@ -844,17 +843,15 @@ QWidget* KisToolTransform::optionWidget()
 
 void KisToolTransform::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Transform"),
-                        "transform",
-                        0,
-                        this,
-                        SLOT(activate()),
-                        collection,
-                        name());
+        m_action = new KAction(KIcon("transform"),
+                               i18n("&Transform"),
+                               collection,
+                               objectName());
         Q_CHECK_PTR(m_action);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Transform a layer or a selection"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

@@ -47,7 +47,7 @@ KisToolLine::KisToolLine()
     : super(i18n("Line")),
       m_dragging( false )
 {
-    setName("tool_line");
+    setObjectName("tool_line");
     setCursor(KisCursor::load("tool_line_cursor.png", 6, 6));
 
     m_painter = 0;
@@ -229,13 +229,15 @@ void KisToolLine::paintLine(KisCanvasPainter& gc, const QRect&)
 
 void KisToolLine::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Line"),
-                        "tool_line", Qt::Key_L, this,
-                        SLOT(activate()), collection,
-                        name());
+        m_action = new KAction(KIcon("tool_line"),
+                               i18n("&Line"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::Key_L);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Draw a line"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

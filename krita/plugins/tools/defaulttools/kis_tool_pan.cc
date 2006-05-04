@@ -30,7 +30,7 @@
 KisToolPan::KisToolPan()
     : super(i18n("Pan Tool"))
 {
-    setName("tool_pan");
+    setObjectName("tool_pan");
     m_subject = 0;
     m_dragging = false;
     m_openHandCursor = KisCursor::openHandCursor();
@@ -82,10 +82,15 @@ void KisToolPan::buttonRelease(KisButtonReleaseEvent *e)
 
 void KisToolPan::setup(KActionCollection *collection)
 {
-    m_action = collection->action(name());
+    m_action = collection->action(objectName());
 
     if (m_action == 0) {
-        m_action = new KAction(i18n("&Pan"), "tool_pan", Qt::SHIFT+Qt::Key_H, this, SLOT(activate()), collection, name());
+        m_action = new KAction(KIcon("tool_pan"),
+                               i18n("&Pan"),
+                               collection,
+                               objectName());
+        m_action->setShortcut(Qt::SHIFT+Qt::Key_H);
+        connect(m_action, SIGNAL(triggered()), this, SLOT(activate()));
         m_action->setToolTip(i18n("Pan"));
         m_action->setActionGroup(actionGroup());
         m_ownAction = true;

@@ -1,246 +1,210 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgToolTransform</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgToolTransform</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgToolTransform</class>
+  <widget class="QWidget" name="WdgToolTransform" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>377</width>
+        <height>91</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>377</width>
-            <height>91</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Transform</string>
     </property>
-    <property name="caption">
-        <string>Transform</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <property name="spacing" >
+        <number>3</number>
+      </property>
+      <item rowspan="1" row="0" column="0" colspan="2" >
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
             <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>3</number>
-        </property>
-        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>layout11</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout7</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout1</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel1</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Move X:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>isbX</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KIntSpinBox">
-                                    <property name="name">
-                                        <cstring>intStartX</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1000000000</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout2</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Scale X:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>isbWidth</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KIntSpinBox">
-                                    <property name="name">
-                                        <cstring>intEndX</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1000000000</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </vbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout8</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout3</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel3</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Move Y:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>isbY</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KIntSpinBox">
-                                    <property name="name">
-                                        <cstring>intStartY</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1000000000</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout4</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel4</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Scale Y:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>isbHeight</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KIntSpinBox">
-                                    <property name="name">
-                                        <cstring>intEndY</cstring>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1000000000</number>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </vbox>
-                </widget>
-            </hbox>
+          </property>
+          <item>
+            <layout class="QVBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <layout class="QHBoxLayout" >
+                  <property name="margin" >
+                    <number>0</number>
+                  </property>
+                  <item>
+                    <widget class="QLabel" name="textLabel1" >
+                      <property name="text" >
+                        <string>Move X:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>isbX</cstring>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="KIntSpinBox" name="intStartX" >
+                      <property name="maximum" >
+                        <number>1000000000</number>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </item>
+              <item>
+                <layout class="QHBoxLayout" >
+                  <property name="margin" >
+                    <number>0</number>
+                  </property>
+                  <item>
+                    <widget class="QLabel" name="textLabel2" >
+                      <property name="text" >
+                        <string>Scale X:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>isbWidth</cstring>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="KIntSpinBox" name="intEndX" >
+                      <property name="maximum" >
+                        <number>1000000000</number>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </item>
+            </layout>
+          </item>
+          <item>
+            <layout class="QVBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <layout class="QHBoxLayout" >
+                  <property name="margin" >
+                    <number>0</number>
+                  </property>
+                  <item>
+                    <widget class="QLabel" name="textLabel3" >
+                      <property name="text" >
+                        <string>Move Y:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>isbY</cstring>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="KIntSpinBox" name="intStartY" >
+                      <property name="maximum" >
+                        <number>1000000000</number>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </item>
+              <item>
+                <layout class="QHBoxLayout" >
+                  <property name="margin" >
+                    <number>0</number>
+                  </property>
+                  <item>
+                    <widget class="QLabel" name="textLabel4" >
+                      <property name="text" >
+                        <string>Scale Y:</string>
+                      </property>
+                      <property name="buddy" stdset="0" >
+                        <cstring>isbHeight</cstring>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="KIntSpinBox" name="intEndY" >
+                      <property name="maximum" >
+                        <number>1000000000</number>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </item>
+            </layout>
+          </item>
+        </layout>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QLabel" name="textLabel1_2" >
+          <property name="text" >
+            <string>Filter:</string>
+          </property>
+          <property name="alignment" >
+            <set>Qt::AlignVCenter|Qt::AlignRight</set>
+          </property>
         </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>textLabel1_2</cstring>
-            </property>
-            <property name="text">
-                <string>Filter:</string>
-            </property>
-            <property name="alignment">
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-            </property>
-        </widget>
-        <widget class="KisCmbIDList" row="1" column="1">
-            <property name="name">
-                <cstring>cmbFilter</cstring>
-            </property>
-        </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>21</height>
-                </size>
-            </property>
+      </item>
+      <item row="1" column="1" >
+        <widget class="KisCmbIDList" name="cmbFilter" />
+      </item>
+      <item row="2" column="0" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>21</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<customwidgets>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>KisCmbIDList</class>
-        <header location="local">kis_cmb_idlist.h</header>
-        <sizehint>
-            <width>1</width>
-            <height>24</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
+      <class>KisCmbIDList</class>
+      <extends>QComboBox</extends>
+      <header location="local" >kis_cmb_idlist.h</header>
+      <sizehint>
+        <width>1</width>
+        <height>24</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
     </customwidget>
     <customwidget>
-	    <class>KIntSpinBox</class>
-	    <extends>QSpinBox</extends>
-	    <header>knuminput.h</header>
-	    <container>1</container>
-	    <pixmap></pixmap>
+      <class>KIntSpinBox</class>
+      <extends>QSpinBox</extends>
+      <header>knuminput.h</header>
+      <container>1</container>
+      <pixmap></pixmap>
     </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="870">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000032d49444154388db59531681c4714863f892dde8004b320c32e3870020b74458a6b0f5458e581c016a809a8496b42208454098604d2c4904a6954a410511ae752085b858c1208dc35221244b00119f60ac12ee860062c980719708a95a248f129459cd7cceeccf0edb76fff61a706830197d5ed765ff3166a30184c4d5d829fed3c7bdd5e6ce3bda71a5738ef301802e1d6d179477152303c1842bc822797a64fbf7b4a9a43be00ada817cb0e12011c2611205ccd73755f9c087c6b19bef0d7c100f5b8267d07caf10fe8ab9210156320fc01be16aa5a11043307f30b20a21041019985f48ef2f7fa0becc68e80475fd584e831b396f210f67795c3831a4940a3228925bb27f4d652ba4b01a199b73342f3981be0ca57745042ac30c632d853b6373d44b056c8ef0922508d94d14be59b2f4aeaf58cd5751069e06f3436890114332b9487d0bf80f61e64dc5f813c3790045453f67703fd4d4f7f6b4496b5597e689044af194f5f5e841800210478bee3d1a8f41e64acbe0f69ae6852e1cf0ccf7f74f4d652defbc042226c6f55e8f89f91bb6e9c387c9d521c9558db988a3416fe3c67e32b4779ec7167f0e8939ce19ea7fc5d298a80c875f03563930855ed2081bc05e91d5014ef53363eaf288e3d6285ee520a338e76c7a251a94e41e30470d3631004a262672e3eca59cec6978ef2b889979d11f2bb904af3be92081a416e28dfe831983920b1142345d5b0ff2234a6334276d7321ad53c795c511ca654a5a251996f19b83d158ef602b45a423d52f67703abeb29ee4ce9de4fc93378f218462f6b3efdb042cf3d59666977a0aa6fe9310888d25b13342afd4dcffeaee3d147399da540ab13f8f8b39c2cb3f8710d11ba2b96f9c57fcd7180287497a03ecde86f8dd8fe1a867b9ef6bb1612a84a871f6bd35b94e217a53832589970f2dcd85d9c7d4580d57521cbdaf4bfaf288e95e268d4ec8e60e72ccb0f2dbffea454e71e8d29f57882717152509482a48d8924b0bc12e82ee51445a03a6da079cbd0eec0fc22142b06620e89a3fc8d3783870743d814d2bc8994aa6ff286472e764902e5a96f72bbd3b4c37b280e95aa9e604c84e1cf978b37c74935797d7ae2ca7fac6968fe51ff0bf86dc30783c1d49f0baa9bb819e612310000000049454e44ae426082</data>
-    </image>
-</images>
-<tabstops>
+  </customwidgets>
+  <tabstops>
     <tabstop>intStartX</tabstop>
     <tabstop>intStartY</tabstop>
     <tabstop>intEndX</tabstop>
     <tabstop>intEndY</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="870" >89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000032d49444154388db59531681c4714863f892dde8004b320c32e3870020b74458a6b0f5458e581c016a809a8496b42208454098604d2c4904a6954a410511ae752085b858c1208dc35221244b00119f60ac12ee860062c980719708a95a248f129459cd7cceeccf0edb76fff61a706830197d5ed765ff3166a30184c4d5d829fed3c7bdd5e6ce3bda71a5738ef301802e1d6d179477152303c1842bc822797a64fbf7b4a9a43be00ada817cb0e12011c2611205ccd73755f9c087c6b19bef0d7c100f5b8267d07caf10fe8ab9210156320fc01be16aa5a11043307f30b20a21041019985f48ef2f7fa0becc68e80475fd584e831b396f210f67795c3831a4940a3228925bb27f4d652ba4b01a199b73342f3981be0ca57745042ac30c632d853b6373d44b056c8ef0922508d94d14be59b2f4aeaf58cd5751069e06f3436890114332b9487d0bf80f61e64dc5f813c3790045453f67703fd4d4f7f6b4496b5597e689044af194f5f5e841800210478bee3d1a8f41e64acbe0f69ae6852e1cf0ccf7f74f4d652defbc042226c6f55e8f89f91bb6e9c387c9d521c9558db988a3416fe3c67e32b4779ec7167f0e8939ce19ea7fc5d298a80c875f03563930855ed2081bc05e91d5014ef53363eaf288e3d6285ee520a338e76c7a251a94e41e30470d3631004a262672e3eca59cec6978ef2b889979d11f2bb904af3be92081a416e28dfe831983920b1142345d5b0ff2234a6334276d7321ad53c795c511ca654a5a251996f19b83d158ef602b45a423d52f67703abeb29ee4ce9de4fc93378f218462f6b3efdb042cf3d59666977a0aa6fe9310888d25b13342afd4dcffeaee3d147399da540ab13f8f8b39c2cb3f8710d11ba2b96f9c57fcd7180287497a03ecde86f8dd8fe1a867b9ef6bb1612a84a871f6bd35b94e217a53832589970f2dcd85d9c7d4580d57521cbdaf4bfaf288e95e268d4ec8e60e72ccb0f2dbffea454e71e8d29f57882717152509482a48d8924b0bc12e82ee51445a03a6da079cbd0eec0fc22142b06620e89a3fc8d3783870743d814d2bc8994aa6ff286472e764902e5a96f72bbd3b4c37b280e95aa9e604c84e1cf978b37c74935797d7ae2ca7fac6968fe51ff0bf86dc30783c1d49f0baa9bb819e612310000000049454e44ae426082</data>
+    </image>
+  </images>
+</ui>

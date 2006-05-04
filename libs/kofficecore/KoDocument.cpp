@@ -1028,7 +1028,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
         }
         else
         {
-            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "meta.xml" );
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?", QString("meta.xml") );
             delete store;
             return false;
         }
@@ -1036,7 +1036,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
         if ( store->open( "Thumbnails/thumbnail.png" ) )
         {
             if ( !saveOasisPreview( store, manifestWriter ) || !store->close() ) {
-                d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?" ).arg( "Thumbnails/thumbnail.png" );
+                d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png") );
                 delete store;
                 return false;
             }
@@ -1044,7 +1044,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
         }
         else
         {
-            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "Thumbnails/thumbnail.png" );
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png") );
             delete store;
             return false;
         }
@@ -1052,7 +1052,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
         // Write out manifest file
         if ( !oasisStore.closeManifestWriter() )
         {
-            d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?" ).arg( "META-INF/manifest.xml" );
+            d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?", QString("META-INF/manifest.xml") );
             delete store;
             return false;
         }
@@ -1083,7 +1083,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
         }
         else
         {
-            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "maindoc.xml" );
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?", QString( "maindoc.xml") );
             delete store;
             return false;
         }
@@ -1124,9 +1124,10 @@ bool KoDocument::saveToStream( QIODevice * dev )
     QDomDocument doc = saveXML();
     // Save to buffer
     QByteArray s = doc.toByteArray(); // utf8 already
+    dev->open( QIODevice::WriteOnly );
     int nwritten = dev->write( s.data(), s.size() );
     if ( nwritten != (int)s.size() )
-        kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size() << endl;
+      kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " <<  s.size() << endl;
     return nwritten == (int)s.size();
 }
 
@@ -1279,8 +1280,8 @@ bool KoDocument::checkAutoSaveFile()
         QDateTime date = QFileInfo(asf).lastModified();
         QString dateStr = date.toString(Qt::LocalDate);
         int res = KMessageBox::warningYesNoCancel(
-            0, i18n( "An autosaved file for an unnamed document exists in %1.\nThis file is dated %2\nDo you want to open it?" )
-            .arg(asf, dateStr) );
+            0, i18n( "An autosaved file for an unnamed document exists in %1.\nThis file is dated %2\nDo you want to open it?",
+            asf, dateStr ) );
         switch(res) {
         case KMessageBox::Yes : {
             KUrl url;
@@ -1332,7 +1333,7 @@ bool KoDocument::openURL( const KUrl & _url )
     // Reimplemented, to add a check for autosave files and to improve error reporting
     if ( !_url.isValid() )
     {
-        d->lastErrorMessage = i18n( "Malformed URL\n%1" ).arg( _url.url() ); // ## used anywhere ?
+        d->lastErrorMessage = i18n( "Malformed URL\n%1",_url.url() ); // ## used anywhere ?
         return false;
     }
     if ( !closeURL() )
@@ -1391,7 +1392,7 @@ bool KoDocument::openFile()
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
             // Maybe offer to create a new document with that name ?
-            KMessageBox::error(0L, i18n("The file %1 does not exist.").arg(m_file) );
+            KMessageBox::error(0L, i18n("The file %1 does not exist.", m_file) );
         d->m_bLoading = false;
         return false;
     }
@@ -1440,7 +1441,7 @@ bool KoDocument::openFile()
         kError(30003) << "No mimetype found for " << m_file << endl;
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
-            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().pathOrURL() ) );
+            KMessageBox::error( 0L, i18n( "Could not open\n%1",url().pathOrURL() ) );
         d->m_bLoading = false;
         return false;
     }
@@ -1615,7 +1616,7 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, QDomDo
     if (!store->open(filename))
     {
         kWarning(30003) << "Entry " << filename << " not found!" << endl;
-        d->lastErrorMessage = i18n( "Could not find %1" ).arg( filename );
+        d->lastErrorMessage = i18n( "Could not find %1",filename );
         return false;
     }
     // Error variables for QDomDocument::setContent
@@ -1642,12 +1643,12 @@ bool KoDocument::loadNativeFormat( const QString & file )
     QFileInfo fileInfo( file );
     if ( !fileInfo.exists() ) // check duplicated from openURL, but this is useful for templates
     {
-        d->lastErrorMessage = i18n("The file %1 does not exist.").arg(file);
+        d->lastErrorMessage = i18n("The file %1 does not exist.", file);
         return false;
     }
     if ( !fileInfo.isFile() )
     {
-        d->lastErrorMessage = i18n( "%1 is not a file." ).arg(file);
+        d->lastErrorMessage = i18n( "%1 is not a file." , file);
         return false;
     }
 
@@ -1700,8 +1701,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
             kError (30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
-            d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3" )
-                                  .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.toUtf8() ) );
+            d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n ( errorMsg.toUtf8() ) );
             res=false;
         }
 
@@ -1724,7 +1724,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
 
     if ( store->bad() )
     {
-        d->lastErrorMessage = i18n( "Not a valid KOffice file: %1" ).arg( file );
+        d->lastErrorMessage = i18n( "Not a valid KOffice file: %1", file );
         delete store;
         QApplication::restoreOverrideCursor();
         return false;
@@ -2323,11 +2323,11 @@ void KoDocument::showSavingErrorDialog()
 {
     if ( d->lastErrorMessage.isEmpty() )
     {
-        KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
+        KMessageBox::error( 0L, i18n( "Could not save\n%1", m_file ) );
     }
     else if ( d->lastErrorMessage != "USER_CANCELED" )
     {
-        KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file, d->lastErrorMessage ) );
+        KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2", m_file, d->lastErrorMessage ) );
     }
 }
 
@@ -2335,11 +2335,11 @@ void KoDocument::showLoadingErrorDialog()
 {
     if ( d->lastErrorMessage.isEmpty() )
     {
-        KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().pathOrURL() ) );
+        KMessageBox::error( 0L, i18n( "Could not open\n%1", url().pathOrURL() ) );
     }
     else if ( d->lastErrorMessage != "USER_CANCELED" )
     {
-        KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().pathOrURL(), d->lastErrorMessage ) );
+        KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2", url().pathOrURL(), d->lastErrorMessage ) );
     }
 }
 

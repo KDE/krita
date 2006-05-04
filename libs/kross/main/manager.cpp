@@ -177,7 +177,7 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
     setException(0); // clear previous exceptions
 
     if(! d->interpreterinfos.contains(interpretername)) {
-        setException( new Exception(QString(i18n("No such interpreter '%1'")).arg(interpretername)) );
+        setException( new Exception(i18n("No such interpreter '%1'",interpretername)) );
         return 0;
     }
 

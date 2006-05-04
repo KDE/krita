@@ -206,7 +206,7 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
             // This display-name will probably look nicer in OO, but this also means
             // no re-use possible between list styles...
             listStyle.addAttribute( "style:display-name",
-                                    i18n( "Numbering Style for %1" ).arg( m_displayName ) );
+                                    i18n( "Numbering Style for %1" , m_displayName ) );
 
             QString autoListStyleName = genStyles.lookup( listStyle, "L", KoGenStyles::ForceNumbering );
             gs.addAttribute( "style:list-style-name", autoListStyleName );

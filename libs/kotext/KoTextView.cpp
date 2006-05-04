@@ -1195,7 +1195,7 @@ bool KoTextView::openLink( KoLinkVariable* variable )
     }
     else
     {
-        KMessageBox::sorry( 0, i18n("%1 is not a valid link.").arg( variable->url() ) );
+        KMessageBox::sorry( 0, i18n("%1 is not a valid link.", variable->url() ) );
         return false;
     }
 }

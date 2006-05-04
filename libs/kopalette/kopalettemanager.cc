@@ -166,8 +166,8 @@ void KoPaletteManager::addWidget(QWidget * widget,
     }
 
     KToggleAction * a;
-    a = new KToggleAction(i18n("Show %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
-    a->setCheckedState(i18n("Hide %1").arg(widget->caption()));
+    a = new KToggleAction(i18n("Show %1",widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
+    a->setCheckedState(i18n("Hide %1",widget->caption()));
 
     m_mapper->setMapping(a, m_widgetNames->count()); // This is the position at which we'll insert the action
     m_actions->insert( name, a );

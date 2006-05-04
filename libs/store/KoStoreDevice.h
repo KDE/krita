@@ -38,6 +38,7 @@ public:
   virtual bool isSequential() const { return true; }
 
   virtual bool open( OpenMode m ) {
+    setOpenMode(m);
     if ( m & QIODevice::ReadOnly )
       return ( m_store->mode() == KoStore::Read );
     if ( m & QIODevice::WriteOnly )

@@ -145,7 +145,7 @@ bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QSt
     if (!m_store->open(fileName))
     {
         kWarning(30003) << "Entry " << fileName << " not found!" << endl;
-        errorMessage = i18n( "Could not find %1" ).arg( fileName );
+        errorMessage = i18n( "Could not find %1", fileName );
         return false;
     }
     // Error variables for QDomDocument::setContent

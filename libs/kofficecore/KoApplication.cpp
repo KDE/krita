@@ -185,10 +185,10 @@ bool KoApplication::start()
 			   paths = KGlobal::dirs()->findAllResources("data", appName +"/templates/" + desktopName );
 	             }
 		     if ( paths.isEmpty()) {
-		        KMessageBox::error(0L, i18n("No template found for: %1 ").arg(desktopName) );
+		        KMessageBox::error(0L, i18n("No template found for: %1 ", desktopName) );
 		        delete shell;
 		     } else if ( paths.count() > 1 ) {
-		        KMessageBox::error(0L,  i18n("Too many templates found for: %1").arg(desktopName) );
+		        KMessageBox::error(0L,  i18n("Too many templates found for: %1", desktopName) );
 		        delete shell;
 		     }
 		  }
@@ -208,7 +208,7 @@ bool KoApplication::start()
 		       kDebug(30003) << "Template loaded..." << endl;
 		       n++;
 		     } else {
-		        KMessageBox::error(0L, i18n("Template %1 failed to load.").arg(templateURL.prettyURL()) );
+		        KMessageBox::error(0L, i18n("Template %1 failed to load.", templateURL.prettyURL()) );
  		        delete shell;
 		     }
 		  }

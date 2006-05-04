@@ -512,7 +512,7 @@ void KoMainWindow::updateCaption()
 
       setCaption( caption, rootDocument()->isModified() );
       if ( !rootDocument()->url().fileName(false).isEmpty() )
-        d->m_paSave->setToolTip( i18n("Save as %1").arg(rootDocument()->url().fileName(false)) );
+        d->m_paSave->setToolTip( i18n("Save as %1", rootDocument()->url().fileName(false)) );
       else
         d->m_paSave->setToolTip( i18n("Save") );
   }
@@ -545,7 +545,7 @@ bool KoMainWindow::openDocument( const KUrl & url )
 {
     if ( !KIO::NetAccess::exists(url,true,0) )
     {
-        KMessageBox::error(0L, i18n("The file %1 does not exist.").arg(url.url()) );
+        KMessageBox::error(0L, i18n("The file %1 does not exist.", url.url()) );
         m_recent->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
         return false;
@@ -678,7 +678,7 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
 
     const bool neverHeardOfIt = ( mime->name() == KMimeType::defaultMimeType() );
     QString comment = neverHeardOfIt ?
-                      i18n( "%1 (unknown file type)" ).arg( QString::fromLatin1(outputFormat) )
+                      i18n( "%1 (unknown file type)", QString::fromLatin1(outputFormat) )
                       : mime->comment();
 
     // Warn the user
@@ -689,8 +689,8 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
               (
                   this,
                   i18n( "<qt>Saving as a %1 may result in some loss of formatting."
-                        "<p>Do you still want to save in this format?</qt>" )
-                  .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
+                        "<p>Do you still want to save in this format?</qt>",
+                  QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                   i18n( "Confirm Save" ),
                   KStdGuiItem::save (),
                   "NonNativeSaveConfirmation"
@@ -702,8 +702,8 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
               (
                   this,
                   i18n( "<qt>Exporting as a %1 may result in some loss of formatting."
-                        "<p>Do you still want to export to this format?</qt>" )
-                  .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
+                        "<p>Do you still want to export to this format?</qt>",
+                  QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                   i18n( "Confirm Export" ),
                   i18n ("Export"),
                   "NonNativeExportConfirmation" // different to the one used for Save (above)
@@ -1515,9 +1515,9 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
       KToolBar * tb = ::qobject_cast<KToolBar *>(it);
       if ( tb )
       {
-          KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar").arg( tb->windowTitle() ),
+          KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar", tb->windowTitle() ),
                                                    actionCollection(), tb->objectName().toUtf8() );
-	  act->setCheckedState(i18n("Hide %1 Toolbar").arg( tb->windowTitle() ));
+	  act->setCheckedState(i18n("Hide %1 Toolbar", tb->windowTitle() ));
 	  connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
           act->setChecked ( !tb->isHidden() );
           d->m_toolbarList.append( act );
@@ -1604,7 +1604,7 @@ void KoMainWindow::slotEmailFile()
     else
     {
         fileURL = rootDocument()->url().url();
-        theSubject = i18n("Document - %1").arg(rootDocument()->url().fileName(false));
+        theSubject = i18n("Document - %1", rootDocument()->url().fileName(false));
         urls.append( fileURL );
     }
 

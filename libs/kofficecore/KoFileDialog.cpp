@@ -90,9 +90,9 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
     int idx = 1; // 0 is the native format
 
     if ( addUncompressed )
-        filterWidget->setItemText( idx++, i18n("%1 (Uncompressed XML Files)").arg( type->comment() ) );
+        filterWidget->setItemText( idx++, i18n("%1 (Uncompressed XML Files)", type->comment() ) );
     if ( addFlatXML )
-        filterWidget->setItemText( idx++, i18n("%1 (Flat XML File)").arg( type->comment() ) );
+        filterWidget->setItemText( idx++, i18n("%1 (Flat XML File)", type->comment() ) );
     // if you add an entry here, update numSpecialEntries above and specialEntrySelected() below
 
     // For native format...
@@ -111,7 +111,7 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
         KMimeType::Ptr mime = KMimeType::mimeType( tmpString );
         compatString = mime->property ("X-KDE-CompatibleApplication").toString ();
         if (!compatString.isEmpty ())
-            filterWidget->setItemText( i, i18n ("%1 (%2 Compatible)").arg (mime->comment ()).arg (compatString) );
+            filterWidget->setItemText( i, i18n ("%1 (%2 Compatible)", mime->comment (), compatString) );
 	i++;
     }
 }

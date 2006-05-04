@@ -246,7 +246,7 @@ bool KoDocumentChild::createAndLoadDocument( KoStore* store, bool doOpenURL, boo
             KMimeType::Ptr mime = KMimeType::mimeType( mimeType );
             if ( mime->name() != KMimeType::defaultMimeType() )
                 mimeName = mime->comment();
-            d->m_doc->setProperty( "unavailReason", i18n( "No handler found for %1" ).arg( mimeName ) );
+            d->m_doc->setProperty( "unavailReason", i18n( "No handler found for %1", mimeName ) );
         }
         return res;
     }
@@ -257,7 +257,7 @@ bool KoDocumentChild::createAndLoadDocument( KoStore* store, bool doOpenURL, boo
         bool res = createUnavailDocument( store, true, mimeType );
         if ( res )
         {
-            d->m_doc->setProperty( "unavailReason", i18n( "Error loading %1:\n%2" ).arg( e.service()->library(), errorMsg ) );
+            d->m_doc->setProperty( "unavailReason", i18n( "Error loading %1:\n%2", e.service()->library(), errorMsg ) );
     }
         return res;
     }
@@ -299,7 +299,7 @@ bool KoDocumentChild::finishLoadingDocument( KoStore* store, KoDocument* doc, bo
                 QApplication::restoreOverrideCursor();
                 // For security reasons we need to ask confirmation if the url is remote
                 int result = KMessageBox::warningYesNoCancel(
-                    0, i18n( "This document contains an external link to a remote document\n%1").arg(m_tmpURL),
+                    0, i18n( "This document contains an external link to a remote document\n%1", m_tmpURL),
                     i18n( "Confirmation Required" ), i18n( "Download" ), i18n( "Skip" ) );
 
                 if ( result == KMessageBox::Cancel )
@@ -328,9 +328,9 @@ bool KoDocumentChild::finishLoadingDocument( KoStore* store, KoDocument* doc, bo
                 d->m_doc->setProperty( "realURL", tmpURL ); // so that it gets saved correctly
                 d->m_doc->setStoreInternal( true );
                 if ( internalURL )
-                    d->m_doc->setProperty( "unavailReason", i18n( "Could not load embedded object:\n%1" ).arg( errorMessage ) );
+                    d->m_doc->setProperty( "unavailReason", i18n( "Could not load embedded object:\n%1", errorMessage ) );
                 else
-                    d->m_doc->setProperty( "unavailReason", i18n( "Could not load external document %1:\n%2" ).arg( tmpURL, errorMessage ) );
+                    d->m_doc->setProperty( "unavailReason", i18n( "Could not load external document %1:\n%2", tmpURL, errorMessage ) );
             }
             return res;
         }

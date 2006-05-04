@@ -589,7 +589,7 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
 
 void KoFilterManager::importErrorHelper( const QString& mimeType, const bool suppressDialog )
 {
-    QString tmp = i18n("Could not import file of type\n%1").arg( mimeType );
+    QString tmp = i18n("Could not import file of type\n%1", mimeType );
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
     if (!suppressDialog) KMessageBox::error( 0L, tmp, i18n("Missing Import Filter") );
 }

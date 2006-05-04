@@ -49,8 +49,6 @@ if (SHOULD_BUILD_KRITA)
         message(STATUS "   hardware accelerated rendering.")
     endif(NOT HAVE_OPENGL)
 
-    macro_optional_find_package(X11)
-
     if(X11_Xinput_FOUND)
         set(HAVE_XINPUTEXT 1)
         message(STATUS "Found XInput extension")

@@ -179,7 +179,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts").arg(instance->aboutData()->programName() ) );
+    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",instance->aboutData()->programName() ) );
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOK(false);
@@ -289,8 +289,7 @@ void KoTemplateCreateDia::slotOk() {
         KoTemplate *existingTemplate=group->find(d->m_name->text());
         if(existingTemplate && !existingTemplate->isHidden()) {
             if(KMessageBox::warningYesNo(this, i18n("Do you really want to overwrite"
-                                                    " the existing '%1' template?").
-                                         arg(existingTemplate->name()))==KMessageBox::Yes)
+                                                    " the existing '%1' template?",existingTemplate->name()))==KMessageBox::Yes)
                 group->add(t, true);
             else
             {

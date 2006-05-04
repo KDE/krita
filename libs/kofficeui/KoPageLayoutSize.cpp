@@ -68,7 +68,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     else {
         QString str=KoUnit::unitDescription(unit);
 
-        QLabel *lpgUnit = new QLabel( i18n("All values are given in %1.").arg(str), this );
+        QLabel *lpgUnit = new QLabel( i18n("All values are given in %1.",str), this );
         grid1->addWidget( lpgUnit, 0, 0, Qt::AlignLeft );
     }
 

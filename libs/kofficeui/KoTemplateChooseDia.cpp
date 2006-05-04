@@ -91,7 +91,7 @@ class MyFileDialog : public KFileDialog
                 ok = QFile::exists( url.path() );
                 if ( !ok ) {
                     // Maybe offer to create a new document with that name? (see alos KoDocument::openFile)
-                    KMessageBox::error( this, i18n( "The file %1 does not exist." ).arg( url.path() ) );
+                    KMessageBox::error( this, i18n( "The file %1 does not exist." ,url.path() ) );
                 }
             }
             return ok;
@@ -475,7 +475,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     currentChanged(itemtoselect);
 
     // setup the checkbox
-    QString translatedstring = i18n("Always start %1 with the selected template").arg(d->m_nativeName);
+    QString translatedstring = i18n("Always start %1 with the selected template",d->m_nativeName);
 
     d->m_nodiag = new QCheckBox ( translatedstring , widgetbase);
     layout->addWidget(d->m_nodiag, 2, 0);
@@ -710,7 +710,7 @@ bool KoTemplateChooseDia::collectInfo()
 		KUrl url = item->url();
 		if(url.isLocalFile() && !QFile::exists(url.path()))
 		{
-			KMessageBox::error( this, i18n( "The file %1 does not exist." ).arg( url.path() ) );
+			KMessageBox::error( this, i18n( "The file %1 does not exist." , url.path() ) );
 			return false;
 		}
 		d->m_fullTemplateName = url.url();

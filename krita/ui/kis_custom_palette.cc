@@ -135,8 +135,7 @@ void KisCustomPalette::slotAddPredefined() {
     }
 
     if (!m_palette->save()) {
-        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.")
-                                   .arg(m_palette->filename()), i18n("Palette"));
+        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
         return;
     }
 

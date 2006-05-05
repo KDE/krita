@@ -513,11 +513,11 @@ void KisView::setupRulers()
 void KisView::updateStatusBarZoomLabel ()
 {
     if (zoom() < 1 - EPSILON) {
-        m_statusBarZoomLabel->setText(i18n("Zoom %1%").arg(zoom() * 100, 0, 'g', 4));
+        m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom() * 100, 0, 'g', 4));
     } else {
-        m_statusBarZoomLabel->setText(i18n("Zoom %1%").arg(zoom() * 100, 0, 'f', 0));
+        m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom() * 100, 0, 'f', 0));
     }
-    m_statusBarZoomLabel->setMaximumWidth(m_statusBarZoomLabel->fontMetrics().width(i18n("Zoom %1%").arg("0.8888  ")));
+    m_statusBarZoomLabel->setMaximumWidth(m_statusBarZoomLabel->fontMetrics().width(i18n("Zoom %1%",QString("0.8888  "))));
 }
 
 void KisView::updateStatusBarSelectionLabel()
@@ -532,7 +532,7 @@ void KisView::updateStatusBarSelectionLabel()
         if (dev) {
             if (dev->hasSelection()) {
                 QRect r = dev->selection()->selectedExactRect();
-                m_statusBarSelectionLabel->setText( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4").arg(r.x()).arg(r.y()).arg( r.width()).arg( r.height()));
+                m_statusBarSelectionLabel->setText( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
                 return;
             }
         }
@@ -2971,7 +2971,7 @@ void KisView::layerDuplicate()
         return;
 
     KisLayerSP dup = active->clone();
-    dup->setName(QString(i18n("Duplicate of '%1'")).arg(active->name()));
+    dup->setName(i18n("Duplicate of '%1'",active->name()));
     img->addLayer(dup, active->parent(), active);
     if (dup) {
         img->activate( dup );

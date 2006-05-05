@@ -53,7 +53,7 @@ Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
     PaintLayer* src = (PaintLayer*)args->item(0);
     if(!m_filter->workWith( src->paintLayer()->paintDevice()->colorSpace()))
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("process") ) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("process")) ) );
     }
     QRect rect;
     if( args->count() >1)

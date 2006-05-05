@@ -59,7 +59,7 @@ KisTool::~KisTool()
 QWidget* KisTool::createOptionWidget(QWidget* parent)
 {
 
-    d->optionWidget = new QLabel(i18n("No options for %1.").arg(d->uiname), parent);
+    d->optionWidget = new QLabel(i18n("No options for %1.",d->uiname), parent);
     d->optionWidget->setWindowTitle(d->uiname);
     d->optionWidget->setAlignment(Qt::AlignCenter);
     return d->optionWidget;

@@ -423,7 +423,7 @@ qint32 TabletSettingsTab::DeviceSettings::serialNumberAxis() const
 
 TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const QString& deviceName, DeviceSettings settings, 
                                                                           QWidget *parent, const char *name)
-    : super(parent, i18n("Configure %1").arg(deviceName), Ok | Cancel)
+    : super(parent, i18n("Configure %1",deviceName), Ok | Cancel)
 {
     setObjectName(name);
 

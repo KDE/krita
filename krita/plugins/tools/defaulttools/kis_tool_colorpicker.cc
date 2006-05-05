@@ -197,7 +197,7 @@ void KisToolColorPicker::displayPickedColor()
             QString channelValueText;
 
             if (m_normaliseValues) {
-                channelValueText = QString(i18n("%1%")).arg(m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), i));
+                channelValueText = i18n("%1%").arg(m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), i));
             } else {
                 channelValueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), i);
             }

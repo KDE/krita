@@ -2917,7 +2917,7 @@ void KisView::layerDuplicate()
         return;
 
     KisLayerSP dup = active->clone();
-    dup->setName(QString(i18n("Duplicate of '%1'")).arg(active->name()));
+    dup->setName(i18n("Duplicate of '%1'").arg(active->name()));
     img->addLayer(dup, active->parent().data(), active);
     if (dup) {
         img->activate( dup );

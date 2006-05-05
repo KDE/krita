@@ -1221,11 +1221,11 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
         if ( !parag->isValid() )
             parag->format();
 
-            QRect pr( parag->pixelRect( zoomHandler ) );
-            pr.setLeft( 0 );
-            pr.setWidth( QWIDGETSIZE_MAX );
-            // The cliprect is checked in layout units, in KoTextParag::paint
-            QRect crect_lu( parag->rect() );
+        QRect pr( parag->pixelRect( zoomHandler ) );
+        pr.setLeft( 0 );
+        pr.setWidth( QWIDGETSIZE_MAX );
+        // The cliprect is checked in layout units, in KoTextParag::paint
+        QRect crect_lu( parag->rect() );
 
         if ( !cr.isNull() && !cr.intersects( pr ) ) {
             parag = parag->next();

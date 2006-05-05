@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2006 David Faure <faure@kde.org>
-   Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
+   Copyright (C) 2005-2006 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1398,21 +1398,25 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert(zh);
 
+    QRect paraRect = pixelRect( zh );
+
+    // Find left margin size, first line offset and right margin in pixels
+    int leftMarginPix = zh->layoutUnitToPixelX( leftMargin() );
+    int firstLineOffset = zh->layoutUnitToPixelX( firstLineMargin() );
+
+    // The furthest left and right x-coords of the paragraph,
+    // including the bullet/counter, but not the borders.
+    int leftExtent = qMin ( leftMarginPix,  leftMarginPix + firstLineOffset );
+    int rightExtent = paraRect.width() - zh->layoutUnitToPixelX( rightMargin() );
+
     // Draw the paragraph background color
     if ( backgroundColor().isValid() )
     {
-        QRect paraRect = pixelRect( zh );
-        // Find left margin size, first line offset and right margin in pixels
-        int leftMarginPix = zh->layoutUnitToPixelX( leftMargin() );
-        int firstLineOffset = zh->layoutUnitToPixelX( firstLineMargin() );
-        int backgroundRight = paraRect.width() - zh->layoutUnitToPixelX( rightMargin() );
-
         // Render background from either left margin indent, or first line indent,
         // whichever is nearer the left.
-        int backgroundLeft = qMin ( leftMarginPix,  leftMarginPix + firstLineOffset );
-        int backgroundWidth = backgroundRight - backgroundLeft;
+        int backgroundWidth = rightExtent - leftExtent + 1;
         int backgroundHeight = pixelRect( zh ).height();
-        painter.fillRect( backgroundLeft, 0,
+        painter.fillRect( leftExtent, 0,
                           backgroundWidth, backgroundHeight,
                           backgroundColor() );
     }
@@ -1435,20 +1439,18 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     {
         bool const drawTopBorder = !prev() || !prev()->joinBorder() || prev()->bottomBorder() != bottomBorder() || prev()->topBorder() != topBorder() || prev()->leftBorder() != leftBorder() || prev()->rightBorder() != rightBorder();
         bool const drawBottomBorder = !joinBorder() || !next() || next()->bottomBorder() != bottomBorder() || next()->topBorder() != topBorder() || next()->leftBorder() != leftBorder() || next()->rightBorder() != rightBorder();
+
+        // Paragraph borders surround the paragraph and its
+        // counters/bullets, but they only touch the frame border if
+        // the paragraph margins are of non-zero length.
+        // This is what OpenOffice does (no really, it is this time).
+        //
+        // drawBorders paints outside the give rect, so for the
+        // x-coords, it just needs to know the left and right extent
+        // of the paragraph.
         QRect r;
-        // Old solution: stick to the text
-        //r.setLeft( at( 0 )->x - counterWidth() - 1 );
-        //r.setRight( rect().width() - rightMargin() - 1 );
-
-        // New solution: occupy the full width
-        // Note that this is what OpenOffice does too.
-        // For something closer to the text, we need a border feature in KoTextFormat, I guess.
-
-        // drawBorders paints outside the give rect, so we need to 'subtract' the border
-        // width on all sides.
-        r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.width(), zh, 0 ) );
-        // The +1 is because if border is 1 pixel, nothing to subtract. 2 pixels -> subtract 1.
-        r.setRight( zh->layoutUnitToPixelX(rect().width()) - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) );
+        r.setLeft( leftExtent );
+        r.setRight( rightExtent );
         r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
 
         int lastLine = lines() - 1;

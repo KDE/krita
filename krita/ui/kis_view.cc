@@ -2548,7 +2548,7 @@ void KisView::canvasGotDoubleClickEvent(KisDoubleClickEvent *e)
 
 void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
 {
-    //if(event->state() == Qt::ControlButton )
+    //if(event->state() == Qt::ControlModifier )
     //{
         if(event->delta() / 120 != 0)
         {

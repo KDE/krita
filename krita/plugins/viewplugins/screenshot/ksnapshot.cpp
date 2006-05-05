@@ -89,7 +89,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     connect( mainWidget, SIGNAL( printClicked() ), SLOT( slotPrint() ) );
 
     grabber->show();
-    grabber->grabMouse( Qt::waitCursor );
+    grabber->grabMouse( Qt::WaitCursor );
     
     snapshot = QPixmap::grabWindow( QX11Info::appRootWindow() );
     updatePreview();
@@ -202,7 +202,7 @@ void KSnapshot::slotGrab()
             grabTimer.start( mainWidget->delay() * 1000, true );
         else {
             grabber->show();
-            grabber->grabMouse( Qt::crossCursor );
+            grabber->grabMouse( Qt::CrossCursor );
         }
     }
 }

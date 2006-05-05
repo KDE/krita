@@ -127,7 +127,7 @@ public:
         }
     }
 
-    Q3PtrList<KoView> m_views;
+    QList<KoView*> m_views;
     Q3PtrList<KoDocumentChild> m_children;
     Q3PtrList<KoMainWindow> m_shells;
     Q3ValueList<QDomDocument> m_viewBuildDocuments;
@@ -288,9 +288,8 @@ KoDocument::~KoDocument()
 
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
-    Q3PtrListIterator<KoView> vIt( d->m_views );
-    for (; vIt.current(); ++vIt )
-        vIt.current()->setDocumentDeleted();
+    foreach ( KoView* view, d->m_views )
+        view->setDocumentDeleted();
 
     delete d->m_startUpWidget;
     d->m_startUpWidget = 0;
@@ -572,7 +571,7 @@ KAction *KoDocument::action( const QDomElement &element ) const
     Q_ASSERT( d->m_bSingleViewMode );
     // Then look in the first view (this is for the single view mode)
     if ( !d->m_views.isEmpty() )
-        return d->m_views.getFirst()->action( element );
+        return d->m_views.first()->action( element );
     else
         return 0L;
 }
@@ -585,14 +584,14 @@ QDomDocument KoDocument::domDocument() const
     if ( d->m_views.isEmpty() )
         return QDomDocument();
     else
-        return d->m_views.getFirst()->domDocument();
+        return d->m_views.first()->domDocument();
 }
 
 void KoDocument::setManager( KParts::PartManager *manager )
 {
     KParts::ReadWritePart::setManager( manager );
     if ( d->m_bSingleViewMode && d->m_views.count() == 1 )
-        d->m_views.getFirst()->setPartManager( manager );
+        d->m_views.first()->setPartManager( manager );
 
     if ( manager )
     {
@@ -607,9 +606,8 @@ void KoDocument::setReadWrite( bool readwrite )
 {
     KParts::ReadWritePart::setReadWrite( readwrite );
 
-    Q3PtrListIterator<KoView> vIt( d->m_views );
-    for (; vIt.current(); ++vIt )
-        vIt.current()->updateReadWrite( readwrite );
+    foreach ( KoView* view, d->m_views )
+        view->updateReadWrite( readwrite );
 
     Q3PtrListIterator<KoDocumentChild> dIt( d->m_children );
     for (; dIt.current(); ++dIt )
@@ -639,10 +637,10 @@ void KoDocument::addView( KoView *view )
 
 void KoDocument::removeView( KoView *view )
 {
-    d->m_views.removeRef( view );
+    d->m_views.removeAll( view );
 }
 
-const Q3PtrList<KoView>& KoDocument::views() const
+const QList<KoView*>& KoDocument::views() const
 {
     return d->m_views;
 }
@@ -696,15 +694,14 @@ const Q3PtrList<KoDocumentChild>& KoDocument::children() const
 
 KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
 {
-    Q3PtrListIterator<KoView> it( d->m_views );
-    for (; it.current(); ++it )
-        if ( static_cast<QWidget *>(it.current()) == widget )
+    foreach ( KoView* view, d->m_views )
+        if ( static_cast<QWidget *>(view) == widget )
         {
-            QPoint canvasPos( it.current()->canvas()->mapFromGlobal( globalPos ) );
-            canvasPos.rx() += it.current()->canvasXOffset();
-            canvasPos.ry() += it.current()->canvasYOffset();
+            QPoint canvasPos( view->canvas()->mapFromGlobal( globalPos ) );
+            canvasPos.rx() += view->canvasXOffset();
+            canvasPos.ry() += view->canvasYOffset();
 
-            KParts::Part *part = it.current()->hitTest( canvasPos );
+            KParts::Part *part = view->hitTest( canvasPos );
             if ( part )
                 return part;
         }
@@ -744,10 +741,9 @@ KoDocumentInfo *KoDocument::documentInfo() const
 
 void KoDocument::setViewBuildDocument( KoView *view, const QDomDocument &doc )
 {
-    if ( d->m_views.find( view ) == -1 )
+    int viewIdx = d->m_views.indexOf( view );
+    if ( viewIdx == -1 )
         return;
-
-    int viewIdx = d->m_views.at();
 
     if ( d->m_viewBuildDocuments.count() == viewIdx )
         d->m_viewBuildDocuments.append( doc );
@@ -759,10 +755,9 @@ QDomDocument KoDocument::viewBuildDocument( KoView *view )
 {
     QDomDocument res;
 
-    if ( d->m_views.find( view ) == -1 )
+    int viewIdx = d->m_views.indexOf( view );
+    if ( viewIdx == -1 )
         return res;
-
-    int viewIdx = d->m_views.at();
 
     if ( viewIdx >= d->m_viewBuildDocuments.count() )
         return res;

@@ -79,7 +79,7 @@ int KoDocumentIface::viewCount()
 
 DCOPRef KoDocumentIface::view( int idx )
 {
-  Q3PtrList<KoView> views = m_pDoc->views();
+  QList<KoView*> views = m_pDoc->views();
   KoView *v = views.at( idx );
   if ( !v )
     return DCOPRef();

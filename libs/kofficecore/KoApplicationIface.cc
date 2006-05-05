@@ -77,9 +77,8 @@ Q3ValueList<DCOPRef> KoApplicationIface::getViews()
       Q3PtrListIterator<KoDocument> it( *documents );
       for (; it.current(); ++it )
       {
-          Q3PtrListIterator<KoView> itview( it.current()->views() );
-          for ( ; itview.current(); ++itview )
-              lst.append( DCOPRef( kapp->dcopClient()->appId(), itview.current()->dcopObject()->objId() ) );
+          foreach ( KoView* view, it.current()->views() )
+              lst.append( DCOPRef( kapp->dcopClient()->appId(), view->dcopObject()->objId() ) );
       }
     }
     return lst;

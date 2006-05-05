@@ -23,6 +23,7 @@
 #define __ko_document_h__
 
 class KoTextDocument;
+#include <QList>
 #include <QMatrix>
 //Added by qt3to4:
 #include <QPixmap>
@@ -349,7 +350,7 @@ public:
     /**
      * @return a list of views this document is displayed in
      */
-    const Q3PtrList<KoView> & views() const;
+    const QList<KoView*> & views() const;
 
     /**
      * @return number of views this document is displayed in

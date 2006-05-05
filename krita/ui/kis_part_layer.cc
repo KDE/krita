@@ -85,7 +85,7 @@ void KisPartLayerImpl::childActivated(KoDocumentChild* child)
         QRect rect = extent();
         m_activated = true;
         setDirty(rect);
-        Q3PtrList<KoView> views = child->parentDocument()->views();
+        QList<KoView*> views = child->parentDocument()->views();
         Q_ASSERT(views.count());
         // XXX iterate over views
         connect(views.at(0), SIGNAL(activated(bool)),
@@ -99,7 +99,7 @@ void KisPartLayerImpl::childDeactivated(bool activated)
     // We probably changed, notify the image that it needs to repaint where we currently updated
     // We use the original geometry
     if (m_activated && !activated /* no clue, but debugging suggests it is false here */) {
-        Q3PtrList<KoView> views = m_doc->parentDocument()->views();
+        QList<KoView*> views = m_doc->parentDocument()->views();
         Q_ASSERT(views.count());
         views.at(0)->disconnect(SIGNAL(activated(bool)));
         m_activated = false;

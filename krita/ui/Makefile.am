@@ -44,18 +44,18 @@ libkritaui_la_SOURCES = kis_histogram_view.cc imageviewer.cc kcurve.cc \
 
 noinst_HEADERS = kis_aboutdata.h imageviewer.h layerlist.h kcurve.h \
 		kis_autobrush.h kis_autogradient.h kis_birdeye_box.h kis_brush_chooser.h \
-		kis_button_event.h kis_button_press_event.h kis_button_release_event.h kis_canvas.h \
+		kis_canvas.h \
 		kis_clipboard.h kis_controlframe.h kis_dlg_apply_profile.h kis_dlg_image_properties.h \
 		kis_dlg_layer_properties.h kis_dlg_new_layer.h kis_dlg_preferences.h \
-		kis_event.h kis_factory.h kis_label_cursor_pos.h kis_label_progress.h \
+		kis_factory.h kis_label_cursor_pos.h kis_label_progress.h \
 		kis_part_layer.h kis_pattern_chooser.h kis_resource_mediator.h kis_resourceserver.h \
 		kis_ruler.h kis_selection_manager.h kis_selection_options.h kis_view_iface.h \
 		kis_custom_brush.h kis_custom_pattern.h kis_custom_image_widget.h \
 		kis_dlg_adjustment_layer.h kis_grid_manager.h kis_dlg_adj_layer_props.h squeezedcombobox.h
 
-include_HEADERS = kis_cmb_composite.h kis_cmb_idlist.h kis_color_cup.h kis_config.h \
+include_HEADERS = kis_button_event.h kis_button_press_event.h kis_button_release_event.h kis_canvas_painter.h kis_cmb_composite.h kis_cmb_idlist.h kis_color_cup.h kis_config.h \
 		kis_cursor.h kis_doc.h kis_doc_iface.h \
-		kis_double_click_event.h kis_double_widget.h kis_filter_manager.h \
+		kis_double_click_event.h kis_double_widget.h kis_event.h kis_filter_manager.h \
 		kis_gradient_chooser.h kis_gradient_slider_widget.h kis_histogram_view.h kis_icon_item.h \
 		kis_iconwidget.h kis_itemchooser.h \
 		kis_label_zoom.h kis_int_spinbox.h kis_layerbox.h kis_layerlist.h kis_matrix_widget.ui.h kis_move_event.h \
@@ -66,7 +66,7 @@ include_HEADERS = kis_cmb_composite.h kis_cmb_idlist.h kis_color_cup.h kis_confi
 		kis_tool_dummy.h kis_tool_manager.h kis_tool_types.h  kis_tool_registry.h kis_view.h \
 		kis_tool_factory.h \
 		kobirdeyepanel.h \
-		kis_filters_listview.h kis_input_device.h
+		kis_filters_listview.h kis_input_device.h kis_opengl_image_context.h
 
 METASOURCES = AUTO
 

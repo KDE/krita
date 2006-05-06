@@ -40,7 +40,7 @@ include_HEADERS = kis_adjustment_layer.h kis_alpha_mask.h \
 	kis_paint_device_iface.h kis_paint_device.h kis_painter.h kis_paintop.h kis_paintop_registry.h \
 	kis_palette.h kis_pattern.h kis_point.h kis_rect.h kis_resource.h kis_selection.h \
 	kis_transaction.h kis_types.h kis_vec.h kis_filter_config_widget.h \
-	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h
+	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h kis_layer_visitor.h kis_paint_layer.h
 
 libkritaimage_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)
 libkritaimage_la_LIBADD = ../sdk/libkritasdk.la ../kritacolor/libkritacolor.la tiles/libkritatile.la $(OPENEXR_LIBS) $(LCMS_LIBS) $(LIB_KOFFICECORE) $(LIB_KOPAINTER) $(LIB_KDECORE) $(LIB_QT) $(OPENEXR_LIBS) 

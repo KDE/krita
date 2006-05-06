@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritasubstrate" version="1">
+<MenuBar>
+    <Menu name="Image"><text>Image</text>
+	<Action name="substrate"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

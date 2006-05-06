@@ -342,9 +342,9 @@ KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
                                 3, 256, 0) {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KisChannelInfo(i18n("R"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(255,0,0)));
-    m_channelsList.append(new KisChannelInfo(i18n("G"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,255,0)));
-    m_channelsList.append(new KisChannelInfo(i18n("B"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,0,255)));
+    m_channelsList.append(new KisChannelInfo(i18n("R"), i18n("R"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(255,0,0)));
+    m_channelsList.append(new KisChannelInfo(i18n("G"), i18n("G"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,255,0)));
+    m_channelsList.append(new KisChannelInfo(i18n("B"), i18n("B"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,0,255)));
 }
 
 QValueVector<KisChannelInfo *> KisGenericRGBHistogramProducer::channels() {
@@ -407,9 +407,9 @@ KisGenericLabHistogramProducer::KisGenericLabHistogramProducer()
     : KisBasicHistogramProducer(KisID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256, 0) {
     /* we set 0 as colorspace, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KisChannelInfo(i18n("L*"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-    m_channelsList.append(new KisChannelInfo(i18n("a*"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-    m_channelsList.append(new KisChannelInfo(i18n("b*"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channelsList.append(new KisChannelInfo(i18n("L*"), i18n("L"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channelsList.append(new KisChannelInfo(i18n("a*"), i18n("a"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channelsList.append(new KisChannelInfo(i18n("b*"), i18n("b"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
 
     if (!m_labCs) {
         KisProfile *labProfile = new KisProfile(cmsCreateLabProfile(NULL));

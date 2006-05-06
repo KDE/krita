@@ -46,8 +46,8 @@ namespace {
 KisGrayColorSpace::KisGrayColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
     KisU8BaseColorSpace(KisID("GRAYA", i18n("Grayscale")), TYPE_GRAYA_8, icSigGrayData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Gray"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 1, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Gray"), i18n("G"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), i18n("A"), 1, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
 
     m_alphaPos = PIXEL_GRAY_ALPHA;
 

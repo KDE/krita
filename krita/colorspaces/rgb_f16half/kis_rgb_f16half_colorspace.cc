@@ -48,10 +48,10 @@ namespace {
 KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
     KisF16HalfBaseColorSpace(KisID("RGBAF16HALF", i18n("RGB (16-bit float/channel)")), RGBAF16HALF_LCMS_TYPE, icSigRgbData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(half), KisChannelInfo::ALPHA, KisChannelInfo::FLOAT16, sizeof(half)));
+    m_channels.push_back(new KisChannelInfo(i18n("Red"), i18n("R"), PIXEL_RED * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
+    m_channels.push_back(new KisChannelInfo(i18n("Green"), i18n("G"), PIXEL_GREEN * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
+    m_channels.push_back(new KisChannelInfo(i18n("Blue"), i18n("B"), PIXEL_BLUE * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), i18n("A"), PIXEL_ALPHA * sizeof(half), KisChannelInfo::ALPHA, KisChannelInfo::FLOAT16, sizeof(half)));
 
     //cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     //setDefaultProfile( new KisProfile(hProfile, RGBAF16HALF_LCMS_TYPE) );

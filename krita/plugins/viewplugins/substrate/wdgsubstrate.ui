@@ -1,0 +1,224 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgSubstrate</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Form1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>478</width>
+            <height>358</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0">
+            <property name="name">
+                <cstring>grpCustom</cstring>
+            </property>
+            <property name="title">
+                <string>Custom canvas definition</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout3</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
+                            <item>
+                                <property name="text">
+                                    <string>Custom</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>cmbPredefinedCanvases</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KColorButton" row="2" column="2">
+                            <property name="name">
+                                <cstring>bnBackground</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Save Custom Substrate As:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>lblPredefined</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Pre-defined canvas types:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>cmbPredefinedCanvases</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>lblColor</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Basic Color:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>bnBackground</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>lineEdit1</cstring>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout2</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QSlider" row="3" column="1">
+                            <property name="name">
+                                <cstring>slAbsorbency</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                        </widget>
+                        <widget class="QSlider" row="2" column="1">
+                            <property name="name">
+                                <cstring>slFiber</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="2">
+                            <property name="name">
+                                <cstring>textLabel9</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Grainy</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>lblSmoothness</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Smooth:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>slSlippery</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="0">
+                            <property name="name">
+                                <cstring>lblAbsorbency</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Water repelllant:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>slAbsorbency</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSlider" row="0" column="1">
+                            <property name="name">
+                                <cstring>slSlippery</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>lblHeight</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Flat:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>slHeight</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0">
+                            <property name="name">
+                                <cstring>lblFiber</cstring>
+                            </property>
+                            <property name="text">
+                                <string>fine &amp;Fiber:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>slFiber</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="2">
+                            <property name="name">
+                                <cstring>lblRough</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Rough</string>
+                            </property>
+                        </widget>
+                        <widget class="QSlider" row="1" column="1">
+                            <property name="name">
+                                <cstring>slHeight</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="2">
+                            <property name="name">
+                                <cstring>textLabel11</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Absorbent</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="2">
+                            <property name="name">
+                                <cstring>textLabel10</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Coarse</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+</includehints>
+</UI>

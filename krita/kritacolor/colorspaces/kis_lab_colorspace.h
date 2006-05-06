@@ -34,6 +34,20 @@ public:
 
 public:
 
+    /**
+     * Return a COPY of the provided data. This method is provided to provide consistency,
+     * but you really don't want to be calling it.
+     */
+    virtual Q_UINT8 * toLabA16(const Q_UINT8 * data, const Q_UINT32 nPixels) const;
+
+    /**
+     * Return a COPY of the provided data. This method is provided for consistency,
+     * but you really don't want to call it.
+     */
+    virtual Q_UINT8 * fromLabA16(const Q_UINT8 * labData, const Q_UINT32 nPixels) const;
+
+
+
     virtual bool willDegrade(ColorSpaceIndependence independence)
         {
             if (independence == TO_RGBA8) 

@@ -3,6 +3,7 @@ SCRIPTINGDIR = scripting
 endif
 
 SUBDIRS = \
+    substrate \
     performancetest \
     colorrange \
     colorspaceconversion \

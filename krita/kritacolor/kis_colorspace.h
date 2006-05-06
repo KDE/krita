@@ -206,6 +206,7 @@ public:
      */
     virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile = 0) = 0;
 
+
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
      * and converts the contents to a QColor, using the given profile as a source
@@ -248,10 +249,35 @@ public:
                                    float exposure = 0.0f) = 0;
 
 
+    
+    /**
+     * Convert the specified data to Lab. This functions allocates the ncessary memory:
+     * it is your responsibility to delete[] it. If this colorspace is not able to 
+     * convert to lab, the function returns 0 (a recipe for a crash, so check it.)
+     * Note that the default conversion profile is used; converting back using the next
+     * function should be safe.
+     *
+     * @param data the source data
+     * @param nPixels the number of source pixels
+     * @return a pointer to a new array containing the lab pixels
+     */
+    virtual Q_UINT8 * toLabA16(const Q_UINT8 * /*data*/, const Q_UINT32 /*nPixels*/) const { return 0; }
+
+    /**
+     * Convert a byte array of nPixels pixels * labData to the current colorspace.
+     * Allocates the necessary memory and expects YOU to delete[] it. If this
+     * colorspaxe cannot convert from lab, the function returns 0 (a recipe for a 
+     * crash, so check it.)
+     *
+     * @param labData the pixels in 16 bit lab format
+     * @param nPxiels the number of pixels in the array
+     * @return a pointer to a new array containing the pixels in this colorspace 
+     */
+    virtual Q_UINT8 * fromLabA16(const Q_UINT8 * /*labData*/, const Q_UINT32 /*nPixels*/) const { return 0; }
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
-     * and put the converted bytes into the prepared byte array *dst.
+     * and put the converted bytes into the prepared byte array *dst. 
      *
      * Returns false if the conversion failed, true if it succeeded
      */

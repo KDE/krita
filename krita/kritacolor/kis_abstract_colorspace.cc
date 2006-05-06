@@ -33,7 +33,7 @@
 class KisColorAdjustmentImpl : public KisColorAdjustment
 {
     public:
-        
+
     KisColorAdjustmentImpl() : KisColorAdjustment()
         {
             csProfile = 0;
@@ -42,7 +42,7 @@ class KisColorAdjustmentImpl : public KisColorAdjustment
             profiles[1] = 0;
             profiles[2] = 0;
         };
-    
+
     ~KisColorAdjustmentImpl() {
 
         if (transform)
@@ -177,6 +177,31 @@ void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opa
     *opacity = getAlpha(src);
 }
 
+Q_UINT8 * KisAbstractColorSpace::toLabA16(const Q_UINT8 * data, const Q_UINT32 nPixels) const
+{
+    if ( m_defaultToLab == 0 ) return 0;
+
+    // 4 channels: labA, 2 bytes per lab channel
+    Q_UINT8 * pixels = new Q_UINT8[nPixels * 2 * 4];
+
+    cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8 *>( data ), pixels, nPixels );
+
+    return pixels;
+}
+
+Q_UINT8 * KisAbstractColorSpace::fromLabA16(const Q_UINT8 * labData, const Q_UINT32 nPixels) const
+{
+    if ( m_defaultFromLab == 0 ) return 0;
+
+    Q_UINT8 * pixels = new Q_UINT8[nPixels * pixelSize()];
+
+    cmsDoTransform( m_defaultFromLab,  const_cast<Q_UINT8 *>( labData ), pixels,  nPixels );
+
+    return pixels;
+
+}
+
+
 void KisAbstractColorSpace::getSingleChannelPixel(Q_UINT8 *dstPixel, const Q_UINT8 *srcPixel, Q_UINT32 channelIndex)
 {
     if (channelIndex < m_channels.count()) {
@@ -209,7 +234,7 @@ bool KisAbstractColorSpace::convertPixelsTo(const Q_UINT8 * src,
     Q_INT32 dstPixelSize = dstColorSpace->pixelSize();
 
     if (m_lastUsedTransform != 0 && m_lastUsedDstColorSpace != 0) {
-        if (dstColorSpace->colorSpaceType() == m_lastUsedDstColorSpace->colorSpaceType() && 
+        if (dstColorSpace->colorSpaceType() == m_lastUsedDstColorSpace->colorSpaceType() &&
             dstColorSpace->getProfile() == m_lastUsedDstColorSpace->getProfile()) {
             tf = m_lastUsedTransform;
         }
@@ -332,7 +357,7 @@ KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()
     adj->profiles[0] = m_profile->profile();
     adj->profiles[2] = m_profile->profile();
     adj->csProfile = m_profile->profile();
-    
+
      LPLUT Lut;
      BCHSWADJUSTS bchsw;
 

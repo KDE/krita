@@ -43,10 +43,10 @@ KisXyzColorSpace::KisXyzColorSpace(KisColorSpaceFactoryRegistry * parent,
                                    KisProfile *p) :
     KisU16BaseColorSpace(KisID("XYZA", i18n("XYZ/Alpha")), (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigCmykData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("X"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-    m_channels.push_back(new KisChannelInfo(i18n("Y"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-    m_channels.push_back(new KisChannelInfo(i18n("Z"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("X"), i18n("X"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Y"), i18n("Y"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Z"), i18n("Z"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), i18n("A"), 4, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
 
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 

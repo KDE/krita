@@ -40,11 +40,11 @@ namespace cmyk {
 KisCmykColorSpace::KisCmykColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
     KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK5_8, icSigCmykData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::cyan));
-    m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::magenta));
-    m_channels.push_back(new KisChannelInfo(i18n("Yellow"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::yellow));
-    m_channels.push_back(new KisChannelInfo(i18n("Black"), 3, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::black));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, KisChannelInfo::ALPHA, KisChannelInfo::UINT8, 1, Qt::white));
+    m_channels.push_back(new KisChannelInfo(i18n("Cyan"), i18n("C"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::cyan));
+    m_channels.push_back(new KisChannelInfo(i18n("Magenta"), i18n("M"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::magenta));
+    m_channels.push_back(new KisChannelInfo(i18n("Yellow"), i18n("Y"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::yellow));
+    m_channels.push_back(new KisChannelInfo(i18n("Black"), i18n("K"), 3, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::black));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), i18n("A"), 4, KisChannelInfo::ALPHA, KisChannelInfo::UINT8, 1, Qt::white));
 
     m_alphaPos = PIXEL_CMYK_ALPHA;
 

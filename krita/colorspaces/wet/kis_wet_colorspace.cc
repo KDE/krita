@@ -130,23 +130,23 @@ KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
         << i18n("Ivory Black")
         << i18n("Pure Water");
 
-    m_channels.push_back(new KisChannelInfo(i18n("Red Concentration"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Red"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Green Concentration"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Green"), 3, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue Concentration"), 4, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Blue"), 5, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Water Volume"), 6, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Paper Height"), 7, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Red Concentration"), "Rc", 0, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Myth Red"), "Rm", 1, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Green Concentration"), "Gc", 2, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Myth Green"), "Gm", 3, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Blue Concentration"), "Bc", 4, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Myth Blue"), "Bm", 5, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Water Volume"), "W", 6, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Paper Height"), "H", 7, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
 
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Red Concentration"), 8, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Red"), 9, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Green Concentration"), 10, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Green"), 11, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Blue Concentration"), 12, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Blue"), 13, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Water Volume"), 14, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Paper Height"), 15, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Red Concentration"), "Rc", 8, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Red"), "Rm", 9, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Green Concentration"), "Gc", 10, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Green"), "Gm", 11, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Blue Concentration"), "Bc", 12, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Blue"), "Bm", 13, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Water Volume"), "W", 14, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
+    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Paper Height"), "H", 15, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
 
     // Store the hue; we'll pick the paintbox color that closest to the given QColor's hue.
     m_conversionMap[getH(240, 32, 160)] = m_paintbox[0]; // Quinacridone Rose

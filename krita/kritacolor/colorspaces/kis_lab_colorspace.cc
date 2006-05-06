@@ -1,4 +1,4 @@
-/*
+ /*
  *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
@@ -39,10 +39,10 @@ KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
          icSigLabData, parent, p)
 
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(100,100,100)));
-    m_channels.push_back(new KisChannelInfo(i18n("a*"), CHANNEL_A * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(150,150,150)));
-    m_channels.push_back(new KisChannelInfo(i18n("b*"), CHANNEL_B * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(200,200,200)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), i18n("L"), CHANNEL_L * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(100,100,100)));
+    m_channels.push_back(new KisChannelInfo(i18n("a*"), i18n("a"), CHANNEL_A * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(150,150,150)));
+    m_channels.push_back(new KisChannelInfo(i18n("b*"), i18n("b"), CHANNEL_B * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16), QColor(200,200,200)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), i18n("A"), CHANNEL_ALPHA * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
 
     m_alphaPos = CHANNEL_ALPHA * sizeof(Q_UINT16);
 
@@ -51,6 +51,20 @@ KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
 
 KisLabColorSpace::~KisLabColorSpace()
 {
+}
+
+Q_UINT8 * KisLabColorSpace::toLabA16(const Q_UINT8 * data, const Q_UINT32 nPixels) const
+{
+    Q_UINT8 * pixels = new Q_UINT8[nPixels * pixelSize()];
+    memcpy( pixels,  data,  nPixels * pixelSize() );
+    return pixels;
+}
+
+Q_UINT8 * KisLabColorSpace::fromLabA16(const Q_UINT8 * labData, const Q_UINT32 nPixels) const
+{
+    Q_UINT8 * pixels = new Q_UINT8[nPixels * pixelSize()];
+    memcpy( pixels, labData,  nPixels * pixelSize() );
+    return pixels;
 }
 
 Q_UINT8 KisLabColorSpace::difference(const Q_UINT8 *src1, const Q_UINT8 *src2)

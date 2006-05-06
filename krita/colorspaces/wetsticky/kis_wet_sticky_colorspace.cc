@@ -63,26 +63,26 @@ KisWetStickyColorSpace::KisWetStickyColorSpace() :
     Q_INT32 pos = 0;
 
     // Basic representational definition
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), pos, COLOR, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), ++pos, COLOR, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), ++pos, COLOR, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), ++pos, ALPHA, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Blue"), "B", pos, COLOR, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Green"), "G", ++pos, COLOR, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Red"), "R", ++pos, COLOR, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), "A", ++pos, ALPHA, 1));
 
     // Paint definition
-    m_channels.push_back(new KisChannelInfo(i18n("Hue"), ++pos, COLOR, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Saturation"), pos+=sizeof(float) , COLOR, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), pos+=sizeof(float), COLOR, sizeof(float)));
+    m_channels.push_back(new KisChannelInfo(i18n("Hue"), "H", ++pos, COLOR, sizeof(float)));
+    m_channels.push_back(new KisChannelInfo(i18n("Saturation"), "S", pos+=sizeof(float) , COLOR, sizeof(float)));
+    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), "L", pos+=sizeof(float), COLOR, sizeof(float)));
 
-    m_channels.push_back(new KisChannelInfo(i18n("Liquid Content"), pos+=sizeof(float), SUBSTANCE, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Drying Rate"), ++pos, SUBSTANCE, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Miscibility"), ++pos, SUBSTANCE, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Liquid Content"), "Q", pos+=sizeof(float), SUBSTANCE, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Drying Rate"), "D", ++pos, SUBSTANCE, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Miscibility"), "M", ++pos, SUBSTANCE, 1));
 
     // Substrate definition
-    m_channels.push_back(new KisChannelInfo(i18n("Gravitational Direction"), ++pos, SUBSTRATE, sizeof(enumDirection)));
-    m_channels.push_back(new KisChannelInfo(i18n("Gravitational Strength"), pos+=sizeof(enumDirection), SUBSTRATE, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Gravitational Direction"), "Gd", ++pos, SUBSTRATE, sizeof(enumDirection)));
+    m_channels.push_back(new KisChannelInfo(i18n("Gravitational Strength"), "Gs", pos+=sizeof(enumDirection), SUBSTRATE, 1));
 
-    m_channels.push_back(new KisChannelInfo(i18n("Absorbency"), ++pos, SUBSTRATE, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Paint Volume"), ++pos, SUBSTANCE, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Absorbency"), "Ad", ++pos, SUBSTRATE, 1));
+    m_channels.push_back(new KisChannelInfo(i18n("Paint Volume"), "V", ++pos, SUBSTANCE, 1));
 
     m_alphaPos = 3;
     m_alphaSize = 1;

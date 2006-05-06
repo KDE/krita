@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Substrate
+ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritasubstrate
+X-Krita-Version=2

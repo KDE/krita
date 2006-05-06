@@ -51,10 +51,10 @@ namespace {
 KisLmsF32ColorSpace::KisLmsF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile */*p*/) :
     KisF32BaseColorSpace(KisID("LMSAF32", i18n("LMS (32-bit float/channel)")), F32_LCMS_TYPE, icSig3colorData, parent, 0)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Long"), PIXEL_LONGWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Middle"), PIXEL_MIDDLEWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Short"), PIXEL_SHORTWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), KisChannelInfo::ALPHA, KisChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KisChannelInfo(i18n("Long"), i18n("L"), PIXEL_LONGWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KisChannelInfo(i18n("Middle"), i18n("M"), PIXEL_MIDDLEWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KisChannelInfo(i18n("Short"), i18n("S"), PIXEL_SHORTWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), i18n("A"), PIXEL_ALPHA * sizeof(float), KisChannelInfo::ALPHA, KisChannelInfo::FLOAT32, sizeof(float)));
 
     m_alphaPos = PIXEL_ALPHA * sizeof(float);
 }

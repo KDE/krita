@@ -95,7 +95,15 @@ AM_CONDITIONAL(include_kunittest_tests, test "$have_kunittest_header" = "yes")
 
 # --- OpenGL check ---
 
-AC_HAVE_GL( [], [] )
+AC_MSG_CHECKING([for Qt OpenGL support])
+
+# check if Qt is linked against GL
+KDE_CHECK_LIB(qt-mt,glBegin,[have_qt_opengl=yes],[have_qt_opengl=no])
+
+if test "$have_qt_opengl" = 'yes'; then
+	# Get the libs, include path etc.
+	AC_HAVE_GL( [], [] )
+fi
 
 # --- End of OpenGL check ---
 

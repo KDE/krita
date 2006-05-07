@@ -19,7 +19,8 @@ else
   fi
   if test -z "$GLLIB"; then
     echo ""
-    echo "You're missing OpenGL libraries. krita will"
+    echo "You're missing OpenGL libraries or Qt has been"
+    echo "built without OpenGL support. krita will"
     echo "not be able to use OpenGL for hardware"
     echo "accelerated rendering."
     echo ""

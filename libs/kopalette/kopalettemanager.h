@@ -47,8 +47,9 @@ enum enumKoDockability {
 };
 
 enum enumKoPaletteStyle {
-    PALETTE_DOCKER, // QDockWindow based docker with tabs
-    PALETTE_TOOLBOX // QDockWindow based docker with a QToolBox
+    PALETTE_DOCKER,  // QDockWindow based docker with tabs
+    PALETTE_TOOLBOX, // QDockWindow based docker with a QToolBox
+    PALETTE_ICONTABS // QDockWidget based docker with icon tabs
 };
 
 

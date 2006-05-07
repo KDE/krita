@@ -19,16 +19,12 @@
 #define _KO_PALETTE_
 
 #include <QDockWidget>
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qtoolbutton.h>
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qfont.h>
-#include <qlayout.h>
+#include <QFont>
+
 #include <koffice_export.h>
 
 #include "kopalettemanager.h"
+
 /**
  * A floating palette that allows the adding and removing of widgets
  * to its organzing principle.
@@ -50,7 +46,7 @@ public:
     virtual void resetFont();
     
     void setStyle(enumKoPaletteStyle style) { m_style = style; };
-    enumKoPaletteStyle style() { return m_style; };
+    enumKoPaletteStyle style() const { return m_style; };
 
     virtual void plug(QWidget * widget, const QString & name, int position) = 0;
     virtual void unplug(const QWidget * widget) = 0;

@@ -16,8 +16,6 @@
  */
 
 #include <qapplication.h>
-#include <q3dockarea.h>
-#include <q3dockwindow.h>
 #include <q3dict.h>
 #include <qwidget.h>
 #include <qobject.h>
@@ -38,6 +36,7 @@
 #include "kopalette.h"
 #include "kotabpalette.h"
 #include "kotoolboxpalette.h"
+#include "KoIconTabPalette.h"
 
 #include "kopalettemanager.h"
 
@@ -98,7 +97,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 
             cfg->setGroup("palette-" + (*it));
 
-            enumKoPaletteStyle style = (enumKoPaletteStyle)cfg->readEntry("style", 0);
+            enumKoPaletteStyle style = (enumKoPaletteStyle)cfg->readEntry("palettestyle", 0);
             QString caption = cfg->readEntry("caption", "");
 
             createPalette((*it), caption, style);
@@ -342,6 +341,9 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
             break;
         case (PALETTE_TOOLBOX):
             palette = new KoToolBoxPalette(m_view, name.latin1());
+            break;
+        case (PALETTE_ICONTABS):
+            palette = new KoIconTabPalette(m_view, name.latin1());
             break;
         default:
             // This is a custom palette that we cannot create

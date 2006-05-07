@@ -10,7 +10,10 @@ set(kopalette_LIB_SRCS
    kopalette.cc 
    kopalettemanager.cc 
    kotoolboxpalette.cc 
-   kotabpalette.cc )
+   kotabpalette.cc
+   KoPaletteTabBar.cpp
+   KoPaletteTabWidget.cpp
+   KoIconTabPalette.cpp)
 
 kde4_automoc(${kopalette_LIB_SRCS})
 

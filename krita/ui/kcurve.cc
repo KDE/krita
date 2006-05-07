@@ -133,6 +133,7 @@ void KCurve::paintEvent(QPaintEvent *)
 
     // Drawing selection or all histogram values.
     QPainter p(this);
+    p.setRenderHint(QPainter::Antialiasing);
 
     //  draw background
     if(!m_pix.isNull())
@@ -163,13 +164,12 @@ void KCurve::paintEvent(QPaintEvent *)
 
         curveVal = getCurveValue(curveX);
 
-        p.drawLine(x - 1, wHeight - int(curvePrevVal * wHeight),
-            x,     wHeight - int(curveVal * wHeight));
-
+        p.drawLine(QLineF(x + 0.5 - 1, wHeight - curvePrevVal * wHeight + 0.5,
+                          x + 0.5, wHeight - curveVal * wHeight + 0.5));
         curvePrevVal = curveVal;
     }
-    p.drawLine(x - 1, wHeight - int(curvePrevVal * wHeight),
-        x,     wHeight - int(getCurveValue(1.0) * wHeight));
+    p.drawLine(QLineF(x + 0.5 - 1, wHeight - curvePrevVal * wHeight + 0.5,
+                      x + 0.5, wHeight - getCurveValue(1.0) * wHeight + 0.5));
 
     // Drawing curve handles.
     if ( !m_readOnlyMode )
@@ -182,15 +182,14 @@ void KCurve::paintEvent(QPaintEvent *)
             if (i == m_grab_point_index)
             {
                 p.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
-                p.drawEllipse( int(curveX * wWidth) - 2,
-                    wHeight - 2 - int(curveY * wHeight), 4, 4 );
+                p.drawEllipse(QRectF(curveX * wWidth + 0.5 - 2,
+                    wHeight - 2 - curveY * wHeight + 0.5, 4, 4));
             }
             else
             {
                 p.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
-
-                p.drawEllipse( int(curveX * wWidth) - 3,
-                    wHeight - 3 - int(curveY * wHeight), 6, 6 );
+                p.drawEllipse(QRectF(curveX * wWidth + 0.5 - 3,
+                    wHeight - 3 - curveY * wHeight + 0.5, 6, 6));
             }
         }
     }

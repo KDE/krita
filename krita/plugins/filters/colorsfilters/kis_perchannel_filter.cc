@@ -23,14 +23,11 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qdom.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 #include "kis_perchannel_filter.h"
-#include "wdg_perchannel.h"
 #include "kis_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
@@ -43,8 +40,9 @@
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
 {
-    curves = new Q3SortedList<QPair<double,double> >[n];
-    for(int i=0;i<n;i++) {
+    for(int i = 0; i < n; i++) {
+        curves.append(KisCurve());
+
         transfers[i] = new quint16[256];
 
         for (quint32 j = 0; j < 256; ++j) {
@@ -56,7 +54,6 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
 
 KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 {
-    delete [] curves;
     for(int i=0;i<nTransfers;i++)
         delete [] transfers[i];
 }
@@ -69,27 +66,35 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
     QDomNode n = e.firstChild();
 
     while (!n.isNull()) {
+
         e = n.toElement();
+
         if (!e.isNull()) {
+
             if (e.attribute("name") == "curves") {
+
                 QDomNode curvesNode = e.firstChild();
                 int count = 0;
                 nTransfers = e.attribute("number").toUShort();
-                curves = new Q3SortedList<QPair<double,double> >[nTransfers];
+
+                curves.clear();
+
+                for (int i = 0; i < nTransfers; ++i) {
+                    curves.append(KisCurve());
+                }
+
                 while (!curvesNode.isNull()) {
+
                     QDomElement curvesElement = curvesNode.toElement();
-                    if (!curvesElement.isNull() && 
-!curvesElement.text().isEmpty()) {
-                        QStringList data = QStringList::split( ";", 
-curvesElement.text() );
-                        QStringList::Iterator pairStart = data.begin();
-                        QStringList::Iterator pairEnd = data.end();
-                        for (QStringList::Iterator it = pairStart; it != pairEnd; ++it) {
-                            QString pair = * it;
-                            if (pair.find(",") > -1) {
-                                QPair<double,double> *p = new QPair<double,double>;
-                                p->first = pair.section(",", 0, 0).toDouble();
-                                p->second = pair.section(",", 1, 1).toDouble();
+
+                    if (!curvesElement.isNull() && !curvesElement.text().isEmpty()) {
+                        QStringList data = curvesElement.text().split( ";" );
+
+                        foreach (QString pair, data) {
+                            if (pair.indexOf(",") > -1) {
+                                QPair<double,double> p;
+                                p.first = pair.section(",", 0, 0).toDouble();
+                                p.second = pair.section(",", 1, 1).toDouble();
                                 curves[count].append(p);
                             }
                         }
@@ -108,7 +113,7 @@ curvesElement.text() );
         for(int i = 0; i < 256; ++i)
         {
             qint32 val;
-            val = int(0xFFFF * KCurve::getCurveValue(curves[ch], i / 
+            val = int(0xFFFF * KCurve::getCurveValue(curves[ch], i /
 255.0));
             if(val > 0xFFFF)
                 val = 0xFFFF;
@@ -132,13 +137,13 @@ QString KisPerChannelFilterConfiguration::toString()
     c.setAttribute("name", "curves");
     for (int i = 0; i < nTransfers; ++i) {
         QDomElement t = doc.createElement("curve");
-        Q3PtrList<QPair<double,double> > curve = curves[i];
+        KisCurve curve = curves[i];
         QString sCurve;
-        QPair<double,double> * pair;
-        for ( pair = curve.first(); pair; pair = curve.next() ) {
-            sCurve += QString::number(pair->first);
+        QPair<double,double> pair;
+        foreach (pair, curve) {
+            sCurve += QString::number(pair.first);
             sCurve += ",";
-            sCurve += QString::number(pair->second);
+            sCurve += QString::number(pair.second);
             sCurve += ";";
         }
         QDomText text = doc.createCDATASection(sCurve);
@@ -146,12 +151,9 @@ QString KisPerChannelFilterConfiguration::toString()
         c.appendChild(t);
     }
     root.appendChild(c);
-
-
     doc.appendChild( root );
     return doc.toString();
 }
-
 
 KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev)
 {
@@ -184,7 +186,7 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         kWarning() << "No configuration object for per-channel filter\n";
         return;
     }
-    
+
     KisPerChannelFilterConfiguration* configBC = (KisPerChannelFilterConfiguration*) config;
     if (configBC->nTransfers != src->colorSpace()->nColorChannels()) {
         // We got an illegal number of colorchannels.KisFilter
@@ -279,7 +281,6 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
         }
     }
 
-    m_curves[m_activeCh].setAutoDelete(true);
     m_curves[m_activeCh] = m_page->kCurve->getCurve();
     m_activeCh = ch;
     m_page->kCurve->setCurve(m_curves[m_activeCh]);
@@ -293,26 +294,27 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     int i;
     int height;
     m_page = new WdgPerChannel(this);
-    Q3HBoxLayout * l = new Q3HBoxLayout(this);
+    QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
     m_dev = dev;
-    m_curves = new Q3SortedList<QPair<double,double> >[m_dev->colorSpace()->nColorChannels()];
+    m_curves.clear();
     m_activeCh = 0;
-    for(unsigned int ch=0; ch <m_dev->colorSpace()->nColorChannels(); ch++)
+    for(unsigned int ch = 0; ch < m_dev->colorSpace()->nColorChannels(); ch++)
     {
-        m_curves[ch].append(new QPair<double,double>(0, 0));
-        m_curves[ch].append(new QPair<double,double>(1, 1));
+        m_curves.append(KisCurve());
+        m_curves[ch].append(QPair<double,double>(0, 0));
+        m_curves[ch].append(QPair<double,double>(1, 1));
     }
 
-    l->add(m_page);
+    l->addWidget(m_page);
     height = 256;
-    connect( m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
 
     // Fill in the channel chooser
     Q3ValueVector<KisChannelInfo *> channels = dev->colorSpace()->channels();
     for(unsigned int val=0; val < dev->colorSpace()->nColorChannels(); val++)
-        m_page->cmbChannel->insertItem(channels.at(val)->name());
+        m_page->cmbChannel->addItem(channels.at(val)->name());
     connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // Create the horizontal gradient label
@@ -351,23 +353,13 @@ KisPerChannelFilterConfiguration * KisPerChannelConfigWidget::config()
     int nCh = m_dev->colorSpace()->nColorChannels();
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
-    m_curves[m_activeCh].setAutoDelete(true);
     m_curves[m_activeCh] = m_page->kCurve->getCurve();
-    
+
     for(int ch = 0; ch < nCh; ch++)
     {
-        cfg->curves[ch].setAutoDelete(true);
-        cfg->curves[ch].clear();
-        QPair<double, double> *p, *inpoint;
-        inpoint = m_curves[ch].first();
-        while(inpoint)
-        {
-            p = new QPair<double, double>(inpoint->first, inpoint->second);
-            cfg->curves[ch].append(p);
-            inpoint = m_curves[ch].next();
-        }
+        cfg->curves[ch] = m_curves[ch];
 
-        for(int i=0; i <256; i++)
+        for(int i = 0; i < 256; i++)
         {
             qint32 val;
             val = int(0xFFFF * m_page->kCurve->getCurveValue(m_curves[ch],  i / 255.0));
@@ -388,19 +380,11 @@ void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config
 
     for(unsigned int ch = 0; ch < cfg->nTransfers; ch++)
     {
-        m_curves[ch].setAutoDelete(true);
-        m_curves[ch].clear();
-        QPair<double, double> *p, *inpoint;
-        inpoint = cfg->curves[ch].first();
-        while(inpoint)
-        {
-            p = new QPair<double, double>(inpoint->first, inpoint->second);
-            m_curves[ch].append(p);
-            inpoint = cfg->curves[ch].next();
-        }
+        m_curves[ch] = cfg->curves[ch];
     }
     m_page->kCurve->setCurve(m_curves[m_activeCh]);
     setActiveChannel( 0 );
 }
 
 #include "kis_perchannel_filter.moc"
+

@@ -21,27 +21,35 @@
 #ifndef _KIS_BRIGHTNESS_CONTRAST_FILTER_H_
 #define _KIS_BRIGHTNESS_CONTRAST_FILTER_H_
 
+#include <QList>
+
 #include "kis_filter.h"
 #include "kis_filter_config_widget.h"
-//Added by qt3to4:
-#include <Q3PtrList>
+#include "ui_wdg_brightness_contrast.h"
 
-class WdgBrightnessContrast;
 class QWidget;
 class KisColorAdjustment;
 
+class WdgBrightnessContrast : public QWidget, public Ui::WdgBrightnessContrast
+{
+    Q_OBJECT
+
+    public:
+        WdgBrightnessContrast(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration {
-    
+
 public:
-    
+
     KisBrightnessContrastFilterConfiguration();
     virtual ~KisBrightnessContrastFilterConfiguration();
     virtual void fromXML( const QString&  );
     virtual QString toString();
-    
+
 public:
     quint16 transfer[256];
-    Q3PtrList<QPair<double,double> >  curve;
+    QList<QPair<double,double> >  curve;
     KisColorAdjustment * m_adjustment;
 };
 

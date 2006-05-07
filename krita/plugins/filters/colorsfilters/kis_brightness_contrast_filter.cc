@@ -31,12 +31,10 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"
-#include "wdg_brightness_contrast.h"
 #include "kis_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
@@ -52,7 +50,6 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
     for (quint32 i = 0; i < 256; ++i) {
         transfer[i] = i * 257;
     }
-    curve.setAutoDelete(true);
     m_adjustment = 0;
 }
 
@@ -72,7 +69,7 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
         e = n.toElement();
         if (!e.isNull()) {
             if (e.attribute("name") == "transfer") {
-                QStringList data = QStringList::split( ",", e.text() );
+                QStringList data = e.text().split( "," );
                 QStringList::Iterator start = data.begin();
                 QStringList::Iterator end = data.end();
                 int i = 0;
@@ -83,15 +80,12 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
                 }
             }
             else if (e.attribute("name") == "curve") {
-                QStringList data = QStringList::split( ";", e.text() );
-                QStringList::Iterator pairStart = data.begin();
-                QStringList::Iterator pairEnd = data.end();
-                for (QStringList::Iterator it = pairStart; it != pairEnd; ++it) {
-                    QString pair = * it;
-                    if (pair.find(",") > -1) {
-                        QPair<double,double> *p = new QPair<double,double>;
-                        p->first = pair.section(",", 0, 0).toDouble();
-                        p->second = pair.section(",", 1, 1).toDouble();
+                QStringList data = e.text().split( ";" );
+                foreach (QString pair, data) {
+                    if (pair.indexOf(",") > -1) {
+                        QPair<double,double> p;
+                        p.first = pair.section(",", 0, 0).toDouble();
+                        p.second = pair.section(",", 1, 1).toDouble();
                         curve.append(p);
                     }
                 }
@@ -112,7 +106,7 @@ QString KisBrightnessContrastFilterConfiguration::toString()
 
     QDomElement e = doc.createElement( "transfer" );
     QString sTransfer;
-    for ( uint i = 0; i < 255 ; ++i ) {
+    for ( uint i = 0; i < 256 ; ++i ) {
         sTransfer += QString::number( transfer[i] );
         sTransfer += ",";
     }
@@ -122,11 +116,11 @@ QString KisBrightnessContrastFilterConfiguration::toString()
 
     e = doc.createElement("curve");
     QString sCurve;
-    QPair<double,double> * pair;
-    for ( pair = curve.first(); pair; pair = curve.next() ) {
-        sCurve += QString::number(pair->first);
+    QPair<double,double> pair;
+    foreach (pair, curve) {
+        sCurve += QString::number(pair.first);
         sCurve += ",";
-        sCurve += QString::number(pair->second);
+        sCurve += QString::number(pair.second);
         sCurve += ";";
     }
     text = doc.createCDATASection(sCurve);
@@ -175,12 +169,12 @@ bool KisBrightnessContrastFilter::workWith(KisColorSpace* cs)
 
 void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
 {
-    
+
     if (!config) {
         kWarning() << "No configuration object for brightness/contrast filter\n";
         return;
     }
-    
+
     KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
 
     if (src!=dst) {
@@ -192,7 +186,7 @@ void KisBrightnessContrastFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP
     if (configBC->m_adjustment == 0) {
         configBC->m_adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
     }
-    
+
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
     setProgressTotalSteps(rect.width() * rect.height());
@@ -253,7 +247,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     int i;
     int height;
     m_page = new WdgBrightnessContrast(this);
-    Q3HBoxLayout * l = new Q3HBoxLayout(this);
+    QHBoxLayout * l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
     //Hide these buttons and labels as they are not implemented in 1.5
@@ -340,3 +334,6 @@ void KisBrightnessContrastConfigWidget::setConfiguration( KisFilterConfiguration
     KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<KisBrightnessContrastFilterConfiguration *>(config);
     m_page->kCurve->setCurve(cfg->curve);
 }
+
+#include "kis_brightness_contrast_filter.moc"
+

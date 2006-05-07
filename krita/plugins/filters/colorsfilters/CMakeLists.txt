@@ -8,7 +8,7 @@ set(kritacolorsfilters_PART_SRCS
 
 kde4_automoc(${kritacolorsfilters_PART_SRCS})
 
-kde4_add_ui3_files(kritacolorsfilters_PART_SRCS
+kde4_add_ui_files(kritacolorsfilters_PART_SRCS
     wdg_perchannel.ui
     wdg_brightness_contrast.ui
     )
@@ -52,7 +52,7 @@ kde4_footer()
 #	kis_brightness_contrast_filter.h
 #
 #kritacolorsfilters_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kritacolorsfilters_la_LIBADD =  ../../../libkritacommon.la 
+#kritacolorsfilters_la_LIBADD =  ../../../libkritacommon.la
 #
 #kde_module_LTLIBRARIES = kritacolorsfilters.la
 #

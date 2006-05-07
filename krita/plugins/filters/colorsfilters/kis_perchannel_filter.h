@@ -22,12 +22,23 @@
 #define _KIS_PERCHANNEL_FILTER_H_
 
 #include <qpair.h>
-#include <q3ptrlist.h>
+#include <QList>
+
 #include "kis_filter.h"
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 
-class WdgPerChannel;
+#include "ui_wdg_perchannel.h"
+
+class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
+{
+    Q_OBJECT
+
+    public:
+        WdgPerChannel(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+typedef QList<QPair<double,double> > KisCurve;
 
 class KisPerChannelFilterConfiguration
     : public KisFilterConfiguration
@@ -38,9 +49,9 @@ public:
 
     virtual void fromXML( const QString&  );
     virtual QString toString();
-    
+
 public:
-    Q3PtrList<QPair<double,double> > *curves;
+    QList<KisCurve> curves;
     quint16 *transfers[256];
     quint16 nTransfers;
 };
@@ -88,7 +99,7 @@ private:
     WdgPerChannel * m_page;
     KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
-    Q3PtrList<QPair<double,double> > *m_curves;
+    QList<KisCurve> m_curves;
     int m_activeCh;
 };
 

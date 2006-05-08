@@ -44,6 +44,7 @@
 #include <kapplication.h>
 #include <QString>
 #include <ktoolinvocation.h>
+#include <ktoggleaction.h>
 #include <QAbstractEventDispatcher>
 
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* /*name*/ )

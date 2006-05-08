@@ -34,6 +34,7 @@
 #include <QPaintEvent>
 
 #include <kaction.h>
+#include <ktoggleaction.h>
 #include <koffice_export.h>
 class QPixmap;
 class QLabel;

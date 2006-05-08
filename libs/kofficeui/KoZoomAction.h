@@ -21,6 +21,7 @@
 
 #include <kaction.h>
 #include <koffice_export.h>
+#include <kselectaction.h>
 /**
  * Class KoZoomAction implements an action to provide zoom values.
  * In a toolbar, KoZoomAction will show a dropdown list, also with 

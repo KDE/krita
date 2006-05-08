@@ -20,6 +20,7 @@
 #define koPartSelectAction_h
 
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <KoQueryTrader.h>
 //Added by qt3to4:
 #include <Q3ValueList>

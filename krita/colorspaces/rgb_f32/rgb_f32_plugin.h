@@ -29,7 +29,7 @@ class RGBF32Plugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RGBF32Plugin(QObject *parent, const char *name, const QStringList &);
+    RGBF32Plugin(QObject *parent, const QStringList &);
     virtual ~RGBF32Plugin();
 
 };

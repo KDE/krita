@@ -28,7 +28,7 @@ class RGBU16Plugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RGBU16Plugin(QObject *parent, const char *name, const QStringList &);
+    RGBU16Plugin(QObject *parent, const QStringList &);
     virtual ~RGBU16Plugin();
 };
 

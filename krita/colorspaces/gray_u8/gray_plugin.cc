@@ -37,10 +37,9 @@ typedef KGenericFactory<GrayPlugin> GrayPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritagrayplugin, GrayPluginFactory( "kritacore" ) )
 
 
-GrayPlugin::GrayPlugin(QObject *parent, const char *name, const QStringList &)
+GrayPlugin::GrayPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(GrayPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.

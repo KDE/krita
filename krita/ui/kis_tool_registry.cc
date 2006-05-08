@@ -48,7 +48,7 @@ KisToolRegistry::KisToolRegistry()
         KService::Ptr service = *iter;
         int errCode = 0;
         KParts::Plugin* plugin =
-             KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
+             KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, QStringList(), &errCode);
         if ( plugin )
             kDebug(DBG_AREA_PLUGINS) << "found plugin " << service->property("Name").toString() << "\n";
         else {

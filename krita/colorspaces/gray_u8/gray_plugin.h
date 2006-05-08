@@ -28,7 +28,7 @@ class GrayPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    GrayPlugin(QObject *parent, const char *name, const QStringList &);
+    GrayPlugin(QObject *parent, const QStringList &);
     virtual ~GrayPlugin();
 
 };

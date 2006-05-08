@@ -34,10 +34,9 @@ typedef KGenericFactory<RGBU16Plugin> RGBU16PluginFactory;
 K_EXPORT_COMPONENT_FACTORY( krita_rgb_u16_plugin, RGBU16PluginFactory( "krita" ) )
 
 
-RGBU16Plugin::RGBU16Plugin(QObject *parent, const char *name, const QStringList &)
+RGBU16Plugin::RGBU16Plugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(RGBU16PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

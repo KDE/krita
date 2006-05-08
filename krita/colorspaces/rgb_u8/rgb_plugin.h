@@ -28,7 +28,7 @@ class RGBPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RGBPlugin(QObject *parent, const char *name, const QStringList &);
+    RGBPlugin(QObject *parent, const QStringList &);
     virtual ~RGBPlugin();
 
 };

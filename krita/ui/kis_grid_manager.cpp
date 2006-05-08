@@ -28,6 +28,7 @@
 #include <qradiobutton.h>
 
 #include <kaction.h>
+#include <ktoggleaction.h>
 #include <kdialogbase.h>
 #include <klocale.h>
 

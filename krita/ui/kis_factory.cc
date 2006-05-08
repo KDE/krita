@@ -76,13 +76,13 @@ KisFactory::~KisFactory()
  * Create the document
  */
 KParts::Part* KisFactory::createPartObject( QWidget *parentWidget,
-                        const char *widgetName, QObject* parent,
-                        const char* name, const char* classname, const QStringList & )
+                        QObject* parent,
+                        const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     KisDoc *doc = new KisDoc( parentWidget,
-                  widgetName, parent, name, !bWantKoDocument );
+                  0, parent, 0, !bWantKoDocument );
     Q_CHECK_PTR(doc);
 
     if ( !bWantKoDocument )
@@ -100,7 +100,7 @@ KAboutData* KisFactory::aboutData()
 KInstance* KisFactory::instance()
 {
     QString homedir = getenv("HOME");
-    
+
     if ( !s_instance )
     {
         s_instance = new KInstance(s_aboutData);
@@ -122,7 +122,7 @@ KInstance* KisFactory::instance()
         s_instance->dirs()->addResourceType("kis_brushes", KStandardDirs::kde_default("data") + "krita/brushes/");
         s_instance->dirs()->addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
         s_instance->dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
-    
+
         s_instance->dirs()->addResourceType("kis_patterns", KStandardDirs::kde_default("data") + "krita/patterns/");
         s_instance->dirs()->addResourceDir("kis_patterns", "/usr/share/create/patterns/gimp");
         s_instance->dirs()->addResourceDir("kis_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
@@ -130,7 +130,7 @@ KInstance* KisFactory::instance()
         s_instance->dirs()->addResourceType("kis_gradients", KStandardDirs::kde_default("data") + "krita/gradients/");
         s_instance->dirs()->addResourceDir("kis_gradients", "/usr/share/create/gradients/gimp");
         s_instance->dirs()->addResourceDir("kis_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
- 
+
         s_instance->dirs()->addResourceType("kis_profiles", KStandardDirs::kde_default("data") + "krita/profiles/");
         s_instance->dirs()->addResourceDir("kis_profiles", "/usr/share/color/icc");
         s_instance->dirs()->addResourceDir("kis_profiles", QDir::homePath() + QString("/.icc"));

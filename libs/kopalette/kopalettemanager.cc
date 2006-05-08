@@ -26,6 +26,7 @@
 #include <kmenu.h>
 #include <kaction.h>
 #include <kactionclasses.h>
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -58,7 +59,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     m_currentMapping = new QMap<QString, QString>();
     m_fixedWidth = 0;
     m_setFixedWidth = false;
-    
+
     m_widgetNames = new QStringList();
 
     m_mapper = new QSignalMapper(this);
@@ -330,7 +331,7 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
     Q_ASSERT(m_view);
     KoPalette * palette = 0;
 
-    
+
     palette = m_palettes->find(name);
     if (palette) return palette;
 
@@ -354,7 +355,7 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
 
     if (m_setFixedWidth)
         palette->setFixedWidth(m_fixedWidth);
-    
+
     palette->setCaption(caption);
     m_palettes->insert(name, palette);
     placePalette(name);

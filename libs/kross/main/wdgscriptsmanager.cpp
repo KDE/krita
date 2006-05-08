@@ -38,6 +38,7 @@
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <ktoolbar.h>
+#include <kactioncollection.h>
 
 #include <knewstuff/provider.h>
 #include <knewstuff/engine.h>

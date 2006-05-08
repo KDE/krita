@@ -23,6 +23,7 @@
 #include <qdom.h>
 #include <Q3ValueList>
 #include <kaction.h>
+#include <kactionmenu.h>
 
 #include "scriptcontainer.h"
 
@@ -175,7 +176,7 @@ namespace Kross { namespace Api {
              * This signal got emitted when this action is emitted before execution.
              */
             void activated(const Kross::Api::ScriptAction*);
-            
+
             /**
             * This signal got emitted after this \a ScriptAction got
             * executed successfully.

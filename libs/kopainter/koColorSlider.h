@@ -23,12 +23,12 @@
 #include <q3frame.h>
 #include <QPoint>
 #include <QImage>
+#include <QPixmap>
 #include <QWidget>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QPaintEvent>
-#include <kpixmap.h>
 #include <koffice_export.h>
 class SliderWidget;
 
@@ -57,7 +57,7 @@ signals:
 protected:
   QColor mC1;
   QColor mC2;
-  KPixmap mPixmap;
+  QPixmap mPixmap;
   QImage  mImage;
   bool mColorChanged;
   bool mPixChanged;

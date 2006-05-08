@@ -22,23 +22,25 @@
 
 #include <qpen.h>
 
+#include "koffice_export.h"
+
 class KoZoomHandler;
 
 /**
  * Pen that handles line widths in points
  */
-class KoPen : public QPen
+class KOFFICECORE_EXPORT KoPen : public QPen
 {
   public:
     KoPen();
     KoPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
     KoPen(const QColor& _color);
     ~KoPen();
-    
+
     /**
      * @brief Compare pens if they are equal
-     * 
-     * Two pens are equal if they have equal styles, widths and colors. 
+     *
+     * Two pens are equal if they have equal styles, widths and colors.
      *
      * @return true if the pens are equal, false otherwise
      */

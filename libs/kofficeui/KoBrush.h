@@ -23,6 +23,8 @@
 
 #include <qbrush.h>
 
+#include "koffice_export.h"
+
 class KoGenStyle;
 class KoGenStyles;
 class KoOasisContext;
@@ -47,7 +49,7 @@ enum FillType
     FT_GRADIENT = 1
 };
 
-class KoBrush
+class KOFFICECORE_EXPORT KoBrush
 {
 public:
     KoBrush();

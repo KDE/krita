@@ -603,7 +603,7 @@ QList<KAction*> KoVariableCollection::popupActionList() const
     for ( int i = 0; it != list.end() ; ++it, ++i )
     {
         if( i == 0 ) // first item, and list not empty
-            listAction.append( new KActionSeparator() );
+            listAction.append( new KSeparatorAction() );
 
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
         {

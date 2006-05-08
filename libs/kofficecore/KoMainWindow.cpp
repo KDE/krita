@@ -286,7 +286,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_orientation->setItems(items);
     d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
     d->m_splitViewActionList.append(d->m_orientation);
-    d->m_splitViewActionList.append(new KActionSeparator(actionCollection()));
+    d->m_splitViewActionList.append(new KSeparatorAction(actionCollection()));
 
     // Load list of recent files
     KConfig * config = instance ? instance->config() : KGlobal::config();

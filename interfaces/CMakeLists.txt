@@ -21,7 +21,7 @@ install_targets(${LIB_INSTALL_DIR} kochart )
 
 install_files( /include FILES  koChart.h )
 
-kde4_create_doxygen_docs(  )
+
 
 kde4_footer()
 

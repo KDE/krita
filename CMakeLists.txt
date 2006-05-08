@@ -92,5 +92,5 @@ add_subdirectory(doc)
 add_subdirectory( cmake )
 message( STATUS "Re-add kpresenter,karbon,kexi when we will port them")
 
-kde4_create_doxygen_docs(  )
+
 

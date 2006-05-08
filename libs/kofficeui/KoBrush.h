@@ -49,7 +49,7 @@ enum FillType
     FT_GRADIENT = 1
 };
 
-class KOFFICECORE_EXPORT KoBrush
+class KOFFICEUI_EXPORT KoBrush
 {
 public:
     KoBrush();

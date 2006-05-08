@@ -29,7 +29,7 @@ class KoZoomHandler;
 /**
  * Pen that handles line widths in points
  */
-class KOFFICECORE_EXPORT KoPen : public QPen
+class KOFFICEUI_EXPORT KoPen : public QPen
 {
   public:
     KoPen();

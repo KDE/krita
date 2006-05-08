@@ -1,193 +1,165 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KoGeneralPropertyUI</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>KoGeneralPropertyUI</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KoGeneralPropertyUI</class>
+  <widget class="QWidget" name="KoGeneralPropertyUI" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>292</width>
+        <height>222</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>292</width>
-            <height>222</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>General</string>
     </property>
-    <property name="caption">
-        <string>General</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout13</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <widget class="QLabel" name="nameLabel" >
+              <property name="text" >
+                <string>Na&amp;me:</string>
+              </property>
+              <property name="buddy" stdset="0" >
+                <cstring>nameInput</cstring>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QLineEdit" name="nameInput" />
+          </item>
+        </layout>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QCheckBox" name="protect" >
+          <property name="text" >
+            <string>Protect si&amp;ze and position</string>
+          </property>
+        </widget>
+      </item>
+      <item row="2" column="0" >
+        <widget class="QCheckBox" name="keepRatio" >
+          <property name="text" >
+            <string>Keep &amp;aspect ratio</string>
+          </property>
+        </widget>
+      </item>
+      <item row="3" column="0" >
+        <widget class="QGroupBox" name="positionGroup" >
+          <property name="title" >
+            <string>Position</string>
+          </property>
+          <property name="flat" >
+            <bool>false</bool>
+          </property>
+          <property name="checkable" >
+            <bool>false</bool>
+          </property>
+          <property name="checked" >
+            <bool>false</bool>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="1" column="0" >
+              <widget class="QLabel" name="widthLabel" >
+                <property name="text" >
+                  <string>&amp;Width:</string>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>nameLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Na&amp;me:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>nameInput</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>nameInput</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QCheckBox" row="1" column="0">
-            <property name="name">
-                <cstring>protect</cstring>
-            </property>
-            <property name="text">
-                <string>Protect si&amp;ze and position</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="2" column="0">
-            <property name="name">
-                <cstring>keepRatio</cstring>
-            </property>
-            <property name="text">
-                <string>Keep &amp;aspect ratio</string>
-            </property>
-        </widget>
-        <widget class="QGroupBox" row="3" column="0">
-            <property name="name">
-                <cstring>positionGroup</cstring>
-            </property>
-            <property name="title">
-                <string>Position</string>
-            </property>
-            <property name="flat">
-                <bool>false</bool>
-            </property>
-            <property name="checkable">
-                <bool>false</bool>
-            </property>
-            <property name="checked">
-                <bool>false</bool>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+                <property name="buddy" stdset="0" >
+                  <cstring>widthInput</cstring>
                 </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>widthLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Width:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>widthInput</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="2">
-                    <property name="name">
-                        <cstring>heightLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Height:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>heightInput</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="2">
-                    <property name="name">
-                        <cstring>topLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Top:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>yInput</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>leftLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Left:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>xInput</cstring>
-                    </property>
-                </widget>
-                <widget class="KoUnitDoubleSpinBox" row="0" column="1">
-                    <property name="name">
-                        <cstring>xInput</cstring>
-                    </property>
-                </widget>
-                <widget class="KoUnitDoubleSpinBox" row="0" column="3">
-                    <property name="name">
-                        <cstring>yInput</cstring>
-                    </property>
-                </widget>
-                <widget class="KoUnitDoubleSpinBox" row="1" column="3">
-                    <property name="name">
-                        <cstring>heightInput</cstring>
-                    </property>
-                </widget>
-                <widget class="KoUnitDoubleSpinBox" row="1" column="1">
-                    <property name="name">
-                        <cstring>widthInput</cstring>
-                    </property>
-                </widget>
-            </grid>
+              </widget>
+            </item>
+            <item row="1" column="2" >
+              <widget class="QLabel" name="heightLabel" >
+                <property name="text" >
+                  <string>&amp;Height:</string>
+                </property>
+                <property name="buddy" stdset="0" >
+                  <cstring>heightInput</cstring>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="2" >
+              <widget class="QLabel" name="topLabel" >
+                <property name="text" >
+                  <string>&amp;Top:</string>
+                </property>
+                <property name="buddy" stdset="0" >
+                  <cstring>yInput</cstring>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="0" >
+              <widget class="QLabel" name="leftLabel" >
+                <property name="text" >
+                  <string>&amp;Left:</string>
+                </property>
+                <property name="buddy" stdset="0" >
+                  <cstring>xInput</cstring>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="KoUnitDoubleSpinBox" name="xInput" />
+            </item>
+            <item row="0" column="3" >
+              <widget class="KoUnitDoubleSpinBox" name="yInput" />
+            </item>
+            <item row="1" column="3" >
+              <widget class="KoUnitDoubleSpinBox" name="heightInput" />
+            </item>
+            <item row="1" column="1" >
+              <widget class="KoUnitDoubleSpinBox" name="widthInput" />
+            </item>
+          </layout>
         </widget>
-        <spacer row="4" column="0">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>21</height>
-                </size>
-            </property>
+      </item>
+      <item row="4" column="0" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>21</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Vertical</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<customwidgets>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>KoUnitDoubleSpinBox</class>
-        <header location="local">KoUnitWidgets.h</header>>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
-    </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="1008">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b749444154388db59541681d551486bf49aef55c4965061b98815a5e20a5790b912c0d66d12c0381361004219bae0a45041111a92d28086a4110eaa68a8bd8b8a97121348b96b810cca6988281111a9c27446720afcc8516efa94e3b2e665e6244832e3c70b8cce5f2cf77cffc734e50d735830882600818060c3004046d1e14759b8f800a7858d7f5a360207cfe8df34f7627ba679d7367f27e7ea27425168bc71fb896ae24bd936eaddf5a5fa6e213e02ef0c00c48af5dbd76364a7837390e9d4a5b98128c0025d608e0f7f6d97b4eefc8389f8617d66f3a0b7c0894a63d395cf48b33d1d390f5bf40ef65f84ab116fcefe00a212f1441b04760ec38882854a0801c866854015e00aeee1203a6ec97273c0ebd57e02b873d1c926dc0daaab271ab400c68a5880989c785d98588a9698fd0ec872302e83120fa33f150ee7226517c95636dc8b73794e52b0e2a08432119174420ef29bd2de5a3b7338ac598f9451069c4dbb0c0a18170608d05147b58c83660a5159d3d1573720e92c482f1a846acad7a56ae3856967ac4719799d316314a53188681606820ec2b0f08dec3f5af1c5a29b3a762e6cf4094286a72dc8ee5fa9725b30b112fbe148211969772b4bfcf7e01100c88b1c682297145447a3b230c1b5291e68aee7ec2e5f74bb24d47b903e75e4b58bfe1c87e50d2d423b2dfdc03627ce5b146c88b120c241d884641519c8bb8fc564ebae99050989a8e60a4a43b19a295926f8356ff20dcd41804814a0947da8fb29370f99d926cb3b157382224472112c08018412b90bf20ef2306b047001392f61455cbda4ddf908e08f1d1905eafe0d2c59c742322cf14ad94b18e853d5734fedd4f5cd23d0e9d8e50f494b555cffc6244b9a34c9d8c4862b874117a5b05e75fced1fb8e380ee94e425e1c50631010657641d04a59b9e2585b2d39f74ac2e4b4a733e979f5cd84380e71fd022a989a0b199bd8e7e3bf23f6500953d3506cc7ac2cf558fe00d66f38bacf846020cf4a5c5f9bdaa2a4df28e96d4b2842ebe37dc275d92fdb7f5f11607e5188e32e2b9fe7a49b4a7abbd79cae203c1232733ae4bbaf95fcbe43ab88a2bf2b5a03f5ae707a27dd4a331997a821110333739ea9e98434f5e4db8d68d2b17427616c02d2390b5502a624fb1e805f8087401dd4754d100416c3ebcf3d2f17a2a4b194aa3270bdb4af17d37633da9b19c139483794bc505cc155e063e047da46ff18700c780ff889bda9f06ff367e033e034f02c303a201ea2e94a11f054bb5ada86c2c151b7d7f73413e02e50ee8ea620080cf038f0442b7a88ff36f37e6bc57f051e04ffd730fd03ef8bd61b5b2ca6900000000049454e44ae426082</data>
+      <class>KoUnitDoubleSpinBox</class>
+      <extends></extends>
+      <header location="local" >KoUnitWidgets.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>>
+        </customwidget>
+  </customwidgets>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="1008" >89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b749444154388db59541681d551486bf49aef55c4965061b98815a5e20a5790b912c0d66d12c0381361004219bae0a45041111a92d28086a4110eaa68a8bd8b8a97121348b96b810cca6988281111a9c27446720afcc8516efa94e3b2e665e6244832e3c70b8cce5f2cf77cffc734e50d735830882600818060c3004046d1e14759b8f800a7858d7f5a360207cfe8df34f7627ba679d7367f27e7ea27425168bc71fb896ae24bd936eaddf5a5fa6e213e02ef0c00c48af5dbd76364a7837390e9d4a5b98128c0025d608e0f7f6d97b4eefc8389f8617d66f3a0b7c0894a63d395cf48b33d1d390f5bf40ef65f84ab116fcefe00a212f1441b04760ec38882854a0801c866854015e00aeee1203a6ec97273c0ebd57e02b873d1c926dc0daaab271ab400c68a5880989c785d98588a9698fd0ec872302e83120fa33f150ee7226517c95636dc8b73794e52b0e2a08432119174420ef29bd2de5a3b7338ac598f9451069c4dbb0c0a18170608d05147b58c83660a5159d3d1573720e92c482f1a846acad7a56ae3856967ac4719799d316314a53188681606820ec2b0f08dec3f5af1c5a29b3a762e6cf4094286a72dc8ee5fa9725b30b112fbe148211969772b4bfcf7e01100c88b1c682297145447a3b230c1b5291e68aee7ec2e5f74bb24d47b903e75e4b58bfe1c87e50d2d423b2dfdc03627ce5b146c88b120c241d884641519c8bb8fc564ebae99050989a8e60a4a43b19a295926f8356ff20dcd41804814a0947da8fb29370f99d926cb3b157382224472112c08018412b90bf20ef2306b047001392f61455cbda4ddf908e08f1d1905eafe0d2c59c742322cf14ad94b18e853d5734fedd4f5cd23d0e9d8e50f494b555cffc6244b9a34c9d8c4862b874117a5b05e75fced1fb8e380ee94e425e1c50631010657641d04a59b9e2585b2d39f74ac2e4b4a733e979f5cd84380e71fd022a989a0b199bd8e7e3bf23f6500953d3506cc7ac2cf558fe00d66f38bacf846020cf4a5c5f9bdaa2a4df28e96d4b2842ebe37dc275d92fdb7f5f11607e5188e32e2b9fe7a49b4a7abbd79cae203c1232733ae4bbaf95fcbe43ab88a2bf2b5a03f5ae707a27dd4a331997a821110333739ea9e98434f5e4db8d68d2b17427616c02d2390b5502a624fb1e805f8087401dd4754d100416c3ebcf3d2f17a2a4b194aa3270bdb4af17d37633da9b19c139483794bc505cc155e063e047da46ff18700c780ff889bda9f06ff367e033e034f02c303a201ea2e94a11f054bb5ada86c2c151b7d7f73413e02e50ee8ea620080cf038f0442b7a88ff36f37e6bc57f051e04ffd730fd03ef8bd61b5b2ca6900000000049454e44ae426082</data>
     </image>
-</images>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </images>
+</ui>

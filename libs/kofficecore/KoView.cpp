@@ -23,7 +23,7 @@
 #include <KoFrame.h>
 #include <KoViewIface.h>
 #include <KoDocumentChild.h>
-
+#include <kactioncollection.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>

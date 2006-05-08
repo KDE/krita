@@ -65,10 +65,10 @@ KoDocument* KoDocumentEntry::createDoc( QString* errorMsg, KoDocument* parent, c
 
     QObject* obj;
     if ( factory->inherits( "KParts::Factory" ) )
-      obj = static_cast<KParts::Factory *>(factory)->createPart( 0L, "", parent, name, "KoDocument" );
+      obj = static_cast<KParts::Factory *>(factory)->createPart( 0L, parent, name, QStringList("KoDocument") );
     else {
       kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->metaObject()->className() << endl; // This shouldn't happen...
-      obj = factory->create( parent, name, "KoDocument" );
+      obj = factory->create( parent, name, QStringList("KoDocument") );
     }
 
     if ( !obj || !obj->inherits( "KoDocument" ) )
@@ -210,7 +210,7 @@ KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent, co
         return 0;
     }
 
-    QObject* obj = factory->create( parent, name, "KoFilter" );
+    QObject* obj = factory->create( parent, name, QStringList("KoFilter") );
     if ( !obj || !obj->inherits( "KoFilter" ) )
     {
         delete obj;

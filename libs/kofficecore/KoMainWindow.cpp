@@ -53,6 +53,7 @@
 #include <kglobalsettings.h>
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
+#include <kseparatoraction.h>
 
 #include <QObject>
 //Added by qt3to4:
@@ -447,7 +448,7 @@ void KoMainWindow::addRecentURL( const KUrl& url )
         bool ok = true;
         if ( url.isLocalFile() )
         {
-            QString path = url.path( -1 );
+            QString path = url.path( KUrl::RemoveTrailingSlash );
             QStringList tmpDirs = KGlobal::dirs()->resourceDirs( "tmp" );
             for ( QStringList::Iterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it )
                 if ( path.contains( *it ) )
@@ -456,7 +457,7 @@ void KoMainWindow::addRecentURL( const KUrl& url )
                 KRecentDocument::add(path);
         }
         else
-            KRecentDocument::add(url.url(-1), true);
+            KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
 
         if ( ok )
             m_recent->addUrl( url );

@@ -25,7 +25,8 @@
 #include <kfiledialog.h>
 #include <koffice_export.h>
 #include "KoDocument.h"
-
+#include <krecentfilesaction.h>
+#include <ktoggleaction.h>
 #include <QLabel>
 #include <QResizeEvent>
 #include <Q3PtrList>

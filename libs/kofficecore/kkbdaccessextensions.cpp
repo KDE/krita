@@ -43,6 +43,7 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <q3tl.h>
+#include <kactioncollection.h>
 
 // KKbdAccessExtensions includes
 #include "kkbdaccessextensions.h"

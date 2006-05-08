@@ -48,7 +48,7 @@
 #endif
 
 KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes )
-    : KToolBar( mainWin, Qt::LeftToolBarArea, false, true, true ),
+    : KToolBar( name, mainWin, Qt::LeftToolBarArea, false, true, true ),
     m_instance( instance )
 {
     setObjectName(name);

@@ -49,7 +49,6 @@ public:
 };
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
-                                                  const char *,
                                                   const QStringList & )
 : KPropsDlgPlugin( props )
 {

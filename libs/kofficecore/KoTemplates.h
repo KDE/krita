@@ -105,7 +105,7 @@ private:
 };
 
 
-class KoTemplateTree {
+class KOFFICECORE_EXPORT KoTemplateTree {
 
 public:
     KoTemplateTree(const QByteArray &templateType, KInstance *instance,
@@ -144,7 +144,7 @@ private:
 
 
 namespace KoTemplates {
-QString trimmed(const QString &string);
+KOFFICECORE_EXPORT QString trimmed(const QString &string);
 }
 
 #endif

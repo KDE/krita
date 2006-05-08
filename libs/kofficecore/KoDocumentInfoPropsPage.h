@@ -32,7 +32,7 @@ class KOFFICECORE_EXPORT KoDocumentInfoPropsPage : public KPropsDlgPlugin
   Q_OBJECT
 
 public:
-    KoDocumentInfoPropsPage( KPropertiesDialog *props, const char *name = 0,
+    KoDocumentInfoPropsPage( KPropertiesDialog *props,
                               const QStringList & = QStringList() );
     virtual ~KoDocumentInfoPropsPage();
 	      

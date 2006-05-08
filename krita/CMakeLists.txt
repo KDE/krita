@@ -168,7 +168,7 @@ if (SHOULD_BUILD_KRITA)
     install_files( ${SERVICES_INSTALL_DIR} FILES  kritapart.desktop )
     install_files( ${DATA_INSTALL_DIR}/krita FILES  krita.rc krita_readonly.rc )
     
-    kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins kritacolor/colorspaces core/tiles  )
+    #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins kritacolor/colorspaces core/tiles  )
 endif (SHOULD_BUILD_KRITA)
 
 kde4_footer()

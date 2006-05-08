@@ -19,7 +19,7 @@ endif(KOFFICE_ENABLE_SCRIPTING)
 ########### install files ###############
 
 
-kde4_create_doxygen_docs( REFERENCES dcop kprint kdeui kparts  )
+#kde4_create_doxygen_docs( REFERENCES dcop kprint kdeui kparts  )
 
 kde4_footer()
 

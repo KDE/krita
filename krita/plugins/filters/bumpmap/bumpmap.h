@@ -54,7 +54,7 @@ using namespace krita;
 class KritaBumpmap : public KParts::Plugin
 {
 public:
-    KritaBumpmap(QObject *parent, const char *name, const QStringList &);
+    KritaBumpmap(QObject *parent, const QStringList &);
     virtual ~KritaBumpmap();
 };
 

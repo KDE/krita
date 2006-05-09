@@ -26,7 +26,7 @@
 class KisRainDropsFilterPlugin : public KParts::Plugin
 {
 public:
-    KisRainDropsFilterPlugin(QObject *parent, const char *name, const QStringList &);
+    KisRainDropsFilterPlugin(QObject *parent, const QStringList &);
     virtual ~KisRainDropsFilterPlugin();
 };
 

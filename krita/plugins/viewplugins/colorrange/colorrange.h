@@ -1,4 +1,4 @@
-/* 
+/*
  * colorrange.h -- Part of Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
@@ -29,9 +29,9 @@ class ColorRange : public KParts::Plugin
 {
         Q_OBJECT
     public:
-        ColorRange(QObject *parent, const char *name, const QStringList &);
+        ColorRange(QObject *parent, const QStringList &);
         virtual ~ColorRange();
-    
+
     private slots:
         void slotActivated();
 

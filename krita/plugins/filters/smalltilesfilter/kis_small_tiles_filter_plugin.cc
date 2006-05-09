@@ -26,10 +26,9 @@
 typedef KGenericFactory<KisSmallTilesFilterPlugin> KisSmallTilesFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritasmalltilesfilter, KisSmallTilesFilterPluginFactory( "krita" ) )
 
-KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const char *name, const QStringList &)
+KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(KisSmallTilesFilterPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {

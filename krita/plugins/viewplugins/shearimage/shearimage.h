@@ -28,7 +28,7 @@ class ShearImage : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ShearImage(QObject *parent, const char *name, const QStringList &);
+    ShearImage(QObject *parent, const QStringList &);
     virtual ~ShearImage();
 
 private slots:

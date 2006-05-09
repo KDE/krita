@@ -44,10 +44,9 @@
 typedef KGenericFactory<KritaExample> KritaExampleFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )
 
-KritaExample::KritaExample(QObject *parent, const char *name, const QStringList &)
+KritaExample::KritaExample(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(KritaExampleFactory::instance());
 
 

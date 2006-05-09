@@ -51,11 +51,9 @@ typedef KGenericFactory<RotateImage> RotateImageFactory;
 K_EXPORT_COMPONENT_FACTORY( kritarotateimage, RotateImageFactory( "krita" ) )
 
 // XXX: this plugin could also provide layer scaling/resizing
-RotateImage::RotateImage(QObject *parent, const char *name, const QStringList &)
+RotateImage::RotateImage(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
-
     if ( parent->inherits("KisView") ) {
         setInstance(RotateImageFactory::instance());
         setXMLFile(locate("data","kritaplugins/rotateimage.rc"), true);

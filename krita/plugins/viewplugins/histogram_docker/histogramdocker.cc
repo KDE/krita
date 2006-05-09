@@ -46,11 +46,9 @@
 typedef KGenericFactory<KritaHistogramDocker> KritaHistogramDockerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogramdocker, KritaHistogramDockerFactory( "krita" ) )
 
-KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const char *name, const QStringList&)
+KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
         : KParts::Plugin(parent)
 {
-    setObjectName(name);
-
     if ( parent->inherits("KisView") ) {
         m_view = dynamic_cast<KisView*>(parent);
 
@@ -136,7 +134,7 @@ void KritaHistogramDocker::producerChanged(int pos)
 
     // use dummy layer as a source; we are not going to actually use or need it
     // All of these are SP, no need to delete them afterwards
-    m_histogram = new KisHistogram( KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "dummy histogram")), 
+    m_histogram = new KisHistogram( KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "dummy histogram")),
                                     KisHistogramProducerSP(m_producer), LOGARITHMIC);
 
     if (m_hview) {

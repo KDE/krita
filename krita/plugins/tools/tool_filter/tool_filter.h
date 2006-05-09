@@ -30,7 +30,7 @@ class ToolFilter : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolFilter(QObject *parent, const char *name, const QStringList &);
+    ToolFilter(QObject *parent, const QStringList &);
     virtual ~ToolFilter();
 
 private:

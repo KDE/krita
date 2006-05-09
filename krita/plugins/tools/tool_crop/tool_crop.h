@@ -30,7 +30,7 @@ class ToolCrop : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolCrop(QObject *parent, const char *name, const QStringList &);
+    ToolCrop(QObject *parent, const QStringList &);
     virtual ~ToolCrop();
 
 private:

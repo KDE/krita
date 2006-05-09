@@ -1,4 +1,4 @@
-/* 
+/*
  * colorspaceconversion.h -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
@@ -32,9 +32,9 @@ class ColorSpaceConversion : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ColorSpaceConversion(QObject *parent, const char *name, const QStringList &);
+    ColorSpaceConversion(QObject *parent, const QStringList &);
     virtual ~ColorSpaceConversion();
-    
+
 private slots:
 
     void slotImgColorSpaceConversion();

@@ -58,11 +58,9 @@ typedef KGenericFactory<ColorSpaceConversion> ColorSpaceConversionFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorspaceconversion, ColorSpaceConversionFactory( "krita" ) )
 
 
-ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const char *name, const QStringList &)
+ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
-
     if ( parent->inherits("KisView") )
     {
         m_view = (KisView*) parent;

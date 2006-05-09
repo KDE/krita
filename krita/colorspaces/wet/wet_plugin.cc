@@ -65,10 +65,9 @@ typedef KGenericFactory<WetPlugin> WetPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritawetplugin, WetPluginFactory( "kritacore" ) )
 
 
-WetPlugin::WetPlugin(QObject *parent, const char *name, const QStringList &)
+WetPlugin::WetPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(WetPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.

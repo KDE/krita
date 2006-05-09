@@ -26,10 +26,9 @@
 typedef KGenericFactory<KisPixelizeFilterPlugin> KisPixelizeFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritapixelizefilter, KisPixelizeFilterPluginFactory( "krita" ) )
 
-KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const char *name, const QStringList &)
+KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(KisPixelizeFilterPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {

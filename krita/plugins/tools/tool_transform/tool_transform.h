@@ -30,7 +30,7 @@ class ToolTransform : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolTransform(QObject *parent, const char *name, const QStringList &);
+    ToolTransform(QObject *parent, const QStringList &);
     virtual ~ToolTransform();
 
 private:

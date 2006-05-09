@@ -40,7 +40,7 @@ class KritaHistogramDocker : public KParts::Plugin
 {
 Q_OBJECT
 public:
-    KritaHistogramDocker(QObject *parent, const char *name, const QStringList &);
+    KritaHistogramDocker(QObject *parent, const QStringList &);
     virtual ~KritaHistogramDocker();
 private slots:
     void producerChanged(int pos);

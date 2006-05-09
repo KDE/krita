@@ -1,4 +1,4 @@
-/* 
+/*
  * histogram.h -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
@@ -31,9 +31,9 @@ class Histogram : public KParts::Plugin
 {
         Q_OBJECT
     public:
-        Histogram(QObject *parent, const char *name, const QStringList &);
+        Histogram(QObject *parent, const QStringList &);
         virtual ~Histogram();
-    
+
     private slots:
         void slotActivated();
         void slotLayersChanged();

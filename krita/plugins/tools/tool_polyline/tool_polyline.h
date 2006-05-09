@@ -30,7 +30,7 @@ class ToolPolyline : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolPolyline(QObject *parent, const char *name, const QStringList &);
+    ToolPolyline(QObject *parent, const QStringList &);
     virtual ~ToolPolyline();
 
 private:

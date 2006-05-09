@@ -29,9 +29,8 @@
 typedef KGenericFactory<KisRainDropsFilterPlugin> KisRainDropsFilterPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaraindropsfilter, KisRainDropsFilterPluginFactory( "krita" ) )
 
-KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent)
+KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(KisRainDropsFilterPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {

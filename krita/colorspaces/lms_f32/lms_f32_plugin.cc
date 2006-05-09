@@ -36,10 +36,9 @@ typedef KGenericFactory<LMSF32Plugin> LMSF32PluginFactory;
 K_EXPORT_COMPONENT_FACTORY( krita_lms_f32_plugin, LMSF32PluginFactory( "krita" ) )
 
 
-LMSF32Plugin::LMSF32Plugin(QObject *parent, const char *name, const QStringList &)
+LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(LMSF32PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

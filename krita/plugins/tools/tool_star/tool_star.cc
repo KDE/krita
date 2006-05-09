@@ -42,10 +42,9 @@ typedef KGenericFactory<ToolStar> ToolStarFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatoolstar, ToolStarFactory( "krita" ) )
 
 
-ToolStar::ToolStar(QObject *parent, const char *name, const QStringList &)
+ToolStar::ToolStar(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(ToolStarFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )

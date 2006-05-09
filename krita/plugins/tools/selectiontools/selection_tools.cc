@@ -50,10 +50,9 @@ typedef KGenericFactory<SelectionTools> SelectionToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaselectiontools, SelectionToolsFactory( "krita" ) )
 
 
-SelectionTools::SelectionTools(QObject *parent, const char *name, const QStringList &)
+SelectionTools::SelectionTools(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(SelectionToolsFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )

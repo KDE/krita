@@ -60,10 +60,9 @@ KisKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
 typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFactory( "krita" ) )
 
-KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const char *name, const QStringList &)
+KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(KritaConvolutionFiltersFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {

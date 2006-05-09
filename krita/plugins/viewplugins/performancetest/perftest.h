@@ -1,4 +1,4 @@
-/* 
+/*
  * perftest.h -- Part of Krita
  *
  * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
@@ -32,9 +32,9 @@ class PerfTest : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    PerfTest(QObject *parent, const char *name, const QStringList &);
+    PerfTest(QObject *parent, const QStringList &);
     virtual ~PerfTest();
-    
+
 private slots:
 
     void slotPerfTest();
@@ -59,7 +59,7 @@ private:
     QString paintViewTest(quint32 testCount);
     QString paintViewFPSTest();
 
-    QString doBlit(const KisCompositeOp& op, 
+    QString doBlit(const KisCompositeOp& op,
                KisID cspace,
                quint8 opacity,
                quint32 testCount,

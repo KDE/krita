@@ -69,10 +69,9 @@
 typedef KGenericFactory<KritaBumpmap> KritaBumpmapFactory;
 K_EXPORT_COMPONENT_FACTORY( kritabumpmap, KritaBumpmapFactory( "krita" ) )
 
-KritaBumpmap::KritaBumpmap(QObject *parent, const char *name, const QStringList &)
+KritaBumpmap::KritaBumpmap(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(KritaBumpmapFactory::instance());
 
 

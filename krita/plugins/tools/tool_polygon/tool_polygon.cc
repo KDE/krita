@@ -42,10 +42,9 @@ typedef KGenericFactory<ToolPolygon> ToolPolygonFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatoolpolygon, ToolPolygonFactory( "krita" ) )
 
 
-ToolPolygon::ToolPolygon(QObject *parent, const char *name, const QStringList &)
+ToolPolygon::ToolPolygon(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(ToolPolygonFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )

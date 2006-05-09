@@ -28,7 +28,7 @@ class SmearyBrush : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    SmearyBrush(QObject *parent, const char *name, const QStringList &);
+    SmearyBrush(QObject *parent, const QStringList &);
     virtual ~SmearyBrush();
 };
 

@@ -28,7 +28,7 @@ class Screenshot : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    Screenshot(QObject *parent, const char *name, const QStringList &);
+    Screenshot(QObject *parent, const QStringList &);
     virtual ~Screenshot();
 
 private slots:

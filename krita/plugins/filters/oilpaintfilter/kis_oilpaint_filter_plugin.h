@@ -25,7 +25,7 @@
 class KisOilPaintFilterPlugin : public KParts::Plugin
 {
 public:
-    KisOilPaintFilterPlugin(QObject *parent, const char *name, const QStringList &);
+    KisOilPaintFilterPlugin(QObject *parent, const QStringList &);
     virtual ~KisOilPaintFilterPlugin();
 };
 

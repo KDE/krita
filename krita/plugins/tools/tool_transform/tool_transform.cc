@@ -42,10 +42,9 @@ typedef KGenericFactory<ToolTransform> ToolTransformFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatooltransform, ToolTransformFactory( "krita" ) )
 
 
-ToolTransform::ToolTransform(QObject *parent, const char *name, const QStringList &)
+ToolTransform::ToolTransform(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(ToolTransformFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )

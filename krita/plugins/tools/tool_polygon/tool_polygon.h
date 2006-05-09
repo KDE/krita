@@ -30,7 +30,7 @@ class ToolPolygon : public KParts::Plugin
 
 public:
 
-    ToolPolygon(QObject *parent, const char *name, const QStringList &);
+    ToolPolygon(QObject *parent, const QStringList &);
     virtual ~ToolPolygon();
 
 };

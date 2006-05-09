@@ -55,10 +55,9 @@
 typedef KGenericFactory<ModifySelection> ModifySelectionFactory;
 K_EXPORT_COMPONENT_FACTORY( kritamodifyselection, ModifySelectionFactory( "krita" ) )
 
-ModifySelection::ModifySelection(QObject *parent, const char *name, const QStringList &)
+ModifySelection::ModifySelection(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     if ( parent->inherits("KisView") )
     {
         setInstance(ModifySelectionFactory::instance());

@@ -29,7 +29,7 @@ class RGBF16HalfPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RGBF16HalfPlugin(QObject *parent, const char *name, const QStringList &);
+    RGBF16HalfPlugin(QObject *parent, const QStringList &);
     virtual ~RGBF16HalfPlugin();
 
 };

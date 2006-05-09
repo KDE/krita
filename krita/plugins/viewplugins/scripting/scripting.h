@@ -38,7 +38,7 @@ class Scripting : public KParts::Plugin
 {
     Q_OBJECT
     public:
-        Scripting(QObject *parent, const char *name, const QStringList &);
+        Scripting(QObject *parent, const QStringList &);
         virtual ~Scripting();
     private slots:
         void executionFinished(const Kross::Api::ScriptAction*);

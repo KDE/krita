@@ -35,10 +35,9 @@ typedef KGenericFactory<GRAYU16Plugin> GRAYU16PluginFactory;
 K_EXPORT_COMPONENT_FACTORY( krita_gray_u16_plugin, GRAYU16PluginFactory( "krita" ) )
 
 
-GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const char *name, const QStringList &)
+GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(GRAYU16PluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

@@ -35,7 +35,7 @@ class DefaultTools : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    DefaultTools(QObject *parent, const char *name, const QStringList &);
+    DefaultTools(QObject *parent, const QStringList &);
     virtual ~DefaultTools();
 
 };

@@ -30,7 +30,7 @@ class KisSeparateChannelsPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    KisSeparateChannelsPlugin(QObject *parent, const char *name, const QStringList &);
+    KisSeparateChannelsPlugin(QObject *parent, const QStringList &);
     virtual ~KisSeparateChannelsPlugin();
 
 private slots:

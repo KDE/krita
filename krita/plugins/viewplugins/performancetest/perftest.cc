@@ -78,10 +78,9 @@
 typedef KGenericFactory<PerfTest> PerfTestFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaperftest, PerfTestFactory( "krita" ) )
 
-PerfTest::PerfTest(QObject *parent, const char *name, const QStringList &)
+PerfTest::PerfTest(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     if ( parent->inherits("KisView") )
     {
         setInstance(PerfTestFactory::instance());
@@ -632,7 +631,7 @@ QString PerfTest::colorConversionTest(quint32 testCount)
         KisIDList l2 = KisMetaRegistry::instance()->csRegistry()->listKeys();
         for (KisIDList::Iterator it2 = l2.begin(); it2 != l2.end(); ++it2) {
             kDebug() << "test conversion from " << (*it).name() << " to " << (*it2).name() << endl;
-            
+
             t.restart();
             for (uint i = 0; i < testCount; ++i) {
                 KisImage * img2 = new KisImage(*img);
@@ -665,7 +664,7 @@ QString PerfTest::filterTest(quint32 testCount)
         QTime t;
 
         for (KisIDList::Iterator it = filters.begin(); it != filters.end(); ++it) {
-            
+
             KisFilterSP f = KisFilterRegistry::instance()->get(*it);
             t.restart();
             kDebug() << "test filter " << f->id().name() << " on " << img->colorSpace()->id().name() << endl;

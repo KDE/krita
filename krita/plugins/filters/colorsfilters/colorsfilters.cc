@@ -54,10 +54,9 @@
 typedef KGenericFactory<ColorsFilters> ColorsFiltersFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorsfilters, ColorsFiltersFactory( "krita" ) )
 
-ColorsFilters::ColorsFilters(QObject *parent, const char *name, const QStringList &)
+ColorsFilters::ColorsFilters(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(ColorsFiltersFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {
@@ -232,7 +231,7 @@ KisDesaturateFilter::KisDesaturateFilter()
 {
     m_lastCS = 0;
     m_adj = 0;
-            
+
 }
 
 KisDesaturateFilter::~KisDesaturateFilter()
@@ -257,7 +256,7 @@ void KisDesaturateFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         m_adj = src->colorSpace()->createDesaturateAdjustment();
         m_lastCS = src->colorSpace();
     }
-    
+
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
     setProgressTotalSteps(rect.width() * rect.height());

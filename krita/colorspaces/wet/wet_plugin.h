@@ -33,7 +33,7 @@ class WetPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    WetPlugin(QObject *parent, const char *name, const QStringList &);
+    WetPlugin(QObject *parent, const QStringList &);
     virtual ~WetPlugin();
 
 private:

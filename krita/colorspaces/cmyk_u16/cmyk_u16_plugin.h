@@ -28,7 +28,7 @@ class CMYKU16Plugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    CMYKU16Plugin(QObject *parent, const char *name, const QStringList &);
+    CMYKU16Plugin(QObject *parent, const QStringList &);
     virtual ~CMYKU16Plugin();
 
 };

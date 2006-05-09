@@ -42,10 +42,9 @@ typedef KGenericFactory<ToolCrop> ToolCropFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatoolcrop, ToolCropFactory( "krita" ) )
 
 
-ToolCrop::ToolCrop(QObject *parent, const char *name, const QStringList &)
+ToolCrop::ToolCrop(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(ToolCropFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )

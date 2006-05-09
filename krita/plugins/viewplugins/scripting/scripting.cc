@@ -54,12 +54,10 @@
 typedef KGenericFactory<Scripting> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
 
-Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
+Scripting::Scripting(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-	setObjectName(name);
     setInstance(KritaScriptingFactory::instance());
-
 
     if ( parent->inherits("KisView") )
     {

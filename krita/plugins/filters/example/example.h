@@ -27,7 +27,7 @@
 class KritaExample : public KParts::Plugin
 {
 public:
-    KritaExample(QObject *parent, const char *name, const QStringList &);
+    KritaExample(QObject *parent, const QStringList &);
     virtual ~KritaExample();
 };
 

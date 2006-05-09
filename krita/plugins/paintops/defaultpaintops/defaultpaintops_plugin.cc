@@ -41,11 +41,9 @@ typedef KGenericFactory<DefaultPaintOpsPlugin> DefaultPaintOpsPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( "kritacore" ) )
 
 
-DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const char *name, const QStringList &)
+DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
-
     setInstance(DefaultPaintOpsPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.

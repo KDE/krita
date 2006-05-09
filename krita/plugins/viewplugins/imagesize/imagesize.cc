@@ -55,10 +55,9 @@
 typedef KGenericFactory<ImageSize> ImageSizeFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
 
-ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
+ImageSize::ImageSize(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     if ( parent->inherits("KisView") )
     {
         setInstance(ImageSizeFactory::instance());

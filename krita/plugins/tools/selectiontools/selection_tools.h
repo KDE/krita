@@ -35,7 +35,7 @@ class SelectionTools : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    SelectionTools(QObject *parent, const char *name, const QStringList &);
+    SelectionTools(QObject *parent, const QStringList &);
     virtual ~SelectionTools();
 
 };

@@ -43,10 +43,9 @@ typedef KGenericFactory<ToolPolyline> ToolPolylineFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatoolpolyline, ToolPolylineFactory( "krita" ) )
 
 
-ToolPolyline::ToolPolyline(QObject *parent, const char *name, const QStringList &)
+ToolPolyline::ToolPolyline(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(ToolPolylineFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )

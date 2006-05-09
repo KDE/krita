@@ -28,7 +28,7 @@ class GRAYU16Plugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    GRAYU16Plugin(QObject *parent, const char *name, const QStringList &);
+    GRAYU16Plugin(QObject *parent, const QStringList &);
     virtual ~GRAYU16Plugin();
 
 };

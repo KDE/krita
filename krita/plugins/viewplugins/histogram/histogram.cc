@@ -52,11 +52,9 @@
 typedef KGenericFactory<Histogram> HistogramFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogram, HistogramFactory( "krita" ) )
 
-Histogram::Histogram(QObject *parent, const char *name, const QStringList &)
+Histogram::Histogram(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
-
     if ( parent->inherits("KisView") ) {
 
         setInstance(HistogramFactory::instance());

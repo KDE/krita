@@ -23,12 +23,10 @@
 
 class SelectSimilar : public KParts::Plugin
 {
-        Q_OBJECT
-    public:
-        SelectSimilar(QObject *parent, const char *name, const QStringList &);
-        virtual ~SelectSimilar();
-
-
+    Q_OBJECT
+public:
+    SelectSimilar(QObject *parent, const QStringList &);
+    virtual ~SelectSimilar();
 };
 
 #endif // SELECTSIMILAR_H

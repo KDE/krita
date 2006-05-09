@@ -28,7 +28,7 @@ class DefaultPaintOpsPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    DefaultPaintOpsPlugin(QObject *parent, const char *name, const QStringList &);
+    DefaultPaintOpsPlugin(QObject *parent, const QStringList &);
     virtual ~DefaultPaintOpsPlugin();
 };
 

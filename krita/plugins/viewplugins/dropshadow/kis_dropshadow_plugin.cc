@@ -39,10 +39,9 @@
 
 K_EXPORT_COMPONENT_FACTORY( kritadropshadow, KGenericFactory<KisDropshadowPlugin>( "krita" ) )
 
-KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const char *name, const QStringList &)
+KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     if ( parent->inherits("KisView") ) {
 
         setInstance(KGenericFactory<KisDropshadowPlugin>::instance());

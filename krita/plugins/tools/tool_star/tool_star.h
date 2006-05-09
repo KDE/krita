@@ -30,7 +30,7 @@ class ToolStar : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolStar(QObject *parent, const char *name, const QStringList &);
+    ToolStar(QObject *parent, const QStringList &);
     virtual ~ToolStar();
 
 private:

@@ -30,7 +30,7 @@ class KisDropshadowPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    KisDropshadowPlugin(QObject *parent, const char *name, const QStringList &);
+    KisDropshadowPlugin(QObject *parent, const QStringList &);
     virtual ~KisDropshadowPlugin();
 
 private slots:

@@ -56,10 +56,9 @@ typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
 
 
-DefaultTools::DefaultTools(QObject *parent, const char *name, const QStringList &)
+DefaultTools::DefaultTools(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(DefaultToolsFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )

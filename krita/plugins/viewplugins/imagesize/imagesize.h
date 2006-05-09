@@ -1,4 +1,4 @@
-/* 
+/*
  * imagesize.h -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
@@ -29,9 +29,9 @@ class ImageSize : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ImageSize(QObject *parent, const char *name, const QStringList &);
+    ImageSize(QObject *parent, const QStringList &);
     virtual ~ImageSize();
-    
+
 private slots:
 
     void slotImageSize();

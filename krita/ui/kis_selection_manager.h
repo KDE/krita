@@ -25,6 +25,7 @@
 #include <koffice_export.h>
 
 class KAction;
+class KToggleAction;
 class KisView;
 class KisDoc;
 class KisClipboard;
@@ -51,7 +52,7 @@ public:
      * This function return if the selection should be displayed
      */
     bool displaySelection();
-    
+
 public slots:
 
     void updateGUI();
@@ -94,7 +95,7 @@ public:
 
 private:
     void fill(const KisColor& color, bool fillWithPattern, const QString& transactionText);
-    
+
     void computeBorder (qint32  *circ, qint32  xradius, qint32  yradius);
     inline void rotatePointers (quint8  **p, quint32 n);
     void computeTransition (quint8* transition, quint8** buf, qint32 width);

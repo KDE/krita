@@ -30,7 +30,7 @@ class LMSF32Plugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    LMSF32Plugin(QObject *parent, const char *name, const QStringList &);
+    LMSF32Plugin(QObject *parent, const QStringList &);
     virtual ~LMSF32Plugin();
 
 };

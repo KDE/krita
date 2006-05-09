@@ -28,14 +28,14 @@ class RotateImage : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RotateImage(QObject *parent, const char *name, const QStringList &);
+    RotateImage(QObject *parent, const QStringList &);
     virtual ~RotateImage();
 
 private slots:
 
     void slotRotateImage();
-    void slotRotateImage90(); 
-    void slotRotateImage180(); 
+    void slotRotateImage90();
+    void slotRotateImage180();
     void slotRotateImage270();
     void slotRotateLayer();
 

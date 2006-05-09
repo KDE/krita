@@ -29,7 +29,7 @@ class KisColorAdjustment;
 class ColorsFilters : public KParts::Plugin
 {
     public:
-        ColorsFilters(QObject *parent, const char *name, const QStringList &);
+        ColorsFilters(QObject *parent, const QStringList &);
         virtual ~ColorsFilters();
 };
 
@@ -59,7 +59,7 @@ class KisDesaturateFilter : public KisFilter {
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
-    
+
         virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
         virtual bool workWith(KisColorSpace* cs);
 

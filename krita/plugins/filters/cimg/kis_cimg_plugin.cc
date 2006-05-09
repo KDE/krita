@@ -28,9 +28,8 @@
 typedef KGenericFactory<KisCImgPlugin> KisCImgPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacimg, KisCImgPluginFactory( "krita" ) )
 
-KisCImgPlugin::KisCImgPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent)
+KisCImgPlugin::KisCImgPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(KisCImgPluginFactory::instance());
 
     if (parent->inherits("KisFilterRegistry")) {

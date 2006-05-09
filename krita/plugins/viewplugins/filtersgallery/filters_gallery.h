@@ -33,15 +33,15 @@ namespace FiltersGallery {
     {
         Q_OBJECT
         public:
-            KritaFiltersGallery(QObject *parent, const char *name, const QStringList &);
+            KritaFiltersGallery(QObject *parent, const QStringList &);
             virtual ~KritaFiltersGallery();
         public slots:
             void showFiltersGalleryDialog();
         private:
-        
+
             KisView * m_view;
-    
-    
+
+
     };
 
 }

@@ -35,10 +35,9 @@ typedef KGenericFactory<RGBF16HalfPlugin> RGBF16HalfPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( krita_rgb_f16half_plugin, RGBF16HalfPluginFactory( "krita" ) )
 
 
-RGBF16HalfPlugin::RGBF16HalfPlugin(QObject *parent, const char *name, const QStringList &)
+RGBF16HalfPlugin::RGBF16HalfPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-	setObjectName(name);
     setInstance(RGBF16HalfPluginFactory::instance());
 
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )

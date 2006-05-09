@@ -44,10 +44,9 @@ typedef KGenericFactory<ToolFilter> ToolFilterFactory;
 K_EXPORT_COMPONENT_FACTORY( kritatoolfilter, ToolFilterFactory( "krita" ) )
 
 
-ToolFilter::ToolFilter(QObject *parent, const char *name, const QStringList &)
+ToolFilter::ToolFilter(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(ToolFilterFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )

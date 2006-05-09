@@ -1,4 +1,4 @@
-/* 
+/*
  * modify_selection.h -- Part of Krita
  *
  * Copyright (c) 2006 Michael Thaler (michael.thaler@physik.tu-muenchen.de)
@@ -28,9 +28,9 @@ class ModifySelection : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ModifySelection(QObject *parent, const char *name, const QStringList &);
+    ModifySelection(QObject *parent, const QStringList &);
     virtual ~ModifySelection();
-    
+
 private slots:
 
     void slotGrowSelection();

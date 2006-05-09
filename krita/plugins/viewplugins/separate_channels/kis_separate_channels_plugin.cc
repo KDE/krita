@@ -39,11 +39,9 @@
 
 K_EXPORT_COMPONENT_FACTORY( kritaseparatechannels, KGenericFactory<KisSeparateChannelsPlugin>( "krita" ) )
 
-KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const char *name, const QStringList &)
+KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
-
     if ( parent->inherits("KisView") ) {
         setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
         setXMLFile(locate("data","kritaplugins/imageseparate.rc"), true);

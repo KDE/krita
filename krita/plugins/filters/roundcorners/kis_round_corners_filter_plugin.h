@@ -25,7 +25,7 @@
 class KisRoundCornersFilterPlugin : public KParts::Plugin
 {
 public:
-    KisRoundCornersFilterPlugin(QObject *parent, const char *name, const QStringList &);
+    KisRoundCornersFilterPlugin(QObject *parent, const QStringList &);
     virtual ~KisRoundCornersFilterPlugin();
 };
 

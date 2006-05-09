@@ -30,6 +30,7 @@
 #include <KoRuler.h> // for KoTabulatorList
 #include <KoTextObject.h> // for KoTextView
 #include <koffice_export.h>
+class KActionCollection;
 class KoBgSpellCheck;
 class KoTextObject;
 class KoTextDocument;
@@ -135,7 +136,7 @@ public:
     QString wordUnderCursor( const KoTextCursor& cursor );
 
     /** Return the list of actions from data-tools. Used to populate a RMB popupmenu usually. */
-    QList<KAction *> dataToolActionList( KInstance * instance, const QString& word, bool & _singleWord );
+    QList<KAction *> dataToolActionList( KInstance * instance, KActionCollection* parent, const QString& word, bool & _singleWord );
 
     void insertSoftHyphen();
     void insertLineBreak();

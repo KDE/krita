@@ -1075,7 +1075,7 @@ KoLinkVariable * KoTextView::linkVariable()
     return dynamic_cast<KoLinkVariable *>(variable());
 }
 
-QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, const QString& word, bool & _singleWord )
+QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, KActionCollection* parent, const QString& word, bool & _singleWord )
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
@@ -1121,7 +1121,7 @@ QList<KAction *> KoTextView::dataToolActionList(KInstance * instance, const QStr
     // Maybe one day we'll have tools that use libkotext (or qt3's qrt), to act on formatted text
     tools += KDataToolInfo::query( "KoTextString", "application/x-qrichtext", instance );
 
-    return KDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KDataToolInfo &, const QString & ) ) );
+    return KDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KDataToolInfo &, const QString & ) ), parent );
 }
 
 QString KoTextView::currentWordOrSelection() const

@@ -127,8 +127,8 @@ private:
     KoPoint m_tl, m_br;
 };
 
-KoRect operator|(const KoRect &lhs, const KoRect &rhs);
-KoRect operator&(const KoRect &lhs, const KoRect &rhs);
+KOFFICEUI_EXPORT KoRect operator|(const KoRect &lhs, const KoRect &rhs);
+KOFFICEUI_EXPORT KoRect operator&(const KoRect &lhs, const KoRect &rhs);
 KOFFICEUI_EXPORT bool operator==(const KoRect &lhs, const KoRect &rhs);
 KOFFICEUI_EXPORT bool operator!=(const KoRect &lhs, const KoRect &rhs);
 

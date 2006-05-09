@@ -36,7 +36,7 @@ void testParseConfigItemString( KoOasisSettings& settings )
 {
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     const QString unit = viewSettings.parseConfigItemString( "unit" );
-    qDebug( "%s", unit.latin1() );
+    qDebug( "%s", qPrintable( unit ) );
     assert( unit == "mm" );
     kDebug() << "testParseConfigItemString OK" << endl;
 }

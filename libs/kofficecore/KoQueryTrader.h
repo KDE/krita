@@ -116,7 +116,7 @@ private:
 /**
  *  Represents an available filter.
  */
-class KoFilterEntry : public KShared
+class KOFFICECORE_EXPORT KoFilterEntry : public KShared
 {
 
 public:

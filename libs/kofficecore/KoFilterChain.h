@@ -367,8 +367,9 @@ namespace KOffice
      * The main worker behind the scenes. Manages the creation of the graph,
      * processing the information in it, and creating the filter chains.
      * @internal
+     * Only exported for unit tests.
      */
-    class Graph
+    class KOFFICECORE_EXPORT Graph
     {
 
     public:

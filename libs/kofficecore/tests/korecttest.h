@@ -16,34 +16,19 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <qtest_kde.h>
+#ifndef KORECTTEST_H
+#define KORECTTEST_H
 
-#include <KoRect.h>
-#include <kdebug.h>
-#include "korecttest.h"
-#include "korecttest.moc"
 
-QTEST_KDEMAIN( KoRectTest, NoGUI )
+#include <QObject>
 
-void KoRectTest::testEmptyRect()
+class KoRectTest : public QObject
 {
-  KoRect emptyRect;
-  QVERIFY( emptyRect.isNull() );
-  QVERIFY( emptyRect.isEmpty() );
-}
+    Q_OBJECT
+private slots:
+    void testEmptyRect();
+    void testNonEmptyRect();
+    void testUnion();
+};
 
-void KoRectTest::testNonEmptyRect()
-{
-  KoRect rect( 1, 15, 250, 156.14 );
-  QVERIFY( !rect.isNull() );
-  QVERIFY( !rect.isEmpty() );
-}
-
-void KoRectTest::testUnion()
-{
-  KoRect emptyRect;
-  KoRect rect( 1, 15, 250, 156.14 );
-  KoRect unionRect = rect | emptyRect;
-  QVERIFY( !unionRect.isNull() );
-  QVERIFY( !unionRect.isEmpty() );
-}
+#endif

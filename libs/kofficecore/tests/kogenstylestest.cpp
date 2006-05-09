@@ -257,7 +257,6 @@ int testStylesDotXml()
 }
 
 int main( int, char** ) {
-    fprintf( stderr, "OK\n" );
 
     if ( testLookup() )
         return 1;

@@ -91,9 +91,7 @@ public:
      * @todo explain what the purpose of widgetName is.
      */
     KoDocument( QWidget* parentWidget,
-                const char* widgetName,
                 QObject* parent,
-                const char* name,
                 bool singleViewMode = false );
 
     /**

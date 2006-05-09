@@ -31,7 +31,7 @@ class KoBrowserExtension : public KParts::BrowserExtension
 {
     Q_OBJECT
 public:
-    KoBrowserExtension( KoDocument * doc, const char * name = 0 );
+    KoBrowserExtension( KoDocument * doc );
 
 public slots:
     /// Automatically detected by konqueror

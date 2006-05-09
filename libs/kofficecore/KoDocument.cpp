@@ -209,11 +209,9 @@ private:
     KoView* m_view;
 };
 
-KoBrowserExtension::KoBrowserExtension( KoDocument * doc, const char * name )
+KoBrowserExtension::KoBrowserExtension( KoDocument * doc )
     : KParts::BrowserExtension( doc)
 {
-#warning "kde4: setObjectName needed ?"
-	setObjectName(name);
     emit enableAction( "print", true );
 }
 
@@ -230,10 +228,9 @@ void KoBrowserExtension::print()
         view->print( printer );
 }
 
-KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KParts::ReadWritePart( parent/*, name*/ )
+KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleViewMode )
+    : KParts::ReadWritePart( parent )
 {
-	setObjectName(name);
     if(s_documentList==0L)
         s_documentList=new Q3PtrList<KoDocument>;
     s_documentList->append(this);
@@ -257,7 +254,6 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
     if ( singleViewMode )
     {
         d->m_wrapperWidget = new KoViewWrapperWidget( parentWidget );
-        d->m_wrapperWidget->setObjectName( widgetName );
         setWidget( d->m_wrapperWidget );
         kDebug(30003) << "creating KoBrowserExtension" << endl;
         (void) new KoBrowserExtension( this ); // ## only if embedded into a browser?

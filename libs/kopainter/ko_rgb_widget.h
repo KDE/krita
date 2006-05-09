@@ -37,7 +37,7 @@ class KDualColorButton;
 class KoColorSlider;
 class QColor;
 
-class KoRGBWidget
+class KOPAINTER_EXPORT KoRGBWidget
      : public QWidget
 {
     Q_OBJECT

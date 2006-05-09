@@ -35,7 +35,7 @@ class QLabel;
 class QSpinBox;
 class KDualColorButton;
 
-class KoGrayWidget
+class KOPAINTER_EXPORT KoGrayWidget
      : public QWidget
 {
     Q_OBJECT

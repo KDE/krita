@@ -38,7 +38,7 @@ class Q3GridLayout;
 class QLabel;
 class QSpinBox;
 
-class KoHSVWidget
+class KOPAINTER_EXPORT KoHSVWidget
      : public QWidget
 {
     Q_OBJECT

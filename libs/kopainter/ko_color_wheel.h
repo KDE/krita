@@ -29,7 +29,7 @@
 
 class QPainter;
 
-class KoColorWheel : public KXYSelector
+class KOPAINTER_EXPORT KoColorWheel : public KXYSelector
 {
   Q_OBJECT
 

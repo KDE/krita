@@ -43,7 +43,7 @@ struct CMYKColor
     float K;
 };
 
-class KoCMYKWidget
+class KOPAINTER_EXPORT KoCMYKWidget
      : public QWidget
 {
     Q_OBJECT

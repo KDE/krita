@@ -35,7 +35,7 @@ namespace Kross { namespace Api {
      * the function supports. The Argument-class represents
      * such a single argument in a \a ArgumentList collection.
      */
-    class Argument
+    class KROSS_EXPORT Argument
     {
         public:
 

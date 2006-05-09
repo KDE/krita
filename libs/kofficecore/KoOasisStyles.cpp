@@ -299,7 +299,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             kDebug()<<" prefix :"<<prefix<<endl;
         } else if ( localName == "currency-symbol" ) {
             dataStyle.currencySymbol = e.text();
-            kdDebug()<<" currency-symbol: "<<dataStyle.currencySymbol<<endl;
+            kDebug()<<" currency-symbol: "<<dataStyle.currencySymbol<<endl;
             format += e.text();
             //TODO
             // number:language="de" number:country="DE">€</number:currency-symbol>
@@ -1044,7 +1044,7 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
 
 QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
 {
-    kdDebug(30003)<<"QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    kDebug(30003)<<"QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_NUMBER );
@@ -1064,14 +1064,14 @@ QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QStr
         else if ( format[0]=='0' && !beforeSeparator )
             decimalplaces++;
         else
-            kdDebug(30003)<<" error format 0 \n";
+            kDebug(30003)<<" error format 0 \n";
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
     text= _prefix ;
     addTextNumber(text, elementWriter );
     elementWriter.startElement( "number:number" );
-    kdDebug(30003)<<" decimalplaces :"<<decimalplaces<<" integerdigits :"<<integerdigits<<endl;
+    kDebug(30003)<<" decimalplaces :"<<decimalplaces<<" integerdigits :"<<integerdigits<<endl;
     if (!beforeSeparator)
         elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
@@ -1241,7 +1241,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
         else if ( format[0]=='0' && !beforeSeparator )
             decimalplaces++;
         else
-            kdDebug(30003)<<" error format 0 \n";
+            kDebug(30003)<<" error format 0 \n";
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
@@ -1250,7 +1250,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
     addTextNumber(text, elementWriter );
 
     elementWriter.startElement( "number:number" );
-    kdDebug(30003)<<" decimalplaces :"<<decimalplaces<<" integerdigits :"<<integerdigits<<endl;
+    kDebug(30003)<<" decimalplaces :"<<decimalplaces<<" integerdigits :"<<integerdigits<<endl;
     if (!beforeSeparator)
       elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
@@ -1261,7 +1261,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
 
     elementWriter.startElement( "number:currency-symbol" );
-    kdDebug(30003)<<" currency-symbol: "<<symbol<<endl;
+    kDebug(30003)<<" currency-symbol: "<<symbol<<endl;
     elementWriter.addTextNode( symbol );
     elementWriter.endElement();
 

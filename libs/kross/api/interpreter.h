@@ -38,7 +38,7 @@ namespace Kross { namespace Api {
      * is used to provide some abstract informations about each interpreter
      * we are able to use within the \a Manager singelton.
      */
-    class KOFFICE_EXPORT InterpreterInfo
+    class KROSS_EXPORT InterpreterInfo
     {
         public:
 
@@ -57,7 +57,7 @@ namespace Kross { namespace Api {
 
                     /**
                      * Constructor.
-                     * 
+                     *
                      * \param name The name the option has. This is the
                      *        displayed title and isn't used internaly.
                      * \param comment A comment that describes the option.
@@ -92,7 +92,7 @@ namespace Kross { namespace Api {
             const QString getInterpretername();
 
             /**
-             * \return the file-wildcard used to determinate by this interpreter 
+             * \return the file-wildcard used to determinate by this interpreter
              * used scriptingfiles. Those filter will be used e.g. with
              * KGlobal::dirs()->findAllResources() as filtermask. For example
              * python just defines it as "*py".
@@ -118,8 +118,8 @@ namespace Kross { namespace Api {
             Option* getOption(const QString name);
 
             /**
-             * \return the value of the option defined with \p name . If there 
-             * doesn't exists an option with such a name, the \p defaultvalue 
+             * \return the value of the option defined with \p name . If there
+             * doesn't exists an option with such a name, the \p defaultvalue
              * is returned.
              */
             const QVariant getOptionValue(const QString name, QVariant defaultvalue = QVariant());

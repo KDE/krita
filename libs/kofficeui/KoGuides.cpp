@@ -172,7 +172,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     }
     else 
     {   
-        if ( !( e->state() && Qt::ControlModifier ) )
+        if ( !( e->state() & Qt::ControlButton ) )
         {
             changed = unselectAll();
         }

@@ -149,7 +149,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
             {
                 m_mouseSelected = true;
             }
-            if ( e->state() & Qt::ControlModifier )
+            if ( e->modifiers() & Qt::ControlModifier )
             {
                 if ( guideLine->selected )
                 {
@@ -172,7 +172,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     }
     else 
     {   
-        if ( !( e->state() & Qt::ControlModifier ) )
+        if ( !( e->modifiers() & Qt::ControlModifier ) )
         {
             changed = unselectAll();
         }
@@ -218,7 +218,7 @@ bool KoGuides::mouseMoveEvent( QMouseEvent *e )
         emit guideLinesChanged( m_view );
         eventProcessed = true;
     }
-    else if ( e->state() == Qt::NoButton )
+    else if ( e->modifiers() == Qt::NoModifier )
     {
         KoPoint p( mapFromScreen( e->pos() ) );
         KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );

@@ -35,7 +35,7 @@ class KoPageLayoutColumns;
 /**
  * This class is a widget that shows the KoPageLayout data structure and allows the user to change it.
  */
-class KoPageLayoutSize : public QWidget
+class KOFFICEUI_EXPORT KoPageLayoutSize : public QWidget
 {
     Q_OBJECT
 

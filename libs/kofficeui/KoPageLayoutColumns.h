@@ -33,7 +33,7 @@ class KoPagePreview;
 /**
  * This class is a widget that shows the KoColumns data structure and allows the user to change it.
  */
-class KoPageLayoutColumns : public KoPageLayoutColumnsBase {
+class KOFFICEUI_EXPORT KoPageLayoutColumns : public KoPageLayoutColumnsBase {
     Q_OBJECT
 
 public:

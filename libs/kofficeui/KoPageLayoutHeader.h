@@ -31,7 +31,7 @@ class KoPagePreview;
 /**
  * This class is a widget that shows the KoKWHeaderFooter data structure and allows the user to change it.
  */
-class KoPageLayoutHeader : public QWidget, public Ui::KoPageLayoutHeaderBase
+class KOFFICEUI_EXPORT KoPageLayoutHeader : public QWidget, public Ui::KoPageLayoutHeaderBase
 {
     Q_OBJECT
 

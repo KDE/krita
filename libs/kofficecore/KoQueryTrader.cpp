@@ -50,7 +50,7 @@ KoDocumentEntry::KoDocumentEntry( KService::Ptr service )
 {
 }
 
-KoDocument* KoDocumentEntry::createDoc( QString* errorMsg, KoDocument* parent, const char* name ) const
+KoDocument* KoDocumentEntry::createDoc( QString* errorMsg, KoDocument* parent ) const
 {
     // TODO use KParts::ComponentFactory::createInstanceFromService( m_service )
     // to get better error handling.
@@ -65,7 +65,7 @@ KoDocument* KoDocumentEntry::createDoc( QString* errorMsg, KoDocument* parent, c
 
     QObject* obj;
     if ( factory->inherits( "KParts::Factory" ) )
-      obj = static_cast<KParts::Factory *>(factory)->createPart( 0L, parent, name, QStringList("KoDocument") );
+      obj = static_cast<KParts::Factory *>(factory)->createPart( 0L, parent, "KoDocument" );
     else {
       kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->metaObject()->className() << endl; // This shouldn't happen...
       obj = factory->create( parent, name, QStringList("KoDocument") );
@@ -201,7 +201,7 @@ Q3ValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
   return lst;
 }
 
-KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent, const char* name )
+KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent )
 {
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName( m_service->library() ) );
 
@@ -210,7 +210,7 @@ KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent, co
         return 0;
     }
 
-    QObject* obj = factory->create( parent, name, QStringList("KoFilter") );
+    QObject* obj = factory->create( parent, "KoFilter" );
     if ( !obj || !obj->inherits( "KoFilter" ) )
     {
         delete obj;

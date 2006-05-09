@@ -70,7 +70,7 @@ public:
    *  Uses the factory of the component to create
    *  a document. If that is not possible, 0 is returned.
    */
-  KoDocument* createDoc( QString* errorMsg = 0, KoDocument* parent = 0, const char* name = 0 ) const;
+  KoDocument* createDoc( QString* errorMsg = 0, KoDocument* parent = 0 ) const;
 
   /**
    *  This function will query ksycoca to find all available components.
@@ -126,7 +126,7 @@ public:
   KoFilterEntry( KService::Ptr service );
   ~KoFilterEntry() { }
 
-  KoFilter* createFilter( KoFilterChain* chain, QObject* parent = 0, const char* name = 0 );
+  KoFilter* createFilter( KoFilterChain* chain, QObject* parent = 0 );
 
   /**
    *  The imported mimetype(s).

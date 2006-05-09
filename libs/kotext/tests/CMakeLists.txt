@@ -1,7 +1,8 @@
 kde4_header()
 
-include_directories( ${KOTEXT_INCLUDES} )
+if(KDE4_BUILD_TESTS)
 
+include_directories( ${KOTEXT_INCLUDES} )
 
 ########### next target ###############
 
@@ -9,13 +10,9 @@ set(kotextformattertest_SRCS kotextformattertest.cpp )
 
 kde4_automoc(${kotextformattertest_SRCS})
 
-if(KDE4_BUILD_TESTS)
+kde4_add_executable(kotextformattertest RUN_UNINSTALLED ${kotextformattertest_SRCS})
 
-kde4_add_executable(kotextformattertest ${kotextformattertest_SRCS})
-
-target_link_libraries(kotextformattertest  ${KDE4_KDECORE_LIBS} )
-
-endif(KDE4_BUILD_TESTS)
+target_link_libraries(kotextformattertest kotext)
 
 ########### next target ###############
 
@@ -23,13 +20,9 @@ set(kobordertest_SRCS kobordertest.cpp )
 
 kde4_automoc(${kobordertest_SRCS})
 
-if(KDE4_BUILD_TESTS)
+kde4_add_executable(kobordertest RUN_UNINSTALLED ${kobordertest_SRCS})
 
-kde4_add_executable(kobordertest ${kobordertest_SRCS})
-
-target_link_libraries(kobordertest  ${KDE4_KDECORE_LIBS} )
-
-endif(KDE4_BUILD_TESTS)
+target_link_libraries(kobordertest kotext)
 
 ########### next target ###############
 
@@ -37,16 +30,13 @@ set(kovariabletest_SRCS kovariabletest.cpp )
 
 kde4_automoc(${kovariabletest_SRCS})
 
-if(KDE4_BUILD_TESTS)
+kde4_add_executable(kovariabletest RUN_UNINSTALLED ${kovariabletest_SRCS})
 
-kde4_add_executable(kovariabletest ${kovariabletest_SRCS})
+target_link_libraries(kovariabletest kotext)
 
-target_link_libraries(kovariabletest  ${KDE4_KDECORE_LIBS} )
+########### end ###############
 
 endif(KDE4_BUILD_TESTS)
-
-########### install files ###############
-
 
 kde4_footer()
 

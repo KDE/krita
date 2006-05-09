@@ -2,6 +2,7 @@
 #define TIMEFORMATWIDGET_H
 
 #include <QWidget>
+class QComboBox;
 class Ui_TimeDateFormatWidgetPrototype;
 
 class TimeFormatWidget : public QWidget

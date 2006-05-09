@@ -44,6 +44,8 @@
 #include <kdeversion.h>
 #include <kinstance.h>
 #include <kcalendarsystem.h>
+#include <kseparatoraction.h>
+#include <ktoggleaction.h>
 #include <kaboutdata.h>
 
 #include <QStringList>
@@ -1342,7 +1344,7 @@ void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
         // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
         const QString dateValue = elem.attributeNS( KoXmlNS::text, "date-value", QString::null);
         QDateTime dt;
-#warning "kde4 port it"		
+#warning "kde4 port it"
         //if ( !dateValue.isEmpty() ) // avoid QDate warning
             //dt = QDate::fromString(dateValue, Qt::ISODate);
 
@@ -1445,7 +1447,7 @@ QString KoDateVariable::formatStr(int & correct)
     {
         QString num;
         num.setNum(i);
-#warning "kde4: port it"		
+#warning "kde4: port it"
         //configGroup.writeEntry("Last Used"+num, stringList[i]);
     }
     config->sync();
@@ -1657,7 +1659,7 @@ QString KoTimeVariable::formatStr(int & _correct)
     {
         QString num;
         num.setNum(i);
-#warning "kde4 port it"		
+#warning "kde4 port it"
         //configGroup.writeEntry("Last Used"+num, stringList[i]);
     }
     config->sync();

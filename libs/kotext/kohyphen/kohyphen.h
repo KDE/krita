@@ -27,6 +27,7 @@
 //Added by qt3to4:
 #include <QByteArray>
 #include "hyphen.h"
+#include <koffice_export.h>
 
 class KoHyphenatorException{
 public:
@@ -55,7 +56,7 @@ private:
  * chars (0xad) or char* in format of hnj_hyphen_hyphenate() function from
  * libhnj library.
  */
-class KoHyphenator{
+class KOTEXT_EXPORT KoHyphenator{ // exported for unit-test
 public:
         /**
          * Returns the single KoHyphenator instance (singleton pattern)

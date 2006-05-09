@@ -109,42 +109,4 @@ protected:
 
 };
 
-/******************************************************************/
-/* class KoBorderPreview                                          */
-/******************************************************************/
-
-class KoBorderPreview : public Q3Frame/*QGroupBox*/
-{
-    Q_OBJECT
-
-public:
-    KoBorderPreview( QWidget* );
-    ~KoBorderPreview() {}
-
-    KoBorder leftBorder()const { return m_leftBorder; }
-    void setLeftBorder( const KoBorder& _leftBorder )
-	{ m_leftBorder = _leftBorder; update(); }
-    KoBorder rightBorder() const { return m_rightBorder; }
-    void setRightBorder( const KoBorder& _rightBorder )
-	{ m_rightBorder = _rightBorder; update(); }
-    KoBorder topBorder()const { return m_topBorder; }
-    void setTopBorder( const KoBorder& _topBorder )
-	{ m_topBorder = _topBorder; update(); }
-    KoBorder bottomBorder()const { return m_bottomBorder; }
-    void setBottomBorder( const KoBorder& _bottomBorder )
-	{ m_bottomBorder = _bottomBorder; update(); }
-
-    void setBorder( KoBorder::BorderType which, const KoBorder& border);
-
-protected:
-    virtual void mousePressEvent( QMouseEvent* _ev );
-    void drawContents( QPainter* );
-    QPen setBorderPen( KoBorder _brd );
-
-    KoBorder m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
-signals:
-    void choosearea(QMouseEvent * _ev);
-
-};
-
 #endif

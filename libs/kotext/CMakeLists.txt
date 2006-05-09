@@ -64,7 +64,9 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoUserStyle.cpp 
    KoUserStyleCollection.cpp 
    KoParagStyle.cpp 
-   KoTextBookmark.cpp )
+   KoTextBookmark.cpp
+   KoBorderPreview.cpp
+ )
 
 kde4_automoc(${kotext_LIB_SRCS})
 

@@ -268,7 +268,7 @@ QIODevice* KoStore::device() const
   return m_stream;
 }
 
-QByteArray KoStore::read( unsigned long int max )
+QByteArray KoStore::read( qint64 max )
 {
   QByteArray data;
 
@@ -300,12 +300,12 @@ QByteArray KoStore::read( unsigned long int max )
   return data;
 }
 
-Q_LONG KoStore::write( const QByteArray& data )
+qint64 KoStore::write( const QByteArray& data )
 {
   return write( data.data(), data.size() ); // see below
 }
 
-Q_LONG KoStore::read( char *_buffer, Q_ULONG _len )
+qint64 KoStore::read( char *_buffer, qint64 _len )
 {
   if ( !m_bIsOpen )
   {
@@ -329,7 +329,7 @@ Q_LONG KoStore::read( char *_buffer, Q_ULONG _len )
   return m_stream->read( _buffer, _len );
 }
 
-Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
+qint64 KoStore::write( const char* _data, qint64 _len )
 {
   if ( _len == 0L ) return 0;
 

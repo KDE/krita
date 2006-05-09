@@ -133,7 +133,7 @@ void KoXmlWriter::addCompleteElement( QIODevice* indev )
     QByteArray buffer;
     buffer.resize(MAX_CHUNK_SIZE);
     while ( !indev->atEnd() ) {
-        Q_LONG len = indev->read( buffer.data(), buffer.size() );
+        qint64 len = indev->read( buffer.data(), buffer.size() );
         if ( len <= 0 ) // e.g. on error
             break;
         m_dev->write( buffer.data(), len );

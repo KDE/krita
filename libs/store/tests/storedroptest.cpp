@@ -61,8 +61,8 @@ void StoreDropTest::contentsDragMoveEvent( QDragMoveEvent * ev )
 
 void StoreDropTest::keyPressEvent( QKeyEvent * e )
 {
-    if ( ( ( e->state() & Qt::ShiftModifier ) && e->key() == Qt::Key_Insert ) ||
-         ( ( e->state() & Qt::ControlModifier ) && e->key() == Qt::Key_V ) )
+    if ( ( ( e->modifiers() & Qt::ShiftModifier ) && e->key() == Qt::Key_Insert ) ||
+         ( ( e->modifiers() & Qt::ControlModifier ) && e->key() == Qt::Key_V ) )
         paste();
     //else
     //    QTextBrowser::keyPressEvent( e );

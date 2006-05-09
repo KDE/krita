@@ -1,10 +1,8 @@
 kde4_header()
 
+include_directories( ${KOSTORE_INCLUDES} )
+
 add_subdirectory( tests )
-
-
-include_directories( ${KOFFICECORE_INCLUDES} )
-
 
 ########### next target ###############
 

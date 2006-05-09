@@ -41,7 +41,7 @@ public:
     KoZipStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
     ~KoZipStore();
 
-    virtual Q_LONG write( const char* _data, Q_ULONG _len );
+    virtual qint64 write( const char* _data, qint64 _len );
 protected:
     virtual bool init( Mode _mode, const QByteArray& appIdentification );
     virtual bool openWrite( const QString& name );

@@ -148,7 +148,7 @@ bool KoZipStore::openRead( const QString& name )
     return true;
 }
 
-Q_LONG KoZipStore::write( const char* _data, Q_ULONG _len )
+qint64 KoZipStore::write( const char* _data, qint64 _len )
 {
   if ( _len == 0L ) return 0;
   //kDebug(s_area) << "KoZipStore::write " << _len << endl;

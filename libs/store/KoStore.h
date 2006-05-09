@@ -127,26 +127,26 @@ public:
    * Read data from the currently opened file. You can also use the streams
    * for this.
    */
-  QByteArray read( unsigned long int max );
+  QByteArray read( qint64 max );
 
   /**
    * Write data into the currently opened file. You can also use the streams
    * for this.
    */
-  Q_LONG write( const QByteArray& _data );
+  qint64 write( const QByteArray& _data );
 
   /**
    * Read data from the currently opened file. You can also use the streams
    * for this.
    * @return size of data read, -1 on error
    */
-  Q_LONG read( char *_buffer, Q_ULONG _len );
+  qint64 read( char *_buffer, qint64 _len );
 
   /**
    * Write data into the currently opened file. You can also use the streams
    * for this.
    */
-  virtual Q_LONG write( const char* _data, Q_ULONG _len );
+  virtual qint64 write( const char* _data, qint64 _len );
 
   /**
    * @return the size of the currently opened file, -1 on error.

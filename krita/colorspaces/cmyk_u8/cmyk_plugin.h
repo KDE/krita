@@ -28,7 +28,7 @@ class CMYKPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    CMYKPlugin(QObject *parent, const char *name, const QStringList &);
+    CMYKPlugin(QObject *parent, const QStringList &);
     virtual ~CMYKPlugin();
 
 

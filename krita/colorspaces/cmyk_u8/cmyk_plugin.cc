@@ -39,10 +39,9 @@ typedef KGenericFactory<CMYKPlugin> CMYKPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKPluginFactory( "krita" ) )
 
 
-CMYKPlugin::CMYKPlugin(QObject *parent, const char *name, const QStringList &)
+CMYKPlugin::CMYKPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    setObjectName(name);
     setInstance(CMYKPluginFactory::instance());
     if ( parent->inherits("KisColorSpaceFactoryRegistry") )
     {

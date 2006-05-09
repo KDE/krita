@@ -29,13 +29,13 @@ class Scan : public KParts::Plugin
 {
     Q_OBJECT
     public:
-	Scan(QObject *parent, const char *name, const QStringList &);
+	Scan(QObject *parent, const QStringList &);
 	virtual ~Scan();
-	
+
     private slots:
 	void slotScan();
 	void slotShowImage(const QImage &img);
-    
+
     private:
         KScanDialog *scanDialog;
 };

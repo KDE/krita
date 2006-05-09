@@ -33,10 +33,9 @@
 typedef KGenericFactory<Scan> ScanFactory;
 K_EXPORT_COMPONENT_FACTORY( kofficescan, ScanFactory( "kscan_plugin" ) )
 
-Scan::Scan(QObject *parent, const char *name, const QStringList &)
+Scan::Scan(QObject *parent, const QStringList &)
     : KParts::Plugin(parent), scanDialog( 0 )
 {
-	setObjectName(name);
     setInstance(ScanFactory::instance());
 
     (void) new KAction(i18n("&Scan Image..."), SmallIcon("scanner"), 0, this, SLOT(slotScan()), actionCollection(), "scan_image");

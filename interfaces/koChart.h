@@ -42,7 +42,7 @@ namespace KoChart
     {
         Q_OBJECT
     public:
-        WizardExtension( Part *part, const char *name = 0 );
+        WizardExtension( Part *part );
         virtual ~WizardExtension();
 
         Part *part() const { return m_part; }
@@ -60,8 +60,8 @@ namespace KoChart
     {
         Q_OBJECT
     public:
-        Part( QWidget *parentWidget, const char *widgetName,
-              QObject *parent, const char *name,
+        Part( QWidget *parentWidget,
+              QObject *parent,
               bool singleViewMode = false );
 
         virtual ~Part();

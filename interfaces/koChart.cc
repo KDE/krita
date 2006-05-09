@@ -22,10 +22,9 @@
 
 using namespace KoChart;
 
-WizardExtension::WizardExtension( Part *part, const char *name )
+WizardExtension::WizardExtension( Part *part )
     : QObject( part )
 {
-    setObjectName( name );
     m_part = part;
 }
 
@@ -33,10 +32,10 @@ WizardExtension::~WizardExtension()
 {
 }
 
-Part::Part( QWidget *parentWidget, const char *widgetName,
-            QObject *parent, const char *name,
+Part::Part( QWidget *parentWidget,
+            QObject *parent,
             bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+    : KoDocument( parentWidget, parent, singleViewMode )
 {
 }
 

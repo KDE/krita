@@ -20,6 +20,7 @@
 #include <dcopclient.h>
 #include <kcmdlineargs.h>
 #include <KoApplication.h>
+#include <krita_export.h>
 
 #include "ui/kis_aboutdata.h"
 

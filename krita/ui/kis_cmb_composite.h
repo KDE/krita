@@ -21,7 +21,7 @@
 #ifndef KIS_CMB_COMPOSITE_H_
 #define KIS_CMB_COMPOSITE_H_
 
-#include <koffice_export.h>
+#include <krita_export.h>
 #include "qcombobox.h"
 #include "kis_composite_op.h"
 

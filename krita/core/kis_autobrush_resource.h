@@ -21,7 +21,7 @@
 
 #include "kis_brush.h"
 
-class KisAutobrushShape {
+class KRITAIMAGE_EXPORT KisAutobrushShape {
     public:
 		virtual ~KisAutobrushShape(){}
         KisAutobrushShape(qint32 w, qint32 h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv)
@@ -33,7 +33,7 @@ class KisAutobrushShape {
         double m_fh, m_fv;
 };
 
-class KisAutobrushCircleShape : public KisAutobrushShape {
+class KRITAIMAGE_EXPORT KisAutobrushCircleShape : public KisAutobrushShape {
     public:
 		virtual ~KisAutobrushCircleShape(){}
         KisAutobrushCircleShape(qint32 w, qint32 h, double fh, double fv);
@@ -50,7 +50,7 @@ class KisAutobrushCircleShape : public KisAutobrushShape {
         double m_xfadecoef, m_yfadecoef;
 };
 
-class KisAutobrushRectShape : public KisAutobrushShape {
+class KRITAIMAGE_EXPORT KisAutobrushRectShape : public KisAutobrushShape {
     public:
 		virtual ~KisAutobrushRectShape() {}
         KisAutobrushRectShape(qint32 w, qint32 h, double fh, double fv);
@@ -60,7 +60,7 @@ class KisAutobrushRectShape : public KisAutobrushShape {
         double m_xcentre, m_ycentre, m_c;
 };
 
-class KisAutobrushResource : public KisBrush
+class KRITAIMAGE_EXPORT KisAutobrushResource : public KisBrush
 {
     public:
 		virtual ~KisAutobrushResource() {}

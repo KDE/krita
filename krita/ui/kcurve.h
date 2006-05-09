@@ -31,7 +31,7 @@
 #include <QPaintEvent>
 #include <QList>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KRITAUI_EXPORT KCurve : public QWidget
 {

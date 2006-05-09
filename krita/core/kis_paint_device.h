@@ -33,7 +33,7 @@
 #include "kis_colorspace.h"
 #include "kis_canvas_controller.h"
 #include "kis_color.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class DCOPObject;
 
@@ -68,7 +68,7 @@ typedef KSharedPtr<KisMemento> KisMementoSP;
  * A KisPaintDevice doesn't have any fixed size, the size change dynamicaly
  * when pixels are accessed by an iterator.
  */
-class KRITACORE_EXPORT KisPaintDevice
+class KRITAIMAGE_EXPORT KisPaintDevice
     : public QObject
     , public KShared
 {
@@ -252,7 +252,7 @@ public:
      * profile. If the given profile is 0, nothing happens.
      */
     virtual void setProfile(KisProfile * profile);
-    
+
     /**
      * Fill this paint device with the data from img; starting at (offsetX, offsetY)
      * @param srcProfileName name of the RGB profile to interpret the img as. "" is interpreted as sRGB
@@ -289,7 +289,7 @@ public:
      */
 
     KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h);
-            
+
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
      * The width and height of the returned QImage won't exceed \p maxw and \p maxw, but they may be smaller.
@@ -411,8 +411,8 @@ public:
      * Set the parent layer completely dirty, if this paint device has one.
      */
     void setDirty();
-    
-    
+
+
     /**
      * Mirror the device along the X axis
      */
@@ -462,7 +462,7 @@ public:
 
     /** Reinstates the old selection */
     void reselect();
-        
+
     /** Clear the selected pixels from the paint device */
     void clearSelection();
 
@@ -491,7 +491,7 @@ public:
      */
     void emitSelectionChanged(const QRect& r);
 
-    
+
     KisUndoAdapter *undoAdapter() const;
 
     /**
@@ -511,15 +511,15 @@ signals:
 private slots:
 
     void runBackgroundFilters();
-    
+
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);
 
 protected:
     KisDataManagerSP m_datamanager;
-    
+
 private:
-    /* The KisLayer that contains this paint device, or 0 if this is not 
+    /* The KisLayer that contains this paint device, or 0 if this is not
      * part of a layer.
      */
     KisLayer *m_parentLayer;
@@ -536,11 +536,11 @@ private:
     // Whether the selection is active
     bool m_hasSelection;
     bool m_selectionDeselected;
-    
+
     // Contains the actual selection. For now, there can be only
     // one selection per layer. XXX: is this a limitation?
     KisSelectionSP m_selection;
-    
+
     DCOPObject * m_dcop;
 
     KisExifInfo* m_exifInfo;

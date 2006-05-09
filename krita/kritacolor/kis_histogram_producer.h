@@ -47,7 +47,7 @@ class KisChannelInfo;
  * in which they are found in the channels() method. This is potentially different from
  * the order in which they are internally ordered!
  **/
-class KisHistogramProducer : public KShared {
+class KRITACOLOR_EXPORT KisHistogramProducer : public KShared {
 public:
     KisHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
     virtual ~KisHistogramProducer() {}
@@ -95,7 +95,7 @@ protected:
 
 typedef KSharedPtr<KisHistogramProducer> KisHistogramProducerSP;
 
-class KisHistogramProducerFactory {
+class KRITACOLOR_EXPORT KisHistogramProducerFactory {
 public:
     KisHistogramProducerFactory(const KisID& id) : m_id(id) {}
     virtual ~KisHistogramProducerFactory() {}
@@ -110,7 +110,7 @@ protected:
     KisID m_id;
 };
 
-class KisHistogramProducerFactoryRegistry
+class KRITACOLOR_EXPORT KisHistogramProducerFactoryRegistry
     : public KisGenericRegistry<KisHistogramProducerFactory*> {
 public:
     virtual ~KisHistogramProducerFactoryRegistry();

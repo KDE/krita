@@ -42,7 +42,7 @@ class KisColorSpaceFactoryRegistry;
  * A colorspace strategy is the definition of a certain color model
  * in Krita.
  */
-class KisAbstractColorSpace : public KisColorSpace {
+class KRITACOLOR_EXPORT KisAbstractColorSpace : public KisColorSpace {
 
 
 public:
@@ -111,7 +111,7 @@ public:
     virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
 
     /**
-     * Returns true if the colorspace supports channel values outside the 
+     * Returns true if the colorspace supports channel values outside the
      * (normalised) range 0 to 1.
      */
     virtual bool hasHighDynamicRange() const { return false; }
@@ -156,7 +156,7 @@ public:
     virtual void applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *, qint32 nPixels);
 
     virtual void invertColor(quint8 * src, qint32 nPixels);
-    
+
     virtual quint8 difference(const quint8* src1, const quint8* src2);
 
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
@@ -166,7 +166,7 @@ public:
     virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
 
     virtual quint8 intensity8(const quint8 * src) const;
-    
+
     virtual KisID mathToolboxID() const;
 
     virtual void bitBlt(quint8 *dst,

@@ -32,7 +32,7 @@
 #include "kis_paintop.h"
 #include "kis_color.h"
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class QRect;
 class KisTransaction;
@@ -49,11 +49,11 @@ class KisPattern;
  *
  * KisPainter supports transactions that can group various paint operations
  * in one undoable step.
- * 
+ *
  * For more complex operations, you might want to have a look at the subclasses
  * of KisPainter: KisConvolutionPainter, KisFillPainter and KisGradientPainter
  */
-class KRITACORE_EXPORT KisPainter : public KisProgressSubject {
+class KRITAIMAGE_EXPORT KisPainter : public KisProgressSubject {
     typedef KisProgressSubject super;
 
 public:
@@ -264,7 +264,7 @@ public:
 
     /// Set the color that will be used to paint with
     void setPaintColor(const KisColor& color) { m_paintColor = color;}
-    
+
     /// Returns the color that will be used to paint with
     KisColor paintColor() const { return m_paintColor; }
 

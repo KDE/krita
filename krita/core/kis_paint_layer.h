@@ -25,7 +25,7 @@
 /**
  * This layer is of a type that can be painted on.
  */
-class KisPaintLayer : public KisLayer {
+class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer {
     typedef KisLayer super;
 
     Q_OBJECT

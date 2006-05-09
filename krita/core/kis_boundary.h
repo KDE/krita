@@ -20,7 +20,7 @@
 
 #include <q3valuelist.h>
 #include <qpair.h>
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_point.h"
 
@@ -34,7 +34,7 @@ class KisPaintDevice;
  * Usage: construct a KisBoundary, and then run a generateBoundary(w, h) on it. After that,
  * you can use the KisBoundaryPainter::paint method to let it paint the outline, or get a pixmap.
  **/
-class KRITACORE_EXPORT KisBoundary {
+class KRITAIMAGE_EXPORT KisBoundary {
 public:
     KisBoundary(KisPaintDevice* dev);
     void generateBoundary(int w, int h);

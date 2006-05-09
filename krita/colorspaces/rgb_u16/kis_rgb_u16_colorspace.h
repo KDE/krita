@@ -21,14 +21,14 @@
 
 #include <klocale.h>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_global.h"
 #include "kis_u16_base_colorspace.h"
 #include "kis_integer_maths.h"
 
 
-class KRITATOOL_EXPORT KisRgbU16ColorSpace : public KisU16BaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbU16ColorSpace : public KisU16BaseColorSpace {
 public:
 
     struct Pixel {
@@ -66,7 +66,7 @@ public:
     virtual quint32 pixelSize() const;
 
     virtual KisCompositeOpList userVisiblecompositeOps() const;
-    
+
 protected:
 
     virtual void bitBlt(quint8 *dst,

@@ -22,7 +22,7 @@
 #include <qpoint.h>
 #include <qrect.h>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KisCanvasController;
 class KisCanvasSubject;

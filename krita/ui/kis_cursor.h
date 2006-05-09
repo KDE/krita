@@ -21,10 +21,10 @@
 
 #ifndef __kis_cursor_h__
 #define __kis_cursor_h__
-#include <koffice_export.h>
+#include <krita_export.h>
 class QCursor;
 
-class KRITACORE_EXPORT KisCursor
+class KRITAUI_EXPORT KisCursor
 {
 
 public:

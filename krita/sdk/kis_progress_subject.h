@@ -20,7 +20,7 @@
 #define KIS_PROGRESS_SUBJECT_H_
 
 #include <qobject.h>
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KRITAUI_EXPORT KisProgressSubject : public QObject {
     Q_OBJECT

@@ -26,7 +26,7 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_painter.h"
 #include "kis_types.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KisPattern;
 
@@ -35,7 +35,7 @@ class KisPattern;
  * This painter can be used to fill paint devices in different ways. This can also be used
  * for flood filling related operations.
  */
-class KRITACORE_EXPORT KisFillPainter : public KisPainter
+class KRITAIMAGE_EXPORT KisFillPainter : public KisPainter
 {
 
     typedef KisPainter super;

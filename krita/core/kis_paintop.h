@@ -34,7 +34,7 @@
 #include "kis_vec.h"
 #include "kis_colorspace.h"
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KisPoint;
 class KisAlphaMask;
@@ -47,7 +47,7 @@ class QWidget;
  * This class keeps information that can be used in the painting process, for example by
  * brushes.
  **/
-class KRITACORE_EXPORT KisPaintInformation {
+class KRITAIMAGE_EXPORT KisPaintInformation {
 public:
     KisPaintInformation(double pressure = PRESSURE_DEFAULT,
                         double xTilt = 0.0, double yTilt = 0.0,
@@ -59,7 +59,7 @@ public:
     KisVector2D movement;
 };
 
-class KRITACORE_EXPORT KisPaintOp : public KShared
+class KRITAIMAGE_EXPORT KisPaintOp : public KShared
 {
 
 public:
@@ -128,7 +128,7 @@ public:
     virtual bool userVisible(KisColorSpace * cs = 0) { return cs->id() != KisID("WET", ""); }
 
     /**
-     * Create and return an (abstracted) widget with options for this paintop when used with the 
+     * Create and return an (abstracted) widget with options for this paintop when used with the
      * specified input device. Return 0 if there are no settings available for the given
      * device.
      */

@@ -24,7 +24,7 @@
 #include <QFrame>
 #include <QStyleOption>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class QSize;
 class QPainter;
@@ -60,9 +60,9 @@ class KRITAUI_EXPORT KisColorCup : public QPushButton {
 public:
     KisColorCup(QWidget * parent, const char * name = 0);
     virtual ~KisColorCup() {}
-    
+
     QColor color() { return m_color; }
-    
+
 signals:
     void changed(const QColor &);
 

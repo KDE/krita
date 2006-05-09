@@ -54,7 +54,7 @@ inline float FLOAT_BLEND(float a, float b, float alpha)
 #define F32_OPACITY_OPAQUE 1.0f
 #define F32_OPACITY_TRANSPARENT 0.0f
 
-class KisF32BaseColorSpace : public KisAbstractColorSpace {
+class KRITACOLOR_EXPORT KisF32BaseColorSpace : public KisAbstractColorSpace {
 
 public:
 

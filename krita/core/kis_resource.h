@@ -21,7 +21,7 @@
 #include <qimage.h>
 #include <qobject.h>
 #include <qstring.h>
-
+#include <krita_export.h>
 
 /**
  * The KisResource class provides a representation of Krita image resources.  This
@@ -29,7 +29,7 @@
  *
  * This replaces the KisKrayon facility that used to be present in Krayon.
  */
-class KisResource : public QObject {
+class KRITAIMAGE_EXPORT KisResource : public QObject {
     typedef QObject super;
     Q_OBJECT
 

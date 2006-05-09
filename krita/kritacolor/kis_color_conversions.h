@@ -20,30 +20,31 @@
 #define _KIS_CONVERSIONS_H_
 
 #include <qglobal.h>
+#include <krita_export.h>
 
 /**
  * A number of often-used conversions between color models
  */
 
 // 8-bit integer versions. RGBSL are 0-255, H is 0-360.
- void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
- void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
+ KRITACOLOR_EXPORT void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
+ KRITACOLOR_EXPORT void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
 
 // Floating point versions. RGBSL are 0-1, H is 0-360.
- void RGBToHSV(float r, float g, float b, float *h, float *s, float *v);
- void HSVToRGB(float h, float s, float v, float *r, float *g, float *b);
+ KRITACOLOR_EXPORT void RGBToHSV(float r, float g, float b, float *h, float *s, float *v);
+ KRITACOLOR_EXPORT void HSVToRGB(float h, float s, float v, float *r, float *g, float *b);
 
- void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
- void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
+ KRITACOLOR_EXPORT void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
+ KRITACOLOR_EXPORT void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
 
- void rgb_to_hls(quint8 r, quint8 g, quint8 b, float * h, float * l, float * s);
+ KRITACOLOR_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, float * h, float * l, float * s);
 
- float hue_value(float n1, float n2, float hue);
+ KRITACOLOR_EXPORT float hue_value(float n1, float n2, float hue);
 
- void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b);
+ KRITACOLOR_EXPORT void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b);
 
- void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s);
- void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b);
+ KRITACOLOR_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s);
+ KRITACOLOR_EXPORT void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b);
 
 #endif // _KIS_CONVERSIONS_H_
 

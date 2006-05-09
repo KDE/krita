@@ -33,7 +33,7 @@ class KisMergeVisitor;
  * KisLayer::nextSibling() moves towards higher indices, from the top to the bottom layer; prevSibling() the reverse.
  * (Implementation detail: internally, the indices are reversed, for speed.)
  **/
-class KisGroupLayer : public KisLayer {
+class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer {
     typedef KisLayer super;
 
     Q_OBJECT

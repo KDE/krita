@@ -24,11 +24,11 @@
 
 #include "kis_tile.h"
 #include "kis_tileddatamanager.h"
-#include "koffice_export.h"
+#include "krita_export.h"
 /**
  * The KisIterator class iterates through the pixels of a KisPaintDevice hiding the tile structure
  */
-class KRITACORE_EXPORT KisTiledIterator : public KShared {
+class KRITAIMAGE_EXPORT KisTiledIterator : public KShared {
 
 protected:
     KisTiledDataManager *m_ktm;
@@ -72,7 +72,7 @@ public:
  * The KisRectIterator class iterates through the pixels of a rect in a KisPaintDevice hiding the
  * tile structure
  */
-class KRITACORE_EXPORT KisTiledRectIterator : public KisTiledIterator
+class KRITAIMAGE_EXPORT KisTiledRectIterator : public KisTiledIterator
 {
 
 public:
@@ -84,10 +84,10 @@ public:
 
 public:
     qint32 nConseqPixels() const;
-    
+
     /// Advances a number of pixels until it reaches the end of the rect
     KisTiledRectIterator & operator+=(int n);
-    
+
     /// Advances one pixel. Going to the beginning of the next line when it reaches the end of a line
     KisTiledRectIterator & operator++();
 
@@ -123,7 +123,7 @@ private:
  * The KisHLineIterator class iterates through the pixels of a horizontal line in a KisPaintDevice hiding the
  * tile structure
  */
-class KRITACORE_EXPORT KisTiledHLineIterator : public KisTiledIterator
+class KRITAIMAGE_EXPORT KisTiledHLineIterator : public KisTiledIterator
 {
 
 public:
@@ -172,7 +172,7 @@ private:
  * The KisVLineIterator class iterates through the pixels of a vertical line in a KisPaintDevice hiding the
  * tile structure
  */
-class KRITACORE_EXPORT KisTiledVLineIterator : public KisTiledIterator
+class KRITAIMAGE_EXPORT KisTiledVLineIterator : public KisTiledIterator
 {
 
 public:

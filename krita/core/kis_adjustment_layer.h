@@ -22,7 +22,7 @@
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "kis_composite_op.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KNamedCommand;
 class QPainter;
@@ -35,14 +35,14 @@ class KisFilterConfiguration;
  * is used by to influence the rendering of the layers under this layer in the
  * layerstack
  **/
-class KRITACORE_EXPORT KisAdjustmentLayer : public KisLayer
+class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer
 {
     Q_OBJECT
 
 public:
     /**
      * Create a new adjustment layer with the given configuration and selection.
-     * Note that the selection will be _copied_. 
+     * Note that the selection will be _copied_.
      */
     KisAdjustmentLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
@@ -52,17 +52,17 @@ public:
     virtual KisLayerSP clone() const;
 
 public:
-    
+
     KisFilterConfiguration * filter();
     void setFilter(KisFilterConfiguration * filterConfig);
 
     KisSelectionSP selection();
-    
+
     /// Set the selction of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
-    
+
 public:
-    
+
     virtual qint32 x() const;
     virtual void setX(qint32);
 
@@ -71,7 +71,7 @@ public:
 
     /// Returns an approximation of where the bounds on actual data are in this layer
     virtual QRect extent() const;
-    
+
     /// Returns the exact bounds of where the actual data resides in this layer
     virtual QRect exactBounds() const;
 
@@ -79,7 +79,7 @@ public:
 
     virtual void resetCache();
     virtual KisPaintDeviceSP cachedPaintDevice() { return m_cachedPaintDev; }
-    
+
 private:
 
     KisFilterConfiguration * m_filterConfig;

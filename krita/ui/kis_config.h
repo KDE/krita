@@ -19,19 +19,19 @@
 #define KIS_CONFIG_H_
 
 #include "kis_global.h"
-#include "koffice_export.h"
+#include "krita_export.h"
 
-class KRITACORE_EXPORT KisConfig {
+class KRITAUI_EXPORT KisConfig {
 public:
     KisConfig();
     ~KisConfig();
 
     bool fixDockerWidth() const;
     void setFixedDockerWidth(bool fix);
-    
+
     bool undoEnabled() const;
     void setUndoEnabled(bool undo);
-    
+
     qint32 defUndoLimit() const;
     void defUndoLimit(qint32 limit);
 
@@ -111,7 +111,7 @@ public:
     float getDefaultDockerFontSize();
     void setDockerFontSize(float);
 
-    
+
     quint32 getGridMainStyle();
     void setGridMainStyle(quint32 v);
     quint32 getGridSubdivisionStyle();
@@ -131,7 +131,7 @@ public:
     quint32 getGridOffsetY();
     void setGridOffsetY(quint32 v);
 
-    
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

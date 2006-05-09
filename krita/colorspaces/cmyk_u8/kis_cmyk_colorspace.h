@@ -20,15 +20,15 @@
 
 #include <qcolor.h>
 #include <qmap.h>
-#include <koffice_export.h>
+#include <krita_export.h>
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"
 
-class KRITACORE_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace {
+class KRITACOLOR_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace {
 
 public:
 
-        
+
     struct Pixel {
             quint16 cyan;
             quint16 magenta;
@@ -58,17 +58,17 @@ public:
     virtual void invertColor(quint8 * src, qint32 nPixels);
     virtual void convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
     // XXX: darken & intensity8?
-    
+
     virtual Q3ValueVector<KisChannelInfo *> channels() const;
     virtual quint32 nChannels() const;
     virtual quint32 nColorChannels() const;
     virtual quint32 pixelSize() const;
     virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex);
-    
+
     virtual KisCompositeOpList userVisiblecompositeOps() const;
 
 protected:
-    
+
     virtual void bitBlt(quint8 *dst,
                         qint32 dstRowStride,
                         const quint8 *src,

@@ -21,7 +21,7 @@
 
 #include <qwidget.h>
 
-#include "koffice_export.h"
+#include "krita_export.h"
 
 #include "ui_wdgselectionoptions.h"
 

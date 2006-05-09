@@ -31,7 +31,7 @@
 #include "kis_progress_subject.h"
 #include "kis_filter_configuration.h"
 #include "kis_colorspace.h"
-#include "koffice_export.h"
+#include "krita_export.h"
 
 class KisColorSpace;
 class KisPreviewDialog;
@@ -42,7 +42,7 @@ class QWidget;
 /**
  * Basic interface of a Krita filter.
  */
-class KRITACORE_EXPORT KisFilter : public KisProgressSubject, public KShared {
+class KRITAIMAGE_EXPORT KisFilter : public KisProgressSubject, public KShared {
     Q_OBJECT
 public:
 
@@ -61,7 +61,7 @@ public:
 public:
     virtual KisFilterConfiguration * configuration(QWidget*);
     virtual KisFilterConfiguration * configuration();
-            
+
     /**
          * If true, this filter can be used in painting tools as a paint operation
          */
@@ -100,11 +100,11 @@ public:
     /**
      * Determine the colorspace independence of this filter.
      * @see ColorSpaceIndependence
-     * 
+     *
      * @return the degree of independence
      */
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; };
-    
+
     /**
      * Determine if this filter can work with this colorSpace. For instance, some
      * colorspaces don't depend on lcms, and cannot do certain tasks. The colorsfilters
@@ -112,11 +112,11 @@ public:
      * BSAR: I'm still not convinced that this is the right approach. I think that every
      * colorspace should implement the api fully; and that the filter should simply call
      * that api. After all, you don't need lcms to desaturate.
-     * 
+     *
      * @param colorsSpace
      */
     virtual bool workWith(KisColorSpace*) { return true; }
-    
+
     virtual void enableProgress();
     virtual void disableProgress();
 

@@ -19,7 +19,7 @@
 #ifndef KIS_TOOL_SHAPE_H_
 #define KIS_TOOL_SHAPE_H_
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_tool_paint.h"
 #include "kis_painter.h"
@@ -35,7 +35,7 @@ class WdgGeometryOptions : public QWidget, public Ui::WdgGeometryOptions
         WdgGeometryOptions(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
-class KRITACORE_EXPORT KisToolShape : public KisToolPaint {
+class KRITAUI_EXPORT KisToolShape : public KisToolPaint {
 
     Q_OBJECT
     typedef KisToolPaint super;

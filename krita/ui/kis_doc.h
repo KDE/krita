@@ -27,7 +27,7 @@
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
 
-#include <koffice_export.h>
+#include <krita_export.h>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -48,7 +48,7 @@ class KisColorSpace;
 class KisColor;
 class KisCompositeOp;
 
-class KRITACORE_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
+class KRITAUI_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 
     typedef KoDocument super;
     Q_OBJECT

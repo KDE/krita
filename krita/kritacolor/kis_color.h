@@ -19,7 +19,7 @@
 #define _KIS_COLOR_H_
 
 #include <qcolor.h>
-#include <koffice_export.h>
+#include <krita_export.h>
 #include "ksharedptr.h"
 
 #include "kis_global.h"

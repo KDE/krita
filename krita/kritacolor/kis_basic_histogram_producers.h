@@ -30,7 +30,7 @@
 
 class KisLabColorSpace;
 
-class KisBasicHistogramProducer : public KisHistogramProducer {
+class KRITACOLOR_EXPORT KisBasicHistogramProducer : public KisHistogramProducer {
 public:
     KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *colorSpace);
     virtual ~KisBasicHistogramProducer() {}
@@ -82,7 +82,7 @@ protected:
     Q3ValueVector<qint32> m_external;
 };
 
-class KisBasicU8HistogramProducer : public KisBasicHistogramProducer {
+class KRITACOLOR_EXPORT KisBasicU8HistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicU8HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
     virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
@@ -90,7 +90,7 @@ public:
     virtual double maximalZoom() const { return 1.0; }
 };
 
-class KisBasicU16HistogramProducer : public KisBasicHistogramProducer {
+class KRITACOLOR_EXPORT KisBasicU16HistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicU16HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
     virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
@@ -98,7 +98,7 @@ public:
     virtual double maximalZoom() const;
 };
 
-class KisBasicF32HistogramProducer : public KisBasicHistogramProducer {
+class KRITACOLOR_EXPORT KisBasicF32HistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicF32HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
     virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
@@ -140,7 +140,7 @@ protected:
  * Registry, because it isCompatibleWith all colorspaces, and should only be used in extreme
  * cases (like no other producer being available
  **/
-class KisGenericRGBHistogramProducer : public KisBasicHistogramProducer {
+class KRITACOLOR_EXPORT KisGenericRGBHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisGenericRGBHistogramProducer();
     virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
@@ -152,7 +152,7 @@ protected:
 };
 
 /** KisGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
-class KisGenericRGBHistogramProducerFactory : public KisHistogramProducerFactory {
+class  KRITACOLOR_EXPORT KisGenericRGBHistogramProducerFactory : public KisHistogramProducerFactory {
 public:
     KisGenericRGBHistogramProducerFactory()
         : KisHistogramProducerFactory(KisID("GENRGBHISTO", i18n("Generic RGB Histogram"))) {}
@@ -168,7 +168,7 @@ public:
  * to L*a*b*, and then does its counting.
  * It isCompatibleWith all colorspaces
  **/
-class KisGenericLabHistogramProducer : public KisBasicHistogramProducer {
+class  KRITACOLOR_EXPORT KisGenericLabHistogramProducer : public KisBasicHistogramProducer {
     public:
         KisGenericLabHistogramProducer();
         virtual ~KisGenericLabHistogramProducer();
@@ -183,7 +183,7 @@ class KisGenericLabHistogramProducer : public KisBasicHistogramProducer {
 };
 
 /** KisGenericLabHistogramProducer his special Factory that isCompatibleWith everything. */
-class KisGenericLabHistogramProducerFactory : public KisHistogramProducerFactory {
+class KRITACOLOR_EXPORT KisGenericLabHistogramProducerFactory : public KisHistogramProducerFactory {
     public:
         KisGenericLabHistogramProducerFactory()
     : KisHistogramProducerFactory(KisID("GENLABHISTO", i18n("Generic L*a*b* Histogram"))) {}

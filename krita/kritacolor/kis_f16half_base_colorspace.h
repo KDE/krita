@@ -58,7 +58,7 @@ inline half HALF_BLEND(half a, half b, half alpha)
 #define F16HALF_OPACITY_OPAQUE ((half)1.0f)
 #define F16HALF_OPACITY_TRANSPARENT ((half)0.0f)
 
-class KisF16HalfBaseColorSpace : public KisAbstractColorSpace {
+class KRITACOLOR_EXPORT KisF16HalfBaseColorSpace : public KisAbstractColorSpace {
 
 public:
 

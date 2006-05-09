@@ -24,14 +24,14 @@
 
 #include <klocale.h>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_global.h"
 #include "kis_f32_base_colorspace.h"
 
 class KisColorSpaceFactoryRegistry;
 
-class KRITATOOL_EXPORT KisRgbF32ColorSpace : public KisF32BaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbF32ColorSpace : public KisF32BaseColorSpace {
 public:
     KisRgbF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbF32ColorSpace();

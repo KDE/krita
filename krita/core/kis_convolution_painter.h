@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_painter.h"
 
-#include "koffice_export.h"
+#include "krita_export.h"
 
 enum KisConvolutionBorderOp {
     BORDER_DEFAULT_FILL = 0, // Use the default pixel to make up for the missing pixels on the border or the pixel that lies beyond
@@ -37,11 +37,11 @@ enum KisConvolutionBorderOp {
 class KisKernel;
 typedef KSharedPtr<KisKernel> KisKernelSP;
 
-class KisKernel : public KShared 
+class KisKernel : public KShared
 {
 
 public:
-    
+
     quint32 width;
     quint32 height;
     qint32 offset;
@@ -57,7 +57,7 @@ public:
 };
 
 
-class KRITACORE_EXPORT KisConvolutionPainter : public KisPainter
+class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter
 {
 
     typedef KisPainter super;

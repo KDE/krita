@@ -24,6 +24,7 @@
 #include <qmutex.h>
 
 #include <ktempfile.h>
+#include <krita_export.h>
 
 class KisTile;
 class KisTiledDataManager;
@@ -39,7 +40,7 @@ class KisTiledDataManager;
  *  * tries to preallocate and recycle some tiles to make future allocations faster
  *    (not done yet)
  */
-class KisTileManager  {
+class KRITAIMAGE_EXPORT KisTileManager  {
 public:
     ~KisTileManager();
     static KisTileManager* instance();

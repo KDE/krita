@@ -24,11 +24,12 @@
 #include <kcommand.h>
 
 #include "kis_types.h"
+#include <krita_export.h>
 
 class QRect;
 class KisTransactionPrivate;
 
-class KisTransaction : public KCommand {
+class KRITAIMAGE_EXPORT KisTransaction : public KCommand {
 public:
     KisTransaction(const QString& name, KisPaintDeviceSP device);
     virtual ~KisTransaction();

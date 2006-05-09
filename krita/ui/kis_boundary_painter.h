@@ -18,14 +18,14 @@
 #ifndef _KIS_BOUNDARY_PAINTER_H_
 #define _KIS_BOUNDARY_PAINTER_H_
 
-#include <koffice_export.h>
+#include <krita_export.h>
 //Added by qt3to4:
 #include <QPixmap>
 
 class KisBoundary;
 class KisCanvasPainter;
 
-class KRITACORE_EXPORT KisBoundaryPainter {
+class KRITAUI_EXPORT KisBoundaryPainter {
 public:
     static void paint(const KisBoundary& boundary, KisCanvasPainter& painter);
     static QPixmap createPixmap(const KisBoundary& boundary, int w, int h);

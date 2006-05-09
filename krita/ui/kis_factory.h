@@ -27,12 +27,12 @@
 
 #include <KoFactory.h>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KInstance;
 class KAboutData;
 
-class KRITACORE_EXPORT KisFactory : public KoFactory
+class KRITAUI_EXPORT KisFactory : public KoFactory
 {
     Q_OBJECT
 

@@ -24,6 +24,7 @@
 
 #include <qsize.h>
 #include "kis_types.h"
+#include <krita_export.h>
 
 class QImage;
 
@@ -37,7 +38,7 @@ enum enumPasteBehaviour {
  * The Krita clipboard is a clipboard that can store paint devices
  * instead of just qimage's.
  */
-class KisClipboard : public QObject {
+class KRITAUI_EXPORT KisClipboard : public QObject {
 
     Q_OBJECT
 
@@ -49,11 +50,11 @@ public:
 
     /**
      * Sets the clipboard to the contents of the specified paint device; also
-     * set the system clipboard to a QImage representation of the specified 
+     * set the system clipboard to a QImage representation of the specified
      * paint device.
      */
     void setClip(KisPaintDeviceSP layer);
-    
+
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
@@ -62,7 +63,7 @@ public:
     bool hasClip();
 
     QSize clipSize();
-    
+
 private slots:
 
     void clipboardDataChanged();

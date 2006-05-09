@@ -49,7 +49,7 @@ struct KisPaletteEntry {
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
-class KisPalette : public KisResource {
+class KRITAIMAGE_EXPORT KisPalette : public KisResource {
     typedef KisResource super;
 
     Q_OBJECT

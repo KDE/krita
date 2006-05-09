@@ -24,7 +24,7 @@
 #include "kis_types.h"
 #include "kis_tool_paint.h"
 #include "kis_point.h"
-#include "koffice_export.h"
+#include "krita_export.h"
 
 class KisPainter;
 class KisBrush;
@@ -32,7 +32,7 @@ class KisEvent;
 class KisPaintLayer;
 
 
-class KRITACORE_EXPORT KisToolFreehand : public KisToolPaint {
+class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint {
     Q_OBJECT
     typedef KisToolPaint super;
 
@@ -82,7 +82,7 @@ protected:
 
     bool m_paintIncremental;
     bool m_paintOnSelection;
-    
+
     KisPaintDeviceSP m_target;
     KisLayerSP m_tempLayer;
     KisPaintDeviceSP m_source;

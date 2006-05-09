@@ -21,6 +21,7 @@
 
 #include <qglobal.h>
 #include <ksharedptr.h>
+#include <krita_export.h>
 
 class KisTiledRectIterator;
 typedef KSharedPtr<KisTiledRectIterator> KisTiledRectIteratorSP;
@@ -81,7 +82,7 @@ private:
     KisTiledRectIteratorSP m_iter;
 };
 
-class KisHLineIterator
+class KRITAIMAGE_EXPORT KisHLineIterator
 {
 
 public:
@@ -160,7 +161,7 @@ public:
 
     /// current y position
     qint32 y() const;
-    
+
     /// increment to the next column and rewind to the begining
     void nextCol();
 

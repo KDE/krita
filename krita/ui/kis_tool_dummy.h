@@ -21,7 +21,7 @@
 
 #include "kis_tool_non_paint.h"
 #include "kis_tool_factory.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_point.h"
 //Added by qt3to4:
@@ -38,7 +38,7 @@ class KisCanvasSubject;
  * Furthermore, it implements more or less the same things as the pan tool,
  * so we can at least move the canvas around.
  */
-class KRITATOOL_EXPORT KisToolDummy : public KisToolNonPaint {
+class KRITAUI_EXPORT KisToolDummy : public KisToolNonPaint {
 
     typedef KisToolNonPaint super;
     Q_OBJECT
@@ -56,7 +56,7 @@ public:
 
     virtual QWidget* createOptionWidget(QWidget* parent);
     virtual QWidget* optionWidget();
-    
+
 private:
     QLabel * m_optionWidget;
     KisCanvasSubject *m_subject;

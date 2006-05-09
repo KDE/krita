@@ -23,7 +23,7 @@
 
 #include <knuminput.h>
 #include <kis_filter_config_widget.h>
-#include "koffice_export.h"
+#include "krita_export.h"
 
 class KisDelayedActionIntegerInput : public KIntNumInput
 {
@@ -51,7 +51,7 @@ private:
 
 
 struct KisIntegerWidgetParam {
-    KRITA_EXPORT KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 ninitvalue, QString label, QString nname);
+    KRITAUI_EXPORT KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 ninitvalue, QString label, QString nname);
     qint32 min;
     qint32 max;
     qint32 initvalue;
@@ -61,7 +61,7 @@ struct KisIntegerWidgetParam {
 
 typedef std::vector<KisIntegerWidgetParam> vKisIntegerWidgetParam;
 
-class KRITA_EXPORT KisMultiIntegerFilterWidget : public KisFilterConfigWidget
+class KRITAUI_EXPORT KisMultiIntegerFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:

@@ -23,7 +23,7 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 
 enum enumSelectionMode {
@@ -40,7 +40,7 @@ enum enumSelectionMode {
  *       often you want to combine several actions in to perfom one operation and you
  *       do not want recomposition to happen all the time.
  */
-class KRITACORE_EXPORT KisSelection : public KisPaintDevice {
+class KRITAIMAGE_EXPORT KisSelection : public KisPaintDevice {
 
     typedef KisPaintDevice super;
 
@@ -56,12 +56,12 @@ public:
      * Create a new KisSelection. This selection will not have a parent paint device.
      */
     KisSelection();
-    
+
     /**
      * Copy the selection
      */
     KisSelection(const KisSelection& rhs);
-    
+
     virtual ~KisSelection();
 
     // Returns selectedness, or 0 if invalid coordinates

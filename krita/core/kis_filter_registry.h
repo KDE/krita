@@ -25,19 +25,19 @@
 #include "kis_types.h"
 #include "kis_generic_registry.h"
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class QString;
 class QStringList;
 
-class KRITACORE_EXPORT KisFilterRegistry : public QObject, public KisGenericRegistry<KisFilterSP>
+class KRITAIMAGE_EXPORT KisFilterRegistry : public QObject, public KisGenericRegistry<KisFilterSP>
 {
 
     Q_OBJECT
 
 public:
     virtual ~KisFilterRegistry();
-    
+
     static KisFilterRegistry* instance();
 
 private:
@@ -48,5 +48,5 @@ private:
 private:
      static KisFilterRegistry *m_singleton;
 };
- 
+
 #endif // KIS_FILTERSPACE_REGISTRY_H_

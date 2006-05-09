@@ -24,13 +24,13 @@
 #include "kis_types.h"
 #include "kis_point.h"
 #include "kis_painter.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KisGradient;
 
 
 // XXX: Need to set dirtyRect in KisPainter
-class KRITACORE_EXPORT KisGradientPainter : public KisPainter
+class KRITAIMAGE_EXPORT KisGradientPainter : public KisPainter
 {
 
     typedef KisPainter super;

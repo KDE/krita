@@ -20,8 +20,9 @@
 
 #include <qstring.h>
 #include "kis_global.h"
+#include <krita_export.h>
 
-class KisNameServer {
+class KRITAIMAGE_EXPORT KisNameServer {
 public:
     KisNameServer(const QString& prefix, qint32 seed = 1);
     ~KisNameServer();

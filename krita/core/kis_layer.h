@@ -22,7 +22,7 @@
 #include <qobject.h>
 #include <QRect>
 
-#include "koffice_export.h"
+#include "krita_export.h"
 
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
@@ -41,7 +41,7 @@ class KisGroupLayer;
  * is at the top of the group in the layerlist, using next will iterate to the bottom to last,
  * whereas previous will go up to first again.
  **/
-class KRITACORE_EXPORT KisLayer : public QObject, public KShared
+class KRITAIMAGE_EXPORT KisLayer : public QObject, public KShared
 {
     Q_OBJECT
 
@@ -50,12 +50,12 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
-    
+
     /**
      * Set the specified rect to clean
      */
     virtual void setClean(const QRect & rect);
-    
+
     /**
      * If the layer has been changed and not been composited yet, this returns true
      */
@@ -68,8 +68,8 @@ public:
 
 
     virtual QRect dirtyRect() const;
-    
-    
+
+
     /**
      * Set the entire layer extent dirty; this percolates up to parent layers all the
      * way to the root layer.
@@ -82,7 +82,7 @@ public:
      * layer.
      */
     virtual void setDirty(const QRect & rect, bool propagate = true);
-    
+
     /// Return a copy of this layer
     virtual KisLayerSP clone() const = 0;
 
@@ -111,7 +111,7 @@ public:
 
     /**
      * Returns the next sibling of this layer in the parent's list. This is the layer *below*
-     * this layer. 0 is returned if there is no parent, or if this child has no more next 
+     * this layer. 0 is returned if there is no parent, or if this child has no more next
      * siblings (== lastChild())
      */
     virtual KisLayerSP nextSibling() const;

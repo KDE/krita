@@ -23,13 +23,13 @@
 
 #include <klocale.h>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_global.h"
 #include "kis_f16half_base_colorspace.h"
 
 
-class KRITATOOL_EXPORT KisRgbF16HalfColorSpace : public KisF16HalfBaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbF16HalfColorSpace : public KisF16HalfBaseColorSpace {
 public:
     KisRgbF16HalfColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbF16HalfColorSpace();

@@ -29,7 +29,7 @@
 #include <qobject.h>
 #include <q3valuevector.h>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_types.h"
 
@@ -39,7 +39,7 @@ class KisOpenGLImageContext;
 typedef KSharedPtr<KisOpenGLImageContext> KisOpenGLImageContextSP;
 class KisColorSpace;
 
-class KRITACORE_EXPORT KisOpenGLImageContext : public QObject , public KShared {
+class KRITAUI_EXPORT KisOpenGLImageContext : public QObject , public KShared {
 
     Q_OBJECT
 
@@ -51,7 +51,7 @@ public:
 
 public:
     // In order to use the image textures, the caller must pass
-    // the sharedContextWidget() as the shareWidget argument to the 
+    // the sharedContextWidget() as the shareWidget argument to the
     // QGLWidget constructor.
     QGLWidget *sharedContextWidget() const;
 
@@ -71,14 +71,14 @@ public:
 
     /**
      * Select selection visualisation rendering.
-     * 
+     *
      * @param enable Set to true to enable selection visualisation rendering.
      */
     void setSelectionDisplayEnabled(bool enable);
 
     /**
      * Update the image textures for the given image rectangle.
-     * 
+     *
      * @param imageRect The rectangle to update in image coordinates.
      */
     void update(const QRect& imageRect);
@@ -101,7 +101,7 @@ signals:
     /**
      * Emitted whenever the image size changes.
      *
-     * @param width  New image width 
+     * @param width  New image width
      * @param height New image height
      */
     void sigSizeChanged(qint32 width, qint32 height);

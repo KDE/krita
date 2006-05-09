@@ -34,7 +34,7 @@
 #include "kis_types.h"
 #include "kis_point.h"
 #include "kis_alpha_mask.h"
-#include "koffice_export.h"
+#include "krita_export.h"
 #include "kis_boundary.h"
 #include "kis_paintop.h"
 
@@ -53,7 +53,7 @@ enum enumBrushType {
     AIRBRUSH
 };
 
-class KRITACORE_EXPORT KisBrush : public KisResource {
+class KRITAIMAGE_EXPORT KisBrush : public KisResource {
     typedef KisResource super;
     Q_OBJECT
 

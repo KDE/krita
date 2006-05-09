@@ -22,7 +22,7 @@
 #include <vector>
 #include <knuminput.h>
 #include <kis_filter_config_widget.h>
-#include "koffice_export.h"
+#include "krita_export.h"
 
 class KisDelayedActionDoubleInput : public KDoubleNumInput
 {
@@ -46,7 +46,7 @@ private:
 };
 
 
-struct KRITA_EXPORT KisDoubleWidgetParam {
+struct KRITAUI_EXPORT KisDoubleWidgetParam {
     KisDoubleWidgetParam(  double nmin, double nmax, double ninitvalue, QString label, QString nname);
     double min;
     double max;
@@ -57,7 +57,7 @@ struct KRITA_EXPORT KisDoubleWidgetParam {
 
 typedef std::vector<KisDoubleWidgetParam> vKisDoubleWidgetParam;
 
-class KRITA_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigWidget
+class KRITAUI_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:

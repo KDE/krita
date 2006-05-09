@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <qpushbutton.h>
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_canvas_subject.h"
 #include "kis_canvas_observer.h"

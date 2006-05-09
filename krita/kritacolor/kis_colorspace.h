@@ -55,7 +55,7 @@ enum ColorSpaceIndependence {
  * in Krita. This is the definition of the public API for
  * colormodels.
  */
-class KisColorSpace {
+class KRITACOLOR_EXPORT KisColorSpace {
 
 
 public:
@@ -69,7 +69,7 @@ public:
         return id().id() == rhs.id().id();
     }
 
-    
+
 public:
 
     //========== Channels =====================================================//
@@ -157,7 +157,7 @@ public:
      *         take place
      */
     virtual bool willDegrade(ColorSpaceIndependence independence) = 0;
-    
+
     //========== Capabilities =================================================//
 
     /**
@@ -365,12 +365,12 @@ public:
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
     */
     virtual quint8 intensity8(const quint8 * src) const = 0;
-    
+
     /**
      * Create a mathematical toolbox compatible with this colorspace
      */
     virtual KisID mathToolboxID() const =0;
-    
+
     /**
      * Compose two arrays of pixels together. If source and target
      * are not the same colour model, the source pixels will be

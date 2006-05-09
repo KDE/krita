@@ -62,7 +62,7 @@ class Color {
         double m_alpha;
 };
 
-class KisGradientSegment {
+class KRITAIMAGE_EXPORT KisGradientSegment {
     public:
         KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const Color& startColor, const Color& endColor);
 

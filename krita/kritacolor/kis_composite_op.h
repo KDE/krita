@@ -20,7 +20,7 @@
 
 #include <map>
 #include <QList>
-#include <koffice_export.h>
+#include <krita_export.h>
 //#include "kis_global.h"
 #include "kis_id.h"
 

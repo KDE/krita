@@ -23,13 +23,13 @@
 
 #include <qcheckbox.h>
 
-#include "koffice_export.h"
+#include "krita_export.h"
 #include <kis_filter_config_widget.h>
 
 class KIntNumInput;
 
 struct KisBoolWidgetParam {
-    KRITA_EXPORT KisBoolWidgetParam(  bool ninitvalue, QString label, QString name);
+    KRITAUI_EXPORT KisBoolWidgetParam(  bool ninitvalue, QString label, QString name);
     bool initvalue;
     QString label;
     QString name;
@@ -38,7 +38,7 @@ struct KisBoolWidgetParam {
 
 typedef std::vector<KisBoolWidgetParam> vKisBoolWidgetParam;
 
-class KRITA_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
+class KRITAUI_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
 {
     Q_OBJECT
 public:

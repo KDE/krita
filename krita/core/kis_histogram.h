@@ -32,15 +32,15 @@ enum enumHistogramType {
  * for the specified channel, through the use of a KisHistogramProducer.
  * This class is only for layers and paintdevices. KisImages are not supported,
  * but you can use the mergedImage function to create a paintdevice and feed that to this class.
- * 
+ *
  * A Histogram also can have a selection: this is a specific range in the current histogram
  * that will get calculations done on it as well. If the range's begin and end are the same,
  * it is supposed to specify a single bin in the histogram.
- * 
+ *
  * The calculations are done in the range 0 - 1, instead of the native range that a pixel
  * might have, so it's not always as precise as it could be. But you can't have it all...
  */
-class KisHistogram : public KShared {
+class KRITAIMAGE_EXPORT KisHistogram : public KShared {
 
 public:
     /**
@@ -84,11 +84,11 @@ public:
         //quint8 getPercentile() { return m_percentile; } // What is this exactly? XXX
     };
 
-    KisHistogram(KisPaintLayerSP layer, 
+    KisHistogram(KisPaintLayerSP layer,
                  KisHistogramProducerSP producer,
                  const enumHistogramType type);
 
-    KisHistogram(KisPaintDeviceSP paintdev, 
+    KisHistogram(KisPaintDeviceSP paintdev,
                  KisHistogramProducerSP producer,
                  const enumHistogramType type);
 

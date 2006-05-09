@@ -60,7 +60,7 @@
 #include "kis_profile.h"
 #include "kis_opengl_image_context.h"
 #include "kis_id.h"
-#include "koffice_export.h"
+#include "krita_export.h"
 #include "kis_color.h"
 #include "kis_input_device.h"
 #include "ui_wdgpalettechooser.h"
@@ -121,7 +121,7 @@ class KisFilterConfiguration;
 class KisPartLayerHandler;
 class KisPaintOpSettings;
 
-class KRITA_EXPORT KisView
+class KRITAUI_EXPORT KisView
     : public KoView,
       public KisCanvasSubject,
       public KXMLGUIBuilder,

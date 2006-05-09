@@ -36,7 +36,7 @@
 #include "kis_annotation.h"
 #include "kis_paint_device.h"
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 
 class DCOPObject;
@@ -57,7 +57,7 @@ class KisProgressDisplayInterface;
 class KisPaintLayer;
 
 
-class KRITACORE_EXPORT KisImage : public QObject, public KShared {
+class KRITAIMAGE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
 
 public:
@@ -235,7 +235,7 @@ public:
     /// Return the projection; that is, the complete, composited representation
     /// of this image.
     KisPaintDeviceSP projection();
-    
+
     KisLayerSP activate(KisLayerSP layer);
     KisLayerSP findLayer(const QString& name) const;
     KisLayerSP findLayer(int id) const;
@@ -250,7 +250,7 @@ public:
      * @param parent the parent layer
      */
     bool addLayer(KisLayerSP layer, KisGroupLayerSP parent);
-    
+
     /**
      * Add already existing layer to image.
      *
@@ -385,7 +385,7 @@ signals:
 
     /**
      * Emitted whenever a layer is modified.
-     * 
+     *
      * @param layer The layer that has been modified.
      * @param rc The rectangle that has been modified.
      */

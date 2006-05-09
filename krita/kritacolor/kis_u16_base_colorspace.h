@@ -27,7 +27,7 @@
  * channels. It defines a number of common methods, like handling 16-bit alpha
  * and up- and down-scaling of channels.
  */
-class KisU16BaseColorSpace : public KisAbstractColorSpace {
+class KRITACOLOR_EXPORT KisU16BaseColorSpace : public KisAbstractColorSpace {
 
 public:
 

@@ -18,6 +18,8 @@
 #ifndef _KIS_META_REGISTRY_
 #define _KIS_META_REGISTRY_
 
+#include <krita_export.h>
+
 class KisColorSpaceFactoryRegistry;
 class KisMathToolboxFactoryRegistry;
 
@@ -26,7 +28,7 @@ class KisMathToolboxFactoryRegistry;
  *
  * XXX: Maybe this should go into the SDK
  */
-class KisMetaRegistry {
+class KRITAIMAGE_EXPORT KisMetaRegistry {
 
 public:
 

@@ -27,7 +27,7 @@
 #include "kis_image.h"
 #include "kis_selection.h"
 
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KAction;
 class KisView;
@@ -41,7 +41,7 @@ class KisPreviewDialog;
 /**
  * Create all the filter actions for the specified view and implement re-apply filter
  */
-class KRITACORE_EXPORT KisFilterManager : public QObject {
+class KRITAUI_EXPORT KisFilterManager : public QObject {
 
     Q_OBJECT
 
@@ -71,15 +71,15 @@ private:
     KAction * m_reapplyAction;
 
     Q3PtrList<KAction> m_filterActions;
-    
+
     KisFilterConfiguration * m_lastFilterConfig;
     KisFilter * m_lastFilter;
     KisPreviewDialog * m_lastDialog;
     KisFilterConfigWidget * m_lastWidget;
-    
+
     KisIDList m_filterList; // Map the actions in the signalmapper to the filters
     QSignalMapper * m_filterMapper;
-    
+
     Q3Dict<KActionMenu> m_filterActionMenus;
 };
 

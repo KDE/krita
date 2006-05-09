@@ -22,7 +22,7 @@
 #include "q3ptrlist.h"
 
 #include "kis_image.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KAction;
 class KToggleAction;
@@ -34,7 +34,7 @@ class KisClipboard;
  * The selection manager is responsible selections
  * and the clipboard.
  */
-class KRITACORE_EXPORT KisSelectionManager : public QObject {
+class KRITAUI_EXPORT KisSelectionManager : public QObject {
 
     Q_OBJECT
 

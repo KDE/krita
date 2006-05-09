@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QList>
 #include <QString>
-#include <koffice_export.h>
+#include <krita_export.h>
 
 #include "kis_generic_registry.h"
 #include "kis_colorspace.h"
@@ -97,7 +97,7 @@ public:
 
     /**
      * add a KisConstructPaintDeviceAction to the registry for a colorspace
-     * 
+     *
      * These actions are exectued when an image is created on the first layer
      * in the image, on the image width and height rect.
      */

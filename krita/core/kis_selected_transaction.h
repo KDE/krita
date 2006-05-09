@@ -25,9 +25,9 @@
 
 #include "kis_transaction.h"
 
-#include "koffice_export.h"
+#include "krita_export.h"
 
-class KRITACORE_EXPORT KisSelectedTransaction : public KisTransaction {
+class KRITAIMAGE_EXPORT KisSelectedTransaction : public KisTransaction {
     typedef KisTransaction super;
 public:
     KisSelectedTransaction(const QString& name, KisPaintDeviceSP device);

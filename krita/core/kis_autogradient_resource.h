@@ -24,7 +24,7 @@
 
 #include "kis_gradient.h"
 
-class KisAutogradientResource : public KisGradient
+class KRITAIMAGE_EXPORT KisAutogradientResource : public KisGradient
 {
 
 public:

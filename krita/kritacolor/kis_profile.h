@@ -32,7 +32,8 @@
 #include <kio/job.h>
 
 #include <kis_annotation.h>
-#include <koffice_export.h>
+#include <krita_export.h>
+
 //XXX: Profiles should be loaded by the color strategies
 //     and be available only through the color strategy
 //     that matches the profile's color model
@@ -61,7 +62,7 @@ public:
     friend inline bool operator==( const KisProfile &,  const KisProfile & );
 
     inline bool valid() const { return m_valid; };
-    
+
     inline bool isSuitableForOutput() { return m_suitableForOutput; };
 
     inline QString filename() const { return m_filename; }

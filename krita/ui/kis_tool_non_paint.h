@@ -30,7 +30,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_tool.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class QEvent;
 class QKeyEvent;
@@ -40,7 +40,7 @@ class KDialog;
 class KisCanvasSubject;
 
 
-class KRITACORE_EXPORT KisToolNonPaint : public KisTool {
+class KRITAUI_EXPORT KisToolNonPaint : public KisTool {
 
     Q_OBJECT
     typedef KisTool super;

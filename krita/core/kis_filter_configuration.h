@@ -22,7 +22,7 @@
 #include <qmap.h>
 #include <qvariant.h>
 #include <kdebug.h>
-#include "koffice_export.h"
+#include "krita_export.h"
 
 class KisPreviewDialog;
 class KisProgressDisplayInterface;
@@ -35,7 +35,7 @@ class QWidget;
  * direct accessors to properties, but properties not in the map will
  * not be serialized.
  */
-class KRITACORE_EXPORT KisFilterConfiguration {
+class KRITAIMAGE_EXPORT KisFilterConfiguration {
 
 public:
 
@@ -92,16 +92,16 @@ public:
     double getDouble(const QString & name, double def = 0.0);
     bool getBool(const QString & name, bool def = false);
     QString getString(const QString & name, QString def = QString::null);
-    
+
 private:
         void dump();
-    
+
 protected:
 
     QString m_name;
     qint32 m_version;
     QMap<QString, QVariant> m_properties;
-    
+
 };
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

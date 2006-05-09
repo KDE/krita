@@ -23,7 +23,7 @@
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class QWidget;
 class QStringList;
@@ -34,7 +34,7 @@ class KisPainter;
 class KisColorSpace;
 class KisInputDevice;
 
-class KRITACORE_EXPORT KisPaintOpRegistry : public QObject, public KisGenericRegistry<KisPaintOpFactorySP>
+class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KisGenericRegistry<KisPaintOpFactorySP>
 {
 
     Q_OBJECT
@@ -59,7 +59,7 @@ public:
      * are no settings available for the given device.
      */
     KisPaintOpSettings * settings(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const;
-    
+
     // Whether we should show this paintop in the toolchest
     bool userVisible(const KisID & id, KisColorSpace* cs) const;
 

@@ -22,14 +22,14 @@
 
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"
-#include "koffice_export.h"
+#include "krita_export.h"
 
 const quint8 PIXEL_BLUE = 0;
 const quint8 PIXEL_GREEN = 1;
 const quint8 PIXEL_RED = 2;
 const quint8 PIXEL_ALPHA = 3;
 
-class KRITATOOL_EXPORT KisRgbColorSpace : public KisU8BaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbColorSpace : public KisU8BaseColorSpace {
 public:
     KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbColorSpace();

@@ -23,7 +23,7 @@
 
 #include "kis_tool_types.h"
 #include "kis_generic_registry.h"
-#include <koffice_export.h>
+#include <krita_export.h>
 
 class KActionCollection;
 class KisCanvasSubject;
@@ -35,7 +35,7 @@ class QStringList;
  * in contrast to the paintop and colormodel registries, creates
  * a vector containing instances of all registered tools.
  */
-class KRITACORE_EXPORT KisToolRegistry : public QObject, public KisGenericRegistry<KisToolFactorySP>{
+class KRITAUI_EXPORT KisToolRegistry : public QObject, public KisGenericRegistry<KisToolFactorySP>{
 
     Q_OBJECT
 
@@ -46,7 +46,7 @@ public:
 
     vKisTool createTools(KActionCollection * ac, KisCanvasSubject *subject) const;
     KisTool * createTool(KActionCollection * ac, KisCanvasSubject * subject, KisID & id) const;
-    
+
 private:
     KisToolRegistry();
      KisToolRegistry(const KisToolRegistry&);

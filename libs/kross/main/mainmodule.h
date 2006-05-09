@@ -34,7 +34,7 @@
 #include <qobject.h>
 //Added by qt3to4:
 #include <Q3CString>
-
+#include <koffice_export.h>
 #include <ksharedptr.h>
 #include <kaction.h>
 
@@ -52,7 +52,7 @@ namespace Kross { namespace Api {
      * for a root node in a tree of \a Kross::Api::Object
      * instances.
      */
-    class MainModule : public Module
+    class KROSS_EXPORT MainModule : public Module
     {
         public:
 

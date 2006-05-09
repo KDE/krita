@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qmap.h>
+#include <koffice_export.h>
 
 #include "object.h"
 #include "value.h"
@@ -32,7 +33,7 @@ namespace Kross { namespace Api {
      * The Dict class implementates \a Value to handle
      * key=value base dictonaries/maps.
      */
-    class Dict : public Value< List, QMap<QString, Object::Ptr> >
+    class KROSS_EXPORT Dict : public Value< List, QMap<QString, Object::Ptr> >
     {
             friend class Value< List, QMap<QString, Object::Ptr> >;
         public:

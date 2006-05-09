@@ -21,7 +21,7 @@
 #define KROSS_MAIN_KROSSCONFIG_H
 
 #include <qstring.h>
-
+#include <koffice_export.h>
 /**
  * The Kross scripting bridge to embed scripting functionality
  * into an application.
@@ -57,12 +57,12 @@ namespace Kross {
         /**
          * Debugging function.
          */
-        void krossdebug(const QString &s);
+        KROSS_EXPORT void krossdebug(const QString &s);
 
         /**
          * Warning function.
          */
-        void krosswarning(const QString &s);
+        KROSS_EXPORT void krosswarning(const QString &s);
 
     #else
         // Define these to an empty statement if debugging is disabled.

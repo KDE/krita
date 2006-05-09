@@ -26,7 +26,7 @@
 #include <qvariant.h>
 #include <qobject.h>
 #include <ksharedptr.h>
-
+#include <koffice_export.h>
 namespace Kross { namespace Api {
 
     // Forward declarations.
@@ -47,7 +47,7 @@ namespace Kross { namespace Api {
      * The class \a ScriptAction provides a higher level class
      * to work with a \a ScriptContainer instances.
      */
-    class ScriptContainer : public MainModule
+    class KROSS_EXPORT ScriptContainer : public MainModule
     {
             // We protected the constructor cause ScriptContainer
             // instances should be created only within the

@@ -27,7 +27,7 @@
 #include <qvariant.h>
 //#include <qobject.h>
 #include <ksharedptr.h>
-
+#include <koffice_export.h>
 #include "krossconfig.h"
 
 namespace Kross { namespace Api {
@@ -54,7 +54,7 @@ namespace Kross { namespace Api {
      * This class implementates reference counting for shared
      * objects. So, no need to take care of freeing objects.
      */
-    class Object : public KShared
+    class KROSS_EXPORT Object : public KShared
     {
         public:
 

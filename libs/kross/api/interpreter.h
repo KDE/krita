@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include <qmap.h>
-
+#include <koffice_export.h>
 #include "object.h"
 
 namespace Kross { namespace Api {
@@ -38,7 +38,7 @@ namespace Kross { namespace Api {
      * is used to provide some abstract informations about each interpreter
      * we are able to use within the \a Manager singelton.
      */
-    class InterpreterInfo
+    class KOFFICE_EXPORT InterpreterInfo
     {
         public:
 
@@ -159,7 +159,7 @@ namespace Kross { namespace Api {
      * The Interpreter will be managed by the \a Kross::Manager
      * class.
      */
-    class Interpreter
+    class KROSS_EXPORT Interpreter
     {
         public:
 

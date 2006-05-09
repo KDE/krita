@@ -25,6 +25,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>
+#include <koffice_export.h>
 
 #include "object.h"
 #include "value.h"
@@ -38,7 +39,7 @@ namespace Kross { namespace Api {
      * Variant value to wrap a QVariant into a \a Kross::Api::Value
      * to enable primitive types like strings or numerics.
      */
-    class Variant : public Value<Variant, QVariant>
+    class KROSS_EXPORT Variant : public Value<Variant, QVariant>
     {
             friend class Value<Variant, QVariant>;
         public:

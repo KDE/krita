@@ -24,7 +24,7 @@
 #include "list.h"
 //#include "exception.h"
 #include "argument.h"
-
+#include <koffice_export.h>
 #include <qstring.h>
 #include <q3valuelist.h>
 #include <ksharedptr.h>
@@ -37,7 +37,7 @@ namespace Kross { namespace Api {
      * and implement the \a Object::call() method to handle
      * the call.
      */
-    class Callable : public Object
+    class KROSS_EXPORT Callable : public Object
     {
         public:
 

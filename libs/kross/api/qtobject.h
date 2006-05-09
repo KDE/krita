@@ -24,6 +24,7 @@
 
 #include <qstring.h>
 #include <qobject.h>
+#include <koffice_export.h>
 
 namespace Kross { namespace Api {
 
@@ -67,7 +68,7 @@ namespace Kross { namespace Api {
      * This class publishs all SIGNAL's, SLOT's and Q_PROPERTY's
      * the QObject has.
      */
-    class QtObject : public Class<QtObject>
+    class KROSS_EXPORT QtObject : public Class<QtObject>
     {
         public:
 

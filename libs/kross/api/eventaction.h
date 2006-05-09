@@ -24,7 +24,7 @@
 //#include <qobject.h>
 #include <kaction.h>
 #include <ksharedptr.h>
-
+#include <koffice_export.h>
 #include "event.h"
 
 namespace Kross { namespace Api {
@@ -37,7 +37,7 @@ namespace Kross { namespace Api {
      * into the Kross object hierachy and provide access to
      * them.
      */
-    class EventAction : public Event<EventAction>
+    class KROSS_EXPORT EventAction : public Event<EventAction>
     {
 
         public:

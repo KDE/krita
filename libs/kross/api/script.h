@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-
+#include <koffice_export.h>
 #include "class.h"
 
 namespace Kross { namespace Api {
@@ -42,7 +42,7 @@ namespace Kross { namespace Api {
      * that implements the \a Script functionality for the
      * defined \a Interpreter .
      */
-    class Script
+    class KROSS_EXPORT Script
     {
         public:
 

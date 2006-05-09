@@ -24,7 +24,7 @@
 
 #include <qstring.h>
 #include <ksharedptr.h>
-
+#include <koffice_export.h>
 namespace Kross { namespace Api {
 
     /**
@@ -35,7 +35,7 @@ namespace Kross { namespace Api {
      * exceptions. Those exceptions are inherited from \a Object
      * and therefore they are first class citizens in Kross.
      */
-    class Exception : public Object
+    class KROSS_EXPORT Exception : public Object
     {
         private:
 

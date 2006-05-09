@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include <q3valuelist.h>
-
+#include <koffice_export.h>
 #include "object.h"
 
 namespace Kross { namespace Api {
@@ -100,7 +100,7 @@ namespace Kross { namespace Api {
      * An ArgumentList is a collection of \a Argument
      * objects used in a \a Class::Function.
      */
-    class ArgumentList
+    class KROSS_EXPORT ArgumentList
     {
         public:
 

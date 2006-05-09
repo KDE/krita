@@ -25,7 +25,7 @@
 #include <q3intdict.h>
 //Added by qt3to4:
 #include <Q3PtrList>
-
+#include <koffice_export.h>
 #include "object.h"
 #include "value.h"
 
@@ -35,7 +35,7 @@ namespace Kross { namespace Api {
      * The List class implementates \a Value to handle
      * lists and collections.
      */
-    class List : public Value< List, Q3ValueList<Object::Ptr> >
+    class KROSS_EXPORT List : public Value< List, Q3ValueList<Object::Ptr> >
     {
             friend class Value< List, Q3ValueList<Object::Ptr> >;
         public:

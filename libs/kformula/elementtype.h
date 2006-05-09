@@ -49,7 +49,7 @@ class TextElement;
  * Basis of all types. Types make up a hierarchy that describes
  * the semantic of the sequence.
  */
-class ElementType {
+class KOFORMULA_EXPORT ElementType { // exported for unit tests
 public:
     ElementType(SequenceParser* parser);
     virtual ~ElementType();

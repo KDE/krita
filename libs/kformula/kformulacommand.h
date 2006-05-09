@@ -48,7 +48,7 @@ KFORMULA_NAMESPACE_BEGIN
  *
  * If you don't like what you've done feel free to unexecute() .
  */
-class PlainCommand : public KNamedCommand
+class KOFORMULA_EXPORT PlainCommand : public KNamedCommand
 {
 public:
 

@@ -73,7 +73,7 @@ class SequenceElement;
  * (See @ref isSenseless )
  * If it is it must be removed.
  */
-class BasicElement
+class KOFORMULA_EXPORT BasicElement // exported for unit tests
 {
     friend class SequenceElement;
     friend class SequenceParser;

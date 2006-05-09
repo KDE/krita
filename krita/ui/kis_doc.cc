@@ -136,8 +136,8 @@ namespace {
 
 }
 
-KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode) :
-    super(parentWidget, widgetName, parent, name, singleViewMode)
+KisDoc::KisDoc(QWidget *parentWidget, QObject *parent, bool singleViewMode) :
+    super(parentWidget, parent, singleViewMode)
 {
 
     m_undo = false;
@@ -155,8 +155,7 @@ KisDoc::KisDoc(QWidget *parentWidget, const char *widgetName, QObject *parent, c
 
     init();
 
-    if (name)
-        dcopObject();
+    dcopObject();
 }
 
 KisDoc::~KisDoc()

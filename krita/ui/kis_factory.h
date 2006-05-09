@@ -37,7 +37,7 @@ class KRITACORE_EXPORT KisFactory : public KoFactory
     Q_OBJECT
 
 public:
-    KisFactory( QObject* parent = 0, const char* name = 0 );
+    KisFactory( QObject* parent = 0 );
     ~KisFactory();
 
     virtual KParts::Part *createPartObject(QWidget *parentWidget = 0,

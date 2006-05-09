@@ -54,7 +54,7 @@ class KRITACORE_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
     Q_OBJECT
 
 public:
-    KisDoc(QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false);
+    KisDoc(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
     virtual ~KisDoc();
 
 public:
@@ -84,8 +84,8 @@ public:
     virtual QDomDocument saveXML();
 
 public slots:
-            
-        
+
+
     /**
      * Initialize an empty document using default values
      * @since 1.5
@@ -93,7 +93,7 @@ public slots:
      virtual void initEmpty();
 
 private: // Undo adapter
-    
+
     virtual void setCommandHistoryListener(const KisCommandHistoryListener *);
     virtual void removeCommandHistoryListener(const KisCommandHistoryListener *);
 
@@ -179,9 +179,9 @@ protected slots:
 private slots:
     void slotUpdate(KisImageSP img, quint32 x, quint32 y, quint32 w, quint32 h);
     void slotIOProgress(qint8 percentage);
-    
+
 private:
-    
+
     QDomElement saveImage(QDomDocument& doc, KisImageSP img);
     KisImageSP loadImage(const QDomElement& elem);
     void loadLayers(const QDomElement& element, KisImageSP img, KisGroupLayerSP parent);
@@ -218,7 +218,7 @@ private:
     int m_ioProgressTotalSteps;
     int m_ioProgressBase;
     QMap<KisLayer *, QString> m_layerFilenames; // temp storage during load
-    
+
 };
 
 #endif // KIS_DOC_H_

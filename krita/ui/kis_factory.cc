@@ -50,8 +50,8 @@ KInstance* KisFactory::s_instance = 0;
 
 
 
-KisFactory::KisFactory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+KisFactory::KisFactory( QObject* parent )
+    : KoFactory( parent )
 {
     s_aboutData = newKritaAboutData();
 
@@ -81,8 +81,7 @@ KParts::Part* KisFactory::createPartObject( QWidget *parentWidget,
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KisDoc *doc = new KisDoc( parentWidget,
-                  0, parent, 0, !bWantKoDocument );
+    KisDoc *doc = new KisDoc( parentWidget, parent, !bWantKoDocument );
     Q_CHECK_PTR(doc);
 
     if ( !bWantKoDocument )

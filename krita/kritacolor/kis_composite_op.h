@@ -20,7 +20,7 @@
 
 #include <map>
 #include <QList>
-
+#include <koffice_export.h>
 //#include "kis_global.h"
 #include "kis_id.h"
 
@@ -71,7 +71,7 @@ enum CompositeOp {
     COMPOSITE_UNDEF
 };
 
-class KisCompositeOp {
+class KRITACOLOR_EXPORT KisCompositeOp {
 public:
     KisCompositeOp();
     KisCompositeOp(const QString& id);

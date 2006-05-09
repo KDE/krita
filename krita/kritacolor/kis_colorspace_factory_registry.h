@@ -24,6 +24,7 @@
 #include <QMap>
 #include <QList>
 #include <QString>
+#include <koffice_export.h>
 
 #include "kis_generic_registry.h"
 #include "kis_colorspace.h"
@@ -37,7 +38,7 @@ class KisPaintDeviceAction;
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
  */
-class KisColorSpaceFactoryRegistry : public QObject,  public KisGenericRegistry<KisColorSpaceFactory *> {
+class KRITACOLOR_EXPORT KisColorSpaceFactoryRegistry : public QObject,  public KisGenericRegistry<KisColorSpaceFactory *> {
 
 
     Q_OBJECT

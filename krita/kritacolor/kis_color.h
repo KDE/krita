@@ -19,6 +19,7 @@
 #define _KIS_COLOR_H_
 
 #include <qcolor.h>
+#include <koffice_export.h>
 #include "ksharedptr.h"
 
 #include "kis_global.h"
@@ -30,7 +31,7 @@
  * A KisColor describes a color in a certain colorspace.
  *
  */
-class KisColor {
+class KRITACOLOR_EXPORT KisColor {
 
 public:
     /// Create an empty KisColor. It will be valid, but also black and transparent

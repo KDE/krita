@@ -20,12 +20,12 @@
 #ifndef _SYMBOLACTION_H_
 #define _SYMBOLACTION_H_
 
-#include <kaction.h>
 #include <q3valuelist.h>
 #include <qstringlist.h>
 #include <q3memarray.h>
 
 #include "kformuladefs.h"
+#include <kselectaction.h>
 
 KFORMULA_NAMESPACE_BEGIN
 

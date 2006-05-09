@@ -29,7 +29,7 @@
 #include <KoFilterManager.h>
 
 
-KoFilter::KoFilter() : QObject( 0 ), m_chain( 0 )
+KoFilter::KoFilter( QObject* parent ) : QObject( parent ), m_chain( 0 )
 {
 }
 

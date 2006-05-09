@@ -34,6 +34,9 @@
 //#include "KoCommandHistory.h"
 #include "kformuladefs.h"
 
+class KToggleAction;
+class KSelectAction;
+
 KFORMULA_NAMESPACE_BEGIN
 
 class Container;
@@ -114,7 +117,7 @@ public:
      * @since 1.4
      */
     bool loadOasis( const QDomDocument& doc );
-    
+
     /**
      * Load the document settings.
      */

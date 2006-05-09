@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <ksimpleconfig.h>
 #include <kstandarddirs.h>
+#include <ktoggleaction.h>
 
 #include <KoDocument.h>
 
@@ -1161,10 +1162,10 @@ void DocumentWrapper::setEnabled( bool enabled )
     getAddLowerLeftAction()->setEnabled( enabled );
     getAddUpperRightAction()->setEnabled( enabled );
     getAddLowerRightAction()->setEnabled( enabled );
-    
+
     getAddGenericUpperAction()->setEnabled( enabled );
     getAddGenericLowerAction()->setEnabled( enabled );
-    
+
 
     if ( enabled ) {
         getAddGenericUpperAction()->

@@ -58,7 +58,7 @@ KoFilter::ConversionStatus KoFilterChain::ChainLink::invokeFilter( const ChainLi
         return KoFilter::CreationError;
     }
 
-    m_filter = m_filterEntry->createFilter( m_chain, 0, 0 );
+    m_filter = m_filterEntry->createFilter( m_chain );
 
     if ( !m_filter ) {
         kError( 30500 ) << "Couldn't create the filter." << endl;

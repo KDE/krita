@@ -128,7 +128,7 @@ bool KoApplication::start()
     // No argument -> create an empty document
     if ( !argsCount ) {
         QString errorMsg;
-        KoDocument* doc = entry.createDoc( &errorMsg, 0, "Document" );
+        KoDocument* doc = entry.createDoc( &errorMsg );
         if ( !doc ) {
             if ( !errorMsg.isEmpty() )
                 KMessageBox::error( 0, errorMsg );

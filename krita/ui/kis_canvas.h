@@ -74,7 +74,7 @@ class KisCanvasWidget : public QObject {
 public:
     KisCanvasWidget();
     virtual ~KisCanvasWidget();
-    
+
     // When enabled, the canvas may throw away move events if the application
     // is unable to keep up with them, i.e. intermediate move events in the event
     // queue are skipped.
@@ -282,13 +282,13 @@ protected:
 #endif // Q_WS_X11
 };
 
-class KisCanvas : public QObject {
+class KRITAUI_EXPORT KisCanvas : public QObject {
     Q_OBJECT
 
 public:
     KisCanvas(QWidget *parent, const char *name);
     virtual ~KisCanvas();
-    
+
     // When enabled, the canvas may throw away move events if the application
     // is unable to keep up with them, i.e. intermediate move events in the event
     // queue are skipped.
@@ -302,7 +302,7 @@ public:
     bool cursorIsOverCanvas() const;
 
     /**
-     * Handle the given event (which must be a key event) as if the canvas 
+     * Handle the given event (which must be a key event) as if the canvas
      * had received it directly.
      */
     void handleKeyEvent(QEvent *e);

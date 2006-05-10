@@ -105,7 +105,7 @@ public:
  * If there is an optionWidget, the derived paintop itself must support settings,
  * and it's up to the factory to do that.
  */
-class KisPaintOpFactory  : public KShared
+class KRITAIMAGE_EXPORT KisPaintOpFactory  : public KShared
 {
 
 public:

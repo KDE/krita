@@ -31,7 +31,7 @@
 
 #include <new>
 
-class KisMathToolbox : public QObject {
+class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
     Q_OBJECT
     public:
         struct KisFloatRepresentation {
@@ -95,7 +95,7 @@ class KisMathToolbox : public QObject {
         KisID m_id;
 };
 
-class KisMathToolboxFactoryRegistry : public KisGenericRegistry<KisMathToolbox*> {
+class KRITAIMAGE_EXPORT KisMathToolboxFactoryRegistry : public KisGenericRegistry<KisMathToolbox*> {
     public:
         KisMathToolboxFactoryRegistry();
         ~KisMathToolboxFactoryRegistry();

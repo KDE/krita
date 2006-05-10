@@ -27,10 +27,11 @@
 #include <QList>
 
 #include "kis_generic_registry.h"
+#include <krita_export.h>
 
 class KisResource;
 
-class KisResourceServerBase : public QObject {
+class KRITAUI_EXPORT KisResourceServerBase : public QObject {
     Q_OBJECT
 public:
     KisResourceServerBase(QString type);
@@ -67,7 +68,7 @@ private:
     KisResource* createResource(QString filename) { return new T(filename); }
 };
 
-class KisResourceServerRegistry : public KisGenericRegistry<KisResourceServerBase*>
+class KRITAUI_EXPORT KisResourceServerRegistry : public KisGenericRegistry<KisResourceServerBase*>
 {
 public:
     virtual ~KisResourceServerRegistry();

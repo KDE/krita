@@ -20,13 +20,14 @@
 
 #include <qwidget.h>
 #include "kis_filter_configuration.h"
+#include <krita_export.h>
 
 /**
  * Empty base class. Filters can build their own configuration widgets that
  * inherit this class. The configuration widget can emit sigPleaseUpdatePreview
- * when it wants the preview in the filter dialog to be updated. 
+ * when it wants the preview in the filter dialog to be updated.
  */
-class KisFilterConfigWidget : public QWidget {
+class KRITAIMAGE_EXPORT KisFilterConfigWidget : public QWidget {
 
     Q_OBJECT
 

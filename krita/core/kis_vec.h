@@ -25,13 +25,14 @@
 #include <cfloat>
 #include <qpoint.h>
 #include "kis_point.h"
+#include <krita_export.h>
 
 /*
  * vector classes
  */
 const double epsilon = DBL_EPSILON;
 
-class KisVector2D
+class KRITAIMAGE_EXPORT KisVector2D
 {
 public:
     KisVector2D();

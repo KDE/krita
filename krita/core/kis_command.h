@@ -22,10 +22,11 @@
 
 #include <qstring.h>
 #include <kcommand.h>
+#include "krita_export.h"
 
 class KisUndoAdapter;
 
-class KisCommand : public KCommand {
+class KRITAIMAGE_EXPORT KisCommand : public KCommand {
     typedef KCommand super;
 
 public:

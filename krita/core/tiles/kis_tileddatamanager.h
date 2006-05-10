@@ -26,6 +26,7 @@
 #include "kis_tile_global.h"
 #include "kis_tile.h"
 #include "kis_memento.h"
+#include "krita_export.h"
 
 class KisTiledDataManager;
 typedef KSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
@@ -52,7 +53,7 @@ class KoStore;
  * how many quint8's a single pixel takes.
  */
 
-class KisTiledDataManager : public KShared {
+class KRITAIMAGE_EXPORT KisTiledDataManager : public KShared {
 
 protected:
     KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);

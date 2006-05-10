@@ -31,6 +31,7 @@
 
 #include "kis_shared_ptr_vector.h"
 #include "kis_canvas_observer.h"
+#include <krita_export.h>
 
 class QCursor;
 class QEvent;
@@ -63,7 +64,7 @@ enum enumToolType {
 
 const quint8 NUMBER_OF_TOOLTYPES = 6;
 
-class KisTool : public QObject, public KisCanvasObserver, public KShared {
+class KRITAUI_EXPORT KisTool : public QObject, public KisCanvasObserver, public KShared {
     Q_OBJECT
 
 public:
@@ -81,7 +82,7 @@ public:
      *
      * The code should look like :
      * @code
-     * 
+     *
      * @endcode
      */
     virtual void setup(KActionCollection *collection) = 0;
@@ -107,7 +108,7 @@ public:
     KAction *action() const { return m_action; }
 
     /**
-     * Return true if this tool wants auto canvas-scrolling to 
+     * Return true if this tool wants auto canvas-scrolling to
      * work when this tool is active.
      */
     virtual bool wantsAutoScroll() const { return true; }
@@ -123,7 +124,7 @@ public slots:
      * This slot is called when the tool is selected in the toolbox
      */
     virtual void activate() = 0;
-    
+
     /**
      * deactivate is called when the tool gets deactivated because another
      * tool is selected. Tools can then clean up after themselves.

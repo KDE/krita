@@ -20,8 +20,9 @@
 #define KIS_INPUT_DEVICE_H_
 
 #include <QList>
+#include "krita_export.h"
 
-class KisInputDevice {
+class KRITAUI_EXPORT KisInputDevice {
 public:
     KisInputDevice();
 

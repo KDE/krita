@@ -19,8 +19,6 @@
 #ifndef KIS_TOOL_BRUSH_H_
 #define KIS_TOOL_BRUSH_H_
 
-#include "koffice_export.h"
-
 #include "kis_tool_freehand.h"
 #include "kis_tool_factory.h"
 
@@ -31,7 +29,7 @@ class QRect;
 class QCheckBox;
 class QGridLayout;
 
-class KRITACORE_EXPORT KisToolBrush : public KisToolFreehand {
+class KisToolBrush : public KisToolFreehand {
     Q_OBJECT
     typedef KisToolFreehand super;
 

@@ -38,7 +38,7 @@ class KisDataManager;
  * The KisRectIterator iterators over a rectangular area in the most efficient order. That is,
  * there is no guarantee that the iterator will work scanline by scanline.
  */
-class KisRectIterator
+class KRITAIMAGE_EXPORT KisRectIterator
 {
 
 
@@ -133,7 +133,7 @@ private:
     KisTiledHLineIteratorSP m_iter;
 };
 
-class KisVLineIterator
+class KRITAIMAGE_EXPORT KisVLineIterator
 {
 
 public:

@@ -97,7 +97,7 @@ public:
 };
 
 
-class KisImagePipeBrush : public KisBrush {
+class KRITAIMAGE_EXPORT KisImagePipeBrush : public KisBrush {
     typedef KisBrush super;
     Q_OBJECT
 
@@ -135,11 +135,11 @@ public:
     virtual bool hasColor() const;
 
     virtual enumBrushType brushType() const;
-    
+
     virtual KisBoundary boundary();
-    
+
     KisPipeBrushParasite const& parasite() const { return m_parasite; }
-    
+
     virtual bool canPaintFor(const KisPaintInformation& info);
 
     virtual void makeMaskImage();
@@ -161,7 +161,7 @@ private:
     mutable Q3PtrList<KisBrush> m_brushes;
 
     enumBrushType m_brushType;
-    
+
 };
 
 #endif // KIS_IMAGEPIPE_BRUSH_

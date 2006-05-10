@@ -25,8 +25,9 @@
 #include "kis_types.h"
 #include "kis_generic_registry.h"
 #include "kis_id.h"
+#include "krita_export.h"
 
-class KisFilterStrategy
+class KRITAIMAGE_EXPORT KisFilterStrategy
 {
     public:
         KisFilterStrategy(KisID id) : m_id(id) {}
@@ -44,18 +45,18 @@ class KisFilterStrategy
         KisID m_id;
 };
 
-class KisHermiteFilterStrategy : public KisFilterStrategy
+class KRITAIMAGE_EXPORT KisHermiteFilterStrategy : public KisFilterStrategy
 {
     public:
         KisHermiteFilterStrategy() : KisFilterStrategy(KisID("Hermite", i18n("Hermite")))
             {supportVal = 1.0; intSupportVal = 256;}
         virtual ~KisHermiteFilterStrategy() {}
-        
+
         virtual quint32 intValueAt(qint32 t) const;
         virtual double valueAt(double t) const;
 };
 
-class KisBoxFilterStrategy : public KisFilterStrategy
+class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 {
     public:
         KisBoxFilterStrategy() : KisFilterStrategy(KisID("Box", i18n("Box")))
@@ -67,7 +68,7 @@ class KisBoxFilterStrategy : public KisFilterStrategy
         virtual bool boxSpecial() { return true;};
 };
 
-class KisTriangleFilterStrategy : public KisFilterStrategy
+class KRITAIMAGE_EXPORT KisTriangleFilterStrategy : public KisFilterStrategy
 {
     public:
         KisTriangleFilterStrategy() : KisFilterStrategy(KisID("Triangle", i18n("Triangle aka (bi)linear")))
@@ -78,7 +79,7 @@ class KisTriangleFilterStrategy : public KisFilterStrategy
         virtual double valueAt(double t) const;
 };
 
-class KisBellFilterStrategy : public KisFilterStrategy
+class KRITAIMAGE_EXPORT KisBellFilterStrategy : public KisFilterStrategy
 {
     public:
         KisBellFilterStrategy() : KisFilterStrategy(KisID("Bell", i18n("Bell")))
@@ -88,7 +89,7 @@ class KisBellFilterStrategy : public KisFilterStrategy
         virtual double valueAt(double t) const;
 };
 
-class KisBSplineFilterStrategy : public KisFilterStrategy
+class KRITAIMAGE_EXPORT KisBSplineFilterStrategy : public KisFilterStrategy
 {
     public:
         KisBSplineFilterStrategy() : KisFilterStrategy(KisID("BSpline", i18n("BSpline")))
@@ -98,7 +99,7 @@ class KisBSplineFilterStrategy : public KisFilterStrategy
         virtual double valueAt(double t) const;
 };
 
-class KisLanczos3FilterStrategy : public KisFilterStrategy
+class KRITAIMAGE_EXPORT KisLanczos3FilterStrategy : public KisFilterStrategy
 {
     public:
         KisLanczos3FilterStrategy() : KisFilterStrategy(KisID("Lanczos3", i18n("Lanczos3")))
@@ -107,10 +108,10 @@ class KisLanczos3FilterStrategy : public KisFilterStrategy
 
         virtual double valueAt(double t) const;
     private:
-        double sinc(double x) const; 
+        double sinc(double x) const;
 };
 
-class KisMitchellFilterStrategy : public KisFilterStrategy
+class KRITAIMAGE_EXPORT  KisMitchellFilterStrategy : public KisFilterStrategy
 {
     public:
         KisMitchellFilterStrategy() : KisFilterStrategy(KisID("Mitchell", i18n("Mitchell")))
@@ -120,11 +121,11 @@ class KisMitchellFilterStrategy : public KisFilterStrategy
         virtual double valueAt(double t) const;
 };
 
-class KisFilterStrategyRegistry : public KisGenericRegistry<KisFilterStrategy *>
+class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KisGenericRegistry<KisFilterStrategy *>
 {
 public:
     virtual ~KisFilterStrategyRegistry();
-    
+
     static KisFilterStrategyRegistry* instance();
 
 private:

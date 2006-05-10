@@ -20,8 +20,9 @@
 #define KIS_MATRIX_WIDGET_H
 
 #include "ui_kis_matrix_widget.h"
+#include "krita_export.h"
 
-class KisMatrixWidget : public QWidget, public Ui::KisMatrixWidget
+class KRITAUI_EXPORT KisMatrixWidget : public QWidget, public Ui::KisMatrixWidget
 {
     Q_OBJECT
 

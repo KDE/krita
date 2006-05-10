@@ -25,17 +25,17 @@ class QRect;
 class KisPaintDevice;
 class KisProgressDisplayInterface;
 
-class KisRotateVisitor : public KisProgressSubject {
-        typedef KisProgressSubject super;  
-        
+class KRITAIMAGE_EXPORT KisRotateVisitor : public KisProgressSubject {
+        typedef KisProgressSubject super;
+
         /* Structs for the image rescaling routine */
-    
+
 public:
         KisRotateVisitor();
         ~KisRotateVisitor();
 
         void visitKisPaintDevice(KisPaintDevice* dev);
-        
+
         void rotate(double angle, bool rotateAboutImageCentre, KisProgressDisplayInterface *progress);
         void shear(double angleX, double angleY, KisProgressDisplayInterface *progress);
 

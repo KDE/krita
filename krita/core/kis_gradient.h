@@ -229,7 +229,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         Color m_endColor;
 };
 
-class KisGradient : public KisResource {
+class KRITAIMAGE_EXPORT KisGradient : public KisResource {
     typedef KisResource super;
     Q_OBJECT
 

@@ -27,11 +27,12 @@
 #include <QPolygon>
 
 #include "kis_global.h"
+#include <krita_export.h>
 
 class KisCanvas;
 class KisCanvasWidget;
 
-class KisCanvasWidgetPainter {
+class KRITAUI_EXPORT KisCanvasWidgetPainter {
 public:
     KisCanvasWidgetPainter();
     virtual ~KisCanvasWidgetPainter();
@@ -189,7 +190,7 @@ protected:
     QMatrix m_defaultWorldMatrix;
 };
 
-class KisCanvasPainter {
+class KRITAUI_EXPORT KisCanvasPainter {
 public:
     KisCanvasPainter();
     KisCanvasPainter(KisCanvas *canvas);

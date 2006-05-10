@@ -24,6 +24,7 @@
 #include <ksharedptr.h>
 
 #include "kis_global.h"
+#include <krita_export.h>
 #include "kis_types.h"
 
 /**
@@ -31,8 +32,8 @@
  * in brush creation. It is not a generic alpha mask that can be used with
  * KisPaintDevices: use a KisSelection for that.
  */
-class KisAlphaMask : public KShared {
-    
+class KRITAIMAGE_EXPORT KisAlphaMask : public KShared {
+
  public:
     /**
        Create an alpha mask based on the specified QImage. If the image is

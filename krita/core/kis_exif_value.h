@@ -26,7 +26,7 @@
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3MemArray>
-
+#include <krita_export.h>
 typedef Q3MemArray<quint8> UByteArray;
 
 struct KisExifRational {
@@ -39,7 +39,7 @@ struct KisExifSRational {
     qint32 denominator;
 };
 
-class ExifValue {
+class KRITAIMAGE_EXPORT ExifValue {
     typedef union {
         quint8 m_byte;
         quint16 m_short;

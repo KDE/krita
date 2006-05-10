@@ -26,6 +26,7 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QWheelEvent>
+#include <krita_export.h>
 
 class QLabel;
 
@@ -35,7 +36,7 @@ class QLabel;
  * XXX: We should add a signal that emits newly eposed rects so the filters
  *      don't have to filter everything, but just the the new bits.
  */
-class ImageViewer : public Q3ScrollView {
+class KRITAUI_EXPORT ImageViewer : public Q3ScrollView {
     Q_OBJECT
 
 public:

@@ -22,6 +22,7 @@
 #include <main/scriptaction.h>
 
 #include <q3listview.h>
+#include <koffice_export.h>
 
 class Scripting;
 
@@ -33,7 +34,7 @@ class WdgScriptsManagerPrivate;
 /**
 @author Cyrille Berger
 */
-class WdgScriptsManager : public QWidget
+class KROSS_EXPORT WdgScriptsManager : public QWidget
 {
     Q_OBJECT
     public:

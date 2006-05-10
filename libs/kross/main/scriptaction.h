@@ -24,6 +24,7 @@
 #include <Q3ValueList>
 #include <kaction.h>
 #include <kactionmenu.h>
+#include <koffice_export.h>
 
 #include "scriptcontainer.h"
 
@@ -38,7 +39,7 @@ namespace Kross { namespace Api {
      * A ScriptAction extends a KAction by providing a wrapper around
      * a \a ScriptContainer to execute scripting code on activation.
      */
-    class ScriptAction
+    class KROSS_EXPORT ScriptAction
         : public KAction
         , public Kross::Api::ScriptContainer
     {

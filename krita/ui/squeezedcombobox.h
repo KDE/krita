@@ -31,6 +31,7 @@ class QTimer;
 
 #include <qcombobox.h>
 #include <qtooltip.h>
+#include <krita_export.h>
 
 class SqueezedComboBox;
 
@@ -81,7 +82,7 @@ class SqueezedComboBox;
  * @image html squeezedcombobox.png "This is how it looks"
  * @author Tom Albers
  */
-class SqueezedComboBox : public QComboBox
+class KRITAUI_EXPORT SqueezedComboBox : public QComboBox
 {
     Q_OBJECT
 

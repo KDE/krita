@@ -24,13 +24,14 @@
 #include "qcombobox.h"
 
 #include "kis_id.h"
+#include <krita_export.h>
 
 /**
  * A combobox that is associated with a list of KisID's. The
  * descriptive (i18n'ed) text is displayed, but the various
  * signals return a KisID.
  */
-class KisCmbIDList : public QComboBox
+class KRITAUI_EXPORT KisCmbIDList : public QComboBox
 {
     typedef QComboBox super;
 

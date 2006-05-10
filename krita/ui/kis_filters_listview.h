@@ -25,7 +25,7 @@
 #include <QPixmap>
 
 #include <k3iconview.h>
-
+#include <krita_export.h>
 #include "kis_id.h"
 #include "kis_types.h"
 #include "kis_layer.h"
@@ -103,7 +103,7 @@ private:
     KisFiltersThumbnailThread * m_thread;
 };
 
-class KisFiltersListView : public K3IconView {
+class KRITAUI_EXPORT KisFiltersListView : public K3IconView {
 
 public:
 

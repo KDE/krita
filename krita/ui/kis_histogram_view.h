@@ -25,7 +25,7 @@
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-
+#include <krita_export.h>
 #include "kis_types.h"
 #include "kis_histogram_producer.h"
 #include "kis_histogram.h"
@@ -47,7 +47,7 @@ class KisChannelInfo;
  * some functionality will disappear, like listProducers(). Setting a histogram will discard
  * info on the layer, and setting a layer will discard info on the histogram.
  **/
-class KisHistogramView : public QLabel {
+class KRITAUI_EXPORT KisHistogramView : public QLabel {
     Q_OBJECT
 public:
     KisHistogramView(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);

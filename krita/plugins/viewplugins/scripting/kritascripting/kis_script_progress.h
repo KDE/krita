@@ -20,6 +20,7 @@
 #define _KIS_SCRIPT_PROGRESS_H_
 
 #include <kis_progress_subject.h>
+#include <krita_export.h>
 
 class KisView;
 
@@ -27,7 +28,7 @@ class KisView;
  * TODO: clarify the situation, while, in the future, multiple scripts could be running at a same time,
  * some of the functions are global to all script and some aren't.
  */
-class KisScriptProgress : public KisProgressSubject
+class KRITASCRIPTING_EXPORT KisScriptProgress : public KisProgressSubject
 {
     public:
         KisScriptProgress(KisView* view) : m_view(view) {};

@@ -24,7 +24,7 @@
 #include <qspinbox.h>
 #include <qslider.h>
 #include <QLabel>
-
+#include <krita_export.h>
 #include <knumvalidator.h>
 #include <kmenu.h>
 
@@ -79,7 +79,7 @@ signals:
  *
  *
  */
-class KisIntSpinbox : public QWidget
+class KRITAUI_EXPORT KisIntSpinbox : public QWidget
 {
 
     Q_OBJECT

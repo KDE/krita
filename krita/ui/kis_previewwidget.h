@@ -25,6 +25,7 @@
 #include <qimage.h>
 #include <qevent.h>
 #include <QWheelEvent>
+#include <krita_export.h>
 
 #include "kis_types.h"
 
@@ -49,7 +50,7 @@ class PreviewWidgetBase : public QWidget, public Ui::PreviewWidgetBase
  * (maybe not those that create a new image) would use this. This can prevent the distracting
  * effect the GIMP has with a different preview for almost every filter.
  */
-class KisPreviewWidget : public PreviewWidgetBase
+class KRITAUI_EXPORT KisPreviewWidget : public PreviewWidgetBase
 {
     Q_OBJECT
 

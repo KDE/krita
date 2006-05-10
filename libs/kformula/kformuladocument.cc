@@ -1190,6 +1190,8 @@ void DocumentWrapper::setEnabled( bool enabled )
 
 void DocumentWrapper::enableMatrixActions( bool b)
 {
+    if ( !m_hasActions )
+        return;
     getAppendColumnAction()->setEnabled( b );
     getInsertColumnAction()->setEnabled( b );
     getRemoveColumnAction()->setEnabled( b );

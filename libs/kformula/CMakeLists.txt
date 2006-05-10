@@ -57,20 +57,19 @@ install_targets(${LIB_INSTALL_DIR} kformulalib )
 
 ########### next target ###############
 
+if(KDE4_BUILD_TESTS)
+
 set(kformulatest_SRCS main.cc kformulawidget.cc )
 
 kde4_automoc(${kformulatest_SRCS})
 
-if(KDE4_BUILD_TESTS)
-
-kde4_add_executable(kformulatest ${kformulatest_SRCS})
+kde4_add_executable(kformulatest RUN_UNINSTALLED ${kformulatest_SRCS})
 
 target_link_libraries(kformulatest  ${KDE4_KDECORE_LIBS} kformulalib )
 
 endif(KDE4_BUILD_TESTS)
 
 ########### install files ###############
-
 
 kde4_footer()
 

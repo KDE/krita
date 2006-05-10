@@ -99,17 +99,17 @@ void CMStyle::installFonts()
 {
     if (m_installed)
         return;
-    QStringList missing = missingFontsInternal();
+    const QStringList missing = missingFontsInternal();
     if (!missing.isEmpty())
     {
-        QStringList urlList;
-        for (QStringList::iterator it = missing.begin(); it != missing.end(); ++it)
+        KUrl::List urlList;
+        for (QStringList::const_iterator it = missing.begin(); it != missing.end(); ++it)
         {
             if (!KIO::NetAccess::exists("fonts:/Personal/" + *it + ".ttf", true, NULL))
-                urlList.append(locate("data", "kformula/fonts/" + *it + ".ttf"));
+                urlList.append(KUrl::fromPath(locate("data", "kformula/fonts/" + *it + ".ttf")));
         }
         KIO::copy(urlList, KUrl("fonts:/Personal/"), false);
-        KMessageBox::information(qApp->mainWidget(), 
+        KMessageBox::information(qApp->mainWidget(),
                                  i18n("Some fonts have been installed to assure that symbols in formulas are properly visualized. You must restart the application in order so that changes take effect"));
     }
     m_installed = true;

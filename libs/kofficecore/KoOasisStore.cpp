@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qfile.h>
+#include <QFile>
 #include <qxml.h>
 #include <qbuffer.h>
 

@@ -24,8 +24,8 @@
 #include <q3buttongroup.h>
 
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qradiobutton.h>
 
 #include <klocale.h>

@@ -31,7 +31,7 @@
 #include <qevent.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <qstringlist.h>
 #include <qstyle.h>
 #include <qstringlist.h>

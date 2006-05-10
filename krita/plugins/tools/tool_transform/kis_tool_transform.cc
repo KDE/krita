@@ -22,10 +22,10 @@
 
 #include <qpainter.h>
 #include <qpen.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qobject.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLabel>
+#include <QComboBox>
 #include <qapplication.h>
 
 #include <kdebug.h>

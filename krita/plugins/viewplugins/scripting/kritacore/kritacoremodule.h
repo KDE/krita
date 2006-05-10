@@ -19,8 +19,8 @@
 #ifndef KRITA_KROSS_KRITACOREMODULE_H
 #define KRITA_KROSS_KRITACOREMODULE_H
 
-#include <qstring.h>
-#include <qvariant.h>
+#include <QString>
+#include <QVariant>
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 

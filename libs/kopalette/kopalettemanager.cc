@@ -17,7 +17,7 @@
 
 #include <qapplication.h>
 #include <q3dict.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <qobject.h>
 #include <qevent.h>
 

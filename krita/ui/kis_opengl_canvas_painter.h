@@ -27,7 +27,7 @@
 
 #ifdef HAVE_OPENGL
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qgl.h>
 #include <qpainter.h>
 

@@ -23,8 +23,8 @@
 #include <knuminput.h>
 
 #include <q3buttongroup.h>
-#include <qcheckbox.h>
-#include <qspinbox.h>
+#include <QCheckBox>
+#include <QSpinBox>
 
 #include "KoLayoutTab.moc"
 

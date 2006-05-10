@@ -19,9 +19,9 @@
  */
 
 #include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QComboBox>
 #include <q3ptrlist.h>
 
 #include <klocale.h>

@@ -23,7 +23,7 @@
 #include <qsize.h>
 #include <qrect.h>
 #include <qsizepolicy.h>
-#include <qpoint.h>
+#include <QPoint>
 //Added by qt3to4:
 #include <Q3ValueList>
 

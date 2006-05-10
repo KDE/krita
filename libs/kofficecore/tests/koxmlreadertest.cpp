@@ -19,12 +19,12 @@
 //  xmlreadertest.cpp - test KoXml classes
 //  Ariya Hidayat, November 2005
 
-#include <qstring.h>
+#include <QString>
 #include <q3cstring.h>
 #include <qbuffer.h>
 #include <qtextstream.h>
 #include <qdatetime.h>
-#include <qfile.h>
+#include <QFile>
 
 #include "KoXmlReader.h"
 #include <qxml.h>

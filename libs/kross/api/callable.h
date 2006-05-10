@@ -25,7 +25,7 @@
 //#include "exception.h"
 #include "argument.h"
 #include <koffice_export.h>
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 #include <ksharedptr.h>
 

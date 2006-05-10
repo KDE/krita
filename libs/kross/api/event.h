@@ -30,9 +30,9 @@
 #include "proxy.h"
 #include "variant.h"
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
-#include <qmap.h>
+#include <QMap>
 
 namespace Kross { namespace Api {
 

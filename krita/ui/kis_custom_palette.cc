@@ -18,10 +18,10 @@
 
 #include <KoImageResource.h>
 #include <kdebug.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <qimage.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
+#include <QPushButton>
+#include <QRegExp>
 #include <qvalidator.h>
 
 #include <kglobal.h>

@@ -20,10 +20,10 @@
 #include "rectedit.h"
 #include "editoritem.h"
 
-#include <qvariant.h>
-#include <qlayout.h>
+#include <QVariant>
+#include <QLayout>
 #include <qpainter.h>
-#include <qtooltip.h>
+#include <QToolTip>
 
 #include <kactivelabel.h>
 #include <klocale.h>

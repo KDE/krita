@@ -20,7 +20,7 @@
 #ifndef __KOCONTEXTHELPACTION_H__
 #define __KOCONTEXTHELPACTION_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qbitmap.h>
 #include <q3dockwindow.h>
 //Added by qt3to4:

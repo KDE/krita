@@ -22,7 +22,7 @@
 
 #include "pythonconfig.h"
 
-#include <qstring.h>
+#include <QString>
 
 namespace Kross { namespace Python {
 

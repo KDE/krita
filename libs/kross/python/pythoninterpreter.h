@@ -29,7 +29,7 @@
 //#include "../api/script.h"
 #include "../main/scriptcontainer.h"
 
-#include <qstring.h>
+#include <QString>
 
 namespace Kross { namespace Python {
 

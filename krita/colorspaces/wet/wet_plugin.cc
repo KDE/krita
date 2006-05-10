@@ -23,9 +23,9 @@
 #include <qobject.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <qpoint.h>
-#include <qlabel.h>
-#include <qwidget.h>
+#include <QPoint>
+#include <QLabel>
+#include <QWidget>
 
 #include <kactionclasses.h>
 #include <klocale.h>

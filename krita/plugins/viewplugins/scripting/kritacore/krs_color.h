@@ -19,7 +19,7 @@
 #ifndef KROSS_APIKRS_COLOR_H
 #define KROSS_APIKRS_COLOR_H
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <api/class.h>
 

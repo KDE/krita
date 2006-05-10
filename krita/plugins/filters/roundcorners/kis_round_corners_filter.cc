@@ -25,8 +25,8 @@
 #include <vector>
 #include <math.h>
 
-#include <qpoint.h>
-#include <qspinbox.h>
+#include <QPoint>
+#include <QSpinBox>
 
 #include <klocale.h>
 #include <kiconloader.h>

@@ -23,7 +23,7 @@
 
 #include "../widget.h"
 
-#include <qvariant.h>
+#include <QVariant>
 
 namespace KoProperty {
 

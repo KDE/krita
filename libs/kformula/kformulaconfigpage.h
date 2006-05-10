@@ -21,7 +21,7 @@
 #ifndef kfconfigpages_h
 #define kfconfigpages_h
 
-#include <qfont.h>
+#include <QFont>
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <QLabel>

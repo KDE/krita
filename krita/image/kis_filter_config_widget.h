@@ -18,7 +18,7 @@
 #ifndef _KIS_FILTER_CONFIG_WIDGET_H_
 #define _KIS_FILTER_CONFIG_WIDGET_H_
 
-#include <qwidget.h>
+#include <QWidget>
 #include "kis_filter_configuration.h"
 #include <krita_export.h>
 

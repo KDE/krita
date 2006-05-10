@@ -19,10 +19,10 @@
  */
 #include <qpixmap.h>
 #include <qimage.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qpainter.h>
 #include <q3frame.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qtoolbutton.h>
 #include <qslider.h>
 #include <qcursor.h>

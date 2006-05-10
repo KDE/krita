@@ -19,8 +19,8 @@
 #define KIS_RESOURCE_MEDIATOR_H_
 
 #include <qobject.h>
-#include <qmap.h>
-#include <qwidget.h>
+#include <QMap>
+#include <QWidget>
 
 class KoIconItem;
 class KisItemChooser;

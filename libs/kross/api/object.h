@@ -20,11 +20,11 @@
 #ifndef KROSS_API_OBJECT_H
 #define KROSS_API_OBJECT_H
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <q3valuelist.h>
-#include <qmap.h>
-#include <qvariant.h>
+#include <QMap>
+#include <QVariant>
 //#include <qobject.h>
 #include <ksharedptr.h>
 #include <koffice_export.h>

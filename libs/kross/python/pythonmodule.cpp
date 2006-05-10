@@ -20,7 +20,7 @@
 #include "pythonmodule.h"
 #include "pythoninterpreter.h"
 
-#include <qregexp.h>
+#include <QRegExp>
 
 using namespace Kross::Python;
 

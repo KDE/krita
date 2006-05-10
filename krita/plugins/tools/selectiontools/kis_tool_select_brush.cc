@@ -19,9 +19,9 @@
  */
 
 #include <qevent.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qwidget.h>
+#include <QLabel>
+#include <QLayout>
+#include <QWidget>
 #include <qrect.h>
 #include <QVBoxLayout>
 

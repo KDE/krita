@@ -19,7 +19,7 @@
 */
 
 #include <iostream>
-#include <qstring.h>
+#include <QString>
 #include <qfontmetrics.h>
 
 #include <klocale.h>

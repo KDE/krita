@@ -23,7 +23,7 @@
 #include <qstringlist.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include <kcombobox.h>
 #include <kcolorbutton.h>

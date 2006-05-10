@@ -21,8 +21,8 @@
 #include "kis_dlg_filtersgallery.h"
 
 #include <q3groupbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <qdatetime.h>
 
 #include <kis_filter.h>

@@ -20,7 +20,7 @@
 #ifndef KROSS_API_EVENTACTION_H
 #define KROSS_API_EVENTACTION_H
 
-#include <qstring.h>
+#include <QString>
 //#include <qobject.h>
 #include <kaction.h>
 #include <ksharedptr.h>

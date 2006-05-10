@@ -21,18 +21,18 @@
 
 #include <qtoolbutton.h>
 #include <qbrush.h>
-#include <qfont.h>
+#include <QFont>
 #include <qfontmetrics.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qpainter.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <qrect.h>
-#include <qstring.h>
+#include <QString>
 #include <qstyle.h>
-#include <qtooltip.h>
-#include <qwidget.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
+#include <QToolTip>
+#include <QWidget>
+#include <QComboBox>
+#include <QCheckBox>
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QList>

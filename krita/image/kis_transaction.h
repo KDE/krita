@@ -19,7 +19,7 @@
 #ifndef KIS_TILE_COMMAND_H_
 #define KIS_TILE_COMMAND_H_
 
-#include <qstring.h>
+#include <QString>
 
 #include <kcommand.h>
 

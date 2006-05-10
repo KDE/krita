@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 #include <qslider.h>
-#include <qpoint.h>
+#include <QPoint>
 
 #include <klocale.h>
 #include <kiconloader.h>

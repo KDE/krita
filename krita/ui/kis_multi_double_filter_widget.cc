@@ -18,8 +18,8 @@
 
 #include "kis_multi_double_filter_widget.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qtimer.h>
 #include <QGridLayout>
 

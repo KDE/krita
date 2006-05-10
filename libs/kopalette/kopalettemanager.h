@@ -20,11 +20,11 @@
 
 #include <qobject.h>
 #include <q3dockwindow.h>
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 #include <q3dict.h>
 #include <q3valuestack.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <qsignalmapper.h>
 #include <qstringlist.h>
 //Added by qt3to4:

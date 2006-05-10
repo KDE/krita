@@ -23,7 +23,7 @@
 #ifndef KSNAPSHOT_H
 #define KSNAPSHOT_H
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qpixmap.h>
 #include <qtimer.h>
 //Added by qt3to4:

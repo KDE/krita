@@ -20,7 +20,7 @@
 #define KIS_TOOL_PAINT_H_
 
 #include <qcursor.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <QLabel>
 #include <QGridLayout>
 #include <QKeyEvent>

@@ -18,9 +18,9 @@
 #ifndef _KIS_FILTER_CONFIGURATION_H_
 #define _KIS_FILTER_CONFIGURATION_H_
 
-#include <qstring.h>
-#include <qmap.h>
-#include <qvariant.h>
+#include <QString>
+#include <QMap>
+#include <QVariant>
 #include <kdebug.h>
 #include "krita_export.h"
 

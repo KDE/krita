@@ -23,8 +23,8 @@
 
 #include <map>
 
-#include <qwidget.h>
-#include <qcombobox.h>
+#include <QWidget>
+#include <QComboBox>
 #include <QList>
 #include <QPixmap>
 

@@ -21,12 +21,12 @@
 #include "sizepolicyedit.h"
 #include "editoritem.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qpainter.h>
 #include <qsizepolicy.h>
-#include <qmap.h>
-#include <qtooltip.h>
+#include <QMap>
+#include <QToolTip>
 
 #ifdef QT_ONLY
 // \todo

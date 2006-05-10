@@ -29,8 +29,8 @@
 #include "KoDirectoryStore.h"
 
 #include <qfileinfo.h>
-#include <qfile.h>
-#include <qdir.h>
+#include <QFile>
+#include <QDir>
 
 #include <kurl.h>
 #include <kdebug.h>

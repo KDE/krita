@@ -19,7 +19,7 @@
 #ifndef _KIS_HISTOGRAM_VIEW_
 #define _KIS_HISTOGRAM_VIEW_
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qpixmap.h>
 #include <q3valuevector.h>
 #include <qstringlist.h>

@@ -28,12 +28,12 @@
 #include "../api/dict.h"
 #include "../api/class.h"
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <q3valuelist.h>
 #include <q3valuevector.h>
-#include <qmap.h>
-#include <qvariant.h>
+#include <QMap>
+#include <QVariant>
 
 namespace Kross { namespace Python {
 

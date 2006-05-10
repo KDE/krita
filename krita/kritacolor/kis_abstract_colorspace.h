@@ -19,8 +19,8 @@
 #ifndef KIS_ABSTRACT_COLORSPACE_H_
 #define KIS_ABSTRACT_COLORSPACE_H_
 
-#include <qmap.h>
-#include <qcolor.h>
+#include <QMap>
+#include <QColor>
 #include <qstringlist.h>
 #include <qpair.h>
 //Added by qt3to4:

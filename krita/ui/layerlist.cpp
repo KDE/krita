@@ -19,7 +19,7 @@
 
 #include "layerlist.h"
 
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qbitmap.h>
 #include <qcursor.h>
 #include <qimage.h>

@@ -18,10 +18,10 @@
 #ifndef KIS_STRATEGY_COLORSPACE_WET_H_
 #define KIS_STRATEGY_COLORSPACE_WET_H_
 
-#include <qcolor.h>
+#include <QColor>
 #include <qstringlist.h>
 #include <q3valuelist.h>
-#include <qmap.h>
+#include <QMap>
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"

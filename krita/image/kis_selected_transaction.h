@@ -21,7 +21,7 @@
 
 #include <map>
 #include <qglobal.h>
-#include <qstring.h>
+#include <QString>
 
 #include "kis_transaction.h"
 

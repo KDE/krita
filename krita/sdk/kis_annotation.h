@@ -24,7 +24,7 @@
 #include <ksharedptr.h>
 #include "kis_shared_ptr_vector.h"
 
-#include <qstring.h>
+#include <QString>
 #include <q3cstring.h>
 #include <q3memarray.h>
 

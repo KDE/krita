@@ -31,7 +31,7 @@
 #include <Q3ValueList>
 #include <kaction.h>
 #include "KoRichText.h"
-#include <qvariant.h>
+#include <QVariant>
 #include <koffice_export.h>
 
 class QDomElement;

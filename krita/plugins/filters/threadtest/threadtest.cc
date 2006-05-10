@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qrect.h>
 #include <qthread.h>
 

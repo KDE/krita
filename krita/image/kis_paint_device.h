@@ -18,13 +18,13 @@
 #ifndef KIS_PAINT_DEVICE_IMPL_H_
 #define KIS_PAINT_DEVICE_IMPL_H_
 
-#include <qcolor.h>
+#include <QColor>
 #include <qobject.h>
 #include <qpixmap.h>
 #include <q3ptrlist.h>
 #include <qrect.h>
 #include <q3valuelist.h>
-#include <qstring.h>
+#include <QString>
 
 #include "kis_types.h"
 #include "kdebug.h"

@@ -23,10 +23,10 @@
 #include <stdlib.h>
 
 #include <qslider.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QCheckBox>
+#include <QLabel>
 #include <q3textedit.h>
 #include <qdatetime.h>
 
@@ -41,7 +41,7 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_meta_registry.h"
 #include <kis_resourceserver.h>

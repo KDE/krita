@@ -7,7 +7,7 @@
 // with kofficecore/tests/kogenstylestest.cpp
 
 #include <qbuffer.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #define TEST_BEGIN(publicId,systemId) \
     { \

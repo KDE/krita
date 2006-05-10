@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qslider.h>
 
 #include <kcolorcombo.h>

@@ -20,8 +20,8 @@
 
 #include "urledit.h"
 
-#include <qlayout.h>
-#include <qvariant.h>
+#include <QLayout>
+#include <QVariant>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 
@@ -29,8 +29,8 @@
 #include <kurlrequester.h>
 #include <klineedit.h>
 #else
-#include <qpushbutton.h>
-#include <qlineedit.h>
+#include <QPushButton>
+#include <QLineEdit>
 #include <q3filedialog.h>
 #endif
 

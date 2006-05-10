@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_PROPERTY_H
 #define KPROPERTY_PROPERTY_H
 
-#include <qvariant.h>
+#include <QVariant>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QStringList>

@@ -20,7 +20,7 @@
 #ifndef KROSS_API_ARGUMENT_H
 #define KROSS_API_ARGUMENT_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 #include <koffice_export.h>
 #include "object.h"

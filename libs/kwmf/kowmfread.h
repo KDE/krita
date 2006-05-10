@@ -20,13 +20,13 @@
 
 #include <qpen.h>
 #include <qbrush.h>
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <qrect.h>
 #include <qregion.h>
 #include <qimage.h>
 #include <qmatrix.h>
-#include <qstring.h>
+#include <QString>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
 #include <QPainter>

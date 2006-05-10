@@ -2,13 +2,13 @@
 #include "DateFormatWidget.h"
 #include "DateFormatWidget.moc"
 #include <qdatetime.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QLabel>
 #include <qradiobutton.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <kdebug.h>
 #include <knuminput.h>
 #include <KoVariable.h>

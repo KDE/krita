@@ -19,8 +19,8 @@
 
 #include <kdeversion.h>
 #include <klocale.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QPushButton>
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -31,8 +31,8 @@
 #include <q3hbox.h>
 #include <klineedit.h>
 #include <q3vbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QCheckBox>
+#include <QLabel>
 
 KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )

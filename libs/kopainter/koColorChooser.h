@@ -21,7 +21,7 @@
 #ifndef __ko_ColorChooser_h__
 #define __ko_ColorChooser_h__
 
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QLabel>
 #include <Q3GridLayout>

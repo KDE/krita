@@ -20,10 +20,10 @@
 #ifndef KROSS_API_MANAGER_H
 #define KROSS_API_MANAGER_H
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
-#include <qmap.h>
-//#include <qvariant.h>
+#include <QMap>
+//#include <QVariant>
 #include <ksharedptr.h>
 
 class QObject;

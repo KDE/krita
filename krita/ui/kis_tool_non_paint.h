@@ -20,8 +20,8 @@
 #define KIS_TOOL_NON_PAINT_H_
 
 #include <qcursor.h>
-#include <qcolor.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QWidget>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>

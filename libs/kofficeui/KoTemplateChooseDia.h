@@ -90,7 +90,7 @@ class KoTCDIconViewItem : public K3IconViewItem
 };
 
 #include <kfileiconview.h>
-#include <qlabel.h>
+#include <QLabel>
 /**
  * Our reimplementation of KFileIconView used as the "recent files" view
  * within the template-chooser dialog.

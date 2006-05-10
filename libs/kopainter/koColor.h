@@ -21,7 +21,7 @@
 #ifndef __ko_color_h__
 #define __ko_color_h__
 
-#include <qcolor.h>
+#include <QColor>
 #include <koffice_export.h>
 class KOPAINTER_EXPORT KoColor
 {

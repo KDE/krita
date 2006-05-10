@@ -26,7 +26,7 @@
 
 #include <qimage.h>
 #include <qtextstream.h>
-#include <qfile.h>
+#include <QFile>
 
 #include <ksharedptr.h>
 #include <kdebug.h>

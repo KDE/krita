@@ -33,7 +33,7 @@
 
 #ifdef HAVE_OPENGL
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qgl.h>
 
 #include "kis_global.h"

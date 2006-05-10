@@ -23,7 +23,7 @@
 #include <qdom.h> 
 
 #include <q3cstring.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3MemArray>
 #include <krita_export.h>

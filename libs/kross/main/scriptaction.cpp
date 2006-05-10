@@ -21,8 +21,8 @@
 #include "manager.h"
 
 #include <q3stylesheet.h>
-#include <qdir.h>
-#include <qfile.h>
+#include <QDir>
+#include <QFile>
 #include <qfileinfo.h>
 #include <Q3ValueList>
 #include <kurl.h>

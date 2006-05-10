@@ -19,18 +19,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qdrawutil.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qpainter.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <qstyle.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include <QToolTip>
+#include <QWidget>
 #include <QFrame>
 #include <QHBoxLayout>
 

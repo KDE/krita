@@ -20,9 +20,9 @@
 
 #include "koColorChooser.h"
 
-#include <qcolor.h>
-#include <qlayout.h>
-#include <qspinbox.h>
+#include <QColor>
+#include <QLayout>
+#include <QSpinBox>
 #include <qtabwidget.h>
 //Added by qt3to4:
 #include <QLabel>

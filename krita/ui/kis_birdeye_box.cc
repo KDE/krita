@@ -19,8 +19,8 @@
 
 #include <lcms.h>
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qimage.h>

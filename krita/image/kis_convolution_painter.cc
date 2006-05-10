@@ -28,19 +28,19 @@
 #include "qregion.h"
 #include "qmatrix.h"
 #include <qimage.h>
-#include <qmap.h>
+#include <QMap>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <q3pointarray.h>
 #include <qrect.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3MemArray>
 
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_brush.h"
 #include "kis_global.h"

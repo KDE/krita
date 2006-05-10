@@ -31,9 +31,9 @@
 #include <stdlib.h>
 #include <cfloat>
 
-#include <qfile.h>
+#include <QFile>
 #include <qimage.h>
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kdebug.h>
 #include <klocale.h>

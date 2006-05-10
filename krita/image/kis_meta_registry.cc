@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <qstringlist.h>
-#include <qdir.h>
+#include <QDir>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kinstance.h>

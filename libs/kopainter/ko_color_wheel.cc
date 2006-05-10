@@ -18,7 +18,7 @@
 
 #include <math.h>
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qpainter.h>
 #include <qimage.h>
 //Added by qt3to4:

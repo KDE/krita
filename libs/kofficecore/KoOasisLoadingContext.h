@@ -26,7 +26,7 @@ class KoOasisStyles;
 class KoPictureCollection;
 class KoStore;
 
-#include <qmap.h>
+#include <QMap>
 #include <koffice_export.h>
 #include <qstringlist.h>
 #include <KoStyleStack.h>

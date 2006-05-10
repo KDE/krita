@@ -18,11 +18,11 @@
 */
 
 #include "MatrixDialog.h"
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QLabel>
+#include <QCheckBox>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <klocale.h>

@@ -21,7 +21,7 @@
 #include <qapplication.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <QVBoxLayout>
 
 #include <kdebug.h>

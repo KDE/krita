@@ -18,11 +18,11 @@
 
 #include <KoImageResource.h>
 #include <kdebug.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qimage.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QComboBox>
+#include <QCheckBox>
 
 #include <QPixmap>
 #include <QShowEvent>

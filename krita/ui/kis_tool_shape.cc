@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qwidget.h>
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qlabel.h>
+#include <QWidget>
+#include <QLayout>
+#include <QComboBox>
+#include <QLabel>
 #include <QGridLayout>
 
 #include <kdebug.h>

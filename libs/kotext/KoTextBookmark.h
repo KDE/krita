@@ -22,9 +22,9 @@
 #define KOTEXTBOOKMARK_H
 
 #include <koffice_export.h>
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
-#include <qmap.h>
+#include <QMap>
 class KoTextParag;
 class KoTextDocument;
 

@@ -20,7 +20,7 @@
 #ifndef KROSS_API_MODULE_H
 #define KROSS_API_MODULE_H
 
-#include <qstring.h>
+#include <QString>
 
 #include "class.h"
 

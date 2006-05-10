@@ -19,7 +19,7 @@
 #define KIS_PALETTE_
 
 #include <qimage.h>
-#include <qcolor.h>
+#include <QColor>
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <QPixmap>

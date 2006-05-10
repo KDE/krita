@@ -19,7 +19,7 @@
 #define KIS_TILEMANAGER_H_
 
 #include <qglobal.h>
-#include <qmap.h>
+#include <QMap>
 #include <q3valuelist.h>
 #include <qmutex.h>
 

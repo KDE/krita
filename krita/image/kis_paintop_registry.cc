@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <qpixmap.h>
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kdebug.h>
 #include <kinstance.h>

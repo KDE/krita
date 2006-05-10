@@ -24,7 +24,7 @@
 #include "editor.h"
 
 #include <qpainter.h>
-#include <qvariant.h>
+#include <QVariant>
 
 #ifdef QT_ONLY
 #include <q3listview.h>

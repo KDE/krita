@@ -20,7 +20,7 @@
 #ifndef MATRIXDIALOG_H_INCLUDED
 #define MATRIXDIALOG_H_INCLUDED
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kdialogbase.h>
 #include <qvalidator.h>
 

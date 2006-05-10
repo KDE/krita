@@ -22,7 +22,7 @@
 #define CREATIONSTRATEGY_H
 
 
-#include <qstring.h>
+#include <QString>
 
 #include "kformuladefs.h"
 

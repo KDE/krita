@@ -21,9 +21,9 @@
 #ifndef SYMBOLTABLE_H
 #define SYMBOLTABLE_H
 
-#include <qfont.h>
-#include <qmap.h>
-#include <qstring.h>
+#include <QFont>
+#include <QMap>
+#include <QString>
 #include <qstringlist.h>
 #include <q3valuevector.h>
 

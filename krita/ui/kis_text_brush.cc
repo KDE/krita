@@ -18,9 +18,9 @@
 
 #include <qfontmetrics.h>
 #include <qpainter.h>
-#include <qspinbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QLabel>
 #include <QPixmap>
 
 #include <kfontdialog.h>

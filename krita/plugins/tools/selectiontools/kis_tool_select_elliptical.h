@@ -23,7 +23,7 @@
 #ifndef __KIS_TOOL_SELECT_ELLIPTICAL_H__
 #define __KIS_TOOL_SELECT_ELLIPTICAL_H__
 
-#include <qpoint.h>
+#include <QPoint>
 
 #include "kis_point.h"
 #include "kis_selection.h"

@@ -20,7 +20,7 @@
 #ifndef __koPictureKey_h__
 #define __koPictureKey_h__
 
-#include <qstring.h>
+#include <QString>
 #include <qdatetime.h>
 #include <koffice_export.h>
 /**

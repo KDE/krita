@@ -18,10 +18,10 @@
 
 #include <KoImageResource.h>
 #include <kdebug.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qimage.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
+#include <QPushButton>
+#include <QComboBox>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QShowEvent>

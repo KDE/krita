@@ -22,8 +22,8 @@
 #include <q3ptrlist.h>
 #include <q3valuelist.h>
 #include <q3valuevector.h>
-#include <qmap.h>
-#include <qstring.h>
+#include <QMap>
+#include <QString>
 
 #include <kio/job.h>
 

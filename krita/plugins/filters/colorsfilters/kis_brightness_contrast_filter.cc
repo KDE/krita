@@ -23,14 +23,14 @@
 
 #include <klocale.h>
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qdom.h>
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <QHBoxLayout>
 
 #include "kis_filter_config_widget.h"

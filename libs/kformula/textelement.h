@@ -21,8 +21,8 @@
 #ifndef TEXTELEMENT_H
 #define TEXTELEMENT_H
 
-#include <qfont.h>
-#include <qstring.h>
+#include <QFont>
+#include <QString>
 
 #include "basicelement.h"
 

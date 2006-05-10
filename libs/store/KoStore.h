@@ -21,7 +21,7 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <qiodevice.h>
 #include <q3valuestack.h>

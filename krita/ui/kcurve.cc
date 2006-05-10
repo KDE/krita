@@ -24,12 +24,12 @@
 
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <qpen.h>
 #include <qevent.h>
 #include <qtimer.h>
 #include <qrect.h>
-#include <qfont.h>
+#include <QFont>
 #include <qfontmetrics.h>
 #include <QMouseEvent>
 #include <QKeyEvent>

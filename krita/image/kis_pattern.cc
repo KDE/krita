@@ -27,11 +27,11 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qsize.h>
 #include <qimage.h>
-#include <qmap.h>
-#include <qfile.h>
+#include <QMap>
+#include <QFile>
 #include <QTextStream>
 
 #include <kdebug.h>

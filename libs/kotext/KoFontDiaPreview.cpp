@@ -26,10 +26,10 @@
 #include <qfontmetrics.h>
 #include <qrect.h>
 #include <qpainter.h>
-#include <qfont.h>
+#include <QFont>
 #include <qstringlist.h>
-#include <qstring.h>
-#include <qregexp.h>
+#include <QString>
+#include <QRegExp>
 //Added by qt3to4:
 #include <Q3Frame>
 

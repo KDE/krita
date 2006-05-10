@@ -23,10 +23,10 @@
 #include <stdlib.h>
 
 #include <qapplication.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qtabwidget.h>
 #include <QFrame>
-#include <qwidget.h>
+#include <QWidget>
 #include <qevent.h>
 #include <qtimer.h>
 #include <QHBoxLayout>

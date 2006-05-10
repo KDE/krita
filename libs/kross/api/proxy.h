@@ -25,7 +25,7 @@
 #include "variant.h"
 #include "list.h"
 
-#include <qstring.h>
+#include <QString>
 
 namespace Kross { namespace Api {
 

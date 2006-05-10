@@ -19,7 +19,7 @@
 
 #include "exception.h"
 
-//#include <qstring.h>
+//#include <QString>
 //#include <ksharedptr.h>
 
 using namespace Kross::Api;

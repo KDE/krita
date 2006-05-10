@@ -19,9 +19,9 @@
  *
  * Ported from the CImg Gimp plugin by Victor Stinner and David Tschumperlé.
  */
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QCheckBox>
+#include <QPushButton>
 #include <QHBoxLayout>
 
 #include <knuminput.h>

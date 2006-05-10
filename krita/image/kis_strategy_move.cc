@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qpoint.h>
-#include <qcolor.h>
+#include <QPoint>
+#include <QColor>
 
 #include <kaction.h>
 #include <kcommand.h>

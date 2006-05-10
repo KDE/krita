@@ -18,8 +18,8 @@
 
 #include "kis_custom_convolution_filter_configuration_widget.h"
 
-#include <qlayout.h>
-#include <qspinbox.h>
+#include <QLayout>
+#include <QSpinBox>
 #include <QGridLayout>
 
 #include <klocale.h>

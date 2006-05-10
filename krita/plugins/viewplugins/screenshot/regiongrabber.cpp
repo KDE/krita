@@ -24,7 +24,7 @@
 #include <qpalette.h>
 #include <qstyle.h>
 #include <qtimer.h>
-#include <qtooltip.h>
+#include <QToolTip>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QMouseEvent>

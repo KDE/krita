@@ -22,12 +22,12 @@
 
 #include "ko_cmyk_widget.h"
 
-#include <qlayout.h>
+#include <QLayout>
 #include <q3hbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qtooltip.h>
-#include <qcolor.h>
+#include <QLabel>
+#include <QSpinBox>
+#include <QToolTip>
+#include <QColor>
 //Added by qt3to4:
 #include <Q3GridLayout>
 

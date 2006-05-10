@@ -26,13 +26,13 @@
 #include "property.h"
 #include "widget.h"
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qmap.h>
+#include <QPushButton>
+#include <QLayout>
+#include <QMap>
 #include <qpointer.h>
 #include <q3header.h>
 #include <q3asciidict.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qapplication.h>
 #include <qeventloop.h>
 #include <qtimer.h>

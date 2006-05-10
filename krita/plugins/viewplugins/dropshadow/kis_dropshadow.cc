@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <klocale.h>
 #include <kiconloader.h>

@@ -20,7 +20,7 @@
 #ifndef KROSS_API_LIST_H
 #define KROSS_API_LIST_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 #include <q3intdict.h>
 //Added by qt3to4:

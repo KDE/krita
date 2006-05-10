@@ -22,15 +22,15 @@
 
 #include <KoTemplateCreateDia.h>
 
-#include <qfile.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QFile>
+#include <QLayout>
+#include <QLabel>
 #include <q3groupbox.h>
 #include <qradiobutton.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <q3header.h>
-#include <qcheckbox.h>
-#include <qtooltip.h>
+#include <QCheckBox>
+#include <QToolTip>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QPixmap>

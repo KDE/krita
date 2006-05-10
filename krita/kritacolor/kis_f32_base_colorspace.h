@@ -18,7 +18,7 @@
 #ifndef KIS_F32_BASE_COLORSPACE_H_
 #define KIS_F32_BASE_COLORSPACE_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"

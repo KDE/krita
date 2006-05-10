@@ -22,7 +22,7 @@
 #include <vector>
 
 #include <qapplication.h>
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kdebug.h>
 #include <kfiledialog.h>

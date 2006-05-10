@@ -18,7 +18,7 @@
 #ifndef KIS_CHANNELINFO_H_
 #define KIS_CHANNELINFO_H_
 
-#include <qcolor.h>
+#include <QColor>
 #include "qstring.h"
 #include "ksharedptr.h"
 

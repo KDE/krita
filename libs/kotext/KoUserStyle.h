@@ -20,7 +20,7 @@
 #define KOUSERSTYLE_H
 
 #include <koffice_export.h>
-#include <qstring.h>
+#include <QString>
 
 /**
  * Base class for any kind of style that the user can create/modify/delete/display.

@@ -28,7 +28,7 @@
 #include <QMouseEvent>
 #include <Q3Frame>
 #include <KoParagCounter.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 class QWidget;
 class QPainter;
 

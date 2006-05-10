@@ -23,7 +23,7 @@
 #include <kfontdialog.h>
 #include <qtabwidget.h>
 #include <KoTextFormat.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <koffice_export.h>
 
 #include "KoFontTab.h"

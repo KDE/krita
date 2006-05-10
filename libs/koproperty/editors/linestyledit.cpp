@@ -23,9 +23,9 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qcombobox.h>
-#include <qlayout.h>
-#include <qvariant.h>
+#include <QComboBox>
+#include <QLayout>
+#include <QVariant>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 

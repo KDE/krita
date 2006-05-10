@@ -20,9 +20,9 @@
 
 #include <qbitmap.h>
 #include <qpainter.h>
-#include <qcombobox.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QComboBox>
+#include <QLayout>
+#include <QLabel>
 #include <QGridLayout>
 
 #include <kaction.h>

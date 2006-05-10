@@ -21,9 +21,9 @@
 #define __kofontdiapreview_h__
 
 #include <q3frame.h>
-#include <qstring.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QString>
+#include <QColor>
+#include <QFont>
 #include <qpainter.h>
 
 /**

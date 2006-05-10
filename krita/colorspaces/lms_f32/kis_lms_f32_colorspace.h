@@ -21,7 +21,7 @@
 #ifndef KIS_STRATEGY_COLORSPACE_LMS_F32_H_
 #define KIS_STRATEGY_COLORSPACE_LMS_F32_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <klocale.h>
 

@@ -18,7 +18,7 @@
 #ifndef KIS_F16HALF_BASE_COLORSPACE_H_
 #define KIS_F16HALF_BASE_COLORSPACE_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <half.h>
 

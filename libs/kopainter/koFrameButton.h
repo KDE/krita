@@ -21,7 +21,7 @@
 #ifndef __ko_framebutton_h__
 #define __ko_framebutton_h__
 
-#include <qlabel.h>
+#include <QLabel>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QMouseEvent>

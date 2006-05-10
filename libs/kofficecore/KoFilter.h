@@ -21,7 +21,7 @@
 #define __koffice_filter_h__
 
 #include <qobject.h>
-#include <qmap.h>
+#include <QMap>
 #include <q3ptrstack.h>
 #include <koffice_export.h>
 class QIODevice;

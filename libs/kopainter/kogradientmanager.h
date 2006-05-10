@@ -21,11 +21,11 @@
 #define __GRADIENT_LOADER__
 
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
-#include <qfile.h>
+#include <QFile>
 #include <qdom.h>
-#include <qcolor.h>
+#include <QColor>
 #include <koffice_export.h>
 struct KoColorStop
 {

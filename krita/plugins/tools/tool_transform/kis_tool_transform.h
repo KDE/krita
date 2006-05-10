@@ -22,7 +22,7 @@
 #ifndef KIS_TOOL_TRANSFORM_H_
 #define KIS_TOOL_TRANSFORM_H_
 
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>

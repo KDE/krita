@@ -19,7 +19,7 @@
 #ifndef __KIS_SELECTION_OPTIONS_H__
 #define __KIS_SELECTION_OPTIONS_H__
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include "krita_export.h"
 

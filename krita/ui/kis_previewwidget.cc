@@ -20,15 +20,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qradiobutton.h>
 #include <qpainter.h>
-#include <qpoint.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QPoint>
+#include <QPushButton>
+#include <QLayout>
+#include <QLabel>
 #include <qapplication.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qcursor.h>
 #include <QWheelEvent>
 

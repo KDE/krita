@@ -19,7 +19,7 @@
 #ifndef KIS_LABEL_PROGRESS_H_
 #define KIS_LABEL_PROGRESS_H_
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qevent.h>
 
 #include "kis_progress_display_interface.h"

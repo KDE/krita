@@ -21,7 +21,7 @@
 #define __koPictureShared_h__
 
 #include <q3shared.h>
-#include <qstring.h>
+#include <QString>
 #include <qiodevice.h>
 #include <qpixmap.h>
 

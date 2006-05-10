@@ -21,8 +21,8 @@
  */
 
 #include <qpainter.h>
-#include <qlayout.h>
-#include <qwidget.h>
+#include <QLayout>
+#include <QWidget>
 
 #include <kdebug.h>
 #include <kaction.h>

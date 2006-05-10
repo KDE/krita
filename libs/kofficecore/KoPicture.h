@@ -20,7 +20,7 @@
 #ifndef __koPicture_h__
 #define __koPicture_h__
 
-#include <qstring.h>
+#include <QString>
 #include <qiodevice.h>
 #include <qpixmap.h>
 #include <koffice_export.h>

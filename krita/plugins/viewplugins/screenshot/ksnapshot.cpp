@@ -42,7 +42,7 @@
 #include <kstartupinfo.h>
 
 #include <qcursor.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qpainter.h>
 #include <q3paintdevicemetrics.h>
 #include <q3whatsthis.h>

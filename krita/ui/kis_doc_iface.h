@@ -23,7 +23,7 @@
 #include <KoDocumentIface.h>
 
 #include <dcopref.h>
-#include <qstring.h>
+#include <QString>
 #include <kis_image_iface.h>
 
 class KisDoc;

@@ -20,7 +20,7 @@
 #ifndef KROSS_API_EVENTSLOT_H
 #define KROSS_API_EVENTSLOT_H
 
-#include <qstring.h>
+#include <QString>
 #include <qobject.h>
 //Added by qt3to4:
 #include <Q3CString>

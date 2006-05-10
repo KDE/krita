@@ -23,7 +23,7 @@
 #ifndef __selecttoolfreehand_h__
 #define __selecttoolfreehand_h__
 
-#include <qpoint.h>
+#include <QPoint>
 #include <q3pointarray.h>
 
 #include "kis_point.h"

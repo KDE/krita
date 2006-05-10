@@ -22,9 +22,9 @@
 
 #include "property.h"
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qobject.h>
-#include <qvariant.h>
+#include <QVariant>
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QKeyEvent>
@@ -36,7 +36,7 @@
 #ifdef QT_ONLY
 //! \todo
 #else
-#include <qlineedit.h>
+#include <QLineEdit>
 #endif
 
 using namespace KoProperty;

@@ -16,15 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qfont.h>
+#include <QFont>
 #include <qrect.h>
 #include <qimage.h>
-#include <qlayout.h>
-#include <qwidget.h>
-#include <qstring.h>
+#include <QLayout>
+#include <QWidget>
+#include <QString>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qfontmetrics.h>
 #include <QLabel>
 
@@ -35,7 +35,7 @@
 #include <kfontdialog.h>
 #include <ksqueezedtextlabel.h>
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_point.h"
 #include "kis_image.h"

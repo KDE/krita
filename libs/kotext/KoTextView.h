@@ -21,9 +21,9 @@
 #define kotextview_h
 
 #include <qobject.h>
-#include <qpoint.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QPoint>
+#include <QColor>
+#include <QFont>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>

@@ -19,8 +19,8 @@
 #ifndef KIS_WET_PALETTE_WIDGET_H
 #define KIS_WET_PALETTE_WIDGET_H
 
-#include <qwidget.h>
-#include <qpushbutton.h>
+#include <QWidget>
+#include <QPushButton>
 
 #include <krita_export.h>
 

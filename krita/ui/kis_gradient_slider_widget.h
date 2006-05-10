@@ -20,7 +20,7 @@
 #ifndef _KIS_WDG_GRADIENT_SLIDER_H_
 #define _KIS_WDG_GRADIENT_SLIDER_H_
 
-#include <qwidget.h>
+#include <QWidget>
 #include <QMouseEvent>
 #include <QPaintEvent>
 

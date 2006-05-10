@@ -29,8 +29,8 @@ class QTimer;
 
 // Qt includes.
 
-#include <qcombobox.h>
-#include <qtooltip.h>
+#include <QComboBox>
+#include <QToolTip>
 #include <krita_export.h>
 
 class SqueezedComboBox;

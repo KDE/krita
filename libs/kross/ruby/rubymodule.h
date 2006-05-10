@@ -22,7 +22,7 @@
 
 #include <ruby.h>
 
-#include <qstring.h>
+#include <QString>
 
 namespace Kross {
 

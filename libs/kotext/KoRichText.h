@@ -39,9 +39,9 @@
 
 #include <q3ptrlist.h>
 #include <qrect.h>
-#include <qmap.h>
+#include <QMap>
 #include <qstringlist.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qsize.h>
 #include <q3valuelist.h>
 #include <qobject.h>

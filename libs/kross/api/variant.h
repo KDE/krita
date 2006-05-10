@@ -20,8 +20,8 @@
 #ifndef KROSS_API_VARIANT_H
 #define KROSS_API_VARIANT_H
 
-#include <qstring.h>
-#include <qvariant.h>
+#include <QString>
+#include <QVariant>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>

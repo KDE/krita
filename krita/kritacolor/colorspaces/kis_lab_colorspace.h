@@ -19,7 +19,7 @@
 #ifndef KIS_STRATEGY_COLORSPACE_LAB_H_
 #define KIS_STRATEGY_COLORSPACE_LAB_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <klocale.h>
 

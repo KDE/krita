@@ -20,7 +20,7 @@
 
 #include <map>
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <ksharedptr.h>
 
 #include "../api/exception.h"

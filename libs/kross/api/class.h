@@ -20,9 +20,9 @@
 #ifndef KROSS_API_CLASS_H
 #define KROSS_API_CLASS_H
 
-#include <qstring.h>
+#include <QString>
 //#include <qvaluelist.h>
-//#include <qmap.h>
+//#include <QMap>
 #include <qobject.h>
 
 //#include "../main/krossconfig.h"

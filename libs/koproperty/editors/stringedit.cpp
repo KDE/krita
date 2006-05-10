@@ -20,9 +20,9 @@
 
 #include "stringedit.h"
 
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qvariant.h>
+#include <QLayout>
+#include <QLineEdit>
+#include <QVariant>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 

@@ -18,7 +18,7 @@
 #ifndef KIS_COLORSPACE_WET_STICKY_H_
 #define KIS_COLORSPACE_WET_STICKY_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_global.h"
 #include "kis_abstract_colorspace.h"

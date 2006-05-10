@@ -18,17 +18,17 @@
  */
 #include <string.h>
 
-#include <qpoint.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
+#include <QPoint>
+#include <QLayout>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QSpinBox>
 #include <QListWidget>
 #include <QList>
 
 #include <kaction.h>
 #include <klocale.h>
-#include <qcolor.h>
+#include <QColor>
 #include <kmessagebox.h>
 
 #include "kis_layer.h"

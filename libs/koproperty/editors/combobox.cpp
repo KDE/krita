@@ -19,9 +19,9 @@
 */
 #include "combobox.h"
 
-#include <qlayout.h>
-#include <qmap.h>
-#include <qvariant.h>
+#include <QLayout>
+#include <QMap>
+#include <QVariant>
 #include <qpainter.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>

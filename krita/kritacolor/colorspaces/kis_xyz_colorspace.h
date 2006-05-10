@@ -18,7 +18,7 @@
 #ifndef KIS__COLORSPACE_XYZ_H_
 #define KIS__COLORSPACE_XYZ_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_global.h"
 #include "kis_integer_maths.h"

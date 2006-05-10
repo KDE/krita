@@ -22,7 +22,7 @@
 
 #include <config.h>
 
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QTabletEvent>

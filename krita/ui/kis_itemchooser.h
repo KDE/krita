@@ -19,7 +19,7 @@
 #define KIS_ITEM_CHOOSER_H_
 
 #include <QList>
-#include <qwidget.h>
+#include <QWidget>
 #include <kvbox.h>
 
 class KHBox;

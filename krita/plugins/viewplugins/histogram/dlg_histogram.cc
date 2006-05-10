@@ -18,13 +18,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <q3buttongroup.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QCheckBox>
 #include <qslider.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qpixmap.h>
 #include <qimage.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <knuminput.h>
 #include <klocale.h>

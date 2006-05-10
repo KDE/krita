@@ -28,9 +28,9 @@
 #include <cfloat>
 
 #include <qimage.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <q3valuevector.h>
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
 
 #include <kdebug.h>

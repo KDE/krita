@@ -21,7 +21,7 @@
 
 #include <map>
 
-#include <qstring.h>
+#include <QString>
 #include <kdebug.h>
 
 #include <kis_id.h>

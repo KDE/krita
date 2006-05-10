@@ -20,13 +20,13 @@
 #include <kapplication.h>
 #include <klocale.h>
 
-#include <qlayout.h>
+#include <QLayout>
 #include <q3vbox.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <kdebug.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLabel>
+#include <QComboBox>
 #include <QDesktopWidget>
 
 #include <klineedit.h>

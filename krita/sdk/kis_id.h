@@ -22,7 +22,7 @@
 #define _KIS_ID_H_
 
 #include <QList>
-#include <qstring.h>
+#include <QString>
 
 /**
  * Krita has a large number of extensible resources. Think:

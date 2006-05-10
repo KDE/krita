@@ -20,7 +20,7 @@
  ***************************************************************************/
 #include "imageviewer.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qpainter.h>
 #include <qimage.h>
 #include <qcursor.h>

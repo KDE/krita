@@ -21,7 +21,7 @@
 #ifndef ROOTELEMENT_H
 #define ROOTELEMENT_H
 
-#include <qpoint.h>
+#include <QPoint>
 //Added by qt3to4:
 #include <Q3PtrList>
 

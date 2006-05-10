@@ -19,7 +19,7 @@
 */
 
 #include <qfontmetrics.h>
-#include <qstring.h>
+#include <QString>
 
 #include <kdebug.h>
 #include <KoGlobal.h>

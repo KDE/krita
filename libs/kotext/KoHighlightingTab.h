@@ -23,7 +23,7 @@
 #include <kohighlightingtabbase.h>
 #include <KoTextFormat.h>
 
-#include <qcolor.h>
+#include <QColor>
 
 class KoHighlightingTab : public KoHighlightingTabBase
 {

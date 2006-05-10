@@ -20,7 +20,7 @@
 
 #include <list>
 
-#include <qstring.h>
+#include <QString>
 
 #include <ksharedptr.h>
 #include <klocale.h>

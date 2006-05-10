@@ -20,9 +20,9 @@
 #ifndef XMLWRITER_H
 #define XMLWRITER_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuestack.h>
-#include <qmap.h>
+#include <QMap>
 #include <koffice_export.h>
 
 class QIODevice;

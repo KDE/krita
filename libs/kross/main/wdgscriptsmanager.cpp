@@ -18,12 +18,12 @@
  */
 #include "wdgscriptsmanager.h"
 
-#include <qfile.h>
+#include <QFile>
 #include <qfileinfo.h>
 #include <q3header.h>
 #include <qobject.h>
 #include <QMenu>
-//#include <qtooltip.h>
+//#include <QToolTip>
 #include <QPixmap>
 #include <Q3ValueList>
 #include <QVBoxLayout>

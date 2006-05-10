@@ -18,8 +18,8 @@
 #ifndef KIS_STRATEGY_COLORSPACE_CMYK_H_
 #define KIS_STRATEGY_COLORSPACE_CMYK_H_
 
-#include <qcolor.h>
-#include <qmap.h>
+#include <QColor>
+#include <QMap>
 #include <krita_export.h>
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"

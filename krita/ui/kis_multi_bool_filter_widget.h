@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include "krita_export.h"
 #include <kis_filter_config_widget.h>

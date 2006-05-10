@@ -18,18 +18,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qvariant.h>   // first for gcc 2.7.2
+#include <QVariant>   // first for gcc 2.7.2
 #include <q3buttongroup.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qmap.h>
+#include <QLabel>
+#include <QLayout>
+#include <QMap>
 #include <qradiobutton.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <qstringlist.h>
 
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3Frame>

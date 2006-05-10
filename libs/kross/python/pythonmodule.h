@@ -25,7 +25,7 @@
 #include "../api/script.h"
 #include "pythonextension.h"
 
-#include <qstring.h>
+#include <QString>
 
 namespace Kross { namespace Python {
 

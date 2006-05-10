@@ -19,10 +19,10 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLabel>
+#include <QComboBox>
 #include <q3buttongroup.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qscrollbar.h>
 
 #include <kdebug.h>

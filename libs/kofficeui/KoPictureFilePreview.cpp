@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kurl.h>
 #include <qbitmap.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qfileinfo.h>
 #include <qpainter.h>
 #include <q3scrollview.h>

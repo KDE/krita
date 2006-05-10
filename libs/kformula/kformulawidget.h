@@ -23,8 +23,8 @@
 
 #include <qdom.h>
 #include <qpixmap.h>
-#include <qpoint.h>
-#include <qwidget.h>
+#include <QPoint>
+#include <QWidget>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QWheelEvent>

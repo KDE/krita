@@ -26,7 +26,7 @@ dcopiface_header = """/* This file is part of the KDE project
 #include <dcopref.h>
 #include <dcopobj.h>
 
-#include <qstring.h>
+#include <QString>
 
 class %(classname)s;
 

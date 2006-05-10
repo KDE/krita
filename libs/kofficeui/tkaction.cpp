@@ -21,8 +21,8 @@
 #include "tktoolbarbutton.h"
 #include "tkcombobox.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <QToolBar>
 //Added by qt3to4:
 #include <QPixmap>

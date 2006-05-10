@@ -29,8 +29,8 @@
 #include "../api/qtobject.h"
 #include "../api/eventaction.h"
 
-#include <qstring.h>
-#include <qvariant.h>
+#include <QString>
+#include <QVariant>
 #include <qobject.h>
 //Added by qt3to4:
 #include <Q3CString>

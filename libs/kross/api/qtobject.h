@@ -22,7 +22,7 @@
 
 #include "class.h"
 
-#include <qstring.h>
+#include <QString>
 #include <qobject.h>
 #include <koffice_export.h>
 

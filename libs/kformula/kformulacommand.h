@@ -21,7 +21,7 @@
 #ifndef KFORMULACOMMAND_H
 #define KFORMULACOMMAND_H
 
-#include <qmap.h>
+#include <QMap>
 #include <q3ptrlist.h>
 #include <q3valuevector.h>
 

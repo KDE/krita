@@ -22,9 +22,9 @@
 #define CONTEXTSTYLE_H
 
 //Qt Include
-#include <qcolor.h>
-#include <qfont.h>
-#include <qstring.h>
+#include <QColor>
+#include <QFont>
+#include <QString>
 #include <qstringlist.h>
 
 //KDE Include

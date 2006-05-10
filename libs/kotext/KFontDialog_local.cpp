@@ -52,7 +52,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <klistbox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

@@ -19,7 +19,7 @@
 #ifndef __koffice_kchart_h__
 #define __koffice_kchart_h__
 
-#include <qvariant.h>
+#include <QVariant>
 
 #include <KoDocument.h>
 #include <KDChartTable.h>

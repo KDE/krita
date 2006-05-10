@@ -28,8 +28,8 @@ using namespace std;
 
 #include <q3groupbox.h>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QCheckBox>
+#include <QLabel>
 
 #include <klocale.h>
 #include <knuminput.h>

@@ -22,9 +22,9 @@
  */
 
 #include <qpainter.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QCheckBox>
 
 #include <kdebug.h>
 #include <kaction.h>

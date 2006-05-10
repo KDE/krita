@@ -22,7 +22,7 @@
 #ifndef KIS_DOUBLE_WIDGET_H
 #define KIS_DOUBLE_WIDGET_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qslider.h>
 
 class QHBoxLayout;

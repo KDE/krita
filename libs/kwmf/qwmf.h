@@ -19,12 +19,12 @@
 #ifndef qwmf_h
 #define qwmf_h
 
-#include <qstring.h>
+#include <QString>
 #include <qpainter.h>
 #include <qmatrix.h>
 #include <q3pointarray.h>
 #include <qpen.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qimage.h>
 #include <qrect.h>
 

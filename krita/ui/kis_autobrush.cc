@@ -19,11 +19,11 @@
 #include "kis_autobrush.h"
 #include <KoImageResource.h>
 #include <kdebug.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <qtoolbutton.h>
 #include <qimage.h>
-#include <qcombobox.h>
-#include <qlabel.h>
+#include <QComboBox>
+#include <QLabel>
 #include <QPixmap>
 #include <QResizeEvent>
 

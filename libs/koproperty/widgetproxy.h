@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_PROPERTYWIDGETPROXY_H
 #define KPROPERTY_PROPERTYWIDGETPROXY_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include "koproperty_global.h"
 
 class QVariant;

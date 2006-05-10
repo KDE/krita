@@ -18,7 +18,7 @@
 #ifndef KIS_LABEL_ZOOM_H_
 #define KIS_LABEL_ZOOM_H_
 
-#include <qlabel.h>
+#include <QLabel>
 
 class KisLabelZoom : public QLabel {
     Q_OBJECT

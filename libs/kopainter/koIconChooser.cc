@@ -26,7 +26,7 @@
 #include <qcursor.h>
 #include <qapplication.h>
 #include <q3hbox.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>

@@ -21,7 +21,7 @@
 #ifndef _TEXTURE_FILTER_H
 #define _TEXTURE_FILTER_H
 
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 #include <kis_paint_device_action.h>
 

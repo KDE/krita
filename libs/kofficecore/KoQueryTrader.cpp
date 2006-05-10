@@ -26,7 +26,7 @@
 #include <kservicetype.h>
 #include <kdebug.h>
 
-#include <qfile.h>
+#include <QFile>
 //Added by qt3to4:
 #include <Q3ValueList>
 

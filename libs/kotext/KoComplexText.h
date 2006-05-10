@@ -40,9 +40,9 @@
 
 #include <koffice_export.h>
 
-#include <qstring.h>
+#include <QString>
 #include <q3pointarray.h>
-#include <qfont.h>
+#include <QFont>
 #include <qpainter.h>
 #include <q3ptrlist.h>
 #include <q3shared.h>

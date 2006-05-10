@@ -23,7 +23,7 @@
 #ifndef KIS_PAINTOP_H_
 #define KIS_PAINTOP_H_
 
-#include <qstring.h>
+#include <QString>
 
 #include <ksharedptr.h>
 #include <klocale.h>

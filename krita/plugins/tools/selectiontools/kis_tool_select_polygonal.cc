@@ -22,8 +22,8 @@
 #include <qapplication.h>
 #include <qpainter.h>
 #include <qregion.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QWidget>
+#include <QLayout>
 #include <QVBoxLayout>
 
 #include <kaction.h>

@@ -19,7 +19,7 @@
 #ifndef KIS_STRATEGY_MOVE_H_
 #define KIS_STRATEGY_MOVE_H_
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qrect.h>
 
 #include <krita_export.h>

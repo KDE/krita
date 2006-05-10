@@ -23,8 +23,8 @@
 #ifndef KIS_PENOP_H_
 #define KIS_PENOP_H_
 
-#include <qlabel.h>
-#include <qwidget.h>
+#include <QLabel>
+#include <QWidget>
 #include "kis_paintop.h"
 
 class KisPoint;

@@ -22,7 +22,7 @@
 #include "tkcoloractions.h"
 #include "tktoolbarbutton.h"
 
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>
@@ -34,7 +34,7 @@
 #include <kcolordialog.h>
 #include <ktoolbar.h>
 #include <qpainter.h>
-#include <qtooltip.h>
+#include <QToolTip>
 
 #include <klocale.h>
 #include <kdebug.h>

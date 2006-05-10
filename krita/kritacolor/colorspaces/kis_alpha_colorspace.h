@@ -18,7 +18,7 @@
 #ifndef KIS_COLORSPACE_ALPHA_H_
 #define KIS_COLORSPACE_ALPHA_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"

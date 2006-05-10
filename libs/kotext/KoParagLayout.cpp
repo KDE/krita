@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>
-#include <qcolor.h>
+#include <QColor>
 //Added by qt3to4:
 #include <QByteArray>
 

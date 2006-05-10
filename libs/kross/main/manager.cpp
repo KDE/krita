@@ -29,8 +29,8 @@
 #include "scriptcontainer.h"
 
 #include <qobject.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 
 #include <klibloader.h>
 #include <klocale.h>

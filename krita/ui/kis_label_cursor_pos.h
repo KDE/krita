@@ -18,7 +18,7 @@
 #ifndef KIS_LABEL_CURSOR_POS_H_
 #define KIS_LABEL_CURSOR_POS_H_
 
-#include <qlabel.h>
+#include <QLabel>
 
 class KisLabelCursorPos : public QLabel {
     Q_OBJECT

@@ -17,11 +17,11 @@
  */
 #include <limits.h>
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3groupbox.h>
 #include <qslider.h>
-#include <qstring.h>
+#include <QString>
 
 #include <klineedit.h>
 #include <klocale.h>

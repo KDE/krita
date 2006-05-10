@@ -18,7 +18,7 @@
 */
 
 #include <qapplication.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qpainter.h>
 #include <qdrawutil.h>
 #include <qpixmap.h>

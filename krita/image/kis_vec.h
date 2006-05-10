@@ -23,7 +23,7 @@
 
 #include <math.h>
 #include <cfloat>
-#include <qpoint.h>
+#include <QPoint>
 #include "kis_point.h"
 #include <krita_export.h>
 

@@ -20,7 +20,7 @@
 #ifndef __koFrame_h__
 #define __koFrame_h__
 
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QResizeEvent>

@@ -21,11 +21,11 @@
 #include "ko_color_wheel.h"
 
 #include <kselector.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3hbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qtooltip.h>
+#include <QLabel>
+#include <QSpinBox>
+#include <QToolTip>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include "koFrameButton.h"

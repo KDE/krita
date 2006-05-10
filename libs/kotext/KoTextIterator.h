@@ -20,7 +20,7 @@
 #define KOTEXTITERATOR_H
 
 #include <q3valuelist.h>
-#include <qstring.h>
+#include <QString>
 #include <qpair.h>
 #include <qobject.h>
 #include <koffice_export.h>

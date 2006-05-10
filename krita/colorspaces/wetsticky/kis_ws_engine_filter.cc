@@ -19,10 +19,10 @@
 #include <vector>
 #include <math.h>
 
-#include <qpoint.h>
-#include <qspinbox.h>
+#include <QPoint>
+#include <QSpinBox>
 #include <qrect.h>
-#include <qcolor.h>
+#include <QColor>
 
 #include <klocale.h>
 #include <kiconloader.h>

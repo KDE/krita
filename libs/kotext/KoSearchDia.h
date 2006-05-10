@@ -29,8 +29,8 @@
 #include "KoTextIterator.h"
 #include "KoTextFormat.h"
 
-#include <qcolor.h>
-#include <qstring.h>
+#include <QColor>
+#include <QString>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

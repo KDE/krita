@@ -34,8 +34,8 @@
 #include "testplugin.h"
 
 // Qt
-#include <qstring.h>
-#include <qfile.h>
+#include <QString>
+#include <QFile>
 
 // KDE
 #include <kinstance.h>

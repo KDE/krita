@@ -17,11 +17,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qlayout.h>
+#include <QLayout>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLabel>
+#include <QComboBox>
 #include <qdom.h>
 #include <QHBoxLayout>
 

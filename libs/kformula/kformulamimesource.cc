@@ -22,7 +22,7 @@
 
 #include <q3popupmenu.h>
 #include <qbuffer.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>

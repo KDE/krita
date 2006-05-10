@@ -16,17 +16,17 @@
  */
 
 #include <QDockWidget>
-#include <qwidget.h>
-#include <qvariant.h>
-#include <qlabel.h>
+#include <QWidget>
+#include <QVariant>
+#include <QLabel>
 #include <qtoolbutton.h>
 #include <qtabwidget.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qlayout.h>
+#include <QLayout>
 
 #include <kdebug.h>
 #include <kglobal.h>

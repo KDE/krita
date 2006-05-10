@@ -20,7 +20,7 @@
 #define KIS_CANVAS_CONTROLLER_H_
 
 #include <qglobal.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <qrect.h>
 #include "kis_types.h"
 

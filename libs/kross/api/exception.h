@@ -22,7 +22,7 @@
 
 #include "object.h"
 
-#include <qstring.h>
+#include <QString>
 #include <ksharedptr.h>
 #include <koffice_export.h>
 namespace Kross { namespace Api {

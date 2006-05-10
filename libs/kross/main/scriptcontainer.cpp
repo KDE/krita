@@ -25,7 +25,7 @@
 #include "../main/manager.h"
 #include "mainmodule.h"
 
-#include <qfile.h>
+#include <QFile>
 
 #include <klocale.h>
 

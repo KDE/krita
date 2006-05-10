@@ -18,8 +18,8 @@
 #include <klocale.h>
 
 #include <QGroupBox>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <QGridLayout>
 
 #include <klineedit.h>

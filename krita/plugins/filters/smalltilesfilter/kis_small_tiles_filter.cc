@@ -24,8 +24,8 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
-#include <qspinbox.h>
+#include <QPoint>
+#include <QSpinBox>
 #include <q3valuevector.h>
 
 #include <klocale.h>

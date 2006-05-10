@@ -21,7 +21,7 @@
 #define KIS_BRUSH_
 
 #include <q3cstring.h>
-#include <qstring.h>
+#include <QString>
 #include <qsize.h>
 #include <qimage.h>
 #include <q3valuevector.h>

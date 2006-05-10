@@ -21,12 +21,12 @@
  */
 
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <qobject.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qrect.h>
 
 #include <kdebug.h>

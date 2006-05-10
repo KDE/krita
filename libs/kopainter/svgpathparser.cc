@@ -18,7 +18,7 @@
 */
 
 #include "svgpathparser.h"
-#include <qstring.h>
+#include <QString>
 #include <math.h>
 #include <kdebug.h>
 

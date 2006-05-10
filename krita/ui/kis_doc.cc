@@ -26,7 +26,7 @@
 #include <qpainter.h>
 #include <q3tl.h>
 #include <qstringlist.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <q3paintdevicemetrics.h>
 
 // KDE

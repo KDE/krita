@@ -18,7 +18,7 @@
 #ifndef _KIS_COLOR_H_
 #define _KIS_COLOR_H_
 
-#include <qcolor.h>
+#include <QColor>
 #include <krita_export.h>
 #include "ksharedptr.h"
 

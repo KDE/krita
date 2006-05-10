@@ -22,7 +22,7 @@
 
 #include <kodecorationtabbase.h>
 
-#include <qcolor.h>
+#include <QColor>
 
 class KoDecorationTab : public KoDecorationTabBase
 {

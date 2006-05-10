@@ -18,9 +18,9 @@
 
 #include "kis_multi_bool_filter_widget.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QCheckBox>
 #include <QVBoxLayout>
 
 #include <klocale.h>

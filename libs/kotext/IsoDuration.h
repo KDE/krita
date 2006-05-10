@@ -16,7 +16,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qstring.h>
+#include <QString>
 
 /**
  * Routines for converting to and from the ISO-8601 duration format

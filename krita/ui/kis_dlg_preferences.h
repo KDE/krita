@@ -21,7 +21,7 @@
 #ifndef __preferencesdlg_h__
 #define __preferencesdlg_h__
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kdialogbase.h>
 

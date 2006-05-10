@@ -19,7 +19,7 @@
 #ifndef KIS_STRATEGY_COLORSPACE_GRAY_U16_H_
 #define KIS_STRATEGY_COLORSPACE_GRAY_U16_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <krita_export.h>
 

@@ -23,7 +23,7 @@
 #include "kis_exif_value.h"
 
 #include <qdom.h> 
-#include <qmap.h>
+#include <QMap>
 
 class KisExifInfo
 {

@@ -27,8 +27,8 @@
 
 #include <qtoolbutton.h>
 #include <qpainter.h>
-#include <qvariant.h>
-#include <qlayout.h>
+#include <QVariant>
+#include <QLayout>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QKeyEvent>

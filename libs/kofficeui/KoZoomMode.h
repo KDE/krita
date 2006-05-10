@@ -20,7 +20,7 @@
 #ifndef _KOZOOMMODE_H_
 #define _KOZOOMMODE_H_
 
-#include <qstring.h>
+#include <QString>
 #include "koffice_export.h"
 
 /**

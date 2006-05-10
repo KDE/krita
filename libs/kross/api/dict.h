@@ -20,8 +20,8 @@
 #ifndef KROSS_API_DICT_H
 #define KROSS_API_DICT_H
 
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 #include <koffice_export.h>
 
 #include "object.h"

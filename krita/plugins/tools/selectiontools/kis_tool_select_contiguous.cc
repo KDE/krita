@@ -21,10 +21,10 @@
  */
 
 #include <qpainter.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <qapplication.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 

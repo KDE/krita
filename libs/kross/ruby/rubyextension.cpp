@@ -20,8 +20,8 @@
 
 #include <st.h>
 
-#include <qmap.h>
-#include <qstring.h>
+#include <QMap>
+#include <QString>
 //Added by qt3to4:
 #include <Q3ValueList>
 

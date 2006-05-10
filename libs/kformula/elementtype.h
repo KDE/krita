@@ -21,8 +21,8 @@
 #ifndef ELEMENTTYPE_H
 #define ELEMENTTYPE_H
 
-#include <qfont.h>
-#include <qstring.h>
+#include <QFont>
+#include <QString>
 #include <qdom.h>
 
 #include "contextstyle.h"

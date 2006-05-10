@@ -20,7 +20,7 @@
 #ifndef __koPictureEps_h__
 #define __koPictureEps_h__
 
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QPixmap>
 

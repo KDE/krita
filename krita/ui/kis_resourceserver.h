@@ -22,7 +22,7 @@
 #ifndef KIS_RESOURCESERVER_H_
 #define KIS_RESOURCESERVER_H_
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <QList>
 

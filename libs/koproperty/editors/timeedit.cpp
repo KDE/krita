@@ -24,8 +24,8 @@
 #include <q3rangecontrol.h>
 #include <qobject.h>
 #include <qpainter.h>
-#include <qlayout.h>
-#include <qvariant.h>
+#include <QLayout>
+#include <QVariant>
 #include <qdatetime.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>

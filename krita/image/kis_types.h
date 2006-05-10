@@ -19,8 +19,8 @@
 #define KISTYPES_H_
 
 #include <q3valuevector.h>
-#include <qmap.h>
-#include <qpoint.h>
+#include <QMap>
+#include <QPoint>
 
 #include <ksharedptr.h>
 

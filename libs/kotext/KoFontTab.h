@@ -21,7 +21,7 @@
 #define __kofonttab_h__
 
 #include <kofonttabbase.h>
-#include <qfont.h>
+#include <QFont>
 
 class KoFontTab : public KoFontTabBase
 {

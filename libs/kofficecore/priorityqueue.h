@@ -20,7 +20,7 @@
 #define priority_queue_h
 
 #include <vector>
-#include <qstring.h>
+#include <QString>
 #include <q3asciidict.h>
 #include <kdebug.h>
 

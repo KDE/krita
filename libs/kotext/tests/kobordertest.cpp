@@ -3,7 +3,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <qpainter.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <q3grid.h>
 //Added by qt3to4:
 #include <QPaintEvent>

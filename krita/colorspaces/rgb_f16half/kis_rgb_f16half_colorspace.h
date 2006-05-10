@@ -19,7 +19,7 @@
 #ifndef KIS_RGB_F16HALF_COLORSPACE_H_
 #define KIS_RGB_F16HALF_COLORSPACE_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <klocale.h>
 

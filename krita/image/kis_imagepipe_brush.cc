@@ -30,10 +30,10 @@
 #include <stdlib.h>
 
 #include <qimage.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <q3valuevector.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 #include <qstringlist.h>
 #include <qtextstream.h>
 

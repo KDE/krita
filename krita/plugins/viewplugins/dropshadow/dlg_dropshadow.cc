@@ -19,12 +19,12 @@
  */
 
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <q3buttongroup.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLabel>
+#include <QComboBox>
 #include <q3button.h>
-#include <qcolor.h>
+#include <QColor>
 
 #include <klocale.h>
 #include <knuminput.h>

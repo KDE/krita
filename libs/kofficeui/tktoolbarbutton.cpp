@@ -20,7 +20,7 @@
 #include <tktoolbarbutton.h>
 
 #include <qtimer.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qdrawutil.h>

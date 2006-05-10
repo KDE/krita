@@ -21,10 +21,10 @@
  */
 
 #include <qrect.h>
-#include <qwidget.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
+#include <QWidget>
+#include <QLayout>
+#include <QLabel>
+#include <QCheckBox>
 #include <QHBoxLayout>
 
 #include <kdebug.h>

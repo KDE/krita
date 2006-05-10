@@ -29,14 +29,14 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
+#include <QPoint>
+#include <QLayout>
+#include <QComboBox>
+#include <QCheckBox>
 #include <qbuttongroup.h>
-#include <qstring.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
+#include <QString>
+#include <QPushButton>
+#include <QLineEdit>
 #include <QHBoxLayout>
 
 #include <knuminput.h>

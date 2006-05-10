@@ -24,9 +24,9 @@
 
 #undef S_NONE // Solaris defines it in sys/signal.h
 
-#include <qcolor.h>
-#include <qfont.h>
-#include <qstring.h>
+#include <QColor>
+#include <QFont>
+#include <QString>
 #include <q3dict.h>
 #include <koffice_export.h>
 

@@ -24,8 +24,8 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
-#include <qspinbox.h>
+#include <QPoint>
+#include <QSpinBox>
 //Added by qt3to4:
 #include <Q3MemArray>
 

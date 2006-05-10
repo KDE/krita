@@ -20,8 +20,8 @@
 #ifndef KIS_INT_SPINBOX_H_
 #define KIS_INT_SPINBOX_H_
 
-#include <qwidget.h>
-#include <qspinbox.h>
+#include <QWidget>
+#include <QSpinBox>
 #include <qslider.h>
 #include <QLabel>
 #include <krita_export.h>

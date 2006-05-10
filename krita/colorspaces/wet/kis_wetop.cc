@@ -17,7 +17,7 @@
  */
 
 #include <qrect.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include <kdebug.h>
 

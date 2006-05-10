@@ -22,7 +22,7 @@
 #define KIS_TOOL_POLYLINE_H_
 
 #include <q3valuevector.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QKeyEvent>
 

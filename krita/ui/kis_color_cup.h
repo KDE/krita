@@ -19,8 +19,8 @@
 #ifndef KIS_COLOR_CUP_H
 #define KIS_COLOR_CUP_H
 
-#include <qpushbutton.h>
-#include <qcolor.h>
+#include <QPushButton>
+#include <QColor>
 #include <QFrame>
 #include <QStyleOption>
 

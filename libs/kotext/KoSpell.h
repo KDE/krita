@@ -21,7 +21,7 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
-#include <qstring.h>
+#include <QString>
 
 #include <kspell2/backgroundchecker.h>
 #include <koffice_export.h>

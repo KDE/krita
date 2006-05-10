@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_layer.h"
 #include "kis_debug_areas.h"

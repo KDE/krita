@@ -17,7 +17,7 @@
  */
 #include "kis_filter.h"
 
-#include <qstring.h>
+#include <QString>
 
 #include "kis_types.h"
 #include "kis_filter_configuration.h"

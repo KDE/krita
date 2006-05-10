@@ -21,12 +21,12 @@
 #define _KOWMFREADPRIVATE_H_
 
 #include <qpen.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 #include <qrect.h>
 #include <qregion.h>
 #include <qbuffer.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QPolygon>
 

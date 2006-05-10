@@ -17,7 +17,7 @@
  */
 #include <klocale.h>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 

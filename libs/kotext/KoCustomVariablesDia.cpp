@@ -23,10 +23,10 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 
-#include <qcombobox.h>
+#include <QComboBox>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QLabel>
+#include <QPushButton>
 #include <q3header.h>
 //Added by qt3to4:
 #include <Q3PtrList>

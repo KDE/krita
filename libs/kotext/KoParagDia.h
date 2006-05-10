@@ -32,7 +32,7 @@
 #include <KoUnit.h>
 #include <KoUnitWidgets.h>
 #include <q3dict.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include "KoParagLayout.h"
 #include "KoParagCounter.h"
 #include <knuminput.h>

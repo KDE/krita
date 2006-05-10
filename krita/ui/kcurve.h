@@ -21,8 +21,8 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qcolor.h>
+#include <QWidget>
+#include <QColor>
 #include <qpair.h>
 #include <QPixmap>
 #include <QMouseEvent>

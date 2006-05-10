@@ -24,8 +24,8 @@
 #include <qbitmap.h>
 #include <q3whatsthis.h>
 #include <qmenubar.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 //Added by qt3to4:
 #include <Q3GridLayout>
 

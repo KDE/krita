@@ -27,9 +27,9 @@
 using namespace std;
 
 #include <qradiobutton.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QLabel>
 
 #include <klocale.h>
 #include <knuminput.h>

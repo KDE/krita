@@ -21,10 +21,10 @@
 #include "sizeedit.h"
 #include "editoritem.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qpainter.h>
-#include <qtooltip.h>
+#include <QToolTip>
 
 #include <kactivelabel.h>
 #include <klocale.h>

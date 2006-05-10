@@ -20,7 +20,7 @@
 #ifndef KIS_COMMAND_H_
 #define KIS_COMMAND_H_
 
-#include <qstring.h>
+#include <QString>
 #include <kcommand.h>
 #include "krita_export.h"
 

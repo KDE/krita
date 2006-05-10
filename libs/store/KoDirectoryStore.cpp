@@ -18,8 +18,8 @@
 */
 
 #include "KoDirectoryStore.h"
-#include <qfile.h>
-#include <qdir.h>
+#include <QFile>
+#include <QDir>
 #include <kdebug.h>
 
 // HMMM... I used QFile and QDir.... but maybe this should be made network transparent?

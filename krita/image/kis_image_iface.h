@@ -24,7 +24,7 @@
 #include <dcopobject.h>
 
 
-#include <qstring.h>
+#include <QString>
 
 class KisImage;
 class KisPaintDeviceIface;

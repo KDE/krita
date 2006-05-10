@@ -23,7 +23,7 @@
 #include <config.h>
 #include <config-krita.h>
 
-#include <qwidget.h>
+#include <QWidget>
 #ifdef HAVE_OPENGL
 #include <qgl.h>
 #endif

@@ -30,7 +30,7 @@
 #include <klocale.h>
 
 #include <qapplication.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <assert.h>
 
 void KoTextFormat::KoTextFormatPrivate::clearCache()

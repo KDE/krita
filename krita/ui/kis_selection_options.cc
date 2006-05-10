@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qradiobutton.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <QVBoxLayout>
-#include <qlayout.h>
+#include <QLayout>
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"

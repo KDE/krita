@@ -27,7 +27,7 @@
 #include "../api/module.h"
 
 #include <qobject.h>
-#include <qstring.h>
+#include <QString>
 
 class TestPluginObject : public Kross::Api::Class<TestPluginObject>
 {

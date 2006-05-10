@@ -20,14 +20,14 @@
 
 #include "coloredit.h"
 
-#include <qvariant.h>
-#include <qlayout.h>
-#include <qcolor.h>
+#include <QVariant>
+#include <QLayout>
+#include <QColor>
 #include <qpainter.h>
 
 #ifdef QT_ONLY
 #include <qcolordialog.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qpixmap.h>
 //Added by qt3to4:
 #include <QHBoxLayout>

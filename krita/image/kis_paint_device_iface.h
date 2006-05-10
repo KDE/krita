@@ -23,7 +23,7 @@
 #include <dcopref.h>
 #include <dcopobject.h>
 
-#include <qstring.h>
+#include <QString>
 
 class KisPaintDevice;
 

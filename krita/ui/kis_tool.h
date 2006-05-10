@@ -21,7 +21,7 @@
 #define KIS_TOOL_H_
 
 #include <qobject.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>

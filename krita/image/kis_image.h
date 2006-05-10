@@ -19,7 +19,7 @@
 #define KIS_IMAGE_H_
 
 #include <qobject.h>
-#include <qstring.h>
+#include <QString>
 #include <q3valuevector.h>
 #include <qmutex.h>
 

@@ -21,8 +21,8 @@
 #ifndef SPACEELEMENT_H
 #define SPACEELEMENT_H
 
-#include <qfont.h>
-#include <qstring.h>
+#include <QFont>
+#include <QString>
 
 #include "basicelement.h"
 

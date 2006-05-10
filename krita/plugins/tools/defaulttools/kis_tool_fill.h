@@ -21,7 +21,7 @@
 #ifndef __filltool_h__
 #define __filltool_h__
 
-#include <qpoint.h>
+#include <QPoint>
 //Added by qt3to4:
 #include <QLabel>
 

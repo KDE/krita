@@ -22,14 +22,14 @@
 #include "fontedit.h"
 #include "editoritem.h"
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qpainter.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qfont.h>
+#include <QLayout>
+#include <QVariant>
+#include <QFont>
 #include <qfontmetrics.h>
-#include <qlabel.h>
-#include <qtooltip.h>
+#include <QLabel>
+#include <QToolTip>
 //Added by qt3to4:
 #include <QEvent>
 #include <QKeyEvent>

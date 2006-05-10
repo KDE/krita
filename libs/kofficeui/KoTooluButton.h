@@ -21,8 +21,8 @@
 #define _kotoolbutton_h_
 
 
-#include <qmap.h>
-#include <qpoint.h>
+#include <QMap>
+#include <QPoint>
 #include <kinstance.h>
 //Added by qt3to4:
 #include <QPixmap>

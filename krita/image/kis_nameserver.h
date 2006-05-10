@@ -18,7 +18,7 @@
 #ifndef KIS_NAMESERVER_H_
 #define KIS_NAMESERVER_H_
 
-#include <qstring.h>
+#include <QString>
 #include "kis_global.h"
 #include <krita_export.h>
 

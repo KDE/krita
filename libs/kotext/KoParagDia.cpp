@@ -51,14 +51,14 @@
 #include <kpushbutton.h>
 #include <kcombobox.h>
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
 #include <qradiobutton.h>
 #include <kvbox.h>
 #include <q3hbox.h>
-#include <qtooltip.h>
-#include <qlayout.h>
+#include <QToolTip>
+#include <QLayout>
 #include <qapplication.h>
 #include <q3widgetstack.h>
 #include <q3tl.h>

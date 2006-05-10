@@ -20,7 +20,7 @@
 #ifndef __koPictureClipart_h__
 #define __koPictureClipart_h__
 
-#include <qstring.h>
+#include <QString>
 #include <qpicture.h>
 //Added by qt3to4:
 #include <QPixmap>

@@ -22,7 +22,7 @@
 #include <qdom.h>
 #include <q3dict.h>
 #include <q3valuevector.h>
-#include <qmap.h>
+#include <QMap>
 #include <koffice_export.h>
 
 class KoGenStyles;

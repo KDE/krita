@@ -23,13 +23,13 @@
 // Qt includes.
 
 #include <q3listbox.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qpair.h>
 #include <qtimer.h>
 #include <q3valuelist.h>
 #include <qstyle.h>
 #include <qapplication.h>
-#include <qtooltip.h>
+#include <QToolTip>
 //Added by qt3to4:
 #include <QResizeEvent>
 

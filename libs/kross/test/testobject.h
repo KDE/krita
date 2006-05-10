@@ -23,7 +23,7 @@
 #include "../main/scriptcontainer.h"
 
 #include <qobject.h>
-#include <qstring.h>
+#include <QString>
 
 class TestObject : public QObject
 {

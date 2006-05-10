@@ -22,7 +22,7 @@
 #define koautoformatdia_h
 
 #include <kdialogbase.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <KoAutoFormat.h>

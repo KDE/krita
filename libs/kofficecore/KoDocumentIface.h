@@ -20,7 +20,7 @@
 #ifndef __KoDocumentIface_h__
 #define __KoDocumentIface_h__
 
-#include <qmap.h>
+#include <QMap>
 
 #include <dcopobject.h>
 #include <q3valuelist.h>

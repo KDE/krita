@@ -22,19 +22,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <qdrawutil.h>
 #include <qevent.h>
-#include <qfile.h>
+#include <QFile>
 #include <qimage.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
 #include <qvalidator.h>
 #include <qpainter.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
+#include <QPushButton>
+#include <QSpinBox>
 #include <qtimer.h>
 
 #include <kapplication.h>

@@ -21,7 +21,7 @@
 #include <lcms.h>
 
 #include <qstringlist.h>
-#include <qdir.h>
+#include <QDir>
 
 #include <kdebug.h>
 #include <kinstance.h>

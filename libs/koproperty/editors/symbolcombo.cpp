@@ -18,11 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QLayout>
 #include <qpainter.h>
-#include <qvariant.h>
+#include <QVariant>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 

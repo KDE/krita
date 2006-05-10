@@ -20,12 +20,12 @@
 
 #include "stringlistedit.h"
 
-#include <qlineedit.h>
-#include <qlayout.h>
+#include <QLineEdit>
+#include <QLayout>
 #include <qdialog.h>
 #include <qpainter.h>
-#include <qvariant.h>
-#include <qpushbutton.h>
+#include <QVariant>
+#include <QPushButton>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>

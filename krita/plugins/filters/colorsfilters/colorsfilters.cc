@@ -24,8 +24,8 @@
 #include <string.h>
 
 #include <qslider.h>
-#include <qpoint.h>
-#include <qcolor.h>
+#include <QPoint>
+#include <QColor>
 
 #include <klocale.h>
 #include <kiconloader.h>

@@ -20,9 +20,9 @@
 #include <q3buttongroup.h>
 #include <qnamespace.h>
 #include <qtoolbutton.h>
-#include <qlabel.h>
-#include <qtooltip.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QToolTip>
+#include <QLayout>
 #include <qpixmap.h>
 #include <q3toolbar.h>
 #include <q3dockwindow.h>

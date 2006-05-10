@@ -20,7 +20,7 @@
 #ifndef KoBorder_h
 #define KoBorder_h
 
-#include <qcolor.h>
+#include <QColor>
 #include <qpen.h>
 #include <koffice_export.h>
 class QDomElement;

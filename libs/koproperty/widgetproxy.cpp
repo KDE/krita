@@ -22,8 +22,8 @@
 #include "widget.h"
 #include "factory.h"
 
-#include <qlayout.h>
-#include <qvariant.h>
+#include <QLayout>
+#include <QVariant>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 

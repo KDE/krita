@@ -22,7 +22,7 @@
 #define SEQUENCEELEMENT_H
 
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QKeyEvent>
 

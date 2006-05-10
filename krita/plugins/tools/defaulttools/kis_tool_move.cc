@@ -20,8 +20,8 @@
  */
 
 #include <stdlib.h>
-#include <qpoint.h>
-#include <qcolor.h>
+#include <QPoint>
+#include <QColor>
 #include <QMouseEvent>
 
 #include <kaction.h>

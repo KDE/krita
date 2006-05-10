@@ -20,7 +20,7 @@
 #ifndef KROSS_MAIN_KROSSCONFIG_H
 #define KROSS_MAIN_KROSSCONFIG_H
 
-#include <qstring.h>
+#include <QString>
 #include <koffice_export.h>
 /**
  * The Kross scripting bridge to embed scripting functionality

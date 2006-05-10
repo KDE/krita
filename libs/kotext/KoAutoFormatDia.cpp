@@ -28,13 +28,13 @@
 #include <k3listview.h>
 #include <kstandarddirs.h>
 
-#include <qlayout.h>
+#include <QLayout>
 
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
-#include <qcombobox.h>
-#include <qdir.h>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QToolTip>
+#include <QComboBox>
+#include <QDir>
 #include <qapplication.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

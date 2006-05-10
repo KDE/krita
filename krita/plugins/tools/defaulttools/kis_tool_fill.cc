@@ -24,11 +24,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcommand.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QCheckBox>
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "knuminput.h"
 

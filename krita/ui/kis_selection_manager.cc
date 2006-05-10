@@ -19,7 +19,7 @@
 #include <qobject.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <qcolor.h>
+#include <QColor>
 
 #include <kdebug.h>
 #include <kaction.h>

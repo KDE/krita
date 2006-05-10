@@ -24,7 +24,7 @@
 
 #include "../widget.h"
 #include <qpixmap.h>
-#include <qvariant.h>
+#include <QVariant>
 //Added by qt3to4:
 #include <QLabel>
 #include <QResizeEvent>

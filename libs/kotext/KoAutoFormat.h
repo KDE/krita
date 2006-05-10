@@ -21,13 +21,13 @@
 #ifndef koautoformat_h
 #define koautoformat_h
 
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 #include <qstringlist.h>
 #include <qdom.h>
 #include <q3dict.h>
-#include <qlabel.h>
-#include <qwidget.h>
+#include <QLabel>
+#include <QWidget>
 #include <koffice_export.h>
 
 class KoDocument;

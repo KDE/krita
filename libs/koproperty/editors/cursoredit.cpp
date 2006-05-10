@@ -20,8 +20,8 @@
 
 #include "cursoredit.h"
 
-#include <qmap.h>
-#include <qvariant.h>
+#include <QMap>
+#include <QVariant>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <Q3ValueList>

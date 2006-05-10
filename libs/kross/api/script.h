@@ -20,7 +20,7 @@
 #ifndef KROSS_API_SCRIPT_H
 #define KROSS_API_SCRIPT_H
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <koffice_export.h>
 #include "class.h"

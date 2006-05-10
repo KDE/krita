@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 #include <qdom.h>
-#include <qstring.h>
+#include <QString>
 
 #include "kis_filter_registry.h"
 #include "kis_transaction.h"

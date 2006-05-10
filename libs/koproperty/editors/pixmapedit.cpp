@@ -23,7 +23,7 @@
 #include "editoritem.h"
 #include "property.h"
 
-#include <qlayout.h>
+#include <QLayout>
 #include <QPainter>
 #include <QLabel>
 #include <QCursor>

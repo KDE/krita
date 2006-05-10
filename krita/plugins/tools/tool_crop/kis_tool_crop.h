@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_CROP_H_
 #define KIS_TOOL_CROP_H_
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qregion.h>
 
 #include <kis_tool_non_paint.h>

@@ -26,9 +26,9 @@
 #include <qsize.h>
 #include <qslider.h>
 #include <qstyle.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLineEdit>
+#include <QLayout>
 #include <qvalidator.h>
 #include <QHBoxLayout>
 #include <QFrame>

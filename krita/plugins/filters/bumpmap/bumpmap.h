@@ -21,7 +21,7 @@
 #ifndef BUMPMAP_H
 #define BUMPMAP_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kparts/plugin.h>
 

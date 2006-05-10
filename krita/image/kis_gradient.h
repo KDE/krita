@@ -25,7 +25,7 @@
 #define KIS_GRADIENT_H
 
 #include <QList>
-#include <qcolor.h>
+#include <QColor>
 
 #include <kio/job.h>
 

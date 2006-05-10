@@ -20,10 +20,10 @@
 #ifndef KROSS_API_EVENTSIGNAL_H
 #define KROSS_API_EVENTSIGNAL_H
 
-//#include <qstring.h>
+//#include <QString>
 //#include <qvaluelist.h>
-//#include <qmap.h>
-//#include <qvariant.h>
+//#include <QMap>
+//#include <QVariant>
 //#include <qsignalmapper.h>
 //#include <qguardedptr.h>
 #include <qobject.h>

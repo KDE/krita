@@ -20,8 +20,8 @@
 #ifndef KROSS_API_VALUE_H
 #define KROSS_API_VALUE_H
 
-#include <qstring.h>
-#include <qvariant.h>
+#include <QString>
+#include <QVariant>
 
 #include "object.h"
 

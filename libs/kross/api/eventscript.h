@@ -20,7 +20,7 @@
 #ifndef KROSS_API_EVENTSCRIPT_H
 #define KROSS_API_EVENTSCRIPT_H
 
-#include <qstring.h>
+#include <QString>
 #include <qobject.h>
 
 #include "event.h"

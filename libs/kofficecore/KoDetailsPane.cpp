@@ -18,9 +18,9 @@
 */
 #include "KoDetailsPane.h"
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qfile.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QFile>
 #include <qimage.h>
 #include <q3header.h>
 #include <qrect.h>

@@ -21,7 +21,7 @@
 #ifndef __KoViewIface_h__
 #define __KoViewIface_h__
 
-#include <qmap.h>
+#include <QMap>
 
 #include <dcopobject.h>
 #include <dcopref.h>

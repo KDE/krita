@@ -17,7 +17,7 @@
  */
 #ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
 #define KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
-#include <qcolor.h>
+#include <QColor>
 
 #include <klocale.h>
 

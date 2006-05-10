@@ -20,8 +20,8 @@
 #define _KOWMFSTACK_H_
 
 #include <qpen.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 #include <qbrush.h>
 #include <qpixmap.h>
 

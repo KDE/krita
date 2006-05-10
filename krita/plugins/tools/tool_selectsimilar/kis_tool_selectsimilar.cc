@@ -18,11 +18,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qpoint.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QPoint>
+#include <QLayout>
+#include <QCheckBox>
+#include <QLabel>
+#include <QComboBox>
 #include <qtimer.h>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

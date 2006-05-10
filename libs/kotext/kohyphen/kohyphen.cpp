@@ -20,9 +20,9 @@
  ******************************************************************************/
 
 #include <qdom.h>
-#include <qfile.h>
+#include <QFile>
 #include <qtextcodec.h>
-#include <qstring.h>
+#include <QString>
 
 #include <klocale.h>
 #include <kapplication.h>

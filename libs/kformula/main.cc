@@ -4,14 +4,14 @@
 
 #include <q3accel.h>
 #include <qdom.h>
-#include <qfile.h>
-#include <qlayout.h>
+#include <QFile>
+#include <QLayout>
 #include <q3ptrlist.h>
 #include <q3mainwindow.h>
 #include <qpainter.h>
-#include <qstring.h>
+#include <QString>
 #include <qtextstream.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <QFocusEvent>

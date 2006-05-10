@@ -22,7 +22,7 @@
 
 #include "kis_custom_convolution_filter.h"
 
-#include <qspinbox.h>
+#include <QSpinBox>
 
 #include "kis_convolution_painter.h"
 #include "kis_custom_convolution_filter_configuration_widget.h"

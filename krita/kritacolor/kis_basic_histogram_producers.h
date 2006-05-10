@@ -108,7 +108,7 @@ public:
 };
 
 #ifdef HAVE_OPENEXR
-class KisBasicF16HalfHistogramProducer : public KisBasicHistogramProducer {
+class KRITACOLOR_EXPORT KisBasicF16HalfHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisBasicF16HalfHistogramProducer(const KisID& id, KisColorSpace *colorSpace);
     virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);

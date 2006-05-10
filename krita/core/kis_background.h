@@ -21,8 +21,9 @@
 #include <qimage.h>
 
 #include <ksharedptr.h>
+#include <krita_export.h>
 
-class KisBackground : public KShared {
+class KRITAIMAGE_EXPORT KisBackground : public KShared {
 
 public:
     KisBackground();

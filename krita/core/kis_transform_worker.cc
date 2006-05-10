@@ -307,7 +307,21 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
                 sum+=filterWeights[center].weight[num];
             }
         }
-//printf("  sum2 =%d\n",sum);
+
+//printf("  sum2 =%d",sum);
+        int num = 0; 
+        while(sum<255 && num*2<span)
+        {
+            filterWeights[center].weight[span/2 + num]++;
+            ++sum;
+            if(sum<255 && num<span/2)
+            {
+                filterWeights[center].weight[span/2 - num - 1]++;
+                ++sum;
+            }
+            ++num;
+        }
+//printf("  sum3 =%d\n",sum);
 
         filterWeights[center].numWeights = span;
     }

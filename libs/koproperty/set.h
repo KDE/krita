@@ -178,13 +178,6 @@ class KOPROPERTY_EXPORT Set : public QObject
 		/*! Emitted when the value of the property is changed.*/
 		void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-		/*! Version of the above signal providing \a previousValue */
-		void propertyChanged(KoProperty::Set& set, KoProperty::Property& property, 
-			const QVariant& previousValue);
-
-		/*! Parameterless version of the above signal. */
-		void propertyChanged();
-
 		/*! Emitted when the value of the property is reset.*/
 		void propertyReset(KoProperty::Set& set, KoProperty::Property& property);
 

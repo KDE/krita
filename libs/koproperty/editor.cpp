@@ -316,7 +316,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 	d->set = set;
 	if (d->set) {
 		//receive property changes
-		connect(d->set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&, const QVariant&)),
+		connect(d->set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
 			this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
 		connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
 			this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));

@@ -397,16 +397,18 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 	if (d->sets) {
 		for (Q3PtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
 			if (it.current()) {//may be destroyed in the meantime
-				emit (*it.current())->propertyChanged(**it.current(), *this, prevValue);
 				emit (*it.current())->propertyChanged(**it.current(), *this);
-				emit (*it.current())->propertyChanged();
 			}
 		}
 	}
 	else if (d->set) {
-		emit d->set->propertyChanged(*d->set, *this, prevValue);
+		//if the slot connect with that signal may call set->clear() - that's
+		//the case e.g. at kexi/plugins/{macros|scripting}/* -  this Property
+		//may got destroyed ( see Set::removeProperty(Property*) ) while we are
+		//still on it. So, if we try to access ourself/this once the signal
+		//got emitted we may end in a very hard to reproduce crash. So, the
+		//emit should happen as last step in this method!
 		emit d->set->propertyChanged(*d->set, *this);
-		emit d->set->propertyChanged();
 	}
 }
 

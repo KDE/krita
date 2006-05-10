@@ -20,6 +20,7 @@
 #define KIS_SCRIPT_MONITOR_H
 
 #include <qobject.h>
+#include <krita_export.h>
 namespace Kross {
     namespace Api {
         class ScriptGUIClient;
@@ -30,7 +31,7 @@ namespace Kross {
 /**
 	@author Cyrille Berger <cberger@cberger.net>
 */
-class KisScriptMonitor : public QObject {
+class KRITASCRIPTING_EXPORT KisScriptMonitor : public QObject {
     Q_OBJECT
     private:
         KisScriptMonitor();

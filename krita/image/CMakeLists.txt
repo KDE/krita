@@ -11,14 +11,14 @@ endif(KUNITTEST_FOUND)
 ########### next target ###############
 
 set(libkritatile_SRCS 
-	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tiledvlineiterator.cc 
-	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tiledhlineiterator.cc 
-	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tileddatamanager.cc 
-	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tile.cc 
-	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tilediterator.cc 
-	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tiledrectiterator.cc 
-	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_memento.cc 
-	${CMAKE_SOURCE_DIR}/krita/core/tiles/kis_tilemanager.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc 
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledhlineiterator.cc 
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tileddatamanager.cc 
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile.cc 
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilediterator.cc 
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledrectiterator.cc 
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_memento.cc 
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilemanager.cc
 )
 
 

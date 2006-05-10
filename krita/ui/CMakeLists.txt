@@ -210,7 +210,7 @@ kde4_footer()
 #
 #lib_LTLIBRARIES = libkritaui.la
 #libkritaui_la_LDFLAGS =  -version-info 1:0:0 -no-undefined $(all_libraries)
-#libkritaui_la_LIBADD = ../sdk/libkritasdk.la ../core/libkritaimage.la ../kritacolor/libkritacolor.la \
+#libkritaui_la_LIBADD = ../sdk/libkritasdk.la ../image/libkritaimage.la ../kritacolor/libkritacolor.la \
 #    $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT) $(GLLIB)
 #
 #libkritaui_la_SOURCES = kis_histogram_view.cc imageviewer.cc kcurve.cc \

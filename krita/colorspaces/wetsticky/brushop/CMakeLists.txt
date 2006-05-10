@@ -36,7 +36,7 @@ kde4_footer()
 #INCLUDES =  -I$(srcdir)/../../../sdk \
 #	-I$(srcdir)/../../../kritacolor/color_strategy/ \
 #	-I$(srcdir)/../../../color_strategy/ \
-#	-I$(srcdir)/../../../core/ \
+#	-I$(srcdir)/../../../image/ \
 #	-I$(srcdir)/../../../ui \
 #	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(all_includes)
 #

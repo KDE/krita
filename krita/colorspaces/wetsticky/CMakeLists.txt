@@ -33,7 +33,7 @@ kde4_footer()
 #kde_services_DATA = kritawsplugin.desktop
 #INCLUDES  =  -I$(srcdir)/../../sdk \
 #	 -I$(srcdir)/../../core \
-#	-I$(srcdir)/../../core/color_strategy \
+#	-I$(srcdir)/../../image/color_strategy \
 #	-I$(srcdir)/../../../kritacolor/color_strategy/ \
 #	-I$(srcdir)/../../../color_strategy/ \
 #	-I$(srcdir)/../../ui \

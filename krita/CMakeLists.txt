@@ -75,8 +75,8 @@ if (SHOULD_BUILD_KRITA)
         # For config-krita.h
         ${CMAKE_CURRENT_BINARY_DIR}
 
-        ${CMAKE_SOURCE_DIR}/krita/core
-        ${CMAKE_SOURCE_DIR}/krita/core/tiles
+        ${CMAKE_SOURCE_DIR}/krita/image
+        ${CMAKE_SOURCE_DIR}/krita/image/tiles
         ${CMAKE_SOURCE_DIR}/krita/sdk
         ${CMAKE_SOURCE_DIR}/krita/kritacolor
         ${CMAKE_SOURCE_DIR}/krita/kritacolor/colorspaces
@@ -107,7 +107,7 @@ if (SHOULD_BUILD_KRITA)
     
     add_subdirectory( sdk )
     add_subdirectory( kritacolor )
-    add_subdirectory( core )
+    add_subdirectory( image )
     add_subdirectory( ui )
     add_subdirectory( dtd )
     add_subdirectory( colorspaces )
@@ -168,7 +168,7 @@ if (SHOULD_BUILD_KRITA)
     install_files( ${SERVICES_INSTALL_DIR} FILES  kritapart.desktop )
     install_files( ${DATA_INSTALL_DIR}/krita FILES  krita.rc krita_readonly.rc )
     
-    #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins kritacolor/colorspaces core/tiles  )
+    #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins kritacolor/colorspaces image/tiles  )
 endif (SHOULD_BUILD_KRITA)
 
 kde4_footer()
@@ -182,7 +182,7 @@ kde4_footer()
 #lib_LTLIBRARIES = libkritacommon.la
 #libkritacommon_la_SOURCES = dummy.cc
 #libkritacommon_la_LDFLAGS = $(all_libraries) -version-info 1:0 -no-undefined
-#libkritacommon_la_LIBADD = sdk/libkritasdk.la core/libkritaimage.la ui/libkritaui.la kritacolor/libkritacolor.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
+#libkritacommon_la_LIBADD = sdk/libkritasdk.la image/libkritaimage.la ui/libkritaui.la kritacolor/libkritacolor.la $(LCMS_LIBS) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_XINPUTEXT)
 #
 ### The part
 #kde_module_LTLIBRARIES = libkritapart.la
@@ -205,7 +205,7 @@ kde4_footer()
 #rcdir = $(kde_datadir)/krita
 #rc_DATA = krita.rc krita_readonly.rc
 #
-#SUBDIRS = sdk kritacolor core ui . dtd colorspaces plugins data pics 
+#SUBDIRS = sdk kritacolor image ui . dtd colorspaces plugins data pics 
 ## Needed to compile libkritacommon.la, which has no source files to itself
 ## but everything in static libs.
 #dummy.cc:
@@ -218,7 +218,7 @@ kde4_footer()
 #	$(XGETTEXT) i18ndata rc.cpp `find . -name \*.cc -o -name \*.h` ui/kis_aboutdata.h -o $(podir)/krita.pot
 #	rm -f i18ndata
 #
-#DOXYGEN_EXCLUDE = CImg.h colorspaces plugins kritacolor/colorspaces core/tiles
+#DOXYGEN_EXCLUDE = CImg.h colorspaces plugins kritacolor/colorspaces image/tiles
 #include $(top_srcdir)/admin/Doxyfile.am
 #
 #kde_services_DATA = kritapart.desktop

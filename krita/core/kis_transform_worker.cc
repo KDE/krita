@@ -324,7 +324,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
         // Build a temporary line
         T srcIt = createIterator <T>(src, srcStart - extraLen, lineNum, srcLen+2*extraLen);
-        int i = 0;
+        Q_INT32 i = 0;
         while(!srcIt.isDone())
         {
             Q_UINT8 *data;
@@ -351,10 +351,18 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         i=0;
         while(!dstIt.isDone())
         {
-            if(scale < 0)
-                center = (srcLen<<8) + (((i<<8)) * scaleDenom) / scale;
+            if(scaleDenom<2500)
+                center = ((i<<8) * scaleDenom) / scale;
             else
-                center = (((i<<8)) * scaleDenom) / scale;
+            {
+                if(scaleDenom<46000) // real limit is actually 46340 pixels
+                    center = ((i * scaleDenom) / scale)<<8;
+                else
+                    center = ((i<<8)/scale * scaleDenom) / scale; // XXX fails for sizes over 2^23 pixels src width
+            }
+
+            if(scale < 0)
+                center += srcLen<<8;
 
             center += (extraLen<<8) + shearFracOffset;
 

@@ -41,10 +41,14 @@ KWmf::KWmf(
 {
     m_dpi = dpi;
     m_objectHandles = new WinObjHandle*[s_maxHandles];
+    memset(m_objectHandles, 0, s_maxHandles * sizeof(WinObjHandle));
 }
 
 KWmf::~KWmf()
 {
+    for(int i = 0; i < s_maxHandles; ++i)
+        handleDelete(i);
+
     delete[] m_objectHandles;
 }
 
@@ -122,8 +126,8 @@ KWmf::WinObjPenHandle *KWmf::handleCreatePen(void)
     WinObjPenHandle *handle = new WinObjPenHandle;
     int idx = handleIndex();
 
-    if (idx >= 0)
-        m_objectHandles[idx] = handle;
+    Q_ASSERT(idx >= 0);
+    m_objectHandles[idx] = handle;
     return handle;
 }
 

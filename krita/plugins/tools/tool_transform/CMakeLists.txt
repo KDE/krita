@@ -13,7 +13,7 @@ kde4_add_plugin(kritatooltransform ${kritatooltransform_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatooltransform )
 
-target_link_libraries(kritatooltransform  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritatooltransform kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritatooltransform )
 

@@ -17,7 +17,7 @@ kde4_add_plugin(kritaselectiontools ${kritaselectiontools_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaselectiontools )
 
-target_link_libraries(kritaselectiontools  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritaselectiontools kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritaselectiontools )
 
@@ -65,7 +65,7 @@ kde4_footer()
 #	kis_tool_select_brush.h \
 #	kis_tool_select_eraser.h \
 #	kis_tool_select_contiguous.h \
-#	kis_tool_select_elliptical.h 
+#	kis_tool_select_elliptical.h
 #
 #
 #kritaselectiontools_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

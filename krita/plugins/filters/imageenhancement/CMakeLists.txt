@@ -12,7 +12,7 @@ kde4_add_plugin(kritaimageenhancement ${kritaimageenhancement_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaimageenhancement )
 
-target_link_libraries(kritaimageenhancement  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritaimageenhancement kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritaimageenhancement )
 
@@ -49,7 +49,7 @@ kde4_footer()
 #
 #noinst_HEADERS = imageenhancement.h kis_wavelet_noise_reduction.h
 #
-#kritaimageenhancement_la_LIBADD =  ../../../libkritacommon.la 
+#kritaimageenhancement_la_LIBADD =  ../../../libkritacommon.la
 #
 #kritaimageenhencement_la_METASOURCES = AUTO
 #

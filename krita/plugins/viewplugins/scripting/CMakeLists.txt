@@ -21,7 +21,7 @@ kde4_add_plugin(kritascripting_plug ${kritascripting_PART_SRCS})
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritascripting_plug )
 set_target_properties(kritascripting_plug PROPERTIES OUTPUT_NAME kritascripting)
 
-target_link_libraries(kritascripting_plug  ${KDE4_KDECORE_LIBS} kritacommon krossmain kritascripting )
+target_link_libraries(kritascripting_plug kritaui krossmain kritascripting)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritascripting_plug )
 

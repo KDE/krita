@@ -13,7 +13,7 @@ kde4_add_plugin(kritatoolstar ${kritatoolstar_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolstar )
 
-target_link_libraries(kritatoolstar  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritatoolstar kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritatoolstar )
 

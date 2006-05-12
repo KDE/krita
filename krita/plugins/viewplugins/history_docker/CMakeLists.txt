@@ -8,7 +8,7 @@ kde4_add_plugin(kritahistorydocker ${kritahistorydocker_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritahistorydocker )
 
-target_link_libraries(kritahistorydocker  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritahistorydocker kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritahistorydocker )
 
@@ -31,10 +31,10 @@ kde4_footer()
 #	$(KOFFICE_INCLUDES) \
 #	$(all_includes)
 #
-#kritahistorydocker_la_SOURCES = historydocker.cc 
+#kritahistorydocker_la_SOURCES = historydocker.cc
 #
 #kde_module_LTLIBRARIES = kritahistorydocker.la
-#noinst_HEADERS = historydocker.h 
+#noinst_HEADERS = historydocker.h
 #
 #kritahistorydocker_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 #kritahistorydocker_la_LIBADD =  ../../../libkritacommon.la

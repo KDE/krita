@@ -13,7 +13,7 @@ kde4_add_plugin(kritaembossfilter ${kritaembossfilter_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaembossfilter )
 
-target_link_libraries(kritaembossfilter  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritaembossfilter kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritaembossfilter )
 

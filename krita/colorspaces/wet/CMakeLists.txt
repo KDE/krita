@@ -23,7 +23,7 @@ kde4_add_plugin(kritawetplugin ${kritawetplugin_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritawetplugin )
 
-target_link_libraries(kritawetplugin  ${KDE4_KDECORE_LIBS} kritacommon kopainter kofficecore )
+target_link_libraries(kritawetplugin kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritawetplugin )
 

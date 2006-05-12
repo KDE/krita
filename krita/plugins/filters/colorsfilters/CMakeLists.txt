@@ -17,7 +17,7 @@ kde4_add_plugin(kritacolorsfilters ${kritacolorsfilters_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorsfilters )
 
-target_link_libraries(kritacolorsfilters  ${KDE4_KDECORE_LIBS} kritacommon)
+target_link_libraries(kritacolorsfilters kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritacolorsfilters )
 

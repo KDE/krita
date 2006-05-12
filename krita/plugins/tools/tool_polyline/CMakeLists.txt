@@ -11,7 +11,7 @@ kde4_add_plugin(kritatoolpolyline ${kritatoolpolyline_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolpolyline )
 
-target_link_libraries(kritatoolpolyline  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritatoolpolyline kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritatoolpolyline )
 
@@ -40,17 +40,17 @@ kde4_footer()
 #
 #kritatoolpolyline_la_SOURCES = \
 #        tool_polyline.cc \
-#	kis_tool_polyline.cc 
+#	kis_tool_polyline.cc
 #
 ## Install this plugin in the KDE modules directory
 #kde_module_LTLIBRARIES = kritatoolpolyline.la
 #
 #noinst_HEADERS = \
 #	tool_polyline.h \
-#	kis_tool_polyline.h 
+#	kis_tool_polyline.h
 #
 #kritatoolpolyline_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kritatoolpolyline_la_LIBADD =  ../../../libkritacommon.la 
+#kritatoolpolyline_la_LIBADD =  ../../../libkritacommon.la
 #
 #kritatoolpolyline_la_METASOURCES = AUTO
 #

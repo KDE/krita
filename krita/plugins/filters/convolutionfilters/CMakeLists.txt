@@ -5,10 +5,10 @@ kde4_header()
 
 ########### next target ###############
 
-set(kritaconvolutionfilters_PART_SRCS 
-   kis_custom_convolution_filter_configuration_widget.cc 
-   kis_custom_convolution_filter.cc 
-   convolutionfilters.cc 
+set(kritaconvolutionfilters_PART_SRCS
+   kis_custom_convolution_filter_configuration_widget.cc
+   kis_custom_convolution_filter.cc
+   convolutionfilters.cc
    kis_convolution_filter.cc )
 
 kde4_automoc(${kritaconvolutionfilters_PART_SRCS})
@@ -19,7 +19,7 @@ kde4_add_plugin(kritaconvolutionfilters ${kritaconvolutionfilters_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaconvolutionfilters )
 
-target_link_libraries(kritaconvolutionfilters  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritaconvolutionfilters kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritaconvolutionfilters )
 

@@ -15,7 +15,7 @@ kde4_add_plugin(kritadropshadow ${kritadropshadow_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadropshadow )
 
-target_link_libraries(kritadropshadow  ${KDE4_KDECORE_LIBS} kritacommon kritargb )
+target_link_libraries(kritadropshadow kritaui kritargb)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritadropshadow )
 

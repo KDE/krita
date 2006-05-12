@@ -10,70 +10,70 @@ endif(KUNITTEST_FOUND)
 
 ########### next target ###############
 
-set(libkritatile_SRCS 
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc 
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledhlineiterator.cc 
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tileddatamanager.cc 
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile.cc 
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilediterator.cc 
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledrectiterator.cc 
-	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_memento.cc 
+set(libkritatile_SRCS
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledvlineiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledhlineiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tileddatamanager.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tile.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilediterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tiledrectiterator.cc
+	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_memento.cc
 	${CMAKE_SOURCE_DIR}/krita/image/tiles/kis_tilemanager.cc
 )
 
 
-set(kritaimage_LIB_SRCS 
+set(kritaimage_LIB_SRCS
    ${libkritasdk_SRCS}
    ${libkritatile_SRCS}
-   kis_adjustment_layer.cc 
-   kis_alpha_mask.cc 
-   kis_autobrush_resource.cc 
-   kis_autogradient_resource.cc 
-   kis_background.cc 
-   kis_boundary.cc 
-   kis_brush.cc 
-   kis_command.cc 
-   kis_convolution_painter.cc 
-   kis_fill_painter.cc 
-   kis_filter.cc 
-   kis_filter_registry.cc 
-   kis_filter_strategy.cc 
-   kis_filter_configuration.cc 
-   kis_filter_config_widget.cc 
-   kis_gradient.cc 
-   kis_gradient_painter.cc 
-   kis_histogram.cc 
-   kis_image.cc 
-   kis_imagepipe_brush.cc 
-   kis_iterator.cc 
-   kis_iterators_pixel.cc 
-   kis_layer.cc 
-   kis_group_layer.cc 
-   kis_paint_layer.cc 
-   kis_meta_registry.cc 
-   kis_nameserver.cc 
-   kis_painter.cc 
-   kis_paintop.cc 
-   kis_paintop_registry.cc 
-   kis_palette.cc 
-   kis_pattern.cc 
-   kis_rect.cc 
-   kis_resource.cc 
-   kis_rotate_visitor.cc 
-   kis_selected_transaction.cc 
-   kis_selection.cc 
-   kis_strategy_move.cc 
-   kis_transaction.cc 
-   kis_transform_worker.cc 
-   kis_vec.cc 
-   kis_paint_device.cc 
-   kis_paint_device_iface.cc 
-   kis_image_iface.cc 
-   kis_basic_math_toolbox.cpp 
-   kis_math_toolbox.cpp 
-   kis_exif_info.cc 
-   kis_thread_pool.cc 
-   kis_exif_value.cc 
+   kis_adjustment_layer.cc
+   kis_alpha_mask.cc
+   kis_autobrush_resource.cc
+   kis_autogradient_resource.cc
+   kis_background.cc
+   kis_boundary.cc
+   kis_brush.cc
+   kis_command.cc
+   kis_convolution_painter.cc
+   kis_fill_painter.cc
+   kis_filter.cc
+   kis_filter_registry.cc
+   kis_filter_strategy.cc
+   kis_filter_configuration.cc
+   kis_filter_config_widget.cc
+   kis_gradient.cc
+   kis_gradient_painter.cc
+   kis_histogram.cc
+   kis_image.cc
+   kis_imagepipe_brush.cc
+   kis_iterator.cc
+   kis_iterators_pixel.cc
+   kis_layer.cc
+   kis_group_layer.cc
+   kis_paint_layer.cc
+   kis_meta_registry.cc
+   kis_nameserver.cc
+   kis_painter.cc
+   kis_paintop.cc
+   kis_paintop_registry.cc
+   kis_palette.cc
+   kis_pattern.cc
+   kis_rect.cc
+   kis_resource.cc
+   kis_rotate_visitor.cc
+   kis_selected_transaction.cc
+   kis_selection.cc
+   kis_strategy_move.cc
+   kis_transaction.cc
+   kis_transform_worker.cc
+   kis_vec.cc
+   kis_paint_device.cc
+   kis_paint_device_iface.cc
+   kis_image_iface.cc
+   kis_basic_math_toolbox.cpp
+   kis_math_toolbox.cpp
+   kis_exif_info.cc
+   kis_thread_pool.cc
+   kis_exif_value.cc
    kis_filter_strategy.h )
 
 kde4_automoc(${kritaimage_LIB_SRCS})
@@ -82,7 +82,7 @@ kde4_add_dcop_skels(kritaimage_LIB_SRCS kis_paint_device_iface.h kis_image_iface
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage  ${KDE4_KDECORE_LIBS} kritacolor kofficecore kopainter )
+target_link_libraries(kritaimage ${KDE4_KDECORE_LIBS} kritacolor kofficecore kopainter)
 
 set_target_properties(kritaimage PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kritaimage )
@@ -143,7 +143,7 @@ kde4_footer()
 #	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h
 #
 #libkritaimage_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)
-#libkritaimage_la_LIBADD = ../sdk/libkritasdk.la ../kritacolor/libkritacolor.la tiles/libkritatile.la $(OPENEXR_LIBS) $(LCMS_LIBS) $(LIB_KOFFICECORE) $(LIB_KOPAINTER) $(LIB_KDECORE) $(LIB_QT) $(OPENEXR_LIBS) 
+#libkritaimage_la_LIBADD = ../sdk/libkritasdk.la ../kritacolor/libkritacolor.la tiles/libkritatile.la $(OPENEXR_LIBS) $(LCMS_LIBS) $(LIB_KOFFICECORE) $(LIB_KOPAINTER) $(LIB_KDECORE) $(LIB_QT) $(OPENEXR_LIBS)
 #
 #if include_kunittest_tests
 #TESTSDIR = tests

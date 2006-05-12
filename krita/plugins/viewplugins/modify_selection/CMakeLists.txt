@@ -1,17 +1,17 @@
 kde4_header()
 
 set(kritamodifyselection_PART_SRCS
-    dlg_grow_selection.cc 
-    dlg_shrink_selection.cc 
-    dlg_border_selection.cc 
+    dlg_grow_selection.cc
+    dlg_shrink_selection.cc
+    dlg_border_selection.cc
     modify_selection.cc
     )
 
 kde4_automoc(${kritamodifyselection_PART_SRCS})
 
 kde4_add_ui3_files(kritamodifyselection_PART_SRCS
-    wdg_grow_selection.ui 
-    wdg_shrink_selection.ui 
+    wdg_grow_selection.ui
+    wdg_shrink_selection.ui
     wdg_border_selection.ui
     )
 
@@ -19,7 +19,7 @@ kde4_add_plugin(kritamodifyselection ${kritamodifyselection_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamodifyselection )
 
-target_link_libraries(kritamodifyselection  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritamodifyselection kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritamodifyselection )
 
@@ -58,6 +58,6 @@ kde4_footer()
 #kde_module_LTLIBRARIES = kritamodifyselection.la
 #
 #kritamodifyselection_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kritamodifyselection_la_LIBADD =  ../../../libkritacommon.la 
+#kritamodifyselection_la_LIBADD =  ../../../libkritacommon.la
 #
 #kritamodifyselection_la_METASOURCES = AUTO

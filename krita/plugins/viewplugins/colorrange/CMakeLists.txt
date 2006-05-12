@@ -15,7 +15,7 @@ kde4_add_plugin(kritacolorrange ${kritacolorrange_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorrange )
 
-target_link_libraries(kritacolorrange  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritacolorrange kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritacolorrange )
 

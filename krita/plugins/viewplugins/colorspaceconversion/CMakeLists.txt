@@ -15,7 +15,7 @@ kde4_add_plugin(kritacolorspaceconversion ${kritacolorspaceconversion_PART_SRCS}
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorspaceconversion )
 
-target_link_libraries(kritacolorspaceconversion  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritacolorspaceconversion kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritacolorspaceconversion )
 

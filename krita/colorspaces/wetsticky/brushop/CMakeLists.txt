@@ -1,6 +1,6 @@
 kde4_header()
 
-set(kritawsbrushpaintop_PART_SRCS 
+set(kritawsbrushpaintop_PART_SRCS
     wsbrushpaintop_plugin.cc
     kis_wsbrushop.cc
     )
@@ -11,7 +11,7 @@ kde4_add_plugin(kritawsbrushpaintop ${kritawsbrushpaintop_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritawsbrushpaintop )
 
-target_link_libraries(kritawsbrushpaintop  ${KDE4_KDECORE_LIBS} kritacommon kopainter kofficecore )
+target_link_libraries(kritawsbrushpaintop kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritawsbrushpaintop )
 

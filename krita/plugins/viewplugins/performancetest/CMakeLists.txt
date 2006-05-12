@@ -15,7 +15,7 @@ kde4_add_plugin(kritaperftest ${kritaperftest_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaperftest )
 
-target_link_libraries(kritaperftest  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritaperftest kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritaperftest )
 

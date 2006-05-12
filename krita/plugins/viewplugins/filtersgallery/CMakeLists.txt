@@ -13,7 +13,7 @@ kde4_add_plugin(kritafiltersgallery ${kritafiltersgallery_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritafiltersgallery )
 
-target_link_libraries(kritafiltersgallery  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritafiltersgallery kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritafiltersgallery )
 
@@ -51,6 +51,6 @@ kde4_footer()
 #kde_services_DATA = kritafiltersgallery.desktop
 #
 #kritafiltersgallery_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kritafiltersgallery_la_LIBADD =  ../../../libkritacommon.la 
+#kritafiltersgallery_la_LIBADD =  ../../../libkritacommon.la
 #
 #kritafiltersgallery_la_METASOURCES = AUTO

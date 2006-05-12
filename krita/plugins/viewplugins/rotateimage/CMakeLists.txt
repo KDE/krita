@@ -15,7 +15,7 @@ kde4_add_plugin(kritarotateimage ${kritarotateimage_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritarotateimage )
 
-target_link_libraries(kritarotateimage  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritarotateimage kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritarotateimage )
 

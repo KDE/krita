@@ -1,7 +1,4 @@
-kde4_header()
-
 set(kritaui_LIB_SRCS
-   ${libkritasdk_SRCS}
    kis_histogram_view.cc
    imageviewer.cc
    kcurve.cc
@@ -120,15 +117,7 @@ kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS})
 
-target_link_libraries(kritaui
-	${KDE4_KDECORE_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
-	kritaimage
-	kritacolor
-	kofficeui
-	kopainter
-	kopalette
-	)
+target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} kritaimage kofficeui kopalette)
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui
@@ -191,10 +180,6 @@ install_files( /include FILES
     kis_filters_listview.h
     kis_input_device.h
     )
-
-kde4_footer()
-
-
 
 #original Makefile.am contents follow:
 

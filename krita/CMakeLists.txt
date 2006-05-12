@@ -1,4 +1,3 @@
-kde4_header()
 project(krita)
 
 find_package(LCMS)
@@ -27,9 +26,9 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
 if (SHOULD_BUILD_KRITA)
-    
+
     macro_optional_find_package(OpenGL)
-    
+
     set(HAVE_OPENGL 0)
 
     if(OPENGL_FOUND)
@@ -104,7 +103,7 @@ if (SHOULD_BUILD_KRITA)
     if(HAVE_XINPUTEXT)
         include_directories(${X11_Xinput_INCLUDE_PATH})
     endif(HAVE_XINPUTEXT)
-    
+
     add_subdirectory( sdk )
     add_subdirectory( kritacolor )
     add_subdirectory( image )
@@ -114,49 +113,47 @@ if (SHOULD_BUILD_KRITA)
     add_subdirectory( plugins )
     add_subdirectory( data )
     add_subdirectory( pics )
-    
+
     ########### next target ###############
-    
-    set(kritapart_PART_SRCS krita_part_init.cc )
-    
+
+    set(kritapart_PART_SRCS krita_part_init.cc)
+
     kde4_automoc(${kritapart_PART_SRCS})
-    
+
     kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
-    
+
     kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapart )
-    
-    target_link_libraries(kritapart  ${KDE4_KDECORE_LIBS} kritacommon )
-    
-    install_targets(${PLUGIN_INSTALL_DIR} kritapart )
-    
-    
+
+    target_link_libraries(kritapart kritaui)
+
+    install_targets(${PLUGIN_INSTALL_DIR} kritapart)
+
+
     ########### next target ###############
-    
-    set(krita_KDEINIT_SRCS main.cc )
-    
+
+    set(krita_KDEINIT_SRCS main.cc)
+
     kde4_automoc(${krita_KDEINIT_SRCS})
-    
-    kde4_add_kdeinit_executable( krita ${krita_KDEINIT_SRCS})
-    
-    target_link_libraries(kdeinit_krita  ${KDE4_KDECORE_LIBS} kofficecore )
-    
-    install_targets(${LIB_INSTALL_DIR} kdeinit_krita )
-    
-    target_link_libraries( krita kdeinit_krita )
-    install_targets(/bin krita )
-    
+
+    kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
+
+    target_link_libraries(kdeinit_krita kritaui)
+
+    install_targets(${LIB_INSTALL_DIR} kdeinit_krita)
+
+    target_link_libraries(krita kdeinit_krita)
+
+    install_targets(/bin krita)
+
     ########### install files ###############
-    
+
     install_files( ${XDG_APPS_DIR} FILES  krita.desktop )
     install_files( ${MIME_INSTALL_DIR}/application FILES  )
     install_files( ${SERVICES_INSTALL_DIR} FILES  kritapart.desktop )
     install_files( ${DATA_INSTALL_DIR}/krita FILES  krita.rc krita_readonly.rc )
-    
+
     #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins kritacolor/colorspaces image/tiles  )
 endif (SHOULD_BUILD_KRITA)
-
-kde4_footer()
-
 
 #original Makefile.am contents follow:
 
@@ -189,7 +186,7 @@ kde4_footer()
 #rcdir = $(kde_datadir)/krita
 #rc_DATA = krita.rc krita_readonly.rc
 #
-#SUBDIRS = sdk kritacolor image ui . dtd colorspaces plugins data pics 
+#SUBDIRS = sdk kritacolor image ui . dtd colorspaces plugins data pics
 ## Needed to compile libkritacommon.la, which has no source files to itself
 ## but everything in static libs.
 #dummy.cc:

@@ -15,7 +15,7 @@ kde4_add_plugin(kritascreenshot ${kritascreenshot_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritascreenshot )
 
-target_link_libraries(kritascreenshot  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritascreenshot kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritascreenshot )
 
@@ -49,7 +49,7 @@ kde4_footer()
 #noinst_HEADERS = screenshot.h ksnapshot.h regiongrabber.h ksnapshotwidget.h ksnapshotwidget.ui.h
 #
 #kritascreenshot_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kritascreenshot_la_LIBADD =  ../../../libkritacommon.la 
+#kritascreenshot_la_LIBADD =  ../../../libkritacommon.la
 #
 #kde_services_DATA = kritascreenshot.desktop
 #

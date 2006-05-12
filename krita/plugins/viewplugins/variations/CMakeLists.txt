@@ -15,7 +15,7 @@ kde4_add_plugin(kritavariations ${kritavariations_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritavariations )
 
-target_link_libraries(kritavariations  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritavariations kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritavariations )
 
@@ -47,7 +47,7 @@ kde4_footer()
 #
 #kde_module_LTLIBRARIES = kritavariations.la
 #
-#kritavariations_la_SOURCES = variations.cc dlg_variations.cc wdg_variations.ui 
+#kritavariations_la_SOURCES = variations.cc dlg_variations.cc wdg_variations.ui
 #noinst_HEADERS = wdg_variations.h
 #
 #kritavariations_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

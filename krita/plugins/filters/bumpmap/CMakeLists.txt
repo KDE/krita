@@ -12,7 +12,7 @@ kde4_add_plugin(kritabumpmap ${kritabumpmap_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritabumpmap )
 
-target_link_libraries(kritabumpmap  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritabumpmap kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritabumpmap )
 

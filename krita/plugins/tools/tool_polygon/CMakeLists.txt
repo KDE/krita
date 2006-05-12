@@ -1,8 +1,8 @@
 kde4_header()
 
-set(kritatoolpolygon_PART_SRCS 
+set(kritatoolpolygon_PART_SRCS
     tool_polygon.cc
-    kis_tool_polygon.cc 
+    kis_tool_polygon.cc
     )
 
 kde4_automoc(${kritatoolpolygon_PART_SRCS})
@@ -11,7 +11,7 @@ kde4_add_plugin(kritatoolpolygon ${kritatoolpolygon_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolpolygon )
 
-target_link_libraries(kritatoolpolygon  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritatoolpolygon kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritatoolpolygon )
 
@@ -40,14 +40,14 @@ kde4_footer()
 #
 #kritatoolpolygon_la_SOURCES = \
 #        tool_polygon.cc \
-#	kis_tool_polygon.cc 
+#	kis_tool_polygon.cc
 #
 ## Install this plugin in the KDE modules directory
 #kde_module_LTLIBRARIES = kritatoolpolygon.la
 #
 #noinst_HEADERS = \
 #	tool_polygon.h \
-#	kis_tool_polygon.h 
+#	kis_tool_polygon.h
 #
 #kritatoolpolygon_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 #kritatoolpolygon_la_LIBADD =  ../../../libkritacommon.la

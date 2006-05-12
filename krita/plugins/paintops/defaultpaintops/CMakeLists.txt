@@ -1,6 +1,6 @@
 kde4_header()
 
-set(kritadefaultpaintops_PART_SRCS 
+set(kritadefaultpaintops_PART_SRCS
 	defaultpaintops_plugin.cc
 	kis_airbrushop.cc
 	kis_brushop.cc
@@ -15,7 +15,7 @@ kde4_add_plugin(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadefaultpaintops )
 
-target_link_libraries(kritadefaultpaintops  ${KDE4_KDECORE_LIBS} kritacommon kopainter kofficecore )
+target_link_libraries(kritadefaultpaintops kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritadefaultpaintops )
 
@@ -23,10 +23,10 @@ install_targets(${PLUGIN_INSTALL_DIR} kritadefaultpaintops )
 ########### install files ###############
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritadefaultpaintops.desktop )
-install_files( ${DATA_INSTALL_DIR}/krita/images FILES 
-    airbrush.png 
-    paintbrush.png 
-    eraser.png 
+install_files( ${DATA_INSTALL_DIR}/krita/images FILES
+    airbrush.png
+    paintbrush.png
+    eraser.png
     pencil.png )
 
 kde4_footer()

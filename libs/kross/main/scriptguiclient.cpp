@@ -34,8 +34,6 @@
 #include <kstandarddirs.h>
 
 #include <kio/netaccess.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace Kross::Api;
 
@@ -146,7 +144,7 @@ void ScriptGUIClient::reloadInstalledScripts()
     if(installedcollection)
         installedcollection->clear();
 
-    Q3CString partname = d->guiclient->instance()->instanceName();
+    QByteArray partname = d->guiclient->instance()->instanceName();
     QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*/*.rc");
     //files.sort();
     for(QStringList::iterator it = files.begin(); it != files.end(); ++it)
@@ -162,7 +160,7 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
         return false;
     }
 
-    Q3CString partname = d->guiclient->instance()->instanceName();
+    QByteArray partname = d->guiclient->instance()->instanceName();
     QString destination = KGlobal::dirs()->saveLocation("data", partname + "/scripts/", true);
     //QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts", true);
     if(destination.isNull()) {

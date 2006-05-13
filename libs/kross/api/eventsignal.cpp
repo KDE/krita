@@ -23,12 +23,10 @@
 #include "qtobject.h"
 
 #include <QMetaObject>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace Kross::Api;
 
-EventSignal::EventSignal(const QString& name, Object* parent, QObject* sender, Q3CString signal)
+EventSignal::EventSignal(const QString& name, Object* parent, QObject* sender, QByteArray signal)
     : Event<EventSignal>(name, parent)
     , m_sender(sender)
     , m_signal(signal) //QObject::normalizeSignalSlot(signal)

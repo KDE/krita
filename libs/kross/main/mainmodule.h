@@ -32,8 +32,6 @@
 #include <QString>
 #include <QVariant>
 #include <QObject>
-//Added by qt3to4:
-#include <Q3CString>
 #include <koffice_export.h>
 #include <ksharedptr.h>
 #include <kaction.h>

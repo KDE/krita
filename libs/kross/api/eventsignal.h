@@ -27,8 +27,6 @@
 //#include <QSignalMapper>
 //#include <qguardedptr.h>
 #include <QObject>
-//Added by qt3to4:
-#include <Q3CString>
 #include <ksharedptr.h>
 
 #include "event.h"
@@ -52,7 +50,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            EventSignal(const QString& name, Object* parent, QObject* sender, Q3CString signal);
+            EventSignal(const QString& name, Object* parent, QObject* sender, QByteArray signal);
 
             /**
              * Destructor.
@@ -72,7 +70,7 @@ namespace Kross { namespace Api {
 */
         private:
             QObject* m_sender;
-            Q3CString m_signal;
+            QByteArray m_signal;
     };
 
 }}

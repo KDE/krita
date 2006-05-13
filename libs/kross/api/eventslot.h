@@ -22,8 +22,6 @@
 
 #include <QString>
 #include <QObject>
-//Added by qt3to4:
-#include <Q3CString>
 #include <ksharedptr.h>
 
 #include "event.h"
@@ -56,7 +54,7 @@ namespace Kross { namespace Api {
              * \param slot The slot of the receiver which this
              *       EventSlot points to.
              */
-            EventSlot(const QString& name, Object* parent, QObject* receiver, Q3CString slot);
+            EventSlot(const QString& name, Object* parent, QObject* receiver, QByteArray slot);
 
             /**
              * Destructor.
@@ -118,7 +116,7 @@ namespace Kross { namespace Api {
 */
         private:
             QObject* m_receiver;
-            Q3CString m_slot;
+            QByteArray m_slot;
     };
 
 }}

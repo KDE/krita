@@ -24,7 +24,6 @@
 #include <QVariant>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 #include <koffice_export.h>
 
 #include "object.h"

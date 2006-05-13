@@ -128,14 +128,13 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     lbLandscape->setPixmap( QPixmap( UserIcon( "koLandscape" ) ) );
     lbLandscape->setMaximumWidth( lbLandscape->pixmap()->width() );
 
-    m_orientGroup->addButton( new QRadioButton( i18n("&Portrait"), m_orientBox ) );
-    m_orientGroup->addButton( new QRadioButton( i18n("La&ndscape"), m_orientBox ) );
+    m_orientGroup->addButton( new QRadioButton( i18n("&Portrait"), m_orientBox ), 0 );
+    m_orientGroup->addButton( new QRadioButton( i18n("La&ndscape"), m_orientBox ), 1 );
 
     connect( m_orientGroup, SIGNAL (clicked (int)), this, SLOT( orientationChanged(int) ));
 
     // --------------- page margins ---------------
     QGroupBox *marginsFrame = new QGroupBox( i18n( "Margins" ), this );
-    marginsFrame->layout()->setMargin( KDialog::marginHint() );
     grid1->addWidget( marginsFrame, 3, 0 );
 
     QGridLayout *marginsLayout = new QGridLayout( marginsFrame );

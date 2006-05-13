@@ -159,7 +159,7 @@ PixmapEdit::selectPixmapFileName()
 		emit valueChanged(this);
 	}
 #endif*/
-	QString caption( i18n("Insert Image From File (for \"%1\" property)").arg(property()->caption()) );
+	QString caption( i18n("Insert Image From File (for \"%1\" property)", property()->caption()) );
 #ifdef Q_WS_WIN
 	QString recentDir;
 	QString fileName = Q3FileDialog::getOpenFileName(

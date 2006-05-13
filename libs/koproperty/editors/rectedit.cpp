@@ -62,7 +62,7 @@ RectEdit::setValue(const QVariant &value, bool emitChange)
 	m_edit->selectAll();
 	m_edit->setText(QString(RECTEDIT_MASK).arg(value.toRect().x()).
 		arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
-	this->setToolTip( i18n("Position: %1, %2\nSize: %3 x %4").arg(value.toRect().x()).
+	this->setToolTip( i18n("Position: %1, %2\nSize: %3 x %4", value.toRect().x()).
 		arg(value.toRect().y()).arg(value.toRect().width()).arg(value.toRect().height()));
 
 	if (emitChange)

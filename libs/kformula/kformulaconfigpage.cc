@@ -232,8 +232,8 @@ void ConfigurePage::apply()
 
         if ( missing.count() > 0 ) {
             QString text = i18n( "The fonts '%1' are missing."
-                                 " Do you want to change the font style anyway?" )
-                           .arg( missing.join( "', '" ) );
+                                 " Do you want to change the font style anyway?"
+                           ,missing.join( "', '" ) );
             if ( KMessageBox::warningContinueCancel( m_view, text ) ==
                  KMessageBox::Cancel ) {
                 return;
@@ -247,8 +247,8 @@ void ConfigurePage::apply()
 
         if ( missing.count() > 0 && !CMStyle::m_installed) {
             QString text = i18n( "The fonts '%1' are missing."
-                                 " Do you want to change the font style anyway?" )
-                           .arg( missing.join( "', '" ) );
+                                 " Do you want to change the font style anyway?"
+                           , missing.join( "', '" ) );
             if ( KMessageBox::warningContinueCancel( m_view, text ) ==
                  KMessageBox::Cancel ) {
                 return;

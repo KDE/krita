@@ -128,7 +128,7 @@ StringListEdit::showEditor()
 	KDialogBase dialog(this->topLevelWidget(), "stringlist_dialog", true, i18n("Edit List of Items"),
 	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
-	KEditListBox *edit = new KEditListBox(i18n("Contents of %1").arg(property()->caption()), &dialog, "editlist");
+	KEditListBox *edit = new KEditListBox(i18n("Contents of %1", property()->caption()), &dialog, "editlist");
 	dialog.setMainWidget(edit);
 	edit->insertStringList(m_list);
 

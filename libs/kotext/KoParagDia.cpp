@@ -1624,9 +1624,9 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
         m_toplimit=9999;
     } else {
         m_toplimit=frameWidth;
-        length=i18n("Frame width: %1 %2")
-		.arg(KoUnit::toUserStringValue(frameWidth,m_unit))
-		.arg(KoUnit::unitName(m_unit));
+        length=i18n("Frame width: %1 %2",
+		KoUnit::toUserStringValue(frameWidth,m_unit),
+		KoUnit::unitName(m_unit));
         frameWidth=KoUnit::toUserValue(frameWidth,m_unit);
     }
     Q3VBoxLayout* Form1Layout = new Q3VBoxLayout( this );

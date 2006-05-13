@@ -158,7 +158,7 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
     krossdebug( QString("Install script package: %1").arg(scriptpackagefile) );
     KTar archive( scriptpackagefile );
     if(! archive.open(QIODevice::ReadOnly)) {
-        KMessageBox::sorry(0, i18n("Could not read the package \"%1\".").arg(scriptpackagefile));
+        KMessageBox::sorry(0, i18n("Could not read the package \"%1\".", scriptpackagefile));
         return false;
     }
 
@@ -175,12 +175,12 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
 
     if( QDir(destination).exists() ) {
         if( KMessageBox::warningContinueCancel(0,
-            i18n("A script package with the name \"%1\" already exists. Replace this package?" ).arg(packagename),
+            i18n("A script package with the name \"%1\" already exists. Replace this package?" , packagename),
             i18n("Replace")) != KMessageBox::Continue )
                 return false;
 
         if(! KIO::NetAccess::del(destination, 0) ) {
-            KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".").arg(destination));
+            KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".", destination));
             return false;
         }
     }
@@ -196,7 +196,7 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
 bool ScriptGUIClient::uninstallScriptPackage(const QString& scriptpackagepath)
 {
     if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
-        KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".").arg(scriptpackagepath));
+        KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".", scriptpackagepath));
         return false;
     }
     reloadInstalledScripts();

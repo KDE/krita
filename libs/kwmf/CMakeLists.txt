@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOFFICECORE_INCLUDES} )
 
@@ -39,7 +39,7 @@ install_targets(${LIB_INSTALL_DIR} kowmf )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

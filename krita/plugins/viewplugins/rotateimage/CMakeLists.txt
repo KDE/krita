@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritarotateimage )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  rotateimage.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritarotateimage.desktop )
 
-kde4_footer()
+
 
 
 

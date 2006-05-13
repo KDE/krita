@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritatoolcrop_PART_SRCS
     tool_crop.cc
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatoolcrop )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_crop_cursor.png )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolcrop.desktop )
 
-kde4_footer()
+
 
 
 

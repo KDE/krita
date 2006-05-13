@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritacolorsfilters_PART_SRCS
     colorsfilters.cc
@@ -26,7 +26,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritacolorsfilters )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritacolorsfilter.desktop )
 
-kde4_footer()
+
 
 
 

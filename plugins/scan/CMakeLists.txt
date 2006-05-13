@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOFFICECORE_INCLUDES} )
 
@@ -24,7 +24,7 @@ install_files( ${DATA_INSTALL_DIR}/kpresenter/kpartplugins FILES  scan-kpresente
 install_files( ${DATA_INSTALL_DIR}/krita/kpartplugins FILES  scan-krita.rc )
 install_files( ${DATA_INSTALL_DIR}/kword/kpartplugins FILES  scan-kword.rc )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty ${KOFFICECORE_INCLUDES} )
 
@@ -16,7 +16,7 @@ target_link_libraries(propertytest  ${KDE4_KDECORE_LIBS} koproperty )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

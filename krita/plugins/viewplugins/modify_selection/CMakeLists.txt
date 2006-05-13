@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritamodifyselection_PART_SRCS
     dlg_grow_selection.cc
@@ -29,7 +29,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritamodifyselection )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  modify_selection.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritamodifyselection.desktop )
 
-kde4_footer()
+
 
 
 

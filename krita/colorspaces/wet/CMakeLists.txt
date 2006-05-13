@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -33,7 +33,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritawetplugin )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  wetplugin.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritawetplugin.desktop )
 
-kde4_footer()
+
 
 
 

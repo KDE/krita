@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -8,7 +8,7 @@ kde4_header()
 install_files( ${DATA_INSTALL_DIR}/kofficewidgets/pics FILES  kounitdoublecombobox.png kounitdoublelineedit.png  	kounitdoublespinbox2.png kounitdoublespincombobox.png )
 install_files( ${DATA_INSTALL_DIR}/koffice/pics FILES  koRulerFirst.png koRulerLeft.png koffice-logo.png  	koKoolBarDown.png koKoolBarUp.png  	koPortrait.png koLandscape.png  )
 
-kde4_footer()
+
 
 
 

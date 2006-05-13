@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritatoolpolygon_PART_SRCS
     tool_polygon.cc
@@ -21,7 +21,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatoolpolygon )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_polygon_cursor.png  	tool_polygon.png )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolpolygon.desktop )
 
-kde4_footer()
+
 
 
 

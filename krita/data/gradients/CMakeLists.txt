@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -87,7 +87,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/gradients FILES
     )
 
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritatoolselectsimilar_PART_SRCS
     selectsimilar.cc
@@ -21,7 +21,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatoolselectsimilar )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_similar_selection.png  	tool_similar_selection_plus_cursor.png  	tool_similar_selection_minus_cursor.png )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolselectsimilar.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( editors )
 add_subdirectory( test )
@@ -54,7 +54,7 @@ install_targets(${LIB_INSTALL_DIR} koproperty )
 
 install_files( ${DATA_INSTALL_DIR}/koffice/icons FILES  )
 
-kde4_footer()
+
 
 
 

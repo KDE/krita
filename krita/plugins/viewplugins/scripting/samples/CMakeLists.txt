@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( python )
 add_subdirectory( ruby )
@@ -9,7 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/scriptingcore/main ${KDE4_INCLUDES
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

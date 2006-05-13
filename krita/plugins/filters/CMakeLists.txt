@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( bumpmap )
 add_subdirectory( cimg )
@@ -20,7 +20,7 @@ add_subdirectory( colorsfilters )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

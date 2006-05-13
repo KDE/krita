@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritaimagesize_PART_SRCS
     imagesize.cc
@@ -28,7 +28,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaimagesize )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  imagesize.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritaimagesize.desktop )
 
-kde4_footer()
+
 
 #original Makefile.am contents follow:
 

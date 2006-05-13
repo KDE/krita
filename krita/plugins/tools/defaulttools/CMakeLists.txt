@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
@@ -34,7 +34,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritadefaulttools )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_rectangle_cursor.png  	tool_ellipse_cursor.png  	tool_line_cursor.png  	tool_freehand_cursor.png  	tool_duplicate_cursor.png  	tool_fill_cursor.png  	tool_text_cursor.png  	tool_gradient_cursor.png          tool_gradient.png  	tool_line.png          tool_rectangle.png  	tool_ellipse.png          tool_pan.png          tool_freehand.png  	tool_text.png          openhand_cursor.xpm          closedhand_cursor.xpm  	tool_zoom_plus_cursor.png  	tool_zoom_minus_cursor.png )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritadefaulttools.desktop )
 
-kde4_footer()
+
 
 
 

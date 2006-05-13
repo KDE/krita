@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( hyphdicts )
 
@@ -26,7 +26,7 @@ endif(KDE4_BUILD_TESTS)
 
 install_files( ${DATA_INSTALL_DIR}/koffice/hyphdicts FILES  )
 
-kde4_footer()
+
 
 
 

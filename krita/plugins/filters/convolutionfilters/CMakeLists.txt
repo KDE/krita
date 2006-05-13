@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -28,7 +28,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaconvolutionfilters )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritaconvolutionfilters.desktop )
 
-kde4_footer()
+
 
 
 

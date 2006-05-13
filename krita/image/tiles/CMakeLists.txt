@@ -1,4 +1,4 @@
-kde4_header()
+
 
 if(KUNITTEST_FOUND)
     add_subdirectory(tests)
@@ -11,7 +11,7 @@ endif(KUNITTEST_FOUND)
 
 install_files( /include FILES  kis_tileddatamanager.h )
 
-kde4_footer()
+
 
 
 

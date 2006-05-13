@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -72,7 +72,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/brushes FILES
     vine.gih
     )
 
-kde4_footer()
+
 
 
 

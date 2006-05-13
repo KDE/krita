@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOSTORE_INCLUDES} )
 
@@ -29,7 +29,7 @@ install_targets(${LIB_INSTALL_DIR} kstore )
 
 install_files( /include FILES  KoStore.h KoStoreDevice.h KoXmlWriter.h )
 
-kde4_footer()
+
 
 
 

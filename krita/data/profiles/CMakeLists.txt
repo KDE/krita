@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -27,7 +27,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/profiles FILES
     ycc709.icm
     )
 
-kde4_footer()
+
 
 
 

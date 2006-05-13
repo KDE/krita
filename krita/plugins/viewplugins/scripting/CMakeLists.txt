@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(
 	BEFORE
@@ -31,7 +31,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritascripting_plug )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  scripting.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritascripting.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( RestrictedPython )
 
@@ -9,7 +9,7 @@ add_subdirectory( RestrictedPython )
 
 install_files( ${DATA_INSTALL_DIR}/kross/python FILES  gui.py )
 
-kde4_footer()
+
 
 
 

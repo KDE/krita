@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( colorspaces )
 if(KUNITTEST_FOUND)
@@ -58,7 +58,7 @@ install_targets(${LIB_INSTALL_DIR} kritacolor )
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES  krita_colorspace.desktop )
 install_files( /include FILES  kis_channelinfo.h      kis_color.h      kis_colorspace.h      kis_composite_op.h      kis_profile.h      kis_histogram_producer.h      kis_basic_histogram_producers.h kis_u8_base_colorspace.h kis_u16_base_colorspace.h kis_f16half_base_colorspace.h kis_f32_base_colorspace.h )
 
-kde4_footer()
+
 
 
 

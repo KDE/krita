@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -36,7 +36,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krita_gray_u16_plugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_gray_u16_plugin.desktop )
 
-kde4_footer()
+
 
 
 

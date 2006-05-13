@@ -1,4 +1,4 @@
-kde4_header()
+
 macro_optional_find_package(KROSS)
 
 add_subdirectory( store )
@@ -21,7 +21,7 @@ endif(KOFFICE_ENABLE_SCRIPTING)
 
 #kde4_create_doxygen_docs( REFERENCES dcop kprint kdeui kparts  )
 
-kde4_footer()
+
 
 
 

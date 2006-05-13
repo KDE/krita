@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaperftest )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  perftest.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritaperftest.desktop )
 
-kde4_footer()
+
 
 
 

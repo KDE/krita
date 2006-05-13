@@ -1,4 +1,4 @@
-kde4_header()
+
 
 if(KDE4_BUILD_TESTS)
 
@@ -38,7 +38,7 @@ target_link_libraries(kovariabletest kotext)
 
 endif(KDE4_BUILD_TESTS)
 
-kde4_footer()
+
 
 
 

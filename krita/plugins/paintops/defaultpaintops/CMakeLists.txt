@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritadefaultpaintops_PART_SRCS
 	defaultpaintops_plugin.cc
@@ -29,7 +29,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/images FILES
     eraser.png
     pencil.png )
 
-kde4_footer()
+
 
 
 

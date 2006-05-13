@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritaexample_PART_SRCS example.cc )
 
@@ -18,7 +18,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaexample )
 install_files( ${DATA_INSTALL_DIR}/krita/kritaplugins FILES  )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritaexample.desktop )
 
-kde4_footer()
+
 
 
 

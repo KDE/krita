@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ kde4_install_icons(${DATA_INSTALL_DIR}/krita/icons crystalsvg)
 install_files( ${DATA_INSTALL_DIR}/krita/templates/cmyk/.source FILES  white_2000x800.kra )
 install_files( ${DATA_INSTALL_DIR}/krita/templates/cmyk FILES  .directory white_2000x800.desktop )
 
-kde4_footer()
+
 
 
 

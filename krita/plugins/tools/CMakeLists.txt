@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( defaulttools )
 add_subdirectory( selectiontools )
@@ -16,7 +16,7 @@ add_subdirectory( tool_transform )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

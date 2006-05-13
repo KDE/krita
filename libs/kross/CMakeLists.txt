@@ -1,4 +1,4 @@
-kde4_header()
+
 macro_optional_find_package(PythonLibs)
 macro_optional_find_package(RUBY)
 include_directories( ${KOFFICECORE_INCLUDES} )
@@ -25,7 +25,7 @@ endif(RUBY_INCLUDE_PATH)
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

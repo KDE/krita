@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${RUBY_INCLUDE_PATH} ${CMAKE_SOURCE_DIR}/lib/kross ${KDE4_INCLUDES} )
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krossruby )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

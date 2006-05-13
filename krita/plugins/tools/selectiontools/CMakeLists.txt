@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritaselectiontools_PART_SRCS
     selection_tools.cc
@@ -27,7 +27,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaselectiontools )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_rect_selection.png  	tool_eraser_selection.png  	tool_brush_selection.png   	tool_contiguous_selection.png  	tool_elliptical_selection.png  	tool_outline_selection.png  	tool_polygonal_selection.png  	tool_rectangular_selection_cursor.png  	tool_eraser_selection_cursor.png  	tool_brush_selection_cursor.png   	tool_contiguous_selection_cursor.png  	tool_elliptical_selection_cursor.png  	tool_outline_selection_cursor.png  	tool_polygonal_selection_cursor.png )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritaselectiontools.desktop )
 
-kde4_footer()
+
 
 
 

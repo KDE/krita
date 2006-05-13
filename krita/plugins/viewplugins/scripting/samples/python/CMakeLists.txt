@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -8,7 +8,7 @@ kde4_header()
 install_files( ${DATA_INSTALL_DIR}/krita/scripts/invertpython FILES  invert.py invertpython.rc )
 install_files( ${DATA_INSTALL_DIR}/krita/scripts/reshapehisto FILES  reshapehisto.py reshapehisto.rc )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 
@@ -71,7 +71,7 @@ endif(KDE4_BUILD_TESTS)
 
 ########### install files ###############
 
-kde4_footer()
+
 
 
 

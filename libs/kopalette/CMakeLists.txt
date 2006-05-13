@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 include_directories( ${KOFFICECORE_INCLUDES} )
@@ -29,7 +29,7 @@ install_targets(${LIB_INSTALL_DIR} kopalette )
 
 install_files( /include FILES  kopalettemanager.h  )
 
-kde4_footer()
+
 
 
 

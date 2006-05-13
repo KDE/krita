@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritafiltersgallery_PART_SRCS
     filters_gallery.cc
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritafiltersgallery )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  kritafiltersgallery.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritafiltersgallery.desktop )
 
-kde4_footer()
+
 
 
 

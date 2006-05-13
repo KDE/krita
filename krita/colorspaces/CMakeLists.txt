@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( rgb_u8 )
 add_subdirectory( rgb_u16 )
@@ -19,7 +19,7 @@ endif(OPENEXR_FOUND)
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

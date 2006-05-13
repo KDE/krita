@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( defaultpaintops )
 add_subdirectory( smearybrush )
@@ -9,7 +9,7 @@ add_subdirectory( smearybrush )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

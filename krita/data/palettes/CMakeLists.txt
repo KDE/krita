@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -53,7 +53,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/palettes FILES
     Web.gpl
     )
 
-kde4_footer()
+
 
 
 

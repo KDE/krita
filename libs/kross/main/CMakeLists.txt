@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/libs/kross/ ${CMAKE_SOURCE_DIR}/libs/kross/api/ )
 include_directories( ${KOFFICECORE_INCLUDES} )
@@ -28,4 +28,4 @@ install_targets(${LIB_INSTALL_DIR} krossmain )
 
 install_files( /include/kross/main FILES  mainmodule.h      manager.h      scriptaction.h      scriptcontainer.h      scriptguiclient.h      wdgscriptsmanager.h  )
 
-kde4_footer()
+

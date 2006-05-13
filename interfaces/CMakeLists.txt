@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOFFICECORE_INCLUDES} )
 
@@ -23,7 +23,7 @@ install_files( /include FILES  koChart.h )
 
 
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritawsbrushpaintop_PART_SRCS
     wsbrushpaintop_plugin.cc
@@ -21,7 +21,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritawsbrushpaintop )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritawsbrushpaintop.desktop )
 install_files(  FILES  wetpaintbrush.png )
 
-kde4_footer()
+
 
 
 

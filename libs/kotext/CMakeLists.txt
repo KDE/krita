@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOFFICEUI_INCLUDES} )
 
@@ -96,7 +96,7 @@ install_targets(${LIB_INSTALL_DIR} kotext )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

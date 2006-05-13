@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritahistorydocker_PART_SRCS historydocker.cc )
 
@@ -16,7 +16,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritahistorydocker )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

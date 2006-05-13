@@ -1,4 +1,4 @@
-kde4_header()
+
 
 if(KUNITTEST_FOUND)
     add_subdirectory(tests)
@@ -39,7 +39,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krita_rgb_f32_plugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_rgb_f32_plugin.desktop )
 
-kde4_footer()
+
 
 
 

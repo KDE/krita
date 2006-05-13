@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( tiles )
 
@@ -92,7 +92,7 @@ install_targets(${LIB_INSTALL_DIR} kritaimage )
 
 install_files( /include FILES  kis_adjustment_layer.h kis_alpha_mask.h  	kis_autobrush_resource.h kis_autogradient_resource.h kis_background.h kis_boundary.h kis_brush.h  	kis_command.h kis_convolution_painter.h kis_fill_painter.h kis_filter.h  	kis_filter_registry.h kis_gradient.h kis_gradient_painter.h kis_histogram.h kis_image.h  	kis_image_iface.h kis_imagepipe_brush.h kis_iterator.h kis_iterators_pixel.h  	kis_iteratorpixeltrait.h kis_layer.h kis_meta_registry.h kis_nameserver.h  	kis_paint_device_iface.h kis_paint_device.h kis_painter.h kis_paintop.h kis_paintop_registry.h  	kis_palette.h kis_pattern.h kis_point.h kis_rect.h kis_resource.h kis_selection.h  	kis_transaction.h kis_types.h kis_vec.h kis_filter_config_widget.h  	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h )
 
-kde4_footer()
+
 
 
 

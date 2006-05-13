@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritatoolstar_PART_SRCS
     tool_star.cc
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatoolstar )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_star.png  	tool_star_cursor.png )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolstar.desktop )
 
-kde4_footer()
+
 
 
 

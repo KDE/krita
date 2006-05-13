@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( brushop )
 
@@ -24,7 +24,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritawsplugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritawsplugin.desktop )
 
-kde4_footer()
+
 
 
 

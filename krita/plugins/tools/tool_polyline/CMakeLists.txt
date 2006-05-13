@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritatoolpolyline_PART_SRCS
     tool_polyline.cc
@@ -21,7 +21,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatoolpolyline )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_polyline_cursor.png  	polyline.png )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolpolyline.desktop )
 
-kde4_footer()
+
 
 
 

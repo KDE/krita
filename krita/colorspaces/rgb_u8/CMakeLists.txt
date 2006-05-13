@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( templates )
 
@@ -41,7 +41,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritargbplugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritargbplugin.desktop )
 
-kde4_footer()
+
 
 
 

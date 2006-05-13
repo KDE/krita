@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritacimg_PART_SRCS
     kis_cimg_filter.cc
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritacimg )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritacimg.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritabumpmap_PART_SRCS
     bumpmap.cc
@@ -21,7 +21,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritabumpmap )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritabumpmapfilter.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( templates )
 
@@ -39,7 +39,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritagrayplugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritagrayplugin.desktop )
 
-kde4_footer()
+
 
 
 

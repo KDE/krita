@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritatoolfilter_PART_SRCS
     kis_filterop.cc
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatoolfilter )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_filter.png  	tool_filter_cursor.png )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolfilter.desktop )
 
-kde4_footer()
+
 
 
 

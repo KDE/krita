@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaseparatechannels )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  imageseparate.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritaseparatechannels.desktop )
 
-kde4_footer()
+
 
 
 

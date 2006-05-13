@@ -1,4 +1,4 @@
-kde4_header()
+
 
 ########### next target ###############
 
@@ -17,7 +17,7 @@ install_targets(${LIB_INSTALL_DIR} kritascripting )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

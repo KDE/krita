@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( brushes )
 add_subdirectory( patterns )
@@ -19,7 +19,7 @@ install_files( ${SERVICETYPES_INSTALL_DIR} FILES
     krita_tool.desktop
     )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritatooltransform_PART_SRCS
     tool_transform.cc
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatooltransform )
 install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  rotate_cursor.xpm )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritatooltransform.desktop )
 
-kde4_footer()
+
 
 
 

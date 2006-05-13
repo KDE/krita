@@ -1,4 +1,4 @@
-kde4_header()
+
 
 if(KDE4_BUILD_TESTS)
 
@@ -110,7 +110,7 @@ add_test(kofficecore-korecttest korecttest)
 
 endif(KDE4_BUILD_TESTS)
 
-kde4_footer()
+
 
 #original Makefile.am contents follow:
 

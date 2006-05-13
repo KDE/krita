@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( templates )
 
@@ -24,7 +24,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritacmykplugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritacmykplugin.desktop )
 
-kde4_footer()
+
 
 
 

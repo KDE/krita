@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -12,7 +12,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/scripts/torturefilters FILES  torture-f
 install_files( ${DATA_INSTALL_DIR}/krita/scripts/randompaint FILES  randompaint.rb randompaint.rc )
 install_files( ${DATA_INSTALL_DIR}/krita/scripts/filterstest FILES  filterstest.rb filterstest.rc )
 
-kde4_footer()
+
 
 
 

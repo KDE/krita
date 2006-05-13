@@ -1,4 +1,4 @@
-kde4_header()
+
 
 if(KDE4_BUILD_TESTS)
 
@@ -40,7 +40,7 @@ target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kstore )
 
 endif(KDE4_BUILD_TESTS)
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritasmearybrush_PART_SRCS
     smearybrush.cc
@@ -20,7 +20,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritasmearybrush )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritasmearybrush.desktop )
 
-kde4_footer()
+
 
 
 

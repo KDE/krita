@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( performancetest )
 add_subdirectory( colorrange )
@@ -22,7 +22,7 @@ endif(KOFFICE_ENABLE_SCRIPTING)
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

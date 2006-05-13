@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( crystalsvg )
 
@@ -8,7 +8,7 @@ add_subdirectory( crystalsvg )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

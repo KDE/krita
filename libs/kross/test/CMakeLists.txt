@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -21,7 +21,7 @@ target_link_libraries(krosstest  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} krossap
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

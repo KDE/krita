@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritascreenshot )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  screenshot-krita.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritascreenshot.desktop )
 
-kde4_footer()
+
 
 
 

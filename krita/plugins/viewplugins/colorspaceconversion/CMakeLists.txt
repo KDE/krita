@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritacolorspaceconversion )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  colorspaceconversion.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritacolorspaceconversion.desktop )
 
-kde4_footer()
+
 
 
 

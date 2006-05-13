@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritahistogramdocker_PART_SRCS
     histogramdocker.cc
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritahistogramdocker )
 install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  kritahistogramdocker.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritahistogramdocker.desktop )
 
-kde4_footer()
+
 
 
 

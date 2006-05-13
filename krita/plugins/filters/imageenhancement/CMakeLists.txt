@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritaimageenhancement_PART_SRCS
     imageenhancement.cpp
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaimageenhancement )
 install_files( ${DATA_INSTALL_DIR}/krita/kritaplugins FILES  )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritaimageenhancement.desktop )
 
-kde4_footer()
+
 
 
 

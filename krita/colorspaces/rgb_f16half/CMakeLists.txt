@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${OPENEXR_INCLUDE_DIR})
 if(KUNITTEST_FOUND)
@@ -39,7 +39,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krita_rgb_f16half_plugin )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_rgb_f16half_plugin.desktop )
 
-kde4_footer()
+
 
 
 

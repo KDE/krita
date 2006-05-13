@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritathreadtest_PART_SRCS threadtest.cc )
 
@@ -17,7 +17,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritathreadtest )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritathreadtest.desktop )
 
-kde4_footer()
+
 
 
 

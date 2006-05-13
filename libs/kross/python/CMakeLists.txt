@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/kross/api/
@@ -42,7 +42,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krosspython )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

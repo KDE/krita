@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -66,7 +66,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/patterns FILES
     wood5.pat
     )
 
-kde4_footer()
+
 
 
 

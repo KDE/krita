@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOFFICECORE_INCLUDES} )
 
@@ -37,7 +37,7 @@ install_targets(${LIB_INSTALL_DIR} krossapi )
 
 install_files( /include/kross/api FILES  argument.h      callable.h      class.h      dict.h      eventaction.h      event.h      eventscript.h      eventsignal.h      eventslot.h      exception.h      function.h      interpreter.h      list.h      module.h      object.h      proxy.h      qtobject.h      script.h      value.h      variant.h krossconfig.h )
 
-kde4_footer()
+
 
 
 

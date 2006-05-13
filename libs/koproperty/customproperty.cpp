@@ -20,9 +20,9 @@
 #include "customproperty.h"
 #include "property.h"
 
-#include <qsize.h>
-#include <qrect.h>
-#include <qsizepolicy.h>
+#include <QSize>
+#include <QRect>
+#include <QSizePolicy>
 #include <QPoint>
 //Added by qt3to4:
 #include <Q3ValueList>

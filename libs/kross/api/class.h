@@ -21,9 +21,9 @@
 #define KROSS_API_CLASS_H
 
 #include <QString>
-//#include <qvaluelist.h>
+//#include <Q3ValueList>
 //#include <QMap>
-#include <qobject.h>
+#include <QObject>
 
 //#include "../main/krossconfig.h"
 #include "object.h"

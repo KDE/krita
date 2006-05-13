@@ -20,12 +20,12 @@
 #include "layerlist.h"
 
 #include <QToolTip>
-#include <qbitmap.h>
-#include <qcursor.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qtimer.h>
+#include <QBitmap>
+#include <QCursor>
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
+#include <QTimer>
 #include <QEvent>
 #include <QFrame>
 #include <QList>

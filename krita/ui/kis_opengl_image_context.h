@@ -26,7 +26,7 @@
 #include <map>
 
 #include <qgl.h>
-#include <qobject.h>
+#include <QObject>
 #include <q3valuevector.h>
 
 #include <krita_export.h>

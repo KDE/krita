@@ -24,7 +24,7 @@
 #ifndef __KIS_TOOL_RECTANGLE_H__
 #define __KIS_TOOL_RECTANGLE_H__
 
-#include <qrect.h>
+#include <QRect>
 
 #include "kis_tool_shape.h"
 #include "kis_types.h"

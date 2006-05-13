@@ -17,16 +17,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qapplication.h>
+#include <QApplication>
 #include <QPushButton>
 #include <QCheckBox>
-#include <qslider.h>
+#include <QSlider>
 #include <QComboBox>
-#include <qpixmap.h>
-#include <qimage.h>
+#include <QPixmap>
+#include <QImage>
 #include <QLabel>
 #include <QColor>
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 #include <knuminput.h>
 #include <klocale.h>

@@ -21,10 +21,10 @@
 
 #include "kis_filters_listview.h"
 
-#include <qapplication.h>
-#include <qtimer.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QApplication>
+#include <QTimer>
+#include <QPainter>
+#include <QPixmap>
 #include <QTime>
 
 //Added by qt3to4:

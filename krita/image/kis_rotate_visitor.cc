@@ -16,9 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <math.h>
-#include <qapplication.h>
-#include <qmatrix.h>
-#include <qrect.h>
+#include <QApplication>
+#include <QMatrix>
+#include <QRect>
 
 #include <kdebug.h>
 #include <klocale.h>

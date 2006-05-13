@@ -19,7 +19,7 @@
 #ifndef KIS_TOOL_REGISTRY_H_
 #define KIS_TOOL_REGISTRY_H_
 
-#include <qobject.h>
+#include <QObject>
 
 #include "kis_tool_types.h"
 #include "kis_generic_registry.h"

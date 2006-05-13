@@ -20,9 +20,9 @@
 #include "KoHighlightingTab.h"
 #include "KoTextFormat.h"
 
-#include <qstringlist.h>
+#include <QStringList>
 #include <q3buttongroup.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QCheckBox>
 
 #include <kcombobox.h>

@@ -21,7 +21,7 @@
 #define KROSS_API_EVENTSLOT_H
 
 #include <QString>
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <Q3CString>
 #include <ksharedptr.h>

@@ -35,7 +35,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include <qapplication.h>
+#include <QApplication>
 #include <assert.h>
 
 // Define the protocol used here for embedded documents' URL

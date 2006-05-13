@@ -22,7 +22,7 @@
 
 #include <q3ptrlist.h>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QFile>
 #include <qdom.h>
 #include <QColor>

@@ -22,7 +22,7 @@
 #include "variant.h"
 #include "qtobject.h"
 
-#include <qmetaobject.h>
+#include <QMetaObject>
 //Added by qt3to4:
 #include <Q3CString>
 

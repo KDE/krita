@@ -26,7 +26,7 @@
 
 using namespace std;
 
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
 #include <QLayout>

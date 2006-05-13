@@ -20,7 +20,7 @@
 #ifndef KIS_FILTER_REGISTRY_H_
 #define KIS_FILTER_REGISTRY_H_
 
-#include <qobject.h>
+#include <QObject>
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"

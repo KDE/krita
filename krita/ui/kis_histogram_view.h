@@ -20,9 +20,9 @@
 #define _KIS_HISTOGRAM_VIEW_
 
 #include <QLabel>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <q3valuevector.h>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <krita_export.h>

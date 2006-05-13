@@ -21,7 +21,7 @@
 #ifndef KIS_MATH_TOOLBOX_H
 #define KIS_MATH_TOOLBOX_H
 
-#include <qobject.h>
+#include <QObject>
 
 // typedef unsigned int uint;
 

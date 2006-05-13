@@ -23,7 +23,7 @@
 #include <QColor>
 #include <QLayout>
 #include <QSpinBox>
-#include <qtabwidget.h>
+#include <QTabWidget>
 //Added by qt3to4:
 #include <QLabel>
 #include <Q3GridLayout>

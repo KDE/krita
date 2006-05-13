@@ -22,8 +22,8 @@
 
 #include <tkaction.h>
 
-#include <qpixmap.h>
-#include <qtoolbutton.h>
+#include <QPixmap>
+#include <QToolButton>
 //Added by qt3to4:
 #include <QEvent>
 #include <Q3PopupMenu>

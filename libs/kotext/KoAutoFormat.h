@@ -23,7 +23,7 @@
 
 #include <QString>
 #include <QMap>
-#include <qstringlist.h>
+#include <QStringList>
 #include <qdom.h>
 #include <q3dict.h>
 #include <QLabel>

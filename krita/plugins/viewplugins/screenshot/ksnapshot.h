@@ -24,8 +24,8 @@
 #define KSNAPSHOT_H
 
 #include <QLabel>
-#include <qpixmap.h>
-#include <qtimer.h>
+#include <QPixmap>
+#include <QTimer>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QEvent>

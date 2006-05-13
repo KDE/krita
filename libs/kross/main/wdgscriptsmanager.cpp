@@ -19,9 +19,9 @@
 #include "wdgscriptsmanager.h"
 
 #include <QFile>
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <q3header.h>
-#include <qobject.h>
+#include <QObject>
 #include <QMenu>
 //#include <QToolTip>
 #include <QPixmap>

@@ -26,7 +26,7 @@
 #include "../api/proxy.h"
 #include "../api/module.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <QString>
 
 class TestPluginObject : public Kross::Api::Class<TestPluginObject>

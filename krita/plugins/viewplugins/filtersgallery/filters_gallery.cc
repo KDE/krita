@@ -21,7 +21,7 @@
 
 #include "filters_gallery.h"
 
-#include <qapplication.h>
+#include <QApplication>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>

@@ -21,8 +21,8 @@
 #ifndef KIS_GRID_MANAGER_H
 #define KIS_GRID_MANAGER_H
 
-#include <qobject.h>
-#include <qpainter.h>
+#include <QObject>
+#include <QPainter>
 
 #include "kis_types.h"
 

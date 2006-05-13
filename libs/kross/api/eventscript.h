@@ -21,7 +21,7 @@
 #define KROSS_API_EVENTSCRIPT_H
 
 #include <QString>
-#include <qobject.h>
+#include <QObject>
 
 #include "event.h"
 

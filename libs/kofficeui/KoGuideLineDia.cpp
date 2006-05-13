@@ -26,7 +26,7 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 #include <klocale.h>
 #include <KoUnitWidgets.h>

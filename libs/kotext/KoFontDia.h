@@ -21,7 +21,7 @@
 #define __kofontdia_h__
 
 #include <kfontdialog.h>
-#include <qtabwidget.h>
+#include <QTabWidget>
 #include <KoTextFormat.h>
 #include <QCheckBox>
 #include <koffice_export.h>

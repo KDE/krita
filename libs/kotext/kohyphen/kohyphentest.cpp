@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kapplication.h>
 

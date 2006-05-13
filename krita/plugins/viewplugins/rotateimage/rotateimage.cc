@@ -23,7 +23,7 @@
 
 #include <stdlib.h>
 
-#include <qslider.h>
+#include <QSlider>
 #include <QPoint>
 
 #include <klocale.h>

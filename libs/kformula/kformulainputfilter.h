@@ -21,7 +21,7 @@
 #ifndef KFORMULAINPUTFILTER_H
 #define KFORMULAINPUTFILTER_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qdom.h>
 
 #include "kformuladefs.h"

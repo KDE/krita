@@ -23,11 +23,11 @@
 
 #include <klocale.h>
 
-#include <qfontmetrics.h>
-#include <qrect.h>
-#include <qpainter.h>
+#include <QFontMetrics>
+#include <QRect>
+#include <QPainter>
 #include <QFont>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QString>
 #include <QRegExp>
 //Added by qt3to4:

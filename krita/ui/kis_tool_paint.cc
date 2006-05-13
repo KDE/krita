@@ -17,7 +17,7 @@
  */
 
 #include <QWidget>
-#include <qrect.h>
+#include <QRect>
 #include <QLayout>
 #include <QLabel>
 #include <QPushButton>

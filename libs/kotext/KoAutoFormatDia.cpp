@@ -35,7 +35,7 @@
 #include <QToolTip>
 #include <QComboBox>
 #include <QDir>
-#include <qapplication.h>
+#include <QApplication>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QKeyEvent>

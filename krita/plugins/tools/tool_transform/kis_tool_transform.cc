@@ -20,13 +20,13 @@
  */
 
 
-#include <qpainter.h>
-#include <qpen.h>
+#include <QPainter>
+#include <QPen>
 #include <QPushButton>
-#include <qobject.h>
+#include <QObject>
 #include <QLabel>
 #include <QComboBox>
-#include <qapplication.h>
+#include <QApplication>
 
 #include <kdebug.h>
 #include <kaction.h>

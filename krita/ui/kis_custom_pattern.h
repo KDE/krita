@@ -19,7 +19,7 @@
 #ifndef KIS_CUSTOM_PATTERN_H_
 #define KIS_CUSTOM_PATTERN_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <QShowEvent>
 
 #include "ui_wdgcustompattern.h"

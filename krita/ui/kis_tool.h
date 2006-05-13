@@ -20,7 +20,7 @@
 #ifndef KIS_TOOL_H_
 #define KIS_TOOL_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <QString>
 //Added by qt3to4:
 #include <QKeyEvent>

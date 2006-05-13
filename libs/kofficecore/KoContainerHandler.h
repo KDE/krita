@@ -20,7 +20,7 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QEvent>

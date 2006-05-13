@@ -21,7 +21,7 @@
 #ifndef _KIS_ACCUMULATING_PRODUCER_H_
 #define _KIS_ACCUMULATING_PRODUCER_H_
 
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <QCustomEvent>
 

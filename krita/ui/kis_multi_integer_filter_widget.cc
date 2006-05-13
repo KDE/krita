@@ -20,7 +20,7 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <qtimer.h>
+#include <QTimer>
 #include <QGridLayout>
 
 #include <knuminput.h>

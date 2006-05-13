@@ -20,13 +20,13 @@
 #define qwmf_h
 
 #include <QString>
-#include <qpainter.h>
-#include <qmatrix.h>
+#include <QPainter>
+#include <QMatrix>
 #include <q3pointarray.h>
-#include <qpen.h>
+#include <QPen>
 #include <QColor>
-#include <qimage.h>
-#include <qrect.h>
+#include <QImage>
+#include <QRect>
 
 class QBuffer;
 class QString;

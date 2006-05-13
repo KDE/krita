@@ -19,7 +19,7 @@
 #ifndef KIS_THREAD_
 #define KIS_THREAD_
 
-#include <qthread.h>
+#include <QThread>
 #include <ksharedptr.h>
 
 /**

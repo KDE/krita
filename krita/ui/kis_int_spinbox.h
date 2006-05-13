@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <QSpinBox>
-#include <qslider.h>
+#include <QSlider>
 #include <QLabel>
 #include <krita_export.h>
 #include <knumvalidator.h>

@@ -21,8 +21,8 @@
 #define __koPicture_h__
 
 #include <QString>
-#include <qiodevice.h>
-#include <qpixmap.h>
+#include <QIODevice>
+#include <QPixmap>
 #include <koffice_export.h>
 
 #include "KoPictureKey.h"

@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_PROPERTYEDITOR_H
 #define KPROPERTY_PROPERTYEDITOR_H
 
-#include <qpointer.h>
+#include <QPointer>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QResizeEvent>

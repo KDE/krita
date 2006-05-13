@@ -21,7 +21,7 @@
 #define _SYMBOLACTION_H_
 
 #include <q3valuelist.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <q3memarray.h>
 
 #include "kformuladefs.h"

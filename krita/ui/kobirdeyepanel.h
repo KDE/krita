@@ -21,7 +21,7 @@
 #ifndef KO_BIRD_EYE_PANEL
 #define KO_BIRD_EYE_PANEL
 
-#include <qrect.h>
+#include <QRect>
 #include <QWidget>
 //Added by qt3to4:
 #include <QPixmap>

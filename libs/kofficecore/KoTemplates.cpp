@@ -20,7 +20,7 @@
 #include <KoTemplates.h>
 
 #include <QDir>
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <QPixmap>
 

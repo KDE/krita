@@ -21,10 +21,10 @@
 #ifndef _KIS_IMAGE_RASTERED_CACHE_H_
 #define _KIS_IMAGE_RASTERED_CACHE_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <q3valuevector.h>
 #include <q3valuelist.h>
-#include <qtimer.h>
+#include <QTimer>
 
 #include <kis_paint_device.h>
 

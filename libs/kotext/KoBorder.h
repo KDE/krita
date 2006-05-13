@@ -21,7 +21,7 @@
 #define KoBorder_h
 
 #include <QColor>
-#include <qpen.h>
+#include <QPen>
 #include <koffice_export.h>
 class QDomElement;
 class KoZoomHandler;

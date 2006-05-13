@@ -18,7 +18,7 @@
 #ifndef KIS_RESOURCE_MEDIATOR_H_
 #define KIS_RESOURCE_MEDIATOR_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <QMap>
 #include <QWidget>
 

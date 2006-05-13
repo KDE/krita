@@ -18,7 +18,7 @@
 #ifndef KIS_ALPHA_MASK_
 #define KIS_ALPHA_MASK_
 
-#include <qimage.h>
+#include <QImage>
 #include <q3valuevector.h>
 
 #include <ksharedptr.h>

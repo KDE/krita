@@ -19,7 +19,7 @@
 #ifndef KIS_TOOL_PAINT_H_
 #define KIS_TOOL_PAINT_H_
 
-#include <qcursor.h>
+#include <QCursor>
 #include <QLayout>
 #include <QLabel>
 #include <QGridLayout>

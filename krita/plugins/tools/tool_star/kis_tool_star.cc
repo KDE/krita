@@ -21,7 +21,7 @@
 
 #include <math.h>
 
-#include <qpainter.h>
+#include <QPainter>
 #include <QSpinBox>
 #include <QLayout>
 #include <QGridLayout>

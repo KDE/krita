@@ -29,7 +29,7 @@
 #include "../api/class.h"
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <q3valuelist.h>
 #include <q3valuevector.h>
 #include <QMap>

@@ -23,11 +23,11 @@
 #include "editoritem.h"
 
 #include <QPushButton>
-#include <qpainter.h>
+#include <QPainter>
 #include <QLayout>
 #include <QVariant>
 #include <QFont>
-#include <qfontmetrics.h>
+#include <QFontMetrics>
 #include <QLabel>
 #include <QToolTip>
 //Added by qt3to4:

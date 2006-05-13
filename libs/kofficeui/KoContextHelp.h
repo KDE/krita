@@ -21,7 +21,7 @@
 #define __KOCONTEXTHELPACTION_H__
 
 #include <QWidget>
-#include <qbitmap.h>
+#include <QBitmap>
 #include <q3dockwindow.h>
 //Added by qt3to4:
 #include <QPixmap>

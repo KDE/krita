@@ -22,8 +22,8 @@
 #ifndef __kis_previewwidget_h__
 #define __kis_previewwidget_h__
 
-#include <qimage.h>
-#include <qevent.h>
+#include <QImage>
+#include <QEvent>
 #include <QWheelEvent>
 #include <krita_export.h>
 

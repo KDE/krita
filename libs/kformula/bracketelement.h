@@ -22,7 +22,7 @@
 #define BRACKETELEMENT_H
 
 #include <QPoint>
-#include <qsize.h>
+#include <QSize>
 //Added by qt3to4:
 #include <Q3PtrList>
 

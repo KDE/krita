@@ -29,13 +29,13 @@
 #include <QPushButton>
 #include <QLayout>
 #include <QMap>
-#include <qpointer.h>
+#include <QPointer>
 #include <q3header.h>
 #include <q3asciidict.h>
 #include <QToolTip>
-#include <qapplication.h>
-#include <qeventloop.h>
-#include <qtimer.h>
+#include <QApplication>
+#include <QEventLoop>
+#include <QTimer>
 //Added by qt3to4:
 #include <QByteArray>
 #include <QEvent>

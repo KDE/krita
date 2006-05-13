@@ -28,10 +28,10 @@
 #include "eventslot.h"
 #include "eventsignal.h"
 
-#include <qobject.h>
+#include <QObject>
 //#include <qglobal.h>
 //#include <qobjectdefs.h>
-#include <qmetaobject.h>
+#include <QMetaObject>
 
 using namespace Kross::Api;
 

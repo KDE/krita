@@ -20,12 +20,12 @@
 #ifndef _KOWMFREADPRIVATE_H_
 #define _KOWMFREADPRIVATE_H_
 
-#include <qpen.h>
+#include <QPen>
 #include <QColor>
 #include <QFont>
-#include <qrect.h>
+#include <QRect>
 #include <qregion.h>
-#include <qbuffer.h>
+#include <QBuffer>
 #include <QString>
 //Added by qt3to4:
 #include <QPolygon>

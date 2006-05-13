@@ -21,7 +21,7 @@
 
 #include <qglobal.h>
 #include <QPoint>
-#include <qrect.h>
+#include <QRect>
 #include "kis_types.h"
 
 class QWidget;

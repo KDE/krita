@@ -23,7 +23,7 @@
 #include <kcombobox.h>
 #include <kiconloader.h>
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include "KoLanguageTab.moc"
 

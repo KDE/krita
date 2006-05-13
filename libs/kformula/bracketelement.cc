@@ -19,8 +19,8 @@
 */
 
 #include <q3ptrlist.h>
-#include <qpainter.h>
-#include <qpen.h>
+#include <QPainter>
+#include <QPen>
 #include <q3pointarray.h>
 
 #include <kdebug.h>

@@ -15,12 +15,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qobject.h>
-#include <qimage.h>
-#include <qmessagebox.h>
-#include <qbuffer.h>
+#include <QApplication>
+#include <QClipboard>
+#include <QObject>
+#include <QImage>
+#include <QMessageBox>
+#include <QBuffer>
 
 #include <klocale.h>
 

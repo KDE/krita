@@ -23,11 +23,11 @@
 #include <kcmdlineargs.h>
 #include <kiconloader.h>
 
-#include <qpixmap.h>
-#include <qstringlist.h>
+#include <QPixmap>
+#include <QStringList>
 #include <q3datetimeedit.h>
-#include <qcursor.h>
-#include <qapplication.h>
+#include <QCursor>
+#include <QApplication>
 #include <QDesktopWidget>
 //Added by qt3to4:
 #include <Q3CString>

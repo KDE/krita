@@ -20,10 +20,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qpainter.h>
+#include <QPainter>
 #include <QLayout>
 #include <QLabel>
-#include <qapplication.h>
+#include <QApplication>
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

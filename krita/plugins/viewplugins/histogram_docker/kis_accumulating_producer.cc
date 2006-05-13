@@ -18,9 +18,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qthread.h>
-#include <qapplication.h>
-#include <qevent.h>
+#include <QThread>
+#include <QApplication>
+#include <QEvent>
 //Added by qt3to4:
 #include <QCustomEvent>
 

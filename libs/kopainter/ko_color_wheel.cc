@@ -19,8 +19,8 @@
 #include <math.h>
 
 #include <QPoint>
-#include <qpainter.h>
-#include <qimage.h>
+#include <QPainter>
+#include <QImage>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QMouseEvent>

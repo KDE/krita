@@ -28,7 +28,7 @@
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <qdom.h>
-#include <qbuffer.h>
+#include <QBuffer>
 //Added by qt3to4:
 #include <QByteArray>
 

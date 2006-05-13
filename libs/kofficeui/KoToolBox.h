@@ -19,7 +19,7 @@
 #ifndef _KO_TOOLBOX_H_
 #define _KO_TOOLBOX_H_
 
-#include <qtoolbutton.h>
+#include <QToolButton>
 #include <q3ptrvector.h>
 #include <q3toolbar.h>
 //Added by qt3to4:

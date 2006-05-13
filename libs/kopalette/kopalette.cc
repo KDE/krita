@@ -19,13 +19,13 @@
 #include <QWidget>
 #include <QVariant>
 #include <QLabel>
-#include <qtoolbutton.h>
-#include <qtabwidget.h>
+#include <QToolButton>
+#include <QTabWidget>
 #include <QLayout>
 #include <QToolTip>
 #include <q3whatsthis.h>
-#include <qimage.h>
-#include <qpixmap.h>
+#include <QImage>
+#include <QPixmap>
 #include <QLayout>
 
 #include <kdebug.h>

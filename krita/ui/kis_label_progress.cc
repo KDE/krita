@@ -18,9 +18,9 @@
  */
 #include <QLayout>
 #include <QToolTip>
-#include <qtoolbutton.h>
-#include <qcursor.h>
-#include <qeventloop.h>
+#include <QToolButton>
+#include <QCursor>
+#include <QEventLoop>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QKeyEvent>

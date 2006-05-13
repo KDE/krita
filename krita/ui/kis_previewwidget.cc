@@ -21,15 +21,15 @@
  */
 
 #include <QCheckBox>
-#include <qradiobutton.h>
-#include <qpainter.h>
+#include <QRadioButton>
+#include <QPainter>
 #include <QPoint>
 #include <QPushButton>
 #include <QLayout>
 #include <QLabel>
-#include <qapplication.h>
+#include <QApplication>
 #include <QColor>
-#include <qcursor.h>
+#include <QCursor>
 #include <QWheelEvent>
 
 #include <kdebug.h>

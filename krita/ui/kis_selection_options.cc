@@ -17,7 +17,7 @@
  */
 
 #include <QWidget>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QComboBox>
 #include <QVBoxLayout>
 #include <QLayout>

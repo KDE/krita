@@ -18,7 +18,7 @@
 */
 
 #include <q3listbox.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <Q3ComboBox>
 //Added by qt3to4:
 #include <Q3ValueList>

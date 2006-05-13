@@ -21,8 +21,8 @@
 
 #include <q3valuelist.h>
 #include <QString>
-#include <qpair.h>
-#include <qobject.h>
+#include <QPair>
+#include <QObject>
 #include <koffice_export.h>
 class KoTextParag;
 class KoTextObject;

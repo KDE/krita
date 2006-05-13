@@ -26,7 +26,7 @@
 #include <QLayout>
 #include <QLabel>
 #include <q3groupbox.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QPushButton>
 #include <q3header.h>
 #include <QCheckBox>

@@ -20,7 +20,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <q3groupbox.h>
-#include <qslider.h>
+#include <QSlider>
 #include <QString>
 
 #include <klineedit.h>

@@ -21,7 +21,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLayout>
-#include <qpainter.h>
+#include <QPainter>
 #include <QVariant>
 //Added by qt3to4:
 #include <Q3HBoxLayout>

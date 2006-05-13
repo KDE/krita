@@ -25,7 +25,7 @@
 #include "../main/scriptguiclient.h"
 #include "../api/object.h"
 
-//#include <qobject.h>
+//#include <QObject>
 #include <QString>
 
 #include <kmainwindow.h>

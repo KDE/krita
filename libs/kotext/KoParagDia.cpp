@@ -54,12 +54,12 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <kvbox.h>
 #include <q3hbox.h>
 #include <QToolTip>
 #include <QLayout>
-#include <qapplication.h>
+#include <QApplication>
 #include <q3widgetstack.h>
 #include <q3tl.h>
 #include <QListWidget>

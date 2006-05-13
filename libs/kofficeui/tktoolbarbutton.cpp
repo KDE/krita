@@ -19,12 +19,12 @@
  */
 #include <tktoolbarbutton.h>
 
-#include <qtimer.h>
+#include <QTimer>
 #include <QToolTip>
-#include <qcursor.h>
-#include <qpainter.h>
+#include <QCursor>
+#include <QPainter>
 #include <qdrawutil.h>
-#include <qstyle.h>
+#include <QStyle>
 #include <QStyleOptionToolButton>
 //Added by qt3to4:
 #include <QPixmap>

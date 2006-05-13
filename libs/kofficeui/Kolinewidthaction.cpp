@@ -19,9 +19,9 @@
 
 #include "Kolinewidthaction.h"
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QBitmap>
 #include <q3whatsthis.h>
 #include <qmenubar.h>
 #include <QLayout>

@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <kdialogbase.h>
-#include <qvalidator.h>
+#include <QValidator>
 
 #include "kformuladefs.h"
 

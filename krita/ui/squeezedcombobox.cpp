@@ -24,11 +24,11 @@
 
 #include <q3listbox.h>
 #include <QComboBox>
-#include <qpair.h>
-#include <qtimer.h>
+#include <QPair>
+#include <QTimer>
 #include <q3valuelist.h>
-#include <qstyle.h>
-#include <qapplication.h>
+#include <QStyle>
+#include <QApplication>
 #include <QToolTip>
 //Added by qt3to4:
 #include <QResizeEvent>

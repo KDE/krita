@@ -21,7 +21,7 @@
 #define __KoImportStyleDia__
 
 #include <kdialogbase.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <KoStyleCollection.h>
 class QLineEdit;
 class Q3ListBox;

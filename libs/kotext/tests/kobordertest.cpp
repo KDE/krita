@@ -2,7 +2,7 @@
 #include <KoZoomHandler.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <QWidget>
 #include <q3grid.h>
 //Added by qt3to4:

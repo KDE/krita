@@ -19,7 +19,7 @@
 #ifndef KIS_PAINTOP_REGISTRY_H_
 #define KIS_PAINTOP_REGISTRY_H_
 
-#include <qobject.h>
+#include <QObject>
 
 #include "kis_types.h"
 #include "kis_generic_registry.h"

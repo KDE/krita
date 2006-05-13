@@ -26,7 +26,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QByteArray>
-//#include <qvaluelist.h>
+//#include <Q3ValueList>
 
 #ifdef QT_ONLY
 // \todo

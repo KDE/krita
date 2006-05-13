@@ -18,14 +18,14 @@
 #ifndef _KOWMFREAD_H_
 #define _KOWMFREAD_H_
 
-#include <qpen.h>
-#include <qbrush.h>
+#include <QPen>
+#include <QBrush>
 #include <QFont>
 #include <QColor>
-#include <qrect.h>
+#include <QRect>
 #include <qregion.h>
-#include <qimage.h>
-#include <qmatrix.h>
+#include <QImage>
+#include <QMatrix>
 #include <QString>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>

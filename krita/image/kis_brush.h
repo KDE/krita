@@ -22,8 +22,8 @@
 
 #include <q3cstring.h>
 #include <QString>
-#include <qsize.h>
-#include <qimage.h>
+#include <QSize>
+#include <QImage>
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <QPixmap>

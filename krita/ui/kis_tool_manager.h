@@ -20,7 +20,7 @@
 
 #include <map>
 
-#include <qobject.h>
+#include <QObject>
 
 #include "kis_tool_controller.h"
 #include "kis_global.h"

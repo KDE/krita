@@ -63,7 +63,7 @@
 
 #ifndef KOXML_USE_QDOM
 
-#include <qxml.h>
+#include <QtXml>
 #include <qdom.h>
 
 #include <QMap>

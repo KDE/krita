@@ -20,7 +20,7 @@
 #ifndef KIS_ICONWIDGET_H_
 #define KIS_ICONWIDGET_H_
 
-#include <qtoolbutton.h>
+#include <QToolButton>
 
 class KoIconItem;
 

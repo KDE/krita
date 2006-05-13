@@ -16,9 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qobject.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QObject>
+#include <QApplication>
+#include <QClipboard>
 #include <QColor>
 
 #include <kdebug.h>

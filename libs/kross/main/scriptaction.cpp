@@ -23,7 +23,7 @@
 #include <q3stylesheet.h>
 #include <QDir>
 #include <QFile>
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <Q3ValueList>
 #include <kurl.h>
 #include <kicon.h>

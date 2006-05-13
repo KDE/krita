@@ -43,7 +43,7 @@
 #include <QString>
 #include <q3pointarray.h>
 #include <QFont>
-#include <qpainter.h>
+#include <QPainter>
 #include <q3ptrlist.h>
 #include <q3shared.h>
 #include <QPainter>

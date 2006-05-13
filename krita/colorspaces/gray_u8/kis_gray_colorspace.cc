@@ -24,7 +24,7 @@
 #include <config.h>
 #include <lcms.h>
 
-#include <qimage.h>
+#include <QImage>
 
 #include <klocale.h>
 #include <kdebug.h>

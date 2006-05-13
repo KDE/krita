@@ -24,12 +24,12 @@
 #include <klocale.h>
 
 #include <QLayout>
-#include <qpixmap.h>
-#include <qpainter.h>
+#include <QPixmap>
+#include <QPainter>
 #include <QLabel>
 #include <qdom.h>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QPushButton>
 #include <QHBoxLayout>
 

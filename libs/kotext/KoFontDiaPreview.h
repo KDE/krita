@@ -24,7 +24,7 @@
 #include <QString>
 #include <QColor>
 #include <QFont>
-#include <qpainter.h>
+#include <QPainter>
 
 /**
  * The font dialog Preview

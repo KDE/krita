@@ -22,9 +22,9 @@
 #include "koIconChooser.h"
 #include <kglobal.h>
 
-#include <qpainter.h>
-#include <qcursor.h>
-#include <qapplication.h>
+#include <QPainter>
+#include <QCursor>
+#include <QApplication>
 #include <q3hbox.h>
 #include <QLayout>
 //Added by qt3to4:

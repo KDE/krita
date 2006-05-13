@@ -27,11 +27,11 @@
 #include <stdlib.h>
 #include <cfloat>
 
-#include <qimage.h>
+#include <QImage>
 #include <QPoint>
 #include <q3valuevector.h>
 #include <QFile>
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>

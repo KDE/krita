@@ -20,12 +20,12 @@
  */
 
 // Qt
-#include <qapplication.h>
+#include <QApplication>
 #include <qdom.h>
-#include <qimage.h>
-#include <qpainter.h>
+#include <QImage>
+#include <QPainter>
 #include <q3tl.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QWidget>
 #include <q3paintdevicemetrics.h>
 

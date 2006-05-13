@@ -29,13 +29,13 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#include <qimage.h>
+#include <QImage>
 #include <QPoint>
 #include <q3valuevector.h>
 #include <QFile>
 #include <QRegExp>
-#include <qstringlist.h>
-#include <qtextstream.h>
+#include <QStringList>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>

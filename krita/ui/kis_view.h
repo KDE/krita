@@ -28,10 +28,10 @@
 
 #include <list>
 
-#include <qdatetime.h>
-#include <qpixmap.h>
-#include <qstringlist.h>
-#include <qtimer.h>
+#include <QDateTime>
+#include <QPixmap>
+#include <QStringList>
+#include <QTimer>
 
 #include <QWheelEvent>
 #include <QPaintEvent>

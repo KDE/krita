@@ -21,7 +21,7 @@
 
 #include <kglobal.h> // kMin
 #include <kdebug.h>
-#include <qiodevice.h>
+#include <QIODevice>
 //Added by qt3to4:
 #include <QByteArray>
 #include <float.h>

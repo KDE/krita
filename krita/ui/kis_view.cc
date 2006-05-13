@@ -26,16 +26,16 @@
 #include <cmath>
 
 // Qt
-#include <qapplication.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qpainter.h>
+#include <QApplication>
+#include <QCursor>
+#include <QEvent>
+#include <QPainter>
 #include <qscrollbar.h>
 #include <QSpinBox>
-#include <qstringlist.h>
-#include <qstyle.h>
-#include <qstringlist.h>
-#include <qobject.h>
+#include <QStringList>
+#include <QStyle>
+#include <QStringList>
+#include <QObject>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QResizeEvent>

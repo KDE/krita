@@ -20,10 +20,10 @@
 
 #include "regiongrabber.h"
 
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qstyle.h>
-#include <qtimer.h>
+#include <QPainter>
+#include <QPalette>
+#include <QStyle>
+#include <QTimer>
 #include <QToolTip>
 //Added by qt3to4:
 #include <QPixmap>

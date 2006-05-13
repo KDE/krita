@@ -21,7 +21,7 @@
 #define KROSS_API_MANAGER_H
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QMap>
 //#include <QVariant>
 #include <ksharedptr.h>

@@ -21,16 +21,16 @@
 #include <config.h>
 #include <config-krita.h>
 
-#include <qbitmap.h>
+#include <QBitmap>
 #include <QCheckBox>
-#include <qcursor.h>
+#include <QCursor>
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QPushButton>
-#include <qslider.h>
-#include <qtoolbutton.h>
+#include <QSlider>
+#include <QToolButton>
 #include <QGridLayout>
 
 #ifdef HAVE_OPENGL

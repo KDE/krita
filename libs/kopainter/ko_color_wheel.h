@@ -19,7 +19,7 @@
 #ifndef KO_COLORWHEEL_H
 #define KO_COLORWHEEL_H
 
-#include <qpixmap.h>
+#include <QPixmap>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QResizeEvent>

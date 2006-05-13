@@ -20,7 +20,7 @@
 #include "eventaction.h"
 #include "variant.h"
 
-//#include <qobject.h>
+//#include <QObject>
 //#include <kaction.h>
 
 using namespace Kross::Api;

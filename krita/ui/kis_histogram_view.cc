@@ -18,8 +18,8 @@
 
 #include <math.h>
 
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QPixmap>
 #include <QLabel>
 #include <QComboBox>
 #include <q3buttongroup.h>

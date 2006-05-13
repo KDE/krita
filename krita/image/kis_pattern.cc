@@ -28,8 +28,8 @@
 #include <stdlib.h>
 
 #include <QPoint>
-#include <qsize.h>
-#include <qimage.h>
+#include <QSize>
+#include <QImage>
 #include <QMap>
 #include <QFile>
 #include <QTextStream>

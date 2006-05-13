@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qfontmetrics.h>
-#include <qpainter.h>
+#include <QFontMetrics>
+#include <QPainter>
 #include <QSpinBox>
 #include <QCheckBox>
 #include <QLabel>

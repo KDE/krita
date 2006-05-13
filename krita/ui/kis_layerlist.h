@@ -20,7 +20,7 @@
 #ifndef KIS_LAYERLIST_H
 #define KIS_LAYERLIST_H
 
-#include <qimage.h>
+#include <QImage>
 #include "layerlist.h"
 
 class KoPartSelectAction;

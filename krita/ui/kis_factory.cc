@@ -20,7 +20,7 @@
 #include <config.h>
 #include <lcms.h>
 
-#include <qstringlist.h>
+#include <QStringList>
 #include <QDir>
 
 #include <kdebug.h>

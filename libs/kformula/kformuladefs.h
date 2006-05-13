@@ -24,7 +24,7 @@
 #include <memory>
 
 #include <QPoint>
-#include <qrect.h>
+#include <QRect>
 #include <QString>
 
 #include <KoPoint.h>

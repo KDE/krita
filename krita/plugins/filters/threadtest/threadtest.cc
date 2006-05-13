@@ -20,8 +20,8 @@
 #include <vector>
 
 #include <QPoint>
-#include <qrect.h>
-#include <qthread.h>
+#include <QRect>
+#include <QThread>
 
 #include <klocale.h>
 #include <kiconloader.h>

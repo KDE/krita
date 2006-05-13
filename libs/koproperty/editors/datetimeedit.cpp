@@ -22,9 +22,9 @@
 
 #include <q3datetimeedit.h>
 #include <q3rangecontrol.h>
-#include <qobject.h>
+#include <QObject>
 #include <QLayout>
-#include <qpainter.h>
+#include <QPainter>
 #include <QVariant>
 //Added by qt3to4:
 #include <Q3HBoxLayout>

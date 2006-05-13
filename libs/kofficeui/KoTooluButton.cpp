@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qapplication.h>
+#include <QApplication>
 #include <QToolTip>
-#include <qpainter.h>
+#include <QPainter>
 #include <qdrawutil.h>
-#include <qpixmap.h>
-#include <qstyle.h>
+#include <QPixmap>
+#include <QStyle>
 #include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QFocusEvent>

@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qapplication.h>
+#include <QApplication>
 #include <QPoint>
 
 #include <kdebug.h>

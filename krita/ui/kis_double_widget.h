@@ -23,7 +23,7 @@
 #define KIS_DOUBLE_WIDGET_H
 
 #include <QWidget>
-#include <qslider.h>
+#include <QSlider>
 
 class QHBoxLayout;
 class KDoubleSpinBox;

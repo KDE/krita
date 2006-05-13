@@ -28,7 +28,7 @@ class KoStore;
 
 #include <QMap>
 #include <koffice_export.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <KoStyleStack.h>
 
 /**

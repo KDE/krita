@@ -23,12 +23,12 @@
 #include <QVariant>
 #include <QLayout>
 #include <QColor>
-#include <qpainter.h>
+#include <QPainter>
 
 #ifdef QT_ONLY
-#include <qcolordialog.h>
+#include <QColorDialog>
 #include <QPushButton>
-#include <qpixmap.h>
+#include <QPixmap>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QKeyEvent>

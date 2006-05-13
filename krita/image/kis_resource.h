@@ -18,8 +18,8 @@
 #ifndef KIS_RESOURCE_H_
 #define KIS_RESOURCE_H_
 
-#include <qimage.h>
-#include <qobject.h>
+#include <QImage>
+#include <QObject>
 #include <QString>
 #include <krita_export.h>
 

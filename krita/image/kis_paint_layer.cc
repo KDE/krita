@@ -17,7 +17,7 @@
  */
 
 #include <kdebug.h>
-#include <qimage.h>
+#include <QImage>
 
 #include "kis_debug_areas.h"
 #include "kis_image.h"

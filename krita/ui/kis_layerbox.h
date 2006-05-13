@@ -25,7 +25,7 @@
 #include <QFrame>
 #include <QPixmap>
 #include <QList>
-#include <qtimer.h>
+#include <QTimer>
 
 #include <kdebug.h>
 

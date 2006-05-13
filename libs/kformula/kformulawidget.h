@@ -22,7 +22,7 @@
 #define KFORMULAWIDGET_H
 
 #include <qdom.h>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QPoint>
 #include <QWidget>
 //Added by qt3to4:

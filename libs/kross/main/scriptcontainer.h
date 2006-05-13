@@ -24,7 +24,7 @@
 
 #include <QString>
 #include <QVariant>
-#include <qobject.h>
+#include <QObject>
 #include <ksharedptr.h>
 #include <koffice_export.h>
 namespace Kross { namespace Api {

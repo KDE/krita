@@ -18,15 +18,15 @@
 #ifndef _KO_PALETTE_MANAGER_
 #define _KO_PALETTE_MANAGER_
 
-#include <qobject.h>
+#include <QObject>
 #include <q3dockwindow.h>
 #include <QString>
 #include <QMap>
 #include <q3dict.h>
 #include <q3valuestack.h>
 #include <QWidget>
-#include <qsignalmapper.h>
-#include <qstringlist.h>
+#include <QSignalMapper>
+#include <QStringList>
 //Added by qt3to4:
 #include <QEvent>
 

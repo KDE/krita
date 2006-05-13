@@ -22,8 +22,8 @@
 
 #include <q3shared.h>
 #include <QString>
-#include <qiodevice.h>
-#include <qpixmap.h>
+#include <QIODevice>
+#include <QPixmap>
 
 #include "KoPictureKey.h"
 

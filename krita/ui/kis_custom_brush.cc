@@ -19,7 +19,7 @@
 #include <KoImageResource.h>
 #include <kdebug.h>
 #include <QLabel>
-#include <qimage.h>
+#include <QImage>
 #include <QPushButton>
 #include <QComboBox>
 #include <QCheckBox>

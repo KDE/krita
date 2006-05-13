@@ -20,7 +20,7 @@
 #ifndef KOPEN_H
 #define KOPEN_H
 
-#include <qpen.h>
+#include <QPen>
 
 #include "koffice_export.h"
 

@@ -8,11 +8,11 @@
 #include <QLayout>
 #include <q3ptrlist.h>
 #include <q3mainwindow.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <QString>
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QWidget>
-#include <qfileinfo.h>
+#include <QFileInfo>
 //Added by qt3to4:
 #include <QFocusEvent>
 #include <QKeyEvent>

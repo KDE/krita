@@ -20,7 +20,7 @@
  */
 
 #include <QLayout>
-#include <qslider.h>
+#include <QSlider>
 #include <QHBoxLayout>
 
 #include <knuminput.h>

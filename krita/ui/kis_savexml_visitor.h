@@ -19,7 +19,7 @@
 #ifndef KIS_SAVEXML_VISITOR_H_
 #define KIS_SAVEXML_VISITOR_H_
 
-#include <qrect.h>
+#include <QRect>
 
 #include "kis_adjustment_layer.h"
 #include "kis_exif_info.h"

@@ -22,7 +22,7 @@
 #define __ko_koolbar_h__
 
 #include <q3frame.h>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <q3intdict.h>
 //Added by qt3to4:
 #include <QMouseEvent>

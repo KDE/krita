@@ -23,10 +23,10 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <qbitmap.h>
+#include <QBitmap>
 #include <QLayout>
-#include <qfileinfo.h>
-#include <qpainter.h>
+#include <QFileInfo>
+#include <QPainter>
 #include <q3scrollview.h>
 #include <QPalette>
 //Added by qt3to4:

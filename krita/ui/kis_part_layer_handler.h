@@ -18,7 +18,7 @@
 #ifndef KIS_PART_LAYER_HANDLER_
 #define KIS_PART_LAYER_HANDLER_
 
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <KoQueryTrader.h> // KoDocumentEntry

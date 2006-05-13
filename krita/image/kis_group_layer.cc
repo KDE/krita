@@ -18,8 +18,8 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <qimage.h>
-#include <qdatetime.h>
+#include <QImage>
+#include <QDateTime>
 
 #include "kis_types.h"
 #include "kis_layer.h"

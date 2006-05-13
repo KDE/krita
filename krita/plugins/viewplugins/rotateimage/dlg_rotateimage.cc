@@ -27,7 +27,7 @@
 using namespace std;
 
 #include <q3groupbox.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
 

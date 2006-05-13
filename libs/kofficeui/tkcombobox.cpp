@@ -20,8 +20,8 @@
 #include "tkcombobox.h"
 
 #include <q3listbox.h>
-#include <qpainter.h>
-#include <qstyle.h>
+#include <QPainter>
+#include <QStyle>
 #include <qdrawutil.h>
 #include <QStyleOption>
 //Added by qt3to4:

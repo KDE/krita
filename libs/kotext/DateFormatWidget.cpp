@@ -1,11 +1,11 @@
 #include "ui_timedateformatwidget.h"
 #include "DateFormatWidget.h"
 #include "DateFormatWidget.moc"
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <kglobal.h>
 #include <klocale.h>
 #include <QLineEdit>

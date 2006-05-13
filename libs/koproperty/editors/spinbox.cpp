@@ -23,9 +23,9 @@
 #include "property.h"
 
 #include <QLayout>
-#include <qobject.h>
+#include <QObject>
 #include <QVariant>
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>

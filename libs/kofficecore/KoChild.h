@@ -19,8 +19,8 @@
 #ifndef __koChild_h__
 #define __koChild_h__
 
-#include <qobject.h>
-#include <qmatrix.h>
+#include <QObject>
+#include <QMatrix>
 //Added by qt3to4:
 #include <QPolygon>
 #include <koffice_export.h>

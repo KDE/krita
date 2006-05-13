@@ -2,9 +2,9 @@
 #include <kcmdlineargs.h>
 #include <KoStore.h>
 #include <q3textbrowser.h>
-#include <qstringlist.h>
-#include <qbuffer.h>
-#include <qclipboard.h>
+#include <QStringList>
+#include <QBuffer>
+#include <QClipboard>
 //Added by qt3to4:
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>

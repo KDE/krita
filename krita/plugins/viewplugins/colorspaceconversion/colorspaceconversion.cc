@@ -19,13 +19,13 @@
  */
 #include <stdlib.h>
 
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
 #include <QComboBox>
 #include <q3buttongroup.h>
-#include <qapplication.h>
-#include <qcursor.h>
+#include <QApplication>
+#include <QCursor>
 
 #include <klocale.h>
 #include <kiconloader.h>

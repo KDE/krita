@@ -23,7 +23,7 @@
 #include "class.h"
 
 #include <QString>
-#include <qobject.h>
+#include <QObject>
 #include <koffice_export.h>
 
 namespace Kross { namespace Api {

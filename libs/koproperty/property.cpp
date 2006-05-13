@@ -28,10 +28,10 @@
 #include <kdebug.h>
 #endif
 
-#include <qobject.h>
+#include <QObject>
 #include <q3ptrdict.h>
 #include <q3asciidict.h>
-#include <qpointer.h>
+#include <QPointer>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QByteArray>

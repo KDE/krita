@@ -21,7 +21,7 @@
 
 #include <math.h>
 
-#include <qpainter.h>
+#include <QPainter>
 #include <QSpinBox>
 //Added by qt3to4:
 #include <QKeyEvent>

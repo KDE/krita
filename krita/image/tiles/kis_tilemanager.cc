@@ -26,8 +26,8 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include <qmutex.h>
-#include <qthread.h>
+#include <QMutex>
+#include <QThread>
 
 #include <kstaticdeleter.h>
 #include <kglobal.h>

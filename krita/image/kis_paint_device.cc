@@ -16,13 +16,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qrect.h>
-#include <qmatrix.h>
-#include <qimage.h>
-#include <qdatetime.h>
-#include <qapplication.h>
+#include <QRect>
+#include <QMatrix>
+#include <QImage>
+#include <QDateTime>
+#include <QApplication>
 #include <q3valuelist.h>
-#include <qtimer.h>
+#include <QTimer>
 
 #include <kcommand.h>
 #include <klocale.h>

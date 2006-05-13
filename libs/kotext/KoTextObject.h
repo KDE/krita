@@ -38,7 +38,7 @@ class KoLinkVariable;
 class KoVariable;
 
 //#define TIMING_FORMAT
-//#include <qdatetime.h>
+//#include <QDateTime>
 
 /**
  * The KoTextFormatInterface is a pure interface that allows access to the

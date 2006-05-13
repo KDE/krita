@@ -26,18 +26,18 @@
 #include <climits>
 #include <strings.h>
 
-#include <qbrush.h>
+#include <QBrush>
 #include <qfontinfo.h>
-#include <qfontmetrics.h>
-#include <qpen.h>
+#include <QFontMetrics>
+#include <QPen>
 #include <qregion.h>
-#include <qmatrix.h>
-#include <qimage.h>
+#include <QMatrix>
+#include <QImage>
 #include <QMap>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QPixmap>
 #include <q3pointarray.h>
-#include <qrect.h>
+#include <QRect>
 #include <QString>
 
 #include <kdebug.h>

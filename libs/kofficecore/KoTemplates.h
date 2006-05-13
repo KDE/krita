@@ -22,8 +22,8 @@
 #define koTemplates_h
 
 #include <q3ptrlist.h>
-#include <qstringlist.h>
-#include <qpixmap.h>
+#include <QStringList>
+#include <QPixmap>
 #include <koffice_export.h>
 
 class KInstance;

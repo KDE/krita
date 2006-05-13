@@ -22,8 +22,8 @@
 #define __koStore_h_
 
 #include <QString>
-#include <qstringlist.h>
-#include <qiodevice.h>
+#include <QStringList>
+#include <QIODevice>
 #include <q3valuestack.h>
 #include <QByteArray>
 #include <koffice_export.h>

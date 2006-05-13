@@ -19,7 +19,7 @@
 #define KIS_TILE_H_
 
 #include <qglobal.h>
-#include <qrect.h>
+#include <QRect>
 
 class KisTiledDataManager;
 class KisTiledIterator;

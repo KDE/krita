@@ -21,7 +21,7 @@
 #include <qglobal.h>
 #include <QMap>
 #include <q3valuelist.h>
-#include <qmutex.h>
+#include <QMutex>
 
 #include <ktempfile.h>
 #include <krita_export.h>

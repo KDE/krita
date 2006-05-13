@@ -19,16 +19,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qtoolbutton.h>
-#include <qbrush.h>
+#include <QToolButton>
+#include <QBrush>
 #include <QFont>
-#include <qfontmetrics.h>
+#include <QFontMetrics>
 #include <QLayout>
-#include <qpainter.h>
+#include <QPainter>
 #include <QPoint>
-#include <qrect.h>
+#include <QRect>
 #include <QString>
-#include <qstyle.h>
+#include <QStyle>
 #include <QToolTip>
 #include <QWidget>
 #include <QComboBox>

@@ -21,12 +21,12 @@
 #define KROSS_API_EVENTSIGNAL_H
 
 //#include <QString>
-//#include <qvaluelist.h>
+//#include <Q3ValueList>
 //#include <QMap>
 //#include <QVariant>
-//#include <qsignalmapper.h>
+//#include <QSignalMapper>
 //#include <qguardedptr.h>
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <Q3CString>
 #include <ksharedptr.h>

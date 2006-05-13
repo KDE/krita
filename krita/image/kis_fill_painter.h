@@ -19,7 +19,7 @@
 #ifndef KIS_FILL_PAINTER_H_
 #define KIS_FILL_PAINTER_H_
 
-#include <qrect.h>
+#include <QRect>
 
 #include "kis_meta_registry.h"
 #include "kis_color.h"

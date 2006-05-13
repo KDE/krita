@@ -19,7 +19,7 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#include <qimage.h>
+#include <QImage>
 
 #include <kdebug.h>
 #include <klocale.h>

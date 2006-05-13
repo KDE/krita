@@ -19,7 +19,7 @@
 
 #include "KoTarStore.h"
 
-#include <qbuffer.h>
+#include <QBuffer>
 //Added by qt3to4:
 #include <QByteArray>
 

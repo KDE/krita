@@ -19,7 +19,7 @@
 #ifndef KIS_MERGE_H_
 #define KIS_MERGE_H_
 
-#include <qrect.h>
+#include <QRect>
 
 #include "kis_types.h"
 #include "kis_paint_device.h"

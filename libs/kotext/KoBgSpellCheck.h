@@ -21,8 +21,8 @@
 #define KOBGSPELLCHECK_H
 
 #include <kspell2/broker.h>
-#include <qobject.h>
-#include <qstringlist.h>
+#include <QObject>
+#include <QStringList>
 #include <koffice_export.h>
 class KoTextObject;
 class KoDocument;

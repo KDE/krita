@@ -20,7 +20,7 @@
 #define KIS_STRATEGY_MOVE_H_
 
 #include <QPoint>
-#include <qrect.h>
+#include <QRect>
 
 #include <krita_export.h>
 

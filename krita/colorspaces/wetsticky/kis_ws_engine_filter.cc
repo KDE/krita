@@ -21,7 +21,7 @@
 
 #include <QPoint>
 #include <QSpinBox>
-#include <qrect.h>
+#include <QRect>
 #include <QColor>
 
 #include <klocale.h>

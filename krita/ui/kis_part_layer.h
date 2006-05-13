@@ -18,7 +18,7 @@
 #ifndef _KIS_PART_LAYER_
 #define _KIS_PART_LAYER_
 
-#include <qrect.h>
+#include <QRect>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>

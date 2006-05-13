@@ -21,9 +21,9 @@
 
 #include <QLayout>
 #include <QLabel>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qimage.h>
+#include <QPixmap>
+#include <QPainter>
+#include <QImage>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 

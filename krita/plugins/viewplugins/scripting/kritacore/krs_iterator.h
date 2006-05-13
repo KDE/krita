@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREKRS_ITERATOR_H
 #define KROSS_KRITACOREKRS_ITERATOR_H
 
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <api/class.h>

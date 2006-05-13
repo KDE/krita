@@ -23,7 +23,7 @@
 #include "editoritem.h"
 #include "editor.h"
 
-#include <qpainter.h>
+#include <QPainter>
 #include <QVariant>
 
 #ifdef QT_ONLY

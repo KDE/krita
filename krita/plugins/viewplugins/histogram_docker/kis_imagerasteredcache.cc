@@ -20,7 +20,7 @@
 
 #include <cmath>
 
-#include <qapplication.h>
+#include <QApplication>
 
 #include <kdebug.h>
 

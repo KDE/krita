@@ -21,14 +21,14 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QFile>
-#include <qimage.h>
+#include <QImage>
 #include <q3header.h>
-#include <qrect.h>
-#include <qbrush.h>
-#include <qpainter.h>
+#include <QRect>
+#include <QBrush>
+#include <QPainter>
 #include <q3simplerichtext.h>
-#include <qevent.h>
-#include <qsplitter.h>
+#include <QEvent>
+#include <QSplitter>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3ValueList>

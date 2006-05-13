@@ -24,7 +24,7 @@
 
 #include "koproperty_global.h"
 #include <kstaticdeleter.h> 
-#include <qobject.h> 
+#include <QObject> 
 //Added by qt3to4:
 #include <Q3ValueList>
 

@@ -21,7 +21,7 @@
 #ifndef KIS_ZOOM_TOOL_H_
 #define KIS_ZOOM_TOOL_H_
 
-#include <qtimer.h>
+#include <QTimer>
 
 #include "kis_tool_non_paint.h"
 

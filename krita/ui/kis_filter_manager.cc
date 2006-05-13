@@ -19,8 +19,8 @@
 #include "qsignalmapper.h"
 #include <QLayout>
 #include <QFrame>
-#include <qcursor.h>
-#include <qapplication.h>
+#include <QCursor>
+#include <QApplication>
 #include <QGridLayout>
 #include <kmessagebox.h>
 #include <kguiitem.h>

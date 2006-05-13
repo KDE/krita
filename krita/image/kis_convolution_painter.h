@@ -18,7 +18,7 @@
 #ifndef KIS_CONVOLUTION_PAINTER_H_
 #define KIS_CONVOLUTION_PAINTER_H_
 
-#include <qimage.h>
+#include <QImage>
 
 #include "ksharedptr.h"
 #include "kis_types.h"

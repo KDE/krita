@@ -21,13 +21,13 @@
 
 #include <QString>
 #include <q3cstring.h>
-#include <qbuffer.h>
-#include <qtextstream.h>
-#include <qdatetime.h>
+#include <QBuffer>
+#include <QTextStream>
+#include <QDateTime>
 #include <QFile>
 
 #include "KoXmlReader.h"
-#include <qxml.h>
+#include <QtXml>
 
 #define CHECK(x,y)  check(__FILE__,__LINE__,#x,x,y)
 

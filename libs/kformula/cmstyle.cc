@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
-#include <qpen.h>
-#include <qapplication.h>
+#include <QPainter>
+#include <QPen>
+#include <QApplication>
 
 #include <kdebug.h>
 #include <klocale.h>

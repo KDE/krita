@@ -6,7 +6,7 @@
 // Those macros are in a separate header file in order to share them
 // with kofficecore/tests/kogenstylestest.cpp
 
-#include <qbuffer.h>
+#include <QBuffer>
 #include <QRegExp>
 
 #define TEST_BEGIN(publicId,systemId) \

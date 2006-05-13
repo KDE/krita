@@ -30,8 +30,8 @@
 #include <klocale.h>
 
 #include <QFile>
-#include <qxml.h>
-#include <qbuffer.h>
+#include <QtXml>
+#include <QBuffer>
 
 KoOasisStore::KoOasisStore( KoStore* store )
     : m_store( store ),

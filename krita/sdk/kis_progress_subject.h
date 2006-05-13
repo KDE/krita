@@ -19,7 +19,7 @@
 #ifndef KIS_PROGRESS_SUBJECT_H_
 #define KIS_PROGRESS_SUBJECT_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <krita_export.h>
 
 class KRITAUI_EXPORT KisProgressSubject : public QObject {

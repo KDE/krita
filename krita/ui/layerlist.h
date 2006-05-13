@@ -21,7 +21,7 @@
 #ifndef LAYERLIST_H
 #define LAYERLIST_H
 
-#include <qicon.h>
+#include <QIcon>
 #include <QPixmap>
 #include <QList>
 #include <QMouseEvent>

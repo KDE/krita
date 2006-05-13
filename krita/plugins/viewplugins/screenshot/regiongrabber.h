@@ -22,7 +22,7 @@
 #define REGIONGRABBER_H
 
 #include <QLabel>
-#include <qpixmap.h>
+#include <QPixmap>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>

@@ -21,7 +21,7 @@
 
 #include "KoPoint.h"
 #include "KoSize.h"
-#include <qrect.h>
+#include <QRect>
 #include "koffice_export.h"
 
 /**

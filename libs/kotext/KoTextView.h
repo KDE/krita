@@ -20,7 +20,7 @@
 #ifndef kotextview_h
 #define kotextview_h
 
-#include <qobject.h>
+#include <QObject>
 #include <QPoint>
 #include <QColor>
 #include <QFont>

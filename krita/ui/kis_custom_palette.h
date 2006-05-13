@@ -19,7 +19,7 @@
 #ifndef KIS_CUSTOM_PALETTE_H_
 #define KIS_CUSTOM_PALETTE_H_
 
-#include <qobject.h>
+#include <QObject>
 
 #include "ui_wdgcustompalette.h"
 

@@ -23,7 +23,7 @@
 #define KPROPERTY_SET_H
 
 #include "koproperty_global.h"
-#include <qobject.h>
+#include <QObject>
 #include <q3asciidict.h>
 //Added by qt3to4:
 #include <Q3ValueList>

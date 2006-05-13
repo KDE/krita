@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <lcms.h>
 
-#include <qimage.h>
+#include <QImage>
 #include <QColor>
 
 #include <kdebug.h>

@@ -18,7 +18,7 @@
  */
 
 #include <QPushButton>
-#include <qslider.h>
+#include <QSlider>
 
 #include <kcolorcombo.h>
 #include <kdebug.h>

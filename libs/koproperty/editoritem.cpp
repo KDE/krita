@@ -25,10 +25,10 @@
 #include "widget.h"
 #include "factory.h"
 
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QPixmap>
 #include <q3header.h>
-#include <qstyle.h>
+#include <QStyle>
 #include <qstyleoption.h>
 
 #ifdef QT_ONLY

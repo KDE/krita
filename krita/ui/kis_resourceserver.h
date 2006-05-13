@@ -23,7 +23,7 @@
 #define KIS_RESOURCESERVER_H_
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QList>
 
 #include "kis_generic_registry.h"

@@ -23,7 +23,7 @@
 
 #include <QWidget>
 #include <QColor>
-#include <qpair.h>
+#include <QPair>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QKeyEvent>

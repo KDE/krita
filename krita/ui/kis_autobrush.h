@@ -19,7 +19,7 @@
 #ifndef _KIS_AUTOBRUSH_H_
 #define _KIS_AUTOBRUSH_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <QResizeEvent>
 
 #include "ui_wdgautobrush.h"

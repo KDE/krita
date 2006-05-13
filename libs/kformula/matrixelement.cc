@@ -19,7 +19,7 @@
 */
 
 #include <q3memarray.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QKeyEvent>

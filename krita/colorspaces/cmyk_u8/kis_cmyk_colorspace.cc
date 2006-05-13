@@ -20,7 +20,7 @@
 #include <config.h>
 #include <lcms.h>
 
-#include <qimage.h>
+#include <QImage>
 
 #include <kdebug.h>
 #include <klocale.h>

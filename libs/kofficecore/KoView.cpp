@@ -33,7 +33,7 @@
 #include <assert.h>
 #include <kstatusbar.h>
 #include <kapplication.h>
-#include <qtimer.h>
+#include <QTimer>
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <QEvent>

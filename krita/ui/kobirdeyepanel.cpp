@@ -17,15 +17,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <qpixmap.h>
-#include <qimage.h>
+#include <QPixmap>
+#include <QImage>
 #include <QLayout>
-#include <qpainter.h>
+#include <QPainter>
 #include <q3frame.h>
 #include <QLabel>
-#include <qtoolbutton.h>
-#include <qslider.h>
-#include <qcursor.h>
+#include <QToolButton>
+#include <QSlider>
+#include <QCursor>
 #include <QPaintEvent>
 #include <QEvent>
 #include <QHBoxLayout>

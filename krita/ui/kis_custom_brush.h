@@ -19,7 +19,7 @@
 #ifndef KIS_CUSTOM_BRUSH_H_
 #define KIS_CUSTOM_BRUSH_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <QShowEvent>
 
 #include "ui_wdgcustombrush.h"

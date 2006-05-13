@@ -21,7 +21,7 @@
 #define KROSS_API_EVENTACTION_H
 
 #include <QString>
-//#include <qobject.h>
+//#include <QObject>
 #include <kaction.h>
 #include <ksharedptr.h>
 #include <koffice_export.h>

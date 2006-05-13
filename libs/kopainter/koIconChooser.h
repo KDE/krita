@@ -23,7 +23,7 @@
 
 #include <q3gridview.h>
 #include <q3ptrlist.h>
-#include <qpixmap.h>
+#include <QPixmap>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3Frame>

@@ -29,7 +29,7 @@
 
 #include <QWidget>
 #include <qgl.h>
-#include <qpainter.h>
+#include <QPainter>
 
 #include "kis_global.h"
 #include "kis_canvas_painter.h"

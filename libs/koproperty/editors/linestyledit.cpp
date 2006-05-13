@@ -21,8 +21,8 @@
 #include "linestyleedit.h"
 #include "editoritem.h"
 
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QPixmap>
 #include <QComboBox>
 #include <QLayout>
 #include <QVariant>

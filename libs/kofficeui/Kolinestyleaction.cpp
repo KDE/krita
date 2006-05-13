@@ -19,9 +19,9 @@
 
 #include "Kolinestyleaction.h"
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QBitmap>
 
 #include <kmenu.h>
 #include <kdebug.h>

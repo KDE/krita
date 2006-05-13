@@ -20,10 +20,10 @@
 #include <q3buttongroup.h>
 #include <QPushButton>
 #include <QCheckBox>
-#include <qslider.h>
+#include <QSlider>
 #include <QComboBox>
-#include <qpixmap.h>
-#include <qimage.h>
+#include <QPixmap>
+#include <QImage>
 #include <QLabel>
 
 #include <knuminput.h>

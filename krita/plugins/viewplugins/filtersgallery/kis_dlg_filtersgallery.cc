@@ -23,7 +23,7 @@
 #include <q3groupbox.h>
 #include <QLayout>
 #include <QLabel>
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include <kis_filter.h>
 #include <kis_filter_config_widget.h>

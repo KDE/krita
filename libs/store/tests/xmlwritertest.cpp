@@ -2,9 +2,9 @@
 
 #include "KoXmlWriter.h"
 
-#include <qapplication.h>
+#include <QApplication>
 #include <QFile>
-#include <qdatetime.h>
+#include <QDateTime>
 //Added by qt3to4:
 #include <Q3CString>
 

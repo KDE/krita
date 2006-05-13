@@ -17,7 +17,7 @@
  */
 
 #include <cfloat>
-#include <qimage.h>
+#include <QImage>
 #include <q3valuevector.h>
 
 #include <kdebug.h>

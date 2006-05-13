@@ -18,7 +18,7 @@
 #ifndef _KOWMFPAINT_H_
 #define _KOWMFPAINT_H_
 
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QPolygon>
 #include <Q3PtrList>

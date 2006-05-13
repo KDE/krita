@@ -17,12 +17,12 @@
  */
 #include <q3buttongroup.h>
 #include <QPushButton>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <q3groupbox.h>
 #include <QLayout>
 #include <QLabel>
 #include <QSpinBox>
-#include <qslider.h>
+#include <QSlider>
 #include <q3textedit.h>
 #include <QCheckBox>
 

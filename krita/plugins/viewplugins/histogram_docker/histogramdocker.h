@@ -21,7 +21,7 @@
 #ifndef _HISTOGRAMDOCKER_H_
 #define _HISTOGRAMDOCKER_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <q3popupmenu.h>
 
 #include <kparts/plugin.h>

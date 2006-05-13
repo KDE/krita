@@ -23,7 +23,7 @@
 #include "KoPictureKey.h" // for KoPictureType
 
 #include <QString>
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <QPixmap>
 

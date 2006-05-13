@@ -23,7 +23,7 @@
 #include "scriptcontainer.h"
 #include "scriptaction.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3PtrList>

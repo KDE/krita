@@ -28,7 +28,7 @@
 #include "../api/krossconfig.h"
 #include "scriptcontainer.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <QFile>
 #include <QRegExp>
 

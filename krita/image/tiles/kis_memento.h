@@ -20,7 +20,7 @@
 #define KIS_MEMENTO_H_
 
 #include <qglobal.h>
-#include <qrect.h>
+#include <QRect>
 
 #include <ksharedptr.h>
 

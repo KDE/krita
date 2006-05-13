@@ -23,7 +23,7 @@
 #define KOPAGELAYOUT_H
 
 #include <KoGenStyles.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <koffice_export.h>
 class QDomElement;
 

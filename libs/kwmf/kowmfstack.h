@@ -19,11 +19,11 @@
 #ifndef _KOWMFSTACK_H_
 #define _KOWMFSTACK_H_
 
-#include <qpen.h>
+#include <QPen>
 #include <QColor>
 #include <QFont>
-#include <qbrush.h>
-#include <qpixmap.h>
+#include <QBrush>
+#include <QPixmap>
 
 class KoWmfRead;
 

@@ -20,15 +20,15 @@
 */
 
 #include <QPushButton>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QClipboard>
 #include <QColor>
 #include <qdrawutil.h>
 #include <QLabel>
 #include <QLayout>
-#include <qpainter.h>
+#include <QPainter>
 #include <QSpinBox>
-#include <qstyle.h>
+#include <QStyle>
 #include <QToolTip>
 #include <QVBoxLayout>
 #include <QGridLayout>

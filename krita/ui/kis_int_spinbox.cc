@@ -21,15 +21,15 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#include <qtimer.h>
-#include <qapplication.h>
-#include <qsize.h>
-#include <qslider.h>
-#include <qstyle.h>
+#include <QTimer>
+#include <QApplication>
+#include <QSize>
+#include <QSlider>
+#include <QStyle>
 #include <QLabel>
 #include <QLineEdit>
 #include <QLayout>
-#include <qvalidator.h>
+#include <QValidator>
 #include <QHBoxLayout>
 #include <QFrame>
 

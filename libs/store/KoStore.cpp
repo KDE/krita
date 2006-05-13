@@ -28,7 +28,7 @@
 #include "KoZipStore.h"
 #include "KoDirectoryStore.h"
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <QFile>
 #include <QDir>
 

@@ -21,8 +21,8 @@
 #include <QFile>
 #include <QRegExp>
 #include <QString>
-#include <qstringlist.h>
-#include <qtextstream.h>
+#include <QStringList>
+#include <QTextStream>
 
 #include <kconfig.h>
 #include <kdebug.h>

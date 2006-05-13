@@ -23,8 +23,8 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <qpainter.h>
-#include <qsizepolicy.h>
+#include <QPainter>
+#include <QSizePolicy>
 #include <QMap>
 #include <QToolTip>
 

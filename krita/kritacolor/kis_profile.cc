@@ -24,8 +24,8 @@
 #include <config.h>
 #include <lcms.h>
 
-#include <qimage.h>
-#include <qtextstream.h>
+#include <QImage>
+#include <QTextStream>
 #include <QFile>
 
 #include <ksharedptr.h>

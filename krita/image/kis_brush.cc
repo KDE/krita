@@ -32,7 +32,7 @@
 #include <cfloat>
 
 #include <QFile>
-#include <qimage.h>
+#include <QImage>
 #include <QPoint>
 
 #include <kdebug.h>

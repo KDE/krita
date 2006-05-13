@@ -21,7 +21,7 @@
 #define __koPictureKey_h__
 
 #include <QString>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <koffice_export.h>
 /**
  * \file koPictureKey.h

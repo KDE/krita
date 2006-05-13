@@ -17,15 +17,15 @@
  */
 
 #include <QFont>
-#include <qrect.h>
-#include <qimage.h>
+#include <QRect>
+#include <QImage>
 #include <QLayout>
 #include <QWidget>
 #include <QString>
-#include <qpixmap.h>
-#include <qpainter.h>
+#include <QPixmap>
+#include <QPainter>
 #include <QPushButton>
-#include <qfontmetrics.h>
+#include <QFontMetrics>
 #include <QLabel>
 
 #include <khbox.h>

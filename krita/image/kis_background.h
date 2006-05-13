@@ -18,7 +18,7 @@
 #ifndef KIS_BACKGROUND_H_
 #define KIS_BACKGROUND_H_
 
-#include <qimage.h>
+#include <QImage>
 
 #include <ksharedptr.h>
 #include <krita_export.h>

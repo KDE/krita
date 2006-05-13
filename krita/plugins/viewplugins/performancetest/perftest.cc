@@ -22,13 +22,13 @@
 
 #include <stdlib.h>
 
-#include <qslider.h>
+#include <QSlider>
 #include <QPoint>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
 #include <q3textedit.h>
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include <klocale.h>
 #include <kiconloader.h>

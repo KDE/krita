@@ -22,7 +22,7 @@
 
 #include "../main/scriptcontainer.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <QString>
 
 class TestObject : public QObject

@@ -23,7 +23,7 @@
 #include <QAction>
 
 #include <kaction.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <koffice_export.h>
 
 // TODO Remove as we can use the Qt enum for this

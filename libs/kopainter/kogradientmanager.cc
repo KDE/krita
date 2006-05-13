@@ -21,7 +21,7 @@
 
 #include "svgnamedcolors.h"
 
-#include <qtextstream.h>
+#include <QTextStream>
 #include <q3cstring.h>
 
 #include <kdebug.h>

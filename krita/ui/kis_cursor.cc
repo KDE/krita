@@ -19,10 +19,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qbitmap.h>
-#include <qcursor.h>
-#include <qimage.h>
-#include <qpainter.h>
+#include <QBitmap>
+#include <QCursor>
+#include <QImage>
+#include <QPainter>
 
 #include <kcursor.h>
 #include <kiconloader.h>

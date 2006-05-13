@@ -20,9 +20,9 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qobject.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QObject>
+#include <QApplication>
+#include <QClipboard>
 #include <QPoint>
 #include <QLabel>
 #include <QWidget>

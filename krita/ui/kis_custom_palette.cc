@@ -19,10 +19,10 @@
 #include <KoImageResource.h>
 #include <kdebug.h>
 #include <QLineEdit>
-#include <qimage.h>
+#include <QImage>
 #include <QPushButton>
 #include <QRegExp>
-#include <qvalidator.h>
+#include <QValidator>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

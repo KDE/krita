@@ -25,17 +25,17 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <qdrawutil.h>
-#include <qevent.h>
+#include <QEvent>
 #include <QFile>
-#include <qimage.h>
+#include <QImage>
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-#include <qvalidator.h>
-#include <qpainter.h>
+#include <QValidator>
+#include <QPainter>
 #include <QPushButton>
 #include <QSpinBox>
-#include <qtimer.h>
+#include <QTimer>
 
 #include <kapplication.h>
 #include <kconfig.h>

@@ -18,10 +18,10 @@
 #ifndef KIS_IMAGE_H_
 #define KIS_IMAGE_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <QString>
 #include <q3valuevector.h>
-#include <qmutex.h>
+#include <QMutex>
 
 #include <config.h>
 

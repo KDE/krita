@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qpainter.h>
+#include <QPainter>
 #include <QPixmap>
 #include <koIconChooser.h>
 #include "kis_iconwidget.h"

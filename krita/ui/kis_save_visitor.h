@@ -19,7 +19,7 @@
 #ifndef KIS_SAVE_VISITOR_H_
 #define KIS_SAVE_VISITOR_H_
 
-#include <qrect.h>
+#include <QRect>
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "kis_image.h"

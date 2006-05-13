@@ -27,7 +27,7 @@
 #ifdef HAVE_OPENGL
 #include <qgl.h>
 #endif
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QWheelEvent>
 #include <QPaintEvent>

@@ -25,8 +25,8 @@
 #include <cfloat>
 #include <cmath>
 
-#include <qimage.h>
-#include <qtextstream.h>
+#include <QImage>
+#include <QTextStream>
 #include <QFile>
 
 #include "koColor.h"

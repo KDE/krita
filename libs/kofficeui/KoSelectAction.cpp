@@ -19,8 +19,8 @@
 
 #include "KoSelectAction.h"
 
-#include <qpixmap.h>
-#include <qbitmap.h>
+#include <QPixmap>
+#include <QBitmap>
 
 #include <qmenubar.h>
 //Added by qt3to4:

@@ -23,7 +23,7 @@
 #define KPROPERTY_PIXMAPEDIT_H
 
 #include "../widget.h"
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QVariant>
 //Added by qt3to4:
 #include <QLabel>

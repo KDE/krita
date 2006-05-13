@@ -21,9 +21,9 @@
 #include "imageviewer.h"
 
 #include <QLabel>
-#include <qpainter.h>
-#include <qimage.h>
-#include <qcursor.h>
+#include <QPainter>
+#include <QImage>
+#include <QCursor>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QMouseEvent>

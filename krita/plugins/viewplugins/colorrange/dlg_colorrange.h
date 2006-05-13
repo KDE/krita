@@ -20,7 +20,7 @@
 #ifndef DLG_COLORRANGE
 #define DLG_COLORRANGE
 
-#include <qcursor.h>
+#include <QCursor>
 
 #include <kdialogbase.h>
 

@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include <QString>
-#include <qfontmetrics.h>
+#include <QFontMetrics>
 
 #include <klocale.h>
 #include <kmessagebox.h>

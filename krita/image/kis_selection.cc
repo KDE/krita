@@ -16,7 +16,7 @@
  *  foundation, inc., 675 mass ave, cambridge, ma 02139, usa.
  */
 
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <Q3MemArray>
 

@@ -22,13 +22,13 @@
 
 #include <stdlib.h>
 
-#include <qapplication.h>
+#include <QApplication>
 #include <QLayout>
-#include <qtabwidget.h>
+#include <QTabWidget>
 #include <QFrame>
 #include <QWidget>
-#include <qevent.h>
-#include <qtimer.h>
+#include <QEvent>
+#include <QTimer>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QMenu>

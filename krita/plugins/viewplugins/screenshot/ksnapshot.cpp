@@ -23,10 +23,10 @@
 #include <ktempfile.h>
 #include <kvbox.h>
 
-#include <qbitmap.h>
+#include <QBitmap>
 #include <q3dragobject.h>
-#include <qimage.h>
-#include <qclipboard.h>
+#include <QImage>
+#include <QClipboard>
 #include <q3vbox.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -41,9 +41,9 @@
 #include <kpushbutton.h>
 #include <kstartupinfo.h>
 
-#include <qcursor.h>
+#include <QCursor>
 #include <QRegExp>
-#include <qpainter.h>
+#include <QPainter>
 #include <q3paintdevicemetrics.h>
 #include <q3whatsthis.h>
 

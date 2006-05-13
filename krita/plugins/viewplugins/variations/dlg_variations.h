@@ -20,7 +20,7 @@
 #ifndef DLG_VARIATIONS
 #define DLG_VARIATIONS
 
-#include <qpixmap.h>
+#include <QPixmap>
 
 #include <kdialogbase.h>
 

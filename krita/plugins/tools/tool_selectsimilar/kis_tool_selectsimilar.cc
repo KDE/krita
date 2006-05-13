@@ -23,7 +23,7 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QComboBox>
-#include <qtimer.h>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 

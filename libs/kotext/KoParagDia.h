@@ -22,7 +22,7 @@
 #define paragdia_h
 
 #include <kdialogbase.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <q3ptrlist.h>
 #include <q3stylesheet.h>
 #include <QKeyEvent>

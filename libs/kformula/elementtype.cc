@@ -19,8 +19,8 @@
 */
 
 #include <QFont>
-#include <qfontmetrics.h>
-#include <qpainter.h>
+#include <QFontMetrics>
+#include <QPainter>
 
 #include <kdebug.h>
 

@@ -18,7 +18,7 @@
  */
 
 #include <kdebug.h>
-#include <qdatetime.h> // ### Debug
+#include <QDateTime> // ### Debug
 
 #include "kis_types.h"
 #include "kis_histogram.h"

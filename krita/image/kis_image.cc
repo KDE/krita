@@ -21,13 +21,13 @@
 #include <config.h>
 #include <lcms.h>
 
-#include <qimage.h>
-#include <qpainter.h>
-#include <qsize.h>
+#include <QImage>
+#include <QPainter>
+#include <QSize>
 #include <q3tl.h>
-#include <qapplication.h>
-#include <qthread.h>
-#include <qdatetime.h>
+#include <QApplication>
+#include <QThread>
+#include <QDateTime>
 
 #include <kcommand.h>
 #include <kdebug.h>

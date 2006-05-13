@@ -21,11 +21,11 @@
 #include <iostream>
 
 #include <q3popupmenu.h>
-#include <qbuffer.h>
+#include <QBuffer>
 #include <QColor>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <QImageWriter>

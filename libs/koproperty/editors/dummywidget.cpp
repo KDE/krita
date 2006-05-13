@@ -20,7 +20,7 @@
 
 #include "dummywidget.h"
 
-#include <qpainter.h>
+#include <QPainter>
 
 using namespace KoProperty;
 

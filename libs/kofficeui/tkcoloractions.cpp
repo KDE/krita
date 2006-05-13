@@ -33,12 +33,12 @@
 #include <QMouseEvent>
 #include <kcolordialog.h>
 #include <ktoolbar.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <QToolTip>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <qapplication.h>
+#include <QApplication>
 
 TKColorPopupMenu::TKColorPopupMenu( QWidget* parent, const char* name )
 : KMenu(parent)

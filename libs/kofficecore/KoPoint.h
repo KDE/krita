@@ -20,7 +20,7 @@
 #ifndef koPoint_h
 #define koPoint_h
 
-#include <qmatrix.h>
+#include <QMatrix>
 #include <math.h>
 
 /**

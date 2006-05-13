@@ -18,7 +18,7 @@
 #ifndef KIS_ADJUSTMENT_LAYER_H_
 #define KIS_ADJUSTMENT_LAYER_H_
 
-#include <qobject.h>
+#include <QObject>
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "kis_composite_op.h"

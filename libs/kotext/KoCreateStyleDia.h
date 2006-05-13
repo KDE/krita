@@ -21,7 +21,7 @@
 #define __KoCreateStyleDia__
 
 #include <kdialogbase.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <koffice_export.h>
 
 class QLineEdit;

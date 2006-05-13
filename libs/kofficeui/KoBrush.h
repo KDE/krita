@@ -21,7 +21,7 @@
 #ifndef KOBRUSH_H
 #define KOBRUSH_H
 
-#include <qbrush.h>
+#include <QBrush>
 
 #include "koffice_export.h"
 

@@ -21,7 +21,7 @@
 #ifndef _KIS_PERCHANNEL_FILTER_H_
 #define _KIS_PERCHANNEL_FILTER_H_
 
-#include <qpair.h>
+#include <QPair>
 #include <QList>
 
 #include "kis_filter.h"

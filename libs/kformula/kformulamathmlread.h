@@ -21,7 +21,7 @@
 #ifndef KFORMULAMATHMLREAD_H
 #define KFORMULAMATHMLREAD_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qdom.h>
 #include "kformulainputfilter.h"
 #include "contextstyle.h"

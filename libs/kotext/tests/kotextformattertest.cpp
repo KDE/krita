@@ -1,6 +1,6 @@
 //KoTextFormatter test (also for profiling purposes), GPL v2, David Faure <faure@kde.org>
 
-#include <qapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>

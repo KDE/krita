@@ -20,8 +20,8 @@
 #include <KoImageResource.h>
 #include <kdebug.h>
 #include <QSpinBox>
-#include <qtoolbutton.h>
-#include <qimage.h>
+#include <QToolButton>
+#include <QImage>
 #include <QComboBox>
 #include <QLabel>
 #include <QPixmap>

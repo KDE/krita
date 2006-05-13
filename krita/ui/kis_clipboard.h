@@ -22,7 +22,7 @@
 #define __KIS_CLIPBOARD_H_
 
 
-#include <qsize.h>
+#include <QSize>
 #include "kis_types.h"
 #include <krita_export.h>
 

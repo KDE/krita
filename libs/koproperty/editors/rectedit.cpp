@@ -22,7 +22,7 @@
 
 #include <QVariant>
 #include <QLayout>
-#include <qpainter.h>
+#include <QPainter>
 #include <QToolTip>
 
 #include <kactivelabel.h>

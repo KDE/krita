@@ -21,8 +21,8 @@
 
 #include <QMap>
 #include <QColor>
-#include <qstringlist.h>
-#include <qpair.h>
+#include <QStringList>
+#include <QPair>
 //Added by qt3to4:
 #include <Q3MemArray>
 

@@ -18,7 +18,7 @@
 #ifndef KIS_EVENT_H_
 #define KIS_EVENT_H_
 
-#include <qevent.h>
+#include <QEvent>
 
 #include "kis_point.h"
 #include "kis_input_device.h"

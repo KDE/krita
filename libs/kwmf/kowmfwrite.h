@@ -18,16 +18,16 @@
 #ifndef _KOWMFWRITE_H_
 #define _KOWMFWRITE_H_
 
-#include <qpen.h>
-#include <qbrush.h>
+#include <QPen>
+#include <QBrush>
 #include <QColor>
 #include <QFont>
-#include <qrect.h>
-#include <qbuffer.h>
+#include <QRect>
+#include <QBuffer>
 #include <qregion.h>
 #include <QString>
-#include <qmatrix.h>
-#include <qimage.h>
+#include <QMatrix>
+#include <QImage>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
 #include <koffice_export.h>

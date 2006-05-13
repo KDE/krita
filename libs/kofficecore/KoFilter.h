@@ -20,7 +20,7 @@
 #ifndef __koffice_filter_h__
 #define __koffice_filter_h__
 
-#include <qobject.h>
+#include <QObject>
 #include <QMap>
 #include <q3ptrstack.h>
 #include <koffice_export.h>

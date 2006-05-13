@@ -19,8 +19,8 @@
 #include "kis_canvas.h"
 #include <fixx11h.h> // kis_canvas.h does X11 stuff
 
-#include <qpainter.h>
-#include <qcursor.h>
+#include <QPainter>
+#include <QCursor>
 //Added by qt3to4:
 #include <QKeyEvent>
 

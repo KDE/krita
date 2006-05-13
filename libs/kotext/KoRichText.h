@@ -38,15 +38,15 @@
 #define KORICHTEXT_H
 
 #include <q3ptrlist.h>
-#include <qrect.h>
+#include <QRect>
 #include <QMap>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QColor>
-#include <qsize.h>
+#include <QSize>
 #include <q3valuelist.h>
-#include <qobject.h>
+#include <QObject>
 #include <q3stylesheet.h>
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QByteArray>

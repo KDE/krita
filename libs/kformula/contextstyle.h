@@ -25,7 +25,7 @@
 #include <QColor>
 #include <QFont>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 
 //KDE Include
 #include <kconfig.h>

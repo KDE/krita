@@ -25,8 +25,8 @@
 #include <klocale.h>
 #endif
 
-#include <qtoolbutton.h>
-#include <qpainter.h>
+#include <QToolButton>
+#include <QPainter>
 #include <QVariant>
 #include <QLayout>
 //Added by qt3to4:

@@ -19,8 +19,8 @@
 #ifndef KOSPELL_H
 #define KOSPELL_H
 
-#include <qobject.h>
-#include <qstringlist.h>
+#include <QObject>
+#include <QStringList>
 #include <QString>
 
 #include <kspell2/backgroundchecker.h>

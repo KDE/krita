@@ -19,7 +19,7 @@
  */
 #include <QWidget>
 #include <QString>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QLayout>
 #include <QHBoxLayout>
 

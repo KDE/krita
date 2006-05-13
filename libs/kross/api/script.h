@@ -21,7 +21,7 @@
 #define KROSS_API_SCRIPT_H
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <koffice_export.h>
 #include "class.h"
 

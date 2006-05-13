@@ -21,11 +21,11 @@
 #define KROSS_API_OBJECT_H
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <q3valuelist.h>
 #include <QMap>
 #include <QVariant>
-//#include <qobject.h>
+//#include <QObject>
 #include <ksharedptr.h>
 #include <koffice_export.h>
 #include "krossconfig.h"

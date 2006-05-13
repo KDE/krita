@@ -20,7 +20,7 @@
 #define PIXMAPVIEWER_H
 
 #include <q3scrollview.h>
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>

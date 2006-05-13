@@ -22,7 +22,7 @@
 
 #include <QMap>
 #include <QVariant>
-#include <qcursor.h>
+#include <QCursor>
 //Added by qt3to4:
 #include <Q3ValueList>
 

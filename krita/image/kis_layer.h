@@ -19,7 +19,7 @@
 #ifndef KIS_LAYER_H_
 #define KIS_LAYER_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <QRect>
 
 #include "krita_export.h"

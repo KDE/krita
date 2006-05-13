@@ -21,7 +21,7 @@
 
 #include <config.h>
 
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QPolygon>

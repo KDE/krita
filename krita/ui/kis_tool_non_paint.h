@@ -19,7 +19,7 @@
 #ifndef KIS_TOOL_NON_PAINT_H_
 #define KIS_TOOL_NON_PAINT_H_
 
-#include <qcursor.h>
+#include <QCursor>
 #include <QColor>
 #include <QWidget>
 //Added by qt3to4:

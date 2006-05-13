@@ -19,7 +19,7 @@
 #define _KIS_BOUNDARY_H_
 
 #include <q3valuelist.h>
-#include <qpair.h>
+#include <QPair>
 #include <krita_export.h>
 
 #include "kis_point.h"

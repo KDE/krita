@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <qslider.h>
+#include <QSlider>
 #include <QPoint>
 #include <QColor>
 

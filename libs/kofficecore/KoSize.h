@@ -23,7 +23,7 @@
 #ifndef koSize_h
 #define koSize_h
 
-#include <qsize.h>
+#include <QSize>
 #include <q3tl.h>
 
 /**

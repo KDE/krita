@@ -23,11 +23,11 @@
 
 #include <QCheckBox>
 #include <QComboBox>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qpen.h>
+#include <QObject>
+#include <QPainter>
+#include <QPen>
 #include <QPushButton>
-#include <qrect.h>
+#include <QRect>
 
 #include <kdebug.h>
 #include <kaction.h>

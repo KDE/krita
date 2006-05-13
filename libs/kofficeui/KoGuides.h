@@ -22,8 +22,8 @@
 #ifndef KOGUIDES_H
 #define KOGUIDES_H
 
-#include <qevent.h>
-#include <qobject.h>
+#include <QEvent>
+#include <QObject>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3ValueList>

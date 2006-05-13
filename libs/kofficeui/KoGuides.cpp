@@ -21,9 +21,9 @@
 
 #include "KoGuides.h"
 
-#include <qcursor.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QCursor>
+#include <QPainter>
+#include <QPixmap>
 #include <QAction>
 //Added by qt3to4:
 #include <QMouseEvent>

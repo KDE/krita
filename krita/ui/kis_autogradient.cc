@@ -19,7 +19,7 @@
 
 #include "kis_autogradient.h"
 
-#include <qpainter.h>
+#include <QPainter>
 #include <QComboBox>
 
 #include <kcolorbutton.h>

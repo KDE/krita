@@ -18,7 +18,7 @@
 #ifndef KIS_PALETTE_
 #define KIS_PALETTE_
 
-#include <qimage.h>
+#include <QImage>
 #include <QColor>
 #include <q3valuevector.h>
 //Added by qt3to4:

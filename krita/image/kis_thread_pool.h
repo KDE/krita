@@ -19,9 +19,9 @@
 #ifndef KIS_THREAD_POOL_
 #define KIS_THREAD_POOL_
 
-#include <qthread.h>
+#include <QThread>
 #include <q3ptrlist.h>
-#include <qmutex.h>
+#include <QMutex>
 
 #include "kis_thread.h"
 

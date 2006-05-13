@@ -25,7 +25,7 @@
 #include <qgl.h>
 #endif
 
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 #include <kaction.h>
 #include <ktoggleaction.h>

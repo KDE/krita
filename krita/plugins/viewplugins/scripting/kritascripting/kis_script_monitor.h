@@ -19,7 +19,7 @@
 #ifndef KIS_SCRIPT_MONITOR_H
 #define KIS_SCRIPT_MONITOR_H
 
-#include <qobject.h>
+#include <QObject>
 #include <krita_export.h>
 namespace Kross {
     namespace Api {

@@ -19,7 +19,7 @@
 #define KIS_STRATEGY_COLORSPACE_WET_H_
 
 #include <QColor>
-#include <qstringlist.h>
+#include <QStringList>
 #include <q3valuelist.h>
 #include <QMap>
 

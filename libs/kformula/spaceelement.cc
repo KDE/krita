@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qfontmetrics.h>
-#include <qpainter.h>
+#include <QFontMetrics>
+#include <QPainter>
 
 #include <kdebug.h>
 #include <kprinter.h>

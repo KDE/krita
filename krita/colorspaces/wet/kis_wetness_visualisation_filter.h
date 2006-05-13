@@ -21,8 +21,8 @@
 #ifndef _WETNESS_VISUALISATION_FILTER_H
 #define _WETNESS_VISUALISATION_FILTER_H
 
-#include <qobject.h>
-#include <qtimer.h>
+#include <QObject>
+#include <QTimer>
 #include <kactionclasses.h>
 
 class KisView;

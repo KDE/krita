@@ -21,7 +21,7 @@
 #define KIS_RULER_H_
 
 #include <QFrame>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QResizeEvent>
 #include <QPaintEvent>
 

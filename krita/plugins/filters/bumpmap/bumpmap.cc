@@ -33,7 +33,7 @@
 #include <QLayout>
 #include <QComboBox>
 #include <QCheckBox>
-#include <qbuttongroup.h>
+#include <QButtonGroup>
 #include <QString>
 #include <QPushButton>
 #include <QLineEdit>

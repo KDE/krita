@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <qdom.h>
-#include <qbuffer.h>
+#include <QBuffer>
 #include <QColor>
 //Added by qt3to4:
 #include <QByteArray>

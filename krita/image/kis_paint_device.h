@@ -19,10 +19,10 @@
 #define KIS_PAINT_DEVICE_IMPL_H_
 
 #include <QColor>
-#include <qobject.h>
-#include <qpixmap.h>
+#include <QObject>
+#include <QPixmap>
 #include <q3ptrlist.h>
-#include <qrect.h>
+#include <QRect>
 #include <q3valuelist.h>
 #include <QString>
 

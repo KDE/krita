@@ -20,7 +20,7 @@
 
 #include <qglobal.h>
 #include <q3valuevector.h>
-#include <qrect.h>
+#include <QRect>
 
 class KoStore;
 

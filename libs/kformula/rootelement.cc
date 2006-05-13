@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
-#include <qpen.h>
+#include <QPainter>
+#include <QPen>
 //Added by qt3to4:
 #include <Q3PtrList>
 

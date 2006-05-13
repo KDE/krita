@@ -164,8 +164,8 @@ bool KSnapshot::save( const KUrl& url )
         kWarning() << "KSnapshot was unable to save the snapshot" << endl;
 
         QString caption = i18n("Unable to Save Image");
-        QString text = i18n("KSnapshot was unable to save the image to\n%1.")
-            .arg(url.prettyURL());
+        QString text = i18n("KSnapshot was unable to save the image to\n%1."
+            , url.prettyURL());
         KMessageBox::error(this, text, caption);
     }
 

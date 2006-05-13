@@ -318,9 +318,9 @@ void KisFilterManager::slotApplyFilter(int i)
         // Warning bells!
         if (m_lastFilter->colorSpaceIndependence() == TO_LAB16) {
             if (KMessageBox::warningContinueCancel(m_view,
-                                               i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ")
-                                                       .arg(m_lastFilter->id().name())
-                                                       .arg(dev->colorSpace()->id().name()),
+                                               i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. "
+                                                       , m_lastFilter->id().name()
+                                                       , dev->colorSpace()->id().name()),
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
                                                "lab16degradation") != KMessageBox::Continue) return;
@@ -328,9 +328,9 @@ void KisFilterManager::slotApplyFilter(int i)
         }
         else if (m_lastFilter->colorSpaceIndependence() == TO_RGBA8) {
             if (KMessageBox::warningContinueCancel(m_view,
-                                               i18n("The %1 filter will convert your %2 data to 8-bit RGBA and vice versa. ")
-                                                       .arg(m_lastFilter->id().name())
-                                                       .arg(dev->colorSpace()->id().name()),
+                                               i18n("The %1 filter will convert your %2 data to 8-bit RGBA and vice versa. "
+                                                       , m_lastFilter->id().name()
+                                                       , dev->colorSpace()->id().name()),
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
                                                "rgba8degradation") != KMessageBox::Continue) return;

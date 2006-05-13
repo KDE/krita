@@ -206,7 +206,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
     KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csname, ""), "");
     if(!cs)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Colorspace %1 is not available, please check your installation.").arg(csname ) ) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Colorspace %1 is not available, please check your installation.", csname ) ) );
         return Kross::Api::Object::Ptr(0);
     }
 

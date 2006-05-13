@@ -133,7 +133,7 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
     {
         return Kross::Api::Object::Ptr(new Histogram( paintLayer(), factory->generate() , type));
     } else {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("createHistogram") + "\n" + i18n("The histogram %1 is not available").arg(histoname) ) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1", QString("createHistogram") ) + "\n" + i18n("The histogram %1 is not available", histoname) ) );
     }
     return Kross::Api::Object::Ptr(0);
 }
@@ -175,7 +175,7 @@ Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr ar
     if(!dstCS)
     {
         // FIXME: inform user
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1").arg("convertToColorspace") + "\n" + i18n("Colorspace %1 is not available, please check your installation.").arg(Kross::Api::Variant::toString(args->item(0))) ) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1", QString("convertToColorspace") ) + "\n" + i18n("Colorspace %1 is not available, please check your installation.", Kross::Api::Variant::toString(args->item(0))) ) );
         return Kross::Api::Object::Ptr(0);
     }
     paintLayer()->paintDevice()->convertTo(dstCS);

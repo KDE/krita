@@ -615,7 +615,7 @@ QPixmap KisLayerBox::loadPixmap(const QString& filename, const KIconLoader&
     QPixmap pixmap = il.loadIcon(filename, K3Icon::NoGroup, size);
 
     if (pixmap.isNull())
-        KMessageBox::error(0, i18n("Cannot find %1").arg(filename),
+        KMessageBox::error(0, i18n("Cannot find %1", filename),
                            i18n("Canvas"));
 
     return pixmap;

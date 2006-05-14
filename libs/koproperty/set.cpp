@@ -22,6 +22,7 @@
 #include "set.h"
 #include "property.h"
 
+#include <q3application.h>
 #include <q3asciidict.h>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -62,41 +63,18 @@ class SetPrivate
 //	static Property nonConstNull;
 	QByteArray prevSelection;
 	QString typeName;
-/*
-	bool contains(const QCString &name)
+
+	inline KoProperty::Property& property(const QByteArray &name) const
 	{
-		PropertyList::iterator it = properties.begin();
-		for( ; it != properties.end(); ++it )
-			if ( ( *it )->name() == name )
-				return true;
-
-		return false;
+		KoProperty::Property *p = dict.find(name);
+		if (p)
+			return *p;
+		Set_nonConstNull.setName(0); //to ensure returned property is null
+		kopropertywarn << "Set::property(): PROPERTY \"" << name << "\" NOT FOUND" << endl;
+		return Set_nonConstNull;
 	}
-
-	Property* operator[](const QCString &name)
-	{
-		PropertyList::iterator it = properties.begin();
-		for( ; it != properties.end(); ++it )
-			if ( ( *it )->name() == name )
-				return ( *it );
-
-		return 0L;
-	}
-
-	Property* take(const QCString &name)
-	{
-		Property *p = 0L;
-		PropertyList::iterator it = properties.begin();
-		for( ; it != properties.end(); ++it )
-			if ( ( *it )->name() == name )
-			{
-				p = ( *it );
-				properties.remove( it );
-			}
-		return p;
-	}
-*/
 };
+
 }
 
 using namespace KoProperty;
@@ -225,7 +203,7 @@ Set::removeProperty(const QByteArray &name)
 	if(name.isNull())
 		return;
 
-	Property *p = d->dict.take(name);
+	Property *p = d->dict.find(name);
 	removeProperty(p);
 }
 
@@ -318,29 +296,21 @@ Set::setReadOnly(bool readOnly)
 }
 
 bool
-Set::contains(const QByteArray &name)
+Set::contains(const QByteArray &name) const
 {
 	return d->dict.find(name);
 }
 
 Property&
-Set::property(const QByteArray &name)
+Set::property(const QByteArray &name) const
 {
-	Property *p = d->dict[name];
-	if (p)
-		return *p;
-//		p = new Property();
-//		//addProperty(p); // maybe just return a null property
-//	}
-	Set_nonConstNull.setName(0); //to ensure returned property is null
-	kopropertywarn << "Set::property(): PROPERTY \"" << name << "\" NOT FOUND" << endl;
-	return Set_nonConstNull;
+	return d->property(name);
 }
 
 Property&
-Set::operator[](const QByteArray &name)
+Set::operator[](const QByteArray &name) const
 {
-	return property(name);
+	return d->property(name);
 }
 
 const Set&

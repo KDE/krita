@@ -23,6 +23,7 @@
 #include <QWidget>
 
 class KoPaletteTabBarPrivate;
+class QEvent;
 
 class KoPaletteTabBar : public QWidget
 {
@@ -71,6 +72,9 @@ class KoPaletteTabBar : public QWidget
   protected:
     /// Reimplemented to paint the tabs
     virtual void paintEvent(QPaintEvent* event);
+
+    ///Reimplemented to handle tooltip events
+    virtual bool event(QEvent* event);
 
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void mouseReleaseEvent(QMouseEvent* event);

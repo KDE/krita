@@ -24,7 +24,10 @@
 #include <QString>
 #include <QRect>
 #include <QPainter>
+#include <QEvent>
 #include <QMouseEvent>
+#include <QHelpEvent>
+#include <QToolTip>
 
 #include <kdebug.h>
 
@@ -267,6 +270,23 @@ void KoPaletteTabBar::layoutTabs()
   }
 
   d->m_dirtyTabList = false;
+}
+
+bool KoPaletteTabBar::event(QEvent* event)
+{
+  if(event->type() == QEvent::ToolTip) {
+    QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
+    KoPaletteTabBarPrivate::Tab* tab = d->tabUnderMouse(helpEvent->pos());
+
+    if(tab) {
+      QToolTip::showText(helpEvent->globalPos(), tab->toolTip, this);
+    }
+
+    event->accept();
+    return true;
+  }
+
+  return QWidget::event(event);
 }
 
 #include "KoPaletteTabBar.moc"

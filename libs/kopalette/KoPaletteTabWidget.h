@@ -64,6 +64,12 @@ class KoPaletteTabWidget : public QWidget
       */
     void takeTab(QWidget* child);
 
+    /** Takes the tab with the index @p index from the widget
+      * @param index index of the tab to take from the widget
+      * @return pointer to the tab's widget
+      */
+    QWidget* takeTab(int index);
+
     /// Returns the index of @p child
     int indexOf(QWidget* child);
 
@@ -82,6 +88,10 @@ class KoPaletteTabWidget : public QWidget
   protected slots:
     /// Sets if tab @p index should be shown or not.
     void setTabActive(int index, bool active);
+
+  protected:
+    /// Inserts a new tab widget in the layout
+    void insertWidgetInLayout(QWidget* child);
 
   private:
     KoPaletteTabBar* m_tabBar;

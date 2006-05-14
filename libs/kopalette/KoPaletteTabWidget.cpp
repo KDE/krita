@@ -51,54 +51,43 @@ KoPaletteTabWidget::~KoPaletteTabWidget()
 
 void KoPaletteTabWidget::addTab(QWidget* child, const QIcon& icon, const QString& toolTip)
 {
+  insertWidgetInLayout(child);
   m_tabBar->addTab(icon, toolTip);
-
-  child->setParent(this);
-  m_tabLayout->addWidget(child);
-
-  if(m_widgets.isEmpty()) {
-    child->show();
-  } else {
-    child->hide();
-  }
-
   m_widgets.append(child);
 }
 
 void KoPaletteTabWidget::insertTab(int index, QWidget* child, const QIcon& icon, const QString& toolTip)
 {
+  insertWidgetInLayout(child);
   m_tabBar->insertTab(index, icon, toolTip);
-
-  child->setParent(this);
-  m_tabLayout->addWidget(child);
-
-  if(m_widgets.isEmpty()) {
-    child->show();
-  } else {
-    child->hide();
-  }
-
   m_widgets.insert(index, child);
 }
 
 void KoPaletteTabWidget::removeTab(QWidget* child)
 {
   removeTab(m_widgets.indexOf(child));
+  child = 0;
 }
 
 void KoPaletteTabWidget::removeTab(int index)
 {
-  m_tabBar->removeTab(index);
-  QWidget* child = m_widgets.takeAt(index);
+  QWidget* child = takeTab(index);
   delete child;
   child = 0;
 }
 
 void KoPaletteTabWidget::takeTab(QWidget* child)
 {
-  int index = m_widgets.indexOf(child);
+  takeTab(m_widgets.indexOf(child));
+}
+
+QWidget* KoPaletteTabWidget::takeTab(int index)
+{
+  setTabActive(index, false);
   m_tabBar->removeTab(index);
-  m_widgets.takeAt(index);
+  QWidget* widget = m_widgets.takeAt(index);
+
+  return widget;
 }
 
 int KoPaletteTabWidget::indexOf(QWidget* child)
@@ -133,6 +122,18 @@ void KoPaletteTabWidget::setTabHidden(int index, bool hide)
 void KoPaletteTabWidget::setTabActive(int index, bool active)
 {
   m_widgets.at(index)->setVisible(active);
+}
+
+void KoPaletteTabWidget::insertWidgetInLayout(QWidget* child)
+{
+  child->setParent(this);
+  m_tabLayout->addWidget(child);
+
+  if(m_widgets.isEmpty()) {
+    child->show();
+  } else {
+    child->hide();
+  }
 }
 
 #include "KoPaletteTabWidget.moc"

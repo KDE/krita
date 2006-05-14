@@ -22,7 +22,7 @@
 
 #include <QCursor>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <kis_types.h>
 
@@ -30,12 +30,12 @@
 #include <kis_types.h>
 #include <kis_global.h>
 
+#include "ui_wdg_colorrange.h"
 
 class KisView;
 class KisCanvasSubject;
 class DlgColorRange;
 class KisSelectedTransaction;
-class WdgColorRange;
 
 enum enumAction {
     REDS,
@@ -49,16 +49,21 @@ enum enumAction {
     SHADOWS
 };
 
+class WdgColorRange : public QWidget, public Ui::WdgColorRange
+{
+    Q_OBJECT
+
+    public:
+        WdgColorRange(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
  /**
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
  */
-class DlgColorRange: public KDialogBase {
-    typedef KDialogBase super;
+class DlgColorRange: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
-
-
 
 public:
 

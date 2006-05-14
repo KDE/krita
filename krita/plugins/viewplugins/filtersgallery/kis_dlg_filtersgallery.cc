@@ -18,9 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "kis_dlg_filtersgallery.h"
-
-#include <q3groupbox.h>
 #include <QLayout>
 #include <QLabel>
 #include <QDateTime>
@@ -35,7 +32,7 @@
 #include <kis_types.h>
 #include <kis_view.h>
 
-#include "kis_wdg_filtersgallery.h"
+#include "kis_dlg_filtersgallery.h"
 
 namespace Krita {
 namespace Plugins {
@@ -43,13 +40,14 @@ namespace FiltersGallery {
 
 
 KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name)
-  : KDialogBase(parent,name, true,i18n("Filters Gallery"), Ok | Cancel), m_view(view),m_currentConfigWidget(0), m_currentFilter(0)
+  : KDialog(parent, i18n("Filters Gallery"), Ok | Cancel), m_view(view), m_currentConfigWidget(0), m_currentFilter(0)
 {
+    setObjectName(name);
    // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);
     m_widget->filtersList->setLayer(view->canvasSubject()->currentImg()->activeLayer());
     m_widget->filtersList->setProfile(view->canvasSubject()->monitorProfile());
-    
+
     setMainWidget(m_widget);
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(selectionChanged(Q3IconViewItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
@@ -57,7 +55,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     m_widget->configWidgetHolder->setColumnLayout ( 0, Qt::Horizontal );
     //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget
-    
+
     if (m_view->canvasSubject()->currentImg() && m_view->canvasSubject()->currentImg()->activeDevice())
     {
         m_widget->previewWidget->slotSetDevice( m_view->canvasSubject()->currentImg()->activeDevice() );
@@ -66,7 +64,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     resize( minimumSizeHint());
     m_widget->previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
     m_labelNoCW = new QLabel(i18n("No configuration options are available for this filter."), m_widget->configWidgetHolder);
-    m_widget->configWidgetHolder->layout()->add(m_labelNoCW);
+    m_widget->configWidgetHolder->layout()->addWidget(m_labelNoCW);
     m_labelNoCW->hide();
 }
 
@@ -80,7 +78,7 @@ void KisDlgFiltersGallery::selectionHasChanged ( Q3IconViewItem * item )
     m_currentFilter = kisitem->filter();
     if(m_currentConfigWidget != 0)
     {
-        m_widget->configWidgetHolder->layout()->remove(m_currentConfigWidget);
+        m_widget->configWidgetHolder->layout()->removeWidget(m_currentConfigWidget);
         delete m_currentConfigWidget;
         m_currentConfigWidget = 0;
     } else {
@@ -88,20 +86,20 @@ void KisDlgFiltersGallery::selectionHasChanged ( Q3IconViewItem * item )
     }
     KisImageSP img = m_view->canvasSubject()->currentImg();
     KisPaintLayerSP activeLayer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->activeLayer().data()));
-    
+
     if (activeLayer)
        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(m_widget->configWidgetHolder, activeLayer->paintDevice());
-    
+
     if(m_currentConfigWidget != 0) {
         //m_currentConfigWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        m_widget->configWidgetHolder->layout()->add(m_currentConfigWidget);
+        m_widget->configWidgetHolder->layout()->addWidget(m_currentConfigWidget);
         m_currentConfigWidget->show();
         connect(m_currentConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SLOT(slotConfigChanged()));
     }
     else {
         m_labelNoCW->show();
     }
-    
+
     refreshPreview();
 }
 

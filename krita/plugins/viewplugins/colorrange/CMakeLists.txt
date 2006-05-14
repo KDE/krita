@@ -1,15 +1,9 @@
 
-
-
-
-
-########### next target ###############
-
 set(kritacolorrange_PART_SRCS colorrange.cc dlg_colorrange.cc )
 
 kde4_automoc(${kritacolorrange_PART_SRCS})
 
-kde4_add_ui3_files(kritacolorrange_PART_SRCS wdg_colorrange.ui )
+kde4_add_ui_files(kritacolorrange_PART_SRCS wdg_colorrange.ui )
 
 kde4_add_plugin(kritacolorrange ${kritacolorrange_PART_SRCS})
 

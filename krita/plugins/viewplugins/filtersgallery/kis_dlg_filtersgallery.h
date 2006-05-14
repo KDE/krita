@@ -21,20 +21,24 @@
 #ifndef KISDLGFILTERSPREVIEW_H
 #define KISDLGFILTERSPREVIEW_H
 
-#include <kdialogbase.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3HBoxLayout>
+#include <kdialog.h>
+
+#include "ui_kis_wdg_filtersgallery.h"
+
+class Q3IconViewItem;
+class QLabel;
 
 class KisView;
 class KisFilter;
-class Q3IconViewItem;
-class QLabel;
-class Q3HBoxLayout;
-class KisPreviewWidget;
-class KisWdgFiltersGallery;
-class KisFiltersListView;
-    
+
+class KisWdgFiltersGallery : public QWidget, public Ui::KisWdgFiltersGallery
+{
+    Q_OBJECT
+
+    public:
+        KisWdgFiltersGallery(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
 namespace Krita {
 namespace Plugins {
 namespace FiltersGallery {
@@ -42,7 +46,7 @@ namespace FiltersGallery {
 /**
 @author Cyrille Berger
 */
-class KisDlgFiltersGallery : public KDialogBase
+class KisDlgFiltersGallery : public KDialog
 {
     Q_OBJECT
     public:

@@ -21,7 +21,6 @@
 #include <QImage>
 #include <QLayout>
 #include <QPainter>
-#include <q3frame.h>
 #include <QLabel>
 #include <QToolButton>
 #include <QSlider>
@@ -53,7 +52,7 @@ KoZoomAdapter::~KoZoomAdapter() {}
 KoThumbnailAdapter::KoThumbnailAdapter() {}
 KoThumbnailAdapter::~KoThumbnailAdapter() {}
 
-KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener, 
+KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
                                 KoThumbnailAdapter * thumbnailProvider,
                                 KoCanvasAdapter * canvas,
                                 QWidget * parent,
@@ -102,7 +101,7 @@ void KoBirdEyePanel::setZoom(int zoom)
 {
     m_page->zoom->blockSignals(true);
     m_page->slZoom->blockSignals(true);
-    
+
     m_page->zoom->setValue(zoom);
 
     if (zoom < 10) {
@@ -141,8 +140,8 @@ void KoBirdEyePanel::setZoom(int zoom)
     else if (zoom >= 1450) {
         m_page->slZoom->setValue(19);
     }
-    
-    
+
+
     m_page->zoom->blockSignals(false);
     m_page->slZoom->blockSignals(false);
 
@@ -473,13 +472,13 @@ void KoBirdEyePanel::handleMousePress(QPoint p)
 
         if (dragHandle == DragHandleNone) {
             if (m_thumbnail.rect().contains(p)) {
-    
+
                 // Snap visible area centre to p and begin a centre drag.
-    
+
                 QRect thumbnailRect = m_visibleAreaInThumbnail;
                 thumbnailRect.moveCenter(p);
                 makeThumbnailRectVisible(thumbnailRect);
-    
+
                 m_dragHandle = DragHandleCentre;
                 m_page->view->setCursor(Qt::SizeAllCursor);
                 m_dragging = true;
@@ -603,14 +602,14 @@ void KoBirdEyePanel::renderView()
             painter.drawPixmap(thumbnailX, thumbnailY, m_thumbnail);
 
             painter.setPen(Qt::red);
-            painter.drawRect(thumbnailX + m_visibleAreaInThumbnail.x() - 1, 
-                             thumbnailY + m_visibleAreaInThumbnail.y() - 1, 
-                             m_visibleAreaInThumbnail.width() + 2, 
+            painter.drawRect(thumbnailX + m_visibleAreaInThumbnail.x() - 1,
+                             thumbnailY + m_visibleAreaInThumbnail.y() - 1,
+                             m_visibleAreaInThumbnail.width() + 2,
                              m_visibleAreaInThumbnail.height() + 2);
             painter.setPen(QColor(Qt::red).light());
-            painter.drawRect(thumbnailX + m_visibleAreaInThumbnail.x() - 2, 
-                             thumbnailY + m_visibleAreaInThumbnail.y() - 2, 
-                             m_visibleAreaInThumbnail.width() + 4, 
+            painter.drawRect(thumbnailX + m_visibleAreaInThumbnail.x() - 2,
+                             thumbnailY + m_visibleAreaInThumbnail.y() - 2,
+                             m_visibleAreaInThumbnail.width() + 4,
                              m_visibleAreaInThumbnail.height() + 4);
         }
     }
@@ -623,7 +622,7 @@ void KoBirdEyePanel::paintViewEvent(QPaintEvent *e)
     if (!m_viewBuffer.isNull()) {
         QPainter p(m_page->view);
 
-        p.drawPixmap(e->rect().x(), e->rect().y(), m_viewBuffer, 
+        p.drawPixmap(e->rect().x(), e->rect().y(), m_viewBuffer,
                e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height());
     }
 }

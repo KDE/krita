@@ -23,7 +23,6 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QComboBox>
-#include <q3buttongroup.h>
 #include <QApplication>
 #include <QCursor>
 
@@ -36,23 +35,22 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_doc.h>
-#include <kis_config.h>
-#include <kis_cursor.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_global.h>
-#include <kis_types.h>
+#include "kis_doc.h"
+#include "kis_config.h"
+#include "kis_cursor.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_global.h"
+#include "kis_types.h"
 #include "kis_meta_registry.h"
-#include <kis_view.h>
-#include <kis_paint_device.h>
-#include <kis_colorspace_factory_registry.h>
-#include <kis_cmb_idlist.h>
-#include <squeezedcombobox.h>
+#include "kis_view.h"
+#include "kis_paint_device.h"
+#include "kis_colorspace_factory_registry.h"
+#include "kis_cmb_idlist.h"
+#include "squeezedcombobox.h"
 
 #include "colorspaceconversion.h"
 #include "dlg_colorspaceconversion.h"
-#include "wdgconvertcolorspace.h"
 
 typedef KGenericFactory<ColorSpaceConversion> ColorSpaceConversionFactory;
 K_EXPORT_COMPONENT_FACTORY( kritacolorspaceconversion, ColorSpaceConversionFactory( "krita" ) )
@@ -68,9 +66,10 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
         setInstance(ColorSpaceConversionFactory::instance());
         setXMLFile(locate("data","kritaplugins/colorspaceconversion.rc"), true);
 
-        (void) new KAction(i18n("&Convert Image Type..."), 0, 0, this, SLOT(slotImgColorSpaceConversion()), actionCollection(), "imgcolorspaceconversion");
-        (void) new KAction(i18n("&Convert Layer Type..."), 0, 0, this, SLOT(slotLayerColorSpaceConversion()), actionCollection(), "layercolorspaceconversion");
-
+        KAction *action = new KAction(i18n("&Convert Image Type..."), actionCollection(), "imgcolorspaceconversion");
+        connect(action, SIGNAL(triggered()), this, SLOT(slotImgColorSpaceConversion()));
+        action = new KAction(i18n("&Convert Layer Type..."), actionCollection(), "layercolorspaceconversion");
+        connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
     }
 }
 
@@ -108,7 +107,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
         KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        image->convertTo(cs, dlgColorSpaceConversion->m_page->grpIntent->selectedId());
+        image->convertTo(cs, dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
         QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;
@@ -145,7 +144,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
                 getColorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
-        dev->convertTo(cs, dlgColorSpaceConversion->m_page->grpIntent->selectedId());
+        dev->convertTo(cs, dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
         QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;

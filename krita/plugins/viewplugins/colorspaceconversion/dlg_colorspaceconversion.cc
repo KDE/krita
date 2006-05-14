@@ -22,29 +22,30 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QComboBox>
-#include <q3ptrlist.h>
+#include <QList>
 
 #include <klocale.h>
 #include <knuminput.h>
 #include <kdebug.h>
 
 #include "kis_meta_registry.h"
-#include <kis_colorspace_factory_registry.h>
+#include "kis_colorspace_factory_registry.h"
 #include "kis_profile.h"
 #include "kis_colorspace.h"
-#include <kis_id.h>
-#include <kis_cmb_idlist.h>
-#include <squeezedcombobox.h>
+#include "kis_id.h"
+#include "kis_cmb_idlist.h"
+#include "squeezedcombobox.h"
 
-#include "wdgconvertcolorspace.h"
 #include "dlg_colorspaceconversion.h"
 
 DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
                           const char * name)
-    : super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
+    : super (parent, i18n("Image Size"), Ok | Cancel)
 {
-    m_page = new WdgConvertColorSpace(this, "colorspace_conversion");
+    setObjectName(name);
+    m_page = new WdgConvertColorSpace(this);
     Q_CHECK_PTR(m_page);
+    m_page->setObjectName("colorspace_conversion");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
@@ -52,6 +53,11 @@ DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
     m_page->cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
 
     fillCmbDestProfile(m_page->cmbColorSpaces->currentItem());
+
+    m_intentButtonGroup.addButton(m_page->radioAbsoluteColorimetric, INTENT_ABSOLUTE_COLORIMETRIC);
+    m_intentButtonGroup.addButton(m_page->radioPerceptual, INTENT_PERCEPTUAL);
+    m_intentButtonGroup.addButton(m_page->radioRelativeColorimetric, INTENT_RELATIVE_COLORIMETRIC);
+    m_intentButtonGroup.addButton(m_page->radioSaturation, INTENT_SATURATION);
 
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbDestProfile(const KisID &)));

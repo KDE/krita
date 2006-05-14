@@ -1,287 +1,257 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>WdgPerfTest</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgPerfTest</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgPerfTest</class>
+  <widget class="QWidget" name="WdgPerfTest" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>377</width>
+        <height>566</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>377</width>
-            <height>566</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Image Size</string>
     </property>
-    <property name="caption">
-        <string>Image Size</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QButtonGroup" row="0" column="0">
-            <property name="name">
-                <cstring>grpPerfTest</cstring>
-            </property>
-            <property name="title">
-                <string>&amp;Performance Test</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <widget class="QGroupBox" name="grpPerfTest" >
+          <property name="title" >
+            <string>&amp;Performance Test</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="0" >
+              <widget class="QLabel" name="lblTests" >
+                <property name="text" >
+                  <string>Number of tests:</string>
                 </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>lblTests</cstring>
+                <property name="buddy" stdset="0" >
+                  <cstring>intWidth</cstring>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QCheckBox" name="chkBitBlt" >
+                <property name="text" >
+                  <string>bitBlt</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="0" >
+              <widget class="QCheckBox" name="chkFill" >
+                <property name="text" >
+                  <string>Fill</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="3" column="0" >
+              <widget class="QCheckBox" name="chkGradient" >
+                <property name="text" >
+                  <string>Gradients</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="4" column="0" colspan="2" >
+              <widget class="QCheckBox" name="chkPixel" >
+                <property name="text" >
+                  <string>setPixel/getPixel</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="5" column="0" >
+              <widget class="QCheckBox" name="chkShape" >
+                <property name="text" >
+                  <string>Shapes</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="6" column="0" >
+              <widget class="QCheckBox" name="chkLayer" >
+                <property name="text" >
+                  <string>Layers</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="7" column="0" >
+              <widget class="QCheckBox" name="chkScale" >
+                <property name="text" >
+                  <string>Scaling</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="8" column="0" >
+              <widget class="QCheckBox" name="chkRotate" >
+                <property name="text" >
+                  <string>Rotating</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="9" column="0" >
+              <widget class="QCheckBox" name="chkRender" >
+                <property name="text" >
+                  <string>Rendering</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="10" column="0" >
+              <widget class="QCheckBox" name="chkSelection" >
+                <property name="text" >
+                  <string>Selection</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="11" column="0" colspan="2" >
+              <widget class="QCheckBox" name="chkColorConversion" >
+                <property name="text" >
+                  <string>Color conversion</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="12" column="0" >
+              <widget class="QCheckBox" name="chkFilter" >
+                <property name="text" >
+                  <string>Filters</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="KIntNumInput" name="intTestCount" >
+                <property name="value" >
+                  <number>10</number>
+                </property>
+                <property name="minimum" >
+                  <number>0</number>
+                </property>
+                <property name="maximum" >
+                  <number>1000000</number>
+                </property>
+              </widget>
+            </item>
+            <item row="13" column="0" >
+              <widget class="QCheckBox" name="chkReadBytes" >
+                <property name="text" >
+                  <string>Read bytes</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="14" column="0" >
+              <widget class="QCheckBox" name="chkWriteBytes" >
+                <property name="text" >
+                  <string>Write bytes</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="15" column="0" >
+              <widget class="QCheckBox" name="chkIterators" >
+                <property name="text" >
+                  <string>Iterators</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="16" column="0" >
+              <widget class="QCheckBox" name="chkPaintView" >
+                <property name="text" >
+                  <string>PaintView</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item rowspan="1" row="18" column="0" colspan="2" >
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QPushButton" name="btnSelectAll" >
+                    <property name="text" >
+                      <string>&amp;Select All</string>
                     </property>
-                    <property name="text">
-                        <string>Number of tests:</string>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="btnDeselectAll" >
+                    <property name="text" >
+                      <string>&amp;Deselect All</string>
                     </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>intWidth</cstring>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>chkBitBlt</cstring>
-                    </property>
-                    <property name="text">
-                        <string>bitBlt</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="2" column="0">
-                    <property name="name">
-                        <cstring>chkFill</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Fill</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="3" column="0">
-                    <property name="name">
-                        <cstring>chkGradient</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Gradients</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>chkPixel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>setPixel/getPixel</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="5" column="0">
-                    <property name="name">
-                        <cstring>chkShape</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Shapes</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="6" column="0">
-                    <property name="name">
-                        <cstring>chkLayer</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Layers</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="7" column="0">
-                    <property name="name">
-                        <cstring>chkScale</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Scaling</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="8" column="0">
-                    <property name="name">
-                        <cstring>chkRotate</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Rotating</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="9" column="0">
-                    <property name="name">
-                        <cstring>chkRender</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Rendering</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="10" column="0">
-                    <property name="name">
-                        <cstring>chkSelection</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Selection</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="11" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>chkColorConversion</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Color conversion</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="12" column="0">
-                    <property name="name">
-                        <cstring>chkFilter</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Filters</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="0" column="1">
-                    <property name="name">
-                        <cstring>intTestCount</cstring>
-                    </property>
-                    <property name="value">
-                        <number>10</number>
-                    </property>
-                    <property name="minimum">
-                        <number>0</number>
-                    </property>
-                    <property name="maximum">
-                        <number>1000000</number>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="13" column="0">
-                    <property name="name">
-                        <cstring>chkReadBytes</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Read bytes</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="14" column="0">
-                    <property name="name">
-                        <cstring>chkWriteBytes</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Write bytes</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="15" column="0">
-                    <property name="name">
-                        <cstring>chkIterators</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Iterators</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="16" column="0">
-                    <property name="name">
-                        <cstring>chkPaintView</cstring>
-                    </property>
-                    <property name="text">
-                        <string>PaintView</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="18" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>layout5</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>btnSelectAll</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Select All</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>btnDeselectAll</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Deselect All</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QCheckBox" row="17" column="0">
-                    <property name="name">
-                        <cstring>chkPaintViewFPS</cstring>
-                    </property>
-                    <property name="text">
-                        <string>PaintView (fps)</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-            </grid>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+            <item row="17" column="0" >
+              <widget class="QCheckBox" name="chkPaintViewFPS" >
+                <property name="text" >
+                  <string>PaintView (fps)</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <customwidgets>
+    <customwidget>
+      <class>KIntNumInput</class>
+      <extends></extends>
+      <header location="local" >knuminput.h</header>
+      <container>1</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
+  <tabstops>
     <tabstop>intTestCount</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-<customwidgets>
-	<customwidget>
-		<class>KIntNumInput</class>
-		<header location="local">knuminput.h</header>
-		<container>1</container>
-		<pixmap></pixmap>
-	</customwidget>
-</customwidgets>
-</UI>
+  </tabstops>
+</ui>

@@ -19,7 +19,6 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <q3groupbox.h>
 #include <QSlider>
 #include <QString>
 

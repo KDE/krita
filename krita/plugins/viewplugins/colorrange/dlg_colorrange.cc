@@ -49,7 +49,6 @@
 #include <kis_cursor.h>
 
 #include "dlg_colorrange.h"
-#include "wdg_colorrange.h"
 
 namespace {
 
@@ -175,15 +174,17 @@ quint32 matchColors(const QColor & c, enumAction action)
 
 
 DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
-    : super (parent, name, true, i18n("Color Range"), Ok | Cancel, Ok)
+    : super (parent, i18n("Color Range"), Ok | Cancel)
 {
+    setObjectName(name);
     m_dev = dev;
     m_view = view;
 
     m_subject = view->canvasSubject();
 
-    m_page = new WdgColorRange(this, "color_range");
+    m_page = new WdgColorRange(this);
     Q_CHECK_PTR(m_page);
+    m_page->setObjectName("color_range");
 
     setCaption(i18n("Color Range"));
     setMainWidget(m_page);
@@ -239,7 +240,7 @@ void DlgColorRange::updatePreview()
 
     qint32 x, y, w, h;
     m_dev->exactBounds(x, y, w, h);
-    QPixmap pix = QPixmap(m_selection->maskImage().smoothScale(350, 350, Qt::KeepAspectRatio));
+    QPixmap pix = QPixmap::fromImage(m_selection->maskImage().scaled(350, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     m_subject->canvasController()->updateCanvas();
     m_page->pixSelection->setPixmap(pix);
 }

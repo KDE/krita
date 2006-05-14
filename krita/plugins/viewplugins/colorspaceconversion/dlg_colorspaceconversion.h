@@ -20,17 +20,27 @@
 #ifndef DLG_COLORSPACECONVERSION
 #define DLG_COLORSPACECONVERSION
 
-#include <kdialogbase.h>
+#include <QButtonGroup>
+
+#include <kdialog.h>
 
 #include <kis_id.h>
 
-class WdgConvertColorSpace;
+#include "ui_wdgconvertcolorspace.h"
+
+class WdgConvertColorSpace : public QWidget, public Ui::WdgConvertColorSpace
+{
+    Q_OBJECT
+
+    public:
+        WdgConvertColorSpace(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
 
 /**
  * XXX
  */
-class DlgColorSpaceConversion: public KDialogBase {
-    typedef KDialogBase super;
+class DlgColorSpaceConversion: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:
@@ -39,6 +49,8 @@ public:
     ~DlgColorSpaceConversion();
 
     WdgConvertColorSpace * m_page;
+
+    QButtonGroup m_intentButtonGroup;
 
 public slots:
 

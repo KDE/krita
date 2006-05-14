@@ -27,11 +27,11 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_view.h>
-#include <kis_types.h>
-#include <kis_image.h>
-#include <kis_paint_device.h>
-#include <kis_layer.h>
+#include "kis_view.h"
+#include "kis_types.h"
+#include "kis_image.h"
+#include "kis_paint_device.h"
+#include "kis_layer.h"
 
 #include "kis_dropshadow_plugin.h"
 #include "kis_dropshadow.h"
@@ -48,7 +48,8 @@ KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
         setXMLFile(locate("data","kritaplugins/dropshadow.rc"), true);
 
         m_view = (KisView*) parent;
-        (void) new KAction(i18n("Add Drop Shadow..."), 0, 0, this, SLOT(slotDropshadow()), actionCollection(), "dropshadow");
+        KAction *action = new KAction(i18n("Add Drop Shadow..."), actionCollection(), "dropshadow");
+        connect(action, SIGNAL(triggered()), this, SLOT(slotDropshadow()));
     }
 }
 

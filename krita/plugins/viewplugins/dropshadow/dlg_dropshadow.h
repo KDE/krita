@@ -20,18 +20,28 @@
 #ifndef DLG_DROPSHADOW
 #define DLG_DROPSHADOW
 
-#include <kdialogbase.h>
-#include <kis_dropshadow.h>
+#include <kdialog.h>
 
-class WdgDropshadow;
+#include "kis_dropshadow.h"
+
+#include "ui_wdg_dropshadow.h"
+
 class QColor;
+
+class WdgDropshadow : public QWidget, public Ui::WdgDropshadow
+{
+    Q_OBJECT
+
+    public:
+        WdgDropshadow(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+};
 
 /**
  * This dialog allows the user to configure the decomposition of an image
  * into layers: one layer for each color channel.
  */
-class DlgDropshadow: public KDialogBase {
-    typedef KDialogBase super;
+class DlgDropshadow: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:
@@ -52,7 +62,6 @@ private slots:
     void okClicked();
 
 private:
-
     WdgDropshadow * m_page;
 };
 

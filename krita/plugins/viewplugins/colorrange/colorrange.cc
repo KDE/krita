@@ -35,15 +35,15 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <kis_doc.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_paint_device.h>
-#include <kis_global.h>
-#include <kis_types.h>
-#include <kis_view.h>
-#include <kis_selection.h>
-#include <kis_selection_manager.h>
+#include "kis_doc.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_paint_device.h"
+#include "kis_global.h"
+#include "kis_types.h"
+#include "kis_view.h"
+#include "kis_selection.h"
+#include "kis_selection_manager.h"
 #include "colorrange.h"
 #include "dlg_colorrange.h"
 
@@ -57,8 +57,9 @@ ColorRange::ColorRange(QObject *parent, const QStringList &)
         setInstance(ColorRangeFactory::instance());
         setXMLFile(locate("data","kritaplugins/colorrange.rc"), true);
         m_view = dynamic_cast<KisView*>(parent);
-        m_view->canvasSubject()->selectionManager()->addSelectionAction( new KAction(i18n("&Color Range..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "colorrange") );
-
+        KAction *action = new KAction(i18n("&Color Range..."), actionCollection(), "colorrange");
+        connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
+        m_view->canvasSubject()->selectionManager()->addSelectionAction(action);
     }
 }
 

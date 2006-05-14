@@ -36,16 +36,15 @@ using namespace std;
 #include <kdebug.h>
 
 #include "dlg_perftest.h"
-#include "wdg_perftest.h"
 
-
-DlgPerfTest::DlgPerfTest( QWidget *  parent,
-                const char * name)
-    : super (parent, name, true, i18n("Performance Test"), Ok | Cancel, Ok)
+DlgPerfTest::DlgPerfTest( QWidget *  parent, const char * name)
+    : super (parent, i18n("Performance Test"), Ok | Cancel)
 {
+    setObjectName(name);
     m_lock = false;
 
-    m_page = new WdgPerfTest(this, "perf_test");
+    m_page = new WdgPerfTest(this);
+    m_page->setObjectName("perf_test");
     Q_CHECK_PTR(m_page);
 
     setMainWidget(m_page);

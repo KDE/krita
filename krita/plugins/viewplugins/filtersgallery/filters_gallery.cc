@@ -29,17 +29,17 @@
 
 #include <kopalettemanager.h>
 
-#include <kis_colorspace_factory_registry.h>
+#include "kis_colorspace_factory_registry.h"
 #include "kis_progress_display_interface.h"
-#include <kis_dlg_filtersgallery.h>
-#include <kis_doc.h>
-#include <kis_filter.h>
-#include <kis_filters_listview.h>
-#include <kis_meta_registry.h>
-#include <kis_paint_device.h>
-#include <kis_selection.h>
-#include <kis_view.h>
-#include <kis_transaction.h>
+#include "kis_dlg_filtersgallery.h"
+#include "kis_doc.h"
+#include "kis_filter.h"
+#include "kis_filters_listview.h"
+#include "kis_meta_registry.h"
+#include "kis_paint_device.h"
+#include "kis_selection.h"
+#include "kis_view.h"
+#include "kis_transaction.h"
 
 namespace Krita {
 namespace Plugins {
@@ -58,7 +58,8 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const QStringList &)
 
         m_view = (KisView*) parent;
 
-        (void) new KAction(i18n("&Filters Gallery"), 0, 0, this, SLOT(showFiltersGalleryDialog()), actionCollection(), "krita_filters_gallery");
+        KAction *action = new KAction(i18n("&Filters Gallery"), actionCollection(), "krita_filters_gallery");
+        connect(action, SIGNAL(triggered()), this, SLOT(showFiltersGalleryDialog()));
 
         // Add a docker with the list of filters
 //         QImage img;

@@ -15,15 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <q3buttongroup.h>
+
 #include <QPushButton>
 #include <QRadioButton>
-#include <q3groupbox.h>
 #include <QLayout>
 #include <QLabel>
 #include <QSpinBox>
 #include <QSlider>
-#include <q3textedit.h>
 #include <QCheckBox>
 
 #include <klocale.h>
@@ -73,7 +71,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     }
     m_page->cmbColorSpaces->setIDList(colorSpaces);
     m_page->cmbColorSpaces->setCurrent(image->colorSpace()->id());
-            
+
     fillCmbProfiles(image->colorSpace()->id());
 
     if (image->getProfile()) {

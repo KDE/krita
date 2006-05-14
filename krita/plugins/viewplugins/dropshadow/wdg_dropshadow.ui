@@ -1,225 +1,191 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgDropshadow</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgDropshadow</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgDropshadow</class>
+  <widget class="QWidget" name="WdgDropshadow" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>403</width>
+        <height>258</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>403</width>
-            <height>258</height>
-        </rect>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>Offset X:</string>
-            </property>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <widget class="QLabel" name="textLabel1" >
+          <property name="text" >
+            <string>Offset X:</string>
+          </property>
         </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>textLabel1_2</cstring>
-            </property>
-            <property name="text">
-                <string>Offset Y:</string>
-            </property>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QLabel" name="textLabel1_2" >
+          <property name="text" >
+            <string>Offset Y:</string>
+          </property>
         </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="text">
-                <string>Blur radius:</string>
-            </property>
+      </item>
+      <item row="2" column="0" >
+        <widget class="QLabel" name="textLabel2" >
+          <property name="text" >
+            <string>Blur radius:</string>
+          </property>
         </widget>
-        <widget class="QLabel" row="3" column="0">
-            <property name="name">
-                <cstring>textLabel3</cstring>
-            </property>
-            <property name="text">
-                <string>Color:</string>
-            </property>
+      </item>
+      <item row="3" column="0" >
+        <widget class="QLabel" name="textLabel3" >
+          <property name="text" >
+            <string>Color:</string>
+          </property>
         </widget>
-        <widget class="QLabel" row="4" column="0">
-            <property name="name">
-                <cstring>textLabel4</cstring>
-            </property>
-            <property name="text">
-                <string>Opacity:</string>
-            </property>
+      </item>
+      <item row="4" column="0" >
+        <widget class="QLabel" name="textLabel4" >
+          <property name="text" >
+            <string>Opacity:</string>
+          </property>
         </widget>
-        <widget class="QSlider" row="4" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>opacitySlider</cstring>
-            </property>
-            <property name="maxValue">
-                <number>100</number>
-            </property>
-            <property name="value">
-                <number>80</number>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
+      </item>
+      <item rowspan="1" row="4" column="1" colspan="2" >
+        <widget class="QSlider" name="opacitySlider" >
+          <property name="maximum" >
+            <number>100</number>
+          </property>
+          <property name="value" >
+            <number>80</number>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="4" column="3">
-            <property name="name">
-                <cstring>opacitySpinBox</cstring>
-            </property>
-            <property name="suffix">
-                <string>%</string>
-            </property>
-            <property name="maxValue">
-                <number>100</number>
-            </property>
-            <property name="value">
-                <number>80</number>
-            </property>
+      </item>
+      <item row="4" column="3" >
+        <widget class="QSpinBox" name="opacitySpinBox" >
+          <property name="suffix" >
+            <string>%</string>
+          </property>
+          <property name="maximum" >
+            <number>100</number>
+          </property>
+          <property name="value" >
+            <number>80</number>
+          </property>
         </widget>
-        <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="4">
-            <property name="name">
-                <cstring>allowResizingCheckBox</cstring>
-            </property>
-            <property name="text">
-                <string>Allow resizing</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
+      </item>
+      <item rowspan="1" row="5" column="0" colspan="4" >
+        <widget class="QCheckBox" name="allowResizingCheckBox" >
+          <property name="text" >
+            <string>Allow resizing</string>
+          </property>
+          <property name="checked" >
+            <bool>true</bool>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="0" column="1">
-            <property name="name">
-                <cstring>xOffsetSpinBox</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
-            <property name="value">
-                <number>8</number>
-            </property>
+      </item>
+      <item row="0" column="1" >
+        <widget class="QSpinBox" name="xOffsetSpinBox" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
+          <property name="value" >
+            <number>8</number>
+          </property>
         </widget>
-        <spacer row="0" column="2" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>spacer7</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>200</width>
-                    <height>20</height>
-                </size>
-            </property>
+      </item>
+      <item rowspan="1" row="0" column="2" colspan="2" >
+        <spacer name="spacer7" >
+          <property name="sizeHint" >
+            <size>
+              <width>200</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </spacer>
-        <widget class="QSpinBox" row="1" column="1">
-            <property name="name">
-                <cstring>yOffsetSpinBox</cstring>
-            </property>
-            <property name="minValue">
-                <number>-99</number>
-            </property>
-            <property name="value">
-                <number>8</number>
-            </property>
+      </item>
+      <item row="1" column="1" >
+        <widget class="QSpinBox" name="yOffsetSpinBox" >
+          <property name="minimum" >
+            <number>-99</number>
+          </property>
+          <property name="value" >
+            <number>8</number>
+          </property>
         </widget>
-        <spacer row="1" column="2" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>spacer8</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>200</width>
-                    <height>20</height>
-                </size>
-            </property>
+      </item>
+      <item rowspan="1" row="1" column="2" colspan="2" >
+        <spacer name="spacer8" >
+          <property name="sizeHint" >
+            <size>
+              <width>200</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </spacer>
-        <widget class="QSpinBox" row="2" column="1">
-            <property name="name">
-                <cstring>blurRadiusSpinBox</cstring>
-            </property>
-            <property name="value">
-                <number>5</number>
-            </property>
+      </item>
+      <item row="2" column="1" >
+        <widget class="QSpinBox" name="blurRadiusSpinBox" >
+          <property name="value" >
+            <number>5</number>
+          </property>
         </widget>
-        <spacer row="2" column="2" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>spacer9</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>190</width>
-                    <height>20</height>
-                </size>
-            </property>
+      </item>
+      <item rowspan="1" row="2" column="2" colspan="2" >
+        <spacer name="spacer9" >
+          <property name="sizeHint" >
+            <size>
+              <width>190</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </spacer>
-        <widget class="KColorButton" row="3" column="1">
-            <property name="name">
-                <cstring>shadowColorButton</cstring>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
+      </item>
+      <item row="3" column="1" >
+        <widget class="KColorButton" name="shadowColorButton" >
+          <property name="text" >
+            <string/>
+          </property>
         </widget>
-        <spacer row="3" column="2" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>spacer4</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>120</width>
-                    <height>31</height>
-                </size>
-            </property>
+      </item>
+      <item rowspan="1" row="3" column="2" colspan="2" >
+        <spacer name="spacer4" >
+          <property name="sizeHint" >
+            <size>
+              <width>120</width>
+              <height>31</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<connections>
-    <connection>
-        <sender>opacitySpinBox</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>opacitySlider</receiver>
-        <slot>setValue(int)</slot>
-    </connection>
-    <connection>
-        <sender>opacitySlider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>opacitySpinBox</receiver>
-        <slot>setValue(int)</slot>
-    </connection>
-</connections>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <tabstops>
     <tabstop>xOffsetSpinBox</tabstop>
     <tabstop>yOffsetSpinBox</tabstop>
     <tabstop>blurRadiusSpinBox</tabstop>
@@ -227,9 +193,19 @@
     <tabstop>opacitySlider</tabstop>
     <tabstop>opacitySpinBox</tabstop>
     <tabstop>allowResizingCheckBox</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kcolorbutton.h</includehint>
-</includehints>
-</UI>
+  </tabstops>
+  <connections>
+    <connection>
+      <sender>opacitySpinBox</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>opacitySlider</receiver>
+      <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+      <sender>opacitySlider</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>opacitySpinBox</receiver>
+      <slot>setValue(int)</slot>
+    </connection>
+  </connections>
+</ui>

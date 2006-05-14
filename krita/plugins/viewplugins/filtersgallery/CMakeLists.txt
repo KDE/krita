@@ -7,7 +7,7 @@ set(kritafiltersgallery_PART_SRCS
 
 kde4_automoc(${kritafiltersgallery_PART_SRCS})
 
-kde4_add_ui3_files(kritafiltersgallery_PART_SRCS kis_wdg_filtersgallery.ui)
+kde4_add_ui_files(kritafiltersgallery_PART_SRCS kis_wdg_filtersgallery.ui)
 
 kde4_add_plugin(kritafiltersgallery ${kritafiltersgallery_PART_SRCS})
 

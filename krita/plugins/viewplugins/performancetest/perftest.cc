@@ -27,8 +27,9 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
-#include <q3textedit.h>
+#include <QTextEdit>
 #include <QDateTime>
+#include <QColor>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -41,32 +42,29 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
-#include <QColor>
-
 #include "kis_meta_registry.h"
-#include <kis_resourceserver.h>
+#include "kis_resourceserver.h"
 #include "kis_cursor.h"
-#include <kis_doc.h>
-#include <kis_config.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_global.h>
-#include <kis_types.h>
-#include <kis_view.h>
-#include <kis_selection.h>
-#include <kis_colorspace_factory_registry.h>
-#include <kis_colorspace.h>
-#include <kis_painter.h>
-#include <kis_fill_painter.h>
-#include <kis_id.h>
-#include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>
+#include "kis_doc.h"
+#include "kis_config.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_global.h"
+#include "kis_types.h"
+#include "kis_view.h"
+#include "kis_selection.h"
+#include "kis_colorspace_factory_registry.h"
+#include "kis_colorspace.h"
+#include "kis_painter.h"
+#include "kis_fill_painter.h"
+#include "kis_id.h"
+#include "kis_paint_device.h"
+#include "kis_iterators_pixel.h"
 #include "perftest.h"
 #include "kis_filter_config_widget.h"
 #include "kis_factory.h"
 
 #include "dlg_perftest.h"
-#include "wdg_perftest.h"
 
 #define USE_CALLGRIND 0
 
@@ -86,8 +84,8 @@ PerfTest::PerfTest(QObject *parent, const QStringList &)
         setInstance(PerfTestFactory::instance());
         setXMLFile(locate("data","kritaplugins/perftest.rc"), true);
 
-        (void) new KAction(i18n("&Performance Test..."), 0, 0, this, SLOT(slotPerfTest()), actionCollection(), "perf_test");
-
+        KAction *action = new KAction(i18n("&Performance Test..."), actionCollection(), "perf_test");
+        connect(action, SIGNAL(triggered()), this, SLOT(slotPerfTest()));
         m_view = (KisView*) parent;
     }
 }
@@ -110,7 +108,7 @@ void PerfTest::slotPerfTest()
 
     QString report = QString("");
 
-        if (dlgPerfTest->exec() == QDialog::Accepted) {
+    if (dlgPerfTest->exec() == QDialog::Accepted) {
 
         qint32 testCount = (qint32)qRound(dlgPerfTest->page()->intTestCount->value());
 
@@ -216,21 +214,20 @@ void PerfTest::slotPerfTest()
             report = report.append(s);
             kDebug() << s << "\n";
         }
-        KDialogBase * d = new KDialogBase(m_view, "", true, "", KDialogBase::Ok);
+        KDialog *d = new KDialog(m_view, i18n("Performance test results"), KDialogBase::Ok);
         Q_CHECK_PTR(d);
 
-        d->setCaption("Performance test results");
-        Q3TextEdit * e = new Q3TextEdit(d);
+        QTextEdit * e = new QTextEdit(d);
         Q_CHECK_PTR(e);
         d->setMainWidget(e);
-        e->setText(report);
+        e->setPlainText(report);
         e->setMinimumWidth(600);
         e->setMinimumHeight(600);
         d->exec();
         delete d;
 
     }
-        delete dlgPerfTest;
+    delete dlgPerfTest;
 }
 
 QString PerfTest::bltTest(quint32 testCount)
@@ -505,20 +502,16 @@ QString PerfTest::fillTest(quint32 testCount)
             p.setCompositeOp(COMPOSITE_OVER);
             p.fillPattern(0,0);
         }
+
         report = report.append(QString("    Opaque patternfill  of whole circle (incl. erase and painting of circle) %1 times: %2\n").arg(testCount).arg(t.elapsed()));
-
-
-
     }
 
-
-
     return report;
-
 }
 
 QString PerfTest::gradientTest(quint32 testCount)
 {
+    Q_UNUSED(testCount);
     return QString("Gradient test\n");
 }
 
@@ -569,16 +562,19 @@ QString PerfTest::pixelTest(quint32 testCount)
 
 QString PerfTest::shapeTest(quint32 testCount)
 {
+    Q_UNUSED(testCount);
     return QString("Shape test\n");
 }
 
 QString PerfTest::layerTest(quint32 testCount)
 {
+    Q_UNUSED(testCount);
     return QString("Layer test\n");
 }
 
 QString PerfTest::scaleTest(quint32 testCount)
 {
+    Q_UNUSED(testCount);
     return QString("Scale test\n");
 }
 
@@ -606,13 +602,15 @@ QString PerfTest::rotateTest(quint32 testCount)
     return report;
 }
 
-QString PerfTest::renderTest(quint32 restCount)
+QString PerfTest::renderTest(quint32 testCount)
 {
+    Q_UNUSED(testCount);
     return QString("Render test\n");
 }
 
 QString PerfTest::selectionTest(quint32 testCount)
 {
+    Q_UNUSED(testCount);
     return QString("Selection test\n");
 }
 

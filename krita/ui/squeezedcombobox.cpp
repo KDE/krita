@@ -22,15 +22,12 @@
 
 // Qt includes.
 
-#include <q3listbox.h>
 #include <QComboBox>
 #include <QPair>
 #include <QTimer>
-#include <q3valuelist.h>
 #include <QStyle>
 #include <QApplication>
 #include <QToolTip>
-//Added by qt3to4:
 #include <QResizeEvent>
 
 // Local includes.

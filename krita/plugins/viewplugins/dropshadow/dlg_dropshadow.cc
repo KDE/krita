@@ -20,10 +20,8 @@
 
 #include <QRadioButton>
 #include <QCheckBox>
-#include <q3buttongroup.h>
 #include <QLabel>
 #include <QComboBox>
-#include <q3button.h>
 #include <QColor>
 
 #include <klocale.h>
@@ -32,14 +30,14 @@
 #include <kcolorbutton.h>
 
 #include "dlg_dropshadow.h"
-#include "wdg_dropshadow.h"
 
 DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
                           const QString & /*layerCS*/,
                           QWidget *  parent,
                           const char * name)
-    : super (parent, name, true, i18n("Drop Shadow"), Ok | Cancel, Ok)
+    : super (parent, i18n("Drop Shadow"), Ok | Cancel)
 {
+    setObjectName(name);
     m_page = new WdgDropshadow(this, "dropshadow");
     Q_CHECK_PTR(m_page);
     setMainWidget(m_page);

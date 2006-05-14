@@ -20,12 +20,20 @@
 #ifndef DLG_PERFTEST_H_
 #define DLG_PERFTEST_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
-class WdgPerfTest;
+#include "ui_wdg_perftest.h"
 
-class DlgPerfTest: public KDialogBase {
-    typedef KDialogBase super;
+class WdgPerfTest : public QWidget, public Ui::WdgPerfTest
+{
+    Q_OBJECT
+
+    public:
+        WdgPerfTest(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class DlgPerfTest: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

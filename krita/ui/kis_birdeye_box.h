@@ -20,8 +20,7 @@
 #ifndef KIS_BIRDEYE_BOX_H
 #define KIS_BIRDEYE_BOX_H
 
-#include "qwidget.h"
-//Added by qt3to4:
+#include <QWidget>
 #include <QLabel>
 
 #include "kis_types.h"
@@ -34,7 +33,7 @@ class KoZoomAdapter;
 class KisColorSpace;
 
 class KisBirdEyeBox : public QWidget
-{ 
+{
     Q_OBJECT
 
 public:
@@ -54,7 +53,7 @@ protected slots:
     void exposureValueChanged(double exposure);
     void exposureSliderPressed();
     void exposureSliderReleased();
-    
+
 private:
     KoBirdEyePanel * m_birdEyePanel;
     KisDoubleWidget * m_exposureDoubleWidget;

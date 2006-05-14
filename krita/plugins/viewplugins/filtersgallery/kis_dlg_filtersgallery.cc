@@ -52,7 +52,6 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     // Initialize filters list
     connect(m_widget->filtersList , SIGNAL(selectionChanged(Q3IconViewItem*)), this, SLOT(selectionHasChanged(Q3IconViewItem* )));
     // Initialize configWidgetHolder
-    m_widget->configWidgetHolder->setColumnLayout ( 0, Qt::Horizontal );
     //m_widget->configWidgetHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     // Initialize preview widget
 
@@ -64,6 +63,7 @@ KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const 
     resize( minimumSizeHint());
     m_widget->previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
     m_labelNoCW = new QLabel(i18n("No configuration options are available for this filter."), m_widget->configWidgetHolder);
+    m_widget->configWidgetHolder->setLayout(new QHBoxLayout());
     m_widget->configWidgetHolder->layout()->addWidget(m_labelNoCW);
     m_labelNoCW->hide();
 }

@@ -46,14 +46,16 @@ using namespace std;
 // be rounding errors. (Boudewijn)
 DlgLayerSize::DlgLayerSize( QWidget *  parent,
                 const char * name)
-    : super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
+    : super (parent, i18n("Image Size"), Ok | Cancel)
 {
+    setObjectName(name);
+
     m_lock = false;
 
     m_page = new WdgLayerSize(this);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("layer_size");
-    
+
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->cmbFilterType->setCurrent("Mitchell");
 

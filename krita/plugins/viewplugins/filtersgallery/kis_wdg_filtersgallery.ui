@@ -32,7 +32,7 @@
         <widget class="KisFiltersListView" name="filtersList" />
       </item>
       <item row="0" column="2" >
-        <widget class="Q3GroupBox" name="configWidgetHolder" >
+        <widget class="QGroupBox" name="configWidgetHolder" >
           <property name="sizePolicy" >
             <sizepolicy>
               <hsizetype>1</hsizetype>

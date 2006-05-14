@@ -20,7 +20,7 @@
 #ifndef DLG_IMAGESIZE
 #define DLG_IMAGESIZE
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KisFilterStrategy;
 class WdgImageSize;
@@ -39,8 +39,8 @@ class WdgImageSize : public QWidget, public Ui::WdgImageSize
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
  */
-class DlgImageSize: public KDialogBase {
-    typedef KDialogBase super;
+class DlgImageSize: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

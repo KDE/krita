@@ -21,8 +21,6 @@
 #include <QThread>
 #include <QApplication>
 #include <QEvent>
-//Added by qt3to4:
-#include <QCustomEvent>
 
 #include "kis_accumulating_producer.h"
 
@@ -90,7 +88,7 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
 
     if (!m_stop) {
         // This function is thread-safe; and it takes ownership of the event
-        QApplication::postEvent(m_source, new QCustomEvent(EmitCompletedType));
+        QApplication::postEvent(m_source, new QEvent(static_cast<QEvent::Type>(EmitCompletedType)));
     }
 }
 

@@ -1,15 +1,9 @@
 
-
-
-
-
-########### next target ###############
-
 set(kritahistogram_PART_SRCS histogram.cc dlg_histogram.cc kis_histogram_widget.cc )
 
 kde4_automoc(${kritahistogram_PART_SRCS})
 
-kde4_add_ui3_files(kritahistogram_PART_SRCS wdghistogram.ui )
+kde4_add_ui_files(kritahistogram_PART_SRCS wdghistogram.ui )
 
 kde4_add_plugin(kritahistogram ${kritahistogram_PART_SRCS})
 

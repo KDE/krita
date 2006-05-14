@@ -17,7 +17,7 @@
     </property>
     <layout class="QGridLayout" >
       <item rowspan="1" row="1" column="0" colspan="2" >
-        <widget class="Q3GroupBox" name="grpSize" >
+        <widget class="QGroupBox" name="grpSize" >
           <property name="title" >
             <string>Print Size</string>
           </property>
@@ -54,7 +54,7 @@
         </widget>
       </item>
       <item rowspan="1" row="0" column="0" colspan="2" >
-        <widget class="Q3GroupBox" name="grpResolution" >
+        <widget class="QGroupBox" name="grpResolution" >
           <property name="title" >
             <string>Image Resolution</string>
           </property>
@@ -116,7 +116,6 @@
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
   <customwidgets>
   	<customwidget>
 	  <class>KIntNumInput</class>

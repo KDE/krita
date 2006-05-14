@@ -17,7 +17,7 @@
     </property>
     <layout class="QGridLayout" >
       <item rowspan="1" row="0" column="0" colspan="2" >
-        <widget class="Q3ButtonGroup" name="grpResizeScale" >
+        <widget class="QGroupBox" name="grpResizeScale" >
           <property name="title" >
             <string/>
           </property>
@@ -129,7 +129,7 @@
         </widget>
       </item>
       <item rowspan="1" row="1" column="0" colspan="2" >
-        <widget class="Q3ButtonGroup" name="grpPixelDimensions" >
+        <widget class="QGroupBox" name="grpPixelDimensions" >
           <property name="title" >
             <string>&amp;Pixel Dimensions</string>
           </property>

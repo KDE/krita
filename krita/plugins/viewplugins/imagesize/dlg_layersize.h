@@ -21,7 +21,7 @@
 #ifndef DLG_LAYERSIZE
 #define DLG_LAYERSIZE
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "ui_wdg_layersize.h"
 
@@ -35,8 +35,8 @@ class WdgLayerSize : public QWidget, public Ui::WdgLayerSize
 
 class KisFilterStrategy;
 
-class DlgLayerSize: public KDialogBase {
-    typedef KDialogBase super;
+class DlgLayerSize: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

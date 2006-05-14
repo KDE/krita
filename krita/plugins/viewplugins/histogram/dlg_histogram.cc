@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <q3buttongroup.h>
+
 #include <QPushButton>
 #include <QCheckBox>
 #include <QSlider>
@@ -40,8 +40,9 @@
 
 
 DlgHistogram::DlgHistogram( QWidget *  parent, const char * name)
-    : super (parent, name, true, i18n("Histogram"), Ok | Cancel, Ok)
+    : super (parent, i18n("Histogram"), Ok | Cancel)
 {
+    setObjectName(name);
     m_page = new KisHistogramWidget(this, "histogram");
     Q_CHECK_PTR(m_page);
 

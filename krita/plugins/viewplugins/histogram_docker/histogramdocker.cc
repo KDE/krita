@@ -30,13 +30,13 @@
 #include <kopalettemanager.h>
 
 #include "kis_meta_registry.h"
-#include <kis_doc.h>
-#include <kis_global.h>
-#include <kis_types.h>
-#include <kis_view.h>
+#include "kis_doc.h"
+#include "kis_global.h"
+#include "kis_types.h"
+#include "kis_view.h"
 
-#include <kis_basic_histogram_producers.h>
-#include <kis_colorspace_factory_registry.h>
+#include "kis_basic_histogram_producers.h"
+#include "kis_colorspace_factory_registry.h"
 
 #include "histogramdocker.h"
 #include "kis_imagerasteredcache.h"
@@ -71,15 +71,15 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
         m_hview->setColor(true);
         m_hview->setCurrentChannels(KisHistogramProducerSP(m_producer), m_producer->channels());
         m_hview->setFixedSize(256, 100); // XXX if not it keeps expanding
-        m_hview->setCaption(i18n("Histogram"));
+        m_hview->setWindowTitle(i18n("Histogram"));
 
 
         connect(m_hview, SIGNAL(rightClicked(const QPoint&)),
                 this, SLOT(popupMenu(const QPoint&)));
         connect(m_cache, SIGNAL(cacheUpdated()),
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
-        connect(&m_popup, SIGNAL(activated(int)),
-                this, SLOT(producerChanged(int)));
+        connect(&m_popup, SIGNAL(triggered(QAction *)),
+                this, SLOT(producerChanged(QAction *)));
         connect(img.data(), SIGNAL(sigColorSpaceChanged(KisColorSpace*)),
                 this, SLOT(colorSpaceChanged(KisColorSpace*))); // No need to force updates here
 
@@ -102,16 +102,18 @@ KritaHistogramDocker::~KritaHistogramDocker()
         m_cache->deleteLater();
 }
 
-void KritaHistogramDocker::producerChanged(int pos)
+void KritaHistogramDocker::producerChanged(QAction *action)
 {
+    int pos = m_popup.actions().indexOf(action);
+
     if (m_cache)
         m_cache->deleteLater();
     m_cache = 0;
 
-    if (m_currentProducerPos < m_popup.count())
-        m_popup.setItemChecked(m_currentProducerPos, false);
+    if (m_currentProducerPos < m_popup.actions().count())
+        m_popup.actions().at(m_currentProducerPos)->setChecked(false);
     m_currentProducerPos = pos;
-    m_popup.setItemChecked(m_currentProducerPos, true);
+    m_popup.actions().at(m_currentProducerPos)->setChecked(true);
 
     uint count = m_producers . count();
     for (uint i = 0; i < count; i++) {
@@ -149,7 +151,7 @@ void KritaHistogramDocker::producerChanged(int pos)
 
 void KritaHistogramDocker::popupMenu(const QPoint& pos)
 {
-    m_popup.popup(pos, m_currentProducerPos);
+    m_popup.popup(pos, m_popup.actions().at(m_currentProducerPos));
 }
 
 void KritaHistogramDocker::colorSpaceChanged(KisColorSpace* cs)
@@ -162,12 +164,12 @@ void KritaHistogramDocker::colorSpaceChanged(KisColorSpace* cs)
     m_popup.clear();
     m_currentProducerPos = 0;
 
-    for (uint i = 0; i < keys.count(); i++) {
+    for (int i = 0; i < keys.count(); i++) {
         KisID id(keys.at(i));
-        m_popup . insertItem(id.name(), static_cast<int>(i));
+        m_popup.addAction(id.name());
     }
 
-    producerChanged(0);
+    producerChanged(m_popup.actions().at(0));
 }
 
 HistogramDockerUpdater::HistogramDockerUpdater(QObject* /*parent*/, KisHistogramSP h, KisHistogramView* v,

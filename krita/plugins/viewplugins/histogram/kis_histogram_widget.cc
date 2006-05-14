@@ -39,8 +39,9 @@
 
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name)
-    : super(parent, name)
+    : super(parent)
 {
+    setObjectName(name);
     m_from = 0.0;
     m_width = 0.0;
 }
@@ -59,12 +60,12 @@ void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev)
 
     // The channels
     cmbChannel->clear();
-    cmbChannel->insertStringList(m_histogramView->channelStrings());
-    cmbChannel->setCurrentItem(0);
+    cmbChannel->addItems(m_histogramView->channelStrings());
+    cmbChannel->setCurrentIndex(0);
 
     // View display
-    currentView->setMinValue(0);
-    currentView->setMaxValue(100);
+    currentView->setMinimum(0);
+    currentView->setMaximum(100);
 
     updateEnabled();
 

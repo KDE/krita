@@ -60,7 +60,8 @@ Histogram::Histogram(QObject *parent, const QStringList &)
         setInstance(HistogramFactory::instance());
         setXMLFile(locate("data","kritaplugins/histogram.rc"), true);
 
-        m_action = new KAction(i18n("&Histogram..."), 0, 0, this, SLOT(slotActivated()), actionCollection(), "histogram");
+        m_action = new KAction(i18n("&Histogram..."), actionCollection(), "histogram");
+        connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
         m_view = (KisView*) parent;
         if (KisImageSP img = m_view->canvasSubject()->currentImg()) {

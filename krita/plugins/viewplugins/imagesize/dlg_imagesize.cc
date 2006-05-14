@@ -28,7 +28,6 @@ using namespace std;
 
 #include <QRadioButton>
 #include <QCheckBox>
-#include <q3buttongroup.h>
 #include <QLabel>
 #include <QComboBox>
 
@@ -45,8 +44,10 @@ using namespace std;
 // be rounding errors. (Boudewijn)
 DlgImageSize::DlgImageSize( QWidget *  parent,
                 const char * name)
-    : super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
+    : super (parent, i18n("Image Size"), Ok | Cancel)
 {
+    setObjectName(name);
+
     m_lock = false;
 
     m_page = new WdgImageSize(this);

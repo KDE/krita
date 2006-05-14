@@ -20,7 +20,7 @@
         <number>0</number>
       </property>
       <item rowspan="1" row="0" column="0" colspan="2" >
-        <widget class="Q3ButtonGroup" name="grpPixelDimensions" >
+        <widget class="QGroupBox" name="grpPixelDimensions" >
           <property name="title" >
             <string>&amp;Pixel Dimensions</string>
           </property>

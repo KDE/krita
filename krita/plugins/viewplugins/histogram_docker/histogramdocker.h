@@ -22,7 +22,6 @@
 #define _HISTOGRAMDOCKER_H_
 
 #include <QObject>
-#include <q3popupmenu.h>
 
 #include <kparts/plugin.h>
 #include <kis_histogram_view.h>
@@ -30,6 +29,7 @@
 
 #include "kis_cachedhistogram.h"
 
+class QMenu;
 class KisAccumulatingHistogramProducer;
 class KisColorSpace;
 class KisHistogramView;
@@ -43,7 +43,7 @@ public:
     KritaHistogramDocker(QObject *parent, const QStringList &);
     virtual ~KritaHistogramDocker();
 private slots:
-    void producerChanged(int pos);
+    void producerChanged(QAction *action);
     void popupMenu(const QPoint & pos);
     void colorSpaceChanged(KisColorSpace* cs);
 private:
@@ -54,9 +54,9 @@ private:
     KisView* m_view;
     KisHistogramView* m_hview;
     KisImageRasteredCache* m_cache;
-    Q3PopupMenu m_popup;
+    QMenu m_popup;
     KisHistogramSP m_histogram;
-    uint m_currentProducerPos;
+    int m_currentProducerPos;
 };
 
 class KisGenericRGBHistogramProducerFactory;

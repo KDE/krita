@@ -28,7 +28,6 @@ using namespace std;
 
 #include <QRadioButton>
 #include <QCheckBox>
-#include <q3buttongroup.h>
 #include <QLabel>
 #include <QComboBox>
 
@@ -37,12 +36,13 @@ using namespace std;
 #include <kdebug.h>
 
 #include "dlg_border_selection.h"
-#include "wdg_border_selection.h"
 
-DlgBorderSelection::DlgBorderSelection( QWidget *  parent, const char * name) : super (parent, name, true, i18n("Border Selection"), Ok | Cancel, Ok)
+DlgBorderSelection::DlgBorderSelection( QWidget *  parent, const char * name) : super (parent, i18n("Border Selection"), Ok | Cancel)
 {
-    m_page = new WdgBorderSelection(this, "border_selection");
+    setObjectName(name);
+    m_page = new WdgBorderSelection(this);
     Q_CHECK_PTR(m_page);
+    m_page->setObjectName("border_selection");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());

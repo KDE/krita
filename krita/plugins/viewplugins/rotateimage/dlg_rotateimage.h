@@ -20,20 +20,27 @@
 #ifndef DLG_ROTATEIMAGE
 #define DLG_ROTATEIMAGE
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
-#include <kis_global.h>
+#include "kis_global.h"
 
-class WdgRotateImage;
+#include "ui_wdg_rotateimage.h"
 
 enum enumRotationDirection {
     CLOCKWISE,
     COUNTERCLOCKWISE
 };
 
+class WdgRotateImage : public QWidget, public Ui::WdgRotateImage
+{
+    Q_OBJECT
 
-class DlgRotateImage: public KDialogBase {
-    typedef KDialogBase super;
+    public:
+        WdgRotateImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class DlgRotateImage: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

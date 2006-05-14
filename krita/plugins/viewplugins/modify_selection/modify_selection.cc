@@ -36,16 +36,16 @@
 #include <kgenericfactory.h>
 #include <kstdaction.h>
 
-#include <kis_doc.h>
-#include <kis_config.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_global.h>
-#include <kis_types.h>
-#include <kis_view.h>
-#include <kis_selection.h>
-#include <kis_selection_manager.h>
-#include <kis_transaction.h>
+#include "kis_doc.h"
+#include "kis_config.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+#include "kis_global.h"
+#include "kis_types.h"
+#include "kis_view.h"
+#include "kis_selection.h"
+#include "kis_selection_manager.h"
+#include "kis_transaction.h"
 
 #include "modify_selection.h"
 #include "dlg_grow_selection.h"
@@ -66,13 +66,17 @@ ModifySelection::ModifySelection(QObject *parent, const QStringList &)
         m_view = (KisView*) parent;
 
         // Selection manager takes ownership?
-        KAction* a = new KAction(i18n("Grow selection..."), 0, 0, this, SLOT(slotGrowSelection()), actionCollection(), "growselection");
-        KAction* b = new KAction(i18n("Shrink selection..."), 0, 0, this, SLOT(slotShrinkSelection()), actionCollection(), "shrinkselection");
-        KAction* c = new KAction(i18n("Border selection..."), 0, 0, this, SLOT(slotBorderSelection()), actionCollection(), "borderselection");
+        KAction* a = new KAction(i18n("Grow selection..."), actionCollection(), "growselection");
+        KAction* b = new KAction(i18n("Shrink selection..."), actionCollection(), "shrinkselection");
+        KAction* c = new KAction(i18n("Border selection..."), actionCollection(), "borderselection");
 
         Q_CHECK_PTR(a);
         Q_CHECK_PTR(b);
         Q_CHECK_PTR(c);
+
+        connect(a, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
+        connect(b, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
+        connect(c, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
 
         m_view ->canvasSubject()-> selectionManager()->addSelectionAction(a);
         m_view ->canvasSubject()-> selectionManager()->addSelectionAction(b);

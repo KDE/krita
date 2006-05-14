@@ -20,12 +20,20 @@
 #ifndef DLG_SHEARIMAGE
 #define DLG_SHEARIMAGE
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
-class WdgShearImage;
+#include "ui_wdg_shearimage.h"
 
-class DlgShearImage: public KDialogBase {
-    typedef KDialogBase super;
+class WdgShearImage : public QWidget, public Ui::WdgShearImage
+{
+    Q_OBJECT
+
+    public:
+        WdgShearImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class DlgShearImage: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

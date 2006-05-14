@@ -26,7 +26,6 @@
 
 using namespace std;
 
-#include <q3groupbox.h>
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QLabel>
@@ -36,17 +35,18 @@ using namespace std;
 #include <kdebug.h>
 
 #include "dlg_rotateimage.h"
-#include "wdg_rotateimage.h"
-
 
 DlgRotateImage::DlgRotateImage( QWidget *  parent,
                 const char * name)
-    : super (parent, name, true, i18n("Rotate Image"), Ok | Cancel, Ok)
+    : super (parent, i18n("Rotate Image"), Ok | Cancel)
 {
+    setObjectName(name);
+
     m_lock = false;
 
-    m_page = new WdgRotateImage(this, "rotate_image");
+    m_page = new WdgRotateImage(this);
     Q_CHECK_PTR(m_page);
+    m_page->setObjectName("rotate_image");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());

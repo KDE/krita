@@ -9,7 +9,7 @@ set(kritarotateimage_PART_SRCS rotateimage.cc dlg_rotateimage.cc )
 
 kde4_automoc(${kritarotateimage_PART_SRCS})
 
-kde4_add_ui3_files(kritarotateimage_PART_SRCS wdg_rotateimage.ui )
+kde4_add_ui_files(kritarotateimage_PART_SRCS wdg_rotateimage.ui )
 
 kde4_add_plugin(kritarotateimage ${kritarotateimage_PART_SRCS})
 

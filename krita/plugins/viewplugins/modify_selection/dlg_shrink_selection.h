@@ -20,12 +20,20 @@
 #ifndef DLG_SHRINK_SELECTION_H
 #define DLG_SHRINK_SELECTION_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
-class WdgShrinkSelection;
+#include "ui_wdg_shrink_selection.h"
 
-class DlgShrinkSelection: public KDialogBase {
-    typedef KDialogBase super;
+class WdgShrinkSelection : public QWidget, public Ui::WdgShrinkSelection
+{
+    Q_OBJECT
+
+    public:
+        WdgShrinkSelection(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class DlgShrinkSelection: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

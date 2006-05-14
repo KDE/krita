@@ -20,12 +20,20 @@
 #ifndef DLG_GROW_SELECTION_H
 #define DLG_GROW_SELECTION_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
-class WdgGrowSelection;
+#include "ui_wdg_grow_selection.h"
 
-class DlgGrowSelection: public KDialogBase {
-    typedef KDialogBase super;
+class WdgGrowSelection : public QWidget, public Ui::WdgGrowSelection
+{
+    Q_OBJECT
+
+    public:
+        WdgGrowSelection(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class DlgGrowSelection: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

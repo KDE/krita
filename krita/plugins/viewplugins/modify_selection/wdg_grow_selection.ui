@@ -1,60 +1,54 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgGrowSelection</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgGrowSelection</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgGrowSelection</class>
+  <widget class="QWidget" name="WdgGrowSelection" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>255</width>
+        <height>101</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>255</width>
-            <height>101</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>WdgGrowSelection</string>
     </property>
-    <property name="caption">
-        <string>WdgGrowSelection</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>Grow selection by</string>
-            </property>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <widget class="QLabel" name="textLabel1" >
+          <property name="text" >
+            <string>Grow selection by</string>
+          </property>
         </widget>
-        <widget class="QSpinBox" row="1" column="0">
-            <property name="name">
-                <cstring>radiusSpinBox</cstring>
-            </property>
-            <property name="maxValue">
-                <number>10000</number>
-            </property>
-            <property name="minValue">
-                <number>1</number>
-            </property>
-            <property name="value">
-                <number>1</number>
-            </property>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QSpinBox" name="radiusSpinBox" >
+          <property name="maximum" >
+            <number>10000</number>
+          </property>
+          <property name="minimum" >
+            <number>1</number>
+          </property>
+          <property name="value" >
+            <number>1</number>
+          </property>
         </widget>
-        <widget class="QComboBox" row="1" column="1">
-            <item>
-                <property name="text">
-                    <string>pixels</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>comboBox1</cstring>
+      </item>
+      <item row="1" column="1" >
+        <widget class="QComboBox" name="comboBox1" >
+          <item>
+            <property name="text" >
+              <string>pixels</string>
             </property>
+          </item>
         </widget>
-    </grid>
-</widget>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <tabstops>
     <tabstop>radiusSpinBox</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+</ui>

@@ -20,12 +20,20 @@
 #ifndef DLG_BORDER_SELECTION_H
 #define DLG_BORDER_SELECTION_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
-class WdgBorderSelection;
+#include "ui_wdg_border_selection.h"
 
-class DlgBorderSelection: public KDialogBase {
-    typedef KDialogBase super;
+class WdgBorderSelection : public QWidget, public Ui::WdgBorderSelection
+{
+    Q_OBJECT
+
+    public:
+        WdgBorderSelection(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
+class DlgBorderSelection: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

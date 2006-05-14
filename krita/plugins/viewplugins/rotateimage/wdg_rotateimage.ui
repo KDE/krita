@@ -1,246 +1,217 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgRotateImage</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgRotateImage</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgRotateImage</class>
+  <widget class="QWidget" name="WdgRotateImage" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>489</width>
+        <height>447</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>489</width>
-            <height>447</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Rotate Image</string>
     </property>
-    <property name="caption">
-        <string>Rotate Image</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QButtonGroup" row="0" column="0">
-            <property name="name">
-                <cstring>grpDirection</cstring>
-            </property>
-            <property name="title">
-                <string>Qt::Orientation</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <widget class="QGroupBox" name="grpDirection" >
+          <property name="title" >
+            <string>Qt::Orientation</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item rowspan="1" row="0" column="0" colspan="2" >
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
                 </property>
-                <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>layout6</cstring>
+                <item>
+                  <spacer name="spacer3" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>20</width>
+                        <height>20</height>
+                      </size>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer3</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>pixmapLabel1</cstring>
-                            </property>
-                            <property name="pixmap">
-                                <pixmap>image0</pixmap>
-                            </property>
-                            <property name="scaledContents">
-                                <bool>false</bool>
-                            </property>
-                            <property name="alignment">
-                                <set>Qt::AlignCenter</set>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer1</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>41</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>pixmapLabel2</cstring>
-                            </property>
-                            <property name="pixmap">
-                                <pixmap>image1</pixmap>
-                            </property>
-                            <property name="scaledContents">
-                                <bool>false</bool>
-                            </property>
-                            <property name="alignment">
-                                <set>Qt::AlignCenter</set>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>31</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </hbox>
-                </widget>
-                <widget class="QRadioButton" row="1" column="1">
-                    <property name="name">
-                        <cstring>radioCW</cstring>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
                     </property>
-                    <property name="text">
-                        <string>C&amp;lockwise</string>
+                    <property name="orientation" >
+                      <enum>Qt::Horizontal</enum>
                     </property>
-                    <property name="checked">
-                        <bool>true</bool>
+                  </spacer>
+                </item>
+                <item>
+                  <widget class="QLabel" name="pixmapLabel1" >
+                    <property name="pixmap" >
+                      <pixmap>image0</pixmap>
                     </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>radioCCW</cstring>
+                    <property name="scaledContents" >
+                      <bool>false</bool>
                     </property>
-                    <property name="text">
-                        <string>Cou&amp;nter-clockwise</string>
+                    <property name="alignment" >
+                      <set>Qt::AlignCenter</set>
                     </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QButtonGroup" row="1" column="0">
-            <property name="name">
-                <cstring>grpAngle</cstring>
-            </property>
-            <property name="title">
-                <string>Angle</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+                  </widget>
+                </item>
+                <item>
+                  <spacer name="spacer1" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>41</width>
+                        <height>20</height>
+                      </size>
+                    </property>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
+                    </property>
+                    <property name="orientation" >
+                      <enum>Qt::Horizontal</enum>
+                    </property>
+                  </spacer>
+                </item>
+                <item>
+                  <widget class="QLabel" name="pixmapLabel2" >
+                    <property name="pixmap" >
+                      <pixmap>image1</pixmap>
+                    </property>
+                    <property name="scaledContents" >
+                      <bool>false</bool>
+                    </property>
+                    <property name="alignment" >
+                      <set>Qt::AlignCenter</set>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <spacer name="spacer2" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>31</width>
+                        <height>20</height>
+                      </size>
+                    </property>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
+                    </property>
+                    <property name="orientation" >
+                      <enum>Qt::Horizontal</enum>
+                    </property>
+                  </spacer>
+                </item>
+              </layout>
+            </item>
+            <item row="1" column="1" >
+              <widget class="QRadioButton" name="radioCW" >
+                <property name="text" >
+                  <string>C&amp;lockwise</string>
                 </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radio90</cstring>
-                    </property>
-                    <property name="text">
-                        <string>90 &amp;degrees</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radio180</cstring>
-                    </property>
-                    <property name="text">
-                        <string>180 d&amp;egrees</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radio270</cstring>
-                    </property>
-                    <property name="text">
-                        <string>270 de&amp;grees</string>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout1</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>radioCustom</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Custom:</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="KIntSpinBox">
-                            <property name="name">
-                                <cstring>intCustom</cstring>
-                            </property>
-                            <property name="maxValue">
-                                <number>359</number>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QRadioButton" name="radioCCW" >
+                <property name="text" >
+                  <string>Cou&amp;nter-clockwise</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>spacer4</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>91</height>
-                </size>
-            </property>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QGroupBox" name="grpAngle" >
+          <property name="title" >
+            <string>Angle</string>
+          </property>
+          <layout class="QVBoxLayout" >
+            <item>
+              <widget class="QRadioButton" name="radio90" >
+                <property name="text" >
+                  <string>90 &amp;degrees</string>
+                </property>
+              </widget>
+            </item>
+            <item>
+              <widget class="QRadioButton" name="radio180" >
+                <property name="text" >
+                  <string>180 d&amp;egrees</string>
+                </property>
+              </widget>
+            </item>
+            <item>
+              <widget class="QRadioButton" name="radio270" >
+                <property name="text" >
+                  <string>270 de&amp;grees</string>
+                </property>
+              </widget>
+            </item>
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QRadioButton" name="radioCustom" >
+                    <property name="text" >
+                      <string>&amp;Custom:</string>
+                    </property>
+                    <property name="checked" >
+                      <bool>true</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="KIntSpinBox" name="intCustom" >
+                    <property name="maximum" >
+                      <number>359</number>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item row="2" column="0" >
+        <spacer name="spacer4" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>91</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-    </grid>
-</widget>
-<customwidgets>
-	<customwidget>
-		<class>KIntSpinBox</class>
-		<extends>QSpinBox</extends>
-		<header>knuminput.h</header>
-		<container>1</container>
-		<pixmap></pixmap>
-	</customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="371">89504e470d0a1a0a0000000d494844520000002c0000002e0806000000534cfb0a0000013a494441545885ed994b0ec330084487aaf7bf32dd5689297f9b489d6d24fc3c02db106266a445c460a67c205daf7404a2821ddb9503de0c0b64800fc00251e043b00040eea28bc21615a50fb8cad904bc1db8230d02e0671cbeca01ee2bbaaecbc16184bfe8a405b4cd58a00c86c48eb588d3cc54b1a9f8c5114d0f0d5c81ce5dcd999c0e42e71f3f5dd0826245572dc9d1c586f20e57a8ed1cdead85f373808d2ecf01366a16f0cae54b5acc0236e80fdcadc701bfc52f99c77ae35065edf0c1ae58d31d78302c302d870d9dcc2c6083e4a2bbaa7b3a694cc5bbc39bc6a626a5dec39dc5e888bd06965cee8076741b40a4e82aa103b164e0442b6ed2af183fd6d69b500dce5ba4c978b6aeb962cc5434aa3a3b6efd56794fd7793e3b62d74d2f23da3ef939f0bfa36e54557d9a48cb8c98ad39f4b8e7e5e3803f91a1a32701eeec170000000049454e44ae426082</data>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
+    <customwidget>
+      <class>KIntSpinBox</class>
+      <extends>QSpinBox</extends>
+      <header>knuminput.h</header>
+      <container>1</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="371" >89504e470d0a1a0a0000000d494844520000002c0000002e0806000000534cfb0a0000013a494441545885ed994b0ec330084487aaf7bf32dd5689297f9b489d6d24fc3c02db106266a445c460a67c205daf7404a2821ddb9503de0c0b64800fc00251e043b00040eea28bc21615a50fb8cad904bc1db8230d02e0671cbeca01ee2bbaaecbc16184bfe8a405b4cd58a00c86c48eb588d3cc54b1a9f8c5114d0f0d5c81ce5dcd999c0e42e71f3f5dd0826245572dc9d1c586f20e57a8ed1cdead85f373808d2ecf01366a16f0cae54b5acc0236e80fdcadc701bfc52f99c77ae35065edf0c1ae58d31d78302c302d870d9dcc2c6083e4a2bbaa7b3a694cc5bbc39bc6a626a5dec39dc5e888bd06965cee8076741b40a4e82aa103b164e0442b6ed2af183fd6d69b500dce5ba4c978b6aeb962cc5434aa3a3b6efd56794fd7793e3b62d74d2f23da3ef939f0bfa36e54557d9a48cb8c98ad39f4b8e7e5e3803f91a1a32701eeec170000000049454e44ae426082</data>
     </image>
-    <image name="image1">
-        <data format="PNG" length="363">89504e470d0a1a0a0000000d494844520000002c0000002e0806000000534cfb0a00000132494441545885ed994b12032108449b54ee7f65b3cd5440f92a56a5f7326f5a11451a63608b8806c6a0689857068b5a446177f6020361e8fdc04008fa0c30e086a6b4a4f3ba664cc418704212013041fb80b340bfa5847e9b825680022687f549d70016d03aac815d7d988be1a87c6be015acb7dc3ac7cd8167b091734160acbc861bc2029e4a77101690f661c9dd840f46a577b8012cc00157edb749d239dcc45de0e4f1d2a927705235aad4e50e5fa03f70b56c0778ab227bba90ec7d1d167eb62f30c0423f81b9696856aa7b3bcc487fa7f3543ccb18e54cfe3adca914332ce7aff9c6d83cb0e47205b4f176634fba4c68472c1978b69633a09db7f2753330bb91128ca7eb5e56b5aaac316069b756573ce54cf5b8e65fd3d0769870e6c920305bfb1e659296541ef0265d77bcbc0ef803779f9c39421cd9b50000000049454e44ae426082</data>
+    <image name="image1" >
+      <data format="PNG" length="363" >89504e470d0a1a0a0000000d494844520000002c0000002e0806000000534cfb0a00000132494441545885ed994b12032108449b54ee7f65b3cd5440f92a56a5f7326f5a11451a63608b8806c6a0689857068b5a446177f6020361e8fdc04008fa0c30e086a6b4a4f3ba664cc418704212013041fb80b340bfa5847e9b825680022687f549d70016d03aac815d7d988be1a87c6be015acb7dc3ac7cd8167b091734160acbc861bc2029e4a77101690f661c9dd840f46a577b8012cc00157edb749d239dcc45de0e4f1d2a927705235aad4e50e5fa03f70b56c0778ab227bba90ec7d1d167eb62f30c0423f81b9696856aa7b3bcc487fa7f3543ccb18e54cfe3adca914332ce7aff9c6d83cb0e47205b4f176634fba4c68472c1978b69633a09db7f2753330bb91128ca7eb5e56b5aaac316069b756573ce54cf5b8e65fd3d0769870e6c920305bfb1e659296541ef0265d77bcbc0ef803779f9c39421cd9b50000000049454e44ae426082</data>
     </image>
-</images>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </images>
+</ui>

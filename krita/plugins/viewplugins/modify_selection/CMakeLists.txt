@@ -9,7 +9,7 @@ set(kritamodifyselection_PART_SRCS
 
 kde4_automoc(${kritamodifyselection_PART_SRCS})
 
-kde4_add_ui3_files(kritamodifyselection_PART_SRCS
+kde4_add_ui_files(kritamodifyselection_PART_SRCS
     wdg_grow_selection.ui
     wdg_shrink_selection.ui
     wdg_border_selection.ui

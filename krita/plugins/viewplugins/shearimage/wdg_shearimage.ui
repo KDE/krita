@@ -1,103 +1,92 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgShearImage</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>WdgShearImage</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WdgShearImage</class>
+  <widget class="QWidget" name="WdgShearImage" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>323</width>
+        <height>114</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>323</width>
-            <height>114</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Shear Image</string>
     </property>
-    <property name="caption">
-        <string>Shear Image</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QButtonGroup" row="0" column="0">
-            <property name="name">
-                <cstring>grpPixelDimensions</cstring>
-            </property>
-            <property name="title">
-                <string>&amp;Shear Image</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <widget class="QGroupBox" name="grpPixelDimensions" >
+          <property name="title" >
+            <string>&amp;Shear Image</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="1" >
+              <widget class="KIntNumInput" name="shearAngleX" >
+                <property name="minimum" >
+                  <number>-45</number>
                 </property>
-                <widget class="KIntNumInput" row="0" column="1">
-                    <property name="name">
-                        <cstring>shearAngleX</cstring>
-                    </property>
-                    <property name="minimum">
-                        <number>-45</number>
-                    </property>
-                    <property name="maximum">
-                        <number>45</number>
-                    </property>
-                    <property name="suffix">
-                        <string>°</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>lblShearAngelY</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Shear angle Y:</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput" row="1" column="1">
-                    <property name="name">
-                        <cstring>shearAngleY</cstring>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>32767</width>
-                            <height>100</height>
-                        </size>
-                    </property>
-                    <property name="minimum">
-                        <number>-45</number>
-                    </property>
-                    <property name="maximum">
-                        <number>45</number>
-                    </property>
-                    <property name="suffix">
-                        <string>°</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>lblShearAngleX</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Shear angle X:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>intWidth</cstring>
-                    </property>
-                </widget>
-            </grid>
+                <property name="maximum" >
+                  <number>45</number>
+                </property>
+                <property name="suffix" >
+                  <string>°</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="lblShearAngelY" >
+                <property name="text" >
+                  <string>Shear angle Y:</string>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="1" >
+              <widget class="KIntNumInput" name="shearAngleY" >
+                <property name="maximumSize" >
+                  <size>
+                    <width>32767</width>
+                    <height>100</height>
+                  </size>
+                </property>
+                <property name="minimum" >
+                  <number>-45</number>
+                </property>
+                <property name="maximum" >
+                  <number>45</number>
+                </property>
+                <property name="suffix" >
+                  <string>°</string>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="0" >
+              <widget class="QLabel" name="lblShearAngleX" >
+                <property name="text" >
+                  <string>Shear angle X:</string>
+                </property>
+                <property name="buddy" stdset="0" >
+                  <cstring>intWidth</cstring>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<customwidgets>
-	<customwidget>
-		<class>KIntNumInput</class>
-		<extends>QWidget</extends>
-		<header>knuminput.h</header>
-		<container>1</container>
-		<pixmap></pixmap>
-	</customwidget>
-</customwidgets>
-<tabstops>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <customwidgets>
+    <customwidget>
+      <class>KIntNumInput</class>
+      <extends>QWidget</extends>
+      <header>knuminput.h</header>
+      <container>1</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
+  <tabstops>
     <tabstop>shearAngleX</tabstop>
-</tabstops>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </tabstops>
+</ui>

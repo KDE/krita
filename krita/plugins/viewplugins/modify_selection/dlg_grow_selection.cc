@@ -28,7 +28,6 @@ using namespace std;
 
 #include <QRadioButton>
 #include <QCheckBox>
-#include <q3buttongroup.h>
 #include <QLabel>
 #include <QComboBox>
 
@@ -37,12 +36,13 @@ using namespace std;
 #include <kdebug.h>
 
 #include "dlg_grow_selection.h"
-#include "wdg_grow_selection.h"
 
-DlgGrowSelection::DlgGrowSelection( QWidget *  parent, const char * name) : super (parent, name, true, i18n("Grow Selection"), Ok | Cancel, Ok)
+DlgGrowSelection::DlgGrowSelection( QWidget *  parent, const char * name) : super (parent, i18n("Grow Selection"), Ok | Cancel)
 {
-    m_page = new WdgGrowSelection(this, "grow_selection");
+    setObjectName(name);
+    m_page = new WdgGrowSelection(this);
     Q_CHECK_PTR(m_page);
+    m_page->setObjectName("grow_selection");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());

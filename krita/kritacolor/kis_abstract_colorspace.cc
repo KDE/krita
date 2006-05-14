@@ -320,7 +320,7 @@ static int desaturateSampler(register WORD In[], register WORD Out[], register L
     // Back to encoded
     cmsFloat2LabEncoded(Out, &LabOut);
 
-    return TRUE;
+    return true;
 }
 
 KisColorAdjustment *KisAbstractColorSpace::createDesaturateAdjustment()

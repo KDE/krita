@@ -88,7 +88,7 @@ public:
 
     virtual void setWorldXForm(bool);
     virtual const QMatrix&worldMatrix() const;
-    virtual void setMatrix(const QMatrix&, bool combine=FALSE);
+    virtual void setMatrix(const QMatrix&, bool combine=false);
 
     virtual void saveWorldMatrix();
     virtual void restoreWorldMatrix();
@@ -145,7 +145,7 @@ public:
     virtual void drawChord(const QRect&, int a, int alen);
     virtual void drawLineSegments(const Q3PointArray&, int index=0, int nlines=-1);
     virtual void drawPolyline(const Q3PointArray&, int index=0, int npoints=-1);
-    virtual void drawPolygon(const Q3PointArray&, bool winding=FALSE, int index=0, int npoints=-1);
+    virtual void drawPolygon(const Q3PointArray&, bool winding=false, int index=0, int npoints=-1);
     virtual void drawConvexPolygon(const Q3PointArray&, int index=0, int npoints=-1);
     virtual void drawCubicBezier(const Q3PointArray&, int index=0);
     virtual void drawPixmap(int x, int y, const QPixmap&, int sx=0, int sy=0, int sw=-1, int sh=-1);

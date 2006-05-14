@@ -1190,7 +1190,7 @@ namespace cimg_library {
       GetStartupInfo(&si);
       si.wShowWindow = SW_HIDE;
       si.dwFlags |= SW_HIDE;
-      BOOL res = CreateProcess(NULL,(LPTSTR)command,NULL,NULL,FALSE,0,NULL,NULL,&si,&pi);
+      BOOL res = CreateProcess(NULL,(LPTSTR)command,NULL,NULL,false,0,NULL,NULL,&si,&pi);
       if (res) {
         WaitForSingleObject(pi.hProcess, INFINITE);
         CloseHandle(pi.hThread);
@@ -1506,7 +1506,7 @@ namespace cimg_library {
     //! Return \c false for little endian CPUs (Intel), \c true for big endian CPUs (Motorola).
     inline const bool endian() { const int x=1; return ((unsigned char*)&x)[0]?false:true; }
 
-    //! Print informations about %CImg environement variables.
+    //! Print information about %CImg environement variables.
     /**
        Printing is done on the standart error output.
     **/
@@ -2908,9 +2908,9 @@ namespace cimg_library {
       }
       else curr_mode.dmSize = 0;
       if (events) {
-        mutex     = CreateMutex(NULL,FALSE,NULL);
-        created   = CreateEvent(NULL,FALSE,FALSE,NULL);
-        wait_disp = CreateEvent(NULL,FALSE,FALSE,NULL);
+        mutex     = CreateMutex(NULL,false,NULL);
+        created   = CreateEvent(NULL,false,false,NULL);
+        wait_disp = CreateEvent(NULL,false,false,NULL);
         thread    = CreateThread(NULL,0,thread_lowlevel,arg,0,&ThreadID);
         WaitForSingleObject(created,INFINITE);
       } else thread_lowlevel(arg);
@@ -3535,7 +3535,7 @@ namespace cimg_library {
     //@}
     //-------------------------------------
     //
-    //! \name Access to image informations
+    //! \name Access to image information
     //@{
     //-------------------------------------
   
@@ -3978,20 +3978,20 @@ namespace cimg_library {
       return dx*dx*dx*(2*(b-c)+0.5f*(c-a+d-b)) + dx*dx*(2*c-2.5f*b+a-0.5f*d) + dx*0.5f*(c-a) + b;
     }
     
-    //! Display informations about the image on the standard error output.
+    //! Display information about the image on the standard error output.
     /**
        \param title Name for the considered image (optional).
-       \param print_flag Level of informations to be printed.
+       \param print_flag Level of information to be printed.
        
        - The possible values for \c print_flag are :
-           - 0 : print only informations about image size and pixel buffer.
+           - 0 : print only information about image size and pixel buffer.
            - 1 : print also statistics on the image pixels.
 	   - 2 : print also the content of the pixel buffer, in a matlab-style.
 
        \par example:
        \code
        CImg<float> img("foo.jpg");      // Load image from a JPEG file.
-       img.print("Image : foo.jpg",1);  // Print image informations and statistics.
+       img.print("Image : foo.jpg",1);  // Print image information and statistics.
        \endcode
        
        \sa CImgStats	   
@@ -10367,7 +10367,7 @@ namespace cimg_library {
       cinfo.err = jpeg_std_error(&jerr);
       jpeg_create_decompress(&cinfo);
       jpeg_stdio_src(&cinfo,file);
-      jpeg_read_header(&cinfo,TRUE);
+      jpeg_read_header(&cinfo,true);
       jpeg_start_decompress(&cinfo);
       
       if (cinfo.output_components!=3) {
@@ -11577,8 +11577,8 @@ namespace cimg_library {
       cinfo.input_components = 3;
       cinfo.in_color_space = JCS_RGB;
       jpeg_set_defaults(&cinfo);
-      jpeg_set_quality(&cinfo,quality<100?quality:100,TRUE);
-      jpeg_start_compress(&cinfo,TRUE);
+      jpeg_set_quality(&cinfo,quality<100?quality:100,true);
+      jpeg_start_compress(&cinfo,true);
       
       const unsigned int row_stride = width*3;
       JSAMPROW row_pointer[1];
@@ -12223,7 +12223,7 @@ namespace cimg_library {
     //@{
     //----------------------------------
     
-    //! Print informations about the list on the standard error stream.
+    //! Print information about the list on the standard error stream.
     const CImgl& print(const char* title=NULL,const int print_flag=1) const { 
       char tmp[1024];
       std::fprintf(stderr,"%-8s(this=%p) : { size=%u, data=%p }\n",title?title:"CImgl",(void*)this,size,(void*)data);
@@ -13353,13 +13353,13 @@ namespace cimg {
   Setting this variable should not be necessary if ImageMagick is installed on a standard directory, or
   if \e convert is in your system PATH variable. This macro should be defined only if the ImageMagick's 
   \e convert tool is not found automatically, when trying to read compressed image format (GIF,PNG,...). 
-  See also cimg_library::CImg::get_load_convert() and cimg_library::CImg::save_convert() for more informations.
+  See also cimg_library::CImg::get_load_convert() and cimg_library::CImg::save_convert() for more information.
 
   - \b \c cimg_temporary_path : This variable tells the library where it can find a directory to store
   temporary files. Setting this variable should not be necessary if you are running on a standard system.
   This macro should be defined only when troubles are encountered when trying to read
   compressed image format (GIF,PNG,...).
-  See also cimg_library::CImg::get_load_convert() and cimg_library::CImg::save_convert() for more informations.
+  See also cimg_library::CImg::get_load_convert() and cimg_library::CImg::save_convert() for more information.
 
   - \b \c cimg_plugin : This variable tells the library to use a plugin file to add features to the CImg<T> class.
   Define it with the path of your plugin file, if you want to add member functions to the CImg<T> class,

@@ -8,6 +8,7 @@ include(KDE4Defaults)
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 macro_optional_find_package(OpenEXR)
+macro_optional_find_package(Exif)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -63,6 +64,7 @@ set(libkdgantt_SRCS
 	)
 
 add_subdirectory(libs)
+MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necessary for official release")
 add_subdirectory(example)
 add_subdirectory(interfaces)
 #add_subdirectory(karbon)

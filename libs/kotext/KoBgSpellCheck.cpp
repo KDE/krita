@@ -228,7 +228,6 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
     kDebug(32500) << "Para modified " << parag << " pos = "<<pos<<", length = "<< length <<endl;
 #endif
 
-#if KDE_VERSION > KDE_MAKE_VERSION(3,3,0)
     if ( length < 10 ) {
         QString str = parag->string()->stringToSpellCheck();
         /// ##### do we really need to create a Filter every time?
@@ -252,15 +251,6 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         }
         if ( parag->hasChanged() ) // always true currently
             parag->document()->emitRepaintChanged();
-#else
-    if ( length < 3 ) {
-        QString word;
-        int start;
-        bool misspelled = !d->backSpeller->checkWordInParagraph( parag, pos,
-                                                                 word, start );
-        markWord( parag, start, word.length(), misspelled );
-        parag->document()->emitRepaintChanged();
-#endif
     } else
     {
         d->backSpeller->check( parag );

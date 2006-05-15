@@ -58,10 +58,8 @@ class FontEditRequester : public KFontRequester
 			label()->setMinimumWidth(0);
 			label()->setFrameShape(Q3Frame::Box);
 			label()->setIndent(-1);
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
 			label()->setFocusPolicy(Qt::ClickFocus);
 			KAcceleratorManager::setNoAccel(label());
-#endif
 			layout()->remove(label());
 			layout()->remove(button());//->reparent(this, 0, QPoint(0,0));
 			delete layout();

@@ -18,7 +18,7 @@
 */
 
 #include <klocale.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <QLayout>
 #include <QLineEdit>
 #include <QPushButton>
@@ -35,9 +35,9 @@ KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidge
 {
     setCaption( i18n("Import Styles") );
     m_currentCollection = currentCollection;
-//    KVBox *page = makeVBoxMainWidget();
-    new QLabel(i18n("Select styles to import:"), this);
-    m_listStyleName = new Q3ListBox( this );
+    KVBox *page = makeVBoxMainWidget();
+    new QLabel(i18n("Select styles to import:"), page);
+    m_listStyleName = new Q3ListBox( page );
     m_listStyleName->setSelectionMode( Q3ListBox::Multi );
     enableButtonOK( m_listStyleName->count() != 0 );
     setButtonText( KDialogBase::User1, i18n("Load...") );

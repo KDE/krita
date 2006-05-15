@@ -22,7 +22,7 @@
 #include "set.h"
 #include "property.h"
 
-#include <q3application.h>
+#include <qapplication.h>
 #include <q3asciidict.h>
 //Added by qt3to4:
 #include <Q3ValueList>

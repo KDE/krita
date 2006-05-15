@@ -584,7 +584,6 @@ Property::operator= (const Property &property)
 	d->setCaptionForDisplaying(property.captionForDisplaying());
 	d->description = property.d->description;
 	d->type = property.d->type;
-	d->value = property.d->value;
 
 	d->icon = property.d->icon;
 	d->autosync = property.d->autosync;
@@ -596,16 +595,18 @@ Property::operator= (const Property &property)
 	if(property.d->listData) {
 		d->listData = new ListData(*property.d->listData); //QMap<QString, QVariant>(*(property.d->valueList));
 	}
-	if(property.d->children) {
-		if(property.d->custom) {
-			d->custom = FactoryManager::self()->createCustomProperty(this);
-			// updates all children value, using CustomProperty
-			setValue(property.d->value);
-		}
-		else {
+	if(property.d->custom) {
+		d->custom = FactoryManager::self()->createCustomProperty(this);
+		// updates all children value, using CustomProperty
+		setValue(property.value());
+	}
+	else {
+		d->value = property.d->value;
+		if(property.d->children) {
 			// no CustomProperty (should never happen), simply copy all children
-			Q3ValueList<Property*>::ConstIterator endIt = d->children->constEnd();
-			for(Q3ValueList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
+			d->children = new Q3ValueList<Property*>();
+			Q3ValueList<Property*>::ConstIterator endIt = property.d->children->constEnd();
+			for(Q3ValueList<Property*>::ConstIterator it = property.d->children->constBegin(); it != endIt; ++it) {
 				Property *child = new Property( *(*it) );
 				addChild(child);
 			}
@@ -619,6 +620,7 @@ Property::operator= (const Property &property)
 	// update these later because they may have been changed when creating children
 	d->oldValue = property.d->oldValue;
 	d->changed = property.d->changed;
+	d->sortingKey = property.d->sortingKey;
 
 	return *this;
 }

@@ -74,7 +74,8 @@ class KOPROPERTY_EXPORT Set : public QObject
 
 		explicit Set(QObject *parent=0, const QString &typeName=QString::null);
 
-		/*! Constreucts a deep copy of \a set. */
+		/*! Constructs a deep copy of \a set. 
+		 The new object will not have a QObject parent even if \a set has such parent. */
 		explicit Set(const Set& set);
 
 		virtual ~Set();
@@ -173,6 +174,12 @@ class KOPROPERTY_EXPORT Set : public QObject
 
 		/*! Removes property from a group.*/
 		void removeFromGroup(Property *property);
+
+		/*! Adds the property to the set, in the group. You can use any group name, except "common"
+		  (which is already used for basic group). If \a updateSortingKey is true, the sorting key
+			will be set automatically to count(). 
+			@internal */
+		void addPropertyInternal(Property *property, QCString group, bool updateSortingKey);
 
 	signals:
 		/*! Emitted when the value of the property is changed.*/

@@ -179,7 +179,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		  (which is already used for basic group). If \a updateSortingKey is true, the sorting key
 			will be set automatically to count(). 
 			@internal */
-		void addPropertyInternal(Property *property, QCString group, bool updateSortingKey);
+		void addPropertyInternal(Property *property, QByteArray group, bool updateSortingKey);
 
 	signals:
 		/*! Emitted when the value of the property is changed.*/

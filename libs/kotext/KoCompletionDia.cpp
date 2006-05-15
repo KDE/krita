@@ -18,7 +18,7 @@
 
 #include "KoCompletionDia.h"
 #include "KoAutoFormat.h"
-
+#include <kvbox.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
@@ -38,8 +38,8 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
     : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1,
       Ok, true, KGuiItem( i18n( "&Reset" ), "undo" ) )
 {
-//    KVBox *page = makeVBoxMainWidget();
-    m_widget = new KoCompletion( this, autoFormat);
+    KVBox *page = makeVBoxMainWidget();
+    m_widget = new KoCompletion( page, autoFormat);
     m_widget->layout()->setMargin(0);
     connect( this, SIGNAL( user1Clicked() ), m_widget, SLOT(slotResetConf()));
     setButtonWhatsThis(Ok,i18n("This will save your options."));

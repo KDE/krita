@@ -218,8 +218,8 @@ public:
 
     virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
 
-    void setAddMargins( bool b ) { addMargs = b; }
-    int addMargins() const { return addMargs; }
+    // Whether margins are added or max'ed.
+    int addMargins() const { return true; }
 
     void informParagraphDeleted( KoTextParag* parag );
 

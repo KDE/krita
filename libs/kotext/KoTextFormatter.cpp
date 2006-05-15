@@ -162,17 +162,17 @@ bool KoTextFormatterCore::format()
     int left = doc ? leftMargin( true, false ) : 0;
     int initialLMargin = leftMargin( true );
 
-    y = doc && doc->addMargins() ? parag->topMargin() : 0;
+    y = parag->breakableTopMargin();
     // #57555, top margin doesn't apply if parag at top of page
     // (but a portion of the margin can be needed, to complete the prev page)
     // So we apply formatVertically() on the top margin, to find where to break it.
     if ( !parag->prev() )
         y = 0; // no top margin on very first parag
-    else if ( parag->breakableTopMargin() )
+    else if ( y )
     {
         int shift = doc->flow()->adjustFlow( parag->rect().y(),
                                              0 /*w, unused*/,
-                                             parag->breakableTopMargin() );
+                                             y );
         if ( shift > 0 )
         {
             // The shift is in fact the amount of top-margin that should remain

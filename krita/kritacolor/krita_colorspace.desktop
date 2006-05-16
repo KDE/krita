@@ -18,6 +18,7 @@ Comment[nl]=Een module die een volledig kleurgebied implementeert dat gebruikt k
 Comment[pl]=Moduł implementujący kompletną przestrzeń barw do użytku z libkritacolor
 Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com a 'libkritacolor'
 Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar com a 'libkritacolor'
+Comment[ru]=Полная поддержка цветовых пространств в libkritacolor
 Comment[sr]=Модул који имплементира потпун простор боја за употребу са libkritacolor
 Comment[sr@Latn]=Modul koji implementira potpun prostor boja za upotrebu sa libkritacolor
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med libkritacolor

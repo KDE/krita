@@ -305,6 +305,10 @@ class KOPROPERTY_EXPORT Property
 		/*! \return parent property for this property, or NULL if there is no parent property. */
 		Property* parent() const;
 
+		/*! \return the custom property for this property.or NULL if there was
+		no custom property defined. */
+		CustomProperty* customProperty() const;
+
 		/*! Sets custom property \a prop for this property. 
 		 @see CustomPropertyFactory */
 		void setCustomProperty(CustomProperty *prop);

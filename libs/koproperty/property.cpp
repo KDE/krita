@@ -720,6 +720,12 @@ Property::addRelatedProperty(Property *property)
 		d->relatedProperties->append(property);
 }
 
+CustomProperty*
+Property::customProperty() const
+{
+	return d->custom;
+}
+
 void
 Property::setCustomProperty(CustomProperty *prop)
 {

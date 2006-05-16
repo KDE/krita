@@ -233,7 +233,7 @@ bool KisPalette::init()
         // Loop over the rest of the lines
         for (qint32 i = index; i < lines.size(); i++) {
             if (lines[i].startsWith("#")) {
-                m_comment += lines[i].mid(1).trimmed() + " ";
+                m_comment += lines[i].mid(1).trimmed() + ' ';
             }
             else {
                 if (lines[i].contains("\t") > 0) {

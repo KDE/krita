@@ -233,7 +233,7 @@ bool KisImagePipeBrush::init()
 
     qint32 numOfBrushes = 0;
     while (numOfBrushes < m_numOfBrushes && i < m_data.size()){
-        KisBrush * brush = new KisBrush(name() + "_" + QString().setNum(numOfBrushes),
+        KisBrush * brush = new KisBrush(name() + '_' + QString().setNum(numOfBrushes),
                         m_data,
                         i);
         Q_CHECK_PTR(brush);

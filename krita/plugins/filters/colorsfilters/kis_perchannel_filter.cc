@@ -142,9 +142,9 @@ QString KisPerChannelFilterConfiguration::toString()
         QPair<double,double> pair;
         foreach (pair, curve) {
             sCurve += QString::number(pair.first);
-            sCurve += ",";
+            sCurve += ',';
             sCurve += QString::number(pair.second);
-            sCurve += ";";
+            sCurve += ';';
         }
         QDomText text = doc.createCDATASection(sCurve);
         t.appendChild(text);

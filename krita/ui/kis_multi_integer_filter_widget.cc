@@ -84,7 +84,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(QWidget * parent,
 
         connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed( int )), SIGNAL(sigPleaseUpdatePreview()));
 
-        QLabel* lbl = new QLabel(iwparam[i].label+":", this);
+        QLabel* lbl = new QLabel(iwparam[i].label+':', this);
         widgetLayout->addWidget(lbl, i , 0);
 
         widgetLayout->addWidget(m_integerWidgets[i], i , 1);

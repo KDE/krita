@@ -108,7 +108,7 @@ QString KisBrightnessContrastFilterConfiguration::toString()
     QString sTransfer;
     for ( uint i = 0; i < 256 ; ++i ) {
         sTransfer += QString::number( transfer[i] );
-        sTransfer += ",";
+        sTransfer += ',';
     }
     QDomText text = doc.createCDATASection(sTransfer);
     e.appendChild(text);
@@ -119,9 +119,9 @@ QString KisBrightnessContrastFilterConfiguration::toString()
     QPair<double,double> pair;
     foreach (pair, curve) {
         sCurve += QString::number(pair.first);
-        sCurve += ",";
+        sCurve += ',';
         sCurve += QString::number(pair.second);
-        sCurve += ";";
+        sCurve += ';';
     }
     text = doc.createCDATASection(sCurve);
     e.appendChild(text);

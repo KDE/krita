@@ -258,7 +258,7 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
                 KFileDialog fd (QString(), mimelist, m_view);
                 fd.setObjectName("Export Layer");
-                fd.setCaption(i18n("Export Layer") + "(" + ch->name() + ")");
+                fd.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 fd.setMimeFilter(listMimeFilter);
                 fd.setOperationMode(KFileDialog::Saving);
                 fd.setURL(KUrl(ch->name()));

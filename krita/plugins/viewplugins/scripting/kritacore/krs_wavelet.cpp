@@ -52,7 +52,7 @@ Kross::Api::Object::Ptr Wavelet::getNCoeff(Kross::Api::List::Ptr args)
     quint32 n = Kross::Api::Variant::toUInt(args->item(0));
     if( n > m_numCoeff)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("getNCoeff")) + "\n" + i18n("Index out of bound") ) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("getNCoeff")) + '\n' + i18n("Index out of bound") ) );
     }
     return Kross::Api::Object::Ptr(new Kross::Api::Variant(*(m_wavelet->coeffs + n )));
 }
@@ -63,7 +63,7 @@ Kross::Api::Object::Ptr Wavelet::setNCoeff(Kross::Api::List::Ptr args)
     double v = Kross::Api::Variant::toDouble(args->item(1));
     if( n > m_numCoeff)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("setNCoeff")) + "\n" + i18n("Index out of bound") ) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("setNCoeff")) + '\n' + i18n("Index out of bound") ) );
     }
     *(m_wavelet->coeffs + n ) = v;
     return Kross::Api::Object::Ptr(0);
@@ -75,7 +75,7 @@ Kross::Api::Object::Ptr Wavelet::getXYCoeff(Kross::Api::List::Ptr args)
     quint32 y = Kross::Api::Variant::toUInt(args->item(1));
     if( x > m_wavelet->size && y > m_wavelet->size)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("getXYCoeff")) + "\n" + i18n("Index out of bound") ) );
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("getXYCoeff")) + '\n' + i18n("Index out of bound") ) );
     }
     return Kross::Api::Object::Ptr(new Kross::Api::Variant(*(m_wavelet->coeffs  + (x + y * m_wavelet->size ) * m_wavelet->depth )));
 }
@@ -87,7 +87,7 @@ Kross::Api::Object::Ptr Wavelet::setXYCoeff(Kross::Api::List::Ptr args)
     double v = Kross::Api::Variant::toDouble(args->item(2));
     if( x > m_wavelet->size && y > m_wavelet->size)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("setXYCoeff")) + "\n" + i18n("Index out of bound") ));
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("setXYCoeff")) + '\n' + i18n("Index out of bound") ));
     }
     *(m_wavelet->coeffs + (x + y * m_wavelet->size ) * m_wavelet->depth ) = v;
     return Kross::Api::Object::Ptr(0);

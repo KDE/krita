@@ -77,7 +77,7 @@ QString KisConvolutionConfiguration::toString()
 
     for ( uint i = 0; i < m_matrix->width * m_matrix->height; ++i ) {
         data += QString::number( m_matrix->data[i] );
-        data += ",";
+        data += ',';
     }
 
     QDomText text = doc.createCDATASection(data);

@@ -241,7 +241,7 @@ QString PerfTest::bltTest(quint32 testCount)
 
         kDebug() << "Image->" << (*it).name() << "\n";
 
-        report = report.append( "  Testing blitting on " + (*it).name() + "\n");
+        report = report.append( "  Testing blitting on " + (*it).name() + '\n');
 
          KisImageSP img = doc->newImage("blt-" + (*it).name(), 1000, 1000,
                 KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
@@ -401,9 +401,9 @@ QString PerfTest::fillTest(quint32 testCount)
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
-        kDebug() << "Filltest on " << (*it).name() + "\n";
+        kDebug() << "Filltest on " << (*it).name() + '\n';
 
-        report = report.append( "  Testing blitting on " + (*it).name() + "\n");
+        report = report.append( "  Testing blitting on " + (*it).name() + '\n');
 
         KisImageSP img = doc->newImage("fill-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
         KisPaintDeviceSP l = img->activeDevice();
@@ -524,7 +524,7 @@ QString PerfTest::pixelTest(quint32 testCount)
 
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
-        report = report.append( "  Testing pixel/setpixel on " + (*it).name() + "\n");
+        report = report.append( "  Testing pixel/setpixel on " + (*it).name() + '\n');
 
          KisImageSP img = doc->newImage("fill-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
 
@@ -654,7 +654,7 @@ QString PerfTest::filterTest(quint32 testCount)
     KisIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
     for (KisIDList::Iterator it = l.begin(); it != l.end(); ++it) {
-        report = report.append( "  Testing filtering on " + (*it).name() + "\n");
+        report = report.append( "  Testing filtering on " + (*it).name() + '\n');
 
         KisImageSP img = doc->newImage("filter-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
         KisPaintDeviceSP l = img->activeDevice();

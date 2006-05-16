@@ -268,11 +268,7 @@ public:
     // Counters are used to implement list and heading numbering/bullets.
     void setCounter( const KoParagCounter & counter );
     void setNoCounter();
-    void setCounter( const KoParagCounter * pCounter )
-    {
-        if ( pCounter ) setCounter( *pCounter );
-        else setNoCounter();
-    }
+    void setCounter( const KoParagCounter * pCounter );
     KoParagCounter *counter();
 
     /** The space required to draw the complete counter label (i.e. the Counter for this
@@ -284,7 +280,7 @@ public:
     KoParagStyle *style() const { return m_layout.style; }
     /** Sets the style in this paragraph, but doesn't _apply_ it, only sets a reference */
     void setStyle( KoParagStyle *style ) { m_layout.style = style; }
-    /** Applies the style directly (without undo/redo! See KoTextObject for undo/redo) */
+    /** Applies the style directly (without undo/redo! See KoTextObject for the full command) */
     void applyStyle( KoParagStyle *style );
 
     /** Get tabulator positions */

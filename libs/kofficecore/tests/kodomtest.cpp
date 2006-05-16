@@ -22,7 +22,7 @@
 
 #include <QApplication>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <assert.h>
 
 //static void debugElemNS( const QDomElement& elem )
@@ -111,7 +111,7 @@ void testKoDom( const QDomDocument& doc )
 int main( int argc, char** argv ) {
     QApplication app( argc, argv, QApplication::Tty );
 
-    const Q3CString xml = Q3CString( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    const QByteArray xml = QByteArray( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                                    "<o:document-content xmlns:o=\"" )
                          + KoXmlNS::office
                          + "\" xmlns=\"" + KoXmlNS::text

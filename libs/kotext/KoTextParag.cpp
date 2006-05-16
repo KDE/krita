@@ -1018,6 +1018,28 @@ void KoTextParag::setNoCounter()
     invalidateCounters();
 }
 
+void KoTextParag::setCounter( const KoParagCounter * pCounter )
+{
+    // Preserve footnote numbering when applying a style
+    const bool isFootNote = m_layout.counter &&
+                            m_layout.counter->numbering() == KoParagCounter::NUM_FOOTNOTE;
+    if ( isFootNote ) {
+        const QString footNotePrefix = m_layout.counter->prefix(); // this is where the number is
+        delete m_layout.counter;
+        m_layout.counter = pCounter ? new KoParagCounter( *pCounter ) : new KoParagCounter();
+        m_layout.counter->setNumbering( KoParagCounter::NUM_FOOTNOTE );
+        m_layout.counter->setStyle( KoParagCounter::STYLE_NONE ); // no number after the 'prefix'
+        m_layout.counter->setPrefix( footNotePrefix );
+        m_layout.counter->setSuffix( QString::null );
+        invalidateCounters();
+    } else {
+        if ( pCounter )
+            setCounter( *pCounter );
+        else
+            setNoCounter();
+    }
+}
+
 void KoTextParag::setCounter( const KoParagCounter & counter )
 {
     // Garbage collect unnneeded counters.

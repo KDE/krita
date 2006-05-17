@@ -12,6 +12,11 @@
 # in the FIND_PATH() and FIND_LIBRARY() calls
 INCLUDE(UsePkgConfig)
 
+if(LIBEXIF_INCLUDE_DIR LIBEXIF_LIBRARY)
+	# Already in cache, be silent
+	set(LIBEXIF_FIND_QUIETLY TRUE)
+endif(LIBEXIF_INCLUDE_DIR LIBEXIF_LIBRARY)
+
 PKGCONFIG(libexif _LibexifIncDir _LibexifLinkDir _LibexifLinkFlags _LibexifCflags)
 
 if(_LibexifLinkFlags)

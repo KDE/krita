@@ -7,6 +7,11 @@
 #  RUBY_EXECUTABLE   = full path to the ruby binary
 #
 
+if(RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
+	# Already in cache, be silent
+	set(RUBY_FIND_QUIETLY TRUE)
+endif (RUBY_LIBRARY AND RUBY_INCLUDE_PATH)		
+
 SET(RUBY_POSSIBLE_INCLUDE_PATHS
   /usr/lib/ruby/1.8/i586-linux-gnu/
   )

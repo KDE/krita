@@ -3,8 +3,7 @@
 #
 #  LIBEXIF_FOUND - system has LIBEXIF
 #  LIBEXIF_INCLUDE_DIR - the LIBEXIF include directory
-#  LIBEXIF_LIBRARIES - Link these to use LIBEXIF
-#  LIBEXIF_DEFINITIONS - Compiler switches required for using LIBEXIF
+#  LIBEXIF_LIBRARY - Link this to use LIBEXIF
 #
 
 
@@ -12,32 +11,35 @@
 # in the FIND_PATH() and FIND_LIBRARY() calls
 INCLUDE(UsePkgConfig)
 
-if(LIBEXIF_INCLUDE_DIR LIBEXIF_LIBRARY)
-	# Already in cache, be silent
-	set(LIBEXIF_FIND_QUIETLY TRUE)
-endif(LIBEXIF_INCLUDE_DIR LIBEXIF_LIBRARY)
+if(LIBEXIF_INCLUDE_DIR AND LIBEXIF_LIBRARY)
 
-PKGCONFIG(libexif _LibexifIncDir _LibexifLinkDir _LibexifLinkFlags _LibexifCflags)
+  # Already in cache
+  set(LIBEXIF_FOUND TRUE)
 
-if(_LibexifLinkFlags)
-  # query pkg-config asking for a libexif >= 0.6.12
-  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.6.12 libexif RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
-  if(_return_VALUE STREQUAL "0")
-    set(LIBEXIF_FOUND TRUE)
-  endif(_return_VALUE STREQUAL "0")
-endif(_LibexifLinkFlags)
+else(LIBEXIF_INCLUDE_DIR AND LIBEXIF_LIBRARY)
 
-if (LIBEXIF_FOUND)
-  set(LIBEXIF_INCLUDE_DIR ${_LibexifIncDir})
-  set(LIBEXIF_LIBRARY ${_LibexifLinkFlags})
-  if (NOT LIBEXIF_FIND_QUIETLY)
-    message(STATUS "Found libexif: ${LIBEXIF_LIBRARY}")
-  endif (NOT LIBEXIF_FIND_QUIETLY)
-else (LIBEXIF_FOUND)
-  if (LIBEXIF_FIND_REQUIRED)
-    message(FATAL_ERROR "Could NOT find libexif")
-  endif (LIBEXIF_FIND_REQUIRED)
-endif (LIBEXIF_FOUND)
+  PKGCONFIG(libexif _LibexifIncDir _LibexifLinkDir _LibexifLinkFlags _LibexifCflags)
 
-MARK_AS_ADVANCED(LIBEXIF_INCLUDE_DIR LIBEXIF_LIBRARY)
+  if(_LibexifLinkFlags)
+    # query pkg-config asking for a libexif >= 0.6.12
+    EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.6.12 libexif RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+    if(_return_VALUE STREQUAL "0")
+      set(LIBEXIF_FOUND TRUE)
+    endif(_return_VALUE STREQUAL "0")
+  endif(_LibexifLinkFlags)
 
+  if (LIBEXIF_FOUND)
+    set(LIBEXIF_INCLUDE_DIR ${_LibexifIncDir})
+    set(LIBEXIF_LIBRARY ${_LibexifLinkFlags})
+    if (NOT LIBEXIF_FIND_QUIETLY)
+      message(STATUS "Found libexif: ${LIBEXIF_LIBRARY}")
+    endif (NOT LIBEXIF_FIND_QUIETLY)
+  else (LIBEXIF_FOUND)
+    if (LIBEXIF_FIND_REQUIRED)
+      message(FATAL_ERROR "Could NOT find libexif")
+    endif (LIBEXIF_FIND_REQUIRED)
+  endif (LIBEXIF_FOUND)
+
+  MARK_AS_ADVANCED(LIBEXIF_INCLUDE_DIR LIBEXIF_LIBRARY)
+
+endif(LIBEXIF_INCLUDE_DIR AND LIBEXIF_LIBRARY)

@@ -63,14 +63,14 @@ void TKComboBox::paintEvent(QPaintEvent*)
   int bh = height()-4;
 
   QPainter p( this );
-  const QColorGroup& g = colorGroup();
+  const QPalette& g = palette();
 
   QRect fr(2,2,width()-4,height()-4);
 
   if ( hasFocus()) {
-    p.fillRect( fr, g.brush( QColorGroup::Highlight ) );
+    p.fillRect( fr, g.brush( QPalette::Highlight ) );
   } else {
-    p.fillRect( fr, g.brush( QColorGroup::Base ) );
+    p.fillRect( fr, g.brush( QPalette::Base ) );
   }
 
   QRect r1(1,1,width()-1,height()-1);
@@ -103,8 +103,8 @@ void TKComboBox::paintEvent(QPaintEvent*)
 
   if (!editable()) {
     p.setClipRect(r);
-    p.setPen( g.text() );
-    p.setBackgroundColor( g.background() );
+    p.setPen( g.color(QPalette::Text ) );
+    p.setBackground( g.background() );
 
     if ( listBox()->item(currentItem()) ) {
       Q3ListBoxItem * item = listBox()->item(currentItem());

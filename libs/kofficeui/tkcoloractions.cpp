@@ -160,7 +160,7 @@ void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
 void TKSelectColorAction::defaultColor()
 {
    m_pCurrentColor = d->defaultColor;
-   emit activated();
+   emit changed();
 }
 
 void TKSelectColorAction::setDefaultColor(const QColor &_col)
@@ -284,7 +284,7 @@ void TKSelectColorAction::slotActivated()
 void TKSelectColorAction::activate()
 {
   emit colorSelected(m_pCurrentColor);
-  emit activated();
+  emit changed();
 }
 
 void TKSelectColorAction::panelColorSelected( const QColor& color )
@@ -312,8 +312,8 @@ public:
 };
 
 /****************************************************************************************/
-TKColorPanel::TKColorPanel( QWidget* parent, const char* name )
-: QWidget(parent,name)
+TKColorPanel::TKColorPanel( QWidget* parent, const char* /*name*/ )
+: QWidget(parent)
 {
   d = new TKColorPanel::TKColorPanelPrivate();
   m_activeColor = Qt::black;

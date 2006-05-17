@@ -215,7 +215,7 @@ private:
   QPixmap defaultPixmap;
   QPixmap activePixmap;
   QPixmap disabledPixmap;
-  virtual void setIcon(const QPixmap &p) { QWidget::setIcon(p); }
+  virtual void setIcon(const QPixmap &p) { QWidget::setWindowIcon(p); }
   class TKToolBarButtonPrivate;
   TKToolBarButtonPrivate *d;
 

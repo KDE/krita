@@ -24,7 +24,6 @@
 #include <QLabel>
 #include <QLayout>
 #include <QToolBar>
-//Added by qt3to4:
 #include <QPixmap>
 #include <Q3HBoxLayout>
 
@@ -63,7 +62,7 @@ QWidget* TKAction::createToolBarWidget(QToolBar* parent)
 {
   TKToolBarButton* button = new TKToolBarButton(
 		  icon().pixmap(parent->iconSize()), iconText(),
-		  parent, name());
+		  parent);
   button->setIconMode(m_imode);
   initToolBarButton(button);
 
@@ -125,7 +124,7 @@ void TKAction::setText(const QString& text)
 
 void TKAction::setIcon(const QString& icon)
 {
-  KAction::setIconName(icon);
+  KAction::setIcon(KIcon(icon));
   updateLayout();
 }
 
@@ -147,14 +146,14 @@ void TKAction::updateLayout()
 
 QWidget* TKAction::createLayout(QWidget* parent, QWidget* children)
 {
-  QWidget* base = new QWidget(parent,"KTToolBarLayout");
-  QLabel* textLabel = new QLabel(base,"text");
+  QWidget* base = new QWidget(parent);
+  QLabel* textLabel = new QLabel(base);
   textLabel->setMinimumHeight(1);
-  QLabel* pixLabel = new QLabel(base,"pixmap");
-  children->reparent(base,QPoint(0,0));
-  children->setName("widget");
+  QLabel* pixLabel = new QLabel(base);
+  children->setParent(base);
+  children->setObjectName("widget");
   Q3HBoxLayout* layout = new Q3HBoxLayout(base,0,3);
-  layout->setResizeMode(QLayout::SetMinimumSize);
+  layout->setSizeConstraint(QLayout::SetMinimumSize);
   layout->addWidget(textLabel);
   layout->addWidget(pixLabel);
   layout->addWidget(children,1);
@@ -341,7 +340,7 @@ void TKSelectAction::clear()
 #endif
 }
 
-void TKSelectAction::setEditText(const QString& text)
+void TKSelectAction::setEditText(const QString& /*text*/)
 {
 #if 0
   SET_FOR_ALL_CONTAINER(TKComboBox,setEditText,text)

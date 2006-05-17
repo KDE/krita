@@ -255,7 +255,7 @@ private:
 
     /**
      * The documents context style. This is the place where all
-     * the user configurable informations are stored.
+     * the user configurable information is stored.
      */
     ContextStyle* m_contextStyle;
 

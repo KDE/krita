@@ -35,8 +35,8 @@ namespace Kross { namespace Api {
 
     /**
      * While the \a Interpreter is the implemented interpreter this class
-     * is used to provide some abstract informations about each interpreter
-     * we are able to use within the \a Manager singelton.
+     * is used to provide some abstract information about each interpreter
+     * we are able to use within the \a Manager singleton.
      */
     class KROSS_EXPORT InterpreterInfo
     {

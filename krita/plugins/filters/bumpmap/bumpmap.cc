@@ -393,7 +393,7 @@ KisFilterConfiguration * KisFilterBumpmap::configuration()
 KisBumpmapConfiguration::KisBumpmapConfiguration()
     : KisFilterConfiguration( "bumpmap", 1 )
 {
-    bumpmap = QString::null;
+    bumpmap.clear();
     azimuth = 135.0;
     elevation = 45.0;
     depth = 3;
@@ -410,7 +410,7 @@ void KisBumpmapConfiguration::fromXML(const QString & s)
 {
     KisFilterConfiguration::fromXML( s );
 
-    bumpmap = QString::null;
+    bumpmap.clear();
     azimuth = 135.0;
     elevation = 45.0;
     depth = 3;

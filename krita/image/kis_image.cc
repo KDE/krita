@@ -525,7 +525,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
     if (this != &rhs) {
         m_private = new KisImagePrivate(*rhs.m_private);
         m_uri = rhs.m_uri;
-        m_name = QString::null;
+        m_name.clear();
         m_width = rhs.m_width;
         m_height = rhs.m_height;
         m_xres = rhs.m_xres;

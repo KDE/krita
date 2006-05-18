@@ -95,8 +95,8 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
 
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
 
-    m_imageTextureTileWidth = qMin(PREFERRED_IMAGE_TEXTURE_WIDTH, max_texture_size);
-    m_imageTextureTileHeight = qMin(PREFERRED_IMAGE_TEXTURE_HEIGHT, max_texture_size);
+    m_imageTextureTileWidth = qMin((GLint)PREFERRED_IMAGE_TEXTURE_WIDTH, max_texture_size);
+    m_imageTextureTileHeight = qMin((GLint)PREFERRED_IMAGE_TEXTURE_HEIGHT, max_texture_size);
 
     createImageTextureTiles();
 

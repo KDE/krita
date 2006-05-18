@@ -59,7 +59,6 @@
 **********************************************************************/
 
 #include <QCursor>
-//Added by qt3to4:
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QKeyEvent>
@@ -68,6 +67,7 @@
 #include <QTabletEvent>
 #include <QDragEnterEvent>
 #include <QMouseEvent>
+#include <QApplication>
 
 #include "kis_canvas.h"
 #include "kis_cursor.h"
@@ -85,7 +85,6 @@
 #ifdef Q_WS_X11
 
 #include <qdesktopwidget.h>
-#include <QApplication>
 #include <QX11Info>
 
 #include <X11/keysym.h>

@@ -1743,7 +1743,7 @@ void KisView::saveLayerAsImage()
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
     QString mimelist = listMimeFilter.join(" ");
 
-    KFileDialog fd (QString(), mimelist, this);
+    KFileDialog fd (QString::null, mimelist, this);
     fd.setObjectName("Export Layer");
     fd.setCaption(i18n("Export Layer"));
     fd.setMimeFilter(listMimeFilter);

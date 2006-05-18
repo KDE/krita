@@ -18,7 +18,7 @@
 #ifndef KISTYPES_H_
 #define KISTYPES_H_
 
-#include <q3valuevector.h>
+#include <QVector>
 #include <QMap>
 #include <QPoint>
 
@@ -73,7 +73,7 @@ typedef KSharedPtr<KisHistogram> KisHistogramSP;
 class KisPaintOpFactory;
 typedef KSharedPtr<KisPaintOpFactory> KisPaintOpFactorySP;
 
-typedef Q3ValueVector<QPoint> vKisSegments;
+typedef QVector<QPoint> vKisSegments;
 
 //class KisGuide;
 //typedef KSharedPtr<KisGuide> KisGuideSP;

@@ -29,7 +29,7 @@
 
 #include <QImage>
 #include <QPoint>
-#include <q3valuevector.h>
+#include <QVector>
 #include <QFile>
 #include <QTextStream>
 
@@ -273,8 +273,8 @@ void KisPalette::add(const KisPaletteEntry & c)
 
 void KisPalette::remove(const KisPaletteEntry & c)
 {
-    Q3ValueVector<KisPaletteEntry>::iterator it = m_colors.begin();
-    Q3ValueVector<KisPaletteEntry>::iterator end = m_colors.end();
+    QVector<KisPaletteEntry>::iterator it = m_colors.begin();
+    QVector<KisPaletteEntry>::iterator end = m_colors.end();
 
     while (it != end) {
         if ((*it) == c) {

@@ -21,7 +21,7 @@
 #include <QImage>
 #include <QDateTime>
 #include <QApplication>
-#include <q3valuelist.h>
+#include <QList>
 #include <QTimer>
 
 #include <kcommand.h>
@@ -306,8 +306,8 @@ KisPaintDevice::~KisPaintDevice()
 {
     delete m_dcop;
     delete m_longRunningFilterTimer;
-    Q3ValueList<KisFilter*>::iterator it;
-    Q3ValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
+    QList<KisFilter*>::iterator it;
+    QList<KisFilter*>::iterator end = m_longRunningFilters.end();
     for (it = m_longRunningFilters.begin(); it != end; ++it) {
         KisFilter * f = (*it);
         delete f;
@@ -1146,8 +1146,8 @@ void KisPaintDevice::runBackgroundFilters()
 {
     QRect rc = exactBounds();
     if (!m_longRunningFilters.isEmpty()) {
-        Q3ValueList<KisFilter*>::iterator it;
-        Q3ValueList<KisFilter*>::iterator end = m_longRunningFilters.end();
+        QList<KisFilter*>::iterator it;
+        QList<KisFilter*>::iterator end = m_longRunningFilters.end();
         for (it = m_longRunningFilters.begin(); it != end; ++it) {
             (*it)->process(KisPaintDeviceSP(this), KisPaintDeviceSP(this), 0, rc);
         }

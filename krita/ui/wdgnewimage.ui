@@ -226,7 +226,7 @@
    <item row="2" column="0" >
     <widget class="QGroupBox" name="grpImage" >
      <property name="title" >
-      <string>&amp;Image Size</string>
+      <string>Image Size</string>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -283,7 +283,7 @@
       <item row="1" column="0" >
        <widget class="QLabel" name="lblHeight" >
         <property name="text" >
-         <string>&amp;Height:</string>
+            <string>Hei&amp;ght:</string>
         </property>
         <property name="buddy" >
          <cstring></cstring>

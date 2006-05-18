@@ -21,9 +21,8 @@
 #include <QColor>
 #include <QObject>
 #include <QPixmap>
-#include <q3ptrlist.h>
 #include <QRect>
-#include <q3valuelist.h>
+#include <QList>
 #include <QString>
 
 #include "kis_types.h"
@@ -545,7 +544,7 @@ private:
 
     KisExifInfo* m_exifInfo;
 
-    Q3ValueList<KisFilter*> m_longRunningFilters;
+    QList<KisFilter*> m_longRunningFilters;
     QTimer * m_longRunningFilterTimer;
 };
 

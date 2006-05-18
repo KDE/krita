@@ -29,6 +29,7 @@
 #endif
 #include <QPainter>
 //Added by qt3to4:
+#include <Q3ValueVector>
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include <QKeyEvent>

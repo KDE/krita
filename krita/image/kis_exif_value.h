@@ -22,12 +22,10 @@
 
 #include <qdom.h> 
 
-#include <q3cstring.h>
 #include <QString>
-//Added by qt3to4:
-#include <Q3MemArray>
+#include <QVector>
 #include <krita_export.h>
-typedef Q3MemArray<quint8> UByteArray;
+typedef QVector<quint8> UByteArray;
 
 struct KisExifRational {
     quint32 numerator;
@@ -91,7 +89,7 @@ class KRITAIMAGE_EXPORT ExifValue {
         {
             if(m_type == EXIF_TYPE_UNDEFINED)
             {
-                ((UByteArray*)m_value)->duplicate(data, size);
+                qCopy(data, data + size, ((UByteArray*)m_value)->begin());
                 m_components = size;
             }
         }

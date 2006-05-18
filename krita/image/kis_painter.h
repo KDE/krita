@@ -167,7 +167,7 @@ public:
     /**
      * Paint a line that connects the dots in points
      */
-    void paintPolyline(const Q3ValueVector <KisPoint> &points,
+    void paintPolyline(const QVector <KisPoint> &points,
                        int index = 0, int numPoints = -1);
 
     /**

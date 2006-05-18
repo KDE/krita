@@ -127,8 +127,8 @@ void KisCustomBrush::createBrush() {
     }
 
     // For each layer in the current image, create a new image, and add it to the list
-    Q3ValueVector< Q3ValueVector<KisPaintDevice*> > devices;
-    devices.push_back(Q3ValueVector<KisPaintDevice*>());
+    QVector< QVector<KisPaintDevice*> > devices;
+    devices.push_back(QVector<KisPaintDevice*>());
     int w = img->width();
     int h = img->height();
 
@@ -138,10 +138,10 @@ void KisCustomBrush::createBrush() {
     while (layer) {
         KisPaintLayer* paint = 0;
         if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
-            devices.at(0).push_back(paint->paintDevice().data());
+            devices[0].push_back(paint->paintDevice().data());
         layer = layer->nextSibling().data();
     }
-    Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes;
+    QVector<KisPipeBrushParasite::SelectionMode> modes;
 
     switch(comboBox2->currentIndex()) {
         case 0: modes.push_back(KisPipeBrushParasite::Constant); break;

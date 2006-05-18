@@ -18,7 +18,7 @@
 
 #include <cfloat>
 #include <QImage>
-#include <q3valuevector.h>
+#include <QVector>
 
 #include <kdebug.h>
 
@@ -56,7 +56,8 @@ KisAlphaMask::KisAlphaMask(qint32 width, qint32 height)
     m_width = width;
     m_height = height;
 
-    m_data.resize(width * height, OPACITY_TRANSPARENT);
+    m_data.clear();
+    m_data.insert(0, width * height, OPACITY_TRANSPARENT);
 }
 
 KisAlphaMask::~KisAlphaMask() 

@@ -31,7 +31,7 @@
 
 #include <QImage>
 #include <QPoint>
-#include <q3valuevector.h>
+#include <QVector>
 #include <QFile>
 #include <QRegExp>
 #include <QStringList>
@@ -156,8 +156,8 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : super(filename)
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
-                                     Q3ValueVector< Q3ValueVector<KisPaintDevice*> > devices,
-                                     Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes)
+                                     QVector< QVector<KisPaintDevice*> > devices,
+                                     QVector<KisPipeBrushParasite::SelectionMode> modes)
     : super("")
 {
     Q_ASSERT(devices.count() == modes.count());
@@ -186,8 +186,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
 
 KisImagePipeBrush::~KisImagePipeBrush()
 {
-    m_brushes.setAutoDelete(true);
-    m_brushes.clear();
+    qDeleteAll(m_brushes);
 }
 
 bool KisImagePipeBrush::load()
@@ -300,7 +299,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
         return false;
 
     // <gbr brushes>
-    for (uint i = 0; i < m_brushes.count(); i++)
+    for (int i = 0; i < m_brushes.count(); i++)
         if (!m_brushes.at(i)->saveToDevice(dev))
             return false;
 
@@ -360,7 +359,7 @@ bool KisImagePipeBrush::useColorAsMask() const
 
 void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
 {
-    for (uint i = 0; i < m_brushes.count(); i++) {
+    for (int i = 0; i < m_brushes.count(); i++) {
         m_brushes.at(i)->setUseColorAsMask(useColorAsMask);
     }
 }
@@ -421,7 +420,7 @@ bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info) {
 }
 
 void KisImagePipeBrush::makeMaskImage() {
-    for (uint i = 0; i < m_brushes.count(); i++)
+    for (int i = 0; i < m_brushes.count(); i++)
         m_brushes.at(i)->makeMaskImage();
 
     setBrushType(PIPE_MASK);
@@ -432,17 +431,17 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const {
     // The obvious way of cloning each brush in this one doesn't work for some reason...
 
     // XXX Multidimensionals not supported yet, change together with the constructor...
-    Q3ValueVector< Q3ValueVector<KisPaintDevice*> > devices;
-    Q3ValueVector<KisPipeBrushParasite::SelectionMode> modes;
+    QVector< QVector<KisPaintDevice*> > devices;
+    QVector<KisPipeBrushParasite::SelectionMode> modes;
 
-    devices.push_back(Q3ValueVector<KisPaintDevice*>());
+    devices.push_back(QVector<KisPaintDevice*>());
     modes.push_back(m_parasite.selection[0]);
 
-    for (uint i = 0; i < m_brushes.count(); i++) {
+    for (int i = 0; i < m_brushes.count(); i++) {
         KisPaintDevice* pd = new KisPaintDevice(
                 KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""), "clone pd" );
         pd->convertFromQImage(m_brushes.at(i)->img(), "");
-        devices.at(0).append(pd);
+        devices[0].append(pd);
     }
 
     KisImagePipeBrush* c = new KisImagePipeBrush(name(), width(), height(), devices, modes);

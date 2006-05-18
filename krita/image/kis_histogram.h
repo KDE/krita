@@ -19,6 +19,8 @@
 #ifndef KIS_HISTOGRAM_
 #define KIS_HISTOGRAM_
 
+#include <QVector>
+
 #include "kis_types.h"
 #include "kis_colorspace.h"
 #include "kis_histogram_producer.h"
@@ -129,7 +131,7 @@ public:
 private:
     // Dump the histogram to debug.
     void dump();
-    Q3ValueVector<Calculations> calculateForRange(double from, double to);
+    QVector<Calculations> calculateForRange(double from, double to);
     Calculations calculateSingleRange(int channel, double from, double to);
 
     KisPaintDeviceSP m_device;
@@ -143,7 +145,7 @@ private:
 
     KisPaintDeviceSP m_dev;
 
-    Q3ValueVector<Calculations> m_completeCalculations, m_selectionCalculations;
+    QVector<Calculations> m_completeCalculations, m_selectionCalculations;
 };
 
 

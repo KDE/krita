@@ -34,8 +34,7 @@
 #include <q3pointarray.h>
 #include <QRect>
 #include <QString>
-//Added by qt3to4:
-#include <Q3MemArray>
+#include <QVector>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -143,7 +142,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 
-    Q3MemArray<quint8 *> pixelPtrCache(kw * kh);
+    QVector<quint8 *> pixelPtrCache(kw * kh);
 //     pixelPtrCache.fill(0);
 
     // row == the y position of the pixel we want to change in the paint device
@@ -236,7 +235,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
 
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 
-    Q3MemArray<quint8 *> pixelPtrCache(kw * kh);
+    QVector<quint8 *> pixelPtrCache(kw * kh);
 
     // row == the y position of the pixel we want to change in the paint device
     int row = y;

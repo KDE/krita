@@ -18,6 +18,7 @@
  */
 
 #include <kdebug.h>
+#include <QVector>
 #include <QDateTime> // ### Debug
 
 #include "kis_types.h"
@@ -109,8 +110,8 @@ KisHistogram::Calculations KisHistogram::selectionCalculations() {
     return m_selectionCalculations.at(m_channel);
 }
 
-Q3ValueVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to) {
-    Q3ValueVector<Calculations> calculations;
+QVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to) {
+    QVector<Calculations> calculations;
     uint count = m_producer->channels().count();
 
     for (uint i = 0; i < count; i++) {

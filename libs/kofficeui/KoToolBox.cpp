@@ -17,18 +17,16 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <q3buttongroup.h>
+#include <QButtonGroup>
 #include <qnamespace.h>
 #include <QToolButton>
 #include <QLabel>
 #include <QToolTip>
 #include <QLayout>
 #include <QPixmap>
-#include <q3toolbar.h>
-#include <q3dockwindow.h>
-#include <Q3BoxLayout>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
+#include <QSpacerItem>
+#include <QSizePolicy>
 
 #include <kdebug.h>
 #include <kparts/event.h>
@@ -53,11 +51,10 @@ KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instanc
 {
     setObjectName(name);
 
-    m_buttonGroup = new Q3ButtonGroup( 0L );
-    m_buttonGroup->setExclusive( true );
-    connect( m_buttonGroup, SIGNAL( pressed( int ) ), this, SLOT( slotButtonPressed( int ) ) );
+    m_buttonGroup = new QButtonGroup( );
+    connect( m_buttonGroup, SIGNAL( buttonClicked( QAbstractButton *) ), this, SLOT( slotButtonPressed( QAbstractButton *) ) );
+    connect( this, SIGNAL(  orientationChanged ( Qt::Orientation )), this, SLOT(setOrientation ( Qt::Orientation ) ) );
 
-    m_tools.setAutoDelete( true );
     // Create separate lists for the various sorts of tools
     for (int i = 0; i < numberOfTooltypes ; ++i) {
         ToolList * tl = new ToolList();
@@ -67,23 +64,13 @@ KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instanc
 
 KoToolBox::~KoToolBox()
 {
+    qDeleteAll(m_tools);
     delete m_buttonGroup;
 }
 
-
-void KoToolBox::slotPressButton( int id )
+void KoToolBox::slotButtonPressed( QAbstractButton *b)
 {
-    m_buttonGroup->setButton( id );
-    slotButtonPressed( id );
-}
-
-void KoToolBox::slotButtonPressed( int id )
-{
-    if( id != m_buttonGroup->selectedId() && m_buttonGroup->selected() ) {
-        m_buttonGroup->selected()->setDown( false );
-    }
-    m_idToActionMap.at(id)->trigger();
-
+    m_actionMap.value(b)->trigger();
 }
 
 void KoToolBox::registerTool( KAction *tool, int toolType, quint32 priority )
@@ -100,7 +87,7 @@ QToolButton *KoToolBox::createButton(QWidget * parent, const QIcon& icon, QStrin
 
     if ( !icon.isNull() ) {
         button->setIcon(icon);
-        button->setToggleButton( true );
+        button->setCheckable( true );
     }
 
     if ( !tooltip.isEmpty() ) {
@@ -112,34 +99,36 @@ QToolButton *KoToolBox::createButton(QWidget * parent, const QIcon& icon, QStrin
 
 void KoToolBox::setupTools()
 {
-    int id = 0;
+    bool first=true;
     // Loop through tooltypes
-    for (uint i = 0; i < m_tools.count(); ++i) {
+    for (int i = 0; i < m_tools.count(); ++i) {
         ToolList * tl = m_tools.at(i);
 
         if (!tl) continue;
         if (tl->isEmpty()) continue;
 
+        if(!first)
+           addSeparator();
         ToolArea *tools = new ToolArea( this );
         ToolList::Iterator it;
         for ( it = tl->begin(); it != tl->end(); ++it )
         {
-            KAction *tool = it.data();
+            KAction *tool = it.value();
             if(! tool)
                 continue;
             QToolButton *bn = createButton(tools->getNextParent(), tool->icon(), tool->toolTip());
             tools->add(bn);
-            m_buttonGroup->insert( bn, id++ );
-            m_idToActionMap.append( tool );
+            m_buttonGroup->addButton(bn);
+            m_actionMap.insert( bn, tool );
+            if(first)
+                bn->setChecked(true);
+            first=false;
         }
         tools->show();
         addWidget(tools);
-        addSeparator();
         m_toolBoxes.append(tools);
     }
-    // select first (select tool)
-    m_buttonGroup->setButton( 0 );
-    m_numberOfButtons = id;
+    //addItem(new QSpacerItem(0, 0));
 }
 
 
@@ -153,7 +142,7 @@ void KoToolBox::setOrientation ( Qt::Orientation o )
 
     QToolBar::setOrientation( o );
 
-    for (uint i = 0; i < m_toolBoxes.count(); ++i) {
+    for (int i = 0; i < m_toolBoxes.count(); ++i) {
         ToolArea *t = m_toolBoxes.at(i);
         t->setOrientation(o);
     }
@@ -164,33 +153,30 @@ void KoToolBox::enableTools(bool enable)
 {
     if (m_tools.isEmpty()) return;
     if (!m_buttonGroup) return;
-    if (m_numberOfButtons <= 0) return;
 
-    for (uint i = 0; i < m_tools.count(); ++i) {
+    for (int i = 0; i < m_tools.count(); ++i) {
         ToolList * tl = m_tools.at(i);
 
         if (!tl) continue;
 
         ToolList::Iterator it;
         for ( it = tl->begin(); it != tl->end(); ++it )
-            if (it.data())
-                it.data()->setEnabled(enable);
-    }
-    m_buttonGroup->setEnabled(enable);
-    for (quint32 i = 0; i < m_numberOfButtons; ++i) {
-        m_buttonGroup->find( i )->setEnabled( enable );
+            if (it.value())
+                it.value()->setEnabled(enable);
     }
 }
 
 void KoToolBox::slotSetTool(const QString & toolname)
 {
-    for (uint i = 0; i < m_idToActionMap.count(); ++i) {
-        KAction * a = m_idToActionMap.at(i);
-        if (!a || a->name() != toolname) continue;
-
-        m_buttonGroup->setButton(i);
-        return;
-
+    QMapIterator<QAbstractButton *, KAction *> i(m_actionMap);
+    while (i.hasNext()) {
+        i.next();
+        KAction * a = i.value();
+        if (a && a->objectName() == toolname)
+        {
+            i.key()->setChecked(true);
+            return;
+        }
     }
 }
 
@@ -202,22 +188,30 @@ void KoToolBox::slotSetTool(const QString & toolname)
 ToolArea::ToolArea(QWidget *parent)
     : QWidget(parent), m_left(true)
 {
-    m_layout = new Q3BoxLayout(this, Q3BoxLayout::LeftToRight, 0, 0, 0);
+    m_layout = new QBoxLayout(QBoxLayout::LeftToRight, this);
+    m_layout->setMargin(0);
+    m_layout->setSpacing(0);
+
     QWidget *w = new QWidget(this);
     m_layout->addWidget(w);
-
-    Q3GridLayout *grid = new Q3GridLayout(w, 2, 2);
+    QGridLayout *grid = new QGridLayout(w, 2, 2);
     m_leftRow = new QWidget(w);
     grid->addWidget(m_leftRow, 0, 0);
-    m_leftLayout = new Q3BoxLayout(m_leftRow, Q3BoxLayout::TopToBottom, 0, 1, 0);
+    grid->addItem(new QSpacerItem(0, 0),0,1);
+    grid->addItem(new QSpacerItem(0, 0),1,0);
+    m_leftLayout = new QBoxLayout(QBoxLayout::TopToBottom, m_leftRow);
+    m_leftLayout->setMargin(0);
+    m_leftLayout->setSpacing(1);
 
     w = new QWidget(this);
     m_layout->addWidget(w);
-
-    grid = new Q3GridLayout(w, 2, 2);
+    grid = new QGridLayout(w, 2, 2);
     m_rightRow = new QWidget(w);
     grid->addWidget(m_rightRow, 0, 0);
-    m_rightLayout = new Q3BoxLayout(m_rightRow, Q3BoxLayout::TopToBottom, 0, 1, 0);
+    grid->addItem(new QSpacerItem(0, 0),1,1);
+    m_rightLayout = new QBoxLayout(QBoxLayout::TopToBottom, m_rightRow);
+    m_rightLayout->setMargin(0);
+    m_rightLayout->setSpacing(1);
 }
 
 
@@ -247,15 +241,15 @@ QWidget* ToolArea::getNextParent()
 
 void ToolArea::setOrientation ( Qt::Orientation o )
 {
-    Q3BoxLayout::Direction  dir = (o != Qt::Horizontal 
-				  ? Q3BoxLayout::TopToBottom
-				  : Q3BoxLayout::LeftToRight);
+    QBoxLayout::Direction  dir = (o != Qt::Horizontal 
+				  ? QBoxLayout::TopToBottom
+				  : QBoxLayout::LeftToRight);
     m_leftLayout->setDirection(dir);
     m_rightLayout->setDirection(dir);
 
     m_layout->setDirection(o == Qt::Horizontal
-			   ? Q3BoxLayout::TopToBottom
-			   : Q3BoxLayout::LeftToRight);
+			   ? QBoxLayout::TopToBottom
+			   : QBoxLayout::LeftToRight);
 }
 
 

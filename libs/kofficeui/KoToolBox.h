@@ -19,35 +19,28 @@
 #ifndef _KO_TOOLBOX_H_
 #define _KO_TOOLBOX_H_
 
-#include <QToolButton>
-#include <q3ptrvector.h>
-#include <q3toolbar.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3PtrList>
+#include <QList>
+#include <QMap>
 #include <koffice_export.h>
 #include <ktoolbar.h>
 
-class Q3ButtonGroup;
-class Q3GridLayout;
-class Q3BoxLayout;
+class QButtonGroup;
+class QToolButton;
+class QGridLayout;
+class QBoxLayout;
+class QAbstractButton;
 class QWidget;
 
 class KAction;
 class KMainWindow;
-class KDualColorButton;
 class ToolArea;
 
 
 /**
- * KActionBox is a kind of super-specialized toolbox that can order
+ * KoToolBox is a kind of super-specialized toolbox that can order
  * tools according to type and priority.
  *
- * This is to a large extent a port of the Karbon vtoolbox -- with
- * which it should be merged one day. However, it doesn't depend on a
- * tool-like class, it aggregates actions.
  */
-
 class KOFFICEUI_EXPORT KoToolBox : public KToolBar {
 
     Q_OBJECT
@@ -69,8 +62,7 @@ public:
 public slots:
 
     virtual void setOrientation ( Qt::Orientation o );
-    void slotButtonPressed( int id );
-    void slotPressButton( int id );
+    void slotButtonPressed( QAbstractButton * );
 
     // Enables or disables all buttons and the corresponding actions.
     void enableTools(bool enable);
@@ -81,18 +73,16 @@ private:
 
     QToolButton * createButton(QWidget * parent, const QIcon& icon, QString tooltip);
 
-
 private:
-    quint32 m_numberOfButtons;
 
-    Q3ButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
+    QButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
 
-    Q3PtrList<ToolArea> m_toolBoxes; // For every ToolArea
+    QList<ToolArea *> m_toolBoxes; // For every ToolArea
 
     typedef QMap< int, KAction*> ToolList; // The priority ordered list of tools for a certain tooltype
 
-    Q3PtrList<ToolList> m_tools;
-    Q3PtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.
+    QList<ToolList *> m_tools;
+    QMap<QAbstractButton *, KAction *> m_actionMap; // Map the buttongroup id's to actions for easy activating.
     KInstance* m_instance;
 };
 
@@ -109,14 +99,14 @@ public:
     QWidget* getNextParent();
 
 private:
-    Q3PtrList<QWidget>  m_children;
-    Q3BoxLayout        *m_layout;
+    QList<QWidget *>  m_children;
+    QBoxLayout        *m_layout;
 
     QWidget           *m_leftRow;
-    Q3BoxLayout        *m_leftLayout;
+    QBoxLayout        *m_leftLayout;
 
     QWidget           *m_rightRow;
-    Q3BoxLayout        *m_rightLayout;
+    QBoxLayout        *m_rightLayout;
 
     bool               m_left;
 };

@@ -24,7 +24,6 @@
 #include <QImage>
 #include <QPainter>
 #include <QSize>
-#include <q3tl.h>
 #include <QApplication>
 #include <QThread>
 #include <QDateTime>

@@ -46,35 +46,38 @@ KisThreadPool::~KisThreadPool()
 
     m_canceled = true;
 
-    m_runningThreads.setAutoDelete(true);
-    m_threads.setAutoDelete(true);
-    m_oldThreads.setAutoDelete(true);
-
     KisThread * t;
 
-    for ( t = m_threads.first(); t; t = m_threads.next()) {
-        if (t) {
-            t->cancel();
-            t->wait();
-            m_threads.remove(t);
-        }
+    QMutableListIterator<KisThread *> i (m_threads);
+    while(i.hasNext())
+    {
+        t= i.next();
+        t->cancel();
+        t->wait();
+        i.remove();
+        delete t;
     }
 
-    for ( t = m_runningThreads.first(); t; t = m_runningThreads.next()) {
-        if (t) {
-            t->cancel();
-            t->wait();
-            m_runningThreads.remove(t);
-        }
+    i = m_runningThreads;
+    while(i.hasNext())
+    {
+        t= i.next();
+        t->cancel();
+        t->wait();
+        i.remove();
+        delete t;
     }
 
-    for ( t = m_oldThreads.first(); t; t = m_oldThreads.next()) {
-        if (t) {
-            t->cancel();
-            t->wait();
-            m_runningThreads.remove(t);
-        }
+    i = m_oldThreads;
+    while(i.hasNext())
+    {
+        t= i.next();
+        t->cancel();
+        t->wait();
+        i.remove();
+        delete t;
     }
+
     KisThreadPool::m_singleton = 0;
     m_poolMutex.unlock();
 
@@ -115,20 +118,20 @@ void KisThreadPool::dequeue(KisThread * thread)
 
     m_poolMutex.lock();
 
-    int i = m_threads.findRef(thread);
+    int i = m_threads.indexOf(thread);
     if (i >= 0) {
-        t = m_threads.take(i);
+        t = m_threads.takeAt(i);
         m_numberOfQueuedThreads--;
     } else {
-        i = m_runningThreads.findRef(thread);
+        i = m_runningThreads.indexOf(thread);
         if (i >= 0) {
-            t = m_runningThreads.take(i);
+            t = m_runningThreads.takeAt(i);
             m_numberOfRunningThreads--;
         }
         else {
-            i = m_oldThreads.findRef(thread);
+            i = m_oldThreads.indexOf(thread);
             if (i >= 0) {
-                t = m_oldThreads.take(i);
+                t = m_oldThreads.takeAt(i);
             }
         }
     }
@@ -152,7 +155,7 @@ void KisThreadPool::run()
             KisThread * thread = 0;
             m_poolMutex.lock();
             if (m_threads.count() > 0) {
-                thread = m_threads.take();
+                thread = m_threads.takeFirst();
                 m_numberOfQueuedThreads--;
             }
             if (thread) {
@@ -165,10 +168,13 @@ void KisThreadPool::run()
         else {
             msleep(m_wait);
             m_poolMutex.lock();
-            for ( KisThread * t = m_runningThreads.first(); t; t = m_runningThreads.next()) {
+            QMutableListIterator<KisThread *> i (m_runningThreads);
+            while(i.hasNext())
+            {
+                KisThread *t = i.next();
                 if (t) {
                     if (t->isFinished()) {
-                        m_runningThreads.remove(t);
+                        i.remove();
                         m_numberOfRunningThreads--;
                         m_oldThreads.append(t);
                     }

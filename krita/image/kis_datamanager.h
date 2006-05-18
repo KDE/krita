@@ -19,7 +19,6 @@
 #define KIS_DATAMANAGER_H_
 
 #include <qglobal.h>
-#include <q3valuevector.h>
 #include <QRect>
 
 class KoStore;

@@ -36,7 +36,6 @@
 #include <QMap>
 #include <QPainter>
 #include <QPixmap>
-#include <q3pointarray.h>
 #include <QRect>
 #include <QString>
 

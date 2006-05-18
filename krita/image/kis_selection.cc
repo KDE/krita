@@ -187,7 +187,7 @@ void KisSelection::paintUniformSelectionRegion(QImage img, const QRect& imageRec
         if (!region.isEmpty()) {
             QVector<QRect> rects = region.rects();
 
-            for (unsigned int i = 0; i < rects.count(); i++) {
+            for (int i = 0; i < rects.count(); i++) {
                 QRect r = rects[i];
 
                 for (qint32 y = 0; y < r.height(); ++y) {

@@ -128,7 +128,6 @@ void KoToolBox::setupTools()
         addWidget(tools);
         m_toolBoxes.append(tools);
     }
-    //addItem(new QSpacerItem(0, 0));
 }
 
 
@@ -197,8 +196,8 @@ ToolArea::ToolArea(QWidget *parent)
     QGridLayout *grid = new QGridLayout(w, 2, 2);
     m_leftRow = new QWidget(w);
     grid->addWidget(m_leftRow, 0, 0);
-    grid->addItem(new QSpacerItem(0, 0),0,1);
-    grid->addItem(new QSpacerItem(0, 0),1,0);
+    grid->setRowStretch(1, 1);
+    grid->setColumnStretch(1, 1);
     m_leftLayout = new QBoxLayout(QBoxLayout::TopToBottom, m_leftRow);
     m_leftLayout->setMargin(0);
     m_leftLayout->setSpacing(1);
@@ -208,10 +207,12 @@ ToolArea::ToolArea(QWidget *parent)
     grid = new QGridLayout(w, 2, 2);
     m_rightRow = new QWidget(w);
     grid->addWidget(m_rightRow, 0, 0);
-    grid->addItem(new QSpacerItem(0, 0),1,1);
+    grid->setRowStretch(1, 1);
+    grid->setColumnStretch(1, 1);
     m_rightLayout = new QBoxLayout(QBoxLayout::TopToBottom, m_rightRow);
     m_rightLayout->setMargin(0);
     m_rightLayout->setSpacing(1);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
 

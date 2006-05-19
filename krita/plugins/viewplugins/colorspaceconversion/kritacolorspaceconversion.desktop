@@ -22,6 +22,7 @@ Name[sl]=Pretvorba barvnega prostora
 Name[sr]=Претварање простора боја
 Name[sr@Latn]=Pretvaranje prostora boja
 Name[sv]=Färgrymdskonvertering
+Name[uk]=Перетворення простору кольорів
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorspaceconversion

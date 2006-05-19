@@ -22,5 +22,6 @@ Comment[ru]=Полная поддержка цветовых пространс�
 Comment[sr]=Модул који имплементира потпун простор боја за употребу са libkritacolor
 Comment[sr@Latn]=Modul koji implementira potpun prostor boja za upotrebu sa libkritacolor
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med libkritacolor
+Comment[uk]=Модуль впровадження повного простору кольорів для вжитку з libkritacolor
 [PropertyDef::X-Krita-Version]
 Type=int

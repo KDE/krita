@@ -22,6 +22,7 @@ Name[ru]=Маленькая черепица
 Name[sr]=Филтер малих плоча
 Name[sr@Latn]=Filter malih ploča
 Name[sv]=Smårutorsfilter
+Name[uk]=Фільтр маленьких плиток
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasmalltilesfilter

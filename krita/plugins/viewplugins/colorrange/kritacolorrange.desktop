@@ -21,6 +21,7 @@ Name[sl]=Barvni razpon
 Name[sr]=Опсег боја
 Name[sr@Latn]=Opseg boja
 Name[sv]=Färgintervall
+Name[uk]=Діапазон кольорів
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorrange

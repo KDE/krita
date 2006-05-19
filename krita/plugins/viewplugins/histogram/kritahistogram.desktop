@@ -21,6 +21,7 @@ Name[sl]=Vstavek za histograme
 Name[sr]=Хистограмски прикључак
 Name[sr@Latn]=Histogramski priključak
 Name[sv]=Insticksprogram med histogram
+Name[uk]=Втулок гістограм
 Name[zh_CN]=直方图插件
 ServiceTypes=Krita/ViewPlugin
 Type=Service

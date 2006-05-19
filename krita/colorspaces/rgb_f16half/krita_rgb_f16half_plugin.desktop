@@ -44,6 +44,7 @@ Comment[ru]=Цветовое пространство RGB (16-бит/канал 
 Comment[sr]=Модел боја за RGB слике, 16-битно реално „полу“ по каналу
 Comment[sr@Latn]=Model boja za RGB slike, 16-bitno realno „polu“ po kanalu
 Comment[sv]=Färgmodell för 16-bitars flyttal 'halva' per kanal RGB-bilder
+Comment[uk]=Модель кольорів для 16-бітних зображень RGB, з плаваючою комою, "половина" на канал
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=krita_rgb_f16half_plugin

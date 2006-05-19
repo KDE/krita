@@ -20,6 +20,7 @@ Name[ru]=Панель гистограммы
 Name[sr]=Сидраш хистограма
 Name[sr@Latn]=Sidraš histograma
 Name[sv]=Histogramdockning
+Name[uk]=Швартувальник гістограм
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogramdocker

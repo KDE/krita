@@ -22,6 +22,7 @@ Name[ru]=Собел
 Name[sr]=Собелов филтер
 Name[sr@Latn]=Sobelov filter
 Name[sv]=Sobelfilter
+Name[uk]=Фільтр Собеля
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaroundcornersfilter

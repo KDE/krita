@@ -46,6 +46,7 @@ Comment[ru]=Цветовое пространство RGB (целое 16-бит/
 Comment[sr]=Модел боја за RGB слике, 16-битно целобројно по каналу
 Comment[sr@Latn]=Model boja za RGB slike, 16-bitno celobrojno po kanalu
 Comment[sv]=Färgmodell för 16-bitars heltal/kanal RGB-bilder
+Comment[uk]=Модель кольорів для зображень RGB 32-біт ціле число на канал
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=krita_rgb_u16_plugin

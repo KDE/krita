@@ -24,6 +24,7 @@ Name[sl]=Orodje za pretvorbo
 Name[sr]=Алат за трансформацију
 Name[sr@Latn]=Alat za transformaciju
 Name[sv]=Transformeringsverktyg
+Name[uk]=Засіб перетворення
 Name[zh_CN]=变形工具
 ServiceTypes=Krita/Tool
 Type=Service

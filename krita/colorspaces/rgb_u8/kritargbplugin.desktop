@@ -70,6 +70,7 @@ Comment[sv]=Färgmodell för 8-bitar/kanal RGB-bilder
 Comment[ta]=8/பிட்/வழி RGB பிம்பங்களுக்கான வண்ண முறை
 Comment[tg]=Mодели ранга барои 8-бит /канал тасвирҳои RGB
 Comment[tr]=8-bit/kanal RGB görüntüler için renk modeli.
+Comment[uk]=Модель кольорів для зображень RGB з 8-бітами/канал
 Comment[zh_CN]=8 位/通道 RGB 图像的色彩模型
 ServiceTypes=Krita/ColorSpace
 Type=Service

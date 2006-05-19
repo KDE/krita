@@ -22,4 +22,4 @@ kritasubstrate_la_LIBADD =  ../../../libkritacommon.la
 
 kde_services_DATA = kritasubstrate.desktop
 
-kritasubstrate_la_METASOURCES = AUTO
+METASOURCES = AUTO

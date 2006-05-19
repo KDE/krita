@@ -20,10 +20,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 
-#include <QLayout>
-#include <q3vbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <kdebug.h>
 #include <QLabel>
 #include <QComboBox>
@@ -131,26 +128,26 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
             slotTextChanged ( );
         }
         return;
-    }
-    if(_href.find("http://")!=-1 || _href.find("https://")!=-1 ||_href.find("ftp://")!=-1 )
+    } 
+    if( _href.contains("http://") || _href.contains("https://") || _href.contains("ftp://") )
     {
         internetLink->setHrefName(_href);
         internetLink->setLinkName(_link);
         showPage(0);
     }
-    else if(_href.find("file:/")!=-1)
+    else if( _href.contains("file:/") )
     {
         fileLink->setHrefName(_href);
         fileLink->setLinkName(_link);
         showPage(2);
     }
-    else if(_href.find("mailto:")!=-1 || _href.find("news:")!=-1)
+    else if( _href.contains("mailto:") || _href.contains("news:") )
     {
         mailLink->setHrefName(_href);
         mailLink->setLinkName(_link);
         showPage(1);
     }
-    else if(_href.find("bkm://")!=-1)
+    else if( _href.contains("bkm://") )
     {
         if ( bookmarkLink )
         {
@@ -220,13 +217,14 @@ void KoInsertLinkDia::slotOk()
 }
 
 
-internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
-  : QWidget(parent,name)
+internetLinkPage::internetLinkPage( QWidget *parent , char* /*name*/  )
+  : QWidget(parent)
 {
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setSpacing( KDialog::spacingHint() );
-  Q3VBoxLayout *lay2 = new Q3VBoxLayout( lay1);
+  QVBoxLayout *lay2 = new QVBoxLayout();
   lay2->setSpacing( KDialog::spacingHint() );
+  lay1->addLayout( lay2 );
 
   QLabel* tmpQLabel = new QLabel( this);
 
@@ -262,7 +260,7 @@ QString internetLinkPage::createInternetLink()
     if(result.isEmpty())
         return result;
 
-    if(result.find("http://")==-1 && result.find("https://")==-1 && result.find("ftp://")==-1)
+    if( !result.contains("http://") && !result.contains("https://") && !result.contains("ftp://") )
         result = "http://"+result;
     return result;
 }
@@ -293,13 +291,14 @@ void internetLinkPage::textChanged ( const QString & )
     emit textChanged();
 }
 
-bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char *name  )
-  : QWidget(parent,name)
+bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char* /*name*/  )
+  : QWidget(parent)
 {
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setSpacing( KDialog::spacingHint() );
-  Q3VBoxLayout *lay2 = new Q3VBoxLayout( lay1);
+  QVBoxLayout *lay2 = new QVBoxLayout();
   lay2->setSpacing( KDialog::spacingHint() );
+  lay1->addLayout( lay2 );
 
   QLabel* tmpQLabel = new QLabel( this);
 
@@ -335,7 +334,7 @@ QString bookmarkLinkPage::createBookmarkLink()
     if(result.isEmpty())
         return result;
 
-    if(result.find("bkm://")==-1)
+    if( !result.contains("bkm://") )
         result = "bkm://"+result;
     return result;
 }
@@ -348,13 +347,13 @@ void bookmarkLinkPage::setLinkName(const QString & _name)
 
 void bookmarkLinkPage::setHrefName(const QString &_name)
 {
-    m_hrefName->setCurrentText(_name);
+    m_hrefName->setItemText( m_hrefName->currentIndex(), _name );
 }
 
 void bookmarkLinkPage::setBookmarkList(const QStringList & bkmlist)
 {
     m_hrefName->clear();
-    m_hrefName->insertStringList(bkmlist, 0);
+    m_hrefName->insertItems( 0, bkmlist );
     if ( bkmlist.isEmpty())
         m_linkName->setEnabled( false);
     //m_hrefName->setEditable(true);
@@ -375,13 +374,14 @@ void bookmarkLinkPage::textChanged ( const QString & )
     emit textChanged();
 }
 
-mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
-  : QWidget(parent,name)
+mailLinkPage::mailLinkPage( QWidget *parent , char* /*name*/  )
+  : QWidget(parent)
 {
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setSpacing( KDialog::spacingHint() );
-  Q3VBoxLayout *lay2 = new Q3VBoxLayout( lay1);
+  QVBoxLayout *lay2 = new QVBoxLayout();
   lay2->setSpacing( KDialog::spacingHint() );
+  lay1->addLayout( lay2 );
 
   QLabel* tmpQLabel = new QLabel( this);
 
@@ -414,7 +414,7 @@ QString mailLinkPage::createMailLink()
     if(result.isEmpty())
         return result;
 
-    if(result.find("mailto:")==-1 && result.find("news:")==-1)
+    if( !result.contains("mailto:") && !result.contains("news:") )
         result = "mailto:"+result;
     return result;
 }
@@ -445,13 +445,14 @@ void mailLinkPage::textChanged ( const QString & )
     emit textChanged();
 }
 
-fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
-  : QWidget(parent,name)
+fileLinkPage::fileLinkPage( QWidget *parent , char* /*name*/  )
+  : QWidget(parent)
 {
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setSpacing( KDialog::spacingHint() );
-  Q3VBoxLayout *lay2 = new Q3VBoxLayout( lay1);
+  QVBoxLayout *lay2 = new QVBoxLayout();
   lay2->setSpacing( KDialog::spacingHint() );
+  lay1->addLayout( lay2 );
 
   QLabel* tmpQLabel = new QLabel( this);
 
@@ -481,11 +482,11 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   if ( lst.count()<= 1 )
   {
       recentFile->clear();
-      recentFile->insertItem( i18n("No Entries") );
+      recentFile->addItem( i18n("No Entries") );
       recentFile->setEnabled( false );
   }
   else
-      recentFile->insertStringList( lst);
+      recentFile->addItems( lst );
   
   recentFile->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
   
@@ -519,7 +520,7 @@ QString fileLinkPage::createFileLink()
     if(result.isEmpty())
         return result;
 
-    if(result.find("file:/")==-1)
+    if( !result.contains("file:/") )
         result = "file://"+result;
     return result;
 }

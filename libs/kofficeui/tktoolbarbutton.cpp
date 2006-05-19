@@ -23,10 +23,8 @@
 #include <QToolTip>
 #include <QCursor>
 #include <QPainter>
-#include <qdrawutil.h>
 #include <QStyle>
 #include <QStyleOptionToolButton>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
 
@@ -46,7 +44,7 @@ public:
   TKToolBarButtonPrivate()
   {
     m_iconMode     = TK::IconOnly;
-    m_isPopup      = false;
+m_isPopup      = false;
     m_isToggle     = false;
     m_isOn         = false;
     m_isRaised     = false;
@@ -113,8 +111,8 @@ TKToolBarButton::TKToolBarButton( const QString& icon, const QString& txt,
   modeChange();
 }
 
-TKToolBarButton::TKToolBarButton( const QPixmap& pixmap, const QString& txt, QWidget* parent, const char* name )
-: QToolButton(parent,name )
+TKToolBarButton::TKToolBarButton( const QPixmap& pixmap, const QString& txt, QWidget* parent, const char* /*name*/ )
+: QToolButton(parent )
 {
   d = new TKToolBarButtonPrivate;
   d->m_text = txt;
@@ -127,7 +125,7 @@ TKToolBarButton::TKToolBarButton( const QPixmap& pixmap, const QString& txt, QWi
 
   installEventFilter(this);
 
-  setPixmap(pixmap);
+  QToolButton::setIcon( QIcon(pixmap) );
   modeChange();
 }
 
@@ -179,7 +177,7 @@ void TKToolBarButton::setEnabled( bool enabled )
   if (isEnabled()==enabled)
     return;
 
-  QToolButton::setPixmap( (enabled ? defaultPixmap : disabledPixmap) );
+  QToolButton::setIcon( QPixmap((enabled ? defaultPixmap : disabledPixmap)) );
   QToolButton::setEnabled( enabled );
 }
 
@@ -306,13 +304,13 @@ void TKToolBarButton::enterEvent(QEvent *)
 {
   if (!d->m_isToggle) {
     if (isEnabled()) {
-      QToolButton::setPixmap(activePixmap);
+      QToolButton::setIcon( QPixmap( activePixmap ) );
       if (d->m_autoRaised)
         setRaised(true);
     } else {
-      QToolButton::setPixmap(disabledPixmap);
+      QToolButton::setIcon( QPixmap( disabledPixmap ) );
     }
-    repaint(false);
+    update();
   }
 }
 
@@ -386,7 +384,7 @@ void TKToolBarButton::drawButton( QPainter* p )
         {
             QStyle::State flags   = QStyle::State_None;
             if (isEnabled()) 	flags |= QStyle::State_Enabled;
-            if (isOn()) 		flags |= QStyle::State_On;
+            if (isChecked())	flags |= QStyle::State_On;
             if (d->m_isRaised)	flags |= QStyle::State_Raised;
             if (hasFocus())	flags |= QStyle::State_HasFocus;
 
@@ -417,10 +415,10 @@ void TKToolBarButton::paletteChange(const QPalette &)
 {
   makeDisabledPixmap();
   if ( !isEnabled() )
-    QToolButton::setPixmap( disabledPixmap );
+    QToolButton::setIcon( QIcon( disabledPixmap ) );
   else
-    QToolButton::setPixmap( defaultPixmap );
-  repaint(false);
+    QToolButton::setIcon( QIcon( defaultPixmap ) );
+  update();
 }
 
 void TKToolBarButton::makeDefaultPixmap()

@@ -82,7 +82,7 @@ public:
 
     void drawContents( QPainter *p, int, int, int, int )
     {
-        p->setBackgroundColor( Qt::white );
+        p->setBackground( QBrush( Qt::white ) );
         // Be sure that the background is white (for transparency)
         p->fillRect(0, 0, m_size.width(), m_size.height(), QBrush( Qt::white ));
         m_picture.draw( *p, 0 ,0, m_size.width(), m_size.height());

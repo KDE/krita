@@ -31,11 +31,10 @@
 #include <q3header.h>
 #include <QCheckBox>
 #include <QToolTip>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPixmap>
-#include <Q3HBoxLayout>
-#include <Q3Frame>
+#include <QHBoxLayout>
+#include <QFrame>
 #include <QByteArray>
 
 #include <ktempfile.h>
@@ -111,12 +110,15 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     d=new KoTemplateCreateDiaPrivate( parent, instance );
 
     QFrame *mainwidget=makeMainWidget();
-    Q3HBoxLayout *mbox=new Q3HBoxLayout(mainwidget, 0, KDialogBase::spacingHint());
-    Q3VBoxLayout *leftbox=new Q3VBoxLayout(mbox);
+    QHBoxLayout *mbox=new QHBoxLayout( mainwidget );
+    mbox->setSpacing( KDialogBase::spacingHint() );
+    QVBoxLayout* leftbox = new QVBoxLayout();
+    mbox->addLayout( leftbox );
 
     QLabel *label=new QLabel(i18n("Name:"), mainwidget);
     leftbox->addSpacing(label->fontMetrics().height()/2);
-    Q3HBoxLayout *namefield=new Q3HBoxLayout(leftbox);
+    QHBoxLayout *namefield=new QHBoxLayout();
+    leftbox->addLayout( namefield );
     namefield->addWidget(label);
     d->m_name=new KLineEdit(mainwidget);
     d->m_name->setFocus();
@@ -137,7 +139,8 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     fillGroupTree();
     d->m_groups->sort();
 
-    Q3HBoxLayout *bbox=new Q3HBoxLayout(leftbox);
+    QHBoxLayout *bbox=new QHBoxLayout();
+    leftbox->addLayout( bbox );
     d->m_add=new QPushButton(i18n("&Add Group..."), mainwidget);
     connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
     bbox->addWidget(d->m_add);
@@ -145,18 +148,20 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     connect(d->m_remove, SIGNAL(clicked()), this, SLOT(slotRemove()));
     bbox->addWidget(d->m_remove);
 
-    Q3VBoxLayout *rightbox=new Q3VBoxLayout(mbox);
+    QVBoxLayout *rightbox=new QVBoxLayout();
+    mbox->addLayout( rightbox );
     Q3GroupBox *pixbox=new Q3GroupBox(i18n("Picture"), mainwidget);
     rightbox->addWidget(pixbox);
-    Q3VBoxLayout *pixlayout=new Q3VBoxLayout(pixbox, KDialogBase::marginHint(),
-                                           KDialogBase::spacingHint());
+    QVBoxLayout *pixlayout=new QVBoxLayout(pixbox );
+    pixlayout->setMargin(KDialogBase::marginHint());
+    pixlayout->setSpacing( KDialogBase::spacingHint());
     pixlayout->addSpacing(pixbox->fontMetrics().height()/2);
     pixlayout->addStretch(1);
     d->m_default=new QRadioButton(i18n("&Default"), pixbox);
     d->m_default->setChecked(true);
     connect(d->m_default, SIGNAL(clicked()), this, SLOT(slotDefault()));
     pixlayout->addWidget(d->m_default);
-    Q3HBoxLayout *custombox=new Q3HBoxLayout();
+    QHBoxLayout *custombox=new QHBoxLayout();
     pixlayout->addItem(custombox);
     d->m_custom=new QRadioButton(i18n("Custom"), pixbox);
     d->m_custom->setChecked(false);
@@ -169,7 +174,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     pixlayout->addStretch(1);
     label=new QLabel(i18n("Preview:"), pixbox);
     pixlayout->addWidget(label);
-    Q3HBoxLayout *previewbox=new Q3HBoxLayout();
+    QHBoxLayout *previewbox=new QHBoxLayout();
     pixlayout->addItem(previewbox);
     previewbox->addStretch(10);
     d->m_preview=new QLabel(pixbox); // setPixmap() -> auto resize?
@@ -262,7 +267,7 @@ void KoTemplateCreateDia::slotOk() {
     icon+=".png";
 
     // try to find the extension for the template file :P
-    const int pos = m_file.findRev( '.' );
+    const int pos = m_file.lastIndexOf( '.' );
     QString ext;
     if ( pos > -1 )
         ext = m_file.mid( pos );

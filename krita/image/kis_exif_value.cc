@@ -339,6 +339,7 @@ QDomElement ExifValue::save(QDomDocument& doc)
             QByteArray data = QByteArray::fromRawData((char*)value.data(), value.size());
             QByteArray encodedData;
             KCodecs::base64Encode( data, encodedData );
+            data.resetRawData( (char*)value.data(), value.size());
             elmt.setAttribute("value", QString(encodedData));
         }
             break;

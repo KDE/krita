@@ -23,8 +23,7 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QLayout>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <klocale.h>
 
 KFORMULA_NAMESPACE_BEGIN
@@ -41,7 +40,7 @@ MatrixDialog::MatrixDialog( QWidget *parent, int _width, int _height )
     QLabel *rows, *columns;
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    Q3GridLayout *grid = new Q3GridLayout(page, 4, 2, 10);
+    QGridLayout *grid = new QGridLayout(page);
 
     rows = new QLabel(i18n("Rows:"), page);
     columns = new QLabel(i18n("Columns:"), page);
@@ -51,12 +50,16 @@ MatrixDialog::MatrixDialog( QWidget *parent, int _width, int _height )
 
     QSpinBox *width, *height;
 
-    height = new QSpinBox(1, MAX_SIZE, 1, page);
+    height = new QSpinBox(page);
+    height->setRange( 1, MAX_SIZE );
+    height->setSingleStep( 1 );
     grid->addWidget(height, 1, 0);
     height->setValue(h);
     connect(height, SIGNAL(valueChanged(int)), SLOT(setHeight(int)));
 
-    width = new QSpinBox(1, MAX_SIZE, 1, page);
+    width = new QSpinBox(page);
+    width->setRange ( 1, MAX_SIZE ); 
+    width->setSingleStep(1);
     grid->addWidget(width, 1, 1);
     width->setValue(w);
     connect(width, SIGNAL(valueChanged(int)), SLOT(setWidth(int)));

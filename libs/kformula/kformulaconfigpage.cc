@@ -60,8 +60,8 @@
 KFORMULA_NAMESPACE_BEGIN
 
 
-ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, KVBox* box, char* name )
-    : QObject( box->parent(), name ), m_document( document ), m_view( view ), m_config( config ), m_changed( false )
+ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, KVBox* box, char* /*name*/ )
+    : QObject( box->parent() ), m_document( document ), m_view( view ), m_config( config ), m_changed( false )
 {
     const ContextStyle& contextStyle = document->getContextStyle( true );
 
@@ -178,13 +178,13 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     grid = new Q3GridLayout( styleBox->layout(), 3, 1 );
     grid->setSpacing( KDialog::spacingHint() );
 
-    esstixStyle = new QRadioButton( i18n( "Esstix font style" ), styleBox, "esstixStyle" );
+    esstixStyle = new QRadioButton( i18n( "Esstix font style" ), styleBox );
     esstixStyle->setChecked( contextStyle.getFontStyle() == "esstix" );
 
-    cmStyle = new QRadioButton( i18n( "Computer modern (TeX) style" ), styleBox, "cmStyle" );
+    cmStyle = new QRadioButton( i18n( "Computer modern (TeX) style" ), styleBox );
     cmStyle->setChecked( contextStyle.getFontStyle() == "tex" );
 
-    symbolStyle = new QRadioButton( i18n( "Symbol font style" ), styleBox, "symbolStyle" );
+    symbolStyle = new QRadioButton( i18n( "Symbol font style" ), styleBox );
     symbolStyle->setChecked( !esstixStyle->isChecked() && !cmStyle->isChecked() );
 
     grid->addWidget( symbolStyle, 0, 0 );

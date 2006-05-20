@@ -49,7 +49,7 @@ SymbolFontHelper::SymbolFontHelper()
 QChar SymbolFontHelper::unicodeFromSymbolFont( QChar pos ) const
 {		
     if ( compatibility.contains( pos ) ) {
-        return compatibility[ pos.latin1() ];
+        return compatibility[ pos.toLatin1() ];
     }
     return QChar::Null;
 }
@@ -177,7 +177,7 @@ QStringList SymbolTable::allNames() const
     for ( EntryTable::const_iterator iter = entries.begin();
           iter != entries.end();
           ++iter ) {
-        if ( QChar( character( iter.data() ) ) != QChar::Null ) {
+        if ( QChar( character( iter.value() ) ) != QChar::Null ) {
             list.append( iter.key() );
         }
     }

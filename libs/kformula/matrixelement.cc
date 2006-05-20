@@ -1173,7 +1173,7 @@ KCommand* MultilineSequenceElement::input( Container* container, QKeyEvent* even
 
 KCommand* MultilineSequenceElement::input( Container* container, QChar ch )
 {
-    int latin1 = ch.latin1();
+    int latin1 = ch.toLatin1();
     switch (latin1) {
     case '&': {
         Request r( req_addTabMark );
@@ -1515,7 +1515,7 @@ void MultilineElement::calcSizes( const ContextStyle& context,
 {
     luPt mySize = context.getAdjustedSize( tstyle );
     QFont font = context.getDefaultFont();
-    font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
+    font.setPointSizeF( context.layoutUnitPtToPt( mySize ) );
     QFontMetrics fm( font );
     luPixel leading = context.ptToLayoutUnitPt( fm.leading() );
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle ) );

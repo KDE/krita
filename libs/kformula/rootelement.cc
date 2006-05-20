@@ -566,13 +566,13 @@ bool RootElement::readContentFromDom(QDomNode& node)
     }
     node = node.nextSibling();
 
-    if ( node.nodeName().upper() == "ROOTINDEX" ) {
+    if ( node.nodeName().toUpper() == "ROOTINDEX" ) {
         if ( !buildChild( index=new SequenceElement( this ), node, "ROOTINDEX" ) ) {
             return false;
         }
     }
     // backward compatibility
-    else if ( node.nodeName().upper() == "INDEX" ) {
+    else if ( node.nodeName().toUpper() == "INDEX" ) {
         if ( !buildChild( index=new SequenceElement( this ), node, "INDEX" ) ) {
             return false;
         }

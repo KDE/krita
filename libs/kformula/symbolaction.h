@@ -20,9 +20,9 @@
 #ifndef _SYMBOLACTION_H_
 #define _SYMBOLACTION_H_
 
-#include <q3valuelist.h>
+#include <QList>
 #include <QStringList>
-#include <q3memarray.h>
+#include <QVector>
 
 #include "kformuladefs.h"
 #include <kselectaction.h>
@@ -37,13 +37,13 @@ public:
                  const QObject* receiver, const char* slot, KActionCollection* parent,
                  const char* name = 0 );
 
-    int plug( QWidget*, int index = -1 );
-    void setSymbols( const QStringList&, const Q3ValueList<QFont>&, const Q3MemArray<QChar>& );
+    void plug( QWidget*, int index = -1 );
+    void setSymbols( const QStringList&, const QList<QFont>&, const QVector<QChar>& );
     void updateItems( int );
 
 private:
-    Q3ValueList<QFont> m_fonts;
-    Q3MemArray<QChar> m_chars;
+    QList<QFont> m_fonts;
+    QVector<QChar> m_chars;
 };
 
 KFORMULA_NAMESPACE_END

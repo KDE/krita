@@ -676,9 +676,9 @@ void MathML2KFormulaPrivate::mfenced( QDomElement element, QDomNode docnode )
 {
     QDomElement bracket = doc.createElement( "BRACKET" );
     QString value = element.attribute( "open", "(" );
-    bracket.setAttribute( "LEFT", QString::number( value.at( 0 ).latin1() ) );
+    bracket.setAttribute( "LEFT", QString::number( value.at( 0 ).toLatin1() ) );
     value = element.attribute( "close", ")" );
-    bracket.setAttribute( "RIGHT", QString::number( value.at( 0 ).latin1() ) );
+    bracket.setAttribute( "RIGHT", QString::number( value.at( 0 ).toLatin1() ) );
 
     QDomElement content = doc.createElement( "CONTENT" );
     QDomElement sequence = doc.createElement( "SEQUENCE" );
@@ -687,7 +687,7 @@ void MathML2KFormulaPrivate::mfenced( QDomElement element, QDomNode docnode )
     QString separators = element.attribute( "separators", "," );
 
     QDomNode n = element.firstChild();
-    uint i = 0;
+    int i = 0;
     while ( !n.isNull() ) {
         if ( n.isElement() ) {
             if ( i != 0 && !separators.isEmpty() ) {
@@ -1188,7 +1188,7 @@ void MathML2KFormulaPrivate::msubsup( QDomElement element, QDomNode docnode )
 
 void MathML2KFormulaPrivate::createTextElements( QString text, QDomNode docnode )
 {
-    for ( uint i = 0; i < text.length(); ++i ) {
+    for ( int i = 0; i < text.length(); ++i ) {
         QDomElement textelement = doc.createElement( "TEXT" );
         textelement.setAttribute( "CHAR", QString( text.at( i ) ) );
         style.setStyles( textelement );
@@ -1714,11 +1714,11 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
             }
             else if ( n.isEntityReference() ) {
                 kDebug( DEBUGID ) << "isEntityReference: "
-                                   << n.toEntityReference().nodeName().latin1()
+                                   << n.toEntityReference().nodeName().toLatin1()
                                    << endl;
             }
             else
-                kDebug( DEBUGID ) << "ci: " << n.nodeName().latin1() << endl;
+                kDebug( DEBUGID ) << "ci: " << n.nodeName().toLatin1() << endl;
         }
 
         else if ( tag == "list" ) {

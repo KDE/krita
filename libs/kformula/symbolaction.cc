@@ -20,9 +20,6 @@
 #include <q3listbox.h>
 #include <QPainter>
 #include <Q3ComboBox>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3MemArray>
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -120,10 +117,10 @@ SymbolAction::SymbolAction( const QString& text, const KShortcut& cut,
     setEditable( FALSE );
 }
 
-int SymbolAction::plug( QWidget* w, int index )
+void SymbolAction::plug( QWidget* w, int /*index*/ )
 {
-    if (!KAuthorized::authorizeKAction(name()))
-        return -1;
+    if (!KAuthorized::authorizeKAction(objectName()))
+        return;
     if ( w->inherits( "KToolBar" ) )
     {
 #warning "kde4: port it"			
@@ -145,19 +142,21 @@ int SymbolAction::plug( QWidget* w, int index )
 
         return containerCount() - 1;
 #endif
-		return 0;
+		return;
     }
-    else return KSelectAction::plug( w, index );	
+    else
+	 w->addAction( this ); // possibly insertAction is needed
+    
 }
 
-void SymbolAction::setSymbols( const QStringList &names, const Q3ValueList<QFont>& fonts,
-                               const Q3MemArray<QChar>& chars )
+void SymbolAction::setSymbols( const QStringList &names, const QList<QFont>& fonts,
+                               const QVector<QChar>& chars )
 {
     m_fonts = fonts;
     m_chars = chars;
     setItems( names );
 
-    int len = containerCount();
+    int len = associatedWidgets().count();
     for ( int i = 0; i < len; ++i )
         updateItems( i );
 }

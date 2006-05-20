@@ -109,7 +109,7 @@ void CMStyle::installFonts()
                 urlList.append(KUrl::fromPath(locate("data", "kformula/fonts/" + *it + ".ttf")));
         }
         KIO::copy(urlList, KUrl("fonts:/Personal/"), false);
-        KMessageBox::information(qApp->mainWidget(),
+        KMessageBox::information(qApp->activeWindow(),
                                  i18n("Some fonts have been installed to assure that symbols in formulas are properly visualized. You must restart the application in order so that changes take effect"));
     }
     m_installed = true;
@@ -537,7 +537,7 @@ bool CMArtwork::calcCMDelimiterSize( const ContextStyle& context,
                                      luPt parentSize )
 {
     QFont f( "cmex10" );
-    f.setPointSizeFloat( context.layoutUnitPtToPt( fontSize ) );
+    f.setPointSizeF( context.layoutUnitPtToPt( fontSize ) );
     QFontMetrics fm( f );
 
     for ( char i=1; c != 0; ++i ) {
@@ -568,7 +568,7 @@ void CMArtwork::calcLargest( const ContextStyle& context,
                              uchar c, luPt fontSize )
 {
     QFont f( "cmex10" );
-    f.setPointSizeFloat( context.layoutUnitPtToPt( fontSize ) );
+    f.setPointSizeF( context.layoutUnitPtToPt( fontSize ) );
     QFontMetrics fm( f );
 
     cmChar = c;
@@ -597,7 +597,7 @@ void CMArtwork::drawCMDelimiter( QPainter& painter, const ContextStyle& style,
                                  luPt height )
 {
     QFont f( "cmex10" );
-    f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
+    f.setPointSizeF( style.layoutUnitToFontSize( height, false ) );
 
     painter.setFont( f );
     painter.drawText( style.layoutUnitToPixelX( x ),

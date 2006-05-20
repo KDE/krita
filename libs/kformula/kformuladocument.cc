@@ -20,9 +20,8 @@
 
 #include <q3ptrlist.h>
 #include <QStringList>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3MemArray>
+#include <QList>
+#include <QVector>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -1113,8 +1112,8 @@ void DocumentWrapper::initSymbolNamesAction()
 
         QStringList names = st.allNames();
         //QStringList i18nNames;
-        Q3ValueList<QFont> fonts;
-        Q3MemArray<QChar> chars( names.count() );
+        QList<QFont> fonts;
+        QVector<QChar> chars( names.count() );
 
         int i = 0;
         for ( QStringList::Iterator it = names.begin();

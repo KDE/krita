@@ -299,7 +299,7 @@ void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const
     QChar line = style.symbolTable().character( chars[2] );
 
     QFont f = style.symbolTable().font( chars[0] );
-    f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
+    f.setPointSizeF( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
 
     QFontMetrics fm(f);
@@ -348,7 +348,7 @@ void Artwork::calcCurlyBracket( const ContextStyle& style, const QChar chars[],
     QChar middle = style.symbolTable().character( chars[3] );
 
     QFont f = style.symbolTable().font( chars[0] );
-    f.setPointSizeFloat( style.layoutUnitPtToPt( charHeight ) );
+    f.setPointSizeF( style.layoutUnitPtToPt( charHeight ) );
     QFontMetrics fm( f );
     LuPtRect upperBound = fm.boundingRect( uppercorner );
     LuPtRect lowerBound = fm.boundingRect( lowercorner );
@@ -370,7 +370,7 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
 {
     //QFont f = style.getSymbolFont();
     QFont f = style.symbolTable().font( chars[0] );
-    f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
+    f.setPointSizeF( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
 
     QChar uppercorner = style.symbolTable().character( chars[0] );

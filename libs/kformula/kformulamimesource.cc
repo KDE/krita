@@ -54,7 +54,7 @@ MimeSource::MimeSource(Document* doc, const QDomDocument& formula)
     list.setAutoDelete(true);
     if ( cursor.buildElementsFromDom( document.documentElement(), list ) ) {
         cursor.insert(list);
-        latexString = rootElement->toLatex().utf8();
+        latexString = rootElement->toLatex().toUtf8();
         if (latexString.size() > 0) {
             latexString.truncate(latexString.size()-1);
         }
@@ -135,7 +135,7 @@ QByteArray MimeSource::encodedData ( const char *format ) const
 	QBuffer buff(&d);
 	buff.open(QIODevice::WriteOnly);
 	QImageWriter io(&buff,"PPM");
-	QImage ima=pm.convertToImage();
+	QImage ima=pm.toImage();
 	ima.detach();
 	//io.write(ima);
 	if(!io.write(ima))

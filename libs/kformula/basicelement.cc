@@ -183,7 +183,7 @@ void BasicElement::writeMathML( QDomDocument& doc, QDomNode parent, bool /*oasis
 bool BasicElement::buildFromDom(QDomElement element)
 {
     if (element.tagName() != getTagName()) {
-        kWarning( DEBUGID ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
+        kWarning( DEBUGID ) << "Wrong tag name " << element.tagName().toLatin1() << " for " << getTagName().toLatin1() << ".\n";
         return false;
     }
     if (!readAttributesFromDom(element)) {

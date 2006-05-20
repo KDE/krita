@@ -39,7 +39,7 @@
 #include <kpushbutton.h>
 #include <kjanuswidget.h>
 #include <kglobalsettings.h>
-#include <ktextedit.h>
+
 #include <kfileiconview.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
@@ -55,7 +55,7 @@
 #include <QObject>
 #include <QDesktopWidget>
 #include <QToolTip>
-//Added by qt3to4:
+#include <QTextEdit>
 #include <QByteArray>
 #include <QHideEvent>
 #include <QGridLayout>
@@ -167,7 +167,7 @@ class KoTemplateChooseDiaPrivate {
 	KJanusWidget * m_jwidget;
 	KFileIconView *m_recent;
 	QGroupBox * boxdescription;
-	KTextEdit * textedit;
+	QTextEdit * textedit;
 
 	// choose a file
 	MyFileDialog *m_filedialog;
@@ -454,7 +454,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     //d->boxdescription->setInsideMargin ( 3 );
     //d->boxdescription->setInsideSpacing ( 3 );
 
-    d->textedit = new KTextEdit( d->boxdescription );
+    d->textedit = new QTextEdit( d->boxdescription );
     d->textedit->setReadOnly(1);
     d->textedit->setPlainText(descriptionText(i18n("Empty Document"), i18n("Creates an empty document")));
     d->textedit->setLineWidth(0);

@@ -114,7 +114,7 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
     //kDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = getFont( context );
-    font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
+    font.setPointSizeF( context.layoutUnitPtToPt( mySize ) );
 
     QFontMetrics fm( font );
     QChar ch = getRealCharacter(context);
@@ -160,7 +160,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 
     luPt mySize = context.getAdjustedSize( tstyle );
     QFont font = getFont( context );
-    font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
+    font.setPointSizeF( context.layoutUnitToFontSize( mySize, false ) );
     painter.setFont( font );
 
     //kDebug( DEBUGID ) << "TextElement::draw font=" << font.rawName() << endl;
@@ -494,7 +494,7 @@ void EmptyElement::calcSizes( const ContextStyle& context,
     //kDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = context.getDefaultFont();
-    font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
+    font.setPointSizeF( context.layoutUnitPtToPt( mySize ) );
 
     QFontMetrics fm( font );
     QChar ch = 'A';

@@ -766,12 +766,12 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
 
     while (!node.isNull() && !(upperRead && lowerRead)) {
 
-        if (!lowerRead && (node.nodeName().upper() == "LOWER")) {
+        if (!lowerRead && (node.nodeName().toUpper() == "LOWER")) {
             lowerRead = buildChild( lower=new SequenceElement( this ), node, "LOWER" );
             if ( !lowerRead ) return false;
         }
 
-        if (!upperRead && (node.nodeName().upper() == "UPPER")) {
+        if (!upperRead && (node.nodeName().toUpper() == "UPPER")) {
             upperRead = buildChild( upper=new SequenceElement( this ), node, "UPPER" );
             if ( !upperRead ) return false;
         }

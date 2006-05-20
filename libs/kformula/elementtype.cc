@@ -386,7 +386,7 @@ void AbstractOperatorType::saveMathML( SequenceElement* se, QDomDocument& doc, Q
 {
     QDomElement op = doc.createElement( oasisFormat ? "math:mo" : "mo" );
     BasicElement* be = se->getChild( start() );
-    if ( be->getCharacter().latin1() != 0 ) {
+    if ( be->getCharacter().toLatin1() != 0 ) {
         // latin-1 char
         op.appendChild( doc.createTextNode( be->getCharacter() ) );
     }

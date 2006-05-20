@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=YCbCr Color Model (8-bit integer)
+Comment=Color model for 8-bit integer per channel YCbCr images
+ServiceTypes=Krita/ColorSpace
+Type=Service
+X-KDE-Library=krita_ycbcr_u8_plugin
+X-Krita-Version=2

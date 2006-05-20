@@ -338,10 +338,11 @@ QDomElement ExifValue::save(QDomDocument& doc)
         case EXIF_TYPE_UNDEFINED:
         {
             UByteArray value = asUndefined();
-            QByteArray data(value.size());
+            QByteArray data;
             data.setRawData((char*)value.data(), value.size());
             QByteArray encodedData;
             KCodecs::base64Encode( data, encodedData );
+            data.resetRawData( (char*)value.data(), value.size());
             elmt.setAttribute("value", encodedData);
         }
             break;

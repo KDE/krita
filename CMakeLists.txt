@@ -9,6 +9,7 @@ find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 macro_optional_find_package(OpenEXR)
 macro_optional_find_package(Exif)
+macro_optional_find_package(PythonLibs)
 
 if (APPLE)
    find_package(Carbon REQUIRED)

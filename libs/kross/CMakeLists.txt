@@ -1,5 +1,4 @@
 
-macro_optional_find_package(PythonLibs)
 macro_optional_find_package(RUBY)
 include_directories( ${KOFFICECORE_INCLUDES} )
 

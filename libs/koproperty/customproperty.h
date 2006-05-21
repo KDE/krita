@@ -62,6 +62,10 @@ class KOPROPERTY_EXPORT CustomProperty
 
 	protected:
 		Property  *m_property;
+
+		/*! This method emits the \a Set::propertyChanged() signal for all
+		sets our parent-property is registered in. */
+		void emitPropertyChanged();
 };
 
 //! \brief Custom property implementation for QSize type

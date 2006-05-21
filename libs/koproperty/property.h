@@ -408,6 +408,11 @@ class KOPROPERTY_EXPORT Property
 		/*! Adds related property for this property. */
 		void addRelatedProperty(Property *property);
 
+		/*! This method emits the \a Set::propertyChanged() signal for all
+		sets this property is registered in. The \a value() method above
+		calls this method of the value changed. */
+		void emitPropertyChanged();
+
 		/*! Outputs debug string for this property. */
 		void debug();
 

@@ -20,17 +20,27 @@
 #include "KoIconTabPalette.h"
 
 #include <QIcon>
+#include <QVBoxLayout>
 
 #include "KoPaletteTabWidget.h"
 
 KoIconTabPalette::KoIconTabPalette(QWidget* parent, const char* name)
   : KoPalette(parent, name)
 {
-  m_style = PALETTE_ICONTABS;
+  setStyle(PALETTE_ICONTABS);
 
-  m_tabWidget = new KoPaletteTabWidget(this);
+  QWidget* mainWidget = new QWidget(this);
+  QVBoxLayout* layout = new QVBoxLayout(mainWidget);
+  layout->setSpacing(0);
+  layout->setMargin(0);
+  mainWidget->setLayout(layout);
+
+  m_tabWidget = new KoPaletteTabWidget(mainWidget);
   m_tabWidget->setFocusPolicy(Qt::TabFocus);
-  setMainWidget(m_tabWidget);
+
+  layout->addWidget(m_tabWidget);
+  layout->addStretch(1);
+  setWidget(mainWidget);
 }
 
 KoIconTabPalette::~KoIconTabPalette()

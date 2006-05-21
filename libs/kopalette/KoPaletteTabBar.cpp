@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <QHelpEvent>
 #include <QToolTip>
+#include <QSize>
 
 #include <kdebug.h>
 
@@ -60,11 +61,7 @@ class KoPaletteTabBarPrivate
 
     ~KoPaletteTabBarPrivate()
     {
-      foreach(KoPaletteTabBarPrivate::Tab* tab, m_tabList) {
-        delete tab;
-      }
-
-      m_tabList.clear();
+      qDeleteAll(m_tabList);
     }
 
     Tab* tabUnderMouse(const QPoint& position)
@@ -156,6 +153,7 @@ void KoPaletteTabBar::setIconSize(int size)
   d->m_iconSize = size;
   d->m_dirtyTabList = true;
   setFixedHeight(d->m_iconSize + 5);
+  update();
 }
 
 bool KoPaletteTabBar::isTabHidden(int index)
@@ -265,8 +263,10 @@ void KoPaletteTabBar::layoutTabs()
   int tabHeight = d->m_iconSize + 4;
 
   foreach(KoPaletteTabBarPrivate::Tab* tab, d->m_tabList) {
-    tab->rect = QRect(offset * tabWidth, 0, tabWidth, tabHeight);
-    offset++;
+    if(!tab->hidden) { // Only calc the rect if the tab isn't hidden
+      tab->rect = QRect(offset * tabWidth, 0, tabWidth, tabHeight);
+      offset++;
+    }
   }
 
   d->m_dirtyTabList = false;
@@ -287,6 +287,19 @@ bool KoPaletteTabBar::event(QEvent* event)
   }
 
   return QWidget::event(event);
+}
+
+QSize KoPaletteTabBar::minimumSizeHint() const
+{
+  int buttonWidthHeight = d->m_iconSize + 5;
+  QSize size(d->m_tabList.count() * buttonWidthHeight, buttonWidthHeight);
+
+  return size;
+}
+
+QSize KoPaletteTabBar::sizeHint() const
+{
+  return minimumSizeHint();
 }
 
 #include "KoPaletteTabBar.moc"

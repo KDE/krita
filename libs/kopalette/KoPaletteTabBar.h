@@ -61,6 +61,9 @@ class KoPaletteTabBar : public QWidget
     /// Returns the number of visible tabs
     int visibleCount() const;
 
+    virtual QSize minimumSizeHint() const;
+    virtual QSize sizeHint() const;
+
   public slots:
     /// hides/shows the tab at @p index
     void setTabHidden(int index, bool hide);

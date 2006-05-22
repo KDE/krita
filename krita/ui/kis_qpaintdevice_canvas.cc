@@ -36,7 +36,7 @@
 #include "kis_qpaintdevice_canvas_painter.h"
 
 KisQPaintDeviceCanvasWidget::KisQPaintDeviceCanvasWidget(QWidget *parent, const char *name)
-    : QWidget(parent, Qt::WA_PaintOutsidePaintEvent)
+    : QWidget(parent)
 {
     QWidget::setObjectName(name);
 }

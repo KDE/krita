@@ -121,7 +121,7 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
         m_canvasWidget = new KisOpenGLCanvasWidget(m_parent, m_name.toLatin1(), sharedContextWidget);
     } else
 #endif
-    {Qt::WA_PaintOutsidePaintEvent
+    {
         m_canvasWidget = new KisQPaintDeviceCanvasWidget(m_parent, m_name.toLatin1());
     }
 
@@ -153,7 +153,6 @@ void KisCanvas::createCanvasWidget(bool useOpenGL)
     connect(m_canvasWidget, SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)), SIGNAL(sigGotButtonReleaseEvent(KisButtonReleaseEvent *)));
     connect(m_canvasWidget, SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent *)), SIGNAL(sigGotDoubleClickEvent(KisDoubleClickEvent *)));
 
-    m_canvasWidget
 }
 
 void KisCanvas::createQPaintDeviceCanvas()

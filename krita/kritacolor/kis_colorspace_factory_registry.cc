@@ -20,7 +20,7 @@
 #include <kdebug.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
-#include <ktrader.h>
+#include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -63,7 +63,7 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
 */
 
     // Load all colorspace modules
-    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/ColorSpace"),
+     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ColorSpace"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
 
@@ -72,7 +72,7 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
         abort();
     }
 
-    KTrader::OfferList::ConstIterator iter;
+     KService::List::ConstIterator iter;
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;

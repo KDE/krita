@@ -54,7 +54,7 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QByteArray & appIdentif
 
 KoTarStore::KoTarStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
-    kDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL()
+    kDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyUrl()
                     << " filename = " << _filename
                     << " mode = " << int(_mode) << endl;
 

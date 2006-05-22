@@ -3159,7 +3159,7 @@ of choice, and rounded to a reasonable precision to avoid 0.999999" isSpecificat
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1065" isRoot="false" isAbstract="false" name="KisGuideMgr" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1068" isRoot="false" isAbstract="false" name="KisAnnotationSP" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1075" isRoot="false" isAbstract="false" name="vKisAnnotationSP_it" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1110" isRoot="false" isAbstract="false" name="KURL" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1110" isRoot="false" isAbstract="false" name="KUrl" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1133" isRoot="false" isAbstract="false" name="vKisAnnotationSP" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1136" isRoot="false" isAbstract="false" name="QMutex" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" xmi.id="1138" isRoot="false" isAbstract="false" name="QSize" />

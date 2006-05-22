@@ -794,7 +794,7 @@ void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
     // for truncated icon texts, and we want tooltips on all icons,
     // with the full path...
     const KFileItem *fi = ( (KFileIconViewItem*)item )->fileInfo();
-    QString toolTipText = fi->url().pathOrURL( );
+    QString toolTipText = fi->url().pathOrUrl( );
 #if 0 // qt3 code
     toolTip = new QLabel( QString::fromLatin1(" %1 ").arg(toolTipText), 0,
                           "myToolTip",

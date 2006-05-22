@@ -1816,7 +1816,7 @@ qint32 KisView::importImage(const KUrl& urlArg)
                     importedImageLayer->parent()->removeLayer(importedImageLayer);
                 }
 
-                importedImageLayer->setName(url.prettyURL());
+                importedImageLayer->setName(url.prettyUrl());
 
                 KisGroupLayerSP parent = KisGroupLayerSP(0);
                 KisLayerSP currentActiveLayer = currentImage->activeLayer();

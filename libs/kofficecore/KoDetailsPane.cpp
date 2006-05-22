@@ -321,7 +321,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
         path = path.mid(pos + 1, path.length() - pos - 2);
       }
 
-      KUrl url = KUrl::fromPathOrURL(path);
+      KUrl url = KUrl::fromPathOrUrl(path);
 
       if(name.isEmpty())
         name = url.fileName();

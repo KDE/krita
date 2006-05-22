@@ -272,7 +272,7 @@ bool KoDocumentChild::finishLoadingDocument( KoStore* store, KoDocument* doc, bo
     if ( doOpenURL )
     {
         bool internalURL = false;
-        if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || m_tmpURL.startsWith( INTERNAL_PROTOCOL ) || KUrl::isRelativeURL( m_tmpURL ) )
+        if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || m_tmpURL.startsWith( INTERNAL_PROTOCOL ) || KUrl::isRelativeUrl( m_tmpURL ) )
         {
             if ( oasis ) {
                 store->pushDirectory();

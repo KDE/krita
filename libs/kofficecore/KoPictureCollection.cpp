@@ -75,7 +75,7 @@ KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
 KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 {
 #ifdef DEBUG_PICTURES
-    kDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyURL() << endl;
+    kDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyUrl() << endl;
 #endif
 
     // If it is a local file, we can check the last modification date, so we should better use loadPicture
@@ -88,13 +88,13 @@ KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 
     KoPicture pic;
 #ifdef DEBUG_PICTURES
-    kDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
+    kDebug(30003) << "Trying to download picture from file " << url.prettyUrl() << endl;
 #endif
 
     if (pic.setKeyAndDownloadPicture(url, window))
         insertPicture(pic.getKey(), pic);
     else
-        kWarning(30003) << "Could not download KoPicture from " << url.prettyURL() << endl;
+        kWarning(30003) << "Could not download KoPicture from " << url.prettyUrl() << endl;
 
     return pic;
 }

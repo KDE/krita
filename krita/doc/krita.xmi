@@ -35,18 +35,18 @@
      <UML:Parameter visibility="private" xmi.id="24" value="" type="const KisImageMagickConverter &amp;" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="25" type="KisImageBuilder_Result" name="buildFile" >
-     <UML:Parameter visibility="private" xmi.id="26" value="" type="const KURL &amp;" name="uri" />
+     <UML:Parameter visibility="private" xmi.id="26" value="" type="const KUrl &amp;" name="uri" />
      <UML:Parameter visibility="private" xmi.id="27" value="" type="KisImageSP" name="img" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="28" type="KisImageBuilder_Result" name="buildFile" >
-     <UML:Parameter visibility="private" xmi.id="29" value="" type="const KURL &amp;" name="uri" />
+     <UML:Parameter visibility="private" xmi.id="29" value="" type="const KUrl &amp;" name="uri" />
      <UML:Parameter visibility="private" xmi.id="30" value="" type="KisLayerSP" name="layer" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="31" type="KisImageBuilder_Result" name="buildImage" >
-     <UML:Parameter visibility="private" xmi.id="32" value="" type="const KURL &amp;" name="uri" />
+     <UML:Parameter visibility="private" xmi.id="32" value="" type="const KUrl &amp;" name="uri" />
     </UML:Operation>
     <UML:Operation visibility="protected" xmi.id="33" type="KisImageBuilder_Result" name="decode" >
-     <UML:Parameter visibility="private" xmi.id="34" value="" type="const KURL &amp;" name="uri" />
+     <UML:Parameter visibility="private" xmi.id="34" value="" type="const KUrl &amp;" name="uri" />
      <UML:Parameter visibility="private" xmi.id="35" value="" type="bool" name="isBlob" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="36" type="KisImageSP" name="image" />
@@ -1810,9 +1810,9 @@ pixels in the brush." visibility="public" xmi.id="705" type="virtual KisAlphaMas
     <UML:Operation visibility="public" xmi.id="1438" type="void" name="unsetSelection" >
      <UML:Parameter visibility="private" xmi.id="1439" value="" type="bool" name="commit" />
     </UML:Operation>
-    <UML:Operation visibility="public" xmi.id="1440" type="KURL" name="uri" />
+    <UML:Operation visibility="public" xmi.id="1440" type="KUrl" name="uri" />
     <UML:Operation visibility="public" xmi.id="1441" type="void" name="uri" >
-     <UML:Parameter visibility="private" xmi.id="1442" value="" type="const KURL &amp;" name="uri" />
+     <UML:Parameter visibility="private" xmi.id="1442" value="" type="const KUrl &amp;" name="uri" />
     </UML:Operation>
     <UML:Operation visibility="public" xmi.id="1443" type="virtual void" name="validate" >
      <UML:Parameter visibility="private" xmi.id="1444" value="" type="qint32" name="tileno" />
@@ -1851,7 +1851,7 @@ pixels in the brush." visibility="public" xmi.id="705" type="virtual KisAlphaMas
     <UML:Attribute visibility="private" xmi.id="1283" value="" type="KisChannelSP" name="m_selectionMask" />
     <UML:Attribute visibility="private" xmi.id="1284" value="" type="KisTileMgrSP" name="m_shadow" />
     <UML:Attribute visibility="private" xmi.id="1286" value="" type="KCommandHistory *" name="m_undoHistory" />
-    <UML:Attribute visibility="private" xmi.id="1287" value="" type="KURL" name="m_uri" />
+    <UML:Attribute visibility="private" xmi.id="1287" value="" type="KUrl" name="m_uri" />
     <UML:Attribute visibility="private" xmi.id="1288" value="" type="QBitArray" name="m_visible" />
     <UML:Attribute visibility="private" xmi.id="1289" value="" type="qint32" name="m_width" />
     <UML:Attribute visibility="private" xmi.id="1290" value="" type="double" name="m_xres" />
@@ -40591,7 +40591,7 @@ in the constructor, you have to call loadAsync.
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
               </ccfdeclarationcodeblock>
-              <ccfdeclarationcodeblock parent_id="1287" tag="tblock_27" canDelete="false" indentLevel="1" role_id="-1" text=" KURL m_uri;" >
+              <ccfdeclarationcodeblock parent_id="1287" tag="tblock_27" canDelete="false" indentLevel="1" role_id="-1" text=" KUrl m_uri;" >
                <header>
                 <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
                </header>
@@ -41477,7 +41477,7 @@ in the constructor, you have to call loadAsync.
        <header>
         <cppcodedocumentation tag="" />
        </header>
-       <ccfdeclarationcodeblock parent_id="1287" tag="tblock_27" canDelete="false" indentLevel="1" role_id="-1" text=" KURL m_uri;" >
+       <ccfdeclarationcodeblock parent_id="1287" tag="tblock_27" canDelete="false" indentLevel="1" role_id="-1" text=" KUrl m_uri;" >
         <header>
          <cppcodedocumentation tag="" writeOutText="false" indentLevel="1" />
         </header>

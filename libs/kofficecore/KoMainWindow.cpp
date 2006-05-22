@@ -440,7 +440,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const Q3PtrList<KoVie
 
 void KoMainWindow::addRecentURL( const KUrl& url )
 {
-    kDebug(30003) << "KoMainWindow::addRecentURL url=" << url.prettyURL() << endl;
+    kDebug(30003) << "KoMainWindow::addRecentURL url=" << url.prettyUrl() << endl;
     // Add entry to recent documents list
     // (call coming from KoDocument because it must work with cmd line, template dlg, file/open, etc.)
     if ( !url.isEmpty() )
@@ -505,7 +505,7 @@ void KoMainWindow::updateCaption()
       {
           caption = rootDocument()->documentInfo()->aboutInfo( "title" );
       }
-      const QString url = rootDocument()->url().pathOrURL();
+      const QString url = rootDocument()->url().pathOrUrl();
       if ( !caption.isEmpty() && !url.isEmpty() )
           caption = QString( "%1 - %2" ).arg( caption ).arg( url );
       else if ( caption.isEmpty() )

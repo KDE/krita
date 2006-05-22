@@ -208,7 +208,7 @@ bool KoApplication::start()
 		       kDebug(30003) << "Template loaded..." << endl;
 		       n++;
 		     } else {
-		        KMessageBox::error(0L, i18n("Template %1 failed to load.", templateURL.prettyURL()) );
+		        KMessageBox::error(0L, i18n("Template %1 failed to load.", templateURL.prettyUrl()) );
  		        delete shell;
 		     }
 		  }

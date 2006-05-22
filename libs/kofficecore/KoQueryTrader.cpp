@@ -22,7 +22,6 @@
 #include <KoQueryTrader.h>
 #include <KoDocument.h>
 #include <KoFilter.h>
-#include <ktrader.h>
 #include <kservicetype.h>
 #include <kdebug.h>
 

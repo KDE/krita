@@ -123,7 +123,7 @@ KSnapshot::~KSnapshot()
 
 bool KSnapshot::save( const QString &filename )
 {
-    return save( KUrl::fromPathOrURL( filename ));
+    return save( KUrl::fromPathOrUrl( filename ));
 }
 
 bool KSnapshot::save( const KUrl& url )
@@ -165,7 +165,7 @@ bool KSnapshot::save( const KUrl& url )
 
         QString caption = i18n("Unable to Save Image");
         QString text = i18n("KSnapshot was unable to save the image to\n%1."
-            , url.prettyURL());
+            , url.prettyUrl());
         KMessageBox::error(this, text, caption);
     }
 
@@ -458,7 +458,7 @@ void KSnapshot::setTime(int newTime)
 
 void KSnapshot::setURL( const QString &url )
 {
-    KUrl newURL = KUrl::fromPathOrURL( url );
+    KUrl newURL = KUrl::fromPathOrUrl( url );
     if ( newURL == filename )
         return;
 

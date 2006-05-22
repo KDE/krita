@@ -1432,7 +1432,7 @@ bool KoDocument::openFile()
         kError(30003) << "No mimetype found for " << m_file << endl;
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
-            KMessageBox::error( 0L, i18n( "Could not open\n%1",url().pathOrURL() ) );
+            KMessageBox::error( 0L, i18n( "Could not open\n%1",url().pathOrUrl() ) );
         d->m_bLoading = false;
         return false;
     }
@@ -1499,7 +1499,7 @@ bool KoDocument::openFile()
             if( d->m_autoErrorHandlingEnabled && !msg.isEmpty())
             {
                 QString errorMsg( i18n( "Could not open\n%2.\nReason: %1" ) );
-                QString docUrl = url().pathOrURL();
+                QString docUrl = url().pathOrUrl();
                 KMessageBox::error( 0L, errorMsg.arg(msg).arg(docUrl) );
             }
 
@@ -2044,7 +2044,7 @@ void KoDocument::setTitleModified()
             caption = documentInfo()->aboutInfo( "title" );
         }
         if ( caption.isEmpty() )
-            caption = url().pathOrURL();             // Fall back to document URL
+            caption = url().pathOrUrl();             // Fall back to document URL
 
         //kDebug(30003)<<k_funcinfo<<" url: "<<url().url()<<" caption: "<<caption<<endl;
         if ( doc )
@@ -2326,11 +2326,11 @@ void KoDocument::showLoadingErrorDialog()
 {
     if ( d->lastErrorMessage.isEmpty() )
     {
-        KMessageBox::error( 0L, i18n( "Could not open\n%1", url().pathOrURL() ) );
+        KMessageBox::error( 0L, i18n( "Could not open\n%1", url().pathOrUrl() ) );
     }
     else if ( d->lastErrorMessage != "USER_CANCELED" )
     {
-        KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2", url().pathOrURL(), d->lastErrorMessage ) );
+        KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2", url().pathOrUrl(), d->lastErrorMessage ) );
     }
 }
 

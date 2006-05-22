@@ -24,7 +24,7 @@
 #include <KoFilter.h>
 #include <kservicetype.h>
 #include <kdebug.h>
-
+#include <kservicetypetrader.h>
 #include <QFile>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -131,9 +131,9 @@ Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QSt
   constr += " exist Library";
 
   // Query the trader
-  KTrader::OfferList offers = KTrader::self()->query( "KOfficePart", constr );
+  KService::List offers = KServiceTypeTrader::self()->query( "KOfficePart", constr );
 
-  KTrader::OfferList::ConstIterator it = offers.begin();
+  KService::List::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   for( unsigned int i = 0; i < max; i++, ++it )
   {
@@ -182,9 +182,9 @@ Q3ValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
   kDebug(30500) << "KoFilterEntry::query( " << _constr << " )" << endl;
   Q3ValueList<KoFilterEntry::Ptr> lst;
 
-  KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilter", _constr );
+  KService::List offers = KServiceTypeTrader::self()->query( "KOfficeFilter", _constr );
 
-  KTrader::OfferList::ConstIterator it = offers.begin();
+  KService::List::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   //kDebug(30500) << "Query returned " << max << " offers" << endl;
   for( unsigned int i = 0; i < max; i++ )

@@ -73,7 +73,7 @@
 #include <ktoolbar.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
-#include <ktrader.h>
+#include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
@@ -332,10 +332,10 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_brushesAndStuffToolBar = new KisControlFrame(mainWindow(), this);
 
     // Load all plugins
-    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
+	KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
-    KTrader::OfferList::ConstIterator iter;
+	KService::List::ConstIterator iter;
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;

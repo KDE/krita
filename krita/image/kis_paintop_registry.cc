@@ -25,8 +25,8 @@
 #include <kstandarddirs.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
-#include <ktrader.h>
 #include <kparts/componentfactory.h>
+#include <kservicetypetrader.h>
 
 #include "kis_generic_registry.h"
 #include "kis_types.h"
@@ -43,11 +43,11 @@ KisPaintOpRegistry::KisPaintOpRegistry()
     Q_ASSERT(KisPaintOpRegistry::m_singleton == 0);
     KisPaintOpRegistry::m_singleton = this;
 
-    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/Paintop"),
+	KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Paintop"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
 
-    KTrader::OfferList::ConstIterator iter;
+     KService::List::ConstIterator iter;
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {

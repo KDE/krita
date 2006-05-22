@@ -23,7 +23,8 @@
 #include <klocale.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
-#include <ktrader.h>
+#include <kservicetypetrader.h>
+
 #include <kparts/componentfactory.h>
 #include "kis_debug_areas.h"
 #include <math.h>
@@ -39,11 +40,11 @@ KisFilterRegistry::KisFilterRegistry()
     Q_ASSERT(KisFilterRegistry::m_singleton == 0);
     KisFilterRegistry::m_singleton = this;
 
-    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/Filter"),
+	KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Filter"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
 
-    KTrader::OfferList::ConstIterator iter;
+	KService::List::ConstIterator iter;
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {

@@ -20,7 +20,7 @@
 #include <kaction.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
-#include <ktrader.h>
+#include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 
 #include "kis_generic_registry.h"
@@ -37,11 +37,11 @@ KisToolRegistry *KisToolRegistry::m_singleton = 0;
 KisToolRegistry::KisToolRegistry()
 {
     // Load all modules: color models, paintops, filters
-    KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("Krita/Tool"),
+	KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Tool"),
                                                          QString::fromLatin1("(Type == 'Service') and "
                                                                              "([X-Krita-Version] == 2)"));
 
-    KTrader::OfferList::ConstIterator iter;
+	KService::List::ConstIterator iter;
 
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {

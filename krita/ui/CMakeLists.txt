@@ -7,6 +7,7 @@ set(kritaui_LIB_SRCS
    kis_boundary_painter.cc
    kis_brush_chooser.cc
    kis_canvas.cc
+   kis_canvas_widget.cc
    kis_canvas_painter.cc
    kis_clipboard.cc
    kis_cmb_composite.cc

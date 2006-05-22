@@ -108,11 +108,11 @@ KisTileManager::~KisTileManager() {
     delete [] m_poolPixelSizes;
     delete [] m_pools;
 
-    m_poolMutex->unlock();
-    delete m_poolMutex;
+    //m_poolMutex->unlock();
+    //delete m_poolMutex;
 
-    m_swapMutex->unlock();
-    delete m_swapMutex;
+    //m_swapMutex->unlock();
+    //delete m_swapMutex;
 
 }
 

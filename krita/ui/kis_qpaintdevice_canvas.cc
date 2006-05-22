@@ -36,7 +36,7 @@
 #include "kis_qpaintdevice_canvas_painter.h"
 
 KisQPaintDeviceCanvasWidget::KisQPaintDeviceCanvasWidget(QWidget *parent, const char *name)
-    : QWidget(parent)
+    : QWidget(parent, Qt::WA_PaintOutsidePaintEvent)
 {
     QWidget::setObjectName(name);
 }
@@ -75,14 +75,14 @@ void KisQPaintDeviceCanvasWidget::tabletEvent(QTabletEvent *e)
     widgetGotTabletEvent(e);
 }
 
-void KisQPaintDeviceCanvasWidget::enterEvent(QEvent *)
+void KisQPaintDeviceCanvasWidget::enterEvent(QEvent * e)
 {
-    //widgetGotEnterEvent(e);
+    widgetGotEnterEvent(e);
 }
 
-void KisQPaintDeviceCanvasWidget::leaveEvent(QEvent *)
+void KisQPaintDeviceCanvasWidget::leaveEvent(QEvent * e)
 {
-    //widgetGotLeaveEvent(e);
+    widgetGotLeaveEvent(e);
 }
 
 void KisQPaintDeviceCanvasWidget::wheelEvent(QWheelEvent *e)

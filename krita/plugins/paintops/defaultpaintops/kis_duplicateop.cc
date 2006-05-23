@@ -116,7 +116,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     KisPainter copyPainter(srcdev);
     copyPainter.bitBlt(0, 0, COMPOSITE_COPY, device, srcPoint.x(), srcPoint.y(), sw, sh);
     copyPainter.end();
-
+    
     // Convert the dab to the colorspace of a selection
     dab->convertTo(KisMetaRegistry::instance()->csRegistry()->getAlpha8());
 
@@ -150,11 +150,11 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     sh = dstRect.height();
     
     if (m_source->hasSelection()) {
-        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab,
+        m_painter->bltSelection(dstRect.x(), dstRect.y(), m_painter->compositeOp(), target,
                                 m_source->selection(), m_painter->opacity(), sx, sy, sw, sh);
     }
     else {
-        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), dab, m_painter->opacity(), sx, sy, sw, sh);
+        m_painter->bitBlt(dstRect.x(), dstRect.y(), m_painter->compositeOp(), target, m_painter->opacity(), sx, sy, sw, sh);
     }
 
     m_painter->addDirtyRect(dstRect);

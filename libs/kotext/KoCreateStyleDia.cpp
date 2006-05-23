@@ -19,7 +19,7 @@
 
 #include <klocale.h>
 
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <QLabel>
 #include <QLineEdit>
 #include "KoCreateStyleDia.h"
@@ -30,9 +30,9 @@ KoCreateStyleDia::KoCreateStyleDia( const QStringList & _list, QWidget *parent, 
 {
     styleList=_list;
     setCaption( i18n("Create New Style") );
-//    KVBox *page = makeVBoxMainWidget();
-    new QLabel(i18n("Please specify a new style name:"), this);
-    m_styleName = new QLineEdit( this );
+    KVBox *page = makeVBoxMainWidget();
+    new QLabel(i18n("Please specify a new style name:"), page);
+    m_styleName = new QLineEdit( page );
     m_styleName->setMinimumWidth( m_styleName->sizeHint().width() * 3 );
 
     connect( m_styleName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));

@@ -101,11 +101,6 @@ void KWmf::genericArc(
                static_cast<unsigned int>(stopAngle));
 }
 
-int KWmf::handleIndex(void) const
-{
-    return m_objectHandles.count();
-}
-
 //-----------------------------------------------------------------------------
 KWmf::WinObjPenHandle *KWmf::handleCreatePen(void)
 {
@@ -120,16 +115,6 @@ KWmf::WinObjBrushHandle *KWmf::handleCreateBrush(void)
     WinObjBrushHandle *handle = new WinObjBrushHandle;
     m_objectHandles.append(handle);
     return handle;
-}
-
-//-----------------------------------------------------------------------------
-void KWmf::handleDelete(int idx)
-{
-    if (idx >= 0 && idx < m_objectHandles.count())
-    {
-        delete m_objectHandles[idx];
-        m_objectHandles[idx] = NULL;
-    }
 }
 
 //
@@ -338,9 +323,6 @@ bool KWmf::parse(
 
     startedAt = stream.device()->pos();
     stream.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
-
-    qDeleteAll(m_objectHandles);
-    m_objectHandles.clear();
 
     typedef struct _RECT
     {
@@ -580,7 +562,6 @@ void KWmf::opBrushCreateIndirect(
     };
     Qt::BrushStyle style;
     WinObjBrushHandle *handle = handleCreateBrush();
-
     S16 arg;
     S32 colour;
     S16 discard;
@@ -669,7 +650,6 @@ void KWmf::opObjectDelete(
     S16 idx;
 
     operands >> idx;
-    handleDelete(idx);
 }
 
 //-----------------------------------------------------------------------------
@@ -680,7 +660,7 @@ void KWmf::opObjectSelect(
     S16 idx;
 
     operands >> idx;
-    if (idx >= 0 && idx < m_objectHandles.size())
+    if (idx >= 0 && idx < m_objectHandles.count())
         m_objectHandles[idx]->apply(*this);
 }
 
@@ -705,7 +685,6 @@ void KWmf::opPenCreateIndirect(
         Qt::SolidLine   // PS_ALTERNATE
     };
     WinObjPenHandle *handle = handleCreatePen();
-
     S16 arg;
     S32 colour;
 

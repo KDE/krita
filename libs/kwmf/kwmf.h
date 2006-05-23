@@ -30,10 +30,12 @@ DESCRIPTION
 #ifndef KWMF_H
 #define KWMF_H
 
-#include <q3valuestack.h>
-//Added by qt3to4:
-#include <QPolygon>
 #include <koffice_export.h>
+
+#include <QList>
+
+#include <q3valuestack.h>
+
 class QDataStream;
 class QPolygon;
 
@@ -143,12 +145,9 @@ private:
         unsigned m_width;
     };
 
-    int handleIndex(void) const;
     WinObjPenHandle *handleCreatePen(void);
     WinObjBrushHandle *handleCreateBrush(void);
-    void handleDelete(int idx);
-    static const int s_maxHandles;
-    WinObjHandle **m_objectHandles;
+    QList<WinObjHandle *>m_objectHandles;
 
     unsigned getColour(S32 colour);
     QPoint normalisePoint(

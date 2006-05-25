@@ -305,7 +305,6 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
                             {
                                 QColor color;
                                 KisHLineIterator dstIt = dst->createHLineIterator(rect.x() + n, rect.y() + m, 1, false);
-                                &color);   
                                 cs->toQColor(dstIt.rawData(), &color);
 
                                 R += color.red();

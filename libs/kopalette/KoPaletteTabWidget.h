@@ -85,6 +85,10 @@ class KoPaletteTabWidget : public QWidget
     /// Hide the tab in the tab bar
     void setTabHidden(int index, bool hide);
 
+  signals:
+    /// Emited when all tabs are hidden
+    void allTabsHidden();
+
   protected slots:
     /// Sets if tab @p index should be shown or not.
     void setTabActive(int index, bool active);

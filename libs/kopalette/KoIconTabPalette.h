@@ -42,6 +42,9 @@ class KoIconTabPalette : public KoPalette
     virtual int indexOf(QWidget* widget);
     virtual void resetFont();
 
+  public slots:
+    void minimizeToTabBar();
+
   private:
     KoPaletteTabWidget* m_tabWidget;
 };

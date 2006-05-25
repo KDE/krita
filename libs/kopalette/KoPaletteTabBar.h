@@ -69,8 +69,11 @@ class KoPaletteTabBar : public QWidget
     void setTabHidden(int index, bool hide);
 
   signals:
-      /// Emited when the selection of a tab has changed
-      void tabSelectionChanged(int index, bool selected);
+    /// Emited when the selection of a tab has changed
+    void tabSelectionChanged(int index, bool selected);
+
+    /// Emited when all tabs are hidden
+    void allTabsHidden();
 
   protected:
     /// Reimplemented to paint the tabs

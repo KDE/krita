@@ -21,6 +21,7 @@
 
 #include <QIcon>
 #include <QVBoxLayout>
+#include <QSpacerItem>
 
 #include "KoPaletteTabWidget.h"
 
@@ -29,17 +30,21 @@ KoIconTabPalette::KoIconTabPalette(QWidget* parent, const char* name)
 {
   setStyle(PALETTE_ICONTABS);
 
+  // ### Hack to work around the fact that you can't resize docked palettes :(
   QWidget* mainWidget = new QWidget(this);
-  QVBoxLayout* layout = new QVBoxLayout(mainWidget);
-  layout->setSpacing(0);
-  layout->setMargin(0);
-  mainWidget->setLayout(layout);
+  QVBoxLayout* mainLayout = new QVBoxLayout(mainWidget);
+  mainLayout->setMargin(0);
+  mainLayout->setSpacing(0);
+  mainWidget->setLayout(mainLayout);
 
   m_tabWidget = new KoPaletteTabWidget(mainWidget);
   m_tabWidget->setFocusPolicy(Qt::TabFocus);
+  connect(m_tabWidget, SIGNAL(allTabsHidden()), this, SLOT(minimizeToTabBar()));
 
-  layout->addWidget(m_tabWidget);
-  layout->addStretch(1);
+  // ### Hack to work around the fact that you can't resize docked palettes :(
+  mainLayout->addWidget(m_tabWidget);
+  mainLayout->addStretch(1);
+
   setWidget(mainWidget);
 }
 
@@ -135,6 +140,11 @@ void KoIconTabPalette::resetFont()
 {
   KoPalette::resetFont();
   m_tabWidget->setFont(QFont());
+}
+
+void KoIconTabPalette::minimizeToTabBar()
+{
+  resize(m_tabWidget->sizeHint());
 }
 
 #include "KoIconTabPalette.moc"

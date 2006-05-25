@@ -35,6 +35,8 @@ KoPaletteTabWidget::KoPaletteTabWidget(QWidget* parent)
   m_tabBar = new KoPaletteTabBar(this);
   connect(m_tabBar, SIGNAL(tabSelectionChanged(int, bool)),
       this, SLOT(setTabActive(int, bool)));
+  connect(m_tabBar, SIGNAL(allTabsHidden()),
+      this, SIGNAL(allTabsHidden()));
   mainLayout->addWidget(m_tabBar);
 
   m_tabLayout = new QVBoxLayout(this);

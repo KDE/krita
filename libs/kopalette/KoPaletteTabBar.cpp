@@ -217,6 +217,8 @@ void KoPaletteTabBar::paintEvent(QPaintEvent* event)
                       tab->selected ? QIcon::On : QIcon::Off);
     }
   }
+
+  painter.drawLine(0, height() - 1, width(), height() - 1);
 }
 
 void KoPaletteTabBar::mouseMoveEvent(QMouseEvent* event)
@@ -241,14 +243,25 @@ void KoPaletteTabBar::mouseReleaseEvent(QMouseEvent* event)
   if(tab) {
     tab->selected = !tab->selected;
 
-    if(!(event->modifiers() & Qt::ControlButton)) {
-      foreach(KoPaletteTabBarPrivate::Tab* otherTab, d->m_tabList) {
-        if((otherTab != tab) && otherTab->selected) {
+    bool controlPressed = (event->modifiers() & Qt::ControlButton);
+    int selectionCount = 0;
+
+    foreach(KoPaletteTabBarPrivate::Tab* otherTab, d->m_tabList) {
+      if((otherTab != tab) && !controlPressed) {
+        if(otherTab->selected) {
           otherTab->selected = false;
           emit tabSelectionChanged(d->m_tabList.indexOf(otherTab),
                                    otherTab->selected);
         }
       }
+
+      if(otherTab->selected) {
+        selectionCount++;
+      }
+    }
+
+    if(selectionCount == 0) {
+      emit allTabsHidden();
     }
 
     update();

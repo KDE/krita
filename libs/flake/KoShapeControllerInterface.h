@@ -29,6 +29,9 @@
 class KoShapeControllerInterface
 {
 public:
+    KoShapeControllerInterface() { }
+    virtual ~KoShapeControllerInterface() { }
+
     /// adds a new shape
     virtual void addShape( KoShape* shape ) = 0;
 

@@ -430,7 +430,7 @@ private:
      * @param converter if not null, this method uses the converter to mark the right
      *        offsets in the current view.
      */
-    QMatrix KoShape::transformationMatrix(KoViewConverter *converter) const;
+    QMatrix transformationMatrix(KoViewConverter *converter) const;
 
 };
 

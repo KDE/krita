@@ -1,0 +1,123 @@
+Thanks to Matthias Ettrich's cooperation the people working on flake have had 
+a sneak preview of Qt 4.2's canvas module, QGraphicsView. While evaluating 
+this for use in KOffice I noticed we didn't have a per-application list of 
+requirements for flake (although we do have a list of general requirements.
+
+
+!Flake & Embedding 
+
+
+KOffice applications create documents; it is seldom useful to embed a whole 
+alien document into another application's document, but it is very useful to 
+embed parts of those documents and have them optionally connected, or have
+different views on the same data in different places in the same document.
+
+KOffice applications create different types of documents.
+
+The following table organizes KOffice apps, classifies their document types 
+and determines which part of their documents could be an embedded flake 
+document.
+
+A page is a layouted entity: a sheet is in an endless canvas. I'm not sure
+whether a Krita image could be seen as a single sheet. It's definitely not a 
+page. Whether Kivio will be a sheet or a page I don't know; ditto for Karbon.
+
+XXX: Make this a wiki table
+
+Application Document Type   Embedded part of app document
+
+KPresenter  multi-page      slide, possibly more than one slide embedded
+                                disconnectedly
+KWord       multi-page      text frame, possibly with embedded image, possibly
+                                more than one text frame, connected, embedded 
+                                at different places
+Kivio       multi-sheet     group of connected objects
+Karbon      single-page     group of connected objects
+Krita       no page         layer stack
+KSpread     multi-sheet     view on a part of a sheet, 
+Kexi        ?               not usable embedded: merge data instead
+KPlato      multi-view      each view is a usable object; we may need to show
+                            the same data in different places in different or
+                            the same views
+KForumula   no page         do we need to show the same formula in more than
+                            one place in the embedding document
+KChart      no page         do we need to show the same chart in more than
+                            one place in the embedding document? Perhaps also
+                            different charts, but using the same data? Data from
+                            an embedded kspread document in a chart in the same
+                            kword document?
+
+! Painting
+
+KOffice documents should not only look good on screen, but also on paper.
+
+I am fairly sure that QGraphicsView does not allow the kind of fine typographic
+detail we really need. QGraphicsView places objects by float pixel (just like
+the current version of Flake). If we want to do typography in points or inches,
+we need all kinds of conversion things, and we need to subclass all QGraphicsItems
+to contain those kinds of coordinates. However, people with more knowledge than me
+need to investigate this.
+
+Color management is a bigger problem. Krita cannot use QGraphicsView as the
+basic canvas to place layers on, and therefore cannot use QGraphicsView for
+painting flake objects; we need color managements and colorspaces
+
+But Krita is not alone here: KWord and Karbon need color management and
+colorspaces, too.
+
+! Pre-canned objects
+
+QGraphicsView gives us QGraphicsItem, with path, line, pixmap,
+text, polygon, rect and ellipse subclasses. These do not look suitably
+powerful for our needs. We would need to subclass QGraphicsItem ourselves,
+for our text, image, svg, movie etc. objects.
+
+Also, QGraphicsView does not seem to provide support for connectors.
+
+! Object handling
+
+While we need to implement a tool design, guides, rulers and other common
+handling strategies (about which a discussion is going on now). QGraphicsView
+can handle the dragging, stacking of objects. I am not sure the transition
+animations necessary for KPresenter or the Glow effect we want in Karbon
+and Kivio can be done in QGraphicsView, but I think so.
+
+If we choose QGraphicsView, most of our effort will be in the object handling
+code.
+
+! Data model & saving as OpenDocument
+
+Is OpenDocument actually flexible enough for what we want?
+
+! Conclusion
+
+What we want, in the end, is a collection of fine-grained objects that can be
+used in a typographically satisfying way. An interesting idea from Martin
+Pfeiffer's competition entry is to make a kind of pasteboard where we can
+temporarily store flake objects; or even have a "clipart"-like collection
+of flake objects.
+
+I am not sure whether we should try to use QGraphicsView. It may be useful
+for Kivio and KPresenter -- but KWord, Karbon, Krita and KSpread are much
+more demanding. And we would like to make Kivio use Karbon's engine, which
+leaves KPresenter, which could conceivably use the same engine as Karbon.
+
+We still don't have the overall design for flexible graphical objects and
+their handling in KOffice 2.0, but we're getting closer.
+
+! Post Scripting
+
+Did anyone else notice the essential sameness of KWord's document structure
+view, Krita's layer box and Karbon and Kivio's layer box? And how useful that
+thing would be in KPresenter and KSpread? Every KOffce app that embeds objects
+should have it.
+
+And the essential sameness of KPresenter's preview page bar and KPdf's
+same -- and how useful that would be in Kivio, KSpread and KWord. As soon
+as a document has pages, it should have an optional preview bar.
+
+
+-- 
+Boudewijn Rempt 
+http://www.valdyas.org/fading/index.cgi
+

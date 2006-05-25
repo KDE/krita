@@ -1,0 +1,49 @@
+The goals of this library are to have in all KOffice application
+that can use graphical objects like clip-art, stencils, borders,
+animations, embedded movies and whatever:
+
+Common object handling in all applications:
+  the same user interface for creation, selection, moving,
+  resizing, snapping to rulers and guides etc. This is the big
+  thing: all KOffice applications should work the same way,
+  have the same interaction model for working with component.
+
+A simple object hierarchy with a common manipulatable base
+  object class and subclasses for svg objects, lines, movies,
+  embedded documents and text objects. Svg objects and lines
+  should always have the option of an associated text object.
+
+Color management (may be hard to achieve with Arthur)
+
+Connectors and snapping
+
+Excellent printing
+
+The possibility of adding high-level behavior to objects
+(click on an object and move to another page in Kivio).
+
+Copy and paste and drag and drop in and between applications
+
+Saveable in OASIS
+
+Inspector widgets
+
+Undo and redo (of course)
+
+The objects render themselves to a QPainter
+
+Oh, and while we're at it, make sure we all use KoRuler (and
+reprogram that one where needed), shall we?
+
+What we don't want to do is:
+
+KOffice independent. Initially it will be, because we're
+developing on Qt4, but it's no hard requirement, unless
+people from outside KOffice start helping and hacking, perhaps.
+
+No canvas. This is no canvas library: every application will have
+a canvas optimized for the kind of things it needs to do (although
+Karbon14 and Kivio will merge their canvas and use the same thing.)
+
+Creation of complex svg itself: use Karbon14 or Inkscape for that
+Save in KOffice's old file format

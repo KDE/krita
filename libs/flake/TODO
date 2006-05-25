@@ -1,0 +1,13 @@
+* Add Commands
+  * KoShapeDelete
+    Have a bool in this command to see if on destructor we did an execute/unexecute
+    last and thus need to delete the KoShape.
+    Note that we want a refCounter in the model-backend of the Shape. (picture/text)
+* add a ShearingStrategy
+
+
+Bugs:
+* rescaling does not alter the positions of the connectors. I expect their
+  relative position to the whole shape to stay the same.
+* selecting an object does not draw the handles correctly until you had a
+  mouseevent that triggers a repaint.

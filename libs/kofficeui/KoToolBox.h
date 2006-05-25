@@ -23,6 +23,7 @@
 #include <QMap>
 #include <koffice_export.h>
 #include <ktoolbar.h>
+#include <kinstance.h>
 
 class QButtonGroup;
 class QToolButton;

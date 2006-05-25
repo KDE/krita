@@ -646,8 +646,11 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIn
             qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
             columns = qMin(columns, columnsRemaining);
 
-            const quint8 *srcData = pixel(column, row);
-            quint8 *dstData = dst.writablePixel(column, row);
+            KisHLineIteratorPixel srcIt = createHLineIterator(column, row, columns, false);
+            KisHLineIteratorPixel dstIt = dst.createHLineIterator(column, row, columns, true);
+
+            const quint8 *srcData = srcIt.rawData();
+            quint8 *dstData = dstIt.rawData();
 
             m_colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent);
 
@@ -1049,7 +1052,8 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, KisColor * kc)
 
 KisColor KisPaintDevice::colorAt(qint32 x, qint32 y)
 {
-    return KisColor(m_datamanager->pixel(x - m_x, y - m_y), m_colorSpace);
+    KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
+    return KisColor(iter.rawData(), m_colorSpace);
 }
 
 bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c, quint8  opacity)

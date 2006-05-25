@@ -350,11 +350,12 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 c
 
             QRect clearTileRect = clearRect & tileRect;
 
+            tile->addReader();
             if (clearTileRect == tileRect) {
-
                 // Clear whole tile
+                tile->addReader();
                 memset(tile->data(), clearValue, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
-
+                tile->removeReader();
             } else {
 
                 quint32 rowsRemaining = clearTileRect.height();
@@ -366,6 +367,7 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 c
                     --rowsRemaining;
                 }
             }
+            tile->removeReader();
         }
     }
 }
@@ -455,11 +457,13 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, const qu
                 if (clearTileRect == tileRect) {
 
                     // Clear whole tile
+                    tile->addReader();
                     memcpy(tile->data(), clearPixelData, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
-
+                    tile->removeReader();
                 } else {
 
                     quint32 rowsRemaining = clearTileRect.height();
+                    tile->addReader();
                     quint8 *dst = tile->data(clearTileRect.x() - tileRect.x(), clearTileRect.y() - tileRect.y());
 
                     while (rowsRemaining > 0) {
@@ -467,6 +471,7 @@ void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, const qu
                         dst += rowStride;
                         --rowsRemaining;
                     }
+                    tile->removeReader();
                 }
             }
         }
@@ -826,6 +831,13 @@ KisTile *KisTiledDataManager::getOldTile(qint32 col, qint32 row, KisTile *def)
 
 quint8* KisTiledDataManager::pixelPtr(qint32 x, qint32 y, bool writable)
 {
+    // Ahem, this is a bit not as good. The point is, this function needs the tile data,
+    // but it might be swapped out. This code swaps it in, but at function exit it might
+    // be swapped out again! THIS MAKES THE RETURNED POINTER QUITE VOLATILE
+    return pixelPtrSafe(x, y, writable) -> data();
+}
+
+KisTileDataWrapperSP KisTiledDataManager::pixelPtrSafe(qint32 x, qint32 y, bool writable) {
     qint32 row = yToRow(y);
     qint32 col = xToCol(x);
 
@@ -836,7 +848,7 @@ quint8* KisTiledDataManager::pixelPtr(qint32 x, qint32 y, bool writable)
 
     KisTile *tile = getTile(col, row, writable);
 
-    return tile->data() + offset;
+    return KisTileDataWrapperSP(new KisTileDataWrapper(tile, offset));
 }
 
 const quint8* KisTiledDataManager::pixel(qint32 x, qint32 y)
@@ -887,7 +899,8 @@ void KisTiledDataManager::readBytes(quint8 * data,
 
             qint32 columns = qMin(numContiguousSrcColumns, columnsRemaining);
 
-            const quint8 *srcData = pixel(srcX, srcY);
+            KisTileDataWrapperSP tileData = pixelPtrSafe(srcX, srcY, false);
+            const quint8 *srcData = tileData -> data();
             qint32 srcRowStride = rowStride(srcX, srcY);
 
             quint8 *dstData = data + ((dstX + (dstY * w)) * m_pixelSize);
@@ -945,7 +958,9 @@ void KisTiledDataManager::writeBytes(const quint8 * bytes,
 
             qint32 columns = qMin(numContiguousdstColumns, columnsRemaining);
 
-            quint8 *dstData = writablePixel(dstX, dstY);
+            //quint8 *dstData = writablePixel(dstX, dstY);
+            KisTileDataWrapperSP tileData = pixelPtrSafe(dstX, dstY, true);
+            quint8 *dstData = tileData->data();
             qint32 dstRowStride = rowStride(dstX, dstY);
 
             const quint8 *srcData = bytes + ((srcX + (srcY * w)) * m_pixelSize);
@@ -1013,3 +1028,13 @@ qint32 KisTiledDataManager::numTiles(void) const
     return m_numTiles;
 }
 
+KisTileDataWrapper::KisTileDataWrapper(KisTile* tile, qint32 offset)
+    : m_tile(tile), m_offset(offset)
+{
+    m_tile->addReader();
+}
+
+KisTileDataWrapper::~KisTileDataWrapper()
+{
+    m_tile->removeReader();
+}

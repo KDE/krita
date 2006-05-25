@@ -202,12 +202,13 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
             columns = qMin(columns, columnsRemaining);
 
-            const quint8 *srcData = srcdev->pixel(srcX, srcY);
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
+            KisHLineIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns, false);
+            const quint8 *srcData = srcIt.rawData();
 
-            quint8 *dstData = m_device->writablePixel(dstX, dstY);
             qint32 dstRowStride = m_device->rowStride(dstX, dstY);
-
+            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns, true);
+            quint8 *dstData = dstIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
                           dstRowStride,
@@ -307,14 +308,17 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
             columns = qMin(numContiguousSelColumns, columns);
             columns = qMin(columns, columnsRemaining);
 
-            quint8 *dstData = m_device->writablePixel(dstX, dstY);
             qint32 dstRowStride = m_device->rowStride(dstX, dstY);
+            KisHLineIteratorPixel dstIt = m_device->createHLineIterator(dstX, dstY, columns, true);
+            quint8 *dstData = dstIt.rawData();
 
-            const quint8 *srcData = srcdev->pixel(srcX, srcY);
             qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
+            KisHLineIteratorPixel srcIt = srcdev->createHLineIterator(srcX, srcY, columns, false);
+            const quint8 *srcData = srcIt.rawData();
 
-            const quint8 *selData = seldev->pixel(dstX, dstY);
             qint32 selRowStride = seldev->rowStride(dstX, dstY);
+            KisHLineIteratorPixel selIt = seldev->createHLineIterator(dstX, dstY, columns, false);
+            const quint8 *selData = selIt.rawData();
 
             m_colorSpace->bitBlt(dstData,
                                    dstRowStride,

@@ -18,6 +18,8 @@
 #ifndef KIS_TILEMANAGER_H_
 #define KIS_TILEMANAGER_H_
 
+#include <sys/types.h>
+
 #include <qglobal.h>
 #include <QMap>
 #include <q3valuelist.h>
@@ -48,8 +50,9 @@ public:
 public: // Tile management
     void registerTile(KisTile* tile);
     void deregisterTile(KisTile* tile);
-    void ensureTileLoaded(KisTile* tile);
-    void maySwapTile(KisTile* tile);
+    // these can change the tile indirectly, though, through the actual swapping!
+    void ensureTileLoaded(const KisTile* tile);
+    void maySwapTile(const KisTile* tile);
 
 public: // Pool management
     quint8* requestTileData(qint32 pixelSize);
@@ -66,15 +69,21 @@ private:
 private:
     static KisTileManager *m_singleton;
     KTempFile m_tempFile;
-    int m_fileSize;
+    off_t m_fileSize;
     // For use when any swap-allocating function failed; the risk of swap allocating failing
     // again is too big, and we'd clutter the logs with kWarnings otherwise
     bool m_swapForbidden;
 
-    struct TileInfo { KisTile *tile; bool inMem; int filePos; int size; int fsize;
-        bool validNode; Q3ValueList<TileInfo*>::iterator node; };
-    typedef struct { quint8 *pointer; int filePos; int size; } FreeInfo;
-    typedef QMap<KisTile*, TileInfo*> TileMap;
+    // validNode says if you can swap it (true) or not (false) mmapped, if this tile
+    // currently is memory mapped. If it is false, but onFile, it is on disk,
+    // but not mmapped, and should be mapped!
+    // filePos is the position inside the file; size is the actual size, fsize is the size
+    // being used in the swap for this tile (may be larger!)
+    struct TileInfo { KisTile *tile; off_t filePos; int size; int fsize;
+        Q3ValueList<TileInfo*>::iterator node;
+        bool inMem; bool onFile; bool mmapped; bool validNode; };
+    typedef struct { off_t filePos; int size; } FreeInfo;
+    typedef QMap<const KisTile*, TileInfo*> TileMap;
     typedef Q3ValueList<TileInfo*> TileList;
     typedef Q3ValueList<FreeInfo*> FreeList;
     typedef Q3ValueVector<FreeList> FreeListList;
@@ -109,6 +118,10 @@ private:
     bool isPoolTile(quint8* data, qint32 pixelSize);
     void reclaimTileToPool(quint8* data, qint32 pixelSize);
 
+    // Mmap wrapper that prints warnings on error. The result is stored in the *& result
+    // the return value is true on succes, false on failure. Other args as in man mmap
+    bool kritaMmap(quint8*& result, void *start, size_t length,
+                   int prot, int flags, int fd, off_t offset);
 };
 
 #endif // KIS_TILEMANAGER_H_

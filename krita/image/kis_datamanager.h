@@ -153,13 +153,13 @@ public:
     /**
      * Get a read-only pointer to the specified pixel.
      */
-      inline const quint8* pixel(qint32 x, qint32 y)
+    inline const quint8* pixel(qint32 x, qint32 y) KDE_DEPRECATED
           { return ACTUAL_DATAMGR::pixel(x, y); }
 
     /**
      * Get a read-write pointer to the specified pixel.
      */
-      inline quint8* writablePixel(qint32 x, qint32 y)
+    inline quint8* writablePixel(qint32 x, qint32 y) KDE_DEPRECATED
           { return ACTUAL_DATAMGR::writablePixel(x, y); }
 
     /**

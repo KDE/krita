@@ -4,10 +4,7 @@ add_subdirectory( pics )
 add_subdirectory( fonts ) 
 add_subdirectory( dtd ) 
 
-include_directories(
-	${CMAKE_SOURCE_DIR}/libs/kotext/
-	${CMAKE_SOURCE_DIR}/libs/kofficeui/
-	${KOFFICECORE_INCLUDES} )
+include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES})
 
 
 ########### next target ###############

@@ -71,3 +71,30 @@ void KoZoomHandler::setZoom( int zoom )
         m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
     }
 }
+
+QPointF KoZoomHandler::normalToView( const QPointF normalPoint ) {
+    return QPointF( zoomItX( normalPoint.x() ), zoomItY( normalPoint.y() ) );
+}
+
+QPointF KoZoomHandler::viewToNormal( const QPointF viewPoint ) {
+    return QPointF( unzoomItX( viewPoint.x() ), unzoomItY( viewPoint.y() ) );
+}
+
+QRectF KoZoomHandler::normalToView( const QRectF normalRect ) {
+    QRectF r;
+    r.setCoords( zoomItX( normalRect.left() ),  zoomItY( normalRect.top() ),
+                  zoomItX( normalRect.right() ), zoomItY( normalRect.bottom() ) );
+    return r;
+}
+
+QRectF KoZoomHandler::viewToNormal( const QRectF viewRect ) {
+    QRectF r;
+    r.setCoords( unzoomItX( viewRect.left() ),  unzoomItY( viewRect.top() ),
+                  unzoomItX( viewRect.right() ), unzoomItY( viewRect.bottom() ) );
+    return r;
+}
+
+void KoZoomHandler::zoom(double *zoomX, double *zoomY) const {
+    *zoomX = zoomItX(100.0) / 100.0;
+    *zoomY = zoomItY(100.0) / 100.0;
+}

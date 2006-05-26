@@ -23,13 +23,14 @@
 #include <KoRect.h>
 #include <koffice_export.h>
 #include <KoZoomMode.h>
+#include <KoViewConverter.h>
 
 /**
  * This class handles the zooming and DPI stuff (conversions between pt values and pixels).
  * An instance of KoZoomHandler operates at a given zoom (see setZoomAndResolution() and setZoom())
  * so there is usually one instance of KoZoomHandler per view.
  */
-class KOFFICEUI_EXPORT KoZoomHandler
+class KOFFICEUI_EXPORT KoZoomHandler : public KoViewConverter
 {
 public:
     KoZoomHandler();
@@ -108,6 +109,12 @@ public:
     int zoomItYOld( double z ) const {
         return qRound( m_zoomedResolutionY * z );
     }
+    double zoomItX( double z ) const {
+        return m_zoomedResolutionX * z;
+    }
+    double zoomItY( double z ) const {
+        return m_zoomedResolutionY * z ;
+    }
 
     QPoint zoomPointOld( const KoPoint & p ) const {
         return QPoint( zoomItXOld( p.x() ), zoomItYOld( p.y() ) );
@@ -139,6 +146,12 @@ public:
     double unzoomItYOld( int y ) const {
         return static_cast<double>( y ) / m_zoomedResolutionY;
     }
+    double unzoomItX( double x ) const {
+        return  x / m_zoomedResolutionX;
+    }
+    double unzoomItY( double y ) const {
+        return  y / m_zoomedResolutionY;
+    }
     KoPoint unzoomPointOld( const QPoint & p ) const {
         return KoPoint( unzoomItXOld( p.x() ), unzoomItYOld( p.y() ) );
     }
@@ -148,6 +161,39 @@ public:
                       unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
         return _r;
     }
+
+    // KoViewConverter-interface methods
+
+    /**
+     * Convert a coordinate in pt to pixels.
+     * @param normalPoint the point in the normal coordinate system of a KoShape.
+     */
+    QPointF normalToView( const QPointF normalPoint );
+
+    /**
+     * Convert a coordinate in pixels to pt.
+     * @param viewPoint the point in the coordinate system of the widget, or window.
+     */
+    QPointF viewToNormal( const QPointF viewPoint );
+
+    /**
+     * Convert a rectangle in pt to pixels.
+     * @param normalRect the rect in the normal coordinate system of a KoShape.
+     */
+    QRectF normalToView( const QRectF normalRect );
+
+    /**
+     * Convert a rectangle in pixels to pt.
+     * @param viewRect the rect in the coordinate system of the widget, or window.
+     */
+    QRectF viewToNormal( const QRectF viewRect );
+
+    /**
+     * set the zoom levels of the individual x and y axis to the pointer paramets.
+     * @param zoomX a pointer to a double which will be modified to set the horizontal zoom.
+     * @param zoomY a pointer to a double which will be modified to set the vertical zoom.
+     */
+    void zoom(double *zoomX, double *zoomY) const;
 
 
 protected:

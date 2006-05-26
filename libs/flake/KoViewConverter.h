@@ -23,6 +23,8 @@
 #include <QPointF>
 #include <QRectF>
 
+#include <koffice_export.h>
+
 /**
  * The interface for view conversions.
  * All KoShape based objects are using a postscript-point (pt) based measurement system
@@ -30,7 +32,7 @@
  * we are painting, and a conversion to the normalized coordinate system if we
  * receive mouse events so we can figure out which KoShape object was touched.
  */
-class KoViewConverter {
+class FLAKE_EXPORT KoViewConverter {
 public:
     KoViewConverter() {};
     virtual ~KoViewConverter() {};

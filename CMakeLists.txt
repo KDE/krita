@@ -31,12 +31,14 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
+# flake is the lib that depends on nothing, but lost of the libs depend on flake
+set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake ${CMAKE_BINARY_DIR}/libs/flake)
 # kostore is at the bottom of stack, so it has the dependency on the kde4 includes.
 set(KOSTORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store ${KDE4_INCLUDES})
 # kofficecore depends on kostore
 set(KOFFICECORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_BINARY_DIR}/libs/kofficecore ${KOSTORE_INCLUDES})
 # kofficeui depends on kofficecore
-set(KOFFICEUI_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kofficeui ${CMAKE_BINARY_DIR}/libs/kofficeui ${KOFFICECORE_INCLUDES})
+set(KOFFICEUI_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kofficeui ${CMAKE_BINARY_DIR}/libs/kofficeui ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
 
 # The rest must be specified independently, in addition to one of the above three
 set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kwmf ${CMAKE_BINARY_DIR}/libs/kwmf)
@@ -45,7 +47,6 @@ set(KOPAINTER_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopainter ${CMAKE_BINARY_DIR}/li
 set(KOPALETTE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopalette ${CMAKE_BINARY_DIR}/libs/kopalette)
 set(KFORMULA_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kformula ${CMAKE_BINARY_DIR}/libs/kformula)
 set(KROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kross ${CMAKE_BINARY_DIR}/libs/kross)
-set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake ${CMAKE_BINARY_DIR}/libs/flake)
 # Those are included with e.g. <koproperty/set.h>
 set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 

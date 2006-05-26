@@ -24,6 +24,8 @@
 #include <QList>
 #include <QObject>
 
+#include <koffice_export.h>
+
 class KoShape;
 class KoSelection;
 class KoRepaintManager;
@@ -39,7 +41,7 @@ class QPointF;
  *
  * The selection in the different views can be different.
  */
-class KoShapeManager : public QObject
+class FLAKE_EXPORT KoShapeManager : public QObject
 {
     Q_OBJECT
 

@@ -45,6 +45,7 @@ set(KOPAINTER_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopainter ${CMAKE_BINARY_DIR}/li
 set(KOPALETTE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopalette ${CMAKE_BINARY_DIR}/libs/kopalette)
 set(KFORMULA_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kformula ${CMAKE_BINARY_DIR}/libs/kformula)
 set(KROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kross ${CMAKE_BINARY_DIR}/libs/kross)
+set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake ${CMAKE_BINARY_DIR}/libs/flake)
 # Those are included with e.g. <koproperty/set.h>
 set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 

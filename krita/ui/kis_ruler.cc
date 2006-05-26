@@ -132,7 +132,7 @@ void KisRuler::setZoom(double zoom)
 }
 
 void KisRuler::updatePointer(qint32 x, qint32 y)
-{
+{/*
     if (m_pixmapBuffer) {
         if (m_orientation == Qt::Horizontal) {
             if (m_currentPosition != -1)
@@ -153,7 +153,7 @@ void KisRuler::updatePointer(qint32 x, qint32 y)
                 m_currentPosition = y;
             }
         }
-    }
+    }*/
 }
 
 void KisRuler::updateVisibleArea(qint32 xpos, qint32 ypos)

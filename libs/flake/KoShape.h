@@ -180,7 +180,7 @@ public:
      *
      * @return the bounding box of the shape
      */
-    virtual QRectF boundingBox() const;
+    virtual QRectF boundingRect() const;
 
     /**
      * @brief Add a connector point to the shape

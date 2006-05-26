@@ -131,7 +131,7 @@ bool KoShape::hitTest( const QPointF &position ) const
     return hit;
 }
 
-QRectF KoShape::boundingBox() const
+QRectF KoShape::boundingRect() const
 {
     QRectF bb( QPointF(0, 0), m_size );
     return m_matrix.mapRect( bb );

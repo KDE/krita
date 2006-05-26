@@ -91,8 +91,8 @@ void KoShapeRubberSelectStrategy::finishInteraction()
     const QList<KoShape *> &objects = m_canvas->shapeManager()->objects();
     foreach ( KoShape * object, objects )
     {
-        //qDebug() << "o bb:" << object->boundingBox() << ", m_selectRect:" << m_selectRect;
-        if ( object->boundingBox().intersects( m_selectRect ) )
+        //qDebug() << "o bb:" << object->boundingRect() << ", m_selectRect:" << m_selectRect;
+        if ( object->boundingRect().intersects( m_selectRect ) )
         {
             selection->select( object );
         }

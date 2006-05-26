@@ -74,7 +74,7 @@ public:
 
     virtual bool hitTest( const QPointF &position ) const;
 
-    virtual QRectF boundingBox() const;
+    virtual QRectF boundingRect() const;
 
 signals:
     /// emitted when the selection is changed

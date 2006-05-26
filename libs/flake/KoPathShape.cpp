@@ -86,7 +86,7 @@ bool KoPathShape::hitTest( const QPointF &position ) const
     return m_path.contains( point );
 }
 
-QRectF KoPathShape::boundingBox() const
+QRectF KoPathShape::boundingRect() const
 {
     QRectF bb( m_path.boundingRect() );
     bb.moveTopLeft( position() );

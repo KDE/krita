@@ -42,7 +42,7 @@ void KoSelection::paint( QPainter &painter, KoViewConverter &converter)
     if ( count() == 0 )
         return;
     painter.setRenderHint( QPainter::Antialiasing, false );
-    QRectF bb = converter.normalToView( boundingBox() );
+    QRectF bb = converter.normalToView( boundingRect() );
     QPen pen( Qt::blue ); //TODO make it configurable
     painter.setPen( pen );
     painter.drawRect( bb );
@@ -97,7 +97,7 @@ void KoSelection::requestSelectionChangedEvent() {
 
 void KoSelection::selectionChangedEvent() {
     m_eventTriggered = false;
-    QRectF bb( boundingBox() );
+    QRectF bb( boundingRect() );
     resize( bb.size() );
     setPosition( bb.topLeft() );
     emit selectionChanged();
@@ -112,7 +112,7 @@ bool KoSelection::hitTest( const QPointF &position ) const
 {
     if ( count() > 1 )
     {
-        QRectF bb( boundingBox() );
+        QRectF bb( boundingRect() );
         return bb.contains( position );
     }
     else if ( count() == 1 )
@@ -121,7 +121,7 @@ bool KoSelection::hitTest( const QPointF &position ) const
         return false;
 }
 
-QRectF KoSelection::boundingBox() const
+QRectF KoSelection::boundingRect() const
 {
     bool first=true;
     QRectF bb;
@@ -132,11 +132,11 @@ QRectF KoSelection::boundingBox() const
             if( dynamic_cast<KoShapeGroup*>( *it ))
                 continue;
             if(first) {
-                bb = (*it)->boundingBox();
+                bb = (*it)->boundingRect();
                 first = false;
             }
             else
-                bb = bb.unite( ( *it )->boundingBox() );
+                bb = bb.unite( ( *it )->boundingRect() );
         }
     }
     return bb;

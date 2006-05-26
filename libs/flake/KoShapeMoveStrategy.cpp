@@ -38,16 +38,16 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
 , m_start(clicked)
 {
     KoSelectionSet selectedObjects = canvas->shapeManager()->selection()->selectedObjects(KoFlake::StrippedSelection);
-    QRectF boundingBox;
+    QRectF boundingRect;
     foreach(KoShape *shape, selectedObjects) {
         if(shape->isLocked())
             continue;
         m_selectedObjects << shape;
         m_previousPositions << shape->position();
         m_newPositions << shape->position();
-        boundingBox = boundingBox.unite( shape->boundingBox() );
+        boundingRect = boundingRect.unite( shape->boundingRect() );
     }
-    m_initialTopLeft = boundingBox.topLeft();
+    m_initialTopLeft = boundingRect.topLeft();
 }
 
 void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {

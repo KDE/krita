@@ -84,7 +84,7 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
         painter.setPen( pen );
         bool editable=false;
         foreach(KoShape *shape, selection()->selectedObjects(KoFlake::StrippedSelection)) {
-            painter.drawRect( converter.normalToView(shape->boundingBox()) );
+            painter.drawRect( converter.normalToView(shape->boundingRect()) );
             if(!shape->isLocked())
                 editable = true;
         }
@@ -92,7 +92,7 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
         if( !editable)
             return;
 
-        SelectionDecorator decorator(selection()->boundingBox(), m_lastHandle, true, true);
+        SelectionDecorator decorator(selection()->boundingRect(), m_lastHandle, true, true);
         decorator.paint(painter, converter);
     }
 }
@@ -125,7 +125,7 @@ void KoInteractionTool::mouseMoveEvent( KoGfxEvent *event ) {
 }
 
 QRectF KoInteractionTool::handlesSize() {
-    QRectF bound = selection()->boundingBox();
+    QRectF bound = selection()->boundingRect();
     // expansion Border
     QPointF border = m_canvas->viewConverter()->viewToNormal(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
     bound.adjust(-border.x(), -border.y(), border.x(), border.y());
@@ -207,7 +207,7 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
 }
 
 void KoInteractionTool::recalcSelectionBox() {
-    QRectF bb( selection()->boundingBox() );
+    QRectF bb( selection()->boundingRect() );
     float width = bb.width();
     float height = bb.height();
     float halfWidth = width / 2.0;

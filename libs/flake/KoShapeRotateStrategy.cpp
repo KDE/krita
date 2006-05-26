@@ -41,7 +41,7 @@ KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas
         m_selectedObjects << shape;
         m_startPositions << shape->absolutePosition();
         m_initialAngles << shape->rotation();
-        m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingBox() );
+        m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
     }
 }
 
@@ -76,7 +76,7 @@ void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 }
 
 void KoShapeRotateStrategy::paint( QPainter &painter, KoViewConverter &converter) {
-    SelectionDecorator decorator (m_canvas->shapeManager()->selection()->boundingBox(), KoFlake::NoHandle, true, false);
+    SelectionDecorator decorator (m_canvas->shapeManager()->selection()->boundingRect(), KoFlake::NoHandle, true, false);
     decorator.paint(painter, converter);
 }
 

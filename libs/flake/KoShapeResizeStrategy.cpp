@@ -35,7 +35,7 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
         m_selectedObjects << shape;
         m_startPositions << shape->absolutePosition();
         m_startSizes << shape->size();
-        m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingBox() );
+        m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
     }
     m_start = clicked;
 
@@ -146,6 +146,6 @@ KCommand* KoShapeResizeStrategy::createCommand() {
 }
 
 void KoShapeResizeStrategy::paint( QPainter &painter, KoViewConverter &converter) {
-    SelectionDecorator decorator (m_canvas->shapeManager()->selection()->boundingBox(), KoFlake::NoHandle, false, false);
+    SelectionDecorator decorator (m_canvas->shapeManager()->selection()->boundingRect(), KoFlake::NoHandle, false, false);
     decorator.paint(painter, converter);
 }

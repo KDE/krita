@@ -85,7 +85,7 @@ void KoShapeManager::paint( QPainter &painter, KoViewConverter &converter, bool 
         if(shape->parent() != 0 && shape->parent()->childClipped(shape))
             continue;
         if(painter.hasClipping()) {
-            QRectF objectBox = shape->boundingBox();
+            QRectF objectBox = shape->boundingRect();
             objectBox = converter.normalToView(objectBox);
             QRegion objectRegion = QRegion(objectBox.toRect());
 

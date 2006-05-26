@@ -43,7 +43,7 @@ public:
     void close();
 
     bool hitTest( const QPointF &position ) const;
-    virtual QRectF boundingBox() const;
+    virtual QRectF boundingRect() const;
     virtual const QPainterPath outline() const;
 
 private:

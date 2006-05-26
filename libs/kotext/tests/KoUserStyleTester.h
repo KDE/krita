@@ -19,9 +19,9 @@
 #ifndef KOUSERSTYLETESTER_H
 #define KOUSERSTYLETESTER_H
 
-#include <kunittest/tester.h>
+#include <QObject>
 
-class KoUserStyleTester : public KUnitTest::SlotTester {
+class KoUserStyleTester : public QObject {
     Q_OBJECT
 private slots:
     void testEmptyCollection();

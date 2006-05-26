@@ -18,8 +18,7 @@
 
 // KoUserStyle/KoUserStyleCollection test
 
-#include <kunittest/runner.h>
-#include <kunittest/module.h>
+#include <qtest_kde.h>
 
 #include <KoUserStyleCollection.h>
 #include <KoUserStyle.h>
@@ -29,23 +28,14 @@
 #include "KoUserStyleTester.h"
 #include "KoUserStyleTester.moc"
 
-KUNITTEST_MODULE(kunittest_KoUserStyleTester, "KoUserStyle Tester");
-KUNITTEST_MODULE_REGISTER_TESTER(KoUserStyleTester);
-
-#undef COMPARE
-/// for source-compat with qttestlib: use COMPARE(x,y) if you plan to port to qttestlib later.
-#define COMPARE CHECK
-
-/// for source-compat with qttestlib: use VERIFY(x) if you plan to port to qttestlib later.
-#undef VERIFY
-#define VERIFY( x ) CHECK( x, true )
+QTEST_KDEMAIN( KoUserStyleTester, NoGUI )
 
 void KoUserStyleTester::testEmptyCollection()
 {
     KoUserStyleCollection coll( "test" );
-    VERIFY( coll.isEmpty() );
-    COMPARE( coll.count(), 0 );
-    VERIFY( coll.styleList().isEmpty() );
+    QVERIFY( coll.isEmpty() );
+    QCOMPARE( coll.count(), 0 );
+    QVERIFY( coll.styleList().isEmpty() );
 }
 
 void KoUserStyleTester::testAddStyle()
@@ -53,35 +43,35 @@ void KoUserStyleTester::testAddStyle()
     KoUserStyleCollection coll( "test" );
 
     KoUserStyle* style = new KoUserStyle( "test1" );
-    COMPARE( style->name(), QString( "test1" ) );
-    COMPARE( style->displayName(), QString( "test1" ) );
+    QCOMPARE( style->name(), QString( "test1" ) );
+    QCOMPARE( style->displayName(), QString( "test1" ) );
     const QString displayName = "A lovely name";
     style->setDisplayName( displayName );
-    COMPARE( style->displayName(), displayName );
+    QCOMPARE( style->displayName(), displayName );
 
     KoUserStyle* ret = coll.addStyle( style );
-    COMPARE( ret, style );
+    QCOMPARE( ret, style );
 
     KoUserStyle* style2 = new KoUserStyle( "test1" );
-    COMPARE( style2->name(), QString( "test1" ) );
+    QCOMPARE( style2->name(), QString( "test1" ) );
     style2->setDisplayName( displayName );
     ret = coll.addStyle( style2 );
     // here style2 got deleted.
-    COMPARE( ret, style );
+    QCOMPARE( ret, style );
 
-    VERIFY( !coll.isEmpty() );
-    COMPARE( coll.count(), 1 );
-    COMPARE( (int)coll.styleList().count(), 1 );
+    QVERIFY( !coll.isEmpty() );
+    QCOMPARE( coll.count(), 1 );
+    QCOMPARE( (int)coll.styleList().count(), 1 );
 
     // Add another style for good this time
     KoUserStyle* style3 = new KoUserStyle( "test3" );
-    COMPARE( style3->name(), QString( "test3" ) );
+    QCOMPARE( style3->name(), QString( "test3" ) );
     ret = coll.addStyle( style3 );
 
     QStringList displayNames = coll.displayNameList();
-    COMPARE( (int)displayNames.count(), 2 );
-    COMPARE( displayNames[0], displayName );
-    COMPARE( displayNames[1], style3->name() );
+    QCOMPARE( (int)displayNames.count(), 2 );
+    QCOMPARE( displayNames[0], displayName );
+    QCOMPARE( displayNames[1], style3->name() );
 }
 
 void KoUserStyleTester::testFindStyle()
@@ -94,31 +84,31 @@ void KoUserStyleTester::testFindStyle()
 
     // --- findStyle tests ---
     KoUserStyle* ret = coll.findStyle( "test1", QString::null );
-    COMPARE( ret, style );
+    QCOMPARE( ret, style );
 
     ret = coll.findStyle( "foo", QString::null );
-    COMPARE( ret, (KoUserStyle*)0 );
+    QCOMPARE( ret, (KoUserStyle*)0 );
 
     ret = coll.findStyle( "foo", "test1" ); // fallback not used for style 'foo'
-    COMPARE( ret, (KoUserStyle*)0 );
+    QCOMPARE( ret, (KoUserStyle*)0 );
 
     ret = coll.findStyle( "test1", "test1" ); // fallback used for standard style test1
-    COMPARE( ret, style );
+    QCOMPARE( ret, style );
 
     // --- findStyleByDisplayName tests ---
     ret = coll.findStyleByDisplayName( displayName );
-    COMPARE( ret, style );
+    QCOMPARE( ret, style );
 
     ret = coll.findStyleByDisplayName( "foo" );
-    COMPARE( ret, (KoUserStyle*)0 );
+    QCOMPARE( ret, (KoUserStyle*)0 );
 
     // --- indexOf tests ---
     int pos = coll.indexOf( style );
-    COMPARE( pos, 0 );
+    QCOMPARE( pos, 0 );
 
     KoUserStyle* style2 = new KoUserStyle( "test1" );
     pos = coll.indexOf( style2 );
-    COMPARE( pos, -1 );
+    QCOMPARE( pos, -1 );
     delete style2;
 }
 
@@ -127,16 +117,16 @@ void KoUserStyleTester::testRemoveStyle()
     KoUserStyleCollection coll( "test" );
     KoUserStyle* style = new KoUserStyle( "test1" );
     coll.addStyle( style );
-    COMPARE( coll.count(), 1 );
+    QCOMPARE( coll.count(), 1 );
 
     // Try removing an unrelated style (noop)
     KoUserStyle* style2 = new KoUserStyle( "test1" );
     coll.removeStyle( style2 );
     delete style2;
-    COMPARE( coll.count(), 1 );
+    QCOMPARE( coll.count(), 1 );
 
     coll.removeStyle( style );
-    COMPARE( coll.count(), 0 );
+    QCOMPARE( coll.count(), 0 );
 }
 
 void KoUserStyleTester::testReorder()
@@ -148,15 +138,15 @@ void KoUserStyleTester::testReorder()
     coll.addStyle( style );
     style = new KoUserStyle( "test3" );
     coll.addStyle( style );
-    COMPARE( coll.count(), 3 );
+    QCOMPARE( coll.count(), 3 );
 
     QStringList newOrder;
     newOrder << "test3";
     newOrder << "test2";
     newOrder << "test1";
     coll.updateStyleListOrder( newOrder );
-    COMPARE( coll.count(), 3 );
+    QCOMPARE( coll.count(), 3 );
     QStringList displayNames = coll.displayNameList();
-    COMPARE( (int)displayNames.count(), 3 );
-    COMPARE( displayNames.join(","), newOrder.join(",") );
+    QCOMPARE( (int)displayNames.count(), 3 );
+    QCOMPARE( displayNames.join(","), newOrder.join(",") );
 }

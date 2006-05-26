@@ -113,7 +113,7 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
     QDomElement nameElem = parentElem.namedItem("NAME").toElement();
     if ( !nameElem.isNull() ) {
         m_name = nameElem.attribute("value");
-        m_displayName = i18n( "Style name", m_name );
+        m_displayName = i18nc( "Style name", m_name.toUtf8() );
     } else
         kWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 

@@ -4,7 +4,7 @@ if(KDE4_BUILD_TESTS)
 
 include_directories( ${KOTEXT_INCLUDES} )
 
-########### next target ###############
+########### kotextformattertest ###############
 
 set(kotextformattertest_SRCS kotextformattertest.cpp )
 
@@ -14,7 +14,7 @@ kde4_add_executable(kotextformattertest RUN_UNINSTALLED ${kotextformattertest_SR
 
 target_link_libraries(kotextformattertest kotext)
 
-########### next target ###############
+########### kobordertest ###############
 
 set(kobordertest_SRCS kobordertest.cpp )
 
@@ -24,7 +24,7 @@ kde4_add_executable(kobordertest RUN_UNINSTALLED ${kobordertest_SRCS})
 
 target_link_libraries(kobordertest kotext)
 
-########### next target ###############
+########### kovariabletest ###############
 
 set(kovariabletest_SRCS kovariabletest.cpp)
 
@@ -36,37 +36,18 @@ target_link_libraries(kovariabletest kotext ${QT_QTTEST_LIBRARY})
 
 add_test(kotext-kovariabletest ${CMAKE_CURRENT_BINARY_DIR}/kovariabletest)
 
+########### KoUserStyleTester ###############
+
+set(KoUserStyleTester_SRCS KoUserStyleTester.cpp)
+
+kde4_automoc(${KoUserStyleTester_SRCS})
+
+kde4_add_executable(KoUserStyleTester RUN_UNINSTALLED ${KoUserStyleTester_SRCS})
+
+target_link_libraries(KoUserStyleTester kotext ${QT_QTTEST_LIBRARY})
+
+add_test(kotext-KoUserStyleTester ${CMAKE_CURRENT_BINARY_DIR}/KoUserStyleTester)
+
 ########### end ###############
 
 endif(KDE4_BUILD_TESTS)
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#INCLUDES = $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
-#KDE_CXXFLAGS = $(USE_EXCEPTIONS)
-#
-#METASOURCES = AUTO
-#
-#check_PROGRAMS = kotextformattertest kobordertest kovariabletest
-#
-#TESTS = kotextformattertest kovariabletest
-#
-#LDADD = ../libkotext.la
-#AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-#
-#kobordertest_SOURCES = kobordertest.cpp
-#kotextformattertest_SOURCES = kotextformattertest.cpp
-#kovariabletest_SOURCES = kovariabletest.cpp
-#
-#check_LTLIBRARIES = kunittest_KoUserStyleTester.la 
-#
-#kunittest_KoUserStyleTester_la_SOURCES = KoUserStyleTester.cpp
-#kunittest_KoUserStyleTester_la_LIBADD = ../libkotext.la -lkunittest
-#kunittest_KoUserStyleTester_la_LDFLAGS = -module $(KDE_CHECK_PLUGIN) $(all_libraries)
-#
-#check-local:
-#	kunittestmodrunner

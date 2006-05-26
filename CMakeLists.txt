@@ -68,7 +68,7 @@ add_subdirectory(libs)
 MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necessary for official release")
 add_subdirectory(example)
 add_subdirectory(interfaces)
-#add_subdirectory(karbon)
+add_subdirectory(karbon)
 add_subdirectory(kdgantt)
 add_subdirectory(kchart)
 #add_subdirectory(kexi)
@@ -93,7 +93,7 @@ add_subdirectory(filters)
 add_subdirectory(autocorrect)
 add_subdirectory(doc)
 add_subdirectory( cmake )
-message( STATUS "Re-add kpresenter,karbon,kexi when we will port them")
+message( STATUS "Re-add kpresenter,kexi when we will port them")
 
 
 

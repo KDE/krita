@@ -23,6 +23,7 @@
 #include "KoCanvasBase.h"
 #include "KoViewConverter.h"
 #include "KoGfxEvent.h"
+#include "KoTool.moc"
 
 KoTool::KoTool(const QString & name, const QString & id, const QString & type, KoCanvasBase *canvas )
 : m_optionWidget( 0 )

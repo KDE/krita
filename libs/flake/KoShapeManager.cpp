@@ -26,6 +26,7 @@
 #include "KoRepaintManager.h"
 #include "KoShapeContainer.h"
 #include "KoShapeBorderModel.h"
+#include "KoRepaintManager.moc"
 
 #include <QDebug>
 #include <QPainter>
@@ -132,3 +133,5 @@ KoShape * KoShapeManager::getObjectAt( const QPointF &position )
 
     return 0; // missed everything
 }
+
+#include "KoShapeManager.moc"

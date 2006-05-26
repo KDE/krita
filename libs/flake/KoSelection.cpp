@@ -174,3 +174,5 @@ bool KoSelection::isSelected(const KoShape *object) const {
 
     return false;
 }
+
+#include "KoSelection.moc"

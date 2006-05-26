@@ -20,12 +20,14 @@ set(flake_SRCS
     KoTool.cpp
 )
 
-
 kde4_automoc(${flake_SRCS})
 
-kde4_add_library(flake ${flake_SRCS})
+kde4_add_library(flake SHARED ${flake_SRCS})
 
-kde4_install_libtool_file( ${LIB_INSTALL_DIR} flake )
+target_link_libraries(flake ${KDE4_KDEUI_LIBS})
+
+set_target_properties(flake PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+
 
 install_targets(${LIB_INSTALL_DIR} flake )
 

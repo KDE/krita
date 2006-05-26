@@ -26,13 +26,15 @@ target_link_libraries(kobordertest kotext)
 
 ########### next target ###############
 
-set(kovariabletest_SRCS kovariabletest.cpp )
+set(kovariabletest_SRCS kovariabletest.cpp)
 
 kde4_automoc(${kovariabletest_SRCS})
 
 kde4_add_executable(kovariabletest RUN_UNINSTALLED ${kovariabletest_SRCS})
 
-target_link_libraries(kovariabletest kotext)
+target_link_libraries(kovariabletest kotext ${QT_QTTEST_LIBRARY})
+
+add_test(kotext-kovariabletest ${CMAKE_CURRENT_BINARY_DIR}/kovariabletest)
 
 ########### end ###############
 

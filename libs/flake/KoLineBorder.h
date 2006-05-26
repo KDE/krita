@@ -23,6 +23,8 @@
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
 
+#include <koffice_export.h>
+
 class KoShape;
 class QPainter;
 class QColor;
@@ -31,7 +33,7 @@ class KoViewConverter;
 /**
  * A border for shapes that draws a single line around the object.
  */
-class KoLineBorder : public KoShapeBorderModel {
+class FLAKE_EXPORT KoLineBorder : public KoShapeBorderModel {
 public:
     /// Constructor for a thin line in black
     KoLineBorder();

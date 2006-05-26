@@ -24,6 +24,8 @@
 
 #include <QList>
 
+#include <koffice_export.h>
+
 /**
  * Provide grouping for shapes.
  * The group shape allows you to add children which will then be grouped in selections
@@ -35,7 +37,7 @@
  * of them at the same time.
  * <p>Note that while this object is also a shape, it is not actually visible.
  */
-class KoShapeGroup : public KoShapeContainer {
+class FLAKE_EXPORT KoShapeGroup : public KoShapeContainer {
 public:
     /// Constructor
     KoShapeGroup();

@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QCursor>
 
+#include <koffice_export.h>
+
 class KoCanvasBase;
 class KoGfxEvent;
 class KoViewConverter;
@@ -43,7 +45,7 @@ class QPainter;
  *      It may be preferable to remove the tool system from flake and
  *      make it more general.
  */
-class KoTool : public QObject
+class FLAKE_EXPORT KoTool : public QObject
 {
     Q_OBJECT
 public:

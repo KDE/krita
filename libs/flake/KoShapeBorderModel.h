@@ -24,6 +24,8 @@
 
 #include <QPainter>
 
+#include <koffice_export.h>
+
 class KoShape;
 class KoViewConverter;
 
@@ -35,7 +37,7 @@ class KoViewConverter;
  * and preferred behavior, to have one instance of a border that is reused on several
  * objects.
  */
-class KoShapeBorderModel {
+class FLAKE_EXPORT KoShapeBorderModel {
 public:
     KoShapeBorderModel() {};
     virtual ~KoShapeBorderModel() {};

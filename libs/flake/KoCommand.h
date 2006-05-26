@@ -21,6 +21,7 @@
 #define KOCommand_h
 
 #include <kcommand.h>
+#include <koffice_export.h>
 
 #include <KoSelection.h>
 
@@ -34,7 +35,7 @@ class KoShapeControllerInterface;
 class QString;
 
 /// The undo / redo command for shape moving.
-class KoShapeMoveCommand : public KCommand {
+class FLAKE_EXPORT KoShapeMoveCommand : public KCommand {
 public:
     /**
      * Constructor.
@@ -55,7 +56,7 @@ private:
 };
 
 /// The undo / redo command for shape rotating.
-class KoShapeRotateCommand : public KCommand {
+class FLAKE_EXPORT KoShapeRotateCommand : public KCommand {
 public:
     /**
      * Comand to rotate a selection of shapes.  Note that it just alters the rotated
@@ -75,7 +76,7 @@ private:
 };
 
 /// The undo / redo command for shape sizing.
-class KoShapeSizeCommand : public KCommand {
+class FLAKE_EXPORT KoShapeSizeCommand : public KCommand {
 public:
     KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes);
     void execute ();
@@ -87,7 +88,7 @@ private:
 };
 
 /// The undo / redo command for grouping shapes
-class KoGroupShapesCommand : public KCommand {
+class FLAKE_EXPORT KoGroupShapesCommand : public KCommand {
 public:
     /**
      * Command to group a set of shapes into a predefined container.
@@ -117,7 +118,7 @@ protected:
 };
 
 /// The undo / redo command for ungrouping shapes
-class KoUngroupShapesCommand : public KoGroupShapesCommand {
+class FLAKE_EXPORT KoUngroupShapesCommand : public KoGroupShapesCommand {
 public:
     /**
      * Command to ungroup a set of shapes from one parent container.
@@ -131,7 +132,7 @@ public:
 };
 
 /// The undo / redo command for creating shapes
-class KoShapeCreateCommand : public KCommand {
+class FLAKE_EXPORT KoShapeCreateCommand : public KCommand {
 public:
     KoShapeCreateCommand( KoShapeControllerInterface *controller, KoShape *shape );
     virtual ~KoShapeCreateCommand();

@@ -25,6 +25,8 @@
 #include "KoTool.h"
 #include "KoSelection.h"
 
+#include <koffice_export.h>
+
 class KoInteractionStrategy;
 
 /**
@@ -34,7 +36,7 @@ class KoInteractionStrategy;
  * XXX: Also transforms? Or better use a separate tool for that.
  * XXX: We already have a moveTool; and 'default' does not say much about the class. What about renaming to KoSelectTool ?  (TZ)
  */
-class KoInteractionTool : public KoTool
+class FLAKE_EXPORT KoInteractionTool : public KoTool
 {
 public:
     /**

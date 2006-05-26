@@ -20,10 +20,12 @@
 #ifndef KOINSETS_H
 #define KOINSETS_H
 
+#include <koffice_export.h>
+
 /**
  * An Insets object is a representation of the borders of a shape.
  */
-struct KoInsets {
+struct FLAKE_EXPORT KoInsets {
 public:
     /**
      * Constructor.

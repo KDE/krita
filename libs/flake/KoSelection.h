@@ -29,6 +29,8 @@
 #include "KoViewConverter.h"
 #include "KoFlake.h"
 
+#include <koffice_export.h>
+
 typedef QSet<KoShape*> KoSelectionSet;
 
 /**
@@ -44,7 +46,7 @@ typedef QSet<KoShape*> KoSelectionSet;
  * A selection, however, should not be selectable. We need to think
  * a little about the interaction here.
  */
-class KoSelection : public QObject, public KoShape {
+class FLAKE_EXPORT KoSelection : public QObject, public KoShape {
     Q_OBJECT
 
 public:

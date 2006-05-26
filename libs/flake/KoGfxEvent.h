@@ -23,11 +23,13 @@
 
 #include <QMouseEvent>
 
+#include <koffice_export.h>
+
 /**
  * The event used in Flake to have both the original (canvas based) position as
  * well as the normalized position.
  */
-class KoGfxEvent
+class FLAKE_EXPORT KoGfxEvent
 {
 public:
     /**

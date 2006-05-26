@@ -25,11 +25,12 @@ class KoSelection;
 
 #include "KoShape.h"
 #include <QPainterPath>
+#include <koffice_export.h>
 
 /**
  * Example/test flake object that draws a Shape based on a path.
  */
-class KoPathShape : public KoShape
+class FLAKE_EXPORT KoPathShape : public KoShape
 {
 public:
     KoPathShape();

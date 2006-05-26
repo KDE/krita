@@ -24,12 +24,14 @@
 
 #include <KoShape.h>
 
+#include <koffice_export.h>
+
 class QPainter;
 
 /**
  * Simple Rectangle shape.
  */
-class KoRectangleShape : public KoShape
+class FLAKE_EXPORT KoRectangleShape : public KoShape
 {
 public:
     KoRectangleShape();

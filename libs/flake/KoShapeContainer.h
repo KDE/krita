@@ -25,6 +25,8 @@
 
 #include <QList>
 
+#include <koffice_export.h>
+
 class QPainter;
 class QPointF;
 
@@ -35,7 +37,7 @@ class QPointF;
  * for the KoShapeContainer.
  * @see KoShapeContainer
  */
-class KoGraphicsContainerModel {
+class FLAKE_EXPORT KoGraphicsContainerModel {
 public:
     /// default constructor
     KoGraphicsContainerModel() {} ;
@@ -120,7 +122,7 @@ public:
  * and the width of the individual columns gets too small, the model can choose to
  * remove a child or add one when the width allows another column.
  */
-class KoShapeContainer : public KoShape {
+class FLAKE_EXPORT KoShapeContainer : public KoShape {
 public:
     /**
      * Default constructor; uses simple internal model.

@@ -168,25 +168,25 @@ public:
      * Convert a coordinate in pt to pixels.
      * @param normalPoint the point in the normal coordinate system of a KoShape.
      */
-    QPointF normalToView( const QPointF normalPoint );
+    QPointF normalToView( const QPointF &normalPoint );
 
     /**
      * Convert a coordinate in pixels to pt.
      * @param viewPoint the point in the coordinate system of the widget, or window.
      */
-    QPointF viewToNormal( const QPointF viewPoint );
+    QPointF viewToNormal( const QPointF &viewPoint );
 
     /**
      * Convert a rectangle in pt to pixels.
      * @param normalRect the rect in the normal coordinate system of a KoShape.
      */
-    QRectF normalToView( const QRectF normalRect );
+    QRectF normalToView( const QRectF &normalRect );
 
     /**
      * Convert a rectangle in pixels to pt.
      * @param viewRect the rect in the coordinate system of the widget, or window.
      */
-    QRectF viewToNormal( const QRectF viewRect );
+    QRectF viewToNormal( const QRectF &viewRect );
 
     /**
      * set the zoom levels of the individual x and y axis to the pointer paramets.

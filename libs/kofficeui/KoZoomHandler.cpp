@@ -72,22 +72,22 @@ void KoZoomHandler::setZoom( int zoom )
     }
 }
 
-QPointF KoZoomHandler::normalToView( const QPointF normalPoint ) {
+QPointF KoZoomHandler::normalToView( const QPointF &normalPoint ) {
     return QPointF( zoomItX( normalPoint.x() ), zoomItY( normalPoint.y() ) );
 }
 
-QPointF KoZoomHandler::viewToNormal( const QPointF viewPoint ) {
+QPointF KoZoomHandler::viewToNormal( const QPointF &viewPoint ) {
     return QPointF( unzoomItX( viewPoint.x() ), unzoomItY( viewPoint.y() ) );
 }
 
-QRectF KoZoomHandler::normalToView( const QRectF normalRect ) {
+QRectF KoZoomHandler::normalToView( const QRectF &normalRect ) {
     QRectF r;
     r.setCoords( zoomItX( normalRect.left() ),  zoomItY( normalRect.top() ),
                   zoomItX( normalRect.right() ), zoomItY( normalRect.bottom() ) );
     return r;
 }
 
-QRectF KoZoomHandler::viewToNormal( const QRectF viewRect ) {
+QRectF KoZoomHandler::viewToNormal( const QRectF &viewRect ) {
     QRectF r;
     r.setCoords( unzoomItX( viewRect.left() ),  unzoomItY( viewRect.top() ),
                   unzoomItX( viewRect.right() ), unzoomItY( viewRect.bottom() ) );

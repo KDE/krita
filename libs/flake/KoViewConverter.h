@@ -23,8 +23,6 @@
 #include <QPointF>
 #include <QRectF>
 
-#include <koffice_export.h>
-
 /**
  * The interface for view conversions.
  * All KoShape based objects are using a postscript-point (pt) based measurement system
@@ -32,7 +30,7 @@
  * we are painting, and a conversion to the normalized coordinate system if we
  * receive mouse events so we can figure out which KoShape object was touched.
  */
-class FLAKE_EXPORT KoViewConverter {
+class KoViewConverter {
 public:
     KoViewConverter() {};
     virtual ~KoViewConverter() {};
@@ -41,25 +39,25 @@ public:
      * Convert a coordinate in pt to pixels.
      * @param normalPoint the point in the normal coordinate system of a KoShape.
      */
-    virtual QPointF normalToView( const QPointF normalPoint ) = 0;
+    virtual QPointF normalToView( const QPointF &normalPoint ) = 0;
 
     /**
      * Convert a coordinate in pixels to pt.
      * @param viewPoint the point in the coordinate system of the widget, or window.
      */
-    virtual QPointF viewToNormal( const QPointF viewPoint ) = 0;
+    virtual QPointF viewToNormal( const QPointF &viewPoint ) = 0;
 
     /**
      * Convert a rectangle in pt to pixels.
      * @param normalRect the rect in the normal coordinate system of a KoShape.
      */
-    virtual QRectF normalToView( const QRectF normalRect ) = 0;
+    virtual QRectF normalToView( const QRectF &normalRect ) = 0;
 
     /**
      * Convert a rectangle in pixels to pt.
      * @param viewRect the rect in the coordinate system of the widget, or window.
      */
-    virtual QRectF viewToNormal( const QRectF viewRect ) = 0;
+    virtual QRectF viewToNormal( const QRectF &viewRect ) = 0;
 
     /**
      * set the zoom levels of the individual x and y axis to the pointer paramets.

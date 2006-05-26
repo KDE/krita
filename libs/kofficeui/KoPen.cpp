@@ -63,7 +63,7 @@ void KoPen::setPointWidth(double w)
 QPen KoPen::zoomedPen(KoZoomHandler* zoomHandler)
 {
   QPen pen = *this;
-  pen.setWidth(zoomHandler->zoomItY(m_pointWidth));
+  pen.setWidth(zoomHandler->zoomItYOld(m_pointWidth));
 
   return pen;
 }

@@ -1462,12 +1462,12 @@ QColor KoTextFormat::shadowColor() const
 
 int KoTextFormat::shadowX( KoTextZoomHandler *zh ) const
 {
-    return zh->zoomItX( d->m_shadowDistanceX );
+    return zh->zoomItXOld( d->m_shadowDistanceX );
 }
 
 int KoTextFormat::shadowY( KoTextZoomHandler *zh ) const
 {
-    return zh->zoomItY( d->m_shadowDistanceY );
+    return zh->zoomItYOld( d->m_shadowDistanceY );
 }
 
 //static

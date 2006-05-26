@@ -98,8 +98,8 @@ void KoGuides::paintGuides( QPainter &painter )
 {
     //painter.setRasterOp( NotROP );
     const KoPageLayout& pl = m_view->koDocument()->pageLayout();
-    int width = qMax( m_view->canvas()->width(), m_zoomHandler->zoomItX( pl.ptWidth ) );
-    int height = qMax( m_view->canvas()->height(), m_zoomHandler->zoomItY( pl.ptHeight ) );
+    int width = qMax( m_view->canvas()->width(), m_zoomHandler->zoomItXOld( pl.ptWidth ) );
+    int height = qMax( m_view->canvas()->height(), m_zoomHandler->zoomItYOld( pl.ptHeight ) );
 
     for ( int i = 0; i < GL_END; ++i )
     {
@@ -118,12 +118,12 @@ void KoGuides::paintGuides( QPainter &painter )
                 painter.save();
                 if ( ( *it )->orientation == Qt::Vertical )
                 {
-                    painter.translate( m_zoomHandler->zoomItX( ( *it )->position ), 0 );
+                    painter.translate( m_zoomHandler->zoomItXOld( ( *it )->position ), 0 );
                     painter.drawLine( 0, 0, 0, height );
                 }
                 else
                 {
-                    painter.translate( 0, m_zoomHandler->zoomItY( ( *it )->position ) );
+                    painter.translate( 0, m_zoomHandler->zoomItYOld( ( *it )->position ) );
                     painter.drawLine( 0, 0, width, 0 );
                 }
                 painter.restore();
@@ -139,7 +139,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     m_mouseSelected = false;
     
     KoPoint p( mapFromScreen( e->pos() ) );
-    KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
+    KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItYOld( 2 ) );
     if ( guideLine )
     {
         m_lastPoint = e->pos();
@@ -221,7 +221,7 @@ bool KoGuides::mouseMoveEvent( QMouseEvent *e )
     else if ( e->modifiers() == Qt::NoModifier )
     {
         KoPoint p( mapFromScreen( e->pos() ) );
-        KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
+        KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItYOld( 2 ) );
         if ( guideLine )
         {
             m_view->canvas()->setCursor( guideLine->orientation == Qt::Vertical ? Qt::SizeHorCursor : Qt::SizeHorCursor );
@@ -254,7 +254,7 @@ bool KoGuides::mouseReleaseEvent( QMouseEvent *e )
                     removeSelected();
             }
         }
-        KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
+        KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItYOld( 2 ) );
         if ( guideLine )
         {
             m_view->canvas()->setCursor( guideLine->orientation == Qt::Vertical ? Qt::SizeHorCursor : Qt::SizeHorCursor );
@@ -385,7 +385,7 @@ void KoGuides::snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus,
             if ( ( *it )->orientation == Qt::Horizontal )
             {
                 double tmp = (*it)->position - rect.top();
-                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.y()))
                     {
@@ -394,7 +394,7 @@ void KoGuides::snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus,
                     }
                 }
                 tmp = (*it)->position - rect.bottom();
-                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.y()))
                     {
@@ -406,7 +406,7 @@ void KoGuides::snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus,
             else
             {
                 double tmp = (*it)->position - rect.left();
-                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.x()))
                     {
@@ -415,7 +415,7 @@ void KoGuides::snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus,
                     }
                 }
                 tmp = (*it)->position - rect.right();
-                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.x()))
                     {
@@ -449,7 +449,7 @@ void KoGuides::snapToGuideLines( KoPoint &pos, int snap, SnapStatus &snapStatus,
             if ( ( *it )->orientation == Qt::Horizontal )
             {
                 double tmp = (*it)->position - pos.y();
-                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItYOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.y()))
                     {
@@ -461,7 +461,7 @@ void KoGuides::snapToGuideLines( KoPoint &pos, int snap, SnapStatus &snapStatus,
             else
             {
                 double tmp = (*it)->position - pos.x();
-                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItXOld( snap ) )
                 {
                     if(QABS( tmp ) < QABS(diff.x()))
                     {
@@ -727,17 +727,17 @@ void KoGuides::addGuide( const QPoint &pos, bool /* horizontal */, int rulerWidt
 void KoGuides::slotChangePosition()
 {
     KoPoint p( mapFromScreen( m_lastPoint ) );
-    KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
+    KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItYOld( 2 ) );
 
     const KoPageLayout& pl = m_view->koDocument()->pageLayout();
     double max = 0.0;
     if ( guideLine->orientation == Qt::Vertical )
     {
-        max = qMax( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->size().width() + m_view->canvasXOffset() - 1 ) );
+        max = qMax( pl.ptWidth, m_zoomHandler->unzoomItXOld( m_view->canvas()->size().width() + m_view->canvasXOffset() - 1 ) );
     }
     else
     {
-        max = qMax( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->size().height() + m_view->canvasYOffset() - 1 ) );
+        max = qMax( pl.ptHeight, m_zoomHandler->unzoomItYOld( m_view->canvas()->size().height() + m_view->canvasYOffset() - 1 ) );
     }
 
     KoGuideLineDia dia( 0, guideLine->position, 0.0, max, m_view->koDocument()->unit() );
@@ -857,12 +857,12 @@ KoGuides::KoGuideLine * KoGuides::find( KoPoint &p, double diff )
 
 void KoGuides::moveSelectedBy( QPoint &p )
 {
-    KoPoint point( m_zoomHandler->unzoomPoint( p ) );
+    KoPoint point( m_zoomHandler->unzoomPointOld( p ) );
     if ( m_guideLines[GL_SELECTED].count() > 1 )
     {
         const KoPageLayout& pl = m_view->koDocument()->pageLayout();
-        double right = qMax( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
-        double bottom = qMax( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
+        double right = qMax( pl.ptWidth, m_zoomHandler->unzoomItXOld( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
+        double bottom = qMax( pl.ptHeight, m_zoomHandler->unzoomItYOld( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
 
         Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
         for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
@@ -914,16 +914,16 @@ KoPoint KoGuides::mapFromScreen( const QPoint & pos )
 {
     int x = pos.x() + m_view->canvasXOffset();
     int y = pos.y() + m_view->canvasYOffset();
-    double xf = m_zoomHandler->unzoomItX( x );
-    double yf = m_zoomHandler->unzoomItY( y );
+    double xf = m_zoomHandler->unzoomItXOld( x );
+    double yf = m_zoomHandler->unzoomItYOld( y );
     return KoPoint( xf, yf );
 }
 
 
 QPoint KoGuides::mapToScreen( const KoPoint & pos )
 {
-    int x = m_zoomHandler->zoomItX( pos.x() ) - m_view->canvasXOffset();
-    int y = m_zoomHandler->zoomItY( pos.y() ) - m_view->canvasYOffset();
+    int x = m_zoomHandler->zoomItXOld( pos.x() ) - m_view->canvasXOffset();
+    int y = m_zoomHandler->zoomItYOld( pos.y() ) - m_view->canvasYOffset();
     return QPoint( x, y );
 }
 

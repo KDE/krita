@@ -198,14 +198,14 @@ int KoBorder::zoomWidthX( double ptWidth, KoZoomHandler * zoomHandler, int minbo
 {
     // If a border was set, then zoom it and apply a minimum of 1, so that it's always visible.
     // If no border was set, apply minborder ( 0 for paragraphs, 1 for frames )
-    return ptWidth > 0 ? qMax( 1, zoomHandler->zoomItX( ptWidth ) /*applies qRound*/ ) : minborder;
+    return ptWidth > 0 ? qMax( 1, zoomHandler->zoomItXOld( ptWidth ) /*applies qRound*/ ) : minborder;
 }
 
 int KoBorder::zoomWidthY( double ptWidth, KoZoomHandler * zoomHandler, int minborder )
 {
     // If a border was set, then zoom it and apply a minimum of 1, so that it's always visible.
     // If no border was set, apply minborder ( 0 for paragraphs, 1 for frames )
-    return ptWidth > 0 ? qMax( 1, zoomHandler->zoomItY( ptWidth ) /*applies qRound*/ ) : minborder;
+    return ptWidth > 0 ? qMax( 1, zoomHandler->zoomItYOld( ptWidth ) /*applies qRound*/ ) : minborder;
 }
 
 void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, const QRect& rect, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int minborder, const QPen& defaultPen, bool drawTopBorder /* = true */, bool drawBottomBorder /* = true */)

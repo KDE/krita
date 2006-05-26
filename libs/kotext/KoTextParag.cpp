@@ -1935,7 +1935,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	painter.save();
 	KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
 	const KoTabulator& tab = m_layout.tabList()[ m_tabCache[ start ] ];
-	int lineWidth = zh->zoomItY( tab.ptWidth );
+	int lineWidth = zh->zoomItYOld( tab.ptWidth );
 	switch ( tab.filling ) {
 	    case TF_DOTS:
 		painter.setPen( QPen( textColor, lineWidth, Qt::DotLine ) );
@@ -3186,7 +3186,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                 int charWidth = format->screenFontMetrics( zh ).width( 'W' );
                 int size = qMin( availWidth, charWidth ) / 2 ; // actually the half size
                 int y = lastY_pix + baseLine_pix - zh->layoutUnitToPixelY( ch.ascent()/2 );
-                int arrowsize = zh->zoomItY( 2 );
+                int arrowsize = zh->zoomItYOld( 2 );
                 painter.drawLine( x - size, y, x + size, y );
                 if ( rightToLeft )
                 {
@@ -3205,7 +3205,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                 KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );
                 int w = format->charWidth( zh, true, &ch, this, 'X' );
                 int size = qMin( w, h_pix * 3 / 4 );
-                int arrowsize = zh->zoomItY( 2 );
+                int arrowsize = zh->zoomItYOld( 2 );
                 // x,y is the bottom right corner of the reversed L
                 //kDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
                 int y = lastY_pix + baseLine_pix - arrowsize;

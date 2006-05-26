@@ -3,7 +3,7 @@
 add_subdirectory( pics )
 
 
-include_directories( ${KOFFICECORE_INCLUDES} )
+include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
 
 
 ########### next target ###############

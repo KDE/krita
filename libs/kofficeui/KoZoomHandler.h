@@ -102,20 +102,20 @@ public:
     KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
     
     // Input: pt. Output: pixels. Resolution and zoom are applied.
-    int zoomItX( double z ) const {
+    int zoomItXOld( double z ) const {
         return qRound( m_zoomedResolutionX * z );
     }
-    int zoomItY( double z ) const {
+    int zoomItYOld( double z ) const {
         return qRound( m_zoomedResolutionY * z );
     }
 
-    QPoint zoomPoint( const KoPoint & p ) const {
-        return QPoint( zoomItX( p.x() ), zoomItY( p.y() ) );
+    QPoint zoomPointOld( const KoPoint & p ) const {
+        return QPoint( zoomItXOld( p.x() ), zoomItYOld( p.y() ) );
     }
-    QRect zoomRect( const KoRect & r ) const {
+    QRect zoomRectOld( const KoRect & r ) const {
         QRect _r;
-        _r.setCoords( zoomItX( r.left() ),  zoomItY( r.top() ),
-                      zoomItX( r.right() ), zoomItY( r.bottom() ) );
+        _r.setCoords( zoomItXOld( r.left() ),  zoomItYOld( r.top() ),
+                      zoomItXOld( r.right() ), zoomItYOld( r.bottom() ) );
         return _r;
     }
     /**
@@ -128,24 +128,24 @@ public:
      * (like when inserting a picture), but then please take
      * care of it afterwards, when you know the reference point.
      */
-    QSize zoomSize( const KoSize & s ) const {
-        return QSize( zoomItX( s.width() ), zoomItY( s.height() ) );
+    QSize zoomSizeOld( const KoSize & s ) const {
+        return QSize( zoomItXOld( s.width() ), zoomItYOld( s.height() ) );
     }
 
     // Input: pixels. Output: pt.
-    double unzoomItX( int x ) const {
+    double unzoomItXOld( int x ) const {
         return static_cast<double>( x ) / m_zoomedResolutionX;
     }
-    double unzoomItY( int y ) const {
+    double unzoomItYOld( int y ) const {
         return static_cast<double>( y ) / m_zoomedResolutionY;
     }
-    KoPoint unzoomPoint( const QPoint & p ) const {
-        return KoPoint( unzoomItX( p.x() ), unzoomItY( p.y() ) );
+    KoPoint unzoomPointOld( const QPoint & p ) const {
+        return KoPoint( unzoomItXOld( p.x() ), unzoomItYOld( p.y() ) );
     }
-    KoRect unzoomRect( const QRect & r ) const {
+    KoRect unzoomRectOld (const QRect & r ) const {
         KoRect _r;
-        _r.setCoords( unzoomItX( r.left() ),  unzoomItY( r.top() ),
-                      unzoomItX( r.right() ), unzoomItY( r.bottom() ) );
+        _r.setCoords( unzoomItXOld( r.left() ),  unzoomItYOld( r.top() ),
+                      unzoomItXOld( r.right() ), unzoomItYOld( r.bottom() ) );
         return _r;
     }
 
@@ -153,7 +153,7 @@ public:
 protected:
     int m_zoom;
     KoZoomMode::Mode m_zoomMode;
-    
+
     double m_resolutionX;
     double m_resolutionY;
     double m_zoomedResolutionX;

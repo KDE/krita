@@ -1,5 +1,7 @@
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
 
+add_subdirectory(tests)
+
 set(flake_SRCS
     KoCommand.cpp
     KoInteractionStrategy.cpp

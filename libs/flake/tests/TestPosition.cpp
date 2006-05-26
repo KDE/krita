@@ -87,4 +87,4 @@ void TestPosition::testSetAbsolutePosition() {
 }
 
 QTEST_MAIN(TestPosition)
-#include "moc_TestPosition.cpp"
+#include "TestPosition.moc"

@@ -27,6 +27,7 @@
 #include <QBrush>
 
 #include "KoViewConverter.h"
+#include <koffice_export.h>
 
 class QPainter;
 class QRectF;
@@ -53,7 +54,7 @@ class KoShapeBorderModel;
  * <p>The KoShape data is completely in postscript-points (pt) (see KoUnit
  * for conversion methods to and from pt).
  */
-class KoShape
+class FLAKE_EXPORT KoShape
 {
 public:
     /**

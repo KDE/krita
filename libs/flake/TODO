@@ -1,7 +1,7 @@
 * Add Commands
   * KoShapeDelete
     Have a bool in this command to see if on destructor we did an execute/unexecute
-    last and thus need to delete the KoShape.
+    last and thus need to delete the KoShape. -> done
     Note that we want a refCounter in the model-backend of the Shape. (picture/text)
 * add a ShearingStrategy
 

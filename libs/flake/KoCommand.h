@@ -145,4 +145,29 @@ protected:
     bool m_deleteShape;
 };
 
+/// The undo / redo command for deleting shapes
+class FLAKE_EXPORT KoShapeDeleteCommand : public KCommand {
+public:
+    /**
+     * Command to delete a single shape by means of a shape controller.
+     * @param controller the controller to used for deleting.
+     * @param shape a single shape that should be deleted.
+     */
+    KoShapeDeleteCommand( KoShapeControllerInterface *controller, KoShape *shape );
+    /**
+     * Command to delete a set of shapes by means of a shape controller.
+     * @param controller the controller to used for deleting.
+     * @param shapes a set of all the shapes that should be deleted.
+     */
+    KoShapeDeleteCommand( KoShapeControllerInterface *controller, const KoSelectionSet &shapes );
+    virtual ~KoShapeDeleteCommand();
+    void execute ();
+    void unexecute ();
+    virtual QString name () const;
+protected:
+    KoShapeControllerInterface *m_controller;
+    QList<KoShape*> m_shapes;
+    bool m_deleteShapes;
+};
+
 #endif

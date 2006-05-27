@@ -188,3 +188,50 @@ void KoShapeCreateCommand::unexecute () {
 QString KoShapeCreateCommand::name () const {
     return "Create shape";
 }
+
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerInterface *controller, KoShape *shape )
+: m_controller( controller )
+, m_deleteShapes( false )
+{
+    m_shapes.append( shape );
+}
+
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerInterface *controller, const KoSelectionSet &shapes ) 
+: m_controller( controller )
+, m_deleteShapes( false )
+{
+    m_shapes = shapes.toList();
+}
+
+KoShapeDeleteCommand::~KoShapeDeleteCommand() {
+    if( ! m_deleteShapes )
+        return;
+
+    foreach (KoShape *shape, m_shapes ) {
+        delete shape;
+    }
+}
+
+void KoShapeDeleteCommand::execute () {
+    if( ! m_controller )
+        return;
+
+    foreach (KoShape *shape, m_shapes ) {
+        m_controller->removeShape( shape );
+    }
+    m_deleteShapes = true;
+}
+
+void KoShapeDeleteCommand::unexecute () {
+    if( ! m_controller )
+        return;
+
+    foreach (KoShape *shape, m_shapes ) {
+        m_controller->addShape( shape );
+    }
+    m_deleteShapes = false;
+}
+
+QString KoShapeDeleteCommand::name () const {
+    return "Delete Shapes";
+}

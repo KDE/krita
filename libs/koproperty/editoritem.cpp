@@ -52,6 +52,95 @@ class EditorItemPrivate
 		Property  *property;
 		Editor  *editor;
 };
+
+//! @internal
+static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QColorGroup& cg, bool isOpen)
+{
+	const int marg = (height -2 - BRANCHBOX_SIZE) / 2;
+	int xmarg = marg;
+//		if (dynamic_cast<EditorGroupItem*>(item))
+//				xmarg = xmarg * 10 / 14 -1;
+#if 0 
+//! @todo disabled: kstyles do not paint background yet... reenable in the future...
+	KStyle* kstyle = dynamic_cast<KStyle*>(widget->style());
+	if (kstyle) {
+		kstyle->drawKStylePrimitive(
+			KStyle::KPE_ListViewExpander, p, w, QRect( xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE ), 
+			cg, isOpen ? 0 : QStyle::Style_On,
+				QStyleOption::Default);
+	}
+	else {
+#endif
+		Q_UNUSED(w);
+		//draw by hand
+		p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
+		p->drawRect(xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE);
+		p->fillRect(xmarg+1, marg + 1, BRANCHBOX_SIZE-2, BRANCHBOX_SIZE-2,
+//			item->listView()->paletteBackgroundColor());
+			cg.base());
+//		p->setPen( item->listView()->paletteForegroundColor() );
+		p->setPen( cg.foreground() );
+		p->drawLine(xmarg+2, marg+BRANCHBOX_SIZE/2, xmarg+BRANCHBOX_SIZE-3, marg+BRANCHBOX_SIZE/2);
+		if(!isOpen) {
+			p->drawLine(xmarg+BRANCHBOX_SIZE/2, marg+2,
+				xmarg+BRANCHBOX_SIZE/2, marg+BRANCHBOX_SIZE-3);
+		}
+//	}
+}
+
+//! @internal
+//! Based on KPopupTitle, see kpopupmenu.cpp
+class GroupWidget : public QWidget
+{
+	public:
+		GroupWidget(EditorGroupItem *parentItem)
+		: QWidget(parentItem->listView()->viewport())
+		, m_parentItem(parentItem)
+		{
+		}
+
+		void setText( const QString &text )
+		{
+			titleStr = text;
+		}
+
+		void setIcon( const QPixmap &pix )
+		{
+			miniicon = pix;
+		}
+
+	protected:
+		virtual void paintEvent(QPaintEvent *) {
+			QRect r(rect());
+			QPainter p(this);
+			kapp->style().drawPrimitive(QStyle::PE_HeaderSection, &p, r, palette().active());
+
+			if (miniicon.isNull()) {
+				paintListViewExpander(&p, this, r.height(), palette().active(), m_parentItem->isOpen());
+			}
+			else {
+				p.drawPixmap(4, (r.height()-miniicon.height())/2, miniicon);
+			}
+
+			if (!titleStr.isNull())
+			{
+				int indent = miniicon.isNull() ? 16 : miniicon.width();
+				p.setPen(palette().active().text());
+				QFont f = p.font();
+				f.setBold(true);
+				p.setFont(f);
+				p.drawText(indent+8, 0, width()-(indent+8),
+						height(), AlignLeft | AlignVCenter | SingleLine,
+						titleStr);
+			}
+//todo			p.setPen(palette().active().mid());
+//todo			p.drawLine(0, 0, r.right(), 0);
+		}
+		QString titleStr;
+		QPixmap miniicon;
+		EditorGroupItem *m_parentItem;
+};
+
 }
 
 using namespace KoProperty;
@@ -153,6 +242,7 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 
 		p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
 		p->drawLine(width-1, 0, width-1, height()-1);
+		p->drawLine(0, -1, width-1, -1);
 
 		p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR ); //! \todo custom color?
 		if (dynamic_cast<EditorDummyItem*>(parent()))
@@ -269,32 +359,8 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 			Qt::AlignLeft | Qt::AlignVCenter /*| Qt::TextSingleLine*/, item->text(0));
 
 		if(item->firstChild())  {
-			//! \todo make BRANCHBOX_SIZE configurable?
-			KStyle* kstyle = 0; //dynamic_cast<KStyle*>(listView()->style());
-			const int lh = item->height();
-			const int marg = (lh -2 - BRANCHBOX_SIZE) / 2;
-			int xmarg = marg;
-			if (dynamic_cast<EditorGroupItem*>(item))
-				xmarg = xmarg * 10 / 14 -1;
-			if (kstyle) {
-#if 0
-				kstyle->drawKStylePrimitive(
-					KStyle::KPE_ListViewExpander, p, listView(),
-					QRect( xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE ), cg, item->isOpen() ? 0 : QStyle::State_On,
-						QStyleOption::SO_Default);
-#endif
-			}
-			else {//draw by hand
-				p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
-				p->drawRect(xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE);
-				p->fillRect(xmarg+1, marg + 1, BRANCHBOX_SIZE-2, BRANCHBOX_SIZE-2,
-					item->listView()->paletteBackgroundColor());
-				p->setPen( item->listView()->paletteForegroundColor() );
-				p->drawLine(xmarg+2, marg+BRANCHBOX_SIZE/2, xmarg+BRANCHBOX_SIZE-3, marg+BRANCHBOX_SIZE/2);
-				if(!item->isOpen())
-					p->drawLine(xmarg+BRANCHBOX_SIZE/2, marg+2,
-						xmarg+BRANCHBOX_SIZE/2, marg+BRANCHBOX_SIZE-3);
-			}
+			paintListViewExpander(p, listView(), item->height(),
+				cg, item->isOpen());
 		}
 
 		// draw icon (if there is one)
@@ -351,14 +417,19 @@ EditorGroupItem::EditorGroupItem(EditorItem *parent, const QString &text)
 {
 	setOpen(true);
 	setSelectable(false);
-	m_label = new QLabel("<b>"+text+"</b>", listView()->viewport());
-	m_label->setBackgroundMode(Qt::PaletteBase);
+	m_label = new GroupWidget(this);
+	m_label->setText(text); //todo: icon?
 	m_label->show();
 }
 
 EditorGroupItem::~EditorGroupItem()
 {
 	delete m_label;
+}
+
+QWidget* EditorGroupItem::label() const
+{
+	return m_label;
 }
 
 void
@@ -396,7 +467,7 @@ void
 EditorGroupItem::setup()
 {
 	K3ListViewItem::setup();
-	setHeight( int(height()*14/10) );
+	setHeight( height()+4 );
 }
 
 ////////////////////////////////////////////////////////

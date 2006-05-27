@@ -41,6 +41,7 @@ namespace KoProperty {
 class EditorItemPrivate;
 class Property;
 class Editor;
+class GroupWidget;
 
 /*! \brief Item for a single property displayed within Editor object.
    \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -96,15 +97,15 @@ class EditorGroupItem : public EditorItem
 		EditorGroupItem(EditorItem *parent, const QString &text);
 		virtual ~EditorGroupItem();
 
-		void  setLabel(QLabel *label) { m_label = label; }
- 		QLabel*  label()  { return m_label; }
+//		void  setLabel(QLabel *label) { m_label = label; }
+		QWidget*  label() const;
 
 	protected:
 		/*! Reimplemented from K3ListViewItem to draw custom contents. */
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 		virtual void setup();
 
-	QLabel  *m_label;
+	GroupWidget *m_label;
 };
 
 //! @internal

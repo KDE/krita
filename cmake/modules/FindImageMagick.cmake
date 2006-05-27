@@ -21,6 +21,8 @@
 #  IMAGEMAGICK_PATCH_VERSION, The patch version number
 #  IMAGEMAGICK_FOUND, If false, do not try to use ImageMagick.
 
+SET(HAVE_MAGICK 0)
+
 if (WIN32)
 
   # Try to find the ImageMagick binary path.
@@ -115,6 +117,7 @@ if(MAGICK_CONFIG_EXECUTABLE)
 endif(MAGICK_CONFIG_EXECUTABLE)
 
 if(IMAGEMAGICK_FOUND)
+   set(HAVE_MAGICK 1)
    if(NOT IMAGEMAGICK_FIND_QUIETLY)
       message(STATUS "Found Image Magick version ${IMAGEMAGICK_VERSION}: ${IMAGEMAGICK_LIBRARIES}")
    endif(NOT IMAGEMAGICK_FIND_QUIETLY)

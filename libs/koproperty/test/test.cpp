@@ -51,7 +51,7 @@ Test::Test()
 	f.setPixelSize(f.pixelSize()*2/3);
 	setFont(f);
 
-+ /*  First, create the Set which will hold the properties.  */
+ /*  First, create the Set which will hold the properties.  */
 	m_set = new Set(this, "test");
 	m_set->setReadOnly(readOnly);
 	Q3CString group;

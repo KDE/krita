@@ -134,6 +134,7 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 
 		void updateEditorGeometry(bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
 		void updateEditorGeometry(EditorItem *item, Widget* widget, bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
+		void updateGroupLabelsPosition();
 
 		void hideEditor();
 

@@ -57,6 +57,8 @@ class KOPROPERTY_EXPORT CustomProperty
 		virtual QVariant value() const = 0;
 
 		/*! Tells whether CustomProperty should be used to get the property's value.
+		CustomProperty::setValue() will always be called. But if hadleValue() == true,
+		then the value stored in the Property won't be changed.
 		You should return true for child properties, and false for others. */
 		virtual bool handleValue() const { return false; }
 

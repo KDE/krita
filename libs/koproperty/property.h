@@ -43,6 +43,9 @@ template<class U> class Q3AsciiDictIterator;
 
  KoProperty framework also supports adding custom property types 
  and custom property editor types using CustomPropertyFactory.
+  If you cannot store your value type in a QVariant, consider using composed properties
+ (see FactoryManager for more information) or storing it in CustomProperty yourself with handleValue()
+  set to true.
 
  \author Cedric Pasteur <cedric.pasteur@free.fr>
  \author Alexander Dymo <cloudtemple@mskat.net>
@@ -59,7 +62,8 @@ class Set;
 //	const QStringList &keys, const QStringList &values);
 
 /*! PropertyType.
-Integers that represent the type of the property. */
+Integers that represent the type of the property. Plugin defined properties
+should have a type number >= UserDefined .*/
 enum PropertyType {
 	//standard supported QVariant types
 	Auto = QVariant::Invalid - 1,
@@ -141,11 +145,20 @@ enum PropertyType {
 	property = Property(name, value, caption, description); // name is a QCString,
 	// value is whatever type QVariant supports
 
-	// To create a list property
+	// To create a valueFromList property (matching strings with strings)
 	QStringList keys, strings;
-	keys << "one" << "two" << "three";
+	keys << "one" << "two" << "three"; // possible values of the property
+	// Strings (possibly i18n-ed) shown in the editor instead of the values
 	strings << i18n("One") << i18n("Two") << i18n("Three");
 	property = Property(name, keys, strings, "two", caption);
+
+	// To create a valueFromList property (matching strings with QVariant)
+	QValueList<QVariant> keys2;
+	keys2.append(1);
+	keys2.append(2);
+	keys2.append(3);
+	Property::ListData listData(keys2, strings);
+	m_set->addProperty(new Property("List2", listData, "otheritem", "List2"), group);
 	\endcode
 
 	Note that you need to use QVariant(bool, int) to create a boolean property value.

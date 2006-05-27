@@ -623,7 +623,7 @@ Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 	//update geometry earlier, because Widget::setValue() can depend on widget's geometry
 	updateEditorGeometry(d->currentItem, widget);
 
-	if(widget && !widget->property() || changeWidgetProperty)
+	if(widget && (!widget->property() || changeWidgetProperty))
 		widget->setProperty(property);
 
 //	if (!d->doNotSetFocusOnSelection) {

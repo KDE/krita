@@ -37,16 +37,16 @@ static KCmdLineOptions options[] =
 int main(int argc, char **argv)
 {
     KAboutData about("proptest", "KoProperty Test", version, description,
-                     KAboutData::License_GPL, "(C) 2003 Cédric Pasteur", 0, 0, "cedric.pasteur@free.fr");
-    about.addAuthor( "Cédric Pasteur", 0, "cedric.pasteur@free.fr" );
+                     KAboutData::License_GPL, "(C) 2005 Cedric Pasteur", 0, 0, "cedric.pasteur@free.fr");
+     about.addAuthor( "Cedric Pasteur", 0, "cedric.pasteur@free.fr" );
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions( options );
     KApplication app;
-    test *mainWin = 0;
+    Test *mainWin = 0;
 
     if (app.isSessionRestored())
     {
-        RESTORE(test);
+        RESTORE(Test);
     }
     else
     {
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
         /// @todo do something with the command line args here
 
-        mainWin = new test();
+        mainWin = new Test();
         app.setMainWidget( mainWin );
         mainWin->show();
 

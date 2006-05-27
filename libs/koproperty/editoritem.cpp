@@ -361,19 +361,19 @@ EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int 
 	//if(column == 1)
 	//	return;
 	p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR ); //! \todo custom color?
-	p->drawLine(0, height()-1, width-1, height()-1);
-	if (column==0) {
-		p->eraseRect(QRect(0,0,width+listView()->columnWidth(1),height()-1));
-	}
-	else {
-		return;
-	}
+
+	p->setClipRect(listView()->itemRect(this));
+	if(column == 1)
+		p->translate(-listView()->columnWidth(0) + 20, 0);
+	int totalWidth = listView()->columnWidth(0) + listView()->columnWidth(1) - 20;
+	p->eraseRect(QRect(0,0, totalWidth,height()-1));
+	p->drawLine(0, height()-1, totalWidth-1, height()-1);
 
 	QFont font = listView()->font();
 	font.setBold(true);
 	p->setFont(font);
 	p->setBrush(cg.highlight());
-	p->setPen(cg.highlightedText());
+	//p->setPen(cg.highlightedText());
 /*
 #ifdef QT_ONLY
 		QListViewItem::paintCell(p, cg, column, width, align);
@@ -381,8 +381,8 @@ EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int 
 		K3ListViewItem::paintCell(p, cg, column, width, align);
 #endif*/
 	p->setPen(cg.text());
-	p->drawText(QRect(0,0, width+listView()->columnWidth(1), height()),
-		Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, text(0));
+	p->drawText(QRect(0,0, totalWidth, height()),
++ 		Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, text(0));
 }
 
 void

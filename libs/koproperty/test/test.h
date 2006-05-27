@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004-2005 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _TEST_H_
-#define _TEST_H_
+#ifndef TEST_H
+#define TEST_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -28,27 +28,20 @@
 
 #include "set.h"
 
-/**
- * @short Application Main Window
- * @author Cédric Pasteur <cedric.pasteur@free.fr>
+/*!
+ * @short KoProperty test appliation main window
+ * @author Cedric Pasteur <cedric.pasteur@free.fr>
  * @version 0.1
  */
-class test : public KMainWindow
+class Test : public KMainWindow
 {
-    Q_OBJECT
-public:
-    /**
-     * Default Constructor
-     */
-    test();
+	Q_OBJECT
+	public:
+	    Test();
+		virtual ~Test();
 
-    /**
-     * Default Destructor
-     */
-    virtual ~test();
-    
-private:
+	private:
 	KoProperty::Set *m_set;
 };
 
-#endif // _TEST_H_
+#endif

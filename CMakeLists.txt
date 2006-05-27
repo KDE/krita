@@ -10,6 +10,7 @@ find_package(ZLIB REQUIRED)
 macro_optional_find_package(OpenEXR)
 macro_optional_find_package(Exif)
 macro_optional_find_package(PythonLibs)
+macro_optional_find_package(LibArt)
 
 if (APPLE)
    find_package(Carbon REQUIRED)

@@ -74,7 +74,7 @@ Test::Test()
 	m_set->addProperty(new Property("List", list, name_list, "otheritem", "List"), group);
 
 	// A valueFromList property matching strings with ints (could be any type supported by QVariant)
-	QValueList<QVariant> keys;
+	QList<QVariant> keys;
 	keys.append(1);
 	keys.append(2);
 	keys.append(3);

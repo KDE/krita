@@ -689,7 +689,7 @@ Editor::updateGroupLabelsPosition()
 
 	EditorGroupItem *group = dynamic_cast<EditorGroupItem*>(d->topItem->firstChild());
 	while(group) {
-		QRect r = itemRect((QListViewItem*) group);
+		QRect r = itemRect((Q3ListViewItem*) group);
 		r.setX(20);
 		if(group->label())
 			group->label()->setGeometry(r);

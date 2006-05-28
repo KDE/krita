@@ -28,7 +28,8 @@ include_HEADERS =  \
     kis_composite_op.h \
     kis_profile.h \
     kis_histogram_producer.h \
-    kis_basic_histogram_producers.h kis_u8_base_colorspace.h kis_u16_base_colorspace.h kis_f16half_base_colorspace.h kis_f32_base_colorspace.h
+    kis_basic_histogram_producers.h kis_u8_base_colorspace.h kis_u16_base_colorspace.h kis_f16half_base_colorspace.h kis_f32_base_colorspace.h \
+    kis_colorspace_factory_registry.h kis_abstract_colorspace.h
 
 
 if include_kunittest_tests

@@ -43,7 +43,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_canvas_subject.h"
 #include "kis_global.h"
-#include "kis_debug_areas.h"
+// #include "kis_debug_areas.h"
 #include "kis_types.h"
 #include "kis_profile.h"
 #include "kis_opengl_image_context.h"

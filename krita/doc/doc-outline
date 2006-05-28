@@ -1,9 +1,10 @@
 Krita documentation outline
 
 
-Last edited 2006-01-31 (Sander Koning)
+Last edited 2006-05-28 (Sander Koning)
 
 Changelog (of major updates)
+2006-05-28: ASK: split into 1.5 and 1.6 parts
 2006-01-31: ASK: elaborate on parts to be written; consistent spelling
 2006-01-26: ASK: split the "Using Krita" chapter
 2006-01-21: ASK: update and make consistent
@@ -45,7 +46,62 @@ An outline of the manual content as in krita.kwd, included here for reference:
   - Help contact info
 
 
-The current outline:
+
+Outline for the 1.5 manual (final as of 2006-05-31):
+
+- Introduction
+  - What is Krita
+  - Key features
+    - Color management
+    - File formats
+  - About this manual
+  - About the application author
+
+- Tutorial
+  - Starting to know Krita (up to a new document)
+  - A small selections and layers tutorial
+  - Quick start guides
+    - Crop an area and save it as a new image
+    - Draw a rectangle on you picture
+
+- Layers
+  - General information
+  - Adjustment layers ([TODO] elaborate)
+
+- Selections
+  - Making a selection
+  - Painting your selection
+  - Unselecting
+  - Making a new selection
+  - Selecting a contiguous area (magic wand)
+  - Selecting similar colors
+  - Inverting the selection
+
+- Filters
+
+- Colorspaces
+  - Introduction to colorspaces
+  - Available colorspaces
+
+- Commands
+  - General layout
+  - Menus
+  - Toolbars
+  - Palettes
+  - Dialogs
+
+- Settings
+
+- Scripting
+
+- FAQ
+
+- Credits
+
+- Installation
+
+
+The current outline (going to 1.6):
 
 - Introduction
   - What is Krita
@@ -112,6 +168,7 @@ The current outline:
 - Scripting
 
 - [TODO] Developers' information
+  - [TODO] plugins (see BSAR's text in 1.6/koffice/krita/doc)
 
 - FAQ
 

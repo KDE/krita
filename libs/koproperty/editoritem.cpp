@@ -31,6 +31,8 @@
 #include <QStyle>
 #include <QLabel>
 #include <qstyleoption.h>
+#include <QStyleOptionHeader>
+#include <QApplication>
 
 #ifdef QT_ONLY
 #else
@@ -113,7 +115,12 @@ class GroupWidget : public QWidget
 		virtual void paintEvent(QPaintEvent *) {
 			QRect r(rect());
 			QPainter p(this);
-			kapp->style().drawPrimitive(QStyle::PE_HeaderSection, &p, r, palette().active());
+
+			QStyleOptionHeader so;
+			so.rect = r;
+			so.palette = palette().active();
+
+			qApp->style()->drawControl(QStyle::CE_HeaderSection, &so, &p, this);
 
 			if (miniicon.isNull()) {
 				paintListViewExpander(&p, this, r.height(), palette().active(), m_parentItem->isOpen());
@@ -129,9 +136,7 @@ class GroupWidget : public QWidget
 				QFont f = p.font();
 				f.setBold(true);
 				p.setFont(f);
-				p.drawText(indent+8, 0, width()-(indent+8),
-						height(), AlignLeft | AlignVCenter | SingleLine,
-						titleStr);
+				p.drawText(indent+8, 0, width()-(indent+8), height(), Qt::TextSingleLine | Qt::AlignLeft | Qt::AlignVCenter, titleStr);
 			}
 //todo			p.setPen(palette().active().mid());
 //todo			p.drawLine(0, 0, r.right(), 0);

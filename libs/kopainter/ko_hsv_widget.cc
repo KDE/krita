@@ -26,8 +26,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QToolTip>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include "koFrameButton.h"
 #include "koColorSlider.h"
 #include <kcolordialog.h>
@@ -36,12 +35,14 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name)
+KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent)
 {
+    setObjectName(name);
+
     m_ColorButton = new KDualColorButton(this);
     m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
 
-    Q3GridLayout *mGrid = new Q3GridLayout(this, 5, 7, 5, 2);
+    QGridLayout *mGrid = new QGridLayout;
     m_colorwheel = new KoColorWheel(this);
     m_colorwheel->setFixedSize( 120, 120);
     m_VSelector = new KValueSelector(Qt::Vertical, this);
@@ -56,34 +57,43 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name
     mVLabel->setFixedSize(12, 20);
 
     /* setup spin box */
-    mHIn = new QSpinBox(0, 359, 1, this);
+    mHIn = new QSpinBox(this);
+    mHIn->setMinimum(0);
+    mHIn->setMaximum(359);   // Is this correct? 359?
+    mHIn->setSingleStep(1);
     mHIn->setFixedSize(50, 20);
     mHIn->setFocusPolicy( Qt::ClickFocus );
     mHIn->setToolTip( i18n( "Hue" ) );
 
-    mSIn = new QSpinBox(0, 255, 1, this);
+    mSIn = new QSpinBox(this);
+    mSIn->setMinimum(0);
+    mSIn->setMaximum(255);
+    mSIn->setSingleStep(1);
     mSIn->setFixedSize(50, 20);
     mSIn->setFocusPolicy( Qt::ClickFocus );
     mSIn->setToolTip( i18n( "Saturation" ) );
 
-    mVIn = new QSpinBox(0, 255, 1, this);
+    mVIn = new QSpinBox(this);
+    mVIn->setMinimum(0);
+    mVIn->setMaximum(255);
+    mVIn->setSingleStep(1);
     mVIn->setFixedSize(50, 20);
     mVIn->setFocusPolicy( Qt::ClickFocus );
     mVIn->setToolTip( i18n( "Value (brightness)" ) );
 
-    mGrid->addMultiCellWidget(m_ColorButton, 0, 0, 0, 1, Qt::AlignTop);
+    mGrid->addWidget(m_ColorButton, 0, 0, 0, 1, Qt::AlignTop);
 
     mGrid->addWidget(mHLabel, 1, 0);
     mGrid->addWidget(mSLabel, 2, 0);
     mGrid->addWidget(mVLabel, 3, 0);
 
-    mGrid->addMultiCellWidget(m_colorwheel, 0, 3, 2, 4);
+    mGrid->addWidget(m_colorwheel, 0, 3, 2, 4);
 
     mGrid->addWidget(mHIn, 1, 1);
     mGrid->addWidget(mSIn, 2, 1);
     mGrid->addWidget(mVIn, 3, 1);
 
-    mGrid->addMultiCellWidget(m_VSelector, 0, 3, 5, 5);
+    mGrid->addWidget(m_VSelector, 0, 3, 5, 5);
 
 
     connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
@@ -102,6 +112,8 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name
     m_autovalue = true; // So on the initial selection of h or v, s gets set to 255.
 
     update(QColor(Qt::black), QColor(Qt::white));
+
+    setLayout(mGrid);
 }
 
 void KoHSVWidget::slotHChanged(int h)
@@ -238,7 +250,7 @@ void KoHSVWidget::update(const KoColor & fgColor, const KoColor & bgColor)
     mSIn->blockSignals(false);
     mVIn->blockSignals(false);
     m_VSelector->blockSignals(false);
-    m_VSelector->repaint(false);
+    //m_VSelector->repaint(false);
     m_colorwheel->blockSignals(false);
 }
 

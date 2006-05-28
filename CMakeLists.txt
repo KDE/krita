@@ -82,7 +82,7 @@ add_subdirectory(kivio)
 add_subdirectory(koshell)
 add_subdirectory(kounavail)
 add_subdirectory(kplato)
-#add_subdirectory(kpresenter)
+add_subdirectory(kpresenter)
 add_subdirectory(krita)
 add_subdirectory(kspread)
 add_subdirectory(kugar)
@@ -98,7 +98,7 @@ add_subdirectory(filters)
 add_subdirectory(autocorrect)
 add_subdirectory(doc)
 add_subdirectory( cmake )
-message( STATUS "Re-add kpresenter,kexi when we will port them")
+message( STATUS "Re-add kexi when we will port them")
 
 
 

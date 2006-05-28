@@ -27,14 +27,14 @@
 #include "KoRect.h"
 #include "KoPoint.h"
 
-
+#include <koffice_export.h>
 class KoUnitDoubleSpinBox;
 class QRadioButton;
 
 /**
  * @brief Class for setting a guide line position.
  */
-class KoGuideLineDia : public KDialogBase
+class KOFFICEUI_EXPORT KoGuideLineDia : public KDialogBase
 {
     Q_OBJECT
 public:

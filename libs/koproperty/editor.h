@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -82,6 +82,7 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 
 		virtual QSize sizeHint() const;
 		virtual void setFocus();
+		virtual void setSorting( int column, bool ascending = TRUE );
 
 	public slots:
 		/*! Populates the editor with an item for each property in the List.

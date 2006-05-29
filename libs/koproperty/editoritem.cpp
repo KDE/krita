@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -122,24 +122,22 @@ class GroupWidget : public QWidget
 
 			qApp->style()->drawControl(QStyle::CE_HeaderSection, &so, &p, this);
 
-			if (miniicon.isNull()) {
-				paintListViewExpander(&p, this, r.height(), palette().active(), m_parentItem->isOpen());
-			}
-			else {
-				p.drawPixmap(4, (r.height()-miniicon.height())/2, miniicon);
+			paintListViewExpander(&p, this, r.height()+2, palette().active(), m_parentItem->isOpen());
+			if (!miniicon.isNull()) {
+				p.drawPixmap(24, (r.height()-miniicon.height())/2, miniicon);
 			}
 
 			if (!titleStr.isNull())
 			{
-				int indent = miniicon.isNull() ? 16 : miniicon.width();
+				int indent = 16 + (miniicon.isNull() ? 0 : (miniicon.width()+4));
 				p.setPen(palette().active().text());
 				QFont f = p.font();
 				f.setBold(true);
 				p.setFont(f);
 				p.drawText(indent+8, 0, width()-(indent+8), height(), Qt::TextSingleLine | Qt::AlignLeft | Qt::AlignVCenter, titleStr);
 			}
-//todo			p.setPen(palette().active().mid());
-//todo			p.drawLine(0, 0, r.right(), 0);
+//			p.setPen(palette().active().mid());
+//			p.drawLine(0, 0, r.right(), 0);
 		}
 		QString titleStr;
 		QPixmap miniicon;
@@ -187,6 +185,15 @@ EditorItem::EditorItem(K3ListView *parent)
 
 EditorItem::EditorItem(EditorItem *parent, const QString &text)
  : K3ListViewItem(parent, text)
+{
+	d = new EditorItemPrivate();
+	d->property = 0;
+	d->editor = 0;
+	setMultiLinesEnabled(true);
+}
+
+EditorItem::EditorItem(EditorItem *parent, EditorItem *after, const QString &text)
+ : KListViewItem(parent, after, text)
 {
 	d = new EditorItemPrivate();
 	d->property = 0;
@@ -264,7 +271,7 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 #endif
 		Widget *widget = d->editor->createWidgetForProperty(d->property, false /*don't change Widget::property() */);
 		if(widget) {
-			QRect r(0, 0, d->editor->header()->sectionSize(1), height() - (widget->hasBorders() ? 1 : 2));
+			QRect r(0, 0, d->editor->header()->sectionSize(1), height() - (widget->hasBorders() ? 0 : 1));
 			p->setClipRect(r);
 			p->setClipping(true);
 			widget->drawViewer(p, icg, r, d->property->value());
@@ -374,7 +381,7 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 			//int margin = listView()->itemMargin();
 			QPixmap pix = SmallIcon(editorItem->property()->icon());
 			if (!pix.isNull())
-				p->drawPixmap(1, (item->height() - pix.height()) / 2, pix);
+				p->drawPixmap(-19+(19-pix.width())/2, (item->height() - pix.height()) / 2, pix);
 		}
 
 		p->translate(0, item->totalHeight());
@@ -389,7 +396,8 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 
 void
 EditorItem::paintFocus(QPainter *, const QColorGroup &, const QRect & )
-{}
+{
+}
 
 int
 EditorItem::compare( Q3ListViewItem *i, int col, bool ascending ) const
@@ -402,7 +410,8 @@ EditorItem::compare( Q3ListViewItem *i, int col, bool ascending ) const
 //			<< static_cast<EditorItem*>(i)->property()->name() << " "
 //			<< static_cast<EditorItem*>(i)->property()->sortingKey() << endl;
 		return d->property->sortingKey()
-			- ((dynamic_cast<EditorItem*>(i) && dynamic_cast<EditorItem*>(i)->property()) ? dynamic_cast<EditorItem*>(i)->property()->sortingKey() : 0);
+			- ((dynamic_cast<EditorItem*>(i) && dynamic_cast<EditorItem*>(i)->property()) 
+				? dynamic_cast<EditorItem*>(i)->property()->sortingKey() : 0);
 	}
 
 	return 0;
@@ -417,14 +426,20 @@ EditorItem::setHeight( int height )
 
 //////////////////////////////////////////////////////
 
-EditorGroupItem::EditorGroupItem(EditorItem *parent, const QString &text)
- : EditorItem(parent, text), m_label(0)
+EditorGroupItem::EditorGroupItem(EditorItem *parent, EditorItem *after, const QString &text, const QString &icon, int sortOrder)
+ : EditorItem(parent, after, text)
+ , m_label(0)
+ , m_sortOrder(sortOrder)
 {
-	setOpen(true);
-	setSelectable(false);
-	m_label = new GroupWidget(this);
-	m_label->setText(text); //todo: icon?
-	m_label->show();
+	init(icon);
+}
+
+EditorGroupItem::EditorGroupItem(EditorItem *parent, const QString &text, const QString &icon, int sortOrder)
+ : EditorItem(parent, text)
+ , m_label(0)
+ , m_sortOrder(sortOrder)
+{
+	init(icon);
 }
 
 EditorGroupItem::~EditorGroupItem()
@@ -437,10 +452,23 @@ QWidget* EditorGroupItem::label() const
 	return m_label;
 }
 
+void EditorGroupItem::init(const QString &icon)
+{
+	setOpen(true);
+	setSelectable(false);
+	m_label = new GroupWidget(this);
+	m_label->setText(text(0)); //todo: icon?
+	if (!icon.isEmpty())
+		m_label->setIcon( SmallIcon(icon) );
+	m_label->show();
+}
+
 void
-EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int /*width*/, int /*align*/)
+EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int /*align*/)
 {
 	//no need to draw anything since there's a label on top of it
+//	p->fillRect(0, 0, width, height(), cg.base());
+
 	//if(column == 1)
 	//	return;
 	/*p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR ); //! \todo custom color?
@@ -473,6 +501,16 @@ EditorGroupItem::setup()
 {
 	K3ListViewItem::setup();
 	setHeight( height()+4 );
+}
+
+int
+EditorGroupItem::compare( QListViewItem *i, int col, bool ascending ) const
+{
+	if (dynamic_cast<EditorGroupItem*>(i)) {
+		return m_sortOrder 
+			- dynamic_cast<EditorGroupItem*>(i)->m_sortOrder;
+	}
+	return 0;
 }
 
 ////////////////////////////////////////////////////////

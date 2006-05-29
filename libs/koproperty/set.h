@@ -35,9 +35,6 @@ namespace KoProperty {
 class Property;
 class SetPrivate;
 
-typedef QMap<QByteArray, Q3ValueList<QByteArray> > StringListMap ;
-typedef QMapIterator<QByteArray, QStringList> StringListMapIterator;
-
 /*! \brief Lists holding properties in groups
 
    \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -143,14 +140,31 @@ class KOPROPERTY_EXPORT Set : public QObject
 		By default, it only calls Property::setValue(). */
 		void changeProperty(const QByteArray &property, const QVariant &value);
 
-		/*! Sets the i18n'ed string that will be shown in Editor to represent this group. */
+		/*! Sets the i18n'ed string that will be shown in Editor to represent 
+		 \a group. */
 		void setGroupDescription(const QByteArray &group, const QString desc);
 
-		QString groupDescription(const QByteArray &group);
+		/*! \return the i18n'ed description string for \a group that will 
+		 be shown in Editor to represent \a group. If there is no special 
+		 description set for the group, \a group is just returned. */
+		QString groupDescription(const QByteArray &group) const;
 
-		const StringListMap& groups();
+		/*! Sets the icon name \a icon to be displayed for \a group. */
+		void setGroupIcon(const QByteArray &group, const QString& icon);
 
-		/*! Used by property editor to preserve previous selection when this set is assigned again. */
+		/*! \return the icons name for \a group. */
+		QString groupIcon(const QByteArray &group) const;
+
+		/*! \return a list of all group names. The order is the same as the order 
+		 of creation. */
+		const Q3ValueList<QByteArray>& groupNames() const;
+
+		/*! \return a list of all property names. The order is the same as the order 
+		 of creation. */
+		const Q3ValueList<QByteArray>& propertyNamesForGroup(const QCString &group) const;
+
+		/*! Used by property editor to preserve previous selection when this set 
+		 is assigned again. */
 		QByteArray prevSelection() const;
 
 		void setPrevSelection(const QByteArray& prevSelection);
@@ -163,6 +177,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		 For comparing purposes, type names are case insensitive.*/
 		QString typeName() const;
 
+		/*! Prints debug output for this set. */
 		void debug();
 
 	protected:

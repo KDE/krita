@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -63,6 +63,7 @@ class EditorItem : public K3ListViewItem
 		//! Two helper contructors for subclass
 		EditorItem(K3ListView *parent);
 		EditorItem(EditorItem *parent, const QString &text);
+		EditorItem(EditorItem *parent, EditorItem *after, const QString &text);
 
 		virtual ~EditorItem();
 
@@ -94,18 +95,25 @@ class EditorItem : public K3ListViewItem
 class EditorGroupItem : public EditorItem
 {
 	public:
-		EditorGroupItem(EditorItem *parent, const QString &text);
+		EditorGroupItem(EditorItem *parent, EditorItem *after, const QString &text, 
+			const QString &icon, int sortOrder);
+		EditorGroupItem(EditorItem *parent, const QString &text, 
+			const QString &icon, int sortOrder);
 		virtual ~EditorGroupItem();
 
 //		void  setLabel(QLabel *label) { m_label = label; }
 		QWidget*  label() const;
 
 	protected:
+		virtual void init(const QString &icon);
+
 		/*! Reimplemented from K3ListViewItem to draw custom contents. */
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 		virtual void setup();
+		virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
-	GroupWidget *m_label;
+		GroupWidget *m_label;
+		int m_sortOrder;
 };
 
 //! @internal

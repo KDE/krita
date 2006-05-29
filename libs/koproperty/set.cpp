@@ -36,6 +36,9 @@
 #include <klocale.h>
 #endif
 
+typedef QMap<QByteArray, Q3ValueList<QByteArray> > StringListMap;
+typedef QMapIterator<QByteArray, QStringList> StringListMapIterator;
+
 namespace KoProperty {
 
 //! @internal
@@ -54,7 +57,7 @@ class SetPrivate
 	//groups of properties:
 	// list of group name: (list of property names)
 	StringListMap propertiesOfGroup;
-	QMap<QByteArray, QString>  groupsDescription;
+	QMap<QByteArray, QString>  groupDescriptions;
 	// map of property: group
 	QMap<Property*, QByteArray> groupForProperty;
 
@@ -126,7 +129,7 @@ Set::Set(QObject *parent, const QString &typeName)
 {
 	d = new SetPrivate();
 	d->ownProperty = true;
-	d->groupsDescription.insert("common", i18nc("General properties", "General"));
+	d->groupDescriptions.insert("common", i18nc("General properties", "General"));
 	d->typeName = typeName;
 }
 
@@ -143,7 +146,7 @@ Set::Set(bool propertyOwner)
 {
 	d = new SetPrivate();
 	d->ownProperty = propertyOwner;
-	d->groupsDescription.insert("common", i18nc("General properties", "General"));
+	d->groupDescriptions.insert("common", i18nc("General properties", "General"));
 }
 
 Set::~Set()
@@ -219,6 +222,7 @@ Set::clear()
 {
 	aboutToBeCleared();
 	d->propertiesOfGroup.clear();
+	d->groupNames.clear();
 	Property::DictIterator it(d->dict);
 	while (it.current())
 		removeProperty( it.current() );
@@ -240,6 +244,7 @@ Set::addToGroup(const QByteArray &group, Property *property)
 		Q3ValueList<QByteArray> l;
 		l.append(property->name());
 		d->propertiesOfGroup.insert(group, l);
+		d->groupNames.append(group);
 	}
 	else {
 		d->propertiesOfGroup[group].append(property->name());
@@ -254,28 +259,55 @@ Set::removeFromGroup(Property *property)
 		return;
 	QByteArray group = d->groupForProperty[property];
 	d->propertiesOfGroup[group].remove(property->name());
+	if (d->propertiesOfGroup[group].isEmpty()) {
+		//remove group as well
+		d->propertiesOfGroup.remove(group);
+		Q3ValueListIterator<QByteArray> it = d->groupNames.find(group);
+		if (it != d->groupNames.end()) {
+			d->groupNames.remove(it);
+		}
+	}
 	d->groupForProperty.remove(property);
 }
 
-const StringListMap&
-Set::groups()
+const Q3ValueList<QByteArray>&
+Set::groupNames() const
 {
-	return d->propertiesOfGroup;
+	return d->groupNames;
+}
+
+const Q3ValueList<QByteArray>&
+Set::propertyNamesForGroup(const QByteArray &group) const
+{
+	return d->propertiesOfGroup[group];
 }
 
 void
 Set::setGroupDescription(const QByteArray &group, const QString desc)
 {
-	d->groupsDescription[group] = desc;
+	d->groupDescriptions[group] = desc;
 }
 
 QString
 Set::groupDescription(const QByteArray &group)
 {
-	if(d->groupsDescription.contains(group))
-		return d->groupsDescription[group];
+	if(d->groupDescriptions.contains(group))
+		return d->groupDescriptions[group];
 	return group;
 }
+
+void
+Set::setGroupIcon(const QByteArray &group, const QString& icon)
+{
+	d->groupIcons[group] = icon;
+}
+
+QString
+Set::groupIcon(const QByteArray &group) const
+{
+	return d->groupIcons[group];
+}
+
 
 /////////////////////////////////////////////////////
 
@@ -333,7 +365,7 @@ Set::operator= (const Set &set)
 
 	d->ownProperty = set.d->ownProperty;
 	d->prevSelection = set.d->prevSelection;
-	d->groupsDescription = set.d->groupsDescription;
+	d->groupDescriptions = set.d->groupDescriptions;
 
 	// Copy all properties in the list
 	for(Property::DictIterator it(set.d->dict); it.current(); ++it) {
@@ -417,7 +449,7 @@ void Buffer::initialSet(const Set *set)
 	for(Property::DictIterator it(set->d->dict); it.current(); ++it) {
 		Property *prop = new Property( *it.current() );
 		QByteArray group = set->d->groupForProperty[it.current()];
-		QString groupDesc = set->d->groupsDescription[ group ];
+		QString groupDesc = set->d->groupDescriptions[ group ];
 		setGroupDescription( group, groupDesc );
 		addProperty( prop, group );
 		prop->addRelatedProperty( it.current() );

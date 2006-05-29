@@ -206,7 +206,6 @@ void KoFindReplace::connectFind( KFind* find )
 KoFindReplace::~KoFindReplace()
 {
     removeHighlight();
-    emitUndoRedo();
     //kDebug(32500) << "KoFindReplace::~KoFindReplace" << endl;
     delete m_find;
     delete m_replace;
@@ -220,6 +219,7 @@ void KoFindReplace::optionsChanged()
 void KoFindReplace::dialogClosed()
 {
     removeHighlight();
+    emitUndoRedo();
     // we have to stop the match counting when closing the dialog,
     // because Shift-F3 (find previous) would keep increasing that count, wrongly.
     m_doCounting = false;

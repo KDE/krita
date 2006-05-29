@@ -1651,7 +1651,7 @@ KCommand * KoTextObject::insertParagraphCommand( KoTextCursor *cursor )
 {
     if ( protectContent() )
         return 0L;
-    return replaceSelectionCommand( cursor, "\n", QString::null );
+    return replaceSelectionCommand( cursor, "\n", QString::null, KoTextDocument::Standard, CheckNewLine );
 }
 
 void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length, bool repaint )

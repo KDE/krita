@@ -21,7 +21,7 @@
 #ifndef SEQUENCEPARSER_H
 #define SEQUENCEPARSER_H
 
-#include <q3ptrlist.h>
+#include <QList>
 #include <QString>
 
 #include "kformuladefs.h"
@@ -43,15 +43,15 @@ public:
     /**
      * @returns a parse tree.
      */
-    ElementType* parse(Q3PtrList<BasicElement>& elements);
+    ElementType* parse( QList<BasicElement*>& elements);
 
     /**
      * Reads the next token.
      */
     void nextToken();
 
-    uint getStart() const { return tokenStart; }
-    uint getEnd() const { return tokenEnd; }
+    int getStart() const { return tokenStart; }
+    int getEnd() const { return tokenEnd; }
     TokenType getTokenType() const { return type; }
 
     /**
@@ -60,7 +60,7 @@ public:
      * @param pos the position of the element
      * @param type the new type
      */
-    void setElementType(uint pos, ElementType* type);
+    void setElementType( int pos, ElementType* type);
 
     /**
      * @returns a new primitive token.
@@ -98,18 +98,18 @@ private:
      * The elements we want to parse. The parser must not change
      * it!
      */
-    Q3PtrList<BasicElement> list;
+    QList<BasicElement*> list;
 
     /**
      * The position up to which we have read. The current
      * token starts here.
      */
-    uint tokenStart;
+    int tokenStart;
 
     /**
      * The first position after the current token.
      */
-    uint tokenEnd;
+    int tokenEnd;
 
     /**
      * The type of the current token.

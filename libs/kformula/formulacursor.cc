@@ -19,8 +19,6 @@
 */
 
 #include <QPainter>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include <kdebug.h>
 #include <assert.h>
@@ -298,12 +296,12 @@ void FormulaCursor::normalize(Direction direction)
  */
 void FormulaCursor::insert(BasicElement* child, Direction direction)
 {
-    Q3PtrList<BasicElement> list;
+    QList<BasicElement*> list;
     list.append(child);
     insert(list, direction);
 }
 
-void FormulaCursor::insert(Q3PtrList<BasicElement>& children,
+void FormulaCursor::insert(QList<BasicElement*>& children,
                            Direction direction)
 {
     assert( !isReadOnly() );
@@ -317,7 +315,7 @@ void FormulaCursor::insert(Q3PtrList<BasicElement>& children,
  * The cursor needs to be normal (that is be inside a SequenceElement)
  * for this to have any effect.
  */
-void FormulaCursor::remove(Q3PtrList<BasicElement>& children,
+void FormulaCursor::remove(QList<BasicElement*>& children,
                            Direction direction)
 {
     assert( !isReadOnly() );
@@ -349,7 +347,7 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
                                          Direction direction)
 {
     assert( !isReadOnly() );
-    Q3PtrList<BasicElement> list;
+    QList<BasicElement*> list;
     // we suppres deletion here to get an error if something
     // was left in the list.
     //list.setAutoDelete(true);
@@ -385,8 +383,8 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
 BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
 {
     assert( !isReadOnly() );
-    Q3PtrList<BasicElement> childrenList;
-    Q3PtrList<BasicElement> list;
+    QList<BasicElement*> childrenList;
+    QList<BasicElement*> list;
     BasicElement* element = getElement();
     SequenceElement* mainChild = element->getMainChild();
     if ((mainChild != 0) && (mainChild->countChildren() > 0)) {
@@ -398,7 +396,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
     remove(list);
     insert(childrenList, direction);
     if (list.count() > 0) {
-        return list.take(0);
+        return list.takeAt(0);
     }
     return 0;
 }
@@ -660,7 +658,7 @@ void FormulaCursor::copy( QDomDocument& doc )
  * Inserts the elements that could be read from the dom into
  * the list. Returns true on success.
  */
-bool FormulaCursor::buildElementsFromDom( QDomElement root, Q3PtrList<BasicElement>& list )
+bool FormulaCursor::buildElementsFromDom( QDomElement root, QList<BasicElement*>& list )
 {
     assert( !isReadOnly() );
     SequenceElement* sequence = normal();

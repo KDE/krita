@@ -23,8 +23,7 @@
 
 #include <QPoint>
 #include <QSize>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 #include "basicelement.h"
 
@@ -102,7 +101,7 @@ public:
      *
      * We remove ourselve if we are requested to remove our content.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements

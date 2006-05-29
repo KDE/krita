@@ -23,9 +23,9 @@
 
 #include <QClipboard>
 #include <QImage>
-#include <q3ptrlist.h>
+//#include <q3ptrlist.h>
 #include <QObject>
-#include <q3ptrstack.h>
+#include <QStack>
 #include <QString>
 //Added by qt3to4:
 #include <QTextStream>

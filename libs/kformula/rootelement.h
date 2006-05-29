@@ -22,8 +22,7 @@
 #define ROOTELEMENT_H
 
 #include <QPoint>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 #include "basicelement.h"
 
@@ -119,7 +118,7 @@ public:
     /**
      * Reinserts the index if it has been removed.
      */
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -127,7 +126,7 @@ public:
      *
      * We remove ourselve if we are requested to remove our content.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements

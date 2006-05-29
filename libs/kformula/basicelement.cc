@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QString>
 #include <kdebug.h>
 
 #include "contextstyle.h"

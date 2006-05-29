@@ -19,8 +19,6 @@
 */
 
 #include <QPainter>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -867,10 +865,10 @@ void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  * The list will be emptied but stays the property of the caller.
  */
 void IndexElement::insert(FormulaCursor* cursor,
-                          Q3PtrList<BasicElement>& newChildren,
+                          QList<BasicElement*>& newChildren,
                           Direction direction)
 {
-    SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
+    SequenceElement* index = static_cast<SequenceElement*>(newChildren.takeAt(0));
     index->setParent(this);
 
     switch (cursor->getPos()) {
@@ -920,7 +918,7 @@ void IndexElement::insert(FormulaCursor* cursor,
  * The ownership of the list is passed to the caller.
  */
 void IndexElement::remove(FormulaCursor* cursor,
-                          Q3PtrList<BasicElement>& removedChildren,
+                          QList<BasicElement*>& removedChildren,
                           Direction direction)
 {
     int pos = cursor->getPos();

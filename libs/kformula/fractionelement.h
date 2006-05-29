@@ -22,8 +22,7 @@
 #define FRACTIONELEMENT_H
 
 #include "basicelement.h"
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 KFORMULA_NAMESPACE_BEGIN
 class SequenceElement;
@@ -123,7 +122,7 @@ public:
     /**
      * Reinserts the denominator if it has been removed.
      */
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -134,7 +133,7 @@ public:
      * It is possible to remove the denominator. But after this we
      * are senseless and the caller is required to replace us.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
 
     // main child

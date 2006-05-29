@@ -21,9 +21,8 @@
 #ifndef SEQUENCEELEMENT_H
 #define SEQUENCEELEMENT_H
 
-#include <q3ptrlist.h>
+#include <QList>
 #include <QString>
-//Added by qt3to4:
 #include <QKeyEvent>
 
 #include "basicelement.h"
@@ -205,13 +204,13 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements
@@ -291,7 +290,7 @@ public:
      * puts them into the list.
      * Returns false if an error occures.
      */
-    bool buildChildrenFromDom(Q3PtrList<BasicElement>& list, QDomNode n);
+    bool buildChildrenFromDom(QList<BasicElement*>& list, QDomNode n);
 
     /**
      * @returns the latex representation of the element and
@@ -309,7 +308,7 @@ public:
     BasicElement* getChild(uint i) { return children.at(i); }
     //const BasicElement* getChild(uint i) const { return children.at(i); }
 
-    int childPos( BasicElement* child ) { return children.find( child ); }
+    int childPos( BasicElement* child ) { return children.indexOf( child ); }
     int childPos( const BasicElement* child ) const;
 
     class ChildIterator {
@@ -406,7 +405,7 @@ protected:
      * @param context the context the child is in
      * @param child the child's number
      */
-    luPixel getChildPosition( const ContextStyle& context, uint child );
+    luPixel getChildPosition( const ContextStyle& context, int child );
 
     /**
      * @returns whether the child is the first element of its token.
@@ -418,14 +417,14 @@ private:
     /**
      * Removes the children at pos and appends it to the list.
      */
-    void removeChild(Q3PtrList<BasicElement>& removedChildren, int pos);
+    void removeChild(QList<BasicElement*>& removedChildren, int pos);
 
 
     /**
      * Our children. Be sure to notify the rootElement before
      * you remove any.
      */
-    Q3PtrList<BasicElement> children;
+    QList<BasicElement*> children;
 
     /**
      * the syntax tree of the sequence

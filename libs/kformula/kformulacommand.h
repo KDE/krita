@@ -22,8 +22,8 @@
 #define KFORMULACOMMAND_H
 
 #include <QMap>
-#include <q3ptrlist.h>
-#include <q3valuevector.h>
+#include <QList>
+#include <QVector>
 
 #include <kcommand.h>
 
@@ -179,7 +179,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    Q3PtrList<BasicElement> addList;
+    QList<BasicElement*> addList;
 };
 
 
@@ -206,7 +206,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    Q3PtrList<BasicElement> removedList;
+    QList<BasicElement*> removedList;
 
     Direction dir;
 };
@@ -264,7 +264,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    Q3PtrList<BasicElement> removedList;
+    QList<BasicElement*> removedList;
 
     /**
      * The element we might have extracted.
@@ -399,7 +399,7 @@ public:
 
 protected:
 
-    Q3PtrList<TextElement>& childrenList() { return list; }
+    QList<TextElement*>& childrenList() { return list; }
 
     void collectChildren();
 
@@ -411,9 +411,9 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    Q3PtrList<TextElement> list;
+    QList<TextElement*> list;
 
-    Q3PtrList<BasicElement> elementList;
+    QList<BasicElement*> elementList;
 };
 
 
@@ -429,7 +429,7 @@ public:
 
 private:
 
-    typedef Q3ValueVector<CharStyle> StyleList;
+    typedef QVector<CharStyle> StyleList;
 
     StyleList styleList;
     CharStyle charStyle;
@@ -448,7 +448,7 @@ public:
 
 private:
 
-    typedef Q3ValueVector<CharFamily> FamilyList;
+    typedef QVector<CharFamily> FamilyList;
 
     FamilyList familyList;
     CharFamily charFamily;

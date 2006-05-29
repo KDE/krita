@@ -21,21 +21,16 @@
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
 
-// Qt Include
-#include <qdom.h>
-#include <q3ptrlist.h>
 #include <QString>
-//Added by qt3to4:
 #include <QKeyEvent>
+#include <QList>
+#include <QDomElement>
+#include <QDomDocument>
 
-// KDE Include
-
-// Formula include
 #include "contextstyle.h"
 #include "kformuladefs.h"
 
 class QKeyEvent;
-
 class KCommand;
 
 KFORMULA_NAMESPACE_BEGIN
@@ -270,13 +265,13 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction) {}
+    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction) {}
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      */
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction) {}
+    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction) {}
 
     /**
      * Moves the cursor to a normal place where new elements

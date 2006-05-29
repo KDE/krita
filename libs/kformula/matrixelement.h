@@ -21,8 +21,6 @@
 #ifndef MATRIXELEMENT_H
 #define MATRIXELEMENT_H
 
-#include <q3ptrlist.h>
-
 #include "basicelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -41,7 +39,7 @@ class MatrixElement : public BasicElement {
 
     MatrixElement& operator=( const MatrixElement& ) { return *this; }
 public:
-    MatrixElement(uint rows = 1, uint columns = 1, BasicElement* parent = 0);
+    MatrixElement( int rows = 1, int columns = 1, BasicElement* parent = 0);
     ~MatrixElement();
 
     MatrixElement( const MatrixElement& );
@@ -189,10 +187,10 @@ public:
 
     virtual QString formulaString();
 
-    uint getRows() const { return content.count(); }
-    uint getColumns() const { return content.getFirst()->count(); }
+    int getRows() const { return content.count(); }
+    int getColumns() const { return content.first()->count(); }
 
-    SequenceElement* elementAt(uint row, uint column);
+    SequenceElement* elementAt( int row, int column );
 
     virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
 
@@ -225,7 +223,7 @@ protected:
 
 private:
 
-    MatrixSequenceElement* getElement(uint row, uint column)
+    MatrixSequenceElement* getElement( int row, int column )
         { return content.at(row)->at(column); }
 
     /**
@@ -233,12 +231,12 @@ private:
      * row and column if found.
      * Returns true if the element was found. false otherwise.
      */
-    bool searchElement(BasicElement* element, uint& row, uint& column);
+    bool searchElement( BasicElement* element, int& row, int& column );
 
     /**
      * The elements we contain.
      */
-    Q3PtrList< Q3PtrList< MatrixSequenceElement > > content;
+    QList< QList< MatrixSequenceElement* >* > content;
 };
 
 
@@ -338,8 +336,8 @@ public:
      */
     virtual void dispatchFontCommand( FontCommand* cmd );
 
-    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
-    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
+    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
     virtual void normalize(FormulaCursor*, Direction);
 
@@ -394,7 +392,7 @@ private:
     /**
      * The list of sequences. Each one is a line.
      */
-    Q3PtrList< MultilineSequenceElement > content;
+    QList<MultilineSequenceElement*> content;
 };
 
 

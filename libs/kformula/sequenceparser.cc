@@ -23,8 +23,6 @@
 #include "sequenceparser.h"
 #include "symboltable.h"
 #include "textelement.h"
-//Added by qt3to4:
-#include <Q3PtrList>
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -37,13 +35,13 @@ SequenceParser::SequenceParser( const SymbolTable& t )
 }
 
 
-void SequenceParser::setElementType( uint pos, ElementType* type )
+void SequenceParser::setElementType( int pos, ElementType* type )
 {
     list.at( pos )->setElementType( type );
 }
 
 
-ElementType* SequenceParser::parse( Q3PtrList<BasicElement>& elements )
+ElementType* SequenceParser::parse( QList<BasicElement*>& elements )
 {
     list = elements;
     return new SequenceType( this );

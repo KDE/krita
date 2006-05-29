@@ -18,10 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3memarray.h>
 #include <QPainter>
-#include <q3ptrlist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QKeyEvent>
 
 #include <kdebug.h>
@@ -41,9 +39,10 @@
 KFORMULA_NAMESPACE_BEGIN
 
 
-class MatrixSequenceElement : public SequenceElement {
+class MatrixSequenceElement : public SequenceElement
+{
     typedef SequenceElement inherited;
-public:
+  public:
 
     MatrixSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
     virtual MatrixSequenceElement* clone() {
@@ -62,26 +61,27 @@ public:
 };
 
 
-class KFCRemoveRow : public Command {
-public:
-    KFCRemoveRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c );
+class KFCRemoveRow : public Command
+{
+  public:
+    KFCRemoveRow( const QString& name, Container* document, MatrixElement* m, int r, int c );
     ~KFCRemoveRow();
 
     virtual void execute();
     virtual void unexecute();
 
-protected:
+  protected:
     MatrixElement* matrix;
-    uint rowPos;
-    uint colPos;
+    int rowPos;
+    int colPos;
 
-    Q3PtrList<MatrixSequenceElement>* row;
+    QList<MatrixSequenceElement*>* row;
 };
 
 
 class KFCInsertRow : public KFCRemoveRow {
 public:
-    KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c );
+    KFCInsertRow( const QString& name, Container* document, MatrixElement* m, int r, int c );
 
     virtual void execute()   { KFCRemoveRow::unexecute(); }
     virtual void unexecute() { KFCRemoveRow::execute(); }
@@ -90,7 +90,7 @@ public:
 
 class KFCRemoveColumn : public Command {
 public:
-    KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c );
+    KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, int r, int c );
     ~KFCRemoveColumn();
 
     virtual void execute();
@@ -98,16 +98,16 @@ public:
 
 protected:
     MatrixElement* matrix;
-    uint rowPos;
-    uint colPos;
+    int rowPos;
+    int colPos;
 
-    Q3PtrList<MatrixSequenceElement>* column;
+    QList<MatrixSequenceElement*>* column;
 };
 
 
 class KFCInsertColumn : public KFCRemoveColumn {
 public:
-    KFCInsertColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c );
+    KFCInsertColumn( const QString& name, Container* document, MatrixElement* m, int r, int c );
 
     virtual void execute()   { KFCRemoveColumn::unexecute(); }
     virtual void unexecute() { KFCRemoveColumn::execute(); }
@@ -130,8 +130,8 @@ KCommand* MatrixSequenceElement::buildCommand( Container* container, Request* re
     case req_removeRow: {
         MatrixElement* matrix = static_cast<MatrixElement*>( getParent() );
         FormulaCursor* cursor = container->activeCursor();
-        for ( uint row = 0; row < matrix->getRows(); row++ ) {
-            for ( uint col = 0; col < matrix->getColumns(); col++ ) {
+        for ( int row = 0; row < matrix->getRows(); row++ ) {
+            for ( int col = 0; col < matrix->getColumns(); col++ ) {
                 if ( matrix->getElement( row, col ) == cursor->getElement() ) {
                     switch ( *request ) {
                     case req_appendColumn:
@@ -168,7 +168,7 @@ KCommand* MatrixSequenceElement::buildCommand( Container* container, Request* re
 }
 
 
-KFCRemoveRow::KFCRemoveRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
+KFCRemoveRow::KFCRemoveRow( const QString& name, Container* document, MatrixElement* m, int r, int c )
     : Command( name, document ), matrix( m ), rowPos( r ), colPos( c ), row( 0 )
 {
 }
@@ -183,10 +183,10 @@ void KFCRemoveRow::execute()
     FormulaCursor* cursor = getExecuteCursor();
     row = matrix->content.at( rowPos );
     FormulaElement* formula = matrix->formula();
-    for ( uint i = matrix->getColumns(); i > 0; i-- ) {
+    for ( int i = matrix->getColumns(); i > 0; i-- ) {
         formula->elementRemoval( row->at( i-1 ) );
     }
-    matrix->content.take( rowPos );
+    matrix->content.takeAt( rowPos );
     formula->changed();
     if ( rowPos < matrix->getRows() ) {
         matrix->getElement( rowPos, colPos )->goInside( cursor );
@@ -208,22 +208,22 @@ void KFCRemoveRow::unexecute()
 }
 
 
-KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
+KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElement* m, int r, int c )
     : KFCRemoveRow( name, document, m, r, c )
 {
-    row = new Q3PtrList< MatrixSequenceElement >;
-    row->setAutoDelete( true );
-    for ( uint i = 0; i < matrix->getColumns(); i++ ) {
+    row = new QList<MatrixSequenceElement*>;
+//    row->setAutoDelete( true );
+    for ( int i = 0; i < matrix->getColumns(); i++ ) {
         row->append( new MatrixSequenceElement( matrix ) );
     }
 }
 
 
-KFCRemoveColumn::KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
+KFCRemoveColumn::KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, int r, int c )
     : Command( name, document ), matrix( m ), rowPos( r ), colPos( c )
 {
-    column = new Q3PtrList< MatrixSequenceElement >;
-    column->setAutoDelete( true );
+    column = new QList<MatrixSequenceElement*>;
+//    column->setAutoDelete( true );
 }
 
 KFCRemoveColumn::~KFCRemoveColumn()
@@ -235,10 +235,10 @@ void KFCRemoveColumn::execute()
 {
     FormulaCursor* cursor = getExecuteCursor();
     FormulaElement* formula = matrix->formula();
-    for ( uint i = 0; i < matrix->getRows(); i++ ) {
+    for ( int i = 0; i < matrix->getRows(); i++ ) {
         column->append( matrix->getElement( i, colPos ) );
         formula->elementRemoval( column->at( i ) );
-        matrix->content.at( i )->take( colPos );
+        matrix->content.at( i )->takeAt( colPos );
     }
     formula->changed();
     if ( colPos < matrix->getColumns() ) {
@@ -252,8 +252,8 @@ void KFCRemoveColumn::execute()
 
 void KFCRemoveColumn::unexecute()
 {
-    for ( uint i = 0; i < matrix->getRows(); i++ ) {
-        matrix->content.at( i )->insert( colPos, column->take( 0 ) );
+    for ( int i = 0; i < matrix->getRows(); i++ ) {
+        matrix->content.at( i )->insert( colPos, column->takeAt( 0 ) );
     }
     FormulaCursor* cursor = getExecuteCursor();
     matrix->getElement( rowPos, colPos )->goInside( cursor );
@@ -262,27 +262,27 @@ void KFCRemoveColumn::unexecute()
 }
 
 
-KFCInsertColumn::KFCInsertColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
+KFCInsertColumn::KFCInsertColumn( const QString& name, Container* document, MatrixElement* m, int r, int c )
     : KFCRemoveColumn( name, document, m, r, c )
 {
-    for ( uint i = 0; i < matrix->getRows(); i++ ) {
+    for ( int i = 0; i < matrix->getRows(); i++ ) {
         column->append( new MatrixSequenceElement( matrix ) );
     }
 }
 
 
-MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
+MatrixElement::MatrixElement( int rows, int columns, BasicElement* parent)
     : BasicElement(parent)
 {
-    for (uint r = 0; r < rows; r++) {
-        Q3PtrList< MatrixSequenceElement >* list = new Q3PtrList< MatrixSequenceElement >;
-        list->setAutoDelete(true);
-        for (uint c = 0; c < columns; c++) {
+    for ( int r = 0; r < rows; r++) {
+        QList<MatrixSequenceElement*>* list = new QList<MatrixSequenceElement*>;
+//        list->setAutoDelete(true);
+        for ( int c = 0; c < columns; c++) {
             list->append(new MatrixSequenceElement(this));
         }
         content.append(list);
     }
-    content.setAutoDelete(true);
+//    content.setAutoDelete(true);
 }
 
 MatrixElement::~MatrixElement()
@@ -293,27 +293,19 @@ MatrixElement::~MatrixElement()
 MatrixElement::MatrixElement( const MatrixElement& other )
     : BasicElement( other )
 {
-    uint rows = other.getRows();
-    uint columns = other.getColumns();
-
-    Q3PtrListIterator< Q3PtrList< MatrixSequenceElement > > rowIter( other.content );
-    for (uint r = 0; r < rows; r++) {
-        ++rowIter;
-        Q3PtrListIterator< MatrixSequenceElement > colIter( *rowIter.current() );
-
-        Q3PtrList< MatrixSequenceElement >* list = new Q3PtrList< MatrixSequenceElement >;
-        list->setAutoDelete(true);
-        for (uint c = 0; c < columns; c++) {
-            ++colIter;
-            MatrixSequenceElement *mse =
-                //new MatrixSequenceElement( *( other.getElement( r, c ) ) );
-                new MatrixSequenceElement( *colIter.current() );
+    foreach( QList<MatrixSequenceElement*>* tmp, other.content )
+    {
+        QList<MatrixSequenceElement*>* list = new QList<MatrixSequenceElement*>;
+//        list->setAutoDelete(true);
+        foreach( MatrixSequenceElement* tmpCol, *tmp )
+	{
+            MatrixSequenceElement *mse = new MatrixSequenceElement( *tmpCol );
             list->append( mse );
             mse->setParent( this );
         }
         content.append(list);
     }
-    content.setAutoDelete(true);
+//    content.setAutoDelete(true);
 }
 
 
@@ -337,11 +329,11 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
         LuPixelPoint myPos(parentOrigin.x() + getX(),
                            parentOrigin.y() + getY());
 
-        uint rows = getRows();
-        uint columns = getColumns();
+        int rows = getRows();
+        int columns = getColumns();
 
-        for (uint r = 0; r < rows; r++) {
-            for (uint c = 0; c < columns; c++) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
                 BasicElement* element = getElement(r, c);
                 e = element->goToPos(cursor, handled, point, myPos);
                 if (e != 0) {
@@ -354,8 +346,8 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
         luPixel dx = point.x() - myPos.x();
         luPixel dy = point.y() - myPos.y();
 
-        uint row = rows;
-        for (uint r = 0; r < rows; r++) {
+        int row = rows;
+        for (int r = 0; r < rows; r++) {
             BasicElement* element = getElement(r, 0);
             if (element->getY() > dy) {
                 row = r;
@@ -370,8 +362,8 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
         }
         row--;
 
-        uint column = columns;
-        for (uint c = 0; c < columns; c++) {
+        int column = columns;
+        for (int c = 0; c < columns; c++) {
             BasicElement* element = getElement(row, c);
             if (element->getX() > dx) {
                 column = c;
@@ -388,7 +380,7 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
 
         // Rescan the rows with the actual colums required.
         row = rows;
-        for (uint r = 0; r < rows; r++) {
+        for (int r = 0; r < rows; r++) {
             BasicElement* element = getElement(r, column);
             if (element->getY() > dy) {
                 row = r;
@@ -425,23 +417,23 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
  */
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    Q3MemArray<luPixel> toMidlines(getRows());
-    Q3MemArray<luPixel> fromMidlines(getRows());
-    Q3MemArray<luPixel> widths(getColumns());
+    QVector<luPixel> toMidlines(getRows());
+    QVector<luPixel> fromMidlines(getRows());
+    QVector<luPixel> widths(getColumns());
 
     toMidlines.fill(0);
     fromMidlines.fill(0);
     widths.fill(0);
 
-    uint rows = getRows();
-    uint columns = getColumns();
+    int rows = getRows();
+    int columns = getColumns();
 
     ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction(tstyle);
     ContextStyle::IndexStyle i_istyle = style.convertIndexStyleUpper(istyle);
 
-    for (uint r = 0; r < rows; r++) {
-        Q3PtrList< MatrixSequenceElement >* list = content.at(r);
-        for (uint c = 0; c < columns; c++) {
+    for (int r = 0; r < rows; r++) {
+        QList<MatrixSequenceElement*>* list = content.at(r);
+        for (int c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
             element->calcSizes( style, i_tstyle, i_istyle );
             toMidlines[r] = qMax(toMidlines[r], element->axis( style, i_tstyle ));
@@ -455,11 +447,11 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
 
     luPixel yPos = 0;
-    for (uint r = 0; r < rows; r++) {
-        Q3PtrList< MatrixSequenceElement >* list = content.at(r);
+    for (int r = 0; r < rows; r++) {
+        QList<MatrixSequenceElement*>* list = content.at(r);
         luPixel xPos = 0;
         yPos += toMidlines[r];
-        for (uint c = 0; c < columns; c++) {
+        for (int c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
             switch (style.getMatrixAlignment()) {
             case ContextStyle::left:
@@ -481,8 +473,8 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     luPixel width = distX * (columns - 1);
     luPixel height = distY * (rows - 1);
 
-    for (uint r = 0; r < rows; r++) height += toMidlines[r] + fromMidlines[r];
-    for (uint c = 0; c < columns; c++) width += widths[c];
+    for (int r = 0; r < rows; r++) height += toMidlines[r] + fromMidlines[r];
+    for (int c = 0; c < columns; c++) width += widths[c];
 
     setWidth(width);
     setHeight(height);
@@ -509,11 +501,11 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( rect ) )
     //    return;
 
-    uint rows = getRows();
-    uint columns = getColumns();
+    int rows = getRows();
+    int columns = getColumns();
 
-    for (uint r = 0; r < rows; r++) {
-        for (uint c = 0; c < columns; c++) {
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < columns; c++) {
             getElement(r, c)->draw(painter, rect, style,
 				   style.convertTextStyleFraction(tstyle),
 				   style.convertIndexStyleUpper(istyle),
@@ -529,11 +521,11 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
 
 void MatrixElement::dispatchFontCommand( FontCommand* cmd )
 {
-    uint rows = getRows();
-    uint columns = getColumns();
+    int rows = getRows();
+    int columns = getColumns();
 
-    for (uint r = 0; r < rows; r++) {
-        for (uint c = 0; c < columns; c++) {
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < columns; c++) {
             getElement(r, c)->dispatchFontCommand( cmd );
         }
     }
@@ -564,8 +556,8 @@ void MatrixElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         }
         else {
             bool linear = cursor->getLinearMovement();
-            uint row = 0;
-            uint column = 0;
+            int row = 0;
+            int column = 0;
             if (searchElement(from, row, column)) {
                 if (column > 0) {
                     getElement(row, column-1)->moveLeft(cursor, this);
@@ -600,8 +592,8 @@ void MatrixElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         }
         else {
             bool linear = cursor->getLinearMovement();
-            uint row = 0;
-            uint column = 0;
+            int row = 0;
+            int column = 0;
             if (searchElement(from, row, column)) {
                 if (column < getColumns()-1) {
                     getElement(row, column+1)->moveRight(cursor, this);
@@ -635,8 +627,8 @@ void MatrixElement::moveUp(FormulaCursor* cursor, BasicElement* from)
             getElement(0, 0)->moveRight(cursor, this);
         }
         else {
-            uint row = 0;
-            uint column = 0;
+            int row = 0;
+            int column = 0;
             if (searchElement(from, row, column)) {
                 if (row > 0) {
                     getElement(row-1, column)->moveRight(cursor, this);
@@ -667,8 +659,8 @@ void MatrixElement::moveDown(FormulaCursor* cursor, BasicElement* from)
             getElement(0, 0)->moveRight(cursor, this);
         }
         else {
-            uint row = 0;
-            uint column = 0;
+            int row = 0;
+            int column = 0;
             if (searchElement(from, row, column)) {
                 if (row < getRows()-1) {
                     getElement(row+1, column)->moveRight(cursor, this);
@@ -702,10 +694,10 @@ SequenceElement* MatrixElement::getMainChild()
 
 void MatrixElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
-    uint rows = getRows();
-    uint columns = getColumns();
-    for (uint r = 0; r < rows; r++) {
-        for (uint c = 0; c < columns; c++) {
+    int rows = getRows();
+    int columns = getColumns();
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < columns; c++) {
             if (child == getElement(r, c)) {
                 cursor->setTo(this, r*columns+c);
             }
@@ -713,12 +705,12 @@ void MatrixElement::selectChild(FormulaCursor* cursor, BasicElement* child)
     }
 }
 
-bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column)
+bool MatrixElement::searchElement(BasicElement* element, int& row, int& column)
 {
-    uint rows = getRows();
-    uint columns = getColumns();
-    for (uint r = 0; r < rows; r++) {
-        for (uint c = 0; c < columns; c++) {
+    int rows = getRows();
+    int columns = getColumns();
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < columns; c++) {
             if (element == getElement(r, c)) {
                 row = r;
                 column = c;
@@ -737,16 +729,16 @@ void MatrixElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
-    uint rows = getRows();
-    uint cols = getColumns();
+    int rows = getRows();
+    int cols = getColumns();
 
     element.setAttribute("ROWS", rows);
     element.setAttribute("COLUMNS", cols);
 
     QDomDocument doc = element.ownerDocument();
 
-    for (uint r = 0; r < rows; r++) {
-        for (uint c = 0; c < cols; c++) {
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
     	    QDomElement tmp = getElement(r,c)->getElementDom(doc);
             element.appendChild(tmp);
 	}
@@ -763,7 +755,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement element)
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;
     }
-    uint rows = 0;
+    int rows = 0;
     QString rowStr = element.attribute("ROWS");
     if(!rowStr.isNull()) {
         rows = rowStr.toInt();
@@ -774,7 +766,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement element)
     }
 
     QString columnStr = element.attribute("COLUMNS");
-    uint cols = 0;
+    int cols = 0;
     if(!columnStr.isNull()) {
         cols = columnStr.toInt();
     }
@@ -784,11 +776,11 @@ bool MatrixElement::readAttributesFromDom(QDomElement element)
     }
 
     content.clear();
-    for (uint r = 0; r < rows; r++) {
-        Q3PtrList< MatrixSequenceElement >* list = new Q3PtrList< MatrixSequenceElement >;
-        list->setAutoDelete(true);
+    for (int r = 0; r < rows; r++) {
+        QList<MatrixSequenceElement*>* list = new QList<MatrixSequenceElement*>;
+//        list->setAutoDelete(true);
         content.append(list);
-        for (uint c = 0; c < cols; c++) {
+        for (int c = 0; c < cols; c++) {
             MatrixSequenceElement* element = new MatrixSequenceElement(this);
             list->append(element);
 	}
@@ -807,11 +799,11 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    uint rows = getRows();
-    uint cols = getColumns();
+    int rows = getRows();
+    int cols = getColumns();
 
-    uint r = 0;
-    uint c = 0;
+    int r = 0;
+    int c = 0;
     while ( !node.isNull() && r < rows ) {
         if ( node.isElement() ) {
             SequenceElement* element = getElement( r, c );
@@ -876,7 +868,7 @@ QString MatrixElement::formulaString()
 }
 
 
-SequenceElement* MatrixElement::elementAt(uint row, uint column)
+SequenceElement* MatrixElement::elementAt(int row, int column)
 {
     return getElement( row, column );
 }
@@ -888,14 +880,14 @@ void MatrixElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisF
     QDomElement row;
     QDomElement cell;
 
-    uint rows = getRows();
-    uint cols = getColumns();
+    int rows = getRows();
+    int cols = getColumns();
 
-    for ( uint r = 0; r < rows; r++ )
+    for ( int r = 0; r < rows; r++ )
     {
         row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
         de.appendChild( row );
-        for ( uint c = 0; c < cols; c++ )
+        for ( int c = 0; c < cols; c++ )
         {
             cell = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
             row.appendChild( cell );
@@ -951,24 +943,24 @@ public:
 
     virtual KCommand* input( Container* container, QChar ch );
 
-    uint tabCount() const { return tabs.count(); }
+    int tabCount() const { return tabs.count(); }
 
-    BasicElement* tab( uint i ) { return tabs.at( i ); }
+    BasicElement* tab( int i ) { return tabs.at( i ); }
 
     /// Change the width of tab i and move all elements after it.
-    void moveTabTo( uint i, luPixel pos );
+    void moveTabTo( int i, luPixel pos );
 
     /// Return the greatest tab number less than pos.
-    int tabBefore( uint pos );
+    int tabBefore( int pos );
 
     /// Return the position of tab i.
-    int tabPos( uint i );
+    int tabPos( int i );
 
     virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
 
 private:
 
-    Q3PtrList<BasicElement> tabs;
+    QList<BasicElement*> tabs;
 };
 
 
@@ -1009,7 +1001,7 @@ void KFCNewLine::execute()
 {
     FormulaCursor* cursor = getExecuteCursor();
     MultilineElement* parent = static_cast<MultilineElement*>( m_line->getParent() );
-    int linePos = parent->content.find( m_line );
+    int linePos = parent->content.indexOf( m_line );
     parent->content.insert( linePos+1, m_newline );
 
     // If there are children to be moved.
@@ -1018,7 +1010,7 @@ void KFCNewLine::execute()
         // Remove anything after position pos from the current line
         m_line->selectAllChildren( cursor );
         cursor->setMark( m_pos );
-        Q3PtrList<BasicElement> elementList;
+        QList<BasicElement*> elementList;
         m_line->remove( cursor, elementList, beforeCursor );
 
         // Insert the removed stuff into the new line
@@ -1044,7 +1036,7 @@ void KFCNewLine::unexecute()
 {
     FormulaCursor* cursor = getExecuteCursor();
     MultilineElement* parent = static_cast<MultilineElement*>( m_line->getParent() );
-    int linePos = parent->content.find( m_line );
+    int linePos = parent->content.indexOf( m_line );
 
     // Now the command owns the new line again.
     m_newline = parent->content.at( linePos+1 );
@@ -1058,7 +1050,7 @@ void KFCNewLine::unexecute()
 
         // Remove anything from the line to be deleted
         m_newline->selectAllChildren( cursor );
-        Q3PtrList<BasicElement> elementList;
+        QList<BasicElement*> elementList;
         m_newline->remove( cursor, elementList, beforeCursor );
 
         // Insert the removed stuff into the previous line
@@ -1069,7 +1061,7 @@ void KFCNewLine::unexecute()
     else {
         m_line->moveEnd( cursor );
     }
-    parent->content.take( linePos+1 );
+    parent->content.takeAt( linePos+1 );
 
     // Tell that something changed
     formula->changed();
@@ -1080,7 +1072,7 @@ void KFCNewLine::unexecute()
 MultilineSequenceElement::MultilineSequenceElement( BasicElement* parent )
     : SequenceElement( parent )
 {
-    tabs.setAutoDelete( false );
+  //  tabs.setAutoDelete( false );
 }
 
 
@@ -1184,7 +1176,7 @@ KCommand* MultilineSequenceElement::input( Container* container, QChar ch )
 }
 
 
-void MultilineSequenceElement::moveTabTo( uint i, luPixel pos )
+void MultilineSequenceElement::moveTabTo( int i, luPixel pos )
 {
     BasicElement* marker = tab( i );
     luPixel diff = pos - marker->getX();
@@ -1199,13 +1191,13 @@ void MultilineSequenceElement::moveTabTo( uint i, luPixel pos )
 }
 
 
-int MultilineSequenceElement::tabBefore( uint pos )
+int MultilineSequenceElement::tabBefore( int pos )
 {
     if ( tabs.isEmpty() ) {
         return -1;
     }
-    uint tabNum = 0;
-    for ( uint i=0; i<pos; ++i ) {
+    int tabNum = 0;
+    for ( int i=0; i<pos; ++i ) {
         BasicElement* child = getChild( i );
         if ( tabs.at( tabNum ) == child ) {
             if ( tabNum+1 == tabs.count() ) {
@@ -1218,7 +1210,7 @@ int MultilineSequenceElement::tabBefore( uint pos )
 }
 
 
-int MultilineSequenceElement::tabPos( uint i )
+int MultilineSequenceElement::tabPos( int i )
 {
     if ( i < tabs.count() ) {
         return childPos( tabs.at( i ) );
@@ -1264,7 +1256,7 @@ void MultilineSequenceElement::writeMathML( QDomDocument& doc,
 MultilineElement::MultilineElement( BasicElement* parent )
     : BasicElement( parent )
 {
-    content.setAutoDelete( true );
+//    content.setAutoDelete( true );
     content.append( new MultilineSequenceElement( this ) );
 }
 
@@ -1275,9 +1267,9 @@ MultilineElement::~MultilineElement()
 MultilineElement::MultilineElement( const MultilineElement& other )
     : BasicElement( other )
 {
-    content.setAutoDelete( true );
-    uint count = other.content.count();
-    for (uint i = 0; i < count; i++) {
+//    content.setAutoDelete( true );
+    int count = other.content.count();
+    for (int i = 0; i < count; i++) {
         MultilineSequenceElement* line = content.at(i)->clone();
         line->setParent( this );
         content.append( line );
@@ -1342,7 +1334,7 @@ void MultilineElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
         else {
             // Coming from one of the lines we go to the previous line
             // or to the parent if there is none.
-            int pos = content.find( static_cast<MultilineSequenceElement*>( from ) );
+            int pos = content.indexOf( static_cast<MultilineSequenceElement*>( from ) );
             if ( pos > -1 ) {
                 if ( pos > 0 ) {
                     content.at( pos-1 )->moveLeft( cursor, this );
@@ -1369,9 +1361,9 @@ void MultilineElement::moveRight( FormulaCursor* cursor, BasicElement* from )
             content.at( 0 )->moveRight(cursor, this);
         }
         else {
-            int pos = content.find( static_cast<MultilineSequenceElement*>( from ) );
+            int pos = content.indexOf( static_cast<MultilineSequenceElement*>( from ) );
             if ( pos > -1 ) {
-                uint upos = pos;
+                int upos = pos;
                 if ( upos < content.count() ) {
                     if ( upos < content.count()-1 ) {
                         content.at( upos+1 )->moveRight( cursor, this );
@@ -1404,7 +1396,7 @@ void MultilineElement::moveUp( FormulaCursor* cursor, BasicElement* from )
         else {
             // Coming from one of the lines we go to the previous line
             // or to the parent if there is none.
-            int pos = content.find( static_cast<MultilineSequenceElement*>( from ) );
+            int pos = content.indexOf( static_cast<MultilineSequenceElement*>( from ) );
             if ( pos > -1 ) {
                 if ( pos > 0 ) {
                     //content.at( pos-1 )->moveLeft( cursor, this );
@@ -1460,9 +1452,9 @@ void MultilineElement::moveDown( FormulaCursor* cursor, BasicElement* from )
             content.at( 0 )->moveRight(cursor, this);
         }
         else {
-            int pos = content.find( static_cast<MultilineSequenceElement*>( from ) );
+            int pos = content.indexOf( static_cast<MultilineSequenceElement*>( from ) );
             if ( pos > -1 ) {
-                uint upos = pos;
+                int upos = pos;
                 if ( upos < content.count() ) {
                     if ( upos < content.count()-1 ) {
                         //content.at( upos+1 )->moveRight( cursor, this );
@@ -1520,11 +1512,11 @@ void MultilineElement::calcSizes( const ContextStyle& context,
     luPixel leading = context.ptToLayoutUnitPt( fm.leading() );
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle ) );
 
-    uint count = content.count();
+    int count = content.count();
     luPixel height = -leading;
     luPixel width = 0;
-    uint tabCount = 0;
-    for ( uint i = 0; i < count; ++i ) {
+    int tabCount = 0;
+    for ( int i = 0; i < count; ++i ) {
         MultilineSequenceElement* line = content.at(i);
         line->calcSizes( context, tstyle, istyle );
         tabCount = qMax( tabCount, line->tabCount() );
@@ -1537,9 +1529,9 @@ void MultilineElement::calcSizes( const ContextStyle& context,
     }
 
     // calculate the tab positions
-    for ( uint t = 0; t < tabCount; ++t ) {
+    for ( int t = 0; t < tabCount; ++t ) {
         luPixel pos = 0;
-        for ( uint i = 0; i < count; ++i ) {
+        for ( int i = 0; i < count; ++i ) {
             MultilineSequenceElement* line = content.at(i);
             if ( t < line->tabCount() ) {
                 pos = qMax( pos, line->tab( t )->getX() );
@@ -1548,7 +1540,7 @@ void MultilineElement::calcSizes( const ContextStyle& context,
                 pos = qMax( pos, line->getWidth() );
             }
         }
-        for ( uint i = 0; i < count; ++i ) {
+        for ( int i = 0; i < count; ++i ) {
             MultilineSequenceElement* line = content.at(i);
             if ( t < line->tabCount() ) {
                 line->moveTabTo( t, pos );
@@ -1575,15 +1567,15 @@ void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
                              const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
-    uint count = content.count();
+    int count = content.count();
 
     if ( context.edit() ) {
-        uint tabCount = 0;
+        int tabCount = 0;
         painter.setPen( context.getHelpColor() );
-        for ( uint i = 0; i < count; ++i ) {
+        for ( int i = 0; i < count; ++i ) {
             MultilineSequenceElement* line = content.at(i);
             if ( tabCount < line->tabCount() ) {
-                for ( uint t = tabCount; t < line->tabCount(); ++t ) {
+                for ( int t = tabCount; t < line->tabCount(); ++t ) {
                     BasicElement* marker = line->tab( t );
                     painter.drawLine( context.layoutUnitToPixelX( myPos.x()+marker->getX() ),
                                       context.layoutUnitToPixelY( myPos.y() ),
@@ -1595,7 +1587,7 @@ void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
         }
     }
 
-    for ( uint i = 0; i < count; ++i ) {
+    for ( int i = 0; i < count; ++i ) {
         MultilineSequenceElement* line = content.at(i);
         line->draw( painter, r, context, tstyle, istyle, myPos );
     }
@@ -1604,18 +1596,18 @@ void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
 
 void MultilineElement::dispatchFontCommand( FontCommand* cmd )
 {
-    uint count = content.count();
-    for ( uint i = 0; i < count; ++i ) {
+    int count = content.count();
+    for ( int i = 0; i < count; ++i ) {
         MultilineSequenceElement* line = content.at(i);
         line->dispatchFontCommand( cmd );
     }
 }
 
 void MultilineElement::insert( FormulaCursor* cursor,
-                               Q3PtrList<BasicElement>& newChildren,
+                               QList<BasicElement*>& newChildren,
                                Direction direction )
 {
-    MultilineSequenceElement* e = static_cast<MultilineSequenceElement*>(newChildren.take(0));
+    MultilineSequenceElement* e = static_cast<MultilineSequenceElement*>(newChildren.takeAt(0));
     e->setParent(this);
     content.insert( cursor->getPos(), e );
 
@@ -1630,7 +1622,7 @@ void MultilineElement::insert( FormulaCursor* cursor,
 }
 
 void MultilineElement::remove( FormulaCursor* cursor,
-                               Q3PtrList<BasicElement>& removedChildren,
+                               QList<BasicElement*>& removedChildren,
                                Direction direction )
 {
     if ( content.count() == 1 ) { //&& ( cursor->getPos() == 0 ) ) {
@@ -1638,7 +1630,7 @@ void MultilineElement::remove( FormulaCursor* cursor,
         getParent()->remove(cursor, removedChildren, direction);
     }
     else {
-        MultilineSequenceElement* e = content.take( cursor->getPos() );
+        MultilineSequenceElement* e = content.takeAt( cursor->getPos() );
         removedChildren.append( e );
         formula()->elementRemoval( e );
         //cursor->setTo( this, denominatorPos );
@@ -1650,7 +1642,7 @@ void MultilineElement::normalize( FormulaCursor* cursor, Direction direction )
 {
     int pos = cursor->getPos();
     if ( ( cursor->getElement() == this ) &&
-         ( pos > -1 ) && ( static_cast<unsigned>( pos ) <= content.count() ) ) {
+         ( pos > -1 ) && ( pos <= content.count() ) ) {
         switch ( direction ) {
         case beforeCursor:
             if ( pos > 0 ) {
@@ -1659,7 +1651,7 @@ void MultilineElement::normalize( FormulaCursor* cursor, Direction direction )
             }
             // no break! intended!
         case afterCursor:
-            if ( static_cast<unsigned>( pos ) < content.count() ) {
+            if ( pos < content.count() ) {
                 content.at( pos )->moveRight( cursor, this );
             }
             else {
@@ -1680,7 +1672,7 @@ SequenceElement* MultilineElement::getMainChild()
 
 void MultilineElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
-    int pos = content.find( dynamic_cast<MultilineSequenceElement*>( child ) );
+    int pos = content.indexOf( dynamic_cast<MultilineSequenceElement*>( child ) );
     if ( pos > -1 ) {
         cursor->setTo( this, pos );
         //content.at( pos )->moveRight( cursor, this );
@@ -1695,11 +1687,11 @@ void MultilineElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
-    uint lineCount = content.count();
+    int lineCount = content.count();
     element.setAttribute( "LINES", lineCount );
 
     QDomDocument doc = element.ownerDocument();
-    for ( uint i = 0; i < lineCount; ++i ) {
+    for ( int i = 0; i < lineCount; ++i ) {
         QDomElement tmp = content.at( i )->getElementDom(doc);
         element.appendChild(tmp);
     }
@@ -1710,7 +1702,7 @@ void MultilineElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oas
     QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
     QDomElement row; QDomElement cell;
 
-    for ( uint i = 0; i < content.count(); ++i ) {
+    for ( int i = 0; i < content.count(); ++i ) {
         row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
         de.appendChild( row );
         //cell = doc.createElement( "mtd" );
@@ -1732,7 +1724,7 @@ bool MultilineElement::readAttributesFromDom(QDomElement element)
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;
     }
-    uint lineCount = 0;
+    int lineCount = 0;
     QString lineCountStr = element.attribute("LINES");
     if(!lineCountStr.isNull()) {
         lineCount = lineCountStr.toInt();
@@ -1743,7 +1735,7 @@ bool MultilineElement::readAttributesFromDom(QDomElement element)
     }
 
     content.clear();
-    for ( uint i = 0; i < lineCount; ++i ) {
+    for ( int i = 0; i < lineCount; ++i ) {
         MultilineSequenceElement* element = new MultilineSequenceElement(this);
         content.append(element);
     }
@@ -1761,8 +1753,8 @@ bool MultilineElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    uint lineCount = content.count();
-    uint i = 0;
+    int lineCount = content.count();
+    int i = 0;
     while ( !node.isNull() && i < lineCount ) {
         if ( node.isElement() ) {
             SequenceElement* element = content.at( i );
@@ -1779,9 +1771,9 @@ bool MultilineElement::readContentFromDom(QDomNode& node)
 
 QString MultilineElement::toLatex()
 {
-    uint lineCount = content.count();
+    int lineCount = content.count();
     QString muliline = "\\begin{split} ";
-    for ( uint i = 0; i < lineCount; ++i ) {
+    for ( int i = 0; i < lineCount; ++i ) {
         muliline += content.at( i )->toLatex();
     	muliline += " \\\\ ";
     }
@@ -1792,9 +1784,9 @@ QString MultilineElement::toLatex()
 // Does this make any sense at all?
 QString MultilineElement::formulaString()
 {
-    uint lineCount = content.count();
+    int lineCount = content.count();
     QString muliline = "";
-    for ( uint i = 0; i < lineCount; ++i ) {
+    for ( int i = 0; i < lineCount; ++i ) {
         muliline += content.at( i )->formulaString();
     	muliline += "\n";
     }

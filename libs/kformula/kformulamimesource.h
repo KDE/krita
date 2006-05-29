@@ -21,8 +21,8 @@
 #ifndef KFORMULAMIMESOURCE_H
 #define KFORMULAMIMESOURCE_H
 
-#include <qmime.h>
-#include <qdom.h>
+#include <QMimeSource>
+#include <QDomDocument>
 
 #include "kformulacontainer.h"
 #include <koffice_export.h>

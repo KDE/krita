@@ -18,10 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3ptrlist.h>
 #include <QPainter>
 #include <QPen>
-#include <q3pointarray.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -132,7 +130,7 @@ void SingleContentElement::moveDown(FormulaCursor* cursor, BasicElement* /*from*
 }
 
 void SingleContentElement::remove( FormulaCursor* cursor,
-                                   Q3PtrList<BasicElement>& removedChildren,
+                                   QList<BasicElement*>& removedChildren,
                                    Direction direction )
 {
     switch (cursor->getPos()) {

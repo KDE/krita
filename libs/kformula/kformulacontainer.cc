@@ -25,8 +25,7 @@
 #include <QPixmap>
 #include <QString>
 #include <QTextStream>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 #include <QKeyEvent>
 
 #include <kdebug.h>
@@ -355,15 +354,15 @@ void Container::paste()
 void Container::paste( const QDomDocument& document, QString desc )
 {
     FormulaCursor* cursor = activeCursor();
-    Q3PtrList<BasicElement> list;
-    list.setAutoDelete( true );
+    QList<BasicElement*> list;
+//    list.setAutoDelete( true );
     if ( cursor->buildElementsFromDom( document.documentElement(), list ) ) {
         uint count = list.count();
         // You must not execute an add command that adds nothing.
         if (count > 0) {
             KFCReplace* command = new KFCReplace( desc, this );
             for (uint i = 0; i < count; i++) {
-                command->addElement(list.take(0));
+                command->addElement(list.takeAt(0));
             }
             execute(command);
         }

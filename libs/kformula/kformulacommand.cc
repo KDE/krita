@@ -20,8 +20,6 @@
 
 #include <klocale.h>  //This is for undo descriptions
 
-#include <q3valuelist.h>
-
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "indexelement.h"
@@ -95,7 +93,7 @@ void Command::setUnexecuteCursor(FormulaCursor* cursor)
 KFCAdd::KFCAdd(const QString &name, Container *document)
         : Command(name, document)
 {
-    addList.setAutoDelete( true );
+//    addList.setAutoDelete( true );
 }
 
 
@@ -127,7 +125,7 @@ KFCRemoveSelection::KFCRemoveSelection(Container *document,
         : Command(i18n("Remove Selected Text"), document),
           dir(direction)
 {
-    removedList.setAutoDelete( true );
+//    removedList.setAutoDelete( true );
 }
 
 void KFCRemoveSelection::execute()
@@ -184,7 +182,7 @@ KFCRemove::KFCRemove(Container *document,
         : Command(i18n("Remove Selected Text"), document),
           element(0), simpleRemoveCursor(0), dir(direction)
 {
-    removedList.setAutoDelete( true );
+//    removedList.setAutoDelete( true );
 }
 
 KFCRemove::~KFCRemove()
@@ -352,8 +350,8 @@ void KFCChangeBaseSize::unexecute()
 FontCommand::FontCommand( const QString& name, Container* document )
     : Command( name, document )
 {
-    list.setAutoDelete( false );
-    elementList.setAutoDelete( false );
+//    list.setAutoDelete( false );
+//    elementList.setAutoDelete( false );
 }
 
 
@@ -369,8 +367,8 @@ void FontCommand::collectChildren()
 
 void FontCommand::parseSequences( const QMap<SequenceElement*, int>& parents )
 {
-    Q3ValueList<SequenceElement*> sequences = parents.keys();
-    for ( Q3ValueList<SequenceElement*>::iterator i = sequences.begin();
+    QList<SequenceElement*> sequences = parents.keys();
+    for ( QList<SequenceElement*>::iterator i = sequences.begin();
           i != sequences.end();
           ++i ) {
         ( *i )->parse();

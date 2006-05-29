@@ -22,8 +22,7 @@
 #define FORMULACURSOR_H
 
 #include <QString>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 #include "basicelement.h"
 #include "kformuladefs.h"
@@ -157,7 +156,7 @@ public:
      * Ignores the selection.
      * The list will be emptied.
      */
-    void insert(Q3PtrList<BasicElement>&,
+    void insert(QList<BasicElement*>&,
                 Direction = beforeCursor);
 
     /**
@@ -165,7 +164,7 @@ public:
      * The cursor needs to be normal (that is be inside a SequenceElement)
      * for this to have any effect.
      */
-    void remove(Q3PtrList<BasicElement>&,
+    void remove(QList<BasicElement*>&,
                 Direction = beforeCursor);
 
 
@@ -298,7 +297,7 @@ public:
      * Inserts the elements that could be read from the dom into
      * the list. Returns true on success.
      */
-    bool buildElementsFromDom( QDomElement root, Q3PtrList<BasicElement>& list );
+    bool buildElementsFromDom( QDomElement root, QList<BasicElement*>& list );
 
     // undo/redo support
 

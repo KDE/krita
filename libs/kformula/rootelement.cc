@@ -20,8 +20,6 @@
 
 #include <QPainter>
 #include <QPen>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -410,11 +408,11 @@ void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  * Reinserts the index if it has been removed.
  */
 void RootElement::insert(FormulaCursor* cursor,
-                         Q3PtrList<BasicElement>& newChildren,
+                         QList<BasicElement*>& newChildren,
                          Direction direction)
 {
     if (cursor->getPos() == upperLeftPos) {
-        index = static_cast<SequenceElement*>(newChildren.take(0));
+        index = static_cast<SequenceElement*>(newChildren.takeAt(0));
         index->setParent(this);
 
         if (direction == beforeCursor) {
@@ -435,7 +433,7 @@ void RootElement::insert(FormulaCursor* cursor,
  * We remove ourselve if we are requested to remove our content.
  */
 void RootElement::remove(FormulaCursor* cursor,
-                         Q3PtrList<BasicElement>& removedChildren,
+                         QList<BasicElement*>& removedChildren,
                          Direction direction)
 {
     switch (cursor->getPos()) {

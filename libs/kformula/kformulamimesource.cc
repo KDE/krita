@@ -26,8 +26,8 @@
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>
-//Added by qt3to4:
-#include <Q3PtrList>
+
+#include <QList>
 #include <QImageWriter>
 #include <kcommand.h>
 
@@ -50,8 +50,8 @@ MimeSource::MimeSource(Document* doc, const QDomDocument& formula)
     rootElement = new FormulaElement(this);
     FormulaCursor cursor(rootElement);
 
-    Q3PtrList<BasicElement> list;
-    list.setAutoDelete(true);
+    QList<BasicElement*> list;
+//    list.setAutoDelete(true);
     if ( cursor.buildElementsFromDom( document.documentElement(), list ) ) {
         cursor.insert(list);
         latexString = rootElement->toLatex().toUtf8();

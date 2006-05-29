@@ -4,7 +4,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeControllerInterface.h"
 
-#include <QString>
+#include <klocale.h>
 
 KoShapeMoveCommand::KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions)
 : m_previousPositions(previousPositions)
@@ -32,7 +32,7 @@ void KoShapeMoveCommand::unexecute() {
 }
 
 QString KoShapeMoveCommand::name () const {
-    return "Move";
+    return i18n( "Move shapes" );
 }
 
 
@@ -62,7 +62,7 @@ void KoShapeRotateCommand::unexecute() {
 }
 
 QString KoShapeRotateCommand::name () const {
-    return "Rotate";
+    return i18n( "Rotate shapes" );
 }
 
 
@@ -94,6 +94,7 @@ void KoShapeSizeCommand::unexecute () {
 }
 
 QString KoShapeSizeCommand::name () const {
+    return i18n( "Resize shapes" );
 }
 
 
@@ -131,7 +132,7 @@ void KoGroupShapesCommand::unexecute () {
 }
 
 QString KoGroupShapesCommand::name () const {
-    return "Group Shapes";
+    return i18n( "Group shapes" );
 }
 
 
@@ -154,7 +155,7 @@ void KoUngroupShapesCommand::unexecute () {
 }
 
 QString KoUngroupShapesCommand::name () const {
-    return "Ungroup shapes";
+    return i18n( "Ungroup shapes" );
 }
 
 KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerInterface *controller, KoShape *shape )
@@ -186,7 +187,7 @@ void KoShapeCreateCommand::unexecute () {
 }
 
 QString KoShapeCreateCommand::name () const {
-    return "Create shape";
+    return i18n( "Create shape" );
 }
 
 KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerInterface *controller, KoShape *shape )
@@ -196,7 +197,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerInterface *controll
     m_shapes.append( shape );
 }
 
-KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerInterface *controller, const KoSelectionSet &shapes ) 
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerInterface *controller, const KoSelectionSet &shapes )
 : m_controller( controller )
 , m_deleteShapes( false )
 {
@@ -233,5 +234,5 @@ void KoShapeDeleteCommand::unexecute () {
 }
 
 QString KoShapeDeleteCommand::name () const {
-    return "Delete Shapes";
+    return i18n( "Delete shapes" );
 }

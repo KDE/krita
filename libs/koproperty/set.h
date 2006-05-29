@@ -161,7 +161,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 
 		/*! \return a list of all property names. The order is the same as the order 
 		 of creation. */
-		const Q3ValueList<QByteArray>& propertyNamesForGroup(const QCString &group) const;
+		const Q3ValueList<QByteArray>& propertyNamesForGroup(const QByteArray &group) const;
 
 		/*! Used by property editor to preserve previous selection when this set 
 		 is assigned again. */

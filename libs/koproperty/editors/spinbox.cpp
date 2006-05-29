@@ -49,7 +49,10 @@ IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntE
 	installEventFilter(lineEdit());
 	installEventFilter(this);
 	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
-	QAbstractSpinBox* spin = static_cast<QAbstractSpinBox*>(spinwidgets.first());
+#ifndef Q_WS_WIN
+#warning TODO: fix for Qt4
+#endif
+	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin)
 		spin->installEventFilter(this);
 }
@@ -152,7 +155,10 @@ void
 IntEdit::updateSpinWidgets()
 {
 	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
-	QAbstractSpinBox* spin = static_cast<QAbstractSpinBox*>(spinwidgets.first());
+#ifndef Q_WS_WIN
+#warning TODO: fix for Qt4
+#endif
+	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin) {
 		spin->setReadOnly(isReadOnly());
 	}
@@ -178,7 +184,10 @@ DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double va
 	installEventFilter(lineEdit());
 	installEventFilter(this);
 	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
-	QAbstractSpinBox* spin = static_cast<QAbstractSpinBox*>(spinwidgets.first());
+#ifndef Q_WS_WIN
+#warning TODO: fix for Qt4
+#endif
+	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin)
 		spin->installEventFilter(this);
 }
@@ -298,7 +307,10 @@ void
 DoubleEdit::updateSpinWidgets()
 {
 	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
-	QAbstractSpinBox* spin = static_cast<QAbstractSpinBox*>(spinwidgets.first());
+#ifndef Q_WS_WIN
+#warning TODO: fix for Qt4
+#endif
+	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
 	if (spin) {
 		spin->setReadOnly(isReadOnly());
 	}

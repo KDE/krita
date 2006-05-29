@@ -83,7 +83,7 @@ URLEdit::setValue(const QVariant &value, bool emitChange)
 #ifdef QT_ONLY
 	m_edit->setText(value.toString());
 #else
-	m_edit->setUrl(value.toString());
+	m_edit->setURL(value.toString());
 #endif
 	m_edit->blockSignals(false);
 	if (emitChange)

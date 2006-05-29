@@ -42,6 +42,7 @@ class EditorItemPrivate;
 class Property;
 class Editor;
 class GroupWidget;
+class QListViewItem;
 
 /*! \brief Item for a single property displayed within Editor object.
    \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -110,7 +111,7 @@ class EditorGroupItem : public EditorItem
 		/*! Reimplemented from K3ListViewItem to draw custom contents. */
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 		virtual void setup();
-		virtual int compare( QListViewItem *i, int col, bool ascending ) const;
+		virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
 
 		GroupWidget *m_label;
 		int m_sortOrder;

@@ -193,7 +193,7 @@ EditorItem::EditorItem(EditorItem *parent, const QString &text)
 }
 
 EditorItem::EditorItem(EditorItem *parent, EditorItem *after, const QString &text)
- : KListViewItem(parent, after, text)
+ : K3ListViewItem(parent, after, text)
 {
 	d = new EditorItemPrivate();
 	d->property = 0;
@@ -466,6 +466,10 @@ void EditorGroupItem::init(const QString &icon)
 void
 EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int /*align*/)
 {
+	Q_UNUSED(p);
+	Q_UNUSED(cg);
+	Q_UNUSED(column);
+	Q_UNUSED(width);
 	//no need to draw anything since there's a label on top of it
 //	p->fillRect(0, 0, width, height(), cg.base());
 
@@ -485,7 +489,6 @@ EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int 
 	p->setFont(font);
 	p->setBrush(cg.highlight());
 	//p->setPen(cg.highlightedText());
-/*
 #ifdef QT_ONLY
 		QListViewItem::paintCell(p, cg, column, width, align);
 #else
@@ -504,8 +507,10 @@ EditorGroupItem::setup()
 }
 
 int
-EditorGroupItem::compare( QListViewItem *i, int col, bool ascending ) const
+EditorGroupItem::compare( Q3ListViewItem *i, int col, bool ascending ) const
 {
+	Q_UNUSED(col);
+	Q_UNUSED(ascending);
 	if (dynamic_cast<EditorGroupItem*>(i)) {
 		return m_sortOrder 
 			- dynamic_cast<EditorGroupItem*>(i)->m_sortOrder;

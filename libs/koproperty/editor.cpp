@@ -994,7 +994,7 @@ Editor::setSorting( int column, bool ascending )
 {
 	if (d->set && d->set->groupNames().count()>1) //do not sort when groups are present (maybe reenable this later?)
 		return;
-	KListView::setSorting( column, ascending );
+	K3ListView::setSorting( column, ascending );
 	updateEditorGeometry();
 	updateGroupLabelsPosition();
 	repaintContents();

@@ -57,7 +57,9 @@ class SetPrivate
 	//groups of properties:
 	// list of group name: (list of property names)
 	StringListMap propertiesOfGroup;
+	Q3ValueList<QByteArray>  groupNames;
 	QMap<QByteArray, QString>  groupDescriptions;
+	QMap<QByteArray, QString>  groupIcons;
 	// map of property: group
 	QMap<Property*, QByteArray> groupForProperty;
 
@@ -289,7 +291,7 @@ Set::setGroupDescription(const QByteArray &group, const QString desc)
 }
 
 QString
-Set::groupDescription(const QByteArray &group)
+Set::groupDescription(const QByteArray &group) const
 {
 	if(d->groupDescriptions.contains(group))
 		return d->groupDescriptions[group];

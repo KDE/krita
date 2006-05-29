@@ -41,8 +41,8 @@
 #include "kformulawidget.h"
 
 
-KFormulaWidget::KFormulaWidget(Container* doc, QWidget* parent, const char* name, Qt::WFlags f)
-    : QWidget(parent, name, f | Qt::WNoAutoErase | Qt::WResizeNoErase),
+KFormulaWidget::KFormulaWidget(Container* doc, QWidget* parent)
+    : QWidget(parent),
       formulaView(doc)
 {
     connect(doc, SIGNAL(formulaChanged(int, int)),

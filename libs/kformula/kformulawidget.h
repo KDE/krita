@@ -50,7 +50,7 @@ class KFormulaWidget : public QWidget
     Q_OBJECT
 
 public:
-    KFormulaWidget(Container*, QWidget* parent=0, Qt::WFlags f=0);
+    KFormulaWidget(Container*, QWidget* parent=0);
     ~KFormulaWidget();
 
 

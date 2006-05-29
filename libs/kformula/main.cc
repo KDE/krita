@@ -37,8 +37,8 @@ using namespace KFormula;
 
 class TestWidget : public KFormulaWidget {
 public:
-    TestWidget(Container* doc, QWidget* parent=0, const char* name=0, Qt::WFlags f=0)
-            : KFormulaWidget(doc, parent, name, f) {}
+    TestWidget(Container* doc, QWidget* parent=0)
+            : KFormulaWidget(doc, parent) {}
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event);
@@ -259,7 +259,7 @@ int main(int argc, char** argv)
 
     ScrollView* scrollview1a = new ScrollView;
 
-    KFormulaWidget* mw1a = new TestWidget(container1, scrollview1a, "test1a");
+    KFormulaWidget* mw1a = new TestWidget(container1, scrollview1a);
 
     scrollview1a->addChild(mw1a);
     scrollview1a->setCaption("Test1a of the formula engine");

@@ -21,11 +21,11 @@
 #define XMLWRITER_H
 
 #include <QString>
-#include <q3valuestack.h>
+#include <QStack>
 #include <QMap>
+#include <QIODevice>
 #include <koffice_export.h>
 
-class QIODevice;
 
 /**
  * A class for writing out XML (to any QIODevice), with a special attention on performance.
@@ -255,7 +255,7 @@ private:
     void init();
 
     QIODevice* m_dev;
-    Q3ValueStack<Tag> m_tags;
+    QStack<Tag> m_tags;
     int m_baseIndentLevel;
 
     class Private;

@@ -22,7 +22,6 @@
 #include <kglobal.h> // kMin
 #include <kdebug.h>
 #include <QIODevice>
-//Added by qt3to4:
 #include <QByteArray>
 #include <float.h>
 
@@ -376,14 +375,14 @@ void KoXmlWriter::addTextSpan( const QString& text )
 
 void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCache )
 {
-    uint len = text.length();
+    int len = text.length();
     int nrSpaces = 0; // number of consecutive spaces
     QString str;
     str.reserve( len );
     // Accumulate chars either in str or in nrSpaces (for spaces).
     // Flush str when writing a subelement (for spaces or for another reason)
     // Flush nrSpaces when encountering two or more consecutive spaces
-    for ( uint i = 0; i < len ; ++i ) {
+    for ( int i = 0; i < len ; ++i ) {
         QChar ch = text[i];
         if ( ch != ' ' ) {
             if ( nrSpaces > 0 ) {

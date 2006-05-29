@@ -53,6 +53,12 @@ KoInteractionTool::KoInteractionTool( const QString & name, const QString & id, 
 {
 }
 
+KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
+: KoTool( "", "", "", canvas )
+, m_currentStrategy( 0 )
+{
+}
+
 KoInteractionTool::~KoInteractionTool()
 {
     delete m_currentStrategy;

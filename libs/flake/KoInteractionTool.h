@@ -48,6 +48,7 @@ public:
      * @param canvas the canvas this tool will be working for.
      */
     KoInteractionTool(const QString & name, const QString & id, const QString & type, KoCanvasBase *canvas );
+    KoInteractionTool( KoCanvasBase *canvas );
     virtual ~KoInteractionTool();
 
 

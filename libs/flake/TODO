@@ -5,6 +5,8 @@
     Note that we want a refCounter in the model-backend of the Shape. (picture/text)
 * add a ShearingStrategy
 
+* Add 'ensureVisible()' to KoShape
+
 
 Bugs:
 * rescaling does not alter the positions of the connectors. I expect their

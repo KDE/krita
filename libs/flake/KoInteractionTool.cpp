@@ -155,9 +155,10 @@ void KoInteractionTool::mouseReleaseEvent( KoGfxEvent *event ) {
 }
 
 void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
-    if(m_currentStrategy != 0 && event->key() == Qt::Key_Control ||
+    if(m_currentStrategy && 
+       (event->key() == Qt::Key_Control ||
             event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
-            event->key() == Qt::Key_Meta) {
+            event->key() == Qt::Key_Meta)) {
         m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
     }
 }

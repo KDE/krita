@@ -26,6 +26,7 @@
 #include <QPoint>
 #include <QRectF>
 #include <QRect>
+#include <QWidget>
 
 
 class KoSelection;
@@ -98,6 +99,10 @@ public:
      */
     virtual KoViewConverter *viewConverter() = 0;
 
+    /**
+     * Return the widget that will be added to the scrollArea.
+     */
+    virtual QWidget* canvasWidget() = 0;
 
 #if 0
 /*  The next list of methods are naming taken from Krita, which means they have allready been

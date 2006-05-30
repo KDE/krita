@@ -36,17 +36,8 @@ KoCanvasView::KoCanvasView(QWidget *parent)
 void KoCanvasView::setCanvas(KoCanvasBase *canvas) {
     Q_ASSERT(m_canvas == 0 /* Only allowed one time */);
     Q_ASSERT(canvas); // param is not null
-qDebug() << "canvas: " << canvas;
-    QWidget *cv = dynamic_cast<QWidget*> (canvas);
-    if(cv == 0) { // for now; since I don't get why kwcanvas is 0 here.
-        qWarning("KoCanvasView::setCanvas ERROR: canvas is not a widget?");
-        return;
-    }
-    Q_ASSERT(cv != 0 /* canvas is not a widget? */);
-    m_viewport->setCanvas(cv);
+    m_viewport->setCanvas(canvas->canvasWidget());
     m_canvas = canvas;
-    m_canvasWidget = cv;
-    m_canvasWidget->setAutoFillBackground(true);
 }
 
 KoCanvasBase* KoCanvasView::canvas() const {
@@ -85,6 +76,7 @@ KoCanvasView::Viewport::Viewport()
 }
 
 void KoCanvasView::Viewport::setCanvas(QWidget *canvas) {
+    canvas->setAutoFillBackground(true);
     m_layout->addWidget(canvas, 0, 1, Qt::AlignHCenter);
 }
 

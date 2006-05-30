@@ -53,8 +53,11 @@ public:
 
     void paint( QPainter &painter, KoViewConverter &converter);
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    KCommand* createCommand() { return 0; }
-    void finishInteraction();
+    virtual KCommand* createCommand() { return 0; }
+    virtual void finishInteraction();
+
+protected:
+    const QRectF selectRect() const;
 
 private:
     QRectF m_selectRect;

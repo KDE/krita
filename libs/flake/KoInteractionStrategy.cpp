@@ -25,6 +25,8 @@
 #include "KoShapeMoveStrategy.h"
 #include "KoShapeRotateStrategy.h"
 #include "KoShapeResizeStrategy.h"
+#include "KoCreateShapeStrategy.h"
+#include "KoCreateShapesTool.h"
 #include "KoInteractionTool.h"
 #include "KoCanvasBase.h"
 #include "KoTool.h"
@@ -51,6 +53,10 @@ KoInteractionStrategy::KoInteractionStrategy(KoTool *parent, KoCanvasBase *canva
 KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoGfxEvent *event, KoInteractionTool *parent, KoCanvasBase *canvas) {
     if((event->buttons() & Qt::LeftButton) == 0)
         return 0;  // Nothing to do for middle/right mouse button
+
+    KoCreateShapesTool *crs = dynamic_cast<KoCreateShapesTool*>(parent);
+    if(crs)
+        return new KoCreateShapeStrategy(crs, canvas, event->point);
 
     KoShapeManager *shapeManager = canvas->shapeManager();
     KoShape * object( shapeManager->getObjectAt( event->point ) );

@@ -21,6 +21,8 @@ set(flake_SRCS
     KoShapeRubberSelectStrategy.cpp
     KoTool.cpp
     KoCanvasView.cpp
+    KoCreateShapeStrategy.cpp
+    KoCreateShapesTool.cpp
 )
 
 kde4_automoc(${flake_SRCS})

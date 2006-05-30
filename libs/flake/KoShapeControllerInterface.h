@@ -22,9 +22,9 @@
 #define KOSHAPECONTROLLERINTERFACE_H
 
 /**
- * The shape controller is an abstract interface to be implemented by the
- * different applications document classes to allow passing them 
- * to commands which can add, remove or otherwise change shapes.
+ * The shape controller is an abstract interface that the applications class
+ * that controls the shapes should implement.  This tends to be the document.
+ * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
 class KoShapeControllerInterface
 {
@@ -32,12 +32,29 @@ public:
     KoShapeControllerInterface() { }
     virtual ~KoShapeControllerInterface() { }
 
-    /// adds a new shape
+    /**
+     * Add a shape to the shape controller, allowing it to be seen and saved.
+     * The controller should add the shape to the ShapeManager instance(s) manually
+     * if the shape is one that should be currently shown on screen.
+     * @param shape the new shape
+     */
     virtual void addShape( KoShape* shape ) = 0;
 
-    /// removes an existing shape
+    /**
+     * Remove a shape from the shape controllers control, allowing it to be deleted shortly after
+     * The controller should remove the shape from all the ShapeManager instance(s) manually
+     * @param shape the shape to remove
+     */
     virtual void removeShape( KoShape* shape ) = 0;
 
+    /**
+     * Factory method to create shapes.
+     * The CreateShapesTool will call this one when the user selected the outline for
+     * the position and size of the shape.<br>
+     * The implementor of this interface can choose to create different types of shapes
+     * based on things like which button was pressed to activate the create tool.
+     */
+    virtual KoShape* createShape(QRectF outline) const = 0;
 };
 
 #endif // KOSHAPECONTROLLERINTERFACE_H

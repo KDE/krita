@@ -171,17 +171,15 @@ KoShapeCreateCommand::~KoShapeCreateCommand() {
 }
 
 void KoShapeCreateCommand::execute () {
-    if( ! m_shape || ! m_controller )
-        return;
-
+    Q_ASSERT(m_shape);
+    Q_ASSERT(m_controller);
     m_controller->addShape( m_shape );
     m_deleteShape = false;
 }
 
 void KoShapeCreateCommand::unexecute () {
-    if( ! m_shape || ! m_controller )
-        return;
-
+    Q_ASSERT(m_shape);
+    Q_ASSERT(m_controller);
     m_controller->removeShape( m_shape );
     m_deleteShape = true;
 }

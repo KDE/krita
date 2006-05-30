@@ -30,11 +30,12 @@
 class KoInteractionStrategy;
 
 /**
- * The default tool (associated with the arrow icon) implements the moving
- * and selecting of flake objects.
- *
- * XXX: Also transforms? Or better use a separate tool for that.
- * XXX: We already have a moveTool; and 'default' does not say much about the class. What about renaming to KoSelectTool ?  (TZ)
+ * The default tool (associated with the arrow icon) implements the default
+ * interactions you have with flake objects.<br>
+ * The tool provides scaling, moving, selecting, rotation and soon skewing of
+ * any number of shapes.
+ * <p>Note that the implementation of those different strategies are delegated
+ * to the InteractionStrategy class and its subclasses.
  */
 class FLAKE_EXPORT KoInteractionTool : public KoTool
 {
@@ -106,13 +107,15 @@ signals:
     void sigDone();
 
 
+protected:
+    KoInteractionStrategy *m_currentStrategy;
+
 private:
     void recalcSelectionBox();
 
     KoInteractionTool(const KoInteractionTool&);
     KoInteractionTool& operator=(const KoInteractionTool&);
 
-    KoInteractionStrategy *m_currentStrategy;
     QRectF handlesSize();
 
     // convenience method;

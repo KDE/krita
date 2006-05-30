@@ -54,7 +54,7 @@ public:
      * The implementor of this interface can choose to create different types of shapes
      * based on things like which button was pressed to activate the create tool.
      */
-    virtual KoShape* createShape(QRectF outline) const = 0;
+    virtual KoShape* createShape(const QRectF &outline) const = 0;
 };
 
 #endif // KOSHAPECONTROLLERINTERFACE_H

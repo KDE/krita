@@ -86,6 +86,8 @@ class KoOpenPane : public QWidget
       */
     void initTemplates(const QString& templateType);
 
+    void updateSectionListMaxHeight();
+
   private:
     KoOpenPanePrivate* d;
 };

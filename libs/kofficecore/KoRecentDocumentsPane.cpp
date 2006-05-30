@@ -227,7 +227,7 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
       break;
     }
 
-    it++;
+    ++it;
   }
 }
 

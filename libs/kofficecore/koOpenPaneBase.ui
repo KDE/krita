@@ -24,7 +24,7 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>0</number>
@@ -66,11 +66,11 @@
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType" >
-          <enum>QSizePolicy::Minimum</enum>
+          <enum>QSizePolicy::MinimumExpanding</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>0</width>
+           <width>20</width>
            <height>0</height>
           </size>
          </property>
@@ -84,7 +84,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>195</width>
+         <width>69</width>
          <height>464</height>
         </rect>
        </property>

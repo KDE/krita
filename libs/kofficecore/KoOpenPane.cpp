@@ -29,6 +29,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
+#include <QSize>
 
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -187,6 +188,8 @@ void KoOpenPane::initRecentDocs()
   if(d->m_instance->config()->hasGroup("RecentFiles")) {
     d->m_sectionList->setSelected(item, true);
   }
+
+  updateSectionListMaxHeight();
 }
 
 void KoOpenPane::initTemplates(const QString& templateType)
@@ -206,7 +209,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
 
       KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_instance, group->name(),
           group, templateTree.defaultTemplate());
-      connect(pane, SIGNAL(openFile(const KUrl&)), this, SIGNAL(openTemplate(const KUrl&)));
+      connect(pane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openTemplate(const KUrl&)));
       connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
               this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
       connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
@@ -241,6 +244,8 @@ void KoOpenPane::initTemplates(const QString& templateType)
   } else if(!d->m_sectionList->selectedItem() && firstItem) {
     d->m_sectionList->setSelected(firstItem, true);
   }
+
+  updateSectionListMaxHeight();
 }
 
 void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
@@ -257,6 +262,8 @@ void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
     KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
     d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
   }
+
+  updateSectionListMaxHeight();
 }
 
 Q3ListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
@@ -313,6 +320,21 @@ void KoOpenPane::itemClicked(Q3ListViewItem* item)
   if(selectedItem) {
     d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
   }
+}
+
+void KoOpenPane::updateSectionListMaxHeight()
+{
+  Q3ListViewItemIterator it(d->m_sectionList);
+  int totalHeight = 0;
+
+  while(it.current()) {
+    totalHeight += it.current()->height();
+    ++it;
+  }
+
+  totalHeight += 4;
+  QSize sizeHint = d->m_sectionList->sizeHint();
+  d->m_sectionList->setFixedHeight(totalHeight);
 }
 
 #include "KoOpenPane.moc"

@@ -40,6 +40,8 @@ public:
 
     int visibleHeight() const;
     int visibleWidth() const;
+    int canvasOffsetX() const;
+    int canvasOffsetY() const;
 
     void centerCanvas(bool centered);
     bool isCanvasCentered() const;

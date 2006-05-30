@@ -61,6 +61,13 @@ bool KoCanvasView::isCanvasCentered() const {
     return m_centerCanvas;
 }
 
+int KoCanvasView::canvasOffsetX() const {
+    return 0; // TODO
+}
+
+int KoCanvasView::canvasOffsetY() const {
+    return 0; // TODO
+}
 
 // ********** Viewport **********
 KoCanvasView::Viewport::Viewport()

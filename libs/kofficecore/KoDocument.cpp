@@ -2515,9 +2515,8 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
     parent->factory()->container("mainToolBar", parent)->hide();
 }
 
-void KoDocument::openExistingFile( const QString& file )
+void KoDocument::openExistingFile( const KUrl& url )
 {
-    KUrl url( file );
     bool ok = openURL( url );
     setModified( false );
 
@@ -2525,9 +2524,9 @@ void KoDocument::openExistingFile( const QString& file )
         QTimer::singleShot( 0, this, SLOT( deleteOpenPane() ) );
 }
 
-void KoDocument::openTemplate( const QString& file )
+void KoDocument::openTemplate( const KUrl& url )
 {
-    bool ok = loadNativeFormat( file );
+    bool ok = loadNativeFormat( url.url() );
     setModified( false );
 
     if ( ok ) {
@@ -2561,10 +2560,10 @@ KoOpenPane* KoDocument::createOpenPane( QWidget* parent, KInstance* instance,
     }
     openPane->show();
 
-    connect( openPane, SIGNAL( openExistingFile( const QString& ) ),
-             this, SLOT( openExistingFile( const QString& ) ) );
-    connect( openPane, SIGNAL( openTemplate( const QString& ) ),
-             this, SLOT( openTemplate( const QString& ) ) );
+    connect( openPane, SIGNAL( openExistingFile( const KUrl& ) ),
+             this, SLOT( openExistingFile( const KUrl& ) ) );
+    connect( openPane, SIGNAL( openTemplate( const KUrl& ) ),
+             this, SLOT( openTemplate( const KUrl& ) ) );
 
     return openPane;
 }
@@ -2588,7 +2587,7 @@ void KoDocument::deleteOpenPane()
         shells().getFirst()->factory()->container("mainToolBar", shells().getFirst())->show();
         shells().getFirst()->setRootDocument( this );
     } else {
-      emit closeEmbedInitDialog();
+        emit closeEmbedInitDialog();
     }
 }
 

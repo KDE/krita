@@ -48,7 +48,6 @@
 #include <KoQueryTrader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <KoTemplateChooseDia.h>
 #include <KoApplication.h>
 
 // Local
@@ -180,65 +179,20 @@ DCOPObject *KisDoc::dcopObject()
     return m_dcop;
 }
 
-bool KisDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
-{
-    if (!init())
-        return false;
-
-    bool ok = false;
-
-    QString file;
-    KoTemplateChooseDia::DialogType dlgtype;
-
-     if (flags != KoDocument::InitDocFileNew) {
-        dlgtype = KoTemplateChooseDia::Everything;
-    } else {
-         dlgtype = KoTemplateChooseDia::OnlyTemplates;
-    }
-
-    KoTemplateChooseDia::ReturnType ret =
-        KoTemplateChooseDia::choose(KisFactory::instance(),
-                        file,
-                        dlgtype,
-                        "krita_template",
-                        parentWidget);
-    setUndo(false);
-
-    if (ret == KoTemplateChooseDia::Template) {
-        resetURL();
-        ok = loadNativeFormat( file );
-        setEmpty();
-        ok = true;
-
-    } else if (ret == KoTemplateChooseDia::File) {
-        KUrl url( file );
-        ok = openURL(url);
-    } else if (ret == KoTemplateChooseDia::Empty) {
-        setEmpty();
-        ok = true;
-    }
-
-    setModified(false);
-    KisConfig cfg;
-    setUndo(cfg.undoEnabled());
-
-    return ok;
-}
-
-void KisDoc::openExistingFile(const QString& file)
+void KisDoc::openExistingFile(const KUrl& url)
 {
   setUndo(false);
 
-  KoDocument::openExistingFile(file);
+  KoDocument::openExistingFile(url);
 
   setUndo(true);
 }
 
-void KisDoc::openTemplate(const QString& file)
+void KisDoc::openTemplate(const KUrl& url)
 {
   setUndo(false);
 
-  KoDocument::openTemplate(file);
+  KoDocument::openTemplate(url);
 
   setUndo(true);
 }

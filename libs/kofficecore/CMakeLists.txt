@@ -55,18 +55,20 @@ set(kofficecore_LIB_SRCS
    KoDetailsPane.cpp
    KoOasisLoadingContext.cpp
    KoRect.cpp
-   KoDocumentInfoPropsPage.cpp )
+   KoDocumentInfoPropsPage.cpp
+   KoTemplatesPane.cpp
+   KoRecentDocumentsPane.cpp )
 
 kde4_automoc(${kofficecore_LIB_SRCS})
 
-kde4_add_ui3_files(kofficecore_LIB_SRCS
-#   koDocumentInfoUserMetadataWidget.ui
-   koDetailsPaneBase.ui
-   koOpenPaneBase.ui )
+#kde4_add_ui3_files(kofficecore_LIB_SRCS
+#   koDocumentInfoUserMetadataWidget.ui )
 
 kde4_add_ui_files( kofficecore_LIB_SRCS
    koDocumentInfoAboutWidget.ui
-   koDocumentInfoAuthorWidget.ui )
+   koDocumentInfoAuthorWidget.ui
+   koOpenPaneBase.ui
+   koDetailsPaneBase.ui )
 
 kde4_add_dcop_skels(kofficecore_LIB_SRCS
    KoApplicationIface.h

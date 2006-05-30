@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,120 +14,52 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 #ifndef KODETAILSPANE_H
 #define KODETAILSPANE_H
 
-#include <k3listview.h>
+#include "ui_koDetailsPaneBase.h"
 
-#include "koDetailsPaneBase.h"
-//Added by qt3to4:
-#include <QPixmap>
-#include <QList>
-#include <QEvent>
-
-class KoTemplateGroup;
-class KoTemplate;
+class QEvent;
 class KInstance;
 class Q3ListViewItem;
-class KoRecentDocumentsPanePrivate;
-class KoRichTextListItemPrivate;
-class KFileItem;
-class QPixmap;
-class KJob;
+class KUrl;
 
-class KoTemplatesPanePrivate;
+class KoDetailsPanePrivate;
 
-/**
- * This widget is the right-side part of the template opening widget.
- * The parent widget is initial widget in the document space of each KOffice component.
- * This widget shows a list of templates and can show their details or open it.
- */
-class KoTemplatesPane : public KoDetailsPaneBase
+class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
 {
   Q_OBJECT
   public:
-    /**
-     * Constructor.
-     * @param parent the parent widget
-     * @param instance the instance object for the app
-     * @param group the group of templates this widget will show.
-     * @param defaultTemplate pointer to the default template. Used to select a
-     * template when none has been selected before.
-     */
-    KoTemplatesPane(QWidget* parent, KInstance* instance,
-                    KoTemplateGroup* group, KoTemplate* defaultTemplate);
-    ~KoTemplatesPane();
+    KoDetailsPane(QWidget* parent, KInstance* _instance, const QString& header);
+    virtual ~KoDetailsPane();
 
-    /// Returns true if a template in this group was the last one selected
-    bool isSelected();
+    KInstance* instance();
 
     virtual bool eventFilter(QObject* watched, QEvent* e);
 
   signals:
-    void openTemplate(const QString&);
-    /// Emited when the always use checkbox is selected
-    void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
+    /// Emited when a file is requested to be opened
+    void openUrl(const KUrl&);
 
-    void splitterResized(KoDetailsPaneBase* sender, const QList<int>& sizes);
+    /// This is used to keep all splitters in different details panes synced
+    void splitterResized(KoDetailsPane* sender, const QList<int>& sizes);
 
   public slots:
-    void resizeSplitter(KoDetailsPaneBase* sender, const QList<int>& sizes);
+    /// This is used to keep all splitters in different details panes synced
+    void resizeSplitter(KoDetailsPane* sender, const QList<int>& sizes);
 
   protected slots:
-    void selectionChanged(Q3ListViewItem* item);
-    void openTemplate();
-    void openTemplate(Q3ListViewItem* item);
-    void alwaysUseClicked();
-    void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
+    /// This is called when the selection in the listview changed
+    virtual void selectionChanged(Q3ListViewItem* item) = 0;
+    virtual void openFile();
+    virtual void openFile(Q3ListViewItem* item) = 0;
 
     void changePalette();
 
   private:
-    KoTemplatesPanePrivate* d;
-};
-
-
-/**
- * This widget is the recent doc part of the template opening widget.
- * The parent widget is initial widget in the document space of each KOffice component.
- * This widget shows a list of recent documents and can show their details or open it.
- */
-class KoRecentDocumentsPane : public KoDetailsPaneBase
-{
-  Q_OBJECT
-  public:
-    /**
-     * Constructor.
-     * @param parent the parent widget
-     * @param instance the instance object for the app
-     */
-    KoRecentDocumentsPane(QWidget* parent, KInstance* instance);
-    ~KoRecentDocumentsPane();
-
-    virtual bool eventFilter(QObject* watched, QEvent* e);
-
-  signals:
-    void openFile(const QString&);
-
-    void splitterResized(KoDetailsPaneBase* sender, const QList<int>& sizes);
-
-  public slots:
-    void resizeSplitter(KoDetailsPaneBase* sender, const QList<int>& sizes);
-
-  protected slots:
-    void selectionChanged(Q3ListViewItem* item);
-    void openFile();
-    void openFile(Q3ListViewItem* item);
-
-    void previewResult(KJob* job);
-    void updatePreview(const KFileItem* fileItem, const QPixmap& preview);
-
-    void changePalette();
-
-  private:
-    KoRecentDocumentsPanePrivate* d;
+    KoDetailsPanePrivate* d;
 };
 
 #endif //KODETAILSPANE_H

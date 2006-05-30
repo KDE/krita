@@ -19,8 +19,7 @@
 #ifndef KOOPENPANE_H
 #define KOOPENPANE_H
 
-#include <koOpenPaneBase.h>
-//Added by qt3to4:
+#include <QWidget>
 #include <QPixmap>
 #include <QList>
 
@@ -30,11 +29,12 @@ class KoTemplateGroup;
 class KoOpenPanePrivate;
 class KInstance;
 class QPixmap;
-class K3ListViewItem;
+class Q3ListViewItem;
 class KoTemplatesPane;
-class KoDetailsPaneBase;
+class KoDetailsPane;
+class KUrl;
 
-class KoOpenPane : public KoOpenPaneBase
+class KoOpenPane : public QWidget
 {
   Q_OBJECT
 
@@ -66,17 +66,17 @@ class KoOpenPane : public KoOpenPaneBase
     void itemClicked(Q3ListViewItem* item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
-    void saveSplitterSizes(KoDetailsPaneBase* sender, const QList<int>& sizes);
+    void saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes);
 
   signals:
-    void openExistingFile(const QString&);
-    void openTemplate(const QString&);
+    void openExistingFile(const KUrl&);
+    void openTemplate(const KUrl&);
 
     /// Emitted when the always use template has changed
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
     /// Emitted when one of the detail panes have changed it's splitter
-    void splitterResized(KoDetailsPaneBase* sender, const QList<int>& sizes);
+    void splitterResized(KoDetailsPane* sender, const QList<int>& sizes);
 
   protected:
     void initRecentDocs();

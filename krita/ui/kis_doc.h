@@ -63,7 +63,6 @@ public:
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
     virtual DCOPObject* dcopObject();
-    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
     virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
     virtual bool loadChildren( KoStore* store);
@@ -173,8 +172,8 @@ protected:
 
 protected slots:
     // Overide KoDocument
-    virtual void openExistingFile(const QString& file);
-    virtual void openTemplate(const QString& file);
+    virtual void openExistingFile(const KUrl& url);
+    virtual void openTemplate(const KUrl& url);
 
 private slots:
     void slotUpdate(KisImageSP img, quint32 x, quint32 y, quint32 w, quint32 h);

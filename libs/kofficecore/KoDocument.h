@@ -966,13 +966,13 @@ protected slots:
      * @param file the file to load (including path)
      * @since 1.5
      */
-    virtual void openExistingFile( const QString& file );
+    virtual void openExistingFile( const KUrl& url );
     /**
      * This slot loads a template and deletes the start up widget.
      * @param file the template to load
      * @since 1.5
      */
-    virtual void openTemplate( const QString& file );
+    virtual void openTemplate( const KUrl& url );
 
     void deleteOpenPaneDelayed();
 

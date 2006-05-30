@@ -2526,7 +2526,7 @@ void KoDocument::openExistingFile( const KUrl& url )
 
 void KoDocument::openTemplate( const KUrl& url )
 {
-    bool ok = loadNativeFormat( url.url() );
+    bool ok = loadNativeFormat( url.path() );
     setModified( false );
 
     if ( ok ) {

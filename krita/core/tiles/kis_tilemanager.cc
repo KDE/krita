@@ -71,7 +71,7 @@ KisTileManager::KisTileManager() {
     m_swappiness = cfg->readNumEntry("swappiness", 100);
 
     m_tileSize = KisTile::WIDTH * KisTile::HEIGHT;
-    m_freeLists.reserve(8);
+    m_freeLists.resize(8);
 
     counter = 0;
 
@@ -345,7 +345,7 @@ void KisTileManager::toSwap(TileInfo* info) {
             return;
         }
 
-        if (file->writeBlock(reinterpret_cast<const char *>(tile->m_data), info->size) == -1) {
+        if (file->writeBlock(reinterpret_cast<const char *>(tile->m_data), info->fsize) == -1) {
             kdWarning() << "Write to file FAILED!: " << info->filePos << endl;
             m_swapForbidden = true;
             m_swapMutex->unlock();

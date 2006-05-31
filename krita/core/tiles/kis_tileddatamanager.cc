@@ -154,7 +154,9 @@ bool KisTiledDataManager::write(KoStore *store)
                             KisTile::WIDTH, KisTile::HEIGHT);
             store->write(str,strlen(str));
 
+            tile->addReader();
             store->write((char *)tile->m_data, KisTile::HEIGHT * KisTile::WIDTH * m_pixelSize);
+            tile->removeReader();
 
             tile = tile->getNext();
         }

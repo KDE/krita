@@ -53,14 +53,10 @@ KisTile::KisTile(const KisTile& rhs, Q_INT32 col, Q_INT32 row)
 
         allocate();
 
-        // If we ensure it's loaded, we won't need to modify the tiles with addReader and so,
-        // which modify the constness much more explicitly than this one, that only does it
-        // implicitly (that is, it has a non-const copy of the pointer tile somewhere)
-        KisTileManager::instance()->ensureTileLoaded(&rhs);
-        assert(rhs.m_data);
-        if (rhs.m_data) {
-            memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
-        }
+        // Assure we have data to copy
+        rhs.addReader();
+        memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
+        rhs.removeReader();
 
         m_col = col;
         m_row = row;
@@ -81,12 +77,9 @@ KisTile::KisTile(const KisTile& rhs)
 
         allocate();
 
-        // Ditto as above
-        KisTileManager::instance()->ensureTileLoaded(&rhs);
-        assert(rhs.m_data);
-        if (rhs.m_data) {
-            memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
-        }
+        rhs.addReader();
+        memcpy(m_data, rhs.m_data, WIDTH * HEIGHT * m_pixelSize * sizeof(Q_UINT8));
+        rhs.removeReader();
 
         KisTileManager::instance()->registerTile(this);
     }
@@ -120,10 +113,11 @@ void KisTile::setNext(KisTile *n)
 
 Q_UINT8 *KisTile::data(Q_INT32 x, Q_INT32 y ) const
 {
+    addReader();
+    removeReader();
+
     Q_ASSERT(m_data != 0);
-    //addReader(); [!] const!
     if (m_data == 0) return 0;
-    //removeReader(); [!]
 
     return m_data + m_pixelSize * ( y * WIDTH + x );
 }
@@ -140,7 +134,7 @@ void KisTile::setData(const Q_UINT8 *pixel)
     removeReader();
 }
 
-void KisTile::addReader()
+void KisTile::addReader() const
 {
     if (m_nReadlock++ == 0)
         KisTileManager::instance()->ensureTileLoaded(this);
@@ -151,7 +145,7 @@ void KisTile::addReader()
     assert(m_data);
 }
 
-void KisTile::removeReader()
+void KisTile::removeReader() const
 {
     if (--m_nReadlock == 0)
         KisTileManager::instance()->maySwapTile(this);

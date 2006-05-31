@@ -796,7 +796,9 @@ void PreferencesDialog::slotDefault()
     m_colorSettings->setDefault();
     m_tabletSettings->setDefault();
     m_performanceSettings->setDefault();
+#ifdef HAVE_OPENGL
     m_displaySettings->setDefault();
+#endif
     m_gridSettings->setDefault();
 }
 
@@ -831,9 +833,11 @@ bool PreferencesDialog::editPreferences()
 
         dialog->m_tabletSettings->applySettings();
 
+#ifdef HAVE_OPENGL
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         //cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
-    
+#endif
+
         // Grid settings
         cfg.setGridMainStyle( dialog->m_gridSettings->selectMainStyle->currentIndex() );
         cfg.setGridSubdivisionStyle( dialog->m_gridSettings->selectSubdivisionStyle->currentIndex() );

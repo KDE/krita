@@ -32,7 +32,7 @@
 #include "kis_ycbcr_u8_colorspace.h"
 
 typedef KGenericFactory<YCbCrU8Plugin> YCbCrU8PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_ycbcr_u16_plugin, YCbCrU8PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( krita_ycbcr_u8_plugin, YCbCrU8PluginFactory( "krita" ) )
 
 
 YCbCrU8Plugin::YCbCrU8Plugin(QObject *parent, const char *name, const QStringList &)

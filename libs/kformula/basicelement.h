@@ -77,17 +77,13 @@ class KOFORMULA_EXPORT BasicElement // exported for unit tests
 public:
 
     /*
-     * Each element might contain children. Each child needs
-     * its own unique number. It is not guaranteed, however,
-     * that the number stays the same all the time.
-     * (The SequenceElement's children are simply counted.)
+     * The standard constructor
+     * @param parent pointer to the BasicElement's parent
      */
+    BasicElement( BasicElement* parent = 0 );
 
-    BasicElement(BasicElement* parent = 0);
+    /// The standard destructor
     virtual ~BasicElement();
-
-    // deep copy
-    BasicElement( const BasicElement& );
 
     virtual BasicElement* clone() = 0;
 
@@ -110,7 +106,7 @@ public:
     /**
      * Provide fast access to the rootElement for each child.
      */
-    virtual const FormulaElement* formula() const { return parent->formula(); }
+    virtual const FormulaElement* formula() const { return m_parentElement->formula(); }
 
     /**
      * @returns the character that represents this element. Used for
@@ -332,9 +328,9 @@ public:
 
     // basic support
 
-    const BasicElement* getParent() const { return parent; }
-    BasicElement* getParent() { return parent; }
-    void setParent(BasicElement* p) { parent = p; }
+    const BasicElement* getParent() const { return m_parentElement; }
+    BasicElement* getParent() { return m_parentElement; }
+    void setParent(BasicElement* p) { m_parentElement = p; }
 
     double getX() const;
     double getY() const;
@@ -438,7 +434,7 @@ protected:
 private:
 
     /// The element's parent element - might not be null except of FormulaElement
-    BasicElement* parent;
+    BasicElement* m_parentElement;
     
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;

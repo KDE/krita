@@ -33,8 +33,9 @@ using namespace std;
 int BasicElement::evilDestructionCount = 0;
 
 BasicElement::BasicElement( BasicElement* p )
-        : parent( p ), m_baseline( 0 ), elementType( 0 )
+        : m_baseline( 0 ), elementType( 0 )
 {
+  m_parentElement = p;
   m_boundingRect = QRectF( 0, 0, 0, 0 );
     evilDestructionCount++;
 }
@@ -44,31 +45,15 @@ BasicElement::~BasicElement()
     evilDestructionCount--;
 }
 
-BasicElement::BasicElement( const BasicElement& other )
-    : parent( 0 ),
-      m_baseline( other.m_baseline ),
-      elementType( other.elementType )
-{
-  m_boundingRect = QRectF( other.getX(), other.getY(), other.getWidth(), other.getHeight() );
-
-    evilDestructionCount++;
-}
-
-
 bool BasicElement::readOnly( const BasicElement* /*child*/ ) const
 {
-    return parent->readOnly( this );
+    return m_parentElement->readOnly( this );
 }
-
 
 FormulaElement* BasicElement::formula()
 {
-    //if ( parent != 0 ) {
-        return parent->formula();
-        //}
-        //return 0;
+  return m_parentElement->formula();
 }
-
 
 /**
  * Returns the element the point is in.
@@ -93,7 +78,7 @@ LuPixelPoint BasicElement::widgetPos()
 {
     luPixel x = 0;
     luPixel y = 0;
-    for (BasicElement* element = this; element != 0; element = element->parent) {
+    for (BasicElement* element = this; element != 0; element = element->getParent()) {
         x += element->getX();
         y += element->getY();
     }
@@ -102,7 +87,7 @@ LuPixelPoint BasicElement::widgetPos()
 
 
 /**
- * Sets the cursor inside this element to its start position.
+ * Sets the cursor inside this element to its start position
  * For most elements that is the main child.
  */
 void BasicElement::goInside(FormulaCursor* cursor)

@@ -81,19 +81,22 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent)
     mVIn->setFocusPolicy( Qt::ClickFocus );
     mVIn->setToolTip( i18n( "Value (brightness)" ) );
 
-    mGrid->addWidget(m_ColorButton, 0, 0, 0, 1, Qt::AlignTop);
+    mGrid->addWidget(m_ColorButton, 0, 0, 2, 2, Qt::AlignTop);
 
-    mGrid->addWidget(mHLabel, 1, 0);
-    mGrid->addWidget(mSLabel, 2, 0);
-    mGrid->addWidget(mVLabel, 3, 0);
+    mGrid->addWidget(mHLabel, 2, 0, Qt::AlignTop);
+    mGrid->addWidget(mSLabel, 3, 0, Qt::AlignTop);
+    mGrid->addWidget(mVLabel, 4, 0, Qt::AlignTop);
 
-    mGrid->addWidget(m_colorwheel, 0, 3, 2, 4);
+    mGrid->addWidget(m_colorwheel, 0, 2, 5, 4, Qt::AlignTop);
 
-    mGrid->addWidget(mHIn, 1, 1);
-    mGrid->addWidget(mSIn, 2, 1);
-    mGrid->addWidget(mVIn, 3, 1);
+    mGrid->addWidget(mHIn, 2, 1, Qt::AlignTop);
+    mGrid->addWidget(mSIn, 3, 1, Qt::AlignTop);
+    mGrid->addWidget(mVIn, 4, 1, Qt::AlignTop);
 
-    mGrid->addWidget(m_VSelector, 0, 3, 5, 5);
+    mGrid->addWidget(m_VSelector, 0, 6, 5, 1, Qt::AlignTop);
+
+    mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 7 );
+    mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ), 5, 0 );
 
 
     connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));

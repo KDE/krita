@@ -599,12 +599,12 @@ QRect KisPaintDevice::exactBoundsImprovedOldMethod() const
 
 QRect KisPaintDevice::exactBounds() const
 {
-//     QRect r1 = exactBoundsOldMethod();
+    QRect r1 = exactBoundsOldMethod();
     QRect r2 = exactBoundsImprovedOldMethod();
-/*    if(r1 != r2)
+    if(r1 != r2)
     {
         kdDebug() << "EXACTBOUNDSERROR : " << r1 << " " << r2 << endl;
-    }*/
+    }
     return r2;
 }
 

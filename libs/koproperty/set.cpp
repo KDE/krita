@@ -21,6 +21,7 @@
 
 #include "set.h"
 #include "property.h"
+#include "utils.h"
 
 #include <qapplication.h>
 #include <q3asciidict.h>
@@ -92,6 +93,7 @@ Set::Iterator::Iterator(const Set &set)
 
 Set::Iterator::~Iterator()
 {
+	delete iterator;
 }
 
 void
@@ -101,13 +103,13 @@ Set::Iterator::operator ++()
 }
 
 Property*
-Set::Iterator::operator *()
+Set::Iterator::operator *() const
 {
 	return current();
 }
 
 QByteArray
-Set::Iterator::currentKey()
+Set::Iterator::currentKey() const
 {
 	if (iterator)
 		return iterator->currentKey();
@@ -116,7 +118,7 @@ Set::Iterator::currentKey()
 }
 
 Property*
-Set::Iterator::current()
+Set::Iterator::current() const
 {
 	if(iterator)
 		return iterator->current();
@@ -124,7 +126,7 @@ Set::Iterator::current()
 	return 0;
 }
 
- //////////////////////////////////////////////
+//////////////////////////////////////////////
 
 Set::Set(QObject *parent, const QString &typeName)
 : QObject(parent, typeName.latin1())
@@ -506,6 +508,17 @@ void Buffer::intersectedReset(KoProperty::Set& set, KoProperty::Property& prop)
 	for ( ; it != props->end(); ++it )  {
 		( *it )->setValue( prop.value(), false );
 	}
+}
+
+//////////////////////////////////////////////
+
+QMap<QByteArray, QVariant> KoProperty::propertyValues(const Set& set)
+{
+	QMap<QByteArray, QVariant> result;
+	for (Set::Iterator it(set); it.current(); ++it)
+		result.insert( it.currentKey(), it.current()->value() );
+	
+	return result;
 }
 
 #include "set.moc"

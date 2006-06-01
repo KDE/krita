@@ -46,10 +46,9 @@ class KOPROPERTY_EXPORT Set : public QObject
 	Q_OBJECT
 
 	public:
-		/*! \brief A class to iterate over a SetPrivate
-		It behaves as a QDictIterator. To use it:
-		\code  Set::Iterator it(set);
-		       for(; it.current(); ++it) { .... }
+		/*! \brief A class to iterate over a Set.
+		It behaves like a QDictIterator. To use it:
+		\code  for(Set::Iterator it(set); it.current(); ++it) { .... }
 		\endcode
 		  \author Cedric Pasteur <cedric.pasteur@free.fr>
 		  \author Alexander Dymo <cloudtemple@mskat.net> */
@@ -59,10 +58,10 @@ class KOPROPERTY_EXPORT Set : public QObject
 				~Iterator();
 
 				void operator ++();
-				Property*  operator *();
+				Property*  operator *() const;
 
-				QByteArray  currentKey();
-				Property*  current();
+				QByteArray  currentKey() const;
+				Property*  current() const;
 
 			private:
 				Q3AsciiDictIterator<Property> *iterator;

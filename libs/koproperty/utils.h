@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qmap.h>
+#include <qwidget.h>
+
 namespace KoProperty {
 
 //! @short A container widget that can be used to split information into hideable sections 
@@ -35,5 +38,7 @@ class KOPROPERTY_EXPORT GroupContainer : public QWidget
 		class Private;
 		Private *d;
 };
+
+KOPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);
 
 }

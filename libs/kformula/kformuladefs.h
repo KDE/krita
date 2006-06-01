@@ -23,13 +23,10 @@
 
 #include <memory>
 
-#include <QPoint>
-#include <QRect>
+#include <QPointF>
+#include <QSizeF>
+#include <QRectF>
 #include <QString>
-
-#include <KoPoint.h>
-#include <KoRect.h>
-
 
 #define KFORMULA_NAMESPACE_BEGIN namespace KFormula {
 #define KFORMULA_NAMESPACE_END }
@@ -38,39 +35,34 @@ KFORMULA_NAMESPACE_BEGIN
 
 const int DEBUGID = 40000;
 
-// to make kDebug a litte more interessting...
-//#define TERM_RESET "[0m"
-//#define TERM_ERROR "[40;31;m"
-
 /**
  * The type to be used for points.
  */
 typedef double pt;
-typedef KoPoint PtPoint;
-typedef KoRect PtRect;
-//typedef KoSize PtSize;
+typedef QPointF PtPoint;
+typedef QRectF PtRect;
 
 /**
  * Pixels. At any zoom level.
  */
-typedef int pixel;
-typedef QPoint PixelPoint;
-typedef QRect PixelRect;
-typedef QSize PixelSize;
+typedef double pixel;
+typedef QPointF PixelPoint;
+typedef QRectF PixelRect;
+typedef QSizeF PixelSize;
 
 /**
  * Layout Unit. That's the values we store to get
  * wysiwyg right.
  */
-typedef int luPt;
-typedef QPoint LuPtPoint;
-typedef QRect LuPtRect;
-typedef QSize LuPtSize;
+typedef double luPt;
+typedef QPointF LuPtPoint;
+typedef QRectF LuPtRect;
+typedef QSizeF LuPtSize;
 
-typedef int luPixel;
-typedef QPoint LuPixelPoint;
-typedef QRect LuPixelRect;
-typedef QSize LuPixelSize;
+typedef double luPixel;
+typedef QPointF LuPixelPoint;
+typedef QRectF LuPixelRect;
+typedef QSizeF LuPixelSize;
 
 
 /**

@@ -336,20 +336,17 @@ public:
     BasicElement* getParent() { return parent; }
     void setParent(BasicElement* p) { parent = p; }
 
-    luPixel getX() const { return m_x; }
-    luPixel getY() const { return m_y; }
+    double getX() const;
+    double getY() const;
 
-    void setX( luPixel x ) { m_x = x; }
-    void setY( luPixel y ) { m_y = y; }
+    void setX( double x );
+    void setY( double y );
+    double getWidth() const;
+    double getHeight() const;
 
-    //QSize getSize() { return size; }
-
-    luPixel getWidth() const { return m_width; }
-    luPixel getHeight() const { return m_height; }
-
-    void setWidth( luPixel width )   { m_width = width; }
-    void setHeight( luPixel height ) { m_height = height; }
-
+    void setWidth( double width );
+    void setHeight( double height );
+    
     luPixel getBaseline() const { return m_baseline; }
     void setBaseline( luPixel line ) { m_baseline = line; }
 
@@ -440,26 +437,11 @@ protected:
 
 private:
 
-    /**
-     * Our parent.
-     * The parent might not be null except for the FormulaElement
-     * that is the top of the element tree.
-     */
+    /// The element's parent element - might not be null except of FormulaElement
     BasicElement* parent;
-
-    /**
-     * This elements size.
-     */
-    //QSize size;
-    luPixel m_width;
-    luPixel m_height;
-
-    /**
-     * Our position relative to our parent.
-     */
-    //KoPoint position;
-    luPixel m_x;
-    luPixel m_y;
+    
+    /// The boundingRect storing the element's width, height, x and y
+    QRectF m_boundingRect;
 
     /**
      * The position of our base line from

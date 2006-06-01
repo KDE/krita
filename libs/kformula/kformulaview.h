@@ -24,7 +24,6 @@
 #include <QEvent>
 #include <QObject>
 #include <QRect>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QFocusEvent>
@@ -73,20 +72,20 @@ public:
     void mouseDoubleClickEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void wheelEvent(QWheelEvent* event);
-
+/*
     // the mouse event happened at a certain point
-    void mousePressEvent( QMouseEvent* event, const PtPoint& pos );
-    void mouseReleaseEvent( QMouseEvent* event, const PtPoint& pos );
-    void mouseDoubleClickEvent( QMouseEvent* event, const PtPoint& pos );
-    void mouseMoveEvent( QMouseEvent* event, const PtPoint& pos );
-    void wheelEvent( QWheelEvent* event, const PtPoint& pos );
-
+    void mousePressEvent( QMouseEvent* event, const QPointF& pos );
+    void mouseReleaseEvent( QMouseEvent* event, const QPointF& pos );
+    void mouseDoubleClickEvent( QMouseEvent* event, const QPointF& pos );
+    void mouseMoveEvent( QMouseEvent* event, const QPointF& pos );
+    void wheelEvent( QWheelEvent* event, const QPointF& pos );
+*/
     // the mouse event happened at a certain point
-    void mousePressEvent( QMouseEvent* event, const LuPixelPoint& pos );
-    void mouseReleaseEvent( QMouseEvent* event, const LuPixelPoint& pos );
-    void mouseDoubleClickEvent( QMouseEvent* event, const LuPixelPoint& pos );
-    void mouseMoveEvent( QMouseEvent* event, const LuPixelPoint& pos );
-    void wheelEvent( QWheelEvent* event, const LuPixelPoint& pos );
+    void mousePressEvent( QMouseEvent* event, const QPointF& pos );
+    void mouseReleaseEvent( QMouseEvent* event, const QPointF& pos );
+    void mouseDoubleClickEvent( QMouseEvent* event, const QPointF& pos );
+    void mouseMoveEvent( QMouseEvent* event, const QPointF& pos );
+    void wheelEvent( QWheelEvent* event, const QPointF& pos );
 
     void keyPressEvent(QKeyEvent* event);
     virtual void focusInEvent(QFocusEvent* event);

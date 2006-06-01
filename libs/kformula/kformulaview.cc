@@ -137,7 +137,7 @@ View::~View()
 
 QPoint View::getCursorPoint() const
 {
-    return contextStyle().layoutUnitToPixel( cursor()->getCursorPoint() );
+    return contextStyle().layoutUnitToPixel( cursor()->getCursorPoint().toPoint() );
 }
 
 void View::setReadOnly(bool ro)
@@ -224,67 +224,67 @@ void View::wheelEvent( QWheelEvent* event )
     const ContextStyle& context = contextStyle();
     wheelEvent( event, context.pixelToLayoutUnit( event->pos() ) );
 }
-
-void View::mousePressEvent( QMouseEvent* event, const PtPoint& pos )
+/*
+void View::mousePressEvent( QMouseEvent* event, const QPointF& pos )
 {
     const ContextStyle& context = contextStyle();
     mousePressEvent( event, context.ptToLayoutUnitPix( pos ) );
 }
 
-void View::mouseReleaseEvent( QMouseEvent* event, const PtPoint& pos )
+void View::mouseReleaseEvent( QMouseEvent* event, const QPointF& pos )
 {
     const ContextStyle& context = contextStyle();
     mouseReleaseEvent( event, context.ptToLayoutUnitPix( pos ) );
 }
 
-void View::mouseDoubleClickEvent( QMouseEvent* event, const PtPoint& pos )
+void View::mouseDoubleClickEvent( QMouseEvent* event, const QPointF& pos )
 {
     const ContextStyle& context = contextStyle();
     mouseDoubleClickEvent( event, context.ptToLayoutUnitPix( pos ) );
 }
 
-void View::mouseMoveEvent( QMouseEvent* event, const PtPoint& pos )
+void View::mouseMoveEvent( QMouseEvent* event, const QPointF& pos )
 {
     const ContextStyle& context = contextStyle();
     mouseMoveEvent( event, context.ptToLayoutUnitPix( pos ) );
 }
 
-void View::wheelEvent( QWheelEvent* event, const PtPoint& pos )
+void View::wheelEvent( QWheelEvent* event, const QPointF& pos )
 {
     const ContextStyle& context = contextStyle();
     wheelEvent( event, context.ptToLayoutUnitPix( pos ) );
 }
 
-
-void View::mousePressEvent( QMouseEvent* event, const LuPixelPoint& pos )
+*/
+void View::mousePressEvent( QMouseEvent* event, const QPointF& pos )
 {
     int flags = movementFlag( event->modifiers() );
     cursor()->mousePress( pos, flags );
     emitCursorChanged();
 }
 
-void View::mouseReleaseEvent( QMouseEvent* event, const LuPixelPoint& pos )
+void View::mouseReleaseEvent( QMouseEvent* event, const QPointF& pos )
 {
     int flags = movementFlag( event->modifiers() );
     cursor()->mouseRelease( pos, flags );
     emitCursorChanged();
 }
 
-void View::mouseDoubleClickEvent( QMouseEvent*, const LuPixelPoint& )
+void View::mouseDoubleClickEvent( QMouseEvent*, const QPointF& )
 {
     cursor()->moveRight( WordMovement );
     cursor()->moveLeft( SelectMovement | WordMovement );
     emitCursorChanged();
 }
 
-void View::mouseMoveEvent( QMouseEvent* event, const LuPixelPoint& pos )
+void View::mouseMoveEvent( QMouseEvent* event, const QPointF& pos )
 {
     int flags = movementFlag( event->modifiers() );
     cursor()->mouseMove( pos, flags );
     emitCursorChanged();
 }
 
-void View::wheelEvent( QWheelEvent*, const LuPixelPoint& )
+void View::wheelEvent( QWheelEvent*, const QPointF& )
 {
 }
 

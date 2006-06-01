@@ -20,8 +20,6 @@
 
 #include <QFile>
 #include <QRegExp>
-#include <QString>
-#include <QStringList>
 #include <QTextStream>
 
 #include <kconfig.h>

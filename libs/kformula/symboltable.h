@@ -26,15 +26,14 @@
 #include <QString>
 #include <QStringList>
 #include <QVector>
-
 #include "kformuladefs.h"
-
+#include "contextstyle.h"
 class KConfig;
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula
+{
 
-class ContextStyle;
-
+	
 /**
  * What we know about a unicode char. The char value itself
  * is a key inside the symbol table. Here we have
@@ -98,10 +97,10 @@ private:
  *
  * It contains all names that are know to the system.
  */
-class KOFORMULA_EXPORT SymbolTable {
-public:
-
-    SymbolTable();
+class KOFORMULA_EXPORT SymbolTable
+{
+  public:
+         SymbolTable();
 
     /**
      * Reads the unicode / font tables.
@@ -186,6 +185,6 @@ private:
     CharTableEntry dummyEntry;
 };
 
-KFORMULA_NAMESPACE_END
+}
 
 #endif // SYMBOLTABLE_H

@@ -35,10 +35,7 @@ int BasicElement::evilDestructionCount = 0;
 BasicElement::BasicElement( BasicElement* p )
         : parent( p ), m_baseline( 0 ), elementType( 0 )
 {
-    setX( 0 );
-    setY( 0 );
-    setWidth( 0 );
-    setHeight( 0 );
+  m_boundingRect = QRectF( 0, 0, 0, 0 );
     evilDestructionCount++;
 }
 
@@ -52,10 +49,8 @@ BasicElement::BasicElement( const BasicElement& other )
       m_baseline( other.m_baseline ),
       elementType( other.elementType )
 {
-    setX( other.getX() );
-    setY( other.getY() );
-    setWidth( other.getWidth() );
-    setHeight( other.getHeight() );
+  m_boundingRect = QRectF( other.getX(), other.getY(), other.getWidth(), other.getHeight() );
+
     evilDestructionCount++;
 }
 
@@ -241,6 +236,46 @@ bool BasicElement::buildChild( SequenceElement* child, QDomNode node, QString na
 QString BasicElement::toLatex()
 {
     return "{}";
+}
+
+void BasicElement::setWidth( double width )
+{
+  m_boundingRect.setWidth( width );
+}
+
+void BasicElement::setHeight( double height )
+{
+  m_boundingRect.setHeight( height );
+}
+
+void BasicElement::setX( double x )
+{
+  m_boundingRect.setX( x );
+}
+
+void BasicElement::setY( double y )
+{
+  m_boundingRect.setY( y );
+}
+
+double BasicElement::getHeight() const
+{
+  return m_boundingRect.height();
+}
+
+double BasicElement::getWidth() const
+{
+  return m_boundingRect.width();
+}
+
+double BasicElement::getY() const
+{
+  return m_boundingRect.y();
+}
+
+double BasicElement::getX() const
+{
+  return m_boundingRect.x();
 }
 
 KFORMULA_NAMESPACE_END

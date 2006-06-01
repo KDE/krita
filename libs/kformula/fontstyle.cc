@@ -379,10 +379,10 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
     QChar middle = style.symbolTable().character( chars[3] );
 
     QFontMetrics fm(p.fontMetrics());
-    QRect upperBound = fm.boundingRect(uppercorner);
-    QRect lowerBound = fm.boundingRect(lowercorner);
-    QRect middleBound = fm.boundingRect(middle);
-    QRect lineBound = fm.boundingRect(line);
+    QRectF upperBound = fm.boundingRect(uppercorner);
+    QRectF lowerBound = fm.boundingRect(lowercorner);
+    QRectF middleBound = fm.boundingRect(middle);
+    QRectF lineBound = fm.boundingRect(line);
 
     pixel ptX = style.layoutUnitToPixelX( x );
     pixel ptY = style.layoutUnitToPixelY( y );
@@ -401,16 +401,16 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
     // If the world was perfect and the urw-symbol font correct
     // this could be 0.
     //lu safety = lineBound.height() / 10;
-    pixel safety = 0;
+    double safety = 0;
 
-    pixel lineHeight = lineBound.height() - safety;
-    pixel gap = height/2 - upperBound.height() - middleBound.height() / 2;
+    double lineHeight = lineBound.height() - safety;
+    double gap = height/2 - upperBound.height() - middleBound.height() / 2;
 
     if (gap > 0) {
         QString ch = QString(QChar(line));
         int lineCount = qRound( gap / lineHeight ) + 1;
 
-        pixel start = (height - middleBound.height()) / 2 + safety;
+        double start = (height - middleBound.height()) / 2 + safety;
         for (int i = 0; i < lineCount; i++) {
             p.drawText( ptX, ptY-lineBound.top()+qMax( start-(i+1)*lineHeight,
                                                        upperBound.width() ),

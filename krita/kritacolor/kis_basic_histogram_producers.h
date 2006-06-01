@@ -23,7 +23,7 @@
 #include <klocale.h>
 
 #include "config.h"
-
+#include <config-krita.h>
 #include "kis_histogram_producer.h"
 #include "kis_colorspace.h"
 #include "kis_id.h"

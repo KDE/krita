@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 #include "config.h"
-
+#include <config-krita.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif

@@ -19,7 +19,7 @@
  */
 
 #include "kis_math_toolbox.h"
-
+#include <config-krita.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif

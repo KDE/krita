@@ -35,7 +35,7 @@
 #include "kis_selection.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), (QString("selection for ") + dev->name()).latin1())
+    : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), (QString("selection for ") + dev->name()).latin1()), m_doCacheExactRect(false)
     , m_parentPaintDevice(dev)
 {
     Q_ASSERT(dev);
@@ -164,10 +164,29 @@ QRect KisSelection::selectedRect()
 
 QRect KisSelection::selectedExactRect()
 {
-    if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
+    if(m_doCacheExactRect)
+        return m_cachedExactRect;
+    else if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
         return exactBounds();
     else
         return exactBounds().unite(m_parentPaintDevice->exactBounds());
+}
+
+void KisSelection::stopCachingExactRect()
+{
+    kdDebug() << "stop caching the exact rect" << endl;
+    m_doCacheExactRect = false;
+}
+
+
+void KisSelection::startCachingExactRect()
+{
+    kdDebug() << "start caching the exact rect" << endl;
+    if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)
+        m_cachedExactRect = exactBounds();
+    else
+        m_cachedExactRect = exactBounds().unite(m_parentPaintDevice->exactBounds());
+    m_doCacheExactRect = true;
 }
 
 void KisSelection::paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion)

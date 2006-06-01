@@ -135,6 +135,10 @@ public:
      */
     void shear( double sx, double sy );
 
+    double shearX() const { return m_shearX; }
+    double shearY() const { return m_shearY; }
+
+
     /**
      * @brief Resize the shape
      *
@@ -194,6 +198,8 @@ public:
      *   just like the rest of the KoShape class uses.
      */
     void addConnectionPoint( const QPointF &point ) { m_connectors.append( point ); }
+
+    QList<QPointF> connectors() const { return m_connectors.toList(); }
 
     /**
      * Set the background of the shape.
@@ -362,7 +368,7 @@ public:
      * ratio.
      * @return whether to keep aspect ratio of this shape
      */
-    bool keepAspectRatio() { return m_keepAspect; }
+    bool keepAspectRatio() const { return m_keepAspect; }
 
     /**
      * Return the position of this shape regardless of rotation/skew/scaling and regardless of
@@ -386,6 +392,9 @@ public:
      */
     void setAbsolutePosition(QPointF newPosition);
 
+    void moveLeft(double distance);
+    void moveTop(double distance);
+
 protected:
     QMatrix m_invMatrix;
     QBrush m_backgroundBrush; ///< Stands for the background color / fill etc.
@@ -399,6 +408,8 @@ protected:
      * @param converter the converter for the current views zoom.
      */
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
+
+    void copySettings(const KoShape *shape);
 
 private:
     double m_scaleX;

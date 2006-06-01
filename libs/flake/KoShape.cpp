@@ -279,6 +279,33 @@ void KoShape::setAbsolutePosition(QPointF newPosition) {
     setPosition(newPosition + vector1 - vector2);
 }
 
+void KoShape::copySettings(const KoShape *shape) {
+    m_pos = shape->position();
+    m_scaleX = shape->scaleX();
+    m_scaleY = shape->scaleY();
+    m_angle = shape->rotation();
+    m_shearX = shape->shearX();
+    m_shearY = shape->shearY();
+    m_size = shape->size();
+    m_connectors.clear();
+    foreach(QPointF point, shape->connectors())
+        addConnectionPoint(point);
+    m_zIndex = shape->zIndex();
+    m_visible = shape->isVisible();
+    m_locked = shape->isLocked();
+    m_keepAspect = shape->keepAspectRatio();
+}
+
+void KoShape::moveLeft(double distance) {
+    m_pos.setX(m_pos.x() + distance);
+    recalcMatrix();
+}
+
+void KoShape::moveTop(double distance) {
+    m_pos.setY(m_pos.y() + distance);
+    recalcMatrix();
+}
+
 // static
 void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter) {
     double zoomX, zoomY;

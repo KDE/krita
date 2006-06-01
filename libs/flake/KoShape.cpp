@@ -296,14 +296,9 @@ void KoShape::copySettings(const KoShape *shape) {
     m_keepAspect = shape->keepAspectRatio();
 }
 
-void KoShape::moveLeft(double distance) {
-    m_pos.setX(m_pos.x() + distance);
-    recalcMatrix();
-}
-
-void KoShape::moveTop(double distance) {
-    m_pos.setY(m_pos.y() + distance);
-    recalcMatrix();
+void KoShape::moveBy(double distanceX, double distanceY) {
+    QPointF p = absolutePosition();
+    setAbsolutePosition(QPointF(p.x() + distanceX, p.y() + distanceY));
 }
 
 // static

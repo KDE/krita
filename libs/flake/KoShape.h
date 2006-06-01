@@ -135,9 +135,17 @@ public:
      */
     void shear( double sx, double sy );
 
+    /**
+     * Return the current horizontal shearing angle for this shape.
+     * @return the current horizontal shearing angle for this shape.
+     */
     double shearX() const { return m_shearX; }
-    double shearY() const { return m_shearY; }
 
+    /**
+     * Return the current vertical shearing angle for this shape.
+     * @return the current vertical shearing angle for this shape.
+     */
+    double shearY() const { return m_shearY; }
 
     /**
      * @brief Resize the shape
@@ -199,6 +207,12 @@ public:
      */
     void addConnectionPoint( const QPointF &point ) { m_connectors.append( point ); }
 
+    /**
+     * Return a list of the connectors that have been added to this shape.
+     * Note that altering the list or the points in there will not have any
+     * effect on the shape.
+     * @return a list of the connectors that have been added to this shape.
+     */
     QList<QPointF> connectors() const { return m_connectors.toList(); }
 
     /**
@@ -392,8 +406,15 @@ public:
      */
     void setAbsolutePosition(QPointF newPosition);
 
-    void moveLeft(double distance);
-    void moveTop(double distance);
+    /**
+     * Move this shape from its current (absolute) position over a specified distance.
+     * This takes the position of the shape, and moves it in the normal plain. This takes
+     * into account the rotation of the object so distanceX really will be the resulting
+     * horizontal distance.
+     * @param distanceX the horizontal distance to move
+     * @param distanceX the vertical distance to move
+     */
+    void moveBy(double distanceX, double distanceY);
 
 protected:
     QMatrix m_invMatrix;
@@ -409,7 +430,13 @@ protected:
      */
     static void applyConversion(QPainter &painter, const KoViewConverter &converter);
 
-    void copySettings(const KoShape *shape);
+    /**
+     * Copy all the settings from the parameter shape and apply them to this shape.
+     * Settings like the position and rotation to visible and locked.  The parent
+     * is a notable exclusion.
+     * @param shape the shape to use as original
+     */
+    virtual void copySettings(const KoShape *shape);
 
 private:
     double m_scaleX;

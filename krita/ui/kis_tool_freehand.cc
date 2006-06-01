@@ -190,6 +190,7 @@ void KisToolFreehand::initPaint(KisEvent *)
         } else {
             m_target = device;
         }
+        if(m_target->hasSelection()) m_target->selection()->startCachingExactRect();
         m_painter = new KisPainter( m_target );
         Q_CHECK_PTR(m_painter);
         m_source = device;
@@ -253,6 +254,7 @@ void KisToolFreehand::endPaint()
         delete m_painter;
         m_painter = 0;
         notifyModified();
+        if(m_target->hasSelection()) m_target->selection()->stopCachingExactRect();
     }
 }
 

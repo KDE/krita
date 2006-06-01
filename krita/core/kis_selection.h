@@ -97,11 +97,15 @@ public:
     void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 
+    void startCachingExactRect();
+    void stopCachingExactRect();
 private:
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
 
 private:
     KisPaintDeviceSP m_parentPaintDevice;
+    bool m_doCacheExactRect;
+    QRect m_cachedExactRect;
 };
 
 #endif // KIS_SELECTION_H_

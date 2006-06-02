@@ -604,7 +604,7 @@ QString RootElement::formulaString()
     return "sqrt(" + content->formulaString() + ")";
 }
 
-void RootElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
+void RootElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de;
 

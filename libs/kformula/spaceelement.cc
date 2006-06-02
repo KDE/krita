@@ -163,7 +163,7 @@ bool SpaceElement::readContentFromDom(QDomNode& node)
     return BasicElement::readContentFromDom( node );
 }
 
-void SpaceElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
+void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
 
     QDomElement de = doc.createElement( oasisFormat ? "math:mspace" : "mspace" );

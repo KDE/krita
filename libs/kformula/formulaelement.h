@@ -169,7 +169,7 @@ public:
 
     virtual KCommand* input( Container* container, QKeyEvent* event );
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
     /**
      * Appends our attributes to the dom element.

@@ -1452,7 +1452,7 @@ QString SequenceElement::formulaString()
 }
 
 
-void SequenceElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
+void SequenceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
 
@@ -1699,7 +1699,7 @@ bool NameSequence::isValidSelection( FormulaCursor* cursor )
     return sequence->onlyTextSelected( cursor );
 }
 
-void NameSequence::writeMathML( QDomDocument& doc, QDomNode parent,bool oasisFormat )
+void NameSequence::writeMathML( QDomDocument& doc, QDomNode& parent,bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
     QString value;

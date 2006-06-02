@@ -847,7 +847,7 @@ QString SymbolElement::formulaString()
     return sym + ")";
 }
 
-void SymbolElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat  )
+void SymbolElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat  )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
     QDomElement mo = doc.createElement( oasisFormat ? "math:mo" : "mo" );

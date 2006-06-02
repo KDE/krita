@@ -1373,7 +1373,7 @@ QString IndexElement::formulaString()
     return index;
 }
 
-void IndexElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
+void IndexElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de;
     QDomElement uo;

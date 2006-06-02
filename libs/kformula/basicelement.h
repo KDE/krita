@@ -359,7 +359,7 @@ public:
     /**
      * Same as above, just MathML.
      */
-    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
     /**
      * Set this element attribute, build children and

@@ -263,7 +263,7 @@ public:
     // the upper right index is the only one we show
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
 

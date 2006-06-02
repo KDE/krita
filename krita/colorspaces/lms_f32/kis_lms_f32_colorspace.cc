@@ -200,17 +200,10 @@ QImage KisLmsF32ColorSpace::convertToQImage(const quint8 *dataU8, qint32 width, 
         double l = *( data + i + PIXEL_LONGWAVE );
         double m = *( data + i + PIXEL_MIDDLEWAVE );
         double s = *( data + i + PIXEL_SHORTWAVE );
-#ifdef __BIG_ENDIAN__
-        *( j + 0)  = FLOAT_TO_UINT8(*( data + i + PIXEL_ALPHA ));
-        *( j + 1 ) = computeRed(l,m,s);
-        *( j + 2 ) = computeGreen(l,m,s);
-        *( j + 3 ) = computeBlue(l,m,s);
-#else
         *( j + 3)  = FLOAT_TO_UINT8(*( data + i + PIXEL_ALPHA ));
         *( j + 2 ) = computeRed(l,m,s);
         *( j + 1 ) = computeGreen(l,m,s);
         *( j + 0 ) = computeBlue(l,m,s);
-#endif
         i += MAX_CHANNEL_LMSA;
         j += MAX_CHANNEL_LMSA;
     }

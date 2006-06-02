@@ -78,7 +78,7 @@ protected slots:
     void slotOffsetChanged( int offset );
     void slotRelativeSizeChanged( double relativeSize );
     void slotHyphenationChanged( bool state );
-    void slotLanguageChanged( int );
+    void slotLanguageChanged();
 
 signals:
     void applyFont();

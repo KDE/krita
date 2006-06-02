@@ -36,7 +36,7 @@ public:
     void setLanguage( const QString &item );
 
 signals:
-    void languageChanged( int item );
+    void languageChanged();
 };
 
 #endif

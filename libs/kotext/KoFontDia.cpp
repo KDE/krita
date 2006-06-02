@@ -101,7 +101,7 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
     //Language tab
     languageTab = new KoLanguageTab( broker, this );
     fontTabWidget->addTab( languageTab, i18n( "Language" ) );
-    connect( languageTab, SIGNAL( languageChanged( int ) ), this, SLOT( slotLanguageChanged( int ) ) );
+    connect( languageTab, SIGNAL( languageChanged() ), this, SLOT( slotLanguageChanged() ) );
 
     //Related properties List View
     //relatedPropertiesListView = new K3ListView( mainHBox );
@@ -297,7 +297,7 @@ void KoFontDia::slotHyphenationChanged( bool )
     m_changedFlags |= KoTextFormat::Hyphenation;
 }
 
-void KoFontDia::slotLanguageChanged( int )
+void KoFontDia::slotLanguageChanged()
 {
     m_changedFlags |= KoTextFormat::Language;
 }

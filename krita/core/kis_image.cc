@@ -1463,6 +1463,21 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
             m_activeLayer->paintMaskInactiveLayers(img, x1, y1, w, h);
         }
     }*/
+#ifdef __BIG_ENDIAN__
+    uchar * data = img.bits();
+    for (int i = 0; i < w * h; ++i) {
+        uchar r, g, b, a;
+        a = data[0];
+        b = data[1];
+        g = data[2];
+        r = data[3];
+        data[0] = r;
+        data[1] = g;
+        data[2] = b;
+        data[3] = a;
+        data += 4;
+    }
+#endif
 
     return image;
 }

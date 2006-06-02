@@ -279,17 +279,10 @@ QImage KisRgbF32ColorSpace::convertToQImage(const Q_UINT8 *dataU8, Q_INT32 width
     float exposureFactor = powf(2, exposure + 2.47393);
 
     while ( i < width * height * MAX_CHANNEL_RGBA) {
-#ifdef __BIG_ENDIAN__
-        *( j + 0)  = FLOAT_TO_UINT8(*( data + i + PIXEL_ALPHA ));
-        *( j + 1 ) = convertToDisplay(*( data + i + PIXEL_RED ), exposureFactor, gamma);
-        *( j + 2 ) = convertToDisplay(*( data + i + PIXEL_GREEN ), exposureFactor, gamma);
-        *( j + 3 ) = convertToDisplay(*( data + i + PIXEL_BLUE ), exposureFactor, gamma);
-#else
         *( j + 3)  = FLOAT_TO_UINT8(*( data + i + PIXEL_ALPHA ));
         *( j + 2 ) = convertToDisplay(*( data + i + PIXEL_RED ), exposureFactor, gamma);
         *( j + 1 ) = convertToDisplay(*( data + i + PIXEL_GREEN ), exposureFactor, gamma);
         *( j + 0 ) = convertToDisplay(*( data + i + PIXEL_BLUE ), exposureFactor, gamma);
-#endif
         i += MAX_CHANNEL_RGBA;
         j += MAX_CHANNEL_RGBA;
     }

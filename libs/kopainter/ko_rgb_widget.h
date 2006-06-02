@@ -20,22 +20,16 @@
 #define KO_RGB_WIDGET_H
 
 #include "qwidget.h"
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3GridLayout>
 
-#include <koffice_export.h>
 #include <kdualcolorbutton.h>
+#include <koffice_export.h>
 
-class KoFrameButton;
 class Q3GridLayout;
 class QColor;
-class KoColorSlider;
 class QLabel;
 class QSpinBox;
 class KDualColorButton;
-class KoColorSlider;
-class QColor;
+class KGradientSelector;
 
 class KOPAINTER_EXPORT KoRGBWidget
      : public QWidget
@@ -79,9 +73,9 @@ private:
 
 private:
 
-    KoColorSlider *mRSlider;
-    KoColorSlider *mGSlider;
-    KoColorSlider *mBSlider;
+    KGradientSelector *mRSlider;
+    KGradientSelector *mGSlider;
+    KGradientSelector *mBSlider;
     QLabel *mRLabel;
     QLabel *mGLabel;
     QLabel *mBLabel;

@@ -253,7 +253,7 @@ void KoHSVWidget::update(const KoColor & fgColor, const KoColor & bgColor)
     mSIn->blockSignals(false);
     mVIn->blockSignals(false);
     m_VSelector->blockSignals(false);
-    //m_VSelector->repaint(false);
+    m_VSelector->repaint(false);
     m_colorwheel->blockSignals(false);
 }
 

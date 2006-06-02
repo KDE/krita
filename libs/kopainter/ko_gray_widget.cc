@@ -24,14 +24,11 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QColor>
-//Added by qt3to4:
 #include <Q3GridLayout>
 
 #include <kdebug.h>
+#include <kselector.h>
 
-#include "koFrameButton.h"
-#include "koColorSlider.h"
-#include <kcolordialog.h>
 
 KoGrayWidget::KoGrayWidget(QWidget *parent, const char *name) : super(parent, name)
 {
@@ -42,22 +39,21 @@ KoGrayWidget::KoGrayWidget(QWidget *parent, const char *name) : super(parent, na
     Q3GridLayout *mGrid = new Q3GridLayout(this, 3, 5, 5, 2);
 
     /* setup color sliders */
-    mSlider = new KoColorSlider(this);
+    mSlider = new KGradientSelector(Qt::Horizontal, this);
     mSlider->setFocusPolicy( Qt::ClickFocus );
-    mSlider->setMaximumHeight(20);
-    mSlider->slotSetRange(0, 255);
-    mSlider->slotSetColor1(QColor(255, 255, 255));
-    mSlider->slotSetColor2(QColor(0, 0, 0));
+    mSlider->setMaximumHeight(25);
+    mSlider->setRange(0, 255);
+    mSlider->setColors(QColor(255, 255, 255), QColor(0, 0, 0));
 
     /* setup slider labels */
     mLabel = new QLabel("K:", this);
     mLabel->setFixedWidth(12);
-    mLabel->setFixedHeight(20);
+    mLabel->setFixedHeight(25);
 
     /* setup spin box */
     mIn = new QSpinBox(0, 255, 1, this);
     mIn->setFixedWidth(50);
-    mIn->setFixedHeight(20);
+    mIn->setFixedHeight(25);
     mIn->setFocusPolicy( Qt::ClickFocus );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
@@ -118,7 +114,7 @@ void KoGrayWidget::update(const QColor & fgColor, const QColor & bgColor)
     v /= 3.0;
     v = 255.0 - v;
     mIn->setValue(static_cast<int>(v));
-    mSlider->slotSetValue(static_cast<int>(v));
+    mSlider->setValue(static_cast<int>(v));
     mIn->blockSignals(false);
     mSlider->blockSignals(false);
 

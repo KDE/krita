@@ -32,60 +32,60 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-
-#include "koFrameButton.h"
-#include "koColorSlider.h"
-#include <kcolordialog.h>
+#include <kselector.h>
 
 KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name)
 {
     m_ColorButton = new KDualColorButton(this);
     m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
-    Q3GridLayout *mGrid = new Q3GridLayout(this, 3, 5, 5, 2);
+    Q3GridLayout *mGrid = new Q3GridLayout(this, 3, 5, 5, 6);
 
     /* setup color sliders */
-    mRSlider = new KoColorSlider(this);
-    mRSlider->setMaximumHeight(20);
-    mRSlider->slotSetRange(0, 255);
+    mRSlider = new KGradientSelector(Qt::Horizontal, this);
+    mRSlider->setInvertedAppearance(false);
+    mRSlider->setMaximumHeight(25);
+    mRSlider->setRange(0, 255);
     mRSlider->setFocusPolicy( Qt::ClickFocus );
 
-    mGSlider = new KoColorSlider(this);
-    mGSlider->setMaximumHeight(20);
-    mGSlider->slotSetRange(0, 255);
+    mGSlider = new KGradientSelector(Qt::Horizontal, this);
+    mGSlider->setInvertedAppearance(false);
+    mGSlider->setMaximumHeight(25);
+    mGSlider->setRange(0, 255);
     mGSlider->setFocusPolicy( Qt::ClickFocus );
 
-    mBSlider = new KoColorSlider(this);
-    mBSlider->setMaximumHeight(20);
-    mBSlider->slotSetRange(0, 255);
+    mBSlider = new KGradientSelector(Qt::Horizontal, this);
+    mBSlider->setInvertedAppearance(false);
+    mBSlider->setMaximumHeight(25);
+    mBSlider->setRange(0, 255);
     mBSlider->setFocusPolicy( Qt::ClickFocus );
 
     /* setup slider labels */
     mRLabel = new QLabel("R:", this);
     mRLabel->setFixedWidth(12);
-    mRLabel->setFixedHeight(20);
+    mRLabel->setFixedHeight(25);
     mGLabel = new QLabel("G:", this);
     mGLabel->setFixedWidth(12);
-    mGLabel->setFixedHeight(20);
+    mGLabel->setFixedHeight(25);
     mBLabel = new QLabel("B:", this);
     mBLabel->setFixedWidth(12);
-    mBLabel->setFixedHeight(20);
+    mBLabel->setFixedHeight(25);
 
     /* setup spin box */
     mRIn = new QSpinBox(0, 255, 1, this);
     mRIn->setFixedWidth(50);
-    mRIn->setFixedHeight(20);
+    mRIn->setFixedHeight(25);
     mRIn->setFocusPolicy( Qt::ClickFocus );
     mRIn->setToolTip( i18n( "Red" ) );
 
     mGIn = new QSpinBox(0, 255, 1, this);
     mGIn->setFixedWidth(50);
-    mGIn->setFixedHeight(20);
+    mGIn->setFixedHeight(25);
     mGIn->setFocusPolicy( Qt::ClickFocus );
     mGIn->setToolTip( i18n( "Green" ) );
 
     mBIn = new QSpinBox(0, 255, 1, this);
     mBIn->setFixedWidth(50);
-    mBIn->setFixedHeight(20);
+    mBIn->setFixedHeight(25);
     mBIn->setFocusPolicy( Qt::ClickFocus );
     mBIn->setToolTip( i18n( "Blue" ) );
 
@@ -174,19 +174,16 @@ void KoRGBWidget::update(const QColor fgColor, const QColor bgColor)
     mBSlider->blockSignals(true);
     mBIn->blockSignals(true);
 
-    mRSlider->slotSetColor1(QColor(0, g, b));
-    mRSlider->slotSetColor2(QColor(255, g, b));
-    mRSlider->slotSetValue(r);
+    mRSlider->setColors(QColor(0, g, b), QColor(255, g, b));
+    mRSlider->setValue(r);
     mRIn->setValue(r);
 
-    mGSlider->slotSetColor1(QColor(r, 0, b));
-    mGSlider->slotSetColor2(QColor(r, 255, b));
-    mGSlider->slotSetValue(g);
+    mGSlider->setColors(QColor(r, 0, b), QColor(r, 255, b));
+    mGSlider->setValue(g);
     mGIn->setValue(g);
 
-    mBSlider->slotSetColor1(QColor(r, g, 0));
-    mBSlider->slotSetColor2(QColor(r, g, 255));
-    mBSlider->slotSetValue(b);
+    mBSlider->setColors(QColor(r, g, 0), QColor(r, g, 255));
+    mBSlider->setValue(b);
     mBIn->setValue(b);
 
     mRSlider->blockSignals(false);

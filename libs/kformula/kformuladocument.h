@@ -33,6 +33,7 @@
 #include <kcommand.h>
 //#include "KoCommandHistory.h"
 #include "kformuladefs.h"
+#include <koffice_export.h>
 
 class KToggleAction;
 class KSelectAction;

@@ -31,7 +31,7 @@
 #include <kvbox.h>
 
 #include "kformuladefs.h"
-
+#include <koffice_export.h>
 class Q3ButtonGroup;
 class QCheckBox;
 class QColor;

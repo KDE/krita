@@ -34,7 +34,7 @@
 #include <kcommand.h>
 //#include <KoCommandHistory.h>
 #include "kformuladefs.h"
-
+#include <kformuladocument.h>
 class QColorGroup;
 class QKeyEvent;
 class QPainter;

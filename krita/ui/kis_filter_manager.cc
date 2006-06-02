@@ -363,7 +363,7 @@ void KisFilterManager::slotApplyFilter(int i)
         if(m_lastDialog->exec() == QDialog::Rejected )
         {
             delete m_lastDialog;
-            m_lastFilterConfig = oldConfig;`
+            m_lastFilterConfig = oldConfig;
             m_lastDialog = oldDialog;
             m_lastFilter = oldFilter;
             return;

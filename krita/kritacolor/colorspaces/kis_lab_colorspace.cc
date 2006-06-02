@@ -53,6 +53,21 @@ KisLabColorSpace::~KisLabColorSpace()
 {
 }
 
+quint8 * KisLabColorSpace::toLabA16(const quint8 * data, const quint32 nPixels) const
+{
+    quint8 * pixels = new quint8[nPixels * pixelSize()];
+    memcpy( pixels,  data,  nPixels * pixelSize() );
+    return pixels;
+}
+
+quint8 * KisLabColorSpace::fromLabA16(const quint8 * labData, const quint32 nPixels) const
+{
+    quint8 * pixels = new quint8[nPixels * pixelSize()];
+    memcpy( pixels, labData,  nPixels * pixelSize() );
+    return pixels;
+}
+
+
 quint8 KisLabColorSpace::difference(const quint8 *src1, const quint8 *src2)
 {
     cmsCIELab labF1, labF2;

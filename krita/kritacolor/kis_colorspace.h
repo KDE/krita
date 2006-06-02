@@ -248,6 +248,30 @@ public:
                                    KisProfile *  dstProfile, qint32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f) = 0;
 
+    /**
+     * Convert the specified data to Lab. This functions allocates the ncessary memory:
+     * it is your responsibility to delete[] it. If this colorspace is not able to 
+     * convert to lab, the function returns 0 (a recipe for a crash, so check it.)
+     * Note that the default conversion profile is used; converting back using the next
+     * function should be safe.
+     *
+     * @param data the source data
+     * @param nPixels the number of source pixels
+     * @return a pointer to a new array containing the lab pixels
+     */
+    virtual quint8 * toLabA16(const quint8 * /*data*/, const quint32 /*nPixels*/) const { return 0; }
+
+    /**
+     * Convert a byte array of nPixels pixels * labData to the current colorspace.
+     * Allocates the necessary memory and expects YOU to delete[] it. If this
+     * colorspaxe cannot convert from lab, the function returns 0 (a recipe for a 
+     * crash, so check it.)
+     *
+     * @param labData the pixels in 16 bit lab format
+     * @param nPxiels the number of pixels in the array
+     * @return a pointer to a new array containing the pixels in this colorspace 
+     */
+    virtual Q_UINT8 * fromLabA16(const quint8 * /*labData*/, const quint32 /*nPixels*/) const { return 0; }
 
 
     /**

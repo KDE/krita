@@ -135,6 +135,9 @@ public:
                                    qint32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f);
 
+    virtual quint8 * toLabA16(const quint8 * data, const quint32 nPixels) const;
+    virtual quint8 * fromLabA16(const quint8 * labData, const quint32 nPixels) const;
+
     virtual bool convertPixelsTo(const quint8 * src,
                                  quint8 * dst, KisColorSpace * dstColorSpace,
                                  quint32 numPixels,

@@ -22,6 +22,7 @@
 
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 #include "krita_export.h"
 
 const quint8 PIXEL_BLUE = 0;
@@ -29,7 +30,7 @@ const quint8 PIXEL_GREEN = 1;
 const quint8 PIXEL_RED = 2;
 const quint8 PIXEL_ALPHA = 3;
 
-class KRITACOLOR_EXPORT KisRgbColorSpace : public KisU8BaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbColorSpace : public KisU8BaseColorSpace, public KisLcmsBaseColorSpace {
 public:
     KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbColorSpace();
@@ -41,9 +42,6 @@ public:
 
 
 public:
-    void setPixel(quint8 *pixel, quint8 red, quint8 green, quint8 blue, quint8 alpha) const;
-    void getPixel(const quint8 *pixel, quint8 *red, quint8 *green, quint8 *blue, quint8 *alpha) const;
-
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
     virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
     virtual void invertColor(quint8 * src, qint32 nPixels);

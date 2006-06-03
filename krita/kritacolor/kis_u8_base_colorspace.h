@@ -23,21 +23,18 @@
 #include <QColor>
 
 #include "kis_global.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_colorspace.h"
 
 /**
  * This class is the base for all homogenous 8-bit/channel colorspaces with 8-bit alpha channels
  */
-class KRITACOLOR_EXPORT KisU8BaseColorSpace : public KisAbstractColorSpace {
+class KRITACOLOR_EXPORT KisU8BaseColorSpace : public virtual KisColorSpace {
 
 public:
 
-    KisU8BaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature,
-                        KisColorSpaceFactoryRegistry * parent,
-                        KisProfile *p)
-	: KisAbstractColorSpace(id, cmType, colorSpaceSignature, parent, p)
+    KisU8BaseColorSpace(qint32 alphaPos)
     {
-	m_alphaSize = sizeof(quint8);
+        m_alphaPos = alphaPos;
     };
 
     virtual quint8 getAlpha(const quint8 * pixel) const;
@@ -52,6 +49,11 @@ public:
 
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos);
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
+
+private:
+    qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
+    //qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
+
 };
 
 

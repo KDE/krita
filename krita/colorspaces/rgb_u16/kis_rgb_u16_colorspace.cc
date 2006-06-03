@@ -45,14 +45,14 @@ namespace {
 //const quint16 KisRgbU16ColorSpace::U16_OPACITY_TRANSPARENT;
 
 KisRgbU16ColorSpace::KisRgbU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisU16BaseColorSpace(KisID("RGBA16", i18n("RGB (16-bit integer/channel)")), TYPE_BGRA_16, icSigRgbData, parent, p)
+    KisColorSpace(KisID("RGBA16", i18n("RGB (16-bit integer/channel)")), parent)
+    , KisU16BaseColorSpace(PIXEL_ALPHA * sizeof(quint16))
+    , KisLcmsBaseColorSpace(TYPE_BGRA_16, icSigRgbData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(255,0,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(0,255,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(0,0,255)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
-
-    m_alphaPos = PIXEL_ALPHA * sizeof(quint16);
 
     init();
 }

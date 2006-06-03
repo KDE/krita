@@ -22,12 +22,13 @@
 
 #include "kis_global.h"
 #include "kis_u8_base_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a colour common to the mask. The default color is white.
  */
-class KisAlphaColorSpace : public KisU8BaseColorSpace {
+class KisAlphaColorSpace : public KisU8BaseColorSpace, public KisLcmsBaseColorSpace {
 public:
     KisAlphaColorSpace(KisColorSpaceFactoryRegistry * parent,
                        KisProfile *p);
@@ -69,7 +70,7 @@ protected:
      * Returns false if the conversion failed, true if it succeeded
      */
     virtual bool convertPixelsTo(const quint8 *src,
-                     quint8 *dst, KisAbstractColorSpace * dstColorSpace,
+                     quint8 *dst, KisColorSpace * dstColorSpace,
                      quint32 numPixels,
                      qint32 renderingIntent = INTENT_PERCEPTUAL);
 

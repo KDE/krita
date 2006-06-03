@@ -24,10 +24,11 @@
 
 #include "kis_global.h"
 #include "kis_u16_base_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 #include "kis_integer_maths.h"
 
 
-class KRITACOLOR_EXPORT KisCmykU16ColorSpace : public KisU16BaseColorSpace {
+class KRITACOLOR_EXPORT KisCmykU16ColorSpace : public KisU16BaseColorSpace, public KisLcmsBaseColorSpace {
 public:
 
     struct Pixel {

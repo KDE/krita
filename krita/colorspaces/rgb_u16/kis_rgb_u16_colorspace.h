@@ -28,7 +28,7 @@
 #include "kis_integer_maths.h"
 
 
-class KRITACOLOR_EXPORT KisRgbU16ColorSpace : public KisU16BaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbU16ColorSpace : public KisU16BaseColorSpace, public KisLcmsBaseColorSpace {
 public:
 
     struct Pixel {

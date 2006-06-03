@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kis_debug_areas.h>
-#include "kis_abstract_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_image.h"
 #include "kis_wet_colorspace.h"
@@ -112,7 +112,8 @@ int getH(int r, int g, int b)
 }
 
 KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisAbstractColorSpace(KisID("WET", i18n("Watercolors")), 0, icMaxEnumData, parent, p)
+    KisColorSpace(KisID("WET", i18n("Watercolors")), parent)
+    , KisLcmsBaseColorSpace(0, icMaxEnumData, p)
 {
     wet_init_render_tab();
 

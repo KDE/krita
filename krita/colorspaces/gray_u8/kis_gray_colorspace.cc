@@ -30,13 +30,10 @@
 #include <kdebug.h>
 #include <kglobal.h>
 
-#include "kis_abstract_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 #include "kis_u8_base_colorspace.h"
 #include "kis_gray_colorspace.h"
 #include "kis_integer_maths.h"
-
-#define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
-#define upscale(value)  (value) // ((quint8) (257UL*(value)))
 
 namespace {
     const qint32 MAX_CHANNEL_GRAYSCALE = 1;
@@ -44,12 +41,12 @@ namespace {
 }
 
 KisGrayColorSpace::KisGrayColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisU8BaseColorSpace(KisID("GRAYA", i18n("Grayscale")), TYPE_GRAYA_8, icSigGrayData, parent, p)
+    KisColorSpace(KisID("GRAYA", i18n("Grayscale")), parent)
+    , KisU8BaseColorSpace(PIXEL_GRAY_ALPHA)
+    , KisLcmsBaseColorSpace(TYPE_GRAYA_8, icSigGrayData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Gray"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 1, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
-
-    m_alphaPos = PIXEL_GRAY_ALPHA;
 
     init();
 }

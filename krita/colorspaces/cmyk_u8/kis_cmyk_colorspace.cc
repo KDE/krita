@@ -38,15 +38,15 @@ namespace cmyk {
 }
 
 KisCmykColorSpace::KisCmykColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisU8BaseColorSpace(KisID("CMYK", i18n("CMYK")), TYPE_CMYK5_8, icSigCmykData, parent, p)
+    KisColorSpace(KisID("CMYK", i18n("CMYK")), parent)
+    , KisU8BaseColorSpace(PIXEL_CMYK_ALPHA)
+    , KisLcmsBaseColorSpace(TYPE_CMYK5_8, icSigCmykData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::cyan));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::magenta));
     m_channels.push_back(new KisChannelInfo(i18n("Yellow"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::yellow));
     m_channels.push_back(new KisChannelInfo(i18n("Black"), 3, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, Qt::black));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4, KisChannelInfo::ALPHA, KisChannelInfo::UINT8, 1, Qt::white));
-
-    m_alphaPos = PIXEL_CMYK_ALPHA;
 
     init();
 }
@@ -159,7 +159,7 @@ void KisCmykColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KisColor
     quint8 * tmpPtr = tmp;
     memcpy(tmp, dst, nPixels * psize);
 
-    KisAbstractColorSpace::applyAdjustment(src, dst, adj, nPixels);
+    KisLcmsBaseColorSpace::applyAdjustment(src, dst, adj, nPixels);
 
     // Copy the alpha, which lcms doesn't do for us, grumble.
 

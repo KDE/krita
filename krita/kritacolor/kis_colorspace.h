@@ -57,10 +57,13 @@ enum ColorSpaceIndependence {
  */
 class KRITACOLOR_EXPORT KisColorSpace {
 
+protected:
+    /// Only for use by classes that serve as baseclass fro real colorspaces
+    KisColorSpace() {};
 
 public:
-
-    KisColorSpace();
+    /// Should be called by real colorspaces
+    KisColorSpace(const KisID &id, KisColorSpaceFactoryRegistry * parent);
     virtual ~KisColorSpace();
 
     virtual DCOPObject * dcopObject();
@@ -137,7 +140,7 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const = 0;
+    virtual KisID id() const {return m_id;};
 
     /**
      * lcms colorspace type definition.
@@ -249,30 +252,29 @@ public:
                                    float exposure = 0.0f) = 0;
 
     /**
-     * Convert the specified data to Lab. This functions allocates the ncessary memory:
-     * it is your responsibility to delete[] it. If this colorspace is not able to 
-     * convert to lab, the function returns 0 (a recipe for a crash, so check it.)
-     * Note that the default conversion profile is used; converting back using the next
-     * function should be safe.
-     *
-     * @param data the source data
-     * @param nPixels the number of source pixels
-     * @return a pointer to a new array containing the lab pixels
+     * This functions allocates the ncessary memory for numPixels number of pixels.
+     * It is your responsibility to delete[] it.
      */
-    virtual quint8 * toLabA16(const quint8 * /*data*/, const quint32 /*nPixels*/) const { return 0; }
+    quint8 *KisColorSpace::allocPixelBuffer(quint32 numPixels) const;
 
     /**
-     * Convert a byte array of nPixels pixels * labData to the current colorspace.
-     * Allocates the necessary memory and expects YOU to delete[] it. If this
-     * colorspaxe cannot convert from lab, the function returns 0 (a recipe for a 
-     * crash, so check it.)
+     * Convert the specified data to Lab. All colorspaces are guaranteed to support this
      *
-     * @param labData the pixels in 16 bit lab format
-     * @param nPxiels the number of pixels in the array
-     * @return a pointer to a new array containing the pixels in this colorspace 
+     * @param src the source data
+     * @param dst the destination data
+     * @param nPixels the number of source pixels
      */
-    virtual Q_UINT8 * fromLabA16(const quint8 * /*labData*/, const quint32 /*nPixels*/) const { return 0; }
+    virtual void toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const = 0;
 
+    /**
+     * Convert the specified data from Lab. to this colorspace. All colorspaces are
+     * guaranteed to support this.
+     *
+     * @param src the pixels in 16 bit lab format
+     * @param dst the destination data
+     * @param nPixels the number of pixels in the array
+     */
+    virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const = 0;
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
@@ -423,6 +425,11 @@ public:
 private:
 
     DCOPObject * m_dcop;
+    KisID m_id;
+
+protected:
+    KisColorSpaceFactoryRegistry * m_parent;
+    Q3ValueVector<KisChannelInfo *> m_channels;
 
 };
 

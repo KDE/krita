@@ -56,7 +56,6 @@
 #include <kis_paint_device.h>
 #include <kis_channelinfo.h>
 #include <kis_convolution_painter.h>
-#include "kis_rgb_colorspace.h"
 
 #include "kis_dropshadow.h"
 
@@ -90,7 +89,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
 
     KisPaintDeviceSP shadowDev = KisPaintDeviceSP(new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"" ), "Shadow"));
     KisPaintDeviceSP bShadowDev;
-    KisRgbColorSpace *rgb8cs = static_cast<KisRgbColorSpace *>(shadowDev->colorSpace());
+    KisColorSpace *rgb8cs = shadowDev->colorSpace();
 
     QRect rect = dev->exactBounds();
 
@@ -104,7 +103,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
             {
                 //set the shadow color
                 quint8 alpha = dev->colorSpace()->getAlpha(srcIt.rawData());
-                rgb8cs->setPixel(dstIt.rawData(), color.red(), color.green(), color.blue(), alpha);
+                rgb8cs->fromQColor(color, alpha, dstIt.rawData());
             }
             ++srcIt;
             ++dstIt;

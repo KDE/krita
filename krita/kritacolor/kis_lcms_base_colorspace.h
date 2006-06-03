@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_ABSTRACT_COLORSPACE_H_
-#define KIS_ABSTRACT_COLORSPACE_H_
+#ifndef KIS_LCMS_BASE_COLORSPACE_H_
+#define KIS_LCMS_BASE_COLORSPACE_H_
 
 #include <QMap>
 #include <QColor>
@@ -42,7 +42,7 @@ class KisColorSpaceFactoryRegistry;
  * A colorspace strategy is the definition of a certain color model
  * in Krita.
  */
-class KRITACOLOR_EXPORT KisAbstractColorSpace : public KisColorSpace {
+class KRITACOLOR_EXPORT KisLcmsBaseColorSpace : public virtual KisColorSpace {
 
 
 public:
@@ -54,18 +54,16 @@ public:
      * @param parent the registry that owns this instance
      * @param profile the profile this colorspace uses for transforms
      */
-    KisAbstractColorSpace(const KisID & id,
-                          DWORD cmType,
+    KisLcmsBaseColorSpace(DWORD cmType,
                           icColorSpaceSignature colorSpaceSignature,
-                          KisColorSpaceFactoryRegistry * parent,
                           KisProfile *profile);
 
     void init();
 
-    virtual ~KisAbstractColorSpace();
+    virtual ~KisLcmsBaseColorSpace();
 
-    virtual bool operator==(const KisAbstractColorSpace& rhs) const {
-        return (m_id == rhs.m_id && m_profile == rhs.m_profile);
+    virtual bool operator==(const KisLcmsBaseColorSpace& rhs) const {
+        return (id() == rhs.id() && m_profile == rhs.m_profile);
     }
 
 
@@ -77,29 +75,12 @@ public:
     //========== Channels =====================================================//
 
     // Return a vector describing all the channels this color model has.
-    virtual Q3ValueVector<KisChannelInfo *> channels() const = 0;
-
-    virtual quint32 nChannels() const = 0;
-
-    virtual quint32 nColorChannels() const = 0;
 
     virtual quint32 nSubstanceChannels() const { return 0; };
-
-    virtual quint32 pixelSize() const = 0;
-
-    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
-
-    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
-
-    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos) = 0;
-
-    virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) = 0;
 
     virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex);
 
     //========== Identification ===============================================//
-
-    virtual KisID id() const { return m_id; }
 
     void setColorSpaceType(quint32 type) { m_cmType = type; }
     quint32 colorSpaceType() { return m_cmType; }
@@ -107,8 +88,6 @@ public:
     virtual icColorSpaceSignature colorSpaceSignature() { return m_colorSpaceSignature; }
 
     //========== Capabilities =================================================//
-
-    virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
 
     /**
      * Returns true if the colorspace supports channel values outside the
@@ -135,8 +114,8 @@ public:
                                    qint32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f);
 
-    virtual quint8 * toLabA16(const quint8 * data, const quint32 nPixels) const;
-    virtual quint8 * fromLabA16(const quint8 * labData, const quint32 nPixels) const;
+    virtual void toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const;
+    virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const;
 
     virtual bool convertPixelsTo(const quint8 * src,
                                  quint8 * dst, KisColorSpace * dstColorSpace,
@@ -215,12 +194,8 @@ protected:
 
     QStringList m_profileFilenames;
     quint8 * m_qcolordata; // A small buffer for conversion from and to qcolor.
-    qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
-    qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
-
-    Q3ValueVector<KisChannelInfo *> m_channels;
-
-    KisColorSpaceFactoryRegistry * m_parent;
+    //qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
+    //qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
 
 private:
 
@@ -238,7 +213,6 @@ private:
     KisColorSpace *m_lastUsedDstColorSpace;
     cmsHTRANSFORM m_lastUsedTransform;
 
-    KisID m_id;
     DWORD m_cmType;                           // The colorspace type as defined by littlecms
     icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 
@@ -246,10 +220,10 @@ private:
     typedef QMap<KisColorSpace *, cmsHTRANSFORM>  TransformMap;
     TransformMap m_transforms; // Cache for existing transforms
 
-    KisAbstractColorSpace(const KisAbstractColorSpace&);
-    KisAbstractColorSpace& operator=(const KisAbstractColorSpace&);
+    KisLcmsBaseColorSpace(const KisLcmsBaseColorSpace&);
+    KisLcmsBaseColorSpace& operator=(const KisLcmsBaseColorSpace&);
 
     Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 };
 
-#endif // KIS_STRATEGY_COLORSPACE_H_
+#endif // KIS_LCMS_BASE_COLORSPACE_H_

@@ -29,10 +29,11 @@
 
 #include "kis_global.h"
 #include "kis_f32_base_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 
 class KisColorSpaceFactoryRegistry;
 
-class KRITACOLOR_EXPORT KisLmsF32ColorSpace : public KisF32BaseColorSpace {
+class KRITACOLOR_EXPORT KisLmsF32ColorSpace : public KisF32BaseColorSpace, public KisLcmsBaseColorSpace {
 public:
     KisLmsF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisLmsF32ColorSpace();

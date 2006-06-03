@@ -27,7 +27,7 @@
 #include "kis_integer_maths.h"
 #include "kis_u16_base_colorspace.h"
 
-class KisLabColorSpace : public KisU16BaseColorSpace {
+class KisLabColorSpace : public KisU16BaseColorSpace, public KisLcmsBaseColorSpace {
 public:
     KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisLabColorSpace();
@@ -35,16 +35,16 @@ public:
 public:
 
     /**
-     * Return a COPY of the provided data. This method is provided to provide consistency,
+     * simply COPY the provided data. This method is provided to provide consistency,
      * but you really don't want to be calling it.
      */
-    virtual quint8 * toLabA16(const quint8 * data, const quint32 nPixels) const;
+    virtual void toLabA16(const quint8 *src, quint8 * dst, const quint32 nPixels) const;
 
     /**
-     * Return a COPY of the provided data. This method is provided for consistency,
+     * simply COPY the provided data. This method is provided for consistency,
      * but you really don't want to call it.
      */
-    virtual quint8 * fromLabA16(const quint8 * labData, const quint32 nPixels) const;
+    virtual void fromLabA16(const quint8 *src, quint8 * dst, const quint32 nPixels) const;
 
 
 

@@ -21,7 +21,7 @@
 #include <QColor>
 
 #include "kis_global.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 #include "kis_integer_maths.h"
 
 /**
@@ -54,14 +54,15 @@ inline float FLOAT_BLEND(float a, float b, float alpha)
 #define F32_OPACITY_OPAQUE 1.0f
 #define F32_OPACITY_TRANSPARENT 0.0f
 
-class KRITACOLOR_EXPORT KisF32BaseColorSpace : public KisAbstractColorSpace {
+class KRITACOLOR_EXPORT KisF32BaseColorSpace : public virtual KisColorSpace {
 
 public:
 
-    KisF32BaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature, KisColorSpaceFactoryRegistry * parent, KisProfile *p)
-	: KisAbstractColorSpace(id, cmType, colorSpaceSignature, parent, p)
+    KisF32BaseColorSpace(qint32 alphaPos)
+	: KisColorSpace()
     {
-	m_alphaSize = sizeof(float);
+        m_alphaPos = alphaPos;
+	//m_alphaSize = sizeof(float);
     };
 
     virtual quint8 getAlpha(const quint8 * pixel) const;
@@ -78,6 +79,11 @@ public:
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
 
     virtual bool hasHighDynamicRange() const { return true; }
+
+private:
+    qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
+    //qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
+
 };
 
 #endif // KIS_F32_BASE_COLORSPACE_H_

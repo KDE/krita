@@ -28,10 +28,11 @@
 
 #include "kis_global.h"
 #include "kis_f32_base_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 
 class KisColorSpaceFactoryRegistry;
 
-class KRITACOLOR_EXPORT KisRgbF32ColorSpace : public KisF32BaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbF32ColorSpace : public KisF32BaseColorSpace, public KisLcmsBaseColorSpace {
 public:
     KisRgbF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbF32ColorSpace();
@@ -49,6 +50,8 @@ public:
 public:
     void setPixel(quint8 *pixel, float red, float green, float blue, float alpha) const;
     void getPixel(const quint8 *pixel, float *red, float *green, float *blue, float *alpha) const;
+
+    virtual bool hasHighDynamicRange() const { return true; }
 
     virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
     virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);

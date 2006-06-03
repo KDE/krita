@@ -51,7 +51,9 @@ namespace {
 #define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
 
 KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisF16HalfBaseColorSpace(KisID("RGBAF16HALF", i18n("RGB (16-bit float/channel)")), RGBAF16HALF_LCMS_TYPE, icSigRgbData, parent, p)
+    KisColorSpace(KisID("RGBAF16HALF", i18n("RGB (16-bit float/channel)")), parent)
+    , KisF16HalfBaseColorSpace(PIXEL_ALPHA * sizeof(half))
+    , KisLcmsBaseColorSpace(RGBAF16HALF_LCMS_TYPE, icSigRgbData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
@@ -60,8 +62,6 @@ KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KisColorSpaceFactoryRegistry * 
 
     //cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
     //setDefaultProfile( new KisProfile(hProfile, RGBAF16HALF_LCMS_TYPE) );
-
-    m_alphaPos = PIXEL_ALPHA * sizeof(half);
 }
 
 KisRgbF16HalfColorSpace::~KisRgbF16HalfColorSpace()

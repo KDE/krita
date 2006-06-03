@@ -22,9 +22,10 @@
 #include <QMap>
 #include <krita_export.h>
 #include "kis_global.h"
+#include "kis_lcms_base_colorspace.h"
 #include "kis_u8_base_colorspace.h"
 
-class KRITACOLOR_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace {
+class KRITACOLOR_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace, public KisLcmsBaseColorSpace {
 
 public:
 

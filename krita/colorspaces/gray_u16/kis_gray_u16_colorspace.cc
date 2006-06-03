@@ -40,7 +40,9 @@ namespace {
 }
 
 KisGrayU16ColorSpace::KisGrayU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisU16BaseColorSpace(KisID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")), TYPE_GRAYA_16, icSigGrayData, parent, p)
+    KisColorSpace(KisID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")), parent)
+    , KisU16BaseColorSpace(PIXEL_ALPHA * sizeof(quint16))
+    , KisLcmsBaseColorSpace(TYPE_GRAYA_16, icSigGrayData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Gray"), PIXEL_GRAY * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
@@ -49,8 +51,6 @@ KisGrayU16ColorSpace::KisGrayU16ColorSpace(KisColorSpaceFactoryRegistry * parent
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
     cmsFreeGamma(Gamma);
 */
-
-    m_alphaPos = PIXEL_ALPHA * sizeof(quint16);
 
     init();
 }

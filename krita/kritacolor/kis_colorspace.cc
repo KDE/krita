@@ -19,7 +19,9 @@
 #include "kis_colorspace.h"
 #include "kis_colorspace_iface.h"
 
-KisColorSpace::KisColorSpace()
+KisColorSpace::KisColorSpace(const KisID &id, KisColorSpaceFactoryRegistry * parent)
+    : m_id(id)
+    , m_parent( parent )
 {
     m_dcop = 0;
 }
@@ -36,4 +38,26 @@ DCOPObject * KisColorSpace::dcopObject()
         Q_CHECK_PTR(m_dcop);
     }
     return m_dcop;
+}
+
+quint8 *KisColorSpace::allocPixelBuffer(quint32 numPixels) const
+{
+    return new quint8[pixelSize()*numPixels];
+}
+
+bool KisColorSpace::convertPixelsTo(const quint8 * src,
+					    quint8 * dst,
+					    KisColorSpace * dstColorSpace,
+					    quint32 numPixels,
+					    qint32 renderingIntent)
+{
+    // 4 channels: labA, 2 bytes per lab channel
+    quint8 *pixels = new quint8[2*4*numPixels];
+
+    toLabA16(src, pixels,numPixels);
+    dstColorSpace->fromLabA16(pixels, dst,numPixels);
+
+    delete [] pixels;
+
+    return true;
 }

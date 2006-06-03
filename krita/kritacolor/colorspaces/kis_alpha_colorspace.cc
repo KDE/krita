@@ -40,10 +40,11 @@ namespace {
 
 KisAlphaColorSpace::KisAlphaColorSpace(KisColorSpaceFactoryRegistry * parent,
                                        KisProfile *p) :
-    KisU8BaseColorSpace(KisID("ALPHA", i18n("Alpha mask")),  TYPE_GRAY_8, icSigGrayData, parent, p)
+    KisColorSpace(KisID("ALPHA", i18n("Alpha mask")),  parent)
+    , KisU8BaseColorSpace(0)
+    , KisLcmsBaseColorSpace(TYPE_GRAY_8, icSigGrayData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
-    m_alphaPos = 0;
 }
 
 KisAlphaColorSpace::~KisAlphaColorSpace()
@@ -102,7 +103,7 @@ Q3ValueVector<KisChannelInfo *> KisAlphaColorSpace::channels() const
 }
 
 bool KisAlphaColorSpace::convertPixelsTo(const quint8 *src,
-                     quint8 *dst, KisAbstractColorSpace * dstColorSpace,
+                     quint8 *dst, KisColorSpace * dstColorSpace,
                      quint32 numPixels,
                      qint32 /*renderingIntent*/)
 {

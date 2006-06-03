@@ -23,7 +23,7 @@
 #include <half.h>
 
 #include "kis_global.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 #include "kis_integer_maths.h"
 
 /**
@@ -58,16 +58,15 @@ inline half HALF_BLEND(half a, half b, half alpha)
 #define F16HALF_OPACITY_OPAQUE ((half)1.0f)
 #define F16HALF_OPACITY_TRANSPARENT ((half)0.0f)
 
-class KRITACOLOR_EXPORT KisF16HalfBaseColorSpace : public KisAbstractColorSpace {
+class KRITACOLOR_EXPORT KisF16HalfBaseColorSpace : public virtual KisColorSpace {
 
 public:
 
-    KisF16HalfBaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature,
-                             KisColorSpaceFactoryRegistry * parent,
-                             KisProfile *p)
-	: KisAbstractColorSpace(id, cmType, colorSpaceSignature, parent, p)
+    KisF16HalfBaseColorSpace(qint32 alphaPos)
+	: KisColorSpace()
     {
-        m_alphaSize = sizeof(half);
+        m_alphaPos = alphaPos;
+        //m_alphaSize = sizeof(half);
     };
 
     virtual quint8 getAlpha(const quint8 * pixel) const;
@@ -84,6 +83,11 @@ public:
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
 
     virtual bool hasHighDynamicRange() const { return true; }
+
+private:
+    qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
+    //qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
+
 };
 
 #endif // KIS_F16HALF_BASE_COLORSPACE_H_

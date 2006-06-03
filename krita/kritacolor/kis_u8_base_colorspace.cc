@@ -20,7 +20,7 @@
 
 #include <kdebug.h>
 
-#include "kis_abstract_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 #include "kis_u8_base_colorspace.h"
 #include "kis_integer_maths.h"
 

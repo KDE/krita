@@ -41,15 +41,15 @@ namespace {
 }
 
 KisCmykU16ColorSpace::KisCmykU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisU16BaseColorSpace(KisID("CMYKA16", i18n("CMYK (16-bit integer/channel)")), TYPE_CMYK5_16, icSigCmykData, parent, p)
+    KisColorSpace(KisID("CMYKA16", i18n("CMYK (16-bit integer/channel)")), parent)
+    , KisU16BaseColorSpace(PIXEL_ALPHA * sizeof(quint16))
+    , KisLcmsBaseColorSpace(TYPE_CMYK5_16, icSigCmykData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0 * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
     m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1 * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
     m_channels.push_back(new KisChannelInfo(i18n("Yellow"), 2 * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), Qt::yellow));
     m_channels.push_back(new KisChannelInfo(i18n("Black"), 3 * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), Qt::black));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4 * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
-
-    m_alphaPos = PIXEL_ALPHA * sizeof(quint16);
 
     init();
 }
@@ -158,14 +158,14 @@ void KisCmykU16ColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KisCo
     quint8 * tmpPtr = tmp;
     memcpy(tmp, dst, nPixels * psize);
     
-    KisAbstractColorSpace::applyAdjustment(src, dst, adj, nPixels);
+    KisLcmsBaseColorSpace::applyAdjustment(src, dst, adj, nPixels);
 
     // Copy the alpha, which lcms doesn't do for us, grumble.
 
     while (nPixels--)
     {
-        quint16 *pixelAlphaSrc = reinterpret_cast<quint16 *>(tmpPtr + m_alphaPos);
-        quint16 *pixelAlphaDst = reinterpret_cast<quint16 *>(dst + m_alphaPos);
+        quint16 *pixelAlphaSrc = reinterpret_cast<quint16 *>(tmpPtr + 8);
+        quint16 *pixelAlphaDst = reinterpret_cast<quint16 *>(dst + 8);
         
         *pixelAlphaDst= *pixelAlphaSrc;
         

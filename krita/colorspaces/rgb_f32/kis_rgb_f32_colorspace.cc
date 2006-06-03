@@ -53,14 +53,14 @@ namespace {
 
 // disable the lcms handling by setting profile=0
 KisRgbF32ColorSpace::KisRgbF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile */*p*/) :
-    KisF32BaseColorSpace(KisID("RGBAF32", i18n("RGB (32-bit float/channel)")), F32_LCMS_TYPE, icSigRgbData, parent, 0)
+    KisColorSpace(KisID("RGBAF32", i18n("RGB (32-bit float/channel)")), parent)
+    , KisF32BaseColorSpace(PIXEL_ALPHA * sizeof(float))
+    , KisLcmsBaseColorSpace(F32_LCMS_TYPE, icSigRgbData, 0)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), KisChannelInfo::ALPHA, KisChannelInfo::FLOAT32, sizeof(float)));
-
-    m_alphaPos = PIXEL_ALPHA * sizeof(float);
 }
 
 KisRgbF32ColorSpace::~KisRgbF32ColorSpace()

@@ -19,7 +19,7 @@
 #define KIS_U16_BASE_COLORSPACE_H_
 
 #include "kis_global.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 #include "kis_integer_maths.h"
 
 /**
@@ -27,7 +27,7 @@
  * channels. It defines a number of common methods, like handling 16-bit alpha
  * and up- and down-scaling of channels.
  */
-class KRITACOLOR_EXPORT KisU16BaseColorSpace : public KisAbstractColorSpace {
+class KRITACOLOR_EXPORT KisU16BaseColorSpace : public virtual KisColorSpace {
 
 public:
 
@@ -36,14 +36,10 @@ public:
 
 public:
 
-    KisU16BaseColorSpace(const KisID & id, DWORD cmType, icColorSpaceSignature colorSpaceSignature,
-                         KisColorSpaceFactoryRegistry * parent,
-                         KisProfile *p)
-	: KisAbstractColorSpace(id, cmType, colorSpaceSignature,
-                                parent,
-                                p)
+    KisU16BaseColorSpace(qint32 alphaPos)
+	: KisColorSpace()
     {
-	    m_alphaSize = sizeof(quint16);
+        m_alphaPos = alphaPos;
     };
 
     virtual quint8 getAlpha(const quint8 * pixel) const;
@@ -58,5 +54,10 @@ public:
 
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos);
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
+
+private:
+    qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
+    //qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
+
 };
 #endif // KIS_U16_BASE_COLORSPACE_H_

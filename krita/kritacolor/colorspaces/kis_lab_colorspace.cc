@@ -34,17 +34,17 @@
 #include "kis_integer_maths.h"
 
 KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p)
-    : KisU16BaseColorSpace(KisID("LABA", i18n("L*a*b* (16-bit integer/channel)")),
+    : KisColorSpace(KisID("LABA", i18n("L*a*b* (16-bit integer/channel)")), parent)
+    , KisU16BaseColorSpace(CHANNEL_ALPHA * sizeof(quint16))
+    , KisLcmsBaseColorSpace(
         COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1),
-         icSigLabData, parent, p)
+         icSigLabData, p)
 
 {
     m_channels.push_back(new KisChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(100,100,100)));
     m_channels.push_back(new KisChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(150,150,150)));
     m_channels.push_back(new KisChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
-
-    m_alphaPos = CHANNEL_ALPHA * sizeof(quint16);
 
     init();
 }
@@ -53,18 +53,14 @@ KisLabColorSpace::~KisLabColorSpace()
 {
 }
 
-quint8 * KisLabColorSpace::toLabA16(const quint8 * data, const quint32 nPixels) const
+void KisLabColorSpace::toLabA16(const quint8 * src, quint8 *dst, const quint32 nPixels) const
 {
-    quint8 * pixels = new quint8[nPixels * pixelSize()];
-    memcpy( pixels,  data,  nPixels * pixelSize() );
-    return pixels;
+    memcpy( dst,  src,  nPixels * pixelSize() );
 }
 
-quint8 * KisLabColorSpace::fromLabA16(const quint8 * labData, const quint32 nPixels) const
+void KisLabColorSpace::fromLabA16(const quint8 *src, quint8 *dst, const quint32 nPixels) const
 {
-    quint8 * pixels = new quint8[nPixels * pixelSize()];
-    memcpy( pixels, labData,  nPixels * pixelSize() );
-    return pixels;
+    memcpy( dst, src,  nPixels * pixelSize() );
 }
 
 
@@ -154,7 +150,7 @@ void KisLabColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, Ki
                                       quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     // XXX: Either do this native, or do this in 16 bit rgba, not this, which is going back to QColor!
-    KisAbstractColorSpace::convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nColors);
+    KisLcmsBaseColorSpace::convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nColors);
 }
 
 void KisLabColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const

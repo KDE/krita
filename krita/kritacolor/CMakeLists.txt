@@ -26,7 +26,7 @@ set(kritacolor_LIB_SRCS
    kis_profile.cc 
    kis_histogram_producer.cc 
    kis_basic_histogram_producers.cc 
-   kis_abstract_colorspace.cc 
+   kis_lcms_base_colorspace.cc 
    kis_colorspace_factory_registry.cc 
    kis_color_conversions.cc 
    kis_u8_base_colorspace.cc 

@@ -45,35 +45,20 @@ namespace {
 }
 
 KisRgbColorSpace::KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisU8BaseColorSpace(KisID("RGBA", i18n("RGB (8-bit integer/channel)")), TYPE_BGRA_8, icSigRgbData, parent, p)
+    KisColorSpace(KisID("RGBA", i18n("RGB (8-bit integer/channel)")), parent)
+    ,KisU8BaseColorSpace(PIXEL_ALPHA)
+    ,KisLcmsBaseColorSpace(TYPE_BGRA_8, icSigRgbData, p)
 {
     m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(255,0,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,255,0)));
     m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,0,255)));
     m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
 
-    m_alphaPos = PIXEL_ALPHA;
     init();
 }
 
 KisRgbColorSpace::~KisRgbColorSpace()
 {
-}
-
-void KisRgbColorSpace::setPixel(quint8 *pixel, quint8 red, quint8 green, quint8 blue, quint8 alpha) const
-{
-    pixel[PIXEL_RED] = red;
-    pixel[PIXEL_GREEN] = green;
-    pixel[PIXEL_BLUE] = blue;
-    pixel[PIXEL_ALPHA] = alpha;
-}
-
-void KisRgbColorSpace::getPixel(const quint8 *pixel, quint8 *red, quint8 *green, quint8 *blue, quint8 *alpha) const
-{
-    *red = pixel[PIXEL_RED];
-    *green = pixel[PIXEL_GREEN];
-    *blue = pixel[PIXEL_BLUE];
-    *alpha = pixel[PIXEL_ALPHA];
 }
 
 void KisRgbColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const

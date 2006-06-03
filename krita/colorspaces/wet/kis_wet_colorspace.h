@@ -24,7 +24,7 @@
 #include <QMap>
 
 #include "kis_global.h"
-#include "kis_abstract_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 
 class KisFilter;
 
@@ -91,7 +91,7 @@ void wetPixToDouble(WetPixDbl * dst, WetPix *src);
 void wetPixFromDouble(WetPix * dst, WetPixDbl *src);
 
 
-class KisWetColorSpace : public KisAbstractColorSpace {
+class KisWetColorSpace : public KisLcmsBaseColorSpace {
 public:
     KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisWetColorSpace();

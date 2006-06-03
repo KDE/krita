@@ -27,9 +27,10 @@
 
 #include "kis_global.h"
 #include "kis_f16half_base_colorspace.h"
+#include "kis_lcms_base_colorspace.h"
 
 
-class KRITACOLOR_EXPORT KisRgbF16HalfColorSpace : public KisF16HalfBaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbF16HalfColorSpace : public KisF16HalfBaseColorSpace, public KisLcmsBaseColorSpace {
 public:
     KisRgbF16HalfColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
     virtual ~KisRgbF16HalfColorSpace();
@@ -46,6 +47,8 @@ public:
 public:
     void setPixel(quint8 *pixel, half red, half green, half blue, half alpha) const;
     void getPixel(const quint8 *pixel, half *red, half *green, half *blue, half *alpha) const;
+
+    virtual bool hasHighDynamicRange() const { return true; }
 
     virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
     virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);

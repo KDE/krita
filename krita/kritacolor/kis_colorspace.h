@@ -255,7 +255,7 @@ public:
      * This functions allocates the ncessary memory for numPixels number of pixels.
      * It is your responsibility to delete[] it.
      */
-    quint8 *KisColorSpace::allocPixelBuffer(quint32 numPixels) const;
+    quint8 *allocPixelBuffer(quint32 numPixels) const;
 
     /**
      * Convert the specified data to Lab. All colorspaces are guaranteed to support this

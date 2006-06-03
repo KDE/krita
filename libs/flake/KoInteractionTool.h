@@ -125,7 +125,7 @@ private:
     // convenience method;
     KoSelection * selection();
     KoFlake::SelectionHandle m_lastHandle;
-    bool m_drawHandles, m_mouseWasInsideHandles;
+    bool m_mouseWasInsideHandles;
     static QPointF m_handleDiff[8];
     QPointF m_selectionBox[8];
     QPointF m_lastPoint;

@@ -73,7 +73,7 @@ bool KoInteractionTool::wantsAutoScroll()
 QCursor KoInteractionTool::cursor( const QPointF &position )
 {
     Q_UNUSED(position); // we assume the mouseMoveEvent has been called.
-    if(m_drawHandles) { // has a selection
+    if(selection()->count() > 0) { // has a selection
         if(!m_mouseWasInsideHandles) {
             if(m_lastHandle == KoFlake::NoHandle)
                 return Qt::ArrowCursor;
@@ -102,7 +102,7 @@ QCursor KoInteractionTool::cursor( const QPointF &position )
 void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
-    else if(m_drawHandles) {
+    else if(selection()->count() > 0) {
         painter.save();
         painter.setRenderHint( QPainter::Antialiasing, false );
         QPen pen( Qt::blue ); //TODO make it configurable
@@ -135,7 +135,6 @@ void KoInteractionTool::mouseMoveEvent( KoGfxEvent *event ) {
     }
     else {
         if(selection()->count() > 0) {
-            m_drawHandles = true;
             QRectF bound = handlesSize();
             if(bound.contains(event->point)) {
                 bool inside;
@@ -146,11 +145,12 @@ void KoInteractionTool::mouseMoveEvent( KoGfxEvent *event ) {
                     repaintDecorations();
                 }
             } else {
+                if(m_lastHandle != KoFlake::NoHandle)
+                    repaintDecorations();
                 m_lastHandle = KoFlake::NoHandle;
                 m_mouseWasInsideHandles = false;
             }
-        } else
-            m_drawHandles = false;
+        }
         event->ignore();
     }
 }

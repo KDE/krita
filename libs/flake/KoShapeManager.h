@@ -55,7 +55,7 @@ public:
      * @param objects the objects to start out with, see also setObjects()
      * @param canvas the canvas this shape manager is working on.
      */
-    KoShapeManager(KoCanvasBase *canvas, QList<KoShape *> &objects);
+    KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &objects);
     virtual ~KoShapeManager();
 
     /**
@@ -63,7 +63,7 @@ public:
      * to be managed by this manager.
      * @param objects the new objects to manage.
      */
-    void setObjects( QList<KoShape *> &objects );
+    void setObjects( const QList<KoShape *> &objects );
     /// returns the list of maintained objects
     const QList<KoShape *> & objects() const { return m_objects; }
 

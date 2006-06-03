@@ -31,7 +31,7 @@
 #include <QDebug>
 #include <QPainter>
 
-KoShapeManager::KoShapeManager( KoCanvasBase *canvas, QList<KoShape *> &objects )
+KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &objects )
 : m_selection( new KoSelection() )
 {
     connect( m_selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
@@ -57,7 +57,7 @@ KoShapeManager::~KoShapeManager()
 }
 
 
-void KoShapeManager::setObjects( QList<KoShape *> &objects )
+void KoShapeManager::setObjects( const QList<KoShape *> &objects )
 {
     m_objects = objects;
     foreach(KoShape *shape, m_objects)

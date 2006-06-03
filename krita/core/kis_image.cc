@@ -1464,8 +1464,8 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, K
         }
     }*/
 #ifdef __BIG_ENDIAN__
-    uchar * data = img.bits();
-    for (int i = 0; i < w * h; ++i) {
+    uchar * data = image.bits();
+    for (int i = 0; i < image.width() * image.height(); ++i) {
         uchar r, g, b, a;
         a = data[0];
         b = data[1];

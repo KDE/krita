@@ -39,9 +39,6 @@ public:
     /// Effective C++, item 11
     KoColor &operator=(const KoColor &);
 
-    /// For easy memcpy'ing etc.
-    quint8 * data() const { return m_data; }
-
     /// To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a
     void toQColor(QColor *c) const;
     void toQColor(QColor *c, quint8 *opacity) const;

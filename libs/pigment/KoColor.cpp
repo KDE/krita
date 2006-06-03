@@ -33,24 +33,24 @@ KoColor::KoColor(const KoColor & rhs)
 {
     if (this == &rhs) return;
 
-    memcpy(m_data, rhs.data(), 4);
+    memcpy(m_data, rhs.m_data, 4);
 }
 
 KoColor & KoColor::operator=(const KoColor & rhs)
 {
-    memcpy(m_data, rhs.data(), 4);
+    memcpy(m_data, rhs.m_data, 4);
     return * this;
 }
 
 // To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a, profile
 void KoColor::toQColor(QColor *c) const
 {
-    c.setRgb(m_data[0],m_data[1],m_data[2]);
+    c->setRgb(m_data[0],m_data[1],m_data[2]);
 }
 
 void KoColor::toQColor(QColor *c, quint8 *opacity) const
 {
-    c.setRgb(m_data[0],m_data[1],m_data[2]);
+    c->setRgb(m_data[0],m_data[1],m_data[2]);
     *opacity = m_data[3];
 }
 

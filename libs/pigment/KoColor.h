@@ -25,7 +25,7 @@
  * A KoColor describes a color in a certain colorspace.
  *
  */
-class PIGMENT_EXPORT KoColor {
+class /*PIGMENT_EXPORT*/ KoColor {
 
 public:
     /// Create an empty KoColor. It will be valid, but also black and transparent
@@ -40,6 +40,7 @@ public:
     KoColor &operator=(const KoColor &);
 
     /// To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a
+    /// The result is in display profile
     void toQColor(QColor *c) const;
     void toQColor(QColor *c, quint8 *opacity) const;
 

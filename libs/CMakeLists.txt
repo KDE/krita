@@ -11,6 +11,7 @@ add_subdirectory( kformula )
 add_subdirectory( kopalette )
 add_subdirectory( kopainter )
 add_subdirectory( flake )
+add_subdirectory( pigment )
 # Laurent: need to detect ruby/python
 MESSAGE(STATUS "KOFFICE_ENABLE_SCRIPTING :<${KOFFICE_ENABLE_SCRIPTING}>")
 if(KOFFICE_ENABLE_SCRIPTING)

@@ -27,6 +27,10 @@
 
 #include <koffice_export.h>
 
+//#include <kstaticdeleter.h>
+
+#include <QImage>
+
 class KoInteractionStrategy;
 
 /**
@@ -121,7 +125,7 @@ private:
     // convenience method;
     KoSelection * selection();
     KoFlake::SelectionHandle m_lastHandle;
-    bool m_drawHandles;
+    bool m_drawHandles, m_mouseWasInsideHandles;
     static QPointF m_handleDiff[8];
     QPointF m_selectionBox[8];
     QPointF m_lastPoint;
@@ -154,6 +158,9 @@ private:
     KoFlake::SelectionHandle m_arrows;
     KoSelection *m_selection;
     QRectF m_bounds;
+
+    /*static*/ QImage *s_rotateCursor;
+    //static KStaticDeleter<QImage> sd;
 };
 
 #endif /* KOINTERACTIONTOOL_H */

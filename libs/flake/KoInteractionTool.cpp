@@ -50,6 +50,7 @@ QPointF KoInteractionTool::m_handleDiff[] = {
 KoInteractionTool::KoInteractionTool( const QString & name, const QString & id, const QString & type, KoCanvasBase *canvas )
 : KoTool( name, id, type, canvas )
 , m_currentStrategy( 0 )
+, m_mouseWasInsideHandles( false )
 {
 }
 
@@ -71,11 +72,29 @@ bool KoInteractionTool::wantsAutoScroll()
 
 QCursor KoInteractionTool::cursor( const QPointF &position )
 {
-    // TODO maybe introduce concept of MouseMeaning?
-    KoShape * shape( m_canvas->shapeManager()->getObjectAt( position ) );
-    if ( shape && m_canvas->shapeManager()->selection()->isSelected( shape ) )
-    {
-        return Qt::SizeAllCursor;
+    Q_UNUSED(position); // we assume the mouseMoveEvent has been called.
+    if(m_drawHandles) { // has a selection
+        if(!m_mouseWasInsideHandles) {
+            if(m_lastHandle == KoFlake::NoHandle)
+                return Qt::ArrowCursor;
+            return Qt::IBeamCursor; // TODO make rotation cursor
+        }
+        switch(m_lastHandle) {
+            case KoFlake::BottomMiddleHandle:
+            case KoFlake::TopMiddleHandle:
+                return Qt::SizeVerCursor;
+            case KoFlake::RightMiddleHandle:
+            case KoFlake::LeftMiddleHandle:
+                return Qt::SizeHorCursor;
+            case KoFlake::TopRightHandle:
+            case KoFlake::BottomLeftHandle:
+                return Qt::SizeHorCursor; // TODO diagonal cursor
+            case KoFlake::BottomRightHandle:
+            case KoFlake::TopLeftHandle:
+                return Qt::SizeHorCursor; // TODO diagonal cursor
+            case KoFlake::NoHandle:
+                return Qt::SizeAllCursor;
+        }
     }
     return Qt::ArrowCursor;
 }
@@ -98,7 +117,8 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
         if( !editable)
             return;
 
-        SelectionDecorator decorator(selection()->boundingRect(), m_lastHandle, true, true);
+        SelectionDecorator decorator(selection()->boundingRect(),
+                m_mouseWasInsideHandles?m_lastHandle:KoFlake::NoHandle, true, true);
         decorator.paint(painter, converter);
     }
 }
@@ -118,11 +138,16 @@ void KoInteractionTool::mouseMoveEvent( KoGfxEvent *event ) {
             m_drawHandles = true;
             QRectF bound = handlesSize();
             if(bound.contains(event->point)) {
-                KoFlake::SelectionHandle newDirection = handleAt(event->point);
-                if(m_lastHandle != newDirection) {
+                bool inside;
+                KoFlake::SelectionHandle newDirection = handleAt(event->point, &inside);
+                if(inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
                     m_lastHandle = newDirection;
+                    m_mouseWasInsideHandles = inside;
                     repaintDecorations();
                 }
+            } else {
+                m_lastHandle = KoFlake::NoHandle;
+                m_mouseWasInsideHandles = false;
             }
         } else
             m_drawHandles = false;
@@ -181,9 +206,7 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event) {
 
 void KoInteractionTool::repaintDecorations() {
     if ( selection()->count() > 0 )
-    {
         m_canvas->updateCanvas(handlesSize());
-    }
 }
 
 KoSelection *KoInteractionTool::selection() {
@@ -241,12 +264,18 @@ SelectionDecorator::SelectionDecorator(QRectF bounds, KoFlake::SelectionHandle a
 , m_arrows(arrows)
 , m_bounds(bounds)
 {
+    //if(SelectionDecorator::s_rotateCursor == 0) {
+        s_rotateCursor = new QImage();
+        s_rotateCursor->load("/home/zander/sources/kde4/flake/lib/rotate.png");
+        //sd.setObject(&SelectionDecorator::s_rotateCursor, SelectionDecorator::s_rotateCursor);
+    //}
 }
 
 void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
-    QPen pen( Qt::red ); //TODO make it configurable
+    QPen pen( Qt::black );
     pen.setWidthF(1.2);
     painter.setPen(pen);
+    painter.setBrush(Qt::yellow);
 
     QRectF bounds = converter.normalToView(m_bounds);
 
@@ -270,18 +299,62 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
     rect.moveTop(bounds.top());
     painter.drawRect(rect);
 
+    // draw the move arrow(s)
+    if(m_arrows != KoFlake::NoHandle && bounds.width() > 45 && bounds.height() > 45) {
+        double x1,x2,y1,y2; // 2 is where the arrow head is
+        switch(m_arrows) {
+            case KoFlake::TopMiddleHandle:
+                x1=bounds.center().x(); x2=x1; y2=bounds.y()+8; y1=y2+20;
+                break;
+            case KoFlake::TopRightHandle:
+                x2=bounds.right()-8; x1=x2-20; y2=bounds.y()+8; y1=y2+20;
+                break;
+            case KoFlake::RightMiddleHandle:
+                x2=bounds.right()-8; x1=x2-20; y1=bounds.center().y(); y2=y1;
+                break;
+            case KoFlake::BottomRightHandle:
+                x2=bounds.right()-8; x1=x2-20; y2=bounds.bottom()-8; y1=y2-20;
+                break;
+            case KoFlake::BottomMiddleHandle:
+                x1=bounds.center().x(); x2=x1; y2=bounds.bottom()-8; y1=y2-20;
+                break;
+            case KoFlake::BottomLeftHandle:
+                x2=bounds.left()+8; x1=x2+20; y2=bounds.bottom()-8; y1=y2-20;
+                break;
+            case KoFlake::LeftMiddleHandle:
+                x2=bounds.left()+8; x1=x2+20; y1=bounds.center().y(); y2=y1;
+                break;
+            default:
+            case KoFlake::TopLeftHandle:
+                x2=bounds.left()+8; x1=x2+20; y2=bounds.y()+8; y1=y2+20;
+                break;
+        }
+        painter.drawLine(QLineF(x1, y1, x2, y2));
+        //pen.setColor(Qt::white);
+        //painter.setPen(pen);
+        //painter.drawLine(QLineF(x1-1, y1-1, x2-1, y2-1));
+    }
+
     QPointF border(HANDLE_DISTANCE, HANDLE_DISTANCE);
     bounds.adjust(-border.x(), -border.y(), border.x(), border.y());
 
     if(m_rotationHandles) {
-        QRectF rect(bounds.topLeft(), QSizeF(10, 10));
-        painter.drawArc(rect, 16 * 100, 16 * 70);
-        rect.moveRight(bounds.right());
-        painter.drawArc(rect, 16 * 370, 16 * 70);
-        rect.moveBottom(bounds.bottom());
-        painter.drawArc(rect, 16 * 280, 16 * 70);
-        rect.moveLeft(bounds.left());
-        painter.drawArc(rect, 16 * 190, 16 * 70);
+        painter.save();
+        painter.translate(bounds.x(), bounds.y());
+        QRectF rect(QPointF(0,0), QSizeF(22, 22));
+        painter.drawImage(rect, *s_rotateCursor, rect);
+        painter.translate(bounds.width(), 0);
+        painter.rotate(90);
+        if(bounds.width() > 45 && bounds.height() > 45)
+            painter.drawImage(rect, *s_rotateCursor, rect);
+        painter.translate(bounds.height(), 0);
+        painter.rotate(90);
+        painter.drawImage(rect, *s_rotateCursor, rect);
+        painter.translate(bounds.width(), 0);
+        painter.rotate(90);
+        if(bounds.width() > 45 && bounds.height() > 45)
+            painter.drawImage(rect, *s_rotateCursor, rect);
+        painter.restore();
     }
 
     /*if(m_shearHandles) {

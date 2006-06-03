@@ -59,26 +59,34 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoGfxEvent *event, 
         return new KoCreateShapeStrategy(crs, canvas, event->point);
 
     KoShapeManager *shapeManager = canvas->shapeManager();
-    KoShape * object( shapeManager->getObjectAt( event->point ) );
     KoSelection *select = shapeManager->selection();
     bool insideSelection;
     KoFlake::SelectionHandle handle = parent->handleAt(event->point, &insideSelection);
 
+    if(select->count() > 0 && (event->modifiers() == Qt::NoModifier )) {
+        // manipulation of selected shapes goes first
+        if(handle != KoFlake::NoHandle) {
+            if(insideSelection)
+                return new KoShapeResizeStrategy(parent, canvas, event->point, handle);
+            // TODO shear
+            return new KoShapeRotateStrategy(parent, canvas, event->point);
+        }
+        if(select->boundingRect().contains(event->point))
+            return new KoShapeMoveStrategy(parent, canvas, event->point);
+    }
+
+    KoShape * object( shapeManager->getObjectAt( event->point ) );
     if( !object && handle == KoFlake::NoHandle) {
         parent->repaintDecorations();
         select->deselectAll();
         return new KoShapeRubberSelectStrategy(parent, canvas, event->point);
     }
+
     if(select->isSelected(object)) {
         if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier ) {
             parent->repaintDecorations();
             select->deselect(object);
         }
-        if(handle == KoFlake::NoHandle)
-            return new KoShapeMoveStrategy(parent, canvas, event->point);
-        if(insideSelection)
-            return new KoShapeResizeStrategy(parent, canvas, event->point, handle);
-
     }
     else if(handle == KoFlake::NoHandle) { // clicked on object which is not selected
         parent->repaintDecorations();
@@ -86,19 +94,6 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoGfxEvent *event, 
             shapeManager->selection()->deselectAll();
         select->select(object);
         parent->repaintDecorations();
-        return new KoShapeMoveStrategy(parent, canvas, event->point);
-    }
-    else { // clicked on one of the handles.
-        switch(handle) {
-            case KoFlake::TopMiddleHandle:
-            case KoFlake::RightMiddleHandle:
-            case KoFlake::BottomMiddleHandle:
-            case KoFlake::LeftMiddleHandle:
-                // TODO shear;
-                break;
-            default:
-                return new KoShapeRotateStrategy(parent, canvas, event->point);
-        }
     }
     return 0;
 }

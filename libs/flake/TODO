@@ -10,5 +10,3 @@
 Bugs:
 * rescaling does not alter the positions of the connectors. I expect their
   relative position to the whole shape to stay the same.
-* selecting an object does not draw the handles correctly until you had a
-  mouseevent that triggers a repaint.

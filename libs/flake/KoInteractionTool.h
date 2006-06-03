@@ -159,7 +159,7 @@ private:
     KoSelection *m_selection;
     QRectF m_bounds;
 
-    /*static*/ QImage *s_rotateCursor;
+    static QImage *s_rotateCursor;
     //static KStaticDeleter<QImage> sd;
 };
 

@@ -256,6 +256,7 @@ void KoInteractionTool::recalcSelectionBox() {
 
 
 // ##########  SelectionDecorator ############
+QImage * SelectionDecorator::s_rotateCursor=0;
 
 SelectionDecorator::SelectionDecorator(QRectF bounds, KoFlake::SelectionHandle arrows,
         bool rotationHandles, bool shearHandles)
@@ -264,11 +265,11 @@ SelectionDecorator::SelectionDecorator(QRectF bounds, KoFlake::SelectionHandle a
 , m_arrows(arrows)
 , m_bounds(bounds)
 {
-    //if(SelectionDecorator::s_rotateCursor == 0) {
+    if(SelectionDecorator::s_rotateCursor == 0) {
         s_rotateCursor = new QImage();
         s_rotateCursor->load("/home/zander/sources/kde4/flake/lib/rotate.png");
         //sd.setObject(&SelectionDecorator::s_rotateCursor, SelectionDecorator::s_rotateCursor);
-    //}
+    }
 }
 
 void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {

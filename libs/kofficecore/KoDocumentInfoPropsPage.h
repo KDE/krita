@@ -35,9 +35,9 @@ public:
     KoDocumentInfoPropsPage( KPropertiesDialog *props,
                               const QStringList & = QStringList() );
     virtual ~KoDocumentInfoPropsPage();
-	      
+
     virtual void applyChanges();
-			
+
 private:
     void copy( const QString &path, const KArchiveEntry *entry );
     class KoDocumentInfoPropsPagePrivate;

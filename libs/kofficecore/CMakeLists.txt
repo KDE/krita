@@ -8,6 +8,7 @@ include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} )
 
 set(kofficecore_LIB_SRCS
    KoDocument.cpp
+   KoProperties.cpp
    KoGlobal.cpp
    KoUnit.cpp
    KoFilterManager.cpp
@@ -105,6 +106,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  kodocinfopropspage.desktop )
 install_files( ${DATA_INSTALL_DIR}/koffice FILES  koffice_shell.rc )
 install_files( /include FILES  
     KoContainerHandler.h 
+    KoProperties.h
     KoFilter.h 
     KoFilterChain.h 
     KoGlobal.h 

@@ -1,0 +1,4 @@
+* Shapes are graphical objects that can render themselves.
+* Tools manipulate shapes. Some tools also create shapes
+* Shape factories create shapes
+* the shape registry keeps a list of all shape factories

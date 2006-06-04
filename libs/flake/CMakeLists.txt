@@ -1,4 +1,4 @@
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICECORE_INCLUDES})
 
 add_subdirectory(tests)
 
@@ -23,13 +23,14 @@ set(flake_SRCS
     KoCanvasView.cpp
     KoCreateShapeStrategy.cpp
     KoCreateShapesTool.cpp
+    KoShapeRegistry.cpp
 )
 
 kde4_automoc(${flake_SRCS})
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS})
+target_link_libraries(flake ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS})
 
 set_target_properties(flake PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 

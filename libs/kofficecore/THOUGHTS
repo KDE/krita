@@ -17,6 +17,9 @@ QPaintDevice::x11AppDpiY()).
 In lib/kofficeui we have some classes replacing QPoint/QRect (they use double
 precision floating point numbers to store coordinates).
 
+
+2006-06-01: Flake uses postscript points, and we should do the same in all of KOffice (BSAR)
+
 2) Embedding:
 2.1) "Plain" KOffice embedding (paintContent):
 We finally added two double values for the X and Y zoom factor. This means

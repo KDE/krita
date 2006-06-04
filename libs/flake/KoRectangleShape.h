@@ -23,6 +23,7 @@
 #define KORECTANGLESHAPE_H
 
 #include <KoShape.h>
+#include <KoShapeFactory.h>
 
 #include <koffice_export.h>
 
@@ -37,6 +38,7 @@ public:
     KoRectangleShape();
     void paint(QPainter &painter, KoViewConverter &converter);
 };
+
 
 #endif
 

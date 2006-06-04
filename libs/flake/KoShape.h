@@ -40,19 +40,30 @@ class KoRepaintManager;
 class KoShapeBorderModel;
 
 /**
+ *
  * Base class for all flake objects. Flake objects extend this class
  * to allow themselves to be manipulated. This class just represents
  * a graphical shape in the document and can be manipulated by some default
  * tools in this library.
+ *
  * <p>Due to the limited responsibility of this class, the extending object
  * can have any data backend and is responsible for painting itself.
+ *
  * <p>We strongly suggest that any extending class will use a Model View
  * Controller (MVC) design where the View part is all in this class, as well
  * as the one that inharits from this one.  This allows the data that rests
  * in the model to be reused in different parts of the document. For example
  * by having two flake objects that show it. Or each showing a section of it.
+ *
  * <p>The KoShape data is completely in postscript-points (pt) (see KoUnit
  * for conversion methods to and from pt).
+ *
+ * <p>Flake objects can be created in three ways: 
+ * <ul>
+ *   <li>a simple new KoDerivedFlake(),
+ *   <li>through an associated tool,
+ *   <li>through a factory
+ * </ul>
  */
 class FLAKE_EXPORT KoShape
 {
@@ -376,6 +387,7 @@ public:
      * @param keepAspect the new value
      */
     void setKeepAspectRatio(bool keepAspect) { m_keepAspect = keepAspect; }
+
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
      * keep the width/hight ratio intact so as not to distort shapes that rely on that
@@ -391,6 +403,7 @@ public:
      * @return the point that is the absolute, centered position of this shape.
      */
     QPointF absolutePosition() const;
+
     /**
      * Move this shape to an absolute position where the end location will be the same
      * regardless of the shape's rotation/skew/scaling and regardless of this shape having

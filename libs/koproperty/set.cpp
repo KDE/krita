@@ -227,6 +227,9 @@ Set::clear()
 	aboutToBeCleared();
 	d->propertiesOfGroup.clear();
 	d->groupNames.clear();
+	d->groupForProperty.clear();
+	d->groupDescriptions.clear();
+	d->groupIcons.clear();
 	Property::DictIterator it(d->dict);
 	while (it.current())
 		removeProperty( it.current() );
@@ -240,7 +243,7 @@ Set::addToGroup(const QByteArray &group, Property *property)
 	if(!property)
 		return;
 
-	//do not add same property to the group twice
+	//do not add the same property to the group twice
 	if(d->groupForProperty.contains(property) && (d->groupForProperty[property] == group))
 		return;
 
@@ -363,9 +366,7 @@ Set::operator= (const Set &set)
 	if(&set == this)
 		return *this;
 
-	d->dict.clear();
-	d->propertiesOfGroup.clear();
-	d->groupForProperty.clear();
+	clear();
 
 	d->ownProperty = set.d->ownProperty;
 	d->prevSelection = set.d->prevSelection;

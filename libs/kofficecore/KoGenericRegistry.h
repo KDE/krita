@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,32 +17,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOGENERICREGISTRY_H
-#define KOGENERICREGISTRY_H
+#ifndef _KO_GENERIC_REGISTRY_H_
+#define _KO_GENERIC_REGISTRY_H_
+
+#include "KoID.h"
 
 #include <map>
 
 #include <QString>
-#include <kdebug.h>
-
-#include <KoID.h>
 
 /**
- * Base class for registry objects in Krita. Krita registries
- * contain resources such as filters, tools or colorspaces.
+ * Base class for registry objects.
  *
- * Items are mapped by KoID. A KoID is the combination of 
+ * Items are mapped by KoID. A KoID is the combination of
  * a non-localized string that can be used in files and a
- * user-visible, translated string that can be used in the 
+ * user-visible, translated string that can be used in the
  * user interface.
  */
 template<typename T>
-class KisGenericRegistry {
+class KoGenericRegistry {
 protected:
     typedef std::map<KoID, T> storageMap;
 public:
-    KisGenericRegistry() { };
-    virtual ~KisGenericRegistry() { };
+    KoGenericRegistry() { };
+    virtual ~KoGenericRegistry() { };
 public:
 
     /**
@@ -158,8 +157,8 @@ public:
     }
 
 protected:
-    KisGenericRegistry(const KisGenericRegistry&) { };
-    KisGenericRegistry operator=(const KisGenericRegistry&) { };
+    KoGenericRegistry(const KoGenericRegistry&) { };
+    KoGenericRegistry operator=(const KoGenericRegistry&) { };
     storageMap m_storage;
 };
 

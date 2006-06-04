@@ -35,7 +35,7 @@ class QStringList;
  * in contrast to the paintop and colormodel registries, creates
  * a vector containing instances of all registered tools.
  */
-class KRITAUI_EXPORT KisToolRegistry : public QObject, public KisGenericRegistry<KisToolFactorySP>{
+class KRITAUI_EXPORT KisToolRegistry : public QObject, public KoGenericRegistry<KisToolFactorySP>{
 
     Q_OBJECT
 

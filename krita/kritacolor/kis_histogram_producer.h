@@ -113,7 +113,7 @@ protected:
 };
 
 class KRITACOLOR_EXPORT KisHistogramProducerFactoryRegistry
-    : public KisGenericRegistry<KisHistogramProducerFactory*> {
+    : public KoGenericRegistry<KisHistogramProducerFactory*> {
 public:
     virtual ~KisHistogramProducerFactoryRegistry();
     static KisHistogramProducerFactoryRegistry* instance();

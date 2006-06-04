@@ -34,7 +34,7 @@ class KisPainter;
 class KoColorSpace;
 class KisInputDevice;
 
-class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KisGenericRegistry<KisPaintOpFactorySP>
+class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericRegistry<KisPaintOpFactorySP>
 {
 
     Q_OBJECT

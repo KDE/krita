@@ -38,7 +38,7 @@ class KisPaintDeviceAction;
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
  */
-class PIGMENT_EXPORT KoColorSpaceFactoryRegistry : public QObject,  public KisGenericRegistry<KoColorSpaceFactory *> {
+class PIGMENT_EXPORT KoColorSpaceFactoryRegistry : public QObject,  public KoGenericRegistry<KoColorSpaceFactory *> {
 
 
     Q_OBJECT

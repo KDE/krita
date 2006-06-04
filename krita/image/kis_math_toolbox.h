@@ -95,7 +95,7 @@ class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
         KoID m_id;
 };
 
-class KRITAIMAGE_EXPORT KisMathToolboxFactoryRegistry : public KisGenericRegistry<KisMathToolbox*> {
+class KRITAIMAGE_EXPORT KisMathToolboxFactoryRegistry : public KoGenericRegistry<KisMathToolbox*> {
     public:
         KisMathToolboxFactoryRegistry();
         ~KisMathToolboxFactoryRegistry();

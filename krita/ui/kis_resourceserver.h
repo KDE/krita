@@ -68,7 +68,7 @@ private:
     KisResource* createResource(QString filename) { return new T(filename); }
 };
 
-class KRITAUI_EXPORT KisResourceServerRegistry : public KisGenericRegistry<KisResourceServerBase*>
+class KRITAUI_EXPORT KisResourceServerRegistry : public KoGenericRegistry<KisResourceServerBase*>
 {
 public:
     virtual ~KisResourceServerRegistry();

@@ -30,7 +30,7 @@
 class QString;
 class QStringList;
 
-class KRITAIMAGE_EXPORT KisFilterRegistry : public QObject, public KisGenericRegistry<KisFilterSP>
+class KRITAIMAGE_EXPORT KisFilterRegistry : public QObject, public KoGenericRegistry<KisFilterSP>
 {
 
     Q_OBJECT

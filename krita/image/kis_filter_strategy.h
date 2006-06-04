@@ -121,7 +121,7 @@ class KRITAIMAGE_EXPORT  KisMitchellFilterStrategy : public KisFilterStrategy
         virtual double valueAt(double t) const;
 };
 
-class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KisGenericRegistry<KisFilterStrategy *>
+class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<KisFilterStrategy *>
 {
 public:
     virtual ~KisFilterStrategyRegistry();

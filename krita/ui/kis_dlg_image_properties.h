@@ -23,9 +23,9 @@
 #include <kis_types.h>
 #include "ui_wdgnewimage.h"
 
-class KisID;
-class KisColorSpace;
-class KisProfile;
+class KoID;
+class KoColorSpace;
+class KoColorProfile;
 
 class WdgNewImage : public QWidget, public Ui::WdgNewImage
 {
@@ -51,12 +51,12 @@ public:
     QString imageName();
     double resolution();
     QString description();
-    KisColorSpace * colorSpace();
-    KisProfile * profile();
+    KoColorSpace * colorSpace();
+    KoColorProfile * profile();
     
 private slots:
 
-    void fillCmbProfiles(const KisID &);
+    void fillCmbProfiles(const KoID &);
 
 private:
 

@@ -93,7 +93,7 @@ void KisToolSelectEraser::initPaint(KisEvent */*e*/)
     m_painter = new KisPainter(KisPaintDeviceSP(selection.data()));
     Q_CHECK_PTR(m_painter);
     m_painter->beginTransaction(i18n("Selection Eraser"));
-    m_painter->setPaintColor(KisColor(Qt::white, selection->colorSpace()));
+    m_painter->setPaintColor(KoColor(Qt::white, selection->colorSpace()));
     m_painter->setBrush(m_subject->currentBrush());
     m_painter->setOpacity(OPACITY_OPAQUE);
     m_painter->setCompositeOp(COMPOSITE_ERASE);

@@ -38,10 +38,10 @@
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
-#include "kis_profile.h"
-#include "kis_color.h"
+#include "KoColorProfile.h"
+#include "KoColor.h"
 #include "kis_integer_maths.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_selection.h"
 #include "kis_layer.h"
 #include "kis_paint_device_iface.h"
@@ -152,8 +152,8 @@ namespace {
 
     public:
         KisConvertLayerTypeCmd(KisUndoAdapter *adapter, KisPaintDeviceSP paintDevice,
-                       KisDataManagerSP beforeData, KisColorSpace * beforeColorSpace,
-                       KisDataManagerSP afterData, KisColorSpace * afterColorSpace
+                       KisDataManagerSP beforeData, KoColorSpace * beforeColorSpace,
+                       KisDataManagerSP afterData, KoColorSpace * afterColorSpace
                 ) : super(i18n("Convert Layer Type"))
             {
                 m_adapter = adapter;
@@ -189,15 +189,15 @@ namespace {
         KisPaintDeviceSP m_paintDevice;
 
         KisDataManagerSP m_beforeData;
-        KisColorSpace * m_beforeColorSpace;
+        KoColorSpace * m_beforeColorSpace;
 
         KisDataManagerSP m_afterData;
-        KisColorSpace * m_afterColorSpace;
+        KoColorSpace * m_afterColorSpace;
     };
 
 }
 
-KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, QString name) :
+KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, QString name) :
         QObject(0), KShared(), m_exifInfo(0)
 {
     setObjectName(name);
@@ -233,7 +233,7 @@ KisPaintDevice::KisPaintDevice(KisColorSpace * colorSpace, QString name) :
 
 }
 
-KisPaintDevice::KisPaintDevice(KisLayer *parent, KisColorSpace * colorSpace, QString name) :
+KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, QString name) :
         QObject(0), KShared(), m_exifInfo(0)
 {
     setObjectName(name);
@@ -617,7 +617,7 @@ bool KisPaintDevice::read(KoStore *store)
         return retval;
 }
 
-void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent)
+void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 {
     kDebug(41004) << "Converting " << objectName() << " to " << dstColorSpace->id().id() << " from "
               << m_colorSpace->id().id() << "\n";
@@ -660,7 +660,7 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIn
     }
 
     KisDataManagerSP oldData = m_datamanager;
-    KisColorSpace *oldColorSpace = m_colorSpace;
+    KoColorSpace *oldColorSpace = m_colorSpace;
 
     setData(dst.m_datamanager, dstColorSpace);
 
@@ -669,11 +669,11 @@ void KisPaintDevice::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIn
     }
 }
 
-void KisPaintDevice::setProfile(KisProfile * profile)
+void KisPaintDevice::setProfile(KoColorProfile * profile)
 {
     if (profile == 0) return;
 
-    KisColorSpace * dstSpace =
+    KoColorSpace * dstSpace =
             KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
                                                                       profile);
     if (dstSpace)
@@ -681,7 +681,7 @@ void KisPaintDevice::setProfile(KisProfile * profile)
 
 }
 
-void KisPaintDevice::setData(KisDataManagerSP data, KisColorSpace * colorSpace)
+void KisPaintDevice::setData(KisDataManagerSP data, KoColorSpace * colorSpace)
 {
     m_datamanager = data;
     m_colorSpace = colorSpace;
@@ -712,20 +712,20 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     }
 #if 0
     // XXX: Apply import profile
-    if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),"")) {
+    if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KoID("RGBA",""),"")) {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
     }
     else {
 #endif
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KisMetaRegistry::instance()->csRegistry()
-                ->getColorSpace(KisID("RGBA",""),srcProfileName)->
+                ->getColorSpace(KoID("RGBA",""),srcProfileName)->
                         convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
 //    }
 }
 
-QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, float exposure)
+QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, float exposure)
 {
     qint32 x1;
     qint32 y1;
@@ -747,7 +747,7 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, float exposure)
 }
 
 // XXX: is this faster than building the QImage ourselves? It makes
-QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, float exposure)
+QImage KisPaintDevice::convertToQImage(KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, float exposure)
 {
     if (w < 0)
         return QImage();
@@ -1037,7 +1037,7 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c, quint8 *opacity)
 }
 
 
-bool KisPaintDevice::pixel(qint32 x, qint32 y, KisColor * kc)
+bool KisPaintDevice::pixel(qint32 x, qint32 y, KoColor * kc)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, false);
 
@@ -1050,10 +1050,10 @@ bool KisPaintDevice::pixel(qint32 x, qint32 y, KisColor * kc)
     return true;
 }
 
-KisColor KisPaintDevice::colorAt(qint32 x, qint32 y)
+KoColor KisPaintDevice::colorAt(qint32 x, qint32 y)
 {
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1, true);
-    return KisColor(iter.rawData(), m_colorSpace);
+    return KoColor(iter.rawData(), m_colorSpace);
 }
 
 bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c, quint8  opacity)
@@ -1065,11 +1065,11 @@ bool KisPaintDevice::setPixel(qint32 x, qint32 y, const QColor& c, quint8  opaci
     return true;
 }
 
-bool KisPaintDevice::setPixel(qint32 x, qint32 y, const KisColor& kc)
+bool KisPaintDevice::setPixel(qint32 x, qint32 y, const KoColor& kc)
 {
     quint8 * pix;
     if (kc.colorSpace() != m_colorSpace) {
-        KisColor kc2 (kc, m_colorSpace);
+        KoColor kc2 (kc, m_colorSpace);
         pix = kc2.data();
     }
     else {

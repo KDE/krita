@@ -16,21 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_GENERIC_REGISTRY_H_
-#define _KIS_GENERIC_REGISTRY_H_
+#ifndef KOGENERICREGISTRY_H
+#define KOGENERICREGISTRY_H
 
 #include <map>
 
 #include <QString>
 #include <kdebug.h>
 
-#include <kis_id.h>
+#include <KoID.h>
 
 /**
  * Base class for registry objects in Krita. Krita registries
  * contain resources such as filters, tools or colorspaces.
  *
- * Items are mapped by KisID. A KisID is the combination of 
+ * Items are mapped by KoID. A KoID is the combination of 
  * a non-localized string that can be used in files and a
  * user-visible, translated string that can be used in the 
  * user interface.
@@ -38,7 +38,7 @@
 template<typename T>
 class KisGenericRegistry {
 protected:
-    typedef std::map<KisID, T> storageMap;
+    typedef std::map<KoID, T> storageMap;
 public:
     KisGenericRegistry() { };
     virtual ~KisGenericRegistry() { };
@@ -46,7 +46,7 @@ public:
 
     /**
      * add an object to the registry
-     * @param item the item to add (NOTE: T must have an KisID id() function)
+     * @param item the item to add (NOTE: T must have an KoID id() function)
      */
     void add(T item)
     {
@@ -57,7 +57,7 @@ public:
      * @param id the id of the object
      * @param item the item
      */
-    void add(KisID id, T item)
+    void add(KoID id, T item)
     {
         m_storage.insert(typename storageMap::value_type(id, item));
     }
@@ -65,7 +65,7 @@ public:
      * This function remove an item from the registry
      * @return the object which have been remove from the registry and which can be safely delete
      */
-    T remove(const KisID& name)
+    T remove(const KoID& name)
     {
         T p = 0;
         typename storageMap::iterator it = m_storage.find(name);
@@ -82,14 +82,14 @@ public:
      */
     T remove(const QString& id)
     {
-        return remove(KisID(id,""));
+        return remove(KoID(id,""));
     }
     /**
-     * This function allow to get an object from its KisID
-     * @param name the KisID of the object
+     * This function allow to get an object from its KoID
+     * @param name the KoID of the object
      * @return T the object
      */
-    T get(const KisID& name) const
+    T get(const KoID& name) const
     {
         T p = T(0);
         typename storageMap::const_iterator it = m_storage.find(name);
@@ -100,19 +100,19 @@ public:
     }
 
     /**
-     * Get a single entry based on the identifying part of KisID, not the
+     * Get a single entry based on the identifying part of KoID, not the
      * the descriptive part.
      */
     T get(const QString& id) const
     {
-        return get(KisID(id, ""));
+        return get(KoID(id, ""));
     }
 
     /**
      * @param id
      * @return true if there is an object corresponding to id
      */
-    bool exists(const KisID& id) const
+    bool exists(const KoID& id) const
     {
         typename storageMap::const_iterator it = m_storage.find(id);
         return (it != m_storage.end());
@@ -120,15 +120,15 @@ public:
 
     bool exists(const QString& id) const
     {
-        return exists(KisID(id, ""));
+        return exists(KoID(id, ""));
     }
     /**
-     * This function allow to search a KisID from the name.
+     * This function allow to search a KoID from the name.
      * @param t the name to search
      * @param result The result is filled in this variable
      * @return true if the search has been successfull, false otherwise
      */
-    bool search(const QString& t, KisID& result) const
+    bool search(const QString& t, KoID& result) const
     {
         for(typename storageMap::const_iterator it = m_storage.begin();
             it != m_storage.end(); ++it)
@@ -144,9 +144,9 @@ public:
 
     /** This function return a list of all the keys
      */
-    KisIDList listKeys() const
+    KoIDList listKeys() const
     {
-        KisIDList list;
+        KoIDList list;
         typename storageMap::const_iterator it = m_storage.begin();
         typename storageMap::const_iterator endit = m_storage.end();
         while( it != endit )

@@ -40,7 +40,7 @@
 #include <kis_doc.h>
 #include <kis_filter.h>
 #include <kis_filterop.h>
-#include <kis_id.h>
+#include <KoID.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_move_event.h>
@@ -109,9 +109,9 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
     Q_CHECK_PTR(lbFilter);
 
     // Check which filters support painting
-    KisIDList l = KisFilterRegistry::instance()->listKeys();
-    KisIDList l2;
-    KisIDList::iterator it;
+    KoIDList l = KisFilterRegistry::instance()->listKeys();
+    KoIDList l2;
+    KoIDList::iterator it;
     for (it = l.begin(); it !=  l.end(); ++it) {
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
         if (f->supportsPainting()) {
@@ -128,13 +128,13 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
     m_optionLayout->setSpacing(6);
     super::addOptionWidgetLayout(m_optionLayout);
 
-    connect(m_cbFilter, SIGNAL(activated ( const KisID& )), this, SLOT( changeFilter( const KisID& ) ) );
+    connect(m_cbFilter, SIGNAL(activated ( const KoID& )), this, SLOT( changeFilter( const KoID& ) ) );
     changeFilter( m_cbFilter->currentItem () );
 
     return widget;
 }
 
-void KisToolFilter::changeFilter( const KisID & id)
+void KisToolFilter::changeFilter( const KoID & id)
 {
     m_filter =  KisFilterRegistry::instance()->get( id );
     Q_ASSERT(!m_filter.isNull());

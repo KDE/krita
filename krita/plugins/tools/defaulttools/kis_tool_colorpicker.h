@@ -69,7 +69,7 @@ private:
     bool m_addPalette;
     bool m_normaliseValues;
     int m_radius;
-    KisColor m_pickedColor;
+    KoColor m_pickedColor;
 
     ColorPickerOptionsWidget *m_optionsWidget;
     KisCanvasSubject *m_subject;
@@ -88,7 +88,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("colorpicker", i18n("Color Picker")); }
+    virtual KoID id() { return KoID("colorpicker", i18n("Color Picker")); }
 };
 
 

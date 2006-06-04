@@ -46,7 +46,7 @@
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
-#include "kis_channelinfo.h"
+#include "KoChannelInfo.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
 #include "kis_debug_areas.h"
@@ -379,7 +379,7 @@ void KisSelectionManager::copy()
     KisPaintDeviceSP clip = KisPaintDeviceSP(new KisPaintDevice(dev->colorSpace(), "clip"));
     Q_CHECK_PTR(clip);
 
-    KisColorSpace * cs = clip->colorSpace();
+    KoColorSpace * cs = clip->colorSpace();
 
     // TODO if the source is linked... copy from all linked layers?!?
 
@@ -548,7 +548,7 @@ void KisSelectionManager::clear()
     if (img->undo()) img->undoAdapter()->addCommand(t);
 }
 
-void KisSelectionManager::fill(const KisColor& color, bool fillWithPattern, const QString& transactionText)
+void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const QString& transactionText)
 {
     KisImageSP img = m_parent->currentImg();
     if (!img) return;
@@ -597,7 +597,7 @@ void KisSelectionManager::fillBackgroundColor()
 
 void KisSelectionManager::fillPattern()
 {
-    fill(KisColor(), true, i18n("Fill with Pattern"));
+    fill(KoColor(), true, i18n("Fill with Pattern"));
 }
 
 void KisSelectionManager::reselect()
@@ -717,7 +717,7 @@ void KisSelectionManager::feather()
     rect = QRect(rect.x() - 3, rect.y() - 3, rect.width() + 6, rect.height() + 6);
     rect &= QRect(0, 0, img->width(), img->height());
 
-    painter.applyMatrix(k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, KisChannelInfo::FLAG_ALPHA);
+    painter.applyMatrix(k, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_AVOID, KoChannelInfo::FLAG_ALPHA);
     painter.end();
 
     dev->emitSelectionChanged();

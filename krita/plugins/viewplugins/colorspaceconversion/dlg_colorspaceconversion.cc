@@ -29,10 +29,10 @@
 #include <kdebug.h>
 
 #include "kis_meta_registry.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_profile.h"
-#include "kis_colorspace.h"
-#include "kis_id.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorProfile.h"
+#include "KoColorSpace.h"
+#include "KoID.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 
@@ -59,8 +59,8 @@ DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
     m_intentButtonGroup.addButton(m_page->radioRelativeColorimetric, INTENT_RELATIVE_COLORIMETRIC);
     m_intentButtonGroup.addButton(m_page->radioSaturation, INTENT_SATURATION);
 
-    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
-        this, SLOT(fillCmbDestProfile(const KisID &)));
+    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbDestProfile(const KoID &)));
 
 
     connect(this, SIGNAL(okClicked()),
@@ -81,13 +81,13 @@ void DlgColorSpaceConversion::okClicked()
 }
 
 
-void DlgColorSpaceConversion::fillCmbDestProfile(const KisID & s)
+void DlgColorSpaceConversion::fillCmbDestProfile(const KoID & s)
 {
     m_page->cmbDestProfile->clear();
 
-    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor(s);
+    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor(s);
 
-    foreach (KisProfile *profile, profileList) {
+    foreach (KoColorProfile *profile, profileList) {
         m_page->cmbDestProfile->addSqueezedItem(profile->productName());
 
     }

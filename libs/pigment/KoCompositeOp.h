@@ -15,14 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_COMPOSITE_OP_H_
-#define KIS_COMPOSITE_OP_H_
+#ifndef KOCOMPOSITEOP_H
+#define KOCOMPOSITEOP_H
 
 #include <map>
 #include <QList>
-#include <krita_export.h>
-//#include "kis_global.h"
-#include "kis_id.h"
+#include <koffice_export.h>
+#include <KoID.h>
 
 enum CompositeOp {
     COMPOSITE_OVER,
@@ -71,32 +70,32 @@ enum CompositeOp {
     COMPOSITE_UNDEF
 };
 
-class KRITACOLOR_EXPORT KisCompositeOp {
+class PIGMENT_EXPORT KoCompositeOp {
 public:
-    KisCompositeOp();
-    KisCompositeOp(const QString& id);
-    KisCompositeOp(CompositeOp compositeOp);
+    KoCompositeOp();
+    KoCompositeOp(const QString& id);
+    KoCompositeOp(CompositeOp compositeOp);
 
-    KisID id() const { return m_id; }
+    KoID id() const { return m_id; }
     CompositeOp op() const { return m_op; }
 
     bool isValid() const { return m_valid; }
 
-    bool operator==(const KisCompositeOp& other) const;
-    bool operator!=(const KisCompositeOp& other) const;
+    bool operator==(const KoCompositeOp& other) const;
+    bool operator!=(const KoCompositeOp& other) const;
 
 private:
     void fillMap();
 
 private:
     CompositeOp m_op;
-    KisID m_id;
+    KoID m_id;
     bool m_valid;
 
-    typedef std::map<KisID, CompositeOp> KisIDCompositeOpMap;
-    static KisIDCompositeOpMap s_idOpMap;
+    typedef std::map<KoID, CompositeOp> KoIDCompositeOpMap;
+    static KoIDCompositeOpMap s_idOpMap;
 };
 
-typedef QList<KisCompositeOp> KisCompositeOpList;
+typedef QList<KoCompositeOp> KoCompositeOpList;
 
-#endif // KIS_COMPOSITE_OP_H
+#endif // KOCOMPOSITEOP_H

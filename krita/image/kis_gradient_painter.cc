@@ -46,13 +46,13 @@
 #include "kis_paint_device.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
 #include "kis_gradient_painter.h"
 #include "kis_meta_registry.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 
 namespace {
 

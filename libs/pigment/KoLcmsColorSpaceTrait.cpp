@@ -21,21 +21,20 @@
 
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
-#include "kis_lcms_base_colorspace.h"
-#include "kis_global.h"
-#include "kis_profile.h"
-#include "kis_id.h"
-#include "kis_integer_maths.h"
-#include "kis_color_conversions.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_channelinfo.h"
+#include "KoLcmsColorSpaceTrait.h"
+#include "KoColorProfile.h"
+#include "KoID.h"
+#include "KoIntegerMaths.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include "KoChannelInfo.h"
 
-class KisColorAdjustmentImpl : public KisColorAdjustment
+class KoColorAdjustmentImpl : public KoColorAdjustment
 {
     public:
 
-    KisColorAdjustmentImpl() : KisColorAdjustment()
+    KoColorAdjustmentImpl() : KoColorAdjustment()
         {
             csProfile = 0;
             transform = 0;
@@ -44,7 +43,7 @@ class KisColorAdjustmentImpl : public KisColorAdjustment
             profiles[2] = 0;
         };
 
-    ~KisColorAdjustmentImpl() {
+    ~KoColorAdjustmentImpl() {
 
         if (transform)
             cmsDeleteTransform(transform);
@@ -61,10 +60,10 @@ class KisColorAdjustmentImpl : public KisColorAdjustment
     cmsHTRANSFORM transform;
 };
 
-KisLcmsBaseColorSpace::KisLcmsBaseColorSpace(DWORD cmType,
+KoLcmsColorSpaceTrait::KoLcmsColorSpaceTrait(DWORD cmType,
                                              icColorSpaceSignature colorSpaceSignature,
-                                             KisProfile *p)
-    : KisColorSpace(  )
+                                             KoColorProfile *p)
+    : KoColorSpace(  )
     , m_profile( p )
     , m_cmType( cmType )
     , m_colorSpaceSignature( colorSpaceSignature )
@@ -81,7 +80,7 @@ KisLcmsBaseColorSpace::KisLcmsBaseColorSpace(DWORD cmType,
     m_defaultToLab = 0;
 }
 
-void KisLcmsBaseColorSpace::init()
+void KoLcmsColorSpaceTrait::init()
 {
     // Default pixel buffer for QColor conversion
     m_qcolordata = new quint8[3];
@@ -109,13 +108,13 @@ void KisLcmsBaseColorSpace::init()
                                         INTENT_PERCEPTUAL, 0);
 }
 
-KisLcmsBaseColorSpace::~KisLcmsBaseColorSpace()
+KoLcmsColorSpaceTrait::~KoLcmsColorSpaceTrait()
 {
 }
 
 
 
-void KisLcmsBaseColorSpace::fromQColor(const QColor& color, quint8 *dst, KisProfile * profile)
+void KoLcmsColorSpaceTrait::fromQColor(const QColor& color, quint8 *dst, KoColorProfile * profile)
 {
     m_qcolordata[2] = color.red();
     m_qcolordata[1] = color.green();
@@ -142,13 +141,13 @@ void KisLcmsBaseColorSpace::fromQColor(const QColor& color, quint8 *dst, KisProf
     setAlpha(dst, OPACITY_OPAQUE, 1);
 }
 
-void KisLcmsBaseColorSpace::fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KisProfile * profile)
+void KoLcmsColorSpaceTrait::fromQColor(const QColor& color, quint8 opacity, quint8 *dst, KoColorProfile * profile)
 {
     fromQColor(color, dst, profile);
     setAlpha(dst, opacity, 1);
 }
 
-void KisLcmsBaseColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile * profile)
+void KoLcmsColorSpaceTrait::toQColor(const quint8 *src, QColor *c, KoColorProfile * profile)
 {
     if (profile == 0) {
 	// Default sRGB transform
@@ -167,41 +166,41 @@ void KisLcmsBaseColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile * 
     c->setRgb(m_qcolordata[2], m_qcolordata[1], m_qcolordata[0]);
 }
 
-void KisLcmsBaseColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile)
+void KoLcmsColorSpaceTrait::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile)
 {
     toQColor(src, c, profile);
     *opacity = getAlpha(src);
 }
 
-void KisLcmsBaseColorSpace::getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex)
+void KoLcmsColorSpaceTrait::getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex)
 {
     if (channelIndex < (quint32)m_channels.count()) {
 
         fromQColor(Qt::black, OPACITY_TRANSPARENT, dstPixel);
 
-        const KisChannelInfo *channelInfo = m_channels[channelIndex];
+        const KoChannelInfo *channelInfo = m_channels[channelIndex];
         memcpy(dstPixel + channelInfo->pos(), srcPixel + channelInfo->pos(), channelInfo->size());
     }
 }
 
 
-void KisLcmsBaseColorSpace::toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+void KoLcmsColorSpaceTrait::toLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
 {
     if ( m_defaultToLab == 0 ) return;
 
     cmsDoTransform( m_defaultToLab, const_cast<quint8 *>( src ), dst, nPixels );
 }
 
-void KisLcmsBaseColorSpace::fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
+void KoLcmsColorSpaceTrait::fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const
 {
     if ( m_defaultFromLab == 0 ) return;
 
     cmsDoTransform( m_defaultFromLab,  const_cast<quint8 *>( src ), dst,  nPixels );
 }
 
-bool KisLcmsBaseColorSpace::convertPixelsTo(const quint8 * src,
+bool KoLcmsColorSpaceTrait::convertPixelsTo(const quint8 * src,
 					    quint8 * dst,
-					    KisColorSpace * dstColorSpace,
+					    KoColorSpace * dstColorSpace,
 					    quint32 numPixels,
 					    qint32 renderingIntent)
 {
@@ -266,10 +265,10 @@ bool KisLcmsBaseColorSpace::convertPixelsTo(const quint8 * src,
     }
 
     // Last resort fallback. This happens when either src or dst isn't a lcms colorspace.
-    return KisColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
+    return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
 }
 
-KisColorAdjustment *KisLcmsBaseColorSpace::createBrightnessContrastAdjustment(quint16 *transferValues)
+KoColorAdjustment *KoLcmsColorSpaceTrait::createBrightnessContrastAdjustment(quint16 *transferValues)
 {
     if (!m_profile) return 0;
 
@@ -281,7 +280,7 @@ KisColorAdjustment *KisLcmsBaseColorSpace::createBrightnessContrastAdjustment(qu
     for(int i =0; i < 256; i++)
         transferFunctions[0]->GammaTable[i] = transferValues[i];
 
-    KisColorAdjustmentImpl *adj = new KisColorAdjustmentImpl;
+    KoColorAdjustmentImpl *adj = new KoColorAdjustmentImpl;
     adj->profiles[1] = cmsCreateLinearizationDeviceLink(icSigLabData, transferFunctions);
     cmsSetDeviceClass(adj->profiles[1], icSigAbstractClass);
 
@@ -321,11 +320,11 @@ static int desaturateSampler(register WORD In[], register WORD Out[], register L
     return true;
 }
 
-KisColorAdjustment *KisLcmsBaseColorSpace::createDesaturateAdjustment()
+KoColorAdjustment *KoLcmsColorSpaceTrait::createDesaturateAdjustment()
 {
     if (!m_profile) return 0;
 
-    KisColorAdjustmentImpl *adj = new KisColorAdjustmentImpl;
+    KoColorAdjustmentImpl *adj = new KoColorAdjustmentImpl;
 
     adj->profiles[0] = m_profile->profile();
     adj->profiles[2] = m_profile->profile();
@@ -376,7 +375,7 @@ KisColorAdjustment *KisLcmsBaseColorSpace::createDesaturateAdjustment()
     return adj;
 }
 
-KisColorAdjustment *KisLcmsBaseColorSpace::createPerChannelAdjustment(quint16 **transferValues)
+KoColorAdjustment *KoLcmsColorSpaceTrait::createPerChannelAdjustment(quint16 **transferValues)
 {
     if (!m_profile) return 0;
 
@@ -389,7 +388,7 @@ KisColorAdjustment *KisLcmsBaseColorSpace::createPerChannelAdjustment(quint16 **
         }
     }
 
-    KisColorAdjustmentImpl *adj = new KisColorAdjustmentImpl;
+    KoColorAdjustmentImpl *adj = new KoColorAdjustmentImpl;
     adj->profiles[0] = cmsCreateLinearizationDeviceLink(colorSpaceSignature(), transferFunctions);
     adj->profiles[1] = NULL;
     adj->profiles[2] = NULL;
@@ -402,15 +401,15 @@ KisColorAdjustment *KisLcmsBaseColorSpace::createPerChannelAdjustment(quint16 **
 }
 
 
-void KisLcmsBaseColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *adjustment, qint32 nPixels)
+void KoLcmsColorSpaceTrait::applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *adjustment, qint32 nPixels)
 {
-    KisColorAdjustmentImpl * adj = dynamic_cast<KisColorAdjustmentImpl*>(adjustment);
+    KoColorAdjustmentImpl * adj = dynamic_cast<KoColorAdjustmentImpl*>(adjustment);
     if (adj)
         cmsDoTransform(adj->transform, const_cast<quint8 *>(src), dst, nPixels);
 }
 
 
-void KisLcmsBaseColorSpace::invertColor(quint8 * src, qint32 nPixels)
+void KoLcmsColorSpaceTrait::invertColor(quint8 * src, qint32 nPixels)
 {
     QColor c;
     quint8 opacity;
@@ -419,14 +418,14 @@ void KisLcmsBaseColorSpace::invertColor(quint8 * src, qint32 nPixels)
     while (nPixels--)
     {
         toQColor(src, &c, &opacity);
-        c.setRgb(quint8_MAX - c.red(), quint8_MAX - c.green(), quint8_MAX - c.blue());
+        c.setRgb(UINT8_MAX - c.red(), UINT8_MAX - c.green(), UINT8_MAX - c.blue());
         fromQColor( c, opacity, src);
 
         src += psize;
     }
 }
 
-quint8 KisLcmsBaseColorSpace::difference(const quint8* src1, const quint8* src2)
+quint8 KoLcmsColorSpaceTrait::difference(const quint8* src1, const quint8* src2)
 {
     if (m_defaultToLab) {
 
@@ -462,7 +461,7 @@ quint8 KisLcmsBaseColorSpace::difference(const quint8* src1, const quint8* src2)
     }
 }
 
-void KisLcmsBaseColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
+void KoLcmsColorSpaceTrait::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
 {
     quint32 totalRed = 0, totalGreen = 0, totalBlue = 0, newAlpha = 0;
 
@@ -472,7 +471,7 @@ void KisLcmsBaseColorSpace::mixColors(const quint8 **colors, const quint8 *weigh
     while (nColors--)
     {
         // Ugly hack to get around the current constness mess of the colour strategy...
-        const_cast<KisLcmsBaseColorSpace *>(this)->toQColor(*colors, &c, &opacity);
+        const_cast<KoLcmsColorSpaceTrait *>(this)->toQColor(*colors, &c, &opacity);
 
         quint32 alphaTimesWeight = UINT8_MULT(opacity, *weights);
 
@@ -507,10 +506,10 @@ void KisLcmsBaseColorSpace::mixColors(const quint8 **colors, const quint8 *weigh
     quint32 dstBlue = ((totalBlue >> 8) + totalBlue) >> 8;
     Q_ASSERT(dstBlue <= 255);
 
-    const_cast<KisLcmsBaseColorSpace *>(this)->fromQColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
+    const_cast<KoLcmsColorSpaceTrait *>(this)->fromQColor(QColor(dstRed, dstGreen, dstBlue), newAlpha, dst);
 }
 
-void KisLcmsBaseColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags,
+void KoLcmsColorSpaceTrait::convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags,
                                            quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     qint32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
@@ -518,7 +517,7 @@ void KisLcmsBaseColorSpace::convolveColors(quint8** colors, qint32 * kernelValue
     QColor dstColor;
     quint8 dstOpacity;
 
-    const_cast<KisLcmsBaseColorSpace *>(this)->toQColor(dst, &dstColor, &dstOpacity);
+    const_cast<KoLcmsColorSpaceTrait *>(this)->toQColor(dst, &dstColor, &dstOpacity);
 
     while (nColors--)
     {
@@ -527,7 +526,7 @@ void KisLcmsBaseColorSpace::convolveColors(quint8** colors, qint32 * kernelValue
         if (weight != 0) {
             QColor c;
             quint8 opacity;
-            const_cast<KisLcmsBaseColorSpace *>(this)->toQColor( *colors, &c, &opacity );
+            const_cast<KoLcmsColorSpaceTrait *>(this)->toQColor( *colors, &c, &opacity );
             totalRed += c.red() * weight;
             totalGreen += c.green() * weight;
             totalBlue += c.blue() * weight;
@@ -538,20 +537,20 @@ void KisLcmsBaseColorSpace::convolveColors(quint8** colors, qint32 * kernelValue
     }
 
 
-    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
-        const_cast<KisLcmsBaseColorSpace *>(this)->fromQColor(QColor(CLAMP((totalRed / factor) + offset, 0, quint8_MAX),
-                                        CLAMP((totalGreen / factor) + offset, 0, quint8_MAX),
-                                        CLAMP((totalBlue / factor) + offset, 0, quint8_MAX)),
+    if (channelFlags & KoChannelInfo::FLAG_COLOR) {
+        const_cast<KoLcmsColorSpaceTrait *>(this)->fromQColor(QColor(CLAMP((totalRed / factor) + offset, 0, UINT8_MAX),
+                                        CLAMP((totalGreen / factor) + offset, 0, UINT8_MAX),
+                                        CLAMP((totalBlue / factor) + offset, 0, UINT8_MAX)),
             dstOpacity,
             dst);
     }
-    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
-        const_cast<KisLcmsBaseColorSpace *>(this)->fromQColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, quint8_MAX), dst);
+    if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
+        const_cast<KoLcmsColorSpaceTrait *>(this)->fromQColor(dstColor, CLAMP((totalAlpha/ factor) + offset, 0, UINT8_MAX), dst);
     }
 
 }
 
-void KisLcmsBaseColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const
+void KoLcmsColorSpaceTrait::darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const
 {
     if (m_defaultToLab) {
         quint16 * labcache = new quint16[nPixels * 4];
@@ -580,7 +579,7 @@ void KisLcmsBaseColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shad
 
         for (int i = 0; i < nPixels; ++i) {
 
-            const_cast<KisLcmsBaseColorSpace *>(this)->toQColor(src + (i * psize), &c);
+            const_cast<KoLcmsColorSpaceTrait *>(this)->toQColor(src + (i * psize), &c);
             qint32 r, g, b;
 
             if (compensate) {
@@ -595,29 +594,29 @@ void KisLcmsBaseColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shad
             }
             c.setRgb(r, g, b);
 
-            const_cast<KisLcmsBaseColorSpace *>(this)->fromQColor( c, dst  + (i * psize));
+            const_cast<KoLcmsColorSpaceTrait *>(this)->fromQColor( c, dst  + (i * psize));
         }
     }
 }
 
-quint8 KisLcmsBaseColorSpace::intensity8(const quint8 * src) const
+quint8 KoLcmsColorSpaceTrait::intensity8(const quint8 * src) const
 {
     QColor c;
     quint8 opacity;
-    const_cast<KisLcmsBaseColorSpace *>(this)->toQColor(src, &c, &opacity);
+    const_cast<KoLcmsColorSpaceTrait *>(this)->toQColor(src, &c, &opacity);
     return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
 
 }
 
 
-KisID KisLcmsBaseColorSpace::mathToolboxID() const
+KoID KoLcmsColorSpaceTrait::mathToolboxID() const
 {
-    return KisID("Basic");
+    return KoID("Basic");
 }
 
-void KisLcmsBaseColorSpace::bitBlt(quint8 *dst,
+void KoLcmsColorSpaceTrait::bitBlt(quint8 *dst,
                    qint32 dststride,
-                   KisColorSpace * srcSpace,
+                   KoColorSpace * srcSpace,
                    const quint8 *src,
                    qint32 srcRowStride,
                    const quint8 *srcAlphaMask,
@@ -625,7 +624,7 @@ void KisLcmsBaseColorSpace::bitBlt(quint8 *dst,
                    quint8 opacity,
                    qint32 rows,
                    qint32 cols,
-                   const KisCompositeOp& op)
+                   const KoCompositeOp& op)
 {
     if (rows <= 0 || cols <= 0)
         return;
@@ -675,17 +674,17 @@ void KisLcmsBaseColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-QImage KisLcmsBaseColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                              KisProfile *dstProfile,
+QImage KoLcmsColorSpaceTrait::convertToQImage(const quint8 *data, qint32 width, qint32 height,
+                                              KoColorProfile *dstProfile,
                                               qint32 renderingIntent, float /*exposure*/)
 
 {
     QImage img = QImage(width, height, QImage::Format_ARGB32);
 
-    KisColorSpace * dstCS;
+    KoColorSpace * dstCS;
 
     if (dstProfile)
-        dstCS = m_parent->getColorSpace(KisID("RGBA",""),dstProfile->productName());
+        dstCS = m_parent->getColorSpace(KoID("RGBA",""),dstProfile->productName());
     else
         dstCS = m_parent->getRGB8();
 
@@ -696,9 +695,9 @@ QImage KisLcmsBaseColorSpace::convertToQImage(const quint8 *data, qint32 width, 
 }
 
 
-cmsHTRANSFORM KisLcmsBaseColorSpace::createTransform(KisColorSpace * dstColorSpace,
-                             KisProfile *  srcProfile,
-                             KisProfile *  dstProfile,
+cmsHTRANSFORM KoLcmsColorSpaceTrait::createTransform(KoColorSpace * dstColorSpace,
+                             KoColorProfile *  srcProfile,
+                             KoColorProfile *  dstProfile,
                              qint32 renderingIntent)
 {
     KConfig * cfg = KGlobal::config();
@@ -723,7 +722,7 @@ cmsHTRANSFORM KisLcmsBaseColorSpace::createTransform(KisColorSpace * dstColorSpa
     return 0;
 }
 
-void KisLcmsBaseColorSpace::compositeCopy(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 * /*maskRowStart*/, qint32 /*maskRowStride*/, qint32 rows, qint32 numColumns, quint8 opacity)
+void KoLcmsColorSpaceTrait::compositeCopy(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 * /*maskRowStart*/, qint32 /*maskRowStride*/, qint32 rows, qint32 numColumns, quint8 opacity)
 {
     quint8 *dst = dstRowStart;
     const quint8 *src = srcRowStart;

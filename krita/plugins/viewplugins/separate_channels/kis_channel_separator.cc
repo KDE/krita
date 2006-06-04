@@ -52,11 +52,11 @@
 #include <kis_types.h>
 #include <kis_progress_subject.h>
 #include <kis_progress_display_interface.h>
-#include <kis_colorspace.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_view.h>
 #include <kis_paint_device.h>
-#include <kis_channelinfo.h>
+#include <KoChannelInfo.h>
 
 #include "kis_channel_separator.h"
 
@@ -81,11 +81,11 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         progress->setSubject(this, true, true);
     emit notifyProgressStage(i18n("Separating image..."), 0);
 
-    KisColorSpace * dstCs = 0;
+    KoColorSpace * dstCs = 0;
 
     quint32 numberOfChannels = src->nChannels();
-    KisColorSpace * srcCs  = src->colorSpace();
-    Q3ValueVector<KisChannelInfo *> channels = srcCs->channels();
+    KoColorSpace * srcCs  = src->colorSpace();
+    Q3ValueVector<KoChannelInfo *> channels = srcCs->channels();
 
     // Use the flattened image, if required
     switch(sourceOps) {
@@ -99,20 +99,20 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
 
     vKisPaintDeviceSP layers;
 
-    Q3ValueVector<KisChannelInfo *>::const_iterator begin = channels.begin();
-    Q3ValueVector<KisChannelInfo *>::const_iterator end = channels.end();
+    Q3ValueVector<KoChannelInfo *>::const_iterator begin = channels.begin();
+    Q3ValueVector<KoChannelInfo *>::const_iterator end = channels.end();
 
 
     QRect rect = src->exactBounds();
 
     int i = 0;
     quint32 channelIndex = 0;
-    for (Q3ValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex)
+    for (Q3ValueVector<KoChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex)
     {
 
-        KisChannelInfo * ch = (*it);
+        KoChannelInfo * ch = (*it);
 
-        if (ch->channelType() == KisChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
+        if (ch->channelType() == KoChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
             continue;
         }
 
@@ -127,10 +127,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
         else {
             if (channelSize == 1 || downscale) {
-                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("GRAYA",""),"" ), "8 bit grayscale sep");
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("GRAYA",""),"" ), "8 bit grayscale sep");
             }
             else {
-                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("GRAYA16",""),"" ), "16 bit grayscale sep");
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("GRAYA16",""),"" ), "16 bit grayscale sep");
                 destSize = 2;
             }
         }
@@ -238,12 +238,12 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 break;
         }
 
-        for (Q3ValueVector<KisChannelInfo *>::const_iterator it = begin; it != end; ++it)
+        for (Q3ValueVector<KoChannelInfo *>::const_iterator it = begin; it != end; ++it)
         {
 
-            KisChannelInfo * ch = (*it);
+            KoChannelInfo * ch = (*it);
 
-            if (ch->channelType() == KisChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
+            if (ch->channelType() == KoChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
             // Don't make an separate separation of the alpha channel if the user didn't ask for it.
                 continue;
             }

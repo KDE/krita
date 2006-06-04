@@ -32,6 +32,8 @@
 #include "koColor.h"
 #include "kogradientmanager.h"
 
+#include <KoColorSpace.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -93,8 +95,8 @@ bool KisGradient::init()
             KoColorStop *colstopNext = grad->colorStops.next();
 
             if(colstopNext) {
-                KoColor leftRgb((int)(colstop->color1 * 255 + 0.5), (int)(colstop->color2 * 255 + 0.5), (int)(colstop->color3 * 255 + 0.5));
-                KoColor rightRgb((int)(colstopNext->color1 * 255 + 0.5), (int)(colstopNext->color2 * 255 + 0.5), (int)(colstopNext->color3 * 255 + 0.5));
+                KoOldColor leftRgb((int)(colstop->color1 * 255 + 0.5), (int)(colstop->color2 * 255 + 0.5), (int)(colstop->color3 * 255 + 0.5));
+                KoOldColor rightRgb((int)(colstopNext->color1 * 255 + 0.5), (int)(colstopNext->color2 * 255 + 0.5), (int)(colstopNext->color3 * 255 + 0.5));
 
                 double midp = colstop->midpoint;
                 midp = colstop->offset + ((colstopNext->offset - colstop->offset) * midp);
@@ -455,8 +457,8 @@ KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWCo
 
 Color KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
-    KoColor sc = KoColor(start.color());
-    KoColor ec = KoColor(end.color());
+    KoOldColor sc = KoOldColor(start.color());
+    KoOldColor ec = KoOldColor(end.color());
     
     int s = static_cast<int>(sc.S() + t * (ec.S() - sc.S()) + 0.5);
     int v = static_cast<int>(sc.V() + t * (ec.V() - sc.V()) + 0.5);
@@ -475,7 +477,7 @@ Color KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(double t, Col
     
     double alpha = start.alpha() + t * (end.alpha() - start.alpha());
 
-    return Color(KoColor(h, s, v, KoColor::csHSV).color(), alpha);
+    return Color(KoOldColor(h, s, v, KoOldColor::csHSV).color(), alpha);
 }
 
 KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCWColorInterpolationStrategy::instance()
@@ -490,8 +492,8 @@ KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCW
 
 Color KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
 {
-    KoColor sc = KoColor(start.color());
-    KoColor se = KoColor(end.color());
+    KoOldColor sc = KoOldColor(start.color());
+    KoOldColor se = KoOldColor(end.color());
 
     int s = static_cast<int>(sc.S() + t * (se.S() - sc.S()) + 0.5);
     int v = static_cast<int>(sc.V() + t * (se.V() - sc.V()) + 0.5);
@@ -510,7 +512,7 @@ Color KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(double t, Co
 
     double alpha = start.alpha() + t * (end.alpha() - start.alpha());
 
-    return Color(KoColor(h, s, v, KoColor::csHSV).color(), alpha);
+    return Color(KoOldColor(h, s, v, KoOldColor::csHSV).color(), alpha);
 }
 
 KisGradientSegment::LinearInterpolationStrategy *KisGradientSegment::LinearInterpolationStrategy::instance()

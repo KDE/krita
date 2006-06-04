@@ -30,26 +30,26 @@
 
 #include <kis_debug_areas.h>
 #include "kis_cmyk_u16_colorspace.h"
-#include "kis_u16_base_colorspace.h"
+#include "KoU16ColorSpaceTrait.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 
 namespace {
     const qint32 MAX_CHANNEL_CMYK = 4;
     const qint32 MAX_CHANNEL_CMYKA = 5;
 }
 
-KisCmykU16ColorSpace::KisCmykU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisColorSpace(KisID("CMYKA16", i18n("CMYK (16-bit integer/channel)")), parent)
-    , KisU16BaseColorSpace(PIXEL_ALPHA * sizeof(quint16))
-    , KisLcmsBaseColorSpace(TYPE_CMYK5_16, icSigCmykData, p)
+KisCmykU16ColorSpace::KisCmykU16ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+    KoColorSpace(KoID("CMYKA16", i18n("CMYK (16-bit integer/channel)")), parent)
+    , KoU16ColorSpaceTrait(PIXEL_ALPHA * sizeof(quint16))
+    , KoLcmsColorSpaceTrait(TYPE_CMYK5_16, icSigCmykData, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Cyan"), 0 * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
-    m_channels.push_back(new KisChannelInfo(i18n("Magenta"), 1 * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
-    m_channels.push_back(new KisChannelInfo(i18n("Yellow"), 2 * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), Qt::yellow));
-    m_channels.push_back(new KisChannelInfo(i18n("Black"), 3 * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), Qt::black));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 4 * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
+    m_channels.push_back(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
+    m_channels.push_back(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
+    m_channels.push_back(new KoChannelInfo(i18n("Yellow"), 2 * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::yellow));
+    m_channels.push_back(new KoChannelInfo(i18n("Black"), 3 * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::black));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 4 * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
 
     init();
 }
@@ -98,7 +98,7 @@ void KisCmykU16ColorSpace::mixColors(const quint8 **colors, const quint8 *weight
     dstPixel->black = totalBlack;
 }
 
-void KisCmykU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
+void KisCmykU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     qint32 totalCyan = 0, totalMagenta = 0, totalYellow = 0, totalK = 0, totalAlpha = 0;
 
@@ -121,13 +121,13 @@ void KisCmykU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues,
 
     Pixel * p = reinterpret_cast< Pixel *>( dst );
 
-    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+    if (channelFlags & KoChannelInfo::FLAG_COLOR) {
         p->cyan = CLAMP( ( totalCyan / factor) + offset, 0, quint16_MAX);
         p->magenta = CLAMP( ( totalMagenta / factor) + offset, 0, quint16_MAX);
         p->yellow = CLAMP( ( totalYellow / factor) + offset, 0, quint16_MAX);
         p->black = CLAMP( ( totalK / factor) + offset, 0, quint16_MAX);
     }
-    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+    if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
         p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, quint16_MAX);
     }
 }
@@ -150,7 +150,7 @@ void KisCmykU16ColorSpace::invertColor(quint8 * src, qint32 nPixels)
 
 
 
-void KisCmykU16ColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *adj, qint32 nPixels)
+void KisCmykU16ColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *adj, qint32 nPixels)
 {
     quint32 psize = pixelSize();
     
@@ -158,7 +158,7 @@ void KisCmykU16ColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KisCo
     quint8 * tmpPtr = tmp;
     memcpy(tmp, dst, nPixels * psize);
     
-    KisLcmsBaseColorSpace::applyAdjustment(src, dst, adj, nPixels);
+    KoLcmsColorSpaceTrait::applyAdjustment(src, dst, adj, nPixels);
 
     // Copy the alpha, which lcms doesn't do for us, grumble.
 
@@ -176,7 +176,7 @@ void KisCmykU16ColorSpace::applyAdjustment(const quint8 *src, quint8 *dst, KisCo
     delete [] tmp;
 }
 
-Q3ValueVector<KisChannelInfo *> KisCmykU16ColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KisCmykU16ColorSpace::channels() const
 {
     return m_channels;
 }
@@ -563,7 +563,7 @@ void KisCmykU16ColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KisCompositeOp& op)
+                      const KoCompositeOp& op)
 {
     quint16 opacity = UINT8_TO_UINT16(U8_opacity);
 
@@ -688,19 +688,19 @@ void KisCmykU16ColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KisCompositeOpList KisCmykU16ColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisCmykU16ColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
-    list.append(KisCompositeOp(COMPOSITE_MULT));
-    list.append(KisCompositeOp(COMPOSITE_BURN));
-    list.append(KisCompositeOp(COMPOSITE_DODGE));
-    list.append(KisCompositeOp(COMPOSITE_DIVIDE));
-    list.append(KisCompositeOp(COMPOSITE_SCREEN));
-    list.append(KisCompositeOp(COMPOSITE_OVERLAY));
-    list.append(KisCompositeOp(COMPOSITE_DARKEN));
-    list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_MULT));
+    list.append(KoCompositeOp(COMPOSITE_BURN));
+    list.append(KoCompositeOp(COMPOSITE_DODGE));
+    list.append(KoCompositeOp(COMPOSITE_DIVIDE));
+    list.append(KoCompositeOp(COMPOSITE_SCREEN));
+    list.append(KoCompositeOp(COMPOSITE_OVERLAY));
+    list.append(KoCompositeOp(COMPOSITE_DARKEN));
+    list.append(KoCompositeOp(COMPOSITE_LIGHTEN));
 
     return list;
 }

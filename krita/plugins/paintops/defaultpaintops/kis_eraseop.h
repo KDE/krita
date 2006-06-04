@@ -35,7 +35,7 @@ public:
     virtual ~KisEraseOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KisID id() { return KisID("eraser", i18n("Pixel Eraser")); }
+    virtual KoID id() { return KoID("eraser", i18n("Pixel Eraser")); }
     virtual QString pixmap() { return "eraser.png"; }
 };
 

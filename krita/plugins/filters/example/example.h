@@ -38,7 +38,7 @@ public:
 public:
     virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
     virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
-    static inline KisID id() { return KisID("invert", i18n("Invert")); };
+    static inline KoID id() { return KoID("invert", i18n("Invert")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }

@@ -50,11 +50,11 @@
 #include <kis_types.h>
 #include <kis_progress_subject.h>
 #include <kis_progress_display_interface.h>
-#include <kis_colorspace.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_view.h>
 #include <kis_paint_device.h>
-#include <kis_channelinfo.h>
+#include <KoChannelInfo.h>
 #include <kis_convolution_painter.h>
 
 #include "kis_dropshadow.h"
@@ -87,9 +87,9 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
         image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
     }
 
-    KisPaintDeviceSP shadowDev = KisPaintDeviceSP(new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"" ), "Shadow"));
+    KisPaintDeviceSP shadowDev = KisPaintDeviceSP(new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),"" ), "Shadow"));
     KisPaintDeviceSP bShadowDev;
-    KisColorSpace *rgb8cs = shadowDev->colorSpace();
+    KoColorSpace *rgb8cs = shadowDev->colorSpace();
 
     QRect rect = dev->exactBounds();
 
@@ -113,7 +113,7 @@ void KisDropshadow::dropshadow(KisProgressDisplayInterface * progress, qint32 xo
 
     if( blurradius > 0 )
     {
-        bShadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"" ), "bShadow");
+        bShadowDev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),"" ), "bShadow");
         gaussianblur(shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progress);
         shadowDev = bShadowDev;
     }

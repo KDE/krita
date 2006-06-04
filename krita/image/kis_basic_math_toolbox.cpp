@@ -21,7 +21,7 @@
 #include "kis_basic_math_toolbox.h"
 
 KisBasicMathToolbox::KisBasicMathToolbox()
-    : KisMathToolbox(KisID("Basic"))
+    : KisMathToolbox(KoID("Basic"))
 {
 }
 

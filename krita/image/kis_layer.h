@@ -26,7 +26,7 @@
 
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
-#include "kis_composite_op.h"
+#include "KoCompositeOp.h"
 
 class KNamedCommand;
 class QPainter;
@@ -190,9 +190,9 @@ public:
     virtual QString name() const;
     virtual void setName(const QString& name);
 
-    KisCompositeOp compositeOp() { return m_compositeOp; }
-    void setCompositeOp(const KisCompositeOp& compositeOp);
-    KNamedCommand *setCompositeOpCommand(const KisCompositeOp& compositeOp);
+    KoCompositeOp compositeOp() { return m_compositeOp; }
+    void setCompositeOp(const KoCompositeOp& compositeOp);
+    KNamedCommand *setCompositeOpCommand(const KoCompositeOp& compositeOp);
 
     KisImage *image() const { return m_image; }
     virtual void setImage(KisImage *image) { m_image = image; }
@@ -233,7 +233,7 @@ private:
     KisImage *m_image;
 
     // Operation used to composite this layer with the layers _under_ this layer
-    KisCompositeOp m_compositeOp;
+    KoCompositeOp m_compositeOp;
 };
 
 #endif // KIS_LAYER_H_

@@ -21,6 +21,8 @@
 
 #include <kdebug.h>
 
+#include "KoIntegerMaths.h"
+
 #include <kis_brush.h>
 #include <kis_debug_areas.h>
 #include <kis_paint_device.h>
@@ -30,7 +32,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include "kis_input_device.h"
 
 #include "kis_wetop.h"
@@ -125,14 +127,14 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->getAlpha8());
     }
 
-    KisColorSpace * cs = device->colorSpace();
+    KoColorSpace * cs = device->colorSpace();
 
-    if (cs->id() != KisID("WET","")) {
+    if (cs->id() != KoID("WET","")) {
         kDebug(DBG_AREA_CMS) << "You cannot paint wet paint on dry pixels.\n";
         return;
     }
 
-    KisColor paintColor = m_painter->paintColor();
+    KoColor paintColor = m_painter->paintColor();
     paintColor.convertTo(cs);
     // hopefully this does
     // nothing, conversions are bad ( wet->rgb->wet gives horrible mismatches, due to

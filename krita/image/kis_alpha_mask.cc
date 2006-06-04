@@ -22,6 +22,8 @@
 
 #include <kdebug.h>
 
+#include <KoColorSpace.h>
+
 #include "kis_global.h"
 #include "kis_alpha_mask.h"
 

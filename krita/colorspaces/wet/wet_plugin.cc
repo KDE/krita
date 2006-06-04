@@ -47,7 +47,7 @@
 #include <kis_debug_areas.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_tool_registry.h>
 #include <kis_paintop_registry.h>
 #include <kis_canvas_subject.h>
@@ -71,12 +71,12 @@ WetPlugin::WetPlugin(QObject *parent, const QStringList &)
     setInstance(WetPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.
-    if ( parent->inherits("KisColorSpaceFactoryRegistry") ) {
-        KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>(parent);
+    if ( parent->inherits("KoColorSpaceFactoryRegistry") ) {
+        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>(parent);
 
-        KisColorSpace* colorSpaceWet = new KisWetColorSpace(f, 0);
+        KoColorSpace* colorSpaceWet = new KisWetColorSpace(f, 0);
 
-        KisColorSpaceFactory * csf = new KisWetColorSpaceFactory();
+        KoColorSpaceFactory * csf = new KisWetColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceWet);
 
         // colorspace
@@ -85,7 +85,7 @@ WetPlugin::WetPlugin(QObject *parent, const QStringList &)
         // histogram producer
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("WETHISTO", i18n("Wet Histogram")), colorSpaceWet) );
+                (KoID("WETHISTO", i18n("Wet Histogram")), colorSpaceWet) );
 
         // wet brush op
         KisPaintOpRegistry::instance()->add(KisPaintOpFactorySP(new KisWetOpFactory));

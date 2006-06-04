@@ -89,6 +89,7 @@ if (SHOULD_BUILD_KRITA)
         ${KOPALETTE_INCLUDES}
         ${KOFFICEUI_INCLUDES}
         ${LCMS_INCLUDE_DIR}
+        ${PIGMENT_INCLUDES}
 
         # 'Export' this for use by filters
         CACHE INTERNAL ""

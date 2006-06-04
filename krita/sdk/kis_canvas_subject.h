@@ -20,7 +20,7 @@
 #define KIS_CANVAS_SUBJECT_H_
 
 #include "kis_types.h"
-#include "kis_id.h"
+#include "KoID.h"
 
 class KisDoc;
 class KisBrush;
@@ -35,9 +35,9 @@ class KisProgressDisplayInterface;
 class KisSelectionManager;
 class QWidget;
 class QCursor;
-class KisColor;
+class KoColor;
 class KoPaletteManager;
-class KisProfile;
+class KoColorProfile;
 class KisPaintOpSettings;
 
 /**
@@ -83,26 +83,26 @@ public:
     /**
      * @return the background color
      */
-    virtual KisColor bgColor() const = 0;
+    virtual KoColor bgColor() const = 0;
 
     /**
      * Set the background color. This should cause all observers to be notified. Do not call from KisCanvasObserver::update()!
      *
      * @param c the new background color
      */
-    virtual void setBGColor(const KisColor& c) = 0;
+    virtual void setBGColor(const KoColor& c) = 0;
     
     /**
      * @return the currently set foreground or painting color
      */
-    virtual KisColor fgColor() const = 0;
+    virtual KoColor fgColor() const = 0;
 
     /**
      * Set the foreground or painting color. This should cause all observers to be notified. Do not call from KisCanvasObserver::update()!
      *
      * @param c the new foreground color
      */
-    virtual void setFGColor(const KisColor& c) = 0;
+    virtual void setFGColor(const KoColor& c) = 0;
     
     /**
      * @return the exposure value. This determines which exposure of multiple exposure or HDR images will be displayed
@@ -134,7 +134,7 @@ public:
     /**
      * @return the identification of the current paintop object, not the paintop object itself.
      */
-    virtual KisID currentPaintop() const = 0;
+    virtual KoID currentPaintop() const = 0;
 
     /**
      * @return the settings for the current paintop object, or 0 if there are no options set.
@@ -176,7 +176,7 @@ public:
      * Get the profile that this view uses to display itself on
      * he monitor.
      */
-    virtual KisProfile *  monitorProfile() = 0;
+    virtual KoColorProfile *  monitorProfile() = 0;
 
 
 private:

@@ -43,7 +43,7 @@
 #include "kis_global.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"
 
@@ -423,7 +423,7 @@ KisAlphaMaskSP KisBrush::mask(const KisPaintInformation& info, double subPixelX,
     return outputMask;
 }
 
-KisPaintDeviceSP KisBrush::image(KisColorSpace * /*colorSpace*/, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceSP KisBrush::image(KoColorSpace * /*colorSpace*/, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_scaledBrushes.isEmpty()) {
         createScaledBrushes();
@@ -1246,7 +1246,7 @@ void KisBrush::setHeight(qint32 h)
 }
 
 /*QImage KisBrush::outline(double pressure) {
-    KisLayerSP layer = image(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""),
+    KisLayerSP layer = image(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),""),
                              KisPaintInformation(pressure));
     KisBoundary bounds(layer.data());
     int w = maskWidth(pressure);
@@ -1265,10 +1265,10 @@ void KisBrush::generateBoundary() {
     int h = maskHeight(KisPaintInformation());
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = image(KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""),""), KisPaintInformation());
+        dev = image(KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KoID("RGBA",""),""), KisPaintInformation());
     } else {
         KisAlphaMaskSP amask = mask(KisPaintInformation());
-        KisColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),"");
+        KoColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),"");
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
         for (int y = 0; y < h; y++) {
             KisHLineIteratorPixel it = dev->createHLineIterator(0, y, w, true);

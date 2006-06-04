@@ -51,7 +51,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -59,7 +59,7 @@
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
-#include "kis_color.h"
+#include "KoColor.h"
 
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
@@ -147,7 +147,7 @@ QRect KisPainter::dirtyRect() {
 }
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
-                        const KisCompositeOp& op,
+                        const KoCompositeOp& op,
                         KisPaintDeviceSP srcdev,
                         quint8 opacity,
                         qint32 sx, qint32 sy,
@@ -177,7 +177,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
     addDirtyRect(QRect(dx, dy, sw, sh));
 
-    KisColorSpace * srcCs = srcdev->colorSpace();
+    KoColorSpace * srcCs = srcdev->colorSpace();
 
     qint32 dstY = dy;
     qint32 srcY = sy;
@@ -234,7 +234,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 }
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                  const KisCompositeOp &op,
+                  const KoCompositeOp &op,
                   KisPaintDeviceSP srcdev,
                   KisSelectionSP seldev,
                   quint8 opacity,
@@ -279,7 +279,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 
     addDirtyRect(QRect(dx, dy, sw, sh));
 
-    KisColorSpace * srcCs = srcdev->colorSpace();
+    KoColorSpace * srcCs = srcdev->colorSpace();
 
     qint32 dstY = dy;
     qint32 srcY = sy;
@@ -345,7 +345,7 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 
 
 void KisPainter::bltSelection(qint32 dx, qint32 dy,
-                  const KisCompositeOp& op,
+                  const KoCompositeOp& op,
                   KisPaintDeviceSP srcdev,
                   quint8 opacity,
                   qint32 sx, qint32 sy,

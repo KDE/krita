@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_ID_H_
-#define _KIS_ID_H_
+#ifndef KOID_H
+#define KOID_H
 
 #include <QList>
 #include <QString>
@@ -54,24 +54,24 @@
  * That last bit has not been solved yet.
  *
  */
-class KisID {
+class KoID {
 
 
 public:
 
-    KisID() : m_id(QString::null), m_name(QString::null) {}
+    KoID() : m_id(QString::null), m_name(QString::null) {}
 
-    KisID(const QString & id, const QString & name = QString::null)
+    KoID(const QString & id, const QString & name = QString::null)
         : m_id(id),
           m_name(name) {};
 
     QString id() const { return m_id; };
     QString name() const { return m_name; };
 
-    friend inline bool operator==(const KisID &, const KisID &);
-    friend inline bool operator!=(const KisID &, const KisID &);
-    friend inline bool operator<(const KisID &, const KisID &);
-    friend inline bool operator>(const KisID &, const KisID &);
+    friend inline bool operator==(const KoID &, const KoID &);
+    friend inline bool operator!=(const KoID &, const KoID &);
+    friend inline bool operator<(const KoID &, const KoID &);
+    friend inline bool operator>(const KoID &, const KoID &);
 
 private:
 
@@ -80,29 +80,29 @@ private:
 
 };
 
-inline bool operator==(const KisID &v1, const KisID &v2)
+inline bool operator==(const KoID &v1, const KoID &v2)
 {
      return v1.m_id == v2.m_id;
 }
 
-inline bool operator!=(const KisID &v1, const KisID &v2)
+inline bool operator!=(const KoID &v1, const KoID &v2)
 {
     return v1.m_id != v2.m_id;
 }
 
 
-inline bool operator<(const KisID &v1, const KisID &v2)
+inline bool operator<(const KoID &v1, const KoID &v2)
 {
     return v1.m_id < v2.m_id;
 }
 
 
-inline bool operator>(const KisID &v1, const KisID &v2)
+inline bool operator>(const KoID &v1, const KoID &v2)
 {
     return v1.m_id < v2.m_id;
 }
 
 
-typedef QList<KisID> KisIDList;
+typedef QList<KoID> KoIDList;
 
-#endif // _KIS_ID_H_
+#endif // KOID_H

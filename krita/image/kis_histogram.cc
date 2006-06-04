@@ -25,7 +25,7 @@
 #include "kis_histogram.h"
 #include "kis_paint_layer.h"
 #include "kis_iterators_pixel.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_debug_areas.h"
 
 KisHistogram::KisHistogram(KisPaintLayerSP layer,
@@ -63,7 +63,7 @@ void KisHistogram::updateHistogram()
     qint32 x,y,w,h;
     m_dev->exactBounds(x,y,w,h);
     KisRectIteratorPixel srcIt = m_dev->createRectIterator(x,y,w,h, false);
-    KisColorSpace* cs = m_dev->colorSpace();
+    KoColorSpace* cs = m_dev->colorSpace();
 
     QTime t;
     t.start();

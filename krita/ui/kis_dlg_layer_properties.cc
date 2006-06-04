@@ -32,14 +32,14 @@
 #include "kis_dlg_layer_properties.h"
 #include "kis_cmb_composite.h"
 #include "kis_cmb_idlist.h"
-#include "kis_profile.h"
+#include "KoColorProfile.h"
 #include "kis_int_spinbox.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                      qint32 opacity,
-                     const KisCompositeOp& compositeOp,
-                     const KisColorSpace * colorSpace,
+                     const KoCompositeOp& compositeOp,
+                     const KoColorSpace * colorSpace,
                      QWidget *parent, const char *name, Qt::WFlags f)
     : super(parent, i18n("Layer Properties"), Ok | Cancel, f)
 {
@@ -58,7 +58,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbColorSpaces->setEnabled(false);
 
     QString profilename;
-    if (KisProfile* profile = const_cast<KisColorSpace *>(colorSpace)->getProfile())
+    if (KoColorProfile* profile = const_cast<KoColorSpace *>(colorSpace)->getProfile())
         profilename = profile->productName();
     m_page->cmbProfile->addSqueezedItem(profilename);
     m_page->cmbProfile->setEnabled(false);
@@ -99,7 +99,7 @@ int KisDlgLayerProperties::getOpacity() const
     return opacity;
 }
 
-KisCompositeOp KisDlgLayerProperties::getCompositeOp() const
+KoCompositeOp KisDlgLayerProperties::getCompositeOp() const
 {
     return m_page->cmbComposite->currentItem();
 }

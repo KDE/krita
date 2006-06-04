@@ -62,7 +62,7 @@ void KisRgbU16ColorSpaceTester::allTests()
 
 void KisRgbU16ColorSpaceTester::testBasics()
 {
-    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
 
     KisRgbU16ColorSpace *cs = new KisRgbU16ColorSpace(defProfile);
     KisAbstractColorSpace * csSP = cs;
@@ -72,7 +72,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
     CHECK(cs->nColorChannels(), NUM_COLOUR_CHANNELS);
     CHECK(cs->pixelSize(), NUM_CHANNELS * CHANNEL_SIZE);
 
-    Q3ValueVector<KisChannelInfo *> channels = cs->channels();
+    Q3ValueVector<KoChannelInfo *> channels = cs->channels();
 
     // Red
     CHECK(channels[0]->pos(), PIXEL_RED * CHANNEL_SIZE);
@@ -305,7 +305,7 @@ void KisRgbU16ColorSpaceTester::testBasics()
 
 void KisRgbU16ColorSpaceTester::testMixColors()
 {
-    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
 
     KisAbstractColorSpace * cs = new KisRgbU16ColorSpace(defProfile);
 
@@ -408,7 +408,7 @@ void KisRgbU16ColorSpaceTester::testMixColors()
 
 void KisRgbU16ColorSpaceTester::testToQImage()
 {
-    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
 
     KisAbstractColorSpace * cs = new KisRgbU16ColorSpace(defProfile);
 
@@ -466,7 +466,7 @@ void KisRgbU16ColorSpaceTester::testToQImage()
 
 void  KisRgbU16ColorSpaceTester::testCompositeOps()
 {
-    KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
 
     KisRgbU16ColorSpace *cs = new KisRgbU16ColorSpace(defProfile);
 

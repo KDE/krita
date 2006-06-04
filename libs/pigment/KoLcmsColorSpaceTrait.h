@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_LCMS_BASE_COLORSPACE_H_
-#define KIS_LCMS_BASE_COLORSPACE_H_
+#ifndef KOLCMSCOLORSPACETRAIT_H
+#define KOLCMSCOLORSPACETRAIT_H
 
 #include <QMap>
 #include <QColor>
@@ -26,23 +26,18 @@
 //Added by qt3to4:
 #include <Q3MemArray>
 
-#include "kis_global.h"
-#include "kis_channelinfo.h"
-#include "kis_profile.h"
-#include "kis_id.h"
-#include "kis_composite_op.h"
-#include "kis_colorspace.h"
+#include "KoChannelInfo.h"
+#include "KoColorProfile.h"
+#include "KoID.h"
+#include "KoCompositeOp.h"
+#include "KoColorSpace.h"
 
 class QPainter;
-class KisPixelRO;
-class KisColorSpaceFactoryRegistry;
-
 
 /**
- * A colorspace strategy is the definition of a certain color model
- * in Krita.
+ * This class provide most of the implementation for lcms based color spaces
  */
-class KRITACOLOR_EXPORT KisLcmsBaseColorSpace : public virtual KisColorSpace {
+class PIGMENT_EXPORT KoLcmsColorSpaceTrait : public virtual KoColorSpace {
 
 
 public:
@@ -54,15 +49,15 @@ public:
      * @param parent the registry that owns this instance
      * @param profile the profile this colorspace uses for transforms
      */
-    KisLcmsBaseColorSpace(DWORD cmType,
+    KoLcmsColorSpaceTrait(DWORD cmType,
                           icColorSpaceSignature colorSpaceSignature,
-                          KisProfile *profile);
+                          KoColorProfile *profile);
 
     void init();
 
-    virtual ~KisLcmsBaseColorSpace();
+    virtual ~KoLcmsColorSpaceTrait();
 
-    virtual bool operator==(const KisLcmsBaseColorSpace& rhs) const {
+    virtual bool operator==(const KoLcmsColorSpaceTrait& rhs) const {
         return (id() == rhs.id() && m_profile == rhs.m_profile);
     }
 
@@ -97,20 +92,20 @@ public:
 
     //========== Display profiles =============================================//
 
-    virtual KisProfile * getProfile() { return m_profile; };
+    virtual KoColorProfile * getProfile() { return m_profile; };
 
 
 //================= Conversion functions ==================================//
 
 
-    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0);
 
-    virtual void toQColor(const quint8 *src, QColor *c, KisProfile * profile = 0);
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0);
 
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   KisProfile *  dstProfile,
+                                   KoColorProfile *  dstProfile,
                                    qint32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f);
 
@@ -118,7 +113,7 @@ public:
     virtual void fromLabA16(const quint8 * src, quint8 * dst, const quint32 nPixels) const;
 
     virtual bool convertPixelsTo(const quint8 * src,
-                                 quint8 * dst, KisColorSpace * dstColorSpace,
+                                 quint8 * dst, KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
                                  qint32 renderingIntent = INTENT_PERCEPTUAL);
 
@@ -129,13 +124,13 @@ public:
 // The manipulation functions have default implementations that _convert_ the pixel
 // to a QColor and back. Reimplement these methods in your color strategy!
 //
-    virtual KisColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues);
+    virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues);
 
-    virtual KisColorAdjustment *createDesaturateAdjustment();
+    virtual KoColorAdjustment *createDesaturateAdjustment();
 
-    virtual KisColorAdjustment *createPerChannelAdjustment(quint16 **transferValues);
+    virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues);
 
-    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *, qint32 nPixels);
+    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *, qint32 nPixels);
 
     virtual void invertColor(quint8 * src, qint32 nPixels);
 
@@ -143,17 +138,17 @@ public:
 
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
 
     virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
 
     virtual quint8 intensity8(const quint8 * src) const;
 
-    virtual KisID mathToolboxID() const;
+    virtual KoID mathToolboxID() const;
 
     virtual void bitBlt(quint8 *dst,
                 qint32 dststride,
-                KisColorSpace * srcSpace,
+                KoColorSpace * srcSpace,
                 const quint8 *src,
                 qint32 srcRowStride,
                 const quint8 *srcAlphaMask,
@@ -161,7 +156,7 @@ public:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op);
+                const KoCompositeOp& op);
 
 //========================== END of Public API ========================================//
 
@@ -181,11 +176,11 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op) = 0;
+                const KoCompositeOp& op) = 0;
 
-    virtual cmsHTRANSFORM createTransform(KisColorSpace * dstColorSpace,
-                          KisProfile *  srcProfile,
-                          KisProfile *  dstProfile,
+    virtual cmsHTRANSFORM createTransform(KoColorSpace * dstColorSpace,
+                          KoColorProfile *  srcProfile,
+                          KoColorProfile *  dstProfile,
                           qint32 renderingIntent);
 
     virtual void compositeCopy(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint8 opacity);
@@ -209,19 +204,19 @@ private:
     cmsHTRANSFORM m_defaultToLab;
     cmsHTRANSFORM m_defaultFromLab;
 
-    KisProfile *  m_profile;
-    KisColorSpace *m_lastUsedDstColorSpace;
+    KoColorProfile *  m_profile;
+    KoColorSpace *m_lastUsedDstColorSpace;
     cmsHTRANSFORM m_lastUsedTransform;
 
     DWORD m_cmType;                           // The colorspace type as defined by littlecms
     icColorSpaceSignature m_colorSpaceSignature; // The colorspace signature as defined in icm/icc files
 
     // cmsHTRANSFORM is a void *, so this should work.
-    typedef QMap<KisColorSpace *, cmsHTRANSFORM>  TransformMap;
+    typedef QMap<KoColorSpace *, cmsHTRANSFORM>  TransformMap;
     TransformMap m_transforms; // Cache for existing transforms
 
-    KisLcmsBaseColorSpace(const KisLcmsBaseColorSpace&);
-    KisLcmsBaseColorSpace& operator=(const KisLcmsBaseColorSpace&);
+    KoLcmsColorSpaceTrait(const KoLcmsColorSpaceTrait&);
+    KoLcmsColorSpaceTrait& operator=(const KoLcmsColorSpaceTrait&);
 
     Q3MemArray<quint8> m_conversionCache; // XXX: This will be a bad problem when we have threading.
 };

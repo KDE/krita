@@ -24,7 +24,7 @@
 
 #include <koIconChooser.h>
 
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_pattern_chooser.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"

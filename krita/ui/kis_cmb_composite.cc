@@ -38,7 +38,7 @@ KisCmbComposite::~KisCmbComposite()
 {
 }
 
-void KisCmbComposite::setCompositeOpList(const KisCompositeOpList & list)
+void KisCmbComposite::setCompositeOpList(const KoCompositeOpList & list)
 {
     super::clear();
     m_list = list;
@@ -47,15 +47,15 @@ void KisCmbComposite::setCompositeOpList(const KisCompositeOpList & list)
         addItem(m_list.at(i).id().name());
 }
 
-KisCompositeOp KisCmbComposite::currentItem() const
+KoCompositeOp KisCmbComposite::currentItem() const
 {
     qint32 i = super::currentIndex();
-    if (i > m_list.count() - 1) return KisCompositeOp();
+    if (i > m_list.count() - 1) return KoCompositeOp();
 
     return m_list[i];
 }
 
-void KisCmbComposite::setCurrent(const KisCompositeOp& op)
+void KisCmbComposite::setCurrent(const KoCompositeOp& op)
 {
     qint32 index = m_list.indexOf(op);
 

@@ -30,7 +30,7 @@
 
 class QPoint;
 class QImage;
-class KisColorSpace;
+class KoColorSpace;
 class KisPaintDevice;
 
 class KRITAIMAGE_EXPORT KisPattern : public KisResource {
@@ -50,7 +50,7 @@ public:
      * returns a KisPaintDeviceSP made with colorSpace as the ColorSpace strategy
      * for use in the fill painter.
      **/
-    KisPaintDeviceSP image(KisColorSpace * colorSpace);
+    KisPaintDeviceSP image(KoColorSpace * colorSpace);
 
     qint32 width() const;
     qint32 height() const;

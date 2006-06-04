@@ -70,7 +70,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("pan", i18n("Pan Tool")); }
+    virtual KoID id() { return KoID("pan", i18n("Pan Tool")); }
 };
 
 

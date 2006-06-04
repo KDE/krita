@@ -94,7 +94,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("fill", i18n("Fill Tool")); }
+    virtual KoID id() { return KoID("fill", i18n("Fill Tool")); }
 
 };
 

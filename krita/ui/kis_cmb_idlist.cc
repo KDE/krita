@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_cmb_idlist.h"
 
 KisCmbIDList::KisCmbIDList(QWidget * parent, const char * name)
@@ -40,7 +40,7 @@ KisCmbIDList::~KisCmbIDList()
 }
 
 
-void KisCmbIDList::setIDList(const KisIDList & list)
+void KisCmbIDList::setIDList(const KoIDList & list)
 {
     m_list = list;
     for(qint32 i = 0; i < m_list.count(); ++i) {
@@ -49,15 +49,15 @@ void KisCmbIDList::setIDList(const KisIDList & list)
 }
 
 
-KisID KisCmbIDList::currentItem() const
+KoID KisCmbIDList::currentItem() const
 {
     qint32 i = super::currentIndex();
-    if (i > m_list.count() - 1) return KisID();
+    if (i > m_list.count() - 1) return KoID();
 
     return m_list[i];
 }
 
-void KisCmbIDList::setCurrent(const KisID id)
+void KisCmbIDList::setCurrent(const KoID id)
 {
     qint32 index = m_list.indexOf(id);
 

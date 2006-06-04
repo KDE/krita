@@ -43,7 +43,7 @@ class QLineEdit;
 class QCheckBox;
 class KUrlRequester;
 class KisCmbIDList;
-class KisID;
+class KoID;
 
 /**
  *  "General"-tab for preferences dialog
@@ -94,8 +94,8 @@ public:
 
 private slots:
 
-    void refillMonitorProfiles(const KisID & s);
-    void refillPrintProfiles(const KisID & s);
+    void refillMonitorProfiles(const KoID & s);
+    void refillPrintProfiles(const KoID & s);
 
 public:
     void setDefault();

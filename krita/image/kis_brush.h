@@ -39,7 +39,7 @@
 class QPoint;
 class QPixmap;
 class KisBoundary;
-class KisColorSpace;
+class KoColorSpace;
 class QIODevice;
 
 enum enumBrushType {
@@ -82,7 +82,7 @@ public:
     virtual KisAlphaMaskSP mask(const KisPaintInformation& info,
                                 double subPixelX = 0, double subPixelY = 0) const;
     // XXX: return non-tiled simple buffer
-    virtual KisPaintDeviceSP image(KisColorSpace * colorSpace, const KisPaintInformation& info,
+    virtual KisPaintDeviceSP image(KoColorSpace * colorSpace, const KisPaintInformation& info,
                              double subPixelX = 0, double subPixelY = 0) const;
 
     void setHotSpot(KisPoint);

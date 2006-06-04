@@ -30,7 +30,7 @@
 #include <kdebug.h>
 
 #include "kis_types.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 
 #include "ui_wdglayerbox.h"
 
@@ -47,7 +47,7 @@ class QWidget;
 class KIconLoader;
 class KMenu;
 class KoDocumentEntry;
-class KisCompositeOp;
+class KoCompositeOp;
 class KisLayerList;
 class LayerItem;
 class KisCanvasSubject;
@@ -74,9 +74,9 @@ public slots:
     void slotLayersChanged(KisGroupLayerSP rootLayer);
     void slotLayerUpdated(KisLayerSP layer, QRect rc);
 
-    void slotSetCompositeOp(const KisCompositeOp& compositeOp);
+    void slotSetCompositeOp(const KoCompositeOp& compositeOp);
     void slotSetOpacity(int opacity);
-    void slotSetColorSpace(const KisColorSpace * colorSpace);
+    void slotSetColorSpace(const KoColorSpace * colorSpace);
 
 signals:
     void sigRequestLayer(KisGroupLayerSP parent, KisLayerSP above);
@@ -87,7 +87,7 @@ signals:
 
     void sigOpacityChanged(int opacity, bool withSlider);
     void sigOpacityFinishedChanging(int previous, int opacity);
-    void sigItemComposite(const KisCompositeOp&);
+    void sigItemComposite(const KoCompositeOp&);
 
 private:
     enum LayerTypes { PAINT_LAYER, GROUP_LAYER, ADJUSTMENT_LAYER, OBJECT_LAYER };

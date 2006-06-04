@@ -70,7 +70,7 @@ public:
     virtual KisFilterConfiguration* configuration(QWidget*);
     virtual KisFilterConfiguration* configuration() { return new KisPerChannelFilterConfiguration(0); };
     virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("perchannel", i18n("Color Adjustment")); };
+    static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }

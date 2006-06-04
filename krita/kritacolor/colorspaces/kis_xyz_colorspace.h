@@ -31,7 +31,7 @@ namespace xyz {
 
 
 
-class KisXyzColorSpace : public KisU16BaseColorSpace {
+class KisXyzColorSpace : public KoU16ColorSpaceTrait {
 
 public:
 
@@ -43,8 +43,8 @@ public:
     };
 
 public:
-    KisXyzColorSpace(KisColorSpaceFactoryRegistry * parent,
-                     KisProfile *p);
+    KisXyzColorSpace(KoColorSpaceFactoryRegistry * parent,
+                     KoColorProfile *p);
     virtual ~KisXyzColorSpace();
 
     virtual bool willDegrade(ColorSpaceIndependence independence)
@@ -56,16 +56,16 @@ public:
         };
 public:
     // Pixel manipulation
-    virtual KisColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues);
-    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *, qint32 nPixels);
+    virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues);
+    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *, qint32 nPixels);
     virtual void invertColor(quint8 * src, qint32 nPixels);
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const;
     virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
     virtual quint8 intensity8(const quint8 * src) const;
 
     // Information about the colorstrategy
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 nChannels() const;
     virtual quint32 nColorChannels() const;
     virtual quint32 pixelSize() const;
@@ -82,9 +82,9 @@ public:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op);
+                const KoCompositeOp& op);
 
-    KisCompositeOpList userVisiblecompositeOps() const;
+    KoCompositeOpList userVisiblecompositeOps() const;
 
 protected:
     void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);

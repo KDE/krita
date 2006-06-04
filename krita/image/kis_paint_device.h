@@ -29,9 +29,9 @@
 #include "kdebug.h"
 #include "kis_global.h"
 #include "kis_image.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_canvas_controller.h"
-#include "kis_color.h"
+#include "KoColor.h"
 #include <krita_export.h>
 
 class DCOPObject;
@@ -82,7 +82,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisColorSpace * colorSpace, QString name = QString());
+    KisPaintDevice(KoColorSpace * colorSpace, QString name = QString());
 
     /**
      * Create a new paint device with the specified colorspace. The
@@ -92,7 +92,7 @@ public:
      * @param colorSpace the colorspace of this paint device
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisLayer *parentLayer, KisColorSpace * colorSpace, QString name = QString());
+    KisPaintDevice(KisLayer *parentLayer, KoColorSpace * colorSpace, QString name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -244,13 +244,13 @@ public:
     /**
      *   Converts the paint device to a different colorspace
      */
-    virtual void convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent = INTENT_PERCEPTUAL);
+    virtual void convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent = INTENT_PERCEPTUAL);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given
      * profile. If the given profile is 0, nothing happens.
      */
-    virtual void setProfile(KisProfile * profile);
+    virtual void setProfile(KoColorProfile * profile);
 
     /**
      * Fill this paint device with the data from img; starting at (offsetX, offsetY)
@@ -270,7 +270,7 @@ public:
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(KisProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, float exposure = 0.0f);
+    virtual QImage convertToQImage(KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h, float exposure = 0.0f);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The rectangle is defined by the parent image's bounds.
@@ -280,7 +280,7 @@ public:
      * like sRGB).
      * @param exposure The exposure setting used to render a preview of a high dynamic range image.
      */
-    virtual QImage convertToQImage(KisProfile *  dstProfile, float exposure = 0.0f);
+    virtual QImage convertToQImage(KoColorProfile *  dstProfile, float exposure = 0.0f);
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining the aspect ratio.
@@ -310,19 +310,19 @@ public:
 
     /**
      * Fill kc with the values found at x and y. This method differs
-     * from the above in using KisColor, which can be of any colorspace
+     * from the above in using KoColor, which can be of any colorspace
      *
      * The color values will be transformed from the profile of
      * this paint device to the display profile.
      *
      * @return true if the operation was succesful.
      */
-    bool pixel(qint32 x, qint32 y, KisColor * kc);
+    bool pixel(qint32 x, qint32 y, KoColor * kc);
 
     /**
-     * Return the KisColor of the pixel at x,y.
+     * Return the KoColor of the pixel at x,y.
      */
-    KisColor colorAt(qint32 x, qint32 y);
+    KoColor colorAt(qint32 x, qint32 y);
 
     /**
      * Set the specified pixel to the specified color. Note that this
@@ -341,16 +341,16 @@ public:
      */
     bool setPixel(qint32 x, qint32 y, const QColor& c, quint8 opacity);
 
-    bool setPixel(qint32 x, qint32 y, const KisColor& kc);
+    bool setPixel(qint32 x, qint32 y, const KoColor& kc);
 
-    KisColorSpace * colorSpace() const;
+    KoColorSpace * colorSpace() const;
 
     KisDataManagerSP dataManager() const;
 
     /**
      * Replace the pixel data, color strategy, and profile.
      */
-    void setData(KisDataManagerSP data, KisColorSpace * colorSpace);
+    void setData(KisDataManagerSP data, KoColorSpace * colorSpace);
 
     /**
      * The X offset of the paint device
@@ -505,7 +505,7 @@ public:
 signals:
     void positionChanged(KisPaintDeviceSP device);
     void ioProgress(qint8 percentage);
-    void profileChanged(KisProfile *  profile);
+    void profileChanged(KoColorProfile *  profile);
 
 private slots:
 
@@ -527,7 +527,7 @@ private:
 
     qint32 m_x;
     qint32 m_y;
-    KisColorSpace * m_colorSpace;
+    KoColorSpace * m_colorSpace;
     // Cached for quick access
     qint32 m_pixelSize;
     qint32 m_nChannels;
@@ -561,7 +561,7 @@ inline qint32 KisPaintDevice::nChannels() const
 ;
 }
 
-inline KisColorSpace * KisPaintDevice::colorSpace() const
+inline KoColorSpace * KisPaintDevice::colorSpace() const
 {
     Q_ASSERT(m_colorSpace != 0);
         return m_colorSpace;

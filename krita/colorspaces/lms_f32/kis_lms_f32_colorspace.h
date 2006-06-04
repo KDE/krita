@@ -27,15 +27,14 @@
 
 #include <krita_export.h>
 
-#include "kis_global.h"
-#include "kis_f32_base_colorspace.h"
-#include "kis_lcms_base_colorspace.h"
+#include "KoF32HalfColorSpaceTrait.h"
+#include "KoLcmsColorSpaceTrait.h"
 
-class KisColorSpaceFactoryRegistry;
+class KoColorSpaceFactoryRegistry;
 
-class KRITACOLOR_EXPORT KisLmsF32ColorSpace : public KisF32BaseColorSpace, public KisLcmsBaseColorSpace {
+class KRITACOLOR_EXPORT KisLmsF32ColorSpace : public KoF32ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KisLmsF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
+    KisLmsF32ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
     virtual ~KisLmsF32ColorSpace();
 
     virtual bool willDegrade(ColorSpaceIndependence independence)
@@ -51,16 +50,16 @@ public:
     void setPixel(quint8 *pixel, float longWave, float middleWave, float shortWave, float alpha) const;
     void getPixel(const quint8 *pixel, float *longWave, float *middleWave, float *shortWave, float *alpha) const;
 
-    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0);
 
-    virtual void toQColor(const quint8 *src, QColor *c, KisProfile * profile = 0);
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0);
 
     virtual quint8 difference(const quint8 *src1, const quint8 *src2);
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 nChannels() const;
     virtual quint32 nColorChannels() const;
     virtual quint32 pixelSize() const;
@@ -68,11 +67,11 @@ public:
     virtual bool hasHighDynamicRange() const { return false; }
 
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                       KisProfile *  dstProfile,
+                       KoColorProfile *  dstProfile,
                        qint32 renderingIntent,
                        float exposure = 0.0f);
 
-    virtual KisCompositeOpList userVisiblecompositeOps() const;
+    virtual KoCompositeOpList userVisiblecompositeOps() const;
 
 
 protected:
@@ -86,7 +85,7 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op);
+                const KoCompositeOp& op);
 
     void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, float opacity);
     void compositeErase(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, float opacity);
@@ -133,14 +132,14 @@ private:
     };
 };
 
-class KisLmsF32ColorSpaceFactory : public KisColorSpaceFactory
+class KisLmsF32ColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("LMSAF32", i18n("LMS Cone Space (32-bit float/channel)")); };
+    virtual KoID id() const { return KoID("LMSAF32", i18n("LMS Cone Space (32-bit float/channel)")); };
 
     /**
      * lcms colorspace type definition.
@@ -149,7 +148,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; };
 
-    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisLmsF32ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisLmsF32ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

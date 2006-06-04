@@ -26,7 +26,7 @@
 
 #include <kis_autobrush_resource.h>
 #include <kis_brush.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_doc.h>
 #include <kis_filter.h>
 #include <kis_filter_registry.h>
@@ -203,7 +203,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Invalid image size") ) );
         return Kross::Api::Object::Ptr(0);
     }
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csname, ""), "");
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csname, ""), "");
     if(!cs)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Colorspace %1 is not available, please check your installation.", csname ) ) );

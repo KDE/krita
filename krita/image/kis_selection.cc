@@ -26,7 +26,7 @@
 #include "kis_layer.h"
 #include "kis_debug_areas.h"
 #include "kis_types.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
 #include "kis_integer_maths.h"
@@ -110,8 +110,8 @@ QImage KisSelection::maskImage()
 void KisSelection::select(QRect r)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-    painter.fillRect(r, KisColor(Qt::white, cs), MAX_SELECTED);
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    painter.fillRect(r, KoColor(Qt::white, cs), MAX_SELECTED);
     qint32 x, y, w, h;
     extent(x, y, w, h);
 }
@@ -119,8 +119,8 @@ void KisSelection::select(QRect r)
 void KisSelection::clear(QRect r)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-    painter.fillRect(r, KisColor(Qt::white, cs), MIN_SELECTED);
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
 }
 
 void KisSelection::clear()

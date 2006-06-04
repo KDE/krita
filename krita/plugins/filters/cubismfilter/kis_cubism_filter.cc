@@ -40,7 +40,7 @@
 
 #include <kis_painter.h>
 #include <kis_meta_registry.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -65,7 +65,7 @@ KisCubismFilter::KisCubismFilter() : KisFilter(id(), "artistic", i18n("&Cubism..
 {
 }
 
-bool KisCubismFilter::workWith(KisColorSpace* /*cs*/)
+bool KisCubismFilter::workWith(KoColorSpace* /*cs*/)
 {
     return true;
 }
@@ -82,7 +82,7 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
     quint32 tileSize = ((KisCubismFilterConfiguration*)configuration)->tileSize();
     quint32 tileSaturation = ((KisCubismFilterConfiguration*)configuration)->tileSaturation();
 
-    KisColorSpace * cs = src->colorSpace();
+    KoColorSpace * cs = src->colorSpace();
     QString id = cs->id().id();
 
     if (id == "RGBA" || id == "GRAY" || id == "CMYK") {

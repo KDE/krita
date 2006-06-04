@@ -46,7 +46,7 @@ void KisGrayColorSpaceTester::allTests()
 
 void KisGrayColorSpaceTester::testBasics()
 {
-    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *profile = new KoColorProfile(cmsCreate_sRGBProfile());
     KisGrayColorSpace *cs = new KisGrayColorSpace(profile);
 
 
@@ -83,7 +83,7 @@ void KisGrayColorSpaceTester::testBasics()
 
 void KisGrayColorSpaceTester::testMixColors()
 {
-    KisProfile *profile = new KisProfile(cmsCreate_sRGBProfile());
+    KoColorProfile *profile = new KoColorProfile(cmsCreate_sRGBProfile());
     KisAbstractColorSpace * cs = new KisGrayColorSpace(profile);
 
     quint8 pixel1[MAX_CHANNEL_GRAYSCALEA];

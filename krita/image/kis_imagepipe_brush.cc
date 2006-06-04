@@ -49,7 +49,7 @@
 #include "kis_alpha_mask.h"
 #include "kis_layer.h"
 #include "kis_meta_registry.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
@@ -323,7 +323,7 @@ KisAlphaMaskSP KisImagePipeBrush::mask(const KisPaintInformation& info, double s
     return m_brushes.at(m_currentBrush)->mask(info, subPixelX, subPixelY);
 }
 
-KisPaintDeviceSP KisImagePipeBrush::image(KisColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceSP KisImagePipeBrush::image(KoColorSpace * colorSpace, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     if (m_brushes.isEmpty()) return KisPaintDeviceSP(0);
     selectNextBrush(info);
@@ -439,7 +439,7 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const {
 
     for (int i = 0; i < m_brushes.count(); i++) {
         KisPaintDevice* pd = new KisPaintDevice(
-                KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""), "clone pd" );
+                KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),""), "clone pd" );
         pd->convertFromQImage(m_brushes.at(i)->img(), "");
         devices[0].append(pd);
     }

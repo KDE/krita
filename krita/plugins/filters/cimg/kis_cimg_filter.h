@@ -55,7 +55,7 @@ public:
     KisCImgFilter();
 public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("cimg", i18n("Image Restauration (cimg-based)")); };
+    static inline KoID id() { return KoID("cimg", i18n("Image Restauration (cimg-based)")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }
 public:

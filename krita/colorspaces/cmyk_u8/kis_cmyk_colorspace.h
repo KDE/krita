@@ -22,10 +22,10 @@
 #include <QMap>
 #include <krita_export.h>
 #include "kis_global.h"
-#include "kis_lcms_base_colorspace.h"
-#include "kis_u8_base_colorspace.h"
+#include "KoLcmsColorSpaceTrait.h"
+#include "KoU8ColorSpaceTrait.h"
 
-class KRITACOLOR_EXPORT KisCmykColorSpace : public KisU8BaseColorSpace, public KisLcmsBaseColorSpace {
+class KRITACOLOR_EXPORT KisCmykColorSpace : public KoU8ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 
 public:
 
@@ -38,7 +38,7 @@ public:
             quint16 alpha;
         };
 public:
-    KisCmykColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
+    KisCmykColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
     virtual ~KisCmykColorSpace();
 
 
@@ -55,18 +55,18 @@ public:
 public:
 
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
-    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *adj, qint32 nPixels);
+    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *adj, qint32 nPixels);
     virtual void invertColor(quint8 * src, qint32 nPixels);
-    virtual void convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
     // XXX: darken & intensity8?
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 nChannels() const;
     virtual quint32 nColorChannels() const;
     virtual quint32 pixelSize() const;
     virtual void getSingleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex);
 
-    virtual KisCompositeOpList userVisiblecompositeOps() const;
+    virtual KoCompositeOpList userVisiblecompositeOps() const;
 
 protected:
 
@@ -79,7 +79,7 @@ protected:
                         quint8 opacity,
                         qint32 rows,
                         qint32 cols,
-                        const KisCompositeOp& op);
+                        const KoCompositeOp& op);
 
     void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
     void compositeMultiply(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
@@ -103,14 +103,14 @@ private:
     static const quint8 PIXEL_CMYK_ALPHA = 4;
 };
 
-class KisCmykColorSpaceFactory : public KisColorSpaceFactory
+class KisCmykColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("CMYK", i18n("CMYK (8-bit integer/channel)")); };
+    virtual KoID id() const { return KoID("CMYK", i18n("CMYK (8-bit integer/channel)")); };
 
     /**
      * lcms colorspace type definition.
@@ -119,7 +119,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
 
-    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisCmykColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisCmykColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "Adobe CMYK"; }; //  Do not i18n -- this is from a data file
 };

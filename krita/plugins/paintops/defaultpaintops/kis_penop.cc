@@ -96,7 +96,7 @@ void KisPenOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    KisColorSpace * cs = dab->colorSpace();
+    KoColorSpace * cs = dab->colorSpace();
 
     // Set all alpha > opaque/2 to opaque, the rest to transparent.
     // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.

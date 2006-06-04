@@ -38,7 +38,7 @@
 #include "kis_tool_brush.h"
 #include "kis_cmb_composite.h"
 #include "kis_tool_fill.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"

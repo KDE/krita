@@ -29,7 +29,7 @@
 
 #include "KoUnit.h"
 
-#include "kis_composite_op.h"
+#include "KoCompositeOp.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_annotation.h"
@@ -43,15 +43,15 @@ class KCommand;
 
 class KoCommandHistory;
 
-class KisColorSpace;
+class KoColorSpace;
 class KisNameServer;
 class KisUndoAdapter;
 class KisPainter;
 class KCommand;
-class KisColor;
+class KoColor;
 class KisFilterStrategy;
 class KisImageIface;
-class KisProfile;
+class KoColorProfile;
 class KisProgressDisplayInterface;
 class KisPaintLayer;
 
@@ -60,7 +60,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
 
 public:
-    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, KisColorSpace * colorSpace, const QString& name);
+    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, KoColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
     virtual DCOPObject *dcopObject();
@@ -81,7 +81,7 @@ public:
                      qint32 x2,
                      qint32 y2,
                      QPainter &painter,
-                     KisProfile *profile,
+                     KoColorProfile *profile,
                      PaintFlags paintFlags,
                      float exposure = 0.0f);
     /**
@@ -92,10 +92,10 @@ public:
                                     qint32 y1,
                                     qint32 x2,
                                     qint32 y2,
-                                    KisProfile * profile,
+                                    KoColorProfile * profile,
                                     float exposure = 0.0f);
 
-     virtual QImage convertToQImage(const QRect& r, const QSize& fullImageSize, KisProfile *profile, PaintFlags paintFlags, float exposure = 0.0f);
+     virtual QImage convertToQImage(const QRect& r, const QSize& fullImageSize, KoColorProfile *profile, PaintFlags paintFlags, float exposure = 0.0f);
 
      KisBackgroundSP background() const;
 
@@ -119,8 +119,8 @@ public:
      */
     bool locked() const;
 
-    KisColor backgroundColor() const;
-    void setBackgroundColor(const KisColor & color);
+    KoColor backgroundColor() const;
+    void setBackgroundColor(const KoColor & color);
 
     QString name() const;
     void setName(const QString& name);
@@ -158,10 +158,10 @@ public:
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent = INTENT_PERCEPTUAL);
+    void convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent = INTENT_PERCEPTUAL);
 
     // Get the profile associated with this image
-    KisProfile *  getProfile() const;
+    KoColorProfile *  getProfile() const;
 
     /**
      * Set the profile of the image to the new profile and do the same for
@@ -172,7 +172,7 @@ public:
      * have an embedded profile to which you want to attach the right profile.
       */
 
-    void setProfile(const KisProfile * profile);
+    void setProfile(const KoColorProfile * profile);
 
     /**
      * Replace the current undo adapter with the specified undo adapter.
@@ -196,7 +196,7 @@ public:
      */
     void setModified();
 
-    KisColorSpace * colorSpace() const;
+    KoColorSpace * colorSpace() const;
 
     // Resolution of the image == XXX: per inch?
     double xRes();
@@ -217,16 +217,16 @@ public:
     /*
      * Returns the colour of the merged image at pixel (x, y).
      */
-    KisColor mergedPixel(qint32 x, qint32 y);
+    KoColor mergedPixel(qint32 x, qint32 y);
 
     /// Creates a new paint layer with the specified properties, adds it to the image, and returns it.
     KisLayerSP newLayer(const QString& name, quint8 opacity,
-                             const KisCompositeOp& compositeOp = KisCompositeOp(), KisColorSpace * colorstrategy = 0);
+                             const KoCompositeOp& compositeOp = KoCompositeOp(), KoColorSpace * colorstrategy = 0);
 
     /// Get the active painting device. Returns 0 if the active layer does not have a paint device.
     KisPaintDeviceSP activeDevice();
 
-    void setLayerProperties(KisLayerSP layer, quint8 opacity, const KisCompositeOp& compositeOp, const QString& name);
+    void setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp& compositeOp, const QString& name);
 
     KisGroupLayerSP rootLayer() const;
     KisLayerSP activeLayer() const;
@@ -312,7 +312,7 @@ public:
 
     void notifyLayerUpdated(KisLayerSP layer, QRect rc);
 
-    void setColorSpace(KisColorSpace * colorSpace);
+    void setColorSpace(KoColorSpace * colorSpace);
     void setRootLayer(KisGroupLayerSP rootLayer);
 
     //KisGuideMgr *guides() const;
@@ -396,8 +396,8 @@ signals:
     void sigImageModified();
 
     void sigSizeChanged(qint32 w, qint32 h);
-    void sigProfileChanged(KisProfile *  profile);
-    void sigColorSpaceChanged(KisColorSpace*  cs);
+    void sigProfileChanged(KoColorProfile *  profile);
+    void sigColorSpaceChanged(KoColorSpace*  cs);
 
 
 public slots:
@@ -407,7 +407,7 @@ public slots:
 
 private:
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoAdapter * adapter, qint32 width, qint32 height,  KisColorSpace * colorSpace, const QString& name);
+    void init(KisUndoAdapter * adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name);
     void emitSizeChanged();
 
 private:
@@ -424,7 +424,7 @@ private:
 
     KoUnit::Unit m_unit;
 
-    KisColorSpace * m_colorSpace;
+    KoColorSpace * m_colorSpace;
 
     bool m_dirty;
     QRect m_dirtyRect;

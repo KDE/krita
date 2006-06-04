@@ -32,7 +32,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_iterators_pixel.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_selection.h"
 #include "kis_eraseop.h"
 
@@ -105,7 +105,7 @@ void KisEraseOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     QRect dstRect;
 
     KisRectIteratorPixel it = dab->createRectIterator(0, 0, maskWidth, maskHeight, true);
-    KisColorSpace* cs = dab->colorSpace();
+    KoColorSpace* cs = dab->colorSpace();
     while (!it.isDone()) {
         cs->setAlpha(it.rawData(), quint8_MAX - mask->alphaAt(it.x(), it.y()), 1);
         ++it;

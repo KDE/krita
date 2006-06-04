@@ -24,7 +24,7 @@
 #include <config.h>
 #include <lcms.h>
 
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_math_toolbox.h"
 #include "kis_meta_registry.h"
 
@@ -61,7 +61,7 @@ KisMetaRegistry::KisMetaRegistry()
     // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
     cmsErrorAction(LCMS_ERROR_SHOW);
 
-    m_csRegistry = new KisColorSpaceFactoryRegistry(profileFilenames);
+    m_csRegistry = new KoColorSpaceFactoryRegistry(profileFilenames);
     m_mtRegistry = new KisMathToolboxFactoryRegistry();
 }
 

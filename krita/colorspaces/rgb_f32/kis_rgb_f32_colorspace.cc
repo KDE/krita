@@ -52,15 +52,15 @@ namespace {
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
 // disable the lcms handling by setting profile=0
-KisRgbF32ColorSpace::KisRgbF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile */*p*/) :
-    KisColorSpace(KisID("RGBAF32", i18n("RGB (32-bit float/channel)")), parent)
-    , KisF32BaseColorSpace(PIXEL_ALPHA * sizeof(float))
-    , KisLcmsBaseColorSpace(F32_LCMS_TYPE, icSigRgbData, 0)
+KisRgbF32ColorSpace::KisRgbF32ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile */*p*/) :
+    KoColorSpace(KoID("RGBAF32", i18n("RGB (32-bit float/channel)")), parent)
+    , KoF32ColorSpaceTrait(PIXEL_ALPHA * sizeof(float))
+    , KoLcmsColorSpaceTrait(F32_LCMS_TYPE, icSigRgbData, 0)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), KisChannelInfo::ALPHA, KisChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Red"), PIXEL_RED * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
 }
 
 KisRgbF32ColorSpace::~KisRgbF32ColorSpace()
@@ -87,7 +87,7 @@ void KisRgbF32ColorSpace::getPixel(const quint8 *src, float *red, float *green, 
     *alpha = srcPixel->alpha;
 }
 
-void KisRgbF32ColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KisProfile * /*profile*/)
+void KisRgbF32ColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -96,7 +96,7 @@ void KisRgbF32ColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KisProfile 
     dst->blue = UINT8_TO_FLOAT(c.blue());
 }
 
-void KisRgbF32ColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KisProfile * /*profile*/)
+void KisRgbF32ColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -106,14 +106,14 @@ void KisRgbF32ColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *ds
     dst->alpha = UINT8_TO_FLOAT(opacity);
 }
 
-void KisRgbF32ColorSpace::toQColor(const quint8 *srcU8, QColor *c, KisProfile * /*profile*/)
+void KisRgbF32ColorSpace::toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c->setRgb(FLOAT_TO_UINT8(src->red), FLOAT_TO_UINT8(src->green), FLOAT_TO_UINT8(src->blue));
 }
 
-void KisRgbF32ColorSpace::toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KisProfile * /*profile*/)
+void KisRgbF32ColorSpace::toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -168,7 +168,7 @@ void KisRgbF32ColorSpace::mixColors(const quint8 **colors, const quint8 *weights
     dstPixel->blue = totalBlue;
 }
 
-void KisRgbF32ColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
+void KisRgbF32ColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     float totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
 
@@ -190,12 +190,12 @@ void KisRgbF32ColorSpace::convolveColors(quint8** colors, qint32 * kernelValues,
 
     Pixel * p = reinterpret_cast< Pixel *>( dst );
 
-    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+    if (channelFlags & KoChannelInfo::FLAG_COLOR) {
         p->red = CLAMP( ( totalRed / factor) + offset, 0, FLOAT_MAX);
         p->green = CLAMP( ( totalGreen / factor) + offset, 0, FLOAT_MAX);
         p->blue = CLAMP( ( totalBlue / factor) + offset, 0, FLOAT_MAX);
     }
-    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+    if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
         p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, FLOAT_MAX);
     }
 }
@@ -225,7 +225,7 @@ quint8 KisRgbF32ColorSpace::intensity8(const quint8 * src) const
 
 
 
-Q3ValueVector<KisChannelInfo *> KisRgbF32ColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KisRgbF32ColorSpace::channels() const
 {
     return m_channels;
 }
@@ -262,7 +262,7 @@ quint8 convertToDisplay(float value, float exposureFactor, float gamma)
 }
 
 QImage KisRgbF32ColorSpace::convertToQImage(const quint8 *dataU8, qint32 width, qint32 height,
-                                            KisProfile *  /*dstProfile*/,
+                                            KoColorProfile *  /*dstProfile*/,
                                             qint32 /*renderingIntent*/, float exposure)
 
 {
@@ -794,7 +794,7 @@ void KisRgbF32ColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KisCompositeOp& op)
+                      const KoCompositeOp& op)
 {
     float opacity = UINT8_TO_FLOAT(U8_opacity);
 
@@ -919,23 +919,23 @@ void KisRgbF32ColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KisCompositeOpList KisRgbF32ColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisRgbF32ColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
-    list.append(KisCompositeOp(COMPOSITE_MULT));
-    list.append(KisCompositeOp(COMPOSITE_BURN));
-    list.append(KisCompositeOp(COMPOSITE_DODGE));
-    list.append(KisCompositeOp(COMPOSITE_DIVIDE));
-    list.append(KisCompositeOp(COMPOSITE_SCREEN));
-    list.append(KisCompositeOp(COMPOSITE_OVERLAY));
-    list.append(KisCompositeOp(COMPOSITE_DARKEN));
-    list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
-    list.append(KisCompositeOp(COMPOSITE_HUE));
-    list.append(KisCompositeOp(COMPOSITE_SATURATION));
-    list.append(KisCompositeOp(COMPOSITE_VALUE));
-    list.append(KisCompositeOp(COMPOSITE_COLOR));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_MULT));
+    list.append(KoCompositeOp(COMPOSITE_BURN));
+    list.append(KoCompositeOp(COMPOSITE_DODGE));
+    list.append(KoCompositeOp(COMPOSITE_DIVIDE));
+    list.append(KoCompositeOp(COMPOSITE_SCREEN));
+    list.append(KoCompositeOp(COMPOSITE_OVERLAY));
+    list.append(KoCompositeOp(COMPOSITE_DARKEN));
+    list.append(KoCompositeOp(COMPOSITE_LIGHTEN));
+    list.append(KoCompositeOp(COMPOSITE_HUE));
+    list.append(KoCompositeOp(COMPOSITE_SATURATION));
+    list.append(KoCompositeOp(COMPOSITE_VALUE));
+    list.append(KoCompositeOp(COMPOSITE_COLOR));
 
     return list;
 }

@@ -92,7 +92,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("selectsimilar", i18n("Select Similar")); }
+    virtual KoID id() { return KoID("selectsimilar", i18n("Select Similar")); }
 };
 
 

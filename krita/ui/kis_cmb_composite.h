@@ -23,7 +23,7 @@
 
 #include <krita_export.h>
 #include "qcombobox.h"
-#include "kis_composite_op.h"
+#include "KoCompositeOp.h"
 
 /**
  * A combobox filled with the various composition strategies defined in kis_global.
@@ -47,16 +47,16 @@ class KRITAUI_EXPORT KisCmbComposite : public QComboBox
     KisCmbComposite(QWidget * parent = 0, const char * name = 0 );
     virtual ~KisCmbComposite();
 
-    KisCompositeOp currentItem() const;
+    KoCompositeOp currentItem() const;
 
-    void setCompositeOpList(const KisCompositeOpList& list);
-    void setCurrent(const KisCompositeOp& op);
+    void setCompositeOpList(const KoCompositeOpList& list);
+    void setCurrent(const KoCompositeOp& op);
     void setCurrent(const QString & s);
 
 signals:
 
-    void activated(const KisCompositeOp &);
-    void highlighted(const KisCompositeOp &);
+    void activated(const KoCompositeOp &);
+    void highlighted(const KoCompositeOp &);
 
 private slots:
 
@@ -67,7 +67,7 @@ private:
     // Prevent deprectated Qt3 method from being called. Use setCurrent instead.
     void setCurrentText(const QString & s);
 
-    KisCompositeOpList m_list;
+    KoCompositeOpList m_list;
 };
 
 #endif

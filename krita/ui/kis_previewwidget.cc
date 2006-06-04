@@ -38,8 +38,8 @@
 #include <kinstance.h>
 
 #include <kis_cursor.h>
-#include <kis_colorspace.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_config.h>
 #include <kis_filter_strategy.h>
 #include <kis_global.h>
@@ -47,7 +47,7 @@
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_painter.h>
-#include <kis_profile.h>
+#include <KoColorProfile.h>
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 

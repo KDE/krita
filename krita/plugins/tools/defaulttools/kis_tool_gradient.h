@@ -111,7 +111,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("gradient", i18n("Gradient Tool")); }
+    virtual KoID id() { return KoID("gradient", i18n("Gradient Tool")); }
 };
 
 

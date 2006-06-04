@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,54 +15,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_F32_BASE_COLORSPACE_H_
-#define KIS_F32_BASE_COLORSPACE_H_
+#ifndef KOU8COLORSPACETRAIT_H
+#define KOU8COLORSPACETRAIT_H
 
 #include <QColor>
 
-#include "kis_global.h"
-#include "kis_lcms_base_colorspace.h"
-#include "kis_integer_maths.h"
+#include <QColor>
+
+#include "KoColorSpace.h"
 
 /**
- * This class is the base for all 32-bit float colorspaces.
+ * This class is the base for all homogenous 8-bit/channel colorspaces with 8-bit alpha channels
  */
-
-inline float UINT8_TO_FLOAT(uint c)
-{
-    return static_cast<float>(c) / UINT8_MAX;
-}
-
-inline uint FLOAT_TO_UINT8(float c)
-{
-    return static_cast<uint>(CLAMP(static_cast<int>(c * static_cast<int>(UINT8_MAX) + 0.5),
-                                   static_cast<int>(UINT8_MIN), static_cast<int>(UINT8_MAX)));
-}
-
-
-inline uint FLOAT_TO_UINT16(float c)
-{
-    return static_cast<uint>(CLAMP(static_cast<int>(c * static_cast<int>(UINT16_MAX) + 0.5),
-                                   static_cast<int>(UINT16_MIN), static_cast<int>(UINT16_MAX)));
-}
-
-inline float FLOAT_BLEND(float a, float b, float alpha)
-{
-    return (a - b) * alpha + b;
-}
-
-#define F32_OPACITY_OPAQUE 1.0f
-#define F32_OPACITY_TRANSPARENT 0.0f
-
-class KRITACOLOR_EXPORT KisF32BaseColorSpace : public virtual KisColorSpace {
+class PIGMENT_EXPORT KoU8ColorSpaceTrait : public virtual KoColorSpace {
 
 public:
 
-    KisF32BaseColorSpace(qint32 alphaPos)
-	: KisColorSpace()
+    KoU8ColorSpaceTrait(qint32 alphaPos)
     {
         m_alphaPos = alphaPos;
-	//m_alphaSize = sizeof(float);
     };
 
     virtual quint8 getAlpha(const quint8 * pixel) const;
@@ -78,12 +49,11 @@ public:
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos);
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
 
-    virtual bool hasHighDynamicRange() const { return true; }
-
 private:
     qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
     //qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
 
 };
 
-#endif // KIS_F32_BASE_COLORSPACE_H_
+
+#endif // KOU8COLORSPACETRAIT_H

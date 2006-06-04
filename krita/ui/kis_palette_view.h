@@ -27,7 +27,7 @@ class KListBox;
 class KisPalette;
 class KColorCells;
 class KisResource;
-class KisColor;
+class KoColor;
 
 /**
  * A scrolling view that lists a single KisPalette
@@ -47,9 +47,9 @@ public slots:
     void setPalette(KisPalette* p);
 
 signals:
-    void colorSelected(const KisColor &);
+    void colorSelected(const KoColor &);
     void colorSelected(const QColor &);
-    void colorDoubleClicked(const KisColor &, const QString &);
+    void colorDoubleClicked(const KoColor &, const QString &);
 
 protected slots:
     void slotColorCellSelected( int );

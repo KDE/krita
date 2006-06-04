@@ -25,7 +25,7 @@
 
 // typedef unsigned int uint;
 
-#include <kis_generic_registry.h>
+#include <KoGenericRegistry.h>
 #include "kis_paint_device.h"
 #include "kis_types.h"
 
@@ -49,10 +49,10 @@ class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
         };
         typedef KisFloatRepresentation KisWavelet;
     public:
-        KisMathToolbox(KisID id);
+        KisMathToolbox(KoID id);
         ~KisMathToolbox();
     public:
-        inline KisID id() { return m_id; };
+        inline KoID id() { return m_id; };
         /**
          * This function initialize a wavelet structure
          * @param lay the layer that will be used for the transformation
@@ -92,7 +92,7 @@ class KRITAIMAGE_EXPORT KisMathToolbox : public QObject {
          */
         void transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation*, const QRect&);
     private:
-        KisID m_id;
+        KoID m_id;
 };
 
 class KRITAIMAGE_EXPORT KisMathToolboxFactoryRegistry : public KisGenericRegistry<KisMathToolbox*> {

@@ -97,7 +97,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("polygonalselect", i18n("Polygonal Select Tool")); }
+    virtual KoID id() { return KoID("polygonalselect", i18n("Polygonal Select Tool")); }
 };
 
 

@@ -67,7 +67,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("text", i18n("Text Tool")); }
+    virtual KoID id() { return KoID("text", i18n("Text Tool")); }
 };
 
 

@@ -36,8 +36,8 @@ class QHBoxLayout;
 class KWidgetAction;
 class KisView;
 class KisCanvasController;
-class KisID;
-class KisColorSpace;
+class KoID;
+class KoColorSpace;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -63,25 +63,25 @@ public:
 
 signals:
 
-    void selected(const KisID & id, const KisPaintOpSettings *settings);
+    void selected(const KoID & id, const KisPaintOpSettings *settings);
 
 private slots:
 
-    void addItem(const KisID & paintop, const QString & category = "");
+    void addItem(const KoID & paintop, const QString & category = "");
 
 private slots:
 
     void slotItemSelected(int index);
-    void colorSpaceChanged(KisColorSpace *cs);
+    void colorSpaceChanged(KoColorSpace *cs);
     void slotInputDeviceChanged(const KisInputDevice & inputDevice);
 
 private:
-    QPixmap paintopPixmap(const KisID & paintop);
+    QPixmap paintopPixmap(const KoID & paintop);
     void updateOptionWidget();
-    const KisID & currentPaintop();
-    void setCurrentPaintop(const KisID & paintop);
-    KisID defaultPaintop(const KisInputDevice& inputDevice);
-    const KisPaintOpSettings *paintopSettings(const KisID & paintop, const KisInputDevice & inputDevice);
+    const KoID & currentPaintop();
+    void setCurrentPaintop(const KoID & paintop);
+    KoID defaultPaintop(const KisInputDevice& inputDevice);
+    const KisPaintOpSettings *paintopSettings(const KoID & paintop, const KisInputDevice & inputDevice);
 
 private:
     KisCanvasController *m_canvasController;
@@ -89,10 +89,10 @@ private:
     QHBoxLayout * m_layout;
     QWidget * m_optionWidget;
 
-    QList<KisID> m_paintops;
-    QList<KisID> m_displayedOps;
+    QList<KoID> m_paintops;
+    QList<KoID> m_displayedOps;
 
-    typedef std::map<KisInputDevice, KisID> InputDevicePaintopMap;
+    typedef std::map<KisInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
 
     typedef std::map<KisInputDevice, QList<KisPaintOpSettings *> > InputDevicePaintopSettingsMap;

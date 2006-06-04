@@ -44,7 +44,7 @@
 
 // ------------------------------------------------
 
-KisFiltersThumbnailThread::KisFiltersThumbnailThread(Q3IconView * parent, KisFiltersIconViewItem * iconItem, KisFilterConfiguration * config, KisFilter * filter, KisPaintDeviceSP dev, const QRect & bounds, KisProfile * profile)
+KisFiltersThumbnailThread::KisFiltersThumbnailThread(Q3IconView * parent, KisFiltersIconViewItem * iconItem, KisFilterConfiguration * config, KisFilter * filter, KisPaintDeviceSP dev, const QRect & bounds, KoColorProfile * profile)
     : m_parent(parent)
     , m_iconItem(iconItem)
     , m_config(config)
@@ -92,8 +92,8 @@ void KisFiltersThumbnailThread::cancel()
 // ------------------------------------------------
 
 KisFiltersIconViewItem::KisFiltersIconViewItem(Q3IconView * parent, const QString & text, const QPixmap & icon,
-                                               KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
-                                               KisPaintDeviceSP thumb, const QRect & bounds, KisProfile * profile)
+                                               KoID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
+                                               KisPaintDeviceSP thumb, const QRect & bounds, KoColorProfile * profile)
     : Q3IconViewItem(parent, text, icon)
     , m_id(id)
     , m_filter(filter)
@@ -163,7 +163,7 @@ void KisFiltersListView::setLayer(KisLayerSP layer) {
     }
 }
 
-void KisFiltersListView::setCurrentFilter(KisID filter)
+void KisFiltersListView::setCurrentFilter(KoID filter)
 {
     setCurrentItem(findItem(filter.name()));
 }
@@ -186,8 +186,8 @@ void KisFiltersListView::buildPreview()
     gc.end();
 
     t.start();
-    KisIDList l = KisFilterRegistry::instance()->listKeys();
-    KisIDList::iterator it;
+    KoIDList l = KisFilterRegistry::instance()->listKeys();
+    KoIDList::iterator it;
     it = l.begin();
     // Iterate over the list of filters
     for (it = l.begin(); it !=  l.end(); ++it) {

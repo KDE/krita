@@ -28,7 +28,7 @@
 #include "ui_wdg_brightness_contrast.h"
 
 class QWidget;
-class KisColorAdjustment;
+class KoColorAdjustment;
 
 class WdgBrightnessContrast : public QWidget, public Ui::WdgBrightnessContrast
 {
@@ -50,7 +50,7 @@ public:
 public:
     quint16 transfer[256];
     QList<QPair<double,double> >  curve;
-    KisColorAdjustment * m_adjustment;
+    KoColorAdjustment * m_adjustment;
 };
 
 /**
@@ -69,14 +69,14 @@ public:
     virtual KisFilterConfiguration * configuration(QWidget *);
     virtual KisFilterConfiguration * configuration() { return new KisBrightnessContrastFilterConfiguration(); };
     virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("brightnesscontrast", i18n("Brightness / Contrast")); };
+    static inline KoID id() { return KoID("brightnesscontrast", i18n("Brightness / Contrast")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
 
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
-    virtual bool workWith(KisColorSpace* cs);
+    virtual bool workWith(KoColorSpace* cs);
 };
 
 

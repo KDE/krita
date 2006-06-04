@@ -89,7 +89,7 @@ Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
     {
         borderop = Kross::Api::Variant::toUInt(args->item(3));
     }
-    uint channelsFlag = KisChannelInfo::FLAG_COLOR;
+    uint channelsFlag = KoChannelInfo::FLAG_COLOR;
     if( args.count() > 4 )
     {
         channelsFlag = Kross::Api::Variant::toUInt(args->item(4));
@@ -141,7 +141,7 @@ Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
             kernel.data[ j + i * kernel.width ] = (*itLine).toInt();
         }
     }
-    cp->applyMatrix(KisKernelSP(&kernel), rect.x(), rect.y(), rect.width(), rect.height(), (KisConvolutionBorderOp)borderop, (KisChannelInfo::enumChannelFlags) channelsFlag);
+    cp->applyMatrix(KisKernelSP(&kernel), rect.x(), rect.y(), rect.width(), rect.height(), (KisConvolutionBorderOp)borderop, (KoChannelInfo::enumChannelFlags) channelsFlag);
     
     delete[] kernel.data;
     return Kross::Api::Object::Ptr(0);
@@ -322,14 +322,14 @@ Kross::Api::Object::Ptr Painter::paintAt(Kross::Api::List::Ptr args)
 Kross::Api::Object::Ptr Painter::setBackgroundColor(Kross::Api::List::Ptr args)
 {
     Color* c = (Color*)args->item(0);
-    m_painter->setBackgroundColor( KisColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
+    m_painter->setBackgroundColor( KoColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
     return Kross::Api::Object::Ptr(0);
 }
 
 Kross::Api::Object::Ptr Painter::setPaintColor(Kross::Api::List::Ptr args)
 {
     Color* c = (Color*)args->item(0);
-    m_painter->setPaintColor( KisColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
+    m_painter->setPaintColor( KoColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
     return Kross::Api::Object::Ptr(0);
 }
 

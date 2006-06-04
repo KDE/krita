@@ -20,18 +20,18 @@
 
 #include <kdebug.h>
 
-#include "kis_lcms_base_colorspace.h"
-#include "kis_u8_base_colorspace.h"
-#include "kis_integer_maths.h"
+#include "KoLcmsColorSpaceTrait.h"
+#include "KoU8ColorSpaceTrait.h"
+#include "KoIntegerMaths.h"
 
-quint8 KisU8BaseColorSpace::getAlpha(const quint8 * pixel) const
+quint8 KoU8ColorSpaceTrait::getAlpha(const quint8 * pixel) const
 {
     return pixel[m_alphaPos];
 }
 
 
 
-void KisU8BaseColorSpace::setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
+void KoU8ColorSpaceTrait::setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
 {
     if (m_alphaPos < 0) return;
     qint32 psize = pixelSize();
@@ -45,7 +45,7 @@ void KisU8BaseColorSpace::setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels
 
 }
 
-void KisU8BaseColorSpace::multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels)
+void KoU8ColorSpaceTrait::multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels)
 {
     if (m_alphaPos < 0) return;
     qint32 psize = pixelSize();
@@ -57,7 +57,7 @@ void KisU8BaseColorSpace::multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nP
     }
 }
 
-void KisU8BaseColorSpace::applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels)
+void KoU8ColorSpaceTrait::applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels)
 {
     qint32 psize = pixelSize();
 
@@ -71,7 +71,7 @@ void KisU8BaseColorSpace::applyAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint
     }
 }
 
-void KisU8BaseColorSpace::applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels)
+void KoU8ColorSpaceTrait::applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alpha, qint32 nPixels)
 {
     qint32 psize = pixelSize();
 
@@ -80,7 +80,7 @@ void KisU8BaseColorSpace::applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alph
             quint16 p_alpha, s_alpha;
 
             p_alpha = getAlpha(pixels);
-            s_alpha = MAX_SELECTED - *alpha;
+            s_alpha = OPACITY_OPAQUE - *alpha;
 
             setAlpha(pixels, UINT8_MULT(p_alpha, s_alpha), 1);
 
@@ -89,7 +89,7 @@ void KisU8BaseColorSpace::applyInverseAlphaU8Mask(quint8 * pixels, quint8 * alph
     }
 }
 
-QString KisU8BaseColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
+QString KoU8ColorSpaceTrait::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < (quint32)nChannels());
     quint32 channelPosition = m_channels[channelIndex]->pos();
@@ -97,7 +97,7 @@ QString KisU8BaseColorSpace::channelValueText(const quint8 *pixel, quint32 chann
     return QString().setNum(pixel[channelPosition]);
 }
 
-QString KisU8BaseColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
+QString KoU8ColorSpaceTrait::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < (quint32)nChannels());
     quint32 channelPosition = m_channels[channelIndex]->pos();
@@ -106,12 +106,12 @@ QString KisU8BaseColorSpace::normalisedChannelValueText(const quint8 *pixel, qui
 }
 
 
-quint8 KisU8BaseColorSpace::scaleToU8(const quint8 * pixel, qint32 channelPos)
+quint8 KoU8ColorSpaceTrait::scaleToU8(const quint8 * pixel, qint32 channelPos)
 {
     return pixel[channelPos];
 }
 
-quint16 KisU8BaseColorSpace::scaleToU16(const quint8 * pixel, qint32 channelPos)
+quint16 KoU8ColorSpaceTrait::scaleToU16(const quint8 * pixel, qint32 channelPos)
 {
     return UINT8_TO_UINT16(pixel[channelPos]);
 }

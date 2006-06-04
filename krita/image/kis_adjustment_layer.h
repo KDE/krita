@@ -21,7 +21,7 @@
 #include <QObject>
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
-#include "kis_composite_op.h"
+#include "KoCompositeOp.h"
 #include <krita_export.h>
 
 class KNamedCommand;

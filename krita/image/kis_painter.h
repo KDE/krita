@@ -22,7 +22,7 @@
 
 #include <kcommand.h>
 
-#include "kis_color.h"
+#include "KoColor.h"
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -30,7 +30,7 @@
 #include "kis_filter.h"
 #include "kis_progress_subject.h"
 #include "kis_paintop.h"
-#include "kis_color.h"
+#include "KoColor.h"
 
 #include <krita_export.h>
 
@@ -103,7 +103,7 @@ public:
      * Blast the specified region from src onto the current paint device.
      */
     void bitBlt(qint32 dx, qint32 dy,
-                const KisCompositeOp& op,
+                const KoCompositeOp& op,
                 KisPaintDeviceSP src,
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh)
@@ -116,7 +116,7 @@ public:
      * a value for opacity
      */
     void bitBlt(qint32 dx, qint32 dy,
-                const KisCompositeOp& op,
+                const KoCompositeOp& op,
                 KisPaintDeviceSP src,
                 quint8 opacity,
                 qint32 sx, qint32 sy,
@@ -128,7 +128,7 @@ public:
      * the src device's own selection, if it has one.
      */
     void bltSelection(qint32 dx, qint32 dy,
-                      const KisCompositeOp &op,
+                      const KoCompositeOp &op,
                       KisPaintDeviceSP src,
                       KisSelectionSP selMask,
                       quint8 opacity,
@@ -140,7 +140,7 @@ public:
      * A version of bitBlt that renders using the src device's selection mask, if it has one.
      */
     void bltSelection(qint32 dx, qint32 dy,
-                      const KisCompositeOp &op,
+                      const KoCompositeOp &op,
                       KisPaintDeviceSP src,
                       quint8 opacity,
                       qint32 sx, qint32 sy,
@@ -263,20 +263,20 @@ public:
     KisPattern * pattern() const { return m_pattern; }
 
     /// Set the color that will be used to paint with
-    void setPaintColor(const KisColor& color) { m_paintColor = color;}
+    void setPaintColor(const KoColor& color) { m_paintColor = color;}
 
     /// Returns the color that will be used to paint with
-    KisColor paintColor() const { return m_paintColor; }
+    KoColor paintColor() const { return m_paintColor; }
 
     /// Set the current background color
-    void setBackgroundColor(const KisColor& color) {m_backgroundColor = color; }
+    void setBackgroundColor(const KoColor& color) {m_backgroundColor = color; }
     /// Returns the current background color
-    KisColor backgroundColor() const { return m_backgroundColor; }
+    KoColor backgroundColor() const { return m_backgroundColor; }
 
     /// Set the current fill color
-    void setFillColor(const KisColor& color) { m_fillColor = color; }
+    void setFillColor(const KoColor& color) { m_fillColor = color; }
     /// Returns the current fill color
-    KisColor fillColor() const { return m_fillColor; }
+    KoColor fillColor() const { return m_fillColor; }
 
 
     /// This enum contains the styles with which we can fill things like polygons and ellipses
@@ -314,9 +314,9 @@ public:
      * Sets the current composite operation. Everything painted will be composited on
      * the destination layer with this composite op.
      **/
-    void setCompositeOp(const KisCompositeOp& op) { m_compositeOp = op; }
+    void setCompositeOp(const KoCompositeOp& op) { m_compositeOp = op; }
     /// Returns the current composite operation
-    KisCompositeOp compositeOp() const { return m_compositeOp; }
+    KoCompositeOp compositeOp() const { return m_compositeOp; }
 
     /// Sets the current KisFilter, used by the paintops that support it (like KisFilterOp)
     void setFilter(KisFilterSP filter) { m_filter = filter; }
@@ -371,23 +371,23 @@ protected:
 
     QRect m_dirtyRect;
 
-    KisColor m_paintColor;
-    KisColor m_backgroundColor;
-    KisColor m_fillColor;
+    KoColor m_paintColor;
+    KoColor m_backgroundColor;
+    KoColor m_fillColor;
     FillStyle m_fillStyle;
     StrokeStyle m_strokeStyle;
     KisBrush *m_brush;
     KisPattern *m_pattern;
     KisPoint m_duplicateOffset;
     quint8 m_opacity;
-    KisCompositeOp m_compositeOp;
+    KoCompositeOp m_compositeOp;
     KisFilterSP m_filter;
     KisPaintOp * m_paintOp;
     double m_pressure;
     bool m_cancelRequested;
     qint32 m_pixelSize;
-    KisColorSpace * m_colorSpace;
-    KisProfile *  m_profile;
+    KoColorSpace * m_colorSpace;
+    KoColorProfile *  m_profile;
     KisPaintDeviceSP m_dab;
 
 };

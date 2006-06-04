@@ -34,7 +34,7 @@
 #include "kis_wet_sticky_colorspace.h"
 #include "kis_integer_maths.h"
 #include "kis_types.h"
-#include "kis_channelinfo.h"
+#include "KoChannelInfo.h"
 
 #define NOWSDEBUG
 
@@ -58,42 +58,42 @@ enum WetStickyChannelIndex {
 };
 
 KisWetStickyColorSpace::KisWetStickyColorSpace() :
-    KisAbstractColorSpace(KisID("W&S", i18n("Wet & Sticky")), 0, icMaxEnumData)
+    KisAbstractColorSpace(KoID("W&S", i18n("Wet & Sticky")), 0, icMaxEnumData)
 {
     qint32 pos = 0;
 
     // Basic representational definition
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), pos, COLOR, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), ++pos, COLOR, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), ++pos, COLOR, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), ++pos, ALPHA, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Blue"), pos, COLOR, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Green"), ++pos, COLOR, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Red"), ++pos, COLOR, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), ++pos, ALPHA, 1));
 
     // Paint definition
-    m_channels.push_back(new KisChannelInfo(i18n("Hue"), ++pos, COLOR, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Saturation"), pos+=sizeof(float) , COLOR, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), pos+=sizeof(float), COLOR, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Hue"), ++pos, COLOR, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Saturation"), pos+=sizeof(float) , COLOR, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Lightness"), pos+=sizeof(float), COLOR, sizeof(float)));
 
-    m_channels.push_back(new KisChannelInfo(i18n("Liquid Content"), pos+=sizeof(float), SUBSTANCE, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Drying Rate"), ++pos, SUBSTANCE, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Miscibility"), ++pos, SUBSTANCE, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Liquid Content"), pos+=sizeof(float), SUBSTANCE, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Drying Rate"), ++pos, SUBSTANCE, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Miscibility"), ++pos, SUBSTANCE, 1));
 
     // Substrate definition
-    m_channels.push_back(new KisChannelInfo(i18n("Gravitational Direction"), ++pos, SUBSTRATE, sizeof(enumDirection)));
-    m_channels.push_back(new KisChannelInfo(i18n("Gravitational Strength"), pos+=sizeof(enumDirection), SUBSTRATE, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Gravitational Direction"), ++pos, SUBSTRATE, sizeof(enumDirection)));
+    m_channels.push_back(new KoChannelInfo(i18n("Gravitational Strength"), pos+=sizeof(enumDirection), SUBSTRATE, 1));
 
-    m_channels.push_back(new KisChannelInfo(i18n("Absorbency"), ++pos, SUBSTRATE, 1));
-    m_channels.push_back(new KisChannelInfo(i18n("Paint Volume"), ++pos, SUBSTANCE, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Absorbency"), ++pos, SUBSTRATE, 1));
+    m_channels.push_back(new KoChannelInfo(i18n("Paint Volume"), ++pos, SUBSTANCE, 1));
 
     m_alphaPos = 3;
     m_alphaSize = 1;
     setDefaultProfile( 0 );
 
 #ifdef WSDEBUG
-    Q3ValueVector<KisChannelInfo *>_it it;
+    Q3ValueVector<KoChannelInfo *>_it it;
     int i = 0;
     for (it = m_channels.begin(); it != m_channels.end(); ++it)
     {
-        KisChannelInfo * ch = (*it);
+        KoChannelInfo * ch = (*it);
         kDebug(DBG_AREA_CMS) << "Channel: " << ch->name() << ", " << ch->pos() << ", " << i << "\n";
         ++i;
     }
@@ -107,7 +107,7 @@ KisWetStickyColorSpace::~KisWetStickyColorSpace()
 {
 }
 
-void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile *  profile)
+void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 *dst, KoColorProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) dst;
     quint8 r, g, b;
@@ -146,7 +146,7 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile
 #endif
 }
 
-void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile *  profile)
+void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) dst;
     quint8 r, g, b;
@@ -184,7 +184,7 @@ void KisWetStickyColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 
 #endif
 }
 
-void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile *  profile)
+void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, KoColorProfile *  profile)
 {
     CELL_PTR p = (CELL_PTR) src;
 
@@ -196,7 +196,7 @@ void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile *
 #endif
 }
 
-void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile *  profile)
+void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile *  profile)
 {
 
     CELL_PTR p = (CELL_PTR) src;
@@ -213,12 +213,12 @@ void KisWetStickyColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opac
 
 
 
-KisPixelRO KisWetStickyColorSpace::toKisPixelRO(const quint8 *src, KisProfile *  profile)
+KisPixelRO KisWetStickyColorSpace::toKisPixelRO(const quint8 *src, KoColorProfile *  profile)
 {
     return KisPixelRO (src, src, this, profile);
 }
 
-KisPixel KisWetStickyColorSpace::toKisPixel(quint8 *src, KisProfile *  profile)
+KisPixel KisWetStickyColorSpace::toKisPixel(quint8 *src, KoColorProfile *  profile)
 {
     return KisPixel (src, src, this, profile);
 }
@@ -260,7 +260,7 @@ quint16 KisWetStickyColorSpace::scaleToU16(const quint8 * srcPixel, qint32 chann
 }
 
 
-Q3ValueVector<KisChannelInfo *> KisWetStickyColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KisWetStickyColorSpace::channels() const
 {
     return m_channels;
 }
@@ -293,7 +293,7 @@ qint32 KisWetStickyColorSpace::pixelSize() const
 
 
 QImage KisWetStickyColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                           KisProfile *  /*srcProfile*/, KisProfile *  /*dstProfile*/,
+                           KoColorProfile *  /*srcProfile*/, KoColorProfile *  /*dstProfile*/,
                            qint32 /*renderingIntent*/, float /*exposure*/)
 {
 
@@ -323,8 +323,8 @@ QImage KisWetStickyColorSpace::convertToQImage(const quint8 *data, qint32 width,
     return img;
 }
 
-bool KisWetStickyColorSpace::convertPixelsTo(const quint8 * src, KisProfile *  /*srcProfile*/,
-                         quint8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
+bool KisWetStickyColorSpace::convertPixelsTo(const quint8 * src, KoColorProfile *  /*srcProfile*/,
+                         quint8 * dst, KisAbstractColorSpace * dstColorSpace, KoColorProfile *  dstProfile,
                          quint32 numPixels,
                          qint32 /*renderingIntent*/)
 {
@@ -361,7 +361,7 @@ void KisWetStickyColorSpace::bitBlt(quint8 *dst,
                       quint8 opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KisCompositeOp& op)
+                      const KoCompositeOp& op)
 {
     switch (op.op()) {
     case COMPOSITE_UNDEF:
@@ -484,11 +484,11 @@ void KisWetStickyColorSpace::compositeCopy(quint8 *dst, qint32 dstRowStride, con
 }
 
 
-KisCompositeOpList KisWetStickyColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisWetStickyColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
 
     return list;
 }

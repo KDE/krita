@@ -23,7 +23,7 @@
 
 #include "kis_convolution_filter.h"
 #include "kis_filter_config_widget.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_types.h"
 
 class QWidget;
@@ -34,7 +34,7 @@ public:
     KisCustomConvolutionFilter() : KisConvolutionFilter(id(), "enhance", i18n("&Custom Convolution...")) {};
     
 public:
-    static inline KisID id() { return KisID("custom convolution", i18n("Custom Convolution")); };
+    static inline KoID id() { return KoID("custom convolution", i18n("Custom Convolution")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsIncrementalPainting() { return true; }
 

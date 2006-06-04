@@ -31,7 +31,7 @@
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paintop.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_selection.h"
 #include "kis_filterop.h"
 
@@ -66,7 +66,7 @@ void KisFilterOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisBrush * brush = m_painter->brush();
     if (!brush) return;
 
-    KisColorSpace * colorSpace = m_source->colorSpace();
+    KoColorSpace * colorSpace = m_source->colorSpace();
 
     KisPoint hotSpot = brush->hotSpot(info);
     KisPoint pt = pos - hotSpot;

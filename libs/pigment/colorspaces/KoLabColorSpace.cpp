@@ -29,42 +29,41 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_lab_colorspace.h"
-#include "kis_color_conversions.h"
-#include "kis_integer_maths.h"
+#include "KoLabColorSpace.h"
+#include "KoIntegerMaths.h"
 
-KisLabColorSpace::KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p)
-    : KisColorSpace(KisID("LABA", i18n("L*a*b* (16-bit integer/channel)")), parent)
-    , KisU16BaseColorSpace(CHANNEL_ALPHA * sizeof(quint16))
-    , KisLcmsBaseColorSpace(
+KoLabColorSpace::KoLabColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p)
+    : KoColorSpace(KoID("LABA", i18n("L*a*b* (16-bit integer/channel)")), parent)
+    , KoU16ColorSpaceTrait(CHANNEL_ALPHA * sizeof(quint16))
+    , KoLcmsColorSpaceTrait(
         COLORSPACE_SH(PT_Lab)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1),
          icSigLabData, p)
 
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(100,100,100)));
-    m_channels.push_back(new KisChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(150,150,150)));
-    m_channels.push_back(new KisChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
+    m_channels.push_back(new KoChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100,100,100)));
+    m_channels.push_back(new KoChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150,150,150)));
+    m_channels.push_back(new KoChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200,200,200)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
 
     init();
 }
 
-KisLabColorSpace::~KisLabColorSpace()
+KoLabColorSpace::~KoLabColorSpace()
 {
 }
 
-void KisLabColorSpace::toLabA16(const quint8 * src, quint8 *dst, const quint32 nPixels) const
+void KoLabColorSpace::toLabA16(const quint8 * src, quint8 *dst, const quint32 nPixels) const
 {
     memcpy( dst,  src,  nPixels * pixelSize() );
 }
 
-void KisLabColorSpace::fromLabA16(const quint8 *src, quint8 *dst, const quint32 nPixels) const
+void KoLabColorSpace::fromLabA16(const quint8 *src, quint8 *dst, const quint32 nPixels) const
 {
     memcpy( dst, src,  nPixels * pixelSize() );
 }
 
 
-quint8 KisLabColorSpace::difference(const quint8 *src1, const quint8 *src2)
+quint8 KoLabColorSpace::difference(const quint8 *src1, const quint8 *src2)
 {
     cmsCIELab labF1, labF2;
 
@@ -80,7 +79,7 @@ quint8 KisLabColorSpace::difference(const quint8 *src1, const quint8 *src2)
         return qint8(diff);
 }
 
-void KisLabColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
+void KoLabColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
 {
     quint32 totalLightness = 0, totalAlpha = 0;
     quint32 totala = 0, totalb = 0;
@@ -130,7 +129,7 @@ void KisLabColorSpace::mixColors(const quint8 **colors, const quint8 *weights, q
     ((Pixel *)dst)->b = totalb;
 }
 
-void KisLabColorSpace::invertColor(quint8 * src, qint32 nPixels)
+void KoLabColorSpace::invertColor(quint8 * src, qint32 nPixels)
 {
     quint32 psize = pixelSize();
 
@@ -146,14 +145,14 @@ void KisLabColorSpace::invertColor(quint8 * src, qint32 nPixels)
     }
 }
 
-void KisLabColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags,
+void KoLabColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags,
                                       quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     // XXX: Either do this native, or do this in 16 bit rgba, not this, which is going back to QColor!
-    KisLcmsBaseColorSpace::convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nColors);
+    KoLcmsColorSpaceTrait::convolveColors(colors, kernelValues, channelFlags, dst, factor, offset, nColors);
 }
 
-void KisLabColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const
+void KoLabColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const
 {
     // XXX: Is the 255 right for u16 colorspaces?
     quint32 pSize = pixelSize();
@@ -177,27 +176,27 @@ void KisLabColorSpace::darken(const quint8 * src, quint8 * dst, qint32 shade, bo
 }
 
 
-Q3ValueVector<KisChannelInfo *> KisLabColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KoLabColorSpace::channels() const
 {
     return m_channels;
 }
 
-quint32 KisLabColorSpace::nChannels() const
+quint32 KoLabColorSpace::nChannels() const
 {
     return NUM_CHANNELS;
 }
 
-quint32 KisLabColorSpace::nColorChannels() const
+quint32 KoLabColorSpace::nColorChannels() const
 {
     return NUM_COLOR_CHANNELS;
 }
 
-quint32 KisLabColorSpace::pixelSize() const
+quint32 KoLabColorSpace::pixelSize() const
 {
     return sizeof(Pixel);
 }
 
-void KisLabColorSpace::getSingleChannelPixel(quint8 *dst, const quint8 *src, quint32 channelIndex)
+void KoLabColorSpace::getSingleChannelPixel(quint8 *dst, const quint8 *src, quint32 channelIndex)
 {
     if (channelIndex < NUM_CHANNELS) {
 
@@ -233,7 +232,7 @@ void KisLabColorSpace::getSingleChannelPixel(quint8 *dst, const quint8 *src, qui
     }
 }
 
-void KisLabColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
+void KoLabColorSpace::compositeOver(quint8 *dstRowStart, qint32 dstRowStride, const quint8 *srcRowStart, qint32 srcRowStride, const quint8 *maskRowStart, qint32 maskRowStride, qint32 rows, qint32 numColumns, quint16 opacity)
 {
     while (rows > 0) {
         const Pixel *src = reinterpret_cast<const Pixel *>(srcRowStart);
@@ -308,7 +307,7 @@ printf("%d %d %d\n", dst->lightness, dst->a, dst->b);
     }
 }
 
-void KisLabColorSpace::compositeErase(quint8 *dst,
+void KoLabColorSpace::compositeErase(quint8 *dst,
             qint32 dstRowSize,
             const quint8 *src,
             qint32 srcRowSize,
@@ -348,7 +347,7 @@ void KisLabColorSpace::compositeErase(quint8 *dst,
     }
 }
 
-void KisLabColorSpace::bitBlt(quint8 *dst,
+void KoLabColorSpace::bitBlt(quint8 *dst,
                       qint32 dstRowStride,
                       const quint8 *src,
                       qint32 srcRowStride,
@@ -357,7 +356,7 @@ void KisLabColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KisCompositeOp& op)
+                      const KoCompositeOp& op)
 {
     quint16 opacity = UINT8_TO_UINT16(U8_opacity);
 
@@ -483,16 +482,16 @@ void KisLabColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KisCompositeOpList KisLabColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KoLabColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
 
     return list;
 }
 
-QString KisLabColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
+QString KoLabColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     const Pixel *pix = reinterpret_cast<const Pixel *>(U8_pixel);
     Q_ASSERT(channelIndex < nChannels());
@@ -511,7 +510,7 @@ QString KisLabColorSpace::channelValueText(const quint8 *U8_pixel, quint32 chann
     }
 }
 
-QString KisLabColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
+QString KoLabColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     const Pixel *pix = reinterpret_cast<const Pixel *>(U8_pixel);
     Q_ASSERT(channelIndex < nChannels());

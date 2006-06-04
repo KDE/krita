@@ -22,7 +22,7 @@
 
 #include <kdialog.h>
 
-#include "kis_composite_op.h"
+#include "KoCompositeOp.h"
 #include <kis_global.h>
 
 class QWidget;
@@ -34,23 +34,23 @@ class NewLayerDialog : public KDialog {
     Q_OBJECT
 
 public:
-    NewLayerDialog(const KisID colorSpace,
+    NewLayerDialog(const KoID colorSpace,
                const QString & profilename,
                const QString & deviceName,
                QWidget *parent = 0,
                const char *name = 0);
 
     QString layerName() const;
-    KisCompositeOp compositeOp() const;
+    KoCompositeOp compositeOp() const;
     qint32 opacity() const;
-    KisID colorSpaceID() const;
+    KoID colorSpaceID() const;
     QString profileName() const;
 
     void setColorSpaceEnabled(bool enabled);
 
 private slots:
-    void fillCmbProfiles(const KisID & s);
-    void fillCmbComposite(const KisID & s);
+    void fillCmbProfiles(const KoID & s);
+    void fillCmbComposite(const KoID & s);
 
 private:
     WdgLayerProperties * m_page;

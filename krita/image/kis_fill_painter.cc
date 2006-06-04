@@ -47,7 +47,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -55,7 +55,7 @@
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
-#include "kis_color.h"
+#include "KoColor.h"
 #include "kis_selection.h"
 
 namespace {
@@ -81,12 +81,12 @@ KisFillPainter::KisFillPainter(KisPaintDeviceSP device) : super(device)
 // 'regular' filling
 // XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
 //      this is more eraseToColor.
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisColor& kc, quint8 opacity)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoColor& kc, quint8 opacity)
 {
     if (w > 0 && h > 0) {
         // Make sure we're in the right colorspace
 
-        KisColor kc2(kc); // get rid of const
+        KoColor kc2(kc); // get rid of const
         kc2.convertTo(m_device->colorSpace());
         quint8 * data = kc2.data();
         m_device->colorSpace()->setAlpha(data, opacity, 1);
@@ -242,8 +242,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY) {
     m_size = m_width * m_height;
 
     KisSelectionSP selection = KisSelectionSP(new KisSelection(m_device));
-    KisColorSpace * colorSpace = selection->colorSpace();
-    KisColorSpace * devColorSpace = sourceDevice->colorSpace();
+    KoColorSpace * colorSpace = selection->colorSpace();
+    KoColorSpace * devColorSpace = sourceDevice->colorSpace();
 
     quint8* source = new quint8[sourceDevice->pixelSize()];
     KisHLineIteratorPixel pixelIt = sourceDevice->createHLineIterator(startX, startY, startX+1, false);

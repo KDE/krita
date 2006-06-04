@@ -71,7 +71,7 @@ QPoint next_cell(quint32 width, quint32 height)
     return QPoint(random() * width,  random() * height);
 }
 
-void single_step(KisColorSpace * cs, KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rect, bool native)
+void single_step(KoColorSpace * cs, KisPaintDeviceSP src,  KisPaintDeviceSP dst, const QRect & rect, bool native)
 {
     using namespace WetAndSticky;
 
@@ -129,10 +129,10 @@ void KisWSEngineFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisF
     // synthesizing w&s pixels.
     bool native = false;
     // XXX: We need a better way to ID color strategies
-    if ( src -> colorSpace() -> id() == KisID("W&S","") ) native = true;
+    if ( src -> colorSpace() -> id() == KoID("W&S","") ) native = true;
 
     // XXX: We need a better way to ID color strategies
-    KisColorSpace * cs = KisColorSpaceRegistry::instance()->get("W&S");
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->get("W&S");
 
     quint32 pixels = 400; //m_cfg -> pixels();
 

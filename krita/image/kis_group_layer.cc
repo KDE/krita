@@ -395,7 +395,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             // Copy the lowest layer rather than compositing it with the background
             // or an empty image. This means the layer's composite op is ignored,
             // which is consistent with Photoshop and gimp.
-            const KisCompositeOp cop = child->compositeOp();
+            const KoCompositeOp cop = child->compositeOp();
             const bool block = child->signalsBlocked();
             child->blockSignals(true);
             child->m_compositeOp = COMPOSITE_COPY;

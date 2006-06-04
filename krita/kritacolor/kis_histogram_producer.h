@@ -22,13 +22,15 @@
 #include <qglobal.h>
 #include <ksharedptr.h>
 
-#include <kis_colorspace.h>
+#include <krita_export.h>
 
-#include "kis_generic_registry.h"
+#include <KoColorSpace.h>
+
+#include "KoGenericRegistry.h"
 
 class KisRectIteratorPixel;
 class QString;
-class KisChannelInfo;
+class KoChannelInfo;
 
 /**
  * This class is an interface used in the generation of a histogram. It is a container of
@@ -67,7 +69,7 @@ public:
      * @param nPixels The number of pixels
      * @param colorSpace the colorspace that can decode the pixel data.
      */
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace* colorSpace) = 0;
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace* colorSpace) = 0;
 
     // Methods to set what exactly is being added to the bins
     virtual void setView(double from, double width) = 0;
@@ -75,8 +77,8 @@ public:
     virtual void setSkipUnselected(bool set) { m_skipUnselected = set; }
 
     // Methods with general information about this specific producer
-    virtual const KisID& id() const = 0;
-    virtual Q3ValueVector<KisChannelInfo *> channels() = 0;
+    virtual const KoID& id() const = 0;
+    virtual Q3ValueVector<KoChannelInfo *> channels() = 0;
     virtual qint32 numberOfBins() = 0;
     virtual QString positionToString(double pos) const = 0;
     virtual double viewFrom() const = 0;
@@ -97,17 +99,17 @@ typedef KSharedPtr<KisHistogramProducer> KisHistogramProducerSP;
 
 class KRITACOLOR_EXPORT KisHistogramProducerFactory {
 public:
-    KisHistogramProducerFactory(const KisID& id) : m_id(id) {}
+    KisHistogramProducerFactory(const KoID& id) : m_id(id) {}
     virtual ~KisHistogramProducerFactory() {}
     /// Factory method, generates a new KisHistogramProducer
     virtual KisHistogramProducerSP generate() = 0;
     /// Returns if a colorspace can be used with this producer
-    virtual bool isCompatibleWith(KisColorSpace* colorSpace) const = 0;
+    virtual bool isCompatibleWith(KoColorSpace* colorSpace) const = 0;
     /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
-    virtual float preferrednessLevelWith(KisColorSpace* colorSpace) const = 0;
-    virtual const KisID& id() const { return m_id; }
+    virtual float preferrednessLevelWith(KoColorSpace* colorSpace) const = 0;
+    virtual const KoID& id() const { return m_id; }
 protected:
-    KisID m_id;
+    KoID m_id;
 };
 
 class KRITACOLOR_EXPORT KisHistogramProducerFactoryRegistry
@@ -116,7 +118,7 @@ public:
     virtual ~KisHistogramProducerFactoryRegistry();
     static KisHistogramProducerFactoryRegistry* instance();
     /// returns a list, sorted by preferrence: higher preferance comes first
-    KisIDList listKeysCompatibleWith(KisColorSpace* colorSpace) const;
+    KoIDList listKeysCompatibleWith(KoColorSpace* colorSpace) const;
 
 private:
    KisHistogramProducerFactoryRegistry();

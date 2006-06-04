@@ -32,7 +32,7 @@
 
 #include "kis_layer.h"
 #include "kis_types.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_part_layer.h"
 #include "kis_group_layer.h"
 #include "kis_factory.h"
@@ -65,7 +65,7 @@ KisPartLayerImpl::KisPartLayerImpl(KisImageSP img, KisChildDoc * doc)
     : super(img.data(), i18n("Embedded Document"), OPACITY_OPAQUE), m_doc(doc)
 {
     m_cache = new KisPaintDevice(
-            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""), name().toLatin1() );
+            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),""), name().toLatin1() );
     m_activated = false;
 }
 

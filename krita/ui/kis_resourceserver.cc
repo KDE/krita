@@ -33,7 +33,7 @@
 
 #include "kis_resource.h"
 #include "kis_factory.h"
-#include "kis_generic_registry.h"
+#include "KoGenericRegistry.h"
 #include "kis_resourceserver.h"
 #include "kis_brush.h"
 #include "kis_imagepipe_brush.h"
@@ -172,11 +172,11 @@ KisResourceServerRegistry::KisResourceServerRegistry()
     t4.wait();
     t5.wait();
 
-    add( KisID( "BrushServer", ""), brushServer );
-    add( KisID( "ImagePipeBrushServer", ""), imagePipeBrushServer );
-    add( KisID( "PatternServer", ""), patternServer );
-    add( KisID( "GradientServer", ""), gradientServer );
-    add( KisID( "PaletteServer", ""), paletteServer );
+    add( KoID( "BrushServer", ""), brushServer );
+    add( KoID( "ImagePipeBrushServer", ""), imagePipeBrushServer );
+    add( KoID( "PatternServer", ""), patternServer );
+    add( KoID( "GradientServer", ""), gradientServer );
+    add( KoID( "PaletteServer", ""), paletteServer );
 
 }
 

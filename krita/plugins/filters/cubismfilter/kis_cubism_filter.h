@@ -52,12 +52,12 @@ public:
     KisCubismFilter();
 public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("cubism", i18n("Cubism")); };
+    static inline KoID id() { return KoID("cubism", i18n("Cubism")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisCubismFilterConfiguration(10,10)); return list; }
-    virtual bool workWith(KisColorSpace* cs);
+    virtual bool workWith(KoColorSpace* cs);
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_RGBA8; };
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

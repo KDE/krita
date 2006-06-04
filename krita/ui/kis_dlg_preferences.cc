@@ -51,15 +51,15 @@
 #include "squeezedcombobox.h"
 #include "kis_clipboard.h"
 #include "kis_cmb_idlist.h"
-#include "kis_colorspace.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"
 #include "kis_factory.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_meta_registry.h"
-#include "kis_profile.h"
+#include "KoColorProfile.h"
 
 #include "kis_canvas.h"
 
@@ -140,8 +140,8 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
     m_page->cmbPrintingColorSpace->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
     m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
 
-    refillMonitorProfiles(KisID("RGBA", ""));
-    refillPrintProfiles(KisID(cfg.printerColorSpace(), ""));
+    refillMonitorProfiles(KoID("RGBA", ""));
+    refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
 
     if(m_page->cmbMonitorProfile->contains(cfg.monitorProfile()))
         m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
@@ -162,8 +162,8 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name  )
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
-    connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KisID &)),
-            this, SLOT(refillPrintProfiles(const KisID &)));
+    connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
+            this, SLOT(refillPrintProfiles(const KoID &)));
 }
 
 void ColorSettingsTab::setDefault()
@@ -171,7 +171,7 @@ void ColorSettingsTab::setDefault()
     m_page->cmbWorkingColorSpace->setCurrent("RGBA");
 
     m_page->cmbPrintingColorSpace->setCurrent("CMYK");
-    refillPrintProfiles(KisID("CMYK", ""));
+    refillPrintProfiles(KoID("CMYK", ""));
 
     m_page->chkBlackpoint->setChecked(false);
     m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
@@ -185,18 +185,18 @@ void ColorSettingsTab::setDefault()
 }
 
 
-void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
+void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 {
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
 
     m_page->cmbMonitorProfile->clear();
 
     if ( !csf )
     return;
 
-    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
 
-    foreach (KisProfile *profile, profileList) {
+    foreach (KoColorProfile *profile, profileList) {
         if (profile->deviceClass() == icSigDisplayClass)
             m_page->cmbMonitorProfile->addSqueezedItem(profile->productName());
     }
@@ -204,18 +204,18 @@ void ColorSettingsTab::refillMonitorProfiles(const KisID & s)
     m_page->cmbMonitorProfile->setCurrent(csf->defaultProfile());
 }
 
-void ColorSettingsTab::refillPrintProfiles(const KisID & s)
+void ColorSettingsTab::refillPrintProfiles(const KoID & s)
 {
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
 
     m_page->cmbPrintProfile->clear();
 
     if ( !csf )
         return;
 
-    QList<KisProfile *> profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *> profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
 
-    foreach (KisProfile *profile, profileList) {
+    foreach (KoColorProfile *profile, profileList) {
         if (profile->deviceClass() == icSigOutputClass)
             m_page->cmbPrintProfile->addSqueezedItem(profile->productName());
     }

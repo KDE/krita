@@ -56,7 +56,7 @@ void selectByColor(KisPaintDeviceSP dev, KisSelectionSP selection, const quint8 
 
     dev->exactBounds(x, y, w, h);
 
-    KisColorSpace * cs = dev->colorSpace();
+    KoColorSpace * cs = dev->colorSpace();
 
     for (int y2 = y; y2 < y + h; ++y2) {
         KisHLineIterator hiter = dev->createHLineIterator(x, y2, w, false);
@@ -147,7 +147,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         KisSelectedTransaction *t = 0;
         if (img->undo()) t = new KisSelectedTransaction(i18n("Similar Selection"),dev);
 
-        KisColor c = dev->colorAt(pos.x(), pos.y());
+        KoColor c = dev->colorAt(pos.x(), pos.y());
         opacity = dev->colorSpace()->getAlpha(c.data());
 
         // XXX we should make this configurable: "allow to select transparent"

@@ -57,11 +57,11 @@
 #include "kis_global.h"
 #include "kis_debug_areas.h"
 #include "kis_types.h"
-#include "kis_profile.h"
+#include "KoColorProfile.h"
 #include "kis_opengl_image_context.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "krita_export.h"
-#include "kis_color.h"
+#include "KoColor.h"
 #include "kis_input_device.h"
 #include "ui_wdgpalettechooser.h"
 
@@ -94,7 +94,7 @@ class KisButtonPressEvent;
 class KisButtonReleaseEvent;
 class KisCanvas;
 class KisCanvasObserver;
-class KisCompositeOp;
+class KoCompositeOp;
 class KisControlFrame;
 class KisDoc;
 class KisDoubleClickEvent;
@@ -175,12 +175,12 @@ signals:
     void brushChanged(KisBrush * brush);
     void gradientChanged(KisGradient * gradient);
     void patternChanged(KisPattern * pattern);
-    void paintopChanged(KisID paintop, const KisPaintOpSettings *paintopSettings);
+    void paintopChanged(KoID paintop, const KisPaintOpSettings *paintopSettings);
     /**
      * Indicates when the current layer changed so that the current colorspace could have
      * changed.
      **/
-    void currentColorSpaceChanged(KisColorSpace* cs);
+    void currentColorSpaceChanged(KoColorSpace* cs);
     void cursorPosition(qint32 xpos, qint32 ypos);
 
     void sigFGQColorChanged(const QColor &);
@@ -195,8 +195,8 @@ signals:
 
 public slots:
 
-    void slotSetFGColor(const KisColor& c);
-    void slotSetBGColor(const KisColor& c);
+    void slotSetFGColor(const KoColor& c);
+    void slotSetBGColor(const KoColor& c);
 
     void rotateLayer180();
     void rotateLayerLeft90();
@@ -210,7 +210,7 @@ public slots:
     void brushActivated(KisResource *brush);
     void patternActivated(KisResource *pattern);
     void gradientActivated(KisResource *gradient);
-    void paintopActivated(const KisID & paintop, const KisPaintOpSettings *paintopSettings);
+    void paintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings);
 
 
 public:
@@ -250,11 +250,11 @@ private:
     virtual void detach(KisCanvasObserver *observer);
     virtual void notifyObservers();
 
-    virtual KisColor bgColor() const;
-    virtual void setBGColor(const KisColor& c);
+    virtual KoColor bgColor() const;
+    virtual void setBGColor(const KoColor& c);
 
-    virtual KisColor fgColor() const;
-    virtual void setFGColor(const KisColor& c);
+    virtual KoColor fgColor() const;
+    virtual void setFGColor(const KoColor& c);
 
     float HDRExposure() const;
     void setHDRExposure(float exposure);
@@ -262,7 +262,7 @@ private:
     virtual KisBrush *currentBrush() const;
     virtual KisPattern *currentPattern() const;
     virtual KisGradient *currentGradient() const;
-    virtual KisID currentPaintop() const;
+    virtual KoID currentPaintop() const;
     virtual const KisPaintOpSettings *currentPaintopSettings() const;
 
     virtual double zoomFactor() const;
@@ -282,7 +282,7 @@ private:
 
     KoPaletteManager * paletteManager();
 
-    KisProfile *  monitorProfile();
+    KoColorProfile *  monitorProfile();
 
 // -------------------------------------------------------------------------//
 //                    KisCanvasController implementation
@@ -453,7 +453,7 @@ private slots:
     QPoint mapToScreen(const QPoint& pt);
     void slotImageProperties();
 
-    void layerCompositeOp(const KisCompositeOp& compositeOp);
+    void layerCompositeOp(const KoCompositeOp& compositeOp);
     void layerOpacity(int opacity, bool dontundo);
     void layerOpacityFinishedChanging(int previous, int opacity);
 
@@ -495,7 +495,7 @@ private slots:
     void scrollV(int value);
 
     void slotInsertImageAsLayer();
-    void profileChanged(KisProfile *  profile);
+    void profileChanged(KoColorProfile *  profile);
 
     void slotAddPalette();
     void slotEditPalette();
@@ -602,14 +602,14 @@ private:
 
     // Current colours, brushes, patterns etc.
 
-    KisColor m_fg;
-    KisColor m_bg;
+    KoColor m_fg;
+    KoColor m_bg;
 
     KisBrush *m_brush;
     KisPattern *m_pattern;
     KisGradient *m_gradient;
 
-    KisID m_paintop;
+    KoID m_paintop;
     const KisPaintOpSettings *m_paintopSettings;
 
     QTime m_tabletEventTimer;
@@ -625,7 +625,7 @@ private:
 #endif
 
     // Monitorprofile for this view
-    KisProfile *  m_monitorProfile;
+    KoColorProfile *  m_monitorProfile;
 
     float m_HDRExposure;
 
@@ -637,7 +637,7 @@ private:
     KoRGBWidget *m_rgbwidget;
     KoGrayWidget *m_graywidget;
     KisPaletteWidget *m_palettewidget;
-    KisID m_currentColorChooserDisplay;
+    KoID m_currentColorChooserDisplay;
 
 private:
     KisImageSP m_image;

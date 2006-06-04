@@ -34,7 +34,7 @@
 #include <knuminput.h>
 #include <kiconloader.h>
 
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_global.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -124,7 +124,7 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
 
     m_lbComposite = new QLabel(i18n("Mode: "), m_optionWidget);
     m_cmbComposite = new KisCmbComposite(m_optionWidget);
-    connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
+    connect(m_cmbComposite, SIGNAL(activated(const KoCompositeOp&)), this, SLOT(slotSetCompositeMode(const KoCompositeOp&)));
 
     QVBoxLayout* verticalLayout = new QVBoxLayout(m_optionWidget);
     verticalLayout->setMargin(0);
@@ -184,7 +184,7 @@ void KisToolPaint::slotSetOpacity(int opacityPerCent)
     m_opacity = opacityPerCent * OPACITY_OPAQUE / 100;
 }
 
-void KisToolPaint::slotSetCompositeMode(const KisCompositeOp& compositeOp)
+void KisToolPaint::slotSetCompositeMode(const KoCompositeOp& compositeOp)
 {
     m_compositeOp = compositeOp;
 }
@@ -238,7 +238,7 @@ void KisToolPaint::updateCompositeOpComboBox()
             KisPaintDeviceSP device = img->activeDevice();
 
             if (device) {
-                KisCompositeOpList compositeOps = device->colorSpace()->userVisiblecompositeOps();
+                KoCompositeOpList compositeOps = device->colorSpace()->userVisiblecompositeOps();
                 m_cmbComposite->setCompositeOpList(compositeOps);
 
                 if (compositeOps.indexOf(m_compositeOp) < 0) {

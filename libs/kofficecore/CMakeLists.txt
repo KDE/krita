@@ -111,6 +111,8 @@ install_files( /include FILES
     KoFilterChain.h 
     KoGlobal.h 
     KoUnit.h 
+    KoID.h 
+    KoGenericRegistry.h
     KoDocument.h 
     KoMainWindow.h 
     KoApplication.h 

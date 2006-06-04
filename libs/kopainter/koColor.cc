@@ -22,7 +22,7 @@
 #include "kdebug.h"
 #include <cmath>
 
-KoColor::KoColor()
+KoOldColor::KoOldColor()
 {
   // initialise to black
   mNative = csRGB;
@@ -45,7 +45,7 @@ KoColor::KoColor()
   rgbChanged();
 }
 
-KoColor::KoColor(int a, int b, int c, cSpace m)
+KoOldColor::KoOldColor(int a, int b, int c, cSpace m)
 {
   switch(m)
   {
@@ -79,7 +79,7 @@ KoColor::KoColor(int a, int b, int c, cSpace m)
   }
 }
 
-KoColor::KoColor(int c, int m, int y, int k)
+KoOldColor::KoOldColor(int c, int m, int y, int k)
 {
   mC = c;
   mM = m;
@@ -89,7 +89,7 @@ KoColor::KoColor(int c, int m, int y, int k)
   cmykChanged();
 }
 
-KoColor::KoColor(const QColor &c)
+KoOldColor::KoOldColor(const QColor &c)
 {
   mR = c.red();
   mG = c.green();
@@ -98,103 +98,103 @@ KoColor::KoColor(const QColor &c)
   rgbChanged();
 }
 
-KoColor::KoColor(const QString &name)
+KoOldColor::KoOldColor(const QString &name)
 {
   setNamedColor(name);
 }
 
-int KoColor::R() const
+int KoOldColor::R() const
 {
   if(!mRGBvalid)
     calcRGB();
   return mR;
 }
 
-int KoColor::G() const
+int KoOldColor::G() const
 {
   if(!mRGBvalid)
     calcRGB();
   return mG;
 }
 
-int KoColor::B() const
+int KoOldColor::B() const
 {
   if(!mRGBvalid)
     calcRGB();
   return mB;
 }
 
-int KoColor::H() const
+int KoOldColor::H() const
 {
   if(!mHSVvalid)
     calcHSV();
   return mH;
 }
 
-int KoColor::S() const
+int KoOldColor::S() const
 {
   if(!mHSVvalid)
     calcHSV();
   return mS;
 }
 
-int KoColor::V() const
+int KoOldColor::V() const
 {
   if(!mHSVvalid)
     calcHSV();
   return mV;
 }
 
-int KoColor::C() const
+int KoOldColor::C() const
 {
   if(!mCMYKvalid)
     calcCMYK();
   return mC;
 }
 
-int KoColor::M() const
+int KoOldColor::M() const
 {
   if(!mCMYKvalid)
     calcCMYK();
   return mM;
 }
 
-int KoColor::Y() const
+int KoOldColor::Y() const
 {
   if(!mCMYKvalid)
     calcCMYK();
   return mY;
 }
 
-int KoColor::K() const
+int KoOldColor::K() const
 {
   if(!mCMYKvalid)
     calcCMYK();
   return mK;
 }
 
-int KoColor::L() const
+int KoOldColor::L() const
 {
   if(!mLABvalid)
     calcLAB();
   return mL;
 }
 
-int KoColor::a() const
+int KoOldColor::a() const
 {
   if(!mLABvalid)
     calcLAB();
   return ma;
 }
 
-int KoColor::b() const
+int KoOldColor::b() const
 {
   if(!mLABvalid)
     calcLAB();
   return mB;
 }
 
-void KoColor::rgb(int *R, int *G, int *B) const
+void KoOldColor::rgb(int *R, int *G, int *B) const
 {
   if(!mRGBvalid)
     calcRGB();
@@ -203,7 +203,7 @@ void KoColor::rgb(int *R, int *G, int *B) const
   *B = mB;
 }
 
-void KoColor::hsv(int *H, int *S, int *V) const
+void KoOldColor::hsv(int *H, int *S, int *V) const
 {
   if(!mHSVvalid)
     calcHSV();
@@ -212,7 +212,7 @@ void KoColor::hsv(int *H, int *S, int *V) const
   *V = mV;
 }
 
-void KoColor::lab(int *L, int *a, int *b) const
+void KoOldColor::lab(int *L, int *a, int *b) const
 {
   if(!mLABvalid)
     calcLAB();
@@ -221,7 +221,7 @@ void KoColor::lab(int *L, int *a, int *b) const
   *b = mB;
 }
 
-void KoColor::cmyk(int *C, int *M, int *Y, int *K) const
+void KoOldColor::cmyk(int *C, int *M, int *Y, int *K) const
 {
   if(!mCMYKvalid)
     calcCMYK();
@@ -231,7 +231,7 @@ void KoColor::cmyk(int *C, int *M, int *Y, int *K) const
   *K = mK;
 }
 
-QString KoColor::name() const
+QString KoOldColor::name() const
 {
   QString s;
   switch(mNative)
@@ -254,14 +254,14 @@ QString KoColor::name() const
   return s;
 }
 
-QColor KoColor::color() const
+QColor KoOldColor::color() const
 {
   if(!mRGBvalid)
     calcRGB();
   return QColor(mR, mG, mB);
 }
 
-void KoColor::setRGB(int R, int G, int B)
+void KoOldColor::setRGB(int R, int G, int B)
 {
   mR = R;
   mG = G;
@@ -270,7 +270,7 @@ void KoColor::setRGB(int R, int G, int B)
   rgbChanged();
 }
 
-void KoColor::setHSV(int H, int S, int V)
+void KoOldColor::setHSV(int H, int S, int V)
 {
   mH = H;
   mS = S;
@@ -279,7 +279,7 @@ void KoColor::setHSV(int H, int S, int V)
   hsvChanged();
 }
 
-void KoColor::setLab(int L, int a, int b)
+void KoOldColor::setLab(int L, int a, int b)
 {
   mL = L;
   ma = a;
@@ -288,7 +288,7 @@ void KoColor::setLab(int L, int a, int b)
   labChanged();
 }
 
-void KoColor::setCMYK(int C, int M, int Y, int K)
+void KoOldColor::setCMYK(int C, int M, int Y, int K)
 {
   mC = C;
   mM = M;
@@ -298,7 +298,7 @@ void KoColor::setCMYK(int C, int M, int Y, int K)
   cmykChanged();
 }
 
-void KoColor::setNamedColor(const QString &name)
+void KoOldColor::setNamedColor(const QString &name)
 {
   switch(name[0].toLatin1())
   {
@@ -340,7 +340,7 @@ void KoColor::setNamedColor(const QString &name)
   }
 }
 
-void KoColor::setColor(const QColor &c)
+void KoOldColor::setColor(const QColor &c)
 {
   mR = c.red();
   mG = c.green();
@@ -349,7 +349,7 @@ void KoColor::setColor(const QColor &c)
   rgbChanged();
 }
 
-void KoColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
+void KoOldColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
 {
   unsigned int max = R;
   unsigned int min = R;
@@ -405,7 +405,7 @@ void KoColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
   }
 }
 
-void KoColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
+void KoOldColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
 {
   // Convert between RGB and CIE-Lab color spaces
   // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -446,7 +446,7 @@ void KoColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
   *b = static_cast<int>(200.0 * (fY - fZ) + 0.5);
 }
 
-void KoColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
+void KoOldColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
 {
     // XXX: these algorithms aren't the best. See www.littlecms.com
     // for a suitable library, or the posting by Leo Rosenthol for
@@ -467,7 +467,7 @@ void KoColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
 }
 
 
-void KoColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
+void KoOldColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
 {
   *R = *G = *B = V;
 
@@ -528,21 +528,21 @@ void KoColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
   }
 }
 
-void KoColor::HSVtoLAB(int H, int S, int V, int *L, int *a, int *b)
+void KoOldColor::HSVtoLAB(int H, int S, int V, int *L, int *a, int *b)
 {
   int R, G, B;
   HSVtoRGB(H, S, V, &R, &G, &B);
   RGBtoLAB(R, G, B, L, a, b);
 }
 
-void KoColor::HSVtoCMYK(int H, int S, int V, int *C, int *M, int *Y, int*K)
+void KoOldColor::HSVtoCMYK(int H, int S, int V, int *C, int *M, int *Y, int*K)
 {
   int R, G, B;
   HSVtoRGB(H, S, V, &R, &G, &B);
   RGBtoCMYK(R, G, B, C, M, Y, K);
 }
 
-void KoColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
+void KoOldColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
 {
   // Convert between RGB and CIE-Lab color spaces
   // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -586,42 +586,42 @@ void KoColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
   *B = BB < 0 ? 0 : BB > 255 ? 255 : BB;
 }
 
-void KoColor::LABtoHSV(int L, int a, int b, int *H, int *S, int *V)
+void KoOldColor::LABtoHSV(int L, int a, int b, int *H, int *S, int *V)
 {
   int R, G, B;
   LABtoRGB(L, a, b, &R, &G, &B);
   RGBtoHSV(R, G, B, H, S, V);
 }
 
-void KoColor::LABtoCMYK(int L, int a, int b, int *C, int *M, int *Y, int*K)
+void KoOldColor::LABtoCMYK(int L, int a, int b, int *C, int *M, int *Y, int*K)
 {
   int R, G, B;
   LABtoRGB(L, a, b, &R, &G, &B);
   RGBtoCMYK(R, G, B, C, M, Y, K);
 }
 
-void KoColor::CMYKtoRGB(int C, int M, int Y, int K, int *R, int *G, int *B)
+void KoOldColor::CMYKtoRGB(int C, int M, int Y, int K, int *R, int *G, int *B)
 {
   *R = 255 - (C + K);
   *G = 255 - (M + K);
   *B = 255 - (Y + K);
 }
 
-void KoColor::CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V)
+void KoOldColor::CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V)
 {
   int R, G, B;
   CMYKtoRGB(C, M, Y, K, &R, &G, &B);
   RGBtoHSV(R, G, B, H, S, V);
 }
 
-void KoColor::CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b)
+void KoOldColor::CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b)
 {
   int R, G, B;
   CMYKtoRGB(C, M, Y, K, &R, &G, &B);
   RGBtoLAB(R, G, B, L, a, b);
 }
 
-int KoColor::hex2int(QChar c)
+int KoOldColor::hex2int(QChar c)
 {
   if(c.isDigit())
     return c.digitValue();
@@ -633,7 +633,7 @@ int KoColor::hex2int(QChar c)
     return 0;
 }
 
-void KoColor::calcRGB() const
+void KoOldColor::calcRGB() const
 {
   switch(mNative)
   {
@@ -652,7 +652,7 @@ void KoColor::calcRGB() const
   mRGBvalid = true;
 }
 
-void KoColor::calcHSV() const
+void KoOldColor::calcHSV() const
 {
   switch(mNative)
   {
@@ -671,7 +671,7 @@ void KoColor::calcHSV() const
   mHSVvalid = true;
 }
 
-void KoColor::calcCMYK() const
+void KoOldColor::calcCMYK() const
 {
   switch(mNative)
   {
@@ -690,7 +690,7 @@ void KoColor::calcCMYK() const
   mCMYKvalid = true;
 }
 
-void KoColor::calcLAB() const
+void KoOldColor::calcLAB() const
 {
   switch(mNative)
   {
@@ -709,7 +709,7 @@ void KoColor::calcLAB() const
   mLABvalid = true;
 }
 
-void KoColor::rgbChanged() const
+void KoOldColor::rgbChanged() const
 {
   mRGBvalid = true;
   mHSVvalid = false;
@@ -717,7 +717,7 @@ void KoColor::rgbChanged() const
   mLABvalid = false;
 }
 
-void KoColor::hsvChanged() const
+void KoOldColor::hsvChanged() const
 {
   mRGBvalid = false;
   mHSVvalid = true;
@@ -725,7 +725,7 @@ void KoColor::hsvChanged() const
   mLABvalid = false;
 }
 
-void KoColor::cmykChanged() const
+void KoOldColor::cmykChanged() const
 {
   mRGBvalid = false;
   mHSVvalid = false;
@@ -733,7 +733,7 @@ void KoColor::cmykChanged() const
   mLABvalid = false;
 }
 
-void KoColor::labChanged() const
+void KoOldColor::labChanged() const
 {
   mRGBvalid = false;
   mHSVvalid = false;

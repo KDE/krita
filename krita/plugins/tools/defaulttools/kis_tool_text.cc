@@ -47,7 +47,7 @@
 #include "kis_paint_device.h"
 #include "kis_canvas_subject.h"
 #include "kis_button_release_event.h"
-#include "kis_color.h"
+#include "KoColor.h"
 #include "kis_undo_adapter.h"
 
 KisToolText::KisToolText()

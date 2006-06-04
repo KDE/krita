@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_doc.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
@@ -112,8 +112,8 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
     QString histoname = Kross::Api::Variant::toString(args->item(0));
     KisHistogramProducerFactory* factory = KisHistogramProducerFactoryRegistry::instance()->get(histoname);
 
-/*    KisIDList listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
-    for(KisIDList::iterator it = listID.begin(); it != listID.end(); it++)
+/*    KoIDList listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
+    for(KoIDList::iterator it = listID.begin(); it != listID.end(); it++)
     {
         kDebug(41011) << (*it).name() << " " << (*it).id() << endl;
     }*/
@@ -171,7 +171,7 @@ Kross::Api::Object::Ptr PaintLayer::endPainting(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr args)
 {
-    KisColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(Kross::Api::Variant::toString(args->item(0)), ""), "");
+    KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(Kross::Api::Variant::toString(args->item(0)), ""), "");
     if(!dstCS)
     {
         // FIXME: inform user

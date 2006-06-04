@@ -35,7 +35,7 @@
 
 #include "kis_filter_config_widget.h"
 #include "kis_brightness_contrast_filter.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
@@ -161,7 +161,7 @@ std::list<KisFilterConfiguration*> KisBrightnessContrastFilter::listOfExamplesCo
     return list;
 }
 
-bool KisBrightnessContrastFilter::workWith(KisColorSpace* cs)
+bool KisBrightnessContrastFilter::workWith(KoColorSpace* cs)
 {
     return (cs->getProfile() != 0);
 }

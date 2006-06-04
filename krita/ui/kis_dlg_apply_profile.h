@@ -22,7 +22,7 @@
 
 #include "ui_wdgapplyprofile.h"
 
-class KisID;
+class KoID;
 
 class WdgApplyProfile : public QWidget, public Ui::WdgApplyProfile
 {
@@ -43,10 +43,10 @@ public:
     virtual ~KisDlgApplyProfile();
 
 
-    KisProfile *  profile() const;
+    KoColorProfile *  profile() const;
     int renderIntent() const;
 
-    void fillCmbProfiles(const KisID & s);
+    void fillCmbProfiles(const KoID & s);
 
 private:
     QButtonGroup *m_intentButtonGroup;

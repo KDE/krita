@@ -42,7 +42,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_iterators_pixel.h>
-#include <kis_colorspace.h>
+#include <KoColorSpace.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include "kis_histogram.h"
@@ -80,7 +80,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), "adjust", i18n("&Auto Contr
 {
 }
 
-bool KisAutoContrast::workWith(KisColorSpace* cs)
+bool KisAutoContrast::workWith(KoColorSpace* cs)
 {
     return (cs->getProfile() != 0);
 }
@@ -163,7 +163,7 @@ void KisAutoContrast::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     }
 
     // apply
-    KisColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
+    KoColorAdjustment *adj = src->colorSpace()->createBrightnessContrastAdjustment(cfg->transfer);
 
     KisRectIteratorPixel iter = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
 
@@ -240,7 +240,7 @@ KisDesaturateFilter::~KisDesaturateFilter()
     delete m_adj;
 }
 
-bool KisDesaturateFilter::workWith(KisColorSpace* cs)
+bool KisDesaturateFilter::workWith(KoColorSpace* cs)
 {
     return (cs->getProfile() != 0);
 }

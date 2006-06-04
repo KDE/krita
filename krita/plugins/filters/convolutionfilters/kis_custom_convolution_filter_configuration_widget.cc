@@ -30,7 +30,7 @@
 #include "kis_view.h"
 #include "kis_types.h"
 #include "kis_filter_configuration.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_convolution_filter.h"
 #include "kis_matrix_widget.h"
 

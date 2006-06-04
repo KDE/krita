@@ -26,7 +26,8 @@
 
 #include "kis_global.h"
 #include "kis_meta_registry.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include <KoIntegerMaths.h>
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_selection.h"
@@ -68,7 +69,7 @@ KisOpenGLImageContext::~KisOpenGLImageContext()
     imageContextMap.erase(m_image);
 }
 
-KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monitorProfile)
+KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KoColorProfile *monitorProfile)
 {
     kDebug(41001) << "Created KisOpenGLImageContext\n";
 
@@ -108,7 +109,7 @@ KisOpenGLImageContext::KisOpenGLImageContext(KisImageSP image, KisProfile *monit
     updateImageTextureTiles(m_image->bounds());
 }
 
-KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image, KisProfile *monitorProfile)
+KisOpenGLImageContextSP KisOpenGLImageContext::getImageContext(KisImageSP image, KoColorProfile *monitorProfile)
 {
     if (imageCanShareImageContext(image)) {
         ImageContextMap::iterator it = imageContextMap.find(image);
@@ -217,12 +218,12 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
     }
 }
 
-KisColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KisColorSpace */*imageColorSpace*/)
+KoColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KoColorSpace */*imageColorSpace*/)
 {
-    return KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""), "");
+    return KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA", ""), "");
 }
 
-void KisOpenGLImageContext::setMonitorProfile(KisProfile *monitorProfile)
+void KisOpenGLImageContext::setMonitorProfile(KoColorProfile *monitorProfile)
 {
     if (monitorProfile != m_monitorProfile) {
         m_monitorProfile = monitorProfile;

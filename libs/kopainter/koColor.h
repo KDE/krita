@@ -23,16 +23,16 @@
 
 #include <QColor>
 #include <koffice_export.h>
-class KOPAINTER_EXPORT KoColor
+class KOPAINTER_EXPORT KoOldColor
 {
 public:
   enum cSpace{ csIndexed, csRGB, csHSV, csCMYK, csLab };
 
-  KoColor();
-  KoColor(int a, int b, int c,  cSpace m = csRGB);
-  KoColor(int c, int m, int y,  int k);
-  KoColor(const QString &name);
-  KoColor(const QColor &c);
+  KoOldColor();
+  KoOldColor(int a, int b, int c,  cSpace m = csRGB);
+  KoOldColor(int c, int m, int y,  int k);
+  KoOldColor(const QString &name);
+  KoOldColor(const QColor &c);
 
   cSpace native() const {return mNative; }
 
@@ -80,23 +80,23 @@ public:
   static void CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V);
   static void CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b);
 
-  static const KoColor black();
-  static const KoColor white();
-  static const KoColor gray();
-  static const KoColor lightGray();
-  static const KoColor darkGray();
-  static const KoColor red();
-  static const KoColor darkRed();
-  static const KoColor green();
-  static const KoColor darkGreen();
-  static const KoColor blue();
-  static const KoColor darkBlue();
-  static const KoColor cyan();
-  static const KoColor darkCyan();
-  static const KoColor magenta();
-  static const KoColor darkMagenta();
-  static const KoColor yellow();
-  static const KoColor darkYellow();
+  static const KoOldColor black();
+  static const KoOldColor white();
+  static const KoOldColor gray();
+  static const KoOldColor lightGray();
+  static const KoOldColor darkGray();
+  static const KoOldColor red();
+  static const KoOldColor darkRed();
+  static const KoOldColor green();
+  static const KoOldColor darkGreen();
+  static const KoOldColor blue();
+  static const KoOldColor darkBlue();
+  static const KoOldColor cyan();
+  static const KoOldColor darkCyan();
+  static const KoOldColor magenta();
+  static const KoOldColor darkMagenta();
+  static const KoOldColor yellow();
+  static const KoOldColor darkYellow();
 
 protected:
   int hex2int(QChar c);
@@ -114,7 +114,7 @@ protected:
 private:
   /*
    * Mutable to make it possible for const objects to transform the native cModel
-   * in functions like KoColor::rgb(...) to the requested.
+   * in functions like KoOldColor::rgb(...) to the requested.
    */
   mutable int mR, mG, mB;        // RGB
   mutable int mC, mM, mY, mK;    // CMYK
@@ -129,89 +129,89 @@ private:
   cSpace mNative; 
 };
 
-inline const KoColor KoColor::white()
+inline const KoOldColor KoOldColor::white()
 {
-  return KoColor(255, 255, 255, csRGB);
+  return KoOldColor(255, 255, 255, csRGB);
 }
 
-inline const KoColor KoColor::black()
+inline const KoOldColor KoOldColor::black()
 {
-  return KoColor(0, 0, 0, csRGB);
+  return KoOldColor(0, 0, 0, csRGB);
 }
 
-inline const KoColor KoColor::gray()
+inline const KoOldColor KoOldColor::gray()
 {
-  return KoColor(160, 160, 164, csRGB);
+  return KoOldColor(160, 160, 164, csRGB);
 }
 
-inline const KoColor KoColor::lightGray()
+inline const KoOldColor KoOldColor::lightGray()
 {
-  return KoColor(192, 192, 192, csRGB);
+  return KoOldColor(192, 192, 192, csRGB);
 }
 
-inline const KoColor KoColor::darkGray()
+inline const KoOldColor KoOldColor::darkGray()
 {
-  return KoColor(128, 128, 128, csRGB);
+  return KoOldColor(128, 128, 128, csRGB);
 }
 
-inline const KoColor KoColor::red()
+inline const KoOldColor KoOldColor::red()
 {
-  return KoColor(255, 0, 0, csRGB);
+  return KoOldColor(255, 0, 0, csRGB);
 }
 
-inline const KoColor KoColor::darkRed()
+inline const KoOldColor KoOldColor::darkRed()
 {
-  return KoColor(128, 0, 0, csRGB);
+  return KoOldColor(128, 0, 0, csRGB);
 }
 
-inline const KoColor KoColor::green()
+inline const KoOldColor KoOldColor::green()
 {
-  return KoColor(0, 255, 0, csRGB);
+  return KoOldColor(0, 255, 0, csRGB);
 }
 
-inline const KoColor KoColor::darkGreen()
+inline const KoOldColor KoOldColor::darkGreen()
 {
-  return KoColor(0, 128, 0, csRGB);
+  return KoOldColor(0, 128, 0, csRGB);
 }
 
-inline const KoColor KoColor::blue()
+inline const KoOldColor KoOldColor::blue()
 {
-  return KoColor(0, 0, 255, csRGB);
+  return KoOldColor(0, 0, 255, csRGB);
 }
 
-inline const KoColor KoColor::darkBlue()
+inline const KoOldColor KoOldColor::darkBlue()
 {
-  return KoColor(0, 0, 128, csRGB);
+  return KoOldColor(0, 0, 128, csRGB);
 }
 
-inline const KoColor KoColor::cyan()
+inline const KoOldColor KoOldColor::cyan()
 {
-  return KoColor(0, 255, 255, csRGB);
+  return KoOldColor(0, 255, 255, csRGB);
 }
 
-inline const KoColor KoColor::darkCyan()
+inline const KoOldColor KoOldColor::darkCyan()
 {
-  return KoColor(0, 128, 128, csRGB);
+  return KoOldColor(0, 128, 128, csRGB);
 }
 
-inline const KoColor KoColor::magenta()
+inline const KoOldColor KoOldColor::magenta()
 {
-  return KoColor(255, 0, 255, csRGB);
+  return KoOldColor(255, 0, 255, csRGB);
 }
 
-inline const KoColor KoColor::darkMagenta()
+inline const KoOldColor KoOldColor::darkMagenta()
 {
-  return KoColor(128, 0, 128, csRGB);
+  return KoOldColor(128, 0, 128, csRGB);
 }
 
-inline const KoColor KoColor::yellow()
+inline const KoOldColor KoOldColor::yellow()
 {
-  return KoColor(255, 255, 0, csRGB);
+  return KoOldColor(255, 255, 0, csRGB);
 }
 
-inline const KoColor KoColor::darkYellow()
+inline const KoOldColor KoOldColor::darkYellow()
 {
-  return KoColor(128, 128, 0, csRGB);
+  return KoOldColor(128, 128, 0, csRGB);
 }
 
 #endif

@@ -61,6 +61,8 @@
 #include <kis_group_layer.h>
 #include <kis_adjustment_layer.h>
 
+#include <KoIntegerMaths.h>
+
 #include "bumpmap.h"
 
 #define MOD(x, y) \
@@ -92,7 +94,7 @@ KisFilterBumpmap::KisFilterBumpmap() : KisFilter(id(), "map", i18n("&Bumpmap..."
 namespace {
     void convertRow(KisPaintDevice * orig, quint8 * row, qint32 x, qint32 y, qint32 w,  quint8 * lut, qint32 waterlevel)
     {
-        KisColorSpace * csOrig = orig->colorSpace();
+        KoColorSpace * csOrig = orig->colorSpace();
 
         KisHLineIteratorPixel origIt = orig->createHLineIterator(x, y, w, false);
         for (int i = 0; i < w; ++i) {
@@ -249,8 +251,8 @@ void KisFilterBumpmap::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFi
 
     // ---------------------- Load initial three bumpmap scanlines
 
-    KisColorSpace * srcCs = src->colorSpace();
-    Q3ValueVector<KisChannelInfo *> channels = srcCs->channels();
+    KoColorSpace * srcCs = src->colorSpace();
+    Q3ValueVector<KoChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
     quint8 * bm_row1 = new quint8[bm_w];

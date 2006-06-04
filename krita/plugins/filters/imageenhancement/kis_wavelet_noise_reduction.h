@@ -56,7 +56,7 @@ public:
     virtual KisFilterConfiguration * configuration() {return new KisWaveletNoiseReductionConfiguration( BEST_WAVELET_THRESHOLD_VALUE );};
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
-    static inline KisID id() { return KisID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); };
+    static inline KoID id() { return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }

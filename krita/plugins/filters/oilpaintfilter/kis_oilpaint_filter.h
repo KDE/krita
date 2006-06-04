@@ -49,7 +49,7 @@ public:
     KisOilPaintFilter();
 public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("oilpaint", i18n("Oilpaint")); };
+    static inline KoID id() { return KoID("oilpaint", i18n("Oilpaint")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);

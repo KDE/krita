@@ -147,7 +147,7 @@ qint32 DlgLayerSize::height()
 
 KisFilterStrategy *DlgLayerSize::filterType()
 {
-    KisID filterID = m_page->cmbFilterType->currentItem();
+    KoID filterID = m_page->cmbFilterType->currentItem();
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(filterID);
     return filter;
 }

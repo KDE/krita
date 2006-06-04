@@ -37,14 +37,14 @@ class QRegion;
 
 class KisOpenGLImageContext;
 typedef KSharedPtr<KisOpenGLImageContext> KisOpenGLImageContextSP;
-class KisColorSpace;
+class KoColorSpace;
 
 class KRITAUI_EXPORT KisOpenGLImageContext : public QObject , public KShared {
 
     Q_OBJECT
 
 public:
-    static KisOpenGLImageContextSP getImageContext(KisImageSP image, KisProfile *monitorProfile);
+    static KisOpenGLImageContextSP getImageContext(KisImageSP image, KoColorProfile *monitorProfile);
 
     KisOpenGLImageContext();
     virtual ~KisOpenGLImageContext();
@@ -55,7 +55,7 @@ public:
     // QGLWidget constructor.
     QGLWidget *sharedContextWidget() const;
 
-    void setMonitorProfile(KisProfile *profile);
+    void setMonitorProfile(KoColorProfile *profile);
     void setHDRExposure(float exposure);
 
     GLuint backgroundTexture() const;
@@ -107,7 +107,7 @@ signals:
     void sigSizeChanged(qint32 width, qint32 height);
 
 protected:
-    KisOpenGLImageContext(KisImageSP image, KisProfile *monitorProfile);
+    KisOpenGLImageContext(KisImageSP image, KoColorProfile *monitorProfile);
 
     void generateBackgroundTexture();
     void createImageTextureTiles();
@@ -115,7 +115,7 @@ protected:
     int imageTextureTileIndex(int x, int y) const;
     void updateImageTextureTiles(const QRect& rect);
 
-    static KisColorSpace* textureColorSpaceForImageColorSpace(KisColorSpace *imageColorSpace);
+    static KoColorSpace* textureColorSpaceForImageColorSpace(KoColorSpace *imageColorSpace);
     static bool imageCanShareImageContext(KisImageSP image);
 
 protected slots:
@@ -124,7 +124,7 @@ protected slots:
 
 private:
     KisImageSP m_image;
-    KisProfile *m_monitorProfile;
+    KoColorProfile *m_monitorProfile;
     float m_exposure;
     bool m_displaySelection;
 

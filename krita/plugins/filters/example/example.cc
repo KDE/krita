@@ -75,7 +75,7 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFil
     int pixelsProcessed = 0;
     setProgressTotalSteps(rect.width() * rect.height());
 
-    KisColorSpace * cs = src->colorSpace();
+    KoColorSpace * cs = src->colorSpace();
     qint32 psize = cs->pixelSize();
 
     while( ! srcIt.isDone() )

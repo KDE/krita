@@ -29,18 +29,18 @@
 
 class QPainter;
 
-class KOPAINTER_EXPORT KoColorWheel : public KXYSelector
+class KOPAINTER_EXPORT KoOldColorWheel : public KXYSelector
 {
   Q_OBJECT
 
 public:
-    KoColorWheel( QWidget *parent=0, const char *name=0 );
+    KoOldColorWheel( QWidget *parent=0, const char *name=0 );
 
 signals:
-    void valueChanged(const KoColor& c);
+    void valueChanged(const KoOldColor& c);
 
 public slots:
-    virtual void slotSetValue(const KoColor& c);
+    virtual void slotSetValue(const KoOldColor& c);
 
 protected:
     virtual void drawWheel( QPixmap *pixmap );
@@ -51,7 +51,7 @@ protected:
 
 private:
     QPixmap m_pixmap;
-    KoColor m_color;
+    KoOldColor m_color;
 };
 
 #endif

@@ -22,7 +22,7 @@
 #include "kis_types.h"
 #include "kis_filter_configuration.h"
 
-KisFilter::KisFilter(const KisID& id, const QString & category, const QString & entry)
+KisFilter::KisFilter(const KoID& id, const QString & category, const QString & entry)
     : KisProgressSubject(0, id.id().toLatin1())
     , m_id(id)
     , m_progressDisplay(0)

@@ -36,12 +36,12 @@
 #include "kis_view.h"
 
 #include "kis_basic_histogram_producers.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 
 #include "histogramdocker.h"
 #include "kis_imagerasteredcache.h"
 #include "kis_accumulating_producer.h"
-#include "kis_id.h"
+#include "KoID.h"
 
 typedef KGenericFactory<KritaHistogramDocker> KritaHistogramDockerFactory;
 K_EXPORT_COMPONENT_FACTORY( kritahistogramdocker, KritaHistogramDockerFactory( "krita" ) )
@@ -80,8 +80,8 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
         connect(&m_popup, SIGNAL(triggered(QAction *)),
                 this, SLOT(producerChanged(QAction *)));
-        connect(img.data(), SIGNAL(sigColorSpaceChanged(KisColorSpace*)),
-                this, SLOT(colorSpaceChanged(KisColorSpace*))); // No need to force updates here
+        connect(img.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace*)),
+                this, SLOT(colorSpaceChanged(KoColorSpace*))); // No need to force updates here
 
         // Add it to the control palette
         m_view->canvasSubject()->paletteManager()->addWidget(
@@ -121,7 +121,7 @@ void KritaHistogramDocker::producerChanged(QAction *action)
     }
     m_producers.clear();
 
-    KisIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
+    KoIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
     m_factory = KisHistogramProducerFactoryRegistry::instance()->get(keys.at(pos));
@@ -154,18 +154,18 @@ void KritaHistogramDocker::popupMenu(const QPoint& pos)
     m_popup.popup(pos, m_popup.actions().at(m_currentProducerPos));
 }
 
-void KritaHistogramDocker::colorSpaceChanged(KisColorSpace* cs)
+void KritaHistogramDocker::colorSpaceChanged(KoColorSpace* cs)
 {
     m_cs = cs;
 
-    KisIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
+    KoIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
     m_popup.clear();
     m_currentProducerPos = 0;
 
     for (int i = 0; i < keys.count(); i++) {
-        KisID id(keys.at(i));
+        KoID id(keys.at(i));
         m_popup.addAction(id.name());
     }
 

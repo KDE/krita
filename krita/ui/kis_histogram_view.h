@@ -30,7 +30,7 @@
 #include "kis_histogram_producer.h"
 #include "kis_histogram.h"
 
-class KisChannelInfo;
+class KoChannelInfo;
 
 /**
  * This class displays a histogram. It has a list of channels it can select. The easy
@@ -59,11 +59,11 @@ public:
     KisHistogramProducerSP currentProducer();
     QStringList channelStrings();
     /** Lists all producers currently available */
-    KisIDList listProducers();
+    KoIDList listProducers();
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
-    void setCurrentChannels(const KisID& producerID, Q3ValueVector<KisChannelInfo *> channels);
+    void setCurrentChannels(const KoID& producerID, Q3ValueVector<KoChannelInfo *> channels);
     /** Be careful, producer will be modified */
-    void setCurrentChannels(KisHistogramProducerSP producer, Q3ValueVector<KisChannelInfo *> channels);
+    void setCurrentChannels(KisHistogramProducerSP producer, Q3ValueVector<KoChannelInfo *> channels);
     bool hasColor();
     void setColor(bool set);
 
@@ -85,15 +85,15 @@ private:
     typedef struct {
         bool isProducer;
         KisHistogramProducerSP producer;
-        KisChannelInfo * channel;
+        KoChannelInfo * channel;
     } ComboboxInfo;
 
     Q3ValueVector<ComboboxInfo> m_comboInfo;
     QPixmap m_pix;
     KisHistogramSP m_histogram;
-    KisColorSpace* m_cs;
+    KoColorSpace* m_cs;
     KisHistogramProducerSP m_currentProducer;
-    Q3ValueVector<KisChannelInfo *> m_channels;
+    Q3ValueVector<KoChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()
     Q3ValueVector<qint32> m_channelToOffset;
     QStringList m_channelStrings;

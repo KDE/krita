@@ -42,7 +42,7 @@ public:
     KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source);
     ~KisAccumulatingHistogramProducer();
     /// Does _nothing_, use addRegionsToBinAsync
-    virtual void addRegionToBin(quint8 *, quint8*, quint32, KisColorSpace *) {}
+    virtual void addRegionToBin(quint8 *, quint8*, quint32, KoColorSpace *) {}
     virtual void addRegionsToBinAsync();
     virtual QString positionToString(double pos) const
         { return m_source->at(0)->positionToString(pos); }
@@ -52,7 +52,7 @@ public:
 
     virtual qint32 numberOfBins() { return m_source->at(0)->numberOfBins(); }
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() { return m_source->at(0)->channels(); }
+    virtual Q3ValueVector<KoChannelInfo *> channels() { return m_source->at(0)->channels(); }
 
     /// Call this when the 'source' list has changed colorspace
     virtual void changedSourceProducer() {

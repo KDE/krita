@@ -16,38 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_colorspace.h"
-#include "kis_colorspace_iface.h"
+#include "KoColorSpace.h"
 
-KisColorSpace::KisColorSpace(const KisID &id, KisColorSpaceFactoryRegistry * parent)
+KoColorSpace::KoColorSpace(const KoID &id, KoColorSpaceFactoryRegistry * parent)
     : m_id(id)
     , m_parent( parent )
 {
     m_dcop = 0;
 }
 
-KisColorSpace::~KisColorSpace()
+KoColorSpace::~KoColorSpace()
 {
     delete m_dcop;
 }
 
-DCOPObject * KisColorSpace::dcopObject()
-{
-    if (!m_dcop) {
-        m_dcop = new KisColorSpaceIface(this);
-        Q_CHECK_PTR(m_dcop);
-    }
-    return m_dcop;
-}
-
-quint8 *KisColorSpace::allocPixelBuffer(quint32 numPixels) const
+quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels) const
 {
     return new quint8[pixelSize()*numPixels];
 }
 
-bool KisColorSpace::convertPixelsTo(const quint8 * src,
+bool KoColorSpace::convertPixelsTo(const quint8 * src,
 					    quint8 * dst,
-					    KisColorSpace * dstColorSpace,
+					    KoColorSpace * dstColorSpace,
 					    quint32 numPixels,
 					    qint32 renderingIntent)
 {

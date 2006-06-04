@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,31 +15,53 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_U16_BASE_COLORSPACE_H_
-#define KIS_U16_BASE_COLORSPACE_H_
+#ifndef KOF32COLORSPACETRAIT_H
+#define KOF32COLORSPACETRAIT_H
 
-#include "kis_global.h"
-#include "kis_lcms_base_colorspace.h"
-#include "kis_integer_maths.h"
+#include <QColor>
+
+#include "KoLcmsColorSpaceTrait.h"
+#include "KoIntegerMaths.h"
 
 /**
- * This is the base class for 16-bit/channel colorspaces with 16-bit alpha
- * channels. It defines a number of common methods, like handling 16-bit alpha
- * and up- and down-scaling of channels.
+ * This class is the base for all 32-bit float colorspaces.
  */
-class KRITACOLOR_EXPORT KisU16BaseColorSpace : public virtual KisColorSpace {
+
+inline float UINT8_TO_FLOAT(uint c)
+{
+    return static_cast<float>(c) / UINT8_MAX;
+}
+
+inline uint FLOAT_TO_UINT8(float c)
+{
+    return static_cast<uint>(CLAMP(static_cast<int>(c * static_cast<int>(UINT8_MAX) + 0.5),
+                                   static_cast<int>(UINT8_MIN), static_cast<int>(UINT8_MAX)));
+}
+
+
+inline uint FLOAT_TO_UINT16(float c)
+{
+    return static_cast<uint>(CLAMP(static_cast<int>(c * static_cast<int>(UINT16_MAX) + 0.5),
+                                   static_cast<int>(UINT16_MIN), static_cast<int>(UINT16_MAX)));
+}
+
+inline float FLOAT_BLEND(float a, float b, float alpha)
+{
+    return (a - b) * alpha + b;
+}
+
+#define F32_OPACITY_OPAQUE 1.0f
+#define F32_OPACITY_TRANSPARENT 0.0f
+
+class PIGMENT_EXPORT KoF32ColorSpaceTrait : public virtual KoColorSpace {
 
 public:
 
-    static const quint16 U16_OPACITY_OPAQUE = UINT16_MAX;
-    static const quint16 U16_OPACITY_TRANSPARENT = UINT16_MIN;
-
-public:
-
-    KisU16BaseColorSpace(qint32 alphaPos)
-	: KisColorSpace()
+    KoF32ColorSpaceTrait(qint32 alphaPos)
+	: KoColorSpace()
     {
         m_alphaPos = alphaPos;
+	//m_alphaSize = sizeof(float);
     };
 
     virtual quint8 getAlpha(const quint8 * pixel) const;
@@ -55,9 +77,12 @@ public:
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos);
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
 
+    virtual bool hasHighDynamicRange() const { return true; }
+
 private:
     qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
     //qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
 
 };
-#endif // KIS_U16_BASE_COLORSPACE_H_
+
+#endif // KOF32COLORSPACETRAIT_H

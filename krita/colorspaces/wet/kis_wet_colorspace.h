@@ -24,7 +24,7 @@
 #include <QMap>
 
 #include "kis_global.h"
-#include "kis_lcms_base_colorspace.h"
+#include "KoLcmsColorSpaceTrait.h"
 
 class KisFilter;
 
@@ -91,9 +91,9 @@ void wetPixToDouble(WetPixDbl * dst, WetPix *src);
 void wetPixFromDouble(WetPix * dst, WetPixDbl *src);
 
 
-class KisWetColorSpace : public KisLcmsBaseColorSpace {
+class KisWetColorSpace : public KoLcmsColorSpaceTrait {
 public:
-    KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
+    KisWetColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
     virtual ~KisWetColorSpace();
 
 
@@ -110,11 +110,11 @@ public:
 
 public:
 
-    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0);
 
-    virtual void toQColor(const quint8 *src, QColor *c, KisProfile * profile = 0);
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0);
 
     virtual quint8 getAlpha(const quint8 * pixel) const;
     virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
@@ -128,7 +128,7 @@ public:
 
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 nChannels() const;
     virtual quint32 nColorChannels() const;
     virtual quint32 nSubstanceChannels() const;
@@ -138,13 +138,13 @@ public:
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                       KisProfile *  dstProfile,
+                       KoColorProfile *  dstProfile,
                        qint32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
     virtual Q3ValueList<KisFilter*> createBackgroundFilters();
     
-    virtual KisCompositeOpList userVisiblecompositeOps() const;
+    virtual KoCompositeOpList userVisiblecompositeOps() const;
 
     void setPaintWetness(bool b) { m_paintwetness = b; } // XXX this needs better design!
     bool paintWetness() { return m_paintwetness; }
@@ -169,7 +169,7 @@ protected:
             quint8 opacity,
             qint32 rows,
             qint32 cols,
-            const KisCompositeOp& op);
+            const KoCompositeOp& op);
 private:
 
     // This was static, but since we have only one instance of the color strategy,
@@ -193,14 +193,14 @@ private:
 
 };
 
-class KisWetColorSpaceFactory : public KisColorSpaceFactory
+class KisWetColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("WET", i18n("Watercolors")); };
+    virtual KoID id() const { return KoID("WET", i18n("Watercolors")); };
 
     /**
      * lcms colorspace type definition.
@@ -209,7 +209,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; };
 
-    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisWetColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisWetColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return ""; };
 };

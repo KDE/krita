@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 
-#include "kis_channelinfo.h"
+#include "KoChannelInfo.h"
 #include "kis_histogram_view.h"
 #include "kis_histogram_widget.h"
 #include "kis_histogram.h"
@@ -35,7 +35,7 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name)

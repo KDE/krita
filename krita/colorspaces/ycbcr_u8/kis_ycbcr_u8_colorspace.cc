@@ -26,13 +26,13 @@
 const Q_INT32 MAX_CHANNEL_YCbCr = 3;
 const Q_INT32 MAX_CHANNEL_YCbCrA = 4;
 
-KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* p)
-    : KisU8BaseColorSpace(KisID("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)")), TYPE_YCbCr_8, icSigYCbCrData, parent, p)
+KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KoColorSpaceFactoryRegistry* parent, KoColorProfile* p)
+    : KoU8ColorSpaceTrait(KoID("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)")), TYPE_YCbCr_8, icSigYCbCrData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Y"), "Y", PIXEL_Y * sizeof(Q_UINT8), KisChannelInfo::COLOR, KisChannelInfo::UINT8, sizeof(Q_UINT8)));
-    m_channels.push_back(new KisChannelInfo(i18n("Cb"), "Cb", PIXEL_Cb * sizeof(Q_UINT8), KisChannelInfo::COLOR, KisChannelInfo::UINT8, sizeof(Q_UINT8)));
-    m_channels.push_back(new KisChannelInfo(i18n("Cr"), "Cr", PIXEL_Cr * sizeof(Q_UINT8), KisChannelInfo::COLOR, KisChannelInfo::UINT8, sizeof(Q_UINT8)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), "A", PIXEL_ALPHA * sizeof(Q_UINT8), KisChannelInfo::ALPHA, KisChannelInfo::UINT8, sizeof(Q_UINT8)));
+    m_channels.push_back(new KoChannelInfo(i18n("Y"), "Y", PIXEL_Y * sizeof(Q_UINT8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(Q_UINT8)));
+    m_channels.push_back(new KoChannelInfo(i18n("Cb"), "Cb", PIXEL_Cb * sizeof(Q_UINT8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(Q_UINT8)));
+    m_channels.push_back(new KoChannelInfo(i18n("Cr"), "Cr", PIXEL_Cr * sizeof(Q_UINT8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(Q_UINT8)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), "A", PIXEL_ALPHA * sizeof(Q_UINT8), KoChannelInfo::ALPHA, KoChannelInfo::UINT8, sizeof(Q_UINT8)));
 
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT8);
 }
@@ -63,11 +63,11 @@ void KisYCbCrU8ColorSpace::getPixel(const Q_UINT8 *src, Q_UINT8 *Y, Q_UINT8 *Cb,
 
 }
 
-void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfile * profile )
+void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KoColorProfile * profile )
 {
     if(getProfile())
     {
-        KisU8BaseColorSpace::fromQColor(c, dstU8, profile);
+        KoU8ColorSpaceTrait::fromQColor(c, dstU8, profile);
     } else {
         Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
         dst->Y = computeY( c.red(), c.green(), c.blue());
@@ -76,11 +76,11 @@ void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfil
     }
 }
 
-void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KisProfile * profile )
+void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dstU8, KoColorProfile * profile )
 {
     if(getProfile())
     {
-        KisU8BaseColorSpace::fromQColor(c, opacity, dstU8, profile);
+        KoU8ColorSpaceTrait::fromQColor(c, opacity, dstU8, profile);
     } else {
         Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
         dst->Y = computeY( c.red(), c.green(), c.blue());
@@ -90,11 +90,11 @@ void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 
     }
 }
 
-void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile * profile)
+void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KoColorProfile * profile)
 {
     if(getProfile())
     {
-        KisU8BaseColorSpace::toQColor(srcU8, c, profile);
+        KoU8ColorSpaceTrait::toQColor(srcU8, c, profile);
         
     } else {
         const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
@@ -102,11 +102,11 @@ void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, KisProfile 
     }
 }
 
-void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KisProfile * profile)
+void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *opacity, KoColorProfile * profile)
 {
     if(getProfile())
     {
-        KisU8BaseColorSpace::toQColor(srcU8, c, opacity, profile);
+        KoU8ColorSpaceTrait::toQColor(srcU8, c, opacity, profile);
     } else {
         const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
         c->setRgb(computeRed(src->Y,src->Cb,src->Cr), computeGreen(src->Y,src->Cb,src->Cr), computeBlue(src->Y,src->Cb,src->Cr));
@@ -117,7 +117,7 @@ void KisYCbCrU8ColorSpace::toQColor(const Q_UINT8 *srcU8, QColor *c, Q_UINT8 *op
 Q_UINT8 KisYCbCrU8ColorSpace::difference(const Q_UINT8 *src1U8, const Q_UINT8 *src2U8)
 {
     if(getProfile())
-        return KisU8BaseColorSpace::difference(src1U8, src2U8);
+        return KoU8ColorSpaceTrait::difference(src1U8, src2U8);
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
     const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
 
@@ -160,7 +160,7 @@ void KisYCbCrU8ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
     dstPixel->Cr = totalCr;
 }
 
-QValueVector<KisChannelInfo *> KisYCbCrU8ColorSpace::channels() const {
+QValueVector<KoChannelInfo *> KisYCbCrU8ColorSpace::channels() const {
     return m_channels;
 }
 
@@ -177,10 +177,10 @@ Q_UINT32 KisYCbCrU8ColorSpace::pixelSize() const {
 }
 
 
-QImage KisYCbCrU8ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height, KisProfile *  dstProfile, Q_INT32 renderingIntent, float exposure )
+QImage KisYCbCrU8ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height, KoColorProfile *  dstProfile, Q_INT32 renderingIntent, float exposure )
 {
     if(getProfile())
-        return KisU8BaseColorSpace::convertToQImage( data, width, height, dstProfile, renderingIntent, exposure);
+        return KoU8ColorSpaceTrait::convertToQImage( data, width, height, dstProfile, renderingIntent, exposure);
     
     QImage img = QImage(width, height, 32, 0, QImage::LittleEndian);
     img.setAlphaBuffer(true);
@@ -213,7 +213,7 @@ QImage KisYCbCrU8ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width,
 }
 
 
-void KisYCbCrU8ColorSpace::bitBlt(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_UINT8 opacity, Q_INT32 rows, Q_INT32 cols, const KisCompositeOp& op)
+void KisYCbCrU8ColorSpace::bitBlt(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *srcAlphaMask, Q_INT32 maskRowStride, Q_UINT8 opacity, Q_INT32 rows, Q_INT32 cols, const KoCompositeOp& op)
 {
     switch (op.op()) {
         case COMPOSITE_UNDEF:
@@ -344,10 +344,10 @@ void KisYCbCrU8ColorSpace::compositeCopy(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
     }
 }
 
-KisCompositeOpList KisYCbCrU8ColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisYCbCrU8ColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
     return list;
 }

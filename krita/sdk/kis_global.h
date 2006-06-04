@@ -36,9 +36,6 @@ const quint16 quint16_MAX = 65535;
 const qint32 qint32_MAX = (2147483647);
 const qint32 qint32_MIN = (-2147483647-1);
 
-const quint8 OPACITY_TRANSPARENT = 0;
-const quint8 OPACITY_OPAQUE = UCHAR_MAX;
-
 const quint8 MAX_SELECTED = UCHAR_MAX;
 const quint8 MIN_SELECTED = 0;
 const quint8 SELECTION_THRESHOLD = 1;
@@ -67,8 +64,6 @@ const double PRESSURE_MIN = 0.0;
 const double PRESSURE_MAX = 1.0;
 const double PRESSURE_DEFAULT = (PRESSURE_MAX - PRESSURE_MIN) / 2;
 const double PRESSURE_THRESHOLD = 5.0 / 255.0;
-
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 
 namespace krita {

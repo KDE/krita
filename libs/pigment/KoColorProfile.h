@@ -1,5 +1,5 @@
 /*
- *  kis_profile.h - part of Krayon
+ *  KoColorProfile.h - part of Krayon
  *
  *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
  *                2004 Boudewijn Rempt <boud@valdyas.org>
@@ -19,32 +19,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PROFILE_H
-#define KIS_PROFILE_H
+#ifndef KOCOLORPROFILE_H
+#define KOCOLORPROFILE_H
 
 #include <config.h>
 
 #include <lcms.h>
 
 #include <q3valuevector.h>
-#include <q3cstring.h>
 
 #include <kio/job.h>
 
-#include <kis_annotation.h>
-#include <krita_export.h>
+//#include <kis_annotation.h>
+#include <koffice_export.h>
 
 //XXX: Profiles should be loaded by the color strategies
 //     and be available only through the color strategy
 //     that matches the profile's color model
-class KRITACOLOR_EXPORT KisProfile {
+class PIGMENT_EXPORT KoColorProfile {
 
 public:
-    KisProfile(QByteArray rawData);
-    KisProfile(const QString& file);
-    KisProfile(const cmsHPROFILE profile);
+    KoColorProfile(QByteArray rawData);
+    KoColorProfile(const QString& file);
+    KoColorProfile(const cmsHPROFILE profile);
 
-    virtual ~KisProfile();
+    virtual ~KoColorProfile();
 
     virtual bool load();
     virtual bool save();
@@ -57,9 +56,7 @@ public:
     inline QString manufacturer() const { return m_manufacturer; }
     cmsHPROFILE profile();
 
-    KisAnnotationSP annotation() const;
-
-    friend inline bool operator==( const KisProfile &,  const KisProfile & );
+    friend inline bool operator==( const KoColorProfile &,  const KoColorProfile & );
 
     inline bool valid() const { return m_valid; };
 
@@ -67,9 +64,11 @@ public:
 
     inline QString filename() const { return m_filename; }
 
+    inline QByteArray rawData() const { return m_rawData; }
+
 public:
 
-    static KisProfile *  getScreenProfile(int screen = -1);
+    static KoColorProfile *  getScreenProfile(int screen = -1);
 
 private:
     bool init();
@@ -90,10 +89,10 @@ private:
 
 };
 
-inline bool operator==( const KisProfile & p1,  const KisProfile & p2 )
+inline bool operator==( const KoColorProfile & p1,  const KoColorProfile & p2 )
 {
     return p1.m_profile == p2.m_profile;
 }
 
-#endif // KIS_PROFILE_H
+#endif // KOCOLORPROFILE_H
 

@@ -28,14 +28,14 @@
 #include "kis_global.h"
 #include "kis_basic_histogram_producers.h"
 #include "kis_integer_maths.h"
-#include "kis_channelinfo.h"
-#include "kis_colorspace.h"
-#include "kis_lab_colorspace.h"
+#include "KoChannelInfo.h"
+#include "KoColorSpace.h"
+#include "KoLabColorSpace.h"
 
-KisLabColorSpace* KisGenericLabHistogramProducer::m_labCs = 0;
+KoLabColorSpace* KisGenericLabHistogramProducer::m_labCs = 0;
 
 
-KisBasicHistogramProducer::KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *cs)
+KisBasicHistogramProducer::KisBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *cs)
     : m_channels(channels),
       m_nrOfBins(nrOfBins),
       m_colorSpace(cs),
@@ -66,7 +66,7 @@ void KisBasicHistogramProducer::makeExternalToInternal() {
     // This function assumes that the pixel is has no 'gaps'. That is to say: if we start
     // at byte 0, we can get to the end of the pixel by adding consecutive size()s of
     // the channels
-    Q3ValueVector<KisChannelInfo *> c = channels();
+    Q3ValueVector<KoChannelInfo *> c = channels();
     uint count = c.count();
     int currentPos = 0;
 
@@ -83,7 +83,7 @@ void KisBasicHistogramProducer::makeExternalToInternal() {
 
 // ------------ U8 ---------------------
 
-KisBasicU8HistogramProducer::KisBasicU8HistogramProducer(const KisID& id, KisColorSpace *cs)
+KisBasicU8HistogramProducer::KisBasicU8HistogramProducer(const KoID& id, KoColorSpace *cs)
     : KisBasicHistogramProducer(id, cs->nChannels(), 256, cs)
 {
 }
@@ -92,7 +92,7 @@ QString KisBasicU8HistogramProducer::positionToString(double pos) const {
     return QString("%1").arg(static_cast<quint8>(pos * UINT8_MAX));
 }
 
-void KisBasicU8HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs)
+void KisBasicU8HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
 {
     qint32 pSize = cs->pixelSize();
 
@@ -132,7 +132,7 @@ void KisBasicU8HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selec
 
 // ------------ U16 ---------------------
 
-KisBasicU16HistogramProducer::KisBasicU16HistogramProducer(const KisID& id, KisColorSpace *cs)
+KisBasicU16HistogramProducer::KisBasicU16HistogramProducer(const KoID& id, KoColorSpace *cs)
     : KisBasicHistogramProducer(id, cs->nChannels(), 256, cs)
 {
 }
@@ -147,7 +147,7 @@ double KisBasicU16HistogramProducer::maximalZoom() const
     return 1.0 / 255.0;
 }
 
-void KisBasicU16HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs)
+void KisBasicU16HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
 {
     // The view
     quint16 from = static_cast<quint16>(m_from * UINT16_MAX);
@@ -202,7 +202,7 @@ void KisBasicU16HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * sele
 }
 
 // ------------ Float32 ---------------------
-KisBasicF32HistogramProducer::KisBasicF32HistogramProducer(const KisID& id, KisColorSpace *cs)
+KisBasicF32HistogramProducer::KisBasicF32HistogramProducer(const KoID& id, KoColorSpace *cs)
     : KisBasicHistogramProducer(id, cs->nChannels(), 256, cs)
 {
 }
@@ -216,7 +216,7 @@ double KisBasicF32HistogramProducer::maximalZoom() const {
     return 1.0 / 255.0;
 }
 
-void KisBasicF32HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs) {
+void KisBasicF32HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
@@ -275,8 +275,8 @@ void KisBasicF32HistogramProducer::addRegionToBin(quint8 * pixels, quint8 * sele
 
 #ifdef HAVE_OPENEXR
 // ------------ Float16 Half ---------------------
-KisBasicF16HalfHistogramProducer::KisBasicF16HalfHistogramProducer(const KisID& id,
-                                                                   KisColorSpace *cs)
+KisBasicF16HalfHistogramProducer::KisBasicF16HalfHistogramProducer(const KoID& id,
+                                                                   KoColorSpace *cs)
     : KisBasicHistogramProducer(id, cs->nChannels(), 256, cs) {
 }
 
@@ -289,7 +289,7 @@ double KisBasicF16HalfHistogramProducer::maximalZoom() const {
     return 1.0 / 255.0;
 }
 
-void KisBasicF16HalfHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs) {
+void KisBasicF16HalfHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs) {
     // The view
     float from = static_cast<float>(m_from);
     float width = static_cast<float>(m_width);
@@ -342,16 +342,16 @@ void KisBasicF16HalfHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * 
 
 // ------------ Generic RGB ---------------------
 KisGenericRGBHistogramProducer::KisGenericRGBHistogramProducer()
-    : KisBasicHistogramProducer(KisID("GENRGBHISTO", i18n("Generic RGB Histogram")),
+    : KisBasicHistogramProducer(KoID("GENRGBHISTO", i18n("Generic RGB Histogram")),
                                 3, 256, 0) {
     /* we set 0 as colorspece, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KisChannelInfo(i18n("R"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(255,0,0)));
-    m_channelsList.append(new KisChannelInfo(i18n("G"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,255,0)));
-    m_channelsList.append(new KisChannelInfo(i18n("B"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,0,255)));
+    m_channelsList.append(new KoChannelInfo(i18n("R"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255,0,0)));
+    m_channelsList.append(new KoChannelInfo(i18n("G"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,255,0)));
+    m_channelsList.append(new KoChannelInfo(i18n("B"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,0,255)));
 }
 
-Q3ValueVector<KisChannelInfo *> KisGenericRGBHistogramProducer::channels() {
+Q3ValueVector<KoChannelInfo *> KisGenericRGBHistogramProducer::channels() {
     return m_channelsList;
 }
 
@@ -364,7 +364,7 @@ double KisGenericRGBHistogramProducer::maximalZoom() const {
 }
 
 
-void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *cs)
+void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *cs)
 {
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;
@@ -409,16 +409,16 @@ void KisGenericRGBHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * se
 
 // ------------ Generic L*a*b* ---------------------
 KisGenericLabHistogramProducer::KisGenericLabHistogramProducer()
-    : KisBasicHistogramProducer(KisID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256, 0) {
+    : KisBasicHistogramProducer(KoID("GENLABHISTO", i18n("L*a*b* Histogram")), 3, 256, 0) {
     /* we set 0 as colorspace, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
-    m_channelsList.append(new KisChannelInfo(i18n("L*"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-    m_channelsList.append(new KisChannelInfo(i18n("a*"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
-    m_channelsList.append(new KisChannelInfo(i18n("b*"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8));
+    m_channelsList.append(new KoChannelInfo(i18n("L*"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
+    m_channelsList.append(new KoChannelInfo(i18n("a*"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
+    m_channelsList.append(new KoChannelInfo(i18n("b*"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
 
     if (!m_labCs) {
-        KisProfile *labProfile = new KisProfile(cmsCreateLabProfile(NULL));
-        m_labCs = new KisLabColorSpace(0, labProfile);
+        KoColorProfile *labProfile = new KoColorProfile(cmsCreateLabProfile(NULL));
+        m_labCs = new KoLabColorSpace(0, labProfile);
     }
     m_colorSpace = m_labCs;
 }
@@ -429,7 +429,7 @@ KisGenericLabHistogramProducer::~KisGenericLabHistogramProducer()
     delete m_channelsList[2];
 }
 
-Q3ValueVector<KisChannelInfo *> KisGenericLabHistogramProducer::channels() {
+Q3ValueVector<KoChannelInfo *> KisGenericLabHistogramProducer::channels() {
     return m_channelsList;
 }
 
@@ -442,7 +442,7 @@ double KisGenericLabHistogramProducer::maximalZoom() const {
 }
 
 
-void KisGenericLabHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels,  KisColorSpace *cs)
+void KisGenericLabHistogramProducer::addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels,  KoColorSpace *cs)
 {
     for (int i = 0; i < m_channels; i++) {
         m_outRight.at(i) = 0;

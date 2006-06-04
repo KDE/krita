@@ -100,7 +100,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("starshape", i18n("Star Tool")); }
+    virtual KoID id() { return KoID("starshape", i18n("Star Tool")); }
 };
 
 

@@ -45,7 +45,7 @@
 #include "kis_meta_registry.h"
 #include "kis_view.h"
 #include "kis_paint_device.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 
@@ -103,8 +103,8 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         // XXX: Do the rest of the stuff
-        KisID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
-        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
+        KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
+        KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         image->convertTo(cs, dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
@@ -139,8 +139,8 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + dev->colorSpace()->id().name());
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
-        KisID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
-        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry() ->
+        KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
+        KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry() ->
                 getColorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());

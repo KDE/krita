@@ -26,10 +26,10 @@
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
 
-class KisColorSpaceConvertVisitor :public KisLayerVisitor {
+class KoColorSpaceConvertVisitor :public KisLayerVisitor {
 public:
-    KisColorSpaceConvertVisitor(KisColorSpace *dstColorSpace, qint32 renderingIntent);
-    virtual ~KisColorSpaceConvertVisitor();
+    KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, qint32 renderingIntent);
+    virtual ~KoColorSpaceConvertVisitor();
 
 public:
     virtual bool visit(KisPaintLayer *layer);
@@ -38,22 +38,22 @@ public:
     virtual bool visit(KisAdjustmentLayer* layer);
     
 private:
-    KisColorSpace *m_dstColorSpace;
+    KoColorSpace *m_dstColorSpace;
     qint32 m_renderingIntent;
 };
 
-KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisColorSpace *dstColorSpace, qint32 renderingIntent) :
+KoColorSpaceConvertVisitor::KoColorSpaceConvertVisitor(KoColorSpace *dstColorSpace, qint32 renderingIntent) :
     KisLayerVisitor(),
     m_dstColorSpace(dstColorSpace),
     m_renderingIntent(renderingIntent)
 {
 }
 
-KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
+KoColorSpaceConvertVisitor::~KoColorSpaceConvertVisitor()
 {
 }
 
-bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
+bool KoColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
 {
     // Clear the projection, we will have to re-render everything.
     // The image is already set to the new colorspace, so this'll work.
@@ -68,7 +68,7 @@ bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
     return true;
 }
 
-bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
+bool KoColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 {
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
 
@@ -76,13 +76,13 @@ bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
     return true;
 }
 
-bool KisColorSpaceConvertVisitor::visit(KisPartLayer *)
+bool KoColorSpaceConvertVisitor::visit(KisPartLayer *)
 {
     return true;
 }
 
 
-bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
+bool KoColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
 {
     if (layer->filter()->name() == "perchannel") {
         // Per-channel filters need to be reset because of different number

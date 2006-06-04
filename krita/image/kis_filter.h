@@ -27,13 +27,13 @@
 
 #include "kis_types.h"
 #include "kis_filter_registry.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_progress_subject.h"
 #include "kis_filter_configuration.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "krita_export.h"
 
-class KisColorSpace;
+class KoColorSpace;
 class KisPreviewDialog;
 class KisProgressDisplayInterface;
 class KisFilterConfigWidget;
@@ -49,7 +49,7 @@ public:
     /**
      * Construct a Krita filter
      */
-    KisFilter(const KisID& id, const QString & category, const QString & entry);
+    KisFilter(const KoID& id, const QString & category, const QString & entry);
     virtual ~KisFilter() {}
 
 public:
@@ -115,7 +115,7 @@ public:
      *
      * @param colorsSpace
      */
-    virtual bool workWith(KisColorSpace*) { return true; }
+    virtual bool workWith(KoColorSpace*) { return true; }
 
     virtual void enableProgress();
     virtual void disableProgress();
@@ -123,7 +123,7 @@ public:
     bool autoUpdate();
 
     // Unique identification for this filter
-    inline const KisID id() const { return m_id; };
+    inline const KoID id() const { return m_id; };
     // Which submenu in the filters menu does filter want to go?
 
     inline QString menuCategory() const { return m_category; };
@@ -164,7 +164,7 @@ protected:
     qint32 m_lastProgressPerCent;
     qint32 m_progressSteps;
 
-    KisID m_id;
+    KoID m_id;
     KisProgressDisplayInterface * m_progressDisplay;
     QString m_category; // The category in the filter menu this filter fits
     QString m_entry; // the i18n'ed accelerated menu text

@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_COLORSPACE_H_
-#define KIS_COLORSPACE_H_
+#ifndef KOCOLORSPACE_H
+#define KOCOLORSPACE_H
 
 #include <config.h>
 #include <lcms.h>
@@ -25,22 +25,25 @@
 #include <q3valuevector.h>
 #include <q3valuelist.h>
 
-#include "kis_composite_op.h"
-#include "kis_channelinfo.h"
+#include <KoCompositeOp.h>
+#include <KoChannelInfo.h>
 
 class DCOPObject;
 
-class KisProfile;
-class KisColorSpaceFactoryRegistry;
+class KoColorProfile;
+class KoColorSpaceFactoryRegistry;
 class KisMathToolbox;
 class KisFilter;
 
-class KisColorAdjustment
+const quint8 OPACITY_TRANSPARENT = 0;
+const quint8 OPACITY_OPAQUE = UCHAR_MAX;
+
+class KoColorAdjustment
 {
 public:
 
-    KisColorAdjustment() {};
-    virtual ~KisColorAdjustment() {};
+    KoColorAdjustment() {};
+    virtual ~KoColorAdjustment() {};
 };
 
 
@@ -51,24 +54,24 @@ enum ColorSpaceIndependence {
 };
 
 /**
- * A colorspace is the definition of a certain color model
- * in Krita. This is the definition of the public API for
+ * A KoColorSpace is the definition of a certain color model.
+ * This is the definition of the public API for
  * colormodels.
+ * Each instance of this class represents a prober color space
+ * as subclasses attach a KoColorProfile at runtime
  */
-class KRITACOLOR_EXPORT KisColorSpace {
+class PIGMENT_EXPORT KoColorSpace {
 
 protected:
     /// Only for use by classes that serve as baseclass fro real colorspaces
-    KisColorSpace() {};
+    KoColorSpace() {};
 
 public:
     /// Should be called by real colorspaces
-    KisColorSpace(const KisID &id, KisColorSpaceFactoryRegistry * parent);
-    virtual ~KisColorSpace();
+    KoColorSpace(const KoID &id, KoColorSpaceFactoryRegistry * parent);
+    virtual ~KoColorSpace();
 
-    virtual DCOPObject * dcopObject();
-
-    virtual bool operator==(const KisColorSpace& rhs) const {
+    virtual bool operator==(const KoColorSpace& rhs) const {
         return id().id() == rhs.id().id();
     }
 
@@ -78,7 +81,7 @@ public:
     //========== Channels =====================================================//
 
     /// Return a vector describing all the channels this color model has.
-    virtual Q3ValueVector<KisChannelInfo *> channels() const = 0;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const = 0;
 
     /**
      * The total number of channels for a single pixel in this color model
@@ -137,10 +140,10 @@ public:
     //========== Identification ===============================================//
 
     /**
-     * Krita definition for use in .kra files and internally: unchanging name +
+     * ID for use in files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const {return m_id;};
+    virtual KoID id() const {return m_id;};
 
     /**
      * lcms colorspace type definition.
@@ -168,7 +171,7 @@ public:
      * ops such as COPY, CLEAR, and ERASE, are not included as these make no sense
      * for layers in the full image model.
      */
-    virtual KisCompositeOpList userVisiblecompositeOps() const = 0;
+    virtual KoCompositeOpList userVisiblecompositeOps() const = 0;
 
     /**
      * Returns true if the colorspace supports channel values outside the
@@ -182,7 +185,7 @@ public:
     /**
      * Return the profile of this color space. This may be 0
      */
-    virtual KisProfile * getProfile() = 0;
+    virtual KoColorProfile * getProfile() = 0;
 
 //================= Conversion functions ==================================//
 
@@ -196,7 +199,7 @@ public:
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0) = 0;
 
     /**
      * The fromQColor methods take a given color defined as an RGB QColor
@@ -208,7 +211,7 @@ public:
      * @param dst a pointer to a pixel
      * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0) = 0;
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0) = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -219,7 +222,7 @@ public:
      * @param c the QColor that will be filled with the color at src
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, KisProfile * profile = 0) = 0;
+    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0) = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -231,7 +234,7 @@ public:
      * @param opacity a pointer to a byte that will be filled with the opacity a src
      * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile = 0) = 0;
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0) = 0;
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
@@ -248,7 +251,7 @@ public:
      * @param exposure The exposure setting for rendering a preview of a high dynamic range image.
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                   KisProfile *  dstProfile, qint32 renderingIntent = INTENT_PERCEPTUAL,
+                                   KoColorProfile *  dstProfile, qint32 renderingIntent = INTENT_PERCEPTUAL,
                                    float exposure = 0.0f) = 0;
 
     /**
@@ -283,7 +286,7 @@ public:
      * Returns false if the conversion failed, true if it succeeded
      */
     virtual bool convertPixelsTo(const quint8 * src,
-                                 quint8 * dst, KisColorSpace * dstColorSpace,
+                                 quint8 * dst, KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
                                  qint32 renderingIntent = INTENT_PERCEPTUAL) = 0;
 
@@ -338,23 +341,23 @@ public:
      * Create an adjustment object for adjusting the brightness and contrast
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
      */
-    virtual KisColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues) = 0;
+    virtual KoColorAdjustment *createBrightnessContrastAdjustment(quint16 *transferValues) = 0;
 
     /**
      * Create an adjustment object for desaturating
      */
-    virtual KisColorAdjustment *createDesaturateAdjustment() = 0;
+    virtual KoColorAdjustment *createDesaturateAdjustment() = 0;
 
     /**
      * Create an adjustment object for adjusting individual channels
      * transferValues is an array of nColorChannels number of 256 bins array with values from 0 to 0xFFFF
      */
-    virtual KisColorAdjustment *createPerChannelAdjustment(quint16 **transferValues) = 0;
+    virtual KoColorAdjustment *createPerChannelAdjustment(quint16 **transferValues) = 0;
 
     /**
      * Apply the adjustment created with onr of the other functions
      */
-    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KisColorAdjustment *, qint32 nPixels) = 0;
+    virtual void applyAdjustment(const quint8 *src, quint8 *dst, KoColorAdjustment *, qint32 nPixels) = 0;
 
     /**
      * Invert color channels of the given pixels
@@ -377,7 +380,7 @@ public:
      * Convolve the given array of pointers to pixels and return the result
      * in dst. The kernel values are clamped between -128 and 128
      */
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const = 0;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nPixels) const = 0;
 
     /**
      * Darken all color channels with the given amount. If compensate is true,
@@ -395,7 +398,7 @@ public:
     /**
      * Create a mathematical toolbox compatible with this colorspace
      */
-    virtual KisID mathToolboxID() const =0;
+    virtual KoID mathToolboxID() const =0;
 
     /**
      * Compose two arrays of pixels together. If source and target
@@ -404,7 +407,7 @@ public:
      */
     virtual void bitBlt(quint8 *dst,
                 qint32 dststride,
-                KisColorSpace * srcSpace,
+                KoColorSpace * srcSpace,
                 const quint8 *src,
                 qint32 srcRowStride,
                 const quint8 *srcAlphaMask,
@@ -412,7 +415,7 @@ public:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op) = 0;
+                const KoCompositeOp& op) = 0;
 
     /**
      * The backgroundfilters will be run periodically on the newly
@@ -425,22 +428,22 @@ public:
 private:
 
     DCOPObject * m_dcop;
-    KisID m_id;
+    KoID m_id;
 
 protected:
-    KisColorSpaceFactoryRegistry * m_parent;
-    Q3ValueVector<KisChannelInfo *> m_channels;
+    KoColorSpaceFactoryRegistry * m_parent;
+    Q3ValueVector<KoChannelInfo *> m_channels;
 
 };
 
-class KisColorSpaceFactory {
+class KoColorSpaceFactory {
 public:
-	virtual ~KisColorSpaceFactory() {}
+	virtual ~KoColorSpaceFactory() {}
     /**
-     * Krita definition for use in .kra files and internally: unchanging name +
+     * ID for use in files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const = 0;
+    virtual KoID id() const = 0;
 
     /**
      * lcms colorspace type definition.
@@ -449,7 +452,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() = 0;
 
-    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *) = 0;
+    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *) = 0;
 
     /**
      * Returns the default icc profile for use with this colorspace. This may be ""
@@ -460,4 +463,4 @@ public:
 
 };
 
-#endif // KIS_COLORSPACE_H_
+#endif // KOCOLORSPACE_H

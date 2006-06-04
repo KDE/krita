@@ -28,7 +28,7 @@
 
 #include "kis_wet_colorspace.h"
 
-class KisID;
+class KoID;
 class QRect;
 
 
@@ -48,12 +48,12 @@ public:
 public:
     virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect& r);
 
-    static inline KisID id() { return KisID("wetphysics", i18n("Watercolor Physics Simulation Filter")); };
+    static inline KoID id() { return KoID("wetphysics", i18n("Watercolor Physics Simulation Filter")); };
 
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }
     virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
-    virtual bool workWith(KisColorSpace* cs) { return (cs->id() == KisID("WET")); };
+    virtual bool workWith(KoColorSpace* cs) { return (cs->id() == KoID("WET")); };
 
 private:
 

@@ -55,9 +55,9 @@
 #include <kdebug.h>
 
 #include <kis_meta_registry.h>
-#include <kis_color.h>
+#include <KoColor.h>
 #include <kis_factory.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include "kis_palette_view.h"
 #include "kis_resource.h"
 #include "kis_palette.h"
@@ -127,22 +127,22 @@ void KisPaletteView::setPalette(KisPalette* palette)
 
 void KisPaletteView::slotColorCellSelected( int col )
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))
         return;
 
     m_currentEntry = m_currentPalette->getColor(col);
-    emit colorSelected(KisColor(m_currentPalette->getColor(col).color, cs));
+    emit colorSelected(KoColor(m_currentPalette->getColor(col).color, cs));
     emit colorSelected(m_currentPalette->getColor(col).color);
 }
 
 void KisPaletteView::slotColorCellDoubleClicked( int col )
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))
         return;
 
-    emit colorDoubleClicked(KisColor(m_currentPalette->getColor(col).color, cs),
+    emit colorDoubleClicked(KoColor(m_currentPalette->getColor(col).color, cs),
                             m_currentPalette->getColor(col).name);
 }
 

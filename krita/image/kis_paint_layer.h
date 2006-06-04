@@ -21,7 +21,7 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 /**
  * This layer is of a type that can be painted on.
  */
@@ -33,7 +33,7 @@ class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer {
 public:
     KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
     KisPaintLayer(KisImage *img, const QString& name, quint8 opacity);
-    KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KisColorSpace * colorSpace);
+    KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KoColorSpace * colorSpace);
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 

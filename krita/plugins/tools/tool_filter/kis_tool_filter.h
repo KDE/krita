@@ -30,7 +30,7 @@ class KisEvent;
 class KisFilterConfigurationWidget;
 class KisButtonPressEvent;
 class KisView;
-class KisID;
+class KoID;
 class KisCmbIDList;
 
 
@@ -47,7 +47,7 @@ public:
     virtual QWidget* createOptionWidget(QWidget* parent);
 
 public slots:
-    void changeFilter( const KisID & filter);
+    void changeFilter( const KoID & filter);
 
 protected:
     virtual void initPaint(KisEvent *e);
@@ -72,7 +72,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("filter", i18n("Filter Tool")); }
+    virtual KoID id() { return KoID("filter", i18n("Filter Tool")); }
 };
 
 #endif //__KIS_TOOL_FILTER_H__

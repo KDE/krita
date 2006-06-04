@@ -98,15 +98,15 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                 >(this, &Iterator<_T_It>::isDone));
 
             // get/set value
-            Q3ValueVector<KisChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();
+            Q3ValueVector<KoChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();
             QString initiales = "";
-            for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
+            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
             {
-                KisChannelInfo * ci = *itC;
+                KoChannelInfo * ci = *itC;
                 initiales += ci->name().left(1);
                 switch(ci->channelValueType())
                 {
-                    case KisChannelInfo::UINT8:
+                    case KoChannelInfo::UINT8:
                         this->addFunction("get"+ci->name(),
                             new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::getChannelUINT8, ci->pos() ) );
@@ -114,7 +114,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                             new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::setChannelUINT8, ci->pos() ) );
                         break;
-                    case KisChannelInfo::UINT16:
+                    case KoChannelInfo::UINT16:
                         this->addFunction("get"+ci->name(),
                             new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::getChannelUINT16, ci->pos() ) );
@@ -122,7 +122,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                             new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::setChannelUINT16, ci->pos() ) );
                         break;
-                    case KisChannelInfo::FLOAT32:
+                    case KoChannelInfo::FLOAT32:
                         this->addFunction("get"+ci->name(),
                             new Kross::Api::Function1< Iterator<_T_It> , uint >(
                                 this, &Iterator<_T_It>::getChannelFLOAT, ci->pos() ) );
@@ -228,21 +228,21 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         }
         Kross::Api::Object::Ptr getPixel(Kross::Api::List::Ptr)
         {
-            Q3ValueVector<KisChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
+            Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
             QList<QVariant> pixel;
-            for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
+            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
             {
-                KisChannelInfo * ci = *itC;
+                KoChannelInfo * ci = *itC;
                 quint8* data = (quint8*)(m_it->rawData() + ci->pos());
                 switch(ci->channelValueType())
                 {
-                    case KisChannelInfo::UINT8:
+                    case KoChannelInfo::UINT8:
                         pixel.push_back( *data);
                         break;
-                    case KisChannelInfo::UINT16:
+                    case KoChannelInfo::UINT16:
                         pixel.push_back( *((quint16*) data) );
                         break;
-                    case KisChannelInfo::FLOAT32:
+                    case KoChannelInfo::FLOAT32:
                         pixel.push_back( *((float*) data) );
                         break;
                     default:
@@ -256,21 +256,21 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
         Kross::Api::Object::Ptr setPixel(Kross::Api::List::Ptr args)
         {
             Q3ValueList<QVariant> pixel = Kross::Api::Variant::toList( args->item(0) );
-            Q3ValueVector<KisChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
+            Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
             uint i = 0;
-            for(Q3ValueVector<KisChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++, i++)
+            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++, i++)
             {
-                KisChannelInfo * ci = *itC;
+                KoChannelInfo * ci = *itC;
                 quint8* data = (quint8*)(m_it->rawData() + ci->pos());
                 switch(ci->channelValueType())
                 {
-                    case KisChannelInfo::UINT8:
+                    case KoChannelInfo::UINT8:
                         *data = pixel[i].toUInt();
                         break;
-                    case KisChannelInfo::UINT16:
+                    case KoChannelInfo::UINT16:
                         *((quint16*) data) = pixel[i].toUInt();
                         break;
-                    case KisChannelInfo::FLOAT32:
+                    case KoChannelInfo::FLOAT32:
                         *((float*) data) = pixel[i].toDouble();
                         break;
                     default:

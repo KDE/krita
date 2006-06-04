@@ -48,7 +48,7 @@ enum {
     COLOR_INTERP_HSV_CW
 };
 
-// TODO: Replace QColor with KisColor
+// TODO: Replace QColor with KoColor
 class Color {
     public:
         Color() { m_alpha = 0; }

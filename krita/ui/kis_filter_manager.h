@@ -77,7 +77,7 @@ private:
     KisPreviewDialog * m_lastDialog;
     KisFilterConfigWidget * m_lastWidget;
 
-    KisIDList m_filterList; // Map the actions in the signalmapper to the filters
+    KoIDList m_filterList; // Map the actions in the signalmapper to the filters
     QSignalMapper * m_filterMapper;
 
     Q3Dict<KActionMenu> m_filterActionMenus;

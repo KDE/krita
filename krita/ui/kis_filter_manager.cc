@@ -28,7 +28,7 @@
 #include "kaction.h"
 
 #include "kis_part_layer.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_view.h"
 #include "kis_doc.h"
 #include "kis_filter.h"
@@ -46,7 +46,7 @@
 #include "kis_previewwidget.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_canvas_subject.h"
 #include "kis_doc.h"
 #include "kis_transaction.h"
@@ -89,7 +89,7 @@ void KisFilterManager::setup(KActionCollection * ac)
     
     m_filterList = KisFilterRegistry::instance()->listKeys();
     
-    for ( KisIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
+    for ( KoIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
         f = KisFilterRegistry::instance()->get(*it);
         if (!f) break;
         
@@ -159,7 +159,7 @@ void KisFilterManager::setup(KActionCollection * ac)
 
     f = 0;
     i = 0;
-    for ( KisIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
+    for ( KoIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
         f = KisFilterRegistry::instance()->get(*it);
 
         if (!f) break;

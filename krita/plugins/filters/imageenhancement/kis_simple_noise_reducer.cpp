@@ -20,7 +20,7 @@
 #include <kis_iterators_pixel.h>
 #include "kis_multi_integer_filter_widget.h"
 #include <kis_meta_registry.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
     : KisFilter(id(), "enhance", i18n("&Simple Noise Reduction"))

@@ -32,7 +32,7 @@ else \
 } \
 
 
-class KisColorConversionsTester : public KUnitTest::Tester
+class KoColorConversionsTester : public KUnitTest::Tester
 {
 public:
         void allTests();

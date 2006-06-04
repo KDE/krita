@@ -139,7 +139,7 @@ void KisToolSelectPolygonal::finish()
         }
 
         KisPainter painter(KisPaintDeviceSP(selection.data()));
-        painter.setPaintColor(KisColor(Qt::black, selection->colorSpace()));
+        painter.setPaintColor(KoColor(Qt::black, selection->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setBrush(m_subject->currentBrush());

@@ -44,7 +44,7 @@ public:
 
 KisAccumulatingHistogramProducer::KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source)
     : KisBasicHistogramProducer(
-        KisID("ACCHISTO", ""),
+        KoID("ACCHISTO", ""),
         source->at(0)->channels().count(),
         source->at(0)->numberOfBins(),
         0),

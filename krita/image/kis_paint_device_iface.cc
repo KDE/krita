@@ -22,8 +22,7 @@
 #include <dcopclient.h>
 
 #include "kis_paint_device_iface.h"
-#include "kis_colorspace_iface.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 
 #include "kis_paint_device.h"
 
@@ -59,14 +58,14 @@ void KisPaintDeviceIface::writeBytes(QByteArray bytes, qint32 x, qint32 y, qint3
 
 DCOPRef KisPaintDeviceIface::colorSpace() const
 {
-    KisColorSpace * cs = m_parent->colorSpace();
+    KoColorSpace * cs = m_parent->colorSpace();
     if ( !cs )
         return DCOPRef();
-    else
+  /*  else
         return DCOPRef( kapp->dcopClient()->appId(),
                         cs->dcopObject()->objId(),
-                        "KisColorSpaceIface" );
-}
+                        "KoColorSpaceIface" );
+*/}
 
 void KisPaintDeviceIface::setColorSpace(DCOPRef)
 {

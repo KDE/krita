@@ -93,7 +93,7 @@ void KisToolSelectBrush::initPaint(KisEvent* /*e*/)
 
     m_painter = new KisPainter(KisPaintDeviceSP(selection.data()));
     Q_CHECK_PTR(m_painter);
-    m_painter->setPaintColor(KisColor(Qt::black, selection->colorSpace()));
+    m_painter->setPaintColor(KoColor(Qt::black, selection->colorSpace()));
     m_painter->setBrush(m_subject->currentBrush());
     m_painter->setOpacity(OPACITY_OPAQUE);//m_subject->fgColor().colorSpace()->intensity8(m_subject->fgColor().data()));
     m_painter->setCompositeOp(COMPOSITE_OVER);

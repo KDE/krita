@@ -21,13 +21,13 @@
 #include <QButtonGroup>
 
 #include "kis_factory.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_types.h"
-#include "kis_profile.h"
-#include "kis_colorspace.h"
+#include "KoColorProfile.h"
+#include "KoColorSpace.h"
 #include "kis_dlg_apply_profile.h"
 #include "kis_config.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include <kis_meta_registry.h>
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
@@ -44,7 +44,7 @@ KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
     resize(m_page->sizeHint());
 
     // XXX: This is BAD! (bsar)
-    fillCmbProfiles(KisID("RGBA", ""));
+    fillCmbProfiles(KoID("RGBA", ""));
 
     m_intentButtonGroup = new QButtonGroup(this);
 
@@ -68,7 +68,7 @@ KisDlgApplyProfile::~KisDlgApplyProfile()
 }
 
 
-KisProfile *  KisDlgApplyProfile::profile() const
+KoColorProfile *  KisDlgApplyProfile::profile() const
 {
     QString profileName;
 
@@ -84,7 +84,7 @@ int KisDlgApplyProfile::renderIntent() const
 
 
 // XXX: Copy & paste from kis_custom_image_widget -- refactor to separate class
-void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
+void KisDlgApplyProfile::fillCmbProfiles(const KoID & s)
 {
     m_page->cmbProfile->clear();
 
@@ -92,12 +92,12 @@ void KisDlgApplyProfile::fillCmbProfiles(const KisID & s)
         return;
     }
 
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     if (csf == 0) return;
 
-    QList<KisProfile *> profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *> profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
 
-    foreach (KisProfile *profile, profileList) {
+    foreach (KoColorProfile *profile, profileList) {
             m_page->cmbProfile->addSqueezedItem(profile->productName());
     }
     m_page->cmbProfile->setCurrent(csf->defaultProfile());

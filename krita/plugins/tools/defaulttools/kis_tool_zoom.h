@@ -90,7 +90,7 @@ public:
         t->setup(ac); 
         return t; 
     }
-    virtual KisID id() { return KisID("zoom", i18n("Zoom Tool")); }
+    virtual KoID id() { return KoID("zoom", i18n("Zoom Tool")); }
 };
 
 

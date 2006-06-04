@@ -25,23 +25,23 @@
 #include "config.h"
 #include <config-krita.h>
 #include "kis_histogram_producer.h"
-#include "kis_colorspace.h"
-#include "kis_id.h"
+#include "KoColorSpace.h"
+#include "KoID.h"
 #include <krita_export.h>
 
-class KisLabColorSpace;
+class KoLabColorSpace;
 
 class KRITACOLOR_EXPORT KisBasicHistogramProducer : public KisHistogramProducer {
 public:
-    KisBasicHistogramProducer(const KisID& id, int channels, int nrOfBins, KisColorSpace *colorSpace);
+    KisBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, KoColorSpace *colorSpace);
     virtual ~KisBasicHistogramProducer() {}
 
     virtual void clear();
 
     virtual void setView(double from, double size) { m_from = from; m_width = size; }
 
-    virtual const KisID& id() const { return m_id; }
-    virtual Q3ValueVector<KisChannelInfo *> channels() { return m_colorSpace->channels(); }
+    virtual const KoID& id() const { return m_id; }
+    virtual Q3ValueVector<KoChannelInfo *> channels() { return m_colorSpace->channels(); }
     virtual qint32 numberOfBins() { return m_nrOfBins; }
     virtual double viewFrom() const { return m_from; }
     virtual double viewWidth() const { return m_width; }
@@ -78,31 +78,31 @@ protected:
     double m_from, m_width;
     qint32 m_count;
     int m_channels, m_nrOfBins;
-    KisColorSpace *m_colorSpace;
-    KisID m_id;
+    KoColorSpace *m_colorSpace;
+    KoID m_id;
     Q3ValueVector<qint32> m_external;
 };
 
 class KRITACOLOR_EXPORT KisBasicU8HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicU8HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
+    KisBasicU8HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const { return 1.0; }
 };
 
 class KRITACOLOR_EXPORT KisBasicU16HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicU16HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
+    KisBasicU16HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
 
 class KRITACOLOR_EXPORT KisBasicF32HistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicF32HistogramProducer(const KisID& id, KisColorSpace *colorSpace);
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
+    KisBasicF32HistogramProducer(const KoID& id, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -110,8 +110,8 @@ public:
 #ifdef HAVE_OPENEXR
 class KRITACOLOR_EXPORT KisBasicF16HalfHistogramProducer : public KisBasicHistogramProducer {
 public:
-    KisBasicF16HalfHistogramProducer(const KisID& id, KisColorSpace *colorSpace);
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
+    KisBasicF16HalfHistogramProducer(const KoID& id, KoColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
 };
@@ -119,20 +119,20 @@ public:
 
 /**
  * Parametrized on a specific KisHistogramProducer. Its generated producers
- * will have the same KisID as the factory's. This is acceptable because we can't mix
+ * will have the same KoID as the factory's. This is acceptable because we can't mix
  * Factories with Producers in the code because they are incompatible types, and
  * in the GUI we actually only need a producer's name, not a factory's.
  */
 template<class T> class KisBasicHistogramProducerFactory : public KisHistogramProducerFactory {
 public:
-    KisBasicHistogramProducerFactory(const KisID& id, KisColorSpace *colorSpace)
+    KisBasicHistogramProducerFactory(const KoID& id, KoColorSpace *colorSpace)
         : KisHistogramProducerFactory(id), m_cs(colorSpace) {}
     virtual ~KisBasicHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return KisHistogramProducerSP(new T(id(), m_cs)); }
-    virtual bool isCompatibleWith(KisColorSpace* colorSpace) const { return colorSpace->id() == m_cs->id(); }
-    virtual float preferrednessLevelWith(KisColorSpace* /*colorSpace*/) const { return 1.0; }
+    virtual bool isCompatibleWith(KoColorSpace* colorSpace) const { return colorSpace->id() == m_cs->id(); }
+    virtual float preferrednessLevelWith(KoColorSpace* /*colorSpace*/) const { return 1.0; }
 protected:
-    KisColorSpace *m_cs;
+    KoColorSpace *m_cs;
 };
 
 /**
@@ -144,23 +144,23 @@ protected:
 class KRITACOLOR_EXPORT KisGenericRGBHistogramProducer : public KisBasicHistogramProducer {
 public:
     KisGenericRGBHistogramProducer();
-    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
+    virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
     virtual QString positionToString(double pos) const;
     virtual double maximalZoom() const;
-    virtual Q3ValueVector<KisChannelInfo *> channels();
+    virtual Q3ValueVector<KoChannelInfo *> channels();
 protected:
-    Q3ValueVector<KisChannelInfo *> m_channelsList;
+    Q3ValueVector<KoChannelInfo *> m_channelsList;
 };
 
 /** KisGenericRGBHistogramProducer his special Factory that isCompatibleWith everything. */
 class  KRITACOLOR_EXPORT KisGenericRGBHistogramProducerFactory : public KisHistogramProducerFactory {
 public:
     KisGenericRGBHistogramProducerFactory()
-        : KisHistogramProducerFactory(KisID("GENRGBHISTO", i18n("Generic RGB Histogram"))) {}
+        : KisHistogramProducerFactory(KoID("GENRGBHISTO", i18n("Generic RGB Histogram"))) {}
     virtual ~KisGenericRGBHistogramProducerFactory() {}
     virtual KisHistogramProducerSP generate() { return KisHistogramProducerSP(new KisGenericRGBHistogramProducer()); }
-    virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
-    virtual float preferrednessLevelWith(KisColorSpace*) const { return 0.0; }
+    virtual bool isCompatibleWith(KoColorSpace*) const { return true; }
+    virtual float preferrednessLevelWith(KoColorSpace*) const { return 0.0; }
 };
 
 
@@ -173,25 +173,25 @@ class  KRITACOLOR_EXPORT KisGenericLabHistogramProducer : public KisBasicHistogr
     public:
         KisGenericLabHistogramProducer();
         virtual ~KisGenericLabHistogramProducer();
-        virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KisColorSpace *colorSpace);
+        virtual void addRegionToBin(quint8 * pixels, quint8 * selectionMask, quint32 nPixels, KoColorSpace *colorSpace);
         virtual QString positionToString(double pos) const;
         virtual double maximalZoom() const;
-        virtual Q3ValueVector<KisChannelInfo *> channels();
+        virtual Q3ValueVector<KoChannelInfo *> channels();
     protected:
-        Q3ValueVector<KisChannelInfo *> m_channelsList;
+        Q3ValueVector<KoChannelInfo *> m_channelsList;
     private:
-        static KisLabColorSpace* m_labCs;
+        static KoLabColorSpace* m_labCs;
 };
 
 /** KisGenericLabHistogramProducer his special Factory that isCompatibleWith everything. */
 class KRITACOLOR_EXPORT KisGenericLabHistogramProducerFactory : public KisHistogramProducerFactory {
     public:
         KisGenericLabHistogramProducerFactory()
-    : KisHistogramProducerFactory(KisID("GENLABHISTO", i18n("Generic L*a*b* Histogram"))) {}
+    : KisHistogramProducerFactory(KoID("GENLABHISTO", i18n("Generic L*a*b* Histogram"))) {}
         virtual ~KisGenericLabHistogramProducerFactory() {}
         virtual KisHistogramProducerSP generate() { return KisHistogramProducerSP(new KisGenericLabHistogramProducer()); }
-        virtual bool isCompatibleWith(KisColorSpace*) const { return true; }
-        virtual float preferrednessLevelWith(KisColorSpace*) const { return 0.0; }
+        virtual bool isCompatibleWith(KoColorSpace*) const { return true; }
+        virtual float preferrednessLevelWith(KoColorSpace*) const { return 0.0; }
 };
 
 

@@ -17,10 +17,9 @@
  */
 #include "kdebug.h"
 
-#include "kis_global.h"
-#include "kis_f16half_base_colorspace.h"
+#include "KoF16HalfColorSpaceTrait.h"
 
-quint8 KisF16HalfBaseColorSpace::getAlpha(const quint8 * U8_pixel) const
+quint8 KoF16HalfColorSpaceTrait::getAlpha(const quint8 * U8_pixel) const
 {
     if (m_alphaPos < 0) return OPACITY_OPAQUE;
 
@@ -30,7 +29,7 @@ quint8 KisF16HalfBaseColorSpace::getAlpha(const quint8 * U8_pixel) const
     return HALF_TO_UINT8(*pixel);
 }
 
-void KisF16HalfBaseColorSpace::setAlpha(quint8 *U8_pixel, quint8 alpha, qint32 nPixels) const
+void KoF16HalfColorSpaceTrait::setAlpha(quint8 *U8_pixel, quint8 alpha, qint32 nPixels) const
 {
     if (m_alphaPos < 0) return;
     qint32 psize = pixelSize();
@@ -45,7 +44,7 @@ void KisF16HalfBaseColorSpace::setAlpha(quint8 *U8_pixel, quint8 alpha, qint32 n
     }
 }
 
-void KisF16HalfBaseColorSpace::multiplyAlpha(quint8 *U8_pixel, quint8 U8_alpha, qint32 nPixels)
+void KoF16HalfColorSpaceTrait::multiplyAlpha(quint8 *U8_pixel, quint8 U8_alpha, qint32 nPixels)
 {
     if (m_alphaPos < 0) return;
     qint32 psize = pixelSize();
@@ -61,7 +60,7 @@ void KisF16HalfBaseColorSpace::multiplyAlpha(quint8 *U8_pixel, quint8 U8_alpha, 
     }
 }
 
-void KisF16HalfBaseColorSpace::applyAlphaU8Mask(quint8 * U8_pixel, quint8 * alpha8, qint32 nPixels)
+void KoF16HalfColorSpaceTrait::applyAlphaU8Mask(quint8 * U8_pixel, quint8 * alpha8, qint32 nPixels)
 {
     if (m_alphaPos < 0) return;
 
@@ -77,7 +76,7 @@ void KisF16HalfBaseColorSpace::applyAlphaU8Mask(quint8 * U8_pixel, quint8 * alph
     }
 }
 
-void KisF16HalfBaseColorSpace::applyInverseAlphaU8Mask(quint8 * U8_pixels, quint8 * alpha8, qint32 nPixels)
+void KoF16HalfColorSpaceTrait::applyInverseAlphaU8Mask(quint8 * U8_pixels, quint8 * alpha8, qint32 nPixels)
 {
     if (m_alphaPos < 0) return;
 
@@ -86,14 +85,14 @@ void KisF16HalfBaseColorSpace::applyInverseAlphaU8Mask(quint8 * U8_pixels, quint
     while (nPixels--) {
 
             half *pixelAlpha = reinterpret_cast<half *>(U8_pixels + m_alphaPos);
-            *pixelAlpha *= UINT8_TO_HALF(MAX_SELECTED - *alpha8);
+            *pixelAlpha *= UINT8_TO_HALF(OPACITY_OPAQUE - *alpha8);
 
             U8_pixels += psize;
             ++alpha8;
     }
 }
 
-QString KisF16HalfBaseColorSpace::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
+QString KoF16HalfColorSpaceTrait::channelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < (quint32)nChannels());
     const half *pixel = reinterpret_cast<const half *>(U8_pixel);
@@ -102,7 +101,7 @@ QString KisF16HalfBaseColorSpace::channelValueText(const quint8 *U8_pixel, quint
     return QString().setNum(pixel[channelPosition]);
 }
 
-QString KisF16HalfBaseColorSpace::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
+QString KoF16HalfColorSpaceTrait::normalisedChannelValueText(const quint8 *U8_pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < (quint32)nChannels());
     const half *pixel = reinterpret_cast<const half *>(U8_pixel);
@@ -111,13 +110,13 @@ QString KisF16HalfBaseColorSpace::normalisedChannelValueText(const quint8 *U8_pi
     return QString().setNum(100.0 * pixel[channelPosition]);
 }
 
-quint8 KisF16HalfBaseColorSpace::scaleToU8(const quint8 * U8_pixel, qint32 channelPos)
+quint8 KoF16HalfColorSpaceTrait::scaleToU8(const quint8 * U8_pixel, qint32 channelPos)
 {
     const half *pixelChannel = reinterpret_cast<const half *>(U8_pixel + channelPos);
     return HALF_TO_UINT8(*pixelChannel);
 }
 
-quint16 KisF16HalfBaseColorSpace::scaleToU16(const quint8 * U8_pixel, qint32 channelPos)
+quint16 KoF16HalfColorSpaceTrait::scaleToU16(const quint8 * U8_pixel, qint32 channelPos)
 {
     const half *pixelChannel = reinterpret_cast<const half *>(U8_pixel + channelPos);
     return HALF_TO_UINT16(*pixelChannel);

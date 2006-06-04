@@ -30,16 +30,16 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_vec.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 
 #include <krita_export.h>
 
 class KisPoint;
 class KisAlphaMask;
 class KisPainter;
-class KisColorSpace;
+class KoColorSpace;
 class KisInputDevice;
 class QWidget;
 
@@ -80,7 +80,7 @@ public:
 protected:
 
     virtual KisPaintDeviceSP computeDab(KisAlphaMaskSP mask);
-    virtual KisPaintDeviceSP computeDab(KisAlphaMaskSP mask, KisColorSpace *cs);
+    virtual KisPaintDeviceSP computeDab(KisAlphaMaskSP mask, KoColorSpace *cs);
 
 
     /**
@@ -113,7 +113,7 @@ public:
     virtual ~KisPaintOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter) = 0;
-    virtual KisID id() { return KisID("abstractpaintop", i18n("Abstract PaintOp")); }
+    virtual KoID id() { return KoID("abstractpaintop", i18n("Abstract PaintOp")); }
 
     /**
      * The filename of the pixmap we can use to represent this paintop in the ui.
@@ -123,9 +123,9 @@ public:
     /**
      * Whether this paintop is internal to a certain tool or can be used
      * in various tools. If false, it won't show up in the toolchest.
-     * The KisColorSpace argument can be used when certain paintops only support a specific cs
+     * The KoColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible(KisColorSpace * cs = 0) { return cs->id() != KisID("WET", ""); }
+    virtual bool userVisible(KoColorSpace * cs = 0) { return cs->id() != KoID("WET", ""); }
 
     /**
      * Create and return an (abstracted) widget with options for this paintop when used with the

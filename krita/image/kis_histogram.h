@@ -22,7 +22,7 @@
 #include <QVector>
 
 #include "kis_types.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_histogram_producer.h"
 
 enum enumHistogramType {

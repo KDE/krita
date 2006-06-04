@@ -23,8 +23,8 @@
 #include <kparts/plugin.h>
 #include "kis_perchannel_filter.h"
 
-class KisColorSpace;
-class KisColorAdjustment;
+class KoColorSpace;
+class KoColorAdjustment;
 
 class ColorsFilters : public KParts::Plugin
 {
@@ -38,13 +38,13 @@ public:
     KisAutoContrast();
 public:
     virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("autocontrast", i18n("Auto Contrast")); };
+    static inline KoID id() { return KoID("autocontrast", i18n("Auto Contrast")); };
     virtual bool supportsPreview() { return true; }
     virtual bool supportsPainting() { return false; }
     virtual bool supportsThreading() { return false; };
 
     virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
-    virtual bool workWith(KisColorSpace* cs);
+    virtual bool workWith(KoColorSpace* cs);
 
 };
 
@@ -55,18 +55,18 @@ class KisDesaturateFilter : public KisFilter {
         ~KisDesaturateFilter();
     public:
         virtual void process(KisPaintDeviceSP, KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-        static inline KisID id() { return KisID("desaturate", i18n("Desaturate")); };
+        static inline KoID id() { return KoID("desaturate", i18n("Desaturate")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
 
         virtual ColorSpaceIndependence colorSpaceIndependence() { return TO_LAB16; };
-        virtual bool workWith(KisColorSpace* cs);
+        virtual bool workWith(KoColorSpace* cs);
 
     private:
 
-        KisColorSpace * m_lastCS;
-        KisColorAdjustment * m_adj;
+        KoColorSpace * m_lastCS;
+        KoColorAdjustment * m_adj;
 };
 
 #endif

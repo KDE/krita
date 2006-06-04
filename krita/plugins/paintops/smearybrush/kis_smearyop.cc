@@ -50,7 +50,7 @@ public:
      *        by picking up paint from the canvas
      * @param color the initial paint color. Will change through contact with color on the canvas
      */
-    SmearyTuft(qint32 distanceFromCenter, qint32 paintload, KisColor color)
+    SmearyTuft(qint32 distanceFromCenter, qint32 paintload, KoColor color)
         : m_distanceFromCenter(distanceFromCenter)
         , m_paintload(paintload)
         , m_color(color) {};
@@ -80,7 +80,7 @@ public:
 public:
     qint32 m_distanceFromCenter;
     qint32 m_paintload;
-    KisColor m_color;
+    KoColor m_color;
 
 };
 
@@ -114,8 +114,8 @@ void KisSmearyOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         return;
 
     KisPaintDeviceSP device = m_painter->device();
-    KisColorSpace * colorSpace = device->colorSpace();
-    KisColor kc = m_painter->paintColor();
+    KoColorSpace * colorSpace = device->colorSpace();
+    KoColor kc = m_painter->paintColor();
     kc.convertTo(colorSpace);
 
     KisPoint hotSpot = brush->hotSpot(info);

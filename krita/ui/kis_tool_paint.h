@@ -30,7 +30,7 @@
 #include <krita_export.h>
 
 #include "kis_tool.h"
-#include "kis_composite_op.h"
+#include "KoCompositeOp.h"
 
 class QCheckBox;
 class QEvent;
@@ -86,7 +86,7 @@ public slots:
     virtual void deactivate();
 
     void slotSetOpacity(int opacityPerCent);
-    void slotSetCompositeMode(const KisCompositeOp& compositeOp);
+    void slotSetCompositeMode(const KoCompositeOp& compositeOp);
     void slotPopupQuickHelp();
 
 protected:
@@ -102,7 +102,7 @@ protected:
     KisCanvasSubject *m_subject;
     QRect m_dirtyRect;
     quint8 m_opacity;
-    KisCompositeOp m_compositeOp;
+    KoCompositeOp m_compositeOp;
     bool m_paintOutline;
 
 private:

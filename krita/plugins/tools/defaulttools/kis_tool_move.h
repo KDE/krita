@@ -65,7 +65,7 @@ public:
         t->setup(ac); 
         return t; 
     }
-    virtual KisID id() { return KisID("move", i18n("Move Tool")); }
+    virtual KoID id() { return KoID("move", i18n("Move Tool")); }
 };
 
 

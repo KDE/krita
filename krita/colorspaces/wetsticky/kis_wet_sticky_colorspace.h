@@ -79,11 +79,11 @@ public:
 
 
 
-    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile *  profile = 0);
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile *  profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile *  profile = 0);
 
-    virtual void toQColor(const quint8 *src, QColor *c, KisProfile *  profile = 0);
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile *  profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile *  profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile *  profile = 0);
 
     virtual quint8 getAlpha(const quint8 *pixel) const;
     virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
@@ -94,7 +94,7 @@ public:
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos);
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual bool hasAlpha() const;
     virtual qint32 nChannels() const;
     virtual qint32 nColorChannels() const;
@@ -105,17 +105,17 @@ public:
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                       KisProfile *  srcProfile, KisProfile *  dstProfile,
+                       KoColorProfile *  srcProfile, KoColorProfile *  dstProfile,
                        qint32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
 
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
     virtual void invertColor(quint8 * src, qint32 nPixels);
     virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
 
-    virtual KisCompositeOpList userVisiblecompositeOps() const;
+    virtual KoCompositeOpList userVisiblecompositeOps() const;
 
 protected:
 
@@ -128,11 +128,11 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op);
+                const KoCompositeOp& op);
 
 
-    virtual bool convertPixelsTo(const quint8 * src, KisProfile *  srcProfile,
-                     quint8 * dst, KisAbstractColorSpace * dstColorSpace, KisProfile *  dstProfile,
+    virtual bool convertPixelsTo(const quint8 * src, KoColorProfile *  srcProfile,
+                     quint8 * dst, KisAbstractColorSpace * dstColorSpace, KoColorProfile *  dstProfile,
                      quint32 numPixels,
                      qint32 renderingIntent = INTENT_PERCEPTUAL);
 

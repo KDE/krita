@@ -49,7 +49,7 @@
 #include "kis_painter.h"
 #include "kis_pattern.h"
 #include "kis_rect.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_types.h"
 #include "kis_vec.h"
 #include "kis_selection.h"
@@ -87,7 +87,7 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device) : super(de
 
 void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                     KisConvolutionBorderOp borderOp,
-                    KisChannelInfo::enumChannelFlags  channelFlags )
+                    KoChannelInfo::enumChannelFlags  channelFlags )
 {
     // Make the area we cover as small as possible
     if (m_device->hasSelection()) {
@@ -121,7 +121,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
     int lastProgressPercent = 0;
     emit notifyProgress(0);
 
-    KisColorSpace * cs = m_device->colorSpace();
+    KoColorSpace * cs = m_device->colorSpace();
 
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
@@ -217,7 +217,7 @@ void KisConvolutionPainter::applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, 
 }
 
 void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
-                           KisChannelInfo::enumChannelFlags channelFlags)
+                           KoChannelInfo::enumChannelFlags channelFlags)
 {
     int lastProgressPercent = 0;
     // Determine the kernel's extent from the center pixel
@@ -230,7 +230,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint
     xLastMinuskhw = x + (w - khalfWidth);
     yLastMinuskhh = y + (h - khalfHeight);
 
-    KisColorSpace * cs = m_device->colorSpace();
+    KoColorSpace * cs = m_device->colorSpace();
 
     // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorstrategy.
 

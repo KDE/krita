@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include "kis_tool_types.h"
-#include "kis_generic_registry.h"
+#include "KoGenericRegistry.h"
 #include <krita_export.h>
 
 class KActionCollection;
@@ -45,7 +45,7 @@ public:
      static KisToolRegistry* instance();
 
     vKisTool createTools(KActionCollection * ac, KisCanvasSubject *subject) const;
-    KisTool * createTool(KActionCollection * ac, KisCanvasSubject * subject, KisID & id) const;
+    KisTool * createTool(KActionCollection * ac, KisCanvasSubject * subject, KoID & id) const;
 
 private:
     KisToolRegistry();

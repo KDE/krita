@@ -47,7 +47,7 @@ public:
     KisRainDropsFilter();
 public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
+    static inline KoID id() { return KoID("raindrops", i18n("Raindrops")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )

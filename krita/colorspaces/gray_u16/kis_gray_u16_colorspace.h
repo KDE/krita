@@ -24,12 +24,12 @@
 #include <krita_export.h>
 
 #include "kis_global.h"
-#include "kis_u16_base_colorspace.h"
-#include "kis_lcms_base_colorspace.h"
+#include "KoU16ColorSpaceTrait.h"
+#include "KoLcmsColorSpaceTrait.h"
 #include "kis_integer_maths.h"
 
 
-class KRITACOLOR_EXPORT KisGrayU16ColorSpace : public KisU16BaseColorSpace, public KisLcmsBaseColorSpace {
+class KRITACOLOR_EXPORT KisGrayU16ColorSpace : public KoU16ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
 
     struct Pixel {
@@ -47,21 +47,21 @@ public:
 
 
 public:
-    KisGrayU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
+    KisGrayU16ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
     virtual ~KisGrayU16ColorSpace();
 
 public:
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
     virtual void invertColor(quint8 * src, qint32 nPixels);
-    virtual void convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
     virtual quint8 intensity8(const quint8 * src) const;
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 nChannels() const;
     virtual quint32 nColorChannels() const;
     virtual quint32 pixelSize() const;
 
-    virtual KisCompositeOpList userVisiblecompositeOps() const;
+    virtual KoCompositeOpList userVisiblecompositeOps() const;
 
 
 protected:
@@ -75,7 +75,7 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op);
+                const KoCompositeOp& op);
 
     void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
     void compositeMultiply(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
@@ -95,14 +95,14 @@ private:
     static const quint8 PIXEL_ALPHA = 1;
 };
 
-class KisGrayU16ColorSpaceFactory : public KisColorSpaceFactory
+class KisGrayU16ColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")); };
+    virtual KoID id() const { return KoID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")); };
 
     /**
      * lcms colorspace type definition.
@@ -111,7 +111,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigGrayData; };
 
-    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisGrayU16ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisGrayU16ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "gray built-in - (lcms internal)"; };
 };

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,58 +15,31 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_F16HALF_BASE_COLORSPACE_H_
-#define KIS_F16HALF_BASE_COLORSPACE_H_
+#ifndef KOU16COLORSPACETRAIT_H
+#define KOU16COLORSPACETRAIT_H
 
-#include <QColor>
-
-#include <half.h>
-
-#include "kis_global.h"
-#include "kis_lcms_base_colorspace.h"
-#include "kis_integer_maths.h"
+#include <koffice_export.h>
+#include "KoIntegerMaths.h"
+#include "KoColorSpace.h"
 
 /**
- * This class is the base for all 16-bit float colorspaces using the
- * OpenEXR half format. This format can be used with the OpenGL
- * extensions GL_NV_half_float and GL_ARB_half_float_pixel.
+ * This is the base class for 16-bit/channel colorspaces with 16-bit alpha
+ * channels. It defines a number of common methods, like handling 16-bit alpha
+ * and up- and down-scaling of channels.
  */
-
-inline half UINT8_TO_HALF(uint c)
-{
-    return static_cast<half>(c) / UINT8_MAX;
-}
-
-inline uint HALF_TO_UINT8(half c)
-{
-    return static_cast<uint>(CLAMP(static_cast<int>(c * static_cast<int>(UINT8_MAX) + 0.5),
-                                   static_cast<int>(UINT8_MIN), static_cast<int>(UINT8_MAX)));
-}
-
-
-inline uint HALF_TO_UINT16(half c)
-{
-    return static_cast<uint>(CLAMP(static_cast<int>(c * static_cast<int>(UINT16_MAX) + 0.5),
-                                   static_cast<int>(UINT16_MIN), static_cast<int>(UINT16_MAX)));
-}
-
-inline half HALF_BLEND(half a, half b, half alpha)
-{
-    return (a - b) * alpha + b;
-}
-
-#define F16HALF_OPACITY_OPAQUE ((half)1.0f)
-#define F16HALF_OPACITY_TRANSPARENT ((half)0.0f)
-
-class KRITACOLOR_EXPORT KisF16HalfBaseColorSpace : public virtual KisColorSpace {
+class PIGMENT_EXPORT KoU16ColorSpaceTrait : public virtual KoColorSpace {
 
 public:
 
-    KisF16HalfBaseColorSpace(qint32 alphaPos)
-	: KisColorSpace()
+    static const quint16 U16_OPACITY_OPAQUE = UINT16_MAX;
+    static const quint16 U16_OPACITY_TRANSPARENT = UINT16_MIN;
+
+public:
+
+    KoU16ColorSpaceTrait(qint32 alphaPos)
+	: KoColorSpace()
     {
         m_alphaPos = alphaPos;
-        //m_alphaSize = sizeof(half);
     };
 
     virtual quint8 getAlpha(const quint8 * pixel) const;
@@ -82,12 +55,9 @@ public:
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos);
     virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos);
 
-    virtual bool hasHighDynamicRange() const { return true; }
-
 private:
     qint32 m_alphaPos; // The position in _bytes_ of the alpha channel
     //qint32 m_alphaSize; // The width in _bytes_ of the alpha channel
 
 };
-
-#endif // KIS_F16HALF_BASE_COLORSPACE_H_
+#endif // KOU16COLORSPACETRAIT_H

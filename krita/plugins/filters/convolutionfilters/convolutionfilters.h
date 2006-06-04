@@ -28,7 +28,7 @@ class KisGaussianBlurFilter : public KisConvolutionConstFilter {
 public:
     KisGaussianBlurFilter();
 public:
-    static inline KisID id() { return KisID("gaussian blur", i18n("Gaussian Blur")); };
+    static inline KoID id() { return KoID("gaussian blur", i18n("Gaussian Blur")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
 };
@@ -37,7 +37,7 @@ class KisSharpenFilter : public KisConvolutionConstFilter {
 public:
     KisSharpenFilter();
 public:
-    static inline KisID id() { return KisID("sharpen", i18n("Sharpen")); };
+    static inline KoID id() { return KoID("sharpen", i18n("Sharpen")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
 };
@@ -46,7 +46,7 @@ class KisMeanRemovalFilter : public KisConvolutionConstFilter {
 public:
     KisMeanRemovalFilter();
 public:
-    static inline KisID id() { return KisID("mean removal", i18n("Mean Removal")); };
+    static inline KoID id() { return KoID("mean removal", i18n("Mean Removal")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -55,7 +55,7 @@ class KisEmbossLaplascianFilter : public KisConvolutionConstFilter {
 public:
     KisEmbossLaplascianFilter();
 public:
-    static inline KisID id() { return KisID("emboss laplascian", i18n("Emboss Laplascian")); };
+    static inline KoID id() { return KoID("emboss laplascian", i18n("Emboss Laplascian")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -64,7 +64,7 @@ class KisEmbossInAllDirectionsFilter : public KisConvolutionConstFilter {
 public:
     KisEmbossInAllDirectionsFilter();
 public:
-    static inline KisID id() { return KisID("emboss all directions", i18n("Emboss in All Directions")); };
+    static inline KoID id() { return KoID("emboss all directions", i18n("Emboss in All Directions")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -73,7 +73,7 @@ class KisEmbossHorizontalVerticalFilter : public KisConvolutionConstFilter {
 public:
     KisEmbossHorizontalVerticalFilter();
 public:
-    static inline KisID id() { return KisID("", i18n("Emboss Horizontal & Vertical")); };
+    static inline KoID id() { return KoID("", i18n("Emboss Horizontal & Vertical")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -82,7 +82,7 @@ class KisEmbossVerticalFilter : public KisConvolutionConstFilter {
 public:
     KisEmbossVerticalFilter();
 public:
-    static inline KisID id() { return KisID("emboss vertical only", i18n("Emboss Vertical Only")); };
+    static inline KoID id() { return KoID("emboss vertical only", i18n("Emboss Vertical Only")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -91,7 +91,7 @@ class KisEmbossHorizontalFilter : public KisConvolutionConstFilter {
 public:
     KisEmbossHorizontalFilter();
 public:
-    static inline KisID id() { return KisID("emboss horizontal only", i18n("Emboss Horizontal Only")); };
+    static inline KoID id() { return KoID("emboss horizontal only", i18n("Emboss Horizontal Only")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -100,7 +100,7 @@ class KisEmbossDiagonalFilter : public KisConvolutionConstFilter {
 public:
     KisEmbossDiagonalFilter();
 public:
-    static inline KisID id() { return KisID("emboss diagonal", i18n("Emboss Diagonal")); };
+    static inline KoID id() { return KoID("emboss diagonal", i18n("Emboss Diagonal")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -109,7 +109,7 @@ class KisTopEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
     KisTopEdgeDetectionFilter();
 public:
-    static inline KisID id() { return KisID("top edge detections", i18n("Top Edge Detection")); };
+    static inline KoID id() { return KoID("top edge detections", i18n("Top Edge Detection")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -118,7 +118,7 @@ class KisRightEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
     KisRightEdgeDetectionFilter();
 public:
-    static inline KisID id() { return KisID("right edge detections", i18n("Right Edge Detection")); };
+    static inline KoID id() { return KoID("right edge detections", i18n("Right Edge Detection")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -127,7 +127,7 @@ class KisBottomEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
     KisBottomEdgeDetectionFilter();
 public:
-    static inline KisID id() { return KisID("bottom edge detections", i18n("Bottom Edge Detection")); };
+    static inline KoID id() { return KoID("bottom edge detections", i18n("Bottom Edge Detection")); };
     virtual bool supportsPainting() { return false; }
 
 };
@@ -136,7 +136,7 @@ class KisLeftEdgeDetectionFilter : public KisConvolutionConstFilter {
 public:
     KisLeftEdgeDetectionFilter();
 public:
-    static inline KisID id() { return KisID("left edge detections", i18n("Left Edge Detection")); };
+    static inline KoID id() { return KoID("left edge detections", i18n("Left Edge Detection")); };
     virtual bool supportsPainting() { return false; }
 
 };

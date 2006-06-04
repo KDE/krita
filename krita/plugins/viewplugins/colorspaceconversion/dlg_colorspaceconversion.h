@@ -24,7 +24,7 @@
 
 #include <kdialog.h>
 
-#include <kis_id.h>
+#include <KoID.h>
 
 #include "ui_wdgconvertcolorspace.h"
 
@@ -55,7 +55,7 @@ public:
 public slots:
 
     void okClicked();
-    void fillCmbDestProfile(const KisID &);
+    void fillCmbDestProfile(const KoID &);
 };
 
 #endif // DLG_COLORSPACECONVERSION

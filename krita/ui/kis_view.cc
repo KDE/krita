@@ -84,9 +84,11 @@
 #include <KoMainWindow.h>
 #include <KoView.h>
 #include <KoTabBar.h>
+
 #include <ko_gray_widget.h>
 #include <ko_hsv_widget.h>
 #include <ko_rgb_widget.h>
+
 #include <kopalettemanager.h>
 #include <kopalette.h>
 #include <KoToolBox.h>
@@ -108,8 +110,8 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_canvas_painter.h"
-#include "kis_color.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColor.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_controlframe.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"
@@ -134,7 +136,7 @@
 #include "kis_part_layer.h"
 #include "kis_part_layer_handler.h"
 #include "kis_pattern.h"
-#include "kis_profile.h"
+#include "KoColorProfile.h"
 #include "kis_rect.h"
 #include "kis_resource.h"
 #include "kis_palette.h"
@@ -161,7 +163,7 @@
 #include "kis_icon_item.h"
 #include "kis_palette_widget.h"
 #include "kis_birdeye_box.h"
-#include "kis_color.h"
+#include "KoColor.h"
 #include "kis_factory.h"
 
 // Dialog boxes
@@ -259,7 +261,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     KisConfig cfg;
 
-    m_currentColorChooserDisplay = KisID("BLA");
+    m_currentColorChooserDisplay = KoID("BLA");
     setFocusPolicy( Qt::StrongFocus );
 
     // Must come before input devices are referenced as this detects them.
@@ -290,9 +292,9 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     // This needs to be set before the dockers are created.
     m_image = m_doc->currentImage();
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-    m_fg = KisColor(Qt::black, cs);
-    m_bg = KisColor(Qt::white, cs);
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    m_fg = KoColor(Qt::black, cs);
+    m_bg = KoColor(Qt::white, cs);
 
     createDockers();
 
@@ -458,7 +460,7 @@ void KisView::createLayerBox()
     connect(m_layerBox, SIGNAL(sigOpacityChanged(int, bool)), this, SLOT(layerOpacity(int, bool)));
     connect(m_layerBox, SIGNAL(sigOpacityFinishedChanging(int, int)),
             this, SLOT(layerOpacityFinishedChanging(int, int)));
-    connect(m_layerBox, SIGNAL(sigItemComposite(const KisCompositeOp&)), this, SLOT(layerCompositeOp(const KisCompositeOp&)));
+    connect(m_layerBox, SIGNAL(sigItemComposite(const KoCompositeOp&)), this, SLOT(layerCompositeOp(const KoCompositeOp&)));
 
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
 
@@ -559,7 +561,7 @@ void KisView::updateStatusBarProfileLabel()
 }
 
 
-KisProfile *  KisView::monitorProfile()
+KoColorProfile *  KisView::monitorProfile()
 {
     if (m_monitorProfile == 0) {
         resetMonitorProfile();
@@ -570,7 +572,7 @@ KisProfile *  KisView::monitorProfile()
 
 void KisView::resetMonitorProfile()
 {
-    m_monitorProfile = KisProfile::getScreenProfile();
+    m_monitorProfile = KoColorProfile::getScreenProfile();
 
     if (m_monitorProfile == 0) {
         KisConfig cfg;
@@ -1317,9 +1319,9 @@ void KisView::layerUpdateGUI(bool enable)
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
 
-    if (pl && ( m_currentColorChooserDisplay != KisID("BLA") ||
+    if (pl && ( m_currentColorChooserDisplay != KoID("BLA") ||
                 pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay)) {
-        if (pl->paintDevice()->colorSpace()->id() == KisID("WET")) {
+        if (pl->paintDevice()->colorSpace()->id() == KoID("WET")) {
             m_paletteManager->hideWidget( "hsvwidget" );
             m_paletteManager->hideWidget( "rgbwidget" );
             m_paletteManager->hideWidget( "graywidget" );
@@ -1933,7 +1935,7 @@ void KisView::rotateLayer(double angle)
         Q_CHECK_PTR(t);
     }
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KisID("Triangle"));
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KoID("Triangle"));
     angle *= M_PI/180;
     qint32 w = currentImg()->width();
     qint32 h = currentImg()->height();
@@ -2059,7 +2061,7 @@ void KisView::preferences()
     }
 }
 
-void KisView::layerCompositeOp(const KisCompositeOp& compositeOp)
+void KisView::layerCompositeOp(const KoCompositeOp& compositeOp)
 {
     KisImageSP img = currentImg();
     if (!img) return;
@@ -2212,7 +2214,7 @@ void KisView::gradientActivated(KisResource *gradient)
     }
 }
 
-void KisView::paintopActivated(const KisID & paintop, const KisPaintOpSettings *paintopSettings)
+void KisView::paintopActivated(const KoID & paintop, const KisPaintOpSettings *paintopSettings)
 {
     if (paintop.id().isNull() || paintop.id().isEmpty()) {
         return;
@@ -2224,28 +2226,28 @@ void KisView::paintopActivated(const KisID & paintop, const KisPaintOpSettings *
     notifyObservers();
 }
 
-void KisView::setBGColor(const KisColor& c)
+void KisView::setBGColor(const KoColor& c)
 {
     m_bg = c;
     notifyObservers();
     emit sigBGQColorChanged( c.toQColor() );
 }
 
-void KisView::setFGColor(const KisColor& c)
+void KisView::setFGColor(const KoColor& c)
 {
     m_fg = c;
     notifyObservers();
     emit sigFGQColorChanged( c.toQColor() );
 }
 
-void KisView::slotSetFGColor(const KisColor& c)
+void KisView::slotSetFGColor(const KoColor& c)
 {
 
     m_fg = c;
     notifyObservers();
 }
 
-void KisView::slotSetBGColor(const KisColor& c)
+void KisView::slotSetBGColor(const KoColor& c)
 {
 
     m_bg = c;
@@ -2254,15 +2256,15 @@ void KisView::slotSetBGColor(const KisColor& c)
 
 void KisView::slotSetFGQColor(const QColor& c)
 {
-    KisColorSpace * monitorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA"), m_monitorProfile);
-    setFGColor(KisColor(c, monitorSpace));
+    KoColorSpace * monitorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA"), m_monitorProfile);
+    setFGColor(KoColor(c, monitorSpace));
     emit sigFGQColorChanged(c);
 }
 
 void KisView::slotSetBGQColor(const QColor& c)
 {
-    KisColorSpace * monitorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA"), m_monitorProfile);
-    setBGColor(KisColor(c, monitorSpace));
+    KoColorSpace * monitorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA"), m_monitorProfile);
+    setBGColor(KoColor(c, monitorSpace));
     emit sigBGQColorChanged(c);
 }
 
@@ -2290,7 +2292,7 @@ void KisView::print(KPrinter& printer)
 
     KisConfig cfg;
     QString printerProfileName = cfg.printerProfile();
-    KisProfile *  printerProfile = KisMetaRegistry::instance()->csRegistry() ->getProfileByName(printerProfileName);
+    KoColorProfile *  printerProfile = KisMetaRegistry::instance()->csRegistry() ->getProfileByName(printerProfileName);
 
     QRect r = img->bounds();
     img->renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile, KisImage::PAINT_IMAGE_ONLY, HDRExposure());
@@ -2673,7 +2675,7 @@ void KisView::showLayerProperties(KisLayerSP layer)
     Q_ASSERT( layer );
     if ( !layer ) return;
 
-    KisColorSpace * cs = 0;
+    KoColorSpace * cs = 0;
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>( layer.data() );
     if ( pl ) {
         cs = pl->paintDevice()->colorSpace();
@@ -2740,7 +2742,7 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
         NewLayerDialog dlg(img->colorSpace()->id(), profilename, img->nextLayerName(), this);
 
         if (dlg.exec() == QDialog::Accepted) {
-            KisColorSpace* cs = KisMetaRegistry::instance()-> csRegistry() ->
+            KoColorSpace* cs = KisMetaRegistry::instance()-> csRegistry() ->
                     getColorSpace(dlg.colorSpaceID(),dlg.profileName());
             KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), dlg.layerName(), dlg.opacity(), cs));
             if (layer) {
@@ -3180,8 +3182,8 @@ void KisView::connectCurrentImg()
     if (m_image) {
         connect(m_image.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), m_selectionManager, SLOT(imgSelectionChanged(KisImageSP)));
         connect(m_image.data(), SIGNAL(sigActiveSelectionChanged(KisImageSP)), this, SLOT(updateCanvas()));
-        connect(m_image.data(), SIGNAL(sigColorSpaceChanged(KisColorSpace *)), this, SLOT(updateStatusBarProfileLabel()));
-        connect(m_image.data(), SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
+        connect(m_image.data(), SIGNAL(sigColorSpaceChanged(KoColorSpace *)), this, SLOT(updateStatusBarProfileLabel()));
+        connect(m_image.data(), SIGNAL(sigProfileChanged(KoColorProfile * )), SLOT(profileChanged(KoColorProfile * )));
 
         connect(m_image.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(layersUpdated()));
         connect(m_image.data(), SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
@@ -3250,7 +3252,7 @@ void KisView::slotOpenGLImageUpdated(QRect rc)
     paintOpenGLView(windowToView(rc));
 }
 
-void KisView::profileChanged(KisProfile *  /*profile*/)
+void KisView::profileChanged(KoColorProfile *  /*profile*/)
 {
     updateStatusBarProfileLabel();
 }
@@ -3687,12 +3689,12 @@ void KisView::setCurrentImage(KisImageSP image)
     image->blockSignals(false);
 }
 
-KisColor KisView::bgColor() const
+KoColor KisView::bgColor() const
 {
     return m_bg;
 }
 
-KisColor KisView::fgColor() const
+KoColor KisView::fgColor() const
 {
     return m_fg;
 }
@@ -3712,7 +3714,7 @@ KisGradient *KisView::currentGradient() const
     return m_gradient;
 }
 
-KisID KisView::currentPaintop() const
+KoID KisView::currentPaintop() const
 {
     return m_paintop;
 }
@@ -3843,7 +3845,7 @@ void KisView::createDockers()
     foreach (KisResource *resource, resources) {
         m_palettewidget->slotAddPalette(resource);
     }
-    connect(m_palettewidget, SIGNAL(colorSelected(const KisColor &)), this, SLOT(slotSetFGColor(const KisColor &)));
+    connect(m_palettewidget, SIGNAL(colorSelected(const KoColor &)), this, SLOT(slotSetFGColor(const KoColor &)));
     m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);
 }
 

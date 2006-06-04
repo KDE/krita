@@ -52,7 +52,7 @@ class KisConvolutionFilter : public KisFilter {
 
 public:
 
-    KisConvolutionFilter(const KisID& id, const QString & category, const QString & entry)
+    KisConvolutionFilter(const KoID& id, const QString & category, const QString & entry)
         : KisFilter( id, category, entry )
         {};
 
@@ -73,7 +73,7 @@ class KisConvolutionConstFilter : public KisConvolutionFilter {
 
 public:
 
-    KisConvolutionConstFilter(const KisID& id, const QString & category, const QString & entry) 
+    KisConvolutionConstFilter(const KoID& id, const QString & category, const QString & entry) 
 	: KisConvolutionFilter(id, category, entry) 
     {};
 

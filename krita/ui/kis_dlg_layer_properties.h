@@ -23,8 +23,8 @@
 #include "ui_wdglayerproperties.h"
 
 class QWidget;
-class KisCompositeOp;
-class KisColorSpace;
+class KoCompositeOp;
+class KoColorSpace;
 
 class WdgLayerProperties : public QWidget, public Ui::WdgLayerProperties
 {
@@ -41,15 +41,15 @@ class KisDlgLayerProperties : public KDialog {
 public:
     KisDlgLayerProperties(const QString& deviceName,
                         qint32 opacity,
-                        const KisCompositeOp& compositeOp,
-                        const KisColorSpace * colorSpace,
+                        const KoCompositeOp& compositeOp,
+                        const KoColorSpace * colorSpace,
                         QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
     virtual ~KisDlgLayerProperties();
 
     QString getName() const;
     qint32 getOpacity() const;
-    KisCompositeOp getCompositeOp() const;
+    KoCompositeOp getCompositeOp() const;
 
 protected slots:
     void slotNameChanged( const QString & );

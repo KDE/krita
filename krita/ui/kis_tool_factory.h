@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_types.h"
 #include "kactioncollection.h"
 
@@ -33,7 +33,7 @@ public:
     virtual ~KisToolFactory() {};
 
     virtual KisTool * createTool(KActionCollection * ac) = 0;
-    virtual KisID id() { return KisID("Abstract Tool", i18n("Abstract Tool")); }
+    virtual KoID id() { return KoID("Abstract Tool", i18n("Abstract Tool")); }
 
 };
 

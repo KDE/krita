@@ -28,14 +28,14 @@
 #include "kis_filter_configuration.h"
 #include "kis_filter_config_widget.h"
 #include "kis_perchannel_filter.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kcurve.h"
 #include "kis_histogram.h"
 #include "kis_basic_histogram_producers.h"
 #include "kis_painter.h"
-#include "kis_id.h"
+#include "KoID.h"
 
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     : KisFilterConfiguration( "perchannel", 1 )
@@ -192,7 +192,7 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
         // We got an illegal number of colorchannels.KisFilter
         return;
     }
-    KisColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
+    KoColorAdjustment *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
 
 
     if (src!=dst) {
@@ -312,7 +312,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     connect(m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
 
     // Fill in the channel chooser
-    Q3ValueVector<KisChannelInfo *> channels = dev->colorSpace()->channels();
+    Q3ValueVector<KoChannelInfo *> channels = dev->colorSpace()->channels();
     for(unsigned int val=0; val < dev->colorSpace()->nColorChannels(); val++)
         m_page->cmbChannel->addItem(channels.at(val)->name());
     connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
@@ -339,7 +339,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
-    KisIDList keys =
+    KoIDList keys =
         KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
     KisHistogramProducerFactory *hpf;
     hpf = KisHistogramProducerFactoryRegistry::instance()->get(keys.at(0));

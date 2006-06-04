@@ -33,7 +33,7 @@
 #include <kis_debug_areas.h>
 
 #include <kis_debug_areas.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "rgb_plugin.h"
@@ -48,21 +48,21 @@ RGBPlugin::RGBPlugin(QObject *parent, const QStringList &)
 {
     setInstance(RGBPluginFactory::instance());
 
-    if ( parent->inherits("KisColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
     {
-	KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>(parent);
+	KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>(parent);
 
-        KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+        KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
         f->addProfile(defProfile);
 
 
-        KisColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
+        KoColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
         f->add(csFactory);
 
-        KisColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
+        KoColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU8HistogramProducer>
-                (KisID("RGB8HISTO", i18n("RGB8 Histogram")), colorSpaceRGBA) );
+                (KoID("RGB8HISTO", i18n("RGB8 Histogram")), colorSpaceRGBA) );
     }
 
 }

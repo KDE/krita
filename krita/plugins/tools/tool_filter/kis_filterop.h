@@ -37,8 +37,8 @@ public:
     virtual ~KisFilterOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KisID id() { return KisID(("filter"), i18n("Filter")); }
-    virtual bool userVisible(KisColorSpace * = 0) { return false; }
+    virtual KoID id() { return KoID(("filter"), i18n("Filter")); }
+    virtual bool userVisible(KoColorSpace * = 0) { return false; }
 };
 
 

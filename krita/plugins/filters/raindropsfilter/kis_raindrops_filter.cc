@@ -38,6 +38,8 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include "KoIntegerMaths.h"
+
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -121,7 +123,7 @@ void KisRainDropsFilter::rainDrops(KisPaintDeviceSP src, KisPaintDeviceSP dst, c
 
     bool      FindAnother = false;              // To search for good coordinates
 
-    KisColorSpace * cs = src->colorSpace();
+    KoColorSpace * cs = src->colorSpace();
 
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );

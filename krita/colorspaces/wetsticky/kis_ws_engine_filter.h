@@ -22,7 +22,7 @@
 
 #include <kis_view.h>
 #include <kis_filter.h>
-#include <kis_id.h>
+#include <KoID.h>
 
 class KisWSEngineFilterConfiguration : public KisFilterConfiguration
 {
@@ -53,7 +53,7 @@ public:
 
     virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* cfg, const QRect& rc);
 
-    static inline KisID id() { return KisID("Wet & Sticky Engine", i18n("Wet & Sticky")); };
+    static inline KoID id() { return KoID("Wet & Sticky Engine", i18n("Wet & Sticky")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return false; }
     virtual bool supportsIncrementalPainting() { return false; }

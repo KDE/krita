@@ -26,7 +26,7 @@
 
 #include <k3iconview.h>
 #include <krita_export.h>
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
@@ -63,7 +63,7 @@ public:
                               KisFiltersIconViewItem * iconItem,
                               KisFilterConfiguration * config, KisFilter * filter,
                               KisPaintDeviceSP dev, const QRect & bounds,
-                              KisProfile * profile);
+                              KoColorProfile * profile);
 
     ~KisFiltersThumbnailThread();
 
@@ -78,18 +78,18 @@ private:
     KisFilter * m_filter;
     KisPaintDeviceSP m_dev;
     const QRect m_bounds;
-    KisProfile * m_profile;
+    KoColorProfile * m_profile;
     QImage m_image;
 };
 
 class KisFiltersIconViewItem : public Q3IconViewItem {
 public:
     KisFiltersIconViewItem( Q3IconView * parent, const QString & text, const QPixmap & icon,
-                            KisID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
-                            KisPaintDeviceSP thumb, const QRect & bounds, KisProfile * profile);
+                            KoID id, KisFilter* filter, KisFilterConfiguration* filterConfig,
+                            KisPaintDeviceSP thumb, const QRect & bounds, KoColorProfile * profile);
 
     virtual ~KisFiltersIconViewItem();
-    KisID id() { return m_id; }
+    KoID id() { return m_id; }
     KisFilter* filter() { return m_filter; }
     void setFilterConfiguration(KisFilterConfiguration* fc) { m_filterconfig = fc; }
 
@@ -97,7 +97,7 @@ public:
     KisThread * thread() { return m_thread; }
 
 private:
-    KisID m_id;
+    KoID m_id;
     KisFilter* m_filter;
     KisFilterConfiguration* m_filterconfig;
     KisFiltersThumbnailThread * m_thread;
@@ -119,7 +119,7 @@ public:
 
 public:
     void setLayer(KisLayerSP layer) KDE_DEPRECATED;
-    void setProfile(KisProfile * profile) { m_profile = profile; };
+    void setProfile(KoColorProfile * profile) { m_profile = profile; };
 
     inline void setPaintDevice(KisPaintDeviceSP pd) {
         if( pd != m_original)
@@ -129,14 +129,14 @@ public:
         }
     }
     void buildPreview();
-    void setCurrentFilter(KisID filter);
+    void setCurrentFilter(KoID filter);
 
 private:
 
     KisPaintDeviceSP m_original;
     KisImageSP m_imgthumb;
     KisPaintDeviceSP m_thumb;
-    KisProfile * m_profile;
+    KoColorProfile * m_profile;
     KisThreadPool * threadPool;
 };
 

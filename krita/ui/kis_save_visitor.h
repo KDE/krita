@@ -65,7 +65,15 @@ public:
         }
 
         if (layer->paintDevice()->colorSpace()->getProfile()) {
-            KisAnnotationSP annotation = layer->paintDevice()->colorSpace()->getProfile()->annotation();
+            KoColorProfile *profile = layer->paintDevice()->colorSpace()->getProfile();
+            KisAnnotationSP annotation;
+            if (profile)
+            {
+                // XXX we hardcode icc, this is correct for lcms?
+                // XXX productName(), or just "ICC Profile"?
+                if (!profile->rawData().isEmpty())
+                    annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+            }
 
             if (annotation) {
                 // save layer profile

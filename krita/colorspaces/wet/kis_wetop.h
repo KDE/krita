@@ -21,7 +21,7 @@
 
 #include "kis_paintop.h"
 #include "kis_types.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "ui_wdgpressure.h"
 
 class KisPoint;
@@ -42,8 +42,8 @@ public:
     virtual ~KisWetOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KisID id() { return KisID("wetbrush", i18n("Watercolor Brush")); }
-    virtual bool userVisible(KisColorSpace* cs) { return cs->id() == KisID("WET", ""); }
+    virtual KoID id() { return KoID("wetbrush", i18n("Watercolor Brush")); }
+    virtual bool userVisible(KoColorSpace* cs) { return cs->id() == KoID("WET", ""); }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
 };
 

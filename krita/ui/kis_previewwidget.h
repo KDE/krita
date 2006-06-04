@@ -32,7 +32,7 @@
 #include "ui_kis_previewwidgetbase.h"
 
 class QWidget;
-class KisProfile;
+class KoColorProfile;
 
 class PreviewWidgetBase : public QWidget, public Ui::PreviewWidgetBase
 {
@@ -108,7 +108,7 @@ private:
     KisPaintDeviceSP m_previewDevice;
     
     double m_zoom;
-    KisProfile * m_profile;
+    KoColorProfile * m_profile;
 
     KisPaintDeviceSP m_origDevice;
 };

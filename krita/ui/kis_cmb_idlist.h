@@ -23,13 +23,13 @@
 
 #include "qcombobox.h"
 
-#include "kis_id.h"
+#include "KoID.h"
 #include <krita_export.h>
 
 /**
- * A combobox that is associated with a list of KisID's. The
+ * A combobox that is associated with a list of KoID's. The
  * descriptive (i18n'ed) text is displayed, but the various
- * signals return a KisID.
+ * signals return a KoID.
  */
 class KRITAUI_EXPORT KisCmbIDList : public QComboBox
 {
@@ -44,16 +44,16 @@ public:
 
 
 public:
-    void setIDList(const KisIDList & list);
-    void setCurrent(const KisID id);
+    void setIDList(const KoIDList & list);
+    void setCurrent(const KoID id);
     void setCurrent(const QString & s);
 
-    KisID currentItem() const;
+    KoID currentItem() const;
 
 signals:
 
-    void activated(const KisID &);
-    void highlighted(const KisID &);
+    void activated(const KoID &);
+    void highlighted(const KoID &);
 
 private slots:
 
@@ -64,7 +64,7 @@ private:
     // Prevent the deprecated Qt3 method being called. Use setCurrent instead.
     void setCurrentText(const QString & s);
 
-    KisIDList m_list;
+    KoIDList m_list;
 
 };
 #endif

@@ -48,7 +48,7 @@
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <kis_cmb_idlist.h>
-#include <kis_id.h>
+#include <KoID.h>
 #include <kis_tool_controller.h>
 #include <kis_transform_worker.h>
 
@@ -798,7 +798,7 @@ void KisToolTransform::notifyCommandExecuted( KCommand * command)
     }
 }
 
-void KisToolTransform::slotSetFilter(const KisID &filterID)
+void KisToolTransform::slotSetFilter(const KoID &filterID)
 {
     m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
 }
@@ -813,10 +813,10 @@ QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
     m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
 
     m_optWidget->cmbFilter->setCurrent("Mitchell");
-    connect(m_optWidget->cmbFilter, SIGNAL(activated(const KisID &)),
-        this, SLOT(slotSetFilter(const KisID &)));
+    connect(m_optWidget->cmbFilter, SIGNAL(activated(const KoID &)),
+        this, SLOT(slotSetFilter(const KoID &)));
 
-    KisID filterID = m_optWidget->cmbFilter->currentItem();
+    KoID filterID = m_optWidget->cmbFilter->currentItem();
     m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
 
 /*

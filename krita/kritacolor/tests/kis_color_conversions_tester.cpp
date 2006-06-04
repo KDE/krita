@@ -25,9 +25,9 @@
 using namespace KUnitTest;
 
 KUNITTEST_MODULE(kunittest_kis_color_conversions_tester, "Color Conversions Tester");
-KUNITTEST_MODULE_REGISTER_TESTER(KisColorConversionsTester);
+KUNITTEST_MODULE_REGISTER_TESTER(KoColorConversionsTester);
 
-void KisColorConversionsTester::allTests()
+void KoColorConversionsTester::allTests()
 {
     testRGBHSV();
     testRGBHSL();
@@ -35,7 +35,7 @@ void KisColorConversionsTester::allTests()
 
 #define EPSILON 1e-6
 
-void KisColorConversionsTester::testRGBHSV()
+void KoColorConversionsTester::testRGBHSV()
 {
     float r, g, b, h, s, v;
 
@@ -130,7 +130,7 @@ void KisColorConversionsTester::testRGBHSV()
     CHECK_TOLERANCE(b, 0.75f, EPSILON);
 }
 
-void KisColorConversionsTester::testRGBHSL()
+void KoColorConversionsTester::testRGBHSL()
 {
     float r, g, b, h, s, l;
 

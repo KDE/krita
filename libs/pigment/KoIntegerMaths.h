@@ -31,6 +31,9 @@
 #define INT16_MAX 32767
 #define INT16_MIN -32768
 
+#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+
+
 /// take a and scale it up by 256*b/255
 inline uint UINT8_SCALEBY(uint a, uint b)
 {

@@ -17,17 +17,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLORSPACE_FACTORY_REGISTRY_H_
-#define KIS_COLORSPACE_FACTORY_REGISTRY_H_
+#ifndef KOCOLORSPACEFACTORYREGISTRY_H
+#define KOCOLORSPACEFACTORYREGISTRY_H
 
 #include <QObject>
 #include <QMap>
 #include <QList>
 #include <QString>
-#include <krita_export.h>
+#include <koffice_export.h>
 
-#include "kis_generic_registry.h"
-#include "kis_colorspace.h"
+#include <KoGenericRegistry.h>
+#include "KoColorSpace.h"
 
 class QStringList;
 class KisPaintDeviceAction;
@@ -38,7 +38,7 @@ class KisPaintDeviceAction;
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
  */
-class KRITACOLOR_EXPORT KisColorSpaceFactoryRegistry : public QObject,  public KisGenericRegistry<KisColorSpaceFactory *> {
+class PIGMENT_EXPORT KoColorSpaceFactoryRegistry : public QObject,  public KisGenericRegistry<KoColorSpaceFactory *> {
 
 
     Q_OBJECT
@@ -53,47 +53,47 @@ public:
      *
      * @param profileFileNames a list of all filenames of all profiles that need to be loaded initially
      */
-    KisColorSpaceFactoryRegistry(QStringList profileFileNames);
+    KoColorSpaceFactoryRegistry(QStringList profileFileNames);
 
-    virtual ~KisColorSpaceFactoryRegistry();
+    virtual ~KoColorSpaceFactoryRegistry();
 
     /**
      * Add the profile to the list.
      */
-    void addProfile(KisProfile * p);
+    void addProfile(KoColorProfile * p);
 
     /**
      * Return the profile associated with the given product name,
      * or 0.
      */
-    KisProfile *  getProfileByName(const QString & name);
+    KoColorProfile *  getProfileByName(const QString & name);
 
     /**
      * Return the list of profiles for this colorspacefactory
      */
-    QList<KisProfile *>  profilesFor(KisColorSpaceFactory * cs);
+    QList<KoColorProfile *>  profilesFor(KoColorSpaceFactory * cs);
 
-    QList<KisProfile *>  profilesFor(KisID id);
+    QList<KoColorProfile *>  profilesFor(KoID id);
 
     /**
      * Return the colorspace + profile as named, or NULL if impossible combination.
      */
-    KisColorSpace *  getColorSpace(const KisID & csID, const QString & profileName);
+    KoColorSpace *  getColorSpace(const KoID & csID, const QString & profileName);
 
     /**
      * Return the colorspace + profile -- where the profile is matched on the name of the specified profile
      */
-    KisColorSpace * getColorSpace(const KisID & csID, const KisProfile * profile);
+    KoColorSpace * getColorSpace(const KoID & csID, const KoColorProfile * profile);
 
     /**
      * Convenience method to get the often used alpha colorspace
      */
-    KisColorSpace * getAlpha8();
+    KoColorSpace * getAlpha8();
 
     /**
      * Convenience method to get an RGB colorspace with the default lcms profile
      */
-    KisColorSpace * getRGB8();
+    KoColorSpace * getRGB8();
 
     /**
      * add a KisConstructPaintDeviceAction to the registry for a colorspace
@@ -101,26 +101,26 @@ public:
      * These actions are exectued when an image is created on the first layer
      * in the image, on the image width and height rect.
      */
-    void addPaintDeviceAction(KisColorSpace* cs, KisPaintDeviceAction* action);
+    void addPaintDeviceAction(KoColorSpace* cs, KisPaintDeviceAction* action);
 
     /**
      * Get a list of KisConstructPaintDeviceAction for a colorspace
      */
-    QList<KisPaintDeviceAction *> paintDeviceActionsFor(KisColorSpace* cs);
+    QList<KisPaintDeviceAction *> paintDeviceActionsFor(KoColorSpace* cs);
 
 private:
-    KisColorSpaceFactoryRegistry();
-    KisColorSpaceFactoryRegistry(const KisColorSpaceFactoryRegistry&);
-    KisColorSpaceFactoryRegistry operator=(const KisColorSpaceFactoryRegistry&);
+    KoColorSpaceFactoryRegistry();
+    KoColorSpaceFactoryRegistry(const KoColorSpaceFactoryRegistry&);
+    KoColorSpaceFactoryRegistry operator=(const KoColorSpaceFactoryRegistry&);
 
 private:
 
-    QMap<QString, KisProfile * > m_profileMap;
-    QMap<QString, KisColorSpace * > m_csMap;
+    QMap<QString, KoColorProfile * > m_profileMap;
+    QMap<QString, KoColorSpace * > m_csMap;
     typedef QList<KisPaintDeviceAction *> PaintActionList;
-    QMap<KisID, PaintActionList> m_paintDevActionMap;
-    KisColorSpace *m_alphaCs;
+    QMap<KoID, PaintActionList> m_paintDevActionMap;
+    KoColorSpace *m_alphaCs;
 };
 
-#endif // KIS_COLORSPACE_FACTORY_REGISTRY_H_
+#endif // KOCOLORSPACEFACTORYREGISTRY_H
 

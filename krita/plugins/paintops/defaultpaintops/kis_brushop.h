@@ -38,7 +38,7 @@ public:
     virtual ~KisBrushOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KisID id() { return KisID("paintbrush", i18n("Pixel Brush")); }
+    virtual KoID id() { return KoID("paintbrush", i18n("Pixel Brush")); }
     virtual QString pixmap() { return "paintbrush.png"; }
     virtual KisPaintOpSettings *settings(QWidget * parent, const KisInputDevice& inputDevice);
 };

@@ -41,7 +41,7 @@
 #include "kis_button_press_event.h"
 #include "kis_canvas_subject.h"
 #include "kis_iterators_pixel.h"
-#include "kis_color.h"
+#include "KoColor.h"
 #include "kis_resourceserver.h"
 #include "kis_palette.h"
 
@@ -61,7 +61,7 @@ KisToolColorPicker::KisToolColorPicker()
     m_addPalette = false;
     m_updateColor = true;
     m_normaliseValues = false;
-    m_pickedColor = KisColor();
+    m_pickedColor = KoColor();
 }
 
 KisToolColorPicker::~KisToolColorPicker()
@@ -118,7 +118,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
             // radius 2 ==> 9 pixels, 3 => 9 pixels, etc
             static int counts[] = { 0, 1, 9, 25, 45, 69, 109, 145, 193, 249 };
 
-            KisColorSpace* cs = dev->colorSpace();
+            KoColorSpace* cs = dev->colorSpace();
             int pixelSize = cs->pixelSize();
 
             quint8* data = new quint8[pixelSize];
@@ -153,7 +153,7 @@ void KisToolColorPicker::buttonPress(KisButtonPressEvent *e)
             // Weird, I can't do that directly :/
             const quint8** cpixels = const_cast<const quint8**>(pixels);
             cs->mixColors(cpixels, weights, counts[m_radius], data);
-            m_pickedColor = KisColor(data, cs);
+            m_pickedColor = KoColor(data, cs);
 
             for (i = 0; i < counts[m_radius]; i++)
                 delete[] pixels[i];
@@ -190,7 +190,7 @@ void KisToolColorPicker::displayPickedColor()
 {
     if (m_pickedColor.data() && m_optionsWidget) {
 
-        Q3ValueVector<KisChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
+        Q3ValueVector<KoChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
 
         for (int i = 0; i < channels.count(); ++i) {

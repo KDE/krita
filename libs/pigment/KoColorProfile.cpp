@@ -23,16 +23,15 @@
 #include <cmath>
 #include <config.h>
 #include <lcms.h>
+#include <limits.h>
 
 #include <QImage>
 #include <QTextStream>
 #include <QFile>
 
-#include <ksharedptr.h>
 #include <kdebug.h>
 
-#include "kis_profile.h"
-#include "kis_global.h"
+#include "KoColorProfile.h"
 
 
 #ifdef Q_WS_X11
@@ -43,7 +42,7 @@
 #endif
 
 
-KisProfile::KisProfile(QByteArray rawData)
+KoColorProfile::KoColorProfile(QByteArray rawData)
     : m_rawData(rawData),
       m_filename( QString() ),
       m_valid( false ),
@@ -53,14 +52,14 @@ KisProfile::KisProfile(QByteArray rawData)
     init();
 }
 
-KisProfile::KisProfile(const QString& file)
+KoColorProfile::KoColorProfile(const QString& file)
     : m_filename(file),
       m_valid( false ),
       m_suitableForOutput( false )
 {
 }
 
-KisProfile::KisProfile(const cmsHPROFILE profile)
+KoColorProfile::KoColorProfile(const cmsHPROFILE profile)
     : m_profile(profile),
       m_filename( QString() ),
       m_valid( true )
@@ -83,13 +82,13 @@ KisProfile::KisProfile(const cmsHPROFILE profile)
     init();
 }
 
-KisProfile::~KisProfile()
+KoColorProfile::~KoColorProfile()
 {
     cmsCloseProfile(m_profile);
 }
 
 
-bool KisProfile::load()
+bool KoColorProfile::load()
 {
     QFile file(m_filename);
     file.open(QIODevice::ReadOnly);
@@ -105,7 +104,7 @@ bool KisProfile::load()
 
 }
 
-bool KisProfile::init()
+bool KoColorProfile::init()
 {
     if (m_profile) {
         m_colorSpaceSignature = cmsGetColorSpace(m_profile);
@@ -141,7 +140,7 @@ bool KisProfile::init()
     return false;
 }
 
-cmsHPROFILE KisProfile::profile()
+cmsHPROFILE KoColorProfile::profile()
 {
 #if 0
 	if (m_profile = 0) {
@@ -155,22 +154,13 @@ cmsHPROFILE KisProfile::profile()
 	return m_profile;
 }
 
-bool KisProfile::save()
+bool KoColorProfile::save()
 {
     return false;
 }
 
-KisAnnotationSP KisProfile::annotation() const
-{
-    // XXX we hardcode icc, this is correct for lcms?
-    // XXX productName(), or just "ICC Profile"?
-    if (!m_rawData.isEmpty())
-        return KisAnnotationSP(new KisAnnotation("icc", productName(), m_rawData));
-    else
-        return KisAnnotationSP(0);
-}
 
-KisProfile *  KisProfile::getScreenProfile (int screen)
+KoColorProfile *  KoColorProfile::getScreenProfile (int screen)
 {
 
 #ifdef Q_WS_X11
@@ -200,7 +190,7 @@ KisProfile *  KisProfile::getScreenProfile (int screen)
         QByteArray bytes (nitems, '\0');
         bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
-        return new KisProfile(bytes);
+        return new KoColorProfile(bytes);
     } else {
         return NULL;
     }

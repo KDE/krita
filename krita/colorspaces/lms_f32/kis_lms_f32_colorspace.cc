@@ -48,15 +48,15 @@ namespace {
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
 // disable the lcms handling by setting profile=0
-KisLmsF32ColorSpace::KisLmsF32ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile */*p*/) :
-    KisColorSpace(KisID("LMSAF32", i18n("LMS (32-bit float/channel)")), parent)
-    , KisF32BaseColorSpace(PIXEL_ALPHA * sizeof(float))
-    , KisLcmsBaseColorSpace(F32_LCMS_TYPE, icSig3colorData, 0)
+KisLmsF32ColorSpace::KisLmsF32ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile */*p*/) :
+    KoColorSpace(KoID("LMSAF32", i18n("LMS (32-bit float/channel)")), parent)
+    , KoF32ColorSpaceTrait(PIXEL_ALPHA * sizeof(float))
+    , KoLcmsColorSpaceTrait(F32_LCMS_TYPE, icSig3colorData, 0)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Long"), PIXEL_LONGWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Middle"), PIXEL_MIDDLEWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Short"), PIXEL_SHORTWAVE * sizeof(float), KisChannelInfo::COLOR, KisChannelInfo::FLOAT32, sizeof(float)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), KisChannelInfo::ALPHA, KisChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Long"), PIXEL_LONGWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Middle"), PIXEL_MIDDLEWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Short"), PIXEL_SHORTWAVE * sizeof(float), KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(float), KoChannelInfo::ALPHA, KoChannelInfo::FLOAT32, sizeof(float)));
 }
 
 KisLmsF32ColorSpace::~KisLmsF32ColorSpace()
@@ -83,7 +83,7 @@ void KisLmsF32ColorSpace::getPixel(const quint8 *src, float *longWave, float *mi
     *alpha = srcPixel->alpha;
 }
 
-void KisLmsF32ColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KisProfile * /*profile*/)
+void KisLmsF32ColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -92,7 +92,7 @@ void KisLmsF32ColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KisProfile 
     dst->shortWave = computeShort(c.red(),c.green(),c.blue());
 }
 
-void KisLmsF32ColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KisProfile * /*profile*/)
+void KisLmsF32ColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile * /*profile*/)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -102,14 +102,14 @@ void KisLmsF32ColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *ds
     dst->alpha = UINT8_TO_FLOAT(opacity);
 }
 
-void KisLmsF32ColorSpace::toQColor(const quint8 *srcU8, QColor *c, KisProfile * /*profile*/)
+void KisLmsF32ColorSpace::toQColor(const quint8 *srcU8, QColor *c, KoColorProfile * /*profile*/)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c->setRgb(computeRed(src->longWave,src->middleWave,src->shortWave), computeGreen(src->longWave,src->middleWave,src->shortWave), computeBlue(src->longWave,src->middleWave,src->shortWave));
 }
 
-void KisLmsF32ColorSpace::toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KisProfile * /*profile*/)
+void KisLmsF32ColorSpace::toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/)
 {
    const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -164,7 +164,7 @@ void KisLmsF32ColorSpace::mixColors(const quint8 **colors, const quint8 *weights
     dstPixel->shortWave = totalShort;
 }
 
-Q3ValueVector<KisChannelInfo *> KisLmsF32ColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KisLmsF32ColorSpace::channels() const
 {
     return m_channels;
 }
@@ -185,7 +185,7 @@ quint32 KisLmsF32ColorSpace::pixelSize() const
 }
 
 QImage KisLmsF32ColorSpace::convertToQImage(const quint8 *dataU8, qint32 width, qint32 height,
-                                            KisProfile *  /*dstProfile*/,
+                                            KoColorProfile *  /*dstProfile*/,
                                             qint32 /*renderingIntent*/, float /*exposure*/)
 
 {
@@ -352,7 +352,7 @@ void KisLmsF32ColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KisCompositeOp& op)
+                      const KoCompositeOp& op)
 {
     float opacity = UINT8_TO_FLOAT(U8_opacity);
 
@@ -374,11 +374,11 @@ void KisLmsF32ColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KisCompositeOpList KisLmsF32ColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisLmsF32ColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
     return list;
 }
 

@@ -29,23 +29,23 @@
 #include <kglobal.h>
 
 #include "kis_gray_u16_colorspace.h"
-#include "kis_u16_base_colorspace.h"
+#include "KoU16ColorSpaceTrait.h"
 #include "kis_color_conversions.h"
 #include "kis_integer_maths.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 
 namespace {
     const qint32 MAX_CHANNEL_GRAY = 1;
     const qint32 MAX_CHANNEL_GRAYA = 2;
 }
 
-KisGrayU16ColorSpace::KisGrayU16ColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisColorSpace(KisID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")), parent)
-    , KisU16BaseColorSpace(PIXEL_ALPHA * sizeof(quint16))
-    , KisLcmsBaseColorSpace(TYPE_GRAYA_16, icSigGrayData, p)
+KisGrayU16ColorSpace::KisGrayU16ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+    KoColorSpace(KoID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")), parent)
+    , KoU16ColorSpaceTrait(PIXEL_ALPHA * sizeof(quint16))
+    , KoLcmsColorSpaceTrait(TYPE_GRAYA_16, icSigGrayData, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Gray"), PIXEL_GRAY * sizeof(quint16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(quint16)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(quint16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(quint16)));
+    m_channels.push_back(new KoChannelInfo(i18n("Gray"), PIXEL_GRAY * sizeof(quint16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(quint16), KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
 
 /*    LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
     cmsHPROFILE hProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
@@ -90,7 +90,7 @@ void KisGrayU16ColorSpace::mixColors(const quint8 **colors, const quint8 *weight
     dstPixel->gray = totalGray;
 }
 
-void KisGrayU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst,
+void KisGrayU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst,
                                           qint32 factor, qint32 offset, qint32 nColors) const
 {
     qint32 totalGray = 0, totalAlpha = 0;
@@ -111,10 +111,10 @@ void KisGrayU16ColorSpace::convolveColors(quint8** colors, qint32* kernelValues,
 
     Pixel * p = reinterpret_cast< Pixel *>( dst );
 
-    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+    if (channelFlags & KoChannelInfo::FLAG_COLOR) {
         p->gray = CLAMP( ( totalGray / factor) + offset, 0, quint16_MAX);
     }
-    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+    if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
         p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, quint16_MAX);
     }
 }
@@ -141,7 +141,7 @@ quint8 KisGrayU16ColorSpace::intensity8(const quint8 * src) const
 }
 
 
-Q3ValueVector<KisChannelInfo *> KisGrayU16ColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KisGrayU16ColorSpace::channels() const
 {
     return m_channels;
 }
@@ -508,7 +508,7 @@ void KisGrayU16ColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KisCompositeOp& op)
+                      const KoCompositeOp& op)
 {
     quint16 opacity = UINT8_TO_UINT16(U8_opacity);
 
@@ -633,19 +633,19 @@ void KisGrayU16ColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KisCompositeOpList KisGrayU16ColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisGrayU16ColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
-    list.append(KisCompositeOp(COMPOSITE_MULT));
-    list.append(KisCompositeOp(COMPOSITE_BURN));
-    list.append(KisCompositeOp(COMPOSITE_DODGE));
-    list.append(KisCompositeOp(COMPOSITE_DIVIDE));
-    list.append(KisCompositeOp(COMPOSITE_SCREEN));
-    list.append(KisCompositeOp(COMPOSITE_OVERLAY));
-    list.append(KisCompositeOp(COMPOSITE_DARKEN));
-    list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_MULT));
+    list.append(KoCompositeOp(COMPOSITE_BURN));
+    list.append(KoCompositeOp(COMPOSITE_DODGE));
+    list.append(KoCompositeOp(COMPOSITE_DIVIDE));
+    list.append(KoCompositeOp(COMPOSITE_SCREEN));
+    list.append(KoCompositeOp(COMPOSITE_OVERLAY));
+    list.append(KoCompositeOp(COMPOSITE_DARKEN));
+    list.append(KoCompositeOp(COMPOSITE_LIGHTEN));
 
     return list;
 }

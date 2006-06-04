@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include "kis_types.h"
-#include "kis_generic_registry.h"
+#include "KoGenericRegistry.h"
 #include <krita_export.h>
 
 class QWidget;
@@ -31,7 +31,7 @@ class QStringList;
 class KisPaintOp;
 class KisPaintOpSettings;
 class KisPainter;
-class KisColorSpace;
+class KoColorSpace;
 class KisInputDevice;
 
 class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KisGenericRegistry<KisPaintOpFactorySP>
@@ -45,7 +45,7 @@ public:
     /**
      * Return a newly created paintop
      */
-    KisPaintOp * paintOp(const KisID& id, const KisPaintOpSettings * settings, KisPainter * painter) const;
+    KisPaintOp * paintOp(const KoID& id, const KisPaintOpSettings * settings, KisPainter * painter) const;
 
     /**
      * Return a newly created paintopd
@@ -58,13 +58,13 @@ public:
      * with the specified parent as widget parent. Returns 0 if there
      * are no settings available for the given device.
      */
-    KisPaintOpSettings * settings(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const;
+    KisPaintOpSettings * settings(const KoID& id, QWidget * parent, const KisInputDevice& inputDevice) const;
 
     // Whether we should show this paintop in the toolchest
-    bool userVisible(const KisID & id, KisColorSpace* cs) const;
+    bool userVisible(const KoID & id, KoColorSpace* cs) const;
 
     // Get the name of the icon to show in the toolchest
-    QString pixmap(const KisID & id) const;
+    QString pixmap(const KoID & id) const;
 
 
 public:

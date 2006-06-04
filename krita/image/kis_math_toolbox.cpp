@@ -30,7 +30,7 @@
 #include <Q3MemArray>
 
 
-KisMathToolbox::KisMathToolbox(KisID id) : m_id(id)
+KisMathToolbox::KisMathToolbox(KoID id) : m_id(id)
 {
 }
 
@@ -66,29 +66,29 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
 {
     qint32 depth = src->colorSpace()->nColorChannels();
     Q3MemArray<PtrToDouble> f(depth);
-    Q3ValueVector<KisChannelInfo *> cis = src->colorSpace()->channels();
+    Q3ValueVector<KoChannelInfo *> cis = src->colorSpace()->channels();
     for(qint32 k = 0; k < depth; k++)
     {
         switch( cis[k]->channelValueType() )
         {
-            case KisChannelInfo::UINT8:
+            case KoChannelInfo::UINT8:
                 f[k] = toDouble<quint8>;
                 break;
-            case KisChannelInfo::UINT16:
+            case KoChannelInfo::UINT16:
                 f[k] = toDouble<quint16>;
                 break;
 #ifdef HAVE_OPENEXR		
-            case KisChannelInfo::FLOAT16:
+            case KoChannelInfo::FLOAT16:
                 f[k] = toDouble<half>;
                 break;
 #endif
-            case KisChannelInfo::FLOAT32:
+            case KoChannelInfo::FLOAT32:
                 f[k] = toDouble<float>;
                 break;
-            case KisChannelInfo::INT8:
+            case KoChannelInfo::INT8:
                 f[k] = toDouble<qint8>;
                 break;
-            case KisChannelInfo::INT16:
+            case KoChannelInfo::INT16:
                 f[k] = toDouble<qint16>;
                 break;
             default:
@@ -118,29 +118,29 @@ void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentatio
 {
     qint32 depth = dst->colorSpace()->nColorChannels();
     Q3MemArray<PtrFromDouble> f(depth);
-    Q3ValueVector<KisChannelInfo *> cis = dst->colorSpace()->channels();
+    Q3ValueVector<KoChannelInfo *> cis = dst->colorSpace()->channels();
     for(qint32 k = 0; k < depth; k++)
     {
         switch( cis[k]->channelValueType() )
         {
-            case KisChannelInfo::UINT8:
+            case KoChannelInfo::UINT8:
                 f[k] = fromDouble<quint8>;
                 break;
-            case KisChannelInfo::UINT16:
+            case KoChannelInfo::UINT16:
                 f[k] = fromDouble<quint16>;
                 break;
 #ifdef HAVE_OPENEXR
-            case KisChannelInfo::FLOAT16:
+            case KoChannelInfo::FLOAT16:
                 f[k] = fromDouble<half>;
                 break;
 #endif		
-            case KisChannelInfo::FLOAT32:
+            case KoChannelInfo::FLOAT32:
                 f[k] = fromDouble<float>;
                 break;
-            case KisChannelInfo::INT8:
+            case KoChannelInfo::INT8:
                 f[k] = fromDouble<qint8>;
                 break;
-            case KisChannelInfo::INT16:
+            case KoChannelInfo::INT16:
                 f[k] = fromDouble<qint16>;
                 break;
             default:

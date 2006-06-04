@@ -29,7 +29,7 @@
 
 #include <kopalettemanager.h>
 
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_progress_display_interface.h"
 #include "kis_dlg_filtersgallery.h"
 #include "kis_doc.h"
@@ -65,7 +65,7 @@ KritaFiltersGallery::KritaFiltersGallery(QObject *parent, const QStringList &)
 //         QImage img;
 //         if(img.load(locate("data","krita/images/previewfilter.png")))
 //         {
-//            KisPaintDeviceSP preview = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA",""),""));
+//            KisPaintDeviceSP preview = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),""));
 //            preview->convertFromQImage(img,"");
 //            m_view->canvasSubject()->paletteManager()->addWidget(new KisFiltersListView(preview,m_view),"filterslist",krita::EFFECTSBOX, 0);
 //         }

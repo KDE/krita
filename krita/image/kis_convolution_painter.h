@@ -82,13 +82,13 @@ public:
      */
     void applyMatrix(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
                      KisConvolutionBorderOp borderOp = BORDER_AVOID,
-                     KisChannelInfo::enumChannelFlags channelFlags = KisChannelInfo::FLAG_COLOR);
+                     KoChannelInfo::enumChannelFlags channelFlags = KoChannelInfo::FLAG_COLOR);
 private:
     /**
      * This function is called by applyMatrix when borderOp == BORDER_REPEAT
      */
     void applyMatrixRepeat(KisKernelSP kernel, qint32 x, qint32 y, qint32 w, qint32 h,
-                           KisChannelInfo::enumChannelFlags channelFlags);
+                           KoChannelInfo::enumChannelFlags channelFlags);
 
 
 };

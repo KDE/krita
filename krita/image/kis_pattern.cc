@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_color.h"
+#include "KoColor.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 
@@ -278,7 +278,7 @@ bool KisPattern::init()
     return true;
 }
 
-KisPaintDeviceSP KisPattern::image(KisColorSpace * colorSpace) {
+KisPaintDeviceSP KisPattern::image(KoColorSpace * colorSpace) {
     // Check if there's already a pattern prepared for this colorspace
     QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
     if (it != m_colorspaces.end())

@@ -92,7 +92,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("selectoutline", i18n("Select Outline tool")); }
+    virtual KoID id() { return KoID("selectoutline", i18n("Select Outline tool")); }
 };
 
 

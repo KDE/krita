@@ -31,23 +31,23 @@
 
 #define pi 3.14159265
 
-KoColorWheel::KoColorWheel( QWidget *parent, const char *name ): KXYSelector( parent )
+KoOldColorWheel::KoOldColorWheel( QWidget *parent, const char *name ): KXYSelector( parent )
 {
     setObjectName(name);
 }
 
-void KoColorWheel::resizeEvent( QResizeEvent * )
+void KoOldColorWheel::resizeEvent( QResizeEvent * )
 {
     drawWheel(&m_pixmap);
     setRange( 0, 0, contentsRect().width(), contentsRect().height() );
 }
 
-void KoColorWheel::drawContents( QPainter *painter )
+void KoOldColorWheel::drawContents( QPainter *painter )
 {
     painter->drawPixmap( contentsRect().x(), contentsRect().y(), m_pixmap );
 }
 
-void KoColorWheel::drawWheel( QPixmap *pixmap )
+void KoOldColorWheel::drawWheel( QPixmap *pixmap )
 {
     int size = qMin(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
@@ -80,7 +80,7 @@ void KoColorWheel::drawWheel( QPixmap *pixmap )
     pixmap->convertFromImage( image );
 }
 
-void KoColorWheel::mousePressEvent( QMouseEvent *e )
+void KoOldColorWheel::mousePressEvent( QMouseEvent *e )
 {
     int size = qMin(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
@@ -102,12 +102,12 @@ void KoColorWheel::mousePressEvent( QMouseEvent *e )
     emit valueChanged(m_color);
 }
 
-void KoColorWheel::mouseMoveEvent( QMouseEvent *e )
+void KoOldColorWheel::mouseMoveEvent( QMouseEvent *e )
 {
     mousePressEvent( e );
 }
 
-void KoColorWheel::slotSetValue(const KoColor& c)
+void KoOldColorWheel::slotSetValue(const KoOldColor& c)
 {
     int size = qMin(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);

@@ -32,7 +32,8 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_config.h"
-#include "kis_colorspace_factory_registry.h"
+#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorProfile.h>
 #include "kis_factory.h"
 #include <kis_meta_registry.h>
 #include "kis_clipboard.h"
@@ -104,10 +105,18 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     }
 
     if (selection->colorSpace()->getProfile()) {
-        KisAnnotationSP annotation = selection->colorSpace()->getProfile()->annotation();
-         if (annotation) {
+        KoColorProfile *profile = selection->colorSpace()->getProfile();
+        KisAnnotationSP annotation;
+        if (profile)
+        {
+            // XXX we hardcode icc, this is correct for lcms?
+            // XXX productName(), or just "ICC Profile"?
+            if (!profile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+        }
+        if (annotation) {
             // save layer profile
-             if (store->open("profile.icc")) {
+            if (store->open("profile.icc")) {
                 store->write(annotation->annotation());
                 store->close();
             }
@@ -120,7 +129,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     QImage qimg;
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KisProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
+    KoColorProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
     qimg = selection->convertToQImage(monitorProfile);
 
     QMimeData *mimeData = new QMimeData;
@@ -150,14 +159,14 @@ KisPaintDeviceSP KisClipboard::clip()
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
-        KisProfile *profile=0;
+        KoColorProfile *profile=0;
 
         if (store->hasFile("profile.icc")) {
             QByteArray data;
             store->open("profile.icc");
             data = store->read(store->size());
             store->close();
-           profile = new KisProfile(data);
+           profile = new KoColorProfile(data);
         }
 
         QString csName;
@@ -168,7 +177,7 @@ KisPaintDeviceSP KisClipboard::clip()
             store->close();
         }
 
-        KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName, ""), profile);
+        KoColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName, ""), profile);
 
         m_clip = new KisPaintDevice(cs, "clip");
 
@@ -196,12 +205,12 @@ KisPaintDeviceSP KisClipboard::clip()
             behaviour = QMessageBox::question(0,i18n("Pasting data from simple source"),i18n("The image data you are trying to paste has no colour profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"),i18n("As &Web"),i18n("As on &Monitor"));
         }
 
-        KisColorSpace * cs;
+        KoColorSpace * cs;
         QString profileName("");
         if (behaviour == PASTE_ASSUME_MONITOR)
             profileName = cfg.monitorProfile();
 
-        cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KisID("RGBA",""), profileName);
+        cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KoID("RGBA",""), profileName);
         m_clip = new KisPaintDevice(cs, "from paste");
         Q_CHECK_PTR(m_clip);
         m_clip->convertFromQImage(qimg, profileName);
@@ -248,14 +257,14 @@ QSize KisClipboard::clipSize()
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
-        KisProfile *profile=0;
+        KoColorProfile *profile=0;
 
         if (store->hasFile("profile.icc")) {
             QByteArray data;
             store->open("profile.icc");
             data = store->read(store->size());
             store->close();
-            profile = new KisProfile(data);
+            profile = new KoColorProfile(data);
         }
 
         QString csName;
@@ -266,7 +275,7 @@ QSize KisClipboard::clipSize()
             store->close();
         }
 
-        KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName, ""), profile);
+        KoColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName, ""), profile);
 
         clip = new KisPaintDevice(cs, "clip");
 

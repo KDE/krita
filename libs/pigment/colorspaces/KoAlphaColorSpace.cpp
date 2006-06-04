@@ -28,62 +28,62 @@
 
 #include <lcms.h>
 
-#include "kis_alpha_colorspace.h"
-#include "kis_u8_base_colorspace.h"
-#include "kis_channelinfo.h"
-#include "kis_id.h"
-#include "kis_integer_maths.h"
+#include "KoAlphaColorSpace.h"
+#include "KoU8ColorSpaceTrait.h"
+#include "KoChannelInfo.h"
+#include "KoID.h"
+#include "KoIntegerMaths.h"
 
 namespace {
     const quint8 PIXEL_MASK = 0;
 }
 
-KisAlphaColorSpace::KisAlphaColorSpace(KisColorSpaceFactoryRegistry * parent,
-                                       KisProfile *p) :
-    KisColorSpace(KisID("ALPHA", i18n("Alpha mask")),  parent)
-    , KisU8BaseColorSpace(0)
-    , KisLcmsBaseColorSpace(TYPE_GRAY_8, icSigGrayData, p)
+KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceFactoryRegistry * parent,
+                                       KoColorProfile *p) :
+    KoColorSpace(KoID("ALPHA", i18n("Alpha mask")),  parent)
+    , KoU8ColorSpaceTrait(0)
+    , KoLcmsColorSpaceTrait(TYPE_GRAY_8, icSigGrayData, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 0, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 }
 
-KisAlphaColorSpace::~KisAlphaColorSpace()
+KoAlphaColorSpace::~KoAlphaColorSpace()
 {
 }
 
-void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 *dst, KisProfile * /*profile*/)
+void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 *dst, KoColorProfile * /*profile*/)
 {
     dst[PIXEL_MASK] = OPACITY_OPAQUE;
 }
 
-void KisAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *dst, KisProfile * /*profile*/)
+void KoAlphaColorSpace::fromQColor(const QColor& /*c*/, quint8 opacity, quint8 *dst, KoColorProfile * /*profile*/)
 {
     dst[PIXEL_MASK] = opacity;
 }
 
-void KisAlphaColorSpace::getAlpha(const quint8 *pixel, quint8 *alpha) const
+void KoAlphaColorSpace::getAlpha(const quint8 *pixel, quint8 *alpha) const
 {
     *alpha = *pixel;
 }
 
-void KisAlphaColorSpace::toQColor(const quint8 */*src*/, QColor *c, KisProfile * /*profile*/)
+void KoAlphaColorSpace::toQColor(const quint8 */*src*/, QColor *c, KoColorProfile * /*profile*/)
 {
     c->setRgb(255, 255, 255);
 }
 
-void KisAlphaColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * /*profile*/)
+void KoAlphaColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/)
 {
     c->setRgb(255, 255, 255);
     *opacity = src[PIXEL_MASK];
 }
 
-quint8 KisAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2)
+quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2)
 {
     // Arithmetic operands smaller than int are converted to int automatically
     return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 
-void KisAlphaColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
+void KoAlphaColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const
 {
     if (nColors > 0) {
         quint32 total = 0;
@@ -97,13 +97,13 @@ void KisAlphaColorSpace::mixColors(const quint8 **colors, const quint8 *weights,
     }
 }
 
-Q3ValueVector<KisChannelInfo *> KisAlphaColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KoAlphaColorSpace::channels() const
 {
     return m_channels;
 }
 
-bool KisAlphaColorSpace::convertPixelsTo(const quint8 *src,
-                     quint8 *dst, KisColorSpace * dstColorSpace,
+bool KoAlphaColorSpace::convertPixelsTo(const quint8 *src,
+                     quint8 *dst, KoColorSpace * dstColorSpace,
                      quint32 numPixels,
                      qint32 /*renderingIntent*/)
 {
@@ -128,7 +128,7 @@ bool KisAlphaColorSpace::convertPixelsTo(const quint8 *src,
 
 //XXX bitblt of ColorSpaceAlpha does not take mask into consideration as this is probably not
 // used ever
-void KisAlphaColorSpace::bitBlt(quint8 *dst,
+void KoAlphaColorSpace::bitBlt(quint8 *dst,
                 qint32 dststride,
                 const quint8 *src,
                 qint32 srcRowStride,
@@ -137,7 +137,7 @@ void KisAlphaColorSpace::bitBlt(quint8 *dst,
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op)
+                const KoCompositeOp& op)
 {
 
     quint8 *d;
@@ -185,7 +185,7 @@ void KisAlphaColorSpace::bitBlt(quint8 *dst,
 
             for (i = cols; i > 0; i--, d++, s++) {
                 if (d[PIXEL_MASK] <= s[PIXEL_MASK]) {
-                    d[PIXEL_MASK] = MIN_SELECTED;
+                    d[PIXEL_MASK] = OPACITY_OPAQUE;
                 } else {
                     d[PIXEL_MASK] -= s[PIXEL_MASK];
                 }
@@ -235,16 +235,16 @@ void KisAlphaColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KisCompositeOpList KisAlphaColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KoAlphaColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
 
     return list;
 }
 
-QString KisAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
+QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < nChannels());
     quint32 channelPosition = m_channels[channelIndex]->pos();
@@ -252,7 +252,7 @@ QString KisAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channe
     return QString().setNum(pixel[channelPosition]);
 }
 
-QString KisAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
+QString KoAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < nChannels());
     quint32 channelPosition = m_channels[channelIndex]->pos();
@@ -261,7 +261,7 @@ QString KisAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quin
 }
 
 
-void KisAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
+void KoAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     qint32 totalAlpha = 0;
 
@@ -276,7 +276,7 @@ void KisAlphaColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, 
         kernelValues++;
     }
 
-    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
-        dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, quint8_MAX);
+    if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
+        dst[PIXEL_MASK] = CLAMP((totalAlpha/ factor) + offset, 0, UINT8_MAX);
     }
 }

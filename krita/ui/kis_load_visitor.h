@@ -78,8 +78,8 @@ public:
             data = m_store->read(m_store->size());
             m_store->close();
             // Create a colorspace with the embedded profile
-            KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(layer->paintDevice()->colorSpace()->id(),
-                                                                                            new KisProfile(data));
+            KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(layer->paintDevice()->colorSpace()->id(),
+                                                                                            new KoColorProfile(data));
             // replace the old colorspace
             layer->paintDevice()->setData(layer->paintDevice()->dataManager(), cs);
             QRect rc = layer->paintDevice()->extent();

@@ -26,7 +26,7 @@
 #include <QStringList>
 #include <QList>
 
-#include "kis_generic_registry.h"
+#include "KoGenericRegistry.h"
 #include <krita_export.h>
 
 class KisResource;

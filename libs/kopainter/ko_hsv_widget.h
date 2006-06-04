@@ -23,14 +23,14 @@
 #include <QLabel>
 #include "kdualcolorbutton.h"
 
-#include "koColor.h"
+#include <koColor.h>
 
 #include <koffice_export.h>
 
 class KDualColorButton;
 class KValueSelector;
-class KoColorWheel;
-class KoColorSlider;
+class KoOldColorWheel;
+class KoOldColorSlider;
 class KoFrameButton;
 class QLabel;
 class QSpinBox;
@@ -65,7 +65,7 @@ protected slots:
     virtual void slotHChanged(int h);
     virtual void slotSChanged(int s);
     virtual void slotVChanged(int v);
-    virtual void slotWheelChanged(const KoColor& c);
+    virtual void slotWheelChanged(const KoOldColor& c);
 
     void slotFGColorSelected(const QColor& c);
     void slotBGColorSelected(const QColor& c);
@@ -75,9 +75,9 @@ private:
     void changedFgColor();
     void changedBgColor();
 
-    void update(const KoColor & fgColor, const KoColor & bgColor);
+    void update(const KoOldColor & fgColor, const KoOldColor & bgColor);
 
-    KoColorWheel *m_colorwheel;
+    KoOldColorWheel *m_colorwheel;
     KValueSelector *m_VSelector;
     QLabel *mHLabel;
     QLabel *mSLabel;
@@ -87,8 +87,8 @@ private:
     QSpinBox *mVIn;
     KDualColorButton *m_ColorButton;
 
-    KoColor m_fgColor;
-    KoColor m_bgColor;
+    KoOldColor m_fgColor;
+    KoOldColor m_bgColor;
 
     bool m_autovalue;
 };

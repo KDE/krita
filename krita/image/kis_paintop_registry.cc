@@ -28,13 +28,13 @@
 #include <kparts/componentfactory.h>
 #include <kservicetypetrader.h>
 
-#include "kis_generic_registry.h"
+#include "KoGenericRegistry.h"
 #include "kis_types.h"
 #include "kis_paintop_registry.h"
 #include "kis_paintop.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_debug_areas.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 
@@ -83,7 +83,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     return KisPaintOpRegistry::m_singleton;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, const KisPaintOpSettings * settings, KisPainter * painter) const
+KisPaintOp * KisPaintOpRegistry::paintOp(const KoID & id, const KisPaintOpSettings * settings, KisPainter * painter) const
 {
     if (painter == 0) {
         kWarning() << " KisPaintOpRegistry::paintOp painter is null";
@@ -100,10 +100,10 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisID & id, const KisPaintOpSetti
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettings * settings, KisPainter * painter) const
 {
-    return paintOp(KisID(id, ""), settings, painter);
+    return paintOp(KoID(id, ""), settings, painter);
 }
 
-KisPaintOpSettings * KisPaintOpRegistry::settings(const KisID& id, QWidget * parent, const KisInputDevice& inputDevice) const
+KisPaintOpSettings * KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KisInputDevice& inputDevice) const
 {
     KisPaintOpFactorySP f = get(id);
     if (f)
@@ -112,7 +112,7 @@ KisPaintOpSettings * KisPaintOpRegistry::settings(const KisID& id, QWidget * par
     return 0;
 }
 
-bool KisPaintOpRegistry::userVisible(const KisID & id, KisColorSpace* cs) const
+bool KisPaintOpRegistry::userVisible(const KoID & id, KoColorSpace* cs) const
 {
 
     KisPaintOpFactorySP f = get(id);
@@ -124,7 +124,7 @@ bool KisPaintOpRegistry::userVisible(const KisID & id, KisColorSpace* cs) const
 
 }
 
-QString KisPaintOpRegistry::pixmap(const KisID & id) const
+QString KisPaintOpRegistry::pixmap(const KoID & id) const
 {
     KisPaintOpFactorySP f = get(id);
 

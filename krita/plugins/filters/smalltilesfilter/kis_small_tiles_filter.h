@@ -50,7 +50,7 @@ public:
 
 public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("smalltiles", i18n("Small Tiles")); };
+    static inline KoID id() { return KoID("smalltiles", i18n("Small Tiles")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }

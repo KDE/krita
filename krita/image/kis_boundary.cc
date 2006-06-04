@@ -19,7 +19,7 @@
 #include <QPainter>
 #include <QList>
 
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_boundary.h"
@@ -37,7 +37,7 @@ void KisBoundary::generateBoundary(int w, int h) {
     if (!m_device)
         return;
 
-    KisColorSpace* cs = m_device->colorSpace();
+    KoColorSpace* cs = m_device->colorSpace();
 
     // Horizontal
     for (int currentY = - 1; currentY < h; currentY++) {

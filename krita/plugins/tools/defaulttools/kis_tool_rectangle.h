@@ -87,7 +87,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("rectangle", i18n("Rectangle Tool")); }
+    virtual KoID id() { return KoID("rectangle", i18n("Rectangle Tool")); }
 };
 
 

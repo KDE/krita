@@ -44,7 +44,7 @@ public:
     KisPixelizeFilter();
 public:
     virtual void process(KisPaintDeviceSP,KisPaintDeviceSP, KisFilterConfiguration* , const QRect&);
-    static inline KisID id() { return KisID("pixelize", i18n("Pixelize")); };
+    static inline KoID id() { return KoID("pixelize", i18n("Pixelize")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )

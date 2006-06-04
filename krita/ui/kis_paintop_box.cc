@@ -65,18 +65,18 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     m_layout->setSpacing(1);
     m_layout->addWidget(m_cmbPaintops);
 
-    connect(this, SIGNAL(selected(const KisID &, const KisPaintOpSettings *)), view, SLOT(paintopActivated(const KisID &, const KisPaintOpSettings *)));
+    connect(this, SIGNAL(selected(const KoID &, const KisPaintOpSettings *)), view, SLOT(paintopActivated(const KoID &, const KisPaintOpSettings *)));
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     // XXX: Let's see... Are all paintops loaded and ready?
-    KisIDList keys = KisPaintOpRegistry::instance()->listKeys();
-    for ( KisIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
+    KoIDList keys = KisPaintOpRegistry::instance()->listKeys();
+    for ( KoIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
         // add all paintops, and show/hide them afterwards
         addItem(*it);
     }
 
-    connect(view, SIGNAL(currentColorSpaceChanged(KisColorSpace*)),
-            this, SLOT(colorSpaceChanged(KisColorSpace*)));
+    connect(view, SIGNAL(currentColorSpaceChanged(KoColorSpace*)),
+            this, SLOT(colorSpaceChanged(KoColorSpace*)));
     connect(view, SIGNAL(sigInputDeviceChanged(const KisInputDevice&)),
             this, SLOT(slotInputDeviceChanged(const KisInputDevice&)));
 
@@ -87,7 +87,7 @@ KisPaintopBox::~KisPaintopBox()
 {
 }
 
-void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
+void KisPaintopBox::addItem(const KoID & paintop, const QString & /*category*/)
 {
     m_paintops.append(paintop);
 }
@@ -95,18 +95,18 @@ void KisPaintopBox::addItem(const KisID & paintop, const QString & /*category*/)
 void KisPaintopBox::slotItemSelected(int index)
 {
     if (index < m_displayedOps.count()) {
-        KisID paintop = m_displayedOps.at(index);
+        KoID paintop = m_displayedOps.at(index);
 
         setCurrentPaintop(paintop);
     }
 }
 
-void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
+void KisPaintopBox::colorSpaceChanged(KoColorSpace *cs)
 {
     m_displayedOps.clear();
     m_cmbPaintops->clear();
 
-    foreach (KisID paintopId, m_paintops) {
+    foreach (KoID paintopId, m_paintops) {
         if (KisPaintOpRegistry::instance()->userVisible(paintopId, cs)) {
 
             QPixmap pm = paintopPixmap(paintopId);
@@ -133,7 +133,7 @@ void KisPaintopBox::colorSpaceChanged(KisColorSpace *cs)
     slotItemSelected(index);
 }
 
-QPixmap KisPaintopBox::paintopPixmap(const KisID & paintop)
+QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
 {
     QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintop);
 
@@ -148,7 +148,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KisID & paintop)
 
 void KisPaintopBox::slotInputDeviceChanged(const KisInputDevice & inputDevice)
 {
-    KisID paintop;
+    KoID paintop;
     InputDevicePaintopMap::iterator it = m_currentID.find(inputDevice);
 
     if (it == m_currentID.end()) {
@@ -190,12 +190,12 @@ void KisPaintopBox::updateOptionWidget()
     }
 }
 
-const KisID& KisPaintopBox::currentPaintop()
+const KoID& KisPaintopBox::currentPaintop()
 {
     return m_currentID[m_canvasController->currentInputDevice()];
 }
 
-void KisPaintopBox::setCurrentPaintop(const KisID & paintop)
+void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
     m_currentID[m_canvasController->currentInputDevice()] = paintop;
 
@@ -204,16 +204,16 @@ void KisPaintopBox::setCurrentPaintop(const KisID & paintop)
     emit selected(paintop, paintopSettings(paintop, m_canvasController->currentInputDevice()));
 }
 
-KisID KisPaintopBox::defaultPaintop(const KisInputDevice& inputDevice)
+KoID KisPaintopBox::defaultPaintop(const KisInputDevice& inputDevice)
 {
     if (inputDevice == KisInputDevice::eraser()) {
-        return KisID("eraser","");
+        return KoID("eraser","");
     } else {
-        return KisID("paintbrush","");
+        return KoID("paintbrush","");
     }
 }
 
-const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KisID & paintop, const KisInputDevice & inputDevice)
+const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KoID & paintop, const KisInputDevice & inputDevice)
 {
     QList<KisPaintOpSettings *> settingsArray;
     InputDevicePaintopSettingsMap::iterator it = m_inputDevicePaintopSettings.find(inputDevice);
@@ -221,7 +221,7 @@ const KisPaintOpSettings *KisPaintopBox::paintopSettings(const KisID & paintop, 
     if (it == m_inputDevicePaintopSettings.end()) {
         // Create settings for each paintop.
 
-        foreach (KisID paintopId, m_paintops) {
+        foreach (KoID paintopId, m_paintops) {
             KisPaintOpSettings *settings = KisPaintOpRegistry::instance()->settings(paintopId, this, inputDevice);
             settingsArray.append(settings);
             if (settings && settings->widget()) {

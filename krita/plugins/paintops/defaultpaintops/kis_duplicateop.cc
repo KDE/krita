@@ -31,7 +31,7 @@
 #include "kis_painter.h"
 #include "kis_types.h"
 #include "kis_meta_registry.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_paintop.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"

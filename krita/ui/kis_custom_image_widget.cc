@@ -28,13 +28,13 @@
 #include "kis_custom_image_widget.h"
 #include "kis_doc.h"
 #include "kis_meta_registry.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_profile.h"
-#include "kis_colorspace.h"
-#include "kis_id.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorProfile.h"
+#include "KoColorSpace.h"
+#include "KoID.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
-#include "kis_color.h"
+#include "KoColor.h"
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 defWidth, qint32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
     : WdgNewImage(parent) {
@@ -49,8 +49,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 
     cmbColorSpaces->setIDList(KisMetaRegistry::instance()->csRegistry()->listKeys());
     cmbColorSpaces->setCurrent(defColorSpaceName);
 
-    connect(cmbColorSpaces, SIGNAL(activated(const KisID &)),
-        this, SLOT(fillCmbProfiles(const KisID &)));
+    connect(cmbColorSpaces, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbProfiles(const KoID &)));
     connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
 
     fillCmbProfiles(cmbColorSpaces->currentItem());
@@ -58,11 +58,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 
 }
 
 void KisCustomImageWidget::buttonClicked() {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
 
     QColor qc(cmbColor->color());
 
-    m_doc->newImage(txtName->text(), (qint32)intWidth->value(), (qint32)intHeight->value(), cs, KisColor(qc, cs), txtDescription->toPlainText(), doubleResolution->value());
+    m_doc->newImage(txtName->text(), (qint32)intWidth->value(), (qint32)intHeight->value(), cs, KoColor(qc, cs), txtDescription->toPlainText(), doubleResolution->value());
     emit documentSelected();
 }
 
@@ -76,7 +76,7 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
     return (opacity * 255) / 100;
 }
 
-void KisCustomImageWidget::fillCmbProfiles(const KisID & s)
+void KisCustomImageWidget::fillCmbProfiles(const KoID & s)
 {
     cmbProfile->clear();
 
@@ -84,12 +84,12 @@ void KisCustomImageWidget::fillCmbProfiles(const KisID & s)
         return;
     }
 
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     if (csf == 0) return;
 
-    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
 
-    foreach (KisProfile *profile, profileList) {
+    foreach (KoColorProfile *profile, profileList) {
         cmbProfile->addSqueezedItem(profile->productName());
     }
     cmbProfile->setCurrent(csf->defaultProfile());

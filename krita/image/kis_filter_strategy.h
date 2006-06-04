@@ -23,17 +23,17 @@
 #include <klocale.h>
 
 #include "kis_types.h"
-#include "kis_generic_registry.h"
-#include "kis_id.h"
+#include "KoGenericRegistry.h"
+#include "KoID.h"
 #include "krita_export.h"
 
 class KRITAIMAGE_EXPORT KisFilterStrategy
 {
     public:
-        KisFilterStrategy(KisID id) : m_id(id) {}
+        KisFilterStrategy(KoID id) : m_id(id) {}
         virtual ~KisFilterStrategy() {}
 
-        KisID id() {return m_id;};
+        KoID id() {return m_id;};
         virtual double valueAt(double /*t*/) const {return 0;};
         virtual quint32 intValueAt(qint32 t) const {return quint32(255*valueAt(t/256.0));};
         double support() { return supportVal;};
@@ -42,13 +42,13 @@ class KRITAIMAGE_EXPORT KisFilterStrategy
     protected:
         double supportVal;
         quint32 intSupportVal;
-        KisID m_id;
+        KoID m_id;
 };
 
 class KRITAIMAGE_EXPORT KisHermiteFilterStrategy : public KisFilterStrategy
 {
     public:
-        KisHermiteFilterStrategy() : KisFilterStrategy(KisID("Hermite", i18n("Hermite")))
+        KisHermiteFilterStrategy() : KisFilterStrategy(KoID("Hermite", i18n("Hermite")))
             {supportVal = 1.0; intSupportVal = 256;}
         virtual ~KisHermiteFilterStrategy() {}
 
@@ -59,7 +59,7 @@ class KRITAIMAGE_EXPORT KisHermiteFilterStrategy : public KisFilterStrategy
 class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 {
     public:
-        KisBoxFilterStrategy() : KisFilterStrategy(KisID("Box", i18n("Box")))
+        KisBoxFilterStrategy() : KisFilterStrategy(KoID("Box", i18n("Box")))
              {supportVal = 0.5; intSupportVal = 128;}
         virtual ~KisBoxFilterStrategy() {}
 
@@ -71,7 +71,7 @@ class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 class KRITAIMAGE_EXPORT KisTriangleFilterStrategy : public KisFilterStrategy
 {
     public:
-        KisTriangleFilterStrategy() : KisFilterStrategy(KisID("Triangle", i18n("Triangle aka (bi)linear")))
+        KisTriangleFilterStrategy() : KisFilterStrategy(KoID("Triangle", i18n("Triangle aka (bi)linear")))
             {supportVal = 1.0; intSupportVal = 256;}
         virtual ~KisTriangleFilterStrategy() {}
 
@@ -82,7 +82,7 @@ class KRITAIMAGE_EXPORT KisTriangleFilterStrategy : public KisFilterStrategy
 class KRITAIMAGE_EXPORT KisBellFilterStrategy : public KisFilterStrategy
 {
     public:
-        KisBellFilterStrategy() : KisFilterStrategy(KisID("Bell", i18n("Bell")))
+        KisBellFilterStrategy() : KisFilterStrategy(KoID("Bell", i18n("Bell")))
             {supportVal = 1.5; intSupportVal = 128+256;}
         virtual ~KisBellFilterStrategy() {}
 
@@ -92,7 +92,7 @@ class KRITAIMAGE_EXPORT KisBellFilterStrategy : public KisFilterStrategy
 class KRITAIMAGE_EXPORT KisBSplineFilterStrategy : public KisFilterStrategy
 {
     public:
-        KisBSplineFilterStrategy() : KisFilterStrategy(KisID("BSpline", i18n("BSpline")))
+        KisBSplineFilterStrategy() : KisFilterStrategy(KoID("BSpline", i18n("BSpline")))
             {supportVal = 2.0; intSupportVal = 512;}
         virtual ~KisBSplineFilterStrategy() {}
 
@@ -102,7 +102,7 @@ class KRITAIMAGE_EXPORT KisBSplineFilterStrategy : public KisFilterStrategy
 class KRITAIMAGE_EXPORT KisLanczos3FilterStrategy : public KisFilterStrategy
 {
     public:
-        KisLanczos3FilterStrategy() : KisFilterStrategy(KisID("Lanczos3", i18n("Lanczos3")))
+        KisLanczos3FilterStrategy() : KisFilterStrategy(KoID("Lanczos3", i18n("Lanczos3")))
             {supportVal = 3.0; intSupportVal = 768;}
         virtual ~KisLanczos3FilterStrategy() {}
 
@@ -114,7 +114,7 @@ class KRITAIMAGE_EXPORT KisLanczos3FilterStrategy : public KisFilterStrategy
 class KRITAIMAGE_EXPORT  KisMitchellFilterStrategy : public KisFilterStrategy
 {
     public:
-        KisMitchellFilterStrategy() : KisFilterStrategy(KisID("Mitchell", i18n("Mitchell")))
+        KisMitchellFilterStrategy() : KisFilterStrategy(KoID("Mitchell", i18n("Mitchell")))
             {supportVal = 2.0; intSupportVal = 256;}
         virtual ~KisMitchellFilterStrategy() {}
 

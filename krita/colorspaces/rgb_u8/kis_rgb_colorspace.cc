@@ -29,10 +29,10 @@
 #include <klocale.h>
 
 #include "kis_rgb_colorspace.h"
-#include "kis_u8_base_colorspace.h"
+#include "KoU8ColorSpaceTrait.h"
 #include "kis_color_conversions.h"
-#include "kis_integer_maths.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoIntegerMaths.h"
+#include "KoColorSpaceFactoryRegistry.h"
 
 #include "composite.h"
 
@@ -44,15 +44,15 @@ namespace {
     const qint32 MAX_CHANNEL_RGBA = 4;
 }
 
-KisRgbColorSpace::KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisColorSpace(KisID("RGBA", i18n("RGB (8-bit integer/channel)")), parent)
-    ,KisU8BaseColorSpace(PIXEL_ALPHA)
-    ,KisLcmsBaseColorSpace(TYPE_BGRA_8, icSigRgbData, p)
+KisRgbColorSpace::KisRgbColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+    KoColorSpace(KoID("RGBA", i18n("RGB (8-bit integer/channel)")), parent)
+    ,KoU8ColorSpaceTrait(PIXEL_ALPHA)
+    ,KoLcmsColorSpaceTrait(TYPE_BGRA_8, icSigRgbData, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(255,0,0)));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,255,0)));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT8, 1, QColor(0,0,255)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), 3, KisChannelInfo::ALPHA, KisChannelInfo::UINT8));
+    m_channels.push_back(new KoChannelInfo(i18n("Red"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255,0,0)));
+    m_channels.push_back(new KoChannelInfo(i18n("Green"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,255,0)));
+    m_channels.push_back(new KoChannelInfo(i18n("Blue"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0,0,255)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
     init();
 }
@@ -109,7 +109,7 @@ void KisRgbColorSpace::mixColors(const quint8 **colors, const quint8 *weights, q
     dst[PIXEL_BLUE] = dstBlue;
 }
 
-void KisRgbColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
+void KisRgbColorSpace::convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     qint32 totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
 
@@ -128,12 +128,12 @@ void KisRgbColorSpace::convolveColors(quint8** colors, qint32* kernelValues, Kis
     }
 
 
-    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+    if (channelFlags & KoChannelInfo::FLAG_COLOR) {
         dst[PIXEL_RED] = CLAMP((totalRed / factor) + offset, 0, quint8_MAX);
         dst[PIXEL_GREEN] = CLAMP((totalGreen / factor) + offset, 0, quint8_MAX);
         dst[PIXEL_BLUE] =  CLAMP((totalBlue / factor) + offset, 0, quint8_MAX);
     }
-    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+    if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
         dst[PIXEL_ALPHA] = CLAMP((totalAlpha/ factor) + offset, 0, quint8_MAX);
     }
 }
@@ -179,7 +179,7 @@ quint8 KisRgbColorSpace::intensity8(const quint8 * src) const
     return (quint8)((src[PIXEL_RED] * 0.30 + src[PIXEL_GREEN] * 0.59 + src[PIXEL_BLUE] * 0.11) + 0.5);
 }
 
-Q3ValueVector<KisChannelInfo *> KisRgbColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KisRgbColorSpace::channels() const
 {
     return m_channels;
 }
@@ -200,7 +200,7 @@ quint32 KisRgbColorSpace::pixelSize() const
 }
 
 QImage KisRgbColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                         KisProfile *  dstProfile,
+                                         KoColorProfile *  dstProfile,
                                          qint32 renderingIntent, float /*exposure*/)
 
 {
@@ -212,7 +212,7 @@ QImage KisRgbColorSpace::convertToQImage(const quint8 *data, qint32 width, qint3
     img = img.copy();
 
     if (dstProfile != 0) {
-        KisColorSpace *dstCS = m_parent->getColorSpace(KisID("RGBA",""),  dstProfile->productName());
+        KoColorSpace *dstCS = m_parent->getColorSpace(KoID("RGBA",""),  dstProfile->productName());
         convertPixelsTo(img.bits(),
                         img.bits(), dstCS,
                         width * height, renderingIntent);
@@ -1258,7 +1258,7 @@ void KisRgbColorSpace::bitBlt(quint8 *dst,
                       quint8 opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KisCompositeOp& op)
+                      const KoCompositeOp& op)
 {
 
     switch (op.op()) {
@@ -1382,23 +1382,23 @@ void KisRgbColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KisCompositeOpList KisRgbColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisRgbColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
-    list.append(KisCompositeOp(COMPOSITE_MULT));
-    list.append(KisCompositeOp(COMPOSITE_BURN));
-    list.append(KisCompositeOp(COMPOSITE_DODGE));
-    list.append(KisCompositeOp(COMPOSITE_DIVIDE));
-    list.append(KisCompositeOp(COMPOSITE_SCREEN));
-    list.append(KisCompositeOp(COMPOSITE_OVERLAY));
-    list.append(KisCompositeOp(COMPOSITE_DARKEN));
-    list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
-    list.append(KisCompositeOp(COMPOSITE_HUE));
-    list.append(KisCompositeOp(COMPOSITE_SATURATION));
-    list.append(KisCompositeOp(COMPOSITE_VALUE));
-    list.append(KisCompositeOp(COMPOSITE_COLOR));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_MULT));
+    list.append(KoCompositeOp(COMPOSITE_BURN));
+    list.append(KoCompositeOp(COMPOSITE_DODGE));
+    list.append(KoCompositeOp(COMPOSITE_DIVIDE));
+    list.append(KoCompositeOp(COMPOSITE_SCREEN));
+    list.append(KoCompositeOp(COMPOSITE_OVERLAY));
+    list.append(KoCompositeOp(COMPOSITE_DARKEN));
+    list.append(KoCompositeOp(COMPOSITE_LIGHTEN));
+    list.append(KoCompositeOp(COMPOSITE_HUE));
+    list.append(KoCompositeOp(COMPOSITE_SATURATION));
+    list.append(KoCompositeOp(COMPOSITE_VALUE));
+    list.append(KoCompositeOp(COMPOSITE_COLOR));
 
     return list;
 }

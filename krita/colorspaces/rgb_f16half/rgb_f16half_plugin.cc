@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 #include <kis_debug_areas.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "rgb_f16half_plugin.h"
@@ -40,17 +40,17 @@ RGBF16HalfPlugin::RGBF16HalfPlugin(QObject *parent, const QStringList &)
 {
     setInstance(RGBF16HalfPluginFactory::instance());
 
-    if ( parent->inherits("KisColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
     {
-        KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>( parent );
+        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>( parent );
 
-        KisColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HalfColorSpace(f, 0);
-        KisColorSpaceFactory *csf  = new KisRgbF16HalfColorSpaceFactory();
+        KoColorSpace * colorSpaceRGBF16Half  = new KisRgbF16HalfColorSpace(f, 0);
+        KoColorSpaceFactory *csf  = new KisRgbF16HalfColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceRGBF16Half);
         f->add(csf);
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicF16HalfHistogramProducer>
-                (KisID("RGBF16HALFHISTO", i18n("Float16 Half Histogram")), colorSpaceRGBF16Half) );
+                (KoID("RGBF16HALFHISTO", i18n("Float16 Half Histogram")), colorSpaceRGBF16Half) );
     }
 
 }

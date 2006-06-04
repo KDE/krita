@@ -25,25 +25,24 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include "kis_debug_areas.h"
-#include "kis_colorspace.h"
-#include "kis_profile.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_alpha_colorspace.h"
-#include "kis_lab_colorspace.h"
+#include "KoColorSpace.h"
+#include "KoColorProfile.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include "colorspaces/KoAlphaColorSpace.h"
+#include "colorspaces/KoLabColorSpace.h"
 
 
-KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFilenames)
+KoColorSpaceFactoryRegistry::KoColorSpaceFactoryRegistry(QStringList profileFilenames)
 {
     // Create the built-in colorspaces
 
-    m_alphaCs = new KisAlphaColorSpace(this, 0);
+    m_alphaCs = new KoAlphaColorSpace(this, 0);
 
     // Load the profiles
     if (!profileFilenames.empty()) {
-        KisProfile * profile = 0;
+        KoColorProfile * profile = 0;
         for ( QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it ) {
-            profile = new KisProfile(*it);
+            profile = new KoColorProfile(*it);
             Q_CHECK_PTR(profile);
 
             profile->load();
@@ -53,13 +52,13 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
         }
     }
 
-    KisProfile *labProfile = new KisProfile(cmsCreateLabProfile(NULL));
+    KoColorProfile *labProfile = new KoColorProfile(cmsCreateLabProfile(NULL));
     addProfile(labProfile);
-    add(new KisLabColorSpaceFactory());
+    add(new KoLabColorSpaceFactory());
 /* XXX where to put this
     KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("LABAHISTO", i18n("L*a*b* Histogram")), new KisLabColorSpace(this, 0);) );
+                (KoID("LABAHISTO", i18n("L*a*b* Histogram")), new KoLabColorSpace(this, 0);) );
 */
 
     // Load all colorspace modules
@@ -80,7 +79,7 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
         KParts::Plugin* plugin =
              KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, QStringList(), &errCode);
         if ( plugin )
-            kDebug(DBG_AREA_PLUGINS) << "found colorspace " << service->property("Name").toString() << "\n";
+            kDebug(41006) << "found colorspace " << service->property("Name").toString() << "\n";
         else {
             kDebug(41006) << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
             if( errCode == KParts::ComponentFactory::ErrNoLibrary)
@@ -91,15 +90,15 @@ KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry(QStringList profileFi
     }
 }
 
-KisColorSpaceFactoryRegistry::KisColorSpaceFactoryRegistry()
+KoColorSpaceFactoryRegistry::KoColorSpaceFactoryRegistry()
 {
 }
 
-KisColorSpaceFactoryRegistry::~KisColorSpaceFactoryRegistry()
+KoColorSpaceFactoryRegistry::~KoColorSpaceFactoryRegistry()
 {
 }
 
-KisProfile *  KisColorSpaceFactoryRegistry::getProfileByName(const QString & name)
+KoColorProfile *  KoColorSpaceFactoryRegistry::getProfileByName(const QString & name)
 {
     if (m_profileMap.find(name) == m_profileMap.end()) {
         return 0;
@@ -108,18 +107,18 @@ KisProfile *  KisColorSpaceFactoryRegistry::getProfileByName(const QString & nam
     return m_profileMap[name];
 }
 
-QList<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisID id)
+QList<KoColorProfile *>  KoColorSpaceFactoryRegistry::profilesFor(KoID id)
 {
     return profilesFor(get(id));
 }
 
-QList<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSpaceFactory * csf)
+QList<KoColorProfile *>  KoColorSpaceFactoryRegistry::profilesFor(KoColorSpaceFactory * csf)
 {
-    QList<KisProfile *>  profiles;
+    QList<KoColorProfile *>  profiles;
 
-    QMap<QString, KisProfile * >::Iterator it;
+    QMap<QString, KoColorProfile * >::Iterator it;
     for (it = m_profileMap.begin(); it != m_profileMap.end(); ++it) {
-        KisProfile *  profile = it.value();
+        KoColorProfile *  profile = it.value();
         if (profile->colorSpaceSignature() == csf->colorSpaceSignature()) {
             profiles.push_back(profile);
         }
@@ -127,30 +126,30 @@ QList<KisProfile *>  KisColorSpaceFactoryRegistry::profilesFor(KisColorSpaceFact
     return profiles;
 }
 
-void KisColorSpaceFactoryRegistry::addProfile(KisProfile *p)
+void KoColorSpaceFactoryRegistry::addProfile(KoColorProfile *p)
 {
       if (p->valid()) {
           m_profileMap[p->productName()] = p;
       }
 }
 
-void KisColorSpaceFactoryRegistry::addPaintDeviceAction(KisColorSpace* cs,
+void KoColorSpaceFactoryRegistry::addPaintDeviceAction(KoColorSpace* cs,
         KisPaintDeviceAction* action) {
     m_paintDevActionMap[cs->id()].append(action);
 }
 
 QList<KisPaintDeviceAction *>
-KisColorSpaceFactoryRegistry::paintDeviceActionsFor(KisColorSpace* cs) {
+KoColorSpaceFactoryRegistry::paintDeviceActionsFor(KoColorSpace* cs) {
     return m_paintDevActionMap[cs->id()];
 }
 
-KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, const QString & pName)
+KoColorSpace * KoColorSpaceFactoryRegistry::getColorSpace(const KoID & csID, const QString & pName)
 {
     QString profileName = pName;
 
     if(profileName.isEmpty())
     {
-        KisColorSpaceFactory *csf = get(csID);
+        KoColorSpaceFactory *csf = get(csID);
 
         if(!csf)
             return 0;
@@ -161,14 +160,14 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
     QString name = csID.id() + "<comb>" + profileName;
 
     if (m_csMap.find(name) == m_csMap.end()) {
-        KisColorSpaceFactory *csf = get(csID);
+        KoColorSpaceFactory *csf = get(csID);
         if(!csf)
             return 0;
 
-        KisProfile *p = getProfileByName(profileName);
+        KoColorProfile *p = getProfileByName(profileName);
         if(!p && profileName != "")
             return 0;
-        KisColorSpace *cs = csf->createColorSpace(this, p);
+        KoColorSpace *cs = csf->createColorSpace(this, p);
         if(!cs)
             return 0;
 
@@ -182,20 +181,20 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
 }
 
 
-KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, const KisProfile * profile)
+KoColorSpace * KoColorSpaceFactoryRegistry::getColorSpace(const KoID & csID, const KoColorProfile * profile)
 {
     if( profile )
     {
-        KisColorSpace *cs = getColorSpace( csID, profile->productName());
+        KoColorSpace *cs = getColorSpace( csID, profile->productName());
 
         if(!cs)
         {
             // The profile was not stored and thus not the combination either
-            KisColorSpaceFactory *csf = get(csID);
+            KoColorSpaceFactory *csf = get(csID);
             if(!csf)
                 return 0;
 
-            cs = csf->createColorSpace(this, const_cast<KisProfile *>(profile));
+            cs = csf->createColorSpace(this, const_cast<KoColorProfile *>(profile));
             if(!cs )
                 return 0;
 
@@ -209,14 +208,14 @@ KisColorSpace * KisColorSpaceFactoryRegistry::getColorSpace(const KisID & csID, 
     }
 }
 
-KisColorSpace * KisColorSpaceFactoryRegistry::getAlpha8()
+KoColorSpace * KoColorSpaceFactoryRegistry::getAlpha8()
 {
    return m_alphaCs;
 }
 
-KisColorSpace * KisColorSpaceFactoryRegistry::getRGB8()
+KoColorSpace * KoColorSpaceFactoryRegistry::getRGB8()
 {
-    return getColorSpace(KisID("RGBA", ""), "");
+    return getColorSpace(KoID("RGBA", ""), "");
 }
 
-#include "kis_colorspace_factory_registry.moc"
+#include "KoColorSpaceFactoryRegistry.moc"

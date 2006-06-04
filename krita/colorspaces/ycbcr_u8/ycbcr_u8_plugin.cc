@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 #include <kis_debug_areas.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_basic_histogram_producers.h>
 #include <kis_debug_areas.h>
 
@@ -40,17 +40,17 @@ YCbCrU8Plugin::YCbCrU8Plugin(QObject *parent, const char *name, const QStringLis
 {
     setInstance(YCbCrU8PluginFactory::instance());
 
-    if ( parent->inherits("KisColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
     {
-        KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>( parent );
+        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>( parent );
 
-        KisColorSpace * colorSpaceYCbCrU8 = new KisYCbCrU8ColorSpace(f, 0);
-        KisColorSpaceFactory * csf = new KisYCbCrU8ColorSpaceFactory();
+        KoColorSpace * colorSpaceYCbCrU8 = new KisYCbCrU8ColorSpace(f, 0);
+        KoColorSpaceFactory * csf = new KisYCbCrU8ColorSpaceFactory();
         Q_CHECK_PTR(colorSpaceYCbCrU8);
         f->add(csf);
         KisHistogramProducerFactoryRegistry::instance()->add(
                 new KisBasicHistogramProducerFactory<KisBasicU16HistogramProducer>
-                (KisID("YCBR8HISTO", i18n("YCBR8 Histogram")), colorSpaceYCbCrU8) );
+                (KoID("YCBR8HISTO", i18n("YCBR8 Histogram")), colorSpaceYCbCrU8) );
     }
 
 }

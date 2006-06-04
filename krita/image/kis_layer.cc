@@ -162,18 +162,18 @@ namespace {
         typedef KisLayerCommand super;
 
     public:
-        KisLayerCompositeOpCommand(KisLayerSP layer, const KisCompositeOp& oldCompositeOp, const KisCompositeOp& newCompositeOp);
+        KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp& oldCompositeOp, const KoCompositeOp& newCompositeOp);
 
         virtual void execute();
         virtual void unexecute();
 
     private:
-        KisCompositeOp m_oldCompositeOp;
-        KisCompositeOp m_newCompositeOp;
+        KoCompositeOp m_oldCompositeOp;
+        KoCompositeOp m_newCompositeOp;
     };
 
-    KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KisCompositeOp& oldCompositeOp,
-                                       const KisCompositeOp& newCompositeOp) :
+    KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp& oldCompositeOp,
+                                       const KoCompositeOp& newCompositeOp) :
         super(i18n("Layer Composite Mode"), layer)
     {
         m_oldCompositeOp = oldCompositeOp;
@@ -533,7 +533,7 @@ void KisLayer::setName(const QString& name)
     }
 }
 
-void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
+void KisLayer::setCompositeOp(const KoCompositeOp& compositeOp)
 {
     if (m_compositeOp != compositeOp)
     {
@@ -544,7 +544,7 @@ void KisLayer::setCompositeOp(const KisCompositeOp& compositeOp)
     }
 }
 
-KNamedCommand *KisLayer::setCompositeOpCommand(const KisCompositeOp& newCompositeOp)
+KNamedCommand *KisLayer::setCompositeOpCommand(const KoCompositeOp& newCompositeOp)
 {
     return new KisLayerCompositeOpCommand(KisLayerSP(this), compositeOp(), newCompositeOp);
 }

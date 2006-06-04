@@ -23,13 +23,13 @@
 #include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 
-#include "kis_generic_registry.h"
+#include "KoGenericRegistry.h"
 #include "kis_types.h"
 #include "kis_tool_registry.h"
 #include "kis_tool.h"
 #include "kis_tool_factory.h"
 #include "kis_canvas_subject.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_debug_areas.h"
 
 KisToolRegistry *KisToolRegistry::m_singleton = 0;
@@ -84,9 +84,9 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
 
     vKisTool tools;
 
-    KisIDList factories = listKeys();
+    KoIDList factories = listKeys();
 
-    for (KisIDList::Iterator it = factories.begin(); it != factories.end(); ++it )
+    for (KoIDList::Iterator it = factories.begin(); it != factories.end(); ++it )
     {
         KisToolFactorySP f = get(*it);
 
@@ -100,7 +100,7 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
     return tools;
 }
 
-KisTool * KisToolRegistry::createTool(KActionCollection * ac, KisCanvasSubject * subject, KisID & id) const
+KisTool * KisToolRegistry::createTool(KActionCollection * ac, KisCanvasSubject * subject, KoID & id) const
 {
     KisToolFactorySP f = get(id);
     KisTool * t = f->createTool(ac);

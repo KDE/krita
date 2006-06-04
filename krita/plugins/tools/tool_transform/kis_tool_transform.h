@@ -31,7 +31,7 @@
 #include "ui_wdg_tool_transform.h"
 
 class KisTransaction;
-class KisID;
+class KoID;
 class KisFilterStrategy;
 
 class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
@@ -97,7 +97,7 @@ private:
 
 private slots:
 
-    void slotSetFilter(const KisID &);
+    void slotSetFilter(const KoID &);
     void setStartX(int x) { m_startPos.setX(x); }
     void setStartY(int y) { m_startPos.setY(y); }
     void setEndX(int x) { m_endPos.setX(x); }
@@ -150,7 +150,7 @@ public:
         Q_CHECK_PTR(t);
         t->setup(ac); return t;
     }
-    virtual KisID id() { return KisID("transform", i18n("Transform Tool")); }
+    virtual KoID id() { return KoID("transform", i18n("Transform Tool")); }
 };
 
 

@@ -32,14 +32,14 @@ class QWidget;
 class KHSSelector;
 class KValueSelector;
 
-class KisColorPopup : public QFrame {
+class KoColorPopup : public QFrame {
 
     Q_OBJECT
 
 public:
 
-    KisColorPopup(QColor color, QWidget * w, const char * name);
-    virtual ~KisColorPopup() {}
+    KoColorPopup(QColor color, QWidget * w, const char * name);
+    virtual ~KoColorPopup() {}
 
 signals:
 
@@ -53,13 +53,13 @@ private:
     QColor m_color;
 };
 
-class KRITAUI_EXPORT KisColorCup : public QPushButton {
+class KRITAUI_EXPORT KoColorCup : public QPushButton {
 
     Q_OBJECT
 
 public:
-    KisColorCup(QWidget * parent, const char * name = 0);
-    virtual ~KisColorCup() {}
+    KoColorCup(QWidget * parent, const char * name = 0);
+    virtual ~KoColorCup() {}
 
     QColor color() { return m_color; }
 
@@ -80,7 +80,7 @@ protected:
 
 private:
 
-    KisColorPopup * m_popup;
+    KoColorPopup * m_popup;
     QColor m_color;
 };
 

@@ -27,7 +27,7 @@ class QLineEdit;
 class KListBox;
 class KisPalette;
 class KisResource;
-class KisColor;
+class KoColor;
 
 /**
  * A color palette in table form.
@@ -50,9 +50,9 @@ public slots:
     void setPalette(const QString &paletteName);
 
 signals:
-    void colorSelected(const KisColor &);
+    void colorSelected(const KoColor &);
     void colorSelected(const QColor&);
-    void colorDoubleClicked( const KisColor &, const QString &);
+    void colorDoubleClicked( const KoColor &, const QString &);
 
 protected slots:
     void slotSetPalette( const QString &_paletteName );

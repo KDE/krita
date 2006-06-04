@@ -20,9 +20,8 @@
 
 #include "klocale.h"
 
-#include "kis_global.h"
-#include "kis_u8_base_colorspace.h"
-#include "kis_lcms_base_colorspace.h"
+#include "KoU8ColorSpaceTrait.h"
+#include "KoLcmsColorSpaceTrait.h"
 #include "krita_export.h"
 
 const quint8 PIXEL_BLUE = 0;
@@ -30,9 +29,9 @@ const quint8 PIXEL_GREEN = 1;
 const quint8 PIXEL_RED = 2;
 const quint8 PIXEL_ALPHA = 3;
 
-class KRITACOLOR_EXPORT KisRgbColorSpace : public KisU8BaseColorSpace, public KisLcmsBaseColorSpace {
+class KRITACOLOR_EXPORT KisRgbColorSpace : public KoU8ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KisRgbColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
+    KisRgbColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
     virtual ~KisRgbColorSpace();
 
     virtual bool willDegrade(ColorSpaceIndependence)
@@ -43,22 +42,22 @@ public:
 
 public:
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
     virtual void invertColor(quint8 * src, qint32 nPixels);
     virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
     virtual quint8 intensity8(const quint8 * src) const;
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 nChannels() const;
     virtual quint32 nColorChannels() const;
     virtual quint32 pixelSize() const;
 
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                       KisProfile *  dstProfile = 0,
+                       KoColorProfile *  dstProfile = 0,
                        qint32 renderingIntent = INTENT_PERCEPTUAL,
                        float exposure = 0.0f);
 
-    virtual KisCompositeOpList userVisiblecompositeOps() const;
+    virtual KoCompositeOpList userVisiblecompositeOps() const;
 
 
 protected:
@@ -72,7 +71,7 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op);
+                const KoCompositeOp& op);
 
     void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
     void compositeMultiply(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
@@ -90,14 +89,14 @@ protected:
     void compositeErase(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
 };
 
-class KisRgbColorSpaceFactory : public KisColorSpaceFactory
+class KisRgbColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("RGBA", i18n("RGB (8-bit integer/channel)")); };
+    virtual KoID id() const { return KoID("RGBA", i18n("RGB (8-bit integer/channel)")); };
 
     /**
      * lcms colorspace type definition.
@@ -106,7 +105,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
-    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile * p) { return new KisRgbColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile * p) { return new KisRgbColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

@@ -16,21 +16,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_STRATEGY_COLORSPACE_LAB_H_
-#define KIS_STRATEGY_COLORSPACE_LAB_H_
+#ifndef KOLABCOLORSPACETRAIT_H
+#define KOLABCOLORSPACETRAIT_H
 
 #include <QColor>
 
 #include <klocale.h>
+#include <koffice_export.h>
 
-#include "kis_global.h"
-#include "kis_integer_maths.h"
-#include "kis_u16_base_colorspace.h"
+#include <KoIntegerMaths.h>
+#include <KoU16ColorSpaceTrait.h>
+#include <KoLcmsColorSpaceTrait.h>
 
-class KisLabColorSpace : public KisU16BaseColorSpace, public KisLcmsBaseColorSpace {
+class PIGMENT_EXPORT KoLabColorSpace : public KoU16ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KisLabColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p);
-    virtual ~KisLabColorSpace();
+    KoLabColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
+    virtual ~KoLabColorSpace();
 
 public:
 
@@ -56,7 +57,7 @@ public:
                 return false;
         };
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 nChannels() const;
     virtual quint32 nColorChannels() const;
     virtual quint32 pixelSize() const;
@@ -68,11 +69,11 @@ public:
     virtual quint8 difference(const quint8 *src1, const quint8 *src2);
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
     virtual void invertColor(quint8 * src, qint32 nPixels);
-    virtual void convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
     
     virtual void darken(const quint8 * src, quint8 * dst, qint32 shade, bool compensate, double compensation, qint32 nPixels) const;
 
-    virtual KisCompositeOpList userVisiblecompositeOps() const;
+    virtual KoCompositeOpList userVisiblecompositeOps() const;
 
 protected:
 
@@ -85,7 +86,7 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op);
+                const KoCompositeOp& op);
 
     void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint16 opacity);
 /*
@@ -126,17 +127,17 @@ private:
     static const quint32 MAX_CHANNEL_AB = 0xffff;
     static const quint32 CHANNEL_AB_ZERO_OFFSET = 0x8000;
 
-    friend class KisLabColorSpaceTester;
+    friend class KoLabColorSpaceTester;
 };
 
-class KisLabColorSpaceFactory : public KisColorSpaceFactory
+class KoLabColorSpaceFactory : public KoColorSpaceFactory
 {
 public:
     /**
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual KisID id() const { return KisID("LABA", i18n("L*a*b* (16-bit integer/channel)")); };
+    virtual KoID id() const { return KoID("LABA", i18n("L*a*b* (16-bit integer/channel)")); };
 
     /**
      * lcms colorspace type definition.
@@ -145,9 +146,9 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigLabData; };
     
-    virtual KisColorSpace *createColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) { return new KisLabColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KoLabColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "Lab built-in - (lcms internal)"; };
 };
 
-#endif // KIS_STRATEGY_COLORSPACE_LAB_H_
+#endif // KOLABCOLORSPACETRAIT_H

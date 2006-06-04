@@ -15,24 +15,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_COLORSPACE_ALPHA_H_
-#define KIS_COLORSPACE_ALPHA_H_
+#ifndef KOALPHACOLORSPACE_H
+#define KOALPHACOLORSPACE_H
 
 #include <QColor>
 
-#include "kis_global.h"
-#include "kis_u8_base_colorspace.h"
-#include "kis_lcms_base_colorspace.h"
+#include <koffice_export.h>
+
+#include "KoU8ColorSpaceTrait.h"
+#include "KoLcmsColorSpaceTrait.h"
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a colour common to the mask. The default color is white.
  */
-class KisAlphaColorSpace : public KisU8BaseColorSpace, public KisLcmsBaseColorSpace {
+class PIGMENT_EXPORT KoAlphaColorSpace : public KoU8ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KisAlphaColorSpace(KisColorSpaceFactoryRegistry * parent,
-                       KisProfile *p);
-    virtual ~KisAlphaColorSpace();
+    KoAlphaColorSpace(KoColorSpaceFactoryRegistry * parent,
+                       KoColorProfile *p);
+    virtual ~KoAlphaColorSpace();
 
 public:
     virtual bool willDegrade(ColorSpaceIndependence)
@@ -40,18 +41,18 @@ public:
             return false;
         };
 
-    virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
-    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 *dst, KoColorProfile * profile = 0);
+    virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KoColorProfile * profile = 0);
 
     virtual void getAlpha(const quint8 *pixel, quint8 *alpha) const;
 
-    virtual void toQColor(const quint8 *src, QColor *c, KisProfile * profile = 0);
-    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, KoColorProfile * profile = 0);
+    virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * profile = 0);
 
     virtual quint8 difference(const quint8 *src1, const quint8 *src2);
     virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
-    virtual Q3ValueVector<KisChannelInfo *> channels() const;
+    virtual Q3ValueVector<KoChannelInfo *> channels() const;
     virtual quint32 nChannels() const { return 1; };
     virtual quint32 nColorChannels() const { return 0; };
     virtual quint32 pixelSize() const { return 1; };
@@ -59,7 +60,7 @@ public:
     virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
 
-    virtual void convolveColors(quint8** colors, qint32* kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
+    virtual void convolveColors(quint8** colors, qint32* kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const;
 
 protected:
 
@@ -70,7 +71,7 @@ protected:
      * Returns false if the conversion failed, true if it succeeded
      */
     virtual bool convertPixelsTo(const quint8 *src,
-                     quint8 *dst, KisColorSpace * dstColorSpace,
+                     quint8 *dst, KoColorSpace * dstColorSpace,
                      quint32 numPixels,
                      qint32 renderingIntent = INTENT_PERCEPTUAL);
 
@@ -85,9 +86,9 @@ protected:
                 quint8 opacity,
                 qint32 rows,
                 qint32 cols,
-                const KisCompositeOp& op);
+                const KoCompositeOp& op);
 
-    KisCompositeOpList userVisiblecompositeOps() const;
+    KoCompositeOpList userVisiblecompositeOps() const;
 
 };
 

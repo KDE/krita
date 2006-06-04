@@ -23,7 +23,7 @@
 #include "kis_dlg_image_properties.h"
 
 class KisDoc;
-class KisID;
+class KoID;
 
 /**
  * The 'Custom Document' widget in the Krita startup widget.
@@ -42,7 +42,7 @@ public:
 
 private slots:
     void buttonClicked();
-    void fillCmbProfiles(const KisID & s);
+    void fillCmbProfiles(const KoID & s);
 
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'

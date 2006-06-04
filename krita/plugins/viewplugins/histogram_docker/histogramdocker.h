@@ -31,10 +31,10 @@
 
 class QMenu;
 class KisAccumulatingHistogramProducer;
-class KisColorSpace;
+class KoColorSpace;
 class KisHistogramView;
 class KisView;
-class KisColorSpace;
+class KoColorSpace;
 
 class KritaHistogramDocker : public KParts::Plugin
 {
@@ -45,12 +45,12 @@ public:
 private slots:
     void producerChanged(QAction *action);
     void popupMenu(const QPoint & pos);
-    void colorSpaceChanged(KisColorSpace* cs);
+    void colorSpaceChanged(KoColorSpace* cs);
 private:
     KisHistogramProducerFactory* m_factory;
     KisCachedHistogramObserver::Producers m_producers;
     KisAccumulatingHistogramProducer* m_producer;
-    KisColorSpace* m_cs;
+    KoColorSpace* m_cs;
     KisView* m_view;
     KisHistogramView* m_hview;
     KisImageRasteredCache* m_cache;

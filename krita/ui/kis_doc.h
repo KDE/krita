@@ -40,13 +40,13 @@ class KCommand;
 class KCommandHistory;
 class KMacroCommand;
 
-class KisProfile;
+class KoColorProfile;
 class KisView;
 class KisNameServer;
 class KisChildDoc;
-class KisColorSpace;
-class KisColor;
-class KisCompositeOp;
+class KoColorSpace;
+class KoColor;
+class KoCompositeOp;
 
 class KRITAUI_EXPORT KisDoc : public KoDocument, private KisUndoAdapter {
 
@@ -117,13 +117,13 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    bool newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution);
+    bool newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * cs, const KoColor &bgColor, const QString &imgDescription, const double imgResolution);
 
     /**
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    KisImageSP newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * colorstrategy);
+    KisImageSP newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorstrategy);
 
     void renameImage(const QString& oldName, const QString& newName);
 
@@ -187,16 +187,16 @@ private:
     KisLayerSP loadLayer(const QDomElement& elem, KisImageSP img);
     KisLayerSP loadPaintLayer(const QDomElement& elem, KisImageSP img,
                 QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                KisCompositeOp compositeOp);
+                KoCompositeOp compositeOp);
     KisGroupLayerSP loadGroupLayer(const QDomElement& elem, KisImageSP img,
                 QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                KisCompositeOp compositeOp);
+                KoCompositeOp compositeOp);
     KisAdjustmentLayerSP loadAdjustmentLayer(const QDomElement& elem, KisImageSP img,
                                              QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                                             KisCompositeOp compositeOp);
+                                             KoCompositeOp compositeOp);
     KisPartLayerSP loadPartLayer(const QDomElement& elem, KisImageSP img,
                                   QString name, qint32 x, qint32 y, qint32 opacity,
-                                  bool visible, bool locked, KisCompositeOp compositeOp);
+                                  bool visible, bool locked, KoCompositeOp compositeOp);
     bool init();
 
     void setIOSteps(qint32 nsteps);

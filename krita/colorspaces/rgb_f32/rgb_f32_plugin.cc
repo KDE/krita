@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 #include <kis_debug_areas.h>
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "rgb_f32_plugin.h"
@@ -40,18 +40,18 @@ RGBF32Plugin::RGBF32Plugin(QObject *parent, const QStringList &)
 {
     setInstance(RGBF32PluginFactory::instance());
 
-    if ( parent->inherits("KisColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
     {
-	KisColorSpaceFactoryRegistry * f = dynamic_cast<KisColorSpaceFactoryRegistry*>(parent);
+	KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>(parent);
 
-        KisColorSpace * colorSpaceRGBF32  = new KisRgbF32ColorSpace(f, 0);
+        KoColorSpace * colorSpaceRGBF32  = new KisRgbF32ColorSpace(f, 0);
 
-        KisColorSpaceFactory * csf  = new KisRgbF32ColorSpaceFactory();
+        KoColorSpaceFactory * csf  = new KisRgbF32ColorSpaceFactory();
         f->add(csf);
 
         KisHistogramProducerFactoryRegistry::instance()->add(
             new KisBasicHistogramProducerFactory<KisBasicF32HistogramProducer>
-            (KisID("RGBF32HISTO", i18n("Float32 Histogram")), colorSpaceRGBF32) );
+            (KoID("RGBF32HISTO", i18n("Float32 Histogram")), colorSpaceRGBF32) );
     }
 
 }

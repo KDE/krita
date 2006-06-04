@@ -163,7 +163,7 @@ bool DlgImageSize::cropLayers()
 
 KisFilterStrategy *DlgImageSize::filterType()
 {
-    KisID filterID = m_page->cmbFilterType->currentItem();
+    KoID filterID = m_page->cmbFilterType->currentItem();
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(filterID);
     return filter;
 }

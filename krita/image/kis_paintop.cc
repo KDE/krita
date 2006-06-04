@@ -27,10 +27,10 @@
 #include "kis_paintop.h"
 #include "kis_alpha_mask.h"
 #include "kis_point.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_global.h"
 #include "kis_iterators_pixel.h"
-#include "kis_color.h"
+#include "KoColor.h"
 
 KisPaintOp::KisPaintOp(KisPainter * painter)
 {
@@ -46,7 +46,7 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask) {
     return computeDab(mask, m_painter->device()->colorSpace());
 }
 
-KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
+KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KoColorSpace *cs)
 {
     // XXX: According to the SeaShore source, the Gimp uses a
     // temporary layer the size of the layer that is being painted
@@ -58,9 +58,9 @@ KisPaintDeviceSP KisPaintOp::computeDab(KisAlphaMaskSP mask, KisColorSpace *cs)
     KisPaintDeviceSP dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
     Q_CHECK_PTR(dab);
 
-    KisColor kc = m_painter->paintColor();
+    KoColor kc = m_painter->paintColor();
 
-    KisColorSpace * colorSpace = dab->colorSpace();
+    KoColorSpace * colorSpace = dab->colorSpace();
 
     qint32 pixelSize = colorSpace->pixelSize();
 

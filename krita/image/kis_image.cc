@@ -35,8 +35,8 @@
 #include "kis_image_iface.h"
 
 #include "kis_annotation.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_color.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColor.h"
 #include "kis_command.h"
 #include "kis_types.h"
 //#include "kis_guide.h"
@@ -59,7 +59,7 @@
 #include "kis_crop_visitor.h"
 #include "kis_transform_visitor.h"
 #include "kis_filter_strategy.h"
-#include "kis_profile.h"
+#include "KoColorProfile.h"
 #include "kis_paint_layer.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_group_layer.h"
@@ -68,7 +68,7 @@
 
 class KisImage::KisImagePrivate {
 public:
-    KisColor backgroundColor;
+    KoColor backgroundColor;
     quint32     lockCount;
     bool sizeChangedWhileLocked;
     bool selectionChangedWhileLocked;
@@ -172,7 +172,7 @@ namespace {
 
     public:
         KisConvertImageTypeCmd(KisUndoAdapter *adapter, KisImageSP img,
-                               KisColorSpace * beforeColorSpace, KisColorSpace * afterColorSpace
+                               KoColorSpace * beforeColorSpace, KoColorSpace * afterColorSpace
             ) : super(i18n("Convert Image Type"))
             {
                 m_adapter = adapter;
@@ -209,8 +209,8 @@ namespace {
     private:
         KisUndoAdapter *m_adapter;
         KisImageSP m_img;
-        KisColorSpace * m_beforeColorSpace;
-        KisColorSpace * m_afterColorSpace;
+        KoColorSpace * m_beforeColorSpace;
+        KoColorSpace * m_afterColorSpace;
     };
 
 
@@ -422,7 +422,7 @@ namespace {
                       KisUndoAdapter *adapter,
                       const QString& name,
                       qint32 opacity,
-                      const KisCompositeOp& compositeOp) : super(i18n("Layer Property Changes"))
+                      const KoCompositeOp& compositeOp) : super(i18n("Layer Property Changes"))
             {
                 m_layer = layer;
                 m_img = img;
@@ -441,7 +441,7 @@ namespace {
             {
                 QString name = m_layer->name();
                 qint32 opacity = m_layer->opacity();
-                KisCompositeOp compositeOp = m_layer->compositeOp();
+                KoCompositeOp compositeOp = m_layer->compositeOp();
 
                 m_adapter->setUndo(false);
                 m_img->setLayerProperties(m_layer,
@@ -466,7 +466,7 @@ namespace {
         KisImageSP m_img;
         QString m_name;
         qint32 m_opacity;
-        KisCompositeOp m_compositeOp;
+        KoCompositeOp m_compositeOp;
     };
 
     // -------------------------------------------------------
@@ -509,7 +509,7 @@ namespace {
     };
 }
 
-KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KisColorSpace * colorSpace, const QString& name)
+KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name)
     : QObject(0), KShared()
 {
     setObjectName(name);
@@ -590,12 +590,12 @@ void KisImage::setDescription(const QString& description)
 }
 
 
-KisColor KisImage::backgroundColor() const
+KoColor KisImage::backgroundColor() const
 {
     return m_private->backgroundColor;
 }
 
-void KisImage::setBackgroundColor(const KisColor & color)
+void KisImage::setBackgroundColor(const KoColor & color)
 {
     m_private->backgroundColor = color;
 }
@@ -616,7 +616,7 @@ void KisImage::rollBackLayerName()
     m_nserver->rollback();
 }
 
-void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KisColorSpace * colorSpace, const QString& name)
+void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColorSpace * colorSpace, const QString& name)
 {
     Q_ASSERT(colorSpace);
 
@@ -626,7 +626,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KisCo
     }
 
     m_private = new KisImagePrivate();
-    m_private->backgroundColor = KisColor(Qt::white, colorSpace);
+    m_private->backgroundColor = KoColor(Qt::white, colorSpace);
     m_private->lockCount = 0;
     m_private->sizeChangedWhileLocked = false;
     m_private->selectionChangedWhileLocked = false;
@@ -807,7 +807,7 @@ void KisImage::rotate(double angle, KisProgressDisplayInterface *progress)
         m_adapter->addCommand(new LockImageCommand(KisImageSP(this), true));
     }
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KisID("Triangle"));
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->get(KoID("Triangle"));
     KisTransformVisitor visitor (KisImageSP(this), 1.0, 1.0, 0, 0, angle, -tx, -ty, progress, filter);
     m_rootLayer->accept(visitor);
 
@@ -879,7 +879,7 @@ void KisImage::shear(double angleX, double angleY, KisProgressDisplayInterface *
     }
 }
 
-void KisImage::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent)
+void KisImage::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 {
     if ( m_colorSpace == dstColorSpace )
     {
@@ -888,7 +888,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent)
 
     lock();
 
-    KisColorSpace * oldCs = m_colorSpace;
+    KoColorSpace * oldCs = m_colorSpace;
 
     if (undo()) {
         m_adapter->beginMacro(i18n("Convert Image Type"));
@@ -897,7 +897,7 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent)
 
     setColorSpace(dstColorSpace);
 
-    KisColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
+    KoColorSpaceConvertVisitor visitor(dstColorSpace, renderingIntent);
     m_rootLayer->accept(visitor);
 
     unlock();
@@ -913,24 +913,24 @@ void KisImage::convertTo(KisColorSpace * dstColorSpace, qint32 renderingIntent)
     }
 }
 
-KisProfile *  KisImage::getProfile() const
+KoColorProfile *  KisImage::getProfile() const
 {
     return colorSpace()->getProfile();
 }
 
-void KisImage::setProfile(const KisProfile * profile)
+void KisImage::setProfile(const KoColorProfile * profile)
 {
     if (profile == 0) return;
 
-    KisColorSpace * dstCs= KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
+    KoColorSpace * dstCs= KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
                                                                                          profile);
     if (dstCs) {
 
         lock();
 
-        KisColorSpace * oldCs = colorSpace();
+        KoColorSpace * oldCs = colorSpace();
         setColorSpace(dstCs);
-        emit(sigProfileChanged(const_cast<KisProfile *>(profile)));
+        emit(sigProfileChanged(const_cast<KoColorProfile *>(profile)));
 
         KisChangeProfileVisitor visitor(oldCs, dstCs);
         m_rootLayer->accept(visitor);
@@ -990,7 +990,7 @@ KisPaintDeviceSP KisImage::activeDevice()
     return KisPaintDeviceSP(0);
 }
 
-KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const KisCompositeOp& compositeOp, KisColorSpace * colorstrategy)
+KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const KoCompositeOp& compositeOp, KoColorSpace * colorstrategy)
 {
     KisPaintLayer * layer;
     if (colorstrategy)
@@ -1016,13 +1016,13 @@ KisLayerSP KisImage::newLayer(const QString& name, quint8 opacity, const KisComp
     return layerSP;
 }
 
-void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KisCompositeOp& compositeOp, const QString& name)
+void KisImage::setLayerProperties(KisLayerSP layer, quint8 opacity, const KoCompositeOp& compositeOp, const QString& name)
 {
     if (layer && (layer->opacity() != opacity || layer->compositeOp() != compositeOp || layer->name() != name)) {
         if (undo()) {
             QString oldname = layer->name();
             qint32 oldopacity = layer->opacity();
-            KisCompositeOp oldCompositeOp = layer->compositeOp();
+            KoCompositeOp oldCompositeOp = layer->compositeOp();
             layer->setName(name);
             layer->setOpacity(opacity);
             layer->setCompositeOp(compositeOp);
@@ -1324,7 +1324,7 @@ void KisImage::renderToPainter(qint32 x1,
                                qint32 x2,
                                qint32 y2,
                                QPainter &painter,
-                               KisProfile *  monitorProfile,
+                               KoColorProfile *  monitorProfile,
                                PaintFlags paintFlags,
                                float exposure)
 {
@@ -1358,7 +1358,7 @@ QImage KisImage::convertToQImage(qint32 x1,
                                  qint32 y1,
                                  qint32 x2,
                                  qint32 y2,
-                                 KisProfile * profile,
+                                 KoColorProfile * profile,
                                  float exposure)
 {
     qint32 w = x2 - x1 + 1;
@@ -1391,7 +1391,7 @@ QImage KisImage::convertToQImage(qint32 x1,
     return QImage();
 }
 
-QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, KisProfile *profile, PaintFlags paintFlags, float exposure)
+QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, KoColorProfile *profile, PaintFlags paintFlags, float exposure)
 {
     if (r.isEmpty() || scaledImageSize.isEmpty()) {
         return QImage();
@@ -1487,7 +1487,7 @@ KisPaintDeviceSP KisImage::mergedImage()
     return m_rootLayer->projection(QRect(0, 0, m_width, m_height));
 }
 
-KisColor KisImage::mergedPixel(qint32 x, qint32 y)
+KoColor KisImage::mergedPixel(qint32 x, qint32 y)
 {
     return m_rootLayer->projection(QRect(x, y, 1, 1))->colorAt(x, y);
 }
@@ -1549,12 +1549,12 @@ void KisImage::slotSelectionChanged(const QRect& r)
     }
 }
 
-KisColorSpace * KisImage::colorSpace() const
+KoColorSpace * KisImage::colorSpace() const
 {
     return m_colorSpace;
 }
 
-void KisImage::setColorSpace(KisColorSpace * colorSpace)
+void KisImage::setColorSpace(KoColorSpace * colorSpace)
 {
     m_colorSpace = colorSpace;
     m_rootLayer->resetProjection();
@@ -1613,11 +1613,16 @@ void KisImage::removeAnnotation(QString type)
 
 vKisAnnotationSP_it KisImage::beginAnnotations()
 {
-    KisProfile * profile = colorSpace()->getProfile();
+    KoColorProfile * profile = colorSpace()->getProfile();
     KisAnnotationSP annotation;
 
     if (profile)
-        annotation =  profile->annotation();
+    {
+        // XXX we hardcode icc, this is correct for lcms?
+        // XXX productName(), or just "ICC Profile"?
+        if (!profile->rawData().isEmpty())
+            annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+    }
 
     if (annotation)
          addAnnotation(annotation);

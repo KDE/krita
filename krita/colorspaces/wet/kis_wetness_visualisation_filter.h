@@ -36,7 +36,7 @@ public:
     void setAction(KToggleAction* action);
     // XXX: Figure out a way to match a filter exactly to a colorspace
     virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
-    virtual bool workWith(KisColorSpace* cs) { return (cs->id() == KisID("WET")); };
+    virtual bool workWith(KoColorSpace* cs) { return (cs->id() == KoID("WET")); };
 private slots:
     void slotActivated();
     void slotTimeout();

@@ -48,7 +48,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity)
     m_paintdev->startBackgroundFilters();
 }
 
-KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KisColorSpace * colorSpace)
+KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KoColorSpace * colorSpace)
     : super(img, name, opacity)
 {
     Q_ASSERT(img);
@@ -93,7 +93,7 @@ void KisPaintLayer::paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qin
 {
     uchar *j = img.bits();
 
-    KisColorSpace *cs = m_paintdev->colorSpace();
+    KoColorSpace *cs = m_paintdev->colorSpace();
 
     for (qint32 y2 = y; y2 < h + y; ++y2) {
         KisHLineIteratorPixel it = m_paintdev->createHLineIterator(x, y2, w, false);

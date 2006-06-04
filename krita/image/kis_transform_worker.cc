@@ -51,7 +51,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
-    KisColorSpace *cs = src->colorSpace();
+    KoColorSpace *cs = src->colorSpace();
 
     if(src->hasSelection())
     {
@@ -89,7 +89,7 @@ void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
-    KisColorSpace *cs = src->colorSpace();
+    KoColorSpace *cs = src->colorSpace();
 
     if(src->hasSelection())
     {
@@ -131,7 +131,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
     KisSelectionSP dstSelection;
     qint32 pixelSize = src->pixelSize();
     QRect r;
-    KisColorSpace *cs = src->colorSpace();
+    KoColorSpace *cs = src->colorSpace();
 
     if(src->hasSelection())
     {
@@ -219,7 +219,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
     quint8 *data;
     quint8 pixelSize = src->pixelSize();
     KisSelectionSP dstSelection;
-    KisColorSpace * cs = src->colorSpace();
+    KoColorSpace * cs = src->colorSpace();
     qint32 scale;
     qint32 scaleDenom;
     qint32 shearFracOffset;

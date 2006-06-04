@@ -28,7 +28,7 @@
 #include <klocale.h>
 
 #include "kis_rgb_f16half_colorspace.h"
-#include "kis_f32_base_colorspace.h"
+#include "KoF32HalfColorSpaceTrait.h"
 #include "kis_color_conversions.h"
 
 namespace {
@@ -50,18 +50,18 @@ namespace {
 // FIXME: lcms doesn't support 16-bit float
 #define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
 
-KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisColorSpace(KisID("RGBAF16HALF", i18n("RGB (16-bit float/channel)")), parent)
-    , KisF16HalfBaseColorSpace(PIXEL_ALPHA * sizeof(half))
-    , KisLcmsBaseColorSpace(RGBAF16HALF_LCMS_TYPE, icSigRgbData, p)
+KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+    KoColorSpace(KoID("RGBAF16HALF", i18n("RGB (16-bit float/channel)")), parent)
+    , KoF16HalfColorSpaceTrait(PIXEL_ALPHA * sizeof(half))
+    , KoLcmsColorSpaceTrait(RGBAF16HALF_LCMS_TYPE, icSigRgbData, p)
 {
-    m_channels.push_back(new KisChannelInfo(i18n("Red"), PIXEL_RED * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
-    m_channels.push_back(new KisChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(half), KisChannelInfo::COLOR, KisChannelInfo::FLOAT16, sizeof(half)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(half), KisChannelInfo::ALPHA, KisChannelInfo::FLOAT16, sizeof(half)));
+    m_channels.push_back(new KoChannelInfo(i18n("Red"), PIXEL_RED * sizeof(half), KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, sizeof(half)));
+    m_channels.push_back(new KoChannelInfo(i18n("Green"), PIXEL_GREEN * sizeof(half), KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, sizeof(half)));
+    m_channels.push_back(new KoChannelInfo(i18n("Blue"), PIXEL_BLUE * sizeof(half), KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, sizeof(half)));
+    m_channels.push_back(new KoChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(half), KoChannelInfo::ALPHA, KoChannelInfo::FLOAT16, sizeof(half)));
 
     //cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-    //setDefaultProfile( new KisProfile(hProfile, RGBAF16HALF_LCMS_TYPE) );
+    //setDefaultProfile( new KoColorProfile(hProfile, RGBAF16HALF_LCMS_TYPE) );
 }
 
 KisRgbF16HalfColorSpace::~KisRgbF16HalfColorSpace()
@@ -88,7 +88,7 @@ void KisRgbF16HalfColorSpace::getPixel(const quint8 *src, half *red, half *green
     *alpha = srcPixel->alpha;
 }
 
-void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KisProfile *)
+void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KoColorProfile *)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -97,7 +97,7 @@ void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KisProf
     dst->blue = UINT8_TO_HALF(c.blue());
 }
 
-void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KisProfile *)
+void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, KoColorProfile *)
 {
     Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
 
@@ -107,14 +107,14 @@ void KisRgbF16HalfColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8
     dst->alpha = UINT8_TO_HALF(opacity);
 }
 
-void KisRgbF16HalfColorSpace::toQColor(const quint8 *srcU8, QColor *c, KisProfile *)
+void KisRgbF16HalfColorSpace::toQColor(const quint8 *srcU8, QColor *c, KoColorProfile *)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
     c->setRgb(HALF_TO_UINT8(src->red), HALF_TO_UINT8(src->green), HALF_TO_UINT8(src->blue));
 }
 
-void KisRgbF16HalfColorSpace::toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KisProfile *)
+void KisRgbF16HalfColorSpace::toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, KoColorProfile *)
 {
     const Pixel *src = reinterpret_cast<const Pixel *>(srcU8);
 
@@ -169,7 +169,7 @@ void KisRgbF16HalfColorSpace::mixColors(const quint8 **colors, const quint8 *wei
     dstPixel->blue = totalBlue;
 }
 
-void KisRgbF16HalfColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KisChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
+void KisRgbF16HalfColorSpace::convolveColors(quint8** colors, qint32 * kernelValues, KoChannelInfo::enumChannelFlags channelFlags, quint8 *dst, qint32 factor, qint32 offset, qint32 nColors) const
 {
     half totalRed = 0, totalGreen = 0, totalBlue = 0, totalAlpha = 0;
 
@@ -191,12 +191,12 @@ void KisRgbF16HalfColorSpace::convolveColors(quint8** colors, qint32 * kernelVal
 
     Pixel * p = reinterpret_cast< Pixel *>( dst );
 
-    if (channelFlags & KisChannelInfo::FLAG_COLOR) {
+    if (channelFlags & KoChannelInfo::FLAG_COLOR) {
         p->red = CLAMP( ( totalRed / factor) + offset, 0, HALF_MAX);
         p->green = CLAMP( ( totalGreen / factor) + offset, 0, HALF_MAX);
         p->blue = CLAMP( ( totalBlue / factor) + offset, 0, HALF_MAX);
     }
-    if (channelFlags & KisChannelInfo::FLAG_ALPHA) {
+    if (channelFlags & KoChannelInfo::FLAG_ALPHA) {
         p->alpha = CLAMP((totalAlpha/ factor) + offset, 0, HALF_MAX);
     }
 }
@@ -226,7 +226,7 @@ quint8 KisRgbF16HalfColorSpace::intensity8(const quint8 * src) const
 }
 
 
-Q3ValueVector<KisChannelInfo *> KisRgbF16HalfColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KisRgbF16HalfColorSpace::channels() const
 {
     return m_channels;
 }
@@ -263,7 +263,7 @@ quint8 convertToDisplay(float value, float exposureFactor, float gamma)
 }
 
 QImage KisRgbF16HalfColorSpace::convertToQImage(const quint8 *dataU8, qint32 width, qint32 height,
-                         KisProfile *  /*dstProfile*/,
+                         KoColorProfile *  /*dstProfile*/,
                          qint32 /*renderingIntent*/, float exposure)
 
 {
@@ -795,7 +795,7 @@ void KisRgbF16HalfColorSpace::bitBlt(quint8 *dst,
                       quint8 U8_opacity,
                       qint32 rows,
                       qint32 cols,
-                      const KisCompositeOp& op)
+                      const KoCompositeOp& op)
 {
     half opacity = UINT8_TO_HALF(U8_opacity);
 
@@ -920,23 +920,23 @@ void KisRgbF16HalfColorSpace::bitBlt(quint8 *dst,
     }
 }
 
-KisCompositeOpList KisRgbF16HalfColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisRgbF16HalfColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
-    list.append(KisCompositeOp(COMPOSITE_MULT));
-    list.append(KisCompositeOp(COMPOSITE_BURN));
-    list.append(KisCompositeOp(COMPOSITE_DODGE));
-    list.append(KisCompositeOp(COMPOSITE_DIVIDE));
-    list.append(KisCompositeOp(COMPOSITE_SCREEN));
-    list.append(KisCompositeOp(COMPOSITE_OVERLAY));
-    list.append(KisCompositeOp(COMPOSITE_DARKEN));
-    list.append(KisCompositeOp(COMPOSITE_LIGHTEN));
-    list.append(KisCompositeOp(COMPOSITE_HUE));
-    list.append(KisCompositeOp(COMPOSITE_SATURATION));
-    list.append(KisCompositeOp(COMPOSITE_VALUE));
-    list.append(KisCompositeOp(COMPOSITE_COLOR));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_MULT));
+    list.append(KoCompositeOp(COMPOSITE_BURN));
+    list.append(KoCompositeOp(COMPOSITE_DODGE));
+    list.append(KoCompositeOp(COMPOSITE_DIVIDE));
+    list.append(KoCompositeOp(COMPOSITE_SCREEN));
+    list.append(KoCompositeOp(COMPOSITE_OVERLAY));
+    list.append(KoCompositeOp(COMPOSITE_DARKEN));
+    list.append(KoCompositeOp(COMPOSITE_LIGHTEN));
+    list.append(KoCompositeOp(COMPOSITE_HUE));
+    list.append(KoCompositeOp(COMPOSITE_SATURATION));
+    list.append(KoCompositeOp(COMPOSITE_VALUE));
+    list.append(KoCompositeOp(COMPOSITE_COLOR));
 
     return list;
 }

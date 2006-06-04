@@ -27,7 +27,7 @@
  * that is, one of the components that makes up a particular 
  * pixel.
  */
-class KisChannelInfo : public KShared {
+class KoChannelInfo : public KShared {
 public:
     enum enumChannelType {
         COLOR, // The channel represents a color
@@ -52,8 +52,8 @@ public:
     };
 
 public:
-    KisChannelInfo() { };
-    KisChannelInfo( const QString & name, qint32 npos, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = 1, QColor color = QColor(0,0,0))
+    KoChannelInfo() { };
+    KoChannelInfo( const QString & name, qint32 npos, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = 1, QColor color = QColor(0,0,0))
     : m_name (name), m_pos (npos), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color) { };
 public:
     /**

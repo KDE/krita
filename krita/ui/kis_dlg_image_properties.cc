@@ -31,13 +31,13 @@
 
 #include "kis_factory.h"
 #include "kis_meta_registry.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_dlg_image_properties.h"
-#include "kis_profile.h"
+#include "KoColorProfile.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_config.h"
-#include "kis_id.h"
+#include "KoID.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 
@@ -64,8 +64,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
     //m_page->cmbColorSpaces->hide();
     //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());
-    KisIDList colorSpaces = KisMetaRegistry::instance()->csRegistry()->listKeys();
-    qint32 i = colorSpaces.indexOf(KisID("WET",""));
+    KoIDList colorSpaces = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    qint32 i = colorSpaces.indexOf(KoID("WET",""));
     if (i >= 0) {
         colorSpaces.removeAt(i);
     }
@@ -89,8 +89,8 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     m_page->cmbColor->hide();
     m_page->lblColor->hide();
 
-    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KisID &)),
-        this, SLOT(fillCmbProfiles(const KisID &)));
+    connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
+        this, SLOT(fillCmbProfiles(const KoID &)));
 
 
 }
@@ -130,14 +130,14 @@ QString KisDlgImageProperties::description()
     return m_page->txtDescription->toPlainText();
 }
 
-KisColorSpace * KisDlgImageProperties::colorSpace()
+KoColorSpace * KisDlgImageProperties::colorSpace()
 {
     return KisMetaRegistry::instance()->csRegistry()->getColorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->currentText());
 }
 
-KisProfile * KisDlgImageProperties::profile()
+KoColorProfile * KisDlgImageProperties::profile()
 {
-    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
+    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( m_image->colorSpace()->id() );
     qint32 index = m_page->cmbProfile->currentIndex();
 
     if (index < profileList.count()) {
@@ -148,13 +148,13 @@ KisProfile * KisDlgImageProperties::profile()
 }
 
 // XXX: Copy & paste from kis_dlg_create_img -- refactor to separate class
-void KisDlgImageProperties::fillCmbProfiles(const KisID & s)
+void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
 {
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
+    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry()->get(s);
     m_page->cmbProfile->clear();
-    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
 
-    foreach (KisProfile *profile, profileList) {
+    foreach (KoColorProfile *profile, profileList) {
         m_page->cmbProfile->addSqueezedItem(profile->productName());
     }
 }

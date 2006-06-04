@@ -68,10 +68,10 @@
 #include "kis_fill_painter.h"
 #include "kis_command.h"
 #include "kis_view.h"
-#include "kis_colorspace.h"
-#include "kis_colorspace_factory_registry.h"
-#include "kis_profile.h"
-#include "kis_id.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorProfile.h"
+#include "KoID.h"
 #include "kis_part_layer.h"
 #include "kis_doc_iface.h"
 #include "kis_paint_device_action.h"
@@ -219,7 +219,7 @@ bool KisDoc::init()
     m_nserver = new KisNameServer(i18n("Image %1"), 1);
     Q_CHECK_PTR(m_nserver);
 
-    if (!KisMetaRegistry::instance()->csRegistry()->exists(KisID("RGBA",""))) {
+    if (!KisMetaRegistry::instance()->csRegistry()->exists(KoID("RGBA",""))) {
         KMessageBox::sorry(0, i18n("No colorspace modules loaded: cannot run Krita"));
         return false;
     }
@@ -349,7 +349,7 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
     double xres;
     double yres;
     QString colorspacename;
-    KisColorSpace * cs;
+    KoColorSpace * cs;
 
     if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
         if ((name = element.attribute("name")).isNull())
@@ -471,12 +471,12 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 
     QString compositeOpName = element.attribute("compositeop");
-    KisCompositeOp compositeOp;
+    KoCompositeOp compositeOp;
 
     if (compositeOpName.isNull()) {
         compositeOp = COMPOSITE_OVER;
     } else {
-        compositeOp = KisCompositeOp(compositeOpName);
+        compositeOp = KoCompositeOp(compositeOpName);
     }
 
     if (!compositeOp.isValid()) {
@@ -516,11 +516,11 @@ KisLayerSP KisDoc::loadLayer(const QDomElement& element, KisImageSP img)
 
 KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
                                   QString name, qint32 x, qint32 y,
-                                  qint32 opacity, bool visible, bool locked, KisCompositeOp compositeOp)
+                                  qint32 opacity, bool visible, bool locked, KoCompositeOp compositeOp)
 {
     QString attr;
     KisPaintLayerSP layer;
-    KisColorSpace * cs;
+    KoColorSpace * cs;
 
     QString colorspacename;
     QString profileProductName;
@@ -559,7 +559,7 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
 
 KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP img,
                                        QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                                       KisCompositeOp compositeOp)
+                                       KoCompositeOp compositeOp)
 {
     QString attr;
     KisGroupLayerSP layer;
@@ -580,7 +580,7 @@ KisGroupLayerSP KisDoc::loadGroupLayer(const QDomElement& element, KisImageSP im
 
 KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, KisImageSP img,
                                              QString name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked,
-                                             KisCompositeOp compositeOp)
+                                             KoCompositeOp compositeOp)
 {
     QString attr;
     KisAdjustmentLayerSP layer;
@@ -622,7 +622,7 @@ KisAdjustmentLayerSP KisDoc::loadAdjustmentLayer(const QDomElement& element, Kis
 KisPartLayerSP KisDoc::loadPartLayer(const QDomElement& element, KisImageSP img,
                                      QString name, qint32 /*x*/, qint32 /*y*/, qint32 opacity,
                                       bool visible, bool locked,
-                                      KisCompositeOp compositeOp) {
+                                      KoCompositeOp compositeOp) {
     KisChildDoc* child = new KisChildDoc(this);
     QString filename(element.attribute("filename"));
     QDomElement partElement = element.namedItem("object").toElement();
@@ -684,7 +684,15 @@ bool KisDoc::completeSaving(KoStore *store)
         }
     }
     if (m_currentImage->getProfile()) {
-        annotation = m_currentImage->getProfile()->annotation();
+        KoColorProfile *profile = m_currentImage->getProfile();
+        KisAnnotationSP annotation;
+        if (profile)
+        {
+            // XXX we hardcode icc, this is correct for lcms?
+            // XXX productName(), or just "ICC Profile"?
+            if (!profile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+        }
 
         if (annotation) {
             location = external ? QString::null : uri;
@@ -738,7 +746,7 @@ bool KisDoc::completeLoading(KoStore *store)
         store->open(location);
         data = store->read(store->size());
         store->close();
-        (m_currentImage)->setProfile(new KisProfile(data));
+        (m_currentImage)->setProfile(new KoColorProfile(data));
     }
 
     IODone();
@@ -793,7 +801,7 @@ void KisDoc::renameImage(const QString& oldName, const QString& newName)
 }
 
 
-KisImageSP KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * colorstrategy)
+KisImageSP KisDoc::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * colorstrategy)
 {
     if (!init())
         return KisImageSP(0);
@@ -807,11 +815,11 @@ KisImageSP KisDoc::newImage(const QString& name, qint32 width, qint32 height, Ki
     KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorstrategy);
     Q_CHECK_PTR(layer);
 
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     KisFillPainter painter;
 
     painter.begin(layer->paintDevice());
-    painter.fillRect(0, 0, width, height, KisColor(Qt::white, cs), OPACITY_OPAQUE);
+    painter.fillRect(0, 0, width, height, KoColor(Qt::white, cs), OPACITY_OPAQUE);
     painter.end();
 
     img->addLayer(KisLayerSP(layer), img->rootLayer(), KisLayerSP(0));
@@ -824,7 +832,7 @@ KisImageSP KisDoc::newImage(const QString& name, qint32 width, qint32 height, Ki
     return img;
 }
 
-bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KisColorSpace * cs, const KisColor &bgColor, const QString &imgDescription, const double imgResolution)
+bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KoColorSpace * cs, const KoColor &bgColor, const QString &imgDescription, const double imgResolution)
 {
     if (!init())
         return false;
@@ -886,7 +894,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rc, bool transparent, 
 {
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KisProfile *  profile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
+    KoColorProfile *  profile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
     QRect rect = rc & m_currentImage->bounds();
     KisImage::PaintFlags paintFlags;
@@ -1106,7 +1114,7 @@ void KisDoc::setCurrentImage(KisImageSP image)
 void KisDoc::initEmpty()
 {
     KisConfig cfg;
-    KisColorSpace * rgb = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * rgb = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
 }
 

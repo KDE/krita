@@ -40,10 +40,10 @@
 #include <koFrameButton.h>
 
 #include <kis_canvas_subject.h>
-#include <kis_color.h>
+#include <KoColor.h>
 #include <kis_color_cup.h>
 
-KisColorPopup::KisColorPopup(QColor c, QWidget * parent, const char * name)
+KoColorPopup::KoColorPopup(QColor c, QWidget * parent, const char * name)
     : QFrame(parent, Qt::Popup | Qt::FramelessWindowHint)
 {
     setObjectName(name);
@@ -60,30 +60,30 @@ KisColorPopup::KisColorPopup(QColor c, QWidget * parent, const char * name)
 
 }
 
-KisColorCup::KisColorCup(QWidget * parent, const char * name)
+KoColorCup::KoColorCup(QWidget * parent, const char * name)
     : QPushButton(parent)
 {
     setObjectName(name);
     m_color = Qt::black;
-    m_popup = new KisColorPopup(m_color, this, "colorpopup");
+    m_popup = new KoColorPopup(m_color, this, "colorpopup");
     connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
     connect(m_popup, SIGNAL(changed( const QColor &)), this, SLOT(setColor(const QColor &)));
 }
 
-void KisColorCup::setColor(const QColor & c)
+void KoColorCup::setColor(const QColor & c)
 {
     m_color = c;
     emit changed(c);
 }
 
-void KisColorCup::slotClicked()
+void KoColorCup::slotClicked()
 {    
 //    m_popup->move(this->mapToGlobal( this->rect().topRight() ) );
 //    m_popup->show();
     emit changed(m_color);
 }
 
-QSize KisColorCup::sizeHint() const
+QSize KoColorCup::sizeHint() const
 {
     QStyleOptionButton option;
     option.initFrom(this);
@@ -92,7 +92,7 @@ QSize KisColorCup::sizeHint() const
 	  	expandedTo(QApplication::globalStrut());
 }
 
-void KisColorCup::paintEvent(QPaintEvent *)
+void KoColorCup::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 

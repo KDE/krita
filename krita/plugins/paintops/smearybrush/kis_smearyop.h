@@ -34,8 +34,8 @@ public:
     virtual ~KisSmearyOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
-    virtual KisID id() { return KisID("paintSmeary", i18n("Smeary Brush")); }
-    virtual bool userVisible(KisColorSpace * ) { return false; }
+    virtual KoID id() { return KoID("paintSmeary", i18n("Smeary Brush")); }
+    virtual bool userVisible(KoColorSpace * ) { return false; }
     virtual QString pixmap() { return ""; }
 
 };

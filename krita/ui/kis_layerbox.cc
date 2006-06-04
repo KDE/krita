@@ -52,7 +52,7 @@
 #include "kis_layerlist.h"
 #include "kis_cmb_composite.h"
 #include "kis_int_spinbox.h"
-#include "kis_colorspace.h"
+#include "KoColorSpace.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
@@ -137,7 +137,7 @@ KisLayerBox::KisLayerBox(KisCanvasSubject *subject, QWidget *parent, const char 
     connect(m_lst->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_lst->intOpacity, SIGNAL(valueChanged(int, bool)), SIGNAL(sigOpacityChanged(int, bool)));
     connect(m_lst->intOpacity, SIGNAL(finishedChanging(int, int)), SIGNAL(sigOpacityFinishedChanging(int, int)));
-    connect(m_lst->cmbComposite, SIGNAL(activated(const KisCompositeOp&)), SIGNAL(sigItemComposite(const KisCompositeOp&)));
+    connect(m_lst->cmbComposite, SIGNAL(activated(const KoCompositeOp&)), SIGNAL(sigItemComposite(const KoCompositeOp&)));
 
     Q_ASSERT(subject->document() != 0);
 
@@ -432,14 +432,14 @@ void KisLayerBox::slotAboutToShow()
 {
 }
 
-void KisLayerBox::slotSetCompositeOp(const KisCompositeOp& compositeOp)
+void KisLayerBox::slotSetCompositeOp(const KoCompositeOp& compositeOp)
 {
     m_lst->cmbComposite->blockSignals(true);
     m_lst->cmbComposite->setCurrent(compositeOp);
     m_lst->cmbComposite->blockSignals(false);
 }
 
-void KisLayerBox::slotSetColorSpace(const KisColorSpace * colorSpace)
+void KisLayerBox::slotSetColorSpace(const KoColorSpace * colorSpace)
 {
     m_lst->cmbComposite->blockSignals(true);
     m_lst->cmbComposite->setCompositeOpList(colorSpace->userVisiblecompositeOps());

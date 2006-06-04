@@ -26,9 +26,9 @@
 #include "kis_texture_filter.h"
 
 void WetPaintDevAction::act(KisPaintDeviceSP device, qint32 w, qint32 h) const {
-    KisColorSpace * cs = device->colorSpace();
+    KoColorSpace * cs = device->colorSpace();
 
-    if (cs->id() != KisID("WET","")) {
+    if (cs->id() != KoID("WET","")) {
         kDebug(DBG_AREA_CMS) << "You set this kind of texture on non-wet layers!.\n";
         return;
     } else {

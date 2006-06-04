@@ -29,12 +29,12 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kis_debug_areas.h>
-#include "kis_lcms_base_colorspace.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoLcmsColorSpaceTrait.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_image.h"
 #include "kis_wet_colorspace.h"
 #include "wetphysicsfilter.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 
 namespace {
     static const WetPix m_paint = { 707, 0, 707, 0, 707, 0, 240, 0 };
@@ -111,9 +111,9 @@ int getH(int r, int g, int b)
     return h;
 }
 
-KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisProfile *p) :
-    KisColorSpace(KisID("WET", i18n("Watercolors")), parent)
-    , KisLcmsBaseColorSpace(0, icMaxEnumData, p)
+KisWetColorSpace::KisWetColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+    KoColorSpace(KoID("WET", i18n("Watercolors")), parent)
+    , KoLcmsColorSpaceTrait(0, icMaxEnumData, p)
 {
     wet_init_render_tab();
 
@@ -133,23 +133,23 @@ KisWetColorSpace::KisWetColorSpace(KisColorSpaceFactoryRegistry * parent, KisPro
         << i18n("Ivory Black")
         << i18n("Pure Water");
 
-    m_channels.push_back(new KisChannelInfo(i18n("Red Concentration"), 0, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Red"), 1, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Green Concentration"), 2, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Green"), 3, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Blue Concentration"), 4, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Myth Blue"), 5, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Water Volume"), 6, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Paper Height"), 7, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Red Concentration"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Myth Red"), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Green Concentration"), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Myth Green"), 3, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Blue Concentration"), 4, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Myth Blue"), 5, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Water Volume"), 6, KoChannelInfo::SUBSTANCE, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Paper Height"), 7, KoChannelInfo::SUBSTANCE, KoChannelInfo::UINT16));
 
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Red Concentration"), 8, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Red"), 9, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Green Concentration"), 10, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Green"), 11, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Blue Concentration"), 12, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Myth Blue"), 13, KisChannelInfo::COLOR, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Water Volume"), 14, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
-    m_channels.push_back(new KisChannelInfo(i18n("Adsorbed Paper Height"), 15, KisChannelInfo::SUBSTANCE, KisChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Adsorbed Red Concentration"), 8, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Adsorbed Myth Red"), 9, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Adsorbed Green Concentration"), 10, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Adsorbed Myth Green"), 11, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Adsorbed Blue Concentration"), 12, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Adsorbed Myth Blue"), 13, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Adsorbed Water Volume"), 14, KoChannelInfo::SUBSTANCE, KoChannelInfo::UINT16));
+    m_channels.push_back(new KoChannelInfo(i18n("Adsorbed Paper Height"), 15, KoChannelInfo::SUBSTANCE, KoChannelInfo::UINT16));
 
     // Store the hue; we'll pick the paintbox color that closest to the given QColor's hue.
     m_conversionMap[getH(240, 32, 160)] = m_paintbox[0]; // Quinacridone Rose
@@ -177,7 +177,7 @@ KisWetColorSpace::~KisWetColorSpace()
 {
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile * /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, quint8 *dst, KoColorProfile * /*profile*/)
 {
     WetPack* p = reinterpret_cast<WetPack*>(dst);
 
@@ -204,7 +204,7 @@ void KisWetColorSpace::fromQColor(const QColor& c, quint8 *dst, KisProfile * /*p
     }
 }
 
-void KisWetColorSpace::fromQColor(const QColor& c, quint8  /*opacity*/, quint8 *dst, KisProfile * /*profile*/)
+void KisWetColorSpace::fromQColor(const QColor& c, quint8  /*opacity*/, quint8 *dst, KoColorProfile * /*profile*/)
 {
     fromQColor(c, dst);
 }
@@ -241,7 +241,7 @@ quint16 KisWetColorSpace::scaleToU16(const quint8 * /*srcPixel*/, qint32 /*chann
 }
 
 
-void KisWetColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile * /*profile*/)
+void KisWetColorSpace::toQColor(const quint8 *src, QColor *c, KoColorProfile * /*profile*/)
 {
     quint8 * rgb = new quint8[3];
     Q_CHECK_PTR(rgb);
@@ -267,7 +267,7 @@ void KisWetColorSpace::toQColor(const quint8 *src, QColor *c, KisProfile * /*pro
     delete[]rgb;
 }
 
-void KisWetColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * /*profile*/)
+void KisWetColorSpace::toQColor(const quint8 *src, QColor *c, quint8 *opacity, KoColorProfile * /*profile*/)
 {
     toQColor(src, c);
     *opacity = OPACITY_OPAQUE;
@@ -277,7 +277,7 @@ void KisWetColorSpace::mixColors(const quint8 **/*colors*/, const quint8 */*weig
 {
 }
 
-Q3ValueVector<KisChannelInfo *> KisWetColorSpace::channels() const
+Q3ValueVector<KoChannelInfo *> KisWetColorSpace::channels() const
 {
     return m_channels;
 }
@@ -310,7 +310,7 @@ quint32 KisWetColorSpace::pixelSize() const
 
 // XXX: use profiles to display correctly on calibrated displays.
 QImage KisWetColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                         KisProfile *  /*dstProfile*/,
+                         KoColorProfile *  /*dstProfile*/,
                          qint32 /*renderingIntent*/, float /*exposure*/)
 {
     QImage img(width, height, QImage::Format_ARGB32);
@@ -367,7 +367,7 @@ void KisWetColorSpace::bitBlt(quint8 *dst,
                   quint8 /*opacity*/,
                   qint32 rows,
                   qint32 cols,
-                  const KisCompositeOp& op)
+                  const KoCompositeOp& op)
 {
     if (rows <= 0 || cols <= 0)
         return;
@@ -491,11 +491,11 @@ void KisWetColorSpace::wet_render_wetness(quint8 * rgb, WetPack * pack)
     phase &= 3;
 }
 
-KisCompositeOpList KisWetColorSpace::userVisiblecompositeOps() const
+KoCompositeOpList KisWetColorSpace::userVisiblecompositeOps() const
 {
-    KisCompositeOpList list;
+    KoCompositeOpList list;
 
-    list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KoCompositeOp(COMPOSITE_OVER));
 
     return list;
 }

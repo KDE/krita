@@ -338,19 +338,18 @@ void KisTileManager::toSwap(TileInfo* info) {
             return;
         }
 
-        if(!file->at(info->filePos)) {
-            kdWarning() << "Seek to position FAILED!: " << info->filePos << endl;
+        int fd = file->handle();
+        Q_UINT8* data = 0;
+        if (!kritaMmap(data, 0, info->size, PROT_READ | PROT_WRITE, MAP_SHARED,
+             fd, info->filePos)) {
+            kdWarning() << "Initial mmap failed" << endl;
             m_swapForbidden = true;
             m_swapMutex->unlock();
             return;
         }
 
-        if (file->writeBlock(reinterpret_cast<const char *>(tile->m_data), info->fsize) == -1) {
-            kdWarning() << "Write to file FAILED!: " << info->filePos << endl;
-            m_swapForbidden = true;
-            m_swapMutex->unlock();
-            return;
-        }
+        memcpy(data, info->tile->m_data, info->size);
+        munmap(tile->m_data, info->size);
 
         m_poolMutex->lock();
         if (isPoolTile(tile->m_data, tile->m_pixelSize))

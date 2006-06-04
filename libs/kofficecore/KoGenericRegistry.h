@@ -20,66 +20,11 @@
 #ifndef _KO_GENERIC_REGISTRY_H_
 #define _KO_GENERIC_REGISTRY_H_
 
+#include "KoID.h"
+
 #include <map>
 
 #include <QString>
-
-
-/**
- * A KoID is a combination of a user-visible string and a string that uniquely
- * identifies a given resource across languages.
- */
-class KoID {
-
-
-public:
-
-    KoID() : m_id(QString::null), m_name(QString::null) {}
-
-    KoID(const QString & id, const QString & name = QString::null)
-        : m_id(id),
-          m_name(name) {};
-
-    QString id() const { return m_id; };
-    QString name() const { return m_name; };
-
-    friend inline bool operator==(const KoID &, const KoID &);
-    friend inline bool operator!=(const KoID &, const KoID &);
-    friend inline bool operator<(const KoID &, const KoID &);
-    friend inline bool operator>(const KoID &, const KoID &);
-
-private:
-
-    QString m_id;
-    QString m_name;
-
-};
-
-inline bool operator==(const KoID &v1, const KoID &v2)
-{
-     return v1.m_id == v2.m_id;
-}
-
-inline bool operator!=(const KoID &v1, const KoID &v2)
-{
-    return v1.m_id != v2.m_id;
-}
-
-
-inline bool operator<(const KoID &v1, const KoID &v2)
-{
-    return v1.m_id < v2.m_id;
-}
-
-
-inline bool operator>(const KoID &v1, const KoID &v2)
-{
-    return v1.m_id < v2.m_id;
-}
-
-
-typedef QList<KoID> KoIDList;
-
 
 /**
  * Base class for registry objects.

@@ -144,7 +144,7 @@ public:
      * @param rotationHandles if true; the rotation handles will be drawn
      * @param shearHandles if true; the shearhandles will be drawn
      */
-    SelectionDecorator(QRectF bounds, KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles);
+    SelectionDecorator(const QRectF &bounds, KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles);
     ~SelectionDecorator() {}
 
     /**

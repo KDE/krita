@@ -258,7 +258,7 @@ void KoInteractionTool::recalcSelectionBox() {
 // ##########  SelectionDecorator ############
 QImage * SelectionDecorator::s_rotateCursor=0;
 
-SelectionDecorator::SelectionDecorator(QRectF bounds, KoFlake::SelectionHandle arrows,
+SelectionDecorator::SelectionDecorator(const QRectF &bounds, KoFlake::SelectionHandle arrows,
         bool rotationHandles, bool shearHandles)
 : m_rotationHandles(rotationHandles)
 , m_shearHandles(shearHandles)

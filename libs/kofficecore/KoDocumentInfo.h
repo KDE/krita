@@ -188,6 +188,8 @@ class KOFFICECORE_EXPORT KoDocumentInfo : public QObject
     QMap<QString, QString> m_authorInfo;
     /** The map containing information about the document */
     QMap<QString, QString> m_aboutInfo;
+
+    bool m_firstSave;
 };
 
 #endif

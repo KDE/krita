@@ -49,6 +49,7 @@ KoDocumentInfo::KoDocumentInfo( QObject* parent ) : QObject( parent )
   setAboutInfo( "initial-creator", i18n( "Unknown" ) );
   setAboutInfo( "creation-date", QDateTime::currentDateTime()
                                                      .toString( Qt::ISODate ) );
+    m_firstSave = false;
 }
 
 KoDocumentInfo::~KoDocumentInfo()
@@ -368,7 +369,11 @@ void KoDocumentInfo::saveParameters()
     return;
 
   int cycles = aboutInfo( "editing-cycles" ).toInt();
-  setAboutInfo( "editing-cycles", QString::number( cycles++ ) );
+  setAboutInfo( "editing-cycles", QString::number( cycles ) );
+    if(m_firstSave) {
+        cycles++;
+        m_firstSave = false;
+    }
   setAboutInfo( "date", QDateTime::currentDateTime().toString( Qt::ISODate ) );
 }
 

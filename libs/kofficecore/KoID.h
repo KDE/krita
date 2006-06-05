@@ -20,9 +20,8 @@
 #ifndef _KO_ID_H_
 #define _KO_ID_H_
 
-#include <map>
-
 #include <QString>
+#include <QList>
 
 
 /**
@@ -32,9 +31,9 @@
 class KoID {
 public:
 
-    KoID() : m_id(QString::null), m_name(QString::null) {}
+    KoID() : m_id(), m_name() {}
 
-    KoID(const QString & id, const QString & name = QString::null)
+    KoID(const QString & id, const QString & name = QString())
         : m_id(id),
           m_name(name) {};
 

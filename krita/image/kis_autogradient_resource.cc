@@ -17,8 +17,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpace.h"
+
 #include "kis_gradient.h"
 #include "kis_autogradient_resource.h"
+#include "kis_meta_registry.h"
 
 // FIXME: use the same #define as in kis_gradient.cc, probably best customizable?
 #define PREVIEW_WIDTH 64
@@ -27,7 +31,8 @@
 
 void KisAutogradientResource::createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right )
 {
-    pushSegment(new KisGradientSegment(interpolation, colorInterpolation, startOffset, middleOffset, endOffset, Color( left, 1 ), Color( right, 1 )));
+    m_colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    pushSegment(new KisGradientSegment(interpolation, colorInterpolation, startOffset, middleOffset, endOffset, KoColor( left, m_colorSpace ), KoColor( right, m_colorSpace )));
 
 }
 
@@ -160,7 +165,7 @@ void KisAutogradientResource::duplicateSegment( KisGradientSegment* segment )
 void KisAutogradientResource::mirrorSegment( KisGradientSegment* segment )
 {
     Q_ASSERT(segment != 0);
-    Color tmpColor = segment->startColor();
+    KoColor tmpColor = segment->startColor();
     segment->setStartColor( segment->endColor() );
     segment->setEndColor( tmpColor );
     segment->setMiddleOffset( segment->endOffset() - ( segment->middleOffset() - segment->startOffset() ) );

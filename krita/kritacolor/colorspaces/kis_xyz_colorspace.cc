@@ -31,7 +31,7 @@
 #include "kis_abstract_colorspace.h"
 #include "kis_u16_base_colorspace.h"
 #include "kis_xyz_colorspace.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))

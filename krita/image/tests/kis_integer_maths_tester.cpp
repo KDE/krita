@@ -20,7 +20,7 @@
 #include <kunittest/module.h>
 
 #include "kis_integer_maths_tester.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 
 using namespace KUnitTest;
 

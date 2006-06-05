@@ -22,7 +22,7 @@
 #include "kis_factory.h"
 #include "kis_strategy_colorspace_rgb_u16_tester.h"
 #include "kis_rgb_u16_colorspace.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 #include "kis_paint_device.h"
 
 using namespace KUnitTest;

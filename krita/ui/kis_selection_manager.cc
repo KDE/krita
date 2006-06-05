@@ -54,7 +54,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_selected_transaction.h"
 #include "kis_convolution_painter.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 #include "kis_fill_painter.h"
 #include "kis_canvas.h"
 

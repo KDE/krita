@@ -30,14 +30,15 @@
 #include <QFile>
 
 #include "koColor.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpace.h"
 #include "kogradientmanager.h"
-
-#include <KoColorSpace.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "kis_gradient.h"
+#include "kis_meta_registry.h"
 
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
@@ -54,6 +55,7 @@ KisGradientSegment::SphereDecreasingInterpolationStrategy *KisGradientSegment::S
 
 KisGradient::KisGradient(const QString& file) : super(file)
 {
+    m_colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
 }
 
 KisGradient::~KisGradient()
@@ -101,8 +103,9 @@ bool KisGradient::init()
                 double midp = colstop->midpoint;
                 midp = colstop->offset + ((colstopNext->offset - colstop->offset) * midp);
 
-                Color leftColor(leftRgb.color(), colstop->opacity);
-                Color rightColor(rightRgb.color(), colstopNext->opacity);
+                KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+                KoColor leftColor(leftRgb.color(), static_cast<quint8>(colstop->opacity * OPACITY_OPAQUE + 0.5), cs);
+                KoColor rightColor(rightRgb.color(), static_cast<quint8>(colstopNext->opacity * OPACITY_OPAQUE + 0.5), cs);
 
                 KisGradientSegment *segment = new KisGradientSegment(colstop->interpolation, colstop->colorType, colstop->offset, midp, colstopNext->offset, leftColor, rightColor);
                 Q_CHECK_PTR(segment);
@@ -166,16 +169,14 @@ KisGradientSegment *KisGradient::segmentAt(double t) const
     return segment;
 }
 
-void KisGradient::colorAt(double t, QColor *color, quint8 *opacity) const
+KoColor KisGradient::colorAt(double t) const
 {
     const KisGradientSegment *segment = segmentAt(t);
     Q_ASSERT(segment != 0);
 
-    if (segment) {
-        Color col = segment->colorAt(t);
-        *color = col.color();
-        *opacity = static_cast<quint8>(col.alpha() * OPACITY_OPAQUE + 0.5);
-    }
+    KoColor color = segment->colorAt(t);
+    color.convertTo(m_colorSpace);
+    return segment->colorAt(t);
 }
 
 QImage KisGradient::generatePreview(int width, int height) const
@@ -189,11 +190,13 @@ QImage KisGradient::generatePreview(int width, int height) const
             int backgroundGreen = backgroundRed;
             int backgroundBlue = backgroundRed;
 
+            KoColor c;
             QColor color;
             quint8 opacity;
             double t = static_cast<double>(x) / (img.width() - 1);
 
-            colorAt(t,  &color, &opacity);
+            c = colorAt(t);
+            c.toQColor( &color, &opacity );
 
             double alpha = static_cast<double>(opacity) / OPACITY_OPAQUE;
 
@@ -208,7 +211,7 @@ QImage KisGradient::generatePreview(int width, int height) const
     return img;
 }
 
-KisGradientSegment::KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const Color& startColor, const Color& endColor)
+KisGradientSegment::KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor)
 {
     m_interpolator = 0;
 
@@ -290,12 +293,12 @@ KisGradientSegment::KisGradientSegment(int interpolationType, int colorInterpola
     m_endColor = endColor;
 }
 
-const Color& KisGradientSegment::startColor() const
+const KoColor& KisGradientSegment::startColor() const
 {
     return m_startColor;
 }
 
-const Color& KisGradientSegment::endColor() const
+const KoColor& KisGradientSegment::endColor() const
 {
     return m_endColor;
 }
@@ -398,7 +401,7 @@ void KisGradientSegment::setColorInterpolation(int colorInterpolationType)
     }
 }
 
-Color KisGradientSegment::colorAt(double t) const
+KoColor KisGradientSegment::colorAt(double t) const
 {
     Q_ASSERT(t > m_startOffset - DBL_EPSILON && t < m_endOffset + DBL_EPSILON);
 
@@ -413,7 +416,7 @@ Color KisGradientSegment::colorAt(double t) const
 
     double colorT = m_interpolator->valueAt(segmentT, m_middleT);
 
-    Color color = m_colorInterpolator->colorAt(colorT, m_startColor, m_endColor);
+    KoColor color = m_colorInterpolator->colorAt(colorT, m_startColor, m_endColor);
 
     return color;
 }
@@ -423,6 +426,11 @@ bool KisGradientSegment::isValid() const
     if (m_interpolator == 0 || m_colorInterpolator ==0)
         return false;
     return true;
+}
+
+KisGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
+{
+    m_colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
 }
 
 KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorInterpolationStrategy::instance()
@@ -435,14 +443,29 @@ KisGradientSegment::RGBColorInterpolationStrategy *KisGradientSegment::RGBColorI
     return m_instance;
 }
 
-Color KisGradientSegment::RGBColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
+KoColor KisGradientSegment::RGBColorInterpolationStrategy::colorAt(double t, KoColor start, KoColor end) const
 {
-    int red = static_cast<int>(start.color().red() + t * (end.color().red() - start.color().red()) + 0.5);
-    int green = static_cast<int>(start.color().green() + t * (end.color().green() - start.color().green()) + 0.5);
-    int blue = static_cast<int>(start.color().blue() + t * (end.color().blue() - start.color().blue()) + 0.5);
-    double alpha = start.alpha() + t * (end.alpha() - start.alpha());
+    KoColor result = start;
 
-    return Color(QColor(red, green, blue), alpha);
+    start.convertTo(m_colorSpace);
+    end.convertTo(m_colorSpace);
+
+    const quint8 *colors[2];
+    colors[0] = start.data();
+    colors[1] = end.data();
+
+    quint8 colorWeights[2];
+    colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
+    colorWeights[1] = 255 - colorWeights[0];
+
+    m_colorSpace->mixColors(colors, colorWeights, 2, result.data());
+
+    return result;
+}
+
+KisGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()
+{
+    m_colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
 }
 
 KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWColorInterpolationStrategy::instance()
@@ -455,30 +478,44 @@ KisGradientSegment::HSVCWColorInterpolationStrategy *KisGradientSegment::HSVCWCo
     return m_instance;
 }
 
-Color KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
+KoColor KisGradientSegment::HSVCWColorInterpolationStrategy::colorAt(double t, KoColor start, KoColor end) const
 {
-    KoOldColor sc = KoOldColor(start.color());
-    KoOldColor ec = KoOldColor(end.color());
-    
-    int s = static_cast<int>(sc.S() + t * (ec.S() - sc.S()) + 0.5);
-    int v = static_cast<int>(sc.V() + t * (ec.V() - sc.V()) + 0.5);
+    QColor sc;
+    QColor ec;
+    quint8 startOpacity;
+    quint8 endOpacity;
+
+    start.toQColor( &sc, &startOpacity);
+    end.toQColor( &ec, &endOpacity);
+
+    int s = static_cast<int>(sc.saturation() + t * (ec.saturation() - sc.saturation()) + 0.5);
+    int v = static_cast<int>(sc.value() + t * (ec.value() - sc.value()) + 0.5);
     int h;
-    
-    if (ec.H() < sc.H()) {
-        h = static_cast<int>(ec.H() + (1 - t) * (sc.H() - ec.H()) + 0.5);
+
+    if (ec.hue() < sc.hue()) {
+        h = static_cast<int>(ec.hue() + (1 - t) * (sc.hue() - ec.hue()) + 0.5);
     }
     else {
-        h = static_cast<int>(ec.H() + (1 - t) * (360 - ec.H() + sc.H()) + 0.5);
-        
+        h = static_cast<int>(ec.hue() + (1 - t) * (360 - ec.hue() + sc.hue()) + 0.5);
+
         if (h > 359) {
             h -= 360;
         }
     }
-    
-    double alpha = start.alpha() + t * (end.alpha() - start.alpha());
 
-    return Color(KoOldColor(h, s, v, KoOldColor::csHSV).color(), alpha);
+    quint8 opacity = startOpacity + t * (endOpacity - startOpacity);
+
+    QColor result;
+    result.setHsv( h, s, v);
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    return KoColor( result, opacity, cs);
 }
+
+KisGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy()
+{
+    m_colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+}
+
 
 KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCWColorInterpolationStrategy::instance()
 {
@@ -490,29 +527,36 @@ KisGradientSegment::HSVCCWColorInterpolationStrategy *KisGradientSegment::HSVCCW
     return m_instance;
 }
 
-Color KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(double t, Color start, Color end) const
+KoColor KisGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(double t, KoColor start, KoColor end) const
 {
-    KoOldColor sc = KoOldColor(start.color());
-    KoOldColor se = KoOldColor(end.color());
+    QColor sc;
+    QColor se;
+    quint8 startOpacity;
+    quint8 endOpacity;
 
-    int s = static_cast<int>(sc.S() + t * (se.S() - sc.S()) + 0.5);
-    int v = static_cast<int>(sc.V() + t * (se.V() - sc.V()) + 0.5);
+    start.toQColor( &sc, &startOpacity);
+    end.toQColor( &se, &endOpacity);
+
+    int s = static_cast<int>(sc.saturation() + t * (se.saturation() - sc.saturation()) + 0.5);
+    int v = static_cast<int>(sc.value() + t * (se.value() - sc.value()) + 0.5);
     int h;
 
-    if (sc.H() < se.H()) {
-        h = static_cast<int>(sc.H() + t * (se.H() - sc.H()) + 0.5);
+    if (sc.hue() < se.hue()) {
+        h = static_cast<int>(sc.hue() + t * (se.hue() - sc.hue()) + 0.5);
     }
     else {
-        h = static_cast<int>(sc.H() + t * (360 - sc.H() + se.H()) + 0.5);
+        h = static_cast<int>(sc.hue() + t * (360 - sc.hue() + se.hue()) + 0.5);
 
         if (h > 359) {
             h -= 360;
         }
     }
 
-    double alpha = start.alpha() + t * (end.alpha() - start.alpha());
+    quint8 opacity = startOpacity + t * (endOpacity - startOpacity);
 
-    return Color(KoOldColor(h, s, v, KoOldColor::csHSV).color(), alpha);
+    QColor result;
+    result.setHsv( h, s, v);
+    return KoColor( result, opacity, m_colorSpace);
 }
 
 KisGradientSegment::LinearInterpolationStrategy *KisGradientSegment::LinearInterpolationStrategy::instance()

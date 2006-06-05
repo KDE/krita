@@ -40,7 +40,7 @@
 #include "kis_iteratorpixeltrait.h"
 #include "KoColorProfile.h"
 #include "KoColor.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 #include "KoColorSpaceFactoryRegistry.h"
 #include "kis_selection.h"
 #include "kis_layer.h"

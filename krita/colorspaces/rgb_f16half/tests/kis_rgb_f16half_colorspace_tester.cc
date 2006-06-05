@@ -24,7 +24,7 @@
 #include "kis_rgb_f16half_colorspace.h"
 #include "kis_rgb_f16half_colorspace_tester.h"
 #include "kis_rgb_f32_colorspace.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 #include "kis_paint_device.h"
 
 using namespace KUnitTest;

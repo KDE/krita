@@ -31,7 +31,7 @@
 #include "kis_gray_u16_colorspace.h"
 #include "KoU16ColorSpaceTrait.h"
 #include "kis_color_conversions.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 #include "KoColorSpaceFactoryRegistry.h"
 
 namespace {

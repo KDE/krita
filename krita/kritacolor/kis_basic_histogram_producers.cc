@@ -27,7 +27,7 @@
 
 #include "kis_global.h"
 #include "kis_basic_histogram_producers.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"
 #include "KoLabColorSpace.h"

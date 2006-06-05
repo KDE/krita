@@ -29,7 +29,7 @@
 #include "KoColorSpaceFactoryRegistry.h"
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 #include "kis_image.h"
 #include "kis_datamanager.h"
 #include "kis_fill_painter.h"

@@ -36,7 +36,7 @@ namespace {
     const qint32 MAX_CHANNEL_RGBA = 4;
 }
 
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 
 #ifndef HAVE_POWF
 #undef powf

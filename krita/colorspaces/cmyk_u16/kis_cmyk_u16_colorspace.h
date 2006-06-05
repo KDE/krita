@@ -25,7 +25,7 @@
 #include "kis_global.h"
 #include "KoU16ColorSpaceTrait.h"
 #include "KoLcmsColorSpaceTrait.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 
 
 class KRITACOLOR_EXPORT KisCmykU16ColorSpace : public KoU16ColorSpaceTrait, public KoLcmsColorSpaceTrait {

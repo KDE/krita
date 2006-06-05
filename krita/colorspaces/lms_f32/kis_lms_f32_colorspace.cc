@@ -38,7 +38,7 @@ namespace {
     const qint32 MAX_CHANNEL_LMSA = 4;
 }
 
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 
 #define FLOAT_MAX 1.0f //temp
 

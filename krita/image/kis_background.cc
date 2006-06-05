@@ -17,7 +17,7 @@
  */
 #include "kis_global.h"
 #include "kis_background.h"
-#include "kis_integer_maths.h"
+#include "KoIntegerMaths.h"
 
 KisBackground::KisBackground()
     : KShared()

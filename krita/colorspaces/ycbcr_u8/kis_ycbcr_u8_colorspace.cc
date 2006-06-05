@@ -21,7 +21,7 @@
 
 #include <qimage.h>
 
-#include <kis_integer_maths.h>
+#include <KoIntegerMaths.h>
 
 const Q_INT32 MAX_CHANNEL_YCbCr = 3;
 const Q_INT32 MAX_CHANNEL_YCbCrA = 4;

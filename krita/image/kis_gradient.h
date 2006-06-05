@@ -31,6 +31,7 @@
 
 #include "kis_resource.h"
 #include "kis_global.h"
+#include "KoColor.h"
 
 class QImage;
 
@@ -48,32 +49,18 @@ enum {
     COLOR_INTERP_HSV_CW
 };
 
-// TODO: Replace QColor with KoColor
-class Color {
-    public:
-        Color() { m_alpha = 0; }
-        Color(const QColor& color, double alpha) { m_color = color; m_alpha = alpha; }
-
-        const QColor& color() const { return m_color; }
-        double alpha() const { return m_alpha; }
-
-    private:
-        QColor m_color;
-        double m_alpha;
-};
-
 class KRITAIMAGE_EXPORT KisGradientSegment {
     public:
-        KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const Color& startColor, const Color& endColor);
+        KisGradientSegment(int interpolationType, int colorInterpolationType, double startOffset, double middleOffset, double endOffset, const KoColor& startColor, const KoColor& endColor);
 
         // startOffset <= t <= endOffset
-        Color colorAt(double t) const;
+        KoColor colorAt(double t) const;
 
-        const Color& startColor() const;
-        const Color& endColor() const;
+        const KoColor& startColor() const;
+        const KoColor& endColor() const;
 
-        void setStartColor(const Color& color) { m_startColor = color; }
-        void setEndColor(const Color& color) { m_endColor = color; }
+        void setStartColor(const KoColor& color) { m_startColor = color; }
+        void setEndColor(const KoColor& color) { m_endColor = color; }
 
         double startOffset() const;
         double middleOffset() const;
@@ -99,7 +86,7 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
             ColorInterpolationStrategy() {}
             virtual ~ColorInterpolationStrategy() {}
 
-            virtual Color colorAt(double t, Color start, Color end) const = 0;
+            virtual KoColor colorAt(double t, KoColor start, KoColor end) const = 0;
             virtual int type() const = 0;
         };
 
@@ -107,37 +94,40 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         public:
             static RGBColorInterpolationStrategy *instance();
 
-            virtual Color colorAt(double t, Color start, Color end) const;
+            virtual KoColor colorAt(double t, KoColor start, KoColor end) const;
             virtual int type() const { return COLOR_INTERP_RGB; }
 
         private:
-            RGBColorInterpolationStrategy() {}
+            RGBColorInterpolationStrategy();
 
             static RGBColorInterpolationStrategy *m_instance;
+            KoColorSpace * m_colorSpace;
         };
 
         class HSVCWColorInterpolationStrategy : public ColorInterpolationStrategy {
         public:
             static HSVCWColorInterpolationStrategy *instance();
 
-            virtual Color colorAt(double t, Color start, Color end) const;
+            virtual KoColor colorAt(double t, KoColor start, KoColor end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CW; }
         private:
-            HSVCWColorInterpolationStrategy() {}
+            HSVCWColorInterpolationStrategy();
 
             static HSVCWColorInterpolationStrategy *m_instance;
+            KoColorSpace * m_colorSpace;
         };
 
         class HSVCCWColorInterpolationStrategy : public ColorInterpolationStrategy {
         public:
             static HSVCCWColorInterpolationStrategy *instance();
 
-            virtual Color colorAt(double t, Color start, Color end) const;
+            virtual KoColor colorAt(double t, KoColor start, KoColor end) const;
             virtual int type() const { return COLOR_INTERP_HSV_CCW; }
         private:
-            HSVCCWColorInterpolationStrategy() {}
+            HSVCCWColorInterpolationStrategy();
 
             static HSVCCWColorInterpolationStrategy *m_instance;
+            KoColorSpace * m_colorSpace;
         };
 
         class InterpolationStrategy {
@@ -225,8 +215,8 @@ class KRITAIMAGE_EXPORT KisGradientSegment {
         double m_length;
         double m_middleT;
 
-        Color m_startColor;
-        Color m_endColor;
+        KoColor m_startColor;
+        KoColor m_endColor;
 };
 
 class KRITAIMAGE_EXPORT KisGradient : public KisResource {
@@ -242,7 +232,8 @@ public:
     virtual QImage img();
     virtual QImage generatePreview(int width, int height) const;
 
-    void colorAt(double t, QColor *color, quint8 *opacity) const;
+    KoColor colorAt(double t) const;
+    KoColorSpace * colorSpace() const { return m_colorSpace; }
 
     KisGradientSegment *segmentAt(double t) const;
 
@@ -252,11 +243,13 @@ protected:
 
     QList<KisGradientSegment *> m_segments;
 
+protected:
+    KoColorSpace * m_colorSpace;
+
 private:
     bool init();
 
 private:
-    QByteArray m_data;
     QImage m_img;
 };
 

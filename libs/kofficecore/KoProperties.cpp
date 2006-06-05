@@ -22,12 +22,11 @@
 #include "KoProperties.h"
 
 KoProperties::KoProperties(const KoProperties & rhs)
+    : m_properties( rhs.m_properties )
 {
-
-    m_properties = rhs.m_properties;
 }
 
-void KoProperties::load(const QString & s )
+void KoProperties::load(const QString & s)
 {
     m_properties.clear();
 
@@ -39,15 +38,11 @@ void KoProperties::load(const QString & s )
     while (!n.isNull()) {
         // We don't nest elements in filter configuration. For now...
         QDomElement e = n.toElement();
-        QString name;
-        QString type;
-        QString value;
-
         if (!e.isNull()) {
             if (e.tagName() == "property") {
-                name = e.attribute("name");
-                type = e.attribute("type");
-                value = e.text();
+                const QString name = e.attribute("name");
+                const QString type = e.attribute("type");
+                const QString value = e.text();
                 // XXX Convert the variant pro-actively to the right type?
                 m_properties[name] = QVariant(value);
             }
@@ -81,39 +76,31 @@ QString KoProperties::store()
 
 void KoProperties::setProperty(const QString & name, const QVariant & value)
 {
-    if ( m_properties.find( name ) == m_properties.end() ) {
-        m_properties.insert( name, value );
-    }
-    else {
-        m_properties[name] = value;
-    }
+    // If there's an existing value for this name already, replace it.
+    m_properties.insert( name, value );
 }
 
 bool KoProperties::getProperty(const QString & name, QVariant & value)
 {
-   if ( m_properties.find( name ) == m_properties.end() ) {
+   QMap<QString, QVariant>::const_iterator it = m_properties.find( name ); 
+   if ( it == m_properties.end() ) {
        return false;
    }
    else {
-       value = m_properties[name];
+       value = *it;
        return true;
    }
 }
 
 QVariant KoProperties::getProperty(const QString & name)
 {
-    if ( m_properties.find( name ) == m_properties.end() ) {
-        return QVariant();
-    }
-    else {
-        return m_properties[name];
-    }
+    return m_properties.value( name, QVariant() );
 }
 
 
 int KoProperties::getInt(const QString & name, int def)
 {
-    QVariant v = getProperty(name);
+    const QVariant v = getProperty(name);
     if (v.isValid())
         return v.toInt();
     else
@@ -123,7 +110,7 @@ int KoProperties::getInt(const QString & name, int def)
 
 double KoProperties::getDouble(const QString & name, double def)
 {
-    QVariant v = getProperty(name);
+    const QVariant v = getProperty(name);
     if (v.isValid())
         return v.toDouble();
     else
@@ -132,7 +119,7 @@ double KoProperties::getDouble(const QString & name, double def)
 
 bool KoProperties::getBool(const QString & name, bool def)
 {
-    QVariant v = getProperty(name);
+    const QVariant v = getProperty(name);
     if (v.isValid())
         return v.toBool();
     else
@@ -141,7 +128,7 @@ bool KoProperties::getBool(const QString & name, bool def)
 
 QString KoProperties::getString(const QString & name, QString def)
 {
-    QVariant v = getProperty(name);
+    const QVariant v = getProperty(name);
     if (v.isValid())
         return v.toString();
     else
@@ -152,6 +139,6 @@ void KoProperties::dump()
 {
     QMap<QString, QVariant>::Iterator it;
     for ( it = m_properties.begin(); it != m_properties.end(); ++it ) {
+        // ### TODO finish
     }
-
 }

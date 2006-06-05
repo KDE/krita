@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KO_FILTER_CONFIGURATION_H_
-#define _KO_FILTER_CONFIGURATION_H_
+#ifndef _KO_PROPERTIES_H
+#define _KO_PROPERTIES_H
 
 #include <QString>
 #include <QMap>
@@ -80,7 +80,7 @@ public:
     QString getString(const QString & name, QString def = QString::null);
 
 private:
-        void dump();
+    void dump();
 
 protected:
 
@@ -88,4 +88,4 @@ protected:
 
 };
 
-#endif // _KO_FILTER_CONFIGURATION_H_
+#endif // _KO_PROPERTIES_H

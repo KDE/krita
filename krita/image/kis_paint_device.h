@@ -34,8 +34,6 @@
 #include "KoColor.h"
 #include <krita_export.h>
 
-class DCOPObject;
-
 class QImage;
 class QSize;
 class QPoint;
@@ -96,7 +94,6 @@ public:
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
-    virtual DCOPObject *dcopObject();
 
 
 public:
@@ -539,8 +536,6 @@ private:
     // Contains the actual selection. For now, there can be only
     // one selection per layer. XXX: is this a limitation?
     KisSelectionSP m_selection;
-
-    DCOPObject * m_dcop;
 
     KisExifInfo* m_exifInfo;
 

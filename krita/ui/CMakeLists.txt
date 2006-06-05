@@ -22,7 +22,6 @@ set(kritaui_LIB_SRCS
    kis_dlg_new_layer.cc
    kis_dlg_preferences.cc
    kis_doc.cc
-   kis_doc_iface.cc
    kis_double_widget.cc
    kis_factory.cc
    kis_filter_manager.cc
@@ -68,7 +67,6 @@ set(kritaui_LIB_SRCS
    kis_tool_shape.cc
    kis_birdeye_box.cc
    kis_view.cc
-   kis_view_iface.cc
    kis_custom_brush.cc
    kis_custom_palette.cc
    kis_custom_pattern.cc
@@ -114,8 +112,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     wdgtextbrush.ui
 	)
 
-kde4_add_dcop_skels(kritaui_LIB_SRCS kis_doc_iface.h kis_view_iface.h )
-
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS})
 
 target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} kritaimage kofficeui kopalette)
@@ -144,7 +140,6 @@ install_files( /include FILES
     kis_config.h
     kis_cursor.h
     kis_doc.h
-    kis_doc_iface.h
     kis_double_click_event.h
     kis_double_widget.h
     kis_filter_manager.h

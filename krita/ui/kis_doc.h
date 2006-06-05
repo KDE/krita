@@ -34,7 +34,6 @@
 class QImage;
 class QString;
 
-class DCOPObject;
 class KCommand;
 
 class KCommandHistory;
@@ -62,7 +61,6 @@ public:
     virtual bool wantExportConfirmation() const { return false; };
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
-    virtual DCOPObject* dcopObject();
     virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
     virtual bool loadChildren( KoStore* store);
@@ -209,7 +207,6 @@ private:
     KCommandHistory *m_cmdHistory;
     Q3PtrList<KisCommandHistoryListener> m_undoListeners;
     KisImageSP m_currentImage;
-    DCOPObject *m_dcop;
     KisNameServer *m_nserver;
     KMacroCommand *m_currentMacro;
     qint32 m_macroNestDepth;

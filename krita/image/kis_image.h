@@ -38,7 +38,6 @@
 #include <krita_export.h>
 
 
-class DCOPObject;
 class KCommand;
 
 class KoCommandHistory;
@@ -63,7 +62,6 @@ public:
     KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, KoColorSpace * colorSpace, const QString& name);
     KisImage(const KisImage& rhs);
     virtual ~KisImage();
-    virtual DCOPObject *dcopObject();
 
 public:
     typedef enum enumPaintFlags {
@@ -437,8 +435,6 @@ private:
     KisNameServer *m_nserver;
     KisUndoAdapter *m_adapter;
     //KisGuideMgr m_guides;
-
-    DCOPObject *m_dcop;
 
     vKisAnnotationSP m_annotations;
 

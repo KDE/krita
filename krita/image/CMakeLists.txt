@@ -67,8 +67,6 @@ set(kritaimage_LIB_SRCS
    kis_transform_worker.cc
    kis_vec.cc
    kis_paint_device.cc
-   kis_paint_device_iface.cc
-   kis_image_iface.cc
    kis_basic_math_toolbox.cpp
    kis_math_toolbox.cpp
    kis_exif_info.cc
@@ -77,8 +75,6 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.h )
 
 kde4_automoc(${kritaimage_LIB_SRCS})
-
-kde4_add_dcop_skels(kritaimage_LIB_SRCS kis_paint_device_iface.h kis_image_iface.h )
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
@@ -90,7 +86,7 @@ install_targets(${LIB_INSTALL_DIR} kritaimage )
 
 ########### install files ###############
 
-install_files( /include FILES  kis_adjustment_layer.h kis_alpha_mask.h  	kis_autobrush_resource.h kis_autogradient_resource.h kis_background.h kis_boundary.h kis_brush.h  	kis_command.h kis_convolution_painter.h kis_fill_painter.h kis_filter.h  	kis_filter_registry.h kis_gradient.h kis_gradient_painter.h kis_histogram.h kis_image.h  	kis_image_iface.h kis_imagepipe_brush.h kis_iterator.h kis_iterators_pixel.h  	kis_iteratorpixeltrait.h kis_layer.h kis_meta_registry.h kis_nameserver.h  	kis_paint_device_iface.h kis_paint_device.h kis_painter.h kis_paintop.h kis_paintop_registry.h  	kis_palette.h kis_pattern.h kis_point.h kis_rect.h kis_resource.h kis_selection.h  	kis_transaction.h kis_types.h kis_vec.h kis_filter_config_widget.h  	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h )
+install_files( /include FILES  kis_adjustment_layer.h kis_alpha_mask.h  	kis_autobrush_resource.h kis_autogradient_resource.h kis_background.h kis_boundary.h kis_brush.h  	kis_command.h kis_convolution_painter.h kis_fill_painter.h kis_filter.h  	kis_filter_registry.h kis_gradient.h kis_gradient_painter.h kis_histogram.h kis_image.h  	kis_imagepipe_brush.h kis_iterator.h kis_iterators_pixel.h  	kis_iteratorpixeltrait.h kis_layer.h kis_meta_registry.h kis_nameserver.h   kis_paint_device.h kis_painter.h kis_paintop.h kis_paintop_registry.h  	kis_palette.h kis_pattern.h kis_point.h kis_rect.h kis_resource.h kis_selection.h  	kis_transaction.h kis_types.h kis_vec.h kis_filter_config_widget.h  	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h )
 
 
 

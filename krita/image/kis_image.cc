@@ -32,8 +32,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kis_image_iface.h"
-
 #include "kis_annotation.h"
 #include "KoColorSpaceFactoryRegistry.h"
 #include "KoColor.h"
@@ -515,12 +513,10 @@ KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoColo
     setObjectName(name);
     init(adapter, width, height, colorSpace, name);
     setName(name);
-    m_dcop = 0L;
 }
 
 KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 {
-    m_dcop = 0L;
     if (this != &rhs) {
         m_private = new KisImagePrivate(*rhs.m_private);
         m_uri = rhs.m_uri;
@@ -551,20 +547,10 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
 
 
 
-DCOPObject * KisImage::dcopObject()
-{
-    if (!m_dcop) {
-        m_dcop = new KisImageIface(this);
-        Q_CHECK_PTR(m_dcop);
-    }
-    return m_dcop;
-}
-
 KisImage::~KisImage()
 {
     delete m_private;
     delete m_nserver;
-    delete m_dcop;
 }
 
 QString KisImage::name() const

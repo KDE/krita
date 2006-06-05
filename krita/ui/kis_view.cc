@@ -53,7 +53,6 @@
 // KDE
 #include <kis_meta_registry.h>
 #include <kglobalsettings.h>
-#include <dcopobject.h>
 #include <kaction.h>
 #include <kcolordialog.h>
 #include <kiconloader.h>
@@ -148,7 +147,6 @@
 #include "kis_types.h"
 #include "kis_undo_adapter.h"
 #include "kis_view.h"
-#include "kis_view_iface.h"
 #include "kis_label_progress.h"
 #include "kis_opengl_image_context.h"
 #include "kis_background.h"
@@ -228,7 +226,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     , m_imgProperties( 0 )
     , m_RulerAction( 0 )
     , m_guideAction( 0 )
-    , m_dcop( 0 )
     , m_hScroll( 0 )
     , m_vScroll( 0 )
     , m_scrollX( 0 )
@@ -320,8 +317,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     setupStatusBar();
 
     setupActions();
-    dcopObject();
-
 
     connect(this, SIGNAL(autoScroll(const QPoint &)), SLOT(slotAutoScroll(const QPoint &)));
 
@@ -372,7 +367,6 @@ KisView::~KisView()
     KisConfig cfg;
     cfg.setShowRulers( m_RulerAction->isChecked() );
 
-    delete m_dcop;
     delete m_paletteManager;
     delete m_selectionManager;
     delete m_filterManager;
@@ -464,15 +458,6 @@ void KisView::createLayerBox()
 
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
 
-}
-
-DCOPObject* KisView::dcopObject()
-{
-    if (!m_dcop) {
-        m_dcop = new KisViewIface(this);
-        Q_CHECK_PTR(m_dcop);
-    }
-    return m_dcop;
 }
 
 void KisView::setupScrollBars()

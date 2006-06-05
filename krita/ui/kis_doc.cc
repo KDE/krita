@@ -30,7 +30,6 @@
 #include <q3paintdevicemetrics.h>
 
 // KDE
-#include <dcopobject.h>
 #include <kapplication.h>
 #include <kcommand.h>
 #include <kdebug.h>
@@ -73,7 +72,6 @@
 #include "KoColorProfile.h"
 #include "KoID.h"
 #include "kis_part_layer.h"
-#include "kis_doc_iface.h"
 #include "kis_paint_device_action.h"
 #include "kis_custom_image_widget.h"
 #include "kis_load_visitor.h"
@@ -140,7 +138,6 @@ KisDoc::KisDoc(QWidget *parentWidget, QObject *parent, bool singleViewMode) :
 {
 
     m_undo = false;
-    m_dcop = 0;
     m_cmdHistory = 0;
     m_nserver = 0;
     m_currentImage = 0;
@@ -162,21 +159,11 @@ KisDoc::~KisDoc()
     delete m_cmdHistory;
     delete m_nserver;
     m_undoListeners.setAutoDelete(false);
-    delete m_dcop;
 }
 
 QByteArray KisDoc::mimeType() const
 {
     return APP_MIMETYPE;
-}
-
-DCOPObject *KisDoc::dcopObject()
-{
-    if (!m_dcop) {
-        m_dcop = new KisDocIface(this);
-        Q_CHECK_PTR(m_dcop);
-    }
-    return m_dcop;
 }
 
 void KisDoc::openExistingFile(const KUrl& url)

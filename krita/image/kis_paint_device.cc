@@ -44,7 +44,6 @@
 #include "KoColorSpaceFactoryRegistry.h"
 #include "kis_selection.h"
 #include "kis_layer.h"
-#include "kis_paint_device_iface.h"
 #include "kis_paint_device.h"
 #include "kis_datamanager.h"
 #include "kis_memento.h"
@@ -206,7 +205,6 @@ KisPaintDevice::KisPaintDevice(KoColorSpace * colorSpace, QString name) :
         return;
     }
     m_longRunningFilterTimer = 0;
-    m_dcop = 0;
     
     m_x = 0;
     m_y = 0;
@@ -239,7 +237,6 @@ KisPaintDevice::KisPaintDevice(KisLayer *parent, KoColorSpace * colorSpace, QStr
     setObjectName(name);
     Q_ASSERT( colorSpace );
     m_longRunningFilterTimer = 0;
-    m_dcop = 0;
 
     m_x = 0;
     m_y = 0;
@@ -276,7 +273,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
     if (this != &rhs) {
         m_longRunningFilterTimer = 0;
         m_parentLayer = 0;
-        m_dcop = rhs.m_dcop;
         if (rhs.m_datamanager) {
             m_datamanager = new KisDataManager(*rhs.m_datamanager);
             Q_CHECK_PTR(m_datamanager);
@@ -304,7 +300,6 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs) : QObject(), KShared(r
 
 KisPaintDevice::~KisPaintDevice()
 {
-    delete m_dcop;
     delete m_longRunningFilterTimer;
     QList<KisFilter*>::iterator it;
     QList<KisFilter*>::iterator end = m_longRunningFilters.end();
@@ -314,15 +309,6 @@ KisPaintDevice::~KisPaintDevice()
     }
     m_longRunningFilters.clear();
     //delete m_exifInfo;
-}
-
-DCOPObject *KisPaintDevice::dcopObject()
-{
-    if (!m_dcop) {
-        m_dcop = new KisPaintDeviceIface(this);
-        Q_CHECK_PTR(m_dcop);
-    }
-    return m_dcop;
 }
 
 

@@ -71,7 +71,6 @@ class QScrollBar;
 class QWidget;
 class QPopup;
 
-class DCOPObject;
 class KAction;
 class KActionMenu;
 class KPrinter;
@@ -147,8 +146,6 @@ public: // KXMLGUIBuilder implementation
 
 public: // KoView implementation
     virtual bool eventFilter(QObject *o, QEvent *e);
-
-    virtual DCOPObject* dcopObject();
 
     virtual void print(KPrinter &printer);
     virtual void setupPrinter(KPrinter &printer);
@@ -567,8 +564,6 @@ private:
 
     KToggleAction *m_RulerAction;
     KToggleAction *m_guideAction;
-
-    DCOPObject *m_dcop;
 
     // Widgets
     QScrollBar *m_hScroll; // XXX: the sizing of the scrollthumbs

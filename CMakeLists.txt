@@ -74,7 +74,7 @@ MESSAGE(STATUS "Before koffice-2.0 disable compile of example subdir, not necess
 add_subdirectory(example)
 add_subdirectory(interfaces)
 if(LIBART_FOUND)
-	add_subdirectory(karbon)
+#	add_subdirectory(karbon)
 endif(LIBART_FOUND)
 add_subdirectory(kdgantt)
 add_subdirectory(kchart)

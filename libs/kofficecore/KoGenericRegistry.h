@@ -24,8 +24,6 @@
 
 #include <map>
 
-#include <QString>
-
 /**
  * Base class for registry objects.
  *
@@ -39,8 +37,8 @@ class KoGenericRegistry {
 protected:
     typedef std::map<KoID, T> storageMap;
 public:
-    KoGenericRegistry() { };
-    virtual ~KoGenericRegistry() { };
+    KoGenericRegistry() { }
+    virtual ~KoGenericRegistry() { }
 public:
 
     /**
@@ -157,8 +155,8 @@ public:
     }
 
 protected:
-    KoGenericRegistry(const KoGenericRegistry&) { };
-    KoGenericRegistry operator=(const KoGenericRegistry&) { };
+    KoGenericRegistry(const KoGenericRegistry&) { }
+    KoGenericRegistry operator=(const KoGenericRegistry&) { }
     storageMap m_storage;
 };
 

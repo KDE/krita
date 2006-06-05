@@ -2,7 +2,7 @@
 
 add_subdirectory( tests )
 
-include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} ${QDBUS_INCLUDE_DIRS} )
+include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} )
 
 ########### next target ###############
 

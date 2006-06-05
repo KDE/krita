@@ -17,14 +17,13 @@ if (APPLE)
 endif (APPLE)
 
 
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QDBUS_DEFINITIONS} -DHAVE_CONFIG_H=1)
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 link_directories(${KDE4_LIB_DIR})
 
 
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 include (ConfigureChecks.cmake)
-include (FindQtDBus)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 #macro_additional_clean_files( ${CMAKE_CURRENT_BINARY_DIR}/config.h )

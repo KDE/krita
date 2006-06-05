@@ -138,7 +138,7 @@ void KisConfig::setCursorStyle(enumCursorStyle style)
 
 QString KisConfig::monitorProfile() const
 {
-    return m_cfg->readEntry("monitorProfile", "None");
+    return m_cfg->readEntry("monitorProfile", "");
 }
 
 void KisConfig::setMonitorProfile(QString monitorProfile)
@@ -171,7 +171,7 @@ void KisConfig::setPrinterColorSpace(QString printerColorSpace)
 
 QString KisConfig::printerProfile() const
 {
-    return m_cfg->readEntry("printerProfile", "None");
+    return m_cfg->readEntry("printerProfile", "");
 }
 
 void KisConfig::setPrinterProfile(QString printerProfile)

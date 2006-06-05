@@ -276,6 +276,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
 
                     // This can be done a lot more efficiently, no doubt, by clearing runs of pixels to the left and the right of
                     // the intersecting line.
+                    tile->addReader();
                     for (int y = 0; y < KisTile::HEIGHT; ++y) {
                         for (int x = 0; x < KisTile::WIDTH; ++x) {
                             if (!intersection.contains(x,y)) {
@@ -284,6 +285,7 @@ void KisTiledDataManager::setExtent(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h)
                             }
                         }
                     }
+                    tile->removeReader();
                     previousTile = tile;
                     tile = tile->getNext();
                 }
@@ -357,9 +359,7 @@ void KisTiledDataManager::clear(Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h, Q_UI
             tile->addReader();
             if (clearTileRect == tileRect) {
                 // Clear whole tile
-                tile->addReader();
                 memset(tile->data(), clearValue, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
-                tile->removeReader();
             } else {
 
                 Q_UINT32 rowsRemaining = clearTileRect.height();

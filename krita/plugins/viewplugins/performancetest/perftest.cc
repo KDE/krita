@@ -235,9 +235,9 @@ QString PerfTest::bltTest(quint32 testCount)
     QString report = QString("* bitBlt test\n");
 
     KisDoc * doc = m_view->canvasSubject()->document();
-    KoIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    QList<KoID> l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
-    for (KoIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+    for (QList<KoID>::Iterator it = l.begin(); it != l.end(); ++it) {
 
         kDebug() << "Image->" << (*it).name() << "\n";
 
@@ -398,9 +398,9 @@ QString PerfTest::fillTest(quint32 testCount)
     QString report = QString("* Fill test\n");
 
     KisDoc * doc = m_view->canvasSubject()->document();
-    KoIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    QList<KoID> l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
-    for (KoIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+    for (QList<KoID>::Iterator it = l.begin(); it != l.end(); ++it) {
         kDebug() << "Filltest on " << (*it).name() + '\n';
 
         report = report.append( "  Testing blitting on " + (*it).name() + '\n');
@@ -520,10 +520,10 @@ QString PerfTest::pixelTest(quint32 testCount)
     QString report = QString("* pixel/setpixel test\n");
 
     KisDoc * doc = m_view->canvasSubject()->document();
-    KoIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    QList<KoID> l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
 
-    for (KoIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+    for (QList<KoID>::Iterator it = l.begin(); it != l.end(); ++it) {
         report = report.append( "  Testing pixel/setpixel on " + (*it).name() + '\n');
 
          KisImageSP img = doc->newImage("fill-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
@@ -583,8 +583,8 @@ QString PerfTest::rotateTest(quint32 testCount)
     QString report = QString("* Rotate test\n");
 
     KisDoc * doc = m_view->canvasSubject()->document();
-    KoIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
-    for (KoIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+    QList<KoID> l = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    for (QList<KoID>::Iterator it = l.begin(); it != l.end(); ++it) {
 
         doc->undoAdapter()->setUndo( false );
         QTime t;
@@ -619,15 +619,15 @@ QString PerfTest::colorConversionTest(quint32 testCount)
     QString report = QString("* Colorspace conversion test\n");
 
     KisDoc * doc = m_view->canvasSubject()->document();
-    KoIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
-    for (KoIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+    QList<KoID> l = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    for (QList<KoID>::Iterator it = l.begin(); it != l.end(); ++it) {
 
         KisImageSP img = doc->newImage("cs-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
 
         QTime t;
 
-        KoIDList l2 = KisMetaRegistry::instance()->csRegistry()->listKeys();
-        for (KoIDList::Iterator it2 = l2.begin(); it2 != l2.end(); ++it2) {
+        QList<KoID> l2 = KisMetaRegistry::instance()->csRegistry()->listKeys();
+        for (QList<KoID>::Iterator it2 = l2.begin(); it2 != l2.end(); ++it2) {
             kDebug() << "test conversion from " << (*it).name() << " to " << (*it2).name() << endl;
 
             t.restart();
@@ -649,11 +649,11 @@ QString PerfTest::filterTest(quint32 testCount)
 
     QString report = QString("* Filter test\n");
 
-    KoIDList filters = KisFilterRegistry::instance()->listKeys();
+    QList<KoID> filters = KisFilterRegistry::instance()->listKeys();
     KisDoc * doc = m_view->canvasSubject()->document();
-    KoIDList l = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    QList<KoID> l = KisMetaRegistry::instance()->csRegistry()->listKeys();
 
-    for (KoIDList::Iterator it = l.begin(); it != l.end(); ++it) {
+    for (QList<KoID>::Iterator it = l.begin(); it != l.end(); ++it) {
         report = report.append( "  Testing filtering on " + (*it).name() + '\n');
 
         KisImageSP img = doc->newImage("filter-" + (*it).name(), 1000, 1000, KisMetaRegistry::instance()->csRegistry()->getColorSpace(*it,""));
@@ -661,7 +661,7 @@ QString PerfTest::filterTest(quint32 testCount)
 
         QTime t;
 
-        for (KoIDList::Iterator it = filters.begin(); it != filters.end(); ++it) {
+        for (QList<KoID>::Iterator it = filters.begin(); it != filters.end(); ++it) {
 
             KisFilterSP f = KisFilterRegistry::instance()->get(*it);
             t.restart();

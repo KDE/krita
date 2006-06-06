@@ -121,7 +121,7 @@ void KritaHistogramDocker::producerChanged(QAction *action)
     }
     m_producers.clear();
 
-    KoIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
+    QList<KoID> keys = KisHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
     m_factory = KisHistogramProducerFactoryRegistry::instance()->get(keys.at(pos));
@@ -158,7 +158,7 @@ void KritaHistogramDocker::colorSpaceChanged(KoColorSpace* cs)
 {
     m_cs = cs;
 
-    KoIDList keys = KisHistogramProducerFactoryRegistry::instance() ->
+    QList<KoID> keys = KisHistogramProducerFactoryRegistry::instance() ->
             listKeysCompatibleWith(m_cs);
 
     m_popup.clear();

@@ -112,8 +112,8 @@ Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
     QString histoname = Kross::Api::Variant::toString(args->item(0));
     KisHistogramProducerFactory* factory = KisHistogramProducerFactoryRegistry::instance()->get(histoname);
 
-/*    KoIDList listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
-    for(KoIDList::iterator it = listID.begin(); it != listID.end(); it++)
+/*    QList<KoID> listID = KisHistogramProducerFactoryRegistry::instance()->listKeys();
+    for(QList<KoID>::iterator it = listID.begin(); it != listID.end(); it++)
     {
         kDebug(41011) << (*it).name() << " " << (*it).id() << endl;
     }*/

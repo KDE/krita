@@ -39,10 +39,10 @@ KisHistogramProducerFactoryRegistry* KisHistogramProducerFactoryRegistry::instan
     return KisHistogramProducerFactoryRegistry::m_singleton;
 }
 
-KoIDList KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
+QList<KoID> KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
         KoColorSpace* colorSpace) const
 {
-    KoIDList list;
+    QList<KoID> list;
     Q3ValueList<float> preferredList;
     storageMap::const_iterator it = m_storage.begin();
     storageMap::const_iterator endit = m_storage.end();
@@ -53,7 +53,7 @@ KoIDList KisHistogramProducerFactoryRegistry::listKeysCompatibleWith(
             float preferred = it->second->preferrednessLevelWith(colorSpace);
             Q3ValueList<float>::iterator pit = preferredList.begin();
             Q3ValueList<float>::iterator pend = preferredList.end();
-            KoIDList::iterator lit = list.begin();
+            QList<KoID>::iterator lit = list.begin();
 
             while (pit != pend && preferred <= *pit) {
                 ++pit;

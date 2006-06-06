@@ -118,7 +118,7 @@ public:
     virtual ~KisHistogramProducerFactoryRegistry();
     static KisHistogramProducerFactoryRegistry* instance();
     /// returns a list, sorted by preferrence: higher preferance comes first
-    KoIDList listKeysCompatibleWith(KoColorSpace* colorSpace) const;
+    QList<KoID> listKeysCompatibleWith(KoColorSpace* colorSpace) const;
 
 private:
    KisHistogramProducerFactoryRegistry();

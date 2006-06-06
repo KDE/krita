@@ -109,9 +109,9 @@ QWidget* KisToolFilter::createOptionWidget(QWidget* parent)
     Q_CHECK_PTR(lbFilter);
 
     // Check which filters support painting
-    KoIDList l = KisFilterRegistry::instance()->listKeys();
-    KoIDList l2;
-    KoIDList::iterator it;
+    QList<KoID> l = KisFilterRegistry::instance()->listKeys();
+    QList<KoID> l2;
+    QList<KoID>::iterator it;
     for (it = l.begin(); it !=  l.end(); ++it) {
         KisFilterSP f = KisFilterRegistry::instance()->get(*it);
         if (f->supportsPainting()) {

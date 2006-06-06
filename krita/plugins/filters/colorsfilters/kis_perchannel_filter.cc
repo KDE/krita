@@ -339,7 +339,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
-    KoIDList keys =
+    QList<KoID> keys =
         KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
     KisHistogramProducerFactory *hpf;
     hpf = KisHistogramProducerFactoryRegistry::instance()->get(keys.at(0));

@@ -127,7 +127,7 @@ if(HAVE_XINPUTEXT)
     target_link_libraries(kritaui ${X11_Xinput_LIB})
 endif(HAVE_XINPUTEXT)
 
-set_target_properties(kritaui PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(kritaui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kritaui )
 
 

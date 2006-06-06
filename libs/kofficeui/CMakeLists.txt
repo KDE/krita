@@ -51,7 +51,7 @@ kde4_add_library(kofficeui SHARED ${kofficeui_LIB_SRCS})
 
 target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} kofficecore )
 
-set_target_properties(kofficeui PROPERTIES VERSION 3.0.0 SOVERSION 3 )
+set_target_properties(kofficeui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kofficeui )
 
 

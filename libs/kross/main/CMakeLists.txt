@@ -20,7 +20,7 @@ kde4_add_library(krossmain SHARED ${krossmain_LIB_SRCS})
 
 target_link_libraries(krossmain  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KNEWSTUFF_LIBS} krossapi )
 
-set_target_properties(krossmain PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(krossmain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} krossmain )
 
 

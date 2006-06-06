@@ -81,7 +81,7 @@ kde4_add_library(kofficecore SHARED ${kofficecore_LIB_SRCS})
 
 target_link_libraries(kofficecore  ${KDE4_KPARTS_LIBS} kstore kabc ${KDE4_KDEPRINT_LIBS} kowmf)
 
-set_target_properties(kofficecore PROPERTIES VERSION 3.0.0 SOVERSION 3 )
+set_target_properties(kofficecore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kofficecore )
 
 

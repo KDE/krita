@@ -2,6 +2,11 @@ project(koffice)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+# define the generic version of the KOffice libraries here
+# this makes it easy to advance it when the next KOffice release comes
+set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")
+set(GENERIC_KOFFICE_LIB_SOVERSION "5")
+
 # search packages used by KDE
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
@@ -77,7 +82,7 @@ if(LIBART_FOUND)
 endif(LIBART_FOUND)
 add_subdirectory(kdgantt)
 add_subdirectory(kchart)
-#add_subdirectory(kexi)
+add_subdirectory(kexi)
 add_subdirectory(kformula)
 add_subdirectory(kivio)
 add_subdirectory(koshell)

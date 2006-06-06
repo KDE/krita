@@ -13,7 +13,7 @@ kde4_add_library(kwmf SHARED ${kwmf_LIB_SRCS})
 
 target_link_libraries(kwmf  ${KDE4_KDECORE_LIBS} )
 
-set_target_properties(kwmf PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(kwmf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kwmf )
 
 
@@ -32,7 +32,7 @@ kde4_add_library(kowmf SHARED ${kowmf_LIB_SRCS})
 
 target_link_libraries(kowmf  ${KDE4_KDECORE_LIBS} )
 
-set_target_properties(kowmf PROPERTIES VERSION 2.0.0 SOVERSION 2 )
+set_target_properties(kowmf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kowmf )
 
 

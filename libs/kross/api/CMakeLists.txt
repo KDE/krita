@@ -29,7 +29,7 @@ kde4_add_library(krossapi SHARED ${krossapi_LIB_SRCS})
 
 target_link_libraries(krossapi  ${KDE4_KDECORE_LIBS} )
 
-set_target_properties(krossapi PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(krossapi PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} krossapi )
 
 

@@ -32,7 +32,7 @@ kde4_add_library(flake SHARED ${flake_SRCS})
 
 target_link_libraries(flake ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS})
 
-set_target_properties(flake PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 
 install_targets(${LIB_INSTALL_DIR} flake )

@@ -13,7 +13,7 @@ kde4_add_library(kochart SHARED ${kochart_LIB_SRCS})
 
 target_link_libraries(kochart  ${KDE4_KDECORE_LIBS} kofficecore )
 
-set_target_properties(kochart PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(kochart PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kochart )
 
 

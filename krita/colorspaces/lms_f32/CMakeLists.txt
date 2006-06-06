@@ -13,7 +13,7 @@ kde4_add_library(krita_lms_f32 SHARED ${krita_lms_f32_LIB_SRCS})
 
 target_link_libraries(krita_lms_f32  ${KDE4_KDECORE_LIBS} kritacolor )
 
-set_target_properties(krita_lms_f32 PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(krita_lms_f32 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} krita_lms_f32 )
 
 

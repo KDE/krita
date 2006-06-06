@@ -186,8 +186,8 @@ void KisFiltersListView::buildPreview()
     gc.end();
 
     t.start();
-    KoIDList l = KisFilterRegistry::instance()->listKeys();
-    KoIDList::iterator it;
+    QList<KoID> l = KisFilterRegistry::instance()->listKeys();
+    QList<KoID>::iterator it;
     it = l.begin();
     // Iterate over the list of filters
     for (it = l.begin(); it !=  l.end(); ++it) {

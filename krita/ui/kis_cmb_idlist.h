@@ -44,7 +44,7 @@ public:
 
 
 public:
-    void setIDList(const KoIDList & list);
+    void setIDList(const QList<KoID> & list);
     void setCurrent(const KoID id);
     void setCurrent(const QString & s);
 
@@ -64,7 +64,7 @@ private:
     // Prevent the deprecated Qt3 method being called. Use setCurrent instead.
     void setCurrentText(const QString & s);
 
-    KoIDList m_list;
+    QList<KoID> m_list;
 
 };
 #endif

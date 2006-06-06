@@ -40,7 +40,7 @@ KisCmbIDList::~KisCmbIDList()
 }
 
 
-void KisCmbIDList::setIDList(const KoIDList & list)
+void KisCmbIDList::setIDList(const QList<KoID>  & list)
 {
     m_list = list;
     for(qint32 i = 0; i < m_list.count(); ++i) {

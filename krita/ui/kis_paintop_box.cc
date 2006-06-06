@@ -69,8 +69,8 @@ KisPaintopBox::KisPaintopBox (KisView * view, QWidget *parent, const char * name
     connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
 
     // XXX: Let's see... Are all paintops loaded and ready?
-    KoIDList keys = KisPaintOpRegistry::instance()->listKeys();
-    for ( KoIDList::Iterator it = keys.begin(); it != keys.end(); ++it ) {
+    QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
+    for ( QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it ) {
         // add all paintops, and show/hide them afterwards
         addItem(*it);
     }

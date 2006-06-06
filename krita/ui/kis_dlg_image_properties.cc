@@ -64,7 +64,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
     //m_page->cmbColorSpaces->hide();
     //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());
-    KoIDList colorSpaces = KisMetaRegistry::instance()->csRegistry()->listKeys();
+    QList<KoID> colorSpaces = KisMetaRegistry::instance()->csRegistry()->listKeys();
     qint32 i = colorSpaces.indexOf(KoID("WET",""));
     if (i >= 0) {
         colorSpaces.removeAt(i);

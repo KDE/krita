@@ -117,11 +117,11 @@ QStringList KisHistogramView::channelStrings()
     return m_channelStrings;
 }
 
-KoIDList KisHistogramView::listProducers()
+QList<KoID> KisHistogramView::listProducers()
 {
     if (m_cs)
         return KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
-    return KoIDList();
+    return QList<KoID>();
 }
 
 void KisHistogramView::setCurrentChannels(const KoID& producerID, Q3ValueVector<KoChannelInfo *> channels)
@@ -228,7 +228,7 @@ void KisHistogramView::setChannels()
     m_channels.clear();
     m_channelToOffset.clear();
 
-    KoIDList list = KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
+    QList<KoID> list = KisHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_cs);
 
     if (list.count() == 0) {
         // XXX: No native histogram for this colorspace. Using converted RGB. We should have a warning

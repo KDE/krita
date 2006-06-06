@@ -84,9 +84,9 @@ vKisTool KisToolRegistry::createTools(KActionCollection * ac, KisCanvasSubject *
 
     vKisTool tools;
 
-    KoIDList factories = listKeys();
+    QList<KoID> factories = listKeys();
 
-    for (KoIDList::Iterator it = factories.begin(); it != factories.end(); ++it )
+    for (QList<KoID>::Iterator it = factories.begin(); it != factories.end(); ++it )
     {
         KisToolFactorySP f = get(*it);
 

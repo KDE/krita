@@ -59,7 +59,7 @@ public:
     KisHistogramProducerSP currentProducer();
     QStringList channelStrings();
     /** Lists all producers currently available */
-    KoIDList listProducers();
+    QList<KoID> listProducers();
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
     void setCurrentChannels(const KoID& producerID, Q3ValueVector<KoChannelInfo *> channels);
     /** Be careful, producer will be modified */

@@ -89,7 +89,7 @@ void KisFilterManager::setup(KActionCollection * ac)
     
     m_filterList = KisFilterRegistry::instance()->listKeys();
     
-    for ( KoIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
+    for ( QList<KoID>::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
         f = KisFilterRegistry::instance()->get(*it);
         if (!f) break;
         
@@ -159,7 +159,7 @@ void KisFilterManager::setup(KActionCollection * ac)
 
     f = 0;
     i = 0;
-    for ( KoIDList::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
+    for ( QList<KoID>::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
         f = KisFilterRegistry::instance()->get(*it);
 
         if (!f) break;

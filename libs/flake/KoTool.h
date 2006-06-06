@@ -61,43 +61,10 @@ public:
      * @param type a string identifying the type of this tool
      * @param canvas the canvas interface this tool will work for.
      */
-    KoTool(const QString & name, const QString & id, const QString & type, KoCanvasBase *canvas );
+    KoTool(KoCanvasBase *canvas );
     virtual ~KoTool() {}
 
-
 public: // Identification
-
-    QString & name() { return m_name; }
-    QString & id() { return m_id; }
-    QString & type() { return m_type; }
-
-    /**
-     * The priority of this tool in its section in the toolbox
-     */
-    virtual quint32 priority();
-
-    /**
-     * A short helptext that can be displayed in the option widget or
-     * as tool help
-     */
-    virtual QString quickHelp();
-
-    /**
-     * The setup() method creates a an action and adds it to the
-     * actioncollection. This is necessary to show the tool in a
-     * toolbar or menu.
-     *
-     * XXX: Make this abstract when we first link to kdelibs
-     * XXX: Actually create an action.
-     */
-    virtual void setup(KActionCollection *ac);
-
-    /**
-     * Return the action associated with this tool.
-     */
-    virtual KRadioAction * action() {
-        return m_action;
-    }
 
     /**
      * Return the option widget for this tool. Create it if it
@@ -224,21 +191,14 @@ signals:
      */
     void sigDone();
 
-
 protected:
     QWidget * m_optionWidget;
-    KRadioAction * m_action;
     KoCanvasBase *m_canvas; ///< the canvas interface this tool will work for.
 
 private:
     KoTool();
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
-
-private:
-    QString m_name;
-    QString m_id;
-    QString m_type;
 };
 
 #endif /* KOTOOL_H */

@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,51 +18,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QWidget>
+#include "KoCreateShapesToolFactory.h"
+#include "KoCreateShapesTool.h"
 
-#include "KoTool.h"
-#include "KoCanvasBase.h"
-#include "KoViewConverter.h"
-#include "KoGfxEvent.h"
-#include "KoTool.moc"
+#include <klocale.h>
 
-KoTool::KoTool(KoCanvasBase *canvas )
-: m_optionWidget( 0 )
-, m_canvas(canvas)
-{
+KoCreateShapesToolFactory::KoCreateShapesToolFactory() {
 }
 
-QWidget * KoTool::optionWidget(QWidget * parent) {
-    if ( !m_optionWidget )
-        m_optionWidget = new QWidget( parent );
-
-    return m_optionWidget;
+KoCreateShapesToolFactory::~KoCreateShapesToolFactory() {
 }
 
-void KoTool::activate(bool temporary) {
-    Q_UNUSED(temporary);
+KoTool* KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas) {
+    return new KoCreateShapesTool(canvas, 0);
 }
 
-void KoTool::deactivate() {
+KoID KoCreateShapesToolFactory::id() {
+    return KoID("Create Shapes", i18n("Create Shapes"));
 }
 
-
-bool KoTool::wantsAutoScroll() {
-    return true;
-}
-QCursor KoTool::cursor( const QPointF &position ) {
-    Q_UNUSED(position);
-    return Qt::ArrowCursor;
+quint32 KoCreateShapesToolFactory::priority() const {
+    return 1;
 }
 
-void KoTool::mouseDoubleClickEvent( KoGfxEvent *event ) {
-    event->ignore();
+QString KoCreateShapesToolFactory::toolType() const {
+    return QString("main");
 }
 
-void KoTool::keyPressEvent(QKeyEvent *e) {
-    e->ignore();
+QString KoCreateShapesToolFactory::tooltipText() const {
+    return i18n("Create tooltip");
 }
 
-void KoTool::keyReleaseEvent(QKeyEvent *e) {
-    e->ignore();
+KoID* KoCreateShapesToolFactory::activationShapeId() const {
+    return 0;
 }
+

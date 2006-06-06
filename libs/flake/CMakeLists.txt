@@ -24,6 +24,8 @@ set(flake_SRCS
     KoCreateShapeStrategy.cpp
     KoCreateShapesTool.cpp
     KoShapeRegistry.cpp
+    KoToolFactory.cpp
+    KoCreateShapesToolFactory.cpp
 )
 
 kde4_automoc(${flake_SRCS})
@@ -36,5 +38,5 @@ set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SO
 
 
 install_targets(${LIB_INSTALL_DIR} flake )
-
+install_files( ${SERVICES_INSTALL_DIR} FILES flaketoolcreateshapes.desktop )
 

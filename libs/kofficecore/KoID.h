@@ -30,7 +30,6 @@
  */
 class KoID {
 public:
-
     KoID() : m_id(), m_name() {}
 
     KoID(const QString & id, const QString & name = QString())
@@ -73,8 +72,5 @@ inline bool operator>(const KoID &v1, const KoID &v2)
 {
     return v1.m_id < v2.m_id;
 }
-
-
-typedef QList<KoID> KoIDList;
 
 #endif

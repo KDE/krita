@@ -40,6 +40,8 @@ set(kofficeui_LIB_SRCS
    KoPageLayoutHeader.cpp 
    KoPen.cpp 
    KoZoomMode.cpp
+   KoToolManager.cpp
+   KoToolRegistry.cpp
    KoGeneralPropertyUi.cpp )
 
 kde4_automoc(${kofficeui_LIB_SRCS})
@@ -49,7 +51,7 @@ kde4_add_ui_files( kofficeui_LIB_SRCS KoGeneralPropertyUi.ui KoPageLayoutHeaderB
 
 kde4_add_library(kofficeui SHARED ${kofficeui_LIB_SRCS})
 
-target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kofficeui  ${KDE4_KDECORE_LIBS} kofficecore flake )
 
 set_target_properties(kofficeui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kofficeui )

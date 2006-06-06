@@ -47,12 +47,8 @@ public:
     /**
      * Constructor for basic interaction tool where user actions are translated
      * and handled by interaction strategies of type KoInteractionStrategy.
-     * @param name ??
-     * @param id ??
-     * @param type ??
      * @param canvas the canvas this tool will be working for.
      */
-    KoInteractionTool(const QString & name, const QString & id, const QString & type, KoCanvasBase *canvas );
     KoInteractionTool( KoCanvasBase *canvas );
     virtual ~KoInteractionTool();
 
@@ -71,11 +67,6 @@ public: // Identification
 
     virtual void setup(KActionCollection *ac) {
         Q_UNUSED(ac);
-    }
-
-    virtual KRadioAction * action()
-    {
-        return m_action;
     }
 
 public:

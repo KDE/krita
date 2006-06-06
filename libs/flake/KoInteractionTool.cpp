@@ -47,16 +47,10 @@ QPointF KoInteractionTool::m_handleDiff[] = {
     QPointF( -HANDLE_DISTANCE, -HANDLE_DISTANCE )
 };
 
-KoInteractionTool::KoInteractionTool( const QString & name, const QString & id, const QString & type, KoCanvasBase *canvas )
-: KoTool( name, id, type, canvas )
+KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
+: KoTool( canvas )
 , m_currentStrategy( 0 )
 , m_mouseWasInsideHandles( false )
-{
-}
-
-KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
-: KoTool( "", "", "", canvas )
-, m_currentStrategy( 0 )
 {
 }
 

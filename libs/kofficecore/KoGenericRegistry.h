@@ -39,8 +39,8 @@ protected:
 public:
     KoGenericRegistry() { }
     virtual ~KoGenericRegistry() { }
-public:
 
+public:
     /**
      * add an object to the registry
      * @param item the item to add (NOTE: T must have an KoID id() function)
@@ -141,9 +141,9 @@ public:
 
     /** This function return a list of all the keys
      */
-    KoIDList listKeys() const
+    QList<KoID> listKeys() const
     {
-        KoIDList list;
+        QList<KoID> list;
         typename storageMap::const_iterator it = m_storage.begin();
         typename storageMap::const_iterator endit = m_storage.end();
         while( it != endit )

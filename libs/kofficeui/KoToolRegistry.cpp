@@ -27,6 +27,7 @@
 KoToolRegistry::KoToolRegistry() {
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/Tool"),
             QString::fromLatin1("(Type == 'Service') and ([X-Flake-Version] == 1)"));
+    kDebug(30008) << "KoToolRegistry searching for plugins, " << offers.count() << " found\n";
 
     foreach(KService::Ptr service, offers) {
         int errCode = 0;
@@ -34,15 +35,27 @@ KoToolRegistry::KoToolRegistry() {
             KParts::ComponentFactory::createInstanceFromService<KoToolFactory>(
                     service, this, QStringList(), &errCode );
         if ( plugin ) {
-            kDebug(30008) << "found plugin " << service->property("Name").toString() << endl;
+            kDebug(30008) <<"found plugin '"<< service->property("Name").toString() << "'\n";
             add(plugin);
         }
         else {
-            kDebug(30008) << "      plugin " << service->property("Name").toString() << ", " <<
-                errCode << endl;
-            if( errCode == KParts::ComponentFactory::ErrNoLibrary)
-                kWarning(30008) << " Error loading plugin was : ErrNoLibrary " <<
-                    KLibLoader::self()->lastErrorMessage() << endl;
+            QString err;
+            switch (errCode) {
+                case KParts::ComponentFactory::ErrNoServiceFound:
+                    err = "No Service Found"; break;
+                case KParts::ComponentFactory::ErrServiceProvidesNoLibrary:
+                    err = "Service provides no library"; break;
+                case KParts::ComponentFactory::ErrNoLibrary:
+                    err = KLibLoader::self()->lastErrorMessage(); break;
+                case KParts::ComponentFactory::ErrNoFactory:
+                    err = "No factory found"; break;
+                case KParts::ComponentFactory::ErrNoComponent:
+                    err = "No Component"; break;
+                default:
+                    err = "Unknown error";
+            }
+            kWarning(30008) <<"loading plugin '" << service->property("Name").toString() <<
+                "' failed, "<< err << "("<< errCode << ")\n";
         }
     }
 }

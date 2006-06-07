@@ -28,7 +28,7 @@
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
 #include "KoSelection.h"
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 #include "KoCommand.h"
 #include "kcommand.h"
 

@@ -34,7 +34,7 @@ class QRectF;
 class QPainterPath;
 
 class KoSelection;
-class KoGfxEvent;
+class KoPointerEvent;
 class KoShapeContainer;
 class KoRepaintManager;
 class KoShapeBorderModel;

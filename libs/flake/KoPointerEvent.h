@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
+   Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,7 +30,7 @@
  * The event used in Flake to have both the original (canvas based) position as
  * well as the normalized position.
  */
-class FLAKE_EXPORT KoGfxEvent
+class FLAKE_EXPORT KoPointerEvent
 {
 public:
     /**
@@ -37,7 +38,7 @@ public:
      * @param ev the mouse event that is the base of this event.
      * @param pnt the zoomed pointed in the normal coordiante system.
      */
-    KoGfxEvent( QMouseEvent *ev, const QPointF &pnt )
+    KoPointerEvent( QMouseEvent *ev, const QPointF &pnt )
     : point( pnt )
     , m_event( ev )
     {}

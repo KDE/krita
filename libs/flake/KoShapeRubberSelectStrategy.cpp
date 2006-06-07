@@ -25,7 +25,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoCanvasBase.h"

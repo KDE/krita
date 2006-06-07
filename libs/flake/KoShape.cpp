@@ -23,7 +23,7 @@
 #include "KoShapeContainer.h"
 #include "KoRepaintManager.h"
 #include "KoSelection.h"
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
 

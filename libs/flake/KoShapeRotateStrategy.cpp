@@ -20,7 +20,7 @@
 #include "KoShapeRotateStrategy.h"
 #include "KoInteractionTool.h"
 #include "KoCanvasBase.h"
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 #include "KoShapeManager.h"
 #include "KoCommand.h"
 

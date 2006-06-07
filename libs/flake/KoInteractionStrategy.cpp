@@ -20,7 +20,7 @@
 #include "KoInteractionStrategy.h"
 #include "KoSelection.h"
 #include "KoShapeManager.h"
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 #include "KoShapeRubberSelectStrategy.h"
 #include "KoShapeMoveStrategy.h"
 #include "KoShapeRotateStrategy.h"
@@ -50,7 +50,7 @@ KoInteractionStrategy::KoInteractionStrategy(KoTool *parent, KoCanvasBase *canva
 }
 
 // static
-KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoGfxEvent *event, KoInteractionTool *parent, KoCanvasBase *canvas) {
+KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *event, KoInteractionTool *parent, KoCanvasBase *canvas) {
     if((event->buttons() & Qt::LeftButton) == 0)
         return 0;  // Nothing to do for middle/right mouse button
 

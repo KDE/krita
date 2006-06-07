@@ -27,7 +27,7 @@
 #include <KoSelection.h>
 
 class QPainter;
-class KoGfxEvent;
+class KoPointerEvent;
 class KCommand;
 class KoCanvasBase;
 class KoInteractionTool;
@@ -82,7 +82,7 @@ public:
     /**
      * This instanciates a new strategy object and decides which one created based on the params.
      */
-    static KoInteractionStrategy* createStrategy(KoGfxEvent *event, KoInteractionTool *parentTool, KoCanvasBase *canvas);
+    static KoInteractionStrategy* createStrategy(KoPointerEvent *event, KoInteractionTool *parentTool, KoCanvasBase *canvas);
 
 protected:
     /// protected constructor. Use the createStrategy method()

@@ -111,9 +111,9 @@ public:
     ~DummyTool() {}
     void paint( QPainter &painter, KoViewConverter &converter ) {}
     QCursor cursor( const QPointF &position ) { return Qt::ForbiddenCursor; }
-    void mousePressEvent( KoGfxEvent *event ) {}
-    void mouseMoveEvent( KoGfxEvent *event ) {}
-    void mouseReleaseEvent( KoGfxEvent *event ) {}
+    void mousePressEvent( KoPointerEvent *event ) {}
+    void mouseMoveEvent( KoPointerEvent *event ) {}
+    void mouseReleaseEvent( KoPointerEvent *event ) {}
 };
 
 #endif

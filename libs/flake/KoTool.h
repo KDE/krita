@@ -26,7 +26,7 @@
 #include <koffice_export.h>
 
 class KoCanvasBase;
-class KoGfxEvent;
+class KoPointerEvent;
 class KoViewConverter;
 
 class KActionCollection;
@@ -127,7 +127,7 @@ public: // Events
      * Implementors should call event->ignore() if they do not actually use the event.
      * @param event state and reason of this mouse press
      */
-    virtual void mousePressEvent( KoGfxEvent *event ) = 0;
+    virtual void mousePressEvent( KoPointerEvent *event ) = 0;
 
     /**
      * Called when (one of) the mouse buttons is double clicked.
@@ -135,21 +135,21 @@ public: // Events
      * Default implementation ignores this event.
      * @param event state and reason of this mouse press
      */
-    virtual void mouseDoubleClickEvent( KoGfxEvent *event );
+    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
     /**
      * Called when the mouse moved over the canvas.
      * Implementors should call event->ignore() if they do not actually use the event.
      * @param event state and reason of this mouse move
      */
-    virtual void mouseMoveEvent( KoGfxEvent *event ) = 0;
+    virtual void mouseMoveEvent( KoPointerEvent *event ) = 0;
 
     /**
      * Called when (one of) the mouse buttons is released.
      * Implementors should call event->ignore() if they do not actually use the event.
      * @param event state and reason of this mouse release
      */
-    virtual void mouseReleaseEvent( KoGfxEvent *event ) = 0;
+    virtual void mouseReleaseEvent( KoPointerEvent *event ) = 0;
 
     /**
      * Called when a key is pressed.

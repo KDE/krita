@@ -88,9 +88,9 @@ public:
 
 public: // Events
 
-    virtual void mousePressEvent( KoGfxEvent *event );
-    virtual void mouseMoveEvent( KoGfxEvent *event );
-    virtual void mouseReleaseEvent( KoGfxEvent *event );
+    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent( KoPointerEvent *event );
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);

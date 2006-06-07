@@ -22,7 +22,7 @@
 #include "KoSelection.h"
 #include "KoShapeContainer.h"
 #include "KoShapeGroup.h"
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 
 #include <QPainter>
 #include <QDebug>

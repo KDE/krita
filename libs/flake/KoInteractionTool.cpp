@@ -25,7 +25,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 #include "KoShape.h"
 #include "KoSelection.h"
 #include "KoShapeManager.h"
@@ -118,12 +118,12 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
     }
 }
 
-void KoInteractionTool::mousePressEvent( KoGfxEvent *event ) {
+void KoInteractionTool::mousePressEvent( KoPointerEvent *event ) {
     Q_ASSERT(m_currentStrategy == 0);
     m_currentStrategy = KoInteractionStrategy::createStrategy(event, this, m_canvas);
 }
 
-void KoInteractionTool::mouseMoveEvent( KoGfxEvent *event ) {
+void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
     if(m_currentStrategy) {
         m_lastPoint = event->point;
         m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
@@ -158,7 +158,7 @@ QRectF KoInteractionTool::handlesSize() {
     return bound;
 }
 
-void KoInteractionTool::mouseReleaseEvent( KoGfxEvent *event ) {
+void KoInteractionTool::mouseReleaseEvent( KoPointerEvent *event ) {
     Q_UNUSED(event);
     if ( m_currentStrategy )
     {

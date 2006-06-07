@@ -24,7 +24,7 @@
 #include <QtDebug>
 
 #include <KoSelection.h>
-#include <KoGfxEvent.h>
+#include <KoPointerEvent.h>
 
 KoPathShape::KoPathShape()
 {

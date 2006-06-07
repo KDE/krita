@@ -29,7 +29,7 @@
 class QPainter;
 class QPointF;
 
-class KoGfxEvent;
+class KoPointerEvent;
 class KoCanvasBase;
 class KoTool;
 

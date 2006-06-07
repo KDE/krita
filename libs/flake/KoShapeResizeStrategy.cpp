@@ -19,7 +19,7 @@
 
 #include "KoShapeResizeStrategy.h"
 #include "KoShapeManager.h"
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include "KoCommand.h"
 

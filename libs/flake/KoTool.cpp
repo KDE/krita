@@ -22,7 +22,7 @@
 #include "KoTool.h"
 #include "KoCanvasBase.h"
 #include "KoViewConverter.h"
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 #include "KoTool.moc"
 
 KoTool::KoTool(KoCanvasBase *canvas )
@@ -54,7 +54,7 @@ QCursor KoTool::cursor( const QPointF &position ) {
     return Qt::ArrowCursor;
 }
 
-void KoTool::mouseDoubleClickEvent( KoGfxEvent *event ) {
+void KoTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
     event->ignore();
 }
 

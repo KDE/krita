@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Flake tool definition
+Type=ServiceType
+X-KDE-ServiceType=KOffice/Tool
+Comment=Definition of flake tools
+[PropertyDef::X-Flake-Version]
+Type=int

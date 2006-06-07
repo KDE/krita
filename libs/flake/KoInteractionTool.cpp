@@ -33,6 +33,7 @@
 #include "KoCanvasBase.h"
 
 #include <kcommand.h>
+#include <kcursor.h>
 
 #define HANDLE_DISTANCE 10
 
@@ -82,10 +83,10 @@ QCursor KoInteractionTool::cursor( const QPointF &position )
                 return Qt::SizeHorCursor;
             case KoFlake::TopRightHandle:
             case KoFlake::BottomLeftHandle:
-                return Qt::SizeHorCursor; // TODO diagonal cursor
+                return KCursor::sizeBDiagCursor();
             case KoFlake::BottomRightHandle:
             case KoFlake::TopLeftHandle:
-                return Qt::SizeHorCursor; // TODO diagonal cursor
+                return KCursor::sizeFDiagCursor();
             case KoFlake::NoHandle:
                 return Qt::SizeAllCursor;
         }

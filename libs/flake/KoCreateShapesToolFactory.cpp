@@ -20,8 +20,13 @@
 
 #include "KoCreateShapesToolFactory.h"
 #include "KoCreateShapesTool.h"
+#include "KoShapeControllerInterface.h"
+#include "KoRectangleShape.h"
 
 #include <klocale.h>
+
+#include <QColor>
+#include <QRectF>
 
 KoCreateShapesToolFactory::KoCreateShapesToolFactory() {
 }
@@ -30,7 +35,21 @@ KoCreateShapesToolFactory::~KoCreateShapesToolFactory() {
 }
 
 KoTool* KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas) {
-    return new KoCreateShapesTool(canvas, 0);
+    class DummyShapeController : public KoShapeControllerInterface {
+        public:
+            DummyShapeController() {};
+            ~DummyShapeController() {};
+            void addShape(KoShape* shape) {};
+            void removeShape(KoShape* shape) {};
+            KoShape* createShape(const QRectF &outline) const {
+                KoShape *rect = new KoRectangleShape();
+                rect->setBackground(QColor(Qt::blue));
+                rect->setPosition(outline.topLeft());
+                rect->resize(outline.size());
+                return rect;
+            }
+    };
+    return new KoCreateShapesTool(canvas, new DummyShapeController());
 }
 
 KoID KoCreateShapesToolFactory::id() {

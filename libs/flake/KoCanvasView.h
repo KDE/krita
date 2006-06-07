@@ -31,6 +31,7 @@ class QGridLayout;
 class QPaintEvent;
 
 class FLAKE_EXPORT KoCanvasView : public QScrollArea {
+    Q_OBJECT
 public:
     KoCanvasView(QWidget *parent);
     virtual ~KoCanvasView() {};
@@ -46,12 +47,17 @@ public:
     void centerCanvas(bool centered);
     bool isCanvasCentered() const;
 
+signals:
+    void canvasRemoved(KoCanvasBase*);
+    void canvasSet(KoCanvasBase*);
+
 private:
     class Viewport : public QWidget {
       public:
         Viewport();
         ~Viewport() {};
         void setCanvas(QWidget *canvas);
+        void removeCanvas(QWidget *canvas);
         void centerCanvas(bool centered);
       private:
         QGridLayout *m_layout;

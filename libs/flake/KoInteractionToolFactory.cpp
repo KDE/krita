@@ -18,23 +18,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCREATESHAPESTOOLFACTORY_H
-#define KOCREATESHAPESTOOLFACTORY_H
+#include "KoInteractionToolFactory.h"
+#include "KoInteractionTool.h"
 
-#include "KoToolFactory.h"
+#include <klocale.h>
 
-#include <koffice_export.h>
+KoInteractionToolFactory::KoInteractionToolFactory() {
+}
 
-class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {
-public:
-    KoCreateShapesToolFactory();
-    ~KoCreateShapesToolFactory();
+KoInteractionToolFactory::~KoInteractionToolFactory() {
+}
 
-    KoTool* createTool(KoCanvasBase *canvas);
-    KoID id();
-    quint32 priority() const;
-    QString toolType() const;
-    QString tooltipText() const;
-    KoID* activationShapeId() const;
-};
-#endif
+KoTool* KoInteractionToolFactory::createTool(KoCanvasBase *canvas) {
+    return new KoInteractionTool(canvas);
+}
+
+KoID KoInteractionToolFactory::id() {
+    return KoID("Default", i18n("Default"));
+}
+
+quint32 KoInteractionToolFactory::priority() const {
+    return 0;
+}
+
+QString KoInteractionToolFactory::toolType() const {
+    return QString("main");
+}
+
+QString KoInteractionToolFactory::tooltipText() const {
+    return i18n("Default tool");
+}
+
+KoID* KoInteractionToolFactory::activationShapeId() const {
+    return 0;
+}
+

@@ -64,7 +64,7 @@ public:
     KoTool(KoCanvasBase *canvas );
     virtual ~KoTool() {}
 
-public: // Identification
+public:
 
     /**
      * Return the option widget for this tool. Create it if it

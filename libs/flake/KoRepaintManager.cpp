@@ -55,8 +55,8 @@ void KoRepaintManager::repaint(QRectF &rect, const KoShape *shape, bool selectio
         return;
     m_canvas->updateCanvas(rect);
     if(selectionHandles && m_selection->isSelected(shape)) {
-        if(m_canvas->activeTool())
-            m_canvas->activeTool()->repaintDecorations();
+        if(m_canvas->tool())
+            m_canvas->tool()->repaintDecorations();
     }
     m_locked = true;
     foreach(KoRepaintManager *manager, m_otherManagers) {

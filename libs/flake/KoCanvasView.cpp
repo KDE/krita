@@ -34,10 +34,14 @@ KoCanvasView::KoCanvasView(QWidget *parent)
 }
 
 void KoCanvasView::setCanvas(KoCanvasBase *canvas) {
-    Q_ASSERT(m_canvas == 0 /* Only allowed one time */);
     Q_ASSERT(canvas); // param is not null
+    if(m_canvas) {
+        emit canvasRemoved(m_canvas);
+        m_viewport->removeCanvas(m_canvas->canvasWidget());
+    }
     m_viewport->setCanvas(canvas->canvasWidget());
     m_canvas = canvas;
+    emit canvasSet(m_canvas);
 }
 
 KoCanvasBase* KoCanvasView::canvas() const {
@@ -87,10 +91,16 @@ void KoCanvasView::Viewport::setCanvas(QWidget *canvas) {
     m_layout->addWidget(canvas, 0, 1, Qt::AlignHCenter);
 }
 
+void KoCanvasView::Viewport::removeCanvas(QWidget *canvas) {
+    m_layout->removeWidget(canvas);
+}
+
 void KoCanvasView::Viewport::centerCanvas(bool centered) {
     m_layout->setColumnStretch(0,centered?1:0);
     m_layout->setColumnStretch(1,1);
     m_layout->setColumnStretch(2,centered?1:2);
 }
+
+#include "KoCanvasView.moc"
 
 // TODO add a paintEvent here and paint a nice shadow to the bottom/right of the canvas

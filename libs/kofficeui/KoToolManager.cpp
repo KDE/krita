@@ -21,6 +21,9 @@
 #include "KoToolRegistry.h"
 
 #include <KoToolFactory.h>
+#include <KoCreateShapesToolFactory.h>
+#include <KoInteractionToolFactory.h>
+#include <KoCanvasView.h>
 
 #include "kactioncollection.h"
 #include "kdebug.h"
@@ -32,16 +35,29 @@
 KoToolManager::KoToolManager()
 : QObject()
 , m_toolBox(0)
+, m_activeCanvas(0)
+, m_activeTool(0)
 {
+    m_dummyTool = new DummyTool();
+#if 0
+    m_oldTool = 0;
+    m_paletteManager = 0;
+    m_tools_disabled = false;
+#endif
 }
 
 KoToolManager::~KoToolManager()
 {
+    delete m_dummyTool;
 }
 
 void KoToolManager::setup() {
     if(m_tools.size() > 0)
         return;
+    // add defaults
+    m_tools.append( new ToolHelper(new KoCreateShapesToolFactory()) );
+    m_tools.append( new ToolHelper(new KoInteractionToolFactory()) );
+
     KoToolRegistry *registry = KoToolRegistry::instance();
     foreach(KoID id, registry->listKeys()) {
         ToolHelper *t = new ToolHelper(registry->get(id));
@@ -50,33 +66,84 @@ kDebug(30004) << "   th" << t->id().name() << endl;
         m_tools.append(t);
     }
 
+    // connect to all tools so we can hear their button-clicks
+    foreach(ToolHelper *tool, m_tools)
+        connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
+
     // do some magic for the sorting here :)  TODO
 }
 
-QWidget *KoToolManager::createToolBox() {
-    setup();
-    QWidget *widget = new QWidget();
-    widget->setMinimumSize(20, 100);
-    QButtonGroup *group = new QButtonGroup(widget);
-    QVBoxLayout *lay = new QVBoxLayout(widget);
-    foreach(ToolHelper *tool, m_tools) {
-        QAbstractButton *but = tool->createButton(widget);
-        group->addButton(but);
-        lay->addWidget(but);
+QWidget *KoToolManager::toolBox() {
+// TODO reentrant
+    if(! m_toolBox) {
+        setup();
+        QWidget *widget = new QWidget();
+        widget->setMinimumSize(20, 100);
+        QButtonGroup *group = new QButtonGroup(widget);
+        QVBoxLayout *lay = new QVBoxLayout(widget);
+        foreach(ToolHelper *tool, m_tools) {
+            QAbstractButton *but = tool->createButton(widget);
+            group->addButton(but);
+            lay->addWidget(but);
+        }
+        m_toolBox = widget;
     }
-    return widget;
+    return m_toolBox;
 }
 
 void KoToolManager::registerTools(KActionCollection *ac) {
     // TODO
 }
 
-void KoToolManager::addCanvasView(const KoCanvasView *view) {
-    // TODO
+void KoToolManager::addCanvasView(KoCanvasView *view) {
+    if(m_canvases.contains(view))
+        return;
+    m_canvases.append(view);
+    if(view->canvas())
+        attachCanvas(view->canvas());
+    connect(view, SIGNAL(canvasRemoved(KoCanvasBase*)), this, SLOT(detachCanvas(KoCanvasBase*)));
+    connect(view, SIGNAL(canvasSet(KoCanvasBase*)), this, SLOT(attachCanvas(KoCanvasBase*)));
+    if(m_activeCanvas == 0)
+        m_activeCanvas = view;
 }
 
+void KoToolManager::removeCanvasView(KoCanvasView *view) {
+    m_canvases.removeAll(view);
+    if(view->canvas())
+        detachCanvas(view->canvas());
+    disconnect(view, SIGNAL(canvasRemoved(KoCanvasBase*)), this, SLOT(detachCanvas(KoCanvasBase*)));
+    disconnect(view, SIGNAL(canvasSet(KoCanvasBase*)), this, SLOT(attachCanvas(KoCanvasBase*)));
+}
+
+
 void KoToolManager::toolActivated(ToolHelper *tool) {
-    kDebug(30004) << "ToolActivated " << tool->id().name();
+    kDebug(30004) << "ToolActivated: '" << tool->id().name() << "'\n";
+    if(m_activeCanvas == 0)
+        return;
+    if(m_activeTool)
+        delete m_activeTool;
+    m_activeTool = tool->m_toolFactory->createTool(m_activeCanvas->canvas());
+    foreach(KoCanvasView *view, m_canvases) {
+        if(!view->canvas())
+continue;
+        if(view == m_activeCanvas)
+            view->canvas()->setTool(m_activeTool);
+        else
+            view->canvas()->setTool(m_dummyTool);
+    }
+}
+
+void KoToolManager::attachCanvas(KoCanvasBase *cb) {
+    // TODO listen to focus changes
+    // TODO listen to selection changes
+    cb->setTool(m_dummyTool);
+}
+
+void KoToolManager::detachCanvas(KoCanvasBase *cb) {
+    // TODO detach
+    if(m_activeCanvas && m_activeCanvas->canvas() == cb)
+        m_activeCanvas = 0;
+    // TODO delete tool that canvas is holding?
 }
 
 //   ************ ToolHelper **********

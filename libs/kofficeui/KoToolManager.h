@@ -22,7 +22,7 @@
 #include "KoToolBox.h"
 
 #include <KoID.h>
-#include <KoCanvasView.h>
+#include <KoTool.h>
 #include <koffice_export.h>
 
 #include <QMap>
@@ -32,6 +32,9 @@ class ToolHelper;
 class KActionCollection;
 class QAbstractButton;
 class KoToolFactory;
+class KoCanvasView;
+class KoCanvasBase;
+class KoTool;
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -55,9 +58,10 @@ public:
     static KoToolManager* instance();
     ~KoToolManager();
 
-    QWidget *createToolBox(); // TODO alter from QWidget to KoToolBox
+    QWidget *toolBox(); // TODO alter from QWidget to KoToolBox
     void registerTools(KActionCollection *ac);
-    void addCanvasView(const KoCanvasView *view);
+    void addCanvasView(KoCanvasView *view);
+    void removeCanvasView(KoCanvasView *view);
 
 private:
     KoToolManager();
@@ -67,13 +71,19 @@ private:
 
 private slots:
     void toolActivated(ToolHelper *tool);
+    void detachCanvas(KoCanvasBase* canvas);
+    void attachCanvas(KoCanvasBase* canvas);
 
 private:
     static KoToolManager* s_instance;
 
-    KoToolBox *m_toolBox;
+    //KoToolBox *m_toolBox;
+    QWidget *m_toolBox;
 
     QList<ToolHelper*> m_tools;
+    QList<KoCanvasView*> m_canvases;
+    KoCanvasView *m_activeCanvas;
+    KoTool *m_activeTool, *m_dummyTool;
 };
 
 class ToolHelper : public QObject {
@@ -88,10 +98,22 @@ signals:
     void toolActivated(ToolHelper *tool);
 
 private slots:
+    friend class KoToolManager;
     void buttonPressed();
 
 private:
     KoToolFactory *m_toolFactory;
+};
+
+class DummyTool : public KoTool {
+public:
+    DummyTool() : KoTool(0) {}
+    ~DummyTool() {}
+    void paint( QPainter &painter, KoViewConverter &converter ) {}
+    QCursor cursor( const QPointF &position ) { return Qt::ForbiddenCursor; }
+    void mousePressEvent( KoGfxEvent *event ) {}
+    void mouseMoveEvent( KoGfxEvent *event ) {}
+    void mouseReleaseEvent( KoGfxEvent *event ) {}
 };
 
 #endif

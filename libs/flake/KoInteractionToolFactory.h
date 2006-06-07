@@ -18,17 +18,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCREATESHAPESTOOLFACTORY_H
-#define KOCREATESHAPESTOOLFACTORY_H
+#ifndef KOINTERACTIONTOOLFACTORY_H
+#define KOINTERACTIONTOOLFACTORY_H
 
 #include "KoToolFactory.h"
 
 #include <koffice_export.h>
 
-class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {
+class FLAKE_EXPORT KoInteractionToolFactory : public KoToolFactory {
 public:
-    KoCreateShapesToolFactory();
-    ~KoCreateShapesToolFactory();
+    KoInteractionToolFactory();
+    ~KoInteractionToolFactory();
 
     KoTool* createTool(KoCanvasBase *canvas);
     KoID id();

@@ -1,7 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Create Shapes
-ServiceTypes=KOffice/Tool
-Type=Service
-X-KDE-Library=flake
-X-Flake-Version=1

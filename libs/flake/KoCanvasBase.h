@@ -91,7 +91,8 @@ public:
      * Return the curently active tool, or 0 if non active.
      * @return the curently active tool, or 0 if non active.
      */
-    virtual KoTool* activeTool() = 0;
+    virtual KoTool* tool() = 0;
+    virtual void setTool(KoTool *tool) = 0;
 
     /**
      * Return the viewConverter for this view.

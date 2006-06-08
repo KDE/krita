@@ -31,7 +31,6 @@
 #include <klocale.h>
 
 #include "ko_color_wheel.h"
-#include "koColorSlider.h"
 
 #include "KoUniColorChooser.h"
 

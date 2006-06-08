@@ -28,7 +28,6 @@
 #include <QToolTip>
 #include <QGridLayout>
 #include "koFrameButton.h"
-#include "koColorSlider.h"
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
 #include "koColor.h"

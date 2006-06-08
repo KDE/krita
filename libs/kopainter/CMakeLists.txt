@@ -16,7 +16,8 @@ set(kopainter_LIB_SRCS
    KoXYColorSelector.cc 
    ko_gray_widget.cc 
    ko_hsv_widget.cc 
-   ko_rgb_widget.cc )
+   KoUniColorChooser.cpp 
+   ko_rgb_widget.cc 
 
 kde4_automoc(${kopainter_LIB_SRCS})
 

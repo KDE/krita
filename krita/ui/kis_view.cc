@@ -87,6 +87,7 @@
 #include <ko_gray_widget.h>
 #include <ko_hsv_widget.h>
 #include <ko_rgb_widget.h>
+#include <KoUniColorChooser.h>
 
 #include <kopalettemanager.h>
 #include <kopalette.h>
@@ -3787,6 +3788,13 @@ void KisView::createDockers()
     m_birdEyeBox = new KisBirdEyeBox(this);
     m_birdEyeBox->setWindowTitle(i18n("Overview"));
     m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
+
+    m_colorchooser = new KoUniColorChooser(this, "uni");
+    m_colorchooser->setWindowTitle(i18n("Color by values"));
+
+    connect(m_colorchooser, SIGNAL(sigColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
+    connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_colorchooser, SLOT(setColor(const QColor &)));
+    m_paletteManager->addWidget( m_colorchooser, "unicolorchooser", krita::COLORBOX, 0, PALETTE_DOCKER, true);
 
     m_hsvwidget = new KoHSVWidget(this, "hsv");
     m_hsvwidget->setWindowTitle(i18n("HSV"));

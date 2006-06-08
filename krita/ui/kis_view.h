@@ -86,6 +86,7 @@ class KoPaletteManager;
 class KoGrayWidget;
 class KoHSVWidget;
 class KoRGBWidget;
+class KoUniColorChooser;
 
 class KisBirdEyeBox;
 class KisBrush;
@@ -628,6 +629,7 @@ private:
     KisInputDevice m_inputDevice;
 
     KisBirdEyeBox * m_birdEyeBox;
+    KoUniColorChooser *m_colorchooser;
     KoHSVWidget *m_hsvwidget;
     KoRGBWidget *m_rgbwidget;
     KoGrayWidget *m_graywidget;

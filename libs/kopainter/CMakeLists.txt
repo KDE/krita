@@ -9,21 +9,20 @@ set(kopainter_LIB_SRCS
    svgpathparser.cc 
    koColor.cc 
    koFrameButton.cc 
-   koColorSlider.cc 
-   koColorChooser.cc 
    koIconChooser.cc 
    kogradientmanager.cc 
-   ko_color_wheel.cc 
+   ko_color_wheel.cc
+   KoColorSlider.cc 
+   KoXYColorSelector.cc 
    ko_gray_widget.cc 
    ko_hsv_widget.cc 
-   ko_rgb_widget.cc 
-   ko_cmyk_widget.cc )
+   ko_rgb_widget.cc )
 
 kde4_automoc(${kopainter_LIB_SRCS})
 
 kde4_add_library(kopainter SHARED ${kopainter_LIB_SRCS})
 
-target_link_libraries(kopainter  ${KDE4_KDECORE_LIBS} kofficeui )
+target_link_libraries(kopainter  ${KDE4_KDECORE_LIBS} kofficeui pigment)
 
 set_target_properties(kopainter PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kopainter )

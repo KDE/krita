@@ -45,26 +45,26 @@ public:
     // XXX: Add a nice pixmap
     KoRectangleShapeFactory() 
     {
-	setName("RectangleShape");
-	setDescription("A simple square shape");
-	setToolTip("A simple square shape");
+        setName("RectangleShape");
+        setDescription("A simple square shape");
+        setToolTip("A simple square shape");
     }
 
     KoShape * createDefaultShape()
     {
-	return new KoRectangleShape();
+        return new KoRectangleShape();
     }
 
     KoShape * createShape(KoShapeParameters * params) const
     {
-	Q_UNUSED(params);
-	return new KoRectangleShape();
+        Q_UNUSED(params);
+        return new KoRectangleShape();
     }
 
     KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const
     {
-	Q_UNUSED(shapeTemplate);
-	return new KoRectangleShape();
+        Q_UNUSED(shapeTemplate);
+        return new KoRectangleShape();
     }
 };
 

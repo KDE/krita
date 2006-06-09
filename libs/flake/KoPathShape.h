@@ -60,26 +60,26 @@ public:
     // XXX: Add a nice pixmap
     KoPathShapeFactory() 
     {
-	setName("PathShape");
-	setDescription("A simple path shape");
-	setToolTip("A simple path shape");
+        setName("PathShape");
+        setDescription("A simple path shape");
+        setToolTip("A simple path shape");
     }
 
     KoShape * createDefaultShape()
     {
-	return new KoPathShape();
+        return new KoPathShape();
     }
 
     KoShape * createShape(KoShapeParameters * params) const
     {
-	Q_UNUSED(params);
-	return new KoPathShape();
+        Q_UNUSED(params);
+        return new KoPathShape();
     }
 
     KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const
     {
-	Q_UNUSED(shapeTemplate);
-	return new KoPathShape();
+        Q_UNUSED(shapeTemplate);
+        return new KoPathShape();
     }
 };
 

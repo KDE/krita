@@ -22,9 +22,11 @@
 #define KOPATHGFXOBJ_H
 
 class KoSelection;
+#include <QPainterPath>
 
 #include "KoShape.h"
-#include <QPainterPath>
+#include "KoShapeFactory.h"
+
 #include <koffice_export.h>
 
 /**
@@ -50,6 +52,37 @@ public:
 private:
     QPainterPath m_path;
 };
+
+
+class KoPathShapeFactory : public KoShapeFactory
+{
+public:
+    // XXX: Add a nice pixmap
+    KoPathShapeFactory() 
+    {
+	setName("PathShape");
+	setDescription("A simple path shape");
+	setToolTip("A simple path shape");
+    }
+
+    KoShape * createDefaultShape()
+    {
+	return new KoPathShape();
+    }
+
+    KoShape * createShape(KoShapeParameters * params) const
+    {
+	Q_UNUSED(params);
+	return new KoPathShape();
+    }
+
+    KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const
+    {
+	Q_UNUSED(shapeTemplate);
+	return new KoPathShape();
+    }
+};
+
 
 #endif /* KOPATHGFXOBJ_H */
 

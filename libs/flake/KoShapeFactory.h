@@ -27,7 +27,7 @@
 #include <QList>
 
 #include <KoProperties.h>
-
+#include <KoID.h>
 #include "KoShape.h"
 
 /**
@@ -85,6 +85,8 @@ public:
 
     KoShapeFactory() { m_optionWidget = 0; }
     virtual ~KoShapeFactory() {}
+
+    virtual KoID id() { return KoID(m_name, m_description); }
 
     virtual KoShape * createDefaultShape() = 0;
     virtual KoShape * createShape(KoShapeParameters * params) const = 0;

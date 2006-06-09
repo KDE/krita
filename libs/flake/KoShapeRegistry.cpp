@@ -30,6 +30,8 @@
 #include <KoGenericRegistry.h>
 
 #include <KoShapeRegistry.h>
+#include <KoRectangleShape.h>
+#include <KoPathShape.h>
 
 KoShapeRegistry *KoShapeRegistry::m_singleton = 0;
 
@@ -64,6 +66,10 @@ KoShapeRegistry::KoShapeRegistry()
         }
 
     }
+
+    // Also add our hard-coded dumb test shapes
+    add( new KoRectangleShapeFactory() );
+    add( new KoPathShapeFactory() );
 }
 
 

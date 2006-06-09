@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Krita Flake Shapes Plugin
+ServiceTypes=KOffice/FlakeShape
+Type=Service
+X-KDE-Library=kritaflakeshapes
+X-Krita-Version=2

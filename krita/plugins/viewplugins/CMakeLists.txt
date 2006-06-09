@@ -13,6 +13,7 @@ add_subdirectory( rotateimage )
 add_subdirectory( screenshot )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
+#add_subdirectory( flakeshapes )
 
 if(KOFFICE_ENABLE_SCRIPTING)
 	add_subdirectory(scripting)

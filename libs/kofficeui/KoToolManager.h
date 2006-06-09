@@ -27,6 +27,7 @@
 
 #include <QMap>
 #include <QObject>
+#include <QMutex>
 
 class ToolHelper;
 class KActionCollection;
@@ -71,8 +72,9 @@ private:
 
 private slots:
     void toolActivated(ToolHelper *tool);
-    void detachCanvas(KoCanvasBase* canvas);
-    void attachCanvas(KoCanvasBase* canvas);
+    void detachCanvas(KoCanvasView* view);
+    void attachCanvas(KoCanvasView* view);
+    void updateCursor(QCursor cursor);
 
 private:
     static KoToolManager* s_instance;
@@ -84,6 +86,12 @@ private:
     QList<KoCanvasView*> m_canvases;
     KoCanvasView *m_activeCanvas;
     KoTool *m_activeTool, *m_dummyTool;
+    ToolHelper *m_defaultTool;
+    /* this mutex synchronizes all accesses to m_allTools, m_tools and m_canvases
+     * and m_toolBox members. */
+    QMutex m_mutex;
+
+    QMap<KoCanvasView*, QMap<QString, KoTool*> > m_allTools;
 };
 
 class ToolHelper : public QObject {
@@ -103,17 +111,6 @@ private slots:
 
 private:
     KoToolFactory *m_toolFactory;
-};
-
-class DummyTool : public KoTool {
-public:
-    DummyTool() : KoTool(0) {}
-    ~DummyTool() {}
-    void paint( QPainter &painter, KoViewConverter &converter ) {}
-    QCursor cursor( const QPointF &position ) { return Qt::ForbiddenCursor; }
-    void mousePressEvent( KoPointerEvent *event ) {}
-    void mouseMoveEvent( KoPointerEvent *event ) {}
-    void mouseReleaseEvent( KoPointerEvent *event ) {}
 };
 
 #endif

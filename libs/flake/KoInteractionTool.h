@@ -72,7 +72,6 @@ public: // Identification
 public:
 
     virtual bool wantsAutoScroll();
-    virtual QCursor cursor( const QPointF &position );
     virtual void paint( QPainter &painter, KoViewConverter &converter );
 
     void repaintDecorations();
@@ -85,6 +84,9 @@ public:
      *   The value of innerHandleMeaning is undefined if the handle location is NoHandle
      */
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
+
+public slots:
+    void activate(bool temporary = false);
 
 public: // Events
 
@@ -107,6 +109,7 @@ protected:
 
 private:
     void recalcSelectionBox();
+    void updateCursor();
 
     KoInteractionTool(const KoInteractionTool&);
     KoInteractionTool& operator=(const KoInteractionTool&);

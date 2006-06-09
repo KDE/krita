@@ -36,12 +36,12 @@ KoCanvasView::KoCanvasView(QWidget *parent)
 void KoCanvasView::setCanvas(KoCanvasBase *canvas) {
     Q_ASSERT(canvas); // param is not null
     if(m_canvas) {
-        emit canvasRemoved(m_canvas);
+        emit canvasRemoved(this);
         m_viewport->removeCanvas(m_canvas->canvasWidget());
     }
     m_viewport->setCanvas(canvas->canvasWidget());
     m_canvas = canvas;
-    emit canvasSet(m_canvas);
+    emit canvasSet(this);
 }
 
 KoCanvasBase* KoCanvasView::canvas() const {

@@ -34,7 +34,6 @@ public:
     KoCreateShapesTool( KoCanvasBase *canvas, KoShapeControllerInterface *sci );
     virtual ~KoCreateShapesTool() {};
 
-    QCursor cursor( const QPointF &position );
     void paint( QPainter &painter, KoViewConverter &converter );
 
     KoShapeControllerInterface* controller() const { return m_shapeController; }

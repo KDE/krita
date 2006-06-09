@@ -34,10 +34,6 @@ KoCreateShapesTool::KoCreateShapesTool(KoCanvasBase *canvas, KoShapeControllerIn
 {
 }
 
-QCursor KoCreateShapesTool::cursor( const QPointF &position ) {
-    return Qt::ArrowCursor; // TODO
-}
-
 void KoCreateShapesTool::paint( QPainter &painter, KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);

@@ -51,14 +51,7 @@ class FLAKE_EXPORT KoTool : public QObject
 public:
 
     /**
-     * Create a new tool. A tool has a user-visible name,
-     * a string that uniquely identifies the tool and a
-     * type string that is used to classify the tool, for instance
-     * in groups in the toolbox.
-     *
-     * @param name the user-visible name of this tool
-     * @param id the system-id of this tool
-     * @param type a string identifying the type of this tool
+     * Constructor, normally only called by the factory (see KoTooLFactory)
      * @param canvas the canvas interface this tool will work for.
      */
     KoTool(KoCanvasBase *canvas );
@@ -71,6 +64,7 @@ public:
      * does not exist yet.
      *
      * Note: by default an empty widget is created.
+     * @see m_optionWidget
      */
     virtual QWidget * optionWidget(QWidget * parent);
 
@@ -80,43 +74,42 @@ public:
 public slots:
     /**
      * This method is called when this tool instance is activated.
+     * For any application there is only one tool active at a time, which then gets all
+     * user input.  Switching between tools will call deactivate on one and activate on the
+     * new tool allowing the tool to flush items (like a selection) when it is not in use.
+     * <p>There is one case where two tools are activated at the same.  This is the case
+     * where one tool delegates work to another temporarily.  For example, while shift is
+     * being held down.  The second tool will get activated with temporary=true and
+     * it should emit sigDone() when the state that activated it is ended.
+     * <p>One of the important tasks of activate is to call useCursor()
      *
      * @param temporary if true, this tool is only temporarily actived
-     *                  and should emit done when it is done.
-     *
-     * XXX: Make virtual
+     *                  and should emit sigDone when it is done.
+     * @see deactivate()
      */
     virtual void activate(bool temporary = false);
 
     /**
      * This method is called whenever this tool is no longer the
      * active tool
+     * @see activate()
      */
     virtual void deactivate();
-
 
 public:
 
     /**
-     * Automatically scroll the canvas with the tool
+     * Return if dragging (moving with the mouse down) to the edge of a canvas should scroll the
+     * canvas.
+     * @return if this tool wants mouse events to cause scrolling of canvas.
      */
     virtual bool wantsAutoScroll();
 
     /**
-     * Return the cursor associated with this tool. The application is
-     * repsonsible for calling this method and setting the cursor on
-     * the right widget.
-     *
-     * XXX: Make this abstract.
-     * XXX: Make it possible to use fancy big cursors
-     */
-    virtual QCursor cursor( const QPointF &position );
-
-    /**
-     * Paint temporary stuff, like rubber bands, grids etc.
-
-     * XXX: Perhaps do this in a more coordinated fashion, instead
-     *      of just passing a painter.
+     * Called by the canvas to paint any decorations that the tool deems needed.
+     * The painter has the top left of the canvas as its origin.
+     * @param painter used for painting the shape
+     * @param converter to convert between internal and view coordinates.
      */
     virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
 
@@ -170,20 +163,23 @@ public: // Events
 signals:
 
     /**
-     * Emitted when this tool wants itself to be replaced by the
-     * specified tool
+     * Emitted when this tool wants itself to be replaced by another tool.
+     * The id it gives is the 'id' part of a KoID instance that is linked to the
+     * specified tool.
+     * TODO should this be an int instead so I can do an emit sigActivateTool(OtherTool::ID) ?
      *
-     *@param id the identification of the desired tool
+     * @param id the identification of the desired tool
      */
     void sigActivateTool( const QString &id );
 
     /**
-     * Emitted when this tool wants the specified tool to temporarily
-     * replace itself. For instance, a paint tool could desire to be
+     * Emitted when this tool wants itself to temporarily be replaced by another tool.
+     * For instance, a paint tool could desire to be
      * temporarily replaced by a pan tool which could be temporarily
      * replaced by a colourpicker.
+     * @param id the identification of the desired tool
      */
-    void sigActivateTemporary(const QString &);
+    void sigActivateTemporary(const QString &id);
 
     /**
      * Emitted when the tool has been temporarily activated and wants
@@ -191,14 +187,30 @@ signals:
      */
     void sigDone();
 
+    /**
+     * Emitted by useCursor() when the cursor to display on the canvas is changed.
+     * The KoToolManager should connect to this signal to handle cursors further.
+     */
+    void sigCursorChanged(QCursor cursor);
+
 protected:
-    QWidget * m_optionWidget;
+    /**
+     * Classes enhariting from this one can call this method to signify which cursor
+     * the tool wants to display at this time.  Logical place to call it is after an
+     * incoming event has been handled.
+     * @param cursor the new cursor. If this is the same as the previously set cursor
+     *   this call will not do anything.
+     * @param force if true the cursor will be set no matter what.
+     */
+    void useCursor(QCursor cursor, bool force=false);
+    QWidget * m_optionWidget; ///< the widget that is returned in optionWidget()
     KoCanvasBase *m_canvas; ///< the canvas interface this tool will work for.
 
 private:
     KoTool();
     KoTool(const KoTool&);
     KoTool& operator=(const KoTool&);
+    QCursor m_previousCursor;
 };
 
 #endif /* KOTOOL_H */

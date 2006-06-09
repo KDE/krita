@@ -32,31 +32,42 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 
+// ******** DummyTool **********
+class DummyTool : public KoTool {
+public:
+    DummyTool() : KoTool(0) {}
+    ~DummyTool() {}
+    void paint( QPainter &, KoViewConverter &) {}
+    void mousePressEvent( KoPointerEvent *) {}
+    void mouseMoveEvent( KoPointerEvent *) {}
+    void mouseReleaseEvent( KoPointerEvent *) {}
+};
+
+// ******** KoToolManager **********
 KoToolManager::KoToolManager()
 : QObject()
 , m_toolBox(0)
 , m_activeCanvas(0)
 , m_activeTool(0)
+, m_mutex(QMutex::Recursive)
 {
     m_dummyTool = new DummyTool();
-#if 0
-    m_oldTool = 0;
-    m_paletteManager = 0;
-    m_tools_disabled = false;
-#endif
 }
 
-KoToolManager::~KoToolManager()
-{
+KoToolManager::~KoToolManager() {
     delete m_dummyTool;
 }
 
 void KoToolManager::setup() {
-    if(m_tools.size() > 0)
+    m_mutex.lock();
+    if(m_tools.size() > 0) {
+        m_mutex.unlock();
         return;
+    }
     // add defaults
     m_tools.append( new ToolHelper(new KoCreateShapesToolFactory()) );
-    m_tools.append( new ToolHelper(new KoInteractionToolFactory()) );
+    m_defaultTool = new ToolHelper(new KoInteractionToolFactory());
+    m_tools.append(m_defaultTool);
 
     KoToolRegistry *registry = KoToolRegistry::instance();
     foreach(KoID id, registry->listKeys()) {
@@ -71,10 +82,11 @@ kDebug(30004) << "   th" << t->id().name() << endl;
         connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
 
     // do some magic for the sorting here :)  TODO
+    m_mutex.unlock();
 }
 
 QWidget *KoToolManager::toolBox() {
-// TODO reentrant
+    m_mutex.lock();
     if(! m_toolBox) {
         setup();
         QWidget *widget = new QWidget();
@@ -88,62 +100,114 @@ QWidget *KoToolManager::toolBox() {
         }
         m_toolBox = widget;
     }
+    m_mutex.unlock();
     return m_toolBox;
 }
 
 void KoToolManager::registerTools(KActionCollection *ac) {
+    m_mutex.lock();
+    setup();
     // TODO
+    m_mutex.unlock();
 }
 
 void KoToolManager::addCanvasView(KoCanvasView *view) {
     if(m_canvases.contains(view))
         return;
+    setup();
+    m_mutex.lock();
+    kDebug(30004) << "KoToolManager::addCanvasView called, setting up..." << endl;
     m_canvases.append(view);
-    if(view->canvas())
-        attachCanvas(view->canvas());
-    connect(view, SIGNAL(canvasRemoved(KoCanvasBase*)), this, SLOT(detachCanvas(KoCanvasBase*)));
-    connect(view, SIGNAL(canvasSet(KoCanvasBase*)), this, SLOT(attachCanvas(KoCanvasBase*)));
+    //QMap<KoID, KoTool*> toolsMap;
+    //m_allTools.insert(view, toolsMap);
     if(m_activeCanvas == 0)
         m_activeCanvas = view;
+    if(view->canvas())
+        attachCanvas(view);
+    connect(view, SIGNAL(canvasRemoved(KoCanvasView*)), this, SLOT(detachCanvas(KoCanvasView*)));
+    connect(view, SIGNAL(canvasSet(KoCanvasView*)), this, SLOT(attachCanvas(KoCanvasView*)));
+    m_mutex.unlock();
 }
 
 void KoToolManager::removeCanvasView(KoCanvasView *view) {
+    m_mutex.lock();
     m_canvases.removeAll(view);
+    QMap<QString, KoTool*> toolsMap = m_allTools.value(view);
+    foreach(KoTool *tool, toolsMap.values())
+        delete tool;
+    m_allTools.remove(view);
     if(view->canvas())
-        detachCanvas(view->canvas());
-    disconnect(view, SIGNAL(canvasRemoved(KoCanvasBase*)), this, SLOT(detachCanvas(KoCanvasBase*)));
-    disconnect(view, SIGNAL(canvasSet(KoCanvasBase*)), this, SLOT(attachCanvas(KoCanvasBase*)));
+        detachCanvas(view);
+    disconnect(view, SIGNAL(canvasRemoved(KoCanvasView*)), this, SLOT(detachCanvas(KoCanvasView*)));
+    disconnect(view, SIGNAL(canvasSet(KoCanvasView*)), this, SLOT(attachCanvas(KoCanvasView*)));
+    m_mutex.unlock();
 }
-
 
 void KoToolManager::toolActivated(ToolHelper *tool) {
     kDebug(30004) << "ToolActivated: '" << tool->id().name() << "'\n";
-    if(m_activeCanvas == 0)
+    m_mutex.lock();
+    if(m_activeCanvas == 0) {
+        m_mutex.unlock();
         return;
-    if(m_activeTool)
-        delete m_activeTool;
-    m_activeTool = tool->m_toolFactory->createTool(m_activeCanvas->canvas());
+    }
+    if(m_activeTool) {
+        m_activeTool->deactivate();
+        disconnect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
+                this, SLOT(updateCursor(QCursor)));
+    }
+    QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
+    m_activeTool = toolsMap.value(tool->id().id());
+    Q_ASSERT(m_activeTool);
+    connect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
+            this, SLOT(updateCursor(QCursor)));
+
+    // and set it.
     foreach(KoCanvasView *view, m_canvases) {
         if(!view->canvas())
-continue;
-        if(view == m_activeCanvas)
-            view->canvas()->setTool(m_activeTool);
-        else
-            view->canvas()->setTool(m_dummyTool);
+            continue;
+        view->canvas()->setTool(view==m_activeCanvas ? m_activeTool : m_dummyTool);
+        // we expect the tool to emit a cursur on activation.  This is for quick-fail :)
+        view->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
+    }
+    m_activeTool->activate();
+    m_mutex.unlock();
+}
+
+void KoToolManager::attachCanvas(KoCanvasView *view) {
+kDebug(30004) << "KoToolManager::attachCanvas\n";
+    // TODO listen to focus changes
+    // TODO listen to selection changes
+    QMap<QString, KoTool*> toolsMap;
+    foreach(ToolHelper *tool, m_tools)
+        toolsMap.insert(tool->id().id(), tool->m_toolFactory->createTool(view->canvas()));
+    m_mutex.lock();
+    m_allTools.remove(view);
+    m_allTools.insert(view, toolsMap);
+    m_mutex.unlock();
+
+    if(m_activeTool == 0)
+        toolActivated(m_defaultTool);
+    else {
+        view->canvas()->setTool(m_dummyTool);
+        view->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
 }
 
-void KoToolManager::attachCanvas(KoCanvasBase *cb) {
-    // TODO listen to focus changes
-    // TODO listen to selection changes
-    cb->setTool(m_dummyTool);
+void KoToolManager::detachCanvas(KoCanvasView *view) {
+    // TODO detach
+    if(m_activeCanvas == view)
+        m_activeCanvas = 0;
+    QMap<QString, KoTool*> toolsMap = m_allTools.value(view);
+    foreach(KoTool *tool, toolsMap.values())
+        delete tool;
+    toolsMap.clear();
+    view->canvas()->setTool(m_dummyTool);
 }
 
-void KoToolManager::detachCanvas(KoCanvasBase *cb) {
-    // TODO detach
-    if(m_activeCanvas && m_activeCanvas->canvas() == cb)
-        m_activeCanvas = 0;
-    // TODO delete tool that canvas is holding?
+void KoToolManager::updateCursor(QCursor cursor) {
+    Q_ASSERT(m_activeCanvas);
+    Q_ASSERT(m_activeCanvas->canvas());
+    m_activeCanvas->canvas()->canvasWidget()->setCursor(cursor);
 }
 
 //   ************ ToolHelper **********

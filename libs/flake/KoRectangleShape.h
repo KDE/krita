@@ -22,8 +22,8 @@
 #ifndef KORECTANGLESHAPE_H
 #define KORECTANGLESHAPE_H
 
-#include <KoShape.h>
-#include <KoShapeFactory.h>
+#include "KoShape.h"
+#include "KoShapeFactory.h"
 
 #include <koffice_export.h>
 

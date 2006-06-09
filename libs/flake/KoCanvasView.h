@@ -102,14 +102,14 @@ public:
 signals:
     /**
      * Emitted when a previously added canvas is about to be removed.
-     * @param cb the canvas about to be removed
+     * @param cv this object
      */
-    void canvasRemoved(KoCanvasBase* cb);
+    void canvasRemoved(KoCanvasView* cv);
     /**
      * Emitted when a canvas is set on this widget
-     * @param cb the canves just added
+     * @param cv this object
      */
-    void canvasSet(KoCanvasBase* cb);
+    void canvasSet(KoCanvasView* cv);
 
 private:
     class Viewport : public QWidget {

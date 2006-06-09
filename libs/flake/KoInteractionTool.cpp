@@ -51,6 +51,7 @@ QPointF KoInteractionTool::m_handleDiff[] = {
 KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
 : KoTool( canvas )
 , m_currentStrategy( 0 )
+, m_lastHandle(KoFlake::NoHandle)
 , m_mouseWasInsideHandles( false )
 {
 }
@@ -65,33 +66,40 @@ bool KoInteractionTool::wantsAutoScroll()
     return true;
 }
 
-QCursor KoInteractionTool::cursor( const QPointF &position )
-{
-    Q_UNUSED(position); // we assume the mouseMoveEvent has been called.
+void KoInteractionTool::updateCursor() {
+    QCursor cursor = Qt::ArrowCursor;
     if(selection()->count() > 0) { // has a selection
         if(!m_mouseWasInsideHandles) {
             if(m_lastHandle == KoFlake::NoHandle)
-                return Qt::ArrowCursor;
-            return Qt::IBeamCursor; // TODO make rotation cursor
+                cursor = Qt::ArrowCursor;
+            else
+                cursor = Qt::IBeamCursor; // TODO make rotation cursor
         }
-        switch(m_lastHandle) {
-            case KoFlake::BottomMiddleHandle:
-            case KoFlake::TopMiddleHandle:
-                return Qt::SizeVerCursor;
-            case KoFlake::RightMiddleHandle:
-            case KoFlake::LeftMiddleHandle:
-                return Qt::SizeHorCursor;
-            case KoFlake::TopRightHandle:
-            case KoFlake::BottomLeftHandle:
-                return KCursor::sizeBDiagCursor();
-            case KoFlake::BottomRightHandle:
-            case KoFlake::TopLeftHandle:
-                return KCursor::sizeFDiagCursor();
-            case KoFlake::NoHandle:
-                return Qt::SizeAllCursor;
+        else {
+            switch(m_lastHandle) {
+                case KoFlake::BottomMiddleHandle:
+                case KoFlake::TopMiddleHandle:
+                    cursor = Qt::SizeVerCursor;
+                    break;
+                case KoFlake::RightMiddleHandle:
+                case KoFlake::LeftMiddleHandle:
+                    cursor = Qt::SizeHorCursor;
+                    break;
+                case KoFlake::TopRightHandle:
+                case KoFlake::BottomLeftHandle:
+                    cursor = KCursor::sizeBDiagCursor();
+                    break;
+                case KoFlake::BottomRightHandle:
+                case KoFlake::TopLeftHandle:
+                    cursor = KCursor::sizeFDiagCursor();
+                    break;
+                case KoFlake::NoHandle:
+                    cursor = Qt::SizeAllCursor;
+                    break;
+            }
         }
     }
-    return Qt::ArrowCursor;
+    useCursor(cursor);
 }
 
 void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
@@ -121,6 +129,7 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
 void KoInteractionTool::mousePressEvent( KoPointerEvent *event ) {
     Q_ASSERT(m_currentStrategy == 0);
     m_currentStrategy = KoInteractionStrategy::createStrategy(event, this, m_canvas);
+    updateCursor();
 }
 
 void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
@@ -148,6 +157,7 @@ void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
         }
         event->ignore();
     }
+    updateCursor();
 }
 
 QRectF KoInteractionTool::handlesSize() {
@@ -172,6 +182,7 @@ void KoInteractionTool::mouseReleaseEvent( KoPointerEvent *event ) {
     }
     else
         event->ignore();
+    updateCursor();
 }
 
 void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
@@ -249,6 +260,11 @@ void KoInteractionTool::recalcSelectionBox() {
     m_selectionBox[KoFlake::TopLeftHandle] = QPointF( xOff, yOff );
 }
 
+void KoInteractionTool::activate(bool temporary) {
+    m_mouseWasInsideHandles = false;
+    m_lastHandle = KoFlake::NoHandle;
+    useCursor(Qt::ArrowCursor, true);
+}
 
 // ##########  SelectionDecorator ############
 QImage * SelectionDecorator::s_rotateCursor=0;

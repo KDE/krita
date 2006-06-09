@@ -28,6 +28,7 @@
 KoTool::KoTool(KoCanvasBase *canvas )
 : m_optionWidget( 0 )
 , m_canvas(canvas)
+, m_previousCursor(Qt::ArrowCursor)
 {
 }
 
@@ -45,13 +46,8 @@ void KoTool::activate(bool temporary) {
 void KoTool::deactivate() {
 }
 
-
 bool KoTool::wantsAutoScroll() {
     return true;
-}
-QCursor KoTool::cursor( const QPointF &position ) {
-    Q_UNUSED(position);
-    return Qt::ArrowCursor;
 }
 
 void KoTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
@@ -64,4 +60,11 @@ void KoTool::keyPressEvent(QKeyEvent *e) {
 
 void KoTool::keyReleaseEvent(QKeyEvent *e) {
     e->ignore();
+}
+
+void KoTool::useCursor(QCursor cursor, bool force) {
+    if(!force && cursor.shape() == m_previousCursor.shape())
+        return;
+    m_previousCursor = cursor;
+    emit sigCursorChanged(m_previousCursor);
 }

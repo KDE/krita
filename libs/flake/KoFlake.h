@@ -18,20 +18,6 @@
  */
 
 /**
- * \mainpage
- * The Flake library is a low level library for all kinds of graphical content
- * to be placed on any KOffice canvas. This includes a line to text-areas or
- * even movies.  Just as important, this library will include tools to manipulate
- * the graphical content. At least at the level of Flake objects.  This goes from
- * moving/rotating the object to a basis for complex brushes for a paint program.
- * <p>Use KoShape as a base object for any application-specific graphical
- * content, and extend KoShapeContainer for objects that can contain others.
- * <p>KoShape is the base class for all flake objects. Flake objects extend it
- * to allow themselves to be manipulated by the KoTool s. The content of such an
- * object is independent and based on the model of the data this object represents.
- */
-
-/**
  * Flake reference
  */
 class KoFlake {

@@ -28,6 +28,7 @@
 #include <QMap>
 #include <QObject>
 #include <QMutex>
+#include <QStack>
 
 class ToolHelper;
 class KActionCollection;
@@ -69,12 +70,17 @@ private:
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);
     void setup();
+    void switchTool(KoTool *tool, bool temporary);
+    void switchTool(const QString &id, bool temporary);
 
 private slots:
     void toolActivated(ToolHelper *tool);
     void detachCanvas(KoCanvasView* view);
     void attachCanvas(KoCanvasView* view);
     void updateCursor(QCursor cursor);
+    void switchToolRequested(const QString &id);
+    void switchToolTemporaryRequested(const QString &id);
+    void switchBackRequested();
 
 private:
     static KoToolManager* s_instance;
@@ -92,6 +98,7 @@ private:
     QMutex m_mutex;
 
     QMap<KoCanvasView*, QMap<QString, KoTool*> > m_allTools;
+    QStack<KoTool*> m_stack;
 };
 
 class ToolHelper : public QObject {

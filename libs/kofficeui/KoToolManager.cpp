@@ -145,7 +145,25 @@ void KoToolManager::removeCanvasView(KoCanvasView *view) {
 
 void KoToolManager::toolActivated(ToolHelper *tool) {
     kDebug(30004) << "ToolActivated: '" << tool->id().name() << "'\n";
+    QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
+    KoTool *t = toolsMap.value(tool->id().id());
+    switchTool(t, false);
+}
+
+void KoToolManager::switchTool(const QString &id, bool temporary) {
+    Q_ASSERT(m_activeCanvas);
+    QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
+    KoTool *tool = toolsMap.value(id);
+    if(! tool) {
+        kWarning(30004) << "Tool requested " << (temporary?"temporary":"") << "switch to unknown tool: '" << id << "'\n";
+        return;
+    }
+    switchTool(tool, temporary);
+}
+
+void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     m_mutex.lock();
+    Q_ASSERT(tool);
     if(m_activeCanvas == 0) {
         m_mutex.unlock();
         return;
@@ -154,12 +172,22 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
         m_activeTool->deactivate();
         disconnect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
                 this, SLOT(updateCursor(QCursor)));
+        disconnect(m_activeTool, SIGNAL(sigActivateTool(const QString &id)),
+                this, SLOT(switchToolRequested(const QString &id)));
+        disconnect(m_activeTool, SIGNAL(sigActivateTemporary(const QString &id)),
+                this, SLOT(switchToolTemporaryRequested(const QString &id)));
+        disconnect(m_activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
     }
-    QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
-    m_activeTool = toolsMap.value(tool->id().id());
-    Q_ASSERT(m_activeTool);
+    if(m_activeTool && temporary)
+        m_stack.push(m_activeTool);
+    m_activeTool = tool;
     connect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
             this, SLOT(updateCursor(QCursor)));
+    connect(m_activeTool, SIGNAL(sigActivateTool(const QString &id)),
+            this, SLOT(switchToolRequested(const QString &id)));
+    connect(m_activeTool, SIGNAL(sigActivateTemporary(const QString &id)),
+            this, SLOT(switchToolTemporaryRequested(const QString &id)));
+    connect(m_activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
 
     // and set it.
     foreach(KoCanvasView *view, m_canvases) {
@@ -208,6 +236,24 @@ void KoToolManager::updateCursor(QCursor cursor) {
     Q_ASSERT(m_activeCanvas);
     Q_ASSERT(m_activeCanvas->canvas());
     m_activeCanvas->canvas()->canvasWidget()->setCursor(cursor);
+}
+
+void KoToolManager::switchToolRequested(const QString &id) {
+    while (!m_stack.isEmpty()) // switching means to flush the stack
+        m_stack.pop();
+    switchTool(id, false);
+}
+
+void KoToolManager::switchToolTemporaryRequested(const QString &id) {
+    switchTool(id, true);
+}
+
+void KoToolManager::switchBackRequested() {
+    if(m_stack.isEmpty()) {
+        kWarning(30004) << "Tool emits a done while it is not temporary, ignoring";
+        return;
+    }
+    switchTool(m_stack.pop(), false);
 }
 
 //   ************ ToolHelper **********

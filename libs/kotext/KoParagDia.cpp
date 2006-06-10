@@ -1751,6 +1751,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
 
     eWidth = new KoUnitDoubleSpinBox( gTabLeader );
     eWidth->setUnit( m_unit );
+    eWidth->setMinValue(0.0);
     TextLabel3->setBuddy( eWidth );
     fillingGrid->addWidget( eWidth, 1, 1 );
 
@@ -1791,7 +1792,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     connect(bDeleteAll,SIGNAL(clicked ()),this,SLOT(deleteAllClicked()));
     connect(bgAlign,SIGNAL(clicked (int)),this,SLOT(updateAlign(int)));
     connect(cFilling,SIGNAL(activated (int)),this,SLOT(updateFilling(int)));
-    connect(eWidth,SIGNAL(valueChanged ( double ) ),this,SLOT(updateWidth()));
+    connect(eWidth,SIGNAL(valueChangedPt ( double ) ),this,SLOT(updateWidth()));
     connect(lstTabs,SIGNAL(highlighted (int)),this,SLOT(setActiveItem(int)));
     noSignals=false;
 }
@@ -1913,7 +1914,7 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
         default:
             cFilling->setCurrentIndex(0);
     }
-    eWidth->setValue( selectedTab->ptWidth );
+    eWidth->changeValue( selectedTab->ptWidth );
     sTabPos->setValue( KoUnit::toUserValue(selectedTab->ptPos, m_unit));
     bDelete->setEnabled(true);
     bDeleteAll->setEnabled(true);

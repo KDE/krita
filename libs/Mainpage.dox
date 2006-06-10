@@ -1,0 +1,9 @@
+/**
+ * \mainpage
+ * The KOffice libraries are really a set of different libraries; but not all of them
+ * have docs so all unmaintained (documentation wise) libs go in this project.
+ * Other projects:
+ * <ul>
+ *  <li><a href="../libs-flake/">Flake</a> The library for graphical content and manipulation</li>
+ * </ul>
+ */

@@ -39,11 +39,6 @@ class QPainter;
 /**
  * Abstract base class for all tools that manipulate flake objects.
  * There exists an instance of every tool for every pointer device.
- *
- * XXX: Note that we also need tools to manipulate the contents of
- *      the objects (e.g., brushes, gradients, text tools, whatever.
- *      It may be preferable to remove the tool system from flake and
- *      make it more general.
  */
 class FLAKE_EXPORT KoTool : public QObject
 {

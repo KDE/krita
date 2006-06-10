@@ -5,5 +5,6 @@
  * Other projects:
  * <ul>
  *  <li><a href="../libs-flake/">Flake</a> The library for graphical content and manipulation</li>
+ *  <li><a href="../libs-kross/">Kross</a> Kross is a scripting bridge to embed scripting functionality into an application.</li>
  * </ul>
  */

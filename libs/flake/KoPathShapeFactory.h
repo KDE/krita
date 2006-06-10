@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
+   Copyright (C) 2006 Rob Buis <buis@kde.org>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -19,24 +18,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KORECTANGLESHAPE_H
-#define KORECTANGLESHAPE_H
+#ifndef KOPATHSHAPEFACTORY_H
+#define KOPATHSHAPEFACTORY_H
 
 #include "KoShape.h"
+#include "KoShapeFactory.h"
 
-#include <koffice_export.h>
-
-class QPainter;
-
-/**
- * Simple Rectangle shape.
- */
-class FLAKE_EXPORT KoRectangleShape : public KoShape
+class KoPathShapeFactory : public KoShapeFactory
 {
 public:
-    KoRectangleShape();
-    void paint(QPainter &painter, KoViewConverter &converter);
+    KoPathShapeFactory();
+    KoShape * createDefaultShape();
+    KoShape * createShape(KoProperties * params) const;
+    KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const;
 };
 
-#endif
+
+#endif /* KOPATHGFXOBJ_H */
 

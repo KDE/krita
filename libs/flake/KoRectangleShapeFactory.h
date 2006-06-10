@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,24 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCREATESHAPESTOOLFACTORY_H
-#define KOCREATESHAPESTOOLFACTORY_H
+#ifndef KORECTANGLESHAPEFACTORY_H
+#define KORECTANGLESHAPEFACTORY_H
 
-#include "KoToolFactory.h"
+#include "KoShape.h"
+#include "KoShapeFactory.h"
 
-#include <koffice_export.h>
-
-class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {
+class KoRectangleShapeFactory : public KoShapeFactory
+{
 public:
-    KoCreateShapesToolFactory();
-    ~KoCreateShapesToolFactory();
-
-    KoTool* createTool(KoCanvasBase *canvas);
-    KoID id();
-    quint32 priority() const;
-    const QString& toolType() const;
-    const QString& tooltipText() const;
-    KoID activationShapeId() const;
-    const QPixmap& icon() const;
+    KoRectangleShapeFactory();
+    KoShape * createDefaultShape();
+    KoShape * createShape(KoProperties * params) const;
+    KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const;
 };
+
 #endif

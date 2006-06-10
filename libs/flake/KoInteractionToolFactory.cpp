@@ -23,6 +23,8 @@
 
 #include <klocale.h>
 
+#include <QPixmap>
+
 KoInteractionToolFactory::KoInteractionToolFactory() {
 }
 
@@ -41,15 +43,18 @@ quint32 KoInteractionToolFactory::priority() const {
     return 0;
 }
 
-QString KoInteractionToolFactory::toolType() const {
+const QString& KoInteractionToolFactory::toolType() const {
     return QString("main");
 }
 
-QString KoInteractionToolFactory::tooltipText() const {
+const QString& KoInteractionToolFactory::tooltipText() const {
     return i18n("Default tool");
 }
 
-KoID* KoInteractionToolFactory::activationShapeId() const {
-    return 0;
+KoID KoInteractionToolFactory::activationShapeId() const {
+    return KoID("defaultTool", i18n("Default Tool"));
 }
 
+const QPixmap& KoInteractionToolFactory::icon() const {
+    return QPixmap();
+}

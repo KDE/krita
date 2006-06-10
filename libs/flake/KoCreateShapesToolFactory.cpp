@@ -27,6 +27,7 @@
 
 #include <QColor>
 #include <QRectF>
+#include <QPixmap>
 
 KoCreateShapesToolFactory::KoCreateShapesToolFactory() {
 }
@@ -60,15 +61,18 @@ quint32 KoCreateShapesToolFactory::priority() const {
     return 1;
 }
 
-QString KoCreateShapesToolFactory::toolType() const {
+const QString& KoCreateShapesToolFactory::toolType() const {
     return QString("main");
 }
 
-QString KoCreateShapesToolFactory::tooltipText() const {
-    return i18n("Create tooltip");
+const QString& KoCreateShapesToolFactory::tooltipText() const {
+    return i18n("Create object");
 }
 
-KoID* KoCreateShapesToolFactory::activationShapeId() const {
-    return 0;
+KoID KoCreateShapesToolFactory::activationShapeId() const {
+    return KoID("createTool", i18n("Create object"));
 }
 
+const QPixmap& KoCreateShapesToolFactory::icon() const {
+    return QPixmap();
+}

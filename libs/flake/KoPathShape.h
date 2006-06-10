@@ -18,14 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPATHGFXOBJ_H
-#define KOPATHGFXOBJ_H
+#ifndef KOPATHSHAPE_H
+#define KOPATHSHAPE_H
 
-class KoSelection;
 #include <QPainterPath>
+#include <QPoint>
 
 #include "KoShape.h"
-#include "KoShapeFactory.h"
 
 #include <koffice_export.h>
 
@@ -54,35 +53,5 @@ private:
 };
 
 
-class KoPathShapeFactory : public KoShapeFactory
-{
-public:
-    // XXX: Add a nice pixmap
-    KoPathShapeFactory() 
-    {
-        setName("PathShape");
-        setDescription("A simple path shape");
-        setToolTip("A simple path shape");
-    }
-
-    KoShape * createDefaultShape()
-    {
-        return new KoPathShape();
-    }
-
-    KoShape * createShape(KoShapeParameters * params) const
-    {
-        Q_UNUSED(params);
-        return new KoPathShape();
-    }
-
-    KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const
-    {
-        Q_UNUSED(shapeTemplate);
-        return new KoPathShape();
-    }
-};
-
-
-#endif /* KOPATHGFXOBJ_H */
+#endif
 

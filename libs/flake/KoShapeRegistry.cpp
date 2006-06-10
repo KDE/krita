@@ -30,19 +30,16 @@
 #include <KoGenericRegistry.h>
 
 #include <KoShapeRegistry.h>
-#include <KoRectangleShape.h>
-#include <KoPathShape.h>
+#include <KoRectangleShapeFactory.h>
+#include <KoPathShapeFactory.h>
 
 KoShapeRegistry *KoShapeRegistry::m_singleton = 0;
 
 KoShapeRegistry::KoShapeRegistry()
 {
-    Q_ASSERT(KoShapeRegistry::m_singleton == 0);
-    KoShapeRegistry::m_singleton = this;
-
-    KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/FlakeShape"),
-                                                               QString::fromLatin1("(Type == 'Service') and "
-                                                                                   "([X-KOffice-Version] == 2)"));
+    KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/Shape"),
+            QString::fromLatin1("(Type == 'Service') and "
+                "([X-KOffice-Version] == 1)"));
 
     KService::List::ConstIterator iter;
 

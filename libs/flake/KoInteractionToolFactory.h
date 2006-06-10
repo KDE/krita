@@ -33,8 +33,9 @@ public:
     KoTool* createTool(KoCanvasBase *canvas);
     KoID id();
     quint32 priority() const;
-    QString toolType() const;
-    QString tooltipText() const;
-    KoID* activationShapeId() const;
+    const QString& toolType() const;
+    const QString& tooltipText() const;
+    KoID activationShapeId() const;
+    const QPixmap& icon() const;
 };
 #endif

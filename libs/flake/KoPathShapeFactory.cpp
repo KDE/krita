@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,24 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCREATESHAPESTOOLFACTORY_H
-#define KOCREATESHAPESTOOLFACTORY_H
+#include "KoPathShapeFactory.h"
+#include "KoPathShape.h"
 
-#include "KoToolFactory.h"
+#include <klocale.h>
 
-#include <koffice_export.h>
+KoPathShapeFactory::KoPathShapeFactory() {
+    setId(KoID("PathShape", i18n("A simple path shape")));
+    setToolTip("A simple path shape");
+}
 
-class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {
-public:
-    KoCreateShapesToolFactory();
-    ~KoCreateShapesToolFactory();
+KoShape * KoPathShapeFactory::createDefaultShape() {
+    return new KoPathShape();
+}
 
-    KoTool* createTool(KoCanvasBase *canvas);
-    KoID id();
-    quint32 priority() const;
-    const QString& toolType() const;
-    const QString& tooltipText() const;
-    KoID activationShapeId() const;
-    const QPixmap& icon() const;
-};
-#endif
+KoShape * KoPathShapeFactory::createShape(KoProperties * params) const {
+    Q_UNUSED(params);
+    return new KoPathShape();
+}
+
+KoShape * KoPathShapeFactory::createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const {
+    Q_UNUSED(shapeTemplate);
+    return new KoPathShape();
+}
+

@@ -26,26 +26,39 @@
 
 #include <klocale.h>
 #include <QObject>
+#include <QObject>
 
+/**
+ * A factory for KoTool objects.
+ * This abstract class is a baseclass for real factories; each class inheriting from this one
+ * will be the creator of one specific tool class. So there is one toolFactory for each type 
+ * of tool.
+ */
 class FLAKE_EXPORT KoToolFactory : public QObject {
     Q_OBJECT
 
 public:
+    /// constructor
     KoToolFactory();
     virtual ~KoToolFactory();
 
     /// instanciate a new tool
     virtual KoTool * createTool(KoCanvasBase *canvas) = 0;
+    /**
+     * return the ID for the tool this factory is associated with.
+     * @return the ID for the tool this factory is associated with.
+     */
     virtual KoID id() = 0;
     /// The priority of this tool in its section in the toolbox
     virtual quint32 priority() const = 0;
     /// the type of tool, used to group tools in the toolbox
-    virtual QString toolType() const = 0;
+    virtual const QString& toolType() const = 0;
     /// return a translated tooltip Text
-    virtual QString tooltipText() const = 0;
-    // getter for icon?
+    virtual const QString& tooltipText() const = 0;
+    /// return an icon for this tool
+    virtual const QPixmap& icon() const = 0;
     /// The shape ID the tool is associated with, or 0 when the tool is a generic tool
-    virtual KoID* activationShapeId() const = 0;
+    virtual KoID activationShapeId() const = 0;
 };
 
 #endif

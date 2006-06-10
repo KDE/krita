@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,25 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "KoRectangleShapeFactory.h"
+#include "KoRectangleShape.h"
 
-#ifndef KOCREATESHAPESTOOLFACTORY_H
-#define KOCREATESHAPESTOOLFACTORY_H
+#include <klocale.h>
 
-#include "KoToolFactory.h"
+KoRectangleShapeFactory::KoRectangleShapeFactory() {
+    setId(KoID("RectangleShape", i18n("A simple square shape")));
+    setToolTip(i18n("A simple square shape"));
+    // XXX: Add a nice icon using the KIconLoader
+}
 
-#include <koffice_export.h>
+KoShape * KoRectangleShapeFactory::createDefaultShape() {
+    return new KoRectangleShape();
+}
 
-class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {
-public:
-    KoCreateShapesToolFactory();
-    ~KoCreateShapesToolFactory();
+KoShape * KoRectangleShapeFactory::createShape(KoProperties * params) const {
+    return new KoRectangleShape();
+}
 
-    KoTool* createTool(KoCanvasBase *canvas);
-    KoID id();
-    quint32 priority() const;
-    const QString& toolType() const;
-    const QString& tooltipText() const;
-    KoID activationShapeId() const;
-    const QPixmap& icon() const;
-};
-#endif
+KoShape * KoRectangleShapeFactory::createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const {
+    return new KoRectangleShape();
+}

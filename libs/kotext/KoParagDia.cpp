@@ -1745,7 +1745,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     TextLabel2->setBuddy( cFilling );
     fillingGrid->addWidget( cFilling, 0, 1 );
 
-    QLabel * TextLabel3 = new QLabel( i18n("&Width:"), gTabLeader );
+    QLabel * TextLabel3 = new QLabel( i18n("Size:"), gTabLeader );
     TextLabel3->setAlignment( Qt::AlignRight );
     fillingGrid->addWidget( TextLabel3, 1, 0 );
 

@@ -1,6 +1,7 @@
-Please use all-lowercase for new file names.
-  The current mixed casing used in kofficecore and kofficeui is too confusing
-  (koDocumentInfoDlg vs KoDocumentInfoDlg, the difference is hard to see),
-  inconsistent with the rest of KDE, and breaks the emacs shortcut for auto-inserting
-  #include statements.
-  Maybe one day we'll rename all the current mixed-case files...
+KOffice libs uses so called CamelCase naming for all files in the libraries.
+Example:  KoParagDia.cpp
+Extensions are always .cpp and .h
+We prefer one class per file.  This is to make the filename match the class, which
+obviously does not work if there is more then one class in the file.
+When there is a private class that is not used outside the file its ok to have it
+in the same file as another class.

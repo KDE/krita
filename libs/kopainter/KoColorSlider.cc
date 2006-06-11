@@ -30,6 +30,14 @@ KoColorSlider::KoColorSlider(KoColorSpace* colorSpace, QWidget* parent)
   color2 = KoColor( Qt::white, m_colorSpace);
 }
 
+KoColorSlider::KoColorSlider(KoColorSpace* colorSpace, Qt::Orientation o, QWidget *parent)
+  : KSelector(o, parent)
+  , m_colorSpace(colorSpace)
+{
+  color1 = KoColor( Qt::black, m_colorSpace);
+  color2 = KoColor( Qt::white, m_colorSpace);
+}
+
 KoColorSlider::~KoColorSlider()
 {
 }
@@ -80,21 +88,41 @@ void KoColorSlider::drawContents( QPainter *painter )
 
   QImage image(contentsRect().width(), contentsRect().height(), QImage::Format_ARGB32 );
 
-  for (int x = 0; x < contentsRect().width(); x++) {
+  if( orientation() == Qt::Horizontal ) {
+    for (int x = 0; x < contentsRect().width(); x++) {
 
-      double t = static_cast<double>(x) / (contentsRect().width() - 1);
+        double t = static_cast<double>(x) / (contentsRect().width() - 1);
 
-      quint8 colorWeights[2];
-      colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
-      colorWeights[1] = 255 - colorWeights[0];
+        quint8 colorWeights[2];
+        colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
+        colorWeights[1] = 255 - colorWeights[0];
 
-      m_colorSpace->mixColors(colors, colorWeights, 2, c.data());
+        m_colorSpace->mixColors(colors, colorWeights, 2, c.data());
 
-      c.toQColor( &color, &opacity );
-      color.setAlpha(opacity);
+        c.toQColor( &color, &opacity );
+        color.setAlpha(opacity);
 
-      for (int y = 0; y < contentsRect().height(); y++)
-        image.setPixel(x, y, color.rgba());
+        for (int y = 0; y < contentsRect().height(); y++)
+          image.setPixel(x, y, color.rgba());
+    }
+  }
+  else {
+    for (int y = 0; y < contentsRect().height(); y++) {
+
+        double t = static_cast<double>(y) / (contentsRect().height() - 1);
+
+        quint8 colorWeights[2];
+        colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
+        colorWeights[1] = 255 - colorWeights[0];
+
+        m_colorSpace->mixColors(colors, colorWeights, 2, c.data());
+
+        c.toQColor( &color, &opacity );
+        color.setAlpha(opacity);
+
+        for (int x = 0; x < contentsRect().width(); x++)
+          image.setPixel(x, y, color.rgba());
+    }
   }
   painter->drawImage( contentsRect(), image, QRect( 0, 0, image.width(), image.height()) );
 }

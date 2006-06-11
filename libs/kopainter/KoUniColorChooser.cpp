@@ -26,26 +26,27 @@
 #include <QGridLayout>
 #include <kcolordialog.h>
 
-#include "koFrameButton.h"
 #include "koColor.h"
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "ko_color_wheel.h"
+#include "KoColorSpaceFactoryRegistry.h"
+#include "KoXYColorSelector.h"
+#include "KoColorSlider.h"
 
 #include "KoUniColorChooser.h"
 
-KoUniColorChooser::KoUniColorChooser(QWidget *parent, const char *name) : super(parent)
+KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegistry, QWidget *parent, const char *name) : super(parent)
 {
     setObjectName(name);
 
     QGridLayout *mGrid = new QGridLayout;
 
-    m_colorwheel = new KoOldColorWheel(this);
-    m_colorwheel->setFixedSize(120, 120);
+    m_xycolorselector = new KoXYColorSelector(csFactoryRegistry->getRGB8(), this);
+    m_xycolorselector->setFixedSize(120, 120);
 
-    m_VSelector = new KValueSelector(Qt::Vertical, this);
-    m_VSelector->setFixedSize(25, 100);
+    m_colorSlider = new KoColorSlider(csFactoryRegistry->getRGB8(), Qt::Vertical, this);
+    m_colorSlider->setFixedSize(25, 100);
 
     m_colorpatch = new QFrame(this);
     m_colorpatch->setFixedSize(18, 18);
@@ -158,11 +159,11 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, const char *name) : super(
     mGrid->setSpacing(0);
     mGrid->setMargin(0);
 
-    mGrid->addWidget(m_colorwheel, 0, 0, -1, 1, Qt::AlignTop);
+    mGrid->addWidget(m_xycolorselector, 0, 0, -1, 1, Qt::AlignTop);
 
     mGrid->addWidget(m_colorpatch, 0, 1, Qt::AlignCenter);
 
-    mGrid->addWidget(m_VSelector, 1, 1, -1, 1, Qt::AlignTop);
+    mGrid->addWidget(m_colorSlider, 1, 1, -1, 1, Qt::AlignTop);
 
     mGrid->addWidget(m_HRB, 0, 2, Qt::AlignCenter);
     mGrid->addWidget(m_SRB, 1, 2, Qt::AlignCenter);
@@ -197,8 +198,8 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, const char *name) : super(
     mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 3, 5 );
     mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 7, 9 );
 
-    connect(m_VSelector, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
-    connect(m_colorwheel, SIGNAL(valueChanged(const KoOldColor&)), this, SLOT(slotWheelChanged(const KoOldColor&)));
+    //connect(m_VSelector, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
+    //connect(m_colorwheel, SIGNAL(valueChanged(const KoOldColor&)), this, SLOT(slotWheelChanged(const KoOldColor&)));
 
     /* connect spin box */
     connect(m_HIn, SIGNAL(valueChanged(int)), this, SLOT(slotHChanged(int)));
@@ -269,8 +270,8 @@ void KoUniColorChooser::update(const KoOldColor & fgColor)
     m_HIn->blockSignals(true);
     m_SIn->blockSignals(true);
     m_VIn->blockSignals(true);
-    m_VSelector->blockSignals(true);
-    m_colorwheel->blockSignals(true);
+    m_colorSlider->blockSignals(true);
+    m_xycolorselector->blockSignals(true);
             
     //kDebug() << "update. FG: " << fgColor.color() << ", bg: " << bgColor.color() << endl;
     m_fgColor = fgColor;
@@ -283,19 +284,14 @@ void KoUniColorChooser::update(const KoOldColor & fgColor)
     m_HIn->setValue(h);
     m_SIn->setValue(s);
     m_VIn->setValue(v);
-    
-    m_VSelector->setHue(h);
-    m_VSelector->setSaturation(s);
-    m_VSelector->setValue(v);
-    m_VSelector->updateContents();
-    
-    m_colorwheel->slotSetValue(color);
+
+
 
     m_HIn->blockSignals(false);
     m_SIn->blockSignals(false);
     m_VIn->blockSignals(false);
-    m_VSelector->blockSignals(false);
-    m_colorwheel->blockSignals(false);
+    m_colorSlider->blockSignals(false);
+    m_xycolorselector->blockSignals(false);
 }
 
 void KoUniColorChooser::slotSetColor(const QColor& c)

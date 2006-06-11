@@ -34,6 +34,6 @@ set_target_properties(pigment PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
 install_targets(${LIB_INSTALL_DIR} pigment )
 
-install_files( /include FILES  KoChannelInfo.h      KoColor.h      KoColorSpace.h      KoCompositeOp.h      KoColorProfile.h      KoU8ColorSpaceTrait.h KoU16ColorSpaceTrait.h KoF16HalfColorSpaceTrait.h KoF32HalfColorSpaceTrait.h )
+install_files( /include FILES  KoColorSpaceFactoryRegistry.h KoChannelInfo.h      KoColor.h      KoColorSpace.h      KoCompositeOp.h      KoColorProfile.h      KoU8ColorSpaceTrait.h KoU16ColorSpaceTrait.h KoF16HalfColorSpaceTrait.h KoF32HalfColorSpaceTrait.h )
 
 

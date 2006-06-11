@@ -30,6 +30,7 @@ class KOPAINTER_EXPORT KoColorSlider : public KSelector
   Q_OBJECT
 public:
   KoColorSlider(KoColorSpace* colorSpace, QWidget *parent = 0);
+  KoColorSlider(KoColorSpace* colorSpace, Qt::Orientation o, QWidget *parent = 0);
   virtual ~KoColorSlider();
 
 public:

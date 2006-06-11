@@ -27,8 +27,8 @@
 #include <koffice_export.h>
 
 class KValueSelector;
-class KoOldColorWheel;
-class KoOldColorSlider;
+class KoXYColorSelector;
+class KoColorSlider;
 class QFrame;
 class QLabel;
 class QSpinBox;
@@ -41,7 +41,7 @@ class KOPAINTER_EXPORT KoUniColorChooser
     typedef QWidget super;
 
 public:
-    KoUniColorChooser(QWidget *parent = 0L, const char *name = 0);
+    KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegistry, QWidget *parent = 0L, const char *name = 0);
     virtual ~KoUniColorChooser() {}
 
 public slots:
@@ -71,8 +71,8 @@ private:
 
     void update(const KoOldColor & color);
 
-    KoOldColorWheel *m_colorwheel;
-    KValueSelector *m_VSelector;
+    KoXYColorSelector *m_xycolorselector;
+    KoColorSlider *m_colorSlider;
     QFrame *m_colorpatch;
     QLabel *m_HLabel;
     QLabel *m_SLabel;

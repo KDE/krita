@@ -145,7 +145,7 @@ void KisFilterManager::setup(KActionCollection * ac)
 
         else if (s == "other" && !m_filterActionMenus.find("other")) {
             other = new KActionMenu(i18n("Other"), ac, "misc_filters");
-            m_filterActionMenus.insert("other", am);
+            m_filterActionMenus.insert("other", other);
         }
 
     }

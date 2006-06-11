@@ -78,8 +78,6 @@ void KoShapeContainer::paint(QPainter &painter, KoViewConverter &converter) {
     QMatrix myMatrix = transformationMatrix(&converter);
     foreach (KoShape *shape, sorterdObjects) {
         if(! shape->isVisible())
-            return;
-        if(! childClipped(shape))
             continue;
         painter.save();
         // TODO this is not perfect yet..
@@ -87,12 +85,15 @@ void KoShapeContainer::paint(QPainter &painter, KoViewConverter &converter) {
 //           QPolygon clip = (myMatrix * shapeMatrix.inverted()).mapToPolygon(clipRect.toRect());
 //           painter.setClipRegion(QRegion(clip));
 
-        QRectF clipRect(QPointF(0, 0), size());
-        clipRect = converter.normalToView(clipRect);
+        if( childClipped(shape) ) {
 
-        QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
-        clip.translate( (position() - converter.normalToView(position())).toPoint() );
-        painter.setClipRegion(QRegion(clip));
+            QRectF clipRect(QPointF(0, 0), size());
+            clipRect = converter.normalToView(clipRect);
+
+            QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
+            clip.translate( (position() - converter.normalToView(position())).toPoint() );
+            painter.setClipRegion(QRegion(clip));
+        }
 //qDebug() << "rect: " << position();
 //qDebug() << "polygon: " << clip.boundingRect();
         //painter.drawPolygon(clip);

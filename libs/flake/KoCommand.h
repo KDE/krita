@@ -31,7 +31,7 @@
 class KoShape;
 class KoShapeGroup;
 class KoShapeContainer;
-class KoShapeControllerInterface;
+class KoShapeControllerBase;
 class QString;
 
 /// The undo / redo command for shape moving.
@@ -134,13 +134,13 @@ public:
 /// The undo / redo command for creating shapes
 class FLAKE_EXPORT KoShapeCreateCommand : public KCommand {
 public:
-    KoShapeCreateCommand( KoShapeControllerInterface *controller, KoShape *shape );
+    KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape );
     virtual ~KoShapeCreateCommand();
     void execute ();
     void unexecute ();
     virtual QString name () const;
 protected:
-    KoShapeControllerInterface *m_controller;
+    KoShapeControllerBase *m_controller;
     KoShape *m_shape;
     bool m_deleteShape;
 };
@@ -153,19 +153,19 @@ public:
      * @param controller the controller to used for deleting.
      * @param shape a single shape that should be deleted.
      */
-    KoShapeDeleteCommand( KoShapeControllerInterface *controller, KoShape *shape );
+    KoShapeDeleteCommand( KoShapeControllerBase *controller, KoShape *shape );
     /**
      * Command to delete a set of shapes by means of a shape controller.
      * @param controller the controller to used for deleting.
      * @param shapes a set of all the shapes that should be deleted.
      */
-    KoShapeDeleteCommand( KoShapeControllerInterface *controller, const KoSelectionSet &shapes );
+    KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes );
     virtual ~KoShapeDeleteCommand();
     void execute ();
     void unexecute ();
     virtual QString name () const;
 protected:
-    KoShapeControllerInterface *m_controller;
+    KoShapeControllerBase *m_controller;
     QList<KoShape*> m_shapes;
     bool m_deleteShapes;
 };

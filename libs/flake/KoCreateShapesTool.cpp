@@ -28,9 +28,9 @@
 
 #include <kcommand.h>
 
-KoCreateShapesTool::KoCreateShapesTool(KoCanvasBase *canvas, KoShapeControllerInterface *sci )
+KoCreateShapesTool::KoCreateShapesTool(KoCanvasBase *canvas)
 : KoInteractionTool( canvas )
-, m_shapeController( sci )
+, m_shapeController( 0 )
 {
 }
 

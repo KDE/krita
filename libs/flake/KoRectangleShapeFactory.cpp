@@ -22,13 +22,17 @@
 #include <klocale.h>
 
 KoRectangleShapeFactory::KoRectangleShapeFactory() {
-    setId(KoID("RectangleShape", i18n("A simple square shape")));
+    setId(KoID("rectangleShape", i18n("A simple square shape")));
     setToolTip(i18n("A simple square shape"));
     // XXX: Add a nice icon using the KIconLoader
 }
 
+
 KoShape * KoRectangleShapeFactory::createDefaultShape() {
-    return new KoRectangleShape();
+    KoRectangleShape *s = new KoRectangleShape();
+    s->resize(QSizeF(100, 100));
+    s->setBackground(QBrush(Qt::yellow));
+    return s;
 }
 
 KoShape * KoRectangleShapeFactory::createShape(KoProperties * params) const {

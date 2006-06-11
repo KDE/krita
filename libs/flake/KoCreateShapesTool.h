@@ -22,24 +22,37 @@
 #define KOCREATESHAPESTOOL_H
 
 #include "KoInteractionTool.h"
+#include "KoShapeFactory.h"
 
 #include <koffice_export.h>
 
-class KoCanvasBase;
-class KoShapeControllerInterface;
+#include <QString>
 
+class KoCanvasBase;
+class KoShapeControllerBase;
+
+
+/**
+ * A tool to create shapes with.
+ */
 class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 {
 public:
-    KoCreateShapesTool( KoCanvasBase *canvas, KoShapeControllerInterface *sci );
+    KoCreateShapesTool( KoCanvasBase *canvas);
     virtual ~KoCreateShapesTool() {};
 
     void paint( QPainter &painter, KoViewConverter &converter );
 
-    KoShapeControllerInterface* controller() const { return m_shapeController; }
+    KoShapeControllerBase* controller() const { return m_shapeController; }
+
+    void setShapeController(KoShapeControllerBase *sc) { m_shapeController = sc; }
+
+    void setShapeId(QString id) { m_shapeId = id; }
+    const QString& shapeId() const { return m_shapeId; }
 
 private:
-    KoShapeControllerInterface *m_shapeController;
+    KoShapeControllerBase *m_shapeController;
+    QString m_shapeId;
 };
 
 #endif

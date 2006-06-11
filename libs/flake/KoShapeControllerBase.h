@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,19 +19,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSHAPECONTROLLERINTERFACE_H
-#define KOSHAPECONTROLLERINTERFACE_H
+#ifndef KOSHAPECONTROLLERBASE_H
+#define KOSHAPECONTROLLERBASE_H
+
+#include "KoShape.h"
 
 /**
  * The shape controller is an abstract interface that the applications class
  * that controls the shapes should implement.  This tends to be the document.
  * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
-class KoShapeControllerInterface
-{
+class KoShapeControllerBase {
 public:
-    KoShapeControllerInterface() { }
-    virtual ~KoShapeControllerInterface() { }
+    KoShapeControllerBase() { }
+    virtual ~KoShapeControllerBase() { }
 
     /**
      * Add a shape to the shape controller, allowing it to be seen and saved.
@@ -46,15 +48,6 @@ public:
      * @param shape the shape to remove
      */
     virtual void removeShape( KoShape* shape ) = 0;
-
-    /**
-     * Factory method to create shapes.
-     * The CreateShapesTool will call this one when the user selected the outline for
-     * the position and size of the shape.<br>
-     * The implementor of this interface can choose to create different types of shapes
-     * based on things like which button was pressed to activate the create tool.
-     */
-    virtual KoShape* createShape(const QRectF &outline) const = 0;
 };
 
-#endif // KOSHAPECONTROLLERINTERFACE_H
+#endif

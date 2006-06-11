@@ -9,5 +9,84 @@
  * content, and extend KoShapeContainer for objects that can contain others.
  * <p>KoShape is the base class for all flake objects. Flake objects extend it
  * to allow themselves to be manipulated by the KoTool s. The content of such an
- * object is independent and based on the model of the data this object represents.
+ * object is independent and based on the model of the data this object represents. <br>
+ * If you want to be a supplier of shape objects; create a library with a KoShapeFactory
+ * class and install a .desktop service file with the following content:
+ * <pre>[Desktop Entry]
+Encoding=UTF-8
+Name=My Flake Shapes Plugin
+ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=myflakeshapesplugin
+X-Flake-Version=1</pre></p>
+ * <hr><p>To use Flake in your application you need to have a canvas that is ready for usage
+ * by flake, do this by implementing the KoCanvasBase interface.  Redirect mouse/key events
+ * to the tool and paint events to the shapeManager.<br>
+ * Then you have to setup the KoToolManager (from KOfficeUI):<br>In your KoDocument instance:<pre>
+        KoToolManager::instance()->toolBox()->show();</pre>
+ * And use a KoCanvasView instance with your Canvas.<pre>
+class MyCanvas : public QWidget, public KoCanvasBase {
+    Q_OBJECT
+public:
+    // KoCanvasBase interface methods.
+    void gridSize(double *horizontal, double *vertical) const;
+    bool snapToGrid() const;
+    void addCommand(KCommand *command, bool execute = true);
+    KoShapeManager *shapeManager() const { return m_shapeManager; }
+    void updateCanvas(const QRectF& rc) {
+        QRect clipRect(viewConverter()->normalToView(rc).toRect());
+        clipRect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
+        update(clipRect);
+    }
+    KoTool* tool() { return m_tool; }
+    void setTool(KoTool *tool) { m_tool = tool; }
+    KoViewConverter *viewConverter() { return view()->viewConverter(); }
+    QWidget* canvasWidget() { return this; }
+
+    // event handlers
+    void mouseMoveEvent(QMouseEvent *e) {
+        KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+        m_tool->mouseMoveEvent( &ev );
+    }
+
+    void mousePressEvent(QMouseEvent *e) {
+        KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+        m_tool->mousePressEvent( &ev );
+    }
+
+    void mouseReleaseEvent(QMouseEvent *e) {
+        KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+        m_tool->mouseReleaseEvent( &ev );
+    }
+
+    void keyReleaseEvent (QKeyEvent *e) {
+        m_tool->keyReleaseEvent(e);
+    }
+
+    void KWCanvas::keyPressEvent( QKeyEvent *e ) {
+        m_tool->keyPressEvent(e);
+    }
+
+    void paintEvent(QPaintEvent * ev) {
+        QPainter painter( this );
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setClipRect(ev->rect());
+
+        m_shapeManager->paint( painter, *(viewConverter()), false );
+        m_tool->paint( painter, *m_doc );
+
+        painter.end();
+    }
+
+private:
+    KoTool *m_tool;
+    KoShapeManager *m_shapeManager;
+}; </pre>
+
+And then: <pre>
+    KoCanvasView *canvasController = new KoCanvasView(parentWidget);
+    MyCanvas *canvas = new MyCanvas();
+    canvasController->setCanvas(canvas);
+    KoToolManager::instance()->addControllers(canvasView, m_document);
+    parentLayout.addWidget(canvasController);</pre>
  */

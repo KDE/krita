@@ -19,7 +19,8 @@
 
 #include "KoCreateShapeStrategy.h"
 #include "KoCreateShapesTool.h"
-#include "KoShapeControllerInterface.h"
+#include "KoShapeControllerBase.h"
+#include "KoShapeRegistry.h"
 #include "KoCommand.h"
 #include "KoCanvasBase.h"
 
@@ -30,7 +31,14 @@ KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvas
 }
 
 KCommand* KoCreateShapeStrategy::createCommand() {
-    KoShape *shape = m_tool->controller()->createShape(selectRect());
+    KoShapeFactory *factory = KoShapeRegistry::instance()->get(
+            static_cast<KoCreateShapesTool*>(m_parent)->shapeId());
+    Q_ASSERT(factory);
+    KoShape *shape = factory->createDefaultShape();
+    QRectF rect = selectRect();
+    shape->setPosition(rect.topLeft());
+    shape->resize(rect.size());
+    Q_ASSERT(m_tool->controller() /*controller was set on parent tool*/);
     KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_tool->controller(), shape);
     cmd->execute();
     return cmd;

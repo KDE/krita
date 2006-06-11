@@ -22,7 +22,9 @@
 
 #include <KoToolFactory.h>
 #include <KoCreateShapesToolFactory.h>
+#include <KoCreateShapesTool.h>
 #include <KoInteractionToolFactory.h>
+#include <KoShapeControllerBase.h>
 #include <KoCanvasView.h>
 
 #include "kactioncollection.h"
@@ -111,15 +113,14 @@ void KoToolManager::registerTools(KActionCollection *ac) {
     m_mutex.unlock();
 }
 
-void KoToolManager::addCanvasView(KoCanvasView *view) {
+void KoToolManager::addControllers(KoCanvasView *view, KoShapeControllerBase *sc) {
     if(m_canvases.contains(view))
         return;
     setup();
     m_mutex.lock();
-    kDebug(30004) << "KoToolManager::addCanvasView called, setting up..." << endl;
+    kDebug(30004) << "KoToolManager::addControllers called, setting up..." << endl;
     m_canvases.append(view);
-    //QMap<KoID, KoTool*> toolsMap;
-    //m_allTools.insert(view, toolsMap);
+    m_shapeControllers.insert(view, sc);
     if(m_activeCanvas == 0)
         m_activeCanvas = view;
     if(view->canvas())
@@ -132,6 +133,7 @@ void KoToolManager::addCanvasView(KoCanvasView *view) {
 void KoToolManager::removeCanvasView(KoCanvasView *view) {
     m_mutex.lock();
     m_canvases.removeAll(view);
+    m_shapeControllers.remove(view);
     QMap<QString, KoTool*> toolsMap = m_allTools.value(view);
     foreach(KoTool *tool, toolsMap.values())
         delete tool;
@@ -208,6 +210,10 @@ kDebug(30004) << "KoToolManager::attachCanvas\n";
     QMap<QString, KoTool*> toolsMap;
     foreach(ToolHelper *tool, m_tools)
         toolsMap.insert(tool->id().id(), tool->m_toolFactory->createTool(view->canvas()));
+    KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsMap["createShapesTool"]);
+    Q_ASSERT(createTool); // if this fails; check the ID didn't change
+    createTool->setShapeController(m_shapeControllers[view]);
+
     m_mutex.lock();
     m_allTools.remove(view);
     m_allTools.insert(view, toolsMap);
@@ -250,10 +256,25 @@ void KoToolManager::switchToolTemporaryRequested(const QString &id) {
 
 void KoToolManager::switchBackRequested() {
     if(m_stack.isEmpty()) {
-        kWarning(30004) << "Tool emits a done while it is not temporary, ignoring";
+        // default to changing to the interactionTool
+        switchTool("defaultTool", false);
         return;
     }
     switchTool(m_stack.pop(), false);
+}
+
+KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const {
+    foreach(KoCanvasView *controller, m_canvases) {
+        if(controller->canvas() == canvas) {
+            QMap<QString, KoTool*> tools = m_allTools.value(controller);
+            KoCreateShapesTool *tool =
+                dynamic_cast<KoCreateShapesTool*>(tools.value("createShapesTool"));
+            Q_ASSERT(tool /* ID changed? */);
+            return tool;
+        }
+    }
+    kWarning(30004) << "KoToolManager: can't find the canvas, did you register it?" << endl;
+    return 0;
 }
 
 //   ************ ToolHelper **********

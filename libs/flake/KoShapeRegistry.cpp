@@ -39,7 +39,7 @@ KoShapeRegistry::KoShapeRegistry()
 {
     KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/Shape"),
             QString::fromLatin1("(Type == 'Service') and "
-                "([X-KOffice-Version] == 1)"));
+                "([X-Flake-Version] == 1)"));
 
     KService::List::ConstIterator iter;
 

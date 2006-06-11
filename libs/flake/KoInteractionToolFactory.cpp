@@ -36,7 +36,7 @@ KoTool* KoInteractionToolFactory::createTool(KoCanvasBase *canvas) {
 }
 
 KoID KoInteractionToolFactory::id() {
-    return KoID("Default", i18n("Default"));
+    return KoID("defaultTool", i18n("Default"));
 }
 
 quint32 KoInteractionToolFactory::priority() const {

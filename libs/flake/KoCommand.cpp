@@ -2,7 +2,7 @@
 #include "KoShape.h"
 #include "KoShapeGroup.h"
 #include "KoShapeContainer.h"
-#include "KoShapeControllerInterface.h"
+#include "KoShapeControllerBase.h"
 
 #include <klocale.h>
 
@@ -158,7 +158,7 @@ QString KoUngroupShapesCommand::name () const {
     return i18n( "Ungroup shapes" );
 }
 
-KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerInterface *controller, KoShape *shape )
+KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape )
 : m_controller( controller )
 , m_shape( shape )
 , m_deleteShape( true )
@@ -188,14 +188,14 @@ QString KoShapeCreateCommand::name () const {
     return i18n( "Create shape" );
 }
 
-KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerInterface *controller, KoShape *shape )
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, KoShape *shape )
 : m_controller( controller )
 , m_deleteShapes( false )
 {
     m_shapes.append( shape );
 }
 
-KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerInterface *controller, const KoSelectionSet &shapes )
+KoShapeDeleteCommand::KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes )
 : m_controller( controller )
 , m_deleteShapes( false )
 {

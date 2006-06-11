@@ -23,6 +23,7 @@
 
 #include <KoID.h>
 #include <KoTool.h>
+#include <KoCreateShapesTool.h>
 #include <koffice_export.h>
 
 #include <QMap>
@@ -36,6 +37,7 @@ class QAbstractButton;
 class KoToolFactory;
 class KoCanvasView;
 class KoCanvasBase;
+class KoShapeControllerBase;
 class KoTool;
 
 /**
@@ -62,8 +64,10 @@ public:
 
     QWidget *toolBox(); // TODO alter from QWidget to KoToolBox
     void registerTools(KActionCollection *ac);
-    void addCanvasView(KoCanvasView *view);
+    void addControllers(KoCanvasView *view, KoShapeControllerBase *sc);
     void removeCanvasView(KoCanvasView *view);
+
+    KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
 private:
     KoToolManager();
@@ -89,6 +93,7 @@ private:
     QWidget *m_toolBox;
 
     QList<ToolHelper*> m_tools;
+    QMap<KoCanvasView*, KoShapeControllerBase*> m_shapeControllers;
     QList<KoCanvasView*> m_canvases;
     KoCanvasView *m_activeCanvas;
     KoTool *m_activeTool, *m_dummyTool;

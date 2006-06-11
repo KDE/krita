@@ -100,7 +100,7 @@ public: // Events
 signals:
 
     void sigActivateTool( const QString &id );
-    void sigActivateTemporary(const QString &);
+    void sigActivateTemporary(const QString &id);
     void sigDone();
 
 

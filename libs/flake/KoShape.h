@@ -425,7 +425,7 @@ public:
      * into account the rotation of the object so distanceX really will be the resulting
      * horizontal distance.
      * @param distanceX the horizontal distance to move
-     * @param distanceX the vertical distance to move
+     * @param distanceY the vertical distance to move
      */
     void moveBy(double distanceX, double distanceY);
 

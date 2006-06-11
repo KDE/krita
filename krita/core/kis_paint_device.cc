@@ -38,6 +38,7 @@
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
+#include "kis_random_accessor.h"
 #include "kis_profile.h"
 #include "kis_color.h"
 #include "kis_integer_maths.h"
@@ -990,6 +991,14 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(Q_INT32 x, Q_INT32 y,
         return KisVLineIteratorPixel(this, m_datamanager, NULL, x, y, h, m_x, m_y, writable);
 
 }
+
+KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(Q_INT32 x, Q_INT32 y, bool writable) {
+    if(hasSelection())
+        return KisRandomAccessorPixel(m_datamanager, m_selection->m_datamanager, x, y, m_x, m_y, writable);
+    else
+        return KisRandomAccessorPixel(m_datamanager, NULL, x, y, m_x, m_y, writable);
+}
+
 
 void KisPaintDevice::emitSelectionChanged()
 {

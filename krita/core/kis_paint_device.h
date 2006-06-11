@@ -52,6 +52,7 @@ class KisHLineIteratorPixel;
 class KisImage;
 class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
+class KisRandomAccessorPixel;
 class KisUndoAdapter;
 class KisFilter;
 class KisDataManager;
@@ -437,7 +438,14 @@ public:
      */
     KisVLineIteratorPixel createVLineIterator(Q_INT32 x, Q_INT32 y, Q_INT32 h, bool writable);
 
-
+    /**
+     * This function creates a random accessor which allow to randomly access any pixels on
+     * the paint device.
+     * <b>Note:</b> random access is way slower than iterators, allways use iterators whenever
+     * you can
+     */
+    KisRandomAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y, bool writable);
+    
     /** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
     KisSelectionSP selection();
 

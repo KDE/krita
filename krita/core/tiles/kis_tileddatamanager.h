@@ -34,6 +34,7 @@ class KisDataManager;
 typedef KSharedPtr<KisDataManager> KisDataManagerSP;
 
 class KisTiledIterator;
+class KisTiledRandomAccessor;
 class KoStore;
 
 class KisTileDataWrapper : public KShared {
@@ -76,6 +77,7 @@ protected:
     // Allow the baseclass of iterators acces to the interior
     // derived iterator classes must go through KisTiledIterator
     friend class KisTiledIterator;
+    friend class KisTiledRandomAccessor;
 
 protected:
 

@@ -106,4 +106,4 @@ add_subdirectory( cmake )
 message( STATUS "Re-add kexi when we will port them")
 
 
-
+ADD_CUSTOM_TARGET(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

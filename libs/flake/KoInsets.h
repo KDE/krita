@@ -40,7 +40,10 @@ public:
         this->bottom = bottom;
         this->right = right;
     }
-    double top, bottom, left, right;
+    double top;     ///< Top inset
+    double bottom;  ///< Bottom inset
+    double left;    ///< Left inset
+    double right;   ///< Right inset
 };
 
 #endif

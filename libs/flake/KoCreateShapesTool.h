@@ -38,17 +38,45 @@ class KoShapeControllerBase;
 class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 {
 public:
+    /**
+     * Create a new tool; typically not called by applications, only by the KoToolManager
+     * @param canvas the canvas this tool works for.
+     */
     KoCreateShapesTool( KoCanvasBase *canvas);
+    /// destructor
     virtual ~KoCreateShapesTool() {};
     void mouseReleaseEvent( KoPointerEvent *event );
 
     void paint( QPainter &painter, KoViewConverter &converter );
 
+    /**
+     * Returns the shape Controller that is registred to hold the shapes this tool creates.
+     * @return the shape controller.
+     */
     KoShapeControllerBase* controller() const { return m_shapeController; }
 
+    /**
+     * Set the shape controller that this tool adds its created shapes to.
+     * This tool will create a shape after user input and that shape has to be
+     * registred to the hosting application.  We add/remove the shape via the
+     * KoShapeControllerBase interface.<br>
+     * Note that this tool will create a command that can be used for undo/redo.
+     * The undo will actually call the remove.
+     * @param sc the controller that will be used to add/remove the created shape.
+     */
     void setShapeController(KoShapeControllerBase *sc) { m_shapeController = sc; }
 
+    /**
+     * Each shape-type has an Id; as found in KoShapeFactory::id().id(), to choose which
+     * shape this tool should actually create; set the id before the user starts to
+     * create the new shape.
+     * @param id the Id part from a KoID of the to be generated shape
+     */
     void setShapeId(QString id) { m_shapeId = id; }
+    /**
+     * return the shape Id that is to be created.
+     * @return the shape Id that is to be created.
+     */
     const QString& shapeId() const { return m_shapeId; }
 
 private:

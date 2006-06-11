@@ -25,9 +25,12 @@
 
 #include <koffice_export.h>
 
+/// The factory for the KoCreateShapesTool
 class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {
 public:
+    /// Constructor
     KoCreateShapesToolFactory();
+    /// Destructor
     ~KoCreateShapesToolFactory();
 
     KoTool* createTool(KoCanvasBase *canvas);

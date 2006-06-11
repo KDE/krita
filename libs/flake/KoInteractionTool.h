@@ -52,23 +52,6 @@ public:
     KoInteractionTool( KoCanvasBase *canvas );
     virtual ~KoInteractionTool();
 
-
-public: // Identification
-
-    virtual quint32 priority()
-    {
-        return 0;
-    }
-
-    virtual QString quickHelp()
-    {
-        return  QString( "" );
-    }
-
-    virtual void setup(KActionCollection *ac) {
-        Q_UNUSED(ac);
-    }
-
 public:
 
     virtual bool wantsAutoScroll();
@@ -105,7 +88,7 @@ signals:
 
 
 protected:
-    KoInteractionStrategy *m_currentStrategy;
+    KoInteractionStrategy *m_currentStrategy; ///< the strategy that is 'in progress'
 
 private:
     void recalcSelectionBox();

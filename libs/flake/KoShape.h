@@ -430,7 +430,7 @@ public:
     void moveBy(double distanceX, double distanceY);
 
 protected:
-    QMatrix m_invMatrix;
+    QMatrix m_invMatrix; ///< The inverted matrix; for convenience
     QBrush m_backgroundBrush; ///< Stands for the background color / fill etc.
     KoShapeBorderModel *m_border; ///< points to a border, or 0 if there is no border
 

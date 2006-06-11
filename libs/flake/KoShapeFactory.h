@@ -50,6 +50,7 @@ struct KoShapeTemplate {
 class KoShapeFactory {
 public:
 
+    /// Factory for shapes
     KoShapeFactory() { m_optionWidget = 0; }
     virtual ~KoShapeFactory() {}
 

@@ -23,9 +23,11 @@
 #include "KoShape.h"
 #include "KoShapeFactory.h"
 
+/// Factory for Rectangle shapes
 class KoRectangleShapeFactory : public KoShapeFactory
 {
 public:
+    /// constructor
     KoRectangleShapeFactory();
     KoShape * createDefaultShape();
     KoShape * createShape(KoProperties * params) const;

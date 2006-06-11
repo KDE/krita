@@ -25,8 +25,10 @@
 
 #include <koffice_export.h>
 
+/// Factory for the KoInteractionTool
 class FLAKE_EXPORT KoInteractionToolFactory : public KoToolFactory {
 public:
+    /// constructor
     KoInteractionToolFactory();
     ~KoInteractionToolFactory();
 

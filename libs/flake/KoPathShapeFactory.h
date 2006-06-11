@@ -24,9 +24,11 @@
 #include "KoShape.h"
 #include "KoShapeFactory.h"
 
+/// Factory for path shapes
 class KoPathShapeFactory : public KoShapeFactory
 {
 public:
+    /// constructor
     KoPathShapeFactory();
     KoShape * createDefaultShape();
     KoShape * createShape(KoProperties * params) const;
@@ -34,5 +36,4 @@ public:
 };
 
 
-#endif /* KOPATHGFXOBJ_H */
-
+#endif

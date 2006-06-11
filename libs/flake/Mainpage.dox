@@ -90,3 +90,5 @@ And then: <pre>
     KoToolManager::instance()->addControllers(canvasView, m_document);
     parentLayout.addWidget(canvasController);</pre>
  */
+
+EXCLUDE=tests

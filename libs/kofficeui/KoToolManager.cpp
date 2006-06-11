@@ -174,10 +174,10 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
         m_activeTool->deactivate();
         disconnect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
                 this, SLOT(updateCursor(QCursor)));
-        disconnect(m_activeTool, SIGNAL(sigActivateTool(const QString &id)),
-                this, SLOT(switchToolRequested(const QString &id)));
-        disconnect(m_activeTool, SIGNAL(sigActivateTemporary(const QString &id)),
-                this, SLOT(switchToolTemporaryRequested(const QString &id)));
+        disconnect(m_activeTool, SIGNAL(sigActivateTool(const QString &)),
+                this, SLOT(switchToolRequested(const QString &)));
+        disconnect(m_activeTool, SIGNAL(sigActivateTemporary(const QString &)),
+                this, SLOT(switchToolTemporaryRequested(const QString &)));
         disconnect(m_activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
     }
     if(m_activeTool && temporary)
@@ -185,10 +185,10 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     m_activeTool = tool;
     connect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
             this, SLOT(updateCursor(QCursor)));
-    connect(m_activeTool, SIGNAL(sigActivateTool(const QString &id)),
-            this, SLOT(switchToolRequested(const QString &id)));
-    connect(m_activeTool, SIGNAL(sigActivateTemporary(const QString &id)),
-            this, SLOT(switchToolTemporaryRequested(const QString &id)));
+    connect(m_activeTool, SIGNAL(sigActivateTool(const QString &)),
+            this, SLOT(switchToolRequested(const QString &)));
+    connect(m_activeTool, SIGNAL(sigActivateTemporary(const QString &)),
+            this, SLOT(switchToolTemporaryRequested(const QString &)));
     connect(m_activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
 
     // and set it.

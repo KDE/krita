@@ -1,19 +1,20 @@
 /*
  * Copyright (c) 2006 Casper Boemann (cbr@boemann.dk)
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
 */
 
 #include <kselector.h>
@@ -144,7 +145,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, const char *name) : super(
     m_aIn->setSingleStep(1);
     m_aIn->setFixedSize(40, 18);
     m_aIn->setFocusPolicy( Qt::ClickFocus );
-    m_aIn->setToolTip( i18n( "a" ) );
+    m_aIn->setToolTip( i18n( "Green to magenta*" ) );
 
     m_bIn = new QSpinBox(this);
     m_bIn->setMinimum(0);
@@ -152,9 +153,9 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, const char *name) : super(
     m_bIn->setSingleStep(1);
     m_bIn->setFixedSize(40, 18);
     m_bIn->setFocusPolicy( Qt::ClickFocus );
-    m_bIn->setToolTip( i18n( "b" ) );
+    m_bIn->setToolTip( i18n( "Blue to yellow" ) );
 
-    mGrid->setSpacing(2);
+    mGrid->setSpacing(0);
     mGrid->setMargin(0);
 
     mGrid->addWidget(m_colorwheel, 0, 0, -1, 1, Qt::AlignTop);

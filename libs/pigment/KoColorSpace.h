@@ -1,20 +1,21 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
 #ifndef KOCOLORSPACE_H
 #define KOCOLORSPACE_H
 
@@ -54,20 +55,40 @@ enum ColorSpaceIndependence {
 };
 
 /**
- * A KoColorSpace is the definition of a certain color model.
- * This is the definition of the public API for
- * colormodels.
- * Each instance of this class represents a prober color space
- * as subclasses attach a KoColorProfile at runtime
+ * A KoColorSpace is the definition of a certain color space.
+ * 
+ * A color model and a color space are two releated concepts. A color
+ * model is more general in that it describes the channels involved and
+ * how they in broad terms combine to describe a color. Examples are
+ * RGB, HSV, CMYK.
+ *
+ * A color space is more specific in that it also describes exactly how
+ * the channels are combined. So for each color model there can be a
+ * number of specific color spaces. So RGB is the model and sRGB,
+ * adobeRGB, etc are colorspaces.
+ * 
+ * In Pigment KoColorSpace act as both a color model and a color space.
+ * You can think of the class definition as the color model, but the
+ * instance of the class as representing a colorspace.
+ *
+ * A third concept is the profile represented by KoColorProfile. It
+ * represents the info needed to specialize a color model into a color
+ * space.
+ *
+ * KoColorSpace is an abstract class serving as an interface.
+ *
+ * Subclasses implement actual color spaces
+ * Some subclasses implement only some parts and are named Traits
+ *
  */
 class PIGMENT_EXPORT KoColorSpace {
 
 protected:
-    /// Only for use by classes that serve as baseclass fro real colorspaces
+    /// Only for use by classes that serve as baseclass for real color spaces
     KoColorSpace() {};
 
 public:
-    /// Should be called by real colorspaces
+    /// Should be called by real color spaces
     KoColorSpace(const KoID &id, KoColorSpaceFactoryRegistry * parent);
     virtual ~KoColorSpace();
 

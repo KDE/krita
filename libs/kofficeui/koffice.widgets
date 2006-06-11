@@ -1,13 +1,7 @@
 [Global]
 PluginName=KOfficeWidgets
 
-[KoBuggyUnitDoubleSpinBox]
-ToolTip=KOffice Spin box for double precision numbers with unit display
-WhatsThis=KOffice Spin box for double precision numbers with unit display
-IncludeFile=koUnitWidgets.h
-Group=Input (KOffice)
-
-[KoUnitDoubleSpinBox2]
+[KoUnitDoubleSpinBox]
 ToolTip=KOffice Spin box for double precision numbers with unit display
 WhatsThis=KOffice Spin box for double precision numbers with unit display
 IncludeFile=koUnitWidgets.h

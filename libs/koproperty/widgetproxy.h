@@ -41,6 +41,7 @@ class KOPROPERTY_EXPORT WidgetProxy : public QWidget
 	public:
 		WidgetProxy(QWidget *parent, const char *name=0);
 		WidgetProxy();
+        virtual ~WidgetProxy();
 
 		void setPropertyType(int propertyType);
 		int propertyType() const;

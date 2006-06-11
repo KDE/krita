@@ -38,7 +38,6 @@ class KoMainWindow;
 class KMainWindow;
 class KoViewPrivate;
 class KoViewChild;
-class KoFrame;
 class KStatusBar;
 class KInstance;
 class KPrinter;
@@ -134,7 +133,7 @@ public:
    * and a right and bottom border is used to display scrollbars. If the view
    * becomes inactive, then this stuff is not displayed anymore.
    *
-   * @ref KoFrame uses this border information. If an embedded document becomes active
+   * KoFrame uses this border information. If an embedded document becomes active
    * then it is resized so that it has enough space to display the borders and to
    * display the same content as before the activation.
    * So if for example all of your borders are 20 pixels, then activating the embedded

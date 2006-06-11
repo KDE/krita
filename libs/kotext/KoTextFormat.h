@@ -356,7 +356,7 @@ public:
     /// Load a text format from OASIS XML
     void load( KoOasisContext& context );
     /// Save a text format to OASIS XML
-    /// Only saves what differs from @refFormat, if set.
+    /// Only saves what differs from refFormat, if set.
     void save( KoGenStyle& gs, KoSavingContext& context, KoTextFormat * refFormat = 0 ) const;
 
 #ifndef NDEBUG

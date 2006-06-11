@@ -59,7 +59,7 @@ public:
 
 static const int delayAfterMarked = 10;
 
-KoBgSpellCheck::KoBgSpellCheck( const Broker::Ptr& broker, QObject *parent,
+KoBgSpellCheck::KoBgSpellCheck( const KSpell2::Broker::Ptr& broker, QObject *parent,
                                 const char *name )
     : QObject( parent, name )
 {

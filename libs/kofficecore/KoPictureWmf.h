@@ -30,7 +30,7 @@ class QPainter;
 class QSize;
 
 /**
- * \file koPictureWmf.h
+ * \file KoPictureWmf.h
  * \todo fix documentation
  */
 

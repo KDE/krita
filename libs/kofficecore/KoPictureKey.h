@@ -24,7 +24,7 @@
 #include <QDateTime>
 #include <koffice_export.h>
 /**
- * \file koPictureKey.h
+ * \file KoPictureKey.h
  * \todo correct documentation (for example: sed "s/image/picture/g")
  */
 

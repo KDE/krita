@@ -78,11 +78,8 @@ public:
      * @param parentWidget the parent widget, in case we create a wrapper widget
      *        (in single view mode).
      *        Usually the first argument passed by KParts::Factory::createPart.
-     * @param widgetName name of the widget.
      * @param parent may be another KoDocument, or anything else.
      *        Usually the third argument of KParts::Factory::createPart.
-     * @param name is used to identify this document via DCOP so you may want to
-     *        pass a meaningful name here which matches the pattern [A-Za-z_][A-Za-z_0-9]*.
      * @param singleViewMode determines whether the document may only have one view. In this case
      *        the @p parent must be a QWidget derived class. KoDocument will then create a wrapper widget
      *        (KoViewWrapperWidget) which is a child of @p parentWidget.
@@ -963,13 +960,13 @@ signals:
 protected slots:
     /**
      * This slot loads an existing file and deletes the start up widget.
-     * @param file the file to load (including path)
+     * @param url the file to load
      * @since 1.5
      */
     virtual void openExistingFile( const KUrl& url );
     /**
      * This slot loads a template and deletes the start up widget.
-     * @param file the template to load
+     * @param url the template to load
      * @since 1.5
      */
     virtual void openTemplate( const KUrl& url );

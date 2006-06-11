@@ -49,7 +49,7 @@ public:
     KoTextDocument *lastTxtDocument;
 };
 
-KoSpell::KoSpell( const Broker::Ptr& broker,  QObject *parent,
+KoSpell::KoSpell( const KSpell2::Broker::Ptr& broker,  QObject *parent,
                   const char* /*name*/ )
     : BackgroundChecker( broker, parent )
 {

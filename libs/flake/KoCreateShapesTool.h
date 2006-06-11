@@ -40,6 +40,7 @@ class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 public:
     KoCreateShapesTool( KoCanvasBase *canvas);
     virtual ~KoCreateShapesTool() {};
+    void mouseReleaseEvent( KoPointerEvent *event );
 
     void paint( QPainter &painter, KoViewConverter &converter );
 

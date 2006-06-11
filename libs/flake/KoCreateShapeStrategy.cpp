@@ -37,7 +37,12 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     KoShape *shape = factory->createDefaultShape();
     QRectF rect = selectRect();
     shape->setPosition(rect.topLeft());
-    shape->resize(rect.size());
+    QSizeF newSize = rect.size();
+    if(newSize.width() < 1.0 || newSize.height() < 1.0) { // if user clicked instead of dragged
+        newSize.setWidth(100);
+        newSize.setHeight(100);
+    }
+    shape->resize(newSize);
     Q_ASSERT(m_tool->controller() /*controller was set on parent tool*/);
     KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_tool->controller(), shape);
     cmd->execute();

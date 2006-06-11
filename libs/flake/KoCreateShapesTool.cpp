@@ -38,3 +38,8 @@ void KoCreateShapesTool::paint( QPainter &painter, KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
 }
+
+void KoCreateShapesTool::mouseReleaseEvent( KoPointerEvent *event ) {
+    KoInteractionTool::mouseReleaseEvent(event);
+    emit KoTool::sigDone();
+}

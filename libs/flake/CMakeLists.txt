@@ -41,5 +41,5 @@ set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SO
 
 
 install_targets(${LIB_INSTALL_DIR} flake )
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES flaketool.desktop )
+install_files( ${SERVICETYPES_INSTALL_DIR} FILES flaketool.desktop flakeshape.desktop)
 

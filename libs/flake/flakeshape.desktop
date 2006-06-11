@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Shape definition
+Type=ServiceType
+X-KDE-ServiceType=KOffice/Shape
+Comment=Definition of a flake shape object
+[PropertyDef::X-Flake-Version]
+Type=int

@@ -246,7 +246,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                         pixel.push_back( *((float*) data) );
                         break;
                     default:
-                        kDebug(41011) << i18n("An error has occurred in %1").arg("getPixel") << endl;
+                        kDebug(41011) << i18n("An error has occurred in %1","getPixel") << endl;
                         kDebug(41011) << i18n("unsupported data format in scripts") << endl;
                         break;
                 }
@@ -274,7 +274,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                         *((float*) data) = pixel[i].toDouble();
                         break;
                     default:
-                        kDebug(41011) << i18n("An error has occurred in %1").arg("setPixel") << endl;
+                        kDebug(41011) << i18n("An error has occurred in %1","setPixel") << endl;
                         kDebug(41011) << i18n("unsupported data format in scripts") << endl;
                         break;
                 }

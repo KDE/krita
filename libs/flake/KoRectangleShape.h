@@ -34,6 +34,8 @@ class QPainter;
 class FLAKE_EXPORT KoRectangleShape : public KoShape
 {
 public:
+    enum RectangleShape { SHAPEID = 43751 };
+
     KoRectangleShape();
     void paint(QPainter &painter, KoViewConverter &converter);
 };

@@ -1,7 +1,6 @@
-/*
- * KoShapeFactory.h -- Part of KOffice
- *
+/* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
+ * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,9 +25,11 @@
 #include <QPixmap>
 #include <QList>
 
-#include <KoProperties.h>
+//#include <KoProperties.h>
 #include <KoID.h>
-#include "KoShape.h"
+
+class KoShape;
+class KoProperties;
 
 /**
  * Contains a KoProperties object that describes the settings of a
@@ -51,36 +52,35 @@ class KoShapeFactory {
 public:
 
     /// Factory for shapes
-    KoShapeFactory() { m_optionWidget = 0; }
+    KoShapeFactory(int id, const QString name);
     virtual ~KoShapeFactory() {}
-
-    virtual KoID id() { return m_id; }
 
     virtual KoShape * createDefaultShape() = 0;
     virtual KoShape * createShape(KoProperties * params) const = 0;
     virtual KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const = 0;
+    virtual QWidget * optionWidget() const = 0;
 
-    virtual QWidget * optionWidget() const { return m_optionWidget; }
-
+    const KoID id() const;
+    int shapeId() const;
     const QList<KoProperties*> templates() const { return m_templates; }
-    const QString & toolTip() const { return m_tooltip; }
-    const QPixmap & icon() const { return m_icon; }
+    const QString & toolTip() const;
+    const QPixmap & icon() const;
+    const QString& name() const;
 
 protected:
 
-    void addTemplate(KoProperties * params) { m_templates.append(params); }
-    void setId(KoID id) { m_id = id; }
-    void setToolTip(const QString & tooltip) { m_tooltip = tooltip; }
-    void setIcon(const QPixmap & icon) { m_icon = icon; }
-    void setOptionWidget(QWidget * widget) { m_optionWidget = widget; }
+    void addTemplate(KoProperties * params);
+    void setToolTip(const QString & tooltip);
+    void setIcon(const QPixmap & icon);
+    void setOptionWidget(QWidget * widget);
 
 private:
 
     QList<KoProperties*> m_templates;
     QString m_tooltip;
     QPixmap m_icon;
-    QWidget * m_optionWidget;
-    KoID m_id;
+    const QString m_name;
+    const int m_id;
 };
 
 #endif // _KO_SHAPE_FACTORY_

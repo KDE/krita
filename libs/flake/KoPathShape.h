@@ -34,6 +34,7 @@
 class FLAKE_EXPORT KoPathShape : public KoShape
 {
 public:
+    enum PathShape { SHAPEID = 54291 };
     KoPathShape();
 
     virtual void paint( QPainter &painter, KoViewConverter &converter );

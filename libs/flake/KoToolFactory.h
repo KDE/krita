@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 #include <QObject>
-#include <QObject>
+#include <QPixmap>
 
 /**
  * A factory for KoTool objects.
@@ -38,27 +38,46 @@ class FLAKE_EXPORT KoToolFactory : public QObject {
     Q_OBJECT
 
 public:
-    /// constructor
-    KoToolFactory();
+    KoToolFactory(int id, const QString name);
     virtual ~KoToolFactory();
 
     /// instanciate a new tool
     virtual KoTool * createTool(KoCanvasBase *canvas) = 0;
     /**
-     * return the ID for the tool this factory is associated with.
-     * @return the ID for the tool this factory is associated with.
+     * return the id for the tool this factory is associated with.
+     * @return the id for the tool this factory is associated with.
      */
-    virtual KoID id() = 0;
+    int toolId() const;
+    const QString& name() const;
+    const KoID id() const;
     /// The priority of this tool in its section in the toolbox
-    virtual quint32 priority() const = 0;
+    int priority() const;
     /// the type of tool, used to group tools in the toolbox
-    virtual const QString& toolType() const = 0;
+    const QString& toolType() const;
     /// return a translated tooltip Text
-    virtual const QString& tooltipText() const = 0;
+    const QString& toolTip() const;
     /// return an icon for this tool
-    virtual const QPixmap& icon() const = 0;
+    const QPixmap& icon() const;
     /// The shape ID the tool is associated with, or 0 when the tool is a generic tool
-    virtual KoID activationShapeId() const = 0;
+    int activationShapeId() const;
+
+protected:
+    /**
+     * Set the id of this tool.
+     * @param id the combination of a internal ID and a (translated) name 
+     */
+    void setToolTip(const QString & tooltip);
+    void setToolType(const QString & toolType);
+    void setIcon(const QPixmap & icon);
+    void setPriority(int newPriority);
+
+private:
+    QString m_toolType;
+    QString m_tooltip;
+    QPixmap m_icon;
+    const QString m_name;
+    const int m_id;
+    int m_priority, m_activationId;
 };
 
 #endif

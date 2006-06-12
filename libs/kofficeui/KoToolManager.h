@@ -75,15 +75,15 @@ private:
     KoToolManager operator=(const KoToolManager&);
     void setup();
     void switchTool(KoTool *tool, bool temporary);
-    void switchTool(const QString &id, bool temporary);
+    void switchTool(int id, bool temporary);
 
 private slots:
     void toolActivated(ToolHelper *tool);
     void detachCanvas(KoCanvasController* controller);
     void attachCanvas(KoCanvasController* controller);
     void updateCursor(QCursor cursor);
-    void switchToolRequested(const QString &id);
-    void switchToolTemporaryRequested(const QString &id);
+    void switchToolRequested(int id);
+    void switchToolTemporaryRequested(int id);
     void switchBackRequested();
 
 private:
@@ -102,7 +102,7 @@ private:
      * and m_toolBox members. */
     QMutex m_mutex;
 
-    QMap<KoCanvasController*, QMap<QString, KoTool*> > m_allTools;
+    QMap<KoCanvasController*, QMap<int, KoTool*> > m_allTools;
     QStack<KoTool*> m_stack;
 };
 
@@ -111,14 +111,14 @@ class ToolHelper : public QObject {
 public:
     ToolHelper(KoToolFactory *tool) { m_toolFactory = tool; }
     QAbstractButton *createButton(QWidget *parent);
-
-    KoID id() const;
+    int id() const;
+    const QString& name() const;
+    KoTool *createTool(KoCanvasBase *canvas) const;
 
 signals:
     void toolActivated(ToolHelper *tool);
 
 private slots:
-    friend class KoToolManager;
     void buttonPressed();
 
 private:

@@ -44,6 +44,8 @@ class KoInteractionStrategy;
 class FLAKE_EXPORT KoInteractionTool : public KoTool
 {
 public:
+    enum InteractionToolenum { TOOLID = 20766 };
+
     /**
      * Constructor for basic interaction tool where user actions are translated
      * and handled by interaction strategies of type KoInteractionStrategy.

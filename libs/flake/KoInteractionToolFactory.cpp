@@ -25,7 +25,12 @@
 
 #include <QPixmap>
 
-KoInteractionToolFactory::KoInteractionToolFactory() {
+KoInteractionToolFactory::KoInteractionToolFactory()
+: KoToolFactory(KoInteractionTool::TOOLID, i18n("Default Tool"))
+{
+    setToolTip(i18n("Default tool"));
+    setToolType("main");
+    setPriority(0);
 }
 
 KoInteractionToolFactory::~KoInteractionToolFactory() {
@@ -33,28 +38,4 @@ KoInteractionToolFactory::~KoInteractionToolFactory() {
 
 KoTool* KoInteractionToolFactory::createTool(KoCanvasBase *canvas) {
     return new KoInteractionTool(canvas);
-}
-
-KoID KoInteractionToolFactory::id() {
-    return KoID("defaultTool", i18n("Default"));
-}
-
-quint32 KoInteractionToolFactory::priority() const {
-    return 0;
-}
-
-const QString& KoInteractionToolFactory::toolType() const {
-    return QString("main");
-}
-
-const QString& KoInteractionToolFactory::tooltipText() const {
-    return i18n("Default tool");
-}
-
-KoID KoInteractionToolFactory::activationShapeId() const {
-    return KoID("defaultTool", i18n("Default Tool"));
-}
-
-const QPixmap& KoInteractionToolFactory::icon() const {
-    return QPixmap();
 }

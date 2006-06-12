@@ -63,7 +63,7 @@ public:
     virtual QWidget * optionWidget() const { return m_optionWidget; }
 
     const QList<KoProperties*> templates() const { return m_templates; }
-    const QString & tooltip() const { return m_tooltip; }
+    const QString & toolTip() const { return m_tooltip; }
     const QPixmap & icon() const { return m_icon; }
 
 protected:

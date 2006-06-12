@@ -38,6 +38,8 @@ class KoShapeControllerBase;
 class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 {
 public:
+    enum createShapesToolenum { TOOLID = 58297 };
+
     /**
      * Create a new tool; typically not called by applications, only by the KoToolManager
      * @param canvas the canvas this tool works for.

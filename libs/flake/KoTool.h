@@ -165,7 +165,7 @@ signals:
      *
      * @param id the identification of the desired tool
      */
-    void sigActivateTool( const QString &id );
+    void sigActivateTool(int id );
 
     /**
      * Emitted when this tool wants itself to temporarily be replaced by another tool.
@@ -174,7 +174,7 @@ signals:
      * replaced by a colourpicker.
      * @param id the identification of the desired tool
      */
-    void sigActivateTemporary(const QString &id);
+    void sigActivateTemporary(int id);
 
     /**
      * Emitted when the tool has been temporarily activated and wants

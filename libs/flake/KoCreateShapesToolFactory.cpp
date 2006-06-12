@@ -28,7 +28,13 @@
 #include <QRectF>
 #include <QPixmap>
 
-KoCreateShapesToolFactory::KoCreateShapesToolFactory() {
+KoCreateShapesToolFactory::KoCreateShapesToolFactory()
+: KoToolFactory(KoCreateShapesTool::TOOLID, i18n("Create Shapes"))
+{
+    setToolTip(i18n("Create object"));
+    setToolType("main");
+    setPriority(1);
+    // TODO create pixmap
 }
 
 KoCreateShapesToolFactory::~KoCreateShapesToolFactory() {
@@ -36,28 +42,4 @@ KoCreateShapesToolFactory::~KoCreateShapesToolFactory() {
 
 KoTool* KoCreateShapesToolFactory::createTool(KoCanvasBase *canvas) {
     return new KoCreateShapesTool(canvas);
-}
-
-KoID KoCreateShapesToolFactory::id() {
-    return KoID("createShapesTool", i18n("Create Shapes"));
-}
-
-quint32 KoCreateShapesToolFactory::priority() const {
-    return 1;
-}
-
-const QString& KoCreateShapesToolFactory::toolType() const {
-    return QString("main");
-}
-
-const QString& KoCreateShapesToolFactory::tooltipText() const {
-    return i18n("Create object");
-}
-
-KoID KoCreateShapesToolFactory::activationShapeId() const {
-    return KoID("createTool", i18n("Create object"));
-}
-
-const QPixmap& KoCreateShapesToolFactory::icon() const {
-    return QPixmap();
 }

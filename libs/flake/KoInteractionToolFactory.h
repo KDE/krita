@@ -33,11 +33,5 @@ public:
     ~KoInteractionToolFactory();
 
     KoTool* createTool(KoCanvasBase *canvas);
-    KoID id();
-    quint32 priority() const;
-    const QString& toolType() const;
-    const QString& tooltipText() const;
-    KoID activationShapeId() const;
-    const QPixmap& icon() const;
 };
 #endif

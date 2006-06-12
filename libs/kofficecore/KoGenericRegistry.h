@@ -97,6 +97,15 @@ public:
     }
 
     /**
+     * Get a single entry based on a integer based id.
+     * @param id the integer ID as used by Tools and Shapes.
+     */
+    T get(int id) const
+    {
+        return get(KoID(QString::number(id), ""));
+    }
+
+    /**
      * Get a single entry based on the identifying part of KoID, not the
      * the descriptive part.
      */

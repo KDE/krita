@@ -40,30 +40,37 @@ KoShapeRegistry::KoShapeRegistry()
     KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/Shape"),
             QString::fromLatin1("(Type == 'Service') and "
                 "([X-Flake-Version] == 1)"));
+    kDebug(30008) << "KoShapeRegistry searching for plugins, " << offers.count() << " found\n";
 
-    KService::List::ConstIterator iter;
-
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
-    {
-        KService::Ptr service = *iter;
+    foreach(KService::Ptr service, offers) {
         int errCode = 0;
-
-        // Create a plugin: the plugin will register the necessary
-        // factory classes with us.
-        KParts::Plugin* plugin =
-            KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, QStringList(), &errCode);
-        if ( plugin )
-            kDebug() << "found plugin " << service->property("Name").toString() << "\n";
-        else {
-            kDebug() << "found plugin " << service->property("Name").toString() << ", " << errCode << "\n";
-            if( errCode == KParts::ComponentFactory::ErrNoLibrary)
-            {
-                kWarning(41006) << " Error loading plugin was : ErrNoLibrary " << KLibLoader::self()->lastErrorMessage() << endl;
-            }
+        KoShapeFactory* plugin =
+            KParts::ComponentFactory::createInstanceFromService<KoShapeFactory>(
+                    service, this, QStringList(), &errCode );
+        if ( plugin ) {
+            kDebug(30008) <<"found plugin '"<< service->property("Name").toString() << "'\n";
+            add(plugin);
         }
-
+        else {
+            QString err;
+            switch (errCode) {
+                case KParts::ComponentFactory::ErrNoServiceFound:
+                    err = "No Service Found"; break;
+                case KParts::ComponentFactory::ErrServiceProvidesNoLibrary:
+                    err = "Service provides no library"; break;
+                case KParts::ComponentFactory::ErrNoLibrary:
+                    err = KLibLoader::self()->lastErrorMessage(); break;
+                case KParts::ComponentFactory::ErrNoFactory:
+                    err = "No factory found"; break;
+                case KParts::ComponentFactory::ErrNoComponent:
+                    err = "No Component"; break;
+                default:
+                    err = "Unknown error";
+            }
+            kWarning(30008) <<"loading plugin '" << service->property("Name").toString() <<
+                "' failed, "<< err << "("<< errCode << ")\n";
+        }
     }
-
     // Also add our hard-coded dumb test shapes
     add( new KoRectangleShapeFactory() );
     add( new KoPathShapeFactory() );

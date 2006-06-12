@@ -30,6 +30,7 @@ class KoPathShapeFactory : public KoShapeFactory
 public:
     /// constructor
     KoPathShapeFactory();
+    ~KoPathShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape(KoProperties * params) const;
     KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const;

@@ -51,8 +51,6 @@ private:
 
 private:
     static KoShapeRegistry *m_singleton;
-
-    
 };
 
 #endif // FLAKESHAPES_H

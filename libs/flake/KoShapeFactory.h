@@ -25,8 +25,9 @@
 #include <QPixmap>
 #include <QList>
 
-//#include <KoProperties.h>
 #include <KoID.h>
+
+#include <koffice_export.h>
 
 class KoShape;
 class KoProperties;
@@ -36,7 +37,7 @@ class KoProperties;
  * particular variant of a shape object, together with a name, a description
  * and a pixmap for use in the user interface.
  */
-struct KoShapeTemplate {
+struct FLAKE_EXPORT KoShapeTemplate {
 
     QString name;
     QString description;
@@ -48,7 +49,8 @@ struct KoShapeTemplate {
 /**
  * The shape factory can create a KoShape without needing a tool or a direct new().
  */
-class KoShapeFactory {
+class FLAKE_EXPORT KoShapeFactory : public QObject {
+    Q_OBJECT
 public:
 
     /// Factory for shapes

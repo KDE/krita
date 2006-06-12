@@ -72,18 +72,18 @@ public:
      * Each shape-type has an Id; as found in KoShapeFactory::id().id(), to choose which
      * shape this tool should actually create; set the id before the user starts to
      * create the new shape.
-     * @param id the Id part from a KoID of the to be generated shape
+     * @param id the SHAPEID of the to be generated shape
      */
-    void setShapeId(QString id) { m_shapeId = id; }
+    void setShapeId(int id) { m_shapeId = id; }
     /**
      * return the shape Id that is to be created.
      * @return the shape Id that is to be created.
      */
-    const QString& shapeId() const { return m_shapeId; }
+    int shapeId() const { return m_shapeId; }
 
 private:
     KoShapeControllerBase *m_shapeController;
-    QString m_shapeId;
+    int m_shapeId;
 };
 
 #endif

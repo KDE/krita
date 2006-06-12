@@ -18,14 +18,6 @@
  */
 
 #include "KoShapeFactory.h"
-//   #include <QString>
-//   #include <QWidget>
-//   #include <QPixmap>
-//   #include <QList>
-//
-//   #include <KoProperties.h>
-//   #include <KoID.h>
-//   #include "KoShape.h"
 
 KoShapeFactory::KoShapeFactory(int id, const QString name)
 : m_id(id)
@@ -64,3 +56,5 @@ void KoShapeFactory::setIcon(const QPixmap & icon) {
 int KoShapeFactory::shapeId() const {
     return m_id;
 }
+
+#include "KoShapeFactory.moc"

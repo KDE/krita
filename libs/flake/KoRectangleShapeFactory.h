@@ -29,6 +29,7 @@ class KoRectangleShapeFactory : public KoShapeFactory
 public:
     /// constructor
     KoRectangleShapeFactory();
+    ~KoRectangleShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape(KoProperties * params) const;
     KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const;

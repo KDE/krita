@@ -1235,9 +1235,9 @@ QString LayerItem::tooltip() const
         if( !isFolder() || listView()->d->properties[i].validForFolders )
         {
             if( d->properties[i] )
-                tip += row.arg( i18n( "%1:" ).arg( listView()->d->properties[i].displayName ) ).arg( i18n( "Yes" ) );
+                tip += row.arg( i18n( "%1:" , listView()->d->properties[i].displayName ) ).arg( i18n( "Yes" ) );
             else
-                tip += row.arg( i18n( "%1:" ).arg( listView()->d->properties[i].displayName ) ).arg( i18n( "No" ) );
+                tip += row.arg( i18n( "%1:" ,listView()->d->properties[i].displayName ) ).arg( i18n( "No" ) );
         }
     tip += "</table>";
     return tip;

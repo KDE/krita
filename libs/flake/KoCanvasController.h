@@ -40,15 +40,15 @@ class QPaintEvent;
  * setCanvas() call. Which is designed so it can be called multiple times for those
  * that wish to exchange one canvas widget for another.
  */
-class FLAKE_EXPORT KoCanvasView : public QScrollArea {
+class FLAKE_EXPORT KoCanvasController : public QScrollArea {
     Q_OBJECT
 public:
     /**
      * Constructor.
      * @param parent the parent this widget will belong to
      */
-    KoCanvasView(QWidget *parent);
-    virtual ~KoCanvasView() {}
+    KoCanvasController(QWidget *parent);
+    virtual ~KoCanvasController() {}
 
     /**
      * Set the new canvas to be shown as a child
@@ -104,12 +104,12 @@ signals:
      * Emitted when a previously added canvas is about to be removed.
      * @param cv this object
      */
-    void canvasRemoved(KoCanvasView* cv);
+    void canvasRemoved(KoCanvasController* cv);
     /**
      * Emitted when a canvas is set on this widget
      * @param cv this object
      */
-    void canvasSet(KoCanvasView* cv);
+    void canvasSet(KoCanvasController* cv);
 
 private:
     class Viewport : public QWidget {

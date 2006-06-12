@@ -20,7 +20,7 @@ set(flake_SRCS
     KoShapeRotateStrategy.cpp
     KoShapeRubberSelectStrategy.cpp
     KoTool.cpp
-    KoCanvasView.cpp
+    KoCanvasController.cpp
     KoCreateShapeStrategy.cpp
     KoCreateShapesTool.cpp
     KoShapeRegistry.cpp

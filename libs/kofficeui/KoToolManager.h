@@ -35,7 +35,7 @@ class ToolHelper;
 class KActionCollection;
 class QAbstractButton;
 class KoToolFactory;
-class KoCanvasView;
+class KoCanvasController;
 class KoCanvasBase;
 class KoShapeControllerBase;
 class KoTool;
@@ -51,7 +51,7 @@ class KoTool;
  * There is one tool instance per pointer
  * There is one set of tools per pointer per process
  * All views share this set of tools
- * The tool manager knows all canvasView intances
+ * The tool manager knows all canvasController intances
  * The tool manager set the active tool in all canvasses
  * (Tools can set another tool as active)
  */
@@ -64,8 +64,8 @@ public:
 
     QWidget *toolBox(); // TODO alter from QWidget to KoToolBox
     void registerTools(KActionCollection *ac);
-    void addControllers(KoCanvasView *view, KoShapeControllerBase *sc);
-    void removeCanvasView(KoCanvasView *view);
+    void addControllers(KoCanvasController *controller, KoShapeControllerBase *sc);
+    void removeCanvasController(KoCanvasController *controller);
 
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
@@ -79,8 +79,8 @@ private:
 
 private slots:
     void toolActivated(ToolHelper *tool);
-    void detachCanvas(KoCanvasView* view);
-    void attachCanvas(KoCanvasView* view);
+    void detachCanvas(KoCanvasController* controller);
+    void attachCanvas(KoCanvasController* controller);
     void updateCursor(QCursor cursor);
     void switchToolRequested(const QString &id);
     void switchToolTemporaryRequested(const QString &id);
@@ -93,16 +93,16 @@ private:
     QWidget *m_toolBox;
 
     QList<ToolHelper*> m_tools;
-    QMap<KoCanvasView*, KoShapeControllerBase*> m_shapeControllers;
-    QList<KoCanvasView*> m_canvases;
-    KoCanvasView *m_activeCanvas;
+    QMap<KoCanvasController*, KoShapeControllerBase*> m_shapeControllers;
+    QList<KoCanvasController*> m_canvases;
+    KoCanvasController *m_activeCanvas;
     KoTool *m_activeTool, *m_dummyTool;
     ToolHelper *m_defaultTool;
     /* this mutex synchronizes all accesses to m_allTools, m_tools and m_canvases
      * and m_toolBox members. */
     QMutex m_mutex;
 
-    QMap<KoCanvasView*, QMap<QString, KoTool*> > m_allTools;
+    QMap<KoCanvasController*, QMap<QString, KoTool*> > m_allTools;
     QStack<KoTool*> m_stack;
 };
 

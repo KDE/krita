@@ -25,7 +25,7 @@
 #include <KoCreateShapesTool.h>
 #include <KoInteractionToolFactory.h>
 #include <KoShapeControllerBase.h>
-#include <KoCanvasView.h>
+#include <KoCanvasController.h>
 
 #include "kactioncollection.h"
 #include "kdebug.h"
@@ -113,35 +113,35 @@ void KoToolManager::registerTools(KActionCollection *ac) {
     m_mutex.unlock();
 }
 
-void KoToolManager::addControllers(KoCanvasView *view, KoShapeControllerBase *sc) {
-    if(m_canvases.contains(view))
+void KoToolManager::addControllers(KoCanvasController *controller, KoShapeControllerBase *sc) {
+    if(m_canvases.contains(controller))
         return;
     setup();
     m_mutex.lock();
     kDebug(30004) << "KoToolManager::addControllers called, setting up..." << endl;
-    m_canvases.append(view);
-    m_shapeControllers.insert(view, sc);
+    m_canvases.append(controller);
+    m_shapeControllers.insert(controller, sc);
     if(m_activeCanvas == 0)
-        m_activeCanvas = view;
-    if(view->canvas())
-        attachCanvas(view);
-    connect(view, SIGNAL(canvasRemoved(KoCanvasView*)), this, SLOT(detachCanvas(KoCanvasView*)));
-    connect(view, SIGNAL(canvasSet(KoCanvasView*)), this, SLOT(attachCanvas(KoCanvasView*)));
+        m_activeCanvas = controller;
+    if(controller->canvas())
+        attachCanvas(controller);
+    connect(controller, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
+    connect(controller, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
     m_mutex.unlock();
 }
 
-void KoToolManager::removeCanvasView(KoCanvasView *view) {
+void KoToolManager::removeCanvasController(KoCanvasController *controller) {
     m_mutex.lock();
-    m_canvases.removeAll(view);
-    m_shapeControllers.remove(view);
-    QMap<QString, KoTool*> toolsMap = m_allTools.value(view);
+    m_canvases.removeAll(controller);
+    m_shapeControllers.remove(controller);
+    QMap<QString, KoTool*> toolsMap = m_allTools.value(controller);
     foreach(KoTool *tool, toolsMap.values())
         delete tool;
-    m_allTools.remove(view);
-    if(view->canvas())
-        detachCanvas(view);
-    disconnect(view, SIGNAL(canvasRemoved(KoCanvasView*)), this, SLOT(detachCanvas(KoCanvasView*)));
-    disconnect(view, SIGNAL(canvasSet(KoCanvasView*)), this, SLOT(attachCanvas(KoCanvasView*)));
+    m_allTools.remove(controller);
+    if(controller->canvas())
+        detachCanvas(controller);
+    disconnect(controller, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
+    disconnect(controller, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
     m_mutex.unlock();
 }
 
@@ -192,50 +192,50 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
     connect(m_activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
 
     // and set it.
-    foreach(KoCanvasView *view, m_canvases) {
-        if(!view->canvas())
+    foreach(KoCanvasController *controller, m_canvases) {
+        if(!controller->canvas())
             continue;
-        view->canvas()->setTool(view==m_activeCanvas ? m_activeTool : m_dummyTool);
+        controller->canvas()->setTool(controller==m_activeCanvas ? m_activeTool : m_dummyTool);
         // we expect the tool to emit a cursur on activation.  This is for quick-fail :)
-        view->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
+        controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
     m_activeTool->activate();
     m_mutex.unlock();
 }
 
-void KoToolManager::attachCanvas(KoCanvasView *view) {
+void KoToolManager::attachCanvas(KoCanvasController *controller) {
 kDebug(30004) << "KoToolManager::attachCanvas\n";
     // TODO listen to focus changes
     // TODO listen to selection changes
     QMap<QString, KoTool*> toolsMap;
     foreach(ToolHelper *tool, m_tools)
-        toolsMap.insert(tool->id().id(), tool->m_toolFactory->createTool(view->canvas()));
+        toolsMap.insert(tool->id().id(), tool->m_toolFactory->createTool(controller->canvas()));
     KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsMap["createShapesTool"]);
     Q_ASSERT(createTool); // if this fails; check the ID didn't change
-    createTool->setShapeController(m_shapeControllers[view]);
+    createTool->setShapeController(m_shapeControllers[controller]);
 
     m_mutex.lock();
-    m_allTools.remove(view);
-    m_allTools.insert(view, toolsMap);
+    m_allTools.remove(controller);
+    m_allTools.insert(controller, toolsMap);
     m_mutex.unlock();
 
     if(m_activeTool == 0)
         toolActivated(m_defaultTool);
     else {
-        view->canvas()->setTool(m_dummyTool);
-        view->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
+        controller->canvas()->setTool(m_dummyTool);
+        controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
 }
 
-void KoToolManager::detachCanvas(KoCanvasView *view) {
+void KoToolManager::detachCanvas(KoCanvasController *controller) {
     // TODO detach
-    if(m_activeCanvas == view)
+    if(m_activeCanvas == controller)
         m_activeCanvas = 0;
-    QMap<QString, KoTool*> toolsMap = m_allTools.value(view);
+    QMap<QString, KoTool*> toolsMap = m_allTools.value(controller);
     foreach(KoTool *tool, toolsMap.values())
         delete tool;
     toolsMap.clear();
-    view->canvas()->setTool(m_dummyTool);
+    controller->canvas()->setTool(m_dummyTool);
 }
 
 void KoToolManager::updateCursor(QCursor cursor) {
@@ -264,7 +264,7 @@ void KoToolManager::switchBackRequested() {
 }
 
 KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const {
-    foreach(KoCanvasView *controller, m_canvases) {
+    foreach(KoCanvasController *controller, m_canvases) {
         if(controller->canvas() == canvas) {
             QMap<QString, KoTool*> tools = m_allTools.value(controller);
             KoCreateShapesTool *tool =

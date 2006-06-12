@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoCanvasView.h"
+#include "KoCanvasController.h"
 
 #include <QGridLayout>
 #include <QDebug>
 
 
-KoCanvasView::KoCanvasView(QWidget *parent)
+KoCanvasController::KoCanvasController(QWidget *parent)
 : QScrollArea(parent)
 , m_canvas(0)
 {
@@ -33,7 +33,7 @@ KoCanvasView::KoCanvasView(QWidget *parent)
     setAutoFillBackground(false);
 }
 
-void KoCanvasView::setCanvas(KoCanvasBase *canvas) {
+void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
     Q_ASSERT(canvas); // param is not null
     if(m_canvas) {
         emit canvasRemoved(this);
@@ -44,37 +44,37 @@ void KoCanvasView::setCanvas(KoCanvasBase *canvas) {
     emit canvasSet(this);
 }
 
-KoCanvasBase* KoCanvasView::canvas() const {
+KoCanvasBase* KoCanvasController::canvas() const {
     return m_canvas;
 }
 
-int KoCanvasView::visibleHeight() const {
+int KoCanvasController::visibleHeight() const {
     return qMin(m_viewport->width(), m_canvasWidget->width());
 }
 
-int KoCanvasView::visibleWidth() const {
+int KoCanvasController::visibleWidth() const {
     return qMin(m_viewport->height(), m_canvasWidget->height());
 }
 
-void KoCanvasView::centerCanvas(bool centered) {
+void KoCanvasController::centerCanvas(bool centered) {
     m_centerCanvas = centered;
     m_viewport->centerCanvas(centered);
 }
 
-bool KoCanvasView::isCanvasCentered() const {
+bool KoCanvasController::isCanvasCentered() const {
     return m_centerCanvas;
 }
 
-int KoCanvasView::canvasOffsetX() const {
+int KoCanvasController::canvasOffsetX() const {
     return 0; // TODO
 }
 
-int KoCanvasView::canvasOffsetY() const {
+int KoCanvasController::canvasOffsetY() const {
     return 0; // TODO
 }
 
 // ********** Viewport **********
-KoCanvasView::Viewport::Viewport()
+KoCanvasController::Viewport::Viewport()
 : QWidget()
 {
     setBackgroundRole(QPalette::Dark);
@@ -86,21 +86,21 @@ KoCanvasView::Viewport::Viewport()
     centerCanvas(true);
 }
 
-void KoCanvasView::Viewport::setCanvas(QWidget *canvas) {
+void KoCanvasController::Viewport::setCanvas(QWidget *canvas) {
     canvas->setAutoFillBackground(true);
     m_layout->addWidget(canvas, 0, 1, Qt::AlignHCenter);
 }
 
-void KoCanvasView::Viewport::removeCanvas(QWidget *canvas) {
+void KoCanvasController::Viewport::removeCanvas(QWidget *canvas) {
     m_layout->removeWidget(canvas);
 }
 
-void KoCanvasView::Viewport::centerCanvas(bool centered) {
+void KoCanvasController::Viewport::centerCanvas(bool centered) {
     m_layout->setColumnStretch(0,centered?1:0);
     m_layout->setColumnStretch(1,1);
     m_layout->setColumnStretch(2,centered?1:2);
 }
 
-#include "KoCanvasView.moc"
+#include "KoCanvasController.moc"
 
 // TODO add a paintEvent here and paint a nice shadow to the bottom/right of the canvas

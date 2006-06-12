@@ -35,7 +35,7 @@ X-Flake-Version=1
 @code
         KoToolManager::instance()->toolBox()->show();</pre>
 @endcode
- * And use a KoCanvasView instance with your Canvas:
+ * And use KoCanvasController KoCanvasView instance with your Canvas:
 @code
 class MyCanvas : public QWidget, public KoCanvasBase {
     Q_OBJECT
@@ -99,10 +99,10 @@ private:
  * And then:
  *
 @code
-    KoCanvasView *canvasController = new KoCanvasView(parentWidget);
+    KoCanvasController *canvasController = new KoCanvasController(parentWidget);
     MyCanvas *canvas = new MyCanvas();
     canvasController->setCanvas(canvas);
-    KoToolManager::instance()->addControllers(canvasView, m_document);
+    KoToolManager::instance()->addControllers(canvasController, m_document);
     parentLayout.addWidget(canvasController);</pre>
 @endcode
  */

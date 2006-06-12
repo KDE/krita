@@ -34,18 +34,14 @@ class KOPAINTER_EXPORT KoXYColorSelector : public KXYSelector
 public:
     KoXYColorSelector( KoColorSpace* colorSpace,  QWidget *parent=0 );
 
-    void setXColors( const KoColor& leftColor, const KoColor& rightColor);
-    void setYColors( const KoColor& topColor, const KoColor& bottomColor);
+    void setColors( const KoColor& topLeftColor, const KoColor& topRightColor,  const KoColor& bottomLeftColor, const KoColor& bottomRightColor);
 
 protected:
     virtual void drawContents( QPainter *painter );
 
 private:
-    KoColor xColor1;
-    KoColor xColor2;
-    KoColor yColor1;
-    KoColor yColor2;
-
+    KoColor m_colors[4];
+    enum {TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT};
     KoColorSpace* m_colorSpace;
 };
 

@@ -25,43 +25,33 @@
 KoXYColorSelector::KoXYColorSelector( KoColorSpace* colorSpace, QWidget *parent ): KXYSelector( parent ), m_colorSpace(colorSpace)
 {
   //XXX: Only for testing remove later
-  xColor1 = KoColor( QColor( 255, 0, 0), m_colorSpace);
-  xColor2 = KoColor( QColor( 255, 0, 255), m_colorSpace);
-  yColor1 = KoColor( QColor( 0, 255, 0), m_colorSpace);
-  yColor2 = KoColor( QColor( 0, 0, 0), m_colorSpace);
+  m_colors[TOPLEFT] = KoColor( QColor( 255, 0, 0), m_colorSpace);
+  m_colors[TOPRIGHT] = KoColor( QColor( 255, 0, 255), m_colorSpace);
+  m_colors[BOTTOMLEFT] = KoColor( QColor( 0, 255, 0), m_colorSpace);
+  m_colors[BOTTOMRIGHT] = KoColor( QColor( 0, 0, 0), m_colorSpace);
 }
 
-void KoXYColorSelector::setXColors( const KoColor& leftColor, const KoColor& rightColor)
+void KoXYColorSelector::setColors( const KoColor& topLeftColor, const KoColor& topRightColor,  const KoColor& bottomLeftColor, const KoColor& bottomRightColor)
 {
-  xColor1 = leftColor;
-  xColor2 = rightColor;
-  xColor1.convertTo(m_colorSpace);
-  xColor2.convertTo(m_colorSpace);
-
-  update();
-}
-
-void KoXYColorSelector::setYColors( const KoColor& topColor, const KoColor& bottomColor)
-{
-  yColor1 = topColor;
-  yColor2 = bottomColor;
-  yColor1.convertTo(m_colorSpace);
-  yColor2.convertTo(m_colorSpace);
+  m_colors[TOPLEFT] = topLeftColor;
+  m_colors[TOPRIGHT] = topRightColor;
+  m_colors[BOTTOMLEFT] = bottomLeftColor;
+  m_colors[BOTTOMRIGHT] = bottomRightColor;
 
   update();
 }
 
 void KoXYColorSelector::drawContents( QPainter *painter )
 {
-    KoColor c = xColor1;
+    KoColor c = m_colors[0]; // quick way to set the colorspace
     QColor color;
     quint8 opacity;
 
     const quint8 *colors[4];
-    colors[0] = xColor1.data();
-    colors[1] = xColor2.data();
-    colors[2] = yColor1.data();
-    colors[3] = yColor2.data();
+    colors[0] = m_colors[0].data();
+    colors[1] = m_colors[1].data();
+    colors[2] = m_colors[2].data();
+    colors[3] = m_colors[3].data();
 
     QImage image(contentsRect().width(), contentsRect().height(), QImage::Format_ARGB32 );
 
@@ -72,10 +62,10 @@ void KoXYColorSelector::drawContents( QPainter *painter )
             double yVal = static_cast<double>(y) / (contentsRect().height() - 1);
 
             quint8 colorWeights[4];
-            colorWeights[0] = static_cast<quint8>((1.0 - xVal) * 255 + 0.5);
-            colorWeights[1] = 255 - colorWeights[0];
-            colorWeights[2] = static_cast<quint8>((1.0 - yVal) * 255 + 0.5);
-            colorWeights[3] = 255 - colorWeights[2];
+            colorWeights[0] = static_cast<quint8>((1.0 - yVal) * (1.0 - xVal) * 255 + 0.5);
+            colorWeights[1] = static_cast<quint8>((1.0 - yVal) * (xVal) * 255 + 0.5);
+            colorWeights[2] = static_cast<quint8>((yVal) * (1.0 - xVal) * 255 + 0.5);
+            colorWeights[3] = static_cast<quint8>((yVal) * (xVal) * 255 + 0.5);
 
             m_colorSpace->mixColors(colors, colorWeights, 4, c.data());
 

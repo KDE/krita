@@ -1,0 +1,114 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgNoiseOptions</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgNoiseOptions</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>174</width>
+            <height>63</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Opacity:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Level:</string>
+            </property>
+        </widget>
+        <widget class="KIntNumInput" row="1" column="1">
+            <property name="name">
+                <cstring>intOpacity</cstring>
+            </property>
+            <property name="value">
+                <number>100</number>
+            </property>
+            <property name="minValue">
+                <number>0</number>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+        </widget>
+        <widget class="KIntNumInput" row="0" column="1">
+            <property name="name">
+                <cstring>intLevel</cstring>
+            </property>
+            <property name="value">
+                <number>50</number>
+            </property>
+            <property name="minValue">
+                <number>0</number>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+        </widget>
+        <spacer row="1" column="2">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>21</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

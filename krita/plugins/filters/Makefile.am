@@ -11,4 +11,5 @@ SUBDIRS = \
     roundcorners \
     smalltilesfilter \
     sobelfilter \
-    colorsfilters 
+    colorsfilters \
+    noisefilter 

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Noise Filter
+Comment=Add noise to an image
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritanoisefilter
+X-Krita-Version=2

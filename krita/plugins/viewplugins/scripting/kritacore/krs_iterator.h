@@ -246,7 +246,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
                         pixel.push_back( *((float*) data) );
                         break;
                     default:
-                        kDebug(41011) << i18n("An error has occurred in %1","getPixel") << endl;
+                        //kDebug(41011) << i18n("An error has occurred in %1","getPixel") << endl;
                         kDebug(41011) << i18n("unsupported data format in scripts") << endl;
                         break;
                 }

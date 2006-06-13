@@ -100,7 +100,7 @@ public:
      * @see KoShapeTemplate::properties
      */
     virtual KoShape * createShape(KoProperties * params) const = 0;
-    virtual QWidget * optionWidget() const = 0;
+    virtual QWidget * optionWidget() = 0;
 
     /**
      * Create a KoID for the shape this factory creates.

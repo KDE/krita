@@ -18,7 +18,7 @@
 
 #include "KoToolFactory.h"
 
-KoToolFactory::KoToolFactory(QObject *parent, const QString id, const QString name)
+KoToolFactory::KoToolFactory(QObject *parent, const QString &id, const QString &name)
 : QObject(parent)
 , m_name(name)
 , m_id(id)

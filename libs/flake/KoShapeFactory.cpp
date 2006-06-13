@@ -19,7 +19,7 @@
 
 #include "KoShapeFactory.h"
 
-KoShapeFactory::KoShapeFactory(QObject *parent, const QString id, const QString name)
+KoShapeFactory::KoShapeFactory(QObject *parent, const QString &id, const QString &name)
 : QObject(parent)
 , m_id(id)
 , m_name(name)

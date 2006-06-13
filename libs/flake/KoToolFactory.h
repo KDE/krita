@@ -64,7 +64,7 @@ K_EXPORT_COMPONENT_FACTORY(myLibrary,
      *   example for use by the KoTool::sigActivateTemporary.
      * @param name the user visible name of the tool this factory creates.
      */
-    KoToolFactory(QObject *parent, const QString id, const QString name);
+    KoToolFactory(QObject *parent, const QString &id, const QString &name);
     virtual ~KoToolFactory();
 
     /**
@@ -78,12 +78,12 @@ K_EXPORT_COMPONENT_FACTORY(myLibrary,
      * return the id for the tool this factory creates.
      * @return the id for the tool this factory creates.
      */
-    const QString& toolId() const;
+    const QString &toolId() const;
     /**
      * return the user visible (and translated) name to be seen by the user.
      * @return the user visible (and translated) name to be seen by the user.
      */
-    const QString& name() const;
+    const QString &name() const;
     /**
      * Create a KoID for the tool this factory creates.
      */
@@ -97,12 +97,12 @@ K_EXPORT_COMPONENT_FACTORY(myLibrary,
      * returns the type of tool, used to group tools in the toolbox
      * @return the type of tool
      */
-    const QString& toolType() const;
+    const QString &toolType() const;
     /**
      * return a translated tooltip Text
      * @return a translated tooltip Text
      */
-    const QString& toolTip() const;
+    const QString &toolTip() const;
     /**
      * return an icon for this tool
      * @return an icon for this tool

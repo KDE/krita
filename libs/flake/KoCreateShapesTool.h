@@ -73,12 +73,12 @@ public:
      * create the new shape.
      * @param id the SHAPEID of the to be generated shape
      */
-    void setShapeId(const QString id) { m_shapeId = id; }
+    void setShapeId(const QString &id) { m_shapeId = id; }
     /**
      * return the shape Id that is to be created.
      * @return the shape Id that is to be created.
      */
-    const QString shapeId() const { return m_shapeId; }
+    const QString &shapeId() const { return m_shapeId; }
 
 private:
     KoShapeControllerBase *m_shapeController;

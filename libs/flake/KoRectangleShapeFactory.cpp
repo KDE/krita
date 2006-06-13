@@ -39,7 +39,3 @@ KoShape * KoRectangleShapeFactory::createDefaultShape() {
 KoShape * KoRectangleShapeFactory::createShape(KoProperties * params) const {
     return new KoRectangleShape();
 }
-
-KoShape * KoRectangleShapeFactory::createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const {
-    return new KoRectangleShape();
-}

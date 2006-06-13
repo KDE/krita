@@ -38,12 +38,15 @@ class KoProperties;
  * and a pixmap for use in the user interface.
  */
 struct FLAKE_EXPORT KoShapeTemplate {
-
-    QString name;
-    QString description;
-    QString toolTip;
-    QPixmap pixmap;
-    KoProperties * params;
+    QString name;       ///< The name to be shown for this template
+    QString description;///< The longer description to explain what this template is for
+    QString toolTip;    ///< The tooltip text for the template
+    QPixmap pixmap;     ///< The pixmap that shows what this template is about
+    /**
+     * The properties which, when passed to the KoShapeFactory::createShape() method
+     * result in the shape this template represents.
+     */
+    KoProperties *properties;
 };
 
 /**
@@ -81,9 +84,22 @@ public:
     KoShapeFactory(QObject *parent, const QString &id, const QString &name);
     virtual ~KoShapeFactory() {}
 
+    /**
+     * This method should be implemented by factories to create a shape that the user
+     * gets when doing a base insert. For example from a script.  The created shape
+     * should have its values set to good defaults that the user can then adjust further if
+     * needed.
+     * The default shape position is not relevant, it will be moved by the caller.
+     * @return a new shape
+     */
     virtual KoShape * createDefaultShape() = 0;
+    /**
+     * This method should be implemented by factories to create a shape based on a set of
+     * properties that are specifically made for this shape-type.
+     * @return a new shape
+     * @see KoShapeTemplate::properties
+     */
     virtual KoShape * createShape(KoProperties * params) const = 0;
-    virtual KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const = 0;
     virtual QWidget * optionWidget() const = 0;
 
     /**
@@ -126,7 +142,6 @@ protected:
      * @see KIconLoader
      */
     void setIcon(const QPixmap & icon);
-    void setOptionWidget(QWidget * widget);
 
 private:
 

@@ -57,6 +57,11 @@ public:
     virtual void finishInteraction();
 
 protected:
+    /**
+     * Return the rectangle that the user dragged.
+     * The rectangle is normalized and immutable.
+     * @return a rectangle in pt.
+     */
     const QRectF selectRect() const;
 
 private:

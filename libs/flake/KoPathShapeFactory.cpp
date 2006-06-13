@@ -37,8 +37,3 @@ KoShape * KoPathShapeFactory::createShape(KoProperties * params) const {
     return new KoPathShape();
 }
 
-KoShape * KoPathShapeFactory::createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const {
-    Q_UNUSED(shapeTemplate);
-    return new KoPathShape();
-}
-

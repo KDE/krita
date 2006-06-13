@@ -40,8 +40,4 @@ KoShape *KoTextShapeFactory::createShape(KoProperties * params) const {
     return new KoTextShape();
 }
 
-KoShape *KoTextShapeFactory::createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const {
-    return new KoTextShape();
-}
-
 #include "KoTextShapeFactory.moc"

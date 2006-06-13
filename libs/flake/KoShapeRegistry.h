@@ -42,6 +42,10 @@ public:
 
     virtual ~KoShapeRegistry();
 
+    /**
+     * Return an instance of the KoShapeRegistry
+     * Creates an instance if that has never happened before and returns the singleton instance.
+     */
     static KoShapeRegistry * instance();
 
 private:

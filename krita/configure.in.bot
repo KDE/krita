@@ -3,7 +3,7 @@ if test -z "$LCMS_LIBS"; then
   echo "LittleCMS is missing, Krita will not be built."
   echo ""
   echo "If you want to compile Krita you should install:"
-  echo "  * lcms 1.12 or newer (http://www.littlecms.com/)"
+  echo "  * lcms 1.15 or newer (http://www.littlecms.com/)"
   echo "    and avoid 1.14 as it has a major bugs in CMYK"
   echo ""
   all_tests=bad

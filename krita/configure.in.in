@@ -5,7 +5,7 @@ KDE_CHECK_LIB(Xi, XOpenDisplay, [
 AC_SUBST(LIB_XINPUTEXT)
 
 # Check for lcms
-AC_MSG_CHECKING([for lcms >= 1.12])
+AC_MSG_CHECKING([for lcms >= 1.15])
 
 have_lcms_header='no'
 KDE_CHECK_HEADER(lcms/lcms.h,have_lcms_header='yes',,)
@@ -14,8 +14,8 @@ then
         AC_DEFINE(LCMS_HEADER, <lcms/lcms.h>, [The correct header])
 
 	echo "#include <lcms/lcms.h>" > conftest.$ac_ext
-	echo "#if LCMS_VERSION < 112" >> conftest.$ac_ext
-	echo "#error Need lcms >= 1.12" >> conftest.$ac_ext
+	echo "#if LCMS_VERSION < 115" >> conftest.$ac_ext
+	echo "#error Need lcms >= 1.15" >> conftest.$ac_ext
 	echo "#endif" >> conftest.$ac_ext
 	echo "int main() {}" >> conftest.$ac_ext
 
@@ -26,8 +26,8 @@ else
        	AC_DEFINE(LCMS_HEADER, <lcms.h>, [The correct header])
 
 	echo "#include <lcms.h>" > conftest.$ac_ext
-	echo "#if LCMS_VERSION < 112" >> conftest.$ac_ext
-	echo "#error Need lcms >= 1.12" >> conftest.$ac_ext
+	echo "#if LCMS_VERSION < 115" >> conftest.$ac_ext
+	echo "#error Need lcms >= 1.15" >> conftest.$ac_ext
 	echo "#endif" >> conftest.$ac_ext
 	echo "int main() {}" >> conftest.$ac_ext
 fi

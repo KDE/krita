@@ -87,16 +87,32 @@ kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
+
 target_link_libraries(kotext  ${KDE4_KSPELL2_LIBS} kutils kofficecore kofficeui )
 
 set_target_properties(kotext PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kotext )
 
 
+########### Flake Plugin library ###############
+set(kotext2_PART_SRCS
+   KoTextShape.cpp
+   KoTextShapeFactory.cpp
+ )
+
+kde4_automoc(${kotext2_PART_SRCS})
+
+kde4_add_plugin(kotext2 ${kotext2_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kotext2 )
+
+target_link_libraries(kotext2 flake)
+
+install_targets(${PLUGIN_INSTALL_DIR} kotext2 )
+
 ########### install files ###############
 
-
-
+install_files( ${SERVICES_INSTALL_DIR} FILES textshape.desktop)
 
 
 

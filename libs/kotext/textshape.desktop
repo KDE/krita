@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Text Shape
+ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=kotext2
+X-Flake-Version=1

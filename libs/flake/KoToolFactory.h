@@ -38,27 +38,81 @@ class FLAKE_EXPORT KoToolFactory : public QObject {
     Q_OBJECT
 
 public:
+    /**
+     * The baseclass for all tool plugins. Each plugin that ships a KoTool should also
+     * ship a factory. That factory will extend this class and set variable data like
+     * a toolTip and icon in the constructor of that extending class.
+     *
+     * An example usage would be:<pre>
+class MyToolFactory : public KoToolFactory {
+public:
+    MyToolFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "MyTool", i18n("My Tool")) {
+        setToolTip(i18n("Create object"));
+        setToolType("dynamic");
+        setPriority(5);
+    }
+    ~MyToolFactory() {}
+    KoTool* createTool(KoCanvasBase *canvas);
+};
+K_EXPORT_COMPONENT_FACTORY(myLibrary,
+         KGenericFactory<MyToolFactory>( "MyTool" ) )
+</pre>
+
+     * @param parent the parent QWidget for memory management usage.
+     * @param id a string that will be used internally for referencing the tool, for
+     *   example for use by the KoTool::sigActivateTemporary.
+     * @param name the user visible name of the tool this factory creates.
+     */
     KoToolFactory(QObject *parent, const QString id, const QString name);
     virtual ~KoToolFactory();
 
-    /// instanciate a new tool
+    /**
+     *  instanciate a new tool
+     * @param canvas the canvas that the new tool will work on. Should be passed
+     *    to the constructor of the tool.
+     * @return a new KoTool instance
+     */
     virtual KoTool * createTool(KoCanvasBase *canvas) = 0;
     /**
-     * return the id for the tool this factory is associated with.
-     * @return the id for the tool this factory is associated with.
+     * return the id for the tool this factory creates.
+     * @return the id for the tool this factory creates.
      */
     const QString& toolId() const;
+    /**
+     * return the user visible (and translated) name to be seen by the user.
+     * @return the user visible (and translated) name to be seen by the user.
+     */
     const QString& name() const;
+    /**
+     * Create a KoID for the tool this factory creates.
+     */
     const KoID id() const;
-    /// The priority of this tool in its section in the toolbox
+    /**
+     * Returns The priority of this tool in its section in the toolbox
+     * @return The priority of this tool.
+     */
     int priority() const;
-    /// the type of tool, used to group tools in the toolbox
+    /**
+     * returns the type of tool, used to group tools in the toolbox
+     * @return the type of tool
+     */
     const QString& toolType() const;
-    /// return a translated tooltip Text
+    /**
+     * return a translated tooltip Text
+     * @return a translated tooltip Text
+     */
     const QString& toolTip() const;
-    /// return an icon for this tool
-    const QPixmap& icon() const;
-    /// The shape ID the tool is associated with, or 0 when the tool is a generic tool
+    /**
+     * return an icon for this tool
+     * @return an icon for this tool
+     */
+    virtual const QPixmap& icon() const;
+    /**
+     * Return the id of the shape we can process.
+     * This is the shape ID the tool we create is associated with.  So a TextTool for a TextShape.
+     * @return the id of a shape, or an empty string for all shapes.
+     */
     const QString &activationShapeId() const;
 
 protected:
@@ -67,9 +121,30 @@ protected:
      * @param id the combination of a internal ID and a (translated) name 
      */
     void setToolTip(const QString & tooltip);
+    /**
+     * Set the toolType. used to group tools in the toolbox
+     * @param toolType the toolType
+     */
     void setToolType(const QString & toolType);
+    /**
+     * Set an icon to be used in the toolBox.
+     * @param icon the pixmap from the iconLoader
+     * @see KIconLoader
+     */
     void setIcon(const QPixmap & icon);
+    /**
+     * Set the priority of this tool, as it is shown in the toolBox; lower number means
+     * it will be show more to the front of the list.
+     * @param newPriority the priority
+     */
     void setPriority(int newPriority);
+    /**
+     * Set the id of the shape we can process.
+     * This is the ID, as passed to the constructor of a KoShapeFactory, that the tool
+     * we create is associated with. This means that if a KoTextShape is selected, then
+     * all tools that have its id set here will be added to the dynamic part of the toolbox.
+     * @param the ID of the shape
+     */
     void setActivationShapeID(const QString &activationShapeId);
 
 private:

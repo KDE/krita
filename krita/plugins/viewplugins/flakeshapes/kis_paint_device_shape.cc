@@ -19,28 +19,30 @@
  */
 
 
-#include <QString>
-#include <QWidget>
-#include <QPixmap>
-#include <QList>
-#include <QPainter>
-#include <QSize>
+//   #include <QString>
+//   #include <QWidget>
+//   #include <QPixmap>
+//   #include <QList>
+//   #include <QPainter>
+//   #include <QSize>
 
 #include <klocale.h>
+#include <kgenericfactory.h>
 
-#include <KoViewConverter.h>
-#include <KoShape.h>
-#include <KoShapeFactory.h>
+//   #include <KoViewConverter.h>
+//   #include <KoShape.h>
+//   #include <KoShapeFactory.h>
 
 #include "kis_paint_device.h"
-#include "kis_fill_painter.h"
-#include "kis_colorspace.h"
-#include "kis_colorspace_factory_registry.h"
+//   #include "kis_fill_painter.h"
+//   #include "kis_colorspace.h"
+//   #include "kis_colorspace_factory_registry.h"
 #include "kis_paint_device_shape.h"
 
 KisPaintDeviceShape::KisPaintDeviceShape()
     : KoShape()
 {
+/*
     KisColorSpace * cs = KisColorspaceFactoryRegistry::instance()->getRGB8();
     m_device = new KisPaintDevice(cs, "Krita PaintDevice Shape");
 
@@ -49,8 +51,9 @@ KisPaintDeviceShape::KisPaintDeviceShape()
     painter.fillRect(0, 0, 256, 256, KisColor(Qt::white, cs), OPACITY_OPAQUE);
     painter.end();
 
-    resize( QSize( 256, 256 );
+    resize( QSize( 256, 256 ) );
 
+*/
 }
 
 void KisPaintDeviceShape::paint(QPainter &painter, KoViewConverter &converter)
@@ -65,16 +68,14 @@ void KisPaintDeviceShape::paint(QPainter &painter, KoViewConverter &converter)
 }
 
 
-KisPaintDeviceShapeFactory::KisPaintDeviceShapeFactory()
+KisPaintDeviceShapeFactory::KisPaintDeviceShapeFactory(QObject *parent,  const QStringList &)
+: KoShapeFactory(parent, "KisPaintDeviceShape", i18n( "Krita Paintdevice" ) )
 {
-    setName( i18n( "Krita Paintdevice" ) );
-    setDescription( i18n( "..." ) );
     setToolTip( i18n( "A surface to paint on with pixels" ) );
-    // setPixmap(); // XXX: Figure out how to load images with Qt4/KDE4
+    // setPixmap(); // XXX: load icon using KIconLoader
     // XXX: Set default templates
 
 }
-
 
 
 KoShape * KisPaintDeviceShapeFactory::createDefaultShape()
@@ -82,17 +83,12 @@ KoShape * KisPaintDeviceShapeFactory::createDefaultShape()
     return new KisPaintDeviceShape();
 }
 
-KoShape * KisPaintDeviceShapeFactory::createShape(KoShapeParameters * params)
+KoShape * KisPaintDeviceShapeFactory::createShape(KoProperties * params) const
 {
     return new KisPaintDeviceShape();
 }
 
-KoShape * KisPaintDeviceShapeFactory::createTemplatedShape(KoShapeTemplate * template)
-{
-    return new KisPaintDeviceShape();
-}
-
-QWidget * KisPaintDeviceShapeFactory::createOptionWidget(QWidget * parent)
+QWidget * KisPaintDeviceShapeFactory::optionWidget()
 {
     return 0;
 }

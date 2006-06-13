@@ -1,7 +1,7 @@
 
 ########### next target ###############
 
-set(kritaflakeshapes_PART_SRCS flakeshapes.cc  kis_image_shape.cc  kis_paint_device_shape.cc)
+set(kritaflakeshapes_PART_SRCS kis_image_shape.cc  kis_paint_device_shape.cc)
 
 kde4_automoc(${kritaflakeshapes_PART_SRCS})
 
@@ -18,5 +18,4 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaflakeshapes )
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  flakeshapes.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kritaflakeshapes.desktop )

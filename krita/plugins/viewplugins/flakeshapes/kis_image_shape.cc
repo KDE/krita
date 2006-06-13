@@ -19,28 +19,32 @@
  */
 
 
-#include <QString>
-#include <QWidget>
-#include <QPixmap>
-#include <QList>
-#include <QPainter>
-#include <QSize>
+//   #include <QString>
+//   #include <QWidget>
+//   #include <QPixmap>
+//   #include <QList>
+//   #include <QPainter>
+//   #include <QSize>
 
 #include <klocale.h>
+#include <kgenericfactory.h>
 
-#include <KoViewConverter.h>
-#include <KoShape.h>
-#include <KoShapeFactory.h>
+//   #include <KoViewConverter.h>
+//   #include <KoShape.h>
+//   #include <KoShapeFactory.h>
+#include <KoShapeRegistry.h>
 
-#include "kis_image.h"
-#include "kis_fill_painter.h"
-#include "kis_colorspace.h"
-#include "kis_colorspace_factory_registry.h"
+//   #include "kis_fill_painter.h"
+
+//#include "kis_colorspace.h"
+//   #include "kis_colorspace_factory_registry.h"
 #include "kis_image_shape.h"
+#include "kis_paint_device_shape.h"
 
 KisImageShape::KisImageShape()
     : KoShape()
 {
+/*
     KisColorSpace * cs = KisColorspaceFactoryRegistry::instance()->getRGB8();
     m_image = new KisImage(cs, "Krita Image Shape");
 
@@ -50,12 +54,13 @@ KisImageShape::KisImageShape()
         painter.fillRect(0, 0, 256, 256, KisColor(Qt::white, cs), OPACITY_OPAQUE);
         painter.end();
 
-        resize( QSize( 256, 256 );
+        resize( QSize( 256, 256 ) );
     }
+*/
 
 }
 
-void KisImageShape::qpaint(QPainter &painter, KoViewConverter &converter)
+void KisImageShape::paint(QPainter &painter, KoViewConverter &converter)
 {
     applyConversion( painter,  converter );
     // XXX: We pass 0 for the display profile for now: this should be
@@ -63,20 +68,23 @@ void KisImageShape::qpaint(QPainter &painter, KoViewConverter &converter)
     // XXX: Here I _need_ to know the zoom level: we need to follow
     //      different optimization paths for different zoom levels
     // XXX: Keep sizes in mind.
-    m_image->renderToPainter( 0, 0,  256, 256, painter );
+    //m_image->renderToPainter( 0, 0,  256, 256, painter );
 }
 
 
-KisImageShapeFactory::KisImageShapeFactory()
+
+
+K_EXPORT_COMPONENT_FACTORY(kritaflakeshapes,
+     KGenericFactory<KisImageShapeFactory>( "KritaImageShape" ) )
+KisImageShapeFactory::KisImageShapeFactory(QObject *parent,  const QStringList & sl)
+: KoShapeFactory(parent, "KisImageShape", i18n("Krita Paintimage"))
 {
-    setName( i18n( "Krita Paintimage" ) );
-    setDescription( i18n( "..." ) );
     setToolTip( i18n( "A surface to paint on with pixels" ) );
-    // setPixmap(); // XXX: Figure out how to load images with Qt4/KDE4
+    // setIcon(); // XXX: use KIconLoader...
     // XXX: Set default templates
 
+    KoShapeRegistry::instance()->add( new KisPaintDeviceShapeFactory(parent, sl) );
 }
-
 
 
 KoShape * KisImageShapeFactory::createDefaultShape()
@@ -84,17 +92,12 @@ KoShape * KisImageShapeFactory::createDefaultShape()
     return new KisImageShape();
 }
 
-KoShape * KisImageShapeFactory::createShape(KoShapeParameters * params)
+KoShape * KisImageShapeFactory::createShape(KoProperties * params) const
 {
     return new KisImageShape();
 }
 
-KoShape * KisImageShapeFactory::createTemplatedShape(KoShapeTemplate * template)
-{
-    return new KisImageShape();
-}
-
-QWidget * KisImageShapeFactory::createOptionWidget(QWidget * parent)
+QWidget * KisImageShapeFactory::optionWidget()
 {
     return 0;
 }

@@ -24,7 +24,7 @@
 #include <QWidget>
 #include <QPainter>
 
-#include <KoViewConverter.h>
+//   #include <KoViewConverter.h>
 #include <KoShape.h>
 #include <KoShapeFactory.h>
 
@@ -55,17 +55,16 @@ class KisPaintDeviceShapeFactory : public KoShapeFactory {
 
 public:
 
-    KisPaintDeviceShapeFactory();
+    KisPaintDeviceShapeFactory(QObject *parent,  const QStringList &);
     virtual ~KisPaintDeviceShapeFactory() {};
 
 public:
 
     virtual KoShape * createDefaultShape();
-    virtual KoShape * createShape(KoShapeParameters * params);
-    virtual KoShape * createTemplatedShape(KoShapeTemplate * template);
-    virtual QWidget * createOptionWidget();
+    virtual KoShape * createShape(KoProperties * params) const;
+    virtual QWidget * optionWidget();
 
-}
+};
 
 
 #endif // _KIS_PAINTDEVICE_FLAKE_H_

@@ -1,4 +1,4 @@
-*
+/*
  * kis_image_flake.h -- Part of Krita
  *
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
@@ -22,13 +22,16 @@
 #define _KIS_IMAGE_SHAKE_H_
 
 #include <QWidget>
-#include <QPainter>
-
-#include <KoViewConverter.h>
+//   #include <QPainter>
+//
+//   #include <KoViewConverter.h>
 #include <KoShape.h>
 #include <KoShapeFactory.h>
+//
+//   #include <kis_types.h>
+#include "kis_image.h"
 
-#include <kis_types.h>
+class QPainter;
 
 /**
  * The paint device flake is a wrapper around a Krita image
@@ -54,17 +57,16 @@ class KisImageShapeFactory : public KoShapeFactory {
 
 public:
 
-    KisImageShapeFactory();
+    KisImageShapeFactory(QObject *parent,  const QStringList &);
     virtual ~KisImageShapeFactory() {};
 
 public:
 
     virtual KoShape * createDefaultShape();
-    virtual KoShape * createShape(KoShapeParameters * params);
-    virtual KoShape * createTemplatedShape(KoShapeTemplate * template);
-    virtual QWidget * createOptionWidget();
+    virtual KoShape * createShape(KoProperties * params) const;
+    virtual QWidget * optionWidget();
 
-}
+};
 
 
 #endif // _KIS_IMAGE_SHAKE_H_

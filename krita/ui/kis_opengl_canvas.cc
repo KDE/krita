@@ -38,6 +38,8 @@ KisOpenGLCanvasWidget::KisOpenGLCanvasWidget(QWidget *parent, const char *name, 
     : QGLWidget(KisOpenGLCanvasFormat, parent, sharedContextWidget)
 {
     QGLWidget::setObjectName(name);
+    setAttribute(Qt::WA_PaintOutsidePaintEvent);
+
     if (isSharing()) {
         kDebug(41001) << "Created QGLWidget with sharing\n";
     } else {

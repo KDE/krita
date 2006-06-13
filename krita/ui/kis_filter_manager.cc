@@ -86,13 +86,13 @@ void KisFilterManager::setup(KActionCollection * ac)
 
     KActionMenu * other = 0;
     KActionMenu * am = 0;
-    
+
     m_filterList = KisFilterRegistry::instance()->listKeys();
-    
+
     for ( QList<KoID>::Iterator it = m_filterList.begin(); it != m_filterList.end(); ++it ) {
         f = KisFilterRegistry::instance()->get(*it);
         if (!f) break;
-        
+
         QString s = f->menuCategory();
         if (s == "adjust" && !m_filterActionMenus.find("adjust")) {
             am = new KActionMenu(i18n("Adjust"), ac, "adjust_filters");
@@ -148,13 +148,13 @@ void KisFilterManager::setup(KActionCollection * ac)
             other = new KActionMenu(i18n("Other"), ac, "misc_filters");
             m_filterActionMenus.insert("other", am);
         }
-        
+
     }
 
     m_reapplyAction = new KAction(i18n("Apply Filter Again"), ac, "filter_apply_again");
     m_reapplyAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_F);
     connect(m_reapplyAction, SIGNAL(triggered()), this , SLOT(slotApply()));
-    
+
     m_reapplyAction->setEnabled(false);
 
     f = 0;
@@ -167,7 +167,7 @@ void KisFilterManager::setup(KActionCollection * ac)
         // Create action
         KAction * a = new KAction(f->menuEntry(), ac, QString("krita_filter_%1").arg((*it).id()).toAscii());
         connect(a, SIGNAL(triggered()), m_filterMapper, SLOT(map()));
-                                  
+
 
         // Add action to the right submenu
         KActionMenu * m = m_filterActionMenus.find( f->menuCategory() );
@@ -199,7 +199,7 @@ void KisFilterManager::updateGUI()
     if (!layer) return;
 
     KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
-    
+
     bool enable =  !(layer->locked() || !layer->visible() || partLayer);
     KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>( layer.data()));
     if(!player)
@@ -208,11 +208,11 @@ void KisFilterManager::updateGUI()
     }
     m_reapplyAction->setEnabled(m_lastFilterConfig);
     if (m_lastFilterConfig)
-        m_reapplyAction->setText(i18n("Apply Filter Again") + ": " 
+        m_reapplyAction->setText(i18n("Apply Filter Again") + ": "
             + KisFilterRegistry::instance()->get(m_lastFilterConfig->name())->id().name());
     else
         m_reapplyAction->setText(i18n("Apply Filter Again"));
-    
+
     KAction * a;
     int i = 0;
     for (a = m_filterActions.first(); a; a = m_filterActions.next() , i++) {
@@ -265,7 +265,7 @@ bool KisFilterManager::apply()
 
     KisTransaction * cmd = 0;
     if (img->undo()) cmd = new KisTransaction(m_lastFilter->id().name(), dev);
-    
+
     m_lastFilter->process(dev, dev, m_lastFilterConfig, rect);
     m_reapplyAction->setEnabled(m_lastFilterConfig);
     if (m_lastFilterConfig)
@@ -274,7 +274,7 @@ bool KisFilterManager::apply()
 
     else
         m_reapplyAction->setText(i18n("Apply Filter Again"));
-    
+
     if (m_lastFilter->cancelRequested()) {
         delete m_lastFilterConfig;
         if (cmd) {
@@ -364,6 +364,7 @@ void KisFilterManager::slotApplyFilter(int i)
         if(m_lastDialog->exec() == QDialog::Rejected )
         {
             delete m_lastDialog;
+            m_lastFilterConfig = oldConfig;
             m_lastDialog = oldDialog;
             m_lastFilter = oldFilter;
             return;
@@ -371,6 +372,7 @@ void KisFilterManager::slotApplyFilter(int i)
     }
 
     if (!apply()) {
+        delete m_lastDialog;
         m_lastFilterConfig = oldConfig;
         m_lastDialog = oldDialog;
         m_lastFilter = oldFilter;

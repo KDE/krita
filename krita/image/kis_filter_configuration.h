@@ -34,6 +34,8 @@ class QWidget;
  * the filter parameters. Filters can subclass this class to implement
  * direct accessors to properties, but properties not in the map will
  * not be serialized.
+ *
+ * XXX: Use KoProperties here!
  */
 class KRITAIMAGE_EXPORT KisFilterConfiguration {
 

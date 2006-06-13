@@ -185,6 +185,7 @@ KisPaintDeviceSP KisPartLayerImpl::prepareProjection(KisPaintDeviceSP projection
 
     //assume the part is sRGB for now, and that "" is sRGB
     // And we need to paint offsetted
+    // XXX: Bug! We need to set alpha correctly, here.
     m_cache->convertFromQImage(qimg, "", intersection.left(), intersection.top());
 
     return m_cache;

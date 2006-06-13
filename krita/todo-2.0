@@ -35,6 +35,7 @@ Wet & sticky colorspace
 
 Colorspace core stuff
 
+?  * use the icc profile widget from lprof/digikam wherever a profile is selected
 ?  * add an input profile combobox to the import image & scan dialogs
 ?  * add an export profile combobox to the export image/print dialogs
 ?  * support out-of-gamut warning indications for parts of an image 

@@ -39,6 +39,7 @@ KisQPaintDeviceCanvasWidget::KisQPaintDeviceCanvasWidget(QWidget *parent, const 
     : QWidget(parent)
 {
     QWidget::setObjectName(name);
+    QWidget::setAttribute(Qt::WA_PaintOutsidePaintEvent);
 }
 
 KisQPaintDeviceCanvasWidget::~KisQPaintDeviceCanvasWidget()

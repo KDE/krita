@@ -25,6 +25,8 @@
 
 #include <KoGenericRegistry.h>
 
+#include <koffice_export.h>
+
 class KoShape;
 class KoShapeFactory;
 
@@ -33,7 +35,7 @@ class KoShapeFactory;
  * or rather, of the factories that applications can use to create flake
  * shape objects.
  */
-class KoShapeRegistry : public QObject,  public KoGenericRegistry<KoShapeFactory*>
+class FLAKE_EXPORT KoShapeRegistry : public QObject,  public KoGenericRegistry<KoShapeFactory*>
 {
 
     Q_OBJECT
@@ -52,6 +54,7 @@ private:
     KoShapeRegistry();
     KoShapeRegistry(const KoShapeRegistry&);
     KoShapeRegistry operator=(const KoShapeRegistry&);
+    void init();
 
 private:
     static KoShapeRegistry *m_singleton;

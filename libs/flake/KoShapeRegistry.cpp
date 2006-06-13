@@ -37,6 +37,9 @@ KoShapeRegistry *KoShapeRegistry::m_singleton = 0;
 
 KoShapeRegistry::KoShapeRegistry()
 {
+}
+
+void KoShapeRegistry::init() {
     KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/Shape"),
             QString::fromLatin1("(Type == 'Service') and "
                 "([X-Flake-Version] == 1)"));
@@ -86,6 +89,7 @@ KoShapeRegistry* KoShapeRegistry::instance()
     if(KoShapeRegistry::m_singleton == 0)
     {
         KoShapeRegistry::m_singleton = new KoShapeRegistry();
+        KoShapeRegistry::m_singleton->init();
     }
     return KoShapeRegistry::m_singleton;
 }

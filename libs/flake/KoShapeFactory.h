@@ -54,7 +54,7 @@ class FLAKE_EXPORT KoShapeFactory : public QObject {
 public:
 
     /// Factory for shapes
-    KoShapeFactory(const QString id, const QString name);
+    KoShapeFactory(QObject *parent, const QString id, const QString name);
     virtual ~KoShapeFactory() {}
 
     virtual KoShape * createDefaultShape() = 0;

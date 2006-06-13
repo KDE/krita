@@ -29,7 +29,7 @@ class KoPathShapeFactory : public KoShapeFactory
 {
 public:
     /// constructor
-    KoPathShapeFactory();
+    KoPathShapeFactory(QObject *parent, const QStringList&);
     ~KoPathShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape(KoProperties * params) const;

@@ -22,8 +22,8 @@
 
 #include <klocale.h>
 
-KoPathShapeFactory::KoPathShapeFactory()
-: KoShapeFactory("KoPathShape", i18n("A simple path shape"))
+KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
+: KoShapeFactory(parent, "KoPathShape", i18n("A simple path shape"))
 {
     setToolTip("A simple path shape");
 }

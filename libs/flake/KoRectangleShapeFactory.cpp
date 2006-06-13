@@ -21,8 +21,8 @@
 
 #include <klocale.h>
 
-KoRectangleShapeFactory::KoRectangleShapeFactory()
-: KoShapeFactory(KoRectangleShape_SHAPEID, i18n("A simple square shape"))
+KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringList&)
+: KoShapeFactory(parent, KoRectangleShape_SHAPEID, i18n("A simple square shape"))
 {
     setToolTip(i18n("A simple square shape"));
     // XXX: Add a nice icon using the KIconLoader

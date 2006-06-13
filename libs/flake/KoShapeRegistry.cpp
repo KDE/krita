@@ -72,8 +72,8 @@ KoShapeRegistry::KoShapeRegistry()
         }
     }
     // Also add our hard-coded dumb test shapes
-    add( new KoRectangleShapeFactory() );
-    add( new KoPathShapeFactory() );
+    add( new KoRectangleShapeFactory(this, QStringList()) );
+    add( new KoPathShapeFactory(this, QStringList()) );
 }
 
 

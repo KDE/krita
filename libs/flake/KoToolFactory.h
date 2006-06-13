@@ -30,20 +30,11 @@
 
 /**
  * A factory for KoTool objects.
- * This abstract class is a baseclass for real factories; each class inheriting from this one
- * will be the creator of one specific tool class. So there is one toolFactory for each type 
- * of tool.
- */
-class FLAKE_EXPORT KoToolFactory : public QObject {
-    Q_OBJECT
-
-public:
-    /**
-     * The baseclass for all tool plugins. Each plugin that ships a KoTool should also
-     * ship a factory. That factory will extend this class and set variable data like
-     * a toolTip and icon in the constructor of that extending class.
-     *
-     * An example usage would be:<pre>
+ * The baseclass for all tool plugins. Each plugin that ships a KoTool should also
+ * ship a factory. That factory will extend this class and set variable data like
+ * a toolTip and icon in the constructor of that extending class.
+ *
+ * An example usage would be:<pre>
 class MyToolFactory : public KoToolFactory {
 public:
     MyToolFactory(QObject *parent, const QStringList&)
@@ -56,9 +47,16 @@ public:
     KoTool* createTool(KoCanvasBase *canvas);
 };
 K_EXPORT_COMPONENT_FACTORY(myLibrary,
-         KGenericFactory<MyToolFactory>( "MyTool" ) )
+     KGenericFactory<MyToolFactory>( "MyTool" ) )
 </pre>
 
+ */
+class FLAKE_EXPORT KoToolFactory : public QObject {
+    Q_OBJECT
+
+public:
+    /**
+     * Create the new factory
      * @param parent the parent QWidget for memory management usage.
      * @param id a string that will be used internally for referencing the tool, for
      *   example for use by the KoTool::sigActivateTemporary.
@@ -117,8 +115,8 @@ K_EXPORT_COMPONENT_FACTORY(myLibrary,
 
 protected:
     /**
-     * Set the id of this tool.
-     * @param id the combination of a internal ID and a (translated) name 
+     * Set the tooltip to be used for this tool
+     * @param tooltip the tooltip
      */
     void setToolTip(const QString & tooltip);
     /**
@@ -143,7 +141,7 @@ protected:
      * This is the ID, as passed to the constructor of a KoShapeFactory, that the tool
      * we create is associated with. This means that if a KoTextShape is selected, then
      * all tools that have its id set here will be added to the dynamic part of the toolbox.
-     * @param the ID of the shape
+     * @param activationShapeId the ID of the shape
      */
     void setActivationShapeID(const QString &activationShapeId);
 

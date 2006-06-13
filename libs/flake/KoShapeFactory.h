@@ -41,19 +41,43 @@ struct FLAKE_EXPORT KoShapeTemplate {
 
     QString name;
     QString description;
-    QString tooltip;
+    QString toolTip;
     QPixmap pixmap;
     KoProperties * params;
 };
 
 /**
- * The shape factory can create a KoShape without needing a tool or a direct new().
+ * A factory for KoShape objects.
+ * The baseclass for all shape plugins. Each plugin that ships a KoShape should also
+ * ship a factory. That factory will extend this class and set variable data like
+ * a toolTip and icon in the constructor of that extending class.
+ *
+ * An example usage would be:<pre>
+class MyShapeFactory : public KoShapeFactory {
+public:
+    MyShapeFactory(QObject *parent, const QStringList&)
+        : KoShapeFactory(parent, "MyShape", i18n("My Shape")) {
+        setToolTip(i18n("A nice shape"));
+    }
+    ~MyShapeFactory() {}
+    // more methods here
+};
+K_EXPORT_COMPONENT_FACTORY(myLibrary,
+     KGenericFactory<MyShapeFactory>( "MyShape" ) )
+</pre>
+
  */
 class FLAKE_EXPORT KoShapeFactory : public QObject {
     Q_OBJECT
 public:
 
-    /// Factory for shapes
+    /**
+     * Create the new factory
+     * @param parent the parent QWidget for memory management usage.
+     * @param id a string that will be used internally for referencing the shape, for
+     *   example for use by the KoShape::sigActivateTemporary.
+     * @param name the user visible name of the tool this factory creates.
+     */
     KoShapeFactory(QObject *parent, const QString &id, const QString &name);
     virtual ~KoShapeFactory() {}
 
@@ -62,17 +86,45 @@ public:
     virtual KoShape * createShapeFromTemplate(KoShapeTemplate * shapeTemplate) const = 0;
     virtual QWidget * optionWidget() const = 0;
 
+    /**
+     * Create a KoID for the shape this factory creates.
+     */
     const KoID id() const;
+    /**
+     * return the id for the shape this factory creates.
+     * @return the id for the shape this factory creates.
+     */
     const QString & shapeId() const;
     const QList<KoProperties*> templates() const { return m_templates; }
+    /**
+     * return a translated tooltip Text for a selector of shapes
+     * @return a translated tooltip Text
+     */
     const QString & toolTip() const;
+    /**
+     * return an icon for this tool for a selector of shapes
+     * @return an icon for this tool
+     */
     const QPixmap & icon() const;
+    /**
+     * return the user visible (and translated) name to be seen by the user.
+     * @return the user visible (and translated) name to be seen by the user.
+     */
     const QString & name() const;
 
 protected:
 
     void addTemplate(KoProperties * params);
+    /**
+     * Set the tooltip to be used for a selector of shapes
+     * @param tooltip the tooltip
+     */
     void setToolTip(const QString & tooltip);
+    /**
+     * Set an icon to be used in a selector of shapes
+     * @param icon the pixmap from the iconLoader
+     * @see KIconLoader
+     */
     void setIcon(const QPixmap & icon);
     void setOptionWidget(QWidget * widget);
 

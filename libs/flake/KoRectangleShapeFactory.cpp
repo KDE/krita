@@ -22,7 +22,7 @@
 #include <klocale.h>
 
 KoRectangleShapeFactory::KoRectangleShapeFactory()
-: KoShapeFactory(KoRectangleShape::SHAPEID, i18n("A simple square shape"))
+: KoShapeFactory(KoRectangleShape_SHAPEID, i18n("A simple square shape"))
 {
     setToolTip(i18n("A simple square shape"));
     // XXX: Add a nice icon using the KIconLoader

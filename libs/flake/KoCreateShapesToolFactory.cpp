@@ -29,7 +29,7 @@
 #include <QPixmap>
 
 KoCreateShapesToolFactory::KoCreateShapesToolFactory()
-: KoToolFactory(KoCreateShapesTool::TOOLID, i18n("Create Shapes"))
+: KoToolFactory(KoCreateShapesTool_ID, i18n("Create Shapes"))
 {
     setToolTip(i18n("Create object"));
     setToolType("main");

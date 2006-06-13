@@ -19,14 +19,14 @@
 
 #include "KoShapeFactory.h"
 
-KoShapeFactory::KoShapeFactory(int id, const QString name)
+KoShapeFactory::KoShapeFactory(const QString id, const QString name)
 : m_id(id)
 , m_name(name)
 {
 }
 
 const KoID KoShapeFactory::id() const {
-    return KoID(QString::number(m_id), m_name);
+    return KoID(m_id, m_name);
 }
 
 const QString & KoShapeFactory::toolTip() const {
@@ -53,7 +53,7 @@ void KoShapeFactory::setIcon(const QPixmap & icon) {
     m_icon = icon;
 }
 
-int KoShapeFactory::shapeId() const {
+const QString &KoShapeFactory::shapeId() const {
     return m_id;
 }
 

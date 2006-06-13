@@ -38,7 +38,7 @@ class FLAKE_EXPORT KoToolFactory : public QObject {
     Q_OBJECT
 
 public:
-    KoToolFactory(int id, const QString name);
+    KoToolFactory(const QString id, const QString name);
     virtual ~KoToolFactory();
 
     /// instanciate a new tool
@@ -47,7 +47,7 @@ public:
      * return the id for the tool this factory is associated with.
      * @return the id for the tool this factory is associated with.
      */
-    int toolId() const;
+    const QString& toolId() const;
     const QString& name() const;
     const KoID id() const;
     /// The priority of this tool in its section in the toolbox
@@ -75,8 +75,7 @@ private:
     QString m_toolType;
     QString m_tooltip;
     QPixmap m_icon;
-    const QString m_name;
-    const int m_id;
+    const QString m_name, m_id;
     int m_priority, m_activationId;
 };
 

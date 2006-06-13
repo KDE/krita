@@ -18,7 +18,7 @@
 
 #include "KoToolFactory.h"
 
-KoToolFactory::KoToolFactory(int id, const QString name)
+KoToolFactory::KoToolFactory(const QString id, const QString name)
 : m_name(name)
 , m_id(id)
 {
@@ -30,7 +30,7 @@ KoToolFactory::~KoToolFactory()
 {
 }
 
-int KoToolFactory::toolId() const {
+const QString &KoToolFactory::toolId() const {
     return m_id;
 }
 
@@ -71,7 +71,7 @@ void KoToolFactory::setPriority(int newPriority) {
 }
 
 const KoID KoToolFactory::id() const {
-    return KoID(QString::number(m_id), m_name);
+    return KoID(m_id, m_name);
 }
 
 const QString& KoToolFactory::name() const {

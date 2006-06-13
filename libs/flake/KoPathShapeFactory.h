@@ -37,5 +37,4 @@ public:
     QWidget * optionWidget() const { return 0; }
 };
 
-
 #endif

@@ -27,6 +27,7 @@
 #include <koffice_export.h>
 
 class QPainter;
+#define KoRectangleShape_SHAPEID "43751"
 
 /**
  * Simple Rectangle shape.
@@ -34,8 +35,6 @@ class QPainter;
 class FLAKE_EXPORT KoRectangleShape : public KoShape
 {
 public:
-    enum RectangleShape { SHAPEID = 43751 };
-
     KoRectangleShape();
     void paint(QPainter &painter, KoViewConverter &converter);
 };

@@ -23,7 +23,7 @@
 #include <klocale.h>
 
 KoPathShapeFactory::KoPathShapeFactory()
-: KoShapeFactory(KoPathShape::SHAPEID, i18n("A simple path shape"))
+: KoShapeFactory("KoPathShape", i18n("A simple path shape"))
 {
     setToolTip("A simple path shape");
 }

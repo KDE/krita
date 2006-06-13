@@ -54,7 +54,7 @@ class FLAKE_EXPORT KoShapeFactory : public QObject {
 public:
 
     /// Factory for shapes
-    KoShapeFactory(int id, const QString name);
+    KoShapeFactory(const QString id, const QString name);
     virtual ~KoShapeFactory() {}
 
     virtual KoShape * createDefaultShape() = 0;
@@ -63,11 +63,11 @@ public:
     virtual QWidget * optionWidget() const = 0;
 
     const KoID id() const;
-    int shapeId() const;
+    const QString & shapeId() const;
     const QList<KoProperties*> templates() const { return m_templates; }
     const QString & toolTip() const;
     const QPixmap & icon() const;
-    const QString& name() const;
+    const QString & name() const;
 
 protected:
 
@@ -81,8 +81,7 @@ private:
     QList<KoProperties*> m_templates;
     QString m_tooltip;
     QPixmap m_icon;
-    const QString m_name;
-    const int m_id;
+    const QString m_id, m_name;
 };
 
 #endif // _KO_SHAPE_FACTORY_

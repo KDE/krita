@@ -33,6 +33,8 @@
 
 class KoInteractionStrategy;
 
+#define KoInteractionTool_ID "InteractionTool"
+
 /**
  * The default tool (associated with the arrow icon) implements the default
  * interactions you have with flake objects.<br>
@@ -44,8 +46,6 @@ class KoInteractionStrategy;
 class FLAKE_EXPORT KoInteractionTool : public KoTool
 {
 public:
-    enum InteractionToolenum { TOOLID = 20766 };
-
     /**
      * Constructor for basic interaction tool where user actions are translated
      * and handled by interaction strategies of type KoInteractionStrategy.

@@ -31,6 +31,7 @@
 class KoCanvasBase;
 class KoShapeControllerBase;
 
+#define KoCreateShapesTool_ID "CreateShapesTool"
 
 /**
  * A tool to create shapes with.
@@ -38,8 +39,6 @@ class KoShapeControllerBase;
 class FLAKE_EXPORT KoCreateShapesTool : public KoInteractionTool
 {
 public:
-    enum createShapesToolenum { TOOLID = 58297 };
-
     /**
      * Create a new tool; typically not called by applications, only by the KoToolManager
      * @param canvas the canvas this tool works for.
@@ -74,16 +73,16 @@ public:
      * create the new shape.
      * @param id the SHAPEID of the to be generated shape
      */
-    void setShapeId(int id) { m_shapeId = id; }
+    void setShapeId(const QString id) { m_shapeId = id; }
     /**
      * return the shape Id that is to be created.
      * @return the shape Id that is to be created.
      */
-    int shapeId() const { return m_shapeId; }
+    const QString shapeId() const { return m_shapeId; }
 
 private:
     KoShapeControllerBase *m_shapeController;
-    int m_shapeId;
+    QString m_shapeId;
 };
 
 #endif

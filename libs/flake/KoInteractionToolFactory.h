@@ -29,7 +29,7 @@
 class FLAKE_EXPORT KoInteractionToolFactory : public KoToolFactory {
 public:
     /// constructor
-    KoInteractionToolFactory();
+    KoInteractionToolFactory(QObject *parent, const QStringList&);
     ~KoInteractionToolFactory();
 
     KoTool* createTool(KoCanvasBase *canvas);

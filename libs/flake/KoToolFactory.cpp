@@ -18,12 +18,12 @@
 
 #include "KoToolFactory.h"
 
-KoToolFactory::KoToolFactory(const QString id, const QString name)
-: m_name(name)
+KoToolFactory::KoToolFactory(QObject *parent, const QString id, const QString name)
+: QObject(parent)
+, m_name(name)
 , m_id(id)
 {
     m_priority=100;
-    m_activationId=-1;
 }
 
 KoToolFactory::~KoToolFactory()
@@ -50,8 +50,12 @@ const QPixmap& KoToolFactory::icon() const {
     return m_icon;
 }
 
-int KoToolFactory::activationShapeId() const {
+const QString &KoToolFactory::activationShapeId() const {
     return m_activationId;
+}
+
+void KoToolFactory::setActivationShapeID(const QString &activationShapeId) {
+    m_activationId = activationShapeId;
 }
 
 void KoToolFactory::setToolTip(const QString & tooltip) {

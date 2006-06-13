@@ -38,7 +38,7 @@ class FLAKE_EXPORT KoToolFactory : public QObject {
     Q_OBJECT
 
 public:
-    KoToolFactory(const QString id, const QString name);
+    KoToolFactory(QObject *parent, const QString id, const QString name);
     virtual ~KoToolFactory();
 
     /// instanciate a new tool
@@ -59,7 +59,7 @@ public:
     /// return an icon for this tool
     const QPixmap& icon() const;
     /// The shape ID the tool is associated with, or 0 when the tool is a generic tool
-    int activationShapeId() const;
+    const QString &activationShapeId() const;
 
 protected:
     /**
@@ -70,13 +70,15 @@ protected:
     void setToolType(const QString & toolType);
     void setIcon(const QPixmap & icon);
     void setPriority(int newPriority);
+    void setActivationShapeID(const QString &activationShapeId);
 
 private:
     QString m_toolType;
     QString m_tooltip;
+    QString m_activationId;
     QPixmap m_icon;
     const QString m_name, m_id;
-    int m_priority, m_activationId;
+    int m_priority;
 };
 
 #endif

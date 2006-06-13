@@ -29,7 +29,7 @@
 class FLAKE_EXPORT KoCreateShapesToolFactory : public KoToolFactory {
 public:
     /// Constructor
-    KoCreateShapesToolFactory();
+    KoCreateShapesToolFactory(QObject *parent, const QStringList&);
     /// Destructor
     ~KoCreateShapesToolFactory();
 

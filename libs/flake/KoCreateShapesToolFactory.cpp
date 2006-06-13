@@ -28,8 +28,8 @@
 #include <QRectF>
 #include <QPixmap>
 
-KoCreateShapesToolFactory::KoCreateShapesToolFactory()
-: KoToolFactory(KoCreateShapesTool_ID, i18n("Create Shapes"))
+KoCreateShapesToolFactory::KoCreateShapesToolFactory(QObject *parent, const QStringList&)
+: KoToolFactory(parent, KoCreateShapesTool_ID, i18n("Create Shapes"))
 {
     setToolTip(i18n("Create object"));
     setToolType("main");

@@ -67,8 +67,8 @@ void KoToolManager::setup() {
         return;
     }
     // add defaults
-    m_tools.append( new ToolHelper(new KoCreateShapesToolFactory()) );
-    m_defaultTool = new ToolHelper(new KoInteractionToolFactory());
+    m_tools.append( new ToolHelper(new KoCreateShapesToolFactory(this, QStringList())) );
+    m_defaultTool = new ToolHelper(new KoInteractionToolFactory(this, QStringList()));
     m_tools.append(m_defaultTool);
 
     KoToolRegistry *registry = KoToolRegistry::instance();

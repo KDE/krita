@@ -22,13 +22,11 @@
 
 #include "KoXYColorSelector.h"
 
-KoXYColorSelector::KoXYColorSelector( KoColorSpace* colorSpace, QWidget *parent ): KXYSelector( parent ), m_colorSpace(colorSpace)
+KoXYColorSelector::KoXYColorSelector( KoColorSpace* colorSpace, QWidget *parent )
+    : KXYSelector( parent )
+    , m_colorSpace(colorSpace)
 {
-  //XXX: Only for testing remove later
-  m_colors[TOPLEFT] = KoColor( QColor( 255, 0, 0), m_colorSpace);
-  m_colors[TOPRIGHT] = KoColor( QColor( 255, 0, 255), m_colorSpace);
-  m_colors[BOTTOMLEFT] = KoColor( QColor( 0, 255, 0), m_colorSpace);
-  m_colors[BOTTOMRIGHT] = KoColor( QColor( 0, 0, 0), m_colorSpace);
+    setRange(0, 0, 255, 255);
 }
 
 void KoXYColorSelector::setColors( const KoColor& topLeftColor, const KoColor& topRightColor,  const KoColor& bottomLeftColor, const KoColor& bottomRightColor)
@@ -45,7 +43,6 @@ void KoXYColorSelector::drawContents( QPainter *painter )
 {
     KoColor c = m_colors[0]; // quick way to set the colorspace
     QColor color;
-    quint8 opacity;
 
     const quint8 *colors[4];
     colors[0] = m_colors[0].data();
@@ -69,8 +66,7 @@ void KoXYColorSelector::drawContents( QPainter *painter )
 
             m_colorSpace->mixColors(colors, colorWeights, 4, c.data());
 
-            c.toQColor( &color, &opacity );
-            color.setAlpha(opacity);
+            c.toQColor( &color);
 
             image.setPixel(x, y, color.rgba());
         }

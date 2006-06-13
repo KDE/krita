@@ -41,7 +41,7 @@ class KOPAINTER_EXPORT KoUniColorChooser
     typedef QWidget super;
 
 public:
-    KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegistry, QWidget *parent = 0L, const char *name = 0);
+    KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegistry, QWidget *parent = 0L);
     virtual ~KoUniColorChooser() {}
 
 public slots:
@@ -63,10 +63,19 @@ protected slots:
     virtual void slotSChanged(int s);
     virtual void slotVChanged(int v);
     virtual void slotWheelChanged(const KoOldColor& c);
+    virtual void slotRSelected(bool s);
+    virtual void slotGSelected(bool s);
+    virtual void slotBSelected(bool s);
+    virtual void slotSliderChanged(int v);
+    virtual void slotXYChanged(int u, int v);
 
     void slotSetColor(const QColor& c);
 
 private:
+    enum ChannelType {CHANNEL_H, CHANNEL_S, CHANNEL_V, CHANNEL_R, CHANNEL_G, CHANNEL_B,CHANNEL_L,CHANNEL_a,CHANNEL_b};
+
+    ChannelType m_activeChannel;
+
     void changedFgColor();
 
     void update(const KoOldColor & color);
@@ -105,6 +114,7 @@ private:
     KoOldColor m_fgColor;
 
     bool m_autovalue;
+    KoColorSpaceFactoryRegistry* m_csFactoryRegistry;
 };
 
 #endif

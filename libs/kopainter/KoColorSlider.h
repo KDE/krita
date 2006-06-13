@@ -34,19 +34,13 @@ public:
   virtual ~KoColorSlider();
 
 public:
-  const KoColor firstColor() const { return color1; }
-  const KoColor secondColor() const { return color2; }
-
-  void setLeftColor( const KoColor& c );
-  void setRightColor( const KoColor& c );
-  void setColors( const KoColor& leftColor, const KoColor& rightColor);
+  void setColors( const KoColor& minColor, const KoColor& maxColor);
 
 protected:
   virtual void drawContents( QPainter* );
 
 protected:
-  KoColor color1;
-  KoColor color2;
+  KoColor m_colors[2];
 
   KoColorSpace * m_colorSpace;
 };

@@ -36,9 +36,9 @@
 
 #include "KoUniColorChooser.h"
 
-KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegistry, QWidget *parent, const char *name) : super(parent)
+KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegistry, QWidget *parent) : super(parent)
 {
-    setObjectName(name);
+    m_csFactoryRegistry = csFactoryRegistry;
 
     QGridLayout *mGrid = new QGridLayout;
 
@@ -198,17 +198,26 @@ KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegis
     mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 3, 5 );
     mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 7, 9 );
 
-    //connect(m_VSelector, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
-    //connect(m_colorwheel, SIGNAL(valueChanged(const KoOldColor&)), this, SLOT(slotWheelChanged(const KoOldColor&)));
-
     /* connect spin box */
     connect(m_HIn, SIGNAL(valueChanged(int)), this, SLOT(slotHChanged(int)));
     connect(m_SIn, SIGNAL(valueChanged(int)), this, SLOT(slotSChanged(int)));
     connect(m_VIn, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
 
+    /* connect radio buttons */
+    connect(m_RRB, SIGNAL(toggled(bool)), this, SLOT(slotRSelected(bool)));
+    connect(m_GRB, SIGNAL(toggled(bool)), this, SLOT(slotGSelected(bool)));
+    connect(m_BRB, SIGNAL(toggled(bool)), this, SLOT(slotBSelected(bool)));
+
+    /* connect slider */
+    connect(m_xycolorselector, SIGNAL(valueChanged(int,int)), this, SLOT(slotXYChanged(int,int)));
+
+    /* connect sxy */
+    connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSliderChanged(int)));
+
     //setFixedSize(mGrid -> minimumSize());
     m_autovalue = true; // So on the initial selection of h or v, s gets set to 255.
 
+    m_RRB->setChecked(true);
     update(QColor(Qt::black));
 
     setLayout(mGrid);
@@ -234,6 +243,144 @@ void KoUniColorChooser::slotVChanged(int v)
     m_autovalue = false;
     m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
     changedFgColor();
+}
+
+void KoUniColorChooser::slotSliderChanged(int v)
+{
+    switch(m_activeChannel)
+    {
+        case CHANNEL_R:
+            slotRSelected(true);
+            break;
+        case CHANNEL_G:
+            slotGSelected(true);
+            break;
+        case CHANNEL_B:
+            slotBSelected(true);
+            break;
+    }
+}
+
+void KoUniColorChooser::slotXYChanged(int u, int v)
+{
+    switch(m_activeChannel)
+    {
+        case CHANNEL_R:
+            slotRSelected(true);
+            break;
+        case CHANNEL_G:
+            slotGSelected(true);
+            break;
+        case CHANNEL_B:
+            slotBSelected(true);
+            break;
+    }
+}
+
+
+void KoUniColorChooser::slotRSelected(bool s)
+{
+    kDebug() << "R selected" << endl;
+
+    m_activeChannel = CHANNEL_R;
+
+    m_autovalue = false;
+    quint8 data[4];
+    data[2] = m_colorSlider->sliderPosition();
+    data[1] = 255;
+    data[0] = 0;
+    data[3] = 255;
+    KoColor topleft(data,m_csFactoryRegistry->getRGB8());
+    data[1] = 255;
+    data[0] = 255;
+    KoColor topright(data,m_csFactoryRegistry->getRGB8());
+    data[1] = 0;
+    data[0] = 0;
+    KoColor bottomleft(data,m_csFactoryRegistry->getRGB8());
+    data[1] = 0;
+    data[0] = 255;
+    KoColor bottomright(data,m_csFactoryRegistry->getRGB8());
+    
+    m_xycolorselector->setColors(topleft,topright,bottomleft,bottomright);
+
+    data[2] = 0;
+    data[1] = m_xycolorselector->yValue();
+    data[0] = m_xycolorselector->xValue();
+    KoColor mincolor(data,m_csFactoryRegistry->getRGB8());
+    data[2] = 255;
+    KoColor maxcolor(data,m_csFactoryRegistry->getRGB8());
+
+    m_colorSlider->setColors(mincolor, maxcolor);
+}
+
+void KoUniColorChooser::slotGSelected(bool s)
+{
+    kDebug() << "G selected" << endl;
+
+    m_activeChannel = CHANNEL_G;
+
+    m_autovalue = false;
+    quint8 data[4];
+    data[2]=255;
+    data[1]=m_colorSlider->sliderPosition();
+    data[0]=0;
+    data[3]=255;
+    KoColor topleft(data,m_csFactoryRegistry->getRGB8());
+    data[2]=255;
+    data[0]=255;
+    KoColor topright(data,m_csFactoryRegistry->getRGB8());
+    data[2]=0;
+    data[0]=0;
+    KoColor bottomleft(data,m_csFactoryRegistry->getRGB8());
+    data[2]=0;
+    data[0]=255;
+    KoColor bottomright(data,m_csFactoryRegistry->getRGB8());
+    
+    m_xycolorselector->setColors(topleft,topright,bottomleft,bottomright);
+
+    data[2] = m_xycolorselector->yValue();
+    data[1] = 0;
+    data[0] = m_xycolorselector->xValue();
+    KoColor mincolor(data,m_csFactoryRegistry->getRGB8());
+    data[1] = 255;
+    KoColor maxcolor(data,m_csFactoryRegistry->getRGB8());
+
+    m_colorSlider->setColors(mincolor, maxcolor);
+}
+
+void KoUniColorChooser::slotBSelected(bool s)
+{
+    kDebug() << "B selected" << endl;
+
+    m_activeChannel = CHANNEL_B;
+
+    m_autovalue = false;
+    quint8 data[4];
+    data[2]=0;
+    data[1]=255;
+    data[0]=m_colorSlider->sliderPosition();
+    data[3]=255;
+    KoColor topleft(data,m_csFactoryRegistry->getRGB8());
+    data[2]=255;
+    data[1]=255;
+    KoColor topright(data,m_csFactoryRegistry->getRGB8());
+    data[2]=0;
+    data[1]=0;
+    KoColor bottomleft(data,m_csFactoryRegistry->getRGB8());
+    data[2]=255;
+    data[1]=0;
+    KoColor bottomright(data,m_csFactoryRegistry->getRGB8());
+    
+    m_xycolorselector->setColors(topleft,topright,bottomleft,bottomright);
+
+    data[2] = m_xycolorselector->xValue();
+    data[1] = m_xycolorselector->yValue();
+    data[0] = 0;
+    KoColor mincolor(data,m_csFactoryRegistry->getRGB8());
+    data[0] = 255;
+    KoColor maxcolor(data,m_csFactoryRegistry->getRGB8());
+
+    m_colorSlider->setColors(mincolor, maxcolor);
 }
 
 void KoUniColorChooser::slotWheelChanged(const KoOldColor& c)

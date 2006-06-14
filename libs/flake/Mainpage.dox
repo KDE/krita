@@ -33,7 +33,7 @@ X-Flake-Version=1
  * Then you have to setup the KoToolManager (from KOfficeUI):
  * In your KoDocument instance:
 @code
-        KoToolManager::instance()->toolBox()->show();</pre>
+        KoToolManager::instance()->toolBox()->show();
 @endcode
  * And use KoCanvasController KoCanvasView instance with your Canvas:
 @code
@@ -75,7 +75,7 @@ public:
         m_tool->keyReleaseEvent(e);
     }
 
-    void KWCanvas::keyPressEvent( QKeyEvent *e ) {
+    void keyPressEvent( QKeyEvent *e ) {
         m_tool->keyPressEvent(e);
     }
 
@@ -103,6 +103,6 @@ private:
     MyCanvas *canvas = new MyCanvas();
     canvasController->setCanvas(canvas);
     KoToolManager::instance()->addControllers(canvasController, m_document);
-    parentLayout.addWidget(canvasController);</pre>
+    parentLayout.addWidget(canvasController);
 @endcode
  */

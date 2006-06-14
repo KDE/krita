@@ -22,13 +22,14 @@
 #include "qwidget.h"
 #include <QLabel>
 
-#include <koColor.h>
+#include <KoColor.h>
 
 #include <koffice_export.h>
 
 class KValueSelector;
 class KoXYColorSelector;
 class KoColorSlider;
+class KoColorPatch;
 class QFrame;
 class QLabel;
 class QSpinBox;
@@ -45,10 +46,6 @@ public:
     virtual ~KoUniColorChooser() {}
 
 public slots:
-    /**
-     * Set the current color to c. Do not emit the color changed signals
-     */
-    virtual void setColor(const QColor & c);
 
 signals:
 
@@ -62,27 +59,29 @@ protected slots:
     virtual void slotHChanged(int h);
     virtual void slotSChanged(int s);
     virtual void slotVChanged(int v);
-    virtual void slotWheelChanged(const KoOldColor& c);
+    virtual void slotRGBChanged();
     virtual void slotRSelected(bool s);
     virtual void slotGSelected(bool s);
     virtual void slotBSelected(bool s);
     virtual void slotSliderChanged(int v);
     virtual void slotXYChanged(int u, int v);
 
-    void slotSetColor(const QColor& c);
-
 private:
     enum ChannelType {CHANNEL_H, CHANNEL_S, CHANNEL_V, CHANNEL_R, CHANNEL_G, CHANNEL_B,CHANNEL_L,CHANNEL_a,CHANNEL_b};
 
     ChannelType m_activeChannel;
+    KoColor m_currentColor;
 
-    void changedFgColor();
-
-    void update(const KoOldColor & color);
+    void announceColor();
+    void updateValues();
+    void updateSelectorsR();
+    void updateSelectorsG();
+    void updateSelectorsB();
+    void updateSelectorsCurrent();
 
     KoXYColorSelector *m_xycolorselector;
     KoColorSlider *m_colorSlider;
-    QFrame *m_colorpatch;
+    KoColorPatch *m_colorpatch;
     QLabel *m_HLabel;
     QLabel *m_SLabel;
     QLabel *m_VLabel;
@@ -111,9 +110,6 @@ private:
     QRadioButton *m_aRB;
     QRadioButton *m_bRB;
 
-    KoOldColor m_fgColor;
-
-    bool m_autovalue;
     KoColorSpaceFactoryRegistry* m_csFactoryRegistry;
 };
 

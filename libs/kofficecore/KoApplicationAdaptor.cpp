@@ -27,7 +27,6 @@
 #include "KoApplication.h"
 
 #include "KoDocument.h"
-#include "KoDocumentIface.h"
 #include "KoMainWindow.h"
 #include "KoQueryTrader.h"
 #include "KoView.h"

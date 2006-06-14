@@ -42,7 +42,7 @@ const QString& KoShapeFactory::name() const {
     return m_name;
 }
 
-void KoShapeFactory::addTemplate(KoProperties * params) {
+void KoShapeFactory::addTemplate(KoShapeTemplate * params) {
     m_templates.append(params);
 }
 

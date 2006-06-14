@@ -20,14 +20,14 @@
 #ifndef __KOEditPathDia__
 #define __KOEditPathDia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QStringList>
 #include <koffice_export.h>
 class KEditListBox;
 class KUrlRequester;
 class QCheckBox;
 
-class KOFFICEUI_EXPORT KoEditPathDia : public KDialogBase
+class KOFFICEUI_EXPORT KoEditPathDia : public KDialog
 {
     Q_OBJECT
 public:
@@ -39,7 +39,7 @@ private:
     KUrlRequester *urlReq;
 };
 
-class KOFFICEUI_EXPORT KoChangePathDia : public KDialogBase
+class KOFFICEUI_EXPORT KoChangePathDia : public KDialog
 {
     Q_OBJECT
 public:

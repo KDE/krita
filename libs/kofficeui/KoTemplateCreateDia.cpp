@@ -104,14 +104,19 @@ public:
 
 KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) :
-    KDialogBase( parent, "template create dia", true, i18n( "Create Template" ),
-                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_file(file), m_pixmap(pix) {
+    KDialog( parent ), m_file(file), m_pixmap(pix) {
+
+    setButtons( KDialog::Ok|KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setCaption( i18n( "Create Template" ) );
+    setModal( true );
+    setObjectName( "template create dia" );
 
     d=new KoTemplateCreateDiaPrivate( parent, instance );
 
-    QFrame *mainwidget=makeMainWidget();
+    QWidget *mainwidget=mainWidget();
     QHBoxLayout *mbox=new QHBoxLayout( mainwidget );
-    mbox->setSpacing( KDialogBase::spacingHint() );
+    mbox->setSpacing( KDialog::spacingHint() );
     QVBoxLayout* leftbox = new QVBoxLayout();
     mbox->addLayout( leftbox );
 
@@ -153,8 +158,8 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     Q3GroupBox *pixbox=new Q3GroupBox(i18n("Picture"), mainwidget);
     rightbox->addWidget(pixbox);
     QVBoxLayout *pixlayout=new QVBoxLayout(pixbox );
-    pixlayout->setMargin(KDialogBase::marginHint());
-    pixlayout->setSpacing( KDialogBase::spacingHint());
+    pixlayout->setMargin(KDialog::marginHint());
+    pixlayout->setSpacing( KDialog::spacingHint());
     pixlayout->addSpacing(pixbox->fontMetrics().height()/2);
     pixlayout->addStretch(1);
     d->m_default=new QRadioButton(i18n("&Default"), pixbox);
@@ -229,7 +234,7 @@ void KoTemplateCreateDia::slotOk() {
         item=d->m_groups->firstChild();
     if(!item) {    // safe :)
         d->m_tree->writeTemplateTree();
-        KDialogBase::slotCancel();
+        slotButtonClicked( KDialog::Cancel );
         return;
     }
     // is it a group or a template? anyway - get the group :)
@@ -237,20 +242,20 @@ void KoTemplateCreateDia::slotOk() {
         item=item->parent();
     if(!item) {    // *very* safe :P
         d->m_tree->writeTemplateTree();
-        KDialogBase::slotCancel();
+        slotButtonClicked( KDialog::Cancel );
         return;
     }
 
     KoTemplateGroup *group=d->m_tree->find(item->text(0));
     if(!group) {    // even safer
         d->m_tree->writeTemplateTree();
-        KDialogBase::slotCancel();
+        slotButtonClicked( KDialog::Cancel );
         return;
     }
 
     if(d->m_name->text().isEmpty()) {
         d->m_tree->writeTemplateTree();
-        KDialogBase::slotCancel();
+        slotButtonClicked( KDialog::Cancel );
         return;
     }
 
@@ -308,7 +313,7 @@ void KoTemplateCreateDia::slotOk() {
 
     if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
         d->m_tree->writeTemplateTree();
-        KDialogBase::slotCancel();
+        slotButtonClicked( KDialog::Cancel );
         return;
     }
 
@@ -354,7 +359,7 @@ void KoTemplateCreateDia::slotOk() {
       grp.writePathEntry( "FullTemplateName", dir + "/" + t->file() );
       grp.writePathEntry( "AlwaysUseTemplate", dir + "/" + t->file() );
     }
-    KDialogBase::slotOk();
+    slotButtonClicked( KDialog::Ok );
 }
 
 void KoTemplateCreateDia::slotDefault() {

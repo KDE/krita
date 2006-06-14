@@ -32,7 +32,7 @@
 
 #ifndef QT_ONLY
 #include <keditlistbox.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kstdguiitem.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -125,9 +125,14 @@ StringListEdit::showEditor()
 
 #else
 
-	KDialogBase dialog(this->topLevelWidget(), "stringlist_dialog", true, i18n("Edit List of Items"),
-	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
+	KDialog dialog(this->topLevelWidget() );
 
+    dialog.setCaption( i18n("Edit List of Items") );
+    dialog.setObjectName( "stringlist_dialog" );
+    dialog.setButtons( KDialog::Ok|KDialog::Cancel );
+    dialog.setDefaultButton( KDialog::Ok );
+    dialog.setModal( false );
+    dialog.enableButtonSeparator( true );
 	KEditListBox *edit = new KEditListBox(i18n("Contents of %1", property()->caption()), &dialog, "editlist");
 	dialog.setMainWidget(edit);
 	edit->insertStringList(m_list);

@@ -31,16 +31,23 @@
 #include <QLabel>
 
 KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel|User1, Ok, true )
+    : KDialog( parent )
 {
+    setModal( true );
+    setObjectName( name );
+    setButtons( Ok|Cancel|User1 );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
+
     setCaption( i18n("Import Styles") );
     m_currentCollection = currentCollection;
-    KVBox *page = makeVBoxMainWidget();
+    KVBox *page = new KVBox();
+    setMainWidget(page);
     new QLabel(i18n("Select styles to import:"), page);
     m_listStyleName = new Q3ListBox( page );
     m_listStyleName->setSelectionMode( Q3ListBox::Multi );
     enableButtonOK( m_listStyleName->count() != 0 );
-    setButtonText( KDialogBase::User1, i18n("Load...") );
+    setButtonText( KDialog::User1, i18n("Load...") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotLoadFile()));
     setInitialSize( QSize( 300, 400 ) );
     setFocus();
@@ -91,7 +98,7 @@ void KoImportStyleDia::initList()
 void KoImportStyleDia::slotOk()
 {
     generateStyleList();
-    KDialogBase::slotOk();
+    slotButtonClicked( Ok );
 }
 
 QString KoImportStyleDia::generateStyleName( const QString & templateName ) const

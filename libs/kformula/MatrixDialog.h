@@ -21,7 +21,7 @@
 #define MATRIXDIALOG_H_INCLUDED
 
 #include <QWidget>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QValidator>
 
 #include "kformuladefs.h"
@@ -31,7 +31,7 @@ KFORMULA_NAMESPACE_BEGIN
 /**
  * Dialog for entering matrix sizes.
  */
-class MatrixDialog : public KDialogBase
+class MatrixDialog : public KDialog
 {
     Q_OBJECT
 

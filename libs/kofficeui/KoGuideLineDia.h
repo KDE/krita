@@ -22,7 +22,7 @@
 #ifndef KOGUIDELINEDIA_H
 #define KOGUIDELINEDIA_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoUnit.h>
 #include "KoRect.h"
 #include "KoPoint.h"
@@ -34,7 +34,7 @@ class QRadioButton;
 /**
  * @brief Class for setting a guide line position.
  */
-class KOFFICEUI_EXPORT KoGuideLineDia : public KDialogBase
+class KOFFICEUI_EXPORT KoGuideLineDia : public KDialog
 {
     Q_OBJECT
 public:

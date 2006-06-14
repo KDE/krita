@@ -9,7 +9,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -21,7 +21,8 @@
 #include "KoDocument.h"
 
 #include "KoDocument_p.h"
-#include "KoDocumentIface.h"
+#include "KoDocumentAdaptor.h"
+#include <dbus/qdbus.h>
 #include "KoDocumentChild.h"
 #include "KoView.h"
 #include "KoMainWindow.h"
@@ -36,7 +37,7 @@
 #include <KoXmlWriter.h>
 
 #include <kapplication.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kfileitem.h>
@@ -97,11 +98,20 @@ class KoViewWrapperWidget;
 
 const int KoDocument::s_defaultAutoSave = 300; // 5 minutes
 
+
+//static
+QString KoDocument::newObjectName()
+{
+    static int s_docIFNumber = 0;
+    QString name; name.setNum( s_docIFNumber++ ); name.prepend("document_");
+    return name;
+}
+
 class KoDocument::Private
 {
 public:
     Private() :
-        m_dcopObject( 0L ),
+//         m_dcopObject( 0L ),
         filterManager( 0L ),
         m_specialOutputFlag( 0 ), // default is native format
         m_isImporting( false ), m_isExporting( false ),
@@ -133,7 +143,7 @@ public:
     Q3ValueList<QDomDocument> m_viewBuildDocuments;
 
     KoViewWrapperWidget *m_wrapperWidget;
-    KoDocumentIface * m_dcopObject;
+//     KoDocumentIface * m_dcopObject;
     KoDocumentInfo *m_docInfo;
 
     KoUnit::Unit m_unit;
@@ -241,6 +251,10 @@ KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleView
     setAutoSave( s_defaultAutoSave );
     d->m_bSingleViewMode = singleViewMode;
 
+    setObjectName( newObjectName() );
+    new KoDocumentAdaptor(this);
+    QDBus::sessionBus().registerObject( '/' + objectName(), this);
+
 
     // the parent setting *always* overrides! (Simon)
     if ( parent )
@@ -296,7 +310,7 @@ KoDocument::~KoDocument()
     d->m_shells.setAutoDelete( true );
     d->m_shells.clear();
 
-    delete d->m_dcopObject;
+//     delete d->m_dcopObject;
     delete d->filterManager;
     delete d;
     s_documentList->removeRef(this);
@@ -2288,17 +2302,17 @@ int KoDocument::shellCount() const
     return d->m_shells.count();
 }
 
-DCOPObject * KoDocument::dcopObject()
-{
-/* ###   if ( !d->m_dcopObject )
-        d->m_dcopObject = new KoDocumentIface( this );*/
-    return d->m_dcopObject;
-}
+// DCOPObject * KoDocument::dcopObject()
+// {
+//     if ( !d->m_dcopObject )
+//         d->m_dcopObject = new KoDocumentIface( this );
+//     return d->m_dcopObject;
+// }
 
-QByteArray KoDocument::dcopObjectId() const
-{
-// ###    return const_cast<KoDocument *>(this)->dcopObject()->objId();
-}
+// QByteArray KoDocument::dcopObjectId() const
+// {
+//     return const_cast<KoDocument *>(this)->dcopObject()->objId();
+// }
 
 void KoDocument::setErrorMessage( const QString& errMsg )
 {
@@ -2603,16 +2617,19 @@ QWidget* KoDocument::createCustomDocumentWidget(QWidget */*parent*/) {
 
 bool KoDocument::showEmbedInitDialog(QWidget* parent)
 {
-    KDialogBase dlg(parent, "EmbedInitDialog", true, i18n("Embedding Object"), 0, KDialogBase::NoDefault);
+//     KDialogBase dlg(parent, "EmbedInitDialog", true, i18n("Embedding Object"), 0, KDialogBase::NoDefault);
+    KDialog dlg( parent );
+    dlg.setCaption( i18n("Embedding Object") );
     KoOpenPane* pane = createOpenPane(&dlg, instance(), templateType());
     pane->layout()->setMargin(0);
     dlg.setMainWidget(pane);
-    dlg.setInitialSize(dlg.configDialogSize("EmbedInitDialog"));
+    KConfig cfg("EmbedInitDialog");
+    /*dlg.setInitialSize(*/dlg.restoreDialogSize( &cfg /*)*/);
     connect(this, SIGNAL(closeEmbedInitDialog()), &dlg, SLOT(slotOk()));
 
     bool ok = dlg.exec() == QDialog::Accepted;
 
-    dlg.saveDialogSize("EmbedInitDialog");
+    dlg.saveDialogSize(&cfg);
 
     return ok;
 }

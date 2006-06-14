@@ -22,7 +22,7 @@
 #ifndef koTemplateCreateDia_h
 #define koTemplateCreateDia_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <koffice_export.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -42,7 +42,7 @@ class KoTemplateCreateDiaPrivate;
  *
  ****************************************************************************/
 
-class KOFFICEUI_EXPORT KoTemplateCreateDia : public KDialogBase
+class KOFFICEUI_EXPORT KoTemplateCreateDia : public KDialog
 {
     Q_OBJECT
 

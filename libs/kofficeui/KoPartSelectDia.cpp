@@ -22,6 +22,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <q3listview.h>
+#include <QPixmap>
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -32,8 +33,13 @@
  ****************************************************/
 
 KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
-    KDialogBase( parent, name, TRUE, i18n("Insert Object"), KDialogBase::Ok | KDialogBase::Cancel )
+    KDialog( parent )
 {
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    setCaption( i18n("Insert Object") );
+    setModal( true );
+    setObjectName( name );
+
     listview = new Q3ListView( this );
     listview->addColumn( i18n( "Object" ) );
     listview->addColumn( i18n( "Comment" ) );

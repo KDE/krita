@@ -44,7 +44,7 @@ class KInstance;
 class KDataToolInfo;
 class KoLinkVariable;
 class KoVariable;
-class KoTextViewIface;
+// class KoTextViewIface;
 #include "KoRichText.h"
 #include <QClipboard>
 class KoBorder;
@@ -68,7 +68,7 @@ public:
 
     void setBackSpeller( KoBgSpellCheck* backSpeller );
 
-    virtual KoTextViewIface* dcopObject();
+//     virtual KoTextViewIface* dcopObject();
 
     /** Call this before deleting */
     /** don't remove selection when we made dnd between different frame*/
@@ -257,7 +257,7 @@ private slots:
     void tripleClickTimeout();
     void afterTripleClickTimeout();
 protected:
-    KoTextViewIface *dcop;
+//     KoTextViewIface *dcop;
  public: // necessary to be public to allow script action in KoTextViewIface
     enum CursorAction { // keep in sync with QTextEdit
         MoveBackward,

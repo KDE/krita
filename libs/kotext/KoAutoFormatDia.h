@@ -21,7 +21,7 @@
 #ifndef koautoformatdia_h
 #define koautoformatdia_h
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <QLineEdit>
 //Added by qt3to4:
 #include <QKeyEvent>
@@ -81,7 +81,7 @@ protected slots:
 /* Class: KoAutoFormatDia                                         */
 /******************************************************************/
 
-class KOTEXT_EXPORT KoAutoFormatDia : public KDialogBase
+class KOTEXT_EXPORT KoAutoFormatDia : public KPageDialog
 {
     Q_OBJECT
 
@@ -111,6 +111,7 @@ protected:
     QWidget *tab2;
     QWidget *tab3;
     QWidget *tab4;
+    KPageWidgetItem *p1, *p2, *p3, *p4;
 
     QComboBox *autoFormatLanguage;
 

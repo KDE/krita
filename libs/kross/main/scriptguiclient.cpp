@@ -23,7 +23,7 @@
 #include "wdgscriptsmanager.h"
 
 #include <kapplication.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
@@ -379,14 +379,12 @@ bool ScriptGUIClient::executeScriptAction(ScriptAction::Ptr action)
 
 void ScriptGUIClient::showScriptManager()
 {
-    KDialogBase* dialog = new KDialogBase(
-        KDialogBase::Plain, // TreeList, Tabbed, Plain, Swallow or IconList.
-        i18n("Scripts Manager"), // The dialog caption.
-        KDialogBase::Ok, // Specifies which buttons will be visible; Ok|Apply|Cancel
-        KDialogBase::Ok, // Specifies which button will be marked as the default.
-        d->parent, // Parent of the dialog.
-        false // If a separator line is drawn between the action buttons and the main widget.
-    );
+    KDialog* dialog = new KDialog( d->parent );
+    dialog->setCaption( i18n("Scripts Manager") );
+    dialog->setModal( true );
+    dialog->setButtons( KDialog::Ok );
+    dialog->enableButtonSeparator( false );
+
     //KDialogBase* dialog = new KDialogBase(d->parent, "", true, i18n("Scripts Manager"), KDialogBase::Close);
     WdgScriptsManager* wsm = new WdgScriptsManager(this, dialog);
     dialog->setMainWidget(wsm);

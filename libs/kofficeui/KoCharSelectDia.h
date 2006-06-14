@@ -20,7 +20,7 @@
 #ifndef KOCHARSELECTDIA_H
 #define KOCHARSELECTDIA_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <koffice_export.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -35,7 +35,7 @@ class KButtonBox;
 /* class KoCharSelectDia                                           */
 /******************************************************************/
 
-class KOFFICEUI_EXPORT KoCharSelectDia : public KDialogBase
+class KOFFICEUI_EXPORT KoCharSelectDia : public KDialog
 {
     Q_OBJECT
 

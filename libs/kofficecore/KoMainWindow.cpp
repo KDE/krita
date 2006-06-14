@@ -25,7 +25,7 @@
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoQueryTrader.h"
-#include "KoMainWindowIface.h"
+// #include "KoMainWindowIface.h"
 #include "KoFrame.h"
 #include "KoFileDialog.h"
 #include "Koversiondialog.h"
@@ -115,7 +115,7 @@ public:
     m_paPrint = 0;
     m_paPrintPreview = 0;
     statusBarLabel = 0L;
-    m_dcopObject = 0;
+//     m_dcopObject = 0;
     m_sendfile = 0;
     m_paCloseFile = 0L;
     m_reloadfile = 0L;
@@ -130,7 +130,7 @@ public:
   }
   ~KoMainWindowPrivate()
   {
-    delete m_dcopObject;
+//     delete m_dcopObject;
     qDeleteAll( m_toolbarList );
   }
 
@@ -152,7 +152,7 @@ public:
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
-  KoMainWindowIface *m_dcopObject;
+//   KoMainWindowIface *m_dcopObject;
 
   QList<KAction *> m_toolbarList;
 
@@ -1557,15 +1557,15 @@ void KoMainWindow::setMaxRecentItems(uint _number)
         m_recent->setMaxItems( _number );
 }
 
-DCOPObject * KoMainWindow::dcopObject()
-{
-    if ( !d->m_dcopObject )
-    {
-// ###        d->m_dcopObject = new KoMainWindowIface( this );
-    }
-
-    return d->m_dcopObject;
-}
+// DCOPObject * KoMainWindow::dcopObject()
+// {
+//     if ( !d->m_dcopObject )
+//     {
+//         d->m_dcopObject = new KoMainWindowIface( this );
+//     }
+// 
+//     return d->m_dcopObject;
+// }
 
 void KoMainWindow::slotEmailFile()
 {

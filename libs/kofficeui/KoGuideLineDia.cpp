@@ -35,12 +35,17 @@
 
 KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, double maxPos,
                                 KoUnit::Unit unit, const char *name )
-: KDialogBase( parent, name , true, "", Ok | Cancel, Ok, true )
+: KDialog( parent )
 , m_hButton( 0 )
 , m_vButton( 0 )
 {
+    setObjectName( name );
+    setButtons( KDialog::Ok|KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setModal( true );
     setCaption( i18n("Set Guide Line Position") );
-    KHBox *page = makeHBoxMainWidget();
+    KHBox *page = new KHBox();
+    setMainWidget(page);
     new QLabel( i18n( "Position:" ), page );
     m_position= new KoUnitDoubleSpinBox( page, qMax( 0.00, minPos ), qMax( 0.00, maxPos ), 1, qMax( 0.00, pos ), unit );
     m_position->setFocus();
@@ -49,15 +54,21 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, doub
 
 KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
                                 KoUnit::Unit unit, const char *name )
-: KDialogBase( parent, name , true, "", Ok | Cancel, Ok, true )
+: KDialog( parent )
 , m_rect( rect )
 , m_pos( pos )
 , m_positionChanged( false )
 , m_hButton( 0 )
 , m_vButton( 0 )
 {
+    setObjectName( name );
+    setButtons( KDialog::Ok|KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setModal( true );
+
     setCaption( i18n("Add Guide Line") );
-    KVBox * vbox = makeVBoxMainWidget();
+    KVBox *vbox = new KVBox();
+    setMainWidget(vbox);
 
     Q3ButtonGroup *group = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Orientation" ), vbox );
     group->setRadioButtonExclusive( true );

@@ -40,14 +40,18 @@
 #include "Koversiondialog.h"
 
 
-KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
-  : KDialog( parent )
+KoVersionDialog::KoVersionDialog( QWidget* parent, const char* name )
+    : KDialog( parent )
 {
   setCaption( i18n("Version") );
   setButtons( Ok | Cancel );
 
   QWidget* page = new QWidget( this );
   setMainWidget( page );
+  setModal( true );
+  setCaption( i18n("Version") );
+  setButtons( Ok|Cancel );
+  setObjectName( name );
 
   QGridLayout* grid1 = new QGridLayout( page );
   grid1->setMargin(KDialog::marginHint());
@@ -130,13 +134,17 @@ void KoVersionDialog::slotOk()
 }
 
 KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, const QString &/*comment*/, const char* name )
-  : KDialog( parent )
+    : KDialog( parent  )
 {
     setCaption( i18n("Comment") );
     setButtons( Ok | Cancel );
 
     QWidget* page = new QWidget( this );
     setMainWidget( page );
+    setButtons( Ok|Cancel );
+    setCaption( i18n("Comment") );
+    setModal( true );
+    setObjectName( name );
 
     QHBoxLayout *grid1 = new QHBoxLayout( page );
     grid1->setMargin(KDialog::marginHint());

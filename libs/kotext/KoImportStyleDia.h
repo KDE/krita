@@ -20,14 +20,14 @@
 #ifndef __KoImportStyleDia__
 #define __KoImportStyleDia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QStringList>
 #include <KoStyleCollection.h>
 class QLineEdit;
 class Q3ListBox;
 class QPushButton;
 
-class KOTEXT_EXPORT KoImportStyleDia : public KDialogBase
+class KOTEXT_EXPORT KoImportStyleDia : public KDialog
 {
     Q_OBJECT
 public:

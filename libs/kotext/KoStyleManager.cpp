@@ -68,10 +68,13 @@ public:
 KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
                                 const KoStyleCollection& styles, const QString & activeStyleName,
                                 int flags )
-    : KDialogBase( _parent, "Stylist", true,
-                   i18n("Style Manager"),
-                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
+    : KDialog( _parent )
 {
+    setCaption( i18n("Style Manager") );
+    setModal( true );
+    setObjectName( "Stylist" );
+    setButtons( Ok|Cancel|Apply );
+
     d = new KoStyleManagerPrivate;
     //setWFlags(getWFlags() || WDestructiveClose);
     m_currentStyle =0L;
@@ -137,7 +140,8 @@ void KoStyleManager::addTab( KoStyleManagerTab * tab )
 
 void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
 {
-    QFrame * frame1 = makeMainWidget();
+    QFrame * frame1 = new QFrame();
+    setMainWidget(frame1);
     Q3GridLayout *frame1Layout = new Q3GridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
     numStyles = styleCollection.count();
@@ -539,13 +543,13 @@ void KoStyleManager::moveDownStyle()
 void KoStyleManager::slotOk() {
     save();
     apply();
-    KDialogBase::slotOk();
+    slotButtonClicked( Ok );
 }
 
 void KoStyleManager::slotApply() {
     save();
     apply();
-    KDialogBase::slotApply();
+    slotButtonClicked( Apply );
 }
 
 void KoStyleManager::apply() {

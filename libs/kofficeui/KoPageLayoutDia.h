@@ -26,7 +26,7 @@
 #include <KoGlobal.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 class QComboBox;
 class QLineEdit;
@@ -81,7 +81,7 @@ class KoPageLayoutDiaPrivate;
 /**
  *  With this dialog the user can specify the layout of the paper during printing.
  */
-class KOFFICEUI_EXPORT KoPageLayoutDia : public KDialogBase
+class KOFFICEUI_EXPORT KoPageLayoutDia : public KPageDialog
 {
     Q_OBJECT
 

@@ -20,7 +20,7 @@
 #ifndef KOBGSPELLCHECK_H
 #define KOBGSPELLCHECK_H
 
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 #include <QObject>
 #include <QStringList>
 #include <koffice_export.h>
@@ -33,7 +33,7 @@ class KOTEXT_EXPORT KoBgSpellCheck : public QObject
 {
     Q_OBJECT
 public:
-    KoBgSpellCheck( const KSpell2::Broker::Ptr& broker, QObject *parent =0,
+    KoBgSpellCheck( const KSpell2::Loader::Ptr& loader, QObject *parent =0,
                     const char *name =0 );
     virtual ~KoBgSpellCheck();
 
@@ -44,7 +44,7 @@ public:
     bool enabled() const;
 
     /**
-     * Returns the Settings object used by the broker.
+     * Returns the Settings object used by the loader.
      */
     KSpell2::Settings *settings() const;
 

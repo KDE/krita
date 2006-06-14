@@ -50,7 +50,6 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoLanguageTab.cpp 
    KoFontDiaPreview.cpp 
    KoCompletionDia.cpp 
-   KoTextViewIface.cc 
    KoFontDia.cpp 
    KoBgSpellCheck.cpp 
    KoCommentDia.cpp 
@@ -83,7 +82,7 @@ kde4_add_ui3_files(kotext_LIB_SRCS
    KoCompletionBase.ui 
    KoParagDecorationTab.ui )
 
-kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )
+# kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 

@@ -8,12 +8,14 @@ include_directories( ${KWMF_INCLUDES} ${KOSTORE_INCLUDES} )
 
 set(kofficecore_LIB_SRCS
    KoDocument.cpp
+   KoDocumentAdaptor.cpp
    KoProperties.cpp
    KoGlobal.cpp
    KoUnit.cpp
    KoFilterManager.cpp
    KoMainWindow.cpp
    KoApplication.cpp
+   KoApplicationAdaptor.cpp
    KoQueryTrader.cpp
    KoFilter.cpp
    KoFilterChain.cpp
@@ -28,16 +30,13 @@ set(kofficecore_LIB_SRCS
    KoPictureWmf.cpp
    KoDocumentInfo.cpp
    KoView.cpp
+   KoViewAdaptor.cpp
    KoFrame.cpp
    KoContainerHandler.cpp
    KoDocumentChild.cpp
    KoDocumentInfoDlg.cpp
    KoFactory.cpp
    KoChild.cpp
-#    KoApplicationIface.cc
-#    KoDocumentIface.cc
-#    KoViewIface.cc
-#    KoMainWindowIface.cc
    kofficeversion.cc
    KoOasisStyles.cpp
    KoStyleStack.cpp
@@ -113,38 +112,36 @@ install_files( /include FILES
     KoUnit.h
     KoID.h
     KoGenericRegistry.h
-    KoDocument.h
-    KoMainWindow.h
-    KoApplication.h
-    KoQueryTrader.h
-    KoFilterManager.h
-    KoDocumentInfo.h
-    KoView.h
-    KoFrame.h
-    KoDocumentChild.h
-    KoDocumentInfoDlg.h
-    KoFactory.h
-    KoChild.h
-    KoApplicationIface.h
-    KoDocumentIface.h
-    KoViewIface.h
-    KoMainWindowIface.h
-    KoPictureKey.h
-    KoPicture.h
-    KoPictureCollection.h
-    kofficeversion.h
-    KoOasisStyles.h
-    KoStyleStack.h
-    KoGenStyles.h
-    KoOasisSettings.h
-    KoPageLayout.h
-    KoXmlNS.h
-    KoDom.h
-    Koversiondialog.h
-    kkbdaccessextensions.h
-    KoOpenPane.h
-    KoOasisLoadingContext.h
-    KoPoint.h
+    KoDocument.h 
+    KoMainWindow.h 
+    KoApplication.h 
+    KoApplicationAdaptor.h 
+    KoQueryTrader.h 
+    KoFilterManager.h 
+    KoDocumentInfo.h 
+    KoView.h 
+    KoViewAdaptor.h 
+    KoFrame.h 
+    KoDocumentChild.h 
+    KoDocumentInfoDlg.h 
+    KoFactory.h 
+    KoChild.h 
+    KoPictureKey.h 
+    KoPicture.h 
+    KoPictureCollection.h 
+    kofficeversion.h 
+    KoOasisStyles.h 
+    KoStyleStack.h 
+    KoGenStyles.h 
+    KoOasisSettings.h 
+    KoPageLayout.h 
+    KoXmlNS.h 
+    KoDom.h 
+    Koversiondialog.h 
+    kkbdaccessextensions.h 
+    KoOpenPane.h 
+    KoOasisLoadingContext.h 
+    KoPoint.h 
     KoGenStyle.h )
 
 

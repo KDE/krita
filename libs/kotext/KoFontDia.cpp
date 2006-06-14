@@ -46,13 +46,18 @@
 #include <kvbox.h>
 
 KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
-    KSpell2::Broker::Ptr broker, QWidget* parent, const char* name )
-    : KDialogBase( parent, name, true,
-    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
+    KSpell2::Loader::Ptr loader, QWidget* parent, const char* name )
+    : KDialog( parent ),
     m_initialFormat(initialFormat),
     m_changedFlags(KoTextFormat::NoFlags)
 {
-    setButtonText( KDialogBase::User1, i18n("&Reset") );
+    setCaption(i18n("Select Font") );
+    setModal( true );
+    setObjectName( name );
+    setButtons( Ok|Cancel|User1|Apply );
+    setDefaultButton( Ok );
+
+    setButtonText( KDialog::User1, i18n("&Reset") );
 
     KVBox *mainWidget = new KVBox( this );
     KHBox *mainHBox = new KHBox( mainWidget );
@@ -99,7 +104,7 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
     connect( layoutTab, SIGNAL( hyphenationChanged( bool ) ), this, SLOT( slotHyphenationChanged( bool ) ) );
 
     //Language tab
-    languageTab = new KoLanguageTab( broker, this );
+    languageTab = new KoLanguageTab( loader, this );
     fontTabWidget->addTab( languageTab, i18n( "Language" ) );
     connect( languageTab, SIGNAL( languageChanged() ), this, SLOT( slotLanguageChanged() ) );
 
@@ -152,7 +157,7 @@ void KoFontDia::slotApply()
 void KoFontDia::slotOk()
 {
     slotApply();
-    KDialogBase::slotOk();
+    slotButtonClicked( Ok );
 }
 
 void KoFontDia::slotReset()

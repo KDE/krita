@@ -51,7 +51,7 @@ class KoChild;
 class KoDocumentChild;
 class KoView;
 class KoDocumentInfo;
-class DCOPObject;
+// class DCOPObject;
 class KoOasisStyles;
 class KoXmlWriter;
 class KoOpenPane;
@@ -66,7 +66,7 @@ class KoOpenPane;
 class KOFFICECORE_EXPORT KoDocument : public KParts::ReadWritePart
 {
     Q_OBJECT
-    Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
+//     Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
     Q_PROPERTY( bool backupFile READ backupFile WRITE setBackupFile )
 
 public:
@@ -707,12 +707,12 @@ public:
      * %KOffice parts are strongly recommended to reimplement this method,
      * so that their DCOP interface provides more functionality than the basic KoDocumentIface
      */
-    virtual DCOPObject * dcopObject();
+//     virtual DCOPObject * dcopObject();
 
     /**
      * @return the ID of the DCOP interface for this document.
      **/
-    QByteArray dcopObjectId() const;
+//     QByteArray dcopObjectId() const;
 
     /**
      * Signal the progress of operations such as loading or saving.
@@ -974,6 +974,11 @@ protected slots:
     void deleteOpenPaneDelayed();
 
 protected:
+
+    /**
+        Generate a name for the document.
+    */
+    QString newObjectName();
 
     QString autoSaveFile( const QString & path ) const;
 

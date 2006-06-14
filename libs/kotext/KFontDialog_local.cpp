@@ -766,8 +766,14 @@ KFontDialog_local::KFontDialog_local( QWidget *parent, const char* name,
 			  bool onlyFixed, bool modal,
 			  const QStringList &fontList, bool makeFrame, bool diff,
                           Qt::CheckState *sizeIsRelativeState )
-  : KDialogBase( parent, name, modal, i18n("Select Font"), Ok|Cancel, Ok )
+  : KDialog( parent )
 {
+  setCaption( i18n("Select Font") );
+  setModal( modal );
+  setObjectName( name );
+  setButtons( Ok|Cancel );
+  setDefaultButton( Ok );
+
   chooser = new KFontChooser_local( this, "fontChooser",
                               onlyFixed, fontList, makeFrame, 8,
                               diff, sizeIsRelativeState );
@@ -837,4 +843,4 @@ void KFontChooser_local::virtual_hook( int, void* )
 { /*BASE::virtual_hook( id, data );*/ }
 
 void KFontDialog_local::virtual_hook( int id, void* data )
-{ KDialogBase::virtual_hook( id, data ); }
+{ /*KDialogBase::virtual_hook( id, data );*/ }

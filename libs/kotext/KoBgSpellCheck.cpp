@@ -30,9 +30,8 @@
 #include "KoTextObject.h"
 #include "KoTextDocument.h"
 
-
 #include <kspell2/backgroundchecker.h>
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 #include <kspell2/dictionary.h>
 #include <kspell2/settings.h>
 #include <kspell2/filter.h>
@@ -59,7 +58,7 @@ public:
 
 static const int delayAfterMarked = 10;
 
-KoBgSpellCheck::KoBgSpellCheck( const KSpell2::Broker::Ptr& broker, QObject *parent,
+KoBgSpellCheck::KoBgSpellCheck( const KSpell2::Loader::Ptr& loader, QObject *parent,
                                 const char *name )
     : QObject( parent, name )
 {
@@ -71,7 +70,7 @@ KoBgSpellCheck::KoBgSpellCheck( const KSpell2::Broker::Ptr& broker, QObject *par
     d->marked = 0;
     d->intraWordParag = 0;
     d->intraWordPosition = 0;
-    d->backSpeller = new KoSpell( broker, this, "KoSpell" );
+    d->backSpeller = new KoSpell( loader, this, "KoSpell" );
 
     connect( d->backSpeller, SIGNAL(misspelling(const QString&, int)),
              SLOT(spellCheckerMisspelling(const QString &, int )) );

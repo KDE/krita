@@ -38,7 +38,7 @@ class KoMainWindowPrivate;
 class KUrl;
 class KRecentFilesAction;
 class KoFilterManager;
-class DCOPObject;
+// class DCOPObject;
 
 namespace KParts
 {
@@ -146,7 +146,7 @@ public:
      */
     bool openDocument( KoDocument *newdoc, const KUrl & url );
 
-    virtual DCOPObject * dcopObject();
+//     virtual DCOPObject * dcopObject();
 
     /**
      * Reloads the recent documents list.

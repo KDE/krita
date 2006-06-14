@@ -238,7 +238,7 @@ public:
     /**
      * Highlight a match.
      */
-    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc, KDialogBase* dialog) = 0;
+    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc, KDialog* dialog) = 0;
 
     /** For KoTextFind and KoTextReplace */
     bool validateMatch( const QString &text, int index, int matchedlength );
@@ -291,7 +291,7 @@ private:
  * The separate dialog that pops up to ask for which formatting options
  * should be used to match text, or when replacing text.
  */
-class KoFormatDia: public KDialogBase
+class KoFormatDia: public KDialog
 {
     Q_OBJECT
 public:

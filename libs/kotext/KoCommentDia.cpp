@@ -29,11 +29,18 @@
 #include <kdebug.h>
 
 KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString & _authorName, const QString &_createNote, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent  )
 {
+    setModal( true );
+    setObjectName( name );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
+
     setCaption( i18n("Edit Comment") );
     authorName = _authorName;
-    KVBox *page = makeVBoxMainWidget();
+    KVBox *page = new KVBox();
+    setMainWidget( page );
     kDebug()<<"_createNote :"<<_createNote<<endl;
     if ( !_createNote.isEmpty() )
         new QLabel( _createNote, page );

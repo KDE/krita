@@ -20,7 +20,7 @@
 #ifndef DlgPartSelect_included
 #define DlgPartSelect_included
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoQueryTrader.h>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -35,7 +35,7 @@ class QPushButton;
  *  and mini icon. The user may select one and
  *  the corresponding KoDocumentEntry is returned.
  */
-class KOFFICEUI_EXPORT KoPartSelectDia : public KDialogBase
+class KOFFICEUI_EXPORT KoPartSelectDia : public KDialog
 {
     Q_OBJECT
 

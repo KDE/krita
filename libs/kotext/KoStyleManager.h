@@ -20,7 +20,7 @@
 #ifndef kostylist_h
 #define kostylist_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QStringList>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -54,7 +54,7 @@ class KoStyleManagerPrivate;
 /**
  * This class provides a dialog for editing named text styles.
  */
-class KOTEXT_EXPORT KoStyleManager : public KDialogBase
+class KOTEXT_EXPORT KoStyleManager : public KDialog
 {
     Q_OBJECT
 

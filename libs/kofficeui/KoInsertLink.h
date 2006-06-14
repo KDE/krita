@@ -20,7 +20,7 @@
 #ifndef __KoInsertLink__
 #define __KoInsertLink__
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <koffice_export.h>
 class QLineEdit;
 class KUrlRequester;
@@ -120,7 +120,7 @@ signals:
 /**
  * Dialog to insert links to various sources (file, Internet, mail and bookmarks).
  */
-class KOFFICEUI_EXPORT KoInsertLinkDia : public KDialogBase
+class KOFFICEUI_EXPORT KoInsertLinkDia : public KPageDialog
 {
     Q_OBJECT
 public:
@@ -143,6 +143,7 @@ private:
     KOfficePrivate::internetLinkPage *internetLink;
     KOfficePrivate::bookmarkLinkPage *bookmarkLink;
     QString currentText;
+    KPageWidgetItem *p1, *p2, *p3, *p4;
 };
 
 #endif

@@ -21,7 +21,7 @@
 #define KOTEXTVIEW_IFACE_H
 
 #include <KoDocumentIface.h>
-#include <dcopref.h>
+// #include <dcopref.h>
 
 #include <QString>
 #include <QColor>
@@ -29,13 +29,13 @@
 #include <koffice_export.h>
 class KoTextView;
 
-class KOTEXT_EXPORT KoTextViewIface :  public DCOPObject
+class KOTEXT_EXPORT KoTextViewIface /*:  public DCOPObject*/
 {
-    K_DCOP
+//     K_DCOP
 public:
     KoTextViewIface( KoTextView *_textview );
 
-k_dcop:
+// k_dcop:
     void insertSoftHyphen();
     void insertNonbreakingSpace();
     void insertNonbreakingHyphen();

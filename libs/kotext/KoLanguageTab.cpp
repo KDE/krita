@@ -28,15 +28,15 @@
 #include "KoLanguageTab.moc"
 
 
-KoLanguageTab::KoLanguageTab( KSpell2::Broker::Ptr broker, QWidget* parent, const char* name, Qt::WFlags fl ) 
+KoLanguageTab::KoLanguageTab( KSpell2::Loader::Ptr loader, QWidget* parent, const char* name, Qt::WFlags fl ) 
         : KoLanguageTabBase( parent, name, fl )
 {
     const QStringList langNames = KoGlobal::listOfLanguages();
     const QStringList langTags = KoGlobal::listTagOfLanguages();
     QStringList spellCheckLanguages;
 
-    if ( broker )
-        spellCheckLanguages = broker->languages();
+    if ( loader )
+        spellCheckLanguages = loader->languages();
 
     QStringList::ConstIterator itName = langNames.begin();
     QStringList::ConstIterator itTag = langTags.begin();

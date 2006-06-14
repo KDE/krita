@@ -32,29 +32,41 @@
 /******************************************************************/
 
 KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont , bool _modal)
-    : KDialogBase( Plain, i18n("Select Character"), Ok | Cancel, Ok , parent, name, _modal )
+    : KDialog( parent )
 {
+    setCaption( i18n("Select Character") );
+    setModal( _modal );
+    setButtons( Ok | Cancel );
+    setDefaultButton( Ok );
+    setObjectName( name );
+
     initDialog(_chr,_font,_enableFont);
 
     KGuiItem okItem = KStdGuiItem::ok(); // start from std item to keep the OK icon...
     okItem.setText( i18n("&Insert") );
     okItem.setWhatsThis( i18n("Insert the selected character in the text") );
-    setButtonOK( okItem );
+    setButtonGuiItem( KDialog::Ok, okItem );
 }
 
 KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal )
-    : KDialogBase( Plain, i18n("Select Character"), User1 | Close, User1 , parent, name, _modal )
+    : KDialog( parent )
 {
+    setCaption( i18n("Select Character") );
+    setModal( _modal );
+    setButtons( User1 | Close );
+    setDefaultButton( User1 );
+    setObjectName( name );
+
     initDialog(_chr,_font,true);
 
     setButtonText( User1, i18n("&Insert") );
-    setButtonTip( User1, i18n("Insert the selected character in the text") );
+    setButtonToolTip( User1, i18n("Insert the selected character in the text") );
 
 }
 
 void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /*_enableFont*/)
 {
-   QWidget *page = plainPage();
+    QWidget *page = mainWidget()/*plainPage()*/;
 
     grid = new Q3GridLayout( page, 1, 1, 0, KDialog::spacingHint() );
 
@@ -76,7 +88,7 @@ KoCharSelectDia::~KoCharSelectDia()
 
 void KoCharSelectDia::closeDialog()
 {
-    KDialogBase::close();
+    KDialog::close();
 }
 
 bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont, QWidget* parent, const char* name )

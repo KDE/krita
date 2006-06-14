@@ -22,14 +22,14 @@
 
 #include <kolanguagetabbase.h>
 
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 
 class KoLanguageTab : public KoLanguageTabBase
 {
     Q_OBJECT
 
 public:
-    KoLanguageTab( KSpell2::Broker::Ptr broker = KSpell2::Broker::Ptr(), QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
+    KoLanguageTab( KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr(), QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
     ~KoLanguageTab();
 
     QString getLanguage() const;

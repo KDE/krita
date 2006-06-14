@@ -21,6 +21,7 @@
 #define __kofontdia_h__
 
 #include <kfontdialog.h>
+#include <kdialog.h>
 #include <QTabWidget>
 #include <KoTextFormat.h>
 #include <QCheckBox>
@@ -34,20 +35,20 @@
 
 #include "KoFontDiaPreview.h"
 
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 
 class QComboBox;
 
 
-class KOTEXT_EXPORT KoFontDia : public KDialogBase
+class KOTEXT_EXPORT KoFontDia : public KDialog
 {
     Q_OBJECT
 public:
 
-    /// If your application supports spell-checking, pass here the KSpell2 Broker
+    /// If your application supports spell-checking, pass here the KSpell2 Loader
     /// so that the font dialog can show which languages are supported for spellchecking.
     KoFontDia( const KoTextFormat& initialFormat,
-               KSpell2::Broker::Ptr broker = KSpell2::Broker::Ptr(),
+               KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr(),
                QWidget* parent = 0, const char* name = 0 );
 
     int changedFlags() const { return m_changedFlags; }

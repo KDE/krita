@@ -174,8 +174,7 @@ void KoAutoFormatExceptionWidget::slotExceptionListSelected()
 
 KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
       KoAutoFormat * autoFormat )
-    : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel | User1, Ok,
-      parent, name, true, true, KGuiItem( i18n( "&Reset" ), "undo" )),
+    : KPageDialog(parent),
       oSimpleBegin( autoFormat->getConfigTypographicSimpleQuotes().begin ),
       oSimpleEnd( autoFormat->getConfigTypographicSimpleQuotes().end ),
       oDoubleBegin( autoFormat->getConfigTypographicDoubleQuotes().begin ),
@@ -184,6 +183,15 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
       m_autoFormat( *autoFormat ),
       m_docAutoFormat( autoFormat )
 {
+    setFaceType( Tabbed );
+    setCaption( i18n("Autocorrection") );
+    setModal( true );
+    setObjectName( name );
+    setButtons( Ok | Cancel | User1 );
+    setDefaultButton( Ok );
+    setButtonGuiItem( User1, KGuiItem( i18n( "&Reset" ), "undo" ) );
+    enableButtonSeparator( true );
+
     noSignal=true;
     newEntry = 0L;
     autocorrectionEntryChanged= false;
@@ -205,27 +213,21 @@ KoAutoFormatDia::~KoAutoFormatDia()
 
 void KoAutoFormatDia::slotResetConf()
 {
-    switch( activePageIndex() ) {
-    case 0:
+    if ( currentPage() == p1 )
         initTab1();
-        break;
-    case 1:
+    else if ( currentPage() == p2 )
         initTab2();
-        break;
-    case 2:
-        initTab3();
-        break;
-    case 3:
+    else if ( currentPage() == p3 )
+        initTab2();
+    else if ( currentPage() == p4 )
         initTab4();
-        break;
-    default:
-        break;
-    }
 }
 
 void KoAutoFormatDia::setupTab1()
 {
-    tab1 = addPage( i18n( "Simple Autocorrection" ) );
+    
+    tab1 = new QWidget();
+    p1 = addPage( tab1, i18n( "Simple Autocorrection" ) );
     Q3VBoxLayout *vbox = new Q3VBoxLayout(tab1, 0, KDialog::spacingHint());
 
     cbUpperCase = new QCheckBox( tab1 );
@@ -292,7 +294,7 @@ void KoAutoFormatDia::setupTab1()
     cbAutoReplaceNumber=new QCheckBox( tab1 );
     cbAutoReplaceNumber->setText( i18nc(
             "We add the 1/2 char at the %1", "Re&place 1/2... with %1...",
-            QString( "½" )  ));
+            QString( "" )  ));
     cbAutoReplaceNumber->setWhatsThis( i18n(
             "Most standard fraction notations will be converted when available"
             ) );
@@ -382,7 +384,8 @@ void KoAutoFormatDia::slotBulletStyleToggled( bool b )
 
 void KoAutoFormatDia::setupTab2()
 {
-    tab2 = addPage( i18n( "Custom Quotes" ) );
+    tab2 = new QWidget();
+    p2 = addPage( tab2, i18n( "Custom Quotes" ) );
 
     Q3VBoxLayout *vbox = new Q3VBoxLayout(tab2, 0, KDialog::spacingHint());
 
@@ -490,7 +493,8 @@ void KoAutoFormatDia::initTab2()
 
 void KoAutoFormatDia::setupTab3()
 {
-    tab3 = addPage( i18n( "Advanced Autocorrection" ) );
+    tab3 = new QWidget();
+    p3 = addPage( tab3, i18n( "Advanced Autocorrection" ) );
 
     QLabel *lblFind, *lblReplace;
 
@@ -713,7 +717,8 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
 
 void KoAutoFormatDia::setupTab4()
 {
-    tab4 = addPage( i18n( "Exceptions" ) );
+    tab4 = new QWidget();
+    p4 = addPage( tab4, i18n( "Exceptions" ) );
     Q3VBoxLayout *vbox = new Q3VBoxLayout(tab4, 0, KDialog::spacingHint());
 
     abbreviation=new KoAutoFormatExceptionWidget(tab4,
@@ -1045,7 +1050,7 @@ void KoAutoFormatDia::slotOk()
 {
     if (applyConfig())
     {
-       KDialogBase::slotOk();
+       slotButtonClicked( Ok );
     }
 }
 
@@ -1057,7 +1062,7 @@ void KoAutoFormatDia::slotCancel()
         m_docAutoFormat->configAutoFormatLanguage( initialLanguage);
         m_docAutoFormat->readConfig( true );
     }
-    KDialogBase::slotCancel();
+    slotButtonClicked( Cancel );
 }
 
 void KoAutoFormatDia::chooseDoubleQuote1()

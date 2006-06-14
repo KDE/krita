@@ -65,17 +65,23 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( QWidget* parent, KoDocumentInfo* docInfo )
     setButtons( Ok|Cancel );
     setFaceType( Tabbed );
     setInitialSize( QSize( 500, 500 ) );
+    setFaceType( KPageDialog::Tabbed );
+    setButtons( KDialog::Ok|KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setCaption( i18n( "Document Information" ) );
 
     d->m_aboutUi = new Ui::KoDocumentInfoAboutWidget();
-    QWidget* widget = new QWidget( this );
-    d->m_aboutUi->setupUi( widget );
-    addPage( widget, i18n( "General" ) );
+    KDialog *infodlg = new KDialog(this);
+    d->m_aboutUi->setupUi( infodlg );
+    addPage( infodlg, i18n( "General" ) );
+
     initAboutTab();
 
     d->m_authorUi = new Ui::KoDocumentInfoAuthorWidget();
-    widget = new QWidget( this );
-    d->m_authorUi->setupUi( widget );
-    addPage( widget, i18n( "Author" ) );
+
+    KDialog *authordlg = new KDialog(this);
+    d->m_authorUi->setupUi( authordlg );
+
     initAuthorTab();
 
     connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );

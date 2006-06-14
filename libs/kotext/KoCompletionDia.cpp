@@ -35,10 +35,18 @@
 #include <q3whatsthis.h>
 
 KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat )
-    : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1,
-      Ok, true, KGuiItem( i18n( "&Reset" ), "undo" ) )
+    : KDialog( parent )
 {
-    KVBox *page = makeVBoxMainWidget();
+    setCaption( i18n( "Completion" ) );
+    setModal( true );
+    setObjectName( name );
+    setButtons( Ok|Cancel|User1 );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
+    setButtonGuiItem( User1, KGuiItem( i18n( "&Reset" ), "undo" )  );
+
+    KVBox *page = new KVBox();
+    setMainWidget(page);
     m_widget = new KoCompletion( page, autoFormat);
     m_widget->layout()->setMargin(0);
     connect( this, SIGNAL( user1Clicked() ), m_widget, SLOT(slotResetConf()));
@@ -50,7 +58,7 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
 void KoCompletionDia::slotOk()
 {
     m_widget->saveSettings();
-    KDialogBase::slotOk();
+    slotButtonClicked( Ok );
 }
 
 KoCompletion::KoCompletion(QWidget *parent, KoAutoFormat *autoFormat) : KoCompletionBase(parent),

@@ -20,7 +20,7 @@
 #define kocompletiondia_h
 
 #include "KoCompletionBase.h"
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoAutoFormat.h>
 
 /**
@@ -50,7 +50,7 @@ protected:
 /**
  * Completion configuration dialog.
  */
-class KOTEXT_EXPORT KoCompletionDia : public KDialogBase {
+class KOTEXT_EXPORT KoCompletionDia : public KDialog {
     Q_OBJECT
 
 public:

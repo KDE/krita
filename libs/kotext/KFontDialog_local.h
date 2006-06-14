@@ -33,7 +33,7 @@
 #include <q3button.h>
 //Added by qt3to4:
 #include <QLabel>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <koffice_export.h>
 
@@ -349,7 +349,7 @@ private:
  * @author Preston Brown <pbrown@kde.org>, Bernd Wuebben <wuebben@kde.org>
  * @version $Id: kfontdialog.h,v 1.71 2004/10/10 10:27:49 bhards Exp $
  */
-class KOTEXT_EXPORT KFontDialog_local : public KDialogBase  {
+class KOTEXT_EXPORT KFontDialog_local : public KDialog  {
     Q_OBJECT
 
 public:

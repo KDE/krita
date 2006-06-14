@@ -51,12 +51,16 @@ public:
 
 
 KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat)
-  : KDialog( parent ),
+    : KDialog ( parent ),
     m_mimeTypes (mimeTypes)
 {
-    setCaption( i18n( "Choose Filter" ) );
+    setObjectName( "kofilterchooser" );
     setButtons( Ok|Cancel );
     setInitialSize( QSize (300, 350) );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setCaption( i18n ("Choose Filter") );
+    setModal( true );
 
     QWidget *page = new QWidget (this);
     setMainWidget (page);

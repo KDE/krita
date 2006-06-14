@@ -20,12 +20,12 @@
 #ifndef __KoCommentDia__
 #define __KoCommentDia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <koffice_export.h>
 class QPushButton;
 class Q3MultiLineEdit;
 
-class KOTEXT_EXPORT KoCommentDia : public KDialogBase
+class KOTEXT_EXPORT KoCommentDia : public KDialog
 {
     Q_OBJECT
 public:

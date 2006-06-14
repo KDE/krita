@@ -21,7 +21,8 @@
 #include <KoDocument.h>
 #include <KoMainWindow.h>
 #include <KoFrame.h>
-#include <KoViewIface.h>
+// #include <KoViewIface.h>
+#include "KoViewAdaptor.h"
 #include <KoDocumentChild.h>
 #include <kactioncollection.h>
 #include <klocale.h>
@@ -41,6 +42,14 @@
 #include <QMouseEvent>
 #include <QCustomEvent>
 
+//static
+QString KoView::newObjectName()
+{
+    static int s_viewIFNumber = 0;
+    QString name; name.setNum( s_viewIFNumber++ ); name.prepend("view_");
+    return name;
+}
+
 class KoViewPrivate
 {
 public:
@@ -51,7 +60,7 @@ public:
     m_children.setAutoDelete( true );
     m_manager = 0L;
     m_tempActiveWidget = 0L;
-    m_dcopObject = 0;
+//     m_dcopObject = 0;
     m_registered=false;
     m_documentDeleted=false;
   }
@@ -64,7 +73,7 @@ public:
   double m_zoom;
   Q3PtrList<KoViewChild> m_children;
   QWidget *m_tempActiveWidget;
-  KoViewIface *m_dcopObject;
+//   KoViewIface *m_dcopObject;
   bool m_registered;  // are we registered at the part manager?
   bool m_documentDeleted; // true when m_doc gets deleted [can't use m_doc==0
                           // since this only happens in ~QObject, and views
@@ -121,6 +130,11 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char* /*name*/ )
 {
   Q_ASSERT( document );
 
+  setObjectName( newObjectName() );
+
+  new KoViewAdaptor(this);
+  QDBus::sessionBus().registerObject('/' + objectName(), this);
+
   //kDebug(30003) << "KoView::KoView " << this << endl;
   d = new KoViewPrivate;
   d->m_doc = document;
@@ -175,7 +189,7 @@ KoView::~KoView()
 {
   kDebug(30003) << "KoView::~KoView " << this << endl;
   delete d->m_scrollTimer;
-  delete d->m_dcopObject;
+//   delete d->m_dcopObject;
   if (!d->m_documentDeleted)
   {
     if ( koDocument() && !koDocument()->isSingleViewMode() )
@@ -706,12 +720,13 @@ void KoView::slotClearStatusText()
       sb->clearMessage();
 }
 
-DCOPObject *KoView::dcopObject()
-{
-/* ###   if ( !d->m_dcopObject )
-        d->m_dcopObject = new KoViewIface( this );*/
-    return d->m_dcopObject;
-}
+
+// DCOPObject *KoView::dcopObject()
+// {
+//     if ( !d->m_dcopObject )
+//         d->m_dcopObject = new KoViewIface( this );
+//     return d->m_dcopObject;
+// }
 
 class KoViewChild::KoViewChildPrivate
 {

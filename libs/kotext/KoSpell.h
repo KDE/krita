@@ -23,6 +23,8 @@
 #include <QStringList>
 #include <QString>
 
+
+class Loader;
 #include <kspell2/backgroundchecker.h>
 #include <koffice_export.h>
 class KoTextIterator;
@@ -40,14 +42,14 @@ namespace KSpell2
  * and background spell-checking (via KoBgSpellCheck).
  *
  * @author Zack Rusin <zack@kde.org>, David Sweet <dsweet@kde.org>
- * @see KSpell2::Broker
+ * @see KSpell2::Loader
  */
 class KOTEXT_EXPORT KoSpell : public KSpell2::BackgroundChecker
 {
     Q_OBJECT
 
 public:
-    KoSpell( const KSpell2::Broker::Ptr& broker, QObject *parent =0,
+    KoSpell( const KSpell2::Loader::Ptr& loader, QObject *parent =0,
              const char *name =0 );
     /**
      * The destructor instructs ISpell/ASpell to write out the personal
@@ -79,7 +81,7 @@ public:
     KoTextDocument *textDocument() const;
 
     /**
-     * Returns the Settings object used by the broker.
+     * Returns the Settings object used by the loader.
      */
     KSpell2::Settings *settings() const;
 

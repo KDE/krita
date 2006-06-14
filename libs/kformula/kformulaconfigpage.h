@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <Q3GridLayout>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kvbox.h>
 
 #include "kformuladefs.h"

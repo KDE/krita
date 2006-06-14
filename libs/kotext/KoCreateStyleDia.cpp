@@ -26,11 +26,17 @@
 #include <kmessagebox.h>
 
 KoCreateStyleDia::KoCreateStyleDia( const QStringList & _list, QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent )
 {
+    setModal( true );
+    setObjectName( name );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     styleList=_list;
     setCaption( i18n("Create New Style") );
-    KVBox *page = makeVBoxMainWidget();
+    KVBox *page = new KVBox();
+    setMainWidget(page);
     new QLabel(i18n("Please specify a new style name:"), page);
     m_styleName = new QLineEdit( page );
     m_styleName->setMinimumWidth( m_styleName->sizeHint().width() * 3 );
@@ -48,7 +54,7 @@ void KoCreateStyleDia::slotOk()
         m_styleName->clear();
     }
     else
-        KDialogBase::slotOk();
+        slotButtonClicked( Ok );
 }
 
 QString KoCreateStyleDia::nameOfNewStyle()const

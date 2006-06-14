@@ -18,6 +18,7 @@
 */
 
 #include <klocale.h>
+#include <kvbox.h>
 
 #include <q3vbox.h>
 
@@ -29,11 +30,16 @@
 
 
 KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent )
 {
-
+    setModal( true );
+    setObjectName( name );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
     setCaption( i18n("Change Case") );
-    KVBox *page = makeVBoxMainWidget();
+    enableButtonSeparator( true );
+    KVBox *page = new KVBox();
+    setMainWidget(page);
 
     QGroupBox *grp = new QGroupBox( i18n( "Case" ), this ); // page is not possible
     grp->layout();

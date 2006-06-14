@@ -29,7 +29,7 @@
 #ifndef QT_ONLY
 #include <kcharselect.h>
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #endif
 
 #include "symbolcombo.h"
@@ -103,8 +103,14 @@ void
 SymbolCombo::selectChar()
 {
 #ifndef QT_ONLY
-	KDialogBase dialog(this->topLevelWidget(), "charselect_dialog", true, i18n("Select Char"),
-	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
+	KDialog dialog(this->topLevelWidget() );
+
+    dialog.setCaption( i18n("Select Char") );
+    dialog.setObjectName( "charselect_dialog" );
+    dialog.setButtons( KDialog::Ok|KDialog::Cancel );
+    dialog.setDefaultButton( KDialog::Ok );
+    dialog.setModal( false );
+    dialog.enableButtonSeparator( true );
 
 	KCharSelect *select = new KCharSelect(&dialog, "select_char");
 	dialog.setMainWidget(select);

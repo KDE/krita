@@ -357,7 +357,7 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
         m_lastTextObjectHighlighted->removeHighlight(true);
     m_lastTextObjectHighlighted = m_textIterator.currentTextObject();
     //kDebug(32500) << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
-    KDialogBase* dialog = m_find ? m_find->findNextDialog() : m_replace->replaceNextDialog();
+    KDialog* dialog = m_find ? m_find->findNextDialog() : m_replace->replaceNextDialog();
     highlightPortion(m_textIterator.currentParag(), m_offset + matchingIndex, matchingLength, m_lastTextObjectHighlighted->textDocument(), dialog );
 }
 
@@ -496,7 +496,7 @@ KMacroCommand* KoFindReplace::macroCommand()
 
 void KoFindReplace::setActiveWindow()
 {
-    KDialogBase* dialog = m_find ? m_find->findNextDialog() : m_replace->replaceNextDialog();
+    KDialog* dialog = m_find ? m_find->findNextDialog() : m_replace->replaceNextDialog();
     if ( dialog )
         dialog->activateWindow();
 }
@@ -544,13 +544,19 @@ bool KoTextReplace::validateMatch( const QString &text, int index, int matchedle
 }
 
 KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchContext *_ctx ,  const char* name)
-    : KDialogBase( parent, name, true, _caption, Ok|Cancel|User1 |User2 ),
+    : KDialog( parent ),
       m_ctx(_ctx)
 {
+    setCaption( _caption );
+    setModal( true );
+    setObjectName( name );
+    setButtons( Ok|Cancel|User1 |User2 );
+    setModal( true );
+
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    setButtonText( KDialogBase::User1, i18n("Reset") );
-    setButtonText( KDialogBase::User2, i18n("Clear") );
+    setButtonText( KDialog::User1, i18n("Reset") );
+    setButtonText( KDialog::User2, i18n("Clear") );
 
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
     connect( this, SIGNAL( user2Clicked() ), this, SLOT(slotClear()));

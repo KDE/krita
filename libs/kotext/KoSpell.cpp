@@ -26,7 +26,7 @@
 #include "KoTextParag.h"
 #include "KoTextIterator.h"
 
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 #include <kspell2/filter.h>
 
 #include <kglobal.h>
@@ -49,9 +49,9 @@ public:
     KoTextDocument *lastTxtDocument;
 };
 
-KoSpell::KoSpell( const KSpell2::Broker::Ptr& broker,  QObject *parent,
+KoSpell::KoSpell( const KSpell2::Loader::Ptr& loader,  QObject *parent,
                   const char* /*name*/ )
-    : BackgroundChecker( broker, parent )
+    : BackgroundChecker( loader, parent )
 {
     d = new Private;
     d->parag = 0;
@@ -110,7 +110,7 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
     /// ##### do we really need to create a Filter every time?
     Filter filter;
     filter.setBuffer( str );
-    filter.setSettings( broker()->settings() );
+    filter.setSettings( loader()->settings() );
     Word w = filter.wordAtPosition( pos );
     foundWord = w.word;
     start = w.start;
@@ -240,7 +240,7 @@ KoTextDocument * KoSpell::textDocument() const
 
 KSpell2::Settings * KoSpell::settings() const
 {
-    return broker()->settings();
+    return loader()->settings();
 }
 
 #include "KoSpell.moc"

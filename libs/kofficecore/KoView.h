@@ -42,7 +42,7 @@ class KStatusBar;
 class KInstance;
 class KPrinter;
 class KoDocumentChild;
-class DCOPObject;
+// class DCOPObject;
 
 namespace KParts
 {
@@ -299,7 +299,7 @@ public:
    * KOffice Applications are strongly recommended to reimplement this method,
    * so that their dcop interface provides more functionality than the basic KoViewIface
    */
-  virtual DCOPObject * dcopObject();
+//   virtual DCOPObject * dcopObject();
 
   /**
    * Overload this method to setup KPrinter before the actual printing.
@@ -424,6 +424,12 @@ protected:
    * Handles the event KParts::GUIActivateEvent.
    */
   virtual void guiActivateEvent( KParts::GUIActivateEvent * );
+
+
+  /**
+     Generate a name for this view.
+  */
+  QString newObjectName();
 
 signals:
   void activated( bool active );

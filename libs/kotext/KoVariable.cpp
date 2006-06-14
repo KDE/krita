@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kconfig.h>
 #include <kdeversion.h>
 #include <kinstance.h>
@@ -1392,7 +1392,11 @@ QString KoDateVariable::formatStr(int & correct)
 {
     QString string;
     QStringList stringList;
-    KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
+    KDialog* dialog=new KDialog();
+    dialog->setCaption( i18n("Date Format") );
+    dialog->setModal( true );
+    dialog->setButtons( KDialog::Ok|KDialog::Cancel );
+
     dialog->setWindowTitle( i18nc( "DateFormat", "Format of Date Variable" ) );
     DateFormatWidget* widget=new DateFormatWidget(dialog);
     int count=0;
@@ -1606,7 +1610,12 @@ QString KoTimeVariable::formatStr(int & _correct)
 {
     QString string;
     QStringList stringList;
-    KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
+    KDialog* dialog=new KDialog();
+    dialog->setCaption( i18n("Time Format") );
+    dialog->setModal( true );
+    dialog->setButtons( KDialog::Ok|KDialog::Cancel );
+
+
     dialog->setWindowTitle( i18nc( "TimeFormat", "This Dialog Allows You to Set the Format of the Time Variable" ) );
     TimeFormatWidget* widget=new TimeFormatWidget(dialog);
     dialog->setMainWidget(widget);

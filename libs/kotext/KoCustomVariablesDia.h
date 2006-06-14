@@ -22,7 +22,7 @@
 
 #include "KoVariable.h"
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3ptrlist.h>
 #include <QString>
 //Added by qt3to4:
@@ -43,7 +43,7 @@ class QCloseEvent;
  *
  ******************************************************************/
 
-class KoVariableNameDia : public KDialogBase
+class KoVariableNameDia : public KDialog
 {
     Q_OBJECT
 
@@ -116,7 +116,7 @@ private:
  * Class: KoCustomVariablesDia
  * This dialog allows to set the value of the custom variables.
  */
-class KOTEXT_EXPORT KoCustomVariablesDia : public KDialogBase
+class KOTEXT_EXPORT KoCustomVariablesDia : public KDialog
 {
     Q_OBJECT
 
@@ -136,7 +136,7 @@ protected:
  * This dialog allows to add a new custom variable or
  * to edit an existing one.
  */
-class KOTEXT_EXPORT KoCustomVarDialog : public KDialogBase
+class KOTEXT_EXPORT KoCustomVarDialog : public KDialog
 {
     Q_OBJECT
 

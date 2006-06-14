@@ -32,8 +32,13 @@ const int DEFAULT_SIZE = 3;
 const int MAX_SIZE = 200;
 
 MatrixDialog::MatrixDialog( QWidget *parent, int _width, int _height )
-        : KDialogBase(parent, "Matrix Dialog", true,i18n("Add Matrix"),Ok|Cancel)
+        : KDialog(parent )
 {
+    setCaption( i18n("Add Matrix") );
+    setModal( true );
+    setObjectName( "Matrix Dialog" );
+    setButtons( Ok|Cancel );
+
     w = _width;
     h = _height;
 

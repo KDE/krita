@@ -26,6 +26,7 @@
 
 #include "KoTemplateChooseDia.h"
 
+#include <kdialog.h>
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kfiledialog.h>
@@ -37,7 +38,6 @@
 
 #include <kdebug.h>
 #include <kpushbutton.h>
-#include <kjanuswidget.h>
 #include <kglobalsettings.h>
 
 #include <kfileiconview.h>
@@ -164,7 +164,7 @@ class KoTemplateChooseDiaPrivate {
 	QCheckBox *m_nodiag;
 
 	// choose a template
-	KJanusWidget * m_jwidget;
+	KPageDialog * m_jwidget;
 	KFileIconView *m_recent;
 	QGroupBox * boxdescription;
 	QTextEdit * textedit;
@@ -191,9 +191,15 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KIns
                                          const QStringList &extraNativeMimeTypes,
                                          const DialogType &dialogType,
                                          const QByteArray& templateType) :
-    KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialogBase::Cancel,
-                KDialogBase::Ok)
+    KPageDialog( parent )
 {
+
+    setModal( true );
+    setCaption( i18n("Open Document") );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setObjectName( name );
+
     d = new KoTemplateChooseDiaPrivate(
         templateType,
         instance,
@@ -202,16 +208,16 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KIns
         extraNativeMimeTypes,
         dialogType);
 
-    QPushButton* ok = actionButton( KDialogBase::Ok );
-    QPushButton* cancel = actionButton( KDialogBase::Cancel );
-    cancel->setAutoDefault(false);
-    ok->setDefault(true);
-    //enableButtonOK(false);
-
+//     QPushButton* ok = actionButton( KDialog::Ok );
+//     QPushButton* cancel = actionButton( KDialog::Cancel );
+//     cancel->setAutoDefault(false);
+//     ok->setDefault(true);
+//  //enableButtonOK(false);
     if (!templateType.isNull() && !templateType.isEmpty() && dialogType!=NoTemplates)
         d->tree = new KoTemplateTree(templateType, instance, true);
 
-    d->m_mainwidget = makeMainWidget();
+    d->m_mainwidget = new QWidget();
+    setMainWidget( d->m_mainwidget ); 
 
     d->m_templateName = "";
     d->m_fullTemplateName = "";
@@ -388,9 +394,8 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * la
 void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout)
 {
 
-    d->m_jwidget = new KJanusWidget(
-	    widgetbase,
-	    KJanusWidget::IconList);
+    d->m_jwidget = new KPageDialog( widgetbase );
+    d->m_jwidget->setFaceType( KPageDialog::List );
     layout->addWidget(d->m_jwidget,0,0);
 
     d->boxdescription = new QGroupBox(
@@ -420,10 +425,10 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 	if ( d->tree->defaultGroup() == group )
 		defaultTemplateGroup = entriesnumber; //select the default template group for the app
 
-	QFrame * frame = d->m_jwidget->addPage (
-		group->name(),
-		group->name(),
-		group->first()->loadPicture(d->m_instance));
+    QFrame * frame = new QFrame();
+    KPageWidgetItem * item = d->m_jwidget->addPage ( frame, group->name() );
+    item->setIcon( group->first()->loadPicture(d->m_instance) );
+    item->setHeader( group->name() );
 
 	QGridLayout* layout = new QGridLayout(frame);
 	KoTCDIconCanvas *canvas = new KoTCDIconCanvas( frame );
@@ -464,11 +469,12 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     if (!entriesnumber)
 	d->m_jwidget->hide();
 
-    // Set the initially shown page, possibly from the last usage of the dialog
-    if (entriesnumber >= templateNum && templateNum != -1 )
-	d->m_jwidget->showPage(templateNum);
-    else if ( defaultTemplateGroup != -1)
-	d->m_jwidget->showPage(defaultTemplateGroup);
+// FIXME: Port this!
+//  Set the initially shown page, possibly from the last usage of the dialog
+//     if (entriesnumber >= templateNum && templateNum != -1 )
+// 	d->m_jwidget->showPage(templateNum);
+//     else if ( defaultTemplateGroup != -1)
+// 	d->m_jwidget->showPage(defaultTemplateGroup);
 
 
     // Set the initially selected template, possibly from the last usage of the dialog
@@ -543,8 +549,8 @@ void KoTemplateChooseDia::setupDialog()
 	d->newTab = new QWidget( d->tabWidget );
 	d->tabWidget->addTab( d->newTab, i18n( "&Create Document" ) );
 	QGridLayout * newTabLayout = new QGridLayout( d->newTab );
-	newTabLayout->setMargin( KDialogBase::marginHint() );
-	newTabLayout->setSpacing( KDialogBase::spacingHint() );
+	newTabLayout->setMargin( KDialog::marginHint() );
+	newTabLayout->setSpacing( KDialog::spacingHint() );
 
 	// existing document
 	d->existingTab = new QWidget( d->tabWidget );
@@ -556,7 +562,7 @@ void KoTemplateChooseDia::setupDialog()
         d->recentTab = new QWidget( d->tabWidget );
         d->tabWidget->addTab( d->recentTab, i18n( "Open &Recent Document" ) );
         QGridLayout * recentTabLayout = new QGridLayout( d->recentTab );
-	recentTabLayout->setMargin( KDialogBase::marginHint() );
+	recentTabLayout->setMargin( KDialog::marginHint() );
 	recentTabLayout->setSpacing( KDialog::spacingHint() );
 
 	setupTemplateDialog(d->newTab, newTabLayout);
@@ -649,9 +655,10 @@ void KoTemplateChooseDia::slotOk()
 	    grp.writeEntry( "LastReturnType", QString::fromLatin1(s_returnTypes[d->m_returnType]) );
 	    if (d->m_returnType == Template)
 	    {
-		grp.writeEntry( "TemplateTab", d->m_jwidget->activePageIndex() );
-		grp.writePathEntry( "TemplateName", d->m_templateName );
-		grp.writePathEntry( "FullTemplateName", d->m_fullTemplateName);
+// TODO: Port this!
+// 		grp.writeEntry( "TemplateTab", d->m_jwidget->activePageIndex() );
+// 		grp.writePathEntry( "TemplateName", d->m_templateName );
+// 		grp.writePathEntry( "FullTemplateName", d->m_fullTemplateName);
 	    }
 
 	    if (d->m_nodiag)
@@ -671,7 +678,7 @@ void KoTemplateChooseDia::slotOk()
 	    kWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
 	    grp.writeEntry( "LastReturnType", QString() );
 	}
-	KDialogBase::slotOk();
+    slotButtonClicked( KDialog::Ok );
     }
 }
 

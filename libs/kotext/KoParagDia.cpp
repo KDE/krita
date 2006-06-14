@@ -2031,39 +2031,48 @@ QString KoParagTabulatorsWidget::tabName() {
 /******************************************************************/
 KoParagDia::KoParagDia( QWidget* parent,
                         int flags, KoUnit::Unit unit, double _frameWidth, bool breakLine, bool disableAll )
-    : KDialogBase(Tabbed, QString::null, Ok | Cancel | User1 | Apply, Ok, parent )
+    : KPageDialog( parent )
 {
+    setFaceType( Tabbed );
+    setButtons(Ok | Cancel | User1 | Apply );
+    setDefaultButton( Ok );
+
     m_decorationsWidget = 0;
     m_flags = flags;
-    setButtonText( KDialogBase::User1, i18n("Reset") );
+    setButtonText( KDialog::User1, i18n("Reset") );
 
     if ( m_flags & PD_SPACING )
     {
-        KVBox * page = addVBoxPage( i18n( "Indent && S&pacing" ) );
+        KVBox * page = new KVBox();
+        m_p1 = addPage( page, i18n( "Indent && S&pacing" ) );
         m_indentSpacingWidget = new KoIndentSpacingWidget( unit, _frameWidth, page );
         m_indentSpacingWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_ALIGN )
     {
-        KVBox * page = addVBoxPage( i18n( "General &Layout" ) );
+        KVBox * page = new KVBox();
+        m_p2 = addPage( page, i18n( "General &Layout" ) );
         m_alignWidget = new KoParagAlignWidget( breakLine, page );
         m_alignWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_DECORATION )
     {
-        KVBox * page = addVBoxPage( i18n( "D&ecorations" ) );
+        KVBox * page = new KVBox();
+        m_p3 = addPage( page, i18n( "D&ecorations" ) );
         m_decorationsWidget = new KoParagDecorationWidget( page);
         m_decorationsWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_NUMBERING )
     {
-        KVBox * page = addVBoxPage( i18n( "B&ullets/Numbers" ) );
+        KVBox * page = new KVBox();
+        m_p4 = addPage( page,i18n( "B&ullets/Numbers" ) );
         m_counterWidget = new KoParagCounterWidget( disableAll, page );
         m_counterWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_TABS )
     {
-        KVBox * page = addVBoxPage( i18n( "&Tabulators" ) );
+        KVBox * page = new KVBox();
+        m_p5 = addPage( page,i18n( "&Tabulators" ) );
         m_tabulatorsWidget = new KoParagTabulatorsWidget( unit, _frameWidth, page );
         m_tabulatorsWidget->layout()->setMargin(0);
     }
@@ -2084,7 +2093,7 @@ void KoParagDia::slotApply()
 void KoParagDia::slotOk()
 {
     slotApply();
-    KDialogBase::slotOk();
+    slotButtonClicked( Ok );
 }
 
 void KoParagDia::setCurrentPage( int page )
@@ -2092,19 +2101,19 @@ void KoParagDia::setCurrentPage( int page )
     switch( page )
     {
     case PD_SPACING:
-        showPage( pageIndex( m_indentSpacingWidget->parentWidget() ) );
+        KPageDialog::setCurrentPage( m_p1 );
         break;
     case PD_ALIGN:
-        showPage( pageIndex( m_alignWidget->parentWidget() ) );
+        KPageDialog::setCurrentPage( m_p2 );
         break;
     case PD_DECORATION:
-        showPage( pageIndex( m_decorationsWidget->parentWidget() ) );
+        KPageDialog::setCurrentPage( m_p3 );
         break;
     case PD_NUMBERING:
-        showPage( pageIndex( m_counterWidget->parentWidget() ) );
+        KPageDialog::setCurrentPage( m_p4 );
         break;
     case PD_TABS:
-        showPage( pageIndex( m_tabulatorsWidget->parentWidget() ) );
+        KPageDialog::setCurrentPage( m_p5 );
         break;
     default:
         break;

@@ -21,7 +21,7 @@
 #include "KoTextParag.h"
 #include "KoParagCounter.h"
 #include "KoTextObject.h"
-#include "KoTextViewIface.h"
+// #include "KoTextViewIface.h"
 #include "KoStyleCollection.h"
 #include "KoBgSpellCheck.h"
 #include "KoVariable.h"
@@ -71,7 +71,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     d = new KoTextViewPrivate;
     m_bReadWrite = true;
     m_textobj = textobj;
-    dcop=0;
+//     dcop=0;
     connect( m_textobj, SIGNAL( hideCursor() ), this, SLOT( hideCursor() ) );
     connect( m_textobj, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
     connect( m_textobj, SIGNAL( setCursor( KoTextCursor * ) ), this, SLOT( setCursor( KoTextCursor * ) ) );
@@ -112,18 +112,18 @@ KoTextView::~KoTextView()
 {
     delete m_cursor;
     delete d;
-    delete dcop;
+//     delete dcop;
     delete blinkTimer;
     delete dragStartTimer;
 }
 
-KoTextViewIface* KoTextView::dcopObject()
-{
-    if ( !dcop )
-        dcop = new KoTextViewIface( this );
-
-    return dcop;
-}
+// KoTextViewIface* KoTextView::dcopObject()
+// {
+//     if ( !dcop )
+//         dcop = new KoTextViewIface( this );
+// 
+//     return dcop;
+// }
 
 void KoTextView::terminate(bool removeselection)
 {

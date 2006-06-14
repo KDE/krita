@@ -21,7 +21,7 @@
 #ifndef paragdia_h
 #define paragdia_h
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <QStringList>
 #include <q3ptrlist.h>
 #include <q3stylesheet.h>
@@ -489,7 +489,7 @@ protected:
  * (*) the flags (to only show parts of it) have been kept just in case
  * but are not currently used.
  */
-class KOTEXT_EXPORT KoParagDia : public KDialogBase
+class KOTEXT_EXPORT KoParagDia : public KPageDialog
 {
     Q_OBJECT
 
@@ -593,6 +593,7 @@ private:
     KoParagDecorationWidget * m_decorationsWidget;
     KoParagCounterWidget * m_counterWidget;
     KoParagTabulatorsWidget * m_tabulatorsWidget;
+    KPageWidgetItem *m_p1, *m_p2, *m_p3, *m_p4, *m_p5;
     int m_flags;
     KoParagLayout oldLayout;
 };

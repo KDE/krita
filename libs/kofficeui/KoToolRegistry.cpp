@@ -32,7 +32,7 @@ KoToolRegistry::KoToolRegistry() {
     foreach(KService::Ptr service, offers) {
         int errCode = 0;
         KoToolFactory* plugin =
-            KParts::ComponentFactory::createInstanceFromService<KoToolFactory>(
+           KService::createInstance<KoToolFactory>(
                     service, this, QStringList(), &errCode );
         if ( plugin ) {
             kDebug(30008) <<"found plugin '"<< service->property("Name").toString() << "'\n";
@@ -41,15 +41,15 @@ KoToolRegistry::KoToolRegistry() {
         else {
             QString err;
             switch (errCode) {
-                case KParts::ComponentFactory::ErrNoServiceFound:
+                case KLibLoader::ErrNoServiceFound:
                     err = "No Service Found"; break;
-                case KParts::ComponentFactory::ErrServiceProvidesNoLibrary:
+                case KLibLoader::ErrServiceProvidesNoLibrary:
                     err = "Service provides no library"; break;
-                case KParts::ComponentFactory::ErrNoLibrary:
+                case KLibLoader::ErrNoLibrary:
                     err = KLibLoader::self()->lastErrorMessage(); break;
-                case KParts::ComponentFactory::ErrNoFactory:
+                case KLibLoader::ErrNoFactory:
                     err = "No factory found"; break;
-                case KParts::ComponentFactory::ErrNoComponent:
+                case KLibLoader::ErrNoComponent:
                     err = "No Component"; break;
                 default:
                     err = "Unknown error";

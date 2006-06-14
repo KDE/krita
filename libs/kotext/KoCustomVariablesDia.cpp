@@ -41,15 +41,21 @@
  ******************************************************************/
 
 KoVariableNameDia::KoVariableNameDia( QWidget *parent )
-    : KDialogBase( parent, "", TRUE,i18n( "Entry Name" ),Ok|Cancel )
+    : KDialog( parent )
 {
+    setCaption( i18n( "Entry Name" ) );
+    setModal( true );
+    setButtons( Ok|Cancel );
     init();
 }
 
 
 KoVariableNameDia::KoVariableNameDia( QWidget *parent, const Q3PtrList<KoVariable>& vars )
-    : KDialogBase( parent, "", TRUE, i18n( "Variable Name" ), Ok|Cancel )
+    : KDialog( parent  )
 {
+    setCaption( i18n( "Variable Name" ) );
+    setModal( true );
+    setButtons( Ok|Cancel );
 
     init();
     enableButtonOK(false);
@@ -64,7 +70,8 @@ KoVariableNameDia::KoVariableNameDia( QWidget *parent, const Q3PtrList<KoVariabl
 
 void KoVariableNameDia::init()
 {
-    back = makeVBoxMainWidget();
+    back = new KVBox();
+    setMainWidget( back );
 
     KHBox *row1 = new KHBox( back );
     row1->setSpacing( KDialog::spacingHint() );
@@ -208,10 +215,14 @@ void KoCustomVariablesList::updateItems()
  ******************************************************************/
 
 KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const Q3PtrList<KoVariable> &variables )
-    : KDialogBase( parent, "", TRUE,i18n( "Variable Value Editor" ), Ok|Cancel )
+    : KDialog( parent )
 {
+    setCaption( i18n( "Variable Value Editor" ) );
+    setModal( true );
+    setButtons( Ok|Cancel );
 
-    back = makeVBoxMainWidget();
+    back = new KVBox();
+    setMainWidget(back);
 
     list = new KoCustomVariablesList( back );
 
@@ -234,7 +245,7 @@ KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const Q3PtrList<KoV
              this, SLOT( slotOk() ) );
     connect( this, SIGNAL( cancelClicked() ),
              this, SLOT( reject() ) );
-    showButtonOK(lst.count()>0);
+    showButton(Ok, lst.count()>0);
 
     resize( 600, 400 );
 }
@@ -252,8 +263,12 @@ void KoCustomVariablesDia::slotOk()
  ******************************************************************/
 
 KoCustomVarDialog::KoCustomVarDialog( QWidget *parent )
-    : KDialogBase( parent, "", TRUE,i18n( "Add Variable" ), Ok|Cancel )
+    : KDialog( parent  )
 {
+    setCaption( i18n( "Add Variable" ) );
+    setModal( true );
+    setButtons( Ok|Cancel );
+
     init();
     m_name->setFocus();
 
@@ -272,8 +287,12 @@ KoCustomVarDialog::KoCustomVarDialog( QWidget *parent )
 }
 // edit existing variable
 KoCustomVarDialog::KoCustomVarDialog( QWidget *parent, KoCustomVariable *var )
-    : KDialogBase( parent, "", TRUE,i18n( "Edit Variable" ), Ok|Cancel )
+    : KDialog( parent  )
 {
+    setCaption( i18n( "Edit Variable" ) );
+    setModal( true );
+    setButtons( Ok|Cancel );
+
     m_var = var;
     init();
     m_name->setText( m_var->name() );
@@ -296,7 +315,8 @@ KoCustomVarDialog::KoCustomVarDialog( QWidget *parent, KoCustomVariable *var )
 
 void KoCustomVarDialog::init()
 {
-    back = makeVBoxMainWidget();
+    back = new KVBox();
+    setMainWidget(back);
     KHBox *row1 = new KHBox( back );
     row1->setSpacing( KDialog::spacingHint() );
     QLabel *ln = new QLabel( i18n( "Name:" ), row1 );

@@ -18,11 +18,13 @@
 */
 
 #include "KoApplication.h"
+#include "KoApplicationAdaptor.h"
+#include <dbus/qdbus.h>
 #include <config.h>
 #include <QFile>
 #include <QRegExp>
-#include <dcopclient.h>
-#include <KoApplicationIface.h>
+// #include <dcopclient.h>
+// #include <KoApplicationIface.h>
 #include <KoQueryTrader.h>
 #include <KoDocument.h>
 #include <KoMainWindow.h>
@@ -50,9 +52,9 @@ class KoApplicationPrivate
 {
 public:
     KoApplicationPrivate()  {
-        m_appIface = 0L;
+//         m_appIface = 0L;
     }
-    KoApplicationIface *m_appIface;  // to avoid a leak
+//     KoApplicationIface *m_appIface;  // to avoid a leak
 };
 
 KoApplication::KoApplication()
@@ -64,8 +66,11 @@ KoApplication::KoApplication()
     KoGlobal::initialize();
 
     // Prepare a DCOP interface
-// ###    d->m_appIface = new KoApplicationIface;
-// ###    dcopClient()->setDefaultObject( d->m_appIface->objId() );
+//     d->m_appIface = new KoApplicationIface;
+//     dcopClient()->setDefaultObject( d->m_appIface->objId() );
+
+    new KoApplicationAdaptor(this);
+    QDBus::sessionBus().registerObject("/application", this);
 
     m_starting = true;
 }
@@ -242,7 +247,7 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-    delete d->m_appIface;
+//     delete d->m_appIface;
     delete d;
 }
 

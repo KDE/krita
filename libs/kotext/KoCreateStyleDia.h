@@ -20,12 +20,12 @@
 #ifndef __KoCreateStyleDia__
 #define __KoCreateStyleDia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QStringList>
 #include <koffice_export.h>
 
 class QLineEdit;
-class KOTEXT_EXPORT KoCreateStyleDia : public KDialogBase
+class KOTEXT_EXPORT KoCreateStyleDia : public KDialog
 {
     Q_OBJECT
 public:

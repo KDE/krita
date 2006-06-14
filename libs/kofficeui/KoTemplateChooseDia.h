@@ -24,7 +24,7 @@
 #ifndef koTemplateChooseDia_h
 #define koTemplateChooseDia_h
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <kicondialog.h>
 #include <k3iconview.h>
 #include <koffice_export.h>
@@ -133,7 +133,7 @@ class KoTemplateChooseDiaPrivate;
  *  @author Reginald Stadlbauer <reggie@kde.org>
  *  @author Werner Trobin <trobin@kde.org>
  */
-class KOFFICEUI_EXPORT KoTemplateChooseDia : public KDialogBase
+class KOFFICEUI_EXPORT KoTemplateChooseDia : public KPageDialog
 {
     Q_OBJECT
 

@@ -129,10 +129,14 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
                                   const KoPageLayout& layout,
                                   const KoHeadFoot& hf, int tabs,
                                   KoUnit::Unit unit, bool modal )
-    : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
-                   KDialogBase::Ok, parent, name, modal)
+    : KPageDialog( parent )
 {
-
+    setCaption( i18n("Page Layout") );
+    setFaceType( KPageDialog::Tabbed );
+    setButtons(  KDialog::Ok | KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setObjectName( name );
+    setModal( modal );
     flags = tabs;
     m_layout = layout;
     m_unit = unit;
@@ -156,9 +160,15 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
                   const KoColumns& columns,
                   const KoKWHeaderFooter& kwhf,
                   int tabs, KoUnit::Unit unit )
-    : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
-                   KDialogBase::Ok, parent, name, true)
+    : KPageDialog( parent )
 {
+    setCaption( i18n("Page Layout") );
+    setFaceType( KPageDialog::Tabbed );
+    setButtons(  KDialog::Ok | KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setObjectName( name );
+    setModal( true );
+
     flags = tabs;
 
     m_layout = layout;
@@ -249,11 +259,13 @@ const KoKWHeaderFooter& KoPageLayoutDia::headerFooter()
 /*================ setup page size & margins tab ==================*/
 void KoPageLayoutDia::setupTab1( bool enableBorders )
 {
-    QWidget* tab1 = addPage(i18n( "Page Size && &Margins" ));
+    QWidget* tab1 = new QWidget();
+    addPage( tab1, i18n( "Page Size && &Margins" ));
     QHBoxLayout *lay = new QHBoxLayout(tab1);
     m_pageSizeTab = new KoPageLayoutSize(tab1, m_layout, m_unit, m_column, !(flags & DISABLE_UNIT), enableBorders );
     lay->addWidget(m_pageSizeTab);
     tab1->setLayout( lay );
+
     m_pageSizeTab->show();
     connect (m_pageSizeTab, SIGNAL( propertyChange(KoPageLayout&)),
             this, SLOT (sizeUpdated( KoPageLayout&)));
@@ -275,7 +287,8 @@ void KoPageLayoutDia::sizeUpdated(KoPageLayout &layout) {
 /*================ setup header and footer tab ===================*/
 void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
 {
-    QWidget *tab2 = addPage(i18n( "H&eader && Footer" ));
+    QWidget *tab2 = new QWidget();
+    addPage(tab2, i18n( "H&eader && Footer" ));
     QGridLayout *grid2 = new QGridLayout( tab2 );
     grid2->setSpacing( KDialog::spacingHint() );
 
@@ -356,7 +369,8 @@ void KoPageLayoutDia::setupTab2( const KoHeadFoot& hf )
 /*================================================================*/
 void KoPageLayoutDia::setupTab3()
 {
-    QWidget *tab3 = addPage(i18n( "Col&umns" ));
+    QWidget *tab3 = new QWidget();
+    addPage(tab3, i18n( "Col&umns" ));
     QHBoxLayout *lay = new QHBoxLayout(tab3);
     m_columnsTab = new KoPageLayoutColumns(tab3, m_column, m_unit, m_layout);
     m_columnsTab->layout()->setMargin(0);
@@ -376,7 +390,8 @@ void KoPageLayoutDia::columnsUpdated(KoColumns &columns) {
 /*================================================================*/
 void KoPageLayoutDia::setupTab4(const KoKWHeaderFooter kwhf )
 {
-    QWidget *tab4 = addPage(i18n( "H&eader && Footer" ));
+    QWidget *tab4 = new QWidget();
+    addPage(tab4, i18n( "H&eader && Footer" ));
     QHBoxLayout *lay = new QHBoxLayout(tab4);
     m_headerTab = new KoPageLayoutHeader(tab4, m_unit, kwhf);
     m_headerTab->layout()->setMargin(0);
@@ -393,7 +408,7 @@ void KoPageLayoutDia::slotOk()
 {
     if( m_pageSizeTab )
         m_pageSizeTab->queryClose();
-    KDialogBase::slotOk(); // accept
+    slotButtonClicked( KDialog::Ok );
 }
 
 #include "KoPageLayoutDia.moc"

@@ -22,14 +22,14 @@
 #include "KoTextParag.h"
 #include "KoBorder.h"
 #include <kapplication.h>
-#include <dcopclient.h>
+// #include <dcopclient.h>
 #include <kdebug.h>
 #include <KoVariable.h>
 #include <kcommand.h>
 
 
 KoTextViewIface::KoTextViewIface( KoTextView *_textview )
-    : DCOPObject( /*TODO name*/ )
+//     : DCOPObject( /*TODO name*/ )
 {
    m_textView = _textview;
 }

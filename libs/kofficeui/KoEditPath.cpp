@@ -35,8 +35,13 @@
 #include <QLabel>
 
 KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent  )
 {
+    setObjectName( name );
+    setModal( true );
+    setButtons( KDialog::Ok|KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+
     setCaption( i18n("Edit Path") );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
@@ -74,11 +79,16 @@ QString KoEditPathDia::newPath()const
 
 
 KoChangePathDia::KoChangePathDia( const QString & _path, QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent )
 {
+    setObjectName( name );
+    setModal( true );
+    setButtons( KDialog::Ok|KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
     setCaption( i18n("Edit Path") );
 
-    KVBox *page =makeVBoxMainWidget();
+    KVBox *page = new KVBox();
+    setMainWidget(page);
     new QLabel( i18n("Location:"), page);
     m_urlReq = new KUrlRequester(page);
     m_urlReq->setMinimumWidth( m_urlReq->sizeHint().width() * 3 );

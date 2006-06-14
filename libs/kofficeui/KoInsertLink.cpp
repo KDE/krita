@@ -37,26 +37,39 @@
 using namespace KOfficePrivate;
 
 KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displayBookmarkLink )
-    : KDialogBase( KDialogBase::IconList, i18n("Insert Link"),
-		   KDialogBase::Ok | KDialogBase::Cancel,
-		   KDialogBase::Ok, parent, name )
+    : KPageDialog( parent )
 {
+  setFaceType( KPageDialog::List );
+  setButtons( KDialog::Ok|KDialog::Cancel );
+  setDefaultButton( KDialog::Ok );
+  setCaption(i18n("Insert Link") );
+  setObjectName( name );
+
   bookmarkLink = 0L;
-  KVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",K3Icon::SizeMedium));
+
+  KVBox *page = new KVBox();
+  p1=addPage(page, i18n("Internet") );
+  p1->setIcon( BarIcon("html",K3Icon::SizeMedium) );
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
 
-  page=addVBoxPage(i18n("Mail & News"), QString::null,BarIcon("mail_generic",K3Icon::SizeMedium));
+  page = new KVBox(); 
+  p2=addPage(page, i18n("Mail & News") );
+  p2->setIcon( BarIcon("mail_generic",K3Icon::SizeMedium) );
   mailLink = new  mailLinkPage(page );
   connect(mailLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
-  page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",K3Icon::SizeMedium));
+  page = new KVBox();
+  p3=addPage(page, i18n("File"));
+  p3->setIcon( BarIcon("filenew",K3Icon::SizeMedium) );
   fileLink = new  fileLinkPage(page );
   connect(fileLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
   if ( displayBookmarkLink)
   {
-      page=addVBoxPage(i18n("Bookmark"), QString::null,BarIcon("bookmark",K3Icon::SizeMedium));
+      page = new KVBox();
+      p4=addPage(page, i18n("Bookmark"));
+      p4->setIcon( BarIcon("bookmark",K3Icon::SizeMedium) );
       bookmarkLink = new  bookmarkLinkPage(page );
       connect(bookmarkLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
   }
@@ -69,25 +82,16 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
 
 void KoInsertLinkDia::tabChanged(QWidget *)
 {
-    switch( activePageIndex() )
-    {
-    case 0:
-      internetLink->setLinkName( currentText );
-      break;
-    case 1:
-      mailLink->setLinkName( currentText );
-      break;
-    case 2:
-      fileLink->setLinkName( currentText );
-      break;
-    case 3:
+    if ( currentPage() == p1 )
+        internetLink->setLinkName( currentText );
+    else if ( currentPage() == p2 )
+        mailLink->setLinkName( currentText );
+    else if ( currentPage() == p3 )
+        fileLink->setLinkName( currentText );
+    else if ( currentPage() == p4 )
     {
         if ( bookmarkLink)
             bookmarkLink->setLinkName( currentText );
-    }
-    break;
-    default:
-      kDebug()<<"Error in linkName\n";
     }
     enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()) );
 }
@@ -124,7 +128,7 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
         if ( !_link.isEmpty() )
         {
             internetLink->setLinkName(_link);
-            showPage(0);
+            setCurrentPage(p1);
             slotTextChanged ( );
         }
         return;
@@ -133,19 +137,19 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
     {
         internetLink->setHrefName(_href);
         internetLink->setLinkName(_link);
-        showPage(0);
+        setCurrentPage(p1);
     }
     else if( _href.contains("file:/") )
     {
         fileLink->setHrefName(_href);
         fileLink->setLinkName(_link);
-        showPage(2);
+        setCurrentPage(p3);
     }
     else if( _href.contains("mailto:") || _href.contains("news:") )
     {
         mailLink->setHrefName(_href);
         mailLink->setLinkName(_link);
-        showPage(1);
+        setCurrentPage(p2);
     }
     else if( _href.contains("bkm://") )
     {
@@ -153,7 +157,7 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
         {
             bookmarkLink->setHrefName(_href.mid(6));
             bookmarkLink->setLinkName(_link);
-            showPage(3);
+            setCurrentPage(p4);
         }
     }
     slotTextChanged ( );
@@ -162,58 +166,40 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
 QString KoInsertLinkDia::linkName() const
 {
     QString result;
-    switch(activePageIndex())
+    if ( currentPage() == p1 )
+        result=internetLink->linkName();
+    else if ( currentPage() == p2 )
+        result=mailLink->linkName();
+    else if ( currentPage() == p3 )
+        result=fileLink->linkName();
+    else if ( currentPage() == p4 )
     {
-    case 0:
-      result=internetLink->linkName();
-      break;
-    case 1:
-      result=mailLink->linkName();
-      break;
-    case 2:
-      result=fileLink->linkName();
-      break;
-    case 3:
-    {
-        if ( bookmarkLink)
-            result=bookmarkLink->linkName();
+         if ( bookmarkLink)
+             result=bookmarkLink->linkName();
     }
-    break;
-    default:
-      kDebug()<<"Error in linkName\n";
-    }
-  return result;
+    return result;
 }
 
 QString KoInsertLinkDia::hrefName() const
 {
     QString result;
-    switch(activePageIndex())
+    if ( currentPage() == p1 )
+        result=internetLink->hrefName();
+    else if ( currentPage() == p2 )
+        result=mailLink->hrefName();
+    else if ( currentPage() == p3 )
+        result=fileLink->hrefName();
+    else if ( currentPage() == p4 )
     {
-    case 0:
-      result=internetLink->hrefName();
-      break;
-    case 1:
-      result=mailLink->hrefName();
-      break;
-    case 2:
-      result=fileLink->hrefName();
-      break;
-    case 3:
-    {
-        if ( bookmarkLink )
-            result=bookmarkLink->hrefName();
-    }
-    break;
-    default:
-      kDebug()<<"Error in hrefName\n";
+         if ( bookmarkLink )
+             result=bookmarkLink->hrefName();
     }
   return result;
 }
 
 void KoInsertLinkDia::slotOk()
 {
-    KDialogBase::slotOk();
+    slotButtonClicked( KDialog::Ok );
 }
 
 

@@ -106,5 +106,3 @@ private:
     parentLayout.addWidget(canvasController);</pre>
 @endcode
  */
-
-EXCLUDE=tests

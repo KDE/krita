@@ -46,8 +46,11 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      */
     KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions);
+    /// execute the command
     void execute ();
+    /// revert the actions done in execute
     void unexecute ();
+    /// return the name of this command
     QString name () const;
 
 private:
@@ -67,8 +70,11 @@ public:
      * @param newAngles a list with the same amount of items as shapes with the new angles.
      */
     KoShapeRotateCommand(const KoSelectionSet &shapes, QList<double> &previousAngles, QList<double> &newAngles);
+    /// execute the command
     void execute ();
+    /// revert the actions done in execute
     void unexecute ();
+    /// return the name of this command
     QString name () const;
 private:
     QList<KoShape*> m_shapes;
@@ -78,9 +84,18 @@ private:
 /// The undo / redo command for shape sizing.
 class FLAKE_EXPORT KoShapeSizeCommand : public KCommand {
 public:
+    /**
+     * The undo / redo command for shape sizing.
+     * @param shapes all the shapes that will be rezised at the same time
+     * @parem previousSizes the old sizes; in a list with a member for each shape
+     * @param newSizes the new sizes; in a list with a member for each shape
+     */
     KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes);
+    /// execute the command
     void execute ();
+    /// revert the actions done in execute
     void unexecute ();
+    /// return the name of this command
     QString name () const;
 private:
     QList<KoShape*> m_shapes;
@@ -106,8 +121,11 @@ public:
      */
     KoGroupShapesCommand(KoShapeGroup *container, QList<KoShape *> shapes);
     virtual ~KoGroupShapesCommand() { };
+    /// execute the command
     virtual void execute ();
+    /// revert the actions done in execute
     virtual void unexecute ();
+    /// return the name of this command
     virtual QString name () const;
 
 protected:
@@ -126,20 +144,31 @@ public:
      * @param shapes a list of all the shapes that should be ungrouped.
      */
     KoUngroupShapesCommand(KoShapeContainer *container, QList<KoShape *> shapes);
+    /// execute the command
     void execute ();
+    /// revert the actions done in execute
     void unexecute ();
+    /// return the name of this command
     QString name () const;
 };
 
 /// The undo / redo command for creating shapes
 class FLAKE_EXPORT KoShapeCreateCommand : public KCommand {
 public:
+    /**
+     * Command used on creation of new shapes
+     * @param controller the controller used to add/remove the shape from
+     * @param shape the shape thats just been created.
+     */
     KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape );
     virtual ~KoShapeCreateCommand();
+    /// execute the command
     void execute ();
+    /// revert the actions done in execute
     void unexecute ();
+    /// return the name of this command
     virtual QString name () const;
-protected:
+private:
     KoShapeControllerBase *m_controller;
     KoShape *m_shape;
     bool m_deleteShape;
@@ -161,10 +190,13 @@ public:
      */
     KoShapeDeleteCommand( KoShapeControllerBase *controller, const KoSelectionSet &shapes );
     virtual ~KoShapeDeleteCommand();
+    /// execute the command
     void execute ();
+    /// revert the actions done in execute
     void unexecute ();
+    /// return the name of this command
     virtual QString name () const;
-protected:
+private:
     KoShapeControllerBase *m_controller;
     QList<KoShape*> m_shapes;
     bool m_deleteShapes;

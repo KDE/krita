@@ -1,0 +1,9 @@
+[Desktop Entry]
+Comment=Random pick to an image
+Encoding=UTF-8
+Icon=
+Name=Random pick Filter
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritarandompickfilter
+X-Krita-Version=2

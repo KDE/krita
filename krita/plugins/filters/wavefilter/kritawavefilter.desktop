@@ -1,0 +1,9 @@
+[Desktop Entry]
+Comment=Transform an image in a wave
+Encoding=UTF-8
+Icon=
+Name=Wave Filter
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritawavefilter
+X-Krita-Version=2

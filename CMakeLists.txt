@@ -12,6 +12,7 @@ find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
+include (FindQtDBus)
 macro_optional_find_package(OpenEXR)
 macro_optional_find_package(Exif)
 macro_optional_find_package(PythonLibs)
@@ -34,7 +35,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 #macro_additional_clean_files( ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories(${QDBUS_INCLUDE_DIRS}  ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 # kostore is at the bottom of stack, so it has the dependency on the kde4 includes.
 set(KOSTORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store ${KDE4_INCLUDES})

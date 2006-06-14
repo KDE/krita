@@ -34,10 +34,10 @@ set(kofficecore_LIB_SRCS
    KoDocumentInfoDlg.cpp
    KoFactory.cpp
    KoChild.cpp
-   KoApplicationIface.cc
-   KoDocumentIface.cc
-   KoViewIface.cc
-   KoMainWindowIface.cc
+#    KoApplicationIface.cc
+#    KoDocumentIface.cc
+#    KoViewIface.cc
+#    KoMainWindowIface.cc
    kofficeversion.cc
    KoOasisStyles.cpp
    KoStyleStack.cpp
@@ -71,11 +71,11 @@ kde4_add_ui_files( kofficecore_LIB_SRCS
    koOpenPaneBase.ui
    koDetailsPaneBase.ui )
 
-kde4_add_dcop_skels(kofficecore_LIB_SRCS
-   KoApplicationIface.h
-   KoDocumentIface.h
-   KoViewIface.h
-   KoMainWindowIface.h )
+# kde4_add_dcop_skels(kofficecore_LIB_SRCS
+#    KoApplicationIface.h
+#    KoDocumentIface.h
+#    KoViewIface.h
+#    KoMainWindowIface.h )
 
 kde4_add_library(kofficecore SHARED ${kofficecore_LIB_SRCS})
 
@@ -104,47 +104,47 @@ install_targets(${PLUGIN_INSTALL_DIR} kodocinfopropspage )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kodocinfopropspage.desktop )
 install_files( ${DATA_INSTALL_DIR}/koffice FILES  koffice_shell.rc )
-install_files( /include FILES  
-    KoContainerHandler.h 
+install_files( /include FILES
+    KoContainerHandler.h
     KoProperties.h
-    KoFilter.h 
-    KoFilterChain.h 
-    KoGlobal.h 
-    KoUnit.h 
-    KoID.h 
+    KoFilter.h
+    KoFilterChain.h
+    KoGlobal.h
+    KoUnit.h
+    KoID.h
     KoGenericRegistry.h
-    KoDocument.h 
-    KoMainWindow.h 
-    KoApplication.h 
-    KoQueryTrader.h 
-    KoFilterManager.h 
-    KoDocumentInfo.h 
-    KoView.h 
-    KoFrame.h 
-    KoDocumentChild.h 
-    KoDocumentInfoDlg.h 
-    KoFactory.h 
-    KoChild.h 
-    KoApplicationIface.h 
-    KoDocumentIface.h 
-    KoViewIface.h 
-    KoMainWindowIface.h 
-    KoPictureKey.h 
-    KoPicture.h 
-    KoPictureCollection.h 
-    kofficeversion.h 
-    KoOasisStyles.h 
-    KoStyleStack.h 
-    KoGenStyles.h 
-    KoOasisSettings.h 
-    KoPageLayout.h 
-    KoXmlNS.h 
-    KoDom.h 
-    Koversiondialog.h 
-    kkbdaccessextensions.h 
-    KoOpenPane.h 
-    KoOasisLoadingContext.h 
-    KoPoint.h 
+    KoDocument.h
+    KoMainWindow.h
+    KoApplication.h
+    KoQueryTrader.h
+    KoFilterManager.h
+    KoDocumentInfo.h
+    KoView.h
+    KoFrame.h
+    KoDocumentChild.h
+    KoDocumentInfoDlg.h
+    KoFactory.h
+    KoChild.h
+    KoApplicationIface.h
+    KoDocumentIface.h
+    KoViewIface.h
+    KoMainWindowIface.h
+    KoPictureKey.h
+    KoPicture.h
+    KoPictureCollection.h
+    kofficeversion.h
+    KoOasisStyles.h
+    KoStyleStack.h
+    KoGenStyles.h
+    KoOasisSettings.h
+    KoPageLayout.h
+    KoXmlNS.h
+    KoDom.h
+    Koversiondialog.h
+    kkbdaccessextensions.h
+    KoOpenPane.h
+    KoOasisLoadingContext.h
+    KoPoint.h
     KoGenStyle.h )
 
 

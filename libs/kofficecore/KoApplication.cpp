@@ -64,8 +64,8 @@ KoApplication::KoApplication()
     KoGlobal::initialize();
 
     // Prepare a DCOP interface
-    d->m_appIface = new KoApplicationIface;
-    dcopClient()->setDefaultObject( d->m_appIface->objId() );
+// ###    d->m_appIface = new KoApplicationIface;
+// ###    dcopClient()->setDefaultObject( d->m_appIface->objId() );
 
     m_starting = true;
 }

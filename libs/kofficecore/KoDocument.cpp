@@ -2290,14 +2290,14 @@ int KoDocument::shellCount() const
 
 DCOPObject * KoDocument::dcopObject()
 {
-    if ( !d->m_dcopObject )
-        d->m_dcopObject = new KoDocumentIface( this );
+/* ###   if ( !d->m_dcopObject )
+        d->m_dcopObject = new KoDocumentIface( this );*/
     return d->m_dcopObject;
 }
 
 QByteArray KoDocument::dcopObjectId() const
 {
-    return const_cast<KoDocument *>(this)->dcopObject()->objId();
+// ###    return const_cast<KoDocument *>(this)->dcopObject()->objId();
 }
 
 void KoDocument::setErrorMessage( const QString& errMsg )

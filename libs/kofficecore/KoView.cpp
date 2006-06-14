@@ -708,8 +708,8 @@ void KoView::slotClearStatusText()
 
 DCOPObject *KoView::dcopObject()
 {
-    if ( !d->m_dcopObject )
-        d->m_dcopObject = new KoViewIface( this );
+/* ###   if ( !d->m_dcopObject )
+        d->m_dcopObject = new KoViewIface( this );*/
     return d->m_dcopObject;
 }
 

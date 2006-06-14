@@ -1561,7 +1561,7 @@ DCOPObject * KoMainWindow::dcopObject()
 {
     if ( !d->m_dcopObject )
     {
-        d->m_dcopObject = new KoMainWindowIface( this );
+// ###        d->m_dcopObject = new KoMainWindowIface( this );
     }
 
     return d->m_dcopObject;

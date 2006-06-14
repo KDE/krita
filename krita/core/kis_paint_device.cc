@@ -35,6 +35,7 @@
 #include "kis_painter.h"
 #include "kis_fill_painter.h"
 #include "kis_undo_adapter.h"
+#include "kis_curve_iterator_pixel.h"
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iteratorpixeltrait.h"
@@ -999,6 +1000,10 @@ KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(Q_INT32 x, Q_INT32 y
         return KisRandomAccessorPixel(m_datamanager, NULL, x, y, m_x, m_y, writable);
 }
 
+KisCurveIteratorPixel KisPaintDevice::createCurveIterator(KisCurveFunction* curveFunction, int start, int end)
+{
+    return KisCurveIteratorPixel(this, curveFunction, start, end);
+}
 
 void KisPaintDevice::emitSelectionChanged()
 {

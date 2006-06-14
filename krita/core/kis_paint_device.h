@@ -53,6 +53,8 @@ class KisImage;
 class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisRandomAccessorPixel;
+class KisCurveIteratorPixel;
+class KisCurveFunction;
 class KisUndoAdapter;
 class KisFilter;
 class KisDataManager;
@@ -445,6 +447,11 @@ public:
      * you can
      */
     KisRandomAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y, bool writable);
+    
+    /**
+     * This function create a curve iterator.
+     */
+    KisCurveIteratorPixel createCurveIterator(KisCurveFunction* curveFunction, int start, int end);
     
     /** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
     KisSelectionSP selection();

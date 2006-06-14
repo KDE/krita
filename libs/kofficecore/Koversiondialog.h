@@ -20,14 +20,14 @@
 #ifndef __VERSION_DIALOG__
 #define __VERSION_DIALOG__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QPushButton;
 class QToolButton;
 class K3ListView;
 class Q3MultiLineEdit;
 
-class KoVersionDialog : public KDialogBase
+class KoVersionDialog : public KDialog
 {
     Q_OBJECT
 public:
@@ -53,7 +53,7 @@ protected:
     QPushButton* m_pModify;
 };
 
-class KoVersionModifyDialog : public KDialogBase
+class KoVersionModifyDialog : public KDialog
 {
     Q_OBJECT
 public:

@@ -22,7 +22,7 @@
 
 #include <KoGlobal.h>
 #include <KoUnit.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "KoPageLayout.h"
 #include "KoPageLayoutDia.h"
 

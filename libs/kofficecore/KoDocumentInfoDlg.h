@@ -22,7 +22,7 @@
 #define __koDocumentInfoDlg_h__
 
 #include <koffice_export.h>
-#include <kpagedialog.h>
+#include <kdialogbase.h>
 
 class KoDocumentInfo;
 
@@ -40,11 +40,11 @@ class KoDocumentInfo;
  * meta.xml file and therefore available through the KoDocumentInfo
  * class.
  * The widgets shown in the tabs are koDocumentInfoAboutWidget and
- * koDocumentInfoAuthorWidget. This class here is derived from
+ * koDocumentInfoAuthorWidget. This class here is derived from 
  * KDialogBase and uses it in the TabbedMode.
  */
 
-class KOFFICECORE_EXPORT KoDocumentInfoDlg : public KPageDialog
+class KOFFICECORE_EXPORT KoDocumentInfoDlg : public KDialogBase
 {
   Q_OBJECT
 

@@ -41,11 +41,8 @@
 
 
 KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
-  : KDialog( parent )
+    : KDialogBase( parent, name, true, i18n("Version"), Ok|Cancel )
 {
-  setCaption( i18n("Version") );
-  setButtons( Ok | Cancel );
-
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
@@ -130,11 +127,8 @@ void KoVersionDialog::slotOk()
 }
 
 KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, const QString &/*comment*/, const char* name )
-  : KDialog( parent )
+    : KDialogBase( parent, name, true, i18n("Comment"), Ok|Cancel )
 {
-    setCaption( i18n("Comment") );
-    setButtons( Ok | Cancel );
-
     QWidget* page = new QWidget( this );
     setMainWidget( page );
 

@@ -51,11 +51,10 @@ public:
 
 
 KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat)
-  : KDialog( parent ),
+    : KDialogBase (parent, "kofilterchooser", true, i18n ("Choose Filter"),
+                   KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok, true),
     m_mimeTypes (mimeTypes)
 {
-    setCaption( i18n( "Choose Filter" ) );
-    setButtons( Ok|Cancel );
     setInitialSize( QSize (300, 350) );
 
     QWidget *page = new QWidget (this);
@@ -63,7 +62,7 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
 
     QLabel *filterLabel = new QLabel( i18n ("Select a filter:"), page );
     m_filterList = new KListBox (page, "filterlist");
-
+    
     QVBoxLayout *layout = new QVBoxLayout( page );
     layout->addWidget (filterLabel);
     layout->addWidget (m_filterList);
@@ -388,7 +387,7 @@ namespace  // in order not to mess with the global namespace ;)
 		  if( !stopList.contains( testIt ) )
 		    impList.append( testIt );
 		}
-
+		
                 expList = ( *it )->export_;
             }
 
@@ -501,9 +500,9 @@ QStringList KoFilterManager::mimeFilter( const QByteArray& mimetype, Direction d
       {
         if ( !lst.contains( mit ) ) // append only if not there already. Qt4: QSet<QString>?
           lst.append( mit );
-      }
+      }  
     }
-
+    
     return lst;
 }
 

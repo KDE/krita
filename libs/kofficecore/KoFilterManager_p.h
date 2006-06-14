@@ -22,12 +22,12 @@
 #include <QString>
 #include <QStringList>
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class KListBox;
 
 
-class KoFilterChooser : public KDialog
+class KoFilterChooser : public KDialogBase
 {
 Q_OBJECT
 

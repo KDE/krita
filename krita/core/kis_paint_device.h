@@ -53,8 +53,7 @@ class KisImage;
 class KisRectIteratorPixel;
 class KisVLineIteratorPixel;
 class KisRandomAccessorPixel;
-class KisCurveIteratorPixel;
-class KisCurveFunction;
+class KisRandomSubAccessorPixel;
 class KisUndoAdapter;
 class KisFilter;
 class KisDataManager;
@@ -449,9 +448,9 @@ public:
     KisRandomAccessorPixel createRandomAccessor(Q_INT32 x, Q_INT32 y, bool writable);
     
     /**
-     * This function create a curve iterator.
+     * This function create a random accessor which can easily access to sub pixel values.
      */
-    KisCurveIteratorPixel createCurveIterator(KisCurveFunction* curveFunction, int start, int end);
+    KisRandomSubAccessorPixel createRandomSubAccessor();
     
     /** Get the current selection or create one if this paintdevice hasn't got a selection yet. */
     KisSelectionSP selection();

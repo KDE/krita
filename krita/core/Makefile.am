@@ -25,24 +25,22 @@ libkritaimage_la_SOURCES = kis_adjustment_layer.cc kis_alpha_mask.cc \
 	kis_transform_worker.cc kis_vec.cc kis_paint_device.cc kis_paint_device_iface.cc \
 	kis_paint_device_iface.skel kis_image_iface.cc kis_image_iface.skel kis_basic_math_toolbox.cpp \
 	kis_math_toolbox.cpp kis_exif_info.cc kis_thread_pool.cc kis_exif_value.cc \
-	kis_filter_strategy.h kis_random_accessor.cpp kis_curve_iterator_pixel.cpp
+	kis_filter_strategy.h kis_random_accessor.cpp kis_random_sub_accessor.cpp
 
 noinst_HEADERS = kis_rotate_visitor.h kis_selected_transaction.h \
 	kis_strategy_move.h kis_transform_worker.h kis_datamanager.h kis_iteratorpixeltrait.h \
-	kis_merge_visitor.h kis_thread.h kis_thread_pool.h kis_change_profile_visitor.h \
-	kis_random_accessor.h
+	kis_merge_visitor.h kis_thread.h kis_thread_pool.h kis_change_profile_visitor.h
 
 include_HEADERS = kis_adjustment_layer.h kis_alpha_mask.h \
-		kis_autobrush_resource.h kis_autogradient_resource.h kis_background.h kis_boundary.h kis_brush.h \
-		kis_command.h kis_convolution_painter.h kis_fill_painter.h kis_filter.h \
-		kis_filter_registry.h kis_gradient.h kis_gradient_painter.h kis_histogram.h kis_image.h \
-		kis_image_iface.h kis_imagepipe_brush.h kis_iterator.h kis_iterators_pixel.h \
-		kis_iteratorpixeltrait.h kis_layer.h kis_meta_registry.h kis_nameserver.h \
-		kis_paint_device_iface.h kis_paint_device.h kis_painter.h kis_paintop.h kis_paintop_registry.h \
-		kis_palette.h kis_pattern.h kis_point.h kis_rect.h kis_resource.h kis_selection.h \
-		kis_transaction.h kis_types.h kis_vec.h kis_filter_config_widget.h \
-		kis_filter_configuration.h kis_exif_info.h kis_exif_value.h kis_substrate.h \
-	kis_curve_iterator_pixel.h
+	kis_autobrush_resource.h kis_autogradient_resource.h kis_background.h kis_boundary.h kis_brush.h \
+	kis_command.h kis_convolution_painter.h kis_fill_painter.h kis_filter.h \
+	kis_filter_registry.h kis_gradient.h kis_gradient_painter.h kis_histogram.h kis_image.h \
+	kis_image_iface.h kis_imagepipe_brush.h kis_iterator.h kis_iterators_pixel.h \
+	kis_iteratorpixeltrait.h kis_layer.h kis_meta_registry.h kis_nameserver.h \
+	kis_paint_device_iface.h kis_paint_device.h kis_painter.h kis_paintop.h kis_paintop_registry.h \
+	kis_palette.h kis_pattern.h kis_point.h kis_rect.h kis_resource.h kis_selection.h \
+	kis_transaction.h kis_types.h kis_vec.h kis_filter_config_widget.h \
+	kis_filter_configuration.h kis_exif_info.h kis_exif_value.h kis_substrate.h
 
 libkritaimage_la_LDFLAGS = -version-info 1:0:0 -no-undefined $(all_libraries)
 libkritaimage_la_LIBADD = ../sdk/libkritasdk.la ../kritacolor/libkritacolor.la tiles/libkritatile.la $(OPENEXR_LIBS) $(LCMS_LIBS) $(LIB_KOFFICECORE) $(LIB_KOPAINTER) $(LIB_KDECORE) $(LIB_QT) $(OPENEXR_LIBS) 

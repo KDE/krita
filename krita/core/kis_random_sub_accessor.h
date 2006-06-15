@@ -25,28 +25,18 @@
 #include "kis_random_accessor.h"
 #include "kis_types.h"
 
-/**
- * you need to inherit this class
- */
-class KisCurveFunction {
+class KisRandomSubAccessorPixel{
     public:
-        virtual KisPoint valueAt(int i) =0;
-};
-
-class KisCurveIteratorPixel{
-    public:
-        KisCurveIteratorPixel(KisPaintDeviceSP device, KisCurveFunction* curveFunction, int start, int end);
-        ~KisCurveIteratorPixel();
+        KisRandomSubAccessorPixel(KisPaintDeviceSP device);
+        ~KisRandomSubAccessorPixel();
         /**
          * Copy the sampled old value to destination
          */
         void sampledOldRawData(Q_UINT8* dst);
-        inline KisCurveIteratorPixel& operator++() { m_position++; m_currentPoint = m_curveFunction->valueAt(m_position); return *this;  };
-        inline bool isDone() { return m_position >= m_end; }
-        inline void setPosition(int p) { m_position = p; }
+        inline void moveTo(double x, double y) { m_currentPoint.setX(x); m_currentPoint.setY(y); }
+        inline void moveTo(KisPoint p ) { m_currentPoint = p; }
     private:
         KisPaintDeviceSP m_device;
-        KisCurveFunction* m_curveFunction;
         int m_position, m_end;
         KisPoint m_currentPoint;
         KisRandomAccessorPixel m_randomAccessor;

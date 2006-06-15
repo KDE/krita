@@ -52,39 +52,33 @@ K_EXPORT_COMPONENT_FACTORY( kritawavefilter, KritaWaveFilterFactory( "krita" ) )
 
 class KisWaveCurve {
     public:
-        virtual KisPoint valueAt(int x, int y) =0;
+        virtual double valueAt(int x, int y) =0;
 };
         
 class KisSinusoidalWaveCurve : public KisWaveCurve {
     public:
-        KisSinusoidalWaveCurve(int amplitude, int wavelenght, int shift, int ystart, int height) : m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift), m_ystart(ystart), m_yend(m_ystart + height - 1)
+        KisSinusoidalWaveCurve(int amplitude, int wavelenght, int shift) : m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift)
         {
         }
-        virtual KisPoint valueAt(int x, int y)
+        virtual double valueAt(int x, int y)
         {
-            double yv = y + m_amplitude * cos( (double) ( m_shift + x) / m_wavelength );
-            if(yv < m_ystart) yv = m_ystart;
-            else if(yv > m_yend) yv = m_yend;
-            return KisPoint(x, yv );
+            return y + m_amplitude * cos( (double) ( m_shift + x) / m_wavelength );
         }
     private:
-        int m_amplitude, m_wavelength, m_shift, m_ystart, m_yend;
+        int m_amplitude, m_wavelength, m_shift;
 };
 
 class KisTriangleWaveCurve : public KisWaveCurve {
     public:
-        KisTriangleWaveCurve(int amplitude, int wavelenght, int shift, int ystart, int height) :  m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift), m_ystart(ystart), m_yend(m_ystart + height - 1)
+        KisTriangleWaveCurve(int amplitude, int wavelenght, int shift) :  m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift)
         {
         }
-        virtual KisPoint valueAt(int x, int y)
+        virtual double valueAt(int x, int y)
         {
-            double yv = y +  m_amplitude * pow( -1, (m_shift + x) / m_wavelength )  * (0.5 - (double)( (m_shift + x) % m_wavelength ) / m_wavelength );
-            if(yv < m_ystart) yv = m_ystart;
-            else if(yv > m_yend) yv = m_yend;
-            return KisPoint(x, yv );
+            return y +  m_amplitude * pow( -1, (m_shift + x) / m_wavelength )  * (0.5 - (double)( (m_shift + x) % m_wavelength ) / m_wavelength );
         }
     private:
-        int m_amplitude, m_wavelength, m_shift, m_ystart, m_yend;
+        int m_amplitude, m_wavelength, m_shift;
 };
 
 
@@ -115,10 +109,14 @@ KisFilterConfiguration* KisFilterWave::configuration(QWidget* w)
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
     if(wN)
     {
-        config->setProperty("wavelength", wN->widget()->intWavelength->value() );
-        config->setProperty("shift", wN->widget()->intShift->value() );
-        config->setProperty("amplitude", wN->widget()->intAmplitude->value() );
-        config->setProperty("shape", wN->widget()->cbShape->currentItem() );
+        config->setProperty("horizontalwavelength", wN->widget()->intHWavelength->value() );
+        config->setProperty("horizontalshift", wN->widget()->intHShift->value() );
+        config->setProperty("horizontalamplitude", wN->widget()->intHAmplitude->value() );
+        config->setProperty("horizontalshape", wN->widget()->cbHShape->currentItem() );
+        config->setProperty("verticalwavelength", wN->widget()->intVWavelength->value() );
+        config->setProperty("verticalshift", wN->widget()->intVShift->value() );
+        config->setProperty("verticalamplitude", wN->widget()->intVAmplitude->value() );
+        config->setProperty("verticalshape", wN->widget()->cbVShape->currentItem() );
     }
     return config;
 }
@@ -135,26 +133,44 @@ void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     
     setProgressTotalSteps(rect.width() * rect.height());
 
+    KisColorSpace* cs = dst->colorSpace();
+    
     QVariant value;
-    int wavelength = (config->getProperty("wavelength", value)) ? value.toInt() : 50;
-    int shift = (config->getProperty("shift", value)) ? value.toInt() : 50;
-    int amplitude = (config->getProperty("amplitude", value)) ? value.toInt() : 4;
-    int shape = (config->getProperty("shape", value)) ? value.toInt() : 0;
+    int horizontalwavelength = (config->getProperty("horizontalwavelength", value)) ? value.toInt() : 50;
+    int horizontalshift = (config->getProperty("horizontalshift", value)) ? value.toInt() : 50;
+    int horizontalamplitude = (config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;
+    int horizontalshape = (config->getProperty("horizontalshape", value)) ? value.toInt() : 0;
+    int verticalwavelength = (config->getProperty("verticalwavelength", value)) ? value.toInt() : 50;
+    int verticalshift = (config->getProperty("verticalshift", value)) ? value.toInt() : 50;
+    int verticalamplitude = (config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
+    int verticalshape = (config->getProperty("verticalshape", value)) ? value.toInt() : 0;
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-    KisWaveCurve* curve;
-    if(shape == 1)
-        curve = new KisTriangleWaveCurve(amplitude, wavelength, shift, rect.y(), rect.height());
+    KisWaveCurve* verticalcurve;
+    if(verticalshape == 1)
+        verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
     else
-        curve = new KisSinusoidalWaveCurve(amplitude, wavelength, shift, rect.y(), rect.height());
+        verticalcurve = new KisSinusoidalWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
+    KisWaveCurve* horizontalcurve;
+    if(horizontalshape == 1)
+        horizontalcurve = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
+    else
+        horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
     while(!dstIt.isDone())
     {
-        srcRSA.moveTo( curve->valueAt( dstIt.x(), dstIt.y() ) );
-//         kdDebug() << dstIt.x() << " " << dstIt.y() << " " << curve->valueAt( dstIt.x(), dstIt.y() ).x() << " " << curve->valueAt( dstIt.x(), dstIt.y() ).y() << endl;
-        srcRSA.sampledOldRawData(dstIt.rawData());
+        double xv = horizontalcurve->valueAt( dstIt.y(), dstIt.x() );
+        double yv = verticalcurve->valueAt( dstIt.x(), dstIt.y() );
+        if( xv >= rect.left() && xv <= rect.right() && yv >= rect.top() && yv <= rect.bottom() )
+        {
+            srcRSA.moveTo( KisPoint( xv, yv ) );
+            srcRSA.sampledOldRawData(dstIt.rawData());
+        } else {
+            cs->setAlpha( dstIt.rawData(), 0, 1);
+        }
         ++dstIt;
         incProgress();
     }
-    delete curve;
+    delete horizontalcurve;
+    delete verticalcurve;
     setProgressDone(); // Must be called even if you don't really support progression
 }

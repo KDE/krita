@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>162</width>
-            <height>113</height>
+            <width>223</width>
+            <height>303</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,15 +22,7 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>Wavelength:</string>
-            </property>
-        </widget>
-        <spacer row="1" column="2">
+        <spacer row="0" column="1">
             <property name="name">
                 <cstring>spacer2</cstring>
             </property>
@@ -42,56 +34,12 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>21</width>
+                    <width>60</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>textLabel2_2</cstring>
-            </property>
-            <property name="text">
-                <string>Amplitude:</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="text">
-                <string>Shift:</string>
-            </property>
-        </widget>
-        <widget class="KIntNumInput" row="0" column="1">
-            <property name="name">
-                <cstring>intWavelength</cstring>
-            </property>
-            <property name="value">
-                <number>50</number>
-            </property>
-            <property name="minValue">
-                <number>0</number>
-            </property>
-            <property name="maxValue">
-                <number>1000000</number>
-            </property>
-        </widget>
-        <widget class="KIntNumInput" row="1" column="1">
-            <property name="name">
-                <cstring>intShift</cstring>
-            </property>
-            <property name="value">
-                <number>0</number>
-            </property>
-            <property name="minValue">
-                <number>0</number>
-            </property>
-            <property name="maxValue">
-                <number>1000000</number>
-            </property>
-        </widget>
-        <spacer row="5" column="1">
+        <spacer row="2" column="0">
             <property name="name">
                 <cstring>spacer3</cstring>
             </property>
@@ -104,46 +52,213 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>20</height>
+                    <height>60</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel" row="3" column="0">
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
-                <cstring>textLabel1_2</cstring>
+                <cstring>groupBox1</cstring>
             </property>
-            <property name="text">
-                <string>Shape:</string>
+            <property name="title">
+                <string>Horizontal wave:</string>
             </property>
-        </widget>
-        <widget class="KComboBox" row="3" column="1">
-            <item>
-                <property name="text">
-                    <string>Sinusoidale</string>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
                 </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Triangle</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>cbShape</cstring>
-            </property>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Wavelength:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="2">
+                    <property name="name">
+                        <cstring>intHWavelength</cstring>
+                    </property>
+                    <property name="value">
+                        <number>50</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Shift:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="1" column="2">
+                    <property name="name">
+                        <cstring>intHShift</cstring>
+                    </property>
+                    <property name="value">
+                        <number>0</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Amplitude:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="2">
+                    <property name="name">
+                        <cstring>intHAmplitude</cstring>
+                    </property>
+                    <property name="value">
+                        <number>20</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000</number>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="3" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Sinusoidale</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Triangle</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cbHShape</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Shape:</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <widget class="KIntNumInput" row="2" column="1">
+        <widget class="QGroupBox" row="1" column="0">
             <property name="name">
-                <cstring>intAmplitude</cstring>
+                <cstring>Vertical_wave</cstring>
             </property>
-            <property name="value">
-                <number>20</number>
+            <property name="title">
+                <string>Vertical wave:</string>
             </property>
-            <property name="minValue">
-                <number>0</number>
-            </property>
-            <property name="maxValue">
-                <number>1000000</number>
-            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Wavelength:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="0" column="2">
+                    <property name="name">
+                        <cstring>intVWavelength</cstring>
+                    </property>
+                    <property name="value">
+                        <number>50</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel2_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Shift:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="1" column="2">
+                    <property name="name">
+                        <cstring>intVShift</cstring>
+                    </property>
+                    <property name="value">
+                        <number>0</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel2_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Amplitude:</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="2">
+                    <property name="name">
+                        <cstring>intVAmplitude</cstring>
+                    </property>
+                    <property name="value">
+                        <number>20</number>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>1000000</number>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="3" column="1" rowspan="1" colspan="2">
+                    <item>
+                        <property name="text">
+                            <string>Sinusoidale</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Triangle</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>cbVShape</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Shape:</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
     </grid>
 </widget>
@@ -155,8 +270,15 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
 </includehints>
 </UI>

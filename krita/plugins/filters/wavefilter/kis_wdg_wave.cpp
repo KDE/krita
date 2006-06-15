@@ -34,10 +34,14 @@ KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent, const char* name
     m_widget = new WdgWaveOptions(this);
     widgetLayout -> addWidget(m_widget, 0, 0);
 
-    connect( widget()->intWavelength, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intShift, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intAmplitude, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->cbShape, SIGNAL( activated(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->intHWavelength, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->intHShift, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->intHAmplitude, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->cbHShape, SIGNAL( activated(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->intVWavelength, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->intVShift, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->intVAmplitude, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->cbVShape, SIGNAL( activated(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisWdgWave::~KisWdgWave()
@@ -47,21 +51,37 @@ KisWdgWave::~KisWdgWave()
 void KisWdgWave::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("wavelength", value))
+    if (config->getProperty("horizontalwavelength", value))
     {
-        widget()->intWavelength->setValue( value.toUInt() );
+        widget()->intHWavelength->setValue( value.toUInt() );
     }
-    if (config->getProperty("shift", value))
+    if (config->getProperty("horizontalshift", value))
     {
-        widget()->intShift->setValue( value.toUInt() );
+        widget()->intHShift->setValue( value.toUInt() );
     }
-    if (config->getProperty("amplitude", value))
+    if (config->getProperty("horizontalamplitude", value))
     {
-        widget()->intAmplitude->setValue( value.toUInt() );
+        widget()->intHAmplitude->setValue( value.toUInt() );
     }
-    if (config->getProperty("shape", value))
+    if (config->getProperty("horizontalshape", value))
     {
-        widget()->cbShape->setCurrentItem( value.toUInt() );
+        widget()->cbHShape->setCurrentItem( value.toUInt() );
+    }
+    if (config->getProperty("verticalwavelength", value))
+    {
+        widget()->intVWavelength->setValue( value.toUInt() );
+    }
+    if (config->getProperty("verticalshift", value))
+    {
+        widget()->intVShift->setValue( value.toUInt() );
+    }
+    if (config->getProperty("verticalamplitude", value))
+    {
+        widget()->intVAmplitude->setValue( value.toUInt() );
+    }
+    if (config->getProperty("verticalshape", value))
+    {
+        widget()->cbVShape->setCurrentItem( value.toUInt() );
     }
 }
 

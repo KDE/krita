@@ -45,8 +45,11 @@ NewLayerDialog::NewLayerDialog(const KoID colorSpaceID,
                    const QString & deviceName,
                    QWidget *parent,
                    const char *name)
-    : super(parent, i18n("New Layer"), Ok | Cancel)
+    : super(parent)
 {
+    setCaption( i18n("New Layer") );
+    setButtons( Ok| Cancel );
+    setDefaultButton( Ok );
     setObjectName(name);
     m_page = new WdgLayerProperties(this);
     m_page->layout()->setMargin(0);

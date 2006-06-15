@@ -34,8 +34,11 @@
 #include "kis_gradient_chooser.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KisView * view, QWidget * parent, const char *name)
-    : KDialog(parent, i18n("Custom Gradient"), Close)
+    : KDialog(parent)
 {
+    setCaption( i18n("Custom Gradient") );
+    setButtons(  Close);
+    setDefaultButton( Close );
     setObjectName(name);
     setModal(false);
     m_page = new KisAutogradient(this, "autogradient", i18n("Custom Gradient"));

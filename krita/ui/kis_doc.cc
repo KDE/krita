@@ -151,7 +151,6 @@ KisDoc::KisDoc(QWidget *parentWidget, QObject *parent, bool singleViewMode) :
 
     init();
 
-    dcopObject();
 }
 
 KisDoc::~KisDoc()

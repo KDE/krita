@@ -423,8 +423,12 @@ qint32 TabletSettingsTab::DeviceSettings::serialNumberAxis() const
 
 TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const QString& deviceName, DeviceSettings settings,
                                                                           QWidget *parent, const char *name)
-    : super(parent, i18n("Configure %1",deviceName), Ok | Cancel)
+    : super(parent)
 {
+    setCaption( i18n("Configure %1",deviceName) );
+    setButtons(  Ok | Cancel );
+    setDefaultButton( Ok );
+
     setObjectName(name);
 
     m_page = new WdgTabletDeviceSettings(this);
@@ -762,7 +766,7 @@ void GridSettingsTab::linkSpacingToggled(bool b)
 //---------------------------------------------------------------------------------------------------
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
-    : KDialog( IconList, i18n("Preferences"), Ok | Cancel | Help | Default /*| Apply*/, Ok, parent, name, true, true )
+    : KPageDialog( parent )
 {
     setCaption( i18n("Preferences") );
     setButtons( Ok | Cancel | Help | Default );

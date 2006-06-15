@@ -41,8 +41,12 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
                      const KoCompositeOp& compositeOp,
                      const KoColorSpace * colorSpace,
                      QWidget *parent, const char *name, Qt::WFlags f)
-    : super(parent, i18n("Layer Properties"), Ok | Cancel, f)
+    : super(parent/* f*/)
 {
+    setCaption( i18n("Layer Properties") );
+    setButtons( Ok | Cancel );
+    setDefaultButton( Ok );
+
     setObjectName(name);
     m_page = new WdgLayerProperties(this);
     m_page->layout()->setMargin(0);

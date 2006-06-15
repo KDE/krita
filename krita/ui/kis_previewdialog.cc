@@ -26,8 +26,11 @@
 #include "kis_previewdialog.h"
 
 KisPreviewDialog::KisPreviewDialog(QWidget *  parent, const char * name, const QString caption)
-    : super(parent, caption, Ok | Cancel)
+    : super(parent)
 {
+    setCaption( caption );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
     setObjectName(name);
     KHBox* layout = new KHBox(this);
     layout->setSpacing( 6 );

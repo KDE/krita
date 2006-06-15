@@ -38,10 +38,10 @@
 
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
-#include <kis_curve_iterator_pixel.h>
-#include <kis_layer.h>
 #include <kis_filter_registry.h>
 #include <kis_global.h>
+#include <kis_layer.h>
+#include <kis_random_sub_accessor.h>
 #include <kis_types.h>
 
 #include "kis_wdg_wave.h"
@@ -50,25 +50,22 @@
 typedef KGenericFactory<KritaWaveFilter> KritaWaveFilterFactory;
 K_EXPORT_COMPONENT_FACTORY( kritawavefilter, KritaWaveFilterFactory( "krita" ) )
 
-class KisWaveCurve : public KisCurveFunction {
+class KisWaveCurve {
     public:
-        KisWaveCurve( int y) : m_y (y) { }
-        inline void setY(int y) { m_y = y; }
-    protected:
-        int m_y;
+        virtual KisPoint valueAt(int x, int y) =0;
 };
         
 class KisSinusoidalWaveCurve : public KisWaveCurve {
     public:
-        KisSinusoidalWaveCurve(int amplitude, int wavelenght, int shift, int y, int ystart, int height) : KisWaveCurve(y), m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift), m_ystart(ystart), m_yend(m_ystart + height - 1)
+        KisSinusoidalWaveCurve(int amplitude, int wavelenght, int shift, int ystart, int height) : m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift), m_ystart(ystart), m_yend(m_ystart + height - 1)
         {
         }
-        virtual KisPoint valueAt(int i)
+        virtual KisPoint valueAt(int x, int y)
         {
-            double yv = m_y + m_amplitude * cos( (double) ( m_shift + i) / m_wavelength );
+            double yv = y + m_amplitude * cos( (double) ( m_shift + x) / m_wavelength );
             if(yv < m_ystart) yv = m_ystart;
             else if(yv > m_yend) yv = m_yend;
-            return KisPoint(i, yv );
+            return KisPoint(x, yv );
         }
     private:
         int m_amplitude, m_wavelength, m_shift, m_ystart, m_yend;
@@ -76,15 +73,15 @@ class KisSinusoidalWaveCurve : public KisWaveCurve {
 
 class KisTriangleWaveCurve : public KisWaveCurve {
     public:
-        KisTriangleWaveCurve(int amplitude, int wavelenght, int shift, int y, int ystart, int height) : KisWaveCurve(y), m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift), m_ystart(ystart), m_yend(m_ystart + height - 1)
+        KisTriangleWaveCurve(int amplitude, int wavelenght, int shift, int ystart, int height) :  m_amplitude(amplitude), m_wavelength(wavelenght), m_shift(shift), m_ystart(ystart), m_yend(m_ystart + height - 1)
         {
         }
-        virtual KisPoint valueAt(int i)
+        virtual KisPoint valueAt(int x, int y)
         {
-            double yv = m_y +  m_amplitude * pow( -1, (m_shift + i) / m_wavelength )  * (0.5 - (double)( (m_shift + i) % m_wavelength ) / m_wavelength );
+            double yv = y +  m_amplitude * pow( -1, (m_shift + x) / m_wavelength )  * (0.5 - (double)( (m_shift + x) % m_wavelength ) / m_wavelength );
             if(yv < m_ystart) yv = m_ystart;
             else if(yv > m_yend) yv = m_yend;
-            return KisPoint(i, yv );
+            return KisPoint(x, yv );
         }
     private:
         int m_amplitude, m_wavelength, m_shift, m_ystart, m_yend;
@@ -143,27 +140,21 @@ void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     int shift = (config->getProperty("shift", value)) ? value.toInt() : 50;
     int amplitude = (config->getProperty("amplitude", value)) ? value.toInt() : 4;
     int shape = (config->getProperty("shape", value)) ? value.toInt() : 0;
-    QRect rect2 = rect;
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect2.x(), rect2.y(), rect2.width(), true );
+    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisWaveCurve* curve;
     if(shape == 1)
-        curve = new KisTriangleWaveCurve(amplitude, wavelength, shift, rect2.y(), rect2.y(), rect2.height());
+        curve = new KisTriangleWaveCurve(amplitude, wavelength, shift, rect.y(), rect.height());
     else
-        curve = new KisSinusoidalWaveCurve(amplitude, wavelength, shift, rect2.y(), rect2.y(), rect2.height());
-    KisCurveIteratorPixel srcIt = src->createCurveIterator(curve ,0, rect2.width() -1);
-    for(int y = rect2.y(); y <= rect2.bottom(); y++)
+        curve = new KisSinusoidalWaveCurve(amplitude, wavelength, shift, rect.y(), rect.height());
+    KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
+    while(!dstIt.isDone())
     {
-        curve->setY( y );
-        while(!srcIt.isDone())
-        {
-            srcIt.sampledOldRawData(dstIt.rawData());
-            ++srcIt;
-            ++dstIt;
-            incProgress();
-        }
-        dstIt.nextRow();
-        srcIt.setPosition(0);
+        srcRSA.moveTo( curve->valueAt( dstIt.x(), dstIt.y() ) );
+//         kdDebug() << dstIt.x() << " " << dstIt.y() << " " << curve->valueAt( dstIt.x(), dstIt.y() ).x() << " " << curve->valueAt( dstIt.x(), dstIt.y() ).y() << endl;
+        srcRSA.sampledOldRawData(dstIt.rawData());
+        ++dstIt;
+        incProgress();
     }
-    
+    delete curve;
     setProgressDone(); // Must be called even if you don't really support progression
 }

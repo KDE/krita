@@ -67,7 +67,6 @@ private:
 
 int main (int argc, char ** argv)
 {
-    KApplication::disableAutoDcopRegistration();
     KCmdLineArgs::init(argc,argv,"kobordertest", 0, 0, 0, 0);
     KApplication app;
 

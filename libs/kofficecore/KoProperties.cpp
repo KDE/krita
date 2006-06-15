@@ -81,7 +81,7 @@ void KoProperties::setProperty(const QString & name, const QVariant & value)
     m_properties.insert( name, value );
 }
 
-bool KoProperties::getProperty(const QString & name, QVariant & value)
+bool KoProperties::getProperty(const QString & name, QVariant & value) const
 {
    QMap<QString, QVariant>::const_iterator it = m_properties.find( name ); 
    if ( it == m_properties.end() ) {
@@ -93,13 +93,13 @@ bool KoProperties::getProperty(const QString & name, QVariant & value)
    }
 }
 
-QVariant KoProperties::getProperty(const QString & name)
+QVariant KoProperties::getProperty(const QString & name) const
 {
     return m_properties.value( name, QVariant() );
 }
 
 
-int KoProperties::getInt(const QString & name, int def)
+int KoProperties::getInt(const QString & name, int def) const
 {
     const QVariant v = getProperty(name);
     if (v.isValid())
@@ -109,7 +109,7 @@ int KoProperties::getInt(const QString & name, int def)
 
 }
 
-double KoProperties::getDouble(const QString & name, double def)
+double KoProperties::getDouble(const QString & name, double def) const
 {
     const QVariant v = getProperty(name);
     if (v.isValid())
@@ -118,7 +118,7 @@ double KoProperties::getDouble(const QString & name, double def)
         return def;
 }
 
-bool KoProperties::getBool(const QString & name, bool def)
+bool KoProperties::getBool(const QString & name, bool def) const
 {
     const QVariant v = getProperty(name);
     if (v.isValid())
@@ -127,7 +127,7 @@ bool KoProperties::getBool(const QString & name, bool def)
         return def;
 }
 
-QString KoProperties::getString(const QString & name, QString def)
+QString KoProperties::getString(const QString & name, QString def) const
 {
     const QVariant v = getProperty(name);
     if (v.isValid())

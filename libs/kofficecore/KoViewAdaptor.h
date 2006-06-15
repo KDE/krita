@@ -49,7 +49,7 @@ public:
 
 public Q_SLOTS: // METHODS
     //DCOPRef action( const DCOPCString &name );
-    QStringList/*DCOPCStringList*/ actions();
+    Q_SCRIPTABLE QStringList/*DCOPCStringList*/ actions();
     //QMap<DCOPCString,DCOPRef> actionMap();
 
 protected:

@@ -51,34 +51,34 @@ public Q_SLOTS: // METHODS
     /**
      * Returns the URL for this document (empty, real URL, or internal one)
      */
-    QString url();
+    Q_SCRIPTABLE QString url();
 
     /**
      * Opens a document stored in @p url
      * Warning: this is asynchronous. The document might not be loaded yet when
      * this call returns. See isLoading.
      */
-    void openURL( QString url );
+    Q_SCRIPTABLE void openURL( QString url );
 
     /**
      * @return TRUE is the document is still loading
      */
-    bool isLoading();
+    Q_SCRIPTABLE bool isLoading();
 
     /**
      * @return TRUE is the document has been modified
      */
-    bool isModified();
+    Q_SCRIPTABLE bool isModified();
 
     /**
      * @return the number of views this document is displayed in
      */
-    int viewCount();
+    Q_SCRIPTABLE int viewCount();
 
     /**
      * @return a DCOP reference (DCOPRef) to the view with index @p idx
      */
-    QString view( int idx );
+    Q_SCRIPTABLE QString view( int idx );
 
     /**
      * DCOP-action proxy
@@ -87,7 +87,7 @@ public Q_SLOTS: // METHODS
     /**
      * @return list of actions
      */
-    QStringList actions();
+    Q_SCRIPTABLE QStringList actions();
     /**
      * @return a map of (action name, DCOP reference)
      */
@@ -96,49 +96,49 @@ public Q_SLOTS: // METHODS
     /**
      * Saves the document under its existing filename
      */
-    void save();
+    Q_SCRIPTABLE void save();
 
     /**
      * Saves the document under a new name
      */
-    void saveAs( const QString & url );
+    Q_SCRIPTABLE void saveAs( const QString & url );
 
-    void setOutputMimeType( const QByteArray & mimetype );
+    Q_SCRIPTABLE void setOutputMimeType( const QByteArray & mimetype );
 
-    QString documentInfoAuthorName() const;
-    QString documentInfoEmail() const;
-    QString documentInfoCompanyName() const;
-    QString documentInfoTitle() const;
-    QString documentInfoAbstract() const;
-    QString documentInfoKeywords() const;
-    QString documentInfoSubject() const;
-    QString documentInfoTelephone() const;
-    QString documentInfoTelephoneWork() const;
-    QString documentInfoTelephoneHome() const;
-    QString documentInfoFax() const;
-    QString documentInfoCountry() const;
-    QString documentInfoPostalCode() const;
-    QString documentInfoCity() const;
-    QString documentInfoStreet() const;
-    QString documentInfoInitial() const;
-    QString documentInfoAuthorPostion() const;
-    void setDocumentInfoAuthorName(const QString & text);
-    void setDocumentInfoEmail(const QString &text);
-    void setDocumentInfoCompanyName(const QString &text);
-    void setDocumentInfoTelephone(const QString &text);
-    void setDocumentInfoTelephoneWork(const QString &text);
-    void setDocumentInfoTelephoneHome(const QString &text);
-    void setDocumentInfoFax(const QString &text);
-    void setDocumentInfoCountry(const QString &text);
-    void setDocumentInfoTitle(const QString & text);
-    void setDocumentInfoPostalCode(const QString &text);
-    void setDocumentInfoCity(const QString & text);
-    void setDocumentInfoStreet(const QString &text);
-    void setDocumentInfoAbstract(const QString &text);
-    void setDocumentInfoInitial(const QString & text);
-    void setDocumentInfoKeywords(const QString & text );
-    void setDocumentInfoSubject(const QString & text);
-    void setDocumentInfoAuthorPosition(const QString & text);
+    Q_SCRIPTABLE QString documentInfoAuthorName() const;
+    Q_SCRIPTABLE QString documentInfoEmail() const;
+    Q_SCRIPTABLE QString documentInfoCompanyName() const;
+    Q_SCRIPTABLE QString documentInfoTitle() const;
+    Q_SCRIPTABLE QString documentInfoAbstract() const;
+    Q_SCRIPTABLE QString documentInfoKeywords() const;
+    Q_SCRIPTABLE QString documentInfoSubject() const;
+    Q_SCRIPTABLE QString documentInfoTelephone() const;
+    Q_SCRIPTABLE QString documentInfoTelephoneWork() const;
+    Q_SCRIPTABLE QString documentInfoTelephoneHome() const;
+    Q_SCRIPTABLE QString documentInfoFax() const;
+    Q_SCRIPTABLE QString documentInfoCountry() const;
+    Q_SCRIPTABLE QString documentInfoPostalCode() const;
+    Q_SCRIPTABLE QString documentInfoCity() const;
+    Q_SCRIPTABLE QString documentInfoStreet() const;
+    Q_SCRIPTABLE QString documentInfoInitial() const;
+    Q_SCRIPTABLE QString documentInfoAuthorPostion() const;
+    Q_SCRIPTABLE void setDocumentInfoAuthorName(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoEmail(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoCompanyName(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoTelephone(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoTelephoneWork(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoTelephoneHome(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoFax(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoCountry(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoTitle(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoPostalCode(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoCity(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoStreet(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoAbstract(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoInitial(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoKeywords(const QString & text );
+    Q_SCRIPTABLE void setDocumentInfoSubject(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoAuthorPosition(const QString & text);
 
 public:
 //     virtual DCOPCStringList functionsDynamic();

@@ -46,26 +46,26 @@ public Q_SLOTS: // METHODS
    * Creates a new document for the given native mimetype
    * Use it to create a shell and to load an existing file, if any
    */
-  QString createDocument( const QString &nativeFormat );
+   Q_SCRIPTABLE QString createDocument( const QString &nativeFormat );
 
   /**
    * @return a list of references to all the documents
    * (see KoDocumentIface)
    */
-  QStringList getDocuments();
+   Q_SCRIPTABLE QStringList getDocuments();
 
   /**
    * @return a list of references to all the views
    * (see KoViewIface)
    * Convenience method to avoid iterating over all documents to get all the views.
    */
-  QStringList getViews();
+   Q_SCRIPTABLE QStringList getViews();
 
   /**
    * @return a list of references to all the windows
    * (see KoMainWindowIface)
    */
-  QStringList getWindows();
+   Q_SCRIPTABLE QStringList getWindows();
 };
 
 #endif

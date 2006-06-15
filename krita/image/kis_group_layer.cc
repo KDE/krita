@@ -18,6 +18,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kicon.h>
 #include <QImage>
 #include <QDateTime>
 
@@ -60,6 +61,11 @@ KisLayerSP KisGroupLayer::clone() const
 KisGroupLayer::~KisGroupLayer()
 {
     m_layers.clear();
+}
+
+QIcon KisGroupLayer::icon() const
+{
+    return KIcon("folder");
 }
 
 

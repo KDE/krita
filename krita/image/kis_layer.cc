@@ -18,6 +18,7 @@
  */
 
 #include <kdebug.h>
+#include <QIcon>
 #include <QImage>
 
 #include "kis_debug_areas.h"
@@ -267,7 +268,7 @@ static int getID()
 
 
 KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
-    QObject(0),
+    QAbstractItemModel(0),
     KShared(),
     m_id(getID()),
     m_index(-1),
@@ -284,7 +285,7 @@ KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
 }
 
 KisLayer::KisLayer(const KisLayer& rhs) :
-    QObject(),
+    QAbstractItemModel(0),
     KShared(rhs)
 {
     if (this != &rhs) {
@@ -584,5 +585,68 @@ void KisLayer::notifyPropertyChanged()
     if(image() && !signalsBlocked())
         image()->notifyPropertyChanged(KisLayerSP(this));
 }
+
+int KisLayer::rowCount(const QModelIndex &parent) const
+{
+    if (!parent.isValid())
+        return 1;
+    Q_ASSERT(parent.model() == this);
+    Q_ASSERT(parent.internalPointer());
+
+    return static_cast<KisLayer*>(parent.internalPointer())->childCount();
+}
+
+int KisLayer::columnCount(const QModelIndex&) const
+{
+    return 0;
+}
+
+QModelIndex KisLayer::index(int row, int column, const QModelIndex &parent) const
+{
+    if (!parent.isValid())
+    {
+        Q_ASSERT(row == 0);
+        return createIndex(row, column, (void*)this);
+    }
+
+    Q_ASSERT(parent.model() == this);
+    Q_ASSERT(parent.internalPointer());
+
+    return createIndex(row, column, static_cast<KisLayer*>(parent.internalPointer())->at(row));
+}
+
+QModelIndex KisLayer::parent(const QModelIndex &i) const
+{
+    if (!i.isValid())
+        return QModelIndex();
+    Q_ASSERT(i.model() == this);
+    Q_ASSERT(i.internalPointer());
+
+    if (KisGroupLayer *p = static_cast<KisLayer*>(i.internalPointer())->parent().data())
+        return createIndex(p->KisLayer::index(), 0, p); //gcc--
+    else
+        return QModelIndex();
+}
+
+QVariant KisLayer::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+    Q_ASSERT(index.model() == this);
+    Q_ASSERT(index.internalPointer());
+
+    KisLayer *layer = static_cast<KisLayer*>(index.internalPointer());
+
+    switch (role)
+    {
+        case Qt::DisplayRole: return layer->name();
+        case Qt::DecorationRole: return layer->icon();
+        case Qt::EditRole: return layer->name();
+        case ThumbnailRole: return layer->createThumbnail(64, 64);
+        default: return QVariant(); //TODO
+    }
+}
+
+
 
 #include "kis_layer.moc"

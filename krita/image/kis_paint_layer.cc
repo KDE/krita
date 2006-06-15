@@ -17,6 +17,7 @@
  */
 
 #include <kdebug.h>
+#include <QIcon>
 #include <QImage>
 
 #include "kis_debug_areas.h"
@@ -62,6 +63,11 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) : KisLayer(rhs)
     m_paintdev = new KisPaintDevice( *rhs.m_paintdev.data() );
     m_paintdev->setParentLayer(this);
     m_paintdev->startBackgroundFilters();
+}
+
+QIcon KisPaintLayer::icon() const
+{
+    return QIcon();
 }
 
 KisLayerSP KisPaintLayer::clone() const

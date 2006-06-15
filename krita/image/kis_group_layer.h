@@ -43,6 +43,8 @@ public:
     KisGroupLayer(const KisGroupLayer& rhs);
     virtual ~KisGroupLayer();
 
+    virtual QIcon icon() const;
+
     virtual KisLayerSP clone() const;
 public:
 

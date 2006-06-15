@@ -37,6 +37,7 @@ public:
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 
+    virtual QIcon icon() const;
     virtual KisLayerSP clone() const;
 public:
 

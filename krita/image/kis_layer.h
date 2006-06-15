@@ -19,7 +19,7 @@
 #ifndef KIS_LAYER_H_
 #define KIS_LAYER_H_
 
-#include <QObject>
+#include <QAbstractItemModel>
 #include <QRect>
 
 #include "krita_export.h"
@@ -29,6 +29,7 @@
 #include "KoCompositeOp.h"
 
 class KNamedCommand;
+class QIcon;
 class QPainter;
 class KisUndoAdapter;
 class KisGroupLayer;
@@ -41,8 +42,9 @@ class KisGroupLayer;
  * is at the top of the group in the layerlist, using next will iterate to the bottom to last,
  * whereas previous will go up to first again.
  **/
-class KRITAIMAGE_EXPORT KisLayer : public QObject, public KShared
+class KRITAIMAGE_EXPORT KisLayer: public QAbstractItemModel, public KShared
 {
+    typedef QAbstractItemModel super;
     Q_OBJECT
 
 public:
@@ -50,6 +52,7 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
+    virtual QIcon icon() const = 0;
 
     /**
      * Set the specified rect to clean
@@ -131,6 +134,8 @@ public:
     /// Returns how many direct child layers this layer has (not recursive).
     virtual uint childCount() const { return 0; }
 
+    virtual KisLayerSP at(int /*index*/) const { return KisLayerSP(0); }
+
     /// Returns the first child layer of this layer (if it supports that).
     virtual KisLayerSP firstChild() const { return KisLayerSP(0); }
 
@@ -206,6 +211,10 @@ public:
     /// paints where no data is on this layer. Useful when it is a transparent layer stacked on top of another one
     virtual void paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
 
+
+    /// extension to Qt::ItemDataRole
+    enum ItemDataRole { ThumbnailRole = 33 };
+
     /// Returns a thumbnail in requested size. The QImage may have transparent parts.
     /// May also return 0
     virtual QImage createThumbnail(qint32 w, qint32 h);
@@ -213,6 +222,12 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
+public: // (re)implemented from QAbstractItemModel
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
 private:
     friend class KisGroupLayer;

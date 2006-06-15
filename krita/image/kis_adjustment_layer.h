@@ -48,6 +48,8 @@ public:
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 
+    virtual QIcon icon() const;
+
     /// Return a copy of this layer
     virtual KisLayerSP clone() const;
 

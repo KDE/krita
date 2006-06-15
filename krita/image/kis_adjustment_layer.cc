@@ -18,6 +18,7 @@
  */
 
 #include <kdebug.h>
+#include <kicon.h>
 #include <QImage>
 
 #include "kis_debug_areas.h"
@@ -54,6 +55,11 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
 KisAdjustmentLayer::~KisAdjustmentLayer()
 {
     delete m_filterConfig;
+}
+
+QIcon KisAdjustmentLayer::icon() const
+{
+    return KIcon("tool_filter");
 }
 
 

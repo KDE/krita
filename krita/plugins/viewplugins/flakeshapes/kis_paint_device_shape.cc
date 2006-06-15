@@ -83,7 +83,7 @@ KoShape * KisPaintDeviceShapeFactory::createDefaultShape()
     return new KisPaintDeviceShape();
 }
 
-KoShape * KisPaintDeviceShapeFactory::createShape(KoProperties * params) const
+KoShape * KisPaintDeviceShapeFactory::createShape(const KoProperties * params) const
 {
     return new KisPaintDeviceShape();
 }

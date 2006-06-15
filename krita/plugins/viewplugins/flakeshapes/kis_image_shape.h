@@ -63,7 +63,7 @@ public:
 public:
 
     virtual KoShape * createDefaultShape();
-    virtual KoShape * createShape(KoProperties * params) const;
+    virtual KoShape * createShape(const KoProperties * params) const;
     virtual QWidget * optionWidget();
 
 };

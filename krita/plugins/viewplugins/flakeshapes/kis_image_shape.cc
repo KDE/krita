@@ -92,7 +92,7 @@ KoShape * KisImageShapeFactory::createDefaultShape()
     return new KisImageShape();
 }
 
-KoShape * KisImageShapeFactory::createShape(KoProperties * params) const
+KoShape * KisImageShapeFactory::createShape(const KoProperties * params) const
 {
     return new KisImageShape();
 }

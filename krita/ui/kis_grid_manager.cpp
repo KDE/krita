@@ -29,7 +29,7 @@
 
 #include <kaction.h>
 #include <ktoggleaction.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klocale.h>
 
 #include "kis_grid_manager.h"

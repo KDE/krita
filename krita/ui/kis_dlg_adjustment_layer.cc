@@ -46,12 +46,15 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
                                              const QString & caption,
                                              QWidget *parent,
                                              const char *name)
-    : KDialog(parent, caption, Ok | Cancel)
+    : KDialog(parent)
     , m_image(img)
     , m_currentFilter(0)
     , m_customName(false)
     , m_freezeName(false)
 {
+    setCaption( caption );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
     setObjectName(name);
 
     Q_ASSERT(img);

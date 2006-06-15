@@ -174,8 +174,11 @@ quint32 matchColors(const QColor & c, enumAction action)
 
 
 DlgColorRange::DlgColorRange( KisView * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
-    : super (parent, i18n("Color Range"), Ok | Cancel)
+    : super (parent)
 {
+    setCaption( i18n("Color Range") );
+    setButtons(  Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
     m_dev = dev;
     m_view = view;

@@ -40,8 +40,11 @@ namespace FiltersGallery {
 
 
 KisDlgFiltersGallery::KisDlgFiltersGallery(KisView* view, QWidget* parent,const char *name)
-  : KDialog(parent, i18n("Filters Gallery"), Ok | Cancel), m_view(view), m_currentConfigWidget(0), m_currentFilter(0)
+  : KDialog(parent), m_view(view), m_currentConfigWidget(0), m_currentFilter(0)
 {
+    setCaption( i18n("Filters Gallery") );
+    setButtons(  Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
    // Initialize main widget
     m_widget = new KisWdgFiltersGallery(this);

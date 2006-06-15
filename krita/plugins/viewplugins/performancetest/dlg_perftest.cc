@@ -38,8 +38,11 @@ using namespace std;
 #include "dlg_perftest.h"
 
 DlgPerfTest::DlgPerfTest( QWidget *  parent, const char * name)
-    : super (parent, i18n("Performance Test"), Ok | Cancel)
+    : super (parent)
 {
+    setCaption(  i18n("Performance Test") );
+    setButtons(  Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
     m_lock = false;
 

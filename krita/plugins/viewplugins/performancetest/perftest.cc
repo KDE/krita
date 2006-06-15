@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kinstance.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -214,7 +214,10 @@ void PerfTest::slotPerfTest()
             report = report.append(s);
             kDebug() << s << "\n";
         }
-        KDialog *d = new KDialog(m_view, i18n("Performance test results"), KDialogBase::Ok);
+        KDialog *d = new KDialog(m_view);
+        d->setCaption( i18n("Performance test results") );
+        d->setButtons(  KDialog::Ok );
+        d->setDefaultButton( KDialog::Ok );
         Q_CHECK_PTR(d);
 
         QTextEdit * e = new QTextEdit(d);

@@ -40,8 +40,11 @@
 
 DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
                           const char * name)
-    : super (parent, i18n("Image Size"), Ok | Cancel)
+    : super (parent)
 {
+    setCaption( i18n("Image Size") );
+    setButtons(  Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
     m_page = new WdgConvertColorSpace(this);
     Q_CHECK_PTR(m_page);

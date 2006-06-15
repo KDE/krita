@@ -35,8 +35,11 @@ DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
                           const QString & /*layerCS*/,
                           QWidget *  parent,
                           const char * name)
-    : super (parent, i18n("Drop Shadow"), Ok | Cancel)
+    : super (parent)
 {
+    setCaption( i18n("Drop Shadow") );
+    setButtons(  Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
     m_page = new WdgDropshadow(this, "dropshadow");
     Q_CHECK_PTR(m_page);

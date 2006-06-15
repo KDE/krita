@@ -37,8 +37,11 @@ using namespace std;
 
 #include "dlg_grow_selection.h"
 
-DlgGrowSelection::DlgGrowSelection( QWidget *  parent, const char * name) : super (parent, i18n("Grow Selection"), Ok | Cancel)
+DlgGrowSelection::DlgGrowSelection( QWidget *  parent, const char * name) : super (parent)
 {
+    setCaption( i18n("Grow Selection") );
+    setButtons(  Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
     m_page = new WdgGrowSelection(this);
     Q_CHECK_PTR(m_page);

@@ -40,8 +40,11 @@
 
 
 DlgHistogram::DlgHistogram( QWidget *  parent, const char * name)
-    : super (parent, i18n("Histogram"), Ok | Cancel)
+    : super (parent)
 {
+    setCaption( i18n("Histogram") );
+    setButtons( Ok | Cancel );
+    setDefaultButton( Ok );
     setObjectName(name);
     m_page = new KisHistogramWidget(this, "histogram");
     Q_CHECK_PTR(m_page);

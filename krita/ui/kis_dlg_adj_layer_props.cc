@@ -45,8 +45,11 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
                                          const QString & caption,
                                          QWidget *parent,
                                          const char *name)
-    : KDialog(parent, "", Ok | Cancel)
+    : KDialog(parent)
 {
+    setButtons( Ok | Cancel);
+    setDefaultButton( Ok );
+
     setObjectName(name);
 
     Q_ASSERT( layer );

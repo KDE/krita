@@ -18,7 +18,7 @@
 #ifndef KIS_DLG_APPLY_PROFILE_H_
 #define KIS_DLG_APPLY_PROFILE_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "ui_wdgapplyprofile.h"
 

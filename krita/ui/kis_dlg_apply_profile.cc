@@ -34,8 +34,9 @@
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.
 KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
-    : super(parent, "", Ok | Cancel)
+    : super(parent )
 {
+    setButtons( Ok |Cancel );
     setObjectName(name);
     setWindowTitle(i18n("Apply Image Profile to Clipboard Data"));
     m_page = new WdgApplyProfile(this);

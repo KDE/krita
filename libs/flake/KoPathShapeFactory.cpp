@@ -32,7 +32,7 @@ KoShape * KoPathShapeFactory::createDefaultShape() {
     return new KoPathShape();
 }
 
-KoShape * KoPathShapeFactory::createShape(KoProperties * params) const {
+KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {
     Q_UNUSED(params);
     return new KoPathShape();
 }

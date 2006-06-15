@@ -19,6 +19,7 @@
 
 #include <KoTextShapeFactory.h>
 #include "KoTextShape.h"
+#include "KoProperties.h"
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -30,13 +31,22 @@ KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList&)
 : KoShapeFactory(parent, "TextShape", i18n("A shape that shows text"))
 {
     setToolTip(i18n("A text shape"));
+
+    KoShapeTemplate t;
+    t.name = "Simple text";
+    t.description = "Texty";
+    t.toolTip = "Text shape with some text";
+    KoProperties *props = new KoProperties();
+    t.properties = props;
+    props->setProperty("text", "<b>Koffie</b>, koffie... Querelanten\ndrinken geen KOffice maar groene thee.");
+    addTemplate(t);
 }
 
 KoShape *KoTextShapeFactory::createDefaultShape() {
     return new KoTextShape();
 }
 
-KoShape *KoTextShapeFactory::createShape(KoProperties * params) const {
+KoShape *KoTextShapeFactory::createShape(const KoProperties * params) const {
     return new KoTextShape();
 }
 

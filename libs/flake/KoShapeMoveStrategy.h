@@ -27,13 +27,15 @@
 
 #include <QPointF>
 
+#include <koffice_export.h>
+
 class KoCanvasBase;
 class KoTool;
 
 /**
  * Implements the Move action on an object or selected objects.
  */
-class KoShapeMoveStrategy : public KoInteractionStrategy
+class FLAKE_EXPORT KoShapeMoveStrategy : public KoInteractionStrategy
 {
 public:
     /**

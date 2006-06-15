@@ -38,6 +38,7 @@ class KoProperties;
  * and a pixmap for use in the user interface.
  */
 struct FLAKE_EXPORT KoShapeTemplate {
+    QString id;         ///< The id of the shape
     QString name;       ///< The name to be shown for this template
     QString description;///< The longer description to explain what this template is for
     QString toolTip;    ///< The tooltip text for the template
@@ -99,7 +100,7 @@ public:
      * @return a new shape
      * @see KoShapeTemplate::properties
      */
-    virtual KoShape * createShape(KoProperties * params) const = 0;
+    virtual KoShape * createShape(const KoProperties * params) const = 0;
     virtual QWidget * optionWidget() = 0;
 
     /**
@@ -111,7 +112,7 @@ public:
      * @return the id for the shape this factory creates.
      */
     const QString & shapeId() const;
-    const QList<KoShapeTemplate*> templates() const { return m_templates; }
+    const QList<KoShapeTemplate> templates() const { return m_templates; }
     /**
      * return a translated tooltip Text for a selector of shapes
      * @return a translated tooltip Text
@@ -130,7 +131,7 @@ public:
 
 protected:
 
-    void addTemplate(KoShapeTemplate * params);
+    void addTemplate(KoShapeTemplate params);
     /**
      * Set the tooltip to be used for a selector of shapes
      * @param tooltip the tooltip
@@ -145,7 +146,7 @@ protected:
 
 private:
 
-    QList<KoShapeTemplate*> m_templates;
+    QList<KoShapeTemplate> m_templates;
     QString m_tooltip;
     QPixmap m_icon;
     const QString m_id, m_name;

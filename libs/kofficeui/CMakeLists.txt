@@ -40,6 +40,7 @@ set(kofficeui_LIB_SRCS
    KoPageLayoutHeader.cpp 
    KoPen.cpp 
    KoZoomMode.cpp
+   KoShapeSelector.cpp
    KoToolManager.cpp
    KoToolRegistry.cpp
    KoGeneralPropertyUi.cpp )

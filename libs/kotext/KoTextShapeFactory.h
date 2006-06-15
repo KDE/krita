@@ -35,7 +35,7 @@ public:
     ~KoTextShapeFactory() {}
 
     KoShape *createDefaultShape();
-    KoShape *createShape(KoProperties * params) const;
+    KoShape *createShape(const KoProperties * params) const;
     QWidget *optionWidget() { return 0; }
 };
 

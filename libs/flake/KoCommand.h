@@ -87,7 +87,7 @@ public:
     /**
      * The undo / redo command for shape sizing.
      * @param shapes all the shapes that will be rezised at the same time
-     * @parem previousSizes the old sizes; in a list with a member for each shape
+     * @param previousSizes the old sizes; in a list with a member for each shape
      * @param newSizes the new sizes; in a list with a member for each shape
      */
     KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes);

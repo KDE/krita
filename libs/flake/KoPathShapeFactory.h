@@ -32,7 +32,7 @@ public:
     KoPathShapeFactory(QObject *parent, const QStringList&);
     ~KoPathShapeFactory() {}
     KoShape * createDefaultShape();
-    KoShape * createShape(KoProperties * params) const;
+    KoShape * createShape(const KoProperties * params) const;
     QWidget * optionWidget() { return 0; }
 };
 

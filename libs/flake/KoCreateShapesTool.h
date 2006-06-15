@@ -80,9 +80,22 @@ public:
      */
     const QString &shapeId() const { return m_shapeId; }
 
+    /**
+     * Set the shape properties that the create tool will use for the next shape it will
+     * create.
+     * @param properties the properties or 0 if the default shape should be created.
+     */
+    void setShapeProperties(KoProperties *properties) { m_newShapeProperties = properties; }
+    /**
+     * return the properties to be used for creating the next shape
+     * @return the properties to be used for creating the next shape
+     */
+    KoProperties const * shapeProperties() { return m_newShapeProperties; }
+
 private:
     KoShapeControllerBase *m_shapeController;
     QString m_shapeId;
+    KoProperties *m_newShapeProperties;
 };
 
 #endif

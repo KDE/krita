@@ -24,6 +24,8 @@
 #include "KoCommand.h"
 #include "KoCanvasBase.h"
 
+    #include "KoProperties.h"
+
 #include <kdebug.h>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
@@ -33,14 +35,19 @@ KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvas
 }
 
 KCommand* KoCreateShapeStrategy::createCommand() {
-    KoShapeFactory *factory = KoShapeRegistry::instance()->get(
-            static_cast<KoCreateShapesTool*>(m_parent)->shapeId());
+    KoCreateShapesTool *parent = static_cast<KoCreateShapesTool*>(m_parent);
+    KoShapeFactory *factory = KoShapeRegistry::instance()->get(parent->shapeId());
     if(! factory) {
         kWarning(30001) << "Application requested a shape that is not registred '" <<
             static_cast<KoCreateShapesTool*>(m_parent)->shapeId() << "'" << endl;
         return 0;
     }
-    KoShape *shape = factory->createDefaultShape();
+    const KoProperties *props = parent->shapeProperties();
+    KoShape *shape;
+    if(props)
+        shape = factory->createShape(props);
+    else
+        shape = factory->createDefaultShape();
     QRectF rect = selectRect();
     shape->setPosition(rect.topLeft());
     QSizeF newSize = rect.size();

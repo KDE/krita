@@ -34,6 +34,7 @@ public:
     void paint(QPainter &painter, KoViewConverter &converter);
 
 private:
+    /// \internal
     class KoTextShapePrivate {
       public:
         KoTextShapePrivate();

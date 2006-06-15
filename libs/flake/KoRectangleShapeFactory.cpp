@@ -16,6 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <KoProperties.h>
+
 #include "KoRectangleShapeFactory.h"
 #include "KoRectangleShape.h"
 
@@ -26,6 +28,23 @@ KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringL
 {
     setToolTip(i18n("A simple square shape"));
     // XXX: Add a nice icon using the KIconLoader
+
+    KoShapeTemplate t;
+    t.name = "Red Square";
+    t.description = "A Red Square that is very pretty";
+    t.toolTip = "Nicely colored square";
+    KoProperties *props = new KoProperties();
+    t.properties = props;
+    props->setProperty("fill", "red");
+    addTemplate(t);
+
+    t.name = "Blue Square";
+    t.description = "A Cold Blue Square";
+    t.toolTip = "Coldly colored square";
+    props = new KoProperties();
+    t.properties = props;
+    props->setProperty("fill", "blue");
+    addTemplate(t);
 }
 
 
@@ -36,6 +55,11 @@ KoShape * KoRectangleShapeFactory::createDefaultShape() {
     return s;
 }
 
-KoShape * KoRectangleShapeFactory::createShape(KoProperties * params) const {
-    return new KoRectangleShape();
+KoShape * KoRectangleShapeFactory::createShape(const KoProperties * params) const {
+    KoRectangleShape *shape = new KoRectangleShape();
+    if(params->getProperty("fill") == "red")
+        shape->setBackground(QBrush(Qt::red));
+    if(params->getProperty("fill") == "blue")
+        shape->setBackground(QBrush(Qt::blue));
+    return shape;
 }

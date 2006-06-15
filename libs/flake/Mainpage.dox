@@ -85,7 +85,7 @@ public:
         painter.setClipRect(ev->rect());
 
         m_shapeManager->paint( painter, *(viewConverter()), false );
-        m_tool->paint( painter, *m_doc );
+        m_tool->paint( painter, *(viewConverter()) );
 
         painter.end();
     }

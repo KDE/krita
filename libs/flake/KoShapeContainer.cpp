@@ -183,8 +183,9 @@ void KoShapeContainer::ChildrenData::containerChanged(KoShapeContainer *containe
 
 void KoShapeContainer::repaint() const {
     KoShape::repaint();
-    foreach ( KoShape *shape, m_children->iterator())
-        shape->repaint();
+    if(m_children)
+        foreach ( KoShape *shape, m_children->iterator())
+            shape->repaint();
 }
 
 QList<KoShape*> KoShapeContainer::iterator() const {

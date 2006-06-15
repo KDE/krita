@@ -2617,7 +2617,6 @@ QWidget* KoDocument::createCustomDocumentWidget(QWidget */*parent*/) {
 
 bool KoDocument::showEmbedInitDialog(QWidget* parent)
 {
-//     KDialogBase dlg(parent, "EmbedInitDialog", true, i18n("Embedding Object"), 0, KDialogBase::NoDefault);
     KDialog dlg( parent );
     dlg.setCaption( i18n("Embedding Object") );
     KoOpenPane* pane = createOpenPane(&dlg, instance(), templateType());

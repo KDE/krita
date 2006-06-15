@@ -41,7 +41,7 @@ class KoDocumentInfo;
  * class.
  * The widgets shown in the tabs are koDocumentInfoAboutWidget and
  * koDocumentInfoAuthorWidget. This class here is derived from
- * KDialogBase and uses it in the TabbedMode.
+ * KPageDialog and uses the face type Tabbed.
  */
 
 class KOFFICECORE_EXPORT KoDocumentInfoDlg : public KPageDialog

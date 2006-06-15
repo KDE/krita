@@ -5,7 +5,7 @@
  * (c) Matthias Ettrich 2000
  * (c) Aaron J. Seigo 2002
  * (c) Nadeem Hasan 2003
- * This adaptation: (c) Boudewijn Rempt 2005 
+ * This adaptation: (c) Boudewijn Rempt 2005
  *
  * Released under the GPL see file LICENSE for details.
  */
@@ -66,8 +66,11 @@
 #include <QX11Info>
 
 KSnapshot::KSnapshot(QWidget *parent, const char *name)
-    : super(parent, name, false, QString::null, Ok|Cancel)
+    : super(parent)
 {
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    setModal( false );
     grabber = new QWidget( 0, 0, Qt::WStyle_Customize | Qt::WX11BypassWM );
     Q_CHECK_PTR(grabber);
     grabber->move( -1000, -1000 );
@@ -79,7 +82,8 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     haveXShape = XShapeQueryExtension( QX11Info::display(), &tmp1, &tmp2 );
 #endif
 
-    KVBox *vbox = makeVBoxMainWidget();
+    KVBox *vbox = new KVBox( this );
+    setMainWidget( vbox );
     mainWidget = new KSnapshotWidget( vbox, "mainWidget" );
     Q_CHECK_PTR(mainWidget);
 
@@ -90,7 +94,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
 
     grabber->show();
     grabber->grabMouse( Qt::WaitCursor );
-    
+
     snapshot = QPixmap::grabWindow( QX11Info::appRootWindow() );
     updatePreview();
     grabber->releaseMouse();
@@ -314,7 +318,7 @@ void KSnapshot::grabTimerDone()
     KNotifyClient::beep(i18n("The screen has been successfully grabbed."));
 }
 
-static 
+static
 Window findRealWindow( Window w, int depth = 0 )
 {
     if( depth > 5 )
@@ -416,7 +420,7 @@ void KSnapshot::performGrab()
 
                 //Create the bounding box.
                 QRegion bbox(0, 0, snapshot.width(), snapshot.height());
-                
+
                 if( border > 0 ) {
                     contents.translate( border, border );
                     contents += QRegion( 0, 0, border, h );
@@ -424,7 +428,7 @@ void KSnapshot::performGrab()
                     contents += QRegion( 0, h - border, w, border );
                     contents += QRegion( w - border, 0, border, h );
                 }
-                
+
                 //Get the masked away area.
                 QRegion maskedAway = bbox - contents;
                 QVector<QRect> maskedAwayRects = maskedAway.rects();

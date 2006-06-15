@@ -39,8 +39,11 @@ using namespace std;
 
 DlgShearImage::DlgShearImage( QWidget *  parent,
                 const char * name)
-    : super (parent, i18n("Shear Image"), Ok | Cancel)
+    : super (parent)
 {
+    setCaption( i18n("Shear Image") );
+    setButtons(  Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
 
     m_lock = false;

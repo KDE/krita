@@ -37,8 +37,11 @@ using namespace std;
 
 #include "dlg_border_selection.h"
 
-DlgBorderSelection::DlgBorderSelection( QWidget *  parent, const char * name) : super (parent, i18n("Border Selection"), Ok | Cancel)
+DlgBorderSelection::DlgBorderSelection( QWidget *  parent, const char * name) : super (parent)
 {
+    setCaption( i18n("Border Selection") );
+    setButtons(  Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
     m_page = new WdgBorderSelection(this);
     Q_CHECK_PTR(m_page);

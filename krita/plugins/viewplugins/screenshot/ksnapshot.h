@@ -1,5 +1,5 @@
 // -*- c++ -*-
-/* 
+/*
  * (c) Richard J. Moore 1997-2002
  * (c) Matthias Ettrich 2000
  * (c) Aaron J. Seigo 2002
@@ -30,9 +30,8 @@
 #include <QMouseEvent>
 #include <QEvent>
 
-#include <dcopclient.h>
 #include <kglobalsettings.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kurl.h>
 
 class RegionGrabber;
@@ -77,9 +76,9 @@ protected:
     QPoint mClickPt;
 };
 
-class KSnapshot : public KDialogBase
+class KSnapshot : public KDialog
 {
-    typedef KDialogBase super;
+    typedef KDialog super;
     Q_OBJECT
 
 public:
@@ -113,7 +112,7 @@ protected slots:
 protected:
     void reject() { close(); }
     bool eventFilter( QObject*, QEvent* );
-    
+
 private slots:
     void grabTimerDone();
     void slotDragSnapshot();

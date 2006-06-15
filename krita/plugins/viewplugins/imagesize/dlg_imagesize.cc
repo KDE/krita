@@ -44,8 +44,11 @@ using namespace std;
 // be rounding errors. (Boudewijn)
 DlgImageSize::DlgImageSize( QWidget *  parent,
                 const char * name)
-    : super (parent, i18n("Image Size"), Ok | Cancel)
+    : super (parent)
 {
+    setCaption( i18n("Image Size") );
+    setButtons( Ok | Cancel);
+    setDefaultButton( Ok );
     setObjectName(name);
 
     m_lock = false;

@@ -36,10 +36,14 @@ DlgSeparate::DlgSeparate( const QString & imageCS,
                           const QString & layerCS,
                           QWidget *  parent,
                           const char * name)
-    : super (parent, name, true, i18n("Separate Image"), Ok | Cancel, Ok),
+    : super (parent),
       m_imageCS(imageCS),
       m_layerCS(layerCS)
 {
+    setCaption( i18n("Separate Image") );
+    setButtons(  Ok | Cancel );
+    setDefaultButton( Ok );
+
     m_page = new WdgSeparations(this, "separate_image");
     Q_CHECK_PTR(m_page);
     setMainWidget(m_page);

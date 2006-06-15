@@ -20,7 +20,7 @@
 #ifndef DLG_SEPARATE
 #define DLG_SEPARATE
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kis_channel_separator.h>
 
 class WdgSeparations;
@@ -29,8 +29,8 @@ class WdgSeparations;
  * This dialog allows the user to configure the decomposition of an image
  * into layers: one layer for each color channel.
  */
-class DlgSeparate: public KDialogBase {
-    typedef KDialogBase super;
+class DlgSeparate: public KDialog {
+    typedef KDialog super;
     Q_OBJECT
 
 public:

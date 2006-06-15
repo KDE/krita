@@ -37,8 +37,11 @@ using namespace std;
 
 #include "dlg_shrink_selection.h"
 
-DlgShrinkSelection::DlgShrinkSelection( QWidget *  parent, const char * name) : super (parent, i18n("Shrink Selection"), Ok | Cancel)
+DlgShrinkSelection::DlgShrinkSelection( QWidget *  parent, const char * name) : super (parent)
 {
+    setCaption( i18n("Shrink Selection") );
+    setButtons(  Ok | Cancel );
+    setDefaultButton( Ok );
     setObjectName(name);
 
     m_page = new WdgShrinkSelection(this);

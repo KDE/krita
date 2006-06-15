@@ -206,7 +206,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
 int main( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, "storage_test", "Storage Test", "A test for the KoStore classes", "1" );
-    KApplication::disableAutoDcopRegistration();
+    //KApplication::disableAutoDcopRegistration();
     KApplication app;
 
     // KZip (due to KSaveFile) doesn't support relative filenames

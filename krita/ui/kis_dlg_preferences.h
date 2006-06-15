@@ -23,7 +23,7 @@
 
 #include <QWidget>
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 #include <kopalettemanager.h>
 
@@ -298,7 +298,7 @@ class GridSettingsTab : public WdgGridSettingsBase {
 /**
  *  Preferences dialog of KImageShop^WKrayon^WKrita
  */
-class PreferencesDialog : public KDialogBase
+class PreferencesDialog : public KPageDialog
 {
     Q_OBJECT
 

@@ -42,8 +42,10 @@
 #include "squeezedcombobox.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
-    : super(parent, "", Ok | Cancel)
+    : super(parent)
 {
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
     setObjectName(name);
     setCaption(i18n("Image Properties"));
     m_page = new WdgNewImage(this);

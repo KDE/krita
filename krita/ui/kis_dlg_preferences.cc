@@ -282,7 +282,7 @@ void TabletSettingsTab::applySettings()
 
 #ifdef EXTENDED_X11_TABLET_SUPPORT
 TabletSettingsTab::DeviceSettings::DeviceSettings(KisCanvasWidget::X11TabletDevice *tabletDevice, bool enabled,
-                                                  qint32 xAxis, qint32 yAxis, qint32 pressureAxis, 
+                                                  qint32 xAxis, qint32 yAxis, qint32 pressureAxis,
                                                   qint32 xTiltAxis, qint32 yTiltAxis, qint32 wheelAxis,
                                                   qint32 toolIDAxis, qint32 serialNumberAxis)
     : m_tabletDevice(tabletDevice),
@@ -421,7 +421,7 @@ qint32 TabletSettingsTab::DeviceSettings::serialNumberAxis() const
     return m_serialNumberAxis;
 }
 
-TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const QString& deviceName, DeviceSettings settings, 
+TabletSettingsTab::TabletDeviceSettingsDialog::TabletDeviceSettingsDialog(const QString& deviceName, DeviceSettings settings,
                                                                           QWidget *parent, const char *name)
     : super(parent, i18n("Configure %1",deviceName), Ok | Cancel)
 {
@@ -583,7 +583,7 @@ void TabletSettingsTab::initTabletDevices()
         for (it = tabletDevices.begin(); it != tabletDevices.end(); ++it) {
             KisCanvasWidget::X11TabletDevice& device = (*it).second;
 
-            m_deviceSettings.append(DeviceSettings(&device, device.enabled(), device.xAxis(), device.yAxis(), 
+            m_deviceSettings.append(DeviceSettings(&device, device.enabled(), device.xAxis(), device.yAxis(),
                                                    device.pressureAxis(), device.xTiltAxis(), device.yTiltAxis(), device.wheelAxis(),
                                                    device.toolIDAxis(), device.serialNumberAxis()));
             cbTabletDevice->addItem(device.name());
@@ -693,23 +693,23 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
     KisConfig cfg;
     selectMainStyle->setCurrentIndex(cfg.getGridMainStyle());
     selectSubdivisionStyle->setCurrentIndex(cfg.getGridSubdivisionStyle());
-    
+
     colorMain->setColor(cfg.getGridMainColor());
     colorSubdivision->setColor(cfg.getGridSubdivisionColor());
-    
+
     intHSpacing->setValue( cfg.getGridHSpacing() );
     intVSpacing->setValue( cfg.getGridVSpacing() );
     intSubdivision->setValue( cfg.getGridSubdivisions());
     intOffsetX->setValue( cfg.getGridOffsetX());
     intOffsetY->setValue( cfg.getGridOffsetY());
-    
+
     linkSpacingToggled(true);
     connect(bnLinkSpacing, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled( bool )));
-    
+
     connect(intHSpacing, SIGNAL(valueChanged(int)),this,SLOT(spinBoxHSpacingChanged(int)));
     connect(intVSpacing, SIGNAL(valueChanged(int)),this,SLOT(spinBoxVSpacingChanged(int)));
 
-    
+
 }
 
 void GridSettingsTab::setDefault()
@@ -717,10 +717,10 @@ void GridSettingsTab::setDefault()
     KisConfig cfg;
     selectMainStyle->setCurrentIndex(0);
     selectSubdivisionStyle->setCurrentIndex(1);
-    
+
     colorMain->setColor(QColor(99,99,99));
     colorSubdivision->setColor(QColor(199,199,199));
-    
+
     intHSpacing->setValue( 10 );
     intVSpacing->setValue( 10 );
     intSubdivision->setValue( 1 );
@@ -748,7 +748,7 @@ void GridSettingsTab::spinBoxVSpacingChanged(int v )
 void GridSettingsTab::linkSpacingToggled(bool b)
 {
     m_linkSpacing = b;
-    
+
     KoImageResource kir;
     if (b) {
         bnLinkSpacing->setIcon(QIcon(kir.chain()));
@@ -762,26 +762,56 @@ void GridSettingsTab::linkSpacingToggled(bool b)
 //---------------------------------------------------------------------------------------------------
 
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
-    : KDialogBase( IconList, i18n("Preferences"), Ok | Cancel | Help | Default /*| Apply*/, Ok, parent, name, true, true )
+    : KDialog( IconList, i18n("Preferences"), Ok | Cancel | Help | Default /*| Apply*/, Ok, parent, name, true, true )
 {
-    KVBox *vbox;
-
-    vbox = addVBoxPage( i18n( "General"), i18n( "General"), BarIcon( "misc", K3Icon::SizeMedium ));
+    setCaption( i18n("Preferences") );
+    setButtons( Ok | Cancel | Help | Default );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
+    setFaceType( KPageDialog::List );
+    KVBox *vbox = new KVBox();
+    KPageWidgetItem *page = new KPageWidgetItem( vbox, i18n( "General"));
+    page->setHeader( i18n( "General") );
+    page->setIcon(  BarIcon( "misc", K3Icon::SizeMedium ) );
+    addPage( page );
     m_general = new GeneralTab( vbox );
 #ifdef HAVE_OPENGL
-    vbox = addVBoxPage ( i18n( "Display" ), i18n( "Display" ), BarIcon( "kscreensaver", K3Icon::SizeMedium ));
+    vbox = new KVBox();
+    page = new KPageWidgetItem( vbox, i18n( "Display" ));
+    page->setHeader( i18n( "Display" ) );
+    page->setIcon(  BarIcon( "kscreensaver", K3Icon::SizeMedium ) );
+    addPage( page );
+
     m_displaySettings = new DisplaySettingsTab( vbox );
 #endif
-    vbox = addVBoxPage( i18n( "Color Management"), i18n( "Color"), BarIcon( "colorize", K3Icon::SizeMedium ));
+    vbox = new KVBox();
+    page = new KPageWidgetItem( vbox, i18n( "Color Management"));
+    page->setHeader( i18n( "Color") );
+    page->setIcon(  BarIcon( "colorize", K3Icon::SizeMedium ));
+    addPage( page );
     m_colorSettings = new ColorSettingsTab( vbox );
 
-    vbox = addVBoxPage( i18n( "Performance"), i18n( "Performance"), BarIcon( "fork", K3Icon::SizeMedium ));
-    m_performanceSettings = new PerformanceTab ( vbox );
+    vbox = new KVBox();
+    page = new KPageWidgetItem( vbox, i18n( "Performance"));
+    page->setHeader( i18n( "Performance") );
+    page->setIcon(  BarIcon( "fork", K3Icon::SizeMedium ));
+    addPage( page );
 
-    vbox = addVBoxPage ( i18n( "Tablet" ), i18n( "Tablet" ), BarIcon( "tablet", K3Icon::SizeMedium ));
+    m_performanceSettings = new PerformanceTab ( vbox );
+    vbox = new KVBox();
+    page = new KPageWidgetItem( vbox, i18n( "Tablet" ));
+    page->setHeader( i18n( "Tablet" ));
+    page->setIcon(  BarIcon( "tablet", K3Icon::SizeMedium ));
+    addPage( page );
+
     m_tabletSettings = new TabletSettingsTab( vbox );
 
-    vbox = addVBoxPage ( i18n( "Grid" ), i18n( "Grid" ), BarIcon( "grid", K3Icon::SizeMedium ));
+    vbox = new KVBox();
+    page = new KPageWidgetItem( vbox, i18n( "Grid" ));
+    page->setHeader( i18n( "Grid" ));
+    page->setIcon(  BarIcon( "grid", K3Icon::SizeMedium ));
+    addPage( page );
+
     m_gridSettings = new GridSettingsTab( vbox );
 
 }

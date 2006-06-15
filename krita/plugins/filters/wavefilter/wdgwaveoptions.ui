@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>227</width>
-            <height>106</height>
+            <width>162</width>
+            <height>113</height>
         </rect>
     </property>
     <property name="caption">
@@ -47,23 +47,6 @@
                 </size>
             </property>
         </spacer>
-        <spacer row="3" column="1">
-            <property name="name">
-                <cstring>spacer3</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QLabel" row="2" column="0">
             <property name="name">
                 <cstring>textLabel2_2</cstring>
@@ -78,20 +61,6 @@
             </property>
             <property name="text">
                 <string>Shift:</string>
-            </property>
-        </widget>
-        <widget class="KIntNumInput" row="2" column="1">
-            <property name="name">
-                <cstring>intAmplitude</cstring>
-            </property>
-            <property name="value">
-                <number>4</number>
-            </property>
-            <property name="minValue">
-                <number>0</number>
-            </property>
-            <property name="maxValue">
-                <number>1000000</number>
             </property>
         </widget>
         <widget class="KIntNumInput" row="0" column="1">
@@ -122,6 +91,60 @@
                 <number>1000000</number>
             </property>
         </widget>
+        <spacer row="5" column="1">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>Shape:</string>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="3" column="1">
+            <item>
+                <property name="text">
+                    <string>Sinusoidale</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Triangle</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>cbShape</cstring>
+            </property>
+        </widget>
+        <widget class="KIntNumInput" row="2" column="1">
+            <property name="name">
+                <cstring>intAmplitude</cstring>
+            </property>
+            <property name="value">
+                <number>20</number>
+            </property>
+            <property name="minValue">
+                <number>0</number>
+            </property>
+            <property name="maxValue">
+                <number>1000000</number>
+            </property>
+        </widget>
     </grid>
 </widget>
 <customwidgets>
@@ -132,6 +155,7 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>

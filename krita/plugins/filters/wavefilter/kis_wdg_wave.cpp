@@ -22,6 +22,7 @@
 
 #include <qlayout.h>
 
+#include <kcombobox.h>
 #include <knuminput.h>
 
 #include "wdgwaveoptions.h"
@@ -31,11 +32,12 @@ KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent, const char* name
 {
     QGridLayout *widgetLayout = new QGridLayout(this, 1, 1);
     m_widget = new WdgWaveOptions(this);
-    widgetLayout -> addWidget(m_widget,0,0);
+    widgetLayout -> addWidget(m_widget, 0, 0);
 
     connect( widget()->intWavelength, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     connect( widget()->intShift, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     connect( widget()->intAmplitude, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect( widget()->cbShape, SIGNAL( activated(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisWdgWave::~KisWdgWave()
@@ -56,6 +58,10 @@ void KisWdgWave::setConfiguration(KisFilterConfiguration* config)
     if (config->getProperty("amplitude", value))
     {
         widget()->intAmplitude->setValue( value.toUInt() );
+    }
+    if (config->getProperty("shape", value))
+    {
+        widget()->cbShape->setCurrentItem( value.toUInt() );
     }
 }
 

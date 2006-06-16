@@ -23,7 +23,6 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 
 KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringList&)
@@ -33,20 +32,20 @@ KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringL
 
     KoShapeTemplate t;
     t.name = "Red Square";
-    t.description = "A Red Square that is very pretty";
     t.toolTip = "Nicely colored square";
     KoProperties *props = new KoProperties();
     t.properties = props;
-    t.pixmap = KGlobal::iconLoader()->loadIcon("redSquare", K3Icon::NoGroup);
+    t.icon = "redSquare";
+    //t.pixmap = KGlobal::iconLoader()->loadIcon("redSquare", K3Icon::NoGroup);
     props->setProperty("fill", "red");
     addTemplate(t);
 
     t.name = "Blue Square";
-    t.description = "A Cold Blue Square";
     t.toolTip = "Coldly colored square";
     props = new KoProperties();
     t.properties = props;
-    t.pixmap = KGlobal::iconLoader()->loadIcon("blueSquare", K3Icon::NoGroup);
+    t.icon = "blueSquare";
+    //t.pixmap = KGlobal::iconLoader()->loadIcon("blueSquare", K3Icon::NoGroup);
     props->setProperty("fill", "blue");
     addTemplate(t);
 }

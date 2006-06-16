@@ -22,7 +22,6 @@
 
 #include <QString>
 #include <QWidget>
-#include <QPixmap>
 #include <QList>
 
 #include <KoID.h>
@@ -35,14 +34,13 @@ class KoProperties;
 /**
  * Contains a KoProperties object that describes the settings of a
  * particular variant of a shape object, together with a name, a description
- * and a pixmap for use in the user interface.
+ * and an icon for use in the user interface.
  */
 struct FLAKE_EXPORT KoShapeTemplate {
     QString id;         ///< The id of the shape
     QString name;       ///< The name to be shown for this template
-    QString description;///< The longer description to explain what this template is for
     QString toolTip;    ///< The tooltip text for the template
-    QPixmap pixmap;     ///< The pixmap that shows what this template is about
+    QString icon;       ///< Icon name
     /**
      * The properties which, when passed to the KoShapeFactory::createShape() method
      * result in the shape this template represents.
@@ -122,7 +120,7 @@ public:
      * return an icon for this tool for a selector of shapes
      * @return an icon for this tool
      */
-    const QPixmap & icon() const;
+    const QString & icon() const;
     /**
      * return the user visible (and translated) name to be seen by the user.
      * @return the user visible (and translated) name to be seen by the user.
@@ -139,16 +137,15 @@ protected:
     void setToolTip(const QString & tooltip);
     /**
      * Set an icon to be used in a selector of shapes
-     * @param icon the pixmap from the iconLoader
+     * @param iconName the basename (without extention) of the icon
      * @see KIconLoader
      */
-    void setIcon(const QPixmap & icon);
+    void setIcon(const QString & iconName);
 
 private:
 
     QList<KoShapeTemplate> m_templates;
-    QString m_tooltip;
-    QPixmap m_icon;
+    QString m_tooltip, m_iconName;
     const QString m_id, m_name;
 };
 

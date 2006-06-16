@@ -25,6 +25,7 @@
 #include <KoToolManager.h>
 #include <KoShapeFactory.h>
 #include <KoShape.h>
+#include <KoShapeContainer.h>
 #include <KoInteractionTool.h>
 #include <KoShapeMoveStrategy.h>
 #include <KoCanvasController.h>
@@ -36,12 +37,12 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-// ******** IconShape *********
+// ******** TemplateShape *********
 /// \internal
-class IconShape : public KoShape {
+class TemplateShape : public KoShape {
 public:
-    IconShape(KoShapeTemplate shapeTemplate) {
-        m_icon = KIconLoader::unknown();
+    TemplateShape(KoShapeTemplate shapeTemplate) {
+        m_icon = KGlobal::iconLoader()->loadIcon(shapeTemplate.icon, K3Icon::NoGroup, 22);
         resize(m_icon.size());
         m_shapeTemplate = shapeTemplate;
     }
@@ -50,6 +51,7 @@ public:
         Q_UNUSED(converter);
         painter.drawPixmap(QRect( QPoint(0,0), m_icon.size()), m_icon);
     }
+
     KoShapeTemplate const *shapeTemplate() {
         return &m_shapeTemplate;
     }
@@ -57,6 +59,31 @@ public:
 private:
     QPixmap m_icon;
     KoShapeTemplate m_shapeTemplate;
+};
+
+
+// ******** GroupShape *********
+/// \internal
+class GroupShape : public KoShapeContainer {
+public:
+    GroupShape(KoShapeFactory *shapeFactory) {
+        m_icon = KGlobal::iconLoader()->loadIcon(shapeFactory->icon(), K3Icon::NoGroup, 22);
+        resize(m_icon.size());
+        m_shapeFactory = shapeFactory;
+    }
+
+    void paintComponent(QPainter &painter, KoViewConverter &converter) {
+        Q_UNUSED(converter);
+        painter.drawPixmap(QRect( QPoint(0,0), m_icon.size()), m_icon);
+    }
+
+    const KoShapeFactory *shapeFactory() {
+        return m_shapeFactory;
+    }
+
+private:
+    QPixmap m_icon;
+    KoShapeFactory *m_shapeFactory;
 };
 
 
@@ -73,6 +100,10 @@ public:
             m_canvas->shapeManager()->selection()->select(clickedShape);
         }
         m_currentStrategy = new KoShapeMoveStrategy(this, m_canvas, event->point);
+    }
+    void mouseMoveEvent (KoPointerEvent *event) {
+        KoInteractionTool::mouseMoveEvent(event);
+        //m_canvas->shapeManager()->getObjectAt
     }
 };
 
@@ -91,11 +122,14 @@ KoShapeSelector::KoShapeSelector(QWidget *parent, KoCanvasController *cc, QStrin
 
     foreach(KoID id, KoShapeRegistry::instance()->listKeys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->get(id);
+        bool oneAdded=false;
         foreach(KoShapeTemplate shapeTemplate, factory->templates()) {
-            //IconShape *shape = new IconShape(shapeTemplate->pixmap); TODO
-            IconShape *shape = new IconShape(shapeTemplate);
+            oneAdded=true;
+            TemplateShape *shape = new TemplateShape(shapeTemplate);
             add(shape);
         }
+        if(!oneAdded)
+            add(new GroupShape(factory));
     }
 
     connect(m_shapeManager->selection(), SIGNAL(selectionChanged()), this, SLOT(itemSelected()));
@@ -111,11 +145,20 @@ void KoShapeSelector::itemSelected() {
     QList<KoShape*> allSelected = m_shapeManager->selection()->selectedObjects().toList();
     if(allSelected.isEmpty())
         return;
-    IconShape *icon = static_cast<IconShape*> (allSelected.first());
+    KoShape *shape= allSelected.first();
 
     KoCreateShapesTool *tool = KoToolManager::instance()->shapeCreatorTool(m_canvasController->canvas());
-    tool->setShapeId(icon->shapeTemplate()->id);
-    tool->setShapeProperties(icon->shapeTemplate()->properties);
+
+    TemplateShape *templateShape = dynamic_cast<TemplateShape*> (shape);
+    if(templateShape) {
+        tool->setShapeId(templateShape->shapeTemplate()->id);
+        tool->setShapeProperties(templateShape->shapeTemplate()->properties);
+    }
+    else {
+        GroupShape *group = dynamic_cast<GroupShape*>(shape);
+        tool->setShapeId(group->shapeFactory()->shapeId());
+        tool->setShapeProperties(0);
+    }
 }
 
 void KoShapeSelector::add(KoShape *shape) {

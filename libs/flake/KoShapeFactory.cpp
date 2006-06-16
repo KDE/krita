@@ -34,8 +34,8 @@ const QString & KoShapeFactory::toolTip() const {
     return m_tooltip;
 }
 
-const QPixmap & KoShapeFactory::icon() const {
-    return m_icon;
+const QString & KoShapeFactory::icon() const {
+    return m_iconName;
 }
 
 const QString& KoShapeFactory::name() const {
@@ -51,8 +51,8 @@ void KoShapeFactory::setToolTip(const QString & tooltip) {
     m_tooltip = tooltip;
 }
 
-void KoShapeFactory::setIcon(const QPixmap & icon) {
-    m_icon = icon;
+void KoShapeFactory::setIcon(const QString & iconName) {
+    m_iconName = iconName;
 }
 
 const QString &KoShapeFactory::shapeId() const {

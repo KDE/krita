@@ -34,7 +34,6 @@ KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList&)
 
     KoShapeTemplate t;
     t.name = "Simple text";
-    t.description = "Texty";
     t.toolTip = "Text shape with some text";
     KoProperties *props = new KoProperties();
     t.properties = props;

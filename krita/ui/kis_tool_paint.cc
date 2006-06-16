@@ -29,17 +29,18 @@
 #include <knuminput.h>
 #include <kiconloader.h>
 
+#include "kis_button_release_event.h"
+#include "kis_canvas_subject.h"
+#include "kis_cmb_composite.h"
 #include "kis_colorspace.h"
-#include "kis_global.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
-#include "kis_canvas_subject.h"
-#include "kis_tool_controller.h"
-#include "kis_tool_paint.h"
-#include "kis_cmb_composite.h"
+#include "kis_global.h"
 #include "kis_image.h"
 #include "kis_int_spinbox.h"
 #include "kis_paint_device.h"
+#include "kis_tool_controller.h"
+#include "kis_tool_paint.h"
 
 KisToolPaint::KisToolPaint(const QString& UIName)
     : super(UIName)
@@ -90,8 +91,16 @@ void KisToolPaint::move(KisMoveEvent *)
 {
 }
 
-void KisToolPaint::buttonRelease(KisButtonReleaseEvent *)
+void KisToolPaint::buttonRelease(KisButtonReleaseEvent * e)
 {
+    kdDebug() << "buttonRelease" << endl;
+    if(e->button() == Qt::MidButton)
+    {
+        kdDebug() << "switch" << endl;
+        KisColor bg = m_subject->bgColor();
+        m_subject->setBGColor(m_subject->fgColor());
+        m_subject->setFGColor(bg);
+    }
 }
 
 void KisToolPaint::doubleClick(KisDoubleClickEvent *)

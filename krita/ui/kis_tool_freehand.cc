@@ -118,6 +118,7 @@ void KisToolFreehand::buttonRelease(KisButtonReleaseEvent* e)
     if (e->button() == QMouseEvent::LeftButton && m_mode == PAINT) {
         endPaint();
     }
+    KisToolPaint::buttonRelease(e);
 }
 
 void KisToolFreehand::move(KisMoveEvent *e)

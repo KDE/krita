@@ -22,12 +22,14 @@
 #include "KoRectangleShape.h"
 
 #include <klocale.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <kdebug.h>
 
 KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringList&)
 : KoShapeFactory(parent, KoRectangleShape_SHAPEID, i18n("A simple square shape"))
 {
     setToolTip(i18n("A simple square shape"));
-    // XXX: Add a nice icon using the KIconLoader
 
     KoShapeTemplate t;
     t.name = "Red Square";
@@ -35,6 +37,7 @@ KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringL
     t.toolTip = "Nicely colored square";
     KoProperties *props = new KoProperties();
     t.properties = props;
+    t.pixmap = KGlobal::iconLoader()->loadIcon("redSquare", K3Icon::NoGroup);
     props->setProperty("fill", "red");
     addTemplate(t);
 
@@ -43,10 +46,10 @@ KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringL
     t.toolTip = "Coldly colored square";
     props = new KoProperties();
     t.properties = props;
+    t.pixmap = KGlobal::iconLoader()->loadIcon("blueSquare", K3Icon::NoGroup);
     props->setProperty("fill", "blue");
     addTemplate(t);
 }
-
 
 KoShape * KoRectangleShapeFactory::createDefaultShape() {
     KoRectangleShape *s = new KoRectangleShape();

@@ -40,7 +40,12 @@ target_link_libraries(flake ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4
 
 set_target_properties(flake PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
+########### install files ###############
 
 install_targets(${LIB_INSTALL_DIR} flake )
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES flaketool.desktop flakeshape.desktop)
+
+kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons crystalsvg)
+
+install_files( ${DATA_INSTALL_DIR}/koffice/icons FILES rotate.png)
 

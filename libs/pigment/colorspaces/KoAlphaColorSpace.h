@@ -36,7 +36,7 @@ public:
     virtual ~KoAlphaColorSpace();
 
 public:
-    virtual bool willDegrade(ColorSpaceIndependence)
+    virtual bool willDegrade(ColorSpaceIndependence independence)
         {
             return false;
         };

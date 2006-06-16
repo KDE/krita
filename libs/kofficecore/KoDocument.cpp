@@ -1257,6 +1257,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 {
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType( nativeFormatMimeType() );
+    Q_ASSERT( mime );
     QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
     if ( path.isEmpty() )
     {
@@ -2167,7 +2168,15 @@ QByteArray KoDocument::nativeFormatMimeType() const
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
         return QByteArray();
-    return service->property( "X-KDE-NativeMimeType" ).toString().toLatin1();
+    QByteArray nativeMimeType = service->property( "X-KDE-NativeMimeType" ).toString().toLatin1();
+    if ( nativeMimeType.isEmpty() ) {
+        // shouldn't happen, let's find out why it happened
+        if ( !service->serviceTypes().contains( "KOfficePart" ) )
+            kWarning(30003) << "Wrong desktop file, KOfficePart isn't mentionned" << endl;
+        else if ( !KServiceType::serviceType( "KOfficePart" ) )
+            kWarning(30003) << "The KOfficePart service type isn't installed!" << endl;
+    }
+    return nativeMimeType;
 }
 
 QByteArray KoDocument::nativeOasisMimeType() const

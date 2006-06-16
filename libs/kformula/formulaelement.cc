@@ -20,7 +20,6 @@
 
 #include <iostream>
 #include <QPainter>
-//Added by qt3to4:
 #include <QKeyEvent>
 
 #include <kdebug.h>
@@ -33,11 +32,11 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-FormulaElement::FormulaElement(FormulaDocument* container)
-    : document( container ), baseSize( 20 ), ownBaseSize( false )
+FormulaElement::FormulaElement( FormulaDocument* container )
+    : baseSize( 20 ), ownBaseSize( false )
 {
+    m_document = container;
 }
-
 
 void FormulaElement::setBaseSize( int size )
 {
@@ -48,81 +47,86 @@ void FormulaElement::setBaseSize( int size )
     else {
         ownBaseSize = false;
     }
-    document->baseSizeChanged( size, ownBaseSize );
+    m_document->baseSizeChanged( size, ownBaseSize );
 }
 
+const QList<BasicElement*>& FormulaElement::childElements()
+{
+    return m_childElements;
+}
 
 /**
  * Returns the element the point is in.
  */
+/*
 BasicElement* FormulaElement::goToPos( FormulaCursor* cursor, const LuPixelPoint& point )
 {
     bool handled = false;
-    BasicElement* element = inherited::goToPos(cursor, handled, point, LuPixelPoint());
-    if (element == 0) {
-        //if ((point.x() > getWidth()) || (point.y() > getHeight())) {
-            cursor->setTo(this, countChildren());
-            //}
-            return this;
+    BasicElement* element = BasicElement::goToPos(cursor, handled, point, LuPixelPoint());
+    if( element == 0 ) {
+        cursor->setTo( this, countChildren() );
+        return this;
     }
     return element;
-}
+}*/
+
+
 
 void FormulaElement::elementRemoval(BasicElement* child)
 {
-    document->elementRemoval(child);
+    m_document->elementRemoval(child);
 }
 
 void FormulaElement::changed()
 {
-    document->changed();
+    m_document->changed();
 }
 
 void FormulaElement::cursorHasMoved( FormulaCursor* cursor )
 {
-    document->cursorHasMoved( cursor );
+    m_document->cursorHasMoved( cursor );
 }
 
 void FormulaElement::moveOutLeft( FormulaCursor* cursor )
 {
-    document->moveOutLeft( cursor );
+    m_document->moveOutLeft( cursor );
 }
 
 void FormulaElement::moveOutRight( FormulaCursor* cursor )
 {
-    document->moveOutRight( cursor );
+    m_document->moveOutRight( cursor );
 }
 
 void FormulaElement::moveOutBelow( FormulaCursor* cursor )
 {
-    document->moveOutBelow( cursor );
+    m_document->moveOutBelow( cursor );
 }
 
 void FormulaElement::moveOutAbove( FormulaCursor* cursor )
 {
-    document->moveOutAbove( cursor );
+    m_document->moveOutAbove( cursor );
 }
 
 void FormulaElement::tell( const QString& msg )
 {
-    document->tell( msg );
+    m_document->tell( msg );
 }
 
 void FormulaElement::removeFormula( FormulaCursor* cursor )
 {
-    document->removeFormula( cursor );
+    m_document->removeFormula( cursor );
 }
 
 void FormulaElement::insertFormula( FormulaCursor* cursor )
 {
-    document->insertFormula( cursor );
+    m_document->insertFormula( cursor );
 }
 
 void FormulaElement::calcSizes( const ContextStyle& style,
                                 ContextStyle::TextStyle tstyle,
                                 ContextStyle::IndexStyle istyle )
 {
-    inherited::calcSizes( style, tstyle, istyle );
+    //BasicElement::calcSizes( style, tstyle, istyle );
 }
 
 
@@ -132,7 +136,7 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
                            ContextStyle::IndexStyle istyle,
                            const LuPixelPoint& parentOrigin )
 {
-    inherited::draw( painter, r, context, tstyle, istyle, parentOrigin );
+//    BasicElement::draw( painter, r, context, tstyle, istyle, parentOrigin );
 }
 
 
@@ -177,12 +181,12 @@ KCommand* FormulaElement::buildCommand( Container* container, Request* request )
     default:
         break;
     }
-    return inherited::buildCommand( container, request );
+    return BasicElement::buildCommand( container, request );
 }
 
 const SymbolTable& FormulaElement::getSymbolTable() const
 {
-    return document->getSymbolTable();
+    return m_document->getSymbolTable();
 }
 
 
@@ -215,7 +219,7 @@ KCommand* FormulaElement::input( Container* container, QKeyEvent* event )
         }
         }
     }
-    return inherited::input( container, event );
+    return BasicElement::input( container, event );
 }
 
 /**
@@ -223,7 +227,7 @@ KCommand* FormulaElement::input( Container* container, QKeyEvent* event )
  */
 void FormulaElement::writeDom(QDomElement element)
 {
-    inherited::writeDom(element);
+    BasicElement::writeDom(element);
     element.setAttribute( "VERSION", "6" );
     if ( ownBaseSize ) {
         element.setAttribute( "BASESIZE", baseSize );
@@ -236,7 +240,7 @@ void FormulaElement::writeDom(QDomElement element)
  */
 bool FormulaElement::readAttributesFromDom(QDomElement element)
 {
-    if (!inherited::readAttributesFromDom(element)) {
+    if (!BasicElement::readAttributesFromDom(element)) {
         return false;
     }
     int version = -1;
@@ -269,7 +273,7 @@ bool FormulaElement::readAttributesFromDom(QDomElement element)
  */
 bool FormulaElement::readContentFromDom(QDomNode& node)
 {
-    return inherited::readContentFromDom(node);
+    return BasicElement::readContentFromDom(node);
 }
 
 void FormulaElement::convertNames( QDomNode node )
@@ -306,12 +310,12 @@ void FormulaElement::convertNames( QDomNode node )
         }
     }
 }
-
+/*
 QString FormulaElement::toLatex()
 {
-    return inherited::toLatex();   //Consider $$ sorround
+    return BasicElement::toLatex();   //Consider $$ sorround
 }
-
+*/
 void FormulaElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de;
@@ -321,7 +325,7 @@ void FormulaElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasi
     else
         de =doc.createElement( "math:semantics" );
 
-    inherited::writeMathML( doc, de, oasisFormat );
+    BasicElement::writeMathML( doc, de, oasisFormat );
     parent.appendChild( de );
 }
 

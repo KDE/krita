@@ -119,12 +119,18 @@ RootElement::RootElement( const RootElement& other )
     }
 }
 
+const QList<BasicElement*>& RootElement::childElements()
+{
+    return QList<BasicElement*>();
+}
 
+
+/*
 bool RootElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
 }
-
+*/
 
 void RootElement::entered( SequenceElement* child )
 {
@@ -136,7 +142,7 @@ void RootElement::entered( SequenceElement* child )
     }
 }
 
-
+/*
 BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
                                     const LuPixelPoint& point, const LuPixelPoint& parentOrigin)
 {
@@ -171,7 +177,7 @@ BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
         return this;
     }
     return 0;
-}
+}*/
 
 
 /**
@@ -579,7 +585,7 @@ bool RootElement::readContentFromDom(QDomNode& node)
 
     return true;
 }
-
+/*
 QString RootElement::toLatex()
 {
     QString root;
@@ -603,7 +609,7 @@ QString RootElement::formulaString()
     }
     return "sqrt(" + content->formulaString() + ")";
 }
-
+*/
 void RootElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de;

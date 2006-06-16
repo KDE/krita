@@ -34,7 +34,7 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-int ElementType::evilDestructionCount = 0;
+//int ElementType::evilDestructionCount = 0;
 
 /*
  * Converts CharStyle and CharFamily to the MathML 'mathvariant'
@@ -80,13 +80,13 @@ QString format2variant( CharStyle style, CharFamily family )
 ElementType::ElementType( SequenceParser* parser )
     : from( parser->getStart() ), to( parser->getEnd() ), prev( 0 )
 {
-    evilDestructionCount++;
+    //evilDestructionCount++;
 }
 
 ElementType::~ElementType()
 {
     delete prev;
-    evilDestructionCount--;
+    //evilDestructionCount--;
 }
 
 

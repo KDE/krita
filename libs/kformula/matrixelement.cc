@@ -308,10 +308,16 @@ MatrixElement::MatrixElement( const MatrixElement& other )
 //    content.setAutoDelete(true);
 }
 
-
+/*
 bool MatrixElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
+}
+*/
+
+const QList<BasicElement*>& MatrixElement::childElements()
+{
+    return QList<BasicElement*>();
 }
 
 
@@ -320,7 +326,7 @@ void MatrixElement::entered( SequenceElement* /*child*/ )
     formula()->tell( i18n( "Matrix element" ) );
 }
 
-
+/*
 BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
                                       const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -401,7 +407,7 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
         return element;
     }
     return 0;
-}
+}*/
 
 
 // drawing
@@ -821,7 +827,7 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
     }
     return true;
 }
-
+/*
 QString MatrixElement::toLatex()
 {
     //All the border handling must be implemented here too
@@ -866,7 +872,7 @@ QString MatrixElement::formulaString()
     matrix += "]";
     return matrix;
 }
-
+*/
 
 SequenceElement* MatrixElement::elementAt(int row, int column)
 {
@@ -916,8 +922,12 @@ public:
         return new MultilineSequenceElement( *this );
     }
 
-    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+
+    const QList<BasicElement*>& childElements();
+    
+                                   
 
     /**
      * Calculates our width and height and
@@ -1075,7 +1085,7 @@ MultilineSequenceElement::MultilineSequenceElement( BasicElement* parent )
   //  tabs.setAutoDelete( false );
 }
 
-
+/*
 BasicElement* MultilineSequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
                                                  const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -1094,7 +1104,7 @@ BasicElement* MultilineSequenceElement::goToPos( FormulaCursor* cursor, bool& ha
         }
     }
     return e;
-}
+}*/
 
 
 void MultilineSequenceElement::calcSizes( const ContextStyle& context,
@@ -1139,6 +1149,11 @@ KCommand* MultilineSequenceElement::buildCommand( Container* container, Request*
         break;
     }
     return inherited::buildCommand( container, request );
+}
+
+const QList<BasicElement*>& MultilineSequenceElement::childElements()
+{
+    return QList<BasicElement*>();
 }
 
 
@@ -1218,7 +1233,6 @@ int MultilineSequenceElement::tabPos( int i )
     return -1;
 }
 
-
 void MultilineSequenceElement::writeMathML( QDomDocument& doc,
                                             QDomNode& parent, bool oasisFormat )
 {
@@ -1276,12 +1290,12 @@ MultilineElement::MultilineElement( const MultilineElement& other )
     }
 }
 
-
+/*
 bool MultilineElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
 }
-
+*/
 
 void MultilineElement::entered( SequenceElement* /*child*/ )
 {
@@ -1292,7 +1306,7 @@ void MultilineElement::entered( SequenceElement* /*child*/ )
 /**
  * Returns the element the point is in.
  */
-BasicElement* MultilineElement::goToPos( FormulaCursor* cursor, bool& handled,
+/*BasicElement* MultilineElement::goToPos( FormulaCursor* cursor, bool& handled,
                                          const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
     BasicElement* e = inherited::goToPos(cursor, handled, point, parentOrigin);
@@ -1311,7 +1325,7 @@ BasicElement* MultilineElement::goToPos( FormulaCursor* cursor, bool& handled,
         return this;
     }
     return 0;
-}
+}*/
 
 void MultilineElement::goInside( FormulaCursor* cursor )
 {
@@ -1715,6 +1729,12 @@ void MultilineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oa
     parent.appendChild( de );
 }
 
+const QList<BasicElement*>& MultilineElement::childElements()
+{
+    return QList<BasicElement*>();
+}
+
+
 /**
  * Reads our attributes from the element.
  * Returns false if it failed.
@@ -1768,7 +1788,7 @@ bool MultilineElement::readContentFromDom(QDomNode& node)
     }
     return true;
 }
-
+/*
 QString MultilineElement::toLatex()
 {
     int lineCount = content.count();
@@ -1793,6 +1813,6 @@ QString MultilineElement::formulaString()
     //muliline += "";
     return muliline;
 }
-
+*/
 
 KFORMULA_NAMESPACE_END

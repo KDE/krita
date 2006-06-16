@@ -54,13 +54,20 @@ public:
     virtual QChar getCharacter() const;
 
     /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+	
+
+    /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
      * This is needed because only the innermost matching element
      * is allowed to set the cursor.
      */
-    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+//                                  const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     /**
      * Dispatch this FontCommand to all our TextElement children.
@@ -167,7 +174,7 @@ public:
         return new BracketElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * @returns the type of this element. Used for
@@ -187,8 +194,15 @@ public:
      * This is needed because only the innermost matching element
      * is allowed to set the cursor.
      */
-    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+	
 
     /**
      * Calculates our width and height and
@@ -230,9 +244,9 @@ protected:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+  //  virtual QString toLatex();
 
-    virtual QString formulaString();
+//    virtual QString formulaString();
 
 private:
 
@@ -268,7 +282,7 @@ public:
         return new OverlineElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * The cursor has entered one of our child sequences.
@@ -297,9 +311,9 @@ public:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+//    virtual QString toLatex();
 
-    virtual QString formulaString();
+//    virtual QString formulaString();
 
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
@@ -331,7 +345,7 @@ public:
         return new UnderlineElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * The cursor has entered one of our child sequences.
@@ -360,9 +374,9 @@ public:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+//    virtual QString toLatex();
 
-    virtual QString formulaString();
+//    virtual QString formulaString();
 
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 

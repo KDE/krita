@@ -195,7 +195,10 @@ bool FormulaCursor::isEnd() const
 void FormulaCursor::mousePress( const LuPixelPoint& pos, int flag )
 {
     FormulaElement* formula = getElement()->formula();
-    formula->goToPos( this, pos );
+//    formula->goToPos( this, pos );
+
+//    for new kformula api, use it soon
+//    setCursorToElement( m_container->childElementAt( pos ) );
     if (flag & SelectMovement) {
         setSelection(true);
         if (getMark() == -1) {
@@ -215,7 +218,7 @@ void FormulaCursor::mouseMove( const LuPixelPoint& point, int )
     int mark = getMark();
 
     FormulaElement* formula = getElement()->formula();
-    formula->goToPos( this, point );
+//    formula->goToPos( this, point );
     BasicElement* newElement = getElement();
     int pos = getPos();
 
@@ -561,7 +564,7 @@ NameSequence* FormulaCursor::getActiveNameSequence()
  */
 TextElement* FormulaCursor::getActiveTextElement()
 {
-    return dynamic_cast<TextElement*>(getSelectedChild());
+ //   return dynamic_cast<TextElement*>(getSelectedChild());
 }
 
 

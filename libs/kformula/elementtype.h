@@ -23,7 +23,6 @@
 
 #include <QFont>
 #include <QString>
-#include <qdom.h>
 
 #include "contextstyle.h"
 #include "kformuladefs.h"
@@ -98,9 +97,6 @@ public:
      */
     virtual void setUpPainter( const ContextStyle& context, QPainter& painter );
 
-    // debug
-    static int getEvilDestructionCount() { return evilDestructionCount; }
-
     virtual void output();
 
     /**
@@ -143,8 +139,6 @@ private:
      */
     ElementType* prev;
 
-    // debug
-    static int evilDestructionCount;
 };
 
 

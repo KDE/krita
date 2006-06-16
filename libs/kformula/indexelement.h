@@ -45,7 +45,14 @@ public:
         return new IndexElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+
 
     /**
      * @returns the character that represents this element. Used for
@@ -66,8 +73,8 @@ public:
      * This is needed because only the innermost matching element
      * is allowed to set the cursor.
      */
-    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     // drawing
     //
@@ -151,12 +158,7 @@ public:
     // If an element has children one has to become the main one.
 
     virtual SequenceElement* getMainChild() { return content; }
-    //SequenceElement* upperLeft;
-    //SequenceElement* upperMiddle;
     SequenceElement* getExponent() { return upperRight; }
-    //SequenceElement* lowerLeft;
-    //SequenceElement* lowerMiddle;
-    //SequenceElement* lowerRight;
 
 
     /**
@@ -258,10 +260,10 @@ public:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+//    virtual QString toLatex();
 
     // the upper right index is the only one we show
-    virtual QString formulaString();
+//    virtual QString formulaString();
 
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
@@ -377,7 +379,7 @@ private:
     /**
      * Sets the x value of the three middle elements. (Two indexes and the content.)
      */
-    void setMiddleX(int xOffset, int middleWidth);
+    void setMiddleX( double xOffset, double middleWidth );
 
     /**
      * @returns the position describtion to the provided element.

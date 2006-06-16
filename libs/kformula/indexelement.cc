@@ -165,12 +165,12 @@ IndexElement::IndexElement( const IndexElement& other )
     }
 }
 
-
+/*
 bool IndexElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
 }
-
+*/
 
 QChar IndexElement::getCharacter() const
 {
@@ -210,11 +210,16 @@ void IndexElement::entered( SequenceElement* child )
     }
 }
 
+const QList<BasicElement*>& IndexElement::childElements()
+{
+    return QList<BasicElement*>();
+}
+
 
 /**
  * Returns the element the point is in.
  */
-BasicElement* IndexElement::goToPos( FormulaCursor* cursor, bool& handled,
+/*BasicElement* IndexElement::goToPos( FormulaCursor* cursor, bool& handled,
                                      const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
@@ -304,7 +309,7 @@ BasicElement* IndexElement::goToPos( FormulaCursor* cursor, bool& handled,
         return this;
     }
     return 0;
-}
+}*/
 
 
 // drawing
@@ -315,7 +320,7 @@ BasicElement* IndexElement::goToPos( FormulaCursor* cursor, bool& handled,
 // before you draw.
 
 
-void IndexElement::setMiddleX(int xOffset, int middleWidth)
+void IndexElement::setMiddleX( double xOffset, double middleWidth )
 {
     content->setX(xOffset + (middleWidth - content->getWidth()) / 2);
     if (hasUpperMiddle()) {
@@ -1318,7 +1323,7 @@ ElementIndexPtr IndexElement::getIndex( int position )
 }
 
 
-
+/*
 QString IndexElement::toLatex()
 {
     QString index;
@@ -1332,12 +1337,12 @@ QString IndexElement::toLatex()
     }
 
     if ( hasUpperLeft() || hasUpperRight() ) { //Not sure that this is possible in Latex!
-        /*index += "{}";
+        index += "{}";
         if ( hasUpperLeft() )
             index += "^" + upperLeft->toLatex();
         if ( hasLowerLeft() )
             index += "_" + lowerLeft->toLatex();
-        */
+        
     }
 
     index += content->toLatex();
@@ -1372,7 +1377,7 @@ QString IndexElement::formulaString()
     }
     return index;
 }
-
+*/
 void IndexElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de;

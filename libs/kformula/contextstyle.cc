@@ -19,6 +19,7 @@
 */
 
 #include <QFontMetrics>
+#include <QPaintDevice>
 #include <QString>
 
 #include <kdebug.h>
@@ -40,13 +41,6 @@ ContextStyle::ContextStyle()
       emptyColor(Qt::blue), helpColor( Qt::gray ),
       m_sizeFactor( 0 )
 {
-//     kDebug() << "ContextStyle::ContextStyle" << endl
-//               << "defaultFont: " << defaultFont.rawName() << endl
-//               << "nameFont: " << nameFont.rawName() << endl
-//               << "numberFont: " << numberFont.rawName() << endl
-//               << "operatorFont: " << operatorFont.rawName() << endl
-//               << "symbolFont: " << symbolFont.rawName() << endl;
-
     textStyleValues[ displayStyle      ].setup( 1. );
     textStyleValues[ textStyle         ].setup( 1. );
     textStyleValues[ scriptStyle       ].setup( .7 );
@@ -128,34 +122,6 @@ void ContextStyle::readConfig( KConfig* config, bool init )
         else
             m_fontStyleName = "symbol";
     }
-
-#if 0
-    m_requestedFonts = config->readListEntry( "usedMathFonts" );
-    if ( m_requestedFonts.size() == 0 ) {
-        m_requestedFonts.push_back( "esstixone" );
-        m_requestedFonts.push_back( "esstixtwo" );
-        m_requestedFonts.push_back( "esstixthree" );
-        m_requestedFonts.push_back( "esstixfour" );
-        m_requestedFonts.push_back( "esstixfive" );
-        m_requestedFonts.push_back( "esstixsix" );
-        m_requestedFonts.push_back( "esstixseven" );
-        m_requestedFonts.push_back( "esstixeight" );
-        m_requestedFonts.push_back( "esstixnine" );
-        m_requestedFonts.push_back( "esstixten" );
-        m_requestedFonts.push_back( "esstixeleven" );
-        m_requestedFonts.push_back( "esstixtwelve" );
-        m_requestedFonts.push_back( "esstixthirteen" );
-        m_requestedFonts.push_back( "esstixfourteen" );
-        m_requestedFonts.push_back( "esstixfifteen" );
-        m_requestedFonts.push_back( "esstixsixteen" );
-        m_requestedFonts.push_back( "esstixseventeen" );
-//         m_requestedFonts.push_back( "mt extra" );
-//         m_requestedFonts.push_back( "mt symbol" );
-//         m_requestedFonts.push_back( "euclid math one" );
-//         m_requestedFonts.push_back( "euclid math two" );
-//         m_requestedFonts.push_back( "euclid symbol" );
-    }
-#endif
 
     // There's no gui right anymore but I'll leave it here...
     config->setGroup( "kformula Color" );
@@ -268,7 +234,7 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 
 luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return qRound( ptToLayoutUnitPt( m_sizeFactor*m_baseSize*getReductionFactor( tstyle ) ) );
+    return ptToLayoutUnitPt( m_sizeFactor*m_baseSize*getReductionFactor( tstyle ) );
 }
 
 luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
@@ -389,19 +355,68 @@ void ContextStyle::setup()
 {
     luPt size = static_cast<luPt>( m_baseSize );
     QFont font = symbolFont;
-    font.setPointSize( size );
+    font.setPointSizeF( size );
     QFontMetrics fm( font );
 
     // Or better the real space required? ( boundingRect )
     quad = ptToLayoutUnitPt( fm.width( 'M' ) );
 
     font = QFont(defaultFont);
-    font.setPointSize( size );
+    font.setPointSizeF( size );
     QFontMetrics fm2( font );
     //m_axisHeight = ptToLayoutUnitPt( fm2.strikeOutPos() );
     //ptToLayoutUnitPixY
     //m_axisHeight = ptToLayoutUnitPt( pixelYToPt( fm2.strikeOutPos() ) );
     m_axisHeight = ptToLayoutUnitPixY( pixelYToPt( fm2.strikeOutPos() ) );
+}
+
+// copied from KoTextZoomHandler.h
+
+double ContextStyle::pixelToLayoutUnitX( double x ) const
+{
+    // Layout text at 1440 DPI
+    // Well, not really always 1440 DPI, but always 20 times the point size
+    // This is constant, no need to litterally apply 1440 DPI at all resolutions.
+    double m_layoutUnitFactor = 20.0;
+	
+    return qRound( ( x * m_layoutUnitFactor * m_resolutionX ) / m_zoomedResolutionX );
+}
+
+double ContextStyle::pixelToLayoutUnitY( double y ) const
+{
+    // Layout text at 1440 DPI
+    // Well, not really always 1440 DPI, but always 20 times the point size
+    // This is constant, no need to litterally apply 1440 DPI at all resolutions.
+    double m_layoutUnitFactor = 20.0;
+    return qRound( ( y * m_layoutUnitFactor * m_resolutionY ) / m_zoomedResolutionY );
+}
+
+double ContextStyle::layoutUnitToPixelX( double lupix ) const
+{
+    // Layout text at 1440 DPI
+    // Well, not really always 1440 DPI, but always 20 times the point size
+    // This is constant, no need to litterally apply 1440 DPI at all resolutions.
+    double m_layoutUnitFactor = 20.0;
+    return ( lupix * m_zoomedResolutionX ) / ( m_layoutUnitFactor * m_resolutionX );
+}
+
+double ContextStyle::layoutUnitToPixelY( double lupix ) const
+{
+    // Layout text at 1440 DPI
+    // Well, not really always 1440 DPI, but always 20 times the point size
+    // This is constant, no need to litterally apply 1440 DPI at all resolutions.
+    double m_layoutUnitFactor = 20.0;
+    return ( lupix * m_zoomedResolutionY ) / ( m_layoutUnitFactor * m_resolutionY );
+}
+
+double ContextStyle::layoutUnitToFontSize( double luSize, bool /*forPrint*/ ) const
+{
+    // Qt will use QPaintDevice::x11AppDpiY() to go from pt to pixel for fonts
+    return layoutUnitPtToPt( luSize ) * m_zoomedResolutionY;
+/*    #ifdef Q_WS_X11
+        / POINT_TO_INCH(QPaintDevice::x11AppDpiY())
+    #endif
+      ;*/
 }
 
 KFORMULA_NAMESPACE_END

@@ -37,12 +37,10 @@ BasicElement::BasicElement( BasicElement* p )
 {
   m_parentElement = p;
   m_boundingRect = QRectF( 0, 0, 0, 0 );
-    evilDestructionCount++;
 }
 
 BasicElement::~BasicElement()
 {
-    evilDestructionCount--;
 }
 
 bool BasicElement::readOnly( const BasicElement* /*child*/ ) const
@@ -58,6 +56,7 @@ FormulaElement* BasicElement::formula()
 /**
  * Returns the element the point is in.
  */
+/*
 BasicElement* BasicElement::goToPos( FormulaCursor*, bool&,
                                      const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -70,7 +69,7 @@ BasicElement* BasicElement::goToPos( FormulaCursor*, bool&,
     }
     return 0;
 }
-
+*/
 /**
  * Returns our position inside the widget.
  */
@@ -217,50 +216,75 @@ bool BasicElement::buildChild( SequenceElement* child, QDomNode node, QString na
     }
     return false;
 }
-
+/*
 QString BasicElement::toLatex()
 {
     return "{}";
 }
-
+*/
 void BasicElement::setWidth( double width )
 {
-  m_boundingRect.setWidth( width );
+    m_boundingRect.setWidth( width );
 }
 
 void BasicElement::setHeight( double height )
 {
-  m_boundingRect.setHeight( height );
+    m_boundingRect.setHeight( height );
 }
 
 void BasicElement::setX( double x )
 {
-  m_boundingRect.setX( x );
+    m_boundingRect.setX( x );
 }
 
 void BasicElement::setY( double y )
 {
-  m_boundingRect.setY( y );
+    m_boundingRect.setY( y );
 }
 
 double BasicElement::getHeight() const
 {
-  return m_boundingRect.height();
+    return m_boundingRect.height();
 }
 
 double BasicElement::getWidth() const
 {
-  return m_boundingRect.width();
+    return m_boundingRect.width();
 }
 
 double BasicElement::getY() const
 {
-  return m_boundingRect.y();
+    return m_boundingRect.y();
 }
 
 double BasicElement::getX() const
 {
-  return m_boundingRect.x();
+    return m_boundingRect.x();
+}
+
+const QRectF& BasicElement::boundingRect() const
+{
+    return m_boundingRect;
+}
+
+BasicElement* BasicElement::childElementAt( const QPointF& p )
+{
+    if( !m_boundingRect.contains( p ) )
+        return 0;
+	  	
+    if( childElements().isEmpty() ) 
+        return this;
+	      
+    BasicElement* ownerElement = 0;
+    foreach( BasicElement* tmpElement, childElements() )  
+    {
+        ownerElement = tmpElement->childElementAt( p );
+	
+        if( ownerElement )
+            return ownerElement;
+    }
+    
+    return this;    // if no child contains the point, it's the FormulaElement itsself
 }
 
 KFORMULA_NAMESPACE_END

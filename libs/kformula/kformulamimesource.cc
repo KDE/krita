@@ -54,7 +54,7 @@ MimeSource::MimeSource(Document* doc, const QDomDocument& formula)
 //    list.setAutoDelete(true);
     if ( cursor.buildElementsFromDom( document.documentElement(), list ) ) {
         cursor.insert(list);
-        latexString = rootElement->toLatex().toUtf8();
+//        latexString = rootElement->toLatex().toUtf8();
         if (latexString.size() > 0) {
             latexString.truncate(latexString.size()-1);
         }
@@ -121,7 +121,7 @@ QByteArray MimeSource::encodedData ( const char *format ) const
         //context.setResolution(5, 5);
 
         rootElement->calcSizes(context);
-        QRect rect(rootElement->getX(), rootElement->getY(),
+        QRectF rect(rootElement->getX(), rootElement->getY(),
                    rootElement->getWidth(), rootElement->getHeight());
 
     	QPixmap pm( context.layoutUnitToPixelX( rootElement->getWidth() ),

@@ -23,16 +23,13 @@
 
 #include <QClipboard>
 #include <QImage>
-//#include <q3ptrlist.h>
 #include <QObject>
 #include <QStack>
 #include <QString>
-//Added by qt3to4:
 #include <QTextStream>
 #include <QKeyEvent>
 #include <QDomElement>
 #include <kcommand.h>
-//#include <KoCommandHistory.h>
 #include "kformuladefs.h"
 #include <kformuladocument.h>
 class QColorGroup;
@@ -171,13 +168,13 @@ public:
     /**
      * Draws the whole thing.
      */
-    void draw( QPainter& painter, const QRect& r,
+    void draw( QPainter& painter, const QRectF& r,
                const QPalette& palette, bool edit=false );
 
     /**
      * Draws the whole thing.
      */
-    void draw( QPainter& painter, const QRect& r, bool edit=false );
+    void draw( QPainter& painter, const QRectF& r, bool edit=false );
 
     /**
      * Saves the data into the document.
@@ -203,9 +200,9 @@ public:
     /**
      * @returns Tex string for the formula
      */
-    QString texString();
+//    QString texString();
 
-    QString formulaString();
+//    QString formulaString();
 
     /**
      * Prints the formula.
@@ -234,12 +231,12 @@ public:
     /**
      * @returns the formula's size.
      */
-    QRect boundingRect() const;
+    const QRectF& boundingRect() const;
 
     /**
      * @returns the formula's size including its active cursor.
      */
-    QRect coveredRect();
+    const QRectF& coveredRect() const;
 
     double width() const;
     double height() const;
@@ -265,15 +262,6 @@ public:
     virtual double getDocumentX() const { return -1; }
     virtual double getDocumentY() const { return -1; }
     virtual void setDocumentPosition( double /*x*/, double /*y*/ ) {}
-
-    /**
-     * Start the documents evaluation at this formula. This must be the
-     * formula that changed. The formulas above it won't be affected
-     * by this change.
-     *
-     * This has no meaning in not evaluating formulas.
-     */
-    virtual void startEvaluation() {}
 
     /**
      * Recalcs the formula and emits the .*Changed signals if needed.
@@ -398,35 +386,28 @@ protected:
     /**
      * Factory method.
      */
-    virtual FormulaElement* createMainSequence();
+//    virtual FormulaElement* createMainSequence();
 
     void emitErrorMsg( const QString& );
 
 private:
+    /// All BasicElements in this formula
+    QList<BasicElement> m_elements;
 
-    /**
-     * Execute the command if it makes sense.
-     */
+    /// The FormulaElement of this formula
+    FormulaElement* m_formulaElement;
+
+    /// Execute the command if it makes sense.
     void execute(KCommand *command);
 
-    /**
-     * Emits a signal if the cursor had moved.
-     */
+    /// Emits a signal if the cursor had moved.
     void checkCursor();
 
-    /**
-     * @returns true if there is a cursor that is allowed to edit the formula.
-     */
+    /// @returns true if there is a cursor that is allowed to edit the formula.
     bool hasValidCursor() const;
 
     struct Container_Impl;
     Container_Impl* impl;
-
-    // debug
-    friend class TestFormulaCursor;
-    friend class TestFormulaElement;
-    friend class TestIndexElement;
-    friend class TestCommands;
 };
 
 KFORMULA_NAMESPACE_END

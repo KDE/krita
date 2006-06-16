@@ -126,7 +126,13 @@ SymbolElement::SymbolElement( const SymbolElement& other )
     }
 }
 
+const QList<BasicElement*>& SymbolElement::childElements()
+{
+    return QList<BasicElement*>();
+}
 
+
+/*
 bool SymbolElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
@@ -187,7 +193,7 @@ BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
         return this;
     }
     return 0;
-}
+}*/
 
 
 /**
@@ -778,7 +784,7 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     }
     return true;
 }
-
+/*
 QString SymbolElement::toLatex()
 {
     QString sym;
@@ -846,7 +852,7 @@ QString SymbolElement::formulaString()
     }
     return sym + ")";
 }
-
+*/
 void SymbolElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat  )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );

@@ -21,7 +21,6 @@
 #ifndef FORMULAELEMENT_H
 #define FORMULAELEMENT_H
 
-// Formula include
 #include "sequenceelement.h"
 #include <QKeyEvent>
 
@@ -34,12 +33,14 @@ class SymbolTable;
 
 
 /**
- * The main element.
- * A formula consists of a FormulaElement and its children.
- * The only element that has no parent.
+ * @short The element of a formula at the highest position.
+ *
+ * A formula consists of a tree of elements. The FormulaElement is the root of this
+ * tree and therefore is the only element that doesn't have a parent element.
+ * It's functionality is reduced to layouting its children in a different way. It is
+ * the element with highest size and can also dictate the size to all other elements. 
  */
-class FormulaElement : public SequenceElement {
-    typedef SequenceElement inherited;
+class FormulaElement : public BasicElement {
 public:
 
     /**
@@ -53,7 +54,17 @@ public:
     /**
      * Returns the element the point is in.
      */
-    BasicElement* goToPos( FormulaCursor*, const LuPixelPoint& point );
+//    BasicElement* goToPos( FormulaCursor*, const LuPixelPoint& point );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+
+    void addChild( BasicElement* element );
+    void deleteChild( BasicElement* element );
+    // void insertChild( int position, BasicElement* element );
 
     /**
      * Ordinary formulas are not write protected.
@@ -160,7 +171,7 @@ public:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+//    virtual QString toLatex();
 
     int getBaseSize() const { return baseSize; }
     void setBaseSize( int size );
@@ -205,6 +216,7 @@ protected:
 
 
 private:
+    QList<BasicElement*> m_childElements;
 
     /**
      * The introduction of 'NameSequence' changed the DOM.
@@ -215,7 +227,7 @@ private:
     /**
      * The document that owns (is) this formula.
      */
-    FormulaDocument* document;
+    FormulaDocument* m_document;
 
     /**
      * The base font size.

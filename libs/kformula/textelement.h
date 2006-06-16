@@ -45,7 +45,13 @@ public:
         return new TextElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
 
     /**
      * @returns the type of this element. Used for
@@ -217,7 +223,14 @@ public:
         return new EmptyElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+    
 
     /**
      * @returns the character that represents this element. Used for

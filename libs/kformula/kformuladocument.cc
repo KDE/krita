@@ -411,14 +411,12 @@ void DocumentWrapper::createActions( KActionCollection* collection )
                                       KStandardDirs::kde_default("data") +
                                       "kformula/pics/" );
 
-    m_addNegThinSpaceAction = new KAction( i18n( "Add Negative Thin Space" ),
-                                    0,
-                                    this, SLOT( addNegThinSpace() ),
-                                    collection, "formula_addnegthinspace") ;
-    m_addThinSpaceAction = new KAction( i18n( "Add Thin Space" ),
-                                    0,
-                                    this, SLOT( addThinSpace() ),
-                                    collection, "formula_addthinspace") ;
+    m_addNegThinSpaceAction = new KAction( i18n( "Add Negative Thin Space" ), collection,
+		                                              "formula_addnegthinspace");
+    connect( m_addNegThinSpaceAction, SIGNAL(triggered(bool)), SLOT(addNegThinSpace()) );
+    m_addThinSpaceAction = new KAction( i18n( "Add Thin Space" ), collection,
+		                                               "formula_addthinspace");
+    connect( m_addThinSpaceAction, SIGNAL( triggered(bool) ), SLOT( addThinSpace() ));
     m_addMediumSpaceAction = new KAction( i18n( "Add Medium Space" ),
                                     0,
                                     this, SLOT( addMediumSpace() ),

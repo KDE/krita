@@ -53,10 +53,15 @@ TextElement::TextElement( const TextElement& other )
 {
 }
 
-
+/*
 bool TextElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
+}*/
+
+const QList<BasicElement*>& TextElement::childElements()
+{
+	    return QList<BasicElement*>();
 }
 
 
@@ -479,10 +484,15 @@ EmptyElement::EmptyElement( const EmptyElement& other )
 {
 }
 
-
+/*
 bool EmptyElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
+}*/
+
+const QList<BasicElement*>& EmptyElement::childElements()
+{
+    return QList<BasicElement*>();
 }
 
 

@@ -70,8 +70,8 @@ class SequenceElement;
  */
 class KOFORMULA_EXPORT BasicElement // exported for unit tests
 {
-    friend class SequenceElement;
-    friend class SequenceParser;
+ //   friend class SequenceElement;
+ //   friend class SequenceParser;
 
     BasicElement& operator= ( const BasicElement& ) { return *this; }
 public:
@@ -90,7 +90,7 @@ public:
     /**
      * Visit this element. An implementation of the visitor pattern.
      */
-    virtual bool accept( ElementVisitor* ) = 0;
+//    virtual bool accept( ElementVisitor* ) = 0;
 
     /**
      * @returns whether the child should be read-only. The idea is
@@ -132,8 +132,22 @@ public:
      * This is needed because only the innermost matching element
      * is allowed to set the cursor.
      */
-    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+
+    /**
+     * Get the element of the formula at the given point
+     * @param p the point to look for 
+     * @return a pointer to a BasicElement
+     */
+    BasicElement* childElementAt( const QPointF& p );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements() = 0;
+
 
     /**
      * Returns our position inside the widget.
@@ -339,6 +353,7 @@ public:
     void setY( double y );
     double getWidth() const;
     double getHeight() const;
+    const QRectF& boundingRect() const;
 
     void setWidth( double width );
     void setHeight( double height );
@@ -427,9 +442,9 @@ protected:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+//    virtual QString toLatex();
 
-    virtual QString formulaString() { return ""; }
+//    virtual QString formulaString() { return ""; }
 
 private:
 

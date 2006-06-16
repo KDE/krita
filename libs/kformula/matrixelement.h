@@ -48,8 +48,14 @@ public:
         return new MatrixElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
-
+//   virtual bool accept( ElementVisitor* visitor );
+  
+   /**
+    * Obtain a list of all child elements of this element
+    * @return a QList with pointers to all child elements
+    */
+    virtual const QList<BasicElement*>& childElements();
+    
     /**
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
@@ -62,8 +68,8 @@ public:
      * This is needed because only the innermost matching element
      * is allowed to set the cursor.
      */
-    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     // drawing
     //
@@ -183,9 +189,9 @@ public:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+//    virtual QString toLatex();
 
-    virtual QString formulaString();
+//    virtual QString formulaString();
 
     int getRows() const { return content.count(); }
     int getColumns() const { return content.first()->count(); }
@@ -266,7 +272,7 @@ public:
         return new MultilineElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * The cursor has entered one of our child sequences.
@@ -277,8 +283,15 @@ public:
     /**
      * Returns the element the point is in.
      */
-    BasicElement* goToPos( FormulaCursor* cursor, bool& handled,
-                           const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    BasicElement* goToPos( FormulaCursor* cursor, bool& handled,
+//                           const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+	
 
     /**
      * Sets the cursor inside this element to its start position.
@@ -353,9 +366,9 @@ public:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+//    virtual QString toLatex();
 
-    virtual QString formulaString();
+//    virtual QString formulaString();
 
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 

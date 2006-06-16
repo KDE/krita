@@ -53,6 +53,12 @@ SingleContentElement::~SingleContentElement()
     delete content;
 }
 
+const QList<BasicElement*>& SingleContentElement::childElements()
+{
+    return QList<BasicElement*>();
+}
+
+
 
 QChar SingleContentElement::getCharacter() const
 {
@@ -64,7 +70,7 @@ QChar SingleContentElement::getCharacter() const
     }
     return content->getCharacter();
 }
-
+/*
 BasicElement* SingleContentElement::goToPos( FormulaCursor* cursor, bool& handled,
                                              const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -80,7 +86,7 @@ BasicElement* SingleContentElement::goToPos( FormulaCursor* cursor, bool& handle
         return this;
     }
     return 0;
-}
+}*/
 
 void SingleContentElement::dispatchFontCommand( FontCommand* cmd )
 {
@@ -218,11 +224,17 @@ BracketElement::BracketElement( const BracketElement& other )
 {
 }
 
-
+/*
 bool BracketElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
+}*/
+
+const QList<BasicElement*>& BracketElement::childElements()
+{
+    return QList<BasicElement*>();
 }
+
 
 
 void BracketElement::entered( SequenceElement* /*child*/ )
@@ -230,7 +242,7 @@ void BracketElement::entered( SequenceElement* /*child*/ )
     formula()->tell( i18n( "Delimited list" ) );
 }
 
-
+/*
 BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
                                        const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -257,7 +269,7 @@ BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
     }
     return 0;
 }
-
+*/
 
 /**
  * Calculates our width and height and
@@ -409,7 +421,7 @@ bool BracketElement::readAttributesFromDom(QDomElement element)
     }
     return true;
 }
-
+/*
 QString BracketElement::toLatex()
 {
     QString ls,rs,cs;
@@ -452,7 +464,7 @@ QString BracketElement::latexString(char type)
 QString BracketElement::formulaString()
 {
     return "(" + getContent()->formulaString() + ")";
-}
+}*/
 
 void BracketElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
@@ -482,12 +494,12 @@ OverlineElement::OverlineElement( const OverlineElement& other )
 {
 }
 
-
+/*
 bool OverlineElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
 }
-
+*/
 
 void OverlineElement::entered( SequenceElement* /*child*/ )
 {
@@ -542,7 +554,7 @@ void OverlineElement::draw( QPainter& painter, const LuPixelRect& r,
                       style.layoutUnitToPixelY( y+distY/3 ) );
 }
 
-
+/*
 QString OverlineElement::toLatex()
 {
     return "\\overline{" + getContent()->toLatex() + "}";
@@ -552,7 +564,7 @@ QString OverlineElement::formulaString()
 {
     return getContent()->formulaString();
 }
-
+*/
 void OverlineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mover" : "mover" );
@@ -580,12 +592,12 @@ UnderlineElement::UnderlineElement( const UnderlineElement& other )
 {
 }
 
-
+/*
 bool UnderlineElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
 }
-
+*/
 
 void UnderlineElement::entered( SequenceElement* /*child*/ )
 {
@@ -642,7 +654,7 @@ void UnderlineElement::draw( QPainter& painter, const LuPixelRect& r,
                       style.layoutUnitToPixelY( y+getHeight()-style.getLineWidth() ) );
 }
 
-
+/*
 QString UnderlineElement::toLatex()
 {
     return "\\underline{" + getContent()->toLatex() + "}";
@@ -652,7 +664,7 @@ QString UnderlineElement::formulaString()
 {
     return getContent()->formulaString();
 }
-
+*/
 void UnderlineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:munder" : "munder" );

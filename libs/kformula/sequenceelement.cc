@@ -104,10 +104,15 @@ bool SequenceElement::readOnly( const FormulaCursor* ) const
     return getParent()->readOnly( this );
 }
 
+const QList<BasicElement*>& SequenceElement::childElements()
+{
+    return QList<BasicElement*>();
+}
 
 /**
  * Returns the element the point is in.
  */
+/*
 BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
                                         const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -151,7 +156,7 @@ BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
     }
     return 0;
 }
-
+*/
 
 bool SequenceElement::isEmpty()
 {
@@ -247,11 +252,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
                             ContextStyle::IndexStyle istyle,
                             const LuPixelPoint& parentOrigin )
 {
-    LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
-    // There might be zero sized elements that still want to be drawn at least
-    // in edit mode. (EmptyElement)
-    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-    //    return;
+    QPointF myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
 
     if( !isEmpty() )
     {
@@ -272,19 +273,6 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
     else {
         drawEmptyRect( painter, context, myPos );
     }
-    // Debug
-    //painter.setPen(Qt::green);
-    //painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),
-    //                 getWidth(), getHeight());
-//     painter.drawLine( context.layoutUnitToPixelX( parentOrigin.x() + getX() ),
-//                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + axis( context, tstyle ) ),
-//                       context.layoutUnitToPixelX( parentOrigin.x() + getX() + getWidth() ),
-//                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + axis( context, tstyle ) ) );
-//     painter.setPen(Qt::red);
-//     painter.drawLine( context.layoutUnitToPixelX( parentOrigin.x() + getX() ),
-//                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + getBaseline() ),
-//                       context.layoutUnitToPixelX( parentOrigin.x() + getX() + getWidth() ),
-//                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + getBaseline() ) );
 }
 
 
@@ -1046,9 +1034,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     }
     case req_remove: {
         SequenceElement* sequence = cursor->normal();
-        if ( sequence &&
-             ( sequence == sequence->formula() ) &&
-             ( sequence->countChildren() == 0 ) ) {
+        if ( sequence && /*  ( sequence == sequence->formula() ) && */            ( sequence->countChildren() == 0 ) ) {
             sequence->formula()->removeFormula( cursor );
             return 0;
         }
@@ -1421,7 +1407,7 @@ bool SequenceElement::isFirstOfToken( BasicElement* child )
     return ( child->getElementType() != 0 ) && isChildNumber( child->getElementType()->start(), child );
 }
 
-
+/*
 QString SequenceElement::toLatex()
 {
     QString content;
@@ -1435,8 +1421,8 @@ QString SequenceElement::toLatex()
     }
     return content;
 }
-
-
+*/
+/*
 QString SequenceElement::formulaString()
 {
     QString content;
@@ -1450,7 +1436,7 @@ QString SequenceElement::formulaString()
     }
     return content;
 }
-
+*/
 
 void SequenceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {

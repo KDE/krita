@@ -21,17 +21,13 @@
 #ifndef CONTEXTSTYLE_H
 #define CONTEXTSTYLE_H
 
-//Qt Include
 #include <QColor>
 #include <QFont>
 #include <QString>
 #include <QStringList>
-
-//KDE Include
 #include <kconfig.h>
-#include <KoTextZoomHandler.h>
+#include <KoZoomHandler.h>
 
-//Formula include
 #include "kformuladefs.h"
 
 
@@ -49,7 +45,7 @@ class SymbolTable;
  * All distances are stored in point. Most methods return pixel
  * values.
  */
-class ContextStyle : public KoTextZoomHandler
+class ContextStyle : public KoZoomHandler
 {
 public:
 
@@ -104,7 +100,48 @@ public:
 
     const FontStyle& fontStyle() const { return *m_fontStyle; }
 
+    //copied from KoTextZoomHandler.h
+    double pixelToLayoutUnitX( double x ) const;
+    double pixelToLayoutUnitY( double y ) const;
+    double ptToPixelX( double pt ) const
+         { return pt * m_resolutionX; }
+    double ptToPixelY( double pt ) const
+         { return pt * m_resolutionY; }
+    double ptToLayoutUnitPt( double pt ) const
+    {
+	    // taken from KoTextZoomHandler
+	    double m_layoutUnitFactor = 20.0;
+	    return pt *  m_layoutUnitFactor; }
+    double ptToLayoutUnitPixX( double x_pt ) const
+        { return ptToPixelX( ptToLayoutUnitPt( x_pt ) ); }
+    double ptToLayoutUnitPixY( double y_pt ) const
+	    { return ptToPixelY( ptToLayoutUnitPt( y_pt ) ); }
+    double pixelYToPt( double y ) const
+	    { return y / m_resolutionY; }
+    double layoutUnitPtToPt( double lupt ) const
+	    { return lupt / 20.0; }
+    double layoutUnitToPixelX( double lupix ) const;
+    double layoutUnitToPixelY( double lupix ) const;
+    double pixelXToPt( double x ) const
+	    { return x / m_resolutionX; }
+    QPointF pixelToLayoutUnit( const QPointF &p ) const
+        { return QPointF( pixelToLayoutUnitX( p.x() ),
+		          pixelToLayoutUnitY( p.y() ) ); }
+    QRectF pixelToLayoutUnit( const QRectF &r ) const
+        {
+	  double x = pixelToLayoutUnitX( r.x() );
+	  double y = pixelToLayoutUnitY( r.y() );
+	  double width = pixelToLayoutUnitX( r.x() + r.width() ) - x;
+	  double height = pixelToLayoutUnitY( r.y() + r.height() ) - y;
+	return QRectF( x,y,width,height ); }
+    double layoutUnitToFontSize( double luSize, bool /*forPrint*/ ) const;
+    double layoutUnitPtToPt( double lupt )
+	    { return lupt / 20.0; }
+    QPoint layoutUnitToPixel( const QPoint &p ) const
+    { return QPoint( layoutUnitToPixelX( p.x() ),
+	                         layoutUnitToPixelY( p.y() ) ); }	    
 
+    
     void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 
     /**

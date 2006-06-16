@@ -69,7 +69,7 @@ struct Container::Container_Impl {
     ~Container_Impl()
     {
         delete internCursor;
-        delete rootElement;
+//        delete rootElement;
         document = 0;
     }
 
@@ -86,7 +86,7 @@ struct Container::Container_Impl {
     /**
      * The element tree's root.
      */
-    FormulaElement* rootElement;
+//    FormulaElement* rootElement;
 
     /**
      * The active cursor is the one that triggered the last command.
@@ -105,13 +105,13 @@ struct Container::Container_Impl {
 };
 
 
-FormulaElement* Container::rootElement() const { return impl->rootElement; }
+FormulaElement* Container::rootElement() const { return m_formulaElement; }
 Document* Container::document() const { return impl->document; }
 
 Container::Container( Document* doc, int pos, bool registerMe )
 {
     impl = new Container_Impl( doc );
-    impl->rootElement = 0;
+    m_formulaElement = 0;
     if ( registerMe ) {
         registerFormula( pos );
     }
@@ -127,16 +127,9 @@ Container::~Container()
 
 void Container::initialize()
 {
-    assert( impl->rootElement == 0 );
-    impl->rootElement = createMainSequence();
+    m_formulaElement = new FormulaElement( this ); 
     impl->activeCursor = impl->internCursor = createCursor();
     recalc();
-}
-
-
-FormulaElement* Container::createMainSequence()
-{
-    return new FormulaElement( this );
 }
 
 
@@ -283,7 +276,7 @@ void Container::recalc()
 
 bool Container::isEmpty()
 {
-    return rootElement()->countChildren() == 0;
+    return rootElement()->childElements().isEmpty();
 }
 
 
@@ -293,16 +286,15 @@ const SymbolTable& Container::getSymbolTable() const
 }
 
 
-void Container::draw( QPainter& painter, const QRect& r, const QPalette& palette, bool edit )
+void Container::draw( QPainter& painter, const QRectF& r, const QPalette& palette, bool edit )
 {
     painter.fillRect( r, palette.base() );
     draw( painter, r, edit );
 }
 
 
-void Container::draw( QPainter& painter, const QRect& r, bool edit )
+void Container::draw( QPainter& painter, const QRectF& r, bool edit )
 {
-    //ContextStyle& context = document()->getContextStyle( painter.device()->devType() == QInternal::Printer );
     ContextStyle& context = document()->getContextStyle( edit );
     rootElement()->draw( painter, context.pixelToLayoutUnit( r ), context );
 }
@@ -410,25 +402,25 @@ void Container::execute(KCommand* command)
 }
 
 
-QRect Container::boundingRect() const
+const QRectF& Container::boundingRect() const
 {
     const ContextStyle& context = document()->getContextStyle();
-    return QRect( context.layoutUnitToPixelX( rootElement()->getX() ),
-                  context.layoutUnitToPixelY( rootElement()->getY() ),
-                  context.layoutUnitToPixelX( rootElement()->getWidth() ),
-                  context.layoutUnitToPixelY( rootElement()->getHeight() ) );
+    return QRectF( context.layoutUnitToPixelX( rootElement()->getX() ),
+                   context.layoutUnitToPixelY( rootElement()->getY() ),
+                   context.layoutUnitToPixelX( rootElement()->getWidth() ),
+                   context.layoutUnitToPixelY( rootElement()->getHeight() ) );
 }
 
-QRect Container::coveredRect()
+const QRectF& Container::coveredRect() const
 {
     if ( impl->activeCursor != 0 ) {
         const ContextStyle& context = document()->getContextStyle();
         const LuPixelRect& cursorRect = impl->activeCursor->getCursorSize();
-        return QRect( context.layoutUnitToPixelX( rootElement()->getX() ),
+        return QRectF( context.layoutUnitToPixelX( rootElement()->getX() ),
                       context.layoutUnitToPixelY( rootElement()->getY() ),
                       context.layoutUnitToPixelX( rootElement()->getWidth() ),
                       context.layoutUnitToPixelY( rootElement()->getHeight() ) ) |
-            QRect( context.layoutUnitToPixelX( cursorRect.x() ),
+            QRectF( context.layoutUnitToPixelX( cursorRect.x() ),
                    context.layoutUnitToPixelY( cursorRect.y() ),
                    context.layoutUnitToPixelX( cursorRect.width() ),
                    context.layoutUnitToPixelY( cursorRect.height() ) );
@@ -507,25 +499,24 @@ void Container::save( QDomElement &root )
  */
 bool Container::load( const QDomElement &fe )
 {
-    if (!fe.isNull()) {
-        FormulaElement* root = createMainSequence();
-        if (root->buildFromDom(fe)) {
-            delete impl->rootElement;
-            impl->rootElement = root;
-            emit formulaLoaded(rootElement());
+    if( fe.isNull() ) {
+        kWarning( DEBUGID ) << "Empty element." << endl;
+        return false;
+    }
+    
+    FormulaElement* root = new FormulaElement( this );
+    if (root->buildFromDom(fe)) {
+        delete m_formulaElement;
+        m_formulaElement = root;
+        emit formulaLoaded(rootElement());
 
-            recalc();
-            return true;
-        }
-        else {
-            delete root;
-            kWarning( DEBUGID ) << "Error constructing element tree." << endl;
-        }
+        recalc();
+        return true;
     }
     else {
-        kWarning( DEBUGID ) << "Empty element." << endl;
+        delete root;
+        kWarning( DEBUGID ) << "Error constructing element tree." << endl;
     }
-    return false;
 }
 
 
@@ -583,11 +574,11 @@ void Container::print(KPrinter& printer)
 QImage Container::drawImage( int width, int height )
 {
     ContextStyle& context = document()->getContextStyle( false );
-    QRect rect(impl->rootElement->getX(), impl->rootElement->getY(),
-               impl->rootElement->getWidth(), impl->rootElement->getHeight());
+    QRectF rect( m_formulaElement->getX(), m_formulaElement->getY(),
+                m_formulaElement->getWidth(), m_formulaElement->getHeight());
 
-    int realWidth = context.layoutUnitToPixelX( impl->rootElement->getWidth() );
-    int realHeight = context.layoutUnitToPixelY( impl->rootElement->getHeight() );
+    int realWidth = context.layoutUnitToPixelX( m_formulaElement->getWidth() );
+    int realHeight = context.layoutUnitToPixelY( m_formulaElement->getHeight() );
 
     double f = qMax( static_cast<double>( width )/static_cast<double>( realWidth ),
                      static_cast<double>( height )/static_cast<double>( realHeight ) );
@@ -595,23 +586,16 @@ QImage Container::drawImage( int width, int height )
     int oldZoom = context.zoom();
     context.setZoomAndResolution( qRound( oldZoom*f ), KoGlobal::dpiX(), KoGlobal::dpiY() );
 
-    kDebug( DEBUGID ) << "Container::drawImage "
-                       << "(" << width << " " << height << ")"
-                       << "(" << context.layoutUnitToPixelX( impl->rootElement->getWidth() )
-                       << " " << context.layoutUnitToPixelY( impl->rootElement->getHeight() ) << ")"
-                       << endl;
-
-    QPixmap pm( context.layoutUnitToPixelX( impl->rootElement->getWidth() ),
-                context.layoutUnitToPixelY( impl->rootElement->getHeight() ) );
+    QPixmap pm( context.layoutUnitToPixelX( m_formulaElement->getWidth() ),
+                context.layoutUnitToPixelY( m_formulaElement->getHeight() ) );
     pm.fill();
     QPainter paint(&pm);
-    impl->rootElement->draw(paint, rect, context);
+    m_formulaElement->draw(paint, rect.toRect(), context);
     paint.end();
     context.setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
-    //return pm.convertToImage().smoothScale( width, height );
     return pm.toImage();
 }
-
+/*
 QString Container::texString()
 {
     return rootElement()->toLatex();
@@ -621,7 +605,7 @@ QString Container::formulaString()
 {
     return rootElement()->formulaString();
 }
-
+*/
 KFORMULA_NAMESPACE_END
 
 using namespace KFormula;

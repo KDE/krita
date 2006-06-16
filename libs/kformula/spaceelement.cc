@@ -25,12 +25,10 @@
 #include <kprinter.h>
 
 #include "contextstyle.h"
-#include "elementvisitor.h"
 #include "spaceelement.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
-
 
 SpaceElement::SpaceElement( SpaceWidth space, bool tab, BasicElement* parent )
     : BasicElement( parent ), spaceWidth( space ), m_tab( tab )
@@ -43,10 +41,16 @@ SpaceElement::SpaceElement( const SpaceElement& other )
 {
 }
 
-
+/*
 bool SpaceElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
+}
+*/
+
+const QList<BasicElement*>& SpaceElement::childElements()
+{
+    return QList<BasicElement*>();
 }
 
 

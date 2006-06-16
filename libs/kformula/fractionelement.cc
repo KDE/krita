@@ -54,12 +54,18 @@ FractionElement::FractionElement( const FractionElement& other )
     denominator->setParent( this );
 }
 
+const QList<BasicElement*>& FractionElement::childElements()
+{
+    return QList<BasicElement*>();
+}
 
+
+/*
 bool FractionElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
 }
-
+*/
 void FractionElement::entered( SequenceElement* child )
 {
     if ( child == numerator ) {
@@ -70,7 +76,7 @@ void FractionElement::entered( SequenceElement* child )
     }
 }
 
-
+/*
 BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
                                         const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
@@ -107,7 +113,7 @@ BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
         return this;
     }
     return 0;
-}
+}*/
 
 
 /**
@@ -444,7 +450,7 @@ bool FractionElement::readContentFromDom(QDomNode& node)
 
     return true;
 }
-
+/*
 QString FractionElement::toLatex()
 {
     if ( withLine ) {
@@ -459,7 +465,7 @@ QString FractionElement::formulaString()
 {
     return "(" + numerator->formulaString() + ")/(" + denominator->formulaString() + ")";
 }
-
+*/
 void FractionElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );

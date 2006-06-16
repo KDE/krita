@@ -35,9 +35,10 @@ KFORMULA_NAMESPACE_BEGIN
  * A element that represents a space.
  */
 class SpaceElement : public BasicElement {
+	
     SpaceElement operator=( const SpaceElement& ) { return *this; }
+    
 public:
-
     SpaceElement( SpaceWidth space = THIN, bool tab=false, BasicElement* parent = 0 );
     SpaceElement( const SpaceElement& );
 
@@ -45,7 +46,7 @@ public:
         return new SpaceElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * @returns the type of this element. Used for
@@ -58,6 +59,13 @@ public:
      * parsing a sequence.
      */
     virtual QChar getCharacter() const { return ' '; }
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+    
 
     // drawing
     //

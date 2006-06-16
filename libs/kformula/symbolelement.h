@@ -46,7 +46,13 @@ public:
         return new SymbolElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
 
     /**
      * Sets the cursor and returns the element the point is in.
@@ -54,8 +60,8 @@ public:
      * This is needed because only the innermost matching element
      * is allowed to set the cursor.
      */
-    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     // drawing
     //
@@ -220,9 +226,9 @@ public:
      * @returns the latex representation of the element and
      * of the element's children
      */
-    virtual QString toLatex();
+//    virtual QString toLatex();
 
-    virtual QString formulaString();
+//    virtual QString formulaString();
 
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 

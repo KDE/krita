@@ -33,56 +33,75 @@
 #include <QKeyEvent>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QHelpEvent>
+#include <QPointF>
+#include <QToolTip>
 
 #include <kdebug.h>
 #include <kiconloader.h>
 
-// ******** TemplateShape *********
+// ******** IconShape *********
 /// \internal
-class TemplateShape : public KoShape {
+class IconShape : public KoShape {
 public:
-    TemplateShape(KoShapeTemplate shapeTemplate) {
-        m_icon = KGlobal::iconLoader()->loadIcon(shapeTemplate.icon, K3Icon::NoGroup, 22);
+    IconShape(QString icon) {
+        m_icon = KGlobal::iconLoader()->loadIcon(icon, K3Icon::NoGroup, 22);
         resize(m_icon.size());
-        m_shapeTemplate = shapeTemplate;
     }
+
+    virtual void visit(KoCreateShapesTool *tool) = 0;
+    virtual QString toolTip() = 0;
 
     void paint(QPainter &painter, KoViewConverter &converter) {
         Q_UNUSED(converter);
         painter.drawPixmap(QRect( QPoint(0,0), m_icon.size()), m_icon);
     }
 
-    KoShapeTemplate const *shapeTemplate() {
-        return &m_shapeTemplate;
+private:
+    QPixmap m_icon;
+};
+
+
+// ******** TemplateShape *********
+/// \internal
+class TemplateShape : public IconShape {
+public:
+    TemplateShape(KoShapeTemplate shapeTemplate) : IconShape(shapeTemplate.icon) {
+        m_shapeTemplate = shapeTemplate;
+    }
+
+    void visit(KoCreateShapesTool *tool) {
+        tool->setShapeId(m_shapeTemplate.id);
+        tool->setShapeProperties(m_shapeTemplate.properties);
+    }
+
+    QString toolTip() {
+        return m_shapeTemplate.toolTip;
     }
 
 private:
-    QPixmap m_icon;
     KoShapeTemplate m_shapeTemplate;
 };
 
 
 // ******** GroupShape *********
 /// \internal
-class GroupShape : public KoShapeContainer {
+class GroupShape : public IconShape {
 public:
-    GroupShape(KoShapeFactory *shapeFactory) {
-        m_icon = KGlobal::iconLoader()->loadIcon(shapeFactory->icon(), K3Icon::NoGroup, 22);
-        resize(m_icon.size());
+    GroupShape(KoShapeFactory *shapeFactory) : IconShape(shapeFactory->icon()) {
         m_shapeFactory = shapeFactory;
     }
 
-    void paintComponent(QPainter &painter, KoViewConverter &converter) {
-        Q_UNUSED(converter);
-        painter.drawPixmap(QRect( QPoint(0,0), m_icon.size()), m_icon);
+    void visit(KoCreateShapesTool *tool) {
+        tool->setShapeId(m_shapeFactory->shapeId());
+        tool->setShapeProperties(0);
     }
 
-    const KoShapeFactory *shapeFactory() {
-        return m_shapeFactory;
+    QString toolTip() {
+        return m_shapeFactory->toolTip();
     }
 
 private:
-    QPixmap m_icon;
     KoShapeFactory *m_shapeFactory;
 };
 
@@ -103,7 +122,6 @@ public:
     }
     void mouseMoveEvent (KoPointerEvent *event) {
         KoInteractionTool::mouseMoveEvent(event);
-        //m_canvas->shapeManager()->getObjectAt
     }
 };
 
@@ -145,20 +163,8 @@ void KoShapeSelector::itemSelected() {
     QList<KoShape*> allSelected = m_shapeManager->selection()->selectedObjects().toList();
     if(allSelected.isEmpty())
         return;
-    KoShape *shape= allSelected.first();
-
-    KoCreateShapesTool *tool = KoToolManager::instance()->shapeCreatorTool(m_canvasController->canvas());
-
-    TemplateShape *templateShape = dynamic_cast<TemplateShape*> (shape);
-    if(templateShape) {
-        tool->setShapeId(templateShape->shapeTemplate()->id);
-        tool->setShapeProperties(templateShape->shapeTemplate()->properties);
-    }
-    else {
-        GroupShape *group = dynamic_cast<GroupShape*>(shape);
-        tool->setShapeId(group->shapeFactory()->shapeId());
-        tool->setShapeProperties(0);
-    }
+    IconShape *shape= static_cast<IconShape*> (allSelected.first());
+    shape->visit( KoToolManager::instance()->shapeCreatorTool(m_canvasController->canvas()) );
 }
 
 void KoShapeSelector::add(KoShape *shape) {
@@ -207,15 +213,30 @@ void KoShapeSelector::keyPressEvent( QKeyEvent *e ) {
     m_tool->keyPressEvent(e);
 }
 
-void KoShapeSelector::paintEvent(QPaintEvent * ev) {
+void KoShapeSelector::paintEvent(QPaintEvent * e) {
     QPainter painter( this );
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipRect(ev->rect());
+    painter.setClipRect(e->rect());
 
     m_shapeManager->paint( painter, *(m_canvas->viewConverter()), false );
     painter.end();
 }
 
+bool KoShapeSelector::event(QEvent *e) {
+    if (e->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
+
+        const QPointF pos(helpEvent->x(), helpEvent->y());
+        KoShape *shape = m_shapeManager->getObjectAt(pos);
+        if(shape) {
+            IconShape *is = static_cast<IconShape*> (shape);
+            QToolTip::showText(helpEvent->globalPos(), is->toolTip());
+        }
+        else
+            QToolTip::showText(helpEvent->globalPos(), "");
+    }
+    return QWidget::event(e);
+}
 
 // ************ DummyViewConverter **********
 QPointF KoShapeSelector::DummyViewConverter::normalToView (const QPointF &normalPoint) {

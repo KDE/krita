@@ -47,7 +47,8 @@ protected: // event handlers
     void mouseReleaseEvent(QMouseEvent *e);
     void keyReleaseEvent (QKeyEvent *e);
     void keyPressEvent( QKeyEvent *e );
-    void paintEvent(QPaintEvent * ev);
+    void paintEvent(QPaintEvent * e);
+    bool event(QEvent *e);
 
 private slots:
     void itemSelected();

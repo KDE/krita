@@ -75,7 +75,7 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *eve
             return new KoShapeMoveStrategy(parent, canvas, event->point);
     }
 
-    KoShape * object( shapeManager->getObjectAt( event->point ) );
+    KoShape * object( shapeManager->getShapeAt( event->point ) );
     if( !object && handle == KoFlake::NoHandle) {
         parent->repaintDecorations();
         select->deselectAll();

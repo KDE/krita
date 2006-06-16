@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOOBJECTMANAGER_H
-#define KOOBJECTMANAGER_H
+#ifndef KOSHAPEMANAGER_H
+#define KOSHAPEMANAGER_H
 
 #include <QList>
 #include <QObject>
@@ -36,8 +36,8 @@ class QPainter;
 class QPointF;
 
 /**
- * The object manager hold a list of all object which are in scope.
- * There is one object manager per view.
+ * The shape manager hold a list of all shape which are in scope.
+ * There is one shape manager per view.
  *
  * The selection in the different views can be different.
  */
@@ -51,21 +51,21 @@ public:
      */
     KoShapeManager(KoCanvasBase *canvas);
     /**
-     * Constructor that takes a list of objects, convenience version.
-     * @param objects the objects to start out with, see also setObjects()
+     * Constructor that takes a list of shapes, convenience version.
+     * @param shapes the shapes to start out with, see also setShapes()
      * @param canvas the canvas this shape manager is working on.
      */
-    KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &objects);
+    KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes);
     virtual ~KoShapeManager();
 
     /**
-     * Remove all previously owned objects and make the argument list the new objects
+     * Remove all previously owned shapes and make the argument list the new shapes
      * to be managed by this manager.
-     * @param objects the new objects to manage.
+     * @param shapes the new shapes to manage.
      */
-    void setObjects( const QList<KoShape *> &objects );
-    /// returns the list of maintained objects
-    const QList<KoShape *> & objects() const { return m_objects; }
+    void setShapes( const QList<KoShape *> &shapes );
+    /// returns the list of maintained shapes
+    const QList<KoShape *> & shapes() const { return m_shapes; }
 
     /**
      * Add a KoShape to be displayed and managed by this manager.
@@ -78,11 +78,11 @@ public:
      */
     void remove(KoShape *shape);
 
-    /// return the selection object for this shapeManager
+    /// return the selection shapes for this shapeManager
     KoSelection * selection() const { return m_selection; }
 
     /**
-     * Paint all objects and their selection handles etc.
+     * Paint all shapes and their selection handles etc.
      * @param painter the painter to paint to.
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      * @param converter to convert between internal and view coordinates.
@@ -90,20 +90,20 @@ public:
     virtual void paint( QPainter &painter, KoViewConverter &converter, bool forPrint );
 
     /**
-     * Returns the object located at a specific point in the document.
+     * Returns the shape located at a specific point in the document.
      * @param position the position in the normal coordinate system.
      */
-    KoShape * getObjectAt( const QPointF &position );
+    KoShape * getShapeAt( const QPointF &position );
 
 signals:
     /// emitted when the selection is changed
     void selectionChanged();
 
 private:
-    QList<KoShape *> m_objects;
+    QList<KoShape *> m_shapes;
     KoSelection * m_selection;
     KoRepaintManager *m_repaintManager;
 };
 
-#endif /* KOOBJECTMANAGER_H */
+#endif
 

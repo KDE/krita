@@ -112,7 +112,7 @@ class MoveTool : public KoInteractionTool {
 public:
     MoveTool(KoCanvasBase *canvas) : KoInteractionTool(canvas) {};
     void mousePressEvent( KoPointerEvent *event ) {
-        KoShape *clickedShape = m_canvas->shapeManager()->getObjectAt(event->point);
+        KoShape *clickedShape = m_canvas->shapeManager()->getShapeAt(event->point);
         repaintDecorations();
         m_canvas->shapeManager()->selection()->deselectAll();
         if(clickedShape) {
@@ -174,7 +174,7 @@ void KoShapeSelector::add(KoShape *shape) {
     do {
         int rowHeight=0;
         ok=true;
-        foreach(const KoShape *shape, m_shapeManager->objects()) {
+        foreach(const KoShape *shape, m_shapeManager->shapes()) {
             rowHeight = qMax(rowHeight, qRound(shape->size().height()));
             x = qMax(x, qRound(shape->position().x() + shape->size().width()) + 5); // 5=gap
             if(x + w > width()) {
@@ -227,7 +227,7 @@ bool KoShapeSelector::event(QEvent *e) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 
         const QPointF pos(helpEvent->x(), helpEvent->y());
-        KoShape *shape = m_shapeManager->getObjectAt(pos);
+        KoShape *shape = m_shapeManager->getShapeAt(pos);
         if(shape) {
             IconShape *is = static_cast<IconShape*> (shape);
             QToolTip::showText(helpEvent->globalPos(), is->toolTip());
@@ -268,6 +268,8 @@ KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)
 }
 
 void KoShapeSelector::Canvas::gridSize (double *horizontal, double *vertical) const {
+    Q_UNUSED(horizontal);
+    Q_UNUSED(vertical);
 }
 
 void KoShapeSelector::Canvas::updateCanvas (const QRectF &rc) {

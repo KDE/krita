@@ -31,17 +31,17 @@
 #include <QDebug>
 #include <QPainter>
 
-KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &objects )
+KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &shapes )
 : m_selection( new KoSelection() )
 {
     connect( m_selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
     m_repaintManager = new KoRepaintManager(canvas, m_selection);
-    setObjects(objects);
+    setShapes(shapes);
     m_selection->setRepaintManager(m_repaintManager);
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
-: m_objects()
+: m_shapes()
 , m_selection( new KoSelection() )
 {
     connect( m_selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
@@ -57,40 +57,40 @@ KoShapeManager::~KoShapeManager()
 }
 
 
-void KoShapeManager::setObjects( const QList<KoShape *> &objects )
+void KoShapeManager::setShapes( const QList<KoShape *> &shapes )
 {
-    m_objects = objects;
-    foreach(KoShape *shape, m_objects)
+    m_shapes = shapes;
+    foreach(KoShape *shape, m_shapes)
         shape->setRepaintManager(m_repaintManager);
 }
 
 void KoShapeManager::add(KoShape *shape) {
     shape->setRepaintManager(m_repaintManager);
-    m_objects.append(shape);
+    m_shapes.append(shape);
 }
 
 void KoShapeManager::remove(KoShape *shape) {
-    m_objects.removeAll(shape);
+    m_shapes.removeAll(shape);
 }
 
 void KoShapeManager::paint( QPainter &painter, KoViewConverter &converter, bool forPrint)
 {
     QPen pen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
     painter.setPen(pen);
-    QList<KoShape*> sorterdObjects(m_objects);
-    qSort(sorterdObjects.begin(), sorterdObjects.end(), KoShape::compareShapeZIndex);
+    QList<KoShape*> sorterdShapes(m_shapes);
+    qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
     const QRegion clipRegion = painter.clipRegion();
-    foreach ( KoShape * shape, sorterdObjects ) {
+    foreach ( KoShape * shape, sorterdShapes ) {
         if(! shape->isVisible())
             continue;
         if(shape->parent() != 0 && shape->parent()->childClipped(shape))
             continue;
         if(painter.hasClipping()) {
-            QRectF objectBox = shape->boundingRect();
-            objectBox = converter.normalToView(objectBox);
-            QRegion objectRegion = QRegion(objectBox.toRect());
+            QRectF shapeBox = shape->boundingRect();
+            shapeBox = converter.normalToView(shapeBox);
+            QRegion shapeRegion = QRegion(shapeBox.toRect());
 
-            if(clipRegion.intersect(objectRegion).isEmpty())
+            if(clipRegion.intersect(shapeRegion).isEmpty())
                 continue;
         }
         painter.save();
@@ -117,15 +117,15 @@ void KoShapeManager::paint( QPainter &painter, KoViewConverter &converter, bool 
         m_selection->paint( painter, converter );
 }
 
-KoShape * KoShapeManager::getObjectAt( const QPointF &position )
+KoShape * KoShapeManager::getShapeAt( const QPointF &position )
 {
-    QList<KoShape*> sorterdObjects(m_objects);
-    qSort(sorterdObjects.begin(), sorterdObjects.end(), KoShape::compareShapeZIndex);
-    for(int count = sorterdObjects.count()-1; count >= 0; count--) {
-        if ( sorterdObjects.at(count)->hitTest( position ) )
+    QList<KoShape*> sorterdShapes(m_shapes);
+    qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
+    for(int count = sorterdShapes.count()-1; count >= 0; count--) {
+        if ( sorterdShapes.at(count)->hitTest( position ) )
         {
             //qDebug() << "Hittest succeeded";
-            return sorterdObjects.at(count);
+            return sorterdShapes.at(count);
         }
     }
     if ( m_selection->hitTest( position ) )

@@ -2,6 +2,7 @@
  * KoShapeRegistry.h -- Part of KOffice
  *
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
+ * Copyright (c) 2006 Thomas Zander <zander@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,21 +18,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QString>
 
-#include <kaction.h>
 #include <kdebug.h>
-#include <klocale.h>
-#include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <kparts/componentfactory.h>
-
-#include <KoGenericRegistry.h>
 
 #include <KoShapeRegistry.h>
 #include <KoRectangleShapeFactory.h>
 #include <KoPathShapeFactory.h>
+
+#include <QString>
 
 KoShapeRegistry *KoShapeRegistry::m_singleton = 0;
 
@@ -40,40 +36,25 @@ KoShapeRegistry::KoShapeRegistry()
 }
 
 void KoShapeRegistry::init() {
-    KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/Shape"),
-            QString::fromLatin1("(Type == 'Service') and "
-                "([X-Flake-Version] == 1)"));
+    const KService::List offers = KServiceTypeTrader::self()->query(
+        QString::fromLatin1("KOffice/Shape"),
+        QString::fromLatin1("(Type == 'Service') and ([X-Flake-Version] == 1)"));
     kDebug(30008) << "KoShapeRegistry searching for plugins, " << offers.count() << " found\n";
 
     foreach(KService::Ptr service, offers) {
         int errCode = 0;
         KoShapeFactory* plugin =
             KService::createInstance<KoShapeFactory>(
-                    service, this, QStringList(), &errCode );
+                service, this, QStringList(), &errCode );
         if ( plugin ) {
-            kDebug(30008) <<"found plugin '"<< service->property("Name").toString() << "'\n";
+            kDebug(30008) <<"found plugin '"<< service->name() << "'\n";
             add(plugin);
         }
-        else {
-            QString err;
-            switch (errCode) {
-                case KLibLoader::ErrNoServiceFound:
-                    err = "No Service Found"; break;
-                case KLibLoader::ErrServiceProvidesNoLibrary:
-                    err = "Service provides no library"; break;
-                case KLibLoader::ErrNoLibrary:
-                    err = KLibLoader::self()->lastErrorMessage(); break;
-                case KLibLoader::ErrNoFactory:
-                    err = "No factory found"; break;
-                case KLibLoader::ErrNoComponent:
-                    err = "No Component"; break;
-                default:
-                    err = "Unknown error";
-            }
-            kWarning(30008) <<"loading plugin '" << service->property("Name").toString() <<
-                "' failed, "<< err << "("<< errCode << ")\n";
-        }
+        else
+            kWarning(30008) <<"loading plugin '" << service->name() <<
+                "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
     }
+
     // Also add our hard-coded dumb test shapes
     add( new KoRectangleShapeFactory(this, QStringList()) );
     add( new KoPathShapeFactory(this, QStringList()) );

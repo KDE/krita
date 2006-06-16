@@ -93,7 +93,7 @@ public:
      * Returns the shape located at a specific point in the document.
      * @param position the position in the normal coordinate system.
      */
-    KoShape * getShapeAt( const QPointF &position );
+    KoShape * shapeAt( const QPointF &position );
 
 signals:
     /// emitted when the selection is changed

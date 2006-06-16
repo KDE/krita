@@ -112,7 +112,7 @@ class MoveTool : public KoInteractionTool {
 public:
     MoveTool(KoCanvasBase *canvas) : KoInteractionTool(canvas) {};
     void mousePressEvent( KoPointerEvent *event ) {
-        KoShape *clickedShape = m_canvas->shapeManager()->getShapeAt(event->point);
+        KoShape *clickedShape = m_canvas->shapeManager()->shapeAt(event->point);
         repaintDecorations();
         m_canvas->shapeManager()->selection()->deselectAll();
         if(clickedShape) {
@@ -227,7 +227,7 @@ bool KoShapeSelector::event(QEvent *e) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 
         const QPointF pos(helpEvent->x(), helpEvent->y());
-        KoShape *shape = m_shapeManager->getShapeAt(pos);
+        KoShape *shape = m_shapeManager->shapeAt(pos);
         if(shape) {
             IconShape *is = static_cast<IconShape*> (shape);
             QToolTip::showText(helpEvent->globalPos(), is->toolTip());

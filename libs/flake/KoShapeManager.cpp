@@ -117,7 +117,7 @@ void KoShapeManager::paint( QPainter &painter, KoViewConverter &converter, bool 
         m_selection->paint( painter, converter );
 }
 
-KoShape * KoShapeManager::getShapeAt( const QPointF &position )
+KoShape * KoShapeManager::shapeAt( const QPointF &position )
 {
     QList<KoShape*> sorterdShapes(m_shapes);
     qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);

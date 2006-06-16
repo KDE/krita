@@ -21,7 +21,7 @@
 #define _KO_GENERIC_REGISTRY_H_
 
 #include "KoID.h"
-
+#include <QList>
 #include <map>
 #include <kdebug.h>
 

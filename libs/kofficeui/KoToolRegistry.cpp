@@ -25,37 +25,23 @@
 #include <kparts/componentfactory.h>
 
 KoToolRegistry::KoToolRegistry() {
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/Tool"),
-            QString::fromLatin1("(Type == 'Service') and ([X-Flake-Version] == 1)"));
+    const KService::List offers = KServiceTypeTrader::self()->query(
+        QString::fromLatin1("KOffice/Tool"),
+        QString::fromLatin1("(Type == 'Service') and ([X-Flake-Version] == 1)"));
     kDebug(30008) << "KoToolRegistry searching for plugins, " << offers.count() << " found\n";
 
     foreach(KService::Ptr service, offers) {
         int errCode = 0;
         KoToolFactory* plugin =
-           KService::createInstance<KoToolFactory>(
-                    service, this, QStringList(), &errCode );
+            KService::createInstance<KoToolFactory>(
+                service, this, QStringList(), &errCode );
         if ( plugin ) {
-            kDebug(30008) <<"found plugin '"<< service->property("Name").toString() << "'\n";
+            kDebug(30008) <<"found plugin '"<< service->name() << "'\n";
             add(plugin);
         }
         else {
-            QString err;
-            switch (errCode) {
-                case KLibLoader::ErrNoServiceFound:
-                    err = "No Service Found"; break;
-                case KLibLoader::ErrServiceProvidesNoLibrary:
-                    err = "Service provides no library"; break;
-                case KLibLoader::ErrNoLibrary:
-                    err = KLibLoader::self()->lastErrorMessage(); break;
-                case KLibLoader::ErrNoFactory:
-                    err = "No factory found"; break;
-                case KLibLoader::ErrNoComponent:
-                    err = "No Component"; break;
-                default:
-                    err = "Unknown error";
-            }
-            kWarning(30008) <<"loading plugin '" << service->property("Name").toString() <<
-                "' failed, "<< err << "("<< errCode << ")\n";
+            kWarning(30008) <<"loading plugin '" << service->name() <<
+                "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
         }
     }
 }
@@ -68,8 +54,8 @@ KoToolRegistry::~KoToolRegistry()
 KoToolRegistry *KoToolRegistry::s_instance = 0;
 KoToolRegistry* KoToolRegistry::instance()
 {
-     if(KoToolRegistry::s_instance == 0)
-         KoToolRegistry::s_instance = new KoToolRegistry();
+    if(KoToolRegistry::s_instance == 0)
+        KoToolRegistry::s_instance = new KoToolRegistry();
     return KoToolRegistry::s_instance;
 }
 

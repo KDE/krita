@@ -21,7 +21,6 @@
 #define _KO_ID_H_
 
 #include <QString>
-#include <QList>
 
 
 /**

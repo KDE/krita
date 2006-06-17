@@ -595,12 +595,12 @@ QImage Container::drawImage( int width, int height )
     context.setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     return pm.toImage();
 }
-/*
+
 QString Container::texString()
 {
-    return rootElement()->toLatex();
+    return QString();
 }
-
+/*
 QString Container::formulaString()
 {
     return rootElement()->formulaString();

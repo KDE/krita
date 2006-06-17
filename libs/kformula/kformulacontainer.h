@@ -200,7 +200,7 @@ public:
     /**
      * @returns Tex string for the formula
      */
-//    QString texString();
+    QString texString();
 
 //    QString formulaString();
 

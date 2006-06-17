@@ -349,7 +349,7 @@ void KisTileManager::toSwap(TileInfo* info) {
         }
 
         memcpy(data, info->tile->m_data, info->size);
-        munmap(tile->m_data, info->size);
+        munmap(data, info->size);
 
         m_poolMutex->lock();
         if (isPoolTile(tile->m_data, tile->m_pixelSize))

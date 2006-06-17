@@ -136,7 +136,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
             }
             initiales = initiales.upper();
             // set/get general
-            addFunction("set" + initiales, &Iterator::setPixel, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") );
+            addFunction("set" + initiales, &Iterator::setPixel);
             addFunction("get" + initiales, &Iterator::getPixel);
             kdDebug(41011) << ( "get" + initiales ) << endl;
             // Various colorSpace

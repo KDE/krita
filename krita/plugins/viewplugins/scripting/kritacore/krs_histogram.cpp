@@ -37,9 +37,9 @@ Histogram::Histogram(KisPaintLayerSP layer,
     addFunction("getMean", &Histogram::getMean);
     addFunction("getCount", &Histogram::getCount);
     addFunction("getTotal", &Histogram::getTotal);
-    addFunction("setChannel", &Histogram::setChannel, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("setChannel", &Histogram::setChannel);
     addFunction("getChannel", &Histogram::getChannel);
-    addFunction("getValue", &Histogram::getValue, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("getValue", &Histogram::getValue);
     addFunction("getNumberOfBins", &Histogram::getNumberOfBins);
 }
 

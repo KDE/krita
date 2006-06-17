@@ -28,8 +28,8 @@ namespace KritaCore {
     FilterConfiguration::FilterConfiguration(KisFilterConfiguration* fConfig)
     : Kross::Api::Class<FilterConfiguration>("KritaFilterConfiguration"), m_fConfig(fConfig)
 {
-    addFunction("setProperty", &FilterConfiguration::setProperty, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("getProperty", &FilterConfiguration::getProperty, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("setProperty", &FilterConfiguration::setProperty);
+    addFunction("getProperty", &FilterConfiguration::getProperty);
     addFunction("fromXML", &FilterConfiguration::fromXML);
 }
 

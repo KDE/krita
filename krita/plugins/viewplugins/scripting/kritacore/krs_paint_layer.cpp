@@ -40,19 +40,16 @@ namespace KritaCore {
 PaintLayer::PaintLayer(KisPaintLayerSP layer, KisDoc* doc)
     : Kross::Api::Class<PaintLayer>("KritaLayer"), m_layer(layer), m_doc(doc), m_cmd(0)
 {
-    addFunction("createRectIterator", &PaintLayer::createRectIterator,
-                Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("createHLineIterator", &PaintLayer::createHLineIterator,
-                Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  <<  Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("createVLineIterator", &PaintLayer::createVLineIterator,
-                Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt")  <<  Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("createRectIterator", &PaintLayer::createRectIterator);
+    addFunction("createHLineIterator", &PaintLayer::createHLineIterator);
+    addFunction("createVLineIterator", &PaintLayer::createVLineIterator);
     addFunction("getWidth", &PaintLayer::getWidth);
     addFunction("getHeight", &PaintLayer::getHeight);
-    addFunction("createHistogram", &PaintLayer::createHistogram, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("createHistogram", &PaintLayer::createHistogram);
     addFunction("createPainter", &PaintLayer::createPainter);
-    addFunction("beginPainting", &PaintLayer::beginPainting, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String" ) );
+    addFunction("beginPainting", &PaintLayer::beginPainting);
     addFunction("endPainting", &PaintLayer::endPainting);
-    addFunction("convertToColorspace", &PaintLayer::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("convertToColorspace", &PaintLayer::convertToColorspace);
     addFunction("fastWaveletTransformation", &PaintLayer::fastWaveletTransformation);
     addFunction("fastWaveletUntransformation", &PaintLayer::fastWaveletUntransformation);
     addFunction("colorSpaceId", &PaintLayer::colorSpaceId);

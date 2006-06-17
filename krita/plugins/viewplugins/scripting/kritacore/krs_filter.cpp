@@ -30,7 +30,7 @@ namespace KritaCore {
 Filter::Filter(KisFilter* filter)
     : Kross::Api::Class<Filter>("KritaFilter"), m_filter(filter), m_config( new FilterConfiguration(filter->configuration()) )
 {
-    addFunction("process", &Filter::process, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::PaintLayer") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("process", &Filter::process);
     addFunction("getFilterConfiguration", &Filter::getFilterConfiguration);
 
 }

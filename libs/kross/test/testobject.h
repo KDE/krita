@@ -34,7 +34,7 @@ class TestObject : public QObject
     public:
         TestObject();
         TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptcontainer);
-        ~TestObject();
+        virtual ~TestObject();
 
         uint func1(uint);
         void func2(QString, int);
@@ -52,11 +52,9 @@ class TestObject : public QObject
         void stderrSignal(const QString&);
     public slots:
         void testSlot();
-        void testSlot2();
+        void testSignalSlot();
         void stdoutSlot(const QString&);
         void stderrSlot(const QString&);
-    private slots:
-        void testSignalSlot();
 };
 
 #endif

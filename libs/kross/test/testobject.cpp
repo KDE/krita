@@ -22,12 +22,12 @@
 #include <iostream> // for std::out
 
 TestObject::TestObject()
-    : QObject(0, "TestObject")
+    : QObject()
 {
 }
 
 TestObject::TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptcontainer)
-    : QObject(parent, "TestObject")
+    : QObject(parent)
 {
     connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
     connect(this, SIGNAL(stdoutSignal(const QString&)), this, SLOT(stdoutSlot(const QString&)));
@@ -76,11 +76,6 @@ void TestObject::testSlot()
     emit testSignalString("This is the emitted TestObject::testSignalString(const QString&)");
 }
 
-void TestObject::testSlot2()
-{
-    Kross::krossdebug("TestObject::testSlot2 called");
-}
-
 void TestObject::testSignalSlot()
 {
     Kross::krossdebug("TestObject::testSignalSlot called");
@@ -98,4 +93,4 @@ void TestObject::stderrSlot(const QString& s)
     //std::cout << "<stderr> " << s.toLatin1().data() << std::endl;
 }
 
-//#include "testobject.moc"
+#include "testobject.moc"

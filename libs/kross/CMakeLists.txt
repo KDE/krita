@@ -7,6 +7,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 add_subdirectory( api )
 add_subdirectory( main )
 add_subdirectory( runner )
+##add_subdirectory( test )
 
 MESSAGE(STATUS "s :PYTHON_INCLUDE_PATH :<${PYTHON_INCLUDE_PATH}")
 if(PYTHON_INCLUDE_PATH)

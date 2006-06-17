@@ -78,11 +78,12 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
     Kross::Api::Object::Ptr result;
     try { // We need a double try/catch because, the cleaning is only done at the end of the catch, so if we had only one try/catch, kross would crash after the call to rb_exc_raise
         try { // We can't let a C++ exceptions propagate in the C mechanism
-            if(object->hasChild(funcname)) {
+            Kross::Api::Callable* callable = dynamic_cast<Kross::Api::Callable*>(object.data());
+            if(callable && callable->hasChild(funcname)) {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
                 krossdebug( QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) );
 #endif
-                result = object->getChild(funcname)->call(QString::null, Api::List::Ptr(new Api::List(argsList)));
+                result = callable->getChild(funcname)->call(QString::null, new Api::List(argsList));
             }
             else {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG

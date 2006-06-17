@@ -37,17 +37,6 @@ namespace Kross { namespace Api {
      */
     class KROSS_EXPORT Exception : public Object
     {
-        private:
-
-            /// The error message.
-            QString m_error;
-
-            /// The trace message.
-            QString m_trace;
-
-            /// The line number where the exception got thrown
-            long m_lineno;
-
         public:
 
             /**
@@ -61,11 +50,8 @@ namespace Kross { namespace Api {
              * \param error The error message.
              * \param lineno The liner number in the scripting
              *        code where this exception got thrown.
-             * \param parent The parent \a Object or NULL if
-             *        this exception object doesn't has a
-             *        parent.
              */
-            Exception(const QString& error, long lineno = -1, Object* parent = 0);
+            Exception(const QString& error, long lineno = -1);
 
             /**
              * Destructor.
@@ -100,6 +86,14 @@ namespace Kross { namespace Api {
              * was no line number defined.
              */
             long getLineNo() const;
+
+        private:
+            /// The error message.
+            QString m_error;
+            /// The trace message.
+            QString m_trace;
+            /// The line number where the exception got thrown
+            long m_lineno;
     };
 
 }}

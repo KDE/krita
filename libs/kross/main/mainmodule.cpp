@@ -68,54 +68,13 @@ void MainModule::setException(Exception* exception)
     d->exception = Exception::Ptr(exception);
 }
 
-bool MainModule::hasChild(const QString& name) const
-{
-    return Object::hasChild(name);
-}
-
-///\todo implement new QMetaObject-stuff
-/*
-EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, Q3CString signal)
-{
-    EventSignal* event = new EventSignal(name, this, sender, signal);
-    if(! addChild( Object::Ptr(event) )) {
-        krosswarning( QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) );
-        return EventSignal::Ptr();
-    }
-    return EventSignal::Ptr(event);
-}
-
-EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, Q3CString slot)
-{
-    EventSlot* event = new EventSlot(name, this, receiver, slot);
-    if(! addChild( Object::Ptr(event) )) {
-        krosswarning( QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) );
-        delete event;
-        return EventSlot::Ptr();
-    }
-    return EventSlot::Ptr(event);
-}
-*/
-
 QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
-    QtObject* qtobject = new QtObject(this, object, name);
+    QtObject* qtobject = new QtObject(object, name);
     if(! addChild(qtobject)) {
         krosswarning( QString("Failed to add QObject name='%1'").arg(object->objectName()) );
         delete qtobject;
-        return QtObject::Ptr();
+        return QtObject::Ptr(0);
     }
     return QtObject::Ptr(qtobject);
 }
-
-EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
-{
-    EventAction* event = new EventAction(name, this, action);
-    if(! addChild(event)) {
-        krosswarning( QString("Failed to add KAction name='%1'").arg(action->objectName()) );
-        delete event;
-        return EventAction::Ptr();
-    }
-    return EventAction::Ptr(event);
-}
-

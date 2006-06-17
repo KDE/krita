@@ -94,13 +94,16 @@ Py::Object PythonExtension::getattr(const char* n)
 
         if(n == "__members__") {
             Py::List members;
-            QMap<QString, Kross::Api::Object::Ptr> children = m_object->getChildren();
-            QMap<QString, Kross::Api::Object::Ptr>::Iterator it( children.begin() );
-            for(; it != children.end(); ++it) {
+            Kross::Api::Callable* callable = dynamic_cast<Kross::Api::Callable*>(m_object.data());
+            if(callable) {
+                QMap<QString, Kross::Api::Object::Ptr> children = callable->getChildren();
+                QMap<QString, Kross::Api::Object::Ptr>::Iterator it( children.begin() );
+                for(; it != children.end(); ++it) {
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-                krossdebug( QString("Kross::Python::PythonExtension::getattr n='%1' child='%2'").arg(n).arg(it.key()) );
+                    krossdebug( QString("Kross::Python::PythonExtension::getattr n='%1' child='%2'").arg(n).arg(it.key()) );
 #endif
-                members.append(Py::String( it.key().toLatin1().data() ));
+                    members.append(Py::String( it.key().toLatin1().data() ));
+                }
             }
             return members;
         }
@@ -419,12 +422,13 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
         krossdebug( QString("Kross::Python::PythonExtension::proxyhandler methodname='%1' arguments='%2'").arg(methodname).arg(arguments->toString()) );
 #endif
 
-        if(self->m_object->hasChild(methodname)) {
+        Kross::Api::Callable* callable = dynamic_cast<Kross::Api::Callable*>(self->m_object.data());
+        if(callable && callable->hasChild(methodname)) {
 #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
             krossdebug( QString("Kross::Python::PythonExtension::proxyhandler methodname='%1' is a child object of '%2'.").arg(methodname).arg(self->m_object->getName()) );
 #endif
-            Kross::Api::Object::Ptr res = self->m_object->getChild(methodname)->call(QString::null, arguments);
-            Py::Object result = toPyObject(res.data());
+            Kross::Api::Object::Ptr r = callable->getChild(methodname)->call(QString::null, arguments);
+            Py::Object result = toPyObject( r.data() );
             result.increment_reference_count();
             return result.ptr();
         }
@@ -444,7 +448,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
     catch(Kross::Api::Exception::Ptr e) {
         const QString err = e->toString();
         krosswarning( QString("Kross::Api::Exception in Kross::Python::PythonExtension::proxyhandler %1").arg(err) );
-        // Don't throw here cause it will end in a crash depp in python. The
+        // Don't throw here cause it will end in a crash deep in python. The
         // error is already handled anyway.
         //throw Py::Exception( (char*) e->toString().toLatin1().data() );
     }

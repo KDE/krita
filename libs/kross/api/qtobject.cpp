@@ -25,8 +25,8 @@
 #include "proxy.h"
 
 #include "../main/manager.h"
-#include "eventslot.h"
-#include "eventsignal.h"
+//#include "eventslot.h"
+//#include "eventsignal.h"
 
 #include <QObject>
 //#include <qglobal.h>
@@ -35,8 +35,8 @@
 
 using namespace Kross::Api;
 
-QtObject::QtObject(Object* parent, QObject* object, const QString& name)
-    : Class<QtObject>(name, parent)
+QtObject::QtObject(QObject* object, const QString& name)
+    : Class<QtObject>(name)
     , m_object(object)
 {
     this->addProxyFunction<Kross::Api::Variant>("className", m_object, &QObject::className);

@@ -1,7 +1,7 @@
 /***************************************************************************
  * object.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -69,10 +69,8 @@ namespace Kross { namespace Api {
              * \param name The name this object has. Return
              *        it via \a getName() and set a new
              *        name via \a setName().
-             * \param parent The parent \a Object or NULL if
-             *        this object doesn't has an parent.
              */
-            explicit Object(const QString& name, Object* parent = 0);
+            explicit Object(const QString& name);
 
             /**
              * Destructor.
@@ -101,64 +99,6 @@ namespace Kross { namespace Api {
              * debugging and testing purposes.
              */
             virtual const QString toString();
-
-            /**
-             * Return the parent object or NULL if this object
-             * doesn't has a parent.
-             *
-             * \return The parent-Object or NULL if this Object
-             *         doesn't has a parent.
-             */
-            Object::Ptr getParent() const;
-
-            /**
-             * Returns if the defined child is avaible.
-             *
-             * \return true if child exists else false.
-             */
-            bool hasChild(const QString& name) const;
-
-            /**
-             * Return the defined child or NULL if there is
-             * no such object with that name avaible.
-             *
-             * \param name The name of the Object to return.
-             * \return The Object matching to the defined
-             *         name or NULL if there is no such Object.
-             */
-            Object::Ptr getChild(const QString& name) const;
-
-            /**
-             * Return all children.
-             *
-             * \return A \a ObjectMap of children this Object has.
-             */
-            QMap<QString, Object::Ptr> getChildren() const;
-
-            /**
-             * Add a new child. Replaces a possible already existing
-             * child with such a name.
-             *
-             * \param name the name of the child
-             * \param object The Object to add.
-             * \return true if the Object was added successfully
-             *         else false.
-             */
-            bool addChild(Object* object, const QString& name = QString::null);
-
-            /**
-             * Remove an existing child.
-             *
-             * \param name The name of the Object to remove.
-             *        If there doesn't exists an Object with
-             *        such name just nothing will be done.
-             */
-            void removeChild(const QString& name);
-
-            /**
-             * Remove all children.
-             */
-            void removeAllChildren();
 
             /**
              * Pass a call to the object and evaluated it recursive
@@ -218,10 +158,6 @@ namespace Kross { namespace Api {
         private:
             /// Name of this object.
             QString m_name;
-            /// The parent object.
-            Object::Ptr m_parent;
-            /// A list of childobjects.
-            QMap<QString, Object::Ptr> m_children;
     };
 
 }}

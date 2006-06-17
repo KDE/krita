@@ -24,10 +24,7 @@
 #include "../api/variant.h"
 #include "../api/module.h"
 #include "../api/event.h"
-#include "../api/eventsignal.h"
-#include "../api/eventslot.h"
 #include "../api/qtobject.h"
-#include "../api/eventaction.h"
 
 #include <QString>
 #include <QVariant>
@@ -96,43 +93,6 @@ namespace Kross { namespace Api {
             void setException(Exception* exception);
 
             /**
-             * Returns if the defined child is avaible.
-             *
-             * \return true if child exists else false.
-             */
-            bool hasChild(const QString& name) const;
-
-            /**
-             * Add a Qt signal to the \a Module by creating
-             * an \a EventSignal for it.
-             *
-             * \param name the name the \a EventSignal is
-             *       reachable as
-             * \param sender the QObject instance which
-             *       is the sender of the \p signal
-             * \param signal the Qt signal macro the \p sender
-             *       emits to call the \a EventSignal
-             * \return the newly added \a EventSignal instance
-             *       which is now a child of this \a MainModule
-             */
-//            EventSignal::Ptr addSignal(const QString& name, QObject* sender, Q3CString signal);
-
-            /**
-             * Add a Qt slot to the \a Module by creating
-             * an \a EventSlot for it.
-             *
-             * \param name the name the \a EventSlot is
-             *       reachable as
-             * \param receiver the QObject instance which
-             *       is the receiver of the \p signal
-             * \param slot the Qt slot macro of the \p receiver
-             *       to invoke if the \a EventSlot got called.
-             * \return the newly added \a EventSlot instance
-             *       which is now a child of this \a MainModule
-             */
-//            EventSlot::Ptr addSlot(const QString& name, QObject* receiver, Q3CString slot);
-
-            /**
              * Add a \a QObject to the eventcollection. All
              * signals and slots the QObject has will be
              * added to a new \a EventCollection instance
@@ -147,26 +107,6 @@ namespace Kross { namespace Api {
              *       which is now a child of this \a MainModule
              */
             QtObject::Ptr addQObject(QObject* object, const QString& name = QString::null);
-
-            /**
-             * Add a \a KAction to the eventcollection. The
-             * KAction will be wrapped by a \a EventAction
-             * and will be added to this collection.
-             *
-             * \param name name to identify the \a action by
-             * \param action the KAction instance that should
-             *       be added to this \a MainModule
-             * \return the newly added \a EventAction instance
-             *       which is now a child of this \a MainModule
-             *
-             * \todo check \a name dox.
-             */
-            EventAction::Ptr addKAction(KAction* action, const QString& name = QString::null);
-
-            //typedef QValueList<Callable::Ptr> EventList;
-            //EventList getEvents();
-            //const QString& serializeToXML();
-            //void unserializeFromXML(const QString& xml);
 
         private:
             /// Private d-pointer class.

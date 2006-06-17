@@ -55,11 +55,9 @@ namespace Kross { namespace Api {
              * Constructor.
              *
              * \param name The name this class has.
-             * \param parent The parent this class is child of
-             *        or NULL if this class has no parent.
              */
-            Class(const QString& name, Object* parent = 0)
-                : Event<T>(name, parent)
+            Class(const QString& name)
+                : Event<T>(name)
             {
             }
 

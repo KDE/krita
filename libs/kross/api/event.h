@@ -64,11 +64,9 @@ namespace Kross { namespace Api {
              * Constructor.
              *
              * \param name The name this \a Event has.
-             * \param parent The \a Object that this \a Event is
-             *        child of.
              */
-            Event(const QString& name, Object* parent)
-                : Callable(name, parent, ArgumentList())
+            Event(const QString& name)
+                : Callable(name)
             {
             }
 

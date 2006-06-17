@@ -51,12 +51,8 @@ namespace Kross { namespace Api {
              *
              * \param name The name this callable object has and
              *       it is reachable as via \a Object::getChild() .
-             * \param parent The parent \a Object this instance is
-             *       child of.
-             * \param arglist A list of arguments the callable
-             *       object expects if it got called.
              */
-            Callable(const QString& name, Object* parent, const ArgumentList& arglist);
+            Callable(const QString& name);
 
             /**
              * Destructor.
@@ -73,60 +69,62 @@ namespace Kross { namespace Api {
             virtual const QString getClassName() const;
 
             /**
+             * Returns if the defined child is avaible.
+             *
+             * \return true if child exists else false.
+             */
+            bool hasChild(const QString& name) const;
+
+            /**
+             * Return the defined child or NULL if there is
+             * no such object with that name avaible.
+             *
+             * \param name The name of the Object to return.
+             * \return The Object matching to the defined
+             *         name or NULL if there is no such Object.
+             */
+            Object::Ptr getChild(const QString& name) const;
+
+            /**
+             * Return all children.
+             *
+             * \return A \a ObjectMap of children this Object has.
+             */
+            QMap<QString, Object::Ptr> getChildren() const;
+
+            /**
+             * Add a new child. Replaces a possible already existing
+             * child with such a name.
+             *
+             * \param name the name of the child
+             * \param object The Object to add.
+             * \return true if the Object was added successfully
+             *         else false.
+             */
+            bool addChild(Object* object, const QString& name = QString::null);
+
+            /**
+             * Remove an existing child.
+             *
+             * \param name The name of the Object to remove.
+             *        If there doesn't exists an Object with
+             *        such name just nothing will be done.
+             */
+            void removeChild(const QString& name);
+
+            /**
+             * Remove all children.
+             */
+            void removeAllChildren();
+
+            /**
              * Call the object.
              */
             virtual Object::Ptr call(const QString& name, List::Ptr arguments);
 
-            /**
-             * Wrapper for the \a Kross::Api::Object::hasChild() method
-             * to check if this object has children.
-             */
-            Object::Ptr hasChild(List::Ptr args);
-
-            /**
-             * Wrapper for the \a Kross::Api::Object::getChild() method
-             * to return a children this object has.
-             */
-            Object::Ptr getChild(List::Ptr args);
-
-            //Object::Ptr setChild(List::Ptr args);
-
-            /**
-             * Wrapper for the \a Kross::Api::Object::getChildren() method
-             * to return a list of childrennames this object has.
-             *
-             * \return a \a List filled with a list of names of the
-             *        children this object has.
-             */
-            Object::Ptr getChildrenList(List::Ptr args);
-
-            /**
-             * Wrapper for the \a Kross::Api::Object::getChild() method
-             * to return a dictonary of children this object has.
-             *
-             * \return a \a Dict filled with the children.
-             */
-            Object::Ptr getChildrenDict(List::Ptr args);
-
-            /**
-             * Wrapper for the \a Kross::Api::Object::call() method
-             * to call a children.
-             */
-            Object::Ptr callChild(List::Ptr args);
-
-        protected:
-
-            /**
-             * List of arguments this callable object supports.
-             */
-            ArgumentList m_arglist;
-
-            /**
-             * Check the passed arguments against the \a m_arglist and throws 
-             * an exception if failed.
-             */
-            //void checkArguments(KSharedPtr<List> arguments);
-
+        private:
+            /// A list of childobjects.
+            QMap<QString, Object::Ptr> m_children;
     };
 
 }}

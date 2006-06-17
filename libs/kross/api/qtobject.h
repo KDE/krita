@@ -80,14 +80,12 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
-             * \param parent The \a Object instance this
-             *        class is children of.
              * \param object The \a QObject instance this
              *        class wraps.
              * \param name The name this \a QtObject instance
              *        will be published under.
              */
-            QtObject(Object* parent, QObject* object, const QString& name);
+            QtObject(QObject* object, const QString& name);
 
             /**
              * Destructor.

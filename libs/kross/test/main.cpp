@@ -68,8 +68,6 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         // Return the scriptingmanager instance. The manager is used as main
         // entry point to work with Kross.
         Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
-        if(! manager)
-            Kross::Api::Exception::Ptr( new Kross::Api::Exception("Failed to get Kross::Api::Manager instance!") );
 
         // Add modules that should be accessible by scripting. Those
         // modules are wrappers around functionality you want to be

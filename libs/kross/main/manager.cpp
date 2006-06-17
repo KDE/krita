@@ -21,8 +21,8 @@
 
 #include "../api/interpreter.h"
 //#include "../api/qtobject.h"
-#include "../api/eventslot.h"
-#include "../api/eventsignal.h"
+//#include "../api/eventslot.h"
+//#include "../api/eventsignal.h"
 //#include "../api/script.h"
 
 #include "../api/krossconfig.h"
@@ -57,30 +57,22 @@ namespace Kross { namespace Api {
     };
 
     /**
-     * Free the static Manager instance if the lib is unloaded or
-     * the app terminates by using the KStaticDeleter template.
-     */
-    static KStaticDeleter<Manager> m_managerdeleter;
-
-    /**
      * The Manager-singleton instance is NULL by default till the
      * Manager::scriptManager() method got called first time.
      */
-    static Manager* m_manager = 0;
+    static KSharedPtr<Manager> m_manager = KSharedPtr<Manager>(0);
 
 }}
 
 Manager* Manager::scriptManager()
 {
-    if(! m_manager) {
-        // Create the Manager-singleton on demand and let the
-        // KStaticDeleter take care of freeing it if not needed
-        // any longer.
-        m_managerdeleter.setObject(m_manager, new Manager());
+    if(! m_manager.data()) {
+        // Create the Manager-singleton on demand.
+        m_manager = KSharedPtr<Manager>( new Manager() );
     }
 
     // and finally return the singleton.
-    return m_manager;
+    return m_manager.data();
 }
 
 Manager::Manager()

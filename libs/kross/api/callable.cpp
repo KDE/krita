@@ -27,9 +27,8 @@
 
 using namespace Kross::Api;
 
-Callable::Callable(const QString& name, Object* parent, const ArgumentList& arglist)
-    : Object(name, parent)
-    , m_arglist(arglist)
+Callable::Callable(const QString& name)
+    : Object(name)
 {
 }
 
@@ -42,132 +41,96 @@ const QString Callable::getClassName() const
     return "Kross::Api::Callable";
 }
 
-Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
+bool Callable::hasChild(const QString& name) const
+{
+    return m_children.contains(name);
+}
+
+Object::Ptr Callable::getChild(const QString& name) const
+{
+    return m_children[name];
+}
+
+QMap<QString, Object::Ptr> Callable::getChildren() const
+{
+    return m_children;
+}
+
+bool Callable::addChild(Object* object, const QString& name)
+{
+    QString n = name.isNull() ? object->getName() : name;
+
+#ifdef KROSS_API_OBJECT_ADDCHILD_DEBUG
+    krossdebug( QString("Kross::Api::Callable::addChild() object.name='%2' object.classname='%3'")
+                .arg(n).arg(object->getClassName()) );
+#endif
+
+    if(n.isEmpty()) // prevent invalid items.
+        return false; //throw Exception::Ptr( new Exception( QString("Failed to add child object to object '%1'. Invalid name for class '%2'.").arg(getName()).arg(object->getClassName()) ) );
+
+    m_children.replace(n, Object::Ptr(object));
+    return true;
+}
+
+void Callable::removeChild(const QString& name)
+{
+#ifdef KROSS_API_OBJECT_REMCHILD_DEBUG
+    krossdebug( QString("Kross::Api::Callable::removeChild() name='%1'").arg(name) );
+#endif
+    m_children.remove(name);
+}
+
+void Callable::removeAllChildren()
+{
+#ifdef KROSS_API_OBJECT_REMCHILD_DEBUG
+    krossdebug( "Kross::Api::Callable::removeAllChildren()" );
+#endif
+    m_children.clear();
+}
+
+Object::Ptr Callable::call(const QString& name, List::Ptr args)
 {
 #ifdef KROSS_API_CALLABLE_CALL_DEBUG
-    krossdebug( QString("Kross::Api::Callable::call() name=%1 getName()=%2 arguments=%3").arg(name).arg(getName()).arg(arguments ? arguments->toString() : QString("")) );
+    krossdebug( QString("Kross::Api::Callable::call() name=%1 getName()=%2 arguments=%3").arg(name).arg(getName()).arg(args ? args->toString() : QString("")) );
 #endif
+
+    if(name.isEmpty()) // return a self-reference if no functionname is defined.
+        return Object::Ptr(this);
+
+    // if name is defined try to get the matching child and pass the call to it.
+    Object::Ptr object = getChild(name);
+    if(object) {
+        //TODO handle namespace, e.g. "mychild1.mychild2.myfunction"
+        return object->call(name, args);
+    }
 
     if(name == "get") {
-        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") );
-        return getChild(arguments);
+        QString s = Variant::toString(args->item(0));
+        Object::Ptr obj = getChild(s);
+        if(! obj)
+            throw Exception::Ptr( new Exception(QString("The object '%1' has no child object '%2'").arg(getName()).arg(s)) );
+        return obj;
     }
     else if(name == "has") {
-        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") );
-        return hasChild(arguments);
+        return Object::Ptr(new Variant( hasChild( Variant::toString(args->item(0)) ) ));
     }
     else if(name == "call") {
-        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )) );
-        return callChild(arguments);
+        //TODO should we remove first args-item?
+        return Object::call(Variant::toString(args->item(0)), args);
     }
     else if(name == "list") {
-        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )) );
-        return getChildrenList(arguments);
+        QStringList list;
+        QMap<QString, Object::Ptr> children = getChildren();
+        QMap<QString, Object::Ptr>::Iterator it( children.begin() );
+        for(; it != children.end(); ++it)
+            list.append( it.key() );
+        return Object::Ptr(new Variant(list));
     }
     else if(name == "dict") {
-        //checkArguments( ArgumentList() << Argument("Kross::Api::Variant::String") << Argument("Kross::Api::List", new List( QValueList<Object::Ptr>() )) );
-        return getChildrenDict(arguments);
+        return Object::Ptr(new Dict( getChildren() ));
     }
 
-    return Object::call(name, arguments);
-}
-
-#if 0
-void Callable::checkArguments(List::Ptr arguments)
-{
-#ifdef KROSS_API_CALLABLE_CHECKARG_DEBUG
-    krossdebug( QString("Kross::Api::Callable::checkArguments() getName()=%1 arguments=%2")
-                 .arg(getName()).arg(arguments ? arguments->toString() : QString::null) );
-#endif
-
-    Q3ValueList<Object::Ptr>& arglist = arguments->getValue();
-
-    // check the number of parameters passed.
-    if(arglist.size() < m_arglist.getMinParams())
-        throw Exception::Ptr( new Exception(QString("Too few parameters for callable object '%1'.").arg(getName())) );
-    // Don't check if the user passed more arguments as allowed cause it's cheaper
-    // to just ignore the additional arguments.
-    //if(arglist.size() > m_arglist.getMaxParams())
-    //    throw Exception::Ptr( new Exception(QString("Too many parameters for callable object '%1'.").arg(getName())) );
-
-    // check type of passed parameters.
-    Q3ValueList<Argument>& farglist = m_arglist;
-    Q3ValueList<Argument>::Iterator it = farglist.begin();
-    Q3ValueList<Object::Ptr>::Iterator argit = arglist.begin();
-    bool argend = ( argit == arglist.end() );
-    for(; it != farglist.end(); ++it) {
-        //if(! argend)
-/*
-
-        if( ! (*it).isVisible() ) {
-            // if the argument isn't visibled, we always use the default argument.
-            if(argend)
-                arglist.append( (*it).getObject() );
-            else
-                arglist.insert(argit, (*it).getObject());
-        }
-        else {
-            // the argument is visibled and therefore the passed arguments may
-            // define the value.
-
-            if(argend) {
-*/
-            if(argend) {
-                // no argument defined, use the default value.
-                arglist.append( (*it).getObject() );
-            }
-            else {
-
-                // Check if the type of the passed argument matches to what we 
-                // expect. The given argument could have just the same type like 
-                // the expected argument or could be a specialization of it.
-                QString fcn = (*it).getClassName(); // expected argument
-                QString ocn = (*argit)->getClassName(); // given argument
-                if(! ocn.startsWith(fcn)) {
-                    if(! (ocn.startsWith("Kross::Api::Variant") && fcn.startsWith("Kross::Api::Variant")))
-                        throw Exception::Ptr( new Exception(QString("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn)) );
-                }
-++argit;
-argend = ( argit == arglist.end() );
-            }
-        //}
-
-        //if(! argend)
-
-    }
-}
-#endif
-
-Object::Ptr Callable::hasChild(List::Ptr args)
-{
-    return Object::Ptr( new Variant( Object::hasChild(Variant::toString(args->item(0))) ) );
-}
-
-Object::Ptr Callable::getChild(List::Ptr args)
-{
-    QString s = Variant::toString(args->item(0));
-    Object::Ptr obj = Object::getChild(s);
-    if(! obj)
-        throw Exception::Ptr( new Exception(QString("The object '%1' has no child object '%2'").arg(getName()).arg(s)) );
-    return obj;
-}
-
-Object::Ptr Callable::getChildrenList(List::Ptr)
-{
-    QStringList list;
-    QMap<QString, Object::Ptr> children = getChildren();
-    QMap<QString, Object::Ptr>::Iterator it( children.begin() );
-    for(; it != children.end(); ++it)
-        list.append( it.key() );
-    return Object::Ptr( new Variant(list) );
-}
-
-Object::Ptr Callable::getChildrenDict(List::Ptr)
-{
-    return Object::Ptr( new Dict(Object::getChildren()) );
-}
-
-Object::Ptr Callable::callChild(List::Ptr args)
-{
-    return Object::call(Variant::toString(args->item(0)), args);
+    // If there exists no such object return NULL.
+    krossdebug( QString("Object '%1' has no callable object named '%2'.").arg(getName()).arg(name) );
+    return Object::Ptr(0);
 }

@@ -113,7 +113,7 @@ TestPluginModule::TestPluginModule(const QString& name)
 
     // Let's wrap a whole instance and it's methodfunctions.
     Kross::Api::Event<TestObject> *testobjectclass =
-        new Kross::Api::Event<TestObject>("testpluginobject2", this);
+        new Kross::Api::Event<TestObject>("testpluginobject2");
     addChild(testobjectclass);
 }
 

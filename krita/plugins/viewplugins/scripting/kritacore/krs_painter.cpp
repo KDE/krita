@@ -45,29 +45,29 @@ Painter::Painter(KisPaintLayerSP layer)
     addFunction("fillPattern", &Painter::fillPattern);
 
     // Painting operations
-    addFunction("paintPolyline", &Painter::paintPolyline, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant::List") << Kross::Api::Argument("Kross::Api::Variant::List") );
-    addFunction("paintLine", &Painter::paintLine, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("paintBezierCurve", &Painter::paintBezierCurve, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("paintEllipse", &Painter::paintEllipse, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("paintPolygon", &Painter::paintPolygon, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::List") << Kross::Api::Argument("Kross::Api::Variant::List") );
-    addFunction("paintRect", &Painter::paintRect, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("paintAt", &Painter::paintAt, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("setBackgroundColor", &Painter::setBackgroundColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Color") );
-    addFunction("setPaintColor", &Painter::setPaintColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Color") );
+    addFunction("paintPolyline", &Painter::paintPolyline);
+    addFunction("paintLine", &Painter::paintLine);
+    addFunction("paintBezierCurve", &Painter::paintBezierCurve);
+    addFunction("paintEllipse", &Painter::paintEllipse);
+    addFunction("paintPolygon", &Painter::paintPolygon);
+    addFunction("paintRect", &Painter::paintRect);
+    addFunction("paintAt", &Painter::paintAt);
+    addFunction("setBackgroundColor", &Painter::setBackgroundColor);
+    addFunction("setPaintColor", &Painter::setPaintColor);
     
     // Color operations
-    addFunction("setPattern", &Painter::setPattern, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Pattern") );
-    addFunction("setBrush", &Painter::setBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Krita::Brush") );
+    addFunction("setPattern", &Painter::setPattern);
+    addFunction("setBrush", &Painter::setBrush);
     
     // How is painting done operations
-    addFunction("setPaintOp", &Painter::setPaintOp, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("setPaintOp", &Painter::setPaintOp);
     // Special settings
-    addFunction("setDuplicateOffset", &Painter::setDuplicateOffset, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("setDuplicateOffset", &Painter::setDuplicateOffset);
     
     // Style operation
-    addFunction("setOpacity", &Painter::setOpacity, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("setStrokeStyle", &Painter::setStrokeStyle, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("setFillStyle", &Painter::setFillStyle, Kross::Api::ArgumentList() <<  Kross::Api::Argument("Kross::Api::Variant") );
+    addFunction("setOpacity", &Painter::setOpacity);
+    addFunction("setStrokeStyle", &Painter::setStrokeStyle);
+    addFunction("setFillStyle", &Painter::setFillStyle);
 }
 
 

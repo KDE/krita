@@ -22,7 +22,6 @@
 
 #include "krossconfig.h"
 #include "object.h"
-#include "argument.h"
 #include "callable.h"
 #include "list.h"
 #include "exception.h"
@@ -93,14 +92,11 @@ namespace Kross { namespace Api {
              *        still accessable.
              * \param function A pointer to the methodfunction that
              *        should handle calls.
-             * \param arglist A list of arguments for the function.
              *
              * \todo Remove this method as soon as there is no code using it
              */
-//TODO remove Argument+ArgumentList. They are replaced with ProxyFunction now.
-            void addFunction(const QString& name, FunctionPtr function, const ArgumentList& arglist = ArgumentList())
+            inline void addFunction(const QString& name, FunctionPtr function)
             {
-                Q_UNUSED(arglist);
                 m_functions.insert(name, new Function0<T>(static_cast<T*>(this), function));
             }
 
@@ -116,7 +112,7 @@ namespace Kross { namespace Api {
              *        owner of the \a Function instance and will take
              *        care of deleting it if this \a Event got deleted.
              */
-            void addFunction(const QString& name, Function* function)
+            inline void addFunction(const QString& name, Function* function)
             {
                 m_functions.insert(name, function);
             }
@@ -126,7 +122,7 @@ namespace Kross { namespace Api {
              * to this \a Event instance.
              */
             template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class ARG3OBJ, class ARG4OBJ, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0, ARG3OBJ* arg3 = 0, ARG4OBJ* arg4 = 0)
+            inline void addFunction4(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0, ARG3OBJ* arg3 = 0, ARG4OBJ* arg4 = 0)
             {
                 m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ, ARG3OBJ, ARG4OBJ>
@@ -136,7 +132,7 @@ namespace Kross { namespace Api {
 
             /// Same as above with three arguments.
             template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class ARG3OBJ, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0, ARG3OBJ* arg3 = 0)
+            inline void addFunction3(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0, ARG3OBJ* arg3 = 0)
             {
                 m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ, ARG3OBJ>
@@ -146,7 +142,7 @@ namespace Kross { namespace Api {
 
             /// Same as above with two arguments.
             template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0)
+            inline void addFunction2(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0)
             {
                 m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ>
@@ -156,7 +152,7 @@ namespace Kross { namespace Api {
 
             /// Same as above, but with one argument.
             template<class RETURNOBJ, class ARG1OBJ, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0)
+            inline void addFunction1(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0)
             {
                 m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ>
@@ -166,7 +162,7 @@ namespace Kross { namespace Api {
 
             /// Same as above with no arguments.
             template<class RETURNOBJ, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            inline void addFunction0(const QString& name, INSTANCE* instance, METHOD method)
             {
                 m_functions.insert(name,
                     new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ>

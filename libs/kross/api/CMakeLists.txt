@@ -12,7 +12,6 @@ set(krossapi_LIB_SRCS
    dict.cpp 
    exception.cpp 
    callable.cpp 
-   argument.cpp 
    qtobject.cpp 
    script.cpp 
    interpreter.cpp 
@@ -31,7 +30,7 @@ install_targets(${LIB_INSTALL_DIR} krossapi )
 
 ########### install files ###############
 
-install_files( /include/kross/api FILES  argument.h      callable.h      class.h      dict.h      event.h      exception.h      function.h      interpreter.h      list.h      module.h      object.h      proxy.h      qtobject.h      script.h      value.h      variant.h krossconfig.h )
+install_files( /include/kross/api FILES  callable.h      class.h      dict.h      event.h      exception.h      function.h      interpreter.h      list.h      module.h      object.h      proxy.h      qtobject.h      script.h      value.h      variant.h krossconfig.h )
 
 
 
@@ -43,7 +42,6 @@ install_files( /include/kross/api FILES  argument.h      callable.h      class.h
 #apiincludedir=$(includedir)/kross/api
 #
 #apiinclude_HEADERS = \
-#    argument.h \
 #    callable.h \
 #    class.h \
 #    dict.h \
@@ -73,7 +71,6 @@ install_files( /include/kross/api FILES  argument.h      callable.h      class.h
 #    dict.cpp \
 #    exception.cpp \
 #    callable.cpp \
-#    argument.cpp \
 #    eventaction.cpp \
 #    eventsignal.cpp \
 #    eventslot.cpp \

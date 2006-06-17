@@ -64,16 +64,16 @@ using namespace Kross::KritaCore;
 
 KritaCoreFactory::KritaCoreFactory(QString packagePath) : Kross::Api::Event<KritaCoreFactory>("KritaCoreFactory"), m_packagePath(packagePath)
 {
-    addFunction("newRGBColor", &KritaCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("newHSVColor", &KritaCoreFactory::newHSVColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("getPattern", &KritaCoreFactory::getPattern, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("newRGBColor", &KritaCoreFactory::newRGBColor);
+    addFunction("newHSVColor", &KritaCoreFactory::newHSVColor);
+    addFunction("getPattern", &KritaCoreFactory::getPattern);
     addFunction("loadPattern", &KritaCoreFactory::loadPattern);
-    addFunction("getBrush", &KritaCoreFactory::getBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("getBrush", &KritaCoreFactory::getBrush);
     addFunction("loadBrush", &KritaCoreFactory::loadBrush);
-    addFunction("getFilter", &KritaCoreFactory::getFilter, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
-    addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("newRectBrush", &KritaCoreFactory::newRectBrush, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("newImage", &KritaCoreFactory::newImage, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant::String") << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("getFilter", &KritaCoreFactory::getFilter);
+    addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush);
+    addFunction("newRectBrush", &KritaCoreFactory::newRectBrush);
+    addFunction("newImage", &KritaCoreFactory::newImage);
     addFunction("getPackagePath", &KritaCoreFactory::getPackagePath);
 }
 

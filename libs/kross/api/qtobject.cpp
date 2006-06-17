@@ -39,13 +39,13 @@ QtObject::QtObject(QObject* object, const QString& name)
     : Class<QtObject>(name)
     , m_object(object)
 {
-    this->addProxyFunction<Kross::Api::Variant>("className", m_object, &QObject::className);
+    this->addFunction0<Kross::Api::Variant>("className", m_object, &QObject::className);
 
-    this->addProxyFunction<Kross::Api::Variant>("objectName", m_object, &QObject::objectName);
-    this->addProxyFunction<void, Kross::Api::Variant>("setObjectName", m_object, &QObject::setObjectName);
+    this->addFunction0<Kross::Api::Variant>("objectName", m_object, &QObject::objectName);
+    this->addFunction1<void, Kross::Api::Variant>("setObjectName", m_object, &QObject::setObjectName);
 
-    this->addProxyFunction<Kross::Api::Variant, Kross::Api::Variant>("property", m_object, &QObject::property);
-    this->addProxyFunction<Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant>("setProperty", m_object, &QObject::setProperty);
+    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("property", m_object, &QObject::property);
+    this->addFunction2<Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant>("setProperty", m_object, &QObject::setProperty);
 
 
 

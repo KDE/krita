@@ -30,7 +30,6 @@
 #include "event.h"
 #include "list.h"
 #include "exception.h"
-#include "argument.h"
 #include "variant.h"
 
 namespace Kross { namespace Api {

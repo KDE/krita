@@ -41,8 +41,8 @@ namespace KritaCore {
     addFunction("getActivePaintLayer", &Image::getActivePaintLayer);
     addFunction("getWidth", &Image::getWidth);
     addFunction("getHeight", &Image::getHeight);
-    addFunction("convertToColorspace", &Image::convertToColorspace, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String") );
-    addFunction("createPaintLayer", &Image::createPaintLayer, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant::String") );
+    addFunction("convertToColorspace", &Image::convertToColorspace);
+    addFunction("createPaintLayer", &Image::createPaintLayer);
     addFunction("colorSpaceId", &Image::colorSpaceId);
     addFunction("scale", &Image::scale);
     addFunction("resize", &Image::resize);

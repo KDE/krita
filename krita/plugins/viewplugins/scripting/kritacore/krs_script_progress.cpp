@@ -26,11 +26,11 @@ namespace KritaCore {
 
 ScriptProgress::ScriptProgress(KisScriptProgress* script): Kross::Api::Class<ScriptProgress>("KritaScript"), m_script(script)
 {
-    addFunction("setProgressTotalSteps", &ScriptProgress::setProgressTotalSteps, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("setProgressTotalSteps", &ScriptProgress::setProgressTotalSteps, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("setProgress", &ScriptProgress::setProgress, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") );
-    addFunction("incProgress", &ScriptProgress::incProgress );
-    addFunction("setProgressStage", &ScriptProgress::setProgressStage, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String")  << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("setProgressTotalSteps", &ScriptProgress::setProgressTotalSteps);
+    addFunction("setProgressTotalSteps", &ScriptProgress::setProgressTotalSteps);
+    addFunction("setProgress", &ScriptProgress::setProgress);
+    addFunction("incProgress", &ScriptProgress::incProgress);
+    addFunction("setProgressStage", &ScriptProgress::setProgressStage);
 }
 
 

@@ -60,7 +60,7 @@ extern "C"
 
 using namespace Kross::KritaCore;
 
-KritaCoreFactory::KritaCoreFactory(QString packagePath) : Kross::Api::Event<KritaCoreFactory>("KritaCoreFactory", 0), m_packagePath(packagePath)
+KritaCoreFactory::KritaCoreFactory(QString packagePath) : Kross::Api::Event<KritaCoreFactory>("KritaCoreFactory"), m_packagePath(packagePath)
 {
     addFunction("newRGBColor", &KritaCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
     addFunction("newHSVColor", &KritaCoreFactory::newHSVColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
@@ -228,7 +228,7 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
     }
 
     // Wrap doc
-    Kross::Api::Object::Ptr kritadocument = ((Kross::Api::Object*)manager)->getChild("KritaDocument");
+    Kross::Api::Object::Ptr kritadocument = manager->getChild("KritaDocument");
     if(kritadocument) {
         Kross::Api::QtObject* kritadocumentqt = (Kross::Api::QtObject*)( kritadocument.data() );
         if(kritadocumentqt) {
@@ -242,7 +242,7 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
     }
    // Wrap KritaScriptProgress
     QString packagePath;
-    Kross::Api::Object::Ptr kritascriptprogress = ((Kross::Api::Object*)manager)->getChild("KritaScriptProgress");
+    Kross::Api::Object::Ptr kritascriptprogress = manager->getChild("KritaScriptProgress");
     if(kritadocument) {
         Kross::Api::QtObject* kritascriptprogressqt = (Kross::Api::QtObject*)( kritascriptprogress.data() );
         if(kritascriptprogressqt) {

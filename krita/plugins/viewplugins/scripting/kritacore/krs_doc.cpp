@@ -25,7 +25,7 @@
 
 namespace Kross { namespace KritaCore {
 
-Doc::Doc(::KisDoc* doc) : Kross::Api::Class<Doc>("KritaDocument", 0 ), m_doc(doc) {
+Doc::Doc(::KisDoc* doc) : Kross::Api::Class<Doc>("KritaDocument"), m_doc(doc) {
     addFunction("getImage", &Doc::getImage);
 }
 

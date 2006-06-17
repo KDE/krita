@@ -18,12 +18,15 @@
 #include "kis_simple_noise_reducer.h"
 
 #include <kis_iterators_pixel.h>
-#include "kis_multi_integer_filter_widget.h"
-#include <kis_meta_registry.h>
+
+#include <kis_autobrush_resource.h>
+#include <kis_convolution_painter.h>
 #include <kis_colorspace_factory_registry.h>
+#include <kis_multi_integer_filter_widget.h>
+#include <kis_meta_registry.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-    : KisFilter(id(), "enhance", i18n("&Simple Noise Reduction"))
+    : KisFilter(id(), "enhance", i18n("&Gaussian Noise Reduction"))
 {
 }
 
@@ -35,7 +38,7 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP)
 {
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 0, 100, 50, i18n("Threshold"), "threshold" ) );
+    param.push_back( KisIntegerWidgetParam( 0, 255, 50, i18n("Threshold"), "threshold" ) );
     param.push_back( KisIntegerWidgetParam( 0, 10, 1, i18n("Window size"), "windowsize") );
     return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
 }
@@ -69,77 +72,55 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
         threshold = 50;
         windowsize = 1;
     }
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
-    KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
     
-    Q_INT32 depth = src->colorSpace()->nColorChannels();
-    QRect extends = src->exactBounds();
-    int lastx = extends.width() - windowsize;
-    int lasty = extends.height() - windowsize;
-    int* means = new int[depth];
-
-    int pixelsProcessed = 0;
-    setProgressTotalSteps(rect.width() * rect.height());
-    while( ! srcIt.isDone() )
-    {
-        if(srcIt.isSelected())
-        {
-            int x = srcIt.x();
-            int y = srcIt.y();
-            int lx = ( x >= lastx ) ? 2 * windowsize - (x - lastx ) : 2 * windowsize + 1;
-            int ly = ( y >= lasty ) ? 2 * windowsize - (y - lasty ) : 2 * windowsize + 1;
-            if(x > windowsize) x -= windowsize;
-            else x = 0;
-            if(y > windowsize) y -= windowsize;
-            else y = 0;
-            KisRectIteratorPixel neighbourgh_srcIt = src->createRectIterator(x, y, lx, ly, false);
-            // Reinit means
-            for( int i = 0; i < depth; i++)
-            {
-                means[i] = 0;
-            }
-            while( ! neighbourgh_srcIt.isDone() )
-            {
-                if(neighbourgh_srcIt.x() != srcIt.x() || neighbourgh_srcIt.y() != srcIt.y() )
-                {
-                    for( int i = 0; i < depth; i++)
-                    {
-                        means[i] += neighbourgh_srcIt.oldRawData()[i];
-                    }
-                }
-                ++neighbourgh_srcIt;
-            }
-            
-            // Count the number of time that the data is too much different from is neighbourgh
-            int pixelsnb = lx * ly - 1;
-
-            if (pixelsnb != 0) {
-                int depthbad = 0;
-                for( int i = 0; i < depth; i++)
-                {
-                    means[i] /= pixelsnb;
-                    if( 100*ABS(means[i] - srcIt.oldRawData()[i]) > threshold * means[i] )
-                    {
-                        ++depthbad;
-                    }
-                }
-                // Change the value of the pixel, if the pixel is too much different
-                if(depthbad > depth / 2)
-                {
-                    for( int i = 0; i < depth; i++)
-                    {
-                        dstIt.rawData()[i] = means[i];
-                    }
-                }
-            } else {
-                kdDebug() << "pixelsnb == 0: lx " << lx << ", " << ly << "\n";
-            }
-
-        }
-        setProgress(++pixelsProcessed);
-        ++srcIt;
-        ++dstIt;
+    KisColorSpace* cs = src->colorSpace();
+    Q_INT32 depth = cs->nColorChannels();
+    
+    // Compute the blur mask
+    KisAutobrushShape* kas = new KisAutobrushCircleShape(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
+    
+    QImage mask;
+    kas->createBrush(&mask);
+    mask.save("testmask.png", "PNG");
+    
+    KisKernelSP kernel = KisKernel::fromQImage(mask);
+    
+    KisPaintDeviceSP interm = new KisPaintDevice(*src);
+    KisConvolutionPainter painter( interm );
+    painter.beginTransaction("bouuh");
+    painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
+    
+    if (painter.cancelRequested()) {
+        cancel();
     }
+    
+
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(rect.x(), rect.y(), rect.width(), true );
+    KisHLineIteratorPixel srcIt = src->createHLineIterator(rect.x(), rect.y(), rect.width(), false);
+    KisHLineIteratorPixel intermIt = interm->createHLineIterator(rect.x(), rect.y(), rect.width(), false);
+    
+    for( int j = 0; j < rect.height(); j++)
+    {
+        while( ! srcIt.isDone() )
+        {
+            if(srcIt.isSelected())
+            {
+                Q_UINT8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
+                if( diff > threshold)
+                {
+                    cs->bitBlt( dstIt.rawData(), 0, cs, intermIt.rawData(), 0, 0, 0, 255, 1, 1, KisCompositeOp(COMPOSITE_COPY) );
+                }
+            }
+            incProgress();
+            ++srcIt;
+            ++dstIt;
+            ++intermIt;
+        }
+        srcIt.nextRow();
+        dstIt.nextRow();
+        intermIt.nextRow();
+    }
+    
     setProgressDone(); // Must be called even if you don't really support progression
 }
 

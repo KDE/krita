@@ -29,7 +29,7 @@ class KisSimpleNoiseReducerConfiguration
 {
     public:
         KisSimpleNoiseReducerConfiguration(int nt, int ws)
-            : KisFilterConfiguration( "simplenoicereducer", 1 )
+    : KisFilterConfiguration( "gaussiannoisereducer", 1 )
         {
             setProperty("threshold", nt);
             setProperty("windowsize", ws);
@@ -49,7 +49,7 @@ class KisSimpleNoiseReducer : public KisFilter
         virtual KisFilterConfiguration * configuration() { return new KisSimpleNoiseReducerConfiguration( 50, 1); };
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
 
-        static inline KisID id() { return KisID("simplenoisereducer", i18n("Simple Noise Reducer")); };
+        static inline KisID id() { return KisID("gaussiannoisereducer", i18n("Gaussian Noise Reducer")); };
         virtual bool supportsPainting() { return false; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }

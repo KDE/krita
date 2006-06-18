@@ -84,8 +84,6 @@ public:
      *        the @p parent must be a QWidget derived class. KoDocument will then create a wrapper widget
      *        (KoViewWrapperWidget) which is a child of @p parentWidget.
      *        This widget can be retrieved by calling widget().
-     *
-     * @todo explain what the purpose of widgetName is.
      */
     KoDocument( QWidget* parentWidget,
                 QObject* parent,
@@ -912,7 +910,7 @@ public slots:
 signals:
 
     /**
-     * This signal is emitted when the unit is changed by setUnit()
+     * This signal is emitted when the unit is changed by setUnit().
      * It is common to connect views to it, in order to change the displayed units
      * (e.g. in the rulers)
      */

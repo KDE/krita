@@ -190,7 +190,7 @@ signals:
 
 protected:
     /**
-     * Classes enhariting from this one can call this method to signify which cursor
+     * Classes inheriting from this one can call this method to signify which cursor
      * the tool wants to display at this time.  Logical place to call it is after an
      * incoming event has been handled.
      * @param cursor the new cursor. If this is the same as the previously set cursor

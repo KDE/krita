@@ -205,6 +205,12 @@
             <property name="name">
                 <cstring>dblBrightness</cstring>
             </property>
+            <property name="minValue">
+                <number>-100</number>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
         </widget>
     </grid>
 </widget>

@@ -129,8 +129,8 @@ public:
     virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile = 0);
 
 
-    virtual Q_UINT8 * toLabA16(const Q_UINT8 * data, const Q_UINT32 nPixels) const;
-    virtual Q_UINT8 * fromLabA16(const Q_UINT8 * labData, const Q_UINT32 nPixels) const;
+    virtual void toLabA16(const Q_UINT8 * src, Q_UINT8 * dst, const Q_UINT32 nPixels) const;
+    virtual void fromLabA16(const Q_UINT8 * src, Q_UINT8 * dst, const Q_UINT32 nPixels) const;
 
     virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
                                    KisProfile *  dstProfile,

@@ -177,28 +177,18 @@ void KisAbstractColorSpace::toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opa
     *opacity = getAlpha(src);
 }
 
-Q_UINT8 * KisAbstractColorSpace::toLabA16(const Q_UINT8 * data, const Q_UINT32 nPixels) const
+void KisAbstractColorSpace::toLabA16(const Q_UINT8 * src, Q_UINT8 * dst, const Q_UINT32 nPixels) const
 {
-    if ( m_defaultToLab == 0 ) return 0;
+    if ( m_defaultToLab == 0 ) return;
 
-    // 4 channels: labA, 2 bytes per lab channel
-    Q_UINT8 * pixels = new Q_UINT8[nPixels * 2 * 4];
-
-    cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8 *>( data ), pixels, nPixels );
-
-    return pixels;
+    cmsDoTransform( m_defaultToLab, const_cast<Q_UINT8 *>( src ), dst, nPixels );
 }
 
-Q_UINT8 * KisAbstractColorSpace::fromLabA16(const Q_UINT8 * labData, const Q_UINT32 nPixels) const
+void KisAbstractColorSpace::fromLabA16(const Q_UINT8 * src, Q_UINT8 * dst, const Q_UINT32 nPixels) const
 {
-    if ( m_defaultFromLab == 0 ) return 0;
+    if ( m_defaultFromLab == 0 ) return;
 
-    Q_UINT8 * pixels = new Q_UINT8[nPixels * pixelSize()];
-
-    cmsDoTransform( m_defaultFromLab,  const_cast<Q_UINT8 *>( labData ), pixels,  nPixels );
-
-    return pixels;
-
+    cmsDoTransform( m_defaultFromLab,  const_cast<Q_UINT8 *>( src ), dst,  nPixels );
 }
 
 

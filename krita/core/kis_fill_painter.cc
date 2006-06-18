@@ -192,8 +192,11 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled) {
         return;
     }
 
-    bltSelection(0, 0, m_compositeOp, filled, m_selection, m_opacity,
-                 0, 0, m_width, m_height);
+    int x, y, w, h;
+    m_selection->extent(x, y, w, h);
+
+    bltSelection(x, y, m_compositeOp, filled, m_selection, m_opacity,
+                 x, y, w, h);
 
     emit notifyProgressDone();
 

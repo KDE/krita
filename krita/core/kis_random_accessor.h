@@ -50,6 +50,10 @@ class KisRandomAccessorPixelTrait {
         inline KisRandomAccessorPixelTrait(KisRandomAccessor* underlyingAccessor, KisRandomAccessor* selectionAccessor) : m_underlyingAccessor(underlyingAccessor), m_selectionAccessor(selectionAccessor)
         {
         }
+	~KisRandomAccessorPixelTrait() {
+		if(m_selectionAccessor)
+			delete m_selectionAccessor;
+	}
         inline bool isSelected() const
         {
             return (m_selectionAccessor) ? *(m_selectionAccessor->rawData()) > SELECTION_THRESHOLD : true;

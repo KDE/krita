@@ -1,0 +1,9 @@
+[Desktop Entry]
+Comment=Transform an image in a lenscorrection
+Encoding=UTF-8
+Icon=
+Name=LensCorrection Filter
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritalenscorrectionfilter
+X-Krita-Version=2

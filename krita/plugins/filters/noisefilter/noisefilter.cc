@@ -90,7 +90,7 @@ void KisFilterNoise::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilt
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     
-    setProgressTotalSteps(100);
+    setProgressTotalSteps(rect.width() * rect.height());
 
     KisColorSpace * cs = src->colorSpace();
     Q_INT32 psize = cs->pixelSize();

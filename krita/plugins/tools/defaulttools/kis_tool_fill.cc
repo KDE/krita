@@ -139,12 +139,17 @@ bool KisToolFill::flood(int startX, int startY)
 
 void KisToolFill::buttonPress(KisButtonPressEvent *e)
 {
+    m_startPos = e->pos();
+}
+
+void KisToolFill::buttonRelease(KisButtonReleaseEvent *e)
+{
     if (!m_subject) return;
     if (!m_currentImage || !m_currentImage->activeDevice()) return;
     if (e->button() != QMouseEvent::LeftButton) return;
     int x, y;
-    x = e->pos().floorX();
-    y = e->pos().floorY();
+    x = m_startPos.floorX();
+    y = m_startPos.floorY();
     if (!m_currentImage->bounds().contains(x, y)) {
         return;
     }

@@ -23,6 +23,7 @@
 
 #include <qpoint.h>
 
+#include "kis_point.h"
 #include "kis_tool_paint.h"
 
 class KisPainter;
@@ -48,6 +49,7 @@ public:
     virtual void update(KisCanvasSubject *subject);
 
     virtual void buttonPress(KisButtonPressEvent*);
+    virtual void buttonRelease(KisButtonReleaseEvent*);
 
     bool flood(int startX, int startY);
 
@@ -60,6 +62,7 @@ public slots:
     virtual void slotSetFillSelection(int);
 
 private:
+    KisPoint m_startPos;
     int m_threshold;
     Q_INT32 m_depth;
     KisLayerSP m_lay;

@@ -47,7 +47,7 @@ public:
     KoShapeManager *shapeManager() const { return m_shapeManager; }
     void updateCanvas(const QRectF& rc) {
         QRect clipRect(viewConverter()->normalToView(rc).toRect());
-        clipRect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
+        clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
         update(clipRect);
     }
     KoTool* tool() { return m_tool; }

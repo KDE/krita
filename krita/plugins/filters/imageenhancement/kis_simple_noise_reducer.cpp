@@ -17,13 +17,15 @@
  */
 #include "kis_simple_noise_reducer.h"
 
-#include <kis_iterators_pixel.h>
+#include <KoColorSpace.h>
 
+#include <kis_iterators_pixel.h>
 #include <kis_autobrush_resource.h>
 #include <kis_convolution_painter.h>
-#include <kis_colorspace_factory_registry.h>
+#include <kis_global.h>
 #include <kis_multi_integer_filter_widget.h>
 #include <kis_meta_registry.h>
+#include <kis_paint_device.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
     : KisFilter(id(), "enhance", i18n("&Gaussian Noise Reduction"))
@@ -73,7 +75,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
         windowsize = 1;
     }
     
-    KisColorSpace* cs = src->colorSpace();
+    KoColorSpace* cs = src->colorSpace();
     Q_INT32 depth = cs->nColorChannels();
     
     // Compute the blur mask
@@ -85,7 +87,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     
     KisKernelSP kernel = KisKernel::fromQImage(mask);
     
-    KisPaintDeviceSP interm = new KisPaintDevice(*src);
+    KisPaintDeviceSP interm = KSharedPtr<KisPaintDevice>(new KisPaintDevice(*src));
     KisConvolutionPainter painter( interm );
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
@@ -108,7 +110,7 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
                 Q_UINT8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
                 if( diff > threshold)
                 {
-                    cs->bitBlt( dstIt.rawData(), 0, cs, intermIt.rawData(), 0, 0, 0, 255, 1, 1, KisCompositeOp(COMPOSITE_COPY) );
+                    cs->bitBlt( dstIt.rawData(), 0, cs, intermIt.rawData(), 0, 0, 0, 255, 1, 1, KoCompositeOp(COMPOSITE_COPY) );
                 }
             }
             incProgress();

@@ -23,7 +23,7 @@
 #include "kis_paint_device.h"
 
 KisRandomSubAccessorPixel::KisRandomSubAccessorPixel(KisPaintDeviceSP device) :
-    m_device(device), m_currentPoint( 0, 0 ), m_randomAccessor(device->createRandomAccessor(0,0, true))
+    m_device(device), m_currentPoint( 0, 0 ), m_randomAccessor(device->createRandomAccessor(0,0, false))
 {
 }
 
@@ -44,10 +44,10 @@ void KisRandomSubAccessorPixel::sampledOldRawData(Q_UINT8* dst)
     weights[0] = (int)round( ( 1.0 - hsub) * ( 1.0 - vsub) * 255 );
     m_randomAccessor.moveTo(x, y);
     pixels[0] = m_randomAccessor.oldRawData();
-    weights[1] = (int)round( ( 1.0 - hsub) * vsub * 255 );
+    weights[1] = (int)round( ( 1.0 - vsub) * hsub * 255 );
     m_randomAccessor.moveTo(x+1, y);
     pixels[1] = m_randomAccessor.oldRawData();
-    weights[2] = (int)round( hsub * ( 1.0 - vsub) * 255 );
+    weights[2] = (int)round( vsub * ( 1.0 - hsub) * 255 );
     m_randomAccessor.moveTo(x, y+1);
     pixels[2] = m_randomAccessor.oldRawData();
     weights[3] = (int)round( hsub * vsub * 255 );

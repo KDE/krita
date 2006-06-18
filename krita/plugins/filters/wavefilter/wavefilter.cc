@@ -136,14 +136,14 @@ void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     KisColorSpace* cs = dst->colorSpace();
     
     QVariant value;
-    int horizontalwavelength = (config->getProperty("horizontalwavelength", value)) ? value.toInt() : 50;
-    int horizontalshift = (config->getProperty("horizontalshift", value)) ? value.toInt() : 50;
-    int horizontalamplitude = (config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;
-    int horizontalshape = (config->getProperty("horizontalshape", value)) ? value.toInt() : 0;
-    int verticalwavelength = (config->getProperty("verticalwavelength", value)) ? value.toInt() : 50;
-    int verticalshift = (config->getProperty("verticalshift", value)) ? value.toInt() : 50;
-    int verticalamplitude = (config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
-    int verticalshape = (config->getProperty("verticalshape", value)) ? value.toInt() : 0;
+    int horizontalwavelength = (config && config->getProperty("horizontalwavelength", value)) ? value.toInt() : 50;
+    int horizontalshift = (config && config->getProperty("horizontalshift", value)) ? value.toInt() : 50;
+    int horizontalamplitude = (config && config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;
+    int horizontalshape = (config && config->getProperty("horizontalshape", value)) ? value.toInt() : 0;
+    int verticalwavelength = (config && config->getProperty("verticalwavelength", value)) ? value.toInt() : 50;
+    int verticalshift = (config && config->getProperty("verticalshift", value)) ? value.toInt() : 50;
+    int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
+    int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisWaveCurve* verticalcurve;
     if(verticalshape == 1)

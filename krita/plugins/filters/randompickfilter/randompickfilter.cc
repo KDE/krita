@@ -98,9 +98,9 @@ void KisFilterRandomPick::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
     Q_INT32 psize = cs->pixelSize();
     
     QVariant value;
-    int level = (config->getProperty("level", value)) ? value.toInt() : 50;
-    double windowsize = (config->getProperty("windowsize", value)) ? value.toInt() / 2. : 2.5;
-    int opacity = (config->getProperty("opacity", value)) ? value.toInt() : 100;
+    int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
+    double windowsize = (config && config->getProperty("windowsize", value)) ? value.toInt() / 2. : 2.5;
+    int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
     
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);

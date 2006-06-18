@@ -103,11 +103,11 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
     KisColorSpace* cs = dst->colorSpace();
     
     QVariant value;
-    double xcenter = (config->getProperty("xcenter", value)) ? value.toInt() : 50;
-    double ycenter = (config->getProperty("ycenter", value)) ? value.toInt() : 50;
-    double correctionnearcenter = (config->getProperty("correctionnearcenter", value)) ? value.toDouble() : 0.;
-    double correctionnearedges = (config->getProperty("correctionnearedges", value)) ? value.toDouble() : 0.;
-    double brightness = ( (config->getProperty("brightness", value)) ? value.toDouble() : 0. );
+    double xcenter = (config && config->getProperty("xcenter", value)) ? value.toInt() : 50;
+    double ycenter = (config && config->getProperty("ycenter", value)) ? value.toInt() : 50;
+    double correctionnearcenter = (config && config->getProperty("correctionnearcenter", value)) ? value.toDouble() : 0.;
+    double correctionnearedges = (config && config->getProperty("correctionnearedges", value)) ? value.toDouble() : 0.;
+    double brightness = ( (config && config->getProperty("brightness", value)) ? value.toDouble() : 0. );
     
     KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
     KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();

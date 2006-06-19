@@ -142,6 +142,7 @@ install_files( /include FILES
     KoOpenPane.h 
     KoOasisLoadingContext.h 
     KoPoint.h 
+    KoRTree.h
     KoGenStyle.h )
 
 

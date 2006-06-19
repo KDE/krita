@@ -212,7 +212,7 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KIns
 //     QPushButton* cancel = actionButton( KDialog::Cancel );
 //     cancel->setAutoDefault(false);
 //     ok->setDefault(true);
-//  //enableButtonOK(false);
+//  //enableButtonOk(false);
     if (!templateType.isNull() && !templateType.isEmpty() && dialogType!=NoTemplates)
         d->tree = new KoTemplateTree(templateType, instance, true);
 

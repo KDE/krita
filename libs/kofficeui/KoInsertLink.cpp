@@ -93,12 +93,12 @@ void KoInsertLinkDia::tabChanged(QWidget *)
         if ( bookmarkLink)
             bookmarkLink->setLinkName( currentText );
     }
-    enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()) );
+    enableButtonOk( !(linkName().isEmpty()  || hrefName().isEmpty()) );
 }
 
 void KoInsertLinkDia::slotTextChanged ( )
 {
-    enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()));
+    enableButtonOk( !(linkName().isEmpty()  || hrefName().isEmpty()));
     currentText = linkName();
 }
 

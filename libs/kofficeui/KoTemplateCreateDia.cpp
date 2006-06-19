@@ -192,7 +192,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QByteArray &templateType, KInsta
     d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",instance->aboutData()->programName() ) );
     rightbox->addWidget( d->m_defaultTemplate );
 
-    enableButtonOK(false);
+    enableButtonOk(false);
     d->m_changed=false;
     updatePixmap();
 
@@ -402,9 +402,9 @@ void KoTemplateCreateDia::slotSelect() {
 void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 
     if( ( name.trimmed().isEmpty() || !d->m_groups->firstChild() ) && !d->m_changed )
-        enableButtonOK(false);
+        enableButtonOk(false);
     else
-        enableButtonOK(true);
+        enableButtonOk(true);
 }
 
 void KoTemplateCreateDia::slotAddGroup() {
@@ -426,7 +426,7 @@ void KoTemplateCreateDia::slotAddGroup() {
     d->m_groups->setCurrentItem(item);
     d->m_groups->sort();
     d->m_name->setFocus();
-    enableButtonOK(true);
+    enableButtonOk(true);
     d->m_changed=true;
 }
 
@@ -469,7 +469,7 @@ void KoTemplateCreateDia::slotRemove() {
     }
     delete item;
     item=0L;
-    enableButtonOK(true);
+    enableButtonOk(true);
     d->m_name->setFocus();
     d->m_changed=true;
 }

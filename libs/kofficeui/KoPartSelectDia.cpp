@@ -69,7 +69,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 
 void KoPartSelectDia::selectionChanged( Q3ListViewItem *item )
 {
-    enableButtonOK( item != 0 );
+    enableButtonOk( item != 0 );
 }
 
 KoDocumentEntry KoPartSelectDia::entry()

@@ -17,7 +17,7 @@ Comment[ja]=KritaのGUI機能
 Comment[nl]=Interfacefunctionaliteit voor Krita
 Comment[pl]=Graficzny interfejs użytkownika programu Krita
 Comment[pt]=Funcionalidade gráfica para o Krita
-Comment[pt_BR]=Funcionalidade gráfica para o Krita
+Comment[pt_BR]=Funcionalidade de interface gráfica para o Krita
 Comment[ru]=Интерфейс Krita
 Comment[sl]=Funkcionalnost grafičnega vmesnika za Krito
 Comment[sr]=Функционалност GUI-ја за Krita-у
@@ -25,5 +25,6 @@ Comment[sr@Latn]=Funkcionalnost GUI-ja za Krita-u
 Comment[sv]=Grafisk gränssnittsfunktion för Krita
 Comment[uk]=Функціональність графічного інтерфейсу для Krita
 Comment[zh_CN]=Krita 的图形界面模块
+Comment[zh_TW]=Krita 的 GUI 功能
 [PropertyDef::X-Krita-Version]
 Type=int

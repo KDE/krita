@@ -46,6 +46,7 @@ Comment[sr]=Конволуциони филтери
 Comment[sr@Latn]=Konvolucioni filteri
 Comment[sv]=Faltningsfilter
 Comment[uk]=Фільтри згортки
+Comment[zh_TW]=皺褶過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaconvolutionfilters

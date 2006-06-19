@@ -26,6 +26,7 @@ Name[sr@Latn]=Alat za transformaciju
 Name[sv]=Transformeringsverktyg
 Name[uk]=Засіб перетворення
 Name[zh_CN]=变形工具
+Name[zh_TW]=變形工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooltransform

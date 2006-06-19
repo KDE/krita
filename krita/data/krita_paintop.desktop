@@ -17,11 +17,12 @@ Comment[ja]=Kritaの描画操作プラグイン
 Comment[nl]=Verfverrichtingplugin voor Krita
 Comment[pl]=Wtyczka operacji malowania dla Krita
 Comment[pt]='Plugin' de operações de pintura do Krita
-Comment[pt_BR]='Plugin' de operações de pintura do Krita
+Comment[pt_BR]=Plugin de operações de pintura do Krita
 Comment[ru]=Инструмент рисования Krita
 Comment[sr]=Прикључак за сликарске операције за Krita-у
 Comment[sr@Latn]=Priključak za slikarske operacije za Krita-u
 Comment[sv]=Insticksprogram med målningsåtgärder för Krita
 Comment[zh_CN]=Krita 的绘画操作插件
+Comment[zh_TW]=Krita 的繪畫操作外掛程式
 [PropertyDef::X-Krita-Version]
 Type=int

@@ -45,6 +45,7 @@ Comment[ru]=Рельеф
 Comment[sr]=Филтер мапе рељефа
 Comment[sr@Latn]=Filter mape reljefa
 Comment[sv]=Bulkartefilter
+Comment[zh_TW]=Bumpmap 的過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritabumpmap

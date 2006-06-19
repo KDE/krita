@@ -34,6 +34,7 @@ Name[sv]=Stjärnverktyg
 Name[uk]=Інструмент зірки
 Name[uz]=Юлдуз воситаси
 Name[zh_CN]=星形工具
+Name[zh_TW]=星形工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolstar

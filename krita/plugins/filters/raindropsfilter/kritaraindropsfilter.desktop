@@ -49,6 +49,7 @@ Comment[sr@Latn]=Filter za kišne kapi
 Comment[sv]=Regndroppsfilter
 Comment[uk]=Фільтр дощових крапель
 Comment[uz]=Ёмғир томчилари филтери
+Comment[zh_TW]=雨滴過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaraindropsfilter

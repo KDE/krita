@@ -57,6 +57,7 @@ Comment[sv]=Färgfilter
 Comment[uk]=Фільтри кольору
 Comment[uz]=Ранг филтерлари
 Comment[zh_CN]=颜色滤镜
+Comment[zh_TW]=色彩過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacolorsfilters

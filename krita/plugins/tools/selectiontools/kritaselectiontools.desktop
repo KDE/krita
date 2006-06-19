@@ -34,6 +34,7 @@ Name[sv]=Markeringsverktyg
 Name[uk]=Засоби виділення
 Name[uz]=Танлаш воситалари
 Name[zh_CN]=选择工具
+Name[zh_TW]=選取區工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritaselectiontools

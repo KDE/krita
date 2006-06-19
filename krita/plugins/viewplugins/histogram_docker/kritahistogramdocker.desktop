@@ -21,6 +21,7 @@ Name[sr]=Сидраш хистограма
 Name[sr@Latn]=Sidraš histograma
 Name[sv]=Histogramdockning
 Name[uk]=Швартувальник гістограм
+Name[zh_TW]=直方圖停駐點
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogramdocker

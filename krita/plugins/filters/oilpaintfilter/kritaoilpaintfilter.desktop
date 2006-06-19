@@ -47,6 +47,7 @@ Comment[sr]=Филтер за уље на платну
 Comment[sr@Latn]=Filter za ulje na platnu
 Comment[sv]=Oljemålningsfilter
 Comment[uk]=Фільтр олійних фарб
+Comment[zh_TW]=油畫過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaoilpaintfilter

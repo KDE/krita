@@ -46,6 +46,7 @@ Comment[sr@Latn]=Kubistički filter
 Comment[sv]=Kubismfilter
 Comment[uk]=Фільтр кубізму
 Comment[uz]=Кубизм филтери
+Comment[zh_TW]=立體過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacubismfilter

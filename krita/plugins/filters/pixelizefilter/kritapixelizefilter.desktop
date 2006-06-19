@@ -48,6 +48,7 @@ Comment[sr]=Филтер за пикселизацију
 Comment[sr@Latn]=Filter za pikselizaciju
 Comment[sv]=Bildpunktsfilter
 Comment[uk]=Фільтр пікселювання
+Comment[zh_TW]=像素化過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritapixelizefilter

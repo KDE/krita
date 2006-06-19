@@ -27,6 +27,7 @@ Name[sr]=Модел боја мокрог и лепљивог платна
 Name[sr@Latn]=Model boja mokrog i lepljivog platna
 Name[sv]=Våt och klibbig dukfärgmodell
 Name[zh_CN]=湿性/粘性画布色彩模型
+Name[zh_TW]=濕 & 黏的畫布色彩模型
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=kritawsplugin

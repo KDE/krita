@@ -41,6 +41,7 @@ Name[tr]=Beyaz 2000 x 800
 Name[uk]=Біле 2000 x 800
 Name[uz]=Оқ 2000 x 800
 Name[zh_CN]=白色 2000 x 800
+Name[zh_TW]=白色 2000 x 800
 Comment=Creates a white CMYK image of 2000 x 800 pixels.
 Comment[bg]=Създаване на бяло CMYK изображение с размери 2000 x 800 точки.
 Comment[ca]=Crea una imatge blanca CMYK de 2000 x 800 píxels
@@ -77,5 +78,6 @@ Comment[tr]=2000 x 800 piksel ebadında beyaz bir CMYK görüntü oluşturur.
 Comment[uk]=Створює біле зображення CMYK 2000 x 800 пікселів.
 Comment[uz]=Ўлчами 2000 x 800 нуқта бўлган оқ CMYK расмни яратиш.
 Comment[zh_CN]=创建 2000 x 800 像素的白色 CMYK 图像。
+Comment[zh_TW]=建立一個白色，2000 x 800 像素的 CMYK 圖片。
 X-Krita-Version=2
 

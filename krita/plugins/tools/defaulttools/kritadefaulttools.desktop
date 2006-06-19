@@ -38,6 +38,7 @@ Name[tr]=Öntanımlı Araçlar
 Name[uk]=Типові інструменти
 Name[uz]=Андоза воситалар
 Name[zh_CN]=默认工具
+Name[zh_TW]=預設工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritadefaulttools

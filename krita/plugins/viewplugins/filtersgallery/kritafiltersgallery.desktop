@@ -25,6 +25,7 @@ Name[sv]=Filtrergalleri
 Name[uk]=Галерея фільтрів
 Name[uz]=Филтерлар тўплами
 Name[zh_CN]=滤镜库
+Name[zh_TW]=濾鏡畫廊
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritafiltersgallery

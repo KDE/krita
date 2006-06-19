@@ -30,5 +30,6 @@ Comment[sv]=Verktygsinsticksprogram för Krita
 Comment[uk]=Втулок інструментів для Krita
 Comment[uz]=Krita учун восита плагини
 Comment[zh_CN]=Krita 工具插件
+Comment[zh_TW]=Krita 的工具外掛程式
 [PropertyDef::X-Krita-Version]
 Type=int

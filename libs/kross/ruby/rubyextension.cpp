@@ -83,7 +83,7 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
                 krossdebug( QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) );
 #endif
-                result = callable->getChild(funcname)->call(QString::null, new Api::List(argsList));
+                result = callable->getChild(funcname)->call(QString::null, KSharedPtr<Kross::Api::List>(new Api::List(argsList)));
             }
             else {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG

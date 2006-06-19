@@ -129,13 +129,13 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisAdjustmentLayerSP layer,
     }
 
     refreshPreview();
-    enableButtonOK( !m_layerName->text().isEmpty() );
+    enableButtonOk( !m_layerName->text().isEmpty() );
 
 }
 
 void KisDlgAdjLayerProps::slotNameChanged( const QString & text )
 {
-    enableButtonOK( !text.isEmpty() );
+    enableButtonOk( !text.isEmpty() );
 }
 
 KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const

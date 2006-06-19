@@ -61,7 +61,7 @@ KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString
 
 void KoCommentDia::slotTextChanged( )
 {
-    enableButtonOK( !m_multiLine->text().isEmpty() );
+    enableButtonOk( !m_multiLine->text().isEmpty() );
 }
 
 QString KoCommentDia::commentText()

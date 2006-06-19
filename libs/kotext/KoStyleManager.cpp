@@ -635,7 +635,7 @@ void KoStyleManager::renameStyle(const QString &theText) {
     noSignals=false;
     // Can't close the dialog if two styles have the same name
     bool state=!theText.isEmpty() && (synonyms == 1);
-    enableButtonOK(state );
+    enableButtonOk(state );
     enableButtonApply(state);
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);

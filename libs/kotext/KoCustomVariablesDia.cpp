@@ -58,7 +58,7 @@ KoVariableNameDia::KoVariableNameDia( QWidget *parent, const Q3PtrList<KoVariabl
     setButtons( Ok|Cancel );
 
     init();
-    enableButtonOK(false);
+    enableButtonOk(false);
     Q3PtrListIterator<KoVariable> it( vars );
      for ( ; it.current() ; ++it ) {
         KoVariable *var = it.current();
@@ -87,7 +87,7 @@ void KoVariableNameDia::init()
              this, SLOT( accept() ) );
     connect( this, SIGNAL( cancelClicked() ),
              this, SLOT( reject() ) );
-    enableButtonOK( !names->currentText().isEmpty() );
+    enableButtonOk( !names->currentText().isEmpty() );
     resize( 350, 100 );
 }
 
@@ -98,7 +98,7 @@ QString KoVariableNameDia::getName() const
 
 void KoVariableNameDia::textChanged ( const QString &_text )
 {
-    enableButtonOK(!_text.isEmpty());
+    enableButtonOk(!_text.isEmpty());
 }
 
 /******************************************************************
@@ -281,7 +281,7 @@ KoCustomVarDialog::KoCustomVarDialog( QWidget *parent )
     connect( m_name, SIGNAL( textChanged(const QString&) ),
              this, SLOT( slotTextChanged(const QString&) ) );
 
-    enableButtonOK( false );
+    enableButtonOk( false );
     resize( 350, 100 );
 
 }
@@ -309,7 +309,7 @@ KoCustomVarDialog::KoCustomVarDialog( QWidget *parent, KoCustomVariable *var )
     connect( m_value, SIGNAL( textChanged(const QString&) ),
              this, SLOT( slotTextChanged(const QString&) ) );
 
-    enableButtonOK( true );
+    enableButtonOk( true );
     resize( 350, 100 );
 }
 
@@ -342,7 +342,7 @@ void KoCustomVarDialog::slotEditOk()
 
 void KoCustomVarDialog::slotTextChanged(const QString&text)
 {
-    enableButtonOK( !text.isEmpty() );
+    enableButtonOk( !text.isEmpty() );
 }
 QString KoCustomVarDialog::name()
 {

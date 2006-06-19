@@ -46,7 +46,7 @@ KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidge
     new QLabel(i18n("Select styles to import:"), page);
     m_listStyleName = new Q3ListBox( page );
     m_listStyleName->setSelectionMode( Q3ListBox::Multi );
-    enableButtonOK( m_listStyleName->count() != 0 );
+    enableButtonOk( m_listStyleName->count() != 0 );
     setButtonText( KDialog::User1, i18n("Load...") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotLoadFile()));
     setInitialSize( QSize( 300, 400 ) );
@@ -87,7 +87,7 @@ void KoImportStyleDia::updateFollowingStyle( KoParagStyle* removedStyle )
 void KoImportStyleDia::slotLoadFile()
 {
     loadFile();
-    enableButtonOK( m_listStyleName->count() != 0 );
+    enableButtonOk( m_listStyleName->count() != 0 );
 }
 
 void KoImportStyleDia::initList()

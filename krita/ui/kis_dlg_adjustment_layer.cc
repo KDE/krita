@@ -119,7 +119,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
 
     m_currentConfigWidget = 0;
 
-    enableButtonOK(0);
+    enableButtonOk(0);
 }
 
 void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
@@ -128,7 +128,7 @@ void KisDlgAdjustmentLayer::slotNameChanged( const QString & text )
         return;
 
     m_customName = !text.isEmpty();
-    enableButtonOK( m_currentFilter && m_customName );
+    enableButtonOk( m_currentFilter && m_customName );
 }
 
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
@@ -202,7 +202,7 @@ void KisDlgAdjustmentLayer::selectionHasChanged ( Q3IconViewItem * item )
         m_freezeName = false;
     }
 
-    enableButtonOK( !m_layerName->text().isEmpty() );
+    enableButtonOk( !m_layerName->text().isEmpty() );
     refreshPreview();
 }
 

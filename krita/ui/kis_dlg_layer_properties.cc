@@ -82,7 +82,7 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
 
 void KisDlgLayerProperties::slotNameChanged( const QString &_text )
 {
-    enableButtonOK( !_text.isEmpty() );
+    enableButtonOk( !_text.isEmpty() );
 }
 
 QString KisDlgLayerProperties::getName() const

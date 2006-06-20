@@ -45,6 +45,7 @@ public:
     static inline KisID id() { return KisID("roundcorners", i18n("Round Corners")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
+    virtual bool supportsAdjustmentLayers () { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
         { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRoundCornersFilterConfiguration(30)); return list; }
 public:

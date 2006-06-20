@@ -41,6 +41,7 @@ SmearyBrush::SmearyBrush(QObject *parent, const char *name, const QStringList &)
     // This is not a gui plugin; only load it when the doc is created.
     if ( parent->inherits("KisPaintOpRegistry") )
     {
+        kdDebug() << "Loading smeary brush\n";
         KisPaintOpRegistry * r = dynamic_cast<KisPaintOpRegistry*>(parent);
         r->add ( new KisSmearyOpFactory );
     }

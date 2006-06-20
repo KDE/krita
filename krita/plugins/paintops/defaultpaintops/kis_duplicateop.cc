@@ -88,10 +88,11 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if (brush->brushType() == IMAGE ||
         brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), info, xFraction, yFraction);
+        dab->convertTo(KisMetaRegistry::instance()->csRegistry()->getAlpha8());
     }
     else {
         KisAlphaMaskSP mask = brush->mask(info, xFraction, yFraction);
-        dab = computeDab(mask);
+        dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->getAlpha8());
     }
 
     m_painter->setPressure(info.pressure);
@@ -109,7 +110,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     if( srcPoint.y() < 0)
         srcPoint.setY(0);
 
-    KisPaintDeviceSP srcdev = new KisPaintDevice(dab->colorSpace(), "duplicate source dev");
+    KisPaintDeviceSP srcdev = new KisPaintDevice(device->colorSpace(), "duplicate source dev");
     Q_CHECK_PTR(srcdev);
 
     // First, copy the source data on the temporary device:
@@ -117,8 +118,6 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     copyPainter.bitBlt(0, 0, COMPOSITE_COPY, device, srcPoint.x(), srcPoint.y(), sw, sh);
     copyPainter.end();
 
-    // Convert the dab to the colorspace of a selection
-    dab->convertTo(KisMetaRegistry::instance()->csRegistry()->getAlpha8());
 
     // Add the dab as selection to the srcdev
     KisPainter copySelection(srcdev->selection().data());

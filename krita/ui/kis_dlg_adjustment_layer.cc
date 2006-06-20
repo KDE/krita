@@ -85,7 +85,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisImage * img,
     grid->addWidget(m_layerName, 0, 1);
     connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
 
-    m_filtersList = new KisFiltersListView(m_dev, page, "dlgadjustment.filtersList");
+    m_filtersList = new KisFiltersListView(m_dev,  page, true, "dlgadjustment.filtersList");
     connect(m_filtersList , SIGNAL(selectionChanged(QIconViewItem*)), this, SLOT(selectionHasChanged(QIconViewItem* )));
     grid->addMultiCellWidget(m_filtersList, 1, 2, 0, 0);
 

@@ -93,6 +93,7 @@ protected:
 };
 
 class KisPaintOpSettings {
+
 public:
     KisPaintOpSettings(QWidget *parent) { Q_UNUSED(parent); }
     virtual ~KisPaintOpSettings() {}

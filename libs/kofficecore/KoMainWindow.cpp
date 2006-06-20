@@ -182,11 +182,10 @@ public:
   int m_lastExportSpecialOutputFlag;
 };
 
-KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
+KoMainWindow::KoMainWindow( KInstance *instance )
     : KParts::MainWindow( )
 {
-	setObjectName(name);
-    setStandardToolBarMenuEnabled(true); // should there be a check for >= 3.1 ?
+    setStandardToolBarMenuEnabled(true);
     Q_ASSERT(instance);
     d = new KoMainWindowPrivate;
 
@@ -1564,7 +1563,7 @@ void KoMainWindow::setMaxRecentItems(uint _number)
 //     {
 //         d->m_dcopObject = new KoMainWindowIface( this );
 //     }
-// 
+//
 //     return d->m_dcopObject;
 // }
 

@@ -97,11 +97,11 @@ KoTextView::KoTextView( KoTextObject *textobj )
 
     m_textobj->formatMore( 2 );
 
-    blinkCursorVisible = FALSE;
-    inDoubleClick = FALSE;
-    mightStartDrag = FALSE;
-    possibleTripleClick = FALSE;
-    afterTripleClick = FALSE;
+    blinkCursorVisible = false;
+    inDoubleClick = false;
+    mightStartDrag = false;
+    possibleTripleClick = false;
+    afterTripleClick = false;
     m_currentFormat = 0;
     m_variablePosition =-1;
     m_overwriteMode = false;
@@ -121,7 +121,7 @@ KoTextView::~KoTextView()
 // {
 //     if ( !dcop )
 //         dcop = new KoTextViewIface( this );
-// 
+//
 //     return dcop;
 // }
 
@@ -170,30 +170,30 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 {
     textObject()->typingStarted();
 
-    /* bool selChanged = FALSE;
+    /* bool selChanged = false;
     for ( int i = 1; i < textDocument()->numSelections(); ++i )
         selChanged = textDocument()->removeSelection( i ) || selChanged;
 
     if ( selChanged ) {
-        // m_cursor->parag()->document()->nextDoubleBuffered = TRUE; ######## we need that only if we have nested items/documents
+        // m_cursor->parag()->document()->nextDoubleBuffered = true; ######## we need that only if we have nested items/documents
         textFrameSet()->selectionChangedNotify();
     }*/
 
-    bool clearUndoRedoInfo = TRUE;
+    bool clearUndoRedoInfo = true;
     if ( KShortcut(  e->key() ) == KStdAccel::deleteWordBack() )
     {
         if ( m_cursor->parag()->string()->isRightToLeft() )
             deleteWordRight();
         else
             deleteWordLeft();
-        clearUndoRedoInfo = TRUE;
+        clearUndoRedoInfo = true;
     } else if ( KShortcut( e->key() ) == KStdAccel::deleteWordForward() )
     {
         if ( m_cursor->parag()->string()->isRightToLeft() )
             deleteWordLeft();
         else
             deleteWordRight();
-        clearUndoRedoInfo = TRUE;
+        clearUndoRedoInfo = true;
     }
     else
     switch ( e->key() ) {
@@ -238,7 +238,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             {
                 if ( textObject()->hasSelection() )
                     textObject()->removeSelectedText( m_cursor );
-                clearUndoRedoInfo = FALSE;
+                clearUndoRedoInfo = false;
                 textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
                 Q_ASSERT( m_cursor->parag()->prev() );
                 if ( m_cursor->parag()->prev() )
@@ -255,7 +255,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 
         textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionDelete );
 
-        clearUndoRedoInfo = FALSE;
+        clearUndoRedoInfo = false;
         break;
     case Qt::Key_Backtab:
       if (e->modifiers() & Qt::ShiftModifier && m_cursor->parag() && m_cursor->atParagStart() && m_cursor->parag()->counter() && textDecreaseIndent())
@@ -268,7 +268,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         }
 	textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
 
-        clearUndoRedoInfo = FALSE;
+        clearUndoRedoInfo = false;
         break;
     case Qt::Key_F16: // Copy key on Sun keyboards
         emit copy(QClipboard::Clipboard);
@@ -314,7 +314,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
                         break;
             }
             if ( e->text().length() &&
-                 ( !e->ascii() || e->ascii() >= 32 ) ||
+                 //( !e->ascii() || e->ascii() >= 32 ) ||
                  ( e->text() == "\t" && !( e->modifiers() & Qt::ControlModifier ) ) ) {
                 clearUndoRedoInfo = false;
                 QString text = e->text();
@@ -366,28 +366,37 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             else
 	    {
 	      if ( e->modifiers() & Qt::ControlModifier )
-		switch ( e->key() )
-	      {
-		case Qt::Key_F16: // Copy key on Sun keyboards
-		  emit copy(QClipboard::Clipboard);
-		  break;
-		case Qt::Key_A:
-		  moveCursor( MoveLineStart, e->modifiers() & Qt::ShiftModifier );
-		  break;
-		case Qt::Key_E:
-		  moveCursor( MoveLineEnd, e->modifiers() & Qt::ShiftModifier );
-		  break;
-		case Qt::Key_K:
-		  textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionKill );
-		  break;
-		case Qt::Key_Insert:
-		  emit copy(QClipboard::Clipboard);
-		  break;
-		case Qt::Key_Space:
-		  insertNonbreakingSpace();
-		  break;
-	      }
-	    }
+              {
+                  switch ( e->key() )
+                  {
+                  case Qt::Key_F16: // Copy key on Sun keyboards
+                      emit copy(QClipboard::Clipboard);
+                      break;
+                  case Qt::Key_A:
+                      moveCursor( MoveLineStart, e->modifiers() & Qt::ShiftModifier );
+                      break;
+                  case Qt::Key_E:
+                      moveCursor( MoveLineEnd, e->modifiers() & Qt::ShiftModifier );
+                      break;
+                  case Qt::Key_K:
+                      textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionKill );
+                      break;
+                  case Qt::Key_Insert:
+                      emit copy(QClipboard::Clipboard);
+                      break;
+                  case Qt::Key_Space:
+                      insertNonbreakingSpace();
+                      break;
+                  default:
+                      clearUndoRedoInfo = false;
+                      break;
+                  }
+              }
+              else  // e.g. just Key_Shift -> don't do anything (#129481)
+              {
+                  clearUndoRedoInfo = false;
+              }
+            }
             break;
         }
     }
@@ -649,7 +658,7 @@ void KoTextView::extendParagraphSelection( const QPoint& iPoint )
     KoTextCursor oldCursor = *m_cursor;
     placeCursor( iPoint );
 
-    bool redraw = FALSE;
+    bool redraw = false;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
     {
         redraw = textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
@@ -682,7 +691,7 @@ QString KoTextView::wordUnderCursor( const KoTextCursor& cursor )
 bool KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bool canStartDrag, bool insertDirectCursor )
 {
     bool addParag = false;
-    mightStartDrag = FALSE;
+    mightStartDrag = false;
     hideCursor();
 
     if (possibleTripleClick)
@@ -709,7 +718,7 @@ bool KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
 
     KoTextDocument * textdoc = textDocument();
     if ( canStartDrag && textdoc->inSelection( KoTextDocument::Standard, iPoint ) ) {
-        mightStartDrag = TRUE;
+        mightStartDrag = true;
         m_textobj->emitShowCursor();
 	dragStartTimer->setSingleShot( true );
         dragStartTimer->start( QApplication::startDragTime() );
@@ -717,7 +726,7 @@ bool KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
         return addParag;
     }
 
-    bool redraw = FALSE;
+    bool redraw = false;
     if ( textdoc->hasSelection( KoTextDocument::Standard ) ) {
         if ( !( e->modifiers() & Qt::ShiftModifier ) ) {
             redraw = textdoc->removeSelection( KoTextDocument::Standard );
@@ -772,7 +781,7 @@ void KoTextView::handleMouseMoveEvent( QMouseEvent*, const QPoint& iPoint )
             *m_cursor = oldCursor;
     }
 
-    bool redraw = FALSE;
+    bool redraw = false;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
         redraw = textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor ) || redraw;
     else // it may be that the initial click was out of the frame
@@ -789,7 +798,7 @@ void KoTextView::handleMouseReleaseEvent()
     if ( dragStartTimer->isActive() )
         dragStartTimer->stop();
     if ( mightStartDrag ) {
-        textObject()->selectAll( FALSE );
+        textObject()->selectAll( false );
         mightStartDrag = false;
     }
     else
@@ -804,7 +813,7 @@ void KoTextView::handleMouseReleaseEvent()
         emit copy(QClipboard::Selection);
     }
 
-    inDoubleClick = FALSE;
+    inDoubleClick = false;
     m_textobj->emitShowCursor();
 }
 
@@ -818,7 +827,7 @@ void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i )
         return;
     }
 
-    inDoubleClick = TRUE;
+    inDoubleClick = true;
     *m_cursor = selectWordUnderCursor( *m_cursor );
     textObject()->selectionChangedNotify();
     emit copy(QClipboard::Selection);
@@ -841,7 +850,7 @@ void KoTextView::handleMouseTripleClickEvent( QMouseEvent*ev, const QPoint& /* C
         return;
     }
     afterTripleClick= true;
-    inDoubleClick = FALSE;
+    inDoubleClick = false;
     *m_cursor = selectParagUnderCursor( *m_cursor );
     QTimer::singleShot(QApplication::doubleClickInterval(),this,SLOT(afterTripleClickTimeout()));
 }
@@ -877,7 +886,7 @@ bool KoTextView::insertParagraph(const QPoint &pos)
     {
         KoTextParag *s=textDocument()->createParag( textDocument(), last );
         if ( f )
-	    s->setFormat( 0, 1, f, TRUE );
+	    s->setFormat( 0, 1, f, true );
         if ( style )
             s->setStyle( style );
         s->setCounter( counter );
@@ -967,8 +976,8 @@ KCommand* KoTextView::setFormatCommand( const KoTextFormat * newFormat, int flag
 
 void KoTextView::dragStarted()
 {
-    mightStartDrag = FALSE;
-    inDoubleClick = FALSE;
+    mightStartDrag = false;
+    inDoubleClick = false;
 }
 
 void KoTextView::applyStyle( const KoParagStyle * style )

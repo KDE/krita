@@ -283,7 +283,7 @@ int main(int argc, char** argv)
     // Okey for a debug app.
     QApplication::clipboard()->clear();
 
-    int destruct = BasicElement::getEvilDestructionCount();
+    int destruct = 0;//BasicElement::getEvilDestructionCount();
     if (destruct != 0) {
         std::cerr << "BasicElement::EvilDestructionCount: " << destruct << std::endl;
     }

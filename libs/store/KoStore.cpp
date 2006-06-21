@@ -28,6 +28,7 @@
 #include "KoZipStore.h"
 #include "KoDirectoryStore.h"
 
+#include <QBuffer>
 #include <QFileInfo>
 #include <QFile>
 #include <QDir>
@@ -457,12 +458,24 @@ bool KoStore::addLocalFile( const QString &fileName, const QString &destName )
 
 bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
 {
-  if ( !open ( srcName ) )
-    return false;
-
   QFile file( fileName );
+  return extractFile( srcName, file );
+}
 
-  if( !file.open ( QIODevice::WriteOnly ) )
+
+bool KoStore::extractFile( const QString &srcName, QByteArray &data )
+{
+  kdDebug() << "hello" << endl;
+  QBuffer buffer( &data );
+  return extractFile( srcName, buffer );
+}
+
+bool KoStore::extractFile( const QString &srcName, QIODevice &buffer )
+{
+  if ( !open ( srcName ) )
+     return false;
+
+  if( !buffer.open ( QIODevice::WriteOnly ) )
   {
     close();
     return false;
@@ -474,17 +487,18 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
   uint total = 0;
   for( int block = 0; ( block = read( data.data(), data.size() ) ) > 0; total += block )
   {
-    file.write( data.data(), block );
+    buffer.write( data.data(), block );
   }
 
   if( size() != static_cast<qint64>(-1) )
-  	Q_ASSERT( total == size() );
+    Q_ASSERT( total == size() );
 
-  file.close();
+  buffer.close();
   close();
 
   return true;
 }
+
 
 QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &destName )
 {

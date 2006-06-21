@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Fredrik Edemar <f_edemar@linux.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,20 +23,21 @@
 
 #include <kdialog.h>
 
+#include "KoDocument.h"
+
 class QPushButton;
 class QToolButton;
-class K3ListView;
+class QTreeWidget;
 class Q3MultiLineEdit;
 
 class KoVersionDialog : public KDialog
 {
     Q_OBJECT
 public:
-    KoVersionDialog(  QWidget* parent, const char* name = 0L );
+    KoVersionDialog(  QWidget* parent, KoDocument *doc );
     ~KoVersionDialog();
 
 public slots:
-    virtual void slotOk();
     void slotRemove();
     void slotAdd();
     void slotOpen();
@@ -46,18 +48,19 @@ protected:
     void init();
     void updateButton();
 
-    K3ListView * list;
+    QTreeWidget * list;
     QPushButton* m_pRemove;
     QPushButton* m_pAdd;
     QPushButton* m_pOpen;
     QPushButton* m_pModify;
+    KoDocument *m_doc;
 };
 
 class KoVersionModifyDialog : public KDialog
 {
     Q_OBJECT
 public:
-    KoVersionModifyDialog(  QWidget* parent, const QString &_comment = QString::null , const char* name = 0L );
+    KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *info );
 
     QString comment() const;
 

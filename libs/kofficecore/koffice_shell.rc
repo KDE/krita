@@ -9,7 +9,7 @@
   <Action name="file_save" />
   <Action name="file_save_as" />
   <Action name="file_reload_file" />
-<!--  <Action name="file_versions_file"/> -->
+  <Action name="file_versions_file"/>
   <Separator />
   <Action name="file_import_file" />
   <Action name="file_export_file" />

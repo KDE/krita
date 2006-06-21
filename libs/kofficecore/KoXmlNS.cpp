@@ -39,6 +39,7 @@ const char* const KoXmlNS::svg = "urn:oasis:names:tc:opendocument:xmlns:svg-comp
 const char* const KoXmlNS::fo = "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0";
 const char* const KoXmlNS::dc = "http://purl.org/dc/elements/1.1/";
 const char* const KoXmlNS::xlink = "http://www.w3.org/1999/xlink";
+const char* const KoXmlNS::VL = "http://openoffice.org/2001/versions-list";
 // const char* const KoXmlNS::smil = "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0";
 
 const char* const KoXmlNS::koffice = "http://www.koffice.org/2005/";

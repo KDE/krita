@@ -20,6 +20,7 @@
 
 #include "KoDocument.h"
 
+#include "KoDom.h"
 #include "KoDocument_p.h"
 #include "KoDocumentAdaptor.h"
 #include <dbus/qdbus.h>
@@ -176,6 +177,7 @@ public:
 
     KoOpenPane* m_startUpWidget;
     QString m_templateType;
+    QList<KoVersionInfo> m_versionInfo;
 };
 
 // Used in singleViewMode
@@ -1725,17 +1727,34 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
 bool KoDocument::loadNativeFormatFromStore( const QString& file )
 {
-    KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
-    KoStore * store = KoStore::createStore( file, KoStore::Read, "", backend );
+  KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
+  KoStore * store = KoStore::createStore( file, KoStore::Read, "", backend );
 
-    if ( store->bad() )
-    {
-        d->lastErrorMessage = i18n( "Not a valid KOffice file: %1", file );
-        delete store;
-        QApplication::restoreOverrideCursor();
-        return false;
-    }
+  if ( store->bad() )
+  {
+    d->lastErrorMessage = i18n( "Not a valid KOffice file: %1", file );
+    delete store;
+    QApplication::restoreOverrideCursor();
+    return false;
+  }
 
+  return loadNativeFormatFromStoreInternal( store );
+}
+
+bool KoDocument::loadNativeFormatFromStore( QByteArray &data )
+{
+  KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
+  QBuffer buffer( &data );
+  KoStore * store = KoStore::createStore( &buffer, KoStore::Read, "", backend );
+
+  if ( store->bad() )
+    return false;
+
+  return loadNativeFormatFromStoreInternal( store );
+}
+
+bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
+{
     bool oasis = true;
     // OASIS/OOo file format?
     if ( store->hasFile( "content.xml" ) )
@@ -1802,6 +1821,29 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         //kDebug( 30003 ) << "cannot open document info" << endl;
         delete d->m_docInfo;
         d->m_docInfo = new KoDocumentInfo( this );
+    }
+
+    if ( oasis && store->hasFile( "VersionList.xml" ) ) {
+        QDomDocument versionInfo;
+        KoOasisStore oasisStore( store );
+        if ( oasisStore.loadAndParse( "VersionList.xml", versionInfo, d->lastErrorMessage ) )
+        {
+            QDomNode list = KoDom::namedItemNS( versionInfo, KoXmlNS::VL, "version-list" );
+            QDomElement e;
+            forEachElement( e, list )
+            {
+                if ( e.localName() == "version-entry" && e.namespaceURI() == KoXmlNS::VL )
+                {
+                    KoVersionInfo version;
+                    version.comment = e.attribute( "comment");
+                    version.title = e.attribute( "title");
+                    version.saved_by = e.attribute( "creator");
+                    version.date = QDateTime::fromString( e.attribute( "date-time"), Qt::ISODate );
+                    store->extractFile( "Versions/"+version.title, version.data );
+                    d->m_versionInfo.append( version );
+                }
+            }
+        }
     }
 
     bool res = completeLoading( store );
@@ -2640,6 +2682,11 @@ bool KoDocument::showEmbedInitDialog(QWidget* parent)
     dlg.saveDialogSize(&cfg);
 
     return ok;
+}
+
+QList<KoVersionInfo> & KoDocument::versionList()
+{
+  return d->m_versionInfo;
 }
 
 #include "KoDocument_p.moc"

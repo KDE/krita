@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Fredrik Edemar <f_edemar@linux.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,50 +19,63 @@
 */
 
 
+#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QLayout>
-#include <q3multilineedit.h>
+#include <QList>
 #include <QPushButton>
 #include <QToolButton>
-#include <QApplication>
-#include <QHBoxLayout>
-#include <QGridLayout>
+#include <QTreeWidget>
 
-#include <kiconloader.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
-#include <kmessagebox.h>
+#include <kiconloader.h>
 #include <klocale.h>
-#include <k3listview.h>
-#include <kdebug.h>
+#include <kmessagebox.h>
 
 #include <q3multilineedit.h>
 
 #include "Koversiondialog.h"
 
 
-KoVersionDialog::KoVersionDialog( QWidget* parent, const char* name )
+KoVersionDialog::KoVersionDialog( QWidget* parent, KoDocument *doc  )
     : KDialog( parent )
 {
   setCaption( i18n("Version") );
-  setButtons( Ok | Cancel );
+  setButtons( Close );
+  setDefaultButton( Close );
+  m_doc = doc;
 
   QWidget* page = new QWidget( this );
   setMainWidget( page );
   setModal( true );
-  setCaption( i18n("Version") );
-  setButtons( Ok|Cancel );
-  setObjectName( name );
 
   QGridLayout* grid1 = new QGridLayout( page );
   grid1->setMargin(KDialog::marginHint());
   grid1->setSpacing(KDialog::spacingHint());
 
-  list=new K3ListView(page);
-  list->setObjectName(  "versionlist");
-  list->addColumn(i18n("Date & Time"));
-  list->addColumn(i18n("Saved By"));
-  list->addColumn(i18n("Comment"));
+  list=new QTreeWidget(page);
+  list->setColumnCount( 3 );
+  QStringList h;
+  h.append( i18n("Date & Time") );
+  h.append( i18n("Saved By") );
+  h.append( i18n("Comment") );
+  list->setHeaderLabels( h );
+
+
+  // add all versions to the tree widget
+  QList<KoVersionInfo> versions = doc->versionList();
+  QList<QTreeWidgetItem *> items;
+  for (int i = 0; i < versions.size(); ++i)
+  {
+    QStringList l;
+    l.append( versions.at(i).date.toString() );
+    l.append( versions.at(i).saved_by );
+    l.append( versions.at(i).comment );
+    items.append( new QTreeWidgetItem( l ) );
+  }
+  list->insertTopLevelItems(0, items );
 
   grid1->addWidget(list,0,0,9,1);
 
@@ -82,6 +96,7 @@ KoVersionDialog::KoVersionDialog( QWidget* parent, const char* name )
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pOpen, SIGNAL( clicked() ), this, SLOT( slotOpen() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
+  connect( list, SIGNAL( itemActivated( QTreeWidgetItem *, int ) ), this, SLOT( slotModify() ) );
 
   updateButton();
 
@@ -108,16 +123,40 @@ void KoVersionDialog::slotAdd()
 
 void KoVersionDialog::slotRemove()
 {
-    //TODO remove entry
+  if ( !list->currentItem() )
+    return;
+
+  for (int i = 0; i < m_doc->versionList().size(); ++i) {
+    if ( m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0) )
+    {
+      m_doc->versionList().takeAt(i);
+      delete list->currentItem();
+      return;
+    }
+  }
 }
 
 void KoVersionDialog::slotModify()
 {
-    KoVersionModifyDialog * dlg = new KoVersionModifyDialog(  this /*, const QString &_comment*/ /*TODO add*/ );
+    if ( !list->currentItem() )
+        return;
+
+    KoVersionInfo *version = 0;
+    for (int i = 0; i < m_doc->versionList().size(); ++i) {
+      if ( m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0) )
+      {
+        version = &m_doc->versionList()[i];
+        break;
+      }
+    }
+    if ( !version )
+      return;
+
+    KoVersionModifyDialog * dlg = new KoVersionModifyDialog( this, version );
     if ( dlg->exec() )
     {
-        //TODO
-        kDebug()<<" comment :"<<dlg->comment()<<endl;
+      version->comment = dlg->comment();
+      list->currentItem()->setText(2, version->comment );
     }
     delete dlg;
 
@@ -125,32 +164,48 @@ void KoVersionDialog::slotModify()
 
 void KoVersionDialog::slotOpen()
 {
-    //TODO open file
+  if ( !list->currentItem() )
+    return;
+
+  KoVersionInfo *version = 0;
+  for (int i = 0; i < m_doc->versionList().size(); ++i) {
+    if ( m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0) )
+    {
+      version = &m_doc->versionList()[i];
+      break;
+    }
+  }
+  if ( !version )
+    return;
+
+  bool result = m_doc->loadNativeFormatFromStore( version->data );
+  if ( !result )
+    KMessageBox::error( this, i18n("The version could not be opened") );
+  else
+    slotButtonClicked( Cancel );
 }
 
-void KoVersionDialog::slotOk()
-{
-    accept();
-}
-
-KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, const QString &/*comment*/, const char* name )
+KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *info )
     : KDialog( parent  )
 {
     setCaption( i18n("Comment") );
     setButtons( Ok | Cancel );
+    setDefaultButton( Ok );
+    setModal( true );
 
     QWidget* page = new QWidget( this );
     setMainWidget( page );
-    setButtons( Ok|Cancel );
-    setCaption( i18n("Comment") );
-    setModal( true );
-    setObjectName( name );
 
-    QHBoxLayout *grid1 = new QHBoxLayout( page );
+    QVBoxLayout *grid1 = new QVBoxLayout( page );
     grid1->setMargin(KDialog::marginHint());
     grid1->setSpacing(KDialog::spacingHint());
 
-    m_multiline=new Q3MultiLineEdit(page, "multiline");
+    QLabel *l = new QLabel( page );
+    l->setText( i18n("Date: %1", info->date.toString() ) );
+    grid1->addWidget( l );
+
+    m_multiline = new Q3MultiLineEdit( page );
+    m_multiline->setText( info->comment );
     grid1->addWidget( m_multiline );
 
 }

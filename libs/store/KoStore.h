@@ -236,6 +236,13 @@ public:
    */
   bool extractFile( const QString &srcName, const QString &fileName );
 
+  /**
+   * Extracts a file out of the store to a buffer
+   * @param srcName file in the store
+   * @param data memory buffer
+   */
+  bool extractFile( const QString &srcName, QByteArray &data );
+
   //@{
   /// See QIODevice
   bool seek( qint64 pos );
@@ -342,6 +349,8 @@ private:
    * Performs some checking when in Read mode
    */
   bool enterDirectoryInternal( const QString& directory );
+
+  bool extractFile( const QString &srcName, QIODevice &buffer );
 
 protected:
 

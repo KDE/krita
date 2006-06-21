@@ -23,6 +23,7 @@
 #define __ko_document_h__
 
 class KoTextDocument;
+#include <QDateTime>
 #include <QList>
 #include <QMatrix>
 //Added by qt3to4:
@@ -55,6 +56,18 @@ class KoDocumentInfo;
 class KoOasisStyles;
 class KoXmlWriter;
 class KoOpenPane;
+
+
+class KoVersionInfo
+{
+public:
+    QDateTime date;
+    QString saved_by;
+    QString comment;
+    QString title;
+
+    QByteArray data; //the content of the compressed version
+};
 
 /**
  *  The %KOffice document class
@@ -900,6 +913,12 @@ public:
      */
     virtual bool showEmbedInitDialog(QWidget* parent);
 
+
+    QList<KoVersionInfo> &versionList();
+
+    bool loadNativeFormatFromStore( QByteArray &data );
+
+
 public slots:
     /**
      * Initialize an empty document using default values
@@ -1137,6 +1156,8 @@ private:
     KService::Ptr nativeService();
     bool oldLoadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );
+    bool loadNativeFormatFromStoreInternal( KoStore * store );
+
     bool savePreview( KoStore* store );
     bool saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter );
     class Private;

@@ -419,7 +419,7 @@ void KoMainWindow::updateReloadFileAction(KoDocument *doc)
 void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
 {
     //TODO activate it just when we save it in oasis file format
-    d->m_versionsfile->setEnabled( doc && !doc->url().isEmpty()&&doc->isModified());
+    d->m_versionsfile->setEnabled( doc && !doc->url().isEmpty() && doc->mimeType() == doc->nativeOasisMimeType() );
 }
 
 
@@ -1622,7 +1622,9 @@ void KoMainWindow::slotEmailFile()
 
 void KoMainWindow::slotVersionsFile()
 {
-    KoVersionDialog *dlg = new KoVersionDialog(  this );
+    if ( !rootDocument() )
+        return;
+    KoVersionDialog *dlg = new KoVersionDialog( this, rootDocument() );
     dlg->exec();
     delete dlg;
 }

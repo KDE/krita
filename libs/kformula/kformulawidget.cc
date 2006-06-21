@@ -53,7 +53,7 @@ KFormulaWidget::KFormulaWidget(Container* doc, QWidget* parent)
     setFocusPolicy(Qt::StrongFocus);
     setBackgroundMode(Qt::NoBackground/*QWidget::PaletteBase*/);
 
-    QRect rect = doc->boundingRect();
+    QRect rect = doc->boundingRect().toRect();
     slotFormulaChanged(rect.width(), rect.height());
 }
 

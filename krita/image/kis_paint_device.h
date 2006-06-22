@@ -503,6 +503,7 @@ signals:
     void positionChanged(KisPaintDeviceSP device);
     void ioProgress(qint8 percentage);
     void profileChanged(KoColorProfile *  profile);
+    void colorSpaceChanged(KoColorSpace *colorspace);
 
 private slots:
 

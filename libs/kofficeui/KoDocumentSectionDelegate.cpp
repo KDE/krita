@@ -23,3 +23,4 @@ KoDocumentSectionDelegate::KoDocumentSectionDelegate( QObject *parent )
 {
 }
 
+#include "KoDocumentSectionDelegate.moc"

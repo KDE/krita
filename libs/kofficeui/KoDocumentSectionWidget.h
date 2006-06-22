@@ -20,12 +20,13 @@
 #define KO_DOCUMENT_SECTION_WIDGET_H
 
 #include <QWidget>
+#include <koffice_export.h>
 #include "KoDocumentSectionModel.h"
 
-class KoDocumentSectionWidget: public QWidget
+class KOFFICEUI_EXPORT KoDocumentSectionWidget: public QWidget
 {
     typedef QWidget super;
-    //Q_OBJECT
+    Q_OBJECT
 
     public:
         KoDocumentSectionWidget( QWidget *parent = 0 );

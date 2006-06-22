@@ -20,11 +20,12 @@
 #define KO_DOCUMENT_SECTION_DELEGATE_H
 
 #include <QItemDelegate>
+#include <koffice_export.h>
 
-class KoDocumentSectionDelegate: public QItemDelegate
+class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QItemDelegate
 {
     typedef QItemDelegate super;
-    //Q_OBJECT
+    Q_OBJECT
 
     public:
         KoDocumentSectionDelegate( QObject *parent = 0 );

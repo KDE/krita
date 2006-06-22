@@ -46,13 +46,13 @@ class KoDocumentSectionModel: public QAbstractItemModel
         PropertiesRole
     };
 
-    /// describes a single property of a document partition
+    /// describes a single property of a document section
     struct Property
     {
         /** i18n-ed name, suitable for displaying */
         QString name;
 
-        /** Whether the property is a boolean which can be toggled directly from widget itself. */
+        /** Whether the property is a boolean which can be toggled directly from the widget itself. */
         bool isMutable;
 
         /** Provide these if the property isMutable. */

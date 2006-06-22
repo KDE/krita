@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QListView>
+#include <QTreeView>
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionWidget.h"
 
@@ -24,7 +24,7 @@ class KoDocumentSectionWidget::Private
 {
     public:
         KoDocumentSectionDelegate *delegate;
-        QListView *view;
+        QTreeView *view;
         Private(): delegate( 0 ), view( 0 ) { }
 };
 
@@ -32,7 +32,7 @@ KoDocumentSectionWidget::KoDocumentSectionWidget( QWidget *parent )
     : QWidget( parent )
     , d( new Private )
 {
-    d->view = new QListView( this );
+    d->view = new QTreeView( this );
     d->delegate = new KoDocumentSectionDelegate( this );
     d->view->setItemDelegate( d->delegate );
 }
@@ -47,3 +47,4 @@ void KoDocumentSectionWidget::setModel( KoDocumentSectionModel *model )
     d->view->setModel( model );
 }
 
+#include "KoDocumentSectionWidget.moc"

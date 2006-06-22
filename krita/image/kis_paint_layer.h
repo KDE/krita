@@ -75,7 +75,11 @@ public:
     /// Returns the paintDevice that accompanies this layer
     inline KisPaintDeviceSP paintDevice() const { return m_paintdev; };
 
+private slots:
+    void slotColorSpaceChanged();
+
 private:
+    void init();
     KisPaintDeviceSP m_paintdev;
 };
 

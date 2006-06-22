@@ -653,6 +653,7 @@ void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, qint32 renderingInt
     if (undoAdapter() && undoAdapter()->undo()) {
         undoAdapter()->addCommand(new KisConvertLayerTypeCmd(undoAdapter(), KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_colorSpace));
     }
+    emit colorSpaceChanged(dstColorSpace);
 }
 
 void KisPaintDevice::setProfile(KoColorProfile * profile)
@@ -664,7 +665,7 @@ void KisPaintDevice::setProfile(KoColorProfile * profile)
                                                                       profile);
     if (dstSpace)
         m_colorSpace = dstSpace;
-
+    emit profileChanged(profile);
 }
 
 void KisPaintDevice::setData(KisDataManagerSP data, KoColorSpace * colorSpace)

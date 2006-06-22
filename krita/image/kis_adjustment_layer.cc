@@ -92,6 +92,7 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 {
     Q_ASSERT(filterConfig);
     m_filterConfig = filterConfig;
+    notifyPropertyChanged(this);
 }
 
 

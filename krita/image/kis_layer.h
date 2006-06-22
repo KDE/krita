@@ -228,6 +228,12 @@ public: // from QAbstractItemModel
     virtual QModelIndex parent(const QModelIndex &index) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
+protected:
+    QModelIndex indexFromLayer(KisLayer *layer) const;
+
+    /// causes QAbstractItemModel::dataChanged() to be emitted and percolated up the tree
+    void notifyPropertyChanged(KisLayer *layer);
+
 private:
     friend class KisGroupLayer;
 

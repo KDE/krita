@@ -37,7 +37,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity,
     Q_ASSERT(dev);
     m_paintdev = dev;
     m_paintdev->setParentLayer(this);
-    m_paintdev->startBackgroundFilters();
+    init();
 }
 
 
@@ -46,7 +46,7 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity)
 {
     Q_ASSERT(img);
     m_paintdev = new KisPaintDevice(this, img->colorSpace(), name);
-    m_paintdev->startBackgroundFilters();
+    init();
 }
 
 KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity, KoColorSpace * colorSpace)
@@ -55,14 +55,21 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, quint8 opacity,
     Q_ASSERT(img);
     Q_ASSERT(colorSpace);
     m_paintdev = new KisPaintDevice(this, colorSpace, name);
-    m_paintdev->startBackgroundFilters();
+    init();
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) : KisLayer(rhs)
 {
     m_paintdev = new KisPaintDevice( *rhs.m_paintdev.data() );
     m_paintdev->setParentLayer(this);
+    init();
+}
+
+void KisPaintLayer::init()
+{
     m_paintdev->startBackgroundFilters();
+    connect(m_paintdev.data(), SIGNAL(colorSpaceChanged(KoColorSpace*)), this, SLOT(slotColorSpaceChanged()));
+    connect(m_paintdev.data(), SIGNAL(profileChanged(KoProfile*)), this, SLOT(slotColorSpaceChanged()));
 }
 
 QIcon KisPaintLayer::icon() const
@@ -150,5 +157,10 @@ void KisPaintLayer::setY(qint32 y) { if (m_paintdev) m_paintdev->setY(y); }
 
 QRect KisPaintLayer::extent() const { if (m_paintdev) return m_paintdev->extent(); else return QRect(); }
 QRect KisPaintLayer::exactBounds() const { if (m_paintdev) return m_paintdev->exactBounds(); else return QRect(); }
+
+void KisPaintLayer::slotColorSpaceChanged()
+{
+    notifyPropertyChanged(this);
+}
 
 #include "kis_paint_layer.moc"

@@ -168,6 +168,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
         kWarning() << "invalid input to KisGroupLayer::addLayer(KisLayerSP newLayer, int x)!" << endl;
         return false;
     }
+    notifyAboutToAdd(this, x);
     uint index(x);
     if (index == 0)
         m_layers.append(newLayer);
@@ -180,6 +181,7 @@ bool KisGroupLayer::addLayer(KisLayerSP newLayer, int x)
     newLayer->setImage(image());
     newLayer->setDirty(newLayer->extent());
     setDirty();
+    notifyAdded(this, x);
     return true;
 }
 
@@ -204,6 +206,7 @@ bool KisGroupLayer::removeLayer(int x)
 
         removedLayer->m_parent = 0;
         removedLayer->m_index = -1;
+        notifyAboutToRemove(this, x);
         m_layers.erase(m_layers.begin() + reverseIndex(index));
         setDirty(removedLayer->extent());
         if (childCount() < 1) {
@@ -211,6 +214,7 @@ bool KisGroupLayer::removeLayer(int x)
             m_projection->clear();
             setDirty();
         }
+        notifyRemoved(this, x);
         return true;
     }
     kWarning() << "invalid input to KisGroupLayer::removeLayer()!" << endl;
@@ -422,7 +426,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
 Qt::ItemFlags KisGroupLayer::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return super::flags(index);
+        return Qt::ItemIsEnabled;
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
@@ -451,5 +455,34 @@ bool KisGroupLayer::setData(const QModelIndex &index, const QVariant &value, int
 
     return false;
 }
+
+void KisGroupLayer::notifyAboutToAdd(KisGroupLayer *p, int index)
+{
+    beginInsertRows(indexFromLayer(p), index, index);
+    if (parent())
+        parent()->notifyAboutToAdd(p, index);
+}
+
+void KisGroupLayer::notifyAdded(KisGroupLayer *p, int index)
+{
+    endInsertRows();
+    if (parent())
+        parent()->notifyAdded(p, index);
+}
+
+void KisGroupLayer::notifyAboutToRemove(KisGroupLayer *p, int index)
+{
+    beginRemoveRows(indexFromLayer(p), index, index);
+    if (parent())
+        parent()->notifyAboutToRemove(p, index);
+}
+
+void KisGroupLayer::notifyRemoved(KisGroupLayer *p, int index)
+{
+    endRemoveRows();
+    if (parent())
+        parent()->notifyRemoved(p, index);
+}
+
 
 #include "kis_group_layer.moc"

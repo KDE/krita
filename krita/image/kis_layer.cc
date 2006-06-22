@@ -605,45 +605,68 @@ void KisLayer::notifyPropertyChanged()
 {
     if(image() && !signalsBlocked())
         image()->notifyPropertyChanged(KisLayerSP(this));
+    notifyPropertyChanged(this);
+}
+
+void KisLayer::notifyPropertyChanged(KisLayer *layer)
+{
+    QModelIndex index = indexFromLayer(layer);
+    emit dataChanged(index, index);
+    if (parent())
+        parent()->notifyPropertyChanged(layer);
+}
+
+QModelIndex KisLayer::indexFromLayer(KisLayer *layer) const
+{
+    Q_ASSERT(layer);
+    return createIndex(layer->index(), 0, layer);
 }
 
 int KisLayer::rowCount(const QModelIndex &parent) const
 {
+    kDebug() << "rowCount() " << parent.isValid() << " " << parent.row() << " " << parent.column() << " " << parent.internalPointer() << endl;
     if (!parent.isValid())
-        return 1;
+        return childCount();
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
 
     return static_cast<KisLayer*>(parent.internalPointer())->childCount();
 }
 
-int KisLayer::columnCount(const QModelIndex&) const
+int KisLayer::columnCount(const QModelIndex &i) const
 {
-    return 0;
+    kDebug() << "columnCount() " << i.isValid() << " " << i.row() << " " << i.column() << " " << i.internalPointer() << endl;
+    return 1;
 }
 
 QModelIndex KisLayer::index(int row, int column, const QModelIndex &parent) const
 {
+    kDebug() << "index() " << parent.isValid() << " " << row << " " << column << " " << parent.row() << " " << parent.column() << " " << parent.internalPointer() << endl;
     if (!parent.isValid())
     {
-        Q_ASSERT(row == 0);
-        return createIndex(row, column, (void*)this);
+        return createIndex(row, column, at(row).data());
     }
 
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
 
-    return createIndex(row, column, static_cast<KisLayer*>(parent.internalPointer())->at(row));
+    return createIndex(row, column, static_cast<KisLayer*>(parent.internalPointer())->at(row).data());
 }
 
 QModelIndex KisLayer::parent(const QModelIndex &i) const
 {
+    kDebug() << "parent() " << i.isValid() << " " << i.row() << " " << i.column() << " " << i.internalPointer() << endl;
     if (!i.isValid())
         return QModelIndex();
     Q_ASSERT(i.model() == this);
     Q_ASSERT(i.internalPointer());
 
-    if (KisGroupLayer *p = static_cast<KisLayer*>(i.internalPointer())->parent().data())
+    if (i.internalPointer() == (void*)1) //wtf?!
+        return QModelIndex();
+
+    if (static_cast<KisLayer*>(i.internalPointer())->parent().data() == this)
+        return QModelIndex();
+    else if (KisGroupLayer *p = static_cast<KisLayer*>(i.internalPointer())->parent().data())
         return createIndex(p->KisLayer::index(), 0, p); //gcc--
     else
         return QModelIndex();
@@ -651,6 +674,7 @@ QModelIndex KisLayer::parent(const QModelIndex &i) const
 
 QVariant KisLayer::data(const QModelIndex &index, int role) const
 {
+    kDebug() << "data() " << index.isValid() << " " << index.row() << " " << index.column() << " " << index.internalPointer() << endl;
     if (!index.isValid())
         return QVariant();
     Q_ASSERT(index.model() == this);

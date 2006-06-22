@@ -27,6 +27,8 @@
 #include "matrixelement.h"
 #include "sequenceelement.h"
 #include "textelement.h"
+#include "matrixentryelement.h"
+#include "matrixrowelement.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -452,5 +454,191 @@ void CharFamilyCommand::unexecute()
     testDirty();
 }
 
+
+KFCRemoveRow::KFCRemoveRow( const QString& name, Container* document, MatrixElement* m, int r, int c )
+    : Command( name, document ), matrix( m ), rowPos( r ), colPos( c ), row( 0 )
+{
+}
+
+KFCRemoveRow::~KFCRemoveRow()
+{
+    delete row;
+}
+
+void KFCRemoveRow::execute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+//    row = matrix->m_matrixRowElements.at( rowPos );
+    
+    FormulaElement* formula = matrix->formula();
+/*    for ( int i = matrix->cols(); i > 0; i-- ) 
+        formula->elementRemoval( row->at( i-1 ) );
+    
+    matrix->m_matrixRowElements.takeAt( rowPos );*/
+    formula->changed();
+
+    if ( rowPos < matrix->rows() )
+        matrix->matrixEntryAt( rowPos, colPos )->goInside( cursor );
+    else
+        matrix->matrixEntryAt( rowPos-1, colPos )->goInside( cursor );
+
+    testDirty();
+}
+
+void KFCRemoveRow::unexecute()
+{
+    //matrix->m_matrixRowElements.insert( rowPos, row );
+    row = 0;
+    FormulaCursor* cursor = getExecuteCursor();
+    matrix->matrixEntryAt( rowPos, colPos )->goInside( cursor );
+    matrix->formula()->changed();
+    testDirty();
+}
+
+
+KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElement* m, int r, int c )
+    : KFCRemoveRow( name, document, m, r, c )
+{
+/*    row = new QList<MatrixSequenceElement*>;
+    row->setAutoDelete( true );
+    for ( int i = 0; i < matrix->cols(); i++ ) {
+        row->append( new MatrixSequenceElement( matrix ) );
+    }*/
+}
+
+
+KFCRemoveColumn::KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, int r, int c )
+    : Command( name, document ), matrix( m ), rowPos( r ), colPos( c )
+{
+//    column = new QList<MatrixSequenceElement*>;
+//    column->setAutoDelete( true );
+}
+
+KFCRemoveColumn::~KFCRemoveColumn()
+{
+    delete column;
+}
+
+void KFCRemoveColumn::execute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+    FormulaElement* formula = matrix->formula();
+    for ( int i = 0; i < matrix->rows(); i++ ) {
+ //       column->append( matrix->matrixEntryAt( i, colPos ) );
+        formula->elementRemoval( column->at( i ) );
+//        matrix->m_matrixRowElements.at( i )->takeAt( colPos );
+    }
+    formula->changed();
+    if ( colPos < matrix->cols() )
+        matrix->matrixEntryAt( rowPos, colPos )->goInside( cursor );
+    else
+        matrix->matrixEntryAt( rowPos, colPos-1 )->goInside( cursor );
+    
+    testDirty();
+}
+
+void KFCRemoveColumn::unexecute()
+{
+    for ( int i = 0; i < matrix->rows(); i++ ) {
+//        matrix->m_matrixRowElements.at( i )->insert( colPos, column->takeAt( 0 ) );
+    }
+    FormulaCursor* cursor = getExecuteCursor();
+    matrix->matrixEntryAt( rowPos, colPos )->goInside( cursor );
+    matrix->formula()->changed();
+    testDirty();
+}
+
+
+KFCInsertColumn::KFCInsertColumn( const QString& name, Container* document, MatrixElement* m, int r, int c )
+    : KFCRemoveColumn( name, document, m, r, c )
+{
+    for ( int i = 0; i < matrix->rows(); i++ )
+        column->append( new MatrixRowElement( matrix ) );
+}
+
+KFCNewLine::KFCNewLine( const QString& name, Container* document,
+	                	MatrixEntryElement* line, uint pos )
+    : Command( name, document ), m_line( line ), m_pos( pos )
+{
+    m_newline = new MatrixEntryElement( m_line->getParent() );
+}
+
+
+KFCNewLine::~KFCNewLine()
+{
+    delete m_newline;
+}
+
+
+void KFCNewLine::execute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+    MatrixRowElement* parent = static_cast<MatrixRowElement*>( m_line->getParent() );
+    int linePos = parent->m_matrixEntryElements.indexOf( m_line );
+    parent->m_matrixEntryElements.insert( linePos+1, m_newline );
+
+    // If there are children to be moved.
+    if ( m_line->countChildren() > static_cast<int>( m_pos ) ) {
+
+        // Remove anything after position pos from the current line
+        m_line->selectAllChildren( cursor );
+        cursor->setMark( m_pos );
+        QList<BasicElement*> elementList;
+        m_line->remove( cursor, elementList, beforeCursor );
+
+        // Insert the removed stuff into the new line
+        m_newline->goInside( cursor );
+        m_newline->insert( cursor, elementList, beforeCursor );
+        cursor->setPos( cursor->getMark() );
+    }
+    else {
+        m_newline->goInside( cursor );
+    }
+
+    // The command no longer owns the new line.
+    m_newline = 0;
+
+    // Tell that something changed
+    FormulaElement* formula = m_line->formula();
+    formula->changed();
+    testDirty();
+}
+
+
+void KFCNewLine::unexecute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+    MatrixRowElement* parent = static_cast<MatrixRowElement*>( m_line->getParent() );
+    int linePos = parent->m_matrixEntryElements.indexOf( m_line );
+
+    // Now the command owns the new line again.
+    m_newline = parent->m_matrixEntryElements.at( linePos+1 );
+
+    // Tell all cursors to leave this sequence
+    FormulaElement* formula = m_line->formula();
+    formula->elementRemoval( m_newline );
+
+    // If there are children to be moved.
+    if ( m_newline->countChildren() > 0 ) {
+
+        // Remove anything from the line to be deleted
+        m_newline->selectAllChildren( cursor );
+        QList<BasicElement*> elementList;
+        m_newline->remove( cursor, elementList, beforeCursor );
+
+        // Insert the removed stuff into the previous line
+        m_line->moveEnd( cursor );
+        m_line->insert( cursor, elementList, beforeCursor );
+        cursor->setPos( cursor->getMark() );
+    }
+    else {
+        m_line->moveEnd( cursor );
+    }
+    parent->m_matrixEntryElements.takeAt( linePos+1 );
+
+    // Tell that something changed
+    formula->changed();
+    testDirty();
+}
 
 KFORMULA_NAMESPACE_END

@@ -30,8 +30,6 @@ KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
-int BasicElement::evilDestructionCount = 0;
-
 BasicElement::BasicElement( BasicElement* p )
         : m_baseline( 0 ), elementType( 0 )
 {

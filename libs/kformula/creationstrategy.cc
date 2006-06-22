@@ -28,6 +28,7 @@
 #include "spaceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
+#include "matrixrowelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -45,7 +46,7 @@ BasicElement* OrdinaryCreationStrategy::createElement( QString type )
     else if ( type == "NAMESEQUENCE" ) return new NameSequence();
     else if ( type == "OVERLINE" )     return new OverlineElement();
     else if ( type == "UNDERLINE" )    return new UnderlineElement();
-    else if ( type == "MULTILINE" )    return new MultilineElement();
+    else if ( type == "MULTILINE" )    return new MatrixRowElement();
     else if ( type == "SEQUENCE" ) {
         kWarning() << "malformed data: sequence inside sequence." << endl;
         return 0;
@@ -84,9 +85,9 @@ UnderlineElement* OrdinaryCreationStrategy::createUnderlineElement()
     return new UnderlineElement;
 }
 
-MultilineElement* OrdinaryCreationStrategy::createMultilineElement()
+MatrixRowElement* OrdinaryCreationStrategy::createMatrixRowElement()
 {
-    return new MultilineElement;
+    return new MatrixRowElement;
 }
 
 SpaceElement* OrdinaryCreationStrategy::createSpaceElement( SpaceWidth width )

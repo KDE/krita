@@ -31,8 +31,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-//#include <boost/spirit.hpp>
-
 #include "MatrixDialog.h"
 #include "bracketelement.h"
 #include "creationstrategy.h"
@@ -53,6 +51,7 @@
 #include "symbolelement.h"
 #include "symboltable.h"
 #include "textelement.h"
+#include "matrixrowelement.h"
 
 #include <assert.h>
 
@@ -92,12 +91,12 @@ SequenceElement::SequenceElement( const SequenceElement& other )
     }
 }
 
-
+/*
 bool SequenceElement::accept( ElementVisitor* visitor )
 {
     return visitor->visit( this );
 }
-
+*/
 
 bool SequenceElement::readOnly( const FormulaCursor* ) const
 {
@@ -929,10 +928,10 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         break;
     }
     case req_addMultiline: {
-        MultilineElement* multiline = creationStrategy->createMultilineElement();
-        if ( multiline != 0 ) {
-            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Multiline"), container);
-            command->setElement( multiline );
+        MatrixRowElement* matrixrow = creationStrategy->createMatrixRowElement();
+        if ( matrixrow != 0 ) {
+            KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Matrixrow"), container);
+            command->setElement( matrixrow );
             return command;
         }
         break;

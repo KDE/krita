@@ -51,7 +51,7 @@ public:
         return new SequenceElement( *this );
     }
 
-    virtual bool accept( ElementVisitor* visitor );
+//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * @returns whether its prohibited to change the sequence with this cursor.

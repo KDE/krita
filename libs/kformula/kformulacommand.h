@@ -31,8 +31,10 @@
 #include "kformulacontainer.h"
 #include "formulacursor.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
+class MatrixRowElement;
+class MatrixEntryElement;
 
 /**
  * Base for all kformula commands.
@@ -455,6 +457,76 @@ private:
 };
 
 
-KFORMULA_NAMESPACE_END
+class KFCRemoveRow : public Command
+{
+  public:
+    KFCRemoveRow( const QString& name, Container* document, MatrixElement* m, int r, int c );
+    ~KFCRemoveRow();
+
+    virtual void execute();
+    virtual void unexecute();
+
+  protected:
+    MatrixElement* matrix;
+    int rowPos;
+    int colPos;
+
+    QList<MatrixRowElement*>* row;
+};
+
+
+class KFCInsertRow : public KFCRemoveRow {
+public:
+    KFCInsertRow( const QString& name, Container* document, MatrixElement* m, int r, int c );
+
+    virtual void execute()   { KFCRemoveRow::unexecute(); }
+    virtual void unexecute() { KFCRemoveRow::execute(); }
+};
+
+
+class KFCRemoveColumn : public Command {
+public:
+    KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, int r, int c );
+    ~KFCRemoveColumn();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    MatrixElement* matrix;
+    int rowPos;
+    int colPos;
+
+    QList<MatrixRowElement*>* column;
+};
+
+
+class KFCInsertColumn : public KFCRemoveColumn {
+public:
+    KFCInsertColumn( const QString& name, Container* document, MatrixElement* m, int r, int c );
+
+    virtual void execute()   { KFCRemoveColumn::unexecute(); }
+    virtual void unexecute() { KFCRemoveColumn::execute(); }
+};
+
+class KFCNewLine : public Command {
+public:
+    KFCNewLine( const QString& name, Container* document,
+                MatrixEntryElement* line, uint pos );
+
+    virtual ~KFCNewLine();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    MatrixEntryElement* m_line;
+    MatrixEntryElement* m_newline;
+    uint m_pos;
+};
+
+
+
+} //namespace KFormula
 
 #endif // KFORMULACOMMAND_H

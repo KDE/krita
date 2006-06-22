@@ -19,7 +19,9 @@ set(kformulalib_LIB_SRCS
    sequenceelement.cc 
    textelement.cc 
    bracketelement.cc 
-   matrixelement.cc 
+   matrixelement.cc
+   matrixrowelement.cpp
+   matrixentryelement.cpp
    fractionelement.cc 
    rootelement.cc 
    symbolelement.cc 

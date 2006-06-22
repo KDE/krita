@@ -42,6 +42,7 @@ class SpaceElement;
 class SymbolElement;
 class TextElement;
 class UnderlineElement;
+class MatrixRowElement;
 
 /**
  * An object of this type needs to be known by the SequenceElement.
@@ -64,7 +65,7 @@ public:
     virtual BracketElement* createBracketElement( SymbolType lhs, SymbolType rhs ) = 0;
     virtual OverlineElement* createOverlineElement() = 0;
     virtual UnderlineElement* createUnderlineElement() = 0;
-    virtual MultilineElement* createMultilineElement() = 0;
+    virtual MatrixRowElement* createMatrixRowElement() = 0;
     virtual SpaceElement* createSpaceElement( SpaceWidth width ) = 0;
     virtual FractionElement* createFractionElement() = 0;
     virtual RootElement* createRootElement() = 0;
@@ -86,7 +87,7 @@ public:
     virtual BracketElement* createBracketElement( SymbolType lhs, SymbolType rhs );
     virtual OverlineElement* createOverlineElement();
     virtual UnderlineElement* createUnderlineElement();
-    virtual MultilineElement* createMultilineElement();
+    virtual MatrixRowElement* createMatrixRowElement();
     virtual SpaceElement* createSpaceElement( SpaceWidth width );
     virtual FractionElement* createFractionElement();
     virtual RootElement* createRootElement();

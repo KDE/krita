@@ -88,11 +88,6 @@ public:
     virtual BasicElement* clone() = 0;
 
     /**
-     * Visit this element. An implementation of the visitor pattern.
-     */
-//    virtual bool accept( ElementVisitor* ) = 0;
-
-    /**
      * @returns whether the child should be read-only. The idea is
      * that a read-only parent has read-only children.
      */
@@ -245,29 +240,7 @@ public:
      */
     virtual void entered( SequenceElement* /*child*/ );
 
-    // children
-
-    /**
-     * Removes the child. If this was the main child this element might
-     * request its own removal.
-     * The cursor is the one that caused the removal. It has to be moved
-     * to the place any user expects the cursor after that particular
-     * element has been removed.
-     */
-    //virtual void removeChild(FormulaCursor* cursor, BasicElement* child) {}
-
-
-    // main child
-    //
-    // If an element has children one has to become the main one.
-
     virtual SequenceElement* getMainChild() { return 0; }
-    //virtual void setMainChild(SequenceElement*) {}
-
-
-    // editing
-    //
-    // Insert and remove children.
 
     /**
      * Inserts all new children at the cursor position. Places the
@@ -386,9 +359,6 @@ public:
      * Heiner's test method. Should read MathML...
      */
     //bool buildFromMathMLDom( QDomElement& element );
-
-    // debug
-    static int getEvilDestructionCount() { return evilDestructionCount; }
 
     /**
      * @returns our type. This is an object from our parent's syntax tree

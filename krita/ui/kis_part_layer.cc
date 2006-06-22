@@ -23,6 +23,8 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 
+#include <kaboutdata.h>
+#include <kinstance.h>
 #include <klocale.h>
 
 #include "KoDocument.h"
@@ -71,6 +73,16 @@ KisPartLayerImpl::KisPartLayerImpl(KisImageSP img, KisChildDoc * doc)
 
 KisPartLayerImpl::~KisPartLayerImpl()
 {
+}
+
+KoDocumentSectionModel::PropertyList KisPartLayerImpl::properties() const
+{
+    PropertyList l = super::properties();
+    QString type = docType();
+    if (type.isEmpty())
+        type = childDoc()->document()->instance()->aboutData()->programName();
+    l << Property(i18n("Document type"), type);
+    return l;
 }
 
 KisLayerSP KisPartLayerImpl::clone() const {

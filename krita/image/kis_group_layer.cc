@@ -419,4 +419,37 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     }
 }
 
+Qt::ItemFlags KisGroupLayer::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return super::flags(index);
+    Q_ASSERT(index.model() == this);
+    Q_ASSERT(index.internalPointer());
+
+    Qt::ItemFlags flags = Qt::ItemIsEnabled & Qt::ItemIsSelectable & Qt::ItemIsDragEnabled;
+    if (dynamic_cast<KisGroupLayer*>(static_cast<KisLayer*>(index.internalPointer()))) //gcc--
+        flags &= Qt::ItemIsDropEnabled;
+    return flags;
+}
+
+bool KisGroupLayer::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (index.isValid())
+        return false;
+    Q_ASSERT(index.model() == this);
+    Q_ASSERT(index.internalPointer());
+
+    KisLayer *layer = static_cast<KisLayer*>(index.internalPointer());
+
+    switch (role)
+    {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            layer->setName(value.toString());
+            return true;
+    }
+
+    return false;
+}
+
 #include "kis_group_layer.moc"

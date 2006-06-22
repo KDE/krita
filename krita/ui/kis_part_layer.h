@@ -78,6 +78,7 @@ public:
     KisPartLayerImpl(KisImageSP img, KisChildDoc * doc);
     virtual ~KisPartLayerImpl();
 
+    virtual PropertyList properties() const;
     virtual KisLayerSP clone() const;
 
     /// Called when the layer is made active

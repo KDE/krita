@@ -62,6 +62,13 @@ QIcon KisAdjustmentLayer::icon() const
     return KIcon("tool_filter");
 }
 
+KoDocumentSectionModel::PropertyList KisAdjustmentLayer::properties() const
+{
+    PropertyList l = super::properties();
+    l << Property(i18n("Filter"), KisFilterRegistry::instance()->get(filter()->name())->id().name());
+    return l;
+}
+
 
 KisLayerSP KisAdjustmentLayer::clone() const
 {
@@ -74,7 +81,7 @@ void KisAdjustmentLayer::resetCache()
     m_cachedPaintDev = new KisPaintDevice(image()->colorSpace(), name().toLatin1());
 }
 
-KisFilterConfiguration * KisAdjustmentLayer::filter()
+KisFilterConfiguration * KisAdjustmentLayer::filter() const
 {
     Q_ASSERT(m_filterConfig);
     return m_filterConfig;

@@ -18,6 +18,7 @@
  */
 
 #include <kdebug.h>
+#include <kicon.h>
 #include <QIcon>
 #include <QImage>
 
@@ -268,7 +269,7 @@ static int getID()
 
 
 KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
-    QAbstractItemModel(0),
+    KoDocumentSectionModel(0),
     KShared(),
     m_id(getID()),
     m_index(-1),
@@ -285,7 +286,7 @@ KisLayer::KisLayer(KisImage *img, const QString &name, quint8 opacity) :
 }
 
 KisLayer::KisLayer(const KisLayer& rhs) :
-    QAbstractItemModel(0),
+    KoDocumentSectionModel(0),
     KShared(rhs)
 {
     if (this != &rhs) {
@@ -305,6 +306,16 @@ KisLayer::KisLayer(const KisLayer& rhs) :
 
 KisLayer::~KisLayer()
 {
+}
+
+KoDocumentSectionModel::PropertyList KisLayer::properties() const
+{
+    PropertyList l;
+    l << Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
+    l << Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), locked());
+    l << Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
+    l << Property(i18n("Composite Mode"), compositeOp().id().name());
+    return l;
 }
 
 void KisLayer::setClean(const QRect & rect)
@@ -452,6 +463,16 @@ void KisLayer::setOpacity(quint8 val)
         setDirty();
         notifyPropertyChanged();
     }
+}
+
+quint8 KisLayer::percentOpacity() const
+{
+    return int(float(opacity() * 100) / 255 + 0.5);
+}
+
+void KisLayer::setPercentOpacity(quint8 val)
+{
+    setOpacity(int(float(val * 255) / 100 + 0.5));
 }
 
 KNamedCommand *KisLayer::setOpacityCommand(quint8 newOpacity)
@@ -643,10 +664,10 @@ QVariant KisLayer::data(const QModelIndex &index, int role) const
         case Qt::DecorationRole: return layer->icon();
         case Qt::EditRole: return layer->name();
         case ThumbnailRole: return layer->createThumbnail(64, 64);
+        case LargeThumbnailRole: return layer->createThumbnail(200, 200);
+        case PropertiesRole: return QVariant::fromValue(layer->properties());
         default: return QVariant(); //TODO
     }
 }
-
-
 
 #include "kis_layer.moc"

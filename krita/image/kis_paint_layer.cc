@@ -70,6 +70,15 @@ QIcon KisPaintLayer::icon() const
     return QIcon();
 }
 
+KoDocumentSectionModel::PropertyList KisPaintLayer::properties() const
+{
+    PropertyList l = super::properties();
+    l << Property(i18n("Colorspace"), paintDevice()->colorSpace()->id().name());
+    if( KoColorProfile *profile = paintDevice()->colorSpace()->getProfile() )
+        l << Property(i18n("Profile"), profile->productName());
+    return l;
+}
+
 KisLayerSP KisPaintLayer::clone() const
 {
     return KisLayerSP(new KisPaintLayer(*this));

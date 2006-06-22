@@ -37,6 +37,7 @@ class KisFilterConfiguration;
  **/
 class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisLayer
 {
+    typedef KisLayer super;
     Q_OBJECT
 
 public:
@@ -49,13 +50,14 @@ public:
     virtual ~KisAdjustmentLayer();
 
     virtual QIcon icon() const;
+    virtual PropertyList properties() const;
 
     /// Return a copy of this layer
     virtual KisLayerSP clone() const;
 
 public:
 
-    KisFilterConfiguration * filter();
+    KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);
 
     KisSelectionSP selection();

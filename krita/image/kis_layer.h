@@ -19,7 +19,6 @@
 #ifndef KIS_LAYER_H_
 #define KIS_LAYER_H_
 
-#include <QAbstractItemModel>
 #include <QRect>
 
 #include "krita_export.h"
@@ -27,6 +26,7 @@
 #include "kis_types.h"
 #include "kis_layer_visitor.h"
 #include "KoCompositeOp.h"
+#include "KoDocumentSectionModel.h"
 
 class KNamedCommand;
 class QIcon;
@@ -42,9 +42,9 @@ class KisGroupLayer;
  * is at the top of the group in the layerlist, using next will iterate to the bottom to last,
  * whereas previous will go up to first again.
  **/
-class KRITAIMAGE_EXPORT KisLayer: public QAbstractItemModel, public KShared
+class KRITAIMAGE_EXPORT KisLayer: public KoDocumentSectionModel, public KShared
 {
-    typedef QAbstractItemModel super;
+    typedef KoDocumentSectionModel super;
     Q_OBJECT
 
 public:
@@ -53,6 +53,7 @@ public:
     virtual ~KisLayer();
 
     virtual QIcon icon() const = 0;
+    virtual PropertyList properties() const;
 
     /**
      * Set the specified rect to clean
@@ -178,8 +179,10 @@ public:
     virtual void setVisible(bool v);
     KNamedCommand *setVisibleCommand(bool visiblel);
 
-    quint8 opacity() const;
-    void setOpacity(quint8 val);
+    quint8 opacity() const; //0-255
+    void setOpacity(quint8 val); //0-255
+    quint8 percentOpacity() const; //0-100
+    void setPercentOpacity(quint8 val); //0-100
     KNamedCommand *setOpacityCommand(quint8 val);
     KNamedCommand *setOpacityCommand(quint8 prevOpacity, quint8 newOpacity);
 
@@ -195,7 +198,7 @@ public:
     virtual QString name() const;
     virtual void setName(const QString& name);
 
-    KoCompositeOp compositeOp() { return m_compositeOp; }
+    KoCompositeOp compositeOp() const { return m_compositeOp; }
     void setCompositeOp(const KoCompositeOp& compositeOp);
     KNamedCommand *setCompositeOpCommand(const KoCompositeOp& compositeOp);
 
@@ -211,10 +214,6 @@ public:
     /// paints where no data is on this layer. Useful when it is a transparent layer stacked on top of another one
     virtual void paintMaskInactiveLayers(QImage &img, qint32 x, qint32 y, qint32 w, qint32 h);
 
-
-    /// extension to Qt::ItemDataRole
-    enum ItemDataRole { ThumbnailRole = 33 };
-
     /// Returns a thumbnail in requested size. The QImage may have transparent parts.
     /// May also return 0
     virtual QImage createThumbnail(qint32 w, qint32 h);
@@ -222,7 +221,7 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
-public: // (re)implemented from QAbstractItemModel
+public: // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;

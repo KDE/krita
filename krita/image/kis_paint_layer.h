@@ -38,6 +38,7 @@ public:
     virtual ~KisPaintLayer();
 
     virtual QIcon icon() const;
+    virtual PropertyList properties() const;
     virtual KisLayerSP clone() const;
 public:
 

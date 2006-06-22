@@ -119,15 +119,20 @@ public:
     virtual bool removeLayer(KisLayerSP layer);
 
     virtual QImage createThumbnail(qint32 w, qint32 h);
-    
+
 signals:
 
     void sigDirty(QRect rc);
-    
+
+public: // from QAbstractItemModel
+
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
 private:
-    
+
     void updateProjection(const QRect & rc);
-    
+
     inline int reverseIndex(int index) const { return childCount() - 1 - index; };
     vKisLayerSP m_layers; // Contains the list of all layers
     KisPaintDeviceSP m_projection; // The cached composition of all layers in this group

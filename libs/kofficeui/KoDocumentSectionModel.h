@@ -42,6 +42,9 @@ class KoDocumentSectionModel: public QAbstractItemModel
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
         LargeThumbnailRole,
 
+        /// The complete image, for generating thumbnails of arbitrary size.
+        ImageRole,
+
         /// A list of properties the part has.
         PropertiesRole
     };
@@ -52,7 +55,7 @@ class KoDocumentSectionModel: public QAbstractItemModel
         /** i18n-ed name, suitable for displaying */
         QString name;
 
-        /** Whether the property is a boolean which can be toggled directly from the widget itself. */
+        /** Whether the property is a boolean (e.g. locked, visible) which can be toggled directly from the widget itself. */
         bool isMutable;
 
         /** Provide these if the property isMutable. */

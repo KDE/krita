@@ -191,6 +191,7 @@ public:
     KNamedCommand *setLockedCommand(bool locked);
 
     void notifyPropertyChanged();
+    void notifyCommandExecuted();
 
     bool temporary() const;
     void setTemporary(bool t);

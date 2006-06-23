@@ -687,6 +687,13 @@ void KisImage::emitSizeChanged()
 void KisImage::notifyLayerUpdated(KisLayerSP layer, QRect rc)
 {
     emit sigLayerUpdated(layer, rc);
+    KisLayer *l = layer.data();
+    while( l )
+    {
+        if( !m_dirtyLayers.contains( l ) )
+            m_dirtyLayers.append( l );
+        l = l->parent().data();
+    }
 }
 
 void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
@@ -1533,6 +1540,13 @@ void KisImage::slotSelectionChanged(const QRect& r)
     } else {
         m_private->selectionChangedWhileLocked = true;
     }
+}
+
+void KisImage::slotCommandExecuted()
+{
+    for( int i = 0, n = m_dirtyLayers.count(); i < n; ++i )
+        m_dirtyLayers.at( i )->notifyCommandExecuted();
+    m_dirtyLayers.clear();
 }
 
 KoColorSpace * KisImage::colorSpace() const

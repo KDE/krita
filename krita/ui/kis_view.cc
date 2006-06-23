@@ -3203,6 +3203,8 @@ void KisView::connectCurrentImg()
             connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(imgUpdated(QRect)));
             connect(m_image.data(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(slotImageSizeChanged(qint32, qint32)));
         }
+
+        connect( document(), SIGNAL( sigCommandExecuted() ), m_image.data(), SLOT( slotCommandExecuted() ) );
     }
 
     m_layerBox->setImage(m_image);
@@ -3214,6 +3216,7 @@ void KisView::disconnectCurrentImg()
 {
     if (m_image) {
         m_image->disconnect(this);
+        disconnect( document(), SIGNAL( sigCommandExecuted() ), m_image.data(), SLOT( slotCommandExecuted() ) );
         m_layerBox->setImage(KisImageSP(0));
         m_dsw->setModel(0);
         m_birdEyeBox->setImage(KisImageSP(0));

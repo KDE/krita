@@ -401,6 +401,7 @@ signals:
 public slots:
     void slotSelectionChanged();
     void slotSelectionChanged(const QRect& r);
+    void slotCommandExecuted();
 
 
 private:
@@ -431,6 +432,7 @@ private:
 
     KisGroupLayerSP m_rootLayer; // The layers are contained in here
     KisLayerSP m_activeLayer;
+    QList<KisLayer*> m_dirtyLayers; // for thumbnails
 
     KisNameServer *m_nserver;
     KisUndoAdapter *m_adapter;

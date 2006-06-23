@@ -608,6 +608,11 @@ void KisLayer::notifyPropertyChanged()
     notifyPropertyChanged(this);
 }
 
+void KisLayer::notifyCommandExecuted()
+{
+    notifyPropertyChanged(this);
+}
+
 void KisLayer::notifyPropertyChanged(KisLayer *layer)
 {
     QModelIndex index = indexFromLayer(layer);

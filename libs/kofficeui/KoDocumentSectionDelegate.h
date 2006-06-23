@@ -19,17 +19,51 @@
 #ifndef KO_DOCUMENT_SECTION_DELEGATE_H
 #define KO_DOCUMENT_SECTION_DELEGATE_H
 
-#include <QItemDelegate>
+#include <QAbstractItemDelegate>
 #include <koffice_export.h>
 
-class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QItemDelegate
+class KoDocumentSectionModel;
+
+class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
 {
-    typedef QItemDelegate super;
+    typedef QAbstractItemDelegate super;
     Q_OBJECT
 
     public:
         KoDocumentSectionDelegate( QObject *parent = 0 );
+        virtual ~KoDocumentSectionDelegate();
 
+        /// how items should be displayed
+        enum DisplayMode
+        {
+            /// large fit-to-width thumbnails, with only titles or page numbers
+            ThumbnailsMode,
+
+            /// smaller thumbnails, with titles and property icons in two rows
+            DetailedMode,
+
+            /// no thumbnails, with titles and property icons in a single row
+            MinimalMode
+        };
+
+        void setDisplayMode( DisplayMode mode );
+
+        virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        virtual QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        virtual bool editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index );
+
+    private:
+        typedef KoDocumentSectionModel Model;
+        class Private;
+        Private* const d;
+
+        static QStyleOptionViewItem getOptions( const QStyleOptionViewItem &option, const QModelIndex &index );
+        QRect textRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        QRect iconsRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        QRect thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        void drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        void drawIcons( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        void drawThumbnail( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 };
 
 #endif

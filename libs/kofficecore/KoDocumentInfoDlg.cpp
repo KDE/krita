@@ -62,13 +62,10 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( QWidget* parent, KoDocumentInfo* docInfo )
     d->m_info = docInfo;
 
     setCaption( i18n( "Document Information" ) );
-    setButtons( Ok|Cancel );
-    setFaceType( Tabbed );
     setInitialSize( QSize( 500, 500 ) );
     setFaceType( KPageDialog::Tabbed );
     setButtons( KDialog::Ok|KDialog::Cancel );
     setDefaultButton( KDialog::Ok );
-    setCaption( i18n( "Document Information" ) );
 
     d->m_aboutUi = new Ui::KoDocumentInfoAboutWidget();
     KDialog *infodlg = new KDialog(this);

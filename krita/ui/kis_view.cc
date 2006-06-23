@@ -283,6 +283,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
+    m_paletteManager->createPalette( krita::NEWLAYERBOX, i18n("Layers"));
 
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);
@@ -461,7 +462,7 @@ void KisView::createLayerBox()
     m_dsw = new KoDocumentSectionWidget(this);
 
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
-    //paletteManager()->addWidget(m_dsw, "layerbox", krita::LAYERBOX, 0);
+    paletteManager()->addWidget(m_dsw, "newlayerbox", krita::NEWLAYERBOX, 0);
 }
 
 void KisView::setupScrollBars()
@@ -3896,6 +3897,7 @@ void KisView::slotLoadingFinished()
     // Set the current image for real now everything is ready to go.
     setCurrentImage(document()->currentImage());
     m_paletteManager->showWidget( "layerbox" );
+    m_paletteManager->showWidget( "newlayerbox" );
     m_canvas->show();
     disconnect(document(), SIGNAL(loadingFinished()), this, SLOT(slotLoadingFinished()));
 

@@ -147,7 +147,10 @@ namespace Kross { namespace Api {
             bool addModule(Module::Ptr module);
 
             /**
-             * Load an external module and return it.
+             * Load an external module and return it. We don't keep
+             * a copy of the module-instance. So, once the caller
+             * doesn't hold a sharedptr any longer, the module will
+             * get unloaded.
              *
              * \param modulename The name of the library we should try to 
              *        load. Those library needs to be a valid kross module.
@@ -155,7 +158,7 @@ namespace Kross { namespace Api {
              *        failed. The loaded Module isn't added to the global
              *        shared list of modules.
              */
-            Module* loadModule(const QString& modulename);
+            Module::Ptr loadModule(const QString& modulename);
 
         private:
             /// Private d-pointer class.

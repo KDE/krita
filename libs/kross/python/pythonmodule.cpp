@@ -84,13 +84,16 @@ Py::Object PythonModule::import(const Py::Tuple& args)
 #ifdef KROSS_PYTHON_MODULE_DEBUG
             krossdebug( QString("Kross::Python::PythonModule::import() module=%1").arg(modname) );
 #endif
-            if( modname.find( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
+            if( modname.indexOf( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
                 krosswarning( QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) );
             }
             else {
-                Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule(modname);
-                if(module)
-                    return PythonExtension::toPyObject(module);
+                Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule(modname);
+                if(module) {
+                    // The returned PythonExtension instance will take care
+                    // of freeing the module if not needed any longer.
+                    return PythonExtension::toPyObject( module.data() );
+                }
                 krosswarning( QString("Loading of Kross module '%1' failed.").arg(modname) );
             }
 

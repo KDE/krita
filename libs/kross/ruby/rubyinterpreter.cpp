@@ -126,7 +126,7 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
             krosswarning( QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) );
         }
         else {
-            Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule(modname);
+            Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule(modname);
             if(module)
             {
                 new RubyModule(module, modname);

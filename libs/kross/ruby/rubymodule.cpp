@@ -19,10 +19,6 @@
 
 #include "rubymodule.h"
 
-#include "../api/krossconfig.h"
-#include "../api/object.h"
-#include "../api/module.h"
-
 #include "rubyconfig.h"
 #include "rubyextension.h"
 
@@ -37,14 +33,14 @@ class RubyModulePrivate {
 
 };
 
-RubyModule::RubyModule(Kross::Api::Module* mod, QString modname) : d(new RubyModulePrivate)
+RubyModule::RubyModule(Kross::Api::Module::Ptr mod, QString modname) : d(new RubyModulePrivate)
 {
-    d->m_module = Kross::Api::Module::Ptr(mod);
+    d->m_module = mod;
     modname = modname.left(1).toUpper() + modname.right(modname.length() - 1 );
     krossdebug(QString("Module: %1").arg(modname));
     VALUE rmodule = rb_define_module(modname.toAscii());
     rb_define_module_function(rmodule,"method_missing",  (VALUE (*)(...))RubyModule::method_missing, -1);
-    VALUE rm = RubyExtension::toVALUE((Kross::Api::Object*)mod);
+    VALUE rm = RubyExtension::toVALUE( mod.data() );
     rb_define_const(rmodule, "MODULEOBJ", rm);
 }
 

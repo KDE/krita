@@ -197,17 +197,17 @@ bool Manager::addModule(Module::Ptr module)
     return true;
 }
 
-Module* Manager::loadModule(const QString& modulename)
+Module::Ptr Manager::loadModule(const QString& modulename)
 {
     if(d->modules.contains(modulename)) {
-        return d->modules[modulename].data();
+        return d->modules[modulename];
     }
 
     KLibLoader* loader = KLibLoader::self();
     KLibrary* lib = loader->globalLibrary( modulename.toLatin1().data() );
     if(! lib) {
         krosswarning( QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) );
-        return 0;
+        return Module::Ptr(0);
     }
     krossdebug( QString("Successfully loaded module '%1'").arg(modulename) );
 
@@ -216,7 +216,7 @@ Module* Manager::loadModule(const QString& modulename)
 
     if(! func) {
         krosswarning( QString("Failed to determinate init function in module '%1'").arg(modulename) );
-        return 0;
+        return Module::Ptr(0);
     }
 
     Kross::Api::Module* module;
@@ -231,13 +231,13 @@ Module* Manager::loadModule(const QString& modulename)
 
     if(! module) {
         krosswarning( QString("Failed to load module '%1'").arg(modulename) );
-        return 0;
+        return Module::Ptr(0);
     }
 
     // Don't remember module cause we like to have freeing it handled by the caller.
     //d->modules.insert(modulename, module);
 
     //krossdebug( QString("Kross::Api::Manager::loadModule modulename='%1' module='%2'").arg(modulename).arg(module->toString()) );
-    return module;
+    return Module::Ptr(module);
 }
 

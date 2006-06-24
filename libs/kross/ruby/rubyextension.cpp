@@ -346,7 +346,7 @@ VALUE RubyExtension::toVALUE(const QVariant& variant)
 
 VALUE RubyExtension::toVALUE(Kross::Api::Object::Ptr object)
 {
-    if(! object) {
+    if(! object.data()) {
         return 0;
     }
 

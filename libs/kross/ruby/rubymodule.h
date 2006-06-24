@@ -24,11 +24,11 @@
 
 #include <QString>
 
-namespace Kross {
+#include "../api/krossconfig.h"
+#include "../api/object.h"
+#include "../api/module.h"
 
-namespace Api {
-    class Module;
-}
+namespace Kross {
 
 namespace Ruby {
 
@@ -48,7 +48,7 @@ class RubyModule {
          *        wraps.
          * @param modname The name the module will be published as.
          */
-        RubyModule(Kross::Api::Module* mod, QString modname);
+        RubyModule(Kross::Api::Module::Ptr mod, QString modname);
 
         /**
          * Destructor.

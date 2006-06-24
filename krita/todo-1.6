@@ -19,15 +19,15 @@ R  * Fix fill in wet
 
 Core
 
+?  * Use the nextCol/nextRow of the line iterators wherever possible to get a speed boost.
+
 User interface
 
 ?  * after hiding and reshowing all palettes, the wrong ones are active
-R  * add to/from lab with nPixels argument
 
 Plugins
 
 C  * finish, polish and document scripting support
-R  * document plugin API
 
 Release
 
@@ -41,14 +41,14 @@ Also: see UIcomments!
 Michael's bugs:
 
 * Open an image, add image as new layer, resize layer, undo: undo removes the layer
-* The change layer size dialog is not the same as the change image dialog, and should
-  therefore be called the scale layer dialog. (Resizing a layer makes no sense)
 * open an image, add an adjustment layer to the image (I used the pixelize 
   filter). Click on the original layer in the layer dialog box and paint 
   something. The undo the painting and undo add layer. Krita's toolbox will 
   become greyed out and you can't paint. I think this is already a bug and 
   should be fixed. But next, try to add an adjustment layer again -> Krita 
   crashes.
+* The shrink etc selection are enabled when there is no selection
+* select by colorrange does not actually set the selection (or something like that)
 
 Regressions
 

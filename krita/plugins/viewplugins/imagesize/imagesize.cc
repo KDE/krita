@@ -64,12 +64,12 @@ ImageSize::ImageSize(QObject *parent, const char *name, const QStringList &)
         setXMLFile(locate("data","kritaplugins/imagesize.rc"), true);
 
         (void) new KAction(i18n("Change &Image Size..."), 0, "Shift-s", this, SLOT(slotImageSize()), actionCollection(), "imagesize");
-        (void) new KAction(i18n("Change &Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layersize");
+        (void) new KAction(i18n("&Scale Layer..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "layerscale");
 
 
         m_view = (KisView*) parent;
         // Selection manager takes ownership?
-        KAction * a = new KAction(i18n("&Layer Size..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "selectionScale");
+        KAction * a = new KAction(i18n("&Scale Selection..."), 0, 0, this, SLOT(slotLayerSize()), actionCollection(), "selectionScale");
         Q_CHECK_PTR(a);
         m_view ->canvasSubject()-> selectionManager()->addSelectionAction(a);
     }

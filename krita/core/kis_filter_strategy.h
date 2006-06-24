@@ -55,6 +55,17 @@ class KisHermiteFilterStrategy : public KisFilterStrategy
         virtual double valueAt(double t) const;
 };
 
+class KisCubicFilterStrategy : public KisFilterStrategy
+{
+    public:
+        KisCubicFilterStrategy() : KisFilterStrategy(KisID("Bicubic", i18n("Bicubic")))
+            {supportVal = 1.0; intSupportVal = 256;}
+        virtual ~KisCubicFilterStrategy() {}
+        
+        virtual Q_UINT32 intValueAt(Q_INT32 t) const;
+        virtual double valueAt(double t) const;
+};
+
 class KisBoxFilterStrategy : public KisFilterStrategy
 {
     public:

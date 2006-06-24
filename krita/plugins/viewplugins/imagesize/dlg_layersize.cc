@@ -48,7 +48,7 @@ using namespace std;
 // be rounding errors. (Boudewijn)
 DlgLayerSize::DlgLayerSize( QWidget *  parent,
                 const char * name)
-    : super (parent, name, true, i18n("Image Size"), Ok | Cancel, Ok)
+    : super (parent, name, true, i18n("Scale Layer"), Ok | Cancel, Ok)
 {
     m_lock = false;
 

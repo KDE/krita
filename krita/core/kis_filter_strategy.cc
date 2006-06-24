@@ -47,6 +47,34 @@ Q_UINT32 KisHermiteFilterStrategy::intValueAt(Q_INT32 t) const {
         return(0);
 }
 
+double KisCubicFilterStrategy::valueAt(double x) const {
+    if (x < -2.0)
+        return(0.0);
+    if (x < -1.0)
+        return((2.0+x)*(2.0+x)*(2.0+x)/6.0);
+    if (x < 0.0)
+        return((4.0+x*x*(-6.0-3.0*x))/6.0);
+    if (x < 1.0)
+        return((4.0+x*x*(-6.0+3.0*x))/6.0);
+    if (x < 2.0)
+        return((2.0-x)*(2.0-x)*(2.0-x)/6.0);
+    return(0.0);
+}
+
+Q_UINT32 KisCubicFilterStrategy::intValueAt(Q_INT32 x) const {
+    if (x < 2)
+        return 0;
+    if (x < -1)
+        return (2 + x) * (2 + x) * ( 2 + x) / 6;
+    if ( x < 0)
+        return (4 + x * x * ( -6 - 3 * x)) / 6;
+    if (x < 1)
+        return (4 + x * x * ( -6 + 3 * x)) / 6;
+    if (x < 2)
+        return (2 - x) * ( 2 - x) * (2 - x) / 6;    
+     return 0;   
+}
+
 double KisBoxFilterStrategy::valueAt(double t) const {
         if((t > -0.5) && (t <= 0.5)) return(1.0);
         return(0.0);
@@ -157,6 +185,7 @@ KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
         m_singleton->add(new KisBSplineFilterStrategy);
         m_singleton->add(new KisLanczos3FilterStrategy);
         m_singleton->add(new KisMitchellFilterStrategy);
+        m_singleton->add(new KisCubicFilterStrategy);
     }
     return KisFilterStrategyRegistry::m_singleton;
 }

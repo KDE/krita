@@ -28,12 +28,18 @@
 using namespace Kross::Api;
 
 Callable::Callable(const QString& name)
-    : Object(name)
+    : Object()
+    , m_name(name)
 {
 }
 
 Callable::~Callable()
 {
+}
+
+const QString Callable::getName() const
+{
+    return m_name;
 }
 
 const QString Callable::getClassName() const
@@ -56,20 +62,17 @@ QMap<QString, Object::Ptr> Callable::getChildren() const
     return m_children;
 }
 
-bool Callable::addChild(Object* object, const QString& name)
+bool Callable::addChild(const QString& name, Object* object)
 {
-    QString n = name.isNull() ? object->getName() : name;
-
 #ifdef KROSS_API_OBJECT_ADDCHILD_DEBUG
-    krossdebug( QString("Kross::Api::Callable::addChild() object.name='%2' object.classname='%3'")
-                .arg(n).arg(object->getClassName()) );
+    krossdebug( QString("Kross::Api::Callable::addChild() object.name='%2' object.classname='%3'").arg(name).arg(object->getClassName()) );
 #endif
+    return m_children.insert(name, Object::Ptr(object)) != m_children.end();
+}
 
-    if(n.isEmpty()) // prevent invalid items.
-        return false; //throw Exception::Ptr( new Exception( QString("Failed to add child object to object '%1'. Invalid name for class '%2'.").arg(getName()).arg(object->getClassName()) ) );
-
-    m_children.replace(n, Object::Ptr(object));
-    return true;
+bool Callable::addChild(Callable* object)
+{
+    return addChild(object->getName(), object);
 }
 
 void Callable::removeChild(const QString& name)

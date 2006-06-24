@@ -144,7 +144,7 @@ int RubyExtension::convertHash_i(VALUE key, VALUE value, VALUE  vmap)
     if (key != Qundef)
     {
         Kross::Api::Object::Ptr o = Kross::Api::Object::Ptr( RubyExtension::toObject( value ) );
-        if(o) map->replace(STR2CSTR(key), o);
+        if(o) map->insert(STR2CSTR(key), o);
     }
     return ST_CONTINUE;
 }
@@ -278,7 +278,7 @@ VALUE RubyExtension::toVALUE(QMap<QString, QVariant> map)
 {
     VALUE h = rb_hash_new();
     for(QMap<QString, QVariant>::Iterator it = map.begin(); it != map.end(); ++it)
-        rb_hash_aset(h, toVALUE(it.key()), toVALUE(it.data()) );
+        rb_hash_aset(h, toVALUE(it.key()), toVALUE(it.value()) );
     return h;
 
 }

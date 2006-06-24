@@ -44,10 +44,9 @@ namespace Kross { namespace Api {
              *
              * \param value The initial value this
              *        Value has.
-             * \param name The name this Value has.
              */
-            Value(V value, const QString& name)
-                : Object(name)
+            Value(V value)
+                : Object()
                 , m_value(value) {}
 
             /**

@@ -65,24 +65,13 @@ namespace Kross { namespace Api {
 
             /**
              * Constructor.
-             *
-             * \param name The name this object has. Return
-             *        it via \a getName() and set a new
-             *        name via \a setName().
              */
-            explicit Object(const QString& name);
+            explicit Object();
 
             /**
              * Destructor.
              */
             virtual ~Object();
-
-            /**
-             * Return the name this object has.
-             *
-             * \return Name of this object.
-             */
-            const QString getName() const;
 
             /**
              * Return the class name. This could be something
@@ -154,10 +143,6 @@ namespace Kross { namespace Api {
              */
             template<typename TYPE>
             static Object::Ptr toObject(TYPE t) { return t; }
-
-        private:
-            /// Name of this object.
-            QString m_name;
     };
 
 }}

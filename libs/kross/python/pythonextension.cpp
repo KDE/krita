@@ -62,16 +62,19 @@ PythonExtension::~PythonExtension()
     delete m_proxymethod;
 }
 
+#if 0
 Py::Object PythonExtension::str()
 {
-    QString s = m_object->getName();
-    return toPyObject(s.isEmpty() ? m_object->getClassName() : s);
+    Kross::Api::Callable* callable = dynamic_cast< Kross::Api::Callable* >(m_object);
+    QString s = callable ? callable->getName() : m_object->getClassName();
+    return toPyObject(s.isEmpty() ?  : s);
 }
 
 Py::Object PythonExtension::repr()
 {
     return toPyObject( m_object->toString() );
 }
+#endif
 
 Py::Object PythonExtension::getattr(const char* n)
 {
@@ -195,7 +198,7 @@ Kross::Api::Object* PythonExtension::toObject(const Py::Object& object)
     if(type == &PyInt_Type)
         return new Kross::Api::Variant(int(Py::Int(object)));
     if(type == &PyBool_Type)
-        return new Kross::Api::Variant(QVariant(object.isTrue(),0));
+        return new Kross::Api::Variant( QVariant(bool(object.isTrue())) );
     if(type == &PyLong_Type)
         return new Kross::Api::Variant(qlonglong(long(Py::Long(object))));
     if(type == &PyFloat_Type)
@@ -268,7 +271,7 @@ const Py::Dict PythonExtension::toPyObject(const QMap<QString, QVariant>& map)
 #endif
     Py::Dict d;
     for(QMap<QString, QVariant>::ConstIterator it = map.constBegin(); it != map.constEnd(); ++it)
-        d.setItem(it.key().toLatin1().data(), toPyObject(it.data()));
+        d.setItem(it.key().toLatin1().data(), toPyObject( it.value() ));
     return d;
 }
 
@@ -386,7 +389,7 @@ const Py::Object PythonExtension::toPyObject(Kross::Api::Object* object)
         QMap<QString, Kross::Api::Object::Ptr> valuedict = dict->getValue();
         for(QMap<QString, Kross::Api::Object::Ptr>::Iterator it = valuedict.begin(); it != valuedict.end(); ++it) {
             const char* n = it.key().toLatin1().data();
-            pydict[ n ] = toPyObject( it.data().data() ); // recursive
+            pydict[ n ] = toPyObject( it.value().data() ); // recursive
         }
         return pydict;
     }

@@ -101,7 +101,7 @@ ScriptContainer::~ScriptContainer()
     delete d;
 }
 
-QString ScriptContainer::getName() const
+const QString ScriptContainer::getName() const
 {
     return d->name;
 }

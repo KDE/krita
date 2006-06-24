@@ -23,7 +23,7 @@
 using namespace Kross::Python;
 
 PythonObject::PythonObject(const Py::Object& object)
-    : Kross::Api::Object(object.as_string().c_str())
+    : Kross::Api::Object()
     , m_pyobject(object)
 {
     krossdebug( QString("PythonObject::PythonObject() constructor") );

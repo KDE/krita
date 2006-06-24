@@ -83,7 +83,7 @@ namespace Kross { namespace Api {
              * \return the unique name this ScriptContainer is
              * reachable as.
              */
-            QString getName() const;
+            const QString getName() const;
 
             /**
              * Set the name this ScriptContainer is reachable as.

@@ -286,7 +286,7 @@ namespace Kross { namespace Api {
                 m_dirty = true;
                 m_actions[ action->objectName() ] = action;
                 m_list.append(action);
-                m_actionmenu->insert(action.data());
+                m_actionmenu->addAction(action.data());
                 action->attach(this);
             }
 
@@ -297,7 +297,7 @@ namespace Kross { namespace Api {
                 m_dirty = true;
                 m_actions.remove(action->objectName());
                 m_list.remove(action);
-                m_actionmenu->remove(action.data());
+                m_actionmenu->removeAction(action.data());
                 action->detach(this);
             }
 
@@ -307,7 +307,7 @@ namespace Kross { namespace Api {
              */
             void clear() {
                 for(Q3ValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it) {
-                    m_actionmenu->remove( (*it).data() );
+                    m_actionmenu->removeAction( (*it).data() );
                     (*it)->detach(this);
                 }
                 m_list.clear();

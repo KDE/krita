@@ -71,7 +71,7 @@ void MainModule::setException(Exception* exception)
 QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
     QtObject* qtobject = new QtObject(object, name);
-    if(! addChild(qtobject)) {
+    if(! addChild(name, qtobject)) {
         krosswarning( QString("Failed to add QObject name='%1'").arg(object->objectName()) );
         delete qtobject;
         return QtObject::Ptr(0);

@@ -44,10 +44,8 @@ namespace Kross { namespace Api {
             * @param value The map of \a Object instances accessible
             *        via there string-identifier that is in this
             *        \a Dict intialy.
-            * @param name The name this dictonary has. The name is
-            *        only used for debugging purposes.
             */
-            explicit Dict(const QMap<QString, Object::Ptr> value, const QString& name = "dict");
+            explicit Dict(const QMap<QString, Object::Ptr> value);
 
             /**
             * Destructor.

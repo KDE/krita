@@ -49,7 +49,7 @@ namespace Kross { namespace Api {
              * Constructor.
              *
              * \param name The name this callable object has and
-             *       it is reachable as via \a Object::getChild() .
+             *       it is reachable as via \a getChild() .
              */
             Callable(const QString& name);
 
@@ -57,6 +57,13 @@ namespace Kross { namespace Api {
              * Destructor.
              */
             virtual ~Callable();
+
+            /**
+             * \return the name this object has. Each callable object
+             * has a name which is used e.g. on \a addChild to be able
+             * to identify the object itself.
+             */
+            const QString getName() const;
 
             /**
              * Return the class name. This could be something
@@ -100,7 +107,13 @@ namespace Kross { namespace Api {
              * \return true if the Object was added successfully
              *         else false.
              */
-            bool addChild(Object* object, const QString& name = QString::null);
+            bool addChild(const QString& name, Object* object);
+
+            /**
+              * Same as the \a addChild method above but for callable
+              * objects which define there own name.
+              */
+            bool addChild(Callable* object);
 
             /**
              * Remove an existing child.
@@ -122,6 +135,8 @@ namespace Kross { namespace Api {
             virtual Object::Ptr call(const QString& name, List::Ptr arguments);
 
         private:
+            /// Name this callable object has.
+            QString m_name;
             /// A list of childobjects.
             QMap<QString, Object::Ptr> m_children;
     };

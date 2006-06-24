@@ -14,11 +14,11 @@ if(PYTHON_INCLUDE_PATH)
 	add_subdirectory(python)
 endif(PYTHON_INCLUDE_PATH)		
 
-# Laurent: perhaps add new search info
+MESSAGE(STATUS "s :RUBY_INCLUDE_PATH :<${RUBY_INCLUDE_PATH}")
+MESSAGE(STATUS "s :RUBY_EXECUTABLE :<${RUBY_EXECUTABLE}")
 if(RUBY_INCLUDE_PATH)
 	add_subdirectory(ruby)
 endif(RUBY_INCLUDE_PATH)
-
 
 
 

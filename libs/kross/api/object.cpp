@@ -26,9 +26,8 @@
 
 using namespace Kross::Api;
 
-Object::Object(const QString& name)
+Object::Object()
     : KShared()
-    , m_name(name)
 {
 #ifdef KROSS_API_OBJECT_CTOR_DEBUG
     krossdebug( QString("Kross::Api::Object::Constructor() name='%1' refcount='%2'").arg(m_name).arg(_KShared_count()) );
@@ -43,14 +42,9 @@ Object::~Object()
     //removeAllChildren(); // not needed cause we use KShared to handle ref-couting and freeing.
 }
 
-const QString Object::getName() const
-{
-    return m_name;
-}
-
 const QString Object::toString()
 {
-    return QString("%1 (%2)").arg(m_name).arg(getClassName());
+    return QString("%1").arg(getClassName());
 }
 
 Object::Ptr Object::call(const QString& name, List::Ptr arguments)
@@ -64,6 +58,6 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
     if(name.isEmpty()) // return a self-reference if no functionname is defined.
         return Object::Ptr(this);
 
-    throw Exception::Ptr( new Exception(QString("The object '%1' has no callable object object named '%2'").arg(getName()).arg(name)) );
+    throw Exception::Ptr( new Exception(QString("No callable object named '%2'").arg(name)) );
 }
 

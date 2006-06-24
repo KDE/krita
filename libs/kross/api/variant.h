@@ -50,7 +50,7 @@ namespace Kross { namespace Api {
              *        this Variant-Object has.
              * \param name The name this Value has.
              */
-            Variant(const QVariant& value, const QString& name = "variant");
+            Variant(const QVariant& value);
 
             inline operator bool () { return getValue().toBool(); }
             inline operator int () { return getValue().toInt(); }

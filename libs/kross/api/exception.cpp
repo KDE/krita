@@ -25,7 +25,7 @@
 using namespace Kross::Api;
 
 Exception::Exception(const QString& error, long lineno)
-    : Object("Exception")
+    : Object()
     , m_error(error)
     , m_lineno(lineno)
 {

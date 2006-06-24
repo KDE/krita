@@ -122,7 +122,7 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
     QString modname = StringValuePtr(name);
     if(modname.startsWith("kross")) {
         krossdebug( QString("RubyInterpreter::require() module=%1").arg(modname) );
-        if( modname.find( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
+        if( modname.indexOf( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
             krosswarning( QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) );
         }
         else {

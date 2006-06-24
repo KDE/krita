@@ -41,6 +41,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <k3popupmenu.h>
 #include <kstringhandler.h>
 
 class LayerItemIterator: public Q3ListViewItemIterator
@@ -83,7 +84,7 @@ public:
     bool previewsShown;
     int itemHeight;
     QList<LayerProperty> properties;
-    KMenu contextMenu;
+    K3PopupMenu contextMenu;
     //LayerToolTip *tooltip; XXX
 
     Private( QWidget *parent, LayerList *list );
@@ -460,7 +461,7 @@ bool LayerList::property( int id, const QString &name ) const
     return l->property( name );
 }
 
-KMenu *LayerList::contextMenu() const
+K3PopupMenu *LayerList::contextMenu() const
 {
     return &( d->contextMenu );
 }
@@ -717,8 +718,7 @@ void LayerList::showContextMenu()
         setCurrentItem( layer );
     d->contextMenu.clear();
     constructMenu( layer );
-#warning kde4 port
-    //menuActivated( d->contextMenu.exec( QCursor::pos() ), layer );
+    menuActivated( d->contextMenu.exec( QCursor::pos() ), layer );
 }
 
 void LayerList::hideTip()

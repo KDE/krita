@@ -29,7 +29,7 @@
 
 class QMouseEvent;
 class QString;
-class KMenu;
+class K3PopupMenu;
 class LayerItem;
 class LayerFolder;
 
@@ -69,7 +69,7 @@ public:
     {
         enum { NewLayer = 0, NewFolder, RemoveLayer, LayerProperties, COUNT };
     };
-    KMenu *contextMenu() const;
+    K3PopupMenu *contextMenu() const;
 
 public slots:
     void setFoldersCanBeActive( bool can );

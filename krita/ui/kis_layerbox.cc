@@ -40,6 +40,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kmenu.h>
+#include <k3popupmenu.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>

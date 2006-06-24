@@ -26,6 +26,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <k3popupmenu.h>
 #include <kinstance.h>
 
 #include <KoPartSelectAction.h>

@@ -93,12 +93,16 @@ KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidg
     return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent, i18n("Configuration of lens correction filter").ascii());
 }
 
-void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rect)
+void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration* config, const QRect& rawrect)
 {
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     
-    setProgressTotalSteps(rect.width() * rect.height());
+    QRect layerrect = src->exactBounds();
+    
+    QRect workingrect = layerrect.intersect( rawrect );
+    
+    setProgressTotalSteps(workingrect.width() * workingrect.height());
 
     KisColorSpace* cs = dst->colorSpace();
     
@@ -109,12 +113,12 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
     double correctionnearedges = (config && config->getProperty("correctionnearedges", value)) ? value.toDouble() : 0.;
     double brightness = ( (config && config->getProperty("brightness", value)) ? value.toDouble() : 0. );
     
-    KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true );
+    KisRectIteratorPixel dstIt = dst->createRectIterator(workingrect.x(), workingrect.y(), workingrect.width(), workingrect.height(), true );
     KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor();
     
-    double normallise_radius_sq = 4.0 / (rect.width() * rect.width() + rect.height() * rect.height());
-    xcenter = rect.width() * xcenter / 100.0;
-    ycenter = rect.height() * ycenter / 100.0;
+    double normallise_radius_sq = 4.0 / (layerrect.width() * layerrect.width() + layerrect.height() * layerrect.height());
+    xcenter = layerrect.x() + layerrect.width() * xcenter / 100.0;
+    ycenter = layerrect.y() + layerrect.height() * ycenter / 100.0;
     double mult_sq = correctionnearcenter / 200.0;
     double mult_qd = correctionnearedges / 200.0;
     
@@ -133,7 +137,7 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
         double srcX = xcenter + radius_mult * off_x;
         double srcY = ycenter + radius_mult * off_y;
 
-        if( srcX >= rect.left() && srcX <= rect.right() && srcY >= rect.top() && srcY <= rect.bottom() )
+        if( srcX >= rawrect.left() && srcX <= rawrect.right() && srcY >= rawrect.top() && srcY <= rawrect.bottom() )
         {
             double brighten = 1.0 + mag * brightness;
 

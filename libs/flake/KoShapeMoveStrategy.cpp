@@ -22,7 +22,6 @@
 #include "KoShapeMoveStrategy.h"
 
 #include <QPainter>
-#include <QDebug>
 #include <QMouseEvent>
 
 #include "KoCanvasBase.h"

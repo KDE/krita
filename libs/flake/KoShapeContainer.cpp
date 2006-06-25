@@ -21,7 +21,6 @@
 
 #include <QPointF>
 #include <QPainter>
-#include <QDebug>
 
 KoShapeContainer::KoShapeContainer() : KoShape() {
     m_children = 0;
@@ -88,14 +87,14 @@ void KoShapeContainer::paint(QPainter &painter, KoViewConverter &converter) {
         if( childClipped(shape) ) {
 
             QRectF clipRect(QPointF(0, 0), size());
-            clipRect = converter.normalToView(clipRect);
+            clipRect = converter.documentToView(clipRect);
 
             QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
-            clip.translate( (position() - converter.normalToView(position())).toPoint() );
+            clip.translate( (position() - converter.documentToView(position())).toPoint() );
             painter.setClipRegion(QRegion(clip));
         }
-//qDebug() << "rect: " << position();
-//qDebug() << "polygon: " << clip.boundingRect();
+//kDebug() << "rect: " << position() << endl;
+//kDebug() << "polygon: " << clip.boundingRect() << endl;
         //painter.drawPolygon(clip);
         painter.setMatrix( shape->transformationMatrix(&converter) * painter.matrix() );
         shape->paint(painter, converter);

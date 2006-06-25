@@ -23,8 +23,6 @@
 #include "KoCanvasBase.h"
 #include "KoCommand.h"
 
-#include <QDebug>
-
 KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool, canvas)

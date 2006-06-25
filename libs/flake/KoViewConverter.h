@@ -37,27 +37,27 @@ public:
 
     /**
      * Convert a coordinate in pt to pixels.
-     * @param normalPoint the point in the normal coordinate system of a KoShape.
+     * @param documentPoint the point in the document coordinate system of a KoShape.
      */
-    virtual QPointF normalToView( const QPointF &normalPoint ) = 0;
+    virtual QPointF documentToView( const QPointF &documentPoint ) = 0;
 
     /**
      * Convert a coordinate in pixels to pt.
      * @param viewPoint the point in the coordinate system of the widget, or window.
      */
-    virtual QPointF viewToNormal( const QPointF &viewPoint ) = 0;
+    virtual QPointF viewToDocument( const QPointF &viewPoint ) = 0;
 
     /**
      * Convert a rectangle in pt to pixels.
-     * @param normalRect the rect in the normal coordinate system of a KoShape.
+     * @param documentRect the rect in the document coordinate system of a KoShape.
      */
-    virtual QRectF normalToView( const QRectF &normalRect ) = 0;
+    virtual QRectF documentToView( const QRectF &documentRect ) = 0;
 
     /**
      * Convert a rectangle in pixels to pt.
      * @param viewRect the rect in the coordinate system of the widget, or window.
      */
-    virtual QRectF viewToNormal( const QRectF &viewRect ) = 0;
+    virtual QRectF viewToDocument( const QRectF &viewRect ) = 0;
 
     /**
      * set the zoom levels of the individual x and y axis to the pointer paramets.

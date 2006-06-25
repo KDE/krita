@@ -84,8 +84,15 @@ public:
     /**
      * Change the zoom level, keeping the resolution unchanged.
      * @param zoom the zoom factor (e.g. 100 for 100%)
+     * \deprecated
      */
     void setZoom( int zoom );
+    /**
+     * Change the zoom level, keeping the resolution unchanged.
+     * @param zoom the zoom factor (e.g. 1.0 for 100%)
+     */
+    void setZoom( double zoom );
+
     /**
      * Change the zoom mode
      * @param zoomMode the zoom mode.
@@ -95,13 +102,13 @@ public:
      * @return the global zoom factor (e.g. 100 for 100%).
      * Only use this to display to the user, don't use in calculations
      */
-    int zoom() const { return m_zoom; }
+    int zoomInPercent() const { return qRound(m_zoom * 100); }
     /**
      * @return the global zoom mode (e.g. KoZoomMode::ZOOM_WIDTH).
      * use this to determine how to zoom
      */
     KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
-    
+
     // Input: pt. Output: pixels. Resolution and zoom are applied.
     int zoomItXOld( double z ) const {
         return qRound( m_zoomedResolutionX * z );
@@ -166,27 +173,27 @@ public:
 
     /**
      * Convert a coordinate in pt to pixels.
-     * @param normalPoint the point in the normal coordinate system of a KoShape.
+     * @param documentPoint the point in the document coordinate system of a KoShape.
      */
-    QPointF normalToView( const QPointF &normalPoint );
+    QPointF documentToView( const QPointF &documentPoint );
 
     /**
      * Convert a coordinate in pixels to pt.
      * @param viewPoint the point in the coordinate system of the widget, or window.
      */
-    QPointF viewToNormal( const QPointF &viewPoint );
+    QPointF viewToDocument( const QPointF &viewPoint );
 
     /**
      * Convert a rectangle in pt to pixels.
-     * @param normalRect the rect in the normal coordinate system of a KoShape.
+     * @param documentRect the rect in the document coordinate system of a KoShape.
      */
-    QRectF normalToView( const QRectF &normalRect );
+    QRectF documentToView( const QRectF &documentRect );
 
     /**
      * Convert a rectangle in pixels to pt.
      * @param viewRect the rect in the coordinate system of the widget, or window.
      */
-    QRectF viewToNormal( const QRectF &viewRect );
+    QRectF viewToDocument( const QRectF &viewRect );
 
     /**
      * set the zoom levels of the individual x and y axis to the pointer paramets.
@@ -197,7 +204,7 @@ public:
 
 
 protected:
-    int m_zoom;
+    double m_zoom;
     KoZoomMode::Mode m_zoomMode;
 
     double m_resolutionX;

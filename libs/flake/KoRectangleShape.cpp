@@ -29,5 +29,5 @@ KoRectangleShape::KoRectangleShape() : KoShape() {
 
 void KoRectangleShape::paint(QPainter &painter, KoViewConverter &converter) {
     painter.setBrush(background());
-    painter.drawRect( converter.normalToView(QRectF( 0, 0, size().width(), size().height() ) ));
+    painter.drawRect( converter.documentToView(QRectF( 0, 0, size().width(), size().height() ) ));
 }

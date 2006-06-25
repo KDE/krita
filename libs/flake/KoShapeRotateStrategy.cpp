@@ -24,7 +24,6 @@
 #include "KoShapeManager.h"
 #include "KoCommand.h"
 
-#include <QDebug>
 #include <QPointF>
 
 #include <math.h>

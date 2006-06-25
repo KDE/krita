@@ -28,7 +28,6 @@
 #include "KoShapeBorderModel.h"
 #include "KoRepaintManager.moc"
 
-#include <QDebug>
 #include <QPainter>
 
 KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &shapes )
@@ -87,7 +86,7 @@ void KoShapeManager::paint( QPainter &painter, KoViewConverter &converter, bool 
             continue;
         if(painter.hasClipping()) {
             QRectF shapeBox = shape->boundingRect();
-            shapeBox = converter.normalToView(shapeBox);
+            shapeBox = converter.documentToView(shapeBox);
             QRegion shapeRegion = QRegion(shapeBox.toRect());
 
             if(clipRegion.intersect(shapeRegion).isEmpty())
@@ -124,7 +123,7 @@ KoShape * KoShapeManager::shapeAt( const QPointF &position )
     for(int count = sorterdShapes.count()-1; count >= 0; count--) {
         if ( sorterdShapes.at(count)->hitTest( position ) )
         {
-            //qDebug() << "Hittest succeeded";
+            //kDebug() << "Hittest succeeded" << endl;
             return sorterdShapes.at(count);
         }
     }

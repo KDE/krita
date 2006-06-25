@@ -21,7 +21,6 @@
 
 #include "KoInteractionTool.h"
 
-#include <QDebug>
 #include <QMouseEvent>
 #include <QPainter>
 
@@ -112,7 +111,7 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
         painter.setPen( pen );
         bool editable=false;
         foreach(KoShape *shape, selection()->selectedObjects(KoFlake::StrippedSelection)) {
-            painter.drawRect( converter.normalToView(shape->boundingRect()) );
+            painter.drawRect( converter.documentToView(shape->boundingRect()) );
             if(!shape->isLocked())
                 editable = true;
         }
@@ -163,7 +162,7 @@ void KoInteractionTool::mouseMoveEvent( KoPointerEvent *event ) {
 QRectF KoInteractionTool::handlesSize() {
     QRectF bound = selection()->boundingRect();
     // expansion Border
-    QPointF border = m_canvas->viewConverter()->viewToNormal(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
+    QPointF border = m_canvas->viewConverter()->viewToDocument(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
     bound.adjust(-border.x(), -border.y(), border.x(), border.y());
     return bound;
 }
@@ -226,7 +225,7 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
     if(innerHandleMeaning != 0)
         *innerHandleMeaning = false;
     for ( int i = 0; i < KoFlake::NoHandle; ++i ) {
-        QPointF pt = converter->normalToView( point ) - converter->normalToView( m_selectionBox[i] ) - m_handleDiff[i];
+        QPointF pt = converter->documentToView( point ) - converter->documentToView( m_selectionBox[i] ) - m_handleDiff[i];
         // if between outline and out handles;
         if(qAbs(pt.x()) < HANDLE_DISTANCE && qAbs(pt.y()) < HANDLE_DISTANCE)
             return static_cast<KoFlake::SelectionHandle> (i);
@@ -289,7 +288,7 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
     painter.setPen(pen);
     painter.setBrush(Qt::yellow);
 
-    QRectF bounds = converter.normalToView(m_bounds);
+    QRectF bounds = converter.documentToView(m_bounds);
 
     // the 4 move rects
     pen.setWidthF(0);

@@ -22,7 +22,6 @@
 #include "KoShapeRubberSelectStrategy.h"
 
 #include <QPainter>
-#include <QDebug>
 #include <QMouseEvent>
 
 #include "KoPointerEvent.h"
@@ -52,7 +51,7 @@ void KoShapeRubberSelectStrategy::paint( QPainter &painter, KoViewConverter &con
     QBrush sb( selectColor, Qt::SolidPattern );
     painter.setPen( QPen( sb, 0 ) );
     painter.setBrush( sb );
-    QRectF paintRect = converter.normalToView(m_selectRect);
+    QRectF paintRect = converter.documentToView(m_selectRect);
     if(painter.hasClipping())
         paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
     painter.drawRect( paintRect);
@@ -91,7 +90,6 @@ void KoShapeRubberSelectStrategy::finishInteraction()
     const QList<KoShape *> &shapes = m_canvas->shapeManager()->shapes();
     foreach ( KoShape * object, shapes )
     {
-        //qDebug() << "o bb:" << object->boundingRect() << ", m_selectRect:" << m_selectRect;
         if ( object->boundingRect().intersects( m_selectRect ) )
         {
             selection->select( object );

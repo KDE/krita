@@ -28,7 +28,7 @@ K_EXPORT_COMPONENT_FACTORY(kotext2,
          KGenericFactory<KoTextShapeFactory>( "TextShape" ) )
 
 KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList&)
-: KoShapeFactory(parent, "TextShape", i18n("A shape that shows text"))
+: KoShapeFactory(parent, KoTextShape_SHAPEID, i18n("A shape that shows text"))
 {
     setToolTip(i18n("A text shape"));
 
@@ -46,7 +46,12 @@ KoShape *KoTextShapeFactory::createDefaultShape() {
 }
 
 KoShape *KoTextShapeFactory::createShape(const KoProperties * params) const {
-    return new KoTextShape();
+    KoTextShape *shape = new KoTextShape();
+    QTextDocument *doc = new QTextDocument();
+    doc->setDefaultFont(QFont("Sans", 10, QFont::Normal, false));
+    doc->setHtml( params->getProperty("text").toString() );
+    shape->setDocument(doc);
+    return shape;
 }
 
 #include "KoTextShapeFactory.moc"

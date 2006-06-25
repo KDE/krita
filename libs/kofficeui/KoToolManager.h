@@ -107,6 +107,7 @@ private:
     QStack<KoTool*> m_stack;
 };
 
+/// \internal
 class ToolHelper : public QObject {
     Q_OBJECT
 public:

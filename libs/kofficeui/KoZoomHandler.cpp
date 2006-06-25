@@ -34,7 +34,7 @@ void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
     // m_resolution[XY] is in pixel per pt
     m_resolutionX = POINT_TO_INCH( static_cast<double>(dpiX) );
     m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
-    setZoom( zoom );
+    setZoom( zoom / 100.0 );
     /*kDebug(32500) << "KoZoomHandler::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
               << " m_resolutionX=" << m_resolutionX
               << " m_zoomedResolutionX=" << m_zoomedResolutionX
@@ -44,7 +44,7 @@ void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 
 void KoZoomHandler::setResolution( double resolutionX, double resolutionY )
 {
-    m_zoom = 100;
+    m_zoom = 1.0;
     m_resolutionX = resolutionX;
     m_resolutionY = resolutionY;
     m_zoomedResolutionX = resolutionX;
@@ -60,34 +60,39 @@ void KoZoomHandler::setZoomedResolution( double zoomedResolutionX, double zoomed
     m_zoomedResolutionY = zoomedResolutionY;
 }
 
-void KoZoomHandler::setZoom( int zoom )
+void KoZoomHandler::setZoom( double zoom )
 {
     m_zoom = zoom;
-    if( m_zoom == 100 ) {
+    if( m_zoom == 1.0 ) {
         m_zoomedResolutionX = m_resolutionX;
         m_zoomedResolutionY = m_resolutionY;
     } else {
-        m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
-        m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
+        m_zoomedResolutionX = m_zoom * m_resolutionX;
+        m_zoomedResolutionY = m_zoom * m_resolutionY;
     }
 }
 
-QPointF KoZoomHandler::normalToView( const QPointF &normalPoint ) {
-    return QPointF( zoomItX( normalPoint.x() ), zoomItY( normalPoint.y() ) );
+void KoZoomHandler::setZoom( int zoom )
+{
+    setZoom(zoom / 100.0);
 }
 
-QPointF KoZoomHandler::viewToNormal( const QPointF &viewPoint ) {
+QPointF KoZoomHandler::documentToView( const QPointF &documentPoint ) {
+    return QPointF( zoomItX( documentPoint.x() ), zoomItY( documentPoint.y() ) );
+}
+
+QPointF KoZoomHandler::viewToDocument( const QPointF &viewPoint ) {
     return QPointF( unzoomItX( viewPoint.x() ), unzoomItY( viewPoint.y() ) );
 }
 
-QRectF KoZoomHandler::normalToView( const QRectF &normalRect ) {
+QRectF KoZoomHandler::documentToView( const QRectF &documentRect ) {
     QRectF r;
-    r.setCoords( zoomItX( normalRect.left() ),  zoomItY( normalRect.top() ),
-                  zoomItX( normalRect.right() ), zoomItY( normalRect.bottom() ) );
+    r.setCoords( zoomItX( documentRect.left() ),  zoomItY( documentRect.top() ),
+                  zoomItX( documentRect.right() ), zoomItY( documentRect.bottom() ) );
     return r;
 }
 
-QRectF KoZoomHandler::viewToNormal( const QRectF &viewRect ) {
+QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect ) {
     QRectF r;
     r.setCoords( unzoomItX( viewRect.left() ),  unzoomItY( viewRect.top() ),
                   unzoomItX( viewRect.right() ), unzoomItY( viewRect.bottom() ) );

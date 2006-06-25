@@ -20,12 +20,12 @@
 #include "KoCanvasController.h"
 
 #include <QGridLayout>
-#include <QDebug>
-
+#include <QScrollBar>
 
 KoCanvasController::KoCanvasController(QWidget *parent)
 : QScrollArea(parent)
 , m_canvas(0)
+, m_canvasWidget(0)
 {
     m_viewport = new Viewport();
     setWidget(m_viewport);
@@ -49,11 +49,27 @@ KoCanvasBase* KoCanvasController::canvas() const {
 }
 
 int KoCanvasController::visibleHeight() const {
-    return qMin(m_viewport->width(), m_canvasWidget->width());
+    int height1;
+    if(m_canvasWidget == 0)
+        height1 = m_viewport->height();
+    else
+        height1 = qMin(m_viewport->height(), m_canvasWidget->height());
+    int height2 = height();
+    if(horizontalScrollBar())
+        height2 -= horizontalScrollBar()->height();
+    return qMin(height1, height2);
 }
 
 int KoCanvasController::visibleWidth() const {
-    return qMin(m_viewport->height(), m_canvasWidget->height());
+    int width1;
+    if(m_canvasWidget == 0)
+        width1 = m_viewport->width();
+    else
+        width1 = qMin(m_viewport->width(), m_canvasWidget->width());
+    int width2 = width();
+    if(verticalScrollBar())
+        width2 -= verticalScrollBar()->width();
+    return qMin(width1, width2);
 }
 
 void KoCanvasController::centerCanvas(bool centered) {

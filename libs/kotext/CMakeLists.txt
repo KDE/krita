@@ -19,6 +19,8 @@ set(libkohyphen_SRCS
 #   KoComplexText.cpp  not compiled
 
 set(kotext_LIB_SRCS ${libkohyphen_SRCS}
+   KoTextShape.cpp
+   KoTextShapeFactory.cpp
    KoRichText.cpp 
    KoTextZoomHandler.cpp 
    KoBorder.cpp 

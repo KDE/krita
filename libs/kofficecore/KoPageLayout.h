@@ -176,7 +176,9 @@ struct KoPageLayout
     double ptTop;
     /** Bottom margin in pt */
     double ptBottom;
+    /// margin on page edge
     double ptPageEdge;
+    /// margin on page-binding edge
     double ptBindingSide;
 
     bool operator==( const KoPageLayout& l ) const {

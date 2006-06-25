@@ -583,7 +583,7 @@ QImage Container::drawImage( int width, int height )
     double f = qMax( static_cast<double>( width )/static_cast<double>( realWidth ),
                      static_cast<double>( height )/static_cast<double>( realHeight ) );
 
-    int oldZoom = context.zoom();
+    int oldZoom = context.zoomInPercent();
     context.setZoomAndResolution( qRound( oldZoom*f ), KoGlobal::dpiX(), KoGlobal::dpiY() );
 
     QPixmap pm( context.layoutUnitToPixelX( m_formulaElement->getWidth() ),
@@ -592,6 +592,7 @@ QImage Container::drawImage( int width, int height )
     QPainter paint(&pm);
     m_formulaElement->draw(paint, rect.toRect(), context);
     paint.end();
+    // FIXME store and reset zoomedResolution as well as zoom. This is lossy
     context.setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     return pm.toImage();
 }

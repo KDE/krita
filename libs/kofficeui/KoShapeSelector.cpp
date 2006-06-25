@@ -191,17 +191,17 @@ void KoShapeSelector::add(KoShape *shape) {
 
 // event handlers
 void KoShapeSelector::mouseMoveEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToDocument(e->pos()) ));
     m_tool->mouseMoveEvent( &ev );
 }
 
 void KoShapeSelector::mousePressEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToDocument(e->pos()) ));
     m_tool->mousePressEvent( &ev );
 }
 
 void KoShapeSelector::mouseReleaseEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( m_canvas->viewConverter()->viewToDocument(e->pos()) ));
     m_tool->mouseReleaseEvent( &ev );
 }
 
@@ -239,19 +239,19 @@ bool KoShapeSelector::event(QEvent *e) {
 }
 
 // ************ DummyViewConverter **********
-QPointF KoShapeSelector::DummyViewConverter::normalToView (const QPointF &normalPoint) {
-    return normalPoint;
+QPointF KoShapeSelector::DummyViewConverter::documentToView (const QPointF &documentPoint) {
+    return documentPoint;
 }
 
-QPointF KoShapeSelector::DummyViewConverter::viewToNormal (const QPointF &viewPoint) {
+QPointF KoShapeSelector::DummyViewConverter::viewToDocument (const QPointF &viewPoint) {
     return viewPoint;
 }
 
-QRectF KoShapeSelector::DummyViewConverter::normalToView (const QRectF &normalRect) {
-    return normalRect;
+QRectF KoShapeSelector::DummyViewConverter::documentToView (const QRectF &documentRect) {
+    return documentRect;
 }
 
-QRectF KoShapeSelector::DummyViewConverter::viewToNormal (const QRectF &viewRect) {
+QRectF KoShapeSelector::DummyViewConverter::viewToDocument (const QRectF &viewRect) {
     return viewRect;
 }
 

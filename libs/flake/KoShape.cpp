@@ -65,7 +65,7 @@ void KoShape::paintDecorations(QPainter &painter, KoViewConverter &converter, bo
         painter.setBrush( Qt::NoBrush );
         for ( int i = 0; i < m_connectors.size(); ++i )
         {
-            QPointF p = converter.normalToView(m_connectors[ i ]);
+            QPointF p = converter.documentToView(m_connectors[ i ]);
             painter.drawLine( QPointF( p.x() - 2, p.y() + 2 ), QPointF( p.x() + 2, p.y() - 2 ) );
             painter.drawLine( QPointF( p.x() + 2, p.y() + 2 ), QPointF( p.x() - 2, p.y() - 2 ) );
         }
@@ -147,7 +147,7 @@ QMatrix KoShape::transformationMatrix(KoViewConverter *converter) const {
     QMatrix matrix;
     QRectF zoomedRect = QRectF(position(), size());
     if(converter)
-        zoomedRect = converter->normalToView(zoomedRect);
+        zoomedRect = converter->documentToView(zoomedRect);
     matrix.translate( zoomedRect.x(), zoomedRect.y() );
 
     // apply parents matrix to inherit any transformations done there.
@@ -159,7 +159,7 @@ QMatrix KoShape::transformationMatrix(KoViewConverter *converter) const {
         else {
             QPointF containerPos =container->position();
             if(converter)
-                containerPos = converter->normalToView(containerPos);
+                containerPos = converter->documentToView(containerPos);
             matrix.translate(containerPos.x(), containerPos.y());
         }
         container = dynamic_cast<KoShapeContainer*>(container->parent());
@@ -274,7 +274,7 @@ void KoShape::setAbsolutePosition(QPointF newPosition) {
     matrix.translate( -size().width() / 2.0, -size().height() / 2.0 );
 
     QPointF vector2 = matrix.map( QPointF(size().width() / 2.0, size().height() / 2.0) );
-    //qDebug() << "vector1: " << vector1 << ", vector2: " << vector2;
+    //kDebug() << "vector1: " << vector1 << ", vector2: " << vector2 << endl;
 
     setPosition(newPosition + vector1 - vector2);
 }

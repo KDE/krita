@@ -22,7 +22,6 @@
 #include <QString>
 #include <QMap>
 #include <QVariant>
-#include <kdebug.h>
 #include "koffice_export.h"
 
 
@@ -73,11 +72,61 @@ public:
      */
     virtual bool getProperty(const QString & name, QVariant & value) const;
 
+    /**
+     * Return a property by name, wrapped in a QVariant.
+     * A typical usage:
+     *  @code
+     *      KoProperties *props = new KoProperties();
+     *      props->setProperty("name", "Marcy");
+     *      props->setProperty("age", 25);
+     *      QString name = props->getProperty("name").toString();
+     *      int age = props->getProperty("age").toInt();
+     *  @endcode
+     * @return a property by name, wrapped in a QVariant.
+     * @param name the name (or key) with which the variant was registred.
+     * @see getInt() getString()
+     */
     virtual QVariant getProperty(const QString & name) const;
 
+    /**
+     * Return an integer property by name.
+     * A typical usage:
+     *  @code
+     *      KoProperties *props = new KoProperties();
+     *      props->setProperty("age", 25);
+     *      int age = props->getInt("age");
+     *  @endcode
+     * @return an integer property by name
+     * @param name the name (or key) with which the variant was registred.
+     * @param def the default value, should there not be no propery by the name this will be returned.
+     * @see getProperty() getString()
+     */
     int getInt(const QString & name, int def = 0) const;
+    /**
+     * Return a double property by name.
+     * @param name the name (or key) with which the variant was registred.
+     * @param def the default value, should there not be no propery by the name this will be returned.
+     */
     double getDouble(const QString & name, double def = 0.0) const;
+    /**
+     * Return a boolean property by name.
+     * @param name the name (or key) with which the variant was registred.
+     * @param def the default value, should there not be no propery by the name this will be returned.
+     */
     bool getBool(const QString & name, bool def = false) const;
+    /**
+     * Return an QString property by name.
+     * A typical usage:
+     *  @code
+     *      KoProperties *props = new KoProperties();
+     *      props->setProperty("name", "Marcy");
+     *      QString name = props->getString("name");
+     *  @endcode
+     * @return an QString property by name
+     * @param name the name (or key) with which the variant was registred.
+     * @see getProperty() getInt()
+     * @param def the default value, should there not be no propery by the name this will be returned.
+     */
     QString getString(const QString & name, QString def = QString::null) const;
 
 private:

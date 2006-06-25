@@ -20,7 +20,6 @@
 
 #include "KoCreateShapesTool.h"
 
-#include <QDebug>
 #include <QMouseEvent>
 #include <QPainter>
 

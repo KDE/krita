@@ -23,7 +23,6 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kdebug.h>
 
 KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringList&)
 : KoShapeFactory(parent, KoRectangleShape_SHAPEID, i18n("A simple square shape"))

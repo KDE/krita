@@ -25,7 +25,6 @@
 #include "KoPointerEvent.h"
 
 #include <QPainter>
-#include <QDebug>
 #include <QTimer>
 
 KoSelection::KoSelection()
@@ -42,7 +41,7 @@ void KoSelection::paint( QPainter &painter, KoViewConverter &converter)
     if ( count() == 0 )
         return;
     painter.setRenderHint( QPainter::Antialiasing, false );
-    QRectF bb = converter.normalToView( boundingRect() );
+    QRectF bb = converter.documentToView( boundingRect() );
     QPen pen( Qt::blue ); //TODO make it configurable
     painter.setPen( pen );
     painter.drawRect( bb );

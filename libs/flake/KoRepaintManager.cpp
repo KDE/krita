@@ -24,7 +24,6 @@
 #include "KoTool.h"
 
 #include <QRectF>
-#include <QDebug>
 
 KoRepaintManager::KoRepaintManager(KoCanvasBase *canvas, KoSelection *selection)
 : m_canvas (canvas)

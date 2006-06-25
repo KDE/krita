@@ -24,40 +24,40 @@
 #include <QFont>
 #include <QAbstractTextDocumentLayout>
 
-// ############ KoTextShapePrivate ################
-
-KoTextShape::KoTextShapePrivate::KoTextShapePrivate()
-{
-    m_document = new QTextDocument();
-    // The following avoids the normal case where the glyph metrices are rounded to integers and
-    // hinted to the screen by freetype, which you of course don't want to wysiwyg
-    m_document->setUseDesignMetrics(true);
-
-    m_document->setDefaultFont(QFont("Sans", 10, QFont::Normal, false));
-    m_document->setHtml( "<b>Koffie</b>, koffie... Querelanten\ndrinken geen KOffice maar groene thee.");
-}
-
-KoTextShape::KoTextShapePrivate::~KoTextShapePrivate() {
-    delete m_document;
-}
-
 
 // ############ KoTextShape ################
 
-KoTextShape::KoTextShape() {
-    m_private = new KoTextShapePrivate();
+KoTextShape::KoTextShape()
+: m_document(0)
+{
+    setDocument(new QTextDocument());
 }
 
 KoTextShape::~KoTextShape() {
-    delete m_private;
+    delete m_document;
 }
 
 void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
-    painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());
+    painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
     applyConversion(painter, converter);
     QAbstractTextDocumentLayout::PaintContext pc;
     pc.cursorPosition = -1;
 
-    m_private->m_document->setPageSize(size());
-    m_private->m_document->documentLayout()->draw( &painter, pc);
+    m_document->setPageSize(size());
+    m_document->documentLayout()->draw( &painter, pc);
+}
+
+void KoTextShape::setDocument(QTextDocument *document) {
+    Q_ASSERT(document);
+    delete m_document;
+    m_document = document;
+    // The following avoids the normal case where the glyph metrices are rounded to integers and
+    // hinted to the screen by freetype, which you of course don't want for WYSIWYG
+    m_document->setUseDesignMetrics(true);
+}
+
+QTextDocument *KoTextShape::takeDocument() {
+    QTextDocument *doc = m_document;
+    m_document = 0;
+    return doc;
 }

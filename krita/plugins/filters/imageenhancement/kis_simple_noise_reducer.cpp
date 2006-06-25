@@ -81,7 +81,6 @@ void KisSimpleNoiseReducer::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, 
     
     QImage mask;
     kas->createBrush(&mask);
-    mask.save("testmask.png", "PNG");
     
     KisKernelSP kernel = KisKernel::fromQImage(mask);
     

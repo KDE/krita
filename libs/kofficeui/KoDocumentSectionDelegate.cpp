@@ -65,7 +65,6 @@ void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &
     {
         QStyleOptionViewItem option = getOptions( o, index );
 
-        p->translate( option.rect.topLeft() );
         p->setFont( option.font );
 
         // p->fillRect( option.rect, option.palette.base() );
@@ -89,14 +88,12 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
         if( me->button() != Qt::LeftButton )
             return false; //TODO
 
-        const QPoint pos = me->pos() - option.rect.topLeft();
-
         const QRect ir = iconsRect( option, index ), tr = textRect( option, index );
 
-        if( ir.contains( pos ) )
+        if( ir.contains( me->pos() ) )
         {
             const int iconWidth = option.decorationSize.width();
-            int x = pos.x() - ir.left();
+            int x = me->pos().x() - ir.left();
             if( x % ( iconWidth + d->margin ) < iconWidth ) //it's on an icon, not a margin
             {
                 Model::PropertyList lp = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
@@ -115,7 +112,7 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
             return true;
         }
 
-        /*else if( tr.contains( pos ) && ( option.state & QStyle::State_Selected ) && !listView()->renameLineEdit()->isVisible() )
+        /*else if( tr.contains( me->pos() ) && ( option.state & QStyle::State_Selected ) && !listView()->renameLineEdit()->isVisible() )
         {
             listView()->rename( this, 0 );
             QRect r( listView()->contentsToViewport( mapToListView( tr.topLeft() ) ), tr.size() );
@@ -168,7 +165,7 @@ QRect KoDocumentSectionDelegate::textRect( const QStyleOptionViewItem &option, c
 
     const int width = ( d->mode == DetailedMode ? option.rect.right() : iconsRect( option, index ).left() ) - indent - d->margin + minbearing;
 
-    return QRect( indent, 0, width, option.fontMetrics.height() );
+    return QRect( indent, 0, width, option.fontMetrics.height() ).translated( option.rect.topLeft() );
 }
 
 QRect KoDocumentSectionDelegate::iconsRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
@@ -184,12 +181,12 @@ QRect KoDocumentSectionDelegate::iconsRect( const QStyleOptionViewItem &option, 
     const int x = d->mode == DetailedMode ? thumbnailRect( option, index ).right() + d->margin : option.rect.width() - iconswidth;
     const int y = d->mode == DetailedMode ? option.fontMetrics.height() : 0;
 
-    return QRect( x, y, iconswidth, option.decorationSize.height() );
+    return QRect( x, y, iconswidth, option.decorationSize.height() ).translated( option.rect.topLeft() );
 }
 
 QRect KoDocumentSectionDelegate::thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex & ) const
 {
-    return QRect( 0, 0, option.rect.height(), option.rect.height() );
+    return QRect( 0, 0, option.rect.height(), option.rect.height() ).translated( option.rect.topLeft() );
 }
 
 void KoDocumentSectionDelegate::drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const

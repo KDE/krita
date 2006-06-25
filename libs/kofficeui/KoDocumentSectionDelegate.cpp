@@ -43,6 +43,11 @@ KoDocumentSectionDelegate::~KoDocumentSectionDelegate()
     delete d;
 }
 
+void KoDocumentSectionDelegate::setDisplayMode( DisplayMode mode )
+{
+    d->mode = mode;
+}
+
 QSize KoDocumentSectionDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     switch( d->mode )

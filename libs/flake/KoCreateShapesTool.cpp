@@ -30,6 +30,7 @@
 KoCreateShapesTool::KoCreateShapesTool(KoCanvasBase *canvas)
 : KoInteractionTool( canvas )
 , m_shapeController( 0 )
+, m_newShapeProperties( 0 )
 {
 }
 

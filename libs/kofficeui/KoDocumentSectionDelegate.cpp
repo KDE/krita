@@ -67,10 +67,11 @@ void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &
 
         p->setFont( option.font );
 
-        // p->fillRect( option.rect, option.palette.base() );
+        if( option.state & QStyle::State_Selected )
+            p->fillRect( option.rect, option.palette.highlight() );
 
-        if( index.data( Qt::DecorationRole ).isValid() )
-            p->drawPixmap( thumbnailRect( option, index ).right() + 1 , 0,
+        if( !index.data( Qt::DecorationRole ).value<QIcon>().isNull() )
+            p->drawPixmap( thumbnailRect( option, index ).right() + 1 , option.rect.top(),
                 index.data( Qt::DecorationRole ).value<QIcon>().pixmap( option.decorationSize ) );
 
         drawText( p, option, index );
@@ -159,11 +160,11 @@ QRect KoDocumentSectionDelegate::textRect( const QStyleOptionViewItem &option, c
         minbearing = option.fontMetrics.minLeftBearing() + option.fontMetrics.minRightBearing();
     }
 
-    int indent = thumbnailRect( option, index ).right() + d->margin;
-    if( index.data( Qt::DecorationRole ).isValid() )
+    int indent = thumbnailRect( option, index ).right() - option.rect.left() + d->margin;
+    if( !index.data( Qt::DecorationRole ).value<QIcon>().isNull() )
         indent += option.decorationSize.width() + d->margin;
 
-    const int width = ( d->mode == DetailedMode ? option.rect.right() : iconsRect( option, index ).left() ) - indent - d->margin + minbearing;
+    const int width = ( d->mode == DetailedMode ? option.rect.width() : iconsRect( option, index ).left() - option.rect.left() ) - indent - d->margin + minbearing;
 
     return QRect( indent, 0, width, option.fontMetrics.height() ).translated( option.rect.topLeft() );
 }
@@ -178,7 +179,7 @@ QRect KoDocumentSectionDelegate::iconsRect( const QStyleOptionViewItem &option, 
 
     const int iconswidth = propscount * option.decorationSize.width() + (propscount - 1) * d->margin;
 
-    const int x = d->mode == DetailedMode ? thumbnailRect( option, index ).right() + d->margin : option.rect.width() - iconswidth;
+    const int x = d->mode == DetailedMode ? thumbnailRect( option, index ).right() - option.rect.left() + d->margin : option.rect.width() - iconswidth;
     const int y = d->mode == DetailedMode ? option.fontMetrics.height() : 0;
 
     return QRect( x, y, iconswidth, option.decorationSize.height() ).translated( option.rect.topLeft() );
@@ -229,7 +230,8 @@ void KoDocumentSectionDelegate::drawThumbnail( QPainter *p, const QStyleOptionVi
 {
     const QRect r = thumbnailRect( option, index );
 
-    const QImage i = index.data( Model::ThumbnailRole ).value<QImage>();
+    const QImage i = index.data( Model::ThumbnailRole ).value<QImage>()
+                     .scaled( r.height(), r.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
     QPoint offset;
     offset.setX( r.width()/2 - i.width()/2 );
     offset.setY( r.height()/2 - i.height()/2 );

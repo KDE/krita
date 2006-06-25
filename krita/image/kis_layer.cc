@@ -318,6 +318,12 @@ KoDocumentSectionModel::PropertyList KisLayer::properties() const
     return l;
 }
 
+void KisLayer::setProperties( const PropertyList &properties )
+{
+    setVisible( properties.at( 0 ).state.toBool() );
+    setLocked( properties.at( 1 ).state.toBool() );
+}
+
 void KisLayer::setClean(const QRect & rect)
 {
     if (m_dirtyRect.isValid() && rect.isValid()) {
@@ -432,7 +438,7 @@ int KisLayer::numLayers(int flags) const
 {
     int num = 0;
     if (matchesFlags(flags)) num++;
-    for (KisLayerSP layer = firstChild(); layer; layer = layer->nextSibling())
+    for (KisLayer* layer = firstChild().data(); layer; layer = layer->nextSibling().data())
         num += layer->numLayers(flags);
     return num;
 }
@@ -697,6 +703,42 @@ QVariant KisLayer::data(const QModelIndex &index, int role) const
         case PropertiesRole: return QVariant::fromValue(layer->properties());
         default: return QVariant(); //TODO
     }
+}
+
+Qt::ItemFlags KisLayer::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::ItemIsEnabled;
+    Q_ASSERT(index.model() == this);
+    Q_ASSERT(index.internalPointer());
+
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+    if (qobject_cast<KisGroupLayer*>(static_cast<KisLayer*>(index.internalPointer()))) //gcc--
+        flags |= Qt::ItemIsDropEnabled;
+    return flags;
+}
+
+bool KisLayer::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (!index.isValid())
+        return false;
+    Q_ASSERT(index.model() == this);
+    Q_ASSERT(index.internalPointer());
+
+    KisLayer *layer = static_cast<KisLayer*>(index.internalPointer());
+
+    switch (role)
+    {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            layer->setName(value.toString());
+            return true;
+        case PropertiesRole:
+            layer->setProperties( value.value<PropertyList>() );
+            return true;
+    }
+
+    return false;
 }
 
 #include "kis_layer.moc"

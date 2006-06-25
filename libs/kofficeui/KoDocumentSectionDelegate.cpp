@@ -20,6 +20,7 @@
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
 #include <QPainter>
+#include <QMouseEvent>
 #include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionDelegate.h"
 
@@ -80,8 +81,52 @@ void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &
     p->restore();
 }
 
-bool KoDocumentSectionDelegate::editorEvent( QEvent *, QAbstractItemModel *, const QStyleOptionViewItem &, const QModelIndex & )
+bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index )
 {
+    if( e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonDblClick )
+    {
+        QMouseEvent *me = static_cast<QMouseEvent*>( e );
+        if( me->button() != Qt::LeftButton )
+            return false; //TODO
+
+        const QPoint pos = me->pos() - option.rect.topLeft();
+
+        const QRect ir = iconsRect( option, index ), tr = textRect( option, index );
+
+        if( ir.contains( pos ) )
+        {
+            const int iconWidth = option.decorationSize.width();
+            int x = pos.x() - ir.left();
+            if( x % ( iconWidth + d->margin ) < iconWidth ) //it's on an icon, not a margin
+            {
+                Model::PropertyList lp = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
+                int p = -1;
+                for( int i = 0, n = lp.count(); i < n; ++i )
+                {
+                    if( lp[i].isMutable )
+                        x -= iconWidth + d->margin;
+                    p += 1;
+                    if( x < 0 )
+                        break;
+                }
+                lp[p].state = !lp[p].state.toBool();
+                model->setData( index, QVariant::fromValue( lp ), Model::PropertiesRole );
+            }
+            return true;
+        }
+
+        /*else if( tr.contains( pos ) && ( option.state & QStyle::State_Selected ) && !listView()->renameLineEdit()->isVisible() )
+        {
+            listView()->rename( this, 0 );
+            QRect r( listView()->contentsToViewport( mapToListView( tr.topLeft() ) ), tr.size() );
+            listView()->renameLineEdit()->setGeometry( r );
+            return true;
+        }
+
+        if ( !(me->modifiers() & Qt::ControlModifier) && !(me->modifiers() & Qt::ShiftModifier) )
+            setActive();*/
+    }
+
     return false;
 }
 

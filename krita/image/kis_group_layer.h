@@ -124,11 +124,6 @@ signals:
 
     void sigDirty(QRect rc);
 
-public: // from QAbstractItemModel
-
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
 protected:
 
     /// these cause QAbstractItemModel::rows{AboutToBe,}{Inserted,Removed} to be emitted and percolated up the tree

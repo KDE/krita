@@ -53,7 +53,9 @@ public:
     virtual ~KisLayer();
 
     virtual QIcon icon() const = 0;
+
     virtual PropertyList properties() const;
+    virtual void setProperties( const PropertyList &properties  );
 
     /**
      * Set the specified rect to clean
@@ -228,6 +230,8 @@ public: // from QAbstractItemModel
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex &index) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 protected:
     QModelIndex indexFromLayer(KisLayer *layer) const;

@@ -69,7 +69,6 @@ KoDocumentSectionModel::PropertyList KisAdjustmentLayer::properties() const
     return l;
 }
 
-
 KisLayerSP KisAdjustmentLayer::clone() const
 {
     return KisLayerSP(new KisAdjustmentLayer(*this));

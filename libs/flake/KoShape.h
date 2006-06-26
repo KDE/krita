@@ -32,12 +32,14 @@
 class QPainter;
 class QRectF;
 class QPainterPath;
+class QVariant;
 
 class KoSelection;
 class KoPointerEvent;
 class KoShapeContainer;
 class KoRepaintManager;
 class KoShapeBorderModel;
+class KoShapeUserData;
 
 /**
  *
@@ -429,6 +431,32 @@ public:
      */
     void moveBy(double distanceX, double distanceY);
 
+    /**
+     * Set a data object on the shape to be used by an application.
+     * This is specifically usefull when a shape is created in a plugin and that data from that
+     * shape should be accessible outside the plugin.
+     * @param userData the new user data, or 0 to delete the current one.
+     */
+    void setUserData(KoShapeUserData *userData);
+    /**
+     * Return the current userData.
+     */
+    KoShapeUserData *userData() const;
+
+    /**
+     * Return the Id of this shape, indentifying the type of shape by the id of the factory.
+     * @see KoShapeFactory::shapeId()
+     * @return the id of the shape-type
+     */
+    const QString & shapeId() const { return m_shapeId; }
+    /**
+     * Set the Id of this shape.  A shapeFactory is expected to set the Id at creation
+     * so applications can find out what kind of shape this is.
+     * @see KoShapeFactory::shapeId()
+     * @param id the ID from the factory that created this shape
+     */
+    void setShapeId(const QString &id) { m_shapeId = id; }
+
 protected:
     QMatrix m_invMatrix; ///< The inverted matrix; for convenience
     QBrush m_backgroundBrush; ///< Stands for the background color / fill etc.
@@ -460,6 +488,7 @@ private:
 
     QSizeF m_size; // size in pt
     QPointF m_pos; // position (top left) in pt
+    QString m_shapeId;
 
     QMatrix m_matrix;
 
@@ -476,6 +505,7 @@ private:
     friend class KoShapeManager;
     friend class KoShapeContainer;
     void setRepaintManager(KoRepaintManager *manager);
+    KoShapeUserData *m_userData;
 
     /**
      * Create a matrix that describes all the transformations done on this shape.

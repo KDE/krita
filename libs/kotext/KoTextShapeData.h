@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,31 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextShape.h"
+#ifndef KOTEXTSHAPEDATA_H
+#define KOTEXTSHAPEDATA_H
 
-#include <QTextLayout>
-#include <QFont>
-#include <QAbstractTextDocumentLayout>
+#include <KoShapeUserData.h>
 
+#include <koffice_export.h>
 
-// ############ KoTextShape ################
+class QTextDocument;
 
-KoTextShape::KoTextShape()
-{
-    m_textShapeData = new KoTextShapeData();
-    setUserData(m_textShapeData);
-}
+class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData {
+    Q_OBJECT
+public:
+    KoTextShapeData();
+    ~KoTextShapeData();
 
-KoTextShape::~KoTextShape() {
-}
+    void setDocument(QTextDocument *document, bool transferOwnership = true);
+    QTextDocument *document();
 
-void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
-    painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
-    applyConversion(painter, converter);
-    QAbstractTextDocumentLayout::PaintContext pc;
-    pc.cursorPosition = -1;
+private:
+    QTextDocument *m_document;
+    bool m_ownsDocument;
+};
 
-    QTextDocument *doc = m_textShapeData->document();
-    doc->setPageSize(size());
-    doc->documentLayout()->draw( &painter, pc);
-}
+#endif

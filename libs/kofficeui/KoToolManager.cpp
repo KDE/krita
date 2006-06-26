@@ -27,6 +27,7 @@
 #include <KoInteractionToolFactory.h>
 #include <KoShapeControllerBase.h>
 #include <KoCanvasController.h>
+#include <KoShapeRegistry.h>
 
 #include "kactioncollection.h"
 #include "kdebug.h"
@@ -72,6 +73,7 @@ void KoToolManager::setup() {
     m_defaultTool = new ToolHelper(new KoInteractionToolFactory(this, QStringList()));
     m_tools.append(m_defaultTool);
 
+    KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();
     foreach(KoID id, registry->listKeys()) {
         ToolHelper *t = new ToolHelper(registry->get(id));

@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,31 +17,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KOTEXTTOOL_H
+#define KOTEXTTOOL_H
+
 #include "KoTextShape.h"
 
-#include <QTextLayout>
-#include <QFont>
-#include <QAbstractTextDocumentLayout>
+#include <KoTool.h>
 
+#include <QTextCursor>
 
-// ############ KoTextShape ################
+class KoTextTool : public KoTool {
+public:
+    KoTextTool(KoCanvasBase *canvas);
+    ~KoTextTool();
 
-KoTextShape::KoTextShape()
-{
-    m_textShapeData = new KoTextShapeData();
-    setUserData(m_textShapeData);
-}
+    // font settings etc
+    //QWidget * optionWidget(QWidget * parent);
 
-KoTextShape::~KoTextShape() {
-}
+    void paint( QPainter &painter, KoViewConverter &converter );
 
-void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
-    painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
-    applyConversion(painter, converter);
-    QAbstractTextDocumentLayout::PaintContext pc;
-    pc.cursorPosition = -1;
+    void mousePressEvent( KoPointerEvent *event ) ;
+    void mouseDoubleClickEvent( KoPointerEvent *event );
+    void mouseMoveEvent( KoPointerEvent *event );
+    void mouseReleaseEvent( KoPointerEvent *event );
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
-    QTextDocument *doc = m_textShapeData->document();
-    doc->setPageSize(size());
-    doc->documentLayout()->draw( &painter, pc);
-}
+    void activate (bool temporary=false);
+    void deactivate();
+
+private:
+    KoTextShape *m_textShape;
+    QTextCursor m_caret;
+};
+
+#endif

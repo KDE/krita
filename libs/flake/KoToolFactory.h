@@ -26,7 +26,6 @@
 
 #include <klocale.h>
 #include <QObject>
-#include <QPixmap>
 
 /**
  * A factory for KoTool objects.
@@ -102,10 +101,10 @@ public:
      */
     const QString &toolTip() const;
     /**
-     * return an icon for this tool
-     * @return an icon for this tool
+     * return the basename of the icon for this tool
+     * @return the basename of the icon for this tool
      */
-    virtual const QPixmap& icon() const;
+    const QString& icon() const;
     /**
      * Return the id of the shape we can process.
      * This is the shape ID the tool we create is associated with.  So a TextTool for a TextShape.
@@ -126,10 +125,10 @@ protected:
     void setToolType(const QString & toolType);
     /**
      * Set an icon to be used in the toolBox.
-     * @param icon the pixmap from the iconLoader
+     * @param iconName the basename (without extention) of the icon
      * @see KIconLoader
      */
-    void setIcon(const QPixmap & icon);
+    void setIcon(const QString & iconName);
     /**
      * Set the priority of this tool, as it is shown in the toolBox; lower number means
      * it will be show more to the front of the list.
@@ -149,10 +148,9 @@ private:
     QString m_toolType;
     QString m_tooltip;
     QString m_activationId;
-    QPixmap m_icon;
+    QString m_icon;
     const QString m_name, m_id;
     int m_priority;
 };
 
 #endif
-

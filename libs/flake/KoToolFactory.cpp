@@ -46,7 +46,7 @@ const QString& KoToolFactory::toolTip() const {
     return m_tooltip;
 }
 
-const QPixmap& KoToolFactory::icon() const {
+const QString& KoToolFactory::icon() const {
     return m_icon;
 }
 
@@ -66,7 +66,7 @@ void KoToolFactory::setToolType(const QString & toolType) {
     m_toolType = toolType;
 }
 
-void KoToolFactory::setIcon(const QPixmap & icon) {
+void KoToolFactory::setIcon(const QString & icon) {
     m_icon = icon;
 }
 

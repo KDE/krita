@@ -19,8 +19,6 @@ set(libkohyphen_SRCS
 #   KoComplexText.cpp  not compiled
 
 set(kotext_LIB_SRCS ${libkohyphen_SRCS}
-   KoTextShape.cpp
-   KoTextShapeFactory.cpp
    KoRichText.cpp 
    KoTextZoomHandler.cpp 
    KoBorder.cpp 
@@ -67,6 +65,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoParagStyle.cpp 
    KoTextBookmark.cpp
    KoBorderPreview.cpp
+   KoTextShapeData.cpp
  )
 
 kde4_automoc(${kotext_LIB_SRCS})
@@ -89,7 +88,7 @@ kde4_add_ui3_files(kotext_LIB_SRCS
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 
-target_link_libraries(kotext  ${KDE4_KSPELL2_LIBS} kutils kofficecore kofficeui )
+target_link_libraries(kotext  ${KDE4_KSPELL2_LIBS} flake kutils kofficecore kofficeui )
 
 set_target_properties(kotext PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kotext )
@@ -97,8 +96,10 @@ install_targets(${LIB_INSTALL_DIR} kotext )
 
 ########### Flake Plugin library ###############
 set(kotext2_PART_SRCS
-   KoTextShape.cpp
-   KoTextShapeFactory.cpp
+    KoTextShape.cpp
+    KoTextShapeFactory.cpp
+    KoTextTool.cpp
+    KoTextToolFactory.cpp
  )
 
 kde4_automoc(${kotext2_PART_SRCS})
@@ -107,7 +108,7 @@ kde4_add_plugin(kotext2 ${kotext2_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kotext2 )
 
-target_link_libraries(kotext2 flake)
+target_link_libraries(kotext2 kotext flake kofficeui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kotext2 )
 

@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,31 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextShape.h"
+#include "KoTextShapeData.h"
+#include <QTextDocument>
 
-#include <QTextLayout>
-#include <QFont>
-#include <QAbstractTextDocumentLayout>
-
-
-// ############ KoTextShape ################
-
-KoTextShape::KoTextShape()
+KoTextShapeData::KoTextShapeData()
+: m_ownsDocument(false)
 {
-    m_textShapeData = new KoTextShapeData();
-    setUserData(m_textShapeData);
+    m_document = new QTextDocument();
 }
 
-KoTextShape::~KoTextShape() {
+KoTextShapeData::~KoTextShapeData() {
+    if(m_ownsDocument)
+        delete m_document;
 }
 
-void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
-    painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
-    applyConversion(painter, converter);
-    QAbstractTextDocumentLayout::PaintContext pc;
-    pc.cursorPosition = -1;
-
-    QTextDocument *doc = m_textShapeData->document();
-    doc->setPageSize(size());
-    doc->documentLayout()->draw( &painter, pc);
+void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership) {
+    Q_ASSERT(document);
+    if(m_ownsDocument)
+        delete m_document;
+    m_document = document;
+    // The following avoids the normal case where the glyph metrices are rounded to integers and
+    // hinted to the screen by freetype, which you of course don't want for WYSIWYG
+    m_document->setUseDesignMetrics(true);
+    m_ownsDocument = transferOwnership;
 }
+
+QTextDocument *KoTextShapeData::document() {
+    return m_document;
+}
+
+#include "KoTextShapeData.moc"

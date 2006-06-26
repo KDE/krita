@@ -69,6 +69,12 @@ public:
      *    of a grouped object if the group-parent is itself also in the set.
      */
     virtual const KoSelectionSet selectedObjects(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+    /**
+     * Return the first selected object, or 0 if there is nothing selected.
+     * @param strip if StrippedSelection, the returned list will not include any children
+     *    of a grouped object if the group-parent is itself also in the set.
+     */
+    KoShape *firstSelectedObject(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
     /// return if the object is selected
     virtual bool isSelected(const KoShape *object) const;
     /// return the selection count

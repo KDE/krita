@@ -87,7 +87,7 @@ public:
      * This method should be implemented by factories to create a shape that the user
      * gets when doing a base insert. For example from a script.  The created shape
      * should have its values set to good defaults that the user can then adjust further if
-     * needed.
+     * needed.  Including the KoShape:setShapeId(), with the Id from this factory
      * The default shape position is not relevant, it will be moved by the caller.
      * @return a new shape
      */
@@ -95,6 +95,7 @@ public:
     /**
      * This method should be implemented by factories to create a shape based on a set of
      * properties that are specifically made for this shape-type.
+     * This method should also set this factories shapeId on the shape using KoShape::setShapeId()
      * @return a new shape
      * @see KoShapeTemplate::properties
      */
@@ -110,6 +111,10 @@ public:
      * @return the id for the shape this factory creates.
      */
     const QString & shapeId() const;
+    /**
+     * Return all the templates this factory knows about.
+     * Each template shows a different way to create a shape this factory is specialized in.
+     */
     const QList<KoShapeTemplate> templates() const { return m_templates; }
     /**
      * return a translated tooltip Text for a selector of shapes
@@ -117,8 +122,8 @@ public:
      */
     const QString & toolTip() const;
     /**
-     * return an icon for this tool for a selector of shapes
-     * @return an icon for this tool
+     * return the basename of i the icon for this tool for a selector of shapes
+     * @return the basename of the icon for this selector of shapes
      */
     const QString & icon() const;
     /**
@@ -129,6 +134,11 @@ public:
 
 protected:
 
+    /**
+     * Add a template with the properties of a speficic type of shape this factory can generate
+     * using the createShape() method.
+     * @param params the new template this factory knows to produce
+     */
     void addTemplate(KoShapeTemplate params);
     /**
      * Set the tooltip to be used for a selector of shapes

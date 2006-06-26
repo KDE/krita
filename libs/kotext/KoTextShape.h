@@ -21,8 +21,8 @@
 #ifndef KOTEXTSHAPE_H
 #define KOTEXTSHAPE_H
 
-#include <koffice_export.h>
 #include <KoShape.h>
+#include <KoTextShapeData.h>
 
 #include <QTextDocument>
 #include <QPainter>
@@ -31,20 +31,15 @@
 
 #define KoTextShape_SHAPEID "TextShapeID"
 
-class KOTEXT_EXPORT KoTextShape : public KoShape {
+class KoTextShape : public KoShape {
 public:
     KoTextShape();
     virtual ~KoTextShape();
 
     void paint(QPainter &painter, KoViewConverter &converter);
 
-    void setDocument(QTextDocument *document);
-    QTextDocument *document() { return m_document; }
-    QTextDocument *takeDocument();
-
 private:
-    QTextDocument *m_document;
-
+    KoTextShapeData *m_textShapeData;
 };
 
 #endif

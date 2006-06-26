@@ -174,4 +174,11 @@ bool KoSelection::isSelected(const KoShape *object) const {
     return false;
 }
 
+KoShape *KoSelection::firstSelectedObject(KoFlake::SelectionType strip) const {
+    KoSelectionSet set = selectedObjects(strip);
+    if(set.isEmpty())
+        return 0;
+    return *(set.begin());
+}
+
 #include "KoSelection.moc"

@@ -46,7 +46,7 @@ class FLAKE_EXPORT KoTool : public QObject
 public:
 
     /**
-     * Constructor, normally only called by the factory (see KoTooLFactory)
+     * Constructor, normally only called by the factory (see KoToolFactory)
      * @param canvas the canvas interface this tool will work for.
      */
     KoTool(KoCanvasBase *canvas );
@@ -95,7 +95,7 @@ public:
 
     /**
      * Return if dragging (moving with the mouse down) to the edge of a canvas should scroll the
-     * canvas.
+     * canvas (default is true).
      * @return if this tool wants mouse events to cause scrolling of canvas.
      */
     virtual bool wantsAutoScroll();

@@ -17,9 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoTextShapeFactory.h>
-#include "KoTextShape.h"
 #include "KoProperties.h"
+#include "KoTextShape.h"
+#include "KoTextShapeData.h"
+#include "KoTextToolFactory.h"
+#include "KoToolRegistry.h"
+#include <KoTextShapeFactory.h>
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -27,7 +30,7 @@
 K_EXPORT_COMPONENT_FACTORY(kotext2,
          KGenericFactory<KoTextShapeFactory>( "TextShape" ) )
 
-KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList&)
+KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList& list)
 : KoShapeFactory(parent, KoTextShape_SHAPEID, i18n("A shape that shows text"))
 {
     setToolTip(i18n("A text shape"));
@@ -39,18 +42,25 @@ KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList&)
     t.properties = props;
     props->setProperty("text", "<b>Koffie</b>, koffie... Querelanten\ndrinken geen KOffice maar groene thee.");
     addTemplate(t);
+
+    // init tool factory here, since this is the only public factory in the lib
+    KoToolRegistry::instance()->add(new KoTextToolFactory(parent, list));
 }
 
 KoShape *KoTextShapeFactory::createDefaultShape() {
-    return new KoTextShape();
+    KoTextShape *text = new KoTextShape();
+    text->setShapeId(shapeId());
+    return text;
 }
 
 KoShape *KoTextShapeFactory::createShape(const KoProperties * params) const {
     KoTextShape *shape = new KoTextShape();
+    shape->setShapeId(shapeId());
     QTextDocument *doc = new QTextDocument();
     doc->setDefaultFont(QFont("Sans", 10, QFont::Normal, false));
     doc->setHtml( params->getProperty("text").toString() );
-    shape->setDocument(doc);
+    KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
+    data->setDocument(doc);
     return shape;
 }
 

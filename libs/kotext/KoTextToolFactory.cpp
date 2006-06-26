@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,31 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoTextToolFactory.h"
+#include "KoTextTool.h"
 #include "KoTextShape.h"
 
-#include <QTextLayout>
-#include <QFont>
-#include <QAbstractTextDocumentLayout>
+#include <klocale.h>
 
-
-// ############ KoTextShape ################
-
-KoTextShape::KoTextShape()
+KoTextToolFactory::KoTextToolFactory(QObject *parent, const QStringList&)
+: KoToolFactory(parent, "TextToolFactory_ID", i18n("Text tool"))
 {
-    m_textShapeData = new KoTextShapeData();
-    setUserData(m_textShapeData);
+    setToolTip (i18n("Text editing tool"));
+    setToolType ("dynamic");
+    setIcon ("tool_text");
+    setPriority (1);
+    setActivationShapeID (KoTextShape_SHAPEID);
 }
 
-KoTextShape::~KoTextShape() {
+KoTextToolFactory::~KoTextToolFactory() {
 }
 
-void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
-    painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
-    applyConversion(painter, converter);
-    QAbstractTextDocumentLayout::PaintContext pc;
-    pc.cursorPosition = -1;
-
-    QTextDocument *doc = m_textShapeData->document();
-    doc->setPageSize(size());
-    doc->documentLayout()->draw( &painter, pc);
+KoTool * KoTextToolFactory::createTool(KoCanvasBase *canvas) {
+    return new KoTextTool(canvas);
 }
+
+#include "KoTextToolFactory.moc"

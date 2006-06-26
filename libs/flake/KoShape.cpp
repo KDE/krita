@@ -26,9 +26,11 @@
 #include "KoPointerEvent.h"
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
+#include "KoShapeUserData.h"
 
 #include <QPainter>
 #include <QtDebug>
+#include <QVariant>
 #include <QPainterPath>
 
 KoShape::KoShape()
@@ -47,12 +49,14 @@ KoShape::KoShape()
 , m_locked( false )
 , m_keepAspect( false )
 , m_repaintManager(0)
+, m_userData(0)
 {
     recalcMatrix();
 }
 
 KoShape::~KoShape()
 {
+    delete m_userData;
 }
 
 void KoShape::paintDecorations(QPainter &painter, KoViewConverter &converter, bool selected) {
@@ -299,6 +303,16 @@ void KoShape::copySettings(const KoShape *shape) {
 void KoShape::moveBy(double distanceX, double distanceY) {
     QPointF p = absolutePosition();
     setAbsolutePosition(QPointF(p.x() + distanceX, p.y() + distanceY));
+}
+
+void KoShape::setUserData(KoShapeUserData *userData) {
+    if(m_userData)
+        delete m_userData;
+    m_userData = userData;
+}
+
+KoShapeUserData *KoShape::userData() const {
+    return m_userData;
 }
 
 // static

@@ -199,6 +199,10 @@ class KOPROPERTY_EXPORT Set : public QObject
 		/*! Emitted when the value of the property is changed.*/
 		void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
+		/*! @internal Exists to be sure that we emitted it before propertyChanged(), 
+		 so Editor object can handle this. */
+		void propertyChangedInternal(KoProperty::Set& set, KoProperty::Property& property);
+
 		/*! Emitted when the value of the property is reset.*/
 		void propertyReset(KoProperty::Set& set, KoProperty::Property& property);
 

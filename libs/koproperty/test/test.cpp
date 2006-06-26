@@ -29,8 +29,6 @@
 #include <QCursor>
 #include <QApplication>
 #include <QDesktopWidget>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <property.h>
 #include <editor.h>

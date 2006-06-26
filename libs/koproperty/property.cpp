@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -733,6 +733,7 @@ void Property::emitPropertyChanged()
 	if (d->sets) {
 		for (Q3PtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
 			if (it.current()) {//may be destroyed in the meantime
+				emit (*it.current())->propertyChangedInternal(**it.current(), *this);
 				emit (*it.current())->propertyChanged(**it.current(), *this);
 			}
 		}
@@ -744,6 +745,7 @@ void Property::emitPropertyChanged()
 		//still on it. So, if we try to access ourself/this once the signal
 		//got emitted we may end in a very hard to reproduce crash. So, the
 		//emit should happen as last step in this method!
+		emit d->set->propertyChangedInternal(*d->set, *this);
 		emit d->set->propertyChanged(*d->set, *this);
 	}
 }

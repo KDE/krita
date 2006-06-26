@@ -86,9 +86,16 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 
 	public slots:
 		/*! Populates the editor with an item for each property in the List.
-		  Also creates child items for composed properties.
-		*/
-		void changeSet(Set *set, bool preservePrevSelection=false);
+		  Also creates child items for composed properties. 
+		 If \a preservePrevSelection is true, previously selected editor 
+		 item will be kept selected, if present. */
+		void changeSet(Set *set, bool preservePrevSelection = false);
+
+		/*! Populates the editor with an item for each property in the List.
+		  Also creates child items for composed properties. 
+		 If \a propertyToSelect is not empty, editor item for this property name
+		 will be selected, if present. */
+		void changeSet(Set *set, const QByteArray& propertyToSelect);
 
 		/*! Clears all items in the list.
 		   if \a editorOnly is true, then only the current editor will be cleared,
@@ -168,6 +175,10 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 		void updateFont();
 
 		virtual void contentsMousePressEvent( QMouseEvent * e );
+
+		/*! Used for changeSet(). */
+		void changeSetInternal(Set *set, bool preservePrevSelection, 
+			const QByteArray& propertyToSelect);
 
 	private:
 		EditorPrivate *d;

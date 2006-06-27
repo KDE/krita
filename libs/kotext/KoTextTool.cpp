@@ -234,7 +234,10 @@ void KoTextTool::repaint() {
     QTextBlock block = m_caret.block();
     if(block.layout()) {
         QTextLine tl = block.layout()->lineForTextPosition(m_caret.position());
-        if(tl.isValid()) // layouting info was removed already :(
-            m_canvas->updateCanvas(tl.rect());
+        if(!tl.isValid()) // layouting info was removed already :(
+            return;
+        QRectF line = tl.rect();
+        line.moveTopLeft(line.topLeft() + m_textShape->position());
+        m_canvas->updateCanvas(line);
     }
 }

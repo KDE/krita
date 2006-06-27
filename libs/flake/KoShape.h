@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOGRAPHICBASE_H
-#define KOGRAPHICBASE_H
+#ifndef KOSHAPE_H
+#define KOSHAPE_H
 
 #include <QMatrix>
 #include <QVector>
@@ -252,7 +252,7 @@ public:
      * you should override it and always return true if your shape is not square.
      * @return if the shape is (partly) transparant.
      */
-    virtual bool hasTransparancy() { return !m_backgroundBrush.isOpaque(); }
+    virtual bool hasTransparancy();
 
     /**
      * Retrieve the z-coordinate of this shape.
@@ -457,6 +457,13 @@ public:
      */
     void setShapeId(const QString &id) { m_shapeId = id; }
 
+    /**
+     * Create a matrix that describes all the transformations done on this shape.
+     * @param converter if not null, this method uses the converter to mark the right
+     *        offsets in the current view.
+     */
+    QMatrix transformationMatrix(KoViewConverter *converter) const;
+
 protected:
     QMatrix m_invMatrix; ///< The inverted matrix; for convenience
     QBrush m_backgroundBrush; ///< Stands for the background color / fill etc.
@@ -503,17 +510,8 @@ private:
 
 private:
     friend class KoShapeManager;
-    friend class KoShapeContainer;
     void setRepaintManager(KoRepaintManager *manager);
     KoShapeUserData *m_userData;
-
-    /**
-     * Create a matrix that describes all the transformations done on this shape.
-     * @param converter if not null, this method uses the converter to mark the right
-     *        offsets in the current view.
-     */
-    QMatrix transformationMatrix(KoViewConverter *converter) const;
-
 };
 
-#endif /* KOGRAPHICBASE_H */
+#endif

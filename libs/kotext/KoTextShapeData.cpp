@@ -33,7 +33,7 @@ KoTextShapeData::~KoTextShapeData() {
 
 void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership) {
     Q_ASSERT(document);
-    if(m_ownsDocument)
+    if(m_ownsDocument && document != m_document)
         delete m_document;
     m_document = document;
     // The following avoids the normal case where the glyph metrices are rounded to integers and

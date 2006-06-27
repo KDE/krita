@@ -25,6 +25,7 @@
 #include <koffice_export.h>
 
 class QTextDocument;
+class QTextCursor;
 
 class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData {
     Q_OBJECT
@@ -35,9 +36,13 @@ public:
     void setDocument(QTextDocument *document, bool transferOwnership = true);
     QTextDocument *document();
 
+    void setTextCursor(QTextCursor *textCursor) { m_textCursor = textCursor; }
+    QTextCursor *textCursor() const { return m_textCursor; }
+
 private:
     QTextDocument *m_document;
     bool m_ownsDocument;
+    QTextCursor *m_textCursor;
 };
 
 #endif

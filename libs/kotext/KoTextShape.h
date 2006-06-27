@@ -38,6 +38,8 @@ public:
 
     void paint(QPainter &painter, KoViewConverter &converter);
 
+    QPointF convertScreenPos(const QPointF &point);
+
 private:
     KoTextShapeData *m_textShapeData;
 };

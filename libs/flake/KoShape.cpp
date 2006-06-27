@@ -315,6 +315,12 @@ KoShapeUserData *KoShape::userData() const {
     return m_userData;
 }
 
+bool KoShape::hasTransparancy() {
+    if(m_backgroundBrush.style() == Qt::NoBrush)
+        return true;
+    return !m_backgroundBrush.isOpaque();
+}
+
 // static
 void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter) {
     double zoomX, zoomY;

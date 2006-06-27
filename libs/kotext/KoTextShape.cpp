@@ -23,6 +23,7 @@
 #include <QTextLayout>
 #include <QFont>
 #include <QAbstractTextDocumentLayout>
+#include <kdebug.h>
 
 
 // ############ KoTextShape ################
@@ -45,4 +46,8 @@ void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
     QTextDocument *doc = m_textShapeData->document();
     doc->setPageSize(size());
     doc->documentLayout()->draw( &painter, pc);
+}
+
+QPointF KoTextShape::convertScreenPos(const QPointF &point) {
+    return m_invMatrix.map(point);
 }

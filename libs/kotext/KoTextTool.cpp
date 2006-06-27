@@ -21,9 +21,13 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoPointerEvent.h>
 
 #include <kdebug.h>
 #include <QKeyEvent>
+#include <QTextBlock>
+#include <QTextLayout>
+#include <QAbstractTextDocumentLayout>
 
 KoTextTool::KoTextTool(KoCanvasBase *canvas)
 : KoTool(canvas)
@@ -35,18 +39,115 @@ KoTextTool::~KoTextTool() {
 }
 
 void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
+//kDebug() << "clip? " << painter.hasClipping() << endl;
+    // clipping
+    if(painter.clipRegion().intersect( QRegion(m_textShape->boundingRect().toRect()) ).isEmpty())
+        return;
+
+    painter.setMatrix( painter.matrix() * m_textShape->transformationMatrix(&converter) );
+    double zoomX, zoomY;
+    converter.zoom(&zoomX, &zoomY);
+    painter.scale(zoomX, zoomY);
+    const QTextDocument *document = m_caret.block().document();
+
+/*
+    QAbstractTextDocumentLayout::PaintContext pc;
+    pc.cursorPosition = m_caret.position();
+    QAbstractTextDocumentLayout::Selection selection;
+    selection.cursor = m_caret;
+    selection.format.setTextOutline(QPen(Qt::red));
+    pc.selections.append(selection);
+    document->documentLayout()->draw( &painter, pc);
+*/
+
+    QTextBlock block = m_caret.block();
+    if(! block.layout())
+        return;
+
+#if 0
+Hmm, not usefull right now due to the implementation of QAbstractTextDocumentLayout
+    if(m_caret.selectionStart() != m_caret.selectionEnd()) { // paint selection
+        //kDebug(32500) << "Selection: " << m_caret.selectionStart() << "-" << m_caret.selectionEnd() << "\n";
+        bool first = true;
+        QList<QTextLine> lines;
+        QTextBlock block = document->findBlock(m_caret.selectionStart());
+        do { // for all textBlocks
+            QTextLayout *layout = block.layout();
+            if(!block.isValid() || block.position() > m_caret.selectionEnd())
+                break;
+            if(layout == 0)
+                continue;
+            layout->setCacheEnabled(true);
+kDebug() << " block '" << block.text() << "'" << endl;
+            for(int i=0; i < layout->lineCount(); i++) {
+                QTextLine line = layout->lineAt(i);
+kDebug() << " line: " << line.textStart() << "-" << (line.textStart() + line.textLength()) << endl;
+                if(first && line.textStart() + line.textLength() < m_caret.selectionStart())
+                    continue;
+                lines.append(line);
+kDebug() << "    appending" << endl;
+                if(line.textStart() + line.textLength() > m_caret.selectionEnd())
+                    break;
+            }
+            first = false;
+            block = block.next();
+        } while(block.position() + block.length() < m_caret.selectionEnd());
+
+        kDebug(32500) << "found " << lines.count() << " lines that contain the selection" << endl;
+        foreach(QTextLine line, lines) {
+            if(! line.isValid())
+                continue;
+            if(painter.clipRegion().intersect(QRegion(line.rect().toRect())).isEmpty())
+                continue;
+            painter.fillRect(line.rect(), QBrush(Qt::yellow));
+        }
+    }
+#endif
+
+    // paint caret.
+    QPen pen(Qt::black);
+    if(! m_textShape->hasTransparancy()) {
+        QColor bg = m_textShape->background().color();
+        QColor invert = QColor(255 - bg.red(), 255 - bg.green(), 255 - bg.blue());
+        pen.setColor(invert);
+    }
+    painter.setPen(pen);
+    block.layout()->drawCursor(&painter, QPointF(0,0), m_caret.position());
 }
 
 void KoTextTool::mousePressEvent( KoPointerEvent *event )  {
+    int position = pointToPosition(event->point);
+    if(position >= 0) {
+        repaint();
+        m_caret.setPosition(position);
+        repaint();
+    }
+}
+
+int KoTextTool::pointToPosition(const QPointF & point) const {
+    QTextBlock block = m_caret.block();
+    QPointF p = m_textShape->convertScreenPos(point);
+    return block.document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
 }
 
 void KoTextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+    // TODO select whole word, or when clicking in between two words select 2 words.
 }
 
 void KoTextTool::mouseMoveEvent( KoPointerEvent *event ) {
+    useCursor(Qt::IBeamCursor);
+    if(event->buttons() == Qt::NoButton)
+        return;
+    int position = pointToPosition(event->point);
+    if(position >= 0) {
+        repaint();
+        m_caret.setPosition(position, QTextCursor::KeepAnchor);
+        repaint();
+    }
 }
 
 void KoTextTool::mouseReleaseEvent( KoPointerEvent *event ) {
+    // TODO
 }
 
 void KoTextTool::keyPressEvent(QKeyEvent *event) {
@@ -56,7 +157,7 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
             m_caret.deletePreviousChar();
             break;
         case Qt::Key_Tab:
-            kDebug() << "Tab key pressed";
+            kDebug(32500) << "Tab key pressed";
             break;
         case Qt::Key_Delete:
             m_caret.deleteChar();
@@ -92,12 +193,17 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
             moveOperation = QTextCursor::StartOfLine;
             break;
         default:
+            if(event->text().length() == 0)
+                return;
+            repaint();
+            useCursor(Qt::BlankCursor);
             m_caret.insertText(event->text());
     }
+    repaint();
     m_caret.movePosition(moveOperation,
         (event->modifiers() & Qt::ShiftModifier)?QTextCursor::KeepAnchor:QTextCursor::MoveAnchor);
+    repaint();
     event->accept();
-    m_textShape->repaint();// TODO more fine grained repainting..
 }
 
 void KoTextTool::keyReleaseEvent(QKeyEvent *event) {
@@ -114,10 +220,21 @@ void KoTextTool::activate (bool temporary) {
     }
     KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
     m_caret = QTextCursor(data->document());
+    data->setTextCursor(&m_caret);
     useCursor(Qt::IBeamCursor, true);
 }
 
 void KoTextTool::deactivate() {
-kDebug(32500) << "  deactivate" << endl;
+    if(m_textShape)
+        static_cast<KoTextShapeData*> (m_textShape->userData())->setTextCursor(0);
     m_textShape = 0;
+}
+
+void KoTextTool::repaint() {
+    QTextBlock block = m_caret.block();
+    if(block.layout()) {
+        QTextLine tl = block.layout()->lineForTextPosition(m_caret.position());
+        if(tl.isValid()) // layouting info was removed already :(
+            m_canvas->updateCanvas(tl.rect());
+    }
 }

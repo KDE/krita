@@ -47,6 +47,10 @@ public:
     void deactivate();
 
 private:
+    void repaint();
+    int pointToPosition(const QPointF & point) const;
+
+private:
     KoTextShape *m_textShape;
     QTextCursor m_caret;
 };

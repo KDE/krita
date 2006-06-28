@@ -83,6 +83,7 @@ void KoShape::scale( double sx, double sy )
     m_scaleX = sx;
     m_scaleY = sy;
     recalcMatrix();
+    shapeChanged(ScaleChanged);
 }
 
 void KoShape::rotate( double angle )
@@ -93,6 +94,7 @@ void KoShape::rotate( double angle )
     while(m_angle >= 360) m_angle -= 360;
     while(m_angle <= -360) m_angle += 360;
     recalcMatrix();
+    shapeChanged(RotationChanged);
 }
 
 void KoShape::shear( double sx, double sy )
@@ -102,6 +104,7 @@ void KoShape::shear( double sx, double sy )
     m_shearX = sx;
     m_shearY = sy;
     recalcMatrix();
+    shapeChanged(ShearChanged);
 }
 
 void KoShape::resize( const QSizeF &size )
@@ -109,6 +112,8 @@ void KoShape::resize( const QSizeF &size )
     if(m_size == size)
         return;
     m_size = size;
+    recalcMatrix();
+    shapeChanged(SizeChanged);
 }
 
 void KoShape::setPosition( const QPointF &position )
@@ -117,6 +122,7 @@ void KoShape::setPosition( const QPointF &position )
         return;
     m_pos = position;
     recalcMatrix();
+    shapeChanged(PositionChanged);
 }
 
 bool KoShape::hitTest( const QPointF &position ) const
@@ -195,6 +201,7 @@ void KoShape::setParent(KoShapeContainer *parent) {
     else
         m_parent = 0;
     recalcMatrix();
+    shapeChanged(ParentChanged);
 }
 
 int KoShape::zIndex() const {

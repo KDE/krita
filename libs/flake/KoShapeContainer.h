@@ -223,7 +223,7 @@ private:
         private: // members
             QList <Relation *> m_relations;
     };
-    void recalcMatrix();
+    void shapeChanged(ChangeType type);
 
 private: // members
     KoGraphicsContainerModel *m_children;

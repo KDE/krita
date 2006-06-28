@@ -39,10 +39,14 @@ public:
     void setTextCursor(QTextCursor *textCursor) { m_textCursor = textCursor; }
     QTextCursor *textCursor() const { return m_textCursor; }
 
+    double documentOffset() const { return m_offset; }
+    void setDocumentOffset(double offset) { m_offset = offset; }
+
 private:
     QTextDocument *m_document;
     bool m_ownsDocument;
     QTextCursor *m_textCursor;
+    double m_offset;
 };
 
 #endif

@@ -359,7 +359,7 @@ public:
     /**
      * Called internally whenever a property is changed that requires the matrix to be recalculated.
      */
-    virtual void recalcMatrix();
+    void recalcMatrix();
 
     /**
      * returns the outline of the shape in the form of a path.
@@ -485,6 +485,22 @@ protected:
      * @param shape the shape to use as original
      */
     virtual void copySettings(const KoShape *shape);
+
+    enum ChangeType {
+        PositionChanged,
+        RotationChanged,
+        ScaleChanged,
+        ShearChanged,
+        SizeChanged,
+        ParentChanged
+    };
+
+    /**
+     * A hook that allows inheriting classes to do something after a KoShape property changed
+     * This is called whenever the shape, position rotation or scale properties were altered.
+     * @param type an indicator which type was changed.
+     */
+    virtual void shapeChanged(ChangeType type) { Q_UNUSED(type); }
 
 private:
     double m_scaleX;

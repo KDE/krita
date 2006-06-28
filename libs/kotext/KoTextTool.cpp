@@ -39,10 +39,11 @@ KoTextTool::~KoTextTool() {
 }
 
 void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
-//kDebug() << "clip? " << painter.hasClipping() << endl;
-    // clipping
-    if(painter.clipRegion().intersect( QRegion(m_textShape->boundingRect().toRect()) ).isEmpty())
-        return;
+    if(painter.hasClipping()) {
+        QRect shape = converter.documentToView(m_textShape->boundingRect()).toRect();
+        if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
+            return;
+    }
 
     painter.setMatrix( painter.matrix() * m_textShape->transformationMatrix(&converter) );
     double zoomX, zoomY;
@@ -112,7 +113,7 @@ kDebug() << "    appending" << endl;
         pen.setColor(invert);
     }
     painter.setPen(pen);
-    block.layout()->drawCursor(&painter, QPointF(0,0), m_caret.position());
+    block.layout()->drawCursor(&painter, QPointF(0,0), m_caret.position() - block.position());
 }
 
 void KoTextTool::mousePressEvent( KoPointerEvent *event )  {
@@ -231,13 +232,24 @@ void KoTextTool::deactivate() {
 }
 
 void KoTextTool::repaint() {
-    QTextBlock block = m_caret.block();
-    if(block.layout()) {
-        QTextLine tl = block.layout()->lineForTextPosition(m_caret.position());
-        if(!tl.isValid()) // layouting info was removed already :(
+    QTextFrame *frame = m_caret.block().document()->frameAt(m_caret.position());
+    if(frame == 0)
+        return;
+     QTextFrame::Iterator iter = frame->begin();
+    while(! iter.atEnd()) {
+        QTextBlock block = iter.currentBlock();
+        if(block.isValid() && block.contains(m_caret.position())) {
+            QTextLine tl = block.layout()->lineForTextPosition(m_caret.position() - block.position());
+            QRectF repaintRect;
+            if(tl.isValid())
+                repaintRect = tl.rect();
+            else { // layouting info was removed already :(
+                repaintRect = block.layout()->boundingRect();
+            }
+            repaintRect.moveTopLeft(repaintRect.topLeft() + m_textShape->position());
+            m_canvas->updateCanvas(repaintRect);
             return;
-        QRectF line = tl.rect();
-        line.moveTopLeft(line.topLeft() + m_textShape->position());
-        m_canvas->updateCanvas(line);
+        }
+        iter++;
     }
 }

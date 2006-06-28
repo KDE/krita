@@ -44,10 +44,15 @@ void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
     pc.cursorPosition = -1;
 
     QTextDocument *doc = m_textShapeData->document();
-    doc->setPageSize(size());
+    painter.translate(0, -m_textShapeData->documentOffset());
     doc->documentLayout()->draw( &painter, pc);
 }
 
 QPointF KoTextShape::convertScreenPos(const QPointF &point) {
     return m_invMatrix.map(point);
+}
+
+void KoTextShape::shapeChanged(ChangeType type) {
+    if(type == KoShape::SizeChanged)
+        m_textShapeData->document()->setPageSize(size());
 }

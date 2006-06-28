@@ -41,6 +41,8 @@ public:
     QPointF convertScreenPos(const QPointF &point);
 
 private:
+    void shapeChanged(ChangeType type);
+
     KoTextShapeData *m_textShapeData;
 };
 

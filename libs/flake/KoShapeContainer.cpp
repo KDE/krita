@@ -102,8 +102,8 @@ void KoShapeContainer::paint(QPainter &painter, KoViewConverter &converter) {
     }
 }
 
-void KoShapeContainer::recalcMatrix() {
-    KoShape::recalcMatrix();
+void KoShapeContainer::shapeChanged(ChangeType type) {
+    Q_UNUSED(type);
     if(m_children == 0)
         return;
     m_children->containerChanged(this);

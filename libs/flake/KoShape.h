@@ -486,13 +486,14 @@ protected:
      */
     virtual void copySettings(const KoShape *shape);
 
+    /// Used by shapeChanged() to select which change was made
     enum ChangeType {
-        PositionChanged,
-        RotationChanged,
-        ScaleChanged,
-        ShearChanged,
-        SizeChanged,
-        ParentChanged
+        PositionChanged, ///< used after a setPosition()
+        RotationChanged, ///< used after a rotate()
+        ScaleChanged,   ///< used after a scale()
+        ShearChanged,   ///< used after a shear()
+        SizeChanged,    ///< used after a resize()
+        ParentChanged   ///< used after a setParent()
     };
 
     /**

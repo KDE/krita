@@ -1056,6 +1056,43 @@ bool KoDocument::saveNativeFormat( const QString & file )
             return false;
         }
 
+        if ( !d->m_versionInfo.isEmpty() )
+        {
+          if ( store->open( "VersionList.xml" ) )
+          {
+            KoStoreDevice dev( store );
+            KoXmlWriter* xmlWriter = KoDocument::createOasisXmlWriter( &dev,
+                "VL:version-list" );
+            for (int i = 0; i < d->m_versionInfo.size(); ++i)
+            {
+                KoVersionInfo *version = &d->m_versionInfo[i];
+                xmlWriter->startElement( "VL:version-entry" );
+                xmlWriter->addAttribute( "VL:title", version->title );
+                xmlWriter->addAttribute( "VL:comment", version->comment );
+                xmlWriter->addAttribute( "VL:creator", version->saved_by );
+                xmlWriter->addAttribute( "dc:date-time", version->date.toString(Qt::ISODate) );
+                xmlWriter->endElement();
+            }
+            xmlWriter->endElement(); // root element
+            xmlWriter->endDocument();
+            delete xmlWriter;
+            store->close();
+            manifestWriter->addManifestEntry( "VersionList.xml", "text/xml" );
+
+            for (int i = 0; i < d->m_versionInfo.size(); ++i)
+            {
+                KoVersionInfo *version = &d->m_versionInfo[i];
+                store->addDataToFile( version->data, "Versions/" + version->title );
+            }
+          }
+          else
+          {
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?", QString("VersionList.xml") );
+            delete store;
+            return false;
+          }
+         }
+
         // Write out manifest file
         if ( !oasisStore.closeManifestWriter() )
         {
@@ -2163,6 +2200,13 @@ KoXmlWriter* KoDocument::createOasisXmlWriter( QIODevice* dev, const char* rootE
     KoXmlWriter* writer = new KoXmlWriter( dev );
     writer->startDocument( rootElementName );
     writer->startElement( rootElementName );
+
+    if ( qstrcmp( rootElementName, "VL:version-list" ) == 0 ) {
+        writer->addAttribute( "xmlns:VL", KoXmlNS::VL );
+        writer->addAttribute( "xmlns:dc", KoXmlNS::dc );
+        return writer;
+    }
+
     writer->addAttribute( "xmlns:office", KoXmlNS::office );
     writer->addAttribute( "xmlns:meta", KoXmlNS::meta );
 

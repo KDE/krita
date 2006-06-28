@@ -456,6 +456,37 @@ bool KoStore::addLocalFile( const QString &fileName, const QString &destName )
   return true;
 }
 
+bool KoStore::addDataToFile( QByteArray &buffer, const QString &destName )
+{
+  QBuffer file( &buffer );
+  if ( !file.open( QIODevice::ReadOnly ))
+  {
+    return false;
+  }
+
+  if ( !open ( destName ) )
+  {
+    return false;
+  }
+
+  QByteArray data;
+  data.resize( 8 * 1024 );
+
+  uint total = 0;
+  for ( int block = 0; ( block = file.read( data.data(), data.size() ) ) > 0; total += block )
+  {
+    data.resize(block);
+    if ( write( data ) != block )
+      return false;
+    data.resize(8*1024);
+  }
+
+  close();
+  file.close();
+
+  return true;
+}
+
 bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
 {
   QFile file( fileName );
@@ -465,7 +496,6 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
 
 bool KoStore::extractFile( const QString &srcName, QByteArray &data )
 {
-  kdDebug() << "hello" << endl;
   QBuffer buffer( &data );
   return extractFile( srcName, buffer );
 }

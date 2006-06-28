@@ -221,6 +221,13 @@ public:
   bool addLocalFile( const QString &fileName, const QString &destName );
 
   /**
+   * Imports data into a store
+   * @param buffer data
+   * @param destName file in the store
+   */
+  bool addDataToFile( QByteArray &buffer, const QString &destName );
+
+  /**
    * Imports a local directory
    * @param dirPath path to the directory on a disk
    * @param dest path in the store where the directory should get saved

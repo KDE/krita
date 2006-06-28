@@ -32,12 +32,15 @@ KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
     m_col = 0;
     m_pixelSize = m_ktm->pixelSize();
     m_tile = 0;
+    m_oldTile = 0;
 }
 
 KisTiledIterator::~KisTiledIterator( )
 {
     if (m_tile)
         m_tile->removeReader();
+    if (m_oldTile)
+        m_oldTile->removeReader();
 }
 
 KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
@@ -54,6 +57,7 @@ KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
         m_oldData = rhs.m_oldData;
         m_offset = rhs.m_offset;
         m_tile = rhs.m_tile;
+        m_oldTile = rhs.m_oldTile;
         m_writable = rhs.m_writable;
         if (m_tile)
             m_tile->addReader();
@@ -65,6 +69,8 @@ KisTiledIterator& KisTiledIterator::operator=(const KisTiledIterator& rhs)
     if (this != &rhs) {
         if (m_tile)
             m_tile->removeReader();
+        if (m_oldTile)
+            m_oldTile->removeReader();
         m_ktm = rhs.m_ktm;
         m_pixelSize = rhs.m_pixelSize;
         m_x = rhs.m_x;
@@ -75,6 +81,7 @@ KisTiledIterator& KisTiledIterator::operator=(const KisTiledIterator& rhs)
         m_oldData = rhs.m_oldData;
         m_offset = rhs.m_offset;
         m_tile = rhs.m_tile;
+        m_oldTile = rhs.m_oldTile;
         m_writable = rhs.m_writable;
         if (m_tile)
             m_tile->addReader();
@@ -102,9 +109,12 @@ void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
 {
     if (m_tile)
         m_tile->removeReader();
+    if (m_oldTile)
+        m_oldTile->removeReader();
+    m_oldTile = 0;
 
     m_tile = m_ktm->getTile(col, row, m_writable);
-    
+
     if (m_tile == 0) return;
     //Q_ASSERT(m_tile != 0);
     m_tile->addReader();
@@ -115,5 +125,7 @@ void KisTiledIterator::fetchTileData(Q_INT32 col, Q_INT32 row)
     //Q_ASSERT(m_data != 0);
 
     // set old data but default to current value
-    m_oldData = m_ktm->getOldTile(col, row, m_tile)->data();
+    m_oldTile = m_ktm->getOldTile(col, row, m_tile);
+    m_oldTile->addReader(); // Double locking in case m_oldTile==m_tile is no problem
+    m_oldData = m_oldTile->data();
 }

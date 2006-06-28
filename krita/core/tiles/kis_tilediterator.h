@@ -41,6 +41,7 @@ protected:
     Q_UINT8 *m_oldData;
     Q_INT32 m_offset;
     KisTile *m_tile;
+    KisTile* m_oldTile;
     bool m_writable;
 
 protected:

@@ -66,6 +66,8 @@ namespace Kross { namespace Api {
             //inline operator const Q3CString () { return getValue().toCString(); }
             //inline operator const Q3CString& () { return getValue().asCString(); }
 
+            inline operator QValueList<QVariant> () { return getValue().toList(); }
+
             /**
              * Operator to return a QStringList.
              *

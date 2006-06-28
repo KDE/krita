@@ -325,7 +325,7 @@ namespace Kross { namespace Api {
 
             template<class PROXYFUNC>
             struct ProxyFunctionCaller<PROXYFUNC, void> {
-                inline static Object::Ptr exec(PROXYFUNC* self, Kross::Api::Object* arg1) {
+                inline static Object::Ptr exec(PROXYFUNC* self) {
                     ( (self->m_instance)->*(self->m_method) )();
                     return Object::Ptr(0);
                 }

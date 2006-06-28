@@ -48,7 +48,7 @@ void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
             m_data = kti.data + offset;
             m_oldData = kti.oldData + offset;
             m_tilesCache.remove(it);
-            m_tilesCache.append(kti);
+            m_tilesCache.prepend(kti);
             return;
         }
     }
@@ -94,7 +94,7 @@ KisTiledRandomAccessor::KisTileInfo KisTiledRandomAccessor::fetchTileData(Q_INT3
 
     kti.data = kti.tile->data();
 
-    kti.area = QRect( col * KisTile::WIDTH, row * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT );
+    kti.area = QRect( col * KisTile::HEIGHT, row * KisTile::WIDTH, KisTile::WIDTH - 1, KisTile::HEIGHT - 1 );
 
     // set old data
     kti.oldtile = m_ktm->getOldTile(col, row, kti.tile);

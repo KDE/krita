@@ -30,6 +30,7 @@ class KisTile;
 class KisTiledRandomAccessor : public KShared {
     struct KisTileInfo {
         KisTile* tile;
+        KisTile* oldtile;
         Q_UINT8* data;
         const Q_UINT8* oldData;
         QRect area;

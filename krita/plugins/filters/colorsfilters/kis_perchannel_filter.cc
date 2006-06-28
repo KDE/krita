@@ -224,12 +224,14 @@ void KisPerChannelFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, Ki
                 while(iter.selectedness()==MAX_SELECTED && maxpix)
                 {
                     --maxpix;
-                    ++iter;
+                    if (maxpix != 0)
+                        ++iter;
                     ++npix;
                 }
                 // adjust
                 src->colorSpace()->applyAdjustment(firstPixel, firstPixel, adj, npix);
                 pixelsProcessed += npix;
+                ++iter;
                 break;
             }
 

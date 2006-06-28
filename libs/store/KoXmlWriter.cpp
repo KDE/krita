@@ -40,7 +40,8 @@ void KoXmlWriter::init()
     *m_indentBuffer = '\n'; // write newline before indentation, in one go
 
     m_escapeBuffer = new char[s_escapeBufferLen];
-    m_dev->open( QIODevice::WriteOnly );
+    if ( !m_dev->isOpen() )
+        m_dev->open( QIODevice::WriteOnly );
 }
 
 KoXmlWriter::~KoXmlWriter()

@@ -34,9 +34,8 @@ KoDocumentSectionWidget::KoDocumentSectionWidget( QWidget *parent )
     , d( new Private )
 {
     d->view = new QTreeView( this );
-    d->delegate = new KoDocumentSectionDelegate( this );
+    d->delegate = new KoDocumentSectionDelegate( d->view, this );
     //d->delegate->setDisplayMode( KoDocumentSectionDelegate::MinimalMode );
-    d->view->setItemDelegate( d->delegate );
 }
 
 KoDocumentSectionWidget::~KoDocumentSectionWidget()

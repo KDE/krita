@@ -23,6 +23,7 @@
 #include <QAbstractItemDelegate>
 #include <koffice_export.h>
 
+class QAbstractItemView;
 class KoDocumentSectionModel;
 
 class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
@@ -31,7 +32,7 @@ class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
     Q_OBJECT
 
     public:
-        KoDocumentSectionDelegate( QObject *parent = 0 );
+        KoDocumentSectionDelegate( QAbstractItemView *view, QObject *parent = 0 );
         virtual ~KoDocumentSectionDelegate();
 
         /// how items should be displayed
@@ -52,6 +53,14 @@ class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
         virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         virtual QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         virtual bool editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index );
+
+        virtual QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        virtual void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+        virtual void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
+        virtual void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index ) const;
+
+    protected:
+        virtual bool eventFilter( QObject *object, QEvent *event );
 
     private:
         typedef KoDocumentSectionModel Model;

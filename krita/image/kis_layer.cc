@@ -655,7 +655,10 @@ QModelIndex KisLayer::index(int row, int column, const QModelIndex &parent) cons
     kDebug() << "index() " << parent.isValid() << " " << row << " " << column << " " << parent.row() << " " << parent.column() << " " << parent.internalPointer() << endl;
     if (!parent.isValid())
     {
-        return createIndex(row, column, at(row).data());
+        if( row < childCount() )
+            return createIndex(row, column, at(row).data());
+        else
+            return QModelIndex();
     }
 
     Q_ASSERT(parent.model() == this);
@@ -712,7 +715,7 @@ Qt::ItemFlags KisLayer::flags(const QModelIndex &index) const
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable;
     if (qobject_cast<KisGroupLayer*>(static_cast<KisLayer*>(index.internalPointer()))) //gcc--
         flags |= Qt::ItemIsDropEnabled;
     return flags;

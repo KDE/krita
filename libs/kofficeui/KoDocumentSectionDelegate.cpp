@@ -17,25 +17,31 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include <QAbstractItemView>
+#include <QKeyEvent>
+#include <QLineEdit>
 #include <QModelIndex>
-#include <QStyleOptionViewItem>
-#include <QPainter>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QStyleOptionViewItem>
 #include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionDelegate.h"
 
 class KoDocumentSectionDelegate::Private
 {
     public:
+        QAbstractItemView *view;
         DisplayMode mode;
         static const int margin = 1;
-        Private(): mode( DetailedMode ) { }
+        Private(): view( 0 ), mode( DetailedMode ) { }
 };
 
-KoDocumentSectionDelegate::KoDocumentSectionDelegate( QObject *parent )
+KoDocumentSectionDelegate::KoDocumentSectionDelegate( QAbstractItemView *view, QObject *parent )
     : super( parent )
     , d( new Private )
 {
+    d->view = view;
+    view->setItemDelegate( this );
 }
 
 KoDocumentSectionDelegate::~KoDocumentSectionDelegate()
@@ -118,20 +124,85 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
             return true;
         }
 
-        /*else if( tr.contains( me->pos() ) && ( option.state & QStyle::State_Selected ) && !listView()->renameLineEdit()->isVisible() )
+        else if( tr.contains( me->pos() ) )
         {
-            listView()->rename( this, 0 );
-            QRect r( listView()->contentsToViewport( mapToListView( tr.topLeft() ) ), tr.size() );
-            listView()->renameLineEdit()->setGeometry( r );
+            d->view->edit( index );
             return true;
         }
 
         if ( !(me->modifiers() & Qt::ControlModifier) && !(me->modifiers() & Qt::ShiftModifier) )
-            setActive();*/
+            d->view->setCurrentIndex( index );
     }
 
     return false;
 }
+
+QWidget *KoDocumentSectionDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem&, const QModelIndex& ) const
+{
+    QLineEdit *edit = new QLineEdit( parent );
+    edit->installEventFilter( const_cast<KoDocumentSectionDelegate*>( this ) );
+    return edit;
+}
+
+void KoDocumentSectionDelegate::setEditorData( QWidget *widget, const QModelIndex &index ) const
+{
+    QLineEdit *edit = qobject_cast<QLineEdit*>( widget );
+    Q_ASSERT( edit );
+
+    edit->setText( index.data( Qt::DisplayRole ).toString() );
+}
+
+void KoDocumentSectionDelegate::setModelData( QWidget *widget, QAbstractItemModel *model, const QModelIndex &index ) const
+{
+    QLineEdit *edit = qobject_cast<QLineEdit*>( widget );
+    Q_ASSERT( edit );
+
+    model->setData( index, edit->text(), Qt::DisplayRole );
+}
+
+void KoDocumentSectionDelegate::updateEditorGeometry( QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    widget->setGeometry( textRect( option, index ) );
+}
+
+
+// PROTECTED
+
+
+bool KoDocumentSectionDelegate::eventFilter( QObject *object, QEvent *event )
+{
+    QLineEdit *edit = qobject_cast<QLineEdit*>( object );
+    if( edit && event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = static_cast<QKeyEvent*>( event );
+        switch( ke->key() )
+        {
+            case Qt::Key_Escape:
+                emit closeEditor( edit );
+                return true;
+            case Qt::Key_Tab:
+                emit commitData( edit );
+                emit closeEditor( edit, EditNextItem );
+                return true;
+            case Qt::Key_Backtab:
+                emit commitData( edit );
+                emit closeEditor( edit, EditPreviousItem );
+                return true;
+            case Qt::Key_Return:
+            case Qt::Key_Enter:
+                emit commitData( edit );
+                emit closeEditor( edit );
+                return true;
+            default: return false;
+        }
+    }
+    else
+        return false;
+}
+
+
+// PRIVATE
+
 
 QStyleOptionViewItem KoDocumentSectionDelegate::getOptions( const QStyleOptionViewItem &o, const QModelIndex &index )
 {

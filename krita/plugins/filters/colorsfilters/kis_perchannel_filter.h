@@ -43,6 +43,10 @@ public:
     QPtrList<QPair<double,double> > *curves;
     Q_UINT16 *transfers[256];
     Q_UINT16 nTransfers;
+    // Caching of adjustment
+    bool dirty;
+    KisColorSpace* oldCs;
+    KisColorAdjustment* adjustment;
 };
 
 

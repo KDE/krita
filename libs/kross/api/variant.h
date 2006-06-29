@@ -66,7 +66,7 @@ namespace Kross { namespace Api {
             //inline operator const Q3CString () { return getValue().toCString(); }
             //inline operator const Q3CString& () { return getValue().asCString(); }
 
-            inline operator QValueList<QVariant> () { return getValue().toList(); }
+            inline operator Q3ValueList<QVariant> () { return getValue().toList(); }
 
             /**
              * Operator to return a QStringList.
@@ -188,17 +188,17 @@ namespace Kross { namespace Api {
              *
              * \throw TypeException If the convert failed.
              * \param object The object to convert.
-             * \return The to a QValueList converted object.
+             * \return The to a Q3ValueList converted object.
              */
             static QStringList toStringList(Object* object);
 
             /**
              * Try to convert the given \a Object into
-             * a QValueList of QVariant's.
+             * a Q3ValueList of QVariant's.
              *
              * \throw TypeException If the convert failed.
              * \param object The object to convert.
-             * \return The to a QValueList converted object.
+             * \return The to a Q3ValueList converted object.
              */
             static Q3ValueList<QVariant> toList(Object* object);
 

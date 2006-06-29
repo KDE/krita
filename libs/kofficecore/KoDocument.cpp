@@ -1965,6 +1965,78 @@ bool KoDocument::loadOasisFromStore( KoStore* store )
     return true;
 }
 
+bool KoDocument::addVersion( const QString& comment )
+{
+    kDebug(30003) << "Saving the new version...." << endl;
+
+    KoStore::Backend backend = KoStore::Auto;
+    if ( d->m_specialOutputFlag != 0 )
+      return false;
+
+    QByteArray mimeType = d->outputMimeType;
+    QByteArray nativeOasisMime = nativeOasisMimeType();
+    bool oasis = !mimeType.isEmpty() && ( mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" );
+
+    if ( !oasis)
+        return false;
+
+    // TODO: use std::auto_ptr or create store on stack [needs API fixing],
+    // to remove all the 'delete store' in all the branches
+    QByteArray data;
+    QBuffer buffer( &data );
+    KoStore* store = KoStore::createStore( &buffer/*file*/, KoStore::Write, mimeType, backend );
+    if ( store->bad() )
+    {
+        delete store;
+        return false;
+    }
+
+    kDebug(30003) << "Saving to OASIS format" << endl;
+    // Tell KoStore not to touch the file names
+    store->disallowNameExpansion();
+    KoOasisStore oasisStore( store );
+    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
+
+    if ( !saveOasis( store, manifestWriter ) )
+    {
+      kDebug(30003) << "saveOasis failed" << endl;
+      delete store;
+      return false;
+    }
+
+    // Save embedded objects
+    if ( !saveChildrenOasis( store, manifestWriter ) )
+    {
+      kDebug(30003) << "saveChildrenOasis failed" << endl;
+      delete store;
+      return false;
+    }
+
+    // Write out manifest file
+    if ( !oasisStore.closeManifestWriter() )
+    {
+      d->lastErrorMessage = i18n( "Error while trying to write '%1'. Partition full?", QString("META-INF/manifest.xml") );
+      delete store;
+      return false;
+    }
+
+    delete store;
+
+    if ( !saveExternalChildren() )
+        return false;
+
+    KoVersionInfo version;
+    version.comment = comment;
+    version.title = "Version" + QString::number( d->m_versionInfo.count()+1);
+    version.saved_by = documentInfo()->authorInfo("creator");
+    version.date = QDateTime::currentDateTime();
+    version.data = data;
+    d->m_versionInfo.append( version );
+
+    save(); //finally save the document + the new version
+    return true;
+}
+
 bool KoDocument::isInOperation() const
 {
     return d->m_numOperations > 0;

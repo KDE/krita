@@ -419,7 +419,7 @@ void KoMainWindow::updateReloadFileAction(KoDocument *doc)
 void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
 {
     //TODO activate it just when we save it in oasis file format
-    d->m_versionsfile->setEnabled( doc && !doc->url().isEmpty() && doc->mimeType() == doc->nativeOasisMimeType() );
+    d->m_versionsfile->setEnabled( doc && !doc->url().isEmpty() && ( doc->outputMimeType() == doc->nativeOasisMimeType() || doc->outputMimeType() == doc->nativeOasisMimeType() + "-template" ) );
 }
 
 

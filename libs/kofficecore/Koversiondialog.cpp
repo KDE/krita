@@ -63,19 +63,7 @@ KoVersionDialog::KoVersionDialog( QWidget* parent, KoDocument *doc  )
   h.append( i18n("Comment") );
   list->setHeaderLabels( h );
 
-
-  // add all versions to the tree widget
-  QList<KoVersionInfo> versions = doc->versionList();
-  QList<QTreeWidgetItem *> items;
-  for (int i = 0; i < versions.size(); ++i)
-  {
-    QStringList l;
-    l.append( versions.at(i).date.toString() );
-    l.append( versions.at(i).saved_by );
-    l.append( versions.at(i).comment );
-    items.append( new QTreeWidgetItem( l ) );
-  }
-  list->insertTopLevelItems(0, items );
+  updateVersionList();
 
   grid1->addWidget(list,0,0,9,1);
 
@@ -108,6 +96,24 @@ KoVersionDialog::~KoVersionDialog()
 {
 }
 
+void KoVersionDialog::updateVersionList()
+{
+  list->clear();
+  // add all versions to the tree widget
+  QList<KoVersionInfo> versions = m_doc->versionList();
+  QList<QTreeWidgetItem *> items;
+  for (int i = 0; i < versions.size(); ++i)
+  {
+    QStringList l;
+    l.append( versions.at(i).date.toString() );
+    l.append( versions.at(i).saved_by );
+    l.append( versions.at(i).comment );
+    items.append( new QTreeWidgetItem( l ) );
+  }
+  list->insertTopLevelItems(0, items );
+}
+
+
 void KoVersionDialog::updateButton()
 {
 #if 0
@@ -118,7 +124,19 @@ void KoVersionDialog::updateButton()
 
 void KoVersionDialog::slotAdd()
 {
-    //TODO create entry
+  KoVersionModifyDialog * dlg = new KoVersionModifyDialog( this, 0 );
+  if ( !dlg->exec() )
+  {
+    delete dlg;
+    return;
+  }
+
+  if ( !m_doc->addVersion( dlg->comment() ) )
+    KMessageBox::error( this, i18n("A new version could not be added") );
+
+  delete dlg;
+
+  updateVersionList();
 }
 
 void KoVersionDialog::slotRemove()
@@ -201,11 +219,15 @@ KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *i
     grid1->setSpacing(KDialog::spacingHint());
 
     QLabel *l = new QLabel( page );
-    l->setText( i18n("Date: %1", info->date.toString() ) );
+    if ( info )
+        l->setText( i18n("Date: %1", info->date.toString() ) );
+    else
+        l->setText( i18n("Date: %1", QDateTime::currentDateTime().toString( Qt::ISODate ) ) );
     grid1->addWidget( l );
 
     m_multiline = new Q3MultiLineEdit( page );
-    m_multiline->setText( info->comment );
+    if ( info )
+        m_multiline->setText( info->comment );
     grid1->addWidget( m_multiline );
 
 }

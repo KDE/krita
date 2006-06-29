@@ -47,6 +47,7 @@ protected:
 
     void init();
     void updateButton();
+    void updateVersionList();
 
     QTreeWidget * list;
     QPushButton* m_pRemove;
@@ -60,7 +61,7 @@ class KoVersionModifyDialog : public KDialog
 {
     Q_OBJECT
 public:
-    KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *info );
+    KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *info=0 );
 
     QString comment() const;
 

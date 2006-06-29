@@ -84,6 +84,9 @@ public:
 
     virtual QRectF boundingRect() const;
 
+protected:    
+    virtual void updateTree() {}
+
 signals:
     /// emitted when the selection is changed
     void selectionChanged();

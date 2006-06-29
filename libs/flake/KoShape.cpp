@@ -21,11 +21,11 @@
 
 #include "KoShape.h"
 #include "KoShapeContainer.h"
-#include "KoRepaintManager.h"
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
 #include "KoInsets.h"
 #include "KoShapeBorderModel.h"
+#include "KoShapeManager.h"
 #include "KoShapeUserData.h"
 
 #include <QPainter>
@@ -48,7 +48,6 @@ KoShape::KoShape()
 , m_visible( true )
 , m_locked( false )
 , m_keepAspect( false )
-, m_repaintManager(0)
 , m_userData(0)
 {
     recalcMatrix();
@@ -151,6 +150,7 @@ void KoShape::recalcMatrix()
 {
     m_matrix = transformationMatrix(0);
     m_invMatrix = m_matrix.inverted();
+    updateTree();
 }
 
 QMatrix KoShape::transformationMatrix(KoViewConverter *converter) const {
@@ -210,36 +210,32 @@ int KoShape::zIndex() const {
     return m_zIndex;
 }
 
-void KoShape::setRepaintManager(KoRepaintManager *manager) {
-    Q_ASSERT(manager);
-    if(m_repaintManager) {
-        // swap repaint Manager (Since that will release old ones easier)
-        m_repaintManager->removeUser();
-        manager->addChainedManager(m_repaintManager);
-    }
-    m_repaintManager = manager;
-    manager->addUser();
-}
-
 void KoShape::repaint() const {
-    if(m_repaintManager == 0)
-        return;
-    QRectF rect(QPointF(0, 0), m_size);
-    if(m_border) {
-        KoInsets *insets = new KoInsets(0, 0, 0, 0);
-        m_border->borderInsets(this, *insets);
-        rect.adjust(-insets->left, -insets->top, insets->right, insets->bottom);
-        delete insets;
+    if ( !m_shapeManagers.empty() )
+    {
+        foreach( KoShapeManager * manager, m_shapeManagers )
+        {
+            QRectF rect(QPointF(0, 0), m_size);
+            if(m_border) {
+                KoInsets insets(0, 0, 0, 0);
+                m_border->borderInsets(this, insets);
+                rect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+            }
+            rect = m_matrix.mapRect(rect);
+            manager->repaint( rect, this, true );
+        }
     }
-    rect = m_matrix.mapRect(rect);
-    m_repaintManager->repaint(rect, this, true);
 }
 
 void KoShape::repaint(QRectF &shape) const {
-    if(m_repaintManager == 0 || !isVisible())
-        return;
-    QRectF rect(m_matrix.mapRect(shape));
-    m_repaintManager->repaint(rect);
+    if ( !m_shapeManagers.empty() && isVisible() )
+    {
+        foreach( KoShapeManager * manager, m_shapeManagers )
+        {
+            QRectF rect(m_matrix.mapRect(shape));
+            manager->repaint(rect);
+        }
+    }
 }
 
 void KoShape::repaint(double x, double y, double width, double height) const {
@@ -312,6 +308,14 @@ void KoShape::moveBy(double distanceX, double distanceY) {
     setAbsolutePosition(QPointF(p.x() + distanceX, p.y() + distanceY));
 }
 
+void KoShape::updateTree()
+{
+    foreach( KoShapeManager * manager, m_shapeManagers )
+    {
+        manager->updateTree( this );
+    }
+}
+
 void KoShape::setUserData(KoShapeUserData *userData) {
     if(m_userData)
         delete m_userData;
@@ -334,3 +338,4 @@ void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converte
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
 }
+

@@ -23,17 +23,19 @@
 
 #include <QList>
 #include <QObject>
+#include <QSet>
 
 #include <koffice_export.h>
+#include <KoRTree.h>
 
 class KoShape;
 class KoSelection;
-class KoRepaintManager;
 class KoViewConverter;
 class KoCanvasBase;
 
 class QPainter;
 class QPointF;
+class QRectF;
 
 /**
  * The shape manager hold a list of all shape which are in scope.
@@ -85,15 +87,51 @@ public:
      * Paint all shapes and their selection handles etc.
      * @param painter the painter to paint to.
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
-     * @param converter to convert between internal and view coordinates.
+     * @param converter to convert between document and view coordinates.
      */
     virtual void paint( QPainter &painter, KoViewConverter &converter, bool forPrint );
 
     /**
      * Returns the shape located at a specific point in the document.
-     * @param position the position in the normal coordinate system.
+     * @param position the position in the document coordinate system.
      */
     KoShape * shapeAt( const QPointF &position );
+
+    /**
+     * Returns the shapes which intersects the specific rect in the document.
+     * @param rect the rectangle in the document coordinate system.
+     */
+    QList<KoShape *> shapesAt( const QRectF &rect );
+    
+    /**
+     * Request a repaint to be queued.
+     * The repaint will be restricted to the parameters rectangle, which is expected to be
+     * in points (the document coordinates system of KoShape) and it is expected to be
+     * normalized and based in the global coordinates, not any local coordinates.
+     * <p>This method will return immediately and only request a repaint. Successive calls
+     * will be merged into an appropriate repaint action.
+     * @param rect the rectangle (in pt) to queue for repaint.
+     * @param shape the shape that is going to be redrawn; only needed when selectionHandles=true
+     * @param selectionHandles if true; find out if the shape is selected and repaint its
+     *   selection handles at the same time.
+     */
+    void repaint( QRectF &rect, const KoShape *shape = 0, bool selectionHandles = false );
+
+    /**
+     * Update the tree for finding the shapes.
+     * This will remove the shape form the tree and will reinsert it again. 
+     * The update to the tree will be posponed until it is needed so that successive calles
+     * will be merged into one.
+     * @param shape the shape to updated its position in the tree.
+     */
+    void updateTree( KoShape * shape );
+
+protected:
+    /**
+     * Update the tree when there are shapes in m_aggregate4update. This is done so not all 
+     * updates to the tree are done when they are asked for but when they are needed. 
+     */
+    void updateTree();
 
 signals:
     /// emitted when the selection is changed
@@ -102,7 +140,9 @@ signals:
 private:
     QList<KoShape *> m_shapes;
     KoSelection * m_selection;
-    KoRepaintManager *m_repaintManager;
+    KoCanvasBase * m_canvas;
+    KoRTree<KoShape> m_tree;
+    QSet<KoShape *> m_aggregate4update;
 };
 
 #endif

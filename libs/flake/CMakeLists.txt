@@ -9,7 +9,6 @@ set(flake_SRCS
     KoLineBorder.cpp
     KoPathShape.cpp
     KoRectangleShape.cpp
-    KoRepaintManager.cpp
     KoSelection.cpp
     KoShape.cpp
     KoShapeContainer.cpp

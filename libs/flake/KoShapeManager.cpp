@@ -23,62 +23,85 @@
 #include "KoSelection.h"
 #include "KoShape.h"
 #include "KoCanvasBase.h"
-#include "KoRepaintManager.h"
 #include "KoShapeContainer.h"
 #include "KoShapeBorderModel.h"
-#include "KoRepaintManager.moc"
+#include "KoShapeGroup.h"
+#include "KoTool.h"
 
 #include <QPainter>
 
 KoShapeManager::KoShapeManager( KoCanvasBase *canvas, const QList<KoShape *> &shapes )
 : m_selection( new KoSelection() )
+, m_canvas( canvas )    
+, m_tree( 4, 2 )
 {
     connect( m_selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
-    m_repaintManager = new KoRepaintManager(canvas, m_selection);
     setShapes(shapes);
-    m_selection->setRepaintManager(m_repaintManager);
+    m_selection->addShapeManager( this );
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 : m_shapes()
 , m_selection( new KoSelection() )
+, m_canvas( canvas )    
+, m_tree( 4, 2 )
 {
     connect( m_selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()) );
-    m_repaintManager = new KoRepaintManager(canvas, m_selection);
-    m_selection->setRepaintManager(m_repaintManager);
+    m_selection->addShapeManager( this );
 }
 
 
 KoShapeManager::~KoShapeManager()
 {
+    foreach(KoShape *shape, m_shapes)
+        shape->removeShapeManager( this );
     delete m_selection;
-    m_repaintManager->dismantle();
 }
 
 
 void KoShapeManager::setShapes( const QList<KoShape *> &shapes )
 {
+    foreach(KoShape *shape, m_shapes)
+    {
+        m_aggregate4update.remove( shape );
+        m_tree.remove( shape );
+        shape->removeShapeManager( this );
+    }
     m_shapes = shapes;
     foreach(KoShape *shape, m_shapes)
-        shape->setRepaintManager(m_repaintManager);
+    {
+        add( shape );
+    }
 }
 
-void KoShapeManager::add(KoShape *shape) {
-    shape->setRepaintManager(m_repaintManager);
+void KoShapeManager::add( KoShape *shape )
+{
+    shape->addShapeManager( this );
     m_shapes.append(shape);
+    if( ! dynamic_cast<KoShapeGroup*>( shape ))
+    {
+        QRectF br( shape->boundingRect() );
+        m_tree.insert( shape, br );
+    }
 }
 
-void KoShapeManager::remove(KoShape *shape) {
+void KoShapeManager::remove( KoShape *shape )
+{
+    shape->removeShapeManager( this );
+    m_aggregate4update.remove( shape );
+    m_tree.remove( shape );
     m_shapes.removeAll(shape);
 }
 
 void KoShapeManager::paint( QPainter &painter, KoViewConverter &converter, bool forPrint)
 {
+    updateTree();
     QPen pen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
     painter.setPen(pen);
-    QList<KoShape*> sorterdShapes(m_shapes);
+    QList<KoShape*> sorterdShapes( m_tree.intersects( converter.viewToDocument( painter.clipRegion().boundingRect() ) ) );
     qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
     const QRegion clipRegion = painter.clipRegion();
+
     foreach ( KoShape * shape, sorterdShapes ) {
         if(! shape->isVisible())
             continue;
@@ -112,13 +135,25 @@ void KoShapeManager::paint( QPainter &painter, KoViewConverter &converter, bool 
         painter.restore();  // for the matrix
     }
 
+#if 0
+    // paint tree
+    double zx = 0;
+    double zy = 0;
+    converter.zoom( &zx, &zy );
+    painter.save();
+    painter.scale( zx, zy );
+    m_tree.paint( painter );
+    painter.restore();
+#endif
+
     if(! forPrint)
         m_selection->paint( painter, converter );
 }
 
 KoShape * KoShapeManager::shapeAt( const QPointF &position )
 {
-    QList<KoShape*> sorterdShapes(m_shapes);
+    updateTree();
+    QList<KoShape*> sorterdShapes( m_tree.contains( position ) );
     qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
     for(int count = sorterdShapes.count()-1; count >= 0; count--) {
         if ( sorterdShapes.at(count)->hitTest( position ) )
@@ -131,6 +166,40 @@ KoShape * KoShapeManager::shapeAt( const QPointF &position )
         return m_selection;
 
     return 0; // missed everything
+}
+
+QList<KoShape *> KoShapeManager::shapesAt( const QRectF &rect )
+{
+    updateTree();
+    //TODO check if object is really in the rect and not 
+    // only the bounding rect of the object.
+    return m_tree.intersects( rect );
+}
+
+void KoShapeManager::repaint( QRectF &rect, const KoShape *shape, bool selectionHandles )
+{
+    m_canvas->updateCanvas( rect );
+    if ( selectionHandles && m_selection->isSelected( shape ) )
+    {
+        if ( m_canvas->tool() )
+            m_canvas->tool()->repaintDecorations();
+    }
+}
+
+void KoShapeManager::updateTree( KoShape * shape )
+{
+    m_aggregate4update.insert( shape );
+}
+
+void KoShapeManager::updateTree()
+{
+    foreach ( KoShape * shape, m_aggregate4update )
+    {
+        m_tree.remove( shape );
+        QRectF br( shape->boundingRect() );
+        m_tree.insert( shape, br );
+    }
+    m_aggregate4update.clear();
 }
 
 #include "KoShapeManager.moc"

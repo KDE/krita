@@ -87,13 +87,10 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &point, Qt::Keyb
 void KoShapeRubberSelectStrategy::finishInteraction()
 {
     KoSelection * selection = m_canvas->shapeManager()->selection();
-    const QList<KoShape *> &shapes = m_canvas->shapeManager()->shapes();
-    foreach ( KoShape * object, shapes )
+    QList<KoShape *> shapes( m_canvas->shapeManager()->shapesAt( m_selectRect ) );
+    foreach ( KoShape * shape, shapes )
     {
-        if ( object->boundingRect().intersects( m_selectRect ) )
-        {
-            selection->select( object );
-        }
+        selection->select( shape );
     }
     m_parent->repaintDecorations();
     m_canvas->updateCanvas(m_selectRect.normalized());

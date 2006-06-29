@@ -24,6 +24,7 @@
 
 #include <QMatrix>
 #include <QVector>
+#include <QSet>
 #include <QBrush>
 
 #include "KoViewConverter.h"
@@ -37,8 +38,8 @@ class QVariant;
 class KoSelection;
 class KoPointerEvent;
 class KoShapeContainer;
-class KoRepaintManager;
 class KoShapeBorderModel;
+class KoShapeManager;
 class KoShapeUserData;
 
 /**
@@ -486,6 +487,11 @@ protected:
      */
     virtual void copySettings(const KoShape *shape);
 
+    /**
+     * Update the position of the shape in the tree of the KoShapeManager.
+     */
+    virtual void updateTree();
+
     /// Used by shapeChanged() to select which change was made
     enum ChangeType {
         PositionChanged, ///< used after a setPosition()
@@ -523,11 +529,13 @@ private:
 
     bool m_visible, m_locked, m_keepAspect;
 
-    KoRepaintManager *m_repaintManager;
+
+    QSet<KoShapeManager *> m_shapeManagers;
 
 private:
     friend class KoShapeManager;
-    void setRepaintManager(KoRepaintManager *manager);
+    void addShapeManager( KoShapeManager * manager ) { m_shapeManagers.insert( manager ); }
+    void removeShapeManager( KoShapeManager * manager ) { m_shapeManagers.remove( manager ); }
     KoShapeUserData *m_userData;
 };
 

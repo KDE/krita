@@ -153,31 +153,42 @@ public:
     {
         kdDebug(41010) << "Visiting on adjustment layer " << layer->name() << ", visible: " << layer->visible() << ", extent: "
                 << layer->extent() << ", dirty: " << layer->dirtyRect() << ", paint rect: " << m_rc << endl;
-        
+
         if (m_projection == 0) {
             return true;
         }
-        
+
         if (!layer->visible())
             return true;
 
         KisFilterConfiguration * cfg = layer->filter();
         if (!cfg) return false;
 
-        
+
         KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
         if (!f) return false;
-        
+
         KisSelectionSP selection = layer->selection();
 
-        // Copy of the projection -- use the copy-on-write trick.
-        KisPaintDeviceSP tmp = new KisPaintDevice(*m_projection);
-
+        // Copy of the projection -- use the copy-on-write trick. XXX NO COPY ON WRITE YET =(
+        //KisPaintDeviceSP tmp = new KisPaintDevice(*m_projection);
+        KisPaintDeviceSP tmp = 0;
         // If there's a selection, only keep the selected bits
         if (selection != 0) {
+            tmp = new KisPaintDevice(m_projection->colorSpace());
+            KisPainter gc(tmp);
+            QRect selectedRect = selection->selectedRect();
+            selectedRect &= m_rc;
+            //kdDebug() << k_funcinfo << selectedRect << endl;
+            gc.bitBlt(selectedRect.x(), selectedRect.y(), COMPOSITE_COPY, m_projection,
+                      selectedRect.x(), selectedRect.y(),
+                      selectedRect.width(), selectedRect.height());
+            gc.end();
             tmp->setSelection(selection);
+        } else {
+            tmp = new KisPaintDevice(*m_projection);
         }
-        
+
         // Filter the temporary paint device -- remember, these are only the selected bits,
         // if there was a selection.
         f->process(tmp, tmp, cfg, m_rc);
@@ -199,7 +210,6 @@ public:
         gc.bitBlt(m_rc.left(), m_rc.top(),
                   COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
                   m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
-
         layer->setClean(m_rc);
 
         return true;

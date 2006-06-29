@@ -31,6 +31,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kuser.h>
 
 #include "KoXmlNS.h"
 
@@ -49,6 +50,8 @@ KoDocumentInfo::KoDocumentInfo( QObject* parent ) : QObject( parent )
     setAboutInfo( "initial-creator", i18n( "Unknown" ) );
     setAboutInfo( "creation-date", QDateTime::currentDateTime()
             .toString( Qt::ISODate ) );
+    KUser user( KUser::UseRealUserID );
+    setAuthorInfo( "creator", user.fullName() );
     m_firstSave = false;
 }
 

@@ -87,7 +87,7 @@ protected:
 private:
     double m_zoom;
     QSet<Data*> m_rects;
-    QVector<Data*> m_found;
+    QList<Data*> m_found;
     QRectF m_insertRect;
     bool m_buttonPressed;
     KoRTree<Data> m_rtree;

@@ -84,8 +84,8 @@ void Canvas::select( QRectF & rect )
 void Canvas::remove( QRectF & rect )
 {
     m_out << "r " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << "\n";
-    m_found = QVector<Data *>();
-    QVector<Data *> remove = m_rtree.intersects( rect );
+    m_found = QList<Data *>();
+    QList<Data *> remove = m_rtree.intersects( rect );
     foreach ( Data * data, remove )
     {
         m_rtree.remove( data );

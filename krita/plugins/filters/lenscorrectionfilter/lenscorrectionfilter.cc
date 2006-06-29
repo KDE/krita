@@ -137,18 +137,13 @@ void KisFilterLensCorrection::process(KisPaintDeviceSP src, KisPaintDeviceSP dst
         double srcX = xcenter + radius_mult * off_x;
         double srcY = ycenter + radius_mult * off_y;
 
-        if( srcX >= rawrect.left() && srcX <= rawrect.right() && srcY >= rawrect.top() && srcY <= rawrect.bottom() )
-        {
-            double brighten = 1.0 + mag * brightness;
+        double brighten = 1.0 + mag * brightness;
 
-            srcRSA.moveTo( KisPoint( srcX, srcY ) );
-            srcRSA.sampledOldRawData( dstIt.rawData() );
-            cs->toLabA16( dstIt.rawData(), (Q_UINT8*)lab, 1);
-            lab[0] = CLAMP( lab[0] * brighten, 0, 65535);
-            cs->fromLabA16( (Q_UINT8*)lab, dstIt.rawData(), 1);
-        } else {
-            cs->setAlpha( dstIt.rawData(), 0, 1);
-        }
+        srcRSA.moveTo( KisPoint( srcX, srcY ) );
+        srcRSA.sampledOldRawData( dstIt.rawData() );
+        cs->toLabA16( dstIt.rawData(), (Q_UINT8*)lab, 1);
+        lab[0] = CLAMP( lab[0] * brighten, 0, 65535);
+        cs->fromLabA16( (Q_UINT8*)lab, dstIt.rawData(), 1);
         
         ++dstIt;
         incProgress();

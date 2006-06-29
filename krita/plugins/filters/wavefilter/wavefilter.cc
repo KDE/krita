@@ -160,13 +160,8 @@ void KisFilterWave::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     {
         double xv = horizontalcurve->valueAt( dstIt.y(), dstIt.x() );
         double yv = verticalcurve->valueAt( dstIt.x(), dstIt.y() );
-        if( xv >= rect.left() && xv <= rect.right() && yv >= rect.top() && yv <= rect.bottom() )
-        {
-            srcRSA.moveTo( KisPoint( xv, yv ) );
-            srcRSA.sampledOldRawData(dstIt.rawData());
-        } else {
-            cs->setAlpha( dstIt.rawData(), 0, 1);
-        }
+        srcRSA.moveTo( KisPoint( xv, yv ) );
+        srcRSA.sampledOldRawData(dstIt.rawData());
         ++dstIt;
         incProgress();
     }

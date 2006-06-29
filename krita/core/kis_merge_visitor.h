@@ -180,11 +180,12 @@ public:
             QRect selectedRect = selection->selectedRect();
             selectedRect &= m_rc;
             //kdDebug() << k_funcinfo << selectedRect << endl;
+            tmp->setX(selection->getX());
+            tmp->setY(selection->getY());
             gc.bitBlt(selectedRect.x(), selectedRect.y(), COMPOSITE_COPY, m_projection,
                       selectedRect.x(), selectedRect.y(),
                       selectedRect.width(), selectedRect.height());
             gc.end();
-            tmp->setSelection(selection);
         } else {
             tmp = new KisPaintDevice(*m_projection);
         }

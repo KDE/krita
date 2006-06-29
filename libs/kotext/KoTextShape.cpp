@@ -44,6 +44,7 @@ void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
     pc.cursorPosition = -1;
 
     QTextDocument *doc = m_textShapeData->document();
+    //painter.setClipRect(QRectF(QPointF(0, 0), size()), Qt::IntersectClip);
     painter.translate(0, -m_textShapeData->documentOffset());
     doc->documentLayout()->draw( &painter, pc);
 }

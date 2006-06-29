@@ -79,8 +79,14 @@ public:
 
     void clear();
 
-    // Tests if the the rect is totally outside the selection
+    /// Tests if the the rect is totally outside the selection
     bool isTotallyUnselected(QRect r);
+
+    /**
+     * Tests if the the rect is totally outside the selection, but uses selectedRect
+     * instead of selectedRect, and this is faster (but might deliver false positives!)
+     */
+    bool isProbablyTotallyUnselected(QRect r);
 
     /**
      * Rough, but fastish way of determining the area

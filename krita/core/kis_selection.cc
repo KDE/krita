@@ -154,6 +154,15 @@ bool KisSelection::isTotallyUnselected(QRect r)
     return ! r.intersects(sr);
 }
 
+bool KisSelection::isProbablyTotallyUnselected(QRect r)
+{
+    if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
+        return false;
+    QRect sr = selectedRect();
+    return ! r.intersects(sr);
+}
+
+
 QRect KisSelection::selectedRect()
 {
     if(*(m_datamanager->defaultPixel()) == MIN_SELECTED || !m_parentPaintDevice)

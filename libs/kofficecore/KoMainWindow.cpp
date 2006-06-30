@@ -28,7 +28,7 @@
 // #include "KoMainWindowIface.h"
 #include "KoFrame.h"
 #include "KoFileDialog.h"
-#include "Koversiondialog.h"
+#include "KoVersionDialog.h"
 #include "kkbdaccessextensions.h"
 
 #include <kprinter.h>

@@ -40,7 +40,7 @@
 
 #include "KoMainWindow.h"
 
-#include "Koversiondialog.h"
+#include "KoVersionDialog.h"
 
 
 KoVersionDialog::KoVersionDialog( QWidget* parent, KoDocument *doc  )
@@ -253,4 +253,4 @@ QString KoVersionModifyDialog::comment() const
 }
 
 
-#include "Koversiondialog.moc"
+#include "KoVersionDialog.moc"

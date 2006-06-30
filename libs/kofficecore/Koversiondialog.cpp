@@ -19,6 +19,7 @@
 */
 
 
+#include <QFile>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -33,8 +34,11 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <ktempfile.h>
 
 #include <q3multilineedit.h>
+
+#include "KoMainWindow.h"
 
 #include "Koversiondialog.h"
 
@@ -84,7 +88,7 @@ KoVersionDialog::KoVersionDialog( QWidget* parent, KoDocument *doc  )
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pOpen, SIGNAL( clicked() ), this, SLOT( slotOpen() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
-  connect( list, SIGNAL( itemActivated( QTreeWidgetItem *, int ) ), this, SLOT( slotModify() ) );
+  connect( list, SIGNAL( itemActivated( QTreeWidgetItem *, int ) ), this, SLOT( slotOpen() ) );
 
   updateButton();
 
@@ -196,11 +200,22 @@ void KoVersionDialog::slotOpen()
   if ( !version )
     return;
 
-  bool result = m_doc->loadNativeFormatFromStore( version->data );
-  if ( !result )
-    KMessageBox::error( this, i18n("The version could not be opened") );
-  else
-    slotButtonClicked( Cancel );
+    KTempFile tmp;
+    QFile *file = tmp.file();
+    file->write( version->data );
+    file->close();
+    tmp.sync();
+
+    if ( !m_doc->shells().isEmpty() ) //open the version in a new window if possible
+    {
+        KoMainWindow *window = m_doc->shells().current();
+        window->openDocument( tmp.name() );
+    }
+    else
+        m_doc->openURL( tmp.name() );
+
+    tmp.unlink();
+    slotButtonClicked( Close );
 }
 
 KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *info )

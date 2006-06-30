@@ -37,10 +37,12 @@ void KisRandomSubAccessorPixel::sampledOldRawData(Q_UINT8* dst)
 {
     const Q_UINT8* pixels[4];
     Q_UINT8 weights[4];
-    int x = (int)m_currentPoint.x();
-    int y = (int)m_currentPoint.y();
+    int x = floor(m_currentPoint.x());
+    int y = floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;
+    if(hsub < 0.0 ) hsub = 1.0 + hsub;
     double vsub = m_currentPoint.y() - y;
+    if(vsub < 0.0 ) vsub = 1.0 + vsub;
     weights[0] = (int)round( ( 1.0 - hsub) * ( 1.0 - vsub) * 255 );
     m_randomAccessor.moveTo(x, y);
     pixels[0] = m_randomAccessor.oldRawData();

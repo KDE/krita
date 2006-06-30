@@ -60,7 +60,9 @@ public:
     
     /// Set the selction of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
-    
+
+    virtual void paintSelection(QImage &img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
+    virtual void paintSelection(QImage &img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
 public:
     
     virtual Q_INT32 x() const;
@@ -79,9 +81,13 @@ public:
 
     virtual void resetCache();
     virtual KisPaintDeviceSP cachedPaintDevice() { return m_cachedPaintDev; }
-    
-private:
 
+    bool showSelection() const { return m_showSelection; }
+    void setSelection(bool b) { m_showSelection = b; }
+
+    virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+private:
+    bool m_showSelection;
     KisFilterConfiguration * m_filterConfig;
     KisSelectionSP m_selection;
     KisPaintDeviceSP m_cachedPaintDev;

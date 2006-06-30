@@ -47,7 +47,7 @@ set(kofficecore_LIB_SRCS
    KoFileDialog.cpp
    KoXmlNS.cpp
    KoDom.cpp
-   Koversiondialog.cpp
+   KoVersionDialog.cpp
    KoOasisStore.cpp
    kkbdaccessextensions.cpp
    KoOpenPane.cpp
@@ -137,7 +137,7 @@ install_files( /include FILES
     KoPageLayout.h 
     KoXmlNS.h 
     KoDom.h 
-    Koversiondialog.h 
+    KoVersionDialog.h 
     kkbdaccessextensions.h 
     KoOpenPane.h 
     KoOasisLoadingContext.h 

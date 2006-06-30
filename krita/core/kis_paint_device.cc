@@ -406,7 +406,6 @@ KNamedCommand * KisPaintDevice::moveCommand(Q_INT32 x, Q_INT32 y)
 void KisPaintDevice::extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const
 {
     m_datamanager->extent(x, y, w, h);
-    kdDebug() << x << " " << y << " ;; " << m_x << endl;
     x += m_x;
     y += m_y;
 }
@@ -876,6 +875,7 @@ QImage KisPaintDevice::convertToQImage(KisProfile *  dstProfile, Q_INT32 x1, Q_I
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(Q_INT32 w, Q_INT32 h)
 {
     KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace(), "thumbnail");
+
     thumbnail->clear();
 
     int srcw, srch;

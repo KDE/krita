@@ -93,6 +93,10 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
                                    KisFilterConfiguration* configuration,
                                    const QRect& rect)
 {
+    if (!configuration) {
+        setProgressDone();
+        return;
+    }
 
     if (dst != src) {
         kdDebug() << "src != dst\n";
@@ -101,11 +105,13 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
         gc.end();
     }
 
+
     KisConvolutionPainter painter( dst );
     if (m_progressDisplay)
         m_progressDisplay->setSubject( &painter, true, true );
 
     KisKernelSP kernel = ((KisConvolutionConfiguration*)configuration)->matrix();
+
     painter.applyMatrix(kernel, rect.x(), rect.y(), rect.width(), rect.height(), BORDER_REPEAT);
 
     if (painter.cancelRequested()) {
@@ -113,6 +119,14 @@ void KisConvolutionFilter::process(KisPaintDeviceSP src,
     }
 
     setProgressDone();
+}
+
+int KisConvolutionFilter::overlapMarginNeeded(KisFilterConfiguration* c) const {
+    KisConvolutionConfiguration* config = dynamic_cast<KisConvolutionConfiguration*>(c);
+    if (!config)
+        return 0;
+    KisKernelSP kernel = config->matrix();
+    return QMAX(kernel->width / 2, kernel->height / 2);
 }
 
 KisFilterConfiguration* KisConvolutionConstFilter::configuration(QWidget*)

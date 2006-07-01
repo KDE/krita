@@ -120,5 +120,13 @@ void KisFilter::setAutoUpdate(bool set) {
     m_autoUpdate = set;
 }
 
+QRect KisFilter::enlargeRect(QRect rect, KisFilterConfiguration* c) const {
+    int margin = overlapMarginNeeded(c);
+    rect.rLeft() -= margin;
+    rect.rTop() -= margin;
+    rect.rRight() += margin;
+    rect.rBottom() += margin;
+    return rect;
+}
 
 #include "kis_filter.moc"

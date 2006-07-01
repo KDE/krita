@@ -626,6 +626,10 @@ void KoDocument::setReadWrite( bool readwrite )
         if ( dIt.current()->document() )
             dIt.current()->document()->setReadWrite( readwrite );
 
+     Q3PtrListIterator<KoMainWindow> it( d->m_shells );
+     for (; it.current(); ++it )
+       it.current()->setReadWrite( readwrite );
+
     setAutoSave( d->m_autoSaveDelay );
 }
 

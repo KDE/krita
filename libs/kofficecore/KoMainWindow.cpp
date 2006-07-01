@@ -54,6 +54,7 @@
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
 #include <kseparatoraction.h>
+#include <kfileitem.h>
 
 #include <QObject>
 //Added by qt3to4:
@@ -126,7 +127,7 @@ public:
     m_isExporting = false;
     m_windowSizeDirty = false;
     m_lastExportSpecialOutputFlag = 0;
-
+    m_readOnly = false;
   }
   ~KoMainWindowPrivate()
   {
@@ -161,6 +162,7 @@ public:
   bool m_forQuit;
   bool m_firstTime;
   bool m_windowSizeDirty;
+  bool m_readOnly;
 
   KAction *m_paDocInfo;
   KAction *m_paSave;
@@ -422,6 +424,13 @@ void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
     d->m_versionsfile->setEnabled( doc && !doc->url().isEmpty() && ( doc->outputMimeType() == doc->nativeOasisMimeType() || doc->outputMimeType() == doc->nativeOasisMimeType() + "-template" ) );
 }
 
+void KoMainWindow::setReadWrite( bool readwrite )
+{
+  d->m_paSave->setEnabled( readwrite );
+  d->m_importFile->setEnabled( readwrite );
+  d->m_readOnly =  !readwrite;
+  updateCaption();
+}
 
 void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const Q3PtrList<KoView> & views )
 {
@@ -510,6 +519,9 @@ void KoMainWindow::updateCaption()
           caption = QString( "%1 - %2" ).arg( caption ).arg( url );
       else if ( caption.isEmpty() )
           caption = url;
+
+      if ( d->m_readOnly )
+        caption += i18n("(write protected)");
 
       setCaption( caption, rootDocument()->isModified() );
       if ( !rootDocument()->url().fileName(false).isEmpty() )
@@ -602,6 +614,10 @@ bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
     }
     updateReloadFileAction(newdoc);
     updateVersionsFileAction( newdoc );
+
+    KFileItem file( url, newdoc->mimeType(), KFileItem::Unknown );
+    if ( !file.isWritable() )
+        newdoc->setReadWrite( false );
     return true;
 }
 

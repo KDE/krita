@@ -39,6 +39,7 @@
 #include <q3multilineedit.h>
 
 #include "KoMainWindow.h"
+#include "KoQueryTrader.h"
 
 #include "KoVersionDialog.h"
 
@@ -204,12 +205,22 @@ void KoVersionDialog::slotOpen()
     QFile *file = tmp.file();
     file->write( version->data );
     file->close();
+    file->setPermissions( QFile::ReadUser );
     tmp.sync();
 
     if ( !m_doc->shells().isEmpty() ) //open the version in a new window if possible
     {
-        KoMainWindow *window = m_doc->shells().current();
-        window->openDocument( tmp.name() );
+        KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
+        QString errorMsg;
+        KoDocument* doc = entry.createDoc( &errorMsg );
+        if ( !doc ) {
+          if ( !errorMsg.isEmpty() )
+            KMessageBox::error( 0, errorMsg );
+          return;
+        }
+        KoMainWindow *shell = new KoMainWindow( doc->instance() );
+        shell->openDocument( tmp.name() );
+        shell->show();
     }
     else
         m_doc->openURL( tmp.name() );

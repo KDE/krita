@@ -160,6 +160,8 @@ public:
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 
+    void setReadWrite( bool readwrite );
+
 signals:
     /**
      * This signal is emitted if the document has been saved successfully.

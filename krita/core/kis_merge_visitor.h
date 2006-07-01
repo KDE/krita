@@ -35,6 +35,7 @@
 #include "kis_filter_configuration.h"
 #include "kis_filter_registry.h"
 #include "kis_selection.h"
+#include "kis_transaction.h"
 
 class KisMergeVisitor : public KisLayerVisitor {
 public:
@@ -161,6 +162,9 @@ public:
         if (!layer->visible())
             return true;
 
+        if (m_rc.width() == 0 || m_rc.height() == 0) // Don't even try
+            return true;
+
         KisFilterConfiguration * cfg = layer->filter();
         if (!cfg) return false;
 
@@ -168,6 +172,8 @@ public:
         KisFilter * f = KisFilterRegistry::instance()->get( cfg->name() );
         if (!f) return false;
 
+        // Possibly enlarge the rect that changed (like for convolution filters)
+        // m_rc = f->enlargeRect(m_rc, cfg);
         KisSelectionSP selection = layer->selection();
 
         // Copy of the projection -- use the copy-on-write trick. XXX NO COPY ON WRITE YET =(
@@ -179,6 +185,13 @@ public:
             KisPainter gc(tmp);
             QRect selectedRect = selection->selectedRect();
             selectedRect &= m_rc;
+
+            if (selectedRect.width() == 0 || selectedRect.height() == 0) // Don't even try
+                return true;
+
+            // Don't forget that we need to take into account the extended sourcing area as well
+            //selectedRect = f->enlargeRect(selectedRect, cfg);
+
             //kdDebug() << k_funcinfo << selectedRect << endl;
             tmp->setX(selection->getX());
             tmp->setY(selection->getY());
@@ -190,10 +203,15 @@ public:
             tmp = new KisPaintDevice(*m_projection);
         }
 
+        // Some filters will require usage of oldRawData, which is not available without
+        // a transaction!
+        KisTransaction* cmd = new KisTransaction("", tmp);
+
         // Filter the temporary paint device -- remember, these are only the selected bits,
         // if there was a selection.
         f->process(tmp, tmp, cfg, m_rc);
 
+        delete cmd;
         // Copy the filtered bits onto the projection 
         KisPainter gc(m_projection);
         if (selection)
@@ -212,7 +230,6 @@ public:
                   COMPOSITE_COPY, m_projection, OPACITY_OPAQUE,
                   m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
         layer->setClean(m_rc);
-
         return true;
     }
 

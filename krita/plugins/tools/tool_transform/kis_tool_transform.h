@@ -27,6 +27,7 @@
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
 #include <kis_undo_adapter.h>
+#include <kis_layer.h>
 
 class KisTransaction;
 class WdgToolTransform;
@@ -88,6 +89,7 @@ private:
 
 private slots:
 
+    void slotLayerActivated(KisLayerSP);
     void slotSetFilter(const KisID &);
     void setStartX(int x) { m_startPos.setX(x); }
     void setStartY(int y) { m_startPos.setY(y); }

@@ -258,9 +258,9 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
     // handle mirroring
     if(scale < 0)
-        dstLen = -srcLen * scale / scaleDenom;
+        dstLen = - scale;
     else
-        dstLen = srcLen * scale / scaleDenom;
+        dstLen = scale;
 
     // Calculate extra length (in each side) needed due to shear
     Q_INT32 extraLen = (support+256)>>8;
@@ -285,14 +285,14 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         Q_INT32 dt = invfscale;
         filterWeights[center].weight = new Q_UINT8[span];
 //printf("%d (",center);
-        int sum=0;
+        Q_UINT32 sum=0;
         for(int num = 0; num<span; ++num)
         {
             Q_UINT32 tmpw = filterStrategy->intValueAt(t) * invfscale;
 
             tmpw >>=8;
             filterWeights[center].weight[num] = tmpw;
-//printf(" %d=%d",t,filterWeights[center].weight[num]);
+//printf(" %d=%d,%d",t,filterWeights[center].weight[num],tmpw);
             t += dt;
             sum+=tmpw;
         }
@@ -378,6 +378,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
             if(scale < 0)
                 center += srcLen<<8;
 
+            center += 128*scaleDenom/scale;//xxx doesn't work for scale<0;
             center += (extraLen<<8) + shearFracOffset;
 
             // find contributing pixels

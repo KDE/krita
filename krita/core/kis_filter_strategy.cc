@@ -155,7 +155,7 @@ KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
         m_singleton->add(new KisTriangleFilterStrategy);
         m_singleton->add(new KisBellFilterStrategy);
         m_singleton->add(new KisBSplineFilterStrategy);
-        m_singleton->add(new KisLanczos3FilterStrategy);
+        //m_singleton->add(new KisLanczos3FilterStrategy);
         m_singleton->add(new KisMitchellFilterStrategy);
     }
     return KisFilterStrategyRegistry::m_singleton;

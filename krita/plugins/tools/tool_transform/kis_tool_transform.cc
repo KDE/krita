@@ -62,7 +62,7 @@ namespace {
         typedef KisSelectedTransaction super;
 
     public:
-        TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, double scaleX, double scaleY, double tX, double tY, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
+        TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, KisPaintDeviceSP origDevice, double scaleX, double scaleY, double tX, double tY, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
         virtual ~TransformCmd();
 
     public:
@@ -70,6 +70,8 @@ namespace {
         virtual void unexecute();
         void transformArgs(double &sx, double &sy, double &tx, double &ty, double &a);
         KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos);
+        KisPaintDeviceSP theDevice();
+        KisPaintDeviceSP origDevice();
 
     private:
         double m_scaleX;
@@ -81,9 +83,11 @@ namespace {
         KisSelectionSP m_origSelection;
         QPoint m_startPos;
         QPoint m_endPos;
+        KisPaintDeviceSP m_device;
+        KisPaintDeviceSP m_origDevice;
     };
 
-    TransformCmd::TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, double scaleX, double scaleY, double tX, double tY, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos) :
+    TransformCmd::TransformCmd(KisToolTransform *tool, KisPaintDeviceSP device, KisPaintDeviceSP origDevice, double scaleX, double scaleY, double tX, double tY, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos) :
         super(i18n("Transform"), device)
         , m_scaleX(scaleX)
         , m_scaleY(scaleY)
@@ -94,6 +98,8 @@ namespace {
         , m_origSelection(origSel)
         , m_startPos(startPos)
         , m_endPos(endPos)
+        , m_device(device)
+        , m_origDevice(origDevice)
     {
     }
 
@@ -125,6 +131,16 @@ namespace {
     void TransformCmd::unexecute()
     {
         super::unexecute();
+    }
+
+    KisPaintDeviceSP TransformCmd::theDevice()
+    {
+        return m_device;
+    }
+
+    KisPaintDeviceSP TransformCmd::origDevice()
+    {
+        return m_origDevice;
     }
 }
 
@@ -163,6 +179,8 @@ void KisToolTransform::deactivate()
     if (!img) return;
 
     paintOutline();
+
+   disconnect(m_subject->currentImg().data(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
 }
 
 void KisToolTransform::activate()
@@ -188,12 +206,22 @@ void KisToolTransform::activate()
         else
         {
             // One of our commands is on top
-            // We should ask for tool args and orig selection
-            cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
-            m_origSelection = cmd->origSelection(m_startPos, m_endPos);
-            paintOutline();
+            if(cmd->theDevice() == m_subject->currentImg()->activeDevice())
+            {
+                // and it even has the same device
+                // We should ask for tool args and orig selection
+                m_origDevice = cmd->origDevice();
+                cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
+                m_origSelection = cmd->origSelection(m_startPos, m_endPos);
+                m_org_cenX = (m_startPos.x() + m_endPos.x()) / 2.0;
+                m_org_cenY = (m_startPos.y() + m_endPos.y()) / 2.0;
+                paintOutline();
+            }
+            else
+                initHandles();
         }
     }
+    connect(m_subject->currentImg(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(slotLayerActivated(KisLayerSP)));
 }
 
 void KisToolTransform::initHandles()
@@ -292,6 +320,7 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
                     break;
             }
             m_selecting = true;
+            m_actualyMoveWhileSelected = false;
         }
     }
 }
@@ -366,7 +395,7 @@ void KisToolTransform::move(KisMoveEvent *e)
 
         if (m_subject && m_selecting) {
             paintOutline();
-
+            m_actualyMoveWhileSelected = true;
             mousePos -= m_clickoffset;
 
             // transform mousePos coords, so it seems like it isn't rotated and centered at 0,0
@@ -617,13 +646,15 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
     if (!img)
         return;
 
-    if (m_subject && m_selecting) {
-        m_selecting = false;
+    m_selecting = false;
+
+    if(m_actualyMoveWhileSelected)
+    {
+        paintOutline();
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
+        transform();
+        QApplication::restoreOverrideCursor();
     }
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
-    paintOutline();
-    transform();
-    QApplication::restoreOverrideCursor();
 }
 
 void KisToolTransform::paintOutline()
@@ -714,8 +745,8 @@ void KisToolTransform::transform()
     KisProgressDisplayInterface *progress = m_subject->progressDisplay();
 
     // This mementoes the current state of the active device.
-    TransformCmd * transaction = new TransformCmd(this, img->activeDevice(), m_scaleX,
-                                                  m_scaleY, m_translateX, m_translateY, m_a, m_origSelection, m_startPos, m_endPos);
+    TransformCmd * transaction = new TransformCmd(this, img->activeDevice(), m_origDevice,
+                                                m_scaleX, m_scaleY, m_translateX, m_translateY, m_a, m_origSelection, m_startPos, m_endPos);
 
     // Copy the original state back.
     QRect rc = m_origDevice->extent();
@@ -796,6 +827,9 @@ void KisToolTransform::notifyCommandExecuted( KCommand * command)
         // We should ask for tool args and orig selection
         cmd->transformArgs(m_scaleX, m_scaleY, m_translateX, m_translateY, m_a);
         m_origSelection = cmd->origSelection(m_startPos, m_endPos);
+        m_origDevice = cmd->origDevice();
+        m_org_cenX = (m_startPos.x() + m_endPos.x()) / 2.0;
+        m_org_cenY = (m_startPos.y() + m_endPos.y()) / 2.0;
         m_subject->canvasController() ->updateCanvas();
     }
 }
@@ -804,6 +838,12 @@ void KisToolTransform::slotSetFilter(const KisID &filterID)
 {
     m_filter = KisFilterStrategyRegistry::instance()->get(filterID);
 }
+
+void KisToolTransform::slotLayerActivated(KisLayerSP)
+{
+    activate();
+}
+
 
 QWidget* KisToolTransform::createOptionWidget(QWidget* parent)
 {

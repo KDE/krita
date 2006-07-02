@@ -259,9 +259,9 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
     // handle mirroring
     if(scale < 0)
-        dstLen = -srcLen * scale / scaleDenom;
+        dstLen = - scale;
     else
-        dstLen = srcLen * scale / scaleDenom;
+        dstLen = scale;
 
     // Calculate extra length (in each side) needed due to shear
     Q_INT32 extraLen = (support+256)>>8;
@@ -286,14 +286,14 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         Q_INT32 dt = invfscale;
         filterWeights[center].weight = new Q_UINT8[span];
 //printf("%d (",center);
-        int sum=0;
+        Q_UINT32 sum=0;
         for(int num = 0; num<span; ++num)
         {
             Q_UINT32 tmpw = filterStrategy->intValueAt(t) * invfscale;
 
             tmpw >>=8;
             filterWeights[center].weight[num] = tmpw;
-//printf(" %d=%d",t,filterWeights[center].weight[num]);
+//printf(" %d=%d,%d",t,filterWeights[center].weight[num],tmpw);
             t += dt;
             sum+=tmpw;
         }
@@ -308,7 +308,21 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
                 sum+=filterWeights[center].weight[num];
             }
         }
-//printf("  sum2 =%d\n",sum);
+
+//printf("  sum2 =%d",sum);
+        int num = 0; 
+        while(sum<255 && num*2<span)
+        {
+            filterWeights[center].weight[span/2 + num]++;
+            ++sum;
+            if(sum<255 && num<span/2)
+            {
+                filterWeights[center].weight[span/2 - num - 1]++;
+                ++sum;
+            }
+            ++num;
+        }
+//printf("  sum3 =%d\n",sum);
 
         filterWeights[center].numWeights = span;
     }
@@ -325,7 +339,7 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
 
         // Build a temporary line
         T srcIt = createIterator <T>(src, srcStart - extraLen, lineNum, srcLen+2*extraLen);
-        int i = 0;
+        Q_INT32 i = 0;
         while(!srcIt.isDone())
         {
             Q_UINT8 *data;
@@ -352,11 +366,20 @@ template <class T> void KisTransformWorker::transformPass(KisPaintDevice *src, K
         i=0;
         while(!dstIt.isDone())
         {
-            if(scale < 0)
-                center = (srcLen<<8) + (((i<<8)) * scaleDenom) / scale;
+            if(scaleDenom<2500)
+                center = ((i<<8) * scaleDenom) / scale;
             else
-                center = (((i<<8)) * scaleDenom) / scale;
+            {
+                if(scaleDenom<46000) // real limit is actually 46340 pixels
+                    center = ((i * scaleDenom) / scale)<<8;
+                else
+                    center = ((i<<8)/scale * scaleDenom) / scale; // XXX fails for sizes over 2^23 pixels src width
+            }
 
+            if(scale < 0)
+                center += srcLen<<8;
+
+            center += 128*scaleDenom/scale;//xxx doesn't work for scale<0;
             center += (extraLen<<8) + shearFracOffset;
 
             // find contributing pixels

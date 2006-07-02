@@ -107,6 +107,7 @@ private:
     QPoint m_startPos;
     QPoint m_endPos;
     bool m_selecting;
+    bool m_actualyMoveWhileSelected;
     QPoint m_topleft;
     QPoint m_topright;
     QPoint m_bottomleft;

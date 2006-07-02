@@ -320,6 +320,7 @@ void KisToolTransform::buttonPress(KisButtonPressEvent *e)
                     break;
             }
             m_selecting = true;
+            m_actualyMoveWhileSelected = false;
         }
     }
 }
@@ -394,7 +395,7 @@ void KisToolTransform::move(KisMoveEvent *e)
 
         if (m_subject && m_selecting) {
             paintOutline();
-
+            m_actualyMoveWhileSelected = true;
             mousePos -= m_clickoffset;
 
             // transform mousePos coords, so it seems like it isn't rotated and centered at 0,0
@@ -645,13 +646,15 @@ void KisToolTransform::buttonRelease(KisButtonReleaseEvent */*e*/)
     if (!img)
         return;
 
-    if (m_subject && m_selecting) {
-        m_selecting = false;
+    m_selecting = false;
+
+    if(m_actualyMoveWhileSelected)
+    {
+        paintOutline();
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
+        transform();
+        QApplication::restoreOverrideCursor();
     }
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
-    paintOutline();
-    transform();
-    QApplication::restoreOverrideCursor();
 }
 
 void KisToolTransform::paintOutline()

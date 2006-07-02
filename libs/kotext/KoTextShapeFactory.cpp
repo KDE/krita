@@ -31,13 +31,13 @@ K_EXPORT_COMPONENT_FACTORY(kotext2,
          KGenericFactory<KoTextShapeFactory>( "TextShape" ) )
 
 KoTextShapeFactory::KoTextShapeFactory(QObject *parent, const QStringList& list)
-: KoShapeFactory(parent, KoTextShape_SHAPEID, i18n("A shape that shows text"))
+: KoShapeFactory(parent, KoTextShape_SHAPEID, i18n("Text"))
 {
-    setToolTip(i18n("A text shape"));
+    setToolTip(i18n("A Shape That Shows Text"));
 
     KoShapeTemplate t;
     t.name = "Simple text";
-    t.toolTip = "Text shape with some text";
+    t.toolTip = "Text Shape With Some Text";
     KoProperties *props = new KoProperties();
     t.properties = props;
     props->setProperty("text", "<b>Koffie</b>, koffie... Querelanten\ndrinken geen KOffice maar groene thee.");

@@ -77,7 +77,7 @@ void KoToolManager::setup() {
     KoToolRegistry *registry = KoToolRegistry::instance();
     foreach(KoID id, registry->listKeys()) {
         ToolHelper *t = new ToolHelper(registry->get(id));
-kDebug(30004) << "   th" << t->name() << endl;
+kDebug(30004) << "   th: " << t->name() << endl;
         connect(t, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
         m_tools.append(t);
     }

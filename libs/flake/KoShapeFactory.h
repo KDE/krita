@@ -30,6 +30,8 @@
 
 class KoShape;
 class KoProperties;
+class KoShapeConfigFactory;
+
 
 /**
  * Contains a KoProperties object that describes the settings of a
@@ -102,6 +104,9 @@ public:
     virtual KoShape * createShape(const KoProperties * params) const = 0;
     virtual QWidget * optionWidget() = 0;
 
+    void setOptionPanels(QList<KoShapeConfigFactory*> &panelFactories);
+    const QList<KoShapeConfigFactory*> &panelFactories();
+
     /**
      * Create a KoID for the shape this factory creates.
      */
@@ -155,6 +160,7 @@ protected:
 private:
 
     QList<KoShapeTemplate> m_templates;
+    QList<KoShapeConfigFactory*> m_configPanels;
     QString m_tooltip, m_iconName;
     const QString m_id, m_name;
 };

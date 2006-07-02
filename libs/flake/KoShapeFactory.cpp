@@ -59,4 +59,12 @@ const QString &KoShapeFactory::shapeId() const {
     return m_id;
 }
 
+void KoShapeFactory::setOptionPanels(QList<KoShapeConfigFactory*> &panelFactories) {
+    m_configPanels = panelFactories;
+}
+
+const QList<KoShapeConfigFactory*> &KoShapeFactory::panelFactories() {
+    return m_configPanels;
+}
+
 #include "KoShapeFactory.moc"

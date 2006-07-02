@@ -23,8 +23,13 @@
 #include "KoShapeRegistry.h"
 #include "KoCommand.h"
 #include "KoCanvasBase.h"
+#include "KoShapeConfigWidgetBase.h"
+#include "KoShapeConfigFactory.h"
 
-#include "KoProperties.h"
+#include <KoProperties.h>
+
+#include <kpagedialog.h>
+#include <klocale.h>
 
 KoCreateShapeStrategy::KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoShapeRubberSelectStrategy(tool, canvas, clicked)
@@ -54,6 +59,40 @@ KCommand* KoCreateShapeStrategy::createCommand() {
         newSize.setHeight(100);
     }
     shape->resize(newSize);
+
+    // show config dialog.
+    KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
+    dialog->setCaption(i18n("%1 Options", factory->name()));
+    QWidget *shapeOptions = factory->optionWidget();
+    int pageCount = 0;
+    if(shapeOptions) {
+        dialog->addPage(shapeOptions, i18n("%1 Options", factory->name()));
+        pageCount ++;
+    }
+    const QList<KoShapeConfigFactory*> panels = factory->panelFactories();
+    QList<KoShapeConfigWidgetBase*> widgets;
+    foreach (KoShapeConfigFactory *panelFactory, panels) {
+        if(! panelFactory->showForShapeId(parent->shapeId()))
+            continue;
+        KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(m_canvas, shape);
+        if(widget == 0)
+            continue;
+        widgets.append(widget);
+        dialog->addPage(widget, panelFactory->name());
+        pageCount ++;
+    }
+
+    if(pageCount > 0) {
+        if(pageCount > 1)
+            dialog->setFaceType(KPageDialog::Tabbed);
+        if(dialog->exec() != KPageDialog::Accepted)
+            return 0;
+        foreach(KoShapeConfigWidgetBase *widget, widgets) {
+            widget->save();
+            // TODO action;
+        }
+    }
+
     Q_ASSERT(m_tool->controller() /*controller was set on parent tool*/);
     KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_tool->controller(), shape);
     cmd->execute();

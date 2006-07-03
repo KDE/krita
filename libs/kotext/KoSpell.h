@@ -25,7 +25,7 @@
 
 
 class Loader;
-#include <kspell2/backgroundchecker.h>
+#include <sonnet/backgroundchecker.h>
 #include <koffice_export.h>
 class KoTextIterator;
 class KoTextParag;

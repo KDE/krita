@@ -35,7 +35,7 @@ KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString
     setObjectName( name );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
 
     setCaption( i18n("Edit Comment") );
     authorName = _authorName;

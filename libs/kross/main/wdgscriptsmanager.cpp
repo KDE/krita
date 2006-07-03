@@ -243,7 +243,7 @@ void WdgScriptsManager::slotLoadScript()
 void WdgScriptsManager::slotInstallScript()
 {
     KFileDialog* filedialog = new KFileDialog(
-        "", // startdir
+        KUrl(""), // startdir
         "*.tar.gz *.tgz *.bz2", // filter
         this, // widget
         this // parent

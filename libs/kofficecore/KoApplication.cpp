@@ -19,7 +19,7 @@
 
 #include "KoApplication.h"
 #include "KoApplicationAdaptor.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 #include <config.h>
 #include <QFile>
 #include <QRegExp>

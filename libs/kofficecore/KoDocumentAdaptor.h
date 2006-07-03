@@ -24,7 +24,7 @@
 #include <QMap>
 
 #include <QtCore/QObject>
-#include <dbus/qdbus.h>
+#include <QtDBus/qdbusabstractadaptor.h>
 #include <q3valuelist.h>
 #include <koffice_export.h>
 class KoDocument;

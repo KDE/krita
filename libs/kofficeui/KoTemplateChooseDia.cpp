@@ -45,6 +45,8 @@
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kaboutdata.h>
+#include <kpagewidgetmodel.h>
+#include <kicon.h>
 
 #include <QApplication>
 #include <QLayout>
@@ -427,7 +429,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 
     QFrame * frame = new QFrame();
     KPageWidgetItem * item = d->m_jwidget->addPage ( frame, group->name() );
-    item->setIcon( group->first()->loadPicture(d->m_instance) );
+    item->setIcon( KIcon(group->first()->loadPicture(d->m_instance)) );
     item->setHeader( group->name() );
 
 	QGridLayout* layout = new QGridLayout(frame);

@@ -37,7 +37,7 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     setCaption( i18n("Change Case") );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     KVBox *page = new KVBox();
     setMainWidget(page);
 

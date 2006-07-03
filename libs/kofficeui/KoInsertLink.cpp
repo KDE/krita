@@ -33,6 +33,8 @@
 #include "KoInsertLink.h"
 #include <kdesktopfile.h>
 #include <krecentdocument.h>
+#include <kpagewidgetmodel.h>
+#include <kicon.h>
 
 using namespace KOfficePrivate;
 
@@ -49,19 +51,19 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
 
   KVBox *page = new KVBox();
   p1=addPage(page, i18n("Internet") );
-  p1->setIcon( BarIcon("html",K3Icon::SizeMedium) );
+  p1->setIcon( KIcon(BarIcon("html",K3Icon::SizeMedium)) );
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
 
   page = new KVBox(); 
   p2=addPage(page, i18n("Mail & News") );
-  p2->setIcon( BarIcon("mail_generic",K3Icon::SizeMedium) );
+  p2->setIcon( KIcon(BarIcon("mail_generic",K3Icon::SizeMedium)) );
   mailLink = new  mailLinkPage(page );
   connect(mailLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
   page = new KVBox();
   p3=addPage(page, i18n("File"));
-  p3->setIcon( BarIcon("filenew",K3Icon::SizeMedium) );
+  p3->setIcon( KIcon(BarIcon("filenew",K3Icon::SizeMedium)) );
   fileLink = new  fileLinkPage(page );
   connect(fileLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
@@ -69,7 +71,7 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
   {
       page = new KVBox();
       p4=addPage(page, i18n("Bookmark"));
-      p4->setIcon( BarIcon("bookmark",K3Icon::SizeMedium) );
+      p4->setIcon( KIcon(BarIcon("bookmark",K3Icon::SizeMedium)) );
       bookmarkLink = new  bookmarkLinkPage(page );
       connect(bookmarkLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
   }

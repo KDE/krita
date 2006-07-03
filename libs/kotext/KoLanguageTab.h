@@ -22,7 +22,7 @@
 
 #include <kolanguagetabbase.h>
 
-#include <kspell2/loader.h>
+#include <sonnet/loader.h>
 
 class KoLanguageTab : public KoLanguageTabBase
 {

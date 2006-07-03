@@ -12,7 +12,7 @@ find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
-include (FindQtDBus)
+#include (FindQtDBus)
 macro_optional_find_package(OpenEXR)
 macro_optional_find_package(Exif)
 macro_optional_find_package(PythonLibs)
@@ -23,7 +23,7 @@ if (APPLE)
 endif (APPLE)
 
 
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} -DHAVE_CONFIG_H=1)
 link_directories(${KDE4_LIB_DIR})
 
 

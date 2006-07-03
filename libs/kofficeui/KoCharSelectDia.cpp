@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <kcharselect.h>
 #include <kdebug.h>
+#include <kstdguiitem.h>
+
 /******************************************************************/
 /* class KoCharSelectDia                                           */
 /******************************************************************/

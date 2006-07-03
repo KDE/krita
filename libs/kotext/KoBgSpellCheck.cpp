@@ -30,11 +30,11 @@
 #include "KoTextObject.h"
 #include "KoTextDocument.h"
 
-#include <kspell2/backgroundchecker.h>
-#include <kspell2/loader.h>
-#include <kspell2/dictionary.h>
-#include <kspell2/settings.h>
-#include <kspell2/filter.h>
+#include <sonnet/backgroundchecker.h>
+#include <sonnet/loader.h>
+#include <sonnet/speller.h>
+#include <sonnet/settings.h>
+#include <sonnet/filter.h>
 using namespace KSpell2;
 
 #include <klocale.h>

@@ -1741,7 +1741,7 @@ void KisView::saveLayerAsImage()
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
     QString mimelist = listMimeFilter.join(" ");
 
-    KFileDialog fd (QString::null, mimelist, this);
+    KFileDialog fd (KUrl(QString::null), mimelist, this);
     fd.setObjectName("Export Layer");
     fd.setCaption(i18n("Export Layer"));
     fd.setMimeFilter(listMimeFilter);
@@ -1788,7 +1788,8 @@ qint32 KisView::importImage(const KUrl& urlArg)
 
     if (urlArg.isEmpty()) {
         QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
-        urls = KFileDialog::getOpenURLs(QString::null, mimelist, 0, i18n("Import Image"));
+        urls = KFileDialog::getOpenURLs(KUrl(QString::null), mimelist, 
+0, i18n("Import Image"));
     } else {
         urls.push_back(urlArg);
     }
@@ -3819,7 +3820,7 @@ void KisView::createDockers()
     connect(m_hsvwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setFgColor(const QColor &)));
     connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setBgColor(const QColor &)));
-    m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX, 0, PALETTE_DOCKER, true);
+    //m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX, 0, PALETTE_DOCKER, true);
 
     m_rgbwidget = new KoRGBWidget(this, "rgb");
     m_rgbwidget->setWindowTitle(i18n("RGB"));
@@ -3827,7 +3828,7 @@ void KisView::createDockers()
     connect(m_rgbwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setFgColor(const QColor &)));
     connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setBgColor(const QColor &)));
-    m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
+    //m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
 
     m_graywidget = new KoGrayWidget(this, "gray");
     m_graywidget->setWindowTitle(i18n("Gray"));
@@ -3835,7 +3836,7 @@ void KisView::createDockers()
     connect(m_graywidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_graywidget, SLOT(setFgColor(const QColor &)));
     connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_graywidget, SLOT(setBgColor(const QColor &)));
-    m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
+    //m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
 
     //make sure the color chooser get right default values
     emit sigFGQColorChanged(m_fg.toQColor());
@@ -3855,7 +3856,7 @@ void KisView::createDockers()
         m_palettewidget->slotAddPalette(resource);
     }
     connect(m_palettewidget, SIGNAL(colorSelected(const KoColor &)), this, SLOT(slotSetFGColor(const KoColor &)));
-    m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);
+    //m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);
 }
 
 QPoint KisView::applyViewTransformations(const QPoint& p) const {

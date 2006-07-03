@@ -23,7 +23,7 @@
 #include "KoDom.h"
 #include "KoDocument_p.h"
 #include "KoDocumentAdaptor.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 #include "KoDocumentChild.h"
 #include "KoView.h"
 #include "KoMainWindow.h"

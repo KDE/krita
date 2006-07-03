@@ -42,12 +42,13 @@ KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegis
     m_csFactoryRegistry = csFactoryRegistry;
 
     QGridLayout *mGrid = new QGridLayout;
+    QGridLayout *mGrowGrid = new QGridLayout;
 
     m_xycolorselector = new KoXYColorSelector(csFactoryRegistry->getRGB8(), this);
-    m_xycolorselector->setFixedSize(120, 120);
+    m_xycolorselector->setFixedSize(137, 137);
 
     m_colorSlider = new KoColorSlider(csFactoryRegistry->getRGB8(), Qt::Vertical, this);
-    m_colorSlider->setFixedSize(25, 100);
+    m_colorSlider->setFixedSize(25, 118);
 
     m_colorpatch = new KoColorPatch(this);
     m_colorpatch->setFixedSize(18, 18);
@@ -68,6 +69,14 @@ KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegis
     m_GLabel->setFixedSize(10, 18);
     m_BLabel = new QLabel("B:", this);
     m_BLabel->setFixedSize(10, 18);
+    m_CLabel = new QLabel("C:", this);
+    m_CLabel->setFixedSize(10, 18);
+    m_MLabel = new QLabel("M:", this);
+    m_MLabel->setFixedSize(10, 18);
+    m_YLabel = new QLabel("Y:", this);
+    m_YLabel->setFixedSize(10, 18);
+    m_KLabel = new QLabel("K:", this);
+    m_KLabel->setFixedSize(10, 18);
     m_LLabel = new QLabel("L:", this);
     m_LLabel->setFixedSize(10, 18);
     m_aLabel = new QLabel("a:", this);
@@ -141,6 +150,38 @@ KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegis
     m_BIn->setFocusPolicy( Qt::ClickFocus );
     m_BIn->setToolTip( i18n( "Blue" ) );
 
+    m_CIn = new QSpinBox(this);
+    m_CIn->setMinimum(0);
+    m_CIn->setMaximum(255);
+    m_CIn->setSingleStep(1);
+    m_CIn->setFixedSize(40, 18);
+    m_CIn->setFocusPolicy( Qt::ClickFocus );
+    m_CIn->setToolTip( i18n( "Cyan" ) );
+
+    m_MIn = new QSpinBox(this);
+    m_MIn->setMinimum(0);
+    m_MIn->setMaximum(255);
+    m_MIn->setSingleStep(1);
+    m_MIn->setFixedSize(40, 18);
+    m_MIn->setFocusPolicy( Qt::ClickFocus );
+    m_MIn->setToolTip( i18n( "Magenta" ) );
+
+    m_YIn = new QSpinBox(this);
+    m_YIn->setMinimum(0);
+    m_YIn->setMaximum(255);
+    m_YIn->setSingleStep(1);
+    m_YIn->setFixedSize(40, 18);
+    m_YIn->setFocusPolicy( Qt::ClickFocus );
+    m_YIn->setToolTip( i18n( "Yellow" ) );
+
+    m_KIn = new QSpinBox(this);
+    m_KIn->setMinimum(0);
+    m_KIn->setMaximum(255);
+    m_KIn->setSingleStep(1);
+    m_KIn->setFixedSize(40, 18);
+    m_KIn->setFocusPolicy( Qt::ClickFocus );
+    m_KIn->setToolTip( i18n( "Black" ) );
+
     m_LIn = new QSpinBox(this);
     m_LIn->setMinimum(0);
     m_LIn->setMaximum(100);
@@ -165,47 +206,55 @@ KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegis
     m_bIn->setFocusPolicy( Qt::ClickFocus );
     m_bIn->setToolTip( i18n( "Blue to yellow" ) );
 
-    mGrid->setSpacing(0);
+    mGrid->setSpacing(1);
     mGrid->setMargin(0);
 
     mGrid->addWidget(m_xycolorselector, 0, 0, -1, 1, Qt::AlignTop);
 
-    mGrid->addWidget(m_colorpatch, 0, 1, Qt::AlignCenter);
+    mGrid->addWidget(m_colorpatch, 0, 1, 1, 4, Qt::AlignCenter);
 
     mGrid->addWidget(m_colorSlider, 1, 1, -1, 1, Qt::AlignTop);
 
-    mGrid->addWidget(m_HRB, 0, 2, Qt::AlignCenter);
-    mGrid->addWidget(m_SRB, 1, 2, Qt::AlignCenter);
-    mGrid->addWidget(m_VRB, 2, 2, Qt::AlignCenter);
-    mGrid->addWidget(m_RRB, 4, 2, Qt::AlignCenter);
-    mGrid->addWidget(m_GRB, 5, 2, Qt::AlignCenter);
-    mGrid->addWidget(m_BRB, 6, 2, Qt::AlignCenter);
-    mGrid->addWidget(m_LRB, 0, 6, Qt::AlignCenter);
-    mGrid->addWidget(m_aRB, 1, 6, Qt::AlignCenter);
-    mGrid->addWidget(m_bRB, 2, 6, Qt::AlignCenter);
+    mGrid->addWidget(m_HRB, 1, 2, Qt::AlignCenter);
+    mGrid->addWidget(m_SRB, 2, 2, Qt::AlignCenter);
+    mGrid->addWidget(m_VRB, 3, 2, Qt::AlignCenter);
+    mGrid->addWidget(m_RRB, 5, 2, Qt::AlignCenter);
+    mGrid->addWidget(m_GRB, 6, 2, Qt::AlignCenter);
+    mGrid->addWidget(m_BRB, 7, 2, Qt::AlignCenter);
+    mGrid->addWidget(m_LRB, 5, 6, Qt::AlignCenter);
+    mGrid->addWidget(m_aRB, 6, 6, Qt::AlignCenter);
+    mGrid->addWidget(m_bRB, 7, 6, Qt::AlignCenter);
 
-    mGrid->addWidget(m_HLabel, 0, 3, Qt::AlignTop);
-    mGrid->addWidget(m_SLabel, 1, 3, Qt::AlignTop);
-    mGrid->addWidget(m_VLabel, 2, 3, Qt::AlignTop);
-    mGrid->addWidget(m_RLabel, 4, 3, Qt::AlignTop);
-    mGrid->addWidget(m_GLabel, 5, 3, Qt::AlignTop);
-    mGrid->addWidget(m_BLabel, 6, 3, Qt::AlignTop);
-    mGrid->addWidget(m_LLabel, 0, 7, Qt::AlignTop);
-    mGrid->addWidget(m_aLabel, 1, 7, Qt::AlignTop);
-    mGrid->addWidget(m_bLabel, 2, 7, Qt::AlignTop);
+    mGrid->addWidget(m_HLabel, 1, 3, Qt::AlignTop);
+    mGrid->addWidget(m_SLabel, 2, 3, Qt::AlignTop);
+    mGrid->addWidget(m_VLabel, 3, 3, Qt::AlignTop);
+    mGrid->addWidget(m_RLabel, 5, 3, Qt::AlignTop);
+    mGrid->addWidget(m_GLabel, 6, 3, Qt::AlignTop);
+    mGrid->addWidget(m_BLabel, 7, 3, Qt::AlignTop);
+    mGrid->addWidget(m_CLabel, 0, 7, Qt::AlignTop);
+    mGrid->addWidget(m_MLabel, 1, 7, Qt::AlignTop);
+    mGrid->addWidget(m_YLabel, 2, 7, Qt::AlignTop);
+    mGrid->addWidget(m_KLabel, 3, 7, Qt::AlignTop);
+    mGrid->addWidget(m_LLabel, 5, 7, Qt::AlignTop);
+    mGrid->addWidget(m_aLabel, 6, 7, Qt::AlignTop);
+    mGrid->addWidget(m_bLabel, 7, 7, Qt::AlignTop);
 
-    mGrid->addWidget(m_HIn, 0, 4, Qt::AlignTop);
-    mGrid->addWidget(m_SIn, 1, 4, Qt::AlignTop);
-    mGrid->addWidget(m_VIn, 2, 4, Qt::AlignTop);
-    mGrid->addWidget(m_RIn, 4, 4, Qt::AlignTop);
-    mGrid->addWidget(m_GIn, 5, 4, Qt::AlignTop);
-    mGrid->addWidget(m_BIn, 6, 4, Qt::AlignTop);
-    mGrid->addWidget(m_LIn, 0, 8, Qt::AlignTop);
-    mGrid->addWidget(m_aIn, 1, 8, Qt::AlignTop);
-    mGrid->addWidget(m_bIn, 2, 8, Qt::AlignTop);
+    mGrid->addWidget(m_HIn, 1, 4, Qt::AlignTop);
+    mGrid->addWidget(m_SIn, 2, 4, Qt::AlignTop);
+    mGrid->addWidget(m_VIn, 3, 4, Qt::AlignTop);
+    mGrid->addWidget(m_RIn, 5, 4, Qt::AlignTop);
+    mGrid->addWidget(m_GIn, 6, 4, Qt::AlignTop);
+    mGrid->addWidget(m_BIn, 7, 4, Qt::AlignTop);
+    mGrid->addWidget(m_CIn, 0, 8, Qt::AlignTop);
+    mGrid->addWidget(m_MIn, 1, 8, Qt::AlignTop);
+    mGrid->addWidget(m_YIn, 2, 8, Qt::AlignTop);
+    mGrid->addWidget(m_KIn, 3, 8, Qt::AlignTop);
+    mGrid->addWidget(m_LIn, 5, 8, Qt::AlignTop);
+    mGrid->addWidget(m_aIn, 6, 8, Qt::AlignTop);
+    mGrid->addWidget(m_bIn, 7, 8, Qt::AlignTop);
 
-    mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 3, 5 );
-    mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 7, 9 );
+    mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 4, 5 );
+    //mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 8, 9 );
 
     /* connect spin box */
     connect(m_HIn, SIGNAL(valueChanged(int)), this, SLOT(slotHChanged(int)));
@@ -227,8 +276,13 @@ KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegis
     connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(slotSliderChanged(int)));
 
     m_RRB->setChecked(true);
-    
-    setLayout(mGrid);
+
+    mGrowGrid->addLayout(mGrid, 0, 0);
+    mGrowGrid->setSpacing(0);
+    mGrowGrid->setMargin(0);
+    mGrowGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 1, 1 );
+
+    setLayout(mGrowGrid);
 }
 
 void KoUniColorChooser::slotHChanged(int )
@@ -249,7 +303,7 @@ void KoUniColorChooser::slotRGBChanged()
     data[2] = m_RIn->value();
     data[1] = m_GIn->value();
     data[0] = m_BIn->value();
-    m_currentColor.setColor(data, m_csFactoryRegistry->getRGB8());
+    m_currentColor.setColor(data, rgbColorSpace());
     updateValues();
     updateSelectorsCurrent();
     announceColor();
@@ -273,19 +327,19 @@ void KoUniColorChooser::slotSliderChanged(int v)
             data[2] = v;
             data[1] = m_GIn->value();
             data[0] = m_BIn->value();
-            m_currentColor.setColor(data, m_csFactoryRegistry->getRGB8());
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_G:
             data[2] = m_RIn->value();
             data[1] = v;
             data[0] = m_BIn->value();
-            m_currentColor.setColor(data, m_csFactoryRegistry->getRGB8());
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_B:
             data[2] = m_RIn->value();
             data[1] = m_GIn->value();
             data[0] = v;
-            m_currentColor.setColor(data, m_csFactoryRegistry->getRGB8());
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_L:
             //slotRSelected(true);
@@ -308,40 +362,34 @@ void KoUniColorChooser::slotXYChanged(int u, int v)
     switch(m_activeChannel)
     {
         case CHANNEL_H:
-            //slotRSelected(true);
             break;
         case CHANNEL_S:
-            //slotGSelected(true);
             break;
         case CHANNEL_V:
-            //slotBSelected(true);
             break;
         case CHANNEL_R:
             data[2] = m_RIn->value();
             data[1] = v;
             data[0] = u;
-            m_currentColor.setColor(data, m_csFactoryRegistry->getRGB8());
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_G:
             data[2] = v;
             data[1] = m_GIn->value();
             data[0] = u;
-            m_currentColor.setColor(data, m_csFactoryRegistry->getRGB8());
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_B:
             data[2] = u;
             data[1] = v;
             data[0] = m_BIn->value();
-            m_currentColor.setColor(data, m_csFactoryRegistry->getRGB8());
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_L:
-            //slotRSelected(true);
             break;
         case CHANNEL_a:
-            //slotGSelected(true);
             break;
         case CHANNEL_b:
-            //slotBSelected(true);
             break;
     }
     updateValues();
@@ -385,25 +433,25 @@ void KoUniColorChooser::updateSelectorsR()
     data[1] = 255;
     data[0] = 0;
     data[3] = 255;
-    KoColor topleft(data, m_csFactoryRegistry->getRGB8());
+    KoColor topleft(data, rgbColorSpace());
     data[1] = 255;
     data[0] = 255;
-    KoColor topright(data, m_csFactoryRegistry->getRGB8());
+    KoColor topright(data, rgbColorSpace());
     data[1] = 0;
     data[0] = 0;
-    KoColor bottomleft(data, m_csFactoryRegistry->getRGB8());
+    KoColor bottomleft(data, rgbColorSpace());
     data[1] = 0;
     data[0] = 255;
-    KoColor bottomright(data, m_csFactoryRegistry->getRGB8());
+    KoColor bottomright(data, rgbColorSpace());
     
     m_xycolorselector->setColors(topleft,topright,bottomleft,bottomright);
 
     data[2] = 0;
     data[1] = m_GIn->value();
     data[0] = m_BIn->value();
-    KoColor mincolor(data,m_csFactoryRegistry->getRGB8());
+    KoColor mincolor(data, rgbColorSpace());
     data[2] = 255;
-    KoColor maxcolor(data,m_csFactoryRegistry->getRGB8());
+    KoColor maxcolor(data, rgbColorSpace());
 
     m_colorSlider->setColors(mincolor, maxcolor);
 
@@ -424,25 +472,25 @@ void KoUniColorChooser::updateSelectorsG()
     data[1] = m_GIn->value();
     data[0] = 0;
     data[3] = 255;
-    KoColor topleft(data,m_csFactoryRegistry->getRGB8());
+    KoColor topleft(data, rgbColorSpace());
     data[2] = 255;
     data[0] = 255;
-    KoColor topright(data,m_csFactoryRegistry->getRGB8());
+    KoColor topright(data, rgbColorSpace());
     data[2] = 0;
     data[0] = 0;
-    KoColor bottomleft(data,m_csFactoryRegistry->getRGB8());
+    KoColor bottomleft(data, rgbColorSpace());
     data[2] = 0;
     data[0] = 255;
-    KoColor bottomright(data,m_csFactoryRegistry->getRGB8());
+    KoColor bottomright(data, rgbColorSpace());
 
     m_xycolorselector->setColors(topleft,topright,bottomleft,bottomright);
 
     data[2] = m_RIn->value();
     data[1] = 0;
     data[0] = m_BIn->value();
-    KoColor mincolor(data,m_csFactoryRegistry->getRGB8());
+    KoColor mincolor(data, rgbColorSpace());
     data[1] = 255;
-    KoColor maxcolor(data,m_csFactoryRegistry->getRGB8());
+    KoColor maxcolor(data, rgbColorSpace());
 
     m_colorSlider->setColors(mincolor, maxcolor);
 
@@ -463,25 +511,25 @@ void KoUniColorChooser::updateSelectorsB()
     data[1] = 255;
     data[0] = m_BIn->value();
     data[3] = 255;
-    KoColor topleft(data,m_csFactoryRegistry->getRGB8());
+    KoColor topleft(data, rgbColorSpace());
     data[2] = 255;
     data[1] = 255;
-    KoColor topright(data,m_csFactoryRegistry->getRGB8());
+    KoColor topright(data, rgbColorSpace());
     data[2] = 0;
     data[1] = 0;
-    KoColor bottomleft(data,m_csFactoryRegistry->getRGB8());
+    KoColor bottomleft(data, rgbColorSpace());
     data[2] = 255;
     data[1] = 0;
-    KoColor bottomright(data,m_csFactoryRegistry->getRGB8());
+    KoColor bottomright(data, rgbColorSpace());
     
     m_xycolorselector->setColors(topleft,topright,bottomleft,bottomright);
 
     data[2] = m_RIn->value();
     data[1] = m_GIn->value();
     data[0] = 0;
-    KoColor mincolor(data,m_csFactoryRegistry->getRGB8());
+    KoColor mincolor(data, rgbColorSpace());
     data[0] = 255;
-    KoColor maxcolor(data,m_csFactoryRegistry->getRGB8());
+    KoColor maxcolor(data, rgbColorSpace());
 
     m_colorSlider->setColors(mincolor, maxcolor);
 
@@ -545,6 +593,10 @@ void KoUniColorChooser::updateValues()
     m_RIn->blockSignals(true);
     m_GIn->blockSignals(true);
     m_BIn->blockSignals(true);
+    m_CIn->blockSignals(true);
+    m_MIn->blockSignals(true);
+    m_YIn->blockSignals(true);
+    m_KIn->blockSignals(true);
     m_LIn->blockSignals(true);
     m_aIn->blockSignals(true);
     m_bIn->blockSignals(true);
@@ -561,24 +613,52 @@ void KoUniColorChooser::updateValues()
     m_VIn->setValue(v);
 */
     tmpColor = m_currentColor;
-    tmpColor.convertTo(m_csFactoryRegistry->getRGB8());
+    tmpColor.convertTo(rgbColorSpace());
     m_RIn->setValue(tmpColor.data()[2]);
     m_GIn->setValue(tmpColor.data()[1]);
     m_BIn->setValue(tmpColor.data()[0]);
 
-/*    m_LIn->setValue(h);
-    m_aIn->setValue(s);
-    m_bIn->setValue(v);
-*/
+    tmpColor = m_currentColor;
+    tmpColor.convertTo(labColorSpace());
+    m_LIn->setValue(((quint16 *)tmpColor.data())[0]/(256*256/100));
+    m_aIn->setValue(((quint16 *)tmpColor.data())[1]/256);
+    m_bIn->setValue(((quint16 *)tmpColor.data())[2]/256);
+
+    tmpColor = m_currentColor;
+    tmpColor.convertTo(cmykColorSpace());
+    m_CIn->setValue((tmpColor.data()[0]*100)/255);
+    m_MIn->setValue((tmpColor.data()[1]*100/255));
+    m_YIn->setValue((tmpColor.data()[2]*100)/255);
+    m_KIn->setValue((tmpColor.data()[3]*100)/255);
+
     m_HIn->blockSignals(false);
     m_SIn->blockSignals(false);
     m_VIn->blockSignals(false);
     m_RIn->blockSignals(false);
     m_GIn->blockSignals(false);
     m_BIn->blockSignals(false);
+    m_CIn->blockSignals(false);
+    m_MIn->blockSignals(false);
+    m_YIn->blockSignals(false);
+    m_KIn->blockSignals(false);
     m_LIn->blockSignals(false);
     m_aIn->blockSignals(false);
     m_bIn->blockSignals(false);
+}
+
+KoColorSpace *KoUniColorChooser::rgbColorSpace()
+{
+    return m_csFactoryRegistry->getRGB8();
+}
+
+KoColorSpace *KoUniColorChooser::labColorSpace()
+{
+    return m_csFactoryRegistry->getColorSpace(KoID("LABA",0),"");
+}
+
+KoColorSpace *KoUniColorChooser::cmykColorSpace()
+{
+    return m_csFactoryRegistry->getColorSpace(KoID("CMYK",0),"");
 }
 
 #include "KoUniColorChooser.moc"

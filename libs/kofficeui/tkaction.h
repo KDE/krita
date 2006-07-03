@@ -20,7 +20,7 @@
 #ifndef TKACTION_H
 #define TKACTION_H
 
-#include <QAction>
+#include <QWidgetAction>
 
 #include <kaction.h>
 #include <QStringList>
@@ -36,7 +36,7 @@ class TKComboBox;
 
 class QToolBar;
 
-class KOFFICEUI_EXPORT TKAction : public KAction, QActionWidgetFactory
+class KOFFICEUI_EXPORT TKAction : public KAction
 { Q_OBJECT
 public:
   TKAction(KActionCollection* parent, const char* name);

@@ -42,7 +42,7 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
     setObjectName( name );
     setButtons( Ok|Cancel|User1 );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     setButtonGuiItem( User1, KGuiItem( i18n( "&Reset" ), "undo" )  );
 
     KVBox *page = new KVBox();

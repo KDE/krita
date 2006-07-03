@@ -168,7 +168,7 @@ PixmapEdit::selectPixmapFileName()
 		this, 0, caption);
 #else
 	KUrl url( KFileDialog::getImageOpenURL(
-		":lastVisitedImagePath", this, caption) );
+		KUrl(":lastVisitedImagePath"), this, caption) );
 	QString fileName = url.isLocalFile() ? url.path() : url.prettyUrl();
 
 	//! @todo download the file if remote, then set fileName properly

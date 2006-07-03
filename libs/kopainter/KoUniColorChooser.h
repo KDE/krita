@@ -72,6 +72,10 @@ private:
     ChannelType m_activeChannel;
     KoColor m_currentColor;
 
+    KoColorSpace *rgbColorSpace();
+    KoColorSpace *labColorSpace();
+    KoColorSpace *cmykColorSpace();
+
     void announceColor();
     void updateValues();
     void updateSelectorsR();
@@ -88,6 +92,10 @@ private:
     QLabel *m_RLabel;
     QLabel *m_GLabel;
     QLabel *m_BLabel;
+    QLabel *m_CLabel;
+    QLabel *m_MLabel;
+    QLabel *m_YLabel;
+    QLabel *m_KLabel;
     QLabel *m_LLabel;
     QLabel *m_aLabel;
     QLabel *m_bLabel;
@@ -97,6 +105,10 @@ private:
     QSpinBox *m_RIn;
     QSpinBox *m_GIn;
     QSpinBox *m_BIn;
+    QSpinBox *m_CIn;
+    QSpinBox *m_MIn;
+    QSpinBox *m_YIn;
+    QSpinBox *m_KIn;
     QSpinBox *m_LIn;
     QSpinBox *m_aIn;
     QSpinBox *m_bIn;

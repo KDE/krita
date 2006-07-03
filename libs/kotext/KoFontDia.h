@@ -35,7 +35,7 @@
 
 #include "KoFontDiaPreview.h"
 
-#include <kspell2/loader.h>
+#include <sonnet/loader.h>
 
 class QComboBox;
 

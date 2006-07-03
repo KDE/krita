@@ -110,7 +110,7 @@ SymbolCombo::selectChar()
     dialog.setButtons( KDialog::Ok|KDialog::Cancel );
     dialog.setDefaultButton( KDialog::Ok );
     dialog.setModal( false );
-    dialog.enableButtonSeparator( true );
+    dialog.showButtonSeparator( true );
 
 	KCharSelect *select = new KCharSelect(&dialog, "select_char");
 	dialog.setMainWidget(select);

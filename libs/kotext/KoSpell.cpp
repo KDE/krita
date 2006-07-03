@@ -26,8 +26,8 @@
 #include "KoTextParag.h"
 #include "KoTextIterator.h"
 
-#include <kspell2/loader.h>
-#include <kspell2/filter.h>
+#include <sonnet/loader.h>
+#include <sonnet/filter.h>
 
 #include <kglobal.h>
 #include <klocale.h>

@@ -24,7 +24,7 @@
 
 #include <QMap>
 #include <QObject>
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 class QString;
 class QStringList;

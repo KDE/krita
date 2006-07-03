@@ -19,8 +19,6 @@ set(kritacolor_LIB_SRCS
 
 kde4_automoc(${kritacolor_LIB_SRCS})
 
-kde4_add_dcop_skels(kritacolor_LIB_SRCS )
-
 kde4_add_library(kritacolor SHARED ${kritacolor_LIB_SRCS})
 
 target_link_libraries(kritacolor ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} pigment kofficecore)

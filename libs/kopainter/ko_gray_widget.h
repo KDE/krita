@@ -61,7 +61,7 @@ protected slots:
 
     void slotFGColorSelected(const QColor& c);
     void slotBGColorSelected(const QColor& c);
-    void currentChanged(KDualColorButton::DualColor);
+    void currentChanged(KDualColorButton::Selection);
 
 private:
 

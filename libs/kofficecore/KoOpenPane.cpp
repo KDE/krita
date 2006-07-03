@@ -162,7 +162,7 @@ void KoOpenPane::showOpenFileDialog()
   const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
       KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
 
-  KUrl url = KFileDialog::getOpenURL(":OpenDialog", mimeFilter.join(" "), this);
+  KUrl url = KFileDialog::getOpenURL(KUrl(":OpenDialog"),mimeFilter.join(" "), this);
 
   if(!url.isEmpty()) {
     KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");

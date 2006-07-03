@@ -37,7 +37,7 @@ KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidge
     setObjectName( name );
     setButtons( Ok|Cancel|User1 );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
 
     setCaption( i18n("Import Styles") );
     m_currentCollection = currentCollection;

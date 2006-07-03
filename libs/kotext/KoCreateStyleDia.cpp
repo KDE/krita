@@ -32,7 +32,7 @@ KoCreateStyleDia::KoCreateStyleDia( const QStringList & _list, QWidget *parent, 
     setObjectName( name );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     styleList=_list;
     setCaption( i18n("Create New Style") );
     KVBox *page = new KVBox();

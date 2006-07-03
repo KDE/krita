@@ -132,7 +132,7 @@ StringListEdit::showEditor()
     dialog.setButtons( KDialog::Ok|KDialog::Cancel );
     dialog.setDefaultButton( KDialog::Ok );
     dialog.setModal( false );
-    dialog.enableButtonSeparator( true );
+    dialog.showButtonSeparator( true );
 	KEditListBox *edit = new KEditListBox(i18n("Contents of %1", property()->caption()), &dialog, "editlist");
 	dialog.setMainWidget(edit);
 	edit->insertStringList(m_list);

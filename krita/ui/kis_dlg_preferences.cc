@@ -47,6 +47,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kurlrequester.h>
+#include <kpagewidgetmodel.h>
 
 #include "squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -771,19 +772,21 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     setCaption( i18n("Preferences") );
     setButtons( Ok | Cancel | Help | Default );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     setFaceType( KPageDialog::List );
     KVBox *vbox = new KVBox();
     KPageWidgetItem *page = new KPageWidgetItem( vbox, i18n( "General"));
     page->setHeader( i18n( "General") );
-    page->setIcon(  BarIcon( "misc", K3Icon::SizeMedium ) );
+    page->setIcon(  KIcon(BarIcon( "misc", K3Icon::SizeMedium )) );
     addPage( page );
     m_general = new GeneralTab( vbox );
 #ifdef HAVE_OPENGL
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Display" ));
     page->setHeader( i18n( "Display" ) );
-    page->setIcon(  BarIcon( "kscreensaver", K3Icon::SizeMedium ) );
+    page->setIcon(  KIcon(BarIcon( "kscreensaver", K3Icon::SizeMedium 
+)) 
+);
     addPage( page );
 
     m_displaySettings = new DisplaySettingsTab( vbox );
@@ -791,21 +794,21 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Color Management"));
     page->setHeader( i18n( "Color") );
-    page->setIcon(  BarIcon( "colorize", K3Icon::SizeMedium ));
+    page->setIcon( KIcon( BarIcon( "colorize", K3Icon::SizeMedium )));
     addPage( page );
     m_colorSettings = new ColorSettingsTab( vbox );
 
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Performance"));
     page->setHeader( i18n( "Performance") );
-    page->setIcon(  BarIcon( "fork", K3Icon::SizeMedium ));
+    page->setIcon( KIcon( BarIcon( "fork", K3Icon::SizeMedium )));
     addPage( page );
 
     m_performanceSettings = new PerformanceTab ( vbox );
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Tablet" ));
     page->setHeader( i18n( "Tablet" ));
-    page->setIcon(  BarIcon( "tablet", K3Icon::SizeMedium ));
+    page->setIcon( KIcon( BarIcon( "tablet", K3Icon::SizeMedium )));
     addPage( page );
 
     m_tabletSettings = new TabletSettingsTab( vbox );
@@ -813,7 +816,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name )
     vbox = new KVBox();
     page = new KPageWidgetItem( vbox, i18n( "Grid" ));
     page->setHeader( i18n( "Grid" ));
-    page->setIcon(  BarIcon( "grid", K3Icon::SizeMedium ));
+    page->setIcon( KIcon( BarIcon( "grid", K3Icon::SizeMedium )));
     addPage( page );
 
     m_gridSettings = new GridSettingsTab( vbox );

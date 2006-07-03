@@ -51,7 +51,6 @@ TKAction::TKAction(KActionCollection* parent, const char* name)
 {
   m_imode = TK::IconOnly;
   
-  setToolBarWidgetFactory(this);
 }
 
 TKAction::~TKAction()

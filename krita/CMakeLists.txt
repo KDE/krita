@@ -115,6 +115,7 @@ if (SHOULD_BUILD_KRITA)
     add_subdirectory( data )
     add_subdirectory( pics )
 
+
     ########### next target ###############
 
     set(kritapart_PART_SRCS krita_part_init.cc)
@@ -128,6 +129,7 @@ if (SHOULD_BUILD_KRITA)
     target_link_libraries(kritapart kritaui)
 
     install_targets(${PLUGIN_INSTALL_DIR} kritapart)
+
 
 
     ########### next target ###############

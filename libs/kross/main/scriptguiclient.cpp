@@ -383,7 +383,7 @@ void ScriptGUIClient::showScriptManager()
     dialog->setCaption( i18n("Scripts Manager") );
     dialog->setModal( true );
     dialog->setButtons( KDialog::Ok );
-    dialog->enableButtonSeparator( false );
+    dialog->showButtonSeparator( false );
 
     //KDialogBase* dialog = new KDialogBase(d->parent, "", true, i18n("Scripts Manager"), KDialogBase::Close);
     WdgScriptsManager* wsm = new WdgScriptsManager(this, dialog);

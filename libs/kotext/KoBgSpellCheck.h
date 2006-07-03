@@ -20,7 +20,7 @@
 #ifndef KOBGSPELLCHECK_H
 #define KOBGSPELLCHECK_H
 
-#include <kspell2/loader.h>
+#include <sonnet/loader.h>
 #include <QObject>
 #include <QStringList>
 #include <koffice_export.h>

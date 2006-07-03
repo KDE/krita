@@ -2,6 +2,7 @@ SUBDIRS = \
     defaulttools \
     selectiontools \
     tool_crop \
+    tool_curves \
     tool_filter \
     tool_polygon \
     tool_polyline \

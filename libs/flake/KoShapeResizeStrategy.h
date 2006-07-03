@@ -50,6 +50,7 @@ public:
 private:
     QPointF m_start;
     QList<QPointF> m_startPositions;
+    QList<QPointF> m_startAbsolutePositions;
     QList<QSizeF> m_startSizes;
     QRectF m_initialBoundingRect;
     bool m_top, m_left, m_bottom, m_right;

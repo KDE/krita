@@ -31,7 +31,8 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
     KoSelectionSet selectedObjects = canvas->shapeManager()->selection()->selectedObjects(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedObjects) {
         m_selectedObjects << shape;
-        m_startPositions << shape->absolutePosition();
+        m_startPositions << shape->position();
+        m_startAbsolutePositions << shape->absolutePosition();
         m_startSizes << shape->size();
         m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
     }
@@ -118,13 +119,14 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 
     int i=0;
     foreach(KoShape *shape, m_selectedObjects) {
-        QRectF rect(m_startPositions.at(i) - m_initialBoundingRect.topLeft(), m_startSizes.at(i));
+        QRectF rect(m_startAbsolutePositions.at(i) - m_initialBoundingRect.topLeft(), m_startSizes.at(i));
         QRectF result = matrix.mapRect(rect);
         result.setWidth(qMax(4.0, result.width()));
         result.setHeight(qMax(4.0, result.height()));
         shape->repaint();
-        shape->setAbsolutePosition( result.topLeft() + m_initialBoundingRect.topLeft() );
+        // the position has to be set after the size as we set the center of the shape
         shape->resize( result.size() );
+        shape->setAbsolutePosition( result.topLeft() + m_initialBoundingRect.topLeft() );
         shape->repaint();
         i++;
     }

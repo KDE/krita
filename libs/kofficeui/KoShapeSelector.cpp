@@ -36,6 +36,7 @@
 #include <QHelpEvent>
 #include <QPointF>
 #include <QToolTip>
+#include <QTimer>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -134,10 +135,19 @@ KoShapeSelector::KoShapeSelector(QWidget *parent, KoCanvasController *cc, QStrin
     m_canvas = new Canvas(this);
     m_tool = new MoveTool(m_canvas);
     m_shapeManager = new KoShapeManager(m_canvas);
-    setMinimumSize(20, 200);
+    setMinimumSize(30, 200);
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Base);
 
+    QTimer::singleShot(0, this, SLOT(loadShapeTypes()));
+}
+
+KoShapeSelector::~KoShapeSelector() {
+    delete m_shapeManager;
+    delete m_canvas;
+}
+
+void KoShapeSelector::loadShapeTypes() {
     foreach(KoID id, KoShapeRegistry::instance()->listKeys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->get(id);
         bool oneAdded=false;
@@ -152,12 +162,6 @@ KoShapeSelector::KoShapeSelector(QWidget *parent, KoCanvasController *cc, QStrin
 
     connect(m_shapeManager->selection(), SIGNAL(selectionChanged()), this, SLOT(itemSelected()));
 }
-
-KoShapeSelector::~KoShapeSelector() {
-    delete m_shapeManager;
-    delete m_canvas;
-}
-
 
 void KoShapeSelector::itemSelected() {
     QList<KoShape*> allSelected = m_shapeManager->selection()->selectedObjects().toList();
@@ -175,10 +179,13 @@ void KoShapeSelector::add(KoShape *shape) {
         int rowHeight=0;
         ok=true;
         foreach(const KoShape *shape, m_shapeManager->shapes()) {
+            if(shape->position().y() < y)
+                continue;
             rowHeight = qMax(rowHeight, qRound(shape->size().height()));
             x = qMax(x, qRound(shape->position().x() + shape->size().width()) + 5); // 5=gap
-            if(x + w > width()) {
+            if(x + w > width()) { // next row
                 y += rowHeight + 5; // 5 = gap
+                x = 0;
                 ok=false;
                 break;
             }

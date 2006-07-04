@@ -52,6 +52,7 @@ protected: // event handlers
 
 private slots:
     void itemSelected();
+    void loadShapeTypes();
 
 private:
     void add(KoShape *item);

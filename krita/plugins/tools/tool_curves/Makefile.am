@@ -12,14 +12,16 @@ INCLUDES =  -I$(srcdir)/../../../sdk \
 kritatoolcurves_la_SOURCES = \
 	wdg_tool_curves.ui \
         tool_curves.cc \
-	kis_tool_curves.cc 
+	kis_tool_curves.cc \
+	kis_curves_painter.cc
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritatoolcurves.la
 
 noinst_HEADERS = \
 	tool_curves.h \
-	kis_tool_curves.h 
+	kis_tool_curves.h \
+	kis_curves_painter.h
 
 kritatoolcurves_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritatoolcurves_la_LIBADD =  ../../../libkritacommon.la

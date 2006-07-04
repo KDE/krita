@@ -38,7 +38,8 @@ KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas
         if(shape->isLocked())
             continue;
         m_selectedObjects << shape;
-        m_startPositions << shape->absolutePosition();
+        m_startPositions << shape->position();
+        m_startAbsolutePositions << shape->absolutePosition();
         m_initialAngles << shape->rotation();
         m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
     }
@@ -67,7 +68,7 @@ void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     int counter=0;
     foreach(KoShape *shape, m_selectedObjects) {
         shape->repaint();
-        shape->setAbsolutePosition(matrix.map(m_startPositions[counter]));
+        shape->setAbsolutePosition(matrix.map(m_startAbsolutePositions[counter]));
         shape->rotate(m_initialAngles[counter] + angle);
         shape->repaint();
         counter++;

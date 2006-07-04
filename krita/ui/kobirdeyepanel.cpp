@@ -549,6 +549,8 @@ void KoBirdEyePanel::makeThumbnailRectVisible(const QRect& r)
 
 void KoBirdEyePanel::resizeViewEvent(QSize size)
 {
+    if(!size.isValid())
+        size = QSize(1,1);
     m_viewBuffer = QPixmap(size);
     fitThumbnailToView();
     slotUpdate(QRect(0, 0, m_documentSize.width(), m_documentSize.height()));

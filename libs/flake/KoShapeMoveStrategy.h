@@ -50,6 +50,7 @@ public:
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     KCommand* createCommand();
     void finishInteraction() { }
+    virtual void paint( QPainter &painter, KoViewConverter &converter);
 
 private:
     QList<QPointF> m_previousPositions;

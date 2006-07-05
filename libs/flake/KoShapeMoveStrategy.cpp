@@ -30,6 +30,7 @@
 #include "KoPointerEvent.h"
 #include "KoCommand.h"
 #include "kcommand.h"
+#include "KoInteractionTool.h"
 
 KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
 : KoInteractionStrategy(tool, canvas)
@@ -81,4 +82,10 @@ KCommand* KoShapeMoveStrategy::createCommand() {
     if(m_diff.x() == 0 && m_diff.y() == 0)
         return 0;
     return new KoShapeMoveCommand(m_selectedObjects, m_previousPositions, m_newPositions);
+}
+
+void KoShapeMoveStrategy::paint( QPainter &painter, KoViewConverter &converter) {
+    SelectionDecorator decorator (KoFlake::NoHandle, false, false);
+    decorator.setSelection(m_canvas->shapeManager()->selection());
+    decorator.paint(painter, converter);
 }

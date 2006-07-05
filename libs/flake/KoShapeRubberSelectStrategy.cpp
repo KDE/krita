@@ -73,13 +73,17 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &point, Qt::Keyb
 */
     QPointF x1 = old;
     x1.setY(m_selectRect.topLeft().y());
-    QRectF A(x1, QSizeF(point.x() - x1.x(), point.y() - x1.y()));
+    double h1 = point.y() - x1.y();
+    double h2 = old.y() - x1.y();
+    QRectF A(x1, QSizeF(point.x() - x1.x(), point.y() < m_selectRect.top() ? qMin(h1, h2) : qMax (h1, h2) ));
     A = A.normalized();
     m_canvas->updateCanvas(A);
 
     QPointF x2 = old;
     x2.setX(m_selectRect.topLeft().x());
-    QRectF B(x2, QSizeF(point.x() - x2.x(), point.y() - x2.y()));
+    double w1 = point.x() - x2.x();
+    double w2 = old.x() - x2.x();
+    QRectF B(x2, QSizeF(point.x() < m_selectRect.left() ? qMin(w1, w2) : qMax(w1, w2), point.y() - x2.y()));
     B = B.normalized();
     m_canvas->updateCanvas(B);
 }

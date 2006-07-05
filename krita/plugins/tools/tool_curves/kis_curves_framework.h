@@ -64,7 +64,6 @@ class KisCurve {
     enum Status {DRAWING, EDITING, ENDING};
 
     PointList m_curve;
-    PointList m_pivots;
     Status m_current;
 
     KisPaintDeviceSP m_dev;
@@ -99,11 +98,6 @@ public:
     bool setPivot (CurvePoint);
     bool setPivot (int);
     
-    PointList getPivots() {return m_pivots;}
-    
-    CurvePoint getLastPivot() {return m_pivots.last();}
-    int getLastPivotIndex() {return m_pivots.count()-1;}
-
     bool deleteLastPivot();
 
     virtual bool selectPivot(CurvePoint);

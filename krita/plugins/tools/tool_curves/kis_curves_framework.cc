@@ -141,3 +141,9 @@ bool KisCurve::setPivot (int index) {
     return true;
 }
 
+bool KisCurve::deleteLastPivot () {
+    m_curve.erase(m_curve.end());
+    for (PointList::iterator it = m_curve.end();(!it->isPivot());it--)
+        m_curve.erase(it);
+    return true;
+}

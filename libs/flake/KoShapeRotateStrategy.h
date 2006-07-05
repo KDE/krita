@@ -55,6 +55,7 @@ private:
     QList<QPointF> m_startPositions;
     QList<QPointF> m_startAbsolutePositions;
     QList<double> m_initialAngles;
+    double m_initialSelectionAngle;
 };
 
 #endif /* KOSHAPEROTATESTRATEGY_H */

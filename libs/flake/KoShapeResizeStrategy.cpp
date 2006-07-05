@@ -146,6 +146,7 @@ KCommand* KoShapeResizeStrategy::createCommand() {
 }
 
 void KoShapeResizeStrategy::paint( QPainter &painter, KoViewConverter &converter) {
-    SelectionDecorator decorator (m_canvas->shapeManager()->selection()->boundingRect(), KoFlake::NoHandle, false, false);
+    SelectionDecorator decorator (KoFlake::NoHandle, false, false);
+    decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.paint(painter, converter);
 }

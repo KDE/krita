@@ -23,6 +23,7 @@
 
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPainterPath>
 
 #include "KoPointerEvent.h"
 #include "KoShape.h"
@@ -68,6 +69,12 @@ bool KoInteractionTool::wantsAutoScroll()
 void KoInteractionTool::updateCursor() {
     QCursor cursor = Qt::ArrowCursor;
     if(selection()->count() > 0) { // has a selection
+        bool editable=false;
+        foreach(KoShape *shape, selection()->selectedObjects(KoFlake::StrippedSelection)) {
+            if(!shape->isLocked())
+                editable = true;
+        }
+
         if(!m_mouseWasInsideHandles) {
             if(m_lastHandle == KoFlake::NoHandle)
                 cursor = Qt::ArrowCursor;
@@ -97,6 +104,8 @@ void KoInteractionTool::updateCursor() {
                     break;
             }
         }
+        if( !editable)
+            cursor = Qt::ArrowCursor;
     }
     useCursor(cursor);
 }
@@ -105,22 +114,9 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
     if ( m_currentStrategy )
         m_currentStrategy->paint( painter, converter);
     else if(selection()->count() > 0) {
-        painter.save();
-        painter.setRenderHint( QPainter::Antialiasing, false );
-        QPen pen( Qt::blue ); //TODO make it configurable
-        painter.setPen( pen );
-        bool editable=false;
-        foreach(KoShape *shape, selection()->selectedObjects(KoFlake::StrippedSelection)) {
-            painter.drawRect( converter.documentToView(shape->boundingRect()) );
-            if(!shape->isLocked())
-                editable = true;
-        }
-        painter.restore();
-        if( !editable)
-            return;
-
-        SelectionDecorator decorator(selection()->boundingRect(),
-                m_mouseWasInsideHandles?m_lastHandle:KoFlake::NoHandle, true, true);
+        SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
+                 true, true);
+        decorator.setSelection(selection());
         decorator.paint(painter, converter);
     }
 }
@@ -223,18 +219,22 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
     KoViewConverter *converter = m_canvas->viewConverter();
 
     if(innerHandleMeaning != 0)
-        *innerHandleMeaning = false;
+    {
+        QPainterPath path;
+        path.addPolygon(m_selectionOutline);
+        *innerHandleMeaning =  path.contains(point);
+    }
     for ( int i = 0; i < KoFlake::NoHandle; ++i ) {
-        QPointF pt = converter->documentToView( point ) - converter->documentToView( m_selectionBox[i] ) - m_handleDiff[i];
-        // if between outline and out handles;
-        if(qAbs(pt.x()) < HANDLE_DISTANCE && qAbs(pt.y()) < HANDLE_DISTANCE)
-            return static_cast<KoFlake::SelectionHandle> (i);
+        QPointF pt = converter->documentToView(point) - converter->documentToView(m_selectionBox[i]);
 
         // if just inside the outline
-        pt = pt + m_handleDiff[i];
-        if(innerHandleMeaning != 0 && qAbs(pt.x()) < HANDLE_DISTANCE &&
+        if(qAbs(pt.x()) < HANDLE_DISTANCE &&
                 qAbs(pt.y()) < HANDLE_DISTANCE) {
-            *innerHandleMeaning = true;
+            if(innerHandleMeaning != 0)
+            {
+                if(qAbs(pt.x()) < 4 && qAbs(pt.y()) < 4)
+                    *innerHandleMeaning = true;
+            }
             return static_cast<KoFlake::SelectionHandle> (i);
         }
     }
@@ -242,21 +242,28 @@ KoFlake::SelectionHandle KoInteractionTool::handleAt(const QPointF &point, bool 
 }
 
 void KoInteractionTool::recalcSelectionBox() {
-    QRectF bb( selection()->boundingRect() );
-    float width = bb.width();
-    float height = bb.height();
-    float halfWidth = width / 2.0;
-    float halfHeight = height / 2.0;
-    float xOff = bb.topLeft().x();
-    float yOff = bb.topLeft().y();
-    m_selectionBox[KoFlake::TopMiddleHandle] = QPointF( halfWidth + xOff, yOff );
-    m_selectionBox[KoFlake::TopRightHandle] = QPointF( width + xOff, yOff );
-    m_selectionBox[KoFlake::RightMiddleHandle] = QPointF( width + xOff, halfHeight + yOff );
-    m_selectionBox[KoFlake::BottomRightHandle] = QPointF( width + xOff, height + yOff );
-    m_selectionBox[KoFlake::BottomMiddleHandle] = QPointF( halfWidth + xOff, height + yOff );
-    m_selectionBox[KoFlake::BottomLeftHandle] = QPointF( xOff, height + yOff );
-    m_selectionBox[KoFlake::LeftMiddleHandle] = QPointF( xOff, halfHeight + yOff );
-    m_selectionBox[KoFlake::TopLeftHandle] = QPointF( xOff, yOff );
+    if(selection()->count()==0)
+        return;
+
+    if(selection()->count()>1)
+    {
+        QMatrix matrix = selection()->transformationMatrix(0);
+        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection()->unmodifiedSize())));
+    }
+    else
+    {
+        QMatrix matrix = selection()->firstSelectedObject()->transformationMatrix(0);
+        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection()->firstSelectedObject()->size())));
+    }
+    QPolygonF outline = m_selectionOutline; //shorter name in the following :)
+    m_selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0)+outline.value(1))/2;
+    m_selectionBox[KoFlake::TopRightHandle] = outline.value(1);
+    m_selectionBox[KoFlake::RightMiddleHandle] = (outline.value(1)+outline.value(2))/2;
+    m_selectionBox[KoFlake::BottomRightHandle] = outline.value(2);
+    m_selectionBox[KoFlake::BottomMiddleHandle] = (outline.value(2)+outline.value(3))/2;
+    m_selectionBox[KoFlake::BottomLeftHandle] = outline.value(3);
+    m_selectionBox[KoFlake::LeftMiddleHandle] = (outline.value(3)+outline.value(0))/2;
+    m_selectionBox[KoFlake::TopLeftHandle] = outline.value(0);
 }
 
 void KoInteractionTool::activate(bool temporary) {
@@ -268,12 +275,11 @@ void KoInteractionTool::activate(bool temporary) {
 // ##########  SelectionDecorator ############
 QImage * SelectionDecorator::s_rotateCursor=0;
 
-SelectionDecorator::SelectionDecorator(const QRectF &bounds, KoFlake::SelectionHandle arrows,
+SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
         bool rotationHandles, bool shearHandles)
 : m_rotationHandles(rotationHandles)
 , m_shearHandles(shearHandles)
 , m_arrows(arrows)
-, m_bounds(bounds)
 {
     if(SelectionDecorator::s_rotateCursor == 0) {
         s_rotateCursor = new QImage();
@@ -282,34 +288,76 @@ SelectionDecorator::SelectionDecorator(const QRectF &bounds, KoFlake::SelectionH
     }
 }
 
+void SelectionDecorator::setSelection(KoSelection *selection) {
+    m_selection = selection;
+}
+
 void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
-    QPen pen( Qt::black );
+    QPen pen( Qt::green );
+    QPolygonF outline;
+
+    painter.save();
+    painter.setRenderHint( QPainter::Antialiasing, false );
+    painter.setPen( pen );
+    bool editable=false;
+    foreach(KoShape *shape, m_selection->selectedObjects(KoFlake::StrippedSelection)) {
+        QMatrix matrix = shape->transformationMatrix(0);
+        outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), shape->size())));
+        for(int i =0; i<outline.count(); i++)
+            outline[i] = converter.documentToView(outline.value(i));
+        painter.drawPolygon(outline);
+        if(!shape->isLocked())
+            editable = true;
+    }
+    painter.restore();
+
+    if(m_selection->count()>1)
+    {
+        QMatrix matrix = m_selection->transformationMatrix(0);
+        outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->unmodifiedSize())));
+        for(int i =0; i<outline.count(); i++)
+            outline[i] = converter.documentToView(outline.value(i));
+        pen = QPen( Qt::blue );
+        painter.setPen(pen);
+        painter.drawPolygon(outline);
+    }
+    else
+    {
+        QMatrix matrix = m_selection->firstSelectedObject()->transformationMatrix(0);
+        outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->firstSelectedObject()->size())));
+        for(int i =0; i<outline.count(); i++)
+            outline[i] = converter.documentToView(outline.value(i));
+    }
+
+    if( !editable)
+        return;
+
+    pen = QPen( Qt::black );
     pen.setWidthF(1.2);
     painter.setPen(pen);
     painter.setBrush(Qt::yellow);
 
-    QRectF bounds = converter.documentToView(m_bounds);
-
-    // the 4 move rects
+    // the 8 move rects
     pen.setWidthF(0);
     painter.setPen(pen);
-    QRectF rect(bounds.topLeft(), QSizeF(6, 6));
+    QRectF rect(outline.value(0)- QPointF(3,3), QSizeF(6, 6));
     painter.drawRect(rect);
-    rect.moveLeft(bounds.x() + bounds.width() /2 -3);
+    rect.moveTo(outline.value(1)- QPointF(3,3));
     painter.drawRect(rect);
-    rect.moveBottom(bounds.bottom());
+    rect.moveTo(outline.value(2)- QPointF(3,3));
     painter.drawRect(rect);
-    rect.moveLeft(bounds.left());
+    rect.moveTo(outline.value(3)- QPointF(3,3));
     painter.drawRect(rect);
-    rect.moveTop(bounds.top() + bounds.height() / 2 -3);
+    rect.moveTo((outline.value(0)+outline.value(1))/2 - QPointF(3,3));
     painter.drawRect(rect);
-    rect.moveRight(bounds.right());
+    rect.moveTo((outline.value(1)+outline.value(2))/2 - QPointF(3,3));
     painter.drawRect(rect);
-    rect.moveBottom(bounds.bottom());
+    rect.moveTo((outline.value(2)+outline.value(3))/2 - QPointF(3,3));
     painter.drawRect(rect);
-    rect.moveTop(bounds.top());
+    rect.moveTo((outline.value(3)+outline.value(0))/2 - QPointF(3,3));
     painter.drawRect(rect);
 
+#if 0
     // draw the move arrow(s)
     if(m_arrows != KoFlake::NoHandle && bounds.width() > 45 && bounds.height() > 45) {
         double x1,x2,y1,y2; // 2 is where the arrow head is
@@ -382,4 +430,5 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
         rect.moveRight(bounds.right());
         painter.drawRect(rect);
     } */
+#endif
 }

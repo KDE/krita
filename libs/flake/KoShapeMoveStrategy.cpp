@@ -47,6 +47,7 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
         boundingRect = boundingRect.unite( shape->boundingRect() );
     }
     m_initialTopLeft = boundingRect.topLeft();
+    m_initialSelectionPosition = canvas->shapeManager()->selection()->position();
 }
 
 void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
@@ -73,6 +74,7 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         shape->repaint();
         i++;
     }
+    m_canvas->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
 }
 
 KCommand* KoShapeMoveStrategy::createCommand() {

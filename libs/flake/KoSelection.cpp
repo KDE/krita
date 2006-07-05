@@ -38,13 +38,14 @@ KoSelection::~KoSelection()
 
 void KoSelection::paint( QPainter &painter, KoViewConverter &converter)
 {
-    if ( count() == 0 )
+/*    if ( count() == 0 )
         return;
     painter.setRenderHint( QPainter::Antialiasing, false );
     QRectF bb = converter.documentToView( boundingRect() );
     QPen pen( Qt::blue ); //TODO make it configurable
     painter.setPen( pen );
     painter.drawRect( bb );
+*/
 }
 
 void KoSelection::select(KoShape * object)
@@ -61,6 +62,10 @@ void KoSelection::select(KoShape * object)
                 m_selectedObjects << shape;
         }
     }
+    m_unmodifiedSize = boundingRect().size();
+    rotate(0);
+    shear(0,0);
+    scale(1,1);
     requestSelectionChangedEvent();
 }
 
@@ -76,6 +81,10 @@ void KoSelection::deselect(KoShape * object)
     }
     else
         m_selectedObjects.remove( object );
+    m_unmodifiedSize = boundingRect().size();
+    rotate(0);
+    shear(0,0);
+    scale(1,1);
     requestSelectionChangedEvent();
 }
 
@@ -84,6 +93,10 @@ void KoSelection::deselectAll()
     if(m_selectedObjects.count() == 0)
         return;
     m_selectedObjects.clear();
+    m_unmodifiedSize = boundingRect().size();
+    rotate(0);
+    shear(0,0);
+    scale(1,1);
     requestSelectionChangedEvent();
 }
 
@@ -118,6 +131,11 @@ bool KoSelection::hitTest( const QPointF &position ) const
         return ( *m_selectedObjects.begin() )->hitTest( position );
     else // count == 0
         return false;
+}
+
+QSizeF KoSelection::unmodifiedSize() const
+{
+    return m_unmodifiedSize;
 }
 
 QRectF KoSelection::boundingRect() const

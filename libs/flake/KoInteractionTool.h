@@ -107,6 +107,7 @@ private:
     bool m_mouseWasInsideHandles;
     static QPointF m_handleDiff[8];
     QPointF m_selectionBox[8];
+    QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
 };
 
@@ -117,13 +118,11 @@ class SelectionDecorator {
 public:
     /**
      * Constructor.
-     * @param bounds the rectangle that the selection occupies; the decorations will be
-        drawn around that rect.
      * @param arrows the direction that needs highlighting. (currently unused)
      * @param rotationHandles if true; the rotation handles will be drawn
      * @param shearHandles if true; the shearhandles will be drawn
      */
-    SelectionDecorator(const QRectF &bounds, KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles);
+    SelectionDecorator(KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles);
     ~SelectionDecorator() {}
 
     /**
@@ -132,11 +131,17 @@ public:
      * @param converter to convert between internal and view coordinates.
      */
     void paint(QPainter &painter, KoViewConverter &converter);
+
+    /**
+     * set the selection that is to be painted.
+     * @param selection the current selection.
+     */
+    void setSelection(KoSelection *selection);
+
 private:
     bool m_rotationHandles, m_shearHandles;
     KoFlake::SelectionHandle m_arrows;
     KoSelection *m_selection;
-    QRectF m_bounds;
 
     static QImage *s_rotateCursor;
     //static KStaticDeleter<QImage> sd;

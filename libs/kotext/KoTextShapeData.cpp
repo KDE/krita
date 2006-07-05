@@ -22,8 +22,11 @@
 
 KoTextShapeData::KoTextShapeData()
 : m_ownsDocument(false)
-, m_offset(0.0)
+, m_dirty(true)
 , m_textCursor(0)
+, m_offset(0.0)
+, m_position(-1)
+, m_endPosition(-1)
 {
     m_document = new QTextDocument();
 }

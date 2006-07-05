@@ -283,7 +283,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 {
     if(SelectionDecorator::s_rotateCursor == 0) {
         s_rotateCursor = new QImage();
-        s_rotateCursor->load("/home/zander/sources/kde4/flake/lib/rotate.png");
+        s_rotateCursor->load("/home/zander/sources/kde4/koffice/libs/flake/rotate.png");
         //sd.setObject(&SelectionDecorator::s_rotateCursor, SelectionDecorator::s_rotateCursor);
     }
 }

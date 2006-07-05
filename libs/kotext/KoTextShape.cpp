@@ -54,6 +54,8 @@ QPointF KoTextShape::convertScreenPos(const QPointF &point) {
 }
 
 void KoTextShape::shapeChanged(ChangeType type) {
-    if(type == KoShape::SizeChanged)
-        m_textShapeData->document()->setPageSize(size());
+    if(type == PositionChanged || type == SizeChanged) {
+        m_textShapeData->faul();
+        m_textShapeData->fireResizeEvent();
+    }
 }

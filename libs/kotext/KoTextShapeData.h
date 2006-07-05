@@ -42,11 +42,28 @@ public:
     double documentOffset() const { return m_offset; }
     void setDocumentOffset(double offset) { m_offset = offset; }
 
+    int position() const { return m_position; }
+    void setPosition(int position) { m_position = position; }
+    int endPosition() const { return m_endPosition; }
+    void setEndPosition(int position) { m_endPosition = position; }
+
+    void faul() { m_dirty = true; }
+    void wipe() { m_dirty = false; }
+    bool isDirty() const { return m_dirty; }
+
+signals:
+    void relayout();
+
+private:
+    friend class KoTextShape;
+    void fireResizeEvent() { emit relayout(); }
+
 private:
     QTextDocument *m_document;
-    bool m_ownsDocument;
+    bool m_ownsDocument, m_dirty;
     QTextCursor *m_textCursor;
     double m_offset;
+    int m_position, m_endPosition;
 };
 
 #endif

@@ -24,7 +24,6 @@
 #include <QString>
 
 class KoShape;
-class KoCanvasBase;
 class KoShapeConfigWidgetBase;
 
 class FLAKE_EXPORT KoShapeConfigFactory {
@@ -32,12 +31,15 @@ public:
     KoShapeConfigFactory() {}
     virtual ~KoShapeConfigFactory() {}
 
-    virtual KoShapeConfigWidgetBase *createConfigWidget(KoCanvasBase *canvas, KoShape *shape) = 0;
+    virtual KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape) = 0;
     virtual QString name() const = 0;
 
-    virtual int sortingOrder() { return 1; }
+    virtual int sortingOrder() const { return 1; }
     virtual bool showForShapeId(const QString &id) const { Q_UNUSED(id); return true; }
 
+    static bool compare(KoShapeConfigFactory *f1, KoShapeConfigFactory *f2) {
+        return f1->sortingOrder() - f2->sortingOrder() > 0;
+    }
 };
 
 #endif

@@ -69,12 +69,14 @@ KCommand* KoCreateShapeStrategy::createCommand() {
         dialog->addPage(shapeOptions, i18n("%1 Options", factory->name()));
         pageCount ++;
     }
-    const QList<KoShapeConfigFactory*> panels = factory->panelFactories();
+    QList<KoShapeConfigFactory*> panels = factory->panelFactories();
+
+    qSort(panels.begin(), panels.end(), KoShapeConfigFactory::compare);
     QList<KoShapeConfigWidgetBase*> widgets;
     foreach (KoShapeConfigFactory *panelFactory, panels) {
         if(! panelFactory->showForShapeId(parent->shapeId()))
             continue;
-        KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(m_canvas, shape);
+        KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
         if(widget == 0)
             continue;
         widgets.append(widget);

@@ -94,6 +94,7 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *eve
             shapeManager->selection()->deselectAll();
         select->select(object);
         parent->repaintDecorations();
+        return new KoShapeMoveStrategy(parent, canvas, event->point);
     }
     return 0;
 }

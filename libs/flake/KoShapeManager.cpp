@@ -83,6 +83,7 @@ void KoShapeManager::add( KoShape *shape )
         QRectF br( shape->boundingRect() );
         m_tree.insert( shape, br );
     }
+    shape->repaint();
 }
 
 void KoShapeManager::remove( KoShape *shape )

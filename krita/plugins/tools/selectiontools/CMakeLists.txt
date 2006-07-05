@@ -19,13 +19,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaselectiontools )
 
 target_link_libraries(kritaselectiontools kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaselectiontools )
+install(TARGETS kritaselectiontools  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_rect_selection.png  	tool_eraser_selection.png  	tool_brush_selection.png   	tool_contiguous_selection.png  	tool_elliptical_selection.png  	tool_outline_selection.png  	tool_polygonal_selection.png  	tool_rectangular_selection_cursor.png  	tool_eraser_selection_cursor.png  	tool_brush_selection_cursor.png   	tool_contiguous_selection_cursor.png  	tool_elliptical_selection_cursor.png  	tool_outline_selection_cursor.png  	tool_polygonal_selection_cursor.png )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaselectiontools.desktop )
+install( FILES  tool_rect_selection.png  	tool_eraser_selection.png  	tool_brush_selection.png   	tool_contiguous_selection.png  	tool_elliptical_selection.png  	tool_outline_selection.png  	tool_polygonal_selection.png  	tool_rectangular_selection_cursor.png  	tool_eraser_selection_cursor.png  	tool_brush_selection_cursor.png   	tool_contiguous_selection_cursor.png  	tool_elliptical_selection_cursor.png  	tool_outline_selection_cursor.png  	tool_polygonal_selection_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  kritaselectiontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

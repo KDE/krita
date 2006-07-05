@@ -25,13 +25,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritawetplugin )
 
 target_link_libraries(kritawetplugin kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritawetplugin )
+install(TARGETS kritawetplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  wetplugin.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritawetplugin.desktop )
+install( FILES  wetplugin.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritawetplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

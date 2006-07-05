@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritasobelfilter )
 
 target_link_libraries(kritasobelfilter kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritasobelfilter )
+install(TARGETS kritasobelfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritasobelfilter.desktop )
+install( FILES  kritasobelfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritasmalltilesfilter )
 
 target_link_libraries(kritasmalltilesfilter kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritasmalltilesfilter )
+install(TARGETS kritasmalltilesfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritasmalltilesfilter.desktop )
+install( FILES  kritasmalltilesfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -5,12 +5,12 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/scripts/torturepainting FILES  torture-painting.rb torture-painting.rc )
-install_files( ${DATA_INSTALL_DIR}/krita/scripts/changecs FILES  changecs.rb changecs.rc )
-install_files( ${DATA_INSTALL_DIR}/krita/scripts/invertruby FILES  invert.rb invertruby.rc )
-install_files( ${DATA_INSTALL_DIR}/krita/scripts/torturefilters FILES  torture-filters.rb torture-filters.rc )
-install_files( ${DATA_INSTALL_DIR}/krita/scripts/randompaint FILES  randompaint.rb randompaint.rc )
-install_files( ${DATA_INSTALL_DIR}/krita/scripts/filterstest FILES  filterstest.rb filterstest.rc )
+install( FILES  torture-painting.rb torture-painting.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/torturepainting)
+install( FILES  changecs.rb changecs.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/changecs)
+install( FILES  invert.rb invertruby.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/invertruby)
+install( FILES  torture-filters.rb torture-filters.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/torturefilters)
+install( FILES  randompaint.rb randompaint.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/randompaint)
+install( FILES  filterstest.rb filterstest.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/filterstest)
 
 
 

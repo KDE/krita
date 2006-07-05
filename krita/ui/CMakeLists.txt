@@ -128,12 +128,12 @@ if(HAVE_XINPUTEXT)
 endif(HAVE_XINPUTEXT)
 
 set_target_properties(kritaui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kritaui )
+install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( /include FILES
+install_files( ${INCLUDE_INSTALL_DIR} FILES
     kis_cmb_composite.h
     kis_cmb_idlist.h
     kis_color_cup.h

@@ -21,11 +21,11 @@ kde4_add_library(krossmain SHARED ${krossmain_LIB_SRCS})
 target_link_libraries(krossmain  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KNEWSTUFF_LIBS} krossapi )
 
 set_target_properties(krossmain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} krossmain )
+install(TARGETS krossmain  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( /include/kross/main FILES  mainmodule.h      manager.h      scriptaction.h      scriptcontainer.h      scriptguiclient.h      wdgscriptsmanager.h  )
+install( FILES  mainmodule.h      manager.h      scriptaction.h      scriptcontainer.h      scriptguiclient.h      wdgscriptsmanager.h   DESTINATION ${INCLUDE_INSTALL_DIR}/kross/main)
 
 

@@ -13,13 +13,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolpolyline )
 
 target_link_libraries(kritatoolpolyline kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritatoolpolyline )
+install(TARGETS kritatoolpolyline  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_polyline_cursor.png  	polyline.png )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolpolyline.desktop )
+install( FILES  tool_polyline_cursor.png  	polyline.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  kritatoolpolyline.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

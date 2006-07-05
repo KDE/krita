@@ -7,7 +7,7 @@ add_subdirectory( RestrictedPython )
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kross/python FILES  gui.py )
+install( FILES  gui.py  DESTINATION ${DATA_INSTALL_DIR}/kross/python)
 
 
 

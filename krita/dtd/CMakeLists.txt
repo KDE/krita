@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/dtd FILES  krita.dtd )
+install( FILES  krita.dtd  DESTINATION ${DATA_INSTALL_DIR}/krita/dtd)
 
 
 

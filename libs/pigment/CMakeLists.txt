@@ -34,8 +34,8 @@ target_link_libraries(pigment ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${LCMS_LIBR
 set_target_properties(pigment PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
 
-install_targets(${LIB_INSTALL_DIR} pigment )
+install(TARGETS pigment  DESTINATION ${LIB_INSTALL_DIR})
 
-install_files( /include FILES  KoColorSpaceFactoryRegistry.h KoChannelInfo.h      KoColor.h      KoColorSpace.h      KoCompositeOp.h      KoColorProfile.h      KoU8ColorSpaceTrait.h KoU16ColorSpaceTrait.h KoF16HalfColorSpaceTrait.h KoF32HalfColorSpaceTrait.h )
+install( FILES  KoColorSpaceFactoryRegistry.h KoChannelInfo.h      KoColor.h      KoColorSpace.h      KoCompositeOp.h      KoColorProfile.h      KoU8ColorSpaceTrait.h KoU16ColorSpaceTrait.h KoF16HalfColorSpaceTrait.h KoF32HalfColorSpaceTrait.h  DESTINATION ${INCLUDE_INSTALL_DIR})
 
 

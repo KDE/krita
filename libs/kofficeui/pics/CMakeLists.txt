@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kofficewidgets/pics FILES  kounitdoublecombobox.png kounitdoublelineedit.png  	kounitdoublespinbox2.png kounitdoublespincombobox.png )
+install( FILES  kounitdoublecombobox.png kounitdoublelineedit.png  	kounitdoublespinbox2.png kounitdoublespincombobox.png  DESTINATION ${DATA_INSTALL_DIR}/kofficewidgets/pics)
 
 
 

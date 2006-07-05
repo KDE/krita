@@ -13,13 +13,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolpolygon )
 
 target_link_libraries(kritatoolpolygon kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritatoolpolygon )
+install(TARGETS kritatoolpolygon  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_polygon_cursor.png  	tool_polygon.png )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolpolygon.desktop )
+install( FILES  tool_polygon_cursor.png  	tool_polygon.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  kritatoolpolygon.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

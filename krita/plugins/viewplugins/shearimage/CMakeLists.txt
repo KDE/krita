@@ -17,13 +17,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritashearimage )
 
 target_link_libraries(kritashearimage kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritashearimage )
+install(TARGETS kritashearimage  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  shearimage.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritashearimage.desktop )
+install( FILES  shearimage.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritashearimage.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

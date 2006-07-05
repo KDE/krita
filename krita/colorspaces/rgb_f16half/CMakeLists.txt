@@ -17,7 +17,7 @@ kde4_add_library(krita_rgb_f16half SHARED ${krita_rgb_f16half_LIB_SRCS})
 target_link_libraries(krita_rgb_f16half  ${KDE4_KDECORE_LIBS} kritacolor ${OPENEXR_LIBRARIES})
 
 set_target_properties(krita_rgb_f16half PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} krita_rgb_f16half )
+install(TARGETS krita_rgb_f16half  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -32,12 +32,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_rgb_f16half_plugin )
 
 target_link_libraries(krita_rgb_f16half_plugin  ${KDE4_KDECORE_LIBS} krita_rgb_f16half kritacolor  ${OPENEXR_LIBRARIES})
 
-install_targets(${PLUGIN_INSTALL_DIR} krita_rgb_f16half_plugin )
+install(TARGETS krita_rgb_f16half_plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  krita_rgb_f16half_plugin.desktop )
+install( FILES  krita_rgb_f16half_plugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

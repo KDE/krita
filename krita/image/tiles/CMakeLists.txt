@@ -9,7 +9,7 @@ endif(KUNITTEST_FOUND)
 
 ########### install files ###############
 
-install_files( /include FILES  kis_tileddatamanager.h )
+install( FILES  kis_tileddatamanager.h  DESTINATION ${INCLUDE_INSTALL_DIR})
 
 
 

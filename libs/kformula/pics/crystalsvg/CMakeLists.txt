@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${KDE4_ICON_DIR}/hicolor FILES  )
+install( FILES   DESTINATION ${KDE4_ICON_DIR}/hicolor)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 

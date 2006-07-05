@@ -13,13 +13,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritawsbrushpaintop )
 
 target_link_libraries(kritawsbrushpaintop kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritawsbrushpaintop )
+install(TARGETS kritawsbrushpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritawsbrushpaintop.desktop )
-install_files(  FILES  wetpaintbrush.png )
+install( FILES  kritawsbrushpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( wetpaintbrush.png  DESTINATION FILES)
 
 
 

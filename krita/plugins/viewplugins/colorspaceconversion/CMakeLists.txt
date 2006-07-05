@@ -11,13 +11,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorspaceconversion )
 
 target_link_libraries(kritacolorspaceconversion kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritacolorspaceconversion )
+install(TARGETS kritacolorspaceconversion  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  colorspaceconversion.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritacolorspaceconversion.desktop )
+install( FILES  colorspaceconversion.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritacolorspaceconversion.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

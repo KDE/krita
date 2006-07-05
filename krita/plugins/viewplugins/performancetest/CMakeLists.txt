@@ -11,13 +11,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaperftest )
 
 target_link_libraries(kritaperftest kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaperftest )
+install(TARGETS kritaperftest  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  perftest.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaperftest.desktop )
+install( FILES  perftest.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritaperftest.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

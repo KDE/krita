@@ -10,7 +10,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritahistorydocker )
 
 target_link_libraries(kritahistorydocker kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritahistorydocker )
+install(TARGETS kritahistorydocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

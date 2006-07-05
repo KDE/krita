@@ -11,13 +11,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacolorrange )
 
 target_link_libraries(kritacolorrange kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritacolorrange )
+install(TARGETS kritacolorrange  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  colorrange.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritacolorrange.desktop )
+install( FILES  colorrange.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritacolorrange.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

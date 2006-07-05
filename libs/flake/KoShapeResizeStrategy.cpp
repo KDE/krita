@@ -23,6 +23,9 @@
 #include "KoCanvasBase.h"
 #include "KoCommand.h"
 
+#include <kdebug.h>
+#include <stdio.h>
+
 KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool, canvas)
@@ -37,6 +40,18 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
         m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
     }
     m_start = clicked;
+
+    if(canvas->shapeManager()->selection()->count()>1)
+        m_unwindMatrix.rotate(canvas->shapeManager()->selection()->rotation());
+    if(canvas->shapeManager()->selection()->count()==1)
+    {
+        m_unwindMatrix = QMatrix();
+        m_unwindMatrix.rotate(-canvas->shapeManager()->selection()->firstSelectedObject()->rotation());
+        m_windMatrix = QMatrix();
+        m_windMatrix.rotate(canvas->shapeManager()->selection()->firstSelectedObject()->rotation());
+        m_initialSize = canvas->shapeManager()->selection()->firstSelectedObject()->size();
+        m_initialPosition = canvas->shapeManager()->selection()->firstSelectedObject()->position();
+    }
 
     switch(direction) {
         case KoFlake::TopMiddleHandle:
@@ -69,8 +84,10 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0)
         applyGrid(distance);
 
-    double startWidth = m_initialBoundingRect.width();
-    double startHeight = m_initialBoundingRect.height();
+    double startWidth = m_initialSize.width();
+    double startHeight = m_initialSize.height();
+    distance = m_unwindMatrix.map(distance);
+
     QMatrix matrix;
     bool scaleFromCenter = modifiers & Qt::ControlModifier;
     if(scaleFromCenter) // translate to center first
@@ -115,18 +132,26 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     if(scaleFromCenter) // and back
         matrix.translate(-startWidth / 2.0, -startHeight / 2.0);
     else
-        matrix.translate(m_left?-startWidth:0, m_top?-startHeight:0);
+    {
+        QPointF move(m_left?-startWidth:0, m_top?-startHeight:0);
+        move = m_windMatrix.map(move);
+        matrix.translate(move.x(), move.y());
+    }
 
     int i=0;
+    QMatrix windMatrix = m_unwindMatrix.inverted();
     foreach(KoShape *shape, m_selectedObjects) {
-        QRectF rect(m_startAbsolutePositions.at(i) - m_initialBoundingRect.topLeft(), m_startSizes.at(i));
+        QPointF pos(m_startAbsolutePositions.at(i) - m_initialPosition);
+        QRectF rect(pos, m_startSizes.at(i));
+printf("rec: %f %f\n",rect.x(),rect.y());
         QRectF result = matrix.mapRect(rect);
+printf("res: %f %f\n",result.x(),result.y());
         result.setWidth(qMax(4.0, result.width()));
         result.setHeight(qMax(4.0, result.height()));
         shape->repaint();
         // the position has to be set after the size as we set the center of the shape
         shape->resize( result.size() );
-        shape->setAbsolutePosition( result.topLeft() + m_initialBoundingRect.topLeft() );
+        shape->setAbsolutePosition( result.topLeft() + m_initialPosition );
         shape->repaint();
         i++;
     }

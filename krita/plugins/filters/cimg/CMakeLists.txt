@@ -18,12 +18,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacimg )
 
 target_link_libraries(kritacimg kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritacimg )
+install(TARGETS kritacimg  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritacimg.desktop )
+install( FILES  kritacimg.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

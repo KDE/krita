@@ -11,9 +11,9 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaflakeshapes )
 
 target_link_libraries(kritaflakeshapes kritaui flake)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaflakeshapes )
+install(TARGETS kritaflakeshapes  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaflakeshapes.desktop )
+install( FILES  kritaflakeshapes.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

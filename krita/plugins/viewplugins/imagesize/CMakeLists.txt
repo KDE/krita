@@ -20,13 +20,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaimagesize )
 
 target_link_libraries(kritaimagesize kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaimagesize )
+install(TARGETS kritaimagesize  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  imagesize.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaimagesize.desktop )
+install( FILES  imagesize.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritaimagesize.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

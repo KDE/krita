@@ -17,13 +17,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritarotateimage )
 
 target_link_libraries(kritarotateimage kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritarotateimage )
+install(TARGETS kritarotateimage  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  rotateimage.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritarotateimage.desktop )
+install( FILES  rotateimage.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritarotateimage.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

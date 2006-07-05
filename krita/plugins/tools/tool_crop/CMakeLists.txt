@@ -15,13 +15,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolcrop )
 
 target_link_libraries(kritatoolcrop kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritatoolcrop )
+install(TARGETS kritatoolcrop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_crop_cursor.png )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolcrop.desktop )
+install( FILES  tool_crop_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  kritatoolcrop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

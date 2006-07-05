@@ -17,12 +17,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritacmykplugin )
 
 target_link_libraries(kritacmykplugin  ${KDE4_KDECORE_LIBS} kritacolor )
 
-install_targets(${PLUGIN_INSTALL_DIR} kritacmykplugin )
+install(TARGETS kritacmykplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritacmykplugin.desktop )
+install( FILES  kritacmykplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

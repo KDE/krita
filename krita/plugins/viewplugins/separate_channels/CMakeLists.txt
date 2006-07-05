@@ -17,13 +17,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaseparatechannels )
 
 target_link_libraries(kritaseparatechannels kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaseparatechannels )
+install(TARGETS kritaseparatechannels  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  imageseparate.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaseparatechannels.desktop )
+install( FILES  imageseparate.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritaseparatechannels.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

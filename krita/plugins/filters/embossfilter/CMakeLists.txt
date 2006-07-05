@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaembossfilter )
 
 target_link_libraries(kritaembossfilter kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaembossfilter )
+install(TARGETS kritaembossfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaembossfilter.desktop )
+install( FILES  kritaembossfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -5,8 +5,8 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/scripts/invertpython FILES  invert.py invertpython.rc )
-install_files( ${DATA_INSTALL_DIR}/krita/scripts/reshapehisto FILES  reshapehisto.py reshapehisto.rc )
+install( FILES  invert.py invertpython.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/invertpython)
+install( FILES  reshapehisto.py reshapehisto.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/reshapehisto)
 
 
 

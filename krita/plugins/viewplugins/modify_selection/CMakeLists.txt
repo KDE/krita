@@ -21,13 +21,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamodifyselection )
 
 target_link_libraries(kritamodifyselection kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritamodifyselection )
+install(TARGETS kritamodifyselection  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  modify_selection.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritamodifyselection.desktop )
+install( FILES  modify_selection.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritamodifyselection.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -15,13 +15,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritafiltersgallery )
 
 target_link_libraries(kritafiltersgallery kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritafiltersgallery )
+install(TARGETS kritafiltersgallery  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  kritafiltersgallery.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritafiltersgallery.desktop )
+install( FILES  kritafiltersgallery.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritafiltersgallery.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

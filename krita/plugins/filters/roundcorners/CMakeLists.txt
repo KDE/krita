@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaroundcornersfilter )
 
 target_link_libraries(kritaroundcornersfilter kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaroundcornersfilter )
+install(TARGETS kritaroundcornersfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaroundcornersfilter.desktop )
+install( FILES  kritaroundcornersfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

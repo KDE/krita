@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapixelizefilter )
 
 target_link_libraries(kritapixelizefilter kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritapixelizefilter )
+install(TARGETS kritapixelizefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritapixelizefilter.desktop )
+install( FILES  kritapixelizefilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

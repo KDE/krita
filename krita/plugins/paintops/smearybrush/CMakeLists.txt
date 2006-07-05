@@ -13,12 +13,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritasmearybrush )
 
 target_link_libraries(kritasmearybrush kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritasmearybrush )
+install(TARGETS kritasmearybrush  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritasmearybrush.desktop )
+install( FILES  kritasmearybrush.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

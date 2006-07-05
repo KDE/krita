@@ -15,13 +15,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatoolstar )
 
 target_link_libraries(kritatoolstar kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritatoolstar )
+install(TARGETS kritatoolstar  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_star.png  	tool_star_cursor.png )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritatoolstar.desktop )
+install( FILES  tool_star.png  	tool_star_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  kritatoolstar.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

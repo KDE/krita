@@ -22,12 +22,12 @@ kde4_add_library(kopalette SHARED ${kopalette_LIB_SRCS})
 target_link_libraries(kopalette  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set_target_properties(kopalette PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kopalette )
+install(TARGETS kopalette  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( /include FILES  kopalettemanager.h  )
+install( FILES  kopalettemanager.h   DESTINATION ${INCLUDE_INSTALL_DIR})
 
 
 

@@ -91,7 +91,7 @@ kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 target_link_libraries(kotext  ${KDE4_KSPELL2_LIBS} flake kutils kofficecore kofficeui )
 
 set_target_properties(kotext PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kotext )
+install(TARGETS kotext  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### Flake Plugin library ###############
@@ -110,11 +110,11 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kotext2 )
 
 target_link_libraries(kotext2 kotext flake kofficeui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kotext2 )
+install(TARGETS kotext2  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES textshape.desktop)
+install( FILES textshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -26,13 +26,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadefaulttools )
 
 target_link_libraries(kritadefaulttools kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritadefaulttools )
+install(TARGETS kritadefaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  tool_rectangle_cursor.png  	tool_ellipse_cursor.png  	tool_line_cursor.png  	tool_freehand_cursor.png  	tool_duplicate_cursor.png  	tool_fill_cursor.png  	tool_text_cursor.png  	tool_gradient_cursor.png          tool_gradient.png  	tool_line.png          tool_rectangle.png  	tool_ellipse.png          tool_pan.png          tool_freehand.png  	tool_text.png          openhand_cursor.xpm          closedhand_cursor.xpm  	tool_zoom_plus_cursor.png  	tool_zoom_minus_cursor.png )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritadefaulttools.desktop )
+install( FILES  tool_rectangle_cursor.png  	tool_ellipse_cursor.png  	tool_line_cursor.png  	tool_freehand_cursor.png  	tool_duplicate_cursor.png  	tool_fill_cursor.png  	tool_text_cursor.png  	tool_gradient_cursor.png          tool_gradient.png  	tool_line.png          tool_rectangle.png  	tool_ellipse.png          tool_pan.png          tool_freehand.png  	tool_text.png          openhand_cursor.xpm          closedhand_cursor.xpm  	tool_zoom_plus_cursor.png  	tool_zoom_minus_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  kritadefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

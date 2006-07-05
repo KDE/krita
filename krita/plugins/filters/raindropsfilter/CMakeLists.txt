@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaraindropsfilter )
 
 target_link_libraries(kritaraindropsfilter kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaraindropsfilter )
+install(TARGETS kritaraindropsfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaraindropsfilter.desktop )
+install( FILES  kritaraindropsfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

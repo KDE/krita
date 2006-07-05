@@ -17,7 +17,7 @@ kde4_add_library(kritagrayscale SHARED ${kritagrayscale_LIB_SRCS})
 target_link_libraries(kritagrayscale  ${KDE4_KDECORE_LIBS} kritacolor )
 
 set_target_properties(kritagrayscale PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kritagrayscale )
+install(TARGETS kritagrayscale  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -32,12 +32,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritagrayplugin )
 
 target_link_libraries(kritagrayplugin  ${KDE4_KDECORE_LIBS} kritagrayscale kritacolor )
 
-install_targets(${PLUGIN_INSTALL_DIR} kritagrayplugin )
+install(TARGETS kritagrayplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritagrayplugin.desktop )
+install( FILES  kritagrayplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

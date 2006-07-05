@@ -81,7 +81,7 @@ kde4_add_library(kofficecore SHARED ${kofficecore_LIB_SRCS})
 target_link_libraries(kofficecore  ${KDE4_KPARTS_LIBS} kstore kabc ${KDE4_KDEPRINT_LIBS} kowmf)
 
 set_target_properties(kofficecore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kofficecore )
+install(TARGETS kofficecore DESTINATION ${LIB_INSTALL_DIR} )
 
 
 ########### next target ###############
@@ -96,14 +96,14 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kodocinfopropspage )
 
 target_link_libraries(kodocinfopropspage  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} kodocinfopropspage )
+install(TARGETS kodocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kodocinfopropspage.desktop )
-install_files( ${DATA_INSTALL_DIR}/koffice FILES  koffice_shell.rc )
-install_files( /include FILES
+install(FILES kodocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(FILES koffice_shell.rc DESTINATION ${DATA_INSTALL_DIR}/koffice )
+install_files( ${INCLUDE_INSTALL_DIR} FILES
     KoContainerHandler.h
     KoProperties.h
     KoFilter.h

@@ -15,14 +15,14 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kofficescan )
 
 target_link_libraries(kofficescan  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KIO_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} kofficescan )
+install(TARGETS kofficescan  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kpresenter/kpartplugins FILES  scan-kpresenter.rc )
-install_files( ${DATA_INSTALL_DIR}/krita/kpartplugins FILES  scan-krita.rc )
-install_files( ${DATA_INSTALL_DIR}/kword/kpartplugins FILES  scan-kword.rc )
+install( FILES  scan-kpresenter.rc  DESTINATION ${DATA_INSTALL_DIR}/kpresenter/kpartplugins)
+install( FILES  scan-krita.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/kpartplugins)
+install( FILES  scan-kword.rc  DESTINATION ${DATA_INSTALL_DIR}/kword/kpartplugins)
 
 
 

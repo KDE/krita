@@ -15,13 +15,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritahistogramdocker )
 
 target_link_libraries(kritahistogramdocker kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritahistogramdocker )
+install(TARGETS kritahistogramdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  kritahistogramdocker.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritahistogramdocker.desktop )
+install( FILES  kritahistogramdocker.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritahistogramdocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

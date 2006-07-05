@@ -27,7 +27,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 target_link_libraries(krosskritacore krossapi krossmain kritaui kritascripting)
 
-install_targets(${PLUGIN_INSTALL_DIR} krosskritacore )
+install(TARGETS krosskritacore  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

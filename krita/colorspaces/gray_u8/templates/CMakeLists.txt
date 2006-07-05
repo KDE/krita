@@ -6,8 +6,8 @@
 ########### install files ###############
 
 kde4_install_icons(${DATA_INSTALL_DIR}/krita/icons crystalsvg)
-install_files( ${DATA_INSTALL_DIR}/krita/templates/gray/.source FILES  white_640x480.kra  )
-install_files( ${DATA_INSTALL_DIR}/krita/templates/gray FILES  .directory white_640x480.desktop )
+install( FILES  white_640x480.kra   DESTINATION ${DATA_INSTALL_DIR}/krita/templates/gray/.source)
+install( FILES  .directory white_640x480.desktop  DESTINATION ${DATA_INSTALL_DIR}/krita/templates/gray)
 
 
 

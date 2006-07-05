@@ -17,13 +17,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritavariations )
 
 target_link_libraries(kritavariations kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritavariations )
+install(TARGETS kritavariations  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  variations.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritavariations.desktop )
+install( FILES  variations.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritavariations.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

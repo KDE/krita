@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kformula/dtd FILES  kformula.dtd )
+install( FILES  kformula.dtd  DESTINATION ${DATA_INSTALL_DIR}/kformula/dtd)
 
 
 

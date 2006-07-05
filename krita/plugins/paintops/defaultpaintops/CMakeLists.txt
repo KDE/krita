@@ -17,12 +17,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritadefaultpaintops )
 
 target_link_libraries(kritadefaultpaintops kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritadefaultpaintops )
+install(TARGETS kritadefaultpaintops  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritadefaultpaintops.desktop )
+install( FILES  kritadefaultpaintops.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install_files( ${DATA_INSTALL_DIR}/krita/images FILES
     airbrush.png
     paintbrush.png

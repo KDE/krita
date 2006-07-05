@@ -15,13 +15,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatooltransform )
 
 target_link_libraries(kritatooltransform kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritatooltransform )
+install(TARGETS kritatooltransform  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  rotate_cursor.xpm )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritatooltransform.desktop )
+install( FILES  rotate_cursor.xpm  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES  kritatooltransform.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

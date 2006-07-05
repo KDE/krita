@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaoilpaintfilter )
 
 target_link_libraries(kritaoilpaintfilter kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaoilpaintfilter )
+install(TARGETS kritaoilpaintfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritaoilpaintfilter.desktop )
+install( FILES  kritaoilpaintfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

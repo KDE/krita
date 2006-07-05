@@ -36,7 +36,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosspython )
 
 target_link_libraries(krosspython  ${KDE4_KDECORE_LIBS} krossapi krossmain ${PYTHON_LIBRARIES})
 
-install_targets(${PLUGIN_INSTALL_DIR} krosspython )
+install(TARGETS krosspython  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

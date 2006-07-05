@@ -13,7 +13,7 @@ kde4_add_executable(krossrunner ${krossrunner_SRCS})
 
 target_link_libraries(krossrunner  ${KDE4_KDECORE_LIBS} krossapi krossmain )
 
-install_targets(/bin krossrunner )
+install(TARGETS krossrunner  DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### install files ###############

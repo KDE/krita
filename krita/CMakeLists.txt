@@ -128,7 +128,7 @@ if (SHOULD_BUILD_KRITA)
 
     target_link_libraries(kritapart kritaui)
 
-    install_targets(${PLUGIN_INSTALL_DIR} kritapart)
+install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 
@@ -142,18 +142,18 @@ if (SHOULD_BUILD_KRITA)
 
     target_link_libraries(kdeinit_krita kritaui)
 
-    install_targets(${LIB_INSTALL_DIR} kdeinit_krita)
+install(TARGETS kdeinit_krita DESTINATION ${LIB_INSTALL_DIR})
 
     target_link_libraries(krita kdeinit_krita)
 
-    install_targets(/bin krita)
+install(TARGETS krita DESTINATION ${BIN_INSTALL_DIR})
 
     ########### install files ###############
 
-    install_files( ${XDG_APPS_DIR} FILES  krita.desktop )
-    install_files( ${MIME_INSTALL_DIR}/application FILES  )
-    install_files( ${SERVICES_INSTALL_DIR} FILES  kritapart.desktop )
-    install_files( ${DATA_INSTALL_DIR}/krita FILES  krita.rc krita_readonly.rc )
+install( FILES  krita.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES   DESTINATION ${MIME_INSTALL_DIR}/application)
+install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
 
     #kde4_create_doxygen_docs( EXCLUDE CImg.h colorspaces plugins kritacolor/colorspaces image/tiles  )
 endif (SHOULD_BUILD_KRITA)

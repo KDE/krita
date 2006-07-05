@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/images FILES previewfilter.png )
+install( FILES previewfilter.png  DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
 
 

@@ -11,7 +11,7 @@ kde4_add_library(kritascripting SHARED ${kritascripting_LIB_SRCS})
 target_link_libraries(kritascripting kritaui krossmain)
 
 set_target_properties(kritascripting PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kritascripting )
+install(TARGETS kritascripting  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

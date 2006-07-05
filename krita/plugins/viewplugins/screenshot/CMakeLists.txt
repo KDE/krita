@@ -17,13 +17,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritascreenshot )
 
 target_link_libraries(kritascreenshot kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritascreenshot )
+install(TARGETS kritascreenshot  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  screenshot-krita.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritascreenshot.desktop )
+install( FILES  screenshot-krita.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritascreenshot.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

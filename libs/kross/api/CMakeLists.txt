@@ -25,12 +25,12 @@ kde4_add_library(krossapi SHARED ${krossapi_LIB_SRCS})
 target_link_libraries(krossapi  ${KDE4_KDECORE_LIBS} )
 
 set_target_properties(krossapi PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} krossapi )
+install(TARGETS krossapi  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( /include/kross/api FILES  callable.h      class.h      dict.h      event.h      exception.h      function.h      interpreter.h      list.h      module.h      object.h      proxy.h      qtobject.h      script.h      value.h      variant.h krossconfig.h )
+install( FILES  callable.h      class.h      dict.h      event.h      exception.h      function.h      interpreter.h      list.h      module.h      object.h      proxy.h      qtobject.h      script.h      value.h      variant.h krossconfig.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kross/api)
 
 
 

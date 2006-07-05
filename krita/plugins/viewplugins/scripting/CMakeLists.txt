@@ -23,13 +23,13 @@ set_target_properties(kritascripting_plug PROPERTIES OUTPUT_NAME kritascripting)
 
 target_link_libraries(kritascripting_plug kritaui krossmain kritascripting)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritascripting_plug )
+install(TARGETS kritascripting_plug  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kritaplugins FILES  scripting.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kritascripting.desktop )
+install( FILES  scripting.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  kritascripting.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -80,7 +80,7 @@ class MyFileDialog : public KFileDialog
         KUrl currentURL()
         {
             setResult( QDialog::Accepted ); // selectedURL tests for it
-            return KFileDialog::selectedURL();
+            return KFileDialog::selectedUrl();
         }
 
         // Return true if the current URL exists, show msg box if not

@@ -323,7 +323,7 @@ KUrl ScriptGUIClient::openScriptFile(const QString& caption)
     if(! caption.isNull())
         filedialog->setCaption(caption);
     if( filedialog->exec() )
-        return filedialog->selectedURL();
+        return filedialog->selectedUrl();
     return KUrl();
 }
 

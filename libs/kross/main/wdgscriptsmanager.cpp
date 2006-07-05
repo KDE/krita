@@ -253,7 +253,7 @@ void WdgScriptsManager::slotInstallScript()
     if(! filedialog->exec())
         return;
 
-    if(! d->m_scripguiclient->installScriptPackage( filedialog->selectedURL().path() )) {
+    if(! d->m_scripguiclient->installScriptPackage( filedialog->selectedUrl().path() )) {
         krosswarning("Failed to install scriptpackage");
         return;
     }

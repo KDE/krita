@@ -400,19 +400,19 @@ void KoAutoFormat::readAutoCorrectConfig()
     QString fname;
     if ( !m_autoFormatLanguage.isEmpty() )
     {
-        fname = locate( "data", "koffice/autocorrect/" + m_autoFormatLanguage + ".xml", m_doc->instance() );
+        fname = KStandardDirs::locate( "data", "koffice/autocorrect/" + m_autoFormatLanguage + ".xml", m_doc->instance() );
     }
     if ( m_autoFormatLanguage != "all_languages" )
     {
         if ( fname.isEmpty() && !kdelang.isEmpty() )
-            fname = locate( "data", "koffice/autocorrect/" + kdelang + ".xml", m_doc->instance() );
+            fname = KStandardDirs::locate( "data", "koffice/autocorrect/" + kdelang + ".xml", m_doc->instance() );
         if ( fname.isEmpty() && kdelang.contains("_") )
         {
             kdelang.remove( QRegExp( "_.*" ) );
-            fname = locate( "data", "koffice/autocorrect/" + kdelang + ".xml", m_doc->instance() );
+            fname = KStandardDirs::locate( "data", "koffice/autocorrect/" + kdelang + ".xml", m_doc->instance() );
         }
         if ( fname.isEmpty() )
-            fname = locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() );
+            fname = KStandardDirs::locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() );
     }
     if ( fname.isEmpty() )
         return;
@@ -494,7 +494,7 @@ void KoAutoFormat::readAutoCorrectConfig()
 
 void KoAutoFormat::loadAllLanguagesAutoCorrection()
 {
-    QString fname = locate( "data", "koffice/autocorrect/all_languages.xml", m_doc->instance() );
+    QString fname = KStandardDirs::locate( "data", "koffice/autocorrect/all_languages.xml", m_doc->instance() );
     if ( fname.isEmpty() )
         return;
     QFile xmlFile( fname );
@@ -735,9 +735,9 @@ void KoAutoFormat::saveConfig()
     begin.appendChild(simpleQuote);
     QFile f;
     if ( m_autoFormatLanguage.isEmpty())
-        f.setFileName(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
+        f.setFileName(KStandardDirs::locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
     else
-        f.setFileName(locateLocal("data", "koffice/autocorrect/"+m_autoFormatLanguage + ".xml",m_doc->instance()));
+        f.setFileName(KStandardDirs::locateLocal("data", "koffice/autocorrect/"+m_autoFormatLanguage + ".xml",m_doc->instance()));
     if(!f.open(QIODevice::WriteOnly)) {
         kWarning()<<"Error during saving autoformat to " << f.fileName() << endl;
 	return;

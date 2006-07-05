@@ -106,7 +106,7 @@ void CMStyle::installFonts()
         for (QStringList::const_iterator it = missing.begin(); it != missing.end(); ++it)
         {
             if (!KIO::NetAccess::exists("fonts:/Personal/" + *it + ".ttf", true, NULL))
-                urlList.append(KUrl::fromPath(locate("data", "kformula/fonts/" + *it + ".ttf")));
+                urlList.append(KUrl::fromPath(KStandardDirs::locate("data", "kformula/fonts/" + *it + ".ttf")));
         }
         KIO::copy(urlList, KUrl("fonts:/Personal/"), false);
         KMessageBox::information(qApp->activeWindow(),

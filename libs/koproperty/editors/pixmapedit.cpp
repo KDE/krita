@@ -167,7 +167,7 @@ PixmapEdit::selectPixmapFileName()
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)),
 		this, 0, caption);
 #else
-	KUrl url( KFileDialog::getImageOpenURL(
+	KUrl url( KFileDialog::getImageOpenUrl(
 		KUrl(":lastVisitedImagePath"), this, caption) );
 	QString fileName = url.isLocalFile() ? url.path() : url.prettyUrl();
 

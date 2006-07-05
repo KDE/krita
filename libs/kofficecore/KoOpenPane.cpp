@@ -163,7 +163,7 @@ void KoOpenPane::showOpenFileDialog()
       KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
 
   KUrl url = 
-KFileDialog::getOpenURL(KUrl("kfiledialog:///OpenDialog"),mimeFilter.join(""), 
+KFileDialog::getOpenUrl(KUrl("kfiledialog:///OpenDialog"),mimeFilter.join(""), 
 this);
 
   if(!url.isEmpty()) {

@@ -204,7 +204,7 @@ KoMainWindow::KoMainWindow( KInstance *instance )
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources( "data", "koffice/koffice_shell.rc" );
     setXMLFile( findMostRecentXMLFile( allFiles, doc ) );
-    setLocalXMLFile( locateLocal( "data", "koffice/koffice_shell.rc" ) );
+    setLocalXMLFile( KStandardDirs::locateLocal( "data", "koffice/koffice_shell.rc" ) );
 
     KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
     KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
@@ -828,7 +828,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
         do {
             bOk=true;
             if(dialog->exec()==QDialog::Accepted) {
-                newURL=dialog->selectedURL();
+                newURL=dialog->selectedUrl();
                 outputFormat=dialog->currentMimeFilter().toLatin1();
                 specialOutputFlag = dialog->specialEntrySelected();
                 kDebug(30003) << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
@@ -1135,7 +1135,7 @@ KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString::null, this);
         delete dialog;
         return;
     }
-    KUrl url( dialog->selectedURL() );
+    KUrl url( dialog->selectedUrl() );
     delete dialog;
 
     if ( url.isEmpty() )

@@ -54,6 +54,14 @@ KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
 , m_lastHandle(KoFlake::NoHandle)
 , m_mouseWasInsideHandles( false )
 {
+    m_sizeCursors[0] = KCursor::sizeVerCursor();
+    m_sizeCursors[1] = KCursor::sizeBDiagCursor();
+    m_sizeCursors[2] = KCursor::sizeHorCursor();
+    m_sizeCursors[3] = KCursor::sizeFDiagCursor();
+    m_sizeCursors[4] = KCursor::sizeVerCursor();
+    m_sizeCursors[5] = KCursor::sizeBDiagCursor();
+    m_sizeCursors[6] = KCursor::sizeHorCursor();
+    m_sizeCursors[7] = KCursor::sizeFDiagCursor();
 }
 
 KoInteractionTool::~KoInteractionTool()
@@ -82,22 +90,32 @@ void KoInteractionTool::updateCursor() {
                 cursor = Qt::IBeamCursor; // TODO make rotation cursor
         }
         else {
+            int rotOctant = 8 + int(8.5 + m_angle / 45);
+
             switch(m_lastHandle) {
-                case KoFlake::BottomMiddleHandle:
                 case KoFlake::TopMiddleHandle:
-                    cursor = Qt::SizeVerCursor;
-                    break;
-                case KoFlake::RightMiddleHandle:
-                case KoFlake::LeftMiddleHandle:
-                    cursor = Qt::SizeHorCursor;
+                    cursor = m_sizeCursors[(0 +rotOctant)%8];
                     break;
                 case KoFlake::TopRightHandle:
-                case KoFlake::BottomLeftHandle:
-                    cursor = KCursor::sizeBDiagCursor();
+                    cursor = m_sizeCursors[(1 +rotOctant)%8];
+                    break;
+                case KoFlake::RightMiddleHandle:
+                    cursor = m_sizeCursors[(2 +rotOctant)%8];
                     break;
                 case KoFlake::BottomRightHandle:
+                    cursor = m_sizeCursors[(3 +rotOctant)%8];
+                    break;
+                case KoFlake::BottomMiddleHandle:
+                    cursor = m_sizeCursors[(4 +rotOctant)%8];
+                    break;
+                case KoFlake::BottomLeftHandle:
+                    cursor = m_sizeCursors[(5 +rotOctant)%8];
+                    break;
+                case KoFlake::LeftMiddleHandle:
+                    cursor = m_sizeCursors[(6 +rotOctant)%8];
+                    break;
                 case KoFlake::TopLeftHandle:
-                    cursor = KCursor::sizeFDiagCursor();
+                    cursor = m_sizeCursors[(7 +rotOctant)%8];
                     break;
                 case KoFlake::NoHandle:
                     cursor = Qt::SizeAllCursor;
@@ -249,11 +267,13 @@ void KoInteractionTool::recalcSelectionBox() {
     {
         QMatrix matrix = selection()->transformationMatrix(0);
         m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection()->unmodifiedSize())));
+        m_angle = selection()->rotation();
     }
     else
     {
         QMatrix matrix = selection()->firstSelectedShape()->transformationMatrix(0);
         m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection()->firstSelectedShape()->size())));
+        m_angle = selection()->firstSelectedShape()->rotation();
     }
     QPolygonF outline = m_selectionOutline; //shorter name in the following :)
     m_selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0)+outline.value(1))/2;

@@ -109,6 +109,8 @@ private:
     QPointF m_selectionBox[8];
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
+    QCursor m_sizeCursors[8];
+    double m_angle;
 };
 
 /**

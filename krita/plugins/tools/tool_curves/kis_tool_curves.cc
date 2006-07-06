@@ -198,7 +198,43 @@ void KisToolCurves::buttonPress(KisButtonPressEvent *event)
 
 void KisToolCurves::move(KisMoveEvent *event)
 {
-    return;
+    if (m_dragging) {
+        // Remove previous lines
+        predraw();
+        m_curve->deleteLastPivot();
+        m_curve->calculateCurve(m_start,event->pos());
+        m_curve->add(event->pos(),true);
+        predraw();
+    }
+}
+
+void KisToolCurves::predraw()
+{
+    KisCanvasPainter *gc;
+    if (m_subject) {
+        KisCanvasController *controller = m_subject->canvasController();
+        KisCanvas *canvas = controller->kiscanvas();
+        gc = new KisCanvasPainter(canvas);
+    } else
+        return;
+
+    if (!m_subject || !m_currentImage)
+        return;
+
+    QPen pen(Qt::white, 0, Qt::SolidLine);
+
+    gc->setPen(pen);
+    gc->setRasterOp(Qt::XorROP);
+
+    KisCanvasController *controller = m_subject->canvasController();
+    KisPoint start, end;
+    QPoint pos;
+
+    for (int i = 0; i < m_curve->count(); i++)
+    {
+        pos = controller->windowToView((*m_curve)[i].getPoint().floorQPoint());
+        gc->drawPoint(pos);
+    }
 }
 
 void KisToolCurves::buttonRelease(KisButtonReleaseEvent *event)

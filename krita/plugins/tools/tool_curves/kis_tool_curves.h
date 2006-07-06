@@ -72,6 +72,7 @@ public slots:
 
 protected:
 
+    void predraw();
     virtual void draw();
 
 protected:

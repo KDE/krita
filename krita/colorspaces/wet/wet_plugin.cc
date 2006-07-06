@@ -99,7 +99,9 @@ WetPlugin::WetPlugin(QObject *parent, const QStringList &)
     else if (parent->inherits("KisView"))
     {
         setInstance(WetPluginFactory::instance());
-        setXMLFile(locate("data","kritaplugins/wetplugin.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/wetplugin.rc"), 
+true);
 
         m_view = dynamic_cast<KisView*>(parent);
         // Wetness visualisation

@@ -57,7 +57,9 @@ ShearImage::ShearImage(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView") )
     {
         setInstance(ShearImageFactory::instance());
-        setXMLFile(locate("data","kritaplugins/shearimage.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/shearimage.rc"), 
+true);
 
         KAction *action = new KAction(i18n("&Shear Image..."), actionCollection(), "shearimage");
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));

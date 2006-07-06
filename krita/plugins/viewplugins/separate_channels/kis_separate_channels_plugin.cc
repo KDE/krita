@@ -44,7 +44,9 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QStr
 {
     if ( parent->inherits("KisView") ) {
         setInstance(KGenericFactory<KisSeparateChannelsPlugin>::instance());
-        setXMLFile(locate("data","kritaplugins/imageseparate.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), 
+true);
         m_view = (KisView*) parent;
         (void) new KAction(i18n("Separate Image..."), 0, 0, this, SLOT(slotSeparate()), actionCollection(), "separate");
     }

@@ -66,7 +66,9 @@ Scripting::Scripting(QObject *parent, const QStringList &)
         m_scriptguiclient = new Kross::Api::ScriptGUIClient( m_view, m_view );
 //         m_scriptguiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
         //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
-        setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), 
+true);
         new KAction(i18n("Execute Script File..."), 0, 0, m_scriptguiclient, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
         new KAction(i18n("Script Manager..."), 0, 0, m_scriptguiclient, SLOT(showScriptManager()), actionCollection(), "configurescripts");
         //END TODO

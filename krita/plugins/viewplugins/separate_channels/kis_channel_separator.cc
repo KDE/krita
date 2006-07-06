@@ -261,10 +261,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
                 fd.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 fd.setMimeFilter(listMimeFilter);
                 fd.setOperationMode(KFileDialog::Saving);
-                fd.setURL(KUrl(ch->name()));
+                fd.setUrl(KUrl(ch->name()));
                 if (!fd.exec()) return;
 
-                KUrl url = fd.selectedURL();
+                KUrl url = fd.selectedUrl();
                 QString mimefilter = fd.currentMimeFilter();
 
                 if (url.isEmpty())

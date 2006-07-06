@@ -44,7 +44,9 @@ Screenshot::Screenshot(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setInstance(KGenericFactory<Screenshot>::instance());
-    setXMLFile(locate("data","kritaplugins/screenshot-krita.rc"), true);
+    
+setXMLFile(KStandardDirs::locate("data","kritaplugins/screenshot-krita.rc"), 
+true);
 
 
     snapshot = new KSnapshot();
@@ -67,7 +69,8 @@ void Screenshot::slotScreenshot()
 
 void Screenshot::slotScreenGrabbed()
 {
-    KTempFile temp(locateLocal("tmp", "screenshot"), ".png");
+    KTempFile temp(KStandardDirs::locateLocal("tmp", "screenshot"), 
+".png");
     snapshot->save(temp.name());
 
     KisView *view = dynamic_cast<KisView *>(parent());

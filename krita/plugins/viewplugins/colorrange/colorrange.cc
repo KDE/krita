@@ -55,7 +55,9 @@ ColorRange::ColorRange(QObject *parent, const QStringList &)
 {
     if (parent->inherits("KisView")) {
         setInstance(ColorRangeFactory::instance());
-        setXMLFile(locate("data","kritaplugins/colorrange.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/colorrange.rc"), 
+true);
         m_view = dynamic_cast<KisView*>(parent);
         KAction *action = new KAction(i18n("&Color Range..."), actionCollection(), "colorrange");
         connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));

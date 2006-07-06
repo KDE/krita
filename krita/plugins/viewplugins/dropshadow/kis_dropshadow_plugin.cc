@@ -45,7 +45,9 @@ KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView") ) {
 
         setInstance(KGenericFactory<KisDropshadowPlugin>::instance());
-        setXMLFile(locate("data","kritaplugins/dropshadow.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/dropshadow.rc"), 
+true);
 
         m_view = (KisView*) parent;
         KAction *action = new KAction(i18n("Add Drop Shadow..."), actionCollection(), "dropshadow");

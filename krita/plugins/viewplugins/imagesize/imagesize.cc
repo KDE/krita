@@ -61,7 +61,9 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView") )
     {
         setInstance(ImageSizeFactory::instance());
-        setXMLFile(locate("data","kritaplugins/imagesize.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"), 
+true);
 
         KAction *action = new KAction(i18n("Change &Image Size..."), actionCollection(), "imagesize");
         action->setShortcut(Qt::SHIFT+Qt::Key_S);

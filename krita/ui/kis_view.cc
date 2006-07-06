@@ -1749,7 +1749,7 @@ void KisView::saveLayerAsImage()
 
     if (!fd.exec()) return;
 
-    KUrl url = fd.selectedURL();
+    KUrl url = fd.selectedUrl();
     QString mimefilter = fd.currentMimeFilter();
 
     if (url.isEmpty())
@@ -1788,7 +1788,7 @@ qint32 KisView::importImage(const KUrl& urlArg)
 
     if (urlArg.isEmpty()) {
         QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
-        urls = KFileDialog::getOpenURLs(KUrl(QString::null), mimelist, 
+        urls = KFileDialog::getOpenUrls(KUrl(QString::null), mimelist, 
 0, i18n("Import Image"));
     } else {
         urls.push_back(urlArg);

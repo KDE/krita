@@ -64,7 +64,9 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
         m_view = (KisView*) parent;
 
         setInstance(ColorSpaceConversionFactory::instance());
-        setXMLFile(locate("data","kritaplugins/colorspaceconversion.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/colorspaceconversion.rc"), 
+true);
 
         KAction *action = new KAction(i18n("&Convert Image Type..."), actionCollection(), "imgcolorspaceconversion");
         connect(action, SIGNAL(triggered()), this, SLOT(slotImgColorSpaceConversion()));

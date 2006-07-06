@@ -61,7 +61,9 @@ ModifySelection::ModifySelection(QObject *parent, const QStringList &)
     if ( parent->inherits("KisView") )
     {
         setInstance(ModifySelectionFactory::instance());
-        setXMLFile(locate("data","kritaplugins/modify_selection.rc"), true);
+        
+setXMLFile(KStandardDirs::locate("data","kritaplugins/modify_selection.rc"), 
+true);
 
         m_view = (KisView*) parent;
 

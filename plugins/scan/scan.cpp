@@ -73,7 +73,7 @@ void Scan::slotScan()
 
 void Scan::slotShowImage(const QImage &img)
 {
-    KTempFile temp(locateLocal("tmp", "scandialog"), ".png");
+    KTempFile temp(KStandardDirs::locateLocal("tmp", "scandialog"), ".png");
     img.save(temp.name(), "PNG");
 
     KoView *view = dynamic_cast<KoView *>(parent());

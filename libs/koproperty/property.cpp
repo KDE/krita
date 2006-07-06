@@ -349,8 +349,8 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 			   || (t==QVariant::CString && newt==QVariant::String)
 			   || (t==QVariant::String && newt==QVariant::CString)
 		 )) {
-		kopropertywarn << "Property::setValue(): INCOMPAT TYPES! " << currentValue.typeName() 
-			<< " and " << value.typeName() << endl;
+		kopropertywarn << "Property::setValue(): INCOMPAT TYPES! " << currentValue 
+			<< " and " << value << endl;
 	}
 
 	//1. Check if the value should be changed
@@ -402,7 +402,12 @@ void
 Property::resetValue()
 {
 	d->changed = false;
+	bool cleared;
+	d->set->informAboutClearing(cleared); //inform me about possibly clearing the property sets
 	setValue(oldValue(), false);
+	if (cleared)
+		return; //property set has been cleared: no further actions make sense as 'this' is dead
+
 	// maybe parent  prop is also unchanged now
 	if(d->parent && d->parent->value() == d->parent->oldValue())
 		d->parent->d->changed = false;

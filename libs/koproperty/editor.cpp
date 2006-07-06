@@ -79,6 +79,7 @@ class EditorPrivate
 			currentItem = 0;
 			undoButton = 0;
 			topItem = 0;
+			itemToSelectLater = 0;
 			if (!kofficeAppDirAdded) {
 				kofficeAppDirAdded = true;
 				KGlobal::iconLoader()->addAppDir("koffice");
@@ -186,12 +187,14 @@ Editor::~Editor()
 {
 	clearWidgetCache();
 	delete d;
+	d = 0;
 }
 
 void
 Editor::fill()
 {
 	setUpdatesEnabled(false);
+	d->itemToSelectLater = 0;
 	qApp->processEvents(QEventLoop::AllEvents);
 	hideEditor();
 	K3ListView::clear();
@@ -357,6 +360,9 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QByteArray
 	}
 
 	fill();
+
+	emit propertySetChanged(d->set);
+
 	if (d->set) {
 		//select prev. selected item
 		EditorItem * item = 0;
@@ -374,8 +380,6 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QByteArray
 //			ensureItemVisible(item);
 		}
 	}
-
-	emit propertySetChanged(d->set);
 }
 
 //! @internal
@@ -413,8 +417,8 @@ Editor::changeSetLater()
 void
 Editor::clear(bool editorOnly)
 {
-	hideEditor();
 	d->itemToSelectLater = 0;
+	hideEditor();
 
 	if(!editorOnly) {
 		qApp->processEvents(QEventLoop::AllEvents);
@@ -620,6 +624,7 @@ Editor::slotCurrentChanged(Q3ListViewItem *item)
 void
 Editor::slotSetWillBeCleared()
 {
+	d->itemToSelectLater = 0;
 	if (d->currentWidget) {
 		acceptInput();
 		d->currentWidget->setProperty(0);

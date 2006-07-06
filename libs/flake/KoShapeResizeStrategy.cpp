@@ -31,9 +31,9 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
 : KoInteractionStrategy(tool, canvas)
 , m_initialBoundingRect()
 {
-    KoSelectionSet selectedObjects = canvas->shapeManager()->selection()->selectedObjects(KoFlake::StrippedSelection);
-    foreach(KoShape *shape, selectedObjects) {
-        m_selectedObjects << shape;
+    KoSelectionSet selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    foreach(KoShape *shape, selectedShapes) {
+        m_selectedShapes << shape;
         m_startPositions << shape->position();
         m_startAbsolutePositions << shape->absolutePosition();
         m_startSizes << shape->size();
@@ -46,11 +46,11 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
     if(canvas->shapeManager()->selection()->count()==1)
     {
         m_unwindMatrix = QMatrix();
-        m_unwindMatrix.rotate(-canvas->shapeManager()->selection()->firstSelectedObject()->rotation());
+        m_unwindMatrix.rotate(-canvas->shapeManager()->selection()->firstSelectedShape()->rotation());
         m_windMatrix = QMatrix();
-        m_windMatrix.rotate(canvas->shapeManager()->selection()->firstSelectedObject()->rotation());
-        m_initialSize = canvas->shapeManager()->selection()->firstSelectedObject()->size();
-        m_initialPosition = canvas->shapeManager()->selection()->firstSelectedObject()->position();
+        m_windMatrix.rotate(canvas->shapeManager()->selection()->firstSelectedShape()->rotation());
+        m_initialSize = canvas->shapeManager()->selection()->firstSelectedShape()->size();
+        m_initialPosition = canvas->shapeManager()->selection()->firstSelectedShape()->position();
     }
 
     switch(direction) {
@@ -78,7 +78,7 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
 void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
     QPointF distance = point - m_start;
     bool keepAspect = modifiers & Qt::AltModifier;
-    foreach(KoShape *shape, m_selectedObjects)
+    foreach(KoShape *shape, m_selectedShapes)
         keepAspect = keepAspect || shape->keepAspectRatio();
 
     if(m_canvas->snapToGrid() && (modifiers & Qt::ShiftModifier) == 0)
@@ -140,7 +140,7 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
 
     int i=0;
     QMatrix windMatrix = m_unwindMatrix.inverted();
-    foreach(KoShape *shape, m_selectedObjects) {
+    foreach(KoShape *shape, m_selectedShapes) {
         QPointF pos(m_startAbsolutePositions.at(i) - m_initialPosition);
         QRectF rect(pos, m_startSizes.at(i));
 printf("rec: %f %f\n",rect.x(),rect.y());
@@ -161,12 +161,12 @@ KCommand* KoShapeResizeStrategy::createCommand() {
     KMacroCommand *cmd = new KMacroCommand("Resize");
     QList<QPointF> newPositions;
     QList<QSizeF> newSizes;
-    foreach(KoShape *shape, m_selectedObjects) {
+    foreach(KoShape *shape, m_selectedShapes) {
         newPositions << shape->position();
         newSizes << shape->size();
     }
-    cmd->addCommand(new KoShapeMoveCommand(m_selectedObjects, m_startPositions, newPositions));
-    cmd->addCommand(new KoShapeSizeCommand(m_selectedObjects, m_startSizes, newSizes));
+    cmd->addCommand(new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions));
+    cmd->addCommand(new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes));
     return cmd;
 }
 

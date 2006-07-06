@@ -37,12 +37,12 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
 , m_initialTopLeft(99999, 99999)
 , m_start(clicked)
 {
-    KoSelectionSet selectedObjects = canvas->shapeManager()->selection()->selectedObjects(KoFlake::StrippedSelection);
+    KoSelectionSet selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     QRectF boundingRect;
-    foreach(KoShape *shape, selectedObjects) {
+    foreach(KoShape *shape, selectedShapes) {
         if(shape->isLocked())
             continue;
-        m_selectedObjects << shape;
+        m_selectedShapes << shape;
         m_previousPositions << shape->position();
         m_newPositions << shape->position();
         boundingRect = boundingRect.unite( shape->boundingRect() );
@@ -67,7 +67,7 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     }
 
     int i=0;
-    foreach(KoShape *shape, m_selectedObjects) {
+    foreach(KoShape *shape, m_selectedShapes) {
         QPointF newPos (m_previousPositions.at(i) + m_diff);
         m_newPositions[i] = newPos;
         shape->repaint();
@@ -81,7 +81,7 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
 KCommand* KoShapeMoveStrategy::createCommand() {
     if(m_diff.x() == 0 && m_diff.y() == 0)
         return 0;
-    return new KoShapeMoveCommand(m_selectedObjects, m_previousPositions, m_newPositions);
+    return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
 }
 
 void KoShapeMoveStrategy::paint( QPainter &painter, KoViewConverter &converter) {

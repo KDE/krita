@@ -33,11 +33,11 @@ KoShapeRotateStrategy::KoShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas
 , m_initialBoundingRect()
 , m_start(clicked)
 {
-    KoSelectionSet selectedObjects = canvas->shapeManager()->selection()->selectedObjects(KoFlake::StrippedSelection);
-    foreach(KoShape *shape, selectedObjects) {
+    KoSelectionSet selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    foreach(KoShape *shape, selectedShapes) {
         if(shape->isLocked())
             continue;
-        m_selectedObjects << shape;
+        m_selectedShapes << shape;
         m_startPositions << shape->position();
         m_startAbsolutePositions << shape->absolutePosition();
         m_initialAngles << shape->rotation();
@@ -67,7 +67,7 @@ void KoShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     matrix.translate(-center.x(), -center.y());
 
     int counter=0;
-    foreach(KoShape *shape, m_selectedObjects) {
+    foreach(KoShape *shape, m_selectedShapes) {
         shape->repaint();
         shape->setAbsolutePosition(matrix.map(m_startAbsolutePositions[counter]));
         shape->rotate(m_initialAngles[counter] + angle);
@@ -88,11 +88,11 @@ KCommand* KoShapeRotateStrategy::createCommand() {
     KMacroCommand *cmd = new KMacroCommand("Rotate");
     QList<QPointF> newPositions;
     QList<double> newAngles;
-    foreach(KoShape *shape, m_selectedObjects) {
+    foreach(KoShape *shape, m_selectedShapes) {
         newPositions << shape->position();
         newAngles << shape->rotation();
     }
-    cmd->addCommand(new KoShapeMoveCommand(m_selectedObjects, m_startPositions, newPositions));
-    cmd->addCommand(new KoShapeRotateCommand(m_selectedObjects, m_initialAngles, newAngles));
+    cmd->addCommand(new KoShapeMoveCommand(m_selectedShapes, m_startPositions, newPositions));
+    cmd->addCommand(new KoShapeRotateCommand(m_selectedShapes, m_initialAngles, newAngles));
     return cmd;
 }

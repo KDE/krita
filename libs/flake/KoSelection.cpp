@@ -159,7 +159,7 @@ QRectF KoSelection::boundingRect() const
     return bb;
 }
 
-const KoSelectionSet KoSelection::selectedObjects(KoFlake::SelectionType strip) const {
+const KoSelectionSet KoSelection::selectedShapes(KoFlake::SelectionType strip) const {
     KoSelectionSet answer;
     // strip the child objects when there is also a parent included.
     bool doStripping = strip == KoFlake::StrippedSelection;
@@ -192,8 +192,8 @@ bool KoSelection::isSelected(const KoShape *object) const {
     return false;
 }
 
-KoShape *KoSelection::firstSelectedObject(KoFlake::SelectionType strip) const {
-    KoSelectionSet set = selectedObjects(strip);
+KoShape *KoSelection::firstSelectedShape(KoFlake::SelectionType strip) const {
+    KoSelectionSet set = selectedShapes(strip);
     if(set.isEmpty())
         return 0;
     return *(set.begin());

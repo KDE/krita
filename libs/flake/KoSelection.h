@@ -34,11 +34,11 @@
 typedef QSet<KoShape*> KoSelectionSet;
 
 /**
- * A selection is a flake object that contains a number of references
- * to flake objects. That means that a selection can be manipulated in
- * the same way as a single flake object.
+ * A selection is a shape that contains a number of references
+ * to shapes. That means that a selection can be manipulated in
+ * the same way as a single shape.
  *
- * Note that a single object can be selected in one view, and not in
+ * Note that a single shape can be selected in one view, and not in
  * another, and that in a single view, more than one selection can be
  * present. So selections should not be seen as singletons, or as
  * something completely transient.
@@ -63,19 +63,19 @@ public:
     /// clear the selections list
     virtual void deselectAll();
     /**
-     * Return the list of selected objects
-     * @return the list of selected objects
+     * Return the list of selected shapes
+     * @return the list of selected shapes
      * @param strip if StrippedSelection, the returned list will not include any children
-     *    of a grouped object if the group-parent is itself also in the set.
+     *    of a grouped shape if the group-parent is itself also in the set.
      */
-    virtual const KoSelectionSet selectedObjects(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+    virtual const KoSelectionSet selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
     /**
-     * Return the first selected object, or 0 if there is nothing selected.
+     * Return the first selected shape, or 0 if there is nothing selected.
      * @param strip if StrippedSelection, the returned list will not include any children
-     *    of a grouped object if the group-parent is itself also in the set.
+     *    of a grouped shape if the group-parent is itself also in the set.
      */
-    KoShape *firstSelectedObject(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
-    /// return if the object is selected
+    KoShape *firstSelectedShape(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
+    /// return if the shape is selected
     virtual bool isSelected(const KoShape *object) const;
     /// return the selection count
     virtual int count() const;

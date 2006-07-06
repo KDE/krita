@@ -164,7 +164,7 @@ void KoShapeSelector::loadShapeTypes() {
 }
 
 void KoShapeSelector::itemSelected() {
-    QList<KoShape*> allSelected = m_shapeManager->selection()->selectedObjects().toList();
+    QList<KoShape*> allSelected = m_shapeManager->selection()->selectedShapes().toList();
     if(allSelected.isEmpty())
         return;
     IconShape *shape= static_cast<IconShape*> (allSelected.first());

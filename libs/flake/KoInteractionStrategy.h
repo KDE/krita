@@ -57,7 +57,7 @@ public:
     virtual void paint( QPainter &painter, KoViewConverter &converter) {
         Q_UNUSED(painter); Q_UNUSED(converter); };
     /**
-     * Extending classes should implement this method to update the selectedObjects
+     * Extending classes should implement this method to update the selectedShapes
      * based on the new mouse position.
      * @param mouseLocation the new location in pt
      * @param modifiers OR-ed set of keys pressed.
@@ -96,7 +96,7 @@ protected:
 
 protected: // members
     KoTool *m_parent; ///< the KoTool instance that controls this strategy.
-    KoSelectionSet m_selectedObjects; ///< the objects this strategy will act on.
+    KoSelectionSet m_selectedShapes; ///< the objects this strategy will act on.
     KoCanvasBase *m_canvas; ///< the canvas which contains getters for document-data
 };
 

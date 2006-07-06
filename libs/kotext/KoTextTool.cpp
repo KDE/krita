@@ -213,7 +213,7 @@ void KoTextTool::keyReleaseEvent(QKeyEvent *event) {
 
 void KoTextTool::activate (bool temporary) {
     Q_UNUSED(temporary);
-    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedObject();
+    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     m_textShape = dynamic_cast<KoTextShape*> (shape);
     if(m_textShape == 0) {
         emit sigDone();

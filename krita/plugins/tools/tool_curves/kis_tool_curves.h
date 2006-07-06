@@ -23,19 +23,28 @@
 #ifndef KIS_TOOL_STAR_H_
 #define KIS_TOOL_STAR_H_
 
-#include "kis_tool_shape.h"
+#include "kis_tool_paint.h"
+#include "kis_point.h"
 
+class KisPoint;
 class KisCanvas;
+class KisCurve;
 class KisDoc;
 class KisPainter;
+class KisPoint;
 class KisView;
 class KisRect;
 class WdgToolCurves;
 
-class KisToolCurves : public KisToolShape {
+class KisToolCurves : public KisToolPaint {
 
-    typedef KisToolShape super;
+    typedef KisToolPaint super;
     Q_OBJECT
+
+    KisCurve *m_curve;
+    KisPoint m_start;
+    KisPoint m_end;
+    bool m_dragging;
 
 public:
     KisToolCurves();
@@ -47,8 +56,6 @@ public:
 
         virtual void update (KisCanvasSubject *subject);
 
-        virtual QWidget* createOptionWidget(QWidget* parent);
-
         //
         // KisToolPaint interface
         //
@@ -59,17 +66,17 @@ public:
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
 
-protected:
-    virtual void draw(const KisPoint& start, const KisPoint& stop);
-    //virtual void draw(KisPainter *gc, const QRect& rc);
+public slots:
+
+    void deactivate();
 
 protected:
-    int m_lineThickness;
+
+    virtual void draw();
+
+protected:
 
     KisImageSP m_currentImage;
-private:
-
-    WdgToolCurves* m_optWidget;
 };
 
 

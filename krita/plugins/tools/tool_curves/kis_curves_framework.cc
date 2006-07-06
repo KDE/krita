@@ -30,7 +30,7 @@
  * ****************************** */
 
 inline CurvePoint::CurvePoint ()
-    : m_point(0), m_pivot(0), m_selected(0)
+    : m_pivot(0), m_selected(0)
 {
 
 }
@@ -38,63 +38,52 @@ inline CurvePoint::CurvePoint ()
 inline CurvePoint::CurvePoint (KisPoint &pt, bool p = false, bool s = false)
     : m_pivot(p), m_selected((p) ? s : false)
 {
-    m_point = new KisPoint;
-    *m_point = pt;
+    m_point = pt;
 }
 
 inline CurvePoint::CurvePoint (double x, double y, bool p = false, bool s = false)
     : m_pivot(p), m_selected((p) ? s : false)
 {
-    m_point = new KisPoint(x,y);
+    KisPoint tmp(x,y);
+    m_point = tmp;
 }
 
 inline CurvePoint::CurvePoint (QPoint& pt, bool p = false, bool s = false)
     : m_pivot(p), m_selected((p) ? s : false)
 {
-    m_point = new KisPoint(pt);
+    KisPoint tmp(pt);
+    m_point = tmp;
 }
     
 inline CurvePoint::CurvePoint (KoPoint& pt, bool p = false, bool s = false)
     : m_pivot(p), m_selected((p) ? s : false)
 {
-    m_point = new KisPoint(pt);
+    KisPoint tmp(pt);
+    m_point = tmp;
 }
 
 
-inline bool CurvePoint::setPoint(KisPoint p)
+inline void CurvePoint::setPoint(KisPoint p)
 {
-    if (!m_point)
-        m_point = new KisPoint();
-    *m_point = p;
-    
-    return ((m_point) ? true : false);
+    m_point = p;
 }
 
-inline bool CurvePoint::setPoint(double x, double y)
+inline void CurvePoint::setPoint(double x, double y)
 {
-    if (m_point)
-        delete m_point;
-    m_point = new KisPoint(x,y);
-    
-    return ((m_point) ? true : false);
+    KisPoint tmp(x,y);
+    m_point = tmp;
 }
 
-inline bool CurvePoint::setPoint(QPoint &pt)
+inline void CurvePoint::setPoint(QPoint &pt)
 {
-    if (m_point)
-        delete m_point;
-    m_point = new KisPoint(pt);
-    
-    return ((m_point) ? true : false);
+    KisPoint tmp(pt);
+    m_point = tmp;
 }
 
-inline bool CurvePoint::setPoint(KoPoint &pt)
+inline void CurvePoint::setPoint(KoPoint &pt)
 {
-    if (m_point)
-        delete m_point;
-    m_point = new KisPoint(pt);
-    
-    return ((m_point) ? true : false);
+    KisPoint tmp(pt);
+    m_point = tmp;
 }
 
 
@@ -103,7 +92,7 @@ inline bool CurvePoint::setPoint(KoPoint &pt)
  * **************************** */
 
 
-int KisCurve::add (CurvePoint point, int index = -1)
+int KisCurve::add (CurvePoint point, int index)
 {
     if (index < 0) {
         m_curve.append (point);
@@ -115,7 +104,7 @@ int KisCurve::add (CurvePoint point, int index = -1)
     } 
 }
 
-int KisCurve::add (KisPoint point, bool pivot, bool selection, int index = -1) {
+int KisCurve::add (KisPoint point, bool pivot, bool selection, int index) {
     CurvePoint temp (point, pivot, selection);
 
     return add (temp, index);
@@ -141,9 +130,12 @@ bool KisCurve::setPivot (int index) {
     return true;
 }
 
-bool KisCurve::deleteLastPivot () {
-    m_curve.erase(m_curve.end());
-    for (PointList::iterator it = m_curve.end();(!it->isPivot());it--)
-        m_curve.erase(it);
-    return true;
+void KisCurve::deleteLastPivot () {
+    kdDebug(0) << "Sono dentro deleteLastPivot... prima linea" << endl;
+    if (!m_curve.isEmpty()) {
+        m_curve.pop_back();
+        kdDebug(0) << "Sono dentro deleteLastPivot..." << endl;
+        while (!m_curve.isEmpty() || !m_curve.last().isPivot())
+            m_curve.pop_back();
+    }
 }

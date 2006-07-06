@@ -18,9 +18,12 @@
 
 /* Initial Commit for the Curves Framework. E.T. */
 
+#ifndef KIS_CURVES_FRAMEWORK_H_
+#define KIS_CURVES_FRAMEWORK_H_
+
 class CurvePoint {
 
-    KisPoint* m_point;
+    KisPoint m_point;
     bool m_pivot;
     bool m_selected; // Only pivots can be selected
     
@@ -34,20 +37,20 @@ public:
     CurvePoint (QPoint&, bool, bool);
     CurvePoint (KoPoint&, bool, bool);
     
-    virtual ~CurvePoint () {delete m_point;}
+    ~CurvePoint () {}
     
 public:
 
     /* Generic Functions */
 
-    bool operator!= (CurvePoint p2) const { if (p2.getPoint() != *m_point) return true; else return false;}
+    bool operator!= (CurvePoint p2) const { if (p2.getPoint() != m_point) return true; else return false;}
     
-    KisPoint getPoint() {return *m_point;}
+    KisPoint getPoint() {return m_point;}
     
-    bool setPoint(KisPoint);
-    bool setPoint(double, double);
-    bool setPoint(QPoint&);
-    bool setPoint(KoPoint&);
+    void setPoint(KisPoint);
+    void setPoint(double, double);
+    void setPoint(QPoint&);
+    void setPoint(KoPoint&);
     
     bool isPivot() {return m_pivot;}
     bool isSelected() {return m_selected;}
@@ -61,19 +64,21 @@ typedef QValueVector<CurvePoint> PointList;
 
 class KisCurve {
 
-    enum Status {DRAWING, EDITING, ENDING};
+    enum tStatus {DRAWING, EDITING, ENDING};
 
     PointList m_curve;
-    Status m_current;
+    tStatus m_current;
+
+protected:
 
     KisPaintDeviceSP m_dev;
     
 public:
     
     KisCurve () {m_dev = 0; m_current=DRAWING;}
-    KisCurve (KisPaintDevice dev) {m_dev = new KisPaintDevice(dev); m_current=DRAWING;}
+    KisCurve (KisPaintDevice& dev) {m_dev = new KisPaintDevice(dev); m_current=DRAWING;}
     
-    virtual ~KisCurve ();
+    virtual ~KisCurve () {m_curve.clear();}
     
 public:
 
@@ -85,11 +90,13 @@ public:
     void operator+(PointList cv);
 */
 
-    void setPaintDevice(KisPaintDevice dev) {if (m_dev) delete m_dev; m_dev = new KisPaintDevice (dev);}
-    void setStatus(Status st) {m_current = st;}
+    void setPaintDevice(KisPaintDevice& dev) {if (m_dev) delete m_dev; m_dev = new KisPaintDevice (dev);}
+    void setStatus(tStatus st) {m_current = st;}
 
-    int add(CurvePoint, int);
-    int add(KisPoint, bool, bool, int);
+    int add(CurvePoint, int = -1);
+    int add(KisPoint, bool = false, bool = false, int = -1);
+
+    int count() {return m_curve.count();}
 
     PointList getCurve() {return m_curve;}
     PointList getCurve(CurvePoint, CurvePoint);
@@ -97,19 +104,22 @@ public:
 
     bool setPivot (CurvePoint);
     bool setPivot (int);
-    
-    bool deleteLastPivot();
 
-    virtual bool selectPivot(CurvePoint);
-    virtual bool selectPivot(int);
+    void clear() {m_curve.clear();}
+    void deleteLastPivot();
 
-    virtual bool calculateCurve(KisPoint, KisPoint) = 0;
-    virtual bool calculateCurve(CurvePoint, CurvePoint) = 0;
+    virtual bool selectPivot(CurvePoint) {return true;}
+    virtual bool selectPivot(int) {return true;}
 
-    virtual bool movePivot(CurvePoint, KisPoint);
-    virtual bool movePivot(CurvePoint, CurvePoint);
-    virtual bool movePivot(int, CurvePoint);
+    virtual bool calculateCurve(KisPoint, KisPoint) {return true;}
+    virtual bool calculateCurve(CurvePoint, CurvePoint) {return true;}
 
-    virtual bool deletePivot(CurvePoint);
-    virtual bool deletePivot(int);
+    virtual bool movePivot(CurvePoint, KisPoint) {return true;}
+    virtual bool movePivot(CurvePoint, CurvePoint) {return true;}
+    virtual bool movePivot(int, CurvePoint) {return true;}
+
+    virtual bool deletePivot(CurvePoint) {return true;}
+    virtual bool deletePivot(int) {return true;}
 };
+
+#endif // KIS_CURVES_FRAMEWORK_H_

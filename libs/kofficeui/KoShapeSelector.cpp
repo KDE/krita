@@ -39,14 +39,14 @@
 #include <QTimer>
 
 #include <kdebug.h>
-#include <kiconloader.h>
+#include <kicon.h>
 
 // ******** IconShape *********
 /// \internal
 class IconShape : public KoShape {
 public:
     IconShape(QString icon) {
-        m_icon = KGlobal::iconLoader()->loadIcon(icon, K3Icon::NoGroup, 22);
+        m_icon = KIcon(icon).pixmap(22);
         resize(m_icon.size());
     }
 

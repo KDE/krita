@@ -65,6 +65,9 @@ public:
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
+    virtual void doubleClick(KisDoubleClickEvent *);
+
+    virtual void keyPress(QKeyEvent *);
 
 public slots:
 

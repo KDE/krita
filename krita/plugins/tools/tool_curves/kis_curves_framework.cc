@@ -131,11 +131,9 @@ bool KisCurve::setPivot (int index) {
 }
 
 void KisCurve::deleteLastPivot () {
-    kdDebug(0) << "Sono dentro deleteLastPivot... prima linea" << endl;
     if (!m_curve.isEmpty()) {
         m_curve.pop_back();
-        kdDebug(0) << "Sono dentro deleteLastPivot..." << endl;
-        while (!m_curve.isEmpty() || !m_curve.last().isPivot())
+        while (m_curve.count() > 1 && !m_curve.last().isPivot())
             m_curve.pop_back();
     }
 }

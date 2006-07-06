@@ -59,7 +59,7 @@ class KisCurveExample : public KisCurve {
     
 public:
 
-    KisCurveExample(KisPaintDevice& dev) : super(dev) {}
+    KisCurveExample() : super() {}
 
     ~KisCurveExample() {}
 
@@ -75,6 +75,7 @@ bool KisCurveExample::calculateCurve(CurvePoint pos1, CurvePoint pos2)
 }
 
 /* Brutally taken from KisPainter::paintLine, sorry :) */
+/* And obviously this is just to see if the Framework works :) */
 bool KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2)
 {
     double savedDist = 0;
@@ -143,7 +144,6 @@ bool KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2)
         if (newDist > DBL_EPSILON) {
             t = distanceMoved / newDist;
         }
-        kdDebug(0) << "Aggiungo Punto" << endl;
         add (p);
         dist -= spacing;
     }
@@ -160,7 +160,6 @@ KisToolCurves::KisToolCurves()
     setCursor(KisCursor::load("tool_curves_cursor.png", 6, 6));
 
     m_dragging = false;
-
     m_curve = 0;
 }
 
@@ -175,11 +174,12 @@ void KisToolCurves::update (KisCanvasSubject *subject)
     if (m_subject)
         m_currentImage = m_subject->currentImg ();
 
-    m_curve = new KisCurveExample(*(m_currentImage->activeDevice()));
+    m_curve = new KisCurveExample;
 }
 
 void KisToolCurves::deactivate()
 {
+    predraw();
     m_curve->clear();
     m_dragging = false;
 }
@@ -187,23 +187,39 @@ void KisToolCurves::deactivate()
 void KisToolCurves::buttonPress(KisButtonPressEvent *event)
 {
     if (m_currentImage && event->button() == LeftButton) {
-        if (!m_dragging) {
-            m_dragging = true;
+        m_dragging = true;
+        if (m_curve->isEmpty()) {
+            m_end = event->pos();
             m_start = event->pos();
-            m_end = m_start;
-            m_curve->add(m_start,true);
+        } else if (m_start != event->pos()) {
+            m_start = m_end;
+            m_end = event->pos();
         }
+        m_curve->calculateCurve(m_start,m_end);
+        m_curve->add(m_end,true);
+        predraw();
+    }
+}
+
+void KisToolCurves::keyPress(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Delete && !m_dragging) {
+        if (m_curve->count() > 1) {
+            m_curve->deleteLastPivot();
+            m_start = m_end = (*m_curve)[m_curve->count()-1].getPoint();
+        } else // delete the line
+            m_curve->clear();
+        predraw();
     }
 }
 
 void KisToolCurves::move(KisMoveEvent *event)
 {
     if (m_dragging) {
-        // Remove previous lines
-        predraw();
         m_curve->deleteLastPivot();
-        m_curve->calculateCurve(m_start,event->pos());
-        m_curve->add(event->pos(),true);
+        m_end = event->pos();
+        m_curve->calculateCurve(m_start,m_end);
+        m_curve->add(m_end,true);
         predraw();
     }
 }
@@ -230,6 +246,7 @@ void KisToolCurves::predraw()
     KisPoint start, end;
     QPoint pos;
 
+    controller->kiscanvas()->repaint();
     for (int i = 0; i < m_curve->count(); i++)
     {
         pos = controller->windowToView((*m_curve)[i].getPoint().floorQPoint());
@@ -242,17 +259,13 @@ void KisToolCurves::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject || !m_currentImage)
         return;
 
-    m_end = event->pos();
+    m_dragging = false;
+}
 
-    kdDebug(0) << "Oh ci siamo?" << endl;
-
-    if (m_end != m_start) {
-        m_curve->calculateCurve(m_start,m_end);
-        m_curve->add(m_end);
-        draw();
-        m_curve->clear();
-        m_dragging = false;
-    }
+void KisToolCurves::doubleClick(KisDoubleClickEvent *)
+{
+    draw();
+    m_curve->clear();
 }
 
 void KisToolCurves::draw()
@@ -283,6 +296,8 @@ void KisToolCurves::draw()
     if (m_currentImage->undo()) {
         m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
     }
+
+    m_subject->canvasController()->kiscanvas()->repaint();
 }
 
 void KisToolCurves::setup(KActionCollection *collection)
@@ -301,7 +316,7 @@ void KisToolCurves::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Draw curves"));
+        m_action->setToolTip(i18n("Draw curves, like polyline, use Delete to remove lines you don't want."));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

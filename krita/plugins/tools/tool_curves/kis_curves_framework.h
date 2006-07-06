@@ -64,43 +64,26 @@ typedef QValueVector<CurvePoint> PointList;
 
 class KisCurve {
 
-    enum tStatus {DRAWING, EDITING, ENDING};
-
     PointList m_curve;
-    tStatus m_current;
-
-protected:
-
-    KisPaintDeviceSP m_dev;
     
 public:
     
-    KisCurve () {m_dev = 0; m_current=DRAWING;}
-    KisCurve (KisPaintDevice& dev) {m_dev = new KisPaintDevice(dev); m_current=DRAWING;}
+    KisCurve () {}
     
     virtual ~KisCurve () {m_curve.clear();}
     
 public:
 
     CurvePoint& operator[](int i) {return m_curve[i];}
-    
-/*
-    void operator+(CurvePoint pt);
-    void operator+(KisCurve cv);
-    void operator+(PointList cv);
-*/
-
-    void setPaintDevice(KisPaintDevice& dev) {if (m_dev) delete m_dev; m_dev = new KisPaintDevice (dev);}
-    void setStatus(tStatus st) {m_current = st;}
 
     int add(CurvePoint, int = -1);
     int add(KisPoint, bool = false, bool = false, int = -1);
 
     int count() {return m_curve.count();}
+    bool isEmpty() {return m_curve.isEmpty();}
 
-    PointList getCurve() {return m_curve;}
-    PointList getCurve(CurvePoint, CurvePoint);
-    PointList getCurve(int, int);
+    KisCurve getCurve(CurvePoint, CurvePoint);
+    KisCurve getCurve(int, int);
 
     bool setPivot (CurvePoint);
     bool setPivot (int);

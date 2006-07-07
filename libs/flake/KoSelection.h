@@ -84,15 +84,6 @@ public:
 
     virtual QRectF boundingRect() const;
 
-    /* Returns the size as from the time where count was last changed.
-     * You need to apply the transformationmatrix if you have transformed the selection since then
-     * This function is used in drawing the rotated/scale/moved outline of the selection.
-     * Whenever a shape is added or removed to the selection the unmodifiedBoundingRect is reset, as
-     * are the transformation matrix
-     * Remember though that the transformation matrix is not used for anything else
-     */
-    QSizeF unmodifiedSize() const;
-
 protected:    
     virtual void updateTree() {}
 
@@ -108,7 +99,6 @@ private:
 
     KoSelectionSet m_selectedObjects;
     bool m_eventTriggered;
-    QSizeF m_unmodifiedSize;
 };
 
 #endif

@@ -266,7 +266,7 @@ void KoInteractionTool::recalcSelectionBox() {
     if(selection()->count()>1)
     {
         QMatrix matrix = selection()->transformationMatrix(0);
-        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection()->unmodifiedSize())));
+        m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection()->size())));
         m_angle = selection()->rotation();
     }
     else
@@ -334,7 +334,7 @@ void SelectionDecorator::paint(QPainter &painter, KoViewConverter &converter) {
     if(m_selection->count()>1)
     {
         QMatrix matrix = m_selection->transformationMatrix(0);
-        outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->unmodifiedSize())));
+        outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->size())));
         for(int i =0; i<outline.count(); i++)
             outline[i] = converter.documentToView(outline.value(i));
         pen = QPen( Qt::blue );

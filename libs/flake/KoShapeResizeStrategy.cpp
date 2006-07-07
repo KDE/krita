@@ -41,17 +41,19 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
     }
     m_start = clicked;
 
+    KoShape *shp;
     if(canvas->shapeManager()->selection()->count()>1)
-        m_unwindMatrix.rotate(canvas->shapeManager()->selection()->rotation());
+       shp = canvas->shapeManager()->selection();
     if(canvas->shapeManager()->selection()->count()==1)
-    {
-        m_unwindMatrix = QMatrix();
-        m_unwindMatrix.rotate(-canvas->shapeManager()->selection()->firstSelectedShape()->rotation());
-        m_windMatrix = QMatrix();
-        m_windMatrix.rotate(canvas->shapeManager()->selection()->firstSelectedShape()->rotation());
-        m_initialSize = canvas->shapeManager()->selection()->firstSelectedShape()->size();
-        m_initialPosition = canvas->shapeManager()->selection()->firstSelectedShape()->position();
-    }
+        shp = canvas->shapeManager()->selection()->firstSelectedShape();
+
+    m_unwindMatrix = QMatrix();
+    m_unwindMatrix.rotate( - shp->rotation());
+    m_windMatrix = QMatrix();
+    m_windMatrix.rotate(shp->rotation());
+    m_initialSize = shp->size();
+    m_initialPosition = shp->transformationMatrix(0).map(QPointF());
+printf("ini: %f %f\n",m_initialPosition.x(),m_initialPosition.y());
 
     switch(direction) {
         case KoFlake::TopMiddleHandle:
@@ -88,13 +90,6 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     double startHeight = m_initialSize.height();
     distance = m_unwindMatrix.map(distance);
 
-    QMatrix matrix;
-    bool scaleFromCenter = modifiers & Qt::ControlModifier;
-    if(scaleFromCenter) // translate to center first
-        matrix.translate(startWidth / 2.0, startHeight / 2.0);
-    else
-        matrix.translate(m_left?startWidth:0, m_top?startHeight:0);
-
     double zoomX=1, zoomY=1;
     if(keepAspect) {
         double ratio = startWidth / startHeight;
@@ -128,21 +123,29 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         else if(m_bottom)
             zoomY = (startHeight + distance.y()) / startHeight;
     }
-    matrix.scale(qMax(0.0, zoomX), qMax(0.0, zoomY));
-    if(scaleFromCenter) // and back
-        matrix.translate(-startWidth / 2.0, -startHeight / 2.0);
+
+    bool scaleFromCenter = modifiers & Qt::ControlModifier;
+    QPointF move;
+    QMatrix matrix;
+
+    if(scaleFromCenter)
+    {
+        move = QPointF(startWidth / 2.0, startHeight / 2.0);
+    }
     else
     {
-        QPointF move(m_left?-startWidth:0, m_top?-startHeight:0);
-        move = m_windMatrix.map(move);
-        matrix.translate(move.x(), move.y());
+        move = QPointF(m_left?startWidth:0, m_top?startHeight:0);
     }
+    matrix.translate(move.x(), move.y()); // translate to 
+    matrix.scale(qMax(0.0, zoomX), qMax(0.0, zoomY));
+    matrix.translate(-move.x(), -move.y()); // and back
 
     int i=0;
-    QMatrix windMatrix = m_unwindMatrix.inverted();
     foreach(KoShape *shape, m_selectedShapes) {
         QPointF pos(m_startAbsolutePositions.at(i) - m_initialPosition);
+        pos = m_unwindMatrix.map(pos);
         QRectF rect(pos, m_startSizes.at(i));
+printf("abs: %f %f\n",m_startAbsolutePositions.at(i).x(),m_startAbsolutePositions.at(i).y());
 printf("rec: %f %f\n",rect.x(),rect.y());
         QRectF result = matrix.mapRect(rect);
 printf("res: %f %f\n",result.x(),result.y());
@@ -151,7 +154,9 @@ printf("res: %f %f\n",result.x(),result.y());
         shape->repaint();
         // the position has to be set after the size as we set the center of the shape
         shape->resize( result.size() );
-        shape->setAbsolutePosition( result.topLeft() + m_initialPosition );
+        pos=m_windMatrix.map(result.topLeft());
+printf("chg: %f %f\n",pos.x(),pos.y());
+        shape->setAbsolutePosition( m_windMatrix.map(result.topLeft()) + m_initialPosition );
         shape->repaint();
         i++;
     }

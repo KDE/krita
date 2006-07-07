@@ -91,43 +91,43 @@ inline void CurvePoint::setPoint(KoPoint &pt)
  * KisCurve methods definitions *
  * **************************** */
 
+void KisCurve::addPivot (CurvePoint point, int index)
+{
+    point.setPivot(true);
+    add(point,index);
+}
 
-int KisCurve::add (CurvePoint point, int index)
+void KisCurve::addPivot (KisPoint point, bool selected, int index)
+{
+    add(point, true, selected, index);
+}
+
+void KisCurve::add (CurvePoint point, int index)
 {
     if (index < 0) {
         m_curve.append (point);
-        return m_curve.count()-1;
     } else {
         PointList::iterator it = &m_curve.at(index);
         m_curve.insert (it, point);
-        return index;
-    } 
+    }
 }
 
-int KisCurve::add (KisPoint point, bool pivot, bool selection, int index) {
-    CurvePoint temp (point, pivot, selection);
+void KisCurve::add (KisPoint point, bool pivot, bool selected, int index) {
+    CurvePoint temp (point, pivot, selected);
 
-    return add (temp, index);
+    add (temp, index);
 }
 
-bool KisCurve::setPivot (CurvePoint pivot) {
+void KisCurve::setPivot (CurvePoint pivot) {
     PointList::iterator it = qFind(m_curve.begin(),m_curve.end(),pivot);
     if (it != m_curve.end())
         it->setPivot(true);
-    else
-        return false;
-
-    return true;
 }
 
-bool KisCurve::setPivot (int index) {
+void KisCurve::setPivot (int index) {
     PointList::iterator it = &m_curve.at(index);
     if (it)
         it->setPivot(true);
-    else
-        return false;
-
-    return true;
 }
 
 void KisCurve::deleteLastPivot () {

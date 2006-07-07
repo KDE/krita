@@ -76,19 +76,23 @@ public:
 
     CurvePoint& operator[](int i) {return m_curve[i];}
 
-    int add(CurvePoint, int = -1);
-    int add(KisPoint, bool = false, bool = false, int = -1);
+    void add(CurvePoint, int = -1);
+    void add(KisPoint, bool = false, bool = false, int = -1);
+
+    void addPivot(CurvePoint,int = -1);
+    void addPivot(KisPoint,bool = false,int = -1);
 
     int count() {return m_curve.count();}
     bool isEmpty() {return m_curve.isEmpty();}
+    CurvePoint last() {return m_curve.back();}
+    void clear() {m_curve.clear();}
 
     KisCurve getCurve(CurvePoint, CurvePoint);
     KisCurve getCurve(int, int);
 
-    bool setPivot (CurvePoint);
-    bool setPivot (int);
+    void setPivot (CurvePoint);
+    void setPivot (int);
 
-    void clear() {m_curve.clear();}
     void deleteLastPivot();
 
     virtual bool selectPivot(CurvePoint) {return true;}

@@ -121,7 +121,7 @@ bool KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2)
     double l_savedDist = savedDist;
 
     if (dist < spacing) {
-        return dist;
+        return false;
     }
 
     dragVec.normalize();
@@ -196,7 +196,7 @@ void KisToolCurves::buttonPress(KisButtonPressEvent *event)
             m_end = event->pos();
         }
         m_curve->calculateCurve(m_start,m_end);
-        m_curve->add(m_end,true);
+        m_curve->addPivot(m_end);
         predraw();
     }
 }
@@ -206,7 +206,7 @@ void KisToolCurves::keyPress(QKeyEvent *event)
     if (event->key() == Qt::Key_Delete && !m_dragging) {
         if (m_curve->count() > 1) {
             m_curve->deleteLastPivot();
-            m_start = m_end = (*m_curve)[m_curve->count()-1].getPoint();
+            m_start = m_end = m_curve->last().getPoint();
         } else // delete the line
             m_curve->clear();
         predraw();
@@ -219,7 +219,7 @@ void KisToolCurves::move(KisMoveEvent *event)
         m_curve->deleteLastPivot();
         m_end = event->pos();
         m_curve->calculateCurve(m_start,m_end);
-        m_curve->add(m_end,true);
+        m_curve->addPivot(m_end);
         predraw();
     }
 }

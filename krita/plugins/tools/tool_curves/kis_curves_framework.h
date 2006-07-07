@@ -32,10 +32,10 @@ public:
     /* Constructors and Destructor */
     
     CurvePoint ();
-    CurvePoint (KisPoint&, bool, bool);
-    CurvePoint (double, double, bool, bool);
-    CurvePoint (QPoint&, bool, bool);
-    CurvePoint (KoPoint&, bool, bool);
+    CurvePoint (KisPoint&, bool = false, bool = false);
+    CurvePoint (double, double, bool = false, bool = false);
+    CurvePoint (QPoint&, bool = false, bool = false);
+    CurvePoint (KoPoint&, bool = false, bool = false);
     
     ~CurvePoint () {}
     
@@ -43,7 +43,11 @@ public:
 
     /* Generic Functions */
 
-    bool operator!= (CurvePoint p2) const { if (p2.getPoint() != m_point) return true; else return false;}
+    bool operator!= (KisPoint p2) const { if (p2 != m_point) return true; else return false; }
+    bool operator!= (CurvePoint p2) const { if (p2.getPoint() != m_point) return true; else return false; }
+
+    bool operator== (KisPoint p2) const { if (p2 == m_point) return true; else return false; }
+    bool operator== (CurvePoint p2) const { if (p2.getPoint() == m_point) return true; else return false; }
     
     KisPoint getPoint() {return m_point;}
     
@@ -60,7 +64,8 @@ public:
 };
 
 
-typedef QValueVector<CurvePoint> PointList;
+typedef QValueList<CurvePoint> PointList;
+typedef QValueList<CurvePoint>::iterator CurveIterator;
 
 class KisCurve {
 
@@ -76,37 +81,53 @@ public:
 
     CurvePoint& operator[](int i) {return m_curve[i];}
 
-    void add(CurvePoint, int = -1);
-    void add(KisPoint, bool = false, bool = false, int = -1);
+    CurveIterator add(CurvePoint, CurveIterator = 0);
+    CurveIterator add(KisPoint, bool = false, bool = false, CurveIterator = 0);
 
-    void addPivot(CurvePoint,int = -1);
-    void addPivot(KisPoint,bool = false,int = -1);
+    CurveIterator addPivot(CurvePoint, CurveIterator = 0);
+    CurveIterator addPivot(KisPoint, bool = false, CurveIterator = 0);
 
     int count() {return m_curve.count();}
     bool isEmpty() {return m_curve.isEmpty();}
+    CurveIterator begin() {return m_curve.begin();}
+    CurveIterator end() {return m_curve.end();}
+    CurvePoint first() {return m_curve.front();}
     CurvePoint last() {return m_curve.back();}
     void clear() {m_curve.clear();}
 
-    KisCurve getCurve(CurvePoint, CurvePoint);
-    KisCurve getCurve(int, int);
+    CurveIterator find(CurvePoint pt) {return m_curve.find(pt);}
+    CurveIterator find(KisPoint pt) {return m_curve.find(CurvePoint(pt));}
+    CurveIterator find(CurveIterator it, CurvePoint pt) {return m_curve.find(it, pt);}
+    CurveIterator find(CurveIterator it, KisPoint pt) {return m_curve.find(it, CurvePoint(pt));}
 
-    void setPivot (CurvePoint);
-    void setPivot (int);
+    CurveIterator getPreviousPivot(KisPoint);
+    CurveIterator getPreviousPivot(CurvePoint);
+    CurveIterator getPreviousPivot(CurveIterator);
+
+    CurveIterator getNextPivot(KisPoint);
+    CurveIterator getNextPivot(CurvePoint);
+    CurveIterator getNextPivot(CurveIterator);
+
+    void setPivot (CurvePoint, bool = true);
+    void setPivot (CurveIterator, bool = true);
 
     void deleteLastPivot();
 
+    virtual void deleteCurve(KisPoint, KisPoint) {return;}
+    virtual void deleteCurve(CurvePoint, CurvePoint) {return;}
+
+    virtual bool calculateCurve(KisPoint, KisPoint, CurveIterator) {return true;}
+    virtual bool calculateCurve(CurvePoint, CurvePoint, CurveIterator) {return true;}
+
     virtual bool selectPivot(CurvePoint) {return true;}
     virtual bool selectPivot(int) {return true;}
-
-    virtual bool calculateCurve(KisPoint, KisPoint) {return true;}
-    virtual bool calculateCurve(CurvePoint, CurvePoint) {return true;}
-
+    
     virtual bool movePivot(CurvePoint, KisPoint) {return true;}
-    virtual bool movePivot(CurvePoint, CurvePoint) {return true;}
-    virtual bool movePivot(int, CurvePoint) {return true;}
+    virtual bool movePivot(KisPoint, KisPoint) {return true;}
+    virtual bool movePivot(CurveIterator, KisPoint) {return true;}
 
     virtual bool deletePivot(CurvePoint) {return true;}
-    virtual bool deletePivot(int) {return true;}
+    virtual bool deletePivot(CurveIterator) {return true;}
 };
 
 #endif // KIS_CURVES_FRAMEWORK_H_

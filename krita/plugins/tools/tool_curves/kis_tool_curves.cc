@@ -63,20 +63,20 @@ public:
 
     ~KisCurveExample() {}
 
-    virtual bool calculateCurve(KisPoint, KisPoint);
-    virtual bool calculateCurve(CurvePoint, CurvePoint);
+    virtual bool calculateCurve(KisPoint, KisPoint, CurveIterator = 0);
+    virtual bool calculateCurve(CurvePoint, CurvePoint, CurveIterator = 0);
 
 };
 
 
-bool KisCurveExample::calculateCurve(CurvePoint pos1, CurvePoint pos2)
+bool KisCurveExample::calculateCurve(CurvePoint pos1, CurvePoint pos2, CurveIterator it)
 {
-    return calculateCurve(pos1.getPoint(),pos2.getPoint());
+    return calculateCurve(pos1.getPoint(),pos2.getPoint(), it);
 }
 
 /* Brutally taken from KisPainter::paintLine, sorry :) */
 /* And obviously this is just to see if the Framework works :) */
-bool KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2)
+bool KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2, CurveIterator it)
 {
     double savedDist = 0;
     KisVector2D end(pos2);
@@ -144,7 +144,7 @@ bool KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2)
         if (newDist > DBL_EPSILON) {
             t = distanceMoved / newDist;
         }
-        add (p);
+        add (p,it);
         dist -= spacing;
     }
 
@@ -195,7 +195,7 @@ void KisToolCurves::buttonPress(KisButtonPressEvent *event)
             m_start = m_end;
             m_end = event->pos();
         }
-        m_curve->calculateCurve(m_start,m_end);
+        m_curve->calculateCurve(m_start,m_end, 0);
         m_curve->addPivot(m_end);
         predraw();
     }
@@ -218,7 +218,7 @@ void KisToolCurves::move(KisMoveEvent *event)
     if (m_dragging) {
         m_curve->deleteLastPivot();
         m_end = event->pos();
-        m_curve->calculateCurve(m_start,m_end);
+        m_curve->calculateCurve(m_start,m_end, 0);
         m_curve->addPivot(m_end);
         predraw();
     }
@@ -254,7 +254,7 @@ void KisToolCurves::predraw()
     }
 }
 
-void KisToolCurves::buttonRelease(KisButtonReleaseEvent *event)
+void KisToolCurves::buttonRelease(KisButtonReleaseEvent *)
 {
     if (!m_subject || !m_currentImage)
         return;

@@ -35,27 +35,27 @@ inline CurvePoint::CurvePoint ()
 
 }
     
-inline CurvePoint::CurvePoint (KisPoint &pt, bool p = false, bool s = false)
+inline CurvePoint::CurvePoint (KisPoint &pt, bool p, bool s)
     : m_pivot(p), m_selected((p) ? s : false)
 {
     m_point = pt;
 }
 
-inline CurvePoint::CurvePoint (double x, double y, bool p = false, bool s = false)
+inline CurvePoint::CurvePoint (double x, double y, bool p, bool s)
     : m_pivot(p), m_selected((p) ? s : false)
 {
     KisPoint tmp(x,y);
     m_point = tmp;
 }
 
-inline CurvePoint::CurvePoint (QPoint& pt, bool p = false, bool s = false)
+inline CurvePoint::CurvePoint (QPoint& pt, bool p, bool s)
     : m_pivot(p), m_selected((p) ? s : false)
 {
     KisPoint tmp(pt);
     m_point = tmp;
 }
     
-inline CurvePoint::CurvePoint (KoPoint& pt, bool p = false, bool s = false)
+inline CurvePoint::CurvePoint (KoPoint& pt, bool p, bool s)
     : m_pivot(p), m_selected((p) ? s : false)
 {
     KisPoint tmp(pt);
@@ -91,46 +91,47 @@ inline void CurvePoint::setPoint(KoPoint &pt)
  * KisCurve methods definitions *
  * **************************** */
 
-void KisCurve::addPivot (CurvePoint point, int index)
+CurveIterator KisCurve::addPivot (CurvePoint point, CurveIterator it)
 {
     point.setPivot(true);
-    add(point,index);
+    return add(point,it);
 }
 
-void KisCurve::addPivot (KisPoint point, bool selected, int index)
+CurveIterator KisCurve::addPivot (KisPoint point, bool selected, CurveIterator it)
 {
-    add(point, true, selected, index);
+    CurvePoint temp (point, true, selected);
+    return add(temp, it);
 }
 
-void KisCurve::add (CurvePoint point, int index)
+CurveIterator KisCurve::add (CurvePoint point, CurveIterator it)
 {
-    if (index < 0) {
-        m_curve.append (point);
-    } else {
-        PointList::iterator it = &m_curve.at(index);
-        m_curve.insert (it, point);
-    }
+    if (it == 0)
+        return m_curve.append (point);
+    else
+        return m_curve.insert (it, point);
 }
 
-void KisCurve::add (KisPoint point, bool pivot, bool selected, int index) {
+CurveIterator KisCurve::add (KisPoint point, bool pivot, bool selected, CurveIterator it)
+{
     CurvePoint temp (point, pivot, selected);
-
-    add (temp, index);
+    return add (temp, it);
 }
 
-void KisCurve::setPivot (CurvePoint pivot) {
+void KisCurve::setPivot (CurvePoint pivot, bool isPivot)
+{
     PointList::iterator it = qFind(m_curve.begin(),m_curve.end(),pivot);
     if (it != m_curve.end())
-        it->setPivot(true);
+        (*it).setPivot(isPivot);
 }
 
-void KisCurve::setPivot (int index) {
-    PointList::iterator it = &m_curve.at(index);
-    if (it)
-        it->setPivot(true);
+void KisCurve::setPivot (CurveIterator it, bool isPivot)
+{
+    if (it != 0)
+        (*it).setPivot(isPivot);
 }
 
-void KisCurve::deleteLastPivot () {
+void KisCurve::deleteLastPivot ()
+{
     if (!m_curve.isEmpty()) {
         m_curve.pop_back();
         while (m_curve.count() > 1 && !m_curve.last().isPivot())

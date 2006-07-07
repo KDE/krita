@@ -113,21 +113,24 @@ public:
 
     void deleteLastPivot();
 
-    virtual void deleteCurve(KisPoint, KisPoint) {return;}
-    virtual void deleteCurve(CurvePoint, CurvePoint) {return;}
+    virtual void deleteCurve(KisPoint, KisPoint);
+    virtual void deleteCurve(CurvePoint, CurvePoint);
+    virtual void deleteCurve(CurveIterator, CurveIterator);
 
-    virtual bool calculateCurve(KisPoint, KisPoint, CurveIterator) {return true;}
-    virtual bool calculateCurve(CurvePoint, CurvePoint, CurveIterator) {return true;}
+    virtual void calculateCurve(KisPoint, KisPoint, CurveIterator) {return;}
+    virtual void calculateCurve(CurvePoint, CurvePoint, CurveIterator) {return;}
+    virtual void calculateCurve(CurveIterator, CurveIterator, CurveIterator) {return;}
 
-    virtual bool selectPivot(CurvePoint) {return true;}
-    virtual bool selectPivot(int) {return true;}
+    virtual void selectPivot(CurvePoint) {return;}
+    virtual void selectPivot(int) {return;}
     
-    virtual bool movePivot(CurvePoint, KisPoint) {return true;}
-    virtual bool movePivot(KisPoint, KisPoint) {return true;}
-    virtual bool movePivot(CurveIterator, KisPoint) {return true;}
+    virtual bool movePivot(CurvePoint, KisPoint);
+    virtual bool movePivot(KisPoint, KisPoint);
+    virtual bool movePivot(CurveIterator, KisPoint);
 
-    virtual bool deletePivot(CurvePoint) {return true;}
-    virtual bool deletePivot(CurveIterator) {return true;}
+    virtual bool deletePivot(CurvePoint);
+    virtual bool deletePivot(KisPoint);
+    virtual bool deletePivot(CurveIterator);
 };
 
 #endif // KIS_CURVES_FRAMEWORK_H_

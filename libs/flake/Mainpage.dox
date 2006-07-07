@@ -46,7 +46,7 @@ public:
     void addCommand(KCommand *command, bool execute = true);
     KoShapeManager *shapeManager() const { return m_shapeManager; }
     void updateCanvas(const QRectF& rc) {
-        QRect clipRect(viewConverter()->normalToView(rc).toRect());
+        QRect clipRect(viewConverter()->documentToView(rc).toRect());
         clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
         update(clipRect);
     }
@@ -57,17 +57,17 @@ public:
 
     // event handlers
     void mouseMoveEvent(QMouseEvent *e) {
-        KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+        KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
         m_tool->mouseMoveEvent( &ev );
     }
 
     void mousePressEvent(QMouseEvent *e) {
-        KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+        KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
         m_tool->mousePressEvent( &ev );
     }
 
     void mouseReleaseEvent(QMouseEvent *e) {
-        KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+        KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
         m_tool->mouseReleaseEvent( &ev );
     }
 

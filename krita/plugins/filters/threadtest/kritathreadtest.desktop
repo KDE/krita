@@ -23,6 +23,7 @@ Name[sl]=Filter za obračanje z nitmi
 Name[sr]=Филтер за инверзију са нитима
 Name[sr@Latn]=Filter za inverziju sa nitima
 Name[sv]=Inverteringsfilter med trådar
+Name[zh_TW]=有 Thread 的反轉過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritathreadtest

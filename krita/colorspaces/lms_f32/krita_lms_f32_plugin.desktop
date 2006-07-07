@@ -50,6 +50,7 @@ Comment[sr]=Модел боја за LMS конусни простор (дуге
 Comment[sr@Latn]=Model boja za LMS konusni prostor (duge srednje i kratke talasne dužine)
 Comment[sv]=Färgmodell för LMS-konrymd (Långa, mellanliggande och korta våglängder)
 Comment[uk]=Модель кольорів для конусного простору LMS (довгі середні і короткі довжини кольорів)
+Comment[zh_TW]=LMS cone space 顏色模式（Long Middle and Short 波長）
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=krita_lms_f32_plugin

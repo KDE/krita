@@ -24,6 +24,7 @@ Name[sr]=Собелов филтер
 Name[sr@Latn]=Sobelov filter
 Name[sv]=Sobelfilter
 Name[uk]=Фільтр Собеля
+Name[zh_TW]=Sobel 過濾器
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritasobelfilter

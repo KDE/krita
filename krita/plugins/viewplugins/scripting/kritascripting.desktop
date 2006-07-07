@@ -51,6 +51,7 @@ Comment[sr@Latn]=Omogući izvršavanje skripti
 Comment[sv]=Tillåt körning av skript
 Comment[uk]=Дає змогу виконувати скрипти
 Comment[zh_CN]=允许执行脚本
+Comment[zh_TW]=允許執行命令稿
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascripting

@@ -23,6 +23,7 @@ Name[sr]=Прикључак за промену величине и скалир
 Name[sr@Latn]=Priključak za promenu veličine i skaliranje slika
 Name[sv]=Insticksprogram för bildstorleksändring och skalning
 Name[uk]=Втулок зміни розміру та масштабування зображень
+Name[zh_TW]=圖片大小與縮放外掛程式
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimagesize

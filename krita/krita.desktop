@@ -56,6 +56,7 @@ Comment[sr]=Уређујте и правите слике
 Comment[sr@Latn]=Uređujte i pravite slike
 Comment[sv]=Redigera och måla bilder
 Comment[uk]=Створення і редагування зображень
+Comment[zh_TW]=編輯與畫圖片
 MimeType=application/x-krita
 Type=Application
 Icon=krita

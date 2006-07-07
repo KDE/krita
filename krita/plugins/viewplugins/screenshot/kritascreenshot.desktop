@@ -28,6 +28,7 @@ Name[sv]=Skärmdump
 Name[uk]=Знімок екрана
 Name[uz]=Скриншот
 Name[zh_CN]=抓图
+Name[zh_TW]=螢幕快照
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascreenshot

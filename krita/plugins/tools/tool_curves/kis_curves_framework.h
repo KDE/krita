@@ -32,10 +32,10 @@ public:
     /* Constructors and Destructor */
     
     CurvePoint ();
-    CurvePoint (KisPoint&, bool = false, bool = false);
+    CurvePoint (KisPoint, bool = false, bool = false);
     CurvePoint (double, double, bool = false, bool = false);
-    CurvePoint (QPoint&, bool = false, bool = false);
-    CurvePoint (KoPoint&, bool = false, bool = false);
+    CurvePoint (QPoint, bool = false, bool = false);
+    CurvePoint (KoPoint, bool = false, bool = false);
     
     ~CurvePoint () {}
     
@@ -44,12 +44,14 @@ public:
     /* Generic Functions */
 
     bool operator!= (KisPoint p2) const { if (p2 != m_point) return true; else return false; }
-    bool operator!= (CurvePoint p2) const { if (p2.getPoint() != m_point) return true; else return false; }
+    bool operator!= (CurvePoint p2) const { if (p2.point() != m_point) return true; else return false; }
 
-    bool operator== (KisPoint p2) const { if (p2 == m_point) return true; else return false; }
-    bool operator== (CurvePoint p2) const { if (p2.getPoint() == m_point) return true; else return false; }
-    
-    KisPoint getPoint() {return m_point;}
+//    bool operator== (KisPoint p2) const { if (p2 == m_point) return true; else return false; }
+    bool operator== (CurvePoint p2) const { if (p2.point() == m_point &&
+                                                p2.isPivot() == m_pivot &&
+                                                p2.isSelected() == m_selected) return true; else return false; }
+
+    KisPoint point() {return m_point;}
     
     void setPoint(KisPoint);
     void setPoint(double, double);
@@ -81,8 +83,8 @@ public:
 
     CurvePoint& operator[](int i) {return m_curve[i];}
 
-    CurveIterator add(CurvePoint, CurveIterator = 0);
-    CurveIterator add(KisPoint, bool = false, bool = false, CurveIterator = 0);
+    CurveIterator addPoint(CurvePoint, CurveIterator = 0);
+    CurveIterator addPoint(KisPoint, bool = false, bool = false, CurveIterator = 0);
 
     CurveIterator addPivot(CurvePoint, CurveIterator = 0);
     CurveIterator addPivot(KisPoint, bool = false, CurveIterator = 0);
@@ -100,17 +102,18 @@ public:
     CurveIterator find(CurveIterator it, CurvePoint pt) {return m_curve.find(it, pt);}
     CurveIterator find(CurveIterator it, KisPoint pt) {return m_curve.find(it, CurvePoint(pt));}
 
-    CurveIterator getPreviousPivot(KisPoint);
-    CurveIterator getPreviousPivot(CurvePoint);
-    CurveIterator getPreviousPivot(CurveIterator);
+    CurveIterator previousPivot(KisPoint);
+    CurveIterator previousPivot(CurvePoint);
+    CurveIterator previousPivot(CurveIterator);
 
-    CurveIterator getNextPivot(KisPoint);
-    CurveIterator getNextPivot(CurvePoint);
-    CurveIterator getNextPivot(CurveIterator);
+    CurveIterator nextPivot(KisPoint);
+    CurveIterator nextPivot(CurvePoint);
+    CurveIterator nextPivot(CurveIterator);
 
-    void setPivot (CurvePoint, bool = true);
-    void setPivot (CurveIterator, bool = true);
+    KisCurve pivots();
+    KisCurve selectedPivots(bool = true);
 
+    void deleteFirstPivot();
     void deleteLastPivot();
 
     virtual void deleteCurve(KisPoint, KisPoint);
@@ -121,12 +124,13 @@ public:
     virtual void calculateCurve(CurvePoint, CurvePoint, CurveIterator) {return;}
     virtual void calculateCurve(CurveIterator, CurveIterator, CurveIterator) {return;}
 
-    virtual void selectPivot(CurvePoint) {return;}
-    virtual void selectPivot(int) {return;}
+    virtual void setPivotSelected(CurvePoint, bool = true);
+    virtual void setPivotSelected(KisPoint, bool = true);
+    virtual void setPivotSelected(CurveIterator, bool = true);
     
-    virtual bool movePivot(CurvePoint, KisPoint);
-    virtual bool movePivot(KisPoint, KisPoint);
-    virtual bool movePivot(CurveIterator, KisPoint);
+    virtual CurveIterator movePivot(CurvePoint, KisPoint);
+    virtual CurveIterator movePivot(KisPoint, KisPoint);
+    virtual CurveIterator movePivot(CurveIterator, KisPoint);
 
     virtual bool deletePivot(CurvePoint);
     virtual bool deletePivot(KisPoint);

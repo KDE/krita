@@ -21,11 +21,9 @@
 /* Just an initial commit. Emanuele Tamponi */
 
 
-#include <math.h>
-
 #include <qpainter.h>
-#include <qspinbox.h>
 #include <qlayout.h>
+#include <qrect.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -33,6 +31,7 @@
 #include <kdebug.h>
 #include <knuminput.h>
 
+#include "kis_global.h"
 #include "kis_doc.h"
 #include "kis_painter.h"
 #include "kis_point.h"
@@ -71,12 +70,12 @@ public:
 
 void KisCurveExample::calculateCurve(CurveIterator pos1, CurveIterator pos2, CurveIterator it)
 {
-    calculateCurve((*pos1).getPoint(),(*pos2).getPoint(), it);
+    calculateCurve((*pos1).point(),(*pos2).point(), it);
 }
 
 void KisCurveExample::calculateCurve(CurvePoint pos1, CurvePoint pos2, CurveIterator it)
 {
-    calculateCurve(pos1.getPoint(),pos2.getPoint(), it);
+    calculateCurve(pos1.point(),pos2.point(), it);
 }
 
 /* Brutally taken from KisPainter::paintLine, sorry :) */
@@ -125,9 +124,8 @@ void KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2, CurveIterator
     double dist = savedDist + newDist;
     double l_savedDist = savedDist;
 
-    if (dist < spacing) {
+    if (dist < spacing)
         return;
-    }
 
     dragVec.normalize();
     KisVector2D step(0, 0);
@@ -149,21 +147,22 @@ void KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2, CurveIterator
         if (newDist > DBL_EPSILON) {
             t = distanceMoved / newDist;
         }
-        add (p,it);
+        addPoint (p,it);
         dist -= spacing;
     }
 }
 
 
 KisToolCurves::KisToolCurves()
-    : super(i18n("Curves Initial Commit")),
+    : super(i18n("Tool for Curves - Example")),
       m_currentImage (0)
 {
     setName("tool_curves");
     setCursor(KisCursor::load("tool_curves_cursor.png", 6, 6));
 
     m_dragging = false;
-    m_curve = 0;
+    m_editing = false;
+    m_curve = new KisCurveExample;
 }
 
 KisToolCurves::~KisToolCurves()
@@ -176,30 +175,34 @@ void KisToolCurves::update (KisCanvasSubject *subject)
     super::update (subject);
     if (m_subject)
         m_currentImage = m_subject->currentImg ();
-
-    m_curve = new KisCurveExample;
 }
 
 void KisToolCurves::deactivate()
 {
-    predraw();
     m_curve->clear();
     m_dragging = false;
+    m_editing = false;
 }
 
 void KisToolCurves::buttonPress(KisButtonPressEvent *event)
 {
     if (m_currentImage && event->button() == LeftButton) {
         m_dragging = true;
-        if (m_curve->isEmpty()) {
-            m_end = event->pos();
-            m_start = event->pos();
-        } else if (m_start != event->pos()) {
-            m_start = m_end;
-            m_end = event->pos();
+        if (!m_editing) {
+            if (m_curve->isEmpty()) {
+                m_end = event->pos();
+                m_start = event->pos();
+            } else if (m_start != event->pos()) {
+                m_start = m_end;
+                m_end = event->pos();
+            }
+            m_curve->calculateCurve(m_start,m_end, 0);
+            m_curve->addPivot(m_end);
+        } else {
+            CurvePoint pos(mouseOnHandle(event->pos()),true);
+            if (pos != KisPoint(-1,-1))
+                m_curve->setPivotSelected(pos);
         }
-        m_curve->calculateCurve(m_start,m_end, 0);
-        m_curve->addPivot(m_end);
         predraw();
     }
 }
@@ -207,11 +210,17 @@ void KisToolCurves::buttonPress(KisButtonPressEvent *event)
 void KisToolCurves::keyPress(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Delete && !m_dragging) {
-        if (m_curve->count() > 1) {
-            m_curve->deleteLastPivot();
-            m_start = m_end = m_curve->last().getPoint();
-        } else // delete the line
-            m_curve->clear();
+        if (!m_editing) {
+            if (m_curve->count() > 1) {
+                m_curve->deleteLastPivot();
+                m_start = m_end = m_curve->last().point();
+            } else // delete the line
+                m_curve->clear();
+        } else {
+            KisCurve sel = m_curve->selectedPivots();
+            if (!sel.isEmpty())
+                m_curve->deletePivot(sel[0]);
+        }
         predraw();
     }
 }
@@ -219,12 +228,34 @@ void KisToolCurves::keyPress(QKeyEvent *event)
 void KisToolCurves::move(KisMoveEvent *event)
 {
     if (m_dragging) {
-        m_curve->deleteLastPivot();
-        m_end = event->pos();
-        m_curve->calculateCurve(m_start,m_end, 0);
-        m_curve->addPivot(m_end);
+        if (!m_editing) {
+            if (m_curve->pivots().count() > 1)
+                m_curve->deleteLastPivot();
+            m_end = event->pos();
+            m_curve->calculateCurve(m_start,m_end, 0);
+            m_curve->addPivot(m_end);
+        } else {
+            KisCurve sel = m_curve->selectedPivots();
+            if (!sel.isEmpty()) {
+                CurveIterator newPivot = m_curve->movePivot(sel[0],event->pos());
+                m_curve->setPivotSelected(newPivot); 
+            }
+        }
         predraw();
     }
+}
+
+KisPoint KisToolCurves::mouseOnHandle(KisPoint pos)
+{
+/* ( toQRect ( endx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) ) */
+    KisCurve pivots = m_curve->pivots();
+
+    for (CurveIterator it = pivots.begin(); it != pivots.end(); it++)
+        if (QRect((*it).point().floorQPoint()-QPoint(4,4),
+                  (*it).point().floorQPoint()+QPoint(4,4)).contains(pos.floorQPoint()))
+            return (*it).point();
+
+    return KisPoint(-1.0,-1.0);
 }
 
 void KisToolCurves::predraw()
@@ -240,7 +271,7 @@ void KisToolCurves::predraw()
     if (!m_subject || !m_currentImage)
         return;
 
-    QPen pen(Qt::white, 0, Qt::SolidLine);
+    QPen pen = QPen(Qt::white, 0, Qt::SolidLine);
 
     gc->setPen(pen);
     gc->setRasterOp(Qt::XorROP);
@@ -250,11 +281,18 @@ void KisToolCurves::predraw()
     QPoint pos;
 
     controller->kiscanvas()->repaint();
-    for (CurveIterator it = m_curve->begin(); it != m_curve->end(); it++)
-    {
-        pos = controller->windowToView((*it).getPoint().floorQPoint());
-        gc->drawPoint(pos);
+    for (CurveIterator it = m_curve->begin(); it != m_curve->end(); it++) {
+        pos = controller->windowToView((*it).point().floorQPoint());
+        if ((*it).isPivot()) {
+            if ((*it).isSelected())
+                gc->fillRect(pos.x()-4,pos.y()-4,9,9,Qt::white);
+            else
+                gc->fillRect(pos.x()-4,pos.y()-4,9,9,Qt::gray);
+        } else
+            gc->drawPoint(pos);
     }
+
+    delete gc;
 }
 
 void KisToolCurves::buttonRelease(KisButtonReleaseEvent *)
@@ -263,12 +301,25 @@ void KisToolCurves::buttonRelease(KisButtonReleaseEvent *)
         return;
 
     m_dragging = false;
+
+    if (m_editing) {
+        KisCurve sel = m_curve->selectedPivots();
+        if (!sel.isEmpty()) {
+            m_curve->setPivotSelected(sel[0],false);
+            predraw();
+        }
+    }
 }
 
 void KisToolCurves::doubleClick(KisDoubleClickEvent *)
 {
-    draw();
-    m_curve->clear();
+    if (!m_editing)
+        m_editing = true;
+    else {
+        draw();
+        m_curve->clear();
+        m_editing = false;
+    }
 }
 
 void KisToolCurves::draw()
@@ -290,7 +341,7 @@ void KisToolCurves::draw()
 
     for( CurveIterator it = m_curve->begin(); it != m_curve->end(); it++ )
     {
-        painter.paintAt((*it).getPoint(), PRESSURE_DEFAULT, 0, 0);
+        painter.paintAt((*it).point(), PRESSURE_DEFAULT, 0, 0);
     }
 
     device->setDirty( painter.dirtyRect() );
@@ -319,7 +370,7 @@ void KisToolCurves::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Draw curves, like polyline, use Delete to remove lines you don't want."));
+        m_action->setToolTip(i18n("Draw curves, like polyline, use Delete to remove lines, double-click to edit, and again to finish."));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

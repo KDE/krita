@@ -26,6 +26,7 @@
 #include "kis_tool_paint.h"
 #include "kis_point.h"
 
+class CurvePoint;
 class KisPoint;
 class KisCanvas;
 class KisCurve;
@@ -45,6 +46,8 @@ class KisToolCurves : public KisToolPaint {
     KisPoint m_start;
     KisPoint m_end;
     bool m_dragging;
+
+    bool m_editing;
 
 public:
     KisToolCurves();
@@ -75,6 +78,7 @@ public slots:
 
 protected:
 
+    KisPoint mouseOnHandle(KisPoint);
     void predraw();
     virtual void draw();
 

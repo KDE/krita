@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/profiles FILES
+install(FILES
     Adobe.icm 
     Apple.icm 
     CIE.icm 
@@ -25,7 +25,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/profiles FILES
     WideGamut.icm 
     ycc601.icm 
     ycc709.icm
-    )
+    DESTINATION ${DATA_INSTALL_DIR}/krita/profiles)
 
 
 

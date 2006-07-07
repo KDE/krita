@@ -103,7 +103,7 @@ install(TARGETS kodocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 install(FILES kodocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES koffice_shell.rc DESTINATION ${DATA_INSTALL_DIR}/koffice )
-install_files( ${INCLUDE_INSTALL_DIR} FILES
+install( FILES
     KoContainerHandler.h
     KoProperties.h
     KoFilter.h
@@ -143,7 +143,7 @@ install_files( ${INCLUDE_INSTALL_DIR} FILES
     KoOasisLoadingContext.h 
     KoPoint.h 
     KoRTree.h
-    KoGenStyle.h )
+    KoGenStyle.h DESTINATION ${INCLUDE_INSTALL_DIR})
 
 
 #original Makefile.am contents follow:

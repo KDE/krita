@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/brushes FILES
+install( FILES
     10x10squareBlur.gbr      
     10x10square.gbr      
     11circle.gbr      
@@ -70,7 +70,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/brushes FILES
     SketchBrush-32.gih      
     SketchBrush-64.gih      
     vine.gih
-    )
+    DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)
 
 
 

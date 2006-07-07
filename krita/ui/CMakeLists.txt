@@ -133,7 +133,7 @@ install(TARGETS kritaui  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${INCLUDE_INSTALL_DIR} FILES
+install( FILES
     kis_cmb_composite.h
     kis_cmb_idlist.h
     kis_color_cup.h
@@ -175,7 +175,7 @@ install_files( ${INCLUDE_INSTALL_DIR} FILES
     kobirdeyepanel.h
     kis_filters_listview.h
     kis_input_device.h
-    )
+    DESTINATION ${INCLUDE_INSTALL_DIR})
 
 #original Makefile.am contents follow:
 

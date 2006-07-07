@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/palettes FILES  
+install( FILES  
     40_Colors.gpl      
     Anchor.gpl      
     Bears.gpl      
@@ -51,7 +51,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/palettes FILES
     Volcano.gpl      
     Warm_Colors.gpl      
     Web.gpl
-    )
+    DESTINATION ${DATA_INSTALL_DIR}/krita/palettes)
 
 
 

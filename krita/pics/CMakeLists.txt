@@ -1,6 +1,6 @@
 
 
-install_files( ${DATA_INSTALL_DIR}/krita/pics FILES  
+install(FILES  
     deletelayer.png  	
     lowerlayer.png  	
     newlayer.png  	
@@ -13,7 +13,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/pics FILES
     tablet.png  	
     locked.png  	
     unlocked.png
-    )
+    DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 

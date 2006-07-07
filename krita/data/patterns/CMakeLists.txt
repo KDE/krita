@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/patterns FILES
+install(FILES
     3dgreen.pat 
     Craters.pat 
     Moonfoot.pat 
@@ -64,7 +64,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/patterns FILES
     wood3.pat 
     wood4.pat 
     wood5.pat
-    )
+    DESTINATION ${DATA_INSTALL_DIR}/krita/patterns)
 
 
 

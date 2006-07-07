@@ -12,12 +12,12 @@ add_subdirectory( images )
 
 ########### install files ###############
 
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES  
+install( FILES  
     krita_filter.desktop      
     krita_paintop.desktop      
     krita_plugin.desktop      
     krita_tool.desktop
-    )
+    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 
 

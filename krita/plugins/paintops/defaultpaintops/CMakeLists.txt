@@ -23,11 +23,11 @@ install(TARGETS kritadefaultpaintops  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kritadefaultpaintops.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install_files( ${DATA_INSTALL_DIR}/krita/images FILES
+install( FILES
     airbrush.png
     paintbrush.png
     eraser.png
-    pencil.png )
+    pencil.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
 
 

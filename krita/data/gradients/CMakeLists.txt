@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/krita/gradients FILES 
+install( FILES 
     Abstract_1.ggr 
     Abstract_2.ggr 
     Abstract_3.ggr 
@@ -84,7 +84,7 @@ install_files( ${DATA_INSTALL_DIR}/krita/gradients FILES
     Wood_2.ggr 
     Yellow_Contrast.ggr 
     Yellow_Orange.ggr
-    )
+    DESTINATION  ${DATA_INSTALL_DIR}/krita/gradients)
 
 
 

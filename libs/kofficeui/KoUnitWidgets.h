@@ -103,19 +103,52 @@ protected:
 
 
 /**
- * Spin box for double precision numbers with unit display
+ * Spin box for double precision numbers with unit display.
+ * Use this widget for any value that represents a real measurable value for consistency throughout
+ * KOffice.
+ * This widget shows the value in the user-selected units (inch, milimeters, etc) but keeps the
+ * koffice-widget default measurement unit internally. This has the advantage that just setting and
+ * getting a value will not change the value due to conversions.
+ * The KoDocument class has a unit() method for consistent (document wide) configuration of the
+ * used unit.
+ * It is adviced to use a QDoubleSpinBox in QtDesigner and then use the context-menu item: 'Promote to Custom Widget' and use the values: 'classname=KoUnitDoubleSpinBox', 'headerfile=KoUnitWidgets.h'
+ * This will generate code that uses this spinbox in the correct manner.
  * \since 1.4 (change of behavior)
  */
 class KOFFICEUI_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor
+     * Will initialize the widget with very broad minimum and maximum range. -10000 to 10000
+     * @param parent the parent widget
+     * @param name unused
+     */
     KoUnitDoubleSpinBox( QWidget *parent = 0L, const char *name = 0L );
-    // lower, upper, step and value are in pt
+    /**
+     * A constructor with all the options in one.
+     * Its not adviced to use this constructor for the sake of readability.
+     * @param parent the parent widget
+     * @param lower the lowest value this spinbox can contain, in points.
+     * @param upper the largest value this spinbox can contain, in points.
+     * @param step the amount the arrows will change the current value, in points.
+     * @param value is the initial value, in points.
+     * @param unit the displaying unit
+     * @param precision the amount of digits after the separator. 2 means 0.00 will be shown.
+     * @param name unused
+     */
     KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
                          KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
-    // added so the class can be used in .ui files(by Tymoteusz Majewski, maju7@o2.pl)
-    virtual void changeValue( double );
+    /**
+     * Set the new value in points which will then be converted to the current unit for display
+     * @param newValue the new value
+     * @see value()
+     */
+    virtual void changeValue( double newValue );
+    /**
+     * This spinbox shows the internal value after a conversion to the unit set here.
+     */
     virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
     /// @return the current value, converted in points
@@ -133,13 +166,12 @@ public:
     /// Set step size in points.
     void setLineStepPt(double step);
 
-    /// Set minimum, maximum value and the step size (all in points) (by Tymoteusz Majewski, maju7@o2.pl)
+    /// Set minimum, maximum value and the step size (all in points)
     void setMinMaxStep( double min, double max, double step );
 
 signals:
     /// emitted like valueChanged in the parent, but this one emits the point value
     void valueChangedPt( double );
-
 
 private:
     double m_lowerInPoints; ///< lowest value in points

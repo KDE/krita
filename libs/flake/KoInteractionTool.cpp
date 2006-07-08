@@ -24,6 +24,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QBitmap>
 
 #include "KoPointerEvent.h"
 #include "KoShape.h"
@@ -34,6 +35,7 @@
 
 #include <kcommand.h>
 #include <kcursor.h>
+#include <kstandarddirs.h>
 
 #define HANDLE_DISTANCE 10
 
@@ -54,6 +56,26 @@ KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
 , m_lastHandle(KoFlake::NoHandle)
 , m_mouseWasInsideHandles( false )
 {
+    QPixmap rotatePixmap, shearPixmap;
+    rotatePixmap.load(KStandardDirs::locate("data", "koffice/icons/rotate.png"));
+    shearPixmap.load(KStandardDirs::locate("data", "koffice/icons/shear.png"));
+
+    m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QMatrix().rotate(45)));
+    m_rotateCursors[1] = QCursor(rotatePixmap.transformed(QMatrix().rotate(90)));
+    m_rotateCursors[2] = QCursor(rotatePixmap.transformed(QMatrix().rotate(135)));
+    m_rotateCursors[3] = QCursor(rotatePixmap.transformed(QMatrix().rotate(180)));
+    m_rotateCursors[4] = QCursor(rotatePixmap.transformed(QMatrix().rotate(225)));
+    m_rotateCursors[5] = QCursor(rotatePixmap.transformed(QMatrix().rotate(270)));
+    m_rotateCursors[6] = QCursor(rotatePixmap.transformed(QMatrix().rotate(315)));
+    m_rotateCursors[7] = QCursor(rotatePixmap);
+    m_shearCursors[0] = QCursor(shearPixmap);
+    m_shearCursors[1] = QCursor(shearPixmap.transformed(QMatrix().rotate(45)));
+    m_shearCursors[2] = QCursor(shearPixmap.transformed(QMatrix().rotate(90)));
+    m_shearCursors[3] = QCursor(shearPixmap.transformed(QMatrix().rotate(135)));
+    m_shearCursors[4] = QCursor(shearPixmap.transformed(QMatrix().rotate(180)));
+    m_shearCursors[5] = QCursor(shearPixmap.transformed(QMatrix().rotate(225)));
+    m_shearCursors[6] = QCursor(shearPixmap.transformed(QMatrix().rotate(270)));
+    m_shearCursors[7] = QCursor(shearPixmap.transformed(QMatrix().rotate(315)));
     m_sizeCursors[0] = KCursor::sizeVerCursor();
     m_sizeCursors[1] = KCursor::sizeBDiagCursor();
     m_sizeCursors[2] = KCursor::sizeHorCursor();
@@ -76,6 +98,7 @@ bool KoInteractionTool::wantsAutoScroll()
 
 void KoInteractionTool::updateCursor() {
     QCursor cursor = Qt::ArrowCursor;
+
     if(selection()->count() > 0) { // has a selection
         bool editable=false;
         foreach(KoShape *shape, selection()->selectedShapes(KoFlake::StrippedSelection)) {
@@ -83,15 +106,45 @@ void KoInteractionTool::updateCursor() {
                 editable = true;
         }
 
+        if(selection()->count()>1)
+            m_angle = selection()->rotation();
+        else
+            m_angle = selection()->firstSelectedShape()->rotation();
+
+        int rotOctant = 8 + int(8.5 + m_angle / 45);
+
         if(!m_mouseWasInsideHandles) {
-            if(m_lastHandle == KoFlake::NoHandle)
-                cursor = Qt::ArrowCursor;
-            else
-                cursor = Qt::IBeamCursor; // TODO make rotation cursor
+            switch(m_lastHandle) {
+                case KoFlake::TopMiddleHandle:
+                    cursor = m_shearCursors[(0 +rotOctant)%8];
+                    break;
+                case KoFlake::TopRightHandle:
+                    cursor = m_rotateCursors[(1 +rotOctant)%8];
+                    break;
+                case KoFlake::RightMiddleHandle:
+                    cursor = m_shearCursors[(2 +rotOctant)%8];
+                    break;
+                case KoFlake::BottomRightHandle:
+                    cursor = m_rotateCursors[(3 +rotOctant)%8];
+                    break;
+                case KoFlake::BottomMiddleHandle:
+                    cursor = m_shearCursors[(4 +rotOctant)%8];
+                    break;
+                case KoFlake::BottomLeftHandle:
+                    cursor = m_rotateCursors[(5 +rotOctant)%8];
+                    break;
+                case KoFlake::LeftMiddleHandle:
+                    cursor = m_shearCursors[(6 +rotOctant)%8];
+                    break;
+                case KoFlake::TopLeftHandle:
+                    cursor = m_rotateCursors[(7 +rotOctant)%8];
+                    break;
+                case KoFlake::NoHandle:
+                    cursor = Qt::ArrowCursor;
+                    break;
+             }
         }
         else {
-            int rotOctant = 8 + int(8.5 + m_angle / 45);
-
             switch(m_lastHandle) {
                 case KoFlake::TopMiddleHandle:
                     cursor = m_sizeCursors[(0 +rotOctant)%8];

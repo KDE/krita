@@ -110,6 +110,8 @@ private:
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
     QCursor m_sizeCursors[8];
+    QCursor m_rotateCursors[8];
+    QCursor m_shearCursors[8];
     double m_angle;
 };
 

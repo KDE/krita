@@ -185,7 +185,7 @@ void KoShapeSelector::add(KoShape *shape) {
             x = qMax(x, qRound(shape->position().x() + shape->size().width()) + 5); // 5=gap
             if(x + w > width()) { // next row
                 y += rowHeight + 5; // 5 = gap
-                x = 0;
+                x = 5;
                 ok=false;
                 break;
             }

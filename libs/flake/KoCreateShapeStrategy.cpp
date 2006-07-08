@@ -21,6 +21,7 @@
 #include "KoCreateShapesTool.h"
 #include "KoShapeControllerBase.h"
 #include "KoShapeRegistry.h"
+#include "KoShapeManager.h"
 #include "KoCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
@@ -87,13 +88,21 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     if(pageCount > 0) {
         if(pageCount > 1)
             dialog->setFaceType(KPageDialog::Tabbed);
-        if(dialog->exec() != KPageDialog::Accepted)
+        if(dialog->exec() != KPageDialog::Accepted) {
+            delete dialog;
             return 0;
+        }
         foreach(KoShapeConfigWidgetBase *widget, widgets) {
             widget->save();
             // TODO action;
         }
     }
+    delete dialog;
+
+    Q_ASSERT(m_canvas->shapeManager());
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    selection->deselectAll();
+    selection->select(shape);
 
     Q_ASSERT(m_tool->controller() /*controller was set on parent tool*/);
     KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_tool->controller(), shape);

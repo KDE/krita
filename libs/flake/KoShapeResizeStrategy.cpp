@@ -29,7 +29,6 @@
 KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
 : KoInteractionStrategy(tool, canvas)
-, m_initialBoundingRect()
 {
     KoSelectionSet selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
@@ -37,7 +36,8 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
         m_startPositions << shape->position();
         m_startAbsolutePositions << shape->absolutePosition();
         m_startSizes << shape->size();
-        m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
+        m_startShearXs << shape->shearX();
+        m_startShearYs << shape->shearY();
     }
     m_start = clicked;
 
@@ -53,7 +53,6 @@ KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas
     m_windMatrix.rotate(shp->rotation());
     m_initialSize = shp->size();
     m_initialPosition = shp->transformationMatrix(0).map(QPointF());
-printf("ini: %f %f\n",m_initialPosition.x(),m_initialPosition.y());
 
     switch(direction) {
         case KoFlake::TopMiddleHandle:
@@ -140,36 +139,23 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     matrix.scale(qMax(0.0, zoomX), qMax(0.0, zoomY));
     matrix.translate(-move.x(), -move.y()); // and back
 
+    matrix = m_unwindMatrix * matrix * m_windMatrix;
     int i=0;
     foreach(KoShape *shape, m_selectedShapes) {
-        QPointF pos(m_startAbsolutePositions.at(i) - m_initialPosition);
-        pos = m_unwindMatrix.map(pos);
-        QRectF rect(pos, m_startSizes.at(i));
+        QPointF pos(m_startAbsolutePositions[i] - m_initialPosition);
         pos = matrix.map(pos);
-/***/
-        // construct a size vector for the shape
-        QPointF sizevec(m_startSizes.at(i).width(), m_startSizes.at(i).height());
+
         // construct the matrix tranformation we apply to the shape
-        QMatrix m;
-        m.rotate(shape->rotation());
-        m = m * m_unwindMatrix * matrix * m_windMatrix * (QMatrix().rotate(-shape->rotation()));
-        sizevec = m.map(sizevec);
-printf("new: %f %f\n",sizevec.x(),sizevec.y());
-printf("ske: %f %f\n",m.m12(),m.m21());
-printf("sca: %f %f\n",m.m11(),m.m22());
-/***/
-        QRectF result = matrix.mapRect(rect);
-printf("cur: %f %f\n",result.width(),result.height());
-        result.setWidth(qMax(4.0, result.width()));
-        result.setHeight(qMax(4.0, result.height()));
+        QMatrix m = (QMatrix().rotate(shape->rotation())) * matrix  * (QMatrix().rotate(-shape->rotation()));
+        QSizeF size(m.m11() * m_startSizes[i].width(), m.m22() * m_startSizes[i].height());
+        size.setWidth(qMax(4.0, size.width()));
+        size.setHeight(qMax(4.0, size.height()));
+
         shape->repaint();
         // the position has to be set after the size as we set the center of the shape
-        QSizeF size(m.m11()*m_startSizes.at(i).width(), m.m22()*m_startSizes.at(i).height());
-printf("alt: %f %f\n",size.width(),size.height());
         shape->resize( size );
-        shape->shear(m.m12(), m.m21());
-        pos=m_windMatrix.map(pos);
-        shape->setAbsolutePosition( m_windMatrix.map(result.topLeft()) + m_initialPosition );
+        shape->shear(m_startShearXs[i] + m.m12() / m.m22(), m_startShearYs[i] + m.m21() / m.m11());
+        shape->setAbsolutePosition( pos + m_initialPosition );
         shape->repaint();
         i++;
     }

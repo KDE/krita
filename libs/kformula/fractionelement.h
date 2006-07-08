@@ -142,15 +142,10 @@ public:
      */
     virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
-
-    // main child
-    //
-    // If an element has children one has to become the main one.
-
     virtual SequenceElement* getMainChild();
 
-    SequenceElement* getNumerator() { return numerator; }
-    SequenceElement* getDenominator() { return denominator; }
+    SequenceElement* getNumerator() { return m_numerator; }
+    SequenceElement* getDenominator() { return m_denominator; }
 
     /**
      * Returns wether the element has no more useful
@@ -159,10 +154,7 @@ public:
      */
     virtual bool isSenseless();
 
-    /**
-     * Sets the cursor to select the child. The mark is placed before,
-     * the position behind it.
-     */
+    /// Sets the cursor to select the child. The mark is placed before, the position behind it.
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
     /**
@@ -171,9 +163,7 @@ public:
      */
     //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
 
-    /**
-     * Tells whether the fraction should be drawn with a line.
-     */
+    /// Tells whether the fraction should be drawn with a line.
     void showLine(bool line) { withLine = line; }
 
     /**
@@ -187,36 +177,24 @@ public:
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
-
-    //Save/load support
-
-    /**
-     * Returns the tag name of this element type.
-     */
+    /// Returns the tag name of this element type.
     virtual QString getTagName() const { return "FRACTION"; }
 
-    /**
-     * Appends our attributes to the dom element.
-     */
+    /// Appends our attributes to the dom element.
     virtual void writeDom(QDomElement element);
 
-    /**
-     * Reads our attributes from the element.
-     * Returns false if it failed.
-     */
+    /// Reads our attributes from the element. Returns false if it failed.
     virtual bool readAttributesFromDom(QDomElement element);
 
     /**
      * Reads our content from the node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
+     * that needs to be read. Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
 
 private:
-
-    SequenceElement* numerator;
-    SequenceElement* denominator;
+    SequenceElement* m_numerator;
+    SequenceElement* m_denominator;
 
     bool withLine;
 };

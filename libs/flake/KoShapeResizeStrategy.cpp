@@ -145,17 +145,30 @@ void KoShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
         QPointF pos(m_startAbsolutePositions.at(i) - m_initialPosition);
         pos = m_unwindMatrix.map(pos);
         QRectF rect(pos, m_startSizes.at(i));
-printf("abs: %f %f\n",m_startAbsolutePositions.at(i).x(),m_startAbsolutePositions.at(i).y());
-printf("rec: %f %f\n",rect.x(),rect.y());
+        pos = matrix.map(pos);
+/***/
+        // construct a size vector for the shape
+        QPointF sizevec(m_startSizes.at(i).width(), m_startSizes.at(i).height());
+        // construct the matrix tranformation we apply to the shape
+        QMatrix m;
+        m.rotate(shape->rotation());
+        m = m * m_unwindMatrix * matrix * m_windMatrix * (QMatrix().rotate(-shape->rotation()));
+        sizevec = m.map(sizevec);
+printf("new: %f %f\n",sizevec.x(),sizevec.y());
+printf("ske: %f %f\n",m.m12(),m.m21());
+printf("sca: %f %f\n",m.m11(),m.m22());
+/***/
         QRectF result = matrix.mapRect(rect);
-printf("res: %f %f\n",result.x(),result.y());
+printf("cur: %f %f\n",result.width(),result.height());
         result.setWidth(qMax(4.0, result.width()));
         result.setHeight(qMax(4.0, result.height()));
         shape->repaint();
         // the position has to be set after the size as we set the center of the shape
-        shape->resize( result.size() );
-        pos=m_windMatrix.map(result.topLeft());
-printf("chg: %f %f\n",pos.x(),pos.y());
+        QSizeF size(m.m11()*m_startSizes.at(i).width(), m.m22()*m_startSizes.at(i).height());
+printf("alt: %f %f\n",size.width(),size.height());
+        shape->resize( size );
+        shape->shear(m.m12(), m.m21());
+        pos=m_windMatrix.map(pos);
         shape->setAbsolutePosition( m_windMatrix.map(result.topLeft()) + m_initialPosition );
         shape->repaint();
         i++;

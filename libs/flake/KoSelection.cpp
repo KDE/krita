@@ -153,8 +153,6 @@ QRectF KoSelection::boundingRect() const
     (const_cast <KoSelection *>(this))->resize( bb.size() );
     QPointF p(tmat.map(bb.topLeft() + QPointF(size().width()/2, size().height()/2)));
     p -= QPointF(size().width()/2, size().height()/2);
-printf("pos: %f %f\n",p.x(), p.y());
-printf("siz: %f %f\n",size().width(), size().height());
 
     (const_cast <KoSelection *>(this))->setPosition( p );
 

@@ -26,6 +26,8 @@
 
 #include "kis_types.h"
 
+struct KisPerspectiveGrid;
+
 class GridDrawer {
 public:
     GridDrawer() {}
@@ -33,6 +35,7 @@ public:
 
 public:
     void drawGrid(KisImageSP image, const QRect& wr);
+    void drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisPerspectiveGrid& grid);
 
     virtual void setPen(const QPen& pen) = 0;
     virtual void drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2) = 0;

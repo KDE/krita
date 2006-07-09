@@ -48,6 +48,11 @@ Qt::PenStyle GridDrawer::gs2style(Q_UINT32 s)
     }
 }
 
+void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, const KisPerspectiveGrid& grid)
+{
+    
+}
+
 void GridDrawer::drawGrid(KisImageSP image, const QRect& wr)
 {
     KisConfig cfg;

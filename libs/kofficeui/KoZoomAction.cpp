@@ -26,19 +26,24 @@
 #include <klocale.h>
 #include <q3tl.h>
 
+#include <kicon.h>
+
 KoZoomAction::KoZoomAction( const QString& text, const QIcon& pix,
   const KShortcut& cut, KActionCollection* parent, const char* name ):
-  KSelectAction( text, pix, cut, parent, name )
+  KSelectAction( KIcon(pix), text, parent, name )
 {
+  setShortcut(cut);
+
   init();
 }
 
 KoZoomAction::KoZoomAction( const QString& text, const QString& pix,
   const KShortcut& cut, KActionCollection* parent, const char* name ):
-  KSelectAction( text, pix, cut, parent, name )
+  KSelectAction( KIcon(pix), text, parent, name )
 {
-  init();
+  setShortcut(cut);
 
+  init();
 }
 
 void KoZoomAction::setZoom( const QString& text )

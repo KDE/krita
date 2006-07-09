@@ -55,12 +55,11 @@ void KoPartSelectAction::init()
     Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
-	if (!serv->genericName().isEmpty()) {
-	    KAction *action = new KAction( serv->genericName().replace('&',"&&"), serv->icon(), 0,
-                                       this, SLOT( slotActionActivated() ),
-                                       parentCollection(), serv->name().toLatin1() );
-    	    insert( action );
-	}
+        if (!serv->genericName().isEmpty()) {
+            KAction *action = new KAction(KIcon(serv->icon()), serv->genericName().replace('&',"&&"), parentCollection(), serv->name().toLatin1());
+            connect(action, SIGNAL(triggered()), this, SLOT(slotActionActivated()));
+            addAction( action );
+        }
     }
 
 }
@@ -71,14 +70,14 @@ void KoPartSelectAction::slotActionActivated()
     QString servName = sender()->objectName();
     KService::Ptr serv = KService::serviceByName( servName );
     m_documentEntry = KoDocumentEntry( serv );
-    emit activated();
+    trigger();
 }
 
 // Called when activating the toolbar button
 void KoPartSelectAction::slotActivated()
 {
     m_documentEntry = KoPartSelectDia::selectPart( 0L );
-    emit activated();
+    trigger();
 }
 
 #include "KoPartSelectAction.moc"

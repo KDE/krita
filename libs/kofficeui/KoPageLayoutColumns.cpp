@@ -24,16 +24,15 @@
 
 #include <QLabel>
 #include <QLayout>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit::Unit unit, const KoPageLayout& layout)
     : KoPageLayoutColumnsBase(parent) {
     m_columns = columns;
-    Q3HBoxLayout *lay = new Q3HBoxLayout(previewPane);
+    QHBoxLayout *lay = new QHBoxLayout(previewPane);
     m_preview = new KoPagePreview( previewPane, "Preview", layout );
     lay->addWidget(m_preview);
-    lay = new Q3HBoxLayout(columnSpacingPane);
+    lay = new QHBoxLayout(columnSpacingPane);
     m_spacing = new KoUnitDoubleSpinBox( columnSpacingPane );
     m_spacing->setValue(  m_columns.ptColumnSpacing );
     m_spacing->setUnit( unit );

@@ -25,7 +25,6 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QAction>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3ValueList>
 #include <QKeyEvent>
@@ -701,13 +700,13 @@ void KoGuides::moveGuide( const QPoint &pos, bool horizontal, int rulerWidth )
         }
         if ( m_insertGuide )
         {
-            QMouseEvent e( QEvent::MouseButtonPress, p, Qt::LeftButton, Qt::LeftButton );
+            QMouseEvent e( QEvent::MouseButtonPress, p, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier );
             mousePressEvent( &e );
         }
     }
     else
     {
-        QMouseEvent e( QEvent::MouseMove, p, Qt::NoButton, Qt::LeftButton );
+        QMouseEvent e( QEvent::MouseMove, p, Qt::NoButton, Qt::LeftButton, Qt::NoModifier );
         mouseMoveEvent( &e );
     }
 }
@@ -719,7 +718,7 @@ void KoGuides::addGuide( const QPoint &pos, bool /* horizontal */, int rulerWidt
     int y = pos.y() - rulerWidth;
     QPoint p( x, y );
     m_insertGuide = false;
-    QMouseEvent e( QEvent::MouseButtonRelease, p, Qt::LeftButton, Qt::LeftButton );
+    QMouseEvent e( QEvent::MouseButtonRelease, p, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier );
     mouseReleaseEvent( &e );
 }
 
@@ -759,7 +758,7 @@ void KoGuides::slotRemove()
 
 void KoGuides::paint()
 {
-    m_view->canvas()->repaint( false );
+    m_view->canvas()->repaint();
 }
 
 

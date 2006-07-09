@@ -12,10 +12,10 @@ add_subdirectory( scripts )
 
 
 set(libkrosspythoncxx_SRCS 
-    ${CMAKE_SOURCE_DIR}/libs/kross/python/CXX/cxxsupport.cxx 
-    ${CMAKE_SOURCE_DIR}/libs/kross/python/CXX/cxx_extensions.cxx 
-    ${CMAKE_SOURCE_DIR}/libs/kross/python/CXX/cxxextensions.c 
-    ${CMAKE_SOURCE_DIR}/libs/kross/python/CXX/IndirectPythonInterface.cxx
+    ${CMAKE_SOURCE_DIR}/libs/kross/python/cxx/cxxsupport.cxx 
+    ${CMAKE_SOURCE_DIR}/libs/kross/python/cxx/cxx_extensions.cxx 
+    ${CMAKE_SOURCE_DIR}/libs/kross/python/cxx/cxxextensions.c 
+    ${CMAKE_SOURCE_DIR}/libs/kross/python/cxx/IndirectPythonInterface.cxx
 	)
 
 ########### next target ###############

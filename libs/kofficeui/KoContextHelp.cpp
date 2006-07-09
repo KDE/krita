@@ -25,14 +25,12 @@
 #include <QLabel>
 #include <QLayout>
 #include <q3simplerichtext.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>
 #include <Q3PointArray>
-#include <Q3GridLayout>
 #include <QEvent>
 #include <QKeyEvent>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QTimerEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -381,12 +379,12 @@ void KoHelpWidget::stopScrolling()
 KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 		: QWidget( parent, Qt::WType_Dialog | Qt::WStyle_Customize | Qt::WStyle_NoBorder )
 {
-	Q3GridLayout* layout = new Q3GridLayout( this );
-	Q3HBoxLayout* buttonLayout;
+	QGridLayout* layout = new QGridLayout( this );
+	QHBoxLayout* buttonLayout;
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
-	buttonLayout = new Q3HBoxLayout( layout );
-	//layout->addLayout( buttonLayout, 2, 0 );
+	buttonLayout = new QHBoxLayout();
+	layout->addLayout( buttonLayout, 2, 0 );
 	layout->addWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 3, 1 );
 	buttonLayout->addWidget( m_close = new KoTinyButton( KoTinyButton::Close, this ) );
 	buttonLayout->addWidget( m_sticky = new KoTinyButton( KoTinyButton::Sticky, this ) );
@@ -517,8 +515,10 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 } // KoContextHelpPopup::keyPressEvent
 
 KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* /*popupParent*/ )
-		: KToggleAction( i18n( "Context Help" ), BarIcon( "help" ), KShortcut( "CTRL+Qt::SHIFT+F1" ), 0, 0, parent, "help_context" )
+		: KToggleAction( KIcon(BarIcon("help")), i18n("Context Help"), parent, "help_context" )
 {
+    setShortcut(KShortcut("CTRL+Qt::SHIFT+F1"));
+
 	m_popup = new KoContextHelpPopup( 0L );
 	connect( m_popup, SIGNAL( wantsToBeClosed() ), this, SLOT( closePopup() ) );
 	connect( this, SIGNAL( toggled( bool ) ), m_popup, SLOT( setShown( bool ) ) );
@@ -546,7 +546,7 @@ KoContextHelpWidget::KoContextHelpWidget( QWidget* parent, const char* /*name*/ 
 		: QWidget( parent )
 {
 	setWindowTitle( i18n( "Context Help" ) );
-	Q3GridLayout* layout = new Q3GridLayout( this );
+	QGridLayout* layout = new QGridLayout( this );
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
 	layout->addWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 2, 1 );
@@ -576,7 +576,7 @@ KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 {
 	setWindowTitle( i18n( "Context Help" ) );
 	QWidget* mainWidget = new QWidget( this );
-	Q3GridLayout* layout = new Q3GridLayout( mainWidget );
+	QGridLayout* layout = new QGridLayout( mainWidget );
 	layout->addWidget( m_helpIcon = new QLabel( mainWidget ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( mainWidget ), 1, 0 );
 	layout->addWidget( m_helpViewer = new KoHelpWidget( "", mainWidget ), 0, 1, 2, 1 );

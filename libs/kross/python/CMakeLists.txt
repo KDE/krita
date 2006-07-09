@@ -7,7 +7,7 @@ include_directories(
 
 
 
-add_subdirectory( CXX )
+add_subdirectory( cxx )
 add_subdirectory( scripts )
 
 

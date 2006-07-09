@@ -37,9 +37,9 @@
 #include <eval.h>
 
 // Include the PyCXX stuff.
-#include "CXX/Config.hxx"
-#include "CXX/Objects.hxx"
-#include "CXX/Extensions.hxx"
+#include "cxx/Config.hxx"
+#include "cxx/Objects.hxx"
+#include "cxx/Extensions.hxx"
 
 namespace Kross {
 

@@ -67,30 +67,38 @@ private:
 
 private:
     static KisTileManager *m_singleton;
-    KTempFile m_tempFile;
-    off_t m_fileSize;
+
     // For use when any swap-allocating function failed; the risk of swap allocating failing
     // again is too big, and we'd clutter the logs with kdWarnings otherwise
     bool m_swapForbidden;
 
+    // This keeps track of open swap files, and their associated filesizes
+    struct TempFile {
+        KTempFile* tempFile;
+        off_t fileSize;
+    };
     // validNode says if you can swap it (true) or not (false) mmapped, if this tile
     // currently is memory mapped. If it is false, but onFile, it is on disk,
     // but not mmapped, and should be mapped!
     // filePos is the position inside the file; size is the actual size, fsize is the size
     // being used in the swap for this tile (may be larger!)
-    struct TileInfo { KisTile *tile; off_t filePos; int size; int fsize;
+    // The file points to 0 if it is not swapped, and to the relevant TempFile otherwise
+    struct TileInfo { KisTile *tile; KTempFile* file; off_t filePos; int size; int fsize;
         QValueList<TileInfo*>::iterator node;
         bool inMem; bool onFile; bool mmapped; bool validNode; };
-    typedef struct { off_t filePos; int size; } FreeInfo;
+    typedef struct { KTempFile* file; off_t filePos; int size; } FreeInfo;
     typedef QMap<const KisTile*, TileInfo*> TileMap;
     typedef QValueList<TileInfo*> TileList;
     typedef QValueList<FreeInfo*> FreeList;
     typedef QValueVector<FreeList> FreeListList;
     typedef QValueList<Q_UINT8*> PoolFreeList;
+    typedef QValueList<TempFile> FileList;
+
 
     TileMap m_tileMap;
     TileList m_swappableList;
     FreeListList m_freeLists;
+    FileList m_files;
     Q_INT32 m_maxInMem;
     Q_INT32 m_currentInMem;
     Q_UINT32 m_swappiness;
@@ -104,6 +112,11 @@ private:
     PoolFreeList *m_poolFreeList;
     QMutex * m_poolMutex;
     QMutex * m_swapMutex;
+
+    // This is the constant that we will use to see if we want to add a new tempfile
+    // We use 1<<30 (one gigabyte) because apparently 32bit systems don't really like very
+    // large files.
+    static const long MaxSwapFileSize = 1<<30; // For debugging purposes: 1<<20 is a megabyte
 
     // debug
     int counter;

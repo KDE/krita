@@ -47,7 +47,6 @@ KisTileManager::KisTileManager() {
 
     Q_ASSERT(KisTileManager::m_singleton == 0);
     KisTileManager::m_singleton = this;
-    m_fileSize = 0;
     m_bytesInMem = 0;
     m_bytesTotal = 0;
     m_swapForbidden = false;
@@ -100,8 +99,11 @@ KisTileManager::~KisTileManager() {
         m_freeLists.clear();
     }
 
-    m_tempFile.close();
-    m_tempFile.unlink();
+    for (FileList::iterator it = m_files.begin(); it != m_files.end(); ++it) {
+        (*it).tempFile->close();
+        (*it).tempFile->unlink();
+        delete (*it).tempFile;
+    }
 
     delete [] m_poolPixelSizes;
     delete [] m_pools;
@@ -133,6 +135,7 @@ void KisTileManager::registerTile(KisTile* tile)
     info->inMem = true;
     info->mmapped = false;
     info->onFile = false;
+    info->file = 0;
     info->filePos = 0;
     info->size = tile->WIDTH * tile->HEIGHT * tile->m_pixelSize;
     info->fsize = 0; // the size in the file
@@ -166,6 +169,7 @@ void KisTileManager::deregisterTile(KisTile* tile) {
     if (info->onFile) { // It was once mmapped
         // To freelist
         FreeInfo* freeInfo = new FreeInfo();
+        freeInfo->file = info->file;
         freeInfo->filePos = info->filePos;
         freeInfo->size = info->fsize;
         uint pixelSize = (info->size / m_tileSize);
@@ -247,10 +251,11 @@ void KisTileManager::fromSwap(TileInfo* info)
     doSwapping();
 
     Q_ASSERT(info->onFile);
+    Q_ASSERT(info->file);
     Q_ASSERT(!info->mmapped);
 
     if (!kritaMmap(info->tile->m_data, 0, info->size, PROT_READ | PROT_WRITE, MAP_SHARED,
-                   m_tempFile.handle(), info->filePos)) {
+                   info->file->handle(), info->filePos)) {
         kdWarning() << "fromSwap failed!" << endl;
         m_swapMutex->unlock();
         return;
@@ -283,6 +288,7 @@ void KisTileManager::toSwap(TileInfo* info) {
                 // found one
                 FreeList::iterator it = m_freeLists[pixelSize].begin();
 
+                info->file = (*it)->file;
                 info->filePos = (*it)->filePos;
                 info->fsize = (*it)->size;
 
@@ -295,10 +301,19 @@ void KisTileManager::toSwap(TileInfo* info) {
 
         if (!foundFree) { // No position found or free, create a new
             long pagesize = sysconf(_SC_PAGESIZE);
-            off_t newsize = m_fileSize + info->size;
+            TempFile* tfile = 0;
+            if (m_files.empty() || m_files.back().fileSize >= MaxSwapFileSize) {
+                m_files.push_back(TempFile());
+                tfile = &(m_files.back());
+                tfile->tempFile = new KTempFile();
+                tfile->fileSize = 0;
+            } else {
+                tfile = &(m_files.back());
+            }
+            off_t newsize = tfile->fileSize + info->size;
             newsize = newsize + newsize % pagesize;
 
-            if (ftruncate(m_tempFile.handle(), newsize)) {
+            if (ftruncate(tfile->tempFile->handle(), newsize)) {
                 // XXX make these maybe i18n()able and in an error box, but then through
                 // some kind of proxy such that we don't pollute this with GUI code
                 kdWarning(DBG_AREA_TILES) << "Resizing the temporary swapfile failed!" << endl;
@@ -311,12 +326,13 @@ void KisTileManager::toSwap(TileInfo* info) {
                             << "the filesystem or disk can handle" << endl; break;
                     default: kdWarning(DBG_AREA_TILES) << "Errno was: " << errno << endl;
                 }
-                kdWarning(DBG_AREA_TILES) << "The swapfile is: " << m_tempFile.name() << endl;
+                kdWarning(DBG_AREA_TILES) << "The swapfile is: " << tfile->tempFile->name() << endl;
                 kdWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
 
                 kdDebug(DBG_AREA_TILES) << "Failed ftruncate info: "
-                        << "tried mapping " << info->size << " bytes"
-                        << "to a " << m_fileSize << " bytes file" << endl;
+                        << "tried adding " << info->size << " bytes "
+                        << "(rounded to pagesize: " << newsize << ") "
+                        << "from a " << tfile->fileSize << " bytes file" << endl;
                 printInfo();
 
                 m_swapForbidden = true;
@@ -324,13 +340,14 @@ void KisTileManager::toSwap(TileInfo* info) {
                 return;
             }
 
+            info->file = tfile->tempFile;
             info->fsize = info->size;
-            info->filePos = m_fileSize;
-            m_fileSize = newsize;
+            info->filePos = tfile->fileSize;
+            tfile->fileSize = newsize;
         }
 
         //memcpy(data, tile->m_data, info->size);
-        QFile* file = m_tempFile.file();
+        QFile* file = info->file->file();
         if(!file) {
             kdWarning() << "Opening the file as QFile failed" << endl;
             m_swapForbidden = true;
@@ -406,6 +423,7 @@ void KisTileManager::printInfo()
 {
     kdDebug(DBG_AREA_TILES) << m_bytesInMem << " out of " << m_bytesTotal << " bytes in memory\n";
     kdDebug(DBG_AREA_TILES) << m_currentInMem << " out of " << m_tileMap.size() << " tiles in memory\n";
+    kdDebug(DBG_AREA_TILES) << m_files.size() << " swap files in use" << endl;
     kdDebug(DBG_AREA_TILES) << m_swappableList.size() << " elements in the swapable list\n";
     kdDebug(DBG_AREA_TILES) << "Freelists information\n";
     for (uint i = 0; i < m_freeLists.capacity(); i++) {
@@ -452,6 +470,7 @@ void KisTileManager::dontNeedTileData(Q_UINT8* data, Q_INT32 pixelSize)
 Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize)
 {
     m_poolMutex->lock();
+
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize) {
             if (!m_poolFreeList[i].isEmpty()) {
@@ -472,6 +491,7 @@ Q_UINT8* KisTileManager::findTileFor(Q_INT32 pixelSize)
             return m_pools[i];
         }
     }
+
     m_poolMutex->unlock();
     return 0;
 }
@@ -537,8 +557,10 @@ bool KisTileManager::kritaMmap(Q_UINT8*& result, void *start, size_t length,
         kdWarning(DBG_AREA_TILES) << "Trying to continue anyway (no guarantees)" << endl;
         kdWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further" << endl;
         kdDebug(DBG_AREA_TILES) << "Failed mmap info: "
-                << "tried mapping " << length << " bytes"
-                << "to a " << m_fileSize << " bytes file" << endl;
+                << "tried mapping " << length << " bytes" << endl;
+        if (!m_files.empty()) {
+            kdDebug(DBG_AREA_TILES) << "Probably to a " << m_files.back().fileSize << " bytes file" << endl;
+        }
         printInfo();
 
         // Be nice

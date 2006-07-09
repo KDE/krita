@@ -92,11 +92,21 @@ public:
      */
     virtual QImage generateImage(const QSize& size);
 
+    // TODO: Rename to hasAlphaChannel() ?
     virtual bool hasAlphaBuffer() const
-        { return m_originalImage.hasAlphaBuffer(); }
+        { return m_originalImage.hasAlphaChannel(); }
 
+    // TODO: Rename to setAlphaChannel() ?
     virtual void setAlphaBuffer(bool enable)
-        { m_originalImage.setAlphaBuffer(enable); }
+        {   if(enable) 
+            {
+                m_originalImage.convertToFormat(QImage::Format_ARGB32);
+            }
+            else 
+            {
+                m_originalImage.convertToFormat(QImage::Format_RGB32);
+            }
+        }
 
     virtual QImage createAlphaMask(Qt::ImageConversionFlags flags = Qt::AutoColor) const
         { return m_originalImage.createAlphaMask(flags); }

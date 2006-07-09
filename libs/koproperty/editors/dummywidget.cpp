@@ -48,7 +48,7 @@ DummyWidget::setValue(const QVariant &value, bool emitChange)
 void
 DummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &)
 {
-	p->setBrush(cg.background());
+	p->setBrush(cg.window());
 	p->setPen(Qt::NoPen);
 	p->drawRect(r);
 }

@@ -26,8 +26,7 @@
 #include <QComboBox>
 #include <QLayout>
 #include <QVariant>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 using namespace KoProperty;
 
@@ -140,17 +139,20 @@ using namespace KoProperty;
 LineStyleEdit::LineStyleEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
+	QHBoxLayout *l = new QHBoxLayout(this);
+	l->setMargin(0);
+	l->setSpacing(0);
+
 	m_edit = new QComboBox(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);
 
-	m_edit->insertItem(QPixmap(nopen));
-	m_edit->insertItem(QPixmap(solid));
-	m_edit->insertItem(QPixmap(dash));
-	m_edit->insertItem(QPixmap(dashdot));
-	m_edit->insertItem(QPixmap(dashdotdot));
+	m_edit->addItem(QIcon(QPixmap(nopen)), "");
+	m_edit->addItem(QIcon(QPixmap(solid)), "");
+	m_edit->addItem(QIcon(QPixmap(dash)), "");
+	m_edit->addItem(QIcon(QPixmap(dashdot)), "");
+	m_edit->addItem(QIcon(QPixmap(dashdotdot)), "");
 
 	setLeavesTheSpaceForRevertButton(true);
 	setFocusWidget(m_edit);
@@ -163,7 +165,7 @@ LineStyleEdit::~LineStyleEdit()
 QVariant
 LineStyleEdit::value() const
 {
-	return m_edit->currentItem();
+	return m_edit->currentIndex();
 }
 
 void

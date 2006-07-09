@@ -30,7 +30,6 @@
 #include <QFontMetrics>
 #include <QLabel>
 #include <QToolTip>
-//Added by qt3to4:
 #include <QEvent>
 #include <QKeyEvent>
 #include <Q3Frame>
@@ -54,14 +53,16 @@ class FontEditRequester : public KFontRequester
 		FontEditRequester(QWidget* parent)
 			: KFontRequester(parent)
 		{
-			label()->setPaletteBackgroundColor(palette().active().base());
+			QPalette pal = label()->palette();
+			pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
+			label()->setPalette(pal);
 			label()->setMinimumWidth(0);
 			label()->setFrameShape(Q3Frame::Box);
 			label()->setIndent(-1);
 			label()->setFocusPolicy(Qt::ClickFocus);
 			KAcceleratorManager::setNoAccel(label());
-			layout()->remove(label());
-			layout()->remove(button());//->reparent(this, 0, QPoint(0,0));
+			layout()->removeWidget(label());
+			layout()->removeWidget(button());//->reparent(this, 0, QPoint(0,0));
 			delete layout();
 			button()->setText(i18n("..."));
 			button()->setToolTip( i18n("Change font"));

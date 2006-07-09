@@ -25,15 +25,13 @@
 #include <koffice_export.h>
 #include <kmenu.h>
 #include <q3dict.h>
-//Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3GridLayout>
 #include <QShowEvent>
 #include <Q3Frame>
 #include <QEvent>
 #include <QPaintEvent>
 
-class Q3GridLayout;
+class QGridLayout;
 class TKColorPanel;
 class TKSelectColorActionPrivate;
 
@@ -158,7 +156,7 @@ protected:
   virtual void mouseReleaseEvent( QMouseEvent* );
   virtual void showEvent( QShowEvent *e );
 
-  Q3GridLayout* m_pLayout;
+  QGridLayout* m_pLayout;
   int m_iWidth;
   int m_iX;
   int m_iY;

@@ -22,8 +22,7 @@
 #include <QLayout>
 #include <QPushButton>
 #include <q3listbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include "KoEditPath.h"
 #include <keditlistbox.h>
 #include <kfiledialog.h>
@@ -45,7 +44,9 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
     setCaption( i18n("Edit Path") );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    Q3GridLayout * grid = new Q3GridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout * grid = new QGridLayout(page);
+    grid->setMargin(KDialog::marginHint());
+    grid->setSpacing(KDialog::spacingHint());
 
     urlReq = new KUrlRequester();
     urlReq->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
@@ -56,7 +57,7 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
                     tmp,page, "list_editor" , false, KEditListBox::Add|KEditListBox::Remove );
 
     grid->addWidget(m_listpath, 0, 0, 5, 1);
-    m_listpath->setItems(QStringList::split(QString(";"), _path));
+    m_listpath->setItems(_path.split(";", QString::SkipEmptyParts));
     setFocus();
     resize( 500, 300);
 }

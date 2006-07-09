@@ -23,10 +23,8 @@
 #include "tktoolbarbutton.h"
 
 #include <QLayout>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>
-#include <Q3GridLayout>
 #include <QEvent>
 #include <Q3Frame>
 #include <QShowEvent>
@@ -348,7 +346,9 @@ void TKColorPanel::resetGrid()
   m_iY = 0;
 
   delete m_pLayout;
-  m_pLayout = new Q3GridLayout(this,0,m_iWidth+1,0,0);
+  m_pLayout = new QGridLayout(this);
+  m_pLayout->setMargin(0);
+  m_pLayout->setSpacing(0);
 
   emit sizeChanged();
 }

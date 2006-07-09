@@ -93,8 +93,10 @@ m_isPopup      = false;
 TKToolBarButton::TKToolBarButton( const QString& icon, const QString& txt,
                                         QWidget* parent, const char* name,
                                         KInstance *instance )
-: QToolButton(parent,name)
+: QToolButton(parent)
 {
+  setObjectName(name);
+
   d = new TKToolBarButtonPrivate;
   d->m_text = txt;
   d->m_instance = instance;
@@ -184,7 +186,7 @@ void TKToolBarButton::setEnabled( bool enabled )
 void TKToolBarButton::setText( const QString& text)
 {
   d->m_text = text;
-  repaint(false);
+  repaint();
 }
 
 void TKToolBarButton::setIcon( const QString& icon )
@@ -283,7 +285,7 @@ void TKToolBarButton::setDelayedPopup (KMenu *p, bool toggle )
 void TKToolBarButton::setRaised(bool f)
 {
   d->m_isRaised = f;
-  repaint(false);
+  repaint();
 }
 
 void TKToolBarButton::setAutoRaised(bool f)

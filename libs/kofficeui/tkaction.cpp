@@ -25,7 +25,7 @@
 #include <QLayout>
 #include <QToolBar>
 #include <QPixmap>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include <ktoolbar.h>
 #include <kiconloader.h>
@@ -47,7 +47,7 @@
 #endif
 
 TKAction::TKAction(KActionCollection* parent, const char* name)
-: KAction( "", 0, parent, name )
+: KAction( "", parent, name )
 {
   m_imode = TK::IconOnly;
   
@@ -151,7 +151,9 @@ QWidget* TKAction::createLayout(QWidget* parent, QWidget* children)
   QLabel* pixLabel = new QLabel(base);
   children->setParent(base);
   children->setObjectName("widget");
-  Q3HBoxLayout* layout = new Q3HBoxLayout(base,0,3);
+  QHBoxLayout* layout = new QHBoxLayout(base);
+  layout->setMargin(0);
+  layout->setSpacing(3);
   layout->setSizeConstraint(QLayout::SetMinimumSize);
   layout->addWidget(textLabel);
   layout->addWidget(pixLabel);
@@ -163,9 +165,9 @@ QWidget* TKAction::createLayout(QWidget* parent, QWidget* children)
 
 void TKAction::updateLayout(QWidget* base)
 {
-  QLabel* textLabel = (QLabel*)base->child("text");
-  QLabel* pixLabel = (QLabel*)base->child("pixmap");
-  QWidget* w = (QWidget*)base->child("widget");
+  QLabel* textLabel = base->findChild<QLabel*>("text");
+  QLabel* pixLabel = base->findChild<QLabel*>("pixmap");
+  QWidget* w = base->findChild<QWidget*>("widget");
 
   if (!textLabel || !pixLabel || !w)
     return;

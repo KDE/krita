@@ -193,7 +193,7 @@ ToolArea::ToolArea(QWidget *parent)
 
     QWidget *w = new QWidget(this);
     m_layout->addWidget(w);
-    QGridLayout *grid = new QGridLayout(w, 2, 2);
+    QGridLayout *grid = new QGridLayout(w);
     m_leftRow = new QWidget(w);
     grid->addWidget(m_leftRow, 0, 0);
     grid->setRowStretch(1, 1);
@@ -204,7 +204,7 @@ ToolArea::ToolArea(QWidget *parent)
 
     w = new QWidget(this);
     m_layout->addWidget(w);
-    grid = new QGridLayout(w, 2, 2);
+    grid = new QGridLayout(w);
     m_rightRow = new QWidget(w);
     grid->addWidget(m_rightRow, 0, 0);
     grid->setRowStretch(1, 1);

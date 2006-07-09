@@ -29,8 +29,7 @@
 #include <QPainter>
 #include <q3scrollview.h>
 #include <QPalette>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kdebug.h>
 
@@ -96,7 +95,8 @@ private:
 KoPictureFilePreview::KoPictureFilePreview( QWidget *parent )
     : KPreviewWidgetBase( parent )
 {
-    Q3VBoxLayout *vb = new Q3VBoxLayout( this, KDialog::marginHint() );
+    QVBoxLayout *vb = new QVBoxLayout( this );
+    vb->setMargin(KDialog::marginHint());
     m_widget = new KoPictureFilePreviewWidget( this );
     vb->addWidget( m_widget, 1 );
 }

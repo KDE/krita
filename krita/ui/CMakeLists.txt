@@ -76,6 +76,7 @@ set(kritaui_LIB_SRCS
    kis_dlg_adjustment_layer.cc
    kis_filters_listview.cc
    kis_grid_manager.cpp
+   kis_grid_drawer.cpp
    kis_input_device.cc
    kis_part_layer_handler.cc
    kis_dlg_adj_layer_props.cc

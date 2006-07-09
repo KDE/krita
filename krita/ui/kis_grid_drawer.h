@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GRID_MANAGER_H
-#define KIS_GRID_MANAGER_H
+#ifndef KIS_GRID_DRAWER_H
+#define KIS_GRID_DRAWER_H
 
 #include <QObject>
 #include <QPainter>
@@ -31,35 +31,38 @@ class KActionCollection;
 class KToggleAction;
 class KAction;
 
-class KisGridManager : public QObject
-{
-    Q_OBJECT
+class GridDrawer {
     public:
-        KisGridManager(KisView * parent);
-        ~KisGridManager();
+        GridDrawer() {}
+        virtual ~GridDrawer() {}
+    
     public:
-        void setup(KActionCollection * collection);
-        void drawGrid(QRect wr, QPainter *p, bool openGL = false);
-    public slots:
-        void updateGUI();
-    private slots:
-        void toggleGrid();
-        void fastConfig1x1();
-        void fastConfig2x2();
-        void fastConfig5x5();
-        void fastConfig10x10();
-        void fastConfig20x20();
-        void fastConfig40x40();
+        void drawGrid(KisImageSP image, const QRect& wr);
+    
+        virtual void setPen(const QPen& pen) = 0;
+        virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) = 0;
     private:
-        KisView* m_view;
-        KToggleAction* m_toggleGrid;
-        KAction* m_gridConfig;
-        KAction* m_gridFastConfig1x1;
-        KAction* m_gridFastConfig2x2;
-        KAction* m_gridFastConfig5x5;
-        KAction* m_gridFastConfig10x10;
-        KAction* m_gridFastConfig20x20;
-        KAction* m_gridFastConfig40x40;
+        Qt::PenStyle gs2style(quint32 s);
+};
+
+class QPainterGridDrawer : public GridDrawer {
+    public:
+        QPainterGridDrawer(QPainter *p) { m_painter = p; }
+    
+        virtual void setPen(const QPen& pen) { m_painter->setPen(pen); }
+        virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) { m_painter->drawLine(x1, y1, x2, y2); }
+    
+    private:
+        QPainter *m_painter;
+};
+
+class OpenGLGridDrawer : public GridDrawer {
+    public:
+        OpenGLGridDrawer();
+        virtual ~OpenGLGridDrawer();
+    
+        virtual void setPen(const QPen& pen);
+        virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2);
 };
 
 #endif

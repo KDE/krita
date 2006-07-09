@@ -23,8 +23,7 @@
 #include <QMap>
 #include <QVariant>
 #include <QPainter>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #ifdef QT_ONLY
 #iinclude <qcombobox.h>
@@ -41,7 +40,9 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
  , m_setValueEnabled(true)
 {
-	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
+	QHBoxLayout *l = new QHBoxLayout(this);
+	l->setMargin(0);
+	l->setSpacing(0);
 #ifdef QT_ONLY
 	m_edit = new QComboBox(this);
 #else
@@ -79,7 +80,7 @@ ComboBox::value() const
 		kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
 		return QVariant();
 	}
-	const int idx = m_edit->currentItem();
+	const int idx = m_edit->currentIndex();
 	if (idx<0 || idx>=(int)property()->listData()->keys.count())
 		return QVariant();
 	return QVariant( property()->listData()->keys[idx] );
@@ -99,7 +100,7 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 		return;
 	int idx = property()->listData()->keys.findIndex( value );
 	if (idx>=0 && idx<m_edit->count()) {
-		m_edit->setCurrentItem(idx);
+		m_edit->setCurrentIndex(idx);
 	}
 	else {
 		if (idx<0) {
@@ -108,13 +109,13 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 		} else {
 			QStringList list;
 			for (int i=0; i<m_edit->count(); i++)
-				list += m_edit->text(i);
+				list += m_edit->itemText(i);
 			kopropertywarn << "ComboBox::setValue(): NO SUCH INDEX WITHIN COMBOBOX: " << idx 
 				<< " count=" << m_edit->count() << " value='" << value.toString() 
 				<< "' (property '" << property()->name() << "')\nActual combobox contents: "
 				<< list << endl;
 		}
-		m_edit->setCurrentText(QString::null);
+		m_edit->setItemText(m_edit->currentIndex(), QString::null);
 	}
 
 	if(value.isNull())
@@ -155,7 +156,7 @@ ComboBox::fillBox()
 		return;
 	}
 
-	m_edit->insertStringList(property()->listData()->names);
+	m_edit->insertItems(0, property()->listData()->names);
 #ifndef QT_ONLY
 	KCompletion *comp = m_edit->completionObject();
 	comp->insertItems(property()->listData()->names);

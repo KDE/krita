@@ -43,9 +43,8 @@ BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
 {
     m_toggle = new QToolButton(this);
     m_toggle->setFocusPolicy(Qt::WheelFocus);
-    m_toggle->setToggleButton(true);
-    m_toggle->setUsesTextLabel(true);
-    m_toggle->setTextPosition(QToolButton::BesideIcon);
+    m_toggle->setCheckable(true);
+    m_toggle->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_toggle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     //we're not using layout to because of problems with button size
     m_toggle->move(0, 0);
@@ -63,14 +62,14 @@ BoolEdit::~BoolEdit()
 QVariant
 BoolEdit::value() const
 {
-    return QVariant(m_toggle->isOn(), 4);
+    return QVariant(m_toggle->isChecked());
 }
 
 void
 BoolEdit::setValue(const QVariant &value, bool emitChange)
 {
     m_toggle->blockSignals(true);
-    m_toggle->setOn(value.toBool());
+    m_toggle->setChecked(value.toBool());
     setState(value.toBool());
     m_toggle->blockSignals(false);
     if (emitChange)
@@ -106,13 +105,13 @@ BoolEdit::setState(bool state)
 {
     if(state)
     {
-        m_toggle->setIconSet(QIcon(SmallIcon("button_ok")));
-        m_toggle->setTextLabel(i18n("Yes"));
+        m_toggle->setIcon(QIcon(SmallIcon("button_ok")));
+        m_toggle->setText(i18n("Yes"));
     }
     else
     {
-        m_toggle->setIconSet(QIcon(SmallIcon("button_no")));
-        m_toggle->setTextLabel(i18n("No"));
+        m_toggle->setIcon(QIcon(SmallIcon("button_no")));
+        m_toggle->setText(i18n("No"));
     }
 }
 

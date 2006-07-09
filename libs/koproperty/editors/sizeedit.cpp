@@ -41,7 +41,9 @@ SizeEdit::SizeEdit(Property *property, QWidget *parent, const char *name)
 	m_edit = new KActiveLabel(this);
 	m_edit->setFocusPolicy(Qt::NoFocus);
 //	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-	m_edit->setPaletteBackgroundColor(palette().active().base());
+	QPalette pal = m_edit->palette();
+	pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
+	m_edit->setPalette(pal);
 //	m_edit->setBackgroundMode(Qt::PaletteBase);
 //	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
@@ -63,7 +65,7 @@ SizeEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
 	m_edit->selectAll();
-	m_edit->setText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
+	m_edit->setPlainText(QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
 	this->setToolTip( QString("%1 x %2").arg(value.toSize().width()).arg(value.toSize().height()));
 
 	if (emitChange)

@@ -26,7 +26,6 @@
 #include <QObject>
 #include <QVariant>
 #include <QPainter>
-//Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 
@@ -48,11 +47,14 @@ IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntE
 	lineEdit()->setAlignment(Qt::AlignLeft);
 	installEventFilter(lineEdit());
 	installEventFilter(this);
-	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
+
+	// NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
+	// An empty string matches all object names.
+	QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
 #warning TODO: fix for Qt4
 #endif
-	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
+	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : spinwidgets.first();
 	if (spin)
 		spin->installEventFilter(this);
 }
@@ -65,7 +67,7 @@ IntSpinBox::eventFilter(QObject *o, QEvent *e)
 		if(e->type() == QEvent::KeyPress)
 		{
 			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-			if((ev->key()==Qt::Key_Up || ev->key()==Qt::Key_Down) && ev->state() !=Qt::ControlModifier)
+			if((ev->key()==Qt::Key_Up || ev->key()==Qt::Key_Down) && ev->modifiers() !=Qt::ControlModifier)
 			{
 				parentWidget()->eventFilter(o, e);
 				return true;
@@ -154,11 +156,13 @@ IntEdit::slotValueChanged(int)
 void
 IntEdit::updateSpinWidgets()
 {
-	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
+	// NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
+	// An empty string matches all object names.
+	QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
 #warning TODO: fix for Qt4
 #endif
-	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
+	QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : spinwidgets.first();
 	if (spin) {
 		spin->setReadOnly(isReadOnly());
 	}
@@ -183,7 +187,10 @@ DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double va
 	lineEdit()->setAlignment(Qt::AlignLeft);
 	installEventFilter(lineEdit());
 	installEventFilter(this);
-	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
+
+	// NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
+	// An empty string matches all object names.
+	QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
 #warning TODO: fix for Qt4
 #endif
@@ -200,7 +207,7 @@ DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 		if(e->type() == QEvent::KeyPress)
 		{
 			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-			if((ev->key()==Qt::Key_Up || ev->key()==Qt::Key_Down) && ev->state()!=Qt::ControlButton)
+			if((ev->key()==Qt::Key_Up || ev->key()==Qt::Key_Down) && ev->modifiers()!=Qt::ControlButton)
 			{
 				parentWidget()->eventFilter(o, e);
 				return true;
@@ -306,7 +313,9 @@ DoubleEdit::slotValueChanged(double)
 void
 DoubleEdit::updateSpinWidgets()
 {
-	QObjectList spinwidgets = queryList( "QAbstractSpinBox", 0, false, true );
+	// NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
+	// An empty string matches all object names.
+	QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
 #warning TODO: fix for Qt4
 #endif

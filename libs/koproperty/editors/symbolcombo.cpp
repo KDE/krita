@@ -23,8 +23,7 @@
 #include <QLayout>
 #include <QPainter>
 #include <QVariant>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #ifndef QT_ONLY
 #include <kcharselect.h>
@@ -40,7 +39,7 @@ SymbolCombo::SymbolCombo(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
 	setHasBorders(false);
-	Q3HBoxLayout *l = new Q3HBoxLayout(this);
+	QHBoxLayout *l = new QHBoxLayout(this);
 
 	m_edit = new QLineEdit(this);
 //	m_edit->setLineWidth(0);

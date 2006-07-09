@@ -37,7 +37,6 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QLabel>
-//Added by qt3to4:
 #include <QByteArray>
 #include <QEvent>
 #include <QKeyEvent>
@@ -149,7 +148,7 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	d->undoButton->setFocusPolicy(Qt::NoFocus);
 	setFocusPolicy(Qt::ClickFocus);
 	d->undoButton->setMinimumSize(QSize(5,5)); // allow to resize undoButton even below pixmap size
-	d->undoButton->setPixmap(SmallIcon("undo"));
+	d->undoButton->setIcon(SmallIcon("undo"));
 	d->undoButton->setToolTip( i18n("Undo changes"));
 	d->undoButton->hide();
 	connect(d->undoButton, SIGNAL(clicked()), this, SLOT(undo()));
@@ -318,11 +317,12 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QByteArray
 			//store prev. selection for this prop set
 			if (d->currentItem)
 				d->set->setPrevSelection( d->currentItem->property()->name() );
-			kdDebug() << d->set->prevSelection() << endl;
+			kDebug() << d->set->prevSelection() << endl;
 		}
 		if (!d->setListLater_set) {
 			d->setListLater_set = true;
-			d->changeSetLaterTimer.start(10, true);
+			d->changeSetLaterTimer.setSingleShot(true);
+			d->changeSetLaterTimer.start(10);
 		}
 		return;
 	}
@@ -399,7 +399,8 @@ Editor::changeSetLater()
 {
 	qApp->processEvents(QEventLoop::AllEvents);
 	if (kapp->hasPendingEvents()) {
-		d->changeSetLaterTimer.start(10, true); //try again...
+		d->changeSetLaterTimer.setSingleShot(true);
+		d->changeSetLaterTimer.start(10); //try again...
 		return;
 	}
 	d->setListLater_set = false;
@@ -679,7 +680,7 @@ void
 Editor::clearWidgetCache()
 {
 	for(QMap<Property*, Widget*>::iterator it = d->widgetCache.begin(); it != d->widgetCache.end(); ++it)
-		it.data()->deleteLater();
+		it.value()->deleteLater();
 //		delete it.data();
 	d->widgetCache.clear();
 }
@@ -935,12 +936,12 @@ bool
 Editor::handleKeyPress(QKeyEvent* ev)
 {
 	const int k = ev->key();
-	const Qt::ButtonState s = ev->state();
+	const Qt::KeyboardModifiers s = ev->modifiers();
 
 	//selection moving
 	Q3ListViewItem *item = 0;
 
-	if ( ((s == Qt::NoButton) && (k == Qt::Key_Up)) || (k==Qt::Key_Backtab) ) {
+	if ( ((s == Qt::NoModifier) && (k == Qt::Key_Up)) || (k==Qt::Key_Backtab) ) {
 		//find prev visible
 		item = selectedItem() ? selectedItem()->itemAbove() : 0;
 		while (item && (!item->isSelectable() || !item->isVisible()))
@@ -948,7 +949,7 @@ Editor::handleKeyPress(QKeyEvent* ev)
 		if (!item)
 			return true;
 	}
-	else if( (s == Qt::NoButton) && ((k == Qt::Key_Down) || (k == Qt::Key_Tab)) ) {
+	else if( (s == Qt::NoModifier) && ((k == Qt::Key_Down) || (k == Qt::Key_Tab)) ) {
 		//find next visible
 		item = selectedItem() ? selectedItem()->itemBelow() : 0;
 		while (item && (!item->isSelectable() || !item->isVisible()))
@@ -956,7 +957,7 @@ Editor::handleKeyPress(QKeyEvent* ev)
 		if (!item)
 			return true;
 	}
-	else if( (s==Qt::NoButton) && (k==Qt::Key_Home) ) {
+	else if( (s == Qt::NoModifier) && (k==Qt::Key_Home) ) {
 		if (d->currentWidget && d->currentWidget->hasFocus())
 			return false;
 		//find 1st visible
@@ -964,7 +965,7 @@ Editor::handleKeyPress(QKeyEvent* ev)
 		while (item && (!item->isSelectable() || !item->isVisible()))
 			item = item->itemBelow();
 	}
-	else if( (s==Qt::NoButton) && (k==Qt::Key_End) ) {
+	else if( (s == Qt::NoModifier) && (k==Qt::Key_End) ) {
 		if (d->currentWidget && d->currentWidget->hasFocus())
 			return false;
 		//find last visible

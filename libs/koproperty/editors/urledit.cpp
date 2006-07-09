@@ -22,8 +22,7 @@
 
 #include <QLayout>
 #include <QVariant>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #ifndef QT_ONLY
 #include <kurlrequester.h>
@@ -42,7 +41,10 @@ using namespace KoProperty;
 URLEdit::URLEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
+	QHBoxLayout *l = new QHBoxLayout(this);
+	l->setMargin(0);
+	l->setSpacing(0);
+
 #ifndef QT_ONLY
 	m_edit = new KUrlRequester(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

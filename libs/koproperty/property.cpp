@@ -184,7 +184,7 @@ Property::Property(const QByteArray &name, const QVariant &value,
 	d->setCaptionForDisplaying(caption);
 	d->description = description;
 
-	if(type == Auto)
+	if(type == (int)Auto)
 		d->type = value.type();
 	else
 		d->type = type;

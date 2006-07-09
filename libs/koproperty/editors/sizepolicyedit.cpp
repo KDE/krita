@@ -45,7 +45,7 @@ SizePolicyEdit::SizePolicyEdit(Property *property, QWidget *parent, const char *
 //	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
 	m_edit = new QLabel(this);
 	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-	m_edit->setBackgroundMode(Qt::PaletteBase);
+	m_edit->setBackgroundRole(QPalette::Base);
 //	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	setEditor(m_edit);
@@ -81,9 +81,9 @@ void
 SizePolicyEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_value = value;
-	m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horData())).
-		arg(findDescription(value.value<QSizePolicy>().verData())).
-		arg(value.value<QSizePolicy>().horStretch()).arg(value.value<QSizePolicy>().verStretch()));
+	m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horizontalPolicy())).
+		arg(findDescription(value.value<QSizePolicy>().verticalPolicy())).
+		arg(value.value<QSizePolicy>().horizontalStretch()).arg(value.value<QSizePolicy>().verticalStretch()));
 	this->setToolTip( m_edit->text());
 
 	if (emitChange)
@@ -98,9 +98,9 @@ SizePolicyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
 	QRect rect(r);
 	rect.setBottom(r.bottom()+1);
 	Widget::drawViewer(p, cg, rect, 
-		QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horData())).
-		arg(findDescription(value.value<QSizePolicy>().verData())).
-		arg(value.value<QSizePolicy>().horStretch()).arg(value.value<QSizePolicy>().verStretch()));
+		QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horizontalPolicy())).
+		arg(findDescription(value.value<QSizePolicy>().verticalPolicy())).
+		arg(value.value<QSizePolicy>().horizontalStretch()).arg(value.value<QSizePolicy>().verticalStretch()));
 }
 
 QString
@@ -111,7 +111,7 @@ SizePolicyEdit::findDescription(const QVariant &value) const
 
 	QMap<QString, QVariant>::ConstIterator endIt = m_spValues->constEnd();
 	for (QMap<QString, QVariant>::ConstIterator it = m_spValues->constBegin(); it != endIt; ++ it) {
-		if (it.data() == value)
+		if (it.value() == value)
 			return it.key();
 	}
 	return QString::null;;

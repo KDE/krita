@@ -27,8 +27,7 @@
 #include <QLayout>
 #include <QVariant>
 #include <QDateTime>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #ifdef QT_ONLY
 // \todo
@@ -42,7 +41,10 @@ using namespace KoProperty;
 TimeEdit::TimeEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
+	QHBoxLayout *l = new QHBoxLayout(this);
+	l->setMargin(0);
+	l->setSpacing(0);
+
 	m_edit = new Q3TimeEdit(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);

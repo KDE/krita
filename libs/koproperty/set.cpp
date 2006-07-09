@@ -25,10 +25,8 @@
 
 #include <qapplication.h>
 #include <q3asciidict.h>
-//Added by qt3to4:
 #include <Q3ValueList>
 #include <QByteArray>
-//#include <Q3ValueList>
 
 #ifdef QT_ONLY
 // \todo
@@ -137,8 +135,10 @@ Set::Iterator::current() const
 //////////////////////////////////////////////
 
 Set::Set(QObject *parent, const QString &typeName)
-: QObject(parent, typeName.latin1())
+: QObject(parent)
 {
+	setObjectName(typeName.toLatin1());
+
 	d = new SetPrivate();
 	d->ownProperty = true;
 	d->groupDescriptions.insert("common", i18nc("General properties", "General"));
@@ -147,14 +147,15 @@ Set::Set(QObject *parent, const QString &typeName)
 
 
 Set::Set(const Set &set)
- : QObject(0 /* implicit sharing the parent is dangerous */, set.name())
+ : QObject(0 /* implicit sharing the parent is dangerous */)
 {
+	setObjectName(set.objectName());
 	d = new SetPrivate();
 	*this = set;
 }
 
 Set::Set(bool propertyOwner)
- : QObject(0, 0)
+ : QObject(0)
 {
 	d = new SetPrivate();
 	d->ownProperty = propertyOwner;

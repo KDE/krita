@@ -1484,7 +1484,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
   KXMLGUIFactory *factory = guiFactory();
 
-  setUpdatesEnabled( false );
+// ###  setUpdatesEnabled( false );
 
   if ( d->m_activeView )
   {
@@ -1556,7 +1556,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     d->m_activeView = 0L;
     d->m_activePart = 0L;
   }
-  setUpdatesEnabled( true );
+// ###  setUpdatesEnabled( true );
 }
 
 QLabel * KoMainWindow::statusBarLabel()

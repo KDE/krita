@@ -77,7 +77,10 @@ public slots:
     void deactivate();
 
 protected:
-
+/*
+    virtual void paint(KisCanvasPainter&);
+    virtual void paint(KisCanvasPainter&, const QRect&);
+*/
     KisPoint mouseOnHandle(KisPoint);
     void predraw();
     virtual void draw();

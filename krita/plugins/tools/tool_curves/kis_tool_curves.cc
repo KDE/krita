@@ -62,25 +62,25 @@ public:
 
     ~KisCurveExample() {}
 
-    virtual void calculateCurve(KisPoint, KisPoint, CurveIterator = 0);
-    virtual void calculateCurve(CurvePoint, CurvePoint, CurveIterator = 0);
-    virtual void calculateCurve(CurveIterator, CurveIterator, CurveIterator = 0);
+    virtual void calculateCurve(const KisPoint&, const KisPoint&, const CurveIterator = 0);
+    virtual void calculateCurve(const CurvePoint&, const CurvePoint&, const CurveIterator = 0);
+    virtual void calculateCurve(const CurveIterator, const CurveIterator, const CurveIterator = 0);
 
 };
 
-void KisCurveExample::calculateCurve(CurveIterator pos1, CurveIterator pos2, CurveIterator it)
+void KisCurveExample::calculateCurve(const CurveIterator pos1, const CurveIterator pos2, const CurveIterator it)
 {
     calculateCurve((*pos1).point(),(*pos2).point(), it);
 }
 
-void KisCurveExample::calculateCurve(CurvePoint pos1, CurvePoint pos2, CurveIterator it)
+void KisCurveExample::calculateCurve(const CurvePoint& pos1, const CurvePoint& pos2, const CurveIterator it)
 {
     calculateCurve(pos1.point(),pos2.point(), it);
 }
 
 /* Brutally taken from KisPainter::paintLine, sorry :) */
 /* And obviously this is just to see if the Framework works :) */
-void KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2, CurveIterator it)
+void KisCurveExample::calculateCurve(const KisPoint& pos1, const KisPoint& pos2, const CurveIterator it)
 {
     double savedDist = 0;
     KisVector2D end(pos2);
@@ -147,7 +147,7 @@ void KisCurveExample::calculateCurve(KisPoint pos1, KisPoint pos2, CurveIterator
         if (newDist > DBL_EPSILON) {
             t = distanceMoved / newDist;
         }
-        addPoint (p,it);
+        addPoint (p,false,false,it);
         dist -= spacing;
     }
 }
@@ -200,6 +200,9 @@ void KisToolCurves::buttonPress(KisButtonPressEvent *event)
             m_curve->addPivot(m_end);
         } else {
             CurvePoint pos(mouseOnHandle(event->pos()),true);
+            KisCurve sel = m_curve->selectedPivots();
+            if (!sel.isEmpty())
+                m_curve->setPivotSelected(sel[0],false);
             if (pos != KisPoint(-1,-1))
                 m_curve->setPivotSelected(pos);
         }
@@ -218,8 +221,11 @@ void KisToolCurves::keyPress(QKeyEvent *event)
                 m_curve->clear();
         } else {
             KisCurve sel = m_curve->selectedPivots();
-            if (!sel.isEmpty())
+            if (!sel.isEmpty()) {
                 m_curve->deletePivot(sel[0]);
+                if (!m_curve->count())
+                    m_editing = false;
+            }
         }
         predraw();
     }
@@ -236,8 +242,9 @@ void KisToolCurves::move(KisMoveEvent *event)
             m_curve->addPivot(m_end);
         } else {
             KisCurve sel = m_curve->selectedPivots();
+            KisPoint dest = event->pos();
             if (!sel.isEmpty()) {
-                CurveIterator newPivot = m_curve->movePivot(sel[0],event->pos());
+                CurveIterator newPivot = m_curve->movePivot(sel[0],dest);
                 m_curve->setPivotSelected(newPivot); 
             }
         }
@@ -302,6 +309,7 @@ void KisToolCurves::buttonRelease(KisButtonReleaseEvent *)
 
     m_dragging = false;
 
+/*
     if (m_editing) {
         KisCurve sel = m_curve->selectedPivots();
         if (!sel.isEmpty()) {
@@ -309,6 +317,7 @@ void KisToolCurves::buttonRelease(KisButtonReleaseEvent *)
             predraw();
         }
     }
+*/
 }
 
 void KisToolCurves::doubleClick(KisDoubleClickEvent *)
@@ -321,7 +330,17 @@ void KisToolCurves::doubleClick(KisDoubleClickEvent *)
         m_editing = false;
     }
 }
+/*
+void KisToolCurves::paint(KisCanvasPainter&)
+{
+    predraw();
+}
 
+void KisToolCurves::paint(KisCanvasPainter&, const QRect&)
+{
+    predraw();
+}
+*/
 void KisToolCurves::draw()
 {
     m_dragging = false;

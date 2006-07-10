@@ -27,7 +27,6 @@
 #include <QLabel>
 #include <QWidget>
 
-#include <kactionclasses.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kinstance.h>
@@ -99,8 +98,8 @@ WetPlugin::WetPlugin(QObject *parent, const QStringList &)
     else if (parent->inherits("KisView"))
     {
         setInstance(WetPluginFactory::instance());
-        
-setXMLFile(KStandardDirs::locate("data","kritaplugins/wetplugin.rc"), 
+
+setXMLFile(KStandardDirs::locate("data","kritaplugins/wetplugin.rc"),
 true);
 
         m_view = dynamic_cast<KisView*>(parent);

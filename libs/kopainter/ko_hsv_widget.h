@@ -28,7 +28,7 @@
 #include <koffice_export.h>
 
 class KDualColorButton;
-class KValueSelector;
+class KColorValueSelector;
 class KoOldColorWheel;
 class KoOldColorSlider;
 class KoFrameButton;
@@ -78,7 +78,7 @@ private:
     void update(const KoOldColor & fgColor, const KoOldColor & bgColor);
 
     KoOldColorWheel *m_colorwheel;
-    KValueSelector *m_VSelector;
+    KColorValueSelector *m_VSelector;
     QLabel *mHLabel;
     QLabel *mSLabel;
     QLabel *mVLabel;

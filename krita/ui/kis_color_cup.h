@@ -29,8 +29,8 @@
 class QSize;
 class QPainter;
 class QWidget;
-class KHSSelector;
-class KValueSelector;
+class KHueSaturationSelector;
+class KColorValueSelector;
 
 class KoColorPopup : public QFrame {
 
@@ -47,8 +47,8 @@ signals:
 
 private:
 
-    KHSSelector * m_khsSelector;
-    KValueSelector * m_valueSelector;
+    KHueSaturationSelector * m_khsSelector;
+    KColorValueSelector * m_valueSelector;
 
     QColor m_color;
 };

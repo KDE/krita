@@ -29,7 +29,7 @@
 #include <kcolorbutton.h>
 #include <kcommand.h>
 #include <kdebug.h>
-#include <kfontcombo.h>
+#include <qfontcombobox.h>
 #include <klocale.h>
 #include <kseparator.h>
 
@@ -598,11 +598,11 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment:" ), page );
 
-    m_familyItem = new KFontCombo(page);
+    m_familyItem = new QFontComboBox(page);
     m_familyItem->setCurrentFont(m_ctx->m_family);
 
     m_sizeItem = new QSpinBox( page );
-    m_sizeItem->setMaximum( 100 ); 
+    m_sizeItem->setMaximum( 100 );
     m_sizeItem->setMinimum( 4 );
     m_sizeItem->setValue( m_ctx->m_size );
 

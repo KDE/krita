@@ -34,7 +34,8 @@
 #include <QFrame>
 #include <QHBoxLayout>
 
-#include <kcolordialog.h>
+#include <kxyselector.h>
+#include <kcolorvalueselector.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <koFrameButton.h>
@@ -51,9 +52,9 @@ KoColorPopup::KoColorPopup(QColor c, QWidget * parent, const char * name)
     setContentsMargins(4, 4, 4, 4);
     setFocusPolicy(Qt::StrongFocus);
     QHBoxLayout * l  = new QHBoxLayout(this);
-    l->addWidget(m_khsSelector = new KHSSelector(this));
+    l->addWidget(m_khsSelector = new KHueSaturationSelector(this));
     m_khsSelector->setMinimumSize(140, 7);
-    l->addWidget(m_valueSelector = new KValueSelector(this));
+    l->addWidget(m_valueSelector = new KColorValueSelector(this));
     m_valueSelector->setMinimumSize(26, 70);
     m_khsSelector->show();
     m_valueSelector->show();
@@ -77,7 +78,7 @@ void KoColorCup::setColor(const QColor & c)
 }
 
 void KoColorCup::slotClicked()
-{    
+{
 //    m_popup->move(this->mapToGlobal( this->rect().topRight() ) );
 //    m_popup->show();
     emit changed(m_color);

@@ -1,4 +1,4 @@
-/* 
+/*
  * kis_wetness_visualisation_filter.h -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
@@ -23,8 +23,8 @@
 
 #include <QObject>
 #include <QTimer>
-#include <kactionclasses.h>
 
+class KToggleAction;
 class KisView;
 
 class WetnessVisualisationFilter : public QObject

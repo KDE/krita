@@ -24,7 +24,7 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 
-#include <kselector.h>
+#include <kxyselector.h>
 #include "koColor.h"
 
 class QPainter;

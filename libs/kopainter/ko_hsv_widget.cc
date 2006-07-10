@@ -19,20 +19,20 @@
 
 #include "ko_hsv_widget.h"
 #include "ko_color_wheel.h"
+#include "koFrameButton.h"
 
-#include <kselector.h>
+#include <kcolorvalueselector.h>
+#include <kcolordialog.h>
+#include "koColor.h"
+#include <kdebug.h>
+#include <klocale.h>
+
 #include <QLayout>
 #include <q3hbox.h>
 #include <QLabel>
 #include <QSpinBox>
 #include <QToolTip>
 #include <QGridLayout>
-#include "koFrameButton.h"
-#include <kcolordialog.h>
-#include <kdualcolorbutton.h>
-#include "koColor.h"
-#include <kdebug.h>
-#include <klocale.h>
 
 KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent)
 {
@@ -44,7 +44,7 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent)
     QGridLayout *mGrid = new QGridLayout;
     m_colorwheel = new KoOldColorWheel(this);
     m_colorwheel->setFixedSize( 120, 120);
-    m_VSelector = new KValueSelector(Qt::Vertical, this);
+    m_VSelector = new KColorValueSelector(Qt::Vertical, this);
     m_VSelector-> setFixedSize( 30, 120);
 
     /* setup slider labels */
@@ -220,19 +220,19 @@ void KoHSVWidget::changedBgColor()
 
 void KoHSVWidget::update(const KoOldColor & fgColor, const KoOldColor & bgColor)
 {
-    
+
     mHIn->blockSignals(true);
     mSIn->blockSignals(true);
     mVIn->blockSignals(true);
     m_VSelector->blockSignals(true);
     m_colorwheel->blockSignals(true);
-            
+
     //kDebug() << "update. FG: " << fgColor.color() << ", bg: " << bgColor.color() << endl;
     m_fgColor = fgColor;
     m_bgColor = bgColor;
 
-    KoOldColor color = (m_ColorButton->currentColor() == 
-KDualColorButton::Foreground)? m_fgColor : m_bgColor;
+    KoOldColor color = (m_ColorButton->currentColor() ==
+                        KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
     int h = color.H();
     int s = color.S();
@@ -241,12 +241,12 @@ KDualColorButton::Foreground)? m_fgColor : m_bgColor;
     mHIn->setValue(h);
     mSIn->setValue(s);
     mVIn->setValue(v);
-    
+
     m_VSelector->setHue(h);
     m_VSelector->setSaturation(s);
     m_VSelector->setValue(v);
     m_VSelector->updateContents();
-    
+
     m_colorwheel->slotSetValue(color);
 
     mHIn->blockSignals(false);

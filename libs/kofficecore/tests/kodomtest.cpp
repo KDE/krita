@@ -102,7 +102,7 @@ void testKoDom( const QDomDocument& doc )
     // Attributes
     // ### Qt bug: it doesn't work if using style-name instead of text:style-name in the XML
     const QString styleName = p.attributeNS( KoXmlNS::text, "style-name", QString::null );
-    qDebug( "%s", styleName.latin1() );
+    qDebug( "%s", qPrintable( styleName ) );
     assert( styleName == "L1" );
 
     qDebug("testKoDom... ok");

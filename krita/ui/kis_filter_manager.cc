@@ -25,7 +25,8 @@
 #include <kmessagebox.h>
 #include <kguiitem.h>
 
-#include "kaction.h"
+#include <kactionmenu.h>
+#include <kactionmenu.h>
 
 #include "kis_part_layer.h"
 #include "KoID.h"

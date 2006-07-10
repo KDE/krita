@@ -39,10 +39,9 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kaction.h>
 #include <koFrameButton.h>
 #include <kactioncollection.h>
-#include <kactionclasses.h>
-#include <k3widgetaction.h>
 
 #include "kis_resourceserver.h"
 #include "kis_controlframe.h"
@@ -110,45 +109,45 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
     m_brushWidget->setText( i18n("Brush Shapes") );
     m_brushWidget->setToolTip( i18n("Brush Shapes") );
     // XXX: An action without a slot -- that's silly, what kind of action could we use here?
-    KAction * action = new K3WidgetAction(m_brushWidget,
-                                         i18n("&Brush"),
+    KAction * action = new KAction( i18n("&Brush"),
                                          0,
                                          view,
                                          0,
                                          view->actionCollection(),
                                          "brushes");
 
+    action->setDefaultWidget( m_brushWidget );
 
     m_patternWidget = new KisIconWidget(view, "patterns");
     m_patternWidget->setText( i18n("Fill Patterns") );
     m_patternWidget->setToolTip( i18n("Fill Patterns") );
-    action = new K3WidgetAction(m_patternWidget,
-                               i18n("&Patterns"),
-                               0,
-                               view,
-                               0,
-                               view->actionCollection(),
-                               "patterns");
+    action = new KAction(i18n("&Patterns"),
+                         0,
+                         view,
+                         0,
+                         view->actionCollection(),
+                         "patterns");
+    action->setDefaultWidget( m_patternWidget );
 
     m_gradientWidget = new KisIconWidget(view, "gradients");
     m_gradientWidget->setText( i18n("Gradients") );
     m_gradientWidget->setToolTip( i18n("Gradients") );
-    action = new K3WidgetAction(m_gradientWidget,
-                               i18n("&Gradients"),
-                               0,
-                               view,
-                               0,
-                               view->actionCollection(),
-                               "gradients");
+    action = new KAction( i18n("&Gradients"),
+                          0,
+                          view,
+                          0,
+                          view->actionCollection(),
+                          "gradients");
+    action->setDefaultWidget( m_gradientWidget );
 
     m_paintopBox = new KisPaintopBox( view, view, "paintopbox" );
-    action = new K3WidgetAction(m_paintopBox,
-                               i18n("&Painter's Tools"),
-                               0,
-                               view,
-                               0,
-                               view->actionCollection(),
-                               "paintops");
+    action = new KAction(i18n("&Painter's Tools"),
+                         0,
+                         view,
+                         0,
+                         view->actionCollection(),
+                         "paintops");
+    action->setDefaultWidget( m_paintopBox );
 
     m_brushWidget->setFixedSize( 26, 26 );
     m_patternWidget->setFixedSize( 26, 26 );

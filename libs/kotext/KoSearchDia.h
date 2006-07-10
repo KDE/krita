@@ -50,7 +50,7 @@ class KoTextObject;
 class KCommand;
 class KoTextDocument;
 class KoFindReplace;
-class KFontCombo;
+class QFontComboBox;
 class KoTextCursor;
 //
 // This class represents the KWord-specific search extension items, and also the
@@ -317,7 +317,7 @@ private:
     QCheckBox *m_checkFontAttribute;
     QCheckBox *m_checkLanguage;
 
-    KFontCombo *m_familyItem;
+    QFontComboBox *m_familyItem;
     QSpinBox *m_sizeItem;
     KColorButton *m_colorItem;
     KColorButton *m_bgColorItem;

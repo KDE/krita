@@ -23,18 +23,17 @@
 #include "qobject.h"
 #include "q3ptrlist.h"
 #include "qsignalmapper.h"
-#include "kactionclasses.h"
 #include "kis_image.h"
 #include "kis_selection.h"
 
 #include <krita_export.h>
 
+class KActionMenu;
 class KAction;
 class KisView;
 class KisDoc;
 class KisFilter;
 class KisFilterConfiguration;
-class KAction;
 class KActionCollection;
 class KisPreviewDialog;
 

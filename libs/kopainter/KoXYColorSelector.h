@@ -20,7 +20,7 @@
 #ifndef KO_XYCOLORSELECTOR_H
 #define KO_XYCOLORSELECTOR_H
 
-#include <kselector.h>
+#include <kxyselector.h>
 
 #include "KoColor.h"
 

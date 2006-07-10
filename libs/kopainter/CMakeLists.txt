@@ -5,20 +5,22 @@ include_directories( ${KOFFICECORE_INCLUDES} ${PIGMENT_INCLUDES} )
 
 ########### next target ###############
 
-set(kopainter_LIB_SRCS 
-   svgpathparser.cc 
-   koColor.cc 
-   koFrameButton.cc 
-   koIconChooser.cc 
-   kogradientmanager.cc 
+set(kopainter_LIB_SRCS
+   svgpathparser.cc
+   koColor.cc
+   koFrameButton.cc
+   koIconChooser.cc
+   kogradientmanager.cc
    ko_color_wheel.cc
-   KoColorSlider.cc 
-   KoXYColorSelector.cc 
-   ko_gray_widget.cc 
-   ko_hsv_widget.cc 
-   KoUniColorChooser.cpp 
-   KoColorPatch.cpp 
-   ko_rgb_widget.cc )
+   KoColorSlider.cc
+   KoXYColorSelector.cc
+   ko_gray_widget.cc
+   ko_hsv_widget.cc
+   KoUniColorChooser.cpp
+   KoColorPatch.cpp
+   ko_rgb_widget.cc
+   kdualcolorbutton.cpp
+)
 
 kde4_automoc(${kopainter_LIB_SRCS})
 

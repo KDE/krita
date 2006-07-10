@@ -25,7 +25,7 @@
 #include <kapplication.h>
 #include <kmenu.h>
 #include <kaction.h>
-#include <kactionclasses.h>
+#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>

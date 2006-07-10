@@ -76,6 +76,7 @@
 #include <kparts/componentfactory.h>
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
+#include <ktogglefullscreenaction.h>
 
 // KOffice
 #include <KoPartSelectAction.h>
@@ -1788,7 +1789,7 @@ qint32 KisView::importImage(const KUrl& urlArg)
 
     if (urlArg.isEmpty()) {
         QString mimelist = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import).join(" ");
-        urls = KFileDialog::getOpenUrls(KUrl(QString::null), mimelist, 
+        urls = KFileDialog::getOpenUrls(KUrl(QString::null), mimelist,
 0, i18n("Import Image"));
     } else {
         urls.push_back(urlArg);

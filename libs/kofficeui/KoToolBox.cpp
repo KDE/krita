@@ -36,7 +36,6 @@
 #include <kseparator.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kactionclasses.h>
 
 #include <KoMainWindow.h>
 #include "KoToolBox.h"
@@ -242,7 +241,7 @@ QWidget* ToolArea::getNextParent()
 
 void ToolArea::setOrientation ( Qt::Orientation o )
 {
-    QBoxLayout::Direction  dir = (o != Qt::Horizontal 
+    QBoxLayout::Direction  dir = (o != Qt::Horizontal
 				  ? QBoxLayout::TopToBottom
 				  : QBoxLayout::LeftToRight);
     m_leftLayout->setDirection(dir);

@@ -44,6 +44,7 @@
 #include <kfileitem.h>
 #include <kiconloader.h>
 #include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -2622,9 +2623,9 @@ bool KoDocument::hasExternURL() const
 
 void KoDocument::slotStarted( KIO::Job* job )
 {
-    if ( job )
+    if ( job && job->ui() )
     {
-        job->setWindow( d->m_shells.current() );
+        job->ui()->setWindow( d->m_shells.current() );
     }
 }
 

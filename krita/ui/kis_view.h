@@ -87,7 +87,7 @@ class KoGrayWidget;
 class KoHSVWidget;
 class KoRGBWidget;
 class KoUniColorChooser;
-class KoDocumentSectionWidget;
+class KoDocumentSectionView;
 
 class KisBirdEyeBox;
 class KisBrush;
@@ -594,7 +594,7 @@ private:
 
 
     KisLayerBox *m_layerBox;
-    KoDocumentSectionWidget *m_dsw;
+    KoDocumentSectionView *m_dsv;
     KoToolBox * m_toolBox;
     KisControlFrame * m_brushesAndStuffToolBar;
 

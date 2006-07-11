@@ -17,6 +17,7 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include <QtDebug>
 #include <QAbstractItemView>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -26,6 +27,7 @@
 #include <QModelIndex>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPointer>
 #include <QStyleOptionViewItem>
 #include <QTextDocument>
 #include <QToolTip>
@@ -36,6 +38,8 @@
 
 class KoDocumentSectionDelegate::ToolTip: public QFrame
 {
+    typedef QFrame super;
+
     public:
         static void showTip( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index );
         static void hideTip();
@@ -63,9 +67,10 @@ class KoDocumentSectionDelegate::Private
 {
     public:
         QAbstractItemView *view;
+        QPointer<QWidget> edit;
         DisplayMode mode;
         static const int margin = 1;
-        Private(): view( 0 ), mode( DetailedMode ) { }
+        Private(): view( 0 ), edit( 0 ), mode( DetailedMode ) { }
 };
 
 KoDocumentSectionDelegate::KoDocumentSectionDelegate( QAbstractItemView *view, QObject *parent )
@@ -132,6 +137,12 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
         if( me->button() != Qt::LeftButton )
             return false; //TODO
 
+        if( d->edit )
+        {
+            emit closeEditor( d->edit );
+            qDebug() << "why doesn't this event ever get received??";
+        }
+
         const QRect ir = iconsRect( option, index ), tr = textRect( option, index );
 
         if( ir.contains( me->pos() ) )
@@ -168,6 +179,7 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
 
     else if( e->type() == QEvent::ToolTip )
     {
+        qDebug() << "helpevent";
         QHelpEvent *he = static_cast<QHelpEvent*>( e );
         ToolTip::showTip( d->view, he->pos(), option, index );
         return true;
@@ -178,9 +190,9 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
 
 QWidget *KoDocumentSectionDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem&, const QModelIndex& ) const
 {
-    QLineEdit *edit = new QLineEdit( parent );
-    edit->installEventFilter( const_cast<KoDocumentSectionDelegate*>( this ) );
-    return edit;
+    d->edit = new QLineEdit( parent );
+    d->edit->installEventFilter( const_cast<KoDocumentSectionDelegate*>( this ) );
+    return d->edit;
 }
 
 void KoDocumentSectionDelegate::setEditorData( QWidget *widget, const QModelIndex &index ) const
@@ -232,11 +244,10 @@ bool KoDocumentSectionDelegate::eventFilter( QObject *object, QEvent *event )
                 emit commitData( edit );
                 emit closeEditor( edit );
                 return true;
-            default: return false;
+            default: break;
         }
     }
-    else
-        return false;
+    return super::eventFilter( object, event );
 }
 
 
@@ -403,7 +414,7 @@ void KoDocumentSectionDelegate::ToolTip::updateDocument( const QModelIndex &inde
     m_document.clear();
 
     QImage thumb = index.data( Model::LargeThumbnailRole ).value<QImage>();
-    m_document.addResource( QTextDocument::ImageResource, QUrl( "thumb:///nail" ), thumb );
+    m_document.addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
 
     QString name = index.data( Qt::DisplayRole ).toString();
     Model::PropertyList properties = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
@@ -417,7 +428,7 @@ void KoDocumentSectionDelegate::ToolTip::updateDocument( const QModelIndex &inde
         rows.append( row.arg( i18n( "%1:", properties[i].name ) ).arg( value ) );
     }
 
-    const QString image = "<img>thumb:///nail</img>";
+    const QString image = "<img src=\"data:thumbnail\">";
     const QString body = QString( "<h3 align=\"center\">%1</h3>" ).arg( name )
                        + QString( "<table><tr><td>%1</td><td>%2</td></tr></table>" ).arg( image ).arg( rows );
     const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
@@ -477,7 +488,7 @@ bool KoDocumentSectionDelegate::ToolTip::eventFilter( QObject *object, QEvent *e
             default: break;
         }
 
-    return false;
+    return super::eventFilter( object, event );
 }
 
 #include "KoDocumentSectionDelegate.moc"

@@ -59,8 +59,10 @@ class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
         virtual void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
         virtual void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index ) const;
 
+
     protected:
         virtual bool eventFilter( QObject *object, QEvent *event );
+
 
     private:
         typedef KoDocumentSectionModel Model;

@@ -93,7 +93,7 @@
 #include <kopalettemanager.h>
 #include <kopalette.h>
 #include <KoToolBox.h>
-#include <KoDocumentSectionWidget.h>
+#include <KoDocumentSectionView.h>
 
 // Local
 
@@ -460,10 +460,10 @@ void KisView::createLayerBox()
             this, SLOT(layerOpacityFinishedChanging(int, int)));
     connect(m_layerBox, SIGNAL(sigItemComposite(const KoCompositeOp&)), this, SLOT(layerCompositeOp(const KoCompositeOp&)));
 
-    m_dsw = new KoDocumentSectionWidget(this);
+    m_dsv = new KoDocumentSectionView(this);
 
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
-    paletteManager()->addWidget(m_dsw, "newlayerbox", krita::NEWLAYERBOX, 0);
+    paletteManager()->addWidget(m_dsv, "newlayerbox", krita::NEWLAYERBOX, 0);
 }
 
 void KisView::setupScrollBars()
@@ -3211,7 +3211,7 @@ void KisView::connectCurrentImg()
     }
 
     m_layerBox->setImage(m_image);
-    m_dsw->setModel(m_image->rootLayer().data());
+    m_dsv->setModel(m_image->rootLayer().data());
     m_birdEyeBox->setImage(m_image);
 }
 
@@ -3221,7 +3221,7 @@ void KisView::disconnectCurrentImg()
         m_image->disconnect(this);
         disconnect( document(), SIGNAL( sigCommandExecuted() ), m_image.data(), SLOT( slotCommandExecuted() ) );
         m_layerBox->setImage(KisImageSP(0));
-        m_dsw->setModel(0);
+        m_dsv->setModel(0);
         m_birdEyeBox->setImage(KisImageSP(0));
 
         KisConnectPartLayerVisitor v(m_image, this, false);
@@ -3681,7 +3681,7 @@ void KisView::setCurrentImage(KisImageSP image)
 #endif
     connectCurrentImg();
     m_layerBox->setImage(currentImg());
-    m_dsw->setModel(currentImg()->rootLayer().data());
+    m_dsv->setModel(currentImg()->rootLayer().data());
 
     zoomAroundPoint(0, 0, 1.0);
 

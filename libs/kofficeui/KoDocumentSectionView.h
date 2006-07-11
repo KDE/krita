@@ -17,22 +17,23 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_DOCUMENT_SECTION_WIDGET_H
-#define KO_DOCUMENT_SECTION_WIDGET_H
+#ifndef KO_DOCUMENT_SECTION_VIEW_H
+#define KO_DOCUMENT_SECTION_VIEW_H
 
-#include <QWidget>
+#include <QTreeView>
 #include <koffice_export.h>
-#include "KoDocumentSectionModel.h"
 
-class KOFFICEUI_EXPORT KoDocumentSectionWidget: public QWidget
+class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
 {
-    typedef QWidget super;
+    typedef QTreeView super;
     Q_OBJECT
 
     public:
-        KoDocumentSectionWidget( QWidget *parent = 0 );
-        virtual ~KoDocumentSectionWidget();
-        void setModel( KoDocumentSectionModel *model );
+        KoDocumentSectionView( QWidget *parent = 0 );
+        virtual ~KoDocumentSectionView();
+
+    protected:
+        virtual bool event( QEvent *event );
 
     private:
         class Private;

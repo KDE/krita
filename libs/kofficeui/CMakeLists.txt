@@ -44,7 +44,7 @@ set(kofficeui_LIB_SRCS
    KoToolManager.cpp
    KoToolRegistry.cpp
    KoGeneralPropertyUi.cpp
-   KoDocumentSectionWidget.cpp
+   KoDocumentSectionView.cpp
    KoDocumentSectionDelegate.cpp )
 
 kde4_automoc(${kofficeui_LIB_SRCS})
@@ -62,7 +62,7 @@ install(TARGETS kofficeui  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  KoPageLayoutDia.h KoZoomAction.h KoTabBar.h  	KoPartSelectDia.h KoPartSelectAction.h  	KoRuler.h KoTemplateChooseDia.h KoTabChooser.h  	KoKoolBar.h KoTemplateCreateDia.h KoContextHelp.h  	KoPictureFilePreview.h KoUnitWidgets.h  	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h  	KoCharSelectDia.h KoInsertLink.h KoEditPath.h  	 KoImageResource.h  	KoZoomHandler.h KoGuideLineDia.h KoGuides.h  	KoPageLayoutHeader.h KoPageLayoutSize.h KoGeneralPropertyUi.h KoPageLayoutColumns.h  	KoBrush.h KoPen.h KoZoomMode.h KoDocumentSectionModel.h KoDocumentSectionDelegate.h KoDocumentSectionWidget.h  DESTINATION ${INCLUDE_INSTALL_DIR})
+install( FILES  KoPageLayoutDia.h KoZoomAction.h KoTabBar.h  	KoPartSelectDia.h KoPartSelectAction.h  	KoRuler.h KoTemplateChooseDia.h KoTabChooser.h  	KoKoolBar.h KoTemplateCreateDia.h KoContextHelp.h  	KoPictureFilePreview.h KoUnitWidgets.h  	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h  	KoCharSelectDia.h KoInsertLink.h KoEditPath.h  	 KoImageResource.h  	KoZoomHandler.h KoGuideLineDia.h KoGuides.h  	KoPageLayoutHeader.h KoPageLayoutSize.h KoGeneralPropertyUi.h KoPageLayoutColumns.h  	KoBrush.h KoPen.h KoZoomMode.h KoDocumentSectionModel.h KoDocumentSectionDelegate.h KoDocumentSectionView.h  DESTINATION ${INCLUDE_INSTALL_DIR})
 
 
 

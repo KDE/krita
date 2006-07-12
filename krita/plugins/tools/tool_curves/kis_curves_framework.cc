@@ -29,54 +29,78 @@
 
 KisCurve::iterator KisCurve::addPivot (KisCurve::iterator it, const CurvePoint& point)
 {
+/*
     CurvePoint temp = point;
     temp.setPivot(true);
     return addPoint(it, temp);
+*/
+    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point.point(),true,point.isSelected())));
 }
 
 KisCurve::iterator KisCurve::addPivot (KisCurve::iterator it, const KisPoint& point, bool selected)
 {
+/*
     CurvePoint temp (point, true, selected);
     return addPoint(it, temp);
+*/
+    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,true,selected)));
 }
 
 KisCurve::iterator KisCurve::addPoint (KisCurve::iterator it, const KisPoint& point, bool pivot, bool selected)
 {
+/*
     CurvePoint temp (point, pivot, selected);
     return addPoint(it, temp);
+*/
+    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,pivot,selected)));
 }
 
 KisCurve::iterator KisCurve::addPoint (KisCurve::iterator it, const CurvePoint& point)
 {
+/*
     iterator temp(*this);
     temp = m_curve.insert (it.position(), point);
     return temp;
+*/
+    return iterator(*this,m_curve.insert(it.position(), point));
 }
 
 KisCurve::iterator KisCurve::pushPivot (const CurvePoint& point)
 {
+/*
     CurvePoint temp = point;
     temp.setPivot(true);
     return pushPoint(temp);
+*/
+    return iterator(*this,m_curve.append(CurvePoint(point.point(),true,point.isSelected())));
 }
 
 KisCurve::iterator KisCurve::pushPivot (const KisPoint& point, bool selected)
 {
+/*
     CurvePoint temp (point, true, selected);
     return pushPoint(temp);
+*/
+    return iterator(*this,m_curve.append(CurvePoint(point,true,selected)));
 }
 
 KisCurve::iterator KisCurve::pushPoint (const KisPoint& point, bool pivot, bool selected)
 {
+/*
     CurvePoint temp (point, pivot, selected);
     return pushPoint(temp);
+*/
+    return iterator(*this,m_curve.append(CurvePoint(point,pivot,selected)));
 }
 
 KisCurve::iterator KisCurve::pushPoint (const CurvePoint& point)
 {
+/*
     iterator temp(*this);
     temp = m_curve.append(point);
     return temp;
+*/
+    return iterator(*this,m_curve.append(point));
 }
 
 KisCurve KisCurve::pivots()
@@ -104,7 +128,7 @@ void KisCurve::deleteFirstPivot ()
 {
     if (!m_curve.isEmpty()) {
         m_curve.pop_front();
-        while (m_curve.count() > 1 && !m_curve.first().isPivot())
+        while (m_curve.count() > 1 && !first().isPivot())
             m_curve.pop_front();
     }
 }
@@ -113,7 +137,7 @@ void KisCurve::deleteLastPivot ()
 {
     if (!m_curve.isEmpty()) {
         m_curve.pop_back();
-        while (m_curve.count() > 1 && !m_curve.last().isPivot())
+        while (m_curve.count() > 1 && !last().isPivot())
             m_curve.pop_back();
     }
 }

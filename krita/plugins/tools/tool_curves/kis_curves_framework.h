@@ -73,8 +73,8 @@ class KisCurve {
 
     mutable PointList m_curve;
 
-    BaseIterator privateBegin() const {return m_curve.begin();}
-    BaseIterator privateEnd() const {return m_curve.end();}
+    BaseIterator baseBegin() const {return m_curve.begin();}
+    BaseIterator baseEnd() const {return m_curve.end();}
     
 public:
     
@@ -186,7 +186,7 @@ class FriendIterator {
     FriendIterator previousPivot()
     {
         FriendIterator it = *this;
-        while (it != m_target->privateBegin()) {
+        while (it != m_target->baseBegin()) {
             it--;
             if ((*it).isPivot())
                 return it;
@@ -198,7 +198,7 @@ class FriendIterator {
     FriendIterator nextPivot()
     {
         FriendIterator it = *this;
-        while (it != m_target->privateEnd()) {
+        while (it != m_target->baseEnd()) {
             it++;
             if ((*it).isPivot())
                 return it;
@@ -258,30 +258,42 @@ inline KisCurve::iterator KisCurve::end()
 
 inline KisCurve::iterator KisCurve::find (const CurvePoint& pt)
 {
+/*
     iterator temp(*this);
     temp = m_curve.find(pt);
     return temp;
+*/
+    return iterator(*this,m_curve.find(pt));
 }
 
 inline KisCurve::iterator KisCurve::find (const KisPoint& pt)
 {
+/*
     iterator temp(*this);
     temp = m_curve.find(CurvePoint(pt));
     return temp;
+*/
+    return iterator(*this,m_curve.find(CurvePoint(pt)));
 }
 
 inline KisCurve::iterator KisCurve::find (KisCurve::iterator it, const CurvePoint& pt)
 {
+/*
     iterator temp(*this);
     temp = m_curve.find(it.position(),pt);
     return temp;
+*/
+    return iterator(*this,m_curve.find(it.position(),pt));
 }
 
 inline KisCurve::iterator KisCurve::find (iterator it, const KisPoint& pt)
 {
+/*
     iterator temp(*this);
     temp = m_curve.find(it.position(),CurvePoint(pt));
     return temp;
+*/
+    return iterator(*this,m_curve.find(it.position(),CurvePoint(pt)));
 }
 
 /* This three lines are here to avoid a linking error */

@@ -196,7 +196,7 @@ void KisToolCurves::buttonPress(KisButtonPressEvent *event)
                 m_start = m_end;
                 m_end = event->pos();
             }
-            m_curve->calculateCurve(m_curve->end(),m_start,m_end);
+            m_curve->calculateCurve(m_start,m_end,m_curve->end());
             m_curve->pushPivot(m_end);
         } else {
             CurvePoint pos(mouseOnHandle(event->pos()),true);
@@ -238,7 +238,7 @@ void KisToolCurves::move(KisMoveEvent *event)
             if (m_curve->pivots().count() > 1)
                 m_curve->deleteLastPivot();
             m_end = event->pos();
-            m_curve->calculateCurve(m_curve->end(),m_start,m_end);
+            m_curve->calculateCurve(m_start,m_end,m_curve->end());
             m_curve->pushPivot(m_end);
         } else {
             KisCurve sel = m_curve->selectedPivots();

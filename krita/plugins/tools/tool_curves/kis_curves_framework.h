@@ -88,11 +88,17 @@ public:
 
     CurvePoint& operator[](int i) {return m_curve[i];}
 
-    iterator addPoint(const CurvePoint&, iterator = 0);
-    iterator addPoint(const KisPoint&, bool = false, bool = false, iterator = 0);
+    iterator addPoint(iterator, const CurvePoint&);
+    iterator addPoint(iterator, const KisPoint&, bool = false, bool = false);
 
-    iterator addPivot(const CurvePoint&, iterator = 0);
-    iterator addPivot(const KisPoint&, bool = false, iterator = 0);
+    iterator addPivot(iterator, const CurvePoint&);
+    iterator addPivot(iterator, const KisPoint&, bool = false);
+
+    iterator pushPivot(const CurvePoint&);
+    iterator pushPivot(const KisPoint&, bool = false);
+
+    iterator pushPoint(const CurvePoint&);
+    iterator pushPoint(const KisPoint&, bool = false, bool = false);
 
     int count() const {return m_curve.count();}
     bool isEmpty() const {return m_curve.isEmpty();}
@@ -119,8 +125,8 @@ public:
     virtual void deleteCurve(iterator, iterator);
 
     /* Core of the Core, calculateCurve is the only function that needs an implementation in the derived curves */
-    virtual void calculateCurve(const KisPoint&, const KisPoint&, iterator);
-    virtual void calculateCurve(const CurvePoint&, const CurvePoint&, iterator);
+    virtual void calculateCurve(iterator, const KisPoint&, const KisPoint&);
+    virtual void calculateCurve(iterator, const CurvePoint&, const CurvePoint&);
     virtual void calculateCurve(iterator, iterator, iterator);
 
     virtual void setPivotSelected(const CurvePoint&, bool = true);
@@ -144,7 +150,7 @@ class FriendIterator {
 
     public:
 
-    FriendIterator (int) {m_target=0;m_position=0;}
+    FriendIterator () {m_target=0;m_position=0;}
 
     FriendIterator (const KisCurve &target)
         {m_target = &target;m_position=0;}
@@ -283,8 +289,8 @@ inline KisCurve::iterator KisCurve::find (iterator it, const KisPoint& pt)
 }
 
 /* This three lines are here to avoid a linking error */
-inline void KisCurve::calculateCurve(const KisPoint&, const KisPoint&, KisCurve::iterator) {return;}
-inline void KisCurve::calculateCurve(const CurvePoint&, const CurvePoint&, KisCurve::iterator) {return;}
+inline void KisCurve::calculateCurve(KisCurve::iterator, const KisPoint&, const KisPoint&) {return;}
+inline void KisCurve::calculateCurve(KisCurve::iterator, const CurvePoint&, const CurvePoint&) {return;}
 inline void KisCurve::calculateCurve(KisCurve::iterator, KisCurve::iterator, KisCurve::iterator) {return;}
 
 #endif // KIS_CURVES_FRAMEWORK_H_

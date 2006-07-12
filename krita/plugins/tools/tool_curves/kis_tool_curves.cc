@@ -147,7 +147,7 @@ void KisCurveExample::calculateCurve(const KisPoint& pos1, const KisPoint& pos2,
         if (newDist > DBL_EPSILON) {
             t = distanceMoved / newDist;
         }
-        addPoint (p,false,false,it);
+        addPoint (it,p,false,false);
         dist -= spacing;
     }
     return;
@@ -196,8 +196,8 @@ void KisToolCurves::buttonPress(KisButtonPressEvent *event)
                 m_start = m_end;
                 m_end = event->pos();
             }
-            m_curve->calculateCurve(m_start,m_end, 0);
-            m_curve->addPivot(m_end);
+            m_curve->calculateCurve(m_curve->end(),m_start,m_end);
+            m_curve->pushPivot(m_end);
         } else {
             CurvePoint pos(mouseOnHandle(event->pos()),true);
             KisCurve sel = m_curve->selectedPivots();
@@ -238,8 +238,8 @@ void KisToolCurves::move(KisMoveEvent *event)
             if (m_curve->pivots().count() > 1)
                 m_curve->deleteLastPivot();
             m_end = event->pos();
-            m_curve->calculateCurve(m_start,m_end, 0);
-            m_curve->addPivot(m_end);
+            m_curve->calculateCurve(m_curve->end(),m_start,m_end);
+            m_curve->pushPivot(m_end);
         } else {
             KisCurve sel = m_curve->selectedPivots();
             KisPoint dest = event->pos();
@@ -287,7 +287,7 @@ void KisToolCurves::predraw()
     KisCanvasController *controller = m_subject->canvasController();
     KisPoint start, end;
     QPoint pos1, pos2;
-    KisCurve::iterator it(0);
+    KisCurve::iterator it;
 
     controller->kiscanvas()->repaint();
     for (it = m_curve->begin(); it != (m_curve->end()); it++) {

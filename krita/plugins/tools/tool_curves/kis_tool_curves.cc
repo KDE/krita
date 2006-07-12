@@ -62,25 +62,25 @@ public:
 
     ~KisCurveExample() {}
 
-    virtual void calculateCurve(const KisPoint&, const KisPoint&, const CurveIterator = 0);
-    virtual void calculateCurve(const CurvePoint&, const CurvePoint&, const CurveIterator = 0);
-    virtual void calculateCurve(const CurveIterator, const CurveIterator, const CurveIterator = 0);
+    virtual void calculateCurve(const KisPoint&, const KisPoint&, KisCurve::iterator);
+    virtual void calculateCurve(const CurvePoint&, const CurvePoint&, KisCurve::iterator);
+    virtual void calculateCurve(KisCurve::iterator, KisCurve::iterator, KisCurve::iterator);
 
 };
 
-void KisCurveExample::calculateCurve(const CurveIterator pos1, const CurveIterator pos2, const CurveIterator it)
+void KisCurveExample::calculateCurve(KisCurve::iterator pos1, KisCurve::iterator pos2, KisCurve::iterator it)
 {
     calculateCurve((*pos1).point(),(*pos2).point(), it);
 }
 
-void KisCurveExample::calculateCurve(const CurvePoint& pos1, const CurvePoint& pos2, const CurveIterator it)
+void KisCurveExample::calculateCurve(const CurvePoint& pos1, const CurvePoint& pos2, KisCurve::iterator it)
 {
     calculateCurve(pos1.point(),pos2.point(), it);
 }
 
 /* Brutally taken from KisPainter::paintLine, sorry :) */
 /* And obviously this is just to see if the Framework works :) */
-void KisCurveExample::calculateCurve(const KisPoint& pos1, const KisPoint& pos2, const CurveIterator it)
+void KisCurveExample::calculateCurve(const KisPoint& pos1, const KisPoint& pos2, KisCurve::iterator it)
 {
     double savedDist = 0;
     KisVector2D end(pos2);
@@ -150,8 +150,8 @@ void KisCurveExample::calculateCurve(const KisPoint& pos1, const KisPoint& pos2,
         addPoint (p,false,false,it);
         dist -= spacing;
     }
+    return;
 }
-
 
 KisToolCurves::KisToolCurves()
     : super(i18n("Tool for Curves - Example")),
@@ -244,7 +244,7 @@ void KisToolCurves::move(KisMoveEvent *event)
             KisCurve sel = m_curve->selectedPivots();
             KisPoint dest = event->pos();
             if (!sel.isEmpty()) {
-                CurveIterator newPivot = m_curve->movePivot(sel[0],dest);
+                KisCurve::iterator newPivot = m_curve->movePivot(sel[0],dest);
                 m_curve->setPivotSelected(newPivot); 
             }
         }
@@ -257,10 +257,11 @@ KisPoint KisToolCurves::mouseOnHandle(KisPoint pos)
 /* ( toQRect ( endx - m_handleSize / 2.0, starty - m_handleSize / 2.0, m_handleSize, m_handleSize ).contains( currentViewPoint ) ) */
     KisCurve pivots = m_curve->pivots();
 
-    for (CurveIterator it = pivots.begin(); it != pivots.end(); it++)
-        if (QRect((*it).point().floorQPoint()-QPoint(4,4),
-                  (*it).point().floorQPoint()+QPoint(4,4)).contains(pos.floorQPoint()))
+    for (KisCurve::iterator it = pivots.begin(); it != pivots.end(); it++) {
+        if (QRect((*it).point().toQPoint()-QPoint(4,4),
+                  (*it).point().toQPoint()+QPoint(4,4)).contains(pos.toQPoint()))
             return (*it).point();
+    }
 
     return KisPoint(-1.0,-1.0);
 }
@@ -285,20 +286,23 @@ void KisToolCurves::predraw()
 
     KisCanvasController *controller = m_subject->canvasController();
     KisPoint start, end;
-    QPoint pos;
+    QPoint pos1, pos2;
+    KisCurve::iterator it(0);
 
     controller->kiscanvas()->repaint();
-    for (CurveIterator it = m_curve->begin(); it != m_curve->end(); it++) {
-        pos = controller->windowToView((*it).point().floorQPoint());
+    for (it = m_curve->begin(); it != (m_curve->end()); it++) {
+        pos1 = controller->windowToView((*it).point().toQPoint());
+//      pos2 = controller->windowToView((*it.nextPivot()).point().toQPoint());
         if ((*it).isPivot()) {
             if ((*it).isSelected())
-                gc->fillRect(pos.x()-4,pos.y()-4,9,9,Qt::white);
+                gc->fillRect(pos1.x()-4,pos1.y()-4,9,9,Qt::white);
             else
-                gc->fillRect(pos.x()-4,pos.y()-4,9,9,Qt::gray);
+                gc->fillRect(pos1.x()-4,pos1.y()-4,9,9,Qt::gray);
         } else
-            gc->drawPoint(pos);
+//          gc->drawLine(pos1,pos2);
+            gc->drawPoint(pos1);
     }
-
+    
     delete gc;
 }
 
@@ -358,10 +362,9 @@ void KisToolCurves::draw()
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
     painter.setPaintOp(op); // Painter takes ownership
 
-    for( CurveIterator it = m_curve->begin(); it != m_curve->end(); it++ )
-    {
-        painter.paintAt((*it).point(), PRESSURE_DEFAULT, 0, 0);
-    }
+    for( KisCurve::iterator it = m_curve->begin(); it != (m_curve->end()--); it = it.nextPivot() )
+        painter.paintLine((*it).point(), PRESSURE_DEFAULT, 0, 0, (*it.nextPivot()).point(), PRESSURE_DEFAULT, 0, 0);
+//        painter.paintAt((*it).point(), PRESSURE_DEFAULT, 0, 0);
 
     device->setDirty( painter.dirtyRect() );
     notifyModified();

@@ -119,6 +119,9 @@ void KisDlgFiltersGallery::slotConfigChanged()
 
 void KisDlgFiltersGallery::refreshPreview( )
 {
+    if(!m_currentFilter)
+        return;
+
     KisPaintDeviceSP layer =  m_widget->previewWidget->getDevice();
 
     KisTransaction cmd("Temporary transaction", layer);

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Modify Selection
+Name[br]=Kemmañ an dibab
+Name[da]=Ændr markering
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection

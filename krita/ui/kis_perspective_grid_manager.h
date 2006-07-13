@@ -29,7 +29,9 @@ class KToggleAction;
 class KisView;
 
 struct KisPerspectiveGrid {
+    KisPerspectiveGrid() : subdivisions(5) { }
     QPoint topLeft, topRight, bottomLeft, bottomRight;
+    int subdivisions;
 };
 
 class KisPerspectiveGridManager : public QObject

@@ -25,22 +25,40 @@
 #include <qpainter.h>
 
 #include "kis_types.h"
+#include "kis_point.h"
 
 struct KisPerspectiveGrid;
+struct LineEquation {
+    // y = a*x + b
+    double a, b;
+};
 
 class GridDrawer {
-public:
-    GridDrawer() {}
-    virtual ~GridDrawer() {}
-
-public:
-    void drawGrid(KisImageSP image, const QRect& wr);
-    void drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisPerspectiveGrid& grid);
-
-    virtual void setPen(const QPen& pen) = 0;
-    virtual void drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2) = 0;
-private:
-    Qt::PenStyle gs2style(Q_UINT32 s);
+    public:
+        GridDrawer() {}
+        virtual ~GridDrawer() {}
+    
+    public:
+        void drawGrid(KisImageSP image, const QRect& wr);
+        void drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisPerspectiveGrid& grid);
+    
+        virtual void setPen(const QPen& pen) = 0;
+        virtual void drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2) = 0;
+        inline void drawLine(const QPoint& p1, const QPoint& p2) { drawLine(p1.x(), p1.y(), p2.x(), p2.y() ); }
+    private:
+        inline LineEquation computeLineEquation(const KisPoint& p1, const KisPoint& p2) const
+        {
+            LineEquation eq;
+            eq.a = (p2.y() - p1.y()) / (double)( p2.x() - p1.x() );
+            eq.b = -eq.a * p1.x() + p1.y();
+            return eq;
+        }
+        inline KisPoint computeIntersection(const LineEquation& d1, const LineEquation& d2) const
+        {
+            double x = (d1.b - d2.b) / (d2.a - d1.a);
+            return KisPoint(x, d2.a * x + d2.b);
+        }
+        Qt::PenStyle gs2style(Q_UINT32 s);
 };
 
 class QPainterGridDrawer : public GridDrawer {

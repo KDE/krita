@@ -30,10 +30,10 @@
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView * parent)
     : QObject(), m_view(parent)
 {
-    m_grid.topLeft = QPoint( 10, 20 );
-    m_grid.topRight = QPoint( 40, 20 );
-    m_grid.bottomLeft = QPoint( 50, 60 );
-    m_grid.bottomRight = QPoint( 80, 50 );
+    m_grid.topLeft = QPoint( 100, 200 );
+    m_grid.topRight = QPoint( 400, 190 );
+    m_grid.bottomLeft = QPoint( 500, 600 );
+    m_grid.bottomRight = QPoint( 800, 500 );
     
 }
 
@@ -50,6 +50,7 @@ void KisPerspectiveGridManager::updateGUI()
 
 void KisPerspectiveGridManager::setup(KActionCollection * collection)
 {
+    kdDebug() << "KisPerspectiveGridManager::setup(KActionCollection * collection)" << endl;
     m_toggleGrid = new KToggleAction(i18n("Show Perspective Grid"), "", this, SLOT(toggleGrid()), collection, "view_toggle_perspective_grid");
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Perspective Grid")));
     m_toggleGrid->setChecked(false);

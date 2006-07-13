@@ -10,3 +10,6 @@
 Bugs:
 * rescaling does not alter the positions of the connectors. I expect their
   relative position to the whole shape to stay the same.
+
+
+Use xcursorgen to create real xcursors

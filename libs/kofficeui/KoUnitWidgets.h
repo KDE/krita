@@ -121,14 +121,17 @@ class KOFFICEUI_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUni
 public:
     /**
      * Constructor
-     * Will initialize the widget with very broad minimum and maximum range. -10000 to 10000
+     * Create a new spinBox with very broad range predefined.
+     * This spinbox will have min and max borders of 10000 points and use
+     * the default unit of points.
      * @param parent the parent widget
      * @param name unused
      */
     KoUnitDoubleSpinBox( QWidget *parent = 0L, const char *name = 0L );
     /**
-     * A constructor with all the options in one.
-     * Its not adviced to use this constructor for the sake of readability.
+     * Create a new spinBox with specified range.
+     * Use this constructor to set the range, steps and value in points in one go. We don't advice
+     * to use this constructor as it will give you unreadable code.
      * @param parent the parent widget
      * @param lower the lowest value this spinbox can contain, in points.
      * @param upper the largest value this spinbox can contain, in points.

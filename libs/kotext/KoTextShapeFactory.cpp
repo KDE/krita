@@ -23,6 +23,7 @@
 #include "KoTextToolFactory.h"
 #include "KoToolRegistry.h"
 #include <KoTextShapeFactory.h>
+#include <KoShapeGeometry.h>
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -62,6 +63,12 @@ KoShape *KoTextShapeFactory::createShape(const KoProperties * params) const {
     KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
     data->setDocument(doc);
     return shape;
+}
+
+QList<KoShapeConfigWidgetBase*> KoTextShapeFactory::createShapeOptionPanels() {
+    QList<KoShapeConfigWidgetBase*> answer;
+    answer.append(new KoShapeGeometry());
+    return answer;
 }
 
 #include "KoTextShapeFactory.moc"

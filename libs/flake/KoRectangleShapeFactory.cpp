@@ -51,7 +51,6 @@ KoRectangleShapeFactory::KoRectangleShapeFactory(QObject *parent, const QStringL
 
 KoShape * KoRectangleShapeFactory::createDefaultShape() {
     KoRectangleShape *s = new KoRectangleShape();
-    s->resize(QSizeF(100, 100));
     s->setBackground(QBrush(Qt::yellow));
     return s;
 }
@@ -60,7 +59,7 @@ KoShape * KoRectangleShapeFactory::createShape(const KoProperties * params) cons
     KoRectangleShape *shape = new KoRectangleShape();
     if(params->getProperty("fill") == "red")
         shape->setBackground(QBrush(Qt::red));
-    if(params->getProperty("fill") == "blue")
+    else if(params->getProperty("fill") == "blue")
         shape->setBackground(QBrush(Qt::blue));
     return shape;
 }

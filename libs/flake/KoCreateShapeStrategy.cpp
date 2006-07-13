@@ -64,14 +64,9 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     // show config dialog.
     KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
     dialog->setCaption(i18n("%1 Options", factory->name()));
-    QWidget *shapeOptions = factory->optionWidget();
-    int pageCount = 0;
-    if(shapeOptions) {
-        dialog->addPage(shapeOptions, i18n("%1 Options", factory->name()));
-        pageCount ++;
-    }
-    QList<KoShapeConfigFactory*> panels = factory->panelFactories();
 
+    int pageCount = 0;
+    QList<KoShapeConfigFactory*> panels = factory->panelFactories();
     qSort(panels.begin(), panels.end(), KoShapeConfigFactory::compare);
     QList<KoShapeConfigWidgetBase*> widgets;
     foreach (KoShapeConfigFactory *panelFactory, panels) {
@@ -81,7 +76,15 @@ KCommand* KoCreateShapeStrategy::createCommand() {
         if(widget == 0)
             continue;
         widgets.append(widget);
+        widget->setUnit(m_canvas->unit());
         dialog->addPage(widget, panelFactory->name());
+        pageCount ++;
+    }
+    foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
+        panel->open(shape);
+        widgets.append(panel);
+        panel->setUnit(m_canvas->unit());
+        dialog->addPage(panel, panel->objectName());
         pageCount ++;
     }
 

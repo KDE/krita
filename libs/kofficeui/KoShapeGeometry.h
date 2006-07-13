@@ -16,28 +16,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KWFRAMEGEOMETRY_H
+#define KWFRAMEGEOMETRY_H
 
-#ifndef TEXTSHAPEFACTORY_H
-#define TEXTSHAPEFACTORY_H
+#include "ui_KoShapeGeometry.h"
 
-#include <KoShapeFactory.h>
-#include <KoShape.h>
+#include <KoShapeConfigWidgetBase.h>
 
 #include <QWidget>
+#include <QList>
 
-#include <koffice_export.h>
+class KoShape;
 
-class KOTEXT_EXPORT KoTextShapeFactory : public KoShapeFactory {
+class KoShapeGeometry : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
-    /// constructor
-    KoTextShapeFactory(QObject *parent, const QStringList&);
-    ~KoTextShapeFactory() {}
+    KoShapeGeometry();
+    ~KoShapeGeometry();
 
-    KoShape *createDefaultShape();
-    KoShape *createShape(const KoProperties * params) const;
+    void open(KoShape *shape);
+    void save();
+    KAction *createAction();
 
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    void setUnit(KoUnit::Unit unit);
+
+private:
+    Ui::KoShapeGeometry widget;
+    KoShape *m_shape;
 };
 
 #endif

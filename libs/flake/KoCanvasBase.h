@@ -22,12 +22,13 @@
 #ifndef KOCANVASBASE_H
 #define KOCANVASBASE_H
 
+#include <KoUnit.h>
+
 #include <QPointF>
 #include <QPoint>
 #include <QRectF>
 #include <QRect>
 #include <QWidget>
-
 
 class KoSelection;
 class KCommand;
@@ -109,6 +110,13 @@ public:
      * Return the widget that will be added to the scrollArea.
      */
     virtual QWidget* canvasWidget() = 0;
+
+    /**
+     * Return the unit of the current document for initialization of the widgets created
+     * by the flake framework.
+     * @see KoDocument::unit()
+     */
+    virtual KoUnit::Unit unit() = 0;
 
 #if 0
 /*  The next list of methods are naming taken from Krita, which means they have allready been

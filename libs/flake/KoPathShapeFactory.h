@@ -33,7 +33,6 @@ public:
     ~KoPathShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape(const KoProperties * params) const;
-    QWidget * optionWidget() { return 0; }
 };
 
 #endif

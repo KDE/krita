@@ -41,6 +41,7 @@ set(kofficeui_LIB_SRCS
    KoPen.cpp 
    KoZoomMode.cpp
    KoShapeSelector.cpp
+    KoShapeGeometry.cpp
    KoToolManager.cpp
    KoToolRegistry.cpp
    KoGeneralPropertyUi.cpp
@@ -50,7 +51,11 @@ set(kofficeui_LIB_SRCS
 kde4_automoc(${kofficeui_LIB_SRCS})
 
 kde4_add_ui3_files(kofficeui_LIB_SRCS KoPageLayoutColumnsBase.ui )
-kde4_add_ui_files( kofficeui_LIB_SRCS KoGeneralPropertyUi.ui KoPageLayoutHeaderBase.ui )
+kde4_add_ui_files( kofficeui_LIB_SRCS
+    KoGeneralPropertyUi.ui
+    KoPageLayoutHeaderBase.ui
+    KoShapeGeometry.ui
+)
 
 kde4_add_library(kofficeui SHARED ${kofficeui_LIB_SRCS})
 

@@ -25,6 +25,8 @@
 #include <koffice_export.h>
 #include <kaction.h>
 
+#include <KoUnit.h>
+
 class KoShape;
 
 class FLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget {
@@ -32,8 +34,11 @@ public:
     KoShapeConfigWidgetBase() {};
     virtual ~KoShapeConfigWidgetBase() {}
 
+    virtual void open(KoShape *shape) = 0;
     virtual void save() = 0;
     virtual KAction *createAction() = 0;
+
+    virtual void setUnit(KoUnit::Unit unit) { Q_UNUSED(unit); }
 };
 
 

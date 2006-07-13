@@ -80,6 +80,7 @@ private:
             void setTool (KoTool *tool) { Q_UNUSED(tool); }
             KoViewConverter * viewConverter() { return &m_converter; }
             QWidget *canvasWidget () { return m_parent; }
+            KoUnit::Unit unit() { return KoUnit::U_MM; }
 
         private:
             DummyViewConverter m_converter;

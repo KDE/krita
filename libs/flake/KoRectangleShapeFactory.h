@@ -32,7 +32,6 @@ public:
     ~KoRectangleShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape(const KoProperties * params) const;
-    QWidget * optionWidget() { return 0; }
 };
 
 #endif

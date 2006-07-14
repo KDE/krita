@@ -20,48 +20,43 @@
 
 /* Initial commit using tool_star. Emanuele Tamponi */
 
-#ifndef KIS_TOOL_STAR_H_
-#define KIS_TOOL_STAR_H_
+#ifndef KIS_TOOL_EXAMPLE_H_
+#define KIS_TOOL_EXAMPLE_H_
 
-#include "kis_tool_paint.h"
+#include "kis_tool_curve.h"
 #include "kis_point.h"
 
 class CurvePoint;
 class KisPoint;
 class KisCanvas;
 class KisCurve;
-class KisDoc;
 class KisPainter;
 class KisPoint;
-class KisView;
-class KisRect;
-class WdgToolCurves;
+class WdgToolExample;
 
-class KisToolCurves : public KisToolPaint {
+class KisToolExample : public KisToolCurve {
 
-    typedef KisToolPaint super;
+    typedef KisToolCurve super;
     Q_OBJECT
 
-    KisCurve *m_curve;
     KisPoint m_start;
     KisPoint m_end;
     bool m_dragging;
-
     bool m_editing;
 
 public:
-    KisToolCurves();
-    virtual ~KisToolCurves();
+    KisToolExample();
+    virtual ~KisToolExample();
 
-        //
-        // KisCanvasObserver interface
-        //
+    //
+    // KisCanvasObserver interface
+    //
 
-        virtual void update (KisCanvasSubject *subject);
+    virtual void update (KisCanvasSubject *subject);
 
-        //
-        // KisToolPaint interface
-        //
+    //
+    // KisToolPaint interface
+    //
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
@@ -69,7 +64,6 @@ public:
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
     virtual void doubleClick(KisDoubleClickEvent *);
-
     virtual void keyPress(QKeyEvent *);
 
 public slots:
@@ -82,31 +76,26 @@ protected:
     virtual void paint(KisCanvasPainter&, const QRect&);
 */
     KisPoint mouseOnHandle(KisPoint);
-    void predraw();
-    virtual void draw();
 
-protected:
-
-    KisImageSP m_currentImage;
 };
 
 
 #include "kis_tool_factory.h"
 
-class KisToolCurvesFactory : public KisToolFactory {
+class KisToolExampleFactory : public KisToolFactory {
     typedef KisToolFactory super;
 public:
-    KisToolCurvesFactory() : super() {};
-    virtual ~KisToolCurvesFactory(){};
+    KisToolExampleFactory() : super() {};
+    virtual ~KisToolExampleFactory(){};
 
     virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolCurves();
+        KisTool * t =  new KisToolExample();
         Q_CHECK_PTR(t);
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("curvesshape", i18n("Curves Tool")); }
+    virtual KisID id() { return KisID("exampleshape", i18n("Example Tool")); }
 };
 
 
-#endif //__KIS_TOOL_STAR_H__
+#endif //__KIS_TOOL_EXAMPLE_H__

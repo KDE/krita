@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>WdgToolCurves</class>
+<class>WdgToolExample</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>WdgToolCurves</cstring>
+        <cstring>WdgToolExample</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Curves</string>
+        <string>Example</string>
     </property>
     <hbox>
         <property name="name">

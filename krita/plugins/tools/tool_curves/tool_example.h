@@ -18,8 +18,8 @@
 
 /* Initial commit using tool_star. Emanuele Tamponi */
 
-#ifndef TOOL_CURVES_H_
-#define TOOL_CURVES_H_
+#ifndef TOOL_EXAMPLE_H_
+#define TOOL_EXAMPLE_H_
 
 #include <kparts/plugin.h>
 
@@ -28,12 +28,12 @@ class KisView;
 /**
  * A module that provides a star tool.
  */
-class ToolCurves : public KParts::Plugin
+class ToolExample : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolCurves(QObject *parent, const char *name, const QStringList &);
-    virtual ~ToolCurves();
+    ToolExample(QObject *parent, const char *name, const QStringList &);
+    virtual ~ToolExample();
 
 private:
 
@@ -41,4 +41,4 @@ private:
 
 };
 
-#endif // TOOL_STAR_H_
+#endif // TOOL_EXAMPLE_H__

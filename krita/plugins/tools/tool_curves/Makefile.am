@@ -10,18 +10,20 @@ INCLUDES =  -I$(srcdir)/../../../sdk \
 	$(all_includes)
 
 kritatoolcurves_la_SOURCES = \
-	wdg_tool_curves.ui \
-        tool_curves.cc \
-	kis_tool_curves.cc \
-	kis_curves_framework.cc
+	kis_curves_framework.cc \
+	kis_tool_curve.cc \
+	wdg_tool_example.ui \
+        tool_example.cc \
+	kis_tool_example.cc
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritatoolcurves.la
 
 noinst_HEADERS = \
-	tool_curves.h \
-	kis_tool_curves.h \
-	kis_curves_framework.h
+	kis_curves_framework.h \
+	kis_tool_curve.h \
+	tool_example.h \
+	kis_tool_example.h
 
 kritatoolcurves_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritatoolcurves_la_LIBADD =  ../../../libkritacommon.la
@@ -31,8 +33,8 @@ kritatoolcurves_la_METASOURCES = AUTO
 KDE_OPTIONS = nofinal
 
 kritapics_DATA = \
-	tool_curves.png \
-	tool_curves_cursor.png
+	tool_example.png \
+	tool_example_cursor.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

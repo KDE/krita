@@ -37,29 +37,29 @@
 #include <kis_types.h>
 #include <kis_tool_registry.h>
 
-#include "tool_curves.h"
-#include "kis_tool_curves.h"
+#include "tool_example.h"
+#include "kis_tool_example.h"
 
 
-typedef KGenericFactory<ToolCurves> ToolCurvesFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolcurves, ToolCurvesFactory( "krita" ) )
+typedef KGenericFactory<ToolExample> ToolExampleFactory;
+K_EXPORT_COMPONENT_FACTORY( kritatoolcurves, ToolExampleFactory( "krita" ) )
 
 
-ToolCurves::ToolCurves(QObject *parent, const char *name, const QStringList &)
+ToolExample::ToolExample(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-    setInstance(ToolCurvesFactory::instance());
+    setInstance(ToolExampleFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );
-        r->add(new KisToolCurvesFactory());
+        r->add(new KisToolExampleFactory());
     }
 
 }
 
-ToolCurves::~ToolCurves()
+ToolExample::~ToolExample()
 {
 }
 
-#include "tool_curves.moc"
+#include "tool_example.moc"

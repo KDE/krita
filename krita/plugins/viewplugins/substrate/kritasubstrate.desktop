@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Substrate
+Name[es]=Sustrato
+Name[et]=Substraat
+Name[pt]=Substrato
+Name[pt_BR]=Substrato
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritasubstrate

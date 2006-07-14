@@ -1,8 +1,16 @@
 [Desktop Entry]
 Comment=Transform an image in a lenscorrection
+Comment[es]=Transforma una imagen en un corrección de lente
+Comment[et]=Pildi teisendamine läätsekorrektsiooniga
+Comment[pt]=Transformar uma imagem numa correcção de lentes
+Comment[pt_BR]=Transformar uma imagem numa correcção de lentes
 Encoding=UTF-8
 Icon=
 Name=LensCorrection Filter
+Name[es]=Filtro de corrección de lente
+Name[et]=Läätsekorrektsiooni filter
+Name[pt]=Filtro de Correcção de Lentes
+Name[pt_BR]=Filtro de Correcção de Lentes
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritalenscorrectionfilter

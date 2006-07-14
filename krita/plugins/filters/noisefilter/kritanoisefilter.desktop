@@ -1,7 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Noise Filter
+Name[es]=Filtro de ruido
+Name[et]=Mürafilter
+Name[pt]=Filtro de Ruído
+Name[pt_BR]=Filtro de Ruído
 Comment=Add noise to an image
+Comment[es]=Añadir ruido a una imagen
+Comment[et]=Müra lisamine pildile
+Comment[pt]=Adiciona ruído a uma imagem
+Comment[pt_BR]=Adiciona ruído a uma imagem
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritanoisefilter

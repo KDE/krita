@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Curves Tool
+Name[es]=Herramienta Curvas
+Name[et]=Kõverate tööriist
+Name[pt]=Ferramenta de Curvas
+Name[pt_BR]=Ferramenta de Curvas
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolcurves

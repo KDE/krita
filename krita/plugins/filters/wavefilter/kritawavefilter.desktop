@@ -1,8 +1,16 @@
 [Desktop Entry]
 Comment=Transform an image in a wave
+Comment[es]=Transformar una imagen en una onda
+Comment[et]=Pildi teisendamine lainefiltris
+Comment[pt]=Transforma uma imagem numa onda
+Comment[pt_BR]=Transforma uma imagem numa onda
 Encoding=UTF-8
 Icon=
 Name=Wave Filter
+Name[es]=Filtro de onda
+Name[et]=Lainefilter
+Name[pt]=Filtro de Onda
+Name[pt_BR]=Filtro de Onda
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritawavefilter

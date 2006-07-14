@@ -10,7 +10,7 @@ INCLUDES =  -I$(srcdir)/../../../sdk \
 	$(all_includes)
 
 kritatoolcurves_la_SOURCES = \
-	kis_curves_framework.cc \
+	kis_curve_framework.cc \
 	kis_tool_curve.cc \
 	wdg_tool_example.ui \
         tool_example.cc \
@@ -20,7 +20,7 @@ kritatoolcurves_la_SOURCES = \
 kde_module_LTLIBRARIES = kritatoolcurves.la
 
 noinst_HEADERS = \
-	kis_curves_framework.h \
+	kis_curve_framework.h \
 	kis_tool_curve.h \
 	tool_example.h \
 	kis_tool_example.h

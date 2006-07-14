@@ -17,6 +17,7 @@
   Boston, MA 02110-1301, USA.
 */
 
+#include <QtDebug>
 #include <QHeaderView>
 #include <QHelpEvent>
 #include "KoDocumentSectionDelegate.h"

@@ -48,7 +48,7 @@ class KoDocumentSectionDelegate::ToolTip: public QFrame
         ToolTip();
         ~ToolTip();
         void update( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index );
-        void updateDocument( const QModelIndex &index );
+        void updateDocument( const QStyleOptionViewItem &option, const QModelIndex &index );
         void updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option );
 
         QTextDocument m_document;
@@ -179,7 +179,6 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
 
     else if( e->type() == QEvent::ToolTip )
     {
-        qDebug() << "helpevent";
         QHelpEvent *he = static_cast<QHelpEvent*>( e );
         ToolTip::showTip( d->view, he->pos(), option, index );
         return true;
@@ -404,12 +403,12 @@ KoDocumentSectionDelegate::ToolTip::~ToolTip()
 
 void KoDocumentSectionDelegate::ToolTip::update( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index )
 {
-    updateDocument( index );
+    updateDocument( option, index );
     updatePosition( widget, pos, option );
     show();
 }
 
-void KoDocumentSectionDelegate::ToolTip::updateDocument( const QModelIndex &index )
+void KoDocumentSectionDelegate::ToolTip::updateDocument( const QStyleOptionViewItem &option, const QModelIndex &index )
 {
     m_document.clear();
 
@@ -428,7 +427,9 @@ void KoDocumentSectionDelegate::ToolTip::updateDocument( const QModelIndex &inde
         rows.append( row.arg( i18n( "%1:", properties[i].name ) ).arg( value ) );
     }
 
-    const QString image = "<img src=\"data:thumbnail\">";
+    rows = QString( "<table>%1</table>" ).arg( rows );
+
+    const QString image = QString( "<table border=\"1\"><tr><td><img src=\"data:thumbnail\"></td></tr></table>" );
     const QString body = QString( "<h3 align=\"center\">%1</h3>" ).arg( name )
                        + QString( "<table><tr><td>%1</td><td>%2</td></tr></table>" ).arg( image ).arg( rows );
     const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
@@ -442,6 +443,7 @@ void KoDocumentSectionDelegate::ToolTip::updatePosition( QWidget *widget, const 
     const QRect drect = QApplication::desktop()->availableGeometry( widget );
     const QSize size = sizeHint();
     const int width = size.width(), height = size.height();
+    const QPoint gpos = widget->mapToGlobal( pos );
     const QRect irect( widget->mapToGlobal( option.rect.topLeft() ), option.rect.size() );
 
     int y;
@@ -450,9 +452,11 @@ void KoDocumentSectionDelegate::ToolTip::updatePosition( QWidget *widget, const 
     else
         y = qMax( drect.top(), irect.top() - height );
 
-    int x = qMax( drect.x(), widget->mapToGlobal( pos ).x() - width/2 );
-    if( x + width > drect.right() )
-        x = drect.right() - width;
+    int x;
+    if( gpos.x() + width < drect.right() )
+        x = gpos.x();
+    else
+        x = qMax( drect.left(), gpos.x() - width );
 
     move( x, y );
 }
@@ -467,26 +471,25 @@ void KoDocumentSectionDelegate::ToolTip::paintEvent( QPaintEvent* )
     QPainter p( this );
     p.initFrom( this );
     m_document.drawContents( &p, rect() );
+    p.drawRect( 0, 0, width() - 1, height() - 1 );
 }
 
 bool KoDocumentSectionDelegate::ToolTip::eventFilter( QObject *object, QEvent *event )
 {
-    if( object == QApplication::instance() )
-        switch( event->type() )
-        {
-            case QEvent::KeyPress:
-            case QEvent::KeyRelease:
-            case QEvent::MouseButtonPress:
-            case QEvent::MouseButtonRelease:
-            case QEvent::FocusIn:
-            case QEvent::FocusOut:
-            case QEvent::Enter:
-            case QEvent::Leave:
-                hide();
-                deleteLater();
-                return true;
-            default: break;
-        }
+    switch( event->type() )
+    {
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::FocusIn:
+        case QEvent::FocusOut:
+        case QEvent::Enter:
+        case QEvent::Leave:
+            hide();
+            deleteLater();
+        default: break;
+    }
 
     return super::eventFilter( object, event );
 }

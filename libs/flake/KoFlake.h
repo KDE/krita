@@ -24,21 +24,21 @@ class KoFlake {
 public:
     /// the selection type for KoSelection::selectedObjects()
     enum SelectionType {
-        FullSelection,
-        StrippedSelection
+        FullSelection,      ///< Create a list of all objects in the selection
+        StrippedSelection   ///< Create a stripped list, without children if the container is also in the list.
     };
 
     /// Enum determining which handle is meant, used in KoInteractionTool
     enum SelectionHandle {
-        TopMiddleHandle,
-        TopRightHandle,
-        RightMiddleHandle,
-        BottomRightHandle,
-        BottomMiddleHandle,
-        BottomLeftHandle,
-        LeftMiddleHandle,
-        TopLeftHandle,
-        NoHandle
+        TopMiddleHandle,    ///< The handle that is at the top - center of a selection
+        TopRightHandle,     ///< The handle that is at the top - right of  a selection
+        RightMiddleHandle,  ///< The handle that is at the right - center of a selection
+        BottomRightHandle,  ///< The handle that is at the bottom right of a selection
+        BottomMiddleHandle, ///< The handle that is at the bottom center of a selection
+        BottomLeftHandle,   ///< The handle that is at the bottom left of a selection
+        LeftMiddleHandle,   ///< The handle that is at the left center of a selection
+        TopLeftHandle,      ///< The handle that is at the top left of a selection
+        NoHandle            ///< Value to indicate no handle
     };
 
 private:

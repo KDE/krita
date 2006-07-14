@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -29,15 +28,50 @@
 
 class KoShape;
 
+/**
+ * Base widget for shape-configuration panels.
+ * This is an interface type class used by classes that intend to provide
+ * a GUI for configuring newly created shapes as created by a KoShapeFactory.
+ *
+ * Every time after a shape is created the KoShapeFactory for that shape-type
+ * will be queried for all the config widgets; both factory specific as well as
+ * those set by the hosting application.
+ * A dialog will be shown with all those panels, each extending this class.
+ * The framework will then call open() to populate the widget with data from
+ * the param shape.  After the user ok-ed the dialog the save() will be called
+ * to allow the widget to apply all settings from the widget to the shape.
+ * Next, the createAction will be called which expects an action to be created
+ * with an execute() and unexecute() to redo or undo the changes the user made
+ * in this specific dialog.
+ */
 class FLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget {
 public:
+    /**
+     * Default constructor
+     */
     KoShapeConfigWidgetBase() {};
     virtual ~KoShapeConfigWidgetBase() {}
 
+    /**
+     * Open the argument shape by interpreting the data and setting that data on this
+     * widget.
+     * @param shape the shape that is to be queried for the data this widget can edit.
+     */
     virtual void open(KoShape *shape) = 0;
+    /**
+     * Save the data  of this widget to the shape passed to open earlier to
+     * apply any user changed options.
+     * Called by the tool that created the shape.
+     */
     virtual void save() = 0;
     virtual KAction *createAction() = 0;
 
+    /**
+     * Overwrite this method to set the application unit type and update all unit-widgets
+     * in this panel.
+     * Called by the tool that created the shape using KoCavasBase::unit()
+     * @param unit the new unit to show data in.
+     */
     virtual void setUnit(KoUnit::Unit unit) { Q_UNUSED(unit); }
 };
 

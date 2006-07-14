@@ -1,7 +1,7 @@
 /*
- *  kis_tool_star.cc -- part of Krita
+ *  kis_tool_example.cc -- part of Krita
  *
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-/* Just an initial commit. Emanuele Tamponi */
 
 
 #include <qpainter.h>
@@ -49,7 +47,6 @@
 #include "kis_curve_framework.h"
 
 #include "kis_tool_example.h"
-#include "wdg_tool_example.h"
 
 
 class KisCurveExample : public KisCurve {
@@ -245,57 +242,6 @@ void KisToolExample::move(KisMoveEvent *event)
     }
 }
 
-KisPoint KisToolExample::mouseOnHandle(KisPoint pos)
-{
-    KisCurve pivots = m_curve->pivots();
-
-    for (KisCurve::iterator it = pivots.begin(); it != pivots.end(); it++) {
-        if (QRect((*it).point().toQPoint()-QPoint(4,4),
-                  (*it).point().toQPoint()+QPoint(4,4)).contains(pos.toQPoint()))
-            return (*it).point();
-    }
-
-    return KisPoint(-1.0,-1.0);
-}
-/*
-void KisToolExample::predraw()
-{
-    KisCanvasPainter *gc;
-    if (m_subject) {
-        KisCanvasController *controller = m_subject->canvasController();
-        KisCanvas *canvas = controller->kiscanvas();
-        gc = new KisCanvasPainter(canvas);
-    } else
-        return;
-
-    if (!m_subject || !m_currentImage)
-        return;
-
-    QPen pen = QPen(Qt::white, 0, Qt::SolidLine);
-
-    gc->setPen(pen);
-    gc->setRasterOp(Qt::XorROP);
-
-    KisCanvasController *controller = m_subject->canvasController();
-    KisPoint start, end;
-    QPoint pos1, pos2;
-    KisCurve::iterator it;
-
-    controller->kiscanvas()->repaint();
-    for (it = m_curve->begin(); it != (m_curve->end()); it++) {
-        pos1 = controller->windowToView((*it).point().toQPoint());
-        if ((*it).isPivot()) {
-            if ((*it).isSelected())
-                gc->fillRect(pos1.x()-4,pos1.y()-4,9,9,Qt::white);
-            else
-                gc->fillRect(pos1.x()-4,pos1.y()-4,9,9,Qt::gray);
-        } else
-            gc->drawPoint(pos1);
-    }
-    
-    delete gc;
-}
-*/
 void KisToolExample::buttonRelease(KisButtonReleaseEvent *)
 {
     if (!m_subject || !m_currentImage)
@@ -314,47 +260,7 @@ void KisToolExample::doubleClick(KisDoubleClickEvent *)
         m_editing = false;
     }
 }
-/*
-void KisToolExample::paint(KisCanvasPainter&)
-{
-    predraw();
-}
 
-void KisToolExample::paint(KisCanvasPainter&, const QRect&)
-{
-    predraw();
-}
-
-void KisToolExample::draw()
-{
-    m_dragging = false;
-
-    KisPaintDeviceSP device = m_currentImage->activeDevice ();
-    if (!device) return;
-    
-    KisPainter painter (device);
-    if (m_currentImage->undo()) painter.beginTransaction (i18n ("Example of curve"));
-
-    painter.setPaintColor(m_subject->fgColor());
-    painter.setBrush(m_subject->currentBrush());
-    painter.setOpacity(m_opacity);
-    painter.setCompositeOp(m_compositeOp);
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
-    painter.setPaintOp(op); // Painter takes ownership
-
-    for( KisCurve::iterator it = m_curve->begin(); it != (m_curve->end()--); it = it.nextPivot() )
-        painter.paintLine((*it).point(), PRESSURE_DEFAULT, 0, 0, (*it.nextPivot()).point(), PRESSURE_DEFAULT, 0, 0);
-
-    device->setDirty( painter.dirtyRect() );
-    notifyModified();
-
-    if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
-    }
-
-    m_subject->canvasController()->kiscanvas()->repaint();
-}
-*/
 void KisToolExample::setup(KActionCollection *collection)
 {
     m_action = static_cast<KRadioAction *>(collection->action(name()));

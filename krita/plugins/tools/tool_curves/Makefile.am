@@ -12,9 +12,10 @@ INCLUDES =  -I$(srcdir)/../../../sdk \
 kritatoolcurves_la_SOURCES = \
 	kis_curve_framework.cc \
 	kis_tool_curve.cc \
+		tool_curves.cc \
 	wdg_tool_example.ui \
-        tool_example.cc \
-	kis_tool_example.cc
+	kis_tool_example.cc \
+	kis_tool_bezier.cc
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritatoolcurves.la
@@ -22,8 +23,9 @@ kde_module_LTLIBRARIES = kritatoolcurves.la
 noinst_HEADERS = \
 	kis_curve_framework.h \
 	kis_tool_curve.h \
-	tool_example.h \
-	kis_tool_example.h
+	tool_curves.h \
+	kis_tool_example.h \
+	kis_tool_bezier.h
 
 kritatoolcurves_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritatoolcurves_la_LIBADD =  ../../../libkritacommon.la
@@ -34,7 +36,9 @@ KDE_OPTIONS = nofinal
 
 kritapics_DATA = \
 	tool_example.png \
-	tool_example_cursor.png
+	tool_example_cursor.png \
+	tool_bezier.png \
+	tool_bezier_cursor.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

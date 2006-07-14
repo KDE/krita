@@ -1,7 +1,7 @@
 /*
- * tool_star.cc -- Part of Krita
+ *  tool_bezier.cc -- part of Krita
  *
- * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-/* Initial Commit from tool_star. Emanuele Tamponi */
 
 #include <stdlib.h>
 #include <vector>
@@ -37,29 +35,31 @@
 #include <kis_types.h>
 #include <kis_tool_registry.h>
 
-#include "tool_example.h"
+#include "tool_curves.h"
+#include "kis_tool_bezier.h"
 #include "kis_tool_example.h"
 
 
-typedef KGenericFactory<ToolExample> ToolExampleFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolcurves, ToolExampleFactory( "krita" ) )
+typedef KGenericFactory<ToolCurves> ToolCurvesFactory;
+K_EXPORT_COMPONENT_FACTORY( kritatoolcurves, ToolCurvesFactory( "krita" ) )
 
 
-ToolExample::ToolExample(QObject *parent, const char *name, const QStringList &)
+ToolCurves::ToolCurves(QObject *parent, const char *name, const QStringList &)
     : KParts::Plugin(parent, name)
 {
-    setInstance(ToolExampleFactory::instance());
+    setInstance(ToolCurvesFactory::instance());
 
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );
+        r->add(new KisToolBezierFactory());
         r->add(new KisToolExampleFactory());
     }
 
 }
 
-ToolExample::~ToolExample()
+ToolCurves::~ToolCurves()
 {
 }
 
-#include "tool_example.moc"
+#include "tool_curves.moc"

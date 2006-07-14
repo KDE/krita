@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  tool_bezier.h -- part of Krita
+ *
+ *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,29 +18,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-/* Initial commit using tool_star. Emanuele Tamponi */
-
-#ifndef TOOL_EXAMPLE_H_
-#define TOOL_EXAMPLE_H_
+#ifndef TOOL_BEZIER_H_
+#define TOOL_BEZIER_H_
 
 #include <kparts/plugin.h>
-
-class KisView;
 
 /**
  * A module that provides a star tool.
  */
-class ToolExample : public KParts::Plugin
+class ToolCurves : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    ToolExample(QObject *parent, const char *name, const QStringList &);
-    virtual ~ToolExample();
-
-private:
-
-    KisView * m_view;
+    ToolCurves(QObject *parent, const char *name, const QStringList &);
+    virtual ~ToolCurves();
 
 };
 
-#endif // TOOL_EXAMPLE_H__
+#endif // TOOL_BEZIER_H__

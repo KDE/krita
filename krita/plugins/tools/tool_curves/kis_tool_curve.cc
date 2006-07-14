@@ -1,7 +1,7 @@
 /*
- *  kis_tool_star.cc -- part of Krita
+ *  kis_tool_curve.cc -- part of Krita
  *
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-/* Just an initial commit. Emanuele Tamponi */
 
 
 #include <qpainter.h>
@@ -166,6 +164,8 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
             gc.drawLine(pos1,pos2);
         }
         break;
+    default:
+        point += 1;
     }
 
     return point;
@@ -212,17 +212,19 @@ void KisToolCurve::paintCurve()
 
 KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iterator point)
 {
+    KisCurve::iterator next = point; next+=1;
     switch ((*point).hint()) {
     case POINTHINT:
         painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);
         break;
     case LINEHINT:
-        KisCurve::iterator next = point; next+=1;
         if (next != m_curve->end())
             painter.paintLine((*point++).point(), PRESSURE_DEFAULT, 0, 0, (*next).point(), PRESSURE_DEFAULT, 0, 0);
         else
             painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);
         break;
+    default:
+        point += 1;
     }
 
     return point;

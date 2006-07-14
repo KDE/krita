@@ -1,5 +1,5 @@
 /*
- *  kis_tool_curve.h - part of Krita
+ *  kis_tool_curve.h -- part of Krita
  *
  *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *

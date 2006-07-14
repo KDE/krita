@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-/* Initial Commit for the Curves Framework. E.T. */
-
 #ifndef KIS_CURVE_FRAMEWORK_H_
 #define KIS_CURVE_FRAMEWORK_H_
+
+#include "kis_point.h"
 
 const int POINTHINT = 0;
 const int LINEHINT = 1;
@@ -78,6 +78,7 @@ class FriendIterator;
 
 class KisCurve {
 
+protected:
     /* I need it to be mutable because my iterator needs to access
        m_curve's end() and begin() functions using a const KisCurve
        (see below) */
@@ -141,6 +142,8 @@ public:
     virtual void calculateCurve(const KisPoint&, const KisPoint&, iterator);
     virtual void calculateCurve(const CurvePoint&, const CurvePoint&, iterator);
     virtual void calculateCurve(iterator, iterator, iterator);
+    virtual void calculateCurve(iterator*);
+    virtual void calculateCurve();
 
     virtual void selectPivot(const CurvePoint&, bool = true);
     virtual void selectPivot(const KisPoint&, bool = true);
@@ -290,5 +293,7 @@ inline KisCurve::iterator KisCurve::find (iterator it, const KisPoint& pt)
 inline void KisCurve::calculateCurve(const KisPoint&, const KisPoint&, KisCurve::iterator) {return;}
 inline void KisCurve::calculateCurve(const CurvePoint&, const CurvePoint&, KisCurve::iterator) {return;}
 inline void KisCurve::calculateCurve(KisCurve::iterator, KisCurve::iterator, KisCurve::iterator) {return;}
+inline void KisCurve::calculateCurve(KisCurve::iterator*) {return;}
+inline void KisCurve::calculateCurve() {return;}
 
 #endif // KIS_CURVE_FRAMEWORK_H_

@@ -1,5 +1,5 @@
 /*
- *  kis_tool_example.h -- part of Krita
+ *  kis_tool_bezier.h -- part of Krita
  *
  *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *
@@ -18,9 +18,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TOOL_EXAMPLE_H_
-#define KIS_TOOL_EXAMPLE_H_
+#ifndef KIS_TOOL_BEZIER_H_
+#define KIS_TOOL_BEZIER_H_
 
+#include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 #include "kis_point.h"
 
@@ -30,21 +31,23 @@ class KisCanvas;
 class KisCurve;
 class KisPainter;
 class KisPoint;
-class WdgToolExample;
 
-class KisToolExample : public KisToolCurve {
+class KisToolBezier : public KisToolCurve {
 
     typedef KisToolCurve super;
     Q_OBJECT
 
-    KisPoint m_start;
-    KisPoint m_end;
+    CurvePoint m_origin;
+    CurvePoint m_destination;
+    CurvePoint m_control1;
+    CurvePoint m_control2;
+    KisCurve::iterator m_iterator;
     bool m_dragging;
     bool m_editing;
 
 public:
-    KisToolExample();
-    virtual ~KisToolExample();
+    KisToolBezier();
+    virtual ~KisToolBezier();
 
     //
     // KisCanvasObserver interface
@@ -62,31 +65,36 @@ public:
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
     virtual void doubleClick(KisDoubleClickEvent *);
-    virtual void keyPress(QKeyEvent *);
+//    virtual void keyPress(QKeyEvent *);
 
 public slots:
 
     void deactivate();
+
+protected:
+
+    virtual void draw() {draw(*m_curve);}
+    virtual void draw(const KisCurve& curve);
 
 };
 
 
 #include "kis_tool_factory.h"
 
-class KisToolExampleFactory : public KisToolFactory {
+class KisToolBezierFactory : public KisToolFactory {
     typedef KisToolFactory super;
 public:
-    KisToolExampleFactory() : super() {};
-    virtual ~KisToolExampleFactory(){};
+    KisToolBezierFactory() : super() {};
+    virtual ~KisToolBezierFactory(){};
 
     virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolExample();
+        KisTool * t =  new KisToolBezier();
         Q_CHECK_PTR(t);
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("exampleshape", i18n("Example Tool")); }
+    virtual KisID id() { return KisID("beziershape", i18n("Bezier Tool")); }
 };
 
 
-#endif //__KIS_TOOL_EXAMPLE_H__
+#endif //__KIS_TOOL_BEZIER_H__

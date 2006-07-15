@@ -42,12 +42,6 @@ public:
     virtual KisLayerSP clone() const;
 public:
 
-    // Called when the layer is made active
-    virtual void activate() {};
-
-    // Called when another layer is made active
-    virtual void deactivate() {};
-
     virtual qint32 x() const;
     virtual void setX(qint32 x);
 

@@ -47,7 +47,10 @@ class KoDocumentSectionModel: public QAbstractItemModel
         ImageRole,
 
         /// A list of properties the part has.
-        PropertiesRole
+        PropertiesRole,
+
+        /// Whether the section is the active one
+        ActiveRole
     };
 
     /// describes a single property of a document section

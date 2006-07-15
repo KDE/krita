@@ -48,7 +48,7 @@ class KoDocumentSectionDelegate::ToolTip: public QFrame
         ToolTip();
         ~ToolTip();
         void update( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index );
-        void updateDocument( const QStyleOptionViewItem &option, const QModelIndex &index );
+        void updateDocument( const QModelIndex &index );
         void updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option );
 
         QTextDocument m_document;
@@ -79,6 +79,7 @@ KoDocumentSectionDelegate::KoDocumentSectionDelegate( QAbstractItemView *view, Q
 {
     d->view = view;
     view->setItemDelegate( this );
+    QApplication::instance()->installEventFilter( this );
 }
 
 KoDocumentSectionDelegate::~KoDocumentSectionDelegate()
@@ -137,12 +138,6 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
         if( me->button() != Qt::LeftButton )
             return false; //TODO
 
-        if( d->edit )
-        {
-            emit closeEditor( d->edit );
-            qDebug() << "why doesn't this event ever get received??";
-        }
-
         const QRect ir = iconsRect( option, index ), tr = textRect( option, index );
 
         if( ir.contains( me->pos() ) )
@@ -167,13 +162,13 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
             return true;
         }
 
-        else if( tr.contains( me->pos() ) )
+        else if( tr.contains( me->pos() ) && ( option.state & QStyle::State_HasFocus ) )
         {
             d->view->edit( index );
             return true;
         }
 
-        if ( !(me->modifiers() & Qt::ControlModifier) && !(me->modifiers() & Qt::ShiftModifier) )
+        if( !( me->modifiers() & Qt::ControlModifier) && !( me->modifiers() & Qt::ShiftModifier ) )
             d->view->setCurrentIndex( index );
     }
 
@@ -221,8 +216,15 @@ void KoDocumentSectionDelegate::updateEditorGeometry( QWidget *widget, const QSt
 
 bool KoDocumentSectionDelegate::eventFilter( QObject *object, QEvent *event )
 {
+    if( event->type() == QEvent::MouseButtonPress && d->edit )
+    {
+        QMouseEvent *me = static_cast<QMouseEvent*>( event );
+        if( !QRect( d->edit->mapToGlobal( QPoint() ), d->edit->size() ).contains( me->globalPos() ) )
+            emit closeEditor( d->edit );
+    }
+
     QLineEdit *edit = qobject_cast<QLineEdit*>( object );
-    if( edit && event->type() == QEvent::KeyPress )
+    if( edit && edit == d->edit && event->type() == QEvent::KeyPress )
     {
         QKeyEvent *ke = static_cast<QKeyEvent*>( event );
         switch( ke->key() )
@@ -246,6 +248,7 @@ bool KoDocumentSectionDelegate::eventFilter( QObject *object, QEvent *event )
             default: break;
         }
     }
+
     return super::eventFilter( object, event );
 }
 
@@ -403,12 +406,12 @@ KoDocumentSectionDelegate::ToolTip::~ToolTip()
 
 void KoDocumentSectionDelegate::ToolTip::update( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index )
 {
-    updateDocument( option, index );
+    updateDocument( index );
     updatePosition( widget, pos, option );
     show();
 }
 
-void KoDocumentSectionDelegate::ToolTip::updateDocument( const QStyleOptionViewItem &option, const QModelIndex &index )
+void KoDocumentSectionDelegate::ToolTip::updateDocument( const QModelIndex &index )
 {
     m_document.clear();
 

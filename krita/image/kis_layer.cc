@@ -324,6 +324,30 @@ void KisLayer::setProperties( const PropertyList &properties )
     setLocked( properties.at( 1 ).state.toBool() );
 }
 
+void KisLayer::activate()
+{
+    notifyPropertyChanged(this);
+}
+
+void KisLayer::deactivate()
+{
+    notifyPropertyChanged(this);
+}
+
+bool KisLayer::isActive() const
+{
+    if (image())
+        return this == image()->activeLayer().data();
+    else
+        return false;
+}
+
+void KisLayer::setActive()
+{
+    if (image())
+        image()->activate(KisLayerSP(this));
+}
+
 void KisLayer::setClean(const QRect & rect)
 {
     if (m_dirtyRect.isValid() && rect.isValid()) {
@@ -704,6 +728,7 @@ QVariant KisLayer::data(const QModelIndex &index, int role) const
         case ThumbnailRole: return layer->createThumbnail(64, 64);
         case LargeThumbnailRole: return layer->createThumbnail(200, 200);
         case PropertiesRole: return QVariant::fromValue(layer->properties());
+        case ActiveRole: return layer->isActive();
         default: return QVariant(); //TODO
     }
 }
@@ -723,6 +748,7 @@ Qt::ItemFlags KisLayer::flags(const QModelIndex &index) const
 
 bool KisLayer::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    kDebug() << "setData() " << index.isValid() << " " << index.row() << " " << index.column() << " " << index.internalPointer() << " " << value << " " << role << endl;
     if (!index.isValid())
         return false;
     Q_ASSERT(index.model() == this);
@@ -737,8 +763,14 @@ bool KisLayer::setData(const QModelIndex &index, const QVariant &value, int role
             layer->setName(value.toString());
             return true;
         case PropertiesRole:
-            layer->setProperties( value.value<PropertyList>() );
+            layer->setProperties(value.value<PropertyList>());
             return true;
+        case ActiveRole:
+            if (value.toBool())
+            {
+                layer->setActive();
+                return true;
+            }
     }
 
     return false;

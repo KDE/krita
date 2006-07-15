@@ -81,12 +81,6 @@ public:
     virtual PropertyList properties() const;
     virtual KisLayerSP clone() const;
 
-    /// Called when the layer is made active
-    virtual void activate() {}
-
-    /// Called when another layer is made inactive
-    virtual void deactivate() {}
-
     /// Returns the childDoc so that we can access the doc from other places, if need be (KisDoc)
     virtual KisChildDoc* childDoc() const { return m_doc; }
 

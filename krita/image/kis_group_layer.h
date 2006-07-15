@@ -61,10 +61,6 @@ public:
      */
     virtual void setDirty(const QRect & rect, bool propagate = true);
 
-    virtual void activate() {};
-
-    virtual void deactivate() {};
-
     virtual qint32 x() const;
     virtual void setX(qint32);
 

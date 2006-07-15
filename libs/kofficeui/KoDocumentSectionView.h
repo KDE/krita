@@ -23,6 +23,8 @@
 #include <QTreeView>
 #include <koffice_export.h>
 
+class KoDocumentSectionModel;
+
 class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
 {
     typedef QTreeView super;
@@ -35,7 +37,12 @@ class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
     protected:
         virtual bool event( QEvent *event );
 
+    protected slots:
+        virtual void currentChanged( const QModelIndex &current, const QModelIndex &previous );
+        virtual void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
+
     private:
+        typedef KoDocumentSectionModel Model;
         class Private;
         Private* const d;
 };

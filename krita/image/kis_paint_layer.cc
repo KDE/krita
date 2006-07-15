@@ -69,7 +69,7 @@ void KisPaintLayer::init()
 {
     m_paintdev->startBackgroundFilters();
     connect(m_paintdev.data(), SIGNAL(colorSpaceChanged(KoColorSpace*)), this, SLOT(slotColorSpaceChanged()));
-    connect(m_paintdev.data(), SIGNAL(profileChanged(KoProfile*)), this, SLOT(slotColorSpaceChanged()));
+    connect(m_paintdev.data(), SIGNAL(profileChanged(KoColorProfile*)), this, SLOT(slotColorSpaceChanged()));
 }
 
 QIcon KisPaintLayer::icon() const

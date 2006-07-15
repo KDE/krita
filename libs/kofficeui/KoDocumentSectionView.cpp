@@ -20,7 +20,9 @@
 #include <QtDebug>
 #include <QHeaderView>
 #include <QHelpEvent>
+#include <QMouseEvent>
 #include "KoDocumentSectionDelegate.h"
+#include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionView.h"
 
 class KoDocumentSectionView::Private
@@ -45,20 +47,42 @@ KoDocumentSectionView::~KoDocumentSectionView()
 
 bool KoDocumentSectionView::event( QEvent *e )
 {
-    if( e->type() == QEvent::ToolTip && model() )
+    if( ( e->type() == QEvent::ToolTip || e->type() == QEvent::MouseButtonPress ) && model() )
     {
-        QHelpEvent *he = static_cast<QHelpEvent*>( e );
-        if( !indexAt( he->pos() ).isValid() )
+        const QPoint pos = e->type() == QEvent::ToolTip
+                         ? static_cast<QHelpEvent*>( e )->pos()
+                         : static_cast<QMouseEvent*>( e )->pos();
+        if( !indexAt( pos ).isValid() )
             return super::event( e );
-        QModelIndex index = model()->buddy( indexAt( he->pos() ) );
+        QModelIndex index = model()->buddy( indexAt( pos ) );
         QStyleOptionViewItem option = viewOptions();
         option.rect = visualRect( index );
         if( index == currentIndex() )
             option.state |= QStyle::State_HasFocus;
+
         return d->delegate->editorEvent( e, model(), option, index );
     }
-    else
-        return super::event( e );
+
+    return super::event( e );
+}
+
+void KoDocumentSectionView::currentChanged( const QModelIndex &current, const QModelIndex &previous )
+{
+    super::currentChanged( current, previous );
+    if( current != previous ) //hack?
+        const_cast<QAbstractItemModel*>( current.model() )->setData( current, true, Model::ActiveRole );
+}
+
+void KoDocumentSectionView::dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
+{
+    super::dataChanged( topLeft, bottomRight );
+    for( int x = topLeft.row(); x <= bottomRight.row(); ++x )
+        for( int y = topLeft.column(); y <= bottomRight.column(); ++y )
+            if( topLeft.sibling( x, y ).data( Model::ActiveRole ).toBool() )
+            {
+                setCurrentIndex( topLeft.sibling( x, y ) );
+                return;
+            }
 }
 
 #include "KoDocumentSectionView.moc"

@@ -308,8 +308,8 @@ LayerList::LayerList( QWidget *parent, const char *name )
 
     connect( this, SIGNAL( itemRenamed( Q3ListViewItem*, const QString&, int ) ),
                  SLOT( slotItemRenamed( Q3ListViewItem*, const QString&, int ) ) );
-    connect( this, SIGNAL( moved( QList<Q3ListViewItem*>&, QList<Q3ListViewItem*>&, QList<Q3ListViewItem*>& ) ),
-             SLOT( slotItemMoved( QList<Q3ListViewItem*>&, QList<Q3ListViewItem*>&, QList<Q3ListViewItem*>& ) ) );
+    connect( this, SIGNAL( moved( Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>& ) ),
+             SLOT( slotItemMoved( Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>& ) ) );
     connect( this, SIGNAL( onItem( Q3ListViewItem* ) ), SLOT( hideTip() ) );
     connect( this, SIGNAL( onViewport() ), SLOT( hideTip() ) );
 }
@@ -807,7 +807,7 @@ void LayerList::slotItemRenamed( Q3ListViewItem *item, const QString &text, int 
     emit displayNameChanged( static_cast<LayerItem*>( item )->id(), text );
 }
 
-void LayerList::slotItemMoved( QList<Q3ListViewItem*> &items, QList<Q3ListViewItem*> &/*afterBefore*/, QList<Q3ListViewItem*> &afterNow )
+void LayerList::slotItemMoved( Q3PtrList<Q3ListViewItem> &items, Q3PtrList<Q3ListViewItem> &/*afterBefore*/, Q3PtrList<Q3ListViewItem> &afterNow )
 {
     for( int i = 0, n = items.count(); i < n; ++i )
     {

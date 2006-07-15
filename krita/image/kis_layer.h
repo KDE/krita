@@ -52,6 +52,12 @@ public:
     KisLayer(const KisLayer& rhs);
     virtual ~KisLayer();
 
+    /// Whether this layer is the active one in its image
+    bool isActive() const;
+
+    /// Sets this layer as the active one
+    void setActive();
+
     virtual QIcon icon() const = 0;
 
     virtual PropertyList properties() const;
@@ -157,11 +163,17 @@ public:
     virtual int numLayers(int type = 0) const;
 
 public:
-    /// Called when the layer is made active
-    virtual void activate() {};
+    /**
+     * Called when the layer is made active.
+     * Be sure to call the superclass's implementation when reimplementing.
+     */
+    virtual void activate();
 
-    /// Called when another layer is made active
-    virtual void deactivate() {};
+    /**
+     * Called when the layer is made active.
+     * Be sure to call the superclass's implementation when reimplementing.
+     */
+    virtual void deactivate();
 
 public:
     virtual qint32 x() const = 0;

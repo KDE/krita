@@ -153,7 +153,7 @@ private:
 
 private slots:
     void slotItemRenamed( Q3ListViewItem *item, const QString &text, int col );
-    void slotItemMoved( QList<Q3ListViewItem *>&, QList<Q3ListViewItem *>&, QList<Q3ListViewItem *>& );
+    void slotItemMoved( Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>&, Q3PtrList<Q3ListViewItem>& );
     void showContextMenu();
     void hideTip();
     void maybeTip();

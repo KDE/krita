@@ -179,7 +179,7 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->numRows()-1, 1);
     }
     else
-        m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->numRows(), 0);
+        m_optionWidgetLayout->addMultiCellWidget(control, m_optionWidgetLayout->numRows(), m_optionWidgetLayout->numRows(), 0, 1);
 }
 
 void KisToolPaint::slotSetOpacity(int opacityPerCent)

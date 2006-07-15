@@ -85,7 +85,7 @@ public:
      *
      * @return objects intersecting the rect
      */
-    QList<T> intersects( const QRectF& rect );
+    QList<T> intersects( const QRectF& rect ) const;
 
     /**
      * @brief Find all data item which contain the point
@@ -94,19 +94,35 @@ public:
      *
      * @return objects which contain the point
      */
-    QList<T> contains( const QPointF &point );
+    QList<T> contains( const QPointF &point ) const;
+
+    /**
+     * @brief Find all data rectangles
+     * The order is guaranteed to be the same as that used by values().
+     *
+     * @return a list containing all the data rectangles used in the tree
+     */
+    QList<QRectF> keys() const;
+
+    /**
+     * @brief Find all data items
+     * The order is guaranteed to be the same as that used by keys().
+     *
+     * @return a list containing all the data rectangles used in the tree
+     */
+    QList<T> values() const;
 
     /**
      * @brief Paint the tree
      *
      * @param p painter which should be used for painting
      */
-    void paint( QPainter & p );
+    void paint( QPainter & p ) const;
 
     /**
      * @brief Print the tree using qdebug
      */
-    void debug();
+    void debug() const;
 
 protected:
     class NoneLeafNode;
@@ -129,38 +145,41 @@ protected:
         virtual LeafNode * chooseLeaf( const QRectF& bb ) = 0;
         virtual NoneLeafNode * chooseNode( const QRectF& bb, int level ) = 0;
 
-        virtual void intersects( const QRectF& rect, QList<T> & result ) = 0;
-        virtual void contains( const QPointF & point, QList<T> & result ) = 0;
+        virtual void intersects( const QRectF& rect, QList<T> & result ) const = 0;
+        virtual void contains( const QPointF & point, QList<T> & result ) const = 0;
 
-        virtual Node * parent() { return m_parent; }
+        virtual void keys( QList<QRectF> & result ) const = 0;
+        virtual void values( QList<T> & result ) const = 0;
+
+        virtual Node * parent() const { return m_parent; }
         virtual void setParent( Node * parent ) { m_parent = parent; }
 
-        virtual int childCount() { return m_counter; }
+        virtual int childCount() const { return m_counter; }
 
-        virtual const QRectF& boundingBox() { return m_boundingBox; }
+        virtual const QRectF& boundingBox() const { return m_boundingBox; }
         virtual void updateBoundingBox();
 
-        virtual const QRectF& childBoundingBox( int index ) { return m_childBoundingBox[index]; }
+        virtual const QRectF& childBoundingBox( int index ) const { return m_childBoundingBox[index]; }
         virtual void setChildBoundingBox( int index, const QRectF& rect ) { m_childBoundingBox[index] = rect; }
 
         virtual void clear();
-        virtual bool isRoot() { return m_parent == 0; }
-        virtual bool isLeaf() { return false; }
+        virtual bool isRoot() const { return m_parent == 0; }
+        virtual bool isLeaf() const { return false; }
 
-        virtual int place() { return m_place; }
+        virtual int place() const { return m_place; }
         virtual void setPlace( int place ) { m_place = place; }
 
-        virtual int nodeId() { return m_nodeId; }
+        virtual int nodeId() const { return m_nodeId; }
 
-        virtual int level() { return m_level; }
+        virtual int level() const { return m_level; }
         virtual void setLevel( int level ) { m_level = level; }
 
-        virtual void paint( QPainter & p, int level ) = 0;
-        virtual void debug( QString line ) = 0;
+        virtual void paint( QPainter & p, int level ) const = 0;
+        virtual void debug( QString line ) const = 0;
 
     protected:
         static QColor levelColor[];
-        virtual void paintRect( QPainter & p, int level );
+        virtual void paintRect( QPainter & p, int level ) const;
 
         Node * m_parent;
         QRectF m_boundingBox;
@@ -187,16 +206,19 @@ protected:
         virtual LeafNode * chooseLeaf( const QRectF& bb );
         virtual NoneLeafNode * chooseNode( const QRectF& bb, int level );
 
-        virtual void intersects( const QRectF& rect, QList<T> & result );
-        virtual void contains( const QPointF & point, QList<T> & result );
+        virtual void intersects( const QRectF& rect, QList<T> & result ) const;
+        virtual void contains( const QPointF & point, QList<T> & result ) const;
 
-        virtual Node * getNode( int index );
+        virtual void keys( QList<QRectF> & result ) const;
+        virtual void values( QList<T> & result ) const;
 
-        virtual void paint( QPainter & p, int level );
-        virtual void debug( QString line );
+        virtual Node * getNode( int index ) const;
+
+        virtual void paint( QPainter & p, int level ) const;
+        virtual void debug( QString line ) const;
 
     protected:
-        virtual Node * getLeastEnlargement( const QRectF& bb );
+        virtual Node * getLeastEnlargement( const QRectF& bb ) const;
 
         QVector<Node *> m_childs;
     };
@@ -217,16 +239,19 @@ protected:
         virtual LeafNode * chooseLeaf( const QRectF& bb );
         virtual NoneLeafNode * chooseNode( const QRectF& bb, int level );
 
-        virtual void intersects( const QRectF& rect, QList<T> & result );
-        virtual void contains( const QPointF & point, QList<T> & result );
+        virtual void intersects( const QRectF& rect, QList<T> & result ) const;
+        virtual void contains( const QPointF & point, QList<T> & result ) const;
 
-        virtual const T& getData( int index );
+        virtual void keys( QList<QRectF> & result ) const;
+        virtual void values( QList<T> & result ) const;
 
-        virtual bool isLeaf() { return true; }
+        virtual const T& getData( int index ) const;
 
-        virtual void debug( QString line );
+        virtual bool isLeaf() const { return true; }
 
-        virtual void paint( QPainter & p, int level );
+        virtual void debug( QString line ) const;
+
+        virtual void paint( QPainter & p, int level ) const;
 
     protected:
         QVector<T> m_data;
@@ -367,7 +392,7 @@ void KoRTree<T>::remove( const T&data )
 }
 
 template <typename T>
-QList<T> KoRTree<T>::intersects( const QRectF& rect )
+QList<T> KoRTree<T>::intersects( const QRectF& rect ) const
 {
     QList<T> found;
     m_root->intersects( rect, found );
@@ -375,7 +400,7 @@ QList<T> KoRTree<T>::intersects( const QRectF& rect )
 }
 
 template <typename T>
-QList<T> KoRTree<T>::contains( const QPointF &point )
+QList<T> KoRTree<T>::contains( const QPointF &point ) const
 {
     QList<T> found;
     m_root->contains( point, found );
@@ -383,7 +408,23 @@ QList<T> KoRTree<T>::contains( const QPointF &point )
 }
 
 template <typename T>
-void KoRTree<T>::paint( QPainter & p )
+QList<QRectF> KoRTree<T>::keys() const
+{
+    QList<QRectF> found;
+    m_root->keys( found );
+    return found;
+}
+
+template <typename T>
+QList<T> KoRTree<T>::values() const
+{
+    QList<T> found;
+    m_root->values( found );
+    return found;
+}
+
+template <typename T>
+void KoRTree<T>::paint( QPainter & p ) const
 {
     if ( m_root )
     {
@@ -392,7 +433,7 @@ void KoRTree<T>::paint( QPainter & p )
 }
 
 template <typename T>
-void KoRTree<T>::debug()
+void KoRTree<T>::debug() const
 {
     QString prefix( "" );
     m_root->debug( prefix );
@@ -689,7 +730,7 @@ void KoRTree<T>::Node::clear()
 
 
 template <typename T>
-void KoRTree<T>::Node::paintRect( QPainter & p, int level )
+void KoRTree<T>::Node::paintRect( QPainter & p, int level ) const
 {
     QColor c( Qt::black );
     if ( level < int( sizeof(levelColor) / sizeof(QColor) ) )
@@ -768,7 +809,7 @@ typename KoRTree<T>::NoneLeafNode * KoRTree<T>::NoneLeafNode::chooseNode( const 
 }
 
 template <typename T>
-void KoRTree<T>::NoneLeafNode::intersects( const QRectF& rect, QList<T> & result )
+void KoRTree<T>::NoneLeafNode::intersects( const QRectF& rect, QList<T> & result ) const
 {
     for ( int i = 0; i < this->m_counter; ++i )
     {
@@ -780,7 +821,7 @@ void KoRTree<T>::NoneLeafNode::intersects( const QRectF& rect, QList<T> & result
 }
 
 template <typename T>
-void KoRTree<T>::NoneLeafNode::contains( const QPointF & point, QList<T> & result )
+void KoRTree<T>::NoneLeafNode::contains( const QPointF & point, QList<T> & result ) const
 {
     for ( int i = 0; i < this->m_counter; ++i )
     {
@@ -792,13 +833,31 @@ void KoRTree<T>::NoneLeafNode::contains( const QPointF & point, QList<T> & resul
 }
 
 template <typename T>
-typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getNode( int index )
+void KoRTree<T>::NoneLeafNode::keys( QList<QRectF> & result ) const
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        m_childs[i]->keys( result );
+    }
+}
+
+template <typename T>
+void KoRTree<T>::NoneLeafNode::values( QList<T> & result ) const
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        m_childs[i]->values( result );
+    }
+}
+
+template <typename T>
+typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getNode( int index ) const
 {
     return m_childs[index];
 }
 
 template <typename T>
-typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getLeastEnlargement( const QRectF& bb )
+typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getLeastEnlargement( const QRectF& bb ) const
 {
     //qDebug() << "NoneLeafNode::getLeastEnlargement";
     double area[this->m_counter];
@@ -826,7 +885,7 @@ typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getLeastEnlargement( const
 }
 
 template <typename T>
-void KoRTree<T>::NoneLeafNode::debug( QString line )
+void KoRTree<T>::NoneLeafNode::debug( QString line ) const
 {
     for ( int i = 0; i < this->m_counter; ++i )
     {
@@ -836,7 +895,7 @@ void KoRTree<T>::NoneLeafNode::debug( QString line )
 }
 
 template <typename T>
-void KoRTree<T>::NoneLeafNode::paint( QPainter & p, int level )
+void KoRTree<T>::NoneLeafNode::paint( QPainter & p, int level ) const
 {
     this->paintRect( p, level );
     for ( int i = 0; i < this->m_counter; ++i )
@@ -921,7 +980,7 @@ typename KoRTree<T>::NoneLeafNode * KoRTree<T>::LeafNode::chooseNode( const QRec
 }
 
 template <typename T>
-void KoRTree<T>::LeafNode::intersects( const QRectF& rect, QList<T> & result )
+void KoRTree<T>::LeafNode::intersects( const QRectF& rect, QList<T> & result ) const
 {
     for ( int i = 0; i < this->m_counter; ++i )
     {
@@ -933,7 +992,7 @@ void KoRTree<T>::LeafNode::intersects( const QRectF& rect, QList<T> & result )
 }
 
 template <typename T>
-void KoRTree<T>::LeafNode::contains( const QPointF & point, QList<T> & result )
+void KoRTree<T>::LeafNode::contains( const QPointF & point, QList<T> & result ) const
 {
     for ( int i = 0; i < this->m_counter; ++i )
     {
@@ -945,13 +1004,31 @@ void KoRTree<T>::LeafNode::contains( const QPointF & point, QList<T> & result )
 }
 
 template <typename T>
-const T& KoRTree<T>::LeafNode::getData( int index )
+void KoRTree<T>::LeafNode::keys( QList<QRectF> & result ) const
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        result.push_back( this->m_childBoundingBox[i] );
+    }
+}
+
+template <typename T>
+void KoRTree<T>::LeafNode::values( QList<T> & result ) const
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        result.push_back( m_data[i] );
+    }
+}
+
+template <typename T>
+const T& KoRTree<T>::LeafNode::getData( int index ) const
 {
     return m_data[ index ];
 }
 
 template <typename T>
-void KoRTree<T>::LeafNode::debug( QString line )
+void KoRTree<T>::LeafNode::debug( QString line ) const
 {
     for ( int i = 0; i < this->m_counter; ++i )
     {
@@ -961,7 +1038,7 @@ void KoRTree<T>::LeafNode::debug( QString line )
 }
 
 template <typename T>
-void KoRTree<T>::LeafNode::paint( QPainter & p, int level )
+void KoRTree<T>::LeafNode::paint( QPainter & p, int level ) const
 {
     if ( this->m_counter )
     {

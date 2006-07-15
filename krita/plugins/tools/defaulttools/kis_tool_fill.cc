@@ -57,7 +57,7 @@ KisToolFill::KisToolFill()
     m_oldColor = 0;
     m_threshold = 15;
     m_usePattern = false;
-    m_sampleMerged = false;
+    m_unmerged = false;
     m_fillOnlySelection = false;
 
     setCursor(KisCursor::load("tool_fill_cursor.png", 6, 6));
@@ -114,7 +114,7 @@ bool KisToolFill::flood(int startX, int startY)
     painter.setFillThreshold(m_threshold);
     painter.setCompositeOp(m_compositeOp);
     painter.setPattern(m_subject->currentPattern());
-    painter.setSampleMerged(m_sampleMerged);
+    painter.setSampleMerged(!m_unmerged);
     painter.setCareForSelection(true);
 
     KisProgressDisplayInterface *progress = m_subject->progressDisplay();
@@ -163,27 +163,30 @@ QWidget* KisToolFill::createOptionWidget(QWidget* parent)
 
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KIntNumInput( widget, "int_widget");
-    m_slThreshold->setRange( 0, 255);
+    m_slThreshold->setRange( 1, 100);
+    m_slThreshold->setSteps( 3, 3);
     m_slThreshold->setValue(m_threshold);
     connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
     m_checkUsePattern = new QCheckBox(i18n("Use pattern"), widget);
+    //m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the gradient selected to fill with"));
     m_checkUsePattern->setChecked(m_usePattern);
-    connect(m_checkUsePattern, SIGNAL(stateChanged(int)), this, SLOT(slotSetUsePattern(int)));
+    connect(m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(slotSetUsePattern(bool)));
 
-    m_checkSampleMerged = new QCheckBox(i18n("Sample merged"), widget);
-    m_checkSampleMerged->setChecked(m_sampleMerged);
-    connect(m_checkSampleMerged, SIGNAL(stateChanged(int)), this, SLOT(slotSetSampleMerged(int)));
+    m_checkSampleMerged = new QCheckBox(i18n("Limit to current layer"), widget);
+    m_checkSampleMerged->setChecked(m_unmerged);
+    connect(m_checkSampleMerged, SIGNAL(toggled(bool)), this, SLOT(slotSetSampleMerged(bool)));
 
     m_checkFillSelection = new QCheckBox(i18n("Fill entire selection"), widget);
+    //m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
     m_checkFillSelection->setChecked(m_fillOnlySelection);
-    connect(m_checkFillSelection, SIGNAL(stateChanged(int)), this, SLOT(slotSetFillSelection(int)));
+    connect(m_checkFillSelection, SIGNAL(toggled(bool)), this, SLOT(slotSetFillSelection(bool)));
 
     addOptionWidgetOption(m_slThreshold, m_lbThreshold);
 
-    addOptionWidgetOption(m_checkUsePattern);
-    addOptionWidgetOption(m_checkSampleMerged);
     addOptionWidgetOption(m_checkFillSelection);
+    addOptionWidgetOption(m_checkSampleMerged);
+    addOptionWidgetOption(m_checkUsePattern);
 
     return widget;
 }
@@ -193,25 +196,21 @@ void KisToolFill::slotSetThreshold(int threshold)
     m_threshold = threshold;
 }
 
-void KisToolFill::slotSetUsePattern(int state)
+void KisToolFill::slotSetUsePattern(bool state)
 {
-    if (state == QButton::NoChange)
-        return;
-    m_usePattern = (state == QButton::On);
+    m_usePattern = state;
 }
 
-void KisToolFill::slotSetSampleMerged(int state)
+void KisToolFill::slotSetSampleMerged(bool state)
 {
-    if (state == QButton::NoChange)
-        return;
-    m_sampleMerged = (state == QButton::On);
+    m_unmerged = state;
 }
 
-void KisToolFill::slotSetFillSelection(int state)
+void KisToolFill::slotSetFillSelection(bool state)
 {
-    if (state == QButton::NoChange)
-        return;
-    m_fillOnlySelection = (state == QButton::On);
+    m_fillOnlySelection = state;
+    m_slThreshold->setEnabled(!state);
+    m_checkSampleMerged->setEnabled(!state);
 }
 
 void KisToolFill::setup(KActionCollection *collection)

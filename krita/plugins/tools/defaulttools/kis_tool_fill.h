@@ -57,9 +57,9 @@ public:
 
 public slots:
     virtual void slotSetThreshold(int);
-    virtual void slotSetUsePattern(int);
-    virtual void slotSetSampleMerged(int);
-    virtual void slotSetFillSelection(int);
+    virtual void slotSetUsePattern(bool);
+    virtual void slotSetSampleMerged(bool);
+    virtual void slotSetFillSelection(bool);
 
 private:
     int m_threshold;
@@ -69,7 +69,7 @@ private:
     KisPainter *m_painter;
     KisCanvasSubject *m_subject;
     KisImageSP m_currentImage;
-    bool *m_map, m_sampleMerged, m_usePattern, m_fillOnlySelection;
+    bool *m_map, m_unmerged, m_usePattern, m_fillOnlySelection;
     KisSelectionSP m_selection;
 
     QLabel *m_lbThreshold;

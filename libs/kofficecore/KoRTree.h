@@ -301,7 +301,7 @@ void KoRTree<T>::insert( const QRectF& bb, const T& data )
         nbb.setHeight(0.0001);
         qWarning( "KoRTree::insert bouningBox isNull setting size to (%fx%f) ", nbb.width(), nbb.height() );
     }
-    qDebug() << nbb;
+
     LeafNode * leaf = m_root->chooseLeaf( nbb );
     //qDebug() << " leaf" << leaf->nodeId() << nbb;
 

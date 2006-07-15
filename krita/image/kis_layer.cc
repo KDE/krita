@@ -659,7 +659,6 @@ QModelIndex KisLayer::indexFromLayer(KisLayer *layer) const
 
 int KisLayer::rowCount(const QModelIndex &parent) const
 {
-    kDebug() << "rowCount() " << parent.isValid() << " " << parent.row() << " " << parent.column() << " " << parent.internalPointer() << endl;
     if (!parent.isValid())
         return childCount();
     Q_ASSERT(parent.model() == this);
@@ -670,13 +669,11 @@ int KisLayer::rowCount(const QModelIndex &parent) const
 
 int KisLayer::columnCount(const QModelIndex &i) const
 {
-    kDebug() << "columnCount() " << i.isValid() << " " << i.row() << " " << i.column() << " " << i.internalPointer() << endl;
     return 1;
 }
 
 QModelIndex KisLayer::index(int row, int column, const QModelIndex &parent) const
 {
-    kDebug() << "index() " << parent.isValid() << " " << row << " " << column << " " << parent.row() << " " << parent.column() << " " << parent.internalPointer() << endl;
     if (!parent.isValid())
     {
         if( row < childCount() )
@@ -693,14 +690,10 @@ QModelIndex KisLayer::index(int row, int column, const QModelIndex &parent) cons
 
 QModelIndex KisLayer::parent(const QModelIndex &i) const
 {
-    kDebug() << "parent() " << i.isValid() << " " << i.row() << " " << i.column() << " " << i.internalPointer() << endl;
     if (!i.isValid())
         return QModelIndex();
     Q_ASSERT(i.model() == this);
     Q_ASSERT(i.internalPointer());
-
-    if (i.internalPointer() == (void*)1) //wtf?!
-        return QModelIndex();
 
     if (static_cast<KisLayer*>(i.internalPointer())->parent().data() == this)
         return QModelIndex();
@@ -712,7 +705,6 @@ QModelIndex KisLayer::parent(const QModelIndex &i) const
 
 QVariant KisLayer::data(const QModelIndex &index, int role) const
 {
-    kDebug() << "data() " << index.isValid() << " " << index.row() << " " << index.column() << " " << index.internalPointer() << endl;
     if (!index.isValid())
         return QVariant();
     Q_ASSERT(index.model() == this);
@@ -748,7 +740,6 @@ Qt::ItemFlags KisLayer::flags(const QModelIndex &index) const
 
 bool KisLayer::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    kDebug() << "setData() " << index.isValid() << " " << index.row() << " " << index.column() << " " << index.internalPointer() << " " << value << " " << role << endl;
     if (!index.isValid())
         return false;
     Q_ASSERT(index.model() == this);

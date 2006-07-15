@@ -5,6 +5,7 @@ Name[es]=Sustrato
 Name[et]=Substraat
 Name[pt]=Substrato
 Name[pt_BR]=Substrato
+Name[zh_TW]=基底
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritasubstrate

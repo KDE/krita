@@ -7,6 +7,7 @@ Name[es]=Modificar selección
 Name[et]=Valiku muutmine
 Name[pt]=Modificar a Selecção
 Name[pt_BR]=Modificar a Selecção
+Name[zh_TW]=變更選取
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection

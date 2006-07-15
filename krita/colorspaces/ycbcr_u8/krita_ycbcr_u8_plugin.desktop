@@ -1,15 +1,19 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=YCbCr Color Model (8-bit integer)
+Name[da]=YCbCr-farvemodel (8-bit heltal)
 Name[es]=Modelo de color YCbCr (entero de 8 bits)
 Name[et]=YCbCr värvimudel (8-bitine täisarv)
 Name[pt]=Modelo de Cor YCbCr (inteiros de 8 bits)
 Name[pt_BR]=Modelo de Cor YCbCr (inteiros de 8 bits)
+Name[zh_TW]=YCbCr 色彩模型 (16-bit 整數)
 Comment=Color model for 8-bit integer per channel YCbCr images
+Comment[da]=Farvemodel for 8-bit heltal pr kanal YCbCr-billeder
 Comment[es]=Modelo de color de entero de 16 bits por canal para imágenes YCbCr
 Comment[et]=8-bitiste täisarvuliste kanalitega YCbCr-piltide värvimudel
 Comment[pt]=Modelo de cor para imagens YCbCr com 8 bits por canal
 Comment[pt_BR]=Modelo de cor para imagens YCbCr com 8 bits por canal
+Comment[zh_TW]=每色頻為 16-bit 的 YCbCr 圖片色彩模型
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=krita_ycbcr_u8_plugin

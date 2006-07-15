@@ -160,8 +160,6 @@ void KisToolBezier::buttonPress(KisButtonPressEvent *event)
                 m_curve->addPivot(m_curve->find(m_control2),m_destination);
                 m_curve->calculateCurve();
                 break;
-            default:
-                m_editing = true;
             }
         } else {
             CurvePoint pos(mouseOnHandle(event->pos()),true);
@@ -202,8 +200,12 @@ void KisToolBezier::move(KisMoveEvent *event)
     if (m_dragging) {
         draw();
         if (!m_editing) {
-            if (m_curve->pivots().count() > 1)
-                m_curve->deleteLastPivot();
+            if (m_curve->pivots().count() > 1) {
+                if (m_curve->pivots().count() == 4)
+                    m_curve->deletePivot(m_curve->find(m_destination));
+                else
+                    m_curve->deleteLastPivot();
+            }
             switch (m_curve->count()) {
             case 0:
                 m_origin = CurvePoint(event->pos(),true,false,BEZIERHINT);
@@ -221,7 +223,6 @@ void KisToolBezier::move(KisMoveEvent *event)
                 m_destination = CurvePoint(event->pos(),true,false,BEZIERHINT);
                 m_curve->addPivot(m_curve->find(m_control2),m_destination);
                 m_curve->calculateCurve();
-                m_editing = true;
                 break;
             }
         } else {
@@ -230,6 +231,10 @@ void KisToolBezier::move(KisMoveEvent *event)
             if (!sel.isEmpty()) {
                 KisCurve::iterator it = m_curve->find(sel[0]);
                 it = m_curve->movePivot(it,dest);
+                if ((*it) == m_curve->last())
+                    m_curve->movePivot(it.previousPivot(),(*it.previousPivot()).point());
+                if ((*it) == m_curve->first())
+                    m_curve->movePivot(it.nextPivot(),(*it.nextPivot()).point());
                 m_curve->selectPivot(it);
             }
         }
@@ -243,6 +248,8 @@ void KisToolBezier::buttonRelease(KisButtonReleaseEvent *)
         return;
 
     m_dragging = false;
+    if (m_curve->count() > 3)
+        m_editing = true;
 }
 
 void KisToolBezier::doubleClick(KisDoubleClickEvent *)
@@ -320,7 +327,7 @@ void KisToolBezier::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Draw a cubic bezier."));
+        m_action->setToolTip(i18n("Draw a cubic bezier: first set four points, then modify the bezier. Double-click when you are done."));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

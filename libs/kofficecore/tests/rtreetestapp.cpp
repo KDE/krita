@@ -64,7 +64,7 @@ void Canvas::insert( QRectF & rect )
     m_out << "i " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << "\n";
     Data * data = new Data( rect );
     m_rects.insert( data );
-    m_rtree.insert( data, rect );
+    m_rtree.insert( rect, data );
     update();
 }
 

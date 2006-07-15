@@ -141,7 +141,7 @@ private:
     QList<KoShape *> m_shapes;
     KoSelection * m_selection;
     KoCanvasBase * m_canvas;
-    KoRTree<KoShape> m_tree;
+    KoRTree<KoShape *> m_tree;
     QSet<KoShape *> m_aggregate4update;
 };
 

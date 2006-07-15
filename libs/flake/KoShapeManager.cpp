@@ -81,7 +81,7 @@ void KoShapeManager::add( KoShape *shape )
     if( ! dynamic_cast<KoShapeGroup*>( shape ))
     {
         QRectF br( shape->boundingRect() );
-        m_tree.insert( shape, br );
+        m_tree.insert( br, shape );
     }
     shape->repaint();
 }
@@ -198,7 +198,7 @@ void KoShapeManager::updateTree()
     {
         m_tree.remove( shape );
         QRectF br( shape->boundingRect() );
-        m_tree.insert( shape, br );
+        m_tree.insert( br, shape );
     }
     m_aggregate4update.clear();
 }

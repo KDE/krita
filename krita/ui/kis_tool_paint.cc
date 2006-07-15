@@ -176,7 +176,7 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount() - 1, 1);
     }
     else
-        m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0);
+        m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
 }
 
 void KisToolPaint::slotSetOpacity(int opacityPerCent)

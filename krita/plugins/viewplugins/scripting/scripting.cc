@@ -69,8 +69,10 @@ Scripting::Scripting(QObject *parent, const QStringList &)
         
 setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), 
 true);
-        new KAction(i18n("Execute Script File..."), 0, 0, m_scriptguiclient, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
-        new KAction(i18n("Script Manager..."), 0, 0, m_scriptguiclient, SLOT(showScriptManager()), actionCollection(), "configurescripts");
+        KAction *action = new KAction(i18n("Execute Script File..."), actionCollection(), "executescriptfile");
+        connect(action, SIGNAL(triggered(bool) ), m_scriptguiclient, SLOT(executeScriptFile()));
+        action = new KAction(i18n("Script Manager..."), actionCollection(), "configurescripts");
+        connect(action, SIGNAL(triggered(bool) ), m_scriptguiclient, SLOT(showScriptManager()));
         //END TODO
 
         QWidget * w = new Kross::Api::WdgScriptsManager(m_scriptguiclient, m_view);

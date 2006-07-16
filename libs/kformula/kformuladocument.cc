@@ -430,113 +430,54 @@ void DocumentWrapper::createActions( KActionCollection* collection )
                                     this, SLOT( addQuadSpace() ),
                                     collection, "formula_addquadspace" );
 
-    m_addIntegralAction = new KAction(i18n("Add Integral"),
-                                    "int",
-                                    0,
-                                    this, SLOT(addIntegral()),
-                                    collection, "formula_addintegral");
-    m_addSumAction      = new KAction(i18n("Add Sum"),
-                                    "sum",
-                                    0,
-                                    this, SLOT(addSum()),
-                                    collection, "formula_addsum");
-    m_addProductAction  = new KAction(i18n("Add Product"),
-                                    "prod",
-                                    0,
-                                    this, SLOT(addProduct()),
-                                    collection, "formula_addproduct");
-    m_addRootAction     = new KAction(i18n("Add Root"),
-                                    "sqrt",
-                                    0,
-                                    this, SLOT(addRoot()),
-                                    collection, "formula_addroot");
-    m_addFractionAction = new KAction(i18n("Add Fraction"),
-                                    "frac",
-                                    0,
-                                    this, SLOT(addFraction()),
-                                    collection, "formula_addfrac");
-    m_addBracketAction  = new KAction(i18n("Add Bracket"),
-                                    "paren",
-                                    0,
-                                    this, SLOT(addDefaultBracket()),
-                                    collection,"formula_addbra");
-    m_addSBracketAction = new KAction(i18n("Add Square Bracket"),
-                                    "brackets",
-                                    0,
-                                    this, SLOT(addSquareBracket()),
-                                    collection,"formula_addsqrbra");
-    m_addCBracketAction = new KAction(i18n("Add Curly Bracket"),
-                                    "math_brace",
-                                    0,
-                                    this, SLOT(addCurlyBracket()),
-                                    collection,"formula_addcurbra");
-    m_addAbsAction      = new KAction(i18n("Add Abs"),
-                                    "abs",
-                                    0,
-                                    this, SLOT(addLineBracket()),
-                                    collection,"formula_addabsbra");
+    m_addIntegralAction = new KAction(KIcon("int"), i18n("Add Integral"), collection, "formula_addintegral");
+    connect(m_addIntegralAction, SIGNAL(triggered(bool) ), SLOT(addIntegral()));
+    m_addSumAction = new KAction(KIcon("sum"), i18n("Add Sum"), collection, "formula_addsum");
+    connect(m_addSumAction, SIGNAL(triggered(bool) ), SLOT(addSum()));
+    m_addProductAction = new KAction(KIcon("prod"), i18n("Add Product"), collection, "formula_addproduct");
+    connect(m_addProductAction, SIGNAL(triggered(bool) ), SLOT(addProduct()));
+    m_addRootAction = new KAction(KIcon("sqrt"), i18n("Add Root"), collection, "formula_addroot");
+    connect(m_addRootAction, SIGNAL(triggered(bool) ), SLOT(addRoot()));
+    m_addFractionAction = new KAction(KIcon("frac"), i18n("Add Fraction"), collection, "formula_addfrac");
+    connect(m_addFractionAction, SIGNAL(triggered(bool) ), SLOT(addFraction()));
+    m_addBracketAction = new KAction(KIcon("paren"), i18n("Add Bracket"), collection, "formula_addbra");
+    connect(m_addBracketAction, SIGNAL(triggered(bool) ), SLOT(addDefaultBracket()));
+    m_addSBracketAction = new KAction(KIcon("brackets"), i18n("Add Square Bracket"), collection, "formula_addsqrbra");
+    connect(m_addSBracketAction, SIGNAL(triggered(bool) ), SLOT(addSquareBracket()));
+    m_addCBracketAction = new KAction(KIcon("math_brace"), i18n("Add Curly Bracket"), collection, "formula_addcurbra");
+    connect(m_addCBracketAction, SIGNAL(triggered(bool) ), SLOT(addCurlyBracket()));
+    m_addAbsAction = new KAction(KIcon("abs"), i18n("Add Abs"), collection, "formula_addabsbra");
+    connect(m_addAbsAction, SIGNAL(triggered(bool) ), SLOT(addLineBracket()));
 
-    m_addMatrixAction   = new KAction(i18n("Add Matrix..."),
-                                    "matrix",
-                                    0,
-                                    this, SLOT(addMatrix()),
-                                    collection, "formula_addmatrix");
+    m_addMatrixAction = new KAction(KIcon("matrix"), i18n("Add Matrix..."), collection, "formula_addmatrix");
+    connect(m_addMatrixAction, SIGNAL(triggered(bool) ), SLOT(addMatrix()));
 
-    m_addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 Matrix"),
-                                    "onetwomatrix",
-                                    0,
-                                    this, SLOT(addOneByTwoMatrix()),
-                                    collection, "formula_add_one_by_two_matrix");
+    m_addOneByTwoMatrixAction = new KAction(KIcon("onetwomatrix"), i18n("Add 1x2 Matrix"), collection, "formula_add_one_by_two_matrix");
+    connect(m_addOneByTwoMatrixAction, SIGNAL(triggered(bool) ), SLOT(addOneByTwoMatrix()));
 
 
-    m_addUpperLeftAction  = new KAction(i18n("Add Upper Left Index"),
-                                      "lsup",
-                                      0,
-                                      this, SLOT(addUpperLeftIndex()),
-                                      collection, "formula_addupperleft");
-    m_addLowerLeftAction  = new KAction(i18n("Add Lower Left Index"),
-                                      "lsub",
-                                      0,
-                                      this, SLOT(addLowerLeftIndex()),
-                                      collection, "formula_addlowerleft");
-    m_addUpperRightAction = new KAction(i18n("Add Upper Right Index"),
-                                      "rsup",
-                                      0,
-                                      this, SLOT(addUpperRightIndex()),
-                                      collection, "formula_addupperright");
-    m_addLowerRightAction = new KAction(i18n("Add Lower Right Index"),
-                                      "rsub",
-                                      0,
-                                      this, SLOT(addLowerRightIndex()),
-                                      collection, "formula_addlowerright");
+    m_addUpperLeftAction = new KAction(KIcon("lsup"), i18n("Add Upper Left Index"), collection, "formula_addupperleft");
+    connect(m_addUpperLeftAction, SIGNAL(triggered(bool) ), SLOT(addUpperLeftIndex()));
+    m_addLowerLeftAction = new KAction(KIcon("lsub"), i18n("Add Lower Left Index"), collection, "formula_addlowerleft");
+    connect(m_addLowerLeftAction, SIGNAL(triggered(bool) ), SLOT(addLowerLeftIndex()));
+    m_addUpperRightAction = new KAction(KIcon("rsup"), i18n("Add Upper Right Index"), collection, "formula_addupperright");
+    connect(m_addUpperRightAction, SIGNAL(triggered(bool) ), SLOT(addUpperRightIndex()));
+    m_addLowerRightAction = new KAction(KIcon("rsub"), i18n("Add Lower Right Index"), collection, "formula_addlowerright");
+    connect(m_addLowerRightAction, SIGNAL(triggered(bool) ), SLOT(addLowerRightIndex()));
 
-    m_addGenericUpperAction = new KAction(i18n("Add Upper Index"),
-                                      "gsup",
-                                              /*CTRL + Qt::Key_U*/0,
-                                      this, SLOT(addGenericUpperIndex()),
-                                      collection, "formula_addupperindex");
-    m_addGenericLowerAction = new KAction(i18n("Add Lower Index"),
-                                      "gsub",
-                                      0,
-                                      this, SLOT(addGenericLowerIndex()),
-                                      collection, "formula_addlowerindex");
+    m_addGenericUpperAction = new KAction(KIcon("gsup"), i18n("Add Upper Index"), collection, "formula_addupperindex");
+    connect(m_addGenericUpperAction, SIGNAL(triggered(bool) ), SLOT(addGenericUpperIndex()));
+    m_addGenericUpperAction->setShortcut(/*CTRL + Qt::Key_U*/0);
+    m_addGenericLowerAction = new KAction(KIcon("gsub"), i18n("Add Lower Index"), collection, "formula_addlowerindex");
+    connect(m_addGenericLowerAction, SIGNAL(triggered(bool) ), SLOT(addGenericLowerIndex()));
 
-    m_addOverlineAction = new KAction(i18n("Add Overline"),
-                                          "over",
-                                          0,
-                                          this, SLOT(addOverline()),
-                                          collection, "formula_addoverline");
-    m_addUnderlineAction = new KAction(i18n("Add Underline"),
-                                           "under",
-                                           0,
-                                           this, SLOT(addUnderline()),
-                                           collection, "formula_addunderline");
+    m_addOverlineAction = new KAction(KIcon("over"), i18n("Add Overline"), collection, "formula_addoverline");
+    connect(m_addOverlineAction, SIGNAL(triggered(bool) ), SLOT(addOverline()));
+    m_addUnderlineAction = new KAction(KIcon("under"), i18n("Add Underline"), collection, "formula_addunderline");
+    connect(m_addUnderlineAction, SIGNAL(triggered(bool) ), SLOT(addUnderline()));
 
-    m_addMultilineAction = new KAction(i18n("Add Multiline"),
-                                           "multiline",
-                                           0,
-                                           this, SLOT(addMultiline()),
-                                           collection, "formula_addmultiline");
+    m_addMultilineAction = new KAction(KIcon("multiline"), i18n("Add Multiline"), collection, "formula_addmultiline");
+    connect(m_addMultilineAction, SIGNAL(triggered(bool) ), SLOT(addMultiline()));
 
     m_removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"),
                                         0,
@@ -548,36 +489,18 @@ void DocumentWrapper::createActions( KActionCollection* collection )
                                   this, SLOT(makeGreek()),
                                   collection, "formula_makegreek");
 
-    m_appendColumnAction = new KAction( i18n( "Append Column" ),
-                                            "inscol",
-                                            0,
-                                            this, SLOT( appendColumn() ),
-                                            collection, "formula_appendcolumn" );
-    m_insertColumnAction = new KAction( i18n( "Insert Column" ),
-                                            "inscol",
-                                            0,
-                                            this, SLOT( insertColumn() ),
-                                            collection, "formula_insertcolumn" );
-    m_removeColumnAction = new KAction( i18n( "Remove Column" ),
-                                            "remcol",
-                                            0,
-                                            this, SLOT( removeColumn() ),
-                                            collection, "formula_removecolumn" );
-    m_appendRowAction = new KAction( i18n( "Append Row" ),
-                                         "insrow",
-                                         0,
-                                         this, SLOT( appendRow() ),
-                                         collection, "formula_appendrow" );
-    m_insertRowAction = new KAction( i18n( "Insert Row" ),
-                                         "insrow",
-                                         0,
-                                         this, SLOT( insertRow() ),
-                                         collection, "formula_insertrow" );
-    m_removeRowAction = new KAction( i18n( "Remove Row" ),
-                                         "remrow",
-                                         0,
-                                         this, SLOT( removeRow() ),
-                                         collection, "formula_removerow" );
+    m_appendColumnAction = new KAction(KIcon("inscol"),  i18n( "Append Column" ), collection, "formula_appendcolumn" );
+    connect(m_appendColumnAction, SIGNAL(triggered(bool) ), SLOT( appendColumn() ));
+    m_insertColumnAction = new KAction(KIcon("inscol"),  i18n( "Insert Column" ), collection, "formula_insertcolumn" );
+    connect(m_insertColumnAction, SIGNAL(triggered(bool) ), SLOT( insertColumn() ));
+    m_removeColumnAction = new KAction(KIcon("remcol"),  i18n( "Remove Column" ), collection, "formula_removecolumn" );
+    connect(m_removeColumnAction, SIGNAL(triggered(bool) ), SLOT( removeColumn() ));
+    m_appendRowAction = new KAction(KIcon("insrow"),  i18n( "Append Row" ), collection, "formula_appendrow" );
+    connect(m_appendRowAction, SIGNAL(triggered(bool) ), SLOT( appendRow() ));
+    m_insertRowAction = new KAction(KIcon("insrow"),  i18n( "Insert Row" ), collection, "formula_insertrow" );
+    connect(m_insertRowAction, SIGNAL(triggered(bool) ), SLOT( insertRow() ));
+    m_removeRowAction = new KAction(KIcon("remrow"),  i18n( "Remove Row" ), collection, "formula_removerow" );
+    connect(m_removeRowAction, SIGNAL(triggered(bool) ), SLOT( removeRow() ));
 
     m_syntaxHighlightingAction = new KToggleAction(i18n("Syntax Highlighting"),
                                                  0,
@@ -634,11 +557,9 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     m_rightBracket->setItems(delimiter);
     //rightBracket->setCurrentItem(0);
 
-    m_insertSymbolAction = new KAction(i18n("Insert Symbol"),
-                                           "key_enter",
-                                           /*CTRL + Qt::Key_I*/0,
-                                           this, SLOT(insertSymbol()),
-                                           collection, "formula_insertsymbol");
+    m_insertSymbolAction = new KAction(KIcon("key_enter"), i18n("Insert Symbol"), collection, "formula_insertsymbol");
+    connect(m_insertSymbolAction, SIGNAL(triggered(bool) ), SLOT(insertSymbol()));
+    m_insertSymbolAction->setShortcut(/*CTRL + Qt::Key_I*/0);
     m_symbolNamesAction = new SymbolAction(i18n("Symbol Names"),
                                                0, this, SLOT(symbolNames()),
                                                collection, "formula_symbolnames");

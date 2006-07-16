@@ -8,50 +8,53 @@ include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
 
 ########### next target ###############
 
-set(kofficeui_LIB_SRCS 
-   KoPageLayoutDia.cpp 
-   KoZoomAction.cpp 
-   KoTabBar.cpp 
-   KoPartSelectDia.cpp 
-   KoPartSelectAction.cpp 
-   KoRuler.cpp 
-   KoTemplateChooseDia.cpp 
-   KoTabChooser.cpp 
-   KoKoolBar.cpp 
-   KoTemplateCreateDia.cpp 
-   KoContextHelp.cpp 
-   KoPictureFilePreview.cpp 
-   KoUnitWidgets.cpp 
-   tkaction.cpp 
+set(kofficeui_LIB_SRCS
+   KoBrush.cpp 
+   KoCharSelectDia.cpp
+   KoContextHelp.cpp
+   KoCsvImportDialog.cpp
+   KoDocumentSectionView.cpp
+   KoDocumentSectionDelegate.cpp
+   KoEditPath.cpp 
+   KoGeneralPropertyUi.cpp
+   KoGuideLineDia.cpp 
+   KoGuides.cpp 
+   KoImageResource.cpp
+   KoInsertLink.cpp
+   KoKoolBar.cpp
+   KoPageLayoutColumns.cpp
+   KoPageLayoutDia.cpp
+   KoPageLayoutHeader.cpp
+   KoPageLayoutSize.cpp 
+   KoPartSelectDia.cpp
+   KoPartSelectAction.cpp
+   KoPen.cpp
+   KoPictureFilePreview.cpp
+   KoRuler.cpp
+   KoShapeSelector.cpp
+   KoShapeGeometry.cpp
+   KoTabBar.cpp
+   KoTabChooser.cpp
+   KoTemplateChooseDia.cpp
+   KoTemplateCreateDia.cpp
+   KoToolBox.cpp
+   KoToolManager.cpp
+   KoToolRegistry.cpp
+   KoUnitWidgets.cpp
+   KoZoomAction.cpp
+   KoZoomHandler.cpp
+   KoZoomMode.cpp
+   tkaction.cpp
    tkcoloractions.cpp 
    tkcombobox.cpp 
    tktoolbarbutton.cpp 
-   KoCharSelectDia.cpp 
-   KoInsertLink.cpp 
-   KoEditPath.cpp 
-   KoBrush.cpp 
-   KoImageResource.cpp 
-   KoToolBox.cpp 
-   KoZoomHandler.cpp 
-   KoGuideLineDia.cpp 
-   KoGuides.cpp 
-   KoPageLayoutColumns.cpp 
-   KoPageLayoutSize.cpp 
-   KoPageLayoutHeader.cpp 
-   KoPen.cpp 
-   KoZoomMode.cpp
-   KoShapeSelector.cpp
-    KoShapeGeometry.cpp
-   KoToolManager.cpp
-   KoToolRegistry.cpp
-   KoGeneralPropertyUi.cpp
-   KoDocumentSectionView.cpp
-   KoDocumentSectionDelegate.cpp )
+)
 
 kde4_automoc(${kofficeui_LIB_SRCS})
 
 kde4_add_ui3_files(kofficeui_LIB_SRCS KoPageLayoutColumnsBase.ui )
 kde4_add_ui_files( kofficeui_LIB_SRCS
+    KoCsvImportDialog.ui
     KoGeneralPropertyUi.ui
     KoPageLayoutHeaderBase.ui
     KoShapeGeometry.ui

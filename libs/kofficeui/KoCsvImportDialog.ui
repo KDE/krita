@@ -1,0 +1,570 @@
+<ui version="4.0" stdsetdef="1" >
+  <author>Inge Wallin &lt;inge@lysator.liu.se></author>
+  <comment>This file is part of the KDE project
+Copyright 2005 Inge Wallin &lt;inge@lysator.liu.se>
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public License
+along with this library; see the file COPYING.LIB.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
+</comment>
+  <exportmacro></exportmacro>
+  <class>KoCsvImportWidget</class>
+  <widget class="QWidget" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>577</width>
+        <height>410</height>
+      </rect>
+    </property>
+    <property name="sizePolicy" >
+      <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>5</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+      </sizepolicy>
+    </property>
+    <widget class="Q3Table" name="m_sheet" >
+      <property name="geometry" >
+        <rect>
+          <x>11</x>
+          <y>208</y>
+          <width>555</width>
+          <height>191</height>
+        </rect>
+      </property>
+      <property name="sizePolicy" >
+        <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>7</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+        </sizepolicy>
+      </property>
+      <property name="numRows" >
+        <number>0</number>
+      </property>
+      <property name="numCols" >
+        <number>0</number>
+      </property>
+    </widget>
+    <widget class="QTabWidget" name="tabWidget2" >
+      <property name="geometry" >
+        <rect>
+          <x>11</x>
+          <y>11</y>
+          <width>555</width>
+          <height>191</height>
+        </rect>
+      </property>
+      <widget class="QWidget" name="TabPage" >
+        <attribute name="title" >
+          <string>Data</string>
+        </attribute>
+        <widget class="QWidget" name="layout5" >
+          <property name="geometry" >
+            <rect>
+              <x>11</x>
+              <y>11</y>
+              <width>520</width>
+              <height>131</height>
+            </rect>
+          </property>
+          <layout class="QVBoxLayout" >
+            <property name="margin" >
+              <number>0</number>
+            </property>
+            <item>
+              <layout class="QHBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QLabel" name="textLabel1_3" >
+                    <property name="text" >
+                      <string>E&amp;ncoding:</string>
+                    </property>
+                    <property name="textFormat" >
+                      <enum>Qt::PlainText</enum>
+                    </property>
+                    <property name="buddy" stdset="0" >
+                      <cstring>comboBoxEncoding</cstring>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="KComboBox" name="comboBoxEncoding" >
+                    <property name="editable" >
+                      <bool>true</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <spacer name="Spacer2" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>106</width>
+                        <height>20</height>
+                      </size>
+                    </property>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
+                    </property>
+                    <property name="orientation" >
+                      <enum>Horizontal</enum>
+                    </property>
+                  </spacer>
+                </item>
+              </layout>
+            </item>
+            <item>
+              <widget class="QCheckBox" name="m_firstRowHeader" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="text" >
+                  <string>First row contains headers</string>
+                </property>
+              </widget>
+            </item>
+            <item>
+              <widget class="QCheckBox" name="m_firstColHeader" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="text" >
+                  <string>First column contains headers</string>
+                </property>
+              </widget>
+            </item>
+            <item>
+              <spacer name="Spacer3" >
+                <property name="sizeHint" >
+                  <size>
+                    <width>20</width>
+                    <height>40</height>
+                  </size>
+                </property>
+                <property name="sizeType" >
+                  <enum>Expanding</enum>
+                </property>
+                <property name="orientation" >
+                  <enum>Vertical</enum>
+                </property>
+              </spacer>
+            </item>
+          </layout>
+        </widget>
+      </widget>
+      <widget class="QWidget" name="tab" >
+        <attribute name="title" >
+          <string>Format</string>
+        </attribute>
+        <layout class="QGridLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item rowspan="2" row="0" column="0" colspan="1" >
+            <widget class="QGroupBox" name="m_delimiterBox" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>1</hsizetype>
+                  <vsizetype>1</vsizetype>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <property name="title" >
+                <string>Delimiter</string>
+              </property>
+              <layout class="QGridLayout" >
+                <property name="margin" >
+                  <number>11</number>
+                </property>
+                <property name="spacing" >
+                  <number>6</number>
+                </property>
+                <item row="0" column="0" >
+                  <widget class="QRadioButton" name="m_radioComma" >
+                    <property name="text" >
+                      <string>Comma</string>
+                    </property>
+                    <property name="checked" >
+                      <bool>true</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item row="0" column="1" >
+                  <widget class="QRadioButton" name="m_radioSemicolon" >
+                    <property name="text" >
+                      <string>Semicolon</string>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="0" >
+                  <widget class="QRadioButton" name="m_radioTab" >
+                    <property name="text" >
+                      <string>Tabulator</string>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="1" >
+                  <widget class="QRadioButton" name="m_radioSpace" >
+                    <property name="text" >
+                      <string>Space</string>
+                    </property>
+                  </widget>
+                </item>
+                <item row="0" column="2" >
+                  <widget class="QRadioButton" name="m_radioOther" >
+                    <property name="text" >
+                      <string>Other</string>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="2" >
+                  <widget class="QLineEdit" name="m_delimiterEdit" >
+                    <property name="sizePolicy" >
+                      <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                      </sizepolicy>
+                    </property>
+                    <property name="maximumSize" >
+                      <size>
+                        <width>30</width>
+                        <height>32767</height>
+                      </size>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </widget>
+          </item>
+          <item row="2" column="0" >
+            <widget class="QCheckBox" name="m_ignoreDuplicates" >
+              <property name="text" >
+                <string>Ignore duplicate delimiters</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="1" >
+            <widget class="QLabel" name="TextLabel2" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>1</hsizetype>
+                  <vsizetype>0</vsizetype>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <property name="text" >
+                <string>Text&amp;quote:</string>
+              </property>
+              <property name="buddy" stdset="0" >
+                <cstring>m_comboQuote</cstring>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="1" >
+            <widget class="QLabel" name="textLabel1_4" >
+              <property name="text" >
+                <string>&amp;Format:</string>
+              </property>
+              <property name="buddy" stdset="0" >
+                <cstring>m_formatComboBox</cstring>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="2" >
+            <widget class="KComboBox" name="m_formatComboBox" />
+          </item>
+          <item row="1" column="2" >
+            <widget class="QComboBox" name="m_comboQuote" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>1</hsizetype>
+                  <vsizetype>0</vsizetype>
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <item>
+                <property name="text" >
+                  <string>"</string>
+                </property>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>'</string>
+                </property>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>None</string>
+                </property>
+              </item>
+            </widget>
+          </item>
+          <item row="0" column="3" >
+            <spacer name="spacer19" >
+              <property name="sizeHint" >
+                <size>
+                  <width>51</width>
+                  <height>21</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+          <item row="1" column="3" >
+            <spacer name="spacer20" >
+              <property name="sizeHint" >
+                <size>
+                  <width>51</width>
+                  <height>21</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+        </layout>
+      </widget>
+      <widget class="QWidget" name="tab" >
+        <attribute name="title" >
+          <string>Ranges</string>
+        </attribute>
+        <layout class="QGridLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item row="0" column="0" >
+            <widget class="QFrame" name="frame3" >
+              <property name="frameShape" >
+                <enum>NoFrame</enum>
+              </property>
+              <property name="frameShadow" >
+                <enum>Raised</enum>
+              </property>
+              <layout class="QGridLayout" >
+                <item row="0" column="3" >
+                  <widget class="QSpinBox" name="m_rowEnd" />
+                </item>
+                <item row="0" column="2" >
+                  <widget class="QLabel" name="textLabel1" >
+                    <property name="text" >
+                      <string>to</string>
+                    </property>
+                    <property name="textFormat" >
+                      <enum>Qt::AutoText</enum>
+                    </property>
+                    <property name="alignment" >
+                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="wordWrap" >
+                      <bool>true</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item row="0" column="0" >
+                  <widget class="QLabel" name="TextLabel3" >
+                    <property name="sizePolicy" >
+                      <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                      </sizepolicy>
+                    </property>
+                    <property name="frameShape" >
+                      <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow" >
+                      <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="text" >
+                      <string>Import lines:</string>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="3" >
+                  <widget class="QSpinBox" name="m_colEnd" />
+                </item>
+                <item row="1" column="1" >
+                  <widget class="QSpinBox" name="m_colStart" >
+                    <property name="value" >
+                      <number>1</number>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="2" >
+                  <widget class="QLabel" name="textLabel1_2" >
+                    <property name="text" >
+                      <string>to</string>
+                    </property>
+                    <property name="textFormat" >
+                      <enum>Qt::AutoText</enum>
+                    </property>
+                    <property name="alignment" >
+                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="wordWrap" >
+                      <bool>true</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item row="0" column="1" >
+                  <widget class="QSpinBox" name="m_rowStart" >
+                    <property name="value" >
+                      <number>1</number>
+                    </property>
+                  </widget>
+                </item>
+                <item row="1" column="0" >
+                  <widget class="QLabel" name="TextLabel3_2" >
+                    <property name="sizePolicy" >
+                      <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                      </sizepolicy>
+                    </property>
+                    <property name="frameShape" >
+                      <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow" >
+                      <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="text" >
+                      <string>Import columns:</string>
+                    </property>
+                  </widget>
+                </item>
+                <item rowspan="1" row="1" column="4" colspan="3" >
+                  <spacer name="spacer2" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>468</width>
+                        <height>20</height>
+                      </size>
+                    </property>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
+                    </property>
+                    <property name="orientation" >
+                      <enum>Horizontal</enum>
+                    </property>
+                  </spacer>
+                </item>
+                <item rowspan="1" row="0" column="4" colspan="3" >
+                  <spacer name="spacer1" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>468</width>
+                        <height>20</height>
+                      </size>
+                    </property>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
+                    </property>
+                    <property name="orientation" >
+                      <enum>Horizontal</enum>
+                    </property>
+                  </spacer>
+                </item>
+                <item rowspan="1" row="2" column="0" colspan="5" >
+                  <spacer name="spacer7" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>611</width>
+                        <height>20</height>
+                      </size>
+                    </property>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
+                    </property>
+                    <property name="orientation" >
+                      <enum>Horizontal</enum>
+                    </property>
+                  </spacer>
+                </item>
+                <item row="2" column="5" >
+                  <spacer name="spacer8" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>71</width>
+                        <height>20</height>
+                      </size>
+                    </property>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
+                    </property>
+                    <property name="orientation" >
+                      <enum>Horizontal</enum>
+                    </property>
+                  </spacer>
+                </item>
+                <item row="2" column="6" >
+                  <widget class="QPushButton" name="m_updateButton" >
+                    <property name="text" >
+                      <string>Update</string>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </widget>
+          </item>
+        </layout>
+      </widget>
+    </widget>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <customwidgets>
+    <customwidget>
+      <class>KComboBox</class>
+      <extends>QComboBox</extends>
+      <header>kcombobox.h</header>
+    </customwidget>
+  </customwidgets>
+  <includes>
+    <include location="global" >kcombobox.h</include>
+    <include location="local" >klineedit.h</include>
+  </includes>
+</ui>

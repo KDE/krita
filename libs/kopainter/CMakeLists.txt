@@ -14,12 +14,10 @@ set(kopainter_LIB_SRCS
    ko_color_wheel.cc
    KoColorSlider.cc
    KoXYColorSelector.cc
-   ko_gray_widget.cc
    ko_hsv_widget.cc
    KoUniColorChooser.cpp
    KoColorPatch.cpp
-   ko_rgb_widget.cc
-   kdualcolorbutton.cpp
+   KoDualColorButton.cpp
 )
 
 kde4_automoc(${kopainter_LIB_SRCS})

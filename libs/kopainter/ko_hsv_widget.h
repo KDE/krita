@@ -21,13 +21,14 @@
 
 #include "qwidget.h"
 #include <QLabel>
-#include "kdualcolorbutton.h"
 
+
+#include "KoDualColorButton.h"
 #include <koColor.h>
 
 #include <koffice_export.h>
 
-class KDualColorButton;
+class KoDualColorButton;
 class KColorValueSelector;
 class KoOldColorWheel;
 class KoOldColorSlider;
@@ -69,7 +70,7 @@ protected slots:
 
     void slotFGColorSelected(const QColor& c);
     void slotBGColorSelected(const QColor& c);
-    void currentChanged(KDualColorButton::Selection);
+    void currentChanged(KoDualColorButton::Selection);
 
 private:
     void changedFgColor();
@@ -85,7 +86,7 @@ private:
     QSpinBox *mHIn;
     QSpinBox *mSIn;
     QSpinBox *mVIn;
-    KDualColorButton *m_ColorButton;
+    KoDualColorButton *m_ColorButton;
 
     KoOldColor m_fgColor;
     KoOldColor m_bgColor;

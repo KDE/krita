@@ -38,7 +38,7 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent)
 {
     setObjectName(name);
 
-    m_ColorButton = new KDualColorButton(this);
+    m_ColorButton = new KoDualColorButton(this);
     m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
 
     QGridLayout *mGrid = new QGridLayout;
@@ -100,7 +100,7 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent)
 
     connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
     connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
-    connect(m_ColorButton, SIGNAL(currentChanged(KDualColorButton::DualColor)), this, SLOT(currentChanged(KDualColorButton::DualColor)));
+    connect(m_ColorButton, SIGNAL(currentChanged(KoDualColorButton::DualColor)), this, SLOT(currentChanged(KoDualColorButton::DualColor)));
 
     connect(m_VSelector, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
     connect(m_colorwheel, SIGNAL(valueChanged(const KoOldColor&)), this, SLOT(slotWheelChanged(const KoOldColor&)));
@@ -121,7 +121,7 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent)
 void KoHSVWidget::slotHChanged(int h)
 {
     //kDebug() << "H changed: " << h << endl;
-    if (m_ColorButton->currentColor() == KDualColorButton::Foreground){
+    if (m_ColorButton->currentColor() == KoDualColorButton::Foreground){
         m_fgColor.setHSV(h, m_fgColor.S(), m_fgColor.V());
         changedFgColor();
     }
@@ -134,7 +134,7 @@ void KoHSVWidget::slotHChanged(int h)
 void KoHSVWidget::slotSChanged(int s)
 {
     //kDebug() << "S changed: " << s << endl;
-    if (m_ColorButton->currentColor() == KDualColorButton::Foreground){
+    if (m_ColorButton->currentColor() == KoDualColorButton::Foreground){
         m_fgColor.setHSV(m_fgColor.H(), s, m_fgColor.V());
         changedFgColor();
     }
@@ -148,7 +148,7 @@ void KoHSVWidget::slotVChanged(int v)
 {
     //kDebug() << "V changed: " << v << ", setting autovalue to false " << endl;
     m_autovalue = false;
-    if (m_ColorButton->currentColor() == KDualColorButton::Foreground){
+    if (m_ColorButton->currentColor() == KoDualColorButton::Foreground){
         m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
         changedFgColor();
     }
@@ -161,7 +161,7 @@ void KoHSVWidget::slotVChanged(int v)
 void KoHSVWidget::slotWheelChanged(const KoOldColor& c)
 {
     //kDebug() << "Wheel changed: " << c.color() <<  endl;
-    if (m_ColorButton->currentColor() == KDualColorButton::Foreground){
+    if (m_ColorButton->currentColor() == KoDualColorButton::Foreground){
         if(m_autovalue)
             m_fgColor.setHSV(c.H(), c.S(), 255);
         else
@@ -232,7 +232,7 @@ void KoHSVWidget::update(const KoOldColor & fgColor, const KoOldColor & bgColor)
     m_bgColor = bgColor;
 
     KoOldColor color = (m_ColorButton->currentColor() ==
-                        KDualColorButton::Foreground)? m_fgColor : m_bgColor;
+                        KoDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
     int h = color.H();
     int s = color.S();
@@ -273,10 +273,10 @@ void KoHSVWidget::slotBGColorSelected(const QColor& c)
     changedBgColor();
 }
 
-void KoHSVWidget::currentChanged(KDualColorButton::Selection s)
+void KoHSVWidget::currentChanged(KoDualColorButton::Selection s)
 {
     //kDebug() << "currentChanged\n";
-    if(s == KDualColorButton::Foreground)
+    if(s == KoDualColorButton::Foreground)
         slotFGColorSelected(m_ColorButton->currentColor());
     else
         slotBGColorSelected(m_ColorButton->currentColor());

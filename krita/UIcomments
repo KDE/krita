@@ -1,14 +1,3 @@
-Color palettes ;
-
-Context; KDualColorButton
-subcontext: Foreground and backgroud are 2 'patches'.
-You can drag a color from a patch anywhere else that excepts color dnd actions.
-The usecase of duplicating the background color to the foreground is impossible
-because starting a drag changes the current selected patch.
-I suggest to do selecting of foreground/background color on mouse release instead.
-
-<BSAR: I don't understand this at all -- not sure what you're talking about.>
-
 Selections
 
 When you did a 'select all' and then create a selection nothing happens 

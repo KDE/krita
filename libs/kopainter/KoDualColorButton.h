@@ -28,7 +28,7 @@
 /**
  * @short A widget for selecting two related colors.
  *
- * KDualColorButton allows the user to select two cascaded colors (usually a
+ * KoDualColorButton allows the user to select two cascaded colors (usually a
  * foreground and background color). Other features include drag and drop
  * from other KDE color widgets, a reset to black and white control, and a
  * swap colors control.
@@ -46,7 +46,7 @@
  *
  * @author Daniel M. Duley <mosfet@kde.org>
  */
-class KDEUI_EXPORT KDualColorButton : public QWidget
+class KDEUI_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
     Q_ENUMS( Selection )
@@ -63,28 +63,28 @@ class KDEUI_EXPORT KDualColorButton : public QWidget
     };
 
     /**
-     * Constructs a new KDualColorButton using the default black and white
+     * Constructs a new KoDualColorButton using the default black and white
      * colors.
      *
-     * @param parent The parent widget of the KDualColorButton.
+     * @param parent The parent widget of the KoDualColorButton.
      * @param dialogParent The parent widget of the color selection dialog.
      */
-    explicit KDualColorButton( QWidget *parent = 0, QWidget* dialogParent = 0 );
+    explicit KoDualColorButton( QWidget *parent = 0, QWidget* dialogParent = 0 );
 
     /**
-     * Constructs a new KDualColorButton with the supplied foreground and
+     * Constructs a new KoDualColorButton with the supplied foreground and
      * background colors.
      *
-     * @param parent The parent widget of the KDualColorButton.
+     * @param parent The parent widget of the KoDualColorButton.
      * @param dialogParent The parent widget of the color selection dialog.
      */
-    KDualColorButton( const QColor &foregroundColor, const QColor &backgroundColor,
+    KoDualColorButton( const QColor &foregroundColor, const QColor &backgroundColor,
                       QWidget *parent = 0, QWidget* dialogParent = 0 );
 
     /**
-     * Destroys the KDualColorButton.
+     * Destroys the KoDualColorButton.
      */
-    ~KDualColorButton();
+    ~KoDualColorButton();
 
     /**
      * Returns the current foreground color.
@@ -158,7 +158,7 @@ class KDEUI_EXPORT KDualColorButton : public QWidget
     /**
      * Emitted when the user changes the current color selection.
      */
-    void selectionChanged( KDualColorButton::Selection selection );
+    void selectionChanged( KoDualColorButton::Selection selection );
 
   protected:
     /**

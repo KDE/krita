@@ -85,9 +85,7 @@
 #include <KoView.h>
 #include <KoTabBar.h>
 
-#include <ko_gray_widget.h>
 #include <ko_hsv_widget.h>
-#include <ko_rgb_widget.h>
 #include <KoUniColorChooser.h>
 
 #include <kopalettemanager.h>
@@ -3822,22 +3820,6 @@ void KisView::createDockers()
     connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setFgColor(const QColor &)));
     connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setBgColor(const QColor &)));
     //m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX, 0, PALETTE_DOCKER, true);
-
-    m_rgbwidget = new KoRGBWidget(this, "rgb");
-    m_rgbwidget->setWindowTitle(i18n("RGB"));
-    connect(m_rgbwidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
-    connect(m_rgbwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
-    connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setFgColor(const QColor &)));
-    connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_rgbwidget, SLOT(setBgColor(const QColor &)));
-    //m_paletteManager->addWidget( m_rgbwidget, "rgbwidget", krita::COLORBOX);
-
-    m_graywidget = new KoGrayWidget(this, "gray");
-    m_graywidget->setWindowTitle(i18n("Gray"));
-    connect(m_graywidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
-    connect(m_graywidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
-    connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_graywidget, SLOT(setFgColor(const QColor &)));
-    connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_graywidget, SLOT(setBgColor(const QColor &)));
-    //m_paletteManager->addWidget( m_graywidget, "graywidget", krita::COLORBOX);
 
     //make sure the color chooser get right default values
     emit sigFGQColorChanged(m_fg.toQColor());

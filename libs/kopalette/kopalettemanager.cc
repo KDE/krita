@@ -88,7 +88,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 
         m_toggleShowHidePalettes->setCheckedState(i18n("Hide All Palette Windows"));
     }
-    m_viewActionMenu->insert(m_toggleShowHidePalettes);
+    m_viewActionMenu->addAction(m_toggleShowHidePalettes);
 
     // Recreate the palettes in the saved order
     QStringList paletteList = QStringList::split(",", cfg->readEntry("palettes"));
@@ -171,7 +171,7 @@ void KoPaletteManager::addWidget(QWidget * widget,
 
     m_mapper->setMapping(a, m_widgetNames->count()); // This is the position at which we'll insert the action
     m_actions->insert( name, a );
-    m_viewActionMenu->insert(a);
+    m_viewActionMenu->addAction(a);
 
     palette->plug(widget, name, position);
 

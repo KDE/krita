@@ -417,18 +417,12 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     m_addThinSpaceAction = new KAction( i18n( "Add Thin Space" ), collection,
 		                                               "formula_addthinspace");
     connect( m_addThinSpaceAction, SIGNAL( triggered(bool) ), SLOT( addThinSpace() ));
-    m_addMediumSpaceAction = new KAction( i18n( "Add Medium Space" ),
-                                    0,
-                                    this, SLOT( addMediumSpace() ),
-                                    collection, "formula_addmediumspace" );
-    m_addThickSpaceAction = new KAction( i18n( "Add Thick Space" ),
-                                    0,
-                                    this, SLOT( addThickSpace() ),
-                                    collection, "formula_addthickspace" );
-    m_addQuadSpaceAction = new KAction( i18n( "Add Quad Space" ),
-                                    0,
-                                    this, SLOT( addQuadSpace() ),
-                                    collection, "formula_addquadspace" );
+    m_addMediumSpaceAction = new KAction( i18n( "Add Medium Space" ), collection, "formula_addmediumspace" );
+    connect(m_addMediumSpaceAction, SIGNAL(triggered(bool)), SLOT( addMediumSpace() ));
+    m_addThickSpaceAction = new KAction( i18n( "Add Thick Space" ), collection, "formula_addthickspace" );
+    connect(m_addThickSpaceAction, SIGNAL(triggered(bool)), SLOT( addThickSpace() ));
+    m_addQuadSpaceAction = new KAction( i18n( "Add Quad Space" ), collection, "formula_addquadspace" );
+    connect(m_addQuadSpaceAction, SIGNAL(triggered(bool)), SLOT( addQuadSpace() ));
 
     m_addIntegralAction = new KAction(KIcon("int"), i18n("Add Integral"), collection, "formula_addintegral");
     connect(m_addIntegralAction, SIGNAL(triggered(bool) ), SLOT(addIntegral()));
@@ -479,15 +473,11 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     m_addMultilineAction = new KAction(KIcon("multiline"), i18n("Add Multiline"), collection, "formula_addmultiline");
     connect(m_addMultilineAction, SIGNAL(triggered(bool) ), SLOT(addMultiline()));
 
-    m_removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"),
-                                        0,
-                                        this, SLOT(removeEnclosing()),
-                                        collection, "formula_removeenclosing");
+    m_removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"), collection, "formula_removeenclosing");
+    connect(m_removeEnclosingAction, SIGNAL(triggered(bool)), SLOT(removeEnclosing()));
 
-    m_makeGreekAction = new KAction(i18n("Convert to Greek"),
-                                  0,
-                                  this, SLOT(makeGreek()),
-                                  collection, "formula_makegreek");
+    m_makeGreekAction = new KAction(i18n("Convert to Greek"), collection, "formula_makegreek");
+    connect(m_makeGreekAction, SIGNAL(triggered(bool)), SLOT(makeGreek()));
 
     m_appendColumnAction = new KAction(KIcon("inscol"),  i18n( "Append Column" ), collection, "formula_appendcolumn" );
     connect(m_appendColumnAction, SIGNAL(triggered(bool) ), SLOT( appendColumn() ));

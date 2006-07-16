@@ -492,20 +492,15 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     m_removeRowAction = new KAction(KIcon("remrow"),  i18n( "Remove Row" ), collection, "formula_removerow" );
     connect(m_removeRowAction, SIGNAL(triggered(bool) ), SLOT( removeRow() ));
 
-    m_syntaxHighlightingAction = new KToggleAction(i18n("Syntax Highlighting"),
-                                                 0,
-                                                 this, SLOT(toggleSyntaxHighlighting()),
+    m_syntaxHighlightingAction = new KToggleAction(i18n("Syntax Highlighting"), 
                                                  collection, "formula_syntaxhighlighting");
+    connect(m_syntaxHighlightingAction, SIGNAL(triggered(bool)), SLOT(toggleSyntaxHighlighting()));
     //m_syntaxHighlightingAction->setChecked( m_contextStyle->syntaxHighlighting() );
 
-    m_formatBoldAction = new KToggleAction( i18n( "&Bold" ), "text_bold",
-                                                0, //CTRL + Qt::Key_B,
-                                                this, SLOT( textBold() ),
-                                                collection, "formula_format_bold" );
-    m_formatItalicAction = new KToggleAction( i18n( "&Italic" ), "text_italic",
-                                                  0, //CTRL + Qt::Key_I,
-                                                  this, SLOT( textItalic() ),
-                                                  collection, "formula_format_italic" );
+    m_formatBoldAction = new KToggleAction(KIcon("text_bold"),  i18n( "&Bold" ), collection, "formula_format_bold" );
+    connect(m_formatBoldAction, SIGNAL(triggered(bool)), SLOT( textBold() ));
+    m_formatItalicAction = new KToggleAction(KIcon("text_italic"),  i18n( "&Italic" ), collection, "formula_format_italic" );
+    connect(m_formatItalicAction, SIGNAL(triggered(bool)), SLOT( textItalic() ));
     m_formatBoldAction->setEnabled( false );
     m_formatItalicAction->setEnabled( false );
 
@@ -522,8 +517,7 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     delimiter.append(QString("]"));
     delimiter.append(QString("}"));
     delimiter.append(QString(">"));
-    m_leftBracket = new KSelectAction(i18n("Left Delimiter"),
-                                    0, this, SLOT(delimiterLeft()),
+    m_leftBracket = new KSelectAction(i18n("Left Delimiter"), 0, this, SLOT(delimiterLeft()),
                                     collection, "formula_typeleft");
     m_leftBracket->setItems(delimiter);
     //leftBracket->setCurrentItem(0);

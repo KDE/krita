@@ -2,6 +2,7 @@
 Comment=Transform an image in a lenscorrection
 Comment[es]=Transforma una imagen en un corrección de lente
 Comment[et]=Pildi teisendamine läätsekorrektsiooniga
+Comment[it]=Trasforma un'immagine in una correzione lenticolare
 Comment[pt]=Transformar uma imagem numa correcção de lentes
 Comment[pt_BR]=Transformar uma imagem numa correcção de lentes
 Comment[zh_TW]=在 lenscorrection 下轉換圖片
@@ -11,6 +12,7 @@ Name=LensCorrection Filter
 Name[da]=Linekorrektionsfilter
 Name[es]=Filtro de corrección de lente
 Name[et]=Läätsekorrektsiooni filter
+Name[it]=Filtro di correzione lenticolare
 Name[pt]=Filtro de Correcção de Lentes
 Name[pt_BR]=Filtro de Correcção de Lentes
 Name[zh_TW]=LensCorrection 過濾器

@@ -2,6 +2,7 @@
 Comment=Transform an image in a wave
 Comment[es]=Transformar una imagen en una onda
 Comment[et]=Pildi teisendamine lainefiltris
+Comment[it]=Trasforma un'immagine in un'onda
 Comment[pt]=Transforma uma imagem numa onda
 Comment[pt_BR]=Transforma uma imagem numa onda
 Comment[zh_TW]=在 wave 中轉換圖片
@@ -10,6 +11,7 @@ Icon=
 Name=Wave Filter
 Name[es]=Filtro de onda
 Name[et]=Lainefilter
+Name[it]=Filtro onda
 Name[pt]=Filtro de Onda
 Name[pt_BR]=Filtro de Onda
 Name[zh_TW]=Wave 過濾器

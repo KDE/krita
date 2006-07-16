@@ -30,6 +30,7 @@
 
 #include "kis_config.h"
 #include "kis_image.h"
+#include "kis_perspective_grid.h"
 #include "kis_perspective_grid_manager.h"
 
 Qt::PenStyle GridDrawer::gs2style(Q_UINT32 s)
@@ -49,7 +50,7 @@ Qt::PenStyle GridDrawer::gs2style(Q_UINT32 s)
     }
 }
 
-void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, const KisPerspectiveGrid& grid)
+void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, const KisSubPerspectiveGrid* grid)
 {
     KisConfig cfg;
     QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
@@ -61,14 +62,14 @@ void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, cons
     // 4 -> bottom-left corner
     // d12 line from top-left to top-right
     // note that the notion of top-left is purely theorical
-    LineEquation d12 = computeLineEquation( grid.topLeft, grid.topRight ) ;
-    KisPoint v12 = KisPoint(grid.topLeft - grid.topRight);
-    v12.setX( v12.x() / grid.subdivisions); v12.setY( v12.y() / grid.subdivisions );
-    LineEquation d23 = computeLineEquation( grid.topRight, grid.bottomRight );
-    KisPoint v23 = KisPoint(grid.topRight - grid.bottomRight);
-    v23.setX( v23.x() / grid.subdivisions); v23.setY( v23.y() / grid.subdivisions );
-    LineEquation d34 = computeLineEquation( grid.bottomRight, grid.bottomLeft );
-    LineEquation d41 = computeLineEquation( grid.bottomLeft, grid.topLeft );
+    LineEquation d12 = computeLineEquation( grid->topLeft(), grid->topRight() ) ;
+    KisPoint v12 = KisPoint(*grid->topLeft() - *grid->topRight());
+    v12.setX( v12.x() / grid->subdivisions()); v12.setY( v12.y() / grid->subdivisions() );
+    LineEquation d23 = computeLineEquation( grid->topRight(), grid->bottomRight() );
+    KisPoint v23 = KisPoint(*grid->topRight() - *grid->bottomRight());
+    v23.setX( v23.x() / grid->subdivisions()); v23.setY( v23.y() / grid->subdivisions() );
+    LineEquation d34 = computeLineEquation( grid->bottomRight(), grid->bottomLeft() );
+    LineEquation d41 = computeLineEquation( grid->bottomLeft(), grid->topLeft() );
     
     if( d12.a == d34.a )
     {
@@ -81,23 +82,23 @@ void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, cons
     }
     KisPoint vertVanishingPoint = computeIntersection(d23,d41);
     
-    for(uint i = 1; i < grid.subdivisions; i ++)
+    for(uint i = 1; i < grid->subdivisions(); i ++)
     {
-        KisPoint pol1 = KisPoint(grid.topRight) + i * v12;
-        LineEquation d1 = computeLineEquation( pol1, vertVanishingPoint );
+        KisPoint pol1 = *grid->topRight() + i * v12;
+        LineEquation d1 = computeLineEquation( &pol1, &vertVanishingPoint );
         KisPoint pol1b =  computeIntersection(d1,d34);
         drawLine( pol1.roundQPoint(), pol1b.roundQPoint() );
         
-        KisPoint pol2 = KisPoint(grid.bottomRight) + i * v23;
-        LineEquation d2 = computeLineEquation( pol2, horizVanishingPoint );
+        KisPoint pol2 = *grid->bottomRight() + i * v23;
+        LineEquation d2 = computeLineEquation( &pol2, &horizVanishingPoint );
         KisPoint pol2b =  computeIntersection(d2,d41);
         drawLine( pol2.roundQPoint(), pol2b.roundQPoint() );
     }
     setPen(mainPen);
-    drawLine( grid.topLeft, grid.topRight );
-    drawLine( grid.topRight, grid.bottomRight );
-    drawLine( grid.bottomRight, grid.bottomLeft );
-    drawLine( grid.bottomLeft, grid.topLeft );
+    drawLine( grid->topLeft(), grid->topRight() );
+    drawLine( grid->topRight(), grid->bottomRight() );
+    drawLine( grid->bottomRight(), grid->bottomLeft() );
+    drawLine( grid->bottomLeft(), grid->topLeft() );
 }
 
 void GridDrawer::drawGrid(KisImageSP image, const QRect& wr)

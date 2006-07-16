@@ -56,7 +56,7 @@ class KisImageIface;
 class KisProfile;
 class KisProgressDisplayInterface;
 class KisPaintLayer;
-
+class KisPerspectiveGrid;
 
 class KRITACORE_EXPORT KisImage : public QObject, public KShared {
     Q_OBJECT
@@ -134,6 +134,9 @@ public:
 
     QString nextLayerName() const;
     void rollBackLayerName();
+    
+    KisPerspectiveGrid* perspectiveGrid();
+    void createPerspectiveGrid(QPoint topLeft, QPoint topRight, QPoint bottomRight, QPoint bottomLeft);
     /**
     * Resize the image to the specified width and height. The resize
     * method handles the creating on an undo step itself.
@@ -448,6 +451,7 @@ private:
 
     class KisImagePrivate;
     KisImagePrivate * m_private;
+    
 };
 
 #endif // KIS_IMAGE_H_

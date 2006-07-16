@@ -22,17 +22,10 @@
 #define KIS_PERSPECTIVE_GRID_MANAGER_H
 
 #include <qobject.h>
-#include <qpoint.h>
 
 class KActionCollection;
 class KToggleAction;
 class KisView;
-
-struct KisPerspectiveGrid {
-    KisPerspectiveGrid() : subdivisions(5) { }
-    QPoint topLeft, topRight, bottomLeft, bottomRight;
-    int subdivisions;
-};
 
 class KisPerspectiveGridManager : public QObject
 {
@@ -49,7 +42,6 @@ class KisPerspectiveGridManager : public QObject
     private:
         KisView* m_view;
         KToggleAction* m_toggleGrid;
-        KisPerspectiveGrid m_grid;
 };
 
 #endif

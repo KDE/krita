@@ -25,15 +25,12 @@
 
 #include "kis_image.h"
 #include "kis_grid_drawer.h"
+#include "kis_perspective_grid.h"
 #include "kis_view.h"
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView * parent)
     : QObject(), m_view(parent)
 {
-    m_grid.topLeft = QPoint( 100, 200 );
-    m_grid.topRight = QPoint( 400, 190 );
-    m_grid.bottomLeft = QPoint( 500, 600 );
-    m_grid.bottomRight = QPoint( 800, 500 );
     
 }
 
@@ -65,28 +62,38 @@ void KisPerspectiveGridManager::drawGrid(QRect wr, QPainter *p, bool openGL )
 {
     KisImageSP image = m_view->canvasSubject()->currentImg();
 
-    if (image) {
-        if (m_toggleGrid->isChecked())
+    
+    if (image && m_toggleGrid->isChecked()) {
+        KisPerspectiveGrid* pGrid = image->perspectiveGrid();
+
+        if(!pGrid->hasSubGrids())
         {
-            GridDrawer *gridDrawer = 0;
+            KisSubPerspectiveGrid* sub1 = new KisSubPerspectiveGrid( new KisPerspectiveGridNode( 100, 100 ), new KisPerspectiveGridNode( 200, 90 ), new KisPerspectiveGridNode( 300, 150 ), new KisPerspectiveGridNode( 10, 200 ) );
+            pGrid->addNewSubGrid( sub1 );
+            KisSubPerspectiveGrid* sub2 = new KisSubPerspectiveGrid( new KisPerspectiveGridNode( 20, 0 ) , sub1->topLeft(), sub1->bottomLeft(), new KisPerspectiveGridNode( 0, 90 ) );
+            sub2->setRightGrid( sub1 );
+            sub1->setLeftGrid( sub2 );
+            pGrid->addNewSubGrid( sub2 );
+        }
+        GridDrawer *gridDrawer = 0;
 
-            if (openGL) {
-                gridDrawer = new OpenGLGridDrawer();
-            } else {
-                Q_ASSERT(p);
+        if (openGL) {
+            gridDrawer = new OpenGLGridDrawer();
+        } else {
+            Q_ASSERT(p);
 
-                if (p) {
-                    gridDrawer = new QPainterGridDrawer(p);
-                }
-            }
-
-            Q_ASSERT(gridDrawer != 0);
-
-            if (gridDrawer) {
-                gridDrawer->drawPerspectiveGrid(image, wr, m_grid );
-                delete gridDrawer;
+            if (p) {
+                gridDrawer = new QPainterGridDrawer(p);
             }
         }
+
+        Q_ASSERT(gridDrawer != 0);
+
+        for( QValueList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
+        {
+            gridDrawer->drawPerspectiveGrid(image, wr, *it );
+        }
+        delete gridDrawer;
     }
 }
 

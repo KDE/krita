@@ -27,7 +27,8 @@
 #include "kis_types.h"
 #include "kis_point.h"
 
-struct KisPerspectiveGrid;
+class KisSubPerspectiveGrid;
+
 struct LineEquation {
     // y = a*x + b
     double a, b;
@@ -40,17 +41,18 @@ class GridDrawer {
     
     public:
         void drawGrid(KisImageSP image, const QRect& wr);
-        void drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisPerspectiveGrid& grid);
+        void drawPerspectiveGrid(KisImageSP image, const QRect& wr, const KisSubPerspectiveGrid* grid);
     
         virtual void setPen(const QPen& pen) = 0;
         virtual void drawLine(Q_INT32 x1, Q_INT32 y1, Q_INT32 x2, Q_INT32 y2) = 0;
         inline void drawLine(const QPoint& p1, const QPoint& p2) { drawLine(p1.x(), p1.y(), p2.x(), p2.y() ); }
+        inline void drawLine(const KisPoint* p1, const KisPoint* p2) { drawLine( p1->roundQPoint(), p2->roundQPoint()); }
     private:
-        inline LineEquation computeLineEquation(const KisPoint& p1, const KisPoint& p2) const
+        inline LineEquation computeLineEquation(const KisPoint* p1, const KisPoint* p2) const
         {
             LineEquation eq;
-            eq.a = (p2.y() - p1.y()) / (double)( p2.x() - p1.x() );
-            eq.b = -eq.a * p1.x() + p1.y();
+            eq.a = (p2->y() - p1->y()) / (double)( p2->x() - p1->x() );
+            eq.b = -eq.a * p1->x() + p1->y();
             return eq;
         }
         inline KisPoint computeIntersection(const LineEquation& d1, const LineEquation& d2) const

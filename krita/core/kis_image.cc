@@ -63,6 +63,7 @@
 #include "kis_filter_strategy.h"
 #include "kis_profile.h"
 #include "kis_paint_layer.h"
+#include "kis_perspective_grid.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_group_layer.h"
 #include "kis_iterators_pixel.h"
@@ -75,6 +76,7 @@ public:
     bool     sizeChangedWhileLocked;
     bool     selectionChangedWhileLocked;
     KisSubstrateSP substrate;
+    KisPerspectiveGrid* perspectiveGrid;
 };
 
 
@@ -525,6 +527,7 @@ KisImage::KisImage(const KisImage& rhs) : QObject(), KShared(rhs)
     m_dcop = 0L;
     if (this != &rhs) {
         m_private = new KisImagePrivate(*rhs.m_private);
+        m_private->perspectiveGrid = new KisPerspectiveGrid(*rhs.m_private->perspectiveGrid);
         m_uri = rhs.m_uri;
         m_name = QString::null;
         m_width = rhs.m_width;
@@ -564,6 +567,7 @@ DCOPObject * KisImage::dcopObject()
 
 KisImage::~KisImage()
 {
+    delete m_private->perspectiveGrid;
     delete m_private;
     delete m_nserver;
     delete m_dcop;
@@ -633,6 +637,8 @@ void KisImage::init(KisUndoAdapter *adapter, Q_INT32 width, Q_INT32 height,  Kis
     m_private->sizeChangedWhileLocked = false;
     m_private->selectionChangedWhileLocked = false;
     m_private->substrate = 0;
+    m_private->perspectiveGrid = new KisPerspectiveGrid();
+            
     m_adapter = adapter;
 
     m_nserver = new KisNameServer(i18n("Layer %1"), 1);
@@ -1656,5 +1662,11 @@ KisBackgroundSP KisImage::background() const
 {
     return m_bkg;
 }
+
+KisPerspectiveGrid* KisImage::perspectiveGrid()
+{
+    return m_private->perspectiveGrid;
+}
+
 #include "kis_image.moc"
 

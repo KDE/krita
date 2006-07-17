@@ -1,3 +1,4 @@
+
 /*
  * This file is part of Krita
  *
@@ -17,7 +18,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * Ported from the CImg Gimp plugin by Victor Stinner and uses CImg by David Tschumperlé.
+ * Ported from the CImg Gimp plugin by Victor Stinner and uses CImg by David TschumperlÃ©.
  * See: http://www.girouette-stinner.com/castor/gimp.html?girouette=ad761bc2f4dcfda1cb44c587da17f86c
  */
 
@@ -37,11 +38,15 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
+#include <KoColorSpaceFactoryRegistry.h>
+
 #include <kis_doc.h>
+#include <kis_filter_registry.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
-#include <kis_filter_registry.h>
+#include <kis_meta_registry.h>
+#include <kis_painter.h>
 #include <kis_global.h>
 #include <kis_types.h>
 
@@ -169,22 +174,43 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
     img = CImg<>(width, height, 1, 3);
 
-    KisRectIteratorPixel it = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
     KoColorSpace * cs = src->colorSpace();
-
-    while (!it.isDone()) {
-
-        QColor color;
-        cs->toQColor(it.rawData(), &color);
-
-        qint32 x = it.x() - rect.x();
-        qint32 y = it.y() - rect.y();
-
-        img(x, y, 0) = color.red();
-        img(x, y, 1) = color.green();
-        img(x, y, 2) = color.blue();
-
-        ++it;
+    KoColorSpace* rgb16CS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA16"),"");
+    KisPaintDeviceSP srcRGB16;
+    if(rgb16CS)
+    {
+        srcRGB16 = new KisPaintDevice(*src.data());
+        srcRGB16->convertTo(rgb16CS);
+        KisRectIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+        while (!it.isDone()) {
+            Q_UINT16* data = reinterpret_cast<Q_UINT16*>(it.rawData());
+    
+            Q_INT32 x = it.x() - rect.x();
+            Q_INT32 y = it.y() - rect.y();
+    
+            img(x, y, 0) = data[0];
+            img(x, y, 1) = data[1];
+            img(x, y, 2) = data[2];
+    
+            ++it;
+        }
+    } else {
+        kdDebug() << "The RGB16 colorspace is not available, will work in 8bit." << endl;
+        KisRectIteratorPixel it = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false);
+        while (!it.isDone()) {
+    
+            QColor color;
+            cs->toQColor(it.rawData(), &color);
+    
+            Q_INT32 x = it.x() - rect.x();
+            Q_INT32 y = it.y() - rect.y();
+    
+            img(x, y, 0) = color.red();
+            img(x, y, 1) = color.green();
+            img(x, y, 2) = color.blue();
+    
+            ++it;
+        }
     }
 
     // Copy the config data into local variables for easy cut & pasting from the original plugin
@@ -204,18 +230,43 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
 
     if (process() && !cancelRequested()) {
 
-        it = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+        
+        if(rgb16CS)
+        {
+            {
+                KisRectIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
+                while (!it.isDone()) {
+                    Q_INT32 x = it.x() - rect.x();
+                    Q_INT32 y = it.y() - rect.y();
+        
+                    Q_UINT16* data = reinterpret_cast<Q_UINT16*>(it.rawData());
+        
+                    data[0] = img(x, y, 0) ;
+                    data[1] = img(x, y, 1) ;
+                    data[2] = img(x, y, 2) ;
+        
+                    ++it;
+                }
+            }
+            srcRGB16->convertTo(cs);
+            KisPainter p(dst);
+            p.bitBlt(rect.x(), rect.y(), COMPOSITE_OVER, srcRGB16, rect.x(), rect.y(), rect.width(), rect.height() );
+        } else {
+            KisRectIteratorPixel it = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true);
 
-        while (!it.isDone()) {
-
-            if (it.isSelected()) {
-
-                qint32 x = it.x() - rect.x();
-                qint32 y = it.y() - rect.y();
-
-                QColor color((int)img(x, y, 0), (int)img(x, y, 1), (int)img(x, y, 2));
-
-                cs->fromQColor(color, it.rawData());
+            while (!it.isDone()) {
+    
+                if (it.isSelected()) {
+    
+                    Q_INT32 x = it.x() - rect.x();
+                    Q_INT32 y = it.y() - rect.y();
+    
+                    QColor color((int)img(x, y, 0), (int)img(x, y, 1), (int)img(x, y, 2));
+    
+                    cs->fromQColor(color, it.rawData());
+                }
+    
+                ++it;
             }
 
             ++it;
@@ -652,3 +703,13 @@ KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
     }
 }
 
+ColorSpaceIndependence KisCImgFilter::colorSpaceIndependence()
+{
+    KoColorSpace* rgb16CS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA16"),"");
+    if(rgb16CS)
+    {
+        return TO_RGBA16;
+    } else {
+        return TO_RGBA8;
+    }
+}

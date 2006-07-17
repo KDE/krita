@@ -31,6 +31,7 @@
 
 #include "kactioncollection.h"
 #include "kdebug.h"
+#include "kstaticdeleter.h"
 
 #include <QToolButton>
 #include <QButtonGroup>
@@ -306,9 +307,11 @@ KoTool *ToolHelper::createTool(KoCanvasBase *canvas) const {
 
 //static
 KoToolManager* KoToolManager::s_instance = 0;
+static KStaticDeleter<KoToolManager> staticToolManagerDeleter;
+
 KoToolManager* KoToolManager::instance() {
     if(s_instance == 0)
-        s_instance = new KoToolManager();
+        staticToolManagerDeleter.setObject(s_instance, new KoToolManager());
     return s_instance;
 }
 

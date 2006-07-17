@@ -22,14 +22,13 @@
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
+#include <kstaticdeleter.h>
 
 #include <KoShapeRegistry.h>
 #include <KoRectangleShapeFactory.h>
 #include <KoPathShapeFactory.h>
 
 #include <QString>
-
-KoShapeRegistry *KoShapeRegistry::m_singleton = 0;
 
 KoShapeRegistry::KoShapeRegistry()
 {
@@ -65,11 +64,14 @@ KoShapeRegistry::~KoShapeRegistry()
 {
 }
 
+KoShapeRegistry *KoShapeRegistry::m_singleton = 0;
+static KStaticDeleter<KoShapeRegistry> staticShapeRegistryDeleter;
+
 KoShapeRegistry* KoShapeRegistry::instance()
 {
     if(KoShapeRegistry::m_singleton == 0)
     {
-        KoShapeRegistry::m_singleton = new KoShapeRegistry();
+        staticShapeRegistryDeleter.setObject(m_singleton, new KoShapeRegistry());
         KoShapeRegistry::m_singleton->init();
     }
     return KoShapeRegistry::m_singleton;

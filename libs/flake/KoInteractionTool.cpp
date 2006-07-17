@@ -36,6 +36,7 @@
 #include <kcommand.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
+#include <kstaticdeleter.h>
 
 #define HANDLE_DISTANCE 10
 
@@ -347,6 +348,7 @@ void KoInteractionTool::activate(bool temporary) {
 
 // ##########  SelectionDecorator ############
 QImage * SelectionDecorator::s_rotateCursor=0;
+static KStaticDeleter<QImage> staticRotateCursorDeleter;
 
 SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
         bool rotationHandles, bool shearHandles)
@@ -355,8 +357,8 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 , m_arrows(arrows)
 {
     if(SelectionDecorator::s_rotateCursor == 0) {
-        s_rotateCursor = new QImage();
-        s_rotateCursor->load("/home/zander/sources/kde4/koffice/libs/flake/rotate.png");
+        staticRotateCursorDeleter.setObject(s_rotateCursor, new QImage());
+        s_rotateCursor->load(KStandardDirs::locate("lib", "flake/rotate.png"));
         //sd.setObject(&SelectionDecorator::s_rotateCursor, SelectionDecorator::s_rotateCursor);
     }
 }

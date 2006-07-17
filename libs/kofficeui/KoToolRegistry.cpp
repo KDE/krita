@@ -23,6 +23,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
+#include <kstaticdeleter.h>
 
 KoToolRegistry::KoToolRegistry() {
     const KService::List offers = KServiceTypeTrader::self()->query(
@@ -52,10 +53,12 @@ KoToolRegistry::~KoToolRegistry()
 
 // static
 KoToolRegistry *KoToolRegistry::s_instance = 0;
+static KStaticDeleter<KoToolRegistry> staticToolRegistryDeleter;
+
 KoToolRegistry* KoToolRegistry::instance()
 {
     if(KoToolRegistry::s_instance == 0)
-        KoToolRegistry::s_instance = new KoToolRegistry();
+        staticToolRegistryDeleter.setObject(s_instance, new KoToolRegistry());
     return KoToolRegistry::s_instance;
 }
 

@@ -132,7 +132,6 @@ KoShapeSelector::KoShapeSelector(QWidget *parent, KoCanvasController *cc, QStrin
 : QWidget(parent)
 , m_canvasController(cc)
 {
-    Q_UNUSED(regExp)
     m_canvas = new Canvas(this);
     m_tool = new MoveTool(m_canvas);
     m_shapeManager = new KoShapeManager(m_canvas);

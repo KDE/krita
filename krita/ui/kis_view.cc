@@ -2239,12 +2239,14 @@ void KisView::slotSetFGColor(const KoColor& c)
 {
     m_fg = c;
     notifyObservers();
+    emit sigFGColorChanged( c );
 }
 
 void KisView::slotSetBGColor(const KoColor& c)
 {
     m_bg = c;
     notifyObservers();
+    emit sigBGColorChanged( c );
 }
 
 void KisView::setupPrinter(KPrinter& printer)

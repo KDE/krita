@@ -42,6 +42,7 @@
 #include <kaction.h>
 #include <koFrameButton.h>
 #include <kactioncollection.h>
+#include <KoDualColorButton.h>
 
 #include "kis_resourceserver.h"
 #include "kis_controlframe.h"
@@ -129,6 +130,15 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
     action = new KAction(i18n("&Painter's Tools"), view->actionCollection(), "paintops");
     action->setDefaultWidget( m_paintopBox );
 
+/**** Temporary hack to test the KoDualColorButton ***/
+   KoDualColorButton * dual = new KoDualColorButton(view->canvasSubject()->fgColor(), view->canvasSubject()->fgColor(), view, view);
+    action = new KAction(i18n("&Painter's Tools"), view->actionCollection(), "dual");
+    action->setDefaultWidget( dual );
+    connect(dual, SIGNAL(foregroundColorChanged(const KoColor &)), view, SLOT(slotSetFGColor(const KoColor &)));
+    connect(dual, SIGNAL(backgroundColorChanged(const KoColor &)), view, SLOT(slotSetBGColor(const KoColor &)));
+    connect(view, SIGNAL(sigFGColorChanged(const KoColor &)), dual, SLOT(setForegroundColor(const KoColor &)));
+    dual->setFixedSize( 26, 26 );
+/*******/
     m_brushWidget->setFixedSize( 26, 26 );
     m_patternWidget->setFixedSize( 26, 26 );
     m_gradientWidget->setFixedSize( 26, 26 );

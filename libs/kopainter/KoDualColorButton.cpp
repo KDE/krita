@@ -36,9 +36,11 @@
 class KoDualColorButton::Private
 {
   public:
-    Private()
-      : dragFlag( false ), miniCtlFlag( false ),
-        selection( Foreground )
+    Private(const KoColor &fgColor, const KoColor &bgColor)
+        : dragFlag( false )
+        , miniCtlFlag( false )
+        , foregroundColor(fgColor)
+        , backgroundColor(bgColor)
     {
         arrowBitmap = QBitmap::fromData( QSize(dcolorarrow_width, dcolorarrow_height),
                                        (const unsigned char *)dcolorarrow_bits, QImage::Format_MonoLSB );
@@ -52,22 +54,19 @@ class KoDualColorButton::Private
 
     QBitmap arrowBitmap;
     QPixmap resetPixmap;
+    bool dragFlag, miniCtlFlag;
     KoColor foregroundColor;
     KoColor backgroundColor;
     QPoint dragPosition;
-    bool dragFlag, miniCtlFlag;
-    Selection selection, tmpSelection;
+    Selection tmpSelection;
     bool popDialog;
 };
 
 KoDualColorButton::KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor, QWidget *parent, QWidget* dialogParent )
   : QWidget( parent ),
-    d( new Private )
+    d( new Private(foregroundColor, backgroundColor) )
 {
     d->dialogParent = dialogParent;
-
-    d->foregroundColor = foregroundColor;
-    d->backgroundColor = backgroundColor;
 
     if ( sizeHint().isValid() )
         setMinimumSize( sizeHint() );
@@ -90,19 +89,9 @@ KoColor KoDualColorButton::backgroundColor() const
   return d->backgroundColor;
 }
 
-KoDualColorButton::Selection KoDualColorButton::selection() const
-{
-  return d->selection;
-}
-
 bool KoDualColorButton::popDialog() const
 {
   return d->popDialog;
-}
-
-KoColor KoDualColorButton::currentColor() const
-{
-  return ( d->selection == Background ? d->backgroundColor : d->foregroundColor );
 }
 
 QSize KoDualColorButton::sizeHint() const
@@ -114,32 +103,11 @@ void KoDualColorButton::setForegroundColor( const KoColor &color )
 {
   d->foregroundColor = color;
   repaint();
-
-  emit foregroundColorChanged( d->foregroundColor );
 }
 
 void KoDualColorButton::setBackgroundColor( const KoColor &color )
 {
   d->backgroundColor = color;
-  repaint();
-
-  emit backgroundColorChanged( d->backgroundColor );
-}
-
-void KoDualColorButton::setCurrentColor( const KoColor &color )
-{
-  if ( d->selection == Background )
-    d->backgroundColor = color;
-  else
-    d->foregroundColor = color;
-
-  repaint();
-}
-
-void KoDualColorButton::setSelection( Selection selection )
-{
-  d->selection = selection;
-
   repaint();
 }
 
@@ -167,11 +135,10 @@ void KoDualColorButton::paintEvent(QPaintEvent *)
   QBrush foregroundBrush( d->foregroundColor.toQColor(), Qt::SolidPattern );
   QBrush backgroundBrush( d->backgroundColor.toQColor(), Qt::SolidPattern );
 
-
-  qDrawShadeRect( &painter, backgroundRect, palette(), d->selection == Background, 2, 0,
+  qDrawShadeRect( &painter, backgroundRect, palette(), false, 2, 0,
                   isEnabled() ? &backgroundBrush : &defBrush );
 
-  qDrawShadeRect( &painter, foregroundRect, palette(), d->selection == Foreground, 2, 0,
+  qDrawShadeRect( &painter, foregroundRect, palette(), false, 2, 0,
                   isEnabled() ? &foregroundBrush : &defBrush );
 
   painter.setPen( palette().color( QPalette::Shadow ) );
@@ -266,14 +233,11 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     metrics( foregroundRect, backgroundRect );
 
     if ( foregroundRect.contains( event->pos() )) {
-        d->selection = Foreground;
         if(d->tmpSelection == Foreground ) {
-            KoColor newColor = d->foregroundColor;
-
             if( d->popDialog) {
-                KoUniColorDialog *dialog = new KoUniColorDialog(newColor, d->dialogParent);
+                KoUniColorDialog *dialog = new KoUniColorDialog(d->foregroundColor, d->dialogParent);
                 if(dialog->exec() != KPageDialog::Accepted) {
-                    d->foregroundColor = KoColor(newColor);
+                 //   d->foregroundColor = newColor;
                     emit foregroundColorChanged( d->foregroundColor );
                 }
             }
@@ -284,16 +248,12 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
             d->foregroundColor = d->backgroundColor;
             emit foregroundColorChanged( d->foregroundColor );
         }
-        emit selectionChanged( Foreground );
     } else if ( backgroundRect.contains( event->pos() )) {
-        d->selection = Background;
         if(d->tmpSelection == Background ) {
-            KoColor newColor = d->backgroundColor;
-
             if( d->popDialog) {
-                KoUniColorDialog *dialog = new KoUniColorDialog(newColor, d->dialogParent);
+                KoUniColorDialog *dialog = new KoUniColorDialog(d->backgroundColor, d->dialogParent);
                 if(dialog->exec() != KPageDialog::Accepted) {
-                    d->backgroundColor = KoColor(newColor);
+                    //d->backgroundColor = ;
                     emit backgroundColorChanged( d->backgroundColor );
                 }
             }
@@ -303,7 +263,6 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
             d->backgroundColor = d->foregroundColor;
             emit backgroundColorChanged( d->backgroundColor );
         }
-        emit selectionChanged( Background );
     }
 
     repaint();

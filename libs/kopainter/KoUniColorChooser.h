@@ -46,13 +46,17 @@ public:
     virtual ~KoUniColorChooser() {}
 
 public slots:
+    /**
+      * Sets the current color
+      * Does not emit a signal
+      */
+    void setColor(const KoColor & c);
 
 signals:
 
     /**
      * Emitted when the current color is changed.
      */
-    void sigColorChanged(const QColor & c);
     void sigColorChanged(const KoColor & c);
 
 protected slots:

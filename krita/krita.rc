@@ -163,6 +163,7 @@
      <Action name="patterns"/>
      <Separator/>
      <Action name="paintops"/>
+     <Action name="dual"/>
      <Action name="paintop_options"/>
 </ToolBar>
 

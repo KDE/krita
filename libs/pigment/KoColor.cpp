@@ -81,14 +81,19 @@ KoColor::KoColor(const KoColor & rhs)
 {
     if (this == &rhs) return;
 
+    m_data = 0;
     m_colorSpace = rhs.colorSpace();
-    m_data = new quint8[m_colorSpace->pixelSize()];
-    memset(m_data, 0, m_colorSpace->pixelSize());
-    memcpy(m_data, rhs.data(), m_colorSpace->pixelSize());
+    if(m_colorSpace && rhs.m_data)
+    {
+        m_data = new quint8[m_colorSpace->pixelSize()];
+        memcpy(m_data, rhs.data(), m_colorSpace->pixelSize());
+    }
 }
 
 KoColor & KoColor::operator=(const KoColor & rhs)
 {
+    if (this == &rhs) return *this;
+
     delete [] m_data;
     m_data = 0;
     m_colorSpace = rhs.colorSpace();

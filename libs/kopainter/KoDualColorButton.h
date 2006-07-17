@@ -53,9 +53,7 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
     Q_ENUMS( Selection )
     Q_PROPERTY( KoColor foregroundColor READ foregroundColor WRITE setForegroundColor )
     Q_PROPERTY( KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor )
-    Q_PROPERTY( KoColor currentColor READ currentColor WRITE setCurrentColor )
     Q_PROPERTY( bool popDialog READ popDialog WRITE setPopDialog )
-    Q_PROPERTY( Selection selection READ selection WRITE setSelection STORED false DESIGNABLE false )
 
 
   public:
@@ -99,27 +97,6 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
     KoColor backgroundColor() const;
 
     /**
-     * Returns the current color depending on the
-     * selection.
-     *
-     * This is equal to
-     *
-     * \code
-     *  if ( selection() == Foreground )
-     *    return foregroundColor();
-     *  else
-     *    return backgroundColor();
-     * \endcode
-     */
-    KoColor currentColor() const;
-
-    /**
-     * Returns whether the foreground or background item
-     * is selected.
-     */
-    Selection selection() const;
-
-    /**
      * Returns if a dialog with a KoUniColorChooser will be popped up when clicking
      * If false then you could/should connect to the pleasePopDialog signal
      * and pop your own dialog. Just set the current color afterwards.
@@ -144,16 +121,6 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
     void setBackgroundColor( const KoColor &color );
 
     /**
-     * Sets the color of the selected item.
-     */
-    void setCurrentColor( const KoColor &color );
-
-    /**
-     * Sets the current selected color item.
-     */
-    void setSelection( Selection selection );
-
-    /**
      * Sets if a dialog with a KoUniColorChooser should be popped up when clicking
      * If you set this to false then you could connect to the pleasePopDialog signal
      * and pop your own dialog. Just set the current color afterwards.
@@ -170,11 +137,6 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
      * Emitted when the background color is changed.
      */
     void backgroundColorChanged( const KoColor &color );
-
-    /**
-     * Emitted when the user changes the current color selection.
-     */
-    void selectionChanged( KoDualColorButton::Selection selection );
 
     /**
      * Emitted when the user clicks one of the two color patches.

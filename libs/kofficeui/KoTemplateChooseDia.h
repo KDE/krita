@@ -50,7 +50,7 @@ class KoTCDIconCanvas : public KIconCanvas
     Q_OBJECT
     public:
 	KoTCDIconCanvas( QWidget *parent = 0, const char *name = 0L )
-	    : KIconCanvas( parent ) {}
+	    : KIconCanvas( parent ) { Q_UNUSED(name) }
 
 	bool isCurrentValid() { return currentItem(); }
 	Q3IconViewItem * load(KoTemplateGroup *group, const QString& name, KInstance* instance);

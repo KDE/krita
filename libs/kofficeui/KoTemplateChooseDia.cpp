@@ -71,9 +71,7 @@ class MyFileDialog : public KFileDialog
         MyFileDialog(
                 const QString& startDir=0,
                 const QString& filter =0,
-                QWidget *parent=0,
-                const char *name=0,
-                bool modal=0)
+                QWidget *parent=0)
             :  KFileDialog (startDir, filter, parent),
         m_slotOkCalled( false ) {}
 
@@ -364,9 +362,7 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * la
 
     d->m_filedialog=new MyFileDialog(dir,
 	    QString::null,
-	    widgetbase,
-	    "file dialog",
-	    false);
+	    widgetbase);
 
     layout->addWidget(d->m_filedialog,0,0);
     d->m_filedialog->setParent( widgetbase );
@@ -408,6 +404,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     // config
     KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
     int templateNum = grp.readEntry( "TemplateTab", -1 );
+    Q_UNUSED(templateNum)
     QString templateName = grp.readPathEntry( "TemplateName" );
 	if ( templateName.isEmpty() && d->tree->defaultTemplate() )
 		templateName = d->tree->defaultTemplate()->name(); //select the default template for the app

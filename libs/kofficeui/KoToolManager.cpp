@@ -110,6 +110,7 @@ QWidget *KoToolManager::toolBox() {
 }
 
 void KoToolManager::registerTools(KActionCollection *ac) {
+    Q_UNUSED(ac)
     m_mutex.lock();
     setup();
     // TODO

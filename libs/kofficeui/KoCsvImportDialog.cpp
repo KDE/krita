@@ -79,7 +79,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent, QByteArray& fileArray)
     encodings << description.arg("Apple Roman"); // Apple
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
     encodings << description.arg("CP 1258"); // Windows
-    m_dialog->comboBoxEncoding->insertStringList(encodings);
+    m_dialog->comboBoxEncoding->insertItems( 0, encodings );
 
     m_formatList << i18n( "Text" );
     m_formatList << i18n( "Number" );
@@ -87,7 +87,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent, QByteArray& fileArray)
     //m_formatList << i18n( "Date" );
     m_formatList << i18n( "Decimal Comma Number" );
     m_formatList << i18n( "Decimal Point Number" );
-    m_dialog->m_formatComboBox->insertStringList( m_formatList );
+    m_dialog->m_formatComboBox->insertItems( 0, m_formatList );
 
     m_dialog->m_sheet->setReadOnly( true );
 
@@ -383,7 +383,7 @@ void KoCsvImportDialog::fillTable( )
     m_adjustCols = true;
     adjustRows( row - m_startRow );
     adjustCols( maxColumn - m_startCol );
-    m_dialog->m_colEnd->setMaxValue( maxColumn );
+    m_dialog->m_colEnd->setMaximum( maxColumn );
     if ( m_endCol == -1 )
       m_dialog->m_colEnd->setValue( maxColumn );
     
@@ -391,7 +391,7 @@ void KoCsvImportDialog::fillTable( )
     for (column = 0; column < m_dialog->m_sheet->numCols(); ++column)
     {
         const QString header = m_dialog->m_sheet->horizontalHeader()->label(column);
-        if ( m_formatList.find( header ) == m_formatList.end() )
+        if ( m_formatList.contains( header ) )
             m_dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Text"));
 
         m_dialog->m_sheet->adjustColumn(column);
@@ -413,15 +413,15 @@ void KoCsvImportDialog::fillComboBox()
   else
     m_dialog->m_colEnd->setValue( m_endCol );  
 
-  m_dialog->m_rowEnd->setMinValue( 1 );
-  m_dialog->m_colEnd->setMinValue( 1 );
-  m_dialog->m_rowEnd->setMaxValue( m_dialog->m_sheet->numRows() );
-  m_dialog->m_colEnd->setMaxValue( m_dialog->m_sheet->numCols() );
+  m_dialog->m_rowEnd->setMinimum( 1 );
+  m_dialog->m_colEnd->setMinimum( 1 );
+  m_dialog->m_rowEnd->setMaximum( m_dialog->m_sheet->numRows() );
+  m_dialog->m_colEnd->setMaximum( m_dialog->m_sheet->numCols() );
 
-  m_dialog->m_rowStart->setMinValue( 1 );
-  m_dialog->m_colStart->setMinValue( 1 );
-  m_dialog->m_rowStart->setMaxValue( m_dialog->m_sheet->numRows() );
-  m_dialog->m_colStart->setMaxValue( m_dialog->m_sheet->numCols() );
+  m_dialog->m_rowStart->setMinimum( 1 );
+  m_dialog->m_colStart->setMinimum( 1 );
+  m_dialog->m_rowStart->setMaximum( m_dialog->m_sheet->numRows() );
+  m_dialog->m_colStart->setMaximum( m_dialog->m_sheet->numCols() );
 }
 
 int KoCsvImportDialog::headerType(int col)
@@ -581,7 +581,7 @@ bool KoCsvImportDialog::checkUpdateRange()
 void KoCsvImportDialog::currentCellChanged(int, int col)
 {
     const QString header = m_dialog->m_sheet->horizontalHeader()->label(col);
-    m_dialog->m_formatComboBox->setCurrentText( header );
+    m_dialog->m_formatComboBox->setItemText( m_dialog->m_formatComboBox->currentIndex(), header );
 }
 
 void KoCsvImportDialog::ignoreDuplicatesChanged(int)
@@ -599,7 +599,7 @@ QTextCodec* KoCsvImportDialog::getCodec(void) const
     kDebug(30502) << "Encoding: " << strCodec << endl;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
     if ( codec )

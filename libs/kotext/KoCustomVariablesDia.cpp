@@ -63,7 +63,7 @@ KoVariableNameDia::KoVariableNameDia( QWidget *parent, const Q3PtrList<KoVariabl
      for ( ; it.current() ; ++it ) {
         KoVariable *var = it.current();
         if ( var->type() == VT_CUSTOM )
-            names->insertItem( ( (KoCustomVariable*) var )->name(), -1 );
+            names->insertItem( 0, ( (KoCustomVariable*) var )->name() );
     }
 
 }

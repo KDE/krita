@@ -532,7 +532,7 @@ void KoAutoFormatDia::setupTab3()
             lst<<tmp;
         }
     }
-    autoFormatLanguage->insertStringList(lst);
+    autoFormatLanguage->addItems(lst);
 #warning "kde4: port it"
     //connect(autoFormatLanguage->listBox(), SIGNAL(selected ( const QString & )), this, SLOT(changeAutoformatLanguage(const QString & )));
 

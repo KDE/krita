@@ -34,10 +34,10 @@
 KoHighlightingTab::KoHighlightingTab( QWidget* parent, const char* name, Qt::WFlags fl ) 
         : KoHighlightingTabBase( parent, name, fl )
 {
-    underlineStyleKComboBox->insertStringList( KoTextFormat::underlineTypeList() );
-    underlineLineStyleKComboBox->insertStringList( KoTextFormat::underlineStyleList() );
-    strikethroughStyleKComboBox->insertStringList( KoTextFormat::strikeOutTypeList() );
-    strikethroughLineStyleKComboBox->insertStringList( KoTextFormat::strikeOutStyleList() );
+    underlineStyleKComboBox->addItems( KoTextFormat::underlineTypeList() );
+    underlineLineStyleKComboBox->addItems( KoTextFormat::underlineStyleList() );
+    strikethroughStyleKComboBox->addItems( KoTextFormat::strikeOutTypeList() );
+    strikethroughLineStyleKComboBox->addItems( KoTextFormat::strikeOutStyleList() );
 
     capitalisationButtonGroup->setColumnLayout( 3, Qt::Horizontal );
     QStringList attributes = KoTextFormat::fontAttributeList();

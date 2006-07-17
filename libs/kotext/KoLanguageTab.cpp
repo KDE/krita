@@ -43,9 +43,9 @@ KoLanguageTab::KoLanguageTab( KSpell2::Loader::Ptr loader, QWidget* parent, cons
     for ( ; itName != langNames.end() && itTag != langTags.end(); ++itName, ++itTag )
     {
         if ( spellCheckLanguages.find( *itTag ) != spellCheckLanguages.end() )
-            languageKComboBox->insertItem( SmallIcon( "spellcheck" ), *itName );
+            languageKComboBox->addItem( SmallIcon( "spellcheck" ), *itName );
         else
-            languageKComboBox->insertItem( *itName );
+            languageKComboBox->addItem( *itName );
     }
     connect( languageKComboBox, SIGNAL( activated( int ) ), this, SIGNAL( languageChanged() ) );
 }

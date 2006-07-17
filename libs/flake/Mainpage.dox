@@ -90,6 +90,10 @@ public:
         painter.end();
     }
 
+    KoUnit::Unit unit() {
+        return U_MM; // replace this with a version that uses KoDocument::unit();
+    }
+
 private:
     KoTool *m_tool;
     KoShapeManager *m_shapeManager;

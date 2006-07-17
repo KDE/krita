@@ -24,7 +24,7 @@
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
-#include "KoPageLayoutColumnsBase.h"
+#include "ui_KoPageLayoutColumns.h"
 
 class QWidget;
 class KoUnitDoubleSpinBox;
@@ -33,7 +33,7 @@ class KoPagePreview;
 /**
  * This class is a widget that shows the KoColumns data structure and allows the user to change it.
  */
-class KOFFICEUI_EXPORT KoPageLayoutColumns : public KoPageLayoutColumnsBase {
+class KOFFICEUI_EXPORT KoPageLayoutColumns : public QWidget, public Ui::KoPageLayoutColumns {
     Q_OBJECT
 
 public:

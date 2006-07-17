@@ -14,6 +14,7 @@ set(kopainter_LIB_SRCS
    KoColorSlider.cc
    KoXYColorSelector.cc
    KoUniColorChooser.cpp
+   KoUniColorDialog.cpp
    KoColorPatch.cpp
    KoDualColorButton.cpp
 )

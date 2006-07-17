@@ -27,6 +27,7 @@
 #include "kcolormimedata.h"
 
 #include "KoDualColorButton.h"
+#include "KoUniColorDialog.h"
 #include "KoColor.h"
 
 #include "dcolorarrow.xbm"
@@ -267,14 +268,15 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     if ( foregroundRect.contains( event->pos() )) {
         d->selection = Foreground;
         if(d->tmpSelection == Foreground ) {
-            QColor newColor = d->foregroundColor.toQColor();
+            KoColor newColor = d->foregroundColor;
 
             if( d->popDialog) {
-/*                if ( KColorDialog::getColor( newColor, d->dialogParent ) != QDialog::Rejected ) {
+                KoUniColorDialog *dialog = new KoUniColorDialog(newColor, d->dialogParent);
+                if(dialog->exec() != KPageDialog::Accepted) {
                     d->foregroundColor = KoColor(newColor);
                     emit foregroundColorChanged( d->foregroundColor );
                 }
-*/            }
+            }
             else
                 emit pleasePopDialog( d->foregroundColor);
         }
@@ -286,14 +288,15 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     } else if ( backgroundRect.contains( event->pos() )) {
         d->selection = Background;
         if(d->tmpSelection == Background ) {
-            QColor newColor = d->backgroundColor.toQColor();
+            KoColor newColor = d->backgroundColor;
 
             if( d->popDialog) {
-/*                if ( KColorDialog::getColor( newColor, d->dialogParent ) != QDialog::Rejected ) {
+                KoUniColorDialog *dialog = new KoUniColorDialog(newColor, d->dialogParent);
+                if(dialog->exec() != KPageDialog::Accepted) {
                     d->backgroundColor = KoColor(newColor);
                     emit backgroundColorChanged( d->backgroundColor );
                 }
-*/            }
+            }
             else
                 emit pleasePopDialog( d->backgroundColor);
         } else {

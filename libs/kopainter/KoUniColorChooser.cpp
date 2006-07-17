@@ -37,17 +37,15 @@
 
 #include "KoUniColorChooser.h"
 
-KoUniColorChooser::KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegistry, QWidget *parent) : super(parent)
+KoUniColorChooser::KoUniColorChooser(QWidget *parent) : super(parent)
 {
-    m_csFactoryRegistry = csFactoryRegistry;
-
     QGridLayout *mGrid = new QGridLayout;
     QGridLayout *mGrowGrid = new QGridLayout;
 
-    m_xycolorselector = new KoXYColorSelector(csFactoryRegistry->getRGB8(), this);
+    m_xycolorselector = new KoXYColorSelector(rgbColorSpace(), this);
     m_xycolorselector->setFixedSize(137, 137);
 
-    m_colorSlider = new KoColorSlider(csFactoryRegistry->getRGB8(), Qt::Vertical, this);
+    m_colorSlider = new KoColorSlider(rgbColorSpace(), Qt::Vertical, this);
     m_colorSlider->setFixedSize(25, 118);
 
     m_colorpatch = new KoColorPatch(this);
@@ -646,17 +644,17 @@ void KoUniColorChooser::updateValues()
 
 KoColorSpace *KoUniColorChooser::rgbColorSpace()
 {
-    return m_csFactoryRegistry->getRGB8();
+    return KoColorSpaceFactoryRegistry::instance()->getRGB8();
 }
 
 KoColorSpace *KoUniColorChooser::labColorSpace()
 {
-    return m_csFactoryRegistry->getColorSpace(KoID("LABA",0),"");
+    return KoColorSpaceFactoryRegistry::instance()->getColorSpace(KoID("LABA",0),"");
 }
 
 KoColorSpace *KoUniColorChooser::cmykColorSpace()
 {
-    return m_csFactoryRegistry->getColorSpace(KoID("CMYK",0),"");
+    return KoColorSpaceFactoryRegistry::instance()->getColorSpace(KoID("CMYK",0),"");
 }
 
 void KoUniColorChooser::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)

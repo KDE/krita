@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=YCbCr Color Model (16-bit integer)
 Comment=Color model for 16-bit integer per channel YCbCr images
-ServiceTypes=Krita/ColorSpace
+ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=krita_ycbcr_u16_plugin
-X-Krita-Version=2
+X-Pigment-Version=1

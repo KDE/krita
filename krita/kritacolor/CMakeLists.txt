@@ -29,7 +29,6 @@ install(TARGETS kritacolor  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_colorspace.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  kis_histogram_producer.h      kis_basic_histogram_producers.h  DESTINATION ${INCLUDE_INSTALL_DIR})
 
 

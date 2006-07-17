@@ -19,14 +19,14 @@
 #ifndef KOUNICOLORCHOOSER_H
 #define KOUNICOLORCHOOSER_H
 
-#include "qwidget.h"
-#include <QLabel>
+#include <QWidget>
 
-#include <KoColor.h>
+#include "KoColor.h"
 
 #include <koffice_export.h>
 
 class KValueSelector;
+class KoColor;
 class KoXYColorSelector;
 class KoColorSlider;
 class KoColorPatch;
@@ -42,7 +42,7 @@ class KOPAINTER_EXPORT KoUniColorChooser
     typedef QWidget super;
 
 public:
-    KoUniColorChooser(KoColorSpaceFactoryRegistry* csFactoryRegistry, QWidget *parent = 0L);
+    KoUniColorChooser(QWidget *parent = 0L);
     virtual ~KoUniColorChooser() {}
 
 public slots:
@@ -125,8 +125,6 @@ private:
     QRadioButton *m_LRB;
     QRadioButton *m_aRB;
     QRadioButton *m_bRB;
-
-    KoColorSpaceFactoryRegistry* m_csFactoryRegistry;
 };
 
 #endif

@@ -18,6 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QStringList>
+#include <QDir>
+
+#include <kinstance.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
@@ -26,18 +31,56 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include <lcms.h>
+
 #include "KoColorSpace.h"
 #include "KoColorProfile.h"
 #include "KoColorSpaceFactoryRegistry.h"
 #include "colorspaces/KoAlphaColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 
+KoColorSpaceFactoryRegistry *KoColorSpaceFactoryRegistry::m_singleton = 0;
 
-KoColorSpaceFactoryRegistry::KoColorSpaceFactoryRegistry(QStringList profileFilenames)
+KoColorSpaceFactoryRegistry* KoColorSpaceFactoryRegistry::instance()
 {
-    // Create the built-in colorspaces
+    if(KoColorSpaceFactoryRegistry::m_singleton == 0)
+    {
+        KoColorSpaceFactoryRegistry::m_singleton = new KoColorSpaceFactoryRegistry();
+        KoColorSpaceFactoryRegistry::m_singleton->init();
+    }
+    return KoColorSpaceFactoryRegistry::m_singleton;
+}
 
-    m_alphaCs = new KoAlphaColorSpace(this, 0);
+
+void KoColorSpaceFactoryRegistry::init()
+{
+    // prepare a list of the profiles
+    KGlobal::instance()->dirs()->addResourceType("kis_profiles",
+                                                     KStandardDirs::kde_default("data") + "krita/profiles/");
+
+    QStringList profileFilenames;
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icm");
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICM");
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICC");
+    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icc");
+
+    QDir d("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
+
+    QStringList filenames = d.entryList();
+
+    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
+        profileFilenames += d.absoluteFilePath(*it);
+    }
+
+    d.setPath(QDir::homePath() + "/.color/icc/");
+    filenames = d.entryList();
+
+    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
+        profileFilenames += d.absoluteFilePath(*it);
+    }
+
+    // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
+    cmsErrorAction(LCMS_ERROR_SHOW);
 
     // Load the profiles
     if (!profileFilenames.empty()) {
@@ -62,13 +105,16 @@ KoColorSpaceFactoryRegistry::KoColorSpaceFactoryRegistry(QStringList profileFile
                 (KoID("LABAHISTO", i18n("L*a*b* Histogram")), new KoLabColorSpace(this, 0);) );
 */
 
+    // Create the built-in colorspaces
+    m_alphaCs = new KoAlphaColorSpace(this, 0);
+
     // Load all colorspace modules
-     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ColorSpace"),
+     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("KOffice/ColorSpace"),
                                                          QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-Krita-Version] == 2)"));
+                                                                             "([X-Pigment-Version] == 1)"));
 
     if (offers.empty()) {
-        KMessageBox::sorry(0, i18n("Cannot start Krita: no colorspaces available."));
+        KMessageBox::sorry(0, i18n("Cannot start: No color spaces available. For now you need to install Krita to get colorspaces"));
         abort();
     }
 

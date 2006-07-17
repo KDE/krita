@@ -15,14 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QStringList>
-#include <QDir>
-#include <kstandarddirs.h>
 #include <kglobal.h>
-#include <kinstance.h>
 
 #include <config.h>
-#include <lcms.h>
 
 #include "KoColorSpaceFactoryRegistry.h"
 #include "kis_math_toolbox.h"
@@ -32,36 +27,7 @@ KisMetaRegistry * KisMetaRegistry::m_singleton = 0;
 
 KisMetaRegistry::KisMetaRegistry()
 {
-    // Create the colorspaces and load the profiles
-
-    KGlobal::instance()->dirs()->addResourceType("kis_profiles",
-                                                     KStandardDirs::kde_default("data") + "krita/profiles/");
-                          
-    QStringList profileFilenames;
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icm");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICM");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.ICC");
-    profileFilenames += KGlobal::instance()->dirs()->findAllResources("kis_profiles", "*.icc");
-
-    QDir d("/usr/share/color/icc/", "*.icc;*.ICC;*.icm;*.ICM");
-
-    QStringList filenames = d.entryList();
-
-    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += d.absoluteFilePath(*it);
-    }
-
-    d.setPath(QDir::homePath() + "/.color/icc/");
-    filenames = d.entryList();
-
-    for (QStringList::iterator it = filenames.begin(); it != filenames.end(); ++it) {
-        profileFilenames += d.absoluteFilePath(*it);
-    }
-
-    // Set lcms to return NUll/false etc from failing calls, rather than aborting the app.
-    cmsErrorAction(LCMS_ERROR_SHOW);
-
-    m_csRegistry = new KoColorSpaceFactoryRegistry(profileFilenames);
+    m_csRegistry = KoColorSpaceFactoryRegistry::instance();
     m_mtRegistry = new KisMathToolboxFactoryRegistry();
 }
 

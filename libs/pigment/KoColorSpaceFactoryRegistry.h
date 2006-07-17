@@ -47,16 +47,14 @@ class PIGMENT_EXPORT KoColorSpaceFactoryRegistry : public QObject,  public KoGen
 public:
 
     /**
-     * Create a new colorspacefactory registry. The registry will
-     * load all colorspace modules that have the right version and
-     * all profiles given in the list. It is always possible
-     * to add more profiles with addProfile()
-     *
-     * @param profileFileNames a list of all filenames of all profiles that need to be loaded initially
+     * Return an instance of the KoColorSpaceFactoryRegistry
+     * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    KoColorSpaceFactoryRegistry(QStringList profileFileNames);
+    static KoColorSpaceFactoryRegistry * instance();
 
     virtual ~KoColorSpaceFactoryRegistry();
+
+public:
 
     /**
      * Add the profile to the list.
@@ -113,6 +111,7 @@ private:
     KoColorSpaceFactoryRegistry();
     KoColorSpaceFactoryRegistry(const KoColorSpaceFactoryRegistry&);
     KoColorSpaceFactoryRegistry operator=(const KoColorSpaceFactoryRegistry&);
+    void init();
 
 private:
 
@@ -121,6 +120,7 @@ private:
     typedef QList<KisPaintDeviceAction *> PaintActionList;
     QMap<KoID, PaintActionList> m_paintDevActionMap;
     KoColorSpace *m_alphaCs;
+    static KoColorSpaceFactoryRegistry *m_singleton;
 };
 
 #endif // KOCOLORSPACEFACTORYREGISTRY_H

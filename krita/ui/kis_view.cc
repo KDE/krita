@@ -3786,7 +3786,7 @@ void KisView::createDockers()
     m_birdEyeBox->setWindowTitle(i18n("Overview"));
     m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
 
-    m_colorchooser = new KoUniColorChooser(KisMetaRegistry::instance()->csRegistry(), this);
+    m_colorchooser = new KoUniColorChooser(this);
     m_colorchooser->setWindowTitle(i18n("Color by values"));
 
     connect(m_colorchooser, SIGNAL(sigColorChanged(const KoColor &)), this, SLOT(slotSetFGColor(const KoColor &)));

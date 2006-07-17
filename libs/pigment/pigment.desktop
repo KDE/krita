@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=ServiceType
-X-KDE-ServiceType=Krita/ColorSpace
-Comment=A module implementing a complete colorspace for use with libkritacolor
+X-KDE-ServiceType=KOffice/ColorSpace
+Comment=A module implementing a complete colorspace for use with libpigment
 Comment[ca]=Un mòdul que implementa un complet espai de colors per a usar-lo amb libkritacolor
 Comment[cy]=Modiwl sy'n gweithredoli gofod lliw cyflawn i'w ddefnyddio efo libkritacolor
 Comment[da]=Et modul som implementerer et fuldstændigt farverum til brug med libkritacolor
@@ -20,5 +20,5 @@ Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar 
 Comment[sr]=Модул који имплементира потпун простор боја за употребу са libkritacolor
 Comment[sr@Latn]=Modul koji implementira potpun prostor boja za upotrebu sa libkritacolor
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med libkritacolor
-[PropertyDef::X-Krita-Version]
+[PropertyDef::X-Pigment-Version]
 Type=int

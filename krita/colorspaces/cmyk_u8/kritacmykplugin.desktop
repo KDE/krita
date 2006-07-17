@@ -71,8 +71,8 @@ Comment[ta]=8/பிட்/வழி CMYK பிம்பங்களுக்�
 Comment[tr]=8-bit/kanal CMYK görüntüler için renk modeli
 Comment[uk]=Модель кольору CMYK для зображень 8-біт/каналів
 Comment[zh_CN]=八位/通道 CMYK 图像的色彩模型
-ServiceTypes=Krita/ColorSpace
+ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritacmykplugin
-X-Krita-Version=2
+X-Pigment-Version=1
 

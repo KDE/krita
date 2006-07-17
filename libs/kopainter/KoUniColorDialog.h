@@ -41,6 +41,14 @@ class KOPAINTER_EXPORT KoUniColorDialog
 public:
     KoUniColorDialog(KoColor &initialColor, QWidget *parent = 0L);
     virtual ~KoUniColorDialog() {}
+
+    /**
+      * @return the selected color
+      */
+    KoColor color();
+
+private:
+    KoUniColorChooser *m_chooser;
 };
 
 #endif

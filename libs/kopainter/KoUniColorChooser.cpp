@@ -283,6 +283,11 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent) : super(parent)
     setLayout(mGrowGrid);
 }
 
+KoColor KoUniColorChooser::color()
+{
+    return m_currentColor;
+}
+
 void KoUniColorChooser::setColor(const KoColor & c)
 {
     m_currentColor = c;

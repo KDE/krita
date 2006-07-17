@@ -236,8 +236,8 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         if(d->tmpSelection == Foreground ) {
             if( d->popDialog) {
                 KoUniColorDialog *dialog = new KoUniColorDialog(d->foregroundColor, d->dialogParent);
-                if(dialog->exec() != KPageDialog::Accepted) {
-                 //   d->foregroundColor = newColor;
+                if(dialog->exec() == KPageDialog::Accepted) {
+                    d->foregroundColor = dialog->color();
                     emit foregroundColorChanged( d->foregroundColor );
                 }
             }
@@ -252,8 +252,8 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
                 KoUniColorDialog *dialog = new KoUniColorDialog(d->backgroundColor, d->dialogParent);
-                if(dialog->exec() != KPageDialog::Accepted) {
-                    //d->backgroundColor = ;
+                if(dialog->exec() == KPageDialog::Accepted) {
+                    d->backgroundColor = dialog->color();
                     emit backgroundColorChanged( d->backgroundColor );
                 }
             }

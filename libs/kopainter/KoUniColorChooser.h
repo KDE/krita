@@ -45,6 +45,11 @@ public:
     KoUniColorChooser(QWidget *parent = 0L);
     virtual ~KoUniColorChooser() {}
 
+        /**
+      * @return the current color
+      */
+    KoColor color();
+
 public slots:
     /**
       * Sets the current color

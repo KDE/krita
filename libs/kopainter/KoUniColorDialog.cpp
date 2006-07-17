@@ -23,8 +23,14 @@ KoUniColorDialog::KoUniColorDialog(KoColor &initialColor, QWidget *parent)
  {
     setFaceType( Plain );
 
-    KoUniColorChooser *chooser = new KoUniColorChooser( );
-    addPage( chooser, "My Test Page");
+    m_chooser = new KoUniColorChooser( );
+    m_chooser->setColor(initialColor);
+    addPage( m_chooser, "My Test Page");
+}
+
+KoColor KoUniColorDialog::color()
+{
+    return m_chooser->color();
 }
 
 #include "KoUniColorDialog.moc"

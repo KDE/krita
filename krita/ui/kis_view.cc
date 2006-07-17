@@ -85,7 +85,6 @@
 #include <KoView.h>
 #include <KoTabBar.h>
 
-#include <ko_hsv_widget.h>
 #include <KoUniColorChooser.h>
 
 #include <kopalettemanager.h>
@@ -2226,44 +2225,27 @@ void KisView::setBGColor(const KoColor& c)
 {
     m_bg = c;
     notifyObservers();
-    emit sigBGQColorChanged( c.toQColor() );
+    emit sigBGColorChanged( c );
 }
 
 void KisView::setFGColor(const KoColor& c)
 {
     m_fg = c;
     notifyObservers();
-    emit sigFGQColorChanged( c.toQColor() );
+    emit sigFGColorChanged( c );
 }
 
 void KisView::slotSetFGColor(const KoColor& c)
 {
-
     m_fg = c;
     notifyObservers();
 }
 
 void KisView::slotSetBGColor(const KoColor& c)
 {
-
     m_bg = c;
     notifyObservers();
 }
-
-void KisView::slotSetFGQColor(const QColor& c)
-{
-    KoColorSpace * monitorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA"), m_monitorProfile);
-    setFGColor(KoColor(c, monitorSpace));
-    emit sigFGQColorChanged(c);
-}
-
-void KisView::slotSetBGQColor(const QColor& c)
-{
-    KoColorSpace * monitorSpace = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA"), m_monitorProfile);
-    setBGColor(KoColor(c, monitorSpace));
-    emit sigBGQColorChanged(c);
-}
-
 
 void KisView::setupPrinter(KPrinter& printer)
 {
@@ -3800,7 +3782,6 @@ void KisView::setHDRExposure(float exposure)
 
 void KisView::createDockers()
 {
-
     m_birdEyeBox = new KisBirdEyeBox(this);
     m_birdEyeBox->setWindowTitle(i18n("Overview"));
     m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
@@ -3808,22 +3789,12 @@ void KisView::createDockers()
     m_colorchooser = new KoUniColorChooser(KisMetaRegistry::instance()->csRegistry(), this);
     m_colorchooser->setWindowTitle(i18n("Color by values"));
 
-    connect(m_colorchooser, SIGNAL(sigColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
-    connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_colorchooser, SLOT(setColor(const QColor &)));
+    connect(m_colorchooser, SIGNAL(sigColorChanged(const KoColor &)), this, SLOT(slotSetFGColor(const KoColor &)));
+    connect(this, SIGNAL(sigFGColorChanged(const KoColor &)), m_colorchooser, SLOT(setColor(const KoColor &)));
     m_paletteManager->addWidget( m_colorchooser, "unicolorchooser", krita::COLORBOX, 0, PALETTE_DOCKER, true);
 
-    m_hsvwidget = new KoHSVWidget(this, "hsv");
-    m_hsvwidget->setWindowTitle(i18n("HSV"));
-
-    connect(m_hsvwidget, SIGNAL(sigFgColorChanged(const QColor &)), this, SLOT(slotSetFGQColor(const QColor &)));
-    connect(m_hsvwidget, SIGNAL(sigBgColorChanged(const QColor &)), this, SLOT(slotSetBGQColor(const QColor &)));
-    connect(this, SIGNAL(sigFGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setFgColor(const QColor &)));
-    connect(this, SIGNAL(sigBGQColorChanged(const QColor &)), m_hsvwidget, SLOT(setBgColor(const QColor &)));
-    //m_paletteManager->addWidget( m_hsvwidget, "hsvwidget", krita::COLORBOX, 0, PALETTE_DOCKER, true);
-
     //make sure the color chooser get right default values
-    emit sigFGQColorChanged(m_fg.toQColor());
-    emit sigBGQColorChanged(m_bg.toQColor());
+    emit sigFGColorChanged(m_fg);
 
     m_palettewidget = new KisPaletteWidget(this);
     m_palettewidget->setWindowTitle(i18n("Palettes"));

@@ -25,6 +25,7 @@
 
 #include <QtGui/QWidget>
 
+class KoColor;
 /**
  * @short A widget for selecting two related colors.
  *
@@ -42,7 +43,7 @@
  * will be set, while when dragging a color it will use whatever color
  * rectangle the mouse was pressed inside.
  *
- * \image html kdualcolorbutton.png "KDE Dual Color Button"
+ * \image html kdualcolorbutton.png "KOffice Dual Color Button"
  *
  * @author Daniel M. Duley <mosfet@kde.org>
  */
@@ -50,9 +51,10 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
     Q_ENUMS( Selection )
-    Q_PROPERTY( QColor foregroundColor READ foregroundColor WRITE setForegroundColor )
-    Q_PROPERTY( QColor backgroundColor READ backgroundColor WRITE setBackgroundColor )
-    Q_PROPERTY( QColor currentColor READ currentColor WRITE setCurrentColor )
+    Q_PROPERTY( KoColor foregroundColor READ foregroundColor WRITE setForegroundColor )
+    Q_PROPERTY( KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor )
+    Q_PROPERTY( KoColor currentColor READ currentColor WRITE setCurrentColor )
+    Q_PROPERTY( bool popDialog READ popDialog WRITE setPopDialog )
     Q_PROPERTY( Selection selection READ selection WRITE setSelection STORED false DESIGNABLE false )
 
 
@@ -78,7 +80,7 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
      * @param parent The parent widget of the KoDualColorButton.
      * @param dialogParent The parent widget of the color selection dialog.
      */
-    KoDualColorButton( const QColor &foregroundColor, const QColor &backgroundColor,
+    KoDualColorButton( const KoColor &foregroundColor, const KoColor &backgroundColor,
                       QWidget *parent = 0, QWidget* dialogParent = 0 );
 
     /**
@@ -89,12 +91,12 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
     /**
      * Returns the current foreground color.
      */
-    QColor foregroundColor() const;
+    KoColor foregroundColor() const;
 
     /**
      * Returns the current background color.
      */
-    QColor backgroundColor() const;
+    KoColor backgroundColor() const;
 
     /**
      * Returns the current color depending on the
@@ -109,13 +111,20 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
      *    return backgroundColor();
      * \endcode
      */
-    QColor currentColor() const;
+    KoColor currentColor() const;
 
     /**
      * Returns whether the foreground or background item
      * is selected.
      */
     Selection selection() const;
+
+    /**
+     * Returns if a dialog with a KoUniColorChooser will be popped up when clicking
+     * If false then you could/should connect to the pleasePopDialog signal
+     * and pop your own dialog. Just set the current color afterwards.
+     */
+    bool popDialog() const;
 
     /**
      * Returns the minimum size needed to display the widget and all its
@@ -127,38 +136,52 @@ class KDEUI_EXPORT KoDualColorButton : public QWidget
     /**
      * Sets the foreground color.
      */
-    void setForegroundColor( const QColor &color );
+    void setForegroundColor( const KoColor &color );
 
     /**
      * Sets the background color.
      */
-    void setBackgroundColor( const QColor &color );
+    void setBackgroundColor( const KoColor &color );
 
     /**
      * Sets the color of the selected item.
      */
-    void setCurrentColor( const QColor &color );
+    void setCurrentColor( const KoColor &color );
 
     /**
      * Sets the current selected color item.
      */
     void setSelection( Selection selection );
 
+    /**
+     * Sets if a dialog with a KoUniColorChooser should be popped up when clicking
+     * If you set this to false then you could connect to the pleasePopDialog signal
+     * and pop your own dialog. Just set the current color afterwards.
+     */
+    void setPopDialog( bool popDialog );
+
   Q_SIGNALS:
     /**
      * Emitted when the foreground color is changed.
      */
-    void foregroundColorChanged( const QColor &color );
+    void foregroundColorChanged( const KoColor &color );
 
     /**
      * Emitted when the background color is changed.
      */
-    void backgroundColorChanged( const QColor &color );
+    void backgroundColorChanged( const KoColor &color );
 
     /**
      * Emitted when the user changes the current color selection.
      */
     void selectionChanged( KoDualColorButton::Selection selection );
+
+    /**
+     * Emitted when the user clicks one of the two color patches.
+     * You should/could pop you own color chooser dialog in response.
+     * Also see the popDialog attribute.
+     */
+    void pleasePopDialog( const KoColor &color );
 
   protected:
     /**

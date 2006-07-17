@@ -53,6 +53,7 @@ signals:
      * Emitted when the current color is changed.
      */
     void sigColorChanged(const QColor & c);
+    void sigColorChanged(const KoColor & c);
 
 protected slots:
 
@@ -82,6 +83,9 @@ private:
     void updateSelectorsG();
     void updateSelectorsB();
     void updateSelectorsCurrent();
+
+    void HSVtoRGB(int H, int S, int V, int *R, int *G, int *B);
+    void RGBtoHSV(int R, int G, int B, int *H, int *S, int *V);
 
     KoXYColorSelector *m_xycolorselector;
     KoColorSlider *m_colorSlider;

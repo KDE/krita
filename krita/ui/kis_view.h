@@ -182,8 +182,8 @@ signals:
     void currentColorSpaceChanged(KoColorSpace* cs);
     void cursorPosition(qint32 xpos, qint32 ypos);
 
-    void sigFGQColorChanged(const QColor &);
-    void sigBGQColorChanged(const QColor &);
+    void sigFGColorChanged(const KoColor &);
+    void sigBGColorChanged(const KoColor &);
 
     void sigInputDeviceChanged(const KisInputDevice& inputDevice);
 
@@ -427,9 +427,6 @@ private:
 
 private slots:
     void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
-
-    void slotSetFGQColor(const QColor & c);
-    void slotSetBGQColor(const QColor & c);
 
     void imgUpdated(QRect rc);
     void slotOpenGLImageUpdated(QRect rc);

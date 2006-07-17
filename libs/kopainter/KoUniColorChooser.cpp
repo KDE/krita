@@ -579,9 +579,7 @@ void KoUniColorChooser::announceColor()
 {
     m_colorpatch->setColor(m_currentColor);
 
-    QColor c;
-    m_currentColor.toQColor(&c);
-    emit sigColorChanged(c);
+    emit sigColorChanged(m_currentColor);
 }
 
 void KoUniColorChooser::updateValues()
@@ -659,6 +657,123 @@ KoColorSpace *KoUniColorChooser::labColorSpace()
 KoColorSpace *KoUniColorChooser::cmykColorSpace()
 {
     return m_csFactoryRegistry->getColorSpace(KoID("CMYK",0),"");
+}
+
+void KoUniColorChooser::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
+{
+  unsigned int max = R;
+  unsigned int min = R;
+  unsigned char maxValue = 0; // r = 0, g = 1, b = 2
+
+  // find maximum and minimum RGB values
+  if(static_cast<unsigned int>(G) > max)
+  {
+    max = G;
+    maxValue = 1;
+  }
+  if(static_cast<unsigned int>(B) > max)
+  {
+    max = B;
+    maxValue = 2;
+  }
+
+  if(static_cast<unsigned int>(G) < min)
+    min = G;
+  if(static_cast<unsigned int>(B) < min )
+    min = B;
+
+  int delta = max - min;
+  *V = max; // value
+  *S = max ? (510 * delta + max) / ( 2 * max) : 0; // saturation
+
+  // calc hue
+  if(*S == 0)
+    *H = -1; // undefined hue
+  else
+  {
+    switch(maxValue)
+    {
+    case 0:  // red
+      if(G >= B)
+        *H = (120 * (G - B) + delta) / (2 * delta);
+      else
+        *H = (120 * (G - B + delta) + delta) / (2 * delta) + 300;
+      break;
+    case 1:  // green
+      if(B > R)
+        *H = 120 + (120 * (B - R) + delta) / (2 * delta);
+      else
+        *H = 60 + (120 * (B - R + delta) + delta) / (2 * delta);
+      break;
+    case 2:  // blue
+      if(R > G)
+        *H = 240 + (120 * (R - G) + delta) / (2 * delta);
+      else
+        *H = 180 + (120 * (R - G + delta) + delta) / (2 * delta);
+      break;
+    }
+  }
+}
+
+void KoUniColorChooser::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
+{
+  *R = *G = *B = V;
+
+  if(S != 0 && H != -1) // chromatic
+  {
+    if(H >= 360) // angle > 360
+      H %= 360;
+
+    unsigned int f = H % 60;
+    H /= 60;
+    unsigned int p = static_cast<unsigned int>(2*V*(255-S)+255)/510;
+    unsigned int q, t;
+
+    if(H & 1)
+    {
+      q = static_cast<unsigned int>(2 * V * (15300 - S * f) + 15300) / 30600;
+      switch(H)
+      {
+      case 1:
+        *R = static_cast<int>(q);
+	*G = static_cast<int>(V);
+	*B = static_cast<int>(p);
+	break;
+      case 3:
+        *R = static_cast<int>(p);
+	*G = static_cast<int>(q);
+	*B = static_cast<int>(V);
+	break;
+      case 5:
+        *R = static_cast<int>(V);
+	*G = static_cast<int>(p);
+	*B = static_cast<int>(q);
+	break;
+      }
+    }
+    else
+    {
+      t = static_cast<unsigned int>(2 * V * (15300 - (S * (60 - f))) + 15300) / 30600;
+      switch(H)
+      {
+      case 0:
+        *R = static_cast<int>(V);
+        *G = static_cast<int>(t);
+        *B = static_cast<int>(p);
+        break;
+      case 2:
+        *R = static_cast<int>(p);
+        *G = static_cast<int>(V);
+        *B = static_cast<int>(t);
+        break;
+      case 4:
+        *R = static_cast<int>(t);
+        *G = static_cast<int>(p);
+        *B = static_cast<int>(V);
+        break;
+      }
+    }
+  }
 }
 
 #include "KoUniColorChooser.moc"

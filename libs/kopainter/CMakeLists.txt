@@ -6,15 +6,13 @@ include_directories( ${KOFFICECORE_INCLUDES} ${PIGMENT_INCLUDES} )
 ########### next target ###############
 
 set(kopainter_LIB_SRCS
-   svgpathparser.cc
    koColor.cc
+   svgpathparser.cc
    koFrameButton.cc
    koIconChooser.cc
    kogradientmanager.cc
-   ko_color_wheel.cc
    KoColorSlider.cc
    KoXYColorSelector.cc
-   ko_hsv_widget.cc
    KoUniColorChooser.cpp
    KoColorPatch.cpp
    KoDualColorButton.cpp

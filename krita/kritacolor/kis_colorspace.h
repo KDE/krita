@@ -46,7 +46,8 @@ public:
 enum ColorSpaceIndependence {
     FULLY_INDEPENDENT,
     TO_LAB16,
-    TO_RGBA8
+    TO_RGBA8,
+    TO_RGBA16
 };
 
 /**

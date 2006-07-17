@@ -200,10 +200,9 @@ void KoCsvImportDialog::fillTable( )
     kDebug(30501) << "Encoding: " << m_codec->name() << endl;
     inputStream.setCodec( m_codec );
 
+    const int delimiterLength = m_delimiter.size();
     bool lastCharWasCr = false; // Last character was a Carriage Return
-#warning "kde4: port it"
-#if 0
-	while (!inputStream.atEnd()) 
+    while (!inputStream.atEnd())
     {
         inputStream >> x; // read one char
 
@@ -240,11 +239,21 @@ void KoCsvImportDialog::fillTable( )
             {
                 state = S_QUOTED_FIELD;
             }
-            else if (x == m_delimiter)
+            else if (x == m_delimiter.at(0))
             {
-                if ((m_ignoreDups == false) || (lastCharDelimiter == false))
-                    ++column;
-                lastCharDelimiter = true;
+                const int pos = inputStream.pos();
+                QString xString = x + inputStream.read( delimiterLength - 1 );
+                if ( xString == m_delimiter )
+                {
+                  if ((m_ignoreDups == false) || (lastCharDelimiter == false))
+                      column += delimiterLength;
+                  lastCharDelimiter = true;
+                }
+                else
+                {
+                  // reset to old position
+                  inputStream.seek( pos );
+                }
             }
             else if (x == '\n')
             {
@@ -287,7 +296,7 @@ void KoCsvImportDialog::fillTable( )
                 field += x;
                 state = S_QUOTED_FIELD;
             }
-            else if (x == m_delimiter || x == '\n')
+            else if (x == m_delimiter.at(0) || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
                 field = QString::null;
@@ -300,9 +309,19 @@ void KoCsvImportDialog::fillTable( )
                 }
                 else
                 {
+                  const int pos = inputStream.pos();
+                  QString xString = x + inputStream.read( delimiterLength - 1 );
+                  if ( xString == m_delimiter )
+                  {
                     if ((m_ignoreDups == false) || (lastCharDelimiter == false))
-                        ++column;
+                      column += delimiterLength;
                     lastCharDelimiter = true;
+                  }
+                  else
+                  {
+                  // reset to old position
+                    inputStream.seek( pos );
+                  }
                 }
                 state = S_START;
             }
@@ -312,7 +331,7 @@ void KoCsvImportDialog::fillTable( )
             }
             break;
          case S_END_OF_QUOTED_FIELD :
-            if (x == m_delimiter || x == '\n')
+            if (x == m_delimiter.at(0) || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
                 field = QString::null;
@@ -325,9 +344,19 @@ void KoCsvImportDialog::fillTable( )
                 }
                 else
                 {
+                  const int pos = inputStream.pos();
+                  QString xString = x + inputStream.read( delimiterLength - 1 );
+                  if ( xString == m_delimiter )
+                  {
                     if ((m_ignoreDups == false) || (lastCharDelimiter == false))
-                        ++column;
+                      column += delimiterLength;
                     lastCharDelimiter = true;
+                  }
+                  else
+                  {
+                  // reset to old position
+                    inputStream.seek( pos );
+                  }
                 }
                 state = S_START;
             }
@@ -344,7 +373,7 @@ void KoCsvImportDialog::fillTable( )
                 break;
             }
          case S_NORMAL_FIELD :
-            if (x == m_delimiter || x == '\n')
+            if (x == m_delimiter.at(0) || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
                 field = QString::null;
@@ -357,9 +386,19 @@ void KoCsvImportDialog::fillTable( )
                 }
                 else
                 {
+                  const int pos = inputStream.pos();
+                  QString xString = x + inputStream.read( delimiterLength - 1 );
+                  if ( xString == m_delimiter )
+                  {
                     if ((m_ignoreDups == false) || (lastCharDelimiter == false))
-                        ++column;
+                      column += delimiterLength;
                     lastCharDelimiter = true;
+                  }
+                  else
+                  {
+                  // reset to old position
+                    inputStream.seek( pos );
+                  }
                 }
                 state = S_START;
             }
@@ -368,10 +407,10 @@ void KoCsvImportDialog::fillTable( )
                 field += x;
             }
         }
-        if (x != m_delimiter)
+        if (x != m_delimiter.at(0))
           lastCharDelimiter = false;
     }
-#endif
+
     if ( !field.isEmpty() )
     {
       // the last line of the file had not any line end

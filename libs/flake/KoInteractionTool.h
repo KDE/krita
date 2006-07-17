@@ -148,7 +148,6 @@ private:
     KoSelection *m_selection;
 
     static QImage *s_rotateCursor;
-    //static KStaticDeleter<QImage> sd;
 };
 
 #endif /* KOINTERACTIONTOOL_H */

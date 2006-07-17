@@ -359,7 +359,6 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
     if(SelectionDecorator::s_rotateCursor == 0) {
         staticRotateCursorDeleter.setObject(s_rotateCursor, new QImage());
         s_rotateCursor->load(KStandardDirs::locate("lib", "flake/rotate.png"));
-        //sd.setObject(&SelectionDecorator::s_rotateCursor, SelectionDecorator::s_rotateCursor);
     }
 }
 

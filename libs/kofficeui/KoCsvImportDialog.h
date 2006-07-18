@@ -92,7 +92,7 @@ protected slots:
     void delimiterClicked(int id);
     void textquoteSelected(const QString& mark);
     void currentCellChanged(int, int col);
-    void textChanged ( const QString & );
+    void genericDelimiterChanged( const QString & );
     void ignoreDuplicatesChanged( int );
     void updateClicked();
     void encodingChanged ( const QString & );

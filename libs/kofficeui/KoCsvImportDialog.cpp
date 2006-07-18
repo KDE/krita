@@ -104,7 +104,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     connect(m_dialog->m_delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
     connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
-            this, SLOT(formatChanged ( const QString & ) ));
+            this, SLOT(genericDelimiterChanged( const QString & ) ));
     connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString &)),
             this, SLOT(textquoteSelected(const QString &)));
     connect(m_dialog->m_sheet, SIGNAL(currentChanged(int, int)),
@@ -548,7 +548,7 @@ void KoCsvImportDialog::returnPressed()
     fillTable();
 }
 
-void KoCsvImportDialog::textChanged ( const QString & )
+void KoCsvImportDialog::genericDelimiterChanged( const QString & )
 {
     m_dialog->m_radioOther->setChecked ( true );
     delimiterClicked(m_dialog->m_radioOther->group()->id(m_dialog->m_radioOther)); // other

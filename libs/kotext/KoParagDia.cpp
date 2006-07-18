@@ -85,7 +85,8 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     connect( lstStyle, SIGNAL( itemSelectionChanged() ), this, SLOT( numStyleChanged() ) );
 
 
-    QLabel *lPrefix = new QLabel( gStyle, "lPrefix" );
+    QLabel *lPrefix = new QLabel( gStyle );
+    lPrefix->setObjectName( "lPrefix" );
     lPrefix->setText( i18n( "Pre&fix text:" ) );
     grid->addWidget( lPrefix, 1, 1);
 
@@ -93,7 +94,8 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     lPrefix->setBuddy( sPrefix );
     grid->addWidget( sPrefix, 1, 2);
 
-    QLabel *lSuffix = new QLabel( gStyle, "lSuffix" );
+    QLabel *lSuffix = new QLabel( gStyle );
+    lSuffix->setObjectName( "lSuffix" );
     lSuffix->setText( i18n( "Suffi&x text:" ) );
     grid->addWidget( lSuffix, 1, 3);
 

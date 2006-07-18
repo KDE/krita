@@ -62,6 +62,8 @@ protected:
     virtual void paint(KisCanvasPainter& gc, const QRect& rc);
     void drawGridCreation(KisCanvasPainter& gc);
     void drawGridCreation();
+    void drawGrid(KisCanvasPainter& gc);
+    void drawGrid();
 
 protected:
     KisPoint m_dragStart;

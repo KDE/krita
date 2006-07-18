@@ -64,15 +64,22 @@ void KisToolPerspectiveGrid::activate()
     if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
     {
         m_points.clear();
+    } else {
+        drawGrid();
     }
     super::activate();
 }
 
 void KisToolPerspectiveGrid::deactivate()
 {
-    drawGridCreation();
-    m_points.clear();
-    m_dragging = false;
+    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    {
+        drawGridCreation();
+        m_points.clear();
+        m_dragging = false;
+    } else {
+        drawGrid();
+    }
 }
 
 
@@ -106,13 +113,17 @@ void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
 
 void KisToolPerspectiveGrid::move(KisMoveEvent *event)
 {
-    if (m_dragging) {
-        // erase old lines on canvas
-        drawGridCreation();
-        // get current mouse position
-        m_dragEnd = event->pos();
-        // draw new lines on canvas
-        drawGridCreation();
+    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    {
+        if (m_dragging) {
+            // erase old lines on canvas
+            drawGridCreation();
+            // get current mouse position
+            m_dragEnd = event->pos();
+            // draw new lines on canvas
+            drawGridCreation();
+        }
+    } else {
     }
 }
 
@@ -130,6 +141,7 @@ void KisToolPerspectiveGrid::buttonRelease(KisButtonReleaseEvent *event)
             { // wow we have a grid, isn't that cool ?
                 drawGridCreation(); // Clean
                 m_subject->currentImg()->perspectiveGrid()->addNewSubGrid( new KisSubPerspectiveGrid( new KisPerspectiveGridNode(m_points[0]), new KisPerspectiveGridNode(m_points[1]), new KisPerspectiveGridNode(m_points[2]), new KisPerspectiveGridNode(m_points[3]) ) );
+                drawGrid();
             }
         }
     }
@@ -144,6 +156,8 @@ void KisToolPerspectiveGrid::paint(KisCanvasPainter& gc)
     if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
     {
         drawGridCreation(gc);
+    } else {
+        drawGrid(gc);
     }
 }
 
@@ -152,6 +166,8 @@ void KisToolPerspectiveGrid::paint(KisCanvasPainter& gc, const QRect&)
     if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
     {
         drawGridCreation(gc);
+    } else {
+        drawGrid(gc);
     }
 }
 
@@ -203,6 +219,65 @@ void KisToolPerspectiveGrid::drawGridCreation(KisCanvasPainter& gc)
             }
         }
     }
+}
+
+void KisToolPerspectiveGrid::drawGrid(KisCanvasPainter& gc)
+{
+    
+    if (!m_subject)
+        return;
+    
+    KisCanvasController *controller = m_subject->canvasController();
+
+    QPen pen(Qt::white);
+    QPoint startPos;
+    QPoint endPos;
+
+    gc.setPen(pen);
+    gc.setRasterOp(Qt::XorROP);
+    KisPerspectiveGrid* pGrid = m_subject->currentImg()->perspectiveGrid();
+
+    for( QValueList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
+    {
+        KisSubPerspectiveGrid* grid = *it;
+        int index = grid->index();
+        bool drawLeft = !(grid->leftGrid() && (index > grid->leftGrid()->index() ) );
+        bool drawRight = !(grid->rightGrid() && (index > grid->rightGrid()->index() ) );
+        bool drawTop = !(grid->topGrid() && (index > grid->topGrid()->index() ) );
+        bool drawBottom = !(grid->bottomGrid() && (index > grid->bottomGrid()->index() ) );
+        if(drawTop) {
+            startPos = controller->windowToView(grid->topLeft()->roundQPoint());
+            endPos = controller->windowToView(grid->topRight()->roundQPoint());
+            gc.drawLine( startPos, endPos );
+        }
+        if(drawRight) {
+            startPos = controller->windowToView(grid->topRight()->roundQPoint());
+            endPos = controller->windowToView(grid->bottomRight()->roundQPoint());
+            gc.drawLine( startPos, endPos );
+        }
+        if(drawBottom) {
+            startPos = controller->windowToView(grid->bottomRight()->roundQPoint());
+            endPos = controller->windowToView(grid->bottomLeft()->roundQPoint());
+            gc.drawLine( startPos, endPos );
+        }
+        if(drawLeft) {
+            startPos = controller->windowToView(grid->bottomLeft()->roundQPoint());
+            endPos = controller->windowToView(grid->topLeft()->roundQPoint());
+            gc.drawLine( startPos, endPos );
+        }
+    }
+}
+
+void KisToolPerspectiveGrid::drawGrid()
+{
+    if (m_subject) {
+        KisCanvasController *controller = m_subject->canvasController();
+        KisCanvas *canvas = controller->kiscanvas();
+        KisCanvasPainter gc(canvas);
+
+        drawGrid(gc);
+    }
+
 }
 
 

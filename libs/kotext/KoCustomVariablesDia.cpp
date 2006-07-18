@@ -78,7 +78,8 @@ void KoVariableNameDia::init()
 
     QLabel *l = new QLabel( i18n( "Name:" ), row1 );
     l->setFixedSize( l->sizeHint() );
-    names = new QComboBox( TRUE, row1 );
+    names = new QComboBox(row1 );
+    names->setEditable( true );
     names->setFocus();
 
     connect( names, SIGNAL( textChanged ( const QString & )),

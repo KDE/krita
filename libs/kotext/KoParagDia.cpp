@@ -813,7 +813,8 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWi
     Q3GridLayout * spacingGrid = new Q3GridLayout( spacingFrame, 2, 1,
                                                  KDialog::marginHint(), KDialog::spacingHint() );
 
-    cSpacing = new QComboBox( false, spacingFrame, "" );
+    cSpacing = new QComboBox(spacingFrame, "" );
+    cSpacing->setEditable( false );
     // Keep order in sync with lineSpacingType() and display()
     cSpacing->addItem( i18nc( "Line spacing value", "Single" ) );
     cSpacing->addItem( i18nc( "Line spacing value", "1.5 Lines" ) );

@@ -54,7 +54,7 @@ public:
 
 protected:
 
-    virtual long KisToolBezier::convertStateToOptions(long state);
+    virtual long convertStateToOptions(long state);
     
     virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
 

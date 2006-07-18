@@ -97,15 +97,24 @@ bool KisGradient::init()
             KoColorStop *colstopNext = grad->colorStops.next();
 
             if(colstopNext) {
-                KoOldColor leftRgb((int)(colstop->color1 * 255 + 0.5), (int)(colstop->color2 * 255 + 0.5), (int)(colstop->color3 * 255 + 0.5));
-                KoOldColor rightRgb((int)(colstopNext->color1 * 255 + 0.5), (int)(colstopNext->color2 * 255 + 0.5), (int)(colstopNext->color3 * 255 + 0.5));
-
                 double midp = colstop->midpoint;
                 midp = colstop->offset + ((colstopNext->offset - colstop->offset) * midp);
 
+                quint8 data[4];
+                data[2] = static_cast<quint8>(colstop->color1 * 255 + 0.5);
+                data[1] = static_cast<quint8>(colstop->color2 * 255 + 0.5);
+                data[0] = static_cast<quint8>(colstop->color3 * 255 + 0.5);
+                data[3] = static_cast<quint8>(colstop->opacity * OPACITY_OPAQUE + 0.5);
+
                 KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-                KoColor leftColor(leftRgb.color(), static_cast<quint8>(colstop->opacity * OPACITY_OPAQUE + 0.5), cs);
-                KoColor rightColor(rightRgb.color(), static_cast<quint8>(colstopNext->opacity * OPACITY_OPAQUE + 0.5), cs);
+                KoColor leftColor(data, cs);
+
+                data[2] = static_cast<quint8>(colstopNext->color1 * 255 + 0.5);
+                data[1] = static_cast<quint8>(colstopNext->color2 * 255 + 0.5);
+                data[0] = static_cast<quint8>(colstopNext->color3 * 255 + 0.5);
+                data[3] = static_cast<quint8>(colstopNext->opacity * OPACITY_OPAQUE + 0.5);
+
+                KoColor rightColor(data, cs);
 
                 KisGradientSegment *segment = new KisGradientSegment(colstop->interpolation, colstop->colorType, colstop->offset, midp, colstopNext->offset, leftColor, rightColor);
                 Q_CHECK_PTR(segment);

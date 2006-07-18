@@ -40,7 +40,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <koFrameButton.h>
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>
 

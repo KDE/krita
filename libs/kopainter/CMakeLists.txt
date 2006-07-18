@@ -6,9 +6,7 @@ include_directories( ${KOFFICECORE_INCLUDES} ${PIGMENT_INCLUDES} )
 ########### next target ###############
 
 set(kopainter_LIB_SRCS
-   koColor.cc
    svgpathparser.cc
-   koFrameButton.cc
    koIconChooser.cc
    kogradientmanager.cc
    KoColorSlider.cc

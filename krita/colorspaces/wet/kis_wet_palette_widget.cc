@@ -37,8 +37,6 @@
 #include <knuminput.h>
 #include <khbox.h>
 
-#include <koFrameButton.h>
-
 #include <kis_meta_registry.h>
 #include <kis_factory.h>
 #include <kis_canvas_subject.h>

@@ -38,7 +38,6 @@
 #include <kcolorvalueselector.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <koFrameButton.h>
 
 #include <kis_canvas_subject.h>
 #include <KoColor.h>

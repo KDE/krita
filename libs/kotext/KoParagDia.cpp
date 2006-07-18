@@ -147,7 +147,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     cbAlignment->addItem(i18n("Align Auto"));
     cbAlignment->addItem(i18n("Align Left"));
     cbAlignment->addItem(i18n("Align Right"));
-    cbAlignment->setCurrentItem(0);
+    cbAlignment->setCurrentIndex(0);
     grid->addWidget( cbAlignment, 2, 4 );
 
     QLabel *lDepth = new QLabel( gStyle, "lDepth" );
@@ -913,7 +913,7 @@ double KoIndentSpacingWidget::spaceAfterParag() const
 
 KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
 {
-    int index = cSpacing->currentItem();
+    int index = cSpacing->currentIndex();
     switch ( index ) {
     case 0:
         return KoParagLayout::LS_SINGLE;
@@ -970,28 +970,28 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     KoParagLayout::SpacingType _type = lay.lineSpacingType;
     switch ( _type ) {
     case KoParagLayout::LS_SINGLE: // single
-        cSpacing->setCurrentItem( 0 );
+        cSpacing->setCurrentIndex( 0 );
         break;
     case KoParagLayout::LS_ONEANDHALF:
-        cSpacing->setCurrentItem( 1 );
+        cSpacing->setCurrentIndex( 1 );
         break;
     case KoParagLayout::LS_DOUBLE:
-        cSpacing->setCurrentItem( 2 );
+        cSpacing->setCurrentIndex( 2 );
         break;
     case KoParagLayout::LS_MULTIPLE:
-        cSpacing->setCurrentItem( 3 );
+        cSpacing->setCurrentIndex( 3 );
         break;
     case KoParagLayout::LS_CUSTOM:
-        cSpacing->setCurrentItem( 4 );
+        cSpacing->setCurrentIndex( 4 );
         break;
     case KoParagLayout::LS_AT_LEAST:
-        cSpacing->setCurrentItem( 5 );
+        cSpacing->setCurrentIndex( 5 );
         break;
     case KoParagLayout::LS_FIXED:
-        cSpacing->setCurrentItem( 6 );
+        cSpacing->setCurrentIndex( 6 );
         break;
     default:
-        cSpacing->setCurrentItem( 0 );
+        cSpacing->setCurrentIndex( 0 );
         break;
     }
 

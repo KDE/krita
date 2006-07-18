@@ -52,7 +52,7 @@ void KSnapshotWidget::setIncludeDecorations( bool b )
 
 void KSnapshotWidget::setMode( int mode )
 {
-    comboMode->setCurrentItem(mode);
+    comboMode->setCurrentIndex(mode);
     slotModeChanged(mode);
 }
 
@@ -71,7 +71,7 @@ bool KSnapshotWidget::includeDecorations()
 
 int KSnapshotWidget::mode()
 {
-    return comboMode->currentItem();
+    return comboMode->currentIndex();
 }
 
 

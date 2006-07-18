@@ -22,6 +22,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include "kis_image.h"
 #include "kis_grid_drawer.h"
@@ -55,6 +56,18 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
 
 void KisPerspectiveGridManager::toggleGrid()
 {
+    KisImageSP image = m_view->canvasSubject()->currentImg();
+
+    
+    if (image && m_toggleGrid->isChecked()) {
+        KisPerspectiveGrid* pGrid = image->perspectiveGrid();
+
+        if(!pGrid->hasSubGrids())
+        {
+            KMessageBox::error(0, i18n("Before displaying the perspective grid, you need to initialize it with the perspective grid tool"), i18n("No perspective grid to display") );
+            m_toggleGrid->setChecked(false);
+        }
+    }
     m_view->updateCanvas();
 }
 
@@ -66,15 +79,6 @@ void KisPerspectiveGridManager::drawGrid(QRect wr, QPainter *p, bool openGL )
     if (image && m_toggleGrid->isChecked()) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 
-        if(!pGrid->hasSubGrids())
-        {
-            KisSubPerspectiveGrid* sub1 = new KisSubPerspectiveGrid( new KisPerspectiveGridNode( 100, 100 ), new KisPerspectiveGridNode( 200, 90 ), new KisPerspectiveGridNode( 300, 150 ), new KisPerspectiveGridNode( 10, 200 ) );
-            pGrid->addNewSubGrid( sub1 );
-            KisSubPerspectiveGrid* sub2 = new KisSubPerspectiveGrid( new KisPerspectiveGridNode( 20, 0 ) , sub1->topLeft(), sub1->bottomLeft(), new KisPerspectiveGridNode( 0, 90 ) );
-            sub2->setRightGrid( sub1 );
-            sub1->setLeftGrid( sub2 );
-            pGrid->addNewSubGrid( sub2 );
-        }
         GridDrawer *gridDrawer = 0;
 
         if (openGL) {

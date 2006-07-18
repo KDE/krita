@@ -23,12 +23,12 @@ KoColorSpace::KoColorSpace(const KoID &id, KoColorSpaceFactoryRegistry * parent)
     : m_id(id)
     , m_parent( parent )
 {
-    m_dcop = 0;
+    //m_dcop = 0;
 }
 
 KoColorSpace::~KoColorSpace()
 {
-    delete m_dcop;
+    //delete m_dcop;
 }
 
 quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels) const

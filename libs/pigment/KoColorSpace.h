@@ -29,7 +29,6 @@
 #include <KoCompositeOp.h>
 #include <KoChannelInfo.h>
 
-class DCOPObject;
 
 class KoColorProfile;
 class KoColorSpaceFactoryRegistry;
@@ -449,7 +448,7 @@ public:
 
 private:
 
-    DCOPObject * m_dcop;
+    //DCOPObject * m_dcop;
     KoID m_id;
 
 protected:

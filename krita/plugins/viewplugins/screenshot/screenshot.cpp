@@ -53,7 +53,8 @@ true);
     Q_CHECK_PTR(snapshot);
     connect( snapshot, SIGNAL( screenGrabbed() ), SLOT( slotScreenGrabbed() ) );
 
-    (void) new KAction(i18n("&Screenshot..."), SmallIcon("tool_screenshot"), 0, this, SLOT(slotScreenshot()), actionCollection(), "screenshot");
+    KAction *action = new KAction(KIcon("tool_screenshot"), i18n("&Screenshot..."), actionCollection(), "screenshot");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotScreenshot()));
 
 }
 

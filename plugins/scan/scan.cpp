@@ -38,7 +38,8 @@ Scan::Scan(QObject *parent, const QStringList &)
 {
     setInstance(ScanFactory::instance());
 
-    (void) new KAction(i18n("&Scan Image..."), SmallIcon("scanner"), 0, this, SLOT(slotScan()), actionCollection(), "scan_image");
+    KAction *action = new KAction(KIcon("scanner"), i18n("&Scan Image..."), actionCollection(), "scan_image");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotScan()));
 }
 
 Scan::~Scan()

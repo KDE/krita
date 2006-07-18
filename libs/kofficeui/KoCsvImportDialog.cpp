@@ -89,7 +89,13 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     setMainWidget(m_dialog);
 
     m_dialog->m_sheet->setSelectionMode( Q3Table::Multi );
-    QButtonGroup* buttonGroup = m_dialog->m_radioComma->group();
+
+    QButtonGroup* buttonGroup = new QButtonGroup( this );
+    buttonGroup->addButton(m_dialog->m_radioComma, 0);
+    buttonGroup->addButton(m_dialog->m_radioSemicolon, 1);
+    buttonGroup->addButton(m_dialog->m_radioSpace, 2);
+    buttonGroup->addButton(m_dialog->m_radioTab, 3);
+    buttonGroup->addButton(m_dialog->m_radioOther, 4);
 
     connect(m_dialog->m_formatComboBox, SIGNAL(activated( const QString& )),
             this, SLOT(formatChanged( const QString& )));
@@ -237,7 +243,7 @@ void KoCsvImportDialog::fillTable( )
             {
                 state = S_QUOTED_FIELD;
             }
-            else if (x == m_delimiter.at(0))
+            else if (!m_delimiter.isEmpty() && x == m_delimiter.at(0))
             {
                 const int pos = inputStream.pos();
                 QString xString = x + inputStream.read( delimiterLength - 1 );
@@ -294,7 +300,7 @@ void KoCsvImportDialog::fillTable( )
                 field += x;
                 state = S_QUOTED_FIELD;
             }
-            else if (x == m_delimiter.at(0) || x == '\n')
+            else if (!m_delimiter.isEmpty() && x == m_delimiter.at(0) || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
                 field = QString::null;
@@ -329,7 +335,7 @@ void KoCsvImportDialog::fillTable( )
             }
             break;
          case S_END_OF_QUOTED_FIELD :
-            if (x == m_delimiter.at(0) || x == '\n')
+            if (!m_delimiter.isEmpty() && x == m_delimiter.at(0) || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
                 field = QString::null;
@@ -371,7 +377,7 @@ void KoCsvImportDialog::fillTable( )
                 break;
             }
          case S_NORMAL_FIELD :
-            if (x == m_delimiter.at(0) || x == '\n')
+            if (!m_delimiter.isEmpty() && x == m_delimiter.at(0) || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
                 field = QString::null;
@@ -405,7 +411,7 @@ void KoCsvImportDialog::fillTable( )
                 field += x;
             }
         }
-        if (x != m_delimiter.at(0))
+        if (m_delimiter.isEmpty() || x != m_delimiter.at(0))
           lastCharDelimiter = false;
     }
 
@@ -416,7 +422,7 @@ void KoCsvImportDialog::fillTable( )
       ++row;
       field = QString::null;
     }
-    
+
     m_adjustCols = true;
     adjustRows( row - m_startRow );
     adjustCols( maxColumn - m_startCol );
@@ -575,6 +581,7 @@ void KoCsvImportDialog::delimiterClicked(int id)
     else if (id == group->id(m_dialog->m_radioSemicolon))
         m_delimiter = ";";
 
+    kDebug() << "Delimiter \"" << m_delimiter << "\" selected." << endl;
     fillTable();
 }
 

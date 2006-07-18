@@ -104,7 +104,7 @@ KSnapshot::KSnapshot(QWidget *parent, const char *name)
     conf->setGroup("GENERAL");
     mainWidget->setDelay(conf->readNumEntry("delay",0));
     mainWidget->setMode( conf->readNumEntry( "mode", 0 ) );
-    mainWidget->setIncludeDecorations(conf->readBoolEntry("includeDecorations",true));
+    mainWidget->setIncludeDecorations(conf->readEntry("includeDecorations",true));
 
     connect( &grabTimer, SIGNAL( timeout() ), this, SLOT(  grabTimerDone() ) );
 

@@ -3788,7 +3788,7 @@ void KisView::createDockers()
     m_birdEyeBox->setWindowTitle(i18n("Overview"));
     m_paletteManager->addWidget( m_birdEyeBox, "birdeyebox", krita::CONTROL_PALETTE);
 
-    m_colorchooser = new KoUniColorChooser(this);
+    m_colorchooser = new KoUniColorChooser(0);
     m_colorchooser->setWindowTitle(i18n("Color by values"));
 
     connect(m_colorchooser, SIGNAL(sigColorChanged(const KoColor &)), this, SLOT(slotSetFGColor(const KoColor &)));
@@ -3798,7 +3798,7 @@ void KisView::createDockers()
     //make sure the color chooser get right default values
     emit sigFGColorChanged(m_fg);
 
-    m_palettewidget = new KisPaletteWidget(this);
+    m_palettewidget = new KisPaletteWidget(0);
     m_palettewidget->setWindowTitle(i18n("Palettes"));
     connect(m_palettewidget, SIGNAL(colorSelected(const QColor &)),
             this, SLOT(slotSetFGQColor(const QColor &)));
@@ -3812,7 +3812,7 @@ void KisView::createDockers()
         m_palettewidget->slotAddPalette(resource);
     }
     connect(m_palettewidget, SIGNAL(colorSelected(const KoColor &)), this, SLOT(slotSetFGColor(const KoColor &)));
-    //m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);
+    m_paletteManager->addWidget( m_palettewidget, "palettewidget", krita::COLORBOX, 10, PALETTE_DOCKER, true);
 }
 
 QPoint KisView::applyViewTransformations(const QPoint& p) const {

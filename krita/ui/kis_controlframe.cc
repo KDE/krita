@@ -231,20 +231,20 @@ void KisControlFrame::createBrushesChooser(KisView * view)
 
     l->addWidget(m_brushesTab);
 
-    KisBrushChooser * m_brushChooser = new KisBrushChooser(m_brushesTab, "brush_chooser");
+    KisBrushChooser * m_brushChooser = new KisBrushChooser(0, "brush_chooser");
     m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
 
-    KisAutobrush * m_autobrush = new KisAutobrush(m_brushesTab, "autobrush", i18n("Autobrush"));
+    KisAutobrush * m_autobrush = new KisAutobrush(0, "autobrush", i18n("Autobrush"));
     m_brushesTab->addTab( m_autobrush, i18n("Autobrush"));
     connect(m_autobrush, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated( KisResource* )));
 
-    KisCustomBrush* customBrushes = new KisCustomBrush(m_brushesTab, "custombrush",
+    KisCustomBrush* customBrushes = new KisCustomBrush(0, "custombrush",
             i18n("Custom Brush"), m_view);
     m_brushesTab->addTab( customBrushes, i18n("Custom Brush"));
     connect(customBrushes, SIGNAL(activatedResource(KisResource*)),
             m_view, SLOT(brushActivated(KisResource*)));
 #ifdef HAVE_TEXT_BRUSH
-    KisTextBrush* textBrushes = new KisTextBrush(m_brushesTab, "textbrush",
+    KisTextBrush* textBrushes = new KisTextBrush(0, "textbrush",
             i18n("Text Brush")/*, m_view*/);
     m_brushesTab->addTab( textBrushes, i18n("Text Brush"));
     connect(textBrushes, SIGNAL(activatedResource(KisResource*)),
@@ -286,12 +286,12 @@ void KisControlFrame::createPatternsChooser(KisView * view)
     m_patternsTab->setContentsMargins(1, 1, 1, 1);
     l2->addWidget( m_patternsTab );
 
-    KisPatternChooser * chooser = new KisPatternChooser(m_patternChooserPopup, "pattern_chooser");
+    KisPatternChooser * chooser = new KisPatternChooser(0, "pattern_chooser");
     chooser->setFont(m_font);
     chooser->setMinimumSize(200, 150);
     m_patternsTab->addTab(chooser, i18n("Patterns"));
 
-    KisCustomPattern* customPatterns = new KisCustomPattern(m_patternsTab, "custompatterns",
+    KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
             i18n("Custom Pattern"), m_view);
     customPatterns->setFont(m_font);
     m_patternsTab->addTab( customPatterns, i18n("Custom Pattern"));
@@ -332,7 +332,7 @@ void KisControlFrame::createGradientsChooser(KisView * view)
 
     l2->addWidget( m_gradientTab);
 
-    m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup, "gradient_chooser");
+    m_gradientChooser = new KisGradientChooser(m_view, 0, "gradient_chooser");
     m_gradientChooser->setFont(m_font);
     m_gradientChooser->setMinimumSize(200, 150);
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));

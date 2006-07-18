@@ -31,7 +31,7 @@ public:
     virtual ~KisPatternChooser();
 
 protected:
-    virtual void update(KoIconItem *item);
+    virtual void update(QTableWidgetItem *item);
 
 private:
     QLabel *m_lbName;

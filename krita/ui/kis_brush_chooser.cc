@@ -87,7 +87,7 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     }
 }
 
-void KisBrushChooser::update(KoIconItem *item)
+void KisBrushChooser::update(QTableWidgetItem *item)
 {
     KisIconItem *kisItem = static_cast<KisIconItem *>(item);
 

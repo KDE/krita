@@ -26,101 +26,33 @@
 #include <QPixmap>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QKeyEvent>
 #include <QResizeEvent>
 #include <QPaintEvent>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 #include <koffice_export.h>
 
-class KoIconItem
+class KOPAINTER_EXPORT KoIconChooser: public QTableWidget
 {
+    Q_OBJECT
 public:
-  KoIconItem() {}
-  virtual ~KoIconItem() {}
+    // To make the items sorted, set 'sort' to true and override QTableWidgetItem::compare().
+    KoIconChooser(QSize iconSize, QWidget *parent = 0L);
+    virtual ~KoIconChooser();
 
-  bool hasValidPixmap() {return validPixmap; }
-  bool validPixmap;
-  bool hasValidThumb() {return validThumb; }
-  bool validThumb;
-
-  virtual int spacing() const {return 0; }
-  virtual void setSpacing(int) {}
-  virtual QPixmap &pixmap() const = 0;
-  virtual QPixmap &thumbPixmap() const = 0;
-  // Return -1 if this is less than other, 0 if equal, 1 if greater than.
-  virtual int compare(const KoIconItem */*other*/) const { return 0; }
-};
-
-class KoPixmapWidget : public Q3Frame
-{
-public:
-  KoPixmapWidget(const QPixmap &aPixmap, QWidget *parent = 0L, const char *name = 0L);
-  ~KoPixmapWidget();
+    void addItem(QTableWidgetItem *item);
+    QTableWidgetItem *itemAt(int index);
 
 protected:
-  void paintEvent(QPaintEvent *e);
-  void mouseReleaseEvent( QMouseEvent *e);
+    virtual void resizeEvent(QResizeEvent *e);
+    virtual void keyPressEvent(QKeyEvent * e);
 
 private:
-  QPixmap mPixmap;
-};
-
-class KOPAINTER_EXPORT KoIconChooser: public Q3GridView
-{
-  Q_OBJECT
-public:
-  // To make the items sorted, set 'sort' to true and override KoIconItem::compare().
-  KoIconChooser(QSize iconSize, QWidget *parent = 0L, const char *name = 0L, bool sort = false);
-  virtual ~KoIconChooser();
-
-  bool autoDelete() const {return mIconList.autoDelete(); }
-  void setAutoDelete(bool b) {mIconList.setAutoDelete(b); }
-
-  void addItem(KoIconItem *item);
-  bool removeItem(KoIconItem *item);
-  void clear();
-
-  KoIconItem *currentItem();
-  void setCurrentItem(KoIconItem *item);
-
-  void setDragEnabled(bool allow) { mDragEnabled = allow; }
-  bool dragEnabled() const { return mDragEnabled; }
-  
-  KoIconItem *itemAt(int row, int col);
-  KoIconItem *itemAt(int index);
-
-signals:
-  void  selected(KoIconItem *item);
-
-protected:
-  void keyPressEvent(QKeyEvent *e);
-  void mousePressEvent( QMouseEvent *e);
-  void mouseReleaseEvent( QMouseEvent *e);
-  void mouseMoveEvent( QMouseEvent *e);
-  void resizeEvent(QResizeEvent *e);
-  void paintCell(QPainter *p, int row, int col);
-  virtual void startDrag();
-
-private:
-  int cellIndex(int row, int col);
-  void calculateCells();
-  void showFullPixmap(const QPixmap &pix, const QPoint &p);
-  int sortInsertionIndex(const KoIconItem *item);
-
-private:
-  Q3PtrList<KoIconItem>    mIconList;
-  KoPixmapWidget         *mPixmapWidget;
-  int                     mItemWidth;
-  int                     mItemHeight;
-  int                     mItemCount;
-  int                     mNCols;
-  int                     mCurRow;
-  int                     mCurCol;
-  int                     mMargin;
-  QPoint                  mDragStartPos;
-  bool                    mMouseButtonDown;
-  bool                    mDragEnabled;
-  bool                    mSort;
+    int mItemWidth;
+    int mItemHeight;
+    int m_itemCount;
 };
 
 // This is a first attempt at a pattern chooser widget abstraction which is at least
@@ -130,18 +62,18 @@ class KOPAINTER_EXPORT KoPatternChooser : public QWidget
 {
   Q_OBJECT
 public:
-  KoPatternChooser( const Q3PtrList<KoIconItem> &list, QWidget *parent, const char *name = 0 );
+  KoPatternChooser( const Q3PtrList<QTableWidgetItem> &list, QWidget *parent, const char *name = 0 );
   ~KoPatternChooser();
 
-  KoIconItem *currentPattern();
-  void setCurrentPattern( KoIconItem * );
-  void addPattern( KoIconItem * );
+  QTableWidgetItem *currentPattern();
+  void setCurrentPattern( QTableWidgetItem * );
+  void addPattern( QTableWidgetItem * );
  
 private:
   KoIconChooser *chooser;
 
 signals:
-  void selected( KoIconItem * );
+  void selected( QTableWidgetItem * );
 };
 
 

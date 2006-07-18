@@ -25,9 +25,9 @@
 class KHBox;
 
 class KoIconChooser;
-class KoIconItem;
+class QTableWidgetItem;
 
-typedef QList<KoIconItem *> vKoIconItem;
+typedef QList<QTableWidgetItem *> vQTableWidgetItem;
 
 class KisItemChooser : public QWidget {
     typedef QWidget super;
@@ -38,23 +38,23 @@ public:
                const char *name = 0);
     virtual ~KisItemChooser();
 
-    KoIconItem *currentItem();
-    void setCurrent(KoIconItem *item);
+    QTableWidgetItem *currentItem();
+    void setCurrent(QTableWidgetItem *item);
     void setCurrent(int index);
 
 public slots:
-    void addItem(KoIconItem *item);
-    void addItems(const vKoIconItem& items);
+    void addItem(QTableWidgetItem *item);
+    void addItems(const vQTableWidgetItem& items);
 
 signals:
-    void selected(KoIconItem *item);
+    void selected(QTableWidgetItem *item);
 
 protected:
-    virtual void update(KoIconItem *item) = 0;
+    virtual void update(QTableWidgetItem *item) = 0;
     QWidget *chooserWidget() const;
 
 private slots:
-    void slotItemSelected(KoIconItem *item);
+    void slotItemSelected(QTableWidgetItem *item);
 
 private:
     KHBox *m_frame;

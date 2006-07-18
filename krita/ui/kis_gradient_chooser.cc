@@ -48,12 +48,12 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView * view, QWidget * paren
 
 KisGradientChooser::KisGradientChooser(KisView * view, QWidget *parent, const char *name) : super(parent, name)
 {
-    m_lbName = new QLabel(this);
+    m_lbName = new QLabel();
 
-    m_customGradient = new QPushButton(i18n("Custom Gradient..."), this);
+    m_customGradient = new QPushButton(i18n("Custom Gradient..."));
     m_customGradient->setObjectName("custom gradient button");
 
-    KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, this, "autogradient");
+    KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, 0, "autogradient");
     connect(m_customGradient, SIGNAL(clicked()), autogradient, SLOT(show()));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -62,13 +62,14 @@ KisGradientChooser::KisGradientChooser(KisView * view, QWidget *parent, const ch
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(chooserWidget(), 10);
     mainLayout->addWidget(m_customGradient, 10);
+    setLayout(mainLayout);
 }
 
 KisGradientChooser::~KisGradientChooser()
 {
 }
 
-void KisGradientChooser::update(KoIconItem *item)
+void KisGradientChooser::update(QTableWidgetItem *item)
 {
     KisIconItem *kisItem = static_cast<KisIconItem *>(item);
 

@@ -80,7 +80,8 @@ void KisPopupFrame::keyPressEvent(QKeyEvent * e)
         hide();
         e->accept();
     }
-    else {
+    else
+    {
         e->ignore();
     }
 }
@@ -156,19 +157,19 @@ KisControlFrame::KisControlFrame( KMainWindow * /*window*/, KisView * view, cons
 }
 
 
-void KisControlFrame::slotSetBrush(KoIconItem *item)
+void KisControlFrame::slotSetBrush(QTableWidgetItem *item)
 {
     if (item)
         m_brushWidget->slotSetItem(*item);
 }
 
-void KisControlFrame::slotSetPattern(KoIconItem *item)
+void KisControlFrame::slotSetPattern(QTableWidgetItem *item)
 {
     if (item)
         m_patternWidget->slotSetItem(*item);
 }
 
-void KisControlFrame::slotSetGradient(KoIconItem *item)
+void KisControlFrame::slotSetGradient(QTableWidgetItem *item)
 {
     if (item)
         m_gradientWidget->slotSetItem(*item);
@@ -185,6 +186,7 @@ void KisControlFrame::slotBrushChanged(KisBrush * brush)
                 slotSetBrush( new KisIconItem(brush) );
         }
 
+        m_brushChooserPopup->hide();
 }
 
 void KisControlFrame::slotPatternChanged(KisPattern * pattern)
@@ -197,6 +199,8 @@ void KisControlFrame::slotPatternChanged(KisPattern * pattern)
                 slotSetPattern(item);
         else
                 slotSetPattern( new KisIconItem(pattern) );
+
+        m_patternChooserPopup->hide();
 }
 
 
@@ -210,6 +214,8 @@ void KisControlFrame::slotGradientChanged(KisGradient * gradient)
                 slotSetGradient(item);
         else
                 slotSetGradient( new KisIconItem(gradient) );
+
+        m_gradientChooserPopup->hide();
 }
 
 void KisControlFrame::createBrushesChooser(KisView * view)
@@ -251,6 +257,7 @@ void KisControlFrame::createBrushesChooser(KisView * view)
             m_view, SLOT(brushActivated(KisResource*)));
 #endif
 
+    m_brushChooserPopup->setLayout(l);
     m_brushChooser->setFont(m_font);
     m_brushMediator = new KisResourceMediator( m_brushChooser, this);
     connect(m_brushMediator, SIGNAL(activatedResource(KisResource*)), m_view, SLOT(brushActivated(KisResource*)));
@@ -288,7 +295,6 @@ void KisControlFrame::createPatternsChooser(KisView * view)
 
     KisPatternChooser * chooser = new KisPatternChooser(0, "pattern_chooser");
     chooser->setFont(m_font);
-    chooser->setMinimumSize(200, 150);
     m_patternsTab->addTab(chooser, i18n("Patterns"));
 
     KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
@@ -329,20 +335,21 @@ void KisControlFrame::createGradientsChooser(KisView * view)
     m_gradientTab->setFocusPolicy(Qt::NoFocus);
     m_gradientTab->setFont(m_font);
     m_gradientTab->setContentsMargins(1, 1, 1, 1);
-
     l2->addWidget( m_gradientTab);
 
     m_gradientChooser = new KisGradientChooser(m_view, 0, "gradient_chooser");
     m_gradientChooser->setFont(m_font);
-    m_gradientChooser->setMinimumSize(200, 150);
     m_gradientTab->addTab( m_gradientChooser, i18n("Gradients"));
 
     m_gradientMediator = new KisResourceMediator( m_gradientChooser, view);
     connect(m_gradientMediator, SIGNAL(activatedResource(KisResource*)), view, SLOT(gradientActivated(KisResource*)));
 
+
     KisResourceServerBase* rServer;
     rServer = KisResourceServerRegistry::instance()->get("GradientServer");
     m_gradientMediator->connectServer(rServer);
+
+    connect(m_gradientChooser, SIGNAL(selected(QTableWidgetItem*)), this, SLOT(slotGradientChanged( )));
 
     connect(view, SIGNAL(gradientChanged(KisGradient *)), this, SLOT(slotGradientChanged( KisGradient *)));
     m_gradientChooser->setCurrent( 0 );

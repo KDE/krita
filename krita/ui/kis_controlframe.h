@@ -35,7 +35,7 @@ class QTabWidget;
 
 class KToolBar;
 
-class KoIconItem;
+class QTableWidgetItem;
 class KisIconWidget;
 class KisGradientWidget;
 
@@ -84,9 +84,9 @@ public:
 
 public slots:
 
-    void slotSetBrush(KoIconItem *item);
-    void slotSetPattern(KoIconItem *item);
-    void slotSetGradient(KoIconItem *item);
+    void slotSetBrush(QTableWidgetItem *item);
+    void slotSetPattern(QTableWidgetItem *item);
+    void slotSetGradient(QTableWidgetItem *item);
 
     void slotBrushChanged(KisBrush * brush);
     void slotPatternChanged(KisPattern * pattern);

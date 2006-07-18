@@ -22,7 +22,7 @@
 #include "kis_resource.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
-//Added by qt3to4:
+
 #include <QPixmap>
 
 #define THUMB_SIZE 30
@@ -30,8 +30,6 @@
 KisIconItem::KisIconItem(KisResource *resource)
 {
     m_resource = resource;
-    validPixmap = false;
-    validThumb = false;
     updatePixmaps();
 }
 
@@ -41,9 +39,6 @@ KisIconItem::~KisIconItem()
 
 void KisIconItem::updatePixmaps()
 {
-    validPixmap = false;
-    validThumb = false;
-
     if (m_resource && m_resource->valid()) {
         QImage img = m_resource->img();
 
@@ -78,26 +73,13 @@ void KisIconItem::updatePixmaps()
 
             thumb = thumb.scaled(xsize, ysize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-            if (!thumb.isNull()) {
-                m_thumb = QPixmap::fromImage(thumb);
-                validThumb = !m_thumb.isNull();
-            }
+            if (!thumb.isNull())
+                setIcon(QIcon(QPixmap::fromImage(thumb)));
         }
 
         img = img.convertToFormat(QImage::Format_RGB32);
-        m_pixmap = QPixmap::fromImage(img);
-        validPixmap = true;
+       // QPixmap::fromImage(img);
     }
-}
-
-QPixmap& KisIconItem::pixmap() const
-{
-    return const_cast<QPixmap&>(m_pixmap);
-}
-
-QPixmap& KisIconItem::thumbPixmap() const
-{
-    return const_cast<QPixmap&>(m_thumb);
 }
 
 KisResource *KisIconItem::resource() const
@@ -105,7 +87,7 @@ KisResource *KisIconItem::resource() const
     return m_resource;
 }
 
-int KisIconItem::compare(const KoIconItem *o) const
+int KisIconItem::compare(const QTableWidgetItem *o) const
 {
     const KisIconItem *other = dynamic_cast<const KisIconItem *>(o);
 

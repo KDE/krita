@@ -22,7 +22,7 @@
 
 #include <QToolButton>
 
-class KoIconItem;
+class QTableWidgetItem;
 
 class KisIconWidget : public QToolButton {
     typedef QToolButton super;
@@ -36,13 +36,13 @@ public:
     KisIconWidget(QWidget *parent = 0, const char *name = 0);
 
 public slots:
-    void slotSetItem(KoIconItem& item);
+    void slotSetItem(QTableWidgetItem& item);
 
 protected:
     virtual void paintEvent(QPaintEvent *);
 
 private:
-    KoIconItem *m_item;
+    QTableWidgetItem *m_item;
 };
 
 #endif // KIS_ICONWIDGET_H_

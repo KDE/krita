@@ -47,7 +47,7 @@ KisPatternChooser::~KisPatternChooser()
 {
 }
 
-void KisPatternChooser::update(KoIconItem *item)
+void KisPatternChooser::update(QTableWidgetItem *item)
 {
     KisIconItem *kisItem = static_cast<KisIconItem *>(item);
 

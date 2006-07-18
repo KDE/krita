@@ -18,8 +18,8 @@
  */
 
 #include <QPainter>
-#include <QPixmap>
-#include <koIconChooser.h>
+#include <QIcon>
+#include <QTableWidgetItem>
 #include "kis_iconwidget.h"
 
 KisIconWidget::KisIconWidget(QWidget *parent, const char *name) : super(parent)
@@ -28,7 +28,7 @@ KisIconWidget::KisIconWidget(QWidget *parent, const char *name) : super(parent)
     m_item = 0;
 }
 
-void KisIconWidget::slotSetItem(KoIconItem& item)
+void KisIconWidget::slotSetItem(QTableWidgetItem& item)
 {
     m_item = &item;
     update();
@@ -39,41 +39,9 @@ void KisIconWidget::paintEvent(QPaintEvent *)
     if (m_item) {
         QPainter p(this);
 
-        const QPixmap& pix = m_item->pixmap();
-        qint32 x = 2;
-        qint32 y = 2;
-        qint32 pw = pix.width();
-        qint32 ph = pix.height();
+        m_item->icon().paint(&p, 0, 0, 24, 24);
         qint32 cw = width();
         qint32 ch = height();
-        qint32 itemWidth = 24;
-        qint32 itemHeight = 24;
-
-        if (pw < itemWidth)
-            x = (cw - pw) / 2;
-        if (ph < itemHeight)
-            y = (cw - ph) / 2;
-
-        if (!m_item->hasValidThumb() || (pw <= itemWidth && ph <= itemHeight)) {
-            p.drawPixmap(x, y, pix, 0, 0, itemWidth, itemHeight);
-        } else {
-            const QPixmap& thumbpix = m_item->thumbPixmap();
-
-            x = 2;
-            y = 2;
-            pw = thumbpix.width();
-            ph = thumbpix.height();
-            cw = width();
-            ch = height();
-
-            if (pw < itemWidth)
-                x = (cw - pw) / 2;
-
-            if (ph < itemHeight)
-                y = (cw - ph) / 2;
-
-            p.drawPixmap(x, y, thumbpix, 0, 0, itemWidth, itemHeight);
-        }
 
         p.setPen(Qt::gray);
         p.drawRect(0, 0, cw + 1, ch + 1);

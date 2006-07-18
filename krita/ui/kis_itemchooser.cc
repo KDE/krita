@@ -30,15 +30,17 @@ KisItemChooser::KisItemChooser(QWidget *parent, const char *name) : super(parent
     setObjectName(name);
 /*    m_frame = new QVBox(this);
     m_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
-    m_chooser = new KoIconChooser(QSize(30,30), this, "icon_chooser", true);
-    QObject::connect(m_chooser, SIGNAL(selected(KoIconItem*)), this, SLOT(slotItemSelected(KoIconItem*)));
+    m_chooser = new KoIconChooser(QSize(30,30), this);
+    m_chooser->setMinimumSize(200, 150);
+
+    QObject::connect(m_chooser, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(slotItemSelected(QTableWidgetItem*)));
 }
 
 KisItemChooser::~KisItemChooser()
 {
 }
 
-void KisItemChooser::setCurrent(KoIconItem *item)
+void KisItemChooser::setCurrent(QTableWidgetItem *item)
 {
     m_chooser->setCurrentItem(item);
     update(item);
@@ -49,25 +51,25 @@ void KisItemChooser::setCurrent(int index)
     setCurrent(m_chooser->itemAt(index));
 }
 
-KoIconItem* KisItemChooser::currentItem()
+QTableWidgetItem* KisItemChooser::currentItem()
 {
     return m_chooser->currentItem();
 }
 
-void KisItemChooser::slotItemSelected(KoIconItem *item)
+void KisItemChooser::slotItemSelected(QTableWidgetItem *item)
 {
     update(item);
     emit selected(currentItem());
 }
 
-void KisItemChooser::addItem(KoIconItem *item)
+void KisItemChooser::addItem(QTableWidgetItem *item)
 {
     m_chooser->addItem(item);
 }
 
-void KisItemChooser::addItems(const vKoIconItem& items)
+void KisItemChooser::addItems(const vQTableWidgetItem& items)
 {
-    foreach (KoIconItem *item, items)
+    foreach (QTableWidgetItem *item, items)
         m_chooser->addItem(item);
 }
 

@@ -18,7 +18,7 @@
 
 #include <QList>
 
-#include <koIconChooser.h>
+#include <QTableWidgetItem>
 
 #include "kdebug.h"
 
@@ -37,7 +37,7 @@ KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
     Q_ASSERT(chooser);
     m_activeItem = 0;
 
-    connect(m_chooser, SIGNAL(selected(KoIconItem*)), SLOT(setActiveItem(KoIconItem*)));
+    connect(m_chooser, SIGNAL(selected(QTableWidgetItem*)), SLOT(setActiveItem(QTableWidgetItem*)));
 }
 
 KisResourceMediator::~KisResourceMediator()
@@ -76,7 +76,7 @@ KisIconItem *KisResourceMediator::itemFor(KisResource *r) const
     return 0;
 }
 
-KisResource *KisResourceMediator::resourceFor(KoIconItem *item) const
+KisResource *KisResourceMediator::resourceFor(QTableWidgetItem *item) const
 {
     KisIconItem *kisitem = dynamic_cast<KisIconItem*>(item);
 
@@ -93,7 +93,7 @@ QWidget *KisResourceMediator::chooserWidget() const
     return m_chooser;
 }
 
-void KisResourceMediator::setActiveItem(KoIconItem *item)
+void KisResourceMediator::setActiveItem(QTableWidgetItem *item)
 {
     KisIconItem *kisitem = dynamic_cast<KisIconItem*>(item);
 

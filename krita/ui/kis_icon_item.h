@@ -19,31 +19,25 @@
 #ifndef KIS_ICON_ITEM_H_
 #define KIS_ICON_ITEM_H_
 
-#include <koIconChooser.h>
-//Added by qt3to4:
+#include <QTableWidgetItem>
 #include <QPixmap>
 
 class KisResource;
 
-class KisIconItem : public KoIconItem {
+class KisIconItem : public QTableWidgetItem {
 
 public:
     KisIconItem(KisResource *resource);
     virtual ~KisIconItem();
 
-    virtual QPixmap& pixmap() const;
-    virtual QPixmap& thumbPixmap() const;
-
     KisResource *resource() const;
 
-    virtual int compare(const KoIconItem *other) const;
+    virtual int compare(const QTableWidgetItem *other) const;
 
     void updatePixmaps();
 
 private:
     KisResource *m_resource;
-    QPixmap m_pixmap;
-    QPixmap m_thumb;
 };
 
 #endif // KIS_ICON_ITEM_H_

@@ -22,7 +22,7 @@
 #include <QMap>
 #include <QWidget>
 
-class KoIconItem;
+class QTableWidgetItem;
 class KisItemChooser;
 class KisIconItem;
 class KisResource;
@@ -48,13 +48,13 @@ public:
     void connectServer(KisResourceServerBase* rServer);
     KisResource *currentResource() const;
     KisIconItem *itemFor(KisResource *r) const;
-    KisResource *resourceFor(KoIconItem *item) const;
+    KisResource *resourceFor(QTableWidgetItem *item) const;
     KisResource *resourceFor(KisIconItem *item) const;
     QWidget *chooserWidget() const;
 
 public slots:
     
-    void setActiveItem(KoIconItem *item);
+    void setActiveItem(QTableWidgetItem *item);
 
 signals:
     void activatedResource(KisResource *r);
@@ -65,7 +65,7 @@ private slots:
 private:
     KisItemChooser *m_chooser;
     QMap<KisResource*, KisIconItem*> m_items;
-    KoIconItem *m_activeItem;
+    QTableWidgetItem *m_activeItem;
 };
 
 #endif // KIS_RESOURCE_MEDIATOR_H_

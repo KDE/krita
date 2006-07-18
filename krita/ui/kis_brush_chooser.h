@@ -36,7 +36,7 @@ public:
     virtual ~KisBrushChooser();
 
 protected:
-    virtual void update(KoIconItem *item);
+    virtual void update(QTableWidgetItem *item);
 
 private slots:
     void slotSetItemSpacing(double spacing);

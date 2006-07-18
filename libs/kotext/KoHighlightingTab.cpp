@@ -61,12 +61,12 @@ KoHighlightingTab::~KoHighlightingTab()
 
 KoTextFormat::UnderlineType KoHighlightingTab::getUnderline() const
 {
-    return static_cast<KoTextFormat::UnderlineType>( underlineStyleKComboBox->currentItem() );
+    return static_cast<KoTextFormat::UnderlineType>( underlineStyleKComboBox->currentIndex() );
 }
 
 KoTextFormat::UnderlineStyle KoHighlightingTab::getUnderlineStyle() const
 {
-    return static_cast<KoTextFormat::UnderlineStyle>( underlineLineStyleKComboBox->currentItem() );
+    return static_cast<KoTextFormat::UnderlineStyle>( underlineLineStyleKComboBox->currentIndex() );
 }
 
 QColor KoHighlightingTab::getUnderlineColor() const
@@ -76,12 +76,12 @@ QColor KoHighlightingTab::getUnderlineColor() const
 
 KoTextFormat::StrikeOutType KoHighlightingTab::getStrikethrough() const
 {
-    return static_cast<KoTextFormat::StrikeOutType>( strikethroughStyleKComboBox->currentItem() );
+    return static_cast<KoTextFormat::StrikeOutType>( strikethroughStyleKComboBox->currentIndex() );
 }
 
 KoTextFormat::StrikeOutStyle KoHighlightingTab::getStrikethroughStyle() const
 {
-    return static_cast<KoTextFormat::StrikeOutStyle>( strikethroughLineStyleKComboBox->currentItem() );
+    return static_cast<KoTextFormat::StrikeOutStyle>( strikethroughLineStyleKComboBox->currentIndex() );
 }
 
 bool KoHighlightingTab::getWordByWord() const
@@ -96,13 +96,13 @@ KoTextFormat::AttributeStyle KoHighlightingTab::getCapitalisation() const
 
 void KoHighlightingTab::setUnderline( KoTextFormat::UnderlineType item )
 {
-    underlineStyleKComboBox->setCurrentItem( static_cast<int>( item ) );
+    underlineStyleKComboBox->setCurrentIndex( static_cast<int>( item ) );
     slotUnderlineChanged( static_cast<int>( item ) );
 }
 
 void KoHighlightingTab::setUnderlineStyle( KoTextFormat::UnderlineStyle item )
 {
-    underlineLineStyleKComboBox->setCurrentItem( static_cast<int>( item ) );
+    underlineLineStyleKComboBox->setCurrentIndex( static_cast<int>( item ) );
     emit underlineStyleChanged( static_cast<int>( item ) );
 }
 
@@ -113,13 +113,13 @@ void KoHighlightingTab::setUnderlineColor( const QColor &color )
 
 void KoHighlightingTab::setStrikethrough( int item )
 {
-    strikethroughStyleKComboBox->setCurrentItem( static_cast<int>( item ) );
+    strikethroughStyleKComboBox->setCurrentIndex( static_cast<int>( item ) );
     slotStrikethroughChanged( static_cast<int>( item ) );
 }
 
 void KoHighlightingTab::setStrikethroughStyle( int item )
 {
-    strikethroughLineStyleKComboBox->setCurrentItem( static_cast<int>( item ) );
+    strikethroughLineStyleKComboBox->setCurrentIndex( static_cast<int>( item ) );
     emit strikethroughStyleChanged( static_cast<int>( item ) );
 }
 
@@ -138,14 +138,14 @@ void KoHighlightingTab::slotUnderlineChanged( int item )
 {
     underlineLineStyleKComboBox->setEnabled( item > 0 );
     underlineKColorButton->setEnabled( item > 0 );
-    underlineWordByWordCheckBox->setEnabled( ( item > 0 ) || ( strikethroughStyleKComboBox->currentItem() > 0 ) );
+    underlineWordByWordCheckBox->setEnabled( ( item > 0 ) || ( strikethroughStyleKComboBox->currentIndex() > 0 ) );
     emit underlineChanged( item );
 }
 
 void KoHighlightingTab::slotStrikethroughChanged( int item )
 {
     strikethroughLineStyleKComboBox->setEnabled( item > 0 );
-    underlineWordByWordCheckBox->setEnabled( ( item > 0 ) || ( underlineStyleKComboBox->currentItem() > 0 ) );
+    underlineWordByWordCheckBox->setEnabled( ( item > 0 ) || ( underlineStyleKComboBox->currentIndex() > 0 ) );
     emit strikethroughChanged(  item );
 }
 

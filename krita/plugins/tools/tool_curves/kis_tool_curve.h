@@ -39,19 +39,13 @@ public:
     KisToolCurve(const QString& UIName);
     virtual ~KisToolCurve();
 
-    //
-    // KisCanvasObserver interface
-    //
-
     virtual void update (KisCanvasSubject *subject);
 
-    //
-    // KisToolPaint interface
-    //
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
-    virtual void doubleClick(KisDoubleClickEvent *);
+    virtual void doubleClick(KisDoubleClickEvent *event);
+    virtual void keyPress(QKeyEvent *event);
 
 public slots:
 
@@ -65,10 +59,12 @@ protected:
     //
     // KisToolCurve interface
     //
-    virtual KisPoint mouseOnHandle(KisPoint);
+    virtual long convertStateToOptions(long);
+    virtual KisCurve::iterator selectByHandle(const KisPoint&);
     virtual void draw();
     virtual void draw(const KisCurve& curve);
     virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
+    virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
     virtual void paintCurve();
     virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
 
@@ -77,6 +73,11 @@ protected:
     KisCurve *m_curve;
     KisImageSP m_currentImage;
     bool m_drawPivots;
+    bool m_dragging;
+    QColor m_pivotColor;
+    QColor m_selectedPivotColor;
+    KisCurve::iterator m_current;
+    KisCurve::iterator m_previous;
 };
 
 #endif //__KIS_TOOL_CURVE_H_

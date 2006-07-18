@@ -144,121 +144,12 @@ KisToolExample::KisToolExample()
     setName("tool_example");
     setCursor(KisCursor::load("tool_example_cursor.png", 6, 6));
 
-    m_dragging = false;
-    m_editing = false;
     m_curve = new KisCurveExample;
 }
 
 KisToolExample::~KisToolExample()
 {
 
-}
-
-
-void KisToolExample::update (KisCanvasSubject *subject)
-{
-    super::update (subject);
-    if (m_subject)
-        m_currentImage = m_subject->currentImg ();
-}
-
-
-void KisToolExample::deactivate()
-{
-    super::deactivate();
-    m_dragging = false;
-    m_editing = false;
-}
-
-void KisToolExample::buttonPress(KisButtonPressEvent *event)
-{
-    if (m_currentImage && event->button() == LeftButton) {
-        draw();
-        m_dragging = true;
-        if (!m_editing) {
-            if (m_curve->isEmpty()) {
-                m_end = event->pos();
-                m_start = event->pos();
-            } else if (m_start != event->pos()) {
-                m_start = m_end;
-                m_end = event->pos();
-            }
-            m_curve->calculateCurve(m_start,m_end,m_curve->end());
-            m_curve->pushPivot(m_end,false,0);
-        } else {
-            CurvePoint pos(mouseOnHandle(event->pos()),true);
-            KisCurve sel = m_curve->selectedPivots();
-            if (!sel.isEmpty())
-                m_curve->selectPivot(sel[0],false);
-            if (pos != KisPoint(-1,-1))
-                m_curve->selectPivot(pos);
-        }
-        draw();
-    }
-}
-
-void KisToolExample::keyPress(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Delete && !m_dragging) {
-        draw();
-        if (!m_editing) {
-            if (m_curve->count() > 1) {
-                m_curve->deleteLastPivot();
-                m_start = m_end = m_curve->last().point();
-            } else
-                m_curve->clear();
-        } else {
-            KisCurve sel = m_curve->selectedPivots();
-            if (!sel.isEmpty()) {
-                m_curve->deletePivot(sel[0]);
-                if (!m_curve->count())
-                    m_editing = false;
-            }
-        }
-        draw();
-    }
-}
-
-void KisToolExample::move(KisMoveEvent *event)
-{
-    if (m_dragging) {
-        draw();
-        if (!m_editing) {
-            if (m_curve->pivots().count() > 1)
-                m_curve->deleteLastPivot();
-            m_end = event->pos();
-            m_curve->calculateCurve(m_start,m_end,m_curve->end());
-            m_curve->pushPivot(m_end,false,0);
-        } else {
-            KisCurve sel = m_curve->selectedPivots();
-            KisPoint dest = event->pos();
-            if (!sel.isEmpty()) {
-                KisCurve::iterator it = m_curve->find(sel[0]);
-                it = m_curve->movePivot(it,dest);
-                m_curve->selectPivot(it);
-            }
-        }
-        draw();
-    }
-}
-
-void KisToolExample::buttonRelease(KisButtonReleaseEvent *)
-{
-    if (!m_subject || !m_currentImage)
-        return;
-
-    m_dragging = false;
-}
-
-void KisToolExample::doubleClick(KisDoubleClickEvent *)
-{
-    if (!m_editing)
-        m_editing = true;
-    else {
-        paintCurve();
-        m_curve->clear();
-        m_editing = false;
-    }
 }
 
 void KisToolExample::setup(KActionCollection *collection)

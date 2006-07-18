@@ -42,39 +42,21 @@ class KisToolBezier : public KisToolCurve {
     CurvePoint m_control1;
     CurvePoint m_control2;
     KisCurve::iterator m_iterator;
-    bool m_dragging;
-    bool m_editing;
 
 public:
     KisToolBezier();
     virtual ~KisToolBezier();
 
-    //
-    // KisCanvasObserver interface
-    //
-
-    virtual void update (KisCanvasSubject *subject);
-
-    //
-    // KisToolPaint interface
-    //
-
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
+    
     virtual void doubleClick(KisDoubleClickEvent *);
-//    virtual void keyPress(QKeyEvent *);
-
-public slots:
-
-    void deactivate();
 
 protected:
 
-    virtual void draw() {draw(*m_curve);}
-    virtual void draw(const KisCurve& curve);
+    virtual long KisToolBezier::convertStateToOptions(long state);
+    
+    virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
 
 };
 

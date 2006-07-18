@@ -37,36 +37,12 @@ class KisToolExample : public KisToolCurve {
     typedef KisToolCurve super;
     Q_OBJECT
 
-    KisPoint m_start;
-    KisPoint m_end;
-    bool m_dragging;
-    bool m_editing;
-
 public:
     KisToolExample();
     virtual ~KisToolExample();
 
-    //
-    // KisCanvasObserver interface
-    //
-
-    virtual void update (KisCanvasSubject *subject);
-
-    //
-    // KisToolPaint interface
-    //
-
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-    virtual void buttonPress(KisButtonPressEvent *event);
-    virtual void move(KisMoveEvent *event);
-    virtual void buttonRelease(KisButtonReleaseEvent *event);
-    virtual void doubleClick(KisDoubleClickEvent *);
-    virtual void keyPress(QKeyEvent *);
-
-public slots:
-
-    void deactivate();
 
 };
 

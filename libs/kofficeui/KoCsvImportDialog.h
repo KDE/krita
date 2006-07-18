@@ -21,7 +21,8 @@
 #ifndef KO_CSV_IMPORT_DIALOG
 #define KO_CSV_IMPORT_DIALOG
 
-#include <qstringlist.h>
+#include <QStringList>
+#include <QWidget>
 
 #include <kdialog.h>
 
@@ -29,7 +30,11 @@
 
 #include "ui_KoCsvImportDialog.h"
 
-class KoCsvImportWidget;
+class KoCsvImportWidget : public QWidget, public Ui::KoCsvImportWidget
+{
+  public:
+    KoCsvImportWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
+};
 
 class KOFFICEUI_EXPORT KoCsvImportDialog : public KDialog
 {
@@ -45,9 +50,10 @@ public:
         POINTNUMBER ///< Number, which decimal symbol is a point/dot
     };
 
-    KoCsvImportDialog(QWidget* parent, QByteArray& fileArray);
+    KoCsvImportDialog(QWidget* parent);
     ~KoCsvImportDialog();
 
+    void     setData( const QByteArray& data);
     bool     firstRowContainHeaders();
     bool     firstColContainHeaders();
     int      rows();
@@ -55,7 +61,7 @@ public:
     int      headerType(int col);
     QString  text(int row, int col);
 
-private:
+protected:
     void fillTable();
     void fillComboBox();
     void setText(int row, int col, const QString& text);
@@ -80,7 +86,7 @@ private:
     QTextCodec *m_codec;
     QStringList m_formatList; ///< List of the column formats
 
-private slots:
+protected slots:
     void returnPressed();
     void formatChanged( const QString& );
     void delimiterClicked(int id);

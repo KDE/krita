@@ -41,15 +41,8 @@
 
 // local
 #include "KoCsvImportDialog.h"
-#include "ui_KoCsvImportDialog.h"
 
-class KoCsvImportWidget : public QWidget, public Ui::KoCsvImportWidget
-{
-public:
-  KoCsvImportWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
-};
-
-KoCsvImportDialog::KoCsvImportDialog(QWidget* parent, QByteArray& fileArray)
+KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     : KDialog(parent),
       m_dialog(new KoCsvImportWidget(this)),
       m_adjustRows(false),
@@ -61,7 +54,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent, QByteArray& fileArray)
       m_textquote('"'),
       m_delimiter(","),
       m_ignoreDups(false),
-      m_fileArray(fileArray),
+      m_fileArray(),
       m_codec( QTextCodec::codecForName( "UTF-8" ) )
 {
     setButtons( KDialog::Ok|KDialog::Cancel );
@@ -90,8 +83,6 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent, QByteArray& fileArray)
     m_dialog->m_formatComboBox->insertItems( 0, m_formatList );
 
     m_dialog->m_sheet->setReadOnly( true );
-
-    fillTable();
 
     //resize(sizeHint());
     resize( 600, 400 ); // Try to show as much as possible of the table view
@@ -129,6 +120,13 @@ KoCsvImportDialog::~KoCsvImportDialog()
 
 // ----------------------------------------------------------------
 //                       public methods
+
+
+void KoCsvImportDialog::setData( const QByteArray& data )
+{
+    m_fileArray = data;
+    fillTable();
+}
 
 
 bool KoCsvImportDialog::firstRowContainHeaders()
@@ -559,7 +557,6 @@ void KoCsvImportDialog::formatChanged( const QString& newValue )
         for ( int j = select.leftCol(); j <= select.rightCol() ; ++j )
         {
             m_dialog->m_sheet->horizontalHeader()->setLabel( j, newValue );
-            
         }
     }
 }

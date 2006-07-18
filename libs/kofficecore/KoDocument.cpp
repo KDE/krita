@@ -1315,7 +1315,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
     {
         KUrl url = KUrl::fromPath( path );
         Q_ASSERT( url.isLocalFile() );
-        QString dir = url.directory(false);
+        QString dir = url.directory(KUrl::AppendTrailingSlash);
         QString filename = url.fileName();
         return dir + "." + filename + ".autosave" + extension;
     }

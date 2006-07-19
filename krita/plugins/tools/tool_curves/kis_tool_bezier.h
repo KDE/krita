@@ -56,7 +56,8 @@ public:
 protected:
 
     virtual long convertStateToOptions(long state);
-    
+
+    virtual KisCurve::iterator paintPoint (KisPainter& painter, KisCurve::iterator point);
     virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
 
 };

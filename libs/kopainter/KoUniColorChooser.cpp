@@ -45,7 +45,7 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent) : super(parent)
     m_xycolorselector = new KoXYColorSelector(rgbColorSpace(), this);
     m_xycolorselector->setFixedSize(137, 137);
 
-    m_colorSlider = new KoColorSlider(rgbColorSpace(), Qt::Vertical, this);
+    m_colorSlider = new KoColorSlider(Qt::Vertical, this);
     m_colorSlider->setFixedSize(25, 118);
 
     m_colorpatch = new KoColorPatch(this);

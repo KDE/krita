@@ -74,24 +74,20 @@ public:
 KisCurve::iterator KisCurveBezier::pushPivot (const KisPoint& point) {
     KisPoint prevTrans(15.0,-15.0);
     KisPoint nextTrans(-15.0,15.0);
-    iterator it,prev,next;
+    iterator it,prev;
 
     it = pushPoint(point,true,false,BEZIERENDHINT);
     if (count() > 1)
         prev = addPoint(it,point+prevTrans,true,false,BEZIERPREVCONTROLHINT);
     
-    next = pushPoint(point+nextTrans,true,false,BEZIERNEXTCONTROLHINT);
-
-    if (count() > 2)
-        return selectPivot(prev);
-    else
-        return selectPivot(next);
+    it = pushPoint(point+nextTrans,true,false,BEZIERNEXTCONTROLHINT);
+    
+    return selectPivot(it);
 }
 
 void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterator tend, KisCurve::iterator)
 {
-    if (pivots().count() < 4 ||
-        tstart == tend)
+    if (pivots().count() < 4 || tstart == tend)
         return;
 
     iterator origin, dest, control1, control2;
@@ -112,6 +108,9 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
     } else if ((*tstart).hint() == BEZIERNEXTCONTROLHINT) {
         origin = tstart.previousPivot();
         control1 = tstart;
+    } else if ((*tstart).hint() == BEZIERPREVCONTROLHINT) {
+        origin = tstart.nextPivot();
+        control1 = origin.nextPivot();
     } else
         return;
         
@@ -121,6 +120,9 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
     } else if ((*tend).hint() == BEZIERPREVCONTROLHINT) {
         dest = tend.nextPivot();
         control2 = tend;
+    } else if ((*tend).hint() == BEZIERNEXTCONTROLHINT) {
+        dest = tend.previousPivot();
+        control2 = dest.previousPivot();
     } else
         return;
 
@@ -165,6 +167,10 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
         thisEnd = it.nextPivot();
         nextEnd = end();
         prevEnd = it.previousPivot().previousPivot();
+    } else if ((*it) == last()) {
+        thisEnd = it.previousPivot();
+        nextEnd = end();
+        prevEnd = thisEnd.previousPivot().previousPivot().previousPivot();
     } else if (hint == BEZIERNEXTCONTROLHINT) {
         thisEnd = it.previousPivot();
         nextEnd = it.nextPivot().nextPivot();
@@ -222,7 +228,6 @@ bool KisCurveBezier::deletePivot (KisCurve::iterator it)
         deleteFirstPivot();
         deleteFirstPivot();
     } else if (nextControl == end()) {
-        kdDebug(0) << "SONO QUI" << endl;
         deleteLastPivot();
         deleteLastPivot();
         deleteLastPivot();
@@ -256,7 +261,7 @@ long KisToolBezier::convertStateToOptions(long state)
 {
     long options = KisToolCurve::convertStateToOptions(state);
 
-    if (state & Qt::ShiftButton)
+    if (state & Qt::AltButton)
         options |= SYMMETRICALCONTROLSOPTION;
 
     return options;
@@ -267,7 +272,6 @@ KisCurve::iterator KisToolBezier::paintPoint (KisPainter& painter, KisCurve::ite
     KisCurve::iterator prev(point),next(point);
     switch ((*point).hint()) {
     case BEZIERENDHINT:
-        kdDebug(0) << "SONO QUI!" << endl;
         if (point.previousPivot() != point && (*point.nextPivot()) != m_curve->last()) {
             prev -= 2; next += 2;
             painter.paintLine((*prev).point(), PRESSURE_DEFAULT, 0, 0, (*next).point(), PRESSURE_DEFAULT, 0, 0);

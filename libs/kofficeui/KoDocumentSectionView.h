@@ -36,6 +36,7 @@ class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
 
     protected:
         virtual bool event( QEvent *event );
+        virtual bool viewportEvent( QEvent *event );
 
     protected slots:
         virtual void currentChanged( const QModelIndex &current, const QModelIndex &previous );

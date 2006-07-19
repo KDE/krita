@@ -47,11 +47,9 @@ KoDocumentSectionView::~KoDocumentSectionView()
 
 bool KoDocumentSectionView::event( QEvent *e )
 {
-    if( ( e->type() == QEvent::ToolTip || e->type() == QEvent::MouseButtonPress ) && model() )
+    if( e->type() == QEvent::MouseButtonPress && model() )
     {
-        const QPoint pos = e->type() == QEvent::ToolTip
-                         ? static_cast<QHelpEvent*>( e )->pos()
-                         : static_cast<QMouseEvent*>( e )->pos();
+        const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
         if( !indexAt( pos ).isValid() )
             return super::event( e );
         QModelIndex index = model()->buddy( indexAt( pos ) );
@@ -64,6 +62,25 @@ bool KoDocumentSectionView::event( QEvent *e )
     }
 
     return super::event( e );
+}
+
+bool KoDocumentSectionView::viewportEvent( QEvent *e )
+{
+    if( e->type() == QEvent::ToolTip && model() )
+    {
+        const QPoint pos = static_cast<QHelpEvent*>( e )->pos();
+        if( !indexAt( pos ).isValid() )
+            return super::viewportEvent( e );
+        QModelIndex index = model()->buddy( indexAt( pos ) );
+        QStyleOptionViewItem option = viewOptions();
+        option.rect = visualRect( index );
+        if( index == currentIndex() )
+            option.state |= QStyle::State_HasFocus;
+
+        return d->delegate->editorEvent( e, model(), option, index );
+    }
+
+    return super::viewportEvent( e );
 }
 
 void KoDocumentSectionView::currentChanged( const QModelIndex &current, const QModelIndex &previous )

@@ -63,6 +63,7 @@ void KisToolPerspectiveGrid::activate()
 {
     if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
     {
+        m_mode = MODE_CREATION;
         m_points.clear();
     } else {
         drawGrid();
@@ -72,7 +73,7 @@ void KisToolPerspectiveGrid::activate()
 
 void KisToolPerspectiveGrid::deactivate()
 {
-    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    if( m_mode == MODE_CREATION )
     {
         drawGridCreation();
         m_points.clear();
@@ -91,7 +92,7 @@ void KisToolPerspectiveGrid::update (KisCanvasSubject *subject)
 
 void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
 {
-    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    if( m_mode == MODE_CREATION )
     {
         if (event->button() == LeftButton) {
             m_dragging = true;
@@ -113,7 +114,7 @@ void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
 
 void KisToolPerspectiveGrid::move(KisMoveEvent *event)
 {
-    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    if( m_mode == MODE_CREATION )
     {
         if (m_dragging) {
             // erase old lines on canvas
@@ -132,7 +133,7 @@ void KisToolPerspectiveGrid::buttonRelease(KisButtonReleaseEvent *event)
     if (!m_subject)
         return;
 
-    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    if( m_mode == MODE_CREATION  )
     {
         if (m_dragging && event->button() == LeftButton)  {
             m_dragging = false;
@@ -153,7 +154,7 @@ void KisToolPerspectiveGrid::buttonRelease(KisButtonReleaseEvent *event)
 
 void KisToolPerspectiveGrid::paint(KisCanvasPainter& gc)
 {
-    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    if( m_mode == MODE_CREATION )
     {
         drawGridCreation(gc);
     } else {
@@ -163,7 +164,7 @@ void KisToolPerspectiveGrid::paint(KisCanvasPainter& gc)
 
 void KisToolPerspectiveGrid::paint(KisCanvasPainter& gc, const QRect&)
 {
-    if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
+    if( m_mode == MODE_CREATION )
     {
         drawGridCreation(gc);
     } else {
@@ -181,6 +182,7 @@ void KisToolPerspectiveGrid::drawGridCreation()
         drawGridCreation(gc);
     }
 }
+
 
 void KisToolPerspectiveGrid::drawGridCreation(KisCanvasPainter& gc)
 {
@@ -221,6 +223,11 @@ void KisToolPerspectiveGrid::drawGridCreation(KisCanvasPainter& gc)
     }
 }
 
+void KisToolPerspectiveGrid::drawSmallRectangle(KisCanvasPainter& gc, QPoint p)
+{
+    gc.drawRect( p.x() - 5 , p.y() - 5 , 9, 9);
+}
+
 void KisToolPerspectiveGrid::drawGrid(KisCanvasPainter& gc)
 {
     
@@ -249,21 +256,49 @@ void KisToolPerspectiveGrid::drawGrid(KisCanvasPainter& gc)
             startPos = controller->windowToView(grid->topLeft()->roundQPoint());
             endPos = controller->windowToView(grid->topRight()->roundQPoint());
             gc.drawLine( startPos, endPos );
+            if( !grid->topGrid() )
+            {
+                drawSmallRectangle(gc, (endPos + startPos) / 2);
+            }
+            if(drawLeft) {
+                drawSmallRectangle(gc, startPos);
+            }
+            if(drawRight) {
+                drawSmallRectangle(gc, endPos);
+            }
         }
         if(drawRight) {
             startPos = controller->windowToView(grid->topRight()->roundQPoint());
             endPos = controller->windowToView(grid->bottomRight()->roundQPoint());
             gc.drawLine( startPos, endPos );
+            if( !grid->rightGrid() )
+            {
+                drawSmallRectangle(gc, (endPos + startPos) / 2);
+            }
         }
         if(drawBottom) {
             startPos = controller->windowToView(grid->bottomRight()->roundQPoint());
             endPos = controller->windowToView(grid->bottomLeft()->roundQPoint());
             gc.drawLine( startPos, endPos );
+            if( !grid->bottomGrid() )
+            {
+                drawSmallRectangle(gc, (endPos + startPos) / 2);
+            }
+            if(drawLeft) {
+                drawSmallRectangle(gc, endPos);
+            }
+            if(drawRight) {
+                drawSmallRectangle(gc, startPos);
+            }
         }
         if(drawLeft) {
             startPos = controller->windowToView(grid->bottomLeft()->roundQPoint());
             endPos = controller->windowToView(grid->topLeft()->roundQPoint());
             gc.drawLine( startPos, endPos );
+            if( !grid->leftGrid() )
+            {
+                drawSmallRectangle(gc, (endPos + startPos) / 2);
+            }
         }
     }
 }

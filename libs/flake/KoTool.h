@@ -161,7 +161,6 @@ signals:
      * Emitted when this tool wants itself to be replaced by another tool.
      * The id it gives is the 'id' part of a KoID instance that is linked to the
      * specified tool.
-     * TODO should this be an int instead so I can do an emit sigActivateTool(OtherTool::ID) ?
      *
      * @param id the identification of the desired tool
      */

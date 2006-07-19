@@ -123,7 +123,7 @@ KoShapeContainer::ChildrenData::ChildrenData() {
 }
 
 KoShapeContainer::ChildrenData::~ChildrenData() {
-    // TODO will the relation instances in m_relations be deleted?
+    qDeleteAll(m_relations);
 }
 
 void KoShapeContainer::ChildrenData::add(KoShape *child) {

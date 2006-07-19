@@ -22,11 +22,13 @@
 #include "KoColor.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
+#include "KoColorSpaceFactoryRegistry.h"
 
 KoColor::KoColor()
 {
-    m_data = 0;
-    m_colorSpace = 0;
+    m_colorSpace = KoColorSpaceFactoryRegistry::instance()->getColorSpace(KoID("LABA",0),"");
+    m_data = new quint8[m_colorSpace->pixelSize()];
+    memset(m_data, 0, m_colorSpace->pixelSize());
 }
 
 KoColor::~KoColor()

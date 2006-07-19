@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <knuminput.h>
 
 #include "kis_global.h"
 #include "kis_doc.h"
@@ -169,11 +168,6 @@ long KisToolCurve::convertStateToOptions(long state)
 
 void KisToolCurve::draw()
 {
-    draw (*m_curve);
-}
-
-void KisToolCurve::draw(const KisCurve& curve)
-{
     KisCanvasPainter *gc;
     KisCanvasController *controller;
     KisCanvas *canvas;
@@ -188,14 +182,14 @@ void KisToolCurve::draw(const KisCurve& curve)
     gc->setPen(pen);
     gc->setRasterOp(Qt::XorROP);
 
-    KisCurve::iterator it = curve.begin();
-    while (it != curve.end()) // increasing is done by drawPoint
-        it = drawPoint(*gc, it, curve);
+    KisCurve::iterator it = m_curve->begin();
+    while (it != m_curve->end()) // increasing is done by drawPoint
+        it = drawPoint(*gc, it);
     
     delete gc;
 }
 
-KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve)
+KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::iterator point)
 {
     KisCanvasController *controller = m_subject->canvasController();
 
@@ -204,13 +198,13 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
     pos1 = controller->windowToView((*point).point().toQPoint());
 
     if ((*point).isPivot()) {
-        point = drawPivot (gc, point, curve);
+        point = drawPivot (gc, point);
     } else
         gc.drawPoint(pos1);
     
     switch ((*point).hint()) {
     case LINEHINT:
-        if (++point != curve.end() && (*point).hint() <= LINEHINT) {
+        if (++point != m_curve->end() && (*point).hint() <= LINEHINT) {
             pos2 = controller->windowToView((*point).point().toQPoint());
             gc.drawLine(pos1,pos2);
         }
@@ -222,7 +216,7 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
     return point;
 }
 
-KisCurve::iterator KisToolCurve::drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve)
+KisCurve::iterator KisToolCurve::drawPivot(KisCanvasPainter& gc, KisCurve::iterator point)
 {
     KisCanvasController *controller = m_subject->canvasController();
 

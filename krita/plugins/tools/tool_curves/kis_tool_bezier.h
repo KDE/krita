@@ -42,20 +42,14 @@ const int SYMMETRICALCONTROLSOPTION = 0x0020;
 class KisCurveBezier : public KisCurve {
 
     typedef KisCurve super;
-
-    KisPoint midpoint (const KisPoint&, const KisPoint&);
-    void recursiveCurve (const KisPoint&, const KisPoint&, const KisPoint&, const KisPoint&, int, iterator);
-
-    int m_maxLevel;
     
 public:
 
-    KisCurveBezier() : super() {m_maxLevel = 6;}
+    KisCurveBezier() : super() {}
 
     ~KisCurveBezier() {}
 
     virtual iterator pushPivot(const KisPoint&);
-    virtual void calculateCurve(iterator, iterator, iterator);
     virtual iterator movePivot(iterator, const KisPoint&);
     virtual bool deletePivot(iterator);
 
@@ -66,27 +60,19 @@ class KisToolBezier : public KisToolCurve {
     typedef KisToolCurve super;
     Q_OBJECT
 
-    CurvePoint m_origin;
-    CurvePoint m_destination;
-    CurvePoint m_control1;
-    CurvePoint m_control2;
-    KisCurve::iterator m_iterator;
-
 public:
     KisToolBezier();
     virtual ~KisToolBezier();
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-    
-    virtual void doubleClick(KisDoubleClickEvent *);
 
 protected:
 
     virtual long convertStateToOptions(long state);
 
-    virtual KisCurve::iterator paintPoint (KisPainter& painter, KisCurve::iterator point);
-    virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
+    virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
+    virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point);
 
 };
 

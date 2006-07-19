@@ -62,9 +62,8 @@ protected:
     virtual long convertStateToOptions(long);
     virtual KisCurve::iterator selectByHandle(const KisPoint&);
     virtual void draw();
-    virtual void draw(const KisCurve& curve);
-    virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
-    virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
+    virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
+    virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point);
     virtual void paintCurve();
     virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
 

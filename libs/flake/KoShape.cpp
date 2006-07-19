@@ -110,7 +110,18 @@ void KoShape::resize( const QSizeF &size )
 {
     if(m_size == size)
         return;
+
+    double fx = size.width() / m_size.width();
+    double fy = size.height() / m_size.height();
+
     m_size = size;
+
+    for ( int i = 0; i < m_connectors.size(); ++i )
+    {
+        QPointF &point = m_connectors[i];
+        point.setX(point.x() * fx);
+        point.setY(point.y() * fy);
+    }
     recalcMatrix();
     shapeChanged(SizeChanged);
 }

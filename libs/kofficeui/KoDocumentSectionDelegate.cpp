@@ -20,6 +20,7 @@
 #include <QtDebug>
 #include <QAbstractItemView>
 #include <QApplication>
+#include <QBasicTimer>
 #include <QDesktopWidget>
 #include <QFrame>
 #include <QKeyEvent>
@@ -31,6 +32,7 @@
 #include <QPointer>
 #include <QStyleOptionViewItem>
 #include <QTextDocument>
+#include <QTimerEvent>
 #include <QToolTip>
 #include <QUrl>
 #include <klocale.h>
@@ -55,6 +57,7 @@ class KoDocumentSectionDelegate::ToolTip: public QFrame
         QTextDocument *m_document;
         QPersistentModelIndex m_index;
         QPoint m_pos;
+        QBasicTimer m_timer;
 
         static ToolTip *instance;
 
@@ -63,6 +66,7 @@ class KoDocumentSectionDelegate::ToolTip: public QFrame
 
     protected:
         virtual void paintEvent( QPaintEvent *e );
+        virtual void timerEvent( QTimerEvent *e );
         virtual bool eventFilter( QObject *object, QEvent *event );
 };
 
@@ -425,6 +429,7 @@ void KoDocumentSectionDelegate::ToolTip::update( QWidget *widget, const QPoint &
             show();
         else
             QWidget::update(); //gcc--
+        m_timer.start( 10000, this );
     }
     else
         delete doc;
@@ -496,6 +501,15 @@ void KoDocumentSectionDelegate::ToolTip::paintEvent( QPaintEvent* )
     p.initFrom( this );
     m_document->drawContents( &p, rect() );
     p.drawRect( 0, 0, width() - 1, height() - 1 );
+}
+
+void KoDocumentSectionDelegate::ToolTip::timerEvent( QTimerEvent *e )
+{
+    if( e->timerId() == m_timer.timerId() )
+    {
+        hide();
+        deleteLater();
+    }
 }
 
 bool KoDocumentSectionDelegate::ToolTip::eventFilter( QObject *object, QEvent *event )

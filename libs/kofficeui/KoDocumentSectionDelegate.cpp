@@ -20,55 +20,16 @@
 #include <QtDebug>
 #include <QAbstractItemView>
 #include <QApplication>
-#include <QBasicTimer>
-#include <QDesktopWidget>
-#include <QFrame>
 #include <QKeyEvent>
 #include <QLineEdit>
 #include <QModelIndex>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QPersistentModelIndex>
 #include <QPointer>
 #include <QStyleOptionViewItem>
-#include <QTextDocument>
-#include <QTimerEvent>
-#include <QToolTip>
-#include <QUrl>
-#include <klocale.h>
 #include "KoDocumentSectionModel.h"
+#include "KoDocumentSectionToolTip.h"
 #include "KoDocumentSectionDelegate.h"
-
-class KoDocumentSectionDelegate::ToolTip: public QFrame
-{
-    typedef QFrame super;
-
-    public:
-        static void showTip( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index );
-        static void hideTip();
-
-    private:
-        ToolTip();
-        ~ToolTip();
-        void update( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index );
-        QTextDocument *createDocument( const QModelIndex &index );
-        void updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option );
-
-        QTextDocument *m_document;
-        QPersistentModelIndex m_index;
-        QPoint m_pos;
-        QBasicTimer m_timer;
-
-        static ToolTip *instance;
-
-    public:
-        virtual QSize sizeHint() const;
-
-    protected:
-        virtual void paintEvent( QPaintEvent *e );
-        virtual void timerEvent( QTimerEvent *e );
-        virtual bool eventFilter( QObject *object, QEvent *event );
-};
 
 class KoDocumentSectionDelegate::Private
 {
@@ -76,6 +37,7 @@ class KoDocumentSectionDelegate::Private
         QAbstractItemView *view;
         QPointer<QWidget> edit;
         DisplayMode mode;
+        KoDocumentSectionToolTip tip;
         static const int margin = 1;
         Private(): view( 0 ), edit( 0 ), mode( DetailedMode ) { }
 };
@@ -182,7 +144,7 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
     else if( e->type() == QEvent::ToolTip )
     {
         QHelpEvent *he = static_cast<QHelpEvent*>( e );
-        ToolTip::showTip( d->view, he->pos(), option, index );
+        d->tip.showTip( d->view, he->pos(), option, index );
         return true;
     }
 
@@ -375,161 +337,5 @@ void KoDocumentSectionDelegate::drawThumbnail( QPainter *p, const QStyleOptionVi
 }
 
 
-// TOOLTIPS
-
-
-KoDocumentSectionDelegate::ToolTip *KoDocumentSectionDelegate::ToolTip::instance = 0;
-
-void KoDocumentSectionDelegate::ToolTip::showTip( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index )
-{
-    if( !instance )
-        instance = new ToolTip();
-
-    instance->update( widget, pos, option, index );
-}
-
-void KoDocumentSectionDelegate::ToolTip::hideTip()
-{
-    if( !instance )
-        return;
-
-    instance->hide();
-    delete instance;
-}
-
-KoDocumentSectionDelegate::ToolTip::ToolTip()
-    : m_document( new QTextDocument( this ) )
-{
-    instance = this;
-    setWindowFlags( Qt::FramelessWindowHint  | Qt::Tool
-                  | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint );
-    setPalette( QToolTip::palette() );
-    QApplication::instance()->installEventFilter( this );
-}
-
-KoDocumentSectionDelegate::ToolTip::~ToolTip()
-{
-    instance = 0;
-}
-
-void KoDocumentSectionDelegate::ToolTip::update( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index )
-{
-    QTextDocument *doc = createDocument( index );
-
-    QPoint p = ( isVisible() && index == m_index ) ? m_pos : pos;
-
-    if( !isVisible() || index != m_index || doc->toHtml() != m_document->toHtml() )
-    {
-        m_pos = p;
-        m_index = index;
-        delete m_document;
-        m_document = doc;
-        updatePosition( widget, p, option );
-        if( !isVisible() )
-            show();
-        else
-            QWidget::update(); //gcc--
-        m_timer.start( 10000, this );
-    }
-    else
-        delete doc;
-}
-
-QTextDocument *KoDocumentSectionDelegate::ToolTip::createDocument( const QModelIndex &index )
-{
-    QTextDocument *doc = new QTextDocument( this );
-
-    QImage thumb = index.data( Model::LargeThumbnailRole ).value<QImage>();
-    doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
-
-    QString name = index.data( Qt::DisplayRole ).toString();
-    Model::PropertyList properties = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
-    QString rows;
-    for( int i = 0, n = properties.count(); i < n; ++i )
-    {
-        const QString row = QString( "<tr><td align=\"right\">%1</td><td align=\"left\">%2</td></tr>" );
-        const QString value = properties[i].isMutable
-                      ? ( properties[i].state.toBool() ? i18n( "Yes" ) : i18n( "No" ) )
-                      : properties[i].state.toString();
-        rows.append( row.arg( i18n( "%1:", properties[i].name ) ).arg( value ) );
-    }
-
-    rows = QString( "<table>%1</table>" ).arg( rows );
-
-    const QString image = QString( "<table border=\"1\"><tr><td><img src=\"data:thumbnail\"></td></tr></table>" );
-    const QString body = QString( "<h3 align=\"center\">%1</h3>" ).arg( name )
-                       + QString( "<table><tr><td>%1</td><td>%2</td></tr></table>" ).arg( image ).arg( rows );
-    const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
-
-    doc->setHtml( html );
-    doc->setTextWidth( qMin( doc->size().width(), 500.0 ) );
-
-    return doc;
-}
-
-void KoDocumentSectionDelegate::ToolTip::updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option )
-{
-    const QRect drect = QApplication::desktop()->availableGeometry( widget );
-    const QSize size = sizeHint();
-    const int width = size.width(), height = size.height();
-    const QPoint gpos = widget->mapToGlobal( pos );
-    const QRect irect( widget->mapToGlobal( option.rect.topLeft() ), option.rect.size() );
-
-    int y;
-    if( irect.bottom() + height < drect.bottom() )
-        y = irect.bottom();
-    else
-        y = qMax( drect.top(), irect.top() - height );
-
-    int x;
-    if( gpos.x() + width < drect.right() )
-        x = gpos.x();
-    else
-        x = qMax( drect.left(), gpos.x() - width );
-
-    move( x, y );
-}
-
-QSize KoDocumentSectionDelegate::ToolTip::sizeHint() const
-{
-    return m_document->size().toSize();
-}
-
-void KoDocumentSectionDelegate::ToolTip::paintEvent( QPaintEvent* )
-{
-    QPainter p( this );
-    p.initFrom( this );
-    m_document->drawContents( &p, rect() );
-    p.drawRect( 0, 0, width() - 1, height() - 1 );
-}
-
-void KoDocumentSectionDelegate::ToolTip::timerEvent( QTimerEvent *e )
-{
-    if( e->timerId() == m_timer.timerId() )
-    {
-        hide();
-        deleteLater();
-    }
-}
-
-bool KoDocumentSectionDelegate::ToolTip::eventFilter( QObject *object, QEvent *event )
-{
-    switch( event->type() )
-    {
-        case QEvent::KeyPress:
-        case QEvent::KeyRelease:
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::FocusIn:
-        case QEvent::FocusOut:
-        case QEvent::Enter:
-        case QEvent::Leave:
-            hide();
-            deleteLater();
-        default: break;
-    }
-
-    return super::eventFilter( object, event );
-}
 
 #include "KoDocumentSectionDelegate.moc"

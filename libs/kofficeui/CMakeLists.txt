@@ -13,14 +13,16 @@ set(kofficeui_LIB_SRCS
    KoCharSelectDia.cpp
    KoContextHelp.cpp
    KoCsvImportDialog.cpp
-   KoDocumentSectionView.cpp
    KoDocumentSectionDelegate.cpp
+   KoDocumentSectionView.cpp
+   KoDocumentSectionToolTip.cpp
    KoEditPath.cpp 
    KoGeneralPropertyUi.cpp
    KoGuideLineDia.cpp 
    KoGuides.cpp 
    KoImageResource.cpp
    KoInsertLink.cpp
+   KoItemToolTip.cpp
    KoKoolBar.cpp
    KoPageLayoutColumns.cpp
    KoPageLayoutDia.cpp
@@ -69,11 +71,47 @@ install(TARGETS kofficeui  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
-
-install( FILES  KoPageLayoutDia.h KoZoomAction.h KoTabBar.h  	KoPartSelectDia.h KoPartSelectAction.h  	KoRuler.h KoTemplateChooseDia.h KoTabChooser.h  	KoKoolBar.h KoTemplateCreateDia.h KoContextHelp.h  	KoPictureFilePreview.h KoUnitWidgets.h  	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h  	KoCharSelectDia.h KoInsertLink.h KoEditPath.h  	 KoImageResource.h  	KoZoomHandler.h KoGuideLineDia.h KoGuides.h  	KoPageLayoutHeader.h KoPageLayoutSize.h KoGeneralPropertyUi.h KoPageLayoutColumns.h  	KoBrush.h KoPen.h KoZoomMode.h KoDocumentSectionModel.h KoDocumentSectionDelegate.h KoDocumentSectionView.h  DESTINATION ${INCLUDE_INSTALL_DIR})
-
-
-
+install(
+    FILES
+    KoBrush.h
+    KoCharSelectDia.h
+    KoContextHelp.h
+    KoDocumentSectionDelegate.h
+    KoDocumentSectionModel.h
+    KoDocumentSectionToolTip.h
+    KoDocumentSectionView.h
+    KoEditPath.h
+    KoGeneralPropertyUi.h
+    KoGuideLineDia.h
+    KoGuides.h
+    KoImageResource.h
+    KoInsertLink.h
+    KoItemToolTip.h
+    KoKoolBar.h
+    KoPageLayoutColumns.h
+    KoPageLayoutDia.h
+    KoPageLayoutHeader.h
+    KoPageLayoutSize.h
+    KoPartSelectAction.h
+    KoPartSelectDia.h
+    KoPen.h
+    KoPictureFilePreview.h
+    KoRuler.h
+    KoTabBar.h
+    KoTabChooser.h
+    KoTemplateChooseDia.h
+    KoTemplateCreateDia.h
+    KoUnitWidgets.h
+    KoZoomAction.h
+    KoZoomHandler.h
+    KoZoomMode.h
+    tkaction.h
+    tkcoloractions.h
+    tkcombobox.h
+    tktoolbarbutton.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}
+)
 
 
 #original Makefile.am contents follow:

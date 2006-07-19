@@ -25,6 +25,7 @@
 
 class QAbstractItemView;
 class KoDocumentSectionModel;
+class KoDocumentSectionToolTip;
 
 class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
 {
@@ -66,7 +67,6 @@ class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
 
     private:
         typedef KoDocumentSectionModel Model;
-        class ToolTip;
         class Private;
         Private* const d;
 

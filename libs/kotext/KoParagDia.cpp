@@ -103,7 +103,8 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     lSuffix->setBuddy( sSuffix );
     grid->addWidget( sSuffix, 1, 4 );
 
-    lStart = new QLabel( gStyle, "lStart" );
+    lStart = new QLabel( gStyle );
+    lStart->setObjectName( "lStart" );
     lStart->setText( i18n( "&Start at:" ) );
     grid->addWidget( lStart, 2, 1 );
 
@@ -152,7 +153,8 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     cbAlignment->setCurrentIndex(0);
     grid->addWidget( cbAlignment, 2, 4 );
 
-    QLabel *lDepth = new QLabel( gStyle, "lDepth" );
+    QLabel *lDepth = new QLabel( gStyle );
+    lDepth->setObjectName( "lDepth" );
     lDepth->setText( i18n( "&Depth:" ) );
     lDepth->setBuddy( spnDepth );
     if ( displayDepth )

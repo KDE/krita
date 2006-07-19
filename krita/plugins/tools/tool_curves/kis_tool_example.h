@@ -21,6 +21,7 @@
 #ifndef KIS_TOOL_EXAMPLE_H_
 #define KIS_TOOL_EXAMPLE_H_
 
+#include "kis_tool_factory.h"
 #include "kis_tool_curve.h"
 #include "kis_point.h"
 
@@ -45,9 +46,6 @@ public:
     virtual enumToolType toolType() { return TOOL_SHAPE; }
 
 };
-
-
-#include "kis_tool_factory.h"
 
 class KisToolExampleFactory : public KisToolFactory {
     typedef KisToolFactory super;

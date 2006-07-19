@@ -21,6 +21,7 @@
 #ifndef KIS_TOOL_BEZIER_H_
 #define KIS_TOOL_BEZIER_H_
 
+#include "kis_tool_factory.h"
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 #include "kis_point.h"
@@ -59,9 +60,6 @@ protected:
     virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve);
 
 };
-
-
-#include "kis_tool_factory.h"
 
 class KisToolBezierFactory : public KisToolFactory {
     typedef KisToolFactory super;

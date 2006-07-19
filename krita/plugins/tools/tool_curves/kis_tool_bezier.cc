@@ -49,9 +49,11 @@
 #include "kis_tool_bezier.h"
 
 const int BEZIERENDHINT = 0x0010;
-const int BEZIERCONTROLHINT = 0x0020;
+const int BEZIERPREVCONTROLHINT = 0x0020;
+const int BEZIERNEXTCONTROLHINT = 0x0040;
 
 const int MOVEWITHCONTROLOPTION = 0x0010;
+const int SYMMETRICALCONTROLSOPTION = 0x0020;
 
 class KisCurveBezier : public KisCurve {
 
@@ -66,19 +68,31 @@ public:
     virtual iterator pushPivot(const KisPoint&);
     virtual void calculateCurve(iterator, iterator, iterator);
     virtual iterator movePivot(iterator, const KisPoint&);
-    virtual bool deletePivot(iterator);
+/*  virtual bool deletePivot(iterator); */
 
 };
 
 KisCurve::iterator KisCurveBezier::pushPivot (const KisPoint& point) {
-    pushPoint(point,true,false,BEZIERENDHINT);
-    iterator it = pushPoint(point,true,false,BEZIERCONTROLHINT);
-    return selectPivot(it);
+    KisPoint prevTrans(15.0,-15.0);
+    KisPoint nextTrans(-15.0,15.0);
+    iterator it,prev,next;
+
+    it = pushPoint(point,true,false,BEZIERENDHINT);
+    if (count() > 1)
+        prev = addPoint(it,point+prevTrans,true,false,BEZIERPREVCONTROLHINT);
+    
+    next = pushPoint(point+nextTrans,true,false,BEZIERNEXTCONTROLHINT);
+
+    if (count() > 2)
+        return selectPivot(prev);
+    else
+        return selectPivot(next);
 }
 
 void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterator tend, KisCurve::iterator)
 {
-    if (pivots().count() < 4)
+    if (pivots().count() < 4 ||
+        tstart == tend)
         return;
 
     iterator origin, dest, control1, control2;
@@ -96,7 +110,7 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
     if ((*tstart).hint() == BEZIERENDHINT) {
         origin = tstart;
         control1 = tstart.nextPivot();
-    } else if ((*tstart).hint() == BEZIERCONTROLHINT) {
+    } else if ((*tstart).hint() == BEZIERNEXTCONTROLHINT) {
         origin = tstart.previousPivot();
         control1 = tstart;
     } else
@@ -104,9 +118,9 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
         
     if ((*tend).hint() == BEZIERENDHINT) {
         dest = tend;
-        control2 = tend.nextPivot();
-    } else if ((*tend).hint() == BEZIERCONTROLHINT) {
-        dest = tend.previousPivot();
+        control2 = tend.previousPivot();
+    } else if ((*tend).hint() == BEZIERPREVCONTROLHINT) {
+        dest = tend.nextPivot();
         control2 = tend;
     } else
         return;
@@ -123,14 +137,14 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
     by = 3 * (y2 - y1) - cy;
     ay = y3 - y0 - cy - by;
 
-    deleteCurve(control1,dest);
+    deleteCurve(control1,control2);
 
-    increase = 0.02;
+    increase = 0.005;
     for (t = 0; t <= 1; t+=increase) {
         xfinal = ax * (pow(t,3)) + bx * (pow(t,2)) + cx * t + x0;
         yfinal = ay * (pow(t,3)) + by * (pow(t,2)) + cy * t + y0;
 
-        addPoint(dest,KisPoint(xfinal,yfinal),false,false,LINEHINT);
+        addPoint(control2,KisPoint(xfinal,yfinal),false,false,LINEHINT);
     }
 }
 
@@ -141,32 +155,44 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
         return end();
     }
 
-    iterator endp, control;
+    int hint = (*it).hint();
+    iterator thisEnd, prevEnd, nextEnd;
 
-    if ((*it).hint() == BEZIERENDHINT) {
-        endp = it;
-        control = it.nextPivot();
-    } else if ((*it).hint() == BEZIERCONTROLHINT) {
-        endp = it.previousPivot();
-        control = it;
-    } else
-        return KisCurve::movePivot(it, newPt);
+    if (hint == BEZIERENDHINT) {
+        thisEnd = it;
+        nextEnd = it.nextPivot().nextPivot().nextPivot();    // Horrible...
+        prevEnd = it.previousPivot().previousPivot().previousPivot();
+    } else if (hint == BEZIERPREVCONTROLHINT) {
+        thisEnd = it.nextPivot();
+        nextEnd = end();
+        prevEnd = it.previousPivot().previousPivot();
+    } else if (hint == BEZIERNEXTCONTROLHINT) {
+        thisEnd = it.previousPivot();
+        nextEnd = it.nextPivot().nextPivot();
+        prevEnd = end();
+    }
 
-    if (m_actionOptions & MOVEWITHCONTROLOPTION) {
-        KisPoint trans = newPt-(*it).point();
-        (*endp).setPoint((*endp).point() + trans);
-        (*control).setPoint((*control).point() + trans);
+    if (hint == BEZIERENDHINT && (m_actionOptions & MOVEWITHCONTROLOPTION)) {
+        KisPoint trans = newPt - (*it).point();
+        (*thisEnd).setPoint((*thisEnd).point()+trans);
+        (*thisEnd.previous()).setPoint((*thisEnd.previous()).point()+trans);
+        (*thisEnd.next()).setPoint((*thisEnd.next()).point()+trans);
     } else
         (*it).setPoint(newPt);
+    if (hint == BEZIERPREVCONTROLHINT && (*it.next().next()) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION)) {
+        KisPoint trans = (*it).point() - (*thisEnd).point();
+        trans = KisPoint(-trans.x()*2,-trans.y()*2);
+        (*it.next().next()).setPoint(newPt+trans);
+    }
 
-    if ((*endp) != first())
-        calculateCurve(endp.previousPivot(), endp, KisCurve::iterator());
-    if ((*control) != last())
-        calculateCurve(control, control.nextPivot(), KisCurve::iterator());
+    if (nextEnd != end() && count() > 2)
+        calculateCurve (thisEnd,nextEnd,iterator());
+    if (prevEnd != end() && count() > 4)
+        calculateCurve (prevEnd,thisEnd,iterator());
 
     return it;
 }
-
+/*
 bool KisCurveBezier::deletePivot (KisCurve::iterator it)
 {
     if (!(*it).isPivot())
@@ -197,7 +223,7 @@ bool KisCurveBezier::deletePivot (KisCurve::iterator it)
 
     return true;
 }
-
+*/
 KisToolBezier::KisToolBezier()
     : super(i18n("Tool for Bezier"))
 {
@@ -214,23 +240,18 @@ KisToolBezier::~KisToolBezier()
 
 void KisToolBezier::doubleClick(KisDoubleClickEvent *)
 {
-    draw();
-    m_curve->deleteLastPivot();
-    if (m_curve->pivots().count()%2)
-        m_curve->deleteLastPivot();
-    draw();
     paintCurve();
     m_curve->clear();
 }
 
 long KisToolBezier::convertStateToOptions(long state)
 {
-    long options = NOOPTIONS;
+    long options = KisToolCurve::convertStateToOptions(state);
 
     if (state & Qt::AltButton)
         options |= MOVEWITHCONTROLOPTION;
-
-    options |= KisToolCurve::convertStateToOptions(state);
+    if (state & Qt::ShiftButton)
+        options |= SYMMETRICALCONTROLSOPTION;
 
     return options;
 }
@@ -238,44 +259,78 @@ long KisToolBezier::convertStateToOptions(long state)
 KisCurve::iterator KisToolBezier::drawPivot(KisCanvasPainter& gc, KisCurve::iterator point, const KisCurve& curve)
 {
     KisCanvasController *controller = m_subject->canvasController();
-    QPoint pos1, pos2;
-    QPen oldPen, linePen, endpPen;
-    QColor controlColor;
-    QRect endpRect, controlRect;
-    KisCurve::iterator endp, control;
-    if ((*point).hint() == BEZIERCONTROLHINT) {
+    QPoint prevControlPos,endpPos,nextControlPos;
+    QPen oldPen, prevLinePen, nextLinePen, endpPen;
+    QColor prevControlColor, nextControlColor;
+    QRect endpRect, nextControlRect, prevControlRect;
+    KisCurve::iterator endp, prevControl, nextControl;
+    if ((*point).hint() == BEZIERNEXTCONTROLHINT) {
         endp = point.previousPivot();
-        control = point;
+        nextControl = point;
+        if (curve.count() > 2)
+            prevControl = endp.previousPivot();
+        else
+            prevControl = curve.end();
     } else
         return point;
 
-    pos1 = controller->windowToView((*endp).point().toQPoint());
-    pos2 = controller->windowToView((*control).point().toQPoint());
-    endpRect = QRect(pos1-QPoint(5,5),
-                     pos1+QPoint(5,5));
-    controlRect = QRect(pos2-QPoint(4,4),
-                        pos2+QPoint(4,4));
+    endpPos = controller->windowToView((*endp).point().toQPoint());
+    nextControlPos = controller->windowToView((*nextControl).point().toQPoint());
+    prevControlPos = controller->windowToView((*prevControl).point().toQPoint());
+    endpRect = QRect(endpPos-QPoint(5,5),
+                     endpPos+QPoint(5,5));
+    nextControlRect = QRect(nextControlPos-QPoint(4,4),
+                            nextControlPos+QPoint(4,4));
+    prevControlRect = QRect(prevControlPos-QPoint(4,4),
+                            prevControlPos+QPoint(4,4));
     oldPen = gc.pen();
 
     if ((*endp).isSelected())
         endpPen = QPen(Qt::yellow, 1, Qt::SolidLine);
     else
         endpPen = QPen(Qt::darkGreen, 1, Qt::SolidLine);
-    if ((*control).isSelected())
-        controlColor = Qt::yellow;
-    else
-        controlColor = Qt::darkRed;
         
-    if ((*endp).isSelected() || (*control).isSelected())
-        linePen = QPen(Qt::yellow, 1, Qt::SolidLine);
+    if ((*nextControl).isSelected())
+        nextControlColor = Qt::yellow;
     else
-        linePen = QPen(Qt::red, 0, Qt::SolidLine);
+        nextControlColor = Qt::darkRed;
+        
+    if (prevControl != curve.end() && (*prevControl).isSelected())
+        prevControlColor = Qt::yellow;
+    else
+        prevControlColor = Qt::darkRed;
+        
+    if ((*endp).isSelected() || (*prevControl).isSelected())
+        prevLinePen = QPen(Qt::yellow, 1, Qt::SolidLine);
+    else
+        prevLinePen = QPen(Qt::red, 0, Qt::SolidLine);
+
+    if ((*endp).isSelected() || (*nextControl).isSelected())
+        nextLinePen = QPen(Qt::yellow, 1, Qt::SolidLine);
+    else
+        nextLinePen = QPen(Qt::red, 0, Qt::SolidLine);
         
     gc.setPen(endpPen);
     gc.drawEllipse(endpRect);
-    gc.fillRect(controlRect,controlColor);
-    gc.setPen(linePen);
-    gc.drawLine(pos2,pos1);
+    gc.fillRect(nextControlRect,nextControlColor);
+    if (prevControl != curve.end()) {
+        gc.setPen(prevLinePen);
+        gc.fillRect(prevControlRect,prevControlColor);
+        gc.drawLine(prevControlPos,endpPos);
+    }
+    gc.setPen(nextLinePen);
+    gc.drawLine(endpPos,nextControlPos);
+    /*
+    if (m_dragging && (*point).isSelected()) {
+        KisPoint trans = (*control).point() - (*endp).point();
+        trans = KisPoint(-trans.x(),-trans.y());
+        KisPoint falsePos = controller->windowToView((*endp).point() + trans);
+        QRect falseRect = QRect(falsePos.toQPoint()-QPoint(4,4),
+                                falsePos.toQPoint()+QPoint(4,4));
+        gc.fillRect(falseRect,controlColor);
+        gc.drawLine(endpPos,falsePos.toQPoint());
+    }
+    */
     gc.setPen(oldPen);
 
     return point;

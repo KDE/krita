@@ -205,7 +205,7 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
     
     switch ((*point).hint()) {
     case LINEHINT:
-        if (++point != curve.end()) {
+        if (++point != curve.end() && (*point).hint() <= LINEHINT) {
             pos2 = controller->windowToView((*point).point().toQPoint());
             gc.drawLine(pos1,pos2);
         }
@@ -281,7 +281,7 @@ KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iter
         painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);
         break;
     case LINEHINT:
-        if (next != m_curve->end())
+        if (next != m_curve->end() && (*next).hint() <= LINEHINT)
             painter.paintLine((*point++).point(), PRESSURE_DEFAULT, 0, 0, (*next).point(), PRESSURE_DEFAULT, 0, 0);
         else
             painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);

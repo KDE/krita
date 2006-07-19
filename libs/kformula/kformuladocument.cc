@@ -517,8 +517,8 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     delimiter.append(QString("]"));
     delimiter.append(QString("}"));
     delimiter.append(QString(">"));
-    m_leftBracket = new KSelectAction(i18n("Left Delimiter"), 0, this, SLOT(delimiterLeft()),
-                                    collection, "formula_typeleft");
+    m_leftBracket = new KSelectAction(i18n("Left Delimiter"), collection, "formula_typeleft");
+    connect(m_leftBracket, SIGNAL(triggered(bool)), SLOT(delimiterLeft()));
     m_leftBracket->setItems(delimiter);
     //leftBracket->setCurrentItem(0);
 
@@ -535,9 +535,8 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     delimiter.append(QString("["));
     delimiter.append(QString("{"));
     delimiter.append(QString("<"));
-    m_rightBracket = new KSelectAction(i18n("Right Delimiter"),
-                                     0, this, SLOT(delimiterRight()),
-                                     collection, "formula_typeright");
+    m_rightBracket = new KSelectAction(i18n("Right Delimiter"), collection, "formula_typeright");
+    connect(m_rightBracket, SIGNAL(triggered(bool)), SLOT(delimiterRight()));
     m_rightBracket->setItems(delimiter);
     //rightBracket->setCurrentItem(0);
 
@@ -553,9 +552,8 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     ff.append( i18n( "Script" ) );
     ff.append( i18n( "Fraktur" ) );
     ff.append( i18n( "Double Struck" ) );
-    m_fontFamily = new KSelectAction(i18n("Font Family"),
-                                         0, this, SLOT(fontFamily()),
-                                         collection, "formula_fontfamily");
+    m_fontFamily = new KSelectAction(i18n("Font Family"), collection, "formula_fontfamily");
+    connect(m_fontFamily, SIGNAL(triggered(bool)), SLOT(fontFamily()));
     m_fontFamily->setItems( ff );
     m_fontFamily->setEnabled( false );
 }

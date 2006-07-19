@@ -112,7 +112,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
                   this, "restorePalettes");
     m_viewActionMenu->insert(a);
 */
-    m_viewActionMenu->popupMenu()->insertSeparator();
+    m_viewActionMenu->menu()->insertSeparator();
 }
 
 

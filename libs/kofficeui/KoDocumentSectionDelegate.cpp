@@ -27,6 +27,7 @@
 #include <QModelIndex>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPersistentModelIndex>
 #include <QPointer>
 #include <QStyleOptionViewItem>
 #include <QTextDocument>
@@ -48,10 +49,12 @@ class KoDocumentSectionDelegate::ToolTip: public QFrame
         ToolTip();
         ~ToolTip();
         void update( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index );
-        void updateDocument( const QModelIndex &index );
+        QTextDocument *createDocument( const QModelIndex &index );
         void updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option );
 
-        QTextDocument m_document;
+        QTextDocument *m_document;
+        QPersistentModelIndex m_index;
+        QPoint m_pos;
 
         static ToolTip *instance;
 
@@ -391,6 +394,7 @@ void KoDocumentSectionDelegate::ToolTip::hideTip()
 }
 
 KoDocumentSectionDelegate::ToolTip::ToolTip()
+    : m_document( new QTextDocument( this ) )
 {
     instance = this;
     setWindowFlags( Qt::FramelessWindowHint  | Qt::Tool
@@ -406,17 +410,32 @@ KoDocumentSectionDelegate::ToolTip::~ToolTip()
 
 void KoDocumentSectionDelegate::ToolTip::update( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index )
 {
-    updateDocument( index );
-    updatePosition( widget, pos, option );
-    show();
+    QTextDocument *doc = createDocument( index );
+
+    QPoint p = ( isVisible() && index == m_index ) ? m_pos : pos;
+
+    if( !isVisible() || index != m_index || doc->toHtml() != m_document->toHtml() )
+    {
+        m_pos = p;
+        m_index = index;
+        delete m_document;
+        m_document = doc;
+        updatePosition( widget, p, option );
+        if( !isVisible() )
+            show();
+        else
+            QWidget::update(); //gcc--
+    }
+    else
+        delete doc;
 }
 
-void KoDocumentSectionDelegate::ToolTip::updateDocument( const QModelIndex &index )
+QTextDocument *KoDocumentSectionDelegate::ToolTip::createDocument( const QModelIndex &index )
 {
-    m_document.clear();
+    QTextDocument *doc = new QTextDocument( this );
 
     QImage thumb = index.data( Model::LargeThumbnailRole ).value<QImage>();
-    m_document.addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
+    doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
 
     QString name = index.data( Qt::DisplayRole ).toString();
     Model::PropertyList properties = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
@@ -437,8 +456,10 @@ void KoDocumentSectionDelegate::ToolTip::updateDocument( const QModelIndex &inde
                        + QString( "<table><tr><td>%1</td><td>%2</td></tr></table>" ).arg( image ).arg( rows );
     const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
 
-    m_document.setHtml( html );
-    m_document.setTextWidth( qMin( m_document.size().width(), 500.0 ) );
+    doc->setHtml( html );
+    doc->setTextWidth( qMin( doc->size().width(), 500.0 ) );
+
+    return doc;
 }
 
 void KoDocumentSectionDelegate::ToolTip::updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option )
@@ -466,14 +487,14 @@ void KoDocumentSectionDelegate::ToolTip::updatePosition( QWidget *widget, const 
 
 QSize KoDocumentSectionDelegate::ToolTip::sizeHint() const
 {
-    return m_document.size().toSize();
+    return m_document->size().toSize();
 }
 
 void KoDocumentSectionDelegate::ToolTip::paintEvent( QPaintEvent* )
 {
     QPainter p( this );
     p.initFrom( this );
-    m_document.drawContents( &p, rect() );
+    m_document->drawContents( &p, rect() );
     p.drawRect( 0, 0, width() - 1, height() - 1 );
 }
 

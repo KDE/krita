@@ -33,6 +33,34 @@ class KisCurve;
 class KisPainter;
 class KisPoint;
 
+const int BEZIERENDHINT = 0x0010;
+const int BEZIERPREVCONTROLHINT = 0x0020;
+const int BEZIERNEXTCONTROLHINT = 0x0040;
+
+const int SYMMETRICALCONTROLSOPTION = 0x0020;
+
+class KisCurveBezier : public KisCurve {
+
+    typedef KisCurve super;
+
+    KisPoint midpoint (const KisPoint&, const KisPoint&);
+    void recursiveCurve (const KisPoint&, const KisPoint&, const KisPoint&, const KisPoint&, int, iterator);
+
+    int m_maxLevel;
+    
+public:
+
+    KisCurveBezier() : super() {m_maxLevel = 6;}
+
+    ~KisCurveBezier() {}
+
+    virtual iterator pushPivot(const KisPoint&);
+    virtual void calculateCurve(iterator, iterator, iterator);
+    virtual iterator movePivot(iterator, const KisPoint&);
+    virtual bool deletePivot(iterator);
+
+};
+
 class KisToolBezier : public KisToolCurve {
 
     typedef KisToolCurve super;

@@ -48,33 +48,6 @@
 #include "kis_curve_framework.h"
 #include "kis_tool_bezier.h"
 
-const int BEZIERENDHINT = 0x0010;
-const int BEZIERPREVCONTROLHINT = 0x0020;
-const int BEZIERNEXTCONTROLHINT = 0x0040;
-
-const int SYMMETRICALCONTROLSOPTION = 0x0020;
-
-class KisCurveBezier : public KisCurve {
-
-    typedef KisCurve super;
-
-    KisPoint midpoint (const KisPoint&, const KisPoint&);
-    void recursiveCurve (const KisPoint&, const KisPoint&, const KisPoint&, const KisPoint&, int, iterator);
-
-    int m_maxLevel;
-    
-public:
-
-    KisCurveBezier() : super() {m_maxLevel = 6;}
-
-    ~KisCurveBezier() {}
-
-    virtual iterator pushPivot(const KisPoint&);
-    virtual void calculateCurve(iterator, iterator, iterator);
-    virtual iterator movePivot(iterator, const KisPoint&);
-    virtual bool deletePivot(iterator);
-
-};
 
 KisPoint KisCurveBezier::midpoint (const KisPoint& P1, const KisPoint& P2)
 {
@@ -87,6 +60,7 @@ KisPoint KisCurveBezier::midpoint (const KisPoint& P1, const KisPoint& P2)
 void KisCurveBezier::recursiveCurve (const KisPoint& P1, const KisPoint& P2, const KisPoint& P3,
                                      const KisPoint& P4, int level, KisCurve::iterator it)
 {
+    return;
     if (level > m_maxLevel) {
         addPoint(it,midpoint(P1,P4),false,false,LINEHINT);
         return;
@@ -191,13 +165,13 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
         (*thisEnd.next()).setPoint((*thisEnd.next()).point()+trans);
     } else
         (*it).setPoint(newPt);
-    if (hint == BEZIERPREVCONTROLHINT && (*it.next().next()) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION)) {
+    if (hint == BEZIERPREVCONTROLHINT && ((*it.next().next()) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION))) {
         KisPoint trans = (*it).point() - (*thisEnd).point();
         trans = KisPoint(-trans.x()*2,-trans.y()*2);
         (*it.next().next()).setPoint(newPt+trans);
     }
 
-    if (hint == BEZIERNEXTCONTROLHINT && (*it) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION)) {
+    if (hint == BEZIERNEXTCONTROLHINT && ((*it) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION))) {
         KisPoint trans = (*it).point() - (*thisEnd).point();
         trans = KisPoint(-trans.x()*2,-trans.y()*2);
         (*it.previous().previous()).setPoint(newPt+trans);
@@ -285,6 +259,7 @@ KisCurve::iterator KisToolBezier::paintPoint (KisPainter& painter, KisCurve::ite
             point = point.nextPivot();
             control2 = (*point++).point();
             destination = (*point).point();
+            painter.paintAt(origin,PRESSURE_DEFAULT,0,0);
             painter.paintBezierCurve(origin,PRESSURE_DEFAULT,0,0,control1,control2,destination,PRESSURE_DEFAULT,0,0,0);
         } else
             point += 1;

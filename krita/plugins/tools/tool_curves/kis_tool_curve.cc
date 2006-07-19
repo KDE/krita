@@ -81,7 +81,9 @@ void KisToolCurve::deactivate()
 
 void KisToolCurve::buttonPress(KisButtonPressEvent *event)
 {
-    if (m_currentImage && event->button() == Qt::LeftButton) { //  && !(event->state() & Qt::ShiftButton)
+    if (!m_currentImage)
+        return;
+    if (event->button() == Qt::LeftButton && !(event->state() & Qt::ShiftButton)) {
         draw();
         m_dragging = true;
         m_curve->startAction(convertStateToOptions(event->state()));
@@ -95,6 +97,9 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
             m_dragging = false;
         m_curve->endAction();
         draw();
+    } else if (event->button() == Qt::LeftButton && (event->state() & Qt::ShiftButton)) {
+        paintCurve();
+        m_curve->clear();
     }
 }
 

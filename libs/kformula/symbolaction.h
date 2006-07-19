@@ -32,10 +32,7 @@ KFORMULA_NAMESPACE_BEGIN
 class SymbolAction : public KSelectAction
 {
 public:
-    SymbolAction( KActionCollection* parent = 0, const char* name = 0 );
-    SymbolAction( const QString& text, const KShortcut& cut,
-                 const QObject* receiver, const char* slot, KActionCollection* parent,
-                 const char* name = 0 );
+    SymbolAction( const QString& text, KActionCollection* parent, const char* name = 0 );
 
     void plug( QWidget*, int index = -1 );
     void setSymbols( const QStringList&, const QList<QFont>&, const QVector<QChar>& );

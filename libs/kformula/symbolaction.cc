@@ -103,18 +103,10 @@ void SymbolComboItem::paint( QPainter *p )
 /*
  * The symbol action *
  */
-SymbolAction::SymbolAction( KActionCollection* parent, const char* name )
-    : KSelectAction( parent, name )
+SymbolAction::SymbolAction( const QString &text, KActionCollection* parent, const char* name )
+    : KSelectAction( text, parent, name )
 {
-    setEditable( FALSE );
-}
-
-SymbolAction::SymbolAction( const QString& text, const KShortcut& cut,
-                            const QObject* receiver, const char* slot,
-                            KActionCollection* parent, const char* name )
-    : KSelectAction( text, cut, receiver, slot, parent, name )
-{
-    setEditable( FALSE );
+    setEditable( false );
 }
 
 void SymbolAction::plug( QWidget* w, int /*index*/ )

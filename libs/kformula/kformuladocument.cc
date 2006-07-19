@@ -543,9 +543,8 @@ void DocumentWrapper::createActions( KActionCollection* collection )
     m_insertSymbolAction = new KAction(KIcon("key_enter"), i18n("Insert Symbol"), collection, "formula_insertsymbol");
     connect(m_insertSymbolAction, SIGNAL(triggered(bool) ), SLOT(insertSymbol()));
     m_insertSymbolAction->setShortcut(/*CTRL + Qt::Key_I*/0);
-    m_symbolNamesAction = new SymbolAction(i18n("Symbol Names"),
-                                               0, this, SLOT(symbolNames()),
-                                               collection, "formula_symbolnames");
+    m_symbolNamesAction = new SymbolAction(i18n("Symbol Names"), collection, "formula_symbolnames");
+    connect(m_symbolNamesAction, SIGNAL(triggered(bool)), SLOT(symbolNames()));
 
     QStringList ff;
     ff.append( i18n( "Normal" ) );

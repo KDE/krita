@@ -29,8 +29,8 @@ class KOPAINTER_EXPORT KoColorSlider : public KSelector
 {
   Q_OBJECT
 public:
-  KoColorSlider(KoColorSpace* colorSpace, QWidget *parent = 0);
-  KoColorSlider(KoColorSpace* colorSpace, Qt::Orientation o, QWidget *parent = 0);
+  KoColorSlider(QWidget *parent = 0);
+  KoColorSlider(Qt::Orientation o, QWidget *parent = 0);
   virtual ~KoColorSlider();
 
 public:
@@ -40,9 +40,8 @@ protected:
   virtual void drawContents( QPainter* );
 
 protected:
-  KoColor m_colors[2];
-
-  KoColorSpace * m_colorSpace;
+  KoColor m_minColor;
+  KoColor m_maxColor;
 };
 
 #endif

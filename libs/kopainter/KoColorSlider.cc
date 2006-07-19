@@ -22,16 +22,14 @@
 
 #include "KoColorSlider.h"
 
-KoColorSlider::KoColorSlider(KoColorSpace* colorSpace, QWidget* parent)
+KoColorSlider::KoColorSlider(QWidget* parent)
   : KSelector(parent)
-  , m_colorSpace(colorSpace)
 {
     setMaximum(255);
 }
 
-KoColorSlider::KoColorSlider(KoColorSpace* colorSpace, Qt::Orientation o, QWidget *parent)
+KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent)
   : KSelector(o, parent)
-  , m_colorSpace(colorSpace)
 {
     setMaximum(255);
 }
@@ -42,8 +40,8 @@ KoColorSlider::~KoColorSlider()
 
 void KoColorSlider::setColors(const KoColor& mincolor, const KoColor& maxcolor)
 {
-  m_colors[0] = mincolor;
-  m_colors[1] = maxcolor;
+  m_minColor = mincolor;
+  m_maxColor = maxcolor;
 
   update();
 }
@@ -59,12 +57,12 @@ void KoColorSlider::drawContents( QPainter *painter )
   p.end();
   painter->fillRect(contentsRect(), QBrush(checker));
 
-  KoColor c = m_colors[0]; // smart way to fetch colorspace
+  KoColor c = m_minColor; // smart way to fetch colorspace
   QColor color;
 
   const quint8 *colors[2];
-  colors[0] = m_colors[0].data();
-  colors[1] = m_colors[1].data();
+  colors[0] = m_minColor.data();
+  colors[1] = m_maxColor.data();
 
   QImage image(contentsRect().width(), contentsRect().height(), QImage::Format_ARGB32 );
 
@@ -77,7 +75,7 @@ void KoColorSlider::drawContents( QPainter *painter )
         colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
         colorWeights[1] = 255 - colorWeights[0];
 
-        m_colorSpace->mixColors(colors, colorWeights, 2, c.data());
+        c.colorSpace()->mixColors(colors, colorWeights, 2, c.data());
 
         c.toQColor(&color);
 
@@ -94,7 +92,7 @@ void KoColorSlider::drawContents( QPainter *painter )
         colorWeights[0] = static_cast<quint8>((t) * 255 + 0.5);
         colorWeights[1] = 255 - colorWeights[0];
 
-        m_colorSpace->mixColors(colors, colorWeights, 2, c.data());
+        c.colorSpace()->mixColors(colors, colorWeights, 2, c.data());
 
         c.toQColor(&color);
 

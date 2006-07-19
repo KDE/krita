@@ -33,25 +33,27 @@ class QLineEdit;
 class QLayout;
 class QValidator;
 
-class KisPopupSlider : public KMenu {
+class KisPopupSlider : public QMenu {
     Q_OBJECT
 
 public:
 
-    KisPopupSlider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orientation, QWidget * parent, const char * name = 0)
-        : KMenu(parent)
+    KisPopupSlider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orientation, QWidget * parent)
+        : QMenu(parent)
     {
-        setObjectName(name);
-        m_slider = new QSlider(orientation, this);
-        m_slider->setObjectName(name);
+        m_slider = new QSlider(orientation);
         m_slider->setMinimum(minValue);
         m_slider->setMaximum(maxValue);
         m_slider->setPageStep(pageStep);
         m_slider->setValue(value);
         //m_slider->setTracking(false);
-#warning kde4 port
-        // Can't insert widgets into QMenu at the moment.
-        //insertItem(m_slider);
+        m_slider->setMinimumSize(maxValue-minValue+20, 30);
+
+        QHBoxLayout * l = new QHBoxLayout(this);
+        l->setMargin(2);
+        l->setSpacing(2);
+        l->addWidget(m_slider);
+
         connect(m_slider, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
     }
     void setTickInterval(int i) { m_slider->setTickInterval(i); }

@@ -32,12 +32,12 @@
 #include <QValidator>
 #include <QHBoxLayout>
 #include <QFrame>
+#include <QToolButton>
 
 #include <knuminput.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <karrowbutton.h>
 #include <knumvalidator.h>
 
 #include "kis_int_spinbox.h"
@@ -47,7 +47,7 @@ public:
 
     KIntSpinBox * m_numinput;
     KisPopupSlider *m_slider;
-    KArrowButton *m_arrow;
+    QToolButton *m_arrow;
     int m_prevValue;
     QValidator *m_validator;
     QTimer m_timer;
@@ -76,21 +76,20 @@ void KisIntSpinbox::init(int val)
     QHBoxLayout * l = new QHBoxLayout( this );
 
     l->insertStretch(0, 1);
-    d->m_numinput = new KIntSpinBox(0, 100, 1, val, this);
+    d->m_numinput = new KIntSpinBox(0, 100, 1, val, 0);
     d->m_numinput->setObjectName("KisIntSpinbox::KIntSpinBox");
 
     d->m_numinput->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     d->m_numinput->setSuffix("%");
-    l->addWidget( d->m_numinput );
 
     d->m_slider = new KisPopupSlider(0, 100, 10, val, Qt::Horizontal, this);
-    //d->m_slider->setFrameStyle(Q3Frame::Panel|Q3Frame::Raised); Qt4
 
-    d->m_arrow = new KArrowButton(this, Qt::DownArrow);
+    d->m_arrow = new QToolButton();
+    d->m_arrow->setPopupMode(QToolButton::MenuButtonPopup);
     d->m_arrow->setMenu(d->m_slider);
     d->m_arrow->setMaximumHeight( fontMetrics().height() + 4);
-    d->m_arrow->setEnabled(true); // Why is the arrow still gray?
 
+    l->addWidget( d->m_numinput );
     l->addWidget( d->m_arrow );
 
     d->m_prevValue = val;

@@ -29,12 +29,15 @@
 class KisPerspectiveGridNode : public KisPoint, public KShared {
     public:
         inline KisPerspectiveGridNode(double x, double y) : KisPoint(x,y)  { }
+        inline KisPerspectiveGridNode(KisPoint p) : KisPoint(p)  { }
 };
 typedef KSharedPtr<KisPerspectiveGridNode> KisPerspectiveGridNodeSP;
 
 class KisSubPerspectiveGrid {
     public:
         KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft);
+        
+        
         inline KisSubPerspectiveGrid* leftGrid() { return m_leftGrid; }
         inline void setLeftGrid(KisSubPerspectiveGrid* g) { Q_ASSERT(m_leftGrid==0); m_leftGrid = g; }
         inline KisSubPerspectiveGrid* rightGrid() { return m_rightGrid; }
@@ -52,10 +55,17 @@ class KisSubPerspectiveGrid {
         inline const KisPerspectiveGridNodeSP bottomRight() const { return m_bottomRight; }
         inline KisPerspectiveGridNodeSP bottomRight() { return m_bottomRight; }
         inline int subdivisions() const { return m_subdivisions; }
+        /**
+         * Return the index of the subgrid, the value is automaticaly set when the KisSubPerspectiveGrid, it is usefull for
+         * drawing the perspective grid, to avoid drawing twice the same border, or points
+         */
+        inline int index() const { return m_index; }
     private:
         KisPerspectiveGridNodeSP m_topLeft, m_topRight, m_bottomLeft, m_bottomRight;
         KisSubPerspectiveGrid *m_leftGrid, *m_rightGrid, *m_topGrid, *m_bottomGrid;
         int m_subdivisions;
+        int m_index;
+        static int s_lastIndex;
 };
 
 class KisPerspectiveGrid {

@@ -20,7 +20,9 @@
 
 #include "kis_perspective_grid.h"
 
-KisSubPerspectiveGrid::KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft) : m_topLeft(topLeft), m_topRight(topRight), m_bottomRight(bottomRight), m_bottomLeft(bottomLeft), m_subdivisions(5), m_leftGrid(0), m_rightGrid(0), m_topGrid(0), m_bottomGrid(0)
+int KisSubPerspectiveGrid::s_lastIndex = 0;
+
+KisSubPerspectiveGrid::KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft) : m_topLeft(topLeft), m_topRight(topRight), m_bottomRight(bottomRight), m_bottomLeft(bottomLeft), m_subdivisions(5), m_leftGrid(0), m_rightGrid(0), m_topGrid(0), m_bottomGrid(0), m_index(++s_lastIndex)
 {
     
 }

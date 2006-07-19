@@ -1405,7 +1405,7 @@ QString KoDateVariable::formatStr(int & correct)
     if( config->hasGroup("Date format history") )
     {
         KConfigGroup configGroup( config, "Date format history");
-        const int noe=configGroup.readNumEntry("Number Of Entries", 5);
+        const int noe=configGroup.readEntry("Number Of Entries", 5);
         for(int i=0;i<noe;i++)
         {
             QString num;
@@ -1624,7 +1624,7 @@ QString KoTimeVariable::formatStr(int & _correct)
     if( config->hasGroup("Time format history") )
     {
         KConfigGroup configGroup( config, "Time format history" );
-        const int noe=configGroup.readNumEntry("Number Of Entries", 5);
+        const int noe=configGroup.readEntry("Number Of Entries", 5);
         for(int i=0;i<noe;i++)
         {
             QString num;

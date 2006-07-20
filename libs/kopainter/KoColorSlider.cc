@@ -59,6 +59,7 @@ void KoColorSlider::drawContents( QPainter *painter )
 
   KoColor c = m_minColor; // smart way to fetch colorspace
   QColor color;
+  quint8 opacity;
 
   const quint8 *colors[2];
   colors[0] = m_minColor.data();
@@ -77,7 +78,8 @@ void KoColorSlider::drawContents( QPainter *painter )
 
         c.colorSpace()->mixColors(colors, colorWeights, 2, c.data());
 
-        c.toQColor(&color);
+        c.toQColor(&color, &opacity);
+        color.setAlpha(opacity);
 
         for (int y = 0; y < contentsRect().height(); y++)
           image.setPixel(x, y, color.rgba());
@@ -94,7 +96,8 @@ void KoColorSlider::drawContents( QPainter *painter )
 
         c.colorSpace()->mixColors(colors, colorWeights, 2, c.data());
 
-        c.toQColor(&color);
+        c.toQColor(&color, &opacity);
+        color.setAlpha(opacity);
 
         for (int x = 0; x < contentsRect().width(); x++)
           image.setPixel(x, y, color.rgba());

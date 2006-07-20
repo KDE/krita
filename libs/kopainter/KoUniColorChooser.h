@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2006 Casper Boemann (cbr@boemann.dk)
  *
  * This library is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@
 
 #include <koffice_export.h>
 
-class KValueSelector;
 class KoColor;
 class KoXYColorSelector;
 class KoColorSlider;
@@ -42,10 +41,10 @@ class KOPAINTER_EXPORT KoUniColorChooser
     typedef QWidget super;
 
 public:
-    KoUniColorChooser(QWidget *parent = 0L);
+    KoUniColorChooser(QWidget *parent = 0L, bool opacitySlider = false);
     virtual ~KoUniColorChooser() {}
 
-        /**
+      /**
       * @return the current color
       */
     KoColor color();
@@ -76,6 +75,7 @@ protected slots:
     virtual void slotBSelected(bool s);
     virtual void slotSliderChanged(int v);
     virtual void slotXYChanged(int u, int v);
+    virtual void slotOpacityChanged(int o);
 
 private:
     enum ChannelType {CHANNEL_H, CHANNEL_S, CHANNEL_V, CHANNEL_R, CHANNEL_G, CHANNEL_B,CHANNEL_L,CHANNEL_a,CHANNEL_b};
@@ -114,6 +114,7 @@ private:
     QLabel *m_LLabel;
     QLabel *m_aLabel;
     QLabel *m_bLabel;
+    QLabel *m_opacityLabel;
     QSpinBox *m_HIn;
     QSpinBox *m_SIn;
     QSpinBox *m_VIn;
@@ -127,6 +128,7 @@ private:
     QSpinBox *m_LIn;
     QSpinBox *m_aIn;
     QSpinBox *m_bIn;
+    QSpinBox *m_opacityIn;
     QRadioButton *m_HRB;
     QRadioButton *m_SRB;
     QRadioButton *m_VRB;
@@ -136,6 +138,8 @@ private:
     QRadioButton *m_LRB;
     QRadioButton *m_aRB;
     QRadioButton *m_bRB;
+
+    bool m_showOpacitySlider;
 };
 
 #endif

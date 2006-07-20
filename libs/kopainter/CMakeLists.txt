@@ -1,6 +1,6 @@
 
 
-include_directories( ${KOFFICECORE_INCLUDES} ${PIGMENT_INCLUDES} )
+include_directories( ${KOFFICECORE_INCLUDES} ${KOFFICEUI_INCLUDES} ${PIGMENT_INCLUDES} )
 
 
 ########### next target ###############

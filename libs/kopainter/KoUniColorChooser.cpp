@@ -37,7 +37,7 @@
 
 #include "KoUniColorChooser.h"
 
-KoUniColorChooser::KoUniColorChooser(QWidget *parent) : super(parent)
+KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : super(parent), m_showOpacitySlider(opacitySlider)
 {
     QGridLayout *mGrid = new QGridLayout;
     QGridLayout *mGrowGrid = new QGridLayout;
@@ -248,6 +248,30 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent) : super(parent)
     mGrid->addWidget(m_aIn, 6, 8, Qt::AlignTop);
     mGrid->addWidget(m_bIn, 7, 8, Qt::AlignTop);
 
+    if(m_showOpacitySlider)
+    {
+        m_opacityLabel = new QLabel(i18n( "Opacity:" ), this);
+
+        m_opacitySlider = new KoColorSlider(Qt::Horizontal, this);
+        m_opacitySlider->setFixedSize(100, 25);
+        m_opacitySlider->setRange(0, 100);
+
+        m_opacityIn = new QSpinBox(this);
+        m_opacityIn->setRange(0, 100);
+        m_opacityIn->setSingleStep(1);
+        m_opacityIn->setFixedSize(40, 18);
+        m_opacityIn->setFocusPolicy( Qt::ClickFocus );
+
+        mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 8, 5 );
+
+        mGrid->addWidget(m_opacityLabel, 9, 2, Qt::AlignTop);
+        mGrid->addWidget(m_opacitySlider, 9, 3, 1, 4, Qt::AlignTop);
+        mGrid->addWidget(m_opacityIn, 9, 8, Qt::AlignTop);
+
+        connect(m_opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
+        connect(m_opacityIn, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
+    }
+
     mGrid->addItem( new QSpacerItem( 4, 4, QSizePolicy::Fixed, QSizePolicy::Fixed), 4, 5 );
     //mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 8, 9 );
 
@@ -300,6 +324,7 @@ void KoUniColorChooser::slotHSVChanged()
 {
     quint8 data[4];
     HSVtoRGB(m_HIn->value(), m_SIn->value(), m_VIn->value(), data+2, data+1, data);
+    data[3] = m_currentColor.colorSpace()->getAlpha(m_currentColor.data());
     m_currentColor.setColor(data, rgbColorSpace());
     updateValues();
     updateSelectorsCurrent();
@@ -312,6 +337,7 @@ void KoUniColorChooser::slotRGBChanged()
     data[2] = m_RIn->value();
     data[1] = m_GIn->value();
     data[0] = m_BIn->value();
+    data[3] = m_currentColor.colorSpace()->getAlpha(m_currentColor.data());
     m_currentColor.setColor(data, rgbColorSpace());
     updateValues();
     updateSelectorsCurrent();
@@ -321,6 +347,7 @@ void KoUniColorChooser::slotRGBChanged()
 void KoUniColorChooser::slotSliderChanged(int v)
 {
     quint8 data[4];
+    data[3] = m_currentColor.colorSpace()->getAlpha(m_currentColor.data());
     switch(m_activeChannel)
     {
         case CHANNEL_H:
@@ -371,6 +398,7 @@ void KoUniColorChooser::slotSliderChanged(int v)
 void KoUniColorChooser::slotXYChanged(int u, int v)
 {
     quint8 data[4];
+    data[3] = m_currentColor.colorSpace()->getAlpha(m_currentColor.data());
     switch(m_activeChannel)
     {
         case CHANNEL_H:
@@ -412,6 +440,14 @@ void KoUniColorChooser::slotXYChanged(int u, int v)
     }
     updateValues();
     updateSelectorsCurrent();
+    announceColor();
+}
+
+void KoUniColorChooser::slotOpacityChanged(int o)
+{
+    quint8 opacity = o * OPACITY_OPAQUE / 100;
+    m_currentColor.colorSpace()->setAlpha(m_currentColor.data(), opacity, 1);
+    updateValues();
     announceColor();
 }
 
@@ -660,6 +696,24 @@ void KoUniColorChooser::updateValues()
     m_RIn->setValue(tmpColor.data()[2]);
     m_GIn->setValue(tmpColor.data()[1]);
     m_BIn->setValue(tmpColor.data()[0]);
+
+    if(m_showOpacitySlider)
+    {
+        m_opacitySlider->blockSignals(true);
+        m_opacityIn->blockSignals(true);
+
+        KoColor minColor = tmpColor;
+        tmpColor.colorSpace()->setAlpha(minColor.data(), 0, 1);
+        KoColor maxColor = tmpColor;
+        tmpColor.colorSpace()->setAlpha(maxColor.data(), 255, 1);
+
+        m_opacitySlider->setColors(minColor, maxColor);
+        m_opacitySlider->setValue(tmpColor.data()[3]* 100 / OPACITY_OPAQUE);
+        m_opacityIn->setValue(tmpColor.data()[3]* 100 / OPACITY_OPAQUE);
+
+        m_opacityIn->blockSignals(false);
+        m_opacitySlider->blockSignals(false);
+    }
 
     tmpColor = m_currentColor;
     tmpColor.convertTo(labColorSpace());

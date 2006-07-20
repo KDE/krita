@@ -183,9 +183,13 @@ void KisToolCurve::draw()
     gc->setRasterOp(Qt::XorROP);
 
     KisCurve::iterator it = m_curve->begin();
-    while (it != m_curve->end()) // increasing is done by drawPoint
-        it = drawPoint(*gc, it);
-    
+    while (it != m_curve->end()) {
+        if ((*it).isPivot()) {
+            it = drawPivot (*gc, it);
+        } else
+            it = drawPoint (*gc, it);
+    }
+        
     delete gc;
 }
 
@@ -194,15 +198,13 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
     KisCanvasController *controller = m_subject->canvasController();
 
     QPoint pos1, pos2;
-
     pos1 = controller->windowToView((*point).point().toQPoint());
 
-    if ((*point).isPivot()) {
-        point = drawPivot (gc, point);
-    } else
-        gc.drawPoint(pos1);
-    
     switch ((*point).hint()) {
+    case POINTHINT:
+        gc.drawPoint(pos1);
+        point += 1;
+        break;
     case LINEHINT:
         if (++point != m_curve->end() && (*point).hint() <= LINEHINT) {
             pos2 = controller->windowToView((*point).point().toQPoint());
@@ -221,7 +223,7 @@ KisCurve::iterator KisToolCurve::drawPivot(KisCanvasPainter& gc, KisCurve::itera
     KisCanvasController *controller = m_subject->canvasController();
 
     if (!m_drawPivots)
-        return point;
+        return ++point;
     QPoint pos1 = controller->windowToView((*point).point().toQPoint());
     QRect pivotRect = QRect(pos1-QPoint(4,4),
                             pos1+QPoint(4,4));
@@ -230,7 +232,7 @@ KisCurve::iterator KisToolCurve::drawPivot(KisCanvasPainter& gc, KisCurve::itera
     else
         gc.fillRect(pivotRect,m_pivotColor);
 
-    return point;
+    return ++point;
 }
 
 void KisToolCurve::paint(KisCanvasPainter&)

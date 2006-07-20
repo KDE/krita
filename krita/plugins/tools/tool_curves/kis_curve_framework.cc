@@ -220,20 +220,20 @@ KisCurve::iterator KisCurve::movePivot(KisCurve::iterator it, const KisPoint& ne
     return it;
 }
 
-bool KisCurve::deletePivot (const KisPoint& pt)
+void KisCurve::deletePivot (const KisPoint& pt)
 {
-    return deletePivot(CurvePoint(pt));
+    deletePivot(CurvePoint(pt));
 }
 
-bool KisCurve::deletePivot (const CurvePoint& pt)
+void KisCurve::deletePivot (const CurvePoint& pt)
 {
-    return deletePivot(find(pt));
+    deletePivot(find(pt));
 }
 
-bool KisCurve::deletePivot (KisCurve::iterator it)
+void KisCurve::deletePivot (KisCurve::iterator it)
 {
     if (!(*it).isPivot())
-        return false;
+        return;
 
     iterator start = it.previousPivot();
     iterator end = it.nextPivot();
@@ -246,8 +246,6 @@ bool KisCurve::deletePivot (KisCurve::iterator it)
         deleteCurve(start,end);
         calculateCurve(start,end,end);
     }
-
-    return true;
 }
 
 // Probably it can be optimized - it's is smooth however.

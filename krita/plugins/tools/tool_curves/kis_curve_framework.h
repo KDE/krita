@@ -151,7 +151,6 @@ public:
     virtual void deleteCurve(iterator, iterator);
 
     /* Core of the Core, calculateCurve is the only function that needs an implementation in the derived curves */
-    /* FIXME should return iterator */
     virtual void calculateCurve(const KisPoint&, const KisPoint&, iterator);
     virtual void calculateCurve(const CurvePoint&, const CurvePoint&, iterator);
     virtual void calculateCurve(iterator, iterator, iterator);
@@ -166,10 +165,9 @@ public:
     virtual iterator movePivot(const KisPoint&, const KisPoint&);
     virtual iterator movePivot(iterator, const KisPoint&);
 
-    /* FIXME probably it is better to return void */
-    virtual bool deletePivot(const CurvePoint&);
-    virtual bool deletePivot(const KisPoint&);
-    virtual bool deletePivot(iterator);
+    virtual void deletePivot(const CurvePoint&);
+    virtual void deletePivot(const KisPoint&);
+    virtual void deletePivot(iterator);
 
     virtual void moveSelected(const KisPoint&);
     virtual void deleteSelected();
@@ -202,10 +200,10 @@ public:
     bool operator!=(FriendIterator it) {return m_position != it.position();}
     bool operator!=(BaseConstIterator it) {return (*m_position) != (*it);}
     
-    FriendIterator operator++() {m_position+=1;return *this;}
-    FriendIterator operator++(int) {FriendIterator temp = *this; m_position+=1; return temp;}
-    FriendIterator operator--() {m_position-=1;return *this;}
-    FriendIterator operator--(int) {FriendIterator temp = *this; m_position-=1; return temp;}
+    FriendIterator operator++() {++m_position;return *this;}
+    FriendIterator operator++(int) {FriendIterator temp = *this; m_position++; return temp;}
+    FriendIterator operator--() {--m_position;return *this;}
+    FriendIterator operator--(int) {FriendIterator temp = *this; m_position--; return temp;}
     FriendIterator operator+=(int i) {m_position+=i;return *this;}
     FriendIterator operator-=(int i) {m_position-=i;return *this;}
     FriendIterator operator=(const BaseIterator &it) {m_position=it; return *this;}

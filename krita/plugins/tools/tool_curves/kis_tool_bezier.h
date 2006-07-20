@@ -51,7 +51,7 @@ public:
 
     virtual iterator pushPivot(const KisPoint&);
     virtual iterator movePivot(iterator, const KisPoint&);
-    virtual bool deletePivot(iterator);
+    virtual void deletePivot(iterator);
 
 };
 

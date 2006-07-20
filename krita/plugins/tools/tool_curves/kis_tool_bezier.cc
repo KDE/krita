@@ -115,10 +115,10 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
     return it;
 }
 
-bool KisCurveBezier::deletePivot (KisCurve::iterator it)
+void KisCurveBezier::deletePivot (KisCurve::iterator it)
 {
     if (!(*it).isPivot())
-        return false;
+        return;
 
     iterator prevControl,nextControl;
 
@@ -144,8 +144,6 @@ bool KisCurveBezier::deletePivot (KisCurve::iterator it)
         deleteLastPivot();
     } else
         calculateCurve(prevControl,nextControl,iterator());
-
-    return true;
 }
 
 KisToolBezier::KisToolBezier()
@@ -191,7 +189,7 @@ KisCurve::iterator KisToolBezier::paintPoint (KisPainter& painter, KisCurve::ite
     return point;
 }
 
-KisCurve::iterator KisToolBezier::drawPivot(KisCanvasPainter& gc, KisCurve::iterator point)
+KisCurve::iterator KisToolBezier::drawPivot (KisCanvasPainter& gc, KisCurve::iterator point)
 {
     KisCanvasController *controller = m_subject->canvasController();
     QPoint prevControlPos,endpPos,nextControlPos;
@@ -207,7 +205,7 @@ KisCurve::iterator KisToolBezier::drawPivot(KisCanvasPainter& gc, KisCurve::iter
         else
             prevControl = m_curve->end();
     } else
-        return point;
+        return ++point;
 
     endpPos = controller->windowToView((*endp).point().toQPoint());
     nextControlPos = controller->windowToView((*nextControl).point().toQPoint());
@@ -273,7 +271,7 @@ KisCurve::iterator KisToolBezier::drawPivot(KisCanvasPainter& gc, KisCurve::iter
         gc.drawCubicBezier(vec);
     }
 
-    return point;
+    return ++point;
 }
 
 void KisToolBezier::setup(KActionCollection *collection)

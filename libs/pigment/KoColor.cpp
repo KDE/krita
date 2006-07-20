@@ -29,6 +29,7 @@ KoColor::KoColor()
     m_colorSpace = KoColorSpaceFactoryRegistry::instance()->getColorSpace(KoID("LABA",0),"");
     m_data = new quint8[m_colorSpace->pixelSize()];
     memset(m_data, 0, m_colorSpace->pixelSize());
+    m_colorSpace->setAlpha(m_data, OPACITY_OPAQUE, 1);
 }
 
 KoColor::~KoColor()

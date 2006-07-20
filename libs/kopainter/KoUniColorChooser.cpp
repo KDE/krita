@@ -305,6 +305,8 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent, bool opacitySlider) : supe
     mGrowGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 1, 1 );
 
     setLayout(mGrowGrid);
+
+    updateValues();
 }
 
 KoColor KoUniColorChooser::color()

@@ -22,6 +22,7 @@
 #include "kis_resource.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"
+#include "KoResourceChooser.h"
 
 #include <QPixmap>
 
@@ -78,7 +79,10 @@ void KisIconItem::updatePixmaps()
         }
 
         img = img.convertToFormat(QImage::Format_RGB32);
-       // QPixmap::fromImage(img);
+
+        setData(KoResourceChooser::LargeThumbnailRole, QVariant(img));
+
+        setText(m_resource->name());
     }
 }
 

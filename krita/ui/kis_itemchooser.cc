@@ -19,7 +19,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <koIconChooser.h>
+#include <KoResourceChooser.h>
 
 #include "kis_itemchooser.h"
 #include "kis_global.h"
@@ -30,7 +30,7 @@ KisItemChooser::KisItemChooser(QWidget *parent, const char *name) : super(parent
     setObjectName(name);
 /*    m_frame = new QVBox(this);
     m_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
-    m_chooser = new KoIconChooser(QSize(30,30), this);
+    m_chooser = new KoResourceChooser(QSize(30,30), this);
     m_chooser->setMinimumSize(200, 150);
 
     QObject::connect(m_chooser, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(slotItemSelected(QTableWidgetItem*)));

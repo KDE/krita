@@ -22,8 +22,6 @@
 
 #include <klocale.h>
 
-#include <koIconChooser.h>
-
 #include "KoColorSpace.h"
 #include "kis_pattern_chooser.h"
 #include "kis_global.h"

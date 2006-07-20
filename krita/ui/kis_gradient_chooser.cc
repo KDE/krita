@@ -23,8 +23,6 @@
 
 #include <klocale.h>
 
-#include <koIconChooser.h>
-
 #include "kis_view.h"
 #include "kis_global.h"
 #include "kis_icon_item.h"

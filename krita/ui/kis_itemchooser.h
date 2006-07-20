@@ -24,7 +24,7 @@
 
 class KHBox;
 
-class KoIconChooser;
+class KoResourceChooser;
 class QTableWidgetItem;
 
 typedef QList<QTableWidgetItem *> vQTableWidgetItem;
@@ -58,7 +58,7 @@ private slots:
 
 private:
     KHBox *m_frame;
-    KoIconChooser *m_chooser;
+    KoResourceChooser *m_chooser;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

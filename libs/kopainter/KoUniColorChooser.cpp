@@ -84,11 +84,8 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent) : super(parent)
 
     /* setup sradio buttons */
     m_HRB = new QRadioButton(this);
-    m_HRB->setEnabled(false);
     m_SRB = new QRadioButton(this);
-    m_SRB->setEnabled(false);
     m_VRB = new QRadioButton(this);
-    m_VRB->setEnabled(false);
     m_RRB = new QRadioButton(this);
     m_GRB = new QRadioButton(this);
     m_BRB = new QRadioButton(this);
@@ -255,14 +252,17 @@ KoUniColorChooser::KoUniColorChooser(QWidget *parent) : super(parent)
     //mGrid->addItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ), 8, 9 );
 
     /* connect spin box */
-    connect(m_HIn, SIGNAL(valueChanged(int)), this, SLOT(slotHChanged(int)));
-    connect(m_SIn, SIGNAL(valueChanged(int)), this, SLOT(slotSChanged(int)));
-    connect(m_VIn, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
+    connect(m_HIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
+    connect(m_SIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
+    connect(m_VIn, SIGNAL(valueChanged(int)), this, SLOT(slotHSVChanged()));
     connect(m_RIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
     connect(m_GIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
     connect(m_BIn, SIGNAL(valueChanged(int)), this, SLOT(slotRGBChanged()));
 
     /* connect radio buttons */
+    connect(m_HRB, SIGNAL(toggled(bool)), this, SLOT(slotHSelected(bool)));
+    connect(m_SRB, SIGNAL(toggled(bool)), this, SLOT(slotSSelected(bool)));
+    connect(m_VRB, SIGNAL(toggled(bool)), this, SLOT(slotVSelected(bool)));
     connect(m_RRB, SIGNAL(toggled(bool)), this, SLOT(slotRSelected(bool)));
     connect(m_GRB, SIGNAL(toggled(bool)), this, SLOT(slotGSelected(bool)));
     connect(m_BRB, SIGNAL(toggled(bool)), this, SLOT(slotBSelected(bool)));
@@ -296,16 +296,14 @@ void KoUniColorChooser::setColor(const KoColor & c)
     m_colorpatch->setColor(m_currentColor);
 }
 
-void KoUniColorChooser::slotHChanged(int )
+void KoUniColorChooser::slotHSVChanged()
 {
-}
-
-void KoUniColorChooser::slotSChanged(int )
-{
-}
-
-void KoUniColorChooser::slotVChanged(int )
-{
+    quint8 data[4];
+    HSVtoRGB(m_HIn->value(), m_SIn->value(), m_VIn->value(), data+2, data+1, data);
+    m_currentColor.setColor(data, rgbColorSpace());
+    updateValues();
+    updateSelectorsCurrent();
+    announceColor();
 }
 
 void KoUniColorChooser::slotRGBChanged()
@@ -326,13 +324,16 @@ void KoUniColorChooser::slotSliderChanged(int v)
     switch(m_activeChannel)
     {
         case CHANNEL_H:
-            //slotRSelected(true);
+            HSVtoRGB(v, m_SIn->value(), m_VIn->value(), data+2, data+1, data);
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_S:
-            //slotGSelected(true);
+            HSVtoRGB(m_HIn->value(), v, m_VIn->value(), data+2, data+1, data);
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_V:
-            //slotBSelected(true);
+            HSVtoRGB(m_HIn->value(), m_SIn->value(), v, data+2, data+1, data);
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_R:
             data[2] = v;
@@ -373,10 +374,16 @@ void KoUniColorChooser::slotXYChanged(int u, int v)
     switch(m_activeChannel)
     {
         case CHANNEL_H:
+            HSVtoRGB(m_HIn->value(), u, v, data+2, data+1, data);
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_S:
+            HSVtoRGB(u, m_SIn->value(), v, data+2, data+1, data);
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_V:
+            HSVtoRGB(u, v, m_VIn->value(), data+2, data+1, data);
+            m_currentColor.setColor(data, rgbColorSpace());
             break;
         case CHANNEL_R:
             data[2] = m_RIn->value();
@@ -406,6 +413,33 @@ void KoUniColorChooser::slotXYChanged(int u, int v)
     updateValues();
     updateSelectorsCurrent();
     announceColor();
+}
+
+void KoUniColorChooser::slotHSelected(bool s)
+{
+    if(s)
+    {
+        m_activeChannel = CHANNEL_H;
+        updateSelectorsR();
+    }
+}
+
+void KoUniColorChooser::slotSSelected(bool s)
+{
+    if(s)
+    {
+        m_activeChannel = CHANNEL_S;
+        updateSelectorsG();
+    }
+}
+
+void KoUniColorChooser::slotVSelected(bool s)
+{
+    if(s)
+    {
+        m_activeChannel = CHANNEL_V;
+        updateSelectorsB();
+    }
 }
 
 void KoUniColorChooser::slotRSelected(bool s)
@@ -726,7 +760,7 @@ void KoUniColorChooser::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
   }
 }
 
-void KoUniColorChooser::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
+void KoUniColorChooser::HSVtoRGB(int H, int S, int V, quint8 *R, quint8 *G, quint8 *B)
 {
   *R = *G = *B = V;
 
@@ -746,19 +780,19 @@ void KoUniColorChooser::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
       switch(H)
       {
       case 1:
-        *R = static_cast<int>(q);
-	*G = static_cast<int>(V);
-	*B = static_cast<int>(p);
+        *R = static_cast<quint8>(q);
+	*G = static_cast<quint8>(V);
+	*B = static_cast<quint8>(p);
 	break;
       case 3:
-        *R = static_cast<int>(p);
-	*G = static_cast<int>(q);
-	*B = static_cast<int>(V);
+        *R = static_cast<quint8>(p);
+	*G = static_cast<quint8>(q);
+	*B = static_cast<quint8>(V);
 	break;
       case 5:
-        *R = static_cast<int>(V);
-	*G = static_cast<int>(p);
-	*B = static_cast<int>(q);
+        *R = static_cast<quint8>(V);
+	*G = static_cast<quint8>(p);
+	*B = static_cast<quint8>(q);
 	break;
       }
     }
@@ -768,19 +802,19 @@ void KoUniColorChooser::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
       switch(H)
       {
       case 0:
-        *R = static_cast<int>(V);
-        *G = static_cast<int>(t);
-        *B = static_cast<int>(p);
+        *R = static_cast<quint8>(V);
+        *G = static_cast<quint8>(t);
+        *B = static_cast<quint8>(p);
         break;
       case 2:
-        *R = static_cast<int>(p);
-        *G = static_cast<int>(V);
-        *B = static_cast<int>(t);
+        *R = static_cast<quint8>(p);
+        *G = static_cast<quint8>(V);
+        *B = static_cast<quint8>(t);
         break;
       case 4:
-        *R = static_cast<int>(t);
-        *G = static_cast<int>(p);
-        *B = static_cast<int>(V);
+        *R = static_cast<quint8>(t);
+        *G = static_cast<quint8>(p);
+        *B = static_cast<quint8>(V);
         break;
       }
     }

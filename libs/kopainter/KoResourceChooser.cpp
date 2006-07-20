@@ -18,10 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-#include "koIconChooser.h"
-#include <kglobal.h>
-
 #include <QPainter>
 #include <QCursor>
 #include <QApplication>
@@ -33,26 +29,63 @@
 #include <QResizeEvent>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QTextDocument>
+#include <QUrl>
+
+#include <kglobal.h>
 #include <kdebug.h>
 
-KoIconChooser::KoIconChooser(QSize aIconSize, QWidget *parent):
-QTableWidget(parent)
+#include "KoResourceChooser.h"
+#include "KoItemToolTip.h"
+
+
+QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 {
-    m_itemCount = 0;
-    mItemWidth = aIconSize.width();
-    mItemHeight = aIconSize.height();
+    QTextDocument *doc = new QTextDocument( this );
+
+    QImage thumb = index.data( KoResourceChooser::LargeThumbnailRole ).value<QImage>();
+    doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
+
+    QString name = index.data( Qt::DisplayRole ).toString();
+
+    const QString image = QString( "<img src=\"data:thumbnail\">" );
+    const QString body = QString( "<h3 align=\"center\">%1</h3>" ).arg( name ) + image;
+    const QString html = QString( "<html><body>%1</body></html>" ).arg( body );
+
+    doc->setHtml( html );
+    doc->setTextWidth( qMin( doc->size().width(), 500.0 ) );
+
+    return doc;
+}
+
+struct KoResourceChooser::Private
+{
+    int m_itemWidth;
+    int m_itemHeight;
+    int m_itemCount;
+    KoIconToolTip tip;
+};
+
+KoResourceChooser::KoResourceChooser(QSize aIconSize, QWidget *parent)
+    : QTableWidget(parent)
+    , d( new Private )
+{
+    d->m_itemCount = 0;
+    d->m_itemWidth = aIconSize.width();
+    d->m_itemHeight = aIconSize.height();
     setRowCount(1);
     setColumnCount(1);
     horizontalHeader()->hide();
     verticalHeader()->hide();
     setSelectionMode(QAbstractItemView::SingleSelection);
+    installEventFilter(this);
 }
 
-KoIconChooser::~KoIconChooser()
+KoResourceChooser::~KoResourceChooser()
 {
 }
 
-void KoIconChooser::keyPressEvent(QKeyEvent * e)
+void KoResourceChooser::keyPressEvent(QKeyEvent * e)
 {
     if (e->key()== Qt::Key_Return)
     {
@@ -63,19 +96,34 @@ void KoIconChooser::keyPressEvent(QKeyEvent * e)
         QTableWidget::keyPressEvent(e);
 }
 
+bool KoResourceChooser::viewportEvent(QEvent *e )
+{
+    if( e->type() == QEvent::ToolTip && model() )
+    {
+        QHelpEvent *he = static_cast<QHelpEvent*>(e);
+        QStyleOptionViewItem option = viewOptions();
+        QModelIndex index = model()->buddy( indexAt(he->pos()));
+        option.rect = visualRect( index );
+        d->tip.showTip( this, he->pos(), option, index );
+        return true;
+    }
+
+    return QTableWidget::viewportEvent( e );
+}
+
 // recalculate the number of items that fit into one row
 // set the current item again after calculating the new grid
-void KoIconChooser::resizeEvent(QResizeEvent *e)
+void KoResourceChooser::resizeEvent(QResizeEvent *e)
 {
     QTableWidget::resizeEvent(e);
 
     int oldNColumns = columnCount();
-    int nColumns = width( ) / mItemWidth;
+    int nColumns = width( ) / d->m_itemWidth;
     if(nColumns == 0)
         nColumns = 1;
 
     int oldNRows = rowCount();
-    int nRows = (m_itemCount - 1)/ nColumns +1;
+    int nRows = (d->m_itemCount - 1)/ nColumns +1;
 
     if(nColumns > oldNColumns)
     {
@@ -83,7 +131,7 @@ void KoIconChooser::resizeEvent(QResizeEvent *e)
 
         setColumnCount(nColumns); // make sure there is enough space for our reordering
         int newRow = 0, newColumn = 0, oldRow = 0, oldColumn = 0;
-        for(int i = 0; i < m_itemCount; i++)
+        for(int i = 0; i < d->m_itemCount; i++)
         {
             QTableWidgetItem *theItem;
             theItem = takeItem(oldRow, oldColumn);
@@ -107,9 +155,9 @@ void KoIconChooser::resizeEvent(QResizeEvent *e)
         // We are now not as wide as before so we must reorder from the top
 
         setRowCount(nRows);// make sure there is enough space for our reordering
-        int newRow = nRows - 1, newColumn = m_itemCount - newRow * nColumns,
-                      oldRow = oldNRows - 1, oldColumn = m_itemCount - oldRow * oldNColumns;
-        for(int i = 0; i < m_itemCount; i++)
+        int newRow = nRows - 1, newColumn = d->m_itemCount - newRow * nColumns,
+                      oldRow = oldNRows - 1, oldColumn = d->m_itemCount - oldRow * oldNColumns;
+        for(int i = 0; i < d->m_itemCount; i++)
         {
             QTableWidgetItem *theItem;
             theItem = takeItem(oldRow, oldColumn);
@@ -135,12 +183,12 @@ void KoIconChooser::resizeEvent(QResizeEvent *e)
 
     // resize cells in case it's needed
     for(int i = 0; i < nColumns; i++)
-        setColumnWidth(i, mItemWidth);
+        setColumnWidth(i, d->m_itemWidth);
     for(int i = 0; i < nRows; i++)
-        setRowHeight(i, mItemHeight);
+        setRowHeight(i, d->m_itemHeight);
 }
 
-QTableWidgetItem *KoIconChooser::itemAt(int index)
+QTableWidgetItem *KoResourceChooser::itemAt(int index)
 {
     int row = index / columnCount();
     int col = index - row * columnCount();
@@ -148,14 +196,14 @@ QTableWidgetItem *KoIconChooser::itemAt(int index)
 }
 
 // adds an item to the end
-void KoIconChooser::addItem(QTableWidgetItem *item)
+void KoResourceChooser::addItem(QTableWidgetItem *item)
 {
-    int row = m_itemCount / columnCount();
-    int col = m_itemCount - row* columnCount();
+    int row = d->m_itemCount / columnCount();
+    int col = d->m_itemCount - row* columnCount();
     if(row+1 > rowCount())
         setRowCount(row+1);
     setItem(row, col, item);
-    m_itemCount++;
+    d->m_itemCount++;
     item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 }
 
@@ -165,7 +213,7 @@ KoPatternChooser::KoPatternChooser( const Q3PtrList<QTableWidgetItem> &list, QWi
     // only serves as beautifier for the iconchooser
     //frame = new QHBox( this );
     //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    chooser = new KoIconChooser( QSize(30,30), this);
+    chooser = new KoResourceChooser( QSize(30,30), this);
 
 	QObject::connect( chooser, SIGNAL(selected( QTableWidgetItem * ) ),
 					            this, SIGNAL( selected( QTableWidgetItem * )));
@@ -202,4 +250,4 @@ QTableWidgetItem *KoPatternChooser::currentPattern()
     return chooser->currentItem();
 }
 
-#include "koIconChooser.moc"
+#include "KoResourceChooser.moc"

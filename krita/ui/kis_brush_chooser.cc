@@ -21,7 +21,6 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <klocale.h>
-#include <koIconChooser.h>
 
 #include "kis_double_widget.h"
 #include "kis_brush_chooser.h"

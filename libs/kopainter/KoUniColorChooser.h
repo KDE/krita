@@ -66,10 +66,11 @@ signals:
 
 protected slots:
 
-    virtual void slotHChanged(int h);
-    virtual void slotSChanged(int s);
-    virtual void slotVChanged(int v);
+    virtual void slotHSVChanged();
     virtual void slotRGBChanged();
+    virtual void slotHSelected(bool s);
+    virtual void slotSSelected(bool s);
+    virtual void slotVSelected(bool s);
     virtual void slotRSelected(bool s);
     virtual void slotGSelected(bool s);
     virtual void slotBSelected(bool s);
@@ -93,11 +94,12 @@ private:
     void updateSelectorsB();
     void updateSelectorsCurrent();
 
-    void HSVtoRGB(int H, int S, int V, int *R, int *G, int *B);
+    void HSVtoRGB(int H, int S, int V, quint8 *R, quint8 *G, quint8 *B);
     void RGBtoHSV(int R, int G, int B, int *H, int *S, int *V);
 
     KoXYColorSelector *m_xycolorselector;
     KoColorSlider *m_colorSlider;
+    KoColorSlider *m_opacitySlider;
     KoColorPatch *m_colorpatch;
     QLabel *m_HLabel;
     QLabel *m_SLabel;

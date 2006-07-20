@@ -87,10 +87,8 @@ void KoItemToolTip::updatePosition( QWidget *widget, const QPoint &pos, const QS
     const QPoint gpos = widget->mapToGlobal( pos );
     const QRect irect( widget->mapToGlobal( option.rect.topLeft() ), option.rect.size() );
 
-    int y;
-    if( irect.bottom() + height < drect.bottom() )
-        y = irect.bottom();
-    else
+    int y = gpos.y() + 20;
+    if( y + height > drect.bottom() )
         y = qMax( drect.top(), irect.top() - height );
 
     int x;
@@ -100,7 +98,9 @@ void KoItemToolTip::updatePosition( QWidget *widget, const QPoint &pos, const QS
         x = qMax( drect.left(), gpos.x() - width );
 
     move( x, y );
-}
+
+    resize( sizeHint() );
+ }
 
 QSize KoItemToolTip::sizeHint() const
 {
@@ -139,7 +139,7 @@ bool KoItemToolTip::eventFilter( QObject *object, QEvent *event )
         default: break;
     }
 
-    return super::eventFilter( object, event );
+    return false;//super::eventFilter( object, event );
 }
 
 #include "KoItemToolTip.moc"

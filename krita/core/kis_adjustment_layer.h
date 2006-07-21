@@ -91,6 +91,8 @@ private:
     KisFilterConfiguration * m_filterConfig;
     KisSelectionSP m_selection;
     KisPaintDeviceSP m_cachedPaintDev;
+private slots:
+    void slotSelectionChanged(KisImageSP image);
 };
 
 #endif // KIS_ADJUSTMENT_LAYER_H_

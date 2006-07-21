@@ -152,6 +152,7 @@ void KisToolSelectSimilar::buttonPress(KisButtonPressEvent *e)
         // if (opacity > OPACITY_TRANSPARENT)
         selectByColor(dev, dev->selection(), c.data(), m_fuzziness, m_currentSelectAction);
 
+        dev->setDirty();
         dev->emitSelectionChanged();
 
         if(img->undo())

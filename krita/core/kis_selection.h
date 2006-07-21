@@ -105,6 +105,14 @@ public:
 
     void startCachingExactRect();
     void stopCachingExactRect();
+
+    // if the parent layer is interested in keeping up to date with the dirtyness
+    // of this layer, set to true
+    void setInterestedInDirtyness(bool b) { m_dirty = b; }
+    bool interestedInDirtyness() const { return m_dirty; }
+
+    virtual void setDirty(const QRect & rc);
+    virtual void setDirty();
 private:
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
 
@@ -112,6 +120,7 @@ private:
     KisPaintDeviceSP m_parentPaintDevice;
     bool m_doCacheExactRect;
     QRect m_cachedExactRect;
+    bool m_dirty;
 };
 
 #endif // KIS_SELECTION_H_

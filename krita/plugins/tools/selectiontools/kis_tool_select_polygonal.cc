@@ -160,10 +160,14 @@ void KisToolSelectPolygonal::finish()
 
         painter.paintPolygon(m_points);
 
-        if(hasSelection)
-            dev->emitSelectionChanged(painter.dirtyRect());
-        else
+        if(hasSelection) {
+            QRect rect(painter.dirtyRect());
+            dev->setDirty(rect);
+            dev->emitSelectionChanged(rect);
+        } else {
+            dev->setDirty();
             dev->emitSelectionChanged();
+        }
 
         if (img->undo()) img->undoAdapter()->addCommand(t);
 

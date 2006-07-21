@@ -124,8 +124,10 @@ void KisToolSelectContiguous::buttonPress(KisButtonPressEvent * e)
                 break;
 
         }
-        
+
+        dev->setDirty(selection->extent()); // A bit too wide, but that's not that bad
         dev->emitSelectionChanged();
+
 
         if (img->undo())
             img->undoAdapter()->addCommand(t);

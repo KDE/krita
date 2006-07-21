@@ -106,6 +106,7 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
                 }
             }
             else {
+                m_target->setDirty(r);
                 // Just update the canvas. XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
                 m_subject->canvasController()->updateCanvas( r );
             } 
@@ -148,6 +149,7 @@ void KisToolFreehand::move(KisMoveEvent *e)
             else {
                 // Just update the canvas
                 r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+                m_target->setDirty(r);
                 m_subject->canvasController()->updateCanvas( r );
             } 
         }

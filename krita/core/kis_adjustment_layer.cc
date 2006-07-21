@@ -38,6 +38,8 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     m_cachedPaintDev = new KisPaintDevice( img->colorSpace(), name.latin1());
     m_showSelection = true;
     Q_ASSERT(m_cachedPaintDev);
+    connect(img, SIGNAL(sigSelectionChanged(KisImageSP)),
+            this, SLOT(sigSelectionChanged(KisImageSP)));
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
@@ -47,6 +49,11 @@ KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
     if (rhs.m_selection) {
         m_selection = new KisSelection( *rhs.m_selection.data() );
         m_selection->setParentLayer(this);
+        m_selection->setInterestedInDirtyness(true);
+        if (!m_selection->hasSelection())
+            m_selection->setSelection(m_selection);
+        connect(rhs.image(), SIGNAL(sigSelectionChanged(KisImageSP)),
+                this, SLOT(sigSelectionChanged(KisImageSP)));
     }
     m_cachedPaintDev = new KisPaintDevice( *rhs.m_cachedPaintDev.data() );
     m_showSelection = false;
@@ -105,6 +112,10 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
     gc.end();
 
     m_selection->setParentLayer(this);
+    m_selection->setInterestedInDirtyness(true);
+
+    if (!m_selection->hasSelection())
+        m_selection->setSelection(m_selection);
 }
 
 
@@ -226,6 +237,10 @@ QImage KisAdjustmentLayer::createThumbnail(Q_INT32 w, Q_INT32 h)
     }
 
     return img;
+}
+
+void KisAdjustmentLayer::slotSelectionChanged(KisImageSP image) {
+    image->setModified();
 }
 
 #include "kis_adjustment_layer.moc"

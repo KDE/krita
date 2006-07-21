@@ -403,12 +403,12 @@ public:
     /**
      * Add the specified rect top the parent layer (if present)
      */
-    void setDirty(const QRect & rc);
+    virtual void setDirty(const QRect & rc);
 
     /**
      * Set the parent layer completely dirty, if this paint device has one.
      */
-    void setDirty();
+    virtual void setDirty();
     
     
     /**

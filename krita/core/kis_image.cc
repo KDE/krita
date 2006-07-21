@@ -1570,6 +1570,7 @@ void KisImage::slotSelectionChanged(const QRect& r)
 
     if (!locked()) {
         emit sigActiveSelectionChanged(this);
+        emit sigSelectionChanged(this);
     } else {
         m_private->selectionChangedWhileLocked = true;
     }

@@ -150,10 +150,14 @@ void KisToolSelectOutline::buttonRelease(KisButtonReleaseEvent *event)
             painter.paintPolygon(m_points);
 
 
-            if(hasSelection)
-                dev->emitSelectionChanged(painter.dirtyRect());
-            else
+            if(hasSelection) {
+                QRect dirty(painter.dirtyRect());
+                dev->setDirty(dirty);
+                dev->emitSelectionChanged(dirty);
+            } else {
+                dev->setDirty();
                 dev->emitSelectionChanged();
+            }
 
             if (img->undo())
                 img->undoAdapter()->addCommand(t);

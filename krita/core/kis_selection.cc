@@ -36,19 +36,19 @@
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
     : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), (QString("selection for ") + dev->name()).latin1()), m_doCacheExactRect(false)
-    , m_parentPaintDevice(dev)
+    , m_parentPaintDevice(dev), m_dirty(false)
 {
     Q_ASSERT(dev);
 }
 
 KisSelection::KisSelection()
     : super(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "anonymous selection")
-    , m_parentPaintDevice(0)
+    , m_parentPaintDevice(0), m_dirty(false)
 {
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)
-    : super(rhs)
+    : super(rhs), m_dirty(rhs.m_dirty)
 {
     m_parentPaintDevice = rhs.m_parentPaintDevice;
 }
@@ -566,3 +566,14 @@ void KisSelection::paintSelection(QImage img, const QRect& scaledImageRect, cons
     }
 }
 
+void KisSelection::setDirty(const QRect& rc)
+{
+    if (m_dirty)
+        super::setDirty(rc);
+}
+
+void KisSelection::setDirty()
+{
+    if (m_dirty)
+        super::setDirty();
+}

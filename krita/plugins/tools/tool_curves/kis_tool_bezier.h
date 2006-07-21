@@ -22,7 +22,6 @@
 #define KIS_TOOL_BEZIER_H_
 
 #include "kis_tool_factory.h"
-#include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 #include "kis_point.h"
 
@@ -64,8 +63,6 @@ public:
     virtual void deletePivot(iterator);
     virtual iterator selectPivot(iterator, bool = true);
 
-    virtual iterator selectByHandle(const KisPoint&);
-
 };
 
 class KisToolBezier : public KisToolCurve {
@@ -82,7 +79,8 @@ public:
 
 protected:
 
-    virtual long convertStateToOptions(long state);
+    virtual int convertKeysToOptions(int);
+    virtual KisCurve::iterator selectByHandle(const QPoint& pos);
 
     virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
     virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point);

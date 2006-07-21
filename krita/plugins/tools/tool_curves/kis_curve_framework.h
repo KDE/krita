@@ -21,13 +21,13 @@
 
 #include "kis_point.h"
 
-const long NOHINTS = 0x0000;
-const long POINTHINT = 0x0000;
-const long LINEHINT = 0x0001;
+const int NOHINTS = 0x0000;
+const int POINTHINT = 0x0001;
+const int LINEHINT = 0x0002;
 
-const long NOOPTIONS = 0x0000;
-const long MOVEALLOPTION = 0x0001;
-const long KEEPSELECTEDOPTION = 0x0002;
+const int NOOPTIONS = 0x0000;
+const int MOVEALLOPTION = 0x0001;
+const int KEEPSELECTEDOPTION = 0x0002;
 
 class CurvePoint {
 
@@ -35,7 +35,7 @@ class CurvePoint {
     bool m_pivot;
     bool m_selected; // Only pivots can be selected
 
-    long m_hint;
+    int m_hint;
     
 public:
 
@@ -54,12 +54,12 @@ public:
     bool operator!= (KisPoint p2) const { if (p2 != m_point) return true; else return false; }
     bool operator!= (CurvePoint p2) const { if (p2.point() != m_point ||
                                                 p2.isPivot() != m_pivot ||
-                                                !(p2.hint() & m_hint)) return true; else return false; }
+                                                p2.hint() != m_hint) return true; else return false; }
 
     bool operator== (KisPoint p2) const { if (p2 == m_point) return true; else return false; }
     bool operator== (CurvePoint p2) const { if (p2.point() == m_point &&
                                                 p2.isPivot() == m_pivot &&
-                                                (p2.hint() & m_hint)) return true; else return false; }
+                                                p2.hint() == m_hint) return true; else return false; }
 
     KisPoint point() const {return m_point;}
     
@@ -71,7 +71,7 @@ public:
     int hint() const {return m_hint;}
     
     void setPivot(bool p) {m_pivot = p;}
-    void setSelected(bool s) {m_selected = ((m_pivot) ? s : false); kdDebug(0) << "FATTO" << endl;}  /* Only pivots can be selected */
+    void setSelected(bool s) {m_selected = ((m_pivot) ? s : false);}  /* Only pivots can be selected */
     void setHint(int h) {m_hint = h;}
 };
 
@@ -96,13 +96,13 @@ protected:
        m_curve's end() and begin() functions using a const KisCurve
        (see below) */
     mutable PointList m_curve;
-    long m_actionOptions;
+    int m_actionOptions;
 
     bool checkIterator (iterator checking) const;
 
 public:
 
-    void startAction (long options) {m_actionOptions = options;}
+    void startAction (int options) {m_actionOptions = options;}
     void endAction () {m_actionOptions = NOOPTIONS;}
 
     CurvePoint& operator[](int i) {return m_curve[i];}
@@ -161,8 +161,6 @@ public:
     virtual iterator selectPivot(const CurvePoint&, bool = true);
     virtual iterator selectPivot(const KisPoint&, bool = true);
     virtual iterator selectPivot(iterator, bool = true);
-
-    virtual iterator selectByHandle(const KisPoint&);
 
     virtual iterator movePivot(const CurvePoint&, const KisPoint&);
     virtual iterator movePivot(const KisPoint&, const KisPoint&);

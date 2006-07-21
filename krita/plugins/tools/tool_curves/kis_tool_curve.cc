@@ -45,12 +45,12 @@
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
-QRect pivotRect (const QPoint& pos)
+QRect KisToolCurve::pivotRect (const QPoint& pos)
 {
     return QRect (pos-QPoint(4,4),pos+QPoint(4,4));
 }
 
-QRect selectedPivotRect (const QPoint& pos)
+QRect KisToolCurve::selectedPivotRect (const QPoint& pos)
 {
     return QRect (pos-QPoint(5,5),pos+QPoint(5,5));
 }
@@ -103,9 +103,9 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
     if (event->button() == Qt::LeftButton) {
         draw();
         m_dragging = true;
-        m_curve->startAction(convertStateToOptions(event->state()));
-        m_current = m_curve->selectByHandle (event->pos());
-        if (m_current == m_curve->end() && !(m_pressedKeys & Qt::Key_Control)) {
+        m_curve->startAction(convertKeysToOptions(m_pressedKeys));
+        m_current = selectByHandle (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+        if (m_current == m_curve->end() && !(m_pressedKeys & Qt::ControlButton)) {
             m_previous = m_curve->find(m_curve->last());
             m_current = m_curve->pushPivot(event->pos());
             if (m_curve->pivots().count() > 1)
@@ -138,14 +138,24 @@ void KisToolCurve::keyPress(QKeyEvent *event)
         draw();
     }
     draw();
-    m_pressedKeys |= event->key();
+    if (event->key() == Qt::Key_Control)
+        m_pressedKeys |= Qt::ControlButton;
+    if (event->key() == Qt::Key_Shift)
+        m_pressedKeys |= Qt::ShiftButton;
+    if (event->key() == Qt::Key_Alt)
+        m_pressedKeys |= Qt::AltButton;
     draw();
 }
 
 void KisToolCurve::keyRelease(QKeyEvent *event)
 {
     draw();
-    m_pressedKeys &= !event->key();
+    if (event->key() == Qt::Key_Control)
+        m_pressedKeys &= !Qt::ControlButton;
+    if (event->key() == Qt::Key_Shift)
+        m_pressedKeys &= !Qt::ShiftButton;
+    if (event->key() == Qt::Key_Alt)
+        m_pressedKeys &= !Qt::AltButton;
     draw();
 }
 
@@ -164,7 +174,7 @@ void KisToolCurve::move(KisMoveEvent *event)
 {
     if (m_dragging) {
         draw();
-        m_curve->startAction(convertStateToOptions(event->state()));
+        m_curve->startAction(convertKeysToOptions(m_pressedKeys));
         KisPoint trans = event->pos() - (*m_current).point();
         m_curve->moveSelected(trans);
         m_curve->endAction();
@@ -172,11 +182,24 @@ void KisToolCurve::move(KisMoveEvent *event)
     }
 }
 
-long KisToolCurve::convertStateToOptions(long state)
+KisCurve::iterator KisToolCurve::selectByHandle(const QPoint& pos)
 {
-    long options = NOOPTIONS;
+    KisCurve pivs = m_curve->pivots(), inHandle;
+    KisCurve::iterator it;
+    for (it = pivs.begin(); it != pivs.end(); it++) {
+        if (pivotRect(m_subject->canvasController()->windowToView((*it).point().toQPoint())).contains(pos))
+            inHandle.pushPoint((*it));
+    }
+    if (inHandle.isEmpty())
+        return m_curve->end();
+    return m_curve->selectPivot(inHandle.last());
+}
 
-    if (state & Qt::ControlButton)
+int KisToolCurve::convertKeysToOptions(int keys)
+{
+    int options = NOOPTIONS;
+
+    if (keys & Qt::Key_Control)
         options |= KEEPSELECTEDOPTION;
 
     return options;

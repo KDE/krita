@@ -30,7 +30,7 @@
 
 KisCurve::iterator KisCurve::addPivot (KisCurve::iterator it, const KisPoint& point)
 {
-    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,true,true,NOHINTS)));
+    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,true,false,NOHINTS)));
 }
 
 KisCurve::iterator KisCurve::addPoint (KisCurve::iterator it, const KisPoint& point, bool pivot, bool selected, int hint)
@@ -168,10 +168,8 @@ KisCurve::iterator KisCurve::selectPivot(KisCurve::iterator it, bool isSelected)
     if (m_actionOptions & KEEPSELECTEDOPTION) {
         if ((*it).isSelected())
             (*it).setSelected(false);
-        else {
-            kdDebug(0) << "E LO SELEZIONO'! " << (*it).hint() << endl;
+        else
             (*it).setSelected(true);
-        }
     } else {
         KisCurve selected = selectedPivots();
         for (iterator i = selected.begin(); i != selected.end(); i++)
@@ -180,20 +178,6 @@ KisCurve::iterator KisCurve::selectPivot(KisCurve::iterator it, bool isSelected)
     }
 
     return it;
-}
-
-KisCurve::iterator KisCurve::selectByHandle(const KisPoint& pos)
-{
-    KisCurve pivs = pivots(), inHandle;
-    KisCurve::iterator it;
-    for (it = pivs.begin(); it != pivs.end(); it++) {
-        if (QRect((*it).point().toQPoint()-QPoint(4,4),
-                  (*it).point().toQPoint()+QPoint(4,4)).contains(pos.toQPoint()))
-            inHandle.pushPoint((*it));
-    }
-    if (inHandle.isEmpty())
-        return end();
-    return selectPivot(inHandle.last());
 }
 
 KisCurve::iterator KisCurve::movePivot(const KisPoint& oldPt, const KisPoint& newPt)
@@ -221,7 +205,7 @@ KisCurve::iterator KisCurve::movePivot(KisCurve::iterator it, const KisPoint& ne
     }
     if ((*it) != last()) {
         deleteCurve (it, it.nextPivot());
-        calculateCurve (it, it.nextPivot(), it);
+        calculateCurve (it, it.nextPivot(), it.nextPivot());
     }
 
     return it;

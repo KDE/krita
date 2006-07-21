@@ -99,7 +99,7 @@ KisCurve::iterator KisCurveBezier::nextGroupEndpoint (KisCurve::iterator it) con
     if ((*it).hint() == BEZIERNEXTCONTROLHINT) {
         temp = temp.nextPivot();
     }
-    temp += 1;
+    temp = temp.nextPivot();
     return temp;
 }
 
@@ -117,7 +117,7 @@ KisCurve::iterator KisCurveBezier::prevGroupEndpoint (KisCurve::iterator it) con
     if ((*it).hint() == BEZIERPREVCONTROLHINT) {
         temp = temp.previousPivot();
     }
-    temp -= 1;
+    temp = temp.previousPivot();
     return temp;
 }
 
@@ -152,17 +152,14 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
         (*thisEnd.next()).setPoint((*thisEnd.next()).point()+trans);
     } else
         (*it).setPoint(newPt);
-    if (!(m_actionOptions & KEEPSELECTEDOPTION)) {
-        if (hint == BEZIERPREVCONTROLHINT && ((*it.next().next()) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION))) {
+    if (!(m_actionOptions & KEEPSELECTEDOPTION) && hint != BEZIERENDHINT) {
+        if (nextEnd == end() || (m_actionOptions & SYMMETRICALCONTROLSOPTION)) {
             KisPoint trans = (*it).point() - (*thisEnd).point();
             trans = KisPoint(-trans.x()*2,-trans.y()*2);
-            (*it.next().next()).setPoint(newPt+trans);
-        }
-    
-        if (hint == BEZIERNEXTCONTROLHINT && ((*it) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION))) {
-            KisPoint trans = (*it).point() - (*thisEnd).point();
-            trans = KisPoint(-trans.x()*2,-trans.y()*2);
-            (*it.previous().previous()).setPoint(newPt+trans);
+            if (hint == BEZIERNEXTCONTROLHINT)
+                (*groupPrevControl(it)).setPoint(newPt+trans);
+            else
+                (*groupNextControl(it)).setPoint(newPt+trans);
         }
     }
     
@@ -221,34 +218,6 @@ KisCurve::iterator KisCurveBezier::selectPivot(KisCurve::iterator it, bool isSel
     return super::selectPivot(it,isSelected);
 }
 
-KisCurve::iterator KisCurveBezier::selectByHandle(const KisPoint& pos)
-{
-    KisCurve pivs = pivots(), inHandle;
-    KisCurve::iterator it;
-    QPoint qpos, curpos = pos.toQPoint();
-    for (it = pivs.begin(); it != pivs.end(); it++) {
-        qpos = (*it).point().toQPoint();
-        if (pivotRect(qpos).contains(curpos)) {
-            if ((m_actionOptions & KEEPSELECTEDOPTION) && (*it).hint() != BEZIERENDHINT);
-            else if ((m_actionOptions & PREFERCONTROLSOPTION) && (*it).hint() == BEZIERENDHINT);
-                inHandle.pushPoint((*it));
-        }
-    }
-    if (inHandle.isEmpty())
-        return end();
-
-    if (inHandle.count() > 1) {
-        if (!(m_actionOptions & PREFERCONTROLSOPTION) || (m_actionOptions & KEEPSELECTEDOPTION)) {
-            for (iterator i = inHandle.begin(); i != inHandle.end(); i++) {
-                if ((*i).hint() != BEZIERENDHINT)
-                    inHandle.deletePivot((*i++));
-            }
-        }
-    }
-
-    return super::selectPivot(inHandle.first());
-}
-
 
 KisToolBezier::KisToolBezier()
     : super(i18n("Tool for Bezier"))
@@ -264,16 +233,47 @@ KisToolBezier::~KisToolBezier()
 
 }
 
-long KisToolBezier::convertStateToOptions(long state)
+int KisToolBezier::convertKeysToOptions(int keys)
 {
-    long options = KisToolCurve::convertStateToOptions(state);
+    int options = KisToolCurve::convertKeysToOptions(keys);
 
-    if (state & Qt::AltButton)
+    if (keys & Qt::Key_Alt)
         options |= SYMMETRICALCONTROLSOPTION;
-    if (state & Qt::ShiftButton)
+    if (keys & Qt::Key_Shift)
         options |= PREFERCONTROLSOPTION;
 
     return options;
+}
+
+KisCurve::iterator KisToolBezier::selectByHandle(const QPoint& pos)
+{
+    QPoint qpos;
+    KisCurve pivs = m_curve->pivots(), inHandle;
+    KisCurve::iterator it;
+    for (it = pivs.begin(); it != pivs.end(); it++) {
+        qpos = m_subject->canvasController()->windowToView((*it).point().toQPoint());
+        if (pivotRect(qpos).contains(pos)) {
+            if ((m_pressedKeys & Qt::ControlButton) && (*it).hint() != BEZIERENDHINT);
+            else if ((m_pressedKeys & Qt::ShiftButton) && (*it).hint() == BEZIERENDHINT);
+            else
+                inHandle.pushPoint((*it));
+        }
+    }
+    if (inHandle.isEmpty())
+        return m_curve->end();
+
+    if (inHandle.count() > 1) {
+        if (!(m_pressedKeys & Qt::ShiftButton) || (m_pressedKeys & Qt::ControlButton)) {
+            for (KisCurve::iterator i = inHandle.begin(); i != inHandle.end();) {
+                if ((*i).hint() != BEZIERENDHINT)
+                    inHandle.deletePivot((*i++));
+                else
+                    i++;
+            }
+        }
+    }
+
+    return m_curve->selectPivot(inHandle.first());
 }
 
 KisCurve::iterator KisToolBezier::paintPoint (KisPainter& painter, KisCurve::iterator point)
@@ -313,7 +313,7 @@ KisCurve::iterator KisToolBezier::drawPivot (KisCanvasPainter& gc, KisCurve::ite
 
         gc.setPen(m_selectedPivotPen);
         gc.drawRoundRect(selectedPivotRect(endpPos),m_selectedPivotRounding,m_selectedPivotRounding);
-        if ((prevControlPos != endpPos || nextControlPos != endpPos) && !(m_pressedKeys & Qt::Key_Control)) {
+        if ((prevControlPos != endpPos || nextControlPos != endpPos) && !(m_pressedKeys & Qt::ControlButton)) {
             gc.drawRoundRect(pivotRect(nextControlPos),m_pivotRounding,m_pivotRounding);
             gc.drawLine(endpPos,nextControlPos);
             gc.drawRoundRect(pivotRect(prevControlPos),m_pivotRounding,m_pivotRounding);
@@ -361,7 +361,7 @@ void KisToolBezier::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Draw cubic beziers. Keep Alt, Control or Shift pressed for options. Hit Return or double-click to finish."));
+        m_action->setToolTip(i18n("Draw cubic beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

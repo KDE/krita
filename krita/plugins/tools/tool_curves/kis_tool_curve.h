@@ -24,6 +24,7 @@
 #include <qpen.h>
 
 #include "kis_tool_paint.h"
+#include "kis_curve_framework.h"
 #include "kis_point.h"
 
 class QRect;
@@ -67,12 +68,16 @@ protected:
     //
     // KisToolCurve interface
     //
-    virtual long convertStateToOptions(long);
+    virtual int convertKeysToOptions(int);
+    virtual KisCurve::iterator selectByHandle(const QPoint& pos);
     virtual void draw();
     virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
     virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point);
     virtual void paintCurve();
     virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
+
+    QRect pivotRect (const QPoint&);
+    QRect selectedPivotRect (const QPoint&);
 
 protected:
 
@@ -92,10 +97,5 @@ protected:
 
     int m_pressedKeys;
 };
-
-// General utility functions
-
-QRect pivotRect (const QPoint&);
-QRect selectedPivotRect (const QPoint&);
 
 #endif //__KIS_TOOL_CURVE_H_

@@ -237,9 +237,9 @@ int KisToolBezier::convertKeysToOptions(int keys)
 {
     int options = KisToolCurve::convertKeysToOptions(keys);
 
-    if (keys & Qt::Key_Alt)
+    if (keys & Qt::AltButton)
         options |= SYMMETRICALCONTROLSOPTION;
-    if (keys & Qt::Key_Shift)
+    if (keys & Qt::ShiftButton)
         options |= PREFERCONTROLSOPTION;
 
     return options;

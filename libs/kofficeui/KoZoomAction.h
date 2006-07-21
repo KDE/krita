@@ -13,7 +13,7 @@
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+    Boston, MA 02110-1301, USA.
 */
 
 #ifndef kozoomaction_h
@@ -22,6 +22,7 @@
 #include <kaction.h>
 #include <koffice_export.h>
 #include <kselectaction.h>
+
 /**
  * Class KoZoomAction implements an action to provide zoom values.
  * In a toolbar, KoZoomAction will show a dropdown list, also with 
@@ -40,44 +41,43 @@ public:
    */
   KoZoomAction( const QString& text, const QIcon& pix, 
     const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
-      
+
   /**
    * Creates a new zoom action.
    */
   KoZoomAction( const QString& text, const QString& pix, 
     const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
-      
-public slots:
+
+public Q_SLOTS:
 
   /**
    * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
    * into the list at proper place so that the the values remain sorted.
    */
   void setZoom( const QString& zoom );
-  
+
   /**
    * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
    * into the list at proper place so that the the values remain sorted.
    */
   void setZoom( int zoom );
 
-protected slots:
+protected Q_SLOTS:
 
-  void activated( const QString& text );  
-  
-signals:
+  void triggered( const QString& text );
+
+Q_SIGNALS:
 
   /**
    * Signal zoomChanged is triggered when user changes the zoom value, either by
    * choosing it from the list or by entering new value.
    */
   void zoomChanged( const QString& zoom );
-  
+
 protected:
 
   void init();
-  
-};
 
+};
 
 #endif // kozoomaction_h

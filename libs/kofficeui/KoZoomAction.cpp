@@ -88,7 +88,7 @@ void KoZoomAction::setZoom( int zoom )
   setZoom( QString::number( zoom ) );
 }
 
-void KoZoomAction::activated( const QString& text )
+void KoZoomAction::triggered( const QString& text )
 {
   setZoom( text );
   emit zoomChanged( text );
@@ -115,8 +115,8 @@ void KoZoomAction::init()
 
   setCurrentItem( values.indexOf( i18n("%1%",  100 ) ) );
 
-  connect( this, SIGNAL( activated( const QString& ) ),
-    SLOT( activated( const QString& ) ) );
+  connect( this, SIGNAL( triggered( const QString& ) ),
+    SLOT( triggered( const QString& ) ) );
 }
 
 #include "KoZoomAction.moc"

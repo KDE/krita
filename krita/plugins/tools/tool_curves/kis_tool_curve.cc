@@ -68,6 +68,8 @@ KisToolCurve::KisToolCurve(const QString& UIName)
     m_pivotPen = QPen(Qt::gray, 0, Qt::SolidLine);
     m_selectedPivotPen = QPen(Qt::yellow, 0, Qt::SolidLine);
     m_pivotRounding = m_selectedPivotRounding = 55;
+
+    m_pressedKeys = 0x0000;
 }
 
 KisToolCurve::~KisToolCurve()
@@ -88,7 +90,8 @@ void KisToolCurve::deactivate()
     draw();
     if (m_curve)
         m_curve->clear();
-    
+
+    m_pressedKeys = 0x0000;
     m_dragging = false;
     m_drawPivots = true;
 }
@@ -102,7 +105,7 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
         m_dragging = true;
         m_curve->startAction(convertStateToOptions(event->state()));
         m_current = m_curve->selectByHandle (event->pos());
-        if (m_current == m_curve->end()) {
+        if (m_current == m_curve->end() && !(m_pressedKeys & Qt::Key_Control)) {
             m_previous = m_curve->find(m_curve->last());
             m_current = m_curve->pushPivot(event->pos());
             if (m_curve->pivots().count() > 1)
@@ -134,6 +137,16 @@ void KisToolCurve::keyPress(QKeyEvent *event)
         m_previous = m_curve->selectPivot(m_current);
         draw();
     }
+    draw();
+    m_pressedKeys |= event->key();
+    draw();
+}
+
+void KisToolCurve::keyRelease(QKeyEvent *event)
+{
+    draw();
+    m_pressedKeys &= !event->key();
+    draw();
 }
 
 void KisToolCurve::buttonRelease(KisButtonReleaseEvent *)

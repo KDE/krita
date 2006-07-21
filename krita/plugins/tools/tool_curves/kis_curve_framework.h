@@ -71,7 +71,7 @@ public:
     int hint() const {return m_hint;}
     
     void setPivot(bool p) {m_pivot = p;}
-    void setSelected(bool s) {m_selected = ((m_pivot) ? s : false);}  /* Only pivots can be selected */
+    void setSelected(bool s) {m_selected = ((m_pivot) ? s : false); kdDebug(0) << "FATTO" << endl;}  /* Only pivots can be selected */
     void setHint(int h) {m_hint = h;}
 };
 

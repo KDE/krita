@@ -168,8 +168,10 @@ KisCurve::iterator KisCurve::selectPivot(KisCurve::iterator it, bool isSelected)
     if (m_actionOptions & KEEPSELECTEDOPTION) {
         if ((*it).isSelected())
             (*it).setSelected(false);
-        else
+        else {
+            kdDebug(0) << "E LO SELEZIONO'! " << (*it).hint() << endl;
             (*it).setSelected(true);
+        }
     } else {
         KisCurve selected = selectedPivots();
         for (iterator i = selected.begin(); i != selected.end(); i++)

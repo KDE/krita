@@ -62,6 +62,7 @@ public:
     virtual iterator pushPivot(const KisPoint&);
     virtual iterator movePivot(iterator, const KisPoint&);
     virtual void deletePivot(iterator);
+    virtual iterator selectPivot(iterator, bool = true);
 
     virtual iterator selectByHandle(const KisPoint&);
 

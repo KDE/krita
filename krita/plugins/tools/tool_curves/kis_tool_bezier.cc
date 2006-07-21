@@ -122,13 +122,11 @@ KisCurve::iterator KisCurveBezier::prevGroupEndpoint (KisCurve::iterator it) con
 }
 
 KisCurve::iterator KisCurveBezier::pushPivot (const KisPoint& point) {
-    KisPoint prevTrans(15.0,-15.0);
-    KisPoint nextTrans(-15.0,15.0);
-    iterator it,prev;
+    iterator it;
 
     it = pushPoint(point,true,false,BEZIERENDHINT);
     if (count() > 1)
-        prev = addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
+        addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
     
     it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
     
@@ -146,25 +144,7 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
     thisEnd = groupEndpoint(it);
     prevEnd = prevGroupEndpoint(it);
     nextEnd = nextGroupEndpoint(it);
-/*
-    if (hint == BEZIERENDHINT) {
-        thisEnd = it;
-        nextEnd = it.nextPivot().nextPivot().nextPivot();    // Horrible...
-        prevEnd = it.previousPivot().previousPivot().previousPivot();
-    } else if (hint == BEZIERPREVCONTROLHINT) {
-        thisEnd = it.nextPivot();
-        nextEnd = end();
-        prevEnd = it.previousPivot().previousPivot();
-    } else if ((*it) == last()) {
-        thisEnd = it.previousPivot();
-        nextEnd = end();
-        prevEnd = thisEnd.previousPivot().previousPivot().previousPivot();
-    } else if (hint == BEZIERNEXTCONTROLHINT) {
-        thisEnd = it.previousPivot();
-        nextEnd = it.nextPivot().nextPivot();
-        prevEnd = end();
-    }
-*/
+
     if (hint == BEZIERENDHINT) {
         KisPoint trans = newPt - (*it).point();
         (*thisEnd).setPoint((*thisEnd).point()+trans);
@@ -172,18 +152,20 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const KisPoi
         (*thisEnd.next()).setPoint((*thisEnd.next()).point()+trans);
     } else
         (*it).setPoint(newPt);
-    if (hint == BEZIERPREVCONTROLHINT && ((*it.next().next()) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION))) {
-        KisPoint trans = (*it).point() - (*thisEnd).point();
-        trans = KisPoint(-trans.x()*2,-trans.y()*2);
-        (*it.next().next()).setPoint(newPt+trans);
+    if (!(m_actionOptions & KEEPSELECTEDOPTION)) {
+        if (hint == BEZIERPREVCONTROLHINT && ((*it.next().next()) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION))) {
+            KisPoint trans = (*it).point() - (*thisEnd).point();
+            trans = KisPoint(-trans.x()*2,-trans.y()*2);
+            (*it.next().next()).setPoint(newPt+trans);
+        }
+    
+        if (hint == BEZIERNEXTCONTROLHINT && ((*it) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION))) {
+            KisPoint trans = (*it).point() - (*thisEnd).point();
+            trans = KisPoint(-trans.x()*2,-trans.y()*2);
+            (*it.previous().previous()).setPoint(newPt+trans);
+        }
     }
-
-    if (hint == BEZIERNEXTCONTROLHINT && ((*it) == last() || (m_actionOptions & SYMMETRICALCONTROLSOPTION))) {
-        KisPoint trans = (*it).point() - (*thisEnd).point();
-        trans = KisPoint(-trans.x()*2,-trans.y()*2);
-        (*it.previous().previous()).setPoint(newPt+trans);
-    }
-
+    
     if (nextEnd != end() && count() > 4)
         calculateCurve (thisEnd,nextEnd,iterator());
     if (prevEnd != thisEnd && count() > 4)
@@ -225,13 +207,18 @@ void KisCurveBezier::deletePivot (KisCurve::iterator it)
     }
 }
 
-KisToolBezier::KisToolBezier()
-    : super(i18n("Tool for Bezier"))
+KisCurve::iterator KisCurveBezier::selectPivot(KisCurve::iterator it, bool isSelected)
 {
-    setName("tool_bezier");
-    setCursor(KisCursor::load("tool_bezier_cursor.png", 6, 6));
 
-    m_curve = new KisCurveBezier;
+    if (m_actionOptions & KEEPSELECTEDOPTION) {
+        KisCurve selected = selectedPivots();
+        for (iterator i = selected.begin(); i != selected.end(); i++) {
+            if ((*i).hint() != BEZIERENDHINT)
+                (*find((*i))).setSelected(false);
+        }
+    }
+
+    return super::selectPivot(it,isSelected);
 }
 
 KisCurve::iterator KisCurveBezier::selectByHandle(const KisPoint& pos)
@@ -243,24 +230,33 @@ KisCurve::iterator KisCurveBezier::selectByHandle(const KisPoint& pos)
         qpos = (*it).point().toQPoint();
         if (pivotRect(qpos).contains(curpos)) {
             if ((m_actionOptions & KEEPSELECTEDOPTION) && (*it).hint() != BEZIERENDHINT);
-            else
+            else if ((m_actionOptions & PREFERCONTROLSOPTION) && (*it).hint() == BEZIERENDHINT);
                 inHandle.pushPoint((*it));
         }
     }
     if (inHandle.isEmpty())
         return end();
+
     if (inHandle.count() > 1) {
-        CurvePoint p(inHandle.first());
-        if (m_actionOptions & PREFERCONTROLSOPTION) {
-            if (inHandle.last().hint() == BEZIERNEXTCONTROLHINT)
-                p.setHint(BEZIERNEXTCONTROLHINT);
-            else
-                p.setHint(BEZIERPREVCONTROLHINT);
-        } else
-            p.setHint(BEZIERENDHINT);
-        return selectPivot(p);
-    } else
-        return selectPivot(inHandle.first());
+        if (!(m_actionOptions & PREFERCONTROLSOPTION) || (m_actionOptions & KEEPSELECTEDOPTION)) {
+            for (iterator i = inHandle.begin(); i != inHandle.end(); i++) {
+                if ((*i).hint() != BEZIERENDHINT)
+                    inHandle.deletePivot((*i++));
+            }
+        }
+    }
+
+    return super::selectPivot(inHandle.first());
+}
+
+
+KisToolBezier::KisToolBezier()
+    : super(i18n("Tool for Bezier"))
+{
+    setName("tool_bezier");
+    setCursor(KisCursor::load("tool_bezier_cursor.png", 6, 6));
+
+    m_curve = new KisCurveBezier;
 }
 
 KisToolBezier::~KisToolBezier()
@@ -317,7 +313,7 @@ KisCurve::iterator KisToolBezier::drawPivot (KisCanvasPainter& gc, KisCurve::ite
 
         gc.setPen(m_selectedPivotPen);
         gc.drawRoundRect(selectedPivotRect(endpPos),m_selectedPivotRounding,m_selectedPivotRounding);
-        if (prevControlPos != endpPos || nextControlPos != endpPos) {
+        if ((prevControlPos != endpPos || nextControlPos != endpPos) && !(m_pressedKeys & Qt::Key_Control)) {
             gc.drawRoundRect(pivotRect(nextControlPos),m_pivotRounding,m_pivotRounding);
             gc.drawLine(endpPos,nextControlPos);
             gc.drawRoundRect(pivotRect(prevControlPos),m_pivotRounding,m_pivotRounding);

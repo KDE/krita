@@ -53,6 +53,7 @@ public:
     virtual void buttonRelease(KisButtonReleaseEvent *event);
     virtual void doubleClick(KisDoubleClickEvent *event);
     virtual void keyPress(QKeyEvent *event);
+    virtual void keyRelease(QKeyEvent *event);
 
 public slots:
 
@@ -88,6 +89,8 @@ protected:
     QPen m_selectedPivotPen;
     int m_pivotRounding;
     int m_selectedPivotRounding;
+
+    int m_pressedKeys;
 };
 
 // General utility functions

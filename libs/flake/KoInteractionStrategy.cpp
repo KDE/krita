@@ -60,10 +60,17 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *eve
 
     KoShapeManager *shapeManager = canvas->shapeManager();
     KoSelection *select = shapeManager->selection();
-    bool insideSelection;
+    bool insideSelection, editableShape=false;
     KoFlake::SelectionHandle handle = parent->handleAt(event->point, &insideSelection);
 
-    if(select->count() > 0 && (event->modifiers() == Qt::NoModifier )) {
+    foreach (KoShape* shape, select->selectedShapes()) {
+        if (shape->isVisible() && !shape->isLocked()) {
+            editableShape = true;
+            break;
+        }
+    }
+
+    if(editableShape && (event->modifiers() == Qt::NoModifier )) {
         // manipulation of selected shapes goes first
         if(handle != KoFlake::NoHandle) {
             if(insideSelection)

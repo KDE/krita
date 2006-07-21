@@ -66,6 +66,40 @@ QString KoShapeRotateCommand::name () const {
 }
 
 
+KoShapeShearCommand::KoShapeShearCommand(const KoSelectionSet &shapes, QList<double> &previousShearXs, QList<double> &previousShearYs, QList<double> &newShearXs, QList<double> &newShearYs)
+: m_previousShearXs(previousShearXs)
+, m_previousShearYs(previousShearYs)
+, m_newShearXs(newShearXs)
+, m_newShearYs(newShearYs)
+{
+    m_shapes = shapes.toList();
+    Q_ASSERT(m_shapes.count() == m_previousShearXs.count());
+    Q_ASSERT(m_shapes.count() == m_previousShearYs.count());
+    Q_ASSERT(m_shapes.count() == m_newShearXs.count());
+    Q_ASSERT(m_shapes.count() == m_newShearYs.count());
+}
+
+void KoShapeShearCommand::execute() {
+    for(int i=0; i < m_shapes.count(); i++) {
+        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->shear( m_newShearXs.at(i), m_newShearYs.at(i));
+        m_shapes.at(i)->repaint();
+    }
+}
+
+void KoShapeShearCommand::unexecute() {
+    for(int i=0; i < m_shapes.count(); i++) {
+        m_shapes.at(i)->repaint();
+        m_shapes.at(i)->shear( m_previousShearXs.at(i), m_previousShearYs.at(i) );
+        m_shapes.at(i)->repaint();
+    }
+}
+
+QString KoShapeShearCommand::name () const {
+    return i18n( "Shear shapes" );
+}
+
+
 KoShapeSizeCommand::KoShapeSizeCommand(const KoSelectionSet &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes)
 : m_previousSizes(previousSizes)
 , m_newSizes(newSizes)

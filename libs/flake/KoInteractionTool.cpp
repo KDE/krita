@@ -69,6 +69,16 @@ KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
     m_rotateCursors[5] = QCursor(rotatePixmap.transformed(QMatrix().rotate(270)));
     m_rotateCursors[6] = QCursor(rotatePixmap.transformed(QMatrix().rotate(315)));
     m_rotateCursors[7] = QCursor(rotatePixmap);
+/*
+    m_rotateCursors[0] = QCursor(Qt::RotateNCursor);
+    m_rotateCursors[1] = QCursor(Qt::RotateNECursor);
+    m_rotateCursors[2] = QCursor(Qt::RotateECursor);
+    m_rotateCursors[3] = QCursor(Qt::RotateSECursor);
+    m_rotateCursors[4] = QCursor(Qt::RotateSCursor);
+    m_rotateCursors[5] = QCursor(Qt::RotateSWCursor);
+    m_rotateCursors[6] = QCursor(Qt::RotateWCursor);
+    m_rotateCursors[7] = QCursor(Qt::RotateNWCursor);
+*/
     m_shearCursors[0] = QCursor(shearPixmap);
     m_shearCursors[1] = QCursor(shearPixmap.transformed(QMatrix().rotate(45)));
     m_shearCursors[2] = QCursor(shearPixmap.transformed(QMatrix().rotate(90)));

@@ -17,6 +17,7 @@ set(flake_SRCS
     KoShapeMoveStrategy.cpp
     KoShapeResizeStrategy.cpp
     KoShapeRotateStrategy.cpp
+    KoShapeShearStrategy.cpp
     KoShapeRubberSelectStrategy.cpp
     KoTool.cpp
     KoCanvasController.cpp

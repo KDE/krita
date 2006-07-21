@@ -24,6 +24,7 @@
 #include "KoShapeRubberSelectStrategy.h"
 #include "KoShapeMoveStrategy.h"
 #include "KoShapeRotateStrategy.h"
+#include "KoShapeShearStrategy.h"
 #include "KoShapeResizeStrategy.h"
 #include "KoCreateShapeStrategy.h"
 #include "KoCreateShapesTool.h"
@@ -75,7 +76,9 @@ KoInteractionStrategy* KoInteractionStrategy::createStrategy(KoPointerEvent *eve
         if(handle != KoFlake::NoHandle) {
             if(insideSelection)
                 return new KoShapeResizeStrategy(parent, canvas, event->point, handle);
-            // TODO shear
+            if(handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
+                        handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle)
+                return new KoShapeShearStrategy(parent, canvas, event->point, handle);
             return new KoShapeRotateStrategy(parent, canvas, event->point);
         }
         if(select->boundingRect().contains(event->point))

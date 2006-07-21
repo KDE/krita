@@ -24,7 +24,6 @@
 #include "KoCommand.h"
 
 #include <kdebug.h>
-#include <stdio.h>
 
 KoShapeResizeStrategy::KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         const QPointF &clicked, KoFlake::SelectionHandle direction )

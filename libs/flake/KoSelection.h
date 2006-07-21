@@ -66,7 +66,7 @@ public:
      * Return the list of selected shapes
      * @return the list of selected shapes
      * @param strip if StrippedSelection, the returned list will not include any children
-     *    of a grouped shape if the group-parent is itself also in the set.
+     *    of a container shape if the container-parent is itself also in the set.
      */
     virtual const KoSelectionSet selectedShapes(KoFlake::SelectionType strip = KoFlake::FullSelection) const;
     /**

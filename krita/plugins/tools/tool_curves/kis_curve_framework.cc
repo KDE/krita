@@ -17,6 +17,7 @@
  */
  
 #include <qvaluelist.h>
+#include <qrect.h>
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_point.h"
@@ -26,12 +27,7 @@
 /* **************************** *
  * KisCurve methods definitions *
  * **************************** */
-/*
-KisCurve::iterator KisCurve::addPivot (KisCurve::iterator it, const CurvePoint& point)
-{
-    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point.point(),true,point.isSelected(),point.hint())));
-}
-*/
+
 KisCurve::iterator KisCurve::addPivot (KisCurve::iterator it, const KisPoint& point)
 {
     return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,true,true,NOHINTS)));
@@ -46,12 +42,7 @@ KisCurve::iterator KisCurve::addPoint (KisCurve::iterator it, const CurvePoint& 
 {
     return iterator(*this,m_curve.insert(it.position(), point));
 }
-/*
-KisCurve::iterator KisCurve::pushPivot (const CurvePoint& point)
-{
-    return iterator(*this,m_curve.append(CurvePoint(point.point(),true,point.isSelected(),point.hint())));
-}
-*/
+
 KisCurve::iterator KisCurve::pushPivot (const KisPoint& point)
 {
     return selectPivot(iterator(*this,m_curve.append(CurvePoint(point,true,false,NOHINTS))), true);
@@ -187,6 +178,20 @@ KisCurve::iterator KisCurve::selectPivot(KisCurve::iterator it, bool isSelected)
     }
 
     return it;
+}
+
+KisCurve::iterator KisCurve::selectByHandle(const KisPoint& pos)
+{
+    KisCurve pivs = pivots(), inHandle;
+    KisCurve::iterator it;
+    for (it = pivs.begin(); it != pivs.end(); it++) {
+        if (QRect((*it).point().toQPoint()-QPoint(4,4),
+                  (*it).point().toQPoint()+QPoint(4,4)).contains(pos.toQPoint()))
+            inHandle.pushPoint((*it));
+    }
+    if (inHandle.isEmpty())
+        return end();
+    return selectPivot(inHandle.last());
 }
 
 KisCurve::iterator KisCurve::movePivot(const KisPoint& oldPt, const KisPoint& newPt)

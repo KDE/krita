@@ -38,10 +38,20 @@ const int BEZIERPREVCONTROLHINT = 0x0020;
 const int BEZIERNEXTCONTROLHINT = 0x0040;
 
 const int SYMMETRICALCONTROLSOPTION = 0x0020;
+const int PREFERCONTROLSOPTION = 0x0040;
 
 class KisCurveBezier : public KisCurve {
 
     typedef KisCurve super;
+
+    iterator groupEndpoint (iterator) const;
+    iterator groupPrevControl (iterator) const;
+    iterator groupNextControl (iterator) const;
+
+    bool groupSelected (iterator) const;
+
+    iterator nextGroupEndpoint (iterator) const;
+    iterator prevGroupEndpoint (iterator) const;
     
 public:
 
@@ -52,6 +62,8 @@ public:
     virtual iterator pushPivot(const KisPoint&);
     virtual iterator movePivot(iterator, const KisPoint&);
     virtual void deletePivot(iterator);
+
+    virtual iterator selectByHandle(const KisPoint&);
 
 };
 

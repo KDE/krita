@@ -45,15 +45,29 @@
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
+QRect pivotRect (const QPoint& pos)
+{
+    return QRect (pos-QPoint(4,4),pos+QPoint(4,4));
+}
+
+QRect selectedPivotRect (const QPoint& pos)
+{
+    return QRect (pos-QPoint(5,5),pos+QPoint(5,5));
+}
+
 KisToolCurve::KisToolCurve(const QString& UIName)
     : super(UIName)
 {
     m_curve = 0;
     m_currentImage = 0;
-    m_drawPivots = true;
+    
     m_dragging = false;
-    m_pivotColor = Qt::gray;
-    m_selectedPivotColor = Qt::white;
+
+    m_drawPivots = true;
+    m_drawingPen = QPen(Qt::white, 0, Qt::SolidLine);
+    m_pivotPen = QPen(Qt::gray, 0, Qt::SolidLine);
+    m_selectedPivotPen = QPen(Qt::yellow, 0, Qt::SolidLine);
+    m_pivotRounding = m_selectedPivotRounding = 55;
 }
 
 KisToolCurve::~KisToolCurve()
@@ -74,19 +88,20 @@ void KisToolCurve::deactivate()
     draw();
     if (m_curve)
         m_curve->clear();
-    m_drawPivots = true;
+    
     m_dragging = false;
+    m_drawPivots = true;
 }
 
 void KisToolCurve::buttonPress(KisButtonPressEvent *event)
 {
     if (!m_currentImage)
         return;
-    if (event->button() == Qt::LeftButton && !(event->state() & Qt::ShiftButton)) {
+    if (event->button() == Qt::LeftButton) {
         draw();
         m_dragging = true;
         m_curve->startAction(convertStateToOptions(event->state()));
-        m_current = selectByHandle (event->pos());
+        m_current = m_curve->selectByHandle (event->pos());
         if (m_current == m_curve->end()) {
             m_previous = m_curve->find(m_curve->last());
             m_current = m_curve->pushPivot(event->pos());
@@ -96,19 +111,21 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
             m_dragging = false;
         m_curve->endAction();
         draw();
-    } else if (event->button() == Qt::LeftButton && (event->state() & Qt::ShiftButton)) {
-        paintCurve();
-        m_curve->clear();
     }
 }
 
 void KisToolCurve::keyPress(QKeyEvent *event)
 {
+    if (event->key() == Qt::Key_Return) {
+        m_dragging = false;
+        paintCurve();
+        m_curve->clear();
+    } else
     if (event->key() == Qt::Key_Escape) {
         m_dragging = false;
         draw();
         m_curve->clear();
-    }
+    } else
     if (event->key() == Qt::Key_Delete) {
         draw();
         m_dragging = false;
@@ -142,20 +159,6 @@ void KisToolCurve::move(KisMoveEvent *event)
     }
 }
 
-KisCurve::iterator KisToolCurve::selectByHandle(const KisPoint& pos)
-{
-    KisCurve pivots = m_curve->pivots();
-    KisCurve::iterator it;
-    for (it = pivots.begin(); it != pivots.end(); it++) {
-        if (QRect((*it).point().toQPoint()-QPoint(4,4),
-                  (*it).point().toQPoint()+QPoint(4,4)).contains(pos.toQPoint()))
-            break;
-    }
-    if (it == pivots.end())
-        return m_curve->end();
-    return m_curve->selectPivot((*it));
-}
-
 long KisToolCurve::convertStateToOptions(long state)
 {
     long options = NOOPTIONS;
@@ -178,8 +181,7 @@ void KisToolCurve::draw()
     } else
         return;
 
-    QPen pen = QPen(Qt::white, 0, Qt::SolidLine);
-    gc->setPen(pen);
+    gc->setPen(m_drawingPen);
     gc->setRasterOp(Qt::XorROP);
 
     KisCurve::iterator it = m_curve->begin();
@@ -222,17 +224,21 @@ KisCurve::iterator KisToolCurve::drawPivot(KisCanvasPainter& gc, KisCurve::itera
 {
     KisCanvasController *controller = m_subject->canvasController();
 
-    if (!m_drawPivots)
-        return ++point;
-    QPoint pos1 = controller->windowToView((*point).point().toQPoint());
-    QRect pivotRect = QRect(pos1-QPoint(4,4),
-                            pos1+QPoint(4,4));
-    if ((*point).isSelected())
-        gc.fillRect(pivotRect,m_selectedPivotColor);
-    else
-        gc.fillRect(pivotRect,m_pivotColor);
+    if (m_drawPivots) {
+        QPoint pos = controller->windowToView((*point).point().toQPoint());
+        if ((*point).isSelected()) {
+            gc.setPen(m_selectedPivotPen);
+            gc.drawRoundRect(selectedPivotRect(pos),m_selectedPivotRounding,m_selectedPivotRounding);
+        } else {
+            gc.setPen(m_pivotPen);
+            gc.drawRoundRect(pivotRect(pos),m_pivotRounding,m_pivotRounding);
+        }
+        gc.setPen(m_drawingPen);
+    }
 
-    return ++point;
+    point += 1;
+
+    return point;
 }
 
 void KisToolCurve::paint(KisCanvasPainter&)

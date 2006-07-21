@@ -21,14 +21,21 @@
 #ifndef KIS_TOOL_CURVE_H_
 #define KIS_TOOL_CURVE_H_
 
+#include <qpen.h>
+
 #include "kis_tool_paint.h"
 #include "kis_point.h"
 
-#include "kis_curve_framework.h"
+class QRect;
 
-class CurvePoint;
 class KisPoint;
 class KisPainter;
+
+class KisCurve;
+
+// These can be passed to draw()
+const bool DRAWING = true;
+const bool ERASING = false;
 
 class KisToolCurve : public KisToolPaint {
 
@@ -60,7 +67,6 @@ protected:
     // KisToolCurve interface
     //
     virtual long convertStateToOptions(long);
-    virtual KisCurve::iterator selectByHandle(const KisPoint&);
     virtual void draw();
     virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
     virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point);
@@ -71,12 +77,22 @@ protected:
 
     KisCurve *m_curve;
     KisImageSP m_currentImage;
-    bool m_drawPivots;
+    
     bool m_dragging;
-    QColor m_pivotColor;
-    QColor m_selectedPivotColor;
     KisCurve::iterator m_current;
     KisCurve::iterator m_previous;
+
+    bool m_drawPivots;
+    QPen m_drawingPen;
+    QPen m_pivotPen;
+    QPen m_selectedPivotPen;
+    int m_pivotRounding;
+    int m_selectedPivotRounding;
 };
+
+// General utility functions
+
+QRect pivotRect (const QPoint&);
+QRect selectedPivotRect (const QPoint&);
 
 #endif //__KIS_TOOL_CURVE_H_

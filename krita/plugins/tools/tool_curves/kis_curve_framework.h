@@ -54,12 +54,12 @@ public:
     bool operator!= (KisPoint p2) const { if (p2 != m_point) return true; else return false; }
     bool operator!= (CurvePoint p2) const { if (p2.point() != m_point ||
                                                 p2.isPivot() != m_pivot ||
-                                                p2.isSelected() != m_selected) return true; else return false; }
+                                                !(p2.hint() & m_hint)) return true; else return false; }
 
     bool operator== (KisPoint p2) const { if (p2 == m_point) return true; else return false; }
     bool operator== (CurvePoint p2) const { if (p2.point() == m_point &&
                                                 p2.isPivot() == m_pivot &&
-                                                p2.isSelected() == m_selected) return true; else return false; }
+                                                (p2.hint() & m_hint)) return true; else return false; }
 
     KisPoint point() const {return m_point;}
     
@@ -83,14 +83,6 @@ class FriendIterator;
 
 class KisCurve {
 
-protected:
-    /* I need it to be mutable because my iterator needs to access
-       m_curve's end() and begin() functions using a const KisCurve
-       (see below) */
-    mutable PointList m_curve;
-
-    long m_actionOptions;
-    
 public:
     
     KisCurve () {m_actionOptions = NOOPTIONS;}
@@ -98,6 +90,15 @@ public:
 
     friend class FriendIterator;
     typedef FriendIterator iterator;
+
+protected:
+    /* I need it to be mutable because my iterator needs to access
+       m_curve's end() and begin() functions using a const KisCurve
+       (see below) */
+    mutable PointList m_curve;
+    long m_actionOptions;
+
+    bool checkIterator (iterator checking) const;
 
 public:
 
@@ -160,6 +161,8 @@ public:
     virtual iterator selectPivot(const CurvePoint&, bool = true);
     virtual iterator selectPivot(const KisPoint&, bool = true);
     virtual iterator selectPivot(iterator, bool = true);
+
+    virtual iterator selectByHandle(const KisPoint&);
 
     virtual iterator movePivot(const CurvePoint&, const KisPoint&);
     virtual iterator movePivot(const KisPoint&, const KisPoint&);
@@ -286,6 +289,14 @@ inline void CurvePoint::setPoint(double x, double y)
 /* *********************************** *
  * KisCurve inline methods definitions *
  * *********************************** */
+
+inline bool KisCurve::checkIterator (KisCurve::iterator checking) const
+{
+     if (checking.target() != this)
+        return false;
+     else
+        return true;
+}
 
 inline KisCurve::iterator KisCurve::begin() const
 {

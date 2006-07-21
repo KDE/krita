@@ -69,7 +69,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
         default:
             ;// throw exception ?  TODO
     }
-    QSizeF m_initialSize = canvas->shapeManager()->selection()->size();
+    m_initialSize = canvas->shapeManager()->selection()->size();
     m_solidPoint = QPointF( m_initialSize.width() / 2, m_initialSize.height() / 2);
 
     if(m_top)
@@ -87,6 +87,7 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
 void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     QPointF shearVector = point - m_solidPoint;
+
     QMatrix matrix;
     matrix.rotate(m_initialSelectionAngle);
     shearVector = matrix.map(shearVector);
@@ -95,7 +96,7 @@ kDebug() << " vec.x=" << shearVector.x() << " vec.y=" << shearVector.y() <<endl;
     double shearX=0, shearY=0;
 
     if(m_top || m_bottom)
-        shearX = shearVector.x() / shearVector.y();
+        shearX = shearVector.x() / m_initialSize.height();
 
     int counter=0;
     foreach(KoShape *shape, m_selectedShapes) {

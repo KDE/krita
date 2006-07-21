@@ -53,6 +53,7 @@ private:
     QRectF m_initialBoundingRect;
     QPointF m_start;
     QPointF m_solidPoint;
+    QSizeF m_initialSize;
     QList<QPointF> m_startPositions;
     QList<QPointF> m_startAbsolutePositions;
     QList<double> m_startShearXs;

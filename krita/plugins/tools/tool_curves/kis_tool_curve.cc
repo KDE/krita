@@ -199,7 +199,7 @@ int KisToolCurve::convertKeysToOptions(int keys)
 {
     int options = NOOPTIONS;
 
-    if (keys & Qt::Key_Control)
+    if (keys & Qt::ControlButton)
         options |= KEEPSELECTEDOPTION;
 
     return options;

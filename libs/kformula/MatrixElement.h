@@ -21,7 +21,7 @@
 #ifndef MATRIXELEMENT_H
 #define MATRIXELEMENT_H
 
-#include "basicelement.h"
+#include "BasicElement.h"
 
 namespace KFormula {
 

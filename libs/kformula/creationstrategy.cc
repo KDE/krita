@@ -20,15 +20,15 @@
 #include "bracketelement.h"
 #include "creationstrategy.h"
 #include "elementtype.h"
-#include "fractionelement.h"
+#include "FractionElement.h"
 #include "indexelement.h"
-#include "matrixelement.h"
-#include "rootelement.h"
-#include "sequenceelement.h"
+#include "MatrixElement.h"
+#include "RootElement.h"
+#include "SequenceElement.h"
 #include "spaceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
-#include "matrixrowelement.h"
+#include "MatrixRowElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

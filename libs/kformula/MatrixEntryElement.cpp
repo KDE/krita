@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "matrixentryelement.h"
-#include "kformulacontainer.h"
+#include "MatrixEntryElement.h"
+#include "FormulaContainer.h"
 #include "kformulacommand.h"
-#include "formulacursor.h"
+#include "FormulaCursor.h"
 #include "spaceelement.h"
 
 #include <klocale.h>

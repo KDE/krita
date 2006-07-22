@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-#include "basicelement.h"
+#include "BasicElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

@@ -28,8 +28,8 @@
 #include <kcommand.h>
 
 #include "fontstyle.h"
-#include "kformulacontainer.h"
-#include "formulacursor.h"
+#include "FormulaContainer.h"
+#include "FormulaCursor.h"
 
 namespace KFormula {
 

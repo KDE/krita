@@ -27,14 +27,14 @@
 
 #include "MatrixDialog.h"
 #include "elementvisitor.h"
-#include "formulaelement.h"
-#include "formulacursor.h"
-#include "kformulacontainer.h"
+#include "FormulaElement.h"
+#include "FormulaCursor.h"
+#include "FormulaContainer.h"
 #include "kformulacommand.h"
-#include "matrixelement.h"
-#include "matrixrowelement.h"
-#include "matrixentryelement.h"
-#include "sequenceelement.h"
+#include "MatrixElement.h"
+#include "MatrixRowElement.h"
+#include "MatrixEntryElement.h"
+#include "SequenceElement.h"
 #include "spaceelement.h"
 
 

@@ -22,7 +22,7 @@
 #define SYMBOLELEMENT_H
 
 #include "fontstyle.h"
-#include "basicelement.h"
+#include "BasicElement.h"
 #include "kformuladefs.h"
 #include <QList>
 

@@ -23,12 +23,12 @@
 #include <kdebug.h>
 #include <assert.h>
 
-#include "formulacursor.h"
-#include "formulaelement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
 #include "indexelement.h"
-#include "matrixelement.h"
-#include "rootelement.h"
-#include "sequenceelement.h"
+#include "MatrixElement.h"
+#include "RootElement.h"
+#include "SequenceElement.h"
 #include "symbolelement.h"
 #include "textelement.h"
 

@@ -25,9 +25,9 @@
 #include <kdebug.h>
 
 #include "contextstyle.h"
-#include "formulacursor.h"
-#include "formulaelement.h"
-#include "kformulacontainer.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
+#include "FormulaContainer.h"
 #include "kformuladocument.h"
 
 KFORMULA_NAMESPACE_BEGIN

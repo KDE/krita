@@ -20,15 +20,15 @@
 
 #include <klocale.h>  //This is for undo descriptions
 
-#include "formulacursor.h"
-#include "formulaelement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
 #include "indexelement.h"
 #include "kformulacommand.h"
-#include "matrixelement.h"
-#include "sequenceelement.h"
+#include "MatrixElement.h"
+#include "SequenceElement.h"
 #include "textelement.h"
-#include "matrixentryelement.h"
-#include "matrixrowelement.h"
+#include "MatrixEntryElement.h"
+#include "MatrixRowElement.h"
 
 
 KFORMULA_NAMESPACE_BEGIN

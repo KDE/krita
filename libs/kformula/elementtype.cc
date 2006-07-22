@@ -24,10 +24,10 @@
 
 #include <kdebug.h>
 
-#include "basicelement.h"
+#include "BasicElement.h"
 #include "contextstyle.h"
 #include "elementtype.h"
-#include "sequenceelement.h"
+#include "SequenceElement.h"
 #include "sequenceparser.h"
 #include "textelement.h"
 

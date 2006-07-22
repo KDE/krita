@@ -21,7 +21,7 @@
 #ifndef FRACTIONELEMENT_H
 #define FRACTIONELEMENT_H
 
-#include "basicelement.h"
+#include "BasicElement.h"
 #include <QList>
 
 KFORMULA_NAMESPACE_BEGIN

@@ -23,10 +23,10 @@
 #include <kdebug.h>
 
 #include "elementvisitor.h"
-#include "formulacursor.h"
-#include "formulaelement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
 #include "kformulacommand.h"
-#include "sequenceelement.h"
+#include "SequenceElement.h"
 #include "symbolelement.h"
 
 KFORMULA_NAMESPACE_BEGIN

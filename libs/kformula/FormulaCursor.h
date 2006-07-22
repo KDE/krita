@@ -24,7 +24,7 @@
 #include <QString>
 #include <QList>
 
-#include "basicelement.h"
+#include "BasicElement.h"
 #include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN

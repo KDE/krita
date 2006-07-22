@@ -22,7 +22,7 @@
 #define INDEXELEMENT_H
 
 // Formula include
-#include "basicelement.h"
+#include "BasicElement.h"
 #include <QList>
 
 KFORMULA_NAMESPACE_BEGIN

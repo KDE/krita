@@ -24,7 +24,7 @@
 #include <QMimeSource>
 #include <QDomDocument>
 
-#include "kformulacontainer.h"
+#include "FormulaContainer.h"
 #include <koffice_export.h>
 
 KFORMULA_NAMESPACE_BEGIN

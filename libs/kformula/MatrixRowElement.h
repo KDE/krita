@@ -21,7 +21,7 @@
 #ifndef MATRIXROWELEMENT_H
 #define MATRIXROWELEMENT_H
 
-#include "basicelement.h"
+#include "BasicElement.h"
 #include "contextstyle.h"
 
 namespace KFormula

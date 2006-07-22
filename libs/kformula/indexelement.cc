@@ -25,10 +25,10 @@
 
 #include "elementvisitor.h"
 #include "indexelement.h"
-#include "formulacursor.h"
-#include "formulaelement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
 #include "kformulacommand.h"
-#include "sequenceelement.h"
+#include "SequenceElement.h"
 
 
 KFORMULA_NAMESPACE_BEGIN

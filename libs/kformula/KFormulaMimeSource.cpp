@@ -32,10 +32,10 @@
 #include <kcommand.h>
 
 #include "contextstyle.h"
-#include "formulacursor.h"
-#include "formulaelement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
 #include "kformuladocument.h"
-#include "kformulamimesource.h"
+#include "KFormulaMimeSource.h"
 
 KFORMULA_NAMESPACE_BEGIN
 using namespace std;

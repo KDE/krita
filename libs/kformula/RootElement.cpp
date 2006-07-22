@@ -25,11 +25,11 @@
 #include <klocale.h>
 
 #include "elementvisitor.h"
-#include "formulacursor.h"
-#include "formulaelement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
 #include "kformulacommand.h"
-#include "rootelement.h"
-#include "sequenceelement.h"
+#include "RootElement.h"
+#include "SequenceElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

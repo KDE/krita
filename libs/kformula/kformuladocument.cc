@@ -35,9 +35,9 @@
 
 #include "contextstyle.h"
 #include "creationstrategy.h"
-#include "kformulacontainer.h"
+#include "FormulaContainer.h"
 #include "kformuladocument.h"
-#include "sequenceelement.h"
+#include "SequenceElement.h"
 #include "symboltable.h"
 #include "symbolaction.h"
 

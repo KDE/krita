@@ -27,7 +27,7 @@
 
 //#include <KoUnit.h>
 
-#include "kformulamathmlread.h"
+#include "MathMlLoader.h"
 #include "symboltable.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -1768,4 +1768,4 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
 KFORMULA_NAMESPACE_END
 
 using namespace KFormula;
-#include "kformulamathmlread.moc"
+#include "MathMlLoader.moc"

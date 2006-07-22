@@ -24,7 +24,7 @@
 #include <QFont>
 #include <QString>
 
-#include "basicelement.h"
+#include "BasicElement.h"
 
 class SymbolTable;
 

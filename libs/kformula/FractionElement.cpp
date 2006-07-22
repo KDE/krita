@@ -24,10 +24,10 @@
 #include <klocale.h>
 
 #include "elementvisitor.h"
-#include "formulaelement.h"
-#include "formulacursor.h"
-#include "fractionelement.h"
-#include "sequenceelement.h"
+#include "FormulaElement.h"
+#include "FormulaCursor.h"
+#include "FractionElement.h"
+#include "SequenceElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 using namespace std;

@@ -27,9 +27,9 @@
 #include "bracketelement.h"
 #include "elementvisitor.h"
 #include "fontstyle.h"
-#include "formulacursor.h"
-#include "formulaelement.h"
-#include "sequenceelement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
+#include "SequenceElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

@@ -21,10 +21,10 @@
 #include <kdebug.h>
 
 #include "contextstyle.h"
-#include "basicelement.h"
-#include "formulacursor.h"
-#include "formulaelement.h"
-#include "sequenceelement.h"
+#include "BasicElement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
+#include "SequenceElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 using namespace std;

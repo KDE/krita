@@ -18,11 +18,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "matrixrowelement.h"
+#include "MatrixRowElement.h"
 
-#include "formulacursor.h"
-#include "formulaelement.h"
-#include "matrixentryelement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
+#include "MatrixEntryElement.h"
 #include <klocale.h>
 
 #include <QPainter>

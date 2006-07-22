@@ -30,10 +30,10 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
-#include "basicelement.h"
-#include "formulacursor.h"
-#include "formulaelement.h"
-#include "kformulacontainer.h"
+#include "BasicElement.h"
+#include "FormulaCursor.h"
+#include "FormulaElement.h"
+#include "FormulaContainer.h"
 #include "kformuladocument.h"
 #include "kformulaview.h"
 

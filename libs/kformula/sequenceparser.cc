@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "basicelement.h"
+#include "BasicElement.h"
 #include "elementtype.h"
 #include "sequenceparser.h"
 #include "symboltable.h"

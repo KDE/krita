@@ -21,7 +21,7 @@
 #ifndef FORMULAELEMENT_H
 #define FORMULAELEMENT_H
 
-#include "sequenceelement.h"
+#include "SequenceElement.h"
 #include <QKeyEvent>
 
 KFORMULA_NAMESPACE_BEGIN

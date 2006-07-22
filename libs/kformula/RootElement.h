@@ -24,7 +24,7 @@
 #include <QPoint>
 #include <QList>
 
-#include "basicelement.h"
+#include "BasicElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 class SequenceElement;

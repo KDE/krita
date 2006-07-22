@@ -25,7 +25,7 @@
 #include <QString>
 #include <QKeyEvent>
 
-#include "basicelement.h"
+#include "BasicElement.h"
 
 class QKeyEvent;
 

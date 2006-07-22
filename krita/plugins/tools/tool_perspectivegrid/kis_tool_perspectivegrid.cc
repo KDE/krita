@@ -50,7 +50,7 @@ KisToolPerspectiveGrid::KisToolPerspectiveGrid()
     : super(i18n("Perspective grid")), m_handleSize(13), m_handleHalfSize(6)
 
 {
-    setName("tool_perspective_grid");
+    setName("tool_perspectivegrid");
 
     m_subject = 0;
     m_dragging = false;
@@ -451,7 +451,7 @@ void KisToolPerspectiveGrid::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Perspective Grid"),
-                                    "KisToolPerspectiveGrid" ,
+                                    "tool_perspectivegrid" ,
                         0,
                         this,
                         SLOT(activate()),

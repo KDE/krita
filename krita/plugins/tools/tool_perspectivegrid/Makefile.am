@@ -27,8 +27,8 @@ kritatoolperspectivegrid_la_METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
 
-#kritapics_DATA = \
-#	tool_perspectivegrid_cursor.png
+kritapics_DATA = \
+	tool_perspectivegrid.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

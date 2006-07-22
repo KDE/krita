@@ -38,7 +38,6 @@ class KisToolPerspectiveGrid : public KisToolNonPaint {
 public:
     KisToolPerspectiveGrid();
     virtual ~KisToolPerspectiveGrid();
-
         //
         // KisCanvasObserver interface
         //
@@ -51,7 +50,7 @@ public:
 
     virtual void setup(KActionCollection *collection);
     virtual Q_UINT32 priority() { return 5; }
-    virtual enumToolType toolType() { return TOOL_SELECT; }
+    virtual enumToolType toolType() { return TOOL_VIEW; }
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);

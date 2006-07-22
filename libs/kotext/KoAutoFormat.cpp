@@ -1488,7 +1488,7 @@ KCommand *KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTex
 
 	// case 1 and 2
 	if ( c1 == QChar::Separator_Space || c1 == QChar::Separator_Line || c1 == QChar::Separator_Paragraph ||
-	    c1 == QChar::Punctuation_Open )
+	    c1 == QChar::Punctuation_Open || c1 == QChar::Other_Control )
 	    ending = false;
 
 	// case 3

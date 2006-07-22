@@ -23,7 +23,10 @@
 #include "kis_point.h"
 #include "kis_input_device.h"
 
-class KisEvent {
+/**
+ * This class wrap the events from the mouse and the tablet and works in float precision.
+ */
+class KRITAUI_EXPORT KisEvent {
 public:
     enum enumEventType {
         UnknownEvent,
@@ -41,12 +44,33 @@ public:
 
     enumEventType type() const { return m_type; }
     KisInputDevice device() const { return m_device; }
+    /**
+     * @return the position in widget coordinates.
+     */
     KisPoint pos() const { return m_pos; }
+    /**
+     * Convenient function that retun the x-coordinate of the event (in the widget coordinates)
+     */
     double x() const { return m_pos.x(); }
+    /**
+     * Convenient function that retun the y-coordinate of the event (in the widget coordinates)
+     */
     double y() const { return m_pos.y(); }
+    /**
+     * @return the position in the sreen coordinate
+     */
     KisPoint globalPos() const { return m_globalPos; }
+    /**
+     * @return the pressure from the table.
+     */
     double pressure() const { return m_pressure; }
+    /**
+     * @return the tilt of the stylet around the x-axis
+     */
     double xTilt() const { return m_xTilt; }
+    /**
+     * @return the tilt of the stylet around the y-axis
+     */
     double yTilt() const { return m_yTilt; }
     Qt::MouseButtons buttons() const { return m_buttons; }
     Qt::KeyboardModifiers modifiers() const { return m_modifiers; }

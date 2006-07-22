@@ -62,28 +62,28 @@ void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, cons
     // 4 -> bottom-left corner
     // d12 line from top-left to top-right
     // note that the notion of top-left is purely theorical
-    LineEquation d12 = computeLineEquation( grid->topLeft(), grid->topRight() ) ;
+    KisSubPerspectiveGrid::LineEquation d12 = KisSubPerspectiveGrid::computeLineEquation( grid->topLeft(), grid->topRight() ) ;
     KisPoint v12 = KisPoint(*grid->topLeft() - *grid->topRight());
     v12.setX( v12.x() / grid->subdivisions()); v12.setY( v12.y() / grid->subdivisions() );
-    LineEquation d23 = computeLineEquation( grid->topRight(), grid->bottomRight() );
+    KisSubPerspectiveGrid::LineEquation d23 = KisSubPerspectiveGrid::computeLineEquation( grid->topRight(), grid->bottomRight() );
     KisPoint v23 = KisPoint(*grid->topRight() - *grid->bottomRight());
     v23.setX( v23.x() / grid->subdivisions()); v23.setY( v23.y() / grid->subdivisions() );
-    LineEquation d34 = computeLineEquation( grid->bottomRight(), grid->bottomLeft() );
-    LineEquation d41 = computeLineEquation( grid->bottomLeft(), grid->topLeft() );
+    KisSubPerspectiveGrid::LineEquation d34 = KisSubPerspectiveGrid::computeLineEquation( grid->bottomRight(), grid->bottomLeft() );
+    KisSubPerspectiveGrid::LineEquation d41 = KisSubPerspectiveGrid::computeLineEquation( grid->bottomLeft(), grid->topLeft() );
     
-    KisPoint horizVanishingPoint = computeIntersection(d12,d34);
-    KisPoint vertVanishingPoint = computeIntersection(d23,d41);
+    KisPoint horizVanishingPoint = KisSubPerspectiveGrid::computeIntersection(d12,d34);
+    KisPoint vertVanishingPoint = KisSubPerspectiveGrid::computeIntersection(d23,d41);
     
     for(uint i = 1; i < grid->subdivisions(); i ++)
     {
         KisPoint pol1 = *grid->topRight() + i * v12;
-        LineEquation d1 = computeLineEquation( &pol1, &vertVanishingPoint );
-        KisPoint pol1b =  computeIntersection(d1,d34);
+        KisSubPerspectiveGrid::LineEquation d1 = KisSubPerspectiveGrid::computeLineEquation( &pol1, &vertVanishingPoint );
+        KisPoint pol1b =  KisSubPerspectiveGrid::computeIntersection(d1,d34);
         drawLine( pol1.roundQPoint(), pol1b.roundQPoint() );
         
         KisPoint pol2 = *grid->bottomRight() + i * v23;
-        LineEquation d2 = computeLineEquation( &pol2, &horizVanishingPoint );
-        KisPoint pol2b =  computeIntersection(d2,d41);
+        KisSubPerspectiveGrid::LineEquation d2 = KisSubPerspectiveGrid::computeLineEquation( &pol2, &horizVanishingPoint );
+        KisPoint pol2b = KisSubPerspectiveGrid::computeIntersection(d2,d41);
         drawLine( pol2.roundQPoint(), pol2b.roundQPoint() );
     }
     setPen(mainPen);

@@ -429,6 +429,20 @@ void KisToolPerspectiveGrid::drawGrid(KisCanvasPainter& gc)
                 drawSmallRectangle(gc, (endPos + startPos) / 2);
             }
         }
+        KisPoint tbVpf = grid->topBottomVanishingPoint();
+        if( fabs(tbVpf.x()) < 30000000. && fabs(tbVpf.y()) < 30000000.)
+        {
+            QPoint tbVp = controller->windowToView(tbVpf.roundQPoint());
+            gc.drawLine( tbVp.x() - m_handleHalfSize, tbVp.y() - m_handleHalfSize, tbVp.x() + m_handleHalfSize, tbVp.y() + m_handleHalfSize);
+            gc.drawLine( tbVp.x() - m_handleHalfSize, tbVp.y() + m_handleHalfSize, tbVp.x() + m_handleHalfSize, tbVp.y() - m_handleHalfSize);
+        }
+        KisPoint lrVpf = grid->leftRightVanishingPoint();
+        if( fabs(lrVpf.x()) < 30000000. && fabs(lrVpf.y()) < 30000000.)
+        { // Don't display it, if it is too far, or you get funny results
+            QPoint lrVp = controller->windowToView(lrVpf.roundQPoint());
+            gc.drawLine( lrVp.x() - m_handleHalfSize, lrVp.y() - m_handleHalfSize, lrVp.x() + m_handleHalfSize, lrVp.y() + m_handleHalfSize);
+            gc.drawLine( lrVp.x() - m_handleHalfSize, lrVp.y() + m_handleHalfSize, lrVp.x() + m_handleHalfSize, lrVp.y() - m_handleHalfSize);
+        }
     }
 }
 

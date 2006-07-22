@@ -27,18 +27,14 @@ KisSubPerspectiveGrid::KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, K
     
 }
 
-
 KisPerspectiveGrid::KisPerspectiveGrid()
 {
-    for( QValueList<KisSubPerspectiveGrid*>::const_iterator it = begin(); it != end(); ++it)
-    {
-        delete *it;
-    }
 }
 
 
 KisPerspectiveGrid::~KisPerspectiveGrid()
 {
+    clearSubGrids( );
 }
 
 bool KisPerspectiveGrid::addNewSubGrid( KisSubPerspectiveGrid* ng )

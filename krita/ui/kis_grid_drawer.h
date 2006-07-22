@@ -31,11 +31,6 @@
 
 class KisSubPerspectiveGrid;
 
-struct LineEquation {
-    // y = a*x + b
-    double a, b;
-};
-
 class GridDrawer {
     public:
         GridDrawer() {}
@@ -50,28 +45,6 @@ class GridDrawer {
         inline void drawLine(const QPoint& p1, const QPoint& p2) { drawLine(p1.x(), p1.y(), p2.x(), p2.y() ); }
         inline void drawLine(const KisPoint* p1, const KisPoint* p2) { drawLine( p1->roundQPoint(), p2->roundQPoint()); }
     private:
-        inline LineEquation computeLineEquation(const KisPoint* p1, const KisPoint* p2) const
-        {
-            LineEquation eq;
-            double x1 = p1->x(); double x2 = p2->x();
-            if( fabs(x1 - x2) < 0.000001 )
-            {
-                x1 += 0.00001; // Introduce a small perturbation
-            }
-            eq.a = (p2->y() - p1->y()) / (double)( x2 - x1 );
-            eq.b = -eq.a * x1 + p1->y();
-            return eq;
-        }
-        inline KisPoint computeIntersection(const LineEquation& d1, const LineEquation& d2) const
-        {
-            double a1 = d1.a; double a2 = d2.a;
-            if( fabs(a1 - a2) < 0.000001 )
-            {
-                a1 += 0.00001; // Introduce a small perturbation
-            }
-            double x = (d1.b - d2.b) / (a2 - a1);
-            return KisPoint(x, a2 * x + d2.b);
-        }
         Qt::PenStyle gs2style(Q_UINT32 s);
 };
 

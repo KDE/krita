@@ -37,6 +37,8 @@ class KisSubPerspectiveGrid {
     public:
         KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft);
         
+        inline KisPoint topBottomVanishingPoint() { return computeVanishingPoint( topLeft(), topRight(), bottomLeft(), bottomRight() ); };
+        inline KisPoint leftRightVanishingPoint() { return computeVanishingPoint( topLeft(), bottomLeft(), topRight(), bottomRight() ); };
         
         inline KisSubPerspectiveGrid* leftGrid() { return m_leftGrid; }
         inline void setLeftGrid(KisSubPerspectiveGrid* g) { Q_ASSERT(m_leftGrid==0); m_leftGrid = g; }
@@ -60,6 +62,41 @@ class KisSubPerspectiveGrid {
          * drawing the perspective grid, to avoid drawing twice the same border, or points
          */
         inline int index() const { return m_index; }
+    public:
+        struct LineEquation {
+            // y = a*x + b
+            double a, b;
+        };
+        static inline LineEquation computeLineEquation(const KisPoint* p1, const KisPoint* p2)
+        {
+            LineEquation eq;
+            double x1 = p1->x(); double x2 = p2->x();
+            if( fabs(x1 - x2) < 0.000001 )
+            {
+                x1 += 0.00001; // Introduce a small perturbation
+            }
+            eq.a = (p2->y() - p1->y()) / (double)( x2 - x1 );
+            eq.b = -eq.a * x1 + p1->y();
+            return eq;
+        }
+        static inline KisPoint computeIntersection(const LineEquation& d1, const LineEquation& d2)
+        {
+            double a1 = d1.a; double a2 = d2.a;
+            if( fabs(a1 - a2) < 0.000001 )
+            {
+                a1 += 0.00001; // Introduce a small perturbation
+            }
+            double x = (d1.b - d2.b) / (a2 - a1);
+            return KisPoint(x, a2 * x + d2.b);
+        }
+
+    private:
+        inline KisPoint computeVanishingPoint(KisPerspectiveGridNodeSP p11, KisPerspectiveGridNodeSP p12, KisPerspectiveGridNodeSP p21, KisPerspectiveGridNodeSP p22)
+        {
+            KisSubPerspectiveGrid::LineEquation d1 = KisSubPerspectiveGrid::computeLineEquation( p11, p12 );
+            KisSubPerspectiveGrid::LineEquation d2 = KisSubPerspectiveGrid::computeLineEquation( p21, p22 );
+            return KisSubPerspectiveGrid::computeIntersection(d1,d2);
+        }
     private:
         KisPerspectiveGridNodeSP m_topLeft, m_topRight, m_bottomLeft, m_bottomRight;
         KisSubPerspectiveGrid *m_leftGrid, *m_rightGrid, *m_topGrid, *m_bottomGrid;

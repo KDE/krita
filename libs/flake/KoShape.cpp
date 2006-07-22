@@ -190,14 +190,13 @@ QMatrix KoShape::transformationMatrix(KoViewConverter *converter) const {
     if ( m_angle != 0 )
     {
         matrix.translate( zoomedRect.width() / 2.0 * m_scaleX, zoomedRect.height() / 2.0 * m_scaleY );
+        matrix.translate( zoomedRect.height() / 2.0 * m_shearX, zoomedRect.width() / 2.0 * m_shearY );
         matrix.rotate( m_angle );
+        matrix.translate( -zoomedRect.width() / 2.0 * m_scaleX, -zoomedRect.height() / 2.0 * m_scaleY );
+        matrix.translate( -zoomedRect.height() / 2.0 * m_shearX, -zoomedRect.width() / 2.0 * m_shearY );
     }
     matrix.shear( m_shearX, m_shearY );
     matrix.scale( m_scaleX, m_scaleY );
-    if ( m_angle != 0 )
-    {
-        matrix.translate( -zoomedRect.width() / 2.0, -zoomedRect.height() / 2.0 );
-    }
     return matrix;
 }
 
@@ -285,11 +284,16 @@ void KoShape::setAbsolutePosition(QPointF newPosition) {
     QPointF vector1 = matrix.inverted().map(zero);
 
     matrix = QMatrix();
-    matrix.translate( size().width() / 2.0 * m_scaleX, size().height() / 2.0 * m_scaleY );
-    matrix.rotate( m_angle );
+    if ( m_angle != 0 )
+    {
+        matrix.translate( size().width() / 2.0 * m_scaleX, size().height() / 2.0 * m_scaleY );
+        matrix.translate( size().height() / 2.0 * m_shearX, size().width() / 2.0 * m_shearY );
+        matrix.rotate( m_angle );
+        matrix.translate( -size().width() / 2.0 * m_scaleX, -size().height() / 2.0 * m_scaleY );
+        matrix.translate( -size().height() / 2.0 * m_shearX, -size().width() / 2.0 * m_shearY );
+    }
     matrix.shear( m_shearX, m_shearY );
     matrix.scale( m_scaleX, m_scaleY );
-    matrix.translate( -size().width() / 2.0, -size().height() / 2.0 );
 
     QPointF vector2 = matrix.map( QPointF(size().width() / 2.0, size().height() / 2.0) );
     //kDebug() << "vector1: " << vector1 << ", vector2: " << vector2 << endl;

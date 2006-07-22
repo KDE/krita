@@ -41,7 +41,10 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
             continue;
         m_selectedShapes << shape;
         m_startPositions << shape->position();
-        m_startAbsolutePositions << shape->absolutePosition();
+        m_startMatrices << shape->transformationMatrix(0);
+        QMatrix m;
+        m.rotate(shape->rotation());
+        m_startMatrices << m;
         m_startShearXs << shape->shearX();
         m_startShearYs << shape->shearY();
         m_initialBoundingRect = m_initialBoundingRect.unite( shape->boundingRect() );
@@ -77,11 +80,13 @@ KoShapeShearStrategy::KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, 
     else if(m_bottom)
         m_solidPoint -= QPointF(0, m_initialSize.height() / 2);
     if(m_left)
-        m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
-    else if(m_right)
         m_solidPoint += QPointF(m_initialSize.width() / 2, 0);
+    else if(m_right)
+        m_solidPoint -= QPointF(m_initialSize.width() / 2, 0);
 
-    m_solidPoint = canvas->shapeManager()->selection()->transformationMatrix(0).map(m_solidPoint);
+kDebug() << " PREsol.x=" << m_solidPoint.x() << " sol.y=" << m_solidPoint.y() <<endl;
+        QMatrix matrix = canvas->shapeManager()->selection()->transformationMatrix(0);
+        m_solidPoint = matrix.map(m_solidPoint);
 }
 
 void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
@@ -89,25 +94,39 @@ void KoShapeShearStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMod
     QPointF shearVector = point - m_solidPoint;
 
     QMatrix matrix;
-    matrix.rotate(m_initialSelectionAngle);
+    matrix.rotate(-m_initialSelectionAngle);
     shearVector = matrix.map(shearVector);
 
-kDebug() << " vec.x=" << shearVector.x() << " vec.y=" << shearVector.y() <<endl;
     double shearX=0, shearY=0;
 
+    if(m_top || m_left)
+        shearVector = - shearVector;
     if(m_top || m_bottom)
         shearX = shearVector.x() / m_initialSize.height();
+    if(m_left || m_right)
+        shearY = shearVector.y() / m_initialSize.width();
 
+    QMatrix applyMatrix;
+    applyMatrix.translate(m_solidPoint.x(), m_solidPoint.y());
+    applyMatrix.shear(shearX, shearY);
+    applyMatrix.translate(-m_solidPoint.x(), -m_solidPoint.y());
+
+kDebug() << "Begin retransform" <<endl;
     int counter=0;
     foreach(KoShape *shape, m_selectedShapes) {
         shape->repaint();
-        shape->shear(shearX, shearY);
-//        shape->setAbsolutePosition(m_startAbsolutePositions[counter]);
+        QMatrix m = m_startMatrices[counter] * applyMatrix;
+        shape->shear(m.m21(), m.m12());
+kDebug() << " s.dx=" << m_startMatrices[counter].dx() << " s.dy=" << m_startMatrices[counter].dy() <<endl;
+kDebug() << " m.dx=" << m.dx() << " m.dy=" << m.dy() <<endl;
+QPointF p = applyMatrix.map(m_startPositions[counter]);
+kDebug() << " px=" << p.x() << " py=" << p.y() <<endl;
+        shape->setPosition(p);//QPointF(m.dx(), m.dy()));
         shape->repaint();
         counter++;
     }
-//    m_canvas->shapeManager()->selection()->rotate(m_initialSelectionAngle + angle);
-
+    m_canvas->shapeManager()->selection()->shear(shearX, shearY);
+    // The selection updates it's own position and size
 }
 
 void KoShapeShearStrategy::paint( QPainter &painter, KoViewConverter &converter) {

@@ -54,8 +54,9 @@ private:
     QPointF m_start;
     QPointF m_solidPoint;
     QSizeF m_initialSize;
+    QList<QMatrix> m_startMatrices;
+    QList<QMatrix> m_startRotationMatrices;
     QList<QPointF> m_startPositions;
-    QList<QPointF> m_startAbsolutePositions;
     QList<double> m_startShearXs;
     QList<double> m_startShearYs;
     bool m_top, m_left, m_bottom, m_right;

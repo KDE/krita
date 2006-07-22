@@ -26,7 +26,7 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <stdio.h>
+#include <kdebug.h>
 
 KoSelection::KoSelection()
 {
@@ -63,7 +63,16 @@ void KoSelection::select(KoShape * object)
                 m_selectedObjects << shape;
         }
     }
-    rotate(0);
+    if(m_selectedObjects.count() == 1)
+    {
+        rotate(object->rotation());
+        shear(object->shearX(), object->shearY());
+    }
+    else
+    {
+        rotate(0);
+        shear(0, 0);
+    }
     requestSelectionChangedEvent();
 }
 
@@ -79,7 +88,12 @@ void KoSelection::deselect(KoShape * object)
     }
     else
         m_selectedObjects.remove( object );
-    rotate(0);
+
+    if(m_selectedObjects.count() == 1)
+    {
+        rotate(firstSelectedShape()->rotation());
+        shear(firstSelectedShape()->shearX(), firstSelectedShape()->shearY());
+    }
     requestSelectionChangedEvent();
 }
 
@@ -88,7 +102,6 @@ void KoSelection::deselectAll()
     if(m_selectedObjects.count() == 0)
         return;
     m_selectedObjects.clear();
-    rotate(0);
     requestSelectionChangedEvent();
 }
 
@@ -101,7 +114,6 @@ void KoSelection::requestSelectionChangedEvent() {
 
 void KoSelection::selectionChangedEvent() {
     m_eventTriggered = false;
-    shear(0,0);
     scale(1,1);
     boundingRect(); //has the side effect of updating the size and position
     emit selectionChanged();
@@ -151,9 +163,7 @@ QRectF KoSelection::boundingRect() const
 
     //just as well use the oppertunity to update the size and position
     (const_cast <KoSelection *>(this))->resize( bb.size() );
-    QPointF p(tmat.map(bb.topLeft() + QPointF(size().width()/2, size().height()/2)));
-    p -= QPointF(size().width()/2, size().height()/2);
-
+    QPointF p = tmat.map(bb.topLeft() + itmat.map(position()));
     (const_cast <KoSelection *>(this))->setPosition( p );
 
     return tmat.mapRect(bb);

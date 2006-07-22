@@ -210,8 +210,10 @@ KisCurve::iterator KisCurveBezier::selectPivot(KisCurve::iterator it, bool isSel
     if (m_actionOptions & KEEPSELECTEDOPTION) {
         KisCurve selected = selectedPivots();
         for (iterator i = selected.begin(); i != selected.end(); i++) {
-            if ((*i).hint() != BEZIERENDHINT)
+            if ((*i).hint() != BEZIERENDHINT) {
                 (*find((*i))).setSelected(false);
+                (*groupEndpoint(find((*i)))).setSelected(true);
+            }
         }
     }
 
@@ -250,30 +252,35 @@ KisCurve::iterator KisToolBezier::selectByHandle(const QPoint& pos)
     QPoint qpos;
     KisCurve pivs = m_curve->pivots(), inHandle;
     KisCurve::iterator it;
+    int hint;
     for (it = pivs.begin(); it != pivs.end(); it++) {
         qpos = m_subject->canvasController()->windowToView((*it).point().toQPoint());
+        hint = (*it).hint();
+        if (hint != BEZIERENDHINT && !(*it).isSelected()) {
+            // That's 'cause we don't have groups...
+            if (m_pressedKeys & Qt::ControlButton)
+                continue;
+            if (hint == BEZIERPREVCONTROLHINT &&
+                !((*it.next()).isSelected() || (*it.next().next()).isSelected()))
+                continue;
+            if (hint == BEZIERNEXTCONTROLHINT &&
+                !((*it.previous()).isSelected() || (*it.previous().previousPivot()).isSelected()))
+                continue;
+        }
+        if (hint == BEZIERENDHINT && (m_pressedKeys & Qt::ShiftButton))
+            continue;
         if (pivotRect(qpos).contains(pos)) {
-            if ((m_pressedKeys & Qt::ControlButton) && (*it).hint() != BEZIERENDHINT);
-            else if ((m_pressedKeys & Qt::ShiftButton) && (*it).hint() == BEZIERENDHINT);
-            else
-                inHandle.pushPoint((*it));
+            inHandle.pushPoint((*it));
+            if (hint == BEZIERENDHINT && !(m_pressedKeys & Qt::ShiftButton))
+                break;
+            if (hint != BEZIERENDHINT && (m_pressedKeys & Qt::ShiftButton))
+                break;
         }
     }
     if (inHandle.isEmpty())
         return m_curve->end();
 
-    if (inHandle.count() > 1) {
-        if (!(m_pressedKeys & Qt::ShiftButton) || (m_pressedKeys & Qt::ControlButton)) {
-            for (KisCurve::iterator i = inHandle.begin(); i != inHandle.end();) {
-                if ((*i).hint() != BEZIERENDHINT)
-                    inHandle.deletePivot((*i++));
-                else
-                    i++;
-            }
-        }
-    }
-
-    return m_curve->selectPivot(inHandle.first());
+    return m_curve->selectPivot(inHandle.last());
 }
 
 KisCurve::iterator KisToolBezier::paintPoint (KisPainter& painter, KisCurve::iterator point)

@@ -151,11 +151,11 @@ void KisToolCurve::keyRelease(QKeyEvent *event)
 {
     draw();
     if (event->key() == Qt::Key_Control)
-        m_pressedKeys &= !Qt::ControlButton;
+        m_pressedKeys -= Qt::ControlButton;
     if (event->key() == Qt::Key_Shift)
-        m_pressedKeys &= !Qt::ShiftButton;
+        m_pressedKeys -= Qt::ShiftButton;
     if (event->key() == Qt::Key_Alt)
-        m_pressedKeys &= !Qt::AltButton;
+        m_pressedKeys -= Qt::AltButton;
     draw();
 }
 

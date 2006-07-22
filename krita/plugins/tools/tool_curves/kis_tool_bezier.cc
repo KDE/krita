@@ -220,7 +220,7 @@ KisCurve::iterator KisCurveBezier::selectPivot(KisCurve::iterator it, bool isSel
 
 
 KisToolBezier::KisToolBezier()
-    : super(i18n("Tool for Bezier"))
+    : super(i18n("Bezier"))
 {
     setName("tool_bezier");
     setCursor(KisCursor::load("tool_bezier_cursor.png", 6, 6));

@@ -34,7 +34,7 @@ class KisPainter;
 
 class KisCurve;
 
-// These can be passed to draw()
+// FIXME These can be passed to draw()
 const bool DRAWING = true;
 const bool ERASING = false;
 

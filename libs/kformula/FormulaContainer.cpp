@@ -43,7 +43,7 @@
 #include "kformulacompatibility.h"
 #include "FormulaContainer.h"
 #include "kformuladocument.h"
-#include "MathMlLoader.h"
+#include "MathMLLoader.h"
 #include "KFormulaMimeSource.h"
 #include "MatrixElement.h"
 #include "RootElement.h"

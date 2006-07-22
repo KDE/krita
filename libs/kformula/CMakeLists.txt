@@ -32,7 +32,7 @@ set(kformulalib_LIB_SRCS
    elementtype.cc 
    kformuladocument.cc 
    symboltable.cc 
-   MathMlLoader.cpp 
+   MathMLLoader.cpp 
    kformulainputfilter.cc 
    kformulaview.cc 
    spaceelement.cc 

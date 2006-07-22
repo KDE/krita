@@ -30,7 +30,7 @@
 #include "kis_view.h"
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView * parent)
-    : QObject(), m_view(parent)
+    : QObject(), m_view(parent), m_toggleEdition(false)
 {
     
 }
@@ -52,6 +52,7 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
     m_toggleGrid = new KToggleAction(i18n("Show Perspective Grid"), "", this, SLOT(toggleGrid()), collection, "view_toggle_perspective_grid");
     m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Perspective Grid")));
     m_toggleGrid->setChecked(false);
+    m_gridClear = new KAction(i18n("Clear Perspective Grid"), 0, "", this, SLOT(clearPerspectiveGrid()), collection, "view_clear_perspective_grid");
 }
 
 void KisPerspectiveGridManager::toggleGrid()
@@ -71,12 +72,38 @@ void KisPerspectiveGridManager::toggleGrid()
     m_view->updateCanvas();
 }
 
+void KisPerspectiveGridManager::clearPerspectiveGrid()
+{
+    KisImageSP image = m_view->canvasSubject()->currentImg();
+    if (image ) {
+        image->perspectiveGrid()->clearSubGrids();
+        m_view->updateCanvas();
+        m_toggleGrid->setChecked(false);
+    }
+}
+
+void KisPerspectiveGridManager::startEdition()
+{
+    m_toggleEdition = true;
+    m_toggleGrid->setEnabled( false );
+    if( m_toggleGrid->isChecked() )
+        m_view->updateCanvas();
+}
+
+void KisPerspectiveGridManager::stopEdition()
+{
+    m_toggleEdition = false;
+    m_toggleGrid->setEnabled( true );
+    if( m_toggleGrid->isChecked() )
+        m_view->updateCanvas();
+}
+
 void KisPerspectiveGridManager::drawGrid(QRect wr, QPainter *p, bool openGL )
 {
     KisImageSP image = m_view->canvasSubject()->currentImg();
 
     
-    if (image && m_toggleGrid->isChecked()) {
+    if (image && m_toggleGrid->isChecked() && !m_toggleEdition) {
         KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 
         GridDrawer *gridDrawer = 0;

@@ -21,9 +21,10 @@
 #ifndef _KIS_TOOL_PERSPECTIVE_GRID_H_
 #define _KIS_TOOL_PERSPECTIVE_GRID_H_
 
-#include "kis_point.h"
-#include "kis_tool_non_paint.h"
-#include "kis_tool_factory.h"
+#include <kis_perspective_grid.h>
+#include <kis_point.h>
+#include <kis_tool_non_paint.h>
+#include <kis_tool_factory.h>
 
 class KisToolPerspectiveGrid : public KisToolNonPaint {
     enum PerspectiveGridEditionMode {
@@ -72,6 +73,7 @@ protected:
 
 private:
     void drawSmallRectangle(KisCanvasPainter& gc, QPoint p);
+    bool mouseNear(const QPoint& mousep, const QPoint point);
 
 protected:
     KisPoint m_dragStart;
@@ -83,6 +85,9 @@ private:
     KisCanvasSubject *m_subject;
     KisPointVector m_points;
     PerspectiveGridEditionMode m_mode;
+    Q_INT32 m_handleSize, m_handleHalfSize;
+    KisPerspectiveGridNodeSP m_selectedNode1, m_selectedNode2;
+
 };
 
 

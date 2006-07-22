@@ -21,6 +21,8 @@
 #ifndef KIS_GRID_DRAWER_H
 #define KIS_GRID_DRAWER_H
 
+#include <math.h>
+
 #include <qobject.h>
 #include <qpainter.h>
 
@@ -51,14 +53,24 @@ class GridDrawer {
         inline LineEquation computeLineEquation(const KisPoint* p1, const KisPoint* p2) const
         {
             LineEquation eq;
-            eq.a = (p2->y() - p1->y()) / (double)( p2->x() - p1->x() );
-            eq.b = -eq.a * p1->x() + p1->y();
+            double x1 = p1->x(); double x2 = p2->x();
+            if( fabs(x1 - x2) < 0.000001 )
+            {
+                x1 += 0.00001; // Introduce a small perturbation
+            }
+            eq.a = (p2->y() - p1->y()) / (double)( x2 - x1 );
+            eq.b = -eq.a * x1 + p1->y();
             return eq;
         }
         inline KisPoint computeIntersection(const LineEquation& d1, const LineEquation& d2) const
         {
-            double x = (d1.b - d2.b) / (d2.a - d1.a);
-            return KisPoint(x, d2.a * x + d2.b);
+            double a1 = d1.a; double a2 = d2.a;
+            if( fabs(a1 - a2) < 0.000001 )
+            {
+                a1 += 0.00001; // Introduce a small perturbation
+            }
+            double x = (d1.b - d2.b) / (a2 - a1);
+            return KisPoint(x, a2 * x + d2.b);
         }
         Qt::PenStyle gs2style(Q_UINT32 s);
 };

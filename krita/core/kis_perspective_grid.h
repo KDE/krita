@@ -79,6 +79,7 @@ class KisPerspectiveGrid {
         inline QValueList<KisSubPerspectiveGrid*>::const_iterator begin() const { return m_subGrids.begin(); }
         inline QValueList<KisSubPerspectiveGrid*>::const_iterator end() const { return m_subGrids.end(); }
         inline bool hasSubGrids() const { return !m_subGrids.isEmpty(); }
+        void clearSubGrids();
     private:
         QValueList<KisSubPerspectiveGrid*> m_subGrids;
 };

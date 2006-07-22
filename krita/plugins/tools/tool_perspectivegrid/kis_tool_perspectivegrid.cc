@@ -38,16 +38,17 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_move_event.h>
+#include <kis_perspective_grid_manager.h>
 #include <kis_selected_transaction.h>
 #include <kis_painter.h>
 #include <kis_paintop_registry.h>
-#include <kis_perspective_grid.h>
 #include <kis_vec.h>
 
 #include <kis_canvas.h>
 
 KisToolPerspectiveGrid::KisToolPerspectiveGrid()
-    : super(i18n("Perspective grid"))
+    : super(i18n("Perspective grid")), m_handleSize(13), m_handleHalfSize(6)
+
 {
     setName("tool_perspective_grid");
 
@@ -61,11 +62,13 @@ KisToolPerspectiveGrid::~KisToolPerspectiveGrid()
 
 void KisToolPerspectiveGrid::activate()
 {
+    m_subject->perspectiveGridManager()->startEdition();
     if( ! m_subject->currentImg()->perspectiveGrid()->hasSubGrids() )
     {
         m_mode = MODE_CREATION;
         m_points.clear();
     } else {
+        m_mode = MODE_EDITING;
         drawGrid();
     }
     super::activate();
@@ -73,6 +76,7 @@ void KisToolPerspectiveGrid::activate()
 
 void KisToolPerspectiveGrid::deactivate()
 {
+    m_subject->perspectiveGridManager()->stopEdition();
     if( m_mode == MODE_CREATION )
     {
         drawGridCreation();
@@ -90,22 +94,126 @@ void KisToolPerspectiveGrid::update (KisCanvasSubject *subject)
     super::update(m_subject);
 }
 
+bool KisToolPerspectiveGrid::mouseNear(const QPoint& mousep, const QPoint point)
+{
+    return (QRect( (point.x() - m_handleHalfSize), (point.y() - m_handleHalfSize), m_handleSize, m_handleSize).contains(mousep) );
+}
+
 void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
 {
-    if( m_mode == MODE_CREATION )
+    if( m_mode == MODE_CREATION && event->button() == LeftButton)
     {
-        if (event->button() == LeftButton) {
-            m_dragging = true;
-    
-            if (m_points.isEmpty())
+        m_dragging = true;
+
+        if (m_points.isEmpty())
+        {
+            m_dragStart = event->pos();
+            m_dragEnd = event->pos();
+            m_points.append(m_dragStart);
+        } else {
+            m_dragStart = m_dragEnd;
+            m_dragEnd = event->pos();
+            drawGridCreation();
+        }
+    } else if(m_mode == MODE_EDITING && event->button() == LeftButton){
+        // Look for the handle which was pressed
+        if (!m_subject)
+            return;
+        KisPerspectiveGrid* pGrid = m_subject->currentImg()->perspectiveGrid();
+        KisCanvasController *controller = m_subject->canvasController();
+        Q_ASSERT(controller);
+        QPoint mousep = controller->windowToView( event->pos().roundQPoint() );
+
+        for( QValueList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it)
+        {
+            KisSubPerspectiveGrid* grid = *it;
+            if( mouseNear( mousep, controller->windowToView(grid->topLeft()->roundQPoint() ) ) )
             {
-                m_dragStart = event->pos();
+                kdDebug() << " PRESS TOPLEFT HANDLE " << endl;
+                m_mode = MODE_DRAGING_NODE;
+                m_selectedNode1 = grid->topLeft();
+                break;
+            }
+            else if( mouseNear( mousep, controller->windowToView(grid->topRight()->roundQPoint() ) ) )
+            {
+                kdDebug() << " PRESS TOPRIGHT HANDLE " << endl;
+                m_mode = MODE_DRAGING_NODE;
+                m_selectedNode1 = grid->topRight();
+                break;
+            }
+            else if( mouseNear( mousep, controller->windowToView(grid->bottomLeft()->roundQPoint() ) ) )
+            {
+                kdDebug() << " PRESS BOTTOMLEFT HANDLE " << endl;
+                m_mode = MODE_DRAGING_NODE;
+                m_selectedNode1 = grid->bottomLeft();
+                break;
+            }
+            else if( mouseNear( mousep, controller->windowToView(grid->bottomRight()->roundQPoint() ) ) )
+            {
+                kdDebug() << " PRESS BOTTOMRIGHT HANDLE " << endl;
+                m_mode = MODE_DRAGING_NODE;
+                m_selectedNode1 = grid->bottomRight();
+                break;
+            }
+            else if( !grid->leftGrid() && mouseNear( mousep, controller->windowToView( ((*grid->topLeft() + *grid->bottomLeft() )*0.5) ).roundQPoint() ) )
+            {
+                kdDebug() << " PRESS LEFT HANDLE " << endl;
+                m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
+                drawGrid();
+                m_selectedNode1 = new KisPerspectiveGridNode( *grid->topLeft() );
+                m_selectedNode2 = new KisPerspectiveGridNode( *grid->bottomLeft() );
+                KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid( m_selectedNode1, grid->topLeft() , grid->bottomLeft(), m_selectedNode2);
                 m_dragEnd = event->pos();
-                m_points.append(m_dragStart);
-            } else {
-                m_dragStart = m_dragEnd;
+                newsubgrid->setRightGrid( grid);
+                grid->setLeftGrid( newsubgrid);
+                pGrid->addNewSubGrid( newsubgrid);
+                drawGrid();
+                break;
+            }
+            else if( !grid->rightGrid() && mouseNear( mousep, controller->windowToView( ((*grid->topRight() + *grid->bottomRight() )*0.5) ).roundQPoint() ) )
+            {
+                kdDebug() << " PRESS RIGHT HANDLE " << endl;
+                m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
+                drawGrid();
+                m_selectedNode1 = new KisPerspectiveGridNode( *grid->topRight() );
+                m_selectedNode2 = new KisPerspectiveGridNode( *grid->bottomRight() );
+                KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid( grid->topRight(), m_selectedNode1, m_selectedNode2, grid->bottomRight());
                 m_dragEnd = event->pos();
-                drawGridCreation();
+                newsubgrid->setLeftGrid( grid);
+                grid->setRightGrid( newsubgrid);
+                pGrid->addNewSubGrid( newsubgrid);
+                drawGrid();
+                break;
+            }
+            else if( !grid->topGrid() && mouseNear( mousep, controller->windowToView( ((*grid->topLeft() + *grid->topRight() )*0.5) ).roundQPoint() ) )
+            {
+                kdDebug() << " PRESS TOP HANDLE " << endl;
+                m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
+                drawGrid();
+                m_selectedNode1 = new KisPerspectiveGridNode( *grid->topLeft() );
+                m_selectedNode2 = new KisPerspectiveGridNode( *grid->topRight() );
+                KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid( m_selectedNode1, m_selectedNode2,  grid->topRight(), grid->topLeft() );
+                m_dragEnd = event->pos();
+                newsubgrid->setBottomGrid( grid);
+                grid->setTopGrid( newsubgrid);
+                pGrid->addNewSubGrid( newsubgrid);
+                drawGrid();
+                break;
+            }
+            else if( !grid->bottomGrid() && mouseNear( mousep, controller->windowToView( ((*grid->bottomLeft() + *grid->bottomRight() )*0.5) ).roundQPoint() ) )
+            {
+                kdDebug() << " PRESS BOTTOM HANDLE " << endl;
+                m_mode = MODE_DRAGING_TRANSLATING_TWONODES;
+                drawGrid();
+                m_selectedNode1 = new KisPerspectiveGridNode( *grid->bottomLeft() );
+                m_selectedNode2 = new KisPerspectiveGridNode( *grid->bottomRight() );
+                KisSubPerspectiveGrid* newsubgrid = new KisSubPerspectiveGrid( grid->bottomLeft(), grid->bottomRight(), m_selectedNode2, m_selectedNode1);
+                m_dragEnd = event->pos();
+                newsubgrid->setTopGrid( grid);
+                grid->setBottomGrid( newsubgrid);
+                pGrid->addNewSubGrid( newsubgrid);
+                drawGrid();
+                break;
             }
         }
     }
@@ -125,6 +233,22 @@ void KisToolPerspectiveGrid::move(KisMoveEvent *event)
             drawGridCreation();
         }
     } else {
+        if( m_mode == MODE_DRAGING_NODE)
+        {
+            drawGrid();
+            m_selectedNode1->setX( event->pos().x() );
+            m_selectedNode1->setY( event->pos().y() );
+            drawGrid();
+        }
+        if( m_mode == MODE_DRAGING_TRANSLATING_TWONODES)
+        {
+            drawGrid();
+            KisPoint translate = event->pos() - m_dragEnd;
+            m_dragEnd = event->pos();
+            *m_selectedNode1 += translate;;
+            *m_selectedNode2 += translate;;
+            drawGrid();
+        }
     }
 }
 
@@ -143,8 +267,13 @@ void KisToolPerspectiveGrid::buttonRelease(KisButtonReleaseEvent *event)
                 drawGridCreation(); // Clean
                 m_subject->currentImg()->perspectiveGrid()->addNewSubGrid( new KisSubPerspectiveGrid( new KisPerspectiveGridNode(m_points[0]), new KisPerspectiveGridNode(m_points[1]), new KisPerspectiveGridNode(m_points[2]), new KisPerspectiveGridNode(m_points[3]) ) );
                 drawGrid();
+                m_mode = MODE_EDITING;
             }
         }
+    } else {
+        m_mode = MODE_EDITING;
+        m_selectedNode1 = 0;
+        m_selectedNode2 = 0;
     }
 
 /*    if (m_dragging && event->button() == RightButton) {
@@ -225,7 +354,7 @@ void KisToolPerspectiveGrid::drawGridCreation(KisCanvasPainter& gc)
 
 void KisToolPerspectiveGrid::drawSmallRectangle(KisCanvasPainter& gc, QPoint p)
 {
-    gc.drawRect( p.x() - 5 , p.y() - 5 , 9, 9);
+    gc.drawRect( p.x() - m_handleHalfSize - 1, p.y() - m_handleHalfSize - 1, m_handleSize, m_handleSize);
 }
 
 void KisToolPerspectiveGrid::drawGrid(KisCanvasPainter& gc)

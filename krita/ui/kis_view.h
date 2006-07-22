@@ -274,13 +274,14 @@ private:
     virtual KisDoc * document() const;
 
     inline KisGridManager * gridManager() { return m_gridManager; }
-    inline KisPerspectiveGridManager* perspectiveGridManager() { return m_perspectiveGridManager; }
+    virtual KisPerspectiveGridManager* perspectiveGridManager() { return m_perspectiveGridManager; }
     
     inline KisSelectionManager * selectionManager() { return m_selectionManager; }
 
     KoPaletteManager * paletteManager();
 
     KisProfile *  monitorProfile();
+
 
 // -------------------------------------------------------------------------//
 //                    KisCanvasController implementation

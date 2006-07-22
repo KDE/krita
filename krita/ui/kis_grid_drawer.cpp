@@ -71,15 +71,7 @@ void GridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& /*wr*/, cons
     LineEquation d34 = computeLineEquation( grid->bottomRight(), grid->bottomLeft() );
     LineEquation d41 = computeLineEquation( grid->bottomLeft(), grid->topLeft() );
     
-    if( d12.a == d34.a )
-    {
-        d12.a += 0.0001; // Introduce a small perturbation
-    }
     KisPoint horizVanishingPoint = computeIntersection(d12,d34);
-    if( d23.a == d41.a )
-    {
-        d23.a += 0.0001; // Introduce a small perturbation
-    }
     KisPoint vertVanishingPoint = computeIntersection(d23,d41);
     
     for(uint i = 1; i < grid->subdivisions(); i ++)

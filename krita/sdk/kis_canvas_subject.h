@@ -39,6 +39,7 @@ class KisColor;
 class KoPaletteManager;
 class KisProfile;
 class KisPaintOpSettings;
+class KisPerspectiveGridManager;
 
 /**
  * KisCanvasSubject is part of the Observer pattern. Classes implementing KisCanvasObserver
@@ -178,7 +179,10 @@ public:
      */
     virtual KisProfile *  monitorProfile() = 0;
 
-
+    /**
+     * Get the perspective grid manager.
+     */
+    virtual KisPerspectiveGridManager* perspectiveGridManager() = 0;
 private:
     KisCanvasSubject(const KisCanvasSubject&);
     KisCanvasSubject& operator=(const KisCanvasSubject&);

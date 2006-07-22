@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 
+class KAction;
 class KActionCollection;
 class KToggleAction;
 class KisView;
@@ -35,13 +36,18 @@ class KisPerspectiveGridManager : public QObject
         ~KisPerspectiveGridManager();
         void setup(KActionCollection * collection);
         void drawGrid(QRect wr, QPainter *p, bool openGL = false);
+        void startEdition();
+        void stopEdition();
     public slots:
         void updateGUI();
+        void clearPerspectiveGrid();
     private slots:
         void toggleGrid();
     private:
+        bool m_toggleEdition;
         KisView* m_view;
         KToggleAction* m_toggleGrid;
+        KAction* m_gridClear;
 };
 
 #endif

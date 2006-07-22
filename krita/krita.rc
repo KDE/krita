@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="11">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="12">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
@@ -48,6 +48,9 @@
    <Action name="view_fast_grid_20x20" />
    <Action name="view_fast_grid_40x40" />
   </Menu>
+  <Seperator/>
+  <Action name="view_toggle_perspective_grid" />
+  <Action name="view_clear_perspective_grid" />
   <Separator/>
   <Action name="view_palette_action_menu"/>
   <Separator/>

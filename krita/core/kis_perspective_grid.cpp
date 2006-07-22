@@ -49,5 +49,15 @@ bool KisPerspectiveGrid::addNewSubGrid( KisSubPerspectiveGrid* ng )
         return false;
     }
     m_subGrids.push_back(ng);
+    return true;
 }
 
+
+void KisPerspectiveGrid::clearSubGrids( )
+{
+    for( QValueList<KisSubPerspectiveGrid*>::const_iterator it = begin(); it != end(); ++it)
+    {
+        delete *it;
+    }
+    m_subGrids.clear();
+}

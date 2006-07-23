@@ -132,6 +132,16 @@ public:
     }
 
     /**
+     * Return a colorspace that works with the parameter profile.
+     * @param csID the ID of the colorspace that you want to have returned
+     * @param profileName the name of the KoColorProfile to be combined with the colorspace
+     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
+     */
+    KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profilename) {
+        return colorSpace(KoID(colorSpaceId, ""), profilename);
+    }
+
+    /**
      * Convenience method to get the often used alpha colorspace
      */
     KoColorSpace * alpha8();

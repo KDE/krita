@@ -685,7 +685,7 @@ QImage KoLcmsColorSpaceTrait::convertToQImage(const quint8 *data, qint32 width, 
     KoColorSpace * dstCS;
 
     if (dstProfile)
-        dstCS = m_parent->colorSpace(KoID("RGBA",""),dstProfile->productName());
+        dstCS = m_parent->colorSpace("RGBA", dstProfile);
     else
         dstCS = m_parent->rgb8();
 

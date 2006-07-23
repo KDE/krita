@@ -752,12 +752,12 @@ KoColorSpace *KoUniColorChooser::rgbColorSpace()
 
 KoColorSpace *KoUniColorChooser::labColorSpace()
 {
-    return KoColorSpaceRegistry::instance()->colorSpace(KoID("LABA",0),"");
+    return KoColorSpaceRegistry::instance()->colorSpace("LABA",0);
 }
 
 KoColorSpace *KoUniColorChooser::cmykColorSpace()
 {
-    return KoColorSpaceRegistry::instance()->colorSpace(KoID("CMYK",0),"");
+    return KoColorSpaceRegistry::instance()->colorSpace("CMYK",0);
 }
 
 void KoUniColorChooser::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)

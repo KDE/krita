@@ -21,6 +21,7 @@
 #define _KOZOOMMODE_H_
 
 #include <QString>
+#include <QFlags>
 #include "koffice_export.h"
 
 /**
@@ -31,10 +32,12 @@ class KOFFICEUI_EXPORT KoZoomMode
 public:
     enum Mode
     {
-        ZOOM_WIDTH    = 0,  ///< zoom pagewidth
-        ZOOM_PAGE     = 1,  ///< zoom to pagesize
-        ZOOM_CONSTANT = 2   ///< zoom x %
+        ZOOM_CONSTANT = 0,  ///< zoom x %
+        ZOOM_WIDTH    = 1,  ///< zoom pagewidth
+        ZOOM_PAGE     = 2   ///< zoom to pagesize
     };
+
+    Q_DECLARE_FLAGS(Modes, Mode)
     
     /// \param mode the mode name
     /// \return the to Mode converted QString \c mode
@@ -50,5 +53,7 @@ public:
 private:
     static const char * modes[];
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoZoomMode::Modes)
 
 #endif

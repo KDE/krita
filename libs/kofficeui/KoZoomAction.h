@@ -1,5 +1,6 @@
 /* This file is part of the KDE libraries
     Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
+    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 #include <kaction.h>
 #include <koffice_export.h>
 #include <kselectaction.h>
+#include <KoZoomMode.h>
 
 /**
  * Class KoZoomAction implements an action to provide zoom values.
@@ -38,14 +40,16 @@ public:
 
   /**
    * Creates a new zoom action.
+   * @param zoomModes which zoom modes that should be shown
    */
-  KoZoomAction( const QString& text, const QIcon& pix, 
+  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QIcon& pix,
     const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
 
   /**
    * Creates a new zoom action.
+   * @param zoomModes which zoom modes that should be shown
    */
-  KoZoomAction( const QString& text, const QString& pix, 
+  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, const QString& pix,
     const KShortcut& cut = KShortcut(), KActionCollection* parent = 0, const char* name = 0 );
 
 public Q_SLOTS:
@@ -62,6 +66,11 @@ public Q_SLOTS:
    */
   void setZoom( int zoom );
 
+  /**
+   * Change the zoom modes that should be shown
+   */
+  void setZoomModes( KoZoomMode::Modes zoomModes );
+
 protected Q_SLOTS:
 
   void triggered( const QString& text );
@@ -77,6 +86,14 @@ Q_SIGNALS:
 protected:
 
   void init();
+
+  /// @return list of zoom levels
+  QStringList generateZoomLevels();
+
+  /// Regenerates the action's items
+  void regenerateItems(const QString& zoomString);
+
+  KoZoomMode::Modes m_zoomModes;
 
 };
 

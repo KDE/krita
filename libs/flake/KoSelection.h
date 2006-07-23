@@ -31,6 +31,8 @@
 
 #include <koffice_export.h>
 
+class KoShapeGroup;
+
 typedef QSet<KoShape*> KoSelectionSet;
 
 /**
@@ -96,6 +98,7 @@ private slots:
 
 private:
     void requestSelectionChangedEvent();
+    void selectGroupChilds( KoShapeGroup *group );
 
     KoSelectionSet m_selectedObjects;
     bool m_eventTriggered;

@@ -49,20 +49,40 @@ void KoSelection::paint( QPainter &painter, KoViewConverter &converter)
 */
 }
 
+void KoSelection::selectGroupChilds( KoShapeGroup *group )
+{
+    if( ! group )
+        return;
+
+    foreach(KoShape *shape, group->iterator()) {
+        if( m_selectedObjects.contains(shape))
+            continue;
+        m_selectedObjects << shape;
+
+        KoShapeGroup* childGroup = dynamic_cast<KoShapeGroup*>( shape );
+        if( childGroup )
+            selectGroupChilds( childGroup );
+    }
+}
+
 void KoSelection::select(KoShape * object)
 {
     Q_ASSERT(object != this);
     if(m_selectedObjects.contains(object))
         return;
     m_selectedObjects << object;
-    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(object->parent());
-    if(group && !m_selectedObjects.contains(group)) {
-        m_selectedObjects << group;
-        foreach(KoShape *shape, group->iterator()) {
-            if(! m_selectedObjects.contains(shape))
-                m_selectedObjects << shape;
+
+    KoShapeContainer *parent = object->parent();
+    while( parent ) {
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(parent);
+        if( ! group ) break;
+        if( ! m_selectedObjects.contains(group) ) {
+            m_selectedObjects << group;
+            selectGroupChilds( group );
         }
+        parent = group->parent();
     }
+
     if(m_selectedObjects.count() == 1)
     {
         rotate(object->rotation());

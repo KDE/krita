@@ -25,7 +25,8 @@ public:
     /// the selection type for KoSelection::selectedObjects()
     enum SelectionType {
         FullSelection,      ///< Create a list of all objects in the selection
-        StrippedSelection   ///< Create a stripped list, without children if the container is also in the list.
+        StrippedSelection,  ///< Create a stripped list, without children if the container is also in the list.
+        TopLevelSelection   ///< Create a list, much like the StrippedSelection, but have the KoShapeGroup instead of all of its children if one is selected.
     };
 
     /// Enum determining which handle is meant, used in KoInteractionTool

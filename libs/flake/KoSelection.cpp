@@ -175,7 +175,8 @@ const KoSelectionSet KoSelection::selectedShapes(KoFlake::SelectionType strip) c
     bool doStripping = strip == KoFlake::StrippedSelection;
     foreach (KoShape *shape, m_selectedObjects) {
         KoShapeContainer *container = shape->parent();
-        if(dynamic_cast<KoShapeGroup*>(shape)) // since a KoShapeGroup
+        if(strip != KoFlake::TopLevelSelection && dynamic_cast<KoShapeGroup*>(shape))
+            // since a KoShapeGroup
             // guarentees all its children are selected at the same time as itself
             // is selected we will only return its children.
             continue;

@@ -544,7 +544,7 @@ void KisView::updateStatusBarProfileLabel()
         m_statusBarProfileLabel->setText(i18n("No profile"));
     }
     else {
-        m_statusBarProfileLabel->setText(img->colorSpace()->id().name() + "  " + img->getProfile()->productName());
+        m_statusBarProfileLabel->setText(img->colorSpace()->name() + "  " + img->getProfile()->productName());
     }
 }
 

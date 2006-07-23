@@ -118,7 +118,7 @@ void KoColorSpaceRegistry::init()
         abort();
     }
 
-     KService::List::ConstIterator iter;
+    KService::List::ConstIterator iter;
     for(iter = offers.begin(); iter != offers.end(); ++iter)
     {
         KService::Ptr service = *iter;
@@ -154,7 +154,7 @@ KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) cons
     return m_profileMap[name];
 }
 
-QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoID id)
+QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id)
 {
     return profilesFor(get(id));
 }
@@ -190,7 +190,7 @@ KoColorSpaceRegistry::paintDeviceActionsFor(KoColorSpace* cs) {
     return m_paintDevActionMap[cs->id()];
 }
 
-KoColorSpace * KoColorSpaceRegistry::colorSpace(const KoID & csID, const QString & pName)
+KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const QString &pName)
 {
     QString profileName = pName;
 
@@ -204,7 +204,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const KoID & csID, const QString
         profileName = csf->defaultProfile();
     }
 
-    QString name = csID.id() + "<comb>" + profileName;
+    QString name = csID + "<comb>" + profileName;
 
     if (m_csMap.find(name) == m_csMap.end()) {
         KoColorSpaceFactory *csf = get(csID);
@@ -228,7 +228,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const KoID & csID, const QString
 }
 
 
-KoColorSpace * KoColorSpaceRegistry::colorSpace(const KoID & csID, const KoColorProfile * profile)
+KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoColorProfile *profile)
 {
     if( profile )
     {
@@ -245,7 +245,7 @@ KoColorSpace * KoColorSpaceRegistry::colorSpace(const KoID & csID, const KoColor
             if(!cs )
                 return 0;
 
-            QString name = csID.id() + "<comb>" + profile->productName();
+            QString name = csID + "<comb>" + profile->productName();
             m_csMap[name] = cs;
         }
 
@@ -262,7 +262,7 @@ KoColorSpace * KoColorSpaceRegistry::alpha8()
 
 KoColorSpace * KoColorSpaceRegistry::rgb8()
 {
-    return colorSpace(KoID("RGBA", ""), "");
+    return colorSpace("RGBA", "");
 }
 
 #include "KoColorSpaceRegistry.moc"

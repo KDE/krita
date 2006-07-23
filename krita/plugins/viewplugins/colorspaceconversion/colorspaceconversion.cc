@@ -91,7 +91,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
         if (KMessageBox::warningContinueCancel(m_view,
             i18n("This conversion will convert your %1 image through 16-bit L*a*b* and back.\n"
                     "Watercolor and openEXR colorspaces will even be converted through 8-bit RGB.\n"
-                    , image->colorSpace()->id().name()),
+                    , image->colorSpace()->name()),
             i18n("Colorspace Conversion"),
             KGuiItem(i18n("Continue")),
             "lab16degradation") != KMessageBox::Continue) return;
@@ -101,7 +101,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
-    dlgColorSpaceConversion->setCaption(i18n("Convert All Layers From ") + image->colorSpace()->id().name());
+    dlgColorSpaceConversion->setCaption(i18n("Convert All Layers From ") + image->colorSpace()->name());
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         // XXX: Do the rest of the stuff
@@ -128,7 +128,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
         if (KMessageBox::warningContinueCancel(m_view,
             i18n("This conversion will convert your %1 layer through 16-bit L*a*b* and back.\n"
                     "Watercolor and openEXR colorspaces will even be converted through 8-bit RGB.\n"
-                    , dev->colorSpace()->id().name()),
+                    , dev->colorSpace()->name()),
             i18n("Colorspace Conversion"),
             KGuiItem(i18n("Continue")),
             "lab16degradation") != KMessageBox::Continue) return;
@@ -138,7 +138,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(m_view, "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
-    dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + dev->colorSpace()->id().name());
+    dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From") + dev->colorSpace()->name());
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();

@@ -40,7 +40,7 @@ namespace {
 
 KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent,
                                        KoColorProfile *p) :
-    KoColorSpace(KoID("ALPHA", i18n("Alpha mask")),  parent)
+    KoColorSpace("ALPHA", i18n("Alpha mask"),  parent)
     , KoU8ColorSpaceTrait(0)
     , KoLcmsColorSpaceTrait(TYPE_GRAY_8, icSigGrayData, p)
 {

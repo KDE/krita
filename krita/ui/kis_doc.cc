@@ -303,7 +303,7 @@ QDomElement KisDoc::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("mime", "application/x-kra");
     image.setAttribute("width", img->width());
     image.setAttribute("height", img->height());
-    image.setAttribute("colorspacename", img->colorSpace()->id().id());
+    image.setAttribute("colorspacename", img->colorSpace()->id());
     image.setAttribute("description", img->description());
     // XXX: Save profile as blob inside the image, instead of the product name.
     if (img->getProfile() && img->getProfile()-> valid())

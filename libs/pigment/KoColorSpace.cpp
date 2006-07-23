@@ -19,8 +19,9 @@
 
 #include "KoColorSpace.h"
 
-KoColorSpace::KoColorSpace(const KoID &id, KoColorSpaceRegistry * parent)
+KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent)
     : m_id(id)
+    , m_name( name )
     , m_parent( parent )
 {
     //m_dcop = 0;

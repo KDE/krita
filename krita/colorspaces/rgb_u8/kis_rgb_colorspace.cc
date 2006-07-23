@@ -45,7 +45,7 @@ namespace {
 }
 
 KisRgbColorSpace::KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-    KoColorSpace(KoID("RGBA", i18n("RGB (8-bit integer/channel)")), parent)
+    KoColorSpace("RGBA", i18n("RGB (8-bit integer/channel)"), parent)
     ,KoU8ColorSpaceTrait(PIXEL_ALPHA)
     ,KoLcmsColorSpaceTrait(TYPE_BGRA_8, icSigRgbData, p)
 {

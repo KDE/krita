@@ -53,7 +53,7 @@ namespace {
 
 // disable the lcms handling by setting profile=0
 KisRgbF32ColorSpace::KisRgbF32ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile */*p*/) :
-    KoColorSpace(KoID("RGBAF32", i18n("RGB (32-bit float/channel)")), parent)
+    KoColorSpace("RGBAF32", i18n("RGB (32-bit float/channel)"), parent)
     , KoF32ColorSpaceTrait(PIXEL_ALPHA * sizeof(float))
     , KoLcmsColorSpaceTrait(F32_LCMS_TYPE, icSigRgbData, 0)
 {

@@ -42,7 +42,7 @@ namespace {
 }
 
 KisGrayColorSpace::KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-    KoColorSpace(KoID("GRAYA", i18n("Grayscale")), parent)
+    KoColorSpace("GRAYA", i18n("Grayscale"), parent)
     , KoU8ColorSpaceTrait(PIXEL_GRAY_ALPHA)
     , KoLcmsColorSpaceTrait(TYPE_GRAYA_8, icSigGrayData, p)
 {

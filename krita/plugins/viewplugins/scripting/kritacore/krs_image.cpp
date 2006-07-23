@@ -90,7 +90,7 @@ Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr Image::colorSpaceId(Kross::Api::List::Ptr )
 {
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_image->colorSpace()->id().id() ));
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_image->colorSpace()->id() ));
 }
 
 
@@ -104,7 +104,7 @@ Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
     {
         csname = Kross::Api::Variant::toString(args->item(2));
     } else {
-        csname = m_image->colorSpace()->id().id();
+        csname = m_image->colorSpace()->id();
     }
     KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csname, 0);
     KisPaintLayer* layer;

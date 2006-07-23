@@ -38,7 +38,7 @@ namespace cmyk {
 }
 
 KisCmykColorSpace::KisCmykColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-    KoColorSpace(KoID("CMYK", i18n("CMYK")), parent)
+    KoColorSpace("CMYK", i18n("CMYK"), parent)
     , KoU8ColorSpaceTrait(PIXEL_CMYK_ALPHA)
     , KoLcmsColorSpaceTrait(TYPE_CMYK5_8, icSigCmykData, p)
 {

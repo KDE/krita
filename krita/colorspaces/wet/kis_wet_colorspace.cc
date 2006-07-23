@@ -112,7 +112,7 @@ int getH(int r, int g, int b)
 }
 
 KisWetColorSpace::KisWetColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-    KoColorSpace(KoID("WET", i18n("Watercolors")), parent)
+    KoColorSpace("WET", i18n("Watercolors"), parent)
     , KoLcmsColorSpaceTrait(0, icMaxEnumData, p)
 {
     wet_init_render_tab();

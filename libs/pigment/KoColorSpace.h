@@ -89,11 +89,11 @@ protected:
 
 public:
     /// Should be called by real color spaces
-    KoColorSpace(const KoID &id, KoColorSpaceRegistry * parent);
+    KoColorSpace(const QString &id, const QString &name, KoColorSpaceRegistry * parent);
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const {
-        return id().id() == rhs.id().id();
+        return id() == rhs.id();
     }
 
 
@@ -161,10 +161,14 @@ public:
     //========== Identification ===============================================//
 
     /**
-     * ID for use in files and internally: unchanging name +
-     * i18n'able description.
+     * ID for use in files and internally: unchanging name
      */
-    virtual KoID id() const {return m_id;};
+    virtual QString id() const {return m_id;};
+
+    /**
+     * i18n name.
+     */
+    virtual QString name() const {return m_name;};
 
     /**
      * lcms colorspace type definition.
@@ -448,8 +452,8 @@ public:
 
 private:
 
-    //DCOPObject * m_dcop;
-    KoID m_id;
+    QString m_id;
+    QString m_name;
 
 protected:
     KoColorSpaceRegistry * m_parent;

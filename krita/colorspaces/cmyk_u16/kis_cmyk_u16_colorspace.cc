@@ -41,7 +41,7 @@ namespace {
 }
 
 KisCmykU16ColorSpace::KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-    KoColorSpace(KoID("CMYKA16", i18n("CMYK (16-bit integer/channel)")), parent)
+    KoColorSpace("CMYKA16", i18n("CMYK (16-bit integer/channel)"), parent)
     , KoU16ColorSpaceTrait(PIXEL_ALPHA * sizeof(quint16))
     , KoLcmsColorSpaceTrait(TYPE_CMYK5_16, icSigCmykData, p)
 {

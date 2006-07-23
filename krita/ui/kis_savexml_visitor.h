@@ -55,7 +55,7 @@ public:
         layerElement.setAttribute("locked", layer->locked());
         layerElement.setAttribute("layertype", "paintlayer");
         layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
-        layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id().id());
+        layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id());
 
         m_elem.appendChild(layerElement);
 

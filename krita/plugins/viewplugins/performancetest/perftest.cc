@@ -670,7 +670,7 @@ QString PerfTest::filterTest(quint32 testCount)
 
             KisFilterSP f = KisFilterRegistry::instance()->get(*it);
             t.restart();
-            kDebug() << "test filter " << f->id().name() << " on " << img->colorSpace()->id().name() << endl;
+            kDebug() << "test filter " << f->id().name() << " on " << img->colorSpace()->name() << endl;
             for (quint32 i = 0; i < testCount; ++i) {
                 f->enableProgress();
                 f->process(l, l, f->configuration(f->createConfigurationWidget(m_view, l)), QRect(0, 0, 1000, 1000));

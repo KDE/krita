@@ -40,7 +40,7 @@ namespace {
 }
 
 KisGrayU16ColorSpace::KisGrayU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
-    KoColorSpace(KoID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")), parent)
+    KoColorSpace("GRAYA16", i18n("Grayscale (16-bit integer/channel)"), parent)
     , KoU16ColorSpaceTrait(PIXEL_ALPHA * sizeof(quint16))
     , KoLcmsColorSpaceTrait(TYPE_GRAYA_16, icSigGrayData, p)
 {

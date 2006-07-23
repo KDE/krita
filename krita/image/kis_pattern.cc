@@ -280,7 +280,7 @@ bool KisPattern::init()
 
 KisPaintDeviceSP KisPattern::image(KoColorSpace * colorSpace) {
     // Check if there's already a pattern prepared for this colorspace
-    QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.find(colorSpace->id().id());
+    QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.find(colorSpace->id());
     if (it != m_colorspaces.end())
         return (*it);
 
@@ -291,7 +291,7 @@ KisPaintDeviceSP KisPattern::image(KoColorSpace * colorSpace) {
 
     layer->convertFromQImage(m_img,"");
 
-    m_colorspaces[colorSpace->id().id()] = layer;
+    m_colorspaces[colorSpace->id()] = layer;
     return layer;
 }
 

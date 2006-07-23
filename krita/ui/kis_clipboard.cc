@@ -99,7 +99,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
 
     // ColorSpace id of layer data
     if (store->open("colorspace")) {
-        QString csName = selection->colorSpace()->id().id();
+        QString csName = selection->colorSpace()->id();
         store->write(csName.toAscii(), strlen(csName.toAscii()));
         store->close();
     }

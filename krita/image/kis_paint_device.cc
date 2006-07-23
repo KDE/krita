@@ -605,8 +605,8 @@ bool KisPaintDevice::read(KoStore *store)
 
 void KisPaintDevice::convertTo(KoColorSpace * dstColorSpace, qint32 renderingIntent)
 {
-    kDebug(41004) << "Converting " << objectName() << " to " << dstColorSpace->id().id() << " from "
-              << m_colorSpace->id().id() << "\n";
+    kDebug(41004) << "Converting " << objectName() << " to " << dstColorSpace->id() << " from "
+              << m_colorSpace->id() << "\n";
     if ( (colorSpace()->id() == dstColorSpace->id()) )
     {
         return;

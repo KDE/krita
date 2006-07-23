@@ -91,7 +91,9 @@ public:
      * @param id the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<KoColorProfile *>  profilesFor(KoID id);
+    QList<KoColorProfile *>  profilesFor(KoID id) {
+        return profilesFor(id.id());
+    }
 
     /**
      * Return the list of profiles for a colorspace with the argument id.
@@ -101,9 +103,7 @@ public:
      * @param colorProfileId the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
-    QList<KoColorProfile *>  profilesFor(const QString &colorSpaceId) {
-        return profilesFor(KoID(colorSpaceId, ""));
-    }
+    QList<KoColorProfile *>  profilesFor(const QString &colorSpaceId);
 
     /**
      * Return a colorspace that works with the parameter profile.
@@ -111,25 +111,17 @@ public:
      * @param profileName the name of the KoColorProfile to be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    KoColorSpace *  colorSpace(const KoID & csID, const QString & profileName);
-
-    /**
-     * Return a colorspace that works with the parameter profile.
-     * @param csID the ID of the colorspace that you want to have returned
-     * @param profile the profile be combined with the colorspace
-     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
-     */
-    KoColorSpace * colorSpace(const KoID & csID, const KoColorProfile * profile);
-
-    /**
-     * Return a colorspace that works with the parameter profile.
-     * @param csID the ID of the colorspace that you want to have returned
-     * @param profile the profile be combined with the colorspace
-     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
-     */
-    KoColorSpace * colorSpace(const QString &colorSpaceId, const KoColorProfile * profile) {
-        return colorSpace(KoID(colorSpaceId, ""), profile);
+    KoColorSpace *  colorSpace(const KoID &csID, const QString & profileName) {
+        return colorSpace(csID.id(), profileName);
     }
+
+    /**
+     * Return a colorspace that works with the parameter profile.
+     * @param colorSpaceId the ID string of the colorspace that you want to have returned
+     * @param profile the profile be combined with the colorspace
+     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
+     */
+    KoColorSpace * colorSpace(const QString &colorSpaceId, const KoColorProfile *profile);
 
     /**
      * Return a colorspace that works with the parameter profile.
@@ -137,9 +129,7 @@ public:
      * @param profileName the name of the KoColorProfile to be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profilename) {
-        return colorSpace(KoID(colorSpaceId, ""), profilename);
-    }
+    KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName);
 
     /**
      * Convenience method to get the often used alpha colorspace
@@ -172,7 +162,7 @@ private:
     QMap<QString, KoColorProfile * > m_profileMap;
     QMap<QString, KoColorSpace * > m_csMap;
     typedef QList<KisPaintDeviceAction *> PaintActionList;
-    QMap<KoID, PaintActionList> m_paintDevActionMap;
+    QMap<QString, PaintActionList> m_paintDevActionMap;
     KoColorSpace *m_alphaCs;
     static KoColorSpaceRegistry *m_singleton;
 };

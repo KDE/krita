@@ -321,7 +321,7 @@ void KisFilterManager::slotApplyFilter(int i)
             if (KMessageBox::warningContinueCancel(m_view,
                                                i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. "
                                                        , m_lastFilter->id().name()
-                                                       , dev->colorSpace()->id().name()),
+                                                       , dev->colorSpace()->name()),
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
                                                "lab16degradation") != KMessageBox::Continue) return;
@@ -331,7 +331,7 @@ void KisFilterManager::slotApplyFilter(int i)
             if (KMessageBox::warningContinueCancel(m_view,
                                                i18n("The %1 filter will convert your %2 data to 8-bit RGBA and vice versa. "
                                                        , m_lastFilter->id().name()
-                                                       , dev->colorSpace()->id().name()),
+                                                       , dev->colorSpace()->name()),
                                                i18n("Filter Will Convert Your Layer Data"),
                                                KGuiItem(i18n("Continue")),
                                                "rgba8degradation") != KMessageBox::Continue) return;

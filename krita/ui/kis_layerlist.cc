@@ -191,7 +191,7 @@ QString KisLayerItem::tooltip() const
     text += row.arg( i18n( "Composite mode:" ) ).arg( m_layer->compositeOp().id().name() );
     if( KisPaintLayer *player = dynamic_cast<KisPaintLayer*>( m_layer ) )
     {
-        text += row.arg( i18n( "Colorspace:" ) ).arg( player->paintDevice()->colorSpace()->id().name() );
+        text += row.arg( i18n( "Colorspace:" ) ).arg( player->paintDevice()->colorSpace()->name() );
         if( KoColorProfile *profile = player->paintDevice()->colorSpace()->getProfile() )
             text += row.arg( i18n( "Profile:" ) ).arg( profile->productName() );
     }

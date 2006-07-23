@@ -181,7 +181,7 @@ Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr ar
 
 Kross::Api::Object::Ptr PaintLayer::colorSpaceId(Kross::Api::List::Ptr )
 {
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( paintLayer()->paintDevice()->colorSpace()->id().id() ));
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant( paintLayer()->paintDevice()->colorSpace()->id() ));
 }
 
 

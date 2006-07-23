@@ -67,7 +67,7 @@ KisPartLayerImpl::KisPartLayerImpl(KisImageSP img, KisChildDoc * doc)
     : super(img.data(), i18n("Embedded Document"), OPACITY_OPAQUE), m_doc(doc)
 {
     m_cache = new KisPaintDevice(
-            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),""), name().toLatin1() );
+            KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA",""),""), name().toLatin1() );
     m_activated = false;
 }
 

@@ -175,7 +175,7 @@ void KisCImgFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilte
     img = CImg<>(width, height, 1, 3);
 
     KoColorSpace * cs = src->colorSpace();
-    KoColorSpace* rgb16CS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA16"),"");
+    KoColorSpace* rgb16CS = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA16"),"");
     KisPaintDeviceSP srcRGB16;
     if(rgb16CS)
     {
@@ -705,7 +705,7 @@ KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
 
 ColorSpaceIndependence KisCImgFilter::colorSpaceIndependence()
 {
-    KoColorSpace* rgb16CS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA16"),"");
+    KoColorSpace* rgb16CS = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA16"),"");
     if(rgb16CS)
     {
         return TO_RGBA16;

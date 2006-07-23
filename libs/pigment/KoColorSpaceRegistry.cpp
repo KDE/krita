@@ -145,7 +145,7 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
 }
 
-KoColorProfile *  KoColorSpaceRegistry::getProfileByName(const QString & name)
+KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & name) const
 {
     if (m_profileMap.find(name) == m_profileMap.end()) {
         return 0;
@@ -190,7 +190,7 @@ KoColorSpaceRegistry::paintDeviceActionsFor(KoColorSpace* cs) {
     return m_paintDevActionMap[cs->id()];
 }
 
-KoColorSpace * KoColorSpaceRegistry::getColorSpace(const KoID & csID, const QString & pName)
+KoColorSpace * KoColorSpaceRegistry::colorSpace(const KoID & csID, const QString & pName)
 {
     QString profileName = pName;
 
@@ -211,7 +211,7 @@ KoColorSpace * KoColorSpaceRegistry::getColorSpace(const KoID & csID, const QStr
         if(!csf)
             return 0;
 
-        KoColorProfile *p = getProfileByName(profileName);
+        KoColorProfile *p = profileByName(profileName);
         if(!p && profileName != "")
             return 0;
         KoColorSpace *cs = csf->createColorSpace(this, p);
@@ -228,11 +228,11 @@ KoColorSpace * KoColorSpaceRegistry::getColorSpace(const KoID & csID, const QStr
 }
 
 
-KoColorSpace * KoColorSpaceRegistry::getColorSpace(const KoID & csID, const KoColorProfile * profile)
+KoColorSpace * KoColorSpaceRegistry::colorSpace(const KoID & csID, const KoColorProfile * profile)
 {
     if( profile )
     {
-        KoColorSpace *cs = getColorSpace( csID, profile->productName());
+        KoColorSpace *cs = colorSpace( csID, profile->productName());
 
         if(!cs)
         {
@@ -251,18 +251,18 @@ KoColorSpace * KoColorSpaceRegistry::getColorSpace(const KoID & csID, const KoCo
 
         return cs;
     } else {
-        return getColorSpace( csID, "");
+        return colorSpace( csID, "");
     }
 }
 
-KoColorSpace * KoColorSpaceRegistry::getAlpha8()
+KoColorSpace * KoColorSpaceRegistry::alpha8()
 {
    return m_alphaCs;
 }
 
-KoColorSpace * KoColorSpaceRegistry::getRGB8()
+KoColorSpace * KoColorSpaceRegistry::rgb8()
 {
-    return getColorSpace(KoID("RGBA", ""), "");
+    return colorSpace(KoID("RGBA", ""), "");
 }
 
 #include "KoColorSpaceRegistry.moc"

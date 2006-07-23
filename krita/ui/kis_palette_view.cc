@@ -127,7 +127,7 @@ void KisPaletteView::setPalette(KisPalette* palette)
 
 void KisPaletteView::slotColorCellSelected( int col )
 {
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))
         return;
 
@@ -138,7 +138,7 @@ void KisPaletteView::slotColorCellSelected( int col )
 
 void KisPaletteView::slotColorCellDoubleClicked( int col )
 {
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))
         return;
 

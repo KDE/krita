@@ -127,10 +127,10 @@ void KisChannelSeparator::separate(KisProgressDisplayInterface * progress, enumS
         }
         else {
             if (channelSize == 1 || downscale) {
-                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("GRAYA",""),"" ), "8 bit grayscale sep");
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("GRAYA",""),"" ), "8 bit grayscale sep");
             }
             else {
-                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("GRAYA16",""),"" ), "16 bit grayscale sep");
+                dev = new KisPaintDevice( KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("GRAYA16",""),"" ), "16 bit grayscale sep");
                 destSize = 2;
             }
         }

@@ -558,7 +558,7 @@ bool KisGradientPainter::paintGradient(const KisPoint& gradientVectorStart,
         totalPixels *= 2;
     }*/
 
-    KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temporary device for gradient"));
+    KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->rgb8(), "temporary device for gradient"));
 
     for (int y = starty; y <= endy; y++) {
 

@@ -129,7 +129,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     QImage qimg;
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KoColorProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
+    KoColorProfile *  monitorProfile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
     qimg = selection->convertToQImage(monitorProfile);
 
     QMimeData *mimeData = new QMimeData;
@@ -177,7 +177,7 @@ KisPaintDeviceSP KisClipboard::clip()
             store->close();
         }
 
-        KoColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName, ""), profile);
+        KoColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName, ""), profile);
 
         m_clip = new KisPaintDevice(cs, "clip");
 
@@ -210,7 +210,7 @@ KisPaintDeviceSP KisClipboard::clip()
         if (behaviour == PASTE_ASSUME_MONITOR)
             profileName = cfg.monitorProfile();
 
-        cs = KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KoID("RGBA",""), profileName);
+        cs = KisMetaRegistry::instance()->csRegistry() ->colorSpace(KoID("RGBA",""), profileName);
         m_clip = new KisPaintDevice(cs, "from paste");
         Q_CHECK_PTR(m_clip);
         m_clip->convertFromQImage(qimg, profileName);
@@ -275,7 +275,7 @@ QSize KisClipboard::clipSize()
             store->close();
         }
 
-        KoColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName, ""), profile);
+        KoColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName, ""), profile);
 
         clip = new KisPaintDevice(cs, "clip");
 

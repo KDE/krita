@@ -67,7 +67,7 @@ true);
 //         QImage img;
 //         if(img.load(locate("data","krita/images/previewfilter.png")))
 //         {
-//            KisPaintDeviceSP preview = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),""));
+//            KisPaintDeviceSP preview = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA",""),""));
 //            preview->convertFromQImage(img,"");
 //            m_view->canvasSubject()->paletteManager()->addWidget(new KisFiltersListView(preview,m_view),"filterslist",krita::EFFECTSBOX, 0);
 //         }

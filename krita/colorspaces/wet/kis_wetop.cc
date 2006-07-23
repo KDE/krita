@@ -120,11 +120,11 @@ void KisWetOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), inf);
+        dab = brush->image(KisMetaRegistry::instance()->csRegistry()->alpha8(), inf);
     }
     else {
         KisAlphaMaskSP mask = brush->mask(inf);
-        dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->getAlpha8());
+        dab = computeDab(mask, KisMetaRegistry::instance()->csRegistry()->alpha8());
     }
 
     KoColorSpace * cs = device->colorSpace();

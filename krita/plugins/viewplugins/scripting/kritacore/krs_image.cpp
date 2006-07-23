@@ -78,7 +78,7 @@ Kross::Api::Object::Ptr Image::getHeight(Kross::Api::List::Ptr)
 }
 Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
 {
-    KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(Kross::Api::Variant::toString(args->item(0)), ""), "");
+    KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(Kross::Api::Variant::toString(args->item(0)), ""), "");
     if(!dstCS)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Colorspace %1 is not available, please check your installation.",Kross::Api::Variant::toString(args->item(0))) ) );
@@ -106,7 +106,7 @@ Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
     } else {
         csname = m_image->colorSpace()->id().id();
     }
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csname, ""), "");
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csname, ""), "");
     KisPaintLayer* layer;
     if(cs)
     {

@@ -607,7 +607,7 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height,  KoCol
     Q_ASSERT(colorSpace);
 
     if (colorSpace == 0) {
-        colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+        colorSpace = KisMetaRegistry::instance()->csRegistry()->rgb8();
         kWarning(41010) << "No colorspace specified: using RGBA\n";
     }
 
@@ -915,7 +915,7 @@ void KisImage::setProfile(const KoColorProfile * profile)
 {
     if (profile == 0) return;
 
-    KoColorSpace * dstCs= KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
+    KoColorSpace * dstCs= KisMetaRegistry::instance()->csRegistry()->colorSpace( colorSpace()->id(),
                                                                                          profile);
     if (dstCs) {
 

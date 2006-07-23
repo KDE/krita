@@ -462,7 +462,7 @@ KisPaintDeviceSP KisBrush::image(KoColorSpace * /*colorSpace*/, const KisPaintIn
     int outputWidth = outputImage.width();
     int outputHeight = outputImage.height();
 
-    KisPaintDevice *layer = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "brush");
+    KisPaintDevice *layer = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->rgb8(), "brush");
 
     Q_CHECK_PTR(layer);
 
@@ -1246,7 +1246,7 @@ void KisBrush::setHeight(qint32 h)
 }
 
 /*QImage KisBrush::outline(double pressure) {
-    KisLayerSP layer = image(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),""),
+    KisLayerSP layer = image(KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA",""),""),
                              KisPaintInformation(pressure));
     KisBoundary bounds(layer.data());
     int w = maskWidth(pressure);
@@ -1265,10 +1265,10 @@ void KisBrush::generateBoundary() {
     int h = maskHeight(KisPaintInformation());
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = image(KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KoID("RGBA",""),""), KisPaintInformation());
+        dev = image(KisMetaRegistry::instance()->csRegistry() ->colorSpace(KoID("RGBA",""),""), KisPaintInformation());
     } else {
         KisAlphaMaskSP amask = mask(KisPaintInformation());
-        KoColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA",""),"");
+        KoColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA",""),"");
         dev = new KisPaintDevice(cs, "tmp for generateBoundary");
         for (int y = 0; y < h; y++) {
             KisHLineIteratorPixel it = dev->createHLineIterator(0, y, w, true);

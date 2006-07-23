@@ -172,7 +172,7 @@ void KisFillPainter::fillRect(const QRect& rc, const KoColor& c)
 inline
 void KisFillPainter::eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
 {
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
     KoColor c(Qt::black, cs);
     fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT);
 }
@@ -180,7 +180,7 @@ void KisFillPainter::eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
 inline
 void KisFillPainter::eraseRect(const QRect& rc)
 {
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
     KoColor c(Qt::black, cs);
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT);
 }

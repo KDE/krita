@@ -43,7 +43,7 @@ KisPaintDeviceShape::KisPaintDeviceShape()
     : KoShape()
 {
 /*
-    KisColorSpace * cs = KisColorspaceFactoryRegistry::instance()->getRGB8();
+    KisColorSpace * cs = KisColorspaceFactoryRegistry::instance()->rgb8();
     m_device = new KisPaintDevice(cs, "Krita PaintDevice Shape");
 
     KisFillPainter painter;

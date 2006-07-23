@@ -57,48 +57,69 @@ public:
 public:
 
     /**
-     * Add the profile to the list.
+     * register the profile with the color space registry
+     * @param profile the new profile to be registred so it can be combined with
+     *  colorspaces.
      */
-    void addProfile(KoColorProfile * p);
+    void addProfile(KoColorProfile * profile);
 
     /**
-     * Return the profile associated with the given product name,
-     * or 0.
+     * Return a profile by its given name, or 0 if none registred.
+     * @return a profile by its given name, or 0 if none registred.
+     * @param name the product name as set on the profile.
+     * @see addProfile()
+     * @see KoColorProfile::productName()
      */
-    KoColorProfile *  getProfileByName(const QString & name);
+    KoColorProfile *  profileByName(const QString & name) const ;
 
     /**
-     * Return the list of profiles for this colorspacefactory
+     * Return the list of profiles for the argument colorspacefactory.
+     * Profiles will not work with any color space, you can query which profiles
+     * that are registred with this registry can be used in combination with the
+     * argument factory.
+     * @param factory the factory with which all the returned profiles will work.
+     * @return a list of profiles for the factory
      */
-    QList<KoColorProfile *>  profilesFor(KoColorSpaceFactory * cs);
+    QList<KoColorProfile *>  profilesFor(KoColorSpaceFactory * factory);
 
+    /**
+     * Return the list of profiles for a colorspace with the argument id.
+     * Profiles will not work with any color space, you can query which profiles
+     * that are registred with this registry can be used in combination with the
+     * argument factory.
+     * @param d the colorspace-id with which all the returned profiles will work.
+     * @return a list of profiles for the factory
+     */
     QList<KoColorProfile *>  profilesFor(KoID id);
 
     /**
-     * Return the colorspace + profile as named, or NULL if impossible combination.
+     * Return a colorspace that works with the parameter profile.
+     * @param csID the ID of the colorspace that you want to have returned
+     * @param profileName the name of the KoColorProfile to be combined with the colorspace
+     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    KoColorSpace *  getColorSpace(const KoID & csID, const QString & profileName);
+    KoColorSpace *  colorSpace(const KoID & csID, const QString & profileName);
 
     /**
-     * Return the colorspace + profile -- where the profile is matched on the name of the specified profile
+     * Return a colorspace that works with the parameter profile.
+     * @param csID the ID of the colorspace that you want to have returned
+     * @param profile the profile be combined with the colorspace
+     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    KoColorSpace * getColorSpace(const KoID & csID, const KoColorProfile * profile);
+    KoColorSpace * colorSpace(const KoID & csID, const KoColorProfile * profile);
 
     /**
      * Convenience method to get the often used alpha colorspace
      */
-    KoColorSpace * getAlpha8();
+    KoColorSpace * alpha8();
 
     /**
      * Convenience method to get an RGB colorspace with the default lcms profile
      */
-    KoColorSpace * getRGB8();
+    KoColorSpace * rgb8();
 
     /**
      * add a KisConstructPaintDeviceAction to the registry for a colorspace
-     *
-     * These actions are exectued when an image is created on the first layer
-     * in the image, on the image width and height rect.
      */
     void addPaintDeviceAction(KoColorSpace* cs, KisPaintDeviceAction* action);
 

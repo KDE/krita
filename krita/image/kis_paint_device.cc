@@ -661,7 +661,7 @@ void KisPaintDevice::setProfile(KoColorProfile * profile)
     if (profile == 0) return;
 
     KoColorSpace * dstSpace =
-            KisMetaRegistry::instance()->csRegistry()->getColorSpace( colorSpace()->id(),
+            KisMetaRegistry::instance()->csRegistry()->colorSpace( colorSpace()->id(),
                                                                       profile);
     if (dstSpace)
         m_colorSpace = dstSpace;
@@ -699,14 +699,14 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     }
 #if 0
     // XXX: Apply import profile
-    if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->getColorSpace(KoID("RGBA",""),"")) {
+    if (colorSpace() == KisMetaRegistry::instance()->csRegistry() ->colorSpace(KoID("RGBA",""),"")) {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
     }
     else {
 #endif
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KisMetaRegistry::instance()->csRegistry()
-                ->getColorSpace(KoID("RGBA",""),srcProfileName)->
+                ->colorSpace(KoID("RGBA",""),srcProfileName)->
                         convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
 //    }

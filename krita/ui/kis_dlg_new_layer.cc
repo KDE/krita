@@ -118,7 +118,7 @@ void NewLayerDialog::fillCmbComposite(const KoID & s)
         return;
     }
 
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(s,"");
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(s,"");
     if (cs) {
         m_page->cmbComposite->setCompositeOpList(cs->userVisiblecompositeOps());
     }

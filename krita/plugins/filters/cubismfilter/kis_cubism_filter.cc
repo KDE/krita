@@ -91,7 +91,7 @@ void KisCubismFilter::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
     else {
         if (src->image()) src->image()->lock();
     
-        KisPaintDeviceSP dev = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->getRGB8(), "temporary");
+        KisPaintDeviceSP dev = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()->rgb8(), "temporary");
         KisPainter gc(dev);
         gc.bitBlt(0, 0, COMPOSITE_COPY, src, rect.x(), rect.y(), rect.width(), rect.height());
         gc.end();

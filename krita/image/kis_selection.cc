@@ -36,14 +36,14 @@
 #include "kis_selection.h"
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->getAlpha8(), QString("selection for ") + dev->objectName())
+    : super(dev->parentLayer(), KisMetaRegistry::instance()->csRegistry()->alpha8(), QString("selection for ") + dev->objectName())
     , m_parentPaintDevice(dev)
 {
     Q_ASSERT(dev);
 }
 
 KisSelection::KisSelection()
-    : super(KisMetaRegistry::instance()->csRegistry()->getAlpha8(), "anonymous selection")
+    : super(KisMetaRegistry::instance()->csRegistry()->alpha8(), "anonymous selection")
     , m_parentPaintDevice(0)
 {
 }
@@ -110,7 +110,7 @@ QImage KisSelection::maskImage()
 void KisSelection::select(QRect r)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), MAX_SELECTED);
     qint32 x, y, w, h;
     extent(x, y, w, h);
@@ -119,7 +119,7 @@ void KisSelection::select(QRect r)
 void KisSelection::clear(QRect r)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
     painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
 }
 

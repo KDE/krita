@@ -685,9 +685,9 @@ QImage KoLcmsColorSpaceTrait::convertToQImage(const quint8 *data, qint32 width, 
     KoColorSpace * dstCS;
 
     if (dstProfile)
-        dstCS = m_parent->getColorSpace(KoID("RGBA",""),dstProfile->productName());
+        dstCS = m_parent->colorSpace(KoID("RGBA",""),dstProfile->productName());
     else
-        dstCS = m_parent->getRGB8();
+        dstCS = m_parent->rgb8();
 
     if (data)
         convertPixelsTo(const_cast<quint8 *>(data), img.bits(), dstCS, width * height, renderingIntent);

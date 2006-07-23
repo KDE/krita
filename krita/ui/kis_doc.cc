@@ -371,10 +371,10 @@ KisImageSP KisDoc::loadImage(const QDomElement& element)
 
         if ((profileProductName = element.attribute("profile")).isNull()) {
             // no mention of profile so get default profile
-            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(colorspacename,"");
+            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename,"");
         }
         else {
-            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(colorspacename, profileProductName);
+            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename, profileProductName);
         }
 
         if (cs == 0) {
@@ -515,7 +515,7 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
         cs = img->colorSpace();
     else
         // use default profile - it will be replaced later in completLoading
-        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(colorspacename,"");
+        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename,"");
 
     layer = new KisPaintLayer(img.data(), name, opacity, cs);
     Q_CHECK_PTR(layer);
@@ -801,7 +801,7 @@ KisImageSP KisDoc::newImage(const QString& name, qint32 width, qint32 height, Ko
     KisPaintLayer *layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorstrategy);
     Q_CHECK_PTR(layer);
 
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
     KisFillPainter painter;
 
     painter.begin(layer->paintDevice());
@@ -880,7 +880,7 @@ void KisDoc::paintContent(QPainter& painter, const QRect& rc, bool transparent, 
 {
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    KoColorProfile *  profile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
+    KoColorProfile *  profile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
     painter.scale(zoomX, zoomY);
     QRect rect = rc & m_currentImage->bounds();
     KisImage::PaintFlags paintFlags;
@@ -1100,7 +1100,7 @@ void KisDoc::setCurrentImage(KisImageSP image)
 void KisDoc::initEmpty()
 {
     KisConfig cfg;
-    KoColorSpace * rgb = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * rgb = KisMetaRegistry::instance()->csRegistry()->rgb8();
     newImage("", cfg.defImgWidth(), cfg.defImgHeight(), rgb);
 }
 

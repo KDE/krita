@@ -134,7 +134,7 @@ QString KisDlgImageProperties::description()
 
 KoColorSpace * KisDlgImageProperties::colorSpace()
 {
-    return KisMetaRegistry::instance()->csRegistry()->getColorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->currentText());
+    return KisMetaRegistry::instance()->csRegistry()->colorSpace(m_page->cmbColorSpaces->currentItem(), m_page->cmbProfile->currentText());
 }
 
 KoColorProfile * KisDlgImageProperties::profile()

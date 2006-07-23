@@ -75,7 +75,7 @@ KoColorProfile *  KisDlgApplyProfile::profile() const
 
     profileName = m_page->cmbProfile->currentText();
 
-    return KisMetaRegistry::instance()->csRegistry()->getProfileByName(profileName);
+    return KisMetaRegistry::instance()->csRegistry()->profileByName(profileName);
 }
 
 int KisDlgApplyProfile::renderIntent() const

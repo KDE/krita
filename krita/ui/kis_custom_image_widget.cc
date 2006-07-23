@@ -58,7 +58,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, qint32 
 }
 
 void KisCustomImageWidget::buttonClicked() {
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(cmbColorSpaces->currentItem(), cmbProfile->currentText());
 
     QColor qc(cmbColor->color());
 

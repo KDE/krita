@@ -200,7 +200,7 @@ void KisWetPaletteWidget::update(KisCanvasSubject *subject)
 
 void KisWetPaletteWidget::slotFGColorSelected(const QColor& c)
 {
-    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("WET", ""), ""));
+    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("WET", ""), ""));
     Q_ASSERT(cs);
 
     WetPack pack;
@@ -220,7 +220,7 @@ void KisWetPaletteWidget::slotWetnessChanged(int n)
     if (!m_subject)
         return;
 
-    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("WET", ""), ""));
+    KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("WET", ""), ""));
     Q_ASSERT(cs);
 
     KoColor color = m_subject->fgColor();
@@ -238,7 +238,7 @@ void KisWetPaletteWidget::slotStrengthChanged(double n)
         return;
 
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("WET", ""), ""));
+            KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("WET", ""), ""));
     Q_ASSERT(cs);
 
     KoColor color = m_subject->fgColor();

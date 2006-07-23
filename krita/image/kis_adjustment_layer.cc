@@ -104,7 +104,7 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
     m_selection = new KisSelection();
     KisFillPainter gc(KisPaintDeviceSP(m_selection.data()));
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
 
     if (selection) {
         gc.bitBlt(0, 0, COMPOSITE_COPY, KisPaintDeviceSP(selection.data()),

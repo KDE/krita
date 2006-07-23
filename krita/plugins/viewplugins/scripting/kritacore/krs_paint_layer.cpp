@@ -168,7 +168,7 @@ Kross::Api::Object::Ptr PaintLayer::endPainting(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr PaintLayer::convertToColorspace(Kross::Api::List::Ptr args)
 {
-    KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(Kross::Api::Variant::toString(args->item(0)), ""), "");
+    KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(Kross::Api::Variant::toString(args->item(0)), ""), "");
     if(!dstCS)
     {
         // FIXME: inform user

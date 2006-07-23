@@ -212,7 +212,7 @@ QImage KisRgbColorSpace::convertToQImage(const quint8 *data, qint32 width, qint3
     img = img.copy();
 
     if (dstProfile != 0) {
-        KoColorSpace *dstCS = m_parent->getColorSpace(KoID("RGBA",""),  dstProfile->productName());
+        KoColorSpace *dstCS = m_parent->colorSpace(KoID("RGBA",""),  dstProfile->productName());
         convertPixelsTo(img.bits(),
                         img.bits(), dstCS,
                         width * height, renderingIntent);

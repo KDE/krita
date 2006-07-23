@@ -118,7 +118,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     copyPainter.end();
     
     // Convert the dab to the colorspace of a selection
-    dab->convertTo(KisMetaRegistry::instance()->csRegistry()->getAlpha8());
+    dab->convertTo(KisMetaRegistry::instance()->csRegistry()->alpha8());
 
     // Add the dab as selection to the srcdev
     KisPainter copySelection(KisPaintDeviceSP(srcdev->selection().data()));

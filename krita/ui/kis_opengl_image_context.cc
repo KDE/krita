@@ -220,7 +220,7 @@ void KisOpenGLImageContext::updateImageTextureTiles(const QRect& rect)
 
 KoColorSpace* KisOpenGLImageContext::textureColorSpaceForImageColorSpace(KoColorSpace */*imageColorSpace*/)
 {
-    return KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBA", ""), "");
+    return KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA", ""), "");
 }
 
 void KisOpenGLImageContext::setMonitorProfile(KoColorProfile *monitorProfile)

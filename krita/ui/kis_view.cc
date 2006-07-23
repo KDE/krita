@@ -290,7 +290,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     // This needs to be set before the dockers are created.
     m_image = m_doc->currentImage();
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->rgb8();
     m_fg = KoColor(Qt::black, cs);
     m_bg = KoColor(Qt::white, cs);
 
@@ -565,7 +565,7 @@ void KisView::resetMonitorProfile()
     if (m_monitorProfile == 0) {
         KisConfig cfg;
         QString monitorProfileName = cfg.monitorProfile();
-        m_monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
+        m_monitorProfile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
     }
 
 }
@@ -2272,7 +2272,7 @@ void KisView::print(KPrinter& printer)
 
     KisConfig cfg;
     QString printerProfileName = cfg.printerProfile();
-    KoColorProfile *  printerProfile = KisMetaRegistry::instance()->csRegistry() ->getProfileByName(printerProfileName);
+    KoColorProfile *  printerProfile = KisMetaRegistry::instance()->csRegistry() ->profileByName(printerProfileName);
 
     QRect r = img->bounds();
     img->renderToPainter(r.x(), r.y(), r.width(), r.height(), gc, printerProfile, KisImage::PAINT_IMAGE_ONLY, HDRExposure());
@@ -2723,7 +2723,7 @@ void KisView::addLayer(KisGroupLayerSP parent, KisLayerSP above)
 
         if (dlg.exec() == QDialog::Accepted) {
             KoColorSpace* cs = KisMetaRegistry::instance()-> csRegistry() ->
-                    getColorSpace(dlg.colorSpaceID(),dlg.profileName());
+                    colorSpace(dlg.colorSpaceID(),dlg.profileName());
             KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), dlg.layerName(), dlg.opacity(), cs));
             if (layer) {
                 layer->setCompositeOp(dlg.compositeOp());

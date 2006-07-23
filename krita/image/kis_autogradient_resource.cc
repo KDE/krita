@@ -31,7 +31,7 @@
 
 void KisAutogradientResource::createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, QColor left, QColor right )
 {
-    m_colorSpace = KisMetaRegistry::instance()->csRegistry()->getRGB8();
+    m_colorSpace = KisMetaRegistry::instance()->csRegistry()->rgb8();
     pushSegment(new KisGradientSegment(interpolation, colorInterpolation, startOffset, middleOffset, endOffset, KoColor( left, m_colorSpace ), KoColor( right, m_colorSpace )));
 
 }

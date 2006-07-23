@@ -21,7 +21,7 @@
 #include <klocale.h>
 
 #include <KoIntegerMaths.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_image.h>
 #include <kis_filter_strategy.h>
 #include <kis_group_layer.h>

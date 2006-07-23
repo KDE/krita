@@ -35,24 +35,24 @@
 
 #include "KoColorSpace.h"
 #include "KoColorProfile.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "colorspaces/KoAlphaColorSpace.h"
 #include "colorspaces/KoLabColorSpace.h"
 
-KoColorSpaceFactoryRegistry *KoColorSpaceFactoryRegistry::m_singleton = 0;
+KoColorSpaceRegistry *KoColorSpaceRegistry::m_singleton = 0;
 
-KoColorSpaceFactoryRegistry* KoColorSpaceFactoryRegistry::instance()
+KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 {
-    if(KoColorSpaceFactoryRegistry::m_singleton == 0)
+    if(KoColorSpaceRegistry::m_singleton == 0)
     {
-        KoColorSpaceFactoryRegistry::m_singleton = new KoColorSpaceFactoryRegistry();
-        KoColorSpaceFactoryRegistry::m_singleton->init();
+        KoColorSpaceRegistry::m_singleton = new KoColorSpaceRegistry();
+        KoColorSpaceRegistry::m_singleton->init();
     }
-    return KoColorSpaceFactoryRegistry::m_singleton;
+    return KoColorSpaceRegistry::m_singleton;
 }
 
 
-void KoColorSpaceFactoryRegistry::init()
+void KoColorSpaceRegistry::init()
 {
     // prepare a list of the profiles
     KGlobal::instance()->dirs()->addResourceType("kis_profiles",
@@ -137,15 +137,15 @@ void KoColorSpaceFactoryRegistry::init()
     }
 }
 
-KoColorSpaceFactoryRegistry::KoColorSpaceFactoryRegistry()
+KoColorSpaceRegistry::KoColorSpaceRegistry()
 {
 }
 
-KoColorSpaceFactoryRegistry::~KoColorSpaceFactoryRegistry()
+KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
 }
 
-KoColorProfile *  KoColorSpaceFactoryRegistry::getProfileByName(const QString & name)
+KoColorProfile *  KoColorSpaceRegistry::getProfileByName(const QString & name)
 {
     if (m_profileMap.find(name) == m_profileMap.end()) {
         return 0;
@@ -154,12 +154,12 @@ KoColorProfile *  KoColorSpaceFactoryRegistry::getProfileByName(const QString & 
     return m_profileMap[name];
 }
 
-QList<KoColorProfile *>  KoColorSpaceFactoryRegistry::profilesFor(KoID id)
+QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoID id)
 {
     return profilesFor(get(id));
 }
 
-QList<KoColorProfile *>  KoColorSpaceFactoryRegistry::profilesFor(KoColorSpaceFactory * csf)
+QList<KoColorProfile *>  KoColorSpaceRegistry::profilesFor(KoColorSpaceFactory * csf)
 {
     QList<KoColorProfile *>  profiles;
 
@@ -173,24 +173,24 @@ QList<KoColorProfile *>  KoColorSpaceFactoryRegistry::profilesFor(KoColorSpaceFa
     return profiles;
 }
 
-void KoColorSpaceFactoryRegistry::addProfile(KoColorProfile *p)
+void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
       if (p->valid()) {
           m_profileMap[p->productName()] = p;
       }
 }
 
-void KoColorSpaceFactoryRegistry::addPaintDeviceAction(KoColorSpace* cs,
+void KoColorSpaceRegistry::addPaintDeviceAction(KoColorSpace* cs,
         KisPaintDeviceAction* action) {
     m_paintDevActionMap[cs->id()].append(action);
 }
 
 QList<KisPaintDeviceAction *>
-KoColorSpaceFactoryRegistry::paintDeviceActionsFor(KoColorSpace* cs) {
+KoColorSpaceRegistry::paintDeviceActionsFor(KoColorSpace* cs) {
     return m_paintDevActionMap[cs->id()];
 }
 
-KoColorSpace * KoColorSpaceFactoryRegistry::getColorSpace(const KoID & csID, const QString & pName)
+KoColorSpace * KoColorSpaceRegistry::getColorSpace(const KoID & csID, const QString & pName)
 {
     QString profileName = pName;
 
@@ -228,7 +228,7 @@ KoColorSpace * KoColorSpaceFactoryRegistry::getColorSpace(const KoID & csID, con
 }
 
 
-KoColorSpace * KoColorSpaceFactoryRegistry::getColorSpace(const KoID & csID, const KoColorProfile * profile)
+KoColorSpace * KoColorSpaceRegistry::getColorSpace(const KoID & csID, const KoColorProfile * profile)
 {
     if( profile )
     {
@@ -255,14 +255,14 @@ KoColorSpace * KoColorSpaceFactoryRegistry::getColorSpace(const KoID & csID, con
     }
 }
 
-KoColorSpace * KoColorSpaceFactoryRegistry::getAlpha8()
+KoColorSpace * KoColorSpaceRegistry::getAlpha8()
 {
    return m_alphaCs;
 }
 
-KoColorSpace * KoColorSpaceFactoryRegistry::getRGB8()
+KoColorSpace * KoColorSpaceRegistry::getRGB8()
 {
     return getColorSpace(KoID("RGBA", ""), "");
 }
 
-#include "KoColorSpaceFactoryRegistry.moc"
+#include "KoColorSpaceRegistry.moc"

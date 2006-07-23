@@ -27,7 +27,7 @@
 
 #include "kis_cmyk_colorspace.h"
 #include "KoU8ColorSpaceTrait.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 
 #include "KoColorProfile.h"
 #include "KoIntegerMaths.h"
@@ -37,7 +37,7 @@ namespace cmyk {
     const qint32 MAX_CHANNEL_CMYKA = 5;
 }
 
-KisCmykColorSpace::KisCmykColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+KisCmykColorSpace::KisCmykColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
     KoColorSpace(KoID("CMYK", i18n("CMYK")), parent)
     , KoU8ColorSpaceTrait(PIXEL_CMYK_ALPHA)
     , KoLcmsColorSpaceTrait(TYPE_CMYK5_8, icSigCmykData, p)

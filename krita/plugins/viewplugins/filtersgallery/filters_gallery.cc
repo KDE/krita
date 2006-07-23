@@ -29,7 +29,7 @@
 
 #include <kopalettemanager.h>
 
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_progress_display_interface.h"
 #include "kis_dlg_filtersgallery.h"
 #include "kis_doc.h"

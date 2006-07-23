@@ -53,7 +53,7 @@
 #include "kis_clipboard.h"
 #include "kis_cmb_idlist.h"
 #include "KoColorSpace.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_cursor.h"
 #include "kis_config.h"
 #include "kis_dlg_preferences.h"

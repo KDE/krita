@@ -28,7 +28,7 @@
 #include <kgenericfactory.h>
 
 #include <kis_debug_areas.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "cmyk_plugin.h"
@@ -43,9 +43,9 @@ CMYKPlugin::CMYKPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
     setInstance(CMYKPluginFactory::instance());
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceRegistry") )
     {
-        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>( parent );
+        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>( parent );
 
         KoColorSpace * colorSpaceCMYK = new KisCmykColorSpace(f, 0);
         KoColorSpaceFactory * csf = new KisCmykColorSpaceFactory();

@@ -43,7 +43,7 @@
 #include "kis_global.h"
 #include "kis_brush.h"
 #include "kis_alpha_mask.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"
 

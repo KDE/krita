@@ -45,7 +45,7 @@
 #include "kis_meta_registry.h"
 #include "kis_view.h"
 #include "kis_paint_device.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 

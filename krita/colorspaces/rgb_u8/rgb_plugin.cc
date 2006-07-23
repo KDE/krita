@@ -33,7 +33,7 @@
 #include <kis_debug_areas.h>
 
 #include <kis_debug_areas.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "rgb_plugin.h"
@@ -48,9 +48,9 @@ RGBPlugin::RGBPlugin(QObject *parent, const QStringList &)
 {
     setInstance(RGBPluginFactory::instance());
 
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceRegistry") )
     {
-	KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>(parent);
+	KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>(parent);
 
         KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
         f->addProfile(defProfile);

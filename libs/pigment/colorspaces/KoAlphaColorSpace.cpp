@@ -38,7 +38,7 @@ namespace {
     const quint8 PIXEL_MASK = 0;
 }
 
-KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceFactoryRegistry * parent,
+KoAlphaColorSpace::KoAlphaColorSpace(KoColorSpaceRegistry * parent,
                                        KoColorProfile *p) :
     KoColorSpace(KoID("ALPHA", i18n("Alpha mask")),  parent)
     , KoU8ColorSpaceTrait(0)

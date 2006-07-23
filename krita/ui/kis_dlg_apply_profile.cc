@@ -21,7 +21,7 @@
 #include <QButtonGroup>
 
 #include "kis_factory.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_types.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"

@@ -29,7 +29,7 @@
 #include <QTextStream>
 #include <QFile>
 
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
 #include "kogradientmanager.h"
 

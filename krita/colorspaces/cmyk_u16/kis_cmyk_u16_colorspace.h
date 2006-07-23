@@ -40,7 +40,7 @@ public:
     };
 
 public:
-    KisCmykU16ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
+    KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual ~KisCmykU16ColorSpace();
 
     virtual bool willDegrade(ColorSpaceIndependence independence)
@@ -116,7 +116,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisCmykU16ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykU16ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "Adobe CMYK"; };
 };

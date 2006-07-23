@@ -50,7 +50,7 @@ namespace {
 // FIXME: lcms doesn't support 16-bit float
 #define RGBAF16HALF_LCMS_TYPE TYPE_BGRA_16
 
-KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+KisRgbF16HalfColorSpace::KisRgbF16HalfColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
     KoColorSpace(KoID("RGBAF16HALF", i18n("RGB (16-bit float/channel)")), parent)
     , KoF16HalfColorSpaceTrait(PIXEL_ALPHA * sizeof(half))
     , KoLcmsColorSpaceTrait(RGBAF16HALF_LCMS_TYPE, icSigRgbData, p)

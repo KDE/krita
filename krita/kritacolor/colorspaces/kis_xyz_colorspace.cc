@@ -39,7 +39,7 @@
 // XXX: Maybe use TYPE_XYZ_DBL for an extra stimulating performance hit? People shouldn't depend
 //      on this fallback...
 
-KisXyzColorSpace::KisXyzColorSpace(KoColorSpaceFactoryRegistry * parent,
+KisXyzColorSpace::KisXyzColorSpace(KoColorSpaceRegistry * parent,
                                    KoColorProfile *p) :
     KoU16ColorSpaceTrait(KoID("XYZA", i18n("XYZ/Alpha")), (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1)), icSigCmykData, parent, p)
 {

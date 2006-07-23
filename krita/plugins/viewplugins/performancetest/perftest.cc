@@ -53,7 +53,7 @@
 #include "kis_types.h"
 #include "kis_view.h"
 #include "kis_selection.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
 #include "kis_painter.h"
 #include "kis_fill_painter.h"

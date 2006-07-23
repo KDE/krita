@@ -25,7 +25,7 @@
 #include "kis_meta_registry.h"
 #include <kis_view.h>
 #include <kis_image.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_factory.h>
 #include "kis_wet_colorspace.h"
 #include <kis_debug_areas.h>

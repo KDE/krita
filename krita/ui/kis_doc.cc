@@ -68,7 +68,7 @@
 #include "kis_command.h"
 #include "kis_view.h"
 #include "KoColorSpace.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoID.h"
 #include "kis_part_layer.h"

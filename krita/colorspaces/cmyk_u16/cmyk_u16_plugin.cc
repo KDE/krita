@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 #include <kis_debug_areas.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 #include <kis_debug_areas.h>
 #include "cmyk_u16_plugin.h"
@@ -39,9 +39,9 @@ CMYKU16Plugin::CMYKU16Plugin(QObject *parent, const QStringList &)
 {
     setInstance(CMYKU16PluginFactory::instance());
 
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceRegistry") )
     {
-        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>( parent );
+        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>( parent );
 
         KoColorSpace * colorSpaceCMYKU16 = new KisCmykU16ColorSpace(f, 0);
         KoColorSpaceFactory * csf = new KisCmykU16ColorSpaceFactory();

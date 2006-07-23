@@ -25,7 +25,7 @@
 
 #include <kis_debug_areas.h>
 
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "gray_u16_plugin.h"
@@ -40,9 +40,9 @@ GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)
 {
     setInstance(GRAYU16PluginFactory::instance());
 
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceRegistry") )
     {
-        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>( parent );
+        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>( parent );
 
         KoColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace(f, 0);
         KoColorSpaceFactory * csf = new KisGrayU16ColorSpaceFactory();

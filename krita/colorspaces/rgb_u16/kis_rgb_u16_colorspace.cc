@@ -44,7 +44,7 @@ namespace {
 //const quint16 KisRgbU16ColorSpace::U16_OPACITY_OPAQUE;
 //const quint16 KisRgbU16ColorSpace::U16_OPACITY_TRANSPARENT;
 
-KisRgbU16ColorSpace::KisRgbU16ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+KisRgbU16ColorSpace::KisRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
     KoColorSpace(KoID("RGBA16", i18n("RGB (16-bit integer/channel)")), parent)
     , KoU16ColorSpaceTrait(PIXEL_ALPHA * sizeof(quint16))
     , KoLcmsColorSpaceTrait(TYPE_BGRA_16, icSigRgbData, p)

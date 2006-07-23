@@ -40,7 +40,7 @@
 #include <kis_meta_registry.h>
 #include <kis_factory.h>
 #include <kis_canvas_subject.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <kis_color_cup.h>
 

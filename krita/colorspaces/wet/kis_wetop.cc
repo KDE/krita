@@ -32,7 +32,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include "kis_input_device.h"
 
 #include "kis_wetop.h"

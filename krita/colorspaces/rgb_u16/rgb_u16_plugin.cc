@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 #include <kis_debug_areas.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "rgb_u16_plugin.h"
 #include "kis_rgb_u16_colorspace.h"
@@ -39,9 +39,9 @@ RGBU16Plugin::RGBU16Plugin(QObject *parent, const QStringList &)
 {
     setInstance(RGBU16PluginFactory::instance());
 
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceRegistry") )
     {
-        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry *>( parent );
+        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry *>( parent );
 
         KoColorSpace * colorSpaceRGBU16 = new KisRgbU16ColorSpace(f, 0);
         KoColorSpaceFactory * csFactory = new KisRgbU16ColorSpaceFactory();

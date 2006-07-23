@@ -28,7 +28,7 @@
 #include "kis_custom_image_widget.h"
 #include "kis_doc.h"
 #include "kis_meta_registry.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoID.h"

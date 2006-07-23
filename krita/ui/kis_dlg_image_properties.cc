@@ -31,7 +31,7 @@
 
 #include "kis_factory.h"
 #include "kis_meta_registry.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_dlg_image_properties.h"
 #include "KoColorProfile.h"
 #include "kis_types.h"

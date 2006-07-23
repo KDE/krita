@@ -40,7 +40,7 @@
 
 #include <kis_painter.h>
 #include <kis_meta_registry.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>

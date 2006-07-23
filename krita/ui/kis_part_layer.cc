@@ -34,7 +34,7 @@
 
 #include "kis_layer.h"
 #include "kis_types.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_part_layer.h"
 #include "kis_group_layer.h"
 #include "kis_factory.h"

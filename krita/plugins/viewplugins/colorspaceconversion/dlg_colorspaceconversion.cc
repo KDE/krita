@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 #include "kis_meta_registry.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoID.h"

@@ -33,7 +33,7 @@
 #include <klocale.h>
 
 #include "kis_annotation.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "kis_command.h"
 #include "kis_types.h"

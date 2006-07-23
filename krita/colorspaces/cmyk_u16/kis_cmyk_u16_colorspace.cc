@@ -33,14 +33,14 @@
 #include "KoU16ColorSpaceTrait.h"
 #include "kis_color_conversions.h"
 #include "KoIntegerMaths.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 
 namespace {
     const qint32 MAX_CHANNEL_CMYK = 4;
     const qint32 MAX_CHANNEL_CMYKA = 5;
 }
 
-KisCmykU16ColorSpace::KisCmykU16ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+KisCmykU16ColorSpace::KisCmykU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
     KoColorSpace(KoID("CMYKA16", i18n("CMYK (16-bit integer/channel)")), parent)
     , KoU16ColorSpaceTrait(PIXEL_ALPHA * sizeof(quint16))
     , KoLcmsColorSpaceTrait(TYPE_CMYK5_16, icSigCmykData, p)

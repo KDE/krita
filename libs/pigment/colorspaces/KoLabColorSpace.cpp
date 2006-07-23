@@ -32,7 +32,7 @@
 #include "KoLabColorSpace.h"
 #include "KoIntegerMaths.h"
 
-KoLabColorSpace::KoLabColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p)
+KoLabColorSpace::KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p)
     : KoColorSpace(KoID("LABA", i18n("L*a*b* (16-bit integer/channel)")), parent)
     , KoU16ColorSpaceTrait(CHANNEL_ALPHA * sizeof(quint16))
     , KoLcmsColorSpaceTrait(

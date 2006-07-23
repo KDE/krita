@@ -31,7 +31,7 @@
  */
 class PIGMENT_EXPORT KoAlphaColorSpace : public KoU8ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KoAlphaColorSpace(KoColorSpaceFactoryRegistry * parent,
+    KoAlphaColorSpace(KoColorSpaceRegistry * parent,
                        KoColorProfile *p);
     virtual ~KoAlphaColorSpace();
 

@@ -19,7 +19,7 @@
 
 #include <config.h>
 
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_math_toolbox.h"
 #include "kis_meta_registry.h"
 
@@ -27,7 +27,7 @@ KisMetaRegistry * KisMetaRegistry::m_singleton = 0;
 
 KisMetaRegistry::KisMetaRegistry()
 {
-    m_csRegistry = KoColorSpaceFactoryRegistry::instance();
+    m_csRegistry = KoColorSpaceRegistry::instance();
     m_mtRegistry = new KisMathToolboxFactoryRegistry();
 }
 

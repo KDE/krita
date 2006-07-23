@@ -26,7 +26,7 @@
 const Q_INT32 MAX_CHANNEL_YCbCr = 3;
 const Q_INT32 MAX_CHANNEL_YCbCrA = 4;
 
-KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KoColorSpaceFactoryRegistry* parent, KoColorProfile* p)
+KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KoColorSpaceRegistry* parent, KoColorProfile* p)
     : KoU16ColorSpaceTrait(KoID("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)")), TYPE_YCbCr_16, icSigYCbCrData, parent, p)
 {
     m_channels.push_back(new KoChannelInfo(i18n("Y"), "Y", PIXEL_Y * sizeof(Q_UINT16), KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(Q_UINT16)));

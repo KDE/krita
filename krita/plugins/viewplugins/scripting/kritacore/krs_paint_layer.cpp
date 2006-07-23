@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_doc.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>

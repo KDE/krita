@@ -19,7 +19,7 @@
 
 #include "KoColorSpace.h"
 
-KoColorSpace::KoColorSpace(const KoID &id, KoColorSpaceFactoryRegistry * parent)
+KoColorSpace::KoColorSpace(const KoID &id, KoColorSpaceRegistry * parent)
     : m_id(id)
     , m_parent( parent )
 {

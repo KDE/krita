@@ -27,7 +27,7 @@
 #include <kgenericfactory.h>
 
 #include <kis_debug_areas.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "gray_plugin.h"
@@ -43,10 +43,10 @@ GrayPlugin::GrayPlugin(QObject *parent, const QStringList &)
     setInstance(GrayPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceRegistry") )
     {
 
-        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>( parent );
+        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>( parent );
 
         // .22 gamma grayscale or something like that. Taken from the lcms tutorial...
         LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);

@@ -43,7 +43,7 @@ public:
     };
 
 public:
-    KisXyzColorSpace(KoColorSpaceFactoryRegistry * parent,
+    KisXyzColorSpace(KoColorSpaceRegistry * parent,
                      KoColorProfile *p);
     virtual ~KisXyzColorSpace();
 

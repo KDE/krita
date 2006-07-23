@@ -52,7 +52,7 @@ namespace {
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
 // disable the lcms handling by setting profile=0
-KisRgbF32ColorSpace::KisRgbF32ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile */*p*/) :
+KisRgbF32ColorSpace::KisRgbF32ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile */*p*/) :
     KoColorSpace(KoID("RGBAF32", i18n("RGB (32-bit float/channel)")), parent)
     , KoF32ColorSpaceTrait(PIXEL_ALPHA * sizeof(float))
     , KoLcmsColorSpaceTrait(F32_LCMS_TYPE, icSigRgbData, 0)

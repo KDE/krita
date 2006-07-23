@@ -30,7 +30,7 @@
 
 class PIGMENT_EXPORT KoLabColorSpace : public KoU16ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KoLabColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
+    KoLabColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual ~KoLabColorSpace();
 
 public:
@@ -146,7 +146,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigLabData; };
     
-    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KoLabColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KoLabColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "Lab built-in - (lcms internal)"; };
 };

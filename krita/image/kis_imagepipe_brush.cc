@@ -49,7 +49,7 @@
 #include "kis_alpha_mask.h"
 #include "kis_layer.h"
 #include "kis_meta_registry.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)

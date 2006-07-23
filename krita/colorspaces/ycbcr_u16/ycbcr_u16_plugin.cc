@@ -23,7 +23,7 @@
 #include <kdebug.h>
 
 #include <kis_debug_areas.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 #include <kis_debug_areas.h>
 #include "ycbcr_u16_plugin.h"
@@ -38,9 +38,9 @@ YCbCrU16Plugin::YCbCrU16Plugin(QObject *parent, const char *name, const QStringL
 {
     setInstance(YCbCrU16PluginFactory::instance());
 
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceRegistry") )
     {
-        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>( parent );
+        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>( parent );
 
         KoColorSpace * colorSpaceYCbCrU16 = new KisYCbCrU16ColorSpace(f, 0);
         KoColorSpaceFactory * csf = new KisYCbCrU16ColorSpaceFactory();

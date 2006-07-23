@@ -30,7 +30,7 @@
 #include <klocale.h>
 
 #include "KoColor.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoXYColorSelector.h"
 #include "KoColorSlider.h"
 #include "KoColorPatch.h"
@@ -747,17 +747,17 @@ void KoUniColorChooser::updateValues()
 
 KoColorSpace *KoUniColorChooser::rgbColorSpace()
 {
-    return KoColorSpaceFactoryRegistry::instance()->getRGB8();
+    return KoColorSpaceRegistry::instance()->getRGB8();
 }
 
 KoColorSpace *KoUniColorChooser::labColorSpace()
 {
-    return KoColorSpaceFactoryRegistry::instance()->getColorSpace(KoID("LABA",0),"");
+    return KoColorSpaceRegistry::instance()->getColorSpace(KoID("LABA",0),"");
 }
 
 KoColorSpace *KoUniColorChooser::cmykColorSpace()
 {
-    return KoColorSpaceFactoryRegistry::instance()->getColorSpace(KoID("CMYK",0),"");
+    return KoColorSpaceRegistry::instance()->getColorSpace(KoID("CMYK",0),"");
 }
 
 void KoUniColorChooser::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)

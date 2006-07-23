@@ -32,14 +32,14 @@
 #include "KoU16ColorSpaceTrait.h"
 #include "kis_color_conversions.h"
 #include "KoIntegerMaths.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 
 namespace {
     const qint32 MAX_CHANNEL_GRAY = 1;
     const qint32 MAX_CHANNEL_GRAYA = 2;
 }
 
-KisGrayU16ColorSpace::KisGrayU16ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+KisGrayU16ColorSpace::KisGrayU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
     KoColorSpace(KoID("GRAYA16", i18n("Grayscale (16-bit integer/channel)")), parent)
     , KoU16ColorSpaceTrait(PIXEL_ALPHA * sizeof(quint16))
     , KoLcmsColorSpaceTrait(TYPE_GRAYA_16, icSigGrayData, p)

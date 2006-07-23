@@ -39,7 +39,7 @@ class KisPaintDeviceAction;
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
  */
-class PIGMENT_EXPORT KoColorSpaceFactoryRegistry : public QObject,  public KoGenericRegistry<KoColorSpaceFactory *> {
+class PIGMENT_EXPORT KoColorSpaceRegistry : public QObject,  public KoGenericRegistry<KoColorSpaceFactory *> {
 
 
     Q_OBJECT
@@ -47,12 +47,12 @@ class PIGMENT_EXPORT KoColorSpaceFactoryRegistry : public QObject,  public KoGen
 public:
 
     /**
-     * Return an instance of the KoColorSpaceFactoryRegistry
+     * Return an instance of the KoColorSpaceRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    static KoColorSpaceFactoryRegistry * instance();
+    static KoColorSpaceRegistry * instance();
 
-    virtual ~KoColorSpaceFactoryRegistry();
+    virtual ~KoColorSpaceRegistry();
 
 public:
 
@@ -108,9 +108,9 @@ public:
     QList<KisPaintDeviceAction *> paintDeviceActionsFor(KoColorSpace* cs);
 
 private:
-    KoColorSpaceFactoryRegistry();
-    KoColorSpaceFactoryRegistry(const KoColorSpaceFactoryRegistry&);
-    KoColorSpaceFactoryRegistry operator=(const KoColorSpaceFactoryRegistry&);
+    KoColorSpaceRegistry();
+    KoColorSpaceRegistry(const KoColorSpaceRegistry&);
+    KoColorSpaceRegistry operator=(const KoColorSpaceRegistry&);
     void init();
 
 private:
@@ -120,7 +120,7 @@ private:
     typedef QList<KisPaintDeviceAction *> PaintActionList;
     QMap<KoID, PaintActionList> m_paintDevActionMap;
     KoColorSpace *m_alphaCs;
-    static KoColorSpaceFactoryRegistry *m_singleton;
+    static KoColorSpaceRegistry *m_singleton;
 };
 
 #endif // KOCOLORSPACEFACTORYREGISTRY_H

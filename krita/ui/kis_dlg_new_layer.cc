@@ -34,7 +34,7 @@
 #include "squeezedcombobox.h"
 #include "kis_dlg_new_layer.h"
 #include "kis_meta_registry.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "kis_int_spinbox.h"

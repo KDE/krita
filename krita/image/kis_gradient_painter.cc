@@ -52,7 +52,7 @@
 #include "kis_selection.h"
 #include "kis_gradient_painter.h"
 #include "kis_meta_registry.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 
 namespace {
 

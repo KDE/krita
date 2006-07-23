@@ -31,7 +31,7 @@
 
 
 class KoColorProfile;
-class KoColorSpaceFactoryRegistry;
+class KoColorSpaceRegistry;
 class KisMathToolbox;
 class KisFilter;
 
@@ -89,7 +89,7 @@ protected:
 
 public:
     /// Should be called by real color spaces
-    KoColorSpace(const KoID &id, KoColorSpaceFactoryRegistry * parent);
+    KoColorSpace(const KoID &id, KoColorSpaceRegistry * parent);
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const {
@@ -452,7 +452,7 @@ private:
     KoID m_id;
 
 protected:
-    KoColorSpaceFactoryRegistry * m_parent;
+    KoColorSpaceRegistry * m_parent;
     Q3ValueVector<KoChannelInfo *> m_channels;
 
 };
@@ -473,7 +473,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() = 0;
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *) = 0;
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *) = 0;
 
     /**
      * Returns the default icc profile for use with this colorspace. This may be ""

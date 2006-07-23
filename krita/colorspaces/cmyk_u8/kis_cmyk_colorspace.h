@@ -38,7 +38,7 @@ public:
             quint16 alpha;
         };
 public:
-    KisCmykColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
+    KisCmykColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual ~KisCmykColorSpace();
 
 
@@ -119,7 +119,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigCmykData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisCmykColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisCmykColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "Adobe CMYK"; }; //  Do not i18n -- this is from a data file
 };

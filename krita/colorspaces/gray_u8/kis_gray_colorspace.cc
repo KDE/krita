@@ -41,7 +41,7 @@ namespace {
     const qint32 MAX_CHANNEL_GRAYSCALEA = 2;
 }
 
-KisGrayColorSpace::KisGrayColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+KisGrayColorSpace::KisGrayColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
     KoColorSpace(KoID("GRAYA", i18n("Grayscale")), parent)
     , KoU8ColorSpaceTrait(PIXEL_GRAY_ALPHA)
     , KoLcmsColorSpaceTrait(TYPE_GRAYA_8, icSigGrayData, p)

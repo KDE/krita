@@ -31,7 +31,7 @@ const quint8 PIXEL_ALPHA = 3;
 
 class KRITACOLOR_EXPORT KisRgbColorSpace : public KoU8ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KisRgbColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
+    KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual ~KisRgbColorSpace();
 
     virtual bool willDegrade(ColorSpaceIndependence)
@@ -105,7 +105,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile * p) { return new KisRgbColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile * p) { return new KisRgbColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

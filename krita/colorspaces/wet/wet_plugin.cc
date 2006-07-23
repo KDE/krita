@@ -46,7 +46,7 @@
 #include <kis_debug_areas.h>
 #include <kis_types.h>
 #include <kis_view.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_tool_registry.h>
 #include <kis_paintop_registry.h>
 #include <kis_canvas_subject.h>
@@ -70,8 +70,8 @@ WetPlugin::WetPlugin(QObject *parent, const QStringList &)
     setInstance(WetPluginFactory::instance());
 
     // This is not a gui plugin; only load it when the doc is created.
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") ) {
-        KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>(parent);
+    if ( parent->inherits("KoColorSpaceRegistry") ) {
+        KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>(parent);
 
         KoColorSpace* colorSpaceWet = new KisWetColorSpace(f, 0);
 

@@ -38,7 +38,7 @@
 #include <kgenericfactory.h>
 #include <knuminput.h>
 
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <kis_doc.h>
 #include <kis_filter_registry.h>

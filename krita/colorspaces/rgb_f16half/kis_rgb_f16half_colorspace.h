@@ -31,7 +31,7 @@
 
 class KRITACOLOR_EXPORT KisRgbF16HalfColorSpace : public KoF16HalfColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KisRgbF16HalfColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
+    KisRgbF16HalfColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual ~KisRgbF16HalfColorSpace();
 
     virtual bool willDegrade(ColorSpaceIndependence independence)
@@ -137,7 +137,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisRgbF16HalfColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisRgbF16HalfColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

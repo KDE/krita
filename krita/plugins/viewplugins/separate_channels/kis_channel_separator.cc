@@ -53,7 +53,7 @@
 #include <kis_progress_subject.h>
 #include <kis_progress_display_interface.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_view.h>
 #include <kis_paint_device.h>
 #include <KoChannelInfo.h>

@@ -39,7 +39,7 @@
 
 #include <kis_cursor.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_config.h>
 #include <kis_filter_strategy.h>
 #include <kis_global.h>

@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 #include <kis_debug_areas.h>
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_basic_histogram_producers.h>
 
 #include "lms_f32_plugin.h"
@@ -41,9 +41,9 @@ LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
 {
     setInstance(LMSF32PluginFactory::instance());
 
-    if ( parent->inherits("KoColorSpaceFactoryRegistry") )
+    if ( parent->inherits("KoColorSpaceRegistry") )
     {
-	KoColorSpaceFactoryRegistry * f = dynamic_cast<KoColorSpaceFactoryRegistry*>(parent);
+	KoColorSpaceRegistry * f = dynamic_cast<KoColorSpaceRegistry*>(parent);
 
         KoColorSpace * colorSpaceLMSF32  = new KisLmsF32ColorSpace(f, 0);
 

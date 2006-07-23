@@ -26,7 +26,7 @@
 #include "kis_layer.h"
 #include "kis_debug_areas.h"
 #include "kis_types.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_fill_painter.h"
 #include "kis_iterators_pixel.h"
 #include "KoIntegerMaths.h"

@@ -38,7 +38,7 @@ public:
         quint16 alpha;
     };
 public:
-    KisRgbU16ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
+    KisRgbU16ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual ~KisRgbU16ColorSpace();
 
     virtual bool willDegrade(ColorSpaceIndependence independence)
@@ -120,7 +120,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icSigRgbData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisRgbU16ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisRgbU16ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

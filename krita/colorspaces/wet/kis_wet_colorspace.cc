@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kis_debug_areas.h>
 #include "KoLcmsColorSpaceTrait.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_image.h"
 #include "kis_wet_colorspace.h"
 #include "wetphysicsfilter.h"
@@ -111,7 +111,7 @@ int getH(int r, int g, int b)
     return h;
 }
 
-KisWetColorSpace::KisWetColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+KisWetColorSpace::KisWetColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
     KoColorSpace(KoID("WET", i18n("Watercolors")), parent)
     , KoLcmsColorSpaceTrait(0, icMaxEnumData, p)
 {

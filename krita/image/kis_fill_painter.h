@@ -23,7 +23,7 @@
 
 #include "kis_meta_registry.h"
 #include "KoColor.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_painter.h"
 #include "kis_types.h"
 #include <krita_export.h>

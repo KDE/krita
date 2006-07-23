@@ -41,7 +41,7 @@
 #include "KoColorProfile.h"
 #include "KoColor.h"
 #include "KoIntegerMaths.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_selection.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"

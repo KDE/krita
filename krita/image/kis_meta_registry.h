@@ -20,7 +20,7 @@
 
 #include <krita_export.h>
 
-class KoColorSpaceFactoryRegistry;
+class KoColorSpaceRegistry;
 class KisMathToolboxFactoryRegistry;
 
 /**
@@ -35,7 +35,7 @@ public:
     virtual ~KisMetaRegistry();
     static KisMetaRegistry* instance();
 
-    KoColorSpaceFactoryRegistry * csRegistry() { return m_csRegistry; };
+    KoColorSpaceRegistry * csRegistry() { return m_csRegistry; };
     KisMathToolboxFactoryRegistry* mtRegistry() { return m_mtRegistry; };
 private:
 
@@ -45,7 +45,7 @@ private:
 
     static KisMetaRegistry * m_singleton;
 
-    KoColorSpaceFactoryRegistry * m_csRegistry;
+    KoColorSpaceRegistry * m_csRegistry;
     KisMathToolboxFactoryRegistry* m_mtRegistry;
 };
 #endif

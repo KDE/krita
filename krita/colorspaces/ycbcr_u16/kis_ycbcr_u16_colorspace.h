@@ -31,7 +31,7 @@
 class KisYCbCrU16ColorSpace : public KoU16ColorSpaceTrait
 {
     public:
-        KisYCbCrU16ColorSpace(KoColorSpaceFactoryRegistry* parent, KoColorProfile* p);
+        KisYCbCrU16ColorSpace(KoColorSpaceRegistry* parent, KoColorProfile* p);
         ~KisYCbCrU16ColorSpace();
         virtual bool willDegrade(ColorSpaceIndependence )
         {
@@ -135,7 +135,7 @@ class KisYCbCrU16ColorSpaceFactory : public KoColorSpaceFactory
 
         virtual icColorSpaceSignature colorSpaceSignature() { return icSigYCbCrData; };
 
-        virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisYCbCrU16ColorSpace(parent, p); };
+        virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisYCbCrU16ColorSpace(parent, p); };
 
         virtual QString defaultProfile() { return ""; };
 };

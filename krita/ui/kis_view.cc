@@ -110,7 +110,7 @@
 #include "kis_button_release_event.h"
 #include "kis_canvas_painter.h"
 #include "KoColor.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_controlframe.h"
 #include "kis_cursor.h"
 #include "kis_doc.h"

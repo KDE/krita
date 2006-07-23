@@ -30,11 +30,11 @@
 #include "KoF32HalfColorSpaceTrait.h"
 #include "KoLcmsColorSpaceTrait.h"
 
-class KoColorSpaceFactoryRegistry;
+class KoColorSpaceRegistry;
 
 class KRITACOLOR_EXPORT KisLmsF32ColorSpace : public KoF32ColorSpaceTrait, public KoLcmsColorSpaceTrait {
 public:
-    KisLmsF32ColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p);
+    KisLmsF32ColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p);
     virtual ~KisLmsF32ColorSpace();
 
     virtual bool willDegrade(ColorSpaceIndependence independence)
@@ -148,7 +148,7 @@ public:
 
     virtual icColorSpaceSignature colorSpaceSignature() { return icMaxEnumData; };
 
-    virtual KoColorSpace *createColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) { return new KisLmsF32ColorSpace(parent, p); };
+    virtual KoColorSpace *createColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) { return new KisLmsF32ColorSpace(parent, p); };
 
     virtual QString defaultProfile() { return "sRGB built-in - (lcms internal)"; };
 };

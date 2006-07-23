@@ -36,7 +36,7 @@
 #include "kis_view.h"
 
 #include "kis_basic_histogram_producers.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 
 #include "histogramdocker.h"
 #include "kis_imagerasteredcache.h"

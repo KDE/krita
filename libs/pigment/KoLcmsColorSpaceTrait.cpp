@@ -28,7 +28,7 @@
 #include "KoColorProfile.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
 
 class KoColorAdjustmentImpl : public KoColorAdjustment

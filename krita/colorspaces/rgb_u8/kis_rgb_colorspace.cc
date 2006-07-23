@@ -32,7 +32,7 @@
 #include "KoU8ColorSpaceTrait.h"
 #include "kis_color_conversions.h"
 #include "KoIntegerMaths.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 
 #include "composite.h"
 
@@ -44,7 +44,7 @@ namespace {
     const qint32 MAX_CHANNEL_RGBA = 4;
 }
 
-KisRgbColorSpace::KisRgbColorSpace(KoColorSpaceFactoryRegistry * parent, KoColorProfile *p) :
+KisRgbColorSpace::KisRgbColorSpace(KoColorSpaceRegistry * parent, KoColorProfile *p) :
     KoColorSpace(KoID("RGBA", i18n("RGB (8-bit integer/channel)")), parent)
     ,KoU8ColorSpaceTrait(PIXEL_ALPHA)
     ,KoLcmsColorSpaceTrait(TYPE_BGRA_8, icSigRgbData, p)

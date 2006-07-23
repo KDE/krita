@@ -34,6 +34,7 @@ class QStringList;
 class KisPaintDeviceAction;
 
 /**
+ * The registry for colorspaces and profiles.
  * This class contains:
  *      - a registry of colorspace instantiated with specific profiles.
  *      - a registry of singleton colorspace factories.
@@ -87,10 +88,22 @@ public:
      * Profiles will not work with any color space, you can query which profiles
      * that are registred with this registry can be used in combination with the
      * argument factory.
-     * @param d the colorspace-id with which all the returned profiles will work.
+     * @param id the colorspace-id with which all the returned profiles will work.
      * @return a list of profiles for the factory
      */
     QList<KoColorProfile *>  profilesFor(KoID id);
+
+    /**
+     * Return the list of profiles for a colorspace with the argument id.
+     * Profiles will not work with any color space, you can query which profiles
+     * that are registred with this registry can be used in combination with the
+     * argument factory.
+     * @param colorProfileId the colorspace-id with which all the returned profiles will work.
+     * @return a list of profiles for the factory
+     */
+    QList<KoColorProfile *>  profilesFor(const QString &colorSpaceId) {
+        return profilesFor(KoID(colorSpaceId, ""));
+    }
 
     /**
      * Return a colorspace that works with the parameter profile.
@@ -107,6 +120,16 @@ public:
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
     KoColorSpace * colorSpace(const KoID & csID, const KoColorProfile * profile);
+
+    /**
+     * Return a colorspace that works with the parameter profile.
+     * @param csID the ID of the colorspace that you want to have returned
+     * @param profile the profile be combined with the colorspace
+     * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
+     */
+    KoColorSpace * colorSpace(const QString &colorSpaceId, const KoColorProfile * profile) {
+        return colorSpace(KoID(colorSpaceId, ""), profile);
+    }
 
     /**
      * Convenience method to get the often used alpha colorspace

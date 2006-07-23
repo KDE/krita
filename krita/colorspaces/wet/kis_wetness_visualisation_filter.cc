@@ -43,7 +43,7 @@ void WetnessVisualisationFilter::setAction(KToggleAction* action) {
     if (!m_action)
         return;
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("WET", ""),"") );
+            KisMetaRegistry::instance()->csRegistry()->colorSpace("WET",0) );
     Q_ASSERT(cs);
     m_action->setChecked(cs->paintWetness());
 }
@@ -55,7 +55,7 @@ void WetnessVisualisationFilter::slotActivated() {
         return;
     }
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("WET", ""),"") );
+            KisMetaRegistry::instance()->csRegistry()->colorSpace("WET",0) );
     Q_ASSERT(cs);
     if (!m_action->isChecked()) {
         m_timer.stop();
@@ -68,7 +68,7 @@ void WetnessVisualisationFilter::slotActivated() {
 
 void WetnessVisualisationFilter::slotTimeout() {
     KisWetColorSpace* cs = dynamic_cast<KisWetColorSpace*>(
-            KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("WET", ""),"") );
+            KisMetaRegistry::instance()->csRegistry()->colorSpace("WET",0) );
     Q_ASSERT(cs);
     if (!cs) return;
     cs->resetPhase();

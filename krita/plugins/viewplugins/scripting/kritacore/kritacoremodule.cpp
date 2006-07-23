@@ -203,7 +203,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Invalid image size") ) );
         return Kross::Api::Object::Ptr(0);
     }
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csname, ""), "");
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csname, 0);
     if(!cs)
     {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Colorspace %1 is not available, please check your installation.", csname ) ) );

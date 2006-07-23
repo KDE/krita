@@ -439,7 +439,7 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const {
 
     for (int i = 0; i < m_brushes.count(); i++) {
         KisPaintDevice* pd = new KisPaintDevice(
-                KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA",""),""), "clone pd" );
+                KisMetaRegistry::instance()->csRegistry()->colorSpace("RGBA", 0), "clone pd" );
         pd->convertFromQImage(m_brushes.at(i)->img(), "");
         devices[0].append(pd);
     }

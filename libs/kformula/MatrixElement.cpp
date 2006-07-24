@@ -57,6 +57,11 @@ MatrixElement::~MatrixElement()
 {
 }
 
+void MatrixElement::drawInternal()
+{
+}
+
+
 
 MatrixElement::MatrixElement( const MatrixElement& other ) : BasicElement( other )
 {

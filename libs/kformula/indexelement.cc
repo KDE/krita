@@ -114,6 +114,11 @@ IndexElement::~IndexElement()
     delete lowerRight;
 }
 
+void IndexElement::drawInternal()
+{
+}
+
+
 
 IndexElement::IndexElement( const IndexElement& other )
     : BasicElement( other )

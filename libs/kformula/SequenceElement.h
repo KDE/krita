@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,21 +16,22 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef SEQUENCEELEMENT_H
 #define SEQUENCEELEMENT_H
 
+#include "BasicElement.h"
+
+
 #include <QList>
 #include <QString>
 #include <QKeyEvent>
 
-#include "BasicElement.h"
-
 class QKeyEvent;
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 class SymbolTable;
 class ElementCreationStrategy;
@@ -41,18 +43,23 @@ class ElementCreationStrategy;
 class SequenceElement : public BasicElement {
     SequenceElement& operator=( const SequenceElement& ) { return *this; }
 public:
-
     SequenceElement(BasicElement* parent = 0);
+    
     ~SequenceElement();
 
+    virtual const QList<BasicElement*>& childElements();
+
+    
+
+
+
+    
     SequenceElement( const SequenceElement& );
 
     virtual SequenceElement* clone() {
         return new SequenceElement( *this );
     }
-
-//    virtual bool accept( ElementVisitor* visitor );
-
+    
     /**
      * @returns whether its prohibited to change the sequence with this cursor.
      */
@@ -73,7 +80,6 @@ public:
 //                                   const LuPixelPoint& point,
 //                                   const LuPixelPoint& parentOrigin );
 
-    virtual const QList<BasicElement*>& childElements();
 
     // drawing
     //
@@ -360,7 +366,9 @@ public:
     static void setCreationStrategy( ElementCreationStrategy* strategy );
 
 protected:
+    virtual void drawInternal();
 
+    
     //Save/load support
 
     /**
@@ -575,6 +583,6 @@ private:
     QString buildName();
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // SEQUENCEELEMENT_H

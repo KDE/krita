@@ -39,6 +39,11 @@ MatrixRowElement::~MatrixRowElement()
 {
 }
 
+void MatrixRowElement::drawInternal()
+{
+}
+
+
 MatrixRowElement::MatrixRowElement( const MatrixRowElement& other ) : BasicElement( other )
 {
     int count = other.m_matrixEntryElements.count();

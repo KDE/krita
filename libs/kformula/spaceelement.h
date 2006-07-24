@@ -108,7 +108,9 @@ public:
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
+    virtual void drawInternal();
 
+    
     //Save/load support
 
     /**

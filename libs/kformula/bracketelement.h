@@ -131,7 +131,9 @@ public:
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
+    virtual void drawInternal();
 
+    
     /**
      * Appends our attributes to the dom element.
      */
@@ -225,6 +227,8 @@ public:
 
 protected:
 
+
+    
     //Save/load support
 
     /**

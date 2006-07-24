@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,38 +16,58 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef FRACTIONELEMENT_H
 #define FRACTIONELEMENT_H
 
 #include "BasicElement.h"
+
+
 #include <QList>
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
+
 class SequenceElement;
 
 
 /**
- * A fraction.
+ * @short A fraction element in a formula
+ *
+ * The fraction consists of two @see SequenceElement, the denominator and the numerator.
+ * The SequenceElements can be set but actually altered they are with the
+ * insertElementInNumerator() and insertElementInDenominator() methods.
  */
 class FractionElement : public BasicElement {
     FractionElement& operator=( const FractionElement& ) { return *this; }
 public:
-
-    enum { numeratorPos, denominatorPos };
-
-    FractionElement(BasicElement* parent = 0);
+    /// The standard constructor
+    FractionElement( BasicElement* parent = 0 );
+   
+    /// The standard destructor 
     ~FractionElement();
 
+    /**
+     * Obtain a list of all child elements of this element,
+     * reimplementated from @see BasicElement
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+
+
+
+
+    enum { numeratorPos, denominatorPos };
+	
     FractionElement( const FractionElement& );
 
     virtual FractionElement* clone() {
         return new FractionElement( *this );
     }
-
-//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * @returns the type of this element. Used for
@@ -60,11 +81,6 @@ public:
      */
     virtual void entered( SequenceElement* child );
 
-    /**
-     * Obtain a list of all child elements of this element
-     * @return a QList with pointers to all child elements
-     */
-    virtual const QList<BasicElement*>& childElements();
 	
 
     /**
@@ -166,17 +182,13 @@ public:
     /// Tells whether the fraction should be drawn with a line.
     void showLine(bool line) { withLine = line; }
 
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-//    virtual QString toLatex();
-
-//    virtual QString formulaString();
-
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
+    /// Draws the element internally, means it paints into @ref m_elementPath
+    virtual void drawInternal();
+
+
+
+
     /// Returns the tag name of this element type.
     virtual QString getTagName() const { return "FRACTION"; }
 
@@ -199,6 +211,6 @@ private:
     bool withLine;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // FRACTIONELEMENT_H

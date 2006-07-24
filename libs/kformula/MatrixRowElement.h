@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,17 +16,18 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef MATRIXROWELEMENT_H
 #define MATRIXROWELEMENT_H
 
 #include "BasicElement.h"
+
+
 #include "contextstyle.h"
 
-namespace KFormula
-{
+namespace KFormula {
 	
 class MatrixEntryElement;
 
@@ -36,23 +38,33 @@ class MatrixRowElement : public BasicElement {
     friend class KFCNewLine;
 
 public:
-
-    /**
-     * The standard constructor
-     * @param parent the parent element of this MatrixRowElement
-     */
+    /// The standard constructor
     MatrixRowElement( BasicElement* parent = 0 );
 
     /// The standard destructor
     ~MatrixRowElement();
 
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+    
+    /// @return The number of @see MatrixEntryElement in this MatrixRowElement
+    int numberOfEntries() const;
+
+    /// @return The MatrixEntryElement at the @p pos position in the MatrixRowElement
+    MatrixEntryElement* entryAtPosition( int pos );
+
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+
+
+
+
     MatrixRowElement( const MatrixRowElement& );
 
     virtual MatrixRowElement* clone() { return new MatrixRowElement( *this ); }
-
-    int numberOfEntries() const;
-
-    MatrixEntryElement* entryAtPosition( int pos );
 
     /**
      * The cursor has entered one of our child sequences.
@@ -65,13 +77,6 @@ public:
      */
 //    BasicElement* goToPos( FormulaCursor* cursor, bool& handled,
 //                           const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
-
-    /**
-     * Obtain a list of all child elements of this element
-     * @return a QList with pointers to all child elements
-     */
-    virtual const QList<BasicElement*>& childElements();
-	
 
     /**
      * Sets the cursor inside this element to its start position.
@@ -139,17 +144,13 @@ public:
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-//    virtual QString toLatex();
-
-//    virtual QString formulaString();
-
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
+    /// Draws the element internally, means it paints into @ref m_elementPath
+    virtual void drawInternal();
+
+
+    
     /// Returns the tag name of this element type.
     virtual QString getTagName() const { return "MULTILINE"; }
 

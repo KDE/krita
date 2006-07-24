@@ -55,8 +55,8 @@
 
 #include <assert.h>
 
-KFORMULA_NAMESPACE_BEGIN
-//using namespace std;
+namespace KFormula {
+
 
 ElementCreationStrategy* SequenceElement::creationStrategy = 0;
 
@@ -70,7 +70,6 @@ SequenceElement::SequenceElement(BasicElement* parent)
         : BasicElement(parent), parseTree(0), textSequence(true),singlePipe(true)
 {
     assert( creationStrategy != 0 );
-//    children.setAutoDelete(true);
 }
 
 
@@ -78,6 +77,13 @@ SequenceElement::~SequenceElement()
 {
     delete parseTree;
 }
+
+void SequenceElement::drawInternal()
+{
+}
+
+
+
 
 SequenceElement::SequenceElement( const SequenceElement& other )
     : BasicElement( other )
@@ -1696,4 +1702,4 @@ void NameSequence::writeMathML( QDomDocument& doc, QDomNode& parent,bool oasisFo
     parent.appendChild( de );
 }
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

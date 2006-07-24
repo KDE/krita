@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef MATRIXELEMENT_H
@@ -47,6 +48,28 @@ public:
     
     /// The standard destructor
     ~MatrixElement();
+
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements();
+
+    /// Return the number of the rows of this matrix
+    int rows() const;
+
+    /// Return the number of the columns of this matrix
+    int cols() const;
+    
+    /// Obtain a pointer to the element at @p row and @p col in the matrix
+    MatrixEntryElement* matrixEntryAt( int row, int col );
+
+    /// Save this element to MathMl
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+
+
+
     
     /// A copy constructor
     MatrixElement( const MatrixElement& );
@@ -54,11 +77,6 @@ public:
     /// Returns a clone of this element
     virtual MatrixElement* clone() { return new MatrixElement( *this ); }
 
-   /**
-    * Obtain a list of all child elements of this element
-    * @return a QList with pointers to all child elements
-    */
-    virtual const QList<BasicElement*>& childElements();
     
     /**
      * The cursor has entered one of our child sequences.
@@ -133,27 +151,13 @@ public:
     /// Sets the cursor to select the child. The mark is palced after this element.
     virtual void selectChild( FormulaCursor*, BasicElement* );
 
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-//    virtual QString toLatex();
-
-//    virtual QString formulaString();
-
-    /// Return the number of the rows of this matrix
-    int rows() const;
-
-    /// Return the number of the columns of this matrix
-    int cols() const;
-    
-    /// Obtain a pointer to the element at @p row and @p col in the matrix
-    MatrixEntryElement* matrixEntryAt( int row, int col );
-
-    /// Save this element to MathMl
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
+    /// Draws the element internally, means it paints into @ref m_elementPath
+    virtual void drawInternal();
+
+    
+
     /// Returns the tag name of this element type.
     virtual QString getTagName() const { return "MATRIX"; }
 
@@ -170,15 +174,18 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
 private:
+    /// The rows a matrix contains
+    QList< MatrixRowElement* > m_matrixRowElements;
+
+
+
+    
     /**
      * Searches through the matrix for the element. Sets the
      * row and column if found.
      * Returns true if the element was found. false otherwise.
      */
     bool searchElement( BasicElement* element, int& row, int& column );
-
-    /// The rows a matrix contains
-    QList< MatrixRowElement* > m_matrixRowElements;
 };
 
 } // namespace KFormula

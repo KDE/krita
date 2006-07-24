@@ -99,6 +99,10 @@ TokenType TextElement::getTokenType() const
     }
 }
 
+void TextElement::drawInternal()
+{
+}
+
 
 bool TextElement::isInvisible() const
 {
@@ -534,6 +538,11 @@ void EmptyElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                           context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
     }
 }
+
+void EmptyElement::drawInternal()
+{
+}
+
 
 QString EmptyElement::toLatex()
 {

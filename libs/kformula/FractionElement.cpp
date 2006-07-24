@@ -61,6 +61,11 @@ const QList<BasicElement*>& FractionElement::childElements()
     return list;
 }
 
+void FractionElement::drawInternal()
+{
+}
+
+
 void FractionElement::entered( SequenceElement* child )
 {
     if ( child == m_numerator ) {

@@ -193,7 +193,9 @@ public:
     QDomElement emptyFormulaElement( QDomDocument& doc );
 
 protected:
+    virtual void drawInternal();
 
+    
     //Save/load support
 
     /**

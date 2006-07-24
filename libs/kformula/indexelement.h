@@ -35,17 +35,8 @@ class SequenceElement;
 class IndexElement : public BasicElement {
     IndexElement& operator=( const IndexElement& ) { return *this; }
 public:
-
     IndexElement(BasicElement* parent = 0);
     ~IndexElement();
-
-    IndexElement( const IndexElement& );
-
-    virtual IndexElement* clone() {
-        return new IndexElement( *this );
-    }
-
-//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * Obtain a list of all child elements of this element
@@ -53,6 +44,15 @@ public:
      */
     virtual const QList<BasicElement*>& childElements();
 
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+
+
+    IndexElement( const IndexElement& );
+
+    virtual IndexElement* clone() {
+        return new IndexElement( *this );
+    }
 
     /**
      * @returns the character that represents this element. Used for
@@ -66,22 +66,6 @@ public:
      * This is a good point to tell the user where he is.
      */
     virtual void entered( SequenceElement* child );
-
-    /**
-     * Sets the cursor and returns the element the point is in.
-     * The handled flag shows whether the cursor has been set.
-     * This is needed because only the innermost matching element
-     * is allowed to set the cursor.
-     */
-//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
-
-    // drawing
-    //
-    // Drawing depends on a context which knows the required properties like
-    // fonts, spaces and such.
-    // It is essential to calculate elements size with the same context
-    // before you draw.
 
     /**
      * Calculates our width and height and
@@ -204,12 +188,6 @@ public:
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
     /**
-     * Moves the cursor away from the given child. The cursor is
-     * guaranteed to be inside this element.
-     */
-    //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
-
-    /**
      * Returns wether the element has no more useful
      * children (except its main child) and should therefore
      * be replaced by its main child's content.
@@ -256,19 +234,12 @@ public:
      */
     ElementIndexPtr getIndex( int position );
 
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-//    virtual QString toLatex();
-
-    // the upper right index is the only one we show
-//    virtual QString formulaString();
-
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
+    virtual void drawInternal();
 
+
+    
     //Save/load support
 
     /**

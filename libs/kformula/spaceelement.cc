@@ -54,6 +54,10 @@ const QList<BasicElement*>& SpaceElement::childElements()
 }
 
 
+void SpaceElement::drawInternal()
+{
+}
+
 void SpaceElement::calcSizes( const ContextStyle& style,
                               ContextStyle::TextStyle tstyle,
                               ContextStyle::IndexStyle /*istyle*/ )

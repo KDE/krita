@@ -127,7 +127,7 @@ public:
     virtual QString formulaString();
 
 protected:
-
+    virtual void drawInternal();
     //Save/load support
 
     /**
@@ -264,7 +264,7 @@ public:
     virtual QString toLatex();
 
 protected:
-
+    virtual void drawInternal();
     //Save/load support
 
     /**

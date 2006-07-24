@@ -1,8 +1,7 @@
-
                         The design of kformula
                           (as we imagine it)
 
-The core of kformula is a tree of element objects that make up the
+The core of KFormula is a tree of element objects that make up the
 formula which is beeing edited.
 
 The element tree itself

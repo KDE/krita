@@ -33,26 +33,10 @@ MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : SequenceElement
   //  tabs.setAutoDelete( false );
 }
 
-/*
-BasicElement* MultilineSequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                                 const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
+void MatrixEntryElement::drawInternal()
 {
-    //LuPixelPoint myPos(parentOrigin.x() + getX(),
-    //                   parentOrigin.y() + getY());
-    BasicElement* e = inherited::goToPos(cursor, handled, point, parentOrigin);
+}
 
-    if (e == 0) {
-        // If the mouse was behind this line put the cursor to the last position.
-        if ( ( point.x() > getX()+getWidth() ) &&
-             ( point.y() >= getY() ) &&
-             ( point.y() < getY()+getHeight() ) ) {
-            cursor->setTo(this, countChildren());
-            handled = true;
-            return this;
-        }
-    }
-    return e;
-}*/
 
 
 void MatrixEntryElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,

@@ -26,20 +26,24 @@
 #include "FormulaElement.h"
 #include "SequenceElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 using namespace std;
 
-
-BasicElement::BasicElement( BasicElement* p )
-        : m_baseline( 0 ), elementType( 0 )
+BasicElement::BasicElement( BasicElement* p ) : m_baseline( 0 ), elementType( 0 )
 {
-  m_parentElement = p;
-  m_boundingRect = QRectF( 0, 0, 0, 0 );
+    m_parentElement = p;
+    m_boundingRect = QRectF( 0, 0, 0, 0 );
 }
 
 BasicElement::~BasicElement()
 {
 }
+
+bool BasicElement::isInvisible() const
+{
+    return m_phantomElement;
+}
+
 
 bool BasicElement::readOnly( const BasicElement* /*child*/ ) const
 {

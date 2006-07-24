@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,18 +16,22 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef ROOTELEMENT_H
 #define ROOTELEMENT_H
 
+#include "BasicElement.h"
+
+
+
 #include <QPoint>
 #include <QList>
 
-#include "BasicElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
+
 class SequenceElement;
 
 
@@ -36,41 +41,35 @@ class SequenceElement;
 class RootElement : public BasicElement {
     RootElement& operator=( const RootElement& ) { return *this; }
 public:
+    /// The standard constructor
+    RootElement( BasicElement* parent = 0 );
 
-    //enum { contentPos, indexPos };
-
-    RootElement(BasicElement* parent = 0);
     ~RootElement();
-
-    RootElement( const RootElement& );
-
-    virtual RootElement* clone() {
-        return new RootElement( *this );
-    }
-
-//    virtual bool accept( ElementVisitor* visitor );
-
-    /**
-     * The cursor has entered one of our child sequences.
-     * This is a good point to tell the user where he is.
-     */
-    virtual void entered( SequenceElement* child );
-
-    /**
-     * Sets the cursor and returns the element the point is in.
-     * The handled flag shows whether the cursor has been set.
-     * This is needed because only the innermost matching element
-     * is allowed to set the cursor.
-     */
-//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
     virtual const QList<BasicElement*>& childElements();
-	
+
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+
+    
+    //enum { contentPos, indexPos };
+
+  
+    RootElement( const RootElement& );
+
+    virtual RootElement* clone() {
+        return new RootElement( *this );
+    }
+
+    /**
+     * The cursor has entered one of our child sequences.
+     * This is a good point to tell the user where he is.
+     */
+    virtual void entered( SequenceElement* child );
 
     /**
      * Calculates our width and height and
@@ -173,22 +172,12 @@ public:
 
     ElementIndexPtr getIndex() { return ElementIndexPtr( new RootElementIndex( this ) ); }
 
-    // Save&load
-    //virtual QDomElement getElementDom(QDomDocument *doc);
-    //virtual bool buildFromDom(QDomElement *elem);
-
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-//    virtual QString toLatex();
-
-//    virtual QString formulaString();
-
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
+    virtual void drawInternal();
 
+
+
+    
     //Save/load support
 
     /**

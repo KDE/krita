@@ -38,6 +38,11 @@ FormulaElement::FormulaElement( FormulaDocument* container )
     m_document = container;
 }
 
+void FormulaElement::drawInternal()
+{
+}
+
+
 void FormulaElement::setBaseSize( int size )
 {
     if ( size > 0 ) {

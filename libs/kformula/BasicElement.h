@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,11 +16,15 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
+
+#include <QPainterPath>
+
+
 
 #include <QString>
 #include <QKeyEvent>
@@ -33,7 +38,7 @@
 class QKeyEvent;
 class KCommand;
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 class ComplexElement;
 class Container;
@@ -46,36 +51,31 @@ class SequenceElement;
 
 
 /**
- * Basis of every formula element. An element is used basically by
- * other elements and by the @ref FormulaCursor .
+ * @short The base class for all elements of a formula
  *
- * Each element knows its size (a rect that includes all children)
- * and how to draw itself. See @ref calcSizes and @ref draw .
- *
- * An element might contain valid cursor position. If the cursor
- * enters the element it must find the next valid position
- * depending on the direction in that the cursor moves and the
- * element it comes from. There might also be some flags inside the
- * cursor that tell how it wants to move. See @ref moveLeft ,
- * @ref moveRight , @ref moveUp , @ref moveDown .
- *
- * To build a tree an element must own children. If there are children
- * there must be a main child. This is the child that might be used to
- * replace the element. See @ref getMainChild().
- *
- * If there can be children you might want to @ref insert and @ref remove
- * them. After a removal the element might be senseless.
- * (See @ref isSenseless )
- * If it is it must be removed.
+ * The BasicElement class is constructed with a parent and normally an element in a
+ * formula has a parent. The only exception is the @see FormulaElement which is the
+ * root of the element tree and has no parent element.
+ * Most of the elements have children but the number of it can be fixed or variable
+ * and the type of child element is not certain. So with the childElements() method you
+ * can obtain a list of all direct children of an element. Note that the returned list
+ * can be empty when the element is eg a token. This is also the reason why each class
+ * inheriting BasicElement has to implement the childElements() method on its own.
+ * With the childElementAt method you can test if the given point is in the element.
+ * This method is generically implemented for all element types only once in
+ * BasicElement.
+ * The BasicElement knows its size and position in the formula. This data is normally
+ * only used for drawing and stored in the m_boundingRect attribute.
+ * To adapt both variables, size and coordinates, to fit in the formula each and every
+ * BasicElement derived class has to implement layoutElement() and calculateSize()
+ * methods. The former adaptes the position, means the coordinates, when the formula
+ * changes and the latter calculates the size of the element. After a formula change
+ * first calculateSize is called for all elements then layoutElement().
  */
-class KOFORMULA_EXPORT BasicElement // exported for unit tests
+class BasicElement
 {
- //   friend class SequenceElement;
- //   friend class SequenceParser;
-
-    BasicElement& operator= ( const BasicElement& ) { return *this; }
+//    BasicElement& operator= ( const BasicElement& ) { return *this; }
 public:
-
     /*
      * The standard constructor
      * @param parent pointer to the BasicElement's parent
@@ -85,8 +85,30 @@ public:
     /// The standard destructor
     virtual ~BasicElement();
 
-    virtual BasicElement* clone() = 0;
+    /**
+     * Get the element of the formula at the given point
+     * @param p the point to look for 
+     * @return a pointer to a BasicElement
+     */
+    BasicElement* childElementAt( const QPointF& p );
 
+    /**
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
+     */
+    virtual const QList<BasicElement*>& childElements() = 0;
+
+    /// @return The element's painter path used for painting it
+    const QPainterPath& elementPath() const;
+
+    /// @returns True if the element is invisible, a phantomelement
+    virtual bool isInvisible() const;
+
+
+
+
+    virtual BasicElement* clone() = 0;    
+    
     /**
      * @returns whether the child should be read-only. The idea is
      * that a read-only parent has read-only children.
@@ -115,33 +137,6 @@ public:
      * parsing a sequence.
      */
     virtual TokenType getTokenType() const { return ELEMENT; }
-
-    /**
-     * @returns true if we don't want to see the element.
-     */
-    virtual bool isInvisible() const { return false; }
-
-    /**
-     * Sets the cursor and returns the element the point is in.
-     * The handled flag shows whether the cursor has been set.
-     * This is needed because only the innermost matching element
-     * is allowed to set the cursor.
-     */
-//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
-
-    /**
-     * Get the element of the formula at the given point
-     * @param p the point to look for 
-     * @return a pointer to a BasicElement
-     */
-    BasicElement* childElementAt( const QPointF& p );
-
-    /**
-     * Obtain a list of all child elements of this element
-     * @return a QList with pointers to all child elements
-     */
-    virtual const QList<BasicElement*>& childElements() = 0;
 
 
     /**
@@ -372,8 +367,10 @@ public:
     virtual void setElementType(ElementType* t) { elementType = t; }
 
 protected:
+    /// Draws the element internally, means it paints into @ref m_elementPath
+    virtual void drawInternal() = 0;
+    
 
-    //Save/load support
 
     /**
      * Returns the tag name of this element type.
@@ -407,23 +404,22 @@ protected:
      */
     bool buildChild( SequenceElement* child, QDomNode node, QString name );
 
-
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-//    virtual QString toLatex();
-
-//    virtual QString formulaString() { return ""; }
-
 private:
-
     /// The element's parent element - might not be null except of FormulaElement
     BasicElement* m_parentElement;
     
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
 
+    /// The path that is used to paint the element
+    QPainterPath m_elementPath;
+
+    /// True if the element is a phantom element means is not visible
+    bool m_phantomElement;   
+
+
+    
+    
     /**
      * The position of our base line from
      * the upper border. A sequence aligns its elements
@@ -435,23 +431,12 @@ private:
     luPixel m_baseline;
 
     /**
-     * The position of our middle line from
-     * the upper border. The strike out position.
-     *
-     * This will have to go. (?)
-     */
-    //luPixel m_axis;
-
-    /**
      * The token that describes our type. Please note that we don't
      * own it.
      */
     ElementType* elementType;
-
-    // debug
-    static int evilDestructionCount;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // BASICELEMENT_H

@@ -124,6 +124,10 @@ const QList<BasicElement*>& RootElement::childElements()
     return QList<BasicElement*>();
 }
 
+void RootElement::drawInternal()
+{
+}
+
 
 /*
 bool RootElement::accept( ElementVisitor* visitor )

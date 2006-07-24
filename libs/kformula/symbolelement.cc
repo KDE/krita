@@ -126,6 +126,10 @@ SymbolElement::SymbolElement( const SymbolElement& other )
     }
 }
 
+void SymbolElement::drawInternal()
+{
+}
+
 const QList<BasicElement*>& SymbolElement::childElements()
 {
     return QList<BasicElement*>();

@@ -235,6 +235,12 @@ const QList<BasicElement*>& BracketElement::childElements()
     return QList<BasicElement*>();
 }
 
+void SingleContentElement::drawInternal()
+{
+}
+
+
+
 
 
 void BracketElement::entered( SequenceElement* /*child*/ )

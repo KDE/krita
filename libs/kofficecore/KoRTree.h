@@ -459,7 +459,7 @@ QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::spli
     marker[seeds.second] = true;
 
     // There is one more in a node to split than the capacity and as we
-    // allready put the seeds int the new nodes substract them.
+    // already put the seeds in the new nodes substract them.
     int remaining = m_capacity + 1 - 2;
 
     while ( remaining > 0 )
@@ -501,6 +501,7 @@ QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::spli
             --remaining;
         }
     }
+    Q_ASSERT( n1->childCount() + n2->childCount() == node->childCount() );
 
     // move the data back to the old node
     // this has to be done as the current node is allready in the tree.
@@ -519,7 +520,7 @@ template <typename T>
 QPair<int, int> KoRTree<T>::pickSeeds( Node *node )
 {
     int s1 = 0;
-    int s2 = 0;
+    int s2 = 1;
     double max = 0;
     for ( int i = 0; i < m_capacity + 1; ++i )
     {
@@ -548,7 +549,7 @@ template <typename T>
 QPair<int, int> KoRTree<T>::pickNext( Node * node, QVector<bool> & marker, Node * group1, Node * group2 )
 {
     //qDebug() << "KoRTree::pickNext" << marker;
-    double max = 0;
+    double max = -1.0;
     int select = 0;
     int group = 0;
     for ( int i = 0; i < m_capacity + 1; ++i )

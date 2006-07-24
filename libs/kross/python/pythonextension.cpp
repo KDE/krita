@@ -23,8 +23,6 @@
 #include "../api/variant.h"
 #include "../api/dict.h"
 #include "../api/exception.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 using namespace Kross::Python;
 
@@ -151,8 +149,7 @@ Kross::Api::List* PythonExtension::toObject(const Py::Tuple& tuple)
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
     krossdebug( QString("Kross::Python::PythonExtension::toObject(Py::Tuple)") );
 #endif
-
-    Q3ValueList<Kross::Api::Object::Ptr> l;
+    QList<Kross::Api::Object::Ptr> l;
     uint size = tuple.size();
     for(uint i = 0; i < size; i++)
         l.append( Kross::Api::Object::Ptr(toObject(tuple[i])) );
@@ -165,7 +162,7 @@ Kross::Api::List* PythonExtension::toObject(const Py::List& list)
     krossdebug( QString("Kross::Python::PythonExtension::toObject(Py::List)") );
 #endif
 
-    Q3ValueList<Kross::Api::Object::Ptr> l;
+    QList<Kross::Api::Object::Ptr> l;
     uint length = list.length();
     for(uint i = 0; i < length; i++)
         l.append( Kross::Api::Object::Ptr(toObject(list[i])) );
@@ -286,17 +283,6 @@ const Py::List PythonExtension::toPyObject(const QList<QVariant>& list)
     return l;
 }
 
-const Py::List PythonExtension::toPyObject(const Q3ValueList<QVariant>& list)
-{
-#ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-    krossdebug( QString("Kross::Python::PythonExtension::toPyObject(QValueList<QVariant>)") );
-#endif
-    Py::List l;
-    for(Q3ValueList<QVariant>::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
-        l.append(toPyObject(*it));
-    return l;
-}
-
 const Py::Object PythonExtension::toPyObject(const QVariant& variant)
 {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
@@ -374,8 +360,8 @@ const Py::Object PythonExtension::toPyObject(Kross::Api::Object* object)
 #endif
         Py::List pylist;
         Kross::Api::List* list = static_cast<Kross::Api::List*>( object );
-        Q3ValueList<Kross::Api::Object::Ptr> valuelist = list->getValue();
-        for(Q3ValueList<Kross::Api::Object::Ptr>::Iterator it = valuelist.begin(); it != valuelist.end(); ++it)
+        QList<Kross::Api::Object::Ptr> valuelist = list->getValue();
+        for(QList<Kross::Api::Object::Ptr>::Iterator it = valuelist.begin(); it != valuelist.end(); ++it)
             pylist.append( toPyObject( (*it).data() ) ); // recursive
         return pylist;
     }

@@ -22,8 +22,6 @@
 
 #include <QString>
 #include <QVariant>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <koffice_export.h>
 
 #include "object.h"
@@ -48,7 +46,6 @@ namespace Kross { namespace Api {
              *
              * \param value The initial QVariant-value
              *        this Variant-Object has.
-             * \param name The name this Value has.
              */
             Variant(const QVariant& value);
 
@@ -66,7 +63,7 @@ namespace Kross { namespace Api {
             //inline operator const Q3CString () { return getValue().toCString(); }
             //inline operator const Q3CString& () { return getValue().asCString(); }
 
-            inline operator Q3ValueList<QVariant> () { return getValue().toList(); }
+            inline operator QList<QVariant> () { return getValue().toList(); }
 
             /**
              * Operator to return a QStringList.
@@ -188,19 +185,19 @@ namespace Kross { namespace Api {
              *
              * \throw TypeException If the convert failed.
              * \param object The object to convert.
-             * \return The to a Q3ValueList converted object.
+             * \return The to a QList converted object.
              */
             static QStringList toStringList(Object* object);
 
             /**
              * Try to convert the given \a Object into
-             * a Q3ValueList of QVariant's.
+             * a QList of QVariant's.
              *
              * \throw TypeException If the convert failed.
              * \param object The object to convert.
-             * \return The to a Q3ValueList converted object.
+             * \return The to a QList converted object.
              */
-            static Q3ValueList<QVariant> toList(Object* object);
+            static QList<QVariant> toList(Object* object);
 
     };
 

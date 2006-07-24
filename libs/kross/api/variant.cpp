@@ -21,8 +21,6 @@
 #include "list.h"
 
 #include <klocale.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 using namespace Kross::Api;
 
@@ -152,7 +150,7 @@ QStringList Variant::toStringList(Object* object)
     return variant.toStringList();
 }
 
-Q3ValueList<QVariant> Variant::toList(Object* object)
+QList<QVariant> Variant::toList(Object* object)
 {
     List* list = dynamic_cast< List* >( object );
     if(list) {

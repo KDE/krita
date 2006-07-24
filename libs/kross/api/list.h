@@ -21,10 +21,6 @@
 #define KROSS_API_LIST_H
 
 #include <QString>
-#include <q3valuelist.h>
-#include <q3intdict.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 #include <koffice_export.h>
 #include "object.h"
 #include "value.h"
@@ -35,9 +31,9 @@ namespace Kross { namespace Api {
      * The List class implementates \a Value to handle
      * lists and collections.
      */
-    class KROSS_EXPORT List : public Value< List, Q3ValueList<Object::Ptr> >
+    class KROSS_EXPORT List : public Value< List, QList<Object::Ptr> >
     {
-            friend class Value< List, Q3ValueList<Object::Ptr> >;
+            friend class Value< List, QList<Object::Ptr> >;
         public:
 
             /**
@@ -57,7 +53,7 @@ namespace Kross { namespace Api {
              * \param value The list of \a Object instances this
              *        list has initialy.
              */
-            List(Q3ValueList<Object::Ptr> value = Q3ValueList<Object::Ptr>());
+            List(QList<Object::Ptr> value = QList<Object::Ptr>());
 
             /**
              * Destructor.
@@ -120,16 +116,17 @@ namespace Kross { namespace Api {
     {
         public:
             ListT() : List() {}
-            ListT(Q3ValueList<OBJECT> values) : List(values) {}
+            ListT(QList<OBJECT> values) : List(values) {}
 
             template< typename TYPE >
-            ListT(Q3ValueList<TYPE> values) : List()
+            ListT(QList<TYPE> values) : List()
             {
-                Q3ValueListIterator<TYPE> it(values.begin()), end(values.end());
+                QListIterator<TYPE> it(values.begin()), end(values.end());
                 for(; it != end; ++it)
                     this->append( new OBJECT(*it) );
             }
 
+            /*
             template< typename TYPE >
             ListT(Q3IntDict<TYPE> values) : List()
             {
@@ -151,6 +148,7 @@ namespace Kross { namespace Api {
                     ++it;
                 }
             }
+            */
 
             virtual ~ListT() {}
 

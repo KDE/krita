@@ -51,10 +51,10 @@ TestPluginObject::TestPluginObject(const QString& name)
     this->addFunction2< Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant >
         ("stringstringfunc", this, &TestPluginObject::stringstringfunc);
     // With 3 arguments
-    this->addFunction2< Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant >
+    this->addFunction3< Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant >
         ("uintdoublestringfunc", this, &TestPluginObject::uintdoublestringfunc);
     // With 4 arguments
-    this->addFunction2< Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant >
+    this->addFunction4< Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant >
         ("stringlistbooluintdouble", this, &TestPluginObject::stringlistbooluintdouble);
 
     // With default arguments
@@ -85,7 +85,6 @@ void TestPluginObject::voiduintfunc(uint) {}
 int TestPluginObject::intfunc(int i) { return i; }
 bool TestPluginObject::boolfunc(bool b) { return b; }
 double TestPluginObject::doublefunc(double d) { return d; }
-//Q3CString TestPluginObject::cstringfunc(const Q3CString& s) { return s; }
 QString TestPluginObject::stringfunc(const QString& s) { return s; }
 QStringList TestPluginObject::stringlistfunc(const QStringList& sl) { return sl; }
 QVariant TestPluginObject::variantfunc(const QVariant& v) { return v; }

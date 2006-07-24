@@ -22,10 +22,8 @@
 
 #include "object.h"
 #include "list.h"
-//#include "exception.h"
 #include <koffice_export.h>
 #include <QString>
-#include <q3valuelist.h>
 #include <ksharedptr.h>
 
 namespace Kross { namespace Api {

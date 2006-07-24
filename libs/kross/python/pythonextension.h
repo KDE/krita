@@ -30,8 +30,6 @@
 
 #include <QString>
 #include <QStringList>
-#include <q3valuelist.h>
-#include <q3valuevector.h>
 #include <QMap>
 #include <QVariant>
 
@@ -168,14 +166,6 @@ namespace Kross { namespace Python {
              * \return The to a Py::List converted QValueList.
              */
             static const Py::List toPyObject(const QList<QVariant>& list);
-
-            /**
-             * Converts a QValueList to a Py::List.
-             *
-             * \param list The QValueList to convert.
-             * \return The to a Py::List converted QValueList.
-             */
-            static const Py::List toPyObject(const Q3ValueList<QVariant>& list);
 
             /**
              * Converts a QVariant to a Py::Object.

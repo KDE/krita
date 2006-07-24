@@ -19,13 +19,11 @@
 
 #include "list.h"
 #include "exception.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 using namespace Kross::Api;
 
-List::List(Q3ValueList<Object::Ptr> value)
-    : Value< List, Q3ValueList<Object::Ptr> >(value)
+List::List(QList<Object::Ptr> value)
+    : Value< List, QList<Object::Ptr> >(value)
 {
 }
 
@@ -41,15 +39,15 @@ const QString List::getClassName() const
 const QString List::toString()
 {
     QString s = "[";
-    Q3ValueList<Object::Ptr> list = getValue();
-    for(Q3ValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+    QList<Object::Ptr> list = getValue();
+    for(QList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
         s += "'" + (*it)->toString() + "', ";
     return (s.endsWith(", ") ? s.left(s.length() - 2) : s) + "]";
 }
 
 Object* List::item(int idx, Object* defaultobject)
 {
-    Q3ValueList<Object::Ptr>& list = getValue();
+    QList<Object::Ptr>& list = getValue();
     if(idx >= list.count()) {
         if(defaultobject)
             return defaultobject;

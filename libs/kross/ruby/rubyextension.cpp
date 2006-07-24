@@ -22,8 +22,6 @@
 
 #include <QMap>
 #include <QString>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "../api/list.h"
 
@@ -66,7 +64,7 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALUE *argv)
 {
     QString funcname = rb_id2name(SYM2ID(argv[0]));
-    Q3ValueList<Api::Object::Ptr> argsList;
+    QList<Api::Object::Ptr> argsList;
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
     krossdebug(QString("Building arguments list for function: %1 there are %2 arguments.").arg(funcname).arg(argc-1));
 #endif
@@ -212,7 +210,7 @@ Kross::Api::Object* RubyExtension::toObject(VALUE value)
             return new Kross::Api::Variant(QString(STR2CSTR(value)));
         case T_ARRAY:
         {
-            Q3ValueList<Kross::Api::Object::Ptr> l;
+            QList<Kross::Api::Object::Ptr> l;
             for(int i = 0; i < RARRAY(value)->len; i++)
             {
                 Kross::Api::Object* o = toObject( rb_ary_entry( value , i ) );
@@ -283,14 +281,6 @@ VALUE RubyExtension::toVALUE(QMap<QString, QVariant> map)
 
 }
 
-VALUE RubyExtension::toVALUE(Q3ValueList<QVariant> list)
-{
-    VALUE l = rb_ary_new();
-    for(Q3ValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
-        rb_ary_push(l, toVALUE(*it));
-    return l;
-}
-
 VALUE RubyExtension::toVALUE(QList<QVariant> list)
 {
     VALUE l = rb_ary_new();
@@ -301,7 +291,6 @@ VALUE RubyExtension::toVALUE(QList<QVariant> list)
 
 VALUE RubyExtension::toVALUE(const QVariant& variant)
 {
-    
     switch(variant.type()) {
         case QVariant::Invalid:
             return Qnil;

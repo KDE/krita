@@ -30,7 +30,7 @@
 #include "variant.h"
 
 #include <QString>
-#include <q3valuelist.h>
+#include <QList>
 #include <QMap>
 
 namespace Kross { namespace Api {

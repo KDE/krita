@@ -22,7 +22,6 @@
 
 #include <QString>
 #include <QStringList>
-#include <q3valuelist.h>
 #include <QMap>
 #include <QVariant>
 //#include <QObject>

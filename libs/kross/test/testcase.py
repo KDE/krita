@@ -71,7 +71,7 @@ class TestPlugin(unittest.TestCase):
 		self.assert_( self.pluginobject1.boolfunc(False) == False )
 		self.assert_( self.pluginobject1.doublefunc(4265.3723) == 4265.3723 )
 		self.assert_( self.pluginobject1.doublefunc(-4265.68) == -4265.68 )
-		self.assert_( self.pluginobject1.cstringfunc(" This is a Test! ") == " This is a Test! " )
+		#self.assert_( self.pluginobject1.cstringfunc(" This is a Test! ") == " This is a Test! " )
 		self.assert_( self.pluginobject1.stringfunc(" Another \n\r Test! $%&\"") == " Another \n\r Test! $%&\"" )
 		#self.assert_( self.pluginobject1.stringfunc(unicode(" Another Test! ")) == unicode(" Another Test! ") )
 		self.assert_( self.pluginobject1.stringstringfunc("MyString1", "MyString2") == "MyString1" )

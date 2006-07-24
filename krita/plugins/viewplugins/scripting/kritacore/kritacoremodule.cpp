@@ -53,7 +53,7 @@ extern "C"
      * Exported an loadable function as entry point to use
      * the \a KexiAppModule.
      */
-    Kross::Api::Object* KDE_EXPORT init_module(Kross::Api::Manager* manager)
+    Kross::Api::Object* init_module(Kross::Api::Manager* manager)
     {
         return new Kross::KritaCore::KritaCoreModule(manager);
     }

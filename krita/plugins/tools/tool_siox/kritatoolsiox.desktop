@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Siox Tool
+ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritatoolsiox
+X-Krita-Version=2

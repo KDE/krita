@@ -43,7 +43,7 @@ BasicElement* OrdinaryCreationStrategy::createElement( QString type )
     else if ( type == "INDEX" )        return new IndexElement();
     else if ( type == "FRACTION" )     return new FractionElement();
     else if ( type == "SYMBOL" )       return new SymbolElement();
-    else if ( type == "NAMESEQUENCE" ) return new NameSequence();
+//    else if ( type == "NAMESEQUENCE" ) return new NameSequence();
     else if ( type == "OVERLINE" )     return new OverlineElement();
     else if ( type == "UNDERLINE" )    return new UnderlineElement();
     else if ( type == "MULTILINE" )    return new MatrixRowElement();
@@ -64,12 +64,12 @@ EmptyElement* OrdinaryCreationStrategy::createEmptyElement()
 {
     return new EmptyElement;
 }
-
+/*
 NameSequence* OrdinaryCreationStrategy::createNameSequence()
 {
     return new NameSequence;
 }
-
+*/
 BracketElement* OrdinaryCreationStrategy::createBracketElement( SymbolType lhs, SymbolType rhs )
 {
     return new BracketElement( lhs, rhs );

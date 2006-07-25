@@ -61,7 +61,7 @@ public:
     virtual MatrixElement* createMatrixElement( uint rows, uint columns ) = 0;
 
     virtual EmptyElement* createEmptyElement() = 0;
-    virtual NameSequence* createNameSequence() = 0;
+//    virtual NameSequence* createNameSequence() = 0;
     virtual BracketElement* createBracketElement( SymbolType lhs, SymbolType rhs ) = 0;
     virtual OverlineElement* createOverlineElement() = 0;
     virtual UnderlineElement* createUnderlineElement() = 0;
@@ -83,7 +83,7 @@ public:
 
     virtual TextElement* createTextElement( const QChar& ch, bool symbol=false );
     virtual EmptyElement* createEmptyElement();
-    virtual NameSequence* createNameSequence();
+//    virtual NameSequence* createNameSequence();
     virtual BracketElement* createBracketElement( SymbolType lhs, SymbolType rhs );
     virtual OverlineElement* createOverlineElement();
     virtual UnderlineElement* createUnderlineElement();

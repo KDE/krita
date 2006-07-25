@@ -57,6 +57,53 @@
 
 namespace KFormula {
 
+SequenceElement::SequenceElement( BasicElement* parent ) : BasicElement(parent), parseTree(0), textSequence(true),singlePipe(true)
+{
+    assert( creationStrategy != 0 );
+}
+
+SequenceElement::~SequenceElement()
+{
+    delete parseTree;
+}
+
+BasicElement* SequenceElement::childAt( int i )
+{
+    return m_sequenceChildren[ i ];
+}
+
+void SequenceElement::drawInternal()
+{
+}   
+
+void SequenceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+{
+    QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
+
+    BasicElement* last = m_sequenceChildren.last();
+    if ( last != 0 ) {
+        // Create a list (right order!)
+        QList<ElementType*> tokenList;
+        ElementType* token = last->getElementType();
+        while ( token != 0 ) {
+            // Add to the list.
+            tokenList.prepend( token );
+            token = token->getPrev();
+        }
+
+        if ( tokenList.count() == 1 ) {
+            tokenList.first()->saveMathML( this, doc, parent.toElement(), oasisFormat );
+            return;
+        }
+
+        for ( int i = 0; i < tokenList.count(); ++i ) {
+            tokenList.at( i )->saveMathML( this, doc, de, oasisFormat );
+        }
+    }
+    parent.appendChild( de );
+}
+
+
 
 ElementCreationStrategy* SequenceElement::creationStrategy = 0;
 
@@ -66,21 +113,6 @@ void SequenceElement::setCreationStrategy( ElementCreationStrategy* strategy )
 }
 
 
-SequenceElement::SequenceElement(BasicElement* parent)
-        : BasicElement(parent), parseTree(0), textSequence(true),singlePipe(true)
-{
-    assert( creationStrategy != 0 );
-}
-
-
-SequenceElement::~SequenceElement()
-{
-    delete parseTree;
-}
-
-void SequenceElement::drawInternal()
-{
-}
 
 
 
@@ -88,21 +120,14 @@ void SequenceElement::drawInternal()
 SequenceElement::SequenceElement( const SequenceElement& other )
     : BasicElement( other )
 {
- //   children.setAutoDelete(true);
-    uint count = other.children.count();
+ //   m_sequenceChildren.setAutoDelete(true);
+    uint count = other.m_sequenceChildren.count();
     for (uint i = 0; i < count; i++) {
-        BasicElement* child = children.at(i)->clone();
+        BasicElement* child = m_sequenceChildren.at(i)->clone();
         child->setParent( this );
-        children.append( child );
+        m_sequenceChildren.append( child );
     }
 }
-
-/*
-bool SequenceElement::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}
-*/
 
 bool SequenceElement::readOnly( const FormulaCursor* ) const
 {
@@ -114,60 +139,12 @@ const QList<BasicElement*>& SequenceElement::childElements()
     return QList<BasicElement*>();
 }
 
-/**
- * Returns the element the point is in.
- */
-/*
-BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                        const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
-{
-    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
-    if (e != 0) {
-        LuPixelPoint myPos(parentOrigin.x() + getX(),
-                           parentOrigin.y() + getY());
-
-        foreach( BasicElement* child, children )
-	{
-            e = child->goToPos(cursor, handled, point, myPos);
-            if (e != 0) {
-                if (!handled) {
-                    handled = true;
-                    if ((point.x() - myPos.x()) < (e->getX() + e->getWidth()*2/3)) {
-                        cursor->setTo(this, children.indexOf(e));
-                    }
-                    else {
-                        cursor->setTo(this, children.indexOf(e)+1);
-                    }
-                }
-                return e;
-            }
-        }
-
-        luPixel dx = point.x() - myPos.x();
-        //int dy = point.y() - myPos.y();
-
-        foreach( BasicElement* child, children )
-	{
-            if (dx < child->getX()) {
-                cursor->setTo( this, children.indexOf( child ) );
-                handled = true;
-                return child;
-            }
-        }
-
-        cursor->setTo(this, countChildren());
-        handled = true;
-        return this;
-    }
-    return 0;
-}
-*/
 
 bool SequenceElement::isEmpty()
 {
-    uint count = children.count();
+    uint count = m_sequenceChildren.count();
     for (uint i = 0; i < count; i++) {
-        BasicElement* child = children.at(i);
+        BasicElement* child = m_sequenceChildren.at(i);
         if (!child->isInvisible()) {
             return false;
         }
@@ -178,7 +155,7 @@ bool SequenceElement::isEmpty()
 
 /**
  * Calculates our width and height and
- * our children's parentPosition.
+ * our m_sequenceChildren's parentPosition.
  */
 void SequenceElement::calcSizes(const ContextStyle& style,
                                 ContextStyle::TextStyle tstyle,
@@ -190,7 +167,7 @@ void SequenceElement::calcSizes(const ContextStyle& style,
         luPixel fromBaseline = 0;
 
         // Let's do all normal elements that have a base line.
-        foreach( BasicElement* child, children  )
+        foreach( BasicElement* child, m_sequenceChildren  )
        	{
             luPixel spaceBefore = 0;
             if ( isFirstOfToken( child ) ) {
@@ -241,13 +218,13 @@ void SequenceElement::calcSizes(const ContextStyle& style,
 
 void SequenceElement::setChildrenPositions()
 {
-    foreach( BasicElement* child, children )
+    foreach( BasicElement* child, m_sequenceChildren )
         child->setY(getBaseline() - child->getBaseline());
 }
 
 
 /**
- * Draws the whole element including its children.
+ * Draws the whole element including its m_sequenceChildren.
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
@@ -261,7 +238,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 
     if( !isEmpty() )
     {
-        foreach( BasicElement* child, children )
+        foreach( BasicElement* child, m_sequenceChildren )
 	{
             if (!child->isInvisible())
 	    {
@@ -283,7 +260,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 
 void SequenceElement::dispatchFontCommand( FontCommand* cmd )
 {
-  foreach( BasicElement* child, children )
+  foreach( BasicElement* child, m_sequenceChildren )
     child->dispatchFontCommand( cmd );
 }
 
@@ -392,12 +369,12 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
 
 luPixel SequenceElement::getChildPosition( const ContextStyle& context, int child )
 {
-    if (child < children.count())
-        return children.at(child)->getX();
+    if (child < m_sequenceChildren.count())
+        return m_sequenceChildren.at(child)->getX();
     else
     {
-        if( !children.isEmpty() )
-            return children.at(child-1)->getX() + children.at(child-1)->getWidth();
+        if( !m_sequenceChildren.isEmpty() )
+            return m_sequenceChildren.at(child-1)->getX() + m_sequenceChildren.at(child-1)->getWidth();
         else 
             return context.ptToLayoutUnitPixX( 2 );
     }
@@ -421,7 +398,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
     // Our parent asks us for a cursor position. Found.
     if (from == getParent()) {
-        cursor->setTo(this, children.count());
+        cursor->setTo(this, m_sequenceChildren.count());
         from->entered( this );
     }
 
@@ -432,12 +409,12 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
                 cursor->setTo(this, cursor->getPos()-1);
 
                 // invisible elements are not visible so we move on.
-                if (children.at(cursor->getPos())->isInvisible()) {
+                if (m_sequenceChildren.at(cursor->getPos())->isInvisible()) {
                     moveLeft(cursor, this);
                 }
             }
             else {
-                children.at(cursor->getPos()-1)->moveLeft(cursor, this);
+                m_sequenceChildren.at(cursor->getPos()-1)->moveLeft(cursor, this);
             }
         }
         else {
@@ -451,10 +428,10 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         }
     }
 
-    // The cursor came from one of our children or
+    // The cursor came from one of our m_sequenceChildren or
     // something is wrong.
     else {
-        int fromPos = children.indexOf(from);
+        int fromPos = m_sequenceChildren.indexOf(from);
         cursor->setTo(this, fromPos);
         if (cursor->isSelectionMode()) {
             cursor->setMark(fromPos+1);
@@ -484,17 +461,17 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     // We already owned the cursor. Ask next child then.
     else if (from == this) {
         int pos = cursor->getPos();
-        if (pos < children.count()) {
+        if (pos < m_sequenceChildren.count()) {
             if (cursor->isSelectionMode()) {
                 cursor->setTo(this, pos+1);
 
                 // invisible elements are not visible so we move on.
-                if (children.at(pos)->isInvisible()) {
+                if (m_sequenceChildren.at(pos)->isInvisible()) {
                     moveRight(cursor, this);
                 }
             }
             else {
-                children.at(pos)->moveRight(cursor, this);
+                m_sequenceChildren.at(pos)->moveRight(cursor, this);
             }
         }
         else {
@@ -508,10 +485,10 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         }
     }
 
-    // The cursor came from one of our children or
+    // The cursor came from one of our m_sequenceChildren or
     // something is wrong.
     else {
-        int fromPos = children.indexOf(from);
+        int fromPos = m_sequenceChildren.indexOf(from);
         cursor->setTo(this, fromPos+1);
         if (cursor->isSelectionMode()) {
             cursor->setMark(fromPos);
@@ -530,7 +507,7 @@ void SequenceElement::moveWordLeft(FormulaCursor* cursor)
 {
     uint pos = cursor->getPos();
     if (pos > 0) {
-        ElementType* type = children.at(pos-1)->getElementType();
+        ElementType* type = m_sequenceChildren.at(pos-1)->getElementType();
         if (type != 0) {
             cursor->setTo(this, type->start());
         }
@@ -544,8 +521,8 @@ void SequenceElement::moveWordLeft(FormulaCursor* cursor)
 void SequenceElement::moveWordRight(FormulaCursor* cursor)
 {
     int pos = cursor->getPos();
-    if (pos < children.count()) {
-        ElementType* type = children.at(pos)->getElementType();
+    if (pos < m_sequenceChildren.count()) {
+        ElementType* type = m_sequenceChildren.at(pos)->getElementType();
         if (type != 0) {
             cursor->setTo(this, type->end());
         }
@@ -608,7 +585,7 @@ void SequenceElement::moveHome(FormulaCursor* cursor)
             while (element->getParent() != this) {
                 element = element->getParent();
             }
-            cursor->setMark(children.indexOf(element)+1);
+            cursor->setMark(m_sequenceChildren.indexOf(element)+1);
         }
     }
     cursor->setTo(this, 0);
@@ -626,15 +603,15 @@ void SequenceElement::moveEnd(FormulaCursor* cursor)
             while (element->getParent() != this) {
                 element = element->getParent();
                 if (element == 0) {
-                    cursor->setMark(children.count());
+                    cursor->setMark(m_sequenceChildren.count());
                     break;
                 }
             }
             if( element )
-                cursor->setMark(children.indexOf(element));
+                cursor->setMark(m_sequenceChildren.indexOf(element));
         }
     }
-    cursor->setTo(this, children.count());
+    cursor->setTo(this, m_sequenceChildren.count());
 }
 
 /**
@@ -648,7 +625,7 @@ void SequenceElement::goInside(FormulaCursor* cursor)
 }
 
 
-// children
+// m_sequenceChildren
 
 /**
  * Removes the child. If this was the main child this element might
@@ -659,12 +636,12 @@ void SequenceElement::goInside(FormulaCursor* cursor)
  */
 // void SequenceElement::removeChild(FormulaCursor* cursor, BasicElement* child)
 // {
-//     int pos = children.find(child);
+//     int pos = m_sequenceChildren.find(child);
 //     formula()->elementRemoval(child, pos);
 //     cursor->setTo(this, pos);
-//     children.remove(pos);
+//     m_sequenceChildren.remove(pos);
 //     /*
-//         if len(self.children) == 0:
+//         if len(self.m_sequenceChildren) == 0:
 //             if self.parent != None:
 //                 self.parent.removeChild(cursor, self)
 //                 return
@@ -674,7 +651,7 @@ void SequenceElement::goInside(FormulaCursor* cursor)
 
 
 /**
- * Inserts all new children at the cursor position. Places the
+ * Inserts all new m_sequenceChildren at the cursor position. Places the
  * cursor according to the direction. The inserted elements will
  * be selected.
  *
@@ -689,7 +666,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
     for (int i = 0; i < count; i++) {
         BasicElement* child = newChildren.takeAt(0);
         child->setParent(this);
-        children.insert(pos+i, child);
+        m_sequenceChildren.insert(pos+i, child);
     }
     if (direction == beforeCursor) {
         cursor->setTo(this, pos+count, pos);
@@ -704,8 +681,8 @@ void SequenceElement::insert(FormulaCursor* cursor,
 
 
 /**
- * Removes all selected children and returns them. Places the
- * cursor to where the children have been.
+ * Removes all selected m_sequenceChildren and returns them. Places the
+ * cursor to where the m_sequenceChildren have been.
  *
  * The ownership of the list is passed to the caller.
  */
@@ -727,9 +704,9 @@ void SequenceElement::remove(FormulaCursor* cursor,
             int pos = cursor->getPos() - 1;
             if (pos >= 0) {
                 while (pos >= 0) {
-                    BasicElement* child = children.at(pos);
+                    BasicElement* child = m_sequenceChildren.at(pos);
                     formula()->elementRemoval(child);
-                    children.takeAt(pos);
+                    m_sequenceChildren.takeAt(pos);
                     removedChildren.prepend(child);
                     if (!child->isInvisible()) {
                         break;
@@ -742,11 +719,11 @@ void SequenceElement::remove(FormulaCursor* cursor,
         }
         else {
             int pos = cursor->getPos();
-            if (pos < children.count()) {
-                while (pos < children.count()) {
-                    BasicElement* child = children.at(pos);
+            if (pos < m_sequenceChildren.count()) {
+                while (pos < m_sequenceChildren.count()) {
+                    BasicElement* child = m_sequenceChildren.at(pos);
                     formula()->elementRemoval(child);
-                    children.takeAt(pos);
+                    m_sequenceChildren.takeAt(pos);
                     removedChildren.append(child);
                     if (!child->isInvisible()) {
                         break;
@@ -765,13 +742,13 @@ void SequenceElement::remove(FormulaCursor* cursor,
 
 
 /**
- * Removes the children at pos and appends it to the list.
+ * Removes the m_sequenceChildren at pos and appends it to the list.
  */
 void SequenceElement::removeChild(QList<BasicElement*>& removedChildren, int pos)
 {
-    BasicElement* child = children.at(pos);
+    BasicElement* child = m_sequenceChildren.at(pos);
     formula()->elementRemoval(child);
-    children.takeAt(pos);
+    m_sequenceChildren.takeAt(pos);
     removedChildren.append(child);
     //cerr << *removedChildren.at(0) << endl;
     formula()->changed();
@@ -796,12 +773,12 @@ BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direct
 {
     if ( direction == beforeCursor ) {
         if ( cursor->getPos() > 0 ) {
-            return children.at( cursor->getPos() - 1 );
+            return m_sequenceChildren.at( cursor->getPos() - 1 );
         }
     }
     else {
-        if ( cursor->getPos() < qRound( children.count() ) ) {
-            return children.at( cursor->getPos() );
+        if ( cursor->getPos() < qRound( m_sequenceChildren.count() ) ) {
+            return m_sequenceChildren.at( cursor->getPos() );
         }
     }
     return 0;
@@ -814,7 +791,7 @@ BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direct
  */
 void SequenceElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
-    int pos = children.indexOf(child);
+    int pos = m_sequenceChildren.indexOf(child);
     if (pos > -1) {
         cursor->setTo(this, pos+1, pos);
     }
@@ -822,7 +799,7 @@ void SequenceElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 
 void SequenceElement::childWillVanish(FormulaCursor* cursor, BasicElement* child)
 {
-    int childPos = children.indexOf(child);
+    int childPos = m_sequenceChildren.indexOf(child);
     if (childPos > -1) {
         int pos = cursor->getPos();
         if (pos > childPos) {
@@ -838,11 +815,11 @@ void SequenceElement::childWillVanish(FormulaCursor* cursor, BasicElement* child
 
 
 /**
- * Selects all children. The cursor is put behind, the mark before them.
+ * Selects all m_sequenceChildren. The cursor is put behind, the mark before them.
  */
 void SequenceElement::selectAllChildren(FormulaCursor* cursor)
 {
-    cursor->setTo(this, children.count(), 0);
+    cursor->setTo(this, m_sequenceChildren.count(), 0);
 }
 
 bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
@@ -851,7 +828,7 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
         uint from = qMin( cursor->getPos(), cursor->getMark() );
         uint to = qMax( cursor->getPos(), cursor->getMark() );
         for ( uint i = from; i < to; i++ ) {
-            BasicElement* element = getChild( i );
+            BasicElement* element = childAt( i );
             if ( element->getCharacter() == QChar::Null ) {
                 return false;
             }
@@ -894,7 +871,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         }
         break;
     }
-    case req_addNameSequence:
+/*    case req_addNameSequence:
         if ( onlyTextSelected( container->activeCursor() ) ) {
             NameSequence* nameSequence = creationStrategy->createNameSequence();
             if ( nameSequence != 0 ) {
@@ -903,7 +880,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
                 return command;
             }
         }
-        break;
+        break;*/
     case req_addBracket: {
         BracketRequest* br = static_cast<BracketRequest*>( request );
         BracketElement* bracketElement =
@@ -1012,7 +989,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     case req_addIndex: {
         if ( cursor->getPos() > 0 && !cursor->isSelection() ) {
             IndexElement* element =
-                dynamic_cast<IndexElement*>( children.at( cursor->getPos()-1 ) );
+                dynamic_cast<IndexElement*>( m_sequenceChildren.at( cursor->getPos()-1 ) );
             if ( element != 0 ) {
                 element->getMainChild()->goInside( cursor );
                 return element->getMainChild()->buildCommand( container, request );
@@ -1100,7 +1077,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
             CharStyleCommand* cmd = new CharStyleCommand( cs, i18n( "Change Char Style" ), container );
             int end = cursor->getSelectionEnd();
             for ( int i = cursor->getSelectionStart(); i<end; ++i ) {
-                cmd->addElement( children.at( i ) );
+                cmd->addElement( m_sequenceChildren.at( i ) );
             }
             return cmd;
         }
@@ -1113,7 +1090,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
             CharFamilyCommand* cmd = new CharFamilyCommand( cf, i18n( "Change Char Family" ), container );
             int end = cursor->getSelectionEnd();
             for ( int i = cursor->getSelectionStart(); i<end; ++i ) {
-                cmd->addElement( children.at( i ) );
+                cmd->addElement( m_sequenceChildren.at( i ) );
             }
             return cmd;
         }
@@ -1282,13 +1259,13 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
 }
 
 /**
- * Stores the given childrens dom in the element.
+ * Stores the given m_sequenceChildrens dom in the element.
  */
 void SequenceElement::getChildrenDom( QDomDocument& doc, QDomElement elem,
                                      uint from, uint to)
 {
     for (uint i = from; i < to; i++) {
-        QDomElement tmpEleDom=children.at(i)->getElementDom(doc);
+        QDomElement tmpEleDom=m_sequenceChildren.at(i)->getElementDom(doc);
 	elem.appendChild(tmpEleDom);
     }
 }
@@ -1341,7 +1318,7 @@ void SequenceElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
-    uint count = children.count();
+    uint count = m_sequenceChildren.count();
     QDomDocument doc = element.ownerDocument();
     getChildrenDom(doc, element, 0, count);
 }
@@ -1369,7 +1346,7 @@ bool SequenceElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    return buildChildrenFromDom(children, node);
+    return buildChildrenFromDom(m_sequenceChildren, node);
 }
 
 
@@ -1378,7 +1355,7 @@ void SequenceElement::parse()
     delete parseTree;
 
     textSequence = true;
-    foreach( BasicElement* element, children )
+    foreach( BasicElement* element, m_sequenceChildren )
     {
         // Those types are gone. Make sure they won't
         // be used.
@@ -1391,7 +1368,7 @@ void SequenceElement::parse()
 
     const SymbolTable& symbols = formula()->getSymbolTable();
     SequenceParser parser(symbols);
-    parseTree = parser.parse(children);
+    parseTree = parser.parse(m_sequenceChildren);
 
     // With the IndexElement dynamically changing its text/non-text
     // behaviour we need to reparse your parent, too. Hacky!
@@ -1412,77 +1389,22 @@ bool SequenceElement::isFirstOfToken( BasicElement* child )
     return ( child->getElementType() != 0 ) && isChildNumber( child->getElementType()->start(), child );
 }
 
+
+
+
 /*
-QString SequenceElement::toLatex()
-{
-    QString content;
-    uint count = children.count();
-    for ( uint i = 0; i < count; i++ ) {
-        BasicElement* child = children.at( i );
-//         if ( isFirstOfToken( child ) ) {
-//             content += "";
-//         }
-        content += child->toLatex();
-    }
-    return content;
-}
-*/
-/*
-QString SequenceElement::formulaString()
-{
-    QString content;
-    uint count = children.count();
-    for ( uint i = 0; i < count; i++ ) {
-        BasicElement* child = children.at( i );
-        //if ( isFirstOfToken( child ) ) {
-        //    content += " ";
-        //}
-        content += child->formulaString();
-    }
-    return content;
-}
-*/
-
-void SequenceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
-
-    BasicElement* last = children.last();
-    if ( last != 0 ) {
-        // Create a list (right order!)
-        QList<ElementType*> tokenList;
-        ElementType* token = last->getElementType();
-        while ( token != 0 ) {
-            // Add to the list.
-            tokenList.prepend( token );
-            token = token->getPrev();
-        }
-
-        if ( tokenList.count() == 1 ) {
-            tokenList.first()->saveMathML( this, doc, parent.toElement(), oasisFormat );
-            return;
-        }
-
-        for ( int i = 0; i < tokenList.count(); ++i ) {
-            tokenList.at( i )->saveMathML( this, doc, de, oasisFormat );
-        }
-    }
-    parent.appendChild( de );
-}
-
-
 int SequenceElement::childPos( const BasicElement* child ) const
 {
-    foreach( BasicElement* tmp, children )
+    foreach( BasicElement* tmp, m_sequenceChildren )
     {
         if ( tmp == child )
-	  return children.indexOf( tmp );
+	  return m_sequenceChildren.indexOf( tmp );
     }
     
     return -1;
 }
-
-
+*/
+/*
 NameSequence::NameSequence( BasicElement* parent )
     : SequenceElement( parent )
 {
@@ -1665,7 +1587,7 @@ BasicElement* NameSequence::createElement( QString type )
 
 // void NameSequence::parse()
 // {
-//     // A name sequence is known as name and so are its children.
+//     // A name sequence is known as name and so are its m_sequenceChildren.
 //     // Caution: this is fake!
 //     for ( int i = 0; i < countChildren(); i++ ) {
 //         getChild( i )->setElementType( getElementType() );
@@ -1701,5 +1623,5 @@ void NameSequence::writeMathML( QDomDocument& doc, QDomNode& parent,bool oasisFo
     de.appendChild( doc.createTextNode( value ) );
     parent.appendChild( de );
 }
-
+*/
 } // namespace KFormula

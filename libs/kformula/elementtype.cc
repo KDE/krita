@@ -94,7 +94,7 @@ QString ElementType::text( SequenceElement* seq ) const
 {
     QString str;
     for ( uint i=start(); i<end(); ++i ) {
-        str.append( seq->getChild( i )->getCharacter() );
+        str.append( seq->childAt( i )->getCharacter() );
     }
     return str;
 }
@@ -205,8 +205,8 @@ void ElementType::output()
 
 void ElementType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
-    for ( uint i = from; i < to; ++i ) {
-        se->getChild( i )->writeMathML( doc, de, oasisFormat );
+    for ( int i = from; i < to; ++i ) {
+        se->childAt( i )->writeMathML( doc, de, oasisFormat );
     }
 }
 
@@ -293,7 +293,7 @@ void TextType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement d
 {
     for ( uint i = start(); i < end(); ++i ) {
         QDomElement text = doc.createElement( oasisFormat ? "math:mi" : "mi" );
-        BasicElement* be = se->getChild( i );
+        BasicElement* be = se->childAt( i );
         TextElement* te = static_cast<TextElement*>( be );
         QString mathvariant = format2variant( te->getCharStyle(), te->getCharFamily());
         if ( !mathvariant.isNull() )
@@ -318,7 +318,7 @@ NameType::NameType( SequenceParser* parser )
 
 void NameType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
-    se->getChild( start() )->writeMathML( doc, de, oasisFormat );
+    se->childAt( start() )->writeMathML( doc, de, oasisFormat );
 
     /*
     QDomElement name = doc.createElement( "mi" );
@@ -358,10 +358,10 @@ void NumberType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement
     QDomElement name = doc.createElement( oasisFormat ? "math:mn"  : "mn" );
     QString value;
     for ( uint i = start(); i < end(); ++i ) {
-        BasicElement* be = se->getChild( i );
+        BasicElement* be = se->childAt( i );
         value += be->getCharacter();
     }
-    TextElement* te = static_cast<TextElement*>( se->getChild( start() ) );
+    TextElement* te = static_cast<TextElement*>( se->childAt( start() ) );
     QString mathvariant = format2variant( te->getCharStyle(), te->getCharFamily() );
     if ( !mathvariant.isNull() )
         name.setAttribute( "mathvariant", mathvariant );
@@ -385,7 +385,7 @@ AbstractOperatorType::AbstractOperatorType( SequenceParser* parser )
 void AbstractOperatorType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
     QDomElement op = doc.createElement( oasisFormat ? "math:mo" : "mo" );
-    BasicElement* be = se->getChild( start() );
+    BasicElement* be = se->childAt( start() );
     if ( be->getCharacter().toLatin1() != 0 ) {
         // latin-1 char
         op.appendChild( doc.createTextNode( be->getCharacter() ) );

@@ -49,7 +49,14 @@ public:
 
     virtual const QList<BasicElement*>& childElements();
 
-    
+    /// @return The child element at the position @p index - 0 if the sequence is empty
+    BasicElement* childAt( int index );
+
+    /// @return The index of the @p element in the sequence - -1 if not in sequence
+    int indexOfElement( const BasicElement* element ) const;
+ 
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+   
 
 
 
@@ -69,16 +76,6 @@ public:
      * @returns true if the sequence contains only text.
      */
     virtual bool isTextOnly() const { return textSequence; }
-
-    /**
-     * Sets the cursor and returns the element the point is in.
-     * The handled flag shows whether the cursor has been set.
-     * This is needed because only the innermost matching element
-     * is allowed to set the cursor.
-     */
-//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-//                                   const LuPixelPoint& point,
-//                                   const LuPixelPoint& parentOrigin );
 
 
     // drawing
@@ -247,13 +244,13 @@ public:
     /**
      * @returns the number of children we have.
      */
-    int countChildren() const { return children.count(); }
+    int countChildren() const { return m_sequenceChildren.count(); }
 
     /**
      * @returns whether the child has the given number.
      */
     bool isChildNumber( uint pos, BasicElement* child )
-        { return children.at( pos ) == child; }
+        { return m_sequenceChildren.at( pos ) == child; }
 
     /**
      * Selects all children. The cursor is put behind, the mark before them.
@@ -299,69 +296,6 @@ public:
      * Returns false if an error occures.
      */
     bool buildChildrenFromDom(QList<BasicElement*>& list, QDomNode n);
-
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-//    virtual QString toLatex();
-
-//    virtual QString formulaString();
-
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
-    /**
-     * @returns the child at position i.
-     */
-    BasicElement* getChild(uint i) { return children.at(i); }
-    //const BasicElement* getChild(uint i) const { return children.at(i); }
-
-    int childPos( BasicElement* child ) { return children.indexOf( child ); }
-    int childPos( const BasicElement* child ) const;
-
-    class ChildIterator {
-    public:
-        ChildIterator( SequenceElement* sequence, int pos=0 )
-            : m_sequence( sequence ), m_pos( pos ) {}
-
-        typedef BasicElement value_type;
-        typedef BasicElement* pointer;
-        typedef BasicElement& reference;
-
-        // we simply expect the compared iterators to belong
-        // to the same sequence.
-        bool operator== ( const ChildIterator& it ) const
-            { return /*m_sequence==it.m_sequence &&*/ m_pos==it.m_pos; }
-        bool operator!= ( const ChildIterator& it ) const
-            { return /*m_sequence!=it.m_sequence ||*/ m_pos!=it.m_pos; }
-
-        const BasicElement& operator* () const
-            { return *m_sequence->getChild( m_pos ); }
-        BasicElement& operator* ()
-            { return *m_sequence->getChild( m_pos ); }
-
-        ChildIterator& operator++ ()
-            { ++m_pos; return *this; }
-        ChildIterator operator++ ( int )
-            { ChildIterator it( *this ); ++m_pos; return it; }
-        ChildIterator& operator-- ()
-            { --m_pos; return *this; }
-        ChildIterator operator-- ( int )
-            { ChildIterator it( *this ); --m_pos; return it; }
-        ChildIterator& operator+= ( int j )
-            { m_pos+=j; return *this; }
-        ChildIterator & operator-= ( int j )
-            { m_pos-=j; return *this; }
-
-    private:
-        SequenceElement* m_sequence;
-        int m_pos;
-    };
-
-    typedef ChildIterator iterator;
-
-    iterator begin() { return ChildIterator( this, 0 ); }
-    iterator end() { return ChildIterator( this, countChildren() ); }
 
     static void setCreationStrategy( ElementCreationStrategy* strategy );
 
@@ -423,18 +357,17 @@ protected:
     virtual bool isFirstOfToken( BasicElement* child );
 
 private:
+    /// The sorted list of all elements in this sequence
+    QList<BasicElement*> m_sequenceChildren;
+
+
+
+
 
     /**
      * Removes the children at pos and appends it to the list.
      */
     void removeChild(QList<BasicElement*>& removedChildren, int pos);
-
-
-    /**
-     * Our children. Be sure to notify the rootElement before
-     * you remove any.
-     */
-    QList<BasicElement*> children;
 
     /**
      * the syntax tree of the sequence
@@ -449,138 +382,6 @@ private:
     static ElementCreationStrategy* creationStrategy;
     
     bool singlePipe; //The key '|' produces one '|' not '| |', '||' produces '| |'
-};
-
-
-/**
- * The sequence thats a name. Actually the purpose
- * is to be able to insert any element by keyboard.
- */
-class NameSequence : public SequenceElement {
-    typedef SequenceElement inherited;
-public:
-
-    NameSequence( BasicElement* parent = 0 );
-
-    virtual NameSequence* clone() {
-        return new NameSequence( *this );
-    }
-
-    virtual bool accept( ElementVisitor* visitor );
-
-    /**
-     * @returns true if the sequence contains only text.
-     */
-    //virtual bool isTextOnly() const { return true; }
-
-    /**
-     * @returns the character that represents this element. Used for
-     * parsing a sequence.
-     * This is guaranteed to be QChar::null for all non-text elements.
-     */
-    virtual QChar getCharacter() const { return '\\'; }
-
-    /**
-     * @returns the type of this element. Used for
-     * parsing a sequence.
-     */
-    virtual TokenType getTokenType() const { return NAME; }
-
-    /**
-     * We are our own main child. This causes interessting effects.
-     */
-    virtual SequenceElement* getMainChild() { return this; }
-
-    virtual void calcCursorSize( const ContextStyle& context,
-                                 FormulaCursor* cursor, bool smallCursor );
-
-    /**
-     * If the cursor is inside a sequence it needs to be drawn.
-     */
-    virtual void drawCursor( QPainter& painter, const ContextStyle& context,
-                             FormulaCursor* cursor, bool smallCursor,
-                             bool activeCursor );
-
-    /**
-     * Moves to the beginning of this word or if we are there already
-     * to the beginning of the previous.
-     */
-    virtual void moveWordLeft(FormulaCursor* cursor);
-
-    /**
-     * Moves to the end of this word or if we are there already
-     * to the end of the next.
-     */
-    virtual void moveWordRight(FormulaCursor* cursor);
-
-    /**
-     * This is called by the container to get a command depending on
-     * the current cursor position (this is how the element gets chosen)
-     * and the request.
-     *
-     * @returns the command that performs the requested action with
-     * the containers active cursor.
-     */
-    virtual KCommand* buildCommand( Container*, Request* );
-
-
-    /**
-     * Parses the input. It's the container which does create
-     * new elements because it owns the undo stack. But only the
-     * sequence knows what chars are allowed.
-     */
-    virtual KCommand* input( Container* container, QChar ch );
-
-    /**
-     * Sets a new type. This is done during parsing.
-     */
-    virtual void setElementType( ElementType* t );
-
-    /**
-     * @returns the element this sequence is to be replaced with.
-     */
-    BasicElement* replaceElement( const SymbolTable& table );
-
-    /**
-     * Tests whether the selected elements can be inserted in a
-     * name sequence.
-     */
-    static bool isValidSelection( FormulaCursor* cursor );
-
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
-protected:
-
-    /**
-     * Returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "NAMESEQUENCE"; }
-
-    /**
-     * Creates a new element with the given type.
-     *
-     * @param type the desired type of the element
-     */
-    virtual BasicElement* createElement( QString type );
-
-    /**
-     * Parses the sequence and generates a new syntax tree.
-     * Has to be called after each modification.
-     */
-    //virtual void parse();
-
-    /**
-     * @returns whether the child is the first element of its token.
-     * This can never happen here. Our children reuse our own
-     * element type.
-     */
-    virtual bool isFirstOfToken( BasicElement* ) { return false; }
-
-private:
-
-    KCommand* compactExpressionCmd( Container* container );
-
-    QString buildName();
 };
 
 } // namespace KFormula

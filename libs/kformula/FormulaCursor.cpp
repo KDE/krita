@@ -546,6 +546,7 @@ SymbolElement* FormulaCursor::getActiveSymbolElement()
  * @returns the NameSequence the cursor is on or 0
  * if there is non.
  */
+/*
 NameSequence* FormulaCursor::getActiveNameSequence()
 {
     NameSequence* element = dynamic_cast<NameSequence*>( getSelectedChild() );
@@ -557,7 +558,7 @@ NameSequence* FormulaCursor::getActiveNameSequence()
         }
     }
     return element;
-}
+}*/
 
 /**
  * @returns the TextElement the cursor is on or 0.

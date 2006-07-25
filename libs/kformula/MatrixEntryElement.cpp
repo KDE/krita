@@ -124,16 +124,16 @@ KCommand* MatrixEntryElement::input( Container* container, QChar ch )
 
 void MatrixEntryElement::moveTabTo( int i, luPixel pos )
 {
-    BasicElement* marker = tab( i );
+/*    BasicElement* marker = tab( i );
     luPixel diff = pos - marker->getX();
     marker->setWidth( marker->getWidth() + diff );
 
     for ( int p = childPos( marker )+1; p < countChildren(); ++p ) {
-        BasicElement* child = getChild( p );
+        BasicElement* child = childAt( p );
         child->setX( child->getX() + diff );
     }
 
-    setWidth( getWidth()+diff );
+    setWidth( getWidth()+diff );*/
 }
 
 
@@ -144,7 +144,7 @@ int MatrixEntryElement::tabBefore( int pos )
     }
     int tabNum = 0;
     for ( int i=0; i<pos; ++i ) {
-        BasicElement* child = getChild( i );
+        BasicElement* child = childAt( i );
         if ( tabs.at( tabNum ) == child ) {
             if ( tabNum+1 == tabs.count() ) {
                 return tabNum;
@@ -158,10 +158,10 @@ int MatrixEntryElement::tabBefore( int pos )
 
 int MatrixEntryElement::tabPos( int i )
 {
-    if ( i < tabs.count() ) {
+/*    if ( i < tabs.count() ) {
         return childPos( tabs.at( i ) );
     }
-    return -1;
+    return -1;*/
 }
 
 void MatrixEntryElement::writeMathML( QDomDocument& doc,

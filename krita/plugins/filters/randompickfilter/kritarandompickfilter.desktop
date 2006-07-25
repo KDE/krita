@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=Random pick to an image
+Comment[da]=Udfør tilfældigt valg i et billede
 Comment[es]=Elección aleatoria de una imagen
 Comment[et]=Juhuslik valik pildil
 Comment[it]=Scegli casualmente un'immagine
@@ -10,11 +11,12 @@ Comment[zh_TW]=隨機挑選圖片
 Encoding=UTF-8
 Icon=
 Name=Random pick Filter
+Name[da]=Tilfældigt udvalgsfilter
 Name[es]=Filtro de elección aleatoria
 Name[et]=Juhusliku valiku filter
 Name[it]=Filtro di scelta casuale
 Name[pt]=Filtro de Extracção Aleatória
-Name[pt_BR]=Filtro de Extracção Aleatória
+Name[pt_BR]=Filtro de Extração Aleatória
 Name[sv]=Slumpmässigt urvalsfilter
 Name[zh_TW]=隨機挑選過濾器
 ServiceTypes=Krita/Filter

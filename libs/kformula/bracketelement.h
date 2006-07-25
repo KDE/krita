@@ -38,7 +38,6 @@ class SequenceElement;
  * (No indexes.)
  */
 class SingleContentElement : public BasicElement {
-    SingleContentElement& operator=( const SingleContentElement& ) { return *this; }
 public:
 
     SingleContentElement(BasicElement* parent = 0);
@@ -161,7 +160,6 @@ private:
  * A left and/or right bracket around one child.
  */
 class BracketElement : public SingleContentElement {
-    BracketElement& operator=( const BracketElement& ) { return *this; }
 public:
 
     enum { contentPos };

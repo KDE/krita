@@ -40,7 +40,6 @@ class SequenceElement;
  * insertElementInNumerator() and insertElementInDenominator() methods.
  */
 class FractionElement : public BasicElement {
-    FractionElement& operator=( const FractionElement& ) { return *this; }
 public:
     /// The standard constructor
     FractionElement( BasicElement* parent = 0 );

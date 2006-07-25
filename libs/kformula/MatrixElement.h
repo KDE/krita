@@ -41,7 +41,6 @@ class MatrixElement : public BasicElement {
     friend class KFCRemoveColumn;
     friend class KFCRemoveRow;
 
-    MatrixElement& operator=( const MatrixElement& ) { return *this; }
 public:
     /// The standard constructor
     MatrixElement( int rows = 1, int columns = 1, BasicElement* parent = 0);

@@ -72,9 +72,7 @@ class SequenceElement;
  * changes and the latter calculates the size of the element. After a formula change
  * first calculateSize is called for all elements then layoutElement().
  */
-class BasicElement
-{
-//    BasicElement& operator= ( const BasicElement& ) { return *this; }
+class BasicElement {
 public:
     /*
      * The standard constructor

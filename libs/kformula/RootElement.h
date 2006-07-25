@@ -39,7 +39,6 @@ class SequenceElement;
  * A nice graphical root.
  */
 class RootElement : public BasicElement {
-    RootElement& operator=( const RootElement& ) { return *this; }
 public:
     /// The standard constructor
     RootElement( BasicElement* parent = 0 );

@@ -41,7 +41,6 @@ class ElementCreationStrategy;
  * The children are aligned in one line.
  */
 class SequenceElement : public BasicElement {
-    SequenceElement& operator=( const SequenceElement& ) { return *this; }
 public:
     SequenceElement(BasicElement* parent = 0);
     

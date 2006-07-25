@@ -35,7 +35,6 @@ KFORMULA_NAMESPACE_BEGIN
  * An element that represents one char.
  */
 class TextElement : public BasicElement {
-    TextElement operator=( const TextElement& ) { return *this; }
 public:
 
     TextElement(QChar ch = ' ', bool beSymbol = false, BasicElement* parent = 0);

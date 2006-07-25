@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,24 +16,26 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#include <iostream>
-#include <QString>
-#include <QFontMetrics>
-
-#include <klocale.h>
-#include <kmessagebox.h>
-
-//#include <KoUnit.h>
-
 #include "MathMLLoader.h"
-#include "symboltable.h"
 
-KFORMULA_NAMESPACE_BEGIN
-using namespace std;
+namespace KFormula {
 
+MathMLLoader::MathMLLoader( FormulaContainer* container )
+{
+    m_formulaContainer = container;
+}
+
+bool MathMLLoader::parse( const QDomDocument& mmldoc, bool oasisFormat )
+{
+    return true;
+}
+
+
+	
+/*
 class MathML2KFormulaPrivate
 {
     friend class MathML2KFormula;
@@ -282,9 +285,9 @@ void MathML2KFormulaPrivate::math( QDomElement element )
 
     style.scriptlevel = 0;
 
-    /*kDebug( DEBUGID ) << "<math> element:\n displaystyle = "
+    kDebug( DEBUGID ) << "<math> element:\n displaystyle = "
                        << style.displaystyle << "\n scriptlevel = "
-                       << style.scriptlevel << endl;*/
+                       << style.scriptlevel << endl;
 
     while ( !n.isNull() ) {
         filter->processElement( n, doc, formula );
@@ -736,7 +739,7 @@ void MathML2KFormulaPrivate::mtable( QDomElement element, QDomNode docnode )
             {
                 ++rows;
 
-                /* Determins the number of columns */
+                // Determins the number of columns
 
                 QDomNode cellnode = e.firstChild();
                 int cc = 0;
@@ -758,8 +761,8 @@ void MathML2KFormulaPrivate::mtable( QDomElement element, QDomNode docnode )
         n = n.nextSibling();
     }
 
-    /* Again createing elements, I need to know the number
-       of rows and cols to leave empty spaces */
+    // Again createing elements, I need to know the number
+    //  of rows and cols to leave empty spaces 
 
     n = element.firstChild();
     QDomElement matrix = doc.createElement( "MATRIX" );
@@ -784,7 +787,7 @@ void MathML2KFormulaPrivate::mtable( QDomElement element, QDomNode docnode )
                     cellnode = cellnode.nextSibling();
                 }
 
-                /* Add empty elements */
+                // Add empty elements
                 for(; cc < cols; cc++ ) {
                     QDomElement cell = doc.createElement( "SEQUENCE" );
                     matrix.appendChild( cell );
@@ -1763,9 +1766,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
     }
 
     return true;
-}
+}*/
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
-using namespace KFormula;
-#include "MathMLLoader.moc"

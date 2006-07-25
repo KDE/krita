@@ -543,7 +543,7 @@ void Container::saveMathML( QTextStream& stream, bool oasisFormat )
 
 bool Container::loadMathML( const QDomDocument &doc, bool oasisFormat )
 {
-    const ContextStyle& context = document()->getContextStyle();
+/*    const ContextStyle& context = document()->getContextStyle();
     MathML2KFormula filter( doc, context, oasisFormat );
     filter.startConversion();
     if (filter.m_error) {
@@ -554,7 +554,7 @@ bool Container::loadMathML( const QDomDocument &doc, bool oasisFormat )
         getHistory()->clear();
         return true;
     }
-    return false;
+    return false;*/
 }
 
 

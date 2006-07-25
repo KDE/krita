@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,80 +16,52 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KFORMULAMATHMLREAD_H
-#define KFORMULAMATHMLREAD_H
+#ifndef MATHMLLOADER_H
+#define MATHMLLOADER_H
 
-#include <QObject>
-#include <qdom.h>
-#include "kformulainputfilter.h"
-#include "contextstyle.h"
+#include <QDomDocument>
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
-class MathML2KFormulaPrivate;
+class FormulaContainer;
 
 /**
- * This class converts MathML to KFormula XML.
- * Right now are only parts of the Presentation Markup implemented.
+ * @short MathMLLoader is KFormula's MathML parser
+ *
+ * The MathMLLoader class is designed after the builder pattern. It parses the
+ * contents of a MathML tree which is passed through the @ref parse() method.
+ * As result of the parsing the MathMLLoader builds the element structure in the
+ * FormulaContainer passed during construction. The FormulaContainer can get formulas
+ * from several sources which will then be tied together. If an error occurs during the
+ * parsing it can be obtained with the parseError() method.
  */
-class MathML2KFormula : public KFInputFilter
-{
-    Q_OBJECT
-
-    friend class MathML2KFormulaPrivate;
-
+class MathMLLoader {
 public:
+    /**
+     * The constructor
+     * @param container The @see FormulaContainer to parse in
+     */
+    MathMLLoader( FormulaContainer* container );
 
     /**
-     * Build a MathML 2 KFormula converter.
-     * call startConversion() to convert and wait for
-     * a conversionFinished() signal, then call
-     * getKFormulaDom() to get the converted DOM
+     * Do the actual parsing
+     * @return True when the parsing succeed without error otherwise false
+     * @param mmldoc The QDomDocument which contains the MathML
+     * @param oasisFormat Indicates if the MathML is inside the OASIS namespace
      */
-    MathML2KFormula( const QDomDocument& mmldoc, const ContextStyle &contextStyle, bool oasisFormat = false );
+    bool parse( const QDomDocument& mmldoc, bool oasisFormat = false );
 
-    /*
-     * Get the just created DOM.
-     */
-    virtual QDomDocument getKFormulaDom();
-
-
-public slots:
-    virtual void startConversion();
-
-public:
-    /// Has an error happened while converting?
-    bool m_error;
+    /// @return The error ocured during parsing the document
+    void parseError();
 
 private:
-
-    bool processElement( QDomNode node, QDomDocument& doc,
-                         QDomNode docnode );
-
-    QDomDocument origdoc;
-    QDomDocument formuladoc;
-    bool oasisFormat;
-    const ContextStyle& context;
-
-    MathML2KFormulaPrivate* impl;
-
-    enum Type {
-        // Presentation Markup
-        UNKNOWN = 1,
-        TOKEN   = 2, // Token Elements
-        LAYOUT  = 3, // General Layout Schemata
-        SCRIPT  = 4, // Script and Limit Schemata
-        TABLE   = 5, // Tables and Matrices
-        EE      = 6, // Enlivening Expressions
-
-        // Content Markup
-        CONTENT = 12
-    };
+    /// The @see FormulaContainer to contain the results of parsing 
+    FormulaContainer* m_formulaContainer;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
-#endif // KFORMULAMATHMLREAD_H
+#endif // MATHMLLOADER_H

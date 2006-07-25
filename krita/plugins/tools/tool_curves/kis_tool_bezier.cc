@@ -227,7 +227,10 @@ KisToolBezier::KisToolBezier()
     setName("tool_bezier");
     setCursor(KisCursor::load("tool_bezier_cursor.png", 6, 6));
 
-    m_curve = new KisCurveBezier;
+    m_derivated = new KisCurveBezier;
+    m_curve = m_derivated;
+
+    m_transactionMessage = QString("Bezier Curve");
 }
 
 KisToolBezier::~KisToolBezier()
@@ -256,17 +259,8 @@ KisCurve::iterator KisToolBezier::selectByHandle(const QPoint& pos)
     for (it = pivs.begin(); it != pivs.end(); it++) {
         qpos = m_subject->canvasController()->windowToView((*it).point().toQPoint());
         hint = (*it).hint();
-        if (hint != BEZIERENDHINT && !(*it).isSelected()) {
-            // That's 'cause we don't have groups...
-            if (m_pressedKeys & Qt::ControlButton)
-                continue;
-            if (hint == BEZIERPREVCONTROLHINT &&
-                !((*it.next()).isSelected() || (*it.next().next()).isSelected()))
-                continue;
-            if (hint == BEZIERNEXTCONTROLHINT &&
-                !((*it.previous()).isSelected() || (*it.previous().previousPivot()).isSelected()))
-                continue;
-        }
+        if (hint != BEZIERENDHINT && (!m_derivated->groupSelected(it) || (m_pressedKeys & Qt::ControlButton)))
+            continue;
         if (hint == BEZIERENDHINT && (m_pressedKeys & Qt::ShiftButton))
             continue;
         if (pivotRect(qpos).contains(pos)) {
@@ -310,8 +304,8 @@ KisCurve::iterator KisToolBezier::drawPivot (KisCanvasPainter& gc, KisCurve::ite
     KisCanvasController *controller = m_subject->canvasController();
 
     QPoint endpPos = controller->windowToView((*point).point().toQPoint());
-    
-    if (!(*point).isSelected() && !(*point.previous()).isSelected() && !(*point.next()).isSelected()) {
+
+    if (!m_derivated->groupSelected(point)) {
         gc.setPen(m_pivotPen);
         gc.drawRoundRect(pivotRect(endpPos),m_pivotRounding,m_pivotRounding);
     } else {

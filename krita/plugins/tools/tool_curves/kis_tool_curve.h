@@ -22,6 +22,7 @@
 #define KIS_TOOL_CURVE_H_
 
 #include <qpen.h>
+#include <qcursor.h>
 
 #include "kis_tool_paint.h"
 #include "kis_curve_framework.h"
@@ -33,10 +34,6 @@ class KisPoint;
 class KisPainter;
 
 class KisCurve;
-
-// FIXME These can be passed to draw()
-const bool DRAWING = true;
-const bool ERASING = false;
 
 class KisToolCurve : public KisToolPaint {
 
@@ -55,7 +52,11 @@ public:
     virtual void doubleClick(KisDoubleClickEvent *event);
     virtual void keyPress(QKeyEvent *event);
     virtual void keyRelease(QKeyEvent *event);
-
+/*
+    virtual QCursor cursor();
+    virtual void setCursor(const QCursor&);
+    virtual void activate();
+*/
 public slots:
 
     void deactivate();
@@ -96,6 +97,12 @@ protected:
     int m_selectedPivotRounding;
 
     int m_pressedKeys;
+
+    QString m_transactionMessage;
+
+private:
+
+    QCursor m_cursor;
 };
 
 #endif //__KIS_TOOL_CURVE_H_

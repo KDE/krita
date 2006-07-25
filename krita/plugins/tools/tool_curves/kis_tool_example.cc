@@ -59,26 +59,14 @@ public:
 
     ~KisCurveExample() {}
 
-    virtual void calculateCurve(const KisPoint&, const KisPoint&, KisCurve::iterator);
-    virtual void calculateCurve(const CurvePoint&, const CurvePoint&, KisCurve::iterator);
     virtual void calculateCurve(KisCurve::iterator, KisCurve::iterator, KisCurve::iterator);
 
 };
 
-void KisCurveExample::calculateCurve(KisCurve::iterator pos1, KisCurve::iterator pos2, KisCurve::iterator it)
+void KisCurveExample::calculateCurve(KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator it)
 {
-    calculateCurve((*pos1).point(),(*pos2).point(), it);
-}
-
-void KisCurveExample::calculateCurve(const CurvePoint& pos1, const CurvePoint& pos2, KisCurve::iterator it)
-{
-    calculateCurve(pos1.point(),pos2.point(), it);
-}
-
-/* Brutally taken from KisPainter::paintLine, sorry :) */
-/* And obviously this is just to see if the Framework works, it hasn't no other senses :) */
-void KisCurveExample::calculateCurve(const KisPoint& pos1, const KisPoint& pos2, KisCurve::iterator it)
-{
+    KisPoint pos1 = (*p1).point();
+    KisPoint pos2 = (*p2).point();
     double savedDist = 0;
     KisVector2D end(pos2);
     KisVector2D start(pos1);
@@ -168,7 +156,7 @@ void KisToolExample::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Draw curves, like polyline, use Delete to remove lines, double-click to edit, and again to finish."));
+        m_action->setToolTip(i18n("This is a test tool for the Curve Framework."));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

@@ -41,6 +41,7 @@
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_cursor.h"
+#include "kis_tool_controller.h"
 
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
@@ -293,12 +294,12 @@ void KisToolCurve::paintCurve()
     if (!device) return;
     
     KisPainter painter (device);
-    if (m_currentImage->undo()) painter.beginTransaction (i18n ("Example of curve"));
+    if (m_currentImage->undo()) painter.beginTransaction (i18n (m_transactionMessage.ascii()));
 
     painter.setPaintColor(m_subject->fgColor());
     painter.setBrush(m_subject->currentBrush());
-    painter.setOpacity(m_opacity);
-    painter.setCompositeOp(m_compositeOp);
+/*  painter.setOpacity(m_opacity);
+    painter.setCompositeOp(m_compositeOp); */
     KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
     painter.setPaintOp(op); // Painter takes ownership
 
@@ -335,5 +336,33 @@ KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iter
 
     return point;
 }
+/*
+QCursor KisToolCurve::cursor()
+{
+    return m_cursor;
+}
 
+void KisToolCurve::setCursor(const QCursor& cursor)
+{
+    m_cursor = cursor;
+
+    if (m_subject) {
+        KisToolControllerInterface *controller = m_subject->toolController();
+
+        if (controller && controller->currentTool() == this) {
+            m_subject->canvasController()->setCanvasCursor(m_cursor);
+        }
+    }
+}
+
+void KisToolCurve::activate()
+{
+    if (m_subject) {
+        KisToolControllerInterface *controller = m_subject->toolController();
+
+        if (controller)
+            controller->setCurrentTool(this);
+    }
+}
+*/
 #include "kis_tool_curve.moc"

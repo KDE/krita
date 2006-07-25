@@ -42,15 +42,6 @@ const int PREFERCONTROLSOPTION = 0x0040;
 class KisCurveBezier : public KisCurve {
 
     typedef KisCurve super;
-
-    iterator groupEndpoint (iterator) const;
-    iterator groupPrevControl (iterator) const;
-    iterator groupNextControl (iterator) const;
-
-    bool groupSelected (iterator) const;
-
-    iterator nextGroupEndpoint (iterator) const;
-    iterator prevGroupEndpoint (iterator) const;
     
 public:
 
@@ -62,6 +53,17 @@ public:
     virtual iterator movePivot(iterator, const KisPoint&);
     virtual void deletePivot(iterator);
     virtual iterator selectPivot(iterator, bool = true);
+
+public:
+
+    iterator groupEndpoint (iterator) const;
+    iterator groupPrevControl (iterator) const;
+    iterator groupNextControl (iterator) const;
+
+    bool groupSelected (iterator) const;
+
+    iterator nextGroupEndpoint (iterator) const;
+    iterator prevGroupEndpoint (iterator) const;
 
 };
 
@@ -84,6 +86,10 @@ protected:
 
     virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
     virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point);
+
+protected:
+
+    KisCurveBezier *m_derivated;
 
 };
 

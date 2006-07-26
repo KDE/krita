@@ -31,8 +31,7 @@
 #include "RootElement.h"
 #include "SequenceElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
-
+namespace KFormula {
 
 class RootSequenceElement : public SequenceElement {
     typedef SequenceElement inherited;
@@ -92,8 +91,7 @@ KCommand* RootSequenceElement::buildCommand( Container* container, Request* requ
 }
 
 
-RootElement::RootElement(BasicElement* parent)
-    : BasicElement(parent)
+RootElement::RootElement( BasicElement* parent ) : BasicElement( parent )
 {
     content = new RootSequenceElement( this );
     index = 0;
@@ -103,20 +101,6 @@ RootElement::~RootElement()
 {
     delete index;
     delete content;
-}
-
-
-RootElement::RootElement( const RootElement& other )
-    : BasicElement( other )
-{
-    content = new RootSequenceElement( *dynamic_cast<RootSequenceElement*>( other.content ) );
-    if ( other.index ) {
-        index = new SequenceElement( *( other.index ) );
-        index->setParent( this );
-    }
-    else {
-        index = 0;
-    }
 }
 
 const QList<BasicElement*>& RootElement::childElements()

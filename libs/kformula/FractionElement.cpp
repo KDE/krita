@@ -29,7 +29,7 @@
 #include "FractionElement.h"
 #include "SequenceElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 using namespace std;
 
 FractionElement::FractionElement(BasicElement* parent)
@@ -43,15 +43,6 @@ FractionElement::~FractionElement()
 {
     m_denominator = 0;
     m_numerator = 0;
-}
-
-FractionElement::FractionElement( const FractionElement& other )
-    : BasicElement( other ), withLine( other.withLine )
-{
-/*    numerator = new SequenceElement( *( other.numerator ) );
-    denominator = new SequenceElement( *( other.denominator ) );
-    numerator->setParent( this );
-    denominator->setParent( this );*/
 }
 
 const QList<BasicElement*>& FractionElement::childElements()

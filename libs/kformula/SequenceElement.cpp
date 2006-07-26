@@ -116,19 +116,6 @@ void SequenceElement::setCreationStrategy( ElementCreationStrategy* strategy )
 
 
 
-
-SequenceElement::SequenceElement( const SequenceElement& other )
-    : BasicElement( other )
-{
- //   m_sequenceChildren.setAutoDelete(true);
-    uint count = other.m_sequenceChildren.count();
-    for (uint i = 0; i < count; i++) {
-        BasicElement* child = m_sequenceChildren.at(i)->clone();
-        child->setParent( this );
-        m_sequenceChildren.append( child );
-    }
-}
-
 bool SequenceElement::readOnly( const FormulaCursor* ) const
 {
     return getParent()->readOnly( this );

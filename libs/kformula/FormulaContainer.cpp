@@ -127,7 +127,7 @@ Container::~Container()
 
 void Container::initialize()
 {
-    m_formulaElement = new FormulaElement( this ); 
+    m_formulaElement = new FormulaElement( ); 
     impl->activeCursor = impl->internCursor = createCursor();
     recalc();
 }
@@ -504,7 +504,7 @@ bool Container::load( const QDomElement &fe )
         return false;
     }
     
-    FormulaElement* root = new FormulaElement( this );
+    FormulaElement* root = new FormulaElement( );
     if (root->buildFromDom(fe)) {
         delete m_formulaElement;
         m_formulaElement = root;

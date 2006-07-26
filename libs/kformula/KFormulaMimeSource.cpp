@@ -47,7 +47,7 @@ MimeSource::MimeSource(Document* doc, const QDomDocument& formula)
     // The query for text/plain comes very often. So make sure
     // it's fast.
 
-    rootElement = new FormulaElement(this);
+    rootElement = new FormulaElement();
     FormulaCursor cursor(rootElement);
 
     QList<BasicElement*> list;

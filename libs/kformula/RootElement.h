@@ -55,15 +55,6 @@ public:
 
 
     
-    //enum { contentPos, indexPos };
-
-  
-    RootElement( const RootElement& );
-
-    virtual RootElement* clone() {
-        return new RootElement( *this );
-    }
-
     /**
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.

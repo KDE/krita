@@ -57,21 +57,6 @@ MatrixElement::~MatrixElement()
 {
 }
 
-void MatrixElement::drawInternal()
-{
-}
-
-
-
-MatrixElement::MatrixElement( const MatrixElement& other ) : BasicElement( other )
-{
-    foreach( MatrixRowElement* tmp, other.m_matrixRowElements )
-    {
-        MatrixRowElement *mse = new MatrixRowElement( *tmp );
-        m_matrixRowElements.append( mse );
-    }
-}
-
 const QList<BasicElement*>& MatrixElement::childElements()
 {
     return QList<BasicElement*>();
@@ -92,13 +77,38 @@ MatrixEntryElement* MatrixElement::matrixEntryAt( int row, int col )
     return m_matrixRowElements[ row ]->entryAtPosition( col );
 }
 
-void MatrixElement::entered( SequenceElement* /*child*/ )
+void MatrixElement::drawInternal()
 {
-    formula()->tell( i18n( "Matrix element" ) );
+}
+
+void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+{
+    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
+    QDomElement row;
+    QDomElement cell;
+
+    for ( int r = 0; r < rows(); r++ )
+    {
+        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
+        de.appendChild( row );
+        for ( int c = 0; c < cols(); c++ )
+        {
+            cell = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
+            row.appendChild( cell );
+    	    matrixEntryAt( r, c )->writeMathML( doc, cell, oasisFormat );
+	}
+    }
+
+    parent.appendChild( de );
 }
 
 
 
+
+void MatrixElement::entered( SequenceElement* /*child*/ )
+{
+    formula()->tell( i18n( "Matrix element" ) );
+}
 
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
@@ -476,156 +486,7 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
-void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
-    QDomElement row;
-    QDomElement cell;
 
-    for ( int r = 0; r < rows(); r++ )
-    {
-        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
-        de.appendChild( row );
-        for ( int c = 0; c < cols(); c++ )
-        {
-            cell = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
-            row.appendChild( cell );
-    	    matrixEntryAt( r, c )->writeMathML( doc, cell, oasisFormat );
-	}
-    }
-
-    parent.appendChild( de );
-}
-
-/*
-QString MatrixElement::toLatex()
-{
-    //All the border handling must be implemented here too
-
-    QString matrix;
-    uint cols=getColumns();
-    uint rows=getRows();
-
-    matrix="\\begin{array}{ ";
-    for(uint i=0;i<cols;i++)
-	matrix+="c ";
-
-    matrix+="} ";
-
-    for (uint r = 0; r < rows; r++) {
-        for (uint c = 0; c < cols; c++) {
-            matrix+=getElement(r, c)->toLatex();
-	    if( c < cols-1)    matrix+=" & ";
-        }
-    	if(r < rows-1 ) matrix+=" \\\\ ";
-    }
-
-    matrix+=" \\end{array}";
-
-    return matrix;
-}
-
-QString MatrixElement::formulaString()
-{
-    QString matrix = "[";
-    uint cols=getColumns();
-    uint rows=getRows();
-    for (uint r = 0; r < rows; r++) {
-        matrix += "[";
-        for (uint c = 0; c < cols; c++) {
-            matrix+=getElement(r, c)->formulaString();
-	    if ( c < cols-1 ) matrix+=", ";
-        }
-        matrix += "]";
-    	if ( r < rows-1 ) matrix += ", ";
-    }
-    matrix += "]";
-    return matrix;
-}
-*/
-
-/*
-BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                      const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
-{
-    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
-    if (e != 0) {
-        LuPixelPoint myPos(parentOrigin.x() + getX(),
-                           parentOrigin.y() + getY());
-
-        int rows = getRows();
-        int columns = getColumns();
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < columns; c++) {
-                BasicElement* element = getElement(r, c);
-                e = element->goToPos(cursor, handled, point, myPos);
-                if (e != 0) {
-                    return e;
-                }
-            }
-        }
-
-        // We are in one of those gaps.
-        luPixel dx = point.x() - myPos.x();
-        luPixel dy = point.y() - myPos.y();
-
-        int row = rows;
-        for (int r = 0; r < rows; r++) {
-            BasicElement* element = getElement(r, 0);
-            if (element->getY() > dy) {
-                row = r;
-                break;
-            }
-        }
-        if (row == 0) {
-            BasicElement* element = getParent();
-            element->moveLeft(cursor, this);
-            handled = true;
-            return element;
-        }
-        row--;
-
-        int column = columns;
-        for (int c = 0; c < columns; c++) {
-            BasicElement* element = getElement(row, c);
-            if (element->getX() > dx) {
-                column = c;
-                break;
-            }
-        }
-        if (column == 0) {
-            BasicElement* element = getParent();
-            element->moveLeft(cursor, this);
-            handled = true;
-            return element;
-        }
-        column--;
-
-        // Rescan the rows with the actual colums required.
-        row = rows;
-        for (int r = 0; r < rows; r++) {
-            BasicElement* element = getElement(r, column);
-            if (element->getY() > dy) {
-                row = r;
-                break;
-            }
-        }
-        if (row == 0) {
-            BasicElement* element = getParent();
-            element->moveLeft(cursor, this);
-            handled = true;
-            return element;
-        }
-        row--;
-
-        BasicElement* element = getElement(row, column);
-        element->moveLeft(cursor, this);
-        handled = true;
-        return element;
-    }
-    return 0;
-}*/
 
 /*
 class MatrixSequenceElement : public SequenceElement

@@ -30,12 +30,10 @@
 #include "FormulaContainer.h"
 #include "kformuladocument.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
-FormulaElement::FormulaElement( FormulaDocument* container )
-    : baseSize( 20 ), ownBaseSize( false )
+FormulaElement::FormulaElement() : BasicElement( 0 ) , baseSize( 20 ), ownBaseSize( false )
 {
-    m_document = container;
 }
 
 void FormulaElement::drawInternal()
@@ -52,7 +50,7 @@ void FormulaElement::setBaseSize( int size )
     else {
         ownBaseSize = false;
     }
-    m_document->baseSizeChanged( size, ownBaseSize );
+//    m_document->baseSizeChanged( size, ownBaseSize );
 }
 
 const QList<BasicElement*>& FormulaElement::childElements()
@@ -60,71 +58,55 @@ const QList<BasicElement*>& FormulaElement::childElements()
     return m_childElements;
 }
 
-/**
- * Returns the element the point is in.
- */
-/*
-BasicElement* FormulaElement::goToPos( FormulaCursor* cursor, const LuPixelPoint& point )
-{
-    bool handled = false;
-    BasicElement* element = BasicElement::goToPos(cursor, handled, point, LuPixelPoint());
-    if( element == 0 ) {
-        cursor->setTo( this, countChildren() );
-        return this;
-    }
-    return element;
-}*/
-
-
 
 void FormulaElement::elementRemoval(BasicElement* child)
 {
-    m_document->elementRemoval(child);
+ //   m_document->elementRemoval(child);
 }
 
 void FormulaElement::changed()
 {
-    m_document->changed();
+//    m_document->changed();
 }
 
 void FormulaElement::cursorHasMoved( FormulaCursor* cursor )
 {
-    m_document->cursorHasMoved( cursor );
+//    m_document->cursorHasMoved( cursor );
 }
 
 void FormulaElement::moveOutLeft( FormulaCursor* cursor )
 {
-    m_document->moveOutLeft( cursor );
+//    m_document->moveOutLeft( cursor );
 }
 
 void FormulaElement::moveOutRight( FormulaCursor* cursor )
 {
-    m_document->moveOutRight( cursor );
+//    m_document->moveOutRight( cursor );
 }
 
 void FormulaElement::moveOutBelow( FormulaCursor* cursor )
 {
-    m_document->moveOutBelow( cursor );
+  //  m_document->moveOutBelow( cursor );
 }
 
 void FormulaElement::moveOutAbove( FormulaCursor* cursor )
 {
-    m_document->moveOutAbove( cursor );
+    //m_document->moveOutAbove( cursor );
 }
 
 void FormulaElement::tell( const QString& msg )
 {
-    m_document->tell( msg );
+ //   m_document->tell( msg );
 }
 
 void FormulaElement::removeFormula( FormulaCursor* cursor )
 {
-    m_document->removeFormula( cursor );
+  //  m_document->removeFormula( cursor );
 }
 
 void FormulaElement::insertFormula( FormulaCursor* cursor )
 {
-    m_document->insertFormula( cursor );
+//    m_document->insertFormula( cursor );
 }
 
 void FormulaElement::calcSizes( const ContextStyle& style,
@@ -191,7 +173,7 @@ KCommand* FormulaElement::buildCommand( Container* container, Request* request )
 
 const SymbolTable& FormulaElement::getSymbolTable() const
 {
-    return m_document->getSymbolTable();
+//    return m_document->getSymbolTable();
 }
 
 

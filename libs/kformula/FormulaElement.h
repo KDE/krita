@@ -24,11 +24,10 @@
 #include "SequenceElement.h"
 #include <QKeyEvent>
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 class BasicElement;
 class ContextStyle;
-class FormulaDocument;
 class SymbolTable;
 
 
@@ -47,14 +46,8 @@ public:
      * The container this FormulaElement belongs to must not be 0,
      * except you really know what you are doing.
      */
-    FormulaElement(FormulaDocument* container);
+    FormulaElement();
 
-    virtual FormulaElement* clone() { return 0; }
-
-    /**
-     * Returns the element the point is in.
-     */
-//    BasicElement* goToPos( FormulaCursor*, const LuPixelPoint& point );
 
     /**
      * Obtain a list of all child elements of this element
@@ -227,11 +220,6 @@ private:
     void convertNames( QDomNode node );
 
     /**
-     * The document that owns (is) this formula.
-     */
-    FormulaDocument* m_document;
-
-    /**
      * The base font size.
      */
     int baseSize;
@@ -242,6 +230,6 @@ private:
     bool ownBaseSize;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // FORMULAELEMENT_H

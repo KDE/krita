@@ -62,12 +62,6 @@ public:
 
     enum { numeratorPos, denominatorPos };
 	
-    FractionElement( const FractionElement& );
-
-    virtual FractionElement* clone() {
-        return new FractionElement( *this );
-    }
-
     /**
      * @returns the type of this element. Used for
      * parsing a sequence.

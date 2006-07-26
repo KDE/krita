@@ -62,21 +62,11 @@ public:
 
 
 
-    MatrixRowElement( const MatrixRowElement& );
-
-    virtual MatrixRowElement* clone() { return new MatrixRowElement( *this ); }
-
     /**
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
     virtual void entered( SequenceElement* child );
-
-    /**
-     * Returns the element the point is in.
-     */
-//    BasicElement* goToPos( FormulaCursor* cursor, bool& handled,
-//                           const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     /**
      * Sets the cursor inside this element to its start position.

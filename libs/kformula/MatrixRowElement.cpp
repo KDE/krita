@@ -44,15 +44,8 @@ void MatrixRowElement::drawInternal()
 }
 
 
-MatrixRowElement::MatrixRowElement( const MatrixRowElement& other ) : BasicElement( other )
-{
-    int count = other.m_matrixEntryElements.count();
-    for (int i = 0; i < count; i++) {
-        MatrixEntryElement* line = m_matrixEntryElements.at(i)->clone();
-        line->setParent( this );
-        m_matrixEntryElements.append( line );
-    }
-}
+
+
 
 int MatrixRowElement::numberOfEntries() const
 {
@@ -70,29 +63,6 @@ void MatrixRowElement::entered( SequenceElement* /*child*/ )
 }
 
 
-/**
- * Returns the element the point is in.
- */
-/*BasicElement* MultilineElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                         const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
-{
-    BasicElement* e = inherited::goToPos(cursor, handled, point, parentOrigin);
-    if ( e != 0 ) {
-        LuPixelPoint myPos(parentOrigin.x() + getX(),
-                           parentOrigin.y() + getY());
-
-        uint count = content.count();
-        for ( uint i = 0; i < count; ++i ) {
-            MultilineSequenceElement* line = content.at(i);
-            e = line->goToPos(cursor, handled, point, myPos);
-            if (e != 0) {
-                return e;
-            }
-        }
-        return this;
-    }
-    return 0;
-}*/
 
 void MatrixRowElement::goInside( FormulaCursor* cursor )
 {

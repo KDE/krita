@@ -70,28 +70,12 @@ public:
 
 
     
-    /// A copy constructor
-    MatrixElement( const MatrixElement& );
-    
-    /// Returns a clone of this element
-    virtual MatrixElement* clone() { return new MatrixElement( *this ); }
-
-    
-    /**
+   /**
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
     virtual void entered( SequenceElement* child );
 
-    /**
-     * Sets the cursor and returns the element the point is in.
-     * The handled flag shows whether the cursor has been set.
-     * This is needed because only the innermost matching element
-     * is allowed to set the cursor.
-     */
-//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
-                                   
     /** Calculates our width and height and our children's parentPosition. */
     virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 

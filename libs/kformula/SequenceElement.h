@@ -60,12 +60,6 @@ public:
 
 
     
-    SequenceElement( const SequenceElement& );
-
-    virtual SequenceElement* clone() {
-        return new SequenceElement( *this );
-    }
-    
     /**
      * @returns whether its prohibited to change the sequence with this cursor.
      */
@@ -76,18 +70,6 @@ public:
      */
     virtual bool isTextOnly() const { return textSequence; }
 
-
-    // drawing
-    //
-    // Drawing depends on a context which knows the required properties like
-    // fonts, spaces and such.
-    // It is essential to calculate elements size with the same context
-    // before you draw.
-
-    /**
-     * Tells the sequence to have a smaller size than its parant.
-     */
-    void setSizeReduction(const ContextStyle& context);
 
     /**
      * @returns true if there is no visible element in the sequence.

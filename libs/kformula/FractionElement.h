@@ -47,6 +47,9 @@ public:
     /// The standard destructor 
     ~FractionElement();
 
+    void insertInNumerator( int index, BasicElement* element );
+    void insertInDenominator( int index, BasicElement* element );
+    
     /**
      * Obtain a list of all child elements of this element,
      * reimplementated from @see BasicElement
@@ -62,29 +65,6 @@ public:
 
     enum { numeratorPos, denominatorPos };
 	
-    /**
-     * @returns the type of this element. Used for
-     * parsing a sequence.
-     */
-    virtual TokenType getTokenType() const { return INNER; }
-
-    /**
-     * The cursor has entered one of our child sequences.
-     * This is a good point to tell the user where he is.
-     */
-//    virtual void entered( SequenceElement* child );
-
-	
-
-    /**
-     * Sets the cursor and returns the element the point is in.
-     * The handled flag shows whether the cursor has been set.
-     * This is needed because only the innermost matching element
-     * is allowed to set the cursor.
-     */
-//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
-
     /**
      * Calculates our width and height and
      * our children's parentPosition.
@@ -138,7 +118,7 @@ public:
     /**
      * Reinserts the denominator if it has been removed.
      */
-    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
+//    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -153,9 +133,6 @@ public:
 
     virtual SequenceElement* getMainChild();
 
-    SequenceElement* getNumerator() { return m_numerator; }
-    SequenceElement* getDenominator() { return m_denominator; }
-
     /**
      * Returns wether the element has no more useful
      * children (except its main child) and should therefore
@@ -166,14 +143,8 @@ public:
     /// Sets the cursor to select the child. The mark is placed before, the position behind it.
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
-    /**
-     * Moves the cursor away from the given child. The cursor is
-     * guaranteed to be inside this element.
-     */
-    //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
-
     /// Tells whether the fraction should be drawn with a line.
-    void showLine(bool line) { withLine = line; }
+//    void showLine(bool line) { withLine = line; }
 
 protected:
     /// Draws the element internally, means it paints into @ref m_elementPath
@@ -201,7 +172,11 @@ private:
     SequenceElement* m_numerator;
     SequenceElement* m_denominator;
 
-    bool withLine;
+    int m_linethickness;  // also thin | medium | thick
+//	numalign    left | center | right
+//	denomalign  left | center | right
+    bool m_bevelled;
+	
 };
 
 } // namespace KFormula

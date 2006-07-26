@@ -105,8 +105,6 @@ public:
 
 
 
-//  virtual BasicElement* clone() = 0;    
-    
     /**
      * @returns whether the child should be read-only. The idea is
      * that a read-only parent has read-only children.

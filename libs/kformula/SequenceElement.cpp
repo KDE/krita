@@ -948,7 +948,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         FractionElement* element = creationStrategy->createFractionElement();
         if ( element != 0 ) {
             KFCAddReplacing* command = new KFCAddReplacing( i18n("Add 1x2 Matrix"), container );
-            element->showLine(false);
+            //element->showLine(false);
             command->setElement(element);
             return command;
         }

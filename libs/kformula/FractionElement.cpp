@@ -30,19 +30,25 @@
 #include "SequenceElement.h"
 
 namespace KFormula {
-using namespace std;
 
-FractionElement::FractionElement(BasicElement* parent)
-        : BasicElement(parent), withLine(true)
+FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_numerator = 0;
     m_denominator = 0;
+    m_bevelled = false;
+    m_linethickness = 1;
 }
 
 FractionElement::~FractionElement()
 {
-    m_denominator = 0;
-    m_numerator = 0;
+}
+
+void FractionElement::insertInNumerator( int index, BasicElement* element )
+{
+}
+
+void FractionElement::insertInDenominator( int index, BasicElement* element )
+{
 }
 
 const QList<BasicElement*>& FractionElement::childElements()
@@ -55,6 +61,19 @@ const QList<BasicElement*>& FractionElement::childElements()
 void FractionElement::drawInternal()
 {
 }
+
+void FractionElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+{
+    QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
+//    if ( !withLine ) // why is this no function?
+//        de.setAttribute( "linethickness", 0 );
+    m_numerator->writeMathML( doc, de, oasisFormat );
+    m_denominator->writeMathML( doc, de, oasisFormat );
+    parent.appendChild( de );
+}
+
+
+
 
 /*
 void FractionElement::entered( SequenceElement* child )
@@ -116,14 +135,14 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
 		      style.convertIndexStyleLower( istyle ), myPos);
     }
 
-    if ( withLine ) {
+
         painter.setPen( QPen( style.getDefaultColor(),
                               style.layoutUnitToPixelY( style.getLineWidth() ) ) );
         painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
                           style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle ) ),
                           style.layoutUnitToPixelX( myPos.x() + getWidth() ),
                           style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle ) ) );
-    }
+    
 }
 
 
@@ -213,7 +232,7 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
             getParent()->moveDown(cursor, this);
     }
 }
-
+/*
 void FractionElement::insert(FormulaCursor* cursor,
                              QList<BasicElement*>& newChildren,
                              Direction direction)
@@ -232,7 +251,7 @@ void FractionElement::insert(FormulaCursor* cursor,
         formula()->changed();
     }
 }
-
+*/
 void FractionElement::remove(FormulaCursor* cursor,
                              QList<BasicElement*>& removedChildren,
                              Direction direction)
@@ -285,7 +304,7 @@ void FractionElement::writeDom(QDomElement element)
     BasicElement::writeDom(element);
 
     QDomDocument doc = element.ownerDocument();
-    if (!withLine) element.setAttribute("NOLINE", 1);
+//    if (!withLine) element.setAttribute("NOLINE", 1);
 
     QDomElement num = doc.createElement("NUMERATOR");
     num.appendChild(m_numerator->getElementDom(doc));
@@ -307,7 +326,7 @@ bool FractionElement::readAttributesFromDom(QDomElement element)
     }
     QString lineStr = element.attribute("NOLINE");
     if(!lineStr.isNull()) {
-        withLine = lineStr.toInt() == 0;
+//        withLine = lineStr.toInt() == 0;
     }
     return true;
 }
@@ -337,71 +356,5 @@ bool FractionElement::readContentFromDom(QDomNode& node)
 
     return true;
 }
-
-void FractionElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
-    if ( !withLine ) // why is this no function?
-        de.setAttribute( "linethickness", 0 );
-    m_numerator->writeMathML( doc, de, oasisFormat );
-    m_denominator->writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
-/*
-QString FractionElement::toLatex()
-{
-    if ( withLine ) {
-        return "\\frac{" + numerator->toLatex() +"}{" + denominator->toLatex() + "}";
-    }
-    else {
-        return "{" + numerator->toLatex() + "\\atop " + denominator->toLatex() + "}";
-    }
-}
-
-QString FractionElement::formulaString()
-{
-    return "(" + numerator->formulaString() + ")/(" + denominator->formulaString() + ")";
-}
-*/
-/*
-BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                        const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
-{
-    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
-    if (e != 0) {
-        LuPixelPoint myPos(parentOrigin.x() + getX(),
-                           parentOrigin.y() + getY());
-        e = numerator->goToPos(cursor, handled, point, myPos);
-        if (e != 0) {
-            return e;
-        }
-        e = denominator->goToPos(cursor, handled, point, myPos);
-        if (e != 0) {
-            return e;
-        }
-
-        luPixel dx = point.x() - myPos.x();
-        luPixel dy = point.y() - myPos.y();
-
-        // the positions after the numerator / denominator
-        if ((dx > numerator->getX()) &&
-            (dy < numerator->getHeight())) {
-            numerator->moveLeft(cursor, this);
-            handled = true;
-            return numerator;
-        }
-        else if ((dx > denominator->getX()) &&
-                 (dy > denominator->getY())) {
-            denominator->moveLeft(cursor, this);
-            handled = true;
-            return denominator;
-        }
-
-        return this;
-    }
-    return 0;
-}*/
-
 
 }  // namespace KFormula

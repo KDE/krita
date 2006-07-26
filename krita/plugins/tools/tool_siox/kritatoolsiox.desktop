@@ -1,6 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Siox Tool
+Name[es]=Herramienta Siox
+Name[et]=SIOX-tööriist
+Name[pt]=Ferramenta Siox
+Name[pt_BR]=Ferramenta Siox
+Name[zh_TW]=Siox 工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolsiox

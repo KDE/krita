@@ -282,6 +282,7 @@ void KoShapeBackgroundCommand::execute () {
     foreach( KoShape *shape, m_shapes ) {
         m_oldBrushes.append( shape->background() );
         shape->setBackground( m_newBrush );
+        shape->repaint();
     }
 }
 
@@ -289,6 +290,7 @@ void KoShapeBackgroundCommand::unexecute () {
     QList<QBrush>::iterator brushIt = m_oldBrushes.begin();
     foreach( KoShape *shape, m_shapes ) {
         shape->setBackground( *brushIt );
+        shape->repaint();
         brushIt++;
     }
 }

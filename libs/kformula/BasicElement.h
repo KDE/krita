@@ -231,7 +231,7 @@ public:
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
-    virtual void entered( SequenceElement* /*child*/ );
+//    virtual void entered( SequenceElement* /*child*/ );
 
     virtual SequenceElement* getMainChild() { return 0; }
 

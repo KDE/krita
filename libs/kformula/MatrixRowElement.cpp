@@ -39,14 +39,6 @@ MatrixRowElement::~MatrixRowElement()
 {
 }
 
-void MatrixRowElement::drawInternal()
-{
-}
-
-
-
-
-
 int MatrixRowElement::numberOfEntries() const
 {
     return m_matrixEntryElements.count();
@@ -57,11 +49,18 @@ MatrixEntryElement* MatrixRowElement::entryAtPosition( int pos )
     return m_matrixEntryElements[ pos ];
 }
 
-void MatrixRowElement::entered( SequenceElement* /*child*/ )
+void MatrixRowElement::drawInternal()
+{
+}
+
+
+
+/*
+void MatrixRowElement::entered( SequenceElement* child )
 {
     formula()->tell( i18n( "Multi line element" ) );
 }
-
+*/
 
 
 void MatrixRowElement::goInside( FormulaCursor* cursor )

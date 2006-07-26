@@ -119,64 +119,6 @@ void IndexElement::drawInternal()
 }
 
 
-
-IndexElement::IndexElement( const IndexElement& other )
-    : BasicElement( other )
-{
-    content = new IndexSequenceElement( *dynamic_cast<IndexSequenceElement*>( other.content ) );
-
-    if ( other.upperLeft ) {
-        upperLeft = new SequenceElement( *( other.upperLeft ) );
-        upperLeft->setParent( this );
-    }
-    else {
-        upperLeft = 0;
-    }
-    if ( other.upperMiddle ) {
-        upperMiddle = new SequenceElement( *( other.upperMiddle ) );
-        upperMiddle->setParent( this );
-    }
-    else {
-        upperMiddle = 0;
-    }
-    if ( other.upperRight ) {
-        upperRight = new SequenceElement( *( other.upperRight ) );
-        upperRight->setParent( this );
-    }
-    else {
-        upperRight = 0;
-    }
-
-    if ( other.lowerLeft ) {
-        lowerLeft = new SequenceElement( *( other.lowerLeft ) );
-        lowerLeft->setParent( this );
-    }
-    else {
-        lowerLeft = 0;
-    }
-    if ( other.lowerMiddle ) {
-        lowerMiddle = new SequenceElement( *( other.lowerMiddle ) );
-        lowerMiddle->setParent( this );
-    }
-    else {
-        lowerMiddle = 0;
-    }
-    if ( other.lowerRight ) {
-        lowerRight = new SequenceElement( *( other.lowerRight ) );
-        lowerRight->setParent( this );
-    }
-    else {
-        lowerRight = 0;
-    }
-}
-
-/*
-bool IndexElement::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}
-*/
-
 QChar IndexElement::getCharacter() const
 {
     if ( !content->isTextOnly() ) {
@@ -204,7 +146,7 @@ QChar IndexElement::getCharacter() const
 
     return ' ';
 }
-
+/*
 void IndexElement::entered( SequenceElement* child )
 {
     if ( child == content ) {
@@ -214,7 +156,7 @@ void IndexElement::entered( SequenceElement* child )
         formula()->tell( i18n( "Index" ) );
     }
 }
-
+*/
 const QList<BasicElement*>& IndexElement::childElements()
 {
     return QList<BasicElement*>();

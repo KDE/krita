@@ -119,7 +119,7 @@ bool RootElement::accept( ElementVisitor* visitor )
     return visitor->visit( this );
 }
 */
-
+/*
 void RootElement::entered( SequenceElement* child )
 {
     if ( child == content ) {
@@ -129,7 +129,7 @@ void RootElement::entered( SequenceElement* child )
         formula()->tell( i18n( "Index" ) );
     }
 }
-
+*/
 /*
 BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
                                     const LuPixelPoint& point, const LuPixelPoint& parentOrigin)

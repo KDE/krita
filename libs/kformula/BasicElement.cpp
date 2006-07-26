@@ -99,12 +99,12 @@ void BasicElement::goInside(FormulaCursor* cursor)
     }
 }
 
-
-void BasicElement::entered( SequenceElement* /*child*/ )
+/*
+void BasicElement::entered( SequenceElement* child )
 {
     formula()->tell( "" );
 }
-
+*/
 
 /**
  * Enters this element while moving to the left starting inside

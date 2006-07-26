@@ -104,12 +104,12 @@ void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasis
 
 
 
-
-void MatrixElement::entered( SequenceElement* /*child*/ )
+/*
+void MatrixElement::entered( SequenceElement* child )
 {
     formula()->tell( i18n( "Matrix element" ) );
 }
-
+*/
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     QVector<luPixel> toMidlines( rows() );

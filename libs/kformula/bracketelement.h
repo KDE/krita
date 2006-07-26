@@ -43,8 +43,6 @@ public:
     SingleContentElement(BasicElement* parent = 0);
     ~SingleContentElement();
 
-    SingleContentElement( const SingleContentElement& );
-
     /**
      * @returns the character that represents this element. Used for
      * parsing a sequence.
@@ -168,13 +166,6 @@ public:
                    BasicElement* parent = 0);
     ~BracketElement();
 
-    BracketElement( const BracketElement& );
-
-    virtual BracketElement* clone() {
-        return new BracketElement( *this );
-    }
-
-//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * @returns the type of this element. Used for
@@ -186,16 +177,7 @@ public:
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
-    virtual void entered( SequenceElement* child );
-
-    /**
-     * Sets the cursor and returns the element the point is in.
-     * The handled flag shows whether the cursor has been set.
-     * This is needed because only the innermost matching element
-     * is allowed to set the cursor.
-     */
-//    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-//                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
+//    virtual void entered( SequenceElement* child );
 
     /**
      * Obtain a list of all child elements of this element
@@ -278,19 +260,11 @@ public:
     OverlineElement(BasicElement* parent = 0);
     ~OverlineElement();
 
-    OverlineElement( const OverlineElement& );
-
-    virtual OverlineElement* clone() {
-        return new OverlineElement( *this );
-    }
-
-//    virtual bool accept( ElementVisitor* visitor );
-
     /**
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
-    virtual void entered( SequenceElement* child );
+//    virtual void entered( SequenceElement* child );
 
     /**
      * Calculates our width and height and
@@ -341,19 +315,13 @@ public:
     UnderlineElement(BasicElement* parent = 0);
     ~UnderlineElement();
 
-    UnderlineElement( const UnderlineElement& );
 
-    virtual UnderlineElement* clone() {
-        return new UnderlineElement( *this );
-    }
-
-//    virtual bool accept( ElementVisitor* visitor );
 
     /**
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
-    virtual void entered( SequenceElement* child );
+//    virtual void entered( SequenceElement* child );
 
     /**
      * Calculates our width and height and

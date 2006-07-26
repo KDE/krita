@@ -386,7 +386,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
     // Our parent asks us for a cursor position. Found.
     if (from == getParent()) {
         cursor->setTo(this, m_sequenceChildren.count());
-        from->entered( this );
+        //from->entered( this );
     }
 
     // We already owned the cursor. Ask next child then.
@@ -428,7 +428,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         if (from->isInvisible()) {
             moveLeft(cursor, this);
         }
-        formula()->tell( "" );
+        //formula()->tell( "" );
     }
 }
 
@@ -442,7 +442,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     // Our parent asks us for a cursor position. Found.
     if (from == getParent()) {
         cursor->setTo(this, 0);
-        from->entered( this );
+        //from->entered( this );
     }
 
     // We already owned the cursor. Ask next child then.
@@ -485,7 +485,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         if (from->isInvisible()) {
             moveRight(cursor, this);
         }
-        formula()->tell( "" );
+        //formula()->tell( "" );
     }
 }
 
@@ -829,7 +829,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
 {
     FormulaCursor* cursor = container->activeCursor();
     if ( cursor->isReadOnly() ) {
-        formula()->tell( i18n( "write protection" ) );
+        //formula()->tell( i18n( "write protection" ) );
         return 0;
     }
 

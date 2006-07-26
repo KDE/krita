@@ -66,7 +66,7 @@ public:
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
-    virtual void entered( SequenceElement* child );
+//    virtual void entered( SequenceElement* child );
 
     /**
      * Sets the cursor inside this element to its start position.

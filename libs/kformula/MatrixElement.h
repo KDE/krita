@@ -74,7 +74,7 @@ public:
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
-    virtual void entered( SequenceElement* child );
+//    virtual void entered( SequenceElement* child );
 
     /** Calculates our width and height and our children's parentPosition. */
     virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);

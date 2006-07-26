@@ -93,12 +93,12 @@ void FormulaElement::moveOutAbove( FormulaCursor* cursor )
 {
     //m_document->moveOutAbove( cursor );
 }
-
+/*
 void FormulaElement::tell( const QString& msg )
 {
  //   m_document->tell( msg );
 }
-
+*/
 void FormulaElement::removeFormula( FormulaCursor* cursor )
 {
   //  m_document->removeFormula( cursor );

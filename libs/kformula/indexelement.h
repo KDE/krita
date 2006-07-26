@@ -33,9 +33,8 @@ class SequenceElement;
  * The element with up to four indexes in the four corners.
  */
 class IndexElement : public BasicElement {
-    IndexElement& operator=( const IndexElement& ) { return *this; }
 public:
-    IndexElement(BasicElement* parent = 0);
+    IndexElement( BasicElement* parent = 0 );
     ~IndexElement();
 
     /**
@@ -48,12 +47,6 @@ public:
 
 
 
-    IndexElement( const IndexElement& );
-
-    virtual IndexElement* clone() {
-        return new IndexElement( *this );
-    }
-
     /**
      * @returns the character that represents this element. Used for
      * parsing a sequence.
@@ -65,7 +58,7 @@ public:
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */
-    virtual void entered( SequenceElement* child );
+//    virtual void entered( SequenceElement* child );
 
     /**
      * Calculates our width and height and

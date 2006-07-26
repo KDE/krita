@@ -40,13 +40,6 @@ SingleContentElement::SingleContentElement(BasicElement* parent )
 }
 
 
-SingleContentElement::SingleContentElement( const SingleContentElement& other )
-    : BasicElement( other )
-{
-    content = new SequenceElement( other.content );
-    content->setParent( this );
-}
-
 
 SingleContentElement::~SingleContentElement()
 {
@@ -217,19 +210,6 @@ BracketElement::~BracketElement()
 }
 
 
-BracketElement::BracketElement( const BracketElement& other )
-    : SingleContentElement( other ),
-      left( 0 ), right( 0 ),
-      leftType( other.leftType ), rightType( other.rightType )
-{
-}
-
-/*
-bool BracketElement::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}*/
-
 const QList<BasicElement*>& BracketElement::childElements()
 {
     return QList<BasicElement*>();
@@ -242,38 +222,10 @@ void SingleContentElement::drawInternal()
 
 
 
-
-void BracketElement::entered( SequenceElement* /*child*/ )
+/*
+void BracketElement::entered( SequenceElement* child )
 {
     formula()->tell( i18n( "Delimited list" ) );
-}
-
-/*
-BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                       const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
-{
-    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
-    if (e != 0) {
-        LuPixelPoint myPos(parentOrigin.x() + getX(),
-                           parentOrigin.y() + getY());
-        e = getContent()->goToPos(cursor, handled, point, myPos);
-        if (e != 0) {
-            return e;
-        }
-
-        // We are in one of those gaps.
-        luPixel dx = point.x() - myPos.x();
-        luPixel dy = point.y() - myPos.y();
-
-        if ((dx > getContent()->getX()+getContent()->getWidth()) ||
-            (dy > getContent()->getY()+getContent()->getHeight())) {
-            getContent()->moveEnd(cursor);
-            handled = true;
-            return getContent();
-        }
-        return this;
-    }
-    return 0;
 }
 */
 
@@ -495,23 +447,12 @@ OverlineElement::~OverlineElement()
 {
 }
 
-OverlineElement::OverlineElement( const OverlineElement& other )
-    : SingleContentElement( other )
-{
-}
-
 /*
-bool OverlineElement::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}
-*/
-
-void OverlineElement::entered( SequenceElement* /*child*/ )
+void OverlineElement::entered( SequenceElement* child )
 {
     formula()->tell( i18n( "Overline" ) );
 }
-
+*/
 
 void OverlineElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
@@ -593,23 +534,12 @@ UnderlineElement::~UnderlineElement()
 }
 
 
-UnderlineElement::UnderlineElement( const UnderlineElement& other )
-    : SingleContentElement( other )
-{
-}
-
 /*
-bool UnderlineElement::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}
-*/
-
-void UnderlineElement::entered( SequenceElement* /*child*/ )
+void UnderlineElement::entered( SequenceElement* child )
 {
     formula()->tell( i18n( "Underline" ) );
 }
-
+*/
 
 void UnderlineElement::calcSizes(const ContextStyle& style,
                                  ContextStyle::TextStyle tstyle,

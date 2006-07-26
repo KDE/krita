@@ -56,7 +56,7 @@ void FractionElement::drawInternal()
 {
 }
 
-
+/*
 void FractionElement::entered( SequenceElement* child )
 {
     if ( child == m_numerator ) {
@@ -66,7 +66,7 @@ void FractionElement::entered( SequenceElement* child )
         formula()->tell( i18n( "Denominator" ) );
     }
 }
-
+*/
 void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction( tstyle );

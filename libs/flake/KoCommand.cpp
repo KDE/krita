@@ -268,3 +268,31 @@ void KoShapeDeleteCommand::unexecute () {
 QString KoShapeDeleteCommand::name () const {
     return i18n( "Delete shapes" );
 }
+
+KoShapeBackgroundCommand::KoShapeBackgroundCommand( const KoSelectionSet &shapes, const QBrush &brush )
+: m_newBrush( brush )
+{
+    m_shapes = shapes.toList();
+}
+
+KoShapeBackgroundCommand::~KoShapeBackgroundCommand() {
+}
+
+void KoShapeBackgroundCommand::execute () {
+    foreach( KoShape *shape, m_shapes ) {
+        m_oldBrushes.append( shape->background() );
+        shape->setBackground( m_newBrush );
+    }
+}
+
+void KoShapeBackgroundCommand::unexecute () {
+    QList<QBrush>::iterator brushIt = m_oldBrushes.begin();
+    foreach( KoShape *shape, m_shapes ) {
+        shape->setBackground( *brushIt );
+        brushIt++;
+    }
+}
+
+QString KoShapeBackgroundCommand::name () const {
+    return i18n( "Set background" );
+}

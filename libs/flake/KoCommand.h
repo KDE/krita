@@ -228,4 +228,26 @@ private:
     bool m_deleteShapes;
 };
 
+/// The undo / redo command for setting the shape background
+class FLAKE_EXPORT KoShapeBackgroundCommand : public KCommand {
+public:
+    /**
+     * Command to set a new shape background.
+     * @param shapes a set of all the shapes that should get the new background.
+     * @param brush the new background brush
+     */
+    KoShapeBackgroundCommand( const KoSelectionSet &shapes, const QBrush &brush );
+    virtual ~KoShapeBackgroundCommand();
+    /// execute the command
+    void execute ();
+    /// revert the actions done in execute
+    void unexecute ();
+    /// return the name of this command
+    virtual QString name () const;
+private:
+    QList<KoShape*> m_shapes;    ///< the shapes to set background for
+    QList<QBrush> m_oldBrushes; ///< the old background brushes, one for each shape
+    QBrush m_newBrush;           ///< the new background brush to set
+};
+
 #endif

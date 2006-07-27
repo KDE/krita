@@ -19,7 +19,6 @@ install(TARGETS kritaimageenhancement  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/krita/kritaplugins)
 install( FILES  kritaimageenhancement.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

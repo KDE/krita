@@ -24,8 +24,6 @@ endif(KDE4_BUILD_TESTS)
 
 ########### install files ###############
 
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/koffice/hyphdicts)
-
 
 
 

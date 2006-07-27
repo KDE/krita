@@ -280,4 +280,39 @@ private:
     KoShapeMoveCommand *m_command;
 };
 
+/// The undo / redo command for distributing shapes
+class KoShapeDistributeCommand : public KCommand
+{
+public:
+    enum Distribute
+    {
+        DISTRIBUTE_HORIZONTAL_CENTER,
+        DISTRIBUTE_HORIZONTAL_GAP,
+        DISTRIBUTE_HORIZONTAL_LEFT,
+        DISTRIBUTE_HORIZONTAL_RIGHT,
+        DISTRIBUTE_VERTICAL_CENTER,
+        DISTRIBUTE_VERTICAL_GAP,
+        DISTRIBUTE_VERTICAL_BOTTOM,
+        DISTRIBUTE_VERTICAL_TOP
+    };
+    /**
+     * Command to align a set of shapes in a rect
+     * @param shapes a set of all the shapes that should be distributed
+     * @param distribute the distribution type
+     */
+    KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute );
+    virtual ~KoShapeDistributeCommand();
+    /// execute the command
+    virtual void execute();
+    /// revert the actions done in execute
+    virtual void unexecute();
+    /// return the name of this command
+    virtual QString name () const;
+private:
+    double getAvailableSpace( KoShape *first, KoShape *last, double extent );
+    Distribute m_distribute;
+    KoShapeMoveCommand *m_command;
+};
+
+
 #endif

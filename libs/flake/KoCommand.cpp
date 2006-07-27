@@ -1,3 +1,25 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#include <QMap>
+
 #include "KoCommand.h"
 #include "KoShape.h"
 #include "KoShapeGroup.h"
@@ -351,4 +373,145 @@ void KoShapeAlignCommand::unexecute()
 
 QString KoShapeAlignCommand::name () const {
     return i18n( "Align shapes" );
+}
+
+KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute )
+: m_distribute( distribute )
+{
+    QMap<double,KoShape*> sortedPos;
+    QRectF bRect;
+    double extent = 0.0;
+    // sort by position and calculate sum of objects widht/height
+    foreach( KoShape *shape, shapes ) {
+        bRect = shape->boundingRect();
+        switch( m_distribute ) {
+            case DISTRIBUTE_HORIZONTAL_CENTER:
+                sortedPos[bRect.center().x()] = shape;
+                break;
+            case DISTRIBUTE_HORIZONTAL_GAP:
+            case DISTRIBUTE_HORIZONTAL_LEFT:
+                sortedPos[bRect.left()] = shape;
+                extent += bRect.width();
+                break;
+            case DISTRIBUTE_HORIZONTAL_RIGHT:
+                sortedPos[bRect.right()] = shape;
+                break;
+            case DISTRIBUTE_VERTICAL_CENTER:
+                sortedPos[bRect.center().y()] = shape;
+                break;
+             case DISTRIBUTE_VERTICAL_GAP:
+             case DISTRIBUTE_VERTICAL_BOTTOM:
+                sortedPos[bRect.bottom()] = shape;
+                extent += bRect.height();
+                break;
+             case DISTRIBUTE_VERTICAL_TOP:
+                sortedPos[bRect.top()] = shape;
+                break;
+        }
+    }
+    KoShape* first = sortedPos.begin().value();
+    KoShape* last = (--sortedPos.end()).value();
+
+    // determine the available space to distribute
+    double space = getAvailableSpace( first, last, extent );
+    double pos = 0.0, step = space / double(shapes.count() - 1);
+
+    QList<QPointF> previousPositions;
+    QList<QPointF> newPositions;
+    QPointF position;
+    QMapIterator<double,KoShape*> it(sortedPos);
+    while(it.hasNext())
+    {
+        it.next();
+        position = it.value()->position();
+        previousPositions  << position;
+        if( it.value() == first || it.value() == last ) {
+            newPositions << position;
+            continue;
+        }
+
+        pos += step;
+        bRect = it.value()->boundingRect();
+        switch( m_distribute )        {
+            case DISTRIBUTE_HORIZONTAL_CENTER:
+                newPositions << QPointF( first->boundingRect().center().x() + pos - bRect.width()/2, position.y() );
+                break;
+            case DISTRIBUTE_HORIZONTAL_GAP:
+                newPositions << QPointF( first->boundingRect().right() + pos, position.y() );
+                pos += bRect.width();
+                break;
+            case DISTRIBUTE_HORIZONTAL_LEFT:
+                newPositions << QPointF( first->boundingRect().left() + pos, position.y() );
+                break;
+            case DISTRIBUTE_HORIZONTAL_RIGHT:
+                newPositions << QPointF( first->boundingRect().right() + pos, position.y() );
+                break;
+            case DISTRIBUTE_VERTICAL_CENTER:
+                newPositions << QPointF( position.x(), first->boundingRect().center().y() + pos - bRect.height()/2 );
+                break;
+            case DISTRIBUTE_VERTICAL_GAP:
+                newPositions << QPointF( position.x(), first->boundingRect().bottom() + pos );
+                break;
+            case DISTRIBUTE_VERTICAL_BOTTOM:
+                newPositions << QPointF( position.x(), first->boundingRect().bottom() + pos );
+                break;
+            case DISTRIBUTE_VERTICAL_TOP:
+                newPositions << QPointF( position.x(), first->boundingRect().top() + pos );
+                break;
+        };
+    }
+    KoSelectionSet changedShapes = KoSelectionSet::fromList(sortedPos.values());
+    m_command = new KoShapeMoveCommand(changedShapes, previousPositions, newPositions);
+}
+
+KoShapeDistributeCommand::~KoShapeDistributeCommand()
+{
+    delete m_command;
+}
+
+void KoShapeDistributeCommand::execute()
+{
+    m_command->execute();
+}
+
+void KoShapeDistributeCommand::unexecute()
+{
+    m_command->unexecute();
+}
+
+QString KoShapeDistributeCommand::name () const {
+    return i18n( "Distribute shapes" );
+}
+
+double KoShapeDistributeCommand::getAvailableSpace( KoShape *first, KoShape *last, double extent )
+{
+    switch( m_distribute ) {
+        case DISTRIBUTE_HORIZONTAL_CENTER:
+            return last->boundingRect().center().x() - first->boundingRect().center().x();
+            break;
+        case DISTRIBUTE_HORIZONTAL_GAP:
+            extent -= first->boundingRect().width() + last->boundingRect().width();
+            return last->boundingRect().left() - first->boundingRect().right() - extent;
+            break;
+        case DISTRIBUTE_HORIZONTAL_LEFT:
+            return last->boundingRect().left() - first->boundingRect().left();
+            break;
+        case DISTRIBUTE_HORIZONTAL_RIGHT:
+            return last->boundingRect().right() - first->boundingRect().right();
+            break;
+        case DISTRIBUTE_VERTICAL_CENTER:
+            return last->boundingRect().center().y() - first->boundingRect().center().y();
+            break;
+        case DISTRIBUTE_VERTICAL_GAP:
+            extent -= first->boundingRect().height() + last->boundingRect().height();
+            return last->boundingRect().top() - first->boundingRect().bottom() - extent;
+            break;
+        case DISTRIBUTE_VERTICAL_BOTTOM:
+            return last->boundingRect().bottom() - first->boundingRect().bottom();
+            break;
+        case DISTRIBUTE_VERTICAL_TOP:
+            return last->boundingRect().top() - first->boundingRect().top();
+            break;
+    }
+    return 0.0;
 }

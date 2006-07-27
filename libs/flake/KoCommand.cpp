@@ -298,3 +298,57 @@ void KoShapeBackgroundCommand::unexecute () {
 QString KoShapeBackgroundCommand::name () const {
     return i18n( "Set background" );
 }
+
+KoShapeAlignCommand::KoShapeAlignCommand( const KoSelectionSet &shapes, Align align, QRectF boundingRect )
+{
+    QList<QPointF> previousPositions;
+    QList<QPointF> newPositions;
+    QPointF position;
+    QRectF bRect;
+    foreach( KoShape *shape, shapes ) {
+        position = shape->position();
+        previousPositions  << position;
+        bRect = shape->boundingRect();
+        switch( align )
+        {
+            case ALIGN_HORIZONTAL_LEFT:
+                newPositions << QPointF( boundingRect.left(), position.y());
+                break;
+            case ALIGN_HORIZONTAL_CENTER:
+                newPositions << QPointF( boundingRect.center().x() - bRect.width()/2, position.y());
+                break;
+            case ALIGN_HORIZONTAL_RIGHT:
+                newPositions << QPointF( boundingRect.right() - bRect.width(), position.y());
+                break;
+            case ALIGN_VERTICAL_TOP:
+                newPositions << QPointF( position.x(), boundingRect.top());
+                break;
+            case ALIGN_VERTICAL_CENTER:
+                newPositions << QPointF(  position.x(), boundingRect.center().y() - bRect.height()/2);
+                break;
+            case ALIGN_VERTICAL_BOTTOM:
+                newPositions << QPointF(  position.x(), boundingRect.bottom() - bRect.height());
+                break;
+        };
+    }
+    m_command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
+}
+
+KoShapeAlignCommand::~KoShapeAlignCommand()
+{
+    delete m_command;
+}
+
+void KoShapeAlignCommand::execute()
+{
+    m_command->execute();
+}
+
+void KoShapeAlignCommand::unexecute()
+{
+    m_command->unexecute();
+}
+
+QString KoShapeAlignCommand::name () const {
+    return i18n( "Align shapes" );
+}

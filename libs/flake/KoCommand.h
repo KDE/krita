@@ -250,4 +250,34 @@ private:
     QBrush m_newBrush;           ///< the new background brush to set
 };
 
+/// The undo / redo command for aligning shapes
+class KoShapeAlignCommand : public KCommand {
+public:
+    enum Align
+    {
+        ALIGN_HORIZONTAL_LEFT,
+        ALIGN_HORIZONTAL_CENTER,
+        ALIGN_HORIZONTAL_RIGHT,
+        ALIGN_VERTICAL_BOTTOM,
+        ALIGN_VERTICAL_CENTER,
+        ALIGN_VERTICAL_TOP
+    };
+    /**
+     * Command to align a set of shapes in a rect
+     * @param shapes a set of all the shapes that should be aligned
+     * @param align the aligment type
+     * @param boundingRect the rect the shape will be aligned in
+     */
+    KoShapeAlignCommand( const KoSelectionSet &shapes, Align align, QRectF boundingRect );
+    virtual ~KoShapeAlignCommand();
+    /// execute the command
+    virtual void execute();
+    /// revert the actions done in execute
+    virtual void unexecute();
+    /// return the name of this command
+    virtual QString name () const;
+private:
+    KoShapeMoveCommand *m_command;
+};
+
 #endif

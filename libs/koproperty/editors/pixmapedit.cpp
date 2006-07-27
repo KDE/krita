@@ -141,12 +141,14 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
 	if (m_recentlyPainted!=value) {
 		m_recentlyPainted = value;
 		m_scaledPixmap = value.value<QPixmap>();
-		QImage img(m_scaledPixmap.toImage());
-		img = img.scaled(r.size()+QSize(0,2), Qt::KeepAspectRatio, Qt::SmoothTransformation );
-		m_scaledPixmap = QPixmap::fromImage(img);
+		if (m_scaledPixmap.height() > r2.height() || m_scaledPixmap.width() > r2.width()) { //scale down
+			QImage img(m_scaledPixmap.toImage());
+			img = img.smoothScale(r2.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+			m_scaledPixmap = QPixmap::fromImage(img);
+		}
 	}
-	p->drawPixmap(r.topLeft().x(), //+KPROPEDITOR_ITEM_MARGIN,
-		r.topLeft().y()+(r.height()-m_scaledPixmap.height())/2+1, m_scaledPixmap);
+	p->drawPixmap(r2.topLeft().x(),
+		r2.topLeft().y()+(r2.height()-m_scaledPixmap.height())/2, m_scaledPixmap);
 }
 
 QString

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,16 +16,14 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <QPainter>
 #include <QPen>
 
 #include <kdebug.h>
-#include <klocale.h>
 
-#include "elementvisitor.h"
 #include "FormulaCursor.h"
 #include "FormulaElement.h"
 #include "kformulacommand.h"
@@ -32,7 +31,7 @@
 #include "SequenceElement.h"
 
 namespace KFormula {
-
+/*
 class RootSequenceElement : public SequenceElement {
     typedef SequenceElement inherited;
 public:
@@ -50,7 +49,7 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual KCommand* buildCommand( Container*, Request* );
+  /*  virtual KCommand* buildCommand( Container*, Request* );
 };
 
 
@@ -89,84 +88,46 @@ KCommand* RootSequenceElement::buildCommand( Container* container, Request* requ
     }
     return inherited::buildCommand( container, request );
 }
-
+*/
 
 RootElement::RootElement( BasicElement* parent ) : BasicElement( parent )
 {
-    content = new RootSequenceElement( this );
-    index = 0;
+    m_radicand = 0;
+    m_exponent = 0;
 }
 
 RootElement::~RootElement()
 {
-    delete index;
-    delete content;
 }
 
 const QList<BasicElement*>& RootElement::childElements()
 {
-    return QList<BasicElement*>();
+    QList<BasicElement*> tmp;
+    if( m_exponent )
+	tmp << m_exponent;
+    return tmp << m_radicand;
 }
 
 void RootElement::drawInternal()
 {
 }
 
-
-/*
-bool RootElement::accept( ElementVisitor* visitor )
+void RootElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
-    return visitor->visit( this );
+    QDomElement de;
+
+    if( m_exponent )
+        de = doc.createElement( oasisFormat ? "math:mroot" : "mroot" );
+    else
+        de = doc.createElement( oasisFormat ? "math:msqrt" : "msqrt" );
+
+    m_radicand->writeMathML( doc, de, oasisFormat );
+
+    if( m_exponent )
+        m_exponent->writeMathML( doc, de, oasisFormat );
+
+    parent.appendChild( de );
 }
-*/
-/*
-void RootElement::entered( SequenceElement* child )
-{
-    if ( child == content ) {
-        formula()->tell( i18n( "Main list of root" ) );
-    }
-    else {
-        formula()->tell( i18n( "Index" ) );
-    }
-}
-*/
-/*
-BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                    const LuPixelPoint& point, const LuPixelPoint& parentOrigin)
-{
-    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
-    if (e != 0) {
-        LuPixelPoint myPos(parentOrigin.x() + getX(),
-                           parentOrigin.y() + getY());
-
-        e = content->goToPos(cursor, handled, point, myPos);
-        if (e != 0) {
-            return e;
-        }
-        if (hasIndex()) {
-            e = index->goToPos(cursor, handled, point, myPos);
-            if (e != 0) {
-                return e;
-            }
-        }
-
-        //int dx = point.x() - myPos.x();
-        luPixel dy = point.y() - myPos.y();
-
-        // the position after the index
-        if (hasIndex()) {
-            if (dy < index->getHeight()) {
-                index->moveLeft(cursor, this);
-                handled = true;
-                return index;
-            }
-        }
-
-        return this;
-    }
-    return 0;
-}*/
-
 
 /**
  * Calculates our width and height and
@@ -174,38 +135,38 @@ BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
  */
 void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    content->calcSizes(style, tstyle,
+    m_radicand->calcSizes(style, tstyle,
 		       style.convertIndexStyleLower(istyle));
 
     luPixel indexWidth = 0;
     luPixel indexHeight = 0;
-    if (hasIndex()) {
-	index->calcSizes(style,
+    if ( m_exponent) {
+	m_exponent->calcSizes(style,
 			 style.convertTextStyleIndex(tstyle),
 			 style.convertIndexStyleUpper(istyle));
-        indexWidth = index->getWidth();
-        indexHeight = index->getHeight();
+        indexWidth = m_exponent->getWidth();
+        indexHeight = m_exponent->getHeight();
     }
 
     luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
     luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
-    luPixel unit = (content->getHeight() + distY)/ 3;
+    luPixel unit = (m_radicand->getHeight() + distY)/ 3;
 
-    if (hasIndex()) {
+    if (m_exponent) {
         if (indexWidth > unit) {
-            index->setX(0);
+            m_exponent->setX(0);
             rootOffset.setX( indexWidth - unit );
         }
         else {
-            index->setX( ( unit - indexWidth )/2 );
+            m_exponent->setX( ( unit - indexWidth )/2 );
             rootOffset.setX(0);
         }
         if (indexHeight > unit) {
-            index->setY(0);
+            m_exponent->setY(0);
             rootOffset.setY( indexHeight - unit );
         }
         else {
-            index->setY( unit - indexHeight );
+            m_exponent->setY( unit - indexHeight );
             rootOffset.setY(0);
         }
     }
@@ -214,12 +175,12 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
         rootOffset.setY(0);
     }
 
-    setWidth( content->getWidth() + unit+unit/3+ rootOffset.x() + distX/2 );
-    setHeight( content->getHeight() + distY*2 + rootOffset.y() );
+    setWidth( m_radicand->getWidth() + unit+unit/3+ rootOffset.x() + distX/2 );
+    setHeight( m_radicand->getHeight() + distY*2 + rootOffset.y() );
 
-    content->setX( rootOffset.x() + unit+unit/3 );
-    content->setY( rootOffset.y() + distY );
-    setBaseline(content->getBaseline() + content->getY());
+    m_radicand->setX( rootOffset.x() + unit+unit/3 );
+    m_radicand->setY( rootOffset.y() + distY );
+    setBaseline(m_radicand->getBaseline() + m_radicand->getY());
 }
 
 /**
@@ -237,10 +198,10 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    content->draw(painter, r, style, tstyle,
+    m_radicand->draw(painter, r, style, tstyle,
 		  style.convertIndexStyleLower(istyle), myPos);
-    if (hasIndex()) {
-        index->draw(painter, r, style,
+    if ( m_exponent ) {
+        m_exponent->draw(painter, r, style,
 		    style.convertTextStyleIndex(tstyle),
 		    style.convertIndexStyleUpper(istyle), myPos);
     }
@@ -249,7 +210,7 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
     luPixel y = myPos.y() + rootOffset.y();
     //int distX = style.getDistanceX(tstyle);
     luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
-    luPixel unit = (content->getHeight() + distY)/ 3;
+    luPixel unit = (m_radicand->getHeight() + distY)/ 3;
 
     painter.setPen( QPen( style.getDefaultColor(),
                           style.layoutUnitToPixelX( 2*style.getLineWidth() ) ) );
@@ -267,7 +228,7 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                       style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
     painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
                       style.layoutUnitToPixelY( y+distY/3 ),
-                      style.layoutUnitToPixelX( x+unit+unit/3+content->getWidth() ),
+                      style.layoutUnitToPixelX( x+unit+unit/3+m_radicand->getWidth() ),
                       style.layoutUnitToPixelY( y+distY/3 ) );
     painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
                       style.layoutUnitToPixelY( y+unit+distY/2 ),
@@ -275,7 +236,7 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                       style.layoutUnitToPixelY( y+unit+unit/2 ) );
 }
 
-
+/*
 void RootElement::dispatchFontCommand( FontCommand* cmd )
 {
     content->dispatchFontCommand( cmd );
@@ -283,7 +244,7 @@ void RootElement::dispatchFontCommand( FontCommand* cmd )
         index->dispatchFontCommand( cmd );
     }
 }
-
+*/
 /**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside
@@ -297,11 +258,11 @@ void RootElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
     else {
         bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
-            content->moveLeft(cursor, this);
+            m_radicand->moveLeft(cursor, this);
         }
-        else if (from == content) {
-            if (linear && hasIndex()) {
-                index->moveLeft(cursor, this);
+        else if (from == m_radicand) {
+            if (linear && m_exponent) {
+                m_radicand->moveLeft(cursor, this);
             }
             else {
                 getParent()->moveLeft(cursor, this);
@@ -326,15 +287,15 @@ void RootElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     else {
         bool linear = cursor->getLinearMovement();
         if (from == getParent()) {
-            if (linear && hasIndex()) {
-                index->moveRight(cursor, this);
+            if (linear && m_exponent) {
+                m_exponent->moveRight(cursor, this);
             }
             else {
-                content->moveRight(cursor, this);
+                m_radicand->moveRight(cursor, this);
             }
         }
-        else if (from == index) {
-            content->moveRight(cursor, this);
+        else if (from == m_radicand) {
+            m_radicand->moveRight(cursor, this);
         }
         else {
             getParent()->moveRight(cursor, this);
@@ -354,11 +315,11 @@ void RootElement::moveUp(FormulaCursor* cursor, BasicElement* from)
     }
     else {
         if (from == getParent()) {
-            content->moveRight(cursor, this);
+            m_radicand->moveRight(cursor, this);
         }
-        else if (from == content) {
-            if (hasIndex()) {
-                index->moveRight(cursor, this);
+        else if (from == m_radicand) {
+            if (m_exponent) {
+                m_radicand->moveRight(cursor, this);
             }
             else {
                 getParent()->moveUp(cursor, this);
@@ -382,15 +343,15 @@ void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
     }
     else {
         if (from == getParent()) {
-            if (hasIndex()) {
-                index->moveRight(cursor, this);
+            if (m_exponent) {
+                m_radicand->moveRight(cursor, this);
             }
             else {
-                content->moveRight(cursor, this);
+                m_radicand->moveRight(cursor, this);
             }
         }
-        else if (from == index) {
-            content->moveRight(cursor, this);
+        else if (from == m_radicand) {
+            m_radicand->moveRight(cursor, this);
         }
         else {
             getParent()->moveDown(cursor, this);
@@ -406,14 +367,14 @@ void RootElement::insert(FormulaCursor* cursor,
                          Direction direction)
 {
     if (cursor->getPos() == upperLeftPos) {
-        index = static_cast<SequenceElement*>(newChildren.takeAt(0));
-        index->setParent(this);
+        m_radicand = static_cast<SequenceElement*>(newChildren.takeAt(0));
+        m_radicand->setParent(this);
 
         if (direction == beforeCursor) {
-            index->moveLeft(cursor, this);
+            m_radicand->moveLeft(cursor, this);
         }
         else {
-            index->moveRight(cursor, this);
+            m_radicand->moveRight(cursor, this);
         }
         cursor->setSelection(false);
         formula()->changed();
@@ -436,9 +397,9 @@ void RootElement::remove(FormulaCursor* cursor,
         getParent()->remove(cursor, removedChildren, direction);
         break;
     case upperLeftPos:
-        removedChildren.append(index);
-        formula()->elementRemoval(index);
-        index = 0;
+        removedChildren.append(m_exponent);
+        formula()->elementRemoval(m_exponent);
+        m_exponent = 0;
         cursor->setTo(this, upperLeftPos);
         formula()->changed();
         break;
@@ -449,7 +410,7 @@ void RootElement::remove(FormulaCursor* cursor,
 /**
  * Moves the cursor to a normal place where new elements
  * might be inserted.
- */
+ */ /*
 void RootElement::normalize(FormulaCursor* cursor, Direction direction)
 {
     if (direction == beforeCursor) {
@@ -459,7 +420,7 @@ void RootElement::normalize(FormulaCursor* cursor, Direction direction)
         content->moveRight(cursor, this);
     }
 }
-
+*/
 
 // main child
 //
@@ -467,17 +428,8 @@ void RootElement::normalize(FormulaCursor* cursor, Direction direction)
 
 SequenceElement* RootElement::getMainChild()
 {
-    return content;
+    return m_radicand;
 }
-
-// void RootElement::setMainChild(SequenceElement* child)
-// {
-//     formula()->elementRemoval(content);
-//     content = child;
-//     content->setParent(this);
-//     formula()->changed();
-// }
-
 
 /**
  * Sets the cursor to select the child. The mark is placed before,
@@ -485,10 +437,10 @@ SequenceElement* RootElement::getMainChild()
  */
 void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
-    if (child == content) {
+    if (child == m_radicand) {
         cursor->setTo(this, contentPos);
     }
-    else if (child == index) {
+    else if (child == m_exponent) {
         cursor->setTo(this, upperLeftPos);
     }
 }
@@ -496,12 +448,12 @@ void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 
 void RootElement::moveToIndex(FormulaCursor* cursor, Direction direction)
 {
-    if (hasIndex()) {
+    if (m_exponent) {
         if (direction == beforeCursor) {
-            index->moveLeft(cursor, this);
+            m_exponent->moveLeft(cursor, this);
         }
         else {
-            index->moveRight(cursor, this);
+            m_exponent->moveRight(cursor, this);
         }
     }
 }
@@ -522,12 +474,12 @@ void RootElement::writeDom(QDomElement element)
     QDomDocument doc = element.ownerDocument();
 
     QDomElement con = doc.createElement("CONTENT");
-    con.appendChild(content->getElementDom(doc));
+    con.appendChild(m_radicand->getElementDom(doc));
     element.appendChild(con);
 
-    if(hasIndex()) {
+    if(m_exponent) {
         QDomElement ind = doc.createElement("ROOTINDEX");
-        ind.appendChild(index->getElementDom(doc));
+        ind.appendChild(m_exponent->getElementDom(doc));
         element.appendChild(ind);
     }
 }
@@ -552,20 +504,20 @@ bool RootElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    if ( !buildChild( content, node, "CONTENT" ) ) {
+    if ( !buildChild( m_radicand, node, "CONTENT" ) ) {
         kWarning( DEBUGID ) << "Empty content in RootElement." << endl;
         return false;
     }
     node = node.nextSibling();
 
     if ( node.nodeName().toUpper() == "ROOTINDEX" ) {
-        if ( !buildChild( index=new SequenceElement( this ), node, "ROOTINDEX" ) ) {
+        if ( !buildChild( m_exponent=new SequenceElement( this ), node, "ROOTINDEX" ) ) {
             return false;
         }
     }
     // backward compatibility
     else if ( node.nodeName().toUpper() == "INDEX" ) {
-        if ( !buildChild( index=new SequenceElement( this ), node, "INDEX" ) ) {
+        if ( !buildChild( m_exponent=new SequenceElement( this ), node, "INDEX" ) ) {
             return false;
         }
     }
@@ -573,48 +525,5 @@ bool RootElement::readContentFromDom(QDomNode& node)
 
     return true;
 }
-/*
-QString RootElement::toLatex()
-{
-    QString root;
-    root="\\sqrt";
-    if(hasIndex()) {
-        root+="[";
-	root+=index->toLatex();
-	root+="]";
-    }
-    root+="{";
-    root+=content->toLatex();
-    root+="}";
 
-    return root;
-}
-
-QString RootElement::formulaString()
-{
-    if ( hasIndex() ) {
-        return "(" + content->formulaString() + ")**(1.0/(" + index->formulaString() + "))";
-    }
-    return "sqrt(" + content->formulaString() + ")";
-}
-*/
-void RootElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de;
-
-    if( hasIndex() )
-        de = doc.createElement( oasisFormat ? "math:mroot" : "mroot" );
-    else
-        de = doc.createElement( oasisFormat ? "math:msqrt" : "msqrt" );
-
-    content->writeMathML( doc, de, oasisFormat );
-
-    if( hasIndex() )
-    {
-        index->writeMathML( doc, de, oasisFormat );
-    }
-
-    parent.appendChild( de );
-}
-
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

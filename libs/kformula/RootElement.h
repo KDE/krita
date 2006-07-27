@@ -31,7 +31,6 @@
 
 
 namespace KFormula {
-
 class SequenceElement;
 
 
@@ -56,12 +55,6 @@ public:
 
     
     /**
-     * The cursor has entered one of our child sequences.
-     * This is a good point to tell the user where he is.
-     */
-//    virtual void entered( SequenceElement* child );
-
-    /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
@@ -81,7 +74,7 @@ public:
     /**
      * Dispatch this FontCommand to all our TextElement children.
      */
-    virtual void dispatchFontCommand( FontCommand* cmd );
+ //   virtual void dispatchFontCommand( FontCommand* cmd );
 
     /**
      * Enters this element while moving to the left starting inside
@@ -128,27 +121,19 @@ public:
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Direction);
+//    virtual void normalize(FormulaCursor*, Direction);
 
     // main child
     //
     // If an element has children one has to become the main one.
 
     virtual SequenceElement* getMainChild();
-    SequenceElement* getRadiant() { return index; }
-    //virtual void setMainChild(SequenceElement*);
 
     /**
      * Sets the cursor to select the child. The mark is placed before,
      * the position behind it.
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
-
-    /**
-     * Moves the cursor away from the given child. The cursor is
-     * guaranteed to be inside this element.
-     */
-    //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
 
     // Moves the cursor inside the index. The index has to exist.
     void moveToIndex(FormulaCursor*, Direction);
@@ -158,9 +143,9 @@ public:
     // we want to insert them.
     void setToIndex(FormulaCursor*);
 
-    bool hasIndex() const { return index != 0; }
+ //   bool hasIndex() const { return index != 0; }
 
-    ElementIndexPtr getIndex() { return ElementIndexPtr( new RootElementIndex( this ) ); }
+//    ElementIndexPtr getIndex() { return ElementIndexPtr( new RootElementIndex( this ) ); }
 
 protected:
     virtual void drawInternal();
@@ -194,7 +179,7 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
 private:
-
+/*
     class RootElementIndex : public ElementIndex {
     public:
         RootElementIndex(RootElement* p) : parent(p) {}
@@ -207,26 +192,19 @@ private:
         virtual RootElement* getElement() { return parent; }
     protected:
         RootElement* parent;
-    };
+    };*/
 
 
-    /**
-     * The one below the graph.
-     */
-    SequenceElement* content;
+    /// The element that is the radicand of the root
+    SequenceElement* m_radicand;
 
-    /**
-     * An optional index.
-     */
-    SequenceElement* index;
+    /// The element that is the exponent of the root
+    SequenceElement* m_exponent;
 
-    /**
-     * The point the artwork relates to.
-     */
+    /// The point the artwork relates to.
     LuPixelPoint rootOffset;
 };
 
-
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // ROOTELEMENT_H

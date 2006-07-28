@@ -8,5 +8,6 @@
      The parameter passed to specify which shape to select should be something like:
      enum SelectionType { selected, unselected, nextUnselected, frameOnTop };
      see kword/KWFrameViewManager for an explenation of the options.
+* update KoShapeContainer positon/boundingRect when a child is added or updated
 
 Use xcursorgen to create real xcursors ? (boemann)

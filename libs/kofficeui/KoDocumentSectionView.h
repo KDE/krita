@@ -30,20 +30,31 @@ class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
     typedef QTreeView super;
     Q_OBJECT
 
+    signals:
+        void contextMenuRequested( const QPoint &globalPos, const QModelIndex &index );
+
     public:
         KoDocumentSectionView( QWidget *parent = 0 );
         virtual ~KoDocumentSectionView();
 
+        void addPropertyActions( QMenu *menu, const QModelIndex &index );
+
     protected:
         virtual bool event( QEvent *event );
         virtual bool viewportEvent( QEvent *event );
+        virtual void contextMenuEvent( QContextMenuEvent *event );
+        virtual void showContextMenu( const QPoint &pos, const QModelIndex &index );
 
     protected slots:
         virtual void currentChanged( const QModelIndex &current, const QModelIndex &previous );
         virtual void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
 
+    private slots:
+        void slotActionToggled( bool on, const QPersistentModelIndex &index, int property );
+
     private:
         typedef KoDocumentSectionModel Model;
+        class PropertyAction;
         class Private;
         Private* const d;
 };

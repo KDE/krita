@@ -18,9 +18,12 @@
 */
 
 #include <QtDebug>
+#include <QContextMenuEvent>
 #include <QHeaderView>
 #include <QHelpEvent>
+#include <QMenu>
 #include <QMouseEvent>
+#include "KoDocumentSectionPropertyAction_p.h"
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionView.h"
@@ -43,6 +46,19 @@ KoDocumentSectionView::KoDocumentSectionView( QWidget *parent )
 KoDocumentSectionView::~KoDocumentSectionView()
 {
     delete d;
+}
+
+void KoDocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &index )
+{
+    Model::PropertyList list = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
+    for( int i = 0, n = list.count(); i < n; ++i )
+        if( list.at( i ).isMutable )
+        {
+            PropertyAction *a = new PropertyAction( i, list.at( i ), index, menu );
+            connect( a, SIGNAL( toggled( bool, const QPersistentModelIndex&, int ) ),
+                     this, SLOT( slotActionToggled( bool, const QPersistentModelIndex&, int ) ) );
+            menu->addAction( a );
+        }
 }
 
 bool KoDocumentSectionView::event( QEvent *e )
@@ -83,6 +99,20 @@ bool KoDocumentSectionView::viewportEvent( QEvent *e )
     return super::viewportEvent( e );
 }
 
+void KoDocumentSectionView::contextMenuEvent( QContextMenuEvent *e )
+{
+    super::contextMenuEvent( e );
+    QModelIndex i = indexAt( e->pos() );
+    if( model() )
+        i = model()->buddy( i );
+    showContextMenu( e->globalPos(), i );
+}
+
+void KoDocumentSectionView::showContextMenu( const QPoint &globalPos, const QModelIndex &index )
+{
+    emit contextMenuRequested( globalPos, index );
+}
+
 void KoDocumentSectionView::currentChanged( const QModelIndex &current, const QModelIndex &previous )
 {
     super::currentChanged( current, previous );
@@ -102,4 +132,12 @@ void KoDocumentSectionView::dataChanged( const QModelIndex &topLeft, const QMode
             }
 }
 
+void KoDocumentSectionView::slotActionToggled( bool on, const QPersistentModelIndex &index, int num )
+{
+    Model::PropertyList list = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
+    list[num].state = on;
+    const_cast<QAbstractItemModel*>( index.model() )->setData( index, QVariant::fromValue( list ), Model::PropertiesRole );
+}
+
+#include "KoDocumentSectionPropertyAction_p.moc"
 #include "KoDocumentSectionView.moc"

@@ -139,7 +139,7 @@ bool KoItemToolTip::eventFilter( QObject *object, QEvent *event )
         default: break;
     }
 
-    return false;//super::eventFilter( object, event );
+    return super::eventFilter( object, event );
 }
 
 #include "KoItemToolTip.moc"

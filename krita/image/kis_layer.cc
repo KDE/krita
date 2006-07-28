@@ -480,6 +480,26 @@ bool KisLayer::matchesFlags(int flags) const
     return true;
 }
 
+KisLayerSP KisLayer::layerFromIndex(const QModelIndex &index)
+{
+    if( !index.isValid() )
+        return KisLayerSP(0);
+
+    Q_ASSERT(index.model() == this);
+    Q_ASSERT(index.internalPointer());
+
+    return KisLayerSP(static_cast<KisLayer*>(index.internalPointer()));
+}
+
+vKisLayerSP KisLayer::layersFromIndexes(const QModelIndexList &in)
+{
+    vKisLayerSP out;
+    for (int i = 0, n = in.count(); i < n; ++i)
+        if (KisLayerSP layer = layerFromIndex(in.at(i)))
+            out << layer;
+    return out;
+}
+
 quint8 KisLayer::opacity() const
 {
     return m_opacity;
@@ -667,7 +687,7 @@ int KisLayer::rowCount(const QModelIndex &parent) const
     return static_cast<KisLayer*>(parent.internalPointer())->childCount();
 }
 
-int KisLayer::columnCount(const QModelIndex &i) const
+int KisLayer::columnCount(const QModelIndex&) const
 {
     return 1;
 }

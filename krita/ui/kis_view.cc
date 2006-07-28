@@ -97,7 +97,6 @@
 #include <kis_config.h>
 #include <config-krita.h>
 
-#include "kis_layerlist.h" // XXX: TODO Work out why this is needed here to fix compilation.
 
 #include "kis_canvas.h"
 
@@ -281,7 +280,6 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
-    m_paletteManager->createPalette( krita::NEWLAYERBOX, i18n("Layers"));
 
     m_selectionManager = new KisSelectionManager(this, doc);
     m_filterManager = new KisFilterManager(this, doc);
@@ -439,7 +437,7 @@ KoPaletteManager * KisView::paletteManager()
 
 void KisView::createLayerBox()
 {
-    m_layerBox = new KisLayerBox(this);
+    m_layerBox = new KisLayerBox();
     m_layerBox->setWindowTitle(i18n("Layers"));
 
     connect(m_layerBox, SIGNAL(sigRequestLayer(KisGroupLayerSP, KisLayerSP)),
@@ -457,12 +455,8 @@ void KisView::createLayerBox()
             this, SLOT(layerOpacityFinishedChanging(int, int)));
     connect(m_layerBox, SIGNAL(sigItemComposite(const KoCompositeOp&)), this, SLOT(layerCompositeOp(const KoCompositeOp&)));
 
-    m_dsv = new KoDocumentSectionView(this);
-
     paletteManager()->addWidget(m_layerBox, "layerbox", krita::LAYERBOX, 0);
-    paletteManager()->addWidget(m_dsv, "newlayerbox", krita::NEWLAYERBOX, 0);
 }
-
 void KisView::setupScrollBars()
 {
     m_scrollX = 0;
@@ -3193,7 +3187,6 @@ void KisView::connectCurrentImg()
     }
 
     m_layerBox->setImage(m_image);
-    m_dsv->setModel(m_image->rootLayer().data());
     m_birdEyeBox->setImage(m_image);
 }
 
@@ -3203,7 +3196,6 @@ void KisView::disconnectCurrentImg()
         m_image->disconnect(this);
         disconnect( document(), SIGNAL( sigCommandExecuted() ), m_image.data(), SLOT( slotCommandExecuted() ) );
         m_layerBox->setImage(KisImageSP(0));
-        m_dsv->setModel(0);
         m_birdEyeBox->setImage(KisImageSP(0));
 
         KisConnectPartLayerVisitor v(m_image, this, false);
@@ -3663,7 +3655,6 @@ void KisView::setCurrentImage(KisImageSP image)
 #endif
     connectCurrentImg();
     m_layerBox->setImage(currentImg());
-    m_dsv->setModel(currentImg()->rootLayer().data());
 
     zoomAroundPoint(0, 0, 1.0);
 
@@ -3854,7 +3845,6 @@ void KisView::slotLoadingFinished()
     // Set the current image for real now everything is ready to go.
     setCurrentImage(document()->currentImage());
     m_paletteManager->showWidget( "layerbox" );
-    m_paletteManager->showWidget( "newlayerbox" );
     m_canvas->show();
     disconnect(document(), SIGNAL(loadingFinished()), this, SLOT(slotLoadingFinished()));
 

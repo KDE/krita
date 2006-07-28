@@ -23,9 +23,7 @@
 #define KIS_LAYERBOX_H
 
 #include <QFrame>
-#include <QPixmap>
 #include <QList>
-#include <QTimer>
 
 #include <kdebug.h>
 
@@ -42,14 +40,14 @@ public:
     WdgLayerBox(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
+class QModelIndex;
+typedef QList<QModelIndex> QModelIndexList;
 class QPainter;
 class QWidget;
 class KIconLoader;
 class KMenu;
 class KoDocumentEntry;
 class KoCompositeOp;
-class KisLayerList;
-class LayerItem;
 class KisCanvasSubject;
 
 class KisLayerBox : public QFrame {
@@ -57,23 +55,13 @@ class KisLayerBox : public QFrame {
         Q_OBJECT
 
 public:
-    KisLayerBox(KisCanvasSubject *subject, QWidget *parent = 0, const char *name = 0);
+    KisLayerBox(QWidget *parent = 0, const char *name = 0);
     virtual ~KisLayerBox();
 
-    void clear();
     void setUpdatesAndSignalsEnabled(bool enable);
     void setImage(KisImageSP image);
 
 public slots:
-    // connect to KisImage signals
-    void slotLayerActivated(KisLayerSP layer);
-    void slotLayerAdded(KisLayerSP layer);
-    void slotLayerRemoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
-    void slotLayerMoved(KisLayerSP layer, KisGroupLayerSP wasParent, KisLayerSP wasAboveThis);
-    void slotLayerPropertiesChanged(KisLayerSP layer);
-    void slotLayersChanged(KisGroupLayerSP rootLayer);
-    void slotLayerUpdated(KisLayerSP layer, QRect rc);
-
     void slotSetCompositeOp(const KoCompositeOp& compositeOp);
     void slotSetOpacity(int opacity);
     void slotSetColorSpace(const KoColorSpace * colorSpace);
@@ -93,19 +81,8 @@ private:
     enum LayerTypes { PAINT_LAYER, GROUP_LAYER, ADJUSTMENT_LAYER, OBJECT_LAYER };
 
 private slots:
-    // connect to LayerList signals
-    void slotLayerActivated(LayerItem* layer);
-    void slotLayerDisplayNameChanged(LayerItem* layer, const QString& displayName);
-    void slotLayerPropertyChanged(LayerItem* layer, const QString& name, bool on);
-    void slotLayerMoved(LayerItem* layer, LayerItem* parent, LayerItem* after);
-    void slotRequestNewLayer(LayerItem* parent, LayerItem* after);
-    void slotRequestNewFolder(LayerItem* parent, LayerItem* after);
-    void slotRequestNewAdjustmentLayer(LayerItem* parent, LayerItem* after);
-    void slotRequestNewObjectLayer(LayerItem* parent, LayerItem* item, const KoDocumentEntry& entry);
-    void slotRequestRemoveLayer(LayerItem* layer);
-    void slotRequestLayerProperties(LayerItem* layer);
+    void slotContextMenuRequested( const QPoint &pos, const QModelIndex &index );
 
-    void slotAboutToShow();
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
@@ -116,23 +93,16 @@ private slots:
     void slotNewAdjustmentLayer();
     void slotNewPartLayer();
 
-    void updateThumbnails();
+    void updateUI();
 
 private:
-    void updateUI();
-    QPixmap loadPixmap(const QString& filename, const KIconLoader& il, int size);
-    KisLayerList* list() const;
-    void markModified(KisLayer *layer);
     void getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above);
+    QModelIndexList selectedLayers() const;
 
     KMenu *m_newLayerMenu;
     KoPartSelectAction *m_partLayerAction;
     KisImageSP m_image;
-    QList<int> m_modified;
     WdgLayerBox *m_lst;
-
-    void printKritaLayers() const;
-    void printLayerboxLayers() const;
 };
 
 #endif // KIS_LAYERBOX_H

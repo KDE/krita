@@ -35,7 +35,6 @@ set(kritaui_LIB_SRCS
    kis_label_progress.cc
    kis_label_zoom.cc
    kis_layerbox.cc
-   kis_layerlist.cc
    kis_multi_bool_filter_widget.cc
    kis_multi_double_filter_widget.cc
    kis_multi_integer_filter_widget.cc
@@ -72,7 +71,6 @@ set(kritaui_LIB_SRCS
    kis_custom_pattern.cc
    kis_custom_image_widget.cc
    kobirdeyepanel.cpp
-   layerlist.cpp
    kis_dlg_adjustment_layer.cc
    kis_filters_listview.cc
    kis_grid_manager.cpp
@@ -153,7 +151,6 @@ install( FILES
     kis_label_zoom.h
     kis_int_spinbox.h
     kis_layerbox.h
-    kis_layerlist.h
     kis_move_event.h
     kis_multi_bool_filter_widget.h
     kis_multi_double_filter_widget.h

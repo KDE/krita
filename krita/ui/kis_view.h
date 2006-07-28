@@ -591,7 +591,6 @@ private:
 
 
     KisLayerBox *m_layerBox;
-    KoDocumentSectionView *m_dsv;
     KoToolBox * m_toolBox;
     KisControlFrame * m_brushesAndStuffToolBar;
 

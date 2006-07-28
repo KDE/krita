@@ -60,7 +60,7 @@
         </layout>
       </item>
       <item>
-        <widget class="KisLayerList" name="listLayers" />
+        <widget class="KoDocumentSectionView" name="listLayers" />
       </item>
       <item>
         <layout class="QHBoxLayout" >
@@ -228,9 +228,9 @@
       <pixmap>image4</pixmap>
     </customwidget>
     <customwidget>
-      <class>KisLayerList</class>
+      <class>KoDocumentSectionView</class>
       <extends></extends>
-      <header location="local" >kis_layerlist.h</header>
+      <header location="global">KoDocumentSectionView.h</header>
       <sizehint>
         <width>-1</width>
         <height>-1</height>

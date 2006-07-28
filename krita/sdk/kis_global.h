@@ -75,7 +75,6 @@ namespace krita {
     const QString PAINTBOX ("paintbox");
     const QString COLORBOX ("colorbox");
     const QString LAYERBOX ("layerbox");
-    const QString NEWLAYERBOX ("newlayerbox");
 }
 
 #endif // KISGLOBAL_H_

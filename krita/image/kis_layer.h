@@ -162,6 +162,9 @@ public:
     /// Returns the total number of layers in this layer, its child layers, and their child layers recursively, optionally ones with the specified properties Visible or Locked, which you can OR together.
     virtual int numLayers(int type = 0) const;
 
+    KisLayerSP layerFromIndex(const QModelIndex &index);
+    vKisLayerSP layersFromIndexes(const QModelIndexList &list);
+
 public:
     /**
      * Called when the layer is made active.

@@ -102,7 +102,7 @@ KFCAdd::KFCAdd(const QString &name, Container *document)
 void KFCAdd::execute()
 {
     FormulaCursor* cursor = getExecuteCursor();
-    cursor->insert(addList, beforeCursor);
+//    cursor->insert(addList, beforeCursor);
     setUnexecuteCursor(cursor);
     cursor->setSelection(false);
     testDirty();
@@ -141,7 +141,7 @@ void KFCRemoveSelection::execute()
 void KFCRemoveSelection::unexecute()
 {
     FormulaCursor* cursor = getUnexecuteCursor();
-    cursor->insert(removedList);
+//    cursor->insert(removedList);
     cursor->setSelection(false);
     testDirty();
 }
@@ -217,7 +217,7 @@ void KFCRemove::unexecute()
         delete simpleRemoveCursor;
         simpleRemoveCursor = 0;
     }
-    cursor->insert(removedList, dir);
+//    cursor->insert(removedList, dir);
     cursor->setSelection(false);
     testDirty();
 }

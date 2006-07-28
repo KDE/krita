@@ -69,7 +69,7 @@ struct Container::Container_Impl {
     ~Container_Impl()
     {
         delete internCursor;
-//        delete rootElement;
+//        delete m_formulaElement;
         document = 0;
     }
 
@@ -104,8 +104,12 @@ struct Container::Container_Impl {
     Document* document;
 };
 
-
-FormulaElement* Container::rootElement() const { return m_formulaElement; }
+/*
+FormulaElement* Container::rootElement() const
+{
+    return m_formulaElement;
+}
+*/
 Document* Container::document() const { return impl->document; }
 
 Container::Container( Document* doc, int pos, bool registerMe )
@@ -135,15 +139,15 @@ void Container::initialize()
 
 FormulaCursor* Container::createCursor()
 {
-    return new FormulaCursor(rootElement());
+    return new FormulaCursor( m_formulaElement );
 }
 
-
+/*
 KCommandHistory* Container::getHistory() const
 {
     return document()->getHistory();
 }
-
+*/
 
 /**
  * Gets called just before the child is removed from
@@ -265,18 +269,18 @@ void Container::recalc()
 {
     impl->dirty = false;
     ContextStyle& context = impl->document->getContextStyle();
-    rootElement()->calcSizes( context );
+    m_formulaElement->calcSizes( context );
 
-    emit formulaChanged( context.layoutUnitToPixelX( rootElement()->getWidth() ),
-                         context.layoutUnitToPixelY( rootElement()->getHeight() ) );
-    emit formulaChanged( context.layoutUnitPtToPt( context.pixelXToPt( rootElement()->getWidth() ) ),
-                         context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getHeight() ) ) );
+    emit formulaChanged( context.layoutUnitToPixelX( m_formulaElement->getWidth() ),
+                         context.layoutUnitToPixelY( m_formulaElement->getHeight() ) );
+    emit formulaChanged( context.layoutUnitPtToPt( context.pixelXToPt( m_formulaElement->getWidth() ) ),
+                         context.layoutUnitPtToPt( context.pixelYToPt( m_formulaElement->getHeight() ) ) );
     emit cursorMoved( activeCursor() );
 }
 
 bool Container::isEmpty()
 {
-    return rootElement()->childElements().isEmpty();
+    return m_formulaElement->childElements().isEmpty();
 }
 
 
@@ -296,7 +300,7 @@ void Container::draw( QPainter& painter, const QRectF& r, const QPalette& palett
 void Container::draw( QPainter& painter, const QRectF& r, bool edit )
 {
     ContextStyle& context = document()->getContextStyle( edit );
-    rootElement()->draw( painter, context.pixelToLayoutUnit( r ), context );
+    m_formulaElement->draw( painter, context.pixelToLayoutUnit( r ), context );
 }
 
 
@@ -314,7 +318,7 @@ void Container::input( QKeyEvent* event )
     if ( impl->activeCursor == 0 ) {
         return;
     }
-    execute( activeCursor()->getElement()->input( this, event ) );
+//    execute( activeCursor()->getElement()->input( this, event ) );
     checkCursor();
 }
 
@@ -323,7 +327,7 @@ void Container::performRequest( Request* request )
 {
     if ( !hasValidCursor() )
         return;
-    execute( activeCursor()->getElement()->buildCommand( this, request ) );
+//    execute( activeCursor()->getElement()->buildCommand( this, request ) );
     checkCursor();
 }
 
@@ -356,7 +360,7 @@ void Container::paste( const QDomDocument& document, QString desc )
             for (uint i = 0; i < count; i++) {
                 command->addElement(list.takeAt(0));
             }
-            execute(command);
+            //execute(command);
         }
     }
 }
@@ -393,22 +397,22 @@ void Container::emitErrorMsg( const QString& msg )
 {
     emit errorMsg( msg );
 }
-
+/*
 void Container::execute(KCommand* command)
 {
     if ( command != 0 ) {
         getHistory()->addCommand(command);
     }
 }
-
+*/
 
 const QRectF& Container::boundingRect() const
 {
     const ContextStyle& context = document()->getContextStyle();
-    return QRectF( context.layoutUnitToPixelX( rootElement()->getX() ),
-                   context.layoutUnitToPixelY( rootElement()->getY() ),
-                   context.layoutUnitToPixelX( rootElement()->getWidth() ),
-                   context.layoutUnitToPixelY( rootElement()->getHeight() ) );
+    return QRectF( context.layoutUnitToPixelX( m_formulaElement->getX() ),
+                   context.layoutUnitToPixelY( m_formulaElement->getY() ),
+                   context.layoutUnitToPixelX( m_formulaElement->getWidth() ),
+                   context.layoutUnitToPixelY( m_formulaElement->getHeight() ) );
 }
 
 const QRectF& Container::coveredRect() const
@@ -416,10 +420,10 @@ const QRectF& Container::coveredRect() const
     if ( impl->activeCursor != 0 ) {
         const ContextStyle& context = document()->getContextStyle();
         const LuPixelRect& cursorRect = impl->activeCursor->getCursorSize();
-        return QRectF( context.layoutUnitToPixelX( rootElement()->getX() ),
-                      context.layoutUnitToPixelY( rootElement()->getY() ),
-                      context.layoutUnitToPixelX( rootElement()->getWidth() ),
-                      context.layoutUnitToPixelY( rootElement()->getHeight() ) ) |
+        return QRectF( context.layoutUnitToPixelX( m_formulaElement->getX() ),
+                      context.layoutUnitToPixelY( m_formulaElement->getY() ),
+                      context.layoutUnitToPixelX( m_formulaElement->getWidth() ),
+                      context.layoutUnitToPixelY( m_formulaElement->getHeight() ) ) |
             QRectF( context.layoutUnitToPixelX( cursorRect.x() ),
                    context.layoutUnitToPixelY( cursorRect.y() ),
                    context.layoutUnitToPixelX( cursorRect.width() ),
@@ -431,33 +435,33 @@ const QRectF& Container::coveredRect() const
 double Container::width() const
 {
     const ContextStyle& context = document()->getContextStyle();
-    return context.layoutUnitPtToPt( context.pixelXToPt( rootElement()->getWidth() ) );
+    return context.layoutUnitPtToPt( context.pixelXToPt( m_formulaElement->getWidth() ) );
 }
 
 double Container::height() const
 {
     const ContextStyle& context = document()->getContextStyle();
-    return context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getHeight() ) );
+    return context.layoutUnitPtToPt( context.pixelYToPt( m_formulaElement->getHeight() ) );
 }
 
 double Container::baseline() const
 {
     const ContextStyle& context = document()->getContextStyle();
     //return context.layoutUnitToPixelY( rootElement()->getBaseline() );
-    return context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getBaseline() ) );
+    return context.layoutUnitPtToPt( context.pixelYToPt( m_formulaElement->getBaseline() ) );
 }
 
 void Container::moveTo( int x, int y )
 {
     const ContextStyle& context = document()->getContextStyle();
-    rootElement()->setX( context.pixelToLayoutUnitX( x ) );
-    rootElement()->setY( context.pixelToLayoutUnitY( y ) );
+    m_formulaElement->setX( context.pixelToLayoutUnitX( x ) );
+    m_formulaElement->setY( context.pixelToLayoutUnitY( y ) );
 }
 
 int Container::fontSize() const
 {
-    if ( rootElement()->hasOwnBaseSize() ) {
-        return rootElement()->getBaseSize();
+    if ( m_formulaElement->hasOwnBaseSize() ) {
+        return m_formulaElement->getBaseSize();
     }
     else {
         const ContextStyle& context = document()->getContextStyle();
@@ -467,14 +471,14 @@ int Container::fontSize() const
 
 void Container::setFontSize( int pointSize, bool /*forPrint*/ )
 {
-    if ( rootElement()->getBaseSize() != pointSize ) {
-        execute( new KFCChangeBaseSize( i18n( "Base Size Change" ), this, rootElement(), pointSize ) );
+    if ( m_formulaElement->getBaseSize() != pointSize ) {
+        ///execute( new KFCChangeBaseSize( i18n( "Base Size Change" ), this, m_formulaElement, pointSize ) );
     }
 }
 
 void Container::setFontSizeDirect( int pointSize )
 {
-    rootElement()->setBaseSize( pointSize );
+    m_formulaElement->setBaseSize( pointSize );
     recalc();
 }
 
@@ -490,7 +494,7 @@ void Container::updateMatrixActions()
 void Container::save( QDomElement &root )
 {
     QDomDocument ownerDoc = root.ownerDocument();
-    root.appendChild(rootElement()->getElementDom(ownerDoc));
+    root.appendChild(m_formulaElement->getElementDom(ownerDoc));
 }
 
 
@@ -508,7 +512,7 @@ bool Container::load( const QDomElement &fe )
     if (root->buildFromDom(fe)) {
         delete m_formulaElement;
         m_formulaElement = root;
-        emit formulaLoaded(rootElement());
+        emit formulaLoaded(m_formulaElement);
 
         recalc();
         return true;
@@ -530,13 +534,13 @@ void Container::saveMathML( QTextStream& stream, bool oasisFormat )
                                                                        "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
         QDomDocument doc( dt );
         doc.insertBefore( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ), doc.documentElement() );
-        rootElement()->writeMathML( doc, doc, oasisFormat );
+        m_formulaElement->writeMathML( doc, doc, oasisFormat );
         stream << doc;
     }
     else
     {
         QDomDocument doc;
-        rootElement()->writeMathML( doc, doc, oasisFormat );
+        m_formulaElement->writeMathML( doc, doc, oasisFormat );
         stream << doc;
     }
 }
@@ -563,10 +567,10 @@ void Container::print(KPrinter& printer)
     //printer.setFullPage(true);
     QPainter painter;
     if (painter.begin(&printer)) {
-        rootElement()->draw( painter, LuPixelRect( rootElement()->getX(),
-                                                   rootElement()->getY(),
-                                                   rootElement()->getWidth(),
-                                                   rootElement()->getHeight() ),
+        m_formulaElement->draw( painter, LuPixelRect( m_formulaElement->getX(),
+                                                   m_formulaElement->getY(),
+                                                   m_formulaElement->getWidth(),
+                                                   m_formulaElement->getHeight() ),
                              document()->getContextStyle( false ) );
     }
 }

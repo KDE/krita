@@ -47,7 +47,18 @@ public:
     /// The standard destructor 
     ~FractionElement();
 
+    /**
+     * Insert a @see BasicElement in the numerator of the FractionElement
+     * @param index The index in the @see SequenceElement where to insert @p element
+     * @param element The @see BasicElement to insert in the numerator
+     */
     void insertInNumerator( int index, BasicElement* element );
+
+    /**
+     * Insert a @see BasicElement in the denominator of the FractionElement
+     * @param index The index in the @see SequenceElement where to insert @p element
+     * @param element The @see BasicElement to insert in the denominator
+     */
     void insertInDenominator( int index, BasicElement* element );
     
     /**
@@ -85,7 +96,7 @@ public:
     /**
      * Dispatch this FontCommand to all our TextElement children.
      */
-    virtual void dispatchFontCommand( FontCommand* cmd );
+//    virtual void dispatchFontCommand( FontCommand* cmd );
 
     /**
      * Enters this element while moving to the left starting inside
@@ -116,11 +127,6 @@ public:
     virtual void moveDown(FormulaCursor* cursor, BasicElement* from);
 
     /**
-     * Reinserts the denominator if it has been removed.
-     */
-//    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
-
-    /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      *
@@ -131,20 +137,17 @@ public:
      */
     virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
-    virtual SequenceElement* getMainChild();
+//    virtual SequenceElement* getMainChild();
 
     /**
      * Returns wether the element has no more useful
      * children (except its main child) and should therefore
      * be replaced by its main child's content.
      */
-    virtual bool isSenseless();
+//    virtual bool isSenseless();
 
     /// Sets the cursor to select the child. The mark is placed before, the position behind it.
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
-
-    /// Tells whether the fraction should be drawn with a line.
-//    void showLine(bool line) { withLine = line; }
 
 protected:
     /// Draws the element internally, means it paints into @ref m_elementPath

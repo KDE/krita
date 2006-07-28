@@ -53,7 +53,7 @@ MimeSource::MimeSource(Document* doc, const QDomDocument& formula)
     QList<BasicElement*> list;
 //    list.setAutoDelete(true);
     if ( cursor.buildElementsFromDom( document.documentElement(), list ) ) {
-        cursor.insert(list);
+//        cursor.insert(list);
 //        latexString = rootElement->toLatex().toUtf8();
         if (latexString.size() > 0) {
             latexString.truncate(latexString.size()-1);

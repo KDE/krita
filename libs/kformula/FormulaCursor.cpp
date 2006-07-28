@@ -296,7 +296,7 @@ void FormulaCursor::normalize(Direction direction)
 /**
  * Inserts the child at the current position.
  * Ignores the selection.
- */
+ *//*
 void FormulaCursor::insert(BasicElement* child, Direction direction)
 {
     QList<BasicElement*> list;
@@ -311,7 +311,7 @@ void FormulaCursor::insert(QList<BasicElement*>& children,
     BasicElement* element = getElement();
     element->insert(this, children, direction);
 }
-
+*/
 
 /**
  * Removes the current selected children and returns them.
@@ -360,11 +360,13 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
         getElement()->remove(this, list, direction);
     }
 
-    insert(element, direction);
+    QList<BasicElement*> ldist;
+    ldist.append(element);
+    getElement()->insert(this, ldist, direction);;
     SequenceElement* mainChild = element->getMainChild();
     if (mainChild != 0) {
         mainChild->goInside(this);
-        insert(list);
+        getElement()->insert(this, list, direction);
         /*
         BasicElement* parent = element->getParent();
         if (direction == beforeCursor) {
@@ -397,7 +399,7 @@ BasicElement* FormulaCursor::replaceByMainChildContent(Direction direction)
     element->getParent()->moveRight(this, element);
     setSelection(false);
     remove(list);
-    insert(childrenList, direction);
+    getElement()->insert(this, childrenList, direction);
     if (list.count() > 0) {
         return list.takeAt(0);
     }

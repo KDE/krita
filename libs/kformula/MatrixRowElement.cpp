@@ -343,7 +343,7 @@ void MatrixRowElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 }
 
-
+/*
 void MatrixRowElement::dispatchFontCommand( FontCommand* cmd )
 {
     foreach( MatrixEntryElement* line, m_matrixEntryElements )
@@ -351,7 +351,7 @@ void MatrixRowElement::dispatchFontCommand( FontCommand* cmd )
         line->dispatchFontCommand( cmd );
     }
 }
-
+*/
 void MatrixRowElement::insert( FormulaCursor* cursor,
                                QList<BasicElement*>& newChildren,
                                Direction direction )
@@ -386,7 +386,7 @@ void MatrixRowElement::remove( FormulaCursor* cursor,
         formula()->changed();
     }
 }
-
+/*
 void MatrixRowElement::normalize( FormulaCursor* cursor, Direction direction )
 {
     int pos = cursor->getPos();
@@ -412,13 +412,13 @@ void MatrixRowElement::normalize( FormulaCursor* cursor, Direction direction )
     else {
         BasicElement::normalize( cursor, direction );
     }
-}
-
+}*/
+/*
 SequenceElement* MatrixRowElement::getMainChild()
 {
     return m_matrixEntryElements.at( 0 );
 }
-
+*/
 void MatrixRowElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
     int pos = m_matrixEntryElements.indexOf( dynamic_cast<MatrixEntryElement*>( child ) );

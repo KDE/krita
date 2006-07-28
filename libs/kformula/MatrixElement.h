@@ -91,7 +91,7 @@ public:
                        const LuPixelPoint& parentOrigin );
 
     /** Dispatch this FontCommand to all our TextElement children. */
-    virtual void dispatchFontCommand( FontCommand* cmd );
+//    virtual void dispatchFontCommand( FontCommand* cmd );
 
     /**
      * Enters this element while moving to the left starting inside
@@ -129,7 +129,7 @@ public:
 
     /// We define the Main Child of a matrix to be the first row/column.
     // If there is a main child we must provide the insert/remove semantics.
-    virtual SequenceElement* getMainChild();
+//    virtual SequenceElement* getMainChild();
 
     /// Sets the cursor to select the child. The mark is palced after this element.
     virtual void selectChild( FormulaCursor*, BasicElement* );

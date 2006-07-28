@@ -225,12 +225,6 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
-    /**
-     * The cursor has entered one of our child sequences.
-     * This is a good point to tell the user where he is.
-     */
-//    virtual void entered( SequenceElement* /*child*/ );
-
     virtual SequenceElement* getMainChild() { return 0; }
 
     /**
@@ -345,11 +339,6 @@ public:
      * call their buildFromDom.
      */
     bool buildFromDom(QDomElement element);
-
-    /**
-     * Heiner's test method. Should read MathML...
-     */
-    //bool buildFromMathMLDom( QDomElement& element );
 
     /**
      * @returns our type. This is an object from our parent's syntax tree

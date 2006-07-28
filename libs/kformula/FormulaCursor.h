@@ -149,15 +149,15 @@ public:
      * Inserts the child at the current position.
      * Ignores the selection.
      */
-    void insert(BasicElement*, Direction = beforeCursor);
+//    void insert(BasicElement*, Direction = beforeCursor);
 
     /**
      * Inserts the listed children at the current position.
      * Ignores the selection.
      * The list will be emptied.
      */
-    void insert(QList<BasicElement*>&,
-                Direction = beforeCursor);
+//    void insert(QList<BasicElement*>&,
+//                Direction = beforeCursor);
 
     /**
      * Removes the current selected children and returns them.

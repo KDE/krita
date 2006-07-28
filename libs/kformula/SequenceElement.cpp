@@ -244,13 +244,13 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 }
 
-
+/*
 void SequenceElement::dispatchFontCommand( FontCommand* cmd )
 {
   foreach( BasicElement* child, m_sequenceChildren )
     child->dispatchFontCommand( cmd );
 }
-
+*/
 
 void SequenceElement::drawEmptyRect( QPainter& painter, const ContextStyle& context,
                                      const LuPixelPoint& upperLeft )

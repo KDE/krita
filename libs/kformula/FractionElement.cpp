@@ -145,13 +145,13 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
     
 }
 
-
+/*
 void FractionElement::dispatchFontCommand( FontCommand* cmd )
 {
     m_numerator->dispatchFontCommand( cmd );
     m_denominator->dispatchFontCommand( cmd );
 }
-
+*/
 void FractionElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
     if (cursor->isSelectionMode()) {
@@ -270,17 +270,17 @@ void FractionElement::remove(FormulaCursor* cursor,
         break;
     }
 }
-
+/*
 bool FractionElement::isSenseless()
 {
     return m_denominator == 0;
-}
-
+}*/
+/*
 SequenceElement* FractionElement::getMainChild()
 {
     return m_numerator;
 }
-
+*/
 /**
  * Sets the cursor to select the child. The mark is placed before,
  * the position behind it.

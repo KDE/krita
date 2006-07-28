@@ -119,14 +119,14 @@ public:
     /**
      * Dispatch this FontCommand to all our TextElement children.
      */
-    virtual void dispatchFontCommand( FontCommand* cmd );
+ //   virtual void dispatchFontCommand( FontCommand* cmd );
 
     virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
     virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
-    virtual void normalize(FormulaCursor*, Direction);
+//    virtual void normalize(FormulaCursor*, Direction);
 
-    virtual SequenceElement* getMainChild();
+//    virtual SequenceElement* getMainChild();
 
     /**
      * Sets the cursor to select the child. The mark is placed before,

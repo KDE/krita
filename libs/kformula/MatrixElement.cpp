@@ -209,7 +209,7 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
     //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());*/
 }
 
-
+/*
 void MatrixElement::dispatchFontCommand( FontCommand* cmd )
 {
     for (int r = 0; r < rows(); r++) {
@@ -218,7 +218,7 @@ void MatrixElement::dispatchFontCommand( FontCommand* cmd )
         }
     }
 }
-
+*/
 /**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside
@@ -360,14 +360,14 @@ void MatrixElement::goInside(FormulaCursor* cursor)
     matrixEntryAt(0, 0)->goInside(cursor);
 }
 
-
+/*
 // If there is a main child we must provide the insert/remove semantics.
 SequenceElement* MatrixElement::getMainChild()
 {
   // only temporary
   return 0;//    return matrixEntryAt( 0, 0 );
 }
-
+*/
 void MatrixElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
     for (int r = 0; r < rows(); r++) {

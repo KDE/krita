@@ -56,23 +56,6 @@ FormulaElement* BasicElement::formula()
 }
 
 /**
- * Returns the element the point is in.
- */
-/*
-BasicElement* BasicElement::goToPos( FormulaCursor*, bool&,
-                                     const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
-{
-    luPixel x = point.x() - (parentOrigin.x() + getX());
-    if ((x >= 0) && (x < getWidth())) {
-        luPixel y = point.y() - (parentOrigin.y() + getY());
-        if ((y >= 0) && (y < getHeight())) {
-            return this;
-        }
-    }
-    return 0;
-}
-*/
-/**
  * Returns our position inside the widget.
  */
 LuPixelPoint BasicElement::widgetPos()
@@ -88,25 +71,6 @@ LuPixelPoint BasicElement::widgetPos()
 
 
 /**
- * Sets the cursor inside this element to its start position
- * For most elements that is the main child.
- */
-void BasicElement::goInside(FormulaCursor* cursor)
-{
-    BasicElement* mainChild = getMainChild();
-    if (mainChild != 0) {
-        mainChild->goInside(cursor);
-    }
-}
-
-/*
-void BasicElement::entered( SequenceElement* child )
-{
-    formula()->tell( "" );
-}
-*/
-
-/**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside
  * this element or to the left of it.
@@ -116,6 +80,17 @@ void BasicElement::moveLeft(FormulaCursor* cursor, BasicElement*)
     getParent()->moveLeft(cursor, this);
 }
 
+ /**
+  * - * Sets the cursor inside this element to its start position
+  *   - * For most elements that is the main child.
+  *   - */
+void BasicElement::goInside(FormulaCursor* cursor)
+{
+    BasicElement* mainChild = getMainChild();
+    if (mainChild != 0) {
+      mainChild->goInside(cursor);
+    }
+}
 
 /**
  * Enters this element while moving to the right starting inside

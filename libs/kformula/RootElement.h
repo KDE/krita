@@ -44,6 +44,10 @@ public:
 
     ~RootElement();
 
+    void insertInExponent( int index, BasicElement* element );
+
+    void insertInRadicand( int index, BasicElement* element );
+     
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements

@@ -29,7 +29,7 @@
 #include <QTextStream>
 #include <QKeyEvent>
 #include <QDomElement>
-#include <kcommand.h>
+//#include <kcommand.h>
 #include "kformuladefs.h"
 #include <kformuladocument.h>
 class QColorGroup;
@@ -376,17 +376,12 @@ public:
 
 protected:
 
-    KCommandHistory* getHistory() const;
+//    KCommandHistory* getHistory() const;
 
     /**
      * @returns the root of our element tree. That's the formula's structure.
      */
-    FormulaElement* rootElement() const;
-
-    /**
-     * Factory method.
-     */
-//    virtual FormulaElement* createMainSequence();
+//    FormulaElement* rootElement() const;
 
     void emitErrorMsg( const QString& );
 
@@ -398,7 +393,7 @@ private:
     FormulaElement* m_formulaElement;
 
     /// Execute the command if it makes sense.
-    void execute(KCommand *command);
+//    void execute(KCommand *command);
 
     /// Emits a signal if the cursor had moved.
     void checkCursor();
@@ -410,6 +405,6 @@ private:
     Container_Impl* impl;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // KFORMULACONTAINER_H

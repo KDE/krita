@@ -24,20 +24,20 @@
 #include <qpen.h>
 #include <qcursor.h>
 
-#include "kis_tool_paint.h"
-#include "kis_curve_framework.h"
+#include "kis_tool.h"
+#include "kis_canvas_subject.h"
 #include "kis_point.h"
 
-class QRect;
+#include "kis_curve_framework.h"
 
-class KisPoint;
+class QRect;
 class KisPainter;
 
-class KisCurve;
+const double MAXDISTANCE = 1.2;
 
-class KisToolCurve : public KisToolPaint {
+class KisToolCurve : public KisTool {
 
-    typedef KisToolPaint super;
+    typedef KisTool super;
     Q_OBJECT
 
 public:
@@ -52,14 +52,15 @@ public:
     virtual void doubleClick(KisDoubleClickEvent *event);
     virtual void keyPress(QKeyEvent *event);
     virtual void keyRelease(QKeyEvent *event);
-/*
+
     virtual QCursor cursor();
     virtual void setCursor(const QCursor&);
-    virtual void activate();
-*/
+    
+
 public slots:
 
-    void deactivate();
+    virtual void activate();
+    virtual void deactivate();
 
 protected:
 
@@ -69,26 +70,31 @@ protected:
     //
     // KisToolCurve interface
     //
-    virtual int convertKeysToOptions(int);
+    virtual int updateOptions(int);
+
+    virtual KisCurve::iterator selectByMouse(const QPoint& pos);
     virtual KisCurve::iterator selectByHandle(const QPoint& pos);
+
     virtual void draw();
     virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
-    virtual KisCurve::iterator drawPivot(KisCanvasPainter& gc, KisCurve::iterator point);
-    virtual void paintCurve();
-    virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
+    virtual void drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point);
+    
+    virtual void paintCurve() = 0;
 
     QRect pivotRect (const QPoint&);
     QRect selectedPivotRect (const QPoint&);
 
 protected:
 
-    KisCurve *m_curve;
+    KisCanvasSubject *m_subject;
     KisImageSP m_currentImage;
-    
-    bool m_dragging;
+
+    KisCurve *m_curve;
     KisCurve::iterator m_current;
     KisCurve::iterator m_previous;
-
+    KisPoint m_currentPoint;
+    
+    bool m_dragging;
     bool m_drawPivots;
     QPen m_drawingPen;
     QPen m_pivotPen;
@@ -96,7 +102,7 @@ protected:
     int m_pivotRounding;
     int m_selectedPivotRounding;
 
-    int m_pressedKeys;
+    int m_actionOptions;
 
     QString m_transactionMessage;
 

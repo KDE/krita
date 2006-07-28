@@ -22,7 +22,7 @@
 #define KIS_TOOL_EXAMPLE_H_
 
 #include "kis_tool_factory.h"
-#include "kis_tool_curve.h"
+#include "kis_tool_curve_paint.h"
 #include "kis_point.h"
 
 class CurvePoint;
@@ -33,9 +33,9 @@ class KisPainter;
 class KisPoint;
 class WdgToolExample;
 
-class KisToolExample : public KisToolCurve {
+class KisToolExample : public KisToolCurvePaint {
 
-    typedef KisToolCurve super;
+    typedef KisToolCurvePaint super;
     Q_OBJECT
 
 public:

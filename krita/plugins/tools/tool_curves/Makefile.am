@@ -12,6 +12,8 @@ INCLUDES =  -I$(srcdir)/../../../sdk \
 kritatoolcurves_la_SOURCES = \
 	kis_curve_framework.cc \
 	kis_tool_curve.cc \
+	kis_tool_curve_paint.cc \
+	kis_tool_curve_select.cc \
 		tool_curves.cc \
 	wdg_tool_example.ui \
 	kis_tool_example.cc \
@@ -23,6 +25,8 @@ kde_module_LTLIBRARIES = kritatoolcurves.la
 noinst_HEADERS = \
 	kis_curve_framework.h \
 	kis_tool_curve.h \
+	kis_tool_curve_paint.h \
+	kis_tool_curve_select.h \
 	tool_curves.h \
 	kis_tool_example.h \
 	kis_tool_bezier.h

@@ -23,9 +23,6 @@
 
 #include <kparts/plugin.h>
 
-/**
- * A module that provides a star tool.
- */
 class ToolCurves : public KParts::Plugin
 {
     Q_OBJECT

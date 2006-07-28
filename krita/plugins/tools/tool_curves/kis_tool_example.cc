@@ -59,71 +59,13 @@ public:
 
     ~KisCurveExample() {}
 
-    virtual void calculateCurve(KisCurve::iterator, KisCurve::iterator, KisCurve::iterator);
+    virtual iterator pushPivot (const KisPoint&);
 
 };
 
-void KisCurveExample::calculateCurve(KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator it)
+KisCurve::iterator KisCurveExample::pushPivot (const KisPoint& point)
 {
-    KisPoint pos1 = (*p1).point();
-    KisPoint pos2 = (*p2).point();
-    double savedDist = 0;
-    KisVector2D end(pos2);
-    KisVector2D start(pos1);
-
-    KisVector2D dragVec = end - start;
-    KisVector2D movement = dragVec;
-
-    // XXX: The spacing should vary as the pressure changes along the line.
-    // This is a quick simplification.
-    double xSpacing = 1;
-    double ySpacing = 1;
-
-    double xScale = 1;
-    double yScale = 1;
-    double spacing;
-    // Scale x or y so that we effectively have a square brush
-    // and calculate distance in that coordinate space. We reverse this scaling
-    // before drawing the brush. This produces the correct spacing in both
-    // x and y directions, even if the brush's aspect ratio is not 1:1.
-    xScale = ySpacing / xSpacing;
-    spacing = ySpacing;
-
-    dragVec.setX(dragVec.x() * xScale);
-    dragVec.setY(dragVec.y() * yScale);
-
-    double newDist = dragVec.length();
-    double dist = savedDist + newDist;
-    double l_savedDist = savedDist;
-
-    if (dist < spacing)
-        return;
-
-    dragVec.normalize();
-    KisVector2D step(0, 0);
-
-    while (dist >= spacing) {
-        if (l_savedDist > 0) {
-            step += dragVec * (spacing - l_savedDist);
-            l_savedDist -= spacing;
-        }
-        else {
-            step += dragVec * spacing;
-        }
-
-        KisPoint p(start.x() + (step.x() / xScale), start.y() + (step.y() / yScale));
-
-        double distanceMoved = step.length();
-        double t = 0;
-
-        if (newDist > DBL_EPSILON) {
-            t = distanceMoved / newDist;
-        }
-        addPoint (it,p);
-        spacing += 1;
-        dist -= spacing;
-    }
-    return;
+    return selectPivot(iterator(*this,m_curve.append(CurvePoint(point,true,false,LINEHINT))), true);
 }
 
 KisToolExample::KisToolExample()

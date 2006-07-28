@@ -18,6 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <math.h>
 
 #include <qpainter.h>
 #include <qlayout.h>
@@ -37,11 +38,11 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "kis_paintop_registry.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_cursor.h"
 #include "kis_tool_controller.h"
+#include "kis_vec.h"
 
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
@@ -59,18 +60,19 @@ QRect KisToolCurve::selectedPivotRect (const QPoint& pos)
 KisToolCurve::KisToolCurve(const QString& UIName)
     : super(UIName)
 {
-    m_curve = 0;
+    m_subject = 0;
     m_currentImage = 0;
+
+    m_curve = 0;
     
     m_dragging = false;
-
     m_drawPivots = true;
     m_drawingPen = QPen(Qt::white, 0, Qt::SolidLine);
     m_pivotPen = QPen(Qt::gray, 0, Qt::SolidLine);
     m_selectedPivotPen = QPen(Qt::yellow, 0, Qt::SolidLine);
     m_pivotRounding = m_selectedPivotRounding = 55;
 
-    m_pressedKeys = 0x0000;
+    m_actionOptions = NOOPTIONS;
 }
 
 KisToolCurve::~KisToolCurve()
@@ -81,39 +83,40 @@ KisToolCurve::~KisToolCurve()
 
 void KisToolCurve::update (KisCanvasSubject *subject)
 {
-    super::update (subject);
-    if (m_subject)
-        m_currentImage = m_subject->currentImg();
+    m_subject = subject;
+    m_currentImage = m_subject->currentImg();
 }
 
 void KisToolCurve::deactivate()
 {
     draw();
-    if (m_curve)
+    if (m_curve) {
         m_curve->clear();
+        m_curve->endActionOptions();
+    }
 
-    m_pressedKeys = 0x0000;
+    m_actionOptions = NOOPTIONS;
     m_dragging = false;
     m_drawPivots = true;
 }
 
 void KisToolCurve::buttonPress(KisButtonPressEvent *event)
 {
+    updateOptions(event->state());
     if (!m_currentImage)
         return;
     if (event->button() == Qt::LeftButton) {
         draw();
         m_dragging = true;
-        m_curve->startAction(convertKeysToOptions(m_pressedKeys));
-        m_current = selectByHandle (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
-        if (m_current == m_curve->end() && !(m_pressedKeys & Qt::ControlButton)) {
+        m_currentPoint = event->pos();
+        m_current = selectByMouse (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+        if (m_current == m_curve->end() && !(m_actionOptions)) {
             m_previous = m_curve->find(m_curve->last());
             m_current = m_curve->pushPivot(event->pos());
             if (m_curve->pivots().count() > 1)
                 m_curve->calculateCurve(m_previous,m_current,m_current);
-        } else if (!(*m_current).isSelected())  // It means: if selectByHandle returned an unselected pivot (for KEEPSELOPTION)
+        } else if (!(*m_current).isSelected())
             m_dragging = false;
-        m_curve->endAction();
         draw();
     }
 }
@@ -138,30 +141,16 @@ void KisToolCurve::keyPress(QKeyEvent *event)
         m_previous = m_curve->selectPivot(m_current);
         draw();
     }
-    draw();
-    if (event->key() == Qt::Key_Control)
-        m_pressedKeys |= Qt::ControlButton;
-    if (event->key() == Qt::Key_Shift)
-        m_pressedKeys |= Qt::ShiftButton;
-    if (event->key() == Qt::Key_Alt)
-        m_pressedKeys |= Qt::AltButton;
-    draw();
 }
 
-void KisToolCurve::keyRelease(QKeyEvent *event)
+void KisToolCurve::keyRelease(QKeyEvent *)
 {
-    draw();
-    if (event->key() == Qt::Key_Control)
-        m_pressedKeys -= Qt::ControlButton;
-    if (event->key() == Qt::Key_Shift)
-        m_pressedKeys -= Qt::ShiftButton;
-    if (event->key() == Qt::Key_Alt)
-        m_pressedKeys -= Qt::AltButton;
-    draw();
+
 }
 
-void KisToolCurve::buttonRelease(KisButtonReleaseEvent *)
+void KisToolCurve::buttonRelease(KisButtonReleaseEvent *event)
 {
+    updateOptions(event->state());
     m_dragging = false;
 }
 
@@ -169,18 +158,70 @@ void KisToolCurve::doubleClick(KisDoubleClickEvent *)
 {
     paintCurve();
     m_curve->clear();
+    m_curve->endActionOptions();
 }
 
 void KisToolCurve::move(KisMoveEvent *event)
 {
+    updateOptions(event->state());
     if (m_dragging) {
         draw();
-        m_curve->startAction(convertKeysToOptions(m_pressedKeys));
-        KisPoint trans = event->pos() - (*m_current).point();
+        KisPoint trans = event->pos() - m_currentPoint;
         m_curve->moveSelected(trans);
-        m_curve->endAction();
+        m_currentPoint = event->pos();
         draw();
     }
+}
+
+double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1)
+{
+    double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
+    double distance = 0;
+    KisVector2D v0(l0), v1(l1), v(p), seg(v0-v1), dist(v0-p);
+
+    if (seg.length() < dist.length())
+        return 1000.0;
+
+    if (lineLength > DBL_EPSILON) {
+        distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y()) / lineLength;
+        distance = fabs(distance);
+    }
+
+    return distance;
+}
+
+KisCurve::iterator KisToolCurve::selectByMouse(const QPoint& pos)
+{
+    KisCurve::iterator it, next, prevPivot, nextPivot;
+    QPoint pos1, pos2;
+    it = selectByHandle(pos);
+    if (it != m_curve->end())
+        return it;
+
+    for (it = m_curve->begin(); it != m_curve->end(); it++) {
+        next = it.next();
+        if (next == m_curve->end() || it == m_curve->end())
+            return m_curve->end();
+        if ((*it).hint() > LINEHINT || (*next).hint() > LINEHINT)
+            continue;
+        pos1 = m_subject->canvasController()->windowToView((*it).point().toQPoint());
+        pos2 = m_subject->canvasController()->windowToView((*next).point().toQPoint());
+        if (pos1 == pos2)
+            continue;
+        if (pointToSegmentDistance(pos,pos1,pos2) <= MAXDISTANCE)
+            break;
+    }
+
+    if ((*it).isPivot())
+        prevPivot = it;
+    else
+        prevPivot = it.previousPivot();
+    nextPivot = it.nextPivot();
+
+    m_curve->selectPivot(prevPivot);
+    (*nextPivot).setSelected(true);
+
+    return prevPivot;
 }
 
 KisCurve::iterator KisToolCurve::selectByHandle(const QPoint& pos)
@@ -196,14 +237,27 @@ KisCurve::iterator KisToolCurve::selectByHandle(const QPoint& pos)
     return m_curve->selectPivot(inHandle.last());
 }
 
-int KisToolCurve::convertKeysToOptions(int keys)
+int KisToolCurve::updateOptions(int key)
 {
-    int options = NOOPTIONS;
+    int options = 0x0000;
+    
+    if (key & Qt::ControlButton)
+            options |= CONTROLOPTION;
 
-    if (keys & Qt::ControlButton)
-        options |= KEEPSELECTEDOPTION;
+    if (key & Qt::ShiftButton)
+            options |= SHIFTOPTION;
 
-    return options;
+    if (key & Qt::AltButton)
+            options |= ALTOPTION;
+
+    if (options != m_actionOptions) {
+        draw();
+        m_actionOptions = options;
+        m_curve->setActionOptions(m_actionOptions);
+        draw();
+    }
+
+    return m_actionOptions;
 }
 
 void KisToolCurve::draw()
@@ -223,10 +277,9 @@ void KisToolCurve::draw()
 
     KisCurve::iterator it = m_curve->begin();
     while (it != m_curve->end()) {
-        if ((*it).isPivot()) {
-            it = drawPivot (*gc, it);
-        } else
-            it = drawPoint (*gc, it);
+        if ((*it).isPivot())
+            drawPivotHandle (*gc, it);
+        it = drawPoint (*gc, it);
     }
         
     delete gc;
@@ -257,7 +310,7 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
     return point;
 }
 
-KisCurve::iterator KisToolCurve::drawPivot(KisCanvasPainter& gc, KisCurve::iterator point)
+void KisToolCurve::drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point)
 {
     KisCanvasController *controller = m_subject->canvasController();
 
@@ -272,10 +325,6 @@ KisCurve::iterator KisToolCurve::drawPivot(KisCanvasPainter& gc, KisCurve::itera
         }
         gc.setPen(m_drawingPen);
     }
-
-    point += 1;
-
-    return point;
 }
 
 void KisToolCurve::paint(KisCanvasPainter&)
@@ -288,55 +337,6 @@ void KisToolCurve::paint(KisCanvasPainter&, const QRect&)
     draw();
 }
 
-void KisToolCurve::paintCurve()
-{
-    KisPaintDeviceSP device = m_currentImage->activeDevice ();
-    if (!device) return;
-    
-    KisPainter painter (device);
-    if (m_currentImage->undo()) painter.beginTransaction (i18n (m_transactionMessage.ascii()));
-
-    painter.setPaintColor(m_subject->fgColor());
-    painter.setBrush(m_subject->currentBrush());
-/*  painter.setOpacity(m_opacity);
-    painter.setCompositeOp(m_compositeOp); */
-    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
-    painter.setPaintOp(op); // Painter takes ownership
-
-    KisCurve::iterator it = m_curve->begin();
-    while (it != m_curve->end())
-        it = paintPoint(painter,it);
-
-    device->setDirty( painter.dirtyRect() );
-    notifyModified();
-
-    if (m_currentImage->undo()) {
-        m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
-    }
-
-    draw();
-}
-
-KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iterator point)
-{
-    KisCurve::iterator next = point; next+=1;
-    switch ((*point).hint()) {
-    case POINTHINT:
-        painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);
-        break;
-    case LINEHINT:
-        if (next != m_curve->end() && (*next).hint() <= LINEHINT)
-            painter.paintLine((*point++).point(), PRESSURE_DEFAULT, 0, 0, (*next).point(), PRESSURE_DEFAULT, 0, 0);
-        else
-            painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);
-        break;
-    default:
-        point += 1;
-    }
-
-    return point;
-}
-/*
 QCursor KisToolCurve::cursor()
 {
     return m_cursor;
@@ -364,5 +364,5 @@ void KisToolCurve::activate()
             controller->setCurrentTool(this);
     }
 }
-*/
+
 #include "kis_tool_curve.moc"

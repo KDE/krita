@@ -375,7 +375,7 @@ QString KoShapeAlignCommand::name () const {
     return i18n( "Align shapes" );
 }
 
-KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute )
+KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute,  QRectF boundingRect )
 : m_distribute( distribute )
 {
     QMap<double,KoShape*> sortedPos;
@@ -413,7 +413,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
     KoShape* last = (--sortedPos.end()).value();
 
     // determine the available space to distribute
-    double space = getAvailableSpace( first, last, extent );
+    double space = getAvailableSpace( first, last, extent, boundingRect);
     double pos = 0.0, step = space / double(shapes.count() - 1);
 
     QList<QPointF> previousPositions;
@@ -425,40 +425,37 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
         it.next();
         position = it.value()->position();
         previousPositions  << position;
-        if( it.value() == first || it.value() == last ) {
-            newPositions << position;
-            continue;
-        }
 
-        pos += step;
         bRect = it.value()->boundingRect();
         switch( m_distribute )        {
             case DISTRIBUTE_HORIZONTAL_CENTER:
-                newPositions << QPointF( first->boundingRect().center().x() + pos - bRect.width()/2, position.y() );
+                newPositions << QPointF( boundingRect.x() + first->boundingRect().width()/2 + pos - bRect.width()/2, position.y() );
                 break;
             case DISTRIBUTE_HORIZONTAL_GAP:
-                newPositions << QPointF( first->boundingRect().right() + pos, position.y() );
+                newPositions << QPointF( boundingRect.left() + pos, position.y() );
                 pos += bRect.width();
                 break;
             case DISTRIBUTE_HORIZONTAL_LEFT:
-                newPositions << QPointF( first->boundingRect().left() + pos, position.y() );
+                newPositions << QPointF( boundingRect.left() + pos, position.y() );
                 break;
             case DISTRIBUTE_HORIZONTAL_RIGHT:
-                newPositions << QPointF( first->boundingRect().right() + pos, position.y() );
+                newPositions << QPointF( boundingRect.left() + first->boundingRect().width() + pos - bRect.width(), position.y() );
                 break;
             case DISTRIBUTE_VERTICAL_CENTER:
-                newPositions << QPointF( position.x(), first->boundingRect().center().y() + pos - bRect.height()/2 );
+                newPositions << QPointF( position.x(), boundingRect.y() + first->boundingRect().height()/2 + pos - bRect.height()/2 );
                 break;
             case DISTRIBUTE_VERTICAL_GAP:
-                newPositions << QPointF( position.x(), first->boundingRect().bottom() + pos );
+                newPositions << QPointF( position.x(), boundingRect.top() + pos );
+                pos += bRect.height();
                 break;
             case DISTRIBUTE_VERTICAL_BOTTOM:
-                newPositions << QPointF( position.x(), first->boundingRect().bottom() + pos );
+                newPositions << QPointF( position.x(), boundingRect.top() + first->boundingRect().height() + pos - bRect.height() );
                 break;
             case DISTRIBUTE_VERTICAL_TOP:
-                newPositions << QPointF( position.x(), first->boundingRect().top() + pos );
+                newPositions << QPointF( position.x(), boundingRect.top() + pos );
                 break;
         };
+        pos += step;
     }
     KoSelectionSet changedShapes = KoSelectionSet::fromList(sortedPos.values());
     m_command = new KoShapeMoveCommand(changedShapes, previousPositions, newPositions);
@@ -483,34 +480,32 @@ QString KoShapeDistributeCommand::name () const {
     return i18n( "Distribute shapes" );
 }
 
-double KoShapeDistributeCommand::getAvailableSpace( KoShape *first, KoShape *last, double extent )
+double KoShapeDistributeCommand::getAvailableSpace( KoShape *first, KoShape *last, double extent, QRectF boundingRect  )
 {
     switch( m_distribute ) {
         case DISTRIBUTE_HORIZONTAL_CENTER:
-            return last->boundingRect().center().x() - first->boundingRect().center().x();
+            return boundingRect.width() - last->boundingRect().width()/2 - first->boundingRect().width()/2;
             break;
         case DISTRIBUTE_HORIZONTAL_GAP:
-            extent -= first->boundingRect().width() + last->boundingRect().width();
-            return last->boundingRect().left() - first->boundingRect().right() - extent;
+            return boundingRect.width() - extent;
             break;
         case DISTRIBUTE_HORIZONTAL_LEFT:
-            return last->boundingRect().left() - first->boundingRect().left();
+            return boundingRect.width() - last->boundingRect().width();
             break;
         case DISTRIBUTE_HORIZONTAL_RIGHT:
-            return last->boundingRect().right() - first->boundingRect().right();
+            return boundingRect.width() - first->boundingRect().width();
             break;
         case DISTRIBUTE_VERTICAL_CENTER:
-            return last->boundingRect().center().y() - first->boundingRect().center().y();
+            return boundingRect.height() - last->boundingRect().height()/2 - first->boundingRect().height()/2;
             break;
         case DISTRIBUTE_VERTICAL_GAP:
-            extent -= first->boundingRect().height() + last->boundingRect().height();
-            return last->boundingRect().top() - first->boundingRect().bottom() - extent;
+            return boundingRect.height() - extent;
             break;
         case DISTRIBUTE_VERTICAL_BOTTOM:
-            return last->boundingRect().bottom() - first->boundingRect().bottom();
+            return boundingRect.height() - first->boundingRect().height();
             break;
         case DISTRIBUTE_VERTICAL_TOP:
-            return last->boundingRect().top() - first->boundingRect().top();
+            return boundingRect.height() - last->boundingRect().height();
             break;
     }
     return 0.0;

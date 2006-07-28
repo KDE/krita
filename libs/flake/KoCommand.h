@@ -299,8 +299,9 @@ public:
      * Command to align a set of shapes in a rect
      * @param shapes a set of all the shapes that should be distributed
      * @param distribute the distribution type
+     * @param boundingRect the rect the shapes will be distributed in
      */
-    KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute );
+    KoShapeDistributeCommand( const KoSelectionSet &shapes, Distribute distribute, QRectF boundingRect );
     virtual ~KoShapeDistributeCommand();
     /// execute the command
     virtual void execute();
@@ -309,7 +310,7 @@ public:
     /// return the name of this command
     virtual QString name () const;
 private:
-    double getAvailableSpace( KoShape *first, KoShape *last, double extent );
+    double getAvailableSpace( KoShape *first, KoShape *last, double extent, QRectF boundingRect );
     Distribute m_distribute;
     KoShapeMoveCommand *m_command;
 };

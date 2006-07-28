@@ -206,6 +206,8 @@ const KoSelectionSet KoSelection::selectedShapes(KoFlake::SelectionType strip) c
                 add = false;
             container = container->parent();
         }
+        if(strip == KoFlake::TopLevelSelection && container && m_selectedObjects.contains(container))
+            add = false;
         if(add)
             answer << shape;
     }

@@ -37,6 +37,15 @@ KoShapeMoveCommand::KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPoin
     Q_ASSERT(m_shapes.count() == m_newPositions.count());
 }
 
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions)
+: m_shapes(shapes)
+, m_previousPositions(previousPositions)
+, m_newPositions(newPositions)
+{
+    Q_ASSERT(m_shapes.count() == m_previousPositions.count());
+    Q_ASSERT(m_shapes.count() == m_newPositions.count());
+}
+
 void KoShapeMoveCommand::execute() {
     for(int i=0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->repaint();
@@ -457,8 +466,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
         };
         pos += step;
     }
-    KoSelectionSet changedShapes = KoSelectionSet::fromList(sortedPos.values());
-    m_command = new KoShapeMoveCommand(changedShapes, previousPositions, newPositions);
+    m_command = new KoShapeMoveCommand(sortedPos.values(), previousPositions, newPositions);
 }
 
 KoShapeDistributeCommand::~KoShapeDistributeCommand()

@@ -46,6 +46,15 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      */
     KoShapeMoveCommand(const KoSelectionSet &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions);
+    /**
+     * Constructor.
+     * @param shapes the set of objects that are moved.
+     * @param previousPositions the known set of previous positions for each of the objects.
+     *  this list naturally must have the same amount of items as the shapes set.
+     * @param newPositions the new positions for the shapes.
+     *  this list naturally must have the same amount of items as the shapes set.
+     */
+    KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions);
     /// execute the command
     void execute ();
     /// revert the actions done in execute

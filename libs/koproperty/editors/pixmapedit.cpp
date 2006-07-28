@@ -143,7 +143,7 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
 		m_scaledPixmap = value.value<QPixmap>();
 		if (m_scaledPixmap.height() > r2.height() || m_scaledPixmap.width() > r2.width()) { //scale down
 			QImage img(m_scaledPixmap.toImage());
-			img = img.smoothScale(r2.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+			img = img.scaled(r2.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 			m_scaledPixmap = QPixmap::fromImage(img);
 		}
 	}

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Random pick to an image
 Comment[da]=Udfør tilfældigt valg i et billede
+Comment[de]=Zufallsauswahl zu einem Bild
 Comment[es]=Elección aleatoria de una imagen
 Comment[et]=Juhuslik valik pildil
 Comment[it]=Scegli casualmente un'immagine
@@ -12,6 +13,7 @@ Encoding=UTF-8
 Icon=
 Name=Random pick Filter
 Name[da]=Tilfældigt udvalgsfilter
+Name[de]=Zufallsauswahlfilter
 Name[es]=Filtro de elección aleatoria
 Name[et]=Juhusliku valiku filter
 Name[it]=Filtro di scelta casuale

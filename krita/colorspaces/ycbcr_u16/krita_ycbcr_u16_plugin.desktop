@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=YCbCr Color Model (16-bit integer)
 Name[da]=YCbCr-farvemodel (16-bit heltal)
+Name[de]=YCbCr-Farbmodell (16-bit Ganzzahl)
 Name[es]=Modelo de color YCbCr (entero de 16 bits)
 Name[et]=YCbCr värvimudel (16-bitine täisarv)
 Name[it]=Modello di colore YCbCr (intero a 16 bit)
@@ -11,6 +12,7 @@ Name[sv]=YCbCr-färgmodell (16-bitars heltal)
 Name[zh_TW]=YCbCr 色彩模型 (16-bit 整數)
 Comment=Color model for 16-bit integer per channel YCbCr images
 Comment[da]=Farvemodel for 16-bit heltal pr kanal YCbCr-billeder
+Comment[de]=Farbmodell für 16-bit pro Kanal YCbCr-Bilder
 Comment[es]=Modelo de color de entero de 16 bits por canal para imágenes YCbCr
 Comment[et]=16-bitiste täisarvuliste kanalitega YCbCr-piltide värvimudel
 Comment[it]=Modello di colore per immagini YCbCr a canale di 16 bit interi

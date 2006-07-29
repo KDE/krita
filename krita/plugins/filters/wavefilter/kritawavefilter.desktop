@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Transform an image in a wave
 Comment[da]=Tranbsformér et billede med en bølge
+Comment[de]=Ein Bild in eine Welle transformieren
 Comment[es]=Transformar una imagen en una onda
 Comment[et]=Pildi teisendamine lainefiltris
 Comment[it]=Trasforma un'immagine in un'onda
@@ -12,6 +13,7 @@ Encoding=UTF-8
 Icon=
 Name=Wave Filter
 Name[da]=Bølgefilter
+Name[de]=Wellenfilter
 Name[es]=Filtro de onda
 Name[et]=Lainefilter
 Name[it]=Filtro onda

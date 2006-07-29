@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Transform an image in a lenscorrection
 Comment[da]=Transformér et billede med linsekorrektion
+Comment[de]=Ein Bild mit einer Linsenkorrektur transformieren
 Comment[es]=Transforma una imagen en un corrección de lente
 Comment[et]=Pildi teisendamine läätsekorrektsiooniga
 Comment[it]=Trasforma un'immagine in una correzione lenticolare
@@ -12,6 +13,7 @@ Encoding=UTF-8
 Icon=
 Name=LensCorrection Filter
 Name[da]=Linekorrektionsfilter
+Name[de]=Linsenkorrekturfilter
 Name[es]=Filtro de corrección de lente
 Name[et]=Läätsekorrektsiooni filter
 Name[it]=Filtro di correzione lenticolare

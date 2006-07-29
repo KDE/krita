@@ -1,0 +1,9 @@
+[Desktop Entry]
+Comment=This plugins allow to transfer color from an image to an other image
+Encoding=UTF-8
+Icon=
+Name=Color Transfer Filter
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritafastcolortransfer
+X-Krita-Version=2

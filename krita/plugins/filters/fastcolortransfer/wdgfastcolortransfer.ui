@@ -1,0 +1,78 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>WdgFastColorTransfer</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>WdgFastColorTransfer</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>236</width>
+            <height>112</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>label1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Reference image:</string>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>fileNameURLRequester</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Filename of the image which as the color feeling that you want to apply.</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>101</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

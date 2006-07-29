@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Color Filters (Extension)
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritaextensioncolorsfilters
+X-Krita-Version=2

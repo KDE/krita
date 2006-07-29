@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Convolution Filters (Extension)
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritablurfilter
+X-Krita-Version=2

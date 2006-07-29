@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Image enhancement Filters (Extension)
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritaunsharpfilter
+X-Krita-Version=2

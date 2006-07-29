@@ -61,7 +61,7 @@ void KoZoomAction::setZoom( const QString& text )
 
 void KoZoomAction::setZoom( int zoom )
 {
-  setZoom( QString::number( zoom ) + "%" );
+  setZoom( i18n( "%1%", zoom ) );
 }
 
 void KoZoomAction::triggered( const QString& text )

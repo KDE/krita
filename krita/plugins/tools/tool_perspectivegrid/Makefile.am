@@ -23,7 +23,7 @@ noinst_HEADERS = \
 kritatoolperspectivegrid_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritatoolperspectivegrid_la_LIBADD =  ../../../libkritacommon.la
 
-kritatoolperspectivegrid_la_METASOURCES = AUTO
+METASOURCES = AUTO
 
 KDE_OPTIONS = nofinal
 

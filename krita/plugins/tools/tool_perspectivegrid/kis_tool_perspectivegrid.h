@@ -27,6 +27,7 @@
 #include <kis_tool_factory.h>
 
 class KisToolPerspectiveGrid : public KisToolNonPaint {
+    Q_OBJECT
     enum PerspectiveGridEditionMode {
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
         MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
@@ -34,7 +35,6 @@ class KisToolPerspectiveGrid : public KisToolNonPaint {
         MODE_DRAGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
     };
     typedef KisToolNonPaint super;
-    Q_OBJECT
 public:
     KisToolPerspectiveGrid();
     virtual ~KisToolPerspectiveGrid();

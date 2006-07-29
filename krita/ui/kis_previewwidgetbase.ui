@@ -26,9 +26,6 @@
             <height>0</height>
         </size>
     </property>
-    <property name="caption">
-        <string>PreviewWidgetBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -203,9 +200,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Autoupdate</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>

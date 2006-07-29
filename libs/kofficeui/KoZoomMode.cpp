@@ -23,8 +23,8 @@
 const char* KoZoomMode::modes[] = 
 {
     I18N_NOOP("%1%"),
-    I18N_NOOP("Fit to Width"),
-    I18N_NOOP("Fit to Page")
+    I18N_NOOP("Fit Page Width"),
+    I18N_NOOP("Fit Page")
 };
 
 QString KoZoomMode::toString(Mode mode)

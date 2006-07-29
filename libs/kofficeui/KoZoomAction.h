@@ -80,18 +80,17 @@ Q_SIGNALS:
   /**
    * Signal zoomChanged is triggered when user changes the zoom value, either by
    * choosing it from the list or by entering new value.
+   * @param mode The selected zoom mode
+   * @param zoom the zoom in percent, only defined if @p mode is KoZoomMode::ZOOM_CONSTANT
    */
-  void zoomChanged( const QString& zoom );
+  void zoomChanged( KoZoomMode::Mode mode, int zoom );
 
 protected:
 
   void init();
 
-  /// @return list of zoom levels
-  QStringList generateZoomLevels();
-
   /// Regenerates the action's items
-  void regenerateItems(const QString& zoomString);
+  void regenerateItems( const QString& zoomString );
 
   KoZoomMode::Modes m_zoomModes;
 

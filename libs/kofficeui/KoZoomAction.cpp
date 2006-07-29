@@ -49,45 +49,54 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, co
 
 void KoZoomAction::setZoom( const QString& text )
 {
-  if( KoZoomMode::isConstant( text ) )
+  QString zoomString = text;
+  zoomString = zoomString.remove('&');
+  if( KoZoomMode::isConstant( zoomString ) )
   {
-    regenerateItems( text );
+    regenerateItems( zoomString );
   }
 
-  setCurrentAction( text );
+  setCurrentAction( zoomString );
 }
 
 void KoZoomAction::setZoom( int zoom )
 {
-  setZoom( QString::number( zoom ) );
+  setZoom( QString::number( zoom ) + "%" );
 }
 
 void KoZoomAction::triggered( const QString& text )
 {
-  setZoom( text );
-  emit zoomChanged( text );
+  QString zoomString = text;
+  zoomString = zoomString.remove( '&' );
+
+  KoZoomMode::Mode mode = KoZoomMode::toMode( zoomString );
+  int zoom = 0;
+
+  if( mode == KoZoomMode::ZOOM_CONSTANT ) {
+    bool ok;
+    QRegExp regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
+    int pos = regexp.indexIn( zoomString );
+
+    if( pos > -1 ) {
+      zoom = regexp.cap( 1 ).toInt( &ok );
+
+      if( !ok ) {
+        zoom = 0;
+      }
+    }
+  }
+
+  emit zoomChanged( mode, zoom );
 }
 
 void KoZoomAction::init()
 {
   setEditable( true );
+  setMaxComboViewCount( 15 );
 
-  QStringList values;
+  regenerateItems(0);
 
-  if( m_zoomModes & KoZoomMode::ZOOM_WIDTH )
-  {
-    values << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
-  }
-  if( m_zoomModes & KoZoomMode::ZOOM_PAGE )
-  {
-    values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
-  }
-
-  values << generateZoomLevels();
-
-  setItems( values );
-
-  setCurrentAction( i18n("%1%",  100 ) );
+  setCurrentAction( i18n( "%1%",  100 ) );
 
   connect( this, SIGNAL( triggered( const QString& ) ),
     SLOT( triggered( const QString& ) ) );
@@ -99,25 +108,6 @@ void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )
   regenerateItems( currentText() );
 }
 
-QStringList KoZoomAction::generateZoomLevels()
-{
-  QStringList values;
-  values << i18n("%1%", 33);
-  values << i18n("%1%", 50);
-  values << i18n("%1%", 75);
-  values << i18n("%1%", 100);
-  values << i18n("%1%", 125);
-  values << i18n("%1%", 150);
-  values << i18n("%1%", 200);
-  values << i18n("%1%", 250);
-  values << i18n("%1%", 350);
-  values << i18n("%1%", 400);
-  values << i18n("%1%", 450);
-  values << i18n("%1%", 500);
-
-  return values;
-}
-
 void KoZoomAction::regenerateItems(const QString& zoomString)
 {
   QString t = zoomString;
@@ -125,12 +115,24 @@ void KoZoomAction::regenerateItems(const QString& zoomString)
   int zoom = t.remove( '%' ).toInt( &ok );
 
   // where we'll store sorted new zoom values
-  QStringList zoomLevels = generateZoomLevels();
+  QList<int> zoomLevels;
+  zoomLevels << 33;
+  zoomLevels << 50;
+  zoomLevels << 75;
+  zoomLevels << 100;
+  zoomLevels << 125;
+  zoomLevels << 150;
+  zoomLevels << 200;
+  zoomLevels << 250;
+  zoomLevels << 350;
+  zoomLevels << 400;
+  zoomLevels << 450;
+  zoomLevels << 500;
 
-  if( ok && zoom > 10 && !zoomLevels.contains( zoomString ) )
-    zoomLevels.append( zoomString );
+  if( ok && zoom > 10 && !zoomLevels.contains( zoom ) )
+    zoomLevels << zoom;
 
-  zoomLevels.sort();
+  qSort(zoomLevels.begin(), zoomLevels.end());
 
     // update items with new sorted zoom values
   QStringList values;
@@ -143,7 +145,9 @@ void KoZoomAction::regenerateItems(const QString& zoomString)
     values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
   }
 
-  values << zoomLevels;
+  foreach(int value, zoomLevels) {
+    values << i18n("%1%", value);
+  }
 
   setItems( values );
 }

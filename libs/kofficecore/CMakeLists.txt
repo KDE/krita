@@ -78,7 +78,7 @@ kde4_add_ui_files( kofficecore_LIB_SRCS
 
 kde4_add_library(kofficecore SHARED ${kofficecore_LIB_SRCS})
 
-target_link_libraries(kofficecore  ${KDE4_KPARTS_LIBS} kstore kabc ${KDE4_KDEPRINT_LIBS} kowmf)
+target_link_libraries(kofficecore  ${KDE4_KPARTS_LIBS} kstore ${KDE4_KABC_LIBS} ${KDE4_KDEPRINT_LIBS} kowmf)
 
 set_target_properties(kofficecore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kofficecore DESTINATION ${LIB_INSTALL_DIR} )

@@ -1,5 +1,6 @@
 #include "TestPosition.h"
 
+#include "MockShapes.h"
 #include <QPointF>
 
 

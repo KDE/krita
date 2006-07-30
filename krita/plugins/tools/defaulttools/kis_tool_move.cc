@@ -69,14 +69,23 @@ void KisToolMove::buttonPress(KisButtonPressEvent *e)
         if (!img || !(dev = img->activeLayer()))
             return;
 
+        m_dragStart = pos;
         m_strategy.startDrag(pos);
     }
 }
 
 void KisToolMove::move(KisMoveEvent *e)
 {
-    if (m_subject)
-        m_strategy.drag(e->pos().floorQPoint());
+    if (m_subject) {
+        QPoint pos = e->pos().floorQPoint();
+        if((e->modifiers() & Qt::AltModifier) || (e->modifiers() & Qt::ControlModifier)) {
+            if(fabs(pos.x() - m_dragStart.x()) > fabs(pos.y() - m_dragStart.y()))
+                pos.setY(m_dragStart.y());
+            else
+                pos.setX(m_dragStart.x());
+        }
+        m_strategy.drag(pos);
+    }
 }
 
 void KisToolMove::buttonRelease(KisButtonReleaseEvent *e)

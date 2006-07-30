@@ -126,7 +126,7 @@ kde4_add_executable(koxmlreadertest RUN_UNINSTALLED ${koxmlreader_SRCS})
 
 target_link_libraries(koxmlreadertest kofficecore ${QT_QTTEST_LIBRARY} )
 
-#add_test(kofficecore-koxmlreadertest koxmlreadertest)
+add_test(kofficecore-koxmlreadertest koxmlreadertest)
 
 
 ########### end ###############

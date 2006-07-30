@@ -244,9 +244,10 @@ public:
     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0 );
   bool setContent( QXmlInputSource *source, QXmlReader *reader, 
     QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0 );
+  bool setContent( const QByteArray& text, bool namespaceProcessing,
+    QString *errorMsg=0, int *errorLine=0, int *errorColumn=0  );
 
 //  bool setContent( const QCString& text, bool namespaceProcessing, QString *errorMsg=0, int *errorLine=0, int *errorColumn=0  );
-//  bool setContent( const QByteArray& text, bool namespaceProcessing, QString *errorMsg=0, int *errorLine=0, int *errorColumn=0  );
 //  bool setContent( const QString& text, bool namespaceProcessing, QString *errorMsg=0, int *errorLine=0, int *errorColumn=0  );
 //  bool setContent( QIODevice* dev, bool namespaceProcessing, QString *errorMsg=0, int *errorLine=0, int *errorColumn=0  );
 //  bool setContent( const QCString& text, QString *errorMsg=0, int *errorLine=0, int *errorColumn=0 );

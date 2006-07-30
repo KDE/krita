@@ -1526,6 +1526,14 @@ QString* errorMsg, int* errorLine, int* errorColumn )
   return d->setContent( &source, &reader, errorMsg, errorLine, errorColumn );
 }
 
+bool KoXmlDocument::setContent( const QByteArray& text, bool namespaceProcessing,
+QString *errorMsg, int *errorLine, int *errorColumn )
+{
+  QBuffer buffer;
+  buffer.setData( text );
+  return setContent( &buffer, namespaceProcessing, errorMsg, errorLine, errorColumn );
+}
+
 #endif
 
 KoXmlElement KoXml::namedItemNS( const KoXmlNode& node, const char* nsURI, 

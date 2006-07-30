@@ -50,7 +50,7 @@ const T& result, const T& expected )
     ts << ", ";
     ts << "Expected:";
     ts << expected;
-    printf( "%s [%d]: %s\n", file, line, message.toLatin1() );
+    printf( "%s [%d]: %s\n", file, line, message.toLatin1().data() );
   }
 }
 
@@ -69,8 +69,8 @@ bool expected )
     ts << ", ";
     ts << "Expected: ";
     if( expected ) ts << "True"; else ts << "False";
-    
-    printf( "%s [%d]: %s\n", file, line, message.toLatin1() );
+
+    printf( "%s [%d]: %s\n", file, line, message.toLatin1().data() );
   }
 }
 
@@ -743,16 +743,16 @@ void testNamespace()
   CHECK( bookAuthorElement.attribute("name"), QString("Eris Kallisti") );
 
   // ------------- now with namespace processing ----------- 
-  xmldevice.at(0); // just to rewind
+  xmldevice.seek(0); // just to rewind
 
   CHECK( doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn ), true );
   CHECK( errorMsg.isEmpty(), true );
   CHECK( errorLine, 0 );
   CHECK( errorColumn, 0 );
 
-  char* defaultNS = "http://trolltech.com/fnord/";
-  char* bookNS = "http://trolltech.com/fnord/book/";
-  char* fnordNS = "http://trolltech.com/fnord/";
+  const char* defaultNS = "http://trolltech.com/fnord/";
+  const char* bookNS = "http://trolltech.com/fnord/book/";
+  const char* fnordNS = "http://trolltech.com/fnord/";
 
   // <document>
   rootElement = doc.documentElement();
@@ -1080,9 +1080,9 @@ void testSimpleOpenDocumentText()
   CHECK( errorMsg.isEmpty(), true );
   CHECK( errorLine, 0 );
   CHECK( errorColumn, 0 );
-  
-  char* officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"; 
-  char* textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+
+  const char* officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"; 
+  const char* textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
 
   // <office:document-content>
   KoXmlElement contentElement;
@@ -1457,12 +1457,12 @@ void testSimpleOpenDocumentPresentation()
   CHECK( errorMsg.isEmpty(), true );
   CHECK( errorLine, 0 );
   CHECK( errorColumn, 0 );
-  
-  char* officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"; 
-  char* drawNS = "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0";
-  char* textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
-  char* presentationNS = "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0";
-  char* svgNS = "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0";
+
+  const char* officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"; 
+  const char* drawNS = "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0";
+  const char* textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+  const char* presentationNS = "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0";
+  const char* svgNS = "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0";
 
   // <office:document-content>
   KoXmlElement contentElement;
@@ -1725,7 +1725,7 @@ void testSimpleOpenDocumentFormula()
   CHECK( errorLine, 0 );
   CHECK( errorColumn, 0 );
 
-  char* mathNS = "http://www.w3.org/1998/Math/MathML";
+  const char* mathNS = "http://www.w3.org/1998/Math/MathML";
 
   // <math:math>
   KoXmlElement mathElement;

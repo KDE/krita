@@ -22,27 +22,27 @@
 #include "KoDom.h"
 #include <kdebug.h>
 
-KoOasisSettings::KoOasisSettings( const QDomDocument& doc )
+KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc )
     : m_settingsElement( KoDom::namedItemNS( doc.documentElement(), KoXmlNS::office, "settings" ) ),
       m_configNSURI( KoXmlNS::config )
 {
-    const QDomElement contents = doc.documentElement();
+    const KoXmlElement contents = doc.documentElement();
     if ( m_settingsElement.isNull() )
         kDebug() << " document doesn't have tag 'office:settings'\n";
 }
 
-KoOasisSettings::KoOasisSettings( const QDomDocument& doc, const char* officeNSURI, const char* configNSURI )
+KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI )
     : m_settingsElement( KoDom::namedItemNS( doc.documentElement(), officeNSURI, "settings" ) ),
       m_configNSURI( configNSURI )
 {
-    const QDomElement contents = doc.documentElement();
+    const KoXmlElement contents = doc.documentElement();
     if ( m_settingsElement.isNull() )
         kDebug() << " document doesn't have tag 'office:settings'\n";
 }
 
 KoOasisSettings::Items KoOasisSettings::itemSet( const QString& itemSetName ) const
 {
-    QDomElement e;
+    KoXmlElement e;
     forEachElement( e, m_settingsElement )
     {
         if ( e.localName() == "config-item-set" &&
@@ -53,12 +53,12 @@ KoOasisSettings::Items KoOasisSettings::itemSet( const QString& itemSetName ) co
         }
     }
 
-    return Items( QDomElement(), this );
+    return Items( KoXmlElement(), this );
 }
 
 KoOasisSettings::IndexedMap KoOasisSettings::Items::indexedMap( const QString& itemMapName ) const
 {
-    QDomElement configItem;
+    KoXmlElement configItem;
     forEachElement( configItem, m_element )
     {
         if ( configItem.localName() == "config-item-map-indexed" &&
@@ -68,12 +68,12 @@ KoOasisSettings::IndexedMap KoOasisSettings::Items::indexedMap( const QString& i
             return IndexedMap( configItem, m_settings );
         }
     }
-    return IndexedMap( QDomElement(), m_settings );
+    return IndexedMap( KoXmlElement(), m_settings );
 }
 
 KoOasisSettings::NamedMap KoOasisSettings::Items::namedMap( const QString& itemMapName ) const
 {
-    QDomElement configItem;
+    KoXmlElement configItem;
     forEachElement( configItem, m_element )
     {
         if ( configItem.localName() == "config-item-map-named" &&
@@ -83,13 +83,13 @@ KoOasisSettings::NamedMap KoOasisSettings::Items::namedMap( const QString& itemM
             return NamedMap( configItem, m_settings );
         }
     }
-    return NamedMap( QDomElement(), m_settings );
+    return NamedMap( KoXmlElement(), m_settings );
 }
 
 KoOasisSettings::Items KoOasisSettings::IndexedMap::entry( int entryIndex ) const
 {
     int i = 0;
-    QDomElement entry;
+    KoXmlElement entry;
     forEachElement( entry, m_element )
     {
         if ( entry.localName() == "config-item-map-entry" &&
@@ -101,12 +101,12 @@ KoOasisSettings::Items KoOasisSettings::IndexedMap::entry( int entryIndex ) cons
                 ++i;
         }
     }
-    return Items( QDomElement(), m_settings );
+    return Items( KoXmlElement(), m_settings );
 }
 
 KoOasisSettings::Items KoOasisSettings::NamedMap::entry( const QString& entryName ) const
 {
-    QDomElement entry;
+    KoXmlElement entry;
     forEachElement( entry, m_element )
     {
         if ( entry.localName() == "config-item-map-entry" &&
@@ -116,14 +116,14 @@ KoOasisSettings::Items KoOasisSettings::NamedMap::entry( const QString& entryNam
             return Items( entry, m_settings );
         }
     }
-    return Items( QDomElement(), m_settings );
+    return Items( KoXmlElement(), m_settings );
 }
 
 // helper method
-QString KoOasisSettings::Items::findConfigItem( const QDomElement& element,
+QString KoOasisSettings::Items::findConfigItem( const KoXmlElement& element,
                                                 const QString& item, bool* ok ) const
 {
-    QDomElement it;
+    KoXmlElement it;
     forEachElement( it, element )
     {
         if ( it.localName() == "config-item" &&

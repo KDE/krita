@@ -21,13 +21,13 @@
 #include "KoDocumentInfoPropsPage.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
+#include <KoXmlReader.h>
 #include <ktar.h>
 #include <ktempfile.h>
 #include <kdeversion.h>
 #include <kfilterdev.h>
 
 #include <QBuffer>
-#include <QDomDocument>
 #include <QFile>
 #include <QDir>
 #include <QTextStream>
@@ -84,7 +84,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
         QBuffer buffer( &data );
         buffer.open( QIODevice::ReadOnly );
 
-        QDomDocument doc;
+        KoXmlDocument doc;
         doc.setContent( &buffer );
 
         d->m_info->load( doc );

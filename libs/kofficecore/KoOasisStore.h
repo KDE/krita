@@ -18,6 +18,8 @@
 #ifndef KOOASISSTORE_H
 #define KOOASISSTORE_H
 
+#include <KoXmlReader.h>
+
 class QString;
 class QDomDocument;
 class KTempFile;
@@ -79,10 +81,10 @@ public:
     bool closeManifestWriter();
 
     /// A completely unrelated method, for loading a file from an oasis store
-    bool loadAndParse( const QString& fileName, QDomDocument& doc, QString& errorMessage );
+    bool loadAndParse( const QString& fileName, KoXmlDocument& doc, QString& errorMessage );
 
     /// Another method for loading: get mimetype from full path, using the manifest
-    static QString mimeForPath( const QDomDocument& doc, const QString& fullPath );
+    static QString mimeForPath( const KoXmlDocument& doc, const QString& fullPath );
 
 private:
     KoStore* m_store;

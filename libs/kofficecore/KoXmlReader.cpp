@@ -429,7 +429,7 @@ const QString& name, const QString& value )
 {
   QString prefix;
   QString localName = name;
-  int i = name.find( ':' );
+  int i = name.indexOf( ':' );
   if( i != -1 )
   {
     localName = name.mid( i + 1 );
@@ -665,7 +665,7 @@ const QString& name, const QXmlAttributes& atts )
     nodeTagName = name;
     nodeLocalName = name;
     nodePrefix = nsURI.isNull() ? QString::null : QString("");
-    int i = name.find( ':' );
+    int i = name.indexOf( ':' );
     if( i != -1 )
     {
       nodeTagName = name.mid( i + 1 );
@@ -695,7 +695,7 @@ const QString& name, const QXmlAttributes& atts )
         QString name;  // without prefix, i.e. local name
 
         name = qName = atts.qName(c);
-        int i = qName.find( ':' );
+        int i = qName.indexOf( ':' );
         if( i != -1 ) prefix = qName.left( i );
         if( i != -1 ) name = qName.mid( i + 1 );
         element->setAttributeNS( atts.uri(c), qName, atts.value(c) );
@@ -720,7 +720,7 @@ const QString& name, const QXmlAttributes& atts )
       {
         QString prefix;
         QString name = atts.qName(c);  // qName contains the prefix
-        int i = name.find( ':' );
+        int i = name.indexOf( ':' );
         if( i != -1 ) prefix = name.left( i );
         if( i != -1 ) name = atts.qName(c).mid( i + 1 );
         if( !atts.uri(c).isEmpty() )

@@ -22,6 +22,7 @@
 #include "KoOasisStore.h"
 #include <KoDocument.h>
 #include <KoQueryTrader.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
@@ -118,7 +119,7 @@ KoDocument* KoDocumentChild::hitTest( const QPoint& p, KoView* view, const QMatr
   return d->m_doc->hitTest( p, view, m );
 }
 
-void KoDocumentChild::loadOasis( const QDomElement &frameElement, const QDomElement& objectElement )
+void KoDocumentChild::loadOasis( const KoXmlElement &frameElement, const KoXmlElement& objectElement )
 {
     double x, y, w, h;
     x = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "x", QString::null ) );
@@ -139,7 +140,7 @@ void KoDocumentChild::loadOasis( const QDomElement &frameElement, const QDomElem
 }
 
 
-bool KoDocumentChild::load( const QDomElement& element, bool uppercase )
+bool KoDocumentChild::load( const KoXmlElement& element, bool uppercase )
 {
     if ( element.hasAttribute( "url" ) )
         m_tmpURL = element.attribute("url");
@@ -158,10 +159,10 @@ bool KoDocumentChild::load( const QDomElement& element, bool uppercase )
     }
 
     bool brect = FALSE;
-    QDomNode n = element.firstChild();
+    KoXmlNode n = element.firstChild();
     for( ; !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement e = n.toElement();
+        KoXmlElement e = n.toElement();
         if ( e.isNull() ) continue;
         if ( e.tagName() == "rect" || ( uppercase && e.tagName() == "RECT" ) )
         {
@@ -203,7 +204,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
     return createAndLoadDocument( store, true /*open url*/, false /*not oasis*/, m_tmpMimeType );
 }
 
-bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& manifestDoc )
+bool KoDocumentChild::loadOasisDocument( KoStore* store, const KoXmlDocument& manifestDoc )
 {
     QString path = m_tmpURL;
     if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {

@@ -41,12 +41,12 @@ KoOasisLoadingContext::~KoOasisLoadingContext()
 
 }
 
-void KoOasisLoadingContext::fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName, const char* family )
+void KoOasisLoadingContext::fillStyleStack( const KoXmlElement& object, const char* nsURI, const char* attrName, const char* family )
 {
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttributeNS( nsURI, attrName ) ) {
         const QString styleName = object.attributeNS( nsURI, attrName, QString::null );
-        const QDomElement* style = 0;
+        const KoXmlElement* style = 0;
         bool isStyleAutoStyle = false;
         if ( m_useStylesAutoStyles ) {
             // When loading something from styles.xml, look into the styles.xml auto styles first
@@ -64,14 +64,14 @@ void KoOasisLoadingContext::fillStyleStack( const QDomElement& object, const cha
     }
 }
 
-void KoOasisLoadingContext::addStyles( const QDomElement* style, const char* family, bool usingStylesAutoStyles )
+void KoOasisLoadingContext::addStyles( const KoXmlElement* style, const char* family, bool usingStylesAutoStyles )
 {
     Q_ASSERT( style );
     if ( !style ) return;
     // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) ) {
         const QString parentStyleName = style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
-        const QDomElement* parentStyle = 0;
+        const KoXmlElement* parentStyle = 0;
         if ( usingStylesAutoStyles ) {
             // When loading something from styles.xml, look into the styles.xml auto styles first
             parentStyle = m_styles.findStyleAutoStyle( parentStyleName, family );
@@ -85,7 +85,7 @@ void KoOasisLoadingContext::addStyles( const QDomElement* style, const char* fam
             kWarning(32500) << "Parent style not found: " << parentStyleName << endl;
     }
     else if ( family ) {
-        const QDomElement* def = m_styles.defaultStyle( family );
+        const KoXmlElement* def = m_styles.defaultStyle( family );
         if ( def ) { // on top of all, the default style for this family
             //kDebug(32500) << "pushing default style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
             m_styleStack.push( *def );
@@ -108,13 +108,13 @@ void KoOasisLoadingContext::parseMeta() const
     {
         if ( m_store->hasFile( "meta.xml" ) )
         {
-            QDomDocument metaDoc;
+            KoXmlDocument metaDoc;
             KoOasisStore oasisStore( m_store );
             QString errorMsg;
             if ( oasisStore.loadAndParse( "meta.xml", metaDoc, errorMsg ) ) {
-                QDomNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
-                QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
-                QDomElement generator = KoDom::namedItemNS( office, KoXmlNS::meta, "generator" );
+                KoXmlNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
+                KoXmlNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
+                KoXmlElement generator = KoDom::namedItemNS( office, KoXmlNS::meta, "generator" );
                 if ( !generator.isNull() )
                     m_generator = generator.text();
             }

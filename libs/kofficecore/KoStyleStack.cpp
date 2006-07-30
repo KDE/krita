@@ -83,7 +83,7 @@ void KoStyleStack::pop()
 #endif
 }
 
-void KoStyleStack::push( const QDomElement& style )
+void KoStyleStack::push( const KoXmlElement& style )
 {
     m_stack.append( style );
 #ifdef DEBUG_STYLESTACK
@@ -99,11 +99,11 @@ bool KoStyleStack::hasAttribute( const QString& name, const QString& detail ) co
         fullName += '-';
         fullName += detail;
     }
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
+        KoXmlElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
         if ( properties.hasAttribute( name ) ||
              ( !detail.isEmpty() && properties.hasAttribute( fullName ) ) )
             return true;
@@ -119,11 +119,11 @@ QString KoStyleStack::attribute( const QString& name, const QString& detail ) co
         fullName += '-';
         fullName += detail;
     }
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
+        KoXmlElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
         if ( properties.hasAttribute( name ) )
             return properties.attribute( name );
         if ( !detail.isEmpty() && properties.hasAttribute( fullName ) )
@@ -140,11 +140,11 @@ QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const ch
         fullName += '-';
         fullName += detail;
     }
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( properties.hasAttributeNS( nsURI, name ) )
             return properties.attributeNS( nsURI, name, QString::null );
         if ( detail && properties.hasAttributeNS( nsURI, fullName ) )
@@ -161,11 +161,11 @@ bool KoStyleStack::hasAttributeNS( const char* nsURI, const char* name, const ch
         fullName += '-';
         fullName += detail;
     }
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( properties.hasAttributeNS( nsURI, name ) ||
              ( detail && properties.hasAttributeNS( nsURI, fullName ) ) )
             return true;
@@ -180,12 +180,12 @@ double KoStyleStack::fontSize() const
 {
     const QString name = "font-size";
     double percent = 1;
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end(); // reverse iterator
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end(); // reverse iterator
 
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
+        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
         if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
             const QString value = properties.attributeNS( m_foNSURI, name, QString::null );
             if ( value.endsWith( "%" ) )
@@ -199,11 +199,11 @@ double KoStyleStack::fontSize() const
 
 bool KoStyleStack::hasChildNode(const QString & name) const
 {
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
+        KoXmlElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
         if ( !properties.namedItem( name ).isNull() )
             return true;
     }
@@ -211,28 +211,28 @@ bool KoStyleStack::hasChildNode(const QString & name) const
     return false;
 }
 
-QDomElement KoStyleStack::childNode(const QString & name) const
+KoXmlElement KoStyleStack::childNode(const QString & name) const
 {
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
 
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
+        KoXmlElement properties = (*it).namedItem( "style:"+m_propertiesTagName ).toElement();
         if ( !properties.namedItem( name ).isNull() )
             return properties.namedItem( name ).toElement();
     }
 
-    return QDomElement();          // a null element
+    return KoXmlElement();          // a null element
 }
 
 bool KoStyleStack::hasChildNodeNS( const char* nsURI, const char* localName ) const
 {
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( !KoDom::namedItemNS( properties, nsURI, localName ).isNull() )
             return true;
     }
@@ -240,34 +240,34 @@ bool KoStyleStack::hasChildNodeNS( const char* nsURI, const char* localName ) co
     return false;
 }
 
-QDomElement KoStyleStack::childNodeNS( const char* nsURI, const char* localName) const
+KoXmlElement KoStyleStack::childNodeNS( const char* nsURI, const char* localName) const
 {
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
 
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
-        QDomElement e = KoDom::namedItemNS( properties, nsURI, localName );
+        KoXmlElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
+        KoXmlElement e = KoDom::namedItemNS( properties, nsURI, localName );
         if ( !e.isNull() )
             return e;
     }
 
-    return QDomElement();          // a null element
+    return KoXmlElement();          // a null element
 }
 
-bool KoStyleStack::isUserStyle( const QDomElement& e, const QString& family ) const
+bool KoStyleStack::isUserStyle( const KoXmlElement& e, const QString& family ) const
 {
     if ( e.attributeNS( m_styleNSURI, "family", QString::null ) != family )
         return false;
-    const QDomElement parent = e.parentNode().toElement();
+    const KoXmlElement parent = e.parentNode().toElement();
     //kDebug(30003) << k_funcinfo << "tagName=" << e.tagName() << " parent-tagName=" << parent.tagName() << endl;
     return parent.localName() == "styles" /*&& parent.namespaceURI() == KoXmlNS::office*/;
 }
 
 QString KoStyleStack::userStyleName( const QString& family ) const
 {
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -281,7 +281,7 @@ QString KoStyleStack::userStyleName( const QString& family ) const
 
 QString KoStyleStack::userStyleDisplayName( const QString& family ) const
 {
-    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<KoXmlElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;

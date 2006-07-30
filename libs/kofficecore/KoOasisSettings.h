@@ -24,6 +24,7 @@
 
 #include <qdom.h>
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 
 /**
  * @brief Parse settings.xml file.
@@ -73,12 +74,12 @@ public:
     /**
      * Normal KoOasisSettings constructor, for an OASIS settings.xml
      */
-    explicit KoOasisSettings( const QDomDocument& doc );
+    explicit KoOasisSettings( const KoXmlDocument& doc );
 
     /**
      * KoOasisSettings constructor for an OpenOffice-1.1 file
      */
-    KoOasisSettings( const QDomDocument& doc, const char* officeNSURI, const char* configNSURI );
+    KoOasisSettings( const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI );
 
     class Items;
 
@@ -96,7 +97,7 @@ public:
         friend class KoOasisSettings;
         friend class IndexedMap;
         friend class NamedMap;
-        Items( const QDomElement& elem, const KoOasisSettings* settings )
+        Items( const KoXmlElement& elem, const KoOasisSettings* settings )
             : m_element( elem ), m_settings( settings ) {}
     public:
         bool isNull() const { return m_element.isNull(); }
@@ -127,9 +128,9 @@ public:
         /// @internal
         QString findConfigItem( const QString& item, bool* ok ) const;
         /// @internal
-        QString findConfigItem( const QDomElement& element, const QString& item, bool* ok ) const;
+        QString findConfigItem( const KoXmlElement& element, const QString& item, bool* ok ) const;
 
-        QDomElement m_element;
+        KoXmlElement m_element;
         const KoOasisSettings* m_settings;
     };
 
@@ -139,16 +140,16 @@ public:
     public:
         bool isNull() const { return m_element.isNull(); }
     protected:
-        Map( const QDomElement& elem, const KoOasisSettings* settings )
+        Map( const KoXmlElement& elem, const KoOasisSettings* settings )
             : m_element( elem ), m_settings( settings ) {}
-        const QDomElement m_element;
+        const KoXmlElement m_element;
         const KoOasisSettings* m_settings;
     };
 
     class KOFFICECORE_EXPORT IndexedMap : public Map
     {
         friend class Items;
-        IndexedMap( const QDomElement& elem, const KoOasisSettings* settings )
+        IndexedMap( const KoXmlElement& elem, const KoOasisSettings* settings )
             : Map( elem, settings ) {}
     public:
         /// Returns an entry in an indexed map
@@ -158,7 +159,7 @@ public:
     class KOFFICECORE_EXPORT NamedMap : public Map
     {
         friend class Items;
-        NamedMap( const QDomElement& elem, const KoOasisSettings* settings )
+        NamedMap( const KoXmlElement& elem, const KoOasisSettings* settings )
             : Map( elem, settings ) {}
     public:
         /// Returns an entry in a named map
@@ -169,7 +170,7 @@ private:
     friend class Items;
     friend class IndexedMap;
     friend class NamedMap;
-    const QDomElement m_settingsElement;
+    const KoXmlElement m_settingsElement;
     const char* m_configNSURI;
 
     class Private;

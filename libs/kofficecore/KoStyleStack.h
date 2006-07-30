@@ -29,6 +29,7 @@
 #include <kdemacros.h>
 
 #include "koffice_export.h"
+#include "KoXmlReader.h"
 
 /**
  *  @brief This class implements a stack for the different styles of an object.
@@ -93,7 +94,7 @@ public:
     /**
      * Pushes the new style onto the stack.
      */
-    void push( const QDomElement& style );
+    void push( const KoXmlElement& style );
 
     /**
      * Check if any of the styles on the stack has an attribute called 'name'-'detail'
@@ -130,7 +131,7 @@ public:
      * Search for a child node called 'name', starting on top of the stack,
      * and return it.
      */
-    QDomElement childNode( const QString & name ) const KDE_DEPRECATED;
+    KoXmlElement childNode( const QString & name ) const KDE_DEPRECATED;
 
     /**
      * Check if any of the styles on the stack has a child element called 'localName' in the namespace 'nsURI'.
@@ -142,7 +143,7 @@ public:
      * in the namespace 'nsURI' starting on top of the stack,
      * and return it.
      */
-    QDomElement childNodeNS( const char* nsURI, const char* localName ) const;
+    KoXmlElement childNodeNS( const char* nsURI, const char* localName ) const;
 
     /**
      * Special case for the current font size, due to special handling of fo:font-size="115%".
@@ -173,7 +174,7 @@ public:
     void setTypeProperties( const char* typeProperties );
 
 private:
-    bool isUserStyle( const QDomElement& e, const QString& family ) const;
+    bool isUserStyle( const KoXmlElement& e, const QString& family ) const;
 
 private:
     /// For save/restore: stack of "marks". Each mark is an index in m_stack.
@@ -183,7 +184,7 @@ private:
      * We use QValueList instead of QValueStack because we need access to all styles
      * not only the top one.
      */
-    Q3ValueList<QDomElement> m_stack;
+    Q3ValueList<KoXmlElement> m_stack;
 
     QByteArray m_propertiesTagName;
 

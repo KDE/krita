@@ -1659,7 +1659,7 @@ void KoDocument::setMimeTypeAfterLoading( const QString& mimeType )
 }
 
 // The caller must call store->close() if loadAndParse returns true.
-bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, QDomDocument& doc)
+bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc)
 {
     //kDebug(30003) << "oldLoadAndParse: Trying to open " << filename << endl;
 
@@ -1738,7 +1738,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         QString errorMsg;
         int errorLine;
         int errorColumn;
-        QDomDocument doc;
+        KoXmlDocument doc;
         bool res;
         if ( doc.setContent( &in, &errorMsg, &errorLine, &errorColumn ) )
         {
@@ -1816,7 +1816,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
     {
         oasis = false;
 
-        QDomDocument doc;
+        KoXmlDocument doc;
         bool ok = oldLoadAndParse( store, "root", doc );
         if ( ok )
             ok = loadXML( store->device(), doc );
@@ -1844,7 +1844,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
     }
 
     if ( oasis && store->hasFile( "meta.xml" ) ) {
-        QDomDocument metaDoc;
+        KoXmlDocument metaDoc;
         KoOasisStore oasisStore( store );
         if ( oasisStore.loadAndParse( "meta.xml", metaDoc, d->lastErrorMessage ) ) {
             d->m_docInfo->loadOasis( metaDoc );
@@ -1852,7 +1852,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
     }
     else if ( !oasis && store->hasFile( "documentinfo.xml" ) )
     {
-        QDomDocument doc;
+        KoXmlDocument doc;
         if ( oldLoadAndParse( store, "documentinfo.xml", doc ) ) {
             store->close();
             d->m_docInfo->load( doc );
@@ -1866,12 +1866,12 @@ bool KoDocument::loadNativeFormatFromStoreInternal( KoStore * store )
     }
 
     if ( oasis && store->hasFile( "VersionList.xml" ) ) {
-        QDomDocument versionInfo;
+        KoXmlDocument versionInfo;
         KoOasisStore oasisStore( store );
         if ( oasisStore.loadAndParse( "VersionList.xml", versionInfo, d->lastErrorMessage ) )
         {
-            QDomNode list = KoDom::namedItemNS( versionInfo, KoXmlNS::VL, "version-list" );
-            QDomElement e;
+            KoXmlNode list = KoDom::namedItemNS( versionInfo, KoXmlNS::VL, "version-list" );
+            KoXmlElement e;
             forEachElement( e, list )
             {
                 if ( e.localName() == "version-entry" && e.namespaceURI() == KoXmlNS::VL )
@@ -1900,7 +1900,7 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
 {
     if ( _store->open( url ) )
     {
-        QDomDocument doc;
+        KoXmlDocument doc;
         doc.setContent( _store->device() );
         if ( !loadXML( _store->device(), doc ) )
         {
@@ -1940,14 +1940,14 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
 bool KoDocument::loadOasisFromStore( KoStore* store )
 {
     KoOasisStyles oasisStyles;
-    QDomDocument contentDoc;
-    QDomDocument settingsDoc;
+    KoXmlDocument contentDoc;
+    KoXmlDocument settingsDoc;
     KoOasisStore oasisStore( store );
     bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, d->lastErrorMessage );
     if ( !ok )
         return false;
 
-    QDomDocument stylesDoc;
+    KoXmlDocument stylesDoc;
     (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, d->lastErrorMessage );
     // Load styles from style.xml
     oasisStyles.createStyleMap( stylesDoc, true );

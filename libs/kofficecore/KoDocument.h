@@ -40,6 +40,8 @@ class KoTextDocument;
 #include <KoPageLayout.h>
 #include <koffice_export.h>
 
+#include "KoXmlReader.h"
+
 
 class QDomElement;
 class QDomDocument;
@@ -530,7 +532,7 @@ public:
      *  for the cases where some pre-processing is needed, like kpresenter's kprconverter.
      *  Note that the QIODevice could be 0L, when called from an import filter.
      */
-    virtual bool loadXML( QIODevice *, const QDomDocument & doc ) = 0;
+    virtual bool loadXML( QIODevice *, const KoXmlDocument & doc ) = 0;
 
     /**
      *  Reimplement this method to load the contents of your %KOffice document,
@@ -538,8 +540,8 @@ public:
      *  you can find them in the oasisStyles parameter. The store can be used
      *  to load images and embedded documents.
      */
-    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles,
-                            const QDomDocument & settings, KoStore* store ) = 0;
+    virtual bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
+                            const KoXmlDocument & settings, KoStore* store ) = 0;
 
     /**
      *  Reimplement this method to save the contents of your %KOffice document,
@@ -1160,7 +1162,7 @@ private:
     virtual void insertChild(QObject *) { Q_ASSERT( 0 ); } // avoid compiler warning, but don't call deprecated insertChild() in QObject
 
     KService::Ptr nativeService();
-    bool oldLoadAndParse( KoStore* store, const QString& filename, QDomDocument& doc );
+    bool oldLoadAndParse( KoStore* store, const QString& filename, KoXmlDocument& doc );
     bool loadNativeFormatFromStore( const QString& file );
     bool loadNativeFormatFromStoreInternal( KoStore * store );
 

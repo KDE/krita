@@ -29,6 +29,7 @@
 
 #include <kconfig.h>
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 
 class QDomDocument;
 class QDomElement;
@@ -67,7 +68,7 @@ class KOFFICECORE_EXPORT KoDocumentInfo : public QObject
      * @param metaDoc the QDomDocument with the metaInformation
      * @return true if success
      */
-    bool loadOasis( const QDomDocument& metaDoc );
+    bool loadOasis( const KoXmlDocument& metaDoc );
 
     /**
      * Save the KoDocumentInfo to an OASIS document
@@ -81,7 +82,7 @@ class KOFFICECORE_EXPORT KoDocumentInfo : public QObject
      * @param doc the QDomDocument to load from
      * @return true if success
      */
-    bool load( const QDomDocument& doc );
+    bool load( const KoXmlDocument& doc );
 
     /**
      * Save the KoDocumentInfo to an KOffice-1.3 DomDocument
@@ -126,7 +127,7 @@ class KOFFICECORE_EXPORT KoDocumentInfo : public QObject
      * @param metaDoc a reference to the information node
      * @return true if success
      */
-    bool loadOasisAboutInfo( const QDomNode& metaDoc );
+    bool loadOasisAboutInfo( const KoXmlNode& metaDoc );
 
     /**
      * Save the information about the document to an OASIS file
@@ -140,7 +141,7 @@ class KOFFICECORE_EXPORT KoDocumentInfo : public QObject
      * @param e the element to load from
      * @return true if success
      */
-    bool loadAboutInfo( const QDomElement& e );
+    bool loadAboutInfo( const KoXmlElement& e );
 
     /**
      * Save the information about the document to a KOffice-1.3 file
@@ -154,14 +155,14 @@ class KOFFICECORE_EXPORT KoDocumentInfo : public QObject
      * @param metaDoc a reference to the information node
      * @return true if success
      */
-    bool loadOasisAuthorInfo( const QDomNode& metaDoc );
+    bool loadOasisAuthorInfo( const KoXmlNode& metaDoc );
 
     /**
      * Load the information about the document from a KOffice-1.3 file
      * @param e the element to load from
      * @return true if success
      */
-    bool loadAuthorInfo( const QDomElement& e );
+    bool loadAuthorInfo( const KoXmlElement& e );
 
     /**
      * Save the information about the author to a KOffice-1.3 file

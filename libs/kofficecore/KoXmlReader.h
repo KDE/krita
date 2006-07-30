@@ -21,7 +21,7 @@
 #define KOFFICE_XMLREADER
 
 // use standard QDom, useful to test KoXml classes against Qt's QDom
-//#define KOXML_USE_QDOM
+#define KOXML_USE_QDOM
 
 #include <qdom.h> 
 //Added by qt3to4:
@@ -31,6 +31,7 @@
 #ifdef KOXML_USE_QDOM
 
 #define KoXmlNode QDomNode
+#define KoXmlNodeList QDomNodeList
 #define KoXmlElement QDomElement
 #define KoXmlText QDomText
 #define KoXmlCDATASection QDomCDATASection

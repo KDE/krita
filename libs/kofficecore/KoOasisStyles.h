@@ -25,6 +25,8 @@
 #include <QMap>
 #include <koffice_export.h>
 
+#include "KoXmlReader.h"
+
 class KoGenStyles;
 class KoXmlWriter;
 class QBrush;
@@ -43,7 +45,7 @@ public:
     /// Look into @p doc for styles and remember them
     /// @param doc document to look into
     /// @param stylesDotXml true when loading styles.xml, false otherwise
-    void createStyleMap( const QDomDocument& doc, bool stylesDotXml );
+    void createStyleMap( const KoXmlDocument& doc, bool stylesDotXml );
 
     /**
      * Look up a style by name.
@@ -54,7 +56,7 @@ public:
      * @param name the style name
      * @return the dom element representing the style, or QString::null if it wasn't found.
      */
-    const QDomElement* findStyle( const QString& name ) const;
+    const KoXmlElement* findStyle( const QString& name ) const;
 
     /**
      * Look up a style:style by name.
@@ -62,33 +64,33 @@ public:
      * @param family the style family (for a style:style, use 0 otherwise)
      * @return the dom element representing the style, or QString::null if it wasn't found.
      */
-    const QDomElement* findStyle( const QString& name, const QString& family ) const;
+    const KoXmlElement* findStyle( const QString& name, const QString& family ) const;
 
     /// Similar to findStyle but for auto-styles in styles.xml only.
-    const QDomElement* findStyleAutoStyle( const QString& name, const QString& family ) const;
+    const KoXmlElement* findStyleAutoStyle( const QString& name, const QString& family ) const;
 
     /// @return the style:styles that are "user styles", i.e. those from office:styles
     /// findStyle() is used for lookup. userStyles() is used to load all user styles upfront.
-    Q3ValueVector<QDomElement> userStyles() const;
+    Q3ValueVector<KoXmlElement> userStyles() const;
 
     /// @return the default style for a given family ("graphic","paragraph","table" etc.)
     /// Returns 0 if no default style for this family is available
-    const QDomElement* defaultStyle( const QString& family ) const;
+    const KoXmlElement* defaultStyle( const QString& family ) const;
 
     /// @return the office:style element
-    const QDomElement& officeStyle() const { return m_officeStyle; }
+    const KoXmlElement& officeStyle() const { return m_officeStyle; }
 
     /// @return all list styles ("text:list-style" elements), hashed by name
-    const Q3Dict<QDomElement>& listStyles() const { return m_listStyles; }
+    const Q3Dict<KoXmlElement>& listStyles() const { return m_listStyles; }
 
     /// @return master pages ("style:master-page" elements), hashed by name
-    const Q3Dict<QDomElement>& masterPages() const { return m_masterPages; }
+    const Q3Dict<KoXmlElement>& masterPages() const { return m_masterPages; }
 
     /// @return draw styles, hashed by name
-    const Q3Dict<QDomElement>& drawStyles() const { return m_drawStyles; }
+    const Q3Dict<KoXmlElement>& drawStyles() const { return m_drawStyles; }
 
     /// @return all styles ("style:style" elements) for a given family, hashed by name
-    const Q3Dict<QDomElement>& styles(const QString& family) const;
+    const Q3Dict<KoXmlElement>& styles(const QString& family) const;
 
     /// Prefix and suffix are always included into formatStr. Having them as separate fields simply
     /// allows to extract them from formatStr, to display them in separate widgets.
@@ -124,12 +126,12 @@ public:
 
 private:
     /// Add styles to styles map
-    void insertStyles( const QDomElement& styles, bool styleAutoStyles = false );
+    void insertStyles( const KoXmlElement& styles, bool styleAutoStyles = false );
 
 private:
-    void insertOfficeStyles( const QDomElement& styles );
-    void insertStyle( const QDomElement& style, bool styleAutoStyles );
-    void importDataStyle( const QDomElement& parent );
+    void insertOfficeStyles( const KoXmlElement& styles );
+    void insertStyle( const KoXmlElement& style, bool styleAutoStyles );
+    void importDataStyle( const KoXmlElement& parent );
     static bool saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash );
     static void parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
     static bool saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text );
@@ -140,14 +142,14 @@ private:
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
 
 private:
-    Q3Dict<QDomElement>   m_styles; // page-layout, font-decl etc.
-    Q3Dict<QDomElement>   m_defaultStyle;
-    QDomElement m_officeStyle;
+    Q3Dict<KoXmlElement>   m_styles; // page-layout, font-decl etc.
+    Q3Dict<KoXmlElement>   m_defaultStyle;
+    KoXmlElement m_officeStyle;
 
-    Q3Dict<QDomElement>   m_masterPages;
-    Q3Dict<QDomElement>   m_listStyles;
+    Q3Dict<KoXmlElement>  m_masterPages;
+    Q3Dict<KoXmlElement>   m_listStyles;
 
-    Q3Dict<QDomElement>   m_drawStyles;
+    Q3Dict<KoXmlElement>   m_drawStyles;
     DataFormatsMap m_dataFormats;
 
     class Private;

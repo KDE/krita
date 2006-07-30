@@ -16,6 +16,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <KoXmlReader.h>
 #include <KoOasisStore.h>
 #include <KoDom.h>
 #include <kdebug.h>
@@ -23,7 +24,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-void testMimeForPath( QDomDocument& doc )
+void testMimeForPath( KoXmlDocument& doc )
 {
     QString mime = KoOasisStore::mimeForPath( doc, "Object 1" );
     kDebug() << k_funcinfo << mime << endl;
@@ -44,7 +45,7 @@ int main( int, char** ) {
 </manifest:manifest> \
 ";
 
-    QDomDocument doc;
+    KoXmlDocument doc;
     QString errorMsg;
     int errorLine, errorColumn;
     bool ok = doc.setContent( xml, true /* namespace processing */, &errorMsg, &errorLine, &errorColumn );

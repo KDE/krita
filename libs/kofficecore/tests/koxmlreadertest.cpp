@@ -50,7 +50,7 @@ const T& result, const T& expected )
     ts << ", ";
     ts << "Expected:";
     ts << expected;
-    printf( "%s [%d]: %s\n", file, line, message.latin1() );
+    printf( "%s [%d]: %s\n", file, line, message.toLatin1() );
   }
 }
 
@@ -69,7 +69,8 @@ bool expected )
     ts << ", ";
     ts << "Expected: ";
     if( expected ) ts << "True"; else ts << "False";
-    printf( "%s [%d]: %s\n", file, line, message.latin1() );
+    
+    printf( "%s [%d]: %s\n", file, line, message.toLatin1() );
   }
 }
 
@@ -80,7 +81,7 @@ void testNode()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<earth>";
   xmlstream << "<continents>";
@@ -105,7 +106,7 @@ void testNode()
 
   // null node
   KoXmlNode node1;
-  CHECK( node1.nodeName(), QString::null );
+  CHECK( node1.nodeName(), QString() );
   CHECK( node1.isNull(), true );
   CHECK( node1.isElement(), false );
   CHECK( node1.isElement(), false );
@@ -144,7 +145,7 @@ void testNode()
 
   // a document is of course can't be converted to element
   KoXmlElement invalidElement = node3.toElement();
-  CHECK( invalidElement.nodeName(), QString::null );
+  CHECK( invalidElement.nodeName(), QString() );
   CHECK( invalidElement.isNull(), true );
   CHECK( invalidElement.isElement(), true );
   CHECK( invalidElement.isText(), false );
@@ -153,7 +154,7 @@ void testNode()
   // clear() makes it a null node again
   node3.clear();
   CHECK( node3.isNull(), true );
-  CHECK( node3.nodeName(), QString::null );
+  CHECK( node3.nodeName(), QString() );
   CHECK( node3.isElement(), false );
   CHECK( node3.isText(), false );
   CHECK( node3.isDocument(), false );
@@ -231,7 +232,7 @@ void testElement()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
 
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<html>";
@@ -299,7 +300,7 @@ void testElement()
 
   // empty element, by default constructor
   KoXmlElement testElement; 
-  CHECK( testElement.nodeName(), QString::null );
+  CHECK( testElement.nodeName(), QString() );
   CHECK( testElement.isNull(), true );
   CHECK( testElement.isElement(), true );
   CHECK( testElement.isDocument(), false );
@@ -383,7 +384,7 @@ void testAttributes()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
 
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<p>";
@@ -433,7 +434,7 @@ void testText()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
 
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<p>";
@@ -522,7 +523,7 @@ void testCDATA()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
 
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<p>";
@@ -600,7 +601,7 @@ void testDocument()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
 
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<koffice>";
@@ -656,7 +657,7 @@ void testDocument()
 
   // clear() converts it into null node
   doc.clear();
-  CHECK( doc.nodeName(), QString::null );
+  CHECK( doc.nodeName(), QString() );
   CHECK( doc.isNull(), true );
   CHECK( doc.isElement(), false );
   CHECK( doc.isDocument(), true );
@@ -682,7 +683,7 @@ void testNamespace()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // taken from example in Qt documentation (xml.html)
@@ -723,14 +724,14 @@ void testNamespace()
   CHECK( bookElement.isElement(), true );
   CHECK( bookElement.tagName(), QString("book") );
   CHECK( bookElement.prefix().isNull(), true );
-  CHECK( bookElement.localName(), QString::null );
+  CHECK( bookElement.localName(), QString() );
 
   bookTitleElement = bookElement.firstChild().toElement();
   CHECK( bookTitleElement.isNull(), false );
   CHECK( bookTitleElement.isElement(), true );
   CHECK( bookTitleElement.tagName(), QString("book:title") );
   CHECK( bookTitleElement.prefix().isNull(), true );
-  CHECK( bookTitleElement.localName(), QString::null );
+  CHECK( bookTitleElement.localName(), QString() );
 
   bookAuthorElement = bookTitleElement.nextSibling().toElement();
   CHECK( bookAuthorElement.isNull(), false );
@@ -838,9 +839,9 @@ void testNamespace()
   CHECK( bookAuthorElement.hasAttributeNS(bookNS,"name"), false );
   CHECK( bookAuthorElement.hasAttributeNS(fnordNS,"name"), false );
   
-  CHECK( bookAuthorElement.attributeNS(defaultNS,"name",QString::null).isEmpty(), true );
-  CHECK( bookAuthorElement.attributeNS(bookNS,"name",QString::null).isEmpty(), true );
-  CHECK( bookAuthorElement.attributeNS(fnordNS,"name",QString::null).isEmpty(), true );
+  CHECK( bookAuthorElement.attributeNS(defaultNS,"name",QString()).isEmpty(), true );
+  CHECK( bookAuthorElement.attributeNS(bookNS,"name",QString()).isEmpty(), true );
+  CHECK( bookAuthorElement.attributeNS(fnordNS,"name",QString()).isEmpty(), true );
 }
 
 void testUnload()
@@ -850,7 +851,7 @@ void testUnload()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<earth>";
   xmlstream << "<continents>";
@@ -917,7 +918,7 @@ void testSimpleXML()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
 
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<solarsystem>";
@@ -1016,7 +1017,7 @@ void testRootError()
 
   // multiple root nodes are not valid !
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<earth></earth><moon></moon>";
 
@@ -1035,7 +1036,7 @@ void testMismatchedTag()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<earth></e>";
 
@@ -1054,7 +1055,7 @@ void testSimpleOpenDocumentText()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml from a simple OpenDocument text
@@ -1199,7 +1200,7 @@ void testSimpleOpenDocumentSpreadsheet()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml from a simple OpenDocument spreadsheet
@@ -1397,7 +1398,7 @@ void testSimpleOpenDocumentPresentation()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml from a simple OpenDocument presentation
@@ -1697,7 +1698,7 @@ void testSimpleOpenDocumentFormula()
   int errorColumn = 0;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml from a simple OpenDocument formula
@@ -1874,7 +1875,7 @@ void testLargeOpenDocumentSpreadsheet()
   int colCount = 200*2;
 
   QByteArray xmlbuf;
-  QBuffer xmldevice( xmlbuf );
+  QBuffer xmldevice( &xmlbuf );
   QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml

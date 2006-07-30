@@ -23,6 +23,7 @@
 #include "KoDom.h"
 #include <KoStore.h>
 #include <KoStoreDevice.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 #include <ktempfile.h>
@@ -138,7 +139,7 @@ bool KoOasisStore::closeManifestWriter()
     return ok;
 }
 
-bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QString& errorMessage )
+bool KoOasisStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QString& errorMessage )
 {
     //kDebug(30003) << "loadAndParse: Trying to open " << fileName << endl;
 
@@ -178,10 +179,10 @@ bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QSt
     return ok;
 }
 
-QString KoOasisStore::mimeForPath( const QDomDocument& doc, const QString& fullPath )
+QString KoOasisStore::mimeForPath( const KoXmlDocument& doc, const QString& fullPath )
 {
-    QDomElement docElem = doc.documentElement();
-    QDomElement elem;
+    KoXmlElement docElem = doc.documentElement();
+    KoXmlElement elem;
     forEachElement( elem, docElem )
     {
         if ( elem.localName() == "file-entry" && elem.namespaceURI() == KoXmlNS::manifest )

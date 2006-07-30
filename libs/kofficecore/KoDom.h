@@ -21,7 +21,10 @@
 #define KODOM_H
 
 #include <qdom.h>
+
 #include <koffice_export.h>
+#include <KoXmlReader.h>
+
 /**
  * This namespace contains a few convenience functions to simplify code using QDom
  * (when loading OASIS documents, in particular).
@@ -58,13 +61,13 @@ namespace KoDom {
      *
      * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
      */
-    KOFFICECORE_EXPORT QDomElement namedItemNS( const QDomNode& node, const char* nsURI, const char* localName );
+    KOFFICECORE_EXPORT KoXmlElement namedItemNS( const KoXmlNode& node, const char* nsURI, const char* localName );
 
 }
-
+#if 0
 #define forEachElement( elem, parent ) \
       for ( QDomNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
         if ( !( elem = _node.toElement() ).isNull() )
-
+#endif
 #endif /* KODOM_H */
 

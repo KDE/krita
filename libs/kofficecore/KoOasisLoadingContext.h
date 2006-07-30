@@ -30,6 +30,7 @@ class KoStore;
 #include <koffice_export.h>
 #include <QStringList>
 #include <KoStyleStack.h>
+#include <KoXmlReader.h>
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
@@ -57,7 +58,7 @@ public:
     KoOasisStyles& oasisStyles() { return m_styles; }
     KoStyleStack& styleStack() { return m_styleStack; }
 
-    const QDomDocument& manifestDocument() const { return m_manifestDoc; }
+    const KoXmlDocument& manifestDocument() const { return m_manifestDoc; }
 
     /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
     QString generator() const;
@@ -74,7 +75,7 @@ public:
      * @param attrName the name of the attribute to read
      * @param family the style family used for this object
      */
-    void fillStyleStack( const QDomElement& element, const char* nsURI, const char* attrName, const char* family );
+    void fillStyleStack( const KoXmlElement& element, const char* nsURI, const char* attrName, const char* family );
 
     /**
      * Add @p style to the stack, as well as all its parent styles
@@ -90,7 +91,7 @@ public:
      *
      * Usually you would call fillStyleStack() instead.
      */
-    void addStyles( const QDomElement* style, const char* family, bool usingStylesAutoStyles = false );
+    void addStyles( const KoXmlElement* style, const char* family, bool usingStylesAutoStyles = false );
 
     /// Set to true while loading headers and footers, to remember to use auto styles
     /// from styles.xml
@@ -112,7 +113,7 @@ private:
     bool m_unused1; // padding, can be used later
     bool m_unused2; // padding, can be used later
 
-    QDomDocument m_manifestDoc;
+    KoXmlDocument m_manifestDoc;
 
     class Private;
     Private *d;

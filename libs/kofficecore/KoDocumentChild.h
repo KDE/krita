@@ -21,6 +21,8 @@
 
 #include <KoChild.h>
 #include <koffice_export.h>
+#include <KoXmlReader.h>
+
 class KoView;
 class QDomDocument;
 class QDomElement;
@@ -121,9 +123,9 @@ public:
    *  @ref KoDocument::loadChildren, respectively from your implementation
    *  of these methods.
    */
-  virtual bool load( const QDomElement& element, bool uppercase=false );
+  virtual bool load( const KoXmlElement& element, bool uppercase=false );
 
-  void loadOasis( const QDomElement &frameElement, const QDomElement& objectElement );
+  void loadOasis( const KoXmlElement &frameElement, const KoXmlElement& objectElement );
 
   /**
    *  Actually loads the document from the disk/net or from the store,
@@ -135,7 +137,7 @@ public:
    *  Actually loads the document from the disk/net or from the store
    *  depending on the document's url
    */
-  virtual bool loadOasisDocument( KoStore* store, const QDomDocument& manifestDoc );
+  virtual bool loadOasisDocument( KoStore* store, const KoXmlDocument& manifestDoc );
 
   virtual bool isStoredExtern() const;
 

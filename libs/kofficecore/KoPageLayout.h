@@ -25,6 +25,8 @@
 #include <KoGenStyles.h>
 #include <QStringList>
 #include <koffice_export.h>
+#include <KoXmlReader.h>
+
 class QDomElement;
 
 /**
@@ -203,7 +205,7 @@ struct KoPageLayout
     /**
      * Load this page layout from OASIS
      */
-    KOFFICECORE_EXPORT void loadOasis(const QDomElement &style);
+    KOFFICECORE_EXPORT void loadOasis(const KoXmlElement &style);
 
     /**
      * @return a page layout with the default page size depending on the locale settings,

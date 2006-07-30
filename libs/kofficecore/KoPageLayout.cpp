@@ -57,9 +57,9 @@ KoGenStyle KoPageLayout::saveOasis() const
     return style;
 }
 
-void KoPageLayout::loadOasis(const QDomElement &style)
+void KoPageLayout::loadOasis(const KoXmlElement &style)
 {
-    QDomElement properties( KoDom::namedItemNS( style, KoXmlNS::style, "page-layout-properties" ) );
+    KoXmlElement properties( KoDom::namedItemNS( style, KoXmlNS::style, "page-layout-properties" ) );
     if ( !properties.isNull() )
     {
         ptWidth = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-width", QString::null ) );

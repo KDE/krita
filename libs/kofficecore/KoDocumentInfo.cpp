@@ -59,7 +59,7 @@ KoDocumentInfo::~KoDocumentInfo()
 {
 }
 
-bool KoDocumentInfo::load( const QDomDocument& doc )
+bool KoDocumentInfo::load( const KoXmlDocument& doc )
 {
     if( !loadAboutInfo( doc.documentElement() ) )
         return false;
@@ -70,10 +70,10 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
     return true;
 }
 
-bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
+bool KoDocumentInfo::loadOasis( const KoXmlDocument& metaDoc )
 {
-    QDomNode t = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
-    QDomNode office = KoDom::namedItemNS( t, KoXmlNS::office, "meta" );
+    KoXmlNode t = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
+    KoXmlNode office = KoDom::namedItemNS( t, KoXmlNS::office, "meta" );
 
     if( office.isNull() )
         return false;
@@ -189,19 +189,19 @@ bool KoDocumentInfo::saveOasisAuthorInfo( KoXmlWriter &xmlWriter )
     return true;
 }
 
-bool KoDocumentInfo::loadOasisAuthorInfo( const QDomNode& metaDoc )
+bool KoDocumentInfo::loadOasisAuthorInfo( const KoXmlNode& metaDoc )
 {
-    QDomElement e = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "creator" );
+    KoXmlElement e = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "creator" );
     if ( !e.isNull() && !e.text().isEmpty() )
         setAuthorInfo( "creator", e.text() );
 
-    QDomNode n = metaDoc.firstChild();
+    KoXmlNode n = metaDoc.firstChild();
     for ( ; !n.isNull(); n = n.nextSibling() )
     {
         if ( !n.isElement())
             continue;
 
-        QDomElement e = n.toElement();
+        KoXmlElement e = n.toElement();
         if ( !( e.namespaceURI() == KoXmlNS::meta &&
                     e.localName() == "user-defined" && !e.text().isEmpty() ) )
             continue;
@@ -213,12 +213,12 @@ bool KoDocumentInfo::loadOasisAuthorInfo( const QDomNode& metaDoc )
     return true;
 }
 
-bool KoDocumentInfo::loadAuthorInfo( const QDomElement& e )
+bool KoDocumentInfo::loadAuthorInfo( const KoXmlElement& e )
 {
-    QDomNode n = e.namedItem( "author" ).firstChild();
+    KoXmlNode n = e.namedItem( "author" ).firstChild();
     for( ; !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement e = n.toElement();
+        KoXmlElement e = n.toElement();
         if( e.isNull() )
             continue;
 
@@ -286,9 +286,9 @@ bool KoDocumentInfo::saveOasisAboutInfo( KoXmlWriter &xmlWriter )
     return true;
 }
 
-bool KoDocumentInfo::loadOasisAboutInfo( const QDomNode& metaDoc )
+bool KoDocumentInfo::loadOasisAboutInfo( const KoXmlNode& metaDoc )
 {
-    QDomElement e;
+    KoXmlElement e;
 
     foreach( QString tag, m_aboutTags )
     {
@@ -320,10 +320,10 @@ bool KoDocumentInfo::loadOasisAboutInfo( const QDomNode& metaDoc )
     return true;
 }
 
-bool KoDocumentInfo::loadAboutInfo( const QDomElement& e )
+bool KoDocumentInfo::loadAboutInfo( const KoXmlElement& e )
 {
-    QDomNode n = e.namedItem( "about" ).firstChild();
-    QDomElement tmp;
+    KoXmlNode n = e.namedItem( "about" ).firstChild();
+    KoXmlElement tmp;
     for( ; !n.isNull(); n = n.nextSibling()  )
     {
         tmp = n.toElement();

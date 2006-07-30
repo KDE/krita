@@ -19,12 +19,12 @@
 
 #include "KoDom.h"
 
-QDomElement KoDom::namedItemNS( const QDomNode& node, const char* nsURI, const char* localName )
+KoXmlElement KoDom::namedItemNS( const KoXmlNode& node, const char* nsURI, const char* localName )
 {
-    QDomNode n = node.firstChild();
+    KoXmlNode n = node.firstChild();
     for ( ; !n.isNull(); n = n.nextSibling() ) {
         if ( n.isElement() && n.localName() == localName && n.namespaceURI() == nsURI )
             return n.toElement();
     }
-    return QDomElement();
+    return KoXmlElement();
 }

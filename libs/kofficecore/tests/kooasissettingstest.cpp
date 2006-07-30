@@ -16,6 +16,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <KoXmlReader.h>
 #include <KoOasisSettings.h>
 #include <KoDom.h>
 #include <kdebug.h>
@@ -94,7 +95,7 @@ int main( int, char** ) {
 </office:document-settings> \
 ";
 
-    QDomDocument doc;
+    KoXmlDocument doc;
     bool ok = doc.setContent( xml, true /* namespace processing */ );
     assert( ok );
 

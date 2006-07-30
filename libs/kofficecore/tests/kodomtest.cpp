@@ -30,9 +30,9 @@
 //    qDebug( "nodeName=%s tagName=%s localName=%s prefix=%s namespaceURI=%s", elem.nodeName().latin1(), elem.tagName().latin1(), elem.localName().latin1(), elem.prefix().latin1(), elem.namespaceURI().latin1() );
 //}
 
-void testQDom( const QDomDocument& doc )
+void testQDom( const KoXmlDocument& doc )
 {
-    QDomElement docElem = doc.documentElement();
+    KoXmlElement docElem = doc.documentElement();
     //debugElemNS( docElem );
     assert( docElem.nodeName() == "o:document-content" );
     assert( docElem.tagName() == "document-content" );
@@ -41,21 +41,21 @@ void testQDom( const QDomDocument& doc )
     assert( docElem.namespaceURI() == KoXmlNS::office );
 
     // WARNING, elementsByTagNameNS is recursive!!!
-    QDomNodeList docElemChildren = docElem.elementsByTagNameNS( KoXmlNS::office, "body" );
+    KoXmlNodeList docElemChildren = docElem.elementsByTagNameNS( KoXmlNS::office, "body" );
     assert( docElemChildren.length() == 1 );
 
-    QDomElement elem = docElemChildren.item( 0 ).toElement();
+    KoXmlElement elem = docElemChildren.item( 0 ).toElement();
     //debugElemNS( elem );
     assert( elem.tagName() == "body" );
     assert( elem.localName() == "body" );
     assert( elem.prefix() == "o" );
     assert( elem.namespaceURI() == KoXmlNS::office );
 
-    QDomNode n = elem.firstChild();
+    KoXmlNode n = elem.firstChild();
     for ( ; !n.isNull() ; n = n.nextSibling() ) {
         if ( !n.isElement() )
             continue;
-        QDomElement e = n.toElement();
+        KoXmlElement e = n.toElement();
         //debugElemNS( e );
         assert( e.tagName() == "p" );
         assert( e.localName() == "p" );
@@ -66,32 +66,32 @@ void testQDom( const QDomDocument& doc )
     qDebug("testQDom... ok");
 }
 
-void testKoDom( const QDomDocument& doc )
+void testKoDom( const KoXmlDocument& doc )
 {
-    QDomElement docElem = KoDom::namedItemNS( doc, KoXmlNS::office, "document-content" );
+    KoXmlElement docElem = KoDom::namedItemNS( doc, KoXmlNS::office, "document-content" );
     assert( !docElem.isNull() );
     assert( docElem.localName() == "document-content" );
     assert( docElem.namespaceURI() == KoXmlNS::office );
 
-    QDomElement body = KoDom::namedItemNS( docElem, KoXmlNS::office, "body" );
+    KoXmlElement body = KoDom::namedItemNS( docElem, KoXmlNS::office, "body" );
     assert( !body.isNull() );
     assert( body.localName() == "body" );
     assert( body.namespaceURI() == KoXmlNS::office );
 
-    QDomElement p = KoDom::namedItemNS( body, KoXmlNS::text, "p" );
+    KoXmlElement p = KoDom::namedItemNS( body, KoXmlNS::text, "p" );
     assert( !p.isNull() );
     assert( p.localName() == "p" );
     assert( p.namespaceURI() == KoXmlNS::text );
 
-    const QDomElement officeStyle = KoDom::namedItemNS( docElem, KoXmlNS::office, "styles" );
+    const KoXmlElement officeStyle = KoDom::namedItemNS( docElem, KoXmlNS::office, "styles" );
     assert( !officeStyle.isNull() );
 
     // Look for a non-existing element
-    QDomElement notexist = KoDom::namedItemNS( body, KoXmlNS::text, "notexist" );
+    KoXmlElement notexist = KoDom::namedItemNS( body, KoXmlNS::text, "notexist" );
     assert( notexist.isNull() );
 
     int count = 0;
-    QDomElement elem;
+    KoXmlElement elem;
     forEachElement( elem, body ) {
         assert( elem.localName() == "p" );
         assert( elem.namespaceURI() == KoXmlNS::text );
@@ -119,7 +119,7 @@ int main( int argc, char** argv ) {
                          + "\">\n"
 		"<o:body><p text:style-name=\"L1\">foobar</p><p>2nd</p></o:body><o:styles></o:styles>\n"
 		"</o:document-content>\n";
-    QDomDocument doc;
+    KoXmlDocument doc;
     //QXmlSimpleReader reader;
     //reader.setFeature( "http://xml.org/sax/features/namespaces", TRUE );
     //reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", FALSE );

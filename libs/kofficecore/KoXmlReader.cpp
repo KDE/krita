@@ -69,6 +69,8 @@
 #include <QMap>
 #include <q3cstring.h>
 
+#include <kdebug.h>
+
 // double QString, used for hashing against namespace and qualified name pair
 class DQString
 {
@@ -468,18 +470,29 @@ bool KoXmlNodeData::setContent( QXmlInputSource* source,
 QXmlReader* reader, QString* errorMsg, int* errorLine, int* errorColumn )
 {
   if( nodeType != KoXmlNode::DocumentNode )
+  {
+    kDebug() << "nodeType != KoXmlNode::DocumentNode" << endl;
     return false;
+  }
 
   clear();
   nodeType = KoXmlNode::DocumentNode;
 
   // sanity checks
-  if( !source ) return false;
-  if( !reader ) return false;
+  if( !source )
+  {
+    kDebug() << "!source" << endl;
+    return false;
+  }
+  if( !reader )
+  {
+    kDebug() << "!reader" << endl;
+    return false;
+  }
 
   // copy the reader for later on-demand loading
   // FIXME this is a workaround because no copy is possible with QXmlReader
-  char* features[] =
+  const char* features[] =
   { 
     "http://xml.org/sax/features/namespaces",
     "http://xml.org/sax/features/namespace-prefixes",
@@ -510,6 +523,9 @@ QXmlReader* reader, QString* errorMsg, int* errorLine, int* errorColumn )
     if( errorMsg ) *errorMsg = handler.errorMsg;
     if( errorLine ) *errorLine = handler.errorLine;
     if( errorColumn )  *errorColumn = handler.errorColumn;
+    kDebug() << "parsing error on line " << handler.errorLine
+        << ", column " << handler.errorColumn
+        << ": " << handler.errorMsg << endl;
     return false;
   }
 
@@ -1495,9 +1511,6 @@ bool KoXmlDocument::fastLoading() const
 bool KoXmlDocument::setContent( QXmlInputSource *source, QXmlReader *reader, 
     QString* errorMsg, int* errorLine, int* errorColumn )
 {
-  if( d->nodeType != KoXmlNode::DocumentNode ) 
-    return false;
-
   return d->setContent( source, reader, errorMsg, errorLine, errorColumn );
 }
 

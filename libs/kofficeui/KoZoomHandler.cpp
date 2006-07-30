@@ -23,10 +23,11 @@
 #include <KoUnit.h> // for POINT_TO_INCH
 #include <KoGlobal.h>
 
-KoZoomHandler::KoZoomHandler()
+KoZoomHandler::KoZoomHandler() : KoViewConverter()
 {
     // Note that this calls the method below, not the derived one
     setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
+    setZoomMode( KoZoomMode::ZOOM_CONSTANT );
 }
 
 void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )

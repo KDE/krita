@@ -66,3 +66,19 @@ bool KoShapeGroup::GroupMembers::childClipped(const KoShape *child) const {
     Q_UNUSED(child);
     return false;
 }
+
+QRectF KoShapeGroup::boundingRect() const {
+    bool first=true;
+    QRectF boundingRect;
+
+    foreach(KoShape *shape, iterator()) {
+        if(first) {
+            boundingRect = shape->boundingRect();
+            first = false;
+        }
+        else
+            boundingRect = boundingRect.unite( shape->boundingRect() );
+    }
+
+    return boundingRect;
+}

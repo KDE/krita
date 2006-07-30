@@ -80,9 +80,9 @@ void testNode()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<earth>";
   xmlstream << "<continents>";
   xmlstream << "<asia/>";
@@ -97,6 +97,7 @@ void testNode()
   xmlstream << "<atlantic/>";
   xmlstream << "</oceans>";
   xmlstream << "</earth>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, &errorMsg, &errorLine, &errorColumn ), true );
@@ -231,10 +232,9 @@ void testElement()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<html>";
   xmlstream << "<body bgcolor=\"#000\">";
   xmlstream << "<p>";
@@ -242,6 +242,7 @@ void testElement()
   xmlstream << "</p>";
   xmlstream << "</body>";
   xmlstream << "</html>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, &errorMsg, &errorLine, &errorColumn ), true );
@@ -383,13 +384,13 @@ void testAttributes()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<p>";
   xmlstream << "<img src=\"foo.png\" width=\"300\" height=\"150\"/>";
   xmlstream << "</p>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, &errorMsg, &errorLine, &errorColumn ), true );
@@ -433,14 +434,14 @@ void testText()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<p>";
   xmlstream << "Hello ";
   xmlstream << "<b>world</b>";
   xmlstream << "</p>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, &errorMsg, &errorLine, &errorColumn ), true );
@@ -522,14 +523,14 @@ void testCDATA()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<p>";
   xmlstream << "Hello ";
   xmlstream << "<![CDATA[world]]>";
   xmlstream << "</p>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, &errorMsg, &errorLine, &errorColumn ), true );
@@ -600,15 +601,15 @@ void testDocument()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<koffice>";
   xmlstream << "  <kword/>\n";
   xmlstream << "  <kpresenter/>\n";
   xmlstream << "  <krita/>\n";
   xmlstream << "</koffice>";
+  xmldevice.close();
 
   KoXmlDocument doc;
 
@@ -682,9 +683,9 @@ void testNamespace()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   
   // taken from example in Qt documentation (xml.html)
   xmlstream << "<document xmlns:book = \"http://trolltech.com/fnord/book/\"";
@@ -700,6 +701,7 @@ void testNamespace()
   xmlstream << "  </chapter>";
   xmlstream << "</book>";
   xmlstream << "</document>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   KoXmlElement rootElement;
@@ -850,9 +852,10 @@ void testUnload()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
+  
   xmlstream << "<earth>";
   xmlstream << "<continents>";
   xmlstream << "<asia/>";
@@ -867,6 +870,7 @@ void testUnload()
   xmlstream << "<atlantic/>";
   xmlstream << "</oceans>";
   xmlstream << "</earth>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, &errorMsg, &errorLine, &errorColumn ), true );
@@ -917,10 +921,9 @@ void testSimpleXML()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<solarsystem>";
   xmlstream << "  <mercurius/>\n";
   xmlstream << "  <venus/>\n";
@@ -930,6 +933,7 @@ void testSimpleXML()
   xmlstream << "  <mars/>\n";
   xmlstream << "  <jupiter/>\n";
   xmlstream << "</solarsystem>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent(&xmldevice,&errorMsg,&errorLine,&errorColumn ), true );
@@ -1016,10 +1020,11 @@ void testRootError()
   int errorColumn = 0;
 
   // multiple root nodes are not valid !
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<earth></earth><moon></moon>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, &errorMsg, &errorLine, &errorColumn ), false );
@@ -1035,10 +1040,11 @@ void testMismatchedTag()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   xmlstream << "<earth></e>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, &errorMsg, &errorLine, &errorColumn ), false );
@@ -1054,9 +1060,9 @@ void testSimpleOpenDocumentText()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   
   // content.xml from a simple OpenDocument text
   // it has only paragraph "Hello, world!"
@@ -1074,6 +1080,7 @@ void testSimpleOpenDocumentText()
   xmlstream << "  </office:text>";
   xmlstream << " </office:body>";
   xmlstream << "</office:document-content>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn ), true );
@@ -1199,9 +1206,9 @@ void testSimpleOpenDocumentSpreadsheet()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   
   // content.xml from a simple OpenDocument spreadsheet
   // the document has three worksheets, the last two are empty.
@@ -1238,6 +1245,7 @@ void testSimpleOpenDocumentSpreadsheet()
   xmlstream << "</office:spreadsheet>";
   xmlstream << "</office:body>";
   xmlstream << "</office:document-content>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn ), true );
@@ -1397,9 +1405,9 @@ void testSimpleOpenDocumentPresentation()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   
   // content.xml from a simple OpenDocument presentation
   // styles, declarations and unnecessary namespaces are omitted
@@ -1451,6 +1459,7 @@ void testSimpleOpenDocumentPresentation()
   xmlstream << "  </office:presentation>";
   xmlstream << " </office:body>";
   xmlstream << "</office:document-content>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn ), true );
@@ -1697,9 +1706,9 @@ void testSimpleOpenDocumentFormula()
   int errorLine = 0;
   int errorColumn = 0;
 
-  QByteArray xmlbuf;
-  QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QBuffer xmldevice;
+  xmldevice.open( QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmldevice );
   
   // content.xml from a simple OpenDocument formula
   // this is essentially MathML
@@ -1718,6 +1727,7 @@ void testSimpleOpenDocumentFormula()
   xmlstream << "  <math:annotation math:encoding=\"StarMath 5.0\">E  =  mc^2 </math:annotation>";
   xmlstream << " </math:semantics>";
   xmlstream << "</math:math>";
+  xmldevice.close();
 
   KoXmlDocument doc;
   CHECK( doc.setContent( &xmldevice, true, &errorMsg, &errorLine, &errorColumn ), true );
@@ -1876,7 +1886,7 @@ void testLargeOpenDocumentSpreadsheet()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( &xmlbuf );
-  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
+  QTextStream xmlstream( &xmlbuf, QIODevice::WriteOnly );
   
   // content.xml
   xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -1907,6 +1917,7 @@ void testLargeOpenDocumentSpreadsheet()
   xmlstream << "</office:spreadsheet>";
   xmlstream << "</office:body>";
   xmlstream << "</office:document-content>";
+  xmldevice.close();
 
   printf("Raw XML size: %d KB\n", xmlbuf.size()/1024 );
 

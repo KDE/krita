@@ -335,6 +335,7 @@ KoShapeAlignCommand::KoShapeAlignCommand( const KoSelectionSet &shapes, Align al
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
     QPointF position;
+    QPointF delta;
     QRectF bRect;
     foreach( KoShape *shape, shapes ) {
         position = shape->position();
@@ -343,24 +344,25 @@ KoShapeAlignCommand::KoShapeAlignCommand( const KoSelectionSet &shapes, Align al
         switch( align )
         {
             case ALIGN_HORIZONTAL_LEFT:
-                newPositions << QPointF( boundingRect.left(), position.y());
+                delta = QPointF( boundingRect.left(), bRect.y()) - bRect.topLeft();
                 break;
             case ALIGN_HORIZONTAL_CENTER:
-                newPositions << QPointF( boundingRect.center().x() - bRect.width()/2, position.y());
+                delta = QPointF( boundingRect.center().x() - bRect.width()/2, bRect.y()) - bRect.topLeft();
                 break;
             case ALIGN_HORIZONTAL_RIGHT:
-                newPositions << QPointF( boundingRect.right() - bRect.width(), position.y());
+                delta = QPointF( boundingRect.right() - bRect.width(), bRect.y()) - bRect.topLeft();
                 break;
             case ALIGN_VERTICAL_TOP:
-                newPositions << QPointF( position.x(), boundingRect.top());
+                delta = QPointF( bRect.x(), boundingRect.top()) - bRect.topLeft();
                 break;
             case ALIGN_VERTICAL_CENTER:
-                newPositions << QPointF(  position.x(), boundingRect.center().y() - bRect.height()/2);
+                delta = QPointF(  bRect.x(), boundingRect.center().y() - bRect.height()/2) - bRect.topLeft();
                 break;
             case ALIGN_VERTICAL_BOTTOM:
-                newPositions << QPointF(  position.x(), boundingRect.bottom() - bRect.height());
+                delta = QPointF(  bRect.x(), boundingRect.bottom() - bRect.height()) - bRect.topLeft();
                 break;
         };
+        newPositions  << position + delta;
     }
     m_command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 }
@@ -428,6 +430,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
     QPointF position;
+    QPointF delta;
     QMapIterator<double,KoShape*> it(sortedPos);
     while(it.hasNext())
     {
@@ -438,32 +441,33 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
         bRect = it.value()->boundingRect();
         switch( m_distribute )        {
             case DISTRIBUTE_HORIZONTAL_CENTER:
-                newPositions << QPointF( boundingRect.x() + first->boundingRect().width()/2 + pos - bRect.width()/2, position.y() );
+                delta = QPointF( boundingRect.x() + first->boundingRect().width()/2 + pos - bRect.width()/2, bRect.y() ) - bRect.topLeft();
                 break;
             case DISTRIBUTE_HORIZONTAL_GAP:
-                newPositions << QPointF( boundingRect.left() + pos, position.y() );
+                delta = QPointF( boundingRect.left() + pos, bRect.y() ) - bRect.topLeft();
                 pos += bRect.width();
                 break;
             case DISTRIBUTE_HORIZONTAL_LEFT:
-                newPositions << QPointF( boundingRect.left() + pos, position.y() );
+                delta = QPointF( boundingRect.left() + pos, bRect.y() ) - bRect.topLeft();
                 break;
             case DISTRIBUTE_HORIZONTAL_RIGHT:
-                newPositions << QPointF( boundingRect.left() + first->boundingRect().width() + pos - bRect.width(), position.y() );
+                delta = QPointF( boundingRect.left() + first->boundingRect().width() + pos - bRect.width(), bRect.y() ) - bRect.topLeft();
                 break;
             case DISTRIBUTE_VERTICAL_CENTER:
-                newPositions << QPointF( position.x(), boundingRect.y() + first->boundingRect().height()/2 + pos - bRect.height()/2 );
+                delta = QPointF( bRect.x(), boundingRect.y() + first->boundingRect().height()/2 + pos - bRect.height()/2 ) - bRect.topLeft();
                 break;
             case DISTRIBUTE_VERTICAL_GAP:
-                newPositions << QPointF( position.x(), boundingRect.top() + pos );
+                delta = QPointF( bRect.x(), boundingRect.top() + pos ) - bRect.topLeft();
                 pos += bRect.height();
                 break;
             case DISTRIBUTE_VERTICAL_BOTTOM:
-                newPositions << QPointF( position.x(), boundingRect.top() + first->boundingRect().height() + pos - bRect.height() );
+                delta = QPointF( bRect.x(), boundingRect.top() + first->boundingRect().height() + pos - bRect.height() ) - bRect.topLeft();
                 break;
             case DISTRIBUTE_VERTICAL_TOP:
-                newPositions << QPointF( position.x(), boundingRect.top() + pos );
+                delta = QPointF( bRect.x(), boundingRect.top() + pos ) - bRect.topLeft();
                 break;
         };
+        newPositions  << position + delta;
         pos += step;
     }
     m_command = new KoShapeMoveCommand(sortedPos.values(), previousPositions, newPositions);

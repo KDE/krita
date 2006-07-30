@@ -50,6 +50,7 @@ public:
 private:
     KisCanvasSubject *m_subject;
     KisStrategyMove m_strategy;
+    QPoint m_dragStart;
 };
 
 

@@ -264,9 +264,7 @@ class KoShapeAlignCommand : public KCommand {
 public:
     enum Align
     {
-v v v v v v v
         ALIGN_HORIZONTAL_LEFT, // TODO make naming more Qt / C++ like :  HorizontalLeftAlignment
-^ ^ ^ ^ ^ ^ ^
         ALIGN_HORIZONTAL_CENTER,
         ALIGN_HORIZONTAL_RIGHT,
         ALIGN_VERTICAL_BOTTOM,

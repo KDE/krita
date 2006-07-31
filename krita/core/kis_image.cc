@@ -976,7 +976,7 @@ Q_INT32 KisImage::height() const
 KisPaintDeviceSP KisImage::activeDevice()
 {
     if (KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(m_activeLayer.data())) {
-        return layer->paintDevice();
+        return layer->paintDeviceOrMask();
     }
     else if (KisAdjustmentLayer* layer = dynamic_cast<KisAdjustmentLayer*>(m_activeLayer.data())) {
         if (layer->selection()) {
@@ -1081,6 +1081,7 @@ KisLayerSP KisImage::activate(KisLayerSP layer)
         m_activeLayer = layer;
         if (m_activeLayer) m_activeLayer->activate();
         emit sigLayerActivated(m_activeLayer);
+        emit sigMaskInfoChanged();
     }
 
     return layer;
@@ -1119,6 +1120,8 @@ bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP abo
             for (uint i = 0; i < actions.count(); i++) {
                 actions.at(i)->act(player.data()->paintDevice(), width(), height());
             }
+
+            connect(player, SIGNAL(sigMaskInfoChanged()), this, SIGNAL(sigMaskInfoChanged()));
         }
 
         if (layer->extent().isValid()) layer->setDirty();
@@ -1157,6 +1160,11 @@ bool KisImage::removeLayer(KisLayerSP layer)
                 l = l->nextSibling();
             }
             unlock();
+        }
+        KisPaintLayerSP player = dynamic_cast<KisPaintLayer*>(layer.data());
+        if (player != 0) {
+            disconnect(player, SIGNAL(sigMaskInfoChanged()),
+                       this, SIGNAL(sigMaskInfoChanged()));
         }
         KisLayerSP l = layer->prevSibling();
         QRect r = layer->extent();

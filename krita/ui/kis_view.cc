@@ -642,6 +642,17 @@ void KisView::setupActions()
     (void)new KAction(i18n("Flip on &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
     (void)new KAction(i18n("Flip on &Y Axis"), "view_top_bottom", 0, this, SLOT(mirrorLayerY()), actionCollection(), "mirrorLayerY");
 
+    m_createMask = new KAction(i18n("Create Mask"), 0, this,
+                               SLOT(slotCreateMask()), actionCollection(), "create_mask");
+    m_applyMask = new KAction(i18n("Apply Mask"), 0, this, SLOT(slotApplyMask()),
+                              actionCollection(), "apply_mask");
+    m_removeMask = new KAction(i18n("Remove Mask"), 0, this,
+                               SLOT(slotRemoveMask()), actionCollection(), "remove_mask");
+    m_showMask = new KToggleAction(i18n( "Show Mask" ), 0, this,
+                                   SLOT(slotShowMask()), actionCollection(), "show_mask");
+    m_editMask = new KToggleAction(i18n( "Edit Mask" ), 0, this,
+                                   SLOT(slotEditMask()), actionCollection(), "edit_mask");
+
     // image actions
     m_imgFlatten = new KAction(i18n("&Flatten image"), "Ctrl+Shift+E", this, SLOT(flattenImage()), actionCollection(), "flatten_image");
     m_imgMergeLayer = new KAction(i18n("&Merge with Layer Below"), "Ctrl+E", this, SLOT(mergeLayer()), actionCollection(), "merge_layer");
@@ -2618,6 +2629,49 @@ void KisView::layerProperties()
         showLayerProperties(currentImg()->activeLayer());
 }
 
+namespace {
+    class KisChangeFilterCmd : public KNamedCommand {
+        typedef KNamedCommand super;
+
+        public:
+            // The QStrings are the _serialized_ configs
+            KisChangeFilterCmd(KisAdjustmentLayerSP layer,
+                               KisFilterConfiguration* config,
+                               const QString& before,
+                               const QString& after) : super(i18n("Change Filter"))
+            {
+                m_layer = layer;
+                m_config = config;
+                m_before = before;
+                m_after = after;
+            }
+        public:
+            virtual void execute()
+            {
+                QApplication::setOverrideCursor(KisCursor::waitCursor());
+                m_config->fromXML(m_after);
+                Q_ASSERT(m_after == m_config->toString());
+                m_layer->setFilter(m_config);
+                m_layer->setDirty();
+                QApplication::restoreOverrideCursor();
+            }
+
+            virtual void unexecute()
+            {
+                QApplication::setOverrideCursor(KisCursor::waitCursor());
+                m_config->fromXML(m_before);
+                m_layer->setFilter(m_config);
+                m_layer->setDirty();
+                QApplication::restoreOverrideCursor();
+            }
+        private:
+            KisAdjustmentLayerSP m_layer;
+            KisFilterConfiguration* m_config;
+            QString m_before;
+            QString m_after;
+    };
+}
+
 void KisView::showLayerProperties(KisLayerSP layer)
 {
     Q_ASSERT( layer );
@@ -2636,13 +2690,14 @@ void KisView::showLayerProperties(KisLayerSP layer)
     if (KisAdjustmentLayerSP alayer = dynamic_cast<KisAdjustmentLayer*>(layer.data()))
     {
         KisDlgAdjLayerProps dlg(alayer, alayer->name(), i18n("Adjustment Layer Properties"), this, "dlgadjlayerprops");
+        QString before = dlg.filterConfiguration()->toString();
         if (dlg.exec() == QDialog::Accepted)
         {
-            QApplication::setOverrideCursor(KisCursor::waitCursor());
-            alayer->setFilter( dlg.filterConfiguration() );
-            alayer->setDirty();
-            QApplication::restoreOverrideCursor();
-            m_doc->setModified( true );
+            m_adapter->addCommand(new KisChangeFilterCmd(alayer,
+                                                         dlg.filterConfiguration(),
+                                                         before,
+                                                         dlg.filterConfiguration()->toString()));
+            //m_doc->setModified( true );
         }
     }
     else
@@ -3133,6 +3188,7 @@ void KisView::connectCurrentImg()
         connect(m_image, SIGNAL(sigProfileChanged(KisProfile * )), SLOT(profileChanged(KisProfile * )));
 
         connect(m_image, SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(layersUpdated()));
+        connect(m_image, SIGNAL(sigMaskInfoChanged()), SLOT(maskUpdated()));
         connect(m_image, SIGNAL(sigLayerAdded(KisLayerSP)), SLOT(layersUpdated()));
         connect(m_image, SIGNAL(sigLayerRemoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
         connect(m_image, SIGNAL(sigLayerMoved(KisLayerSP, KisGroupLayerSP, KisLayerSP)), SLOT(layersUpdated()));
@@ -3145,6 +3201,7 @@ void KisView::connectCurrentImg()
         connect(m_image, SIGNAL(sigLayerAdded(KisLayerSP)),
                 SLOT(handlePartLayerAdded(KisLayerSP)));
 
+        maskUpdated();
 #ifdef HAVE_GL
         if (m_OpenGLImageContext != 0) {
             connect(m_OpenGLImageContext, SIGNAL(sigImageUpdated(QRect)), SLOT(slotOpenGLImageUpdated(QRect)));
@@ -3855,6 +3912,80 @@ void KisView::slotInitialZoomTimeout()
 
     m_paintViewEnabled = true;
     setInitialZoomLevel();
+}
+
+
+void KisView::slotCreateMask() {
+    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
+    if (!layer)
+        return;
+
+    KNamedCommand *cmd = layer->createMaskCommand();
+    cmd->execute();
+    if (undoAdapter() && undoAdapter()->undo()) {
+        undoAdapter()->addCommand(cmd);
+    }
+}
+
+void KisView::slotApplyMask() {
+    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
+    if (!layer)
+        return;
+
+    KNamedCommand *cmd = layer->applyMaskCommand();
+    cmd->execute();
+    if (undoAdapter() && undoAdapter()->undo()) {
+        undoAdapter()->addCommand(cmd);
+    }
+}
+
+void KisView::slotRemoveMask() {
+    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
+    if (!layer)
+        return;
+
+    KNamedCommand *cmd = layer->removeMaskCommand();
+    cmd->execute();
+    if (undoAdapter() && undoAdapter()->undo()) {
+        undoAdapter()->addCommand(cmd);
+    }
+}
+
+void KisView::slotEditMask() {
+    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
+    if (!layer)
+        return;
+
+    layer->setEditMask(m_editMask->isChecked());
+}
+
+void KisView::slotShowMask() {
+    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
+    if (!layer)
+        return;
+
+    layer->setRenderMask(m_showMask->isChecked());
+}
+
+void KisView::maskUpdated() {
+    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
+    if (!layer) {
+        m_createMask->setEnabled(false);
+        m_applyMask->setEnabled(false);
+        m_removeMask->setEnabled(false);
+        m_editMask->setEnabled(false);
+        m_showMask->setEnabled(false);
+        return;
+    }
+    m_createMask->setEnabled(!layer->hasMask());
+    //m_applyMask->setEnabled(layer->hasMask());
+    m_applyMask->setEnabled(false); // Does not work yet
+    m_removeMask->setEnabled(layer->hasMask());
+
+    m_editMask->setEnabled(layer->hasMask());
+    m_editMask->setChecked(layer->editMask());
+    m_showMask->setEnabled(layer->hasMask());
+    m_showMask->setChecked(layer->renderMask());
 }
 
 #include "kis_view.moc"

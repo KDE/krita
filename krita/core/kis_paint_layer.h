@@ -41,10 +41,10 @@ public:
 public:
 
     // Called when the layer is made active
-    virtual void activate() {};
+    virtual void activate() {}
 
     // Called when another layer is made active
-    virtual void deactivate() {};
+    virtual void deactivate() {}
 
     virtual Q_INT32 x() const;
     virtual void setX(Q_INT32 x);
@@ -67,15 +67,84 @@ public:
 //            kdDebug(41001) << "\tPAINT\t" << name()
 //                    << " dirty: " << dirty() << "\n";
             return v.visit(this);
-        };
+        }
 
 
-    /// Returns the paintDevice that accompanies this layer
-    inline KisPaintDeviceSP paintDevice() const { return m_paintdev; };
+    inline KisPaintDeviceSP paintDevice() const { return m_paintdev; }
+
+    /// Returns the paintDevice that accompanies this layer (or mask, see editMask)
+    inline KisPaintDeviceSP paintDeviceOrMask() const {
+        if (hasMask() && editMask())
+            return m_mask;
+        return m_paintdev;
+    }
+
+    // Mask Layer
+
+    /// Does this layer have a layer mask?
+    bool hasMask() const { return m_mask != 0; }
+    // XXX TODO: Make these undo-able!
+    /// Create a mask if it does not yet exist, and return it
+    KisPaintDeviceSP createMask();
+    /// Convert the from argument to the mask
+    void createMaskFromPaintDevice(KisPaintDeviceSP from);
+    /**
+     * Convert the from selection to a paint device (should convert the getMaskAsSelection
+     * result back to the mask)
+     */
+    void createMaskFromSelection(KisSelectionSP from);
+    /// Remove the layer mask
+    void removeMask();
+    /// Apply the layer mask to the paint device, this removes the mask afterwards
+    void applyMask();
+    /// Returns the layer mask's device. Creates one if there is currently none
+    KisPaintDeviceSP getMask();
+    /// Returns the layer mask's device, converted to a selection. Creates one if there is currently none
+    KisSelectionSP getMaskAsSelection();
+
+    /// Undoable version of createMask
+    KNamedCommand* createMaskCommand();
+    /// Undoable version of removeMask
+    KNamedCommand* removeMaskCommand();
+    /// Undoable version of applyMask
+    KNamedCommand* applyMaskCommand();
+
+    /// Returns true if the masked part of the mask will be rendered instead of being transparent
+    bool renderMask() const { return m_renderMask; }
+    /// Set the renderMask property
+    void setRenderMask(bool b);
+
+    /**
+     * When this returns true, the KisPaintDevice returned in paintDevice will actually
+     * be the layer mask (if there is one). This is so that tools can draw on the mask
+     * without needing to know its existance.
+     */
+    bool editMask() const { return m_editMask; }
+    /// Sets the editMask property
+    void setEditMask(bool b);
+
+    /// Overridden to call the private convertMaskToSelection
+    virtual void setDirty(bool propagate = true);
+    /// Same as above
+    virtual void setDirty(const QRect & rect, bool propagate = true);
+
+signals:
+    /// When the mask is created/destroyed or the editmask or rendermask is changed
+    void sigMaskInfoChanged();
 
 private:
+    void convertMaskToSelection(const QRect& r);
+    void genericMaskCreationHelper();
     KisPaintDeviceSP m_paintdev;
+    // Layer mask related:
+    // XXX It would be nice to merge the next 2 devices...
+    KisPaintDeviceSP m_mask; // The mask that we can edit and display easily
+    KisSelectionSP m_maskAsSelection; // The mask as selection, to apply and render easily
+    bool m_renderMask;
+    bool m_editMask;
 };
+
+typedef KSharedPtr<KisPaintLayer> KisPaintLayerSP;
 
 #endif // KIS_PAINT_LAYER_H_
 

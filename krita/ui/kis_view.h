@@ -196,6 +196,12 @@ public slots:
     void rotateLayer(double angle);
     void shearLayer(double angleX, double angleY);
 
+    void slotCreateMask();
+    void slotApplyMask();
+    void slotRemoveMask();
+    void slotEditMask();
+    void slotShowMask();
+
     void brushActivated(KisResource *brush);
     void patternActivated(KisResource *pattern);
     void gradientActivated(KisResource *gradient);
@@ -419,6 +425,7 @@ private:
 
 private slots:
     void layersUpdated(); // Used in the channel separation to notify the view that we have added a few layers.
+    void maskUpdated(); // To update the enabled or disabled status of the mask entries
 
     void slotSetFGQColor(const QColor & c);
     void slotSetBGQColor(const QColor & c);
@@ -549,6 +556,12 @@ private:
     KAction *m_layerRm;
     KAction *m_layerSaveAs;
     KAction *m_layerTop;
+
+    KAction *m_createMask;
+    KAction *m_applyMask;
+    KAction *m_removeMask;
+    KToggleAction *m_editMask;
+    KToggleAction *m_showMask;
 
     KAction *m_zoomIn;
     KAction *m_zoomOut;

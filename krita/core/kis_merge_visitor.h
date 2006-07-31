@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2006 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,7 +79,23 @@ public:
         dy = sy;
 
         KisPainter gc(m_projection);
-        gc.bitBlt(dx, dy, layer->compositeOp(), layer->paintDevice(), layer->opacity(), sx, sy, w, h);
+
+        if (!layer->hasMask()) {
+            gc.bitBlt(dx, dy, layer->compositeOp(), layer->paintDevice(), layer->opacity(), sx, sy, w, h);
+        } else {
+            if (layer->renderMask()) {
+                // To display the mask, we don't do things with composite op and opacity
+                // This is like the gimp does it, I guess that's ok?
+                gc.bitBlt(dx, dy, COMPOSITE_OVER, layer->getMask(), OPACITY_OPAQUE,
+                          sx, sy, w, h);
+            } else {
+                gc.bltSelection(dx, dy,
+                                layer->compositeOp(),
+                                layer->paintDevice(),
+                                layer->getMaskAsSelection(),
+                                layer->opacity(), sx, sy, w, h);
+            }
+        }
 
         layer->setClean( rc );
         return true;

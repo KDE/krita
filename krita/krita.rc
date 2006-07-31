@@ -78,6 +78,15 @@
   <Action name="hide_layer"/>
   <Action name="link_layer"/>
   <Separator/>
+  <Menu name="LayerNew"><text>Mask</text>
+    <Action name="create_mask"/>
+    <Action name="apply_mask"/>
+    <Action name="remove_mask"/>
+    <Seperator/>
+    <Action name="edit_mask"/>
+    <Action name="show_mask"/>
+  </Menu>
+  <Separator/>
   <Action name="raiselayer"/>
   <Action name="lowerlayer"/>
   <Action name="toplayer"/>

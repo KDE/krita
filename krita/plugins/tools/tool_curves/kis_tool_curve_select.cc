@@ -74,7 +74,7 @@ void KisToolCurveSelect::paintCurve()
     KisPaintDeviceSP dev = m_currentImage->activeDevice();
     bool hasSelection = dev->hasSelection();
     KisSelectedTransaction *t = 0;
-    if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n(m_transactionMessage.ascii()), dev);
+    if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n(m_transactionMessage.latin1()), dev);
     KisSelectionSP selection = dev->selection();
 
     if (!hasSelection) {
@@ -131,7 +131,7 @@ QWidget* KisToolCurveSelect::createOptionWidget(QWidget* parent)
 {
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setCaption(i18n(m_UIName.ascii()));
+    m_optWidget->setCaption(i18n(m_UIName.latin1()));
 
     connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 

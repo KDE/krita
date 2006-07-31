@@ -82,7 +82,7 @@ void KisToolCurvePaint::paintCurve()
     if (!device) return;
     
     KisPainter painter (device);
-    if (m_currentImage->undo()) painter.beginTransaction (i18n (m_transactionMessage.ascii()));
+    if (m_currentImage->undo()) painter.beginTransaction (i18n (m_transactionMessage.latin1()));
 
     painter.setPaintColor(m_subject->fgColor());
     painter.setBrush(m_subject->currentBrush());
@@ -130,7 +130,7 @@ KisCurve::iterator KisToolCurvePaint::paintPoint (KisPainter& painter, KisCurve:
 QWidget* KisToolCurvePaint::createOptionWidget(QWidget* parent)
 {
     m_optionWidget = new QWidget(parent);
-    m_optionWidget->setCaption(m_UIName);
+    m_optionWidget->setCaption(i18n(m_UIName.latin1()));
 
     m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
     m_slOpacity = new KisIntSpinbox( m_optionWidget, "int_m_optionwidget");

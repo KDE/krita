@@ -33,7 +33,7 @@
 class QRect;
 class KisPainter;
 
-const double MAXDISTANCE = 1.2;
+const double MAXDISTANCE = 1.2; 
 
 class KisToolCurve : public KisTool {
 

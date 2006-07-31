@@ -29,6 +29,7 @@ KoTextShapeData::KoTextShapeData()
 , m_endPosition(-1)
 {
     m_document = new QTextDocument();
+    m_document->setUseDesignMetrics(true);
 }
 
 KoTextShapeData::~KoTextShapeData() {

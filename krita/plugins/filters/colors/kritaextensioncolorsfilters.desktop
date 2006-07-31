@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Icon=
 Name=Color Filters (Extension)
+Name[es]=Filtros de color (Extensión)
+Name[et]=Värvifiltrid (laiendus)
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaextensioncolorsfilters

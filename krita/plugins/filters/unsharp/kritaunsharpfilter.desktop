@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Icon=
 Name=Image enhancement Filters (Extension)
+Name[es]=Filtros de realce de imagen (Extensión)
+Name[et]=Parandusfiltrid (laiendus)
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaunsharpfilter

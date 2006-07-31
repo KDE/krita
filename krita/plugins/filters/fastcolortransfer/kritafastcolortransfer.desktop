@@ -1,8 +1,12 @@
 [Desktop Entry]
 Comment=This plugins allow to transfer color from an image to an other image
+Comment[es]=Esta extensión le permite transferir colores de una imagen a otra
+Comment[et]=See plugin võimaldab värvi ühelt pildilt teisele üle kanda
 Encoding=UTF-8
 Icon=
 Name=Color Transfer Filter
+Name[es]=Filtro de transferencia de color
+Name[et]=Värviülekande filter
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritafastcolortransfer

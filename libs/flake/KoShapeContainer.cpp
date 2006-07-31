@@ -84,15 +84,14 @@ void KoShapeContainer::paint(QPainter &painter, KoViewConverter &converter) {
 //           QPolygon clip = (myMatrix * shapeMatrix.inverted()).mapToPolygon(clipRect.toRect());
 //           painter.setClipRegion(QRegion(clip));
 
-        if( childClipped(shape) ) {
+        if(! childClipped(shape) )
+            continue;
+        QRectF clipRect(QPointF(0, 0), size());
+        clipRect = converter.documentToView(clipRect);
 
-            QRectF clipRect(QPointF(0, 0), size());
-            clipRect = converter.documentToView(clipRect);
-
-            QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
-            clip.translate( (position() - converter.documentToView(position())).toPoint() );
-            painter.setClipRegion(QRegion(clip));
-        }
+        QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
+        clip.translate( (position() - converter.documentToView(position())).toPoint() );
+        painter.setClipRegion(QRegion(clip));
 //kDebug() << "rect: " << position() << endl;
 //kDebug() << "polygon: " << clip.boundingRect() << endl;
         //painter.drawPolygon(clip);

@@ -58,7 +58,7 @@ KoShape::~KoShape()
     delete m_userData;
 }
 
-void KoShape::paintDecorations(QPainter &painter, KoViewConverter &converter, bool selected) {
+void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected) {
     if ( selected )
     {
         // draw connectors
@@ -164,7 +164,7 @@ void KoShape::recalcMatrix()
     updateTree();
 }
 
-QMatrix KoShape::transformationMatrix(KoViewConverter *converter) const {
+QMatrix KoShape::transformationMatrix(const KoViewConverter *converter) const {
     QMatrix matrix;
     QRectF zoomedRect = QRectF(position(), size());
     if(converter)

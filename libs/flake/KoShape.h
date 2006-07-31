@@ -94,7 +94,7 @@ public:
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
      */
-    virtual void paint(QPainter &painter, KoViewConverter &converter) = 0;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) = 0;
 
     /**
      * Paint non-print decorations specific for this type of shape.
@@ -104,7 +104,7 @@ public:
      * @param selected true if the shape is currently selected
      * @param converter to convert between internal and view coordinates.
      */
-    virtual void paintDecorations(QPainter &painter, KoViewConverter &converter, bool selected);
+    virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected);
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -463,7 +463,7 @@ public:
      * @param converter if not null, this method uses the converter to mark the right
      *        offsets in the current view.
      */
-    QMatrix transformationMatrix(KoViewConverter *converter) const;
+    QMatrix transformationMatrix(const KoViewConverter *converter) const;
 
 protected:
     QMatrix m_invMatrix; ///< The inverted matrix; for convenience

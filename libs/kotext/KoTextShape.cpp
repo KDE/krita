@@ -37,7 +37,7 @@ KoTextShape::KoTextShape()
 KoTextShape::~KoTextShape() {
 }
 
-void KoTextShape::paint(QPainter &painter, KoViewConverter &converter) {
+void KoTextShape::paint(QPainter &painter, const KoViewConverter &converter) {
     painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
     applyConversion(painter, converter);
     QAbstractTextDocumentLayout::PaintContext pc;

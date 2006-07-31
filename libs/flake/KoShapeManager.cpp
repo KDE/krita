@@ -94,7 +94,7 @@ void KoShapeManager::remove( KoShape *shape )
     m_shapes.removeAll(shape);
 }
 
-void KoShapeManager::paint( QPainter &painter, KoViewConverter &converter, bool forPrint)
+void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
     updateTree();
     QPen pen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.

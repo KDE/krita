@@ -56,7 +56,7 @@ public:
     KoSelection();
     virtual ~KoSelection();
 
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
     /// add a selected object
     virtual void select(KoShape * object);

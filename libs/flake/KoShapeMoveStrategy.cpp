@@ -37,7 +37,7 @@ KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, co
 , m_initialTopLeft(99999, 99999)
 , m_start(clicked)
 {
-    KoSelectionSet selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    KoSelectionSet selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
         if(shape->isLocked())

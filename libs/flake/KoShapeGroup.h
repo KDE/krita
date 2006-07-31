@@ -44,7 +44,7 @@ public:
     /// destructor
     ~KoShapeGroup() {};
     /// This implementation is empty since a group is itself not visible.
-    void paintComponent(QPainter &painter, KoViewConverter &converter);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// always returns false since the group itself can't be selected or hit
     bool hitTest( const QPointF &position ) const;
 
@@ -64,8 +64,10 @@ private:
         private: // members
             QList <KoShape *> m_groupMembers;
     };
+v v v v v v v
 
     void childCountChanged();
+^ ^ ^ ^ ^ ^ ^
 };
 
 #endif

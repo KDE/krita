@@ -169,7 +169,7 @@ public:
      */
     bool childClipped(const KoShape *child) const;
 
-    void paint(QPainter &painter, KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
      * @brief Paint the component
@@ -180,7 +180,7 @@ public:
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
      */
-    virtual void paintComponent(QPainter &painter, KoViewConverter &converter) = 0;
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter) = 0;
 
     void repaint() const;
 
@@ -189,6 +189,9 @@ public:
      * @return an interator over all child objects.
      */
     QList<KoShape*> iterator() const;
+
+protected:
+    virtual void childCountChanged() { }
 
 protected:
     virtual void childCountChanged() { }

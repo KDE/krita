@@ -53,7 +53,7 @@ public:
     virtual void visit(KoCreateShapesTool *tool) = 0;
     virtual QString toolTip() = 0;
 
-    void paint(QPainter &painter, KoViewConverter &converter) {
+    void paint(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(converter);
         painter.drawPixmap(QRect( QPoint(0,0), m_icon.size()), m_icon);
     }
@@ -246,19 +246,19 @@ bool KoShapeSelector::event(QEvent *e) {
 }
 
 // ************ DummyViewConverter **********
-QPointF KoShapeSelector::DummyViewConverter::documentToView (const QPointF &documentPoint) {
+QPointF KoShapeSelector::DummyViewConverter::documentToView (const QPointF &documentPoint) const {
     return documentPoint;
 }
 
-QPointF KoShapeSelector::DummyViewConverter::viewToDocument (const QPointF &viewPoint) {
+QPointF KoShapeSelector::DummyViewConverter::viewToDocument (const QPointF &viewPoint) const {
     return viewPoint;
 }
 
-QRectF KoShapeSelector::DummyViewConverter::documentToView (const QRectF &documentRect) {
+QRectF KoShapeSelector::DummyViewConverter::documentToView (const QRectF &documentRect) const {
     return documentRect;
 }
 
-QRectF KoShapeSelector::DummyViewConverter::viewToDocument (const QRectF &viewRect) {
+QRectF KoShapeSelector::DummyViewConverter::viewToDocument (const QRectF &viewRect) const {
     return viewRect;
 }
 

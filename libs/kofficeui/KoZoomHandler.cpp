@@ -78,22 +78,22 @@ void KoZoomHandler::setZoom( int zoom )
     setZoom(zoom / 100.0);
 }
 
-QPointF KoZoomHandler::documentToView( const QPointF &documentPoint ) {
+QPointF KoZoomHandler::documentToView( const QPointF &documentPoint )  const{
     return QPointF( zoomItX( documentPoint.x() ), zoomItY( documentPoint.y() ) );
 }
 
-QPointF KoZoomHandler::viewToDocument( const QPointF &viewPoint ) {
+QPointF KoZoomHandler::viewToDocument( const QPointF &viewPoint )  const{
     return QPointF( unzoomItX( viewPoint.x() ), unzoomItY( viewPoint.y() ) );
 }
 
-QRectF KoZoomHandler::documentToView( const QRectF &documentRect ) {
+QRectF KoZoomHandler::documentToView( const QRectF &documentRect )  const{
     QRectF r;
     r.setCoords( zoomItX( documentRect.left() ),  zoomItY( documentRect.top() ),
                   zoomItX( documentRect.right() ), zoomItY( documentRect.bottom() ) );
     return r;
 }
 
-QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect ) {
+QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect )  const{
     QRectF r;
     r.setCoords( unzoomItX( viewRect.left() ),  unzoomItY( viewRect.top() ),
                   unzoomItX( viewRect.right() ), unzoomItY( viewRect.bottom() ) );

@@ -30,7 +30,7 @@ KoPathShape::KoPathShape()
 {
 }
 
-void KoPathShape::paint( QPainter &painter, KoViewConverter &converter)
+void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion(painter, converter);
     painter.setBrush(background());

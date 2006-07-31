@@ -24,7 +24,7 @@ KoShapeGroup::KoShapeGroup()
 {
 }
 
-void KoShapeGroup::paintComponent(QPainter &painter, KoViewConverter &converter) {
+void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter) {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
 }
@@ -66,9 +66,33 @@ bool KoShapeGroup::GroupMembers::childClipped(const KoShape *child) const {
     Q_UNUSED(child);
     return false;
 }
+v v v v v v v
 
 void KoShapeGroup::childCountChanged() {
     QRectF br = boundingRect();
     setPosition( br.topLeft() );
     resize( br.size() );
+*************
+
+void KoShapeGroup::childCountChanged() {
+    QRectF br = boundingRect();
+    setPosition( br.topLeft() );
+    resize( br.size() );
+}
+
+QRectF KoShapeGroup::boundingRect() const {
+    bool first=true;
+    QRectF boundingRect;
+
+    foreach(KoShape *shape, iterator()) {
+        if(first) {
+            boundingRect = shape->boundingRect();
+            first = false;
+        }
+        else
+            boundingRect = boundingRect.unite( shape->boundingRect() );
+    }
+
+    return boundingRect;
+^ ^ ^ ^ ^ ^ ^
 }

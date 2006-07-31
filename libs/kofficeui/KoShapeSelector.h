@@ -60,10 +60,10 @@ private:
 private:
     /// \internal
     class DummyViewConverter : public KoViewConverter {
-        QPointF documentToView (const QPointF &documentPoint);
-        QPointF viewToDocument (const QPointF &viewPoint);
-        QRectF documentToView (const QRectF &documentRect);
-        QRectF viewToDocument (const QRectF &viewRect);
+        QPointF documentToView (const QPointF &documentPoint) const;
+        QPointF viewToDocument (const QPointF &viewPoint) const;
+        QRectF documentToView (const QRectF &documentRect) const;
+        QRectF viewToDocument (const QRectF &viewRect) const;
         void zoom (double *zoomX, double *zoomY) const;
     };
 

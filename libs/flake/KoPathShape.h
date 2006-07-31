@@ -36,7 +36,7 @@ class FLAKE_EXPORT KoPathShape : public KoShape
 public:
     KoPathShape();
 
-    virtual void paint( QPainter &painter, KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
     virtual void paintDecorations(QPainter &painter, KoViewConverter &converter, bool selected);
 
     void moveTo( const QPointF &p );

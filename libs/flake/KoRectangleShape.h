@@ -36,7 +36,7 @@ class FLAKE_EXPORT KoRectangleShape : public KoShape
 {
 public:
     KoRectangleShape();
-    void paint(QPainter &painter, KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter);
 };
 
 #endif

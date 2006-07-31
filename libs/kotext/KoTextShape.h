@@ -36,7 +36,7 @@ public:
     KoTextShape();
     virtual ~KoTextShape();
 
-    void paint(QPainter &painter, KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
     QPointF convertScreenPos(const QPointF &point);
 

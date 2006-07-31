@@ -72,7 +72,7 @@ public:
      *       shape as its start coordinate.
      * @param converter to convert between internal and view coordinates.
      */
-    virtual void paintBorder(KoShape *shape, QPainter &painter, KoViewConverter &converter) = 0;
+    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
 };
 
 #endif

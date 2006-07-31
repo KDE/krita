@@ -37,7 +37,7 @@ KoSelection::~KoSelection()
 {
 }
 
-void KoSelection::paint( QPainter &painter, KoViewConverter &converter)
+void KoSelection::paint( QPainter &painter, const KoViewConverter &converter)
 {
 /*    if ( count() == 0 )
         return;
@@ -67,6 +67,7 @@ void KoSelection::selectGroupChilds( KoShapeGroup *group )
 
 void KoSelection::select(KoShape * object)
 {
+kDebug() << "select " << object << endl;
     Q_ASSERT(object != this);
     if(m_selectedObjects.contains(object))
         return;

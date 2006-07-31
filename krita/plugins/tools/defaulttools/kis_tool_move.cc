@@ -75,7 +75,7 @@ void KisToolMove::move(KisMoveEvent *e)
 {
     if (m_subject) {
         QPoint pos = e->pos().floorQPoint();
-        if((e->modifiers() & Qt::AltModifier) || (e->modifiers() & Qt::ControlModifier)) {
+        if((e->state() & Qt::AltButton) || (e->state() & Qt::ControlButton)) {
             if(fabs(pos.x() - m_dragStart.x()) > fabs(pos.y() - m_dragStart.y()))
                 pos.setY(m_dragStart.y());
             else

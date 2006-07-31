@@ -193,9 +193,6 @@ public:
 protected:
     virtual void childCountChanged() { }
 
-protected:
-    virtual void childCountChanged() { }
-
 private:
     /**
      */

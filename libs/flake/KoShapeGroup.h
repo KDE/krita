@@ -64,10 +64,8 @@ private:
         private: // members
             QList <KoShape *> m_groupMembers;
     };
-v v v v v v v
 
     void childCountChanged();
-^ ^ ^ ^ ^ ^ ^
 };
 
 #endif

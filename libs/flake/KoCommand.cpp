@@ -184,10 +184,6 @@ KoGroupShapesCommand::KoGroupShapesCommand() {
 }
 
 void KoGroupShapesCommand::execute () {
-v v v v v v v
-    QList <QPointF> positions;
-    QRectF bound = m_container->boundingRect();
-*************
     QList <QPointF> positions;
     bool boundingRectInitialized=true;
     QRectF bound;
@@ -195,12 +191,7 @@ v v v v v v v
         bound = m_container->boundingRect();
     else
         boundingRectInitialized = false;
-^ ^ ^ ^ ^ ^ ^
     foreach(KoShape *shape, m_shapes) {
-v v v v v v v
-        positions.append(shape->absolutePosition());
-        bound = bound.unite(shape->boundingRect());
-*************
         positions.append(shape->absolutePosition());
         if(boundingRectInitialized)
             bound = bound.unite(shape->boundingRect());
@@ -208,19 +199,8 @@ v v v v v v v
             bound = shape->boundingRect();
             boundingRectInitialized = true;
         }
-^ ^ ^ ^ ^ ^ ^
         m_container->addChild(shape);
-v v v v v v v
-^ ^ ^ ^ ^ ^ ^
     }
-v v v v v v v
-    for(int i=0; i < m_shapes.count(); i++) {
-        m_shapes[i]->setAbsolutePosition( positions[i] );
-    }
-
-    m_container->setPosition( bound.topLeft() );
-    m_container->resize( bound.size() );
-*************
     m_container->setPosition( bound.topLeft() );
     m_container->resize( bound.size() );
     for(int i=0; i < m_shapes.count(); i++) {
@@ -228,11 +208,9 @@ v v v v v v v
     }
 
 kDebug() << "after group: " << m_container->position().x() << ", " << m_container->position().y() << endl;
-^ ^ ^ ^ ^ ^ ^
 }
 
 void KoGroupShapesCommand::unexecute () {
-v v v v v v v
     QList <QPointF> positions;
     foreach(KoShape *shape, m_shapes)
         positions.append(shape->absolutePosition());
@@ -240,7 +218,6 @@ v v v v v v v
     for(int i=0; i < m_shapes.count(); i++) {
         m_container->removeChild(m_shapes[i]);
         m_shapes[i]->setAbsolutePosition( positions[i] );
-^ ^ ^ ^ ^ ^ ^
     }
 }
 
@@ -383,9 +360,7 @@ KoShapeAlignCommand::KoShapeAlignCommand( const KoSelectionSet &shapes, Align al
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
     QPointF position;
-v v v v v v v
     QPointF delta;
-^ ^ ^ ^ ^ ^ ^
     QRectF bRect;
     foreach( KoShape *shape, shapes ) {
 if(dynamic_cast<KoShapeGroup*> (shape))
@@ -400,43 +375,27 @@ else
         switch( align )
         {
             case ALIGN_HORIZONTAL_LEFT:
-v v v v v v v
                 delta = QPointF( boundingRect.left(), bRect.y()) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case ALIGN_HORIZONTAL_CENTER:
-v v v v v v v
                 delta = QPointF( boundingRect.center().x() - bRect.width()/2, bRect.y()) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case ALIGN_HORIZONTAL_RIGHT:
-v v v v v v v
                 delta = QPointF( boundingRect.right() - bRect.width(), bRect.y()) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case ALIGN_VERTICAL_TOP:
-v v v v v v v
                 delta = QPointF( bRect.x(), boundingRect.top()) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case ALIGN_VERTICAL_CENTER:
-v v v v v v v
                 delta = QPointF(  bRect.x(), boundingRect.center().y() - bRect.height()/2) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case ALIGN_VERTICAL_BOTTOM:
-v v v v v v v
                 delta = QPointF(  bRect.x(), boundingRect.bottom() - bRect.height()) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
         };
-v v v v v v v
-        newPositions  << position + delta;
-*************
         newPositions  << position + delta;
 kDebug() << "-> moving " <<  position.x() << "," << position.y() << " to " <<
         (position + delta).x() << ", " << (position+delta).y() << endl;
-^ ^ ^ ^ ^ ^ ^
     }
     m_command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 }
@@ -504,9 +463,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
     QPointF position;
-v v v v v v v
     QPointF delta;
-^ ^ ^ ^ ^ ^ ^
     QMapIterator<double,KoShape*> it(sortedPos);
     while(it.hasNext())
     {
@@ -517,51 +474,33 @@ v v v v v v v
         bRect = it.value()->boundingRect();
         switch( m_distribute )        {
             case DISTRIBUTE_HORIZONTAL_CENTER:
-v v v v v v v
                 delta = QPointF( boundingRect.x() + first->boundingRect().width()/2 + pos - bRect.width()/2, bRect.y() ) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case DISTRIBUTE_HORIZONTAL_GAP:
-v v v v v v v
                 delta = QPointF( boundingRect.left() + pos, bRect.y() ) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 pos += bRect.width();
                 break;
             case DISTRIBUTE_HORIZONTAL_LEFT:
-v v v v v v v
                 delta = QPointF( boundingRect.left() + pos, bRect.y() ) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case DISTRIBUTE_HORIZONTAL_RIGHT:
-v v v v v v v
                 delta = QPointF( boundingRect.left() + first->boundingRect().width() + pos - bRect.width(), bRect.y() ) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case DISTRIBUTE_VERTICAL_CENTER:
-v v v v v v v
                 delta = QPointF( bRect.x(), boundingRect.y() + first->boundingRect().height()/2 + pos - bRect.height()/2 ) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case DISTRIBUTE_VERTICAL_GAP:
-v v v v v v v
                 delta = QPointF( bRect.x(), boundingRect.top() + pos ) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 pos += bRect.height();
                 break;
             case DISTRIBUTE_VERTICAL_BOTTOM:
-v v v v v v v
                 delta = QPointF( bRect.x(), boundingRect.top() + first->boundingRect().height() + pos - bRect.height() ) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
             case DISTRIBUTE_VERTICAL_TOP:
-v v v v v v v
                 delta = QPointF( bRect.x(), boundingRect.top() + pos ) - bRect.topLeft();
-^ ^ ^ ^ ^ ^ ^
                 break;
         };
-v v v v v v v
         newPositions  << position + delta;
-^ ^ ^ ^ ^ ^ ^
         pos += step;
     }
     m_command = new KoShapeMoveCommand(sortedPos.values(), previousPositions, newPositions);

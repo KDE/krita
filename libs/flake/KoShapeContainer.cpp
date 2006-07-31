@@ -35,30 +35,22 @@ KoShapeContainer::~KoShapeContainer() {
     delete m_children;
 }
 
-v v v v v v v
 void KoShapeContainer::addChild(KoShape *shape) {
     Q_ASSERT(shape);
-^ ^ ^ ^ ^ ^ ^
     if(m_children == 0)
         m_children = new ChildrenData();
-v v v v v v v
     m_children->add(shape);
     shape->setParent(this);
     childCountChanged();
-^ ^ ^ ^ ^ ^ ^
 }
 
-v v v v v v v
 void KoShapeContainer::removeChild(KoShape *shape) {
     Q_ASSERT(shape);
-^ ^ ^ ^ ^ ^ ^
     if(m_children == 0)
         return;
-v v v v v v v
     m_children->remove(shape);
     shape->setParent(0);
     childCountChanged();
-^ ^ ^ ^ ^ ^ ^
 }
 
 int  KoShapeContainer::childCount() const {
@@ -94,19 +86,6 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 //           QPolygon clip = (myMatrix * shapeMatrix.inverted()).mapToPolygon(clipRect.toRect());
 //           painter.setClipRegion(QRegion(clip));
 
-v v v v v v v
-        if(! childClipped(shape) )
-            continue;
-        QRectF clipRect(QPointF(0, 0), size());
-        clipRect = converter.documentToView(clipRect);
-
-            QRectF clipRect(QPointF(0, 0), size());
-            clipRect = converter.documentToView(clipRect);
-
-        QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
-        clip.translate( (position() - converter.documentToView(position())).toPoint() );
-        painter.setClipRegion(QRegion(clip));
-*************
         if(! childClipped(shape) )
             continue;
         QRectF clipRect(QPointF(0, 0), size());
@@ -115,16 +94,6 @@ v v v v v v v
         QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
         clip.translate( (position() - converter.documentToView(position())).toPoint() );
         painter.setClipRegion(QRegion(clip));
-*************
-        if(! childClipped(shape) )
-            continue;
-        QRectF clipRect(QPointF(0, 0), size());
-        clipRect = converter.documentToView(clipRect);
-
-        QPolygon clip = myMatrix.mapToPolygon(clipRect.toRect());
-        clip.translate( (position() - converter.documentToView(position())).toPoint() );
-        painter.setClipRegion(QRegion(clip));
-^ ^ ^ ^ ^ ^ ^
 //kDebug() << "rect: " << position() << endl;
 //kDebug() << "polygon: " << clip.boundingRect() << endl;
         //painter.drawPolygon(clip);

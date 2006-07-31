@@ -47,7 +47,7 @@ public:
 
     virtual KoInsets* borderInsets(const KoShape *shape, KoInsets &insets);
     virtual bool hasTransparancy();
-    virtual void paintBorder(KoShape *shape, QPainter &painter, KoViewConverter &converter);
+    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 
 private:
     double m_lineSize;

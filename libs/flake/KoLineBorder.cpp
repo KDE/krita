@@ -52,7 +52,7 @@ bool KoLineBorder::hasTransparancy() {
     return m_color.alpha() > 0;
 }
 
-void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, KoViewConverter &converter) {
+void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) {
     double zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);

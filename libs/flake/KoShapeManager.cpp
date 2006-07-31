@@ -151,16 +151,19 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
         m_selection->paint( painter, converter );
 }
 
-KoShape * KoShapeManager::shapeAt( const QPointF &position )
+KoShape * KoShapeManager::shapeAt( const QPointF &position, bool omitHiddenShapes )
 {
     updateTree();
     QList<KoShape*> sorterdShapes( m_tree.contains( position ) );
     qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
     for(int count = sorterdShapes.count()-1; count >= 0; count--) {
-        if ( sorterdShapes.at(count)->hitTest( position ) )
+        KoShape *shape = sorterdShapes.at(count);
+        if( omitHiddenShapes && ! shape->isVisible() )
+            continue;
+        if ( shape->hitTest( position ) )
         {
             //kDebug() << "Hittest succeeded" << endl;
-            return sorterdShapes.at(count);
+            return shape;
         }
     }
     if ( m_selection->hitTest( position ) )

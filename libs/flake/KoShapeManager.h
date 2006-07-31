@@ -93,9 +93,12 @@ public:
 
     /**
      * Returns the shape located at a specific point in the document.
+     * If more than one shape is located at the specific point, the one with
+     * the highest z-index is returned.
      * @param position the position in the document coordinate system.
+     * @param omitHiddenShape if true, only visible shapes are considered
      */
-    KoShape * shapeAt( const QPointF &position );
+    KoShape * shapeAt( const QPointF &position, bool omitHiddenShapes = false );
 
     /**
      * Returns the shapes which intersects the specific rect in the document.

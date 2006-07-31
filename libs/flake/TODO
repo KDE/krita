@@ -1,7 +1,5 @@
 * add a ShearingStrategy (boemann)
 * Add 'ensureVisible(KoShape)' to KoCanvasController (see QScrollArea for what it should do)
-* extend KoShapeManager shapesAt
-   - optionally not return hidden shapes (KoShape::visible())
 * extend KoShapeManager shapeAt to
    - optionally not return hidden shapes (KoShape::visible())
    - return a shape out of the shapes at point based on its selection.

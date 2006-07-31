@@ -92,19 +92,36 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter, bool forPrint );
 
     /**
-     * Returns the shape located at a specific point in the document.
-     * If more than one shape is located at the specific point, the one with
-     * the highest z-index is returned.
-     * @param position the position in the document coordinate system.
-     * @param omitHiddenShape if true, only visible shapes are considered
+     * Used to change the behavior of shapeAt()<dl>
+     * <dt>selected</dt>
+     *   <dd>return the first selected with the highest z-ordering (i.e. on top).</dd>
+     * <dt>unselected</dt>
+     *   <dd>return the first unselected on top.</dd>
+     * <dt>nextUnselected</dt>
+     *    <dd>return the first unselected directly under a selected shape, or
+     *    the top most one if nothing is selected.</dd>
+     * <dt>shapeOnTop</dt>
+     *    <dd>return the shape highest z-ordering, regardless of selection.</dd>
+     * </dl>
      */
-    KoShape * shapeAt( const QPointF &position, bool omitHiddenShapes = false );
+    enum SelectionType { selected, unselected, nextUnselected, shapeOnTop };
+
+    /**
+     * Returns the shape located at a specific point in the document.
+     * If more than one shape is located at the specific point, the given selection type
+     * controls which of them is returned.
+     * @param position the position in the document coordinate system.
+     * @param selection controls which shape is returned when more than one shape is at the specific point
+     * @param omitHiddenShapes if true, only visible shapes are considered
+     */
+    KoShape * shapeAt( const QPointF &position, SelectionType selection = shapeOnTop, bool omitHiddenShapes = false );
 
     /**
      * Returns the shapes which intersects the specific rect in the document.
      * @param rect the rectangle in the document coordinate system.
+     * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    QList<KoShape *> shapesAt( const QRectF &rect );
+    QList<KoShape *> shapesAt( const QRectF &rect, bool omitHiddenShapes = false );
     
     /**
      * Request a repaint to be queued.

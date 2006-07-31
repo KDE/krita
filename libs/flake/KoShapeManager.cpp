@@ -151,33 +151,71 @@ void KoShapeManager::paint( QPainter &painter, const KoViewConverter &converter,
         m_selection->paint( painter, converter );
 }
 
-KoShape * KoShapeManager::shapeAt( const QPointF &position, bool omitHiddenShapes )
+KoShape * KoShapeManager::shapeAt( const QPointF &position, SelectionType selection, bool omitHiddenShapes )
 {
     updateTree();
     QList<KoShape*> sorterdShapes( m_tree.contains( position ) );
     qSort(sorterdShapes.begin(), sorterdShapes.end(), KoShape::compareShapeZIndex);
+    KoShape *firstUnselectedShape = 0L; 
     for(int count = sorterdShapes.count()-1; count >= 0; count--) {
         KoShape *shape = sorterdShapes.at(count);
-        if( omitHiddenShapes && ! shape->isVisible() )
+        if ( omitHiddenShapes && ! shape->isVisible() )
             continue;
-        if ( shape->hitTest( position ) )
+        if ( ! shape->hitTest( position ) )
+            continue;
+
+        switch ( selection )
         {
-            //kDebug() << "Hittest succeeded" << endl;
-            return shape;
+            case shapeOnTop:
+                return shape;
+            case selected:
+                if ( m_selection->isSelected( shape ) )
+                    return shape;
+                break;
+            case unselected:
+                if ( ! m_selection->isSelected( shape ) )
+                    return shape;
+                break;
+            case nextUnselected:
+                // we want an unselected shape
+                if ( m_selection->isSelected( shape ) )
+                    continue;
+                // memorize the first unselected shape
+                if( ! firstUnselectedShape ) 
+                    firstUnselectedShape = shape;
+                // check if the shape above is selected
+                if( count < sorterdShapes.count() && m_selection->isSelected( sorterdShapes.at(count+1) ) )
+                    return shape;
+                break;
         }
     }
+    // if we want the next unselected below a selected but there was none selected, 
+    // return the first found unselected shape
+    if( selection == nextUnselected && firstUnselectedShape )
+        return firstUnselectedShape;
+
     if ( m_selection->hitTest( position ) )
         return m_selection;
 
     return 0; // missed everything
 }
 
-QList<KoShape *> KoShapeManager::shapesAt( const QRectF &rect )
+QList<KoShape *> KoShapeManager::shapesAt( const QRectF &rect, bool omitHiddenShapes )
 {
     updateTree();
     //TODO check if object is really in the rect and not 
     // only the bounding rect of the object.
-    return m_tree.intersects( rect );
+    if( omitHiddenShapes ) {
+        QList<KoShape*> intersectedShapes( m_tree.intersects( rect ) );
+        for(int count = intersectedShapes.count()-1; count >= 0; count--) {
+            KoShape *shape = intersectedShapes.at( count );
+            if( ! shape->isVisible() )
+                intersectedShapes.removeAt( count );
+        }
+        return intersectedShapes;
+    }
+    else
+        return m_tree.intersects( rect );
 }
 
 void KoShapeManager::repaint( QRectF &rect, const KoShape *shape, bool selectionHandles )

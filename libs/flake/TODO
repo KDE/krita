@@ -1,11 +1,5 @@
 * add a ShearingStrategy (boemann)
 * Add 'ensureVisible(KoShape)' to KoCanvasController (see QScrollArea for what it should do)
-* extend KoShapeManager shapeAt to
-   - optionally not return hidden shapes (KoShape::visible())
-   - return a shape out of the shapes at point based on its selection.
-     The parameter passed to specify which shape to select should be something like:
-     enum SelectionType { selected, unselected, nextUnselected, frameOnTop };
-     see kword/KWFrameViewManager for an explenation of the options.
 * update KoShapeContainer positon/boundingRect when a child is added or updated
 
 Use xcursorgen to create real xcursors ? (boemann)

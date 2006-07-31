@@ -190,6 +190,9 @@ public:
      */
     QList<KoShape*> iterator() const;
 
+protected:
+    virtual void childCountChanged() { }
+
 private:
     /**
      */

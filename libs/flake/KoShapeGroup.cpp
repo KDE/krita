@@ -67,28 +67,8 @@ bool KoShapeGroup::GroupMembers::childClipped(const KoShape *child) const {
     return false;
 }
 
-void KoShapeGroup::setPosition( const QPointF &position ) {
-    QPointF newPos = position - boundingRect().topLeft();
-    foreach(KoShape *shape, iterator()) {
-        shape->repaint();
-        shape->setAbsolutePosition( shape->absolutePosition() + newPos);
-        shape->repaint();
-    }
-    Q_ASSERT(boundingRect().topLeft() == position);
-}
-
-QRectF KoShapeGroup::boundingRect() const {
-    bool first=true;
-    QRectF boundingRect;
-
-    foreach(KoShape *shape, iterator()) {
-        if(first) {
-            boundingRect = shape->boundingRect();
-            first = false;
-        }
-        else
-            boundingRect = boundingRect.unite( shape->boundingRect() );
-    }
-
-    return boundingRect;
+void KoShapeGroup::childCountChanged() {
+    QRectF br = boundingRect();
+    setPosition( br.topLeft() );
+    resize( br.size() );
 }

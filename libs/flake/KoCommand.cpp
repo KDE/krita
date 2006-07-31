@@ -183,16 +183,29 @@ KoGroupShapesCommand::KoGroupShapesCommand() {
 }
 
 void KoGroupShapesCommand::execute () {
+    QList <QPointF> positions;
+    QRectF bound = m_container->boundingRect();
     foreach(KoShape *shape, m_shapes) {
+        positions.append(shape->absolutePosition());
+        bound = bound.unite(shape->boundingRect());
         m_container->addChild(shape);
-        shape->setPosition(shape->position() - m_container->position());
     }
+    for(int i=0; i < m_shapes.count(); i++) {
+        m_shapes[i]->setAbsolutePosition( positions[i] );
+    }
+
+    m_container->setPosition( bound.topLeft() );
+    m_container->resize( bound.size() );
 }
 
 void KoGroupShapesCommand::unexecute () {
-    foreach(KoShape *shape, m_shapes) {
-        m_container->removeChild(shape);
-        shape->setPosition(shape->position() + m_container->position());
+    QList <QPointF> positions;
+    foreach(KoShape *shape, m_shapes)
+        positions.append(shape->absolutePosition());
+
+    for(int i=0; i < m_shapes.count(); i++) {
+        m_container->removeChild(m_shapes[i]);
+        m_shapes[i]->setAbsolutePosition( positions[i] );
     }
 }
 

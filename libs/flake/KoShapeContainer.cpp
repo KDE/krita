@@ -35,20 +35,22 @@ KoShapeContainer::~KoShapeContainer() {
     delete m_children;
 }
 
-void KoShapeContainer::addChild(KoShape *object) {
-    Q_ASSERT(object);
+void KoShapeContainer::addChild(KoShape *shape) {
+    Q_ASSERT(shape);
     if(m_children == 0)
         m_children = new ChildrenData();
-    m_children->add(object);
-    object->setParent(this);
+    m_children->add(shape);
+    shape->setParent(this);
+    childCountChanged();
 }
 
-void KoShapeContainer::removeChild(KoShape *object) {
-    Q_ASSERT(object);
+void KoShapeContainer::removeChild(KoShape *shape) {
+    Q_ASSERT(shape);
     if(m_children == 0)
         return;
-    m_children->remove(object);
-    object->setParent(0);
+    m_children->remove(shape);
+    shape->setParent(0);
+    childCountChanged();
 }
 
 int  KoShapeContainer::childCount() const {

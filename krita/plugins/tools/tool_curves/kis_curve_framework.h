@@ -141,10 +141,10 @@ public:
     KisCurve subCurve(const CurvePoint&, const CurvePoint&);
     KisCurve subCurve(iterator,iterator);
 
-    void deleteFirstPivot();
-    void deleteLastPivot();
-
     /* Core virtual functions */
+    virtual void deleteFirstPivot();
+    virtual void deleteLastPivot();
+    
     virtual iterator deleteCurve(const KisPoint&, const KisPoint&);
     virtual iterator deleteCurve(const CurvePoint&, const CurvePoint&);
     virtual iterator deleteCurve(iterator, iterator);

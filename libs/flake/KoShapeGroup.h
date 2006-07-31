@@ -49,6 +49,8 @@ public:
     bool hitTest( const QPointF &position ) const;
     virtual QRectF boundingRect() const;
 
+    void setPosition( const QPointF &position );
+
 private:
     class GroupMembers: public KoGraphicsContainerModel {
         public:

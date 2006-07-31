@@ -67,6 +67,16 @@ bool KoShapeGroup::GroupMembers::childClipped(const KoShape *child) const {
     return false;
 }
 
+void KoShapeGroup::setPosition( const QPointF &position ) {
+    QPointF newPos = position - boundingRect().topLeft();
+    foreach(KoShape *shape, iterator()) {
+        shape->repaint();
+        shape->setAbsolutePosition( shape->absolutePosition() + newPos);
+        shape->repaint();
+    }
+    Q_ASSERT(boundingRect().topLeft() == position);
+}
+
 QRectF KoShapeGroup::boundingRect() const {
     bool first=true;
     QRectF boundingRect;

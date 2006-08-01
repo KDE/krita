@@ -188,12 +188,12 @@ void KisLayerBox::slotSetOpacity(int opacity)
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
 {
     QMenu menu;
-    m_lst->listLayers->addPropertyActions(&menu, index);
-    menu.addAction(KIcon("info"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
-    menu.addSeparator();
-    menu.addAction(KIcon("editdelete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
     if (index.isValid())
     {
+        m_lst->listLayers->addPropertyActions(&menu, index);
+        menu.addAction(KIcon("info"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
+        menu.addSeparator();
+        menu.addAction(KIcon("editdelete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
         QMenu *sub = menu.addMenu(KIcon("filenew"), i18n("&New"));
         sub->addAction(KIcon("file"), i18n("&Layer..."), this, SLOT(slotNewLayer()));
         sub->addAction(KIcon("folder"), i18n("&Group Layer..."), this, SLOT(slotNewGroupLayer()));

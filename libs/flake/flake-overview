@@ -18,7 +18,7 @@ Thrain> another question
 Thrain> then, if I've to use the same code to draw a shape on Karbon and Krita (for example)
 Thrain> then also the underlying "object" that the shape is drawn over
 Thrain> needs to be the same
-ThomasZ> Just like a widget does not know the difference between painting on one app, or another a shape will now know the difference. The flake library will take care of all details.
+ThomasZ> Just like a widget does not know the difference between painting on one app, or another a shape will not know the difference. The flake library will take care of all details.
 Thrain> ThomasZ: so the flake library will have "backends" for every "surface"
 Thrain> mhmhmh
 ThomasZ> Thrain: a canvas, yes.  Each app will have one.

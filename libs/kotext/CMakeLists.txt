@@ -88,7 +88,7 @@ kde4_add_ui3_files(kotext_LIB_SRCS
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 
-target_link_libraries(kotext  ${KDE4_KSPELL2_LIBS} flake kutils kofficecore kofficeui )
+target_link_libraries(kotext  ${KDE4_KSPELL2_LIBS} flake ${KDE4_KUTILS_LIBS} kofficecore kofficeui )
 
 set_target_properties(kotext PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kotext  DESTINATION ${LIB_INSTALL_DIR})

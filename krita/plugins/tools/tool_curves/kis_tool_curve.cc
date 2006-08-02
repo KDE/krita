@@ -20,6 +20,7 @@
 
 #include <math.h>
 
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qrect.h>
@@ -43,6 +44,10 @@
 #include "kis_cursor.h"
 #include "kis_tool_controller.h"
 #include "kis_vec.h"
+#include "kis_selection.h"
+#include "kis_selection_options.h"
+#include "kis_selected_transaction.h"
+#include "kis_paintop_registry.h"
 
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
@@ -60,7 +65,7 @@ QRect KisToolCurve::selectedPivotRect (const QPoint& pos)
 KisToolCurve::KisToolCurve(const QString& UIName)
     : super(UIName)
 {
-    m_subject = 0;
+    m_UIName = UIName;
     m_currentImage = 0;
 
     m_curve = 0;
@@ -83,8 +88,9 @@ KisToolCurve::~KisToolCurve()
 
 void KisToolCurve::update (KisCanvasSubject *subject)
 {
-    m_subject = subject;
-    m_currentImage = m_subject->currentImg();
+    super::update(subject);
+    if (m_subject)
+        m_currentImage = m_subject->currentImg();
 }
 
 void KisToolCurve::deactivate()
@@ -125,8 +131,7 @@ void KisToolCurve::keyPress(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
         m_dragging = false;
-        paintCurve();
-        m_curve->clear();
+        commitCurve();
     } else
     if (event->key() == Qt::Key_Escape) {
         m_dragging = false;
@@ -156,9 +161,7 @@ void KisToolCurve::buttonRelease(KisButtonReleaseEvent *event)
 
 void KisToolCurve::doubleClick(KisDoubleClickEvent *)
 {
-    paintCurve();
-    m_curve->clear();
-    m_curve->endActionOptions();
+    commitCurve();
 }
 
 void KisToolCurve::move(KisMoveEvent *event)
@@ -337,32 +340,170 @@ void KisToolCurve::paint(KisCanvasPainter&, const QRect&)
     draw();
 }
 
-QCursor KisToolCurve::cursor()
+void KisToolCurve::commitCurve()
 {
-    return m_cursor;
+    if (toolType() == TOOL_SHAPE || toolType() == TOOL_FREEHAND)
+        paintCurve();
+    else if (toolType() == TOOL_SELECT)
+        selectCurve();
+    else
+        kdDebug(0) << "NO SUPPORT FOR THIS TOOL TYPE" << endl;
+
+    m_curve->clear();
+    m_curve->endActionOptions();
 }
 
-void KisToolCurve::setCursor(const QCursor& cursor)
+void KisToolCurve::paintCurve()
 {
-    m_cursor = cursor;
+    KisPaintDeviceSP device = m_currentImage->activeDevice ();
+    if (!device) return;
+    
+    KisPainter painter (device);
+    if (m_currentImage->undo()) painter.beginTransaction (i18n (m_transactionMessage.latin1()));
 
-    if (m_subject) {
-        KisToolControllerInterface *controller = m_subject->toolController();
+    painter.setPaintColor(m_subject->fgColor());
+    painter.setBrush(m_subject->currentBrush());
+    painter.setOpacity(m_opacity);
+    painter.setCompositeOp(m_compositeOp);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &painter);
+    painter.setPaintOp(op); // Painter takes ownership
 
-        if (controller && controller->currentTool() == this) {
-            m_subject->canvasController()->setCanvasCursor(m_cursor);
-        }
+// Call paintPoint
+    KisCurve::iterator it = m_curve->begin();
+    while (it != m_curve->end())
+        it = paintPoint(painter,it);
+// Finish
+
+    device->setDirty( painter.dirtyRect() );
+    notifyModified();
+
+    if (m_currentImage->undo()) {
+        m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
     }
+
+    draw();
 }
 
-void KisToolCurve::activate()
+KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iterator point)
 {
-    if (m_subject) {
-        KisToolControllerInterface *controller = m_subject->toolController();
-
-        if (controller)
-            controller->setCurrentTool(this);
+    KisCurve::iterator next = point; next+=1;
+    switch ((*point).hint()) {
+    case POINTHINT:
+        painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);
+        break;
+    case LINEHINT:
+        if (next != m_curve->end() && (*next).hint() <= LINEHINT)
+            painter.paintLine((*point++).point(), PRESSURE_DEFAULT, 0, 0, (*next).point(), PRESSURE_DEFAULT, 0, 0);
+        else
+            painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);
+        break;
+    default:
+        point += 1;
     }
+
+    return point;
+}
+
+QValueVector<KisPoint> KisToolCurve::convertCurve()
+{
+    QValueVector<KisPoint> points;
+
+    for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++)
+        points.append((*i).point());
+
+    return points;
+}
+
+void KisToolCurve::selectCurve()
+{
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisPaintDeviceSP dev = m_currentImage->activeDevice();
+    bool hasSelection = dev->hasSelection();
+    KisSelectedTransaction *t = 0;
+    if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n(m_transactionMessage.latin1()), dev);
+    KisSelectionSP selection = dev->selection();
+
+    if (!hasSelection) {
+        selection->clear();
+    }
+
+    KisPainter painter(selection.data());
+
+    painter.setPaintColor(KisColor(Qt::black, selection->colorSpace()));
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+    painter.setBrush(m_subject->currentBrush());
+    painter.setOpacity(OPACITY_OPAQUE);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("paintbrush", 0, &painter);
+    painter.setPaintOp(op);    // And now the painter owns the op and will destroy it.
+
+    switch (m_selectAction) {
+    case SELECTION_ADD:
+        painter.setCompositeOp(COMPOSITE_OVER);
+        break;
+    case SELECTION_SUBTRACT:
+        painter.setCompositeOp(COMPOSITE_SUBTRACT);
+        break;
+    default:
+        break;
+    }
+
+    painter.paintPolygon(convertCurve());
+
+
+    if(hasSelection) {
+        QRect dirty(painter.dirtyRect());
+        dev->setDirty(dirty);
+        dev->emitSelectionChanged(dirty);
+    } else {
+        dev->setDirty();
+        dev->emitSelectionChanged();
+    }
+
+    if (m_currentImage->undo())
+        m_currentImage->undoAdapter()->addCommand(t);
+
+    QApplication::restoreOverrideCursor();
+
+    draw();
+}
+
+QWidget* KisToolCurve::createOptionWidget(QWidget* parent)
+{
+    if (toolType() == TOOL_SHAPE || toolType() == TOOL_FREEHAND)
+        return super::createOptionWidget(parent);
+    else if (toolType() == TOOL_SELECT)
+        return createSelectionOptionWidget(parent);
+    else
+        kdDebug(0) << "NO SUPPORT FOR THIS TOOL TYPE" << endl;
+    return 0;
+}
+
+void KisToolCurve::slotSetAction(int action) {
+    if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
+        m_selectAction =(enumSelectionMode)action;
+}
+
+QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)
+{
+    m_optWidget = new KisSelectionOptions(parent, m_subject);
+    Q_CHECK_PTR(m_optWidget);
+    m_optWidget->setCaption(m_UIName.latin1());
+
+    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
+
+    return m_optWidget;
+}
+
+QWidget* KisToolCurve::optionWidget()
+{
+    if (toolType() == TOOL_SELECT)
+        return m_optWidget;
+    else
+        return super::optionWidget();
 }
 
 #include "kis_tool_curve.moc"

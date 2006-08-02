@@ -36,7 +36,8 @@
 #include <kis_tool_registry.h>
 
 #include "tool_curves.h"
-#include "kis_tool_bezier.h"
+#include "kis_tool_bezier_paint.h"
+#include "kis_tool_bezier_select.h"
 #include "kis_tool_example.h"
 
 
@@ -52,8 +53,9 @@ ToolCurves::ToolCurves(QObject *parent, const char *name, const QStringList &)
     if ( parent->inherits("KisToolRegistry") )
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );
-        r->add(new KisToolBezierFactory());
+        r->add(new KisToolBezierPaintFactory());
         r->add(new KisToolExampleFactory());
+        r->add(new KisToolBezierSelectFactory());
     }
 
 }

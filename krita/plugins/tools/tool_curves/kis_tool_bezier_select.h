@@ -1,5 +1,5 @@
 /*
- *  kis_tool_example.h -- part of Krita
+ *  kis_tool_curve_paint.h -- part of Krita
  *
  *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *
@@ -18,49 +18,44 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TOOL_EXAMPLE_H_
-#define KIS_TOOL_EXAMPLE_H_
+#ifndef KIS_TOOL_BEZIER_SELECT_H_
+#define KIS_TOOL_BEZIER_SELECT_H_
 
 #include "kis_tool_factory.h"
-#include "kis_tool_curve.h"
+#include "kis_tool_bezier.h"
 #include "kis_point.h"
 
-class CurvePoint;
-class KisPoint;
-class KisCanvas;
-class KisCurve;
-class KisPainter;
-class KisPoint;
-class WdgToolExample;
+class KisToolBezierSelect : public KisToolBezier {
 
-class KisToolExample : public KisToolCurve {
-
-    typedef KisToolCurve super;
+    typedef KisToolBezier super;
     Q_OBJECT
 
 public:
-    KisToolExample();
-    virtual ~KisToolExample();
+    KisToolBezierSelect();
+    virtual ~KisToolBezierSelect();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual enumToolType toolType() { return TOOL_SELECT; }
+
+protected:
+
+    virtual QValueVector<KisPoint> convertCurve();
 
 };
 
-class KisToolExampleFactory : public KisToolFactory {
+class KisToolBezierSelectFactory : public KisToolFactory {
     typedef KisToolFactory super;
 public:
-    KisToolExampleFactory() : super() {};
-    virtual ~KisToolExampleFactory(){};
+    KisToolBezierSelectFactory() : super() {};
+    virtual ~KisToolBezierSelectFactory(){};
 
     virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolExample();
+        KisTool * t =  new KisToolBezierSelect();
         Q_CHECK_PTR(t);
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("exampleshape", i18n("Example Tool")); }
+    virtual KisID id() { return KisID("bezierselection", i18n("Bezier selection Tool")); }
 };
 
-
-#endif //__KIS_TOOL_EXAMPLE_H__
+#endif //__KIS_TOOL_CURVE_PAINT_H_

@@ -1,5 +1,5 @@
 /*
- *  kis_tool_example.h -- part of Krita
+ *  kis_tool_curve_paint.h -- part of Krita
  *
  *  Copyright (c) 2006 Emanuele Tamponi <emanuele@valinor.it>
  *
@@ -18,49 +18,44 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TOOL_EXAMPLE_H_
-#define KIS_TOOL_EXAMPLE_H_
+#ifndef KIS_TOOL_BEZIER_PAINT_H_
+#define KIS_TOOL_BEZIER_PAINT_H_
 
 #include "kis_tool_factory.h"
-#include "kis_tool_curve.h"
+#include "kis_tool_bezier.h"
 #include "kis_point.h"
 
-class CurvePoint;
-class KisPoint;
-class KisCanvas;
-class KisCurve;
-class KisPainter;
-class KisPoint;
-class WdgToolExample;
+class KisToolBezierPaint : public KisToolBezier {
 
-class KisToolExample : public KisToolCurve {
-
-    typedef KisToolCurve super;
+    typedef KisToolBezier super;
     Q_OBJECT
 
 public:
-    KisToolExample();
-    virtual ~KisToolExample();
+    KisToolBezierPaint();
+    virtual ~KisToolBezierPaint();
 
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
 
+protected:
+
+    virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
+
 };
 
-class KisToolExampleFactory : public KisToolFactory {
+class KisToolBezierPaintFactory : public KisToolFactory {
     typedef KisToolFactory super;
 public:
-    KisToolExampleFactory() : super() {};
-    virtual ~KisToolExampleFactory(){};
+    KisToolBezierPaintFactory() : super() {};
+    virtual ~KisToolBezierPaintFactory(){};
 
     virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolExample();
+        KisTool * t =  new KisToolBezierPaint();
         Q_CHECK_PTR(t);
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("exampleshape", i18n("Example Tool")); }
+    virtual KisID id() { return KisID("beziershape", i18n("Bezier painting Tool")); }
 };
 
-
-#endif //__KIS_TOOL_EXAMPLE_H__
+#endif //__KIS_TOOL_CURVE_PAINT_H_

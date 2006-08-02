@@ -259,12 +259,9 @@ void KisCurveBezier::deletePivot (KisCurve::iterator it)
     }
 }
 
-KisToolBezier::KisToolBezier()
-    : super(i18n("Bezier"))
+KisToolBezier::KisToolBezier(const QString& UIName)
+    : super(UIName)
 {
-    setName("tool_bezier");
-    setCursor(KisCursor::load("tool_bezier_cursor.png", 6, 6));
-
     m_derivated = new KisCurveBezier;
     m_curve = m_derivated;
 
@@ -301,41 +298,6 @@ KisCurve::iterator KisToolBezier::selectByHandle(const QPoint& pos)
         return m_curve->end();
 
     return m_curve->selectPivot(inHandle.last());
-}
-/*
-QValueVector<KisPoint> KisToolBezier::convertCurve()
-{
-    QValueVector<KisPoint> points;
-
-    for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++) {
-        if (((*i).hint() != BEZIERPREVCONTROLHINT) || ((*i).hint() != BEZIERNEXTCONTROLHINT))
-            points.append((*i).point());
-    }
-
-    return points;
-}
-*/
-KisCurve::iterator KisToolBezier::paintPoint (KisPainter& painter, KisCurve::iterator point)
-{
-    KisCurve::iterator origin,destination,control1,control2;
-    switch ((*point).hint()) {
-    case BEZIERENDHINT:
-        origin = point++;
-        control1 = point;
-        control2 = control1.nextPivot();
-        destination = control2.next();
-        if (m_curve->count() > 4 && (*point) != m_curve->last()) {
-            point = point.nextPivot().next();
-            painter.paintAt((*origin).point(),PRESSURE_DEFAULT,0,0);
-            painter.paintBezierCurve((*origin).point(),PRESSURE_DEFAULT,0,0,(*control1).point(),
-            (*control2).point(),(*destination).point(),PRESSURE_DEFAULT,0,0,0);
-        }
-        break;
-    default:
-        point = super::paintPoint(painter,point);
-    }
-
-    return point;
 }
 
 KisCurve::iterator KisToolBezier::drawPoint (KisCanvasPainter& gc, KisCurve::iterator point)
@@ -396,28 +358,6 @@ void KisToolBezier::drawPivotHandle (KisCanvasPainter& gc, KisCurve::iterator po
     }
 
     gc.setPen(m_drawingPen);
-}
-
-void KisToolBezier::setup(KActionCollection *collection)
-{
-    m_action = static_cast<KRadioAction *>(collection->action(name()));
-
-    if (m_action == 0) {
-        KShortcut shortcut(Qt::Key_Plus);
-        shortcut.append(KShortcut(Qt::Key_F9));
-        m_action = new KRadioAction(i18n("&Bezier"),
-                                    "tool_bezier",
-                                    shortcut,
-                                    this,
-                                    SLOT(activate()),
-                                    collection,
-                                    name());
-        Q_CHECK_PTR(m_action);
-
-        m_action->setToolTip(i18n("Draw cubic beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
-        m_action->setExclusiveGroup("tools");
-        m_ownAction = true;
-    }
 }
 
 #include "kis_tool_bezier.moc"

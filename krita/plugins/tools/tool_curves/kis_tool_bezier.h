@@ -22,7 +22,7 @@
 #define KIS_TOOL_BEZIER_H_
 
 #include "kis_tool_factory.h"
-#include "kis_tool_curve_paint.h"
+#include "kis_tool_curve.h"
 #include "kis_point.h"
 
 class CurvePoint;
@@ -73,23 +73,25 @@ public:
 
 };
 
-class KisToolBezier : public KisToolCurvePaint {
+class KisToolBezier : public KisToolCurve {
 
-    typedef KisToolCurvePaint super;
+    typedef KisToolCurve super;
     Q_OBJECT
 
 public:
-    KisToolBezier();
+    KisToolBezier(const QString&);
     virtual ~KisToolBezier();
 
+/*
     virtual void setup(KActionCollection *collection);
     virtual enumToolType toolType() { return TOOL_SHAPE; }
-
+*/
 protected:
 
     virtual KisCurve::iterator selectByHandle(const QPoint& pos);
-
+/*
     virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
+*/
     virtual void drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point);
     virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
 
@@ -99,6 +101,7 @@ protected:
 
 };
 
+/*
 class KisToolBezierFactory : public KisToolFactory {
     typedef KisToolFactory super;
 public:
@@ -113,6 +116,6 @@ public:
     }
     virtual KisID id() { return KisID("beziershape", i18n("Bezier Tool")); }
 };
-
+*/
 
 #endif //__KIS_TOOL_BEZIER_H__

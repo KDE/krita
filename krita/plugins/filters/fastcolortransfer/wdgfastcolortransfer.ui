@@ -12,6 +12,9 @@
             <height>112</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>WdgFastColorTransfer</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -40,7 +43,7 @@
                         <cstring>fileNameURLRequester</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Filename of the image which as the color feeling that you want to apply.</string>
+                        <string>Filename of the image whose tones and color you want to transfer to the current layer.</string>
                     </property>
                 </widget>
             </hbox>

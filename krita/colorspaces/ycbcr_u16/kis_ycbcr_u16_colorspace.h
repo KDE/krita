@@ -126,7 +126,7 @@ class KisYCbCrU16ColorSpaceFactory : public KisColorSpaceFactory
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-        virtual KisID id() const { return KisID("YCbCrAU16", i18n("YCBCR (16-bit integer/channel)")); };
+        virtual KisID id() const { return KisID("YCbCrAU16", i18n("YCbCr (16-bit integer/channel)")); };
 
     /**
          * lcms colorspace type definition.

@@ -127,7 +127,7 @@ class KisYCbCrU8ColorSpaceFactory : public KisColorSpaceFactory
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-        virtual KisID id() const { return KisID("YCbCrAU8", i18n("YCBCR (8-bit integer/channel)")); };
+        virtual KisID id() const { return KisID("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)")); };
 
     /**
          * lcms colorspace type definition.

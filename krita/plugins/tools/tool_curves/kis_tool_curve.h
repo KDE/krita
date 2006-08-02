@@ -50,10 +50,6 @@ public:
 
     virtual QWidget* createOptionWidget(QWidget* parent);
 
-    /* Used only for TOOL_SELECT */
-    virtual QWidget* createSelectionOptionWidget(QWidget* parent);
-    virtual QWidget* optionWidget();
-
     virtual void buttonPress(KisButtonPressEvent *event);
     virtual void move(KisMoveEvent *event);
     virtual void buttonRelease(KisButtonReleaseEvent *event);
@@ -64,9 +60,6 @@ public:
 public slots:
 
     virtual void deactivate();
-
-    /* Used only for TOOL_SELECT */
-    virtual void slotSetAction(int);
 
 protected:
 
@@ -164,7 +157,35 @@ private:
 
     QString m_UIName;
 
-    /* Used only for TOOL_SELECT */
+
+/* ********************************** *
+ * Selection Tools specific functions *
+ * ********************************** */
+
+public:
+
+    /*
+     * This initializes our Option Widget (called by createOptionWidget())
+     */
+    virtual QWidget* createSelectionOptionWidget(QWidget* parent);
+    
+    /*
+     * This return our internal KisSelectionOptions if toolType() returns TOOL_SELECT
+     */
+    virtual QWidget* optionWidget();
+
+public slots:
+
+    /*
+     * Slot for createSelectionOptionWidget()
+     */
+    virtual void slotSetAction(int);
+
+private:
+
+    /*
+     * Members used by slotSetAction() and selectCurve()
+     */
     KisSelectionOptions* m_optWidget;
     enumSelectionMode m_selectAction;
 };

@@ -47,7 +47,6 @@ public:
     virtual ~KisToolCurve();
 
     virtual void update (KisCanvasSubject *subject);
-
     virtual QWidget* createOptionWidget(QWidget* parent);
 
     virtual void buttonPress(KisButtonPressEvent *event);
@@ -99,7 +98,7 @@ protected:
      * Used by draw(), if a point is a pivot, this draw the handle around it (if m_drawPivots is set to true)
      */
     virtual void drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point);
-    
+
     /*
      * Methods for commiting the curve
      */
@@ -129,7 +128,14 @@ protected:
      */
     virtual void selectCurve();
 
+    /*
+     * Return the rect around a given point, assuming that that point is an unselected pivot
+     */
     QRect pivotRect (const QPoint&);
+
+    /*
+     * Same as above for selected pivots
+     */
     QRect selectedPivotRect (const QPoint&);
 
 protected:

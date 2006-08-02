@@ -38,7 +38,7 @@
 #include "tool_curves.h"
 #include "kis_tool_bezier_paint.h"
 #include "kis_tool_bezier_select.h"
-#include "kis_tool_example.h"
+#include "kis_tool_moutline.h"
 
 
 typedef KGenericFactory<ToolCurves> ToolCurvesFactory;
@@ -54,7 +54,7 @@ ToolCurves::ToolCurves(QObject *parent, const char *name, const QStringList &)
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );
         r->add(new KisToolBezierPaintFactory());
-        r->add(new KisToolExampleFactory());
+        r->add(new KisToolMagneticFactory());
         r->add(new KisToolBezierSelectFactory());
     }
 

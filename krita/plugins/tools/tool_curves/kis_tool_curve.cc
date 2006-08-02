@@ -359,7 +359,7 @@ void KisToolCurve::paintCurve()
     if (!device) return;
     
     KisPainter painter (device);
-    if (m_currentImage->undo()) painter.beginTransaction (i18n (m_transactionMessage.latin1()));
+    if (m_currentImage->undo()) painter.beginTransaction (m_transactionMessage.latin1());
 
     painter.setPaintColor(m_subject->fgColor());
     painter.setBrush(m_subject->currentBrush());
@@ -420,7 +420,7 @@ void KisToolCurve::selectCurve()
     KisPaintDeviceSP dev = m_currentImage->activeDevice();
     bool hasSelection = dev->hasSelection();
     KisSelectedTransaction *t = 0;
-    if (m_currentImage->undo()) t = new KisSelectedTransaction(i18n(m_transactionMessage.latin1()), dev);
+    if (m_currentImage->undo()) t = new KisSelectedTransaction(m_transactionMessage.latin1(), dev);
     KisSelectionSP selection = dev->selection();
 
     if (!hasSelection) {

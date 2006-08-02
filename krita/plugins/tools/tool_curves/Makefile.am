@@ -17,7 +17,8 @@ kritatoolcurves_la_SOURCES = \
 	kis_tool_example.cc \
 	kis_tool_bezier.cc \
 	kis_tool_bezier_paint.cc \
-	kis_tool_bezier_select.cc
+	kis_tool_bezier_select.cc \
+	kis_tool_moutline.cc
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = kritatoolcurves.la
@@ -29,7 +30,8 @@ noinst_HEADERS = \
 	kis_tool_example.h \
 	kis_tool_bezier.h \
 	kis_tool_bezier_paint.h \
-	kis_tool_bezier_select.h
+	kis_tool_bezier_select.h \
+	kis_tool_moutline.h
 
 kritatoolcurves_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kritatoolcurves_la_LIBADD =  ../../../libkritacommon.la
@@ -43,7 +45,9 @@ kritapics_DATA = \
 	tool_example_cursor.png \
 	tool_bezier_paint.png \
 	tool_bezier_select.png \
-	tool_bezier_cursor.png
+	tool_bezier_cursor.png \
+	tool_moutline.png \
+	tool_moutline_cursor.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

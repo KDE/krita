@@ -33,6 +33,9 @@ class KisCurveMagnetic : public KisCurve {
 
     KisToolMagnetic *m_parent;
 
+    void prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
+    void sobel (const QRect & rc, KisPaintDeviceSP src, bool** dst);
+
 public:
 
     KisCurveMagnetic (KisToolMagnetic *parent);
@@ -46,6 +49,8 @@ class KisToolMagnetic : public KisToolCurve {
 
     typedef KisToolCurve super;
     Q_OBJECT
+
+    friend class KisCurveMagnetic;
 
 public:
 

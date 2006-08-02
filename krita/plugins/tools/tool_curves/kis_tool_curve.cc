@@ -78,6 +78,7 @@ KisToolCurve::KisToolCurve(const QString& UIName)
     m_pivotRounding = m_selectedPivotRounding = 55;
 
     m_actionOptions = NOOPTIONS;
+    m_selectAction = SELECTION_ADD;
 }
 
 KisToolCurve::~KisToolCurve()

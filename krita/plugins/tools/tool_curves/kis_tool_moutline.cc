@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <math.h>
+
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qrect.h>
@@ -45,6 +47,10 @@
 
 #include "kis_tool_moutline.h"
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
+#define ROUND(x) ((int) ((x) + 0.5))
+
 KisCurveMagnetic::KisCurveMagnetic (KisToolMagnetic *parent)
     : m_parent(parent)
 {
@@ -58,7 +64,89 @@ KisCurveMagnetic::~KisCurveMagnetic ()
 
 void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator it)
 {
-    return;
+    KisPaintDeviceSP src = m_parent->m_subject->currentImg()->activeDevice();
+    QRect rc = QRect((*p1).point().roundQPoint(),(*p2).point().roundQPoint());
+    int col = rc.width(), row = rc.height();
+}
+
+void KisCurveMagnetic::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
+{
+    if (y > h -1) y = h -1;
+    Q_UINT32 pixelSize = src->pixelSize();
+
+    src->readBytes( data, x, y, w, 1 );
+
+    for (Q_UINT32 b = 0; b < pixelSize; b++) {
+        int offset = pixelSize - b;
+        data[-offset] = data[b];
+        data[w * pixelSize + b] = data[(w - 1) * pixelSize + b];
+    }
+}
+
+void KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src, bool** dst)
+{
+    QRect rect = rc; //src->exactBounds();
+    Q_UINT32 x = rect.x();
+    Q_UINT32 y = rect.y();
+    Q_UINT32 width = rect.width();
+    Q_UINT32 height = rect.height();
+    Q_UINT32 pixelSize = src->pixelSize();
+
+    /*  allocate row buffers  */
+    Q_UINT8* prevRow = new Q_UINT8[ (width + 2) * pixelSize];
+    Q_CHECK_PTR(prevRow);
+    Q_UINT8* curRow = new Q_UINT8[ (width + 2) * pixelSize];
+    Q_CHECK_PTR(curRow);
+    Q_UINT8* nextRow = new Q_UINT8[ (width + 2) * pixelSize];
+    Q_CHECK_PTR(nextRow);
+    Q_UINT8* dest = new Q_UINT8[ width  * pixelSize];
+    Q_CHECK_PTR(dest);
+
+    Q_UINT8* pr = prevRow + pixelSize;
+    Q_UINT8* cr = curRow + pixelSize;
+    Q_UINT8* nr = nextRow + pixelSize;
+
+    prepareRow (src, pr, x, y - 1, width, height);
+    prepareRow (src, cr, x, y, width, height);
+
+    bool isEdge;
+    Q_UINT8* tmp;
+    Q_INT32 gradient, horGradient, verGradient;
+    // loop through the rows, applying the sobel convolution
+    for (Q_UINT32 row = 0; row < height; row++) {
+        // prepare the next row
+        prepareRow (src, nr, x, row + 1, width, height);
+
+        for (Q_UINT32 col = 0; col < width * pixelSize; col++) {
+            int positive = col + pixelSize;
+            int negative = col - pixelSize;
+            horGradient = ((pr[negative] + 2 * pr[col] + pr[positive]) -
+                           (nr[negative] + 2 * nr[col] + nr[positive]));
+
+            verGradient = ((pr[negative] + 2 * cr[negative] + nr[negative]) -
+                           (pr[positive] + 2 * cr[positive] + nr[positive]));
+            gradient = (Q_INT32) (ROUND (RMS (horGradient, verGradient)) / 5.66);
+
+            kdDebug(0) << "GRADIENTE: " << gradient << endl;
+            if (gradient > 10)
+                isEdge = true;
+            else
+                isEdge = false;
+
+            dst[row][col] = isEdge;
+        }
+
+        //  shuffle the row pointers
+        tmp = pr;
+        pr = cr;
+        cr = nr;
+        nr = tmp;
+    }
+
+    delete[] prevRow;
+    delete[] curRow;
+    delete[] nextRow;
+    delete[] dest;
 }
 
 KisToolMagnetic::KisToolMagnetic ()

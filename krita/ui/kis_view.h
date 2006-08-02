@@ -197,6 +197,8 @@ public slots:
     void shearLayer(double angleX, double angleY);
 
     void slotCreateMask();
+    void slotMaskFromSelection();
+    void slotMaskToSelection();
     void slotApplyMask();
     void slotRemoveMask();
     void slotEditMask();
@@ -558,6 +560,8 @@ private:
     KAction *m_layerTop;
 
     KAction *m_createMask;
+    KAction *m_maskFromSelection;
+    KAction *m_maskToSelection;
     KAction *m_applyMask;
     KAction *m_removeMask;
     KToggleAction *m_editMask;

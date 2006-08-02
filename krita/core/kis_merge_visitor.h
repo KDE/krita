@@ -37,6 +37,7 @@
 #include "kis_filter_registry.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
+#include "kis_iterators_pixel.h"
 
 class KisMergeVisitor : public KisLayerVisitor {
 public:
@@ -86,8 +87,35 @@ public:
             if (layer->renderMask()) {
                 // To display the mask, we don't do things with composite op and opacity
                 // This is like the gimp does it, I guess that's ok?
-                gc.bitBlt(dx, dy, COMPOSITE_OVER, layer->getMask(), OPACITY_OPAQUE,
-                          sx, sy, w, h);
+
+                // Note that here we'll use m_rc, because even if the extent of the device is
+                // empty, we want a full mask to be drawn! (we don't change rc, since
+                // it'd mess with setClean). This is because KisPainter::bitBlt &'s with
+                // the source device's extent. This is ok in normal circumstances, but
+                // we changed the default tile. Fixing this properly would mean fixing it there.
+                sx = m_rc.left();
+                sy = m_rc.top();
+                w  = m_rc.width();
+                h  = m_rc.height();
+                dx = sx;
+                dy = sy;
+
+                // The problem is that the extent of the layer mask might not be extended
+                // enough. Check if that is the case
+                KisPaintDeviceSP mask = layer->getMask();
+                QRect mextent = mask->extent();
+                if ((mextent & m_rc) != m_rc) {
+                    // Iterate over all pixels in the m_rc area. With just accessing the
+                    // tiles in read-write mode, we ensure that the tiles get created if they
+                    // do not exist. If they do, they'll remain untouched since we don't
+                    // actually write data to it.
+                    // XXX Admission: this is actually kind of a hack :-(
+                    KisRectIteratorPixel it = mask->createRectIterator(sx, sy, w, h, true);
+                    while (!it.isDone())
+                        ++it;
+                }
+
+                gc.bitBlt(dx, dy, COMPOSITE_OVER, mask, OPACITY_OPAQUE, sx, sy, w, h);
             } else {
                 gc.bltSelection(dx, dy,
                                 layer->compositeOp(),

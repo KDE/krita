@@ -199,8 +199,13 @@ void KisPaintLayer::applyMask() {
     int x, y, w, h;
     m_paintdev->extent(x, y, w, h);
 
-    KisPainter gc(m_paintdev);
+    // A bit slow; but it works
+    KisPaintDeviceSP temp = new KisPaintDevice(m_paintdev->colorSpace());
+    KisPainter gc(temp);
     gc.bltSelection(x, y, COMPOSITE_OVER, m_paintdev, m_maskAsSelection, OPACITY_OPAQUE, x, y, w, h);
+    gc.end();
+    gc.begin(m_paintdev);
+    gc.bitBlt(x, y, COMPOSITE_COPY, temp, OPACITY_OPAQUE, x, y, w, h);
     gc.end();
 
     removeMask();
@@ -233,32 +238,39 @@ void KisPaintLayer::createMaskFromPaintDevice(KisPaintDeviceSP from) {
     genericMaskCreationHelper();
 }
 
-// Not tested
 void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
-    if (hasMask())
-        return; // Or overwrite? XXX
-
     kdDebug() << k_funcinfo << endl;
     m_mask = new KisPaintDevice(KisMetaRegistry::instance()->csRegistry()
             ->getColorSpace(KisID("GRAYA"), 0));
+    m_mask->setParentLayer(this);
 
-    QRect r(from->extent());
+    m_maskAsSelection = new KisSelection(); // Anonymous selection is good enough
 
-    KisRectIteratorPixel srcIt = from->createRectIterator(r.x(), r.y(),
-            r.width(), r.height(), false);
-    KisRectIteratorPixel dstIt = m_mask->createRectIterator(r.x(), r.y(),
-            r.width(), r.height(), true);
+    // Default pixel is opaque white == don't mask?
+    Q_UINT8 const defPixel[] = { 255, 255 };
+    m_mask->dataManager()->setDefaultPixel(defPixel);
 
-    while(!dstIt.isDone()) {
+    if (from) {
+        QRect r(extent());
+
+        KisRectIteratorPixel srcIt = from->createRectIterator(r.x(), r.y(),
+                r.width(), r.height(), false);
+        KisRectIteratorPixel dstIt = m_mask->createRectIterator(r.x(), r.y(),
+                r.width(), r.height(), true);
+
+        while(!dstIt.isDone()) {
         // XXX same remark as in convertMaskToSelection
-        *dstIt.rawData() = *srcIt.rawData();
-        ++srcIt;
-        ++dstIt;
+            *dstIt.rawData() = *srcIt.rawData();
+            ++srcIt;
+            ++dstIt;
+        }
     }
 
     convertMaskToSelection(extent());
+    m_paintdev->deselect();
 
-    genericMaskCreationHelper();
+    setDirty();
+    emit sigMaskInfoChanged();
 }
 
 KisPaintDeviceSP KisPaintLayer::getMask() {
@@ -331,24 +343,92 @@ void KisPaintLayer::setDirty(const QRect & rect, bool propagate) {
 // Undoable versions code
 namespace {
     class KisCreateMaskCommand : public KNamedCommand {
-    typedef KNamedCommand super;
-    KisPaintLayerSP m_layer;
+        typedef KNamedCommand super;
+        KisPaintLayerSP m_layer;
+        KisPaintDeviceSP m_mask;
     public:
         KisCreateMaskCommand(const QString& name, KisPaintLayer* layer)
             : super(name), m_layer(layer) {}
         virtual void execute() {
             kdDebug() << k_funcinfo << endl;
-            m_layer->createMask();
+            if (!m_mask)
+                m_mask = m_layer->createMask();
+            else
+                m_layer->createMaskFromPaintDevice(m_mask);
         }
         virtual void unexecute() {
             m_layer->removeMask();
         }
     };
 
+    class KisMaskFromSelectionCommand : public KNamedCommand {
+        typedef KNamedCommand super;
+        KisPaintLayerSP m_layer;
+        KisPaintDeviceSP m_maskBefore;
+        KisPaintDeviceSP m_maskAfter;
+        KisSelectionSP m_selection;
+    public:
+        KisMaskFromSelectionCommand(const QString& name, KisPaintLayer* layer)
+            : super(name), m_layer(layer) {
+            if (m_layer->hasMask())
+                m_maskBefore = m_layer->getMask();
+            else
+                m_maskBefore = 0;
+            m_maskAfter = 0;
+            if (m_layer->paintDevice()->hasSelection())
+                m_selection = m_layer->paintDevice()->selection();
+            else
+                m_selection = 0;
+        }
+        virtual void execute() {
+            if (!m_maskAfter) {
+                m_layer->createMaskFromSelection(m_selection);
+                m_maskAfter = m_layer->getMask();
+            } else {
+                m_layer->paintDevice()->deselect();
+                m_layer->createMaskFromPaintDevice(m_maskAfter);
+            }
+        }
+        virtual void unexecute() {
+            m_layer->paintDevice()->setSelection(m_selection);
+            if (m_maskBefore)
+                m_layer->createMaskFromPaintDevice(m_maskBefore);
+            else
+                m_layer->removeMask();
+        }
+    };
+
+    class KisMaskToSelectionCommand : public KNamedCommand {
+        typedef KNamedCommand super;
+        KisPaintLayerSP m_layer;
+        KisPaintDeviceSP m_mask;
+        KisSelectionSP m_selection;
+    public:
+        KisMaskToSelectionCommand(const QString& name, KisPaintLayer* layer)
+            : super(name), m_layer(layer) {
+            m_mask = m_layer->getMask();
+            if (m_layer->paintDevice()->hasSelection())
+                m_selection = m_layer->paintDevice()->selection();
+            else
+                m_selection = 0;
+        }
+        virtual void execute() {
+            m_layer->paintDevice()->setSelection(m_layer->getMaskAsSelection());
+            m_layer->removeMask();
+        }
+        virtual void unexecute() {
+            if (m_selection)
+                m_layer->paintDevice()->setSelection(m_selection);
+            else
+                m_layer->paintDevice()->deselect();
+            m_layer->createMaskFromPaintDevice(m_mask);
+        }
+    };
+
     class KisRemoveMaskCommand : public KNamedCommand {
-    typedef KNamedCommand super;
-    KisPaintLayerSP m_layer;
-    KisPaintDeviceSP m_mask;
+        typedef KNamedCommand super;
+        KisPaintLayerSP m_layer;
+        KisPaintDeviceSP m_mask;
     public:
         KisRemoveMaskCommand(const QString& name, KisPaintLayer* layer)
             : super(name), m_layer(layer) {
@@ -370,33 +450,42 @@ namespace {
         KisPaintLayerSP m_layer;
         KisPaintDeviceSP m_mask;
         KisPaintDeviceSP m_original;
-        public:
-            KisApplyMaskCommand(const QString& name, KisPaintLayer* layer)
+    public:
+        KisApplyMaskCommand(const QString& name, KisPaintLayer* layer)
             : super(name), m_layer(layer) {
-                m_mask = m_layer->getMask();
-                m_original = new KisPaintDevice(*m_layer->paintDevice());
-            }
-            virtual void execute() {
-                m_layer->applyMask();
-            }
-            virtual void unexecute() {
+            m_mask = m_layer->getMask();
+            m_original = new KisPaintDevice(*m_layer->paintDevice());
+        }
+        virtual void execute() {
+            m_layer->applyMask();
+        }
+        virtual void unexecute() {
                 // I hope that if the undo stack unwinds, it will end up here in the right
                 // state again; taking a deep-copy sounds like wasteful to me
-                KisPainter gc(m_layer->paintDevice());
-                int x, y, w, h;
-                m_layer->paintDevice()->extent(x, y, w, h);
+            KisPainter gc(m_layer->paintDevice());
+            int x, y, w, h;
+            m_layer->paintDevice()->extent(x, y, w, h);
 
-                gc.bitBlt(x, y, COMPOSITE_COPY, m_original, OPACITY_OPAQUE, x, y, w, h);
-                gc.end();
+            gc.bitBlt(x, y, COMPOSITE_COPY, m_original, OPACITY_OPAQUE, x, y, w, h);
+            gc.end();
 
-                m_layer->createMaskFromPaintDevice(m_mask);
-            }
+            m_layer->createMaskFromPaintDevice(m_mask);
+        }
     };
 }
 
 KNamedCommand* KisPaintLayer::createMaskCommand() {
     return new KisCreateMaskCommand(i18n("Create Layer Mask"), this);
 }
+
+KNamedCommand* KisPaintLayer::maskFromSelectionCommand() {
+    return new KisMaskFromSelectionCommand(i18n("Mask From Selection"), this);
+}
+
+KNamedCommand* KisPaintLayer::maskToSelectionCommand() {
+    return new KisMaskToSelectionCommand(i18n("Mask To Selection"), this);
+}
+
 
 KNamedCommand* KisPaintLayer::removeMaskCommand() {
     return new KisRemoveMaskCommand(i18n("Remove Layer Mask"), this);

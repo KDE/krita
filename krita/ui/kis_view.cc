@@ -644,6 +644,11 @@ void KisView::setupActions()
 
     m_createMask = new KAction(i18n("Create Mask"), 0, this,
                                SLOT(slotCreateMask()), actionCollection(), "create_mask");
+    m_maskFromSelection = new KAction(i18n("Mask From Selection"), 0, this,
+                                      SLOT(slotMaskFromSelection()), actionCollection(),
+                                      "mask_fromsel");
+    m_maskToSelection = new KAction(i18n("Mask To Selection"), 0, this,
+                               SLOT(slotMaskToSelection()), actionCollection(), "mask_tosel");
     m_applyMask = new KAction(i18n("Apply Mask"), 0, this, SLOT(slotApplyMask()),
                               actionCollection(), "apply_mask");
     m_removeMask = new KAction(i18n("Remove Mask"), 0, this,
@@ -3927,6 +3932,30 @@ void KisView::slotCreateMask() {
     }
 }
 
+void KisView::slotMaskFromSelection() {
+    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
+    if (!layer)
+        return;
+
+    KNamedCommand *cmd = layer->maskFromSelectionCommand();
+    cmd->execute();
+    if (undoAdapter() && undoAdapter()->undo()) {
+        undoAdapter()->addCommand(cmd);
+    }
+}
+
+void KisView::slotMaskToSelection() {
+    KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
+    if (!layer)
+        return;
+
+    KNamedCommand *cmd = layer->maskToSelectionCommand();
+    cmd->execute();
+    if (undoAdapter() && undoAdapter()->undo()) {
+        undoAdapter()->addCommand(cmd);
+    }
+}
+
 void KisView::slotApplyMask() {
     KisPaintLayer* layer = dynamic_cast<KisPaintLayer*>(currentImg()->activeLayer().data());
     if (!layer)
@@ -3978,8 +4007,9 @@ void KisView::maskUpdated() {
         return;
     }
     m_createMask->setEnabled(!layer->hasMask());
-    //m_applyMask->setEnabled(layer->hasMask());
-    m_applyMask->setEnabled(false); // Does not work yet
+    m_maskFromSelection->setEnabled(true); // Perhaps also update this to false when no selection?
+    m_maskToSelection->setEnabled(layer->hasMask());
+    m_applyMask->setEnabled(layer->hasMask());
     m_removeMask->setEnabled(layer->hasMask());
 
     m_editMask->setEnabled(layer->hasMask());

@@ -80,6 +80,8 @@
   <Separator/>
   <Menu name="LayerNew"><text>Mask</text>
     <Action name="create_mask"/>
+    <Action name="mask_fromsel"/>
+    <Action name="mask_tosel"/>
     <Action name="apply_mask"/>
     <Action name="remove_mask"/>
     <Seperator/>

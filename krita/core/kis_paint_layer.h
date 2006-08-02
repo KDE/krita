@@ -90,7 +90,7 @@ public:
     void createMaskFromPaintDevice(KisPaintDeviceSP from);
     /**
      * Convert the from selection to a paint device (should convert the getMaskAsSelection
-     * result back to the mask)
+     * result back to the mask). Overwrites the current mask, if any. Also removes the selection
      */
     void createMaskFromSelection(KisSelectionSP from);
     /// Remove the layer mask
@@ -104,6 +104,10 @@ public:
 
     /// Undoable version of createMask
     KNamedCommand* createMaskCommand();
+    /// Undoable version of createMaskFromSelection
+    KNamedCommand* maskFromSelectionCommand();
+    /// Undoable, removes the current mask, but converts it to the current selection
+    KNamedCommand* maskToSelectionCommand();
     /// Undoable version of removeMask
     KNamedCommand* removeMaskCommand();
     /// Undoable version of applyMask

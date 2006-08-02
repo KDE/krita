@@ -138,7 +138,7 @@
                                 <cstring>lblAbsorbency</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Water repelllant:</string>
+                                <string>&amp;Water repellant:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>slAbsorbency</cstring>

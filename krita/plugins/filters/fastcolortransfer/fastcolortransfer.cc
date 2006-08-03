@@ -84,7 +84,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP src, KisPaintDeviceSP 
     kdDebug() << "Start transfering color" << endl;
     QVariant value;
     QString fileName;
-    if (config->getProperty("filename", value))
+    if (config && config->getProperty("filename", value))
     {
         fileName = value.toString();
     } else {

@@ -55,7 +55,7 @@ int KoCanvasController::visibleHeight() const {
     else
         height1 = qMin(m_viewport->height(), m_canvasWidget->height());
     int height2 = height();
-    if(horizontalScrollBar())
+    if(horizontalScrollBar() && horizontalScrollBar()->isVisible())
         height2 -= horizontalScrollBar()->height();
     return qMin(height1, height2);
 }
@@ -67,7 +67,7 @@ int KoCanvasController::visibleWidth() const {
     else
         width1 = qMin(m_viewport->width(), m_canvasWidget->width());
     int width2 = width();
-    if(verticalScrollBar())
+    if(verticalScrollBar() && verticalScrollBar()->isVisible())
         width2 -= verticalScrollBar()->width();
     return qMin(width1, width2);
 }

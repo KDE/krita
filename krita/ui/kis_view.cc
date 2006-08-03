@@ -89,7 +89,7 @@
 
 #include <kopalettemanager.h>
 #include <kopalette.h>
-#include <KoToolBox.h>
+#include <oldtoolbox.h>
 #include <KoDocumentSectionView.h>
 
 // Local
@@ -398,7 +398,7 @@ QWidget * KisView::createContainer( QWidget *parent, int index, const QDomElemen
 {
     if( element.attribute( "name" ) == "ToolBox" )
     {
-        m_toolBox = new KoToolBox(mainWindow(), "ToolBox", KisFactory::instance(), NUMBER_OF_TOOLTYPES);
+        m_toolBox = new OldToolBox(mainWindow(), "ToolBox", KisFactory::instance(), NUMBER_OF_TOOLTYPES);
         m_toolBox->setWindowTitle(i18n("Krita"));
         m_toolManager->setUp(m_toolBox, m_paletteManager, actionCollection());
 

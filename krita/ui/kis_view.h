@@ -114,7 +114,7 @@ class KisResource;
 class KisResourceMediator;
 class KisRuler;
 class KisSelectionManager;
-class KoToolBox;
+class OldToolBox;
 class KisToolControllerInterface;
 class KisToolManager;
 class KisUndoAdapter;
@@ -591,7 +591,7 @@ private:
 
 
     KisLayerBox *m_layerBox;
-    KoToolBox * m_toolBox;
+    OldToolBox * m_toolBox;
     KisControlFrame * m_brushesAndStuffToolBar;
 
     // Current colours, brushes, patterns etc.

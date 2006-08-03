@@ -2,6 +2,7 @@ set(kritaui_LIB_SRCS
    kis_histogram_view.cc
    imageviewer.cc
    kcurve.cc
+    oldtoolbox.cc
    kis_autobrush.cc
    kis_autogradient.cc
    kis_boundary_painter.cc

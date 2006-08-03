@@ -34,7 +34,7 @@ class KisTool;
 class KisToolRegistry;
 class KisCanvasController;
 class KoPaletteManager;
-class KoToolBox;
+class OldToolBox;
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -51,7 +51,7 @@ public:
 
 public:
 
-    void setUp(KoToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * collection);
+    void setUp(OldToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * collection);
     
     // Called when the toolbox is deleted because the view was made inactive in favour of another view
     void youAintGotNoToolBox();
@@ -71,7 +71,7 @@ public:
 
 private:
     
-    void resetToolBox(KoToolBox * toolbox);
+    void resetToolBox(OldToolBox * toolbox);
     
 private:
 
@@ -87,7 +87,7 @@ private:
     KoPaletteManager * m_paletteManager;
     KActionCollection * m_actionCollection;
 
-    KoToolBox * m_toolBox;
+    OldToolBox * m_toolBox;
 
     KisTool * m_oldTool;
     KisTool * m_dummyTool;

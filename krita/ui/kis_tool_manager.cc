@@ -26,7 +26,7 @@
 #include "kis_view.h"
 #include "kis_canvas.h"
 #include "kis_cursor.h"
-#include "KoToolBox.h"
+#include "oldtoolbox.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_input_device.h"
@@ -50,7 +50,7 @@ KisToolManager::~KisToolManager()
     delete m_dummyTool;
 }
 
-void KisToolManager::setUp(KoToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
+void KisToolManager::setUp(OldToolBox * toolbox, KoPaletteManager * paletteManager, KActionCollection * actionCollection)
 {
     if (setup) {
         resetToolBox( toolbox );
@@ -94,7 +94,7 @@ void KisToolManager::youAintGotNoToolBox()
     m_oldTool = currentTool();
 }
 
-void KisToolManager::resetToolBox(KoToolBox * toolbox)
+void KisToolManager::resetToolBox(OldToolBox * toolbox)
 {
     m_toolBox = toolbox;
 

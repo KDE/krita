@@ -39,11 +39,15 @@
 #include "kis_button_press_event.h"
 #include "kis_button_release_event.h"
 #include "kis_move_event.h"
-#include "kis_paintop_registry.h"
 #include "kis_canvas.h"
 #include "kis_canvas_painter.h"
 #include "kis_cursor.h"
+#include "kis_tool_controller.h"
 #include "kis_vec.h"
+#include "kis_selection.h"
+#include "kis_selection_options.h"
+#include "kis_selected_transaction.h"
+#include "kis_paintop_registry.h"
 
 #include "kis_tool_moutline.h"
 
@@ -64,12 +68,12 @@ KisCurveMagnetic::~KisCurveMagnetic ()
 
 void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator it)
 {
-    KisPaintDeviceSP src = m_parent->m_subject->currentImg()->activeDevice();
+    KisPaintDeviceSP src = m_parent->m_currentImage->activeDevice();
     QRect rc = QRect((*p1).point().roundQPoint(),(*p2).point().roundQPoint()).normalize();
+    Q_UINT32 pixelSize = src->pixelSize();
 
     BoolMatrix dst = sobel (rc, src);
 
-/*
     QString line;
     for (int i = 0; i < rc.height(); i++) {
         line = "";
@@ -77,8 +81,6 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
             line += (dst[i][j] ? "1" : "0");
         kdDebug(0) << line << endl;
     }
-*/
-//     sobel (rc, src, dst);
 }
 
 void KisCurveMagnetic::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
@@ -97,7 +99,7 @@ void KisCurveMagnetic::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32
 
 BoolMatrix KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src)
 {
-    QRect rect = rc; //src->exactBounds();
+    QRect rect = rc; // src->exactBounds();
     Q_UINT32 x = rect.x();
     Q_UINT32 y = rect.y();
     Q_UINT32 width = rect.width();
@@ -124,29 +126,26 @@ BoolMatrix KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src)
     Q_UINT8* tmp;
     Q_INT32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution
-    kdDebug(0) << "HEIGHT: " << height << endl;
-    kdDebug(0) << "WIDTH: " << width << endl;
-    for (Q_UINT32 row = 0; row < height; row++) {
+    for (Q_UINT32 row = y; row < (y+height); row++) {
         // prepare the next row
         prepareRow (src, nr, x, row + 1, width, height);
-
+        
         dst.append(QValueList<bool>());
-        for (Q_UINT32 col = 0; col < width * pixelSize; col++) {
+        for (Q_UINT32 col = x; col < (x+width)*pixelSize; col+=pixelSize) {
             int positive = col + pixelSize;
             int negative = col - pixelSize;
             horGradient = ((pr[negative] + 2 * pr[col] + pr[positive]) -
                            (nr[negative] + 2 * nr[col] + nr[positive]));
-
             verGradient = ((pr[negative] + 2 * cr[negative] + nr[negative]) -
                            (pr[positive] + 2 * cr[positive] + nr[positive]));
             gradient = (Q_INT32) (ROUND (RMS (horGradient, verGradient)) / 5.66);
-
+            
             if (gradient > 10)
                 isEdge = true;
             else
                 isEdge = false;
 
-            dst[row].append(isEdge);
+            dst[row-y].append(isEdge);
         }
 
         //  shuffle the row pointers

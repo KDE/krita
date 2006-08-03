@@ -32,9 +32,8 @@ KoCreateShapesToolFactory::KoCreateShapesToolFactory(QObject *parent, const QStr
 : KoToolFactory(parent, KoCreateShapesTool_ID, i18n("Create Shapes"))
 {
     setToolTip(i18n("Create object"));
-    setToolType("main");
+    setToolType(mainToolType());
     setPriority(1);
-    // TODO create pixmap
 }
 
 KoCreateShapesToolFactory::~KoCreateShapesToolFactory() {

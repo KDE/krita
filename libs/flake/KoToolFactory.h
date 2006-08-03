@@ -112,6 +112,9 @@ public:
      */
     const QString &activationShapeId() const;
 
+    static QString mainToolType() { return "main"; }
+    static QString dynamicToolType() { return "dynamic"; }
+
 protected:
     /**
      * Set the tooltip to be used for this tool

@@ -38,6 +38,8 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 
+#include <stdlib.h> // for random()
+
 // ******** DummyTool **********
 class DummyTool : public KoTool {
 public:
@@ -52,7 +54,6 @@ public:
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()
 : QObject()
-, m_toolBox(0)
 , m_activeCanvas(0)
 , m_activeTool(0)
 , m_mutex(QMutex::Recursive)
@@ -79,7 +80,6 @@ void KoToolManager::setup() {
     KoToolRegistry *registry = KoToolRegistry::instance();
     foreach(KoID id, registry->listKeys()) {
         ToolHelper *t = new ToolHelper(registry->get(id));
-kDebug(30004) << "   th: " << t->name() << endl;
         connect(t, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
         m_tools.append(t);
     }
@@ -93,19 +93,15 @@ kDebug(30004) << "   th: " << t->name() << endl;
 }
 
 KoToolBox *KoToolManager::toolBox() {
-    m_mutex.lock();
-    if(! m_toolBox) {
-        setup();
-
-        m_toolBox = new KoToolBox();
-        foreach(ToolHelper *tool, m_tools) {
-            QAbstractButton *but = tool->createButton(m_toolBox);
-            m_toolBox->addButton(but, tool->toolType(), tool->priority());
-        }
-        m_toolBox->setup();
+    setup();
+    KoToolBox *toolBox = new KoToolBox();
+    foreach(ToolHelper *tool, m_tools) {
+        QAbstractButton *but = tool->createButton(toolBox);
+        toolBox->addButton(but, tool->toolType(), tool->priority(), tool->uniqueId());
     }
-    m_mutex.unlock();
-    return m_toolBox;
+    toolBox->setup();
+    connect(this, SIGNAL(changedTool(int)), toolBox, SLOT(setActiveTool(int)));
+    return toolBox;
 }
 
 void KoToolManager::registerTools(KActionCollection *ac) {
@@ -137,8 +133,10 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller) {
     m_canvases.removeAll(controller);
     m_shapeControllers.remove(controller);
     QMap<QString, KoTool*> toolsMap = m_allTools.value(controller);
-    foreach(KoTool *tool, toolsMap.values())
+    foreach(KoTool *tool, toolsMap.values()) {
+        m_uniqueToolIds.remove(tool);
         delete tool;
+    }
     m_allTools.remove(controller);
     if(controller->canvas())
         detachCanvas(controller);
@@ -202,16 +200,19 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
         controller->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
     m_activeTool->activate();
+    emit changedTool(m_uniqueToolIds.value(m_activeTool));
     m_mutex.unlock();
 }
 
 void KoToolManager::attachCanvas(KoCanvasController *controller) {
-kDebug(30004) << "KoToolManager::attachCanvas\n";
     // TODO listen to focus changes
     // TODO listen to selection changes
     QMap<QString, KoTool*> toolsMap;
-    foreach(ToolHelper *tool, m_tools)
-        toolsMap.insert(tool->id(), tool->createTool(controller->canvas()));
+    foreach(ToolHelper *tool, m_tools) {
+        KoTool *tl = tool->createTool(controller->canvas());
+        m_uniqueToolIds.insert(tl, tool->uniqueId());
+        toolsMap.insert(tool->id(), tl);
+    }
     KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsMap.value(KoCreateShapesTool_ID));
     Q_ASSERT(createTool);
     createTool->setShapeController(m_shapeControllers[controller]);
@@ -280,6 +281,11 @@ KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const 
 }
 
 //   ************ ToolHelper **********
+ToolHelper::ToolHelper(KoToolFactory *tool) {
+    m_toolFactory = tool;
+    m_uniqueId = (int) random();
+}
+
 QAbstractButton* ToolHelper::createButton(QWidget *parent) {
     QToolButton *but = new QToolButton(parent);
     but->setIcon(KIcon( m_toolFactory->icon() ).pixmap(22));

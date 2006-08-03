@@ -70,6 +70,9 @@ public:
 
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
+signals:
+    void changedTool(int uniqueToolId);
+
 private:
     KoToolManager();
     KoToolManager(const KoToolManager&);
@@ -90,8 +93,6 @@ private slots:
 private:
     static KoToolManager* s_instance;
 
-    KoToolBox *m_toolBox;
-
     QList<ToolHelper*> m_tools;
     QMap<KoCanvasController*, KoShapeControllerBase*> m_shapeControllers;
     QList<KoCanvasController*> m_canvases;
@@ -102,6 +103,7 @@ private:
      * and m_toolBox members. */
     QMutex m_mutex;
 
+    QMap<KoTool*, int> m_uniqueToolIds;
     QMap<KoCanvasController*, QMap<QString, KoTool*> > m_allTools;
     QStack<KoTool*> m_stack;
 };
@@ -110,13 +112,14 @@ private:
 class ToolHelper : public QObject {
     Q_OBJECT
 public:
-    ToolHelper(KoToolFactory *tool) { m_toolFactory = tool; }
+    ToolHelper(KoToolFactory *tool);
     QAbstractButton *createButton(QWidget *parent);
     const QString &id() const;
     const QString &name() const;
     const QString &toolType() const;
     int priority() const;
     KoTool *createTool(KoCanvasBase *canvas) const;
+    int uniqueId() const { return m_uniqueId; }
 
 signals:
     void toolActivated(ToolHelper *tool);
@@ -126,6 +129,7 @@ private slots:
 
 private:
     KoToolFactory *m_toolFactory;
+    int m_uniqueId;
 };
 
 #endif

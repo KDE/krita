@@ -45,12 +45,16 @@ class ToolArea;
  * @see setWindowTitle()
  */
 class KOFFICEUI_EXPORT KoToolBox : public QDockWidget {
+    Q_OBJECT
 public:
     KoToolBox();
     ~KoToolBox();
 
-    void addButton(QAbstractButton *button, const QString &section, int priority);
+    void addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId=-1);
     void setup();
+
+public slots:
+    void setActiveTool(int id);
 
 private:
     QButtonGroup *m_buttonGroup;

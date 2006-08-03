@@ -40,6 +40,7 @@
 #include <kactioncollection.h>
 
 #include <KoMainWindow.h>
+#include <KoToolFactory.h>
 #include "KoToolBox.h"
 
 #ifdef HAVE_CONFIG_H
@@ -55,11 +56,15 @@ KoToolBox::KoToolBox() {
 KoToolBox::~KoToolBox() {
 }
 
-void KoToolBox::addButton(QAbstractButton *button, const QString &section, int priority) {
-kDebug() << "addButton " << button->text() << " " << section << "/" << priority << endl;
+void KoToolBox::addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId) {
     QMap<int, QAbstractButton*> buttons = m_buttons[section];
     buttons.insert(priority, button);
     m_buttons.insert(section, buttons);
+    if(buttonGroupId < 0)
+        m_buttonGroup->addButton(button);
+    else
+        m_buttonGroup->addButton(button, buttonGroupId);
+    button->setCheckable(true);
 }
 
 void KoToolBox::setup() {
@@ -68,8 +73,15 @@ void KoToolBox::setup() {
     m_layout = new QBoxLayout(QBoxLayout::TopToBottom, widget);
     m_layout->setMargin(0);
     m_layout->setSpacing(KDialog::spacingHint());
-    foreach(QString section, m_buttons.keys()) {
-        kDebug() << "section: " << section << endl;
+
+    // loop over all sections.
+    QList<QString> sections = m_buttons.keys();
+    // but first make the main and dynamic be the first and last respectively.
+    sections.removeAll(KoToolFactory::mainToolType());
+    sections.insert(0, KoToolFactory::mainToolType());
+    sections.removeAll(KoToolFactory::dynamicToolType());
+    sections.append(KoToolFactory::dynamicToolType());
+    foreach(QString section, sections) {
         ToolArea *ta = m_toolAreas.value(section);
         if(ta == 0) {
             ta = new ToolArea(widget);
@@ -78,7 +90,6 @@ void KoToolBox::setup() {
         }
         QMap<int, QAbstractButton*> buttons = m_buttons[section];
         foreach(QAbstractButton *button, buttons.values()) {
-            kDebug() << " " << section << " " << button->text() << endl;
             ta->add(button);
         }
     }
@@ -118,6 +129,14 @@ void KoToolBox::showEvent(QShowEvent *event) {
         area->setOrientation(orientation);
 
     adjustSize();
+}
+
+void KoToolBox::setActiveTool(int id) {
+    QAbstractButton *button = m_buttonGroup->button(id);
+    if(button)
+        button->setChecked(true);
+    else
+        kWarning() << "KoToolBox::setActiveTool(" << id << "): no such button found\n";
 }
 
 #if 0
@@ -309,3 +328,5 @@ void ToolArea::setOrientation ( Qt::Orientation o )
             ? QBoxLayout::TopToBottom
             : QBoxLayout::LeftToRight);
 }
+
+#include "KoToolBox.moc"

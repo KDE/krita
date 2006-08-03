@@ -654,7 +654,8 @@ bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & f
     return changed;
 }
 
-QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat )
+QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
+                                           const QString & _prefix, const QString & _suffix )
 {
     kDebug(30003)<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -803,7 +804,8 @@ void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & 
     addTextNumber( text, elementWriter );
 }
 
-QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat )
+QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
+                                           const QString & _prefix, const QString & _suffix )
 {
     kDebug(30003)<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -979,7 +981,8 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
 }
 
 
-QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
+QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format,
+                                               const QString &_prefix, const QString &_suffix )
 {
     kDebug(30003)<<"QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -1043,7 +1046,8 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
 }
 
 
-QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
+QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format,
+                                             const QString &_prefix, const QString &_suffix )
 {
     kDebug(30003)<<"QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -1087,7 +1091,8 @@ QString KoOasisStyles::saveOasisNumberStyle( KoGenStyles &mainStyles, const QStr
     return mainStyles.lookup( currentStyle, "N" );
 }
 
-QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
+QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format,
+                                                 const QString &_prefix, const QString &_suffix )
 {
     //<number:percentage-style style:name="N11">
     //<number:number number:decimal-places="2" number:min-integer-digits="1"/>
@@ -1138,7 +1143,8 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
 
 }
 
-QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
+QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format,
+                                                 const QString &_prefix, const QString &_suffix )
 {
     //<number:number-style style:name="N60">
     //<number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -1213,7 +1219,9 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     return mainStyles.lookup( currentStyle, "N" );
 }
 
-QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &symbol, const QString &_prefix, const QString &_suffix )
+QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles,
+                                               const QString & _format, const QString &symbol,
+                                               const QString &_prefix, const QString &_suffix )
 {
 
     //<number:currency-style style:name="N107P0" style:volatile="true">
@@ -1263,7 +1271,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
 
     elementWriter.startElement( "number:currency-symbol" );
     kDebug(30003)<<" currency-symbol: "<<symbol<<endl;
-    elementWriter.addTextNode( symbol );
+    elementWriter.addTextNode( symbol.toUtf8() );
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );

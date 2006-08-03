@@ -1,28 +1,29 @@
 /*
-   Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+ * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2005-2006 Thomas Zander <zander@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 #ifndef _KO_TOOLBOX_H_
 #define _KO_TOOLBOX_H_
 
 #include <QList>
 #include <QMap>
+#include <QDockWidget>
 #include <koffice_export.h>
-#include <ktoolbar.h>
 #include <kinstance.h>
 
 class QButtonGroup;
@@ -41,15 +42,28 @@ class ToolArea;
  * KoToolBox is a kind of super-specialized toolbox that can order
  * tools according to type and priority.
  *
+ * @see setWindowTitle()
  */
-class KOFFICEUI_EXPORT KoToolBox : public KToolBar {
-
-    Q_OBJECT
-
+class KOFFICEUI_EXPORT KoToolBox : public QDockWidget {
 public:
+    KoToolBox();
+    ~KoToolBox();
 
-    KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes);
-    virtual ~KoToolBox();
+    void addButton(QAbstractButton *button, const QString &section, int priority);
+    void setup();
+
+private:
+    QButtonGroup *m_buttonGroup;
+    QBoxLayout* m_layout;
+    QList<ToolArea *> m_toolBoxes;
+
+    // Section,  [prio, button]
+    QMap<QString, QMultiMap<int, QAbstractButton*> > m_buttons;
+    QMap<QString, ToolArea*> m_toolAreas;
+
+    void showEvent(QShowEvent *event);
+
+#if 0
 
     // Called by the toolcontroller for each tool. For every category,
     // there is a separate list, and the tool is categorized correctly.
@@ -84,32 +98,31 @@ private:
 
     QList<ToolList *> m_tools;
     QMap<QAbstractButton *, KAction *> m_actionMap; // Map the buttongroup id's to actions for easy activating.
-    KInstance* m_instance;
+#endif
 };
 
-
+/// \internal
 class ToolArea : public QWidget {
 
 public:
     ToolArea(QWidget *parent);
     ~ToolArea();
 
-    void  setOrientation ( Qt::Orientation o );
-    void  add(QWidget *button);
+    void setOrientation (Qt::Orientation orientation);
+    void add(QWidget *button);
 
     QWidget* getNextParent();
 
 private:
-    QList<QWidget *>  m_children;
-    QBoxLayout        *m_layout;
+    QList<QWidget *> m_children;
+    QBoxLayout *m_layout;
 
-    QWidget           *m_leftRow;
-    QBoxLayout        *m_leftLayout;
+    QWidget *m_leftRow;
+    QWidget *m_rightRow;
+    QBoxLayout *m_leftLayout;
+    QBoxLayout *m_rightLayout;
 
-    QWidget           *m_rightRow;
-    QBoxLayout        *m_rightLayout;
-
-    bool               m_left;
+    bool m_left;
 };
 
 

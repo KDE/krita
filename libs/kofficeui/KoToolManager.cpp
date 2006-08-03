@@ -29,9 +29,10 @@
 #include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
 
-#include "kactioncollection.h"
-#include "kdebug.h"
-#include "kstaticdeleter.h"
+#include <kactioncollection.h>
+#include <kdebug.h>
+#include <kstaticdeleter.h>
+#include <kicon.h>
 
 #include <QToolButton>
 #include <QButtonGroup>
@@ -91,20 +92,17 @@ kDebug(30004) << "   th: " << t->name() << endl;
     m_mutex.unlock();
 }
 
-QWidget *KoToolManager::toolBox() {
+KoToolBox *KoToolManager::toolBox() {
     m_mutex.lock();
     if(! m_toolBox) {
         setup();
-        QWidget *widget = new QWidget();
-        widget->setMinimumSize(20, 100);
-        QButtonGroup *group = new QButtonGroup(widget);
-        QVBoxLayout *lay = new QVBoxLayout(widget);
+
+        m_toolBox = new KoToolBox();
         foreach(ToolHelper *tool, m_tools) {
-            QAbstractButton *but = tool->createButton(widget);
-            group->addButton(but);
-            lay->addWidget(but);
+            QAbstractButton *but = tool->createButton(m_toolBox);
+            m_toolBox->addButton(but, tool->toolType(), tool->priority());
         }
-        m_toolBox = widget;
+        m_toolBox->setup();
     }
     m_mutex.unlock();
     return m_toolBox;
@@ -284,7 +282,9 @@ KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const 
 //   ************ ToolHelper **********
 QAbstractButton* ToolHelper::createButton(QWidget *parent) {
     QToolButton *but = new QToolButton(parent);
-    but->setText(name());
+    //but->setText(name());
+    but->setIcon(KIcon( m_toolFactory->icon() ).pixmap(16));
+    but->setToolTip(m_toolFactory->toolTip());
     connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));
     return but;
 }
@@ -303,6 +303,14 @@ const QString& ToolHelper::name() const {
 
 KoTool *ToolHelper::createTool(KoCanvasBase *canvas) const {
     return m_toolFactory->createTool(canvas);
+}
+
+const QString &ToolHelper::toolType() const {
+    return m_toolFactory->toolType();
+}
+
+int ToolHelper::priority() const {
+    return m_toolFactory->priority();
 }
 
 //static

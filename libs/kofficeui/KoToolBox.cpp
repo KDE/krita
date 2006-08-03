@@ -1,5 +1,6 @@
 /*
    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (c) 2005-2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
 #include <QLabel>
 #include <QToolTip>
 #include <QLayout>
+#include <QBoxLayout>
 #include <QPixmap>
 #include <QGridLayout>
 #include <QSpacerItem>
@@ -44,29 +46,81 @@
 #include <config.h>
 #endif
 
-KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instance, int numberOfTooltypes )
-    : KToolBar( name, mainWin, Qt::LeftToolBarArea, false, true, true ),
-    m_instance( instance )
-{
-    setObjectName(name);
-
-    m_buttonGroup = new QButtonGroup( );
-    connect( m_buttonGroup, SIGNAL( buttonClicked( QAbstractButton *) ), this, SLOT( slotButtonPressed( QAbstractButton *) ) );
+KoToolBox::KoToolBox() {
+    m_buttonGroup = new QButtonGroup(this);
     connect( this, SIGNAL(  orientationChanged ( Qt::Orientation )), this, SLOT(setOrientation ( Qt::Orientation ) ) );
+    setFeatures(DockWidgetMovable | DockWidgetFloatable);
+}
 
-    // Create separate lists for the various sorts of tools
-    for (int i = 0; i < numberOfTooltypes ; ++i) {
-        ToolList * tl = new ToolList();
-        m_tools.append(tl);
+KoToolBox::~KoToolBox() {
+}
+
+void KoToolBox::addButton(QAbstractButton *button, const QString &section, int priority) {
+kDebug() << "addButton " << button->text() << " " << section << "/" << priority << endl;
+    QMap<int, QAbstractButton*> buttons = m_buttons[section];
+    buttons.insert(priority, button);
+    m_buttons.insert(section, buttons);
+}
+
+void KoToolBox::setup() {
+    QWidget *widget = new QWidget();
+    widget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_layout = new QBoxLayout(QBoxLayout::TopToBottom, widget);
+    m_layout->setMargin(0);
+    m_layout->setSpacing(KDialog::spacingHint());
+    foreach(QString section, m_buttons.keys()) {
+        kDebug() << "section: " << section << endl;
+        ToolArea *ta = m_toolAreas.value(section);
+        if(ta == 0) {
+            ta = new ToolArea(widget);
+            m_toolAreas.insert(section, ta);
+            m_layout->addWidget(ta);
+        }
+        QMap<int, QAbstractButton*> buttons = m_buttons[section];
+        foreach(QAbstractButton *button, buttons.values()) {
+            kDebug() << " " << section << " " << button->text() << endl;
+            ta->add(button);
+        }
     }
+    m_buttons.clear();
+    layout()->addWidget(widget);
+    layout()->setAlignment(widget, Qt::AlignLeft | Qt::AlignTop);
+    layout()->setMargin(0);
 }
 
-KoToolBox::~KoToolBox()
-{
-    qDeleteAll(m_tools);
-    delete m_buttonGroup;
+void KoToolBox::showEvent(QShowEvent *event) {
+    Q_UNUSED(event);
+    Qt::Orientation orientation = Qt::Vertical;
+    QWidget *parent = parentWidget();
+    bool floating=false;
+    while(parent) {
+        QMainWindow *mw = dynamic_cast<QMainWindow *> (parent);
+        if(mw) {
+            switch (mw->dockWidgetArea(this)) {
+                case Qt::TopDockWidgetArea:
+                case Qt::BottomDockWidgetArea:
+                    orientation = Qt::Horizontal;
+                    break;
+                case Qt::NoDockWidgetArea:
+                    floating = true;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        parent = parentWidget();
+    }
+    m_layout->setDirection(orientation == Qt::Horizontal
+            ? QBoxLayout::LeftToRight
+            : QBoxLayout::TopToBottom);
+    foreach(ToolArea *area, m_toolAreas)
+        area->setOrientation(orientation);
+
+    adjustSize();
 }
 
+#if 0
 void KoToolBox::slotButtonPressed( QAbstractButton *b)
 {
     m_actionMap.value(b)->trigger();
@@ -106,8 +160,8 @@ void KoToolBox::setupTools()
         if (!tl) continue;
         if (tl->isEmpty()) continue;
 
-        if(!first)
-           addSeparator();
+//       if(!first)
+//          addSeparator();
         ToolArea *tools = new ToolArea( this );
         ToolList::Iterator it;
         for ( it = tl->begin(); it != tl->end(); ++it )
@@ -124,7 +178,7 @@ void KoToolBox::setupTools()
             first=false;
         }
         tools->show();
-        addWidget(tools);
+        //addWidget(tools);
         m_toolBoxes.append(tools);
     }
 }
@@ -138,7 +192,7 @@ void KoToolBox::setOrientation ( Qt::Orientation o )
     }
 #endif
 
-    QToolBar::setOrientation( o );
+    //QToolBar::setOrientation( o );
 
     for (int i = 0; i < m_toolBoxes.count(); ++i) {
         ToolArea *t = m_toolBoxes.at(i);
@@ -177,7 +231,7 @@ void KoToolBox::slotSetTool(const QString & toolname)
         }
     }
 }
-
+#endif
 
 // ----------------------------------------------------------------
 //                         class ToolArea
@@ -197,6 +251,8 @@ ToolArea::ToolArea(QWidget *parent)
     grid->addWidget(m_leftRow, 0, 0);
     grid->setRowStretch(1, 1);
     grid->setColumnStretch(1, 1);
+    grid->setMargin(0);
+    grid->setSpacing(0);
     m_leftLayout = new QBoxLayout(QBoxLayout::TopToBottom, m_leftRow);
     m_leftLayout->setMargin(0);
     m_leftLayout->setSpacing(1);
@@ -208,6 +264,8 @@ ToolArea::ToolArea(QWidget *parent)
     grid->addWidget(m_rightRow, 0, 0);
     grid->setRowStretch(1, 1);
     grid->setColumnStretch(1, 1);
+    grid->setMargin(0);
+    grid->setSpacing(0);
     m_rightLayout = new QBoxLayout(QBoxLayout::TopToBottom, m_rightRow);
     m_rightLayout->setMargin(0);
     m_rightLayout->setSpacing(1);
@@ -242,15 +300,12 @@ QWidget* ToolArea::getNextParent()
 void ToolArea::setOrientation ( Qt::Orientation o )
 {
     QBoxLayout::Direction  dir = (o != Qt::Horizontal
-				  ? QBoxLayout::TopToBottom
-				  : QBoxLayout::LeftToRight);
+            ? QBoxLayout::TopToBottom
+            : QBoxLayout::LeftToRight);
     m_leftLayout->setDirection(dir);
     m_rightLayout->setDirection(dir);
 
     m_layout->setDirection(o == Qt::Horizontal
-			   ? QBoxLayout::TopToBottom
-			   : QBoxLayout::LeftToRight);
+            ? QBoxLayout::TopToBottom
+            : QBoxLayout::LeftToRight);
 }
-
-
-#include "KoToolBox.moc"

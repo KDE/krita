@@ -63,7 +63,7 @@ public:
     static KoToolManager* instance();
     ~KoToolManager();
 
-    QWidget *toolBox(); // TODO alter from QWidget to KoToolBox
+    KoToolBox *toolBox();
     void registerTools(KActionCollection *ac);
     void addControllers(KoCanvasController *controller, KoShapeControllerBase *sc);
     void removeCanvasController(KoCanvasController *controller);
@@ -90,8 +90,7 @@ private slots:
 private:
     static KoToolManager* s_instance;
 
-    //KoToolBox *m_toolBox;
-    QWidget *m_toolBox;
+    KoToolBox *m_toolBox;
 
     QList<ToolHelper*> m_tools;
     QMap<KoCanvasController*, KoShapeControllerBase*> m_shapeControllers;
@@ -115,6 +114,8 @@ public:
     QAbstractButton *createButton(QWidget *parent);
     const QString &id() const;
     const QString &name() const;
+    const QString &toolType() const;
+    int priority() const;
     KoTool *createTool(KoCanvasBase *canvas) const;
 
 signals:

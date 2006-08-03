@@ -31,6 +31,7 @@ KoInteractionToolFactory::KoInteractionToolFactory(QObject *parent, const QStrin
     setToolTip(i18n("Default tool"));
     setToolType("main");
     setPriority(0);
+    setIcon("select");
 }
 
 KoInteractionToolFactory::~KoInteractionToolFactory() {

@@ -282,8 +282,7 @@ KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const 
 //   ************ ToolHelper **********
 QAbstractButton* ToolHelper::createButton(QWidget *parent) {
     QToolButton *but = new QToolButton(parent);
-    //but->setText(name());
-    but->setIcon(KIcon( m_toolFactory->icon() ).pixmap(16));
+    but->setIcon(KIcon( m_toolFactory->icon() ).pixmap(22));
     but->setToolTip(m_toolFactory->toolTip());
     connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));
     return but;

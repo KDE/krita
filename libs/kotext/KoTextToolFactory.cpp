@@ -28,7 +28,7 @@ KoTextToolFactory::KoTextToolFactory(QObject *parent, const QStringList&)
 {
     setToolTip (i18n("Text editing tool"));
     setToolType ("dynamic");
-    setIcon ("tool_text");
+    setIcon ("edittext");
     setPriority (1);
     setActivationShapeID (KoTextShape_SHAPEID);
 }

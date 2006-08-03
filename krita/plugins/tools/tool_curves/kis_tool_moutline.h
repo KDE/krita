@@ -27,6 +27,8 @@
 
 class KisToolMagnetic;
 
+typedef QValueList< QValueList <bool> > BoolMatrix;
+
 class KisCurveMagnetic : public KisCurve {
 
     typedef KisCurve super;
@@ -34,7 +36,7 @@ class KisCurveMagnetic : public KisCurve {
     KisToolMagnetic *m_parent;
 
     void prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
-    void sobel (const QRect & rc, KisPaintDeviceSP src, bool** dst);
+    BoolMatrix sobel (const QRect & rc, KisPaintDeviceSP src);
 
 public:
 

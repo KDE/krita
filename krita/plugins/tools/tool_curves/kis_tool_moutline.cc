@@ -65,8 +65,20 @@ KisCurveMagnetic::~KisCurveMagnetic ()
 void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator it)
 {
     KisPaintDeviceSP src = m_parent->m_subject->currentImg()->activeDevice();
-    QRect rc = QRect((*p1).point().roundQPoint(),(*p2).point().roundQPoint());
-    int col = rc.width(), row = rc.height();
+    QRect rc = QRect((*p1).point().roundQPoint(),(*p2).point().roundQPoint()).normalize();
+
+    BoolMatrix dst = sobel (rc, src);
+
+/*
+    QString line;
+    for (int i = 0; i < rc.height(); i++) {
+        line = "";
+        for (int j = 0; j < rc.width(); j++)
+            line += (dst[i][j] ? "1" : "0");
+        kdDebug(0) << line << endl;
+    }
+*/
+//     sobel (rc, src, dst);
 }
 
 void KisCurveMagnetic::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h)
@@ -83,7 +95,7 @@ void KisCurveMagnetic::prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32
     }
 }
 
-void KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src, bool** dst)
+BoolMatrix KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src)
 {
     QRect rect = rc; //src->exactBounds();
     Q_UINT32 x = rect.x();
@@ -91,6 +103,7 @@ void KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src, bool** dst)
     Q_UINT32 width = rect.width();
     Q_UINT32 height = rect.height();
     Q_UINT32 pixelSize = src->pixelSize();
+    BoolMatrix dst;
 
     /*  allocate row buffers  */
     Q_UINT8* prevRow = new Q_UINT8[ (width + 2) * pixelSize];
@@ -99,8 +112,6 @@ void KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src, bool** dst)
     Q_CHECK_PTR(curRow);
     Q_UINT8* nextRow = new Q_UINT8[ (width + 2) * pixelSize];
     Q_CHECK_PTR(nextRow);
-    Q_UINT8* dest = new Q_UINT8[ width  * pixelSize];
-    Q_CHECK_PTR(dest);
 
     Q_UINT8* pr = prevRow + pixelSize;
     Q_UINT8* cr = curRow + pixelSize;
@@ -113,10 +124,13 @@ void KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src, bool** dst)
     Q_UINT8* tmp;
     Q_INT32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution
+    kdDebug(0) << "HEIGHT: " << height << endl;
+    kdDebug(0) << "WIDTH: " << width << endl;
     for (Q_UINT32 row = 0; row < height; row++) {
         // prepare the next row
         prepareRow (src, nr, x, row + 1, width, height);
 
+        dst.append(QValueList<bool>());
         for (Q_UINT32 col = 0; col < width * pixelSize; col++) {
             int positive = col + pixelSize;
             int negative = col - pixelSize;
@@ -127,13 +141,12 @@ void KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src, bool** dst)
                            (pr[positive] + 2 * cr[positive] + nr[positive]));
             gradient = (Q_INT32) (ROUND (RMS (horGradient, verGradient)) / 5.66);
 
-            kdDebug(0) << "GRADIENTE: " << gradient << endl;
             if (gradient > 10)
                 isEdge = true;
             else
                 isEdge = false;
 
-            dst[row][col] = isEdge;
+            dst[row].append(isEdge);
         }
 
         //  shuffle the row pointers
@@ -146,7 +159,8 @@ void KisCurveMagnetic::sobel(const QRect & rc, KisPaintDeviceSP src, bool** dst)
     delete[] prevRow;
     delete[] curRow;
     delete[] nextRow;
-    delete[] dest;
+
+    return dst;
 }
 
 KisToolMagnetic::KisToolMagnetic ()

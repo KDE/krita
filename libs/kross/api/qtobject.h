@@ -33,35 +33,6 @@ namespace Kross { namespace Api {
     class Variant;
     class ScriptContainer;
 
-/*
-    class ClassInfo : public ::Kross::Api::Class<ClassInfo>
-    {
-        public:
-            ClassInfo(const QMetaClassInfo& info) : ::Kross::Api::Class<ClassInfo>() {
-                this->addProxyFunction<QString>("name", info, QMetaClassInfo::name);
-                this->addProxyFunction<QString>("value", info, QMetaClassInfo::value);
-            }
-            virtual ~ClassInfo() {}
-            virtual const QString getClassName() const { return "Kross::Qt::ClassInfo"; }
-    };
-
-    class Method : public ::Kross::Api::Class<Method>
-    {
-        public:
-            Method() : ::Kross::Api::Class<Method>() {}
-            virtual ~Method() {}
-            virtual const QString getClassName() const { return "Kross::Qt::Method"; }
-    };
-
-    class Property : public ::Kross::Api::Class<Property>
-    {
-        public:
-            Property() : ::Kross::Api::Class<Property>() {}
-            virtual ~Property() {}
-            virtual const QString getClassName() const { return "Kross::Qt::Property"; }
-    };
-*/
-
     /**
      * Class to wrap \a QObject or inherited instances.
      *
@@ -107,19 +78,42 @@ namespace Kross { namespace Api {
             /// The wrapped QObject.
             QObject* m_object;
 
-///\todo implement new QMetaObject-stuff
-/*
-            // QProperty's
+            // QObject
 
-            /// Return a list of property names.
-            Kross::Api::Object::Ptr propertyNames(Kross::Api::List::Ptr);
-            /// Return true if the property exists else false.
-            Kross::Api::Object::Ptr hasProperty(Kross::Api::List::Ptr);
+            /// Return the classname. E.g. "QObject" or "QWidget".
+            const QString className() const;
+            /// Return the name the object has.
+            const QString objectName() const;
+            /// Set the name the object has.
+            void setObjectName(const QString& name);
+
+            // QProperty
+
             /// Return a property.
-            Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr);
+            QVariant property(const char* name);
             /// Set a property.
-            Kross::Api::Object::Ptr setProperty(Kross::Api::List::Ptr);
+            bool setProperty(const char* name, const QVariant& value);
+            /// Return a list of property names.
+            QStringList propertyNames() const;
+            /// Return the name of the property's type. E.g. "QString" or "int".
+            QString propertyTypeName(const char* name);
 
+            // Enumerator
+
+            /// Return the name of the enumerator identified with the index-value.
+            QString enumeratorName(int index) const;
+            int enumeratorCount() const;
+            /// Return a list of all enumerator names.
+            QStringList enumeratorNames() const;
+            /// Return the index the enumerator identified with name has.
+            int enumeratorIndex(const char* name) const;
+
+            // Methods
+
+            QStringList methodNames() const;
+            //bool invokeMethod(const char* name);
+
+            /*
             // Slots
 
             /// Return a list of slot names.
@@ -142,7 +136,7 @@ namespace Kross { namespace Api {
             Kross::Api::Object::Ptr connectSignal(Kross::Api::List::Ptr);
             /// Disconnect signal from QObject slot.
             Kross::Api::Object::Ptr disconnectSignal(Kross::Api::List::Ptr);
-*/
+            */
 
     };
 

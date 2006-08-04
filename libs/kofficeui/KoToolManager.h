@@ -44,10 +44,12 @@ class KoTool;
 /**
  * This class manages the activation and deactivation of tools for
  * each input device.
+ * Managing the active tool and switching tool based on various variables.
  *
- * We assume ONE toolbox per application instance (process), not one
- * per view. This one toolbox is owned and managed by this
- * toolmanager.  We will create that without using actions, just signal slots.
+ * The state of the toolbox will be the same for all views in the process so practically
+ * you can say we have one toolbox per application instance (process).  Implementation
+ * does not allow one widget to be in more then one view, so we just make sure the toolbox
+ * is hidden in not-in-focus views.
  *
  * There is one tool instance per pointer
  * There is one set of tools per pointer per process
@@ -63,7 +65,7 @@ public:
     static KoToolManager* instance();
     ~KoToolManager();
 
-    KoToolBox *toolBox();
+    KoToolBox *toolBox(const QString &applicationName = QString());
     void registerTools(KActionCollection *ac);
     void addControllers(KoCanvasController *controller, KoShapeControllerBase *sc);
     void removeCanvasController(KoCanvasController *controller);

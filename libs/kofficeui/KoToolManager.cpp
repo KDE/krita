@@ -92,7 +92,7 @@ void KoToolManager::setup() {
     m_mutex.unlock();
 }
 
-KoToolBox *KoToolManager::toolBox() {
+KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
     setup();
     KoToolBox *toolBox = new KoToolBox();
     foreach(ToolHelper *tool, m_tools) {
@@ -101,6 +101,7 @@ KoToolBox *KoToolManager::toolBox() {
     }
     toolBox->setup();
     connect(this, SIGNAL(changedTool(int)), toolBox, SLOT(setActiveTool(int)));
+    toolBox->setWindowTitle(applicationName);
     return toolBox;
 }
 

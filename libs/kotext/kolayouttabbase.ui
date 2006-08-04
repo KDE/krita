@@ -119,10 +119,10 @@
                             <property name="suffix">
                                 <string> %</string>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>100</number>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>1</number>
                             </property>
                             <property name="value">
@@ -172,10 +172,10 @@
                             <property name="suffix">
                                 <string> pts</string>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>9</number>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>-9</number>
                             </property>
                             <property name="value">

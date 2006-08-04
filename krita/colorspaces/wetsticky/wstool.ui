@@ -86,7 +86,7 @@
                     <property name="name">
                         <cstring>intGravitationalStrength</cstring>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>0</number>
                     </property>
                 </widget>
@@ -129,10 +129,10 @@
                     <property name="name">
                         <cstring>intDryingRate</cstring>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>0</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>100</number>
                     </property>
                 </widget>
@@ -145,10 +145,10 @@
                     <property name="name">
                         <cstring>intLiquidContent</cstring>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>0</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>100</number>
                     </property>
                 </widget>
@@ -196,10 +196,10 @@
                     <property name="name">
                         <cstring>intAbsorbency</cstring>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>0</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>100</number>
                     </property>
                 </widget>

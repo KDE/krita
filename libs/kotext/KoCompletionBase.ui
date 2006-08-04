@@ -139,10 +139,10 @@
                             <property name="name">
                                 <cstring>slider2</cstring>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>1</number>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>500</number>
                             </property>
                             <property name="pageStep">
@@ -191,10 +191,10 @@ This option is most important when Automatically add words to completion list is
                             <property name="name">
                                 <cstring>m_maxNbWordCompletion</cstring>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>500</number>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>1</number>
                             </property>
                             <property name="value">
@@ -209,10 +209,10 @@ This option is most important when Automatically add words to completion list is
                             <property name="name">
                                 <cstring>slider1</cstring>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>5</number>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>100</number>
                             </property>
                             <property name="orientation">
@@ -229,10 +229,10 @@ This option is most important when Automatically add words to completion list is
                             <property name="name">
                                 <cstring>m_minWordLength</cstring>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>100</number>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>5</number>
                             </property>
                             <property name="whatsThis" stdset="0">

@@ -38,15 +38,21 @@ class ToolHelper : public QObject {
 public:
     ToolHelper(KoToolFactory *tool);
     QAbstractButton *createButton(QWidget *parent);
+    /// wrapper around KoToolFactory::id();
     const QString &id() const;
+    /// wrapper around KoToolFactory::name();
     const QString &name() const;
+    /// wrapper around KoToolFactory::toolType();
     const QString &toolType() const;
+    /// wrapper around KoToolFactory::activationShapeId();
     const QString &activationShapeId() const;
+    /// wrapper around KoToolFactory::priority();
     int priority() const;
     KoTool *createTool(KoCanvasBase *canvas) const;
     int uniqueId() const { return m_uniqueId; }
 
 signals:
+    /// emitted when one of the generated buttons was pressed.
     void toolActivated(ToolHelper *tool);
 
 private slots:
@@ -58,6 +64,7 @@ private:
 };
 
 /// \internal
+/// Helper class to transform a simple signal selection changed into a signal with a parameter
 class Connector : public QObject {
     Q_OBJECT
 public:

@@ -37,15 +37,14 @@ class WinObjBrushHandle;
 struct WmfPlaceableHeader;
 
 /**
- * QWinMetaFile is a WMF viewer based on QT toolkit
+ * QWinMetaFile is a WMF viewer based on Qt toolkit
  * How to use QWinMetaFile :
- * <pre>
- * #include "qwmf.h"
+ * @code
  * QWinMetaFile wmf;
  * QPicture pic;     // or QImage pic;
  * if ( wmf.load( filename )
  *    wmf.paint( &pic );
- * </pre>
+ * @endcode
  */
 
 

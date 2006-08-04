@@ -43,8 +43,6 @@ class KoColor;
  * will be set, while when dragging a color it will use whatever color
  * rectangle the mouse was pressed inside.
  *
- * \image html kdualcolorbutton.png "KOffice Dual Color Button"
- *
  * @author Daniel M. Duley <mosfet@kde.org>
  */
 class KDEUI_EXPORT KoDualColorButton : public QWidget

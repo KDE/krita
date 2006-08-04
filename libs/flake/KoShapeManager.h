@@ -92,19 +92,14 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter, bool forPrint );
 
     /**
-     * Used to change the behavior of shapeAt()<dl>
-     * <dt>selected</dt>
-     *   <dd>return the first selected with the highest z-ordering (i.e. on top).</dd>
-     * <dt>unselected</dt>
-     *   <dd>return the first unselected on top.</dd>
-     * <dt>nextUnselected</dt>
-     *    <dd>return the first unselected directly under a selected shape, or
-     *    the top most one if nothing is selected.</dd>
-     * <dt>shapeOnTop</dt>
-     *    <dd>return the shape highest z-ordering, regardless of selection.</dd>
-     * </dl>
+     * Used to change the behavior of shapeAt()
      */
-    enum SelectionType { selected, unselected, nextUnselected, shapeOnTop };
+    enum SelectionType {
+        selected,   ///< return the first selected with the highest z-ordering (i.e. on top).
+        unselected, ///< return the first unselected on top.
+        nextUnselected, ///< return the first unselected directly under a selected shape, or the top most one if nothing is selected.
+        shapeOnTop  ///< return the shape highest z-ordering, regardless of selection.
+    };
 
     /**
      * Returns the shape located at a specific point in the document.

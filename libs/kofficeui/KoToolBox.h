@@ -41,21 +41,63 @@ class ToolArea;
 /**
  * KoToolBox is a kind of super-specialized toolbox that can order
  * tools according to type and priority.
- *
- * @see setWindowTitle()
+ * The ToolBox is a container for tool buttons which are themselves divided into sections.
+ * Adding buttons using addButton() will allow you to show those buttons.  You should connect
+ * the button to your handling method yourself.
+ * The unique property of this toolbox is that it can be shown horizontal as well as vertical,
+ * rotating in a smart way to show the buttons optimally.
  */
 class KOFFICEUI_EXPORT KoToolBox : public QDockWidget {
     Q_OBJECT
 public:
+    /// constructor
     KoToolBox();
     ~KoToolBox();
 
+    /**
+     * Add a button to the toolbox.
+     * The buttons should all be added before the fist showing since adding will not really add
+     * them to the UI until setup() is called.
+     * @param button the new button.  Please make sure you connect to the button yourself.
+     * @param section the section in which this button will be shown.  Each section will be its own
+     *        widget.
+     * @param priority the priority in the section. Lowest value means it will be shown first.
+     * @param buttonGroupId if passed this will allow you to use setActiveTool() to trigger
+     *      this button
+     * @see setup()
+     */
     void addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId=-1);
+
+    /**
+     * Setup the toolbox by adding the buttons in the right configuration to the ui.
+     * You should only call this method one time, and you should call it prior to showing.
+     */
     void setup();
+
+    /**
+     * For a button added to this toolbox you can regiter a visibility-code by which that
+     * button will be known.  Using setButtonsVisible() you can then show only the buttons
+     * you want visible.
+     * @param button the previously registred button
+     * @param code that we recognize this button by, does not have to be unique.
+     */
     void setVisibilityCode(QAbstractButton *button, const QString &code);
 
 public slots:
+    /**
+     * Using the buttongroup id passed in addButton() you can set the new active button.
+     * If the id does not resolve to a visible button, this call is ignored.
+     * @param id an id to identify the button to activate.
+     */
     void setActiveTool(int id);
+
+    /**
+     * Show only the dynamic buttons that have a code from parameter codes.
+     * The toolbox allows buttons to be optionally registred with a visibilityCode. This code
+     * can be passed here and all buttons that have that code are shown. All buttons that
+     * have another visibility code registred are hidden.
+     * @param codes a list of all the codes to show.
+     */
     void setButtonsVisible(const QList<QString> &codes);
 
 private:

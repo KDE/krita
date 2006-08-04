@@ -46,29 +46,89 @@ class KoShape;
  * does not allow one widget to be in more then one view, so we just make sure the toolbox
  * is hidden in not-in-focus views.
  *
- * There is one tool instance per pointer
- * There is one set of tools per pointer per process
- * All views share this set of tools
- * The tool manager knows all canvasController intances
- * The tool manager set the active tool in all canvasses
- * (Tools can set another tool as active)
+ * The ToolManager is a singleton, but it will manage all views in all applications that
+ * are loaded.  This means you will have to register and unregister your view.
+ * When creating your new view you should use a KoCanvasController() and register that
+ * with the ToolManager like this:
+@code
+    MyGuiWidget::MyGuiWidget() {
+        m_canvasController = new KoCanvasController(this);
+        m_canvasController->setCanvas(m_canvas);
+        KoToolManager::instance()->addControllers(m_canvasController, myShapeController));
+    }
+    MyGuiWidget::~MyGuiWidget() {
+        KoToolManager::instance()->removeCanvasController(m_canvasController);
+    }
+@endcode
+
+  * For a new view that extends KoView you can do this:
+@code
+    shell()->addDockWidget(Qt::LeftDockWidgetArea,
+        KoToolManager::instance()->toolBox("MyApp"));
+@endcode
+ *
  */
 class KOFFICEUI_EXPORT KoToolManager : public QObject {
     Q_OBJECT
 
 public:
+    /// Return the toolmanager singleton
     static KoToolManager* instance();
     ~KoToolManager();
 
+    /**
+     * Create a new ToolBox with title.
+     * This creates a new toolbox that is initialized with all tools registred for you
+     * to attach to the view of your application.
+     * If your view extends KoView the line of code is:
+@code
+    shell()->addDockWidget(Qt::LeftDockWidgetArea,
+        KoToolManager::instance()->toolBox("MyApp"));
+@endcode
+     * @param applicationName the title for the toolbox
+     */
     KoToolBox *toolBox(const QString &applicationName = QString());
+
     void registerTools(KActionCollection *ac);
+
+    /**
+     * Register a new pair of view controllers
+     * @param controller the view controller that this toolmanager will manager the tools for
+     * @param sc the shape controller instance that is associated with the controller and which
+     *      will be used for things like registring new shapes if a tool creates one.
+     */
     void addControllers(KoCanvasController *controller, KoShapeControllerBase *sc);
+
+    /**
+     * Remove a set of controllers
+     * When the controller is no longer used it should be removed so all tools can be
+     * deleted and stop eating memory.  The accompanying KoShapeControllerBase will
+     * no longer be referenced afterwards.
+     * @param controller the controller that is removed
+     */
     void removeCanvasController(KoCanvasController *controller);
 
+    /**
+     * Return the tool that is able to create shapes for this param canvas.
+     * This is typically used by the KoShapeSelector to set which shape to create next.
+     * @param canvas the canvas that is a child of a previously registred controller
+     *    who's tool you want.
+     * @see addControllers()
+     */
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
 signals:
+    /**
+     * Emitted when a new tool was selected or became active.
+     * @param uniqueToolId a random but unique code for the new tool.
+     */
     void changedTool(int uniqueToolId);
+
+    /**
+     * Emitted after the selection changed to state which unique shape-types are now
+     * in the selection.
+     * @param types a list of string that are the shape types of the selected objects.
+     */
     void toolCodesSelected(QList<QString> types);
 
 private:

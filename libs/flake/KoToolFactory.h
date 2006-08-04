@@ -112,7 +112,21 @@ public:
      */
     const QString &activationShapeId() const;
 
+    /**
+     * Returns the main toolType
+     * Each tool has a toolType which it uses to be grouped in the toolbox.
+     * The predefined areas are main and dynamic.
+     * @see toolType()
+     * @see setToolType()
+     */
     static QString mainToolType() { return "main"; }
+    /**
+     * Returns the dynamic toolType
+     * Each tool has a toolType which it uses to be grouped in the toolbox.
+     * The predefined areas are main and dynamic.
+     * @see toolType()
+     * @see setToolType()
+     */
     static QString dynamicToolType() { return "dynamic"; }
 
 protected:

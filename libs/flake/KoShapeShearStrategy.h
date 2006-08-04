@@ -40,6 +40,7 @@ public:
      * @param tool the parent tool which controls this strategy
      * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
+     * @param direction the handle that was grabbed
      */
     KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction );
     virtual ~KoShapeShearStrategy() {}

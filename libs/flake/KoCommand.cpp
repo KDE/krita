@@ -374,22 +374,22 @@ else
         bRect = shape->boundingRect();
         switch( align )
         {
-            case ALIGN_HORIZONTAL_LEFT:
+            case HorizontalLeftAlignment:
                 delta = QPointF( boundingRect.left(), bRect.y()) - bRect.topLeft();
                 break;
-            case ALIGN_HORIZONTAL_CENTER:
+            case HorizontalCenterAlignment:
                 delta = QPointF( boundingRect.center().x() - bRect.width()/2, bRect.y()) - bRect.topLeft();
                 break;
-            case ALIGN_HORIZONTAL_RIGHT:
+            case HorizontalRightAlignment:
                 delta = QPointF( boundingRect.right() - bRect.width(), bRect.y()) - bRect.topLeft();
                 break;
-            case ALIGN_VERTICAL_TOP:
+            case VerticalTopAlignment:
                 delta = QPointF( bRect.x(), boundingRect.top()) - bRect.topLeft();
                 break;
-            case ALIGN_VERTICAL_CENTER:
+            case VerticalCenterAlignment:
                 delta = QPointF(  bRect.x(), boundingRect.center().y() - bRect.height()/2) - bRect.topLeft();
                 break;
-            case ALIGN_VERTICAL_BOTTOM:
+            case VerticalBottomAlignment:
                 delta = QPointF(  bRect.x(), boundingRect.bottom() - bRect.height()) - bRect.topLeft();
                 break;
         };
@@ -429,26 +429,26 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
     foreach( KoShape *shape, shapes ) {
         bRect = shape->boundingRect();
         switch( m_distribute ) {
-            case DISTRIBUTE_HORIZONTAL_CENTER:
+            case HorizontalCenterDistribution:
                 sortedPos[bRect.center().x()] = shape;
                 break;
-            case DISTRIBUTE_HORIZONTAL_GAP:
-            case DISTRIBUTE_HORIZONTAL_LEFT:
+            case HorizontalGapsDistribution:
+            case HorizontalLeftDistribution:
                 sortedPos[bRect.left()] = shape;
                 extent += bRect.width();
                 break;
-            case DISTRIBUTE_HORIZONTAL_RIGHT:
+            case HorizontalRightDistribution:
                 sortedPos[bRect.right()] = shape;
                 break;
-            case DISTRIBUTE_VERTICAL_CENTER:
+            case VerticalCenterDistribution:
                 sortedPos[bRect.center().y()] = shape;
                 break;
-             case DISTRIBUTE_VERTICAL_GAP:
-             case DISTRIBUTE_VERTICAL_BOTTOM:
+             case VerticalGapsDistribution:
+             case VerticalBottomDistribution:
                 sortedPos[bRect.bottom()] = shape;
                 extent += bRect.height();
                 break;
-             case DISTRIBUTE_VERTICAL_TOP:
+             case VerticalTopDistribution:
                 sortedPos[bRect.top()] = shape;
                 break;
         }
@@ -473,30 +473,30 @@ KoShapeDistributeCommand::KoShapeDistributeCommand( const KoSelectionSet &shapes
 
         bRect = it.value()->boundingRect();
         switch( m_distribute )        {
-            case DISTRIBUTE_HORIZONTAL_CENTER:
+            case HorizontalCenterDistribution:
                 delta = QPointF( boundingRect.x() + first->boundingRect().width()/2 + pos - bRect.width()/2, bRect.y() ) - bRect.topLeft();
                 break;
-            case DISTRIBUTE_HORIZONTAL_GAP:
+            case HorizontalGapsDistribution:
                 delta = QPointF( boundingRect.left() + pos, bRect.y() ) - bRect.topLeft();
                 pos += bRect.width();
                 break;
-            case DISTRIBUTE_HORIZONTAL_LEFT:
+            case HorizontalLeftDistribution:
                 delta = QPointF( boundingRect.left() + pos, bRect.y() ) - bRect.topLeft();
                 break;
-            case DISTRIBUTE_HORIZONTAL_RIGHT:
+            case HorizontalRightDistribution:
                 delta = QPointF( boundingRect.left() + first->boundingRect().width() + pos - bRect.width(), bRect.y() ) - bRect.topLeft();
                 break;
-            case DISTRIBUTE_VERTICAL_CENTER:
+            case VerticalCenterDistribution:
                 delta = QPointF( bRect.x(), boundingRect.y() + first->boundingRect().height()/2 + pos - bRect.height()/2 ) - bRect.topLeft();
                 break;
-            case DISTRIBUTE_VERTICAL_GAP:
+            case VerticalGapsDistribution:
                 delta = QPointF( bRect.x(), boundingRect.top() + pos ) - bRect.topLeft();
                 pos += bRect.height();
                 break;
-            case DISTRIBUTE_VERTICAL_BOTTOM:
+            case VerticalBottomDistribution:
                 delta = QPointF( bRect.x(), boundingRect.top() + first->boundingRect().height() + pos - bRect.height() ) - bRect.topLeft();
                 break;
-            case DISTRIBUTE_VERTICAL_TOP:
+            case VerticalTopDistribution:
                 delta = QPointF( bRect.x(), boundingRect.top() + pos ) - bRect.topLeft();
                 break;
         };
@@ -528,28 +528,28 @@ QString KoShapeDistributeCommand::name () const {
 double KoShapeDistributeCommand::getAvailableSpace( KoShape *first, KoShape *last, double extent, QRectF boundingRect  )
 {
     switch( m_distribute ) {
-        case DISTRIBUTE_HORIZONTAL_CENTER:
+        case HorizontalCenterDistribution:
             return boundingRect.width() - last->boundingRect().width()/2 - first->boundingRect().width()/2;
             break;
-        case DISTRIBUTE_HORIZONTAL_GAP:
+        case HorizontalGapsDistribution:
             return boundingRect.width() - extent;
             break;
-        case DISTRIBUTE_HORIZONTAL_LEFT:
+        case HorizontalLeftDistribution:
             return boundingRect.width() - last->boundingRect().width();
             break;
-        case DISTRIBUTE_HORIZONTAL_RIGHT:
+        case HorizontalRightDistribution:
             return boundingRect.width() - first->boundingRect().width();
             break;
-        case DISTRIBUTE_VERTICAL_CENTER:
+        case VerticalCenterDistribution:
             return boundingRect.height() - last->boundingRect().height()/2 - first->boundingRect().height()/2;
             break;
-        case DISTRIBUTE_VERTICAL_GAP:
+        case VerticalGapsDistribution:
             return boundingRect.height() - extent;
             break;
-        case DISTRIBUTE_VERTICAL_BOTTOM:
+        case VerticalBottomDistribution:
             return boundingRect.height() - first->boundingRect().height();
             break;
-        case DISTRIBUTE_VERTICAL_TOP:
+        case VerticalTopDistribution:
             return boundingRect.height() - last->boundingRect().height();
             break;
     }

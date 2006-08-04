@@ -191,6 +191,12 @@ public:
     QList<KoShape*> iterator() const;
 
 protected:
+    /**
+     * This hook is for inheriting classes that need to do something on adding/removing
+     * of children.
+     * This method will be called just after the child has been added/removed.
+     * The default implementation is empty.
+     */
     virtual void childCountChanged() { }
 
 private:

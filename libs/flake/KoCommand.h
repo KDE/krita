@@ -262,14 +262,15 @@ private:
 /// The undo / redo command for aligning shapes
 class KoShapeAlignCommand : public KCommand {
 public:
+    /// The different alignment options for this command
     enum Align
     {
-        ALIGN_HORIZONTAL_LEFT, // TODO make naming more Qt / C++ like :  HorizontalLeftAlignment
-        ALIGN_HORIZONTAL_CENTER,
-        ALIGN_HORIZONTAL_RIGHT,
-        ALIGN_VERTICAL_BOTTOM,
-        ALIGN_VERTICAL_CENTER,
-        ALIGN_VERTICAL_TOP
+        HorizontalLeftAlignment,    ///< Align left
+        HorizontalCenterAlignment,  ///< Align Centered horizontally
+        HorizontalRightAlignment,   ///< Align Right
+        VerticalBottomAlignment,    ///< Align bottom
+        VerticalCenterAlignment,    ///< Align centered vertically
+        VerticalTopAlignment        ///< Align top
     };
     /**
      * Command to align a set of shapes in a rect
@@ -293,16 +294,17 @@ private:
 class KoShapeDistributeCommand : public KCommand
 {
 public:
+    /// The different options to ditribute with this command
     enum Distribute
     {
-        DISTRIBUTE_HORIZONTAL_CENTER,
-        DISTRIBUTE_HORIZONTAL_GAP,
-        DISTRIBUTE_HORIZONTAL_LEFT,
-        DISTRIBUTE_HORIZONTAL_RIGHT,
-        DISTRIBUTE_VERTICAL_CENTER,
-        DISTRIBUTE_VERTICAL_GAP,
-        DISTRIBUTE_VERTICAL_BOTTOM,
-        DISTRIBUTE_VERTICAL_TOP
+        HorizontalCenterDistribution,   ///< Horizontal centered
+        HorizontalGapsDistribution,     ///< Horizontal Gaps
+        HorizontalLeftDistribution,     ///< Horizontal Left
+        HorizontalRightDistribution,    ///< Horizontal Right
+        VerticalCenterDistribution,     ///< Vertical centered
+        VerticalGapsDistribution,       ///< Vertical Gaps
+        VerticalBottomDistribution,     ///< Vertical bottom
+        VerticalTopDistribution         ///< Vertical top
     };
     /**
      * Command to align a set of shapes in a rect

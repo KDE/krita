@@ -40,14 +40,29 @@ class KCommand;
 
 namespace KFormula {
 
-class ComplexElement;
 class Container;
 class ElementType;
-class ElementVisitor;
 class FontCommand;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
+/*
+enum ElementType
+{
+    SequenceElement,     
+    MultiscriptElement,
+    OverUnderElement,
+    MatrixElement,
+    MatrixRowElement,
+    MatrixEntryElement,
+    FractionElement,
+    OperatorElement,
+    NumberElement,
+    BracketElement,
+    RootElement,
+    TextElement
+};*/
+
 
 
 /**
@@ -101,6 +116,21 @@ public:
 
     /// @returns True if the element is invisible, a phantomelement
     virtual bool isInvisible() const;
+
+    /// @return The type of element represented within the enum ElementType
+    //  ElementType elementType() const;
+
+    /// Save the element to MathML 
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+    /// @return The height of the element
+    double height() const;
+
+    /// @return The width of the element
+    double width() const;
+
+    /// @return The bounding rectangle of the element
+    const QRectF& boundingRect() const;
 
 
 
@@ -311,7 +341,7 @@ public:
     void setY( double y );
     double getWidth() const;
     double getHeight() const;
-    const QRectF& boundingRect() const;
+
 
     void setWidth( double width );
     void setHeight( double height );
@@ -329,10 +359,6 @@ public:
      */
     QDomElement getElementDom( QDomDocument& doc);
 
-    /**
-     * Same as above, just MathML.
-     */
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
     /**
      * Set this element attribute, build children and
@@ -340,19 +366,10 @@ public:
      */
     bool buildFromDom(QDomElement element);
 
-    /**
-     * @returns our type. This is an object from our parent's syntax tree
-     * or 0 if there was a very bad parsing error.
-     */
-    ElementType* getElementType() const { return elementType; }
 
-    /**
-     * Sets a new type. This is done during parsing.
-     */
-    virtual void setElementType(ElementType* t) { elementType = t; }
 
 protected:
-    /// Draws the element internally, means it paints into @ref m_elementPath
+    /// Draws the element internally, means it paints into m_elementPath
     virtual void drawInternal() = 0;
     
 
@@ -402,6 +419,8 @@ private:
     /// True if the element is a phantom element means is not visible
     bool m_phantomElement;   
 
+    /// The BasicElement's type of element - an element has to set it in the constructor
+    //    ElementType m_elementType;
 
     
     
@@ -415,11 +434,6 @@ private:
      */
     luPixel m_baseline;
 
-    /**
-     * The token that describes our type. Please note that we don't
-     * own it.
-     */
-    ElementType* elementType;
 };
 
 } // namespace KFormula

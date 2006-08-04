@@ -29,7 +29,7 @@
 namespace KFormula {
 using namespace std;
 
-BasicElement::BasicElement( BasicElement* p ) : m_baseline( 0 ), elementType( 0 )
+BasicElement::BasicElement( BasicElement* p ) : m_baseline( 0 )// elementType( 0 )
 {
     m_parentElement = p;
     m_boundingRect = QRectF( 0, 0, 0, 0 );

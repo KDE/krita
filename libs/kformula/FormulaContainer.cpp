@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
+		      
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -15,12 +16,13 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <QApplication>
 #include <QEvent>
 #include <QFile>
+#include <QClipboard>
 #include <QPainter>
 #include <QPixmap>
 #include <QString>
@@ -30,7 +32,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kprinter.h>
 
 #include "KoGlobal.h"
 #include "bracketelement.h"
@@ -42,9 +43,9 @@
 #include "kformulacommand.h"
 #include "kformulacompatibility.h"
 #include "FormulaContainer.h"
-#include "kformuladocument.h"
+//#include "kformuladocument.h"
 #include "MathMLLoader.h"
-#include "KFormulaMimeSource.h"
+//#include "KFormulaMimeSource.h"
 #include "MatrixElement.h"
 #include "RootElement.h"
 #include "SequenceElement.h"
@@ -61,8 +62,8 @@ using namespace std;
 
 struct Container::Container_Impl {
 
-    Container_Impl( Document* doc )
-            : dirty( true ), cursorMoved( false ), document( doc )
+    Container_Impl( /*Document* doc*/ )
+            : dirty( true ), cursorMoved( false )//, document( doc )
     {
     }
 
@@ -70,7 +71,7 @@ struct Container::Container_Impl {
     {
         delete internCursor;
 //        delete m_formulaElement;
-        document = 0;
+//        document = 0;
     }
 
     /**
@@ -101,20 +102,14 @@ struct Container::Container_Impl {
     /**
      * The document we belong to.
      */
-    Document* document;
+//    Document* document;
 };
 
-/*
-FormulaElement* Container::rootElement() const
-{
-    return m_formulaElement;
-}
-*/
-Document* Container::document() const { return impl->document; }
+//Document* Container::document() const { return impl->document; }
 
-Container::Container( Document* doc, int pos, bool registerMe )
+Container::Container( /*Document* doc,*/ int pos, bool registerMe )
 {
-    impl = new Container_Impl( doc );
+//    impl = new Container_Impl( doc );
     m_formulaElement = 0;
     if ( registerMe ) {
         registerFormula( pos );
@@ -133,7 +128,7 @@ void Container::initialize()
 {
     m_formulaElement = new FormulaElement( ); 
     impl->activeCursor = impl->internCursor = createCursor();
-    recalc();
+    recalcLayout();
 }
 
 
@@ -205,24 +200,24 @@ void Container::removeFormula( FormulaCursor* cursor )
 
 void Container::registerFormula( int pos )
 {
-    document()->registerFormula( this, pos );
+//    document()->registerFormula( this, pos );
 }
 
 void Container::unregisterFormula()
 {
-    document()->unregisterFormula( this );
+//    document()->unregisterFormula( this );
 }
 
 
 void Container::baseSizeChanged( int size, bool owned )
 {
-    if ( owned ) {
+/*    if ( owned ) {
         emit baseSizeChanged( size );
     }
     else {
         const ContextStyle& context = document()->getContextStyle();
         emit baseSizeChanged( context.baseSize() );
-    }
+    }*/
 }
 
 FormulaCursor* Container::activeCursor()
@@ -242,7 +237,7 @@ const FormulaCursor* Container::activeCursor() const
  */
 void Container::setActiveCursor(FormulaCursor* cursor)
 {
-    document()->activate(this);
+//    document()->activate(this);
     if (cursor != 0) {
         impl->activeCursor = cursor;
     }
@@ -261,13 +256,14 @@ bool Container::hasValidCursor() const
 void Container::testDirty()
 {
     if (impl->dirty) {
-        recalc();
+        recalcLayout();
     }
 }
 
-void Container::recalc()
+void Container::recalcLayout()
 {
-    impl->dirty = false;
+//    m_formulaElement->layout();
+/*    impl->dirty = false;
     ContextStyle& context = impl->document->getContextStyle();
     m_formulaElement->calcSizes( context );
 
@@ -275,7 +271,7 @@ void Container::recalc()
                          context.layoutUnitToPixelY( m_formulaElement->getHeight() ) );
     emit formulaChanged( context.layoutUnitPtToPt( context.pixelXToPt( m_formulaElement->getWidth() ) ),
                          context.layoutUnitPtToPt( context.pixelYToPt( m_formulaElement->getHeight() ) ) );
-    emit cursorMoved( activeCursor() );
+    emit cursorMoved( activeCursor() );*/
 }
 
 bool Container::isEmpty()
@@ -286,7 +282,7 @@ bool Container::isEmpty()
 
 const SymbolTable& Container::getSymbolTable() const
 {
-    return document()->getSymbolTable();
+//    return document()->getSymbolTable();
 }
 
 
@@ -299,8 +295,8 @@ void Container::draw( QPainter& painter, const QRectF& r, const QPalette& palett
 
 void Container::draw( QPainter& painter, const QRectF& r, bool edit )
 {
-    ContextStyle& context = document()->getContextStyle( edit );
-    m_formulaElement->draw( painter, context.pixelToLayoutUnit( r ), context );
+//    ContextStyle& context = document()->getContextStyle( edit );
+//    m_formulaElement->draw( painter, context.pixelToLayoutUnit( r ), context );
 }
 
 
@@ -334,7 +330,7 @@ void Container::performRequest( Request* request )
 
 void Container::paste()
 {
-    if (!hasValidCursor())
+/*    if (!hasValidCursor())
         return;
     QClipboard* clipboard = QApplication::clipboard();
     const QMimeData* source = clipboard->mimeData();
@@ -344,7 +340,7 @@ void Container::paste()
         QDomDocument formula;
         formula.setContent(data);
         paste( formula, i18n("Paste") );
-    }
+    }*/
 }
 
 void Container::paste( const QDomDocument& document, QString desc )
@@ -367,17 +363,17 @@ void Container::paste( const QDomDocument& document, QString desc )
 
 void Container::copy()
 {
-    // read-only cursors are fine for copying.
+/*    // read-only cursors are fine for copying.
     FormulaCursor* cursor = activeCursor();
     if (cursor != 0)
     {
-        QDomDocument formula = document()->createDomDocument();
+        QDomDocument formula;// = document()->createDomDocument();
         cursor->copy( formula );
         QClipboard* clipboard = QApplication::clipboard();
 	QMimeData* data = new QMimeData();
 	data->setData(MimeSource::selectionMimeType(), formula.toByteArray() );
         clipboard->setMimeData( data );
-    }
+    }*/
 }
 
 void Container::cut()
@@ -392,31 +388,22 @@ void Container::cut()
     }
 }
 
-
 void Container::emitErrorMsg( const QString& msg )
 {
     emit errorMsg( msg );
 }
-/*
-void Container::execute(KCommand* command)
-{
-    if ( command != 0 ) {
-        getHistory()->addCommand(command);
-    }
-}
-*/
 
 const QRectF& Container::boundingRect() const
 {
-    const ContextStyle& context = document()->getContextStyle();
+/*    const ContextStyle& context = document()->getContextStyle();
     return QRectF( context.layoutUnitToPixelX( m_formulaElement->getX() ),
                    context.layoutUnitToPixelY( m_formulaElement->getY() ),
                    context.layoutUnitToPixelX( m_formulaElement->getWidth() ),
-                   context.layoutUnitToPixelY( m_formulaElement->getHeight() ) );
+                   context.layoutUnitToPixelY( m_formulaElement->getHeight() ) );*/
 }
 
 const QRectF& Container::coveredRect() const
-{
+{/*
     if ( impl->activeCursor != 0 ) {
         const ContextStyle& context = document()->getContextStyle();
         const LuPixelRect& cursorRect = impl->activeCursor->getCursorSize();
@@ -429,9 +416,9 @@ const QRectF& Container::coveredRect() const
                    context.layoutUnitToPixelX( cursorRect.width() ),
                    context.layoutUnitToPixelY( cursorRect.height() ) );
     }
-    return boundingRect();
+    return boundingRect();*/
 }
-
+/*
 double Container::width() const
 {
     const ContextStyle& context = document()->getContextStyle();
@@ -442,20 +429,20 @@ double Container::height() const
 {
     const ContextStyle& context = document()->getContextStyle();
     return context.layoutUnitPtToPt( context.pixelYToPt( m_formulaElement->getHeight() ) );
-}
+}*/
 
 double Container::baseline() const
 {
-    const ContextStyle& context = document()->getContextStyle();
+/*    const ContextStyle& context = document()->getContextStyle();
     //return context.layoutUnitToPixelY( rootElement()->getBaseline() );
-    return context.layoutUnitPtToPt( context.pixelYToPt( m_formulaElement->getBaseline() ) );
+    return context.layoutUnitPtToPt( context.pixelYToPt( m_formulaElement->getBaseline() ) );*/
 }
 
 void Container::moveTo( int x, int y )
 {
-    const ContextStyle& context = document()->getContextStyle();
+/*    const ContextStyle& context = document()->getContextStyle();
     m_formulaElement->setX( context.pixelToLayoutUnitX( x ) );
-    m_formulaElement->setY( context.pixelToLayoutUnitY( y ) );
+    m_formulaElement->setY( context.pixelToLayoutUnitY( y ) );*/
 }
 
 int Container::fontSize() const
@@ -464,8 +451,8 @@ int Container::fontSize() const
         return m_formulaElement->getBaseSize();
     }
     else {
-        const ContextStyle& context = document()->getContextStyle();
-        return qRound( context.baseSize() );
+//        const ContextStyle& context = document()->getContextStyle();
+//        return qRound( context.baseSize() );
     }
 }
 
@@ -479,16 +466,16 @@ void Container::setFontSize( int pointSize, bool /*forPrint*/ )
 void Container::setFontSizeDirect( int pointSize )
 {
     m_formulaElement->setBaseSize( pointSize );
-    recalc();
+    recalcLayout();
 }
 
 void Container::updateMatrixActions()
 {
-    BasicElement *currentElement = activeCursor()->getElement();
+/*    BasicElement *currentElement = activeCursor()->getElement();
     if ( ( currentElement = currentElement->getParent() ) != 0 )
         document()->wrapper()->enableMatrixActions( dynamic_cast<MatrixElement*>(currentElement) );
     else
-        document()->wrapper()->enableMatrixActions( false );
+        document()->wrapper()->enableMatrixActions( false );*/
 }
 
 void Container::save( QDomElement &root )
@@ -514,7 +501,7 @@ bool Container::load( const QDomElement &fe )
         m_formulaElement = root;
         emit formulaLoaded(m_formulaElement);
 
-        recalc();
+        recalcLayout();
         return true;
     }
     else {
@@ -561,20 +548,7 @@ bool Container::loadMathML( const QDomDocument &doc, bool oasisFormat )
     return false;*/
 }
 
-
-void Container::print(KPrinter& printer)
-{
-    //printer.setFullPage(true);
-    QPainter painter;
-    if (painter.begin(&printer)) {
-        m_formulaElement->draw( painter, LuPixelRect( m_formulaElement->getX(),
-                                                   m_formulaElement->getY(),
-                                                   m_formulaElement->getWidth(),
-                                                   m_formulaElement->getHeight() ),
-                             document()->getContextStyle( false ) );
-    }
-}
-
+/*
 QImage Container::drawImage( int width, int height )
 {
     ContextStyle& context = document()->getContextStyle( false );
@@ -599,19 +573,9 @@ QImage Container::drawImage( int width, int height )
     // FIXME store and reset zoomedResolution as well as zoom. This is lossy
     context.setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     return pm.toImage();
-}
+}*/
 
-QString Container::texString()
-{
-    return QString();
-}
-/*
-QString Container::formulaString()
-{
-    return rootElement()->formulaString();
-}
-*/
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 using namespace KFormula;
 #include "FormulaContainer.moc"

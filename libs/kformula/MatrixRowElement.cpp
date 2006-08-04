@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,18 +50,33 @@ MatrixEntryElement* MatrixRowElement::entryAtPosition( int pos )
     return m_matrixEntryElements[ pos ];
 }
 
+const QList<BasicElement*>& MatrixRowElement::childElements()
+{
+    QList<BasicElement*> tmp;
+    foreach( MatrixEntryElement* element, m_matrixEntryElements )
+        tmp.append( element );
+
+    return tmp;
+}
+
 void MatrixRowElement::drawInternal()
 {
+    // do not paint anything as a MatrixRowElement only orders its children
 }
 
-
-
-/*
-void MatrixRowElement::entered( SequenceElement* child )
+void MatrixRowElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
-    formula()->tell( i18n( "Multi line element" ) );
+    QDomElement row; 
+
+    foreach( MatrixEntryElement* tmpEntry, m_matrixEntryElements )
+    {
+        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
+	parent.appendChild( row );
+        tmpEntry->writeMathML( doc, row, oasisFormat );
+    }
 }
-*/
+
+
 
 
 void MatrixRowElement::goInside( FormulaCursor* cursor )
@@ -343,15 +359,6 @@ void MatrixRowElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 }
 
-/*
-void MatrixRowElement::dispatchFontCommand( FontCommand* cmd )
-{
-    foreach( MatrixEntryElement* line, m_matrixEntryElements )
-    {
-        line->dispatchFontCommand( cmd );
-    }
-}
-*/
 void MatrixRowElement::insert( FormulaCursor* cursor,
                                QList<BasicElement*>& newChildren,
                                Direction direction )
@@ -446,32 +453,9 @@ void MatrixRowElement::writeDom(QDomElement element)
     }
 }
 
-void MatrixRowElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
-    QDomElement row; QDomElement cell;
 
-    for ( int i = 0; i < m_matrixEntryElements.count(); ++i ) {
-        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
-        de.appendChild( row );
-        //cell = doc.createElement( "mtd" );
-        //row.appendChild( cell );
 
-        //content.at( i )->writeMathML( doc, cell );
-        m_matrixEntryElements.at( i )->writeMathML( doc, row, oasisFormat );
-    }
 
-    parent.appendChild( de );
-}
-
-const QList<BasicElement*>& MatrixRowElement::childElements()
-{
-    QList<BasicElement*> tmp;
-    foreach( MatrixEntryElement* element, m_matrixEntryElements )
-        tmp.append( element );
-
-    return tmp;
-}
 
 
 /**
@@ -527,31 +511,5 @@ bool MatrixRowElement::readContentFromDom(QDomNode& node)
     }
     return true;
 }
-/*
-QString MultilineElement::toLatex()
-{
-    int lineCount = content.count();
-    QString muliline = "\\begin{split} ";
-    for ( int i = 0; i < lineCount; ++i ) {
-        muliline += content.at( i )->toLatex();
-    	muliline += " \\\\ ";
-    }
-    muliline += "\\end{split}";
-    return muliline;
-}
-
-// Does this make any sense at all?
-QString MultilineElement::formulaString()
-{
-    int lineCount = content.count();
-    QString muliline = "";
-    for ( int i = 0; i < lineCount; ++i ) {
-        muliline += content.at( i )->formulaString();
-    	muliline += "\n";
-    }
-    //muliline += "";
-    return muliline;
-}
-*/
 
 } // namespace KFormula

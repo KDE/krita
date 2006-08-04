@@ -53,12 +53,6 @@ TextElement::TextElement( const TextElement& other )
 {
 }
 
-/*
-bool TextElement::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}*/
-
 const QList<BasicElement*>& TextElement::childElements()
 {
 	    return QList<BasicElement*>();
@@ -106,9 +100,10 @@ void TextElement::drawInternal()
 
 bool TextElement::isInvisible() const
 {
-    if (getElementType() != 0) {
+    /*if (getElementType() != 0) {
         return getElementType()->isInvisible(*this);
-    }
+    }*/
+    // no longer needed as BasicElement implements this
     return false;
 }
 
@@ -172,20 +167,10 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     font.setPointSizeF( context.layoutUnitToFontSize( mySize, false ) );
     painter.setFont( font );
 
-    //kDebug( DEBUGID ) << "TextElement::draw font=" << font.rawName() << endl;
-    //kDebug( DEBUGID ) << "TextElement::draw size=" << mySize << endl;
-    //kDebug( DEBUGID ) << "TextElement::draw size=" << context.layoutUnitToFontSize( mySize, false ) << endl;
-    //kDebug( DEBUGID ) << "TextElement::draw height: " << getHeight() << endl;
-    //kDebug( DEBUGID ) << "TextElement::draw width: " << getWidth() << endl;
-    //kDebug( DEBUGID ) << endl;
-
     // Each starting element draws the whole token
-    ElementType* token = getElementType();
+/*    ElementType* token = getElementType();
     if ( ( token != 0 ) && !symbol ) {
         QString text = token->text( static_cast<SequenceElement*>( getParent() ) );
-//         kDebug() << "draw text: " << text[0].unicode()
-//                   << " " << painter.font().family().latin1()
-//                   << endl;
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
                           text );
@@ -215,19 +200,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                               context.layoutUnitToPixelY( getHeight() ) );
         }
     }
-
-    // Debug
-    //painter.setBrush(Qt::NoBrush);
-//     if ( isSymbol() ) {
-//         painter.setPen( Qt::red );
-//         painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
-//                           context.layoutUnitToPixelX( myPos.y() ),
-//                           context.layoutUnitToPixelX( getWidth() ),
-//                           context.layoutUnitToPixelX( getHeight() ) );
-//         painter.setPen(Qt::green);
-//         painter.drawLine(myPos.x(), myPos.y()+axis( context, tstyle ),
-//                          myPos.x()+getWidth(), myPos.y()+axis( context, tstyle ));
-//     }
+*/
 }
 
 
@@ -285,12 +258,12 @@ QFont TextElement::getFont(const ContextStyle& context)
             //}
         }
         QFont font;
-        if (getElementType() != 0) {
+/*        if (getElementType() != 0) {
             font = getElementType()->getFont(context);
         }
         else {
             font = context.getDefaultFont();
-        }
+        }*/
         switch ( charStyle() ) {
         case anyChar:
             break;
@@ -319,12 +292,12 @@ QFont TextElement::getFont(const ContextStyle& context)
 
 void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
 {
-    if (getElementType() != 0) {
+/*    if (getElementType() != 0) {
         getElementType()->setUpPainter(context, painter);
     }
     else {
         painter.setPen(Qt::red);
-    }
+    }*/
 }
 
 const SymbolTable& TextElement::getSymbolTable() const
@@ -434,10 +407,6 @@ bool TextElement::readAttributesFromDom(QDomElement element)
         charFamily( anyFamily );
     }
 
-//     kDebug() << "charStyle=" << charStyle()
-//               << "  charFamily=" << charFamily()
-//               << "  format=" << int( format() ) << endl;
-
     return true;
 }
 
@@ -487,12 +456,6 @@ EmptyElement::EmptyElement( const EmptyElement& other )
     : BasicElement( other )
 {
 }
-
-/*
-bool EmptyElement::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}*/
 
 const QList<BasicElement*>& EmptyElement::childElements()
 {

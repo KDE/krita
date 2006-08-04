@@ -37,7 +37,7 @@ SequenceParser::SequenceParser( const SymbolTable& t )
 
 void SequenceParser::setElementType( int pos, ElementType* type )
 {
-    list.at( pos )->setElementType( type );
+//    list.at( pos )->setElementType( type );
 }
 
 

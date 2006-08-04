@@ -150,7 +150,7 @@ public:
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
 protected:
-    /// Draws the element internally, means it paints into @ref m_elementPath
+    /// Draws the element internally, means it paints into m_elementPath
     virtual void drawInternal();
 
 

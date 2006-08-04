@@ -4,6 +4,17 @@
 The core of KFormula is a tree of element objects that make up the
 formula which is beeing edited.
 
+Size calculation
+Calling the method calculateSize() of each BasicElement derived class invokes
+the layout process. Each BasicElement in the tree calculates his size with the
+knowledge of the sizes of its children. So first each BasicElement that has
+child elements will call calculateSize() for its children and then calculate his
+own size.
+The size might difer because of the fontsize chosen for the numbers or operators.
+If an application want 
+
+
+
 The element tree itself
 #######################
 

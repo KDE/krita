@@ -79,6 +79,7 @@ MatrixEntryElement* MatrixElement::matrixEntryAt( int row, int col )
 
 void MatrixElement::drawInternal()
 {
+    // a MatrixElement does not paint anything, it just arranges it children
 }
 
 void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
@@ -102,14 +103,6 @@ void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasis
     parent.appendChild( de );
 }
 
-
-
-/*
-void MatrixElement::entered( SequenceElement* child )
-{
-    formula()->tell( i18n( "Matrix element" ) );
-}
-*/
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     QVector<luPixel> toMidlines( rows() );
@@ -188,37 +181,9 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
                           ContextStyle::IndexStyle istyle,
                           const LuPixelPoint& parentOrigin )
 {
-/*    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( rect ) )
-    //    return;
 
-    int rows = getRows();
-    int columns = getColumns();
-
-    for (int r = 0; r < rows; r++) {
-        for (int c = 0; c < columns; c++) {
-            getElement(r, c)->draw(painter, rect, style,
-				   style.convertTextStyleFraction(tstyle),
-				   style.convertIndexStyleUpper(istyle),
-				   myPos);
-        }
-    }
-
-    // Debug
-    //painter.setPen(Qt::red);
-    //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());*/
 }
 
-/*
-void MatrixElement::dispatchFontCommand( FontCommand* cmd )
-{
-    for (int r = 0; r < rows(); r++) {
-        for (int c = 0; c < cols(); c++) {
-            matrixEntryAt( r, c )->dispatchFontCommand( cmd );
-        }
-    }
-}
-*/
 /**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside
@@ -360,14 +325,6 @@ void MatrixElement::goInside(FormulaCursor* cursor)
     matrixEntryAt(0, 0)->goInside(cursor);
 }
 
-/*
-// If there is a main child we must provide the insert/remove semantics.
-SequenceElement* MatrixElement::getMainChild()
-{
-  // only temporary
-  return 0;//    return matrixEntryAt( 0, 0 );
-}
-*/
 void MatrixElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 {
     for (int r = 0; r < rows(); r++) {

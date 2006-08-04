@@ -275,7 +275,7 @@ void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 void Document::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 {
     if ( updateViews ) {
-        recalc();
+        //recalc();
     }
 }
 
@@ -317,7 +317,7 @@ void Document::recalc()
     for ( Container* f = formulae.first();
           f != 0;
           f=formulae.next() ) {
-        f->recalc();
+        f->recalcLayout();
     }
 }
 

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,34 +16,26 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KFORMULACONTAINER_H
 #define KFORMULACONTAINER_H
 
-#include <QClipboard>
-#include <QImage>
 #include <QObject>
-#include <QStack>
 #include <QString>
 #include <QTextStream>
 #include <QKeyEvent>
 #include <QDomElement>
-//#include <kcommand.h>
 #include "kformuladefs.h"
-#include <kformuladocument.h>
 class QColorGroup;
 class QKeyEvent;
 class QPainter;
 
-class KCommand;
-class KPrinter;
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 class BasicElement;
-class Document;
 class FormulaCursor;
 class FormulaElement;
 class IndexElement;
@@ -86,7 +79,6 @@ public:
  * Provides everything to edit the formula.
  */
 class KOFORMULA_EXPORT Container : public QObject, public FormulaDocument {
-    friend class MimeSource;
     Q_OBJECT
 
     // no copying
@@ -107,9 +99,17 @@ public:
      * @param registerMe whether the formula is to be registered
      * with the document.
      */
-    Container( Document* doc, int pos, bool registerMe=true );
+    Container( /*Document* doc,*/ int pos, bool registerMe=true );
+
+    /// The standard constructor
     ~Container();
 
+    /// Recalc the formula's layout
+    void recalcLayout();
+
+
+
+    
     /**
      * Needs to be called before anything else can be done with a
      * newly created formula! This is required to allow polymorphic
@@ -198,23 +198,6 @@ public:
     bool load( const QDomElement &fe );
 
     /**
-     * @returns Tex string for the formula
-     */
-    QString texString();
-
-//    QString formulaString();
-
-    /**
-     * Prints the formula.
-     */
-    void print(KPrinter& printer);
-
-    /**
-     * @returns an image that looks like out formula.
-     */
-    QImage drawImage( int width, int height );
-
-    /**
      * @returns the cursor to be used for editing.
      */
     FormulaCursor* activeCursor();
@@ -238,8 +221,8 @@ public:
      */
     const QRectF& coveredRect() const;
 
-    double width() const;
-    double height() const;
+//    double width() const;
+//    double height() const;
 
     /**
      * @returns the distance between the upper bound and the formulas
@@ -268,10 +251,7 @@ public:
      */
     void testDirty();
 
-    /**
-     * Recalc the formula.
-     */
-    virtual void recalc();
+
 
     /**
      * @returns true if there is no element.
@@ -281,7 +261,7 @@ public:
     /**
      * @returns the document this formula belongs to.
      */
-    virtual Document* document() const;
+//    virtual Document* document() const;
 
     virtual const SymbolTable& getSymbolTable() const;
 
@@ -375,14 +355,6 @@ public:
     void cut();
 
 protected:
-
-//    KCommandHistory* getHistory() const;
-
-    /**
-     * @returns the root of our element tree. That's the formula's structure.
-     */
-//    FormulaElement* rootElement() const;
-
     void emitErrorMsg( const QString& );
 
 private:
@@ -391,9 +363,6 @@ private:
 
     /// The FormulaElement of this formula
     FormulaElement* m_formulaElement;
-
-    /// Execute the command if it makes sense.
-//    void execute(KCommand *command);
 
     /// Emits a signal if the cursor had moved.
     void checkCursor();

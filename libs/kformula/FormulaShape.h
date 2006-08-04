@@ -29,6 +29,8 @@ class FormulaContainer;
 
 /**
  * @short The flake shape for a formula
+ * @author Martin Pfeiffer <hubipete@gmx.net>
+ * @since 2.0
  */
 class KOFORMULA_EXPORT FormulaShape : public KoShape {
 public:

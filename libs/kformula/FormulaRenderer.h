@@ -20,28 +20,50 @@
 #ifndef FORMULARENDERER_H
 #define FORMULARENDERER_H
 
+/**
+ * @file
+ * This file is part of KFormula and defines the classe FormulaRenderer
+ */
+
 #include <QList>
 
+/** The KFormula namespace contains all classes needed to FormulaShape in KOffice */
 namespace KFormula {
 
 class FormulaContainer;
 
+
+
 /**
- * @short FormulaRenderer renders the content of a given @ref FormulaContainer
+ * @short FormulaRenderer renders the content of a given FormulaContainer
+ *
+ * The FormulaRenderer class contains all code for rendering a formula. 
+ *
+ * @author Martin Pfeiffer <hubipete@gmx.net>
+ * @since 2.0
  */
 class FormulaRenderer
 {
 public:
 	/**
 	 * The constructor
-	 * @param container The @ref FormulaContainer that will be rendered
+	 * @param container The FormulaContainer that will be rendered
 	 */
 	FormulaRenderer( FormulaContainer* container = 0 );
 
+	/**
+	 * The constructor
+	 * @param element The BasicElement the FormulaRenderer will render
+	 */
 	FormulaRenderer( BasicElement* element = 0 );
 	
+	/// The destructor
 	~FormulaRenderer();
 
+	/**
+	 * Render the given formula content to a @p QPainter
+	 * @param p The QPainter to render to
+	 */
 	void render( QPainter* p );
 	const QSize& defaultSize() const;
 	const QSize& contentSize() const;

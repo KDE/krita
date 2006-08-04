@@ -63,7 +63,7 @@ KFORMULA_NAMESPACE_BEGIN
 ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, KVBox* box, char* /*name*/ )
     : QObject( box->parent() ), m_document( document ), m_view( view ), m_config( config ), m_changed( false )
 {
-    const ContextStyle& contextStyle = document->getContextStyle( true );
+//    const ContextStyle& contextStyle = document->getContextStyle( true );
 
     // fonts
 
@@ -75,10 +75,10 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
     grid->setColumnStretch(1, 1);
 
-    defaultFont = contextStyle.getDefaultFont();
+/*    defaultFont = contextStyle.getDefaultFont();
     nameFont = contextStyle.getNameFont();
     numberFont = contextStyle.getNumberFont();
-    operatorFont = contextStyle.getOperatorFont();
+    operatorFont = contextStyle.getOperatorFont();*/
 
     connect( buildFontLine( gbox, grid, 0, defaultFont,
             i18n( "Default font:" ), defaultFontName ),
@@ -99,8 +99,8 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     QLabel* sizeTitle = new QLabel( i18n( "Default base size:" ), gbox );
     grid->addWidget( sizeTitle, 4, 0 );
 
-    sizeSpin = new KIntNumInput( contextStyle.baseSize(), gbox );
-    sizeSpin->setRange( 8, 72, 1, true );
+//    sizeSpin = new KIntNumInput( contextStyle.baseSize(), gbox );
+//    sizeSpin->setRange( 8, 72, 1, true );
 
     grid->addMultiCellWidget( sizeSpin, 4, 4, 1, 2 );
 
@@ -109,8 +109,8 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
     // syntax highlighting
 
-    syntaxHighlighting = new QCheckBox( i18n( "Use syntax highlighting" ),box );
-    syntaxHighlighting->setChecked( contextStyle.syntaxHighlighting() );
+ //   syntaxHighlighting = new QCheckBox( i18n( "Use syntax highlighting" ),box );
+ //   syntaxHighlighting->setChecked( contextStyle.syntaxHighlighting() );
 
 //     hlBox = new QGroupBox( i18n( "Highlight Colors" ), box );
 //     hlBox->setColumnLayout( 0, Qt::Horizontal );
@@ -178,11 +178,11 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     grid = new Q3GridLayout( styleBox->layout(), 3, 1 );
     grid->setSpacing( KDialog::spacingHint() );
 
-    esstixStyle = new QRadioButton( i18n( "Esstix font style" ), styleBox );
-    esstixStyle->setChecked( contextStyle.getFontStyle() == "esstix" );
+//    esstixStyle = new QRadioButton( i18n( "Esstix font style" ), styleBox );
+//    esstixStyle->setChecked( contextStyle.getFontStyle() == "esstix" );
 
-    cmStyle = new QRadioButton( i18n( "Computer modern (TeX) style" ), styleBox );
-    cmStyle->setChecked( contextStyle.getFontStyle() == "tex" );
+//    cmStyle = new QRadioButton( i18n( "Computer modern (TeX) style" ), styleBox );
+//    cmStyle->setChecked( contextStyle.getFontStyle() == "tex" );
 
     symbolStyle = new QRadioButton( i18n( "Symbol font style" ), styleBox );
     symbolStyle->setChecked( !esstixStyle->isChecked() && !cmStyle->isChecked() );
@@ -271,7 +271,7 @@ void ConfigurePage::apply()
         }
     }
 
-    ContextStyle& contextStyle = m_document->getContextStyle( true );
+/*    ContextStyle& contextStyle = m_document->getContextStyle( true );
 
     contextStyle.setDefaultFont( defaultFont );
     contextStyle.setNameFont( nameFont );
@@ -281,7 +281,7 @@ void ConfigurePage::apply()
 
     contextStyle.setFontStyle( fontStyle );
 
-    contextStyle.setSyntaxHighlighting( syntaxHighlighting->isChecked() );
+    contextStyle.setSyntaxHighlighting( syntaxHighlighting->isChecked() );*/
 //     contextStyle.setDefaultColor( defaultColorBtn->color() );
 //     contextStyle.setNumberColor( numberColorBtn->color() );
 //     contextStyle.setOperatorColor( operatorColorBtn->color() );
@@ -306,7 +306,7 @@ void ConfigurePage::apply()
 //     m_config->writeEntry( "errorColor", errorColorBtn->color() );
 
     // notify!!!
-    m_document->updateConfig();
+//    m_document->updateConfig();
     m_changed = false;
 }
 

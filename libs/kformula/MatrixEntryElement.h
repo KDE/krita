@@ -30,14 +30,16 @@ namespace KFormula {
  * @short The class representing an entry in a matrix
  * 
  * The lines behaviour is (a little) different from that
- * of ordinary sequences. Its MathML tag is <mtd>.
+ * of ordinary sequences. Its MathML tag is \<mtd\>.
+ *
+ * @since 2.0
  */
 class MatrixEntryElement : public SequenceElement {
 public:
     /// The standard constructor
     MatrixEntryElement( BasicElement* parent = 0 );
 
-    /// returns a list of all children of this class                           
+    /// @return a list of all children of this class                           
     const QList<BasicElement*>& childElements();
 
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
@@ -76,7 +78,7 @@ public:
 
 
 protected:
-    /// Draws the element internally, means it paints into @ref m_elementPath
+    /// Draws the element internally, means it paints into m_elementPath
     virtual void drawInternal();
 
 

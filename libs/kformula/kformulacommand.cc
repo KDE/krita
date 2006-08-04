@@ -339,13 +339,13 @@ KFCChangeBaseSize::KFCChangeBaseSize( const QString& name, Container* document,
 void KFCChangeBaseSize::execute()
 {
     m_formula->setBaseSize( m_size );
-    m_document->recalc();
+    m_document->recalcLayout();
 }
 
 void KFCChangeBaseSize::unexecute()
 {
     m_formula->setBaseSize( m_oldSize );
-    m_document->recalc();
+    m_document->recalcLayout();
 }
 
 

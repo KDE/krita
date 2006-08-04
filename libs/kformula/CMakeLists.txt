@@ -26,15 +26,15 @@ set(kformulalib_LIB_SRCS
    RootElement.cpp
    symbolelement.cc 
    kformulacommand.cc 
-   KFormulaMimeSource.cpp
+#   KFormulaMimeSource.cpp
    MatrixDialog.cc 
    sequenceparser.cc 
    elementtype.cc 
-   kformuladocument.cc 
+#   kformuladocument.cc 
    symboltable.cc 
    MathMLLoader.cpp 
    kformulainputfilter.cc 
-   kformulaview.cc 
+#   kformulaview.cc 
    spaceelement.cc 
    kformulaconfigpage.cc 
    symbolaction.cc 

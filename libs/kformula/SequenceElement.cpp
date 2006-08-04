@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <stdlib.h>
@@ -80,26 +80,9 @@ void SequenceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oas
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
 
-    BasicElement* last = m_sequenceChildren.last();
-    if ( last != 0 ) {
-        // Create a list (right order!)
-        QList<ElementType*> tokenList;
-        ElementType* token = last->getElementType();
-        while ( token != 0 ) {
-            // Add to the list.
-            tokenList.prepend( token );
-            token = token->getPrev();
-        }
+    foreach( BasicElement* tmpChild, m_sequenceChildren )
+        tmpChild->writeMathML( doc, de, oasisFormat );
 
-        if ( tokenList.count() == 1 ) {
-            tokenList.first()->saveMathML( this, doc, parent.toElement(), oasisFormat );
-            return;
-        }
-
-        for ( int i = 0; i < tokenList.count(); ++i ) {
-            tokenList.at( i )->saveMathML( this, doc, de, oasisFormat );
-        }
-    }
     parent.appendChild( de );
 }
 
@@ -158,9 +141,9 @@ void SequenceElement::calcSizes(const ContextStyle& style,
        	{
             luPixel spaceBefore = 0;
             if ( isFirstOfToken( child ) ) {
-                spaceBefore =
-                    style.ptToPixelX( child->getElementType()->getSpaceBefore( style,
-                                                                               tstyle ) );
+                //spaceBefore =
+                //    style.ptToPixelX( child->getElementType()->getSpaceBefore( style,
+                //                                                               tstyle ) );
             }
 
             if ( !child->isInvisible() ) {
@@ -223,7 +206,9 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 {
     QPointF myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
 
-    if( !isEmpty() )
+    if( m_sequenceChildren.isEmpty() )
+        drawEmptyRect( painter, context, myPos );
+    else
     {
         foreach( BasicElement* child, m_sequenceChildren )
 	{
@@ -233,14 +218,11 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 
                 // Each starting element draws the whole token
                 // This only concerns TextElements.
-                ElementType* token = child->getElementType();
-                if ( token )
-                    child += token->end() - token->start();
+               // ElementType* token = child->getElementType();
+               // if ( token )
+               //     child += token->end() - token->start();
             }
         }
-    }
-    else {
-        drawEmptyRect( painter, context, myPos );
     }
 }
 
@@ -492,7 +474,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
 
 void SequenceElement::moveWordLeft(FormulaCursor* cursor)
 {
-    uint pos = cursor->getPos();
+/*    uint pos = cursor->getPos();
     if (pos > 0) {
         ElementType* type = m_sequenceChildren.at(pos-1)->getElementType();
         if (type != 0) {
@@ -501,13 +483,13 @@ void SequenceElement::moveWordLeft(FormulaCursor* cursor)
     }
     else {
         moveLeft(cursor, this);
-    }
+    }*/
 }
 
 
 void SequenceElement::moveWordRight(FormulaCursor* cursor)
 {
-    int pos = cursor->getPos();
+/*    int pos = cursor->getPos();
     if (pos < m_sequenceChildren.count()) {
         ElementType* type = m_sequenceChildren.at(pos)->getElementType();
         if (type != 0) {
@@ -516,7 +498,7 @@ void SequenceElement::moveWordRight(FormulaCursor* cursor)
     }
     else {
         moveRight(cursor, this);
-    }
+    }*/
 }
 
 
@@ -1039,13 +1021,13 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         TextElement* element = cursor->getActiveTextElement();
         if ((element != 0) && !element->isSymbol()) {
             cursor->selectActiveElement();
-            const SymbolTable& table = container->document()->getSymbolTable();
+/*            const SymbolTable& table = container->document()->getSymbolTable();
             if (table.greekLetters().contains(element->getCharacter())) {
                 KFCReplace* command = new KFCReplace( i18n( "Change Char to Symbol" ), container );
                 TextElement* symbol = creationStrategy->createTextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
                 command->addElement( symbol );
                 return command;
-            }
+            }*/
             cursor->setSelection( false );
         }
         break;
@@ -1172,10 +1154,10 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
     int unicode = ch.unicode();
     switch (unicode) {
     case '(': {
-        BracketRequest r( container->document()->leftBracketChar(),
+/*        BracketRequest r( container->document()->leftBracketChar(),
                           container->document()->rightBracketChar() );
         singlePipe = true;
-        return buildCommand( container, &r );
+        return buildCommand( container, &r );*/
     }
     case '[': {
         BracketRequest r( LeftSquareBracket, RightSquareBracket );
@@ -1339,7 +1321,7 @@ bool SequenceElement::readContentFromDom(QDomNode& node)
 
 void SequenceElement::parse()
 {
-    delete parseTree;
+/*    delete parseTree;
 
     textSequence = true;
     foreach( BasicElement* element, m_sequenceChildren )
@@ -1365,7 +1347,7 @@ void SequenceElement::parse()
         if ( seq != 0 ) {
             seq->parse();
         }
-    }
+    }*/
     // debug
     //parseTree->output();
 }
@@ -1373,7 +1355,7 @@ void SequenceElement::parse()
 
 bool SequenceElement::isFirstOfToken( BasicElement* child )
 {
-    return ( child->getElementType() != 0 ) && isChildNumber( child->getElementType()->start(), child );
+    return true;//( child->getElementType() != 0 ) && isChildNumber( child->getElementType()->start(), child );
 }
 
 

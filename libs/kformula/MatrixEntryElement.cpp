@@ -30,12 +30,53 @@ namespace KFormula {
 
 MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : SequenceElement( parent )
 {
-  //  tabs.setAutoDelete( false );
+}
+
+const QList<BasicElement*>& MatrixEntryElement::childElements()
+{
+    return SequenceElement::childElements();
 }
 
 void MatrixEntryElement::drawInternal()
 {
+    // A MatrixEntryElement has no own representation if it has children,
+    // if not it paints a rectangle, this behavior is the same as SequenceElement
+    SequenceElement::drawInternal();
 }
+
+void MatrixEntryElement::writeMathML( QDomDocument& doc,
+                                            QDomNode& parent, bool oasisFormat )
+{
+    // parent is required to be a <mtr> tag
+
+    QDomElement tmp = doc.createElement( "TMP" );
+
+    SequenceElement::writeMathML( doc, tmp, oasisFormat );
+
+    /* Now we re-parse the Dom tree, because of the TabMarkers
+     * that have no direct representation in MathML but mark the
+     * end of a <mtd> tag.
+     */
+
+    QDomElement mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
+
+    // The mrow, if it exists.
+    QDomNode n = tmp.firstChild().firstChild();
+    while ( !n.isNull() ) {
+        // the illegal TabMarkers are children of the mrow, child of tmp.
+        if ( n.isElement() && n.toElement().tagName() == "TAB" ) {
+            parent.appendChild( mtd );
+            mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
+        }
+        else {
+            mtd.appendChild( n.cloneNode() ); // cloneNode needed?
+        }
+        n = n.nextSibling();
+    }
+
+    parent.appendChild( mtd );
+}
+
 
 
 
@@ -82,10 +123,7 @@ KCommand* MatrixEntryElement::buildCommand( Container* container, Request* reque
     return SequenceElement::buildCommand( container, request );
 }
 
-const QList<BasicElement*>& MatrixEntryElement::childElements()
-{
-    return QList<BasicElement*>();
-}
+
 
 
 KCommand* MatrixEntryElement::input( Container* container, QKeyEvent* event )
@@ -155,46 +193,12 @@ int MatrixEntryElement::tabBefore( int pos )
     return static_cast<int>( tabNum )-1;
 }
 
-
 int MatrixEntryElement::tabPos( int i )
 {
 /*    if ( i < tabs.count() ) {
         return childPos( tabs.at( i ) );
     }
     return -1;*/
-}
-
-void MatrixEntryElement::writeMathML( QDomDocument& doc,
-                                            QDomNode& parent, bool oasisFormat )
-{
-    // parent is required to be a <mtr> tag
-
-    QDomElement tmp = doc.createElement( "TMP" );
-
-    SequenceElement::writeMathML( doc, tmp, oasisFormat );
-
-    /* Now we re-parse the Dom tree, because of the TabMarkers
-     * that have no direct representation in MathML but mark the
-     * end of a <mtd> tag.
-     */
-
-    QDomElement mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
-
-    // The mrow, if it exists.
-    QDomNode n = tmp.firstChild().firstChild();
-    while ( !n.isNull() ) {
-        // the illegal TabMarkers are children of the mrow, child of tmp.
-        if ( n.isElement() && n.toElement().tagName() == "TAB" ) {
-            parent.appendChild( mtd );
-            mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
-        }
-        else {
-            mtd.appendChild( n.cloneNode() ); // cloneNode needed?
-        }
-        n = n.nextSibling();
-    }
-
-    parent.appendChild( mtd );
 }
 
 } // namespace KFormula

@@ -20,6 +20,8 @@
 #include "FormulaRenderer.h"
 #include <QPainter>
 
+namespace KFormula {
+
 FormulaRenderer::FormulaRenderer( FormulaContainer* container = 0 )
 {
     m_formulaContainer = container;
@@ -77,4 +79,5 @@ void FormulaRenderer::setElement( BasicElement* element )
 void FormulaRenderer::paintDecoration()
 {
 }
-									
+
+}

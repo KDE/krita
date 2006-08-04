@@ -54,6 +54,11 @@ class TestObject : public QObject
         void testSignalSlot();
         void stdoutSlot(const QString&);
         void stderrSlot(const QString&);
+
+        QObject* self() { return this; }
+
+    private:
+        QString m_prop;
 };
 
 #endif

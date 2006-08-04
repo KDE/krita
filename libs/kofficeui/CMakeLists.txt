@@ -41,6 +41,7 @@ set(kofficeui_LIB_SRCS
    KoTemplateCreateDia.cpp
    KoToolBox.cpp
    KoToolManager.cpp
+   KoToolManager_p.cpp
    KoToolRegistry.cpp
    KoUnitWidgets.cpp
    KoZoomAction.cpp

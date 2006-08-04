@@ -53,16 +53,6 @@ public:
     virtual ~KoTool() {}
 
 public:
-
-    /**
-     * Return the option widget for this tool. Create it if it
-     * does not exist yet.
-     *
-     * Note: by default an empty widget is created.
-     * @see m_optionWidget
-     */
-    virtual QWidget * optionWidget(QWidget * parent);
-
     /// request a repaint of the decorations to be made.
     virtual void repaintDecorations() {};
 
@@ -197,7 +187,6 @@ protected:
      * @param force if true the cursor will be set no matter what.
      */
     void useCursor(QCursor cursor, bool force=false);
-    QWidget * m_optionWidget; ///< the widget that is returned in optionWidget()
     KoCanvasBase *m_canvas; ///< the canvas interface this tool will work for.
 
 private:

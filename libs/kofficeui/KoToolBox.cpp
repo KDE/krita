@@ -136,7 +136,16 @@ void KoToolBox::setActiveTool(int id) {
     if(button)
         button->setChecked(true);
     else
-        kWarning() << "KoToolBox::setActiveTool(" << id << "): no such button found\n";
+        kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found\n";
+}
+
+void KoToolBox::setVisibilityCode(QAbstractButton *button, const QString &code) {
+    m_visibilityCodes.insert(button, code);
+}
+
+void KoToolBox::setButtonsVisible(const QList<QString> &codes) {
+    foreach(QAbstractButton *button, m_visibilityCodes.keys())
+        button->setVisible( codes.contains(m_visibilityCodes.value(button)) );
 }
 
 #if 0

@@ -223,6 +223,7 @@ void KoTextTool::activate (bool temporary) {
     m_caret = QTextCursor(data->document());
     data->setTextCursor(&m_caret);
     useCursor(Qt::IBeamCursor, true);
+    m_textShape->repaint();
 }
 
 void KoTextTool::deactivate() {

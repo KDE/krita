@@ -141,7 +141,7 @@ kDebug(30008) << "**********add 1" << endl;
         return false;
     }
 
-    /** This function return a list of all the keys
+    /** This function return a list of all the keys in KoID format
      */
     QList<KoID> listKeys() const
     {
@@ -154,6 +154,22 @@ kDebug(30008) << "**********add 1" << endl;
             ++it;
         }
         return list;
+    }
+
+    /**
+     * Returns a list of all the keys
+     * @returns a list of all the keys
+     */
+    QList<QString> keys() const {
+        QList<QString> answer;
+        typename storageMap::const_iterator it = m_storage.begin();
+        typename storageMap::const_iterator endit = m_storage.end();
+        while( it != endit )
+        {
+            answer.append(it->first.id());
+            ++it;
+        }
+        return answer;
     }
 
 protected:

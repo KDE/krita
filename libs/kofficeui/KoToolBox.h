@@ -52,14 +52,17 @@ public:
 
     void addButton(QAbstractButton *button, const QString &section, int priority, int buttonGroupId=-1);
     void setup();
+    void setVisibilityCode(QAbstractButton *button, const QString &code);
 
 public slots:
     void setActiveTool(int id);
+    void setButtonsVisible(const QList<QString> &codes);
 
 private:
     QButtonGroup *m_buttonGroup;
     QBoxLayout* m_layout;
     QList<ToolArea *> m_toolBoxes;
+    QMap<QAbstractButton*, QString> m_visibilityCodes;
 
     // Section,  [prio, button]
     QMap<QString, QMultiMap<int, QAbstractButton*> > m_buttons;

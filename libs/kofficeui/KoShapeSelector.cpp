@@ -28,6 +28,7 @@
 #include <KoShapeContainer.h>
 #include <KoInteractionTool.h>
 #include <KoShapeMoveStrategy.h>
+#include <KoCreateShapesTool.h>
 #include <KoCanvasController.h>
 
 #include <QKeyEvent>

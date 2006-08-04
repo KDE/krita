@@ -26,17 +26,9 @@
 #include "KoTool.moc"
 
 KoTool::KoTool(KoCanvasBase *canvas )
-: m_optionWidget( 0 )
-, m_canvas(canvas)
+:m_canvas(canvas)
 , m_previousCursor(Qt::ArrowCursor)
 {
-}
-
-QWidget * KoTool::optionWidget(QWidget * parent) {
-    if ( !m_optionWidget )
-        m_optionWidget = new QWidget( parent );
-
-    return m_optionWidget;
 }
 
 void KoTool::activate(bool temporary) {

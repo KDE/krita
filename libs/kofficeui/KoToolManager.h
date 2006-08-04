@@ -20,26 +20,21 @@
 #ifndef KO_TOOL_MANAGER
 #define KO_TOOL_MANAGER
 
-#include "KoToolBox.h"
-
-#include <KoID.h>
-#include <KoTool.h>
-#include <KoCreateShapesTool.h>
 #include <koffice_export.h>
-
 #include <QMap>
 #include <QObject>
-#include <QMutex>
+#include <QCursor>
 #include <QStack>
 
 class ToolHelper;
-class KActionCollection;
-class QAbstractButton;
-class KoToolFactory;
 class KoCanvasController;
 class KoCanvasBase;
-class KoShapeControllerBase;
 class KoTool;
+class KoShapeControllerBase;
+class KoToolBox;
+class KoCreateShapesTool;
+class KActionCollection;
+class KoShape;
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -74,6 +69,7 @@ public:
 
 signals:
     void changedTool(int uniqueToolId);
+    void toolCodesSelected(QList<QString> types);
 
 private:
     KoToolManager();
@@ -91,6 +87,7 @@ private slots:
     void switchToolRequested(const QString &id);
     void switchToolTemporaryRequested(const QString &id);
     void switchBackRequested();
+    void selectionChanged(QList<KoShape*> shapes);
 
 private:
     static KoToolManager* s_instance;
@@ -101,37 +98,10 @@ private:
     KoCanvasController *m_activeCanvas;
     KoTool *m_activeTool, *m_dummyTool;
     ToolHelper *m_defaultTool;
-    /* this mutex synchronizes all accesses to m_allTools, m_tools and m_canvases
-     * and m_toolBox members. */
-    QMutex m_mutex;
 
     QMap<KoTool*, int> m_uniqueToolIds;
     QMap<KoCanvasController*, QMap<QString, KoTool*> > m_allTools;
     QStack<KoTool*> m_stack;
-};
-
-/// \internal
-class ToolHelper : public QObject {
-    Q_OBJECT
-public:
-    ToolHelper(KoToolFactory *tool);
-    QAbstractButton *createButton(QWidget *parent);
-    const QString &id() const;
-    const QString &name() const;
-    const QString &toolType() const;
-    int priority() const;
-    KoTool *createTool(KoCanvasBase *canvas) const;
-    int uniqueId() const { return m_uniqueId; }
-
-signals:
-    void toolActivated(ToolHelper *tool);
-
-private slots:
-    void buttonPressed();
-
-private:
-    KoToolFactory *m_toolFactory;
-    int m_uniqueId;
 };
 
 #endif

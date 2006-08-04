@@ -1,7 +1,7 @@
 Krita documentation outline
 
 
-Last edited 2006-05-28 (Sander Koning)
+Last edited 2006-08-04 (Sander Koning)
 
 Changelog (of major updates)
 2006-05-28: ASK: split into 1.5 and 1.6 parts
@@ -83,7 +83,7 @@ Outline for the 1.5 manual (final as of 2006-05-31):
   - Introduction to colorspaces
   - Available colorspaces
 
-- Commands
+- Commands ([TODO] make up-to-date)
   - General layout
   - Menus
   - Toolbars
@@ -134,9 +134,12 @@ The current outline (going to 1.6):
 
 - Layers
   - General information
-  - Adjustment layers ([TODO] elaborate)
-  - [TODO] Create, transform, combine, layerbox (hide/lock/...), composite,
-    histograms, ...
+  - Layer box
+  - Working with layers ([TODO] expand)
+  - Adjustment layers ([TODO] expand)
+  - [TODO] Layer masks
+  - Compositing modes ([TODO] expand)
+  - [TODO] Create, transform, combine, histograms, ...
 
 - Selections
   - Making a selection
@@ -156,14 +159,14 @@ The current outline (going to 1.6):
   - Available colorspaces
   - [TODO] properties, usage, converting, ...
 
-- Commands
+- Commands ([TODO] check and make up-to-date)
   - General layout
   - Menus
   - Toolbars
   - Palettes
   - Dialogs
 
-- Settings
+- Settings ([TODO] check)
 
 - Scripting
 

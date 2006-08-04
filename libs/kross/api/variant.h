@@ -63,7 +63,8 @@ namespace Kross { namespace Api {
             //inline operator const Q3CString () { return getValue().toCString(); }
             //inline operator const Q3CString& () { return getValue().asCString(); }
 
-            inline operator QList<QVariant> () { return getValue().toList(); }
+            inline operator QVariant () { return getValue(); }
+            inline operator const QVariant& () { return getValue(); }
 
             /**
              * Operator to return a QStringList.
@@ -76,13 +77,11 @@ namespace Kross { namespace Api {
              * exception if the Kross::Api::List isn't a QStringList.
              */
             inline operator QStringList () {
-                return Kross::Api::Variant::toStringList(this);
+                return toStringList(this);
             }
-            //inline operator const QStringList () { getValue().toStringList(); }
-            //inline operator const QStringList& () { return getValue().asStringList(); }
-
-            inline operator QVariant () { return getValue(); }
-            inline operator const QVariant& () { return getValue(); }
+            inline operator QList<QVariant> () {
+                return toList(this);
+            }
 
             /**
              * Destructor.

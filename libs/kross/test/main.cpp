@@ -50,6 +50,8 @@
 
 KApplication *app = 0;
 
+
+
 static KCmdLineOptions options[] =
 {
     { "interpreter <interpretername>", "Name of the interpreter being used", "python" },

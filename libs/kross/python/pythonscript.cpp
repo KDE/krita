@@ -181,17 +181,16 @@ void PythonScript::finalize()
 
 Kross::Api::Exception* PythonScript::toException(const QString& error)
 {
-    PyObject *type, *value, *traceback;
-    PyObject *lineobj = 0;
-    Py::List tblist;
+    long lineno = -1;
+    QStringList errorlist;
 
+    PyObject *type, *value, *traceback;
     PyErr_Fetch(&type, &value, &traceback);
     Py_FlushLine();
     PyErr_NormalizeException(&type, &value, &traceback);
 
     if(traceback) {
-        lineobj = PyObject_GetAttrString(traceback, "tb_lineno");
-
+        Py::List tblist;
         try {
             Py::Module tbmodule( PyImport_Import(Py::String("traceback").ptr()), true );
             Py::Dict tbdict = tbmodule.getDict();
@@ -201,35 +200,57 @@ Kross::Api::Exception* PythonScript::toException(const QString& error)
             tblist = tbfunc.apply(args);
             uint length = tblist.length();
             for(Py::List::size_type i = 0; i < length; ++i)
-                krossdebug( Py::Object(tblist[i]).as_string().c_str() );
+                errorlist.append( Py::Object(tblist[i]).as_string().c_str() );
         }
         catch(Py::Exception& e) {
             QString err = Py::value(e).as_string().c_str();
             e.clear(); // exception is handled. clear it now.
             krosswarning( QString("Kross::Python::PythonScript::toException() Failed to fetch a traceback: %1").arg(err) );
         }
+
+        PyObject *next;
+        while (traceback && traceback != Py_None) {
+            PyFrameObject *frame = (PyFrameObject*)PyObject_GetAttrString(traceback, "tb_frame");
+            Py_DECREF(frame);
+            {
+                PyObject *getobj = PyObject_GetAttrString(traceback, "tb_lineno");
+                lineno = PyInt_AsLong(getobj);
+                Py_DECREF(getobj);
+            }
+            if(Py_OptimizeFlag) {
+                PyObject *getobj = PyObject_GetAttrString(traceback, "tb_lasti");
+                int lasti = PyInt_AsLong(getobj);
+                Py_DECREF(getobj);
+                lineno = PyCode_Addr2Line(frame->f_code, lasti);
+            }
+
+            //const char* filename = PyString_AsString(frame->f_code->co_filename);
+            //const char* name = PyString_AsString(frame->f_code->co_name);
+            //errorlist.append( QString("%1#%2: \"%3\"").arg(filename).arg(lineno).arg(name) );
+
+            next = PyObject_GetAttrString(traceback, "tb_next");
+            Py_DECREF(traceback);
+            traceback = next;
+        }
     }
 
-    if((! lineobj) && value)
-        lineobj = PyObject_GetAttrString(value, "lineno"); //['args', 'filename', 'lineno', 'msg', 'offset', 'print_file_and_line', 'text']
-
-    PyErr_Restore(type, value, traceback);
-
-    long line = -1;
-    if(lineobj) {
-        Py::Object o(lineobj, true);
-        if(o.isNumeric())
-            line = long(Py::Long(o)) - 1; // python linecount starts with 1..
+    if(lineno < 0) {
+        if(value) {
+            PyObject *getobj = PyObject_GetAttrString(value, "lineno");
+            if(getobj) {
+                lineno = PyInt_AsLong(getobj);
+                Py_DECREF(getobj);
+            }
+        }
+        if(lineno < 0)
+            lineno = 0;
     }
 
-    QStringList tb;
-    uint tblength = tblist.length();
-    for(Py::List::size_type i = 0; i < tblength; ++i)
-        tb.append( Py::Object(tblist[i]).as_string().c_str() );
+    //PyErr_Restore(type, value, traceback);
 
-    Kross::Api::Exception* exception = new Kross::Api::Exception(error, line);;
-    if(tb.count() > 0)
-        exception->setTrace( tb.join("\n") );
+    Kross::Api::Exception* exception = new Kross::Api::Exception(error, lineno - 1);
+    if(errorlist.count() > 0)
+        exception->setTrace( errorlist.join("\n") );
     return exception;
 }
 

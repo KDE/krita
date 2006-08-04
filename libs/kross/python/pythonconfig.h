@@ -35,6 +35,7 @@
 #include <object.h>
 #include <compile.h>
 #include <eval.h>
+#include <frameobject.h>
 
 // Include the PyCXX stuff.
 #include "cxx/Config.hxx"

@@ -25,6 +25,7 @@
 #include "../api/class.h"
 #include "../api/proxy.h"
 #include "../api/module.h"
+#include "../api/qtobject.h"
 
 #include <QObject>
 #include <QString>

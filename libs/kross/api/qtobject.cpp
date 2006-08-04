@@ -170,7 +170,7 @@ Kross::Api::Object::Ptr QtObject::callSlot(Kross::Api::List::Ptr args)
     m_object->qt_invoke(slotid, uo);
     delete [] uo;
 
-    return new Variant(true);
+    return new Variant( QVariant(true,0) );
 }
 
 Kross::Api::Object::Ptr QtObject::signalNames(Kross::Api::List::Ptr)

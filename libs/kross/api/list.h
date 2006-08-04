@@ -41,11 +41,13 @@ namespace Kross { namespace Api {
              */
             typedef KSharedPtr<List> Ptr;
 
+/*
             operator QStringList () {
                 //QValueList<Object::Ptr> getValue()
                 krossdebug("999999999999 ...........................");
                 return QStringList();
             }
+*/
 
             /**
              * Constructor.

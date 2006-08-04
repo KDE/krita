@@ -136,13 +136,14 @@ private:
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);
     void setup();
-    void switchTool(KoTool *tool, bool temporary);
+    void switchTool(KoTool *tool);
     void switchTool(const QString &id, bool temporary);
 
 private slots:
     void toolActivated(ToolHelper *tool);
-    void detachCanvas(KoCanvasController* controller);
-    void attachCanvas(KoCanvasController* controller);
+    void detachCanvas(KoCanvasController *controller);
+    void attachCanvas(KoCanvasController *controller);
+    void movedFocus(QWidget *from, QWidget *to);
     void updateCursor(QCursor cursor);
     void switchToolRequested(const QString &id);
     void switchToolTemporaryRequested(const QString &id);
@@ -157,11 +158,12 @@ private:
     QList<KoCanvasController*> m_canvases;
     KoCanvasController *m_activeCanvas;
     KoTool *m_activeTool, *m_dummyTool;
-    ToolHelper *m_defaultTool;
+    ToolHelper *m_defaultTool; // the pointer thingy
+    QString m_activeToolId;
 
-    QMap<KoTool*, int> m_uniqueToolIds;
+    QMap<KoTool*, int> m_uniqueToolIds; // for the changedTool signal
     QMap<KoCanvasController*, QMap<QString, KoTool*> > m_allTools;
-    QStack<KoTool*> m_stack;
+    QStack<QString> m_stack; // stack of temporary tools
 };
 
 #endif

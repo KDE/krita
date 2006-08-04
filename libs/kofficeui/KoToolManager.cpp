@@ -38,6 +38,7 @@
 
 #include <QStringList>
 #include <QAbstractButton>
+#include <QApplication>
 
 // ******** DummyTool **********
 class DummyTool : public KoTool {
@@ -57,6 +58,8 @@ KoToolManager::KoToolManager()
 , m_activeTool(0)
 {
     m_dummyTool = new DummyTool();
+    connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*,QWidget*)),
+        this, SLOT(movedFocus(QWidget*,QWidget*)));
 }
 
 KoToolManager::~KoToolManager() {
@@ -82,8 +85,6 @@ void KoToolManager::setup() {
     // connect to all tools so we can hear their button-clicks
     foreach(ToolHelper *tool, m_tools)
         connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
-
-    // do some magic for the sorting here :)  TODO
 }
 
 KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
@@ -143,21 +144,25 @@ void KoToolManager::toolActivated(ToolHelper *tool) {
     kDebug(30004) << "ToolActivated: '" << tool->name() << "'\n";
     QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
     KoTool *t = toolsMap.value(tool->id());
-    switchTool(t, false);
+    m_activeToolId = tool->id();
+    switchTool(t);
 }
 
 void KoToolManager::switchTool(const QString &id, bool temporary) {
     Q_ASSERT(m_activeCanvas);
+    if(m_activeTool && temporary)
+        m_stack.push(m_activeToolId);
+    m_activeToolId = id;
     QMap<QString, KoTool*> toolsMap = m_allTools.value(m_activeCanvas);
     KoTool *tool = toolsMap.value(id);
     if(! tool) {
         kWarning(30004) << "Tool requested " << (temporary?"temporary":"") << "switch to unknown tool: '" << id << "'\n";
         return;
     }
-    switchTool(tool, temporary);
+    switchTool(tool);
 }
 
-void KoToolManager::switchTool(KoTool *tool, bool temporary) {
+void KoToolManager::switchTool(KoTool *tool) {
     Q_ASSERT(tool);
     if(m_activeCanvas == 0) {
         return;
@@ -172,8 +177,6 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
                 this, SLOT(switchToolTemporaryRequested(const QString &)));
         disconnect(m_activeTool, SIGNAL(sigDone()), this, SLOT(switchBackRequested()));
     }
-    if(m_activeTool && temporary)
-        m_stack.push(m_activeTool);
     m_activeTool = tool;
     connect(m_activeTool, SIGNAL(sigCursorChanged(QCursor)),
             this, SLOT(updateCursor(QCursor)));
@@ -196,7 +199,6 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary) {
 }
 
 void KoToolManager::attachCanvas(KoCanvasController *controller) {
-    // TODO listen to focus changes
     QMap<QString, KoTool*> toolsMap;
     foreach(ToolHelper *tool, m_tools) {
         KoTool *tl = tool->createTool(controller->canvas());
@@ -226,10 +228,47 @@ void KoToolManager::attachCanvas(KoCanvasController *controller) {
         SLOT(selectionChanged(QList<KoShape*>)));
 }
 
+void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
+    Q_UNUSED(from);
+    if(to == 0 || to == m_activeCanvas)
+        return;
+    QWidget *newMainWindow = to;
+    while(newMainWindow->parentWidget())
+        newMainWindow = newMainWindow->parentWidget();
+
+    KoCanvasController *newCanvas = 0;
+    // if the 'to' is one of our canvasses, or one of its children, then switch.
+    foreach(KoCanvasController* canvas, m_canvases) {
+        if(canvas == m_activeCanvas)
+            continue;
+        // make sure we are not just talking about overlapping windows.
+        QWidget *root = canvas;
+        while(root->parentWidget())
+            root = root->parentWidget();
+        if(newMainWindow == root) {
+            // this canvas is the new 'To'
+            newCanvas = canvas;
+            break;
+        }
+    }
+    if(newCanvas == 0)
+        return;
+    if(newCanvas == m_activeCanvas)
+        return;
+    if(m_activeCanvas) {
+        m_activeCanvas->canvas()->setTool(m_dummyTool);
+        m_activeCanvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
+    }
+    m_activeCanvas = newCanvas;
+
+    switchTool(m_activeToolId, false);
+}
+
 void KoToolManager::detachCanvas(KoCanvasController *controller) {
     // TODO detach
     if(m_activeCanvas == controller)
         m_activeCanvas = 0;
+    m_activeTool = 0;
     QMap<QString, KoTool*> toolsMap = m_allTools.value(controller);
     foreach(KoTool *tool, toolsMap.values())
         delete tool;

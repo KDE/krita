@@ -49,7 +49,6 @@
 
 KoToolBox::KoToolBox() {
     m_buttonGroup = new QButtonGroup(this);
-    connect( this, SIGNAL(  orientationChanged ( Qt::Orientation )), this, SLOT(setOrientation ( Qt::Orientation ) ) );
     setFeatures(DockWidgetMovable | DockWidgetFloatable);
 }
 

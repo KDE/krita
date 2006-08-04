@@ -146,8 +146,8 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
             writer->endElement();
     }
     writeStyleProperties( writer, KoGenStyle::GraphicType, "style:graphic-properties", parentStyle );
-    writeStyleProperties( writer, KoGenStyle::TextType, "style:text-properties", parentStyle );
     writeStyleProperties( writer, KoGenStyle::ParagraphType, "style:paragraph-properties", parentStyle );
+    writeStyleProperties( writer, KoGenStyle::TextType, "style:text-properties", parentStyle );
 
     // And now the style maps
     for ( int i = 0; i < m_maps.count(); ++i ) {

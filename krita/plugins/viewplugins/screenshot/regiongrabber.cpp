@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QLabel>
-#include <Q3Frame>
+#include <QFrame>
 #include <QKeyEvent>
 
 #include <kglobalsettings.h>
@@ -41,7 +41,7 @@ SizeTip::SizeTip( QWidget *parent, const char *name )
 {
   setMargin( 2 );
   setIndent( 0 );
-  setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
+  setFrameStyle( QFrame::Plain | QFrame::Box );
 
   setPalette( QToolTip::palette() );
 }
@@ -116,7 +116,8 @@ void RegionGrabber::mouseMoveEvent( QMouseEvent *e )
   if ( mouseDown )
   {
     sizeTip->hide();
-    tipTimer->start( 250, true );
+    tipTimer->setSingleShot(true);
+    tipTimer->start( 250 );
 
     drawRubber();
     grabRect.setBottomRight( e->pos() );

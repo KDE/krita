@@ -35,7 +35,7 @@
 #include <QMouseEvent>
 
 
-#include <knotifyclient.h>
+#include <knotification.h>
 #include <khelpmenu.h>
 #include <kmenu.h>
 #include <kpushbutton.h>
@@ -44,7 +44,6 @@
 #include <QCursor>
 #include <QRegExp>
 #include <QPainter>
-#include <q3paintdevicemetrics.h>
 #include <q3whatsthis.h>
 
 #include <stdlib.h>
@@ -148,7 +147,7 @@ bool KSnapshot::save( const KUrl& url )
     if ( url.isLocalFile() ) {
         KSaveFile saveFile( url.path() );
         if ( saveFile.status() == 0 ) {
-            if ( snapshot.save( saveFile.file(), type.latin1() ) )
+            if ( snapshot.save( saveFile.file(), type.toLatin1() ) )
                 ok = saveFile.close();
         }
     }
@@ -156,7 +155,7 @@ bool KSnapshot::save( const KUrl& url )
         KTempFile tmpFile;
         tmpFile.setAutoDelete( true );
         if ( tmpFile.status() == 0 ) {
-            if ( snapshot.save( tmpFile.file(), type.latin1() ) ) {
+            if ( snapshot.save( tmpFile.file(), type.toLatin1() ) ) {
                 if ( tmpFile.close() )
                     ok = KIO::NetAccess::upload( tmpFile.name(), url, this );
             }
@@ -202,8 +201,10 @@ void KSnapshot::slotGrab()
     }
     else
     {
-        if ( mainWidget->delay() )
-            grabTimer.start( mainWidget->delay() * 1000, true );
+        if ( mainWidget->delay() ) {
+            grabTimer.setSingleShot(true);
+            grabTimer.start( mainWidget->delay() * 1000 );
+        }
         else {
             grabber->show();
             grabber->grabMouse( Qt::CrossCursor );
@@ -226,12 +227,11 @@ void KSnapshot::slotPrint()
         qApp->processEvents();
 
         QPainter painter(&printer);
-        Q3PaintDeviceMetrics metrics(painter.device());
 
         float w = snapshot.width();
-        float dw = w - metrics.width();
+        float dw = w - painter.device()->width();
         float h = snapshot.height();
-        float dh = h - metrics.height();
+        float dh = h - painter.device()->height();
         bool scale = false;
 
         if ( (dw > 0.0) || (dh > 0.0) )
@@ -255,14 +255,14 @@ void KSnapshot::slotPrint()
             img = img.smoothScale( int(neww), int(newh), Qt::KeepAspectRatio );
             qApp->processEvents();
 
-            int x = (metrics.width()-img.width())/2;
-            int y = (metrics.height()-img.height())/2;
+            int x = (painter.device()->width()-img.width())/2;
+            int y = (painter.device()->height()-img.height())/2;
 
             painter.drawImage( x, y, img);
         }
         else {
-            int x = (metrics.width()-snapshot.width())/2;
-            int y = (metrics.height()-snapshot.height())/2;
+            int x = (painter.device()->width()-snapshot.width())/2;
+            int y = (painter.device()->height()-snapshot.height())/2;
             painter.drawPixmap( x, y, snapshot );
         }
     }
@@ -315,7 +315,7 @@ void KSnapshot::updatePreview()
 void KSnapshot::grabTimerDone()
 {
     performGrab();
-    KNotifyClient::beep(i18n("The screen has been successfully grabbed."));
+    KNotification::beep(i18n("The screen has been successfully grabbed."));
 }
 
 static

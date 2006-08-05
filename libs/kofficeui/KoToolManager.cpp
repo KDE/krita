@@ -30,6 +30,7 @@
 #include <KoShapeControllerBase.h>
 #include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeManager.h>
 #include <KoID.h>
 
 #include <kactioncollection.h>
@@ -102,6 +103,8 @@ KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
     connect(this, SIGNAL(changedTool(int)), toolBox, SLOT(setActiveTool(int)));
     connect(this, SIGNAL(toolCodesSelected(QList<QString>)),
             toolBox, SLOT(setButtonsVisible(QList<QString>)));
+    QList<QString> empty;
+    toolBox->setButtonsVisible(empty);
     return toolBox;
 }
 
@@ -262,6 +265,7 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
     m_activeCanvas = newCanvas;
 
     switchTool(m_activeToolId, false);
+    selectionChanged(m_activeCanvas->canvas()->shapeManager()->selection()->selectedShapes().toList());
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {

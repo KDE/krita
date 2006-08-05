@@ -86,6 +86,7 @@ void KoToolBox::setup() {
             ta = new ToolArea(widget);
             m_toolAreas.insert(section, ta);
             m_layout->addWidget(ta);
+            m_layout->setAlignment(ta, Qt::AlignLeft | Qt::AlignTop);
         }
         QMap<int, QAbstractButton*> buttons = m_buttons[section];
         foreach(QAbstractButton *button, buttons.values()) {

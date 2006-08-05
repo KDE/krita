@@ -25,6 +25,7 @@
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
+#include <kicon.h>
 
 #include <ksharedptr.h>
 #include <kaction.h>

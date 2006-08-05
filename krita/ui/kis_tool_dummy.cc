@@ -20,6 +20,7 @@
 #include <QString>
 #include <kaction.h>
 #include <QLabel>
+#include <kicon.h>
 
 #include <kaction.h>
 #include <klocale.h>

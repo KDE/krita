@@ -30,6 +30,7 @@
 #include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QMouseEvent>
+#include <kicon.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>

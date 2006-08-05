@@ -36,7 +36,7 @@
 #include <kseparator.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-
+#include <kicon.h>
 #include <KoMainWindow.h>
 #include "oldtoolbox.h"
 

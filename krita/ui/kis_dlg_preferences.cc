@@ -48,7 +48,7 @@
 #include <knuminput.h>
 #include <kurlrequester.h>
 #include <kpagewidgetmodel.h>
-
+#include <kicon.h>
 #include "squeezedcombobox.h"
 #include "kis_clipboard.h"
 #include "kis_cmb_idlist.h"

@@ -48,7 +48,7 @@
 #include <kicontheme.h>
 #include <klocale.h>
 #include <khbox.h>
-
+#include <kicon.h> 
 #include <KoDocumentSectionView.h>
 #include <KoPartSelectAction.h>
 

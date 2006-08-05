@@ -29,7 +29,7 @@
 
 #include <ktoolbar.h>
 #include <kiconloader.h>
-
+#include <kicon.h> 
 #if 0
 #define SET_FOR_ALL_CONTAINER(WIDGET_TYPE,METHOD_NAME,VALUE)             \
   for( int id = 0; id < containerCount(); ++id ) {                       \

@@ -27,7 +27,7 @@
 #include <QPixmap>
 #include <Q3ValueList>
 #include <QVBoxLayout>
-
+#include <kicon.h>
 #include <kapplication.h>
 #include <kdeversion.h>
 #include <kfiledialog.h>

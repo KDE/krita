@@ -41,6 +41,7 @@
 #include <Q3ValueList>
 #include <QMouseEvent>
 #include <QCustomEvent>
+#include <kicon.h>
 
 //static
 QString KoView::newObjectName()

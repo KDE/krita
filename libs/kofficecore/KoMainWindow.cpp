@@ -55,7 +55,7 @@
 #include <kxmlguifactory.h>
 #include <kseparatoraction.h>
 #include <kfileitem.h>
-
+#include <kicon.h>
 #include <QObject>
 //Added by qt3to4:
 #include <QCloseEvent>

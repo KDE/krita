@@ -34,7 +34,7 @@
 #include <QTimerEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
-
+#include <kicon.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>

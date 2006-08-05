@@ -22,7 +22,7 @@
 #include <kdebug.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-
+#include <kicon.h>
 #warning "KDE4: TODO change argument as kactionmenu (when all will compile)"
 
 KoPartSelectAction::KoPartSelectAction( const QString& text, KActionCollection* parent, const char* name )

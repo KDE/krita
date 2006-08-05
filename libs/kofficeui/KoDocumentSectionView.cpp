@@ -23,6 +23,7 @@
 #include <QHelpEvent>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QPersistentModelIndex>
 #include "KoDocumentSectionPropertyAction_p.h"
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
@@ -32,6 +33,7 @@ class KoDocumentSectionView::Private
 {
     public:
         KoDocumentSectionDelegate *delegate;
+        QPersistentModelIndex hovered;
         Private(): delegate( 0 ) { }
 };
 
@@ -40,6 +42,7 @@ KoDocumentSectionView::KoDocumentSectionView( QWidget *parent )
     , d( new Private )
 {
     d->delegate = new KoDocumentSectionDelegate( this, this );
+    setMouseTracking( true );
     header()->hide();
 }
 
@@ -63,18 +66,26 @@ void KoDocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &
 
 bool KoDocumentSectionView::event( QEvent *e )
 {
-    if( e->type() == QEvent::MouseButtonPress && model() )
+    if( model() )
     {
-        const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
-        if( !indexAt( pos ).isValid() )
-            return super::event( e );
-        QModelIndex index = model()->buddy( indexAt( pos ) );
-        QStyleOptionViewItem option = viewOptions();
-        option.rect = visualRect( index );
-        if( index == currentIndex() )
-            option.state |= QStyle::State_HasFocus;
-
-        return d->delegate->editorEvent( e, model(), option, index );
+        switch( e->type() )
+        {
+            case QEvent::Leave:
+            {
+                QEvent e( QEvent::Leave );
+                d->delegate->editorEvent( &e, model(), optionForIndex( d->hovered ), d->hovered );
+                d->hovered = QModelIndex();
+            } break;
+            case QEvent::MouseButtonPress:
+            {
+                const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
+                if( !indexAt( pos ).isValid() )
+                    return super::event( e );
+                QModelIndex index = model()->buddy( indexAt( pos ) );
+                return d->delegate->editorEvent( e, model(), optionForIndex( index ), index );
+            } break;
+            default: break;
+        }
     }
 
     return super::event( e );
@@ -82,18 +93,39 @@ bool KoDocumentSectionView::event( QEvent *e )
 
 bool KoDocumentSectionView::viewportEvent( QEvent *e )
 {
-    if( e->type() == QEvent::ToolTip && model() )
+    if( model() )
     {
-        const QPoint pos = static_cast<QHelpEvent*>( e )->pos();
-        if( !indexAt( pos ).isValid() )
-            return super::viewportEvent( e );
-        QModelIndex index = model()->buddy( indexAt( pos ) );
-        QStyleOptionViewItem option = viewOptions();
-        option.rect = visualRect( index );
-        if( index == currentIndex() )
-            option.state |= QStyle::State_HasFocus;
-
-        return d->delegate->editorEvent( e, model(), option, index );
+        switch( e->type() )
+        {
+            case QEvent::MouseMove:
+            {
+                const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
+                QModelIndex hovered = indexAt( pos );
+                if( hovered != d->hovered )
+                {
+                    if( d->hovered.isValid() )
+                    {
+                        QEvent e( QEvent::Leave );
+                        d->delegate->editorEvent( &e, model(), optionForIndex( d->hovered ), d->hovered );
+                    }
+                    if( hovered.isValid() )
+                    {
+                        QEvent e( QEvent::Enter );
+                        d->delegate->editorEvent( &e, model(), optionForIndex( hovered ), hovered );
+                    }
+                    d->hovered = hovered;
+                }
+            } break;
+            case QEvent::ToolTip:
+            {
+                const QPoint pos = static_cast<QHelpEvent*>( e )->pos();
+                if( !indexAt( pos ).isValid() )
+                    return super::viewportEvent( e );
+                QModelIndex index = model()->buddy( indexAt( pos ) );
+                return d->delegate->editorEvent( e, model(), optionForIndex( index ), index );
+            } break;
+            default: break;
+        }
     }
 
     return super::viewportEvent( e );
@@ -137,6 +169,15 @@ void KoDocumentSectionView::slotActionToggled( bool on, const QPersistentModelIn
     Model::PropertyList list = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
     list[num].state = on;
     const_cast<QAbstractItemModel*>( index.model() )->setData( index, QVariant::fromValue( list ), Model::PropertiesRole );
+}
+
+QStyleOptionViewItem KoDocumentSectionView::optionForIndex( const QModelIndex &index ) const
+{
+    QStyleOptionViewItem option = viewOptions();
+    option.rect = visualRect( index );
+    if( index == currentIndex() )
+        option.state |= QStyle::State_HasFocus;
+    return option;
 }
 
 #include "KoDocumentSectionPropertyAction_p.moc"

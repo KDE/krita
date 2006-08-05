@@ -148,6 +148,11 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
         return true;
     }
 
+    else if( e->type() == QEvent::Leave )
+    {
+        d->tip.hide();
+    }
+
     return false;
 }
 

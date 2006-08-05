@@ -23,6 +23,7 @@
 #include <QTreeView>
 #include <koffice_export.h>
 
+class QStyleOptionViewItem;
 class KoDocumentSectionModel;
 
 class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
@@ -43,7 +44,7 @@ class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
         virtual bool event( QEvent *event );
         virtual bool viewportEvent( QEvent *event );
         virtual void contextMenuEvent( QContextMenuEvent *event );
-        virtual void showContextMenu( const QPoint &pos, const QModelIndex &index );
+        virtual void showContextMenu( const QPoint &globalPos, const QModelIndex &index );
 
     protected slots:
         virtual void currentChanged( const QModelIndex &current, const QModelIndex &previous );
@@ -53,6 +54,7 @@ class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
         void slotActionToggled( bool on, const QPersistentModelIndex &index, int property );
 
     private:
+        QStyleOptionViewItem optionForIndex( const QModelIndex &index ) const;
         typedef KoDocumentSectionModel Model;
         class PropertyAction;
         class Private;

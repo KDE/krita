@@ -37,7 +37,7 @@
 #include <ktoolbar.h>
 #include <knuminput.h>
 #include <klocale.h>
-
+#include <kicon.h>
 #include <KoDocument.h>
 
 #include "kobirdeyepanel.h"

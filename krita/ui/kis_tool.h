@@ -28,7 +28,7 @@
 
 #include <ksharedptr.h>
 #include <kaction.h>
-
+#include <kicon.h>
 #include "kis_shared_ptr_vector.h"
 #include "kis_canvas_observer.h"
 #include <krita_export.h>

@@ -30,7 +30,7 @@
 #include <KoView.h>
 #include <KoDocument.h>
 #include <kgenericfactory.h>
-
+#include <kicon.h> 
 #include "ksnapshot.h"
 #include <kimageio.h>
 #include <kis_view.h>

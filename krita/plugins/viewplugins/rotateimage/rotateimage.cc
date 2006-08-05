@@ -34,7 +34,7 @@
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
-
+#include <kicon.h>
 #include <kis_doc.h>
 #include <kis_config.h>
 #include <kis_image.h>

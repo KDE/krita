@@ -27,7 +27,7 @@
 #include <kscan.h>
 #include <KoView.h>
 #include <kgenericfactory.h>
-
+#include <kicon.h>
 #include "scan.moc"
 
 typedef KGenericFactory<Scan> ScanFactory;

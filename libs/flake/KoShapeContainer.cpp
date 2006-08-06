@@ -80,7 +80,6 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     foreach (KoShape *shape, sorterdObjects) {
         if(! shape->isVisible())
             continue;
-        painter.save();
         // TODO this is not perfect yet..
 //           QRectF clipRect(QPoint(0,0), size()); // old
 //           QPolygon clip = (myMatrix * shapeMatrix.inverted()).mapToPolygon(clipRect.toRect());
@@ -88,6 +87,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
         if(! childClipped(shape) )
             continue;
+        painter.save();
         QRectF clipRect(QPointF(0, 0), size());
         clipRect = converter.documentToView(clipRect);
 

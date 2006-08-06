@@ -310,11 +310,11 @@ void KoAutoFormat::readConfig(bool force)
     m_completion = configGroup.readEntry( "completion", false );
 
     m_completionAppendSpace = configGroup.readEntry( "CompletionAppendSpace", false );
-    m_minCompletionWordLength = configGroup.readUnsignedNumEntry( "CompletionMinWordLength", 5 );
-    m_nbMaxCompletionWord = configGroup.readUnsignedNumEntry( "NbMaxCompletionWord", 100 );
+    m_minCompletionWordLength = configGroup.readEntry( "CompletionMinWordLength", 5 );
+    m_nbMaxCompletionWord = configGroup.readEntry( "NbMaxCompletionWord", 100 );
     m_addCompletionWord = configGroup.readEntry( "AddCompletionWord", true );
     m_toolTipCompletion = configGroup.readEntry( "ToolTipCompletion", true );
-    m_keyCompletionAction = ( KoAutoFormat::KeyCompletionAction )configGroup.readUnsignedNumEntry( "CompletionKeyAction", 0 );
+    m_keyCompletionAction = ( KoAutoFormat::KeyCompletionAction )configGroup.readEntry( "CompletionKeyAction", 0 );
 
     if ( force )
     {

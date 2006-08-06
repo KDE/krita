@@ -24,8 +24,14 @@
 
 namespace KFormula {
 
-class UnderOverElement : public BasicElement
-{
+/**
+ * @short 
+ *
+ * 
+ * @author Martin Pfeiffer <hubipete@gmx.net>
+ * @since 2.0
+ */
+class UnderOverElement : public BasicElement {
 public:
     /// The standard constructor
     UnderOverElement( BasicElement* parent = 0 );
@@ -37,14 +43,18 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements() = 0;
+    virtual const QList<BasicElement*>& childElements();
+
+    void insertInBaseElement( int index, BasicElement* element );
+    void insertInUnderElement( int index, BasicElement* element );
+    void insertInOverElement( int index, BasicElement* element );
 
     /// Saves the element to MathML
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
-    /// Draws the element internally, means it paints into @ref m_elementPath
-    virtual void drawInternal() = 0;
+    /// Draws the element internally, means it paints into m_elementPath
+    virtual void drawInternal();
     
 private:
     BasicElement* m_baseElement;

@@ -26,12 +26,254 @@ namespace KFormula {
 MathMLLoader::MathMLLoader( FormulaContainer* container )
 {
     m_formulaContainer = container;
+    m_oasisNamespace = false;
 }
 
-bool MathMLLoader::parse( const QDomDocument& mmldoc, bool oasisFormat )
+bool MathMLLoader::parse( const QDomDocument& mmldoc )
 {
+    // check if the MathML document uses the Oasis namespace
+    if( mmldoc.documentElement().prefix() == "math" )
+	m_oasisNamespace = true;
+    else if( mmldoc.documentElement().prefix() == "" )
+	m_oasisNamespace = false;
+    else
+    {
+	m_oasisNamespace = false;
+//        m_error = UnknownNamespace;      
+    }
+
+    // check if the documentElement is the <math> element
+    if( mmldoc.documentElement().tagName() != "math" )
+    {
+//	m_error = 
+	return false;
+    }
+	
+    // start the actual parsing by walking the dom tree
+    m_currentElement = mmldoc.documentElement();
+    while( !( m_currentElement.isNull() &&
+	   m_currentParentElement == mmldoc.documentElement() ) )
+    {
+	processElement();
+	
+	// iterate in the element tree
+        if( m_currentElement.isNull() )
+	{
+	    m_currentElement = m_currentParentElement;
+	    m_currentElement = m_currentElement.nextSiblingElement();
+            m_currentParentElement = m_currentParentElement.parentNode().toElement();
+	    m_parentElements.pop();
+	}
+	else if( m_currentElement.hasChildNodes() )
+	{
+	    m_currentParentElement = m_currentElement;
+	    m_currentElement = m_currentParentElement.firstChildElement();
+//	    m_parentElements.push( );
+	}
+	else
+	    m_currentElement = m_currentElement.nextSiblingElement();
+    }
+
+/*    if( m_parsingError != NoError )
+        return false;
+    else 
+	return true;*/
+     	
     return true;
 }
+
+void MathMLLoader::processElement()
+{
+    QString currentTagName = m_currentElement.tagName();
+    
+    if( currentTagName == "math" )
+	math();
+    else if( currentTagName == "mi" )
+        mi();
+    else if( currentTagName == "mn" )
+        mn();
+    else if( currentTagName == "mo" )
+        mo();
+    else if( currentTagName == "mtext" )
+        mtext();
+    else if( currentTagName == "mspace" )
+        mspace();
+    else if( currentTagName == "ms" )
+        ms();
+    else if( currentTagName == "mglyph" )
+        mglyph();
+    else if( currentTagName == "mrow" )
+        mrow();
+    else if( currentTagName == "mfrac" )
+        mfrac();
+    else if( currentTagName == "msqrt" )
+        msqrt();
+    else if( currentTagName == "mroot" )
+        mroot();
+    else if( currentTagName == "mstyle" )
+        mstyle();
+    else if( currentTagName == "merror" )
+        merror();
+    else if( currentTagName == "mpadded" )
+        mpadded();
+    else if( currentTagName == "mphantom" )
+        mphantom();
+    else if( currentTagName == "mfenced" )
+        mfenced();
+    else if( currentTagName == "menclose" )
+        menclose();
+    else if( currentTagName == "msub" )
+        msub();
+    else if( currentTagName == "msup" )
+        msup();
+    else if( currentTagName == "msubsup" )
+        msubsup();
+    else if( currentTagName == "munder" )
+        munder();
+    else if( currentTagName == "mover" )
+        mover();
+    else if( currentTagName == "munderover" )
+        munderover();
+    else if( currentTagName == "mmultiscripts" )
+        mmultiscripts();
+    else if( currentTagName == "mtable" )
+        mtable();
+    else if( currentTagName == "mlabeledtr" )
+        mlabeledtr();
+    else if( currentTagName == "mtr" )
+        mtr();
+    else if( currentTagName == "mtd" )
+        mtd();
+    else if( currentTagName == "maligngroup" )
+        maligngroup();
+    else if( currentTagName == "malignmark" )
+        malignmark();
+}
+
+void MathMLLoader::math()
+{
+}
+
+void MathMLLoader::mi()
+{
+}
+
+void MathMLLoader::mn()
+{
+}
+
+void MathMLLoader::mo()
+{
+}
+
+void MathMLLoader::mtext()
+{
+}
+
+void MathMLLoader::mspace()
+{
+}
+
+void MathMLLoader::ms()
+{
+}
+
+void MathMLLoader::mglyph()
+{
+}
+
+void MathMLLoader::mrow()
+{
+}
+
+void MathMLLoader::mfrac()
+{
+}
+
+void MathMLLoader::msqrt()
+{
+}
+
+void MathMLLoader::mroot()
+{
+}
+
+void MathMLLoader::mstyle()
+{
+}
+
+void MathMLLoader::merror()
+{
+}
+
+void MathMLLoader::mpadded()
+{
+}
+
+void MathMLLoader::mphantom()
+{
+}
+
+void MathMLLoader::mfenced()
+{
+}
+
+void MathMLLoader::menclose()
+{
+}
+
+void MathMLLoader::msub()
+{
+}
+
+void MathMLLoader::msup()
+{
+}
+
+void MathMLLoader::msubsup()
+{
+}
+
+void MathMLLoader::munder()
+{
+}
+
+void MathMLLoader::mover()
+{
+}
+
+void MathMLLoader::munderover()
+{
+}
+
+void MathMLLoader::mmultiscripts()
+{
+}
+
+void MathMLLoader::mtable()
+{
+}
+
+void MathMLLoader::mlabeledtr()
+{
+}
+
+void MathMLLoader::mtr()
+{
+}
+
+void MathMLLoader::mtd()
+{
+}
+
+void MathMLLoader::maligngroup()
+{
+}
+
+void MathMLLoader::malignmark()
+{
+}
+
 
 
 	

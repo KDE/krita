@@ -33,8 +33,8 @@ ToolHelper::ToolHelper(KoToolFactory *tool) {
     m_uniqueId = (int) random();
 }
 
-QAbstractButton* ToolHelper::createButton(QWidget *parent) {
-    QToolButton *but = new QToolButton(parent);
+QAbstractButton* ToolHelper::createButton() {
+    QToolButton *but = new QToolButton();
     but->setIcon(KIcon( m_toolFactory->icon() ).pixmap(22));
     but->setToolTip(m_toolFactory->toolTip());
     connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));

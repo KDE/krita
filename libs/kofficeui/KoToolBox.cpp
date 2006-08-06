@@ -18,34 +18,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QButtonGroup>
-#include <qnamespace.h>
-#include <QToolButton>
-#include <QLabel>
-#include <QToolTip>
-#include <QLayout>
-#include <QBoxLayout>
-#include <QPixmap>
-#include <QGridLayout>
-#include <QSpacerItem>
-#include <QSizePolicy>
-
-#include <kdebug.h>
-#include <kparts/event.h>
-#include <klocale.h>
-#include <ktoolbar.h>
-#include <kiconloader.h>
-#include <kseparator.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-
-#include <KoMainWindow.h>
-#include <KoToolFactory.h>
 #include "KoToolBox.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+// koffice includes
+#include <KoToolFactory.h>
+
+// kde + qt includes
+#include <kdialog.h>
+#include <QButtonGroup>
+#include <QAbstractButton>
+#include <QMainWindow>
+#include <QBoxLayout>
 
 KoToolBox::KoToolBox() {
     m_buttonGroup = new QButtonGroup(this);
@@ -103,32 +86,26 @@ void KoToolBox::showEvent(QShowEvent *event) {
     Q_UNUSED(event);
     Qt::Orientation orientation = Qt::Vertical;
     QWidget *parent = parentWidget();
-    bool floating=false;
     while(parent) {
         QMainWindow *mw = dynamic_cast<QMainWindow *> (parent);
-        if(mw) {
-            switch (mw->dockWidgetArea(this)) {
-                case Qt::TopDockWidgetArea:
-                case Qt::BottomDockWidgetArea:
-                    orientation = Qt::Horizontal;
-                    break;
-                case Qt::NoDockWidgetArea:
-                    floating = true;
-                    break;
-                default:
-                    break;
-            }
-            break;
-        }
         parent = parentWidget();
+        if(mw == 0)
+            continue;
+        switch (mw->dockWidgetArea(this)) {
+            case Qt::TopDockWidgetArea:
+            case Qt::BottomDockWidgetArea:
+                orientation = Qt::Horizontal;
+                break;
+            default:
+                break;
+        }
+        break; // found it, lets stop.
     }
-    m_layout->setDirection(orientation == Qt::Horizontal
-            ? QBoxLayout::LeftToRight
-            : QBoxLayout::TopToBottom);
+    m_layout->setDirection(orientation == Qt::Horizontal ?
+            QBoxLayout::LeftToRight : QBoxLayout::TopToBottom);
     foreach(ToolArea *area, m_toolAreas)
         area->setOrientation(orientation);
-
-    adjustSize();
+    adjustSize(); // make the toolbox be a sane size not depending on the last place it was docked
 }
 
 void KoToolBox::setActiveTool(int id) {
@@ -148,124 +125,14 @@ void KoToolBox::setButtonsVisible(const QList<QString> &codes) {
         button->setVisible( codes.contains(m_visibilityCodes.value(button)) );
 }
 
-#if 0
-void KoToolBox::slotButtonPressed( QAbstractButton *b)
-{
-    m_actionMap.value(b)->trigger();
+void KoToolBox::enableTools(bool enable) {
+    foreach(ToolArea *ta, m_toolBoxes)
+        ta->setEnabled(enable);
 }
-
-void KoToolBox::registerTool( KAction *tool, int toolType, quint32 priority )
-{
-    uint prio = priority;
-    ToolList * tl = m_tools.at(toolType);
-    while( (*tl)[prio] ) prio++;
-    (*tl)[prio] = tool;
-}
-
-QToolButton *KoToolBox::createButton(QWidget * parent, const QIcon& icon, QString tooltip)
-{
-    QToolButton *button = new QToolButton(parent);
-
-    if ( !icon.isNull() ) {
-        button->setIcon(icon);
-        button->setCheckable( true );
-    }
-
-    if ( !tooltip.isEmpty() ) {
-        button->setToolTip( tooltip );
-    }
-    return button;
-}
-
-
-void KoToolBox::setupTools()
-{
-    bool first=true;
-    // Loop through tooltypes
-    for (int i = 0; i < m_tools.count(); ++i) {
-        ToolList * tl = m_tools.at(i);
-
-        if (!tl) continue;
-        if (tl->isEmpty()) continue;
-
-//       if(!first)
-//          addSeparator();
-        ToolArea *tools = new ToolArea( this );
-        ToolList::Iterator it;
-        for ( it = tl->begin(); it != tl->end(); ++it )
-        {
-            KAction *tool = it.value();
-            if(! tool)
-                continue;
-            QToolButton *bn = createButton(tools->getNextParent(), tool->icon(), tool->toolTip());
-            tools->add(bn);
-            m_buttonGroup->addButton(bn);
-            m_actionMap.insert( bn, tool );
-            if(first)
-                bn->setChecked(true);
-            first=false;
-        }
-        tools->show();
-        //addWidget(tools);
-        m_toolBoxes.append(tools);
-    }
-}
-
-
-void KoToolBox::setOrientation ( Qt::Orientation o )
-{
-#if 0
-    if ( barPos() == Floating ) { // when floating, make it a standing toolbox.
-        o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
-    }
-#endif
-
-    //QToolBar::setOrientation( o );
-
-    for (int i = 0; i < m_toolBoxes.count(); ++i) {
-        ToolArea *t = m_toolBoxes.at(i);
-        t->setOrientation(o);
-    }
-}
-
-
-void KoToolBox::enableTools(bool enable)
-{
-    if (m_tools.isEmpty()) return;
-    if (!m_buttonGroup) return;
-
-    for (int i = 0; i < m_tools.count(); ++i) {
-        ToolList * tl = m_tools.at(i);
-
-        if (!tl) continue;
-
-        ToolList::Iterator it;
-        for ( it = tl->begin(); it != tl->end(); ++it )
-            if (it.value())
-                it.value()->setEnabled(enable);
-    }
-}
-
-void KoToolBox::slotSetTool(const QString & toolname)
-{
-    QMapIterator<QAbstractButton *, KAction *> i(m_actionMap);
-    while (i.hasNext()) {
-        i.next();
-        KAction * a = i.value();
-        if (a && a->objectName() == toolname)
-        {
-            i.key()->setChecked(true);
-            return;
-        }
-    }
-}
-#endif
 
 // ----------------------------------------------------------------
 //                         class ToolArea
-
-
-ToolArea::ToolArea(QWidget *parent)
+KoToolBox::ToolArea::ToolArea(QWidget *parent)
     : QWidget(parent), m_left(true)
 {
     m_layout = new QBoxLayout(QBoxLayout::LeftToRight, this);
@@ -300,13 +167,11 @@ ToolArea::ToolArea(QWidget *parent)
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
-
-ToolArea::~ToolArea()
+KoToolBox::ToolArea::~ToolArea()
 {
 }
 
-
-void ToolArea::add(QWidget *button)
+void KoToolBox::ToolArea::add(QWidget *button)
 {
     if (m_left)
         m_leftLayout->addWidget(button);
@@ -316,16 +181,14 @@ void ToolArea::add(QWidget *button)
     m_left = !m_left;
 }
 
-
-QWidget* ToolArea::getNextParent()
+QWidget* KoToolBox::ToolArea::getNextParent()
 {
     if (m_left)
         return m_leftRow;
     return m_rightRow;
 }
 
-
-void ToolArea::setOrientation ( Qt::Orientation o )
+void KoToolBox::ToolArea::setOrientation ( Qt::Orientation o )
 {
     QBoxLayout::Direction  dir = (o != Qt::Horizontal
             ? QBoxLayout::TopToBottom

@@ -31,7 +31,6 @@
 #include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
-#include <KoID.h>
 
 #include <kactioncollection.h>
 #include <kdebug.h>
@@ -77,7 +76,7 @@ void KoToolManager::setup() {
 
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();
-    foreach(KoID id, registry->listKeys()) {
+    foreach(QString id, registry->keys()) {
         ToolHelper *t = new ToolHelper(registry->get(id));
         connect(t, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
         m_tools.append(t);
@@ -92,11 +91,12 @@ KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
     setup();
     KoToolBox *toolBox = new KoToolBox();
     foreach(ToolHelper *tool, m_tools) {
-        QAbstractButton *but = tool->createButton(toolBox);
+        QAbstractButton *but = tool->createButton();
         toolBox->addButton(but, tool->toolType(), tool->priority(), tool->uniqueId());
         if(tool->toolType() == KoToolFactory::dynamicToolType())
             toolBox->setVisibilityCode(but, tool->activationShapeId());
     }
+
     toolBox->setup();
     toolBox->setWindowTitle(applicationName);
     toolBox->setObjectName("ToolBox_"+ applicationName);
@@ -105,6 +105,7 @@ KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
             toolBox, SLOT(setButtonsVisible(QList<QString>)));
     QList<QString> empty;
     toolBox->setButtonsVisible(empty);
+    toolBox->setActiveTool(m_defaultTool->uniqueId());
     return toolBox;
 }
 
@@ -117,7 +118,6 @@ void KoToolManager::addControllers(KoCanvasController *controller, KoShapeContro
     if(m_canvases.contains(controller))
         return;
     setup();
-    kDebug(30004) << "KoToolManager::addControllers called, setting up..." << endl;
     m_canvases.append(controller);
     m_shapeControllers.insert(controller, sc);
     if(m_activeCanvas == 0)
@@ -269,7 +269,6 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to) {
 }
 
 void KoToolManager::detachCanvas(KoCanvasController *controller) {
-    // TODO detach
     if(m_activeCanvas == controller)
         m_activeCanvas = 0;
     m_activeTool = 0;
@@ -320,7 +319,6 @@ KoCreateShapesTool *KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const 
 }
 
 void KoToolManager::selectionChanged(QList<KoShape*> shapes) {
-    kDebug() << "selection changed, now " << shapes.count() << " shapes selected\n";
     QList<QString> types;
     foreach(KoShape *shape, shapes) {
        if(! types.contains(shape->shapeId()))

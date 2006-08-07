@@ -142,7 +142,7 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     }
     kdDebug(0) << "FIRST EDGE AFTER TOP CHECK : " << first.x() << " " << first.y() << endl;
 */
-    uint /*i, j, */x, y;
+    uint i, j, x, y;
     x = (start.x()-tlx);
     y = (start.y()-tly);
     KisVector2D first = findNearestGradient(KisVector2D(x,y), edges);
@@ -160,10 +160,7 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
         addPoint(it,first.toKisPoint(),false,false,LINEHINT);
         first = findNextGradient(gmap,first,end);
         --iterate;
-
-        kdDebug(0) << "POINT: " << first.x() << " " << first.y() << endl;
     }
-    /*
     QString line;
     Q_INT32 grad = edges.last()[0];
     for (i = 0; i < edges.count(); i++) {
@@ -182,7 +179,6 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     }
     kdDebug(0) << "ROWS: " << edges.count() << " COLS: " << edges[0].count() << endl;
     kdDebug(0) << "HEIG: " << rc.height() << " WIDT: " << rc.width() << endl;
-    */
 }
 
 KisVector2D KisCurveMagnetic::findNearestGradient (const KisVector2D& from, const Matrix& m)
@@ -234,7 +230,7 @@ GMap KisCurveMagnetic::convertMatrixToGMap (const Matrix& m)
         for (uint j = 0; j < m[j].count(); j++) {
             if ((m[i][j] != 0)) {
                 //// THE ALGORITHM TO FIND USEFUL PIXELS GOES HERE ////
-                if ((m[i][j] > (grad-10)) && (m[i][j] < (grad+10)))
+                if ((m[i][j]) && (m[i][j] > (grad-20)) && (m[i][j] < (grad+20)))
                     gmap.append(KisVector2D(tlx+j,tly+i));
             }
         }
@@ -244,7 +240,7 @@ GMap KisCurveMagnetic::convertMatrixToGMap (const Matrix& m)
 
 double tolerance (double dist)
 {
-    double tol = dist/3;
+    double tol = dist/2;
     if (tol < 1)  tol = 1;
 
     return tol;
@@ -252,15 +248,28 @@ double tolerance (double dist)
 
 KisVector2D KisCurveMagnetic::findNextGradient (const GMap& m, const KisVector2D& start, const KisVector2D& end)
 {
+    // Algorithm to get the optimal path goes here //
     double mindist = 10000.0, tmpdist;
     double dist = (start-end).length();
     KisVector2D vec(-1,-1);
+    double leftx, rightx;
+    if (start.x() < end.x()) {
+        leftx = start.x();
+        rightx = end.x();
+    } else {
+        leftx = end.x();
+        rightx = start.x();
+    }
     for (uint i = 0; i < m.count(); i++) {
+        if (leftx > m[i].x())
+            continue;
         if (m[i] == start || m[i] == end)
             continue;
         tmpdist = (start-m[i]).length();
+        if (tmpdist < 3.0)
+            continue;
         tmpdist += (m[i]-end).length();
-        if (tmpdist < (dist+tolerance(dist)) && tmpdist < mindist) {
+        if (tmpdist < (dist+tolerance(dist))/* && tmpdist < mindist*/) {
             mindist = tmpdist;
             vec = m[i];
         }

@@ -26,8 +26,11 @@
 #include "kis_tool_curve.h"
 
 class KisToolMagnetic;
+class KisVector2D;
 
-typedef QValueList< QValueList <bool> > BoolMatrix;
+typedef QValueList<Q_INT32> MatrixRow;
+typedef QValueList<MatrixRow> Matrix;
+typedef QValueList<KisVector2D> GMap;
 
 class KisCurveMagnetic : public KisCurve {
 
@@ -35,8 +38,13 @@ class KisCurveMagnetic : public KisCurve {
 
     KisToolMagnetic *m_parent;
 
-    void prepareRow (KisPaintDeviceSP src, Q_UINT8* data, Q_UINT32 x, Q_UINT32 y, Q_UINT32 w, Q_UINT32 h);
-    BoolMatrix sobel (const QRect & rc, KisPaintDeviceSP src);
+    KisVector2D findNearestGradient (const KisVector2D&, const Matrix&);
+    KisVector2D findNearestGradient (const KisVector2D&, const GMap&);
+    KisVector2D findNextGradient (const GMap&, const KisVector2D&, const KisVector2D&);
+    GMap convertMatrixToGMap (const Matrix&);
+    void resizeMap (GMap&, const KisVector2D&, const KisVector2D&);
+    void clearMap (GMap&, Q_INT32);
+    Matrix sobel (const QRect & rect, KisPaintDeviceSP src);
 
 public:
 
@@ -61,6 +69,10 @@ public:
 
     virtual void setup (KActionCollection*);
     virtual enumToolType toolType() { return TOOL_SELECT; }
+
+public slots:
+
+    virtual void activate ();
 
 private:
 

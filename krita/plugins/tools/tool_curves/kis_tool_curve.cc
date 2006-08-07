@@ -181,10 +181,11 @@ double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPo
 {
     double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
     double distance = 0;
-    KisVector2D v0(l0), v1(l1), v(p), seg(v0-v1), dist(v0-p);
+    KisVector2D v0(l0), v1(l1), v(p), seg(v0-v1), dist0(v0-p), dist1(v1-p);
 
-    if (seg.length() < dist.length()) // the point doesn't perpendicolarly intersecate the segment (or it's too far from the segment)
-        return 1000.0; // Return a too big integer - FIXME is there a MAX_DOUBLE_VALUE or something like that?
+    if (seg.length() < dist0.length() ||
+        seg.length() < dist1.length()) // the point doesn't perpendicolarly intersecate the segment (or it's too far from the segment)
+        return 1000.0; // Return a too big value - FIXME is there a MAX_DOUBLE_VALUE or something like that?
 
     if (lineLength > DBL_EPSILON) {
         distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y()) / lineLength;
@@ -410,7 +411,8 @@ QValueVector<KisPoint> KisToolCurve::convertCurve()
     QValueVector<KisPoint> points;
 
     for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++)
-        points.append((*i).point());
+        if ((*i).hint() != NOHINTS)
+            points.append((*i).point());
 
     return points;
 }

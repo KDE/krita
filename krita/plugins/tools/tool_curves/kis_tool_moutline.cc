@@ -364,7 +364,8 @@ KisToolMagnetic::KisToolMagnetic ()
 
 KisToolMagnetic::~KisToolMagnetic ()
 {
-
+    delete m_derived;
+    m_curve = 0;
 }
 
 void KisToolMagnetic::activate ()
@@ -381,7 +382,7 @@ void KisToolMagnetic::setup(KActionCollection *collection)
     if (m_action == 0) {
         KShortcut shortcut(Qt::Key_Plus);
         shortcut.append(KShortcut(Qt::Key_F9));
-        m_action = new KRadioAction(i18n("&Magnetic Outline"),
+        m_action = new KRadioAction(i18n("Magnetic Outline"),
                                     "tool_moutline",
                                     shortcut,
                                     this,

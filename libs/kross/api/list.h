@@ -63,11 +63,6 @@ namespace Kross { namespace Api {
             virtual ~List();
 
             /**
-             * See \see Kross::Api::Object::getClassName()
-             */
-            virtual const QString getClassName() const;
-
-            /**
              * \return a string representation of the whole list.
              *
              * \see Kross::Api::Object::toString()

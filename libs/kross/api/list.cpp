@@ -31,11 +31,6 @@ List::~List()
 {
 }
 
-const QString List::getClassName() const
-{
-    return "Kross::Api::List";
-}
-
 const QString List::toString()
 {
     QString s = "[";

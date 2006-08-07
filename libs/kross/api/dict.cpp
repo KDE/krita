@@ -31,11 +31,6 @@ Dict::~Dict()
 {
 }
 
-const QString Dict::getClassName() const
-{
-    return "Kross::Api::Dict";
-}
-
 const QString Dict::toString()
 {
     QString s = "[";

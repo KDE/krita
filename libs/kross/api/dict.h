@@ -52,9 +52,6 @@ namespace Kross { namespace Api {
             */
             virtual ~Dict();
 
-            /// \see Kross::Api::Object::getClassName()
-            virtual const QString getClassName() const;
-
             /**
              * \return a string representation of the whole dictonary.
              *

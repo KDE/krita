@@ -48,11 +48,6 @@ MainModule::~MainModule()
     delete d;
 }
 
-const QString MainModule::getClassName() const
-{
-    return "Kross::Api::MainModule";
-}
-
 bool MainModule::hadException()
 {
     return d->exception.data() != 0;

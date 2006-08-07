@@ -63,16 +63,12 @@ namespace Kross { namespace Api {
              */
             virtual ~QtObject();
 
-            /// \see Kross::Api::Object::getClassName()
-            virtual const QString getClassName() const;
-
             /**
              * Return the \a QObject instance this class wraps.
              *
              * \return The wrapped QObject.
              */
             QObject* getObject() const;
-
 
         private:
             /// The wrapped QObject.

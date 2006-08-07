@@ -75,11 +75,6 @@ TestPluginObject::~TestPluginObject()
 {
 }
 
-const QString TestPluginObject::getClassName() const
-{
-    return "TestPluginObject";
-}
-
 uint TestPluginObject::uintfunc(uint i) { return i; }
 void TestPluginObject::voiduintfunc(uint) {}
 int TestPluginObject::intfunc(int i) { return i; }
@@ -116,10 +111,5 @@ TestPluginModule::TestPluginModule(const QString& name)
 TestPluginModule::~TestPluginModule()
 {
     delete m_testobject;
-}
-
-const QString TestPluginModule::getClassName() const
-{
-    return "TestPluginModule";
 }
 

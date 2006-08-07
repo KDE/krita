@@ -83,7 +83,6 @@ namespace Kross { namespace Api {
      *                 &TestPluginObject::myfunc ); // pointer to the method itself.
      *         }
      *         virtual ~MyClass() {}
-     *         virtual const QString getClassName() const { return "MyClass"; }
      *     private:
      *         uint myfunc(const QCString&, MyClass* myotherclass) {
      *             // This method will be published to the scripting backend. So, scripting

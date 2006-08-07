@@ -77,10 +77,6 @@ QtObject::QtObject(QObject* object, const QString& name)
 QtObject::~QtObject() {
 }
 
-const QString QtObject::getClassName() const {
-    return "Kross::Api::QtObject";
-}
-
 QObject* QtObject::getObject() const {
     return m_object;
 }

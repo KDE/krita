@@ -31,7 +31,7 @@ PythonExtension::PythonExtension(Kross::Api::Object* object)
     , m_object(object)
 {
 #ifdef KROSS_PYTHON_EXTENSION_CTOR_DEBUG
-    krossdebug( QString("Kross::Python::PythonExtension::Constructor objectname='%1' objectclass='%2'").arg(m_object->getName()).arg(m_object->getClassName()) );
+    krossdebug( QString("Kross::Python::PythonExtension::Constructor objectname='%1'").arg(m_object->getName()) );
 #endif
 
     behaviors().name("KrossPythonExtension");
@@ -55,7 +55,7 @@ PythonExtension::PythonExtension(Kross::Api::Object* object)
 PythonExtension::~PythonExtension()
 {
 #ifdef KROSS_PYTHON_EXTENSION_DTOR_DEBUG
-    krossdebug( QString("Kross::Python::PythonExtension::Destructor objectname='%1' objectclass='%2'").arg(m_object->getName()).arg(m_object->getClassName()) );
+    krossdebug( QString("Kross::Python::PythonExtension::Destructor objectname='%1'").arg(m_object->getName()) );
 #endif
     delete m_proxymethod;
 }
@@ -64,7 +64,7 @@ PythonExtension::~PythonExtension()
 Py::Object PythonExtension::str()
 {
     Kross::Api::Callable* callable = dynamic_cast< Kross::Api::Callable* >(m_object);
-    QString s = callable ? callable->getName() : m_object->getClassName();
+    QString s = callable ? callable->getName() : "";
     return toPyObject(s.isEmpty() ?  : s);
 }
 
@@ -345,43 +345,36 @@ const Py::Object PythonExtension::toPyObject(Kross::Api::Object* object)
         return Py::None();
     }
 
-    const QString classname = object->getClassName();
-    if(classname == "Kross::Api::Variant") {
-        QVariant v = static_cast<Kross::Api::Variant*>( object )->getValue();
-#ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-        krossdebug( QString("Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::Variant %1").arg(v.toString()) );
-#endif
-        return toPyObject(v);
+    {
+        Kross::Api::Variant* variant = dynamic_cast<Kross::Api::Variant*>( object );
+        if(variant)
+            return toPyObject( variant->getValue() );
     }
-
-    if(classname == "Kross::Api::List") {
-#ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-        krossdebug("Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::List");
-#endif
-        Py::List pylist;
-        Kross::Api::List* list = static_cast<Kross::Api::List*>( object );
-        QList<Kross::Api::Object::Ptr> valuelist = list->getValue();
-        for(QList<Kross::Api::Object::Ptr>::Iterator it = valuelist.begin(); it != valuelist.end(); ++it)
-            pylist.append( toPyObject( (*it).data() ) ); // recursive
-        return pylist;
-    }
-
-    if(classname == "Kross::Api::Dict") {
-#ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-        krossdebug("Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::Dict");
-#endif
-        Py::Dict pydict;
-        Kross::Api::Dict* dict = static_cast<Kross::Api::Dict*>( object );
-        QMap<QString, Kross::Api::Object::Ptr> valuedict = dict->getValue();
-        for(QMap<QString, Kross::Api::Object::Ptr>::Iterator it = valuedict.begin(); it != valuedict.end(); ++it) {
-            const char* n = it.key().toLatin1().data();
-            pydict[ n ] = toPyObject( it.value().data() ); // recursive
+    {
+        Kross::Api::List* list = dynamic_cast<Kross::Api::List*>( object );
+        if(list) {
+            Py::List pylist;
+            QList<Kross::Api::Object::Ptr> valuelist = list->getValue();
+            for(QList<Kross::Api::Object::Ptr>::Iterator it = valuelist.begin(); it != valuelist.end(); ++it)
+                pylist.append( toPyObject( (*it).data() ) ); // recursive
+            return pylist;
         }
-        return pydict;
+    }
+    {
+        Kross::Api::Dict* dict = dynamic_cast<Kross::Api::Dict*>( object );
+        if(dict) {
+            Py::Dict pydict;
+            QMap<QString, Kross::Api::Object::Ptr> valuedict = dict->getValue();
+            for(QMap<QString, Kross::Api::Object::Ptr>::Iterator it = valuedict.begin(); it != valuedict.end(); ++it) {
+                const char* n = it.key().toLatin1().data();
+                pydict[ n ] = toPyObject( it.value().data() ); // recursive
+            }
+            return pydict;
+        }
     }
 
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
-    krossdebug( QString("Trying to handle PythonExtension::toPyObject(%1) as PythonExtension").arg(object->getClassName()) );
+    krossdebug( QString("Trying to handle PythonExtension::toPyObject() as PythonExtension") );
 #endif
     return Py::asObject( new PythonExtension(object) );
 }

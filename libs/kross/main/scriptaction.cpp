@@ -98,7 +98,7 @@ ScriptAction::ScriptAction(const QString& file)
     if(url.isLocalFile()) {
         setFile(file);
         setText(url.fileName());
-        setIcon(KIcon(KMimeType::iconForURL(url)));
+        setIcon(KIcon(KMimeType::iconNameForURL(url)));
     }
     else {
         setText(file);
@@ -150,15 +150,15 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         ScriptContainer::setName(name);
     }
     else {
-        QDir dir = QFileInfo(scriptconfigfile).dir(true);
-        d->packagepath = dir.absPath();
+        QDir dir = QFileInfo(scriptconfigfile).dir();
+        d->packagepath = dir.absolutePath();
         QFileInfo fi(dir, file);
-        file = fi.absFilePath();
+        file = fi.absoluteFilePath();
         setEnabled(fi.exists());
         setFile(file);
         if(icon.isNull()) {
             Kross::krossdebug( QString("FILE => %1").arg(file) );
-            icon = KMimeType::iconForURL( KUrl::fromPath(file) );
+            icon = KMimeType::iconNameForURL( KUrl::fromPath(file) );
         }
         if(description.isEmpty())
             description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);

@@ -42,17 +42,12 @@ Object::~Object()
     //removeAllChildren(); // not needed cause we use KShared to handle ref-couting and freeing.
 }
 
-const QString Object::toString()
-{
-    return QString("%1").arg(getClassName());
-}
-
 Object::Ptr Object::call(const QString& name, List::Ptr arguments)
 {
     Q_UNUSED(arguments);
 
 #ifdef KROSS_API_OBJECT_CALL_DEBUG
-    krossdebug( QString("Kross::Api::Object::call(%1) name=%2 class=%3").arg(name).arg(getName()).arg(getClassName()) );
+    krossdebug( QString("Kross::Api::Object::call(%1) name=%2").arg(name).arg(getName()) );
 #endif
 
     if(name.isEmpty()) // return a self-reference if no functionname is defined.
@@ -61,3 +56,7 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
     throw Exception::Ptr( new Exception(QString("No callable object named '%2'").arg(name)) );
 }
 
+const QString Object::toString()
+{
+    return "Kross::Api::Object";
+}

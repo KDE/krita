@@ -88,9 +88,6 @@ namespace Kross { namespace Api {
              */
             virtual ~Variant();
 
-            /// \see Kross::Api::Object::getClassName()
-            virtual const QString getClassName() const;
-
             /**
              * \return a string representation of the variant.
              *

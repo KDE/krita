@@ -57,11 +57,6 @@ PythonObject::~PythonObject()
 {
 }
 
-const QString PythonObject::getClassName() const
-{
-    return "Kross::Python::PythonObject";
-}
-
 Kross::Api::Object::Ptr PythonObject::call(const QString& name, Kross::Api::List::Ptr arguments)
 {
     krossdebug( QString("PythonObject::call(%1)").arg(name) );

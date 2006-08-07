@@ -52,16 +52,6 @@ namespace Kross { namespace Python {
             virtual ~PythonObject();
 
             /**
-             * Return the class name. This could be something
-             * like "Kross::Python::PythonObject" for this
-             * object. The value is mainly used for display
-             * purposes.
-             *
-             * \return The name of this class.
-             */
-            virtual const QString getClassName() const;
-
-            /**
              * Pass a call to the object. Objects like \a Class
              * are able to handle call's by just implementating
              * this function.

@@ -73,15 +73,6 @@ namespace Kross { namespace Api {
             virtual ~Object();
 
             /**
-             * Return the class name. This could be something
-             * like "Kross::Api::Object" for this object. The
-             * value is mainly used for display purposes.
-             *
-             * \return The name of this class.
-             */
-            virtual const QString getClassName() const = 0;
-
-            /**
              * \return a string representation of the object or
              * it's content. This method is mainly used for
              * debugging and testing purposes.
@@ -128,7 +119,7 @@ namespace Kross { namespace Api {
             {
                 T* t = (T*) object;
                 if(! t)
-                    throw KSharedPtr<Exception>( new Exception(QString("Object \"%1\" invalid.").arg(object ? object->getClassName() : "")) );
+                    throw KSharedPtr<Exception>( new Exception(QString("Invalid object.")) );
                 return t;
             }
 
@@ -145,6 +136,10 @@ namespace Kross { namespace Api {
     };
 
 }}
+
+//Q_DECLARE_METATYPE(Kross::Api::Object);
+//qRegisterMetaType<Kross::Api::Object>("Kross::Api::Object");
+//qRegisterMetaTypeStreamOperator<Kross::Api::Object>("Kross::Api::Object");
 
 #endif
 

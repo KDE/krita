@@ -339,19 +339,20 @@ VALUE RubyExtension::toVALUE(Kross::Api::Object::Ptr object)
         return 0;
     }
 
-    if(object->getClassName() == "Kross::Api::Variant") {
-        QVariant v = static_cast<Kross::Api::Variant*>( object.data() )->getValue();
-        return toVALUE(v);
+    {
+        Kross::Api::Variant* variant = dynamic_cast<Kross::Api::Variant*>( object.data() );
+        if(variant)
+            return toVALUE( variant->getValue() );
     }
-
-    if(object->getClassName() == "Kross::Api::List") {
-        Kross::Api::List* list = static_cast<Kross::Api::List*>( object.data() );
-        return toVALUE((Kross::Api::List::Ptr)list);
+    {
+        Kross::Api::List* list = dynamic_cast<Kross::Api::List*>( object.data() );
+        if(list)
+            return toVALUE( Kross::Api::List::Ptr(list) );
     }
-
-    if(object->getClassName() == "Kross::Api::Dict") {
-        Kross::Api::Dict* dict = static_cast<Kross::Api::Dict*>( object.data() );
-        return toVALUE((Kross::Api::Dict::Ptr)dict);
+    {
+        Kross::Api::Dict* dict = dynamic_cast<Kross::Api::Dict*>( object.data() );
+        if(dict)
+            return toVALUE( Kross::Api::Dict::Ptr(dict) );
     }
 
     if(RubyExtensionPrivate::s_krossObject == 0)

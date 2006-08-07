@@ -69,9 +69,6 @@ namespace Kross { namespace Api {
              */
             virtual ~MainModule();
 
-            /// \see Kross::Api::Object::getClassName()
-            virtual const QString getClassName() const;
-
             /**
              * \return true if the script throwed an exception
              *        else false.

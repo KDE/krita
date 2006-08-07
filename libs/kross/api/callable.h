@@ -64,15 +64,6 @@ namespace Kross { namespace Api {
             const QString getName() const;
 
             /**
-             * Return the class name. This could be something
-             * like "Kross::Api::Callable" for this object. The
-             * value is mainly used for display purposes.
-             *
-             * \return The name of this class.
-             */
-            virtual const QString getClassName() const;
-
-            /**
              * Returns if the defined child is avaible.
              *
              * \return true if child exists else false.

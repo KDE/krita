@@ -58,9 +58,6 @@ namespace Kross { namespace Api {
              */
             virtual ~Exception();
 
-            /// \see Kross::Api::Object::getClassName()
-            virtual const QString getClassName() const;
-
             /// \see Kross::Api::Object::toString()
             virtual const QString toString();
 

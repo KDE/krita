@@ -40,11 +40,6 @@ const QString Callable::getName() const
     return m_name;
 }
 
-const QString Callable::getClassName() const
-{
-    return "Kross::Api::Callable";
-}
-
 bool Callable::hasChild(const QString& name) const
 {
     return m_children.contains(name);
@@ -63,7 +58,7 @@ QMap<QString, Object::Ptr> Callable::getChildren() const
 bool Callable::addChild(const QString& name, Object* object)
 {
 #ifdef KROSS_API_OBJECT_ADDCHILD_DEBUG
-    krossdebug( QString("Kross::Api::Callable::addChild() object.name='%2' object.classname='%3'").arg(name).arg(object->getClassName()) );
+    krossdebug( QString("Kross::Api::Callable::addChild() object.name='%2'").arg(name) );
 #endif
     return m_children.insert(name, Object::Ptr(object)) != m_children.end();
 }

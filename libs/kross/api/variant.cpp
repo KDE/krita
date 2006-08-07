@@ -33,11 +33,6 @@ Variant::~Variant()
 {
 }
 
-const QString Variant::getClassName() const
-{
-    return "Kross::Api::Variant";
-}
-
 const QString Variant::toString()
 {
     return getValue().toString();

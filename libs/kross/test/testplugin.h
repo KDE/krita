@@ -35,7 +35,6 @@ class TestPluginObject : public Kross::Api::Class<TestPluginObject>
     public:
         TestPluginObject(const QString& name);
         virtual ~TestPluginObject();
-        virtual const QString getClassName() const;
 
     private:
         uint uintfunc(uint);
@@ -62,7 +61,6 @@ class TestPluginModule : public Kross::Api::Module
     public:
         TestPluginModule(const QString& name);
         virtual ~TestPluginModule();
-        virtual const QString getClassName() const;
 
         virtual Kross::Api::Object::Ptr get(const QString& /*name*/, void* /*pointer*/ = 0)
         {

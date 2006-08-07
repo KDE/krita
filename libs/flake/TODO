@@ -1,5 +1,4 @@
 * add a ShearingStrategy (boemann)
 * Add 'ensureVisible(KoShape)' to KoCanvasController (see QScrollArea for what it should do)
-* update KoShapeContainer positon/boundingRect when a child is added or updated
 
 Use xcursorgen to create real xcursors ? (boemann)

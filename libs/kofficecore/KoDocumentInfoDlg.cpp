@@ -110,9 +110,8 @@ void KoDocumentInfoDlg::initAboutTab()
         d->m_aboutUi->leKeywords->setText( d->m_info->aboutInfo( "keyword" ) );
 
     d->m_aboutUi->meComments->setPlainText( d->m_info->aboutInfo( "comments" ) );
-
-    d->m_aboutUi->lblType->setText( KMimeType::mimeType( doc->mimeType() )->comment() );
-
+    if ( !doc->mimeType().isEmpty() )
+        d->m_aboutUi->lblType->setText( KMimeType::mimeType( doc->mimeType() )->comment() );
     if ( !d->m_info->aboutInfo( "creation-date" ).isEmpty() )
     {
         QDateTime t = QDateTime::fromString( d->m_info->aboutInfo( "creation-date" ),

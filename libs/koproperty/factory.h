@@ -72,7 +72,7 @@ class KOPROPERTY_EXPORT CustomPropertyFactory : public QObject
 
      \section custom_prop Using Custom Properties
      To create a custom property, create a subclass of \ref CustomProperty class. You need to implement
-     some virtual functions, to customise the behaviour of your property
+     some virtual functions, to customize the behaviour of your property
      (see \ref CustomProperty api doc).\n
      Then, you need to register the new created type, using \ref registerFactoryForProperty().
      The second parameter is an instance of CustomPropertyFactory-derived class

@@ -34,18 +34,20 @@ template<class U> class Q3AsciiDictIterator;
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.
 
- Main classes of this framework:
-  - Property, representing a single property with it's own type and value
+ Main classes of this framework are:
+  - Property, representing a single property with its own type and value
   - Set, a set of properties
-  - Editor, a widget for displaying and editing properies provided by a Set object. 
-    Every property has it's own row displayed using EditorItem object, within Editor widget. 
+  - Editor, a widget for displaying and editing properties provided by a Set object. 
+    Every property has its own row displayed using EditorItem object, within Editor widget. 
     Widget class provides editing feature for EditorItem objects if a user selects a given item.
 
  KoProperty framework also supports adding custom property types 
- and custom property editor types using CustomPropertyFactory.
+ and custom property editor types using Custom Property and CustomPropertyFactory.
   If you cannot store your value type in a QVariant, consider using composed properties
  (see FactoryManager for more information) or storing it in CustomProperty yourself with handleValue()
   set to true.
+
+ Take a look at the test application, available in /koproperty/test to see how to use KoProperty.
 
  \author Cedric Pasteur <cedric.pasteur@free.fr>
  \author Alexander Dymo <cloudtemple@mskat.net>
@@ -165,7 +167,7 @@ enum PropertyType {
 	See QVariant docs for more details.
 
 	Sometimes, for longer property captions or these with more words, e.g. "Allow Zero Size",
-	it's usable to provide newline characters, e.g. "Allow Zero\nSize".
+	its usable to provide newline characters, e.g. "Allow Zero\nSize".
 	If caption argument of the constructors contains newline characters, 
 	caption() will return this text with substituted these characters with spaces.
 	In such cases, captionForDisplaying() is used to get the original caption text usable 
@@ -399,7 +401,7 @@ class KOPROPERTY_EXPORT Property
 		bool operator ==(const Property &prop) const;
 
 		/*! \return a key used for sorting. 
-		 Usually it's set by Set::addProperty() and Property::addChild() t oa unique value,
+		 Usually its set by Set::addProperty() and Property::addChild() t oa unique value,
 		 so that this property can be sorted in a property editor in original order. 
 		 \see EditorItem::compare() */
 		int sortingKey() const;

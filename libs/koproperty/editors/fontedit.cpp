@@ -69,7 +69,7 @@ class FontEditRequester : public KFontRequester
 			button()->setFocusPolicy(Qt::NoFocus);
 			button()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 			QFontMetrics fm(button()->font());
-			button()->setFixedWidth(fm.width(button()->text()+" "));
+			button()->setFixedWidth(fm.width(button()->text()+' '));
 		}
 		virtual void resizeEvent(QResizeEvent *e)
 		{
@@ -105,7 +105,7 @@ FontEdit::value() const
 static QString sampleText(const QVariant &value)
 {
 	QFontInfo fi(value.value<QFont>());
-	return fi.family() + (fi.bold() ? " " + i18n("Bold") : QString("")) +
+	return fi.family() + (fi.bold() ? " " + i18n("Bold") : QString()) +
 		(fi.italic() ? " " + i18n("Italic") : QString::null) +
 		" " + QString::number(fi.pointSize());
 }

@@ -326,9 +326,9 @@ Property::value() const
 QVariant
 Property::oldValue() const
 {
-	if(d->oldValue.isNull())
+/*	if(d->oldValue.isNull())
 		return value();
-	else
+	else*/
 		return d->oldValue;
 }
 
@@ -402,8 +402,9 @@ void
 Property::resetValue()
 {
 	d->changed = false;
-	bool cleared;
-	d->set->informAboutClearing(cleared); //inform me about possibly clearing the property sets
+	bool cleared = false;
+	if (d->set)
+		d->set->informAboutClearing(cleared); //inform me about possibly clearing the property sets
 	setValue(oldValue(), false);
 	if (cleared)
 		return; //property set has been cleared: no further actions make sense as 'this' is dead
@@ -763,7 +764,7 @@ Property::debug()
 	QString dbg = "Property( name='" + QString(d->name) + "' desc='" + d->description
 		+ "' val=" + (value().isValid() ? value().toString() : "<INVALID>");
 	if (!d->oldValue.isValid())
-		dbg += (", oldVal='" + d->oldValue.toString() + "'");
+		dbg += (", oldVal='" + d->oldValue.toString() + '\'');
 	dbg += (QString(d->changed ? " " : " un") + "changed");
 	dbg += (d->visible ? " visible" : " hidden");
 	dbg+=" )";

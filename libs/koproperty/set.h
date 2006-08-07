@@ -90,10 +90,10 @@ class KOPROPERTY_EXPORT Set : public QObject
 		/*! Removes all properties from the property set and destroys them. */
 		virtual void clear();
 
-		/*! Returns the number of items in the set. */
+		/*! \return the number of items in the set. */
 		uint count() const;
 
-		/*! Returns TRUE if the set is empty, i.e. count() == 0; otherwise it returns FALSE. */
+		/*! \return true if the set is empty, i.e. count() == 0; otherwise returns false. */
 		bool isEmpty() const;
 
 		/*! \return true if the set is read-only. 

@@ -77,7 +77,7 @@ PixmapEdit::PixmapEdit(Property *property, QWidget *parent, const char *name)
 	m_button->setToolTip( i18n("Insert image from file"));
 	m_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	QFontMetrics fm(m_button->font());
-	m_button->setFixedWidth(fm.width(m_button->text()+" "));
+	m_button->setFixedWidth(fm.width(m_button->text()+' '));
 	m_button->setFocusPolicy(Qt::NoFocus);
 
 	m_popup = new QLabel(0, Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WX11BypassWM|Qt::WStyle_StaysOnTop);

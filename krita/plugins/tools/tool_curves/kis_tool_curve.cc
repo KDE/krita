@@ -67,6 +67,7 @@ KisToolCurve::KisToolCurve(const QString& UIName)
 {
     m_UIName = UIName;
     m_currentImage = 0;
+    m_optWidget = 0;
 
     m_curve = 0;
     

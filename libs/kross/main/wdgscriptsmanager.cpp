@@ -115,9 +115,11 @@ class WdgScriptsManagerPrivate
 };
 
 WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name)
-    : QWidget(parent, name)
+    : QWidget(parent)
     , d( new WdgScriptsManagerPrivate() )
 {
+    setObjectName(name);
+
     d->m_scripguiclient = scr;
     //d->m_tooltip = new ToolTip(d->m_listview);
     d->newstuff = 0;
@@ -319,7 +321,7 @@ void WdgScriptsManager::slotGetNewScript()
 
     KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
     KNS::DownloadDialog *d = new KNS::DownloadDialog( engine, this );
-    d->setType(type);
+    d->setCategory(type);
 
     KNS::ProviderLoader *p = new KNS::ProviderLoader(this);
     QObject::connect(p, SIGNAL(providersLoaded(Provider::List*)),

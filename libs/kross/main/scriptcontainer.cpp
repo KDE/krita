@@ -87,7 +87,7 @@ ScriptContainer::ScriptContainer(const QString& name)
     : MainModule(name)
     , d( new ScriptContainerPrivate() ) // initialize d-pointer class
 {
-    krossdebug( QString("ScriptContainer::ScriptContainer() Ctor name='%1'").arg(name) );
+    //krossdebug( QString("ScriptContainer::ScriptContainer() Ctor name='%1'").arg(name) );
 
     d->script = 0;
     d->name = name;
@@ -95,7 +95,7 @@ ScriptContainer::ScriptContainer(const QString& name)
 
 ScriptContainer::~ScriptContainer()
 {
-    krossdebug( QString("ScriptContainer::~ScriptContainer() Dtor name='%1'").arg(d->name) );
+    //krossdebug( QString("ScriptContainer::~ScriptContainer() Dtor name='%1'").arg(d->name) );
 
     finalize();
     delete d;

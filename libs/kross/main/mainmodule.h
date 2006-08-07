@@ -23,7 +23,6 @@
 #include "../api/object.h"
 #include "../api/variant.h"
 #include "../api/module.h"
-#include "../api/event.h"
 #include "../api/qtobject.h"
 
 #include <QString>

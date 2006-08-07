@@ -21,7 +21,6 @@
 
 #include "object.h"
 #include "variant.h"
-#include "event.h"
 #include "proxy.h"
 
 #include "../main/manager.h"

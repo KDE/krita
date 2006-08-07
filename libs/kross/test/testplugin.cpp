@@ -100,8 +100,8 @@ TestPluginModule::TestPluginModule(const QString& name)
     addChild(new TestPluginObject("testpluginobject1"));
 
     // Let's wrap a whole instance and it's methodfunctions.
-    Kross::Api::Event<TestObject> *testobjectclass =
-        new Kross::Api::Event<TestObject>("testpluginobject2");
+    Kross::Api::Class<TestObject> *testobjectclass =
+        new Kross::Api::Class<TestObject>("testpluginobject2");
     addChild(testobjectclass);
 
     // Wrap a whole QObject

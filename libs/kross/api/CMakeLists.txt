@@ -30,7 +30,7 @@ install(TARGETS krossapi  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  callable.h      class.h      dict.h      event.h      exception.h      function.h      interpreter.h      list.h      module.h      object.h      proxy.h      qtobject.h      script.h      value.h      variant.h krossconfig.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kross/api)
+install( FILES  callable.h      class.h      dict.h      exception.h      function.h      interpreter.h      list.h      module.h      object.h      proxy.h      qtobject.h      script.h      value.h      variant.h krossconfig.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kross/api)
 
 
 

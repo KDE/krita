@@ -30,7 +30,7 @@
 #else
 #include <QPushButton>
 #include <QLineEdit>
-#include <q3filedialog.h>
+#include <QFileDialog>
 #endif
 
 #include "property.h"
@@ -121,9 +121,9 @@ URLEdit::selectFile()
 #ifdef QT_ONLY
 	QString path;
 	if(m_property->type() == DirectoryURL)
-		path = Q3FileDialog::getExistingDirectory(path,this);
+		path = QFileDialog::getExistingDirectory(this,QString::null,path);
 	else if(m_property->type() == FileURL)
-		path = Q3FileDialog::getOpenFileName(path, QString::null, this);
+		path = QFileDialog::getOpenFileName(this, QString::null, path);
 	//slotValueChanged(m_url);
 	m_edit->setText(path);
 #endif

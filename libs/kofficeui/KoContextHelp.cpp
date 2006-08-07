@@ -27,7 +27,7 @@
 #include <q3simplerichtext.h>
 #include <QPixmap>
 #include <QPaintEvent>
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QEvent>
 #include <QKeyEvent>
 #include <QHBoxLayout>
@@ -426,7 +426,7 @@ void KoContextHelpPopup::mouseMoveEvent( QMouseEvent* e )
 void KoContextHelpPopup::resizeEvent( QResizeEvent* )
 {
 	QBitmap mask( width(), height() );
-	Q3PointArray a;
+	QPolygon a;
 	QPainter p( &mask );
 	p.fillRect( 0, 0, width(), height(), Qt::color1 );
 	p.setPen( Qt::color0 );

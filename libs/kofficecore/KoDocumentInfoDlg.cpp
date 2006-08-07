@@ -68,20 +68,20 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( QWidget* parent, KoDocumentInfo* docInfo )
     setDefaultButton( KDialog::Ok );
 
     d->m_aboutUi = new Ui::KoDocumentInfoAboutWidget();
-    KDialog *infodlg = new KDialog(this);
+    QWidget *infodlg = new QWidget();
     d->m_aboutUi->setupUi( infodlg );
     addPage( infodlg, i18n( "General" ) );
 
     initAboutTab();
 
     d->m_authorUi = new Ui::KoDocumentInfoAuthorWidget();
-
-    KDialog *authordlg = new KDialog(this);
+    QWidget *authordlg = new QWidget();
     d->m_authorUi->setupUi( authordlg );
+    addPage( authordlg, i18n( "Author" ) );
 
     initAuthorTab();
 
-    connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
@@ -98,15 +98,15 @@ void KoDocumentInfoDlg::initAboutTab()
         return;
 
     d->m_aboutUi->leFileName->setText( doc->file() );
+    d->m_aboutUi->leFileName->setReadOnly( true );
     QPixmap p = KMimeType::mimeType( doc->mimeType() )->pixmap( K3Icon::Desktop, 48 );
     d->m_aboutUi->lblPixmap->setPixmap( p );
 
     d->m_aboutUi->leTitle->setText( d->m_info->aboutInfo( "title" ) );
     d->m_aboutUi->leSubject->setText( d->m_info->aboutInfo( "subject" ) );
 
-    if( d->m_info->aboutInfo( "keyword" ).isEmpty() )
-        d->m_aboutUi->leKeywords->setText( i18n("Use ';' (Example: Office;KDE;KOffice)" ) );
-    else
+    d->m_aboutUi->leKeywords->setToolTip( i18n("Use ';' (Example: Office;KDE;KOffice)" ) );
+    if( !d->m_info->aboutInfo( "keyword" ).isEmpty() )
         d->m_aboutUi->leKeywords->setText( d->m_info->aboutInfo( "keyword" ) );
 
     d->m_aboutUi->meComments->setPlainText( d->m_info->aboutInfo( "comments" ) );
@@ -171,10 +171,7 @@ void KoDocumentInfoDlg::slotApply()
 
 void KoDocumentInfoDlg::saveAboutData()
 {
-    if( d->m_aboutUi->leKeywords->text() !=
-            i18n( "Use ';' (Example: Office;KDE;KOffice)" ) )
-        d->m_info->setAboutInfo( "keyword", d->m_aboutUi->leKeywords->text() );
-
+    d->m_info->setAboutInfo( "keyword", d->m_aboutUi->leKeywords->text() );
     d->m_info->setAboutInfo( "title", d->m_aboutUi->leTitle->text() );
     d->m_info->setAboutInfo( "subject", d->m_aboutUi->leSubject->text() );
     d->m_info->setAboutInfo( "comments", d->m_aboutUi->meComments->toPlainText() );

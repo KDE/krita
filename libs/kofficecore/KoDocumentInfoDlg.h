@@ -60,7 +60,7 @@ class KOFFICECORE_EXPORT KoDocumentInfoDlg : public KPageDialog
     virtual ~KoDocumentInfoDlg();
 
   public slots:
-    /** Connected to the applyClicked() signal */
+    /** Connected to the okClicked() signal */
     void slotApply();
 
   private slots:

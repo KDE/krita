@@ -7,7 +7,7 @@ include_directories(
 	)
 
 add_subdirectory( kritascripting )
-#add_subdirectory( kritacore )
+add_subdirectory( kritacore )
 add_subdirectory( samples )
 
 ########### next target ###############

@@ -24,8 +24,8 @@
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 
+#include <api/class.h>
 #include <api/module.h>
-#include <api/event.h>
 
 namespace Kross { namespace Api {
     class Manager;
@@ -35,7 +35,7 @@ namespace Kross { namespace KritaCore {
     /**
      * This class contains functions use to create new Kross object in a script
      */
-    class KritaCoreFactory : public Kross::Api::Event<KritaCoreFactory>
+    class KritaCoreFactory : public Kross::Api::Class<KritaCoreFactory>
     {
         public:
             KritaCoreFactory(QString packagePath);

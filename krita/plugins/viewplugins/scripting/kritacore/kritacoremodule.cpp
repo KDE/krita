@@ -62,7 +62,7 @@ extern "C"
 
 using namespace Kross::KritaCore;
 
-KritaCoreFactory::KritaCoreFactory(QString packagePath) : Kross::Api::Event<KritaCoreFactory>("KritaCoreFactory"), m_packagePath(packagePath)
+KritaCoreFactory::KritaCoreFactory(QString packagePath) : Kross::Api::Class<KritaCoreFactory>("KritaCoreFactory"), m_packagePath(packagePath)
 {
     addFunction("newRGBColor", &KritaCoreFactory::newRGBColor);
     addFunction("newHSVColor", &KritaCoreFactory::newHSVColor);

@@ -256,7 +256,7 @@ bool KoDocumentInfo::saveOasisAboutInfo( KoXmlWriter &xmlWriter )
 
     foreach( QString tag, m_aboutTags )
     {
-        if( !aboutInfo( tag ).isEmpty() )
+        if( !aboutInfo( tag ).isEmpty() || tag == "title" )
         {
             if( tag == "keyword" )
             {
@@ -270,6 +270,11 @@ bool KoDocumentInfo::saveOasisAboutInfo( KoXmlWriter &xmlWriter )
             else if( tag == "title" || tag == "description" || tag == "subject" ||
                     tag == "date" )
             {
+              if ( tag == "title" && aboutInfo( tag ).isEmpty() )
+                {
+                  KoDocument* doc = dynamic_cast< KoDocument* >( parent() );
+                  setAboutInfo( "title", doc->url().fileName() );
+                }
                 xmlWriter.startElement( QString( "dc:" + tag ).toLatin1().constData() );
                 xmlWriter.addTextNode( aboutInfo( tag ) );
                 xmlWriter.endElement();

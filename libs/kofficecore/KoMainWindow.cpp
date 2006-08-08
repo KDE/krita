@@ -514,7 +514,7 @@ void KoMainWindow::updateCaption()
       {
           caption = rootDocument()->documentInfo()->aboutInfo( "title" );
       }
-      const QString url = rootDocument()->url().fileName(false);
+      const QString url = rootDocument()->url().pathOrUrl();
       if ( !caption.isEmpty() && !url.isEmpty() )
           caption = QString( "%1 - %2" ).arg( caption ).arg( url );
       else if ( caption.isEmpty() )
@@ -524,8 +524,8 @@ void KoMainWindow::updateCaption()
         caption += i18n("(write protected)");
 
       setCaption( caption, rootDocument()->isModified() );
-      if ( !url.isEmpty() )
-        d->m_paSave->setToolTip( i18n("Save as %1", url) );
+      if ( !rootDocument()->url().fileName(false).isEmpty() )
+        d->m_paSave->setToolTip( i18n("Save as %1", rootDocument()->url().fileName(false)) );
       else
         d->m_paSave->setToolTip( i18n("Save") );
   }

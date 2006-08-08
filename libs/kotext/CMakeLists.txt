@@ -4,6 +4,7 @@ include_directories( ${KOFFICEUI_INCLUDES} )
 
 add_subdirectory( kohyphen ) 
 add_subdirectory( tests ) 
+add_subdirectory( styles/tests )
 
 
 # Need by kohyphen
@@ -66,6 +67,9 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoTextBookmark.cpp
    KoBorderPreview.cpp
    KoTextShapeData.cpp
+    styles/Styles_p.cpp
+    styles/KoCharacterStyle.cpp
+    styles/KoParagraphStyle.cpp
  )
 
 kde4_automoc(${kotext_LIB_SRCS})

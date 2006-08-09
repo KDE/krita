@@ -11,6 +11,7 @@ Name[ja]=コンヴォリューションフィルタ (拡張)
 Name[nl]=Verdraaiïngsfilters (uitbreiding)
 Name[pt]=Filtros de Convolução (Extensão)
 Name[pt_BR]=Filtros de Convolução (Extensão)
+Name[ru]=Свёртка (расширение)
 Name[zh_TW]=皺褶過濾器（延伸）
 ServiceTypes=Krita/Filter
 Type=Service

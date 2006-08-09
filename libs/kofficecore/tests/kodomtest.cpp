@@ -40,15 +40,8 @@ void testQDom( const KoXmlDocument& doc )
     assert( docElem.prefix() == "o" );
     assert( docElem.namespaceURI() == KoXmlNS::office );
 
-#ifdef KOXML_USE_QDOM
-    // WARNING, elementsByTagNameNS is recursive!!!
-    KoXmlNodeList docElemChildren = docElem.elementsByTagNameNS( KoXmlNS::office, "body" );
-    assert( docElemChildren.length() == 1 );
+    KoXmlElement elem = KoXml::namedItemNS( docElem, KoXmlNS::office, "body" );
 
-    KoXmlElement elem = docElemChildren.item( 0 ).toElement();
-#else
-    KoXmlElement elem = docElem.namedItemNS( KoXmlNS::office, "body" ).toElement(); // FIXME Stefan: correct?
-#endif
     //debugElemNS( elem );
     assert( elem.tagName() == "body" );
     assert( elem.localName() == "body" );

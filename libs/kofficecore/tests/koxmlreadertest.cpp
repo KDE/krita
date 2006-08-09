@@ -110,9 +110,8 @@ void testNode()
   CHECK( node1.nodeName(), QString() );
   CHECK( node1.isNull(), true );
   CHECK( node1.isElement(), false );
-  CHECK( node1.isElement(), false );
   CHECK( node1.isDocument(), false );
-  CHECK( node1.ownerDocument().isNull(), false );
+  CHECK( node1.ownerDocument().isNull(), true );
   CHECK( node1.parentNode().isNull(), true );
   CHECK( node1.hasChildNodes(), false );
   CHECK( node1.firstChild().isNull(), true );
@@ -159,7 +158,7 @@ void testNode()
   CHECK( node3.isElement(), false );
   CHECK( node3.isText(), false );
   CHECK( node3.isDocument(), false );
-  CHECK( node3.ownerDocument().isNull(), false );
+  CHECK( node3.ownerDocument().isNull(), true );
   CHECK( node1==node3, true );
   CHECK( node1!=node3, false );
 
@@ -202,9 +201,8 @@ void testNode()
   CHECK( continentsElement.ownerDocument()==doc, true );
 
   // and it doesn't make sense to convert that node to document
-  // (instead a brand new document is created, i.e. not a null node)
   KoXmlDocument invalidDoc = node5.toDocument();
-  CHECK( invalidDoc.isNull(), false );
+  CHECK( invalidDoc.isNull(), true );
   CHECK( invalidDoc.isElement(), false );
   CHECK( invalidDoc.isText(), false );
   CHECK( invalidDoc.isDocument(), true );
@@ -305,7 +303,7 @@ void testElement()
   CHECK( testElement.isNull(), true );
   CHECK( testElement.isElement(), true );
   CHECK( testElement.isDocument(), false );
-  CHECK( testElement.ownerDocument().isNull(), false );
+  CHECK( testElement.ownerDocument().isNull(), true );
   CHECK( testElement.ownerDocument()!=doc, true );
   CHECK( testElement==rootElement, false );
   CHECK( testElement!=rootElement, true );
@@ -361,7 +359,7 @@ void testElement()
   CHECK( dummyElement.isNull(), true );
   CHECK( dummyElement.isElement(), true );
   CHECK( dummyElement.isDocument(), false );
-  CHECK( dummyElement.ownerDocument().isNull(), false );
+  CHECK( dummyElement.ownerDocument().isNull(), true );
   CHECK( dummyElement.ownerDocument()==doc, false );
   CHECK( dummyElement.hasChildNodes(), false );
   CHECK( dummyElement==rootElement, false );
@@ -373,7 +371,7 @@ void testElement()
   CHECK( dummyElement.isNull(), true );
   CHECK( dummyElement.isElement(), true );
   CHECK( dummyElement.isDocument(), false );
-  CHECK( dummyElement.ownerDocument().isNull(), false );
+  CHECK( dummyElement.ownerDocument().isNull(), true );
   CHECK( dummyElement.hasChildNodes(), false );
   CHECK( dummyElement.ownerDocument()==doc, false );
 }
@@ -615,7 +613,7 @@ void testDocument()
 
   // empty document
   CHECK( doc.nodeName(), QString("#document") );
-  CHECK( doc.isNull(), false );
+  CHECK( doc.isNull(), true );
   CHECK( doc.isElement(), false );
   CHECK( doc.isDocument(), true );
   CHECK( doc.parentNode().isNull(), true );
@@ -671,7 +669,7 @@ void testDocument()
   // assigned from another empty document
   doc = KoXmlDocument();
   CHECK( doc.nodeName(), QString("#document") );
-  CHECK( doc.isNull(), false );
+  CHECK( doc.isNull(), true );
   CHECK( doc.isElement(), false );
   CHECK( doc.isDocument(), true );
   CHECK( doc.parentNode().isNull(), true );

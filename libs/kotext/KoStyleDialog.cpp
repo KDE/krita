@@ -19,8 +19,8 @@
 
 
 #include "KoStyleCollection.h"
-#include "KoStyleManager.h"
-#include "KoStyleManager.moc"
+#include "KoStyleDialog.h"
+#include "KoStyleDialog.moc"
 #include <KoFontDia.h>
 #include <KoGlobal.h>
 
@@ -43,7 +43,7 @@
 #include <QResizeEvent>
 
 /******************************************************************/
-/* Class: KoStyleManager                                          */
+/* Class: KoStyleDialog                                          */
 /******************************************************************/
 
 /* keep 2 qlists with the styles.
@@ -65,7 +65,7 @@ public:
     QCheckBox* cbIncludeInTOC;
 };
 
-KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
+KoStyleDialog::KoStyleDialog( QWidget *_parent, KoUnit::Unit unit,
                                 const KoStyleCollection& styles, const QString & activeStyleName,
                                 int flags )
     : KDialog( _parent )
@@ -119,7 +119,7 @@ KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
     setInitialSize( QSize( 600, 570 ) );
 }
 
-KoStyleManager::~KoStyleManager()
+KoStyleDialog::~KoStyleDialog()
 {
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         KoParagStyle *orig = m_origStyles.at(i);
@@ -131,14 +131,14 @@ KoStyleManager::~KoStyleManager()
     delete d;
 }
 
-void KoStyleManager::addTab( KoStyleManagerTab * tab )
+void KoStyleDialog::addTab( KoStyleManagerTab * tab )
 {
     m_tabsList.append( tab );
     m_tabs->addTab( tab, tab->tabName() );
     tab->layout()->activate();
 }
 
-void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
+void KoStyleDialog::setupWidget(const KoStyleCollection& styleCollection)
 {
     QFrame * frame1 = new QFrame();
     setMainWidget(frame1);
@@ -191,7 +191,7 @@ void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
     connect( m_tabs, SIGNAL( currentChanged ( QWidget * ) ), this, SLOT( switchTabs() ) );
 }
 
-void KoStyleManager::addGeneralTab( int flags ) {
+void KoStyleDialog::addGeneralTab( int flags ) {
     QWidget *tab = new QWidget( m_tabs );
 
     Q3GridLayout *tabLayout = new Q3GridLayout( tab );
@@ -258,8 +258,8 @@ void KoStyleManager::addGeneralTab( int flags ) {
 
 }
 
-void KoStyleManager::switchStyle() {
-    kDebug(32500) << "KoStyleManager::switchStyle noSignals=" << noSignals << endl;
+void KoStyleDialog::switchStyle() {
+    kDebug(32500) << "KoStyleDialog::switchStyle noSignals=" << noSignals << endl;
     if(noSignals) return;
     noSignals=true;
 
@@ -268,7 +268,7 @@ void KoStyleManager::switchStyle() {
 
     m_currentStyle = 0L;
     int num = styleIndex( m_stylesList->currentRow() );
-    kDebug(32500) << "KoStyleManager::switchStyle switching to " << num << endl;
+    kDebug(32500) << "KoStyleDialog::switchStyle switching to " << num << endl;
     if(m_origStyles.at(num) == m_changedStyles.at(num)) {
         m_currentStyle = new KoParagStyle( *m_origStyles.at(num) );
         m_changedStyles.take(num);
@@ -281,7 +281,7 @@ void KoStyleManager::switchStyle() {
     noSignals=false;
 }
 
-void KoStyleManager::switchTabs()
+void KoStyleDialog::switchTabs()
 {
     // Called when the user switches tabs
     // We call save() to update our style, for the preview on the 1st tab
@@ -294,7 +294,7 @@ void KoStyleManager::switchTabs()
 // the m_origStyles and m_changedStyles lists.
 // The reason for the difference is that a deleted style is removed
 // from the GUI but not from the internal lists.
-int KoStyleManager::styleIndex( int pos ) {
+int KoStyleDialog::styleIndex( int pos ) {
     int p = 0;
     for(unsigned int i=0; i < m_changedStyles.count(); i++) {
         // Skip deleted styles, they're no in m_stylesList anymore
@@ -304,7 +304,7 @@ int KoStyleManager::styleIndex( int pos ) {
             return i;
         ++p;
     }
-    kWarning() << "KoStyleManager::styleIndex no style found at pos " << pos << endl;
+    kWarning() << "KoStyleDialog::styleIndex no style found at pos " << pos << endl;
 
 #ifdef __GNUC_
 #warning implement undo/redo
@@ -314,8 +314,8 @@ int KoStyleManager::styleIndex( int pos ) {
 }
 
 // Update the GUI so that it shows m_currentStyle
-void KoStyleManager::updateGUI() {
-    kDebug(32500) << "KoStyleManager::updateGUI m_currentStyle=" << m_currentStyle << " " << m_currentStyle->name() << endl;
+void KoStyleDialog::updateGUI() {
+    kDebug(32500) << "KoStyleDialog::updateGUI m_currentStyle=" << m_currentStyle << " " << m_currentStyle->name() << endl;
     Q3PtrListIterator<KoStyleManagerTab> it( m_tabsList );
     for ( ; it.current() ; ++it )
     {
@@ -326,7 +326,7 @@ void KoStyleManager::updateGUI() {
     m_nameString->setText(m_currentStyle->displayName());
 
     QString followingName = m_currentStyle->followingStyle() ? m_currentStyle->followingStyle()->displayName() : QString::null;
-    kDebug(32500) << "KoStyleManager::updateGUI updating combo to " << followingName << endl;
+    kDebug(32500) << "KoStyleDialog::updateGUI updating combo to " << followingName << endl;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
         if ( m_styleCombo->itemText( i ) == followingName ) {
             m_styleCombo->setCurrentIndex( i );
@@ -336,7 +336,7 @@ void KoStyleManager::updateGUI() {
     }
 
     QString inheritName = m_currentStyle->parentStyle() ? m_currentStyle->parentStyle()->displayName() : QString::null;
-    kDebug(32500) << "KoStyleManager::updateGUI updating combo to " << inheritName << endl;
+    kDebug(32500) << "KoStyleDialog::updateGUI updating combo to " << inheritName << endl;
     for ( int i = 0; i < m_inheritCombo->count(); i++ ) {
         if ( m_inheritCombo->itemText( i ) == inheritName ) {
             m_inheritCombo->setCurrentIndex( i );
@@ -359,13 +359,13 @@ void KoStyleManager::updateGUI() {
     updatePreview();
 }
 
-void KoStyleManager::updatePreview()
+void KoStyleDialog::updatePreview()
 {
     d->preview->setStyle(m_currentStyle);
     d->preview->update();
 }
 
-void KoStyleManager::save() {
+void KoStyleDialog::save() {
     if(m_currentStyle) {
         // save changes from UI to object.
         Q3PtrListIterator<KoStyleManagerTab> it( m_tabsList );
@@ -387,7 +387,7 @@ void KoStyleManager::save() {
     }
 }
 
-KoParagStyle * KoStyleManager::style( const QString & _name )
+KoParagStyle * KoStyleDialog::style( const QString & _name )
 {
     for(unsigned int i=0; i < m_changedStyles.count(); i++) {
         // Skip deleted styles, they're no in m_stylesList anymore
@@ -399,7 +399,7 @@ KoParagStyle * KoStyleManager::style( const QString & _name )
     return 0;
 }
 
-QString KoStyleManager::generateUniqueName()
+QString KoStyleDialog::generateUniqueName()
 {
     int count = 1;
     QString name;
@@ -410,7 +410,7 @@ QString KoStyleManager::generateUniqueName()
 }
 
 
-void KoStyleManager::addStyle() {
+void KoStyleDialog::addStyle() {
     save();
 
     QString str = i18n( "New Style Template (%1)" ,numStyles++);
@@ -437,7 +437,7 @@ void KoStyleManager::addStyle() {
     updateGUI();
 }
 
-void KoStyleManager::updateFollowingStyle( KoParagStyle *s )
+void KoStyleDialog::updateFollowingStyle( KoParagStyle *s )
 {
     for ( KoParagStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
     {
@@ -447,7 +447,7 @@ void KoStyleManager::updateFollowingStyle( KoParagStyle *s )
 
 }
 
-void KoStyleManager::updateInheritStyle( KoParagStyle *s )
+void KoStyleDialog::updateInheritStyle( KoParagStyle *s )
 {
     for ( KoParagStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
     {
@@ -460,7 +460,7 @@ void KoStyleManager::updateInheritStyle( KoParagStyle *s )
 
 }
 
-void KoStyleManager::deleteStyle() {
+void KoStyleDialog::deleteStyle() {
 
     unsigned int cur = styleIndex( m_stylesList->currentRow() );
     unsigned int curItem = m_stylesList->currentRow();
@@ -486,7 +486,7 @@ void KoStyleManager::deleteStyle() {
     m_stylesList->setItemSelected( m_stylesList->currentItem(), true );
 }
 
-void KoStyleManager::moveUpStyle()
+void KoStyleDialog::moveUpStyle()
 {
     Q_ASSERT( m_currentStyle );
     if ( m_currentStyle )
@@ -514,7 +514,7 @@ void KoStyleManager::moveUpStyle()
     updateGUI();
 }
 
-void KoStyleManager::moveDownStyle()
+void KoStyleDialog::moveDownStyle()
 {
     Q_ASSERT( m_currentStyle );
     if ( m_currentStyle )
@@ -540,19 +540,19 @@ void KoStyleManager::moveDownStyle()
     updateGUI();
 }
 
-void KoStyleManager::slotOk() {
+void KoStyleDialog::slotOk() {
     save();
     apply();
     slotButtonClicked( Ok );
 }
 
-void KoStyleManager::slotApply() {
+void KoStyleDialog::slotApply() {
     save();
     apply();
     slotButtonClicked( Apply );
 }
 
-void KoStyleManager::apply() {
+void KoStyleDialog::apply() {
     noSignals=true;
     KoStyleChangeDefMap styleChanged;
     Q3PtrList<KoParagStyle> removeStyle;
@@ -610,19 +610,19 @@ void KoStyleManager::apply() {
     noSignals=false;
 }
 
-void KoStyleManager::renameStyle(const QString &theText) {
+void KoStyleDialog::renameStyle(const QString &theText) {
     if(noSignals) return;
     noSignals=true;
 
     int index = m_stylesList->currentRow();
-    kDebug(32500) << "KoStyleManager::renameStyle " << index << " to " << theText << endl;
+    kDebug(32500) << "KoStyleDialog::renameStyle " << index << " to " << theText << endl;
 
     // rename only in the GUI, not even in the underlying objects (save() does it).
-    kDebug(32500) << "KoStyleManager::renameStyle before " << m_styleCombo->currentText() << endl;
+    kDebug(32500) << "KoStyleDialog::renameStyle before " << m_styleCombo->currentText() << endl;
     m_styleCombo->setItemText( index, theText );
     m_inheritCombo->setItemText( index+1, theText );
     //m_styleOrder[index]=theText; // not needed anymore, we use internal names
-    kDebug(32500) << "KoStyleManager::renameStyle after " << m_styleCombo->currentText() << endl;
+    kDebug(32500) << "KoStyleDialog::renameStyle after " << m_styleCombo->currentText() << endl;
     m_stylesList->item( index )->setText( theText );
 
     // Check how many styles with that name we have now

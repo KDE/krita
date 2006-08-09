@@ -60,3 +60,26 @@ QColor KoCharacterStyle::underlineColor () const {
     }
     return qvariant_cast<QColor>(variant);
 }
+
+int KoCharacterStyle::propertyInt(int key) const {
+    const QVariant *variant = get(key);
+    if(variant == 0)
+        return 0;
+    return variant->toInt();
+}
+
+void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
+    // copy all relevant properties.
+    static const int properties[] = {
+        // TODO
+        -1
+    };
+
+    int i=0;
+    while(properties[i] != -1) {
+        format.setProperty(i, get(i));
+        i++;
+    }
+}
+
+#include "KoCharacterStyle.moc"

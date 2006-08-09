@@ -18,15 +18,22 @@
 #ifndef KOCHARACTERSTYLE_H
 #define KOCHARACTERSTYLE_H
 
+#include <QObject>
 #include <QVector>
 #include <QVariant>
 #include <QString>
 #include <QTextCharFormat>
+#include <koffice_export.h>
 
 class StylePrivate;
 
-class KoCharacterStyle {
+class KOTEXT_EXPORT KoCharacterStyle : public QObject {
+    Q_OBJECT
 public:
+    enum Property {
+        StyleId = QTextFormat::UserProperty+1
+    };
+
     KoCharacterStyle();
     ~KoCharacterStyle();
 /*
@@ -70,6 +77,12 @@ public:
     const QString& name() const { return m_name; }
 
     void setName(const QString &name) { m_name = name; }
+
+    int styleId() const { return propertyInt(StyleId); }
+
+    void setStyleId(int id) { setProperty(StyleId, id); }
+
+    void applyStyle(QTextCharFormat &format) const;
 
 private:
     void setProperty(int key, const QVariant &value);

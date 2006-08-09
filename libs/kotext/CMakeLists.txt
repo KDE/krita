@@ -39,7 +39,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoVariable.cpp 
    KoCustomVariablesDia.cpp 
    KoChangeCaseDia.cpp 
-   KoStyleManager.cpp 
+   KoStyleDialog.cpp 
    KoSearchDia.cpp 
    TimeFormatWidget.cpp 
    DateFormatWidget.cpp 
@@ -70,6 +70,8 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp
+    styles/KoStyleManager.cpp
+    styles/ChangeFollower.cpp
  )
 
 kde4_automoc(${kotext_LIB_SRCS})

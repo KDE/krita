@@ -74,3 +74,24 @@ int KoParagraphStyle::propertyInt(int key) const {
     return variant->toInt();
 }
 
+void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
+    // copy all relevant properties.
+    static const int properties[] = {
+        QTextFormat::BlockTopMargin,
+        QTextFormat::BlockBottomMargin,
+        QTextFormat::BlockLeftMargin,
+        QTextFormat::BlockRightMargin,
+        QTextFormat::BlockAlignment,
+        QTextFormat::TextIndent,
+        QTextFormat::BlockIndent,
+        -1
+    };
+
+    int i=0;
+    while(properties[i] != -1) {
+        format.setProperty(i, get(i));
+        i++;
+    }
+}
+
+#include "KoParagraphStyle.moc"

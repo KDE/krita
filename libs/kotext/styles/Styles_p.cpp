@@ -18,6 +18,8 @@
 
 #include "Styles_p.h"
 
+#include <QTextFormat>
+
 StylePrivate::StylePrivate() {
 }
 

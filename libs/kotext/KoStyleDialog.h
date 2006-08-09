@@ -54,17 +54,17 @@ class KoStyleManagerPrivate;
 /**
  * This class provides a dialog for editing named text styles.
  */
-class KOTEXT_EXPORT KoStyleManager : public KDialog
+class KOTEXT_EXPORT KoStyleDialog : public KDialog
 {
     Q_OBJECT
 
 public:
     enum { ShowIncludeInToc = 1 }; // bitfield for flags
-    KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
+    KoStyleDialog( QWidget *_parent, KoUnit::Unit unit,
                     const KoStyleCollection& styleCollection,
                     const QString & activeStyleName,
                     int flags = 0 );
-    virtual ~KoStyleManager();
+    virtual ~KoStyleDialog();
 
     virtual KoParagStyle* addStyleTemplate(KoParagStyle *style)=0;
     //virtual void applyStyleChange( KoParagStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;

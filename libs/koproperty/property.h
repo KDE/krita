@@ -69,51 +69,47 @@ should have a type number >= UserDefined .*/
 enum PropertyType {
 	//standard supported QVariant types
 	Auto = QVariant::Invalid - 1,
-	Invalid = QVariant::Invalid	/**<invalid property type*/,
-	Map = QVariant::Map		/**<QMap<QString, QVariant>*/,
-	List = QVariant::List		  /**<QValueList<QVariant>*/,
-	String = QVariant::String	  /**<string*/,
+	Invalid = QVariant::Invalid   /**<invalid property type*/,
+	Map = QVariant::Map           /**<QMap<QString, QVariant>*/,
+	List = QVariant::List         /**<Q3ValueList<QVariant>*/,
+	String = QVariant::String     /**<string*/,
 	StringList = QVariant::StringList  /**<string list*/,
-	Font = QVariant::Font		  /**<font*/,
-	Pixmap = QVariant::Pixmap	  /**<pixmap*/,
+	Font = QVariant::Font         /**<font*/,
+	Pixmap = QVariant::Pixmap     /**<pixmap*/,
 	//! @todo implement QVariant::Brush
-	Rect = QVariant::Rect		  /**<rectangle (x,y, width, height)*/,
-	Size = QVariant::Size		  /**<size (width, height)*/,
-	Color = QVariant::Color		/**<color*/,
+	Rect = QVariant::Rect         /**<rectangle (x,y, width, height)*/,
+	Size = QVariant::Size         /**<size (width, height)*/,
+	Color = QVariant::Color       /**<color*/,
 	//! \todo implement QVariant::Palette
 	//! \todo implement QVariant::ColorGroup
 	//! \todo implement QVariant::IconSet
-	Point = QVariant::Point		/**<point (x,y)*/,
+	Point = QVariant::Point       /**<point (x,y)*/,
 	//! \todo implement QVariant::Image
-	Integer = QVariant::Int		/**<integer*/,
+	Integer = QVariant::Int       /**<integer*/,
 	//! \todo implement QVariant::UInt
-	Boolean = QVariant::Bool	   /**<boolean*/,
-	Double = QVariant::Double	  /**<double*/,
-	CString = QVariant::CString	   /** 8-bit string*/,
+	Boolean = QVariant::Bool      /**<boolean*/,
+	Double = QVariant::Double     /**<double*/,
+	CString = QVariant::CString   /** latin-1 string*/,
 	//! @todo implement QVariant::PointArray
 	//! @todo implement QVariant::Region
 	//! @todo implement QVariant::Bitmap
-	Cursor = QVariant::Cursor	  /**<cursor*/,
+	Cursor = QVariant::Cursor     /**<cursor*/,
 	SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
-	Date = QVariant::Date		  /**<date*/,
-	Time = QVariant::Time	   /**<time*/,
-	DateTime = QVariant::DateTime	  /**<date and time*/,
+	Date = QVariant::Date         /**<date*/,
+	Time = QVariant::Time         /**<time*/,
+	DateTime = QVariant::DateTime /**<date and time*/,
 	//! @todo implement QVariant::ByteArray
 	//! @todo implement QVariant::BitArray
 	//! @todo implement QVariant::KeySequence
-	//! @todo implement QVariant::Pen
-	//! @todo implement QVariant::Long
-	//! @todo implement QVariant::LongLong
-	//! @todo implement QVariant::ULongLong
 
 	//predefined custom types
-	ValueFromList = 2000		   /**<string value from a list*/,
-	Symbol = 2001			  /**<unicode symbol code*/,
-	FontName			/**<font name, e.g. "times new roman"*/,
-	FileURL			 /**<url of a file*/,
-	PictureFileURL	 /**<url of a pixmap*/,
-	DirectoryURL		   /**<url of a directory*/,
-	LineStyle		   /**<line style*/,
+	ValueFromList = 2000          /**<string value from a list*/,
+	Symbol = 2001                 /**<unicode symbol code*/,
+	FontName                      /**<font name, e.g. "times new roman"*/,
+	FileURL                       /**<url of a file*/,
+	PictureFileURL                /**<url of a pixmap*/,
+	DirectoryURL                  /**<url of a directory*/,
+	LineStyle                     /**<line style*/,
 
 	// Child property types
 	Size_Height = 3001,
@@ -129,7 +125,7 @@ enum PropertyType {
 	SizePolicy_HorStretch,
 	SizePolicy_VerStretch,
 
-	UserDefined = 4000		 /**<plugin defined properties should start here*/
+	UserDefined = 4000            /**<plugin defined properties should start here*/
 };
 
 /*! \brief The base class representing a single property

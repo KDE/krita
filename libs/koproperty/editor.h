@@ -49,7 +49,7 @@ class Widget;
 class EditorItem;
 
 //! \brief A listview to edit properties
-/*! Editor uses property options using Property::option(const char *)
+/*! Editor widgets use property options using Property::option(const char *)
     to override default behaviour of editor items.
     Currently supported options are:
     <ul><li> min: integer setting for minimum value of IntEdit and DoubleEdit item. Default is 0.
@@ -59,7 +59,13 @@ class EditorItem;
     <li> max: integer setting for minimum value of IntEdit item. Default is 0xffff.</li>
     <li> precision:  The number of decimals after the decimal point. (for DoubleEdit)</li>
     <li> step : the size of the step that is taken when the user hits the up
-    or down buttons (for DoubleEdit) </li></ul>
+    or down buttons (for DoubleEdit) </li>
+    <li> 3rdState: i18n'd QString used in BoolEdit. If not empty, the the editor's button
+     accept third "null" state with name equal to this string. When this value is selected,
+     Widget::value() returns null QVariant. This option is used for example in the "defaultValue"
+     property for a field of type boolean (in Kexi Table Designer). Third, "null" value 
+     of the property means there is no "defaultValue" specified. </li>
+    </ul>
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jaroslaw Staniek <js@iidea.pl>

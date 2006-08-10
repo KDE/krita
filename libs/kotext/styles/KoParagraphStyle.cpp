@@ -19,6 +19,8 @@
 
 #include "Styles_p.h"
 
+#include <kdebug.h>
+
 KoParagraphStyle::KoParagraphStyle()
     : m_charStyle(0),
     m_parent(0),
@@ -53,7 +55,7 @@ void KoParagraphStyle::setProperty(int key, const QVariant &value) {
     m_stylesPrivate->add(key, value);
 }
 
-const QVariant *KoParagraphStyle::get(int key) const {
+QVariant const *KoParagraphStyle::get(int key) const {
     QVariant const *var = m_stylesPrivate->get(key);
     if(var == 0 && m_parent)
         var = m_parent->get(key);
@@ -89,7 +91,12 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
 
     int i=0;
     while(properties[i] != -1) {
-        format.setProperty(i, get(i));
+        QVariant const *variant = get(properties[i]);
+        if(variant)
+            format.setProperty(properties[i], *variant);
+        else
+            kWarning() << "KoParagraphStyle: Missing mandatory property '" << properties[i] <<
+                "' on " << name() << endl;
         i++;
     }
 }

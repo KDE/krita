@@ -23,22 +23,33 @@
 
 #include <QTimer>
 #include <kdebug.h>
+#include <klocale.h>
 
 KoStyleManager::KoStyleManager(QObject *parent)
     : QObject(parent),
     m_updateTriggered(false)
 {
-    KoParagraphStyle *p1 = new KoParagraphStyle();
-    p1->setLeftMargin(20);
-    p1->setName("left");
-    KoParagraphStyle *p2 = new KoParagraphStyle();
-    p2->setTopMargin(20);
-    p2->setName("right");
-    KoParagraphStyle *p3 = new KoParagraphStyle();
-    p3->setName("Standard");
-    add(p1);
-    add(p2);
-    add(p3);
+    KoParagraphStyle *standard = new KoParagraphStyle();
+    standard->setLeftMargin(0);
+    standard->setTopMargin(0);
+    standard->setBottomMargin(0);
+    standard->setRightMargin(0);
+    standard->setTextIndent(0);
+    standard->setIndent(0);
+    standard->setAlignment(Qt::AlignLeft);
+    standard->setName( i18n("[No Paragraph Style]"));
+    add(standard);
+/* for testing ;)
+KoParagraphStyle *a = new KoParagraphStyle();
+a->setName("A");
+a->setParent(standard);
+a->setLeftMargin(40);
+add(a);
+KoParagraphStyle *b = new KoParagraphStyle();
+b->setName("B");
+b->setParent(standard);
+b->setRightMargin(400);
+add(b); */
 }
 
 void KoStyleManager::add(KoCharacterStyle *style) {
@@ -76,6 +87,7 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *style) {
     }
     if(! m_updateQueue.contains(id))
         m_updateQueue.append(id);
+    // TODO also update all inheriting styles
     requestFireUpdate();
 }
 
@@ -159,6 +171,6 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
 
 
 // static
-int KoStyleManager::s_stylesNumber = 1;
+int KoStyleManager::s_stylesNumber = 100;
 
 #include "KoStyleManager.moc"

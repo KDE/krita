@@ -22,6 +22,9 @@
 
 #include <QVector>
 #include <QTextDocument>
+#include <QTextCursor>
+#include <QTextBlock>
+#include <kdebug.h>
 
 ChangeFollower::ChangeFollower(QTextDocument *parent, KoStyleManager *manager)
     : QObject(parent),
@@ -43,6 +46,40 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles) {
         return;
     }
 
+    QTextCursor cursor (m_document);
+    QTextBlock block = cursor.block();
+    while(block.isValid()) {
+        QTextBlockFormat bf = block.blockFormat();
+        int id = bf.intProperty(KoParagraphStyle::StyleId);
+        if(id > 0 && changedStyles.contains(id)) {
+            cursor.setPosition( block.position() );
+            KoParagraphStyle *style = m_styleManager->paragraphStyle(id);
+            Q_ASSERT(style);
+
+            style->applyStyle(bf);
+            cursor.setBlockFormat(bf);
+        }
+        QTextBlock::iterator iter = block.begin();
+        while(! iter.atEnd()) {
+            QTextFragment fragment = iter.fragment();
+            QTextCharFormat cf = fragment.charFormat();
+            id = cf.intProperty(KoCharacterStyle::StyleId);
+            if(id > 0 && changedStyles.contains(id)) {
+                // create selection
+                cursor.setPosition(block.position() + fragment.position());
+                cursor.setPosition(block.position() + fragment.position() +
+                        fragment.length(), QTextCursor::KeepAnchor);
+                KoCharacterStyle *style = m_styleManager->characterStyle(id);
+                Q_ASSERT(style);
+
+                style->applyStyle(cf);
+                cursor.mergeCharFormat(cf);
+            }
+            iter++;
+        }
+        block = block.next();
+    }
+/*  I think we want to look at Qt to see if this _much_ faster way can ever work.
     foreach(QTextFormat format, m_document->allFormats()) {
         int id = format.intProperty(KoParagraphStyle::StyleId);
         if(id <= 0)
@@ -61,5 +98,5 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles) {
                 style->applyStyle(cf);
             }
         }
-    }
+    } */
 }

@@ -70,9 +70,9 @@ public:
 
     KoParagraphStyle *parent() const { return m_parent; }
 
-    void setNext(const KoParagraphStyle *next) { m_next = next; }
+    void setNextStyle(int next) { m_next = next; }
 
-    const KoParagraphStyle *next() const { return m_next; }
+    int nextStyle() const { return m_next; }
 
     const QString& name() const { return m_name; }
 
@@ -80,7 +80,7 @@ public:
 
     int styleId() const { return propertyInt(StyleId); }
 
-    void setStyleId(int id) { setProperty(StyleId, id); }
+    void setStyleId(int id) { setProperty(StyleId, id); if(m_next == 0) m_next=id; }
 
     void applyStyle(QTextBlockFormat &format) const;
 
@@ -88,13 +88,13 @@ private:
     void setProperty(int key, const QVariant &value);
     double propertyDouble(int key) const;
     int propertyInt(int key) const;
-    const QVariant *get(int key) const;
+    QVariant const *get(int key) const;
 
 private:
     QString m_name;
     KoCharacterStyle *m_charStyle;
     KoParagraphStyle *m_parent;
-    KoParagraphStyle const *m_next;
+    int m_next;
     StylePrivate *m_stylesPrivate;
 };
 

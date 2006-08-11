@@ -1,4 +1,2 @@
-
-
 add_subdirectory( crystalsvg )
 

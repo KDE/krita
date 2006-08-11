@@ -1,10 +1,4 @@
 
-
-
-
-
-########### install files ###############
-
 install( FILES  cmbx10.ttf cmex10.ttf cmmi10.ttf cmr10.ttf cmsy10.ttf msam10.ttf msbm10.ttf  DESTINATION ${DATA_INSTALL_DIR}/kformula/fonts)
 
 

@@ -19,7 +19,7 @@ kde4_automoc(${kstore_LIB_SRCS})
 
 kde4_add_library(kstore SHARED ${kstore_LIB_SRCS})
 
-target_link_libraries(kstore  ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} )
+target_link_libraries(kstore  ${KDE4_KIO_LIBS} )
 
 set_target_properties(kstore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kstore  DESTINATION ${LIB_INSTALL_DIR})
@@ -28,23 +28,3 @@ install(TARGETS kstore  DESTINATION ${LIB_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  KoStore.h KoStoreDevice.h KoXmlWriter.h  DESTINATION ${INCLUDE_INSTALL_DIR})
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#
-#SUBDIRS = . tests
-#
-#KDE_CXXFLAGS = $(USE_RTTI)
-#lib_LTLIBRARIES = libkstore.la
-#INCLUDES = $(all_includes)
-#
-######## Files
-#
-#libkstore_la_LIBADD = $(LIB_KIO)
-#libkstore_la_SOURCES = KoStore.cpp KoTarStore.cpp KoDirectoryStore.cpp KoZipStore.cpp KoStoreDrag.cpp KoStoreBase.cpp KoXmlWriter.cpp
-#libkstore_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 $(KDE_LDFLAGS) -no-undefined
-#include_HEADERS = KoStore.h KoStoreDevice.h KoXmlWriter.h

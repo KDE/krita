@@ -83,7 +83,7 @@ Test::Test()
 	keys.append(2);
 	keys.append(3);
 	Property::ListData *listData = new Property::ListData(keys, name_list);
-	m_set->addProperty(new Property("List2", listData, "otheritem", "List 2"), group);
+	m_set->addProperty(new Property("List2", listData, 3, "List 2"), group);
 
 //  Complex
 	if (!flat) {

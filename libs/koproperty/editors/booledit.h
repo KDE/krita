@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +23,8 @@
 #define KPROPERTY_BOOLEDIT_H
 
 #include "../widget.h"
-//Added by qt3to4:
+#include "combobox.h"
+#include <QPixmap>
 #include <QResizeEvent>
 #include <QEvent>
 
@@ -35,7 +37,7 @@ class KOPROPERTY_EXPORT BoolEdit : public Widget
 	Q_OBJECT
 
 	public:
-		BoolEdit(Property *property, QWidget *parent=0, const char *name=0);
+		BoolEdit(Property *property, QWidget *parent=0);
 		virtual ~BoolEdit();
 
 		virtual QVariant value() const;
@@ -53,7 +55,24 @@ class KOPROPERTY_EXPORT BoolEdit : public Widget
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 
 	private:
-		QToolButton   *m_toggle;
+		QToolButton *m_toggle;
+		QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
+};
+
+class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
+{
+	Q_OBJECT
+
+	public:
+		ThreeStateBoolEdit(Property *property, QWidget *parent=0);
+		virtual ~ThreeStateBoolEdit();
+
+		virtual QVariant value() const;
+		virtual void setValue(const QVariant &value, bool emitChange=true);
+
+		virtual void setProperty(Property *property);
+		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+		QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 };
 
 }

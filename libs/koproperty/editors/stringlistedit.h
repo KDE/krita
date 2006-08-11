@@ -35,7 +35,7 @@ class KOPROPERTY_EXPORT StringListEdit : public Widget
 	Q_OBJECT
 
 	public:
-		StringListEdit(Property *property, QWidget *parent=0, const char *name=0);
+		StringListEdit(Property *property, QWidget *parent=0);
 		virtual ~StringListEdit();
 
 		virtual QVariant value() const;

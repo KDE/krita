@@ -23,15 +23,9 @@
 #include <QMap>
 #include <QVariant>
 #include <QCursor>
-//Added by qt3to4:
-#include <Q3ValueList>
 
-#ifdef QT_ONLY
-// \tdo
-#else
 #include <klocale.h>
 #include <kdebug.h>
-#endif
 
 #include "property.h"
 
@@ -41,8 +35,8 @@ using namespace KoProperty;
 Property::ListData *m_cursorListData = 0;
 
 
-CursorEdit::CursorEdit(Property *property, QWidget *parent, const char *name)
-: ComboBox(property, parent, name)
+CursorEdit::CursorEdit(Property *property, QWidget *parent)
+: ComboBox(property, parent)
 {
 	/*
 	if(!m_spValues) {
@@ -67,7 +61,7 @@ CursorEdit::CursorEdit(Property *property, QWidget *parent, const char *name)
 
 //! @todo NOT THREAD-SAFE
 	if (!m_cursorListData) {
-		Q3ValueList<QVariant> keys;
+		QList<QVariant> keys;
 		keys 
 			<< Qt::BlankCursor
 			<< Qt::ArrowCursor

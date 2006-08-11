@@ -35,7 +35,7 @@ class KOPROPERTY_EXPORT FontEdit : public Widget
 	Q_OBJECT
 
 	public:
-		FontEdit(Property *property, QWidget *parent=0, const char *name=0);
+		FontEdit(Property *property, QWidget *parent=0);
 		virtual ~FontEdit();
 
 		virtual QVariant value() const;

@@ -32,7 +32,7 @@ class KOPROPERTY_EXPORT LineStyleEdit : public Widget
 	Q_OBJECT
 
 	public:
-		LineStyleEdit(Property *property, QWidget *parent=0, const char *name=0);
+		LineStyleEdit(Property *property, QWidget *parent=0);
 		virtual ~LineStyleEdit();
 
 		virtual QVariant value() const;

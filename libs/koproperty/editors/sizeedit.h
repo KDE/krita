@@ -34,7 +34,7 @@ class KOPROPERTY_EXPORT SizeEdit : public Widget
 	Q_OBJECT
 
 	public:
-		SizeEdit(Property *property, QWidget *parent=0, const char *name=0);
+		SizeEdit(Property *property, QWidget *parent=0);
 		virtual ~SizeEdit();
 
 		virtual QVariant value() const;

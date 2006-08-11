@@ -25,11 +25,10 @@
 #include "koproperty_global.h"
 #include <QObject>
 #include <q3asciidict.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QByteArray>
 #include <QStringList>
 #include <QMap>
+
 namespace KoProperty {
 
 class Property;
@@ -156,11 +155,11 @@ class KOPROPERTY_EXPORT Set : public QObject
 
 		/*! \return a list of all group names. The order is the same as the order 
 		 of creation. */
-		const Q3ValueList<QByteArray>& groupNames() const;
+		const QList<QByteArray>& groupNames() const;
 
 		/*! \return a list of all property names. The order is the same as the order 
 		 of creation. */
-		const Q3ValueList<QByteArray>& propertyNamesForGroup(const QByteArray &group) const;
+		const QList<QByteArray>& propertyNamesForGroup(const QByteArray &group) const;
 
 		/*! Used by property editor to preserve previous selection when this set 
 		 is assigned again. */

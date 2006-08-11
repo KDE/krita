@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT SymbolCombo : public Widget
 	Q_OBJECT
 
 	public:
-		SymbolCombo(Property *property, QWidget *parent=0, const char *name=0);
+		SymbolCombo(Property *property, QWidget *parent=0);
 		virtual ~SymbolCombo();
 
 		virtual QVariant value() const;

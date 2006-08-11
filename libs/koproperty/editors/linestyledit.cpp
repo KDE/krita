@@ -136,8 +136,8 @@ using namespace KoProperty;
     "................................................"};
 
 
-LineStyleEdit::LineStyleEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+LineStyleEdit::LineStyleEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setMargin(0);

@@ -29,23 +29,18 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#ifndef QT_ONLY
 #include <keditlistbox.h>
 #include <kdialog.h>
 #include <kstdguiitem.h>
 #include <klocale.h>
 #include <kdebug.h>
-#else
-#include "qeditlistbox.h"
-#include <compat_tools.h>
-#endif
 
 #include "property.h"
 
 using namespace KoProperty;
 
-StringListEdit::StringListEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+StringListEdit::StringListEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	setHasBorders(false);
 	QHBoxLayout *l = new QHBoxLayout(this);
@@ -96,50 +91,13 @@ StringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
 void
 StringListEdit::showEditor()
 {
-#ifdef QT_ONLY
-	QDialog* dia = new QDialog(this, "stringlist_dialog", true);
-	QVBoxLayout *dv = new QVBoxLayout(dia);
-	dv->setMargin(2);
-	dv->setSpacing(2);
-
-	QEditListBox *select = new QEditListBox(dia, "select_char");
-	dv->addWidget(select);
-
-	QHBoxLayout *dh = new QHBoxLayout(dv);
-	dh->setMargin(6);
-	dh->setSpacing(6);
-
-	QPushButton *pbOk = new QPushButton(i18n("Ok"), dia);
-	QPushButton *pbCancel = new QPushButton(i18n("Cancel"), dia);
-
-	QSpacerItem *si = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-	connect(pbOk, SIGNAL(clicked()), dia, SLOT(accept()));
-	connect(pbCancel, SIGNAL(clicked()), dia, SLOT(reject()));
-
-	dh->addItem(si);
-	dh->addWidget(pbOk);
-	dh->addWidget(pbCancel);
-
-	select->insertStringList(m_list);
-
-	if (dia->exec() == QDialog::Accepted) {
-		m_list = select->items();
-		m_edit->setText(select->items().join(", "));
-		emit valueChanged(this);
-	}
-	delete dia;
-
-#else
-
 	KDialog dialog(this->topLevelWidget() );
-
-    dialog.setCaption( i18n("Edit List of Items") );
-    dialog.setObjectName( "stringlist_dialog" );
-    dialog.setButtons( KDialog::Ok|KDialog::Cancel );
-    dialog.setDefaultButton( KDialog::Ok );
-    dialog.setModal( false );
-    dialog.showButtonSeparator( true );
+	dialog.setCaption( i18n("Edit List of Items") );
+	dialog.setObjectName( "stringlist_dialog" );
+	dialog.setButtons( KDialog::Ok|KDialog::Cancel );
+	dialog.setDefaultButton( KDialog::Ok );
+	dialog.setModal( false );
+	dialog.showButtonSeparator( true );
 	KEditListBox *edit = new KEditListBox(i18n("Contents of %1", property()->caption()), &dialog, "editlist");
 	dialog.setMainWidget(edit);
 	edit->insertStringList(m_list);
@@ -150,8 +108,6 @@ StringListEdit::showEditor()
 		m_edit->setText(m_list.join(", "));
 		emit valueChanged(this);
 	}
-
-#endif
 }
 
 void

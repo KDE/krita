@@ -33,8 +33,8 @@
 
 using namespace KoProperty;
 
-RectEdit::RectEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+RectEdit::RectEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	setHasBorders(false);
 	m_edit = new KActiveLabel(this);

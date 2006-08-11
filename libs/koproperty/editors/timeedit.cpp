@@ -29,17 +29,13 @@
 #include <QDateTime>
 #include <QHBoxLayout>
 
-#ifdef QT_ONLY
-// \todo
-#else
 #include <klocale.h>
 #include <kglobal.h>
-#endif
 
 using namespace KoProperty;
 
-TimeEdit::TimeEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+TimeEdit::TimeEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setMargin(0);
@@ -77,13 +73,8 @@ void
 TimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 //	p->eraseRect(r);
-#ifdef QT_ONLY
 	Widget::drawViewer(p, cg, r, value.toDate().toString(Qt::LocalDate));
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toDate().toString(Qt::LocalDate));
-#else
-	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatTime(value.toTime(), true /* include sec*/));
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, KGlobal::locale()->formatTime(value.toTime(), true /* include sec*/));
-#endif
 }
 
 void

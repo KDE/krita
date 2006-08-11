@@ -25,18 +25,16 @@
 #include <QVariant>
 #include <QHBoxLayout>
 
-#ifndef QT_ONLY
 #include <kcharselect.h>
 #include <klocale.h>
 #include <kdialog.h>
-#endif
 
 #include "symbolcombo.h"
 
 using namespace KoProperty;
 
-SymbolCombo::SymbolCombo(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+SymbolCombo::SymbolCombo(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	setHasBorders(false);
 	QHBoxLayout *l = new QHBoxLayout(this);
@@ -52,10 +50,6 @@ SymbolCombo::SymbolCombo(Property *property, QWidget *parent, const char *name)
 	m_select->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
 	m_select->setMinimumHeight(5);
 	l->addWidget(m_select);
-
-#ifdef QT_ONLY
-	m_select->hide();
-#endif
 
 	connect(m_select, SIGNAL(clicked()), this, SLOT(selectChar()));
 	connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
@@ -101,15 +95,13 @@ SymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, cons
 void
 SymbolCombo::selectChar()
 {
-#ifndef QT_ONLY
 	KDialog dialog(this->topLevelWidget() );
-
-    dialog.setCaption( i18n("Select Char") );
-    dialog.setObjectName( "charselect_dialog" );
-    dialog.setButtons( KDialog::Ok|KDialog::Cancel );
-    dialog.setDefaultButton( KDialog::Ok );
-    dialog.setModal( false );
-    dialog.showButtonSeparator( true );
+	dialog.setCaption( i18n("Select Char") );
+	dialog.setObjectName( "charselect_dialog" );
+	dialog.setButtons( KDialog::Ok|KDialog::Cancel );
+	dialog.setDefaultButton( KDialog::Ok );
+	dialog.setModal( false );
+	dialog.showButtonSeparator( true );
 
 	KCharSelect *select = new KCharSelect(&dialog, "select_char");
 	dialog.setMainWidget(select);
@@ -119,7 +111,6 @@ SymbolCombo::selectChar()
 
 	if (dialog.exec() == QDialog::Accepted)
 		m_edit->setText(select->chr());
-#endif
 }
 
 void

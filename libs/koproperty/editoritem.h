@@ -23,12 +23,7 @@
 #define KPROPERTY_PROPERTYEDITORITEM_H
 
 #include "koproperty_global.h"
-#ifdef QT_ONLY
-#include <q3listview.h>
-#else
 #include <k3listview.h>
-//#define K3ListViewItem QListViewItem
-#endif
 
 #define KPROPEDITOR_ITEM_MARGIN 2
 #define KPROPEDITOR_ITEM_BORDER_COLOR QColor(200,200,200) //! \todo custom color?

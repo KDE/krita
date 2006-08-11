@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,27 +20,25 @@
 */
 
 #include "booledit.h"
+#include "property.h"
 
-#ifndef QT_ONLY
 #include <kiconloader.h>
 #include <klocale.h>
-#endif
+#include <kcombobox.h>
+#include <kdebug.h>
 
 #include <QToolButton>
 #include <QPainter>
 #include <QVariant>
 #include <QLayout>
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <QKeyEvent>
-#include <QEvent>
-
-#include <kdebug.h>
+#include <QBitmap>
 
 using namespace KoProperty;
 
-BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+BoolEdit::BoolEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
+ , m_yesIcon( SmallIcon("button_ok") )
+ , m_noIcon( SmallIcon("button_no") )
 {
     m_toggle = new QToolButton(this);
     m_toggle->setFocusPolicy(Qt::WheelFocus);
@@ -49,7 +48,6 @@ BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
     //we're not using layout to because of problems with button size
     m_toggle->move(0, 0);
     m_toggle->resize(width(), height());
-//    m_toggle->show();
 
     setFocusWidget(m_toggle);
     connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
@@ -83,21 +81,31 @@ BoolEdit::slotValueChanged(bool state)
     emit valueChanged(this);
 }
 
-void
-BoolEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVariant &value)
+static void drawViewerInternal(QPainter *p, const QRect &r, const QVariant &value,
+ const QPixmap& yesIcon, const QPixmap& noIcon, const QString& nullText)
 {
     p->eraseRect(r);
     QRect r2(r);
     r2.moveLeft(K3Icon::SizeSmall + 6);
 
-    if(value.toBool()) {
-        p->drawPixmap(3, (r.height()-1-K3Icon::SizeSmall)/2, SmallIcon("button_ok"));
+    if(value.isNull() && !nullText.isEmpty()) {
+        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, nullText);
+    }
+    else if(value.toBool()) {
+        p->drawPixmap(3, (r.height()-1-K3Icon::SizeSmall)/2, yesIcon);
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("Yes"));
     }
-    else  {
-        p->drawPixmap(3, (r.height()-1-K3Icon::SizeSmall)/2, SmallIcon("button_no"));
+    else {
+        p->drawPixmap(3, (r.height()-1-K3Icon::SizeSmall)/2, noIcon);
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("No"));
     }
+}
+
+void
+BoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+{
+    Q_UNUSED(cg);
+    drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, "");
 }
 
 void
@@ -126,7 +134,8 @@ BoolEdit::eventFilter(QObject* watched, QEvent* e)
 {
     if(e->type() == QEvent::KeyPress) {
         QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-        if(ev->key() == Qt::Key_Space) {
+        const int k = ev->key();
+        if(k == Qt::Key_Space || k == Qt::Key_Enter || k == Qt::Key_Return) {
             if (m_toggle)
                 m_toggle->toggle();
             return true;
@@ -139,6 +148,68 @@ void
 BoolEdit::setReadOnlyInternal(bool readOnly)
 {
 	setVisibleFlag(!readOnly);
+}
+
+//--------------------------------------------------
+
+ThreeStateBoolEdit::ThreeStateBoolEdit(Property *property, QWidget *parent)
+ : ComboBox(property, parent)
+ , m_yesIcon( SmallIcon("button_ok") )
+ , m_noIcon( SmallIcon("button_no") )
+{
+	m_edit->addItem( m_yesIcon, i18n("Yes") );
+	m_edit->addItem( m_noIcon, i18n("No") );
+	QVariant thirdState = property ? property->option("3rdState") : QVariant();
+	QPixmap nullIcon( m_yesIcon.size() ); //transparent pixmap of appropriate size
+	nullIcon.fill( Qt::transparent );
+	m_edit->addItem( nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString() );
+}
+
+ThreeStateBoolEdit::~ThreeStateBoolEdit()
+{
+}
+
+QVariant
+ThreeStateBoolEdit::value() const
+{
+	// list items: true, false, NULL
+	const int idx = m_edit->currentIndex();
+	if (idx==0)
+		return QVariant(true);
+	else
+		return idx==1 ? QVariant(false) : QVariant();
+}
+
+void
+ThreeStateBoolEdit::setProperty(Property *prop)
+{
+	m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
+	Widget::setProperty(prop);
+	m_setValueEnabled = true;
+	if(prop)
+		setValue(prop->value(), false); //now the value can be set
+}
+
+void
+ThreeStateBoolEdit::setValue(const QVariant &value, bool emitChange)
+{
+	if (!m_setValueEnabled)
+		return;
+
+	if (value.isNull())
+		m_edit->setCurrentIndex(2);
+	else
+		m_edit->setCurrentIndex(value.toBool() ? 0 : 1);
+
+	if (emitChange)
+		emit valueChanged(this);
+}
+
+void
+ThreeStateBoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+{
+	Q_UNUSED(cg);
+	drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, m_edit->itemText(2));
 }
 
 #include "booledit.moc"

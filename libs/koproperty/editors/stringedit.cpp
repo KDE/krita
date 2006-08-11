@@ -27,8 +27,8 @@
 
 using namespace KoProperty;
 
-StringEdit::StringEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+StringEdit::StringEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setMargin(0);

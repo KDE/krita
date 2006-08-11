@@ -25,10 +25,6 @@
 #include "koproperty_global.h"
 #include <kstaticdeleter.h>
 #include <QObject>
-//Added by qt3to4:
-#include <Q3ValueList>
-
-template<class U> class Q3ValueList;
 
 namespace KoProperty {
 
@@ -127,7 +123,7 @@ class KOPROPERTY_EXPORT FactoryManager : public QObject
 
 		/*! Registers custom factory \a factory for handling property editors for \a editorTypes.
 		 @see registerFactoryForEditor(). */
-		void registerFactoryForEditors(const Q3ValueList<int> &editorTypes, CustomPropertyFactory *factory);
+		void registerFactoryForEditors(const QList<int> &editorTypes, CustomPropertyFactory *factory);
 
 		/*! \return custom factory for type \a type or NULL if there
 		 is no such property type registered.
@@ -146,7 +142,7 @@ class KOPROPERTY_EXPORT FactoryManager : public QObject
 
 		/*! Registers a custom property factory that handles a CustomProperty for \a types.
 		 @see registerFactoryForProperty() */
-		void registerFactoryForProperties(const Q3ValueList<int> &propertyTypes,
+		void registerFactoryForProperties(const QList<int> &propertyTypes,
 			CustomPropertyFactory *factory);
 
 		/*! This function is called in Property::Property() to create (optional)

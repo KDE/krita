@@ -21,7 +21,6 @@
 #include "factory.h"
 #include "property.h"
 #include "customproperty.h"
-
 #include "booledit.h"
 #include "combobox.h"
 #include "coloredit.h"
@@ -43,13 +42,9 @@
 #include "timeedit.h"
 #include "urledit.h"
 
-#include <q3valuelist.h>
-#include <q3intdict.h>
-
-#ifdef QT_ONLY
-#else
 #include <kdebug.h>
-#endif
+
+#include <QHash>
 
 static KStaticDeleter<KoProperty::FactoryManager> m_managerDeleter;
 static KoProperty::FactoryManager* m_manager = 0;
@@ -74,16 +69,17 @@ class FactoryManagerPrivate
 		~FactoryManagerPrivate() {}
 
 		//registered widgets for property types
-		Q3IntDict<CustomPropertyFactory> registeredWidgets;
-		Q3IntDict<CustomPropertyFactory> registeredCustomProperties;
+		QHash<int, CustomPropertyFactory*> registeredWidgets;
+		QHash<int, CustomPropertyFactory*> registeredCustomProperties;
 };
 }
 
 using namespace KoProperty;
 
 FactoryManager::FactoryManager()
-: QObject(0, "KoProperty::FactoryManager")
+: QObject(0)
 {
+	setObjectName("KoProperty::FactoryManager");
 	d = new FactoryManagerPrivate();
 }
 
@@ -107,24 +103,24 @@ FactoryManager::registerFactoryForEditor(int editorType, CustomPropertyFactory *
 {
 	if(!widgetFactory)
 		return;
-	if(d->registeredWidgets.find(editorType))
+	if(d->registeredWidgets.contains(editorType))
 		kopropertywarn << "FactoryManager::registerFactoryForEditor(): "
 		"Overriding already registered custom widget type \"" << editorType << "\"" << endl;
-	d->registeredWidgets.replace(editorType, widgetFactory);
+	d->registeredWidgets.insert(editorType, widgetFactory);
 }
 
 void
-FactoryManager::registerFactoryForEditors(const Q3ValueList<int> &editorTypes, CustomPropertyFactory *factory)
+FactoryManager::registerFactoryForEditors(const QList<int> &editorTypes, CustomPropertyFactory *factory)
 {
-	Q3ValueList<int>::ConstIterator endIt = editorTypes.constEnd();
-	for(Q3ValueList<int>::ConstIterator it = editorTypes.constBegin(); it != endIt; ++it)
+	QList<int>::ConstIterator endIt = editorTypes.constEnd();
+	for(QList<int>::ConstIterator it = editorTypes.constBegin(); it != endIt; ++it)
 		registerFactoryForEditor(*it, factory);
 }
 
 CustomPropertyFactory *
 FactoryManager::factoryForEditorType(int type)
 {
-	return d->registeredWidgets.find(type);
+	return d->registeredWidgets[type];
 }
 
 Widget*
@@ -135,7 +131,7 @@ FactoryManager::createWidgetForProperty(Property *property)
 
 	const int type = property->type();
 
-	CustomPropertyFactory *factory = d->registeredWidgets.find(type);
+	CustomPropertyFactory *factory = d->registeredWidgets[type];
 	if (factory)
 		return factory->createCustomWidget(property);
 
@@ -168,8 +164,14 @@ FactoryManager::createWidgetForProperty(Property *property)
 			return new IntEdit(property);
 		case Double:
 			return new DoubleEdit(property);
-		case Boolean:
-			return new BoolEdit(property);
+		case Boolean: {
+			//boolean editors can optionally accept 3rd state:
+			QVariant thirdState = property ? property->option("3rdState") : QVariant();
+			if (thirdState.toString().isEmpty())
+				return new BoolEdit(property);
+			else
+				return new ThreeStateBoolEdit(property);
+		}
 		case Date:
 			return new DateEdit(property);
 		case Time:
@@ -221,19 +223,20 @@ FactoryManager::registerFactoryForProperty(int propertyType, CustomPropertyFacto
 {
 	if(!factory)
 		return;
-	if(d->registeredCustomProperties.find(propertyType))
+	if(d->registeredCustomProperties.contains(propertyType))
 		kopropertywarn << "FactoryManager::registerFactoryForProperty(): "
 		"Overriding already registered custom property type \"" << propertyType << "\"" << endl;
-
-	d->registeredCustomProperties.replace(propertyType, factory);
+	
+	delete d->registeredCustomProperties[ propertyType ];
+	d->registeredCustomProperties.insert(propertyType, factory);
 }
 
 void
-FactoryManager::registerFactoryForProperties(const Q3ValueList<int> &propertyTypes, 
+FactoryManager::registerFactoryForProperties(const QList<int> &propertyTypes, 
 	CustomPropertyFactory *factory)
 {
-	Q3ValueList<int>::ConstIterator endIt = propertyTypes.constEnd();
-	for(Q3ValueList<int>::ConstIterator it = propertyTypes.constBegin(); it != endIt; ++it)
+	QList<int>::ConstIterator endIt = propertyTypes.constEnd();
+	for(QList<int>::ConstIterator it = propertyTypes.constBegin(); it != endIt; ++it)
 		registerFactoryForProperty(*it, factory);
 }
 
@@ -241,7 +244,7 @@ CustomProperty*
 FactoryManager::createCustomProperty(Property *parent)
 {
 	const int type = parent->type();
-	CustomPropertyFactory *factory = d->registeredWidgets.find(type);
+	CustomPropertyFactory *factory = d->registeredWidgets[type];
 	if (factory)
 		return factory->createCustomProperty(parent);
 

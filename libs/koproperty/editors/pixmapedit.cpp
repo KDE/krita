@@ -59,8 +59,8 @@
 
 using namespace KoProperty;
 
-PixmapEdit::PixmapEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+PixmapEdit::PixmapEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	setHasBorders(false);
 

@@ -40,7 +40,7 @@ class IntSpinBox : public KIntSpinBox
 
 	public:
 		IntSpinBox(int lower, int upper, int step, int value, int base=10,
-			IntEdit *parent=0, const char *name=0);
+			IntEdit *parent=0);
 		virtual ~IntSpinBox() {;}
 
 		virtual bool eventFilter(QObject *o, QEvent *e);
@@ -52,7 +52,7 @@ class KOPROPERTY_EXPORT IntEdit : public Widget
 	Q_OBJECT
 
 	public:
-		IntEdit(Property *property, QWidget *parent=0, const char *name=0);
+		IntEdit(Property *property, QWidget *parent=0);
 		virtual ~IntEdit();
 
 		virtual QVariant value() const;
@@ -94,7 +94,7 @@ class KOPROPERTY_EXPORT DoubleEdit : public Widget
 	Q_OBJECT
 
 	public:
-		DoubleEdit(Property *property, QWidget *parent=0, const char *name=0);
+		DoubleEdit(Property *property, QWidget *parent=0);
 		virtual ~DoubleEdit();
 
 		virtual QVariant value() const;

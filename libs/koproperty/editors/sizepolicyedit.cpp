@@ -28,18 +28,14 @@
 #include <QMap>
 #include <QToolTip>
 
-#ifdef QT_ONLY
-// \todo
-#else
 #include <klocale.h>
-#endif
 
 using namespace KoProperty;
 
 QMap<QString, QVariant> *SizePolicyEdit::m_spValues = 0;
 
-SizePolicyEdit::SizePolicyEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+SizePolicyEdit::SizePolicyEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	setHasBorders(false);
 //	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);

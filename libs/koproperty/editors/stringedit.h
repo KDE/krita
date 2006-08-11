@@ -32,7 +32,7 @@ class KOPROPERTY_EXPORT StringEdit : public Widget
 	Q_OBJECT
 
 	public:
-		StringEdit(Property *property, QWidget *parent=0, const char *name=0);
+		StringEdit(Property *property, QWidget *parent=0);
 		virtual ~StringEdit();
 
 		virtual QVariant value() const;

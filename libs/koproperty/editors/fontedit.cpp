@@ -38,12 +38,7 @@
 #include <kdeversion.h>
 #include <kfontrequester.h>
 #include <kacceleratormanager.h>
-
-#ifdef QT_ONLY
-//! \todo
-#else
 #include <klocale.h>
-#endif
 
 //! @internal
 //! reimplemented to better button and label's positioning
@@ -83,8 +78,8 @@ class FontEditRequester : public KFontRequester
 
 using namespace KoProperty;
 
-FontEdit::FontEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+FontEdit::FontEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	m_edit = new FontEditRequester(this);
 	m_edit->setMinimumHeight(5);

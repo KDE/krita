@@ -38,7 +38,7 @@ class KOPROPERTY_EXPORT SizePolicyEdit : public Widget
 	Q_OBJECT
 
 	public:
-		SizePolicyEdit(Property *property, QWidget *parent=0, const char *name=0);
+		SizePolicyEdit(Property *property, QWidget *parent=0);
 		virtual ~SizePolicyEdit();
 
 		virtual QVariant value() const;

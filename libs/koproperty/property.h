@@ -23,8 +23,6 @@
 #define KPROPERTY_PROPERTY_H
 
 #include <QVariant>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QStringList>
 #include <QByteArray>
 #include "koproperty_global.h"
@@ -71,7 +69,7 @@ enum PropertyType {
 	Auto = QVariant::Invalid - 1,
 	Invalid = QVariant::Invalid   /**<invalid property type*/,
 	Map = QVariant::Map           /**<QMap<QString, QVariant>*/,
-	List = QVariant::List         /**<Q3ValueList<QVariant>*/,
+	List = QVariant::List         /**<QList<QVariant>*/,
 	String = QVariant::String     /**<string*/,
 	StringList = QVariant::StringList  /**<string list*/,
 	Font = QVariant::Font         /**<font*/,
@@ -189,7 +187,7 @@ class KOPROPERTY_EXPORT Property
 			/*! Data container for list-value property.
 			 We will be able to choose an item from this list. */
 			ListData(const QStringList& keys_, const QStringList& names_);
-			ListData(const Q3ValueList<QVariant> keys_, const QStringList& names_);
+			ListData(const QList<QVariant> keys_, const QStringList& names_);
 			ListData();
 			~ListData();
 
@@ -200,7 +198,7 @@ class KOPROPERTY_EXPORT Property
 			 or NULL if this is not a property of type 'list'. The values in this list are ordered,
 			 so the first key element is associated with first element from
 			 the 'names' list, and so on. */
-			Q3ValueList<QVariant> keys;
+			QList<QVariant> keys;
 //			QStringList keys;
 
 //! @todo what about using QValueList<QVariant> here too?
@@ -308,7 +306,7 @@ class KOPROPERTY_EXPORT Property
 
 		/*! \return a list of all children for this property, or NULL of there
 		 is no children for this property */
-		const Q3ValueList<Property*>*  children() const;
+		const QList<Property*>*  children() const;
 
 		/*! \return a child property for \a name, or NULL if there is no property with that name. */
 		Property* child(const QByteArray &name);
@@ -414,7 +412,7 @@ class KOPROPERTY_EXPORT Property
 		void setSortingKey(int key);
 
 		/*! \return a list of related properties for this property. */
-		const Q3ValueList<Property*>* related() const;
+		const QList<Property*>* related() const;
 
 		/*! Adds related property for this property. */
 		void addRelatedProperty(Property *property);

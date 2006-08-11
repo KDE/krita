@@ -34,7 +34,7 @@ class KOPROPERTY_EXPORT RectEdit : public Widget
 	Q_OBJECT
 
 	public:
-		RectEdit(Property *property, QWidget *parent=0, const char *name=0);
+		RectEdit(Property *property, QWidget *parent=0);
 		virtual ~RectEdit();
 
 		virtual QVariant value() const;

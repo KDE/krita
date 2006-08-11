@@ -26,16 +26,8 @@
 #include <QPainter>
 #include <QVariant>
 
-#ifdef QT_ONLY
-#include <q3listview.h>
-//Added by qt3to4:
-#include <QKeyEvent>
-#include <QResizeEvent>
-#include <QEvent>
-#else
 #include <k3listview.h>
 #include <kdebug.h>
-#endif
 
 using namespace KoProperty;
 
@@ -63,8 +55,8 @@ class WidgetPrivate
 };
 }
 
-Widget::Widget(Property *property, QWidget *parent, const char *name)
- : QWidget(parent, name)
+Widget::Widget(Property *property, QWidget *parent)
+ : QWidget(parent)
 {
 	d = new WidgetPrivate();
 	d->property = property;

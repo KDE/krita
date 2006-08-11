@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT DateTimeEdit : public Widget
 	Q_OBJECT
 
 	public:
-		DateTimeEdit(Property *property, QWidget *parent=0, const char *name=0);
+		DateTimeEdit(Property *property, QWidget *parent=0);
 		virtual ~DateTimeEdit();
 
 		virtual QVariant value() const;

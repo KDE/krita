@@ -40,18 +40,14 @@
 #include <QByteArray>
 #include <QEvent>
 #include <QKeyEvent>
-#include <Q3ValueList>
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-#ifdef QT_ONLY
-#else
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kapplication.h>
-#endif
 
 namespace KoProperty {
 
@@ -208,22 +204,24 @@ Editor::fill()
 
 	d->topItem = new EditorDummyItem(this);
 
-	const Q3ValueList<QByteArray> groupNames = d->set->groupNames();
+	const QList<QByteArray> groupNames = d->set->groupNames();
 //	kopropertydbg << "Editor::fill(): group names = " << groupNames.count() << endl;
 	if(groupNames.count() == 1) { // one group (default one), so don't show groups
 		//add flat set of properties
-		const Q3ValueList<QByteArray>& propertyNames = d->set->propertyNamesForGroup( groupNames.first() );
-		Q3ValueListConstIterator<QByteArray> it = propertyNames.constBegin();
-		for( ; it != propertyNames.constEnd(); ++it)
+		const QList<QByteArray>& propertyNames = d->set->propertyNamesForGroup( groupNames.first() );
+		for (QList<QByteArray>::ConstIterator it = propertyNames.constBegin();
+			it != propertyNames.constEnd(); ++it)
+		{
 			addItem(*it, d->topItem);
+		}
 	}
 	else { // create a groupItem for each group
 		EditorGroupItem *prevGroupItem = 0;
 		int sortOrder = 0;
-		for (Q3ValueListConstIterator<QByteArray> it = groupNames.constBegin(); it!=groupNames.constEnd(); 
+		for (QList<QByteArray>::ConstIterator it = groupNames.constBegin(); it!=groupNames.constEnd(); 
 			++it, sortOrder++) 
 		{
-			const Q3ValueList<QByteArray>& propertyNames = d->set->propertyNamesForGroup(*it);
+			const QList<QByteArray>& propertyNames = d->set->propertyNamesForGroup(*it);
 			EditorGroupItem *groupItem;
 			if (prevGroupItem)
 				groupItem = new EditorGroupItem(d->topItem, prevGroupItem, 
@@ -232,7 +230,7 @@ Editor::fill()
 				groupItem = new EditorGroupItem(d->topItem, 
 					d->set->groupDescription(*it), d->set->groupIcon(*it), sortOrder );
 
-			Q3ValueList<QByteArray>::ConstIterator it2 = propertyNames.constBegin();
+			QList<QByteArray>::ConstIterator it2 = propertyNames.constBegin();
 			for( ; it2 != propertyNames.constEnd(); ++it2)
 				addItem(*it2, groupItem);
 
@@ -282,8 +280,8 @@ Editor::addItem(const QByteArray &name, EditorItem *parent)
 		return;
 
 	last = 0;
-	Q3ValueList<Property*>::ConstIterator endIt = property->children()->constEnd();
-	for(Q3ValueList<Property*>::ConstIterator it = property->children()->constBegin(); it != endIt; ++it) {
+	QList<Property*>::ConstIterator endIt = property->children()->constEnd();
+	for(QList<Property*>::ConstIterator it = property->children()->constBegin(); it != endIt; ++it) {
 		//! \todo allow to have child prop with child items too
 		if( *it && (*it)->isVisible() )
 			last = new EditorItem(this, item, *it, last);

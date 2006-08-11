@@ -24,16 +24,12 @@
 #include "set.h"
 #include "factory.h"
 
-#ifndef QT_ONLY
 #include <kdebug.h>
-#endif
 
 #include <QObject>
 #include <q3ptrdict.h>
 #include <q3asciidict.h>
 #include <QPointer>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QByteArray>
 #include <QStringList>
 namespace KoProperty {
@@ -104,9 +100,9 @@ class PropertyPrivate
 //	QValueList<Set*>  sets;
 
 	Property  *parent;
-	Q3ValueList<Property*>  *children;
+	QList<Property*>  *children;
 	//! list of properties with the same name (when intersecting buffers)
-	Q3ValueList<Property*>  *relatedProperties;
+	QList<Property*>  *relatedProperties;
 
 	int sortingKey;
 };
@@ -123,7 +119,7 @@ Property::ListData::ListData(const QStringList& keys_, const QStringList& names_
 	setKeysAsStringList(keys_);
 }
 
-Property::ListData::ListData(const Q3ValueList<QVariant> keys_, const QStringList& names_)
+Property::ListData::ListData(const QList<QVariant> keys_, const QStringList& names_)
  : keys(keys_), names(names_)
 // , fixed(true)
 {
@@ -149,7 +145,7 @@ void Property::ListData::setKeysAsStringList(const QStringList& list)
 QStringList Property::ListData::keysAsStringList() const
 {
 	QStringList result;
-	for (Q3ValueList<QVariant>::ConstIterator it = keys.constBegin(); it!=keys.constEnd(); ++it) {
+	for (QList<QVariant>::ConstIterator it = keys.constBegin(); it!=keys.constEnd(); ++it) {
 		result.append((*it).toString());
 	}
 	return result;
@@ -596,9 +592,9 @@ Property::operator= (const Property &property)
 		d->value = property.d->value;
 		if(property.d->children) {
 			// no CustomProperty (should never happen), simply copy all children
-			d->children = new Q3ValueList<Property*>();
-			Q3ValueList<Property*>::ConstIterator endIt = property.d->children->constEnd();
-			for(Q3ValueList<Property*>::ConstIterator it = property.d->children->constBegin(); it != endIt; ++it) {
+			d->children = new QList<Property*>();
+			QList<Property*>::ConstIterator endIt = property.d->children->constEnd();
+			for(QList<Property*>::ConstIterator it = property.d->children->constBegin(); it != endIt; ++it) {
 				Property *child = new Property( *(*it) );
 				addChild(child);
 			}
@@ -606,7 +602,7 @@ Property::operator= (const Property &property)
 	}
 
 	if(property.d->relatedProperties) {
-		d->relatedProperties = new Q3ValueList<Property*>( *(property.d->relatedProperties));
+		d->relatedProperties = new QList<Property*>( *(property.d->relatedProperties));
 	}
 
 	// update these later because they may have been changed when creating children
@@ -625,7 +621,7 @@ Property::operator ==(const Property &prop) const
 
 /////////////////////////////////////////////////////////////////
 
-const Q3ValueList<Property*>*
+const QList<Property*>*
 Property::children() const
 {
 	return d->children;
@@ -634,8 +630,8 @@ Property::children() const
 Property*
 Property::child(const QByteArray &name)
 {
-	Q3ValueList<Property*>::ConstIterator endIt = d->children->constEnd();
-	for(Q3ValueList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
+	QList<Property*>::ConstIterator endIt = d->children->constEnd();
+	for(QList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
 		if((*it)->name() == name)
 			return *it;
 	}
@@ -656,7 +652,7 @@ Property::addChild(Property *prop)
 
 	if(!d->children || qFind( d->children->begin(), d->children->end(), prop) == d->children->end()) { // not in our list
 		if(!d->children)
-			d->children = new Q3ValueList<Property*>();
+			d->children = new QList<Property*>();
 		d->children->append(prop);
 		prop->setSortingKey(d->children->count());
 		prop->d->parent = this;
@@ -695,7 +691,7 @@ Property::addSet(Set *set)
 //		d->sets.append(set);
 }
 
-const Q3ValueList<Property*>*
+const QList<Property*>*
 Property::related() const
 {
 	return d->relatedProperties;
@@ -705,9 +701,9 @@ void
 Property::addRelatedProperty(Property *property)
 {
 	if(!d->relatedProperties)
-		d->relatedProperties = new Q3ValueList<Property*>();
+		d->relatedProperties = new QList<Property*>();
 
-	Q3ValueList<Property*>::iterator it = qFind( d->relatedProperties->begin(), d->relatedProperties->end(), property);
+	QList<Property*>::iterator it = qFind( d->relatedProperties->begin(), d->relatedProperties->end(), property);
 	if(it == d->relatedProperties->end()) // not in our list
 		d->relatedProperties->append(property);
 }

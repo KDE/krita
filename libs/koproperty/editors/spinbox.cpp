@@ -28,22 +28,16 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QLineEdit>
 
 #include <kglobal.h>
 #include <klocale.h>
 
-#ifdef QT_ONLY
-//! \todo
-#else
-#include <QLineEdit>
-#endif
-
 using namespace KoProperty;
 
-IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntEdit *parent, const char *name)
+IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntEdit *parent)
 : KIntSpinBox(lower, upper, step, value, parent, base)
 {
-	setObjectName(name);
 	lineEdit()->setAlignment(Qt::AlignLeft);
 	installEventFilter(lineEdit());
 	installEventFilter(this);
@@ -86,8 +80,8 @@ IntSpinBox::eventFilter(QObject *o, QEvent *e)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-IntEdit::IntEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+IntEdit::IntEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	QVariant minVal( property ? property->option("min") : 0 );
 	QVariant maxVal( property ? property->option("max") : QVariant() );
@@ -233,8 +227,8 @@ void DoubleSpinBox::setValue ( double value )
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DoubleEdit::DoubleEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+DoubleEdit::DoubleEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	QVariant minVal( property ? property->option("min") : 0 );
 	QVariant maxVal( property ? property->option("max") : QVariant() );

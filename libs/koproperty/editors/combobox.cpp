@@ -25,29 +25,21 @@
 #include <QPainter>
 #include <QHBoxLayout>
 
-#ifdef QT_ONLY
-#iinclude <qcombobox.h>
-#else
 #include <kcombobox.h>
 #include <kdebug.h>
-#endif
 
 #include "property.h"
 
 using namespace KoProperty;
 
-ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+ComboBox::ComboBox(Property *property, QWidget *parent)
+ : Widget(property, parent)
  , m_setValueEnabled(true)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setMargin(0);
 	l->setSpacing(0);
-#ifdef QT_ONLY
-	m_edit = new QComboBox(this);
-#else
 	m_edit = new KComboBox(this);
-#endif
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);
@@ -56,9 +48,7 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
 	m_edit->setInsertPolicy(QComboBox::NoInsert);
 	m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
 	m_edit->setAutoCompletion(true);
-#ifndef QT_ONLY
 	m_edit->setContextMenuEnabled(false);
-#endif
 
 	if (this->property()->listData()) {
 		fillBox();
@@ -98,7 +88,8 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 	}
 	if (!m_setValueEnabled)
 		return;
-	int idx = property()->listData()->keys.findIndex( value );
+	int idx = property()->listData()->keys.indexOf( value.toString() );
+	kDebug() << "********** " <<idx << " " <<value.toString()<<endl;
 	if (idx>=0 && idx<m_edit->count()) {
 		m_edit->setCurrentIndex(idx);
 	}
@@ -133,7 +124,7 @@ ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 {
 	QString txt;
 	if (property()->listData()) {
-		const int idx = property()->listData()->keys.findIndex( value );
+		const int idx = property()->listData()->keys.indexOf( value );
 		if (idx>=0)
 			txt = property()->listData()->names[ idx ];
 	}
@@ -157,11 +148,9 @@ ComboBox::fillBox()
 	}
 
 	m_edit->insertItems(0, property()->listData()->names);
-#ifndef QT_ONLY
 	KCompletion *comp = m_edit->completionObject();
 	comp->insertItems(property()->listData()->names);
 	comp->setCompletionMode(KGlobalSettings::CompletionShell);
-#endif
 }
 
 void

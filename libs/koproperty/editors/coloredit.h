@@ -25,11 +25,7 @@
 //Added by qt3to4:
 #include <QEvent>
 
-#ifdef QT_ONLY
-class QPushButton;
-#else
 class KColorCombo;
-#endif
 
 namespace KoProperty {
 
@@ -38,7 +34,7 @@ class KOPROPERTY_EXPORT ColorButton : public Widget
 	Q_OBJECT
 
 	public:
-		ColorButton(Property *property, QWidget *parent=0, const char *name=0);
+		ColorButton(Property *property, QWidget *parent=0);
 		virtual ~ColorButton();
 
 		virtual QVariant value() const;
@@ -52,15 +48,9 @@ class KOPROPERTY_EXPORT ColorButton : public Widget
 
 	protected slots:
 		void  slotValueChanged(int index);
-		void  selectColor();
 
 	private:
-#ifdef QT_ONLY
-		QPushButton  *m_edit;
-		QVariant  m_color;
-#else
 		KColorCombo  *m_edit;
-#endif
 };
 
 }

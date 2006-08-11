@@ -24,15 +24,9 @@
 #include <QRect>
 #include <QSizePolicy>
 #include <QPoint>
-//Added by qt3to4:
-#include <Q3ValueList>
 
-#ifdef QT_ONLY
-// \todo
-#else
 #include <klocale.h>
 #include <kdebug.h>
-#endif
 
 using namespace KoProperty;
 

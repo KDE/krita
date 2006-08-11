@@ -34,8 +34,8 @@
 
 using namespace KoProperty;
 
-PointEdit::PointEdit(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+PointEdit::PointEdit(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {
 	setHasBorders(false);
 	m_edit = new KActiveLabel(this);

@@ -31,12 +31,7 @@
 #include <QByteArray>
 #include "koproperty_global.h"
 
-#ifdef QT_ONLY
-#include <q3listview.h>
-#else
 #include <k3listview.h>
-//#define QListView K3ListView
-#endif
 
 class QSize;
 

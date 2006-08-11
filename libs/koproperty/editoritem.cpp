@@ -36,12 +36,9 @@
 #include <QApplication>
 #include <qlayout.h>
 
-#ifdef QT_ONLY
-#else
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kstyle.h>
-#endif
 
 #define BRANCHBOX_SIZE 9
 
@@ -337,11 +334,7 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 		p->setFont(font);
 		p->setBrush(cg.highlight());
 		p->setPen(cg.highlightedText());
-#ifdef QT_ONLY
-		Q3ListViewItem::paintCell(p, cg, column, width, align);
-#else
 		K3ListViewItem::paintCell(p, cg, column, width, align);
-#endif
 		p->fillRect(parent() ? 0 : 50, 0, width, height()-1,
 			QBrush(isSelected() ? cg.highlight() : backgroundColor()));
 		p->setPen(isSelected() ? cg.highlightedText() : cg.text());
@@ -373,12 +366,8 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 	else if(column == 1)
 	{
 		QColorGroup icg(cg);
-#ifdef QT_ONLY
-		icg.setColor(QColorGroup::Background, cg.base());
-#else
 		icg.setColor(QColorGroup::Background, backgroundColor());
 		p->setBackgroundColor(backgroundColor());
-#endif
 		Widget *widget = d->editor->createWidgetForProperty(d->property, false /*don't change Widget::property() */);
 		if(widget) {
 			QRect r(0, 0, d->editor->header()->sectionSize(1), height() - (widget->hasBorders() ? 0 : 1));
@@ -396,11 +385,7 @@ void
 EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h)
 {
 	p->eraseRect(0,0,w,h);
-#ifdef QT_ONLY
-	Q3ListViewItem *item = firstChild();
-#else
 	K3ListViewItem *item = static_cast<K3ListViewItem*>(firstChild());
-#endif
 	if(!item)
 		return;
 
@@ -413,14 +398,10 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 		if(item->isSelected())
 			backgroundColor = cg.highlight();
 		else {
-#ifdef QT_ONLY
-			backgroundColor = cg.base();
-#else
 			if (dynamic_cast<EditorGroupItem*>(item))
 				backgroundColor = cg.base();
 			else
 				backgroundColor = item->backgroundColor();
-#endif
 		}
 //		p->fillRect(-50,0,50, item->height(), QBrush(backgroundColor));
 		p->save();
@@ -495,11 +476,7 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 		}
 
 		p->translate(0, item->totalHeight());
-#ifdef QT_ONLY
-		item = item->nextSibling();
-#else
-		item = (K3ListViewItem*)item->nextSibling();
-#endif
+		item = static_cast<K3ListViewItem*>(item->nextSibling());
 	}
 	p->restore();
 }
@@ -599,11 +576,7 @@ EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int 
 	p->setFont(font);
 	p->setBrush(cg.highlight());
 	//p->setPen(cg.highlightedText());
-#ifdef QT_ONLY
-		QListViewItem::paintCell(p, cg, column, width, align);
-#else
-		K3ListViewItem::paintCell(p, cg, column, width, align);
-#endif
+	K3ListViewItem::paintCell(p, cg, column, width, align);
 	p->setPen(cg.text());
 	p->drawText(QRect(0,0, totalWidth, height()),
 		Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, text(0));*/

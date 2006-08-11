@@ -25,17 +25,12 @@
 
 #include <qapplication.h>
 #include <q3asciidict.h>
-#include <Q3ValueList>
 #include <QByteArray>
 
-#ifdef QT_ONLY
-// \todo
-#else
 #include <kdebug.h>
 #include <klocale.h>
-#endif
 
-typedef QMap<QByteArray, Q3ValueList<QByteArray> > StringListMap;
+typedef QMap<QByteArray, QList<QByteArray> > StringListMap;
 typedef QMapIterator<QByteArray, QStringList> StringListMapIterator;
 
 namespace KoProperty {
@@ -60,7 +55,7 @@ class SetPrivate
 	//groups of properties:
 	// list of group name: (list of property names)
 	StringListMap propertiesOfGroup;
-	Q3ValueList<QByteArray>  groupNames;
+	QList<QByteArray>  groupNames;
 	QMap<QByteArray, QString>  groupDescriptions;
 	QMap<QByteArray, QString>  groupIcons;
 	// map of property: group
@@ -267,7 +262,7 @@ Set::addToGroup(const QByteArray &group, Property *property)
 		return;
 
 	if(!d->propertiesOfGroup.contains(group)) { // group doesn't exist
-		Q3ValueList<QByteArray> l;
+		QList<QByteArray> l;
 		l.append(property->name());
 		d->propertiesOfGroup.insert(group, l);
 		d->groupNames.append(group);
@@ -283,26 +278,29 @@ Set::removeFromGroup(Property *property)
 {
 	if(!property)
 		return;
-	QByteArray group = d->groupForProperty[property];
-	d->propertiesOfGroup[group].remove(property->name());
-	if (d->propertiesOfGroup[group].isEmpty()) {
+	QMap<Property*, QByteArray>::ConstIterator it = d->groupForProperty.find(property);
+	if (it==d->groupForProperty.constEnd())
+		return;
+	QByteArray group = *it;
+	QList<QByteArray> propertiesOfGroup = d->propertiesOfGroup[group];
+	propertiesOfGroup.removeAt( propertiesOfGroup.indexOf(property->name()) );
+	if (propertiesOfGroup.isEmpty()) {
 		//remove group as well
-		d->propertiesOfGroup.remove(group);
-		Q3ValueListIterator<QByteArray> it = d->groupNames.find(group);
-		if (it != d->groupNames.end()) {
-			d->groupNames.remove(it);
-		}
+		d->propertiesOfGroup.remove( group );
+		const int i = d->groupNames.indexOf(group);
+		if (i!=-1)
+			d->groupNames.removeAt(i);
 	}
 	d->groupForProperty.remove(property);
 }
 
-const Q3ValueList<QByteArray>&
+const QList<QByteArray>&
 Set::groupNames() const
 {
 	return d->groupNames;
 }
 
-const Q3ValueList<QByteArray>&
+const QList<QByteArray>&
 Set::propertyNamesForGroup(const QByteArray &group) const
 {
 	return d->propertiesOfGroup[group];
@@ -509,8 +507,8 @@ void Buffer::intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop
 	if ( !contains( propertyName ) )
 		return;
 
-	const Q3ValueList<Property*> *props = prop.related();
-	Q3ValueList<Property*>::const_iterator it = props->begin();
+	const QList<Property*> *props = prop.related();
+	QList<Property*>::ConstIterator it = props->begin();
 	for ( ; it != props->end(); ++it ) {
 		( *it )->setValue( prop.value(), false );
 	}
@@ -523,8 +521,8 @@ void Buffer::intersectedReset(KoProperty::Set& set, KoProperty::Property& prop)
 	if ( !contains( propertyName ) )
 		return;
 
-	const Q3ValueList<Property*> *props = prop.related();
-	Q3ValueList<Property*>::const_iterator it = props->begin();
+	const QList<Property*> *props = prop.related();
+	QList<Property*>::ConstIterator it = props->begin();
 	for ( ; it != props->end(); ++it )  {
 		( *it )->setValue( prop.value(), false );
 	}

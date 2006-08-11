@@ -23,12 +23,7 @@
 
 #include "../widget.h"
 
-#ifndef QT_ONLY
 class KUrlRequester;
-#else
-class QPushButton;
-class QLineEdit;
-#endif
 
 namespace KoProperty {
 
@@ -37,7 +32,7 @@ class KOPROPERTY_EXPORT URLEdit : public Widget
 	Q_OBJECT
 
 	public:
-		URLEdit(Property *property, QWidget *parent=0, const char *name=0);
+		URLEdit(Property *property, QWidget *parent=0);
 		virtual ~URLEdit();
 
 		virtual QVariant value() const;
@@ -49,16 +44,10 @@ class KOPROPERTY_EXPORT URLEdit : public Widget
 		virtual void setReadOnlyInternal(bool readOnly);
 
 	protected slots:
-		void selectFile();
 		void slotValueChanged(const QString &url);
 
 	private:
-#ifndef QT_ONLY
 		KUrlRequester *m_edit;
-#else
-		QLineEdit *m_edit;
-		QPushButton *m_select;
-#endif
 };
 
 }

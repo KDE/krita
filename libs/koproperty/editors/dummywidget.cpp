@@ -24,8 +24,8 @@
 
 using namespace KoProperty;
 
-DummyWidget::DummyWidget(Property *property, QWidget *parent, const char *name)
- : Widget(property, parent, name)
+DummyWidget::DummyWidget(Property *property, QWidget *parent)
+ : Widget(property, parent)
 {}
 
 DummyWidget::~DummyWidget()

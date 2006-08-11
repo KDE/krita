@@ -23,11 +23,7 @@
 
 #include "../widget.h"
 
-#ifdef QT_ONLY
-class QComboBox;
-#else
 class KComboBox;
-#endif
 
 namespace KoProperty {
 
@@ -36,7 +32,7 @@ class KOPROPERTY_EXPORT ComboBox : public Widget
 	Q_OBJECT
 
 	public:
-		ComboBox(Property *property, QWidget *parent=0, const char *name=0);
+		ComboBox(Property *property, QWidget *parent=0);
 		virtual ~ComboBox();
 
 		virtual QVariant value() const;
@@ -53,12 +49,7 @@ class KOPROPERTY_EXPORT ComboBox : public Widget
 		QString keyForValue(const QVariant &value);
 		void fillBox();
 
-	private:
-#ifdef QT_ONLY
-		QComboBox  *m_edit;
-#else
-		KComboBox  *m_edit;
-#endif
+		KComboBox *m_edit;
 		bool m_setValueEnabled : 1;
 };
 

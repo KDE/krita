@@ -41,7 +41,7 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 	Q_OBJECT
 
 	public:
-		Widget(Property *property, QWidget *parent, const char *name="property_editor");
+		Widget(Property *property, QWidget *parent);
 		virtual ~Widget();
 
 		/*! \return the value currently entered in the item editor widget.*/

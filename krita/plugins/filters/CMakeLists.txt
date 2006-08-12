@@ -1,5 +1,3 @@
-
-
 add_subdirectory( bumpmap )
 add_subdirectory( cimg )
 add_subdirectory( convolutionfilters )
@@ -14,29 +12,3 @@ add_subdirectory( smalltilesfilter )
 add_subdirectory( sobelfilter )
 add_subdirectory( colorsfilters )
 
-
-
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = \
-#    bumpmap  \
-#    cimg \
-#    convolutionfilters \
-#    embossfilter \
-#    example \
-#    imageenhancement \
-#    oilpaintfilter \
-#    pixelizefilter \
-#    raindropsfilter \
-#    roundcorners \
-#    smalltilesfilter \
-#    sobelfilter \
-#    colorsfilters 

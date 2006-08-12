@@ -28,9 +28,8 @@
 class KisToolMagnetic;
 class KisVector2D;
 
-typedef QValueList<Q_INT32> MatrixRow;
-typedef QValueList<MatrixRow> Matrix;
-typedef QValueList<KisVector2D> GMap;
+typedef QValueVector<Q_INT16> GrayCol;
+typedef QValueVector<GrayCol> GrayMatrix;
 
 class KisCurveMagnetic : public KisCurve {
 
@@ -38,13 +37,16 @@ class KisCurveMagnetic : public KisCurve {
 
     KisToolMagnetic *m_parent;
 
-    KisVector2D findNearestGradient (const KisVector2D&, const Matrix&);
-    KisVector2D findNearestGradient (const KisVector2D&, const GMap&);
-    KisVector2D findNextGradient (const GMap&, const KisVector2D&, const KisVector2D&);
-    GMap convertMatrixToGMap (const Matrix&);
-    void resizeMap (GMap&, const KisVector2D&, const KisVector2D&);
-    void clearMap (GMap&, Q_INT32);
-    Matrix sobel (const QRect & rect, KisPaintDeviceSP src);
+    void showMatrixValues(const QRect&, const GrayMatrix&, const QPoint&, const QPoint&);
+    void reduceMatrix (QRect&, GrayMatrix&, int, int, int, int);
+
+    void detectEdges (const QRect&, KisPaintDeviceSP, GrayMatrix&);
+
+    void gaussianBlur (const QRect&, KisPaintDeviceSP, KisPaintDeviceSP);
+    void toGrayScale (const QRect&, KisPaintDeviceSP, GrayMatrix&);
+    void getDeltas (const GrayMatrix&, GrayMatrix&, GrayMatrix&);
+    void getMagnitude (const GrayMatrix&, const GrayMatrix&, GrayMatrix&);
+    void nonMaxSupp (const GrayMatrix&, const GrayMatrix&, const GrayMatrix&, GrayMatrix&);
 
 public:
 

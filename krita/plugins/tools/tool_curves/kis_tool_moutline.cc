@@ -51,12 +51,83 @@
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
 #include "kis_paintop_registry.h"
+#include "kis_convolution_painter.h"
 
 #include "kis_tool_moutline.h"
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
+
+KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2, Q_INT32 i3, Q_INT32 i4,
+                          Q_INT32 i5, Q_INT32 i6, Q_INT32 i7, Q_INT32 i8, Q_INT32 i9,
+                          Q_INT32 i10, Q_INT32 i11, Q_INT32 i12, Q_INT32 i13, Q_INT32 i14,
+                          Q_INT32 i15, Q_INT32 i16, Q_INT32 i17, Q_INT32 i18, Q_INT32 i19,
+                          Q_INT32 i20, Q_INT32 i21, Q_INT32 i22, Q_INT32 i23, Q_INT32 i24,
+                          Q_INT32 factor, Q_INT32 offset )
+{
+    KisKernelSP kernel = new KisKernel();
+    kernel->width = 5;
+    kernel->height = 5;
+
+    kernel->factor = factor;
+    kernel->offset = offset;
+
+    kernel->data = new Q_INT32[25];
+    kernel->data[0] = i0;
+    kernel->data[1] = i1;
+    kernel->data[2] = i2;
+    kernel->data[3] = i3;
+    kernel->data[4] = i4;
+    kernel->data[5] = i5;
+    kernel->data[6] = i6;
+    kernel->data[7] = i7;
+    kernel->data[8] = i8;
+    kernel->data[9] = i9;
+    kernel->data[10] = i10;
+    kernel->data[11] = i11;
+    kernel->data[12] = i12;
+    kernel->data[13] = i13;
+    kernel->data[14] = i14;
+    kernel->data[15] = i15;
+    kernel->data[16] = i16;
+    kernel->data[17] = i17;
+    kernel->data[18] = i18;
+    kernel->data[19] = i19;
+    kernel->data[20] = i20;
+    kernel->data[21] = i21;
+    kernel->data[22] = i22;
+    kernel->data[23] = i23;
+    kernel->data[24] = i24;
+
+    return kernel;
+}
+
+KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
+                          Q_INT32 i3, Q_INT32 i4, Q_INT32 i5,
+                          Q_INT32 i6, Q_INT32 i7, Q_INT32 i8,
+                          Q_INT32 factor, Q_INT32 offset )
+{
+    KisKernelSP kernel = new KisKernel();
+    kernel->width = 3;
+    kernel->height = 3;
+
+    kernel->factor = factor;
+    kernel->offset = offset;
+
+    kernel->data = new Q_INT32[9];
+    kernel->data[0] = i0;
+    kernel->data[1] = i1;
+    kernel->data[2] = i2;
+    kernel->data[3] = i3;
+    kernel->data[4] = i4;
+    kernel->data[5] = i5;
+    kernel->data[6] = i6;
+    kernel->data[7] = i7;
+    kernel->data[8] = i8;
+
+    return kernel;
+}
 
 KisCurveMagnetic::KisCurveMagnetic (KisToolMagnetic *parent)
     : m_parent(parent)
@@ -69,295 +140,248 @@ KisCurveMagnetic::~KisCurveMagnetic ()
 
 }
 
-void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator it)
+void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator /*it*/)
 {
-    KisPaintDeviceSP src = m_parent->m_currentImage->activeDevice();
     QPoint start = (*p1).point().roundQPoint();
     QPoint end = (*p2).point().roundQPoint();
     QRect rc = QRect(start,end).normalize();
+    rc.setTopLeft(rc.topLeft()+QPoint(-10,-10));         // Enlarge the view, so problems with gaussian blur can be removed
+    rc.setBottomRight(rc.bottomRight()+QPoint(10,10));   // and we are able to find paths that go beyond the rect.
 
-    rc.setTopLeft(rc.topLeft()+QPoint(-3,-3));         // Enlarge the view
-    rc.setBottomRight(rc.bottomRight()+QPoint(3,3));   // Enlarge the view
+    KisPaintDeviceSP src = m_parent->m_currentImage->activeDevice();
+    GrayMatrix       dst = GrayMatrix(rc.width());
+
+    detectEdges  (rc, src, dst);
+    reduceMatrix (rc, dst, 3, 3, 3, 3);
 
     uint tlx = rc.topLeft().x();
     uint tly = rc.topLeft().y();
+    start -= QPoint(tlx,tly);
+    end -= QPoint(tlx,tly);
+    showMatrixValues (rc, dst, start, end);
+}
 
-    Matrix edges = sobel (rc, src);
-/*    
-    KisVector2D base, first, dist1, dist2;
-    first = dist1 = dist2 = KisVector2D(0,0);
-
-    x = (start.x()-tlx);
-    y = (start.y()-tly); // We need x,y values for the edges matrix
-    base = KisVector2D(x,y);
-
-    kdDebug(0) << "X: " << x << " Y: " << y << endl;
-    
-    kdDebug(0) << "Search the first edge at the left of start" << endl;
-    for (i = x; i > (x-10); i--) {
-        if (edges[y][i]) {
-            first = KisVector2D(i,y);
-            break;
-        }
-    }
-    if (first != KisVector2D(0,0))
-        dist1 = base - first;
-    else
-        dist1 = KisVector2D(1000,0);
-    kdDebug(0) << "FIRST EDGE AFTER LEFT CHECK: " << first.x() << " " << first.y() << endl;
-    kdDebug(0) << "Search the first edge at the right of start" << endl;
-    for (i = x; i < (x+10); i++) {
-        if (edges[y][i]) {
-            dist2 = KisVector2D(i,y) - base;
-            if (dist2.length() < dist1.length()) {
-                first = KisVector2D(i,y);
-                dist1 = dist2;
+void KisCurveMagnetic::showMatrixValues(const QRect& rc, const GrayMatrix& dst, const QPoint& start, const QPoint& end)
+{
+    QString line = "---|";
+    for (uint col = 0; col < dst.count() && col < 59; col++)
+        line += QString("%1|").arg(col,3);
+    kdDebug(0) << line << endl;
+    for (uint row = 0; row < dst[0].count(); row++) {
+        line = QString("%1|").arg(row,3);
+        for (uint col = 0; col < dst.count(); col++) {
+            if (col >= 58) {
+                line += "....";
+                break;
             }
-            break;
-        }
-    }
-    kdDebug(0) << "FIRST EDGE AFTER RIGHT CHEC: " << first.x() << " " << first.y() << endl;
-    kdDebug(0) << "Search the first edge at the bottom of start" << endl;
-    for (i = y; i < (y+10); i++) {
-        if (edges[i][x]) {
-            dist2 = KisVector2D(x,i) - base;
-            if (dist2.length() < dist1.length()) {
-                first = KisVector2D(x,i);
-                dist1 = dist2;
-            }
-            break;
-        }
-    }
-    kdDebug(0) << "FIRST EDGE AFTER BOTTOM CHE: " << first.x() << " " << first.y() << endl;
-    kdDebug(0) << "Search the first edge at the top of start" << endl;
-    for (i = y; i > (y-10); i--) {
-        if (edges[i][x]) {
-            dist2 = KisVector2D(x,i) - base;
-            if (dist2.length() < dist1.length()) {
-                first = KisVector2D(x,i);
-                dist1 = dist2;
-            }
-            break;
-        }
-    }
-    kdDebug(0) << "FIRST EDGE AFTER TOP CHECK : " << first.x() << " " << first.y() << endl;
-*/
-    uint i, j, x, y;
-    x = (start.x()-tlx);
-    y = (start.y()-tly);
-    KisVector2D first = findNearestGradient(KisVector2D(x,y), edges);
-    first = KisVector2D(first.x()+tlx,first.y()+tly);
-    GMap gmap = convertMatrixToGMap(edges);
-/*
-    gmap.prepend(start);
-    gmap.prepend(KisVector2D(first.x()+tlx,first.y()+tly));
-    gmap.append(end);
-*/
-    addPoint(it,first.toKisPoint(),false,false,LINEHINT);
-    first = findNextGradient(gmap,start,end);
-    int iterate = 99;
-    while (first != KisVector2D(-1,-1) && iterate) {
-        addPoint(it,first.toKisPoint(),false,false,LINEHINT);
-        first = findNextGradient(gmap,first,end);
-        --iterate;
-    }
-    QString line;
-    Q_INT32 grad = edges.last()[0];
-    for (i = 0; i < edges.count(); i++) {
-        line = "";
-        for (j = 0; j < edges[i].count(); j++) {
-            if (j == first.x() && i == first.y())
-                line += " 4 |";
-            else if (j == x && i == y)
-                line += " 2 |";
-            else if (edges[i][j] && (edges[i][j] > (grad-10)) && (edges[i][j] < (grad+10)))
-                line += QString::number((int)(100+edges[i][j]))+"|";
+            if (col == start.x() && row == start.y())
+                line += "SSS:";
+            else if (col == end.x() && row == end.y())
+                line += "EEE:";
+            else if (dst[col][row])
+                line += QString("%1:").arg(dst[col][row],3);
             else
-                line += " 0 |";
+                line += "   :";
         }
         kdDebug(0) << line << endl;
     }
-    kdDebug(0) << "ROWS: " << edges.count() << " COLS: " << edges[0].count() << endl;
-    kdDebug(0) << "HEIG: " << rc.height() << " WIDT: " << rc.width() << endl;
+    kdDebug(0) << "WIDTH: " << rc.width() << " HEIGHT: " << rc.height() << endl;
+    kdDebug(0) << " COLS: " << dst.count() << "   ROWS: " << dst[0].count() << endl;
 }
 
-KisVector2D KisCurveMagnetic::findNearestGradient (const KisVector2D& from, const Matrix& m)
+void KisCurveMagnetic::reduceMatrix (QRect& rc, GrayMatrix& m, int top, int right, int bottom, int left)
 {
-    double mindist, tmpdist;
-    KisVector2D vec(-1,-1), tmpvec;
-    mindist = 10000; // Starting from a too big distance
-    for (uint i = 0; i < (m.count()-1); i++) {   // Ignore last row
-        for (uint j = 0; j < m[i].count(); j++) {
-            if (j == from.x() && i == from.y())
-                continue;
-            if (m[i][j]) {
-                tmpvec = KisVector2D(j,i);
-                tmpdist = (tmpvec-from).length();
-                if (tmpdist < mindist) {
-                    mindist = tmpdist;
-                    vec = tmpvec;
+    QPoint topleft(top, left);
+    QPoint bottomright(bottom, right);
+
+    rc.setTopLeft(rc.topLeft()+topleft);
+    rc.setBottomRight(rc.bottomRight()-bottomright);
+
+    if (left)
+        m.erase(m.begin(),m.begin()+left);
+    if (right)
+        m.erase(m.end()-right,m.end());
+    if (top) {
+        for (uint i = 0; i < m.count(); i++)
+            m[i].erase(m[i].begin(),m[i].begin()+top);
+    }
+    if (bottom) {
+        for (uint i = 0; i < m.count(); i++)
+            m[i].erase(m[i].end()-bottom,m[i].end());
+    }
+}
+
+void KisCurveMagnetic::detectEdges (const QRect & rect, KisPaintDeviceSP src, GrayMatrix& dst)
+{
+    GrayMatrix graysrc(rect.width());
+    GrayMatrix xdeltas(rect.width());
+    GrayMatrix ydeltas(rect.width());
+    GrayMatrix magnitude(rect.width());
+    KisPaintDeviceSP smooth = new KisPaintDevice(src->colorSpace());
+
+    gaussianBlur(rect, src, smooth);
+    toGrayScale(rect, smooth, graysrc);
+    getDeltas(graysrc, xdeltas, ydeltas);
+    getMagnitude(xdeltas, ydeltas, magnitude);
+    nonMaxSupp(magnitude, xdeltas, ydeltas, dst);
+}
+
+void KisCurveMagnetic::gaussianBlur (const QRect& rect, KisPaintDeviceSP src, KisPaintDeviceSP dst)
+{
+    int grectx = rect.x();
+    int grecty = rect.y();
+    int grectw = rect.width();
+    int grecth = rect.height();
+    if (dst != src) {
+        KisPainter gc(dst);
+        gc.bitBlt(grectx, grecty, COMPOSITE_COPY, src, grectx, grecty, grectw, grecth);
+        gc.end();
+    }
+
+    KisConvolutionPainter painter( dst );
+    // FIXME createKernel could create dynamic gaussian kernels having sigma as argument
+    KisKernelSP kernel = createKernel( 2, 4, 5, 4, 2,
+                                       4, 9,12, 9, 4,
+                                       5,12,15,12, 5,
+                                       4, 9,12, 9, 4,
+                                       2, 4, 5, 4, 2, 115, 0 );
+//     KisKernelSP kernel = createKernel( 1, 2, 1, 2, 4, 2, 1, 2, 1, 11, 0);
+    painter.applyMatrix(kernel, grectx, grecty, grectw, grecth, BORDER_AVOID);
+}
+
+void KisCurveMagnetic::toGrayScale (const QRect& rect, KisPaintDeviceSP src, GrayMatrix& dst)
+{
+    int grectx = rect.x();
+    int grecty = rect.y();
+    int grectw = rect.width();
+    int grecth = rect.height();
+    QColor c;
+    KisColorSpace *cs = src->colorSpace();
+
+    for (int row = 0; row < grecth; row++) {
+        KisHLineIteratorPixel srcIt = src->createHLineIterator(grectx, grecty+row, grectw, false);
+        for (int col = 0; col < grectw; col++) {
+            cs->toQColor(srcIt.rawData(),&c);
+            dst[col].push_back(qGray(c.rgb()));
+            ++srcIt;
+        }
+    }
+}
+
+void KisCurveMagnetic::getDeltas (const GrayMatrix& src, GrayMatrix& xdelta, GrayMatrix& ydelta)
+{
+    uint start = 1, xend = src[0].count()-1, yend = src.count()-1;
+    Q_INT16 deri;
+    for (uint col = 0; col < src.count(); col++) {
+        for (uint row = 0; row < src[col].count(); row++) {
+            if (row >= start && row < xend) {
+                deri = src[col][row+1] - src[col][row-1];
+                xdelta[col].push_back(deri);
+            } else
+                xdelta[col].push_back(0);
+            if (col >= start && col < yend) {
+                deri = src[col+1][row] - src[col-1][row];
+                ydelta[col].push_back(deri);
+            } else
+                ydelta[col].push_back(0);
+        }
+    }
+}
+
+void KisCurveMagnetic::getMagnitude (const GrayMatrix& xdelta, const GrayMatrix& ydelta, GrayMatrix& gradient)
+{
+    for (uint col = 0; col < xdelta.count(); col++) {
+        for (uint row = 0; row < xdelta[col].count(); row++)
+            gradient[col].push_back((Q_INT16)(ROUND(RMS(xdelta[col][row],ydelta[col][row]))));
+    }
+}
+
+void KisCurveMagnetic::nonMaxSupp (const GrayMatrix& magnitude, const GrayMatrix& xdelta, const GrayMatrix& ydelta, GrayMatrix& nms)
+{
+    // Directions:
+    // 1:   0 - 22.5 degrees
+    // 2:   22.5 - 67.5 degrees
+    // 3:   67.5 - 90 degrees
+    // Second direction is relative to a quadrant. The quadrant is known by looking at x/y derivatives
+    // First quadrant:  Gx < 0  & Gy >= 0
+    // Second quadrant: Gx < 0  & Gy < 0
+    // Third quadrant:  Gx >= 0 & Gy < 0
+    // Fourth quadrant: Gx >= 0 & Gy >= 0
+    // For this reason: first direction is relative to Gy only and third direction to Gx only
+    
+    double  theta;      // theta = invtan (|Gy| / |Gx|) This give the direction
+    Q_INT16 mag;        // Current magnitude
+    Q_INT16 lmag;       // Magnitude at the left (So this pixel is "more internal" than the current
+    Q_INT16 rmag;       // Magnitude at the right (So this pixel is "more external")
+    double  xdel;       // Current xdelta
+    double  ydel;       // Current ydelta
+    Q_INT16 result;
+
+    for (uint col = 0; col < magnitude.count(); col++) {
+        for (uint row = 0; row < magnitude[col].count(); row++) {
+            mag = magnitude[col][row];
+            if (!mag || row == 0 || row == (magnitude[col].count()-1) ||
+                        col == 0 || col == (magnitude.count()-1))
+            {
+                result = 0;
+            } else {
+                xdel = (double)xdelta[col][row];
+                ydel = (double)ydelta[col][row];
+                theta = atan(fabs(ydel)/fabs(xdel));
+                if (theta < 0)
+                    theta = fabs(theta)+M_PI_2;
+                theta = (theta * 360.0) / (2.0*M_PI); // Radians -> degrees
+                if (theta >= 0 && theta < 22.5) { // .0 - .3926990816
+                    if (ydel >= 0) {
+                        lmag = magnitude[col][row-1];
+                        rmag = magnitude[col][row+1];
+                    } else {
+                        lmag = magnitude[col][row+1];
+                        rmag = magnitude[col][row-1];
+                    }
+                }
+                if (theta >= 22.5 && theta < 67.5) { // .3926990816 - 1.1780972449
+                    if (xdel >= 0) {
+                        if (ydel >= 0) {
+                            lmag = magnitude[col-1][row-1];
+                            rmag = magnitude[col+1][row+1];
+                        } else {
+                            lmag = magnitude[col+1][row-1];
+                            rmag = magnitude[col-1][row+1];
+                        }
+                    } else {
+                        if (ydel >= 0) {
+                            lmag = magnitude[col-1][row+1];
+                            rmag = magnitude[col+1][row-1];
+                        } else {
+                            lmag = magnitude[col+1][row+1];
+                            rmag = magnitude[col-1][row-1];
+                        }
+                    }
+                }
+                if (theta >= 67.5 && theta <= 90.0) { // 1.1780972449 - 1.5707963266
+                    if (xdel >= 0) {
+                        lmag = magnitude[col+1][row];
+                        rmag = magnitude[col-1][row];
+                    } else {
+                        lmag = magnitude[col-1][row];
+                        rmag = magnitude[col+1][row];
+                    }
+                }
+
+                if ((mag < lmag) || (mag < rmag)) {
+                    result = 0;
+                } else {
+                    if (rmag == mag) // If the external magnitude is equal to the current, take the external and suppress this.
+                        result = 0;
+                    else
+                        result = (mag > 255) ? 255 : mag;
                 }
             }
+            nms[col].push_back(result);
         }
     }
-    return vec;
 }
-
-KisVector2D KisCurveMagnetic::findNearestGradient (const KisVector2D& from, const GMap& m)
-{
-    double mindist, tmpdist;
-    KisVector2D vec(-1,-1);
-    mindist = 10000;
-    for (uint i = 0; i < m.count(); i++) {
-        if (m[i] == from)
-            continue;
-        tmpdist = (m[i]-from).length();
-        if (tmpdist < mindist) {
-            mindist = tmpdist;
-            vec = m[i];
-        }
-    }
-    return vec;
-}
-
-GMap KisCurveMagnetic::convertMatrixToGMap (const Matrix& m)
-{
-    GMap gmap;
-    Q_INT32 grad = m.last()[0];
-    Q_INT32 tlx = m.last()[1];
-    Q_INT32 tly = m.last()[2];
-    for (uint i = 0; i < (m.count()-1); i++) {
-        for (uint j = 0; j < m[j].count(); j++) {
-            if ((m[i][j] != 0)) {
-                //// THE ALGORITHM TO FIND USEFUL PIXELS GOES HERE ////
-                if ((m[i][j]) && (m[i][j] > (grad-20)) && (m[i][j] < (grad+20)))
-                    gmap.append(KisVector2D(tlx+j,tly+i));
-            }
-        }
-    }
-    return gmap;
-}
-
-double tolerance (double dist)
-{
-    double tol = dist/2;
-    if (tol < 1)  tol = 1;
-
-    return tol;
-}
-
-KisVector2D KisCurveMagnetic::findNextGradient (const GMap& m, const KisVector2D& start, const KisVector2D& end)
-{
-    // Algorithm to get the optimal path goes here //
-    double mindist = 10000.0, tmpdist;
-    double dist = (start-end).length();
-    KisVector2D vec(-1,-1);
-    double leftx, rightx;
-    if (start.x() < end.x()) {
-        leftx = start.x();
-        rightx = end.x();
-    } else {
-        leftx = end.x();
-        rightx = start.x();
-    }
-    for (uint i = 0; i < m.count(); i++) {
-        if (leftx > m[i].x())
-            continue;
-        if (m[i] == start || m[i] == end)
-            continue;
-        tmpdist = (start-m[i]).length();
-        if (tmpdist < 3.0)
-            continue;
-        tmpdist += (m[i]-end).length();
-        if (tmpdist < (dist+tolerance(dist))/* && tmpdist < mindist*/) {
-            mindist = tmpdist;
-            vec = m[i];
-        }
-    }
-    return vec;
-}
-
-Matrix KisCurveMagnetic::sobel (const QRect & rect, KisPaintDeviceSP src)
-{
-//     KisColorSpace *cs = src->colorSpace();
-    Q_UINT32 pixelSize = src->pixelSize();
-    int rectx = rect.topLeft().x();
-    int recty = rect.topLeft().y();
-    KisHLineIteratorPixel prevIt = src->createHLineIterator(rectx-1, recty-1, rect.width()+2, false);
-    KisHLineIteratorPixel currIt = src->createHLineIterator(rectx-1, recty,   rect.width()+2, false);
-    KisHLineIteratorPixel nextIt = src->createHLineIterator(rectx-1, recty+1, rect.width()+2, false);
-
-    Q_INT32 ykernel[9] = { 1, 2, 1,
-                           0, 0, 0,
-                          -1,-2,-1 };
-    
-    Q_INT32 xkernel[9] = {-1, 0, 1,
-                          -2, 0, 2,
-                          -1, 0, 1 };
-
-    Q_UINT8 **colors = new Q_UINT8*[9];
-
-    for (int t=0;t<9;t++)
-        colors[t] = new Q_UINT8[pixelSize];
-
-    Q_INT32 *ygrad = new Q_INT32[pixelSize];
-    Q_INT32 *xgrad = new Q_INT32[pixelSize];
-    Q_INT32 *grad  = new Q_INT32[pixelSize];
-
-    Q_INT32 edgegrad = 0;
-
-    int row = 0, irow = 0;
-
-    Matrix temp;
-    temp.append(MatrixRow()); // Add first row
-    while( row < rect.height() ) {
-        if (currIt.isDone()) { // Reached the end of the row
-            ++row; irow = 0; // Increment the row counter and reset the iteration counter for this row
-            // New iterators. Should we use another way? (Rect iterators seems to make confusion with index)
-            prevIt = src->createHLineIterator(rectx-1, recty+row-1, rect.width()+2, false);
-            currIt = src->createHLineIterator(rectx-1, recty+row,   rect.width()+2, false);
-            nextIt = src->createHLineIterator(rectx-1, recty+row+1, rect.width()+2, false);
-            temp.append(MatrixRow()); // Add row
-        }
-        colors[irow] = prevIt.rawData();
-        colors[irow+3] = currIt.rawData();
-        colors[irow+6] = nextIt.rawData();
-        if (irow == 2) { // Third iteration in this row, colors array is full.
-            for (uint i = 0; i < (pixelSize-1); i++) {
-                ygrad[i] = xgrad[i] = 0; // Reset the values.
-                for (uint j = 0; j < 9; j++) {
-                    if (ykernel[j] != 0)
-                        ygrad[i] = ygrad[i]+colors[j][i]*ykernel[j];
-                    if (xkernel[j] != 0)
-                        xgrad[i] = xgrad[i]+colors[j][i]*xkernel[j];
-                }
-                grad[i] = (Q_INT32)(ROUND(RMS(ygrad[i],xgrad[i]))/5.66); // Taken from sobelfilter
-            }
-            if (grad[0] != 0 && grad[0] > edgegrad)
-                edgegrad = grad[0];
-            temp[row].append(grad[0]);
-            // Swap pixels
-            colors[0] = colors[1]; colors[1] = colors[2]; colors[2] = 0;
-            colors[3] = colors[4]; colors[4] = colors[5]; colors[5] = 0;
-            colors[6] = colors[7]; colors[7] = colors[8]; colors[8] = 0;
-        } else
-            ++irow;
-        ++prevIt;
-        ++currIt;
-        ++nextIt;
-    }
-
-    delete [] colors;
-    delete [] ygrad;
-    delete [] xgrad;
-    delete [] grad;
-
-    temp.last().append(edgegrad); // Last row is empty, so I use it to store some information
-    temp.last().append(rectx);
-    temp.last().append(recty);
-    return temp;
-}
-    
 
 KisToolMagnetic::KisToolMagnetic ()
     : super("Magnetic Outline Tool")

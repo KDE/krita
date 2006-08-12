@@ -55,7 +55,7 @@ public:
     /**
      * @brief Destructor
      */
-    ~KoRTree();
+    virtual ~KoRTree();
 
     /**
      * @brief Insert data item into the tree
@@ -66,7 +66,7 @@ public:
      * @param data
      * @param bb
      */
-    void insert( const QRectF& bb, const T& data );
+    virtual void insert( const QRectF& bb, const T& data );
 
     /**
      * @brief Remove a data item from the tree
@@ -85,7 +85,7 @@ public:
      *
      * @return objects intersecting the rect
      */
-    QList<T> intersects( const QRectF& rect ) const;
+    virtual QList<T> intersects( const QRectF& rect ) const;
 
     /**
      * @brief Find all data item which contain the point
@@ -108,7 +108,7 @@ public:
      * @brief Find all data items
      * The order is guaranteed to be the same as that used by keys().
      *
-     * @return a list containing all the data rectangles used in the tree
+     * @return a list containing all the data used in the tree
      */
     QList<T> values() const;
 
@@ -135,8 +135,6 @@ protected:
 
         Node( int capcity, int level, Node * parent );
         virtual ~Node() {}
-
-        virtual Node * createNode( int capcity, int level, Node * parent ) = 0;
 
         virtual void remove( int index );
         // move node between nodes of the same type from node
@@ -191,13 +189,11 @@ protected:
         int m_level;
     };
 
-    class NoneLeafNode : public Node
+    class NoneLeafNode : virtual public Node
     {
     public:
         NoneLeafNode( int capcity, int level, Node * parent );
         virtual ~NoneLeafNode() {}
-
-        virtual Node * createNode( int capcity, int level, Node * parent ) { return new NoneLeafNode( capcity, level, parent ); }
 
         virtual void insert( const QRectF& bb, Node * data );
         virtual void remove( int index );
@@ -223,13 +219,11 @@ protected:
         QVector<Node *> m_childs;
     };
 
-    class LeafNode : public Node
+    class LeafNode : virtual public Node
     {
     public:
         LeafNode( int capcity, int level, Node * parent );
         virtual ~LeafNode() {}
-
-        virtual Node * createNode( int capcity, int level, Node * parent ) { return new LeafNode( capcity, level, parent ); }
 
         virtual void insert( const QRectF& bb, const T& data );
         virtual void remove( int index );
@@ -257,6 +251,16 @@ protected:
         QVector<T> m_data;
     };
 
+    // factory methods
+    virtual LeafNode* createLeafNode( int capacity, int level, Node * parent )
+    {
+      return new LeafNode( capacity, level, parent );
+    }
+    virtual NoneLeafNode* createNoneLeafNode( int capacity, int level, Node * parent )
+    {
+      return new NoneLeafNode( capacity, level, parent );
+    }
+
     // methods for insert
     QPair<Node *, Node *> splitNode( Node * node );
     QPair<int, int> pickSeeds( Node * node );
@@ -277,7 +281,7 @@ template <typename T>
 KoRTree<T>::KoRTree( int capacity, int minimum )
 : m_capacity( capacity )
 , m_minimum( minimum )
-, m_root( new LeafNode( m_capacity + 1, 0, 0 ) )
+, m_root( createLeafNode( m_capacity + 1, 0, 0 ) )
 {
     if ( minimum > capacity / 2 )
         qFatal( "KoRTree::KoRTree minimum can be maximal capacity/2");
@@ -443,8 +447,18 @@ template <typename T>
 QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::splitNode( KoRTree<T>::Node* node )
 {
     //qDebug() << "KoRTree::splitNode" << node;
-    Node * n1( node->createNode( m_capacity + 1, node->level(), node->parent() ) );
-    Node * n2( node->createNode( m_capacity + 1, node->level(), node->parent() ) );
+    Node * n1;
+    Node * n2;
+    if ( node->isLeaf() )
+    {
+        n1 = createLeafNode( m_capacity + 1, node->level(), node->parent() );
+        n2 = createLeafNode( m_capacity + 1, node->level(), node->parent() );
+    }
+    else
+    {
+        n1 = createNoneLeafNode( m_capacity + 1, node->level(), node->parent() );
+        n2 = createNoneLeafNode( m_capacity + 1, node->level(), node->parent() );
+    }
     //qDebug() << " n1" << n1 << n1->nodeId();
     //qDebug() << " n2" << n2 << n2->nodeId();
 
@@ -592,7 +606,7 @@ void KoRTree<T>::adjustTree( Node *node1, Node *node2 )
         //qDebug() << "  root";
         if ( node2 )
         {
-            NoneLeafNode * newRoot = new NoneLeafNode( m_capacity + 1, node1->level() + 1, 0 );
+            NoneLeafNode * newRoot = createNoneLeafNode( m_capacity + 1, node1->level() + 1, 0 );
             newRoot->insert( node1->boundingBox(), node1 );
             newRoot->insert( node2->boundingBox(), node2 );
             m_root = newRoot;

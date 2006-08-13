@@ -21,7 +21,7 @@
 #include <QTextDocument>
 
 KoTextShapeData::KoTextShapeData()
-: m_ownsDocument(false)
+: m_ownsDocument(true)
 , m_dirty(true)
 , m_textCursor(0)
 , m_offset(0.0)
@@ -29,7 +29,7 @@ KoTextShapeData::KoTextShapeData()
 , m_endPosition(-1)
 {
     m_document = new QTextDocument();
-    m_document->setUseDesignMetrics(true);
+    //m_document->setUseDesignMetrics(true); // TODO remove the comment when Qt fixes the first-parag-won't-break bug.
 }
 
 KoTextShapeData::~KoTextShapeData() {

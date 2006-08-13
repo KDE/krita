@@ -87,8 +87,13 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *style) {
     }
     if(! m_updateQueue.contains(id))
         m_updateQueue.append(id);
-    // TODO also update all inheriting styles
     requestFireUpdate();
+
+    // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
+    foreach(KoParagraphStyle *ps, m_paragStyles) {
+        if(ps->parent() == style)
+            alteredStyle(ps);
+    }
 }
 
 void KoStyleManager::alteredStyle(const KoCharacterStyle *style) {

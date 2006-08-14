@@ -109,35 +109,31 @@ void RubyInterpreter::finalizeRuby()
 
 VALUE RubyInterpreter::require (VALUE obj, VALUE name)
 {
-#ifdef KROSS_RUBY_INTERPRETER_DEBUG
-    krossdebug("RubyInterpreter::require(obj,name)");
-#endif
+    #ifdef KROSS_RUBY_INTERPRETER_DEBUG
+        krossdebug("RubyInterpreter::require(obj,name)");
+    #endif
 
-#if 0
     QString modname = StringValuePtr(name);
     if(modname.startsWith("kross")) {
-        krossdebug( QString("RubyInterpreter::require() module=%1").arg(modname) );
-        if( modname.indexOf( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
-            krosswarning( QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) );
+        #ifdef KROSS_RUBY_INTERPRETER_DEBUG
+            krossdebug( QString("RubyInterpreter::require() kross module=%1").arg(modname) );
+        #endif
+#if 0
+        modname = modname.mid(6);
+        QObject* object = Kross::Manager::self()->object(modname);
+        if(! object) {
+            krosswarning( QString("No such module '%1'.").arg(modname) );
+            return Qfalse;
         }
-        else {
-            Kross::Module::Ptr module = Kross::Manager::scriptManager()->loadModule(modname);
-            if(module)
-            {
-                new RubyModule(module, modname);
-//                     VALUE rmodule = rb_define_module(modname.ascii());
-//                     rb_define_module_function();
-//                     VALUE rm = RubyExtension::toVALUE(module);
-//                     rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
-                return Qtrue;
-            }
-            krosswarning( QString("Loading of Kross module '%1' failed.").arg(modname) );
-        }
-    } else {
-        return rb_f_require(obj, name);
-    }
+        new RubyModule(object, modname);
+        //VALUE rmodule = rb_define_module(modname.ascii());
+        //rb_define_module_function();
+        //VALUE rm = RubyExtension::toVALUE(module);
+        //rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
+        return Qtrue;
 #endif
-    return Qfalse;
+    }
+    return rb_f_require(obj, name);
 }
 
 }

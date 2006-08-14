@@ -40,8 +40,10 @@ class RubyScriptPrivate {
     RNode* m_compile;
     /// A list of functionnames.
     QStringList m_functions;
+#if 0
     /// A list of classnames.
     QStringList m_classes;
+#endif
 };
 
 RubyScript::RubyScript(Kross::Interpreter* interpreter, Kross::Action* Action)
@@ -66,7 +68,6 @@ void RubyScript::compile()
         krossdebug("RubyScript::compile()");
     #endif
 
-#if 0
     int critical;
 
     ruby_nerrs = 0;
@@ -76,7 +77,7 @@ void RubyScript::compile()
     critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
     ruby_in_eval++;
-    d->m_compile = rb_compile_string((char*) m_action->getName().toLatin1().data(), src, 0);
+    d->m_compile = rb_compile_string((char*) m_action->objectName().toLatin1().data(), src, 0);
     ruby_in_eval--;
     rb_thread_critical = critical;
 
@@ -85,13 +86,12 @@ void RubyScript::compile()
         #ifdef KROSS_RUBY_SCRIPT_DEBUG
             krossdebug("Compilation has failed");
         #endif
-        setException( new Kross::Exception(QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
+        setError( QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )) ); // TODO: get the error
         d->m_compile = 0;
     }
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
         krossdebug("Compilation was successfull");
     #endif
-#endif
 }
 
 void RubyScript::execute(const QVariant& args)
@@ -107,7 +107,7 @@ void RubyScript::execute(const QVariant& args)
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
         krossdebug("Start execution");
     #endif
-#if 0
+
     selectScript();
     int result = ruby_exec();
     if (result != 0)
@@ -115,23 +115,24 @@ void RubyScript::execute(const QVariant& args)
         #ifdef KROSS_RUBY_SCRIPT_DEBUG
             krossdebug("Execution has failed");
         #endif
+#if 0
         if( TYPE( ruby_errinfo )  == T_DATA && RubyExtension::isOfExceptionType( ruby_errinfo ) )
         {
             #ifdef KROSS_RUBY_SCRIPT_DEBUG
                 krossdebug("Kross exception");
             #endif
-            setException( RubyExtension::convertToException( ruby_errinfo ) );
+            setError( RubyExtension::convertToException( ruby_errinfo ) );
         } else {
-            setException( new Kross::Exception(QString("Failed to execute ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
-        }
+#endif
+            setError( QString("Failed to execute ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )) ); // TODO: get the error
+        //}
+
     }
 
     unselectScript();
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
         krossdebug("Execution is finished");
     #endif
-    return Kross::Object::Ptr(0);
-#endif
 }
 
 QStringList RubyScript::functionNames()
@@ -148,7 +149,6 @@ QStringList RubyScript::functionNames()
 
 QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
 {
-#if 0
     Q_UNUSED(name)
     Q_UNUSED(args)
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -160,12 +160,9 @@ QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
     }
     selectScript();
     unselectScript();
-    return Kross::Object::Ptr(0);
-#endif
+//TODO    return Kross::Object::Ptr(0);
     return QVariant();
 }
-
-
 
 #if 0
 const QStringList& RubyScript::getClassNames()

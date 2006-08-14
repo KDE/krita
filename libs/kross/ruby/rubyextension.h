@@ -21,9 +21,11 @@
 
 #include <ruby.h>
 
-#include "../core/krossconfig.h"
+#include "rubyconfig.h"
 //#include "../core/object.h"
-#include <QList>
+
+#include <QStringList>
+#include <QVariant>
 #include <QObject>
 
 namespace Kross {
@@ -50,8 +52,6 @@ class RubyExtension{
          */
         ~RubyExtension();
 
-#if 0
-
     private:
         /**
          * This function will catch functions that are undefined.
@@ -72,17 +72,20 @@ class RubyExtension{
          * This function is called by ruby to delete a RubyExtension object
          */
         static void delete_exception(void* object);
+#if 0
     private: // Tests
         /**
          * Test if the ruby object is an exception.
          */
         static bool isOfExceptionType(VALUE obj);
+
         /**
          * Test if the ruby object is an object
          */
         static bool isOfObjectType(VALUE obj);
+#endif
     private: //Converting functions
-
+#if 0
         /**
          * Convert a ruby object to the exception type.
          * @return 0 if the object wasn't an exception.
@@ -103,6 +106,7 @@ class RubyExtension{
          * \return The to a Kross::Object converted Py::Object.
          */
         static Kross::Object* toObject(VALUE value);
+#endif
         /**
          * Converts a QString to a VALUE. If
          * the QString isNull() then a "" will
@@ -124,14 +128,14 @@ class RubyExtension{
          * \param map The QMap to convert.
          * \return The converted QMap.
          */
-        static VALUE toVALUE(QMap<QString, QVariant> map);
+        static VALUE toVALUE(QVariantMap map);
 
         /**
          * Converts a QList to a VALUE.
          * \param list The QValueList to convert.
          * \return The converted QValueList.
          */
-        static VALUE toVALUE(QList<QVariant> list);
+        static VALUE toVALUE(QVariantList list);
 
         /**
          * Converts a QVariant to a VALUE.
@@ -145,16 +149,7 @@ class RubyExtension{
          * \param object The Kross::Object to convert.
          * \return The converted Kross::Object.
          */
-        static VALUE toVALUE(Kross::Object::Ptr object);
-
-        /**
-         * Converts a \a Kross::List into a VALUE.
-         * \param list The Kross::List to convert.
-         * \return The converted Kross::List.
-         */
-        static VALUE toVALUE(Kross::List::Ptr list);
-
-#endif
+        static VALUE toVALUE(QObject* object);
 
     private:
         /// Private d-pointer.

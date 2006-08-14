@@ -39,7 +39,9 @@ RubyModule::RubyModule(/*Kross::Module::Ptr mod,*/ QString modname) : d(new Ruby
     d->m_module = mod;
 #endif
     modname = modname.left(1).toUpper() + modname.right(modname.length() - 1 );
-    krossdebug(QString("Module: %1").arg(modname));
+    #ifdef KROSS_RUBY_MODULE_DEBUG
+        krossdebug(QString("Module: %1").arg(modname));
+    #endif
 #if 0
     VALUE rmodule = rb_define_module(modname.toAscii());
     rb_define_module_function(rmodule,"method_missing",  (VALUE (*)(...))RubyModule::method_missing, -1);

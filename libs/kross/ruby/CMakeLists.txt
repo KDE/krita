@@ -5,7 +5,7 @@ include_directories( ${RUBY_INCLUDE_PATH} ${CMAKE_SOURCE_DIR}/lib/kross ${KDE4_I
 
 ########### next target ###############
 
-set(krossruby_PART_SRCS 
+set(krossruby_PART_SRCS
    rubyinterpreter.cpp 
    rubyextension.cpp 
    rubyscript.cpp 

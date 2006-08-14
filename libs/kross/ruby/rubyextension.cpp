@@ -33,13 +33,24 @@ class RubyExtensionPrivate {
     friend class RubyExtension;
     QPointer<QObject> m_object;
     static VALUE s_krossObject;
-    static VALUE s_krossException;
+    //static VALUE s_krossException;
 };
 
-#if 0
-
 VALUE RubyExtensionPrivate::s_krossObject = 0;
-VALUE RubyExtensionPrivate::s_krossException = 0;
+//VALUE RubyExtensionPrivate::s_krossException = 0;
+
+RubyExtension::RubyExtension(QObject* object) : d(new RubyExtensionPrivate())
+{
+    d->m_object = object;
+}
+
+RubyExtension::~RubyExtension()
+{
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug("Delete RubyExtension");
+    #endif
+    delete d;
+}
 
 VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 {
@@ -54,12 +65,16 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
         krossdebug("Converting self to QObject");
     #endif
 
+#if 0
     QObject* object = toObject( self );
     return RubyExtension::call_method(object, argc, argv);
+#endif
+    return Qfalse;
 }
 
 VALUE RubyExtension::call_method( QObject* object, int argc, VALUE *argv)
 {
+#if 0
     QString funcname = rb_id2name(SYM2ID(argv[0]));
     QList<Api::Object::Ptr> argsList;
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
@@ -101,6 +116,8 @@ VALUE RubyExtension::call_method( QObject* object, int argc, VALUE *argv)
          rb_exc_raise(v );
     }
     return toVALUE(result);
+#endif
+    return Qfalse;
 }
 
 void RubyExtension::delete_object(void* object)
@@ -113,21 +130,10 @@ void RubyExtension::delete_object(void* object)
 
 void RubyExtension::delete_exception(void* object)
 {
+#if 0
     Kross::Exception* exc = static_cast<Kross::Exception*>(object);
-    exc->_KShared_unref(); //TODO
-}
-
+    exc->_KShared_unref();
 #endif
-
-RubyExtension::RubyExtension(QObject* object) : d(new RubyExtensionPrivate())
-{
-    d->m_object = object;
-}
-
-RubyExtension::~RubyExtension()
-{
-    krossdebug("Delete RubyExtension");
-    delete d;
 }
 
 #if 0
@@ -254,6 +260,7 @@ Kross::Object* RubyExtension::toObject(VALUE value)
             return 0;
     }
 }
+#endif
 
 VALUE RubyExtension::toVALUE(const QString& s)
 {
@@ -263,12 +270,12 @@ VALUE RubyExtension::toVALUE(const QString& s)
 VALUE RubyExtension::toVALUE(QStringList list)
 {
     VALUE l = rb_ary_new();
-    for(QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
-        rb_ary_push(l, toVALUE(*it));
+    foreach(QString s, list)
+        rb_ary_push(l, toVALUE(s));
     return l;
 }
 
-VALUE RubyExtension::toVALUE(QMap<QString, QVariant> map)
+VALUE RubyExtension::toVALUE(QVariantMap map)
 {
     VALUE h = rb_hash_new();
     for(QMap<QString, QVariant>::Iterator it = map.begin(); it != map.end(); ++it)
@@ -277,11 +284,11 @@ VALUE RubyExtension::toVALUE(QMap<QString, QVariant> map)
 
 }
 
-VALUE RubyExtension::toVALUE(QList<QVariant> list)
+VALUE RubyExtension::toVALUE(QVariantList list)
 {
     VALUE l = rb_ary_new();
-    for(QList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
-        rb_ary_push(l, toVALUE(*it));
+    foreach(QVariant v, list)
+        rb_ary_push(l, toVALUE(v));
     return l;
 }
 
@@ -329,12 +336,18 @@ VALUE RubyExtension::toVALUE(const QVariant& variant)
     }
 }
 
-VALUE RubyExtension::toVALUE(Kross::Object::Ptr object)
+VALUE RubyExtension::toVALUE(QObject* object)
 {
-    if(! object.data()) {
+    if(! object) {
         return 0;
     }
-
+    if(RubyExtensionPrivate::s_krossObject == 0)
+    {
+        RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
+        rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
+    }
+    return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, new RubyExtension(object) );
+#if 0
     {
         Kross::Variant* variant = dynamic_cast<Kross::Variant*>( object.data() );
         if(variant)
@@ -350,15 +363,16 @@ VALUE RubyExtension::toVALUE(Kross::Object::Ptr object)
         if(dict)
             return toVALUE( Kross::Dict::Ptr(dict) );
     }
-
     if(RubyExtensionPrivate::s_krossObject == 0)
     {
         RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
         rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
     }
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, new RubyExtension(object) );
+#endif
 }
 
+#if 0
 VALUE RubyExtension::toVALUE(Kross::List::Ptr list)
 {
     VALUE l = rb_ary_new();

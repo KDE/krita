@@ -10,6 +10,7 @@
 #	end
 #end
 
-require 'kross/blaaaaa'
-
+require 'kross/TestObject1'
+require 'kross/TestObject2'
 print "3----------------\n"
+print TestObject1::get("testpluginobject1")

@@ -115,23 +115,24 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
 
     QString modname = StringValuePtr(name);
     if(modname.startsWith("kross")) {
+        QString childname = modname.mid(5).trimmed();
+        childname.replace( QRegExp("^[^a-zA-Z]"), "" );
+
         #ifdef KROSS_RUBY_INTERPRETER_DEBUG
-            krossdebug( QString("RubyInterpreter::require() kross module=%1").arg(modname) );
+            krossdebug( QString("RubyInterpreter::require() kross module='%1' childname='%2'").arg(modname).arg(childname) );
         #endif
-#if 0
-        modname = modname.mid(6);
-        QObject* object = Kross::Manager::self()->object(modname);
+
+        QObject* object = Kross::Manager::self().object(childname);
         if(! object) {
             krosswarning( QString("No such module '%1'.").arg(modname) );
             return Qfalse;
         }
-        new RubyModule(object, modname);
+        new RubyModule(object, childname);
         //VALUE rmodule = rb_define_module(modname.ascii());
         //rb_define_module_function();
         //VALUE rm = RubyExtension::toVALUE(module);
         //rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
         return Qtrue;
-#endif
     }
     return rb_f_require(obj, name);
 }

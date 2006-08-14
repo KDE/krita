@@ -23,6 +23,7 @@
 #include <ruby.h>
 
 #include <QString>
+#include <QObject>
 
 #include "../core/krossconfig.h"
 //#include "../core/object.h"
@@ -46,7 +47,7 @@ class RubyModule {
          *        wraps.
          * @param modname The name the module will be published as.
          */
-        RubyModule(/*Kross::Module::Ptr mod,*/ QString modname);
+        RubyModule(QObject* object, QString modname);
 
         /**
          * Destructor.

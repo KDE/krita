@@ -24,6 +24,8 @@
 #include <QMap>
 #include <QString>
 #include <QPointer>
+#include <QMetaObject>
+#include <QMetaMethod>
 
 #include "rubyconfig.h"
 
@@ -74,12 +76,55 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 
 VALUE RubyExtension::call_method( QObject* object, int argc, VALUE *argv)
 {
-#if 0
     QString funcname = rb_id2name(SYM2ID(argv[0]));
-    QList<Api::Object::Ptr> argsList;
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
         krossdebug(QString("Building arguments list for function: %1 there are %2 arguments.").arg(funcname).arg(argc-1));
     #endif
+
+    Q_ASSERT(object);
+    Q_ASSERT(object->metaObject());
+
+    int methodindex = funcname.isNull() ? -1 : object->metaObject()->indexOfMethod( funcname.toLatin1().constData() );
+    if(methodindex < 0) {
+        krosswarning(QString("No such function '%1'").arg(funcname));
+        return Qfalse;
+    }
+
+    QMetaMethod metamethod = object->metaObject()->method( methodindex );
+    if(metamethod.parameterTypes().size() != argc) {
+        bool found = false;
+        const int count = object->metaObject()->methodCount();
+        for(++methodindex; methodindex < count; ++methodindex) {
+            metamethod = object->metaObject()->method( methodindex );
+            const QString signature = metamethod.signature();
+            const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
+            if(name == funcname && metamethod.parameterTypes().size() == argc) {
+                found = true;
+                break;
+            }
+        }
+        if(! found) {
+            krosswarning(QString("The function '%1' does not expect %2 arguments.").arg(funcname).arg(argc));
+            return Qfalse;
+        }
+    }
+
+    krossdebug( QString("  QMetaMethod idx=%1 sig=%2 tag=%3 type=%4").arg(methodindex).arg(metamethod.signature()).arg(metamethod.tag()).arg(metamethod.typeName()) );
+
+    {
+        QList<QByteArray> typelist = metamethod.parameterTypes();
+        const int typelistcount = typelist.count();
+        bool hasreturnvalue = strcmp(metamethod.typeName(),"") != 0;
+
+        Q_ASSERT(typelistcount < 10);
+
+        krosswarning("TODOOOOOOOOOOOOOOOO !!!!!!!!!!!!!!!!!!!!!!");
+        //TODO
+
+    }
+
+#if 0
+    QList<Api::Object::Ptr> argsList;
     for(int i = 1; i < argc; i++)
     {
         QObject* obj = toObject(argv[i]);
@@ -136,22 +181,16 @@ void RubyExtension::delete_exception(void* object)
 #endif
 }
 
-#if 0
-
-typedef QMap<QString, Kross::Object::Ptr> mStrObj;
-
 int RubyExtension::convertHash_i(VALUE key, VALUE value, VALUE  vmap)
 {
-    QMap<QString, Kross::Object::Ptr>* map; 
-    Data_Get_Struct(vmap, mStrObj, map);
+    QVariantMap* map; 
+    Data_Get_Struct(vmap, QVariantMap, map);
     if (key != Qundef)
-    {
-        Kross::Object::Ptr o = Kross::Object::Ptr( RubyExtension::toObject( value ) );
-        if(o) map->insert(STR2CSTR(key), o);
-    }
+        map->insert(STR2CSTR(key), RubyExtension::toVariant( value ));
     return ST_CONTINUE;
 }
 
+#if 0
 bool RubyExtension::isOfExceptionType(VALUE value)
 {
     VALUE result = rb_funcall(value, rb_intern("kind_of?"), 1, RubyExtensionPrivate::s_krossException );
@@ -184,12 +223,14 @@ VALUE RubyExtension::convertFromException(Kross::Exception::Ptr exc)
     //exc->_KShared_ref(); //TODO
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossException, 0, RubyExtension::delete_exception, exc.data() );
 }
+#endif
 
-Kross::Object* RubyExtension::toObject(VALUE value)
+QVariant RubyExtension::toVariant(VALUE value)
 {
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
-        krossdebug(QString("RubyExtension::toObject of type %1").arg(TYPE(value)));
+        krossdebug(QString("RubyExtension::toVariant of type %1").arg(TYPE(value)));
     #endif
+
     switch( TYPE( value ) )
     {
         case T_DATA:
@@ -197,6 +238,7 @@ Kross::Object* RubyExtension::toObject(VALUE value)
             #ifdef KROSS_RUBY_EXTENSION_DEBUG
                 krossdebug("Object is a Kross Object");
             #endif
+#if 0
             if( isOfObjectType(value) )
             {
                 RubyExtension* objectExtension;
@@ -206,45 +248,44 @@ Kross::Object* RubyExtension::toObject(VALUE value)
                 krosswarning("Cannot yet convert standard ruby type to kross object");
                 return 0;
             }
+#endif
+            return 0;
         }
         case T_FLOAT:
-            return new Kross::Variant(NUM2DBL(value));
+            return (double) NUM2DBL(value);
         case T_STRING:
-            return new Kross::Variant(QString(STR2CSTR(value)));
+            return QString(STR2CSTR(value));
         case T_ARRAY:
         {
-            QList<Kross::Object::Ptr> l;
+            QVariantList l;
             for(int i = 0; i < RARRAY(value)->len; i++)
-            {
-                Kross::Object* o = toObject( rb_ary_entry( value , i ) );
-                if(o) l.append( Kross::Object::Ptr(o) );
-            }
-            return new Kross::List(l);
+                l.append( toVariant( rb_ary_entry( value , i ) ) );
+            return l;
         }
         case T_FIXNUM:
-            return new Kross::Variant((qlonglong)FIX2INT(value));
+            return (qlonglong) FIX2INT(value);
         case T_HASH:
         {
-            QMap<QString, Kross::Object::Ptr> map;
+            QVariantMap map;
             VALUE vmap = Data_Wrap_Struct(rb_cObject, 0,0, &map);
             rb_hash_foreach(value, (int (*)(...))convertHash_i, vmap);
-            return new Kross::Dict(map);
+            return map;
         }
         case T_BIGNUM:
         {
-            return new Kross::Variant((qlonglong)NUM2LONG(value));
+            return (qlonglong) NUM2LONG(value);
         }
         case T_TRUE:
         {
-            return new Kross::Variant(true);
+            return QVariant(bool(true));
         }
         case T_FALSE:
         {
-            return new Kross::Variant(false);
+            return QVariant(bool(false));
         }
         case T_SYMBOL:
         {
-            return new Kross::Variant(QString(rb_id2name(SYM2ID(value))));
+            return QString(rb_id2name(SYM2ID(value)));
         }
         case T_MATCH:
         case T_OBJECT:
@@ -260,7 +301,6 @@ Kross::Object* RubyExtension::toObject(VALUE value)
             return 0;
     }
 }
-#endif
 
 VALUE RubyExtension::toVALUE(const QString& s)
 {

@@ -95,18 +95,20 @@ class RubyExtension{
          * Wrap an exception in a ruby object.
          */
         static VALUE convertFromException(Kross::Exception::Ptr exc);
+#endif
 
         /**
          * This function iterats through a ruby hash
          */
         static int convertHash_i(VALUE key, VALUE value, VALUE vmap);
+
         /**
-         * Converts a \a VALUE into a \a Kross::Object.
-         * \param object The ruby VALUE to convert.
-         * \return The to a Kross::Object converted Py::Object.
+         * Converts a \a VALUE into a QVariant.
+         * \param value The ruby VALUE to convert.
+         * \return The to a QVariant converted Ruby VALUE.
          */
-        static Kross::Object* toObject(VALUE value);
-#endif
+        static QVariant toVariant(VALUE value);
+
         /**
          * Converts a QString to a VALUE. If
          * the QString isNull() then a "" will

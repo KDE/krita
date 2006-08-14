@@ -1,0 +1,19 @@
+== Kross CHANGES ==
+
+1.6
+* Added krossdebug and krosswarning.
+* Integrated ProxyFunction's.
+* Python: Added unittest.
+* Removed Argument class.
+* Refactor of the tree-handling to improve the performance.
+* Tweaks on Object and Value to improve the performance.
+
+1.5.2
+* API: Fix possible crash in Manager::getInterpreternameForFile()
+
+1.5.1
+* Python: Fix compile with gcc 3.3.6
+
+1.5
+* Ruby: Fix 124649: libruby-devel lost when build.
+* Ruby: Fix crash cause of invalid rNode.

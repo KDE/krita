@@ -20,8 +20,8 @@
 #ifndef KROSS_RUBYRUBYSCRIPT_H
 #define KROSS_RUBYRUBYSCRIPT_H
 
-#include "../api/krossconfig.h"
-#include "../api/script.h"
+#include "../core/krossconfig.h"
+#include "../core/script.h"
 
 namespace Kross {
 
@@ -31,10 +31,10 @@ class RubyScriptPrivate;
 
 /**
  * Handle ruby scripts. This class implements
- * \a Kross::Api::Script for ruby.
+ * \a Kross::Script for ruby.
  * @author Cyrille Berger
  */
-class RubyScript : public Kross::Api::Script
+class RubyScript : public Kross::Script
 {
     public:
 
@@ -43,11 +43,11 @@ class RubyScript : public Kross::Api::Script
          *
          * @param interpreter The @a RubyInterpreter instance used to
          *        create this script.
-         * @param scriptcontainer The @a Kross::Api::ScriptContainer
+         * @param Action The @a Kross::Api::Action
          *        instance this @a RubyScript does handle the
          *        backend-work for.
          */
-        RubyScript(Kross::Api::Interpreter* interpreter, Kross::Api::ScriptContainer* scriptcontainer);
+        RubyScript(Kross::Api::Interpreter* interpreter, Kross::Api::Action* Action);
 
         /**
          * Destructor.

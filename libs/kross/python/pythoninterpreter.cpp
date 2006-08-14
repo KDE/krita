@@ -1,7 +1,7 @@
 /***************************************************************************
  * pythoninterpreter.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,9 +20,7 @@
 #include "pythoninterpreter.h"
 #include "pythonscript.h"
 #include "pythonmodule.h"
-#include "pythonsecurity.h"
 //#include "pythonextension.h"
-#include "../api/variant.h"
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -40,42 +38,34 @@ extern "C"
      * the \a PythonInterpreter.
      * The krosspython library the \a PythonInterpreter is part
      * will be loaded dynamicly at runtime from e.g.
-     * \a Kross::Api::Manager::getInterpreter and this exported
+     * \a Kross::Manager::getInterpreter and this exported
      * function will be used to return an instance of the
      * \a PythonInterpreter implementation.
      */
-    void* krossinterpreter(Kross::Api::InterpreterInfo* info)
+    void* krossinterpreter(Kross::InterpreterInfo* info)
     {
-        try {
-            return new Kross::Python::PythonInterpreter(info);
-        }
-        catch(Kross::Api::Exception::Ptr e) {
-            Kross::krosswarning("krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception.");
-        }
-        return 0;
+        return new Kross::PythonInterpreter(info);
     }
 }
 
-using namespace Kross::Python;
+using namespace Kross;
 
-namespace Kross { namespace Python {
+namespace Kross {
 
     /// \internal
     class PythonInterpreterPrivate
     {
         public:
-
             /// The __main__ python module.
             PythonModule* mainmodule;
 
-            /// The \a PythonSecurity python module to wrap the RestrictedPython functionality.
-            PythonSecurity* security;
+            PythonInterpreterPrivate() : mainmodule(0) {}
     };
 
-}}
+}
 
-PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
-    : Kross::Api::Interpreter(info)
+PythonInterpreter::PythonInterpreter(Kross::InterpreterInfo* info)
+    : Kross::Interpreter(info)
     , d(new PythonInterpreterPrivate())
 {
     // Initialize the python interpreter.
@@ -97,7 +87,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
 
     // First import the sys-module to remember it's sys.path
     // list in our path QString.
-    Py::Module sysmod( PyImport_ImportModule("sys"), true );
+    Py::Module sysmod( PyImport_ImportModule( (char*)"sys" ), true );
     Py::Dict sysmoddict = sysmod.getDict();
     Py::Object syspath = sysmoddict.getItem("path");
     if(syspath.isList()) {
@@ -128,8 +118,8 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
     krossdebug(QString("Python Platform: %1").arg(Py_GetPlatform()));
     krossdebug(QString("Python Prefix: %1").arg(Py_GetPrefix()));
     krossdebug(QString("Python ExecPrefix: %1").arg(Py_GetExecPrefix()));
-    krossdebug(QString("Python Path: %1").arg(Py_GetPath()));
-    krossdebug(QString("Python System Path: %1").arg(path));
+    //krossdebug(QString("Python Path: %1").arg(Py_GetPath()));
+    //krossdebug(QString("Python System Path: %1").arg(path));
 
     // Initialize the main module.
     d->mainmodule = new PythonModule(this);
@@ -148,16 +138,19 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
 
         // On the try to read something from stdin always return an empty
         // string. That way such reads don't block our script.
-        "import cStringIO\n"
-        "sys.stdin = cStringIO.StringIO()\n"
+        "try:\n"
+        "    import cStringIO\n"
+        "    sys.stdin = cStringIO.StringIO()\n"
+        "except:\n"
+        "    pass\n"
 
         // Class to redirect something. We use this class e.g. to redirect
         // <stdout> and <stderr> to a c++ event.
-        "class Redirect:\n"
-        "  def __init__(self, target):\n"
-        "    self.target = target\n"
-        "  def write(self, s):\n"
-        "    self.target.call(s)\n"
+        //"class Redirect:\n"
+        //"  def __init__(self, target):\n"
+        //"    self.target = target\n"
+        //"  def write(self, s):\n"
+        //"    self.target.call(s)\n"
 
         // Wrap builtin __import__ method. All import requests are
         // first redirected to our PythonModule.import method and
@@ -165,7 +158,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
         // python import mechanism.
         "import __builtin__\n"
         "import __main__\n"
-        "class Importer:\n"
+        "class _Importer:\n"
         "    def __init__(self):\n"
         "        self.realImporter = __builtin__.__import__\n"
         "        __builtin__.__import__ = self._import\n"
@@ -173,24 +166,19 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
         "        mod = __main__._import(name, globals, locals, fromlist)\n"
         "        if mod != None: return mod\n"
         "        return self.realImporter(name, globals, locals, fromlist)\n"
-        "Importer()\n"
+        "_Importer()\n"
         ;
 
     PyObject* pyrun = PyRun_String(s.toLatin1().data(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str())) );
+        setError( QString("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str()) );
     }
     Py_XDECREF(pyrun); // free the reference.
-
-    // Initialize the RestrictedPython module.
-    d->security = new PythonSecurity(this);
 }
 
 PythonInterpreter::~PythonInterpreter()
 {
-    // Free the zope security module.
-    delete d->security; d->security = 0;
     // Free the main module.
     delete d->mainmodule; d->mainmodule = 0;
     // Finalize the python interpreter.
@@ -238,18 +226,15 @@ void PythonInterpreter::finalize()
     Py_Finalize();
 }
 
-Kross::Api::Script* PythonInterpreter::createScript(Kross::Api::ScriptContainer* scriptcontainer)
+Kross::Script* PythonInterpreter::createScript(Kross::Action* Action)
 {
-    return new PythonScript(this, scriptcontainer);
+    //if(hadError()) return 0;
+    return new PythonScript(this, Action);
 }
 
-PythonModule* PythonInterpreter::mainModule()
+
+PythonModule* PythonInterpreter::mainModule() const
 {
     return d->mainmodule;
-}
-
-PythonSecurity* PythonInterpreter::securityModule()
-{
-    return d->security;
 }
 

@@ -1,7 +1,7 @@
 /***************************************************************************
- * testwindow.h
+ * metaobject.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,39 +17,39 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_TEST_TESTWINDOW_H
-#define KROSS_TEST_TESTWINDOW_H
+#ifndef KROSS_METAOBJECT_H
+#define KROSS_METAOBJECT_H
 
-#include "../core/action.h"
-#include "../core/object.h"
-#include "../core/manager.h"
-#include "../core/guiclient.h"
-
+//#include <QString>
+//#include <QStringList>
+//#include <QMap>
+//#include <QVariant>
+#include <QMetaType>
 //#include <QObject>
-#include <QString>
 
-#include <kmainwindow.h>
+#include "krossconfig.h"
 
-class QComboBox;
-class KTextEdit;
+namespace Kross {
 
-class TestWindow : public KMainWindow
-{
-        Q_OBJECT
-    public:
-        TestWindow(const QString& interpretername, const QString& scriptcode);
-        virtual ~TestWindow();
-    private slots:
-        void execute();
-    private:
-        QString m_interpretername;
-        QString m_scriptcode;
+    class Object;
 
-        Kross::Action::Ptr m_action;
-        Kross::GUIClient* m_scriptextension;
+    struct MetaObject : public QMetaObject
+    {
+        public:
+            MetaObject(const Object* object);
+            ~MetaObject();
 
-        QComboBox* m_interpretercombo;
-        KTextEdit* m_codeedit;
-};
+            //void addSlot(QObject* sender, QByteArray slot);
+            //void removeSlot(QObject* sender, QByteArray slot);
+
+            void attachObject(QObject* object);
+            void rebuild();
+
+        private:
+            class Private;
+            Private* const dptr;
+    };
+}
 
 #endif
+

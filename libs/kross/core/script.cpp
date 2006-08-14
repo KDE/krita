@@ -1,7 +1,7 @@
 /***************************************************************************
- * testwindow.h
+ * script.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,39 +17,44 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_TEST_TESTWINDOW_H
-#define KROSS_TEST_TESTWINDOW_H
+#include "script.h"
+#include "interpreter.h"
+#include "action.h"
+#include "krossconfig.h"
 
-#include "../core/action.h"
-#include "../core/object.h"
-#include "../core/manager.h"
-#include "../core/guiclient.h"
+using namespace Kross;
 
-//#include <QObject>
-#include <QString>
-
-#include <kmainwindow.h>
-
-class QComboBox;
-class KTextEdit;
-
-class TestWindow : public KMainWindow
+Script::Script(Interpreter* const interpreter, Action* const action)
+    : QObject()
+    , ErrorInterface()
+    , m_interpreter(interpreter)
+    , m_action(action)
+    //, m_exception(0)
 {
-        Q_OBJECT
-    public:
-        TestWindow(const QString& interpretername, const QString& scriptcode);
-        virtual ~TestWindow();
-    private slots:
-        void execute();
-    private:
-        QString m_interpretername;
-        QString m_scriptcode;
+}
 
-        Kross::Action::Ptr m_action;
-        Kross::GUIClient* m_scriptextension;
+Script::~Script()
+{
+}
 
-        QComboBox* m_interpretercombo;
-        KTextEdit* m_codeedit;
-};
+#if 0
+bool Script::hadException()
+{
+    return m_exception.data() != 0;
+}
 
+Exception* Script::getException()
+{
+    return m_exception.data();
+}
+
+void Script::setException(Exception* e)
+{
+    m_exception = Exception::Ptr(e);
+}
+
+void Script::clearException()
+{
+    m_exception = Exception::Ptr(0);
+}
 #endif

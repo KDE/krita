@@ -33,9 +33,9 @@
 #include <ksharedptr.h>
 
 // Kross
-#include "../main/manager.h"
-#include "../main/scriptcontainer.h"
-#include "../api/interpreter.h"
+#include "../core/manager.h"
+#include "../core/action.h"
+#include "../core/interpreter.h"
 
 #define ERROR_OK 0
 #define ERROR_HELP -1
@@ -63,30 +63,27 @@ int runScriptFile(const QString& scriptfile)
     f.close();
 
     // Determinate the matching interpreter
-    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
-    Kross::Api::InterpreterInfo* interpreterinfo = manager->getInterpreterInfo( manager->getInterpreternameForFile(scriptfile) );
+    Kross::InterpreterInfo* interpreterinfo = Kross::Manager::self().getInterpreterInfo( Kross::Manager::self().getInterpreternameForFile(scriptfile) );
     if(! interpreterinfo) {
         std::cerr << "No interpreter for file: " << scriptfile.toLatin1().data() << std::endl;
         return ERROR_NOINTERPRETER;
     }
 
-    // Run the script.
-    try {
-        // First we need a scriptcontainer and fill it.
-        Kross::Api::ScriptContainer::Ptr scriptcontainer = manager->getScriptContainer(scriptfile);
-        scriptcontainer->setInterpreterName( interpreterinfo->getInterpretername() );
-        scriptcontainer->setCode(scriptcode);
-        // Now execute the scriptcontainer.
-        scriptcontainer->execute();
-        if(scriptcontainer->hadException()) {
-            // We had an exception.
-            QString errormessage = scriptcontainer->getException()->getError();
-            QString tracedetails = scriptcontainer->getException()->getTrace();
-            std::cerr << QString("%2\n%1").arg(tracedetails).arg(errormessage).toLatin1().data() << std::endl;
-            return ERROR_EXCEPTION;
-        }
+    // First we need a Action and fill it.
+    Kross::Action::Ptr action = Kross::Manager::self().createAction(scriptfile);
+    action->setInterpreterName( interpreterinfo->getInterpretername() );
+    action->setCode(scriptcode);
+
+    // Now execute the Action.
+    action->execute();
+    if(action->hadException()) {
+        // We had an exception.
+        QString errormessage = action->getException()->getError();
+        QString tracedetails = action->getException()->getTrace();
+        std::cerr << QString("%2\n%1").arg(tracedetails).arg(errormessage).toLatin1().data() << std::endl;
+        return ERROR_EXCEPTION;
     }
-    catch(Kross::Api::Exception::Ptr e) {
+    catch(Kross::Exception::Ptr e) {
         // Normaly that shouldn't be the case...
         std::cerr << QString("EXCEPTION %1").arg(e->toString()).toLatin1().data() << std::endl;
         return ERROR_UNHALDEDEXCEPTION;
@@ -105,7 +102,7 @@ int main(int argc, char **argv)
                      KAboutData::License_LGPL,
                      "(C) 2006 Sebastian Sauer",
                      "Run Kross scripts.",
-                     "http://www.dipe.org/kross",
+                     "http://kross.dipe.org",
                      "kross@dipe.org");
     about.addAuthor("Sebastian Sauer", "Author", "mail@dipe.org");
 
@@ -127,9 +124,6 @@ int main(int argc, char **argv)
 
     // Create KApplication instance.
     app = new KApplication( /* GUIenabled */ true );
-
-    //QString interpretername = args->getOption("interpreter");
-    //QString scriptfilename = args->getOption("scriptfile");
 
     // Each argument is a scriptfile to open
     for(int i = 0; i < args->count(); i++) {

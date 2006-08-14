@@ -17,17 +17,15 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_PYTHON_MODULE_H
-#define KROSS_PYTHON_MODULE_H
+#ifndef KROSS_PYTHONMODULE_H
+#define KROSS_PYTHONMODULE_H
 
 #include "pythonconfig.h"
-#include "../api/object.h"
-#include "../api/script.h"
 #include "pythonextension.h"
 
 #include <QString>
 
-namespace Kross { namespace Python {
+namespace Kross {
 
     // Forward declaration.
     class PythonInterpreter;
@@ -71,6 +69,6 @@ namespace Kross { namespace Python {
             Py::Object import(const Py::Tuple&);
     };
 
-}}
+}
 
 #endif

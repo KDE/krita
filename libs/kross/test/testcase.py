@@ -4,137 +4,117 @@
   This Python script is used to test the Kross scripting framework.
 """
 
-#def testobjectCallback():
-#    print "function testobjectCallback() called !"
-#    return "this is the __main__.testobjectCallback() returnvalue!"
-#def testobjectCallbackWithParams(argument):
-#    print "testobjectCallbackWithParams() argument = %s" % str(argument)
-#    return "this is the __main__.testobjectCallbackWithParams() returnvalue!"
-#def testQtObject(self):
-    ## Get the QtObject instance to access the QObject.
-    ##testobject = get("TestObject")
-    #testobject = self.get("TestObject")
-    #if testobject == None: raise "Object 'TestObject' undefined !!!"
-    #print "testobject = %s %s" % (str(testobject),dir(testobject))
-    ##print "propertyNames = %s" % testobject.propertyNames()
-    ##print "slotNames = %s" % testobject.slotNames()
-    ##print "signalNames = %s" % testobject.signalNames()
-    ## We could just call a slot or a signal.
-    #print testobject.call("testSlot2()");
-    #print testobject.call("testSignal()");
-    ##print testobject.call() #KrossTest: List::item index=0 is out of bounds. Raising TypeException.
-    ## Each slot a QObject spends is a object itself.
-    #myslot = testobject.get("testSlot()")
-    #print "myslotevent = %s" % str(myslot)
-    #print myslot.call()
-    #print "__name__ = %s" % __name__
-    #print "__dir__ = %s" % dir()
-    ##print "__builtin__ = %s" % __builtin__
-    #print "self = %s %s" % (str(self),dir(self))
-    ##print "TestCase = %s" % str(TestCase)
-    #print "self.list = %s" % self.list()
-    #print "self.dict = %s" % self.dict()
-    #testobject = self.get("TestObject")
-    #print "testobject = %s" % testobject
-    #if not testobject.connect("testSignal()",testobject,"testSlot2()"):
-        #raise "Failed to connect testSignal() with testSlot2() at object 'TestObject'."
-    #testobject.signal("testSignal()")
-    ##testobject.testSlot()
-    #testobject.slot("testSlot()")
-    #testobject.disconnect("testSignal()")
-#def testActionEvent(self):
-    ##action1 = get("Action1")
-    #action1 = self.get("Action1")
-    #if action1 == None:
-        #raise "Object 'Action1' undefined !!!"
-    #print "action1 = %s %s" % (str(action1),dir(action1))
-    ##action1.call()
-    #action1.activate()
-
 import unittest
 
 class TestPlugin(unittest.TestCase):
-	""" Testcase to test the Kross python functionality for regressions. """
+	""" Testcases to test the Kross python functionality for regressions. """
 
 	def setUp(self):
-		import krosstestpluginmodule
-		self.pluginobject1 = krosstestpluginmodule.testpluginobject1()
-		self.assert_( self.pluginobject1 )
+		import TestObject1, TestObject2
+		self.object1 = TestObject1
+		self.object2 = TestObject2
 
-		self.pluginobject2 = krosstestpluginmodule.testpluginobject2()
-		self.assert_( self.pluginobject2 )
+	def testBool(self):
+		self.assert_( self.object1.func_bool_bool(True) == True )
+		self.assert_( self.object1.func_bool_bool(False) == False )
 
-		self.testqobject1 = krosstestpluginmodule.testqobject1()
-		self.assert_( self.testqobject1 )
+	def testInt(self):
+		self.assert_( self.object1.func_int_int(0) == 0 )
+		self.assert_( self.object1.func_int_int(177321) == 177321 )
+		self.assert_( self.object1.func_int_int(-98765) == -98765 )
 
-	def testBasicDataTypes(self):
-		self.assert_( self.pluginobject1.uintfunc(177321) == 177321 )
-		self.assert_( self.pluginobject1.intfunc(93675) == 93675 )
-		self.assert_( self.pluginobject1.intfunc(-73673) == -73673 )
-		self.assert_( self.pluginobject1.boolfunc(True) == True )
-		self.assert_( self.pluginobject1.boolfunc(False) == False )
-		self.assert_( self.pluginobject1.doublefunc(4265.3723) == 4265.3723 )
-		self.assert_( self.pluginobject1.doublefunc(-4265.68) == -4265.68 )
-		#self.assert_( self.pluginobject1.cstringfunc(" This is a Test! ") == " This is a Test! " )
-		self.assert_( self.pluginobject1.stringfunc(" Another \n\r Test! $%&\"") == " Another \n\r Test! $%&\"" )
-		#self.assert_( self.pluginobject1.stringfunc(unicode(" Another Test! ")) == unicode(" Another Test! ") )
-		self.assert_( self.pluginobject1.stringstringfunc("MyString1", "MyString2") == "MyString1" )
-		self.assert_( self.pluginobject1.uintdoublestringfunc(8529,285.246,"String") == 8529 )
-		self.assert_( self.pluginobject1.stringlistbooluintdouble(["s1","s2"],True,6,7.0,"String") == ["s1","s2"] )
+	def testUInt(self):
+		self.assert_( self.object1.func_uint_uint(0) == 0 )
+		self.assert_( self.object1.func_uint_uint(177321) == 177321 )
+		#self.assertRaises(OverflowError, self.object1.func_uint_uint, -1)
+
+	def testDouble(self):
+		self.assert_( self.object1.func_double_double(0.0) == 0.0 )
+		self.assert_( self.object1.func_double_double(1773.2177) == 1773.2177 )
+		self.assert_( self.object1.func_double_double(-548993.271993) == -548993.271993 )
+
+	def testLongLong(self):
+		self.assert_( self.object1.func_qlonglong_qlonglong(0) == 0 )
+		self.assert_( self.object1.func_qlonglong_qlonglong(7379) == 7379 )
+		self.assert_( self.object1.func_qlonglong_qlonglong(-6384673) == -6384673 )
+		#self.assert_( self.object1.func_qlonglong_qlonglong(678324787843223472165) == 678324787843223472165 )
+
+	def testULongLong(self):
+		self.assert_( self.object1.func_qulonglong_qulonglong(0) == 0 )
+		self.assert_( self.object1.func_qulonglong_qulonglong(378972) == 378972 )
+		#self.assert_( self.object1.func_qulonglong_qulonglong(-8540276823902375665225676321823) == -8540276823902375665225676321823 )
+
+	def testByteArray(self):
+		self.assert_( self.object1.func_qbytearray_qbytearray("  Some String as ByteArray  ") == "  Some String as ByteArray  " )
+		self.assert_( self.object1.func_qbytearray_qbytearray("\0") == "" )
+		self.assert_( self.object1.func_qbytearray_qbytearray("  \0  ") == "  " )
+		self.assert_( self.object1.func_qbytearray_qbytearray("\n\r\t\s \0 test \0\0\0 test") == "\n\r\t\s " )
+
+	def testString(self):
+		self.assert_( self.object1.func_qstring_qstring("") == "" )
+		self.assert_( self.object1.func_qstring_qstring(" ") == " " )
+		self.assert_( self.object1.func_qstring_qstring(" Another \n\r Test!   $%&\" ") == " Another \n\r Test!   $%&\" " )
 
 	def testStringList(self):
-		self.assert_( self.pluginobject1.stringlistfunc( [] ) == [] )
-		self.assert_( self.pluginobject1.stringlistfunc( ["First Item"," Second Item "] ) == ["First Item"," Second Item "] )
-		self.assert_( self.pluginobject1.stringlistfunc( ("Theird Item"," Forth Item ","Fifth Item") ) == ["Theird Item"," Forth Item ","Fifth Item"] )
+		self.assert_( self.object1.func_qstringlist_qstringlist( [] ) == [] )
+		self.assert_( self.object1.func_qstringlist_qstringlist( ["string1"] ) == ["string1"] )
+		self.assert_( self.object1.func_qstringlist_qstringlist( [" string1","string2 "] ) == [" string1","string2 "] )
+
+	def testVariantList(self):
+		self.assert_( self.object1.func_qvariantlist_qvariantlist( [] ) == [] )
+		self.assert_( self.object1.func_qvariantlist_qvariantlist( [[[[]],[]]] ) == [[[[]],[]]] )
+		self.assert_( self.object1.func_qvariantlist_qvariantlist( ["A string",[17539,-8591],[5.32,-842.775]] ) == ["A string",[17539,-8591],[5.32,-842.775]] )
+		self.assert_( self.object1.func_qvariantlist_qvariantlist( [[True,[],False,"Other String"],"test"] ) == [[True,[],False,"Other String"],"test"] )
+
+	def testVariantMap(self):
+		self.assert_( self.object1.func_qvariantmap_qvariantmap( {} ) == {} )
+		#self.assert_( self.object1.func_qvariantmap_qvariantmap( {"1":73682,"2":285} ) == {"1":73682,"2":285} )
+		#self.assert_( self.object1.func_qvariantmap_qvariantmap( {"a":-6892.957,"b":692.66} ) == {"a":-6892.957,"b":692.66} )
+		self.assert_( self.object1.func_qvariantmap_qvariantmap( {"key1":True,"key2":False} ) == {"key1":True,"key2":False} )
+		self.assert_( self.object1.func_qvariantmap_qvariantmap( {"key 1":"  Some String  ","key 2":"oThEr StRiNg"} ) == {"key 1":"  Some String  ","key 2":"oThEr StRiNg"} )
+		self.assert_( self.object1.func_qvariantmap_qvariantmap( {" key1 ":[12.5,True]," key2 ":[83.002,"test"]} ) == {" key1 ":[12.5,True]," key2 ":[83.002,"test"]} )
 
 	def testVariant(self):
-		self.assert_( self.pluginobject1.variantfunc(True) == True )
-		self.assert_( self.pluginobject1.variantfunc(False) == False )
-		self.assert_( self.pluginobject1.variantfunc(187937) == 187937 )
-		self.assert_( self.pluginobject1.variantfunc(-69825) == -69825 )
-		self.assert_( self.pluginobject1.variantfunc(8632.274) == 8632.274 )
-		self.assert_( self.pluginobject1.variantfunc(-8632.351) == -8632.351 )
-		self.assert_( self.pluginobject1.variantfunc(" Test \n\r This String $%&\"") == " Test \n\r This String $%&\"")
+		#self.assert_( self.object1.func_qvariant_qvariant(0.0) == 0.0 )
+		#self.assert_( self.object1.func_qvariant_qvariant(True) == True )
+		#self.assert_( self.object1.func_qvariant_qvariant(False) == False )
+		#self.assert_( self.object1.func_qvariant_qvariant(187937) == 187937 )
+		#self.assert_( self.object1.func_qvariant_qvariant(-69825) == -69825 )
+		#self.assert_( self.object1.func_qvariant_qvariant(8632.274) == 8632.274 )
+		#self.assert_( self.object1.func_qvariant_qvariant(-8632.351) == -8632.351 )
+		#self.assert_( self.object1.func_qvariant_qvariant(" Test \n\r This String $%&\"") == " Test \n\r This String $%&\"")
+		pass
 
-	def testObjects(self):
-		print "-----------------1"
-		newobjref = self.pluginobject1.objectfunc(self.pluginobject2)
-		print "-----------------2"
-		print str(newobjref)
-
-		#self.assert_( newobjref.myuniqueid == self.pluginobject2.myuniqueid )
-		#print "===========> %s" % self.pluginobject2.myName()
-
-		print "testqobject1 properties=%s" % self.testqobject1.propertyNames()
-		print "testqobject1 slots=%s" % self.testqobject1.slotNames()
-		print "testqobject1 signals=%s" % self.testqobject1.signalNames()
-		print "-----------------3"
-		print "DIR=>%s" % dir(self.testqobject1)
-
-		print "===================> slotcall-result: %s" % self.testqobject1.slot("self()")
-
-		#testobject = newobjref.get("TestObject")
-		#print testobject
-		print "-----------------9"
-
-	def testDefaultArguments(self):
-		self.assert_( self.pluginobject1.uintfunc_defarg(98765) == 98765 )
-		self.assert_( self.pluginobject1.uintfunc_defarg() == 12345 )
-		self.assert_( self.pluginobject1.stringfunc_defarg("MyString") == "MyString" )
-		self.assert_( self.pluginobject1.stringfunc_defarg() == "MyDefaultString" )
-		self.assert_( self.pluginobject1.stringlistfunc_defarg(["s1","s2","s3"]) == ["s1","s2","s3"] )
-		self.assert_( self.pluginobject1.stringlistfunc_defarg() == ["Default1","Default2"] )
-		self.assert_( self.pluginobject1.variantfunc_defarg(822.75173) == 822.75173 )
-		self.assert_( self.pluginobject1.variantfunc_defarg() == "MyDefaultVariantString" )
+	def testObject(self):
+		self.assert_( self.object1.name() == "TestObject1" and self.object2.name() == "TestObject2" )
+		#self.assert_( self.object1.func_testobject_testobject(self.object1).name() == self.object1.name() )
+		#self.assert_( self.object1.func_testobject_testobject(self.object2).name() == self.object2.name() )
+		#self.assert_( self.object2.func_testobject_testobject(self.object1).name() == self.object1.name() )
+		#self.assert_( self.object2.func_testobject_testobject(self.object2).name() == self.object2.name() )
+		pass
 
 	#def testExpectedFailures(self):
 		# to less arguments
 		#self.assertRaises(ValueError, self.pluginobject1.uintfunc)
 		#self.assert_( self.pluginobject1.uintfunc() != 8465 )
 
-print "__name__ = %s" % __name__
-#print "self = %s" % self
-#print self.get("TestObject")
+	#def testPyQt(self):
+		#pyqtextension = TestObject3.toPyQt()
+		#print "pyqtextension=%s" % pyqtextension
+		#import PyQt4, sip
+		#qobj = pyqtextension.getQObject()
+		#qo = sip.wrapinstance (qobj, QObject)
+		#print ">>>>>>>>>>>>>>>>>>> %s" % qo
 
-suite = unittest.makeSuite(TestPlugin)
-unittest.TextTestRunner(verbosity=2).run(suite)
+print "__name__ = %s" % __name__
+#print "__main__ = %s %s" % (__main__,dir(__main__))
+#print "========> %s" % TestObject3.name()
+
+#suite = unittest.makeSuite(TestPlugin)
+#unittest.TextTestRunner(verbosity=2).run(suite)
+
+#print "1==============> %s" % TestObject3.func_testobject_testobject(TestObject3)
+#print "2==============> %s" % TestObject3.func_qobject_qobject( TestObject3 )
+#print "3==============> %s" % TestObject3.func_qstringlist_qstringlist( [" string1","string2 "] )
+#print "4==============> %s" % TestObject3.func_void_qstringlist( [" string1","string2 "] )
+print "5==============> %s" % TestObject3.func_void()

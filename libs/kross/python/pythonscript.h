@@ -1,7 +1,7 @@
 /***************************************************************************
  * pythonscript.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,24 +17,26 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_PYTHON_PYTHONSCRIPT_H
-#define KROSS_PYTHON_PYTHONSCRIPT_H
+#ifndef KROSS_PYTHONSCRIPT_H
+#define KROSS_PYTHONSCRIPT_H
 
 #include "pythonconfig.h"
-#include "../api/script.h"
+#include "../core/script.h"
 
-namespace Kross { namespace Python {
+namespace Kross {
 
     // Forward declarations.
+    class PythonPyQtExtension;
     class PythonScriptPrivate;
-    class PythonModuleManager;
 
     /**
      * Handle python scripts. This class implements
-     * \a Kross::Api::Script for python.
+     * \a Kross::Script for python.
      */
-    class PythonScript : public Kross::Api::Script
+    class PythonScript : public Kross::Script
     {
+            friend class PythonPyQtExtension;
+
         public:
 
             /**
@@ -42,17 +44,39 @@ namespace Kross { namespace Python {
              *
              * \param interpreter The \a Kross::Python::PythonInterpreter used
              *       to create this PythonScript instance.
-             * \param scriptcontainer The with this PythonScript associated
-             *       \a Kross::Api::ScriptContainer instance that spends us
+             * \param Action The with this PythonScript associated
+             *       \a Kross::Action instance that spends us
              *       e.g. the python scripting code.
              */
-            explicit PythonScript(Kross::Api::Interpreter* interpreter, Kross::Api::ScriptContainer* scriptcontainer);
+            explicit PythonScript(Kross::Interpreter* interpreter, Kross::Action* action);
 
             /**
              * Destructor.
              */
             virtual ~PythonScript();
 
+            /**
+             * Execute the script.
+             *
+             * \param args The optional arguments passed to the script
+             * on excution.
+             */
+            virtual void execute(const QVariant& args = QVariant());
+
+            /**
+             * \return the list of functionnames.
+             */
+            virtual QStringList functionNames();
+
+            /**
+             * Call a function in the script.
+             *
+             * \param name The name of the function which should be called.
+             * \param args The optional list of arguments.
+             */
+            virtual QVariant callFunction(const QString& name, const QVariantList& args = QVariantList());
+
+#if 0
             /**
              * Return a list of callable functionnames this
              * script spends.
@@ -62,12 +86,12 @@ namespace Kross { namespace Python {
             /**
              * Execute the script.
              */
-            virtual Kross::Api::Object::Ptr execute();
+            virtual Kross::Object::Ptr execute();
 
             /**
              * Call a function.
              */
-            virtual Kross::Api::Object::Ptr callFunction(const QString& name, Kross::Api::List::Ptr args);
+            virtual Kross::Object::Ptr callFunction(const QString& name, Kross::List::Ptr args);
 
             /**
              * Return a list of class types this script supports.
@@ -77,22 +101,26 @@ namespace Kross { namespace Python {
             /**
              * Create and return a new class instance.
              */
-            virtual Kross::Api::Object::Ptr classInstance(const QString& name);
+            virtual Kross::Object::Ptr classInstance(const QString& name);
+#endif
 
         private:
             /// Private d-pointer class.
             PythonScriptPrivate* d;
 
+            /// \return the script's module dictonary.
+            Py::Dict moduleDict() const;
+
             /// Initialize the script.
-            void initialize();
+            bool initialize();
             /// Finalize and cleanup the script.
             void finalize();
 
-            /// \return a \a Kross::Api::Exception instance.
-            Kross::Api::Exception* toException(const QString& error);
+            /// \return a \a Kross::Exception instance.
+            void setErrorFromException(const QString& error);
     };
 
-}}
+}
 
 #endif
 

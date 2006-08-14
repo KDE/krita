@@ -24,7 +24,7 @@
 #include <rubysig.h>
 #include <node.h>
 
-#include "../main/scriptcontainer.h"
+#include "../core/action.h"
 
 #include "rubyconfig.h"
 #include "rubyextension.h"
@@ -47,8 +47,8 @@ class RubyScriptPrivate {
     QStringList m_classes;
 };
     
-RubyScript::RubyScript(Kross::Api::Interpreter* interpreter, Kross::Api::ScriptContainer* scriptcontainer)
-    : Kross::Api::Script(interpreter, scriptcontainer), d(new RubyScriptPrivate())
+RubyScript::RubyScript(Kross::Api::Interpreter* interpreter, Kross::Api::Action* Action)
+    : Kross::Script(interpreter, Action), d(new RubyScriptPrivate())
 {
 }
 
@@ -73,12 +73,12 @@ void RubyScript::compile()
 
     ruby_nerrs = 0;
     ruby_errinfo = Qnil;
-    VALUE src = RubyExtension::toVALUE( m_scriptcontainer->getCode() );
+    VALUE src = RubyExtension::toVALUE( m_Action->getCode() );
     StringValue(src);
     critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
     ruby_in_eval++;
-    d->m_compile = rb_compile_string((char*) m_scriptcontainer->getName().toLatin1().data(), src, 0);
+    d->m_compile = rb_compile_string((char*) m_Action->getName().toLatin1().data(), src, 0);
     ruby_in_eval--;
     rb_thread_critical = critical;
 

@@ -23,9 +23,9 @@
 #include <QRegExp>
 #include <ksharedptr.h>
 
-#include "../api/exception.h"
-#include "../api/module.h"
-#include "../main/manager.h"
+#include "../core/exception.h"
+#include "../core/module.h"
+#include "../core/manager.h"
 
 #include "rubyconfig.h"
 #include "rubyextension.h"
@@ -38,11 +38,11 @@ extern "C"
      * Exported and loadable function as entry point to use
      * the \a RubyInterpreter.
      * The krossruby library will be loaded dynamicly at runtime from e.g.
-     * \a Kross::Api::Manager::getInterpreter and this exported
+     * \a Kross::Manager::getInterpreter and this exported
      * function will be used to return an instance of the
      * \a RubyInterpreter implementation.
      */
-    void* krossinterpreter(Kross::Api::InterpreterInfo* info)
+    void* krossinterpreter(Kross::InterpreterInfo* info)
     {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
         krossdebug("krossinterpreter(info)");
@@ -50,8 +50,8 @@ extern "C"
         try {
             return new Kross::Ruby::RubyInterpreter(info);
         }
-        catch(Kross::Api::Exception::Ptr e) {
-            Kross::krosswarning("krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception.");
+        catch(Kross::Exception::Ptr e) {
+            Kross::krosswarning("krossinterpreter(Kross::InterpreterInfo* info): Unhandled exception.");
         }
         return 0;
     }
@@ -70,7 +70,7 @@ class RubyInterpreterPrivate {
     
 RubyInterpreterPrivate* RubyInterpreter::d = 0;
     
-RubyInterpreter::RubyInterpreter(Kross::Api::InterpreterInfo* info): Kross::Api::Interpreter(info)
+RubyInterpreter::RubyInterpreter(Kross::InterpreterInfo* info): Kross::Interpreter(info)
 {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
     krossdebug("RubyInterpreter::RubyInterpreter(info)");
@@ -94,9 +94,9 @@ RubyInterpreter::~RubyInterpreter()
 }
 
 
-Kross::Api::Script* RubyInterpreter::createScript(Kross::Api::ScriptContainer* scriptcontainer)
+Kross::Script* RubyInterpreter::createScript(Kross::Action* Action)
 {
-    return new RubyScript(this, scriptcontainer);
+    return new RubyScript(this, Action);
 }
 
 void RubyInterpreter::initRuby()
@@ -126,7 +126,7 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
             krosswarning( QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) );
         }
         else {
-            Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule(modname);
+            Kross::Module::Ptr module = Kross::Manager::scriptManager()->loadModule(modname);
             if(module)
             {
                 new RubyModule(module, modname);

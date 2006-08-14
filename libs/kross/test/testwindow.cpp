@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "testwindow.h"
-#include "testplugin.h"
+//#include "testobject.h"
 
 #include <QLabel>
 #include <QMenu>
@@ -37,14 +37,13 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     , m_interpretername(interpretername)
     , m_scriptcode(scriptcode)
 {
-    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
-    manager->addModule( Kross::Api::Module::Ptr(new TestPluginModule("krosstestpluginmodule")) );
-    m_scriptcontainer = manager->getScriptContainer("test");
+    //Kross::Manager::self().addModule( Kross::Module::Ptr(new TestPluginModule("krosstestpluginmodule")) );
+    m_action = Kross::Manager::self().createAction("test");
 
     QMenu *menuFile = new QMenu( this );
     menuBar()->insertItem( "&File", menuFile );
 
-    m_scriptextension = new Kross::Api::ScriptGUIClient(this, this);
+    m_scriptextension = new Kross::GUIClient(this, this);
 
     QString file = KGlobal::dirs()->findResource("appdata", "testscripting.rc");
     if(file.isNull())
@@ -71,7 +70,7 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     QGroupBox* interpretergrpbox = new QGroupBox("Interpreter", mainbox);
     layout->addWidget(interpretergrpbox);
     new QVBoxLayout(interpretergrpbox);
-    QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
+    QStringList interpreters = Kross::Manager::self().getInterpreters();
     m_interpretercombo = new QComboBox(interpretergrpbox);
     interpretergrpbox->layout()->addWidget(m_interpretercombo);
     m_interpretercombo->insertStringList(interpreters);
@@ -100,16 +99,21 @@ TestWindow::~TestWindow()
 
 void TestWindow::execute()
 {
-    m_scriptcontainer->setInterpreterName( m_interpretercombo->currentText() );
-    m_scriptcontainer->setCode(m_codeedit->text());
-    Kross::Api::Object::Ptr result = m_scriptcontainer->execute();
-    if(m_scriptcontainer->hadException()) {
-        Kross::krossdebug( QString("EXCEPTION => %1").arg(m_scriptcontainer->getException()->toString()) );
+    m_action->setInterpreterName( m_interpretercombo->currentText() );
+    m_action->setCode(m_codeedit->text());
+
+    m_action->trigger();
+
+#if 0
+    Kross::Object::Ptr result = m_action->execute();
+    if(m_action->hadException()) {
+        Kross::krossdebug( QString("EXCEPTION => %1").arg(m_action->getException()->toString()) );
     }
     else {
         QString s = result ? result->toString() : QString::null;
         Kross::krossdebug( QString("DONE => %1").arg(s) );
     }
+#endif
 }
 
 #include "testwindow.moc"

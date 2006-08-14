@@ -21,8 +21,8 @@
 
 #include <ruby.h>
 
-#include "../api/krossconfig.h"
-#include "../api/interpreter.h"
+#include "../core/krossconfig.h"
+#include "../core/interpreter.h"
 
 namespace Kross {
 
@@ -33,17 +33,17 @@ class RubyInterpreterPrivate;
  * This class is the bridget between Kross and Ruby.
  * @author Cyrille Berger
  */
-class RubyInterpreter : public Kross::Api::Interpreter
+class RubyInterpreter : public Kross::Interpreter
 {
     public:
 
         /**
          * Constructor
          *
-         * @param info The \a Kross::Api::InterpreterInfo instance
+         * @param info The \a Kross::InterpreterInfo instance
          *        that describes this \a RubyInterpreter .
          */
-        RubyInterpreter(Kross::Api::InterpreterInfo* info);
+        RubyInterpreter(Kross::InterpreterInfo* info);
 
         /**
          * Destructor.
@@ -53,7 +53,7 @@ class RubyInterpreter : public Kross::Api::Interpreter
         /**
          * Factory method to create and return a new \a RubyScript instance.
          */
-        virtual Kross::Api::Script* createScript(Kross::Api::ScriptContainer* scriptcontainer);
+        virtual Kross::Script* createScript(Kross::Action* Action);
 
     private:
         /// Initialize the ruby interpreter.

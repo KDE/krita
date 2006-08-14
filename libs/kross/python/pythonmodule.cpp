@@ -22,9 +22,9 @@
 
 #include <QRegExp>
 
-using namespace Kross::Python;
+using namespace Kross;
 
-namespace Kross { namespace Python {
+namespace Kross {
 
     /// @internal
     class PythonModulePrivate
@@ -35,38 +35,37 @@ namespace Kross { namespace Python {
              * The \a PythonInterpreter instance this module is
              * part of.
              */
-            PythonInterpreter* m_interpreter;
+            PythonInterpreter* const m_interpreter;
 
             /**
              * List of \a PythonExtension instances accessible
              * via this \a PythonModule instance.
              */
-            QMap<QString, PythonExtension*> m_modules;
+            //QMap<QString, PythonExtension*> m_modules;
 
+            PythonModulePrivate(PythonInterpreter* const interpreter)
+                : m_interpreter(interpreter) {}
     };
 
-}}
+}
 
 PythonModule::PythonModule(PythonInterpreter* interpreter)
     : Py::ExtensionModule<PythonModule>("__main__")
-    , d(new PythonModulePrivate())
+    , d(new PythonModulePrivate(interpreter))
 {
-#ifdef KROSS_PYTHON_MODULE_DEBUG
-    krossdebug( QString("Kross::Python::PythonModule::Constructor") );
-#endif
+    #ifdef KROSS_PYTHON_MODULE_DEBUG
+        krossdebug( QString("PythonModule::Constructor name='%1'").arg(name().c_str()) );
+    #endif
 
-    d->m_interpreter = interpreter;
-
-    add_varargs_method("_import", &PythonModule::import, "FIXME: Documentation");
-
+    add_varargs_method("_import", &PythonModule::import, "Kross import hook.");
     initialize("The PythonModule is the __main__ python environment used as global object namespace.");
 }
 
 PythonModule::~PythonModule()
 {
-#ifdef KROSS_PYTHON_MODULE_DEBUG
-    krossdebug( QString("Kross::Python::PythonModule::Destructor name='%1'").arg(name().c_str()) );
-#endif
+    #ifdef KROSS_PYTHON_MODULE_DEBUG
+        krossdebug( QString("PythonModule::Destructor name='%1'").arg(name().c_str()) );
+    #endif
 
     delete d;
 }
@@ -80,23 +79,13 @@ Py::Object PythonModule::import(const Py::Tuple& args)
 {
     if(args.size() > 0) {
         QString modname = args[0].as_string().c_str();
-        if(modname.startsWith("kross")) {
-#ifdef KROSS_PYTHON_MODULE_DEBUG
-            krossdebug( QString("Kross::Python::PythonModule::import() module=%1").arg(modname) );
-#endif
-            if( modname.indexOf( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
-                krosswarning( QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) );
-            }
-            else {
-                Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule(modname);
-                if(module) {
-                    // The returned PythonExtension instance will take care
-                    // of freeing the module if not needed any longer.
-                    return PythonExtension::toPyObject( module.data() );
-                }
-                krosswarning( QString("Loading of Kross module '%1' failed.").arg(modname) );
-            }
-
+        if(Kross::Manager::self().hasObject(modname)) {
+            #ifdef KROSS_PYTHON_MODULE_DEBUG
+                krossdebug( QString("PythonModule::import() module=%1 is internal").arg(modname) );
+            #endif
+            QObject* obj = Kross::Manager::self().object(modname);
+            Q_ASSERT(obj);
+            return Py::asObject( new PythonExtension(obj) );
         }
     }
     return Py::None();

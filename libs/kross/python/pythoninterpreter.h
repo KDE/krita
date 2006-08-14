@@ -1,7 +1,7 @@
 /***************************************************************************
  * pythoninterpreter.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,45 +17,43 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_PYTHON_INTERPRETER_H
-#define KROSS_PYTHON_INTERPRETER_H
+#ifndef KROSS_PYTHONINTERPRETER_H
+#define KROSS_PYTHONINTERPRETER_H
 
 #include "pythonconfig.h"
-
-#include "../api/krossconfig.h"
-#include "../api/object.h"
-#include "../api/interpreter.h"
-#include "../main/manager.h"
-//#include "../api/script.h"
-#include "../main/scriptcontainer.h"
+#include "../core/krossconfig.h"
+#include "../core/interpreter.h"
+#include "../core/action.h"
+#include "../core/manager.h"
 
 #include <QString>
 
-namespace Kross { namespace Python {
+namespace Kross {
 
     // Forward declarations.
-    class PythonSecurity;
+    class PythonScript;
     class PythonModule;
     class PythonInterpreterPrivate;
 
     /**
      * Python interpreter bridge.
      *
-     * Implements an \a Kross::Api::Interpreter for the python
+     * Implements an \a Kross::Interpreter for the python
      * interpreter.
      */
-    class PythonInterpreter : public Kross::Api::Interpreter
+    class PythonInterpreter : public Kross::Interpreter
     {
+            friend class PythonScript;
         public:
 
             /**
              * Constructor.
              *
-             * \param info The \a Kross::Api::InterpreterInfo instance
+             * \param info The \a Kross::InterpreterInfo instance
              *        which describes the \a PythonInterpreter for
              *        applications using Kross.
              */
-            PythonInterpreter(Kross::Api::InterpreterInfo* info);
+            PythonInterpreter(Kross::InterpreterInfo* info);
 
             /**
              * Destructor.
@@ -65,28 +63,23 @@ namespace Kross { namespace Python {
             /**
              * \return a \a PythonScript instance.
              */
-            virtual Kross::Api::Script* createScript(Kross::Api::ScriptContainer* scriptcontainer);
-
-            /**
-             * \return the \a MainModule instance.
-             */
-            PythonModule* mainModule();
-
-            /**
-             * \return the \a PythonSecurity instance.
-             */
-            PythonSecurity* securityModule();
+            virtual Kross::Script* createScript(Kross::Action* Action);
 
         private:
-            /// Internal d-pointer class.
+            /// \internal d-pointer instance.
             PythonInterpreterPrivate* d;
 
             /// Initialize the python interpreter.
             inline void initialize();
             /// Finalize the python interpreter.
             inline void finalize();
+
+            /**
+             * \return the \a PythonModule instance.
+             */
+            PythonModule* mainModule() const;
     };
 
-}}
+}
 
 #endif

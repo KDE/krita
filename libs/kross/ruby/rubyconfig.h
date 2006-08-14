@@ -20,7 +20,7 @@
 #ifndef KROSS_RUBY_CONFIG_H
 #define KROSS_RUBY_CONFIG_H
 
-#include "../api/krossconfig.h"
+#include "../core/krossconfig.h"
 
 namespace Kross {
 
@@ -30,12 +30,12 @@ namespace Kross {
  * @author Cyrille Berger
  * @sa http://www.ruby-lang.org
  */
-namespace Ruby {
-// #define KROSS_RUBY_SCRIPT_DEBUG
-// #define KROSS_RUBY_INTERPRETER_DEBUG
-// #define KROSS_RUBY_EXTENSION_DEBUG
-// #define KROSS_RUBY_MODULE_DEBUG
-}
+
+ #define KROSS_RUBY_SCRIPT_DEBUG
+ #define KROSS_RUBY_INTERPRETER_DEBUG
+ #define KROSS_RUBY_EXTENSION_DEBUG
+ #define KROSS_RUBY_MODULE_DEBUG
+
 }
 
 #endif

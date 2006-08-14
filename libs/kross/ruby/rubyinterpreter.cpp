@@ -23,8 +23,8 @@
 #include <QRegExp>
 #include <ksharedptr.h>
 
-#include "../core/exception.h"
-#include "../core/module.h"
+//#include "../core/exception.h"
+//#include "../core/module.h"
 #include "../core/manager.h"
 
 #include "rubyconfig.h"
@@ -45,31 +45,24 @@ extern "C"
     void* krossinterpreter(Kross::InterpreterInfo* info)
     {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
-        krossdebug("krossinterpreter(info)");
+        Kross::krossdebug("krossinterpreter(info)");
 #endif
-        try {
-            return new Kross::Ruby::RubyInterpreter(info);
-        }
-        catch(Kross::Exception::Ptr e) {
-            Kross::krosswarning("krossinterpreter(Kross::InterpreterInfo* info): Unhandled exception.");
-        }
-        return 0;
+        return new Kross::RubyInterpreter(info);
     }
 };
 
 
 namespace Kross {
 
-namespace Ruby {
 typedef std::map<QString, VALUE> mStrVALUE;
 typedef mStrVALUE::iterator mStrVALUE_it;
 typedef mStrVALUE::const_iterator mStrVALUE_cit;
 class RubyInterpreterPrivate {
     friend class RubyInterpreter;
 };
-    
+
 RubyInterpreterPrivate* RubyInterpreter::d = 0;
-    
+
 RubyInterpreter::RubyInterpreter(Kross::InterpreterInfo* info): Kross::Interpreter(info)
 {
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
@@ -119,6 +112,8 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
     krossdebug("RubyInterpreter::require(obj,name)");
 #endif
+
+#if 0
     QString modname = StringValuePtr(name);
     if(modname.startsWith("kross")) {
         krossdebug( QString("RubyInterpreter::require() module=%1").arg(modname) );
@@ -141,9 +136,8 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
     } else {
         return rb_f_require(obj, name);
     }
+#endif
     return Qfalse;
-}
-
 }
 
 }

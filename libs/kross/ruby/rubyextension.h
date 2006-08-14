@@ -21,21 +21,17 @@
 
 #include <ruby.h>
 
-#include "../api/krossconfig.h"
-#include "../api/class.h"
-#include "../api/dict.h"
-#include "../api/list.h"
-#include "../api/object.h"
+#include "../core/krossconfig.h"
+//#include "../core/object.h"
 #include <QList>
+#include <QObject>
 
 namespace Kross {
-
-namespace Ruby {
 
 class RubyExtensionPrivate;
 
 /**
- * This class wraps a \a Kross::Api::Object into the world of ruby.
+ * This class wraps a QObject into the world of ruby.
  * @author Cyrille Berger
  */
 class RubyExtension{
@@ -46,14 +42,16 @@ class RubyExtension{
         /**
          * Constructor.
          *
-         * @param object The \a Kross::Api::Object instance this
-         *        extension provides access to.
+         * @param object The QObject instance this extension provides access to.
          */
-        RubyExtension(Kross::Api::Object::Ptr object);
+        RubyExtension(QObject* object);
         /**
          * Destructor.
          */
         ~RubyExtension();
+
+#if 0
+
     private:
         /**
          * This function will catch functions that are undefined.
@@ -65,7 +63,7 @@ class RubyExtension{
          * @param argc the number of argument
          * @param argv the lists of arguments (the first argument is the Ruby ID of the function)
          */
-        static VALUE call_method( Kross::Api::Object::Ptr obj, int argc, VALUE *argv);
+        static VALUE call_method( QObject* obj, int argc, VALUE *argv);
         /**
          * This function is called by ruby to delete a RubyExtension object
          */
@@ -84,25 +82,27 @@ class RubyExtension{
          */
         static bool isOfObjectType(VALUE obj);
     private: //Converting functions
+
         /**
          * Convert a ruby object to the exception type.
          * @return 0 if the object wasn't an exception.
          */
-        static Kross::Api::Exception* convertToException(VALUE obj);
+        static Kross::Exception* convertToException(VALUE obj);
         /**
          * Wrap an exception in a ruby object.
          */
-        static VALUE convertFromException(Kross::Api::Exception::Ptr exc);
+        static VALUE convertFromException(Kross::Exception::Ptr exc);
+
         /**
          * This function iterats through a ruby hash
          */
         static int convertHash_i(VALUE key, VALUE value, VALUE vmap);
         /**
-         * Converts a \a VALUE into a \a Kross::Api::Object.
+         * Converts a \a VALUE into a \a Kross::Object.
          * \param object The ruby VALUE to convert.
-         * \return The to a Kross::Api::Object converted Py::Object.
+         * \return The to a Kross::Object converted Py::Object.
          */
-        static Kross::Api::Object* toObject(VALUE value);
+        static Kross::Object* toObject(VALUE value);
         /**
          * Converts a QString to a VALUE. If
          * the QString isNull() then a "" will
@@ -141,24 +141,25 @@ class RubyExtension{
         static VALUE toVALUE(const QVariant& variant);
 
         /**
-         * Converts a \a Kross::Api::Object to a VALUE.
-         * \param object The Kross::Api::Object to convert.
-         * \return The converted Kross::Api::Object.
+         * Converts a \a Kross::Object to a VALUE.
+         * \param object The Kross::Object to convert.
+         * \return The converted Kross::Object.
          */
-        static VALUE toVALUE(Kross::Api::Object::Ptr object);
+        static VALUE toVALUE(Kross::Object::Ptr object);
 
         /**
-         * Converts a \a Kross::Api::List into a VALUE.
-         * \param list The Kross::Api::List to convert.
-         * \return The converted Kross::Api::List.
+         * Converts a \a Kross::List into a VALUE.
+         * \param list The Kross::List to convert.
+         * \return The converted Kross::List.
          */
-        static VALUE toVALUE(Kross::Api::List::Ptr list);
+        static VALUE toVALUE(Kross::List::Ptr list);
+
+#endif
+
     private:
         /// Private d-pointer.
         RubyExtensionPrivate* d;
  };
-
-}
 
 }
 

@@ -34,24 +34,20 @@ extern NODE *ruby_eval_tree;
 
 namespace Kross {
 
-namespace Ruby {
-
 class RubyScriptPrivate {
     friend class RubyScript;
     RubyScriptPrivate() : m_compile(0) { }
     RNode* m_compile;
     /// A list of functionnames.
     QStringList m_functions;
-
     /// A list of classnames.
     QStringList m_classes;
 };
-    
-RubyScript::RubyScript(Kross::Api::Interpreter* interpreter, Kross::Api::Action* Action)
+
+RubyScript::RubyScript(Kross::Interpreter* interpreter, Kross::Action* Action)
     : Kross::Script(interpreter, Action), d(new RubyScriptPrivate())
 {
 }
-
 
 RubyScript::~RubyScript()
 {
@@ -66,40 +62,83 @@ RubyScript::~RubyScript()
 
 void RubyScript::compile()
 {
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("RubyScript::compile()");
-#endif
+    #ifdef KROSS_RUBY_SCRIPT_DEBUG
+        krossdebug("RubyScript::compile()");
+    #endif
+
+#if 0
     int critical;
 
     ruby_nerrs = 0;
     ruby_errinfo = Qnil;
-    VALUE src = RubyExtension::toVALUE( m_Action->getCode() );
+    VALUE src = RubyExtension::toVALUE( m_action->getCode() );
     StringValue(src);
     critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
     ruby_in_eval++;
-    d->m_compile = rb_compile_string((char*) m_Action->getName().toLatin1().data(), src, 0);
+    d->m_compile = rb_compile_string((char*) m_action->getName().toLatin1().data(), src, 0);
     ruby_in_eval--;
     rb_thread_critical = critical;
 
     if (ruby_nerrs != 0)
     {
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("Compilation has failed");
-#endif
-        setException( new Kross::Api::Exception(QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
+        #ifdef KROSS_RUBY_SCRIPT_DEBUG
+            krossdebug("Compilation has failed");
+        #endif
+        setException( new Kross::Exception(QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
         d->m_compile = 0;
     }
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("Compilation was successfull");
+    #ifdef KROSS_RUBY_SCRIPT_DEBUG
+        krossdebug("Compilation was successfull");
+    #endif
 #endif
 }
 
-const QStringList& RubyScript::getFunctionNames()
+void RubyScript::execute(const QVariant& args)
 {
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("RubyScript::getFunctionNames()");
+    #ifdef KROSS_RUBY_SCRIPT_DEBUG
+        krossdebug("RubyScript::execute()");
+    #endif
+
+    if(d->m_compile == 0)
+    {
+        compile();
+    }
+    #ifdef KROSS_RUBY_SCRIPT_DEBUG
+        krossdebug("Start execution");
+    #endif
+#if 0
+    selectScript();
+    int result = ruby_exec();
+    if (result != 0)
+    {
+        #ifdef KROSS_RUBY_SCRIPT_DEBUG
+            krossdebug("Execution has failed");
+        #endif
+        if( TYPE( ruby_errinfo )  == T_DATA && RubyExtension::isOfExceptionType( ruby_errinfo ) )
+        {
+            #ifdef KROSS_RUBY_SCRIPT_DEBUG
+                krossdebug("Kross exception");
+            #endif
+            setException( RubyExtension::convertToException( ruby_errinfo ) );
+        } else {
+            setException( new Kross::Exception(QString("Failed to execute ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
+        }
+    }
+
+    unselectScript();
+    #ifdef KROSS_RUBY_SCRIPT_DEBUG
+        krossdebug("Execution is finished");
+    #endif
+    return Kross::Object::Ptr(0);
 #endif
+}
+
+QStringList RubyScript::functionNames()
+{
+    #ifdef KROSS_RUBY_SCRIPT_DEBUG
+        krossdebug("RubyScript::getFunctionNames()");
+    #endif
     if(d->m_compile == 0)
     {
         compile();
@@ -107,59 +146,28 @@ const QStringList& RubyScript::getFunctionNames()
     return d->m_functions;
 }
 
-Kross::Api::Object::Ptr RubyScript::execute()
+QVariant RubyScript::callFunction(const QString& name, const QVariantList& args)
 {
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("RubyScript::execute()");
-#endif
-    if(d->m_compile == 0)
-    {
-        compile();
-    }
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("Start execution");
-#endif
-    selectScript();
-    int result = ruby_exec();
-    if (result != 0)
-    {
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-        krossdebug("Execution has failed");
-#endif
-        if( TYPE( ruby_errinfo )  == T_DATA && RubyExtension::isOfExceptionType( ruby_errinfo ) )
-        {
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-            krossdebug("Kross exception");
-#endif
-            setException( RubyExtension::convertToException( ruby_errinfo ) );
-        } else {
-            setException( new Kross::Api::Exception(QString("Failed to execute ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
-        }
-    }
-
-    unselectScript();
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("Execution is finished");
-#endif
-    return Kross::Api::Object::Ptr(0);
-}
-
-Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api::List::Ptr args)
-{
+#if 0
     Q_UNUSED(name)
     Q_UNUSED(args)
-#ifdef KROSS_RUBY_SCRIPT_DEBUG
-    krossdebug("RubyScript::callFunction()");
-#endif
+    #ifdef KROSS_RUBY_SCRIPT_DEBUG
+        krossdebug("RubyScript::callFunction()");
+    #endif
     if(d->m_compile == 0)
     {
         compile();
     }
     selectScript();
     unselectScript();
-    return Kross::Api::Object::Ptr(0);
+    return Kross::Object::Ptr(0);
+#endif
+    return QVariant();
 }
 
+
+
+#if 0
 const QStringList& RubyScript::getClassNames()
 {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -172,7 +180,7 @@ const QStringList& RubyScript::getClassNames()
     return d->m_classes;
 }
 
-Kross::Api::Object::Ptr RubyScript::classInstance(const QString& name)
+Kross::Object::Ptr RubyScript::classInstance(const QString& name)
 {
     Q_UNUSED(name)
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -184,10 +192,8 @@ Kross::Api::Object::Ptr RubyScript::classInstance(const QString& name)
     }
     selectScript();
     unselectScript();
-    return Kross::Api::Object::Ptr(0);
+    return Kross::Object::Ptr(0);
 }
-
-
-}
+#endif
 
 }

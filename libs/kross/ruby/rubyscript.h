@@ -25,8 +25,6 @@
 
 namespace Kross {
 
-namespace Ruby {
-
 class RubyScriptPrivate;
 
 /**
@@ -43,11 +41,11 @@ class RubyScript : public Kross::Script
          *
          * @param interpreter The @a RubyInterpreter instance used to
          *        create this script.
-         * @param Action The @a Kross::Api::Action
+         * @param Action The @a Kross::Action
          *        instance this @a RubyScript does handle the
          *        backend-work for.
          */
-        RubyScript(Kross::Api::Interpreter* interpreter, Kross::Api::Action* Action);
+        RubyScript(Kross::Interpreter* interpreter, Kross::Action* Action);
 
         /**
          * Destructor.
@@ -55,21 +53,27 @@ class RubyScript : public Kross::Script
         ~RubyScript();
 
         /**
-         * Return a list of callable functionnames this
-         * script spends.
-         */
-        virtual const QStringList& getFunctionNames();
-
-        /**
          * Execute the script.
+         *
+         * \param args The optional arguments passed to the script
+         * on excution.
          */
-        virtual Kross::Api::Object::Ptr execute();
+        virtual void execute(const QVariant& args = QVariant());
 
         /**
-         * Call a function.
+         * \return the list of functionnames.
          */
-        virtual Kross::Api::Object::Ptr callFunction(const QString& name, Kross::Api::List::Ptr args);
+        virtual QStringList functionNames();
 
+        /**
+         * Call a function in the script.
+         *
+         * \param name The name of the function which should be called.
+         * \param args The optional list of arguments.
+         */
+        virtual QVariant callFunction(const QString& name, const QVariantList& args = QVariantList());
+
+#if 0
         /**
          * Return a list of class types this script supports.
          */
@@ -78,7 +82,8 @@ class RubyScript : public Kross::Script
         /**
          * Create and return a new class instance.
          */
-        virtual Kross::Api::Object::Ptr classInstance(const QString& name);
+        virtual Kross::Object::Ptr classInstance(const QString& name);
+#endif
 
     private:
 
@@ -91,8 +96,6 @@ class RubyScript : public Kross::Script
         /// Private d-pointer.
         RubyScriptPrivate* d;
 };
-
-}
 
 }
 

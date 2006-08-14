@@ -24,13 +24,11 @@
 
 #include <QString>
 
-#include "../api/krossconfig.h"
-#include "../api/object.h"
-#include "../api/module.h"
+#include "../core/krossconfig.h"
+//#include "../core/object.h"
+//#include "../core/module.h"
 
 namespace Kross {
-
-namespace Ruby {
 
 class RubyModulePrivate;
 
@@ -44,11 +42,11 @@ class RubyModule {
         /**
          * Constructor.
          *
-         * @param mod The \a Kross::Api::Module this RubyExtension
+         * @param mod The \a Kross::Module this RubyExtension
          *        wraps.
          * @param modname The name the module will be published as.
          */
-        RubyModule(Kross::Api::Module::Ptr mod, QString modname);
+        RubyModule(/*Kross::Module::Ptr mod,*/ QString modname);
 
         /**
          * Destructor.
@@ -66,8 +64,6 @@ class RubyModule {
         /// Private d-pointer.
         RubyModulePrivate* d;
 };
-
-}
 
 }
 

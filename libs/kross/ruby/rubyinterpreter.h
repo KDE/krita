@@ -26,8 +26,6 @@
 
 namespace Kross {
 
-namespace Ruby {
-
 class RubyInterpreterPrivate;
 /**
  * This class is the bridget between Kross and Ruby.
@@ -66,8 +64,6 @@ class RubyInterpreter : public Kross::Interpreter
         /// Private d-pointer.
         static RubyInterpreterPrivate* d;
 };
-
-}
 
 }
 

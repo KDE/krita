@@ -16,88 +16,85 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
+
 #include "rubyextension.h"
 
 #include <st.h>
 
 #include <QMap>
 #include <QString>
-
-#include "../api/list.h"
+#include <QPointer>
 
 #include "rubyconfig.h"
 
 namespace Kross {
 
-namespace Ruby {
-
-    
 class RubyExtensionPrivate {
     friend class RubyExtension;
-    /// The \a Kross::Api::Object this RubyExtension wraps.
-    Kross::Api::Object::Ptr m_object;
-    /// 
+    QPointer<QObject> m_object;
     static VALUE s_krossObject;
     static VALUE s_krossException;
 };
 
+#if 0
+
 VALUE RubyExtensionPrivate::s_krossObject = 0;
 VALUE RubyExtensionPrivate::s_krossException = 0;
-    
+
 VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 {
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-    krossdebug("method_missing(argc, argv, self)");
-#endif
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug("method_missing(argc, argv, self)");
+    #endif
     if(argc < 1)
     {
         return 0;
     }
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-    krossdebug("Converting self to Kross::Api::Object");
-#endif
-    
-    Kross::Api::Object::Ptr object = Kross::Api::Object::Ptr( toObject( self ) );
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug("Converting self to QObject");
+    #endif
+
+    QObject* object = toObject( self );
     return RubyExtension::call_method(object, argc, argv);
 }
 
-VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALUE *argv)
+VALUE RubyExtension::call_method( QObject* object, int argc, VALUE *argv)
 {
     QString funcname = rb_id2name(SYM2ID(argv[0]));
     QList<Api::Object::Ptr> argsList;
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-    krossdebug(QString("Building arguments list for function: %1 there are %2 arguments.").arg(funcname).arg(argc-1));
-#endif
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug(QString("Building arguments list for function: %1 there are %2 arguments.").arg(funcname).arg(argc-1));
+    #endif
     for(int i = 1; i < argc; i++)
     {
-        Kross::Api::Object::Ptr obj = Kross::Api::Object::Ptr( toObject(argv[i]) );
+        QObject* obj = toObject(argv[i]);
         if(obj) argsList.append(obj);
     }
-    Kross::Api::Object::Ptr result;
+    QObject* result;
     try { // We need a double try/catch because, the cleaning is only done at the end of the catch, so if we had only one try/catch, kross would crash after the call to rb_exc_raise
         try { // We can't let a C++ exceptions propagate in the C mechanism
-            Kross::Api::Callable* callable = dynamic_cast<Kross::Api::Callable*>(object.data());
+            Kross::Callable* callable = dynamic_cast<Kross::Callable*>(object.data());
             if(callable && callable->hasChild(funcname)) {
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-                krossdebug( QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) );
-#endif
-                result = callable->getChild(funcname)->call(QString::null, KSharedPtr<Kross::Api::List>(new Api::List(argsList)));
+                #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                    krossdebug( QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) );
+                #endif
+                result = callable->getChild(funcname)->call(QString::null, KSharedPtr<Kross::List>(new Api::List(argsList)));
             }
             else {
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-                krossdebug( QString("Kross::Ruby::RubyExtension::method_missing try to call function with name '%1' in object '%2'.").arg(funcname).arg(object->getName()) );
-#endif
+                #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                    krossdebug( QString("Kross::Ruby::RubyExtension::method_missing try to call function with name '%1' in object '%2'.").arg(funcname).arg(object->getName()) );
+                #endif
                 result = object->call(funcname, Api::List::Ptr(new Api::List(argsList)));
             }
-        } catch(Kross::Api::Exception::Ptr exception)
+        } catch(Kross::Exception::Ptr exception)
         {
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-            krossdebug("c++ exception catched, raise a ruby error");
-#endif
+            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                krossdebug("c++ exception catched, raise a ruby error");
+            #endif
             throw convertFromException(exception);
         }  catch(...)
         {
-            Kross::Api::Exception::Ptr e = Kross::Api::Exception::Ptr( new Kross::Api::Exception( "Unknow error" ) );
+            Kross::Exception::Ptr e = Kross::Exception::Ptr( new Kross::Exception( "Unknow error" ) );
             throw convertFromException(e); // TODO: fix //i18n
         }
     } catch(VALUE v) {
@@ -116,16 +113,16 @@ void RubyExtension::delete_object(void* object)
 
 void RubyExtension::delete_exception(void* object)
 {
-    Kross::Api::Exception* exc = static_cast<Kross::Api::Exception*>(object);
-    //exc->_KShared_unref(); //TODO
+    Kross::Exception* exc = static_cast<Kross::Exception*>(object);
+    exc->_KShared_unref(); //TODO
 }
 
-    
-RubyExtension::RubyExtension(Kross::Api::Object::Ptr object) : d(new RubyExtensionPrivate())
+#endif
+
+RubyExtension::RubyExtension(QObject* object) : d(new RubyExtensionPrivate())
 {
     d->m_object = object;
 }
-
 
 RubyExtension::~RubyExtension()
 {
@@ -133,15 +130,17 @@ RubyExtension::~RubyExtension()
     delete d;
 }
 
-typedef QMap<QString, Kross::Api::Object::Ptr> mStrObj;
+#if 0
+
+typedef QMap<QString, Kross::Object::Ptr> mStrObj;
 
 int RubyExtension::convertHash_i(VALUE key, VALUE value, VALUE  vmap)
 {
-    QMap<QString, Kross::Api::Object::Ptr>* map; 
+    QMap<QString, Kross::Object::Ptr>* map; 
     Data_Get_Struct(vmap, mStrObj, map);
     if (key != Qundef)
     {
-        Kross::Api::Object::Ptr o = Kross::Api::Object::Ptr( RubyExtension::toObject( value ) );
+        Kross::Object::Ptr o = Kross::Object::Ptr( RubyExtension::toObject( value ) );
         if(o) map->insert(STR2CSTR(key), o);
     }
     return ST_CONTINUE;
@@ -159,19 +158,18 @@ bool RubyExtension::isOfObjectType(VALUE value)
     return (TYPE(result) == T_TRUE);
 }
 
-
-Kross::Api::Exception* RubyExtension::convertToException(VALUE value)
+Kross::Exception* RubyExtension::convertToException(VALUE value)
 {
     if( isOfExceptionType(value) )
     {
-        Kross::Api::Exception* exception;
-        Data_Get_Struct(value, Kross::Api::Exception, exception);
+        Kross::Exception* exception;
+        Data_Get_Struct(value, Kross::Exception, exception);
         return exception;
     }
     return 0;
 }
 
-VALUE RubyExtension::convertFromException(Kross::Api::Exception::Ptr exc)
+VALUE RubyExtension::convertFromException(Kross::Exception::Ptr exc)
 {
     if(RubyExtensionPrivate::s_krossException == 0)
     {
@@ -181,19 +179,18 @@ VALUE RubyExtension::convertFromException(Kross::Api::Exception::Ptr exc)
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossException, 0, RubyExtension::delete_exception, exc.data() );
 }
 
-
-Kross::Api::Object* RubyExtension::toObject(VALUE value)
+Kross::Object* RubyExtension::toObject(VALUE value)
 {
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-    krossdebug(QString("RubyExtension::toObject of type %1").arg(TYPE(value)));
-#endif
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug(QString("RubyExtension::toObject of type %1").arg(TYPE(value)));
+    #endif
     switch( TYPE( value ) )
     {
         case T_DATA:
         {
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-            krossdebug("Object is a Kross Object");
-#endif
+            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+                krossdebug("Object is a Kross Object");
+            #endif
             if( isOfObjectType(value) )
             {
                 RubyExtension* objectExtension;
@@ -205,43 +202,43 @@ Kross::Api::Object* RubyExtension::toObject(VALUE value)
             }
         }
         case T_FLOAT:
-            return new Kross::Api::Variant(NUM2DBL(value));
+            return new Kross::Variant(NUM2DBL(value));
         case T_STRING:
-            return new Kross::Api::Variant(QString(STR2CSTR(value)));
+            return new Kross::Variant(QString(STR2CSTR(value)));
         case T_ARRAY:
         {
-            QList<Kross::Api::Object::Ptr> l;
+            QList<Kross::Object::Ptr> l;
             for(int i = 0; i < RARRAY(value)->len; i++)
             {
-                Kross::Api::Object* o = toObject( rb_ary_entry( value , i ) );
-                if(o) l.append( Kross::Api::Object::Ptr(o) );
+                Kross::Object* o = toObject( rb_ary_entry( value , i ) );
+                if(o) l.append( Kross::Object::Ptr(o) );
             }
-            return new Kross::Api::List(l);
+            return new Kross::List(l);
         }
         case T_FIXNUM:
-            return new Kross::Api::Variant((qlonglong)FIX2INT(value));
+            return new Kross::Variant((qlonglong)FIX2INT(value));
         case T_HASH:
         {
-            QMap<QString, Kross::Api::Object::Ptr> map;
+            QMap<QString, Kross::Object::Ptr> map;
             VALUE vmap = Data_Wrap_Struct(rb_cObject, 0,0, &map);
             rb_hash_foreach(value, (int (*)(...))convertHash_i, vmap);
-            return new Kross::Api::Dict(map);
+            return new Kross::Dict(map);
         }
         case T_BIGNUM:
         {
-            return new Kross::Api::Variant((qlonglong)NUM2LONG(value));
+            return new Kross::Variant((qlonglong)NUM2LONG(value));
         }
         case T_TRUE:
         {
-            return new Kross::Api::Variant(true);
+            return new Kross::Variant(true);
         }
         case T_FALSE:
         {
-            return new Kross::Api::Variant(false);
+            return new Kross::Variant(false);
         }
         case T_SYMBOL:
         {
-            return new Kross::Api::Variant(QString(rb_id2name(SYM2ID(value))));
+            return new Kross::Variant(QString(rb_id2name(SYM2ID(value))));
         }
         case T_MATCH:
         case T_OBJECT:
@@ -251,7 +248,7 @@ Kross::Api::Object* RubyExtension::toObject(VALUE value)
         case T_MODULE:
         case T_ICLASS:
         case T_CLASS:
-            krosswarning(QString("This ruby type '%1' cannot be converted to a Kross::Api::Object").arg(TYPE(value)));
+            krosswarning(QString("This ruby type '%1' cannot be converted to a Kross::Object").arg(TYPE(value)));
         default:
         case T_NIL:
             return 0;
@@ -270,7 +267,6 @@ VALUE RubyExtension::toVALUE(QStringList list)
         rb_ary_push(l, toVALUE(*it));
     return l;
 }
-
 
 VALUE RubyExtension::toVALUE(QMap<QString, QVariant> map)
 {
@@ -333,26 +329,26 @@ VALUE RubyExtension::toVALUE(const QVariant& variant)
     }
 }
 
-VALUE RubyExtension::toVALUE(Kross::Api::Object::Ptr object)
+VALUE RubyExtension::toVALUE(Kross::Object::Ptr object)
 {
     if(! object.data()) {
         return 0;
     }
 
     {
-        Kross::Api::Variant* variant = dynamic_cast<Kross::Api::Variant*>( object.data() );
+        Kross::Variant* variant = dynamic_cast<Kross::Variant*>( object.data() );
         if(variant)
             return toVALUE( variant->getValue() );
     }
     {
-        Kross::Api::List* list = dynamic_cast<Kross::Api::List*>( object.data() );
+        Kross::List* list = dynamic_cast<Kross::List*>( object.data() );
         if(list)
-            return toVALUE( Kross::Api::List::Ptr(list) );
+            return toVALUE( Kross::List::Ptr(list) );
     }
     {
-        Kross::Api::Dict* dict = dynamic_cast<Kross::Api::Dict*>( object.data() );
+        Kross::Dict* dict = dynamic_cast<Kross::Dict*>( object.data() );
         if(dict)
-            return toVALUE( Kross::Api::Dict::Ptr(dict) );
+            return toVALUE( Kross::Dict::Ptr(dict) );
     }
 
     if(RubyExtensionPrivate::s_krossObject == 0)
@@ -363,7 +359,7 @@ VALUE RubyExtension::toVALUE(Kross::Api::Object::Ptr object)
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, new RubyExtension(object) );
 }
 
-VALUE RubyExtension::toVALUE(Kross::Api::List::Ptr list)
+VALUE RubyExtension::toVALUE(Kross::List::Ptr list)
 {
     VALUE l = rb_ary_new();
     uint count = list ? list->count() : 0;
@@ -372,7 +368,6 @@ VALUE RubyExtension::toVALUE(Kross::Api::List::Ptr list)
     return l;
 
 }
-
-}
+#endif
 
 }

@@ -15,7 +15,8 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 #add_subdirectory( flakeshapes )
 
-if(KOFFICE_ENABLE_SCRIPTING)
-	add_subdirectory(scripting)
-endif(KOFFICE_ENABLE_SCRIPTING)	
+# disabled for now till ported to Kross2
+#if(KOFFICE_ENABLE_SCRIPTING)
+#	add_subdirectory(scripting)
+#endif(KOFFICE_ENABLE_SCRIPTING)	
 

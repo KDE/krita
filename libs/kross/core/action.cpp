@@ -24,6 +24,7 @@
 
 #include <QFile>
 #include <klocale.h>
+#include <kmimetype.h>
 
 using namespace Kross;
 
@@ -61,7 +62,7 @@ namespace Kross {
             * scripting code and, if not defined, the
             * used interpreter.
             */
-            QString scriptfile;
+            KUrl scriptfile;
 
             /**
             * Map of options that overwritte the \a InterpreterInfo::Option::Map
@@ -75,15 +76,27 @@ namespace Kross {
 }
 
 Action::Action(const QString& name)
-    : KAction( 0 /* no parent QObject */, name )
+    : KAction( 0 /* no parent KActionCollection */, name )
     , KShared()
     , ChildrenInterface()
     , ErrorInterface()
-    , d( new ActionPrivate() ) // initialize d-pointer class
+    , d( new ActionPrivate() )
 {
     //krossdebug( QString("Action::Action() Ctor name='%1'").arg(objectName()) );
     //connect(this, SIGNAL(triggered(bool)), this, SLOT(slotTriggered()));
     //connect(this, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotTriggered()));
+}
+
+Action::Action(const KUrl& file)
+    : KAction( 0 /* no parent KActionCollection */, file.path() )
+    , KShared()
+    , ChildrenInterface()
+    , ErrorInterface()
+    , d( new ActionPrivate() )
+{
+    d->scriptfile = file;
+    setText(file.fileName());
+    setIcon( KIcon( KMimeType::iconNameForURL(file) ) );
 }
 
 Action::~Action()
@@ -115,15 +128,9 @@ void Action::setInterpreterName(const QString& interpretername)
     d->interpretername = interpretername;
 }
 
-QString Action::getFile() const
+KUrl Action::getFile() const
 {
     return d->scriptfile;
-}
-
-void Action::setFile(const QString& scriptfile)
-{
-    finalize();
-    d->scriptfile = scriptfile;
 }
 
 QMap<QString, QVariant>& Action::getOptions()
@@ -219,20 +226,25 @@ bool Action::initialize()
 {
     finalize();
 
-    if(! d->scriptfile.isNull()) {
-        krossdebug( QString("Kross::Action::initialize() file=%1").arg(d->scriptfile) );
+    if(d->scriptfile.isValid()) {
+        const QString file = d->scriptfile.toLocalFile();
+        QFile f(file);
+        if(! f.exists()) {
+            setError(i18n("There exists no such scriptfile '%1'",file));
+            return false;
+        }
 
+        krossdebug( QString("Kross::Action::initialize() file=%1").arg(file) );
         if(d->interpretername.isNull()) {
-            d->interpretername = Manager::self().getInterpreternameForFile( d->scriptfile );
+            d->interpretername = Manager::self().getInterpreternameForFile(file);
             if(d->interpretername.isNull()) {
-                setError(i18n("Failed to determinate interpreter for scriptfile '%1'",d->scriptfile));
+                setError(i18n("Failed to determinate interpreter for scriptfile '%1'",file));
                 return false;
             }
         }
 
-        QFile f( d->scriptfile );
         if(! f.open(QIODevice::ReadOnly)) {
-            setError(i18n("Failed to open scriptfile '%1'",d->scriptfile));
+            setError(i18n("Failed to open scriptfile '%1'",file));
             return false;
         }
         d->code = QString( f.readAll() );

@@ -26,6 +26,7 @@
 
 #include <kaction.h>
 #include <ksharedptr.h>
+#include <kurl.h>
 #include <koffice_export.h>
 
 #include "errorinterface.h"
@@ -47,28 +48,34 @@ namespace Kross {
     {
             Q_OBJECT
 
-            // We protected the constructor cause Action instances should
-            // be created only within the Manager::getAction() method.
-            friend class Manager;
+        public:
 
-        protected:
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<Action> Ptr;
 
             /**
              * Constructor.
-             *
-             * The constructor is protected cause only with the \a ScriptManager
-             * it's possible to access \a Action instances.
              *
              * \param name The unique name this Action has. It's used
              * e.g. at the \a Manager to identify the Action. The
              * name is accessible via \a QObject::objectName .
              */
-            explicit Action(const QString& name = QString::null);
+            Action(const QString& name = QString::null);
 
-        public:
-
-            /// Shared pointer to implement reference-counting.
-            typedef KSharedPtr<Action> Ptr;
+            /**
+             * Constructor.
+             *
+             * \param file The in the KUrl defined path() should point
+             * to a valid scriptingfile. This \a Action will be filled
+             * with the content of the file (e.g. the file is readed
+             * and \a getCode should return it's content and it's also
+             * tried to determinate the \a getInterpreterName ).
+             *
+             * The \p file needs to be a valid local file and can't be
+             * changed later cause the file.path() will be used as
+             * name for this KAction.
+             */
+            Action(const KUrl& file);
 
             /**
              * Destructor.
@@ -76,17 +83,18 @@ namespace Kross {
             virtual ~Action();
 
             /**
-             * Return the scriptcode this Action holds.
+             * \return the scriptcode this Action holds.
              */
             QString getCode() const;
 
             /**
-             * Set the scriptcode this Action holds.
+             * Set the scriptcode \p code this Action should execute.
              */
             void setCode(const QString& code);
 
             /**
-             * \return the name of the interpreter.
+             * \return the name of the interpreter. Could be for
+             * example "python" or "ruby".
              */
             QString getInterpreterName() const;
 
@@ -98,15 +106,7 @@ namespace Kross {
             /**
              * \return the filename which will be executed.
              */
-            QString getFile() const;
-
-            /**
-             * Set the filename which will be executed if the triggered signal
-             * got emitted. The \p scriptfile needs to be a valid local file or
-             * QString::null if you don't like to use a file rather then the
-             * with \a setCode() defined scripting code.
-             */
-            void setFile(const QString& scriptfile);
+            KUrl getFile() const;
 
             /**
              * \return a map of options this \a Action defines.
@@ -176,19 +176,6 @@ namespace Kross {
             KSharedPtr<Object> classInstance(const QString& classname);
 #endif
 
-        private slots:
-
-            /**
-             * This private slot is connected with the \a QAction::triggered
-             * signal. To execute the script just emit that signal and this
-             * slot tries to execute the script.
-             */
-            void slotTriggered();
-
-        private:
-            /// Internaly used private d-pointer.
-            ActionPrivate* d;
-
             /**
              * Initialize the \a Script instance.
              *
@@ -207,6 +194,19 @@ namespace Kross {
              * of calling it if needed.
              */
             void finalize();
+
+        private slots:
+
+            /**
+             * This private slot is connected with the \a QAction::triggered
+             * signal. To execute the script just emit that signal and this
+             * slot tries to execute the script.
+             */
+            void slotTriggered();
+
+        private:
+            /// Internaly used private d-pointer.
+            ActionPrivate* d;
     };
 
 }

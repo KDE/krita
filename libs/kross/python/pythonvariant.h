@@ -21,7 +21,8 @@
 #define KROSS_PYTHONVARIANT_H
 
 #include "pythonconfig.h"
-#include "../core/object.h"
+#include "../core/metatype.h"
+//#include "../core/object.h"
 
 #include <QString>
 #include <QStringList>
@@ -382,70 +383,25 @@ namespace Kross {
     */
 
     /**********************************************************************
-     * The PythonVariant helper classes used as temp objects within
+     * Following helper classes are used as temp objects within
      * PythonExtension to translate an argument into a void* needed
      * for QGenericArgument's data pointer.
      */
 
-    struct PythonVariant
+    class PythonMetaTypeFactory
     {
-        virtual ~PythonVariant() {}
-        virtual void* toVoidStar() = 0;
-        //virtual QVariant toVariant(int type) = 0;
-        //virtual Py::Object toPyObject() = 0;
-
-        static PythonVariant* create(const char* typeName);
-        static PythonVariant* create(const char* typeName, const Py::Object& object);
+        public:
+            static MetaType* create(const char* typeName);
+            static MetaType* create(const char* typeName, const Py::Object& object);
     };
 
     template<typename VARIANTTYPE>
-    struct PythonVariantImpl : public PythonVariant
+    class PythonMetaTypeVariant : public MetaTypeVariant<VARIANTTYPE>
     {
-        PythonVariantImpl(const VARIANTTYPE& v) : m_variant(v) {}
-        PythonVariantImpl(const Py::Object& obj) : m_variant( PythonType<VARIANTTYPE>::toVariant(obj) ) {
-            krossdebug( QString("PythonVariantImpl<VARIANTTYPE> CTOR typename=%1").arg(typeid(VARIANTTYPE).name()) );
-        }
-        virtual ~PythonVariantImpl() {
-            krossdebug( QString("PythonVariantImpl<VARIANTTYPE> DTOR typename=%1").arg(typeid(VARIANTTYPE).name()) );
-        }
-        virtual void* toVoidStar() { return (void*) &m_variant; }
-        VARIANTTYPE m_variant;
-    };
-
-    template<>
-    struct PythonVariantImpl<Object::Ptr> : public PythonVariant
-    {
-        PythonVariantImpl(Object::Ptr obj) : m_object(obj) {
-            Q_ASSERT(m_object.data());
-            krossdebug( QString("PythonVariantImpl<Object::Ptr> CTOR objectName=%1 typename=%2").arg(m_object->objectName()).arg(typeid(m_object).name()) );
-        }
-        virtual ~PythonVariantImpl() {
-            krossdebug( QString("PythonVariantImpl<Object::Ptr> DTOR objectName=%1 typename=%2").arg(m_object->objectName()).arg(typeid(m_object).name()) );
-        }
-        virtual void* toVoidStar() { return (void*) &m_object; }
-        Object::Ptr m_object;
-    };
-
-    template<>
-    struct PythonVariantImpl< void* > : public PythonVariant
-    {
-        PythonVariantImpl(int typeId, void* obj) : m_typeId(typeId), m_object(obj) {
-            krossdebug( QString("PythonVariantImpl< void* > CTOR typeid=%1 typename=%2").arg(m_typeId).arg(typeid(m_object).name()) );
-        }
-        virtual ~PythonVariantImpl() {
-            krossdebug( QString("PythonVariantImpl< void* > DTOR typeid=%1 typename=%2").arg(m_typeId).arg(typeid(m_object).name()) );
-        }
-        virtual void* toVoidStar() { return (void*) &m_object; }
-        int m_typeId;
-        void* m_object;
-    };
-
-    template<>
-    struct PythonVariantImpl<void> : public PythonVariant
-    {
-        PythonVariantImpl() {}
-        virtual ~PythonVariantImpl() {}
-        virtual void* toVoidStar() { return (void*)0; }
+        public:
+            PythonMetaTypeVariant(const Py::Object& obj)
+                : MetaTypeVariant<VARIANTTYPE>( PythonType<VARIANTTYPE>::toVariant(obj) ) {}
+            virtual ~PythonMetaTypeVariant() {}
     };
 
 }

@@ -21,14 +21,14 @@
 #define KROSS_GUICLIENT_H
 
 #include "../core/krossconfig.h"
+#include "../core/action.h"
 
 #include <QObject>
 //#include <QList>
 #include <qdom.h>
 #include <kurl.h>
 #include <kxmlguiclient.h>
-
-class QWdiget;
+//class QWdiget;
 
 namespace Kross {
 
@@ -41,7 +41,6 @@ namespace Kross {
         , public KXMLGUIClient
     {
             Q_OBJECT
-            //Q_PROPERTY(QString configfile READ getConfigFile WRITE setConfigFile)
 
         public:
 
@@ -137,15 +136,39 @@ namespace Kross {
             virtual void setXMLFile(const QString& file, bool merge = false, bool setXMLDoc = true);
             /// KXMLGUIClient overloaded method to set the XML DOM-document.
             virtual void setDOMDocument(const QDomDocument &document, bool merge = false);
+#endif
 
-        public slots:
+        protected slots:
 
            /**
             * A KFileDialog will be displayed to let the user choose
             * a scriptfile. The choosen file will be returned as KUrl.
             */
-            KUrl openScriptFile(const QString& caption = QString::null);
+            KUrl openFile(const QString& caption);
 
+        public slots: // to execute a scriptfile
+
+            /**
+            * A KFileDialog will be displayed to let the user choose the scriptfile
+            * that should be executed.
+            */
+            bool executeFile();
+
+            /**
+            * Execute the scriptfile \p file . Internaly we try to use
+            * the defined filename to auto-detect the \a Interpreter which
+            * should be used for the execution.
+            */
+            bool executeFile(const KUrl& file);
+
+            /**
+             * This method executes the \a Action \p action . Internaly we just
+             * call \a Action::trigger and redirect the success/failed signals
+             * to our internal slots.
+             */
+            bool executeAction(Action::Ptr action);
+
+#if 0
            /**
             * A KFileDialog will be displayed to let the user choose
             * a scriptfile that should be loaded.
@@ -153,60 +176,41 @@ namespace Kross {
             * \a ScriptActionCollection of loaded scripts.
             */
             bool loadScriptFile();
-
-            /**
-            * A KFileDialog will be displayed to let the user choose
-            * the scriptfile that should be executed.
-            * The executed \a ScriptAction will be added to the
-            * \a ScriptActionCollection of executed scripts.
-            */
-            bool executeScriptFile();
-
-            /**
-            * Execute the scriptfile \p file . Internaly we try to use
-            * the defined filename to auto-detect the \a Interpreter which
-            * should be used for the execution.
-            */
-            bool executeScriptFile(const QString& file);
-
-            /**
-             * This method executes the \a ScriptAction \p action .
-             * Internaly we just call \a ScriptAction::activate and 
-             * redirect the success/failed signals to our internal slots.
-             */
-            bool executeScriptAction(ScriptAction::Ptr action);
+#endif
 
             /**
             * The \a ScriptManagerGUI dialog will be displayed to
             * let the user manage the scriptfiles.
             */
-            void showScriptManager();
+            void showManager();
 
         private slots:
 
             /**
-            * Called if execution of this \a ScriptAction failed and
-            * displays an errormessage-dialog.
-            */
+             * Called if execution failed and displays an errormessage-dialog.
+             */
             void executionFailed(const QString& errormessage, const QString& tracedetails);
 
             /**
-            * Called if execution of this \a ScriptAction was 
-            * successfully. The \a ScriptAction will be added
-            * to the history-collection of successfully executed
-            * \a ScriptAction instances.
-            */
-            void successfullyExecuted();
+             * Called if execution was successfully.
+             */
+            void executionSuccessfull();
 
         signals:
+#if 0
             /// Emitted if a \a ScriptActionCollection instances changed.
             void collectionChanged(ScriptActionCollection*);
-            /// This signal is emited when the execution of a script is started
-            void executionStarted(const Kross::Api::ScriptAction* );
-            /// This signal is emited when the execution of a script is finished
-            void executionFinished(const Kross::Api::ScriptAction* );
-
 #endif
+
+            /**
+             * This signal is emited when the execution of a script is started.
+             */
+            void executionStarted(const Action* );
+
+            /**
+             * This signal is emited when the execution of a script is finished.
+             */
+            void executionFinished(const Action* );
 
         private:
             /// \internal d-pointer class.

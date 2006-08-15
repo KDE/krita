@@ -20,6 +20,8 @@
 #include "pythonvariant.h"
 #include "pythonextension.h"
 
+#include "../core/metatype.h"
+
 #include <QWidget>
 
 using namespace Kross;
@@ -132,61 +134,61 @@ QVariant PythonType<QVariant>::toVariant(const Py::Object& obj)
     return variant;
 }
 
-PythonVariant* PythonVariant::create(const char* typeName)
+MetaType* PythonMetaTypeFactory::create(const char* typeName)
 {
     int typeId = QVariant::nameToType(typeName);
 
     if(typeId != QVariant::Invalid) {
-        krossdebug( QString("PythonVariant::create typeName=%1 variant.typeid=%2").arg(typeName).arg(typeId) );
-        return new PythonVariantImpl< QVariant >( QVariant( (QVariant::Type) typeId ) );
+        krossdebug( QString("PythonMetaTypeFactory::create typeName=%1 variant.typeid=%2").arg(typeName).arg(typeId) );
+        return new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) typeId ) );
     }
 
 /* crashes on shared containers like e.g. QStringList and QList */
     typeId = QMetaType::type(typeName);
     //Q_ASSERT(typeId != QMetaType::Void);
-    krossdebug( QString("PythonVariant::create typeName=%1 metatype.typeid=%2").arg(typeName).arg(typeId) );
+    krossdebug( QString("PythonMetaTypeFactory::create typeName=%1 metatype.typeid=%2").arg(typeName).arg(typeId) );
 
     //if (id != -1) {
     void* myClassPtr = QMetaType::construct(typeId, 0);
     //QMetaType::destroy(id, myClassPtr);
     //myClassPtr = 0;
-    return new PythonVariantImpl< void* >( typeId, myClassPtr );
+    return new MetaTypeVoidStar( typeId, myClassPtr );
 
     //krosswarning( QString("PythonVariant::create Not possible to create a PythonVariant for typename '%1' with id %2").arg(typeName).arg(typeId) );
     //throw Py::TypeError( QString("Invalid typename %1").arg(typeName).toLatin1().constData() );
 }
 
-PythonVariant* PythonVariant::create(const char* typeName, const Py::Object& object)
+MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& object)
 {
     int typeId = QVariant::nameToType(typeName);
-    krossdebug( QString("PythonVariant::create object=%1 typeName=%2 metatype.id=%3 variant.id=%4").arg(object.as_string().c_str()).arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
+    krossdebug( QString("PythonMetaTypeFactory::create object=%1 typeName=%2 metatype.id=%3 variant.id=%4").arg(object.as_string().c_str()).arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
 
     switch(typeId) {
         case QVariant::Int:
-            return new PythonVariantImpl<int>(object);
+            return new PythonMetaTypeVariant<int>(object);
         case QVariant::UInt:
-            return new PythonVariantImpl<uint>(object);
+            return new PythonMetaTypeVariant<uint>(object);
         case QVariant::Double:
-            return new PythonVariantImpl<double>(object);
+            return new PythonMetaTypeVariant<double>(object);
         case QVariant::Bool:
-            return new PythonVariantImpl<bool>(object);
+            return new PythonMetaTypeVariant<bool>(object);
 
         case QVariant::ByteArray:
-            return new PythonVariantImpl<QByteArray>(object);
+            return new PythonMetaTypeVariant<QByteArray>(object);
         case QVariant::String:
-            return new PythonVariantImpl<QString>(object);
+            return new PythonMetaTypeVariant<QString>(object);
 
         case QVariant::StringList:
-            return new PythonVariantImpl<QStringList>(object);
+            return new PythonMetaTypeVariant<QStringList>(object);
         case QVariant::Map:
-            return new PythonVariantImpl<QVariantMap>(object);
+            return new PythonMetaTypeVariant<QVariantMap>(object);
         case QVariant::List:
-            return new PythonVariantImpl<QVariantList>(object);
+            return new PythonMetaTypeVariant<QVariantList>(object);
 
         case QVariant::LongLong:
-            return new PythonVariantImpl<qlonglong>(object);
+            return new PythonMetaTypeVariant<qlonglong>(object);
         case QVariant::ULongLong:
-            return new PythonVariantImpl<qulonglong>(object);
+            return new PythonMetaTypeVariant<qulonglong>(object);
 
         case QVariant::Invalid: // fall through
         case QVariant::UserType: // fall through
@@ -194,12 +196,11 @@ PythonVariant* PythonVariant::create(const char* typeName, const Py::Object& obj
             //int metaid = QMetaType::type(typeName);
 
             if(Py::PythonExtension<PythonExtension>::check( object )) {
-                krossdebug( QString("PythonVariant::create Py::Object '%1' with typename '%2' is a PythonExtension object").arg(object.as_string().c_str()).arg(typeName) );
+                krossdebug( QString("PythonMetaTypeFactory::create Py::Object '%1' with typename '%2' is a PythonExtension object").arg(object.as_string().c_str()).arg(typeName) );
                 Py::ExtensionObject<PythonExtension> extobj(object);
                 PythonExtension* extension = extobj.extensionObject();
                 Q_ASSERT( extension->object() );
-                //TODO same as above and merge them!
-                return new PythonVariantImpl< void* >( typeId, extension->object() );
+                return new MetaTypeVoidStar( typeId, extension->object() );
             }
 
             //QVariant v = PythonType<QVariant>::toVariant(object);
@@ -207,7 +208,7 @@ PythonVariant* PythonVariant::create(const char* typeName, const Py::Object& obj
             //if(typeId == QVariant::Invalid) return new PythonVariantImpl<void>();
             //return new PythonVariantImpl<QVariant>(v);
 
-            krosswarning( QString("PythonVariant::create Not possible to convert the Py::Object '%1' to QVariant with '%2' and metaid '%3'").arg(object.as_string().c_str()).arg(typeName).arg(typeId) );
+            krosswarning( QString("PythonMetaTypeFactory::create Not possible to convert the Py::Object '%1' to QVariant with '%2' and metaid '%3'").arg(object.as_string().c_str()).arg(typeName).arg(typeId) );
             throw Py::TypeError( QString("Invalid typename %1").arg(typeName).toLatin1().constData() );
         } break;
     }

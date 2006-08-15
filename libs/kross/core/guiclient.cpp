@@ -18,7 +18,6 @@
  ***************************************************************************/
 
 #include "guiclient.h"
-#include "../core/action.h"
 #include "../core/interpreter.h"
 #include "manager.h"
 
@@ -57,28 +56,24 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     , KXMLGUIClient(guiclient)
     , d(new Private(guiclient, parent))
 {
-    //setInstance( GUIClient::instance() );
+    setInstance( GUIClient::instance() );
 
-#if 0
     // action to execute a scriptfile.
     KAction* execfileaction = new KAction(i18n("Execute Script File..."), actionCollection(), "executescriptfile");
-    //i18n("Execute Script File..."), 0, 0, this, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
-    connect(execfileaction, SIGNAL(triggered(Qt::MouseButtons, Qt::KeyboardModifiers)),
-            this, SLOT(executeScriptFile()));
+    connect(execfileaction, SIGNAL(triggered(Qt::MouseButtons, Qt::KeyboardModifiers)), this, SLOT(executeFile()));
 
     // acion to show the ScriptManagerGUI dialog.
     KAction* manageraction =  new KAction(i18n("Scripts Manager..."), actionCollection(), "configurescripts");
-    //i18n("Scripts Manager..."), 0, 0, this, SLOT(showScriptManager()), actionCollection(), "configurescripts");
-    connect(manageraction, SIGNAL(triggered(Qt::MouseButtons, Qt::KeyboardModifiers)),
-            this, SLOT(showScriptManager()));
+    connect(manageraction, SIGNAL(triggered(Qt::MouseButtons, Qt::KeyboardModifiers)), this, SLOT(showManager()));
 
-    // The predefined ScriptActionCollection's this GUIClient provides.
+#if 0
+    // The predefined ActionCollection's this GUIClient provides.
     d->collections.insert("installedscripts",
-        new ScriptActionCollection(i18n("Scripts"), actionCollection(), "installedscripts") );
+        new ActionCollection(i18n("Scripts"), actionCollection(), "installedscripts") );
     d->collections.insert("loadedscripts",
-        new ScriptActionCollection(i18n("Loaded"), actionCollection(), "loadedscripts") );
+        new ActionCollection(i18n("Loaded"), actionCollection(), "loadedscripts") );
     d->collections.insert("executedscripts",
-        new ScriptActionCollection(i18n("History"), actionCollection(), "executedscripts") );
+        new ActionCollection(i18n("History"), actionCollection(), "executedscripts") );
 
     reloadInstalledScripts();
 #endif
@@ -87,7 +82,7 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
 GUIClient::~GUIClient()
 {
 #if 0
-    for(QMap<QString, ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
+    for(QMap<QString, ActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
         delete it.value();
 #endif
     delete d;
@@ -101,7 +96,7 @@ void GUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
 void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
 {
     /*
-    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
+    ActionCollection* installedcollection = d->collections["installedscripts"];
     if(! merge && installedcollection)
         installedcollection->clear();
 
@@ -116,17 +111,17 @@ bool GUIClient::hasActionCollection(const QString& name)
     return d->collections.contains(name);
 }
 
-ScriptActionCollection* GUIClient::getActionCollection(const QString& name)
+ActionCollection* GUIClient::getActionCollection(const QString& name)
 {
     return d->collections[name];
 }
 
-QMap<QString, ScriptActionCollection*> GUIClient::getActionCollections()
+QMap<QString, ActionCollection*> GUIClient::getActionCollections()
 {
     return d->collections;
 }
 
-void GUIClient::addActionCollection(const QString& name, ScriptActionCollection* collection)
+void GUIClient::addActionCollection(const QString& name, ActionCollection* collection)
 {
     removeActionCollection(name);
     d->collections.insert(name, collection);
@@ -135,7 +130,7 @@ void GUIClient::addActionCollection(const QString& name, ScriptActionCollection*
 bool GUIClient::removeActionCollection(const QString& name)
 {
     if(d->collections.contains(name)) {
-        ScriptActionCollection* c = d->collections[name];
+        ActionCollection* c = d->collections[name];
         d->collections.remove(name);
         delete c;
         return true;
@@ -145,7 +140,7 @@ bool GUIClient::removeActionCollection(const QString& name)
 
 void GUIClient::reloadInstalledScripts()
 {
-    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
+    ActionCollection* installedcollection = d->collections["installedscripts"];
     if(installedcollection)
         installedcollection->clear();
 
@@ -228,14 +223,14 @@ bool GUIClient::loadScriptConfigFile(const QString& scriptconfigfile)
 
 bool GUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, const QDomDocument &document)
 {
-    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
-    QDomNodeList nodelist = document.elementsByTagName("ScriptAction");
+    ActionCollection* installedcollection = d->collections["installedscripts"];
+    QDomNodeList nodelist = document.elementsByTagName("Action");
     uint nodelistcount = nodelist.count();
     for(uint i = 0; i < nodelistcount; i++) {
-        ScriptAction::Ptr action = ScriptAction::Ptr( new ScriptAction(scriptconfigfile, nodelist.item(i).toElement()) );
+        Action::Ptr action = Action::Ptr( new Action(scriptconfigfile, nodelist.item(i).toElement()) );
 
         if(installedcollection) {
-            ScriptAction::Ptr otheraction = installedcollection->action( action->objectName() );
+            Action::Ptr otheraction = installedcollection->action( action->objectName() );
             if(otheraction) {
                 // There exists already an action with the same name. Use the versionnumber
                 // to see if one of them is newer and if that's the case display only
@@ -265,7 +260,7 @@ bool GUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, const 
                 this, SLOT( executionFailed(const QString&, const QString&) ));
         connect(action.data(), SIGNAL( success() ),
                 this, SLOT( successfullyExecuted() ));
-        connect(action.data(), SIGNAL( activated(const Kross::ScriptAction*) ), SIGNAL( executionStarted(const Kross::ScriptAction*)));
+        connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
     }
     emit collectionChanged(installedcollection);
     return true;
@@ -278,32 +273,35 @@ void GUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
 
 void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
 {
-    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
+    ActionCollection* installedcollection = d->collections["installedscripts"];
     if(! merge && installedcollection)
         installedcollection->clear();
 
     KXMLGUIClient::setDOMDocument(document, merge);
     loadScriptConfigDocument(xmlFile(), document);
 }
+#endif
 
-void GUIClient::successfullyExecuted()
+void GUIClient::executionSuccessfull()
 {
-    const ScriptAction* action = dynamic_cast< const ScriptAction* >( QObject::sender() );
+    const Action* action = dynamic_cast< const Action* >( QObject::sender() );
     if(action) {
         emit executionFinished(action);
-        ScriptActionCollection* executedcollection = d->collections["executedscripts"];
+#if 0
+        ActionCollection* executedcollection = d->collections["executedscripts"];
         if(executedcollection) {
-            ScriptAction* actionptr = const_cast< ScriptAction* >( action );
-            executedcollection->detach( ScriptAction::Ptr(actionptr) );
-            executedcollection->attach( ScriptAction::Ptr(actionptr) );
+            Action* actionptr = const_cast< Action* >( action );
+            executedcollection->detach( Action::Ptr(actionptr) );
+            executedcollection->attach( Action::Ptr(actionptr) );
             emit collectionChanged(executedcollection);
         }
+#endif
     }
 }
 
 void GUIClient::executionFailed(const QString& errormessage, const QString& tracedetails)
 {
-    const ScriptAction* action = dynamic_cast< const ScriptAction* >( QObject::sender() );
+    const Action* action = dynamic_cast< const Action* >( QObject::sender() );
     if(action)
         emit executionFinished(action);
     if(tracedetails.isEmpty())
@@ -312,10 +310,10 @@ void GUIClient::executionFailed(const QString& errormessage, const QString& trac
         KMessageBox::detailedError(0, errormessage, tracedetails);
 }
 
-KUrl GUIClient::openScriptFile(const QString& caption)
+KUrl GUIClient::openFile(const QString& caption)
 {
     QStringList mimetypes;
-    QMap<QString, InterpreterInfo*> infos = Manager::scriptManager()->getInterpreterInfos();
+    QMap<QString, InterpreterInfo*> infos = Manager::self().getInterpreterInfos();
     for(QMap<QString, InterpreterInfo*>::Iterator it = infos.begin(); it != infos.end(); ++it)
         mimetypes.append( it.value()->getMimeTypes().join(" ").trimmed() );
 
@@ -325,25 +323,37 @@ KUrl GUIClient::openScriptFile(const QString& caption)
         0, // widget
         0 // parent
     );
-    if(! caption.isNull())
-        filedialog->setCaption(caption);
-    if( filedialog->exec() )
-        return filedialog->selectedUrl();
-    return KUrl();
+    filedialog->setCaption(caption);
+    return filedialog->exec() ? filedialog->selectedUrl() : KUrl();
 }
 
-bool GUIClient::loadScriptFile()
+bool GUIClient::executeFile()
+{
+    KUrl url = openFile( i18n("Execute Script File") );
+    if(url.isValid())
+        return executeFile(url);
+    return false;
+}
+
+bool GUIClient::executeFile(const KUrl& file)
+{
+    krossdebug( QString("GUIClient::executeFile() file='%1'").arg(file) );
+    return executeAction( Action::Ptr( new Action(file) ) );
+}
+
+#if 0
+bool GUIClient::loadFile()
 {
     KUrl url = openScriptFile( i18n("Load Script File") );
     if(url.isValid()) {
-        ScriptActionCollection* loadedcollection = d->collections["loadedscripts"];
+        ActionCollection* loadedcollection = d->collections["loadedscripts"];
         if(loadedcollection) {
-            ScriptAction::Ptr action = ScriptAction::Ptr( new ScriptAction( url.path() ) );
+            Action::Ptr action = Action::Ptr( new Action( url.path() ) );
             connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
                     this, SLOT( executionFailed(const QString&, const QString&) ));
             connect(action.data(), SIGNAL( success() ),
                     this, SLOT( successfullyExecuted() ));
-            connect(action.data(), SIGNAL( activated(const Kross::ScriptAction*) ), SIGNAL( executionStarted(const Kross::ScriptAction*)));
+            connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
 
             loadedcollection->detach(action);
             loadedcollection->attach(action);
@@ -352,38 +362,25 @@ bool GUIClient::loadScriptFile()
     }
     return false;
 }
+#endif
 
-bool GUIClient::executeScriptFile()
+bool GUIClient::executeAction(Action::Ptr action)
 {
-    KUrl url = openScriptFile( i18n("Execute Script File") );
-    if(url.isValid())
-        return executeScriptFile( url.path() );
-    return false;
-}
+    connect(action.data(), SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+    connect(action.data(), SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
 
-bool GUIClient::executeScriptFile(const QString& file)
-{
-    krossdebug( QString("GUIClient::executeScriptFile() file='%1'").arg(file) );
+    connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
 
-    ScriptAction::Ptr action = ScriptAction::Ptr( new ScriptAction(file) );
-    return executeScriptAction(action);
-}
+    action->trigger(); // activate the action and execute the script that way
 
-bool GUIClient::executeScriptAction(ScriptAction::Ptr action)
-{
-    connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
-            this, SLOT( executionFailed(const QString&, const QString&) ));
-    connect(action.data(), SIGNAL( success() ),
-            this, SLOT( successfullyExecuted() ));
-    connect(action.data(), SIGNAL( activated(const Kross::ScriptAction*) ), SIGNAL( executionStarted(const Kross::ScriptAction*)));
-    action->activate();
-    bool ok = action->hadException();
+    bool ok = action->hadError();
     action->finalize(); // execution is done.
     return ok;
 }
 
-void GUIClient::showScriptManager()
+void GUIClient::showManager()
 {
+#if 0
     KDialog* dialog = new KDialog( d->parent );
     dialog->setCaption( i18n("Scripts Manager") );
     dialog->setModal( true );
@@ -395,7 +392,7 @@ void GUIClient::showScriptManager()
     dialog->setMainWidget(wsm);
     dialog->resize( QSize(360, 320).expandedTo(dialog->minimumSizeHint()) );
     dialog->show();
-}
 #endif
+}
 
 #include "guiclient.moc"

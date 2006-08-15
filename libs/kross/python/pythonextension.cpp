@@ -242,12 +242,12 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
             //Q_ASSERT(! hasreturnvalue || QVariant::nameToType(metamethod.typeName()) != QVariant::Invalid);
 
             // exact 1 returnvalue + 0..n arguments
-            PythonVariant* variantargs[ typelistcount + 1 ];
+            MetaType* variantargs[ typelistcount + 1 ];
             void* voidstarargs[ typelistcount + 1 ];
 
             // set the return value
             if(hasreturnvalue) {
-                PythonVariant* pv = PythonVariant::create( metamethod.typeName() );
+                MetaType* pv = PythonMetaTypeFactory::create( metamethod.typeName() );
                 variantargs[0] = pv;
                 voidstarargs[0] = pv->toVoidStar();
             }
@@ -260,13 +260,13 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
             int idx = 1;
             try {
                 for(; idx <= typelistcount; ++idx) {
-                    variantargs[idx] = PythonVariant::create(typelist[idx - 1].constData(), argstuple[idx - 1]);
+                    variantargs[idx] = PythonMetaTypeFactory::create(typelist[idx - 1].constData(), argstuple[idx - 1]);
                     voidstarargs[idx] = variantargs[idx]->toVoidStar();
                 }
             }
             catch(Py::Exception& e) {
-                // Seems PythonVariant::create raised an exception up. So, we
-                // need to clean all already allocated PythonVariant instances.
+                // Seems PythonMetaTypeFactory::create raised an exception
+                // up. Clean all already allocated MetaType instances.
                 for(int i = 0; i < idx; ++i)
                     delete variantargs[i];
                 throw e; // re-throw exception

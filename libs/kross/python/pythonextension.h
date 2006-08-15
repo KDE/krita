@@ -35,7 +35,6 @@
 namespace Kross {
 
     // Forward declaration.
-    class PythonVariant;
     class PythonScript;
 
     /**
@@ -48,7 +47,6 @@ namespace Kross {
     {
             friend class PythonScript;
             //friend class PythonModule;
-            //friend class PythonVariant;
         public:
 
             /**

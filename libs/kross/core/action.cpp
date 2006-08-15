@@ -24,6 +24,7 @@
 
 #include <QFile>
 #include <klocale.h>
+#include <kicon.h>
 #include <kmimetype.h>
 
 using namespace Kross;

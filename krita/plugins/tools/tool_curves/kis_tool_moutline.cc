@@ -280,7 +280,7 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     rc.setBottomRight(rc.bottomRight()+QPoint(10,10));   // and we are able to find paths that go beyond the rect.
 
     KisPaintDeviceSP src = m_parent->m_currentImage->activeDevice();
-    GrayMatrix       dst = GrayMatrix(rc.width());
+    GrayMatrix       dst = GrayMatrix(rc.width(),GrayCol(rc.height()));
 
     Node startNode, endNode;
     QValueList<Node> closedList, openList;
@@ -302,45 +302,39 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     while (!openList.isEmpty()) {
         Node current = openList.first();
         openList.pop_front();
-        if (current == endNode) {
-            // FIXME This goto label shouts revenge in front of God, we need another way to do such a thing!
-            success:
-            while (current.parent() != QPoint(-1,-1)) {
-                it = addPoint(it,tl+current.pos(),false,false,LINEHINT);
-                current = *qFind(closedList.begin(),closedList.end(),current.parent());
-            }
-            break;
-        }
         QValueList<Node> successors = current.getNeighbor(dst,endNode);
-        for (QValueList<Node>::iterator it = successors.begin(); it != successors.end(); it++) {
-            if ((*it) == endNode) {
-//                 closedList.append((*it));
-                goto success;
+        for (QValueList<Node>::iterator iter = successors.begin(); iter != successors.end(); iter++) {
+            if ((*iter) == endNode) {
+                while (current.parent() != QPoint(-1,-1)) {
+                    it = addPoint(it,tl+current.pos(),false,false,LINEHINT);
+                    current = *qFind(closedList.begin(),closedList.end(),current.parent());
+                }
+                return;
             }
-            QValueList<Node>::iterator openIt = qFind(openList.begin(),openList.end(),(*it));
+            QValueList<Node>::iterator openIt = qFind(openList.begin(),openList.end(),(*iter));
             if (openIt != openList.end()) {
-                if ((*it) > (*openIt))
+                if ((*iter) > (*openIt))
                     continue;
                 else
                     openList.erase(openIt);
             }
-            QValueList<Node>::iterator closedIt = qFind(closedList.begin(),closedList.end(),(*it));
+            QValueList<Node>::iterator closedIt = qFind(closedList.begin(),closedList.end(),(*iter));
             if (closedIt != closedList.end()) {
-                if ((*it) > (*closedIt))
+                if ((*iter) > (*closedIt))
                     continue;
                 else {
                     openList.append((*closedIt));
                     closedList.erase(closedIt);
                 }
             }
-            openList.append((*it));
+            openList.append((*iter));
         }
         closedList.append(current);
         qHeapSort(openList);
     }
 
-    int i = 0;
-    for (QValueList<Node>::iterator iter = closedList.begin(); iter != closedList.end(); iter++, i++) {
+//     int i = 0;
+//     for (QValueList<Node>::iterator iter = closedList.begin(); iter != closedList.end(); iter++, i++) {
 //         if ((*iter).parent() != QPoint(-1,-1)) {
 //             if ((*iter) == (*iter).parent())
 //                 kdDebug(0) << "NODE: " << (*iter).pos() << " FATTO MALE!" << endl;
@@ -348,8 +342,8 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
 //                 kdDebug(0) << "NODE: " << (*iter).pos() << " FATTO BENE! PARENT: " << (*iter).parent() << endl;
 //         } else
 //             kdDebug(0) << "NO PARENT!" << endl;
-        dst[(*iter).pos().x()][(*iter).pos().y()] = EDGE + i;
-    }
+//         dst[(*iter).pos().x()][(*iter).pos().y()] = EDGE + i;
+//     }
 
 //     cleanMatrix(dst);
 //     showMatrixValues (rc, dst, start, end);
@@ -442,10 +436,10 @@ void KisCurveMagnetic::reduceMatrix (QRect& rc, GrayMatrix& m, int top, int righ
 
 void KisCurveMagnetic::detectEdges (const QRect & rect, KisPaintDeviceSP src, GrayMatrix& dst)
 {
-    GrayMatrix graysrc(rect.width());
-    GrayMatrix xdeltas(rect.width());
-    GrayMatrix ydeltas(rect.width());
-    GrayMatrix magnitude(rect.width());
+    GrayMatrix graysrc(rect.width(),GrayCol(rect.height()));
+    GrayMatrix xdeltas(rect.width(),GrayCol(rect.height()));
+    GrayMatrix ydeltas(rect.width(),GrayCol(rect.height()));
+    GrayMatrix magnitude(rect.width(),GrayCol(rect.height()));
     KisPaintDeviceSP smooth = new KisPaintDevice(src->colorSpace());
 
     gaussianBlur(rect, src, smooth);
@@ -491,7 +485,7 @@ void KisCurveMagnetic::toGrayScale (const QRect& rect, KisPaintDeviceSP src, Gra
         KisHLineIteratorPixel srcIt = src->createHLineIterator(grectx, grecty+row, grectw, false);
         for (int col = 0; col < grectw; col++) {
             cs->toQColor(srcIt.rawData(),&c);
-            dst[col].push_back(qGray(c.rgb()));
+            dst[col][row] = qGray(c.rgb());
             ++srcIt;
         }
     }
@@ -505,14 +499,14 @@ void KisCurveMagnetic::getDeltas (const GrayMatrix& src, GrayMatrix& xdelta, Gra
         for (uint row = 0; row < src[col].count(); row++) {
             if (row >= start && row < xend) {
                 deri = src[col][row+1] - src[col][row-1];
-                xdelta[col].push_back(deri);
+                xdelta[col][row] = deri;
             } else
-                xdelta[col].push_back(0);
+                xdelta[col][row] = 0;
             if (col >= start && col < yend) {
                 deri = src[col+1][row] - src[col-1][row];
-                ydelta[col].push_back(deri);
+                ydelta[col][row] = deri;
             } else
-                ydelta[col].push_back(0);
+                ydelta[col][row] = 0;
         }
     }
 }
@@ -521,7 +515,7 @@ void KisCurveMagnetic::getMagnitude (const GrayMatrix& xdelta, const GrayMatrix&
 {
     for (uint col = 0; col < xdelta.count(); col++) {
         for (uint row = 0; row < xdelta[col].count(); row++)
-            gradient[col].push_back((Q_INT16)(ROUND(RMS(xdelta[col][row],ydelta[col][row]))));
+            gradient[col][row] = (Q_INT16)(ROUND(RMS(xdelta[col][row],ydelta[col][row])));
     }
 }
 
@@ -608,7 +602,7 @@ void KisCurveMagnetic::nonMaxSupp (const GrayMatrix& magnitude, const GrayMatrix
 //                         result = POSSIBLE_EDGE;
                 }
             }
-            nms[col].push_back(result);
+            nms[col][row] = result;
         }
     }
 }

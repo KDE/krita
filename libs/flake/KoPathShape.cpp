@@ -131,7 +131,7 @@ void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
     applyConversion( painter, converter );
     QPainterPath path( outline() );
-    
+
     painter.setBrush( background() );
     painter.drawPath( path );
     //paintDebug( painter );
@@ -183,7 +183,7 @@ void KoPathShape::paintDebug( QPainter &painter )
     qDebug() << "nop = " << i;
 }
 
-const QPainterPath KoPathShape::KoPathShape::outline() const
+const QPainterPath KoPathShape::getPath( const QPointF &position ) const
 {
     QList<KoSubpath>::const_iterator pathIt( m_points.begin() );
     QPainterPath path;
@@ -197,7 +197,7 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
             if ( ( *it )->properties() & KoPathPoint::StartSubpath )
             {
                 //qDebug() << "moveTo" << ( *it )->point();
-                path.moveTo( ( *it )->point() );
+                path.moveTo( ( *it )->point() - position );
             }
             else if ( activeCP || ( *it )->properties() & KoPathPoint::HasControlPoint1 )
             {
@@ -205,14 +205,14 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
                 //    << "lastPoint->controlPoint2()" << lastPoint->controlPoint2()
                 //    << "lastPoint->point()" << lastPoint->point();
 
-                path.cubicTo( activeCP ? lastPoint->controlPoint2() : lastPoint->point()
-                            , ( *it )->properties() & KoPathPoint::HasControlPoint1 ? ( *it )->controlPoint1() : ( *it )->point()
-                            , ( *it )->point() );
+                path.cubicTo( (activeCP ? lastPoint->controlPoint2() : lastPoint->point() ) - position
+                            , ( ( *it )->properties() & KoPathPoint::HasControlPoint1 ? ( *it )->controlPoint1() : ( *it )->point() ) - position
+                            , ( *it )->point() - position );
             }
             else
             {
                 //qDebug() << "lineTo" << ( *it )->point();
-                path.lineTo( ( *it )->point() );
+                path.lineTo( ( *it )->point() - position );
             }
             if ( ( *it )->properties() & KoPathPoint::CloseSubpath )
             {
@@ -234,10 +234,16 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
     return path;
 }
 
+const QPainterPath KoPathShape::KoPathShape::outline() const
+{
+    QPainterPath originalPath( getPath( QPointF( 0, 0 ) ) );
+    return getPath( originalPath.boundingRect().topLeft() );
+}
+
 QRectF KoPathShape::boundingRect() const
 {
     QRectF bb( outline().boundingRect() );
-    qDebug() << "KoPathShape::boundingRect = " << bb;
+    //qDebug() << "KoPathShape::boundingRect = " << bb;
     return transformationMatrix( 0 ).mapRect( bb );
 }
 

@@ -19,6 +19,7 @@
 
 #include "KoPathShapeFactory.h"
 #include "KoPathShape.h"
+#include "KoLineBorder.h"
 
 #include <klocale.h>
 
@@ -29,7 +30,12 @@ KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
 }
 
 KoShape * KoPathShapeFactory::createDefaultShape() {
-    return new KoPathShape();
+    KoPathShape* path = new KoPathShape();
+    path->moveTo( QPointF( 0, 10 ) );
+    path->curveTo( QPointF( 0, 20 ), QPointF( 5, 20 ), QPointF( 5, 10 ) );
+    path->curveTo( QPointF( 5, 0 ), QPointF( 10, 0 ), QPointF( 10, 10 ) );
+    path->setBorder( new KoLineBorder( 1.0 ) );
+    return path;
 }
 
 KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {

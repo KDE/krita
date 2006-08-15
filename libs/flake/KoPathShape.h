@@ -302,6 +302,8 @@ protected:
 
     void paintDebug( QPainter &painter );
 
+    const QPainterPath getPath( const QPointF &position ) const;
+
     /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
     typedef QList<KoPathPoint *> KoSubpath;
     QList<KoSubpath> m_points;

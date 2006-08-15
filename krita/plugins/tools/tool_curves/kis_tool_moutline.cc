@@ -55,9 +55,140 @@
 
 #include "kis_tool_moutline.h"
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
+
+const int NOEDGE = 0x0000;
+const int POSSIBLE_EDGE = 0x00f0;
+const int EDGE = 400;
+
+const int ORTHOGONAL_COST = 10; // 1*10
+const int DIAGONAL_COST = 14;   // sqrt(2)*10
+const int MALUS = 20;           // This applies to NOEDGE nodes
+
+const int NOTCOPY = true;       // This to know that the constructor is not a copy constructor
+
+class Node {
+
+    QPoint m_pos;
+    int m_gCost;
+    int m_hCost;
+    int m_tCost;
+    bool m_malus;
+    QPoint m_parent;
+
+public:
+
+    Node()
+    {
+        m_pos = m_parent = QPoint(-1,-1);
+        m_gCost = m_hCost = m_tCost = 0;
+        m_malus = false;
+    }
+
+    Node(const Node& node)
+    {
+        m_pos = node.pos();
+        m_gCost = node.gCost();
+        m_hCost = node.hCost();
+        m_tCost = node.tCost();
+        m_malus = node.malus();
+        m_parent = node.parent();
+    }
+
+    Node(const QPoint& parent, const QPoint& pos, int g, int h, bool malus)
+        : m_pos(pos), m_hCost(h), m_malus(malus)
+    {
+        setGCost(g);
+        m_parent = parent;
+    }
+    ~Node ()
+    {
+    }
+
+    int gCost () const {return m_gCost;}
+    int hCost () const {return m_hCost;}
+    int tCost () const {return m_tCost;}
+    bool malus () const {return m_malus;}
+    QPoint pos () const {return m_pos;}
+    QPoint parent () const {return m_parent;}
+
+    void setGCost (int g)
+    {
+        m_gCost = g+(m_malus?MALUS:0);
+        m_tCost = m_gCost+m_hCost;
+    }
+    void setHCost (int h)
+    {
+        m_hCost = h;
+        m_tCost = m_gCost+m_hCost;
+    }
+    void setPos (const QPoint& pos)
+    {
+        m_pos = pos;
+    }
+    void setMalus (bool malus)
+    {
+        m_malus = malus;
+    }
+
+    bool operator== (const Node& n2)
+    {
+        return m_pos == n2.pos();
+    }
+    bool operator!= (const Node& n2)
+    {
+        return m_pos != n2.pos();
+    }
+    bool operator== (const QPoint& n2)
+    {
+        return m_pos == n2;
+    }
+    bool operator!= (const QPoint& n2)
+    {
+        return m_pos != n2;
+    }
+    bool operator< (const Node& n2)
+    {
+        return m_tCost < n2.tCost();
+    }
+    bool operator> (const Node& n2)
+    {
+        return m_tCost > n2.tCost();
+    }
+
+    QValueList<Node> getNeighbor(const GrayMatrix& src, const Node& end)
+    {
+        QPoint tmpdist;
+        QValueList<Node> temp;
+        int dcol, drow;
+        int g, h;
+        bool malus;
+        int x[8] = { 1, 1, 0,-1,-1,-1, 0, 1},
+            y[8] = { 0,-1,-1,-1, 0, 1, 1, 1};
+    
+        for (int i = 0; i < 8; i++) {
+            dcol = m_pos.x() + x[i];
+            drow = m_pos.y() + y[i];
+            tmpdist = QPoint(dcol,drow) - end.pos();
+            if (dcol == src.count() || dcol < 0 ||
+                drow == src[0].count() || drow < 0)
+                continue;
+            if (src[dcol][drow])
+                malus = false;
+            else
+                malus = true;
+            if (i%2)
+                g = m_gCost + DIAGONAL_COST;
+            else
+                g = m_gCost + ORTHOGONAL_COST;
+            h = ORTHOGONAL_COST * (abs(tmpdist.x()) + abs(tmpdist.y()));
+            temp.append(Node(m_pos,QPoint(dcol,drow),g,h,malus));
+        }
+        return temp;
+    }
+
+};
 
 KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2, Q_INT32 i3, Q_INT32 i4,
                           Q_INT32 i5, Q_INT32 i6, Q_INT32 i7, Q_INT32 i8, Q_INT32 i9,
@@ -132,7 +263,7 @@ KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
 KisCurveMagnetic::KisCurveMagnetic (KisToolMagnetic *parent)
     : m_parent(parent)
 {
-
+    standardkeepselected = false;
 }
 
 KisCurveMagnetic::~KisCurveMagnetic ()
@@ -140,7 +271,7 @@ KisCurveMagnetic::~KisCurveMagnetic ()
 
 }
 
-void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator /*it*/)
+void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator it)
 {
     QPoint start = (*p1).point().roundQPoint();
     QPoint end = (*p2).point().roundQPoint();
@@ -151,16 +282,114 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     KisPaintDeviceSP src = m_parent->m_currentImage->activeDevice();
     GrayMatrix       dst = GrayMatrix(rc.width());
 
+    Node startNode, endNode;
+    QValueList<Node> closedList, openList;
+
     detectEdges  (rc, src, dst);
     reduceMatrix (rc, dst, 3, 3, 3, 3);
 
     uint tlx = rc.topLeft().x();
     uint tly = rc.topLeft().y();
-    start -= QPoint(tlx,tly);
-    end -= QPoint(tlx,tly);
-    showMatrixValues (rc, dst, start, end);
-}
+    QPoint tl(tlx,tly);
+    start -= tl;
+    end -= tl;
+//     showMatrixValues (rc, dst, start, end);
 
+    findEdge (start.x(), start.y(), dst, openList);
+    startNode = openList.first();
+    endNode.setPos(end);
+
+    while (!openList.isEmpty()) {
+        Node current = openList.first();
+        openList.pop_front();
+        if (current == endNode) {
+            // FIXME This goto label shouts revenge in front of God, we need another way to do such a thing!
+            success:
+            while (current.parent() != QPoint(-1,-1)) {
+                it = addPoint(it,tl+current.pos(),false,false,LINEHINT);
+                current = *qFind(closedList.begin(),closedList.end(),current.parent());
+            }
+            break;
+        }
+        QValueList<Node> successors = current.getNeighbor(dst,endNode);
+        for (QValueList<Node>::iterator it = successors.begin(); it != successors.end(); it++) {
+            if ((*it) == endNode) {
+//                 closedList.append((*it));
+                goto success;
+            }
+            QValueList<Node>::iterator openIt = qFind(openList.begin(),openList.end(),(*it));
+            if (openIt != openList.end()) {
+                if ((*it) > (*openIt))
+                    continue;
+                else
+                    openList.erase(openIt);
+            }
+            QValueList<Node>::iterator closedIt = qFind(closedList.begin(),closedList.end(),(*it));
+            if (closedIt != closedList.end()) {
+                if ((*it) > (*closedIt))
+                    continue;
+                else {
+                    openList.append((*closedIt));
+                    closedList.erase(closedIt);
+                }
+            }
+            openList.append((*it));
+        }
+        closedList.append(current);
+        qHeapSort(openList);
+    }
+
+    int i = 0;
+    for (QValueList<Node>::iterator iter = closedList.begin(); iter != closedList.end(); iter++, i++) {
+//         if ((*iter).parent() != QPoint(-1,-1)) {
+//             if ((*iter) == (*iter).parent())
+//                 kdDebug(0) << "NODE: " << (*iter).pos() << " FATTO MALE!" << endl;
+//             else
+//                 kdDebug(0) << "NODE: " << (*iter).pos() << " FATTO BENE! PARENT: " << (*iter).parent() << endl;
+//         } else
+//             kdDebug(0) << "NO PARENT!" << endl;
+        dst[(*iter).pos().x()][(*iter).pos().y()] = EDGE + i;
+    }
+
+//     cleanMatrix(dst);
+//     showMatrixValues (rc, dst, start, end);
+}
+/*
+void KisCurveMagnetic::cleanMatrix (GrayMatrix& dst)
+{
+    for (uint i = 0; i < dst.count(); i++) {
+        for (uint j = 0; j < dst[i].count(); j++) {
+            if (dst[i][j] < EDGE && dst[i][j])
+                dst[i][j] = NOEDGE;
+        }
+    }
+}
+*/
+void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, QValueList<Node>& olist)
+{
+    Node node;
+    int x = -1;
+    int y = -1;
+
+    QValueVector<KisVector2D> tmp;
+    KisVector2D mindist(10.,10.0), tmpdist;
+    for (int i = -7; i < 8; i++) {
+        for (int j = -7; j < 8; j++) {
+            if (src[col+i][row+j] != NOEDGE) {
+                tmpdist = KisVector2D(i,j);
+                if (tmpdist.length() < mindist.length())
+                    mindist = tmpdist;
+            }
+        }
+    }
+
+    x = (int)(col + mindist.x());
+    y = (int)(row + mindist.y());
+
+    node.setPos(QPoint(x,y));
+    olist.append(node);
+}
+/*
 void KisCurveMagnetic::showMatrixValues(const QRect& rc, const GrayMatrix& dst, const QPoint& start, const QPoint& end)
 {
     QString line = "---|";
@@ -188,7 +417,7 @@ void KisCurveMagnetic::showMatrixValues(const QRect& rc, const GrayMatrix& dst, 
     kdDebug(0) << "WIDTH: " << rc.width() << " HEIGHT: " << rc.height() << endl;
     kdDebug(0) << " COLS: " << dst.count() << "   ROWS: " << dst[0].count() << endl;
 }
-
+*/
 void KisCurveMagnetic::reduceMatrix (QRect& rc, GrayMatrix& m, int top, int right, int bottom, int left)
 {
     QPoint topleft(top, left);
@@ -240,12 +469,12 @@ void KisCurveMagnetic::gaussianBlur (const QRect& rect, KisPaintDeviceSP src, Ki
 
     KisConvolutionPainter painter( dst );
     // FIXME createKernel could create dynamic gaussian kernels having sigma as argument
-    KisKernelSP kernel = createKernel( 2, 4, 5, 4, 2,
-                                       4, 9,12, 9, 4,
-                                       5,12,15,12, 5,
-                                       4, 9,12, 9, 4,
-                                       2, 4, 5, 4, 2, 115, 0 );
-//     KisKernelSP kernel = createKernel( 1, 2, 1, 2, 4, 2, 1, 2, 1, 11, 0);
+//     KisKernelSP kernel = createKernel( 2, 4, 5, 4, 2,
+//                                        4, 9,12, 9, 4,
+//                                        5,12,15,12, 5,
+//                                        4, 9,12, 9, 4,
+//                                        2, 4, 5, 4, 2, 115, 0 );
+    KisKernelSP kernel = createKernel( 1, 1, 1, 1, 24, 1, 1, 1, 1, 32, 0);
     painter.applyMatrix(kernel, grectx, grecty, grectw, grecth, BORDER_AVOID);
 }
 
@@ -323,7 +552,7 @@ void KisCurveMagnetic::nonMaxSupp (const GrayMatrix& magnitude, const GrayMatrix
             if (!mag || row == 0 || row == (magnitude[col].count()-1) ||
                         col == 0 || col == (magnitude.count()-1))
             {
-                result = 0;
+                result = NOEDGE;
             } else {
                 xdel = (double)xdelta[col][row];
                 ydel = (double)ydelta[col][row];
@@ -370,12 +599,13 @@ void KisCurveMagnetic::nonMaxSupp (const GrayMatrix& magnitude, const GrayMatrix
                 }
 
                 if ((mag < lmag) || (mag < rmag)) {
-                    result = 0;
+                    result = NOEDGE;
                 } else {
-                    if (rmag == mag) // If the external magnitude is equal to the current, take the external and suppress this.
-                        result = 0;
+                    if (rmag == mag) // If the external magnitude is equal to the current, suppress current.
+                        result = NOEDGE;
                     else
                         result = (mag > 255) ? 255 : mag;
+//                         result = POSSIBLE_EDGE;
                 }
             }
             nms[col].push_back(result);

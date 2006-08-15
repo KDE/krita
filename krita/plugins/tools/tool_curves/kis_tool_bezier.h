@@ -82,16 +82,9 @@ public:
     KisToolBezier(const QString&);
     virtual ~KisToolBezier();
 
-/*
-    virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
-*/
 protected:
 
     virtual KisCurve::iterator selectByHandle(const QPoint& pos);
-/*
-    virtual KisCurve::iterator paintPoint(KisPainter& painter, KisCurve::iterator point);
-*/
     virtual void drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point);
     virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
 
@@ -100,22 +93,5 @@ protected:
     KisCurveBezier *m_derivated;
 
 };
-
-/*
-class KisToolBezierFactory : public KisToolFactory {
-    typedef KisToolFactory super;
-public:
-    KisToolBezierFactory() : super() {};
-    virtual ~KisToolBezierFactory(){};
-
-    virtual KisTool * createTool(KActionCollection * ac) {
-        KisTool * t =  new KisToolBezier();
-        Q_CHECK_PTR(t);
-        t->setup(ac);
-        return t;
-    }
-    virtual KisID id() { return KisID("beziershape", i18n("Bezier Tool")); }
-};
-*/
 
 #endif //__KIS_TOOL_BEZIER_H__

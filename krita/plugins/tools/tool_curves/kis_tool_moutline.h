@@ -27,6 +27,7 @@
 
 class KisToolMagnetic;
 class KisVector2D;
+class Node;
 
 typedef QValueVector<Q_INT16> GrayCol;
 typedef QValueVector<GrayCol> GrayMatrix;
@@ -37,9 +38,12 @@ class KisCurveMagnetic : public KisCurve {
 
     KisToolMagnetic *m_parent;
 
-    void showMatrixValues(const QRect&, const GrayMatrix&, const QPoint&, const QPoint&);
+//     void showMatrixValues(const QRect&, const GrayMatrix&, const QPoint&, const QPoint&);
     void reduceMatrix (QRect&, GrayMatrix&, int, int, int, int);
 
+//     void cleanMatrix (GrayMatrix&);
+    void findEdge (int, int, const GrayMatrix&, QValueList<Node>&);
+    bool findPath(Node, const Node&, const GrayMatrix&, QValueList<Node>&, QValueList<Node>&);
     void detectEdges (const QRect&, KisPaintDeviceSP, GrayMatrix&);
 
     void gaussianBlur (const QRect&, KisPaintDeviceSP, KisPaintDeviceSP);

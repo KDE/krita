@@ -165,8 +165,10 @@ KisCurve::iterator KisCurve::selectPivot(const CurvePoint& pt, bool isSelected)
 KisCurve::iterator KisCurve::selectPivot(KisCurve::iterator it, bool isSelected)
 {
     bool sel = false;
-    if (m_actionOptions & KEEPSELECTEDOPTION)
-        sel = true;
+    if (standardkeepselected) {
+        if (m_actionOptions & KEEPSELECTEDOPTION)
+            sel = true;
+    }
     KisCurve selected = pivots();
     for (iterator i = selected.begin(); i != selected.end(); i++)
         (*find((*i))).setSelected(sel);

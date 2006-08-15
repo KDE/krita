@@ -87,7 +87,7 @@ class KisCurve {
 
 public:
     
-    KisCurve () {m_actionOptions = NOOPTIONS;}
+    KisCurve () {m_actionOptions = NOOPTIONS; standardkeepselected = true;}
     virtual ~KisCurve () {m_curve.clear();}
 
     friend class CurveIterator;
@@ -99,6 +99,8 @@ protected:
        (see below in CurveIterator) */
     mutable PointList m_curve;
     int m_actionOptions;
+
+    bool standardkeepselected;
 
     bool checkIterator (iterator checking) const;
 

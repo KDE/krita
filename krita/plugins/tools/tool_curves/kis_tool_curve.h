@@ -75,7 +75,7 @@ protected:
     virtual int updateOptions(int);
 
     /*
-     * Check if the user clicked on the curve and select the needed points
+     * Check if the user clicked on the curve and select the needed points; call selectByHandle too
      */
     virtual KisCurve::iterator selectByMouse(const QPoint& pos);
     

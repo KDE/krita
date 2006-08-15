@@ -37,32 +37,24 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     , m_interpretername(interpretername)
     , m_scriptcode(scriptcode)
 {
+    QMenu *menuFile = menuBar()->addMenu( "&File" );
+
     //Kross::Manager::self().addModule( Kross::Module::Ptr(new TestPluginModule("krosstestpluginmodule")) );
     m_action = Kross::Manager::self().createAction("test");
-
-    QMenu *menuFile = new QMenu( this );
-    menuBar()->insertItem( "&File", menuFile );
-
     m_scriptextension = new Kross::GUIClient(this, this);
 
     QString file = KGlobal::dirs()->findResource("appdata", "testscripting.rc");
     if(file.isNull())
-        file = QDir(QDir::currentDirPath()).filePath("testscripting.rc");
-    else Kross::krossdebug("-------------------------222222");
+        file = QDir( QDir::currentDirPath() ).filePath("testscripting.rc");
 
     Kross::krossdebug(QString("XML-file: %1").arg(file));
     m_scriptextension->setXMLFile(file);
 
     //menuFile->insertSeparator();
 
-    KAction* execaction = m_scriptextension->action("executescriptfile");
-    if(execaction) execaction->plug(menuFile);
-
-    KAction* configaction = m_scriptextension->action("configurescripts");
-    if(configaction) configaction->plug(menuFile);
-
-    KAction* scriptsaction = m_scriptextension->action("installedscripts");
-    if(scriptsaction) scriptsaction->plug(menuFile);
+    menuFile->addAction( m_scriptextension->action("executescriptfile") );
+    menuFile->addAction( m_scriptextension->action("configurescripts") );
+    menuFile->addAction( m_scriptextension->action("installedscripts") );
 
     QWidget* mainbox = new QWidget(this);
     QVBoxLayout* layout = new QVBoxLayout(mainbox);
@@ -70,10 +62,9 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     QGroupBox* interpretergrpbox = new QGroupBox("Interpreter", mainbox);
     layout->addWidget(interpretergrpbox);
     new QVBoxLayout(interpretergrpbox);
-    QStringList interpreters = Kross::Manager::self().getInterpreters();
     m_interpretercombo = new QComboBox(interpretergrpbox);
     interpretergrpbox->layout()->addWidget(m_interpretercombo);
-    m_interpretercombo->insertStringList(interpreters);
+    m_interpretercombo->addItems( Kross::Manager::self().getInterpreters() );
     m_interpretercombo->setCurrentText(interpretername);
 
     QGroupBox* scriptgrpbox = new QGroupBox("Scripting code", mainbox);

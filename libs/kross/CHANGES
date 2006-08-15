@@ -1,5 +1,15 @@
 == Kross CHANGES ==
 
+2.0
+The whole backend got replaced and is build up on Qt's metatypes now.
+This means we are able to throw any QObject/QVariant in and just use
+the slots as script-functions and the properties as script-members.
+So, we don't need wrappers/bindings any longer (and provided
+scripting-interfaces don't need to depend on Kross) on the one hand
+and and earn a more cleaner interface on the other. Beside the try
+to follow KISS, we should earn much more speed that way cause
+everything talks now Qt internal :)
+
 1.6
 * Added krossdebug and krosswarning.
 * Integrated ProxyFunction's.

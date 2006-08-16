@@ -19,10 +19,16 @@
 
 #include "Styles_p.h"
 
+#include <QTextBlock>
+#include <QTextCursor>
+
 KoCharacterStyle::KoCharacterStyle()
 {
-    // TODO fill with nice defaults
     m_stylesPrivate = new StylePrivate();
+    setFontPointSize(12.0);
+    setFontWeight(QFont::Normal);
+    setVerticalAlignment(QTextCharFormat::AlignNormal);
+    setTextOutline(QPen(Qt::NoPen));
 }
 
 KoCharacterStyle::~KoCharacterStyle() {
@@ -68,18 +74,38 @@ int KoCharacterStyle::propertyInt(int key) const {
     return variant->toInt();
 }
 
+bool KoCharacterStyle::propertyBoolean(int key) const {
+    const QVariant *variant = get(key);
+    if(variant == 0)
+        return false;
+    return variant->toBool();
+}
+
 void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
     // copy all relevant properties.
     static const int properties[] = {
-        // TODO
+        QTextFormat::FontPointSize,
         -1
     };
 
     int i=0;
     while(properties[i] != -1) {
-        format.setProperty(i, get(i));
+        QVariant const *variant = get(properties[i]);
+        if(variant) format.setProperty(properties[i], *variant);
         i++;
     }
+}
+
+void KoCharacterStyle::applyStyle(QTextBlock &block) const {
+    QTextCursor cursor(block);
+    QTextCharFormat cf = cursor.charFormat();
+/*
+    TODO make replacement of the style be a lot smarter.
+    QTextBlock::Iterator fragmentIter = block.begin();
+ */
+    cursor.setPosition(block.position() + block.length()-1, QTextCursor::KeepAnchor);
+    applyStyle(cf);
+    cursor.mergeCharFormat(cf);
 }
 
 #include "KoCharacterStyle.moc"

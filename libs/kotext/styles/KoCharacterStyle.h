@@ -26,6 +26,7 @@
 #include <koffice_export.h>
 
 class StylePrivate;
+class QTextBlock;
 
 class KOTEXT_EXPORT KoCharacterStyle : public QObject {
     Q_OBJECT
@@ -83,6 +84,7 @@ public:
     void setStyleId(int id) { setProperty(StyleId, id); }
 
     void applyStyle(QTextCharFormat &format) const;
+    void applyStyle(QTextBlock &block) const;
 
 private:
     void setProperty(int key, const QVariant &value);

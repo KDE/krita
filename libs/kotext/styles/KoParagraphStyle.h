@@ -29,6 +29,13 @@ struct Property;
 class KoCharacterStyle;
 class StylePrivate;
 
+/**
+ * A container for all properties for the paragraph wide style.
+ * Each paragraph in the main text either is based on a parag style, or its not. Where
+ * it is based on a paragraph style this is indecated that it has a property 'StyleId'
+ * with an integer as value.  The integer value corresponds to the styleId() output of
+ * a specific KoParagraphStyle.
+ */
 class KOTEXT_EXPORT KoParagraphStyle : public QObject {
     Q_OBJECT
 public:
@@ -38,12 +45,6 @@ public:
 
     KoParagraphStyle();
     ~KoParagraphStyle();
-
-/*
-    this class has setters and getters for all properties that we record in a style.
-    The setter will set the property unless the m_parent has that exact same value
-    in which case it will clear the property on m_paragStyle.
-*/
 
     void setTopMargin(double topMargin) { setProperty(QTextFormat::BlockTopMargin, topMargin); }
     double topMargin() const { return propertyDouble(QTextFormat::BlockTopMargin); }

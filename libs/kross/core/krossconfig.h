@@ -94,8 +94,8 @@ namespace Kross {
         // the interpreter-plugin or to hardcode the location of the lib
         // like I did at the following line.
 
-        #define KROSS_PYTHON_LIBRARY "/home/kde4/koffice/_build/lib/krosspython.la"
-        //#define KROSS_PYTHON_LIBRARY "krosspython"
+        //#define KROSS_PYTHON_LIBRARY "/home/kde4/koffice/_build/lib/krosspython.la"
+        #define KROSS_PYTHON_LIBRARY "krosspython"
         #define KROSS_RUBY_LIBRARY "krossruby"
 
     }

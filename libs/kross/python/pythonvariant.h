@@ -391,7 +391,6 @@ namespace Kross {
     class PythonMetaTypeFactory
     {
         public:
-            static MetaType* create(const char* typeName);
             static MetaType* create(const char* typeName, const Py::Object& object);
     };
 

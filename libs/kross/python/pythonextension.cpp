@@ -247,9 +247,25 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
             // set the return value
             if(hasreturnvalue) {
-                MetaType* pv = PythonMetaTypeFactory::create( metamethod.typeName() );
-                variantargs[0] = pv;
-                voidstarargs[0] = pv->toVoidStar();
+                MetaType* returntype;
+                int typeId = QVariant::nameToType( metamethod.typeName() );
+                if(typeId != QVariant::Invalid) {
+                    krossdebug( QString("PythonMetaTypeFactory::create typeName=%1 variant.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                    returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) typeId ) );
+                }
+                else {
+                    // crashes on shared containers like e.g. QStringList and QList
+                    typeId = QMetaType::type( metamethod.typeName() );
+                    //Q_ASSERT(typeId != QMetaType::Void);
+                    krossdebug( QString("PythonMetaTypeFactory::create typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                    //if (id != -1) {
+                    void* myClassPtr = QMetaType::construct(typeId, 0);
+                    //QMetaType::destroy(id, myClassPtr);
+                    returntype = new MetaTypeVoidStar( typeId, myClassPtr );
+                }
+
+                variantargs[0] = returntype;
+                voidstarargs[0] = returntype->toVoidStar();
             }
             else {
                 variantargs[0] = 0;

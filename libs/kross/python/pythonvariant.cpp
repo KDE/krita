@@ -134,30 +134,6 @@ QVariant PythonType<QVariant>::toVariant(const Py::Object& obj)
     return variant;
 }
 
-MetaType* PythonMetaTypeFactory::create(const char* typeName)
-{
-    int typeId = QVariant::nameToType(typeName);
-
-    if(typeId != QVariant::Invalid) {
-        krossdebug( QString("PythonMetaTypeFactory::create typeName=%1 variant.typeid=%2").arg(typeName).arg(typeId) );
-        return new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) typeId ) );
-    }
-
-/* crashes on shared containers like e.g. QStringList and QList */
-    typeId = QMetaType::type(typeName);
-    //Q_ASSERT(typeId != QMetaType::Void);
-    krossdebug( QString("PythonMetaTypeFactory::create typeName=%1 metatype.typeid=%2").arg(typeName).arg(typeId) );
-
-    //if (id != -1) {
-    void* myClassPtr = QMetaType::construct(typeId, 0);
-    //QMetaType::destroy(id, myClassPtr);
-    //myClassPtr = 0;
-    return new MetaTypeVoidStar( typeId, myClassPtr );
-
-    //krosswarning( QString("PythonVariant::create Not possible to create a PythonVariant for typename '%1' with id %2").arg(typeName).arg(typeId) );
-    //throw Py::TypeError( QString("Invalid typename %1").arg(typeName).toLatin1().constData() );
-}
-
 MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& object)
 {
     int typeId = QVariant::nameToType(typeName);

@@ -36,6 +36,9 @@
 
 namespace Kross {
 
+    /**
+     * Base class for metatype-implementations.
+     */
     class MetaType
     {
         public:
@@ -47,7 +50,9 @@ namespace Kross {
             virtual void* toVoidStar() = 0;
     };
 
-    /// Metatypes which are registered in the QMetaType system.
+    /**
+     * Metatypes which are registered in the QMetaType system.
+     */
     template<typename METATYPE>
     class MetaTypeImpl : public MetaType
     {
@@ -67,7 +72,9 @@ namespace Kross {
             METATYPE m_variant;
     };
 
-    /// Metatypes which are listened in QVariant::Type.
+    /**
+     * Metatypes which are listened in QVariant::Type.
+     */
     template<typename VARIANTTYPE>
     class MetaTypeVariant : public MetaType
     {
@@ -87,7 +94,9 @@ namespace Kross {
             VARIANTTYPE m_value;
     };
 
-    /// Metatype for VoidStar pointers.
+    /**
+     * Metatype for generic VoidStar pointers.
+     */
     class MetaTypeVoidStar : public MetaType
     {
         public:

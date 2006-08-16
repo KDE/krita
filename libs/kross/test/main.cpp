@@ -143,8 +143,6 @@ int runScriptFile(const QString& scriptfile)
     }
     */
 
-    delete testobj1;
-    delete testobj2;
     delete testobj3;
     delete testobj4;
 

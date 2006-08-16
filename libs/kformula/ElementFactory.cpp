@@ -47,10 +47,10 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if( tagName == "mo" )
 	return new OperatorElement( parent );
     else if( tagName == "mtext" )
-	return new TextElement( parent );
+	return new TextElement( parent );*/
     else if( tagName == "mspace" )
 	return new SpaceElement( parent );
-    else if( tagName == "ms" )
+/*    else if( tagName == "ms" )
 	return new StringElement( parent );
     else if( tagName == "mglyph" )
 	return new GlyphElement( parent );*/

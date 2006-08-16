@@ -15,14 +15,15 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "MatrixEntryElement.h"
+
 #include "FormulaContainer.h"
 #include "kformulacommand.h"
 #include "FormulaCursor.h"
-#include "spaceelement.h"
+#include "SpaceElement.h"
 
 #include <klocale.h>
 
@@ -111,12 +112,12 @@ KCommand* MatrixEntryElement::buildCommand( Container* container, Request* reque
         FormulaCursor* cursor = container->activeCursor();
         return new KFCNewLine( i18n( "Add Newline" ), container, this, cursor->getPos() );
     }
-    case req_addTabMark: {
+/*    case req_addTabMark: {
         KFCReplace* command = new KFCReplace( i18n("Add Tabmark"), container );
         SpaceElement* element = new SpaceElement( THIN, true );
         command->addElement( element );
         return command;
-    }
+    }*/
     default:
         break;
     }

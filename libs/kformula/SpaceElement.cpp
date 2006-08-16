@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,48 +16,87 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
+
+#include "SpaceElement.h"
+
 
 #include <QFontMetrics>
 #include <QPainter>
 
 #include <kdebug.h>
-#include <kprinter.h>
 
 #include "contextstyle.h"
-#include "SpaceElement.h"
 
+namespace KFormula {
 
-KFORMULA_NAMESPACE_BEGIN
-
-SpaceElement::SpaceElement( SpaceWidth space, bool tab, BasicElement* parent )
-    : BasicElement( parent ), spaceWidth( space ), m_tab( tab )
+SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent ),
+						     spaceWidth( THIN ),
+						     m_tab( false )
 {
 }
-
-
-SpaceElement::SpaceElement( const SpaceElement& other )
-    : BasicElement( other ), spaceWidth( other.spaceWidth )
-{
-}
-
-/*
-bool SpaceElement::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}
-*/
 
 const QList<BasicElement*>& SpaceElement::childElements()
 {
     return QList<BasicElement*>();
 }
 
-
 void SpaceElement::drawInternal()
 {
 }
+
+void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+{
+
+    QDomElement de = doc.createElement( oasisFormat ? "math:mspace" : "mspace" );
+    QString width;
+
+    switch ( spaceWidth ) {
+    case NEGTHIN:
+        width = "-3/18em";
+        break;
+    case THIN:
+        width = "thinmathspace";
+        break;
+    case MEDIUM:
+        width = "mediummathspace";
+        break;
+    case THICK:
+        width = "thickmathspace";
+        break;
+    case QUAD:
+        width = "veryverythickmathspace"; // double 'very' is appropriate.
+        break;
+    }
+
+    de.setAttribute( "width", width );
+
+    parent.appendChild( de );
+
+
+    /* // worked, but I redecided.
+    switch ( spaceWidth )
+    {
+    case NEGTHIN:
+        return doc.createEntityReference( "NegativeThinSpace" );
+    case THIN:
+        return doc.createEntityReference( "ThinSpace" );
+    case MEDIUM:
+        return doc.createEntityReference( "MediumSpace" );
+    case THICK:
+        return doc.createEntityReference( "ThickSpace" );
+    case QUAD:
+        //return doc.createEntityReference( "Space" ); // misused &Space;???
+        QDomElement de = doc.createElement( "mspace" );
+        de.setAttribute( "width", "veryverythickmathspace" );
+        return de;
+    }*/
+
+}
+
+
+
 
 void SpaceElement::calcSizes( const ContextStyle& style,
                               ContextStyle::TextStyle tstyle,
@@ -171,65 +211,4 @@ bool SpaceElement::readContentFromDom(QDomNode& node)
     return BasicElement::readContentFromDom( node );
 }
 
-void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-
-    QDomElement de = doc.createElement( oasisFormat ? "math:mspace" : "mspace" );
-    QString width;
-
-    switch ( spaceWidth ) {
-    case NEGTHIN:
-        width = "-3/18em";
-        break;
-    case THIN:
-        width = "thinmathspace";
-        break;
-    case MEDIUM:
-        width = "mediummathspace";
-        break;
-    case THICK:
-        width = "thickmathspace";
-        break;
-    case QUAD:
-        width = "veryverythickmathspace"; // double 'very' is appropriate.
-        break;
-    }
-
-    de.setAttribute( "width", width );
-
-    parent.appendChild( de );
-
-
-    /* // worked, but I redecided.
-    switch ( spaceWidth )
-    {
-    case NEGTHIN:
-        return doc.createEntityReference( "NegativeThinSpace" );
-    case THIN:
-        return doc.createEntityReference( "ThinSpace" );
-    case MEDIUM:
-        return doc.createEntityReference( "MediumSpace" );
-    case THICK:
-        return doc.createEntityReference( "ThickSpace" );
-    case QUAD:
-        //return doc.createEntityReference( "Space" ); // misused &Space;???
-        QDomElement de = doc.createElement( "mspace" );
-        de.setAttribute( "width", "veryverythickmathspace" );
-        return de;
-    }*/
-
-}
-
-QString SpaceElement::toLatex()
-{
-    switch ( spaceWidth ) {
-    case NEGTHIN: return "\\!";
-    case THIN:    return "\\,";
-    case MEDIUM:  return "\\>";
-    case THICK:   return "\\;";
-    case QUAD:    return "\\quad ";
-    }
-    return "";
-}
-
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

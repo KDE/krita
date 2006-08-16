@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef SPACEELEMENT_H
@@ -29,30 +30,14 @@
 class SymbolTable;
 
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 /**
  * A element that represents a space.
  */
 class SpaceElement : public BasicElement {
-	
-    SpaceElement operator=( const SpaceElement& ) { return *this; }
-    
 public:
-    SpaceElement( SpaceWidth space = THIN, bool tab=false, BasicElement* parent = 0 );
-    SpaceElement( const SpaceElement& );
-
-    virtual SpaceElement* clone() {
-        return new SpaceElement( *this );
-    }
-
-//    virtual bool accept( ElementVisitor* visitor );
-
-    /**
-     * @returns the type of this element. Used for
-     * parsing a sequence.
-     */
-    //virtual TokenType getTokenType() const;
+    SpaceElement( BasicElement* parent = 0 );
 
     /**
      * @returns the character that represents this element. Used for
@@ -64,15 +49,11 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
-    
+    const QList<BasicElement*>& childElements();
 
-    // drawing
-    //
-    // Drawing depends on a conspace which knows the required properties like
-    // fonts, spaces and such.
-    // It is essential to calculate elements size with the same conspace
-    // before you draw.
+    void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+
 
     /**
      * Calculates our width and height and
@@ -93,25 +74,10 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
-    /**
-     * Moves the cursor away from the given child. The cursor is
-     * guaranteed to be inside this element.
-     */
-    //virtual void childWillVanish(FormulaCursor*, BasicElement*) {}
 
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-    virtual QString toLatex();
-
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
-    virtual void drawInternal();
-
-    
-    //Save/load support
+     void drawInternal();
 
     /**
      * @returns the tag name of this element type.
@@ -146,6 +112,6 @@ private:
     bool m_tab;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // SPACEELEMENT_H

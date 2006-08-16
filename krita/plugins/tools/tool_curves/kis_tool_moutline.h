@@ -40,10 +40,7 @@ class KisCurveMagnetic : public KisCurve {
 
     KisToolMagnetic *m_parent;
 
-//     void showMatrixValues(const QRect&, const GrayMatrix&, const QPoint&, const QPoint&);
     void reduceMatrix (QRect&, GrayMatrix&, int, int, int, int);
-
-//     void cleanMatrix (GrayMatrix&);
     void findEdge (int, int, const GrayMatrix&, Node&);
     void detectEdges (const QRect&, KisPaintDeviceSP, GrayMatrix&);
 

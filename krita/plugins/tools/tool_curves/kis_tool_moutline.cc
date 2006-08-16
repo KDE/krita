@@ -300,7 +300,6 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     QPoint tl(tlx,tly);
     start -= tl;
     end -= tl;
-//     showMatrixValues (rc, dst, start, end);
 
     findEdge (start.x(), start.y(), dst, startNode);
     openMatrix[startNode.col()][startNode.row()] = *openSet.insert(startNode);
@@ -346,21 +345,8 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
         }
         closedMatrix[current.col()][current.row()] = current;
     }
+}
 
-//     cleanMatrix(dst);
-//     showMatrixValues (rc, dst, start, end);
-}
-/*
-void KisCurveMagnetic::cleanMatrix (GrayMatrix& dst)
-{
-    for (uint i = 0; i < dst.count(); i++) {
-        for (uint j = 0; j < dst[i].count(); j++) {
-            if (dst[i][j] < EDGE && dst[i][j])
-                dst[i][j] = NOEDGE;
-        }
-    }
-}
-*/
 void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, Node& node)
 {
     int x = -1;
@@ -383,35 +369,7 @@ void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, Node& 
 
     node.setPos(QPoint(x,y));
 }
-/*
-void KisCurveMagnetic::showMatrixValues(const QRect& rc, const GrayMatrix& dst, const QPoint& start, const QPoint& end)
-{
-    QString line = "---|";
-    for (uint col = 0; col < dst.count() && col < 59; col++)
-        line += QString("%1|").arg(col,3);
-    kdDebug(0) << line << endl;
-    for (uint row = 0; row < dst[0].count(); row++) {
-        line = QString("%1|").arg(row,3);
-        for (uint col = 0; col < dst.count(); col++) {
-            if (col >= 58) {
-                line += "....";
-                break;
-            }
-            if (col == start.x() && row == start.y())
-                line += "SSS:";
-            else if (col == end.x() && row == end.y())
-                line += "EEE:";
-            else if (dst[col][row])
-                line += QString("%1:").arg(dst[col][row],3);
-            else
-                line += "   :";
-        }
-        kdDebug(0) << line << endl;
-    }
-    kdDebug(0) << "WIDTH: " << rc.width() << " HEIGHT: " << rc.height() << endl;
-    kdDebug(0) << " COLS: " << dst.count() << "   ROWS: " << dst[0].count() << endl;
-}
-*/
+
 void KisCurveMagnetic::reduceMatrix (QRect& rc, GrayMatrix& m, int top, int right, int bottom, int left)
 {
     QPoint topleft(top, left);

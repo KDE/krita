@@ -308,12 +308,14 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
 
     while (!openSet.empty()) {
         Node current = *openSet.begin();
-        openSet.erase(current);
+        kdDebug(0) << current.pos() << endl;
+        openSet.erase(openSet.begin());
         QValueList<Node> successors = current.getNeighbor(dst,endNode);
         for (QValueList<Node>::iterator iter = successors.begin(); iter != successors.end(); iter++) {
             int col = (*iter).col();
             int row = (*iter).row();
             if ((*iter) == endNode) {
+                kdDebug(0) << "SUCCESSO!" << endl;
                 while (current.parent() != QPoint(-1,-1)) {
                     it = addPoint(it,tl+current.pos(),false,false,LINEHINT);
                     current = closedMatrix[current.parent().x()][current.parent().y()];

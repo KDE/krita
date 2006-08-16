@@ -19,6 +19,7 @@
  */
 
 #include <math.h>
+#include <set>
 
 #include <qpainter.h>
 #include <qlayout.h>
@@ -54,6 +55,8 @@
 #include "kis_convolution_painter.h"
 
 #include "kis_tool_moutline.h"
+
+using namespace std;
 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
@@ -111,6 +114,8 @@ public:
     int tCost () const {return m_tCost;}
     bool malus () const {return m_malus;}
     QPoint pos () const {return m_pos;}
+    int col () const {return m_pos.x();}
+    int row () const {return m_pos.y();}
     QPoint parent () const {return m_parent;}
 
     void setGCost (int g)
@@ -132,27 +137,27 @@ public:
         m_malus = malus;
     }
 
-    bool operator== (const Node& n2)
+    bool operator== (const Node& n2) const
     {
         return m_pos == n2.pos();
     }
-    bool operator!= (const Node& n2)
+    bool operator!= (const Node& n2) const
     {
         return m_pos != n2.pos();
     }
-    bool operator== (const QPoint& n2)
+    bool operator== (const QPoint& n2) const
     {
         return m_pos == n2;
     }
-    bool operator!= (const QPoint& n2)
+    bool operator!= (const QPoint& n2) const
     {
         return m_pos != n2;
     }
-    bool operator< (const Node& n2)
+    bool operator< (const Node& n2) const
     {
         return m_tCost < n2.tCost();
     }
-    bool operator> (const Node& n2)
+    bool operator> (const Node& n2) const
     {
         return m_tCost > n2.tCost();
     }
@@ -283,7 +288,9 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     GrayMatrix       dst = GrayMatrix(rc.width(),GrayCol(rc.height()));
 
     Node startNode, endNode;
-    QValueList<Node> closedList, openList;
+    multiset<Node> openSet;
+    NodeMatrix openMatrix = NodeMatrix(rc.width(),NodeCol(rc.height()));
+    NodeMatrix closedMatrix = NodeMatrix(rc.width(),NodeCol(rc.height()));
 
     detectEdges  (rc, src, dst);
     reduceMatrix (rc, dst, 3, 3, 3, 3);
@@ -295,55 +302,46 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     end -= tl;
 //     showMatrixValues (rc, dst, start, end);
 
-    findEdge (start.x(), start.y(), dst, openList);
-    startNode = openList.first();
+    findEdge (start.x(), start.y(), dst, startNode);
+    openSet.insert(startNode);
     endNode.setPos(end);
 
-    while (!openList.isEmpty()) {
-        Node current = openList.first();
-        openList.pop_front();
+    while (!openSet.empty()) {
+        Node current = *openSet.begin();
+        openSet.erase(current);
         QValueList<Node> successors = current.getNeighbor(dst,endNode);
         for (QValueList<Node>::iterator iter = successors.begin(); iter != successors.end(); iter++) {
+            int col = (*iter).col();
+            int row = (*iter).row();
             if ((*iter) == endNode) {
                 while (current.parent() != QPoint(-1,-1)) {
                     it = addPoint(it,tl+current.pos(),false,false,LINEHINT);
-                    current = *qFind(closedList.begin(),closedList.end(),current.parent());
+                    current = closedMatrix[current.parent().x()][current.parent().y()];
                 }
                 return;
             }
-            QValueList<Node>::iterator openIt = qFind(openList.begin(),openList.end(),(*iter));
-            if (openIt != openList.end()) {
-                if ((*iter) > (*openIt))
-                    continue;
-                else
-                    openList.erase(openIt);
-            }
-            QValueList<Node>::iterator closedIt = qFind(closedList.begin(),closedList.end(),(*iter));
-            if (closedIt != closedList.end()) {
-                if ((*iter) > (*closedIt))
+            Node *openNode = &openMatrix[col][row];
+            if (*openNode != QPoint(-1,-1)) {
+                if ((*iter) > *openNode)
                     continue;
                 else {
-                    openList.append((*closedIt));
-                    closedList.erase(closedIt);
+                    openSet.erase(qFind(openSet.begin(),openSet.end(),*openNode));
+                    openNode->setPos(QPoint(-1,-1));
                 }
             }
-            openList.append((*iter));
+            Node *closedNode = &closedMatrix[col][row];
+            if (*closedNode != QPoint(-1,-1)) {
+                if ((*iter) > (*closedNode))
+                    continue;
+                else {
+                    openSet.insert(*closedNode);
+                    closedNode->setPos(QPoint(-1,-1));
+                }
+            }
+            openSet.insert((*iter));
         }
-        closedList.append(current);
-        qHeapSort(openList);
+        closedMatrix[current.col()][current.row()] = current;
     }
-
-//     int i = 0;
-//     for (QValueList<Node>::iterator iter = closedList.begin(); iter != closedList.end(); iter++, i++) {
-//         if ((*iter).parent() != QPoint(-1,-1)) {
-//             if ((*iter) == (*iter).parent())
-//                 kdDebug(0) << "NODE: " << (*iter).pos() << " FATTO MALE!" << endl;
-//             else
-//                 kdDebug(0) << "NODE: " << (*iter).pos() << " FATTO BENE! PARENT: " << (*iter).parent() << endl;
-//         } else
-//             kdDebug(0) << "NO PARENT!" << endl;
-//         dst[(*iter).pos().x()][(*iter).pos().y()] = EDGE + i;
-//     }
 
 //     cleanMatrix(dst);
 //     showMatrixValues (rc, dst, start, end);
@@ -359,9 +357,8 @@ void KisCurveMagnetic::cleanMatrix (GrayMatrix& dst)
     }
 }
 */
-void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, QValueList<Node>& olist)
+void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, Node& node)
 {
-    Node node;
     int x = -1;
     int y = -1;
 
@@ -381,7 +378,6 @@ void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, QValue
     y = (int)(row + mindist.y());
 
     node.setPos(QPoint(x,y));
-    olist.append(node);
 }
 /*
 void KisCurveMagnetic::showMatrixValues(const QRect& rc, const GrayMatrix& dst, const QPoint& start, const QPoint& end)

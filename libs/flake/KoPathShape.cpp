@@ -190,7 +190,7 @@ const QPainterPath KoPathShape::getPath( const QPointF &position ) const
     for ( ; pathIt != m_points.end(); ++pathIt )
     {
         KoSubpath::const_iterator it( ( *pathIt ).begin() );
-        KoPathPoint * lastPoint;
+        KoPathPoint * lastPoint( *it );
         bool activeCP = false;
         for ( ; it != ( *pathIt ).end(); ++it )
         {
@@ -203,7 +203,7 @@ const QPainterPath KoPathShape::getPath( const QPointF &position ) const
             {
                 //qDebug() << "activeCP " << activeCP 
                 //    << "lastPoint->controlPoint2()" << lastPoint->controlPoint2()
-                //    << "lastPoint->point()" << lastPoint->point();
+                //    << "lastPoint->point()" << lastPoint->point() << ( *it )->controlPoint1();
 
                 path.cubicTo( (activeCP ? lastPoint->controlPoint2() : lastPoint->point() ) - position
                             , ( ( *it )->properties() & KoPathPoint::HasControlPoint1 ? ( *it )->controlPoint1() : ( *it )->point() ) - position
@@ -222,13 +222,13 @@ const QPainterPath KoPathShape::getPath( const QPointF &position ) const
 
             if ( ( *it )->properties() & KoPathPoint::HasControlPoint2 )
             {
-                lastPoint = *it;
                 activeCP = true;
             }
             else
             {
                 activeCP = false;
             }
+            lastPoint = *it;
         }
     }
     return path;

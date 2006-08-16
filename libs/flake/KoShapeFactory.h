@@ -40,6 +40,12 @@ class KoShapeConfigWidgetBase;
  * and an icon for use in the user interface.
  */
 struct FLAKE_EXPORT KoShapeTemplate {
+    KoShapeTemplate() {
+        id="";
+        name="";
+        toolTip="";
+        icon="";
+    }
     QString id;         ///< The id of the shape
     QString name;       ///< The name to be shown for this template
     QString toolTip;    ///< The tooltip text for the template

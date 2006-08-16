@@ -23,6 +23,8 @@ KoShapeFactory::KoShapeFactory(QObject *parent, const QString &id, const QString
 : QObject(parent)
 , m_id(id)
 , m_name(name)
+, m_iconName("")
+, m_tooltip("")
 {
 }
 

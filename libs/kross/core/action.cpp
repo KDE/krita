@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <kmimetype.h>
+#include <kicon.h>
 
 using namespace Kross;
 

@@ -170,13 +170,13 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char* /*name*/ )
   if ( sb ) // No statusbar in e.g. konqueror
   {
       //coll->setHighlightingEnabled( true );
-#warn portKDE4
+#warning portKDE4
 #if 0
       connect( coll, SIGNAL( actionStatusText( const QString & ) ),
                this, SLOT( slotActionStatusText( const QString & ) ) );
       connect( coll, SIGNAL( clearStatusText() ),
                this, SLOT( slotClearStatusText() ) );
-*/
+#endif
 
       connect( d->m_doc, SIGNAL( sigStatusBarMessage( const QString& ) ),
                this, SLOT( slotActionStatusText( const QString& ) ) );

@@ -303,19 +303,20 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
 //     showMatrixValues (rc, dst, start, end);
 
     findEdge (start.x(), start.y(), dst, startNode);
-    openSet.insert(startNode);
+    openMatrix[startNode.col()][startNode.row()] = *openSet.insert(startNode);
     endNode.setPos(end);
 
     while (!openSet.empty()) {
         Node current = *openSet.begin();
-        kdDebug(0) << current.pos() << endl;
+        
         openSet.erase(openSet.begin());
+        openMatrix[current.col()][current.row()].setPos(QPoint(-1,-1));
+
         QValueList<Node> successors = current.getNeighbor(dst,endNode);
         for (QValueList<Node>::iterator iter = successors.begin(); iter != successors.end(); iter++) {
             int col = (*iter).col();
             int row = (*iter).row();
             if ((*iter) == endNode) {
-                kdDebug(0) << "SUCCESSO!" << endl;
                 while (current.parent() != QPoint(-1,-1)) {
                     it = addPoint(it,tl+current.pos(),false,false,LINEHINT);
                     current = closedMatrix[current.parent().x()][current.parent().y()];
@@ -324,11 +325,11 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
             }
             Node *openNode = &openMatrix[col][row];
             if (*openNode != QPoint(-1,-1)) {
-                if ((*iter) > *openNode)
+                if (*iter > *openNode)
                     continue;
                 else {
                     openSet.erase(qFind(openSet.begin(),openSet.end(),*openNode));
-                    openNode->setPos(QPoint(-1,-1));
+                    openNode->setPos(QPoint(-1,-1));  // Clear the Node
                 }
             }
             Node *closedNode = &closedMatrix[col][row];
@@ -336,11 +337,12 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
                 if ((*iter) > (*closedNode))
                     continue;
                 else {
-                    openSet.insert(*closedNode);
-                    closedNode->setPos(QPoint(-1,-1));
+                    openMatrix[col][row] = *openSet.insert(*closedNode);
+                    closedNode->setPos(QPoint(-1,-1));  // Clear the Node
+                    continue;
                 }
             }
-            openSet.insert((*iter));
+            openMatrix[col][row] = *openSet.insert(*iter);
         }
         closedMatrix[current.col()][current.row()] = current;
     }

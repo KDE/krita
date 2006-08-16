@@ -25,7 +25,7 @@
 #include <kprinter.h>
 
 #include "contextstyle.h"
-#include "spaceelement.h"
+#include "SpaceElement.h"
 
 
 KFORMULA_NAMESPACE_BEGIN

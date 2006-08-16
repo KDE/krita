@@ -24,6 +24,8 @@ set(kformulalib_LIB_SRCS
    MatrixEntryElement.cpp
    FractionElement.cpp
    RootElement.cpp
+   SpaceElement.cpp 
+   ElementFactory.cpp 
    symbolelement.cc 
    kformulacommand.cc 
 #   KFormulaMimeSource.cpp
@@ -32,17 +34,15 @@ set(kformulalib_LIB_SRCS
    elementtype.cc 
 #   kformuladocument.cc 
    symboltable.cc 
-   MathMLLoader.cpp 
+#   MathMLLoader.cpp 
    kformulainputfilter.cc 
 #   kformulaview.cc 
-   spaceelement.cc 
    kformulaconfigpage.cc 
    symbolaction.cc 
    cmstyle.cc 
    fontstyle.cc 
    symbolfontstyle.cc 
-   esstixfontstyle.cc 
-   creationstrategy.cc )
+   esstixfontstyle.cc )
 
 kde4_automoc(${kformulalib_LIB_SRCS})
 

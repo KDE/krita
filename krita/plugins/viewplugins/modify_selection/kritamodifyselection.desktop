@@ -1,20 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Modify Selection
-Name[br]=Kemmañ an dibab
-Name[da]=Ændr markering
-Name[de]=Auswahl verändern
-Name[es]=Modificar selección
-Name[et]=Valiku muutmine
-Name[hu]=A kijelölés módosítása
-Name[it]=Modifica la selezione
 Name[ja]=選択領域を変更
-Name[nl]=Selectie aanpassen
-Name[pt]=Modificar a Selecção
-Name[pt_BR]=Modificar a Seleção
-Name[ru]=Выделение
-Name[sv]=Ändra markering
-Name[zh_TW]=變更選取
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection

@@ -2,17 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Image enhancement Filters (Extension)
-Name[de]=Verbesserungsfilter (Erweiterung)
-Name[es]=Filtros de realce de imagen (Extensión)
-Name[et]=Parandusfiltrid (laiendus)
-Name[hu]=Képjavító szűrők (kiterjesztés)
-Name[it]=Filtri di miglioramento delle immagini (estensione)
 Name[ja]=画像エンハンスメントフィルタ (拡張)
-Name[nl]=Afbeeldingsfilters (extensie)
-Name[pt]=Filtros de Melhoramento de Imagem (Extensão)
-Name[pt_BR]=Filtros de Melhoramento de Imagem (Extensão)
-Name[ru]=Улучшение изображения (расширение)
-Name[zh_TW]=增強過濾器（延伸）
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaunsharpfilter

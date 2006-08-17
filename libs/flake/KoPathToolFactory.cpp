@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,30 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoPathShapeFactory.h"
+#include "KoPathToolFactory.h"
+#include "KoPathTool.h"
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
 
 #include <klocale.h>
 
-KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
-: KoShapeFactory(parent, KoPathShapeId, i18n("A simple path shape"))
+KoPathToolFactory::KoPathToolFactory(QObject *parent, const QStringList&)
+: KoToolFactory(parent, "PathToolFactoryId", i18n("Path tool"))
 {
-    setToolTip("A simple path shape");
+    setToolTip (i18n("Path editing tool"));
+    setToolType (dynamicToolType());
+    setIcon ("group");
+    setPriority (2);
+    setActivationShapeID (KoPathShapeId);
 }
 
-KoShape * KoPathShapeFactory::createDefaultShape() {
-    KoPathShape* path = new KoPathShape();
-    path->moveTo( QPointF( 0, 10 ) );
-    path->curveTo( QPointF( 0, 20 ), QPointF( 5, 20 ), QPointF( 5, 10 ) );
-    path->curveTo( QPointF( 5, 0 ), QPointF( 10, 0 ), QPointF( 10, 10 ) );
-    path->setBorder( new KoLineBorder( 1.0 ) );
-    path->setShapeId(shapeId());
-    return path;
+KoPathToolFactory::~KoPathToolFactory() {
 }
 
-KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {
-    Q_UNUSED(params);
-    return new KoPathShape();
+KoTool * KoPathToolFactory::createTool(KoCanvasBase *canvas) {
+    return new KoPathTool(canvas);
 }
 
+#include "KoPathToolFactory.moc"

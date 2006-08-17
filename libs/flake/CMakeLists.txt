@@ -31,6 +31,8 @@ set(flake_SRCS
     KoPathShapeFactory.cpp
     KoShapeFactory.cpp
     KoShapeUserData.cpp
+    KoPathToolFactory.cpp
+    KoPathTool.cpp
 )
 
 kde4_automoc(${flake_SRCS})

@@ -24,6 +24,7 @@
 #include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kstaticdeleter.h>
+#include <KoPathToolFactory.h>
 
 KoToolRegistry::KoToolRegistry() {
     const KService::List offers = KServiceTypeTrader::self()->query(
@@ -45,6 +46,8 @@ KoToolRegistry::KoToolRegistry() {
                 "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
         }
     }
+    // path tool is always there
+    add( new KoPathToolFactory(this, QStringList()) );
 }
 
 KoToolRegistry::~KoToolRegistry()

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,30 +17,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoPathShapeFactory.h"
+#ifndef KOPATHTOOL_H
+#define KOPATHTOOL_H
+
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
 
-#include <klocale.h>
+#include <KoTool.h>
 
-KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
-: KoShapeFactory(parent, KoPathShapeId, i18n("A simple path shape"))
-{
-    setToolTip("A simple path shape");
-}
+class KoPathTool : public KoTool {
+public:
+    KoPathTool(KoCanvasBase *canvas);
+    ~KoPathTool();
 
-KoShape * KoPathShapeFactory::createDefaultShape() {
-    KoPathShape* path = new KoPathShape();
-    path->moveTo( QPointF( 0, 10 ) );
-    path->curveTo( QPointF( 0, 20 ), QPointF( 5, 20 ), QPointF( 5, 10 ) );
-    path->curveTo( QPointF( 5, 0 ), QPointF( 10, 0 ), QPointF( 10, 10 ) );
-    path->setBorder( new KoLineBorder( 1.0 ) );
-    path->setShapeId(shapeId());
-    return path;
-}
+    void paint( QPainter &painter, KoViewConverter &converter );
 
-KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const {
-    Q_UNUSED(params);
-    return new KoPathShape();
-}
+    void mousePressEvent( KoPointerEvent *event ) ;
+    void mouseDoubleClickEvent( KoPointerEvent *event );
+    void mouseMoveEvent( KoPointerEvent *event );
+    void mouseReleaseEvent( KoPointerEvent *event );
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
+    void activate (bool temporary=false);
+    void deactivate();
+
+private:
+    void repaint();
+
+private:
+    KoPathShape *m_pathShape;
+};
+
+#endif

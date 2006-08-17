@@ -29,6 +29,8 @@
 
 #include "KoShape.h"
 
+#define KoPathShapeId "KoPathShape"
+
 class KoPathShape;
 class KoPointGroup;
 

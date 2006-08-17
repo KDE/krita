@@ -1,12 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Modify Selection
-Name[da]=Ændr markering
-Name[el]=Τροποποίηση επιλογής
-Name[et]=Valiku muutmine
-Name[pt]=Ferramentas de Selecção
-Name[pt_BR]=Ferramentas de Selecção
-Name[sv]=Ändra markering
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection

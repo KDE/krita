@@ -1,24 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Rotate Image Plugin
-Name[ca]=Connector de rotació d'imatge
-Name[da]=Plugin for rotering af billede
-Name[de]="Bild rotieren"-Plugin
-Name[el]=Πρόσθετο περιστροφής εικόνας
-Name[es]=Extensión para girar la imagen
-Name[et]=Pildi pööramise plugin
-Name[hu]=Képelforgató modul
-Name[is]=Snúa mynd íforrit
-Name[it]=Plugin per ruotare le immagini
-Name[ja]=画像回転プラグイン
-Name[nl]=Plugin voor afbeeldingrotatie
-Name[pl]=Wtyczka obrotu obrazków
-Name[pt]='Plugin' para Rodar a Imagem
-Name[pt_BR]='Plugin' para Rodar a Imagem
-Name[sl]=Vstavek za vrtenje slike
-Name[sr]=Прикључак за ротирање слике
-Name[sr@Latn]=Priključak za rotiranje slike
-Name[sv]=Insticksprogram för rotera bild
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritarotateimage

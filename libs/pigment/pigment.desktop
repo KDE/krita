@@ -2,23 +2,5 @@
 Type=ServiceType
 X-KDE-ServiceType=KOffice/ColorSpace
 Comment=A module implementing a complete colorspace for use with libpigment
-Comment[ca]=Un mòdul que implementa un complet espai de colors per a usar-lo amb libkritacolor
-Comment[cy]=Modiwl sy'n gweithredoli gofod lliw cyflawn i'w ddefnyddio efo libkritacolor
-Comment[da]=Et modul som implementerer et fuldstændigt farverum til brug med libkritacolor
-Comment[de]=Ein Modul, das einen kompletten Farbraum zur Benutzung mit libkritacolor implementiert
-Comment[el]=Ένα άρθρωμα που υλοποιεί έναν πλήρη χρωματικό χώρο για χρήση με το libkritacolor
-Comment[en_GB]=A module implementing a complete colourspace for use with libkritacolor
-Comment[es]=Un módulo que implementa un espacio de color completo para usar con libkritacolor
-Comment[et]=Täielikku värviruumi teostav moodul (teegile libkritacolor)
-Comment[hu]=Teljes színteret megvalósító modul a libkritacolor programkönyvtárhoz
-Comment[is]=Eining með fullu litasvæði til notkunar með libkritacolor
-Comment[it]=Un modulo che implementa uno spazio dei colori completo per usarlo con libkritacolor
-Comment[nl]=Een module die een volledig kleurgebied implementeert dat gebruikt kan worden met libkritacolor
-Comment[pl]=Moduł implementujący kompletną przestrzeń barw do użytku z libkritacolor
-Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com a 'libkritacolor'
-Comment[pt_BR]=Um módulo que implementa um espaço de cores completo para usar com a 'libkritacolor'
-Comment[sr]=Модул који имплементира потпун простор боја за употребу са libkritacolor
-Comment[sr@Latn]=Modul koji implementira potpun prostor boja za upotrebu sa libkritacolor
-Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med libkritacolor
 [PropertyDef::X-Pigment-Version]
 Type=int

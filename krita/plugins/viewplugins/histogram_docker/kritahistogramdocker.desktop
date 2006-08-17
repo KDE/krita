@@ -1,23 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Histogram Docker
-Name[cy]=Bachydd Histogram
-Name[da]=Histogramdokning
-Name[de]=Histogramm-Docker
-Name[el]=Προσάρτηση ιστογράμματος
-Name[es]=Anclaje del histograma
-Name[et]=Histogrammi dokk
-Name[hu]=Hisztogramdokkoló
-Name[is]=Súluritsspjald
-Name[it]=Aggancia-istogrammi
-Name[ja]=ヒストグラムドッカー
-Name[nl]=Histogramcomponent
-Name[pl]=Doker histogramu
-Name[pt]=Acoplador de Histogramas
-Name[pt_BR]=Acoplador de Histogramas
-Name[sr]=Сидраш хистограма
-Name[sr@Latn]=Sidraš histograma
-Name[sv]=Histogramdockning
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogramdocker

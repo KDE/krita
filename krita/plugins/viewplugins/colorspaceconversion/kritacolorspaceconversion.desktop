@@ -1,25 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Colorspace Conversion
-Name[ca]=Conversió d'espai de color
-Name[da]=Farverumskonvertering
-Name[de]=Farbraumkonversion
-Name[el]=Μετατροπή χρωματικού χώρου
-Name[en_GB]=Colourspace Conversion
-Name[es]=Conversión de espacio de color
-Name[et]=Värviruumi teisendus
-Name[hu]=Színtér-konverzió
-Name[is]=Litasvæðis umbreyting
-Name[it]=Conversione dello spazio dei colori
-Name[ja]=カラースペース変換
-Name[nl]=Conversie van kleurspectrum
-Name[pl]=Konwersja przestrzeni barw
-Name[pt]=Conversão de Espaços de Cores
-Name[pt_BR]=Conversão de Espaços de Cores
-Name[sl]=Pretvorba barvnega prostora
-Name[sr]=Претварање простора боја
-Name[sr@Latn]=Pretvaranje prostora boja
-Name[sv]=Färgrymdskonvertering
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorspaceconversion

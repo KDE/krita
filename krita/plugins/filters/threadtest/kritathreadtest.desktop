@@ -1,24 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Invert Filter with Threads
-Name[ca]=Inverteix filtre amb fils
-Name[cy]=Gwrthdroi Hidlen efo Edeifion
-Name[da]=Inverteringsfilter med tråde
-Name[de]=Invertierungsfilter mit Threads
-Name[el]=Φίλτρο αντιστροφής με νήματα
-Name[es]=Invertir filtro con hilos
-Name[et]=Lõimedega inverteerimise filter
-Name[ga]=Inbhéartaigh Scagaire le Snáitheanna
-Name[hu]=Invertáló szűrő szálakkal
-Name[is]=Snúa síu með þráðum
-Name[it]=File di inversione con trama
-Name[nl]=Filter met threads omkeren
-Name[pl]=Filtr inwersji z wątkami
-Name[pt]=Filtro de Inversão Multitarefa
-Name[pt_BR]=Filtro de Inversão Multitarefa
-Name[sr]=Филтер за инверзију са нитима
-Name[sr@Latn]=Filter za inverziju sa nitima
-Name[sv]=Inverteringsfilter med trådar
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritathreadtest

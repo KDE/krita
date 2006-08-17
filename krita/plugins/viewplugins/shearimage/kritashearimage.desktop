@@ -1,23 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Shear Image Plugin
-Name[ca]=Connector de tall d'imatge
-Name[da]=Plugin for skævvrid billede
-Name[de]="Bild scheren"-Plugin
-Name[el]=Πρόσθετο στρέβλωσης εικόνας
-Name[es]=Extensión para cortar la imagen
-Name[et]=Pildinihke plugin
-Name[hu]=Képnyíró modul
-Name[is]=Klippa mynd íforrit
-Name[it]=Plugin di distorsione delle immagini
-Name[ja]=画像剪断変形プラグイン
-Name[nl]=Afbeelding schuintrekken
-Name[pl]=Wtyczka obcinania obrazków
-Name[pt]='Plugin' de Inclinação da Imagem
-Name[pt_BR]='Plugin' de Inclinação da Imagem
-Name[sr]=Прикључак за смицање слике
-Name[sr@Latn]=Priključak za smicanje slike
-Name[sv]=Insticksprogram för skjuva bild
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritashearimage

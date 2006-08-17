@@ -1,24 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Performance Test
-Name[ca]=Prova d'execució
-Name[da]=Ydelsestest
-Name[de]=Leistungstest
-Name[el]=Δοκιμή επίδοσης
-Name[es]=Prueba de rendimiento
-Name[et]=Jõudlustest
-Name[hu]=Teljesítményteszt
-Name[is]=Afkastapróf
-Name[it]=Prova delle prestazioni
-Name[ja]=パフォーマンステスト
-Name[nl]=Prestatiemeting
-Name[pl]=Test wydajności
-Name[pt]=Teste de Performance
-Name[pt_BR]=Teste de Performance
-Name[sl]=Preizkus zmogljivosti
-Name[sr]=Проба перформанси
-Name[sr@Latn]=Proba performansi
-Name[sv]=Prestandatest
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaperftest

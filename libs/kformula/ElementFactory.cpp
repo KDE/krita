@@ -29,7 +29,7 @@
 #include "MatrixEntryElement.h"
 #include "SequenceElement.h"
 #include "SpaceElement.h"
-#include "textelement.h"
+#include "TextElement.h"
 #include "bracketelement.h"
 
 
@@ -45,9 +45,9 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if( tagName == "mn" )
 	return new NumberElement( parent );
     else if( tagName == "mo" )
-	return new OperatorElement( parent );
+	return new OperatorElement( parent );*/
     else if( tagName == "mtext" )
-	return new TextElement( parent );*/
+	return new TextElement( parent );
     else if( tagName == "mspace" )
 	return new SpaceElement( parent );
 /*    else if( tagName == "ms" )

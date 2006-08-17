@@ -30,7 +30,7 @@
 #include "RootElement.h"
 #include "SequenceElement.h"
 #include "symbolelement.h"
-#include "textelement.h"
+#include "TextElement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 

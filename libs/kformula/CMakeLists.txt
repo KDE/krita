@@ -18,7 +18,7 @@ set(kformulalib_LIB_SRCS
    SequenceElement.cpp
    MultiscriptElement.cpp
    UnderOverElement.cpp
-   textelement.cc 
+   TextElement.cpp 
    bracketelement.cc 
    MatrixElement.cpp
    MatrixRowElement.cpp

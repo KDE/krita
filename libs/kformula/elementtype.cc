@@ -29,7 +29,7 @@
 #include "elementtype.h"
 #include "SequenceElement.h"
 #include "sequenceparser.h"
-#include "textelement.h"
+#include "TextElement.h"
 
 
 KFORMULA_NAMESPACE_BEGIN

@@ -52,7 +52,7 @@
 #include "symbolelement.h"
 #include "symboltable.h"
 #include "SpaceElement.h"
-#include "textelement.h"
+#include "TextElement.h"
 
 #include <assert.h>
 

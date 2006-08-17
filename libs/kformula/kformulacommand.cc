@@ -26,7 +26,7 @@
 #include "kformulacommand.h"
 #include "MatrixElement.h"
 #include "SequenceElement.h"
-#include "textelement.h"
+#include "TextElement.h"
 #include "MatrixEntryElement.h"
 #include "MatrixRowElement.h"
 

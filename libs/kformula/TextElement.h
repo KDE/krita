@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef TEXTELEMENT_H
@@ -29,28 +30,22 @@
 class SymbolTable;
 
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 /**
  * An element that represents one char.
  */
 class TextElement : public BasicElement {
 public:
-
-    TextElement(QChar ch = ' ', bool beSymbol = false, BasicElement* parent = 0);
-    TextElement( const TextElement& );
-
-    virtual TextElement* clone() {
-        return new TextElement( *this );
-    }
-
-//    virtual bool accept( ElementVisitor* visitor );
+    TextElement( BasicElement* parent = 0 );
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    const QList<BasicElement*>& childElements();
+
+
 
     /**
      * @returns the type of this element. Used for
@@ -68,13 +63,6 @@ public:
      * parsing a sequence.
      */
     virtual QChar getCharacter() const { return character; }
-
-    // drawing
-    //
-    // Drawing depends on a context which knows the required properties like
-    // fonts, spaces and such.
-    // It is essential to calculate elements size with the same context
-    // before you draw.
 
     /**
      * Calculates our width and height and
@@ -107,26 +95,15 @@ public:
     char format() const { return m_format; }
 
     /**
-     * Moves the cursor away from the given child. The cursor is
-     * guaranteed to be inside this element.
-     */
-    //virtual void childWillVanish(FormulaCursor*, BasicElement*) {}
-
-    /**
      * @returns whether we are a symbol (greek letter).
      */
     bool isSymbol() const { return symbol; }
 
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-    virtual QString toLatex();
-
-    virtual QString formulaString();
-
 protected:
-    virtual void drawInternal();
+    void drawInternal();
+
+
+
     //Save/load support
 
     /**
@@ -207,72 +184,6 @@ private:
     char m_format;
 };
 
-
-/**
- * An element that represents an empty box.
- */
-class EmptyElement : public BasicElement {
-    EmptyElement& operator=( const EmptyElement& ) { return *this; }
-public:
-
-    EmptyElement( BasicElement* parent = 0 );
-    EmptyElement( const EmptyElement& );
-
-    virtual EmptyElement* clone() {
-        return new EmptyElement( *this );
-    }
-
-//    virtual bool accept( ElementVisitor* visitor );
-
-    /**
-     * Obtain a list of all child elements of this element
-     * @return a QList with pointers to all child elements
-     */
-    virtual const QList<BasicElement*>& childElements();
-    
-
-    /**
-     * @returns the character that represents this element. Used for
-     * parsing a sequence.
-     * Here we use a dummy so an EmptyElement pretends to be a letter.
-     */
-    virtual QChar getCharacter() const { return 'A'; }
-
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
-
-    /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
-     */
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin );
-
-
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-    virtual QString toLatex();
-
-protected:
-    virtual void drawInternal();
-    //Save/load support
-
-    /**
-     * @returns the tag name of this element type.
-     */
-    virtual QString getTagName() const { return "EMPTY"; }
-};
-
-
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // TEXTELEMENT_H

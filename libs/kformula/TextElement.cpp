@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,8 +16,11 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
+
+#include "TextElement.h"
+
 
 #include <QFontMetrics>
 #include <QPainter>
@@ -26,38 +30,27 @@
 #include "BasicElement.h"
 #include "contextstyle.h"
 #include "elementtype.h"
-#include "elementvisitor.h"
 #include "fontstyle.h"
 #include "FormulaElement.h"
 #include "kformulacommand.h"
 #include "SequenceElement.h"
 #include "symboltable.h"
-#include "textelement.h"
 
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
-TextElement::TextElement(QChar ch, bool beSymbol, BasicElement* parent)
-        : BasicElement(parent), character(ch), symbol(beSymbol)
+TextElement::TextElement( BasicElement* parent ) : BasicElement(parent),
+						   character(' '),
+						   symbol(false)
 {
     charStyle( anyChar );
     charFamily( anyFamily );
 }
 
-
-TextElement::TextElement( const TextElement& other )
-    : BasicElement( other ),
-      character( other.character ),
-      symbol( other.symbol ),
-      m_format( other.m_format )
-{
-}
-
 const QList<BasicElement*>& TextElement::childElements()
 {
-	    return QList<BasicElement*>();
+    return QList<BasicElement*>();
 }
-
 
 TokenType TextElement::getTokenType() const
 {
@@ -420,96 +413,4 @@ bool TextElement::readContentFromDom(QDomNode& node)
     return BasicElement::readContentFromDom(node);
 }
 
-QString TextElement::toLatex()
-{
-    if ( isSymbol() ) {
-        QString texName = getSymbolTable().name( character );
-        if ( !texName.isNull() )
-            return " \\" + texName + " ";
-        return  " ? ";
-    }
-    else {
-        return QString(character);
-    }
-}
-
-QString TextElement::formulaString()
-{
-    if ( isSymbol() ) {
-        QString texName = getSymbolTable().name( character );
-        if ( !texName.isNull() )
-            return " " + texName + " ";
-        return " ? ";
-    }
-    else {
-        return character;
-    }
-}
-
-
-EmptyElement::EmptyElement( BasicElement* parent )
-    : BasicElement( parent )
-{
-}
-
-EmptyElement::EmptyElement( const EmptyElement& other )
-    : BasicElement( other )
-{
-}
-
-const QList<BasicElement*>& EmptyElement::childElements()
-{
-    return QList<BasicElement*>();
-}
-
-
-void EmptyElement::calcSizes( const ContextStyle& context,
-                              ContextStyle::TextStyle tstyle,
-                              ContextStyle::IndexStyle /*istyle*/ )
-{
-    luPt mySize = context.getAdjustedSize( tstyle );
-    //kDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
-
-    QFont font = context.getDefaultFont();
-    font.setPointSizeF( context.layoutUnitPtToPt( mySize ) );
-
-    QFontMetrics fm( font );
-    QChar ch = 'A';
-    QRect bound = fm.boundingRect( ch );
-    setWidth( 0 );
-    setHeight( context.ptToLayoutUnitPt( bound.height() ) );
-    setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
-}
-
-void EmptyElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
-                         const ContextStyle& context,
-                         ContextStyle::TextStyle /*tstyle*/,
-                         ContextStyle::IndexStyle /*istyle*/,
-                         const LuPixelPoint& parentOrigin )
-{
-    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    /*
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
-    */
-
-    if ( context.edit() ) {
-        painter.setPen( context.getHelpColor() );
-        painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),
-                          context.layoutUnitToPixelY( myPos.y() ),
-                          context.layoutUnitToPixelX( myPos.x() ),
-                          context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
-    }
-}
-
-void EmptyElement::drawInternal()
-{
-}
-
-
-QString EmptyElement::toLatex()
-{
-    return "{}";
-}
-
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

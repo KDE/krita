@@ -50,7 +50,7 @@
 #include "SpaceElement.h"
 #include "symbolelement.h"
 #include "symboltable.h"
-#include "textelement.h"
+#include "TextElement.h"
 #include "MatrixRowElement.h"
 
 #include <assert.h>

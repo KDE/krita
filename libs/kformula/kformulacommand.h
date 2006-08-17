@@ -343,12 +343,9 @@ private:
     ElementIndexPtr index;
 };
 
-
+/*
 class IndexElement;
-
-/**
- * Add an IndexElement.
- */
+/
 class KFCAddIndex : public KFCAddReplacing
 {
 public:
@@ -362,7 +359,7 @@ public:
 private:
     KFCAddGenericIndex addIndex;
 };
-
+*/
 
 class FormulaElement;
 

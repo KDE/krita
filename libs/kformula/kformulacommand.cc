@@ -22,7 +22,6 @@
 
 #include "FormulaCursor.h"
 #include "FormulaElement.h"
-#include "indexelement.h"
 #include "kformulacommand.h"
 #include "MatrixElement.h"
 #include "SequenceElement.h"
@@ -303,7 +302,7 @@ void KFCAddGenericIndex::execute()
     KFCAdd::execute();
 }
 
-
+/*
 KFCAddIndex::KFCAddIndex(Container* document,
                          IndexElement* element, ElementIndexPtr index)
         : KFCAddReplacing(i18n("Add Index"), document),
@@ -327,7 +326,7 @@ void KFCAddIndex::unexecute()
     addIndex.unexecute();
     KFCAddReplacing::unexecute();
 }
-
+*/
 
 KFCChangeBaseSize::KFCChangeBaseSize( const QString& name, Container* document,
                                       FormulaElement* formula, int size )

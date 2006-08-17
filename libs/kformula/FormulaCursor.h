@@ -30,7 +30,6 @@
 KFORMULA_NAMESPACE_BEGIN
 
 class FormulaElement;
-class IndexElement;
 class MatrixElement;
 class NameSequence;
 class RootElement;
@@ -146,20 +145,6 @@ public:
     void mouseRelease( const LuPixelPoint&, int flags );
 
     /**
-     * Inserts the child at the current position.
-     * Ignores the selection.
-     */
-//    void insert(BasicElement*, Direction = beforeCursor);
-
-    /**
-     * Inserts the listed children at the current position.
-     * Ignores the selection.
-     * The list will be emptied.
-     */
-//    void insert(QList<BasicElement*>&,
-//                Direction = beforeCursor);
-
-    /**
      * Removes the current selected children and returns them.
      * The cursor needs to be normal (that is be inside a SequenceElement)
      * for this to have any effect.
@@ -247,40 +232,6 @@ public:
      */
     SequenceElement* normal();
     const SequenceElement* normal() const;
-
-    /**
-     * Returns the IndexElement the cursor is on or 0
-     * if there is non.
-     */
-    IndexElement* getActiveIndexElement();
-
-    /**
-     * Returns the RootElement the cursor is on or 0
-     * if there is non.
-     */
-    RootElement* getActiveRootElement();
-
-    /**
-     * Returns the SymbolElement the cursor is on or 0
-     * if there is non.
-     */
-    SymbolElement* getActiveSymbolElement();
-
-    /**
-     * @returns the NameSequence the cursor is on or 0
-     * if there is non.
-     */
-    NameSequence* getActiveNameSequence();
-
-    /**
-     * @returns the TextElement the cursor is on or 0.
-     */
-    TextElement* getActiveTextElement();
-
-    /**
-     * @returns the MatrixElement the cursor is on or 0.
-     */
-    MatrixElement* getActiveMatrixElement();
 
     /**
      * Selects the element the cursor points to (stands after)

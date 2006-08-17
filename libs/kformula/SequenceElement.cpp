@@ -33,13 +33,10 @@
 
 #include "MatrixDialog.h"
 #include "BracketElement.h"
-//#include "creationstrategy.h"
 #include "elementtype.h"
-#include "elementvisitor.h"
 #include "FormulaCursor.h"
 #include "FormulaElement.h"
 #include "FractionElement.h"
-#include "indexelement.h"
 #include "kformulacommand.h"
 #include "FormulaContainer.h"
 #include "kformuladocument.h"

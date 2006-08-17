@@ -25,14 +25,13 @@
 
 #include "FormulaCursor.h"
 #include "FormulaElement.h"
-#include "indexelement.h"
 #include "MatrixElement.h"
 #include "RootElement.h"
 #include "SequenceElement.h"
 #include "symbolelement.h"
 #include "TextElement.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 FormulaCursor::FormulaCursor(FormulaElement* element)
         : selectionFlag(false), linearMovement(false),
@@ -292,27 +291,6 @@ void FormulaCursor::normalize(Direction direction)
     element->normalize(this, direction);
 }
 
-
-/**
- * Inserts the child at the current position.
- * Ignores the selection.
- *//*
-void FormulaCursor::insert(BasicElement* child, Direction direction)
-{
-    QList<BasicElement*> list;
-    list.append(child);
-    insert(list, direction);
-}
-
-void FormulaCursor::insert(QList<BasicElement*>& children,
-                           Direction direction)
-{
-    assert( !isReadOnly() );
-    BasicElement* element = getElement();
-    element->insert(this, children, direction);
-}
-*/
-
 /**
  * Removes the current selected children and returns them.
  * The cursor needs to be normal (that is be inside a SequenceElement)
@@ -488,103 +466,6 @@ bool FormulaCursor::pointsAfterMainChild(BasicElement* element)
             ((mainChild->countChildren() == getPos()) || (0 == getPos()));
     }
     return false;
-}
-
-
-/**
- * Returns the IndexElement the cursor is on or 0
- * if there is non.
- */
-/*IndexElement* FormulaCursor::getActiveIndexElement()
-{
-    IndexElement* element = dynamic_cast<IndexElement*>(getSelectedChild());
-
-    if ((element == 0) && !isSelection()) {
-        element = dynamic_cast<IndexElement*>(getElement()->getParent());
-        if (!pointsAfterMainChild(element)) {
-            return 0;
-        }
-    }
-    return element;
-}
-*/
-
-/**
- * Returns the RootElement the cursor is on or 0
- * if there is non.
- */
-RootElement* FormulaCursor::getActiveRootElement()
-{
-    RootElement* element = dynamic_cast<RootElement*>(getSelectedChild());
-
-    if ((element == 0) && !isSelection()) {
-        element = dynamic_cast<RootElement*>(getElement()->getParent());
-        if (!pointsAfterMainChild(element)) {
-            return 0;
-        }
-    }
-    return element;
-}
-
-
-/**
- * @returns the SymbolElement the cursor is on or 0
- * if there is non.
- */
-SymbolElement* FormulaCursor::getActiveSymbolElement()
-{
-    SymbolElement* element = dynamic_cast<SymbolElement*>(getSelectedChild());
-
-    if ((element == 0) && !isSelection()) {
-        element = dynamic_cast<SymbolElement*>(getElement()->getParent());
-        if (!pointsAfterMainChild(element)) {
-            return 0;
-        }
-    }
-    return element;
-}
-
-/**
- * @returns the NameSequence the cursor is on or 0
- * if there is non.
- */
-/*
-NameSequence* FormulaCursor::getActiveNameSequence()
-{
-    NameSequence* element = dynamic_cast<NameSequence*>( getSelectedChild() );
-
-    if ( ( element == 0 ) && !isSelection() ) {
-        element = dynamic_cast<NameSequence*>( getElement() );
-        if ( !pointsAfterMainChild( element ) ) {
-            return 0;
-        }
-    }
-    return element;
-}*/
-
-/**
- * @returns the TextElement the cursor is on or 0.
- */
-TextElement* FormulaCursor::getActiveTextElement()
-{
- //   return dynamic_cast<TextElement*>(getSelectedChild());
-}
-
-
-MatrixElement* FormulaCursor::getActiveMatrixElement()
-{
-    MatrixElement* element = dynamic_cast<MatrixElement*>(getSelectedChild());
-
-    if ( ( element != 0 ) && !isSelection() ) {
-        normal()->selectChild( this, element );
-    }
-//     if ((element == 0) && !isSelection()) {
-//         element = dynamic_cast<MatrixElement*>(getElement()->getParent());
-//         if (!pointsAfterMainChild(element)) {
-//             return 0;
-//         }
-//     }
-    return element;
 }
 
 /**

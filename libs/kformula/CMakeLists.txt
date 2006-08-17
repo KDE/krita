@@ -35,7 +35,7 @@ set(kformulalib_LIB_SRCS
 #   kformuladocument.cc 
    symboltable.cc 
 #   MathMLLoader.cpp 
-   kformulainputfilter.cc 
+#   kformulainputfilter.cc 
 #   kformulaview.cc 
    kformulaconfigpage.cc 
    symbolaction.cc 

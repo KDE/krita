@@ -36,15 +36,26 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    const QList<BasicElement*>& childElements();
 
-    virtual void calculateSize();
+    void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPixelPoint& parentOrigin );
 
-    virtual void layoutElement( const QPointF& offset );
+
+
+    void calculateSize();
+
+    void layoutElement( const QPointF& offset );
+
+    void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
     /// Draws the element internally, means set up @ref m_elementPath
-    virtual void drawInternal();
+    void drawInternal();
     
 private:
     BasicElement* m_baseElement;

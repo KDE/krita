@@ -33,7 +33,7 @@
 
 #include "MatrixDialog.h"
 #include "bracketelement.h"
-#include "creationstrategy.h"
+//#include "creationstrategy.h"
 #include "elementtype.h"
 #include "elementvisitor.h"
 #include "FormulaCursor.h"
@@ -47,7 +47,7 @@
 #include "RootElement.h"
 #include "SequenceElement.h"
 #include "sequenceparser.h"
-#include "spaceelement.h"
+#include "SpaceElement.h"
 #include "symbolelement.h"
 #include "symboltable.h"
 #include "textelement.h"
@@ -806,7 +806,7 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
     return true;
 }
 
-
+/*
 KCommand* SequenceElement::buildCommand( Container* container, Request* request )
 {
     FormulaCursor* cursor = container->activeCursor();
@@ -840,7 +840,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         }
         break;
     }
-/*    case req_addNameSequence:
+    case req_addNameSequence:
         if ( onlyTextSelected( container->activeCursor() ) ) {
             NameSequence* nameSequence = creationStrategy->createNameSequence();
             if ( nameSequence != 0 ) {
@@ -849,7 +849,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
                 return command;
             }
         }
-        break;*/
+        break;
     case req_addBracket: {
         BracketRequest* br = static_cast<BracketRequest*>( request );
         BracketElement* bracketElement =
@@ -985,7 +985,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     }
     case req_remove: {
         SequenceElement* sequence = cursor->normal();
-        if ( sequence && /*  ( sequence == sequence->formula() ) && */            ( sequence->countChildren() == 0 ) ) {
+        if ( sequence &&   ( sequence == sequence->formula() ) && ( sequence->countChildren() == 0 ) ) {
             sequence->formula()->removeFormula( cursor );
             return 0;
         }
@@ -1021,13 +1021,13 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         TextElement* element = cursor->getActiveTextElement();
         if ((element != 0) && !element->isSymbol()) {
             cursor->selectActiveElement();
-/*            const SymbolTable& table = container->document()->getSymbolTable();
+            const SymbolTable& table = container->document()->getSymbolTable();
             if (table.greekLetters().contains(element->getCharacter())) {
                 KFCReplace* command = new KFCReplace( i18n( "Change Char to Symbol" ), container );
                 TextElement* symbol = creationStrategy->createTextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
                 command->addElement( symbol );
                 return command;
-            }*/
+            }
             cursor->setSelection( false );
         }
         break;
@@ -1070,7 +1070,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     }
     return 0;
 }
-
+*/
 
 KCommand* SequenceElement::input( Container* container, QKeyEvent* event )
 {
@@ -1277,7 +1277,7 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement*>& list, QDomNode 
 
 BasicElement* SequenceElement::createElement( QString type )
 {
-    return creationStrategy->createElement( type );
+    return 0; //creationStrategy->createElement( type );
 }
 
 /**

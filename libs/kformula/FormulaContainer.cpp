@@ -51,7 +51,7 @@
 #include "SequenceElement.h"
 #include "symbolelement.h"
 #include "symboltable.h"
-#include "spaceelement.h"
+#include "SpaceElement.h"
 #include "textelement.h"
 
 #include <assert.h>

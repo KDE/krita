@@ -25,16 +25,16 @@ UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( paren
 {
 }
 
+UnderOverElement::~UnderOverElement()
+{}
+
 const QList<BasicElement*>& UnderOverElement::childElements()
 {
-    return SequenceElement::childElements();
+    return QList<BasicElement*>();
 }
 
 void UnderOverElement::drawInternal()
 {
-    // A UnderOverElement has no own representation if it has children,
-    // if not it paints a rectangle, this behavior is the same as SequenceElement
-    SequenceElement::drawInternal();
 }
 
 void UnderOverElement::writeMathML( QDomDocument& doc,
@@ -46,8 +46,14 @@ void UnderOverElement::writeMathML( QDomDocument& doc,
 void UnderOverElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,
                                           ContextStyle::IndexStyle istyle )
 {
-    tabs.clear();
-    SequenceElement::calcSizes( context, tstyle, istyle );
 }
+
+void UnderOverElement::draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPixelPoint& parentOrigin )
+{}
+
 
 } // namespace KFormula

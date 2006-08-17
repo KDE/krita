@@ -22,8 +22,8 @@
 
 #include "FractionElement.h"
 #include "RootElement.h"
-//#include "UnderOverElement.h"
-//#include "MultiscriptElement.h"
+#include "UnderOverElement.h"
+#include "MultiscriptElement.h"
 #include "MatrixElement.h"
 #include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
@@ -71,7 +71,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if( tagName == "mfenced" )
 	return new FencedElement( parent );
     else if( tagName == "menclose" )
-	return new EncloseElement( parent );
+	return new EncloseElement( parent );*/
     else if( tagName == "msub" )
 	return new MultiscriptElement( parent );
     else if( tagName == "msup" )
@@ -85,7 +85,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if( tagName == "munderover" )
 	return new UnderOverElement( parent );
     else if( tagName == "mmultiscripts" )
-	return new MultiscriptElement( parent ); */
+	return new MultiscriptElement( parent );
 
     return 0;
 }

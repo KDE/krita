@@ -14,9 +14,10 @@ set(kformulalib_LIB_SRCS
    contextstyle.cc 
    FormulaCursor.cpp 
    FormulaElement.cpp
-   indexelement.cc 
    FormulaContainer.cpp
    SequenceElement.cpp
+   MultiscriptElement.cpp
+   UnderOverElement.cpp
    textelement.cc 
    bracketelement.cc 
    MatrixElement.cpp
@@ -37,6 +38,7 @@ set(kformulalib_LIB_SRCS
 #   MathMLLoader.cpp 
    kformulainputfilter.cc 
 #   kformulaview.cc 
+#   indexelement.cc 
    kformulaconfigpage.cc 
    symbolaction.cc 
    cmstyle.cc 

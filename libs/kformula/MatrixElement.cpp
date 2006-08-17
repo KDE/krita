@@ -35,7 +35,7 @@
 #include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
 #include "SequenceElement.h"
-#include "spaceelement.h"
+#include "SpaceElement.h"
 
 
 namespace KFormula {

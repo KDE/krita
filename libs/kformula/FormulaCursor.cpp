@@ -495,7 +495,7 @@ bool FormulaCursor::pointsAfterMainChild(BasicElement* element)
  * Returns the IndexElement the cursor is on or 0
  * if there is non.
  */
-IndexElement* FormulaCursor::getActiveIndexElement()
+/*IndexElement* FormulaCursor::getActiveIndexElement()
 {
     IndexElement* element = dynamic_cast<IndexElement*>(getSelectedChild());
 
@@ -507,7 +507,7 @@ IndexElement* FormulaCursor::getActiveIndexElement()
     }
     return element;
 }
-
+*/
 
 /**
  * Returns the RootElement the cursor is on or 0

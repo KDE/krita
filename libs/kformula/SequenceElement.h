@@ -249,7 +249,7 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual KCommand* buildCommand( Container*, Request* );
+//    virtual KCommand* buildCommand( Container*, Request* );
 
 
     /**

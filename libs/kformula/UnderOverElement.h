@@ -50,11 +50,19 @@ public:
     void insertInOverElement( int index, BasicElement* element );
 
     /// Saves the element to MathML
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPixelPoint& parentOrigin );
+
+    
 protected:
     /// Draws the element internally, means it paints into m_elementPath
-    virtual void drawInternal();
+    void drawInternal();
     
 private:
     BasicElement* m_baseElement;

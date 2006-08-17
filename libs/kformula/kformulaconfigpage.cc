@@ -50,7 +50,6 @@
 
 #include "contextstyle.h"
 #include "kformulaconfigpage.h"
-#include "kformuladocument.h"
 #include "symboltable.h"
 #include "esstixfontstyle.h"
 #include "cmstyle.h"

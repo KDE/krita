@@ -18,8 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <stdlib.h>
-#include <math.h>
+#include "SequenceElement.h"
 
 #include <QPainter>
 #include <QPaintDevice>
@@ -38,10 +37,8 @@
 #include "FractionElement.h"
 #include "kformulacommand.h"
 #include "FormulaContainer.h"
-#include "kformuladocument.h"
 #include "MatrixElement.h"
 #include "RootElement.h"
-#include "SequenceElement.h"
 #include "SpaceElement.h"
 #include "symboltable.h"
 #include "TextElement.h"

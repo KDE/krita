@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,10 +16,12 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#include <iostream>
+#include "FormulaElement.h"
+
+
 #include <QPainter>
 #include <QKeyEvent>
 
@@ -26,9 +29,7 @@
 
 #include "contextstyle.h"
 #include "FormulaCursor.h"
-#include "FormulaElement.h"
 #include "FormulaContainer.h"
-#include "kformuladocument.h"
 
 namespace KFormula {
 

@@ -297,15 +297,10 @@ void FormulaElement::convertNames( QDomNode node )
         }
     }
 }
-/*
-QString FormulaElement::toLatex()
+
+void FormulaElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
 {
-    return BasicElement::toLatex();   //Consider $$ sorround
-}
-*/
-void FormulaElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de;
+/*    QDomElement de;
     if ( !oasisFormat )
         de = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
                                               "math" );
@@ -313,7 +308,7 @@ void FormulaElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasi
         de =doc.createElement( "math:semantics" );
 
     BasicElement::writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );
+    parent.appendChild( de );*/
 }
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

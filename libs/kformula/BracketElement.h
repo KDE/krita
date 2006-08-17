@@ -56,7 +56,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    const QList<BasicElement*>& childElements();
 	
 
     /**
@@ -76,11 +76,14 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
-    void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void readMathML( const QDomElement& element );
+    
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
 protected:
     void drawInternal();
 
+    void readMathMLAttributes( const QDomElement& element );
     
     //Save/load support
 

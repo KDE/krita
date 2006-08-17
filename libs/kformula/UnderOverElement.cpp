@@ -37,10 +37,16 @@ void UnderOverElement::drawInternal()
 {
 }
 
-void UnderOverElement::writeMathML( QDomDocument& doc,
-                                            QDomNode& parent, bool oasisFormat )
+void UnderOverElement::readMathML( const QDomElement& element )
 {
+}
 
+void UnderOverElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void UnderOverElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
 }
 
 void UnderOverElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,

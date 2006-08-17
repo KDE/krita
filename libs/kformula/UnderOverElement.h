@@ -49,8 +49,10 @@ public:
     void insertInUnderElement( int index, BasicElement* element );
     void insertInOverElement( int index, BasicElement* element );
 
+    void readMathML( const QDomElement& element );
+    
     /// Saves the element to MathML
-    void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
     virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
     virtual void draw( QPainter& painter, const LuPixelRect& r,
@@ -63,6 +65,8 @@ public:
 protected:
     /// Draws the element internally, means it paints into m_elementPath
     void drawInternal();
+
+    void readMathMLAttributes( const QDomElement& element );
     
 private:
     BasicElement* m_baseElement;

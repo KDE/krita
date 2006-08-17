@@ -23,7 +23,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "elementvisitor.h"
 #include "FormulaElement.h"
 #include "FormulaCursor.h"
 #include "FractionElement.h"
@@ -62,14 +61,22 @@ void FractionElement::drawInternal()
 {
 }
 
-void FractionElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void FractionElement::readMathML( const QDomElement& element )
 {
-    QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
+}
+
+void FractionElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void FractionElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
 //    if ( !withLine ) // why is this no function?
 //        de.setAttribute( "linethickness", 0 );
     m_numerator->writeMathML( doc, de, oasisFormat );
     m_denominator->writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );
+    parent.appendChild( de );*/
 }
 
 

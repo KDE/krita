@@ -48,7 +48,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    const QList<BasicElement*>& childElements();
     
     /// @return The number of @see MatrixEntryElement in this MatrixRowElement
     int numberOfEntries() const;
@@ -56,17 +56,13 @@ public:
     /// @return The MatrixEntryElement at the @p pos position in the MatrixRowElement
     MatrixEntryElement* entryAtPosition( int pos );
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void readMathML( const QDomElement& element );
+    
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
 
 
 
-
-    /**
-     * The cursor has entered one of our child sequences.
-     * This is a good point to tell the user where he is.
-     */
-//    virtual void entered( SequenceElement* child );
 
     /**
      * Sets the cursor inside this element to its start position.
@@ -124,10 +120,6 @@ public:
     virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
     virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
-//    virtual void normalize(FormulaCursor*, Direction);
-
-//    virtual SequenceElement* getMainChild();
-
     /**
      * Sets the cursor to select the child. The mark is placed before,
      * the position behind it.
@@ -137,7 +129,9 @@ public:
 
 protected:
     /// Draws the element internally, means it paints into m_elementPath
-    virtual void drawInternal();
+    void drawInternal();
+
+    void readMathMLAttributes( const QDomElement& element );
 
 
     

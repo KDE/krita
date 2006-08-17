@@ -52,9 +52,11 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    const QList<BasicElement*>& childElements();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void readMathML( const QDomElement& element );
+    
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
 
     
@@ -147,13 +149,10 @@ public:
     // we want to insert them.
     void setToIndex(FormulaCursor*);
 
- //   bool hasIndex() const { return index != 0; }
-
-//    ElementIndexPtr getIndex() { return ElementIndexPtr( new RootElementIndex( this ) ); }
-
 protected:
-    virtual void drawInternal();
+    void drawInternal();
 
+    void readMathMLAttributes( const QDomElement& element );
 
 
     

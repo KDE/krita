@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <QPainter>
@@ -26,7 +27,6 @@
 #include <klocale.h>
 
 #include "MatrixDialog.h"
-#include "elementvisitor.h"
 #include "FormulaElement.h"
 #include "FormulaCursor.h"
 #include "FormulaContainer.h"
@@ -82,9 +82,17 @@ void MatrixElement::drawInternal()
     // a MatrixElement does not paint anything, it just arranges it children
 }
 
-void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void MatrixElement::readMathML( const QDomElement& element )
 {
-    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
+}
+
+void MatrixElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void MatrixElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
     QDomElement row;
     QDomElement cell;
 
@@ -100,7 +108,7 @@ void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasis
 	}
     }
 
-    parent.appendChild( de );
+    parent.appendChild( de );*/
 }
 
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)

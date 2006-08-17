@@ -37,10 +37,16 @@ void MultiscriptElement::drawInternal()
 {
 }
 
-void MultiscriptElement::writeMathML( QDomDocument& doc,
-                                            QDomNode& parent, bool oasisFormat )
+void MultiscriptElement::readMathML( const QDomElement& element )
 {
+}
 
+void MultiscriptElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void MultiscriptElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
 }
 
 void MultiscriptElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,

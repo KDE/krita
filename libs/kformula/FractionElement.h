@@ -66,9 +66,11 @@ public:
      * reimplementated from @see BasicElement
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    const QList<BasicElement*>& childElements();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void readMathML( const QDomElement& element );
+    
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
 
 
@@ -151,9 +153,9 @@ public:
 
 protected:
     /// Draws the element internally, means it paints into m_elementPath
-    virtual void drawInternal();
+    void drawInternal();
 
-
+    void readMathMLAttributes( const QDomElement& element );
 
 
     /// Returns the tag name of this element type.

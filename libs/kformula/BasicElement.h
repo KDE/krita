@@ -38,6 +38,8 @@
 class QKeyEvent;
 class KCommand;
 
+class KoXmlWriter;
+
 namespace KFormula {
 
 class Container;
@@ -120,9 +122,6 @@ public:
     /// @return The type of element represented within the enum ElementType
     //  ElementType elementType() const;
 
-    /// Save the element to MathML 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
     /// @return The height of the element
     double height() const;
 
@@ -131,6 +130,12 @@ public:
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
+
+    virtual void readMathML( const QDomElement& element );
+
+    /// Save the element to MathML 
+    virtual void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+
 
 
 
@@ -372,6 +377,8 @@ protected:
     /// Draws the element internally, means it paints into m_elementPath
     virtual void drawInternal() = 0;
     
+    virtual void readMathMLAttributes( const QDomElement& element );
+
 
 
     /**

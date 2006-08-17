@@ -53,8 +53,10 @@ public:
 
     /// @return The index of the @p element in the sequence - -1 if not in sequence
     int indexOfElement( const BasicElement* element ) const;
- 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+    virtual void readMathML( const QDomElement& element );
+    
+    virtual void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
    
 
 
@@ -283,6 +285,7 @@ public:
 protected:
     virtual void drawInternal();
 
+    virtual void readMathMLAttributes( const QDomElement& element );
     
     //Save/load support
 

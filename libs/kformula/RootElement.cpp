@@ -31,64 +31,6 @@
 #include "SequenceElement.h"
 
 namespace KFormula {
-/*
-class RootSequenceElement : public SequenceElement {
-    typedef SequenceElement inherited;
-public:
-
-    RootSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
-    virtual RootSequenceElement* clone() {
-        return new RootSequenceElement( *this );
-    }
-
-    /**
-     * This is called by the container to get a command depending on
-     * the current cursor position (this is how the element gets chosen)
-     * and the request.
-     *
-     * @returns the command that performs the requested action with
-     * the containers active cursor.
-     */
-  /*  virtual KCommand* buildCommand( Container*, Request* );
-};
-
-
-KCommand* RootSequenceElement::buildCommand( Container* container, Request* request )
-{
-    FormulaCursor* cursor = container->activeCursor();
-    if ( cursor->isReadOnly() ) {
-        return 0;
-    }
-
-    switch ( *request ) {
-    case req_addIndex: {
-        FormulaCursor* cursor = container->activeCursor();
-        if ( cursor->isSelection() ||
-             ( cursor->getPos() > 0 && cursor->getPos() < countChildren() ) ) {
-            break;
-        }
-        IndexRequest* ir = static_cast<IndexRequest*>( request );
-        if ( ir->index() == upperLeftPos ) {
-            RootElement* element = static_cast<RootElement*>( getParent() );
-            ElementIndexPtr index = element->getIndex();
-            if ( !index->hasIndex() ) {
-                KFCAddGenericIndex* command = new KFCAddGenericIndex( container, index );
-                return command;
-            }
-            else {
-                index->moveToIndex( cursor, afterCursor );
-                cursor->setSelection( false );
-                formula()->cursorHasMoved( cursor );
-                return 0;
-            }
-        }
-    }
-    default:
-        break;
-    }
-    return inherited::buildCommand( container, request );
-}
-*/
 
 RootElement::RootElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -112,9 +54,17 @@ void RootElement::drawInternal()
 {
 }
 
-void RootElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void RootElement::readMathML( const QDomElement& element )
 {
-    QDomElement de;
+}
+
+void RootElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void RootElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    QDomElement de;
 
     if( m_exponent )
         de = doc.createElement( oasisFormat ? "math:mroot" : "mroot" );
@@ -126,7 +76,7 @@ void RootElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFo
     if( m_exponent )
         m_exponent->writeMathML( doc, de, oasisFormat );
 
-    parent.appendChild( de );
+    parent.appendChild( de );*/
 }
 
 /**
@@ -236,15 +186,6 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                       style.layoutUnitToPixelY( y+unit+unit/2 ) );
 }
 
-/*
-void RootElement::dispatchFontCommand( FontCommand* cmd )
-{
-    content->dispatchFontCommand( cmd );
-    if (hasIndex()) {
-        index->dispatchFontCommand( cmd );
-    }
-}
-*/
 /**
  * Enters this element while moving to the left starting inside
  * the element `from'. Searches for a cursor position inside
@@ -406,21 +347,6 @@ void RootElement::remove(FormulaCursor* cursor,
     }
 }
 
-
-/**
- * Moves the cursor to a normal place where new elements
- * might be inserted.
- */ /*
-void RootElement::normalize(FormulaCursor* cursor, Direction direction)
-{
-    if (direction == beforeCursor) {
-        content->moveLeft(cursor, this);
-    }
-    else {
-        content->moveRight(cursor, this);
-    }
-}
-*/
 
 // main child
 //

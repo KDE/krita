@@ -52,7 +52,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    const QList<BasicElement*>& childElements();
 
     /// Return the number of the rows of this matrix
     int rows() const;
@@ -63,19 +63,15 @@ public:
     /// Obtain a pointer to the element at @p row and @p col in the matrix
     MatrixEntryElement* matrixEntryAt( int row, int col );
 
+    void readMathML( const QDomElement& element );
+    
     /// Save this element to MathMl
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
 
 
 
     
-   /**
-     * The cursor has entered one of our child sequences.
-     * This is a good point to tell the user where he is.
-     */
-//    virtual void entered( SequenceElement* child );
-
     /** Calculates our width and height and our children's parentPosition. */
     virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
@@ -89,9 +85,6 @@ public:
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
-
-    /** Dispatch this FontCommand to all our TextElement children. */
-//    virtual void dispatchFontCommand( FontCommand* cmd );
 
     /**
      * Enters this element while moving to the left starting inside
@@ -127,17 +120,15 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
-    /// We define the Main Child of a matrix to be the first row/column.
-    // If there is a main child we must provide the insert/remove semantics.
-//    virtual SequenceElement* getMainChild();
-
     /// Sets the cursor to select the child. The mark is palced after this element.
     virtual void selectChild( FormulaCursor*, BasicElement* );
 
 
 protected:
     /// Draws the element internally, means it paints into m_elementPath
-    virtual void drawInternal();
+    void drawInternal();
+
+    void readMathMLAttributes( const QDomElement& element );
 
     
 

@@ -60,7 +60,26 @@ void BracketElement::drawInternal()
 {
 }
 
+void BracketElement::readMathML( const QDomElement& element )
+{
+}
 
+void BracketElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void BracketElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    QDomElement de = doc.createElement( oasisFormat ? "math:mfenced" : "mfenced" );
+    if ( left->getType() != LeftRoundBracket ||
+         right->getType() != RightRoundBracket )
+    {
+        de.setAttribute( "open",  QString( QChar( leftType ) ) );
+        de.setAttribute( "close", QString( QChar( rightType ) ) );
+    }
+    SingleContentElement::writeMathML( doc, de, oasisFormat );
+    parent.appendChild( de );*/
+}
 
 /**
  * Calculates our width and height and
@@ -213,17 +232,6 @@ bool BracketElement::readAttributesFromDom(QDomElement element)
     return true;
 }
 
-void BracketElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-/*    QDomElement de = doc.createElement( oasisFormat ? "math:mfenced" : "mfenced" );
-    if ( left->getType() != LeftRoundBracket ||
-         right->getType() != RightRoundBracket )
-    {
-        de.setAttribute( "open",  QString( QChar( leftType ) ) );
-        de.setAttribute( "close", QString( QChar( rightType ) ) );
-    }
-    SingleContentElement::writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );*/
-}
+
 
 } // namespace KFormula

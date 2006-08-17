@@ -46,9 +46,17 @@ void SpaceElement::drawInternal()
 {
 }
 
-void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void SpaceElement::readMathML( const QDomElement& element )
 {
+}
 
+void SpaceElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void SpaceElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*
     QDomElement de = doc.createElement( oasisFormat ? "math:mspace" : "mspace" );
     QString width;
 
@@ -75,7 +83,7 @@ void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisF
     parent.appendChild( de );
 
 
-    /* // worked, but I redecided.
+     // worked, but I redecided.
     switch ( spaceWidth )
     {
     case NEGTHIN:

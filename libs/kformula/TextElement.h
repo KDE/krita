@@ -45,7 +45,11 @@ public:
      */
     const QList<BasicElement*>& childElements();
 
+    void readMathML( const QDomElement& element );
+    
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
+    
 
     /**
      * @returns the type of this element. Used for
@@ -101,6 +105,8 @@ public:
 
 protected:
     void drawInternal();
+
+    void readMathMLAttributes( const QDomElement& element );
 
 
 

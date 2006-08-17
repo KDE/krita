@@ -51,11 +51,15 @@ public:
 
     void layoutElement( const QPointF& offset );
 
-    void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void readMathML( const QDomElement& element );
+    
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
 protected:
     /// Draws the element internally, means set up @ref m_elementPath
     void drawInternal();
+
+    void readMathMLAttributes( const QDomElement& element );
     
 private:
     BasicElement* m_baseElement;

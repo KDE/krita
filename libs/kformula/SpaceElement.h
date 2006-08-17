@@ -51,7 +51,9 @@ public:
      */
     const QList<BasicElement*>& childElements();
 
-    void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void readMathML( const QDomElement& element );
+    
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
 
 
 
@@ -78,6 +80,8 @@ public:
 
 protected:
      void drawInternal();
+
+     void readMathMLAttributes( const QDomElement& element );
 
     /**
      * @returns the tag name of this element type.

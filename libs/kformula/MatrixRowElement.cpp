@@ -64,16 +64,24 @@ void MatrixRowElement::drawInternal()
     // do not paint anything as a MatrixRowElement only orders its children
 }
 
-void MatrixRowElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void MatrixRowElement::readMathML( const QDomElement& element )
 {
-    QDomElement row; 
+}
+
+void MatrixRowElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void MatrixRowElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    QDomElement row; 
 
     foreach( MatrixEntryElement* tmpEntry, m_matrixEntryElements )
     {
         row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
 	parent.appendChild( row );
         tmpEntry->writeMathML( doc, row, oasisFormat );
-    }
+    }*/
 }
 
 

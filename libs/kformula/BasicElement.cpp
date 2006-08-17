@@ -39,6 +39,21 @@ BasicElement::~BasicElement()
 {
 }
 
+void BasicElement::readMathML( const QDomElement& element )
+{
+}
+
+void BasicElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void BasicElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    parent.appendChild( doc.createComment( QString( "MathML Error in %1" )
+                                           .arg( getTagName() ) ) );*/
+}
+
+
 bool BasicElement::isInvisible() const
 {
     return m_phantomElement;
@@ -129,11 +144,6 @@ QDomElement BasicElement::getElementDom( QDomDocument& doc)
 }
 
 
-void BasicElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool /*oasisFormat*/ )
-{
-    parent.appendChild( doc.createComment( QString( "MathML Error in %1" )
-                                           .arg( getTagName() ) ) );
-}
 
 bool BasicElement::buildFromDom(QDomElement element)
 {
@@ -193,12 +203,7 @@ bool BasicElement::buildChild( SequenceElement* child, QDomNode node, QString na
     }
     return false;
 }
-/*
-QString BasicElement::toLatex()
-{
-    return "{}";
-}
-*/
+
 void BasicElement::setWidth( double width )
 {
     m_boundingRect.setWidth( width );
@@ -264,4 +269,4 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
     return this;    // if no child contains the point, it's the FormulaElement itsself
 }
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula

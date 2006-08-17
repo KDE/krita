@@ -72,14 +72,22 @@ void SequenceElement::drawInternal()
 {
 }   
 
-void SequenceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void SequenceElement::readMathML( const QDomElement& element )
 {
-    QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
+}
+
+void SequenceElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void SequenceElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
 
     foreach( BasicElement* tmpChild, m_sequenceChildren )
         tmpChild->writeMathML( doc, de, oasisFormat );
 
-    parent.appendChild( de );
+    parent.appendChild( de );*/
 }
 
 

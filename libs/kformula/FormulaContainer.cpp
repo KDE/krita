@@ -508,7 +508,7 @@ bool Container::load( const QDomElement &fe )
 
 void Container::saveMathML( QTextStream& stream, bool oasisFormat )
 {
-    if ( !oasisFormat )
+/*    if ( !oasisFormat )
     {
         // ### TODO: Are we really using MathML 2.0 or would be MathMl 1.01 enough (like for OO)?
         QDomDocumentType dt = QDomImplementation().createDocumentType( "math",
@@ -524,7 +524,7 @@ void Container::saveMathML( QTextStream& stream, bool oasisFormat )
         QDomDocument doc;
         m_formulaElement->writeMathML( doc, doc, oasisFormat );
         stream << doc;
-    }
+    }*/
 }
 
 bool Container::loadMathML( const QDomDocument &doc, bool oasisFormat )

@@ -45,21 +45,28 @@ void MatrixEntryElement::drawInternal()
     SequenceElement::drawInternal();
 }
 
-void MatrixEntryElement::writeMathML( QDomDocument& doc,
-                                            QDomNode& parent, bool oasisFormat )
+void MatrixEntryElement::readMathML( const QDomElement& element )
 {
-    // parent is required to be a <mtr> tag
+}
+
+void MatrixEntryElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void MatrixEntryElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    // parent is required to be a <mtr> tag
 
     QDomElement tmp = doc.createElement( "TMP" );
 
     SequenceElement::writeMathML( doc, tmp, oasisFormat );
-
+*/
     /* Now we re-parse the Dom tree, because of the TabMarkers
      * that have no direct representation in MathML but mark the
      * end of a <mtd> tag.
      */
 
-    QDomElement mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
+/*    QDomElement mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
 
     // The mrow, if it exists.
     QDomNode n = tmp.firstChild().firstChild();
@@ -75,7 +82,7 @@ void MatrixEntryElement::writeMathML( QDomDocument& doc,
         n = n.nextSibling();
     }
 
-    parent.appendChild( mtd );
+    parent.appendChild( mtd );*/
 }
 
 

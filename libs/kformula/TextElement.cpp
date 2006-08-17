@@ -52,6 +52,19 @@ const QList<BasicElement*>& TextElement::childElements()
     return QList<BasicElement*>();
 }
 
+void TextElement::readMathML( const QDomElement& element )
+{
+}
+
+void TextElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void TextElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+}
+
+
 TokenType TextElement::getTokenType() const
 {
     if ( isSymbol() ) {

@@ -205,9 +205,9 @@ void ElementType::output()
 
 void ElementType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
-    for ( int i = from; i < to; ++i ) {
+/*    for ( int i = from; i < to; ++i ) {
         se->childAt( i )->writeMathML( doc, de, oasisFormat );
-    }
+    }*/
 }
 
 
@@ -318,7 +318,7 @@ NameType::NameType( SequenceParser* parser )
 
 void NameType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
-    se->childAt( start() )->writeMathML( doc, de, oasisFormat );
+//    se->childAt( start() )->writeMathML( doc, de, oasisFormat );
 
     /*
     QDomElement name = doc.createElement( "mi" );

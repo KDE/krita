@@ -28,7 +28,6 @@
 #include "MatrixElement.h"
 #include "RootElement.h"
 #include "SequenceElement.h"
-#include "symbolelement.h"
 #include "TextElement.h"
 
 namespace KFormula {

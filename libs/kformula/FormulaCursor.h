@@ -33,7 +33,6 @@ class FormulaElement;
 class MatrixElement;
 class NameSequence;
 class RootElement;
-class SymbolElement;
 class TextElement;
 
 

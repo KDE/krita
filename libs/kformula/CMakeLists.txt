@@ -26,7 +26,6 @@ set(kformulalib_LIB_SRCS
    RootElement.cpp
    SpaceElement.cpp 
    ElementFactory.cpp 
-   symbolelement.cc 
    kformulacommand.cc 
 #   KFormulaMimeSource.cpp
    MatrixDialog.cc 
@@ -38,7 +37,6 @@ set(kformulalib_LIB_SRCS
 #   MathMLLoader.cpp 
    kformulainputfilter.cc 
 #   kformulaview.cc 
-#   indexelement.cc 
    kformulaconfigpage.cc 
    symbolaction.cc 
    cmstyle.cc 

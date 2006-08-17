@@ -45,7 +45,6 @@
 #include "MatrixElement.h"
 #include "RootElement.h"
 #include "SequenceElement.h"
-#include "symbolelement.h"
 #include "symboltable.h"
 #include "SpaceElement.h"
 #include "TextElement.h"

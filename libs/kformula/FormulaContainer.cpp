@@ -34,7 +34,7 @@
 #include <klocale.h>
 
 #include "KoGlobal.h"
-#include "bracketelement.h"
+#include "BracketElement.h"
 #include "contextstyle.h"
 #include "FormulaCursor.h"
 #include "FormulaElement.h"

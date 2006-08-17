@@ -30,7 +30,7 @@
 #include "SequenceElement.h"
 #include "SpaceElement.h"
 #include "TextElement.h"
-#include "bracketelement.h"
+#include "BracketElement.h"
 
 
 namespace KFormula {
@@ -67,10 +67,10 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if( tagName == "mpadded" )
 	return new PaddedElement( parent );
     else if( tagName == "mphantom" )
-	return new PhantomElement( parent );
+	return new PhantomElement( parent );*/
     else if( tagName == "mfenced" )
-	return new FencedElement( parent );
-    else if( tagName == "menclose" )
+	return new BracketElement( parent );
+/*    else if( tagName == "menclose" )
 	return new EncloseElement( parent );*/
     else if( tagName == "msub" )
 	return new MultiscriptElement( parent );

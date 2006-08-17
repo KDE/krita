@@ -32,7 +32,7 @@
 #include <klocale.h>
 
 #include "MatrixDialog.h"
-#include "bracketelement.h"
+#include "BracketElement.h"
 //#include "creationstrategy.h"
 #include "elementtype.h"
 #include "elementvisitor.h"

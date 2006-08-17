@@ -11,7 +11,6 @@ include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES})
 
 set(kformulalib_LIB_SRCS 
    BasicElement.cpp 
-   contextstyle.cc 
    FormulaCursor.cpp 
    FormulaElement.cpp
    FormulaContainer.cpp
@@ -19,7 +18,7 @@ set(kformulalib_LIB_SRCS
    MultiscriptElement.cpp
    UnderOverElement.cpp
    TextElement.cpp 
-   bracketelement.cc 
+   BracketElement.cpp 
    MatrixElement.cpp
    MatrixRowElement.cpp
    MatrixEntryElement.cpp
@@ -33,6 +32,7 @@ set(kformulalib_LIB_SRCS
    MatrixDialog.cc 
    sequenceparser.cc 
    elementtype.cc 
+   contextstyle.cc 
 #   kformuladocument.cc 
    symboltable.cc 
 #   MathMLLoader.cpp 

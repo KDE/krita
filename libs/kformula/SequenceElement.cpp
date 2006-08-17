@@ -33,7 +33,6 @@
 
 #include "MatrixDialog.h"
 #include "BracketElement.h"
-#include "elementtype.h"
 #include "FormulaCursor.h"
 #include "FormulaElement.h"
 #include "FractionElement.h"
@@ -43,24 +42,19 @@
 #include "MatrixElement.h"
 #include "RootElement.h"
 #include "SequenceElement.h"
-#include "sequenceparser.h"
 #include "SpaceElement.h"
 #include "symboltable.h"
 #include "TextElement.h"
 #include "MatrixRowElement.h"
 
-#include <assert.h>
-
 namespace KFormula {
 
-SequenceElement::SequenceElement( BasicElement* parent ) : BasicElement(parent), parseTree(0), textSequence(true),singlePipe(true)
+SequenceElement::SequenceElement( BasicElement* parent ) : BasicElement(parent),  textSequence(true),singlePipe(true)
 {
-    assert( creationStrategy != 0 );
 }
 
 SequenceElement::~SequenceElement()
 {
-    delete parseTree;
 }
 
 BasicElement* SequenceElement::childAt( int i )
@@ -89,16 +83,6 @@ void SequenceElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
 
     parent.appendChild( de );*/
 }
-
-
-
-ElementCreationStrategy* SequenceElement::creationStrategy = 0;
-
-void SequenceElement::setCreationStrategy( ElementCreationStrategy* strategy )
-{
-    creationStrategy = strategy;
-}
-
 
 
 
@@ -649,7 +633,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
     }
 
     formula()->changed();
-    parse();
+    //parse();
 }
 
 
@@ -710,7 +694,7 @@ void SequenceElement::remove(FormulaCursor* cursor,
             }
         }
     }
-    parse();
+    //parse();
 }
 
 
@@ -1257,7 +1241,7 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement*>& list, QDomNode 
             BasicElement* child = 0;
             QString tag = e.tagName().toUpper();
 
-            child = createElement(tag);
+//            child = createElement(tag);
             if (child != 0) {
                 child->setParent(this);
                 if (child->buildFromDom(e)) {
@@ -1274,19 +1258,10 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement*>& list, QDomNode 
         }
         n = n.nextSibling();
     }
-    parse();
+    //parse();
     return true;
 }
 
-
-BasicElement* SequenceElement::createElement( QString type )
-{
-    return 0; //creationStrategy->createElement( type );
-}
-
-/**
- * Appends our attributes to the dom element.
- */
 void SequenceElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
@@ -1296,10 +1271,6 @@ void SequenceElement::writeDom(QDomElement element)
     getChildrenDom(doc, element, 0, count);
 }
 
-/**
- * Reads our attributes from the element.
- * Returns false if it failed.
- */
 bool SequenceElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
@@ -1308,11 +1279,6 @@ bool SequenceElement::readAttributesFromDom(QDomElement element)
     return true;
 }
 
-/**
- * Reads our content from the node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
 bool SequenceElement::readContentFromDom(QDomNode& node)
 {
     if (!BasicElement::readContentFromDom(node)) {
@@ -1322,279 +1288,9 @@ bool SequenceElement::readContentFromDom(QDomNode& node)
     return buildChildrenFromDom(m_sequenceChildren, node);
 }
 
-
-void SequenceElement::parse()
-{
-/*    delete parseTree;
-
-    textSequence = true;
-    foreach( BasicElement* element, m_sequenceChildren )
-    {
-        // Those types are gone. Make sure they won't
-        // be used.
-        element->setElementType(0);
-
-        if (element->getCharacter().isNull()) {
-            textSequence = false;
-        }
-    }
-
-    const SymbolTable& symbols = formula()->getSymbolTable();
-    SequenceParser parser(symbols);
-    parseTree = parser.parse(m_sequenceChildren);
-
-    // With the IndexElement dynamically changing its text/non-text
-    // behaviour we need to reparse your parent, too. Hacky!
-    BasicElement* p = getParent();
-    if ( p != 0 ) {
-        SequenceElement* seq = dynamic_cast<SequenceElement*>( p->getParent() );
-        if ( seq != 0 ) {
-            seq->parse();
-        }
-    }*/
-    // debug
-    //parseTree->output();
-}
-
-
 bool SequenceElement::isFirstOfToken( BasicElement* child )
 {
     return true;//( child->getElementType() != 0 ) && isChildNumber( child->getElementType()->start(), child );
 }
 
-
-
-
-/*
-int SequenceElement::childPos( const BasicElement* child ) const
-{
-    foreach( BasicElement* tmp, m_sequenceChildren )
-    {
-        if ( tmp == child )
-	  return m_sequenceChildren.indexOf( tmp );
-    }
-    
-    return -1;
-}
-*/
-/*
-NameSequence::NameSequence( BasicElement* parent )
-    : SequenceElement( parent )
-{
-}
-
-
-bool NameSequence::accept( ElementVisitor* visitor )
-{
-    return visitor->visit( this );
-}
-
-
-void NameSequence::calcCursorSize( const ContextStyle& context,
-                                   FormulaCursor* cursor, bool smallCursor )
-{
-    inherited::calcCursorSize( context, cursor, smallCursor );
-    LuPixelPoint point = widgetPos();
-    luPixel unitX = context.ptToLayoutUnitPixX( 1 );
-    luPixel unitY = context.ptToLayoutUnitPixY( 1 );
-    cursor->addCursorSize( LuPixelRect( point.x()-unitX, point.y()-unitY,
-                                        getWidth()+2*unitX, getHeight()+2*unitY ) );
-}
-
-void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
-                               FormulaCursor* cursor, bool smallCursor,
-                               bool activeCursor )
-{
-    LuPixelPoint point = widgetPos();
-    painter.setPen( QPen( context.getEmptyColor(),
-                          context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
-    luPixel unitX = context.ptToLayoutUnitPixX( 1 );
-    luPixel unitY = context.ptToLayoutUnitPixY( 1 );
-    painter.drawRect( context.layoutUnitToPixelX( point.x()-unitX ),
-                      context.layoutUnitToPixelY( point.y()-unitY ),
-                      context.layoutUnitToPixelX( getWidth()+2*unitX ),
-                      context.layoutUnitToPixelY( getHeight()+2*unitY ) );
-
-    inherited::drawCursor( painter, context, cursor, smallCursor, activeCursor );
-}
-
-void NameSequence::moveWordLeft( FormulaCursor* cursor )
-{
-    uint pos = cursor->getPos();
-    if ( pos > 0 ) {
-        cursor->setTo( this, 0 );
-    }
-    else {
-        moveLeft( cursor, this );
-    }
-}
-
-void NameSequence::moveWordRight( FormulaCursor* cursor )
-{
-    int pos = cursor->getPos();
-    if ( pos < countChildren() ) {
-        cursor->setTo( this, countChildren() );
-    }
-    else {
-        moveRight( cursor, this );
-    }
-}
-
-
-KCommand* NameSequence::compactExpressionCmd( Container* container )
-{
-    BasicElement* element = replaceElement( container->document()->getSymbolTable() );
-    if ( element != 0 ) {
-        getParent()->selectChild( container->activeCursor(), this );
-
-        KFCReplace* command = new KFCReplace( i18n( "Add Element" ), container );
-        command->addElement( element );
-        return command;
-    }
-    return 0;
-}
-
-KCommand* NameSequence::buildCommand( Container* container, Request* request )
-{
-    switch ( *request ) {
-    case req_compactExpression:
-        return compactExpressionCmd( container );
-    case req_addSpace:
-    case req_addIndex:
-    case req_addMatrix:
-    case req_addOneByTwoMatrix:
-    case req_addSymbol:
-    case req_addRoot:
-    case req_addFraction:
-    case req_addBracket:
-    case req_addNameSequence:
-        return 0;
-    default:
-        break;
-    }
-    return inherited::buildCommand( container, request );
-}
-
-
-KCommand* NameSequence::input( Container* container, QChar ch )
-{
-    int unicode = ch.unicode();
-    switch (unicode) {
-    case '(':
-    case '[':
-    case '|':
-    case '^':
-    case '_':
-    case '}':
-    case ']':
-    case ')':
-    case '\\': {
-//         KCommand* compact = compactExpressionCmd( container );
-//         KCommand* cmd = static_cast<SequenceElement*>( getParent() )->input( container, ch );
-//         if ( compact != 0 ) {
-//             KMacroCommand* macro = new KMacroCommand( cmd->name() );
-//             macro->addCommand( compact );
-//             macro->addCommand( cmd );
-//             return macro;
-//         }
-//         else {
-//             return cmd;
-//         }
-        break;
-    }
-    case '{':
-    case ' ': {
-        Request r( req_compactExpression );
-        return buildCommand( container, &r );
-    }
-    default: {
-        TextCharRequest r( ch );
-        return buildCommand( container, &r );
-    }
-    }
-    return 0;
-}
-
-void NameSequence::setElementType( ElementType* t )
-{
-    inherited::setElementType( t );
-    parse();
-}
-
-BasicElement* NameSequence::replaceElement( const SymbolTable& table )
-{
-    QString name = buildName();
-    QChar ch = table.unicode( name );
-    if ( !ch.isNull() ) {
-        return new TextElement( ch, true );
-    }
-    else {
-        ch = table.unicode( i18n( name.toLatin1() ) );
-        if ( !ch.isNull() ) {
-            return new TextElement( ch, true );
-        }
-    }
-
-    if ( name == "!" )    return new SpaceElement( NEGTHIN );
-    if ( name == "," )    return new SpaceElement( THIN );
-    if ( name == ">" )    return new SpaceElement( MEDIUM );
-    if ( name == ";" )    return new SpaceElement( THICK );
-    if ( name == "quad" ) return new SpaceElement( QUAD );
-
-    if ( name == "frac" ) return new FractionElement();
-    if ( name == "atop" ) {
-        FractionElement* frac = new FractionElement();
-        frac->showLine( false );
-        return frac;
-    }
-    if ( name == "sqrt" ) return new RootElement();
-
-    return 0;
-}
-
-BasicElement* NameSequence::createElement( QString type )
-{
-    if      ( type == "TEXT" )         return new TextElement();
-    return 0;
-}
-
-// void NameSequence::parse()
-// {
-//     // A name sequence is known as name and so are its m_sequenceChildren.
-//     // Caution: this is fake!
-//     for ( int i = 0; i < countChildren(); i++ ) {
-//         getChild( i )->setElementType( getElementType() );
-//     }
-// }
-
-QString NameSequence::buildName()
-{
-    QString name;
-    for ( int i = 0; i < countChildren(); i++ ) {
-        name += getChild( i )->getCharacter();
-    }
-    return name;
-}
-
-bool NameSequence::isValidSelection( FormulaCursor* cursor )
-{
-    SequenceElement* sequence = cursor->normal();
-    if ( sequence == 0 ) {
-        return false;
-    }
-    return sequence->onlyTextSelected( cursor );
-}
-
-void NameSequence::writeMathML( QDomDocument& doc, QDomNode& parent,bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
-    QString value;
-    for ( int i = 0; i < countChildren(); ++i ) {
-        // these are supposed to by TextElements
-        value += getChild( i )->getCharacter();
-    }
-    de.appendChild( doc.createTextNode( value ) );
-    parent.appendChild( de );
-}
-*/
 } // namespace KFormula

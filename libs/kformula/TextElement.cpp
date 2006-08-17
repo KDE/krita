@@ -29,7 +29,6 @@
 
 #include "BasicElement.h"
 #include "contextstyle.h"
-#include "elementtype.h"
 #include "fontstyle.h"
 #include "FormulaElement.h"
 #include "kformulacommand.h"

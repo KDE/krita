@@ -10,11 +10,11 @@ include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES})
 ########### next target ###############
 
 set(kformulalib_LIB_SRCS 
-   BasicElement.cpp 
    FormulaCursor.cpp 
-   FormulaElement.cpp
    FormulaContainer.cpp
+   BasicElement.cpp 
    SequenceElement.cpp
+   FormulaElement.cpp 
    MultiscriptElement.cpp
    UnderOverElement.cpp
    TextElement.cpp 
@@ -28,8 +28,6 @@ set(kformulalib_LIB_SRCS
    ElementFactory.cpp 
    kformulacommand.cc 
    MatrixDialog.cc 
-   sequenceparser.cc 
-   elementtype.cc 
    contextstyle.cc 
 #   kformuladocument.cc 
    symboltable.cc 

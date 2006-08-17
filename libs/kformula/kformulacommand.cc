@@ -368,12 +368,12 @@ void FontCommand::collectChildren()
 
 void FontCommand::parseSequences( const QMap<SequenceElement*, int>& parents )
 {
-    QList<SequenceElement*> sequences = parents.keys();
+/*    QList<SequenceElement*> sequences = parents.keys();
     for ( QList<SequenceElement*>::iterator i = sequences.begin();
           i != sequences.end();
           ++i ) {
         ( *i )->parse();
-    }
+    }*/
 }
 
 

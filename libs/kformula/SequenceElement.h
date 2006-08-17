@@ -34,7 +34,6 @@ class QKeyEvent;
 namespace KFormula {
 
 class SymbolTable;
-class ElementCreationStrategy;
 
 /**
  * The element that contains a number of children.
@@ -98,10 +97,6 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
-    /**
-     * Dispatch this FontCommand to all our TextElement children.
-     */
-//    virtual void dispatchFontCommand( FontCommand* cmd );
 
     virtual void drawEmptyRect( QPainter& painter, const ContextStyle& context,
                                 const LuPixelPoint& upperLeft );
@@ -115,14 +110,6 @@ public:
     virtual void drawCursor( QPainter& painter, const ContextStyle& context,
                              FormulaCursor* cursor, bool smallCursor,
                              bool activeCursor );
-
-    // navigation
-    //
-    // The elements are responsible to handle cursor movement themselves.
-    // To do this they need to know the direction the cursor moves and
-    // the element it comes from.
-    //
-    // The cursor might be in normal or in selection mode.
 
     /**
      * Enters this element while moving to the left starting inside
@@ -183,7 +170,6 @@ public:
     virtual void goInside(FormulaCursor* cursor);
 
 
-    // children
 
     /**
      * Inserts all new children at the cursor position. Places the
@@ -242,18 +228,6 @@ public:
 
     bool onlyTextSelected( FormulaCursor* cursor );
 
-
-    /**
-     * This is called by the container to get a command depending on
-     * the current cursor position (this is how the element gets chosen)
-     * and the request.
-     *
-     * @returns the command that performs the requested action with
-     * the containers active cursor.
-     */
-//    virtual KCommand* buildCommand( Container*, Request* );
-
-
     /**
      * Parses the input. It's the container which does create
      * new elements because it owns the undo stack. But only the
@@ -262,13 +236,7 @@ public:
     virtual KCommand* input( Container* container, QChar ch );
     virtual KCommand* input( Container* container, QKeyEvent* event );
 
-    /**
-     * Parses the sequence and generates a new syntax tree.
-     * Has to be called after each modification.
-     */
-    virtual void parse();
-
-    /**
+   /**
      * Stores the given childrens dom in the element.
      */
     void getChildrenDom( QDomDocument& doc, QDomElement elem, uint from, uint to);
@@ -279,8 +247,6 @@ public:
      * Returns false if an error occures.
      */
     bool buildChildrenFromDom(QList<BasicElement*>& list, QDomNode n);
-
-    static void setCreationStrategy( ElementCreationStrategy* strategy );
 
 protected:
     virtual void drawInternal();
@@ -321,13 +287,6 @@ protected:
     virtual void setChildrenPositions();
 
     /**
-     * Creates a new element with the given type.
-     *
-     * @param type the desired type of the element
-     */
-    virtual BasicElement* createElement(QString type);
-
-    /**
      * @returns the position where the child starts.
      *
      * @param context the context the child is in
@@ -354,17 +313,10 @@ private:
     void removeChild(QList<BasicElement*>& removedChildren, int pos);
 
     /**
-     * the syntax tree of the sequence
-     */
-    ElementType* parseTree;
-
-    /**
      * true if the sequence contains only text
      */
     bool textSequence;
 
-    static ElementCreationStrategy* creationStrategy;
-    
     bool singlePipe; //The key '|' produces one '|' not '| |', '||' produces '| |'
 };
 

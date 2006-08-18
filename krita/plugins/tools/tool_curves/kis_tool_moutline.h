@@ -25,6 +25,8 @@
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
+const int CANSELECTOPTION = ALTOPTION;
+
 class KisToolMagnetic;
 class KisVector2D;
 class Node;
@@ -55,6 +57,8 @@ public:
     KisCurveMagnetic (KisToolMagnetic *parent);
     ~KisCurveMagnetic ();
 
+    virtual KisCurve::iterator addPivot (iterator, const KisPoint&);
+    virtual KisCurve::iterator pushPivot (const KisPoint&);
     virtual void calculateCurve (iterator, iterator, iterator);
 
 };
@@ -71,12 +75,22 @@ public:
     KisToolMagnetic();
     ~KisToolMagnetic();
 
+    virtual void update (KisCanvasSubject*);
     virtual void setup (KActionCollection*);
     virtual enumToolType toolType() { return TOOL_SELECT; }
+
+    virtual void keyPress(QKeyEvent*);
+    virtual void buttonPress(KisButtonPressEvent*);
+    virtual void buttonRelease(KisButtonReleaseEvent*);
+    virtual void move(KisMoveEvent*);
+
+    virtual int updateOptions (int);
+    virtual KisCurve::iterator selectByMouse(const QPoint&);
 
 public slots:
 
     virtual void activate ();
+    virtual void deactivate ();
 
 private:
 

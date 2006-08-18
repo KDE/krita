@@ -19,6 +19,7 @@
  */
 
 #include <math.h>
+#include <limits.h>
 
 #include <qapplication.h>
 #include <qpainter.h>
@@ -79,6 +80,7 @@ KisToolCurve::KisToolCurve(const QString& UIName)
     m_pivotRounding = m_selectedPivotRounding = 55;
 
     m_actionOptions = NOOPTIONS;
+    m_supportMinimalDraw = true;
     m_selectAction = SELECTION_ADD;
 }
 
@@ -185,7 +187,7 @@ double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPo
 
     if (seg.length() < dist0.length() ||
         seg.length() < dist1.length()) // the point doesn't perpendicolarly intersecate the segment (or it's too far from the segment)
-        return 1000.0; // Return a too big value - FIXME is there a MAX_DOUBLE_VALUE or something like that?
+        return (double)INT_MAX;
 
     if (lineLength > DBL_EPSILON) {
         distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y()) / lineLength;
@@ -303,6 +305,7 @@ KisCurve::iterator KisToolCurve::drawPoint(KisCanvasPainter& gc, KisCurve::itera
         point += 1;
         break;
     case LINEHINT:
+        gc.drawPoint(pos1);
         if (++point != m_curve->end() && (*point).hint() <= LINEHINT) {
             pos2 = controller->windowToView((*point).point().toQPoint());
             gc.drawLine(pos1,pos2);

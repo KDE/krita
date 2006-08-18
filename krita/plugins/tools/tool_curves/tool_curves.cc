@@ -54,8 +54,8 @@ ToolCurves::ToolCurves(QObject *parent, const char *name, const QStringList &)
     {
         KisToolRegistry * r = dynamic_cast<KisToolRegistry*>( parent );
         r->add(new KisToolBezierPaintFactory());
-        r->add(new KisToolMagneticFactory());
         r->add(new KisToolBezierSelectFactory());
+        r->add(new KisToolMagneticFactory());
     }
 
 }

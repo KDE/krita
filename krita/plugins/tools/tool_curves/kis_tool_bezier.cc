@@ -184,7 +184,8 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
     
 }
 
-KisCurve::iterator KisCurveBezier::pushPivot (const KisPoint& point) {
+KisCurve::iterator KisCurveBezier::pushPivot (const KisPoint& point)
+{
     iterator it;
 
     it = pushPoint(point,true,false,BEZIERENDHINT);
@@ -264,6 +265,8 @@ KisToolBezier::KisToolBezier(const QString& UIName)
 {
     m_derivated = new KisCurveBezier;
     m_curve = m_derivated;
+
+    m_supportMinimalDraw = false;
 
     m_transactionMessage = QString("Bezier Curve");
 }

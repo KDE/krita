@@ -36,6 +36,7 @@ class KisPainter;
 class KisSelectionOptions;
 
 const double MAXDISTANCE = 2.5;
+double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
 
 class KisToolCurve : public KisToolPaint {
 
@@ -156,6 +157,7 @@ protected:
     int m_selectedPivotRounding;
 
     int m_actionOptions;
+    bool m_supportMinimalDraw;
 
     QString m_transactionMessage;
 

@@ -69,8 +69,6 @@ const int ORTHOGONAL_COST = 10; // 1*10
 const int DIAGONAL_COST = 14;   // sqrt(2)*10
 const int MALUS = 20;           // This applies to NOEDGE nodes
 
-const int NOTCOPY = true;       // This to know that the constructor is not a copy constructor
-
 class Node {
 
     QPoint m_pos;
@@ -136,6 +134,10 @@ public:
     {
         m_malus = malus;
     }
+    void clear ()
+    {
+        m_pos = QPoint(-1,-1);
+    }
 
     bool operator== (const Node& n2) const
     {
@@ -176,8 +178,8 @@ public:
             dcol = m_pos.x() + x[i];
             drow = m_pos.y() + y[i];
             tmpdist = QPoint(dcol,drow) - end.pos();
-            if (dcol == src.count() || dcol < 0 ||
-                drow == src[0].count() || drow < 0)
+            if (dcol == (int)src.count() || dcol < 0 ||
+                drow == (int)src[0].count() || drow < 0)
                 continue;
             if (src[dcol][drow])
                 malus = false;
@@ -276,13 +278,33 @@ KisCurveMagnetic::~KisCurveMagnetic ()
 
 }
 
+KisCurve::iterator KisCurveMagnetic::addPivot (KisCurve::iterator it, const KisPoint& point)
+{
+    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,true,false,LINEHINT)));
+}
+
+KisCurve::iterator KisCurveMagnetic::pushPivot (const KisPoint& point)
+{
+    iterator it;
+
+    it = pushPoint(point,true,false,LINEHINT);
+    if (count() == 1)
+        addPoint(it,point,true,false,LINEHINT);
+    
+    return selectPivot(it);
+}
+
 void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator p2, KisCurve::iterator it)
 {
+    if (p1 == m_curve.end() || p2 == m_curve.end()) // It happens sometimes, for example on the first click
+        return;
+    if (m_actionOptions & CANSELECTOPTION)
+        return;
     QPoint start = (*p1).point().roundQPoint();
     QPoint end = (*p2).point().roundQPoint();
     QRect rc = QRect(start,end).normalize();
-    rc.setTopLeft(rc.topLeft()+QPoint(-10,-10));         // Enlarge the view, so problems with gaussian blur can be removed
-    rc.setBottomRight(rc.bottomRight()+QPoint(10,10));   // and we are able to find paths that go beyond the rect.
+    rc.setTopLeft(rc.topLeft()+QPoint(-8,-8));         // Enlarge the view, so problems with gaussian blur can be removed
+    rc.setBottomRight(rc.bottomRight()+QPoint(8,8));   // and we are able to find paths that go beyond the rect.
 
     KisPaintDeviceSP src = m_parent->m_currentImage->activeDevice();
     GrayMatrix       dst = GrayMatrix(rc.width(),GrayCol(rc.height()));
@@ -295,11 +317,9 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     detectEdges  (rc, src, dst);
     reduceMatrix (rc, dst, 3, 3, 3, 3);
 
-    uint tlx = rc.topLeft().x();
-    uint tly = rc.topLeft().y();
-    QPoint tl(tlx,tly);
-    start -= tl;
-    end -= tl;
+    QPoint tl(rc.topLeft().x(),rc.topLeft().y());
+    start -= tl;  // Relative to the matrix
+    end -= tl;    // Relative to the matrix
 
     findEdge (start.x(), start.y(), dst, startNode);
     openMatrix[startNode.col()][startNode.row()] = *openSet.insert(startNode);
@@ -309,13 +329,13 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
         Node current = *openSet.begin();
         
         openSet.erase(openSet.begin());
-        openMatrix[current.col()][current.row()].setPos(QPoint(-1,-1));
+        openMatrix[current.col()][current.row()].clear();
 
         QValueList<Node> successors = current.getNeighbor(dst,endNode);
-        for (QValueList<Node>::iterator iter = successors.begin(); iter != successors.end(); iter++) {
-            int col = (*iter).col();
-            int row = (*iter).row();
-            if ((*iter) == endNode) {
+        for (QValueList<Node>::iterator i = successors.begin(); i != successors.end(); i++) {
+            int col = (*i).col();
+            int row = (*i).row();
+            if ((*i) == endNode) {
                 while (current.parent() != QPoint(-1,-1)) {
                     it = addPoint(it,tl+current.pos(),false,false,LINEHINT);
                     current = closedMatrix[current.parent().x()][current.parent().y()];
@@ -324,24 +344,24 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
             }
             Node *openNode = &openMatrix[col][row];
             if (*openNode != QPoint(-1,-1)) {
-                if (*iter > *openNode)
+                if (*i > *openNode)
                     continue;
                 else {
                     openSet.erase(qFind(openSet.begin(),openSet.end(),*openNode));
-                    openNode->setPos(QPoint(-1,-1));  // Clear the Node
+                    openNode->clear();      // Clear the Node
                 }
             }
             Node *closedNode = &closedMatrix[col][row];
             if (*closedNode != QPoint(-1,-1)) {
-                if ((*iter) > (*closedNode))
+                if ((*i) > (*closedNode))
                     continue;
                 else {
                     openMatrix[col][row] = *openSet.insert(*closedNode);
-                    closedNode->setPos(QPoint(-1,-1));  // Clear the Node
+                    closedNode->clear();    // Clear the Node
                     continue;
                 }
             }
-            openMatrix[col][row] = *openSet.insert(*iter);
+            openMatrix[col][row] = *openSet.insert(*i);
         }
         closedMatrix[current.col()][current.row()] = current;
     }
@@ -352,10 +372,9 @@ void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, Node& 
     int x = -1;
     int y = -1;
 
-    QValueVector<KisVector2D> tmp;
-    KisVector2D mindist(10.,10.0), tmpdist;
-    for (int i = -7; i < 8; i++) {
-        for (int j = -7; j < 8; j++) {
+    KisVector2D mindist(10.0,10.0), tmpdist;
+    for (int i = -5; i < 6; i++) {
+        for (int j = -5; j < 6; j++) {
             if (src[col+i][row+j] != NOEDGE) {
                 tmpdist = KisVector2D(i,j);
                 if (tmpdist.length() < mindist.length())
@@ -557,7 +576,6 @@ void KisCurveMagnetic::nonMaxSupp (const GrayMatrix& magnitude, const GrayMatrix
                         result = NOEDGE;
                     else
                         result = (mag > 255) ? 255 : mag;
-//                         result = POSSIBLE_EDGE;
                 }
             }
             nms[col][row] = result;
@@ -583,11 +601,141 @@ KisToolMagnetic::~KisToolMagnetic ()
     m_curve = 0;
 }
 
+void KisToolMagnetic::update (KisCanvasSubject *subject)
+{
+    super::update(subject);
+}
+
 void KisToolMagnetic::activate ()
 {
     super::activate();
-    m_derived = new KisCurveMagnetic(this);
-    m_curve = m_derived;
+    if (!m_derived) {
+        m_derived = new KisCurveMagnetic(this);
+        m_curve = m_derived;
+    }
+}
+
+void KisToolMagnetic::deactivate ()
+{
+    m_curve->endActionOptions();
+    m_actionOptions = NOOPTIONS;
+    m_dragging = false;
+    m_drawPivots = true;
+}
+
+void KisToolMagnetic::keyPress(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Delete) {
+        draw();
+        m_dragging = false;
+        if (m_curve->pivots().count() == 2)
+            m_curve->clear();
+        else {
+            if ((*m_current) == m_curve->last() && !(m_actionOptions & CANSELECTOPTION)) {
+                m_curve->deletePivot(m_current.previousPivot());
+                m_previous = m_current.previousPivot();
+            } else
+                m_curve->deletePivot(m_current);
+            draw();
+        }
+    } else
+        super::keyPress(event);
+}
+
+void KisToolMagnetic::buttonRelease(KisButtonReleaseEvent *event)
+{
+    if (m_actionOptions & CANSELECTOPTION) {
+        draw();
+        super::updateOptions(0);
+        m_curve->movePivot(m_current, (*m_current).point());
+        draw();
+    }
+    super::buttonRelease(event);
+}
+
+void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
+{
+    updateOptions(event->state());
+    if (!m_currentImage)
+        return;
+    if (event->button() == Qt::LeftButton) {
+        draw();
+        m_dragging = true;
+        m_currentPoint = event->pos();
+        m_current = m_curve->end();
+        if (m_actionOptions & CANSELECTOPTION)
+            m_current = selectByMouse (event->pos().toQPoint());
+        if (m_current == m_curve->end() && !(m_actionOptions)) {
+            m_previous = m_curve->find(m_curve->last());
+            m_current = m_curve->pushPivot(event->pos());
+            if (m_curve->pivots().count() > 1)
+                m_curve->calculateCurve(m_previous,m_current,m_current);
+        } else if (!(*m_current).isSelected())
+            m_dragging = false;
+        draw();
+    }
+}
+
+void KisToolMagnetic::move(KisMoveEvent *event)
+{
+    updateOptions(event->state());
+    if (m_curve->selectedPivots().isEmpty())
+        return;
+    if (!m_dragging && (m_actionOptions & CANSELECTOPTION))
+        return;
+    draw();
+    KisPoint trans = event->pos() - m_currentPoint;
+    KisPoint dist;
+    dist = (*m_current).point() - (*m_current.previousPivot()).point();
+    if ((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_actionOptions & CANSELECTOPTION))
+        m_previous = m_curve->addPivot(m_current,event->pos());
+    m_curve->movePivot(m_current,event->pos());
+    m_currentPoint = event->pos();
+    draw();
+}
+
+int KisToolMagnetic::updateOptions (int keys)
+{
+    int m_oldOptions = m_actionOptions;
+    super::updateOptions(keys);
+    if ((m_oldOptions & CANSELECTOPTION) &&
+        !(m_actionOptions & CANSELECTOPTION)) {
+        draw();
+        m_curve->selectPivot(m_current,false);
+        draw();
+    }
+    return m_actionOptions;
+}
+
+KisCurve::iterator KisToolMagnetic::selectByMouse(const QPoint& pos)
+{
+    KisCurve::iterator it, next, currPivot, nextPivot;
+    QPoint currPos = m_subject->canvasController()->windowToView(pos);
+    QPoint pos1, pos2;
+    it = selectByHandle(currPos);
+    if (it != m_curve->end())
+        return it;
+
+    for (it = m_curve->begin(); it != m_curve->end(); it++) {
+        next = it.next();
+        if (next == m_curve->end() || it == m_curve->end())
+            return m_curve->end();
+        if ((*it).hint() > LINEHINT || (*next).hint() > LINEHINT)
+            continue;
+        pos1 = m_subject->canvasController()->windowToView((*it).point().toQPoint());
+        pos2 = m_subject->canvasController()->windowToView((*next).point().toQPoint());
+        if (pos1 == pos2)
+            continue;
+        if (pointToSegmentDistance(currPos,pos1,pos2) <= MAXDISTANCE)
+            break;
+    }
+
+    nextPivot = it.nextPivot();
+
+    currPivot = m_curve->selectPivot(m_curve->addPivot(nextPivot, KisPoint(0,0)));
+    m_curve->movePivot(currPivot,pos);
+
+    return currPivot;
 }
 
 void KisToolMagnetic::setup(KActionCollection *collection)
@@ -606,7 +754,7 @@ void KisToolMagnetic::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Magnetic Selection: click around an edge to select the area inside."));
+        m_action->setToolTip(i18n("Magnetic Selection: move around the edge to select it, click to manually add points and keep Alt pressed to modify the curve"));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

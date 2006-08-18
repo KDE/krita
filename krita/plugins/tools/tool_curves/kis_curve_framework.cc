@@ -234,7 +234,7 @@ void KisCurve::deletePivot (KisCurve::iterator it)
     }
 }
 
-// Probably it can be optimized - it's is smooth however.
+// Probably it can be optimized - it's is smooth though.
 void KisCurve::moveSelected (const KisPoint& trans)
 {
     KisPoint p;

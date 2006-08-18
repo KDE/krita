@@ -32,10 +32,10 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kurl.h>
-//#include <ktar.h>
-#include <kstandarddirs.h>
 #include <kicon.h>
-//#include <kio/netaccess.h>
+#include <kstandarddirs.h>
+#include <ktar.h>
+#include <kio/netaccess.h>
 
 using namespace Kross;
 
@@ -82,7 +82,10 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
 
     // read the script-actions.
     readConfig( instance()->config() );
-    //writeConfig( instance()->config() );
+
+//TESTCASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//installPackage( KUrl("/home/kde4/koffice/libs/kross/test/Archiv.tar.gz") );
+
 }
 
 GUIClient::~GUIClient()
@@ -144,10 +147,10 @@ void GUIClient::readConfig(KConfig* config)
         Action* action = new Action(d->actions, name, file);
         action->setText(text);
         action->setDescription(description);
-        action->setIcon(KIcon(icon));
+        if(! icon.isNull())
+            action->setIcon(KIcon(icon));
         if(! interpreter.isNull())
             action->setInterpreterName(interpreter);
-
         d->scriptsmenu->addAction(action);
     }
 
@@ -374,7 +377,7 @@ void GUIClient::executionFailed(const QString& errormessage, const QString& trac
         KMessageBox::detailedError(0, errormessage, tracedetails);
 }
 
-KUrl GUIClient::openFile(const QString& caption)
+bool GUIClient::executeFile()
 {
     QStringList mimetypes;
     QMap<QString, InterpreterInfo*> infos = Manager::self().getInterpreterInfos();
@@ -382,21 +385,13 @@ KUrl GUIClient::openFile(const QString& caption)
         mimetypes.append( it.value()->getMimeTypes().join(" ").trimmed() );
 
     KFileDialog* filedialog = new KFileDialog(
-        QString(), // startdir
+        KUrl("kfiledialog:///KrossInstallPackage"), // startdir
         mimetypes.join(" "), // filter
-        0, // widget
+        0, // custom widget
         0 // parent
     );
-    filedialog->setCaption(caption);
-    return filedialog->exec() ? filedialog->selectedUrl() : KUrl();
-}
-
-bool GUIClient::executeFile()
-{
-    KUrl url = openFile( i18n("Execute Script File") );
-    if(url.isValid())
-        return executeFile(url);
-    return false;
+    filedialog->setCaption( i18n("Execute Script File") );
+    return filedialog->exec() ? executeFile(filedialog->selectedUrl()) : false;
 }
 
 bool GUIClient::executeFile(const KUrl& file)
@@ -436,6 +431,90 @@ bool GUIClient::executeAction(Action::Ptr action)
     bool ok = action->hadError();
     action->finalize(); // execution is done.
     return ok;
+}
+
+bool GUIClient::installPackage()
+{
+    KFileDialog* filedialog = new KFileDialog(
+        KUrl("kfiledialog:///KrossInstallPackage"), // startdir
+        "*.tar.gz *.tgz *.bz2", // filter
+        0, // custom widget
+        0 // parent
+    );
+    filedialog->setCaption(i18n("Install Script Package"));
+    return filedialog->exec() ? installPackage(filedialog->selectedUrl()) : false;
+}
+
+bool GUIClient::installPackage(const KUrl& file)
+{
+    const QString scriptpackagefile = file.path();
+    KTar archive( scriptpackagefile );
+    if(! file.isLocalFile() || ! archive.open(QIODevice::ReadOnly)) {
+        KMessageBox::sorry(0, i18n("Could not read the package \"%1\".", scriptpackagefile));
+        return false;
+    }
+
+    const KArchiveDirectory* archivedir = archive.directory();
+    const KArchiveEntry* entry = archivedir->entry("install.xml");
+    if(! entry || ! entry->isFile()) {
+        KMessageBox::sorry(0, i18n("The package \"%1\" does not contain a valid install.xml file.", scriptpackagefile));
+        return false;
+    }
+
+    QString xml = static_cast< const KArchiveFile* >(entry)->data();
+    QDomDocument domdoc;
+    if(! domdoc.setContent(xml)) {
+        KMessageBox::sorry(0, i18n("Failed to parse the install.xml file at package \"%1\".", scriptpackagefile));
+        return false;
+    }
+
+    QDomElement element = domdoc.documentElement();
+    const QString name = element.attribute("name");
+    const QString version = element.attribute("version");
+    const QString text = element.attribute("text");
+    const QString description = element.attribute("description");
+    const QString icon = element.attribute("icon");
+    const QString interpreter = element.attribute("interpreter");
+    const QString scriptfile = element.attribute("file");
+
+    if(name.isNull()) {
+        KMessageBox::sorry(0, i18n("The install.xml file of the package \"%1\" does not define a valid package-name.", scriptpackagefile));
+        return false;
+    }
+
+    QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts/", true);
+    if(destination.isNull()) {
+        KMessageBox::sorry(0, i18n("Failed to determinate location where the package \"%1\" should be installed to.", scriptpackagefile));
+        return false;
+    }
+
+    destination += name; // add the packagename to the name of the destination-directory.
+    if( QDir(destination).exists() ) {
+        if( KMessageBox::warningContinueCancel(0,
+            i18n("A script package with the name \"%1\" already exists. Replace this package?" , name),
+            i18n("Replace")) != KMessageBox::Continue )
+                return false;
+        if(! KIO::NetAccess::del(destination, 0) ) {
+            KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".", destination));
+            return false;
+        }
+    }
+
+    krossdebug( QString("Copy script-package to destination directory: %1").arg(destination) );
+    archivedir->copyTo(destination, true);
+
+    Action* action = new Action(d->actions, name, scriptfile);
+    action->setText(text);
+    action->setDescription(description);
+    if(! icon.isNull())
+        action->setIcon(KIcon(icon));
+    if(! interpreter.isNull())
+        action->setInterpreterName(interpreter);
+    d->scriptsmenu->addAction(action);
+    d->scriptsmenu->setEnabled(true);
+
+    writeConfig( instance()->config() );
+    return true;
 }
 
 void GUIClient::showManager()

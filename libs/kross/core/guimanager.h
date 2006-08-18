@@ -82,7 +82,7 @@ namespace Kross {
     {
             Q_OBJECT
         public:
-            GUIManagerDialog(GUIClient* guiclient, QWidget* parent = 0);
+            GUIManagerDialog(GUIClient* guiclient, QWidget* parent);
             virtual ~GUIManagerDialog();
 
         private:

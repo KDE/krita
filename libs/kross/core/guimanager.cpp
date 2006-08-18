@@ -191,24 +191,29 @@ void GUIManagerView::slotRun()
 {
     foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
         if(index.isValid())
-            static_cast< Action* >( index.internalPointer() )->trigger();
+            static_cast< Action* >(index.internalPointer())->trigger();
 }
 
 void GUIManagerView::slotStop()
 {
     foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
         if(index.isValid())
-            static_cast< Action* >( index.internalPointer() )->finalize();
+            static_cast< Action* >(index.internalPointer())->finalize();
 }
 
 void GUIManagerView::slotInstall()
 {
-    KMessageBox::information(0, "unimplemented yet");
+    d->guiclient->installPackage();
 }
 
 void GUIManagerView::slotUninstall()
 {
     KMessageBox::information(0, "unimplemented yet");
+    /*
+    foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
+        if(index.isValid())
+            d->guiclient->uninstallPackage( static_cast< Action* >(index.internalPointer()) );
+    */
 }
 
 void GUIManagerView::slotNewScripts()

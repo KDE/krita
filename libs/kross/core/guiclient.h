@@ -89,6 +89,17 @@ namespace Kross {
 
 #if 0
             /**
+             * Install the packagefile \p scriptpackagefile . Those packagefile should
+             * be a tar.gz-archive which will be extracted to the users script-directory.
+             *
+             * \param scriptpackagefile The tar.gz or tar.bzip archivfile which contains
+             * the files that should be installed.
+             * \return true if installing was successfully else false.
+             */
+            bool installPackage(const QString& scriptpackagefile);
+#endif
+#if 0
+            /**
              * Reload the list of installed scripts.
              */
             void loadScriptConfig();
@@ -122,15 +133,7 @@ namespace Kross {
             bool loadScriptConfigDocument(const QString& scriptconfigfile, const QDomDocument &document);
 #endif
 
-        protected slots:
-
-           /**
-            * A KFileDialog will be displayed to let the user choose
-            * a scriptfile. The choosen file will be returned as KUrl.
-            */
-            KUrl openFile(const QString& caption);
-
-        public slots: // to execute a scriptfile
+        public slots:
 
             /**
             * A KFileDialog will be displayed to let the user choose the scriptfile
@@ -152,15 +155,17 @@ namespace Kross {
              */
             bool executeAction(Action::Ptr action);
 
-#if 0
-           /**
-            * A KFileDialog will be displayed to let the user choose
-            * a scriptfile that should be loaded.
-            * Those loaded \a ScriptAction will be added to the
-            * \a ScriptActionCollection of loaded scripts.
+            /**
+            * A KFileDialog will be displayed to let the user choose a scriptpackage
+            * that should be installed.
             */
-            bool loadScriptFile();
-#endif
+            bool installPackage();
+
+            /**
+            * Install the scriptpackage \p file . The scriptpackage should be a
+            * tar.gz or tar.bzip archivefile.
+            */
+            bool installPackage(const KUrl& file);
 
             /**
             * The \a ScriptManagerGUI dialog will be displayed to

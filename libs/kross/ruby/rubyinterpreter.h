@@ -46,7 +46,7 @@ class RubyInterpreter : public Kross::Interpreter
         /**
          * Destructor.
          */
-        ~RubyInterpreter();
+        virtual ~RubyInterpreter();
 
         /**
          * Factory method to create and return a new \a RubyScript instance.

@@ -661,7 +661,7 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
     if (event->button() == Qt::LeftButton) {
         draw();
         m_dragging = true;
-        m_currentPoint = event->pos();
+        m_currentPoint = event->pos().floorQPoint();
         m_current = m_curve->end();
         if (m_actionOptions & CANSELECTOPTION)
             m_current = selectByMouse (event->pos().toQPoint());
@@ -683,6 +683,8 @@ void KisToolMagnetic::move(KisMoveEvent *event)
         return;
     if (!m_dragging && (m_actionOptions & CANSELECTOPTION))
         return;
+    if (m_currentPoint == event->pos().floorQPoint())
+        return;
     draw();
     KisPoint trans = event->pos() - m_currentPoint;
     KisPoint dist;
@@ -690,7 +692,7 @@ void KisToolMagnetic::move(KisMoveEvent *event)
     if ((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_actionOptions & CANSELECTOPTION))
         m_previous = m_curve->addPivot(m_current,event->pos());
     m_curve->movePivot(m_current,event->pos());
-    m_currentPoint = event->pos();
+    m_currentPoint = event->pos().floorQPoint();
     draw();
 }
 

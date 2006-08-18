@@ -34,6 +34,7 @@
 #include <kurl.h>
 //#include <ktar.h>
 #include <kstandarddirs.h>
+#include <kicon.h>
 //#include <kio/netaccess.h>
 
 using namespace Kross;

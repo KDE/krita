@@ -35,7 +35,7 @@ public:
         StyleId = QTextFormat::UserProperty+1
     };
 
-    KoCharacterStyle();
+    KoCharacterStyle(QObject *parent = 0);
     ~KoCharacterStyle();
 /*
     void setFont (const QFont &font) { setProperty(QTextFormat::FOO, font); }

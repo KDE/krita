@@ -22,7 +22,8 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-KoCharacterStyle::KoCharacterStyle()
+KoCharacterStyle::KoCharacterStyle(QObject *parent)
+    : QObject(parent)
 {
     m_stylesPrivate = new StylePrivate();
     setFontPointSize(12.0);

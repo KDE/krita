@@ -16,10 +16,14 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoParagraphStyle.h"
+#include "KoCharacterStyle.h"
 
 #include "Styles_p.h"
 
 #include <kdebug.h>
+#include <QTextBlock>
+#include <QTextBlockFormat>
+#include <QTextCursor>
 
 KoParagraphStyle::KoParagraphStyle()
     : m_charStyle(0),
@@ -27,12 +31,15 @@ KoParagraphStyle::KoParagraphStyle()
     m_next(0)
 {
     m_stylesPrivate = new StylePrivate();
-    // TODO fill with nice defaults.
+    setLineHeightPercent(120);
+    setFontIndependentLineSpacing(true);
+    m_charStyle = new KoCharacterStyle(this);
 }
 
 KoParagraphStyle::~KoParagraphStyle() {
     delete m_stylesPrivate;
     m_stylesPrivate = 0;
+    m_charStyle = 0; // QObject will delete it.
 }
 
 void KoParagraphStyle::setParent(KoParagraphStyle *parent) {
@@ -53,6 +60,10 @@ void KoParagraphStyle::setProperty(int key, const QVariant &value) {
         }
     }
     m_stylesPrivate->add(key, value);
+}
+
+void KoParagraphStyle::remove(int key) {
+    m_stylesPrivate->remove(key);
 }
 
 QVariant const *KoParagraphStyle::get(int key) const {
@@ -76,6 +87,13 @@ int KoParagraphStyle::propertyInt(int key) const {
     return variant->toInt();
 }
 
+bool KoParagraphStyle::propertyBoolean(int key) const {
+    const QVariant *variant = get(key);
+    if(variant == 0)
+        return false;
+    return variant->toBool();
+}
+
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
     // copy all relevant properties.
     static const int properties[] = {
@@ -86,6 +104,11 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
         QTextFormat::BlockAlignment,
         QTextFormat::TextIndent,
         QTextFormat::BlockIndent,
+        StyleId,
+        FixedLineHeight,
+        MinimumLineHeight,
+        LineSpacing,
+        FontIndependentLineSpacing,
         -1
     };
 
@@ -94,11 +117,20 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
         QVariant const *variant = get(properties[i]);
         if(variant)
             format.setProperty(properties[i], *variant);
-        else
+/*        else
             kWarning() << "KoParagraphStyle: Missing mandatory property '" << properties[i] <<
-                "' on " << name() << endl;
+                "' on " << name() << endl; */
         i++;
     }
+}
+
+void KoParagraphStyle::applyStyle(QTextBlock &block) const {
+    QTextCursor cursor(block);
+    QTextBlockFormat format = cursor.blockFormat();
+    applyStyle(format);
+    cursor.setBlockFormat(format);
+    if(m_charStyle)
+        m_charStyle->applyStyle(block);
 }
 
 #include "KoParagraphStyle.moc"

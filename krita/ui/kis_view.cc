@@ -2404,6 +2404,10 @@ void KisView::canvasGotMoveEvent(KisMoveEvent *e)
         KisMoveEvent ev(e->device(), wp, e->globalPos(), e->pressure(), e->xTilt(), e->yTilt(), e->state());
 
         m_toolManager->currentTool()->move(&ev);
+//	if (m_oldTool && (e->state() & Qt::LeftButton)) {
+//		KisCanvasPainter gc(m_canvas);
+//              m_oldTool->paint(gc);
+//	}
     }
 
 //    m_lastGuidePoint = mapToScreen(e->pos().floorQPoint());
@@ -2524,6 +2528,10 @@ void KisView::canvasGotMouseWheelEvent(QWheelEvent *event)
                 zoomIn();
             } else {
                 zoomOut();
+            }
+	    if (m_oldTool) {
+                KisCanvasPainter gc(m_canvas);
+                m_oldTool->paint(gc);
             }
         }
     //} else {
@@ -3117,6 +3125,10 @@ void KisView::scrollH(int value)
                 m_canvas->repaint();
             }
         }
+        if (m_oldTool) {
+            KisCanvasPainter gc(m_canvas);
+            m_oldTool->paint(gc);
+        }
     }
 
     if (xShift != 0) {
@@ -3157,6 +3169,10 @@ void KisView::scrollV(int value)
                 updateQPaintDeviceCanvas(viewToWindow(drawRect));
                 m_canvas->repaint();
             }
+        }
+	if (m_oldTool) {
+	    KisCanvasPainter gc(m_canvas);
+            m_oldTool->paint(gc);
         }
     }
 

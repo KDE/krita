@@ -10,7 +10,8 @@ set(krosscore_LIB_SRCS
    script.cpp 
    action.cpp
    manager.cpp
-   guiclient.cpp    
+   guiclient.cpp
+   guimanager.cpp
    )
 
 kde4_automoc(${krosscore_LIB_SRCS})

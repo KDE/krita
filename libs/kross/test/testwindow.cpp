@@ -43,18 +43,20 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     m_action = Kross::Manager::self().createAction("test");
     m_scriptextension = new Kross::GUIClient(this, this);
 
+    /*
     QString file = KGlobal::dirs()->findResource("appdata", "testscripting.rc");
     if(file.isNull())
         file = QDir( QDir::currentDirPath() ).filePath("testscripting.rc");
 
     Kross::krossdebug(QString("XML-file: %1").arg(file));
     m_scriptextension->setXMLFile(file);
+    */
 
     //menuFile->insertSeparator();
 
     menuFile->addAction( m_scriptextension->action("executescriptfile") );
     menuFile->addAction( m_scriptextension->action("configurescripts") );
-    menuFile->addAction( m_scriptextension->action("installedscripts") );
+    menuFile->addAction( m_scriptextension->action("scripts") );
 
     QWidget* mainbox = new QWidget(this);
     QVBoxLayout* layout = new QVBoxLayout(mainbox);

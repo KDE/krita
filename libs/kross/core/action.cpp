@@ -23,9 +23,12 @@
 #include "manager.h"
 
 #include <QFile>
+#include <QFileInfo>
+
 #include <klocale.h>
 #include <kicon.h>
 #include <kmimetype.h>
+#include <kstandarddirs.h>
 
 using namespace Kross;
 
@@ -43,6 +46,12 @@ namespace Kross {
             * demand.
             */
             Script* script;
+
+            /**
+            * The optional description to provide some more details about the
+            * Action to the user.
+            */
+            QString description;
 
             /**
             * The scripting code.
@@ -100,11 +109,31 @@ Action::Action(const KUrl& file)
     setIcon( KIcon( KMimeType::iconNameForURL(file) ) );
 }
 
+Action::Action(KActionCollection* collection, const QString& name, const KUrl& file)
+    : KAction( collection, name )
+    , KShared()
+    , ChildrenInterface()
+    , ErrorInterface()
+    , d( new ActionPrivate() )
+{
+    d->scriptfile = file;
+}
+
 Action::~Action()
 {
     //krossdebug( QString("Action::~Action() Dtor name='%1'").arg(objectName()) );
     finalize();
     delete d;
+}
+
+QString Action::description() const
+{
+    return d->description;
+}
+
+void Action::setDescription(const QString& description)
+{
+    d->description = description;
 }
 
 QString Action::getCode() const

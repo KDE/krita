@@ -23,6 +23,7 @@
 #include <QString>
 #include <QVariant>
 #include <QObject>
+//#include <qdom.h>
 
 #include <kaction.h>
 #include <ksharedptr.h>
@@ -77,10 +78,36 @@ namespace Kross {
              */
             Action(const KUrl& file);
 
+           /**
+             * Constructor.
+             *
+             * \param collection The KActionCollection this Action
+             * is child of.
+             * \param name The unique name this Action has. It's used
+             * e.g. at the \a Manager to identify the Action. The
+             * name is accessible via \a QObject::objectName .
+             * \param file The in the KUrl defined path() should point
+             * to a valid scriptingfile. This \a Action will be filled
+             * with the content of the file (e.g. the file is readed
+             * and \a getCode should return it's content and it's also
+             * tried to determinate the \a getInterpreterName ).
+             */
+            Action(KActionCollection* collection, const QString& name, const KUrl& file);
+
             /**
              * Destructor.
              */
             virtual ~Action();
+
+            /**
+             * \return the optional description for this Action.
+             */
+            QString description() const;
+
+            /**
+             * Set the optional description for this Action.
+             */
+            void setDescription(const QString& description);
 
             /**
              * \return the scriptcode this Action holds.

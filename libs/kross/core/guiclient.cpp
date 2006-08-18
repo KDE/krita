@@ -20,18 +20,21 @@
 #include "guiclient.h"
 #include "../core/interpreter.h"
 #include "manager.h"
+#include "guimanager.h"
 
 #include <kapplication.h>
-#include <kdialog.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+//#include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <ktar.h>
+//#include <ktar.h>
 #include <kstandarddirs.h>
-#include <kio/netaccess.h>
+//#include <kio/netaccess.h>
 
 using namespace Kross;
 
@@ -45,18 +48,24 @@ namespace Kross {
             KXMLGUIClient* guiclient;
             /// The optional parent QWidget widget.
             QWidget* parent;
-
-            Private(KXMLGUIClient* g, QWidget* p) : guiclient(g), parent(p) {}
+            /// The collection of installed script-packages.
+            KActionCollection* actions;
+            /// The menu used to display the scripts.
+            KActionMenu* scriptsmenu;
     };
 
 }
 
 GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
-    : QObject( parent )
+    : QObject(parent)
     , KXMLGUIClient(guiclient)
-    , d(new Private(guiclient, parent))
+    , d(new Private())
 {
     setInstance( GUIClient::instance() );
+
+    d->guiclient = guiclient;
+    d->parent = parent;
+    d->actions = new KActionCollection(this, instance());
 
     // action to execute a scriptfile.
     KAction* execfileaction = new KAction(i18n("Execute Script File..."), actionCollection(), "executescriptfile");
@@ -66,25 +75,17 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     KAction* manageraction =  new KAction(i18n("Scripts Manager..."), actionCollection(), "configurescripts");
     connect(manageraction, SIGNAL(triggered(Qt::MouseButtons, Qt::KeyboardModifiers)), this, SLOT(showManager()));
 
-#if 0
-    // The predefined ActionCollection's this GUIClient provides.
-    d->collections.insert("installedscripts",
-        new ActionCollection(i18n("Scripts"), actionCollection(), "installedscripts") );
-    d->collections.insert("loadedscripts",
-        new ActionCollection(i18n("Loaded"), actionCollection(), "loadedscripts") );
-    d->collections.insert("executedscripts",
-        new ActionCollection(i18n("History"), actionCollection(), "executedscripts") );
+    d->scriptsmenu = new KActionMenu(i18n("Scripts"), actionCollection(), "scripts");
+    //connect(d->actions, SIGNAL(inserted(KAction*)), scriptsmenu, SLOT(addAction(QAction*)));
+    //connect(d->actions, SIGNAL(removed(KAction*)), scriptsmenu, SLOT(removeAction(QAction*)));
 
-    reloadInstalledScripts();
-#endif
+    // read the script-actions.
+    readConfig( instance()->config() );
+    //writeConfig( instance()->config() );
 }
 
 GUIClient::~GUIClient()
 {
-#if 0
-    for(QMap<QString, ActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
-        delete it.value();
-#endif
     delete d;
 }
 
@@ -95,60 +96,135 @@ void GUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
 
 void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
 {
-    /*
-    ActionCollection* installedcollection = d->collections["installedscripts"];
-    if(! merge && installedcollection)
-        installedcollection->clear();
+    //ActionCollection* installedcollection = d->collections["installedscripts"];
+    //if(! merge && installedcollection) installedcollection->clear();
 
     KXMLGUIClient::setDOMDocument(document, merge);
-    loadScriptConfigDocument(xmlFile(), document);
-    */
+    //loadScriptConfigDocument(xmlFile(), document);
+}
+
+KActionCollection* GUIClient::scriptsActionCollection() const
+{
+    return d->actions;
+}
+
+void GUIClient::readConfig(KConfig* config)
+{
+    krossdebug( QString("GUIClient::read hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
+
+    config->setGroup("scripts");
+    foreach(QString name, config->readEntry("names", QStringList())) {
+        QString text = config->readEntry(QString("%1_text").arg(name).toLatin1());
+        QString description = config->readEntry(QString("%1_description").arg(name).toLatin1());
+        QString icon = config->readEntry(QString("%1_icon").arg(name).toLatin1());
+        QString file = config->readEntry(QString("%1_file").arg(name).toLatin1());
+        QString interpreter = config->readEntry(QString("%1_interpreter").arg(name).toLatin1());
+
+        QFileInfo fi(file);
+        if(! fi.exists()) {
+            QString resource = KGlobal::dirs()->findResource("appdata", QString("scripts/%1/%2").arg(name).arg(file));
+            if(! resource.isNull())
+                file = resource;
+        }
+
+        if(text.isNull())
+            text = file;
+
+        if(description.isEmpty())
+            description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);
+        else
+            description += QString("<br>%1").arg(file);
+
+        if(icon.isNull())
+            icon = KMimeType::iconNameForURL( KUrl(file) );
+
+        krossdebug( QString("GUIClient::readConfig Add scriptaction name='%1' file='%2'").arg(name).arg(file) );
+
+        Action* action = new Action(d->actions, name, file);
+        action->setText(text);
+        action->setDescription(description);
+        action->setIcon(KIcon(icon));
+        if(! interpreter.isNull())
+            action->setInterpreterName(interpreter);
+
+        d->scriptsmenu->addAction(action);
+    }
+
+    d->scriptsmenu->setEnabled( ! d->actions->isEmpty() );
+}
+
+void GUIClient::writeConfig(KConfig* config)
+{
+    krossdebug( QString("GUIClient::write hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
+
+    config->deleteGroup("scripts"); // remove old entries
+    config->setGroup("scripts"); // according to the documentation it's needed to re-set the group after delete.
+
+    QStringList names;
+    foreach(KAction* a, d->actions->actions(QString::null)) {
+        Action* action = static_cast< Action* >(a);
+        const QString name = action->objectName();
+        names << name;
+        config->writeEntry(QString("%1_text").arg(name).toLatin1(), action->text());
+        config->writeEntry(QString("%1_description").arg(name).toLatin1(), action->description());
+
+        //TODO hmmm... kde4's KIcon / Qt4's QIcon does not allow to reproduce the iconname?
+        //config->writeEntry(QString("%1_icon").arg(name).toLatin1(), action->icon());
+
+        config->writeEntry(QString("%1_file").arg(name).toLatin1(), action->getFile().path());
+        config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), action->getInterpreterName());
+    }
+
+    config->writeEntry("names", names);
+    config->sync();
 }
 
 #if 0
-bool GUIClient::hasActionCollection(const QString& name)
+void GUIClient::loadScriptConfig()
 {
-    return d->collections.contains(name);
-}
-
-ActionCollection* GUIClient::getActionCollection(const QString& name)
-{
-    return d->collections[name];
-}
-
-QMap<QString, ActionCollection*> GUIClient::getActionCollections()
-{
-    return d->collections;
-}
-
-void GUIClient::addActionCollection(const QString& name, ActionCollection* collection)
-{
-    removeActionCollection(name);
-    d->collections.insert(name, collection);
-}
-
-bool GUIClient::removeActionCollection(const QString& name)
-{
-    if(d->collections.contains(name)) {
-        ActionCollection* c = d->collections[name];
-        d->collections.remove(name);
-        delete c;
-        return true;
+    d->actions->clear();
+    QString configfile = "/home/kde4/scripts.rc";//KGlobal::dirs()->findResource("appdata","scripts.rc");
+    if(configfile.isNull()) {
+        krossdebug( QString("No scriptconfigfile found.") );
+        return;
     }
-    return false;
-}
+    QDomDocument domdoc;
+    QFile file(configfile);
+    if(! file.open(QIODevice::ReadOnly)) {
+        krosswarning( QString("GUIClient::loadScriptConfig(): Failed to read scriptconfigfile: %1").arg(configfile) );
+        return;
+    }
+    bool ok = domdoc.setContent(&file);
+    file.close();
+    if(! ok) {
+        krosswarning( QString("GUIClient::loadScriptConfig(): Failed to parse scriptconfigfile: %1").arg(configfile) );
+        return;
+    }
+    QDomNodeList nodelist = domdoc.elementsByTagName("ScriptAction");
+    uint nodelistcount = nodelist.count();
+    for(uint i = 0; i < nodelistcount; i++) {
+        QDomElement element = nodelist.item(i).toElement();
+        new Action(d->actions, element);
 
-void GUIClient::reloadInstalledScripts()
-{
+        /*
+        connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
+                this, SLOT( executionFailed(const QString&, const QString&) ));
+        connect(action.data(), SIGNAL( success() ),
+                this, SLOT( successfullyExecuted() ));
+        connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
+        */
+    }
+    //emit collectionChanged(installedcollection);
+    #if 0
     ActionCollection* installedcollection = d->collections["installedscripts"];
     if(installedcollection)
         installedcollection->clear();
-
     QByteArray partname = d->guiclient->instance()->instanceName();
     QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*/*.rc");
     //files.sort();
     for(QStringList::iterator it = files.begin(); it != files.end(); ++it)
         loadScriptConfigFile(*it);
+    #endif
 }
 
 bool GUIClient::installScriptPackage(const QString& scriptpackagefile)
@@ -159,7 +235,6 @@ bool GUIClient::installScriptPackage(const QString& scriptpackagefile)
         KMessageBox::sorry(0, i18n("Could not read the package \"%1\".", scriptpackagefile));
         return false;
     }
-
     QByteArray partname = d->guiclient->instance()->instanceName();
     QString destination = KGlobal::dirs()->saveLocation("data", partname + "/scripts/", true);
     //QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts", true);
@@ -167,26 +242,21 @@ bool GUIClient::installScriptPackage(const QString& scriptpackagefile)
         krosswarning("GUIClient::installScriptPackage() Failed to determinate location where the scriptpackage should be installed to!");
         return false;
     }
-
     QString packagename = QFileInfo(scriptpackagefile).baseName();
     destination += packagename; // add the packagename to the name of the destination-directory.
-
     if( QDir(destination).exists() ) {
         if( KMessageBox::warningContinueCancel(0,
             i18n("A script package with the name \"%1\" already exists. Replace this package?" , packagename),
             i18n("Replace")) != KMessageBox::Continue )
                 return false;
-
         if(! KIO::NetAccess::del(destination, 0) ) {
             KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".", destination));
             return false;
         }
     }
-
     krossdebug( QString("Copy script-package to destination directory: %1").arg(destination) );
     const KArchiveDirectory* archivedir = archive.directory();
     archivedir->copyTo(destination, true);
-
     reloadInstalledScripts();
     return true;
 }
@@ -217,7 +287,6 @@ bool GUIClient::loadScriptConfigFile(const QString& scriptconfigfile)
         krosswarning( QString("GUIClient::loadScriptConfig(): Failed to parse scriptconfigfile: %1").arg(scriptconfigfile) );
         return false;
     }
-
     return loadScriptConfigDocument(scriptconfigfile, domdoc);
 }
 
@@ -228,7 +297,6 @@ bool GUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, const 
     uint nodelistcount = nodelist.count();
     for(uint i = 0; i < nodelistcount; i++) {
         Action::Ptr action = Action::Ptr( new Action(scriptconfigfile, nodelist.item(i).toElement()) );
-
         if(installedcollection) {
             Action::Ptr otheraction = installedcollection->action( action->objectName() );
             if(otheraction) {
@@ -255,11 +323,8 @@ bool GUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, const 
             }
             installedcollection->attach( action );
         }
-
-        connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
-                this, SLOT( executionFailed(const QString&, const QString&) ));
-        connect(action.data(), SIGNAL( success() ),
-                this, SLOT( successfullyExecuted() ));
+        connect(action.data(), SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+        connect(action.data(), SIGNAL( success() ), this, SLOT( successfullyExecuted() ));
         connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
     }
     emit collectionChanged(installedcollection);
@@ -274,9 +339,7 @@ void GUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
 void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
 {
     ActionCollection* installedcollection = d->collections["installedscripts"];
-    if(! merge && installedcollection)
-        installedcollection->clear();
-
+    if(! merge && installedcollection) installedcollection->clear();
     KXMLGUIClient::setDOMDocument(document, merge);
     loadScriptConfigDocument(xmlFile(), document);
 }
@@ -337,7 +400,7 @@ bool GUIClient::executeFile()
 
 bool GUIClient::executeFile(const KUrl& file)
 {
-    krossdebug( QString("GUIClient::executeFile() file='%1'").arg(file) );
+    krossdebug( QString("GUIClient::executeFile() file='%1'").arg(file.path()) );
     return executeAction( Action::Ptr( new Action(file) ) );
 }
 
@@ -349,12 +412,9 @@ bool GUIClient::loadFile()
         ActionCollection* loadedcollection = d->collections["loadedscripts"];
         if(loadedcollection) {
             Action::Ptr action = Action::Ptr( new Action( url.path() ) );
-            connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
-                    this, SLOT( executionFailed(const QString&, const QString&) ));
-            connect(action.data(), SIGNAL( success() ),
-                    this, SLOT( successfullyExecuted() ));
+            connect(action.data(), SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+            connect(action.data(), SIGNAL( success() ), this, SLOT( successfullyExecuted() ));
             connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
-
             loadedcollection->detach(action);
             loadedcollection->attach(action);
             return true;
@@ -368,7 +428,6 @@ bool GUIClient::executeAction(Action::Ptr action)
 {
     connect(action.data(), SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
     connect(action.data(), SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
-
     connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
 
     action->trigger(); // activate the action and execute the script that way
@@ -380,19 +439,9 @@ bool GUIClient::executeAction(Action::Ptr action)
 
 void GUIClient::showManager()
 {
-#if 0
-    KDialog* dialog = new KDialog( d->parent );
-    dialog->setCaption( i18n("Scripts Manager") );
-    dialog->setModal( true );
-    dialog->setButtons( KDialog::Ok );
-    dialog->showButtonSeparator( false );
-
-    //KDialogBase* dialog = new KDialogBase(d->parent, "", true, i18n("Scripts Manager"), KDialogBase::Close);
-    WdgScriptsManager* wsm = new WdgScriptsManager(this, dialog);
-    dialog->setMainWidget(wsm);
-    dialog->resize( QSize(360, 320).expandedTo(dialog->minimumSizeHint()) );
+    GUIManagerDialog* dialog = new GUIManagerDialog(this, d->parent);
+    //dialog->resize( QSize(360, 320).expandedTo(dialog->minimumSizeHint()) );
     dialog->show();
-#endif
 }
 
 #include "guiclient.moc"

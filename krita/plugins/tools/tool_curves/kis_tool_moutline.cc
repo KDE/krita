@@ -754,7 +754,7 @@ void KisToolMagnetic::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Magnetic Selection: move around the edge to select it, click to manually add points and keep Alt pressed to modify the curve"));
+        m_action->setToolTip(i18n("Magnetic Selection: move around the edge to select it, click to manually add points and keep Ctrl pressed to modify the curve"));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

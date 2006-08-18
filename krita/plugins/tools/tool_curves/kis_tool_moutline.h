@@ -25,7 +25,7 @@
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
-const int CANSELECTOPTION = ALTOPTION;
+const int CANSELECTOPTION = CONTROLOPTION;
 
 class KisToolMagnetic;
 class KisVector2D;

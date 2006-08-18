@@ -46,7 +46,29 @@ public:
         FixedLineHeight,    ///< this propery is used to use a non-default line height
         MinimumLineHeight,  ///< this property is used to have a minimum line spacing
         LineSpacing,        ///< Hard leader height.
-        FontIndependentLineSpacing  ///< if true, use fontsize (in pt) solely.
+        FontIndependentLineSpacing,  ///< if true, use fontsize (in pt) solely.
+        AlignLastLine,      ///< When the paragraph is justified, what to do with the last word line
+        WidowThreshold,     ///< If 'keep together'=false, amount of lines to keep it anyway.
+        OrphanThreshold,   ///< If 'keep together'=false, amount of lines to keep it anyway.
+        DropCaps,       ///< defines if a paragraph renders its first char(s) with drop-caps
+        DropCapsLength, ///< Number of glyphs to show as drop-caps
+        DropCapsLines,  ///< Number of lines that the drop-caps span
+        DropCapsDistance,   ///< Distance between drop caps and text
+        FollowDocBaseline,  ///< If true the baselines will be aligned with the doc-wide grid
+        BreakBefore,    ///< If true, insert a frame break before this paragraph
+        BreakAfter,     ///< If true, insert a frame break after this paragraph
+        HasLeftBorder,  ///< If true, paint a border on the left
+        HasTopBorder,   ///< If true, paint a border on the top
+        HasRightBorder, ///< If true, paint a border on the right
+        HasBottomBorder,///< If true, paint a border on the bottom
+        BorderLineWidth,///< Thickness of inner-border
+        SecondBorderLineWidth,  ///< Thickness of outer-border
+        DistanceToSecondBorder, ///< Distance between inner and outer border
+        LeftPadding,    ///< distance between text and border
+        TopPadding,     ///< distance between text and border
+        RightPadding,   ///< distance between text and border
+        BottomPadding   ///< distance between text and border
+// continue at 15.5.28
     };
 
     KoParagraphStyle();
@@ -54,7 +76,7 @@ public:
     KoParagraphStyle(const KoParagraphStyle &orig);
     ~KoParagraphStyle();
 
-    //  ***** Linespacing stuff from ODF ****
+    //  ***** Linespacing
     /**
      * Sets the line height as a percentage of the highest character on that line.
      * A good typographically correct value would be 120%
@@ -62,27 +84,27 @@ public:
      */
     void setLineHeightPercent(int lineHeight)
         {setProperty(FixedLineHeight, lineHeight); remove(LineSpacing);}
-    int lineHeightPercent() { return propertyInt(FixedLineHeight); }
+    int lineHeightPercent() const { return propertyInt(FixedLineHeight); }
 
     /**
      * Sets the line height to a specific pt-based height, ignoring the font size.
      */
     void setLineHeightAbsolute(double height)
         {setProperty(FixedLineHeight, height); remove(LineSpacing);}
-    double lineHeightAbsolute() {return propertyDouble(FixedLineHeight); }
+    double lineHeightAbsolute() const {return propertyDouble(FixedLineHeight); }
 
     /**
      * Sets the line height to have a minimum height in pt.
      */
     void setMinimumLineHeight(double height) {setProperty(MinimumLineHeight, height); }
-    double minimumLineHeight() { return propertyDouble(MinimumLineHeight); }
+    double minimumLineHeight() const { return propertyDouble(MinimumLineHeight); }
 
     /**
      * Sets the space between two lines to be a specific height, ignoring the font size.
      */
     void setLineSpacing(double spacing)
         {setProperty(LineSpacing, spacing); remove(FixedLineHeight); }
-    double lineSpacing() {return propertyDouble(LineSpacing); }
+    double lineSpacing() const {return propertyDouble(LineSpacing); }
 
     /**
      * If set to true the font-size will be used instead of the font-encoded size.
@@ -92,10 +114,138 @@ public:
      * is used which can differ for various fonts, even if they are the same size.
      */
     void setFontIndependentLineSpacing(bool on) {setProperty(FontIndependentLineSpacing, on); }
-    bool fontIndependentLineSpacing() {return propertyBoolean(FontIndependentLineSpacing); }
+    /**
+     * @see setFontIndependentLineSpacing
+     */
+    bool fontIndependentLineSpacing() const {return propertyBoolean(FontIndependentLineSpacing); }
 
 
-    // properties from QTextFormat
+    /**
+     * For paragraphs that are justified the last line alignment is specified here.
+     * There are only 3 valid options, Left, Center and Justified. (where Left will
+     * be right aligned for RTL text).
+     */
+    void setAlignLastLine(Qt::Alignment alignment ) { setProperty(AlignLastLine, (int) alignment); }
+    /**
+     * @see setAlignLastLine
+     */
+    Qt::Alignment alignLastLine() const {
+        return static_cast<Qt::Alignment> (propertyInt(QTextFormat::BlockAlignment));
+    }
+    /**
+     * Paragraphs that are broken accross two frames are normally broken at the bottom
+     * of the frame.  Using this property we can set the minimum number of lines that should
+     * appear in the second frame to avoid really short paragraphs standing alone (also called
+     * widows).  So, if a 10 line parag is broken in a way that only one line is in the second
+     * frame, setting a widowThreshold of 4 will break at 6 lines instead to leave the
+     * requested 4 lines.
+     */
+    void setWidowThreshold(int lines) { setProperty(WidowThreshold, lines); }
+    /**
+     * @see setWidowThreshold
+     */
+    int widowThreshold() const { return propertyInt(WidowThreshold); }
+    /**
+     * Paragraphs that are broken accross two frames are normally broken at the bottom
+     * of the frame.  Using this property we can set the minimum number of lines that should
+     * appear in the first frame to avoid really short paragraphs standing alone (also called
+     * orphans).  So, if a paragraph is broken so only 2 line is left in the first frame
+     * setting the orphanThreshold to something greater than 2 will move the whole paragraph
+     * to the second frame.
+     */
+    void setOrphanThreshold(int lines) { setProperty(OrphanThreshold, lines); }
+    /**
+     * @see setOrphanThreshold
+     */
+    int orphanThreshold() const { return propertyInt(OrphanThreshold); }
+    /**
+     * If true, make the first character span multiple lines.
+     * @see setDropCapsLenght
+     * @see setDropCapsLines
+     * @see dropCapsDistance
+     */
+    void setDropCaps(bool on) { setProperty(DropCaps, on); }
+    /**
+     * @see setDropCaps
+     */
+    bool dropCaps() const { return propertyBoolean(DropCaps); }
+    /**
+     * Set the number of glyphs to show as drop-caps
+     * @see setDropCaps
+     * @see setDropCapsLines
+     * @see dropCapsDistance
+     */
+    void setDropCapsLenght(int characters) { setProperty(DropCapsLength, characters); }
+    /**
+     * set dropCaps Lenght in characters
+     * @see setDropCapsLenght
+     */
+    int dropCapsLength() const { return propertyInt(DropCapsLength); }
+    /**
+     * Set the number of lines that the drop-caps span
+     * @see setDropCapsLenght
+     * @see setDropCaps
+     * @see dropCapsDistance
+     */
+    void setDropCapsLines(int lines) { setProperty(DropCapsLines, lines); }
+    /**
+     * set dropCapsLines
+     * @see setDropCapsLines
+     */
+    int dropCapsLines() const { return propertyInt(DropCapsLines); }
+    /**
+     * set the distance between drop caps and text in pt
+     * @see setDropCapsLenght
+     * @see setDropCaps
+     * @see setDropCapsLines
+     */
+    void setDropCapsDistance(double distance) { setProperty(DropCapsDistance, distance); }
+    /**
+     * Set dropCaps distance
+     * @see setDropCapsDistance
+     */
+    double dropCapsDistance() const { return propertyDouble(DropCapsDistance); }
+    /**
+     * If true the baselines will be aligned with the doc-wide grid
+     */
+    void setFollowDocBaseline(bool on) { setProperty(FollowDocBaseline, on); }
+    /**
+     * return if baseline alignment is used
+     * @see setFollowDocBaseline
+     */
+    bool followDocBaseline() const { return propertyBoolean(FollowDocBaseline); }
+
+    void setBreakBefore(bool on) { setProperty(BreakBefore, on); }
+    bool breakBefore() { return propertyBoolean(BreakBefore); }
+    void setBreakAfter(bool on) { setProperty(BreakAfter, on); }
+    bool breakAfter() { return propertyBoolean(BreakAfter); }
+    void setHasLeftBorder(bool on) { setProperty(HasLeftBorder, on); }
+    bool hasLeftBorder() { return propertyBoolean(HasLeftBorder); }
+    void setHasTopBorder(bool on) { setProperty(HasTopBorder, on); }
+    bool hasTopBorder() { return propertyBoolean(HasTopBorder); }
+    void setHasRightBorder(bool on) { setProperty(HasRightBorder, on); }
+    bool hasRightBorder() { return propertyBoolean(HasRightBorder); }
+    void setHasBottomBorder(bool on) { setProperty(HasBottomBorder, on); }
+    bool hasBottomBorder() { return propertyBoolean(HasBottomBorder); }
+    void setBorderLineWidth(double width) { setProperty(BorderLineWidth, width); }
+    double borderLineWidth() { return propertyDouble(BorderLineWidth); }
+    void setSecondBorderLineWidth(double width) { setProperty(SecondBorderLineWidth, width); }
+    double secondBorderLineWidth() { return propertyDouble(SecondBorderLineWidth); }
+    void setDistanceToSecondBorder(double distance) { setProperty(DistanceToSecondBorder, distance); }
+    double distanceToSecondBorder() { return propertyDouble(DistanceToSecondBorder); }
+    void setLeftPadding(double padding) { setProperty(LeftPadding, padding); }
+    double leftPadding() { return propertyDouble(LeftPadding); }
+    void setTopPadding(double padding) { setProperty(TopPadding, padding); }
+    double topPadding() { return propertyDouble(TopPadding); }
+    void setRightPadding(double padding) { setProperty(RightPadding, padding); }
+    double rightPadding() { return propertyDouble(RightPadding); }
+    void setBottomPadding(double padding) { setProperty(BottomPadding, padding); }
+    double bottomPadding() { return propertyDouble(BottomPadding); }
+
+
+
+
+    // ************ properties from QTextFormat
     /// duplicated property from QTextBlockFormat
     void setTopMargin(double topMargin) { setProperty(QTextFormat::BlockTopMargin, topMargin); }
     /// duplicated property from QTextBlockFormat

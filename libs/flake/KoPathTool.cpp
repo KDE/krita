@@ -38,6 +38,8 @@ KoPathTool::~KoPathTool() {
 }
 
 void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
+    if( ! m_pathShape )
+        return;
     QPainterPath outline = m_pathShape->outline();
     if(painter.hasClipping()) {
         QRect shape = converter.documentToView( outline.controlPointRect() ).toRect();
@@ -160,8 +162,10 @@ void KoPathTool::activate (bool temporary) {
 }
 
 void KoPathTool::deactivate() {
+    QRectF repaintRect = m_pathShape->outline().controlPointRect().translated( m_pathShape->position() );
     m_pathShape = 0;
     m_activePoint = 0;
+    m_canvas->updateCanvas( repaintRect.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius ) );
 }
 
 void KoPathTool::repaint() {

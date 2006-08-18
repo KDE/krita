@@ -33,13 +33,28 @@ public:
     KoTextShapeData();
     ~KoTextShapeData();
 
+    /**
+     * Replace the QTextDocument this shape will render.
+     * @param document the new document. If there was an old document owned, it will be deleted.
+     * @param transferOwnership if true then the document will be considered the responsibility
+     *    of this data and the doc will be deleted when it dies.
+     */
     void setDocument(QTextDocument *document, bool transferOwnership = true);
+    /// return the document
     QTextDocument *document();
 
     void setTextCursor(QTextCursor *textCursor) { m_textCursor = textCursor; }
     QTextCursor *textCursor() const { return m_textCursor; }
 
+    /**
+     * return the amount of points into the document (y) this shape will display.
+     */
     double documentOffset() const { return m_offset; }
+    /**
+     * Set the amount of points into the document (y direction) that is relevant for this
+     * datas-shape.  This allows multiple shapes to all use one document at different offsets
+     * into the document.
+     */
     void setDocumentOffset(double offset) { m_offset = offset; }
 
     int position() const { return m_position; }

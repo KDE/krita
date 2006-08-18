@@ -381,7 +381,18 @@ void KoStyleDialog::save() {
 
         int indexNextStyle = styleIndex( m_styleCombo->currentIndex() );
         m_currentStyle->setFollowingStyle( m_origStyles.at( indexNextStyle ) ); // point to orig, not changed! (#47377)
-        m_currentStyle->setParentStyle( style( m_inheritCombo->currentText() ) );
+
+        if ( m_inheritCombo->currentItem() == 0 )  //<None> selected
+            m_currentStyle->setParentStyle(0);
+        else
+        {
+            int indexParentStyle=styleIndex( m_inheritCombo->currentItem()-1 );
+            KoParagStyle *parent=m_origStyles.at(indexParentStyle);
+            if( parent==0L )  //If not found in the orig list (means its a new Style) look in the changeStyles list
+                parent=m_changedStyles.at(indexParentStyle);
+            m_currentStyle->setParentStyle( parent );
+        }
+
         if ( d->cbIncludeInTOC )
             m_currentStyle->setOutline( d->cbIncludeInTOC->isChecked() );
     }

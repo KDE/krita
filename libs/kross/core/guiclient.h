@@ -89,17 +89,6 @@ namespace Kross {
 
 #if 0
             /**
-             * Install the packagefile \p scriptpackagefile . Those packagefile should
-             * be a tar.gz-archive which will be extracted to the users script-directory.
-             *
-             * \param scriptpackagefile The tar.gz or tar.bzip archivfile which contains
-             * the files that should be installed.
-             * \return true if installing was successfully else false.
-             */
-            bool installPackage(const QString& scriptpackagefile);
-#endif
-#if 0
-            /**
              * Reload the list of installed scripts.
              */
             void loadScriptConfig();
@@ -164,6 +153,10 @@ namespace Kross {
             /**
             * Install the scriptpackage \p file . The scriptpackage should be a
             * tar.gz or tar.bzip archivefile.
+            *
+            * \param scriptpackagefile The tar.gz or tar.bzip archivfile which contains
+            * the files that should be installed.
+            * \return true if installing was successfully else false.
             */
             bool installPackage(const KUrl& file);
 

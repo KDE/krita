@@ -22,6 +22,8 @@
 #include "manager.h"
 #include "guimanager.h"
 
+#include <QRegExp>
+
 #include <kapplication.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -231,40 +233,6 @@ void GUIClient::loadScriptConfig()
     #endif
 }
 
-bool GUIClient::installScriptPackage(const QString& scriptpackagefile)
-{
-    krossdebug( QString("Install script package: %1").arg(scriptpackagefile) );
-    KTar archive( scriptpackagefile );
-    if(! archive.open(QIODevice::ReadOnly)) {
-        KMessageBox::sorry(0, i18n("Could not read the package \"%1\".", scriptpackagefile));
-        return false;
-    }
-    QByteArray partname = d->guiclient->instance()->instanceName();
-    QString destination = KGlobal::dirs()->saveLocation("data", partname + "/scripts/", true);
-    //QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts", true);
-    if(destination.isNull()) {
-        krosswarning("GUIClient::installScriptPackage() Failed to determinate location where the scriptpackage should be installed to!");
-        return false;
-    }
-    QString packagename = QFileInfo(scriptpackagefile).baseName();
-    destination += packagename; // add the packagename to the name of the destination-directory.
-    if( QDir(destination).exists() ) {
-        if( KMessageBox::warningContinueCancel(0,
-            i18n("A script package with the name \"%1\" already exists. Replace this package?" , packagename),
-            i18n("Replace")) != KMessageBox::Continue )
-                return false;
-        if(! KIO::NetAccess::del(destination, 0) ) {
-            KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".", destination));
-            return false;
-        }
-    }
-    krossdebug( QString("Copy script-package to destination directory: %1").arg(destination) );
-    const KArchiveDirectory* archivedir = archive.directory();
-    archivedir->copyTo(destination, true);
-    reloadInstalledScripts();
-    return true;
-}
-
 bool GUIClient::uninstallScriptPackage(const QString& scriptpackagepath)
 {
     if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
@@ -385,7 +353,7 @@ bool GUIClient::executeFile()
         mimetypes.append( it.value()->getMimeTypes().join(" ").trimmed() );
 
     KFileDialog* filedialog = new KFileDialog(
-        KUrl("kfiledialog:///KrossInstallPackage"), // startdir
+        KUrl("kfiledialog:///KrossExecuteScript"), // startdir
         mimetypes.join(" "), // filter
         0, // custom widget
         0 // parent
@@ -399,26 +367,6 @@ bool GUIClient::executeFile(const KUrl& file)
     krossdebug( QString("GUIClient::executeFile() file='%1'").arg(file.path()) );
     return executeAction( Action::Ptr( new Action(file) ) );
 }
-
-#if 0
-bool GUIClient::loadFile()
-{
-    KUrl url = openScriptFile( i18n("Load Script File") );
-    if(url.isValid()) {
-        ActionCollection* loadedcollection = d->collections["loadedscripts"];
-        if(loadedcollection) {
-            Action::Ptr action = Action::Ptr( new Action( url.path() ) );
-            connect(action.data(), SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-            connect(action.data(), SIGNAL( success() ), this, SLOT( successfullyExecuted() ));
-            connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
-            loadedcollection->detach(action);
-            loadedcollection->attach(action);
-            return true;
-        }
-    }
-    return false;
-}
-#endif
 
 bool GUIClient::executeAction(Action::Ptr action)
 {
@@ -477,7 +425,7 @@ bool GUIClient::installPackage(const KUrl& file)
     const QString interpreter = element.attribute("interpreter");
     const QString scriptfile = element.attribute("file");
 
-    if(name.isNull()) {
+    if(name.isNull() || name.contains(QRegExp("[^a-zA-Z0-9\\_\\-]"))) {
         KMessageBox::sorry(0, i18n("The install.xml file of the package \"%1\" does not define a valid package-name.", scriptpackagefile));
         return false;
     }

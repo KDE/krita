@@ -29,16 +29,16 @@ KoStyleManager::KoStyleManager(QObject *parent)
     : QObject(parent),
     m_updateTriggered(false)
 {
-    KoParagraphStyle *standard = new KoParagraphStyle();
-    standard->setLeftMargin(0);
-    standard->setTopMargin(0);
-    standard->setBottomMargin(0);
-    standard->setRightMargin(0);
-    standard->setTextIndent(0);
-    standard->setIndent(0);
-    standard->setAlignment(Qt::AlignLeft);
-    standard->setName( i18n("[No Paragraph Style]"));
-    add(standard);
+    m_standard = new KoParagraphStyle();
+    m_standard->setLeftMargin(0);
+    m_standard->setTopMargin(0);
+    m_standard->setBottomMargin(0);
+    m_standard->setRightMargin(0);
+    m_standard->setTextIndent(0);
+    m_standard->setIndent(0);
+    m_standard->setAlignment(Qt::AlignLeft);
+    m_standard->setName( i18n("[No Paragraph Style]"));
+    add(m_standard);
 /* for testing ;)
 KoParagraphStyle *a = new KoParagraphStyle();
 a->setName("A");
@@ -174,6 +174,9 @@ KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
     return 0;
 }
 
+KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const {
+    return m_standard;
+}
 
 // static
 int KoStyleManager::s_stylesNumber = 100;

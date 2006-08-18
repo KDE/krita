@@ -26,14 +26,26 @@
 #include <QTextCursor>
 
 KoParagraphStyle::KoParagraphStyle()
-    : m_charStyle(0),
+    : m_charStyle(new KoCharacterStyle(this)),
     m_parent(0),
     m_next(0)
 {
     m_stylesPrivate = new StylePrivate();
     setLineHeightPercent(120);
     setFontIndependentLineSpacing(true);
-    m_charStyle = new KoCharacterStyle(this);
+}
+
+KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
+    : QObject(0),
+    m_charStyle(new KoCharacterStyle(this)),
+    m_parent(0),
+    m_next(0)
+{
+    m_stylesPrivate = new StylePrivate();
+    m_stylesPrivate->copyMissing(orig.m_stylesPrivate);
+    m_name = orig.name();
+    m_charStyle = orig.m_charStyle;
+    m_next = orig.m_next;
 }
 
 KoParagraphStyle::~KoParagraphStyle() {

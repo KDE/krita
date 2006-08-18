@@ -46,6 +46,7 @@ public:
     KoParagraphStyle *paragraphStyle(int id) const;
     KoCharacterStyle *characterStyle(const QString &name) const;
     KoParagraphStyle *paragraphStyle(const QString &name) const;
+    KoParagraphStyle *defaultParagraphStyle() const;
 
 public slots:
     void alteredStyle(const KoParagraphStyle *style);
@@ -68,6 +69,9 @@ private:
 
     bool m_updateTriggered;
     QList<int> m_updateQueue;
+
+
+    KoParagraphStyle *m_standard;
 };
 
 #endif

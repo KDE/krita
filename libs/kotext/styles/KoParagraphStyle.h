@@ -50,6 +50,8 @@ public:
     };
 
     KoParagraphStyle();
+    /// Copy constructor
+    KoParagraphStyle(const KoParagraphStyle &orig);
     ~KoParagraphStyle();
 
     //  ***** Linespacing stuff from ODF ****

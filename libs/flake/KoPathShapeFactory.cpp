@@ -34,6 +34,7 @@ KoShape * KoPathShapeFactory::createDefaultShape() {
     path->moveTo( QPointF( 0, 10 ) );
     path->curveTo( QPointF( 0, 20 ), QPointF( 5, 20 ), QPointF( 5, 10 ) );
     path->curveTo( QPointF( 5, 0 ), QPointF( 10, 0 ), QPointF( 10, 10 ) );
+    path->normalize();
     path->setBorder( new KoLineBorder( 1.0 ) );
     path->setShapeId(shapeId());
     return path;

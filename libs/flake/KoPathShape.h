@@ -297,14 +297,21 @@ public:
      */
     void update() {}
 
+    /**
+     * @brief Normalizes the path data.
+     *
+     * The path points are transformed so that the top-left corner
+     * of the bounding rect is (0,0).
+     * This should be called after adding points to the path.
+     */
+    void normalize();
+
 protected:    
     void map( const QMatrix &matrix );
 
     void updateLast( KoPathPoint * lastPoint );
 
     void paintDebug( QPainter &painter );
-
-    const QPainterPath getPath( const QPointF &position ) const;
 
     /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
     typedef QList<KoPathPoint *> KoSubpath;

@@ -43,9 +43,15 @@ public:
 
 private:
     void repaint();
+    /// returns a handle rect at the given position
+    QRectF handleRect( const QPointF &p );
 
 private:
+    enum ActivePointType { Normal, ControlPoint1, ControlPoint2 };
     KoPathShape *m_pathShape;
+    KoPathPoint* m_activePoint;
+    int m_handleRadius;
+    ActivePointType m_activePointType;
 };
 
 #endif

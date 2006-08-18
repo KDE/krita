@@ -306,6 +306,13 @@ public:
      */
     void normalize();
 
+    /**
+     * @brief Returns the path points within the given rectangle.
+     * @param p the rectangle the requested points are in
+     * @return list of points within the rectangle
+     */
+    QList<KoPathPoint*> pointsAt( const QRectF &r );
+
 protected:    
     void map( const QMatrix &matrix );
 

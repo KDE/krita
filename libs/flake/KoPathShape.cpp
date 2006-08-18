@@ -358,3 +358,24 @@ void KoPathShape::updateLast( KoPathPoint * lastPoint )
     }
     lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CanHaveControlPoint2 );
 }
+
+QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
+{
+    QList<KoPathPoint*> result;
+
+    QList<KoSubpath>::iterator pathIt( m_points.begin() );
+    for ( ; pathIt != m_points.end(); ++pathIt )
+    {
+        KoSubpath::iterator it( ( *pathIt ).begin() );
+        for ( ; it != ( *pathIt ).end(); ++it )
+        {
+            if( r.contains( (*it)->point() ) )
+                result.append( *it );
+            else if( (*it)->properties() & KoPathPoint::HasControlPoint1 && r.contains( (*it)->controlPoint1() ) )
+                result.append( *it );
+            else if( (*it)->properties() & KoPathPoint::HasControlPoint2 && r.contains( (*it)->controlPoint2() ) )
+                result.append( *it );
+        }
+    }
+    return result;
+}

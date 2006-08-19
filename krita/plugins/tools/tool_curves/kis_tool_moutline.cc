@@ -630,13 +630,16 @@ void KisToolMagnetic::deactivate ()
 void KisToolMagnetic::keyPress(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control) {
-        m_editingMode = true;
-        m_mode->setText(i18n("Editing Mode"));
+        if (m_editingMode) {
+            m_editingMode = false;
+            m_mode->setText(i18n("Standard Mode"));
+        } else {
+            m_editingMode = true;
+            m_mode->setText(i18n("Editing Mode"));
+        }
     } else if (event->key() == Qt::Key_Delete) {
         draw();
         m_dragging = false;
-        m_editingMode = false;
-        m_mode->setText(i18n("Standard Mode"));
         if (m_curve->pivots().count() == 2)
             m_curve->clear();
         else {
@@ -647,11 +650,8 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
                 m_curve->deletePivot(m_current);
             draw();
         }
-    } else if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Return) {
-        m_editingMode = false;
-        m_mode->setText(i18n("Standard Mode"));
+    } else
         super::keyPress(event);
-    }
 }
 
 void KisToolMagnetic::buttonRelease(KisButtonReleaseEvent *event)
@@ -687,15 +687,6 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
             m_dragging = false;
         draw();
     }
-}
-
-void KisToolMagnetic::doubleClick (KisDoubleClickEvent *event)
-{
-    if (m_editingMode) {
-        m_editingMode = false;
-        m_mode->setText(i18n("Standard Mode"));
-    } else
-        super::doubleClick(event);
 }
 
 void KisToolMagnetic::move(KisMoveEvent *event)
@@ -751,9 +742,8 @@ KisCurve::iterator KisToolMagnetic::selectByMouse(const QPoint& pos)
 
 void KisToolMagnetic::slotCommitCurve ()
 {
-    m_editingMode = false;
-    m_mode->setText(i18n("Standard Mode"));
-    commitCurve();
+    if (!m_curve->isEmpty())
+        commitCurve();
 }
 
 QWidget* KisToolMagnetic::createOptionWidget(QWidget* parent)

@@ -80,7 +80,6 @@ public:
     virtual void keyPress(QKeyEvent*);
     virtual void buttonPress(KisButtonPressEvent*);
     virtual void buttonRelease(KisButtonReleaseEvent*);
-    virtual void doubleClick(KisDoubleClickEvent *event);
     virtual void move(KisMoveEvent*);
 
     virtual KisCurve::iterator selectByMouse(const QPoint&);

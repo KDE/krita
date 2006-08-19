@@ -241,11 +241,8 @@ public:
         CurveIterator it = *this;
         while (it != m_target->m_curve.end()) {
             it+=1;
-            kdDebug(0) << "PRIMA" << endl;
-            if ((*it).isPivot()) {
-                kdDebug(0) << "QUI" << endl;
+            if ((*it).isPivot())
                 return it;
-            }
         }
         return it;
     }

@@ -281,7 +281,7 @@ int KisToolCurve::updateOptions(int key)
     return m_actionOptions;
 }
 
-void KisToolCurve::draw()
+void KisToolCurve::draw(bool minimal)
 {
     KisCanvasPainter *gc;
     KisCanvasController *controller;
@@ -296,13 +296,21 @@ void KisToolCurve::draw()
     gc->setPen(m_drawingPen);
     gc->setRasterOp(Qt::XorROP);
 
-    KisCurve::iterator it = m_curve->begin();
+    KisCurve::iterator it, finish;
+    // FIXME This don't work and is deactivated by default
+    if (minimal && m_supportMinimalDraw && m_current != 0) {
+        it = m_current.previousPivot();
+        finish = m_current.nextPivot();
+    } else {
+        it = m_curve->begin();
+        finish = m_curve->end();
+    }
     while (it != m_curve->end()) {
         if ((*it).isPivot())
             drawPivotHandle (*gc, it);
         it = drawPoint (*gc, it);
     }
-        
+    
     delete gc;
 }
 

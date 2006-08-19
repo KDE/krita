@@ -649,8 +649,11 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
             if ((*m_current) == m_curve->last() && !(m_editingMode)) {
                 m_curve->deletePivot(m_current.previousPivot());
                 m_previous = m_current.previousPivot();
-            } else
+            } else {
+                m_editingMode = false;
                 m_curve->deletePivot(m_current);
+                m_editingMode = true;
+            }
             draw();
         }
     } else

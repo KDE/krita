@@ -81,19 +81,14 @@ protected:
     virtual KisCurve::iterator handleUnderMouse(const QPoint& pos);
 
     /*
-     * Check if the user clicked on the curve and select the needed points; call selectByHandle too
+     * Select the needed points; called after pointUnderMouse
      */
     virtual KisCurve::iterator selectByMouse(KisCurve::iterator it);
-    
-    /*
-     * Called by the previous, check if the click is on the handle of a pivot.
-     *
-    virtual KisCurve::iterator selectByHandle(const QPoint& pos);
-     */
+
     /*
      * draw() initializes the KisCanvasPainter and then loop on the points of the curve for drawing them.
      */
-    virtual void draw();
+    virtual void draw(bool = false);
 
     /*
      * Used by draw() to draw the current point of the curve. Can draw more than one point and then returns the last one

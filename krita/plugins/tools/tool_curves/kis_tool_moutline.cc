@@ -803,7 +803,7 @@ void KisToolMagnetic::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter manual editing mode, and double click for standard mode."));
+        m_action->setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual editing mode, and double click to finish."));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

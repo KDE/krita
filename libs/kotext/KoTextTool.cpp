@@ -155,12 +155,16 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     switch(event->key()) { // map input to moveOperation
         case Qt::Key_Backspace:
+            repaint();
+            useCursor(Qt::BlankCursor);
             m_caret.deletePreviousChar();
             break;
         case Qt::Key_Tab:
             kDebug(32500) << "Tab key pressed";
             break;
         case Qt::Key_Delete:
+            repaint();
+            useCursor(Qt::BlankCursor);
             m_caret.deleteChar();
             break;
         case Qt::Key_Left:

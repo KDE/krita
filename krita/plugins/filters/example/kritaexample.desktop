@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Invert Filter
+Name[x-test]=xxInvert Filterxx
 Comment=Invert the colors of an image
+Comment[x-test]=xxInvert the colors of an imagexx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaexample

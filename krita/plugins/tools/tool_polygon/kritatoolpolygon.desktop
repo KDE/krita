@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Polygon Tool
+Name[x-test]=xxPolygon Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolpolygon

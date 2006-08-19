@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita
+Name[x-test]=xxKritaxx
 Exec=krita %U
 DocPath=krita/index.html
 GenericName=Painting and Image Editing
+GenericName[x-test]=xxPainting and Image Editingxx
 MimeType=application/x-krita
 Comment=Edit and paint images
 Type=Application

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Histogram Docker
+Name[x-test]=xxHistogram Dockerxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritahistogramdocker

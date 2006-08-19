@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (32-bit float)
+Name[x-test]=xxRGB Color Model (32-bit float)xx
 Comment=Color model for 32-bit floating point per channel RGB images
+Comment[x-test]=xxColor model for 32-bit floating point per channel RGB imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-Pigment-Version=1

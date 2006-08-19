@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Emboss Filter
+Name[x-test]=xxEmboss Filterxx
 Comment=Emboss filter
+Comment[x-test]=xxEmboss filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaembossfilter

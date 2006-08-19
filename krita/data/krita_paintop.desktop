@@ -2,5 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Paintop
 Comment=Paint operation plugin for Krita
+Comment[x-test]=xxPaint operation plugin for Kritaxx
 [PropertyDef::X-Krita-Version]
 Type=int

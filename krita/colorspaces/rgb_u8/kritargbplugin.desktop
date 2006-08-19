@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model
+Name[x-test]=xxRGB Color Modelxx
 Comment=Color model for 8-bit/channel RGB images
+Comment[x-test]=xxColor model for 8-bit/channel RGB imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritargbplugin

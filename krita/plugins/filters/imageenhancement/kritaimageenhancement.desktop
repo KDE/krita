@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Enhancement Filters
+Name[x-test]=xxEnhancement Filtersxx
 Comment=Enhance the quality of an image
+Comment[x-test]=xxEnhance the quality of an imagexx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaimageenhancement

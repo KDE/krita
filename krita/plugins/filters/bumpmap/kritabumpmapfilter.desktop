@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Bumpmap Filter
+Name[x-test]=xxBumpmap Filterxx
 Comment=Bumpmap filter
+Comment[x-test]=xxBumpmap filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritabumpmap

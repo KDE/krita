@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Pixelize Filter
+Name[x-test]=xxPixelize Filterxx
 Comment=Pixelize filter
+Comment[x-test]=xxPixelize filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritapixelizefilter

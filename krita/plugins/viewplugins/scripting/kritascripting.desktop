@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Scripting plugin
+Name[x-test]=xxScripting pluginxx
 Comment=Allow execution of scripts
+Comment[x-test]=xxAllow execution of scriptsxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritascripting

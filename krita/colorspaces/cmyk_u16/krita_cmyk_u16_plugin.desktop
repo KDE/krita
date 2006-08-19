@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CMYK Color Model (16-bit integer)
+Name[x-test]=xxCMYK Color Model (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel CMYK images
+Comment[x-test]=xxColor model for 16-bit integer per channel CMYK imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=krita_cmyk_u16_plugin

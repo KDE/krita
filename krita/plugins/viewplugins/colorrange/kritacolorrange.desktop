@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Colorrange
+Name[x-test]=xxColorrangexx
 ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritacolorrange

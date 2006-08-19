@@ -4,5 +4,7 @@ Type=Link
 URL=.source/white_640x480.kra
 Icon=template_rgb_empty
 Name=White 640x480
+Name[x-test]=xxWhite 640x480xx
 Comment=Creates a white RGB image of 640 x 480 pixels.
+Comment[x-test]=xxCreates a white RGB image of 640 x 480 pixels.xx
 X-Krita-Version=2

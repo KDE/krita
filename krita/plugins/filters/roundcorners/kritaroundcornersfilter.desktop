@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Sobel Filter
+Name[x-test]=xxSobel Filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaroundcornersfilter

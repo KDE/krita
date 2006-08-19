@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CMYK Color Model
+Name[x-test]=xxCMYK Color Modelxx
 Comment=Color model for 8-bit/channel CMYK images
+Comment[x-test]=xxColor model for 8-bit/channel CMYK imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritacmykplugin

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Star Tool
+Name[x-test]=xxStar Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolstar

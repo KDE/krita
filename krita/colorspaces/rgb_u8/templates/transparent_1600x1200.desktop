@@ -4,5 +4,7 @@ Type=Link
 URL=.source/transparent_1600x1200.kra
 Icon=template_rgb_empty
 Name=Transparent 1600 x 1200
+Name[x-test]=xxTransparent 1600 x 1200xx
 Comment=Creates a transparent image of 1600 x 1200 pixels.
+Comment[x-test]=xxCreates a transparent image of 1600 x 1200 pixels.xx
 X-Krita-Version=2

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Grayscale Color Model (16-bit integer)
+Name[x-test]=xxGrayscale Color Model (16-bit integer)xx
 Comment=Color model for 16-bit integer per channel Grayscale images
+Comment[x-test]=xxColor model for 16-bit integer per channel Grayscale imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-Pigment-Version=1

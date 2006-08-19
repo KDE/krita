@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Select Similar Colors Tool
+Name[x-test]=xxSelect Similar Colors Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolselectsimilar

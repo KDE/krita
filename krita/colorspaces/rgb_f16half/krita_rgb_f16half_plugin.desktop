@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (16-bit float 'half')
+Name[x-test]=xxRGB Color Model (16-bit float 'half')xx
 Comment=Color model for 16-bit floating point 'half' per channel RGB images
+Comment[x-test]=xxColor model for 16-bit floating point 'half' per channel RGB imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=krita_rgb_f16half_plugin

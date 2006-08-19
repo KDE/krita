@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Invert Filter with Threads
+Name[x-test]=xxInvert Filter with Threadsxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritathreadtest

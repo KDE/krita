@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Smeary Brush
+Name[x-test]=xxSmeary Brushxx
 Comment=Smeary brush
+Comment[x-test]=xxSmeary brushxx
 ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasmearybrush

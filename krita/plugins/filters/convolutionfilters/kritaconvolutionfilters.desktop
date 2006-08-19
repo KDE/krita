@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Convolution Filters
+Name[x-test]=xxConvolution Filtersxx
 Comment=Convolution filters
+Comment[x-test]=xxConvolution filtersxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaconvolutionfilters

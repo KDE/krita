@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Wet & Sticky Paintbrush Paintop
+Name[x-test]=xxWet & Sticky Paintbrush Paintopxx
 Comment=Wet & Sticky paintbrush
+Comment[x-test]=xxWet & Sticky paintbrushxx
 ServiceTypes=Krita/ColorSpace
 Type=Service
 X-KDE-Library=kritawsbrushpaintop

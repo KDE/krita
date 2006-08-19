@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Filter Tool
+Name[x-test]=xxFilter Toolxx
 Comment=Filter tool and paint operation
+Comment[x-test]=xxFilter tool and paint operationxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolfilter

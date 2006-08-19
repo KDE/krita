@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Wet & Sticky Canvas Color Model
+Name[x-test]=xxWet & Sticky Canvas Color Modelxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=kritawsplugin

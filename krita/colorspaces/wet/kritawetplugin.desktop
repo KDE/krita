@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Watercolor Paint Plugin
+Name[x-test]=xxWatercolor Paint Pluginxx
 Comment=Color model and tools for painting with simulated watercolors
+Comment[x-test]=xxColor model and tools for painting with simulated watercolorsxx
 ServiceTypes=KOffice/ColorSpace,Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritawetplugin

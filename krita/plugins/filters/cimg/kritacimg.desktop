@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CImg Image Restoration Filter
+Name[x-test]=xxCImg Image Restoration Filterxx
 Comment=CImg Image restoration filter
+Comment[x-test]=xxCImg Image restoration filterxx
 ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacimg

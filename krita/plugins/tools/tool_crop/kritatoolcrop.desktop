@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Crop Tool
+Name[x-test]=xxCrop Toolxx
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolcrop

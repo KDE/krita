@@ -180,8 +180,9 @@ public:
             dcol = m_pos.x() + x[i];
             drow = m_pos.y() + y[i];
             tmpdist = QPoint(dcol,drow) - end.pos();
-            if (dcol == (int)src.count() || dcol < 0 ||
-                drow == (int)src[0].count() || drow < 0)
+            // I use src[0] here because all cols have same number of rows
+            if (dcol >= (int)src.count() || dcol < 0 ||
+                drow >= (int)src[0].count() || drow < 0)
                 continue;
             if (src[dcol][drow])
                 malus = false;

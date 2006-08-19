@@ -661,7 +661,8 @@ void KisToolMagnetic::buttonRelease(KisButtonReleaseEvent *event)
     if (m_editingMode) {
         draw();
         m_editingMode = false;
-        m_curve->movePivot(m_current, (*m_current).point());
+        if (!m_curve->isEmpty())
+            m_curve->movePivot(m_current, m_currentPoint);
         m_editingMode = true;
         draw();
     }

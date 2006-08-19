@@ -100,6 +100,8 @@ private:
     QWidget* m_optWidget;
     QLabel* m_mode;
     bool m_editingMode;
+    bool m_editingCursor;
+    bool m_draggingCursor;
 
 };
 

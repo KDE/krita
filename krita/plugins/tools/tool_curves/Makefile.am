@@ -47,7 +47,9 @@ kritapics_DATA = \
 	tool_bezier_select.png \
 	tool_bezier_cursor.png \
 	tool_moutline.png \
-	tool_moutline_cursor.png
+	tool_moutline_cursor.png \
+	tool_moutline_editing.png \
+	tool_moutline_dragging.png
 
 kritapicsdir = $(kde_datadir)/krita/pics
 

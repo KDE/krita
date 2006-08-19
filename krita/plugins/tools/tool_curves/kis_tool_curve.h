@@ -35,6 +35,8 @@ class QRect;
 class KisPainter;
 class KisSelectionOptions;
 
+typedef QPair<KisCurve::iterator,bool> PointPair;
+
 const double MAXDISTANCE = 2.5;
 double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPoint& l1);
 
@@ -75,16 +77,19 @@ protected:
      */
     virtual int updateOptions(int);
 
+    virtual PointPair pointUnderMouse(const QPoint& pos);
+    virtual KisCurve::iterator handleUnderMouse(const QPoint& pos);
+
     /*
      * Check if the user clicked on the curve and select the needed points; call selectByHandle too
      */
-    virtual KisCurve::iterator selectByMouse(const QPoint& pos);
+    virtual KisCurve::iterator selectByMouse(KisCurve::iterator it);
     
     /*
      * Called by the previous, check if the click is on the handle of a pivot.
-     */
+     *
     virtual KisCurve::iterator selectByHandle(const QPoint& pos);
-
+     */
     /*
      * draw() initializes the KisCanvasPainter and then loop on the points of the curve for drawing them.
      */

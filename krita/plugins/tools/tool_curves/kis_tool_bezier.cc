@@ -276,7 +276,7 @@ KisToolBezier::~KisToolBezier()
 
 }
 
-KisCurve::iterator KisToolBezier::selectByHandle(const QPoint& pos)
+KisCurve::iterator KisToolBezier::handleUnderMouse(const QPoint& pos)
 {
     QPoint qpos;
     KisCurve pivs = m_curve->pivots(), inHandle;
@@ -300,7 +300,7 @@ KisCurve::iterator KisToolBezier::selectByHandle(const QPoint& pos)
     if (inHandle.isEmpty())
         return m_curve->end();
 
-    return m_curve->selectPivot(inHandle.last());
+    return m_curve->find(inHandle.last());
 }
 
 KisCurve::iterator KisToolBezier::drawPoint (KisCanvasPainter& gc, KisCurve::iterator point)

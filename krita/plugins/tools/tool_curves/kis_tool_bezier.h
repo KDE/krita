@@ -84,7 +84,7 @@ public:
 
 protected:
 
-    virtual KisCurve::iterator selectByHandle(const QPoint& pos);
+    virtual KisCurve::iterator handleUnderMouse(const QPoint& pos);
     virtual void drawPivotHandle(KisCanvasPainter& gc, KisCurve::iterator point);
     virtual KisCurve::iterator drawPoint(KisCanvasPainter& gc, KisCurve::iterator point);
 

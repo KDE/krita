@@ -118,14 +118,21 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
         draw();
         m_dragging = true;
         m_currentPoint = event->pos();
-        m_current = selectByMouse (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
-        if (m_current == m_curve->end() && !(m_actionOptions)) {
+        PointPair temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+        if (temp.first == m_curve->end() && !(m_actionOptions)) {
             m_previous = m_curve->find(m_curve->last());
             m_current = m_curve->pushPivot(event->pos());
             if (m_curve->pivots().count() > 1)
                 m_curve->calculateCurve(m_previous,m_current,m_current);
-        } else if (!(*m_current).isSelected())
-            m_dragging = false;
+        } else {
+            if (temp.second)
+                m_current = m_curve->selectPivot(temp.first);
+            else
+                m_current = selectByMouse(temp.first);
+                
+            if (!(*m_current).isSelected())
+                m_dragging = false;
+        }
         draw();
     }
 }
@@ -197,18 +204,18 @@ double pointToSegmentDistance(const KisPoint& p, const KisPoint& l0, const KisPo
     return distance;
 }
 
-KisCurve::iterator KisToolCurve::selectByMouse(const QPoint& pos)
+PointPair KisToolCurve::pointUnderMouse(const QPoint& pos)
 {
-    KisCurve::iterator it, next, prevPivot, nextPivot;
+    KisCurve::iterator it, next;
     QPoint pos1, pos2;
-    it = selectByHandle(pos);
+    it = handleUnderMouse(pos);
     if (it != m_curve->end())
-        return it;
+        return PointPair(it,true);
 
     for (it = m_curve->begin(); it != m_curve->end(); it++) {
         next = it.next();
         if (next == m_curve->end() || it == m_curve->end())
-            return m_curve->end();
+            return PointPair(m_curve->end(),false);
         if ((*it).hint() > LINEHINT || (*next).hint() > LINEHINT)
             continue;
         pos1 = m_subject->canvasController()->windowToView((*it).point().toQPoint());
@@ -218,6 +225,26 @@ KisCurve::iterator KisToolCurve::selectByMouse(const QPoint& pos)
         if (pointToSegmentDistance(pos,pos1,pos2) <= MAXDISTANCE)
             break;
     }
+
+    return PointPair(it,false);
+}
+
+KisCurve::iterator KisToolCurve::handleUnderMouse(const QPoint& pos)
+{
+    KisCurve pivs = m_curve->pivots(), inHandle;
+    KisCurve::iterator it;
+    for (it = pivs.begin(); it != pivs.end(); it++) {
+        if (pivotRect(m_subject->canvasController()->windowToView((*it).point().toQPoint())).contains(pos))
+            inHandle.pushPoint((*it));
+    }
+    if (inHandle.isEmpty())
+        return m_curve->end();
+    return m_curve->find(inHandle.last());
+}
+
+KisCurve::iterator KisToolCurve::selectByMouse(KisCurve::iterator it)
+{
+    KisCurve::iterator prevPivot, nextPivot;
 
     if ((*it).isPivot())
         prevPivot = it;
@@ -229,19 +256,6 @@ KisCurve::iterator KisToolCurve::selectByMouse(const QPoint& pos)
     (*nextPivot).setSelected(true);
 
     return prevPivot;
-}
-
-KisCurve::iterator KisToolCurve::selectByHandle(const QPoint& pos)
-{
-    KisCurve pivs = m_curve->pivots(), inHandle;
-    KisCurve::iterator it;
-    for (it = pivs.begin(); it != pivs.end(); it++) {
-        if (pivotRect(m_subject->canvasController()->windowToView((*it).point().toQPoint())).contains(pos))
-            inHandle.pushPoint((*it));
-    }
-    if (inHandle.isEmpty())
-        return m_curve->end();
-    return m_curve->selectPivot(inHandle.last());
 }
 
 int KisToolCurve::updateOptions(int key)

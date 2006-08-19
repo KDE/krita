@@ -592,6 +592,7 @@ KisToolMagnetic::KisToolMagnetic ()
     setCursor(KisCursor::load("tool_moutline_cursor.png", 6, 6));
 
     m_editingMode = false;
+    m_editingCursor = m_draggingCursor = false;
     m_mode = 0;
     m_derived = 0;
     m_curve = 0;
@@ -694,8 +695,28 @@ void KisToolMagnetic::move(KisMoveEvent *event)
     updateOptions(event->state());
     if (m_curve->selectedPivots().isEmpty())
         return;
-    if (!m_dragging && m_editingMode)
-        return;
+    if (m_editingMode) {
+        PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+        if (temp.first == m_curve->end()) {
+            if (m_editingCursor || m_draggingCursor) {
+                setCursor(KisCursor::load("tool_moutline_cursor.png", 6, 6));
+                m_editingCursor = m_draggingCursor = false;
+            }
+        } else {
+            if (!m_draggingCursor && temp.second) {
+                setCursor(KisCursor::load("tool_moutline_dragging.png", 6, 6));
+                m_editingCursor = false;
+                m_draggingCursor = true;
+            }
+            if (!m_editingCursor && !temp.second) {
+                setCursor(KisCursor::load("tool_moutline_editing.png", 6, 6));
+                m_editingCursor = true;
+                m_draggingCursor = false;
+            }
+        }
+        if (!m_dragging)
+            return;
+    }
     if (m_currentPoint == event->pos().floorQPoint())
         return;
     draw();
@@ -714,9 +735,9 @@ KisCurve::iterator KisToolMagnetic::selectByMouse(const QPoint& pos)
     KisCurve::iterator it, next, currPivot, nextPivot;
     QPoint currPos = m_subject->canvasController()->windowToView(pos);
     QPoint pos1, pos2;
-    it = selectByHandle(currPos);
+    it = handleUnderMouse(currPos);
     if (it != m_curve->end())
-        return it;
+        return m_curve->selectPivot(it);
 
     for (it = m_curve->begin(); it != m_curve->end(); it++) {
         next = it.next();

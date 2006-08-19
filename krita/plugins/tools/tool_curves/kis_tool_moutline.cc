@@ -270,7 +270,7 @@ KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
 KisCurveMagnetic::KisCurveMagnetic (KisToolMagnetic *parent)
     : m_parent(parent)
 {
-    standardkeepselected = false;
+    m_standardkeepselected = false;
 }
 
 KisCurveMagnetic::~KisCurveMagnetic ()
@@ -298,7 +298,7 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
 {
     if (p1 == m_curve.end() || p2 == m_curve.end()) // It happens sometimes, for example on the first click
         return;
-    if (m_actionOptions & CANSELECTOPTION)
+    if (m_parent->editingMode())
         return;
     QPoint start = (*p1).point().roundQPoint();
     QPoint end = (*p2).point().roundQPoint();
@@ -589,6 +589,7 @@ KisToolMagnetic::KisToolMagnetic ()
     setName("tool_moutline");
     setCursor(KisCursor::load("tool_moutline_cursor.png", 6, 6));
 
+    m_editingMode = false;
     m_derived = 0;
     m_curve = 0;
 
@@ -625,29 +626,35 @@ void KisToolMagnetic::deactivate ()
 
 void KisToolMagnetic::keyPress(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Delete) {
+    if (event->key() == Qt::Key_Control) {
+        m_editingMode = true;
+    } else if (event->key() == Qt::Key_Delete) {
         draw();
         m_dragging = false;
+        m_editingMode = false;
         if (m_curve->pivots().count() == 2)
             m_curve->clear();
         else {
-            if ((*m_current) == m_curve->last() && !(m_actionOptions & CANSELECTOPTION)) {
+            if ((*m_current) == m_curve->last() && !(m_editingMode)) {
                 m_curve->deletePivot(m_current.previousPivot());
                 m_previous = m_current.previousPivot();
             } else
                 m_curve->deletePivot(m_current);
             draw();
         }
-    } else
+    } else if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Return) {
+        m_editingMode = false;
         super::keyPress(event);
+    }
 }
 
 void KisToolMagnetic::buttonRelease(KisButtonReleaseEvent *event)
 {
-    if (m_actionOptions & CANSELECTOPTION) {
+    if (m_editingMode) {
         draw();
-        super::updateOptions(0);
+        m_editingMode = false;
         m_curve->movePivot(m_current, (*m_current).point());
+        m_editingMode = true;
         draw();
     }
     super::buttonRelease(event);
@@ -663,7 +670,7 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
         m_dragging = true;
         m_currentPoint = event->pos().floorQPoint();
         m_current = m_curve->end();
-        if (m_actionOptions & CANSELECTOPTION)
+        if (m_editingMode)
             m_current = selectByMouse (event->pos().toQPoint());
         if (m_current == m_curve->end() && !(m_actionOptions)) {
             m_previous = m_curve->find(m_curve->last());
@@ -676,12 +683,20 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
     }
 }
 
+void KisToolMagnetic::doubleClick (KisDoubleClickEvent *event)
+{
+    if (m_editingMode)
+        m_editingMode = false;
+    else
+        super::doubleClick(event);
+}
+
 void KisToolMagnetic::move(KisMoveEvent *event)
 {
     updateOptions(event->state());
     if (m_curve->selectedPivots().isEmpty())
         return;
-    if (!m_dragging && (m_actionOptions & CANSELECTOPTION))
+    if (!m_dragging && m_editingMode)
         return;
     if (m_currentPoint == event->pos().floorQPoint())
         return;
@@ -689,13 +704,13 @@ void KisToolMagnetic::move(KisMoveEvent *event)
     KisPoint trans = event->pos() - m_currentPoint;
     KisPoint dist;
     dist = (*m_current).point() - (*m_current.previousPivot()).point();
-    if ((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_actionOptions & CANSELECTOPTION))
+    if ((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_editingMode))
         m_previous = m_curve->addPivot(m_current,event->pos());
     m_curve->movePivot(m_current,event->pos());
     m_currentPoint = event->pos().floorQPoint();
     draw();
 }
-
+/*
 int KisToolMagnetic::updateOptions (int keys)
 {
     int m_oldOptions = m_actionOptions;
@@ -708,7 +723,7 @@ int KisToolMagnetic::updateOptions (int keys)
     }
     return m_actionOptions;
 }
-
+*/
 KisCurve::iterator KisToolMagnetic::selectByMouse(const QPoint& pos)
 {
     KisCurve::iterator it, next, currPivot, nextPivot;
@@ -756,7 +771,7 @@ void KisToolMagnetic::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Magnetic Selection: move around the edge to select it, click to manually add points and keep Ctrl pressed to modify the curve"));
+        m_action->setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter manual editing mode, and double click for standard mode."));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

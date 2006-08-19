@@ -165,7 +165,7 @@ KisCurve::iterator KisCurve::selectPivot(const CurvePoint& pt, bool isSelected)
 KisCurve::iterator KisCurve::selectPivot(KisCurve::iterator it, bool isSelected)
 {
     bool sel = false;
-    if (standardkeepselected) {
+    if (m_standardkeepselected) {
         if (m_actionOptions & KEEPSELECTEDOPTION)
             sel = true;
     }

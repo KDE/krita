@@ -25,8 +25,6 @@
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
-const int CANSELECTOPTION = CONTROLOPTION;
-
 class KisToolMagnetic;
 class KisVector2D;
 class Node;
@@ -82,10 +80,12 @@ public:
     virtual void keyPress(QKeyEvent*);
     virtual void buttonPress(KisButtonPressEvent*);
     virtual void buttonRelease(KisButtonReleaseEvent*);
+    virtual void doubleClick(KisDoubleClickEvent *event);
     virtual void move(KisMoveEvent*);
 
-    virtual int updateOptions (int);
     virtual KisCurve::iterator selectByMouse(const QPoint&);
+
+    bool editingMode() {return m_editingMode;}
 
 public slots:
 
@@ -95,6 +95,7 @@ public slots:
 private:
 
     KisCurveMagnetic *m_derived;
+    bool m_editingMode;
 
 };
 

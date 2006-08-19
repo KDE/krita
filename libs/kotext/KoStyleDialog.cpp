@@ -242,6 +242,10 @@ void KoStyleDialog::addGeneralTab( int flags ) {
         d->cbIncludeInTOC = 0;
     }
 
+    /*i18n: This is a test text.
+      ("The quick brown fox jumps over the lazy dog" contains all
+      standard Latin characters from A to Z.)
+    */
     d->preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog. And, what about the cat, one may ask? Well, the cat is playing cards with the mouse, the bird and the fish. It is, to say the least a hell of a party!" ), tab );
 
     tabLayout->addMultiCellWidget( d->preview, row, row, 0, 1 );

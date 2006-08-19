@@ -634,6 +634,7 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
     if (event->key() == Qt::Key_Control) {
         if (m_editingMode) {
             m_editingMode = false;
+            m_curve->selectPivot(m_current,false);
             m_mode->setText(i18n("Standard Mode"));
         } else {
             m_editingMode = true;

@@ -695,9 +695,11 @@ void KisToolMagnetic::move(KisMoveEvent *event)
     updateOptions(event->state());
     if (m_curve->selectedPivots().isEmpty())
         return;
+    if (m_currentPoint == event->pos().floorQPoint())
+        return;
     if (m_editingMode) {
         PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos().toQPoint()));
-        if (temp.first == m_curve->end()) {
+        if (temp.first == m_curve->end() && !m_dragging) {
             if (m_editingCursor || m_draggingCursor) {
                 setCursor(KisCursor::load("tool_moutline_cursor.png", 6, 6));
                 m_editingCursor = m_draggingCursor = false;
@@ -717,8 +719,6 @@ void KisToolMagnetic::move(KisMoveEvent *event)
         if (!m_dragging)
             return;
     }
-    if (m_currentPoint == event->pos().floorQPoint())
-        return;
     draw();
     KisPoint trans = event->pos() - m_currentPoint;
     KisPoint dist;

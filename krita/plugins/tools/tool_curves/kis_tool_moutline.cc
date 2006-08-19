@@ -24,6 +24,8 @@
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qrect.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -590,6 +592,7 @@ KisToolMagnetic::KisToolMagnetic ()
     setCursor(KisCursor::load("tool_moutline_cursor.png", 6, 6));
 
     m_editingMode = false;
+    m_mode = 0;
     m_derived = 0;
     m_curve = 0;
 
@@ -598,8 +601,8 @@ KisToolMagnetic::KisToolMagnetic ()
 
 KisToolMagnetic::~KisToolMagnetic ()
 {
-    delete m_derived;
     m_curve = 0;
+    delete m_derived;
 }
 
 void KisToolMagnetic::update (KisCanvasSubject *subject)
@@ -628,10 +631,12 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control) {
         m_editingMode = true;
+        m_mode->setText(i18n("Editing Mode"));
     } else if (event->key() == Qt::Key_Delete) {
         draw();
         m_dragging = false;
         m_editingMode = false;
+        m_mode->setText(i18n("Standard Mode"));
         if (m_curve->pivots().count() == 2)
             m_curve->clear();
         else {
@@ -644,6 +649,7 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
         }
     } else if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Return) {
         m_editingMode = false;
+        m_mode->setText(i18n("Standard Mode"));
         super::keyPress(event);
     }
 }
@@ -672,7 +678,7 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
         m_current = m_curve->end();
         if (m_editingMode)
             m_current = selectByMouse (event->pos().toQPoint());
-        if (m_current == m_curve->end() && !(m_actionOptions)) {
+        if (m_current == m_curve->end() && !m_actionOptions) {
             m_previous = m_curve->find(m_curve->last());
             m_current = m_curve->pushPivot(event->pos());
             if (m_curve->pivots().count() > 1)
@@ -685,9 +691,10 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
 
 void KisToolMagnetic::doubleClick (KisDoubleClickEvent *event)
 {
-    if (m_editingMode)
+    if (m_editingMode) {
         m_editingMode = false;
-    else
+        m_mode->setText(i18n("Standard Mode"));
+    } else
         super::doubleClick(event);
 }
 
@@ -710,20 +717,7 @@ void KisToolMagnetic::move(KisMoveEvent *event)
     m_currentPoint = event->pos().floorQPoint();
     draw();
 }
-/*
-int KisToolMagnetic::updateOptions (int keys)
-{
-    int m_oldOptions = m_actionOptions;
-    super::updateOptions(keys);
-    if ((m_oldOptions & CANSELECTOPTION) &&
-        !(m_actionOptions & CANSELECTOPTION)) {
-        draw();
-        m_curve->selectPivot(m_current,false);
-        draw();
-    }
-    return m_actionOptions;
-}
-*/
+
 KisCurve::iterator KisToolMagnetic::selectByMouse(const QPoint& pos)
 {
     KisCurve::iterator it, next, currPivot, nextPivot;
@@ -753,6 +747,32 @@ KisCurve::iterator KisToolMagnetic::selectByMouse(const QPoint& pos)
     m_curve->movePivot(currPivot,pos);
 
     return currPivot;
+}
+
+void KisToolMagnetic::slotCommitCurve ()
+{
+    m_editingMode = false;
+    m_mode->setText(i18n("Standard Mode"));
+    commitCurve();
+}
+
+QWidget* KisToolMagnetic::createOptionWidget(QWidget* parent)
+{
+    m_optWidget = super::createOptionWidget(parent);
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    QHBoxLayout * hbox = new QHBoxLayout(l);
+    Q_CHECK_PTR(hbox);
+
+    hbox->setSpacing(6);
+
+    m_mode = new QLabel(i18n("Standard mode"), m_optWidget);
+    hbox->addWidget(m_mode);
+
+    QPushButton *finish = new QPushButton(i18n("Finish selection"), m_optWidget);
+    hbox->addWidget(finish);
+    connect(finish, SIGNAL(clicked()), this, SLOT(slotCommitCurve()));
+
+    return m_optWidget;
 }
 
 void KisToolMagnetic::setup(KActionCollection *collection)

@@ -352,7 +352,7 @@ void KisToolCurve::commitCurve()
     else if (toolType() == TOOL_SELECT)
         selectCurve();
     else
-        kdDebug(0) << "NO SUPPORT FOR THIS TOOL TYPE" << endl;
+        kdDebug(0) << "NO SUPPORT FOR THIS TYPE OF TOOL" << endl;
 
     m_curve->clear();
     m_curve->endActionOptions();

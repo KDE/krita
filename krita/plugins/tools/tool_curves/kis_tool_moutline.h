@@ -86,15 +86,20 @@ public:
     virtual KisCurve::iterator selectByMouse(const QPoint&);
 
     bool editingMode() {return m_editingMode;}
+    virtual QWidget* createOptionWidget(QWidget* parent);
 
 public slots:
 
     virtual void activate ();
     virtual void deactivate ();
 
+    void slotCommitCurve ();
+
 private:
 
     KisCurveMagnetic *m_derived;
+    QWidget* m_optWidget;
+    QLabel* m_mode;
     bool m_editingMode;
 
 };

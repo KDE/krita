@@ -737,11 +737,15 @@ QVariant KisLayer::data(const QModelIndex &index, int role) const
         case Qt::DisplayRole: return layer->name();
         case Qt::DecorationRole: return layer->icon();
         case Qt::EditRole: return layer->name();
-        case ThumbnailRole: return layer->createThumbnail(64, 64);
-        case LargeThumbnailRole: return layer->createThumbnail(200, 200);
-        case PropertiesRole: return QVariant::fromValue(layer->properties());
+        case Qt::SizeHintRole: return layer->image().size();
         case ActiveRole: return layer->isActive();
-        default: return QVariant(); //TODO
+        case PropertiesRole: return QVariant::fromValue(layer->properties());
+        case AspectRatioRole: return double(layer->image()->width()) / layer->image()->height();
+        default:
+            if (role >= int(BeginThumbnailRole))
+                return layer->createThumbnail(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole));
+            else
+                return QVariant();
     }
 }
 

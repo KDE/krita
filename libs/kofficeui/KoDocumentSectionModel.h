@@ -37,20 +37,17 @@ class KoDocumentSectionModel: public QAbstractItemModel
     /// Extensions to Qt::ItemDataRole.
     enum ItemDataRole
     {
-        /// A thumbnail for displaying in a list. Probably 64x64.
-        ThumbnailRole = 33,
-
-        /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
-        LargeThumbnailRole,
-
-        /// The complete image, for generating thumbnails of arbitrary size.
-        ImageRole,
+        /// Whether the section is the active one
+        ActiveRole = 33,
 
         /// A list of properties the part has.
         PropertiesRole,
 
-        /// Whether the section is the active one
-        ActiveRole
+        /// The aspect ratio of the section as a floating point value: width divided by height.
+        AspectRatioRole,
+
+        /// For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension is larger than (int) value - (int) BeginThumbnailRole. This is a hack to work around the fact that Interview doesn't have a nice way to request thumbnails of arbitrary size.
+        BeginThumbnailRole
     };
 
     /// describes a single property of a document section

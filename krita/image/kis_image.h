@@ -203,6 +203,7 @@ public:
 
     qint32 width() const;
     qint32 height() const;
+    QSize size() const { return QSize( width(), height() ); }
 
     bool empty() const;
 

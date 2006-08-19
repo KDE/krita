@@ -33,8 +33,9 @@ class KoDocumentSectionView::Private
 {
     public:
         KoDocumentSectionDelegate *delegate;
+        DisplayMode mode;
         QPersistentModelIndex hovered;
-        Private(): delegate( 0 ) { }
+        Private(): delegate( 0 ), mode( DetailedMode ) { }
 };
 
 KoDocumentSectionView::KoDocumentSectionView( QWidget *parent )
@@ -43,12 +44,27 @@ KoDocumentSectionView::KoDocumentSectionView( QWidget *parent )
 {
     d->delegate = new KoDocumentSectionDelegate( this, this );
     setMouseTracking( true );
+    setVerticalScrollMode( ScrollPerPixel );
     header()->hide();
 }
 
 KoDocumentSectionView::~KoDocumentSectionView()
 {
     delete d;
+}
+
+void KoDocumentSectionView::setDisplayMode( DisplayMode mode )
+{
+    if( d->mode != mode )
+    {
+        d->mode = mode;
+        scheduleDelayedItemsLayout();
+    }
+}
+
+KoDocumentSectionView::DisplayMode KoDocumentSectionView::displayMode() const
+{
+    return d->mode;
 }
 
 void KoDocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &index )
@@ -64,39 +80,26 @@ void KoDocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &
         }
 }
 
-bool KoDocumentSectionView::event( QEvent *e )
-{
-    if( model() )
-    {
-        switch( e->type() )
-        {
-            case QEvent::Leave:
-            {
-                QEvent e( QEvent::Leave );
-                d->delegate->editorEvent( &e, model(), optionForIndex( d->hovered ), d->hovered );
-                d->hovered = QModelIndex();
-            } break;
-            case QEvent::MouseButtonPress:
-            {
-                const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
-                if( !indexAt( pos ).isValid() )
-                    return super::event( e );
-                QModelIndex index = model()->buddy( indexAt( pos ) );
-                return d->delegate->editorEvent( e, model(), optionForIndex( index ), index );
-            } break;
-            default: break;
-        }
-    }
-
-    return super::event( e );
-}
-
 bool KoDocumentSectionView::viewportEvent( QEvent *e )
 {
     if( model() )
     {
         switch( e->type() )
         {
+            case QEvent::MouseButtonPress:
+            {
+                const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
+                if( !indexAt( pos ).isValid() )
+                    return super::viewportEvent( e );
+                QModelIndex index = model()->buddy( indexAt( pos ) );
+                return d->delegate->editorEvent( e, model(), optionForIndex( index ), index );
+            } break;
+            case QEvent::Leave:
+            {
+                QEvent e( QEvent::Leave );
+                d->delegate->editorEvent( &e, model(), optionForIndex( d->hovered ), d->hovered );
+                d->hovered = QModelIndex();
+            } break;
             case QEvent::MouseMove:
             {
                 const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
@@ -123,6 +126,10 @@ bool KoDocumentSectionView::viewportEvent( QEvent *e )
                     return super::viewportEvent( e );
                 QModelIndex index = model()->buddy( indexAt( pos ) );
                 return d->delegate->editorEvent( e, model(), optionForIndex( index ), index );
+            } break;
+            case QEvent::Resize:
+            {
+                scheduleDelayedItemsLayout();
             } break;
             default: break;
         }

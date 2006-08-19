@@ -61,6 +61,8 @@ public:
     void setUpdatesAndSignalsEnabled(bool enable);
     void setImage(KisImageSP image);
 
+    virtual bool eventFilter(QObject *object, QEvent *event);
+
 public slots:
     void slotSetCompositeOp(const KoCompositeOp& compositeOp);
     void slotSetOpacity(int opacity);
@@ -83,6 +85,10 @@ private:
 private slots:
     void slotContextMenuRequested( const QPoint &pos, const QModelIndex &index );
 
+    void slotMinimalView();
+    void slotDetailedView();
+    void slotThumbnailView();
+
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
@@ -99,6 +105,7 @@ private:
     void getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above);
     QModelIndexList selectedLayers() const;
 
+    KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
     KoPartSelectAction *m_partLayerAction;
     KisImageSP m_image;

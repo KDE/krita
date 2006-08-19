@@ -57,6 +57,10 @@
               </property>
             </widget>
           </item>
+          <item>
+              <widget class="QToolButton" name="bnViewMode" >
+              </widget>
+          </item>
         </layout>
       </item>
       <item>

@@ -19,11 +19,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QtDebug>
 #include <QToolButton>
 #include <QBrush>
 #include <QFont>
 #include <QFontMetrics>
 #include <QLayout>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPoint>
 #include <QRect>
@@ -72,32 +74,52 @@ KisLayerBox::KisLayerBox(QWidget *parent, const char *name)
     setMinimumSize(m_lst->minimumSizeHint());
     vbox->addWidget(m_lst);
 
+    m_lst->listLayers->viewport()->installEventFilter(this);
     connect(m_lst->listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
-            this, SLOT( slotContextMenuRequested(const QPoint&, const QModelIndex&)));
+            this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
 
-    m_lst->bnAdd->setToolTip( i18n("Create new layer"));
+    m_viewModeMenu = new KMenu( this );
+    QActionGroup *group = new QActionGroup( this );
+    QList<QAction*> actions;
+    actions << m_viewModeMenu->addAction(KIcon("view_text"),
+               i18n("Minimal View"), this, SLOT(slotMinimalView()));
+    actions << m_viewModeMenu->addAction(KIcon("view_detailed"),
+               i18n("Detailed View"), this, SLOT(slotDetailedView()));
+    actions << m_viewModeMenu->addAction(KIcon("view_icon"),
+               i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
+    for( int i = 0, n = actions.count(); i < n; ++i )
+    {
+        actions[i]->setCheckable( true );
+        actions[i]->setActionGroup( group );
+    }
+    actions[1]->trigger(); //TODO save/load previous state
 
-    m_lst->bnDelete->setToolTip( i18n("Remove current layer"));
+    m_lst->bnViewMode->setMenu(m_viewModeMenu);
+    m_lst->bnViewMode->setPopupMode(QToolButton::InstantPopup);
+    m_lst->bnViewMode->setIcon(KIcon("view_choose"));
+    m_lst->bnViewMode->setText(i18n("View mode"));
 
-    m_lst->bnRaise->setToolTip( i18n("Raise current layer"));
+    m_lst->bnAdd->setToolTip(i18n("Create new layer"));
+
+    m_lst->bnDelete->setToolTip(i18n("Remove current layer"));
+
+    m_lst->bnRaise->setToolTip(i18n("Raise current layer"));
     m_lst->bnRaise->setEnabled(false);
 
     m_lst->bnLower->setEnabled(false);
-    m_lst->bnLower->setToolTip( i18n("Lower current layer"));
+    m_lst->bnLower->setToolTip(i18n("Lower current layer"));
 
-    m_lst->bnProperties->setToolTip( i18n("Properties for layer"));
-
-    KIconLoader il( "krita" );
+    m_lst->bnProperties->setToolTip(i18n("Properties for layer"));
 
     m_newLayerMenu = new KMenu(this);
     m_lst->bnAdd->setMenu(m_newLayerMenu);
     m_lst->bnAdd->setPopupMode(QToolButton::InstantPopup);
 
-    m_newLayerMenu->addAction(SmallIconSet( "filenew" ), i18n( "&New Layer..." ), this, SLOT(slotNewLayer()));
-    m_newLayerMenu->addAction(SmallIconSet( "folder" ), i18n( "New &Group Layer..." ), this, SLOT(slotNewGroupLayer()));
-    m_newLayerMenu->addAction(SmallIconSet( "tool_filter" ), i18n( "New &Adjustment Layer..." ), this, SLOT(slotNewAdjustmentLayer()));
+    m_newLayerMenu->addAction(SmallIconSet("filenew"), i18n("&New Layer..."), this, SLOT(slotNewLayer()));
+    m_newLayerMenu->addAction(SmallIconSet("folder"), i18n("New &Group Layer..."), this, SLOT(slotNewGroupLayer()));
+    m_newLayerMenu->addAction(SmallIconSet("tool_filter"), i18n("New &Adjustment Layer..."), this, SLOT(slotNewAdjustmentLayer()));
 
-    m_partLayerAction = new KoPartSelectAction( i18n( "New &Object Layer" ), "gear" /*, this - KDE4*/);
+    m_partLayerAction = new KoPartSelectAction( i18n("New &Object Layer"), "gear" /*, this - KDE4*/);
     m_newLayerMenu->addAction(m_partLayerAction);
     connect(m_partLayerAction, SIGNAL(triggered()), this, SLOT(slotNewPartLayer()));
 
@@ -142,6 +164,24 @@ void KisLayerBox::setImage(KisImageSP img)
     {
         m_lst->listLayers->setModel(0);
     }
+}
+
+bool KisLayerBox::eventFilter(QObject *o, QEvent *e)
+{
+    Q_ASSERT(o == m_lst->listLayers->viewport());
+
+    if (e->type() == QEvent::MouseButtonDblClick)
+    {
+        QMouseEvent *me = static_cast<QMouseEvent*>(e);
+        QModelIndex mi = m_lst->listLayers->indexAt(me->pos());
+        if (mi.isValid())
+            slotPropertiesClicked();
+        else
+            slotNewLayer();
+        return true;
+    }
+
+    return super::eventFilter(o, e);
 }
 
 void KisLayerBox::updateUI()
@@ -209,7 +249,22 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(m_partLayerAction);
     }
     menu.exec(pos);
-    m_partLayerAction->setText(i18n("&New Object Layer..."));
+    m_partLayerAction->setText(i18n("New &Object Layer..."));
+}
+
+void KisLayerBox::slotMinimalView()
+{
+    m_lst->listLayers->setDisplayMode(KoDocumentSectionView::MinimalMode);
+}
+
+void KisLayerBox::slotDetailedView()
+{
+    m_lst->listLayers->setDisplayMode(KoDocumentSectionView::DetailedMode);
+}
+
+void KisLayerBox::slotThumbnailView()
+{
+    m_lst->listLayers->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
 
 void KisLayerBox::getNewLayerLocation(KisGroupLayerSP &parent, KisLayerSP &above)

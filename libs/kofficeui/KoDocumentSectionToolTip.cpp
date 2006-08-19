@@ -37,7 +37,7 @@ QTextDocument *KoDocumentSectionToolTip::createDocument( const QModelIndex &inde
 {
     QTextDocument *doc = new QTextDocument( this );
 
-    QImage thumb = index.data( Model::LargeThumbnailRole ).value<QImage>();
+    QImage thumb = index.data( int( Model::BeginThumbnailRole ) + 250 ).value<QImage>();
     doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
 
     QString name = index.data( Qt::DisplayRole ).toString();

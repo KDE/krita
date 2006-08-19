@@ -77,9 +77,7 @@ install(
     KoBrush.h
     KoCharSelectDia.h
     KoContextHelp.h
-    KoDocumentSectionDelegate.h
     KoDocumentSectionModel.h
-    KoDocumentSectionToolTip.h
     KoDocumentSectionView.h
     KoEditPath.h
     KoGeneralPropertyUi.h

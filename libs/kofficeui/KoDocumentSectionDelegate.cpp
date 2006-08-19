@@ -18,7 +18,6 @@
 */
 
 #include <QtDebug>
-#include <QAbstractItemView>
 #include <QApplication>
 #include <QKeyEvent>
 #include <QLineEdit>
@@ -29,20 +28,20 @@
 #include <QStyleOptionViewItem>
 #include "KoDocumentSectionModel.h"
 #include "KoDocumentSectionToolTip.h"
+#include "KoDocumentSectionView.h"
 #include "KoDocumentSectionDelegate.h"
 
 class KoDocumentSectionDelegate::Private
 {
     public:
-        QAbstractItemView *view;
+        KoDocumentSectionView *view;
         QPointer<QWidget> edit;
-        DisplayMode mode;
         KoDocumentSectionToolTip tip;
         static const int margin = 1;
-        Private(): view( 0 ), edit( 0 ), mode( DetailedMode ) { }
+        Private(): view( 0 ), edit( 0 ) { }
 };
 
-KoDocumentSectionDelegate::KoDocumentSectionDelegate( QAbstractItemView *view, QObject *parent )
+KoDocumentSectionDelegate::KoDocumentSectionDelegate( KoDocumentSectionView *view, QObject *parent )
     : super( parent )
     , d( new Private )
 {
@@ -56,23 +55,20 @@ KoDocumentSectionDelegate::~KoDocumentSectionDelegate()
     delete d;
 }
 
-void KoDocumentSectionDelegate::setDisplayMode( DisplayMode mode )
-{
-    d->mode = mode;
-}
-
 QSize KoDocumentSectionDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    switch( d->mode )
+    switch( d->view->displayMode() )
     {
-        case ThumbnailsMode:
-            return QSize( option.rect.width(), option.rect.width() + option.fontMetrics.height() );
-        case DetailedMode:
+        case View::ThumbnailMode:
+        {
+            const int height = thumbnailHeight( option, index ) + textBoxHeight( option ) + d->margin * 2;
+            return QSize( availableWidth( index ), height );
+        }
+        case View::DetailedMode:
             return QSize( option.rect.width(),
-                qMax( index.data( Model::ThumbnailRole ).value<QImage>().height(),
-                      option.fontMetrics.height() + option.decorationSize.height() ) );
-        case MinimalMode:
-            return QSize( option.rect.width(), qMax( option.decorationSize.height(), option.fontMetrics.height() ) );
+                textBoxHeight( option ) + option.decorationSize.height() + d->margin );
+        case View::MinimalMode:
+            return QSize( option.rect.width(), textBoxHeight( option ) );
         default: return option.rect.size(); //gcc--
     }
 }
@@ -88,13 +84,10 @@ void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &
         if( option.state & QStyle::State_Selected )
             p->fillRect( option.rect, option.palette.highlight() );
 
-        if( !index.data( Qt::DecorationRole ).value<QIcon>().isNull() )
-            p->drawPixmap( thumbnailRect( option, index ).right() + 1 , option.rect.top(),
-                index.data( Qt::DecorationRole ).value<QIcon>().pixmap( option.decorationSize ) );
-
         drawText( p, option, index );
         drawIcons( p, option, index );
         drawThumbnail( p, option, index );
+        drawDecoration( p, option, index );
     }
     p->restore();
 }
@@ -105,9 +98,13 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
     {
         QMouseEvent *me = static_cast<QMouseEvent*>( e );
         if( me->button() != Qt::LeftButton )
-            return false; //TODO
+        {
+            d->view->setCurrentIndex( index );
+            return false;
+        }
 
-        const QRect ir = iconsRect( option, index ), tr = textRect( option, index );
+        const QRect ir = iconsRect( option, index ).translated( option.rect.topLeft() )
+                       , tr = textRect( option, index ).translated( option.rect.topLeft() );
 
         if( ir.contains( me->pos() ) )
         {
@@ -159,7 +156,7 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
 QWidget *KoDocumentSectionDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem&, const QModelIndex& ) const
 {
     d->edit = new QLineEdit( parent );
-    d->edit->installEventFilter( const_cast<KoDocumentSectionDelegate*>( this ) );
+    d->edit->installEventFilter( const_cast<KoDocumentSectionDelegate*>( this ) ); //hack?
     return d->edit;
 }
 
@@ -181,7 +178,7 @@ void KoDocumentSectionDelegate::setModelData( QWidget *widget, QAbstractItemMode
 
 void KoDocumentSectionDelegate::updateEditorGeometry( QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    widget->setGeometry( textRect( option, index ) );
+    widget->setGeometry( textRect( option, index ).translated( option.rect.topLeft() ) );
 }
 
 
@@ -252,27 +249,76 @@ QStyleOptionViewItem KoDocumentSectionDelegate::getOptions( const QStyleOptionVi
    return option;
 }
 
+int KoDocumentSectionDelegate::thumbnailHeight( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    const QSize size = index.data( Qt::SizeHintRole ).toSize();
+    int width = option.rect.width();
+    if( !option.rect.isValid() )
+        width = availableWidth( index );
+    if( size.width() <= width )
+        return size.height();
+    else
+        return int( width / ( double( size.width() ) / size.height() ) );
+}
+
+int KoDocumentSectionDelegate::availableWidth( const QModelIndex &index ) const
+    //this is such a HACK
+{
+    if( !d->view->rootIndex().isValid() )
+        return d->view->width();
+    QModelIndex i = index;
+    int dis = 0;
+    while( i.isValid() && i != d->view->rootIndex() )
+    {
+        i = i.parent();
+        dis++;
+    }
+    Q_ASSERT( i.isValid() );
+    if( d->view->rootIsDecorated() )
+        dis++;
+    const int indent = dis * d->view->indentation();
+    return d->view->columnWidth( 0 ) - indent;
+}
+
+int KoDocumentSectionDelegate::textBoxHeight( const QStyleOptionViewItem &option ) const
+{
+    return qMax( option.fontMetrics.height(), option.decorationSize.height() );
+}
+
 QRect KoDocumentSectionDelegate::textRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    static QFont f;
-    static int minbearing = 1337 + 666; //can be 0 or negative, 2003 is less likely
-    if( minbearing == 2003 || f != option.font )
+    if( d->view->displayMode() == View::ThumbnailMode )
     {
-        f = option.font; //getting your bearings can be expensive, so we cache them
-        minbearing = option.fontMetrics.minLeftBearing() + option.fontMetrics.minRightBearing();
+        const QRect r = decorationRect( option, index );
+        const int left = r.right() + d->margin;
+        return QRect( left, r.top(), option.rect.width() - left, textBoxHeight( option ) );
     }
+    else
+    {
+        static QFont f;
+        static int minbearing = 1337 + 666; //can be 0 or negative, 2003 is less likely
+        if( minbearing == 2003 || f != option.font )
+        {
+            f = option.font; //getting your bearings can be expensive, so we cache them
+            minbearing = option.fontMetrics.minLeftBearing() + option.fontMetrics.minRightBearing();
+        }
 
-    int indent = thumbnailRect( option, index ).right() - option.rect.left() + d->margin;
-    if( !index.data( Qt::DecorationRole ).value<QIcon>().isNull() )
-        indent += option.decorationSize.width() + d->margin;
+        int indent = decorationRect( option, index ).right() + d->margin;
 
-    const int width = ( d->mode == DetailedMode ? option.rect.width() : iconsRect( option, index ).left() - option.rect.left() ) - indent - d->margin + minbearing;
+        const int width = ( d->view->displayMode() == View::DetailedMode
+                            ? option.rect.width()
+                            : iconsRect( option, index ).left() )
+                          - indent - d->margin + minbearing;
 
-    return QRect( indent, 0, width, option.fontMetrics.height() ).translated( option.rect.topLeft() );
+        return QRect( indent, 0, width, textBoxHeight( option ) );
+    }
 }
 
 QRect KoDocumentSectionDelegate::iconsRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
+    if( d->view->displayMode() == View::ThumbnailMode )
+        return QRect();
+
     Model::PropertyList lp = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
     int propscount = 0;
     for( int i = 0, n = lp.count(); i < n; ++i )
@@ -281,40 +327,85 @@ QRect KoDocumentSectionDelegate::iconsRect( const QStyleOptionViewItem &option, 
 
     const int iconswidth = propscount * option.decorationSize.width() + (propscount - 1) * d->margin;
 
-    const int x = d->mode == DetailedMode ? thumbnailRect( option, index ).right() - option.rect.left() + d->margin : option.rect.width() - iconswidth;
-    const int y = d->mode == DetailedMode ? option.fontMetrics.height() : 0;
+    const int x = d->view->displayMode() == View::DetailedMode ? thumbnailRect( option, index ).right() + d->margin : option.rect.width() - iconswidth;
+    const int y = d->view->displayMode() == View::DetailedMode ? textBoxHeight( option ) + d->margin : 0;
 
-    return QRect( x, y, iconswidth, option.decorationSize.height() ).translated( option.rect.topLeft() );
+    return QRect( x, y, iconswidth, option.decorationSize.height() );
 }
 
-QRect KoDocumentSectionDelegate::thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex & ) const
+QRect KoDocumentSectionDelegate::thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    return QRect( 0, 0, option.rect.height(), option.rect.height() ).translated( option.rect.topLeft() );
+    if( d->view->displayMode() == View::ThumbnailMode )
+        return QRect( 0, 0, option.rect.width(), thumbnailHeight( option, index ) );
+    else
+        return QRect( 0, 0, option.rect.height(), option.rect.height() );
+}
+
+QRect KoDocumentSectionDelegate::decorationRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    int width = option.decorationSize.width();
+    if( index.data( Qt::DecorationRole ).value<QIcon>().isNull() )
+        width = 0;
+    switch( d->view->displayMode() )
+    {
+        case View::ThumbnailMode:
+        {
+            QFont font = option.font;
+            if( index.data( Model::ActiveRole ).toBool() )
+                font.setBold( !font.bold() );
+            const QFontMetrics metrics( font );
+            const int totalwidth = metrics.width( index.data( Qt::DisplayRole ).toString() ) + width + d->margin;
+            int left;
+            if( totalwidth < option.rect.width() )
+                left = ( option.rect.width() - totalwidth ) / 2;
+            else
+                left = 0;
+            return QRect( left, thumbnailRect( option, index ).bottom() + d->margin, width, textBoxHeight( option ) );
+        }
+        case View::DetailedMode:
+        case View::MinimalMode:
+        {
+            const int left = thumbnailRect( option, index ).right() + d->margin;
+            return QRect( left, 0, width, textBoxHeight( option ) );
+        }
+        default: return QRect(); //gcc--
+    }
 }
 
 void KoDocumentSectionDelegate::drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    const QRect r = textRect( option, index );
+    const QRect r = textRect( option, index ).translated( option.rect.topLeft() );
 
-    p->translate( r.left(), r.top() );
+    p->save();
     {
+        p->setClipRect( r );
+        p->translate( r.left(), r.top() );
         p->setPen( ( option.state & QStyle::State_Selected )
                    ? option.palette.highlightedText().color()
                    : option.palette.text().color() );
 
+        if( index.data( Model::ActiveRole ).toBool() )
+        {
+            QFont f = p->font();
+            f.setBold( !f.bold() );
+            p->setFont( f );
+        }
+
         const QString text = index.data( Qt::DisplayRole ).toString();
-        const QString elided = elidedText( option.fontMetrics, r.width(), Qt::ElideRight, text );
+        const QString elided = elidedText( p->fontMetrics(), r.width(), Qt::ElideRight, text );
         p->drawText( d->margin, 0, r.width(), r.height(), Qt::AlignLeft | Qt::AlignTop, elided );
     }
-    p->translate( -r.left(), -r.top() );
+    p->restore();
 }
 
 void KoDocumentSectionDelegate::drawIcons( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    const QRect r = iconsRect( option, index );
+    const QRect r = iconsRect( option, index ).translated( option.rect.topLeft() );
 
-    p->translate( r.left(), r.top() );
+    p->save();
     {
+        p->setClipRect( r );
+        p->translate( r.left(), r.top() );
         int x = 0;
         Model::PropertyList lp = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
         for( int i = 0, n = lp.count(); i < n; ++i )
@@ -325,20 +416,42 @@ void KoDocumentSectionDelegate::drawIcons( QPainter *p, const QStyleOptionViewIt
                 x += option.decorationSize.width() + d->margin;
             }
     }
-    p->translate( -r.left(), -r.top() );
+    p->restore();
 }
 
 void KoDocumentSectionDelegate::drawThumbnail( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    const QRect r = thumbnailRect( option, index );
+    const QRect r = thumbnailRect( option, index ).translated( option.rect.topLeft() );
 
-    const QImage i = index.data( Model::ThumbnailRole ).value<QImage>()
-                     .scaled( r.height(), r.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
-    QPoint offset;
-    offset.setX( r.width()/2 - i.width()/2 );
-    offset.setY( r.height()/2 - i.height()/2 );
+    p->save();
+    {
+        p->setClipRect( r );
+        const double myratio = double( r.width() ) / r.height();
+        const double thumbratio = index.data( Model::AspectRatioRole ).toDouble();
+        const int s = ( myratio > thumbratio ) ? r.height() : r.width();
 
-    p->drawImage( r.topLeft() + offset, i );
+        const QImage i = index.data( int( Model::BeginThumbnailRole ) + s ).value<QImage>();
+        QPoint offset;
+        offset.setX( r.width()/2 - i.width()/2 );
+        offset.setY( r.height()/2 - i.height()/2 );
+
+        p->drawImage( r.topLeft() + offset, i );
+    }
+    p->restore();
+}
+
+void KoDocumentSectionDelegate::drawDecoration( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    const QRect r = decorationRect( option, index ).translated( option.rect.topLeft() );
+
+    p->save();
+    {
+        p->setClipRect( r );
+        p->translate( r.topLeft() );
+        if( !index.data( Qt::DecorationRole ).value<QIcon>().isNull() )
+            p->drawPixmap( 0, 0, index.data( Qt::DecorationRole ).value<QIcon>().pixmap( option.decorationSize ) );
+    }
+    p->restore();
 }
 
 

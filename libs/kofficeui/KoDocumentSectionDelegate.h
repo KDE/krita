@@ -22,8 +22,9 @@
 
 #include <QAbstractItemDelegate>
 #include <koffice_export.h>
+#include "KoDocumentSectionView.h"
 
-class QAbstractItemView;
+class QTreeView;
 class KoDocumentSectionModel;
 class KoDocumentSectionToolTip;
 
@@ -33,23 +34,8 @@ class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
     Q_OBJECT
 
     public:
-        KoDocumentSectionDelegate( QAbstractItemView *view, QObject *parent = 0 );
+        KoDocumentSectionDelegate( KoDocumentSectionView *view, QObject *parent = 0 );
         virtual ~KoDocumentSectionDelegate();
-
-        /// how items should be displayed
-        enum DisplayMode
-        {
-            /// large fit-to-width thumbnails, with only titles or page numbers
-            ThumbnailsMode,
-
-            /// smaller thumbnails, with titles and property icons in two rows
-            DetailedMode,
-
-            /// no thumbnails, with titles and property icons in a single row
-            MinimalMode
-        };
-
-        void setDisplayMode( DisplayMode mode );
 
         virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         virtual QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
@@ -67,16 +53,22 @@ class KOFFICEUI_EXPORT KoDocumentSectionDelegate: public QAbstractItemDelegate
 
     private:
         typedef KoDocumentSectionModel Model;
+        typedef KoDocumentSectionView View;
         class Private;
         Private* const d;
 
         static QStyleOptionViewItem getOptions( const QStyleOptionViewItem &option, const QModelIndex &index );
+        int thumbnailHeight( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        int availableWidth( const QModelIndex &index ) const;
+        int textBoxHeight( const QStyleOptionViewItem &option ) const;
         QRect textRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         QRect iconsRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         QRect thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        QRect decorationRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         void drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         void drawIcons( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         void drawThumbnail( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+        void drawDecoration( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 };
 
 #endif

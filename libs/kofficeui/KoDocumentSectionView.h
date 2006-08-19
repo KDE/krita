@@ -38,10 +38,26 @@ class KOFFICEUI_EXPORT KoDocumentSectionView: public QTreeView
         KoDocumentSectionView( QWidget *parent = 0 );
         virtual ~KoDocumentSectionView();
 
+        /// how items should be displayed
+        enum DisplayMode
+        {
+            /// large fit-to-width thumbnails, with only titles or page numbers
+            ThumbnailMode,
+
+            /// smaller thumbnails, with titles and property icons in two rows
+            DetailedMode,
+
+            /// no thumbnails, with titles and property icons in a single row
+            MinimalMode
+        };
+
+        void setDisplayMode( DisplayMode mode );
+
+        DisplayMode displayMode() const;
+
         void addPropertyActions( QMenu *menu, const QModelIndex &index );
 
     protected:
-        virtual bool event( QEvent *event );
         virtual bool viewportEvent( QEvent *event );
         virtual void contextMenuEvent( QContextMenuEvent *event );
         virtual void showContextMenu( const QPoint &globalPos, const QModelIndex &index );

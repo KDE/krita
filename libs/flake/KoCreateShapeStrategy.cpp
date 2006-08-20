@@ -61,6 +61,12 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     }
     shape->resize(newSize);
 
+    Q_ASSERT(m_canvas->shapeManager());
+    int z=0;
+    foreach(KoShape *sh, m_canvas->shapeManager()->shapesAt(shape->boundingRect()))
+        z = qMax(z, sh->zIndex());
+    shape->setZIndex(z+1);
+
     // show config dialog.
     KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
     dialog->setCaption(i18n("%1 Options", factory->name()));
@@ -102,7 +108,6 @@ KCommand* KoCreateShapeStrategy::createCommand() {
     }
     delete dialog;
 
-    Q_ASSERT(m_canvas->shapeManager());
     KoSelection *selection = m_canvas->shapeManager()->selection();
     selection->deselectAll();
     selection->select(shape);

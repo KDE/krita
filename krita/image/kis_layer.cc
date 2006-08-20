@@ -737,7 +737,7 @@ QVariant KisLayer::data(const QModelIndex &index, int role) const
         case Qt::DisplayRole: return layer->name();
         case Qt::DecorationRole: return layer->icon();
         case Qt::EditRole: return layer->name();
-        case Qt::SizeHintRole: return layer->image().size();
+        case Qt::SizeHintRole: return layer->image()->size();
         case ActiveRole: return layer->isActive();
         case PropertiesRole: return QVariant::fromValue(layer->properties());
         case AspectRatioRole: return double(layer->image()->width()) / layer->image()->height();

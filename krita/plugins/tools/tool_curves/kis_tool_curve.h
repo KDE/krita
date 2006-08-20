@@ -159,8 +159,10 @@ protected:
 
     int m_actionOptions;
     bool m_supportMinimalDraw;
+    bool m_draggingCursor;
 
     QString m_transactionMessage;
+    QString m_cursor;
 
 private:
 

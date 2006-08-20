@@ -72,7 +72,8 @@ KisToolExample::KisToolExample()
     : super(i18n("Tool for Curves - Example"))
 {
     setName("tool_example");
-    setCursor(KisCursor::load("tool_example_cursor.png", 6, 6));
+    m_cursor = "tool_example_cursor.png";
+    setCursor(KisCursor::load(m_cursor, 6, 6));
 
     m_curve = new KisCurveExample;
 }

@@ -58,7 +58,8 @@ KisToolBezierPaint::KisToolBezierPaint()
     : super(i18n("Bezier painting tool"))
 {
     setName("tool_bezier_paint");
-    setCursor(KisCursor::load("tool_bezier_cursor.png", 6, 6));
+    m_cursor = "tool_bezier_cursor.png";
+    setCursor(KisCursor::load(m_cursor, 6, 6));
 }
 
 KisToolBezierPaint::~KisToolBezierPaint()

@@ -73,6 +73,7 @@ KisToolCurve::KisToolCurve(const QString& UIName)
     m_curve = 0;
     
     m_dragging = false;
+    m_draggingCursor = false;
     m_drawPivots = true;
     m_drawingPen = QPen(Qt::white, 0, Qt::SolidLine);
     m_pivotPen = QPen(Qt::gray, 0, Qt::SolidLine);
@@ -179,6 +180,16 @@ void KisToolCurve::doubleClick(KisDoubleClickEvent *)
 void KisToolCurve::move(KisMoveEvent *event)
 {
     updateOptions(event->state());
+    PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+    if (temp.first == m_curve->end() && !m_dragging) {
+        if (m_draggingCursor) {
+            setCursor(KisCursor::load(m_cursor, 6, 6));
+            m_draggingCursor = false;
+        }
+    } else {
+        setCursor(KisCursor::load("tool_curve_dragging.png", 6, 6));
+        m_draggingCursor = true;
+    }
     if (m_dragging) {
         draw();
         KisPoint trans = event->pos() - m_currentPoint;

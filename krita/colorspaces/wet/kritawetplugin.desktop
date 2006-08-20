@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Watercolor Paint Plugin
+Name[fr]=Module de dessin à l'aquarelle
 Name[x-test]=xxWatercolor Paint Pluginxx
 Comment=Color model and tools for painting with simulated watercolors
+Comment[fr]=Modèle de couleurs et outils pour dessiner avec des couleurs simulées d'aquarelle
 Comment[x-test]=xxColor model and tools for painting with simulated watercolorsxx
 ServiceTypes=KOffice/ColorSpace,Krita/ViewPlugin
 Type=Service

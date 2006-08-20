@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Filters Gallery
+Name[fr]=Galerie de filtres
 Name[x-test]=xxFilters Galleryxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

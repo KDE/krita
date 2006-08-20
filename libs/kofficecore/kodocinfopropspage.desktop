@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Document Info Properties Page
+Name[fr]=Page des propriétés d'un document KOffice
 Name[x-test]=xxKOffice Document Info Properties Pagexx
 X-KDE-Library=kodocinfopropspage
 ServiceTypes=KPropsDlg/Plugin,application/x-kspread,application/x-kword,application/x-kpresenter,application/x-kchart

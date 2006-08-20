@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Histogram Docker
+Name[fr]=Ancrage d'histogramme
 Name[x-test]=xxHistogram Dockerxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

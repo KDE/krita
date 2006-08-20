@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=RGB Color Model (16-bit float 'half')
+Name[fr]=Modèle de couleurs RVB (demi flottants 16 bits)
 Name[x-test]=xxRGB Color Model (16-bit float 'half')xx
 Comment=Color model for 16-bit floating point 'half' per channel RGB images
+Comment[fr]=Modèle de couleurs pour des images RVB en 16 bits flottants (demi) par canal
 Comment[x-test]=xxColor model for 16-bit floating point 'half' per channel RGB imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service

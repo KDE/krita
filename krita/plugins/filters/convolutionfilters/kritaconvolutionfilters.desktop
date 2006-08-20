@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Convolution Filters
+Name[fr]=Filtres de convolution
 Name[x-test]=xxConvolution Filtersxx
 Comment=Convolution filters
+Comment[fr]=Filtres de déformations
 Comment[x-test]=xxConvolution filtersxx
 ServiceTypes=Krita/Filter
 Type=Service

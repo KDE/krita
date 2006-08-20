@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Raindrops Filter
+Name[fr]=Filtre gouttes de pluie
 Name[x-test]=xxRaindrops Filterxx
 Comment=Raindrops filter
+Comment[fr]=Filtre gouttes de pluie
 Comment[x-test]=xxRaindrops filterxx
 ServiceTypes=Krita/Filter
 Type=Service

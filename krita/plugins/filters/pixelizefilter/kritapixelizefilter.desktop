@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Pixelize Filter
+Name[fr]=Filtre pixélisation
 Name[x-test]=xxPixelize Filterxx
 Comment=Pixelize filter
+Comment[fr]=Filtre pixélisation
 Comment[x-test]=xxPixelize filterxx
 ServiceTypes=Krita/Filter
 Type=Service

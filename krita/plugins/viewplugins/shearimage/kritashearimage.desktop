@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Shear Image Plugin
+Name[fr]=Module de rognage d'images
 Name[x-test]=xxShear Image Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

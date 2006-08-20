@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=History Docker
+Name[fr]=Ancrage d'historique
 Name[x-test]=xxHistory Dockerxx
 Comment=Command history docker for Krita
+Comment[fr]=Ancrage de l'historique des commandes pour Krita
 Comment[x-test]=xxCommand history docker for Kritaxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

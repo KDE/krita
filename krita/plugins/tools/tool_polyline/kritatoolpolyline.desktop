@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Polyline Tool
+Name[fr]=Outil lignes multiples
 Name[x-test]=xxPolyline Toolxx
 ServiceTypes=Krita/Tool
 Type=Service

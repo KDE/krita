@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Emboss Filter
+Name[fr]=Filtre gravure
 Name[x-test]=xxEmboss Filterxx
 Comment=Emboss filter
+Comment[fr]=Filtre gravure
 Comment[x-test]=xxEmboss filterxx
 ServiceTypes=Krita/Filter
 Type=Service

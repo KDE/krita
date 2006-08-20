@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Crop Tool
+Name[fr]=Outil découpage
 Name[x-test]=xxCrop Toolxx
 ServiceTypes=Krita/Tool
 Type=Service

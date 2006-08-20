@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Image Resize and Scale Plugin
+Name[fr]=Module de redimensionnement d'images
 Name[x-test]=xxImage Resize and Scale Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

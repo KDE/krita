@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Selection Tools
+Name[fr]=Outils de sélection
 Name[x-test]=xxSelection Toolsxx
 ServiceTypes=Krita/Tool
 Type=Service

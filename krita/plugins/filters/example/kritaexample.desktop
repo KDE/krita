@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Invert Filter
+Name[fr]=Filtre d'inversion
 Name[x-test]=xxInvert Filterxx
 Comment=Invert the colors of an image
+Comment[fr]=Inverse les couleurs de l'image
 Comment[x-test]=xxInvert the colors of an imagexx
 ServiceTypes=Krita/Filter
 Type=Service

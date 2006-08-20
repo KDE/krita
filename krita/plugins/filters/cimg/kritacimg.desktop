@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CImg Image Restoration Filter
+Name[fr]=Filtre de restauration d'images de CImg
 Name[x-test]=xxCImg Image Restoration Filterxx
 Comment=CImg Image restoration filter
+Comment[fr]=Filtre de restauration d'images de CImg
 Comment[x-test]=xxCImg Image restoration filterxx
 ServiceTypes=Krita/Filter
 Type=Service

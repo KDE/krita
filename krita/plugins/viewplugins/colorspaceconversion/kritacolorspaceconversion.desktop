@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Colorspace Conversion
+Name[fr]=Conversion d'espaces de couleurs
 Name[x-test]=xxColorspace Conversionxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

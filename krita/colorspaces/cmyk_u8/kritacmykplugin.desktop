@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=CMYK Color Model
+Name[fr]=Modèle de couleurs CMYK
 Name[x-test]=xxCMYK Color Modelxx
 Comment=Color model for 8-bit/channel CMYK images
+Comment[fr]=Modèle de couleurs pour des images CMYK à 8 bits/plage
 Comment[x-test]=xxColor model for 8-bit/channel CMYK imagesxx
 ServiceTypes=KOffice/ColorSpace
 Type=Service

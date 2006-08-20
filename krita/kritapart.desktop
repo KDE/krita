@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Painting and Image Editor Component
+Name[fr]=Composant manipulation d'images et dessin de KOffice
 Name[x-test]=xxKOffice Painting and Image Editor Componentxx
 X-KDE-Library=libkritapart
 MimeType=application/x-krita
@@ -8,6 +9,7 @@ Type=Service
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-krita
 GenericName=Image Object
+GenericName[fr]=Objet image
 GenericName[x-test]=xxImage Objectxx
 Icon=krita
 X-Krita-Version=2

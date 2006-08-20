@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Color Filters
+Name[fr]=Filtres de couleurs
 Name[x-test]=xxColor Filtersxx
 Comment=Color filters
+Comment[fr]=Filtres de couleurs
 Comment[x-test]=xxColor filtersxx
 ServiceTypes=Krita/Filter
 Type=Service

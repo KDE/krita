@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Cubism Filter
+Name[fr]=Filtre de cubisme
 Name[x-test]=xxCubism Filterxx
 Comment=Cubism filter
+Comment[fr]=Filtre de cubisme
 Comment[x-test]=xxCubism filterxx
 ServiceTypes=Krita/Filter
 Type=Service

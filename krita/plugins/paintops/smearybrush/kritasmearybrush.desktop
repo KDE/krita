@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Smeary Brush
+Name[fr]=Brosse salissante
 Name[x-test]=xxSmeary Brushxx
 Comment=Smeary brush
+Comment[fr]=Brosse salissante
 Comment[x-test]=xxSmeary brushxx
 ServiceTypes=Krita/Paintop
 Type=Service

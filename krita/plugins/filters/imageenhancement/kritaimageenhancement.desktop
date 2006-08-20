@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Enhancement Filters
+Name[fr]=Filtres d'amélioration
 Name[x-test]=xxEnhancement Filtersxx
 Comment=Enhance the quality of an image
+Comment[fr]=Améliore la qualité d'une image
 Comment[x-test]=xxEnhance the quality of an imagexx
 ServiceTypes=Krita/Filter
 Type=Service

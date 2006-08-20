@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Colorrange
+Name[fr]=Plage de couleurs
 Name[x-test]=xxColorrangexx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

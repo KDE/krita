@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Variations Plugin
+Name[fr]=Module de variations
 Name[x-test]=xxVariations Pluginxx
 ServiceTypes=Krita/ViewPlugin
 Type=Service

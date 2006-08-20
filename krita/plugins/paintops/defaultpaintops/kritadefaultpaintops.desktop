@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Default Paint Operations
+Name[fr]=Opérations de dessin par défaut
 Name[x-test]=xxDefault Paint Operationsxx
 Comment=Default paint operations
+Comment[fr]=Opérations de dessin par défaut
 Comment[x-test]=xxDefault paint operationsxx
 ServiceTypes=Krita/Paintop
 Type=Service

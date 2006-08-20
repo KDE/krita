@@ -31,6 +31,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 , m_pathShape(0)
 , m_activePoint(0)
 , m_handleRadius( 3 )
+, m_pointMoving( false )
 {
 }
 
@@ -70,6 +71,7 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
                     QPointF(outline.elementAt( i + 2 ).x, outline.elementAt( i + 2 ).y ));
         }
     }
+
     if( m_activePoint )
     {
         painter.setBrush( Qt::red );
@@ -89,43 +91,74 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
 }
 
 void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
-
+    m_pointMoving = m_activePoint;
+    m_lastPosition = untransformed( event->point );
 }
 
 void KoPathTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
 }
 
 void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
-    m_activePoint = 0;
-
-    QWMatrix unwindMatrix = m_pathShape->transformationMatrix(0).inverted();
-    QRectF roi = unwindMatrix.mapRect( handleRect( event->point ) );
-    QList<KoPathPoint*> points = m_pathShape->pointsAt( roi );
-    if( points.empty() )
+    if( m_pointMoving )
     {
-        useCursor(Qt::ArrowCursor);
-        repaint();
-        return;
+        QRectF oldControlRect = m_pathShape->outline().controlPointRect();
+        QPointF move = untransformed( event->point ) - m_lastPosition;
+        m_lastPosition = untransformed( event->point );
+
+        if( m_activePointType == Normal )
+        {
+            m_activePoint->setPoint( m_activePoint->point() + move );
+            if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 )
+                m_activePoint->setControlPoint1( m_activePoint->controlPoint1() + move );
+            if( m_activePoint->properties() & KoPathPoint::HasControlPoint2 )
+                m_activePoint->setControlPoint2( m_activePoint->controlPoint2() + move );
+        }
+        else if( m_activePointType == ControlPoint1 )
+            m_activePoint->setControlPoint1( m_activePoint->controlPoint1() + move );
+        else if( m_activePointType == ControlPoint2 )
+            m_activePoint->setControlPoint2( m_activePoint->controlPoint2() + move );
+
+        // the bounding rect has changed -> normalize and adjust position of shape 
+        QPointF tlOld = m_pathShape->boundingRect().topLeft();
+        m_pathShape->normalize();
+        QPointF tlNew = m_pathShape->boundingRect().topLeft();
+        m_pathShape->moveBy( tlOld.x()-tlNew.x(), tlOld.y()-tlNew.y() );
+
+        repaint( transformed( oldControlRect.unite( m_pathShape->outline().controlPointRect() ) ) );
     }
+    else
+    {
+        m_activePoint = 0;
 
-    useCursor(Qt::SizeAllCursor);
+        QRectF roi = handleRect( untransformed( event->point ) );
+        QList<KoPathPoint*> points = m_pathShape->pointsAt( roi );
+        if( points.empty() )
+        {
+            useCursor(Qt::ArrowCursor);
+            repaint( transformed( m_pathShape->outline().controlPointRect() ) );
+            return;
+        }
 
-    m_activePoint = points.first();
-    if( roi.contains( m_activePoint->point() ) )
-        m_activePointType = Normal;
-    else if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 && roi.contains( m_activePoint->controlPoint1() ) )
-        m_activePointType = ControlPoint1;
-    else if( m_activePoint->properties() & KoPathPoint::HasControlPoint2 && roi.contains( m_activePoint->controlPoint2() ) )
-        m_activePointType = ControlPoint2;
+        useCursor(Qt::SizeAllCursor);
 
-    repaint();
+        m_activePoint = points.first();
+        if( roi.contains( m_activePoint->point() ) )
+            m_activePointType = Normal;
+        else if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 && roi.contains( m_activePoint->controlPoint1() ) )
+            m_activePointType = ControlPoint1;
+        else if( m_activePoint->properties() & KoPathPoint::HasControlPoint2 && roi.contains( m_activePoint->controlPoint2() ) )
+            m_activePointType = ControlPoint2;
 
-    if(event->buttons() == Qt::NoButton)
-        return;
+        repaint( transformed( m_pathShape->outline().controlPointRect() ) );
+
+        if(event->buttons() == Qt::NoButton)
+            return;
+    }
 }
 
 void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
     // TODO
+    m_pointMoving = false;
 }
 
 void KoPathTool::keyPressEvent(QKeyEvent *event) {
@@ -139,7 +172,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
             }
             else
                 m_handleRadius++;
-            repaint();
+            repaint( transformed( m_pathShape->outline().controlPointRect() ) );
         break;
     }
     event->accept();
@@ -158,21 +191,36 @@ void KoPathTool::activate (bool temporary) {
         return;
     }
     useCursor(Qt::ArrowCursor, true);
-    repaint();
+    repaint( transformed( m_pathShape->outline().controlPointRect() ) );
 }
 
 void KoPathTool::deactivate() {
-    QRectF repaintRect = m_pathShape->outline().controlPointRect().translated( m_pathShape->position() );
+    QRectF repaintRect = transformed( m_pathShape->outline().controlPointRect() );
     m_pathShape = 0;
     m_activePoint = 0;
-    m_canvas->updateCanvas( repaintRect.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius ) );
+    repaint( repaintRect );
 }
 
-void KoPathTool::repaint() {
-    QRectF repaintRect = m_pathShape->outline().controlPointRect().translated( m_pathShape->position() );
+void KoPathTool::repaint( const QRectF &repaintRect ) {
     m_canvas->updateCanvas( repaintRect.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius ) );
 }
 
 QRectF KoPathTool::handleRect( const QPointF &p ) {
     return QRectF( p.x()-m_handleRadius, p.y()-m_handleRadius, 2*m_handleRadius, 2*m_handleRadius );
+}
+
+QRectF KoPathTool::transformed( const QRectF &r ) {
+    return m_pathShape->transformationMatrix(0).mapRect( r );
+}
+
+QPointF KoPathTool::transformed( const QPointF &p ) {
+    return m_pathShape->transformationMatrix(0).map( p );
+}
+
+QRectF KoPathTool::untransformed( const QRectF &r ) {
+    return m_pathShape->transformationMatrix(0).inverted().mapRect( r );
+}
+
+QPointF KoPathTool::untransformed( const QPointF &p ) {
+    return m_pathShape->transformationMatrix(0).inverted().map( p );
 }

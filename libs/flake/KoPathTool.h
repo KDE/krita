@@ -42,16 +42,27 @@ public:
     void deactivate();
 
 private:
-    void repaint();
+    /// repaints the specified rect
+    void repaint( const QRectF &repaintRect );
     /// returns a handle rect at the given position
     QRectF handleRect( const QPointF &p );
 
+    /// transform rect form local shape coordinates to world coordinates
+    QRectF transformed( const QRectF &r );
+    /// transform point form local shape coordinates to world coordinates
+    QPointF transformed( const QPointF &p );
+    /// transform rect form world coordinates to local shape coordinates
+    QRectF untransformed( const QRectF &r );
+    /// transform point form world coordinates to local shape coordinates
+    QPointF untransformed( const QPointF &p );
 private:
     enum ActivePointType { Normal, ControlPoint1, ControlPoint2 };
-    KoPathShape *m_pathShape;
-    KoPathPoint* m_activePoint;
-    int m_handleRadius;
-    ActivePointType m_activePointType;
+    KoPathShape *m_pathShape;          /// the actual selected path shape
+    KoPathPoint* m_activePoint;        /// the currently active path point
+    int m_handleRadius;                /// the radius of the control point handles
+    ActivePointType m_activePointType; /// the type of currently active path point
+    bool m_pointMoving;                /// shows if points are actually moved
+    QPointF m_lastPosition;            /// the last mouse position
 };
 
 #endif

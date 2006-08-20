@@ -74,8 +74,10 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) : KisLayer(rhs)
 {
     m_paintdev = new KisPaintDevice( *rhs.m_paintdev.data() );
     m_paintdev->setParentLayer(this);
-    m_mask = new KisPaintDevice(*rhs.m_mask.data());
-    m_mask->setParentLayer(this);
+    if (rhs.hasMask()) {
+        m_mask = new KisPaintDevice(*rhs.m_mask.data());
+        m_mask->setParentLayer(this);
+    }
     m_renderMask = rhs.m_renderMask;
     m_editMask = rhs.m_editMask;
 }

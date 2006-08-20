@@ -181,8 +181,8 @@ public:
             drow = m_pos.y() + y[i];
             tmpdist = QPoint(dcol,drow) - end.pos();
             // I use src[0] here because all cols have same number of rows
-            if (dcol >= (int)src.count() || dcol < 0 ||
-                drow >= (int)src[0].count() || drow < 0)
+            if (dcol == (int)src.count() || dcol < 0 ||
+                drow == (int)src[0].count() || drow < 0)
                 continue;
             if (src[dcol][drow])
                 malus = false;
@@ -312,13 +312,13 @@ void KisCurveMagnetic::calculateCurve (KisCurve::iterator p1, KisCurve::iterator
     KisPaintDeviceSP src = m_parent->m_currentImage->activeDevice();
     GrayMatrix       dst = GrayMatrix(rc.width(),GrayCol(rc.height()));
 
+    detectEdges  (rc, src, dst);
+    reduceMatrix (rc, dst, 3, 3, 3, 3);
+
     Node startNode, endNode;
     multiset<Node> openSet;
     NodeMatrix openMatrix = NodeMatrix(rc.width(),NodeCol(rc.height()));
     NodeMatrix closedMatrix = NodeMatrix(rc.width(),NodeCol(rc.height()));
-
-    detectEdges  (rc, src, dst);
-    reduceMatrix (rc, dst, 3, 3, 3, 3);
 
     QPoint tl(rc.topLeft().x(),rc.topLeft().y());
     start -= tl;  // Relative to the matrix
@@ -375,7 +375,8 @@ void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, Node& 
     int x = -1;
     int y = -1;
 
-    KisVector2D mindist(10.0,10.0), tmpdist;
+    // tmpdist out of range
+    KisVector2D mindist(5.0,5.0), tmpdist(1000.0,1000.0);
     for (int i = -5; i < 6; i++) {
         for (int j = -5; j < 6; j++) {
             if (src[col+i][row+j] != NOEDGE) {
@@ -385,6 +386,8 @@ void KisCurveMagnetic::findEdge (int col, int row, const GrayMatrix& src, Node& 
             }
         }
     }
+    if (tmpdist.x() == 1000.0)
+        mindist = KisVector2D(0.0,0.0);
 
     x = (int)(col + mindist.x());
     y = (int)(row + mindist.y());
@@ -720,23 +723,6 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
                 m_dragging = false;
         }
     }
-/*
-    if (event->button() == Qt::LeftButton) {
-        m_dragging = true;
-        m_currentPoint = event->pos().floorQPoint();
-        m_current = m_curve->end();
-        if (m_editingMode)
-            m_current = selectByMouse (event->pos().toQPoint());
-        if (m_current == m_curve->end() && !m_actionOptions) {
-            m_previous = m_curve->find(m_curve->last());
-            m_current = m_curve->pushPivot(event->pos());
-            if (m_curve->pivots().count() > 1)
-                m_curve->calculateCurve(m_previous,m_current,m_current);
-        } else if (!(*m_current).isSelected())
-            m_dragging = false;
-        draw();
-    }
-*/
 }
 
 void KisToolMagnetic::move(KisMoveEvent *event)
@@ -775,7 +761,7 @@ void KisToolMagnetic::move(KisMoveEvent *event)
         draw(m_curve->end());
         m_previous = m_current;
         m_current = m_curve->pushPivot(event->pos());
-    } else if ((*m_previous).point() == (*m_current).point())
+    } else if ((*m_previous).point() == (*m_current).point() && (*m_previous).point() == m_curve->last().point())
         draw(m_curve->end());
     else
         draw();

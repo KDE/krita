@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>227</width>
-            <height>219</height>
+            <height>279</height>
         </rect>
     </property>
     <property name="caption">
@@ -151,13 +151,75 @@
                 </spacer>
             </hbox>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>checkBox1</cstring>
+                <cstring>layout8</cstring>
             </property>
-            <property name="text">
-                <string>Contiguous</string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout7</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>checkBox1_2</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>Antialiasing</string>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>checkBox1_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Feather edges</string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>checkBox1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Contiguous</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer5</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>71</width>
+                            <height>51</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -323,7 +385,5 @@
         <data format="PNG" length="341">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000011c49444154388dad934d4a03411085bf9640aee2c213b8f11c812c7206611c893b254326b34820249ecb8d3b414441c19d5d66957a2ee687fc804e820f8aea6eba5ebdaeea0ae3c9481c80ebab9b2089100292e8005c9e5f800b7c5d7a3978699213d68e24a68f0f4865be9aa403403454076983c81db9830b69bda7a651208b4db0aacc61632df752d50e42089c940486cc7033662f4f747b3da66fcf74fb7d661faf740703669fefa4c990bcc804282f324912e3c948abfba5568b8556f3b97ec37832dadb570abe914564465e64ad3b9226c3ba8811b9135ca477b7ad09f222ab6a10238a86dbd7710adc8c50553a4da6872ba07abfc7236bb0383bdd3a6c4bd2dc93d4d86eabfe42a8fff6065a0fd7bf28d89aaeca373fae8dff01438e8efad96132a60000000049454e44ae426082</data>
     </image>
 </images>
-<tabstops>
-</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

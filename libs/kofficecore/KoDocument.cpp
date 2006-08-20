@@ -1557,9 +1557,9 @@ bool KoDocument::openFile()
 
             if( d->m_autoErrorHandlingEnabled && !msg.isEmpty())
             {
-                QString errorMsg( i18n( "Could not open\n%2.\nReason: %1" ) );
                 QString docUrl = url().pathOrUrl();
-                KMessageBox::error( 0L, errorMsg.arg(msg).arg(docUrl) );
+                QString errorMsg( i18n( "Could not open\n%2.\nReason: %1", msg, docUrl ) );
+                KMessageBox::error( 0, errorMsg );
             }
 
             d->m_bLoading = false;
@@ -1679,8 +1679,7 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlD
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
         d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4"
-                              ,filename  ,errorLine, errorColumn ,
-                              i18n ( "QXml", errorMsg ));
+                              ,filename  ,errorLine, errorColumn , errorMsg);
         store->close();
         return false;
     }

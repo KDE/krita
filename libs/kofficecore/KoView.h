@@ -30,26 +30,30 @@
 #include <koffice_export.h>
 #include <KoDocumentChild.h>
 #include <KoFrame.h>
-class KAction;
-class KActionCollection;
-class QCustomEvent;
 class KoDocument;
 class KoMainWindow;
-class KMainWindow;
 class KoViewPrivate;
 class KoViewChild;
+class KoDocumentChild;
+
+// KDE classes
 class KStatusBar;
 class KInstance;
 class KPrinter;
-class KoDocumentChild;
-// class DCOPObject;
-
+class KMainWindow;
+class KAction;
+class KActionCollection;
 namespace KParts
 {
   class PartManager;
   class PartActivateEvent;
   class PartSelectEvent;
 }
+
+// Qt classes
+class QDockWidget;
+class QCustomEvent;
+
 
 /**
  * This class is used to display a @ref KoDocument.
@@ -74,7 +78,7 @@ public:
    *                 match the pattern [A-Za-z_][A-Za-z_0-9]*.
    *
    */
-  KoView( KoDocument *document, QWidget *parent = 0, const char *name = 0 );
+  KoView( KoDocument *document, QWidget *parent = 0 );
   /**
    * Destroys the view and unregisters at the document.
    */
@@ -362,6 +366,16 @@ public:
    * your view to allow/disallow editing of the document.
    */
   virtual void updateReadWrite( bool readwrite ) = 0;
+
+    /**
+     * Create a toolbox for your view. Will only be called on the first view in a mainwindow.
+     * The default implementation return 0, to have no toolbox.
+     * If you want the toolbox, you should have something like this:
+     @code
+        return KoToolManager::instance()->toolBox("AppName");
+     @endcode
+     */
+    virtual QDockWidget *createToolBox() { return 0; }
 
    /**
     * Check to see if the view is currently in the middle of an operation which means

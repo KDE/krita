@@ -340,7 +340,7 @@ public:
     /**
      *  Create a new view for the document.
      */
-    KoView *createView( QWidget *parent = 0, const char *name = 0 );
+    KoView *createView( QWidget *parent = 0 );
 
     /**
      * Adds a view to the document.
@@ -1007,7 +1007,7 @@ protected:
 
     QString autoSaveFile( const QString & path ) const;
 
-    virtual KoView *createViewInstance( QWidget *parent, const char *name ) = 0;
+    virtual KoView *createViewInstance( QWidget *parent ) = 0;
 
     /**
      *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading

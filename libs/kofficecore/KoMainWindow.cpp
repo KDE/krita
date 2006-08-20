@@ -70,6 +70,9 @@
 #include <stdlib.h>
 #include <ktoolbar.h>
 
+// qt includes
+#include <QDockWidget>
+
 class KoPartManager : public KParts::PartManager
 {
 public:
@@ -128,6 +131,7 @@ public:
     m_windowSizeDirty = false;
     m_lastExportSpecialOutputFlag = 0;
     m_readOnly = false;
+    m_toolBox = 0;
   }
   ~KoMainWindowPrivate()
   {
@@ -182,6 +186,8 @@ public:
   KUrl m_lastExportURL;
   QByteArray m_lastExportFormat;
   int m_lastExportSpecialOutputFlag;
+
+    QDockWidget *m_toolBox;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance )
@@ -378,10 +384,17 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   {
     doc->setSelectable( false );
     //d->m_manager->addPart( doc, false ); // done by KoView::setPartManager
-    d->m_rootViews.append( doc->createView( d->m_splitter, "view" /*not unique, but better than unnamed*/ ) );
-    d->m_rootViews.current()->setPartManager( d->m_manager );
+    KoView *view = doc->createView(d->m_splitter);
+    d->m_rootViews.append(view);
+    view->setPartManager( d->m_manager );
+    if(! d->m_toolBox) { // no toolbox yet, create one
+        d->m_toolBox = view->createToolBox();
+        if(d->m_toolBox) // if the app wants one, then add it.
+            addDockWidget(Qt::LeftDockWidgetArea, d->m_toolBox);
+    } else
+        d->m_toolBox->setVisible(true);
 
-    d->m_rootViews.current()->show();
+    view->show();
     // The addShell has been done already if using openURL
     if ( !d->m_rootDoc->shells().contains( this ) )
         d->m_rootDoc->addShell( this );
@@ -1088,6 +1101,9 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
     if ( !newdoc )
         return;
 
+    if(d->m_toolBox)
+        d->m_toolBox->setVisible(false);
+
     //FIXME: This needs to be handled differently
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -1358,7 +1374,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
 
 void KoMainWindow::slotSplitView() {
     d->m_splitted=true;
-    d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter, "splitted-view"));
+    d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter));
     d->m_rootViews.current()->show();
     d->m_rootViews.current()->setPartManager( d->m_manager );
     d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );

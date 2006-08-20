@@ -126,7 +126,7 @@ public:
   bool m_inOperation; //in the middle of an operation (no screen refreshing)?
 };
 
-KoView::KoView( KoDocument *document, QWidget *parent, const char* /*name*/ )
+KoView::KoView( KoDocument *document, QWidget *parent )
  : QWidget( parent )
 {
   Q_ASSERT( document );
@@ -723,7 +723,6 @@ void KoView::slotClearStatusText()
   if ( sb )
       sb->clearMessage();
 }
-
 
 // DCOPObject *KoView::dcopObject()
 // {

@@ -334,9 +334,9 @@ bool KoDocument::isEmbedded() const
     return dynamic_cast<KoDocument *>( parent() ) != 0;
 }
 
-KoView *KoDocument::createView( QWidget *parent, const char *name )
+KoView *KoDocument::createView( QWidget *parent )
 {
-    KoView *view=createViewInstance(parent, name);
+    KoView *view=createViewInstance(parent);
     addView(view);
     return view;
 }

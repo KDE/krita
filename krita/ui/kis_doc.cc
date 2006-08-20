@@ -868,9 +868,9 @@ bool KisDoc::newImage(const QString& name, qint32 width, qint32 height, KoColorS
     return true;
 }
 
-KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
+KoView* KisDoc::createViewInstance(QWidget* parent)
 {
-    KisView * v = new KisView(this, this, parent, name);
+    KisView * v = new KisView(this, this, parent);
     Q_CHECK_PTR(v);
 
     return v;

@@ -61,11 +61,7 @@ class KoShape;
     }
 @endcode
 
-  * For a new view that extends KoView you can do this:
-@code
-    shell()->addDockWidget(Qt::LeftDockWidgetArea,
-        KoToolManager::instance()->toolBox("MyApp"));
-@endcode
+ * For a new view that extends KoView all you need to do is implement KoView::createToolBox()
  *
  */
 class KOFFICEUI_EXPORT KoToolManager : public QObject {

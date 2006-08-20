@@ -138,7 +138,7 @@ class KRITAUI_EXPORT KisView
     typedef vKisCanvasObserver::const_iterator vKisCanvasObserver_cit;
 
 public:
-    KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0, const char *name = 0);
+    KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent = 0);
     virtual ~KisView();
 
 public: // KXMLGUIBuilder implementation

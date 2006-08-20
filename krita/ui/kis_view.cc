@@ -183,8 +183,8 @@
 // sent to a receiver if it does not accept the tablet event.
 #define MOUSE_CHANGE_EVENT_DELAY 100
 
-KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const char *name)
-    : super(doc, parent, name)
+KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent)
+    : super(doc, parent)
     , KXMLGUIBuilder( shell() )
     , m_panning( false )
     , m_oldTool( 0 )

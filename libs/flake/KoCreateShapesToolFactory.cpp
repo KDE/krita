@@ -20,7 +20,6 @@
 
 #include "KoCreateShapesToolFactory.h"
 #include "KoCreateShapesTool.h"
-#include "KoRectangleShape.h"
 
 #include <klocale.h>
 

@@ -8,7 +8,6 @@ set(flake_SRCS
     KoInteractionTool.cpp
     KoLineBorder.cpp
     KoPathShape.cpp
-    KoRectangleShape.cpp
     KoSelection.cpp
     KoShape.cpp
     KoShapeContainer.cpp
@@ -27,7 +26,6 @@ set(flake_SRCS
     KoToolFactory.cpp
     KoCreateShapesToolFactory.cpp
     KoInteractionToolFactory.cpp
-    KoRectangleShapeFactory.cpp
     KoPathShapeFactory.cpp
     KoShapeFactory.cpp
     KoShapeUserData.cpp

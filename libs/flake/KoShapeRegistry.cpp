@@ -25,7 +25,6 @@
 #include <kstaticdeleter.h>
 
 #include <KoShapeRegistry.h>
-#include <KoRectangleShapeFactory.h>
 #include <KoPathShapeFactory.h>
 
 #include <QString>
@@ -54,8 +53,7 @@ void KoShapeRegistry::init() {
                 "' failed, "<< KLibLoader::errorString( errCode ) << " ("<< errCode << ")\n";
     }
 
-    // Also add our hard-coded dumb test shapes
-    add( new KoRectangleShapeFactory(this, QStringList()) );
+    // Also add our hard-coded basic shape
     add( new KoPathShapeFactory(this, QStringList()) );
 }
 

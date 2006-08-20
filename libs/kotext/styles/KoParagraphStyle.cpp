@@ -32,7 +32,6 @@ KoParagraphStyle::KoParagraphStyle()
 {
     m_stylesPrivate = new StylePrivate();
     setLineHeightPercent(120);
-    setFontIndependentLineSpacing(true);
 }
 
 KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
@@ -120,7 +119,7 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
         FixedLineHeight,
         MinimumLineHeight,
         LineSpacing,
-        FontIndependentLineSpacing,
+        LineSpacingFromFont,
 //       AlignLastLine,
 //       WidowThreshold,
 //       OrphanThreshold,
@@ -129,8 +128,8 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
 //       DropCapsLines,
 //       DropCapsDistance,
 //       FollowDocBaseline,
-//       BreakBefore,
-//       BreakAfter,
+        BreakBefore,
+        BreakAfter,
 //       HasLeftBorder,
 //       HasTopBorder,
 //       HasRightBorder,

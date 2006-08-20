@@ -46,7 +46,7 @@ public:
         FixedLineHeight,    ///< this propery is used to use a non-default line height
         MinimumLineHeight,  ///< this property is used to have a minimum line spacing
         LineSpacing,        ///< Hard leader height.
-        FontIndependentLineSpacing,  ///< if true, use fontsize (in pt) solely.
+        LineSpacingFromFont,  ///< if false, use fontsize (in pt) solely, otherwise respect font settings
         AlignLastLine,      ///< When the paragraph is justified, what to do with the last word line
         WidowThreshold,     ///< If 'keep together'=false, amount of lines to keep it anyway.
         OrphanThreshold,   ///< If 'keep together'=false, amount of lines to keep it anyway.
@@ -107,17 +107,17 @@ public:
     double lineSpacing() const {return propertyDouble(LineSpacing); }
 
     /**
-     * If set to true the font-size will be used instead of the font-encoded size.
+     * If set to true the font-encoded height will be used instead of the font-size propery
      * This property influences setLineHeightPercent() behavior.
-     * When on (default) a font of 12pt will always have a linespacing of 12pt times the
-     * current linespacing percentage.   When off the linespacing embedded in the font
-     * is used which can differ for various fonts, even if they are the same size.
+     * When off (default) a font of 12pt will always have a linespacing of 12pt times the
+     * current linespacing percentage.  When on the linespacing embedded in the font
+     * is used which can differ for various fonts, even if they are the same pt-size.
      */
-    void setFontIndependentLineSpacing(bool on) {setProperty(FontIndependentLineSpacing, on); }
+    void setLineSpacingFromFont(bool on) {setProperty(LineSpacingFromFont, on); }
     /**
      * @see setFontIndependentLineSpacing
      */
-    bool fontIndependentLineSpacing() const {return propertyBoolean(FontIndependentLineSpacing); }
+    bool lineSpacingFromFont() const {return propertyBoolean(LineSpacingFromFont); }
 
 
     /**

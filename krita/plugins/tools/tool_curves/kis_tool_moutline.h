@@ -82,7 +82,7 @@ public:
     virtual void buttonRelease(KisButtonReleaseEvent*);
     virtual void move(KisMoveEvent*);
 
-    virtual KisCurve::iterator selectByMouse(const QPoint&);
+    virtual KisCurve::iterator selectByMouse(KisCurve::iterator it);
 
     bool editingMode() {return m_editingMode;}
     virtual QWidget* createOptionWidget(QWidget* parent);

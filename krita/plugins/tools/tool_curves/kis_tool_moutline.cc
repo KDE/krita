@@ -291,8 +291,8 @@ KisCurve::iterator KisCurveMagnetic::pushPivot (const KisPoint& point)
     iterator it;
 
     it = pushPoint(point,true,false,LINEHINT);
-    if (count() == 1)
-        addPoint(it,point,true,false,LINEHINT);
+//     if (count() == 1 && !m_parent->editingMode())
+//         addPoint(it,point,true,false,LINEHINT);
     
     return selectPivot(it);
 }
@@ -632,6 +632,7 @@ void KisToolMagnetic::deactivate ()
 void KisToolMagnetic::keyPress(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control) {
+        draw(false);
         if (m_editingMode) {
             m_editingMode = false;
             m_curve->selectPivot(m_current,false);
@@ -640,8 +641,9 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
             m_editingMode = true;
             m_mode->setText(i18n("Editing Mode"));
         }
+        draw(false);
     } else if (event->key() == Qt::Key_Delete) {
-        draw();
+        draw(false);
         m_dragging = false;
         if (m_curve->pivots().count() == 2)
             m_curve->clear();
@@ -654,7 +656,7 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
                 m_curve->deletePivot(m_current);
                 m_editingMode = true;
             }
-            draw();
+            draw(false);
         }
     } else
         super::keyPress(event);
@@ -663,12 +665,12 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
 void KisToolMagnetic::buttonRelease(KisButtonReleaseEvent *event)
 {
     if (m_editingMode) {
-        draw();
+        draw(m_current);
         m_editingMode = false;
         if (!m_curve->isEmpty())
             m_curve->movePivot(m_current, m_currentPoint);
         m_editingMode = true;
-        draw();
+        draw(m_current);
     }
     super::buttonRelease(event);
 }
@@ -679,7 +681,47 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
     if (!m_currentImage)
         return;
     if (event->button() == Qt::LeftButton) {
-        draw();
+        m_dragging = true;
+        m_currentPoint = event->pos();
+        PointPair temp(m_curve->end(),false);
+        if (m_editingMode)
+            temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
+        if (temp.first == m_curve->end() && !(m_actionOptions)) {
+            if (m_editingMode)
+                draw(m_curve->end());
+            else
+                draw(m_curve->end());
+            if (m_curve->isEmpty() && !m_editingMode)
+                m_previous = m_curve->pushPivot(event->pos());
+            else
+                m_previous = m_current;
+            m_current = m_curve->pushPivot(event->pos());
+            if (m_curve->pivots().count() > 1)
+                m_curve->calculateCurve(m_previous,m_current,m_current);
+            if (m_editingMode)
+                draw();
+            else {
+                if ((*m_previous).point() == (*m_current).point())
+                    draw(m_curve->end());
+                else
+                    draw();
+            }
+        } else if (temp.first != m_curve->end()) {
+            if (temp.second) {
+                draw(true, true);
+                m_current = m_curve->selectPivot(temp.first);
+                draw(true, true);
+            } else {
+                draw(false);
+                m_current = selectByMouse(temp.first);
+                draw(false);
+            }
+            if (!(*m_current).isSelected())
+                m_dragging = false;
+        }
+    }
+/*
+    if (event->button() == Qt::LeftButton) {
         m_dragging = true;
         m_currentPoint = event->pos().floorQPoint();
         m_current = m_curve->end();
@@ -694,6 +736,7 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
             m_dragging = false;
         draw();
     }
+*/
 }
 
 void KisToolMagnetic::move(KisMoveEvent *event)
@@ -725,44 +768,26 @@ void KisToolMagnetic::move(KisMoveEvent *event)
         if (!m_dragging)
             return;
     }
-    draw();
     KisPoint trans = event->pos() - m_currentPoint;
     KisPoint dist;
     dist = (*m_current).point() - (*m_current.previousPivot()).point();
-    if ((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_editingMode))
-        m_previous = m_curve->addPivot(m_current,event->pos());
+    if ((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_editingMode)) {
+        draw(m_curve->end());
+        m_previous = m_current;
+        m_current = m_curve->pushPivot(event->pos());
+    } else if ((*m_previous).point() == (*m_current).point())
+        draw(m_curve->end());
+    else
+        draw();
     m_curve->movePivot(m_current,event->pos());
     m_currentPoint = event->pos().floorQPoint();
     draw();
 }
 
-KisCurve::iterator KisToolMagnetic::selectByMouse(const QPoint& pos)
+KisCurve::iterator KisToolMagnetic::selectByMouse(KisCurve::iterator it)
 {
-    KisCurve::iterator it, next, currPivot, nextPivot;
-    QPoint currPos = m_subject->canvasController()->windowToView(pos);
-    QPoint pos1, pos2;
-    it = handleUnderMouse(currPos);
-    if (it != m_curve->end())
-        return m_curve->selectPivot(it);
-
-    for (it = m_curve->begin(); it != m_curve->end(); it++) {
-        next = it.next();
-        if (next == m_curve->end() || it == m_curve->end())
-            return m_curve->end();
-        if ((*it).hint() > LINEHINT || (*next).hint() > LINEHINT)
-            continue;
-        pos1 = m_subject->canvasController()->windowToView((*it).point().toQPoint());
-        pos2 = m_subject->canvasController()->windowToView((*next).point().toQPoint());
-        if (pos1 == pos2)
-            continue;
-        if (pointToSegmentDistance(currPos,pos1,pos2) <= MAXDISTANCE)
-            break;
-    }
-
-    nextPivot = it.nextPivot();
-
-    currPivot = m_curve->selectPivot(m_curve->addPivot(nextPivot, KisPoint(0,0)));
-    m_curve->movePivot(currPivot,pos);
+    KisCurve::iterator currPivot = m_curve->selectPivot(m_curve->addPivot(it, KisPoint(0,0)));
+    m_curve->movePivot(currPivot,(*it).point());
 
     return currPivot;
 }

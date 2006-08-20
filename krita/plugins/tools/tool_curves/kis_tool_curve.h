@@ -88,7 +88,8 @@ protected:
     /*
      * draw() initializes the KisCanvasPainter and then loop on the points of the curve for drawing them.
      */
-    virtual void draw(bool = false);
+    virtual void draw(bool = true, bool = false);
+    virtual void draw(KisCurve::iterator inf, bool = false, bool = true);
 
     /*
      * Used by draw() to draw the current point of the curve. Can draw more than one point and then returns the last one

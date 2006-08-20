@@ -182,7 +182,7 @@ class CurveIterator {
 
 public:
 
-    CurveIterator () {}
+    CurveIterator () { m_target = 0; m_position = 0;}
 
     CurveIterator (const KisCurve &target)
         {m_target = &target;}

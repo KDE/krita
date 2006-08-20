@@ -12,6 +12,7 @@ Name[nl]=Afbeeldingsfilters (extensie)
 Name[pt]=Filtros de Melhoramento de Imagem (Extensão)
 Name[pt_BR]=Filtros de Melhoramento de Imagem (Extensão)
 Name[ru]=Улучшение изображения (расширение)
+Name[sv]=Bildförbättringsfilter (utökning)
 Name[zh_TW]=增強過濾器（延伸）
 ServiceTypes=Krita/Filter
 Type=Service

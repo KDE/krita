@@ -11,6 +11,7 @@ Name[nl]=Siox-gereedschap
 Name[pt]=Ferramenta Siox
 Name[pt_BR]=Ferramenta Siox
 Name[ru]=Выделение объекта
+Name[sv]=Siox-verktyg
 Name[zh_TW]=Siox 工具
 ServiceTypes=Krita/Tool
 Type=Service

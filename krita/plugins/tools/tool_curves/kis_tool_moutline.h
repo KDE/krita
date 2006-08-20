@@ -102,6 +102,7 @@ private:
     bool m_editingMode;
     bool m_editingCursor;
     bool m_draggingCursor;
+    bool m_needNewPivot;
 
 };
 

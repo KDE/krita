@@ -692,8 +692,6 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
             draw(m_curve->end());
             if (!m_curve->isEmpty()) {
-                if ((*m_previous).point() == event->pos())
-                    return;
                 m_previous = m_current;
                 m_current = m_curve->pushPivot(event->pos());
             } else {
@@ -709,7 +707,7 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
                 else
                     draw();
             }
-        } else if (temp.first != m_curve->end()) {
+        } else if (temp.first != m_curve->end() && m_editingMode) {
             if (temp.second) {
                 draw(true, true);
                 m_current = m_curve->selectPivot(temp.first);
@@ -764,10 +762,10 @@ void KisToolMagnetic::move(KisMoveEvent *event)
     } else if ((*m_previous).point() == (*m_current).point() && (*m_previous).point() == m_curve->last().point())
         draw(m_curve->end());
     else
-        draw();
+        draw(m_current);
     m_curve->movePivot(m_current,event->pos());
     m_currentPoint = event->pos().floorQPoint();
-    draw();
+    draw(m_current);
 }
 
 KisCurve::iterator KisToolMagnetic::selectByMouse(KisCurve::iterator it)

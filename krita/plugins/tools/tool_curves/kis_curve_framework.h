@@ -128,6 +128,7 @@ public:
 
     /* These needs iterators so they are implemented inline after the definition of CurveIterator */
     iterator begin() const;
+    iterator lastIterator() const;
     iterator end() const;
     iterator find(const CurvePoint& pt);
     iterator find(const KisPoint& pt);
@@ -298,6 +299,11 @@ inline bool KisCurve::checkIterator (KisCurve::iterator checking) const
 inline KisCurve::iterator KisCurve::begin() const
 {
     return iterator(*this,m_curve.begin());
+}
+
+inline KisCurve::iterator KisCurve::lastIterator() const
+{
+    return (iterator(*this,--m_curve.end()));
 }
 
 inline KisCurve::iterator KisCurve::end() const

@@ -694,11 +694,12 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
                 draw(m_curve->end());
             else
                 draw(m_curve->end());
-            if (m_curve->isEmpty() && !m_editingMode)
-                m_previous = m_curve->pushPivot(event->pos());
-            else
+            if (!m_curve->isEmpty()) {
                 m_previous = m_current;
-            m_current = m_curve->pushPivot(event->pos());
+                m_current = m_curve->pushPivot(event->pos());
+            } else {
+                m_previous = m_current = m_curve->pushPivot(event->pos());
+            }
             if (m_curve->pivots().count() > 1)
                 m_curve->calculateCurve(m_previous,m_current,m_current);
             if (m_editingMode)
@@ -757,7 +758,7 @@ void KisToolMagnetic::move(KisMoveEvent *event)
     KisPoint trans = event->pos() - m_currentPoint;
     KisPoint dist;
     dist = (*m_current).point() - (*m_current.previousPivot()).point();
-    if ((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_editingMode)) {
+    if (((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_editingMode)) || m_curve->pivots().count() == 1) {
         draw(m_curve->end());
         m_previous = m_current;
         m_current = m_curve->pushPivot(event->pos());

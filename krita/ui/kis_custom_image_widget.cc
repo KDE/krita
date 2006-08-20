@@ -27,6 +27,9 @@
 #include "kis_cmb_idlist.h"
 #include "squeezedcombobox.h"
 #include "kis_color.h"
+#include "kis_image.h"
+#include "kis_layer.h"
+
 #include <kcolorcombo.h>
 
 #include <kdebug.h>
@@ -51,6 +54,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32
     connect(cmbColorSpaces, SIGNAL(activated(const KisID &)),
         this, SLOT(fillCmbProfiles(const KisID &)));
     connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
+    m_createButton -> setDefault(true);
 
     fillCmbProfiles(cmbColorSpaces->currentItem());
 
@@ -62,6 +66,13 @@ void KisCustomImageWidget::buttonClicked() {
     QColor qc(cmbColor->color());
 
     m_doc->newImage(txtName->text(), (Q_INT32)intWidth->value(), (Q_INT32)intHeight->value(), cs, KisColor(qc, cs), txtDescription->text(), doubleResolution->value());
+    KisImageSP img = m_doc->currentImage();
+    if (img) {
+        KisLayerSP layer = img->activeLayer();
+        if (layer) {
+            layer->setOpacity(backgroundOpacity());
+        }
+    }
     emit documentSelected();
 }
 

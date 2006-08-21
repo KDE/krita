@@ -173,6 +173,7 @@ public:
 
     virtual void moveSelected(const KisPoint&);
     virtual void deleteSelected();
+    virtual void selectAll(bool = true);
 };
 
 class CurveIterator {

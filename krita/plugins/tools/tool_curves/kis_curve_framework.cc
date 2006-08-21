@@ -234,7 +234,7 @@ void KisCurve::deletePivot (KisCurve::iterator it)
     }
 }
 
-// Probably it can be optimized - it's is smooth though.
+// Probably it can be optimized - it is smooth though.
 void KisCurve::moveSelected (const KisPoint& trans)
 {
     KisPoint p;
@@ -251,4 +251,10 @@ void KisCurve::deleteSelected ()
     KisCurve sel = selectedPivots();
     for (iterator it = sel.begin(); it != sel.end(); it++)
         deletePivot((*it));
+}
+
+void KisCurve::selectAll(bool sel)
+{
+    for (iterator i = begin(); i != end(); i = i.nextPivot())
+        (*i).setSelected(sel);
 }

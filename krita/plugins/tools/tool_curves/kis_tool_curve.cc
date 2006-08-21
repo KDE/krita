@@ -120,6 +120,9 @@ void KisToolCurve::buttonPress(KisButtonPressEvent *event)
         m_currentPoint = event->pos();
         PointPair temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
+            draw(true, true);
+            m_curve->selectAll(false);
+            draw(true, true);
             draw(m_curve->end());
             m_previous = m_curve->find(m_curve->last());
             m_current = m_curve->pushPivot(event->pos());

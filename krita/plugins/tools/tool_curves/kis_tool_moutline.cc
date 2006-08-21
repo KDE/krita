@@ -690,6 +690,11 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
         if (m_editingMode)
             temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos().toQPoint()));
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
+            if (m_editingMode) {
+                draw(true, true);
+                m_curve->selectAll(false);
+                draw(true, true);
+            }
             draw(m_curve->end());
             if (!m_curve->isEmpty()) {
                 m_previous = m_current;

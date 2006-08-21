@@ -42,30 +42,10 @@ class KoXmlWriter;
 
 namespace KFormula {
 
-class Container;
-class ElementType;
 class FontCommand;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
-/*
-enum ElementType
-{
-    SequenceElement,     
-    MultiscriptElement,
-    OverUnderElement,
-    MatrixElement,
-    MatrixRowElement,
-    MatrixEntryElement,
-    FractionElement,
-    OperatorElement,
-    NumberElement,
-    BracketElement,
-    RootElement,
-    TextElement
-};*/
-
-
 
 /**
  * @short The base class for all elements of a formula
@@ -111,16 +91,13 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements() = 0;
+    virtual const QList<BasicElement*>& childElements();
 
     /// @return The element's painter path used for painting it
     const QPainterPath& elementPath() const;
 
     /// @returns True if the element is invisible, a phantomelement
     virtual bool isInvisible() const;
-
-    /// @return The type of element represented within the enum ElementType
-    //  ElementType elementType() const;
 
     /// @return The height of the element
     double height() const;
@@ -130,6 +107,49 @@ public:
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
+
+    /// @return The parent element of this BasicElement
+    BasicElement* parentElement() const;
+
+    /**
+     * Move the FormulaCursor left
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    virtual void moveLeft( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor right 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor up 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    virtual void moveUp( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor down 
+     * @param cursor The FormulaCursor to be moved
+     * @param from The BasicElement which was the last owner of the FormulaCursor
+     */
+    virtual void moveDown( FormulaCursor* cursor, BasicElement* from );
+
+    /**
+     * Move the FormulaCursor at the first position of the line 
+     * @param cursor The FormulaCursor to be moved
+     */
+    virtual void moveHome( FormulaCursor* cursor );
+
+    /**
+     * Move the FormulaCursor at the end of the line
+     * @param from The FormulaCursor to be moved 
+     */
+    virtual void moveEnd( FormulaCursor* cursor );
 
     virtual void readMathML( const QDomElement& element );
 
@@ -206,54 +226,7 @@ public:
      */
     virtual void dispatchFontCommand( FontCommand* /*cmd*/ ) {}
 
-    // navigation
-    //
-    // The elements are responsible to handle cursor movement themselves.
-    // To do this they need to know the direction the cursor moves and
-    // the element it comes from.
-    //
-    // The cursor might be in normal or in selection mode.
-
-    /**
-     * Enters this element while moving to the left starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the left of it.
-     */
-    virtual void moveLeft(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving to the right starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the right of it.
-     */
-    virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving up starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or above it.
-     */
-    virtual void moveUp(FormulaCursor*, BasicElement*) {}
-
-    /**
-     * Enters this element while moving down starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or below it.
-     */
-    virtual void moveDown(FormulaCursor*, BasicElement* ) {}
-
-    /**
-     * Moves the cursor to the first position in this sequence.
-     * (That is before the first child.)
-     */
-    virtual void moveHome(FormulaCursor*) {}
-
-    /**
-     * Moves the cursor to the last position in this sequence.
-     * (That is behind the last child.)
-     */
-    virtual void moveEnd(FormulaCursor*) {}
-
+    
     /**
      * Sets the cursor inside this element to its start position.
      * For most elements that is the main child.
@@ -324,14 +297,14 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual KCommand* buildCommand( Container*, Request* ) { return 0; }
+//    virtual KCommand* buildCommand( Container*, Request* ) { return 0; }
 
     /**
      * Parses the input. It's the container which does create
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual KCommand* input( Container*, QKeyEvent* ) { return 0; }
+//    virtual KCommand* input( Container*, QKeyEvent* ) { return 0; }
 
     // basic support
 
@@ -425,9 +398,6 @@ private:
 
     /// True if the element is a phantom element means is not visible
     bool m_phantomElement;   
-
-    /// The BasicElement's type of element - an element has to set it in the constructor
-    //    ElementType m_elementType;
 
     
     

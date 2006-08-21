@@ -61,6 +61,8 @@ public:
      */
     FormulaCursor(FormulaElement* element);
 
+    BasicElement* currentElement() const;
+
     FormulaCursor& operator= (const FormulaCursor&);
 
     // where the cursor and the mark are
@@ -198,7 +200,7 @@ public:
      * If there is a selection and you don't provide a mark the
      * current mark won't change.
      */
-    void setTo(BasicElement* element, int cursor, int mark=-1);
+    void setTo( BasicElement* element, int cursor, int mark=-1);
 
     void setPos(int pos);
     void setMark(int mark);

@@ -1056,7 +1056,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     return 0;
 }
 */
-
+/*
 KCommand* SequenceElement::input( Container* container, QKeyEvent* event )
 {
     QChar ch = event->text().at( 0 );
@@ -1139,10 +1139,10 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
     int unicode = ch.unicode();
     switch (unicode) {
     case '(': {
-/*        BracketRequest r( container->document()->leftBracketChar(),
+        BracketRequest r( container->document()->leftBracketChar(),
                           container->document()->rightBracketChar() );
         singlePipe = true;
-        return buildCommand( container, &r );*/
+        return buildCommand( container, &r );
     }
     case '[': {
         BracketRequest r( LeftSquareBracket, RightSquareBracket );
@@ -1210,7 +1210,7 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
     }
     }
     return 0;
-}
+}*/
 
 /**
  * Stores the given m_sequenceChildrens dom in the element.

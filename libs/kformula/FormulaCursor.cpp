@@ -40,7 +40,15 @@ FormulaCursor::FormulaCursor(FormulaElement* element)
     element->goInside( this );
 }
 
-void FormulaCursor::setTo(BasicElement* element, int cursor, int mark)
+BasicElement* FormulaCursor::currentElement() const
+{
+    return current;
+}
+
+
+
+
+void FormulaCursor::setTo( BasicElement* element, int cursor, int mark)
 {
     hasChangedFlag = true;
     current = element;

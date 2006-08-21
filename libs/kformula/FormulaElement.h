@@ -41,19 +41,26 @@ class SymbolTable;
  */
 class FormulaElement : public BasicElement {
 public:
-
-    /**
-     * The container this FormulaElement belongs to must not be 0,
-     * except you really know what you are doing.
-     */
+    /// The standard constructor
     FormulaElement();
 
-
+    /// The standard destructor
+    ~FormulaElement();
+    
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    const QList<BasicElement*>& childElements();
+
+    void readMathML( const QDomElement& element );
+    
+    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+
+
+
+
+
 
     void addChild( BasicElement* element );
     void deleteChild( BasicElement* element );
@@ -153,28 +160,21 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual KCommand* buildCommand( Container*, Request* );
+//    virtual KCommand* buildCommand( Container*, Request* );
 
     /**
      * @returns our documents symbol table
      */
     const SymbolTable& getSymbolTable() const;
 
-    /**
-     * @returns the latex representation of the element and
-     * of the element's children
-     */
-//    virtual QString toLatex();
-
     int getBaseSize() const { return baseSize; }
     void setBaseSize( int size );
 
     bool hasOwnBaseSize() const { return ownBaseSize; }
 
-    virtual KCommand* input( Container* container, QKeyEvent* event );
+//    virtual KCommand* input( Container* container, QKeyEvent* event );
 
-    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
-
+ 
     /**
      * Appends our attributes to the dom element.
      */
@@ -186,7 +186,9 @@ public:
     QDomElement emptyFormulaElement( QDomDocument& doc );
 
 protected:
-    virtual void drawInternal();
+    void drawInternal();
+
+    void readMathMLAttributes( const QDomElement& element );
 
     
     //Save/load support
@@ -211,6 +213,7 @@ protected:
 
 
 private:
+    /// The child elements of the FormulaElement 
     QList<BasicElement*> m_childElements;
 
     /**

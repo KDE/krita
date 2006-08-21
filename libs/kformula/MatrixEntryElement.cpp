@@ -101,7 +101,7 @@ void MatrixEntryElement::registerTab( BasicElement* tab )
     tabs.append( tab );
 }
 
-
+/*
 KCommand* MatrixEntryElement::buildCommand( Container* container, Request* request )
 {
     FormulaCursor* cursor = container->activeCursor();
@@ -119,12 +119,12 @@ KCommand* MatrixEntryElement::buildCommand( Container* container, Request* reque
         FormulaCursor* cursor = container->activeCursor();
         return new KFCNewLine( i18n( "Add Newline" ), container, this, cursor->getPos() );
     }
-/*    case req_addTabMark: {
+    case req_addTabMark: {
         KFCReplace* command = new KFCReplace( i18n("Add Tabmark"), container );
         SpaceElement* element = new SpaceElement( THIN, true );
         command->addElement( element );
         return command;
-    }*/
+    }
     default:
         break;
     }
@@ -166,7 +166,7 @@ KCommand* MatrixEntryElement::input( Container* container, QChar ch )
     }
     return SequenceElement::input( container, ch );
 }
-
+*/
 
 void MatrixEntryElement::moveTabTo( int i, luPixel pos )
 {

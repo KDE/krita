@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <kdebug.h>
@@ -27,9 +28,8 @@
 #include "SequenceElement.h"
 
 namespace KFormula {
-using namespace std;
 
-BasicElement::BasicElement( BasicElement* p ) : m_baseline( 0 )// elementType( 0 )
+BasicElement::BasicElement( BasicElement* p ) : m_baseline( 0 )
 {
     m_parentElement = p;
     m_boundingRect = QRectF( 0, 0, 0, 0 );
@@ -37,6 +37,77 @@ BasicElement::BasicElement( BasicElement* p ) : m_baseline( 0 )// elementType( 0
 
 BasicElement::~BasicElement()
 {
+}
+
+const QList<BasicElement*>& BasicElement::childElements() 
+{
+    return QList<BasicElement*>();
+}
+
+const QRectF& BasicElement::boundingRect() const
+{
+    return m_boundingRect;
+}
+
+BasicElement* BasicElement::childElementAt( const QPointF& p )
+{
+    if( !m_boundingRect.contains( p ) )
+        return 0;
+	  	
+    if( childElements().isEmpty() ) 
+        return this;
+	      
+    BasicElement* ownerElement = 0;
+    foreach( BasicElement* tmpElement, childElements() )  
+    {
+        ownerElement = tmpElement->childElementAt( p );
+	
+        if( ownerElement )
+            return ownerElement;
+    }
+    
+    return this;    // if no child contains the point, it's the FormulaElement itsself
+}
+
+BasicElement* BasicElement::parentElement() const
+{
+    return m_parentElement;
+}
+
+void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )
+{
+    if( cursor->currentElement() == this )
+        parentElement()->moveLeft( cursor, this );
+    else
+        cursor->setTo( this, 1 );
+}
+
+void BasicElement::moveRight( FormulaCursor* cursor, BasicElement* )
+{
+    if( cursor->currentElement() == this )
+        parentElement()->moveRight( cursor, this );
+    else
+        cursor->setTo( this, 1 );
+}
+
+void BasicElement::moveUp( FormulaCursor* cursor, BasicElement* )
+{
+    parentElement()->moveUp( cursor, this );
+}
+
+void BasicElement::moveDown( FormulaCursor* cursor, BasicElement* )
+{
+    parentElement()->moveDown( cursor, this );
+}
+
+void BasicElement::moveHome( FormulaCursor* cursor )
+{
+    parentElement()->moveHome( cursor );
+}
+
+void BasicElement::moveEnd( FormulaCursor* cursor )
+{
+    parentElement()->moveEnd( cursor );
 }
 
 void BasicElement::readMathML( const QDomElement& element )
@@ -52,6 +123,9 @@ void BasicElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
 /*    parent.appendChild( doc.createComment( QString( "MathML Error in %1" )
                                            .arg( getTagName() ) ) );*/
 }
+
+
+
 
 
 bool BasicElement::isInvisible() const
@@ -85,15 +159,7 @@ LuPixelPoint BasicElement::widgetPos()
 }
 
 
-/**
- * Enters this element while moving to the left starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the left of it.
- */
-void BasicElement::moveLeft(FormulaCursor* cursor, BasicElement*)
-{
-    getParent()->moveLeft(cursor, this);
-}
+
 
  /**
   * - * Sets the cursor inside this element to its start position
@@ -107,15 +173,7 @@ void BasicElement::goInside(FormulaCursor* cursor)
     }
 }
 
-/**
- * Enters this element while moving to the right starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the right of it.
- */
-void BasicElement::moveRight(FormulaCursor* cursor, BasicElement*)
-{
-    getParent()->moveRight(cursor, this);
-}
+
 
 
 /**
@@ -244,29 +302,6 @@ double BasicElement::getX() const
     return m_boundingRect.x();
 }
 
-const QRectF& BasicElement::boundingRect() const
-{
-    return m_boundingRect;
-}
 
-BasicElement* BasicElement::childElementAt( const QPointF& p )
-{
-    if( !m_boundingRect.contains( p ) )
-        return 0;
-	  	
-    if( childElements().isEmpty() ) 
-        return this;
-	      
-    BasicElement* ownerElement = 0;
-    foreach( BasicElement* tmpElement, childElements() )  
-    {
-        ownerElement = tmpElement->childElementAt( p );
-	
-        if( ownerElement )
-            return ownerElement;
-    }
-    
-    return this;    // if no child contains the point, it's the FormulaElement itsself
-}
 
 } // namespace KFormula

@@ -233,8 +233,8 @@ public:
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual KCommand* input( Container* container, QChar ch );
-    virtual KCommand* input( Container* container, QKeyEvent* event );
+//    virtual KCommand* input( Container* container, QChar ch );
+//    virtual KCommand* input( Container* container, QKeyEvent* event );
 
    /**
      * Stores the given childrens dom in the element.

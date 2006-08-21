@@ -63,9 +63,9 @@ public:
 	 * @returns the command that performs the requested action with the
 	 * containers active cursor.
 	 */
-	 virtual KCommand* buildCommand( Container*, Request* );
+/*	 virtual KCommand* buildCommand( Container*, Request* );
 	 virtual KCommand* input( Container* container, QKeyEvent* event );
-	 virtual KCommand* input( Container* container, QChar ch );
+	 virtual KCommand* input( Container* container, QChar ch );*/
 	 int tabCount() const { return tabs.count(); }
 	 BasicElement* tab( int i ) { return tabs.at( i ); }
 		 

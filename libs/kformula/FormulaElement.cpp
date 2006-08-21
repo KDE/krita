@@ -21,14 +21,14 @@
 
 #include "FormulaElement.h"
 
+#include "FormulaCursor.h"
+#include "ElementFactory.h"
+
 
 #include <QPainter>
 #include <QKeyEvent>
-
 #include <kdebug.h>
-
 #include "contextstyle.h"
-#include "FormulaCursor.h"
 #include "FormulaContainer.h"
 
 namespace KFormula {
@@ -37,8 +37,41 @@ FormulaElement::FormulaElement() : BasicElement( 0 ) , baseSize( 20 ), ownBaseSi
 {
 }
 
+FormulaElement::~FormulaElement()
+{
+    // delete all child elements
+    foreach( BasicElement* tmpElement, m_childElements )
+	delete tmpElement;
+}
+
+const QList<BasicElement*>& FormulaElement::childElements()
+{
+    return m_childElements;
+}
+
 void FormulaElement::drawInternal()
 {
+}
+
+void FormulaElement::readMathML( const QDomElement& element )
+{
+}
+
+void FormulaElement::readMathMLAttributes( const QDomElement& element )
+{
+}
+
+void FormulaElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+{
+/*    QDomElement de;
+    if ( !oasisFormat )
+        de = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
+                                              "math" );
+    else
+        de =doc.createElement( "math:semantics" );
+
+    BasicElement::writeMathML( doc, de, oasisFormat );
+    parent.appendChild( de );*/
 }
 
 
@@ -54,10 +87,7 @@ void FormulaElement::setBaseSize( int size )
 //    m_document->baseSizeChanged( size, ownBaseSize );
 }
 
-const QList<BasicElement*>& FormulaElement::childElements()
-{
-    return m_childElements;
-}
+
 
 
 void FormulaElement::elementRemoval(BasicElement* child)
@@ -160,7 +190,7 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
     draw( painter, r, context, context.getBaseTextStyle(),
           ContextStyle::normal, LuPixelPoint() );
 }
-
+/*
 KCommand* FormulaElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
@@ -170,7 +200,7 @@ KCommand* FormulaElement::buildCommand( Container* container, Request* request )
         break;
     }
     return BasicElement::buildCommand( container, request );
-}
+}*/
 
 const SymbolTable& FormulaElement::getSymbolTable() const
 {
@@ -189,7 +219,7 @@ QDomElement FormulaElement::emptyFormulaElement( QDomDocument& doc )
     */
     return element;
 }
-
+/*
 KCommand* FormulaElement::input( Container* container, QKeyEvent* event )
 {
     QChar ch = event->text().at( 0 );
@@ -208,7 +238,7 @@ KCommand* FormulaElement::input( Container* container, QKeyEvent* event )
         }
     }
     return BasicElement::input( container, event );
-}
+}*/
 
 /**
  * Appends our attributes to the dom element.
@@ -299,17 +329,6 @@ void FormulaElement::convertNames( QDomNode node )
     }
 }
 
-void FormulaElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    QDomElement de;
-    if ( !oasisFormat )
-        de = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
-                                              "math" );
-    else
-        de =doc.createElement( "math:semantics" );
 
-    BasicElement::writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );*/
-}
 
 } // namespace KFormula

@@ -256,7 +256,7 @@ KoDocument::KoDocument( QWidget * parentWidget, QObject* parent, bool singleView
 
     setObjectName( newObjectName() );
     new KoDocumentAdaptor(this);
-    QDBus::sessionBus().registerObject( '/' + objectName(), this);
+    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this);
 
 
     // the parent setting *always* overrides! (Simon)

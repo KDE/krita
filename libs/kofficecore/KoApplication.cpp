@@ -70,7 +70,7 @@ KoApplication::KoApplication()
 //     dcopClient()->setDefaultObject( d->m_appIface->objId() );
 
     new KoApplicationAdaptor(this);
-    QDBus::sessionBus().registerObject("/application", this);
+    QDBusConnection::sessionBus().registerObject("/application", this);
 
     m_starting = true;
 }

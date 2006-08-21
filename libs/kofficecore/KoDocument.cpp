@@ -1679,7 +1679,9 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlD
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
         d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4"
-                              ,filename  ,errorLine, errorColumn , errorMsg);
+                              ,filename  ,errorLine, errorColumn ,
+                              QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
+                                  QCoreApplication::UnicodeUTF8));
         store->close();
         return false;
     }

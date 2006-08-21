@@ -280,6 +280,10 @@ public:
     void setIndent (int indent) { setProperty(QTextFormat::BlockIndent, indent); }
     /// duplicated property from QTextBlockFormat
     int indent () const { return propertyInt(QTextFormat::BlockIndent); }
+    /// duplicated property from QTextBlockFormat
+    void setNonBreakableLines(bool on) { setProperty(QTextFormat::BlockNonBreakableLines, on); }
+    /// duplicated property from QTextBlockFormat
+    bool nonBreakableLines() const { return propertyBoolean(QTextFormat::BlockNonBreakableLines); }
 
     /// set the parent style this one inherits its unset properties from.
     void setParent(KoParagraphStyle *parent);
@@ -317,6 +321,9 @@ public:
      * the character style (where relevant) to the target block formats.
      */
     void applyStyle(QTextBlock &block) const;
+
+    KoCharacterStyle *characterStyle() { return m_charStyle; }
+    const KoCharacterStyle *characterStyle() const { return m_charStyle; }
 
 private:
     void setProperty(int key, const QVariant &value);

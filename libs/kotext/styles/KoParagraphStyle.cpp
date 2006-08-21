@@ -115,6 +115,7 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
         QTextFormat::BlockAlignment,
         QTextFormat::TextIndent,
         QTextFormat::BlockIndent,
+        QTextFormat::BlockNonBreakableLines,
         StyleId,
         FixedLineHeight,
         MinimumLineHeight,

@@ -1719,17 +1719,26 @@ bool KoDocument::loadNativeFormat( const QString & file )
             return false;
         }
 
-        // Try to find out whether it is a mime multi part file
-        char buf[5];
-        if ( in.read( buf, 4 ) < 4 )
-        {
-            QApplication::restoreOverrideCursor();
-            in.close();
-            d->lastErrorMessage = i18n( "Could not read the beginning of the file." );
-            return false;
-        }
-        // ### TODO: allow UTF-16
-        isRawXML = (strncasecmp( buf, "<?xm", 4 ) == 0);
+        char buf[6];
+        buf[5]=0;
+        int pos=0;
+        do {
+            if ( in.read( buf+pos , 1 ) < 1 )
+            {
+                QApplication::restoreOverrideCursor();
+                in.close();
+                d->lastErrorMessage = i18n( "Could not read the beginning of the file." );
+                return false;
+            }
+
+            if(QChar( buf[pos] ).isSpace())
+                continue;
+            pos++;
+        } while ( pos < 5 );
+        isRawXML = (strncasecmp( buf, "<?xml", 5 ) == 0);
+        if(! isRawXML)
+            // also check for broken MathML files, which seem to be rather common
+            isRawXML = (strncasecmp( buf, "<math", 5 ) == 0); // file begins with <math ?
         //kDebug(30003) << "PATTERN=" << buf << endl;
     }
     // Is it plain XML?

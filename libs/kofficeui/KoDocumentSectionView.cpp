@@ -45,6 +45,8 @@ KoDocumentSectionView::KoDocumentSectionView( QWidget *parent )
     d->delegate = new KoDocumentSectionDelegate( this, this );
     setMouseTracking( true );
     setVerticalScrollMode( ScrollPerPixel );
+    setSelectionMode( SingleSelection );
+    setSelectionBehavior( SelectItems );
     header()->hide();
 }
 

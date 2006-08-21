@@ -331,7 +331,7 @@ void KisLayer::activate()
 
 void KisLayer::deactivate()
 {
-    notifyPropertyChanged(this);
+    /*notifyPropertyChanged(this); not necessary, and causes scrolling issues */
 }
 
 bool KisLayer::isActive() const

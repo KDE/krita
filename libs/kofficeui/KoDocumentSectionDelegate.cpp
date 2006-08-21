@@ -103,10 +103,10 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
             return false;
         }
 
-        const QRect ir = iconsRect( option, index ).translated( option.rect.topLeft() )
-                       , tr = textRect( option, index ).translated( option.rect.topLeft() );
+        const QRect ir = iconsRect( option, index ).translated( option.rect.topLeft() ),
+                    tr = textRect( option, index ).translated( option.rect.topLeft() );
 
-        if( ir.contains( me->pos() ) )
+        if( ir.isValid() && ir.contains( me->pos() ) )
         {
             const int iconWidth = option.decorationSize.width();
             int x = me->pos().x() - ir.left();
@@ -128,7 +128,7 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
             return true;
         }
 
-        else if( tr.contains( me->pos() ) && ( option.state & QStyle::State_HasFocus ) )
+        else if( tr.isValid() && tr.contains( me->pos() ) && ( option.state & QStyle::State_HasFocus ) )
         {
             d->view->edit( index );
             return true;
@@ -264,16 +264,17 @@ int KoDocumentSectionDelegate::thumbnailHeight( const QStyleOptionViewItem &opti
 int KoDocumentSectionDelegate::availableWidth( const QModelIndex &index ) const
     //this is such a HACK
 {
-    if( !d->view->rootIndex().isValid() )
-        return d->view->width();
-    QModelIndex i = index;
     int dis = 0;
-    while( i.isValid() && i != d->view->rootIndex() )
+    if( d->view->rootIndex().isValid() )
     {
-        i = i.parent();
-        dis++;
+        QModelIndex i = index;
+        while( i.isValid() && i != d->view->rootIndex() )
+        {
+            i = i.parent();
+            dis++;
+        }
+        Q_ASSERT( i.isValid() );
     }
-    Q_ASSERT( i.isValid() );
     if( d->view->rootIsDecorated() )
         dis++;
     const int indent = dis * d->view->indentation();

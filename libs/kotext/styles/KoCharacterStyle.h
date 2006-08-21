@@ -28,6 +28,17 @@
 class StylePrivate;
 class QTextBlock;
 
+/**
+ * A container for all properties for a character style.
+ * A character style represents all character properties for a set of characters.
+ * Each character in the document will have a character style, most of the time
+ * shared with all the characters next to it that have the same style (see
+ * QTextFragment).
+ * In a document the instances of QTextCharFormat which are based on a
+ * KoCharacterStyle have a property StyleId with an integer as value which
+ * equals styleId() of that style.
+ * @see KoStyleManager
+ */
 class KOTEXT_EXPORT KoCharacterStyle : public QObject {
     Q_OBJECT
 public:
@@ -42,9 +53,9 @@ public:
     QFont font () const {
         return static_cast<QFont> (propertyObject(QTextFormat::FOO));
     }
-    void setFontFamily (const QString &family) { setProperty(QTextFormat::FOO, family); }
-    QString fontFamily () const { return propertyString(QTextFormat::FOO); }
 */
+    void setFontFamily (const QString &family) { setProperty(QTextFormat::FontFamily, family); }
+    QString fontFamily () const { return propertyString(QTextFormat::FontFamily); }
     void setFontPointSize (qreal size) { setProperty(QTextFormat::FontPointSize, size); }
     double fontPointSize () const { return propertyDouble(QTextFormat::FontPointSize); }
     void setFontWeight (int weight) { setProperty(QTextFormat::FontWeight, weight); }
@@ -74,6 +85,13 @@ public:
     void setTextOutline (const QPen &pen) { setProperty(QTextFormat::TextOutline, pen); }
     QPen textOutline () const;
 
+    void setBackground (const QBrush &brush) { setProperty(QTextFormat::BackgroundBrush, brush); }
+    QBrush background () const;
+    void clearBackground ();
+    void setForeground (const QBrush &brush) { setProperty(QTextFormat::ForegroundBrush, brush); }
+    QBrush foreground () const;
+    void clearForeground ();
+
 
     const QString& name() const { return m_name; }
 
@@ -85,6 +103,7 @@ public:
 
     void applyStyle(QTextCharFormat &format) const;
     void applyStyle(QTextBlock &block) const;
+    void applyStyle(QTextCursor *selection) const;
 
 private:
     void setProperty(int key, const QVariant &value);

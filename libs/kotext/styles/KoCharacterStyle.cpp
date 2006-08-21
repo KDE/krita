@@ -68,6 +68,32 @@ QColor KoCharacterStyle::underlineColor () const {
     return qvariant_cast<QColor>(variant);
 }
 
+QBrush KoCharacterStyle::background() const {
+    const QVariant *variant = get(QTextFormat::BackgroundBrush);
+    if(variant == 0) {
+        QBrush brush;
+        return brush;
+    }
+    return qvariant_cast<QBrush>(variant);
+}
+
+void KoCharacterStyle::clearBackground() {
+    m_stylesPrivate->remove(QTextCharFormat::BackgroundBrush);
+}
+
+QBrush KoCharacterStyle::foreground() const {
+    const QVariant *variant = get(QTextFormat::ForegroundBrush);
+    if(variant == 0) {
+        QBrush brush;
+        return brush;
+    }
+    return qvariant_cast<QBrush>(variant);
+}
+
+void KoCharacterStyle::clearForeground() {
+    m_stylesPrivate->remove(QTextCharFormat::ForegroundBrush);
+}
+
 int KoCharacterStyle::propertyInt(int key) const {
     const QVariant *variant = get(key);
     if(variant == 0)
@@ -107,6 +133,12 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const {
     cursor.setPosition(block.position() + block.length()-1, QTextCursor::KeepAnchor);
     applyStyle(cf);
     cursor.mergeCharFormat(cf);
+}
+
+void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
+    QTextCharFormat cf = selection->charFormat();
+    applyStyle(cf);
+    selection->mergeCharFormat(cf);
 }
 
 #include "KoCharacterStyle.moc"

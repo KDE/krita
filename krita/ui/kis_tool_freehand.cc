@@ -81,8 +81,10 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 
     if (e->button() == QMouseEvent::LeftButton) {
         
-        
-        if (!m_currentImage->bounds().contains(e->pos().floorQPoint())) return;
+        // People complain that they can't start brush strokes outside of the image boundaries.
+        // This makes sense, especially when combined with BUG:132759, so commenting out the
+        // next line makes sense.
+        //if (!m_currentImage->bounds().contains(e->pos().floorQPoint())) return;
         
         initPaint(e);
         paintAt(e->pos(), e->pressure(), e->xTilt(), e->yTilt());

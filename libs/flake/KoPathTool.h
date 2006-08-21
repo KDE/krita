@@ -55,6 +55,8 @@ private:
     QRectF untransformed( const QRectF &r );
     /// transform point form world coordinates to local shape coordinates
     QPointF untransformed( const QPointF &p );
+    /// snaps given point to grid point
+    QPointF snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers );
 private:
     enum ActivePointType { Normal, ControlPoint1, ControlPoint2 };
     KoPathShape *m_pathShape;          /// the actual selected path shape

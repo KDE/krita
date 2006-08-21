@@ -53,8 +53,14 @@ void KoPathPoint::setControlPoint2( const QPointF & point )
 }
 
 void KoPathPoint::setProperties( KoPointProperties properties ) 
-{ 
-    m_properties = properties; 
+{
+    if( properties & HasControlPoint1 == 0 || properties & HasControlPoint2 == 0 )
+    {
+        // strip smooth and symmetric flags if points has not two control points
+        properties &= ~IsSmooth;
+        properties &= ~IsSymmetric;
+    }
+    m_properties = properties;
     m_shape->update(); 
 }
 
@@ -237,7 +243,7 @@ const QPainterPath KoPathShape::KoPathShape::outline() const
 QRectF KoPathShape::boundingRect() const
 {
     QRectF bb( outline().boundingRect() );
-    qDebug() << "KoPathShape::boundingRect = " << bb;
+    //qDebug() << "KoPathShape::boundingRect = " << bb;
     return transformationMatrix( 0 ).mapRect( bb );
 }
 

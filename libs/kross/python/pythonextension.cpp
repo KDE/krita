@@ -42,7 +42,10 @@ PythonExtension::PythonExtension(QObject* object)
         "backwards in a transparent way."
     );
     */
+    //behaviors().supportRepr();
     behaviors().supportGetattr();
+    behaviors().supportSequenceType();
+    behaviors().supportMappingType();
 
     m_proxymethod = new Py::MethodDefExt<PythonExtension>(
         "", // methodname, not needed cause we use the method only internaly.
@@ -318,3 +321,68 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
     return Py_None;
 }
+
+int PythonExtension::sequence_length()
+{
+    return m_object->children().count();
+}
+
+Py::Object PythonExtension::sequence_concat(const Py::Object& obj)
+{
+    throw Py::RuntimeError( QString("Unsupported: PythonExtension::sequence_concat %1").arg(obj.as_string().c_str()).toLatin1().constData() );
+}
+
+Py::Object PythonExtension::sequence_repeat(int index)
+{
+    throw Py::RuntimeError( QString("Unsupported: PythonExtension::sequence_repeat %1").arg(index).toLatin1().constData() );
+}
+
+Py::Object PythonExtension::sequence_item(int index)
+{
+    if(index < m_object->children().count())
+        return Py::asObject(new PythonExtension( m_object->children().at(index) ));
+    return Py::asObject( Py::new_reference_to( NULL ) );
+}
+
+Py::Object PythonExtension::sequence_slice(int from, int to)
+{
+    throw Py::RuntimeError( QString("Unsupported: PythonExtension::sequence_slice %1 %2").arg(from).arg(to).toLatin1().constData() );
+}
+
+int PythonExtension::sequence_ass_item(int index, const Py::Object& obj)
+{
+    throw Py::RuntimeError( QString("Unsupported: PythonExtension::sequence_ass_item %1 %2").arg(index).arg(obj.as_string().c_str()).toLatin1().constData() );
+}
+
+int PythonExtension::sequence_ass_slice(int from, int to, const Py::Object& obj)
+{
+    throw Py::RuntimeError( QString("Unsupported: PythonExtension::sequence_ass_slice %1 %2 %3").arg(from).arg(to).arg(obj.as_string().c_str()).toLatin1().constData() );
+}
+
+int PythonExtension::mapping_length()
+{
+    return m_object->children().count();
+}
+
+Py::Object PythonExtension::mapping_subscript(const Py::Object& obj)
+{
+    QString name = Py::String(obj).as_string().c_str();
+    QObject* object = m_object->findChild< QObject* >( name );
+    if(! object) {
+        foreach(QObject* o, m_object->children()) {
+            if(name == o->metaObject()->className()) {
+                object = o;
+                break;
+            }
+        }
+    }
+    if(object)
+        return Py::asObject(new PythonExtension(object));
+    return Py::asObject( Py::new_reference_to( NULL ) );
+}
+
+int PythonExtension::mapping_ass_subscript(const Py::Object& obj1, const Py::Object& obj2)
+{
+    throw Py::RuntimeError( QString("Unsupported: PythonExtension::mapping_ass_subscript %1 %2").arg(obj1.as_string().c_str()).arg(obj2.as_string().c_str()).toLatin1().constData() );
+}
+

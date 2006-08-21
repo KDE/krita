@@ -87,41 +87,6 @@ namespace Kross {
              */
             void writeConfig(KConfig* config);
 
-#if 0
-            /**
-             * Reload the list of installed scripts.
-             */
-            void loadScriptConfig();
-
-            /**
-             * Install the packagefile \p scriptpackagefile . Those
-             * packagefile should be a tar.gz-archive which will be
-             * extracted and to the users script-directory.
-             */
-            bool installScriptPackage(const QString& scriptpackagefile);
-
-            /**
-             * Uninstall the scriptpackage located in the path
-             * \p scriptpackagepath . This just deletes the whole
-             * directory.
-             */
-            bool uninstallScriptPackage(const QString& scriptpackagepath);
-
-            /**
-             * Load the scriptpackage's configurationfile
-             * \p scriptconfigfile and add the defined \a ScriptAction
-             * instances to the list of installed scripts.
-             */
-            bool loadScriptConfigFile(const QString& scriptconfigfile);
-
-            /**
-             * Load the \p document DOM-document from the scriptpackage's
-             * XML-configfile \p scriptconfigfile and add the defined
-             * \a ScriptAction instances to the list of installed scripts.
-             */
-            bool loadScriptConfigDocument(const QString& scriptconfigfile, const QDomDocument &document);
-#endif
-
         public slots:
 
             /**
@@ -159,6 +124,15 @@ namespace Kross {
             * \return true if installing was successfully else false.
             */
             bool installPackage(const KUrl& file);
+
+            /**
+            * Uninstalls the scriptpackage \p action and removes all to the package
+            * belonging files.
+            *
+            * \param action The \a Action that should be removed.
+            * \return true if the uninstall was successfully else false.
+            */
+            bool uninstallPackage(Action* action);
 
             /**
             * The \a ScriptManagerGUI dialog will be displayed to

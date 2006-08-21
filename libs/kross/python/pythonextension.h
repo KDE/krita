@@ -93,6 +93,18 @@ namespace Kross {
             //virtual Py::Object getattr_methods(const char* name);
             //virtual int setattr(const char* name, const Py::Object& value);
 
+            virtual int sequence_length();
+            virtual Py::Object sequence_concat(const Py::Object&);
+            virtual Py::Object sequence_repeat(int);
+            virtual Py::Object sequence_item(int);
+            virtual Py::Object sequence_slice(int, int);
+            virtual int sequence_ass_item(int, const Py::Object&);
+            virtual int sequence_ass_slice(int, int, const Py::Object&);
+
+            virtual int mapping_length();
+            virtual Py::Object mapping_subscript(const Py::Object&);
+            virtual int mapping_ass_subscript(const Py::Object&, const Py::Object&);
+
         private:
 
             /// The QObject this PythonExtension wraps.

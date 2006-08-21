@@ -101,9 +101,13 @@ QVariant GUIManagerModel::data(const QModelIndex& index, int role) const
             return action->icon();
         case Qt::DisplayRole:
             return action->text().replace("&","");
+        case Qt::ToolTipRole: // fall through
+        case Qt::WhatsThisRole:
+            return action->description();
         default:
-            return QVariant();
+            break;
     }
+    return QVariant();
 }
 
 QModelIndex GUIManagerModel::index(int row, int column, const QModelIndex& parent) const
@@ -208,12 +212,10 @@ void GUIManagerView::slotInstall()
 
 void GUIManagerView::slotUninstall()
 {
-    KMessageBox::information(0, "unimplemented yet");
-    /*
     foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
         if(index.isValid())
-            d->guiclient->uninstallPackage( static_cast< Action* >(index.internalPointer()) );
-    */
+            if(! d->guiclient->uninstallPackage( static_cast< Action* >(index.internalPointer()) ))
+                break;
 }
 
 void GUIManagerView::slotNewScripts()
@@ -278,6 +280,8 @@ GUIManagerDialog::GUIManagerDialog(GUIClient* guiclient, QWidget* parent)
         connect(btn, SIGNAL(clicked()), action, SLOT(trigger()));
         //connect(action, SLOT(setEnabled(bool)), btn, SLOT(setEnabled(bool)));
     }
+
+    btnlayout->addStretch(1);
 }
 
 GUIManagerDialog::~GUIManagerDialog()

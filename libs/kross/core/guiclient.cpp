@@ -85,9 +85,8 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     // read the script-actions.
     readConfig( instance()->config() );
 
-//TESTCASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//installPackage( KUrl("/home/kde4/koffice/libs/kross/test/Archiv.tar.gz") );
-
+    //TESTCASE
+    //installPackage( KUrl("/home/kde4/koffice/libs/kross/test/Archiv.tar.gz") );
 }
 
 GUIClient::~GUIClient()
@@ -465,10 +464,36 @@ bool GUIClient::installPackage(const KUrl& file)
     return true;
 }
 
+bool GUIClient::uninstallPackage(Action* action)
+{
+    const QString name = action->objectName();
+
+    KUrl url = action->getFile();
+    if(! url.isValid()) {
+        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\" since the script is not installed.").arg(action->objectName()));
+        return false;
+    }
+
+    QDir dir = QFileInfo( url.path() ).dir();
+    const QString scriptpackagepath = dir.absolutePath();
+    krossdebug( QString("Uninstall script-package with destination directory: %1").arg(scriptpackagepath) );
+
+    if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
+        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\". You may not have sufficient permissions to delete the folder \"%1\".").arg(action->objectName()).arg(scriptpackagepath));
+        return false;
+    }
+
+    d->scriptsmenu->removeAction(action);
+    delete action; action = 0; // removes the action from d->actions as well
+
+    writeConfig( instance()->config() );
+    return true;
+}
+
 void GUIClient::showManager()
 {
     GUIManagerDialog* dialog = new GUIManagerDialog(this, d->parent);
-    //dialog->resize( QSize(360, 320).expandedTo(dialog->minimumSizeHint()) );
+    dialog->resize( QSize(360, 320).expandedTo(dialog->minimumSizeHint()) );
     dialog->show();
 }
 

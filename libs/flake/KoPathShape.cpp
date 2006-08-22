@@ -22,7 +22,7 @@
 #include <QDebug>
 #include <QPainter>
 
-KoPathPoint::KoPathPoint( KoPathPoint & pathPoint )
+KoPathPoint::KoPathPoint( const KoPathPoint & pathPoint )
 : m_pointGroup( 0 )
 {
     m_shape = pathPoint.m_shape;
@@ -33,8 +33,8 @@ KoPathPoint::KoPathPoint( KoPathPoint & pathPoint )
 }
 
 void KoPathPoint::setPoint( const QPointF & point ) 
-{ 
-    m_point = point; 
+{
+    m_point = point;
     m_shape->update();
 }
 
@@ -143,6 +143,7 @@ void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter )
     //paintDebug( painter );
 }
 
+#ifndef NDEBUG
 void KoPathShape::paintDebug( QPainter &painter )
 {
     QList<KoSubpath>::const_iterator pathIt( m_points.begin() );
@@ -188,6 +189,7 @@ void KoPathShape::paintDebug( QPainter &painter )
     painter.restore();
     qDebug() << "nop = " << i;
 }
+#endif
 
 const QPainterPath KoPathShape::KoPathShape::outline() const
 {

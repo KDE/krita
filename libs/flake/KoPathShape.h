@@ -45,47 +45,47 @@ class KoPointGroup;
  */
 class KoPathPoint
 {
-public:    
+public:
     enum KoPointProperty
     {
-        Normal = 0, /// it has no control point
-        CanHaveControlPoint1 = 1, /// it can have a control point 1
-        CanHaveControlPoint2 = 2, /// it can have a control point 2
-        HasControlPoint1 = 4, /// it has a control point 1
-        HasControlPoint2 = 8, /// it has a control point 2
-        StartSubpath = 16, /// it starts a new subpath by a moveTo command
-        CloseSubpath = 32, /// it closes a subpath
-        IsSmooth = 64, /// it is smooth, both control points on a line through the point
-        IsSymmetric = 128 /// it is symmetric, like smooth but control points have same distance to point
+        Normal = 0, ///< it has no control points
+        CanHaveControlPoint1 = 1, ///< it can have a control point 1
+        CanHaveControlPoint2 = 2, ///< it can have a control point 2
+        HasControlPoint1 = 4, ///< it has a control point 1
+        HasControlPoint2 = 8, ///< it has a control point 2
+        StartSubpath = 16, ///< it starts a new subpath by a moveTo command
+        CloseSubpath = 32, ///< it closes a subpath
+        IsSmooth = 64, ///< it is smooth, both control points on a line through the point
+        IsSymmetric = 128 ///< it is symmetric, like smooth but control points have same distance to point
     };
     Q_DECLARE_FLAGS( KoPointProperties, KoPointProperty )
 
     /**
      * @brief Constructor
      *
-     * @param path a pointer to the path shape this point is used in
-     * @param point the point
+     * @param path is a pointer to the path shape this point is used in
+     * @param point the position relative to the shape origin
      * @param properties describing the point
      */
     KoPathPoint( KoPathShape * path, const QPointF & point, KoPointProperties properties = Normal )
     : m_shape( path )
     , m_point( point )
-    , m_properties( properties )    
+    , m_properties( properties )
     , m_pointGroup( 0 )
     {}
 
     /**
      * @brief Copy Constructor
      */
-    KoPathPoint( KoPathPoint & pathPoint );
-        
+    KoPathPoint( const KoPathPoint & pathPoint );
+
     /**
      * @brief Destructor
      */
     ~KoPathPoint() {}
 
     /**
-     * @brief get the point 
+     * @brief return the position relative to the shape origin
      *
      * @return point
      */
@@ -94,39 +94,39 @@ public:
     /**
      * @brief get the control point 1
      *
-     * This points is used for controling a curve ending at this point
+     * This points is used for controlling a curve ending at this point
      *
      * @return control point 1 of this point
      */
     QPointF controlPoint1() { return m_controlPoint1; }
 
     /**
-     * @brief get the control point 2
+     * @brief get the second control point
      *
-     * This points is used for controling a curve starting at this point
+     * This points is used for controlling a curve starting at this point
      *
      * @return control point 2 of this point
      */
     QPointF controlPoint2() { return m_controlPoint2; }
 
     /**
-     * @brief Set the point
-     * 
-     * @param point to set 
+     * @brief alter the point
+     *
+     * @param point to set
      */
     void setPoint( const QPointF & point );
 
     /**
      * @brief Set the control point 1
-     * 
-     * @param point to set 
+     *
+     * @param point to set
      */
     void setControlPoint1( const QPointF & point );
 
     /**
      * @brief Set the control point 2
-     * 
-     * @param point to set 
+     *
+     * @param point to set
      */
     void setControlPoint2( const QPointF & point );
 
@@ -154,7 +154,7 @@ public:
      */
     void map( const QMatrix &matrix ) { map( matrix, true ); }
 
-protected:    
+protected:
     friend class KoPointGroup;
     friend class KoPathShape;
     void removeFromGroup();
@@ -162,6 +162,7 @@ protected:
     void map( const QMatrix &matrix, bool mapGroup );
     KoPointGroup * group() { return m_pointGroup; }
 
+private:
     KoPathShape * m_shape;
     QPointF m_point;
     QPointF m_controlPoint1;
@@ -259,7 +260,7 @@ public:
     virtual void resize( const QSizeF &size );
 
     /**
-     * @brief Creats a new Subpath
+     * @brief Start a new Subpath
      *
      * Moves the pen to p and starts a new subpath.
      *
@@ -281,6 +282,9 @@ public:
      *
      * Adds a cubic Bezier curve between the last point and the given p,
      * using the control points specified by c1, and c2.
+     * @param c1 control point1
+     * @param c2 control point2
+     * @param p The endpoint of this curve-part
      *
      * @return The newly created point 
      */
@@ -315,18 +319,20 @@ public:
      */
     QList<KoPathPoint*> pointsAt( const QRectF &r );
 
-protected:    
+private:
     void map( const QMatrix &matrix );
 
     void updateLast( KoPathPoint * lastPoint );
 
+#ifndef NDEBUG
     void paintDebug( QPainter &painter );
+#endif
 
     /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
     typedef QList<KoPathPoint *> KoSubpath;
     QList<KoSubpath> m_points;
 };
-        
+
 Q_DECLARE_OPERATORS_FOR_FLAGS( KoPathPoint::KoPointProperties )
 
 #endif /* KOPATHSHAPE_H */

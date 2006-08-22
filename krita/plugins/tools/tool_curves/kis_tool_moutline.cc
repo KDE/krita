@@ -26,6 +26,7 @@
 #include <qrect.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qslider.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -34,7 +35,7 @@
 #include <knuminput.h>
 
 #include "kis_global.h"
-#include <kis_iterators_pixel.h>
+#include "kis_iterators_pixel.h"
 #include "kis_colorspace.h"
 #include "kis_channelinfo.h"
 #include "kis_doc.h"
@@ -64,12 +65,15 @@ using namespace std;
 #define ROUND(x) ((int) ((x) + 0.5))
 
 const int NOEDGE = 0x0000;
-const int POSSIBLE_EDGE = 0x00f0;
-const int EDGE = 400;
 
 const int ORTHOGONAL_COST = 10; // 1*10
 const int DIAGONAL_COST = 14;   // sqrt(2)*10
 const int MALUS = 20;           // This applies to NOEDGE nodes
+
+const int DEFAULTDIST = 40;     // Default distance between two automatic pivots
+const int MAXDIST = 55;         // Max distance
+const int MINDIST = 15;
+const int PAGESTEP = 5;
 
 class Node {
 
@@ -601,6 +605,8 @@ KisToolMagnetic::KisToolMagnetic ()
     m_derived = 0;
     m_curve = 0;
 
+    m_distance = DEFAULTDIST;
+
     m_transactionMessage = i18n("Magnetic Outline Selection");
 }
 
@@ -657,10 +663,11 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
             } else {
                 m_editingMode = false;
                 m_curve->deletePivot(m_current);
+                m_previous = m_current = m_curve->selectPivot(m_curve->lastIterator());
                 m_editingMode = true;
             }
-            draw(false);
         }
+        draw(false);
     } else
         super::keyPress(event);
 }
@@ -731,8 +738,6 @@ void KisToolMagnetic::buttonPress(KisButtonPressEvent *event)
 void KisToolMagnetic::move(KisMoveEvent *event)
 {
     updateOptions(event->state());
-    if (m_curve->selectedPivots().isEmpty())
-        return;
     if (m_currentPoint == event->pos().floorQPoint())
         return;
     if (m_editingMode) {
@@ -756,11 +761,20 @@ void KisToolMagnetic::move(KisMoveEvent *event)
         }
         if (!m_dragging)
             return;
+    } else {
+        if (m_editingCursor || m_draggingCursor) {
+            setCursor(KisCursor::load("tool_moutline_cursor.png", 6, 6));
+            m_editingCursor = m_draggingCursor = false;
+        }
     }
+    if (m_curve->selectedPivots().isEmpty())
+        return;
+
     KisPoint trans = event->pos() - m_currentPoint;
     KisPoint dist;
     dist = (*m_current).point() - (*m_current.previousPivot()).point();
-    if (((fabs(dist.x()) + fabs(dist.y())) > 50 && !(m_editingMode)) || m_curve->pivots().count() == 1) {
+    if ((m_distance >= MINDIST && (fabs(dist.x()) + fabs(dist.y())) > m_distance && !(m_editingMode))
+        || m_curve->pivots().count() == 1) {
         draw(m_curve->end());
         m_previous = m_current;
         m_current = m_curve->pushPivot(event->pos());
@@ -787,21 +801,34 @@ void KisToolMagnetic::slotCommitCurve ()
         commitCurve();
 }
 
+void KisToolMagnetic::slotSetDistance (int dist)
+{
+    m_distance = dist;
+}
+
 QWidget* KisToolMagnetic::createOptionWidget(QWidget* parent)
 {
     m_optWidget = super::createOptionWidget(parent);
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
-    QHBoxLayout * hbox = new QHBoxLayout(l);
-    Q_CHECK_PTR(hbox);
-
-    hbox->setSpacing(6);
+//     QHBoxLayout * hbox = new QHBoxLayout(l);
+//     Q_CHECK_PTR(hbox);
+    QGridLayout *box = new QGridLayout(l, 2, 2, 3);
+    box->setColStretch(0, 1);
+    box->setColStretch(1, 1);
+    Q_CHECK_PTR(box);
 
     m_mode = new QLabel(i18n("Standard mode"), m_optWidget);
-    hbox->addWidget(m_mode);
-
+    m_lbDistance = new QLabel(i18n("Distance: "), m_optWidget);
     QPushButton *finish = new QPushButton(i18n("Finish selection"), m_optWidget);
-    hbox->addWidget(finish);
+    m_slDistance = new QSlider(MINDIST, MAXDIST, PAGESTEP, m_distance, Qt::Horizontal, m_optWidget);
+
+    connect(m_slDistance, SIGNAL(valueChanged(int)), this, SLOT(slotSetDistance(int)));
     connect(finish, SIGNAL(clicked()), this, SLOT(slotCommitCurve()));
+
+    box->addWidget(m_mode, 0, 0);
+    box->addWidget(finish, 0, 1);
+    box->addWidget(m_lbDistance, 1, 0);
+    box->addWidget(m_slDistance, 1, 1);
 
     return m_optWidget;
 }

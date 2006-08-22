@@ -25,6 +25,7 @@
 #include "kis_curve_framework.h"
 #include "kis_tool_curve.h"
 
+class QSlider;
 class KisToolMagnetic;
 class KisVector2D;
 class Node;
@@ -93,16 +94,21 @@ public slots:
     virtual void deactivate ();
 
     void slotCommitCurve ();
+    void slotSetDistance (int);
 
 private:
 
     KisCurveMagnetic *m_derived;
     QWidget* m_optWidget;
     QLabel* m_mode;
+    QLabel* m_lbDistance;
+    QSlider* m_slDistance;
     bool m_editingMode;
     bool m_editingCursor;
     bool m_draggingCursor;
     bool m_needNewPivot;
+
+    int m_distance;
 
 };
 

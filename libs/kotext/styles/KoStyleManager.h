@@ -91,7 +91,7 @@ public:
      * Return the first characterStyle with the param user-visible-name.
      * Since the name does not have to be unique there can be multiple
      * styles registred with that name, only the first is returned
-     * @param the name of the style.
+     * @param name the name of the style.
      * @see characterStyle(id);
      */
     KoCharacterStyle *characterStyle(const QString &name) const;
@@ -100,7 +100,7 @@ public:
      * Return the first paragraphStyle with the param user-visible-name.
      * Since the name does not have to be unique there can be multiple
      * styles registred with that name, only the first is returned
-     * @param the name of the style.
+     * @param name the name of the style.
      * @see paragraphStyle(id);
      */
     KoParagraphStyle *paragraphStyle(const QString &name) const;

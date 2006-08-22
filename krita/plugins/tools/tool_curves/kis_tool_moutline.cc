@@ -204,50 +204,6 @@ public:
 
 };
 
-KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2, Q_INT32 i3, Q_INT32 i4,
-                          Q_INT32 i5, Q_INT32 i6, Q_INT32 i7, Q_INT32 i8, Q_INT32 i9,
-                          Q_INT32 i10, Q_INT32 i11, Q_INT32 i12, Q_INT32 i13, Q_INT32 i14,
-                          Q_INT32 i15, Q_INT32 i16, Q_INT32 i17, Q_INT32 i18, Q_INT32 i19,
-                          Q_INT32 i20, Q_INT32 i21, Q_INT32 i22, Q_INT32 i23, Q_INT32 i24,
-                          Q_INT32 factor, Q_INT32 offset )
-{
-    KisKernelSP kernel = new KisKernel();
-    kernel->width = 5;
-    kernel->height = 5;
-
-    kernel->factor = factor;
-    kernel->offset = offset;
-
-    kernel->data = new Q_INT32[25];
-    kernel->data[0] = i0;
-    kernel->data[1] = i1;
-    kernel->data[2] = i2;
-    kernel->data[3] = i3;
-    kernel->data[4] = i4;
-    kernel->data[5] = i5;
-    kernel->data[6] = i6;
-    kernel->data[7] = i7;
-    kernel->data[8] = i8;
-    kernel->data[9] = i9;
-    kernel->data[10] = i10;
-    kernel->data[11] = i11;
-    kernel->data[12] = i12;
-    kernel->data[13] = i13;
-    kernel->data[14] = i14;
-    kernel->data[15] = i15;
-    kernel->data[16] = i16;
-    kernel->data[17] = i17;
-    kernel->data[18] = i18;
-    kernel->data[19] = i19;
-    kernel->data[20] = i20;
-    kernel->data[21] = i21;
-    kernel->data[22] = i22;
-    kernel->data[23] = i23;
-    kernel->data[24] = i24;
-
-    return kernel;
-}
-
 KisKernelSP createKernel( Q_INT32 i0, Q_INT32 i1, Q_INT32 i2,
                           Q_INT32 i3, Q_INT32 i4, Q_INT32 i5,
                           Q_INT32 i6, Q_INT32 i7, Q_INT32 i8,
@@ -450,11 +406,6 @@ void KisCurveMagnetic::gaussianBlur (const QRect& rect, KisPaintDeviceSP src, Ki
 
     KisConvolutionPainter painter( dst );
     // FIXME createKernel could create dynamic gaussian kernels having sigma as argument
-//     KisKernelSP kernel = createKernel( 2, 4, 5, 4, 2,
-//                                        4, 9,12, 9, 4,
-//                                        5,12,15,12, 5,
-//                                        4, 9,12, 9, 4,
-//                                        2, 4, 5, 4, 2, 115, 0 );
     KisKernelSP kernel = createKernel( 1, 1, 1, 1, 24, 1, 1, 1, 1, 32, 0);
     painter.applyMatrix(kernel, grectx, grecty, grectw, grecth, BORDER_AVOID);
 }

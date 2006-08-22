@@ -27,6 +27,7 @@
 
 struct Property;
 class KoCharacterStyle;
+class KoListStyle;
 class StylePrivate;
 class QTextBlock;
 
@@ -326,6 +327,9 @@ public:
     KoCharacterStyle *characterStyle() { return m_charStyle; }
     const KoCharacterStyle *characterStyle() const { return m_charStyle; }
 
+    KoListStyle *listStyle() { return m_listStyle; }
+    const KoListStyle *listStyle() const { return m_listStyle; }
+
 private:
     void setProperty(int key, const QVariant &value);
     void remove(int key);
@@ -337,6 +341,7 @@ private:
 private:
     QString m_name;
     KoCharacterStyle *m_charStyle;
+    KoListStyle *m_listStyle;
     KoParagraphStyle *m_parent;
     int m_next;
     StylePrivate *m_stylesPrivate;

@@ -71,6 +71,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp
     styles/KoStyleManager.cpp
+    styles/KoListStyle.cpp
     styles/ChangeFollower.cpp
  )
 

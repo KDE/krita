@@ -256,7 +256,7 @@ public:
     virtual QRectF boundingRect() const;
     virtual QSizeF size() const;
     virtual QPointF position() const;
-    virtual void resize( const QSizeF &newSize );
+    virtual void resize( const QSizeF &size );
 
     /**
      * @brief Creats a new Subpath
@@ -310,7 +310,7 @@ public:
 
     /**
      * @brief Returns the path points within the given rectangle.
-     * @param p the rectangle the requested points are in
+     * @param r the rectangle the requested points are in
      * @return list of points within the rectangle
      */
     QList<KoPathPoint*> pointsAt( const QRectF &r );

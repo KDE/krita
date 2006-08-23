@@ -19,7 +19,23 @@
 #include "KoListStyle.h"
 #include "Styles_p.h"
 
+#include <QTextBlock>
+#include <QTextCursor>
+
 KoListStyle::KoListStyle() {
+    m_stylesPrivate = new StylePrivate();
+    setStyle(DiscItem);
+    setStartValue(1);
+}
+
+KoListStyle::KoListStyle(const KoListStyle &orig) {
+    m_stylesPrivate = new StylePrivate();
+    m_stylesPrivate->copyMissing(orig.m_stylesPrivate);
+    m_name = orig.name();
+}
+
+void KoListStyle::setProperty(int key, const QVariant &value) {
+    m_stylesPrivate->add(key, value);
 }
 
 int KoListStyle::propertyInt(int key) const {
@@ -36,25 +52,33 @@ bool KoListStyle::propertyBoolean(int key) const {
     return variant->toBool();
 }
 
-const QString &KoListStyle::listItemPrefix() const {
+QString KoListStyle::listItemPrefix() const {
     const QVariant *variant = m_stylesPrivate->get(ListItemPrefix);
     if(variant == 0) {
-        QString string;
-        return string;
+        return QString();
     }
     return qvariant_cast<QString>(variant);
 }
 
-const QString &KoListStyle::listItemSuffix() const {
+QString KoListStyle::listItemSuffix() const {
     const QVariant *variant = m_stylesPrivate->get(ListItemSuffix);
     if(variant == 0) {
-        QString string;
-        return string;
+        return QString();
     }
     return qvariant_cast<QString>(variant);
 }
 
-void KoListStyle::applyStyle(QTextBlockFormat &format) const {
+void KoListStyle::applyStyle(QTextBlock &block) {
+    QTextList *textList = m_textLists.value(block.document());
+    if(textList && block.textList() && block.textList() != textList) // remove old one
+        block.textList()->remove(block);
+    if(block.textList() == 0 && textList) // add if new
+        textList->add(block);
+
+    QTextListFormat format;
+    if(block.textList())
+        format = block.textList()->format();
+
     // copy all relevant properties.
     static const int properties[] = {
         ListStyle,
@@ -75,5 +99,13 @@ void KoListStyle::applyStyle(QTextBlockFormat &format) const {
         QVariant const *variant = m_stylesPrivate->get(properties[i]);
         if(variant) format.setProperty(properties[i], *variant);
         i++;
+    }
+
+    if(textList)
+        textList->setFormat(format);
+    else { // does not exist yet, this is the first parag that uses it :)
+        QTextCursor cursor(block);
+        textList = cursor.createList(format);
+        m_textLists.insert(block.document(), QPointer<QTextList>(textList));
     }
 }

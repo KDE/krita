@@ -19,20 +19,25 @@
 #define KOLISTSTYLE_H
 
 #include <QTextFormat>
+#include <QMap>
+#include <QPointer>
+#include <QTextList>
+
 class StylePrivate;
+
 
 class KoListStyle {
 public:
     enum Style {
+        SquareItem = QTextListFormat::ListSquare,
+        DiscItem = QTextListFormat::ListDisc,
+        CircleItem = QTextListFormat::ListCircle,
+        DecimalItem = QTextListFormat::ListDecimal,
+        AlphaLowerItem = QTextListFormat::ListLowerAlpha,
+        UpperAlphaItem = QTextListFormat::ListUpperAlpha,
+        NumberItem = 1,
         NoItem,
         BulletItem,
-        SquareItem,
-        NumberItem,
-        DiscItem,
-        CircleItem,
-        DecimalItem,
-        AlphaLowerItem,
-        UpperAlphaItem,
         RomanLowerItem,
         UpperRomanItem,
         BoxItem,
@@ -56,13 +61,14 @@ public:
     };
 
     KoListStyle();
+    KoListStyle(const KoListStyle &orig);
 
     void setStyle(Style style) { setProperty(ListStyle, (int) style); }
     Style style() const { return static_cast<Style> (propertyInt(ListStyle)); }
     void setListItemPrefix(const QString &prefix) { setProperty(ListItemPrefix, prefix ); }
-    const QString &listItemPrefix() const;
+    QString listItemPrefix() const;
     void setListItemSuffix(const QString &suffix) { setProperty(ListItemSuffix, suffix  ); }
-    const QString &listItemSuffix() const;
+    QString listItemSuffix() const;
     void setConsecutiveNumbering(bool on) { setProperty(ConsecutiveNumbering, on  ); }
     bool consecutiveNumbering() const { return propertyBoolean (ConsecutiveNumbering); }
     void setStartValue(int value) { setProperty(StartValue, value  ); }
@@ -88,18 +94,17 @@ public:
      * Apply this style to a blockFormat by copying all properties from this style
      * to the target block format.
      */
-    void applyStyle(QTextBlockFormat &format) const;
+    void applyStyle(QTextBlock &block);
 
 private:
     void setProperty(int key, const QVariant &value);
-    //void remove(int key);
-    //double propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
 
 private:
     QString m_name;
     StylePrivate *m_stylesPrivate;
+    QMap<const QTextDocument*, QPointer<QTextList> > m_textLists;
 };
 
 #endif

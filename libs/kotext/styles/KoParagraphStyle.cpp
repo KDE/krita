@@ -17,6 +17,7 @@
  */
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
+#include "KoListStyle.h"
 
 #include "Styles_p.h"
 
@@ -27,6 +28,7 @@
 
 KoParagraphStyle::KoParagraphStyle()
     : m_charStyle(new KoCharacterStyle(this)),
+    m_listStyle(0),
     m_parent(0),
     m_next(0)
 {
@@ -37,6 +39,7 @@ KoParagraphStyle::KoParagraphStyle()
 KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
     : QObject(0),
     m_charStyle(new KoCharacterStyle(this)),
+    m_listStyle(0),
     m_parent(0),
     m_next(0)
 {
@@ -51,6 +54,8 @@ KoParagraphStyle::~KoParagraphStyle() {
     delete m_stylesPrivate;
     m_stylesPrivate = 0;
     m_charStyle = 0; // QObject will delete it.
+    delete m_listStyle;
+    m_listStyle = 0;
 }
 
 void KoParagraphStyle::setParent(KoParagraphStyle *parent) {
@@ -150,9 +155,8 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
         QVariant const *variant = get(properties[i]);
         if(variant)
             format.setProperty(properties[i], *variant);
-/*        else
-            kWarning() << "KoParagraphStyle: Missing mandatory property '" << properties[i] <<
-                "' on " << name() << endl; */
+        else
+            format.clearProperty(properties[i]);
         i++;
     }
 }
@@ -164,6 +168,20 @@ void KoParagraphStyle::applyStyle(QTextBlock &block) const {
     cursor.setBlockFormat(format);
     if(m_charStyle)
         m_charStyle->applyStyle(block);
+
+    if(m_listStyle) {
+        // make sure this block becomes a list if its not one already
+        m_listStyle->applyStyle(block);
+    } else if(block.textList()) {
+        // remove
+        block.textList()->remove(block);
+    }
+}
+
+void KoParagraphStyle::setListStyle(const KoListStyle &style) {
+    if(m_listStyle)
+        delete m_listStyle;
+    m_listStyle = new KoListStyle(style);
 }
 
 #include "KoParagraphStyle.moc"

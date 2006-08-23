@@ -65,6 +65,7 @@ private:
     ActivePointType m_activePointType; /// the type of currently active path point
     bool m_pointMoving;                /// shows if points are actually moved
     QPointF m_lastPosition;            /// the last mouse position
+    QList<KoPathPoint*> m_selectedPoints; ///< list of selected path points
 };
 
 #endif

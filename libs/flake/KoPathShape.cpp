@@ -79,7 +79,40 @@ void KoPathPoint::map( const QMatrix &matrix, bool mapGroup )
     m_shape->update(); 
 }
 
-void KoPathPoint::removeFromGroup() 
+void KoPathPoint::paint(QPainter &painter, const QSizeF &size)
+{
+    QRectF handle( QPointF(-0.5*size.width(),0-0.5*size.height()), size );
+
+    if( properties() & IsSelected )
+    {
+        if( properties() & HasControlPoint1 )
+        {
+            painter.drawLine( point(), controlPoint1() );
+            painter.drawEllipse( handle.translated( controlPoint1() ) );
+        }
+        if( properties() & HasControlPoint2 )
+        {
+            painter.drawLine( point(), controlPoint2() );
+            painter.drawEllipse( handle.translated( controlPoint2() ) );
+        }
+    }
+
+    if( properties() & IsSmooth )
+        painter.drawRect( handle.translated( point() ) );
+    else if( properties() & IsSymmetric )
+    {
+        QWMatrix matrix;
+        matrix.rotate( 45.0 );
+        QPolygonF poly( handle );
+        poly = matrix.map( poly );
+        poly.translate( point() );
+        painter.drawPolygon( poly );
+    }
+    else
+        painter.drawEllipse( handle.translated( point() ) );
+}
+
+void KoPathPoint::removeFromGroup()
 { 
     if ( m_pointGroup ) 
         m_pointGroup->remove( this ); 
@@ -190,6 +223,39 @@ void KoPathShape::paintDebug( QPainter &painter )
     qDebug() << "nop = " << i;
 }
 #endif
+
+void KoPathShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected)
+{
+    if( ! selected ) return;
+
+    applyConversion( painter, converter );
+
+    QList<KoSubpath>::const_iterator pathIt( m_points.begin() );
+
+    painter.save();
+    painter.setRenderHint( QPainter::Antialiasing, true );
+    painter.setBrush( Qt::blue );
+    painter.setPen( Qt::blue );
+
+    QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
+
+    for ( ; pathIt != m_points.end(); ++pathIt )
+    {
+        KoSubpath::const_iterator it( ( *pathIt ).begin() );
+        for ( ; it != ( *pathIt ).end(); ++it )
+        {
+            KoPathPoint *point = ( *it );
+            point->paint( painter, handle.size() );
+        }
+    }
+    painter.restore();
+}
+
+QRectF KoPathShape::handleRect( const QPointF &p ) const
+{
+    const qreal handleRadius = 3.0;
+    return QRectF( p.x()-handleRadius, p.y()-handleRadius, 2*handleRadius, 2*handleRadius );
+}
 
 const QPainterPath KoPathShape::KoPathShape::outline() const
 {
@@ -386,4 +452,26 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
         }
     }
     return result;
+}
+
+void KoPathShape::selectAllPoints()
+{
+    QList<KoSubpath>::iterator pathIt( m_points.begin() );
+    for ( ; pathIt != m_points.end(); ++pathIt )
+    {
+        KoSubpath::iterator it( ( *pathIt ).begin() );
+        for ( ; it != ( *pathIt ).end(); ++it )
+            (*it)->setProperties( (*it)->properties() | KoPathPoint::IsSelected );
+    }
+}
+
+void KoPathShape::deselectAllPoints()
+{
+    QList<KoSubpath>::iterator pathIt( m_points.begin() );
+    for ( ; pathIt != m_points.end(); ++pathIt )
+    {
+        KoSubpath::iterator it( ( *pathIt ).begin() );
+        for ( ; it != ( *pathIt ).end(); ++it )
+            (*it)->setProperties( (*it)->properties() & ~KoPathPoint::IsSelected );
+    }
 }

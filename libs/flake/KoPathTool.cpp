@@ -55,45 +55,27 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
 
     painter.setBrush( Qt::blue );
     painter.setPen( Qt::blue );
-    int mcount = outline.elementCount();
 
     QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
-
-    for( int i = 0; i < mcount; i++)
-    {
-        QPainterPath::Element elem = outline.elementAt( i );
-        painter.drawEllipse( handle.translated( elem.x, elem.y ) );
-        if(elem.type == QPainterPath::CurveToElement) 
-        {
-            painter.drawLine( QPointF(outline.elementAt( i - 1 ).x, outline.elementAt( i - 1 ).y),
-                    QPointF(outline.elementAt( i ).x, outline.elementAt( i ).y ));
-            painter.drawLine( QPointF(outline.elementAt( i + 1 ).x, outline.elementAt( i + 1 ).y),
-                    QPointF(outline.elementAt( i + 2 ).x, outline.elementAt( i + 2 ).y ));
-        }
-    }
 
     if( m_activePoint )
     {
         painter.setBrush( Qt::red );
-        if( m_activePointType == Normal )
-        {
-            painter.drawEllipse( handle.translated( m_activePoint->point() ) );
-            if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 )
-                painter.drawEllipse( handle.translated( m_activePoint->controlPoint1() ) );
-            if( m_activePoint->properties() & KoPathPoint::HasControlPoint2 )
-                painter.drawEllipse( handle.translated( m_activePoint->controlPoint2() ) );
-        }
-        else if( m_activePointType == ControlPoint1 )
-            painter.drawEllipse( handle.translated( m_activePoint->controlPoint1() ) );
-        else if( m_activePointType == ControlPoint2 )
-            painter.drawEllipse( handle.translated( m_activePoint->controlPoint2() ) );
+        painter.setPen( Qt::NoPen );
+        m_activePoint->paint( painter, handle.size() );
     }
 }
 
 void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     m_pointMoving = m_activePoint;
     m_lastPosition = untransformed( event->point );
-    if( m_activePoint && event->button() & Qt::RightButton )
+    if( m_activePoint && event->button() & Qt::LeftButton)
+    {
+        m_pathShape->deselectAllPoints();
+        m_activePoint->setProperties( m_activePoint->properties() | KoPathPoint::IsSelected );
+        repaint( transformed( m_pathShape->outline().controlPointRect() ) );
+    }
+    else if( m_activePoint && event->button() & Qt::RightButton )
     {
         KoPathPoint::KoPointProperties props = m_activePoint->properties();
         if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
@@ -145,7 +127,7 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     }
 }
 
-void KoPathTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
+void KoPathTool::mouseDoubleClickEvent( KoPointerEvent * ) {
 }
 
 void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
@@ -210,6 +192,8 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
         m_pathShape->normalize();
         QPointF tlNew = m_pathShape->boundingRect().topLeft();
         m_pathShape->moveBy( tlOld.x()-tlNew.x(), tlOld.y()-tlNew.y() );
+        // adjust the last mouse position after moving the path shape
+        m_lastPosition -= tlOld-tlNew;
 
         repaint( transformed( oldControlRect.unite( m_pathShape->outline().controlPointRect() ) ) );
     }
@@ -243,7 +227,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     }
 }
 
-void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
+void KoPathTool::mouseReleaseEvent( KoPointerEvent * ) {
     // TODO
     m_pointMoving = false;
 }
@@ -283,6 +267,7 @@ void KoPathTool::activate (bool temporary) {
 
 void KoPathTool::deactivate() {
     QRectF repaintRect = transformed( m_pathShape->outline().controlPointRect() );
+    m_pathShape->deselectAllPoints();
     m_pathShape = 0;
     m_activePoint = 0;
     repaint( repaintRect );

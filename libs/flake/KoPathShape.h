@@ -56,7 +56,8 @@ public:
         StartSubpath = 16, ///< it starts a new subpath by a moveTo command
         CloseSubpath = 32, ///< it closes a subpath
         IsSmooth = 64, ///< it is smooth, both control points on a line through the point
-        IsSymmetric = 128 ///< it is symmetric, like smooth but control points have same distance to point
+        IsSymmetric = 128, ///< it is symmetric, like smooth but control points have same distance to point
+        IsSelected = 256 ///< it is selected
     };
     Q_DECLARE_FLAGS( KoPointProperties, KoPointProperty )
 
@@ -153,6 +154,13 @@ public:
      * This does a matrix multiplication on all points of the point
      */
     void map( const QMatrix &matrix ) { map( matrix, true ); }
+
+    /**
+     * Paints the path point with the actual brush and pen
+     * @param painter used for painting the shape point
+     * @param size the drawing size of the shape point
+     */
+    void paint(QPainter &painter, const QSizeF &size);
 
 protected:
     friend class KoPointGroup;
@@ -253,6 +261,7 @@ public:
     virtual ~KoPathShape();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected);
     virtual const QPainterPath outline() const;
     virtual QRectF boundingRect() const;
     virtual QSizeF size() const;
@@ -319,6 +328,12 @@ public:
      */
     QList<KoPathPoint*> pointsAt( const QRectF &r );
 
+    /// Selects all path points.
+    void selectAllPoints();
+
+    /// Deselects all path points.
+    void deselectAllPoints();
+
 private:
     void map( const QMatrix &matrix );
 
@@ -327,6 +342,7 @@ private:
 #ifndef NDEBUG
     void paintDebug( QPainter &painter );
 #endif
+    QRectF handleRect( const QPointF &p ) const;
 
     /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
     typedef QList<KoPathPoint *> KoSubpath;

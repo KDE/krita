@@ -110,7 +110,7 @@ private:
     const QVariant *get(int key) const;
     double propertyDouble(int key) const;
     int propertyInt(int key) const;
-    const QString &propertyString(int key) const;
+    QString propertyString(int key) const;
     bool propertyBoolean(int key) const;
 
 private:

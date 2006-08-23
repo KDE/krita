@@ -18,6 +18,7 @@
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
+#include "KoTextBlockData.h"
 
 #include "Styles_p.h"
 
@@ -175,12 +176,14 @@ void KoParagraphStyle::applyStyle(QTextBlock &block) const {
     } else if(block.textList()) {
         // remove
         block.textList()->remove(block);
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+        if(data)
+            data->setCounterWidth(-1);
     }
 }
 
 void KoParagraphStyle::setListStyle(const KoListStyle &style) {
-    if(m_listStyle)
-        delete m_listStyle;
+    delete m_listStyle;
     m_listStyle = new KoListStyle(style);
 }
 

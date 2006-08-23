@@ -35,9 +35,7 @@ public:
         DecimalItem = QTextListFormat::ListDecimal,
         AlphaLowerItem = QTextListFormat::ListLowerAlpha,
         UpperAlphaItem = QTextListFormat::ListUpperAlpha,
-        NumberItem = 1,
-        NoItem,
-        BulletItem,
+        NoItem = 1,
         RomanLowerItem,
         UpperRomanItem,
         BoxItem,
@@ -57,7 +55,8 @@ public:
         BulletCharacter,///< an int with the unicode value of the character
         BulletSize,     ///< size in percent relative to the height of the text
         ListHeader,     ///< TextBlock level flag to mark a block to be a listHeader
-        NoListItem      ///< TextBlock level flag to mark a block to not have a listItem
+        NoListItem,     ///< TextBlock level flag to mark a block to not have a listItem
+        ExplicitListValue ///< TextBlock level int with the value that that parag will have
     };
 
     KoListStyle();
@@ -66,9 +65,9 @@ public:
     void setStyle(Style style) { setProperty(ListStyle, (int) style); }
     Style style() const { return static_cast<Style> (propertyInt(ListStyle)); }
     void setListItemPrefix(const QString &prefix) { setProperty(ListItemPrefix, prefix ); }
-    QString listItemPrefix() const;
+    QString listItemPrefix() const { return propertyString(ListItemPrefix); }
     void setListItemSuffix(const QString &suffix) { setProperty(ListItemSuffix, suffix  ); }
-    QString listItemSuffix() const;
+    QString listItemSuffix() const { return propertyString(ListItemSuffix); }
     void setConsecutiveNumbering(bool on) { setProperty(ConsecutiveNumbering, on  ); }
     bool consecutiveNumbering() const { return propertyBoolean (ConsecutiveNumbering); }
     void setStartValue(int value) { setProperty(StartValue, value  ); }
@@ -100,6 +99,7 @@ private:
     void setProperty(int key, const QVariant &value);
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
+    QString propertyString(int key) const;
 
 private:
     QString m_name;

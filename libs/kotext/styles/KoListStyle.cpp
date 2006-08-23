@@ -21,6 +21,7 @@
 
 #include <QTextBlock>
 #include <QTextCursor>
+#include <kdebug.h>
 
 KoListStyle::KoListStyle() {
     m_stylesPrivate = new StylePrivate();
@@ -52,19 +53,10 @@ bool KoListStyle::propertyBoolean(int key) const {
     return variant->toBool();
 }
 
-QString KoListStyle::listItemPrefix() const {
-    const QVariant *variant = m_stylesPrivate->get(ListItemPrefix);
-    if(variant == 0) {
+QString KoListStyle::propertyString(int key) const {
+    const QVariant *variant = m_stylesPrivate->get(key);
+    if(variant == 0)
         return QString();
-    }
-    return qvariant_cast<QString>(variant);
-}
-
-QString KoListStyle::listItemSuffix() const {
-    const QVariant *variant = m_stylesPrivate->get(ListItemSuffix);
-    if(variant == 0) {
-        return QString();
-    }
     return qvariant_cast<QString>(variant);
 }
 

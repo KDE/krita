@@ -141,4 +141,11 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const {
     selection->mergeCharFormat(cf);
 }
 
+QString KoCharacterStyle::propertyString(int key) const {
+    const QVariant *variant = m_stylesPrivate->get(key);
+    if(variant == 0)
+        return QString();
+    return qvariant_cast<QString>(variant);
+}
+
 #include "KoCharacterStyle.moc"

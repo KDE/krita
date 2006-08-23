@@ -67,6 +67,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoTextBookmark.cpp
    KoBorderPreview.cpp
    KoTextShapeData.cpp
+    KoTextBlockData.cpp
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp

@@ -58,11 +58,14 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
 
     QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
 
+    foreach( KoPathPoint *p, m_selectedPoints )
+        p->paint( painter, handle.size(), true );
+
     if( m_activePoint )
     {
         painter.setBrush( Qt::red );
         painter.setPen( Qt::NoPen );
-        m_activePoint->paint( painter, handle.size() );
+        m_activePoint->paint( painter, handle.size(), m_selectedPoints.contains( m_activePoint ) );
     }
 }
 
@@ -71,8 +74,8 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     m_lastPosition = untransformed( event->point );
     if( m_activePoint && event->button() & Qt::LeftButton)
     {
-        m_pathShape->deselectAllPoints();
-        m_activePoint->setProperties( m_activePoint->properties() | KoPathPoint::IsSelected );
+        m_selectedPoints.clear();
+        m_selectedPoints << m_activePoint;
         repaint( transformed( m_pathShape->outline().controlPointRect() ) );
     }
     else if( m_activePoint && event->button() & Qt::RightButton )
@@ -267,7 +270,7 @@ void KoPathTool::activate (bool temporary) {
 
 void KoPathTool::deactivate() {
     QRectF repaintRect = transformed( m_pathShape->outline().controlPointRect() );
-    m_pathShape->deselectAllPoints();
+    m_selectedPoints.clear();
     m_pathShape = 0;
     m_activePoint = 0;
     repaint( repaintRect );

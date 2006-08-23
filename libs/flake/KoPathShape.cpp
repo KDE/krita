@@ -79,11 +79,11 @@ void KoPathPoint::map( const QMatrix &matrix, bool mapGroup )
     m_shape->update(); 
 }
 
-void KoPathPoint::paint(QPainter &painter, const QSizeF &size)
+void KoPathPoint::paint(QPainter &painter, const QSizeF &size, bool selected)
 {
     QRectF handle( QPointF(-0.5*size.width(),0-0.5*size.height()), size );
 
-    if( properties() & IsSelected )
+    if( selected )
     {
         if( properties() & HasControlPoint1 )
         {
@@ -245,7 +245,7 @@ void KoPathShape::paintDecorations(QPainter &painter, const KoViewConverter &con
         for ( ; it != ( *pathIt ).end(); ++it )
         {
             KoPathPoint *point = ( *it );
-            point->paint( painter, handle.size() );
+            point->paint( painter, handle.size(), false );
         }
     }
     painter.restore();
@@ -452,26 +452,4 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
         }
     }
     return result;
-}
-
-void KoPathShape::selectAllPoints()
-{
-    QList<KoSubpath>::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
-    {
-        KoSubpath::iterator it( ( *pathIt ).begin() );
-        for ( ; it != ( *pathIt ).end(); ++it )
-            (*it)->setProperties( (*it)->properties() | KoPathPoint::IsSelected );
-    }
-}
-
-void KoPathShape::deselectAllPoints()
-{
-    QList<KoSubpath>::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
-    {
-        KoSubpath::iterator it( ( *pathIt ).begin() );
-        for ( ; it != ( *pathIt ).end(); ++it )
-            (*it)->setProperties( (*it)->properties() & ~KoPathPoint::IsSelected );
-    }
 }

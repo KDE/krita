@@ -56,8 +56,7 @@ public:
         StartSubpath = 16, ///< it starts a new subpath by a moveTo command
         CloseSubpath = 32, ///< it closes a subpath
         IsSmooth = 64, ///< it is smooth, both control points on a line through the point
-        IsSymmetric = 128, ///< it is symmetric, like smooth but control points have same distance to point
-        IsSelected = 256 ///< it is selected
+        IsSymmetric = 128 ///< it is symmetric, like smooth but control points have same distance to point
     };
     Q_DECLARE_FLAGS( KoPointProperties, KoPointProperty )
 
@@ -160,7 +159,7 @@ public:
      * @param painter used for painting the shape point
      * @param size the drawing size of the shape point
      */
-    void paint(QPainter &painter, const QSizeF &size);
+    void paint(QPainter &painter, const QSizeF &size, bool selected );
 
 protected:
     friend class KoPointGroup;
@@ -327,12 +326,6 @@ public:
      * @return list of points within the rectangle
      */
     QList<KoPathPoint*> pointsAt( const QRectF &r );
-
-    /// Selects all path points.
-    void selectAllPoints();
-
-    /// Deselects all path points.
-    void deselectAllPoints();
 
 private:
     void map( const QMatrix &matrix );

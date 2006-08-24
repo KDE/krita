@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Perspective transform Tool
+ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritatoolperspectivetransform
+X-Krita-Version=2

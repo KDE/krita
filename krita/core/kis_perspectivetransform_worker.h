@@ -1,5 +1,5 @@
 /*
- *  This file is part of the KDE project
+ * This file is part of Krita
  *
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
@@ -16,31 +16,29 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ */
 
-#ifndef KIS_CURVE_ITERATOR_H
-#define KIS_CURVE_ITERATOR_H
+#ifndef KIS_PERSPECTIVETRANSFORM_WORKER_H
+#define KIS_PERSPECTIVETRANSFORM_WORKER_H
 
-#include "kis_point.h"
-#include "kis_random_accessor.h"
 #include "kis_types.h"
+#include "kis_progress_subject.h"
 
-class KisRandomSubAccessorPixel{
+class KisPoint;
+
+class KisPerspectiveTransformWorker : public KisProgressSubject
+{
     public:
-        KisRandomSubAccessorPixel(KisPaintDeviceSP device);
-        ~KisRandomSubAccessorPixel();
-        /**
-         * Copy the sampled old value to destination
-         */
-        void sampledOldRawData(Q_UINT8* dst);
-        void sampledRawData(Q_UINT8* dst);
-        inline void moveTo(double x, double y) { m_currentPoint.setX(x); m_currentPoint.setY(y); }
-        inline void moveTo(KisPoint p ) { m_currentPoint = p; }
+        KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const KisPoint& topLeft, const KisPoint& topRight, const KisPoint& bottomLeft, const KisPoint& bottomRight);
+    
+        ~KisPerspectiveTransformWorker();
+        
+        void run();
+        void cancel() { }
+        bool isCanceled() { return false; };
     private:
-        KisPaintDeviceSP m_device;
-        int m_position, m_end;
-        KisPoint m_currentPoint;
-        KisRandomAccessorPixel m_randomAccessor;
+        double m_xcenter, m_ycenter, m_p, m_q;
+        KisPaintDeviceSP m_dev;
 };
 
 #endif

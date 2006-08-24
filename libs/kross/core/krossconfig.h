@@ -97,7 +97,7 @@ namespace Kross {
         //#define KROSS_PYTHON_LIBRARY "/home/kde4/koffice/_build/lib/krosspython.la"
         #define KROSS_PYTHON_LIBRARY "krosspython"
         #define KROSS_RUBY_LIBRARY "krossruby"
-
+        #define KROSS_KJS_LIBRARY "krosskjs"
     }
 
 }

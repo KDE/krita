@@ -68,9 +68,10 @@ Manager::Manager()
     , ChildrenInterface()
     , d( new ManagerPrivate() )
 {
+
 #ifdef KROSS_PYTHON_LIBRARY
     QString pythonlib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_PYTHON_LIBRARY) );
-    if(! pythonlib.isEmpty()) { // If the Kross Python plugin exists we offer it as supported scripting language.
+    if(! pythonlib.isEmpty()) { // If the Kross Python plugin exists we offer is as supported scripting language.
         InterpreterInfo::Option::Map pythonoptions;
         d->interpreterinfos.insert("python",
             new InterpreterInfo("python",
@@ -82,9 +83,10 @@ Manager::Manager()
         );
     }
 #endif
+
 #ifdef KROSS_RUBY_LIBRARY
     QString rubylib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_RUBY_LIBRARY) );
-    if(! rubylib.isEmpty()) { // If the Kross Ruby plugin exists we offer it as supported scripting language.
+    if(! rubylib.isEmpty()) { // If the Kross Ruby plugin exists we offer is as supported scripting language.
       InterpreterInfo::Option::Map rubyoptions;
       rubyoptions.insert("safelevel",
                           new InterpreterInfo::Option("safelevel", "Level of safety of the Ruby interpreter", QVariant(0)) // 0 -> unsafe, 4 -> very safe
@@ -101,6 +103,22 @@ Manager::Manager()
         krossdebug("Ruby interpreter for kross is unavailable");
     }
 #endif
+
+#ifdef KROSS_KJS_LIBRARY
+    QString kjslib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_KJS_LIBRARY) );
+    if(! kjslib.isEmpty()) { // If the Kjs Python plugin exists we offer is as supported scripting language.
+        InterpreterInfo::Option::Map kjsoptions;
+        d->interpreterinfos.insert("javascript",
+            new InterpreterInfo("javascript",
+                kjslib, // library
+                "*.js", // file filter-wildcard
+                QStringList() << "application/x-javascript", // mimetypes
+                kjsoptions // options
+            )
+        );
+    }
+#endif
+
 }
 
 Manager::~Manager()

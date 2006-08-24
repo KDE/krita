@@ -106,7 +106,7 @@ Manager::Manager()
 
 #ifdef KROSS_KJS_LIBRARY
     QString kjslib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_KJS_LIBRARY) );
-    if(! kjslib.isEmpty()) { // If the Kjs Python plugin exists we offer is as supported scripting language.
+    if(! kjslib.isEmpty()) { // If the Kjs plugin exists we offer is as supported scripting language.
         InterpreterInfo::Option::Map kjsoptions;
         d->interpreterinfos.insert("javascript",
             new InterpreterInfo("javascript",

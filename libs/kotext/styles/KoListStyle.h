@@ -44,8 +44,7 @@ public:
     };
 
     enum Property {
-        ListStyle = QTextFormat::UserProperty+1000, ///< Style
-        ListItemPrefix, ///< The text to be printed before the listItem
+        ListItemPrefix = QTextFormat::UserProperty+1000, ///< The text to be printed before the listItem
         ListItemSuffix, ///< The text to be printed after the listItem
         ConsecutiveNumbering,   ///< when true don't let non-numbering parags restart numbering
         StartValue,     ///< First value to use
@@ -62,8 +61,8 @@ public:
     KoListStyle();
     KoListStyle(const KoListStyle &orig);
 
-    void setStyle(Style style) { setProperty(ListStyle, (int) style); }
-    Style style() const { return static_cast<Style> (propertyInt(ListStyle)); }
+    void setStyle(Style style) { setProperty(QTextListFormat::ListStyle, (int) style); }
+    Style style() const { return static_cast<Style> (propertyInt(QTextListFormat::ListStyle)); }
     void setListItemPrefix(const QString &prefix) { setProperty(ListItemPrefix, prefix ); }
     QString listItemPrefix() const { return propertyString(ListItemPrefix); }
     void setListItemSuffix(const QString &suffix) { setProperty(ListItemSuffix, suffix  ); }

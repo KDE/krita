@@ -18,6 +18,7 @@
 
 #include "KoListStyle.h"
 #include "Styles_p.h"
+#include "KoTextBlockData.h"
 
 #include <QTextBlock>
 #include <QTextCursor>
@@ -73,7 +74,7 @@ void KoListStyle::applyStyle(QTextBlock &block) {
 
     // copy all relevant properties.
     static const int properties[] = {
-        ListStyle,
+        QTextListFormat::ListStyle,
         ListItemPrefix,
         ListItemSuffix,
         ConsecutiveNumbering,
@@ -93,8 +94,15 @@ void KoListStyle::applyStyle(QTextBlock &block) {
         i++;
     }
 
-    if(textList)
+    if(textList) {
         textList->setFormat(format);
+        QTextBlock tb = textList->item(0);
+        if(tb.isValid()) { // invalidate the counter part
+            KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (tb.userData());
+            if(userData)
+                userData->setCounterWidth(-1.0);
+        }
+    }
     else { // does not exist yet, this is the first parag that uses it :)
         QTextCursor cursor(block);
         textList = cursor.createList(format);

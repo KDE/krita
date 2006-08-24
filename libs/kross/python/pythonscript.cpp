@@ -82,7 +82,7 @@ bool PythonScript::initialize()
     clearError(); // clear previous errors.
 
     try {
-        if(m_action->getCode().isNull()) {
+        if(m_action->code().isNull()) {
             setError( QString("Invalid scripting code for script '%1'").arg(m_action->objectName()) );
             return false;
         }
@@ -145,7 +145,7 @@ bool PythonScript::initialize()
 
         { // Compile the python script code. It will be later on request executed. That way we cache the compiled code.
             PyObject* code = Py_CompileString(
-                (char*) m_action->getCode().toLatin1().data(),
+                (char*) m_action->code().toLatin1().data(),
                 (char*) m_action->objectName().toLatin1().data(),
                 Py_file_input
             );
@@ -243,10 +243,10 @@ void PythonScript::setErrorFromException(const QString& error)
     setError(error, errorlist.join("\n"), lineno - 1);
 }
 
-void PythonScript::execute(const QVariant& args)
+void PythonScript::execute()
 {
     #ifdef KROSS_PYTHON_SCRIPT_EXEC_DEBUG
-        krossdebug( QString("PythonScript::execute() args=%1").arg(args.toString()) );
+        krossdebug( QString("PythonScript::execute()") );
     #endif
 
     clearError(); // clear previous errors.

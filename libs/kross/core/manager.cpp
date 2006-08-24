@@ -64,7 +64,7 @@ Manager& Manager::self()
 }
 
 Manager::Manager()
-    : KShared()
+    : QObject()
     , ChildrenInterface()
     , d( new ManagerPrivate() )
 {
@@ -119,6 +119,8 @@ Manager::Manager()
     }
 #endif
 
+    // publish ourself.
+    ChildrenInterface::addObject(this, "Kross");
 }
 
 Manager::~Manager()
@@ -174,17 +176,23 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
     return d->interpreterinfos[interpretername]->getInterpreter();
 }
 
-const QStringList Manager::getInterpreters()
+QStringList Manager::getInterpreters()
 {
     QStringList list;
-
     QMap<QString, InterpreterInfo*>::Iterator it( d->interpreterinfos.begin() );
     for(; it != d->interpreterinfos.end(); ++it)
         list << it.key();
-
-//list << "TestCase";
-
     return  list;
+}
+
+QObject* Manager::action(const QString& name)
+{
+    QObject* object = findChild< Action* >(name);
+    if(! object) {
+        object = new Action(name);
+        object->setParent(this);
+    }
+    return object;
 }
 
 #if 0
@@ -241,3 +249,4 @@ Module::Ptr Manager::loadModule(const QString& modulename)
 }
 #endif
 
+#include "manager.moc"

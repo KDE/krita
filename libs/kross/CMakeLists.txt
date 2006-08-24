@@ -7,8 +7,8 @@ add_subdirectory( core )
 #add_subdirectory( runner )
 add_subdirectory( test )
 
-# KDE Javascript, disabled yet till next kdelibs update
-#add_subdirectory( kjs )
+# KDE Javascript
+add_subdirectory( kjs )
 
 # Python
 MESSAGE(STATUS "s :PYTHON_INCLUDE_PATH :<${PYTHON_INCLUDE_PATH}")

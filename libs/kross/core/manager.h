@@ -48,8 +48,10 @@ namespace Kross {
      * interpreter like python. While \a Script spends a more
      * flexible container.
      */
-    class KDE_EXPORT Manager : public KShared, public ChildrenInterface
+    class KDE_EXPORT Manager : public QObject, public ChildrenInterface
     {
+            Q_OBJECT
+
         protected:
 
             /**
@@ -95,10 +97,10 @@ namespace Kross {
              * for the defined \p file .
              *
              * \param file The filename we should try to determinate the
-             *        interpretername for.
+             * interpretername for.
              * \return The name of the \a Interpreter which will be used
-             *        to execute the file or QString::null if we failed
-             *        to determinate a matching interpreter for the file.
+             * to execute the file or QString::null if we failed to determinate
+             * a matching interpreter for the file.
              */
             const QString getInterpreternameForFile(const QString& file);
 
@@ -107,11 +109,9 @@ namespace Kross {
              * or create a new \a Action instance and associate
              * the passed scriptname with it.
              *
-             * \param scriptname The name of the script. This
-             *        should be unique for each \a Script and
-             *        could be something like the filename.
-             * \return The \a Action instance matching to
-             *         scriptname.
+             * \param scriptname The name of the action. This should be unique
+             * for each \a Action and could be something like the filename.
+             * \return The \a Action instance matching to scriptname.
              */
             KSharedPtr<Action> createAction(const QString& scriptname);
 
@@ -120,18 +120,11 @@ namespace Kross {
              * the interpretername.
              *
              * \param interpretername The name of the interpreter.
-             *        e.g. "python" or "kjs".
-             * \return The Interpreter instance or NULL if there
-             *         does not exists an interpreter with such
-             *         an interpretername.
+             * e.g. "python" or "kjs".
+             * \return The Interpreter instance or NULL if there does not exists
+             * an interpreter with such an interpretername.
              */
             Interpreter* getInterpreter(const QString& interpretername);
-
-            /**
-             * \return a list of names of the at the backend
-             * supported interpreters.
-             */
-            const QStringList getInterpreters();
 
 #if 0
             /**
@@ -158,6 +151,20 @@ namespace Kross {
              */
             Module::Ptr loadModule(const QString& modulename);
 #endif
+
+        public slots:
+
+            /**
+             * \return a list of names of all supported scripting interpreters.
+             */
+            QStringList getInterpreters();
+
+            /**
+            * \return the \a Action QObject instance defined with \p name which is
+            * child of this \a Manager instance. If there exists no such \a Action
+            * yet, create one.
+            */
+            QObject* action(const QString& name);
 
         private:
             /// Private d-pointer class.

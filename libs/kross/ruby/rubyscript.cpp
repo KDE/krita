@@ -72,7 +72,7 @@ void RubyScript::compile()
 
     ruby_nerrs = 0;
     ruby_errinfo = Qnil;
-    VALUE src = RubyExtension::toVALUE( m_action->getCode() );
+    VALUE src = RubyExtension::toVALUE( m_action->code() );
     StringValue(src);
     critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
@@ -94,7 +94,7 @@ void RubyScript::compile()
     #endif
 }
 
-void RubyScript::execute(const QVariant& args)
+void RubyScript::execute()
 {
     #ifdef KROSS_RUBY_SCRIPT_DEBUG
         krossdebug("RubyScript::execute()");

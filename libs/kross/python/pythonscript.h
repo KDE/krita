@@ -61,7 +61,7 @@ namespace Kross {
              * \param args The optional arguments passed to the script
              * on excution.
              */
-            virtual void execute(const QVariant& args = QVariant());
+            virtual void execute();
 
             /**
              * \return the list of functionnames.

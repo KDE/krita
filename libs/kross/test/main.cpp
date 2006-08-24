@@ -121,7 +121,7 @@ int runScriptFile(const QString& scriptfile)
 
     // First we need a Action and fill it.
     Kross::Action::Ptr action = Kross::Manager::self().createAction(scriptfile);
-    action->setInterpreterName(interpretername);
+    action->setInterpreter(interpretername);
     action->setCode(scriptcode);
 
     // Publish other both testobject instance to the script.

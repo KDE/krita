@@ -151,7 +151,7 @@ void GUIClient::readConfig(KConfig* config)
         if(! icon.isNull())
             action->setIcon(KIcon(icon));
         if(! interpreter.isNull())
-            action->setInterpreterName(interpreter);
+            action->setInterpreter(interpreter);
         d->scriptsmenu->addAction(action);
     }
 
@@ -177,7 +177,7 @@ void GUIClient::writeConfig(KConfig* config)
         //config->writeEntry(QString("%1_icon").arg(name).toLatin1(), action->icon());
 
         config->writeEntry(QString("%1_file").arg(name).toLatin1(), action->getFile().path());
-        config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), action->getInterpreterName());
+        config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), action->interpreter());
     }
 
     config->writeEntry("names", names);
@@ -456,7 +456,7 @@ bool GUIClient::installPackage(const KUrl& file)
     if(! icon.isNull())
         action->setIcon(KIcon(icon));
     if(! interpreter.isNull())
-        action->setInterpreterName(interpreter);
+        action->setInterpreter(interpreter);
     d->scriptsmenu->addAction(action);
     d->scriptsmenu->setEnabled(true);
 

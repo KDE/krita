@@ -100,37 +100,6 @@ namespace Kross {
             virtual ~Action();
 
             /**
-             * \return the optional description for this Action.
-             */
-            QString description() const;
-
-            /**
-             * Set the optional description for this Action.
-             */
-            void setDescription(const QString& description);
-
-            /**
-             * \return the scriptcode this Action holds.
-             */
-            QString getCode() const;
-
-            /**
-             * Set the scriptcode \p code this Action should execute.
-             */
-            void setCode(const QString& code);
-
-            /**
-             * \return the name of the interpreter. Could be for
-             * example "python" or "ruby".
-             */
-            QString getInterpreterName() const;
-
-            /**
-             * Set the name of the interpreter.
-             */
-            void setInterpreterName(const QString& interpretername);
-
-            /**
              * \return the filename which will be executed.
              */
             KUrl getFile() const;
@@ -221,6 +190,39 @@ namespace Kross {
              * of calling it if needed.
              */
             void finalize();
+
+        public slots:
+
+            /**
+             * \return the optional description for this Action.
+             */
+            QString description() const;
+
+            /**
+             * Set the optional description for this Action.
+             */
+            void setDescription(const QString& description);
+
+            /**
+             * \return the scriptcode this Action holds.
+             */
+            QString code() const;
+
+            /**
+             * Set the scriptcode \p code this Action should execute.
+             */
+            void setCode(const QString& code);
+
+            /**
+             * \return the name of the interpreter. Could be for
+             * example "python" or "ruby".
+             */
+            QString interpreter() const;
+
+            /**
+             * Set the name of the interpreter.
+             */
+            void setInterpreter(const QString& interpretername);
 
         private slots:
 

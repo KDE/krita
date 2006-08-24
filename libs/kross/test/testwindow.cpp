@@ -92,7 +92,7 @@ TestWindow::~TestWindow()
 
 void TestWindow::execute()
 {
-    m_action->setInterpreterName( m_interpretercombo->currentText() );
+    m_action->setInterpreter( m_interpretercombo->currentText() );
     m_action->setCode(m_codeedit->text());
 
     m_action->trigger();

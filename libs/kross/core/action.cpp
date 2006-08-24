@@ -136,7 +136,7 @@ void Action::setDescription(const QString& description)
     d->description = description;
 }
 
-QString Action::getCode() const
+QString Action::code() const
 {
     return d->code;
 }
@@ -147,12 +147,12 @@ void Action::setCode(const QString& code)
     d->code = code;
 }
 
-QString Action::getInterpreterName() const
+QString Action::interpreter() const
 {
     return d->interpretername;
 }
 
-void Action::setInterpreterName(const QString& interpretername)
+void Action::setInterpreter(const QString& interpretername)
 {
     finalize();
     d->interpretername = interpretername;
@@ -323,7 +323,9 @@ void Action::slotTriggered()
         return;
     }
 
-    d->script->execute( data() );
+    //what to do with data() ?
+
+    d->script->execute();
     if(d->script->hadError()) {
         setError(d->script);
         finalize();

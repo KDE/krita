@@ -86,49 +86,19 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
         if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
             return;
 
-        QRectF oldControlRect = m_pathShape->outline().controlPointRect();
         // cycle the smooth->symmetric->unsmooth state of the path point
         if( props & KoPathPoint::IsSmooth )
         {
             props &= ~KoPathPoint::IsSmooth;
-            m_activePoint->setProperties( props | KoPathPoint::IsSymmetric );
-
-            // First calculate the direction vector of both control points starting from the point and their
-            // distance to the point. Then calculate the average distance and move points so that
-            // they have the same (average) distance from the point but keeping their direction.
-            QPointF directionC1 = m_activePoint->controlPoint1() - m_activePoint->point();
-            qreal dirLengthC1 = sqrt( directionC1.x()*directionC1.x() + directionC1.y()*directionC1.y() );
-            QPointF directionC2 = m_activePoint->controlPoint2() - m_activePoint->point();
-            qreal dirLengthC2 = sqrt( directionC2.x()*directionC2.x() + directionC2.y()*directionC2.y() );
-            qreal averageLength = 0.5 * (dirLengthC1 + dirLengthC2);
-            m_activePoint->setControlPoint1( m_activePoint->point() + averageLength / dirLengthC1 * directionC1 );
-            m_activePoint->setControlPoint2( m_activePoint->point() + averageLength / dirLengthC2 * directionC2 );
-            repaint( transformed( oldControlRect.unite( m_pathShape->outline().controlPointRect() ) ) );
+            props |= KoPathPoint::IsSymmetric;
         }
-        else if( m_activePoint->properties() & KoPathPoint::IsSymmetric )
-        {
+        else if( props & KoPathPoint::IsSymmetric )
             props &= ~KoPathPoint::IsSymmetric;
-            m_activePoint->setProperties( props );
-        }
         else
-        {
-            m_activePoint->setProperties( props | KoPathPoint::IsSmooth );
+            props |= KoPathPoint::IsSmooth;
 
-            // First calculate the direction vector of both control points starting from the point and their
-            // distance to the point. Then calculate the normalized direction vector. Then for each control
-            // point calculate the bisecting line between its nromalized direction vector and the negated normalied
-            // direction vector of the other points. Then use the result as the new direction vector for the
-            // control point and their old distance to the point.
-            QPointF directionC1 = m_activePoint->controlPoint1() - m_activePoint->point();
-            qreal dirLengthC1 = sqrt( directionC1.x()*directionC1.x() + directionC1.y()*directionC1.y() );
-            directionC1 /= dirLengthC1;
-            QPointF directionC2 = m_activePoint->controlPoint2() - m_activePoint->point();
-            qreal dirLengthC2 = sqrt( directionC2.x()*directionC2.x() + directionC2.y()*directionC2.y() );
-            directionC2 /= dirLengthC2;
-            m_activePoint->setControlPoint1( m_activePoint->point() + 0.5 * dirLengthC1 * (directionC1 - directionC2) );
-            m_activePoint->setControlPoint2( m_activePoint->point() + 0.5 * dirLengthC2 * (directionC2 - directionC1) );
-            repaint( transformed( oldControlRect.unite( m_pathShape->outline().controlPointRect() ) ) );
-        }
+        KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_pathShape, m_activePoint, props );
+        m_canvas->addCommand( cmd, true );
     }
 }
 

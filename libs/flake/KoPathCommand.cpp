@@ -21,8 +21,26 @@
 #include <klocale.h>
 #include <math.h>
 
-KoPointMoveCommand::KoPointMoveCommand( KoPathShape *shape, KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType )
+KoPointBaseCommand::KoPointBaseCommand( KoPathShape *shape )
 : m_shape( shape )
+{
+}
+
+void KoPointBaseCommand::repaint( const QRectF &oldControlPointRect )
+{
+    // the bounding rect has changed -> normalize and adjust position of shape
+    QPointF offset = m_shape->normalize();
+    m_shape->moveBy( -offset.x(), -offset.y() );
+
+    // adjust the old control rect as the repainting is relative to the new shape position
+    QRectF repaintRect = oldControlPointRect.translated( offset ).unite( m_shape->outline().controlPointRect() );
+    // TODO use the proper adjustment if the actual point size could be retrieved
+    repaintRect.adjust( -5.0, -5.0, 5.0, 5.0 );
+    m_shape->repaint( repaintRect );
+}
+
+KoPointMoveCommand::KoPointMoveCommand( KoPathShape *shape, KoPathPoint *point, const QPointF &offset, KoPathPoint::KoPointType pointType )
+: KoPointBaseCommand( shape )
 , m_offset( offset )
 , m_pointType( pointType )
 {
@@ -30,7 +48,7 @@ KoPointMoveCommand::KoPointMoveCommand( KoPathShape *shape, KoPathPoint *point, 
 }
 
 KoPointMoveCommand::KoPointMoveCommand( KoPathShape *shape, const QList<KoPathPoint*> &points, const QPointF &offset )
-: m_shape( shape )
+: KoPointBaseCommand( shape )
 , m_points( points )
 , m_offset( offset )
 , m_pointType( KoPathPoint::Node )
@@ -95,16 +113,7 @@ void KoPointMoveCommand::execute()
         }
     }
 
-    // the bounding rect has changed -> normalize and adjust position of shape
-    QPointF offset = m_shape->normalize();
-    m_shape->moveBy( -offset.x(), -offset.y() );
-
-    // adjust the old control rect as the repainting is relative to the new shape position
-    oldControlRect.translate( offset );
-    QRectF repaintRect = oldControlRect.unite( m_shape->outline().controlPointRect() );
-    // TODO use the proper adjustment if the actual point size could be retrieved
-    repaintRect.adjust( -5.0, -5.0, 5.0, 5.0 );
-    m_shape->repaint( repaintRect );
+    repaint( oldControlRect );
 }
 
 void KoPointMoveCommand::unexecute()
@@ -117,4 +126,79 @@ void KoPointMoveCommand::unexecute()
 QString KoPointMoveCommand::name() const
 {
     return i18n( "Move points" );
+}
+
+KoPointPropertyCommand::KoPointPropertyCommand( KoPathShape *shape, KoPathPoint *point, KoPathPoint::KoPointProperties property )
+: KoPointBaseCommand( shape )
+, m_point( point )
+, m_newProperties( property )
+{
+    m_oldProperties = point->properties();
+    m_controlPoint1 = point->controlPoint1();
+    m_controlPoint2 = point->controlPoint2();
+}
+
+void KoPointPropertyCommand::execute()
+{
+    QRectF oldControlRect = m_shape->outline().controlPointRect();
+
+    if( m_newProperties & KoPathPoint::IsSymmetric )
+    {
+        m_newProperties &= ~KoPathPoint::IsSmooth;
+        m_point->setProperties( m_newProperties );
+
+        // First calculate the direction vector of both control points starting from the point and their
+        // distance to the point. Then calculate the average distance and move points so that
+        // they have the same (average) distance from the point but keeping their direction.
+        QPointF directionC1 = m_point->controlPoint1() - m_point->point();
+        qreal dirLengthC1 = sqrt( directionC1.x()*directionC1.x() + directionC1.y()*directionC1.y() );
+        QPointF directionC2 = m_point->controlPoint2() - m_point->point();
+        qreal dirLengthC2 = sqrt( directionC2.x()*directionC2.x() + directionC2.y()*directionC2.y() );
+        qreal averageLength = 0.5 * (dirLengthC1 + dirLengthC2);
+        m_point->setControlPoint1( m_point->point() + averageLength / dirLengthC1 * directionC1 );
+        m_point->setControlPoint2( m_point->point() + averageLength / dirLengthC2 * directionC2 );
+        repaint( oldControlRect );
+    }
+    else if( m_newProperties & KoPathPoint::IsSmooth )
+    {
+        m_newProperties &= ~KoPathPoint::IsSymmetric;
+        m_point->setProperties( m_newProperties );
+
+        // First calculate the direction vector of both control points starting from the point and their
+        // distance to the point. Then calculate the normalized direction vector. Then for each control
+        // point calculate the bisecting line between its nromalized direction vector and the negated
+        // normalied direction vector of the other points. Then use the result as the new direction
+        // vector for the control point and their old distance to the point.
+        QPointF directionC1 = m_point->controlPoint1() - m_point->point();
+        qreal dirLengthC1 = sqrt( directionC1.x()*directionC1.x() + directionC1.y()*directionC1.y() );
+        directionC1 /= dirLengthC1;
+        QPointF directionC2 = m_point->controlPoint2() - m_point->point();
+        qreal dirLengthC2 = sqrt( directionC2.x()*directionC2.x() + directionC2.y()*directionC2.y() );
+        directionC2 /= dirLengthC2;
+        m_point->setControlPoint1( m_point->point() + 0.5 * dirLengthC1 * (directionC1 - directionC2) );
+        m_point->setControlPoint2( m_point->point() + 0.5 * dirLengthC2 * (directionC2 - directionC1) );
+        repaint( oldControlRect );
+    }
+    else
+    {
+        m_newProperties &= ~KoPathPoint::IsSymmetric;
+        m_newProperties &= ~KoPathPoint::IsSmooth;
+        m_point->setProperties( m_newProperties );
+    }
+}
+
+void KoPointPropertyCommand::unexecute()
+{
+    QRectF oldControlRect = m_shape->outline().controlPointRect();
+
+    m_point->setProperties( m_oldProperties );
+    m_point->setControlPoint1( m_controlPoint1 );
+    m_point->setControlPoint2( m_controlPoint2 );
+
+    repaint( oldControlRect );
+}
+
+QString KoPointPropertyCommand::name() const
+{
+    return i18n( "Set point properties" );
 }

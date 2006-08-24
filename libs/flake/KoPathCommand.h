@@ -25,8 +25,22 @@
 #include <QPointF>
 #include <KoPathShape.h>
 
+/// the base command for commands altering a path shape
+class KoPointBaseCommand : public KCommand {
+public:
+    /// intialize the base command with the shape
+    KoPointBaseCommand( KoPathShape *shape );
+protected:
+    /**
+     * Call this to repaint the shape after altering.
+     * @param oldControlPointRect the control point rect of the shape before altering
+     */
+    void repaint( const QRectF &oldControlPointRect );
+    KoPathShape *m_shape; ///< the shape the command operates on
+};
+
 /// The undo / redo command for path point moving.
-class KoPointMoveCommand : public KCommand {
+class KoPointMoveCommand : public KoPointBaseCommand {
 public:
     /**
      * Command to move single path point.
@@ -50,10 +64,33 @@ public:
     /// return the name of this command
     QString name() const;
 private:
-    KoPathShape *m_shape;
     QList<KoPathPoint*> m_points;
     QPointF m_offset;
     KoPathPoint::KoPointType m_pointType;
+};
+
+/// The undo / redo command for changing the path point type.
+class KoPointPropertyCommand : public KoPointBaseCommand {
+public:
+    /**
+     * Command to change the type of the point
+     * @param shape the path shape containing the point
+     * @param point the path point to move
+     * @param pointType the new type of the point to set
+     */
+    KoPointPropertyCommand( KoPathShape *shape, KoPathPoint *point, KoPathPoint::KoPointProperties property );
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    KoPathPoint* m_point;
+    KoPathPoint::KoPointProperties m_newProperties;
+    KoPathPoint::KoPointProperties m_oldProperties;
+    QPointF m_controlPoint1;
+    QPointF m_controlPoint2;
 };
 
 #endif

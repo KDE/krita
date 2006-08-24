@@ -58,14 +58,14 @@ private:
     /// snaps given point to grid point
     QPointF snapToGrid( const QPointF &p, Qt::KeyboardModifiers modifiers );
 private:
-    enum ActivePointType { Normal, ControlPoint1, ControlPoint2 };
-    KoPathShape *m_pathShape;          /// the actual selected path shape
-    KoPathPoint* m_activePoint;        /// the currently active path point
-    int m_handleRadius;                /// the radius of the control point handles
-    ActivePointType m_activePointType; /// the type of currently active path point
-    bool m_pointMoving;                /// shows if points are actually moved
-    QPointF m_lastPosition;            /// the last mouse position
+    KoPathShape *m_pathShape;          ///< the actual selected path shape
+    KoPathPoint* m_activePoint;        ///< the currently active path point
+    int m_handleRadius;                ///< the radius of the control point handles
+    KoPathPoint::KoPointType m_activePointType; ///< the type of currently active path point
+    bool m_pointMoving;                ///< shows if points are actually moved
+    QPointF m_lastPosition;            ///< the last mouse position
     QList<KoPathPoint*> m_selectedPoints; ///< list of selected path points
+    QPointF m_move;                    ///< the accumulated point move amount
 };
 
 #endif

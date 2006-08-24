@@ -60,6 +60,13 @@ public:
     };
     Q_DECLARE_FLAGS( KoPointProperties, KoPointProperty )
 
+    /// the type for identifying part of a KoPathPoint
+    enum KoPointType {
+        Node,          ///< the node point
+        ControlPoint1, ///< the first control point
+        ControlPoint2  ///< the second control point
+    };
+
     /**
      * @brief Constructor
      *

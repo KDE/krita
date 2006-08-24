@@ -22,6 +22,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoPathCommand.h>
 
 #include <kdebug.h>
 #include <QKeyEvent>
@@ -72,6 +73,7 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
 void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     m_pointMoving = m_activePoint;
     m_lastPosition = untransformed( event->point );
+    m_move = QPointF( 0, 0 );
     if( m_activePoint && event->button() & Qt::LeftButton)
     {
         m_selectedPoints.clear();
@@ -137,66 +139,18 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     if( m_pointMoving )
     {
         QPointF docPoint = snapToGrid( event->point, event->modifiers() );
-        QRectF oldControlRect = m_pathShape->outline().controlPointRect();
         QPointF move = untransformed( docPoint ) - m_lastPosition;
         m_lastPosition = untransformed( docPoint );
 
-        if( m_activePointType == Normal )
-        {
-            m_activePoint->setPoint( m_activePoint->point() + move );
-            if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 )
-                m_activePoint->setControlPoint1( m_activePoint->controlPoint1() + move );
-            if( m_activePoint->properties() & KoPathPoint::HasControlPoint2 )
-                m_activePoint->setControlPoint2( m_activePoint->controlPoint2() + move );
-        }
-        else if( m_activePointType == ControlPoint1 )
-        {
-            m_activePoint->setControlPoint1( m_activePoint->controlPoint1() + move );
-            if( m_activePoint->properties() & KoPathPoint::IsSymmetric )
-            {
-                // set the other control point so that it lies on the line between the moved
-                // control point and the point, with the same distance to the point as the moved point
-                m_activePoint->setControlPoint2( 2.0 * m_activePoint->point() - m_activePoint->controlPoint1() );
-            }
-            else if( m_activePoint->properties() & KoPathPoint::IsSmooth )
-            {
-                // move the other control point so that it lies on the line through point and control point
-                // keeping its distance to the point
-                QPointF direction = m_activePoint->point() - m_activePoint->controlPoint1();
-                direction /= sqrt( direction.x()*direction.x() + direction.y()*direction.y() );
-                QPointF distance = m_activePoint->point() - m_activePoint->controlPoint2();
-                qreal length = sqrt( distance.x()*distance.x() + distance.y()*distance.y() );
-                m_activePoint->setControlPoint2( m_activePoint->point() + length * direction );
-            }
-        }
-        else if( m_activePointType == ControlPoint2 )
-        {
-            m_activePoint->setControlPoint2( m_activePoint->controlPoint2() + move );
-            if( m_activePoint->properties() & KoPathPoint::IsSymmetric )
-            {
-                // set the other control point so that it lies on the line between the moved
-                // control point and the point, with the same distance to the point as the moved point
-                m_activePoint->setControlPoint1( 2.0 * m_activePoint->point() - m_activePoint->controlPoint2() );
-            }
-            else if( m_activePoint->properties() & KoPathPoint::IsSmooth )
-            {
-                // move the other control point so that it lies on the line through point and control point
-                // keeping its distance to the point
-                QPointF direction = m_activePoint->point() - m_activePoint->controlPoint2();
-                direction /= sqrt( direction.x()*direction.x() + direction.y()*direction.y() );
-                QPointF distance = m_activePoint->point() - m_activePoint->controlPoint1();
-                qreal length = sqrt( distance.x()*distance.x() + distance.y()*distance.y() );
-                m_activePoint->setControlPoint1( m_activePoint->point() + length * direction );
-            }
-        }
+        m_move += move;
 
-        // the bounding rect has changed -> normalize and adjust position of shape
-        QPointF offset = m_pathShape->normalize();
-        m_pathShape->moveBy( -offset.x(), -offset.y() );
+        QPointF oldPos = m_pathShape->position();
+        KoPointMoveCommand cmd( m_pathShape, m_activePoint, move, m_activePointType );
+        cmd.execute();
+        QPointF newPos = m_pathShape->position();
+
         // adjust the last mouse position after moving the path shape
-        m_lastPosition += offset;
-
-        repaint( transformed( oldControlRect.unite( m_pathShape->outline().controlPointRect() ) ) );
+        m_lastPosition += oldPos - newPos;
     }
     else
     {
@@ -215,11 +169,11 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
 
         m_activePoint = points.first();
         if( roi.contains( m_activePoint->point() ) )
-            m_activePointType = Normal;
+            m_activePointType = KoPathPoint::Node;
         else if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 && roi.contains( m_activePoint->controlPoint1() ) )
-            m_activePointType = ControlPoint1;
+            m_activePointType = KoPathPoint::ControlPoint1;
         else if( m_activePoint->properties() & KoPathPoint::HasControlPoint2 && roi.contains( m_activePoint->controlPoint2() ) )
-            m_activePointType = ControlPoint2;
+            m_activePointType = KoPathPoint::ControlPoint2;
 
         repaint( transformed( m_pathShape->outline().controlPointRect() ) );
 
@@ -231,6 +185,11 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
 void KoPathTool::mouseReleaseEvent( KoPointerEvent * ) {
     // TODO
     m_pointMoving = false;
+    if( ! m_move.isNull() )
+    {
+        KoPointMoveCommand *cmd = new KoPointMoveCommand( m_pathShape, m_activePoint, m_move, m_activePointType );
+        m_canvas->addCommand( cmd, false );
+    }
 }
 
 void KoPathTool::keyPressEvent(QKeyEvent *event) {

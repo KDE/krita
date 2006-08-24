@@ -1301,8 +1301,8 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 {
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType( nativeFormatMimeType() );
-    Q_ASSERT( mime );
-    QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
+    //Q_ASSERT( mime );
+    QString extension = mime ? mime->property( "X-KDE-NativeExtension" ).toString() : QString::null;
     if ( path.isEmpty() )
     {
         // Never saved? Use a temp file in $HOME then

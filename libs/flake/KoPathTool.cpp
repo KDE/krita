@@ -190,13 +190,11 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
             }
         }
 
-        // the bounding rect has changed -> normalize and adjust position of shape 
-        QPointF tlOld = m_pathShape->boundingRect().topLeft();
-        m_pathShape->normalize();
-        QPointF tlNew = m_pathShape->boundingRect().topLeft();
-        m_pathShape->moveBy( tlOld.x()-tlNew.x(), tlOld.y()-tlNew.y() );
+        // the bounding rect has changed -> normalize and adjust position of shape
+        QPointF offset = m_pathShape->normalize();
+        m_pathShape->moveBy( -offset.x(), -offset.y() );
         // adjust the last mouse position after moving the path shape
-        m_lastPosition -= tlOld-tlNew;
+        m_lastPosition += offset;
 
         repaint( transformed( oldControlRect.unite( m_pathShape->outline().controlPointRect() ) ) );
     }

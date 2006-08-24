@@ -317,8 +317,9 @@ public:
      * The path points are transformed so that the top-left corner
      * of the bounding rect is (0,0).
      * This should be called after adding points to the path.
+     * @return the offset by which the points are moved.
      */
-    void normalize();
+    QPointF normalize();
 
     /**
      * @brief Returns the path points within the given rectangle.

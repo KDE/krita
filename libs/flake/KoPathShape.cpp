@@ -389,12 +389,13 @@ void KoPathShape::close()
     firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
 }
 
-void KoPathShape::normalize()
+QPointF KoPathShape::normalize()
 {
     QPointF tl( outline().boundingRect().topLeft() );
     QMatrix matrix;
     matrix.translate( -tl.x(), -tl.y() );
     map( matrix );
+    return -tl;
 }
 
 void KoPathShape::map( const QMatrix &matrix )

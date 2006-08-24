@@ -63,16 +63,28 @@ Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
         } // fall through
 
         default: {
+            if( strcmp(v.typeName(),"float") == 0 ) {
+                krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to double").arg(v.typeName()) );
+                return PythonType<double>::toPyObject(v.toDouble());
+            }
+
             if( qVariantCanConvert< QWidget* >(v) ) {
                 krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to QWidget").arg(v.typeName()) );
                 QWidget* widget = qvariant_cast< QWidget* >(v);
-                Q_ASSERT(widget);
+                if(! widget) {
+                    krossdebug( QString("PythonType<QVariant>::toPyObject To QWidget casted '%1' is NULL").arg(v.typeName()) );
+                    return Py::None();
+                }
                 return Py::asObject(new PythonExtension(widget));
             }
+
             if( qVariantCanConvert< QObject* >(v) ) {
                 krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to QObject").arg(v.typeName()) );
                 QObject* obj = qvariant_cast< QObject* >(v);
-                Q_ASSERT(obj);
+                if(! obj) {
+                    krossdebug( QString("PythonType<QVariant>::toPyObject To QObject casted '%1' is NULL").arg(v.typeName()) );
+                    return Py::None();
+                }
                 return Py::asObject(new PythonExtension(obj));
             }
 

@@ -469,7 +469,7 @@ bool GUIClient::uninstallPackage(Action* action)
     const QString name = action->objectName();
 
     KUrl url = action->getFile();
-    if(! url.isValid()) {
+    if(! url.isValid() || ! url.isLocalFile()) {
         KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\" since the script is not installed.").arg(action->objectName()));
         return false;
     }

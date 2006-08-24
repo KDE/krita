@@ -2,7 +2,7 @@
  * guimanager.h
  * This file is part of the KDE project
  * copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
- * copyright (C) 2006 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,8 +21,6 @@
 #ifndef KROSS_GUIMANAGER_H
 #define KROSS_GUIMANAGER_H
 
-//#include "action.h"
-
 #include <QWidget>
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
@@ -39,6 +37,10 @@ namespace Kross {
 
     class GUIClient;
 
+    /**
+    * This class implements a abstract model to display the \a Action
+    * instances provided by a \a GUIClient .
+    */
     class KROSS_EXPORT GUIManagerModel : public QAbstractItemModel
     {
         public:
@@ -56,6 +58,11 @@ namespace Kross {
             Private* const d;
     };
 
+    /**
+    * The listview that displays the items provided by the \a GUIManagerModel
+    * model and offers a collection of actions to run, stop, install, uninstall
+    * and to get new scripts.
+    */
     class KROSS_EXPORT GUIManagerView : public QListView
     {
             Q_OBJECT
@@ -72,12 +79,17 @@ namespace Kross {
             void slotInstall();
             void slotUninstall();
             void slotNewScripts();
+            void slotNewScriptsInstallFinished();
 
         private:
             class Private;
             Private* const d;
     };
 
+    /**
+    * The "Scripts Manager" dialog that displays the \a GUIManagerView
+    * and buttons to run, stop, install, uninstall and to get new scripts.
+    */
     class KROSS_EXPORT GUIManagerDialog : public KDialog
     {
             Q_OBJECT

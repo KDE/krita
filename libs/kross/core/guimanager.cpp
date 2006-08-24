@@ -2,7 +2,7 @@
  * guimanager.h
  * This file is part of the KDE project
  * copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
- * copyright (C) 2006 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,25 +30,25 @@
 //#include <QPixmap>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-//#include <kicon.h>
-//#include <kapplication.h>
+
+#include <kapplication.h>
 //#include <kdeversion.h>
+#include <kconfig.h>
+//#include <kicon.h>
 //#include <kfiledialog.h>
 //#include <kiconloader.h>
-
 #include <klocale.h>
 #include <kicon.h>
 #include <kmessagebox.h>
 //#include <kpushbutton.h>
 //#include <kstandarddirs.h>
 #include <kpushbutton.h>
+//#include <ktoolbar.h>
 
-#include <ktoolbar.h>
-
-//#include <knewstuff/provider.h>
-//#include <knewstuff/engine.h>
-//#include <knewstuff/downloaddialog.h>
-//#include <knewstuff/knewstuffsecure.h>
+#include <knewstuff/provider.h>
+#include <knewstuff/engine.h>
+#include <knewstuff/downloaddialog.h>
+#include <knewstuff/knewstuffsecure.h>
 
 using namespace Kross;
 
@@ -58,6 +58,7 @@ using namespace Kross;
 
 namespace Kross {
 
+    /// \internal d-pointer class.
     class GUIManagerModel::Private
     {
         public:
@@ -75,12 +76,6 @@ GUIManagerModel::GUIManagerModel(KActionCollection* collection, QObject* parent)
 
 GUIManagerModel::~GUIManagerModel()
 {
-    /*
-    // Delete KNewStuff's configuration entries. These entries reflect what has
-    // already been installed. As we cannot yet keep them in sync after uninstalling
-    // scripts, we deactivate the check marks entirely.
-    KGlobal::config()->deleteGroup("KNewStuffStatus");
-    */
     delete d;
 }
 
@@ -134,6 +129,20 @@ int GUIManagerModel::rowCount(const QModelIndex& parent) const
 
 namespace Kross {
 
+    /// \internal class that inherits \a KNewStuffSecure to implement the GHNS-functionality.
+    class GUIManagerNewStuff : public KNewStuffSecure
+    {
+        public:
+            GUIManagerNewStuff(GUIClient* guiclient, const QString& type, QWidget *parentWidget = 0)
+                : KNewStuffSecure(type, parentWidget)
+                , m_guiclient(guiclient) {}
+            virtual ~GUIManagerNewStuff() {}
+        private:
+            GUIClient* m_guiclient;
+            virtual void installResource() { m_guiclient->installPackage( m_tarName ); }
+    };
+
+    /// \internal d-pointer class.
     class GUIManagerView::Private
     {
         public:
@@ -141,6 +150,9 @@ namespace Kross {
             GUIManagerModel* model;
             QItemSelectionModel* selectionmodel;
             KActionCollection* collection;
+            GUIManagerNewStuff* newstuff;
+
+            Private() : newstuff(0) {}
     };
 
 }
@@ -161,7 +173,6 @@ GUIManagerView::GUIManagerView(GUIClient* guiclient, QWidget* parent)
             SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotRun()) );
     connect(new KAction(KIcon("player_stop"), i18n("Stop"), d->collection, "stopscript"),
             SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotStop()) );
-
     connect(new KAction(KIcon("fileimport"), i18n("Install"), d->collection, "installscript"),
             SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotInstall()) );
     connect(new KAction(KIcon("fileclose"), i18n("Uninstall"), d->collection, "uninstallscript"),
@@ -220,22 +231,28 @@ void GUIManagerView::slotUninstall()
 
 void GUIManagerView::slotNewScripts()
 {
-    KMessageBox::information(0, "unimplemented yet");
-    /*
     const QString appname = KApplication::kApplication()->objectName();
     const QString type = QString("%1/script").arg(appname);
+    krossdebug( QString("GUIManagerView::slotNewScripts %1").arg(type) );
     if(! d->newstuff) {
-        d->newstuff = new ScriptNewStuff(d->m_scripguiclient, type);
-        connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotResourceInstalled()));
+        d->newstuff = new GUIManagerNewStuff(d->guiclient, type);
+        connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotNewScriptsInstallFinished()));
     }
     KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
-    KNS::DownloadDialog *d = new KNS::DownloadDialog( engine, this );
+    KNS::DownloadDialog *d = new KNS::DownloadDialog(engine, this);
     d->setCategory(type);
     KNS::ProviderLoader *p = new KNS::ProviderLoader(this);
     QObject::connect(p, SIGNAL(providersLoaded(Provider::List*)), d, SLOT(slotProviders(Provider::List*)));
     p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
     d->exec();
-    */
+}
+
+void GUIManagerView::slotNewScriptsInstallFinished()
+{
+    // Delete KNewStuff's configuration entries. These entries reflect what has
+    // already been installed. As we cannot yet keep them in sync after uninstalling
+    // scripts, we deactivate the check marks entirely.
+    KGlobal::config()->deleteGroup("KNewStuffStatus");
 }
 
 /******************************************************************************
@@ -244,6 +261,7 @@ void GUIManagerView::slotNewScripts()
 
 namespace Kross {
 
+    /// \internal d-pointer class.
     class GUIManagerDialog::Private
     {
         public:

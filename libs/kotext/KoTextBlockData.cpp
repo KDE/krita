@@ -18,7 +18,9 @@
 
 #include "KoTextBlockData.h"
 
-KoTextBlockData::KoTextBlockData() {
+KoTextBlockData::KoTextBlockData()
+    : m_counterPos(0.0, 0.0)
+{
     m_counterWidth = -1.0;
 }
 

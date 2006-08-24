@@ -331,6 +331,7 @@ public:
     const KoListStyle *listStyle() const { return m_listStyle; }
 
     void setListStyle(const KoListStyle &style);
+    void removeListStyle() { delete m_listStyle; m_listStyle = 0; }
 
 private:
     void setProperty(int key, const QVariant &value);

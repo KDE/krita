@@ -43,9 +43,13 @@ public:
     /// return the exact text that will be painted as the counter
     const QString &counterText() const { return m_counterText; }
 
+    void setCounterPosition(QPointF position) { m_counterPos = position; }
+    QPointF counterPosition() const { return m_counterPos; }
+
 private:
     double m_counterWidth;
     QString m_counterText;
+    QPointF m_counterPos;
 };
 
 #endif

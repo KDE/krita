@@ -67,6 +67,10 @@ void KoListStyle::applyStyle(QTextBlock &block) {
         block.textList()->remove(block);
     if(block.textList() == 0 && textList) // add if new
         textList->add(block);
+    if(block.textList() && textList == 0) {
+        textList = block.textList(); // missed it ?
+        m_textLists.insert(block.document(), QPointer<QTextList>(textList));
+    }
 
     QTextListFormat format;
     if(block.textList())
@@ -109,3 +113,5 @@ void KoListStyle::applyStyle(QTextBlock &block) {
         m_textLists.insert(block.document(), QPointer<QTextList>(textList));
     }
 }
+
+// TODO; what did I invent m_textLists for?  Can it be removed?

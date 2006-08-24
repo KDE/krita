@@ -156,8 +156,8 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const {
         QVariant const *variant = get(properties[i]);
         if(variant)
             format.setProperty(properties[i], *variant);
-        else
-            format.clearProperty(properties[i]);
+//        else
+//            format.clearProperty(properties[i]);
         i++;
     }
 }
@@ -185,6 +185,10 @@ void KoParagraphStyle::applyStyle(QTextBlock &block) const {
 void KoParagraphStyle::setListStyle(const KoListStyle &style) {
     delete m_listStyle;
     m_listStyle = new KoListStyle(style);
+}
+
+void KoParagraphStyle::removeListStyle() {
+    delete m_listStyle; m_listStyle = 0;
 }
 
 #include "KoParagraphStyle.moc"

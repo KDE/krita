@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREKRS_BRUSH_H
 #define KROSS_KRITACOREKRS_BRUSH_H
 
-#include <api/class.h>
+#include <QObject>
 
 class KisBrush;
 
@@ -27,15 +27,18 @@ namespace Kross {
 
 namespace KritaCore {
 
-class Brush : public Kross::Api::Class<Brush>{
+class Brush : public QObject
+{
     public:
         /**
          * @param sharedBrush tell if the brush should be deleted or not when this object is deleted
          */
         Brush(KisBrush*, bool sharedBrush );
         ~Brush();
+
     public:
         inline KisBrush* getBrush() { return m_brush; }
+
     private:
         KisBrush* m_brush;
         bool m_sharedBrush;

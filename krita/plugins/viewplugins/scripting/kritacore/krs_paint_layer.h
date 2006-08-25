@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREKRSLAYER_H
 #define KROSS_KRITACOREKRSLAYER_H
 
-#include <api/class.h>
+#include <QObject>
 
 #include <kis_types.h>
 #include <kis_paint_layer.h>
@@ -34,13 +34,16 @@ namespace KritaCore {
 /**
 @author Cyrille Berger
 */
-class PaintLayer : public Kross::Api::Class<PaintLayer>
+class PaintLayer : public QObject
 {
+        //Q_OBJECT
     public:
         explicit PaintLayer(KisPaintLayerSP layer, KisDoc* doc = 0);
         virtual ~PaintLayer();
-        virtual const QString getClassName() const;
-    private:
+
+    //public slots:
+
+#if 0
         /**
          * Create an iterator over a layer, it will iterate on a rectangle area.
          * This function takes four arguments :
@@ -124,6 +127,8 @@ class PaintLayer : public Kross::Api::Class<PaintLayer>
          * @endcode
          */
         Kross::Api::Object::Ptr fastWaveletUntransformation(Kross::Api::List::Ptr args);
+#endif
+
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
         inline KisDoc* doc() { return m_doc; }

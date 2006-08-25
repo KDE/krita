@@ -20,9 +20,8 @@
 #define KROSS_KRITACOREKRS_ITERATOR_H
 
 #include <QObject>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <api/class.h>
+//#include <Q3ValueList>
+//#include <api/class.h>
 
 #include <klocale.h>
 
@@ -30,28 +29,32 @@
 #include <kis_paint_device.h>
 #include <kis_types.h>
 
-#include <kis_script_monitor.h>
+//#include "../scriptingmonitor.h"
 
 namespace Kross {
 
 namespace KritaCore {
 
 //<beurk> stupid Qt which doesn't support templated QObject
-class IteratorMemoryManaged {
+class IteratorMemoryManaged
+{
     public:
-		virtual ~IteratorMemoryManaged() {}
+        virtual ~IteratorMemoryManaged() {}
         virtual void invalidateIterator() = 0;
 };
-    
-class IteratorMemoryManager : public QObject {
-    Q_OBJECT
+
+class IteratorMemoryManager : public QObject
+{
+        Q_OBJECT
     public:
         IteratorMemoryManager(IteratorMemoryManaged* it) : m_it(it)
         {
+#if 0
             // Connect the Monitor to know when the invalidating of iterator is needed
-            connect(KisScriptMonitor::instance(), SIGNAL(executionFinished(const Kross::Api::ScriptAction* )), this, SLOT(invalidateIterator()));
-
+            connect(ScriptingMonitor::instance(), SIGNAL(executionFinished(const Kross::Api::ScriptAction* )), this, SLOT(invalidateIterator()));
+#endif
         }
+
     public slots:
         void invalidateIterator()
         {
@@ -61,6 +64,7 @@ class IteratorMemoryManager : public QObject {
         IteratorMemoryManaged* m_it;
 };
 //</beurk>
+
 /**
  * This object allow to change the value of pixel one by one.
  * The name of some function depends of the colorspace, for instance, if
@@ -78,11 +82,18 @@ class IteratorMemoryManager : public QObject {
  *  - an array with the new value for all channels
  */
 template<class _T_It>
-class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMemoryManaged
+class Iterator : public IteratorMemoryManaged
 {
     public:
-        Iterator(_T_It it, KisPaintLayerSP layer) : Kross::Api::Class<Iterator<_T_It> >("KritaIterator"), m_itmm (new IteratorMemoryManager(this)), m_it(new _T_It(it)), nchannels(layer->paintDevice()->nChannels()), m_layer(layer)
+        Iterator(_T_It it, KisPaintLayerSP layer)
+            : m_itmm (new IteratorMemoryManager(this))
+            , m_it(new _T_It(it))
+            , nchannels(layer->paintDevice()->nChannels())
+            , m_layer(layer)
         {
+           //setObjectName("KritaIterator");
+
+#if 0
             // navigate in the iterator
             this->addFunction("next",
                 new Kross::Api::ProxyFunction<
@@ -143,6 +154,7 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
             // Various colorSpace
             addFunction("invertColor", &Iterator::invertColor);
             addFunction("darken", &Iterator::darken);
+#endif
         }
     
         ~Iterator()
@@ -150,9 +162,8 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
             invalidateIterator();
             delete m_itmm;
         }
-        virtual const QString getClassName() const {
-            return "Kross::KritaCore::KrsDoc";
-        };
+
+#if 0
     private:
         /**
          * Darken a pixel.
@@ -281,6 +292,8 @@ class Iterator : public Kross::Api::Class<Iterator<_T_It> >, private IteratorMem
             }
             return Kross::Api::Object::Ptr(0);
         }
+#endif
+
     private:
         virtual void invalidateIterator()
         {

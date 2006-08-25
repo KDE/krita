@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREKRS_PAINTER_H
 #define KROSS_KRITACOREKRS_PAINTER_H
 
-#include <api/class.h>
+#include <QObject>
 
 #include <kis_point.h>
 #include <kis_types.h>
@@ -34,12 +34,17 @@ namespace Kross {
 
 namespace KritaCore {
 
-class Painter : public Kross::Api::Class<Painter>
+class Painter : public QObject
 {
+        //Q_OBJECT
     public:
         explicit Painter(KisPaintLayerSP layer);
         ~Painter();
-    private:
+
+    //public slots:
+
+#if 0
+
         // Convolution
         /**
          * This function apply a convolution kernel to an image.
@@ -216,6 +221,8 @@ class Painter : public Kross::Api::Class<Painter>
          * 3 for fill with a pattern
          */
         Kross::Api::Object::Ptr setFillStyle(Kross::Api::List::Ptr args);
+#endif
+
     protected:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
     private:

@@ -19,20 +19,25 @@
 #ifndef KROSS_KRITACOREKRS_FILTER_H
 #define KROSS_KRITACOREKRS_FILTER_H
 
-#include <api/class.h>
+#include <QObject>
 
 class KisFilter;
 
 namespace Kross {
 namespace KritaCore {
-    class FilterConfiguration;
 
-class Filter : public Kross::Api::Class<Filter>
+class FilterConfiguration;
+
+class Filter : public QObject
 {
+        //Q_OBJECT
     public:
         Filter(KisFilter*);
         ~Filter();
-    private:
+
+    //public slots:
+
+#if 0
         /**
          * This function return the FilterConfiguration associated with this filter.
          */
@@ -63,8 +68,8 @@ class Filter : public Kross::Api::Class<Filter>
          * @endcode
          */
         Kross::Api::Object::Ptr process(Kross::Api::List::Ptr args);
-    public:
-        virtual const QString getClassName() const;
+#endif
+
     private:
         KisFilter* m_filter;
         FilterConfiguration* m_config;

@@ -21,8 +21,11 @@
 
 #include <QString>
 #include <QVariant>
+#include <QObject>
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
+
+#if 0
 
 #include <api/class.h>
 #include <api/module.h>
@@ -31,15 +34,31 @@ namespace Kross { namespace Api {
     class Manager;
 }}
 
+#endif
+
+class KisView;
+
 namespace Kross { namespace KritaCore {
+
     /**
-     * This class contains functions use to create new Kross object in a script
+     * The main KritaCoreModule class enables access to the Krita
+     * functionality from within the Kross scripting backends.
      */
-    class KritaCoreFactory : public Kross::Api::Class<KritaCoreFactory>
+    class KritaCoreModule : public QObject
     {
+            Q_OBJECT
         public:
-            KritaCoreFactory(QString packagePath);
-        private:
+            KritaCoreModule(KisView* view);
+            virtual ~KritaCoreModule();
+
+        public slots:
+
+            /**
+            * Returns the \a KoApplicationAdaptor object.
+            */
+            QObject* application();
+
+#if 0
             /**
              * This function return a new Image.
              * It takes four arguments :
@@ -173,33 +192,13 @@ namespace Kross { namespace KritaCore {
             Kross::Api::Object::Ptr getPackagePath(Kross::Api::List::Ptr);
         private:
             QString m_packagePath;
-    };
-    /**
-     *
-     */
-    class KritaCoreModule : public Kross::Api::Module
-    {
-        public:
-            /**
-             * Constructor.
-             */
-            KritaCoreModule(Kross::Api::Manager* manager);
+#endif
 
-            /**
-             * Destructor.
-             */
-            virtual ~KritaCoreModule();
-
-            /// \see Kross::Api::Object::getClassName
-            virtual const QString getClassName() const;
-            virtual Kross::Api::Object::Ptr call(const QString& name, Kross::Api::List::Ptr arguments);
         private:
-            Kross::Api::Manager* m_manager;
-            KritaCoreFactory* m_factory;
+            class Private;
+            Private* const d;
     };
-    
 
 }}
 
 #endif
-

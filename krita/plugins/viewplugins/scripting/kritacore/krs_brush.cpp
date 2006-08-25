@@ -24,8 +24,10 @@ namespace Kross {
 
 namespace KritaCore {
 
-Brush::Brush(KisBrush* brush, bool sharedBrush) : Kross::Api::Class<Brush>("KritaBrush"), m_brush(brush), m_sharedBrush(sharedBrush)
+Brush::Brush(KisBrush* brush, bool sharedBrush)
+    : QObject(), m_brush(brush), m_sharedBrush(sharedBrush)
 {
+    setObjectName("KritaBrush");
 }
 
 Brush::~Brush()

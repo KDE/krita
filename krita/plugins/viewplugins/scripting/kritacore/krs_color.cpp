@@ -23,19 +23,20 @@ namespace Kross {
 namespace KritaCore {
 
 Color::Color ( int x, int y, int z, QColor::Spec colorSpec )
-    : Kross::Api::Class<Color>("KritaColor"), m_color(x,y,z,colorSpec)
+    : QObject(), m_color(x,y,z,colorSpec)
 {
+    setObjectName("KritaColor");
 }
 
 Color::Color()
- : Kross::Api::Class<Color>("KritaColor")
+ : QObject()
 {
+    setObjectName("KritaColor");
 }
 
 Color::~Color()
 {
 }
-
 
 }
 

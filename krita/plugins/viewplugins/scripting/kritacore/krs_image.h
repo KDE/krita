@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREKRSIMAGE_H
 #define KROSS_KRITACOREKRSIMAGE_H
 
-#include <api/class.h>
+#include <QObject>
 
 #include <kis_types.h>
 
@@ -29,13 +29,16 @@ namespace Kross {
 
 namespace KritaCore {
 
-class Image : public Kross::Api::Class<Image>
+class Image : public QObject
 {
+       //Q_OBJECT
     public:
         Image(KisImageSP image, KisDoc* doc = 0);
         ~Image();
-        virtual const QString getClassName() const;
-    private:
+
+    //public slots:
+
+#if 0
         /**
          * Return the active PaintLayer, if any.
          */
@@ -82,6 +85,8 @@ class Image : public Kross::Api::Class<Image>
          *      will have the same colorspace as the image)
          */
         Kross::Api::Object::Ptr createPaintLayer(Kross::Api::List::Ptr args);
+#endif
+
     private:
         KisImageSP m_image;
         KisDoc* m_doc;

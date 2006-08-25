@@ -29,15 +29,9 @@ namespace Kross {
 namespace KritaCore {
 
 Wavelet::Wavelet(KisMathToolbox::KisWavelet* kwl)
-    : Kross::Api::Class<Wavelet>("KritaWavelet"), m_wavelet(kwl)
+    : QObject(), m_wavelet(kwl)
 {
-    addFunction("getNCoeff", &Wavelet::getNCoeff);
-    addFunction("setNCoeff", &Wavelet::setNCoeff);
-    addFunction("getXYCoeff", &Wavelet::getXYCoeff);
-    addFunction("setXYCoeff", &Wavelet::setXYCoeff);
-    addFunction("getDepth", &Wavelet::getDepth);
-    addFunction("getSize", &Wavelet::getSize);
-    addFunction("getNumCoeffs", &Wavelet::getNumCoeffs);
+    setObjectName("KritaWavelet");
     m_numCoeff = m_wavelet->size*m_wavelet->size*m_wavelet->depth;
 }
 
@@ -46,7 +40,7 @@ Wavelet::~Wavelet()
 {
 }
 
-
+#if 0
 Kross::Api::Object::Ptr Wavelet::getNCoeff(Kross::Api::List::Ptr args)
 {
     quint32 n = Kross::Api::Variant::toUInt(args->item(0));
@@ -107,7 +101,7 @@ Kross::Api::Object::Ptr Wavelet::getNumCoeffs(Kross::Api::List::Ptr)
 {
     return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_numCoeff));
 }
-
+#endif
 
 }
 

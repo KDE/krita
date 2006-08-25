@@ -28,24 +28,16 @@
 #include <kis_paint_layer.h>
 #include <kis_meta_registry.h>
 
-
 #include "krs_paint_layer.h"
 
 namespace Kross {
 
 namespace KritaCore {
 
-    Image::Image(KisImageSP image, KisDoc* doc)
-    : Kross::Api::Class<Image>("KritaImage"), m_image(image), m_doc(doc)
+Image::Image(KisImageSP image, KisDoc* doc)
+    : QObject(), m_image(image), m_doc(doc)
 {
-    addFunction("getActivePaintLayer", &Image::getActivePaintLayer);
-    addFunction("getWidth", &Image::getWidth);
-    addFunction("getHeight", &Image::getHeight);
-    addFunction("convertToColorspace", &Image::convertToColorspace);
-    addFunction("createPaintLayer", &Image::createPaintLayer);
-    addFunction("colorSpaceId", &Image::colorSpaceId);
-    addFunction("scale", &Image::scale);
-    addFunction("resize", &Image::resize);
+    setObjectName("KritaImage");
 }
 
 
@@ -53,10 +45,7 @@ Image::~Image()
 {
 }
 
-const QString Image::getClassName() const {
-    return "Kross::KritaCore::Image";
-}
-
+#if 0
 Kross::Api::Object::Ptr Image::getActivePaintLayer(Kross::Api::List::Ptr)
 {
     KisPaintLayer* activePaintLayer = dynamic_cast<KisPaintLayer*>(m_image->activeLayer().data());
@@ -142,7 +131,7 @@ Kross::Api::Object::Ptr Image::resize(Kross::Api::List::Ptr args)
     m_image->resize( nw, nh, x, y );
     return Kross::Api::Object::Ptr(0);
 }
-
+#endif
 
 }
 

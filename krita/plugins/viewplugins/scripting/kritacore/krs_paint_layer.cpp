@@ -38,21 +38,9 @@ namespace Kross {
 namespace KritaCore {
 
 PaintLayer::PaintLayer(KisPaintLayerSP layer, KisDoc* doc)
-    : Kross::Api::Class<PaintLayer>("KritaLayer"), m_layer(layer), m_doc(doc), m_cmd(0)
+    : QObject(), m_layer(layer), m_doc(doc), m_cmd(0)
 {
-    addFunction("createRectIterator", &PaintLayer::createRectIterator);
-    addFunction("createHLineIterator", &PaintLayer::createHLineIterator);
-    addFunction("createVLineIterator", &PaintLayer::createVLineIterator);
-    addFunction("getWidth", &PaintLayer::getWidth);
-    addFunction("getHeight", &PaintLayer::getHeight);
-    addFunction("createHistogram", &PaintLayer::createHistogram);
-    addFunction("createPainter", &PaintLayer::createPainter);
-    addFunction("beginPainting", &PaintLayer::beginPainting);
-    addFunction("endPainting", &PaintLayer::endPainting);
-    addFunction("convertToColorspace", &PaintLayer::convertToColorspace);
-    addFunction("fastWaveletTransformation", &PaintLayer::fastWaveletTransformation);
-    addFunction("fastWaveletUntransformation", &PaintLayer::fastWaveletUntransformation);
-    addFunction("colorSpaceId", &PaintLayer::colorSpaceId);
+    setObjectName("KritaLayer");
 }
 
 
@@ -60,10 +48,7 @@ PaintLayer::~PaintLayer()
 {
 }
 
-const QString PaintLayer::getClassName() const {
-    return "Kross::KritaCore::PaintLayer";
-}
-
+#if 0
 Kross::Api::Object::Ptr PaintLayer::createRectIterator(Kross::Api::List::Ptr args)
 {
     return Kross::Api::Object::Ptr(new Iterator<KisRectIteratorPixel>(
@@ -200,7 +185,7 @@ Kross::Api::Object::Ptr PaintLayer::fastWaveletUntransformation(Kross::Api::List
     mathToolbox->fastWaveletUntransformation( paintLayer()->paintDevice(), rect, wav->wavelet() );
     return Kross::Api::Object::Ptr(0);
 }
-
+#endif
 
 }
 

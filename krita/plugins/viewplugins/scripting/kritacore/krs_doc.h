@@ -21,17 +21,19 @@
 
 class KisDoc;
 
-#include <api/class.h>
+#include <QObject>
 
 namespace Kross { namespace KritaCore {
 
-class Doc : public Kross::Api::Class<Doc>
+class Doc : public QObject
 {
+        //Q_OBJECT
     public:
-        explicit Doc(::KisDoc* doc);
+        Doc(::KisDoc* doc);
         virtual ~Doc();
-        virtual const QString getClassName() const;
-    private:
+
+    //public slots:
+#if 0
         /**
          * This function return the Image associated with this Doc.
          * 
@@ -42,6 +44,7 @@ class Doc : public Kross::Api::Class<Doc>
          * @endcode
          */
         Kross::Api::Object::Ptr getImage(Kross::Api::List::Ptr);
+#endif
     private:
         KisDoc* m_doc;
 

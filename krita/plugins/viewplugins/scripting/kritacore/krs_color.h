@@ -21,23 +21,21 @@
 
 #include <QColor>
 
-#include <api/class.h>
+#include <QObject>
 
 namespace Kross {
 
 namespace KritaCore {
 
-class Color : public Kross::Api::Class<Color>
+class Color : public QObject
 {
     public:
         Color ( int x, int y, int z, QColor::Spec colorSpec );
         Color ();
+        virtual ~Color();
 
-        ~Color();
-    public:
-        inline const QString getClassName() const
-        { return "Kross::Krita::Color"; };
         inline QColor toQColor() { return m_color; };
+
     private:
         QColor m_color;
 };

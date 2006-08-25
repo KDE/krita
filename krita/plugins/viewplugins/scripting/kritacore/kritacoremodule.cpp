@@ -18,11 +18,72 @@
 
 #include "kritacoremodule.h"
 
+// koffice
+#include <KoDocumentAdaptor.h>
+#include <KoApplicationAdaptor.h>
+
+// krita
+#include <kis_view.h>
+
+#include <kapplication.h>
+#include <kdebug.h>
+
+using namespace Kross::KritaCore;
+
+namespace Kross { namespace KritaCore {
+
+	class KritaCoreModule::Private
+	{
+		public:
+			KisView* view;
+			
+			Private(KisView* v) : view(v) {}
+	};
+
+}}
+
+KritaCoreModule::KritaCoreModule(KisView* view)
+	: QObject()
+	, d(new Private(view))
+{
+	setObjectName("Krita");
+
+#if 0
+	Kross::Manager::self().addObject(d->view->canvasSubject()->document(), "KritaDocument");
+	Kross::Manager::self().addObject(d->view, "KritaView");
+#endif
+}
+
+KritaCoreModule::~KritaCoreModule()
+{
+	delete d;
+}
+
+QObject* KritaCoreModule::application()
+{
+	return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#if 0
 #include <kdebug.h>
 
 //#include <api/variant.h>
-#include <api/qtobject.h>
-#include <main/manager.h>
+//#include <api/qtobject.h>
+//#include <main/manager.h>
 
 #include <kis_autobrush_resource.h>
 #include <kis_brush.h>
@@ -35,7 +96,7 @@
 #include <kis_pattern.h>
 #include <kis_resourceserver.h>
 
-#include "kis_script_progress.h"
+//#include "kis_script_progress.h"
 
 #include "krs_brush.h"
 #include "krs_color.h"
@@ -43,9 +104,12 @@
 #include "krs_filter.h"
 #include "krs_image.h"
 #include "krs_pattern.h"
-#include "krs_script_progress.h"
+//#include "krs_script_progress.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+//#include <Q3ValueList>
+#endif
+
+#if 0
 
 extern "C"
 {
@@ -58,7 +122,6 @@ extern "C"
         return new Kross::KritaCore::KritaCoreModule(manager);
     }
 }
-
 
 using namespace Kross::KritaCore;
 
@@ -268,11 +331,6 @@ KritaCoreModule::~KritaCoreModule()
 }
 
 
-const QString KritaCoreModule::getClassName() const
-{
-    return "Kross::KritaCore::KritaCoreModule";
-}
-
 Kross::Api::Object::Ptr KritaCoreModule::call(const QString& name, Kross::Api::List::Ptr arguments)
 {
     kDebug(41011) << "KritaCoreModule::call = " << name << endl;
@@ -283,3 +341,6 @@ Kross::Api::Object::Ptr KritaCoreModule::call(const QString& name, Kross::Api::L
         return Kross::Api::Module::call(name, arguments);
     }
 }
+#endif
+
+#include "kritacoremodule.moc"

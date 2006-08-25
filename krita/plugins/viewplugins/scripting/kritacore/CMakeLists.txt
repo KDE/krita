@@ -5,7 +5,6 @@ set(krosskritacore_PART_SRCS
    krs_paint_layer.cpp
    krs_image.cpp
    krs_histogram.cpp
-   krs_script_progress.cpp
    krs_painter.cpp
    krs_color.cpp
    krs_brush.cpp

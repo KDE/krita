@@ -33,39 +33,9 @@ namespace Kross {
 namespace KritaCore {
 
 Painter::Painter(KisPaintLayerSP layer)
-    : Kross::Api::Class<Painter>("KritaPainter"), m_layer(layer),m_painter(new KisPainter(layer->paintDevice())),m_threshold(1)
+    : QObject(), m_layer(layer),m_painter(new KisPainter(layer->paintDevice())),m_threshold(1)
 {
-    // convolution
-    addFunction("convolve", &Painter::convolve);
-    // Fill specific
-    addFunction("setFillThreshold", &Painter::setFillThreshold);
-    addFunction("fillColor", &Painter::fillColor);
-    addFunction("fillPattern", &Painter::fillPattern);
-
-    // Painting operations
-    addFunction("paintPolyline", &Painter::paintPolyline);
-    addFunction("paintLine", &Painter::paintLine);
-    addFunction("paintBezierCurve", &Painter::paintBezierCurve);
-    addFunction("paintEllipse", &Painter::paintEllipse);
-    addFunction("paintPolygon", &Painter::paintPolygon);
-    addFunction("paintRect", &Painter::paintRect);
-    addFunction("paintAt", &Painter::paintAt);
-    addFunction("setBackgroundColor", &Painter::setBackgroundColor);
-    addFunction("setPaintColor", &Painter::setPaintColor);
-    
-    // Color operations
-    addFunction("setPattern", &Painter::setPattern);
-    addFunction("setBrush", &Painter::setBrush);
-    
-    // How is painting done operations
-    addFunction("setPaintOp", &Painter::setPaintOp);
-    // Special settings
-    addFunction("setDuplicateOffset", &Painter::setDuplicateOffset);
-    
-    // Style operation
-    addFunction("setOpacity", &Painter::setOpacity);
-    addFunction("setStrokeStyle", &Painter::setStrokeStyle);
-    addFunction("setFillStyle", &Painter::setFillStyle);
+    setObjectName("KritaPainter");
 }
 
 
@@ -74,6 +44,7 @@ Painter::~Painter()
     delete m_painter;
 }
 
+#if 0
 Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
 {
     KisConvolutionPainter* cp = new KisConvolutionPainter(m_painter->device());
@@ -352,6 +323,7 @@ Kross::Api::Object::Ptr Painter::setPaintOp(Kross::Api::List::Ptr args)
     m_painter->setPaintOp( op );
     return Kross::Api::Object::Ptr(0);
 }
+#endif
 
 }
 

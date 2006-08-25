@@ -27,30 +27,17 @@ namespace KritaCore {
 Histogram::Histogram(KisPaintLayerSP layer,
                      KisHistogramProducerSP producer,
                      const enumHistogramType type)
- : Kross::Api::Class<Histogram>("KritaHistogram")
+    : QObject()
 {
+    setObjectName("KritaHistogram");
     m_histogram = new KisHistogram(layer, producer, type);
-    addFunction("getMax", &Histogram::getMax);
-    addFunction("getMin", &Histogram::getMin);
-    addFunction("getHighest", &Histogram::getHighest);
-    addFunction("getLowest", &Histogram::getLowest);
-    addFunction("getMean", &Histogram::getMean);
-    addFunction("getCount", &Histogram::getCount);
-    addFunction("getTotal", &Histogram::getTotal);
-    addFunction("setChannel", &Histogram::setChannel);
-    addFunction("getChannel", &Histogram::getChannel);
-    addFunction("getValue", &Histogram::getValue);
-    addFunction("getNumberOfBins", &Histogram::getNumberOfBins);
 }
 
 Histogram::~Histogram()
 {
 }
 
-const QString Histogram::getClassName() const {
-    return "Kross::KritaCore::Histogram";
-}
-
+#if 0
 Kross::Api::Object::Ptr Histogram::setChannel(Kross::Api::List::Ptr args)
 {
     m_histogram->setChannel(Kross::Api::Variant::toUInt(args->item(0)));
@@ -97,7 +84,7 @@ Kross::Api::Object::Ptr Histogram::getNumberOfBins(Kross::Api::List::Ptr)
 {
     return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->producer()->numberOfBins() ));
 }
-
+#endif
 
 }
 

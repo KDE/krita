@@ -25,22 +25,22 @@
 
 namespace Kross { namespace KritaCore {
 
-Doc::Doc(::KisDoc* doc) : Kross::Api::Class<Doc>("KritaDocument"), m_doc(doc) {
-    addFunction("getImage", &Doc::getImage);
+Doc::Doc(::KisDoc* doc)
+    : QObject(), m_doc(doc)
+{
+    setObjectName("KritaDocument");
 }
 
-Doc::~Doc() {
-    
+Doc::~Doc()
+{
 }
 
-const QString Doc::getClassName() const {
-    return "Kross::KritaCore::Doc";
-}
-
+#if 0
 Kross::Api::Object::Ptr Doc::getImage(Kross::Api::List::Ptr)
 {
     return Kross::Api::Object::Ptr(new Image(m_doc->currentImage(), m_doc));
 }
+#endif
 
 }
 }

@@ -28,21 +28,16 @@ namespace Kross {
 namespace KritaCore {
 
 Filter::Filter(KisFilter* filter)
-    : Kross::Api::Class<Filter>("KritaFilter"), m_filter(filter), m_config( new FilterConfiguration(filter->configuration()) )
+    : QObject(), m_filter(filter), m_config( new FilterConfiguration(filter->configuration()) )
 {
-    addFunction("process", &Filter::process);
-    addFunction("getFilterConfiguration", &Filter::getFilterConfiguration);
-
+    setObjectName("KritaFilter");
 }
 
 Filter::~Filter()
 {
 }
 
-const QString Filter::getClassName() const {
-    return "Kross::KritaCore::Filter";
-}
-
+#if 0
 Kross::Api::Object::Ptr Filter::getFilterConfiguration(Kross::Api::List::Ptr )
 {
      return Kross::Api::Object::Ptr(m_config);
@@ -71,6 +66,7 @@ Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
     m_filter->process( src->paintLayer()->paintDevice(), src->paintLayer()->paintDevice(), m_config->filterConfiguration(), rect );
     return Kross::Api::Object::Ptr(0);
 }
+#endif
 
 }
 }

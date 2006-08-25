@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREHISTOGRAM_H
 #define KROSS_KRITACOREHISTOGRAM_H
 
-#include <api/class.h>
+#include <QObject>
 
 #include <kis_types.h>
 #include <kis_histogram.h>
@@ -45,13 +45,16 @@ namespace KritaCore {
  * end
  * @endcode
  */
-class Histogram : public Kross::Api::Class<Histogram>
+class Histogram : public QObject
 {
+        //Q_OBJECT
     public:
         Histogram(KisPaintLayerSP layer, KisHistogramProducerSP producer, const enumHistogramType type);
         ~Histogram();
-        virtual const QString getClassName() const;
-    private:
+
+    //public slots:
+
+#if 0
         /**
          * This function return the maximum bound of the histogram
          * (values at greater position than the maximum are null).
@@ -104,6 +107,8 @@ class Histogram : public Kross::Api::Class<Histogram>
          * Return the number of bins of this histogram.
          */
         Kross::Api::Object::Ptr getNumberOfBins(Kross::Api::List::Ptr);
+#endif
+
     private:
         KisHistogram* m_histogram;
 };

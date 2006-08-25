@@ -20,7 +20,6 @@
 
 #include "scriptingmodule.h"
 #include "scriptingprogress.h"
-#include "scriptingmonitor.h"
 
 #include <kis_view.h>
 

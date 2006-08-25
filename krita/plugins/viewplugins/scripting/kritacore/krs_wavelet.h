@@ -21,7 +21,7 @@
 #ifndef KROSS_KRITACOREKRS_WAVELET_H
 #define KROSS_KRITACOREKRS_WAVELET_H
 
-#include <api/class.h>
+#include <QObject>
 
 #include <kis_math_toolbox.h>
 
@@ -32,12 +32,15 @@ namespace KritaCore {
 /**
 	@author Cyrille Berger <cberger@cberger.net>
 */
-class Wavelet : public Kross::Api::Class<Wavelet>
+class Wavelet : public QObject
 {
+        //Q_OBJECT
     public:
         Wavelet(KisMathToolbox::KisWavelet* wavelet);
         ~Wavelet();
-    private:
+    //public slots:
+
+#if 0
         /**
          * Return the value of the Nth coefficient
          * The function takes one argument :
@@ -78,6 +81,8 @@ class Wavelet : public Kross::Api::Class<Wavelet>
          * Return the number of coefficients in this wavelet (= size * size * depth)
          */
         Kross::Api::Object::Ptr getNumCoeffs(Kross::Api::List::Ptr);
+#endif
+
     public:
         KisMathToolbox::KisWavelet* wavelet() { return m_wavelet; }
     private:

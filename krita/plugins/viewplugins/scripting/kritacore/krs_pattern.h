@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREKRS_PATTERN_H
 #define KROSS_KRITACOREKRS_PATTERN_H
 
-#include <api/class.h>
+#include <QObject>
 
 class KisPattern;
 
@@ -27,7 +27,8 @@ namespace Kross {
 
 namespace KritaCore {
 
-class Pattern : public Kross::Api::Class<Pattern>{
+class Pattern : public QObject {
+        //Q_OBJECT
     public:
         /**
          * @param sharedPattern tell if the pattern should be deleted or not when this object is deleted
@@ -35,7 +36,7 @@ class Pattern : public Kross::Api::Class<Pattern>{
         Pattern(KisPattern*, bool sharedPattern);
         ~Pattern();
     public:
-        inline KisPattern* getPattern() { return m_pattern; }
+        KisPattern* getPattern() { return m_pattern; }
     private:
         KisPattern* m_pattern;
         bool m_sharedPattern;

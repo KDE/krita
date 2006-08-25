@@ -18,30 +18,22 @@
 
 #include "krs_filter_configuration.h"
 
-#include <api/variant.h>
-
 #include <kis_filter_configuration.h>
 
 namespace Kross {
 namespace KritaCore {
 
-    FilterConfiguration::FilterConfiguration(KisFilterConfiguration* fConfig)
-    : Kross::Api::Class<FilterConfiguration>("KritaFilterConfiguration"), m_fConfig(fConfig)
+FilterConfiguration::FilterConfiguration(KisFilterConfiguration* fConfig)
+    : QObject(), m_fConfig(fConfig)
 {
-    addFunction("setProperty", &FilterConfiguration::setProperty);
-    addFunction("getProperty", &FilterConfiguration::getProperty);
-    addFunction("fromXML", &FilterConfiguration::fromXML);
+    setObjectName("KritaFilterConfiguration");
 }
 
 FilterConfiguration::~FilterConfiguration()
 {
 }
 
-const QString FilterConfiguration::getClassName() const {
-    return "Kross::KritaCore::FilterConfiguration";
-}
-
-
+#if 0
 Kross::Api::Object::Ptr FilterConfiguration::setProperty(Kross::Api::List::Ptr args)
 {
     QString name = Kross::Api::Variant::toString(args->item(0));
@@ -67,6 +59,7 @@ Kross::Api::Object::Ptr FilterConfiguration::fromXML(Kross::Api::List::Ptr args)
     m_fConfig->fromXML( xml );
     return Kross::Api::Object::Ptr(0);
 }
+#endif
 
 }
 }

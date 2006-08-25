@@ -19,7 +19,7 @@
 #ifndef KROSS_KRITACOREKRS_FILTER_CONFIGURATION_H
 #define KROSS_KRITACOREKRS_FILTER_CONFIGURATION_H
 
-#include <api/class.h>
+#include <QObject>
 
 class KisFilterConfiguration;
 
@@ -29,15 +29,18 @@ namespace KritaCore {
 /**
 	@author Cyrille Berger <cberger@cberger.net>
 */
-class FilterConfiguration : public Kross::Api::Class<FilterConfiguration>
+class FilterConfiguration : public QObject
 {
+        //Q_OBJECT
     public:
         FilterConfiguration(KisFilterConfiguration*);
         ~FilterConfiguration();
-    public:
-        virtual const QString getClassName() const;
+
         inline KisFilterConfiguration* filterConfiguration() { return m_fConfig; };
-    private:
+
+    //public slots:
+
+#if 0
         /**
          * This function define a parameter of the associated Filter.
          * It takes two arguments :
@@ -55,6 +58,8 @@ class FilterConfiguration : public Kross::Api::Class<FilterConfiguration>
          * Deserialize
          */
         Kross::Api::Object::Ptr fromXML(Kross::Api::List::Ptr args);
+#endif
+
     private:
         KisFilterConfiguration* m_fConfig;
 };

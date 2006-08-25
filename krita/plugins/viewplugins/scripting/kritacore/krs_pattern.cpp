@@ -24,8 +24,9 @@ namespace Kross {
 
 namespace KritaCore {
 
-Pattern::Pattern(KisPattern* pattern, bool sharedPattern) : Kross::Api::Class<Pattern>("KritaPattern"), m_pattern(pattern), m_sharedPattern(sharedPattern)
+Pattern::Pattern(KisPattern* pattern, bool sharedPattern) : QObject(), m_pattern(pattern), m_sharedPattern(sharedPattern)
 {
+    setObjectName("KritaPattern");
 }
 
 Pattern::~Pattern()

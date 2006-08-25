@@ -19,6 +19,7 @@
 #include "krs_image.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <KoIntegerMaths.h>
 #include <KoColorSpaceRegistry.h>
@@ -30,41 +31,45 @@
 
 #include "krs_paint_layer.h"
 
-namespace Kross {
-
-namespace KritaCore {
+using namespace Kross::KritaCore;
 
 Image::Image(KisImageSP image, KisDoc* doc)
-    : QObject(), m_image(image), m_doc(doc)
+    : QObject()
+    , m_image(image)
+    , m_doc(doc)
 {
     setObjectName("KritaImage");
 }
-
 
 Image::~Image()
 {
 }
 
+QObject* Image::getActivePaintLayer()
+{
+    KisPaintLayer* activePaintLayer = dynamic_cast< KisPaintLayer* >(m_image->activeLayer().data());
+    if(activePaintLayer)
+        return new PaintLayer(KisPaintLayerSP(activePaintLayer), m_doc);
+    kWarning() << "The active layer is not paintable." << endl;
+    return 0;
+}
+
+int Image::width() const
+{
+    return m_image->width();
+}
+
+int Image::height() const
+{
+    return m_image->height();
+}
+
+QString Image::colorSpaceId() const
+{
+    return m_image->colorSpace()->id();
+}
+
 #if 0
-Kross::Api::Object::Ptr Image::getActivePaintLayer(Kross::Api::List::Ptr)
-{
-    KisPaintLayer* activePaintLayer = dynamic_cast<KisPaintLayer*>(m_image->activeLayer().data());
-    if(activePaintLayer )
-    {
-        return Kross::Api::Object::Ptr(new PaintLayer(KisPaintLayerSP(activePaintLayer), m_doc));
-    } else {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("The active layer is not paintable.") );
-        return Kross::Api::Object::Ptr(0);
-    }
-}
-Kross::Api::Object::Ptr Image::getWidth(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_image->width()));
-}
-Kross::Api::Object::Ptr Image::getHeight(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_image->height()));
-}
 Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
 {
     KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->colorSpace(Kross::Api::Variant::toString(args->item(0)), 0);
@@ -76,12 +81,6 @@ Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
     m_image->convertTo(dstCS);
     return Kross::Api::Object::Ptr(0);
 }
-
-Kross::Api::Object::Ptr Image::colorSpaceId(Kross::Api::List::Ptr )
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_image->colorSpace()->id() ));
-}
-
 
 Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
 {
@@ -133,6 +132,4 @@ Kross::Api::Object::Ptr Image::resize(Kross::Api::List::Ptr args)
 }
 #endif
 
-}
-
-}
+#include "krs_image.moc"

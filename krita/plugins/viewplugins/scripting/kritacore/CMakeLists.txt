@@ -1,7 +1,6 @@
 
 set(krosskritacore_PART_SRCS
    kritacoremodule.cpp
-   krs_doc.cpp
    krs_paint_layer.cpp
    krs_image.cpp
    krs_histogram.cpp

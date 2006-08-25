@@ -31,26 +31,34 @@ namespace KritaCore {
 
 class Image : public QObject
 {
-       //Q_OBJECT
+       Q_OBJECT
     public:
         Image(KisImageSP image, KisDoc* doc = 0);
         ~Image();
 
-    //public slots:
+    public slots:
 
-#if 0
         /**
-         * Return the active PaintLayer, if any.
+         * Return the active \a PaintLayer or NULL.
          */
-        Kross::Api::Object::Ptr getActivePaintLayer(Kross::Api::List::Ptr);
+        QObject* getActivePaintLayer();
+
         /**
          * Return the width of the image.
          */
-        Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
+        int width() const;
+
         /**
          * Return the height of the image.
          */
-        Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
+        int height() const;
+
+        /**
+         * Return the id of the colorspace of this image (e.g. "RGBA").
+         */
+        QString colorSpaceId() const;
+
+#if 0
         /**
          * Resize an image
          */
@@ -70,10 +78,6 @@ class Image : public QObject
          * @endcode
          */
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
-        /**
-         * Return the id of the colorspace of this image.
-         */
-        Kross::Api::Object::Ptr colorSpaceId(Kross::Api::List::Ptr );
         /**
          * Create a new PaintLayer for this image, and return it.
          * This function takes at least two arguments :

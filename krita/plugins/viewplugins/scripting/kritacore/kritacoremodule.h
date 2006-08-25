@@ -58,6 +58,19 @@ namespace Kross { namespace KritaCore {
             */
             QObject* application();
 
+            /**
+            * This function return the \a Image associated with the
+            * currently loaded document.
+            *
+            * Example (in Ruby) :
+            * @code
+            * require 'Krita'
+            * image = Krita.image()
+            * @endcode
+            */
+            QObject* image();
+
+
 #if 0
             /**
              * This function return a new Image.

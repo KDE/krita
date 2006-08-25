@@ -17,6 +17,11 @@
  */
 
 #include "kritacoremodule.h"
+#include "krs_image.h"
+
+// kde
+#include <kapplication.h>
+#include <kdebug.h>
 
 // koffice
 #include <KoDocumentAdaptor.h>
@@ -24,9 +29,8 @@
 
 // krita
 #include <kis_view.h>
-
-#include <kapplication.h>
-#include <kdebug.h>
+#include <kis_doc.h>
+#include <kis_image.h>
 
 using namespace Kross::KritaCore;
 
@@ -36,7 +40,7 @@ namespace Kross { namespace KritaCore {
 	{
 		public:
 			KisView* view;
-			
+
 			Private(KisView* v) : view(v) {}
 	};
 
@@ -64,6 +68,13 @@ QObject* KritaCoreModule::application()
 	return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
 }
 
+QObject* KritaCoreModule::image()
+{
+    ::KisDoc* document = d->view->canvasSubject()->document();
+    if(! document)
+        return 0;
+    return new Image(document->currentImage(), document);
+}
 
 
 

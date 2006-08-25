@@ -36,12 +36,27 @@ namespace KritaCore {
 */
 class PaintLayer : public QObject
 {
-        //Q_OBJECT
+        Q_OBJECT
     public:
         explicit PaintLayer(KisPaintLayerSP layer, KisDoc* doc = 0);
         virtual ~PaintLayer();
 
-    //public slots:
+    public slots:
+
+        /**
+         * Return the width of the layer
+         */
+        int width();
+
+        /**
+         * Return the height of the layer
+         */
+        int height();
+
+        /**
+         * Return the id of the colorspace of this image (e.g. "RGBA").
+         */
+        QString colorSpaceId();
 
 #if 0
         /**
@@ -70,14 +85,6 @@ class PaintLayer : public QObject
          */
         Kross::Api::Object::Ptr createVLineIterator(Kross::Api::List::Ptr);
         /**
-         * Return the width of the layer
-         */
-        Kross::Api::Object::Ptr getWidth(Kross::Api::List::Ptr);
-        /**
-         * Return the height of the layer
-         */
-        Kross::Api::Object::Ptr getHeight(Kross::Api::List::Ptr);
-        /**
          * This function creates an Histogram for this layer.
          * It takes two arguments :
          *  - the type of the histogram ("RGB8HISTO")
@@ -88,14 +95,22 @@ class PaintLayer : public QObject
          * This function create a Painter which will allow you to some painting on the layer.
          */
         Kross::Api::Object::Ptr createPainter(Kross::Api::List::Ptr);
+#endif
+
         /**
-         * Uses this function to create a new undo entry.
+         * Uses this function to create a new undo entry. The \p name
+         * is the displayed undo-name. You should always close the
+         * paint-operation with \a endPainting() .
          */
-        Kross::Api::Object::Ptr beginPainting(Kross::Api::List::Ptr args);
+        void beginPainting(const QString& name);
+
         /**
-         * Uses this function to close the current undo entry and add it to the history.
+         * Uses this function to close the current undo entry and add it to
+         * the history.
          */
-        Kross::Api::Object::Ptr endPainting(Kross::Api::List::Ptr args);
+        void endPainting();
+
+#if 0
         /**
          * Convert the image to a colorspace.
          * This function takes one argument :
@@ -107,10 +122,6 @@ class PaintLayer : public QObject
          * @endcode
          */
         Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
-        /**
-         * Return the id of the colorspace of this paint layer.
-         */
-        Kross::Api::Object::Ptr colorSpaceId(Kross::Api::List::Ptr );
         /**
          * Return the fast wavelet transformed of the layer
          */

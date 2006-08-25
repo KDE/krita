@@ -103,7 +103,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     ScriptingMonitor::instance()->monitor( m_scriptguiclient );
     m_scriptProgress = new ScriptingProgress(m_view);
     m_module = new ScriptingModule(m_view, m_scriptProgress);
-    Kross::Manager::self().addObject(m_module);
+    Kross::Manager::self().addObject(m_module, "Krita");
 }
 
 ScriptingPart::~ScriptingPart()

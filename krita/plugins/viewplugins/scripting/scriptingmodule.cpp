@@ -41,7 +41,7 @@ ScriptingModule::ScriptingModule(KisView* view, ScriptingProgress* progress)
 	: QObject()
 	, d(new Private())
 {
-	setObjectName("KritaScriptingModule");
+	setObjectName("Krita");
 	d->view = view;
 	d->progress = progress;
 

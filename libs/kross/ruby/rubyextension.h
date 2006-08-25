@@ -24,7 +24,6 @@
 #include <ruby.h>
 
 #include "rubyconfig.h"
-//#include "../core/object.h"
 
 #include <QStringList>
 #include <QVariant>
@@ -39,7 +38,7 @@ namespace Kross {
     *
     * @author Cyrille Berger
     */
-    class RubyExtension{
+    class RubyExtension {
             friend class RubyInterpreter;
             friend class RubyModule;
             friend class RubyScript;
@@ -56,6 +55,11 @@ namespace Kross {
             * Destructor.
             */
             ~RubyExtension();
+
+            /**
+            * \return the QObject this \a RubyExtension wraps.
+            */
+            QObject* object() const;
 
         private:
 
@@ -77,23 +81,25 @@ namespace Kross {
             */
             static void delete_object(void* object);
 
+#if 0
             /**
             * This function is called by ruby to delete a RubyExtension object
             */
             static void delete_exception(void* object);
+#endif
 
-        private:
+        public:
+
+            /**
+            * Test if the ruby object is a \a RubyExtension object.
+            */
+            static bool isRubyExtension(VALUE obj);
 
             #if 0
             /**
             * Test if the ruby object is an exception.
             */
             static bool isOfExceptionType(VALUE obj);
-
-            /**
-            * Test if the ruby object is an object
-            */
-            static bool isOfObjectType(VALUE obj);
 
             /**
             * Convert a ruby object to the exception type.
@@ -106,6 +112,7 @@ namespace Kross {
             static VALUE convertFromException(Kross::Exception::Ptr exc);
             #endif
 
+#if 0
             /**
             * This function iterats through a ruby hash
             */
@@ -154,6 +161,7 @@ namespace Kross {
             * \return The to a VALUE converted QVariant.
             */
             static VALUE toVALUE(const QVariant& variant);
+#endif
 
 #if 0
             /**

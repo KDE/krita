@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "rubyscript.h"
+#include "rubyvariant.h"
 
 #include <ruby.h>
 #include <env.h>
@@ -77,7 +78,7 @@ void RubyScript::compile()
 
     ruby_nerrs = 0;
     ruby_errinfo = Qnil;
-    VALUE src = RubyExtension::toVALUE( m_action->code() );
+    VALUE src = RubyType<QString>::toVALUE( m_action->code() );
     StringValue(src);
     critical = rb_thread_critical;
     rb_thread_critical = Qtrue;

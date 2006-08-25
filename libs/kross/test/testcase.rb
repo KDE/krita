@@ -15,7 +15,8 @@ print "\n1------------------------------------\n"
 print TestObject1
 print "\n2------------------------------------\n"
 #TestObject1.func_void()
-print TestObject1.func_qstring_qstring( "string" )
+print TestObject1.func_qstring_qstring("Here some Teststring")
+#print TestObject1.func_int_int(12345)
 print "\n3------------------------------------\n"
 
 #require 'kross/TestObject1'

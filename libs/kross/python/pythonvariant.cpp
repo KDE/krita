@@ -20,8 +20,6 @@
 #include "pythonvariant.h"
 #include "pythonextension.h"
 
-#include "../core/metatype.h"
-
 #include <QWidget>
 
 using namespace Kross;

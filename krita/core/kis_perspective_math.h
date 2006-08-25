@@ -24,49 +24,8 @@
 #include "kis_point.h"
 
 class KisPerspectiveMath {
-    public:
-        KisPerspectiveMath(double p, double q) : m_p(p), m_q(q) { }
-        /**
-         * note the two equation to get the perspective transformation coordinates are :
-         * (p*X-1) * x + (q*X*y) = -X
-         * (p*Y*x + (q * Y - 1) * y = -Y
-         * where (X,Y) are the coordinate in source, and (x,y) are the coordinate
-         * in source (all centered on (m_xcenter,m_ycenter)
-         * @param pt the (X,Y) coordinate on the perspective image
-         * @return the (x,y) coordinate on the flat image
-         */
-        KisPoint fromPerspectiveCoordinate(KisPoint pt)
-        {
-            if(pt.x() == 0.)
-            {
-                if( pt.y() == 0. )
-                    return KisPoint(0., 0.);
-                return KisPoint( 0., -pt.y() / (m_q * pt.y() - 1.) );
-            } else if( pt.y() == 0. )
-            {
-                return KisPoint( -pt.x() / ( m_p* pt.x() - 1. ) , 0.); // note: m_p * pt.x() == 0. => X is equal to the vanishing point
-            } else {
-                //y = (-X - (p*X-1)*x ) / q*X
-                //p*Y*x + (q*Y - 1) * (-X - (p*X -1)*x) / q*X =-Y
-                // x = - X / ( 1 - q*Y - p*X )
-                double d = 1./(m_q*pt.y() + m_p * pt.x() -1.);
-                return KisPoint(-pt.x() *d, -pt.y() *d);
-            }
-        }
-        /**
-         * Solve this set of equation
-         * X = x / (p*x + q * y + 1 )
-         * Y = y / (p*x + q * y + 1 )
-         * @param pt the (x,y) coordinate on the flat image
-         * @return the (X,Y) coordinate on the perspective image
-         */
-        KisPoint toPerspectiveCoordinate(KisPoint pt)
-        {
-            double a = m_p * pt.x() + m_q * pt.y() + 1;
-            return KisPoint( pt.x() / a, pt.y() / a );
-        }
-    private:
-        double m_p, m_q;
+  private:
+        KisPerspectiveMath() { }
   public:
     struct LineEquation {
             // y = a*x + b

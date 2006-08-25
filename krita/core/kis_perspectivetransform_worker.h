@@ -39,6 +39,7 @@ class KisPerspectiveTransformWorker : public KisProgressSubject
     private:
         double m_xcenter, m_ycenter, m_p, m_q;
         KisPaintDeviceSP m_dev;
+        double m_matrix[3][3];
 };
 
 #endif

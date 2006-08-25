@@ -30,26 +30,61 @@
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const KisPoint& topLeft, const KisPoint& topRight, const KisPoint& bottomLeft, const KisPoint& bottomRight)
     : KisProgressSubject(), m_dev(dev)
 {
-    // Do some maths here :)
-    kdDebug() << "topLeft = " << topLeft <<  " topRight = " << topRight << " bottomLeft = " << bottomLeft << " bottomRight = " << bottomRight << endl;
-    // Computing vanishing points
-    KisPerspectiveMath::LineEquation left = KisPerspectiveMath::computeLineEquation( &topLeft, &bottomLeft);
-    kdDebug() << "left: " << left.a << " " << left.b << endl;
-    KisPerspectiveMath::LineEquation right = KisPerspectiveMath::computeLineEquation( &topRight, &bottomRight);
-    kdDebug() << "right: " << right.a << " " << right.b << endl;
-    KisPerspectiveMath::LineEquation top = KisPerspectiveMath::computeLineEquation( &topLeft, &topRight);
-    kdDebug() << "top: " << top.a << " " << top.b << endl;
-    KisPerspectiveMath::LineEquation bottom = KisPerspectiveMath::computeLineEquation( &bottomLeft, &bottomRight);
-    kdDebug() << "bottom: " << bottom.a << " " << bottom.b << endl;
-    KisPoint  horizontalVP = KisPerspectiveMath::computeIntersection( top, bottom);
-    KisPoint verticalVP = KisPerspectiveMath::computeIntersection( left, right);
-    // Compute the center
-    m_xcenter = verticalVP.x();
-    m_ycenter = horizontalVP.y();
-    // Compute p and q
-    m_q = 1/verticalVP.y();
-    m_p = 1/horizontalVP.x();
-    kdDebug() << m_xcenter << " "  << verticalVP.y() << " " << horizontalVP.x() << " " << m_ycenter << " " << m_q << " " << m_p << endl;
+    kdDebug() << topLeft << " " << topRight << " " << bottomLeft << " " << bottomRight << endl;
+    {
+        double dx1, dx2, dx3, dy1, dy2, dy3;
+
+        dx1 = topRight.x() - bottomRight.x();
+        dx2 = bottomLeft.x() - bottomRight.x();
+        dx3 = topLeft.x() - topRight.x() + bottomRight.x() - bottomLeft.x();
+
+        dy1 = topRight.y() - bottomRight.y();
+        dy2 = bottomLeft.y() - bottomRight.y();
+        dy3 = topLeft.y() - topRight.y() + bottomRight.y() - bottomLeft.y();
+
+        /*  Is the mapping affine?  */
+        if ((dx3 == 0.0) && (dy3 == 0.0))
+        {
+            m_matrix[0][0] = topRight.x() - topLeft.x();
+            m_matrix[0][1] = bottomRight.x() - topRight.x();
+            m_matrix[0][2] = topLeft.x();
+            m_matrix[1][0] = topRight.y() - topLeft.y();
+            m_matrix[1][1] = bottomRight.y() - topRight.y();
+            m_matrix[1][2] = topLeft.y();
+            m_matrix[2][0] = 0.0;
+            m_matrix[2][1] = 0.0;
+        }
+        else
+        {
+            double det1, det2;
+
+            det1 = dx3 * dy2 - dy3 * dx2;
+            det2 = dx1 * dy2 - dy1 * dx2;
+
+            if (det1 == 0.0 && det2 == 0.0)
+                m_matrix[2][0] = 1.0;
+            else
+                m_matrix[2][0] = det1 / det2;
+
+            det1 = dx1 * dy3 - dy1 * dx3;
+
+            if (det1 == 0.0 && det2 == 0.0)
+                m_matrix[2][1] = 1.0;
+            else
+                m_matrix[2][1] = det1 / det2;
+
+            m_matrix[0][0] = topRight.x() - topLeft.x() + m_matrix[2][0] * topRight.x();
+            m_matrix[0][1] = bottomLeft.x() - topLeft.x() + m_matrix[2][1] * bottomLeft.x();
+            m_matrix[0][2] = topLeft.x();
+
+            m_matrix[1][0] = topRight.y() - topLeft.y() + m_matrix[2][0] * topRight.y();
+            m_matrix[1][1] = bottomLeft.y() - topLeft.y() + m_matrix[2][1] * bottomLeft.y();
+            m_matrix[1][2] = topLeft.y();
+        }
+
+        m_matrix[2][2] = 1.0;
+    }
+
 }
 
 
@@ -59,7 +94,6 @@ KisPerspectiveTransformWorker::~KisPerspectiveTransformWorker()
 
 void KisPerspectiveTransformWorker::run()
 {
-    KisPerspectiveMath pm(m_p, m_q);
     KisColorSpace * cs = m_dev->colorSpace();
     Q_UINT8 pixelSize = m_dev->pixelSize();
     QRect r;
@@ -69,18 +103,49 @@ void KisPerspectiveTransformWorker::run()
         r = m_dev->exactBounds();
     if(m_dev->hasSelection())
         m_dev->selection()->clear();
+    
+    // TODO: in 2.0 with eigen :
+    // m_matrix = m_matrix * [ sx 0 sx*tx ],[0 sy sy*ty ], [0 0 1 ]
+    //Translation
+
+    double matrix[3][3];
+    double t00 = 1./r.width();
+    double t02 = -t00*r.x();
+    for(int j = 0; j < 3; j++)
+    {
+        matrix[j][0]  = t00 * m_matrix[j][0];
+        matrix[j][0] += t02 * m_matrix[j][2];
+    }
+    
+    double t11 = 1./r.height();
+    double t12 = -t11*r.y();
+    for(int j = 0; j < 3; j++)
+    {
+        matrix[j][1]  = t11 * m_matrix[j][1];
+        matrix[j][1] += t12 * m_matrix[j][2];
+    }
+
+    for(int j = 0; j < 3; j++)
+    {
+        matrix[j][2]  = m_matrix[j][2];
+    }
+    
     kdDebug() << "r = " << r << endl;
     KisRectIteratorPixel dstIt = m_dev->createRectIterator(r.x(), r.y(), r.width(), r.height(), true); 
     KisPaintDeviceSP srcdev = new KisPaintDevice(*m_dev.data());
 
     KisRandomSubAccessorPixel srcAcc = srcdev->createRandomSubAccessor();
-    KisPoint center(m_xcenter, m_ycenter);
     while(!dstIt.isDone())
     {
         if(dstIt.isSelected())
         {
-//         kdDebug() << KisPoint(dstIt.x(), dstIt.y() ) << " " << pm.fromPerspectiveCoordinate( KisPoint(dstIt.x(), dstIt.y() ) -center ) + center << endl;
-            srcAcc.moveTo( pm.fromPerspectiveCoordinate( KisPoint(dstIt.x(), dstIt.y() ) -center ) + center );
+            KisPoint p;
+            double sf = ( dstIt.x() * matrix[2][0] + dstIt.y() * matrix[2][1] + 1.0);
+            sf = (sf == 0.) ? 1. : 1./sf;
+            p.setX( ( dstIt.x() * matrix[0][0] + dstIt.y() * matrix[0][1] + matrix[0][2] ) * sf );
+            p.setY( ( dstIt.x() * matrix[1][0] + dstIt.y() * matrix[1][1] + matrix[1][2] ) * sf );
+//             kdDebug() << dstIt.x() << " " << dstIt.y() << " " << p << endl;
+            srcAcc.moveTo( p );
             srcAcc.sampledRawData( dstIt.rawData() );
             // TODO: Should set alpha = alpha*(1-selectedness)
             cs->setAlpha( dstIt.rawData(), 255, 1);

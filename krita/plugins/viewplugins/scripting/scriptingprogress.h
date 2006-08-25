@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_SCRIPT_PROGRESS_H_
-#define _KIS_SCRIPT_PROGRESS_H_
+#ifndef SCRIPTINGPROGRESS_H
+#define SCRIPTINGPROGRESS_H
 
 #include <kis_progress_subject.h>
 #include <krita_export.h>
@@ -28,28 +28,33 @@ class KisView;
  * TODO: clarify the situation, while, in the future, multiple scripts could be running at a same time,
  * some of the functions are global to all script and some aren't.
  */
-class KRITASCRIPTING_EXPORT KisScriptProgress : public KisProgressSubject
+class KRITASCRIPTING_EXPORT ScriptingProgress : public KisProgressSubject
 {
+        Q_OBJECT
     public:
-        KisScriptProgress(KisView* view) : m_view(view) {};
+        ScriptingProgress(KisView* view) : KisProgressSubject(), m_view(view) {}
+        virtual ~ScriptingProgress() {}
+
     public:
+
         /**
          * This function will set this class as the KisProgressSubject in view
          */
         void activateAsSubject();
-        virtual void cancel() {};
-    public:
+        virtual void cancel() {}
+
+    public slots:
         void setProgressTotalSteps(qint32 totalSteps);
         void setProgress(qint32 progress);
         void incProgress();
         void setProgressStage(const QString& stage, qint32 progress);
         void progressDone();
-        inline void setPackagePath(QString path) { m_packagePath = path; };
-        inline QString packagePath() { return m_packagePath; }
+        //inline void setPackagePath(QString path) { m_packagePath = path; };
+        //inline QString packagePath() { return m_packagePath; }
     private:
         qint32 m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
         KisView * m_view;
-        QString m_packagePath;
+        //QString m_packagePath;
 };
 
 #endif

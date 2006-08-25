@@ -16,17 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_script_progress.h"
+#include "scriptingprogress.h"
 
 #include <kis_progress_display_interface.h>
 #include <kis_view.h>
 
-void KisScriptProgress::activateAsSubject()
+void ScriptingProgress::activateAsSubject()
 {
     m_view->canvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
 }
 
-void KisScriptProgress::setProgressTotalSteps(qint32 totalSteps)
+void ScriptingProgress::setProgressTotalSteps(qint32 totalSteps)
 {
     m_progressTotalSteps = totalSteps;
     m_progressSteps = 0;
@@ -34,7 +34,7 @@ void KisScriptProgress::setProgressTotalSteps(qint32 totalSteps)
     emit notifyProgress(0);
 }
 
-void KisScriptProgress::setProgress(qint32 progress)
+void ScriptingProgress::setProgress(qint32 progress)
 {
     m_progressSteps = progress;
     qint32 progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
@@ -46,19 +46,21 @@ void KisScriptProgress::setProgress(qint32 progress)
     }
 }
 
-void KisScriptProgress::incProgress()
+void ScriptingProgress::incProgress()
 {
     setProgress( ++m_progressSteps );
 }
 
-void KisScriptProgress::setProgressStage(const QString& stage, qint32 progress)
+void ScriptingProgress::setProgressStage(const QString& stage, qint32 progress)
 {
     qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
     m_lastProgressPerCent = progress;
     emit notifyProgressStage( stage, progressPerCent);
 }
 
-void KisScriptProgress::progressDone()
+void ScriptingProgress::progressDone()
 {
     emit notifyProgressDone();
 }
+
+#include "scriptingprogress.moc"

@@ -18,35 +18,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SCRIPTING_H
-#define SCRIPTING_H
+#ifndef SCRIPTINGPART_H
+#define SCRIPTINGPART_H
 
 #include <kparts/plugin.h>
 
 class KisView;
 class KisScript;
-class KisScriptProgress;
+class ScriptingProgress;
+class ScriptingModule;
 
 namespace Kross {
-    namespace Api {
-        class ScriptGUIClient;
-        class ScriptAction;
-    }
+    class GUIClient;
+    class Action;
 }
 
-class Scripting : public KParts::Plugin
+class ScriptingPart : public KParts::Plugin
 {
     Q_OBJECT
     public:
-        Scripting(QObject *parent, const QStringList &);
-        virtual ~Scripting();
+        ScriptingPart(QObject *parent, const QStringList &);
+        virtual ~ScriptingPart();
     private slots:
-        void executionFinished(const Kross::Api::ScriptAction*);
-        void executionStarted(const Kross::Api::ScriptAction*);
+        void executionFinished(const Kross::Action*);
+        void executionStarted(const Kross::Action*);
     private:
         KisView * m_view;
-        Kross::Api::ScriptGUIClient* m_scriptguiclient;
-        KisScriptProgress* m_scriptProgress;
+        Kross::GUIClient* m_scriptguiclient;
+        ScriptingProgress* m_scriptProgress;
+        ScriptingModule* m_module;
 };
 
 

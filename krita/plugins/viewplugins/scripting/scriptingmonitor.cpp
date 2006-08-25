@@ -16,35 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SCRIPT_MONITOR_H
-#define KIS_SCRIPT_MONITOR_H
+#include "scriptingmonitor.h"
 
-#include <QObject>
-#include <krita_export.h>
-namespace Kross {
-    namespace Api {
-        class ScriptGUIClient;
-        class ScriptAction;
-    }
+#include <core/action.h>
+#include <core/guiclient.h>
+
+
+ScriptingMonitor::ScriptingMonitor()
+{
 }
 
-/**
-	@author Cyrille Berger <cberger@cberger.net>
-*/
-class KRITASCRIPTING_EXPORT KisScriptMonitor : public QObject {
-    Q_OBJECT
-    private:
-        KisScriptMonitor();
-        ~KisScriptMonitor();
-    public:
-        static KisScriptMonitor* instance();
-        void monitor(Kross::Api::ScriptGUIClient* guiClient);
-    signals:
-        void executionFinished(const Kross::Api::ScriptAction* );
-        void executionStarted(const Kross::Api::ScriptAction* );
-    private:
-        static KisScriptMonitor* s_instance;
 
-};
+ScriptingMonitor::~ScriptingMonitor()
+{
+    s_instance = 0;
+}
 
-#endif
+void ScriptingMonitor::monitor(Kross::GUIClient* guiClient)
+{
+    connect(guiClient, SIGNAL(executionFinished( const Kross::Action* )), SIGNAL(executionFinished( const Kross::Action* )));
+    connect(guiClient, SIGNAL(executionStarted( const Kross::Action* )), SIGNAL(executionStarted( const Kross::Action* )));
+}
+
+ScriptingMonitor* ScriptingMonitor::s_instance = 0;
+
+ScriptingMonitor* ScriptingMonitor::instance()
+{
+    if(s_instance == 0)
+        s_instance = new ScriptingMonitor();
+    return s_instance;
+}
+
+#include "scriptingmonitor.moc"
+

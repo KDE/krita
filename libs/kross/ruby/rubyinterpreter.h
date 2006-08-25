@@ -2,6 +2,7 @@
  * rubyinterpreter.h
  * This file is part of the KDE project
  * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
+ * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,6 +17,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
+
 #ifndef KROSS_RUBYRUBYINTERPRETER_H
 #define KROSS_RUBYRUBYINTERPRETER_H
 
@@ -26,44 +28,45 @@
 
 namespace Kross {
 
-class RubyInterpreterPrivate;
-/**
- * This class is the bridget between Kross and Ruby.
- * @author Cyrille Berger
- */
-class RubyInterpreter : public Kross::Interpreter
-{
-    public:
+    class RubyInterpreterPrivate;
 
-        /**
-         * Constructor
-         *
-         * @param info The \a Kross::InterpreterInfo instance
-         *        that describes this \a RubyInterpreter .
-         */
-        RubyInterpreter(Kross::InterpreterInfo* info);
+    /**
+    * This class is the bridget between Kross and Ruby.
+    * @author Cyrille Berger
+    */
+    class RubyInterpreter : public Kross::Interpreter
+    {
+        public:
 
-        /**
-         * Destructor.
-         */
-        virtual ~RubyInterpreter();
+            /**
+            * Constructor
+            *
+            * @param info The \a Kross::InterpreterInfo instance
+            *        that describes this \a RubyInterpreter .
+            */
+            RubyInterpreter(Kross::InterpreterInfo* info);
 
-        /**
-         * Factory method to create and return a new \a RubyScript instance.
-         */
-        virtual Kross::Script* createScript(Kross::Action* Action);
+            /**
+            * Destructor.
+            */
+            virtual ~RubyInterpreter();
 
-    private:
-        /// Initialize the ruby interpreter.
-        void initRuby();
-        /// Finalize the ruby interpreter.
-        void finalizeRuby();
-        /// Load an external plugin / module.
-        static VALUE require (VALUE, VALUE);
-    private:
-        /// Private d-pointer.
-        static RubyInterpreterPrivate* d;
-};
+            /**
+            * Factory method to create and return a new \a RubyScript instance.
+            */
+            virtual Kross::Script* createScript(Kross::Action* Action);
+
+        private:
+            /// Initialize the ruby interpreter.
+            void initRuby();
+            /// Finalize the ruby interpreter.
+            void finalizeRuby();
+            /// Load an external plugin / module.
+            static VALUE require (VALUE, VALUE);
+        private:
+            /// Private d-pointer.
+            static RubyInterpreterPrivate* d;
+    };
 
 }
 

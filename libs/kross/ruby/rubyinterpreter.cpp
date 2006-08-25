@@ -2,6 +2,7 @@
  * rubyinterpreter.cpp
  * This file is part of the KDE project
  * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
+ * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,14 +52,17 @@ extern "C"
     }
 };
 
+using namespace Kross;
 
 namespace Kross {
 
-typedef std::map<QString, VALUE> mStrVALUE;
-typedef mStrVALUE::iterator mStrVALUE_it;
-typedef mStrVALUE::const_iterator mStrVALUE_cit;
-class RubyInterpreterPrivate {
-    friend class RubyInterpreter;
+    typedef std::map<QString, VALUE> mStrVALUE;
+    typedef mStrVALUE::iterator mStrVALUE_it;
+    typedef mStrVALUE::const_iterator mStrVALUE_cit;
+
+    class RubyInterpreterPrivate {
+        friend class RubyInterpreter;
+    };
 };
 
 RubyInterpreterPrivate* RubyInterpreter::d = 0;
@@ -68,24 +72,22 @@ RubyInterpreter::RubyInterpreter(Kross::InterpreterInfo* info): Kross::Interpret
 #ifdef KROSS_RUBY_INTERPRETER_DEBUG
     krossdebug("RubyInterpreter::RubyInterpreter(info)");
 #endif
+
     if(d == 0)
     {
         initRuby();
     }
-    if(info->hasOption("safelevel") )
-    {
-        rb_set_safe_level( info->getOption("safelevel")->value.toInt() );
-    } else {
-        rb_set_safe_level(4); // if the safelevel option is undefined, set it to maximum level
-    }
-}
 
+    if(info->hasOption("safelevel") )
+        rb_set_safe_level( info->getOption("safelevel")->value.toInt() );
+    else
+        rb_set_safe_level(4); // if the safelevel option is undefined, set it to maximum level
+}
 
 RubyInterpreter::~RubyInterpreter()
 {
     finalizeRuby();
 }
-
 
 Kross::Script* RubyInterpreter::createScript(Kross::Action* Action)
 {
@@ -109,32 +111,23 @@ void RubyInterpreter::finalizeRuby()
 
 VALUE RubyInterpreter::require (VALUE obj, VALUE name)
 {
-    #ifdef KROSS_RUBY_INTERPRETER_DEBUG
-        krossdebug("RubyInterpreter::require(obj,name)");
-    #endif
-
     QString modname = StringValuePtr(name);
-    if(modname.startsWith("kross")) {
-        QString childname = modname.mid(5).trimmed();
-        childname.replace( QRegExp("^[^a-zA-Z]"), "" );
-
+    if( Kross::Manager::self().hasObject(modname) ) {
         #ifdef KROSS_RUBY_INTERPRETER_DEBUG
-            krossdebug( QString("RubyInterpreter::require() kross module='%1' childname='%2'").arg(modname).arg(childname) );
+            krossdebug( QString("RubyInterpreter::require() module=%1 is internal").arg(modname) );
         #endif
 
-        QObject* object = Kross::Manager::self().object(childname);
-        if(! object) {
-            krosswarning( QString("No such module '%1'.").arg(modname) );
-            return Qfalse;
-        }
-        new RubyModule(object, childname);
+        QObject* obj = Kross::Manager::self().object(modname);
+        Q_ASSERT(obj);
+
+        new RubyModule(obj, modname);
         //VALUE rmodule = rb_define_module(modname.ascii());
         //rb_define_module_function();
         //VALUE rm = RubyExtension::toVALUE(module);
         //rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
+
         return Qtrue;
     }
-    return rb_f_require(obj, name);
-}
 
+    return rb_f_require(obj, name);
 }

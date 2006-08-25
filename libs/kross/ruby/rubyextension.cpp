@@ -2,6 +2,7 @@
  * rubyinterpreter.cpp
  * This file is part of the KDE project
  * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
+ * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,31 +27,69 @@
 #include <QPointer>
 #include <QMetaObject>
 #include <QMetaMethod>
+#include <QHash>
 
 #include "rubyconfig.h"
 
+using namespace Kross;
+
 namespace Kross {
 
-class RubyExtensionPrivate {
-    friend class RubyExtension;
-    QPointer<QObject> m_object;
-    static VALUE s_krossObject;
-    //static VALUE s_krossException;
-};
+    class RubyExtensionPrivate {
+        friend class RubyExtension;
+
+        /// The wrapped QObject.
+        QPointer<QObject> m_object;
+
+        /// The wrapped krossobject
+        static VALUE s_krossObject;
+
+        //static VALUE s_krossException;
+
+        /// The cached list of methods.
+        QHash<QByteArray, int>* m_methods;
+
+        RubyExtensionPrivate(QObject* object) : m_object(object), m_methods(0) {}
+        ~RubyExtensionPrivate() { delete m_methods; }
+
+        /// Update the cached list of methods.
+        void updateMethods() {
+            delete m_methods;
+            m_methods = new QHash<QByteArray, int>();
+            if(m_object) {
+                const QMetaObject* metaobject = m_object->metaObject();
+                const int count = metaobject->methodCount();
+                for(int i = 0; i < count; ++i) {
+                    QMetaMethod member = metaobject->method(i);
+                    const QString signature = member.signature();
+                    const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
+                    if(! m_methods->contains(name)) {
+                        m_methods->insert(name, i);
+                    }
+                }
+            }
+        }
+    };
+
+}
 
 VALUE RubyExtensionPrivate::s_krossObject = 0;
 //VALUE RubyExtensionPrivate::s_krossException = 0;
 
-RubyExtension::RubyExtension(QObject* object) : d(new RubyExtensionPrivate())
+RubyExtension::RubyExtension(QObject* object)
+    : d(new RubyExtensionPrivate(object))
 {
-    d->m_object = object;
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug(QString("RubyExtension Ctor QObject=%1").arg( object ? QString("%1 %2").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL" ));
+    #endif
 }
 
 RubyExtension::~RubyExtension()
 {
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
-        krossdebug("Delete RubyExtension");
+        krossdebug("RubyExtension Dtor");
     #endif
+
     delete d;
 }
 
@@ -59,10 +98,11 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
         krossdebug("method_missing(argc, argv, self)");
     #endif
-    if(argc < 1)
-    {
+
+    if(argc < 1) {
         return 0;
     }
+
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
         krossdebug("Converting self to QObject");
     #endif
@@ -70,46 +110,66 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 #if 0
     QObject* object = toObject( self );
     return RubyExtension::call_method(object, argc, argv);
+//#else
+    RubyExtension* extension = toObject( self );
+    Q_ASSERT(extension);
+    return RubyExtension::call_method(extension, argc, argv);
 #endif
     return Qfalse;
 }
 
-VALUE RubyExtension::call_method( QObject* object, int argc, VALUE *argv)
+VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv)
 {
-    QString funcname = rb_id2name(SYM2ID(argv[0]));
+    QByteArray funcname = rb_id2name(SYM2ID(argv[0]));
+    const int argumentcount = argc - 1;
+
     #ifdef KROSS_RUBY_EXTENSION_DEBUG
-        krossdebug(QString("Building arguments list for function: %1 there are %2 arguments.").arg(funcname).arg(argc-1));
+        krossdebug(QString("RubyExtension::call_method method=%1 argumentcount=%2").arg(funcname.constData()).arg(argumentcount));
     #endif
 
-    Q_ASSERT(object);
-    Q_ASSERT(object->metaObject());
+    Q_ASSERT(extension);
+    Q_ASSERT(extension->d->m_object);
 
-    int methodindex = funcname.isNull() ? -1 : object->metaObject()->indexOfMethod( funcname.toLatin1().constData() );
-    if(methodindex < 0) {
-        krosswarning(QString("No such function '%1'").arg(funcname));
+    if(! extension->d->m_methods) {
+        extension->d->updateMethods();
+        Q_ASSERT(extension->d->m_methods);
+    }
+
+    if(! extension->d->m_methods->contains(funcname)) {
+        krosswarning( QString("RubyExtension::call_method No such method '%1'").arg(funcname.constData()) );
         return Qfalse;
     }
 
+    int methodindex = extension->d->m_methods->operator[](funcname);
+    //int methodindex = object->metaObject()->indexOfMethod( funcname.toLatin1().constData() );
+    if(methodindex < 0) {
+        krosswarning(QString("No such function '%1'").arg(funcname.constData()));
+        return Qfalse;
+    }
+
+    QObject* object = extension->d->m_object;
     QMetaMethod metamethod = object->metaObject()->method( methodindex );
-    if(metamethod.parameterTypes().size() != argc) {
+    if(metamethod.parameterTypes().size() != argumentcount) {
         bool found = false;
         const int count = object->metaObject()->methodCount();
         for(++methodindex; methodindex < count; ++methodindex) {
             metamethod = object->metaObject()->method( methodindex );
             const QString signature = metamethod.signature();
             const QByteArray name = signature.left(signature.indexOf('(')).toLatin1();
-            if(name == funcname && metamethod.parameterTypes().size() == argc) {
+            if(name == funcname && metamethod.parameterTypes().size() == argumentcount) {
                 found = true;
                 break;
             }
         }
         if(! found) {
-            krosswarning(QString("The function '%1' does not expect %2 arguments.").arg(funcname).arg(argc));
+            krosswarning(QString("The function '%1' does not expect %2 arguments.").arg(funcname.constData()).arg(argumentcount));
             return Qfalse;
         }
     }
 
-    krossdebug( QString("  QMetaMethod idx=%1 sig=%2 tag=%3 type=%4").arg(methodindex).arg(metamethod.signature()).arg(metamethod.tag()).arg(metamethod.typeName()) );
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug( QString("  QMetaMethod idx=%1 sig=%2 tag=%3 type=%4").arg(methodindex).arg(metamethod.signature()).arg(metamethod.tag()).arg(metamethod.typeName()) );
+    #endif
 
     {
         QList<QByteArray> typelist = metamethod.parameterTypes();
@@ -167,10 +227,10 @@ VALUE RubyExtension::call_method( QObject* object, int argc, VALUE *argv)
 
 void RubyExtension::delete_object(void* object)
 {
-    krossdebug("delete_object");
-    RubyExtension* obj = static_cast<RubyExtension*>(object);
-    if(obj)
-        delete obj;
+    krossdebug("RubyExtension::delete_object");
+    RubyExtension* extension = static_cast< RubyExtension* >(object);
+    delete extension;
+    extension = 0;
 }
 
 void RubyExtension::delete_exception(void* object)
@@ -183,6 +243,7 @@ void RubyExtension::delete_exception(void* object)
 
 int RubyExtension::convertHash_i(VALUE key, VALUE value, VALUE  vmap)
 {
+    krossdebug("RubyExtension::convertHash_i");
     QVariantMap* map; 
     Data_Get_Struct(vmap, QVariantMap, map);
     if (key != Qundef)
@@ -376,17 +437,45 @@ VALUE RubyExtension::toVALUE(const QVariant& variant)
     }
 }
 
-VALUE RubyExtension::toVALUE(QObject* object)
+VALUE RubyExtension::toVALUE(RubyExtension* extension)
 {
+    QObject* object = extension->d->m_object;
+
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug( QString("RubyExtension::toVALUE RubyExtension.QObject=%1").arg( object ? QString("%1 %2").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL" ) );
+    #endif
+
     if(! object) {
         return 0;
     }
-    if(RubyExtensionPrivate::s_krossObject == 0)
-    {
+
+    if(RubyExtensionPrivate::s_krossObject == 0) {
         RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
         rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
     }
+
+    return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, extension);
+    //return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, new RubyExtension(extension));
+}
+
+#if 0
+VALUE RubyExtension::toVALUE(QObject* object)
+{
+    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+        krossdebug( QString("RubyExtension::toVALUE QObject=%1").arg( object ? QString("%1 %2").arg(object->objectName()).arg(object->metaObject()->className()) : "NULL" ) );
+    #endif
+
+    if(! object) {
+        return 0;
+    }
+
+    if(RubyExtensionPrivate::s_krossObject == 0) {
+        RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
+        rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
+    }
+
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, new RubyExtension(object) );
+
 #if 0
     {
         Kross::Variant* variant = dynamic_cast<Kross::Variant*>( object.data() );
@@ -411,6 +500,7 @@ VALUE RubyExtension::toVALUE(QObject* object)
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, new RubyExtension(object) );
 #endif
 }
+#endif
 
 #if 0
 VALUE RubyExtension::toVALUE(Kross::List::Ptr list)
@@ -423,5 +513,3 @@ VALUE RubyExtension::toVALUE(Kross::List::Ptr list)
 
 }
 #endif
-
-}

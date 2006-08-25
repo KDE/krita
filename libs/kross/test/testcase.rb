@@ -10,7 +10,15 @@
 #	end
 #end
 
-require 'kross/TestObject1'
-require 'kross/TestObject2'
-print "3----------------\n"
-print TestObject1::get("testpluginobject1")
+require 'TestObject1'
+print "\n1------------------------------------\n"
+print TestObject1
+print "\n2------------------------------------\n"
+#TestObject1.func_void()
+print TestObject1.func_qstring_qstring( "string" )
+print "\n3------------------------------------\n"
+
+#require 'kross/TestObject1'
+#require 'kross/TestObject2'
+#print "3----------------\n"
+#print TestObject1::get("testpluginobject1")

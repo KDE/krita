@@ -2,6 +2,7 @@
  * rubyinterpreter.cpp
  * This file is part of the KDE project
  * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
+ * copyright (C)2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,40 +32,42 @@
 
 namespace Kross {
 
-class RubyModulePrivate;
+    class RubyModulePrivate;
 
-/**
- * A ruby module.
- * @author Cyrille Berger
- */
-class RubyModule {
-    public:
+    /**
+    * A ruby module.
+    * @author Cyrille Berger
+    */
+    class RubyModule {
+        public:
 
-        /**
-         * Constructor.
-         *
-         * @param mod The \a Kross::Module this RubyExtension
-         *        wraps.
-         * @param modname The name the module will be published as.
-         */
-        RubyModule(QObject* object, QString modname);
+            /**
+            * Constructor.
+            *
+            * @param mod The \a Kross::Module this RubyExtension
+            *        wraps.
+            * @param modname The name the module will be published as.
+            */
+            RubyModule(QObject* object, QString modname);
 
-        /**
-         * Destructor.
-         */
-        ~RubyModule();
+            /**
+            * Destructor.
+            */
+            ~RubyModule();
 
-    private:
+        private:
 
-        /**
-         * This function will catch functions that are undefined.
-         */
-        static VALUE method_missing(int argc, VALUE *argv, VALUE self);
+            /**
+            * This function will catch functions that are undefined.
+            */
+            static VALUE method_missing(int argc, VALUE *argv, VALUE self);
 
-    private:
-        /// Private d-pointer.
-        RubyModulePrivate* d;
-};
+        private:
+            /// Private d-pointer.
+            RubyModulePrivate* d;
+            /// Unwanted copy-ctor.
+            RubyModule(const RubyModule&) {}
+    };
 
 }
 

@@ -190,7 +190,7 @@ void KisRuler::drawRuler()
     qint32 st4 = 0;
     qint32 stt = 0;
 
-    if (!m_pixmapBuffer)
+    if (!m_pixmapBuffer || m_pixmapBuffer->isNull())
         return;
 
     p.begin(m_pixmapBuffer);

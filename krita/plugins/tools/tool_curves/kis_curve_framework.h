@@ -347,7 +347,7 @@ inline void KisCurve::calculateCurve(KisCurve::iterator, KisCurve::iterator, Kis
     return;
 }
 
-/* Really generic functions, provided if someone _really_ needs them... */
+/* Really generic functions, provided if someone _really_ needs them: array of iterators and no iterators. */
 inline void KisCurve::calculateCurve(KisCurve::iterator*) {return;}
 inline void KisCurve::calculateCurve() {return;}
 

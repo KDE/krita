@@ -320,8 +320,6 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
     gc->setRasterOp(Qt::XorROP);
 
     KisCurve::iterator it, finish;
-    
-    // FIXME This don't work and is deactivated by default
 
     if (minimal && m_supportMinimalDraw) {
         if (pivotonly) {

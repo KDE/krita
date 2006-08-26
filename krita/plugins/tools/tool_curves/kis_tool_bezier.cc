@@ -268,7 +268,7 @@ KisToolBezier::KisToolBezier(const QString& UIName)
 
     m_supportMinimalDraw = false;
 
-    m_transactionMessage = QString("Bezier Curve");
+    m_transactionMessage = i18n("Bezier Curve");
 }
 
 KisToolBezier::~KisToolBezier()

@@ -463,14 +463,14 @@ void KisCurveMagnetic::nonMaxSupp (const GrayMatrix& magnitude, const GrayMatrix
     // 1:   0 - 22.5 degrees
     // 2:   22.5 - 67.5 degrees
     // 3:   67.5 - 90 degrees
-    // Second direction is relative to a quadrant. The quadrant is known by looking at x/y derivatives
+    // Second direction is relative to a quadrant. The quadrant is known by looking at x and y derivatives
     // First quadrant:  Gx < 0  & Gy >= 0
     // Second quadrant: Gx < 0  & Gy < 0
     // Third quadrant:  Gx >= 0 & Gy < 0
     // Fourth quadrant: Gx >= 0 & Gy >= 0
     // For this reason: first direction is relative to Gy only and third direction to Gx only
     
-    double  theta;      // theta = invtan (|Gy| / |Gx|) This give the direction
+    double  theta;      // theta = invtan (|Gy| / |Gx|) This give the direction relative to a quadrant
     Q_INT16 mag;        // Current magnitude
     Q_INT16 lmag;       // Magnitude at the left (So this pixel is "more internal" than the current
     Q_INT16 rmag;       // Magnitude at the right (So this pixel is "more external")
@@ -552,9 +552,10 @@ KisToolMagnetic::KisToolMagnetic ()
 
     m_editingMode = false;
     m_editingCursor = m_draggingCursor = false;
+
     m_mode = 0;
-    m_derived = 0;
-    m_curve = 0;
+    m_curve = m_derived = 0;
+    m_current = m_previous = 0;
 
     m_distance = DEFAULTDIST;
 
@@ -595,11 +596,12 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
         draw(false);
         if (m_editingMode) {
             m_editingMode = false;
-            m_curve->selectPivot(m_current,false);
-            m_mode->setText(i18n("Standard Mode"));
+            if (m_current != 0)
+                m_curve->selectPivot(m_current,false);
+            m_mode->setText(i18n("Automatic Mode"));
         } else {
             m_editingMode = true;
-            m_mode->setText(i18n("Editing Mode"));
+            m_mode->setText(i18n("Manual Mode"));
         }
         draw(false);
     } else if (event->key() == Qt::Key_Delete) {
@@ -761,25 +763,23 @@ QWidget* KisToolMagnetic::createOptionWidget(QWidget* parent)
 {
     m_optWidget = super::createOptionWidget(parent);
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
-//     QHBoxLayout * hbox = new QHBoxLayout(l);
-//     Q_CHECK_PTR(hbox);
     QGridLayout *box = new QGridLayout(l, 2, 2, 3);
     box->setColStretch(0, 1);
     box->setColStretch(1, 1);
     Q_CHECK_PTR(box);
 
-    m_mode = new QLabel(i18n("Standard mode"), m_optWidget);
+    m_mode = new QLabel(i18n("Automatic mode"), m_optWidget);
     m_lbDistance = new QLabel(i18n("Distance: "), m_optWidget);
-    QPushButton *finish = new QPushButton(i18n("Finish selection"), m_optWidget);
+    QPushButton *finish = new QPushButton(i18n("To selection"), m_optWidget);
     m_slDistance = new QSlider(MINDIST, MAXDIST, PAGESTEP, m_distance, Qt::Horizontal, m_optWidget);
 
     connect(m_slDistance, SIGNAL(valueChanged(int)), this, SLOT(slotSetDistance(int)));
     connect(finish, SIGNAL(clicked()), this, SLOT(slotCommitCurve()));
 
-    box->addWidget(m_mode, 0, 0);
-    box->addWidget(finish, 0, 1);
-    box->addWidget(m_lbDistance, 1, 0);
-    box->addWidget(m_slDistance, 1, 1);
+    box->addWidget(m_lbDistance, 0, 0);
+    box->addWidget(m_slDistance, 0, 1);
+    box->addWidget(m_mode, 1, 0);
+    box->addWidget(finish, 1, 1);
 
     return m_optWidget;
 }
@@ -800,7 +800,7 @@ void KisToolMagnetic::setup(KActionCollection *collection)
                                     name());
         Q_CHECK_PTR(m_action);
 
-        m_action->setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual editing mode, and double click to finish."));
+        m_action->setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual mode, and double click to finish."));
         m_action->setExclusiveGroup("tools");
         m_ownAction = true;
     }

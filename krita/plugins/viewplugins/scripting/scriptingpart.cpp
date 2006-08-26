@@ -63,13 +63,11 @@ class ScriptingPart::Private
         KisView* view;
         Kross::GUIClient* guiclient;
         Kross::KritaCore::KritaCoreModule* module;
-        Kross::KritaCore::KritaCoreProgress* progress;
 
-        Private() : view(0), guiclient(0), module(0), progress(0) {}
+        Private() : view(0), guiclient(0), module(0) {}
         virtual ~Private() {
             //Kross::Manager::self().removeObject(module);
             delete module; module = 0;
-            delete progress; progress = 0;
         }
 };
 
@@ -118,12 +116,11 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     connect(d->guiclient, SIGNAL(executionFinished( const Kross::ScriptAction* )), this, SLOT(executionFinished(const Kross::ScriptAction*)));
     connect(d->guiclient, SIGNAL(executionStarted( const Kross::ScriptAction* )), this, SLOT(executionStarted(const Kross::ScriptAction*)));
 
-    //ScriptingMonitor::instance()->monitor( d->guiclient );
+    // do we need the monitor?
+    ScriptingMonitor::instance()->monitor( d->guiclient );
+
     d->module = new Kross::KritaCore::KritaCoreModule(d->view);
     Kross::Manager::self().addObject(d->module, "Krita");
-
-    d->progress = new Kross::KritaCore::KritaCoreProgress(d->view);
-    d->progress->setParent(d->module); // attach the progress-stuff to the Krita module.
 }
 
 ScriptingPart::~ScriptingPart()
@@ -135,7 +132,7 @@ void ScriptingPart::executionFinished(const Kross::Action*)
 {
     d->view->canvasSubject()->document()->setModified(true);
     d->view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
-    d->progress->progressDone();
+    static_cast< Kross::KritaCore::KritaCoreProgress* >( d->module->progress() )->progressDone();
     QApplication::restoreOverrideCursor();
 }
 

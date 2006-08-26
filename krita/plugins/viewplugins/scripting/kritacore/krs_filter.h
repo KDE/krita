@@ -38,9 +38,39 @@ class Filter : public QObject
     public slots:
 
         /**
-         * This function return the FilterConfiguration associated with this filter.
+         * Return the unique name the filter has.
          */
-        QObject* filterConfiguration();
+        const QString name();
+
+        /**
+         * This function return the value of a parameter of the associated
+         * Filter. The properties define the filters-configuration and you
+         * are able to use \a property and \a setProperty to manipulate them.
+         *
+         * It takes one argument :
+         *  - the name of the parameter
+         * It returns the properties value.
+         */
+        const QVariant property(const QString& name);
+
+        /**
+         * This function define a parameter of the associated Filter.
+         *
+         * It takes two arguments :
+         *  - the name of the parameter
+         *  - the value, whose type depends of the Filter
+         */
+        void setProperty(const QString& name, const QVariant& value);
+
+        /**
+         * Deserialize the filter-configuration from XML.
+         */
+        void fromXML(const QString& xml);
+
+        /**
+         * Serialize filter-configuration to XML.
+         */
+        const QString toXML();
 
 #if 0
         /**
@@ -73,7 +103,6 @@ class Filter : public QObject
 
     private:
         KisFilter* m_filter;
-        FilterConfiguration* m_config;
 };
 
 }

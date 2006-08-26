@@ -204,7 +204,9 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
         int methodindex = self->m_methods->operator[](methodname);
         Q_ASSERT(methodindex >= 0);
-        krossdebug( QString("PythonExtension::proxyhandler methodname=%1 methodindex=%2").arg(methodname).arg(methodindex) );
+        #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+            krossdebug( QString("PythonExtension::proxyhandler methodname=%1 methodindex=%2").arg(methodname).arg(methodindex) );
+        #endif
 
         Py::Tuple argstuple(args);
         const int argssize = int( argstuple.size() );
@@ -229,7 +231,10 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
             }
         }
 
-        krossdebug( QString("PythonExtension::proxyhandler QMetaMethod idx=%1 sig=%2 tag=%3 type=%4").arg(methodindex).arg(metamethod.signature()).arg(metamethod.tag()).arg(metamethod.typeName()) );
+        #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+            krossdebug( QString("PythonExtension::proxyhandler QMetaMethod idx=%1 sig=%2 tag=%3 type=%4").arg(methodindex).arg(metamethod.signature()).arg(metamethod.tag()).arg(metamethod.typeName()) );
+        #endif
+
         for(int i = 0; i < argssize; ++i) {
             QVariant v = PythonType<QVariant>::toVariant( argstuple[i] );
             krossdebug( QString("  Argument index=%1 variant.toString=%2 variant.typeName=%3").arg(i).arg(v.toString()).arg(v.typeName()) );
@@ -253,14 +258,18 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
                 MetaType* returntype;
                 int typeId = QVariant::nameToType( metamethod.typeName() );
                 if(typeId != QVariant::Invalid) {
-                    krossdebug( QString("PythonExtension::proxyhandler typeName=%1 variant.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                    #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+                        krossdebug( QString("PythonExtension::proxyhandler typeName=%1 variant.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                    #endif
                     returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) typeId ) );
                 }
                 else {
                     // crashes on shared containers like e.g. QStringList and QList
                     typeId = QMetaType::type( metamethod.typeName() );
                     //Q_ASSERT(typeId != QMetaType::Void);
-                    krossdebug( QString("PythonExtension::proxyhandler typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                    #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+                        krossdebug( QString("PythonExtension::proxyhandler typeName=%1 metatype.typeid=%2").arg(metamethod.typeName()).arg(typeId) );
+                    #endif
                     //if (id != -1) {
                     void* myClassPtr = QMetaType::construct(typeId, 0);
                     //QMetaType::destroy(id, myClassPtr);
@@ -293,7 +302,11 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
             // call the method now
             int r = self->m_object->qt_metacall(QMetaObject::InvokeMetaMethod, methodindex, voidstarargs);
-            krossdebug( QString("RESULT nr=%1").arg(r) );
+            #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+                krossdebug( QString("RESULT nr=%1").arg(r) );
+            #else
+                Q_UNUSED(r);
+            #endif
 
             // eval the return-value
             if(hasreturnvalue) {
@@ -304,7 +317,9 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
                 }
                 QVariant v(tp, variantargs[0]->toVoidStar());
                 pyresult = PythonType<QVariant>::toPyObject(v);
-                krossdebug( QString("Returnvalue id=%1 metamethod.typename=%2 variant.toString=%3 variant.typeName=%4 pyobject=%5").arg(tp).arg(metamethod.typeName()).arg(v.toString()).arg(v.typeName()).arg(pyresult.as_string().c_str()) );
+                #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+                    krossdebug( QString("Returnvalue id=%1 metamethod.typename=%2 variant.toString=%3 variant.typeName=%4 pyobject=%5").arg(tp).arg(metamethod.typeName()).arg(v.toString()).arg(v.typeName()).arg(pyresult.as_string().c_str()) );
+                #endif
             }
 
             // finally free the PythonVariable instances
@@ -316,7 +331,7 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
         return pyresult.ptr();
     }
     catch(Py::Exception& e) {
-        krossdebug( QString("PythonExtension::proxyhandler Had exception: %1").arg(Py::value(e).as_string().c_str()) );
+        krosswarning( QString("PythonExtension::proxyhandler Had exception: %1").arg(Py::value(e).as_string().c_str()) );
     }
 
     return Py_None;

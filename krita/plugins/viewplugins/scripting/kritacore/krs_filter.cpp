@@ -17,19 +17,16 @@
  */
 
 #include "krs_filter.h"
+#include "krs_paint_layer.h"
 
 #include <kis_filter.h>
 #include <kis_paint_layer.h>
-
-#include "krs_filter_configuration.h"
-#include "krs_paint_layer.h"
 
 using namespace Kross::KritaCore;
 
 Filter::Filter(KisFilter* filter)
     : QObject()
     , m_filter(filter)
-    , m_config( new FilterConfiguration(filter->configuration()) )
 {
     setObjectName("KritaFilter");
 }
@@ -38,9 +35,30 @@ Filter::~Filter()
 {
 }
 
-QObject* Filter::filterConfiguration()
+const QString Filter::name()
 {
-     return m_config;
+    return m_filter->configuration()->name();
+}
+
+const QVariant Filter::property(const QString& name)
+{
+    QVariant value;
+    return m_filter->configuration()->getProperty(name, value) ? value : QVariant();
+}
+
+void Filter::setProperty(const QString& name, const QVariant& value)
+{
+    m_filter->configuration()->setProperty(name, value);
+}
+
+void Filter::fromXML(const QString& xml)
+{
+    m_filter->configuration()->fromXML( xml );
+}
+
+const QString Filter::toXML()
+{
+    return m_filter->configuration()->toString();
 }
 
 #if 0

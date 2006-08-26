@@ -17,6 +17,7 @@
  */
 
 #include "kritacoremodule.h"
+#include "kritacoreprogress.h"
 #include "krs_image.h"
 
 // kde
@@ -40,8 +41,10 @@ namespace Kross { namespace KritaCore {
 	{
 		public:
 			KisView* view;
+			KritaCoreProgress* progress;
 
-			Private(KisView* v) : view(v) {}
+			Private(KisView* v) : view(v), progress(0) {}
+			~Private() { delete progress; }
 	};
 
 }}
@@ -51,6 +54,8 @@ KritaCoreModule::KritaCoreModule(KisView* view)
 	, d(new Private(view))
 {
 	setObjectName("Krita");
+
+	d->progress = new KritaCoreProgress(view);
 
 #if 0
 	Kross::Manager::self().addObject(d->view->canvasSubject()->document(), "KritaDocument");
@@ -74,6 +79,11 @@ QObject* KritaCoreModule::document()
 	return d->view->document() ? d->view->document()->findChild< KoDocumentAdaptor* >() : 0;
 }
 #endif
+
+QObject* KritaCoreModule::progress()
+{
+    return d->progress;
+}
 
 QObject* KritaCoreModule::image()
 {

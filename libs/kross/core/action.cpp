@@ -312,14 +312,16 @@ void Action::finalize()
 void Action::slotTriggered()
 {
     krossdebug( QString("Action::slotTriggered()") );
+    emit activated(this);
 
     if(! d->script) {
         if(! initialize())
-            return;
+            Q_ASSERT( hadError() );
     }
 
     if(hadError()) {
         krossdebug( QString("Action::slotTriggered() name=%1 had errors: %2").arg(objectName()).arg(errorMessage()) );
+        emit failed(errorMessage(), errorTrace());
         return;
     }
 
@@ -329,9 +331,11 @@ void Action::slotTriggered()
     if(d->script->hadError()) {
         setError(d->script);
         finalize();
+        emit failed(errorMessage(), errorTrace());
     }
     else {
         clearError();
+        emit success();
     }
 }
 

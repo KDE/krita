@@ -58,10 +58,14 @@ namespace Kross {
     {
         public:
             MetaTypeImpl(const METATYPE& v) : m_variant(v) {
-                krossdebug( QString("MetaTypeImpl<METATYPE> Ctor typeid=%1 typename=%2").arg(qMetaTypeId<METATYPE>()).arg(typeid(METATYPE).name()) );
+                #ifdef KROSS_METATYPE_DEBUG
+                    krossdebug( QString("MetaTypeImpl<METATYPE> Ctor typeid=%1 typename=%2").arg(qMetaTypeId<METATYPE>()).arg(typeid(METATYPE).name()) );
+                #endif
             }
             virtual ~MetaTypeImpl() {
-                krossdebug( QString("MetaTypeImpl<METATYPE> Dtor typeid=%1 typename=%2").arg(qMetaTypeId<METATYPE>()).arg(typeid(METATYPE).name()) );
+                #ifdef KROSS_METATYPE_DEBUG
+                    krossdebug( QString("MetaTypeImpl<METATYPE> Dtor typeid=%1 typename=%2").arg(qMetaTypeId<METATYPE>()).arg(typeid(METATYPE).name()) );
+                #endif
             }
 
             virtual int typeId() { return qMetaTypeId<METATYPE>(); }
@@ -80,10 +84,14 @@ namespace Kross {
     {
         public:
             MetaTypeVariant(const VARIANTTYPE& v) : m_value(v) {
-                krossdebug( QString("MetaTypeVariant<VARIANTTYPE> Ctor value=%1 typename=%2").arg(qVariantFromValue(m_value).toString()).arg(qVariantFromValue(m_value).type()) );
+                #ifdef KROSS_METATYPE_DEBUG
+                    krossdebug( QString("MetaTypeVariant<VARIANTTYPE> Ctor value=%1 typename=%2").arg(qVariantFromValue(m_value).toString()).arg(qVariantFromValue(m_value).type()) );
+                #endif
             }
             virtual ~MetaTypeVariant() {
-                krossdebug( QString("MetaTypeVariant<VARIANTTYPE> Dtor value=%1 typename=%2").arg(qVariantFromValue(m_value).toString()).arg(qVariantFromValue(m_value).type()) );
+                #ifdef KROSS_METATYPE_DEBUG
+                    krossdebug( QString("MetaTypeVariant<VARIANTTYPE> Dtor value=%1 typename=%2").arg(qVariantFromValue(m_value).toString()).arg(qVariantFromValue(m_value).type()) );
+                #endif
             }
 
             virtual int typeId() { return qVariantFromValue(m_value).type(); }
@@ -101,10 +109,14 @@ namespace Kross {
     {
         public:
             MetaTypeVoidStar(int typeId, void* obj) : m_typeId(typeId), m_object(obj) {
-                krossdebug( QString("MetaTypeVoidStar Ctor typeid=%1 typename=%2").arg(m_typeId).arg(typeid(m_object).name()) );
+                #ifdef KROSS_METATYPE_DEBUG
+                    krossdebug( QString("MetaTypeVoidStar Ctor typeid=%1 typename=%2").arg(m_typeId).arg(typeid(m_object).name()) );
+                #endif
             }
             virtual ~MetaTypeVoidStar() {
-                krossdebug( QString("MetaTypeVoidStar Ctor typeid=%1 typename=%2").arg(m_typeId).arg(typeid(m_object).name()) );
+                #ifdef KROSS_METATYPE_DEBUG
+                    krossdebug( QString("MetaTypeVoidStar Ctor typeid=%1 typename=%2").arg(m_typeId).arg(typeid(m_object).name()) );
+                #endif
             }
             virtual int typeId() { return m_typeId; }
             //virtual QVariant toVariant() { return QVariant(m_typeId, m_object); }

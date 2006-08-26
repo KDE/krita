@@ -10,7 +10,6 @@ set(krosskritacore_LIB_SRCS
    krs_brush.cpp
    krs_pattern.cpp
    krs_filter.cpp
-   krs_filter_configuration.cpp
    krs_wavelet.cpp
    )
 

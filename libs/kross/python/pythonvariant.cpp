@@ -26,7 +26,10 @@ using namespace Kross;
 
 Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
 {
-    krossdebug( QString("PythonType<QVariant>::toPyObject variant.toString=%1 variant.typeid=%2 variant.typeName=%3").arg(v.toString()).arg(v.type()).arg(v.typeName()) );
+    #ifdef KROSS_PYTHON_VARIANT_DEBUG
+        krossdebug( QString("PythonType<QVariant>::toPyObject variant.toString=%1 variant.typeid=%2 variant.typeName=%3").arg(v.toString()).arg(v.type()).arg(v.typeName()) );
+    #endif
+
     switch( v.type() ) {
         case QVariant::Int:
             return PythonType<int>::toPyObject(v.toInt());
@@ -52,35 +55,49 @@ Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
             return PythonType<qlonglong>::toPyObject(v.toULongLong());
 
         case QVariant::Invalid: {
-            krossdebug( QString("PythonType<QVariant>::toPyObject variant=%1 is QVariant::Invalid. Returning Py:None.").arg(v.toString()) );
+            #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                krossdebug( QString("PythonType<QVariant>::toPyObject variant=%1 is QVariant::Invalid. Returning Py:None.").arg(v.toString()) );
+            #endif
             //return Py::None();
         } // fall through
 
         case QVariant::UserType: {
-            krossdebug( QString("PythonType<QVariant>::toPyObject variant=%1 is QVariant::UserType. Trying to cast now.").arg(v.toString()) );
+            #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                krossdebug( QString("PythonType<QVariant>::toPyObject variant=%1 is QVariant::UserType. Trying to cast now.").arg(v.toString()) );
+            #endif
         } // fall through
 
         default: {
             if( strcmp(v.typeName(),"float") == 0 ) {
-                krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to double").arg(v.typeName()) );
+                #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                    krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to double").arg(v.typeName()) );
+                #endif
                 return PythonType<double>::toPyObject(v.toDouble());
             }
 
             if( qVariantCanConvert< QWidget* >(v) ) {
-                krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to QWidget").arg(v.typeName()) );
+                #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                    krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to QWidget").arg(v.typeName()) );
+                #endif
                 QWidget* widget = qvariant_cast< QWidget* >(v);
                 if(! widget) {
-                    krossdebug( QString("PythonType<QVariant>::toPyObject To QWidget casted '%1' is NULL").arg(v.typeName()) );
+                    #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                        krossdebug( QString("PythonType<QVariant>::toPyObject To QWidget casted '%1' is NULL").arg(v.typeName()) );
+                    #endif
                     return Py::None();
                 }
                 return Py::asObject(new PythonExtension(widget));
             }
 
             if( qVariantCanConvert< QObject* >(v) ) {
-                krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to QObject").arg(v.typeName()) );
+                #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                    krossdebug( QString("PythonType<QVariant>::toPyObject Casting '%1' to QObject").arg(v.typeName()) );
+                #endif
                 QObject* obj = qvariant_cast< QObject* >(v);
                 if(! obj) {
-                    krossdebug( QString("PythonType<QVariant>::toPyObject To QObject casted '%1' is NULL").arg(v.typeName()) );
+                    #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                        krossdebug( QString("PythonType<QVariant>::toPyObject To QObject casted '%1' is NULL").arg(v.typeName()) );
+                    #endif
                     return Py::None();
                 }
                 return Py::asObject(new PythonExtension(obj));
@@ -90,7 +107,10 @@ Py::Object PythonType<QVariant>::toPyObject(const QVariant& v)
             //PyObject* qobjectptr = PyLong_FromVoidPtr( (void*) variantargs[0]->toVoidStar() );
 
             //if(v.type() == QVariant::Invalid) return Py::None();
-            krosswarning( QString("PythonType<QVariant>::toPyObject Not possible to convert the QVariant '%1' with type '%2' (%3) to a Py::Object.").arg(v.toString()).arg(v.typeName()).arg(v.type()) );
+
+            #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                krosswarning( QString("PythonType<QVariant>::toPyObject Not possible to convert the QVariant '%1' with type '%2' (%3) to a Py::Object.").arg(v.toString()).arg(v.typeName()).arg(v.type()) );
+            #endif
             throw Py::TypeError( QString("Variant of type %1 can not be casted to a python object.").arg(v.typeName()).toLatin1().constData() );
         }
     }
@@ -123,19 +143,23 @@ QVariant PythonType<QVariant>::toVariant(const Py::Object& obj)
         return PythonType<QVariantMap,Py::Dict>::toVariant(Py::Dict(obj.ptr()));
 
     if(obj.isInstance()) {
-        krossdebug( QString("PythonType<QVariant>::toVariant IsInstance=TRUE") );
+        #ifdef KROSS_PYTHON_VARIANT_DEBUG
+            krossdebug( QString("PythonType<QVariant>::toVariant IsInstance=TRUE") );
+        #endif
         //return new PythonType(object);
     }
 
     Py::ExtensionObject<PythonExtension> extobj(obj);
     PythonExtension* extension = extobj.extensionObject();
     if(! extension) {
-        krosswarning( QString("PythonType<QVariant>::toVariant Failed to determinate PythonExtension for object=%1").arg(obj.as_string().c_str()) );
+        #ifdef KROSS_PYTHON_VARIANT_DEBUG
+            krosswarning( QString("PythonType<QVariant>::toVariant Failed to determinate PythonExtension for object=%1").arg(obj.as_string().c_str()) );
+        #endif
         throw Py::RuntimeError( QString("Failed to determinate PythonExtension object.").toLatin1().constData() );
     }
 
     const QVariant variant = qVariantFromValue( extension->object() );
-    #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+    #ifdef KROSS_PYTHON_VARIANT_DEBUG
         if(extension->object())
             krossdebug( QString("PythonType<QVariant>::toVariant KrossObject.objectName=%1 KrossObject.className=%2 QVariant.toString=%3 QVariant.typeName=%4").arg(extension->object()->objectName()).arg(extension->object()->metaObject()->className()).arg(variant.toString()).arg(variant.typeName()) );
         else
@@ -147,7 +171,10 @@ QVariant PythonType<QVariant>::toVariant(const Py::Object& obj)
 MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& object)
 {
     int typeId = QVariant::nameToType(typeName);
-    krossdebug( QString("PythonMetaTypeFactory::create object=%1 typeName=%2 metatype.id=%3 variant.id=%4").arg(object.as_string().c_str()).arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
+
+    #ifdef KROSS_PYTHON_VARIANT_DEBUG
+        krossdebug( QString("PythonMetaTypeFactory::create object=%1 typeName=%2 metatype.id=%3 variant.id=%4").arg(object.as_string().c_str()).arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
+    #endif
 
     switch(typeId) {
         case QVariant::Int:
@@ -182,7 +209,10 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
             //int metaid = QMetaType::type(typeName);
 
             if(Py::PythonExtension<PythonExtension>::check( object )) {
-                krossdebug( QString("PythonMetaTypeFactory::create Py::Object '%1' with typename '%2' is a PythonExtension object").arg(object.as_string().c_str()).arg(typeName) );
+                #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                    krossdebug( QString("PythonMetaTypeFactory::create Py::Object '%1' with typename '%2' is a PythonExtension object").arg(object.as_string().c_str()).arg(typeName) );
+                #endif
+
                 Py::ExtensionObject<PythonExtension> extobj(object);
                 PythonExtension* extension = extobj.extensionObject();
                 Q_ASSERT( extension->object() );
@@ -194,8 +224,11 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
             //if(typeId == QVariant::Invalid) return new PythonVariantImpl<void>();
             //return new PythonVariantImpl<QVariant>(v);
 
-            krosswarning( QString("PythonMetaTypeFactory::create Not possible to convert the Py::Object '%1' to QVariant with '%2' and metaid '%3'").arg(object.as_string().c_str()).arg(typeName).arg(typeId) );
+            #ifdef KROSS_PYTHON_VARIANT_DEBUG
+                krosswarning( QString("PythonMetaTypeFactory::create Not possible to convert the Py::Object '%1' to QVariant with '%2' and metaid '%3'").arg(object.as_string().c_str()).arg(typeName).arg(typeId) );
+            #endif
             throw Py::TypeError( QString("Invalid typename %1").arg(typeName).toLatin1().constData() );
         } break;
     }
 }
+

@@ -87,6 +87,7 @@ namespace Kross {
     namespace Api {
 
         #define KROSS_OBJECT_METACALL_DEBUG
+        //#define KROSS_METATYPE_DEBUG
         #define KROSS_INTERPRETER_DEBUG
 
         // The name of the interpreter's library. Those library got loaded

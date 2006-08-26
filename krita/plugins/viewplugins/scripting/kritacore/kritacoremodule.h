@@ -67,6 +67,11 @@ namespace Kross { namespace KritaCore {
 #endif
 
             /**
+            * Returns the \a KritaCoreProgress object.
+            */
+            QObject* progress();
+
+            /**
             * This function return the \a Image associated with the
             * currently loaded document.
             *

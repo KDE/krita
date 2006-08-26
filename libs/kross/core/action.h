@@ -224,6 +224,11 @@ namespace Kross {
              */
             void setInterpreter(const QString& interpretername);
 
+        signals:
+            void activated(const Kross::Action*);
+            void success();
+            void failed(const QString& errormessage, const QString& tracedetails);
+
         private slots:
 
             /**

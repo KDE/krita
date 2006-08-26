@@ -36,7 +36,8 @@ class Inverter:
         height = layer.height()
 
         # we like to use the progressbar
-        #script.setProgressTotalSteps(width * height)
+        progress = self.Krita.progress()
+        progress.setProgressTotalSteps(width * height)
 
         # tell Krita that painting starts. the whole painting session will be
         # counted till layer.endPainting() was called as one undo/redo-step.
@@ -58,7 +59,7 @@ class Inverter:
             it.invertColor()
 
             # increment the progress to show, that work on this pixel is done.
-            #script.incProgress()
+            progress.incProgress()
 
             # go to the next pixel.
             finesh = it.next()

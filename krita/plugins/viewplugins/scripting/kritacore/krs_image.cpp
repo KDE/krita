@@ -101,33 +101,21 @@ void Image::shear(double xangle, double yangle)
     m_image->shear(xangle, yangle, 0);
 }
 
-#if 0
-Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
+
+QObject* Image::createPaintLayer(const QString& name, int opacity)
 {
-    QString name = Kross::Api::Variant::toString(args->item(0));
-    int opacity = Kross::Api::Variant::toInt(args->item(1));
-    opacity = CLAMP(opacity, 0, 255);
-    QString csname;
-    if(args->count() > 2)
-    {
-        csname = Kross::Api::Variant::toString(args->item(2));
-    } else {
-        csname = m_image->colorSpace()->id();
-    }
-    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csname, 0);
-    KisPaintLayer* layer;
-    if(cs)
-    {
-        layer = new KisPaintLayer(m_image.data(), name, opacity, cs);
-    } else {
-        layer = new KisPaintLayer(m_image.data(), name, opacity);
-    }
-    layer->setVisible(true);
-
-    m_image->addLayer(KisLayerSP(layer), m_image->rootLayer(), KisLayerSP(0));
-    return Kross::Api::Object::Ptr(new PaintLayer(KisPaintLayerSP(layer)));
-
+    return createPaintLayer(name, opacity, m_image->colorSpace()->id());
 }
-#endif
+
+QObject* Image::createPaintLayer(const QString& name, int opacity, const QString& colorspacename)
+{
+    opacity = CLAMP(opacity, 0, 255);
+    KoColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename, 0);
+    KisPaintLayer* layer = cs ? new KisPaintLayer(m_image.data(), name, opacity, cs)
+                              : new KisPaintLayer(m_image.data(), name, opacity);
+    layer->setVisible(true);
+    m_image->addLayer(KisLayerSP(layer), m_image->rootLayer(), KisLayerSP(0));
+    return new PaintLayer(KisPaintLayerSP(layer));
+}
 
 #include "krs_image.moc"

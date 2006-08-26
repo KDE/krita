@@ -111,19 +111,24 @@ class Image : public QObject
          */
         void shear(double xangle, double yangle);
 
-#if 0
         /**
-         * Create a new PaintLayer for this image, and return it.
-         * This function takes at least two arguments :
+         * Create a new \a PaintLayer for this image, and return it.
+         * This function takes two arguments :
          *  - the name of the layer
          *  - the opacity of the layer (between 0 and 255)
-         * 
-         * This function can take one optional argument :
-         *  - the id of the colorSpace (if this is not specified, the new PaintLayer
-         *      will have the same colorspace as the image)
+         * The new \a PaintLayer will have the same colorspace as the
+         * image. Use the method bellow to define the colorspace.
          */
-        Kross::Api::Object::Ptr createPaintLayer(Kross::Api::List::Ptr args);
-#endif
+        QObject* createPaintLayer(const QString& name, int opacity);
+
+        /**
+         * Create a new PaintLayer for this image, and return it.
+         * This function takes three arguments :
+         *  - the name of the layer
+         *  - the opacity of the layer (between 0 and 255)
+         *  - the id of the colorSpace
+         */
+        QObject* createPaintLayer(const QString& name, int opacity, const QString& colorspacename);
 
     private:
         KisImageSP m_image;

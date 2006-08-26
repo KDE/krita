@@ -58,6 +58,14 @@ namespace Kross { namespace KritaCore {
             */
             QObject* application();
 
+#if 0
+            //TODO KisView::document() needs to be public to have this working!
+            /**
+            * Returns the \a KoDocumentAdaptor object.
+            */
+            QObject* document();
+#endif
+
             /**
             * This function return the \a Image associated with the
             * currently loaded document.

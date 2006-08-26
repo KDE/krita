@@ -35,36 +35,6 @@ namespace Kross {
 
 namespace KritaCore {
 
-//<beurk> stupid Qt which doesn't support templated QObject
-class IteratorMemoryManaged
-{
-    public:
-        virtual ~IteratorMemoryManaged() {}
-        virtual void invalidateIterator() = 0;
-};
-
-class IteratorMemoryManager : public QObject
-{
-        Q_OBJECT
-    public:
-        IteratorMemoryManager(IteratorMemoryManaged* it) : m_it(it)
-        {
-#if 0
-            // Connect the Monitor to know when the invalidating of iterator is needed
-            connect(ScriptingMonitor::instance(), SIGNAL(executionFinished(const Kross::Api::ScriptAction* )), this, SLOT(invalidateIterator()));
-#endif
-        }
-
-    public slots:
-        void invalidateIterator()
-        {
-            m_it->invalidateIterator();
-        }
-    private:
-        IteratorMemoryManaged* m_it;
-};
-//</beurk>
-
 /**
  * This object allow to change the value of pixel one by one.
  * The name of some function depends of the colorspace, for instance, if
@@ -81,12 +51,57 @@ class IteratorMemoryManager : public QObject
  * This function take one argument:
  *  - an array with the new value for all channels
  */
+class IteratorBase : public QObject
+{
+        Q_OBJECT
+    public:
+        IteratorBase() : QObject() {
+            // Connect the Monitor to know when the invalidating of iterator is needed
+            //connect(ScriptingMonitor::instance(), SIGNAL(executionFinished(const Kross::Api::ScriptAction* )), this, SLOT(invalidate()));
+        }
+        virtual ~IteratorBase() {}
+
+    public slots:
+
+        /**
+         * Increment the positon, and go to the next pixel.
+         */
+        virtual bool next() = 0;
+
+        /**
+         * Return true if the iterator is at the end, and that no more pixels are available.
+         */
+        virtual bool isDone() = 0;
+
+        /**
+         * Invert the color of a pixel.
+         */
+        virtual void invertColor() = 0;
+
+        /**
+         * Darken a pixel.
+         * This functions takes three arguments:
+         *  - shade amount use to darken all color channels.
+         *  - compensate defines if compensation should be used to limit the darkening.
+         *  - compensation to limit the darkening
+         */
+        virtual void darken(int shade, bool compensate, double compensation) = 0;
+
+    private slots:
+        virtual void invalidateIterator() = 0;
+};
+
+/**
+ * \internal template class that implements \a IteratorBase to deal
+ * with all the different kind of iterators Krita uses.
+ */
 template<class _T_It>
-class Iterator : public IteratorMemoryManaged
+class Iterator : public IteratorBase
 {
     public:
         Iterator(_T_It it, KisPaintLayerSP layer)
-            : m_itmm (new IteratorMemoryManager(this))
+            //: m_itmm (new IteratorMemoryManager(this))
+            : IteratorBase()
             , m_it(new _T_It(it))
             , nchannels(layer->paintDevice()->nChannels())
             , m_layer(layer)
@@ -156,54 +171,37 @@ class Iterator : public IteratorMemoryManaged
             addFunction("darken", &Iterator::darken);
 #endif
         }
-    
+
         ~Iterator()
         {
             invalidateIterator();
-            delete m_itmm;
+            //delete m_itmm;
         }
 
-#if 0
     private:
-        /**
-         * Darken a pixel.
-         * This functions at least one argument:
-         *  - shade amount use to darken all color channels
-         * 
-         * This function can take the following optional argument:
-         *  - compensation to limit the darkening
-         */
-        Kross::Api::Object::Ptr darken(Kross::Api::List::Ptr args)
-        {
-            qint32 shade = Kross::Api::Variant::toUInt( args->item(0) );
-            bool compensate = (args->count() == 2);
-            double compensation = compensate ? Kross::Api::Variant::toDouble( args->item(2) ) : 0.;
-            m_layer->paintDevice()->colorSpace()->darken(m_it->rawData(), m_it->rawData(), shade, compensate, compensation, 1);
-            return Kross::Api::Object::Ptr(0);
-        }
-        /**
-         * Invert the color of a pixel.
-         */
-        Kross::Api::Object::Ptr invertColor(Kross::Api::List::Ptr )
+
+        void invertColor()
         {
             m_layer->paintDevice()->colorSpace()->invertColor(m_it->rawData(), 1);
-            return Kross::Api::Object::Ptr(0);
         }
-        /**
-         * Increment the positon, and go to the next pixel.
-         */
+
+        void darken(int shade, bool compensate, double compensation)
+        {
+            m_layer->paintDevice()->colorSpace()->darken(m_it->rawData(), m_it->rawData(), shade, compensate, compensation, 1);
+        }
+
+        bool isDone()
+        {
+            return m_it->isDone();
+        }
+
         bool next()
         {
             ++(*m_it);
             return m_it->isDone();
         }
-        /**
-         * Return true if the iterator is at the end, and that no more pixels are available.
-         */
-        bool isDone()
-        {
-            return m_it->isDone();
-        }
+
+#if 0
         Kross::Api::Object::Ptr getChannelUINT8(Kross::Api::List::Ptr, uint channelpos)
         {
             quint8* data = (quint8*)(m_it->rawData() + channelpos);
@@ -306,8 +304,9 @@ class Iterator : public IteratorMemoryManaged
             m_it = 0;
             kDebug() << " Iterator = " << m_it << endl;
         }
+
     private:
-        IteratorMemoryManager* m_itmm;
+        //IteratorMemoryManager* m_itmm;
         _T_It* m_it;
         int nchannels;
         KisPaintLayerSP m_layer;

@@ -20,7 +20,6 @@
 #include "scriptingpart.h"
 #include "scriptingmonitor.h"
 #include "scriptingprogress.h"
-#include "scriptingmodule.h"
 
 #include <stdlib.h>
 #include <vector>
@@ -38,12 +37,6 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 
-#define KROSS_MAIN_EXPORT KDE_EXPORT
-
-#include <core/manager.h>
-#include <core/guiclient.h>
-#include <core/guimanager.h>
-
 #include <kopalettemanager.h>
 
 #include <kis_doc.h>
@@ -53,8 +46,32 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 
+#define KROSS_MAIN_EXPORT KDE_EXPORT
+
+#include <core/manager.h>
+#include <core/guiclient.h>
+#include <core/guimanager.h>
+
+#include "kritacore/kritacoremodule.h"
+
 typedef KGenericFactory<ScriptingPart> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
+
+class ScriptingPart::Private
+{
+    public:
+        KisView* view;
+        Kross::GUIClient* guiclient;
+        ScriptingProgress* progress;
+        Kross::KritaCore::KritaCoreModule* module;
+
+        Private() : view(0), guiclient(0), progress(0), module(0) {}
+        virtual ~Private() {
+            //Kross::Manager::self().removeObject(module);
+            delete module; module = 0;
+            delete progress; progress = 0;
+        }
+};
 
 class ScriptingViewWidget : public Kross::GUIManagerView
 {
@@ -65,61 +82,58 @@ class ScriptingViewWidget : public Kross::GUIManagerView
 };
 
 ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
+    : KParts::Plugin(parent)
+    , d(new Private())
 {
     //setInstance(KritaScriptingFactory::instance());
     setInstance(ScriptingPart::instance());
 
-    m_view = dynamic_cast< KisView* >(parent);
-    Q_ASSERT(m_view);
+    d->view = dynamic_cast< KisView* >(parent);
+    Q_ASSERT(d->view);
 
-    m_scriptguiclient = new Kross::GUIClient( m_view, m_view );
+    d->guiclient = new Kross::GUIClient( d->view, d->view );
 
-    //m_scriptguiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
+    //d->guiclient ->setXMLFile(locate("data","kritaplugins/scripting.rc"), true);
     //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
     setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
 
     // Setup the actions Kross provides and KSpread likes to have.
     KAction* execaction = new KAction(i18n("Execute Script File..."), actionCollection(), "executescriptfile");
-    connect(execaction, SIGNAL(triggered(bool)), m_scriptguiclient, SLOT(executeFile()));
+    connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(executeFile()));
 
     KAction* manageraction = new KAction(i18n("Script Manager..."), actionCollection(), "configurescripts");
-    connect(manageraction, SIGNAL(triggered(bool)), m_scriptguiclient, SLOT(showManager()));
+    connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(showManager()));
 
-    KAction* scriptmenuaction = m_scriptguiclient->action("scripts");
+    KAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->insert(scriptmenuaction);
 
 #if 0
-    QWidget* w = new Kross::WdgScriptsManager(m_scriptguiclient, m_view);
-    m_view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
+    QWidget* w = new Kross::WdgScriptsManager(d->guiclient, d->view);
+    d->view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
 #else
-    QWidget* w = new ScriptingViewWidget(m_scriptguiclient, m_view);
-    m_view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
+    QWidget* w = new ScriptingViewWidget(d->guiclient, d->view);
+    d->view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
 #endif
 
-    connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::ScriptAction* )), this, SLOT(executionFinished(const Kross::ScriptAction*)));
-    connect(m_scriptguiclient, SIGNAL(executionStarted( const Kross::ScriptAction* )), this, SLOT(executionStarted(const Kross::ScriptAction*)));
+    connect(d->guiclient, SIGNAL(executionFinished( const Kross::ScriptAction* )), this, SLOT(executionFinished(const Kross::ScriptAction*)));
+    connect(d->guiclient, SIGNAL(executionStarted( const Kross::ScriptAction* )), this, SLOT(executionStarted(const Kross::ScriptAction*)));
 
-    ScriptingMonitor::instance()->monitor( m_scriptguiclient );
-    m_scriptProgress = new ScriptingProgress(m_view);
-    m_module = new ScriptingModule(m_view, m_scriptProgress);
-    Kross::Manager::self().addObject(m_module, "Krita");
+    //ScriptingMonitor::instance()->monitor( d->guiclient );
+    //d->progress = new ScriptingProgress(d->view);
+    d->module = new Kross::KritaCore::KritaCoreModule(d->view);
+    Kross::Manager::self().addObject(d->module, "Krita");
 }
 
 ScriptingPart::~ScriptingPart()
 {
-    //Kross::Manager::self().removeObject(m_module);
-    delete m_module;
-    m_module = 0;
-    delete m_scriptProgress;
-    m_scriptProgress = 0;
+    delete d;
 }
 
 void ScriptingPart::executionFinished(const Kross::Action*)
 {
-    m_view->canvasSubject()->document()->setModified(true);
-    m_view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
-    m_scriptProgress->progressDone();
+    d->view->canvasSubject()->document()->setModified(true);
+    d->view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
+    d->progress->progressDone();
     QApplication::restoreOverrideCursor();
 }
 
@@ -127,7 +141,7 @@ void ScriptingPart::executionStarted(const Kross::Action* act)
 {
 #if 0
     kDebug(41011) << act->getPackagePath() << endl;
-    m_scriptProgress->setPackagePath( act->getPackagePath() );
+    progress->setPackagePath( act->getPackagePath() );
 #endif
 }
 

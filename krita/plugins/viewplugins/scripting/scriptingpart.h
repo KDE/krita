@@ -43,10 +43,8 @@ class ScriptingPart : public KParts::Plugin
         void executionFinished(const Kross::Action*);
         void executionStarted(const Kross::Action*);
     private:
-        KisView * m_view;
-        Kross::GUIClient* m_scriptguiclient;
-        ScriptingProgress* m_scriptProgress;
-        ScriptingModule* m_module;
+        class Private;
+        Private* const d;
 };
 
 

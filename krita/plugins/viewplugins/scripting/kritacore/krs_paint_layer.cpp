@@ -67,32 +67,28 @@ QString PaintLayer::colorSpaceId()
     return paintLayer()->paintDevice()->colorSpace()->id();
 }
 
+QObject* PaintLayer::createRectIterator(uint x, uint y, uint width, uint height)
+{
+    return new Iterator<KisRectIteratorPixel>(
+            paintLayer()->paintDevice()->createRectIterator(x, y, width, height, true),
+            paintLayer());
+}
+
 #if 0
-Kross::Api::Object::Ptr PaintLayer::createRectIterator(Kross::Api::List::Ptr args)
+QObject* PaintLayer::createHLineIterator(uint x, uint y, uint width)
 {
-    return Kross::Api::Object::Ptr(new Iterator<KisRectIteratorPixel>(
-            paintLayer()->paintDevice()->createRectIterator(Kross::Api::Variant::toUInt(args->item(0)),
-                                        Kross::Api::Variant::toUInt(args->item(1)),
-                                        Kross::Api::Variant::toUInt(args->item(2)),
-                                        Kross::Api::Variant::toUInt(args->item(3)), true),
-            paintLayer()));
+    return new Iterator<KisHLineIteratorPixel>(
+            paintLayer()->paintDevice()->createHLineIterator(x, y, width, true),
+            paintLayer());
 }
-Kross::Api::Object::Ptr PaintLayer::createHLineIterator(Kross::Api::List::Ptr args)
+
+QObject* PaintLayer::createVLineIterator(uint x, uint y, uint height)
 {
-    return Kross::Api::Object::Ptr(new Iterator<KisHLineIteratorPixel>(
-            paintLayer()->paintDevice()->createHLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
-                                        Kross::Api::Variant::toUInt(args->item(1)),
-                                        Kross::Api::Variant::toUInt(args->item(2)), true),
-            paintLayer()));
+    return new Iterator<KisVLineIteratorPixel>(
+            paintLayer()->paintDevice()->createVLineIterator(x, y, height, true),
+            paintLayer());
 }
-Kross::Api::Object::Ptr PaintLayer::createVLineIterator(Kross::Api::List::Ptr args)
-{
-    return Kross::Api::Object::Ptr(new Iterator<KisVLineIteratorPixel>(
-            paintLayer()->paintDevice()->createVLineIterator(Kross::Api::Variant::toUInt(args->item(0)),
-                                        Kross::Api::Variant::toUInt(args->item(1)),
-                                        Kross::Api::Variant::toUInt(args->item(2)), true),
-            paintLayer()));
-}
+
 Kross::Api::Object::Ptr PaintLayer::createHistogram(Kross::Api::List::Ptr args)
 {
     QString histoname = Kross::Api::Variant::toString(args->item(0));

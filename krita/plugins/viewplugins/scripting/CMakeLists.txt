@@ -5,12 +5,12 @@ add_subdirectory( kritacore )
 
 ########### next target ###############
 
-set(kritascripting_PART_SRCS scriptingprogress.cpp scriptingmonitor.cpp scriptingmodule.cpp scriptingpart.cpp)
+set(kritascripting_PART_SRCS scriptingprogress.cpp scriptingmonitor.cpp scriptingpart.cpp)
 
 kde4_automoc(${kritascripting_PART_SRCS})
 kde4_add_plugin(kritascripting ${kritascripting_PART_SRCS})
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritascripting )
-target_link_libraries(kritascripting kritaui krosscore)
+target_link_libraries(kritascripting kritaui krosscore krosskritacore)
 
 install(TARGETS kritascripting  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -45,7 +45,7 @@ Image::~Image()
 {
 }
 
-QObject* Image::getActivePaintLayer()
+QObject* Image::activePaintLayer()
 {
     KisPaintLayer* activePaintLayer = dynamic_cast< KisPaintLayer* >(m_image->activeLayer().data());
     if(activePaintLayer)

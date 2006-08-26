@@ -68,6 +68,13 @@ QObject* KritaCoreModule::application()
 	return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
 }
 
+#if 0
+QObject* KritaCoreModule::document()
+{
+	return d->view->document() ? d->view->document()->findChild< KoDocumentAdaptor* >() : 0;
+}
+#endif
+
 QObject* KritaCoreModule::image()
 {
     ::KisDoc* document = d->view->canvasSubject()->document();

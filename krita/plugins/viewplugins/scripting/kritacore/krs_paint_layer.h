@@ -27,9 +27,7 @@
 class KisDoc;
 class KisTransaction;
 
-namespace Kross {
-
-namespace KritaCore {
+namespace Kross { namespace KritaCore {
 
 /**
 @author Cyrille Berger
@@ -44,12 +42,12 @@ class PaintLayer : public QObject
     public slots:
 
         /**
-         * Return the width of the layer
+         * Return the width of the layer.
          */
         int width();
 
         /**
-         * Return the height of the layer
+         * Return the height of the layer.
          */
         int height();
 
@@ -58,7 +56,6 @@ class PaintLayer : public QObject
          */
         QString colorSpaceId();
 
-#if 0
         /**
          * Create an iterator over a layer, it will iterate on a rectangle area.
          * This function takes four arguments :
@@ -67,7 +64,9 @@ class PaintLayer : public QObject
          *  - width of the rectangle
          *  - height of the rectangle
          */
-        Kross::Api::Object::Ptr createRectIterator(Kross::Api::List::Ptr);
+        QObject* createRectIterator(uint x, uint y, uint width, uint height);
+
+#if 0
         /**
          * Create an iterator over a layer, it will iterate on a row.
          * This function takes three arguments :
@@ -75,7 +74,8 @@ class PaintLayer : public QObject
          *  - y vertical position of the row
          *  - width of the row
          */
-        Kross::Api::Object::Ptr createHLineIterator(Kross::Api::List::Ptr);
+        QObject* createHLineIterator(uint x, uint y, uint width);
+
         /**
          * Create an iterator over a layer, it will iterate on a column.
          * This function takes three arguments :
@@ -83,7 +83,8 @@ class PaintLayer : public QObject
          *  - y start in the column
          *  - height of the column
          */
-        Kross::Api::Object::Ptr createVLineIterator(Kross::Api::List::Ptr);
+        QObject* createVLineIterator(uint x, uint y, uint height);
+
         /**
          * This function creates an Histogram for this layer.
          * It takes two arguments :
@@ -149,8 +150,6 @@ class PaintLayer : public QObject
         KisTransaction* m_cmd;
 };
 
-}
-
-}
+}}
 
 #endif

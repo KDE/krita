@@ -39,9 +39,10 @@ class Image : public QObject
     public slots:
 
         /**
-         * Return the active \a PaintLayer or NULL.
+         * Return the active \a PaintLayer or NULL if there is
+         * no PaintLayer active yet.
          */
-        QObject* getActivePaintLayer();
+        QObject* activePaintLayer();
 
         /**
          * Return the width of the image.

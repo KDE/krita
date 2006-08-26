@@ -15,6 +15,7 @@ Comment[zh_TW]=這個外掛程式允許將一張圖片的顏色轉換為另一�
 Encoding=UTF-8
 Icon=
 Name=Color Transfer Filter
+Name[da]=Farveoverførselsfilter
 Name[de]=Farbübertragungsfilter
 Name[es]=Filtro de transferencia de color
 Name[et]=Värviülekande filter

@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Icon=
 Name=Perspective transform Tool
+Name[da]=Perspectivetransformeringsværktøj
+Name[es]=Herramienta Transformar perspectiva
+Name[et]=Perspektiivteisenduse tööriist
+Name[sv]=Perspektivtransformverktyg
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivetransform

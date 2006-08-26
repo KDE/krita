@@ -23,7 +23,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskritacore )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-target_link_libraries(krosskritacore krosscore kritaui)
+target_link_libraries(krosskritacore kritaui)
 
 install(TARGETS krosskritacore DESTINATION ${LIB_INSTALL_DIR})
 

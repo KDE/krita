@@ -78,9 +78,7 @@ QObject* KritaCoreModule::document()
 QObject* KritaCoreModule::image()
 {
     ::KisDoc* document = d->view->canvasSubject()->document();
-    if(! document)
-        return 0;
-    return new Image(document->currentImage(), document);
+    return document ? new Image(document->currentImage(), document) : 0;
 }
 
 

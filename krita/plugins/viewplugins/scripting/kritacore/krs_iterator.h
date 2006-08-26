@@ -74,6 +74,16 @@ class IteratorBase : public QObject
         virtual bool isDone() = 0;
 
         /**
+         * Return the list of pixels.
+         */
+        virtual QVariantList pixel() = 0;
+
+        /**
+         * Set the list of pixels.
+         */
+        virtual void setPixel(QVariantList pixel) = 0;
+
+        /**
          * Invert the color of a pixel.
          */
         virtual void invertColor() = 0;
@@ -180,6 +190,59 @@ class Iterator : public IteratorBase
 
     private:
 
+        QVariantList pixel()
+        {
+            Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
+            QVariantList pixel;
+            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++) {
+                KoChannelInfo * ci = *itC;
+                quint8* data = (quint8*)(m_it->rawData() + ci->pos());
+                switch(ci->channelValueType())
+                {
+                    case KoChannelInfo::UINT8:
+                        pixel.push_back( *data);
+                        break;
+                    case KoChannelInfo::UINT16:
+                        pixel.push_back( *((quint16*) data) );
+                        break;
+                    case KoChannelInfo::FLOAT32:
+                        pixel.push_back( *((float*) data) );
+                        break;
+                    default:
+                        //kDebug(41011) << i18n("An error has occurred in %1","getPixel") << endl;
+                        kDebug(41011) << i18n("unsupported data format in scripts") << endl;
+                        break;
+                }
+            }
+            return pixel;
+        }
+
+        void setPixel(QVariantList pixel)
+        {
+            Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
+            uint i = 0;
+            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++, i++) {
+                KoChannelInfo * ci = *itC;
+                quint8* data = (quint8*)(m_it->rawData() + ci->pos());
+                switch(ci->channelValueType())
+                {
+                    case KoChannelInfo::UINT8:
+                        *data = pixel[i].toUInt();
+                        break;
+                    case KoChannelInfo::UINT16:
+                        *((quint16*) data) = pixel[i].toUInt();
+                        break;
+                    case KoChannelInfo::FLOAT32:
+                        *((float*) data) = pixel[i].toDouble();
+                        break;
+                    default:
+                        //kDebug(41011) << i18n("An error has occurred in %1","setPixel") << endl;
+                        kDebug(41011) << i18n("unsupported data format in scripts") << endl;
+                        break;
+                }
+            }
+        }
+
         void invertColor()
         {
             m_layer->paintDevice()->colorSpace()->invertColor(m_it->rawData(), 1);
@@ -235,64 +298,10 @@ class Iterator : public IteratorBase
             *data = Kross::Api::Variant::toUInt( args->item(0) );
             return Kross::Api::Object::Ptr(0);
         }
-        Kross::Api::Object::Ptr getPixel(Kross::Api::List::Ptr)
-        {
-            Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
-            QList<QVariant> pixel;
-            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
-            {
-                KoChannelInfo * ci = *itC;
-                quint8* data = (quint8*)(m_it->rawData() + ci->pos());
-                switch(ci->channelValueType())
-                {
-                    case KoChannelInfo::UINT8:
-                        pixel.push_back( *data);
-                        break;
-                    case KoChannelInfo::UINT16:
-                        pixel.push_back( *((quint16*) data) );
-                        break;
-                    case KoChannelInfo::FLOAT32:
-                        pixel.push_back( *((float*) data) );
-                        break;
-                    default:
-                        //kDebug(41011) << i18n("An error has occurred in %1","getPixel") << endl;
-                        kDebug(41011) << i18n("unsupported data format in scripts") << endl;
-                        break;
-                }
-            }
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant( pixel));
-        }
-        Kross::Api::Object::Ptr setPixel(Kross::Api::List::Ptr args)
-        {
-            Q3ValueList<QVariant> pixel = Kross::Api::Variant::toList( args->item(0) );
-            Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
-            uint i = 0;
-            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++, i++)
-            {
-                KoChannelInfo * ci = *itC;
-                quint8* data = (quint8*)(m_it->rawData() + ci->pos());
-                switch(ci->channelValueType())
-                {
-                    case KoChannelInfo::UINT8:
-                        *data = pixel[i].toUInt();
-                        break;
-                    case KoChannelInfo::UINT16:
-                        *((quint16*) data) = pixel[i].toUInt();
-                        break;
-                    case KoChannelInfo::FLOAT32:
-                        *((float*) data) = pixel[i].toDouble();
-                        break;
-                    default:
-                        //kDebug(41011) << i18n("An error has occurred in %1","setPixel") << endl;
-                        kDebug(41011) << i18n("unsupported data format in scripts") << endl;
-                        break;
-                }
-            }
-            return Kross::Api::Object::Ptr(0);
-        }
 #endif
 
     private:
+
         virtual void invalidateIterator()
         {
             kDebug(41011) << "invalidating iterator" << endl;

@@ -5,7 +5,7 @@ add_subdirectory( kritacore )
 
 ########### next target ###############
 
-set(kritascripting_PART_SRCS scriptingprogress.cpp scriptingmonitor.cpp scriptingpart.cpp)
+set(kritascripting_PART_SRCS scriptingmonitor.cpp scriptingpart.cpp)
 
 kde4_automoc(${kritascripting_PART_SRCS})
 kde4_add_plugin(kritascripting ${kritascripting_PART_SRCS})

@@ -19,7 +19,6 @@
 
 #include "scriptingpart.h"
 #include "scriptingmonitor.h"
-#include "scriptingprogress.h"
 
 #include <stdlib.h>
 #include <vector>
@@ -53,6 +52,7 @@
 #include <core/guimanager.h>
 
 #include "kritacore/kritacoremodule.h"
+#include "kritacore/kritacoreprogress.h"
 
 typedef KGenericFactory<ScriptingPart> KritaScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
@@ -62,10 +62,10 @@ class ScriptingPart::Private
     public:
         KisView* view;
         Kross::GUIClient* guiclient;
-        ScriptingProgress* progress;
         Kross::KritaCore::KritaCoreModule* module;
+        Kross::KritaCore::KritaCoreProgress* progress;
 
-        Private() : view(0), guiclient(0), progress(0), module(0) {}
+        Private() : view(0), guiclient(0), module(0), progress(0) {}
         virtual ~Private() {
             //Kross::Manager::self().removeObject(module);
             delete module; module = 0;
@@ -119,9 +119,11 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     connect(d->guiclient, SIGNAL(executionStarted( const Kross::ScriptAction* )), this, SLOT(executionStarted(const Kross::ScriptAction*)));
 
     //ScriptingMonitor::instance()->monitor( d->guiclient );
-    //d->progress = new ScriptingProgress(d->view);
     d->module = new Kross::KritaCore::KritaCoreModule(d->view);
     Kross::Manager::self().addObject(d->module, "Krita");
+
+    d->progress = new Kross::KritaCore::KritaCoreProgress(d->view);
+    d->progress->setParent(d->module); // attach the progress-stuff to the Krita module.
 }
 
 ScriptingPart::~ScriptingPart()

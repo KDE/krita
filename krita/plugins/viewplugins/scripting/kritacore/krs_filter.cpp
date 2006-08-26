@@ -24,11 +24,12 @@
 #include "krs_filter_configuration.h"
 #include "krs_paint_layer.h"
 
-namespace Kross {
-namespace KritaCore {
+using namespace Kross::KritaCore;
 
 Filter::Filter(KisFilter* filter)
-    : QObject(), m_filter(filter), m_config( new FilterConfiguration(filter->configuration()) )
+    : QObject()
+    , m_filter(filter)
+    , m_config( new FilterConfiguration(filter->configuration()) )
 {
     setObjectName("KritaFilter");
 }
@@ -37,12 +38,12 @@ Filter::~Filter()
 {
 }
 
-#if 0
-Kross::Api::Object::Ptr Filter::getFilterConfiguration(Kross::Api::List::Ptr )
+QObject* Filter::filterConfiguration()
 {
-     return Kross::Api::Object::Ptr(m_config);
+     return m_config;
 }
 
+#if 0
 Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
 {
     PaintLayer* src = (PaintLayer*)args->item(0);
@@ -68,5 +69,4 @@ Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
 }
 #endif
 
-}
-}
+#include "krs_filter.moc"

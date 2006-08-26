@@ -31,33 +31,40 @@ namespace KritaCore {
 */
 class FilterConfiguration : public QObject
 {
-        //Q_OBJECT
+        Q_OBJECT
     public:
         FilterConfiguration(KisFilterConfiguration*);
         ~FilterConfiguration();
 
         inline KisFilterConfiguration* filterConfiguration() { return m_fConfig; };
 
-    //public slots:
+    public slots:
 
-#if 0
         /**
          * This function define a parameter of the associated Filter.
          * It takes two arguments :
          *  - the name of the parameter
          *  - the value, whose type depends of the Filter
          */
-        Kross::Api::Object::Ptr setProperty(Kross::Api::List::Ptr args);
+        void setProperty(const QString& name, const QVariant& value);
+
         /**
          * This function return the value of a parameter of the associated Filter.
          * It takes one argument :
          *  - the name of the parameter
          */
-        Kross::Api::Object::Ptr getProperty(Kross::Api::List::Ptr args);
+        const QVariant getProperty(const QString& name);
+
         /**
-         * Deserialize
+         * Deserialize from XML.
          */
-        Kross::Api::Object::Ptr fromXML(Kross::Api::List::Ptr args);
+        void fromXML(const QString& xml);
+
+#if 0
+        /**
+         * Serialize to XML.
+         */
+        const QString toXML();
 #endif
 
     private:

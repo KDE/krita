@@ -57,6 +57,25 @@ class PaintLayer : public QObject
         QString colorSpaceId();
 
         /**
+         * Convert the image to a colorspace.
+         * This function takes one argument :
+         *  - the name of the destination colorspace
+         * This function returns true if convert to the
+         * colorspace was successfully else (e.g. if the
+         * colorspace is not available, please check your
+         * installation in that case) false is returned.
+         *
+         * For example (in Ruby) :
+         * @code
+         * # set the colorspace to "CMYK"
+         * image.convertToColorspace("CMYK")
+         * # following line will print "CMYK" now.
+         * image.colorSpaceId()
+         * @endcode
+         */
+        bool convertToColorspace(const QString& colorspacename);
+
+        /**
          * Create an iterator over a layer, it will iterate on a rectangle area.
          * This function takes four arguments :
          *  - x
@@ -66,7 +85,6 @@ class PaintLayer : public QObject
          */
         QObject* createRectIterator(uint x, uint y, uint width, uint height);
 
-#if 0
         /**
          * Create an iterator over a layer, it will iterate on a row.
          * This function takes three arguments :
@@ -91,12 +109,12 @@ class PaintLayer : public QObject
          *  - the type of the histogram ("RGB8HISTO")
          *  - 0 if the histogram is linear, or 1 if it is logarithmic
          */
-        Kross::Api::Object::Ptr createHistogram(Kross::Api::List::Ptr);
+        QObject* createHistogram(const QString& histoname, uint typenr);
+
         /**
          * This function create a Painter which will allow you to some painting on the layer.
          */
-        Kross::Api::Object::Ptr createPainter(Kross::Api::List::Ptr);
-#endif
+        QObject* createPainter();
 
         /**
          * Uses this function to create a new undo entry. The \p name
@@ -111,26 +129,17 @@ class PaintLayer : public QObject
          */
         void endPainting();
 
-#if 0
         /**
-         * Convert the image to a colorspace.
-         * This function takes one argument :
-         *  - the name of the destination colorspace
-         * 
-         * For example (in Ruby) :
-         * @code
-         * image.convertToColorspace("CMYK")
-         * @endcode
+         * Return the fast \a Wavelet transformed of the layer
          */
-        Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
+        QObject* fastWaveletTransformation();
+
         /**
-         * Return the fast wavelet transformed of the layer
-         */
-        Kross::Api::Object::Ptr fastWaveletTransformation(Kross::Api::List::Ptr args);
-        /**
-         * Untransform a fast wavelet into this layer
+         * Untransform a fast \a Wavelet into this layer
          * It takes one argument :
          *  - a wavelet object
+         * It returns true on success else (e.g. cause no valid \a Wavelet
+         * object was passed as argument) false is returned.
          * 
          * For example (in Ruby) :
          * @code
@@ -138,8 +147,7 @@ class PaintLayer : public QObject
          * layer.fastWaveletUntransformation(wavelet)
          * @endcode
          */
-        Kross::Api::Object::Ptr fastWaveletUntransformation(Kross::Api::List::Ptr args);
-#endif
+        bool fastWaveletUntransformation(QObject* wavelet);
 
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }

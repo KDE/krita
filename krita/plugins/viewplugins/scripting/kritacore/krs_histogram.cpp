@@ -20,9 +20,7 @@
 
 #include <kis_paint_layer.h>
 
-namespace Kross {
-
-namespace KritaCore {
+using namespace Kross::KritaCore;
 
 Histogram::Histogram(KisPaintLayerSP layer,
                      KisHistogramProducerSP producer,
@@ -37,55 +35,59 @@ Histogram::~Histogram()
 {
 }
 
-#if 0
-Kross::Api::Object::Ptr Histogram::setChannel(Kross::Api::List::Ptr args)
+void Histogram::setChannel(uint channelnr)
 {
-    m_histogram->setChannel(Kross::Api::Variant::toUInt(args->item(0)));
-    return Kross::Api::Object::Ptr(0);
-}
-Kross::Api::Object::Ptr Histogram::getChannel(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->channel()));
-}
-Kross::Api::Object::Ptr Histogram::getMax(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getMax()));
-}
-Kross::Api::Object::Ptr Histogram::getMin(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getMin() ));
-}
-Kross::Api::Object::Ptr Histogram::getHighest(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getHighest() ));
-}
-Kross::Api::Object::Ptr Histogram::getLowest(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getLowest() ));
-}
-Kross::Api::Object::Ptr Histogram::getMean(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getMean() ));
-}
-Kross::Api::Object::Ptr Histogram::getCount(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getCount() ));
-}
-Kross::Api::Object::Ptr Histogram::getTotal(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->calculations().getTotal() ));
-}
-Kross::Api::Object::Ptr Histogram::getValue(Kross::Api::List::Ptr args)
-{
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->getValue( Kross::Api::Variant::toUInt(args->item(0)) ) ));
+    m_histogram->setChannel(channelnr);
 }
 
-Kross::Api::Object::Ptr Histogram::getNumberOfBins(Kross::Api::List::Ptr)
+uint Histogram::getChannel()
 {
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant( m_histogram->producer()->numberOfBins() ));
-}
-#endif
-
+    return m_histogram->channel();
 }
 
+double Histogram::getMax()
+{
+    return m_histogram->calculations().getMax();
 }
+
+double Histogram::getMin()
+{
+    return m_histogram->calculations().getMin();
+}
+
+uint Histogram::getHighest()
+{
+    return m_histogram->calculations().getHighest();
+}
+
+uint Histogram::getLowest()
+{
+    return m_histogram->calculations().getLowest();
+}
+
+double Histogram::getMean()
+{
+    return m_histogram->calculations().getMean();
+}
+
+uint Histogram::getCount()
+{
+    return m_histogram->calculations().getCount();
+}
+
+double Histogram::getTotal()
+{
+    return m_histogram->calculations().getTotal();
+}
+
+uint Histogram::getValue(int index)
+{
+    return m_histogram->getValue(index);
+}
+
+int Histogram::getNumberOfBins()
+{
+    return m_histogram->producer()->numberOfBins();
+}
+
+#include "krs_histogram.moc"

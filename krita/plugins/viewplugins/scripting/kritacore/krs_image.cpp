@@ -69,19 +69,39 @@ QString Image::colorSpaceId() const
     return m_image->colorSpace()->id();
 }
 
-#if 0
-Kross::Api::Object::Ptr Image::convertToColorspace(Kross::Api::List::Ptr args)
+bool Image::convertToColorspace(const QString& colorspacename)
 {
-    KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->colorSpace(Kross::Api::Variant::toString(args->item(0)), 0);
+    KoColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->colorSpace(colorspacename, 0);
     if(!dstCS)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Colorspace %1 is not available, please check your installation.",Kross::Api::Variant::toString(args->item(0))) ) );
-        return Kross::Api::Object::Ptr(0);
+        kWarning() << QString("Colorspace %1 is not available, please check your installation.").arg(colorspacename) << endl;
+        return false;
     }
     m_image->convertTo(dstCS);
-    return Kross::Api::Object::Ptr(0);
+    return true;
 }
 
+void Image::resize(int width, int height, int x, int y)
+{
+    m_image->resize( width, height, x, y );
+}
+
+void Image::scale(double widthfactor, double heightfactor)
+{
+    m_image->scale( widthfactor, heightfactor, 0, KisFilterStrategyRegistry::instance()->get( "Mitchell") );
+}
+
+void Image::rotate(double angle)
+{
+    m_image->rotate(angle, 0);
+}
+
+void Image::shear(double xangle, double yangle)
+{
+    m_image->shear(xangle, yangle, 0);
+}
+
+#if 0
 Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
 {
     QString name = Kross::Api::Variant::toString(args->item(0));
@@ -107,28 +127,6 @@ Kross::Api::Object::Ptr Image::createPaintLayer(Kross::Api::List::Ptr args)
     m_image->addLayer(KisLayerSP(layer), m_image->rootLayer(), KisLayerSP(0));
     return Kross::Api::Object::Ptr(new PaintLayer(KisPaintLayerSP(layer)));
 
-}
-
-Kross::Api::Object::Ptr Image::scale(Kross::Api::List::Ptr args)
-{
-    double cw = Kross::Api::Variant::toDouble(args->item(0));
-    double ch = Kross::Api::Variant::toDouble(args->item(1));
-    m_image->scale( cw, ch, 0, KisFilterStrategyRegistry::instance()->get( "Mitchell") );
-    return Kross::Api::Object::Ptr(0);
-}
-Kross::Api::Object::Ptr Image::resize(Kross::Api::List::Ptr args)
-{
-    int nw = Kross::Api::Variant::toInt(args->item(0));
-    int nh = Kross::Api::Variant::toInt(args->item(1));
-    int x = 0;
-    int y = 0;
-    if(args->count() > 2)
-    {
-        x = Kross::Api::Variant::toInt(args->item(2));
-        y = Kross::Api::Variant::toInt(args->item(3));
-    }
-    m_image->resize( nw, nh, x, y );
-    return Kross::Api::Object::Ptr(0);
 }
 #endif
 

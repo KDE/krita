@@ -16,17 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "scriptingprogress.h"
+#include "kritacoreprogress.h"
 
 #include <kis_progress_display_interface.h>
 #include <kis_view.h>
 
-void ScriptingProgress::activateAsSubject()
+using namespace Kross::KritaCore;
+
+void KritaCoreProgress::activateAsSubject()
 {
     m_view->canvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
 }
 
-void ScriptingProgress::setProgressTotalSteps(qint32 totalSteps)
+void KritaCoreProgress::setProgressTotalSteps(uint totalSteps)
 {
     m_progressTotalSteps = totalSteps;
     m_progressSteps = 0;
@@ -34,7 +36,7 @@ void ScriptingProgress::setProgressTotalSteps(qint32 totalSteps)
     emit notifyProgress(0);
 }
 
-void ScriptingProgress::setProgress(qint32 progress)
+void KritaCoreProgress::setProgress(uint progress)
 {
     m_progressSteps = progress;
     qint32 progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
@@ -46,21 +48,21 @@ void ScriptingProgress::setProgress(qint32 progress)
     }
 }
 
-void ScriptingProgress::incProgress()
+void KritaCoreProgress::incProgress()
 {
     setProgress( ++m_progressSteps );
 }
 
-void ScriptingProgress::setProgressStage(const QString& stage, qint32 progress)
+void KritaCoreProgress::setProgressStage(const QString& stage, uint progress)
 {
     qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
     m_lastProgressPerCent = progress;
     emit notifyProgressStage( stage, progressPerCent);
 }
 
-void ScriptingProgress::progressDone()
+void KritaCoreProgress::progressDone()
 {
     emit notifyProgressDone();
 }
 
-#include "scriptingprogress.moc"
+#include "kritacoreprogress.moc"

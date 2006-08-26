@@ -24,9 +24,7 @@
 
 #include <kis_math_toolbox.h>
 
-namespace Kross {
-
-namespace KritaCore {
+using namespace Kross::KritaCore;
 
 Wavelet::Wavelet(KisMathToolbox::KisWavelet* kwl)
     : QObject(), m_wavelet(kwl)
@@ -40,69 +38,65 @@ Wavelet::~Wavelet()
 {
 }
 
-#if 0
-Kross::Api::Object::Ptr Wavelet::getNCoeff(Kross::Api::List::Ptr args)
+double Wavelet::getNCoeff(uint index)
 {
-    quint32 n = Kross::Api::Variant::toUInt(args->item(0));
+    quint32 n = index;
     if( n > m_numCoeff)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("getNCoeff")) + '\n' + i18n("Index out of bound") ) );
+        kWarning() << i18n("An error has occured in %1",QString("getNCoeff")) + '\n' + i18n("Index out of bound") << endl;
+        return 0.0;
     }
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(*(m_wavelet->coeffs + n )));
+    return *(m_wavelet->coeffs + n );
 }
 
-Kross::Api::Object::Ptr Wavelet::setNCoeff(Kross::Api::List::Ptr args)
+void Wavelet::setNCoeff(uint index, double value)
 {
-    quint32 n = Kross::Api::Variant::toUInt(args->item(0));
-    double v = Kross::Api::Variant::toDouble(args->item(1));
+    quint32 n = index;
     if( n > m_numCoeff)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("setNCoeff")) + '\n' + i18n("Index out of bound") ) );
+        kWarning() << i18n("An error has occured in %1",QString("setNCoeff")) + '\n' + i18n("Index out of bound") << endl;
+        return;
     }
-    *(m_wavelet->coeffs + n ) = v;
-    return Kross::Api::Object::Ptr(0);
+    *(m_wavelet->coeffs + n ) = value;
 }
 
-Kross::Api::Object::Ptr Wavelet::getXYCoeff(Kross::Api::List::Ptr args)
+double Wavelet::getXYCoeff(uint x, uint y)
 {
-    quint32 x = Kross::Api::Variant::toUInt(args->item(0));
-    quint32 y = Kross::Api::Variant::toUInt(args->item(1));
-    if( x > m_wavelet->size && y > m_wavelet->size)
+    quint32 _x = x;
+    quint32 _y = y;
+    if( _x > m_wavelet->size && _y > m_wavelet->size)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("getXYCoeff")) + '\n' + i18n("Index out of bound") ) );
+        kWarning() << i18n("An error has occured in %1",QString("getXYCoeff")) + '\n' + i18n("Index out of bound") << endl;
+        return 0.0;
     }
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(*(m_wavelet->coeffs  + (x + y * m_wavelet->size ) * m_wavelet->depth )));
+    return *( m_wavelet->coeffs  + (_x + _y * m_wavelet->size ) * m_wavelet->depth );
 }
 
-Kross::Api::Object::Ptr Wavelet::setXYCoeff(Kross::Api::List::Ptr args)
+void Wavelet::setXYCoeff(uint x, uint y, double value)
 {
-    quint32 x = Kross::Api::Variant::toUInt(args->item(0));
-    quint32 y = Kross::Api::Variant::toUInt(args->item(1));
-    double v = Kross::Api::Variant::toDouble(args->item(2));
-    if( x > m_wavelet->size && y > m_wavelet->size)
+    quint32 _x = x;
+    quint32 _y = y;
+    if( _x > m_wavelet->size && _y > m_wavelet->size)
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("setXYCoeff")) + '\n' + i18n("Index out of bound") ));
+        kWarning() << i18n("An error has occured in %1",QString("setXYCoeff")) + '\n' + i18n("Index out of bound") << endl;
+        return;
     }
-    *(m_wavelet->coeffs + (x + y * m_wavelet->size ) * m_wavelet->depth ) = v;
-    return Kross::Api::Object::Ptr(0);
+    *(m_wavelet->coeffs + (_x + _y * m_wavelet->size ) * m_wavelet->depth ) = value;
 }
 
-Kross::Api::Object::Ptr Wavelet::getDepth(Kross::Api::List::Ptr /*args*/)
+uint Wavelet::getDepth()
 {
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_wavelet->depth));
+    return m_wavelet->depth;
 }
 
-Kross::Api::Object::Ptr Wavelet::getSize(Kross::Api::List::Ptr)
+uint Wavelet::getSize()
 {
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_wavelet->size));
+    return m_wavelet->size;
 }
 
-Kross::Api::Object::Ptr Wavelet::getNumCoeffs(Kross::Api::List::Ptr)
+uint Wavelet::getNumCoeffs()
 {
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_numCoeff));
-}
-#endif
-
+    return m_numCoeff;
 }
 
-}
+#include "krs_wavelet.moc"

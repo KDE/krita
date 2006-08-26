@@ -55,30 +55,63 @@ class Image : public QObject
         int height() const;
 
         /**
-         * Return the id of the colorspace of this image (e.g. "RGBA").
+         * Return the id of the colorspace of this image (e.g. "RGBA" or "CMYK").
          */
         QString colorSpaceId() const;
 
-#if 0
-        /**
-         * Resize an image
-         */
-        Kross::Api::Object::Ptr resize(Kross::Api::List::Ptr);
-        /**
-         * Scale an image
-         */
-        Kross::Api::Object::Ptr scale(Kross::Api::List::Ptr);
         /**
          * Convert the image to a colorspace.
          * This function takes one argument :
          *  - the name of the destination colorspace
-         * 
+         * This function returns true if convert to the
+         * colorspace was successfully else (e.g. if the
+         * colorspace is not available, please check your
+         * installation in that case) false is returned.
+         *
          * For example (in Ruby) :
          * @code
+         * # set the colorspace to "CMYK"
          * image.convertToColorspace("CMYK")
+         * # following line will print "CMYK" now.
+         * image.colorSpaceId()
          * @endcode
          */
-        Kross::Api::Object::Ptr convertToColorspace(Kross::Api::List::Ptr args);
+        bool convertToColorspace(const QString& colorspacename);
+
+        /**
+         * Resize the image.
+         * This function takes four arguments :
+         *  - the new width.
+         *  - the new height.
+         *  - x-position (if you don't need this, set it to 0).
+         *  - y-position (if you don't need this, set it to 0).
+         */
+        void resize(int width, int height, int x, int y);
+
+        /**
+         * Scale an image.
+         * This function takes two arguments :
+         *  - the width scalefactor.
+         *  - the height scalefactor.
+         */
+        void scale(double widthfactor, double heightfactor);
+
+        /**
+         * Rotate the image.
+         * This function takes one argument :
+         *  - the angle.
+         */
+        void rotate(double angle);
+
+        /**
+         * Shear the image.
+         * This function takes two arguments :
+         *  - the X-angle.
+         *  - the Y-angle.
+         */
+        void shear(double xangle, double yangle);
+
+#if 0
         /**
          * Create a new PaintLayer for this image, and return it.
          * This function takes at least two arguments :

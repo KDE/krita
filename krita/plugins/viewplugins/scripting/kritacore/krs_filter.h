@@ -30,18 +30,19 @@ class FilterConfiguration;
 
 class Filter : public QObject
 {
-        //Q_OBJECT
+        Q_OBJECT
     public:
         Filter(KisFilter*);
         ~Filter();
 
-    //public slots:
+    public slots:
 
-#if 0
         /**
          * This function return the FilterConfiguration associated with this filter.
          */
-        Kross::Api::Object::Ptr getFilterConfiguration(Kross::Api::List::Ptr args);
+        QObject* filterConfiguration();
+
+#if 0
         /**
          * This function will apply the filter.
          * It takes one argument :

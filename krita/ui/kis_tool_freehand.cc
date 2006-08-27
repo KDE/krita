@@ -100,18 +100,13 @@ void KisToolFreehand::buttonPress(KisButtonPressEvent *e)
 
             r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
             if (!m_paintOnSelection) {
-                if (!m_paintIncremental) {
-                    m_tempLayer->setDirty(r);
-                }
-                else {
                     m_currentImage->activeLayer()->setDirty(r);
-                }
             }
             else {
                 m_target->setDirty(r);
                 // Just update the canvas. XXX: After 1.5, find a better way to make sure tools don't set dirty what they didn't touch.
                 m_subject->canvasController()->updateCanvas( r );
-            } 
+            }
         }
     }
 }
@@ -129,7 +124,7 @@ void KisToolFreehand::move(KisMoveEvent *e)
     if (m_mode == PAINT) {
 
         paintLine(m_prevPos, m_prevPressure, m_prevXTilt, m_prevYTilt, e->pos(), e->pressure(), e->xTilt(), e->yTilt());
-    
+
         m_prevPos = e->pos();
         m_prevPressure = e->pressure();
         m_prevXTilt = e->xTilt();
@@ -141,19 +136,14 @@ void KisToolFreehand::move(KisMoveEvent *e)
             m_dirtyRect |= r;
 
             if (!m_paintOnSelection) {
-                if (!m_paintIncremental) {
-                    m_tempLayer->setDirty(r);
-                }
-                else {
                     m_currentImage->activeLayer()->setDirty(r);
-                }
             }
             else {
                 // Just update the canvas
                 r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
                 m_target->setDirty(r);
                 m_subject->canvasController()->updateCanvas( r );
-            } 
+            }
         }
     }
 }
@@ -168,30 +158,23 @@ void KisToolFreehand::initPaint(KisEvent *)
     // Create painter
     KisPaintDeviceSP device;
     if (m_currentImage && (device = m_currentImage->activeDevice())) {
-        
+
         if (m_painter)
             delete m_painter;
-        
+
         if (!m_paintIncremental) {
             if (m_currentImage->undo())
                 m_currentImage->undoAdapter()->beginMacro(m_transactionText);
 
-            //if (m_tempLayer == 0) {
-                // XXX ugly! hacky! We'd like to cache the templayer, but that makes sure
-                // the layer is never really removed from its parent group because of shared pointers
-                m_tempLayer = new KisPaintLayer(m_currentImage, "temp", OPACITY_OPAQUE);
-                m_tempLayer->setTemporary(true);
-                // Yuck, what an ugly cast!
-                m_target = (dynamic_cast<KisPaintLayer*>(m_tempLayer.data()))->paintDevice();
-            //}
-
-            m_tempLayer->setCompositeOp( m_compositeOp );
-            m_tempLayer->setOpacity( m_opacity );
-
-            m_tempLayer->setVisible(true);
-
-            currentImage()->addLayer(m_tempLayer, m_currentImage->activeLayer()->parent().data(), m_currentImage->activeLayer());
-
+            KisLayerSupportsIndirectPainting* layer;
+            if ((layer = dynamic_cast<KisLayerSupportsIndirectPainting*>(
+                    m_currentImage->activeLayer().data()))) {
+                m_target = new KisPaintDevice(m_currentImage->activeLayer(),
+                                              device->colorSpace());
+                layer->setTemporaryTarget(m_target);
+                layer->setTemporaryCompositeOp(m_compositeOp);
+                layer->setTemporaryOpacity(m_opacity);
+            }
         } else {
             m_target = device;
         }
@@ -212,7 +195,7 @@ void KisToolFreehand::initPaint(KisEvent *)
         m_painter->setCompositeOp(m_compositeOp);
         m_painter->setOpacity(m_opacity);
     } else {
-        m_painter->setCompositeOp(COMPOSITE_OVER);
+        m_painter->setCompositeOp(COMPOSITE_ALPHA_DARKEN);
         m_painter->setOpacity( OPACITY_OPAQUE );
 
     }
@@ -231,29 +214,34 @@ void KisToolFreehand::endPaint()
 {
     m_mode = HOVER;
     if (m_currentImage) {
-        
+
         if (m_painter) {
             // If painting in mouse release, make sure painter
             // is destructed or end()ed
             if (!m_paintIncremental) {
-                if (m_currentImage->undo()) m_painter->endTransaction();
+                if (m_currentImage->undo())
+                    m_painter->endTransaction();
                 KisPainter painter( m_source );
                 painter.setCompositeOp(m_compositeOp);
-                if (m_currentImage->undo()) painter.beginTransaction(m_transactionText);
-                painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target, m_opacity,
-                               m_dirtyRect.x(), m_dirtyRect.y(), m_dirtyRect.width(), m_dirtyRect.height());
+                if (m_currentImage->undo())
+                    painter.beginTransaction(m_transactionText);
+                painter.bitBlt(m_dirtyRect.x(), m_dirtyRect.y(), m_compositeOp, m_target,
+                               m_opacity,
+                               m_dirtyRect.x(), m_dirtyRect.y(),
+                               m_dirtyRect.width(), m_dirtyRect.height());
 
-                if (m_currentImage->undo()) m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
-                m_currentImage->removeLayer(m_tempLayer);
-                // The shared ptr layer vector in the group keeps the layer from being
-                // being removed if it isn't removed here. It would be much faster to
-                // keep the layer and clear it, but that isn't possible. Replacing the
-                // old templayer with a new one at the end of paint prevents at least
-                // the pause when painting again.
-                //m_target->clear();
-                if (m_currentImage->undo()) m_currentImage->undoAdapter()->endMacro();
+                KisLayerSupportsIndirectPainting* layer =
+                    dynamic_cast<KisLayerSupportsIndirectPainting*>(m_source->parentLayer());
+                layer->setTemporaryTarget(0);
+                m_source->parentLayer()->setDirty(m_dirtyRect);
+
+                if (m_currentImage->undo()) {
+                    m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
+                    m_currentImage->undoAdapter()->endMacro();
+                }
             } else {
-                if (m_currentImage->undo()) m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
+                if (m_currentImage->undo())
+                    m_currentImage->undoAdapter()->addCommand(m_painter->endTransaction());
             }
         }
         delete m_painter;

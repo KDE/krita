@@ -43,7 +43,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
 }
 
 KisAdjustmentLayer::KisAdjustmentLayer(const KisAdjustmentLayer& rhs)
-    : KisLayer(rhs)
+    : KisLayer(rhs), KisLayerSupportsIndirectPainting(rhs)
 {
     m_filterConfig = new KisFilterConfiguration(*rhs.m_filterConfig);
     if (rhs.m_selection) {

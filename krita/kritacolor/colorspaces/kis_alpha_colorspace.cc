@@ -194,6 +194,44 @@ void KisAlphaColorSpace::bitBlt(Q_UINT8 *dst,
             src += srcRowStride;
         }
         return;
+    case COMPOSITE_ALPHA_DARKEN: 
+        /* XXX ### FIXME
+        while (rows > 0) {
+            const Q_UINT8 *mask = srcAlphaMask;
+            Q_INT32 columns = cols;
+
+            while (columns > 0) {
+                Q_UINT8 srcAlpha = *src;
+                Q_UINT8 dstAlpha = *dst;
+
+                // apply the alphamask
+                if(mask != 0)
+                {
+                    if(*mask != OPACITY_OPAQUE)
+                        srcAlpha = UINT8_MULT(srcAlpha, *mask);
+                    mask++;
+                }
+
+                if (opacity != OPACITY_OPAQUE) {
+                    srcAlpha = UINT8_MULT(srcAlpha, opacity);
+                }
+
+                if (srcAlpha != OPACITY_TRANSPARENT && srcAlpha >= dstAlpha) {
+                    *dst = srcAlpha;
+                }
+
+                columns--;
+                src++;
+                dst++;
+            }
+
+            rows--;
+            src += srcRowStride;
+            dst += dststride;
+            if(srcAlphaMask)
+                srcAlphaMask += maskRowStride;
+        }
+        return;*/
     case COMPOSITE_OVER:
     default:
         if (opacity == OPACITY_TRANSPARENT)

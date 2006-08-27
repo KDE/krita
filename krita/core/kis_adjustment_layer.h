@@ -35,7 +35,7 @@ class KisFilterConfiguration;
  * is used by to influence the rendering of the layers under this layer in the
  * layerstack
  **/
-class KRITACORE_EXPORT KisAdjustmentLayer : public KisLayer
+class KRITACORE_EXPORT KisAdjustmentLayer : public KisLayer, public KisLayerSupportsIndirectPainting
 {
     Q_OBJECT
 
@@ -86,6 +86,7 @@ public:
     void setSelection(bool b) { m_showSelection = b; }
 
     virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
+
 private:
     bool m_showSelection;
     KisFilterConfiguration * m_filterConfig;

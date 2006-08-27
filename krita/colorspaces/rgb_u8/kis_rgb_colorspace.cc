@@ -313,6 +313,55 @@ void KisRgbColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
     }
 }
 
+
+void KisRgbColorSpace::compositeAlphaDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
+                                     const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride,
+                                     const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride,
+                                     Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
+{
+    while (rows > 0) {
+
+        const Q_UINT8 *src = srcRowStart;
+        Q_UINT8 *dst = dstRowStart;
+        const Q_UINT8 *mask = maskRowStart;
+        Q_INT32 columns = numColumns;
+
+        while (columns > 0) {
+
+            Q_UINT8 srcAlpha = src[PIXEL_ALPHA];
+            Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
+
+            // apply the alphamask
+            if(mask != 0)
+            {
+                if(*mask != OPACITY_OPAQUE)
+                    srcAlpha = UINT8_MULT(srcAlpha, *mask);
+                mask++;
+            }
+
+            if (opacity != OPACITY_OPAQUE) {
+                srcAlpha = UINT8_MULT(srcAlpha, opacity);
+            }
+
+            if (srcAlpha != OPACITY_TRANSPARENT && srcAlpha >= dstAlpha) {
+                dst[PIXEL_ALPHA] = srcAlpha;
+                memcpy(dst, src, MAX_CHANNEL_RGB * sizeof(Q_UINT8));
+            }
+
+            columns--;
+            src += MAX_CHANNEL_RGBA;
+            dst += MAX_CHANNEL_RGBA;
+        }
+
+        rows--;
+        srcRowStart += srcRowStride;
+        dstRowStart += dstRowStride;
+        if(maskRowStart)
+            maskRowStart += maskRowStride;
+    }
+}
+
+
 void KisRgbColorSpace::compositeMultiply(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride, const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride, const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
 {
     while (rows > 0) {
@@ -1284,6 +1333,9 @@ void KisRgbColorSpace::bitBlt(Q_UINT8 *dst,
     case COMPOSITE_OVER:
         compositeOver(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
         break;
+    case COMPOSITE_ALPHA_DARKEN:
+        compositeAlphaDarken(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
+        break;
     case COMPOSITE_IN:
         compositeIn(pixelSize(), dst, dstRowStride, src, srcRowStride, rows, cols, opacity);
         break;
@@ -1404,6 +1456,7 @@ KisCompositeOpList KisRgbColorSpace::userVisiblecompositeOps() const
     KisCompositeOpList list;
 
     list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KisCompositeOp(COMPOSITE_ALPHA_DARKEN));
     list.append(KisCompositeOp(COMPOSITE_MULT));
     list.append(KisCompositeOp(COMPOSITE_BURN));
     list.append(KisCompositeOp(COMPOSITE_DODGE));

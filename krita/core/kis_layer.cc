@@ -584,4 +584,28 @@ void KisLayer::notifyPropertyChanged()
         image()->notifyPropertyChanged(this);
 }
 
+void KisLayerSupportsIndirectPainting::setTemporaryTarget(KisPaintDeviceSP t) {
+     m_temporaryTarget = t;
+}
+
+void KisLayerSupportsIndirectPainting::setTemporaryCompositeOp(const KisCompositeOp& c) {
+     m_compositeOp = c;
+}
+
+void KisLayerSupportsIndirectPainting::setTemporaryOpacity(Q_UINT8 o) {
+    m_compositeOpacity = o;
+}
+
+KisPaintDeviceSP KisLayerSupportsIndirectPainting::temporaryTarget() {
+    return m_temporaryTarget;
+}
+
+KisCompositeOp KisLayerSupportsIndirectPainting::temporaryCompositeOp() const {
+    return m_compositeOp;
+}
+
+Q_UINT8 KisLayerSupportsIndirectPainting::temporaryOpacity() const {
+    return m_compositeOpacity;
+}
+
 #include "kis_layer.moc"

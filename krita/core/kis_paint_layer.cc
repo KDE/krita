@@ -70,7 +70,8 @@ KisPaintLayer::KisPaintLayer(KisImage *img, const QString& name, Q_UINT8 opacity
     m_editMask = true;
 }
 
-KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) : KisLayer(rhs)
+KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs) :
+        KisLayer(rhs), KisLayerSupportsIndirectPainting(rhs)
 {
     m_paintdev = new KisPaintDevice( *rhs.m_paintdev.data() );
     m_paintdev->setParentLayer(this);

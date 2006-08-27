@@ -252,6 +252,10 @@ void KisGrayColorSpace::bitBlt(Q_UINT8 *dst,
         }
     }
         break;
+    case COMPOSITE_ALPHA_DARKEN:
+        compositeAlphaDarken(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
+        break;
+
     default:
         break;
     }
@@ -942,5 +946,52 @@ void KisGrayColorSpace::compositeErase(Q_UINT8 *dst,
         if(srcAlphaMask)
             srcAlphaMask += maskRowStride;
         src += srcRowSize;
+    }
+}
+
+void KisGrayColorSpace::compositeAlphaDarken(Q_UINT8 *dstRowStart, Q_INT32 dstRowStride,
+                                     const Q_UINT8 *srcRowStart, Q_INT32 srcRowStride,
+                                     const Q_UINT8 *maskRowStart, Q_INT32 maskRowStride,
+                                     Q_INT32 rows, Q_INT32 numColumns, Q_UINT8 opacity)
+{
+    while (rows > 0) {
+
+        const Q_UINT8 *src = srcRowStart;
+        Q_UINT8 *dst = dstRowStart;
+        const Q_UINT8 *mask = maskRowStart;
+        Q_INT32 columns = numColumns;
+
+        while (columns > 0) {
+
+            Q_UINT8 srcAlpha = src[PIXEL_GRAY_ALPHA];
+            Q_UINT8 dstAlpha = dst[PIXEL_GRAY_ALPHA];
+
+            // apply the alphamask
+            if(mask != 0)
+            {
+                if(*mask != OPACITY_OPAQUE)
+                    srcAlpha = UINT8_MULT(srcAlpha, *mask);
+                mask++;
+            }
+
+            if (opacity != OPACITY_OPAQUE) {
+                srcAlpha = UINT8_MULT(srcAlpha, opacity);
+            }
+
+            if (srcAlpha != OPACITY_TRANSPARENT && srcAlpha >= dstAlpha) {
+                dst[PIXEL_GRAY_ALPHA] = srcAlpha;
+                memcpy(dst, src, MAX_CHANNEL_GRAYSCALE * sizeof(Q_UINT8));
+            }
+
+            columns--;
+            src += MAX_CHANNEL_GRAYSCALEA;
+            dst += MAX_CHANNEL_GRAYSCALEA;
+        }
+
+        rows--;
+        srcRowStart += srcRowStride;
+        dstRowStart += dstRowStride;
+        if(maskRowStart)
+            maskRowStart += maskRowStride;
     }
 }

@@ -72,6 +72,12 @@ public:
 
         QRect rc = layer->paintDevice()->extent() & m_rc;
 
+        // Indirect painting?
+        KisPaintDeviceSP tempTarget = layer->temporaryTarget();
+        if (tempTarget) {
+            rc = (layer->paintDevice()->extent() | tempTarget->extent()) & m_rc;
+        }
+
         sx = rc.left();
         sy = rc.top();
         w  = rc.width();
@@ -80,9 +86,15 @@ public:
         dy = sy;
 
         KisPainter gc(m_projection);
+        KisPaintDeviceSP source = layer->paintDevice();
 
         if (!layer->hasMask()) {
-            gc.bitBlt(dx, dy, layer->compositeOp(), layer->paintDevice(), layer->opacity(), sx, sy, w, h);
+            if (tempTarget) {
+                KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
+                source = paintIndirect(source, temp, layer, sx, sy, dx, dy, w, h);
+            }
+
+            gc.bitBlt(dx, dy, layer->compositeOp(), source, layer->opacity(), sx, sy, w, h);
         } else {
             if (layer->renderMask()) {
                 // To display the mask, we don't do things with composite op and opacity
@@ -114,13 +126,35 @@ public:
                     while (!it.isDone())
                         ++it;
                 }
+                if (tempTarget) {
+                    KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
+                    mask = paintIndirect(mask, temp, layer, sx, sy, dx, dy, w, h);
+                }
 
                 gc.bitBlt(dx, dy, COMPOSITE_OVER, mask, OPACITY_OPAQUE, sx, sy, w, h);
             } else {
+                KisSelectionSP mask = layer->getMaskAsSelection();
+                // The indirect painting happens on the mask
+                if (tempTarget) {
+                    KisPaintDeviceSP maskSrc = layer->getMask();
+                    KisPaintDeviceSP temp = new KisPaintDevice(maskSrc->colorSpace());
+                    temp = paintIndirect(maskSrc, temp, layer, sx, sy, dx, dy, w, h);
+                    // Blegh
+                    KisRectIteratorPixel srcIt = temp->createRectIterator(sx, sy, w, h, false);
+                    KisRectIteratorPixel dstIt = mask->createRectIterator(sx, sy, w, h, true);
+
+                    while(!dstIt.isDone()) {
+                        // Same as in convertMaskToSelection
+                        *dstIt.rawData() = *srcIt.rawData();
+                        ++srcIt;
+                        ++dstIt;
+                    }
+                }
+
                 gc.bltSelection(dx, dy,
                                 layer->compositeOp(),
-                                layer->paintDevice(),
-                                layer->getMaskAsSelection(),
+                                source,
+                                mask,
                                 layer->opacity(), sx, sy, w, h);
             }
         }
@@ -207,6 +241,11 @@ public:
         if (!layer->visible())
             return true;
 
+        KisPaintDeviceSP tempTarget = layer->temporaryTarget();
+        if (tempTarget) {
+            m_rc = (layer->extent() | tempTarget->extent()) & m_rc;
+        }
+
         if (m_rc.width() == 0 || m_rc.height() == 0) // Don't even try
             return true;
 
@@ -224,9 +263,11 @@ public:
         // Copy of the projection -- use the copy-on-write trick. XXX NO COPY ON WRITE YET =(
         //KisPaintDeviceSP tmp = new KisPaintDevice(*m_projection);
         KisPaintDeviceSP tmp = 0;
+        KisSelectionSP sel = selection;
         // If there's a selection, only keep the selected bits
         if (selection != 0) {
             tmp = new KisPaintDevice(m_projection->colorSpace());
+
             KisPainter gc(tmp);
             QRect selectedRect = selection->selectedRect();
             selectedRect &= m_rc;
@@ -240,6 +281,14 @@ public:
             //kdDebug() << k_funcinfo << selectedRect << endl;
             tmp->setX(selection->getX());
             tmp->setY(selection->getY());
+
+            // Indirect painting
+            if (tempTarget) {
+                sel = new KisSelection();
+                sel = paintIndirect(selection.data(), sel, layer, m_rc.left(), m_rc.top(),
+                                    m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
+            }
+
             gc.bitBlt(selectedRect.x(), selectedRect.y(), COMPOSITE_COPY, m_projection,
                       selectedRect.x(), selectedRect.y(),
                       selectedRect.width(), selectedRect.height());
@@ -257,11 +306,12 @@ public:
         f->process(tmp, tmp, cfg, m_rc);
 
         delete cmd;
+
         // Copy the filtered bits onto the projection 
         KisPainter gc(m_projection);
         if (selection)
             gc.bltSelection(m_rc.left(), m_rc.top(),
-                            COMPOSITE_OVER, tmp, selection, layer->opacity(),
+                            COMPOSITE_OVER, tmp, sel, layer->opacity(),
                             m_rc.left(), m_rc.top(), m_rc.width(), m_rc.height());
         else
             gc.bitBlt(m_rc.left(), m_rc.top(),
@@ -279,6 +329,21 @@ public:
     }
 
 private:
+    // Helper for the indirect painting
+    template<class Target>
+    KSharedPtr<Target> paintIndirect(KisPaintDeviceSP source,
+                                     KSharedPtr<Target> target,
+                                     KisLayerSupportsIndirectPainting* layer,
+                                     Q_INT32 sx, Q_INT32 sy, Q_INT32 dx, Q_INT32 dy,
+                                     Q_INT32 w, Q_INT32 h) {
+        KisPainter gc2(target.data());
+        gc2.bitBlt(dx, dy, COMPOSITE_COPY, source,
+                   OPACITY_OPAQUE, sx, sy, w, h);
+        gc2.bitBlt(dx, dy, layer->temporaryCompositeOp(), layer->temporaryTarget(),
+                   layer->temporaryOpacity(), sx, sy, w, h);
+        gc2.end();
+        return target;
+    }
     KisPaintDeviceSP m_projection;
     QRect m_rc;
 };

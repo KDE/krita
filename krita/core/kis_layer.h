@@ -210,7 +210,6 @@ public:
     /// Accept the KisLayerVisitor (for the Visitor design pattern), should call the correct function on the KisLayerVisitor for this layer type
     virtual bool accept(KisLayerVisitor &) = 0;
 
-
 private:
     friend class KisGroupLayer;
 
@@ -231,6 +230,22 @@ private:
 
     // Operation used to composite this layer with the layers _under_ this layer
     KisCompositeOp m_compositeOp;
+};
+
+// For classes that support indirect painting
+class KRITACORE_EXPORT KisLayerSupportsIndirectPainting {
+    // To simulate the indirect painting
+    KisPaintDeviceSP m_temporaryTarget;
+    KisCompositeOp m_compositeOp;
+    Q_UINT8 m_compositeOpacity;
+public:
+    // Indirect painting
+    void setTemporaryTarget(KisPaintDeviceSP t);
+    void setTemporaryCompositeOp(const KisCompositeOp& c);
+    void setTemporaryOpacity(Q_UINT8 o);
+    KisPaintDeviceSP temporaryTarget();
+    KisCompositeOp temporaryCompositeOp() const;
+    Q_UINT8 temporaryOpacity() const;
 };
 
 #endif // KIS_LAYER_H_

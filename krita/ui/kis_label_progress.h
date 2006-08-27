@@ -26,7 +26,7 @@
 
 class QToolButton;
 class QProgressBar;
-class QTimer;
+class QTime;
 
 class KisLabelProgress : public QWidget, public KisProgressDisplayInterface {
     Q_OBJECT
@@ -51,7 +51,6 @@ private slots:
     virtual void subjectDestroyed();
 
 private slots:
-    void updateTimeout();
     void cancelPressed();
 
 private:
@@ -61,7 +60,7 @@ private:
     QProgressBar *m_bar;
     QToolButton *m_cancelButton;
     bool m_modal;
-    QTimer* m_timer;
+    QTime m_time;
 };
 
 #endif // KIS_LABEL_PROGRESS_H_

@@ -26,7 +26,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QProgressBar>
-#include <QTimer>
+#include <QTime>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -70,11 +70,6 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name) : super(pa
 
     m_bar = new QProgressBar(this);
     box->addWidget(m_bar, 1, Qt::AlignTop);
-
-    m_timer = new QTimer(this);
-    m_timer->setInterval(100);
-    m_timer->setSingleShot(true);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
 }
 
 KisLabelProgress::~KisLabelProgress()
@@ -120,6 +115,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
         }
 
         m_bar->setValue(0);
+        m_time.start();
     }
 }
 
@@ -161,11 +157,6 @@ bool KisLabelProgress::event(QEvent * e)
 
 void KisLabelProgress::reset()
 {
-    if(m_timer->isActive()) {
-        m_timer->stop();
-        updateTimeout();
-    }
-
     if (m_subject) {
         m_subject->disconnect(this);
         m_subject = 0;
@@ -186,26 +177,24 @@ void KisLabelProgress::reset()
 
 void KisLabelProgress::update(int percent)
 {
-    m_bar->setValue(percent);
-    if(! m_timer->isActive())
-        m_timer->start();
+    if(m_time.elapsed() >= 100) {
+        m_bar->setValue(percent);
+        KApplication::kApplication()->processEvents();
+        // The following is safer, but makes cancel impossible:
+        //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers);
+        m_time.restart();
+    }
 }
 
 void KisLabelProgress::updateStage(const QString&, int percent)
 {
-    m_bar->setValue(percent);
-    if(! m_timer->isActive())
-        m_timer->start();
-}
-
-void KisLabelProgress::updateTimeout()
-{
-    KApplication *app = KApplication::kApplication();
-    Q_ASSERT(app);
-    app->processEvents();
-    // The following is safer, but makes cancel impossible:
-    //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput |
-    //                                         QEventLoop::ExcludeSocketNotifiers);
+    if(m_time.elapsed() >= 100) {
+        m_bar->setValue(percent);
+        KApplication::kApplication()->processEvents();
+        // The following is safer, but makes cancel impossible:
+        //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput | QEventLoop::ExcludeSocketNotifiers);
+        m_time.restart();
+    }
 }
 
 void KisLabelProgress::cancelPressed()

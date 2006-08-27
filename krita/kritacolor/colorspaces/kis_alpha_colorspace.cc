@@ -195,43 +195,20 @@ void KisAlphaColorSpace::bitBlt(Q_UINT8 *dst,
         }
         return;
     case COMPOSITE_ALPHA_DARKEN: 
-        /* XXX ### FIXME
-        while (rows > 0) {
-            const Q_UINT8 *mask = srcAlphaMask;
-            Q_INT32 columns = cols;
-
-            while (columns > 0) {
-                Q_UINT8 srcAlpha = *src;
-                Q_UINT8 dstAlpha = *dst;
-
-                // apply the alphamask
-                if(mask != 0)
-                {
-                    if(*mask != OPACITY_OPAQUE)
-                        srcAlpha = UINT8_MULT(srcAlpha, *mask);
-                    mask++;
-                }
-
-                if (opacity != OPACITY_OPAQUE) {
-                    srcAlpha = UINT8_MULT(srcAlpha, opacity);
-                }
-
-                if (srcAlpha != OPACITY_TRANSPARENT && srcAlpha >= dstAlpha) {
-                    *dst = srcAlpha;
-                }
-
-                columns--;
-                src++;
-                dst++;
+        while (rows-- > 0) {
+            d = dst;
+            s = src;
+            for (i = cols; i > 0; i--, d++, s++) {
+                if (s[PIXEL_MASK] == OPACITY_TRANSPARENT)
+                    continue;
+                int srcAlpha = (s[PIXEL_MASK] * opacity + UINT8_MAX / 2) / UINT8_MAX;
+                if (srcAlpha > d[PIXEL_MASK])
+                    d[PIXEL_MASK] = srcAlpha;
             }
-
-            rows--;
-            src += srcRowStride;
             dst += dststride;
-            if(srcAlphaMask)
-                srcAlphaMask += maskRowStride;
+            src += srcRowStride;
         }
-        return;*/
+        return;
     case COMPOSITE_OVER:
     default:
         if (opacity == OPACITY_TRANSPARENT)

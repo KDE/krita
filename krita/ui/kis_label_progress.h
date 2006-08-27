@@ -19,13 +19,14 @@
 #ifndef KIS_LABEL_PROGRESS_H_
 #define KIS_LABEL_PROGRESS_H_
 
-#include <QFrame>
+#include <QWidget>
 #include <QEvent>
 
 #include "kis_progress_display_interface.h"
 
 class QToolButton;
 class QProgressBar;
+class QTimer;
 
 class KisLabelProgress : public QWidget, public KisProgressDisplayInterface {
     Q_OBJECT
@@ -50,6 +51,7 @@ private slots:
     virtual void subjectDestroyed();
 
 private slots:
+    void updateTimeout();
     void cancelPressed();
 
 private:
@@ -59,6 +61,8 @@ private:
     QProgressBar *m_bar;
     QToolButton *m_cancelButton;
     bool m_modal;
+    int m_percent;
+    QTimer* m_timer;
 };
 
 #endif // KIS_LABEL_PROGRESS_H_

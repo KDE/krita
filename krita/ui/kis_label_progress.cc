@@ -26,6 +26,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QProgressBar>
+#include <QTimer>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -69,6 +70,11 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name) : super(pa
 
     m_bar = new QProgressBar(this);
     box->addWidget(m_bar, 1, Qt::AlignTop);
+
+    m_timer = new QTimer(this);
+    m_timer->setInterval(100);
+    m_timer->setSingleShot(true);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
 }
 
 KisLabelProgress::~KisLabelProgress()
@@ -114,6 +120,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
         }
 
         m_bar->setValue(0);
+        updateTimeout();
     }
 }
 
@@ -155,6 +162,8 @@ bool KisLabelProgress::event(QEvent * e)
 
 void KisLabelProgress::reset()
 {
+    m_timer->stop();
+
     if (m_subject) {
         m_subject->disconnect(this);
         m_subject = 0;
@@ -175,24 +184,26 @@ void KisLabelProgress::reset()
 
 void KisLabelProgress::update(int percent)
 {
-    m_bar->setValue(percent);
-
-    KApplication *app = KApplication::kApplication();
-
-    app->processEvents();
-    // The following is safer, but makes cancel impossible:
-    //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput |
-    //                                         QEventLoop::ExcludeSocketNotifiers);
+    m_bar->setValue(m_percent);
+    if(! m_timer->isActive())
+        m_timer->start();
 }
 
 void KisLabelProgress::updateStage(const QString&, int percent)
 {
-    m_bar->setValue(percent);
+    m_bar->setValue(m_percent);
+    if(! m_timer->isActive())
+        m_timer->start();
+}
 
+void KisLabelProgress::updateTimeout()
+{
     KApplication *app = KApplication::kApplication();
     Q_ASSERT(app);
-
     app->processEvents();
+    // The following is safer, but makes cancel impossible:
+    //QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput |
+    //                                         QEventLoop::ExcludeSocketNotifiers);
 }
 
 void KisLabelProgress::cancelPressed()

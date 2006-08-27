@@ -119,8 +119,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
             QApplication::setOverrideCursor(KisCursor::waitCursor());
         }
 
-        m_percent = 0;
-        updateTimeout();
+        m_bar->setValue(0);
     }
 }
 
@@ -187,21 +186,20 @@ void KisLabelProgress::reset()
 
 void KisLabelProgress::update(int percent)
 {
-    m_percent = percent;
+    m_bar->setValue(percent);
     if(! m_timer->isActive())
         m_timer->start();
 }
 
 void KisLabelProgress::updateStage(const QString&, int percent)
 {
-    m_percent = percent;
+    m_bar->setValue(percent);
     if(! m_timer->isActive())
         m_timer->start();
 }
 
 void KisLabelProgress::updateTimeout()
 {
-    m_bar->setValue(m_percent);
     KApplication *app = KApplication::kApplication();
     Q_ASSERT(app);
     app->processEvents();

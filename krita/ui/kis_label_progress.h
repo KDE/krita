@@ -61,7 +61,6 @@ private:
     QProgressBar *m_bar;
     QToolButton *m_cancelButton;
     bool m_modal;
-    int m_percent;
     QTimer* m_timer;
 };
 

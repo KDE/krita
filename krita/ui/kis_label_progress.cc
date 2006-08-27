@@ -70,6 +70,8 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name) : super(pa
 
     m_bar = new QProgressBar(this);
     box->addWidget(m_bar, 1, Qt::AlignTop);
+
+    m_time.start();
 }
 
 KisLabelProgress::~KisLabelProgress()
@@ -115,7 +117,7 @@ void KisLabelProgress::setSubject(KisProgressSubject *subject, bool modal, bool 
         }
 
         m_bar->setValue(0);
-        m_time.start();
+        m_time.restart();
     }
 }
 
@@ -163,9 +165,8 @@ void KisLabelProgress::reset()
 
         if (m_modal) {
             QApplication::restoreOverrideCursor();
+            m_modal = false;
         }
-
-        m_modal = false;
     }
 
     releaseMouse();

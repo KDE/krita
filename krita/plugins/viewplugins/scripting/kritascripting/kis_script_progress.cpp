@@ -37,7 +37,7 @@ void KisScriptProgress::setProgressTotalSteps(Q_INT32 totalSteps)
 void KisScriptProgress::setProgress(Q_INT32 progress)
 {
     m_progressSteps = progress;
-    Q_INT32 progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
+    Q_INT32 progressPerCent = (m_progressSteps * 100) / (m_progressTotalSteps > 0 ? m_progressTotalSteps : 1);
 
     if (progressPerCent != m_lastProgressPerCent) {
 
@@ -53,7 +53,7 @@ void KisScriptProgress::incProgress()
 
 void KisScriptProgress::setProgressStage(const QString& stage, Q_INT32 progress)
 {
-    Q_INT32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+    Q_INT32 progressPerCent = (progress * 100) / (m_progressTotalSteps > 0 ? m_progressTotalSteps : 1);
     m_lastProgressPerCent = progress;
     emit notifyProgressStage( stage, progressPerCent);
 }

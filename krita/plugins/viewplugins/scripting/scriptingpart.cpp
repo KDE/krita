@@ -113,8 +113,8 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     d->view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
 #endif
 
-    connect(d->guiclient, SIGNAL(executionFinished( const Kross::ScriptAction* )), this, SLOT(executionFinished(const Kross::ScriptAction*)));
-    connect(d->guiclient, SIGNAL(executionStarted( const Kross::ScriptAction* )), this, SLOT(executionStarted(const Kross::ScriptAction*)));
+    connect(d->guiclient, SIGNAL(executionFinished(Kross::Action*)), this, SLOT(executionFinished(Kross::Action*)));
+    connect(d->guiclient, SIGNAL(executionStarted(Kross::Action*)), this, SLOT(executionStarted(Kross::Action*)));
 
     // do we need the monitor?
     ScriptingMonitor::instance()->monitor( d->guiclient );
@@ -128,16 +128,18 @@ ScriptingPart::~ScriptingPart()
     delete d;
 }
 
-void ScriptingPart::executionFinished(const Kross::Action*)
+void ScriptingPart::executionFinished(Kross::Action*)
 {
+    kDebug() << "ScriptingPart::executionFinished" << endl;
     d->view->canvasSubject()->document()->setModified(true);
     d->view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
     static_cast< Kross::KritaCore::KritaCoreProgress* >( d->module->progress() )->progressDone();
     QApplication::restoreOverrideCursor();
 }
 
-void ScriptingPart::executionStarted(const Kross::Action* act)
+void ScriptingPart::executionStarted(Kross::Action* act)
 {
+    kDebug() << "ScriptingPart::executionStarted" << endl;
 #if 0
     kDebug(41011) << act->getPackagePath() << endl;
     progress->setPackagePath( act->getPackagePath() );

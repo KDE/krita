@@ -56,7 +56,6 @@ KritaCoreModule::KritaCoreModule(KisView* view)
 	setObjectName("Krita");
 
 	d->progress = new KritaCoreProgress(view);
-
 #if 0
 	Kross::Manager::self().addObject(d->view->canvasSubject()->document(), "KritaDocument");
 	Kross::Manager::self().addObject(d->view, "KritaView");

@@ -161,12 +161,12 @@ namespace Kross {
             /**
              * This signal is emited when the execution of a script is started.
              */
-            void executionStarted(const Action*);
+            void executionStarted(Kross::Action*);
 
             /**
              * This signal is emited when the execution of a script is finished.
              */
-            void executionFinished(const Action*);
+            void executionFinished(Kross::Action*);
 
         private:
             /// \internal d-pointer class.

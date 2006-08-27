@@ -34,8 +34,8 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
 {
         Q_OBJECT
     public:
-        KritaCoreProgress(KisView* view) : KisProgressSubject(), m_view(view) {}
-        virtual ~KritaCoreProgress() {}
+        KritaCoreProgress(KisView* view);
+        virtual ~KritaCoreProgress();
 
     public:
 
@@ -43,6 +43,7 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
          * This function will set this class as the KisProgressSubject in view
          */
         void activateAsSubject();
+
         virtual void cancel() {}
 
     public slots:

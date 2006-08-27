@@ -39,8 +39,8 @@ class KRITASCRIPTING_EXPORT ScriptingMonitor : public QObject {
         static ScriptingMonitor* instance();
         void monitor(Kross::GUIClient* guiClient);
     signals:
-        void executionFinished(const Kross::Action* );
-        void executionStarted(const Kross::Action* );
+        void executionFinished(Kross::Action*);
+        void executionStarted(Kross::Action*);
     private:
         static ScriptingMonitor* s_instance;
 

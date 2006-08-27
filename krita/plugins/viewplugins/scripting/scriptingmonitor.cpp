@@ -34,8 +34,8 @@ ScriptingMonitor::~ScriptingMonitor()
 
 void ScriptingMonitor::monitor(Kross::GUIClient* guiClient)
 {
-    connect(guiClient, SIGNAL(executionFinished( const Kross::Action* )), SIGNAL(executionFinished( const Kross::Action* )));
-    connect(guiClient, SIGNAL(executionStarted( const Kross::Action* )), SIGNAL(executionStarted( const Kross::Action* )));
+    connect(guiClient, SIGNAL(executionFinished(Kross::Action*)), SIGNAL(executionFinished(Kross::Action*)));
+    connect(guiClient, SIGNAL(executionStarted(Kross::Action*)), SIGNAL(executionStarted(Kross::Action*)));
 }
 
 ScriptingMonitor* ScriptingMonitor::s_instance = 0;

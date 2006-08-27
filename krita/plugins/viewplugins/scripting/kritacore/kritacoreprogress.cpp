@@ -23,14 +23,32 @@
 
 using namespace Kross::KritaCore;
 
+KritaCoreProgress::KritaCoreProgress(KisView* view)
+    : KisProgressSubject()
+    , m_view(view)
+    , m_progressTotalSteps(0)
+{
+    //kDebug() << "KritaCoreProgress::KritaCoreProgress" << endl;
+}
+
+KritaCoreProgress::~KritaCoreProgress()
+{
+    //kDebug() << "KritaCoreProgress::~KritaCoreProgress" << endl;
+}
+
 void KritaCoreProgress::activateAsSubject()
 {
+    // set this class as the KisProgressSubject in view.
     m_view->canvasSubject()->progressDisplay()->setSubject( this, true, false /* TODO: how to cancel a script ? */ );
+    m_progressTotalSteps = 100; // let's us 100 as default (=100%)
 }
 
 void KritaCoreProgress::setProgressTotalSteps(uint totalSteps)
 {
-    m_progressTotalSteps = totalSteps;
+    if(m_progressTotalSteps < 1)
+        activateAsSubject();
+
+    m_progressTotalSteps = totalSteps > 1 ? totalSteps : 1;
     m_progressSteps = 0;
     m_lastProgressPerCent = 0;
     emit notifyProgress(0);
@@ -38,6 +56,9 @@ void KritaCoreProgress::setProgressTotalSteps(uint totalSteps)
 
 void KritaCoreProgress::setProgress(uint progress)
 {
+    if(m_progressTotalSteps < 1)
+        return;
+
     m_progressSteps = progress;
     qint32 progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
 
@@ -55,6 +76,9 @@ void KritaCoreProgress::incProgress()
 
 void KritaCoreProgress::setProgressStage(const QString& stage, uint progress)
 {
+    if(m_progressTotalSteps < 1)
+        return;
+
     qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
     m_lastProgressPerCent = progress;
     emit notifyProgressStage( stage, progressPerCent);
@@ -62,6 +86,7 @@ void KritaCoreProgress::setProgressStage(const QString& stage, uint progress)
 
 void KritaCoreProgress::progressDone()
 {
+    kDebug() << "KritaCoreProgress::progressDone" << endl;
     emit notifyProgressDone();
 }
 

@@ -35,13 +35,13 @@ namespace Kross {
 
 class ScriptingPart : public KParts::Plugin
 {
-    Q_OBJECT
+        Q_OBJECT
     public:
         ScriptingPart(QObject *parent, const QStringList &);
         virtual ~ScriptingPart();
     private slots:
-        void executionFinished(const Kross::Action*);
-        void executionStarted(const Kross::Action*);
+        void executionFinished(Kross::Action*);
+        void executionStarted(Kross::Action*);
     private:
         class Private;
         Private* const d;

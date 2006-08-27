@@ -152,6 +152,10 @@ void GUIClient::readConfig(KConfig* config)
             action->setIcon(KIcon(icon));
         if(! interpreter.isNull())
             action->setInterpreter(interpreter);
+        connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+        connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
+        connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+
         d->scriptsmenu->addAction(action);
     }
 
@@ -318,9 +322,8 @@ void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
 
 void GUIClient::executionSuccessfull()
 {
-    const Action* action = dynamic_cast< const Action* >( QObject::sender() );
-    if(action) {
-        emit executionFinished(action);
+    Action* action = dynamic_cast< Action* >( QObject::sender() );
+    emit executionFinished(action);
 #if 0
         ActionCollection* executedcollection = d->collections["executedscripts"];
         if(executedcollection) {
@@ -330,14 +333,12 @@ void GUIClient::executionSuccessfull()
             emit collectionChanged(executedcollection);
         }
 #endif
-    }
 }
 
 void GUIClient::executionFailed(const QString& errormessage, const QString& tracedetails)
 {
-    const Action* action = dynamic_cast< const Action* >( QObject::sender() );
-    if(action)
-        emit executionFinished(action);
+    Action* action = dynamic_cast< Action* >( QObject::sender() );
+    emit executionFinished(action);
     if(tracedetails.isEmpty())
         KMessageBox::error(0, errormessage);
     else
@@ -371,7 +372,7 @@ bool GUIClient::executeAction(Action::Ptr action)
 {
     connect(action.data(), SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
     connect(action.data(), SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
-    connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
+    connect(action.data(), SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
 
     action->trigger(); // activate the action and execute the script that way
 
@@ -457,6 +458,10 @@ bool GUIClient::installPackage(const KUrl& file)
         action->setIcon(KIcon(icon));
     if(! interpreter.isNull())
         action->setInterpreter(interpreter);
+    connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+    connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
+    connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+
     d->scriptsmenu->addAction(action);
     d->scriptsmenu->setEnabled(true);
 

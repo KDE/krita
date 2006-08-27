@@ -162,7 +162,10 @@ bool KisLabelProgress::event(QEvent * e)
 
 void KisLabelProgress::reset()
 {
-    m_timer->stop();
+    if(m_timer->isActive()) {
+        m_timer->stop();
+        updateTimeout();
+    }
 
     if (m_subject) {
         m_subject->disconnect(this);
@@ -184,14 +187,14 @@ void KisLabelProgress::reset()
 
 void KisLabelProgress::update(int percent)
 {
-    m_bar->setValue(m_percent);
+    m_bar->setValue(percent);
     if(! m_timer->isActive())
         m_timer->start();
 }
 
 void KisLabelProgress::updateStage(const QString&, int percent)
 {
-    m_bar->setValue(m_percent);
+    m_bar->setValue(percent);
     if(! m_timer->isActive())
         m_timer->start();
 }

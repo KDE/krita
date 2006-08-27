@@ -60,7 +60,7 @@ void KritaCoreProgress::setProgress(uint progress)
         return;
 
     m_progressSteps = progress;
-    qint32 progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
+    uint progressPerCent = (m_progressSteps * 100) / m_progressTotalSteps;
 
     if (progressPerCent != m_lastProgressPerCent) {
 
@@ -79,7 +79,7 @@ void KritaCoreProgress::setProgressStage(const QString& stage, uint progress)
     if(m_progressTotalSteps < 1)
         return;
 
-    qint32 progressPerCent = (progress * 100) / m_progressTotalSteps;
+    uint progressPerCent = (progress * 100) / m_progressTotalSteps;
     m_lastProgressPerCent = progress;
     emit notifyProgressStage( stage, progressPerCent);
 }

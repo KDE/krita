@@ -18,7 +18,14 @@
 
 #include "kritacoremodule.h"
 #include "kritacoreprogress.h"
+#include "krs_brush.h"
+#include "krs_color.h"
+#include "krs_filter.h"
 #include "krs_image.h"
+#include "krs_pattern.h"
+
+// qt
+//#include <Q3ValueList>
 
 // kde
 #include <kapplication.h>
@@ -32,6 +39,16 @@
 #include <kis_view.h>
 #include <kis_doc.h>
 #include <kis_image.h>
+#include <kis_autobrush_resource.h>
+#include <kis_resourceserver.h>
+#include <kis_brush.h>
+#include <kis_pattern.h>
+//#include <KoColorSpaceRegistry.h>
+//#include <kis_doc.h>
+//#include <kis_filter.h>
+//#include <kis_filter_registry.h>
+//#include <kis_image.h>
+//#include <kis_meta_registry.h>
 
 using namespace Kross::KritaCore;
 
@@ -90,52 +107,53 @@ QObject* KritaCoreModule::image()
     return document ? new Image(document->currentImage(), document) : 0;
 }
 
+QObject* KritaCoreModule::createRGBColor(int r, int g, int b)
+{
+    return new Color(r, g, b, QColor::Rgb);
+}
 
+QObject* KritaCoreModule::createHSVColor(int hue, int saturation, int value)
+{
+    return new Color(hue, saturation, value, QColor::Hsv);
+}
 
+QObject* KritaCoreModule::pattern(const QString& patternname)
+{
+    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("PatternServer");
+    foreach(KisResource* res, rServer->resources())
+        if(res->name() == patternname)
+            return new Pattern(dynamic_cast<KisPattern*>(res), true);
+    kWarning() << QString("Unknown pattern \"%1\"").arg(patternname) << endl;
+    return 0;
+}
 
+QObject* KritaCoreModule::brush(const QString& brushname)
+{
+    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("BrushServer");
+    foreach(KisResource* res, rServer->resources())
+        if(res->name() == brushname)
+            return new Brush(dynamic_cast<KisBrush*>(res), true);
+    kWarning() << QString("Unknown brush \"%1\"").arg(brushname) << endl;
+    return 0;
+}
 
+QObject* KritaCoreModule::createCircleBrush(uint w, uint h, uint hf, uint vf)
+{
+    KisAutobrushShape* kas = new KisAutobrushCircleShape(qMax(1u,w), qMax(1u,h), hf, vf);
+    QImage* brsh = new QImage();
+    kas->createBrush(brsh);
+    return new Brush(new KisAutobrushResource(*brsh), false);
+}
 
-
-
-
-
-
-
-
+QObject* KritaCoreModule::createRectBrush(uint w, uint h, uint hf, uint vf)
+{
+    KisAutobrushShape* kas = new KisAutobrushRectShape(qMax(1u,w), qMax(1u,h), hf, vf);
+    QImage* brsh = new QImage();
+    kas->createBrush(brsh);
+    return new Brush(new KisAutobrushResource(*brsh), false);
+}
 
 #if 0
-#include <kdebug.h>
-
-//#include <api/variant.h>
-//#include <api/qtobject.h>
-//#include <main/manager.h>
-
-#include <kis_autobrush_resource.h>
-#include <kis_brush.h>
-#include <KoColorSpaceRegistry.h>
-#include <kis_doc.h>
-#include <kis_filter.h>
-#include <kis_filter_registry.h>
-#include <kis_image.h>
-#include <kis_meta_registry.h>
-#include <kis_pattern.h>
-#include <kis_resourceserver.h>
-
-//#include "kis_script_progress.h"
-
-#include "krs_brush.h"
-#include "krs_color.h"
-#include "krs_doc.h"
-#include "krs_filter.h"
-#include "krs_image.h"
-#include "krs_pattern.h"
-//#include "krs_script_progress.h"
-//Added by qt3to4:
-//#include <Q3ValueList>
-#endif
-
-#if 0
-
 extern "C"
 {
     /**
@@ -148,53 +166,7 @@ extern "C"
     }
 }
 
-using namespace Kross::KritaCore;
-
-KritaCoreFactory::KritaCoreFactory(QString packagePath) : Kross::Api::Class<KritaCoreFactory>("KritaCoreFactory"), m_packagePath(packagePath)
-{
-    addFunction("newRGBColor", &KritaCoreFactory::newRGBColor);
-    addFunction("newHSVColor", &KritaCoreFactory::newHSVColor);
-    addFunction("getPattern", &KritaCoreFactory::getPattern);
-    addFunction("loadPattern", &KritaCoreFactory::loadPattern);
-    addFunction("getBrush", &KritaCoreFactory::getBrush);
-    addFunction("loadBrush", &KritaCoreFactory::loadBrush);
-    addFunction("getFilter", &KritaCoreFactory::getFilter);
-    addFunction("newCircleBrush", &KritaCoreFactory::newCircleBrush);
-    addFunction("newRectBrush", &KritaCoreFactory::newRectBrush);
-    addFunction("newImage", &KritaCoreFactory::newImage);
-    addFunction("getPackagePath", &KritaCoreFactory::getPackagePath);
-}
-
-Kross::Api::Object::Ptr KritaCoreFactory::newRGBColor(Kross::Api::List::Ptr args)
-{
-    Color* c = new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Rgb);
-    return Kross::Api::Object::Ptr(c);
-}
-Kross::Api::Object::Ptr KritaCoreFactory::newHSVColor(Kross::Api::List::Ptr args)
-{
-    return Kross::Api::Object::Ptr(new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Hsv));
-}
-
-Kross::Api::Object::Ptr KritaCoreFactory::getPattern(Kross::Api::List::Ptr args)
-{
-    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("PatternServer");
-    Q3ValueList<KisResource*> resources = rServer->resources();
-
-    QString name = Kross::Api::Variant::toString(args->item(0));
-
-    for (Q3ValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
-    {
-        if((*it)->name() == name)
-        {
-            return Kross::Api::Object::Ptr(new Pattern(dynamic_cast<KisPattern*>(*it), true));
-        }
-    }
-    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(  i18n("Unknown pattern") ) );
-    return Kross::Api::Object::Ptr(0);
-
-}
-
-Kross::Api::Object::Ptr KritaCoreFactory::loadPattern(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr KritaCoreModule::loadPattern(Kross::Api::List::Ptr args)
 {
     QString filename = Kross::Api::Variant::toString(args->item(0));
     KisPattern* pattern = new KisPattern(filename);
@@ -208,25 +180,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::loadPattern(Kross::Api::List::Ptr args
     }
 }
 
-Kross::Api::Object::Ptr KritaCoreFactory::getBrush(Kross::Api::List::Ptr args)
-{
-    KisResourceServerBase* rServer = KisResourceServerRegistry::instance()->get("BrushServer");
-    Q3ValueList<KisResource*> resources = rServer->resources();
-
-    QString name = Kross::Api::Variant::toString(args->item(0));
-
-    for (Q3ValueList<KisResource*>::iterator it = resources.begin(); it != resources.end(); ++it )
-    {
-        if((*it)->name() == name)
-        {
-            return Kross::Api::Object::Ptr(new Brush(dynamic_cast<KisBrush*>(*it), true));
-        }
-    }
-    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("Unknown brush") ) );
-    return Kross::Api::Object::Ptr(0);
-}
-
-Kross::Api::Object::Ptr KritaCoreFactory::loadBrush(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr KritaCoreModule::loadBrush(Kross::Api::List::Ptr args)
 {
     QString filename = Kross::Api::Variant::toString(args->item(0));
     KisBrush* brush = new KisBrush(filename);
@@ -240,47 +194,14 @@ Kross::Api::Object::Ptr KritaCoreFactory::loadBrush(Kross::Api::List::Ptr args)
     }
 }
 
-Kross::Api::Object::Ptr KritaCoreFactory::getFilter(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr KritaCoreModule::getFilter(Kross::Api::List::Ptr args)
 {
     QString name = Kross::Api::Variant::toString(args->item(0));
     KisFilter* filter = KisFilterRegistry::instance()->get(name).data();
     return Kross::Api::Object::Ptr(new Filter(filter));
 }
 
-Kross::Api::Object::Ptr KritaCoreFactory::newCircleBrush(Kross::Api::List::Ptr args)
-{
-    uint w = qMax(1u, Kross::Api::Variant::toUInt(args->item(0)));
-    uint h = qMax(1u, Kross::Api::Variant::toUInt(args->item(1)));
-    uint hf = 0;
-    uint vf = 0;
-    if( args.count() > 2)
-    {
-        hf = Kross::Api::Variant::toUInt(args->item(2));
-        vf = Kross::Api::Variant::toUInt(args->item(3));
-    }
-    KisAutobrushShape* kas = new KisAutobrushCircleShape(w, h, hf, vf);
-    QImage* brsh = new QImage();
-    kas->createBrush(brsh);
-    return Kross::Api::Object::Ptr(new Brush(new KisAutobrushResource(*brsh), false));
-}
-Kross::Api::Object::Ptr KritaCoreFactory::newRectBrush(Kross::Api::List::Ptr args)
-{
-    uint w = qMax(1u, Kross::Api::Variant::toUInt(args->item(0)));
-    uint h = qMax(1u, Kross::Api::Variant::toUInt(args->item(1)));
-    uint hf = 0;
-    uint vf = 0;
-    if( args.count() > 2)
-    {
-        hf = Kross::Api::Variant::toUInt(args->item(2));
-        vf = Kross::Api::Variant::toUInt(args->item(3));
-    }
-    KisAutobrushShape* kas = new KisAutobrushRectShape(w, h, hf, vf);
-    QImage* brsh = new QImage();
-    kas->createBrush(brsh);
-    return Kross::Api::Object::Ptr(new Brush(new KisAutobrushResource(*brsh), false));
-}
-
-Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
+Kross::Api::Object::Ptr KritaCoreModule::newImage(Kross::Api::List::Ptr args)
 {
     int w = Kross::Api::Variant::toInt(args->item(0));
     int h = Kross::Api::Variant::toInt(args->item(1));
@@ -301,7 +222,7 @@ Kross::Api::Object::Ptr KritaCoreFactory::newImage(Kross::Api::List::Ptr args)
     return Kross::Api::Object::Ptr(new Image(KisImageSP(new KisImage(0,w,h, cs, name))));
 }
 
-Kross::Api::Object::Ptr KritaCoreFactory::getPackagePath(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr KritaCoreModule::getPackagePath(Kross::Api::List::Ptr)
 {
     return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_packagePath));
 }
@@ -346,7 +267,7 @@ KritaCoreModule::KritaCoreModule(Kross::Api::Manager* manager)
                 }
         }
     }
-    m_factory = new KritaCoreFactory(packagePath);
+    m_factory = new KritaCoreModule(packagePath);
 }
 
 KritaCoreModule::~KritaCoreModule()

@@ -103,6 +103,8 @@ namespace Kross {
             return INT2FIX(i);
         }
         inline static int toVariant(VALUE value) {
+            if(TYPE(value) == T_FLOAT) // ruby is not able to convert double into int :-/
+                return int(NUM2DBL(value));
             return FIX2INT(value);
         }
     };
@@ -114,6 +116,8 @@ namespace Kross {
             return UINT2NUM(i);
         }
         inline static uint toVariant(VALUE value) {
+            if(TYPE(value) == T_FLOAT) // ruby is not able to convert double into uint :-/
+                return uint(NUM2DBL(value));
             return FIX2UINT(value);
         }
     };

@@ -245,7 +245,9 @@ MetaType* RubyMetaTypeFactory::create(const char* typeName, VALUE value)
             //int metaid = QMetaType::type(typeName);
 
             if( RubyExtension::isRubyExtension(value) ) {
-                krossdebug( QString("RubyMetaTypeFactory::create VALUE with typename '%1' is a RubyExtension object").arg(typeName) );
+                #ifdef KROSS_RUBY_VARIANT_DEBUG
+                    krossdebug( QString("RubyMetaTypeFactory::create VALUE with typename '%1' is a RubyExtension object").arg(typeName) );
+                #endif
 
                 RubyExtension* extension;
                 Data_Get_Struct(value, RubyExtension, extension);

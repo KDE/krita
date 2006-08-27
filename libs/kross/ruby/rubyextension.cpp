@@ -176,9 +176,8 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
         const int typelistcount = typelist.count();
         bool hasreturnvalue = strcmp(metamethod.typeName(),"") != 0;
 
-        Q_ASSERT(typelistcount < 10);
-
-        // exact 1 returnvalue + 0..n arguments
+        // exact 1 returnvalue + 0..9 arguments
+        Q_ASSERT(typelistcount <= 10);
         MetaType* variantargs[ typelistcount + 1 ];
         void* voidstarargs[ typelistcount + 1 ];
 

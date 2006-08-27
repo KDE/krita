@@ -18,26 +18,15 @@
 
 #include "krs_color.h"
 
-namespace Kross {
+using namespace Kross::KritaCore;
 
-namespace KritaCore {
-
-Color::Color ( int x, int y, int z, QColor::Spec colorSpec )
-    : QObject(), m_color(x,y,z,colorSpec)
-{
-    setObjectName("KritaColor");
-}
-
-Color::Color()
- : QObject()
+Color::Color(int x, int y, int z, QColor::Spec colorSpec)
+    : QObject()
+    , m_color(x,y,z,colorSpec)
 {
     setObjectName("KritaColor");
 }
 
 Color::~Color()
 {
-}
-
-}
-
 }

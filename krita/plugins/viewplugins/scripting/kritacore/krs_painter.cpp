@@ -19,21 +19,20 @@
 #include "krs_painter.h"
 
 #include <kis_convolution_painter.h>
-#include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
-#include <kis_painter.h>
 
 #include "krs_brush.h"
 #include "krs_color.h"
 #include "krs_pattern.h"
 
-namespace Kross {
-
-namespace KritaCore {
+using namespace Kross::KritaCore;
 
 Painter::Painter(KisPaintLayerSP layer)
-    : QObject(), m_layer(layer),m_painter(new KisPainter(layer->paintDevice())),m_threshold(1)
+    : QObject()
+    , m_layer(layer)
+    , m_painter(new KisPainter(layer->paintDevice()))
+    , m_threshold(1)
 {
     setObjectName("KritaPainter");
 }
@@ -45,26 +44,21 @@ Painter::~Painter()
 }
 
 #if 0
-Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
+void Painter::convolve()
 {
     KisConvolutionPainter* cp = new KisConvolutionPainter(m_painter->device());
     QRect rect;
     KisKernel kernel;
     kernel.factor = Kross::Api::Variant::toInt(args->item(1));
     kernel.offset = Kross::Api::Variant::toInt(args->item(2));
-    
+
     uint borderop = 3;
     if( args.count() > 3 )
-    {
         borderop = Kross::Api::Variant::toUInt(args->item(3));
-    }
     uint channelsFlag = KoChannelInfo::FLAG_COLOR;
     if( args.count() > 4 )
-    {
         channelsFlag = Kross::Api::Variant::toUInt(args->item(4));
-    }
-    if( args.count() > 5)
-    {
+    if( args.count() > 5) {
         uint x = Kross::Api::Variant::toUInt(args->item(5));
         uint y = Kross::Api::Variant::toUInt(args->item(6));
         uint w = Kross::Api::Variant::toUInt(args->item(7));
@@ -75,105 +69,59 @@ Kross::Api::Object::Ptr Painter::convolve(Kross::Api::List::Ptr args)
         QRect r2 = paintLayer()->image()->bounds();
         rect = r1.intersect(r2);
     }
-    
+
     QList<QVariant> kernelH = Kross::Api::Variant::toList( args->item(0) );
-    
+
     QVariant firstlineVariant = *kernelH.begin();
     if(firstlineVariant.type() != QVariant::List)
-    {
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1",QString("applyConvolution"))) );
-    }
-    
+
     QList<QVariant> firstline = firstlineVariant.toList();
-    
+
     kernel.height = kernelH.size();
     kernel.width = firstline.size();
-    
     kernel.data = new qint32[kernel.height * kernel.width];
-    
+
     uint i = 0;
-    for(QList<QVariant>::iterator itK = kernelH.begin(); itK != kernelH.end(); itK++, i ++ )
-    {
+    for(QList<QVariant>::iterator itK = kernelH.begin(); itK != kernelH.end(); itK++, i ++ ) {
         QVariant lineVariant = *kernelH.begin();
         if(lineVariant.type() != QVariant::List)
-        {
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1",QString("applyConvolution"))) );
-        }
         QList<QVariant> line = firstlineVariant.toList();
         if(line.size() != kernel.width)
-        {
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(i18n("An error has occured in %1",QString("applyConvolution"))) );
-        }
         uint j = 0;
         for(QList<QVariant>::iterator itLine = line.begin(); itLine != line.end(); itLine++, j ++ )
-        {
             kernel.data[ j + i * kernel.width ] = (*itLine).toInt();
-        }
     }
     cp->applyMatrix(KisKernelSP(&kernel), rect.x(), rect.y(), rect.width(), rect.height(), (KisConvolutionBorderOp)borderop, (KoChannelInfo::enumChannelFlags) channelsFlag);
-    
+
     delete[] kernel.data;
     return Kross::Api::Object::Ptr(0);
 }
+#endif
 
-
-KisFillPainter* Painter::createFillPainter()
+void Painter::setFillThreshold(int threshold)
 {
-    KisFillPainter* fp = new KisFillPainter(m_painter->device());
-    fp->setBrush( m_painter->brush() );
-    fp->setFillColor( m_painter->fillColor() );
-    fp->setPaintColor( m_painter->paintColor() );
-    fp->setFillStyle( m_painter->fillStyle() );
-    fp->setOpacity( m_painter->opacity() );
-    fp->setPattern( m_painter->pattern() );
-    return fp;
+    m_threshold = threshold;
 }
 
-Kross::Api::Object::Ptr Painter::setFillThreshold(Kross::Api::List::Ptr args)
-{
-    m_threshold = Kross::Api::Variant::toInt(args->item(0));
-    return Kross::Api::Object::Ptr(0);
-}
-Kross::Api::Object::Ptr Painter::fillColor(Kross::Api::List::Ptr args)
+void Painter::fillColor(uint x, uint y)
 {
     KisFillPainter* fp = createFillPainter();
-    uint x = Kross::Api::Variant::toUInt(args->item(0));
-    uint y = Kross::Api::Variant::toUInt(args->item(1));
-
-    fp->fillColor( x, y );
-    return Kross::Api::Object::Ptr(0);
+    fp->fillColor(x, y);
 }
-Kross::Api::Object::Ptr Painter::fillPattern(Kross::Api::List::Ptr args)
+
+void Painter::fillPattern(uint x, uint y)
 {
     KisFillPainter* fp = createFillPainter();
-    uint x = Kross::Api::Variant::toUInt(args->item(0));
-    uint y = Kross::Api::Variant::toUInt(args->item(1));
     fp->fillPattern(x, y);
-    return Kross::Api::Object::Ptr(0);
 }
 
-Kross::Api::Object::Ptr Painter::setStrokeStyle(Kross::Api::List::Ptr args)
+void Painter::setFillStyle(uint style)
 {
-    uint style = Kross::Api::Variant::toVariant(args->item(0)).toUInt();
-    KisPainter::StrokeStyle strokestyle;
-    switch(style)
-    {
-        case 1:
-            strokestyle = KisPainter::StrokeStyleBrush;
-            break;
-        default:
-            strokestyle = KisPainter::StrokeStyleNone;
-    }
-    m_painter->setStrokeStyle(strokestyle);
-    return Kross::Api::Object::Ptr(0);
-}
-
-Kross::Api::Object::Ptr Painter::setFillStyle(Kross::Api::List::Ptr args)
-{
-    uint style = Kross::Api::Variant::toVariant(args->item(0)).toUInt();
     KisPainter::FillStyle fillstyle;
-    switch(style)
-    {
+    switch(style) {
         case 1:
             fillstyle = KisPainter::FillStyleForegroundColor;
             break;
@@ -187,144 +135,102 @@ Kross::Api::Object::Ptr Painter::setFillStyle(Kross::Api::List::Ptr args)
             fillstyle = KisPainter::FillStyleNone;
     }
     m_painter->setFillStyle(fillstyle);
-    return Kross::Api::Object::Ptr(0);
 }
 
-Kross::Api::Object::Ptr Painter::setOpacity(Kross::Api::List::Ptr args)
+void Painter::setOpacity(uint opacity)
 {
-    quint8 opacity = Kross::Api::Variant::toVariant(args->item(0)).toUInt();
-    m_painter->setOpacity(opacity);
-    return Kross::Api::Object::Ptr(0);
+    m_painter->setOpacity( (quint8)opacity );
 }
 
-Kross::Api::Object::Ptr Painter::setDuplicateOffset(Kross::Api::List::Ptr args)
+void Painter::setStrokeStyle(uint style)
 {
-    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
-    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
+    KisPainter::StrokeStyle strokestyle;
+    switch(style) {
+        case 1:
+            strokestyle = KisPainter::StrokeStyleBrush;
+            break;
+        default:
+            strokestyle = KisPainter::StrokeStyleNone;
+    }
+    m_painter->setStrokeStyle(strokestyle);
+}
+
+void Painter::setDuplicateOffset(double x1, double y1)
+{
     m_painter->setDuplicateOffset(KisPoint(x1,y1));
-    return Kross::Api::Object::Ptr(0);
 }
 
-Kross::Api::Object::Ptr Painter::paintPolyline(Kross::Api::List::Ptr args)
+void Painter::paintPolyline(QVariantList pointsX, QVariantList pointsY)
 {
-    QList<QVariant> pointsX = Kross::Api::Variant::toList( args->item(0) );
-    QList<QVariant> pointsY = Kross::Api::Variant::toList( args->item(1) );
-    if(pointsX.size() != pointsY.size())
-    {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("the two lists should have the same size.") );
+    if(pointsX.size() != pointsY.size()) {
+        kWarning() << QString("The two lists of points should have the same size.") << endl;
+        return;
     }
     m_painter->paintPolyline( createPointsVector( pointsX, pointsY));
-    return Kross::Api::Object::Ptr(0);
 }
 
-Kross::Api::Object::Ptr Painter::paintLine(Kross::Api::List::Ptr args)
+void Painter::paintLine(double x1, double y1, double p1, double x2, double y2, double p2)
 {
-    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
-    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
-    double p1 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
-    double x2 = Kross::Api::Variant::toVariant(args->item(3)).toDouble();
-    double y2 = Kross::Api::Variant::toVariant(args->item(4)).toDouble();
-    double p2 = Kross::Api::Variant::toVariant(args->item(5)).toDouble();
     m_painter->paintLine(KisPoint( x1, y1), p1, 0.0, 0.0, KisPoint( x2, y2 ), p2, 0.0, 0.0 );
-    return Kross::Api::Object::Ptr(0);
 }
 
-Kross::Api::Object::Ptr Painter::paintBezierCurve(Kross::Api::List::Ptr args)
+void Painter::paintBezierCurve(double x1, double y1, double p1, double cx1, double cy1, double cx2, double cy2, double x2, double y2, double p2)
 {
-    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
-    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
-    double p1 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
-    double cx1 = Kross::Api::Variant::toVariant(args->item(3)).toDouble();
-    double cy1 = Kross::Api::Variant::toVariant(args->item(4)).toDouble();
-    double cx2 = Kross::Api::Variant::toVariant(args->item(5)).toDouble();
-    double cy2 = Kross::Api::Variant::toVariant(args->item(6)).toDouble();
-    double x2 = Kross::Api::Variant::toVariant(args->item(7)).toDouble();
-    double y2 = Kross::Api::Variant::toVariant(args->item(8)).toDouble();
-    double p2 = Kross::Api::Variant::toVariant(args->item(9)).toDouble();
     m_painter->paintBezierCurve( KisPoint(x1,y1), p1, 0.0, 0.0, KisPoint(cx1,cy1), KisPoint(cx2,cy2), KisPoint(x2,y2), p2, 0.0, 0.0);
-    return Kross::Api::Object::Ptr(0);
 }
 
-Kross::Api::Object::Ptr Painter::paintEllipse(Kross::Api::List::Ptr args)
+void Painter::paintEllipse(double x1, double y1, double x2, double y2, double pressure)
 {
-    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
-    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
-    double x2 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
-    double y2 = Kross::Api::Variant::toVariant(args->item(3)).toDouble();
-    double p1 = Kross::Api::Variant::toVariant(args->item(4)).toDouble();
-    m_painter->paintEllipse( KisPoint(x1,y1), KisPoint(x2,y2), p1, 0.0, 0.0 );
-    return Kross::Api::Object::Ptr(0);
+    m_painter->paintEllipse( KisPoint(x1,y1), KisPoint(x2,y2), pressure, 0.0, 0.0 );
 }
 
-Kross::Api::Object::Ptr Painter::paintPolygon(Kross::Api::List::Ptr args)
+void Painter::paintPolygon(QVariantList pointsX, QVariantList pointsY)
 {
-    QList<QVariant> pointsX = Kross::Api::Variant::toList( args->item(0) );
-    QList<QVariant> pointsY = Kross::Api::Variant::toList( args->item(1) );
-    if(pointsX.size() != pointsY.size())
-    {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("the two lists should have the same size.") );
+    if(pointsX.size() != pointsY.size()) {
+        kWarning() << "The two lists of points should have the same size." << endl;
+        return;
     }
-    m_painter->paintPolygon( createPointsVector(pointsX, pointsY));
-    return Kross::Api::Object::Ptr(0);
+    m_painter->paintPolygon( createPointsVector(pointsX, pointsY) );
 }
 
-Kross::Api::Object::Ptr Painter::paintRect(Kross::Api::List::Ptr args)
+void Painter::paintRect(double x, double y, double width, double height, double pressure)
 {
-    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
-    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
-    double x2 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
-    double y2 = Kross::Api::Variant::toVariant(args->item(3)).toDouble();
-    double p1 = Kross::Api::Variant::toVariant(args->item(4)).toDouble();
-    m_painter->paintRect( KisPoint(x1, y1), KisPoint(x2,y2), p1, 0, 0);
-    return Kross::Api::Object::Ptr(0);
+    m_painter->paintRect( KisPoint(x, y), KisPoint(width, height), pressure, 0, 0);
 }
 
-Kross::Api::Object::Ptr Painter::paintAt(Kross::Api::List::Ptr args)
+void Painter::paintAt(double x, double y, double pressure)
 {
-    double x1 = Kross::Api::Variant::toVariant(args->item(0)).toDouble();
-    double y1 = Kross::Api::Variant::toVariant(args->item(1)).toDouble();
-    double p1 = Kross::Api::Variant::toVariant(args->item(2)).toDouble();
-    m_painter->paintAt( KisPoint( x1, y1 ), p1, 0.0, 0.0);
-    return Kross::Api::Object::Ptr(0);
+    m_painter->paintAt( KisPoint( x, y ), pressure, 0.0, 0.0);
 }
 
-Kross::Api::Object::Ptr Painter::setBackgroundColor(Kross::Api::List::Ptr args)
+void Painter::setPaintColor(QObject* color)
 {
-    Color* c = (Color*)args->item(0);
-    m_painter->setBackgroundColor( KoColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
-    return Kross::Api::Object::Ptr(0);
+    Color* c = dynamic_cast< Color* >(color);
+    if(c) m_painter->setPaintColor( KoColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
 }
 
-Kross::Api::Object::Ptr Painter::setPaintColor(Kross::Api::List::Ptr args)
+void Painter::setBackgroundColor(QObject* color)
 {
-    Color* c = (Color*)args->item(0);
-    m_painter->setPaintColor( KoColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
-    return Kross::Api::Object::Ptr(0);
+    Color* c = dynamic_cast< Color* >(color);
+    if(c) m_painter->setBackgroundColor( KoColor(c->toQColor(), paintLayer()->paintDevice()->colorSpace() ));
 }
 
-Kross::Api::Object::Ptr Painter::setPattern(Kross::Api::List::Ptr args)
+void Painter::setPattern(QObject* pattern)
 {
-    Pattern* p = (Pattern*)args->item(0);
-    m_painter->setPattern( p->getPattern());
-    return Kross::Api::Object::Ptr(0);
+    Pattern* p = dynamic_cast< Pattern* >(pattern);
+    if(p) m_painter->setPattern( p->getPattern() );
 }
 
-
-Kross::Api::Object::Ptr Painter::setBrush(Kross::Api::List::Ptr args)
+void Painter::setBrush(QObject* brush)
 {
-    Brush* b = (Brush*)args->item(0);
-    m_painter->setBrush( b->getBrush());
-    return Kross::Api::Object::Ptr(0);
+    Brush* b = dynamic_cast< Brush* >(brush);
+    if(b) m_painter->setBrush( b->getBrush() );
 }
-Kross::Api::Object::Ptr Painter::setPaintOp(Kross::Api::List::Ptr args)
+
+void Painter::setPaintOp(const QString& paintopname)
 {
-    QString id = Kross::Api::Variant::toString(args->item(0));
-    KisPaintOp* op = KisPaintOpRegistry::instance()->paintOp( id, 0, m_painter );
-    m_painter->setPaintOp( op );
-    return Kross::Api::Object::Ptr(0);
-}
-#endif
-
+    KisPaintOp* op = KisPaintOpRegistry::instance()->paintOp( paintopname, 0, m_painter );
+    if(op) m_painter->setPaintOp( op );
 }
 
-}
+#include "krs_painter.moc"

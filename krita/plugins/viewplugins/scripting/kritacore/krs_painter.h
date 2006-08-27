@@ -24,28 +24,24 @@
 #include <kis_point.h>
 #include <kis_types.h>
 #include <kis_paint_layer.h>
+#include <kis_painter.h>
+#include <kis_fill_painter.h>
+
 //Added by qt3to4:
 #include <Q3ValueList>
 
-class KisPainter;
-class KisFillPainter;
-
-namespace Kross {
-
-namespace KritaCore {
+namespace Kross { namespace KritaCore {
 
 class Painter : public QObject
 {
-        //Q_OBJECT
+        Q_OBJECT
     public:
-        explicit Painter(KisPaintLayerSP layer);
-        ~Painter();
+        Painter(KisPaintLayerSP layer);
+        virtual ~Painter();
 
-    //public slots:
+    public slots: // Convolution
 
 #if 0
-
-        // Convolution
         /**
          * This function apply a convolution kernel to an image.
          * It takes at least three arguments :
@@ -65,46 +61,88 @@ class Painter : public QObject
          *  - width
          *  - height
          */
-        Kross::Api::Object::Ptr convolve(Kross::Api::List::Ptr args);
-        // Fill specific
+        void convolve();
+#endif
+
+    public slots: // Fill specific
+
         /**
          * Set the threshold the fill threshold.
          * It takes one argument :
          *  - threshold
          */
-        Kross::Api::Object::Ptr setFillThreshold(Kross::Api::List::Ptr args);
+        void setFillThreshold(int threshold);
+
         /**
          * Start filling color.
          * It takes two argument :
          *  - x
          *  - y
          */
-        Kross::Api::Object::Ptr fillColor(Kross::Api::List::Ptr args);
+        void fillColor(uint x, uint y);
+
         /**
          * start filling a pattern
          * It takes two argument :
          *  - x
          *  - y
          */
-        Kross::Api::Object::Ptr fillPattern(Kross::Api::List::Ptr args);
-        // Painting operations
+        void fillPattern(uint x, uint y);
+
+    public slots: // Style operation
+
+        /**
+         * This function set the fill style of the Painter.
+         * It takes one argument :
+         *  - 0 for none 1 for fill with foreground color 2 for fill with background color
+         * 3 for fill with a pattern
+         */
+        void setFillStyle(uint style);
+
+        /**
+         * This function set the opacity of the painting
+         * It takes one argument :
+         *  - opacity in the range 0 to 255
+         */
+        void setOpacity(uint opacity);
+
+        /**
+         * This function set the style of the stroke.
+         * It takes one argument :
+         *  - 0 for none 1 for brush
+         */
+        void setStrokeStyle(uint style);
+
+        /**
+         * This function define the duplicate offset.
+         * It takes two arguments :
+         *  - horizontal offset
+         *  - vertical offset
+         */
+        void setDuplicateOffset(double x1, double y1);
+
+    public slots: // Painting operations
+
         /**
          * This function will paint a polyline.
          * It takes two arguments :
          *  - a list of x position
          *  - a list of y position
          */
-        Kross::Api::Object::Ptr paintPolyline(Kross::Api::List::Ptr args);
+        void paintPolyline(QVariantList pointsX, QVariantList pointsY);
+
         /**
          * This function will paint a line.
-         * It takes five arguments :
+         * It takes six arguments :
          *  - x1
          *  - y1
+         *  - pressure1
          *  - x2
          *  - y2
-         *  - pressure
+         *  - pressure2
          */
-        Kross::Api::Object::Ptr paintLine(Kross::Api::List::Ptr args);
+        void paintLine(double x1, double y1, double p1, double x2, double y2, double p2);
+
         /**
          * This function will paint a Bezier curve.
          * It takes ten arguments :
@@ -123,7 +161,8 @@ class Painter : public QObject
          * (x2,y2) is the ending position, p2 is the pressure at the end. (cx1,cy1) and (cx2,cy2)
          * are the position of the control points.
          */
-        Kross::Api::Object::Ptr paintBezierCurve(Kross::Api::List::Ptr args);
+        void paintBezierCurve(double x1, double y1, double p1, double cx1, double cy1, double cx2, double cy2, double x2, double y2, double p2);
+
         /**
          * This function will paint an ellipse.
          * It takes five arguments :
@@ -135,14 +174,16 @@ class Painter : public QObject
          * 
          * Where (x1,y1) and (x2,y2) are the position of the two centers.
          */
-        Kross::Api::Object::Ptr paintEllipse(Kross::Api::List::Ptr args);
+        void paintEllipse(double x1, double y1, double x2, double y2, double pressure);
+
         /**
          * This function will paint a polygon.
          * It takes two arguments :
          *  - a list of x position
          *  - a list of y position
          */
-        Kross::Api::Object::Ptr paintPolygon(Kross::Api::List::Ptr args);
+        void paintPolygon(QVariantList pointsX, QVariantList pointsY);
+
         /**
          * This function will paint a rectangle.
          * It takes five arguments :
@@ -152,7 +193,8 @@ class Painter : public QObject
          *  - height
          *  - pressure
          */
-        Kross::Api::Object::Ptr paintRect(Kross::Api::List::Ptr args);
+        void paintRect(double x, double y, double width, double height, double pressure);
+
         /**
          * This function will paint at a given position.
          * It takes three arguments :
@@ -160,68 +202,46 @@ class Painter : public QObject
          *  - y
          *  - pressure
          */
-        Kross::Api::Object::Ptr paintAt(Kross::Api::List::Ptr args);
-        // Color operations
+        void paintAt(double x, double y, double pressure);
+
+    public slots: // Color operations
+
         /**
          * This functions set the paint color (also called foreground color).
          * It takes one argument :
-         *  - a Color
+         *  - a \a Color object e.g. create with \a KritaCoreModule::createRGBColor .
          */
-        Kross::Api::Object::Ptr setPaintColor(Kross::Api::List::Ptr args);
+        void setPaintColor(QObject* color);
+
         /**
          * This functions set the background color.
          * It takes one argument :
-         *  - a Color
+         *  - a \a Color object e.g. create with \a KritaCoreModule::createRGBColor .
          */
-        Kross::Api::Object::Ptr setBackgroundColor(Kross::Api::List::Ptr args);
-        // How is painting done operations
+        void setBackgroundColor(QObject* color);
+
+    public slots: // How is painting done operations
+
         /**
          * This functions set the pattern used for filling.
          * It takes one argument :
          *  - a Pattern object
          */
-        Kross::Api::Object::Ptr setPattern(Kross::Api::List::Ptr args);
+        void setPattern(QObject* pattern);
+
         /**
          * This functions set the brush used for painting.
          * It takes one argument :
          *  - a Brush object
          */
-        Kross::Api::Object::Ptr setBrush(Kross::Api::List::Ptr args);
+        void setBrush(QObject* brush);
+
         /**
          * This function define the paint operation.
          * It takes one argument :
          *  - the name of the paint operation
          */
-        Kross::Api::Object::Ptr setPaintOp(Kross::Api::List::Ptr args);
-        // Special settings
-        /**
-         * This function define the duplicate offset.
-         * It takes two arguments :
-         *  - horizontal offset
-         *  - vertical offset
-         */
-        Kross::Api::Object::Ptr setDuplicateOffset(Kross::Api::List::Ptr args);
-        // Style operation
-        /**
-         * This function set the opacity of the painting
-         * It takes one argument :
-         *  - opacity in the range 0 to 255
-         */
-        Kross::Api::Object::Ptr setOpacity(Kross::Api::List::Ptr args);
-        /**
-         * This function set the style of the stroke.
-         * It takes one argument :
-         *  - 0 for none 1 for brush
-         */
-        Kross::Api::Object::Ptr setStrokeStyle(Kross::Api::List::Ptr args);
-        /**
-         * This function set the fill style of the Painter.
-         * It takes one argument :
-         *  - 0 for none 1 for fill with foreground color 2 for fill with background color
-         * 3 for fill with a pattern
-         */
-        Kross::Api::Object::Ptr setFillStyle(Kross::Api::List::Ptr args);
-#endif
+        void setPaintOp(const QString& paintopname);
 
     protected:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
@@ -237,15 +257,23 @@ class Painter : public QObject
             }
             return a;
         }
-        inline KisFillPainter* createFillPainter();
+        inline KisFillPainter* createFillPainter()
+        {
+            KisFillPainter* fp = new KisFillPainter(m_painter->device());
+            fp->setBrush( m_painter->brush() );
+            fp->setFillColor( m_painter->fillColor() );
+            fp->setPaintColor( m_painter->paintColor() );
+            fp->setFillStyle( m_painter->fillStyle() );
+            fp->setOpacity( m_painter->opacity() );
+            fp->setPattern( m_painter->pattern() );
+            return fp;
+        }
     private:
         KisPaintLayerSP m_layer;
         KisPainter* m_painter;
         int m_threshold;
 };
 
-}
-
-}
+}}
 
 #endif

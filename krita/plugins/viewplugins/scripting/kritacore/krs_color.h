@@ -23,15 +23,12 @@
 
 #include <QObject>
 
-namespace Kross {
-
-namespace KritaCore {
+namespace Kross { namespace KritaCore {
 
 class Color : public QObject
 {
     public:
-        Color ( int x, int y, int z, QColor::Spec colorSpec );
-        Color ();
+        Color(int x, int y, int z, QColor::Spec colorSpec);
         virtual ~Color();
 
         inline QColor toQColor() { return m_color; };
@@ -40,8 +37,6 @@ class Color : public QObject
         QColor m_color;
 };
 
-}
-
-}
+}}
 
 #endif

@@ -83,7 +83,6 @@ namespace Kross { namespace KritaCore {
             */
             QObject* image();
 
-
 #if 0
             /**
              * This function return a new Image.
@@ -101,6 +100,8 @@ namespace Kross { namespace KritaCore {
              * @endcode
              */
             Kross::Api::Object::Ptr newImage(Kross::Api::List::Ptr);
+#endif
+
             /**
              * This function return a new Color with the given RGB triplet
              * It takes three arguments :
@@ -110,11 +111,13 @@ namespace Kross { namespace KritaCore {
              * 
              * For example (in ruby) :
              * @code
-             * Krosskritacore::newRGBColor(255,0,0) # create a red color
-             * Krosskritacore::newRGBColor(255,255,255) # create a white color
+             * require "Krita"
+             * redcolor = Krita.createRGBColor(255,0,0)
+             * whitecolor = Krita.createRGBColor(255,255,255)
              * @endcode
              */
-            Kross::Api::Object::Ptr newRGBColor(Kross::Api::List::Ptr);
+            QObject* createRGBColor(int r, int g, int b);
+
             /**
              * This function return a new Color with the given HSV triplet
              * It takes three arguments :
@@ -124,41 +127,45 @@ namespace Kross { namespace KritaCore {
              * 
              * For example (in ruby) :
              * @code
-             * Krosskritacore::newRGBColor(255,125,0)
+             * require "Krita"
+             * Krita.createHSVColor(255,125,0)
              * @endcode
              */
-            Kross::Api::Object::Ptr newHSVColor(Kross::Api::List::Ptr);
+            QObject* createHSVColor(int hue, int saturation, int value);
+
             /**
-             * This function return a Pattern taken from the list of ressources
+             * This function return a \a Pattern taken from the list of ressources
              * of krita
              * It takes one argument :
              *  - the name of the pattern
              * 
              * For example (in ruby) :
              * @code
-             * Krosskritacore::getPattern("Bricks")
+             * require "Krita"
+             * brickspattern = Krita.pattern("Bricks")
              * @endcode
              */
-            Kross::Api::Object::Ptr getPattern(Kross::Api::List::Ptr);
+            QObject* pattern(const QString& patternname);
+
             /**
-             * This function return a Brush taken from the list of ressources
+             * This function return a \a Brush taken from the list of ressources
              * of krita
              * It takes one argument :
-             *  - the name of the pattern
+             *  - the name of the brush
              * 
              * For example (in ruby) :
              * @code
-             * Krosskritacore::getBrush("Circle (05)")
+             * require "Krita"
+             * circlebrush = Krita.brush("Circle (05)")
              * @endcode
              */
-            Kross::Api::Object::Ptr getBrush(Kross::Api::List::Ptr);
+            QObject* brush(const QString& brushname);
+
             /**
              * This function return a Brush with a circular shape
-             * It takes at least two arguments :
+             * It takes four arguments :
              *  - width
              *  - height
-             * 
-             * It can takes two other arguments :
              *  - width of the shading
              *  - height of the shading
              * 
@@ -166,18 +173,18 @@ namespace Kross { namespace KritaCore {
              * 
              * For example (in ruby) :
              * @code
-             * Krosskritacore::newCircleBrush(10,20) # create a plain circle
-             * Krosskritacore::newCircleBrush(10,20,5,10) # create a gradient
+             * require "Krita"
+             * plaincircle = Krita.createCircleBrush(10,20,0,0)
+             * gradientcircle = Krita.createCircleBrush(10,20,5,10)
              * @endcode
              */
-            Kross::Api::Object::Ptr newCircleBrush(Kross::Api::List::Ptr);
+            QObject* createCircleBrush(uint w, uint h, uint hf, uint vf);
+
             /**
              * This function return a Brush with a rectangular shape
-             * It takes at least two arguments :
+             * It takes four arguments :
              *  - width
              *  - height
-             * 
-             * It can takes two other arguments :
              *  - width of the shading
              *  - height of the shading
              * 
@@ -185,11 +192,14 @@ namespace Kross { namespace KritaCore {
              * 
              * For example (in ruby) :
              * @code
-             * Krosskritacore::newRectBrush(10,20) # create a plain rectangle
-             * Krosskritacore::newRectBrush(10,20,5,10) # create a gradient
+             * require "Krita"
+             * plainrectangle = Krita.createRectBrush(10,20,0,0)
+             * gradientrectangle = Krita.createRectBrush(10,20,5,10)
              * @endcode
              */
-            Kross::Api::Object::Ptr newRectBrush(Kross::Api::List::Ptr);
+            QObject* createRectBrush(uint w, uint h, uint hf, uint vf);
+
+#if 0
             /**
              * This function return a Filter taken from the list of ressources
              * of krita

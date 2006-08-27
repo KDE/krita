@@ -15,7 +15,7 @@ image = Krita.image()
 # we like to manipulate the active painting layer.
 layer = image.activePaintLayer()
 
-# currently the invert.py does not work with all supported colorspaces.
+# currently the invert.rb does not work with all supported colorspaces.
 if(layer.colorSpaceId() != "RGBA" )
     raise("This script works only for 8bit RGBA layers")
 end

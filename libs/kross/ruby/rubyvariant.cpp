@@ -27,7 +27,9 @@ using namespace Kross;
 
 VALUE RubyType<QVariant>::toVALUE(const QVariant& v)
 {
-    krossdebug( QString("RubyType<QVariant>::toVALUE variant.toString=%1 variant.typeid=%2 variant.typeName=%3").arg(v.toString()).arg(v.type()).arg(v.typeName()) );
+    #ifdef KROSS_RUBY_VARIANT_DEBUG
+        krossdebug( QString("RubyType<QVariant>::toVALUE variant.toString=%1 variant.typeid=%2 variant.typeName=%3").arg(v.toString()).arg(v.type()).arg(v.typeName()) );
+    #endif
 
     switch( v.type() ) {
         case QVariant::Int:
@@ -54,35 +56,45 @@ VALUE RubyType<QVariant>::toVALUE(const QVariant& v)
             return RubyType<qlonglong>::toVALUE(v.toULongLong());
 
         case QVariant::Invalid: {
-            krossdebug( QString("RubyType<QVariant>::toVALUE variant=%1 is QVariant::Invalid. Returning Py:None.").arg(v.toString()) );
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
+                krossdebug( QString("RubyType<QVariant>::toVALUE variant=%1 is QVariant::Invalid. Returning Py:None.").arg(v.toString()) );
+            #endif
             //return Py::None();
         } // fall through
 
         case QVariant::UserType: {
-            krossdebug( QString("RubyType<QVariant>::toVALUE variant=%1 is QVariant::UserType. Trying to cast now.").arg(v.toString()) );
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
+                krossdebug( QString("RubyType<QVariant>::toVALUE variant=%1 is QVariant::UserType. Trying to cast now.").arg(v.toString()) );
+            #endif
         } // fall through
 
         default: {
             if( strcmp(v.typeName(),"float") == 0 ) {
-                krossdebug( QString("RubyType<QVariant>::toVALUE Casting '%1' to double").arg(v.typeName()) );
+                #ifdef KROSS_RUBY_VARIANT_DEBUG
+                    krossdebug( QString("RubyType<QVariant>::toVALUE Casting '%1' to double").arg(v.typeName()) );
+                #endif
                 return RubyType<double>::toVALUE(v.toDouble());
             }
 
             if( qVariantCanConvert< QWidget* >(v) ) {
-                krossdebug( QString("RubyType<QVariant>::toVALUE Casting '%1' to QWidget").arg(v.typeName()) );
+                #ifdef KROSS_RUBY_VARIANT_DEBUG
+                    krossdebug( QString("RubyType<QVariant>::toVALUE Casting '%1' to QWidget").arg(v.typeName()) );
+                #endif
                 QWidget* widget = qvariant_cast< QWidget* >(v);
                 if(! widget) {
-                    krossdebug( QString("RubyType<QVariant>::toVALUE To QWidget casted '%1' is NULL").arg(v.typeName()) );
+                    krosswarning( QString("RubyType<QVariant>::toVALUE To QWidget casted '%1' is NULL").arg(v.typeName()) );
                     return 0;
                 }
                 return RubyExtension::toVALUE( new RubyExtension(widget) );
             }
 
             if( qVariantCanConvert< QObject* >(v) ) {
-                krossdebug( QString("RubyType<QVariant>::toVALUE Casting '%1' to QObject").arg(v.typeName()) );
+                #ifdef KROSS_RUBY_VARIANT_DEBUG
+                    krossdebug( QString("RubyType<QVariant>::toVALUE Casting '%1' to QObject").arg(v.typeName()) );
+                #endif
                 QObject* obj = qvariant_cast< QObject* >(v);
                 if(! obj) {
-                    krossdebug( QString("RubyType<QVariant>::toVALUE To QObject casted '%1' is NULL").arg(v.typeName()) );
+                    krosswarning( QString("RubyType<QVariant>::toVALUE To QObject casted '%1' is NULL").arg(v.typeName()) );
                     return 0;
                 }
                 return RubyExtension::toVALUE( new RubyExtension(obj) );
@@ -101,14 +113,14 @@ VALUE RubyType<QVariant>::toVALUE(const QVariant& v)
 
 QVariant RubyType<QVariant>::toVariant(VALUE value)
 {
-    #ifdef KROSS_RUBY_EXTENSION_DEBUG
+    #ifdef KROSS_RUBY_VARIANT_DEBUG
         krossdebug(QString("RubyType<QVariant>::toVariant of type %1").arg(TYPE(value)));
     #endif
 
     switch( TYPE( value ) )
     {
         case T_DATA: {
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a Kross::RubyExtension");
             #endif
 
@@ -129,51 +141,51 @@ QVariant RubyType<QVariant>::toVariant(VALUE value)
         }
 
         case T_FLOAT:
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_FLOAT");
             #endif
             return RubyType<double>::toVariant(value);
         case T_STRING:
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_STRING");
             #endif
             return RubyType<QString>::toVariant(value);
         case T_ARRAY:
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_ARRAY");
             #endif
             return RubyType<QVariantList>::toVariant(value);
         case T_FIXNUM:
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_FIXNUM");
             #endif
             return RubyType<qlonglong>::toVariant(value);
         case T_HASH:
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_HASH");
             #endif
             return RubyType<QVariantMap>::toVariant(value);
         case T_BIGNUM:
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_BIGNUM");
             #endif
             return RubyType<qlonglong>::toVariant(value);
 
         case T_FALSE:
         case T_TRUE:
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_TRUE/T_FALSE");
             #endif
             return RubyType<bool>::toVariant(value);
 
         case T_SYMBOL: // hmmm... where is this used?
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_SYMBOL");
             #endif
             return QString(rb_id2name(SYM2ID(value)));
 
         case T_NIL:
-            #ifdef KROSS_RUBY_EXTENSION_DEBUG
+            #ifdef KROSS_RUBY_VARIANT_DEBUG
                 krossdebug("  VALUE is a T_NIL. Returning QVariant::Invalid.");
             #endif
             return QVariant();
@@ -195,7 +207,10 @@ QVariant RubyType<QVariant>::toVariant(VALUE value)
 MetaType* RubyMetaTypeFactory::create(const char* typeName, VALUE value)
 {
     int typeId = QVariant::nameToType(typeName);
-    krossdebug( QString("RubyMetaTypeFactory::create typeName=%1 metatype.id=%2 variant.id=%3").arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
+
+    #ifdef KROSS_RUBY_VARIANT_DEBUG
+        krossdebug( QString("RubyMetaTypeFactory::create typeName=%1 metatype.id=%2 variant.id=%3").arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
+    #endif
 
     switch(typeId) {
         case QVariant::Int:

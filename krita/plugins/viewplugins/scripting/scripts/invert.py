@@ -56,6 +56,7 @@ class Inverter:
             #p[2] = 255 - p[2]
             #it.setRGBA(p)
 
+            # invert the color of the pixel.
             it.invertColor()
 
             # increment the progress to show, that work on this pixel is done.

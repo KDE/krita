@@ -56,17 +56,19 @@ KisLabelProgress::KisLabelProgress(QWidget *parent, const char *name) : super(pa
     m_modal = false;
 
     QHBoxLayout *box = new QHBoxLayout(this);
+    box->setMargin(0);
+    box->setAlignment(Qt::AlignTop);
 
     QIcon cancelIconSet = SmallIconSet("stop");
 
     m_cancelButton = new EscapeButton(this, "cancel_button");
-    box->addWidget(m_cancelButton);
     m_cancelButton->setIcon(cancelIconSet);
     m_cancelButton->setToolTip( i18n("Cancel"));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancelPressed()));
+    box->addWidget(m_cancelButton, 0, Qt::AlignTop | Qt::AlignLeft);
 
     m_bar = new QProgressBar(this);
-    box->addWidget(m_bar);
+    box->addWidget(m_bar, 1, Qt::AlignTop);
 }
 
 KisLabelProgress::~KisLabelProgress()
@@ -145,7 +147,7 @@ bool KisLabelProgress::event(QEvent * e)
             subjectDestroyed();
             break;
         default:
-            return QLabel::event(e);
+            return super::event(e);
     };
 
     return true;

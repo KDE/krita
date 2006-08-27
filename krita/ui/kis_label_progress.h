@@ -19,7 +19,7 @@
 #ifndef KIS_LABEL_PROGRESS_H_
 #define KIS_LABEL_PROGRESS_H_
 
-#include <QLabel>
+#include <QFrame>
 #include <QEvent>
 
 #include "kis_progress_display_interface.h"
@@ -27,9 +27,9 @@
 class QToolButton;
 class QProgressBar;
 
-class KisLabelProgress : public QLabel, public KisProgressDisplayInterface {
+class KisLabelProgress : public QWidget, public KisProgressDisplayInterface {
     Q_OBJECT
-    typedef QLabel super;
+    typedef QWidget super;
 
 public:
     KisLabelProgress(QWidget *parent, const char *name = 0);

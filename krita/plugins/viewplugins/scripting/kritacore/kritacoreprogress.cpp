@@ -87,6 +87,7 @@ void KritaCoreProgress::setProgressStage(const QString& stage, uint progress)
 void KritaCoreProgress::progressDone()
 {
     kDebug() << "KritaCoreProgress::progressDone" << endl;
+    m_progressTotalSteps = 0;
     emit notifyProgressDone();
 }
 

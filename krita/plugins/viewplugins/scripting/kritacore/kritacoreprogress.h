@@ -57,8 +57,8 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
         //inline QString packagePath() { return m_packagePath; }
 
     private:
-        uint m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
         KisView * m_view;
+        uint m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
         //QString m_packagePath;
 };
 

@@ -74,6 +74,16 @@ class IteratorBase : public QObject
         virtual bool isDone() = 0;
 
         /**
+         * Return the current column the iterator is on.
+         */
+        virtual int x() = 0;
+
+        /**
+         * Return the current row the iterator is on.
+         */
+        virtual int y() = 0;
+
+        /**
          * Return the list of pixels.
          */
         virtual QVariantList pixel() = 0;
@@ -190,6 +200,27 @@ class Iterator : public IteratorBase
 
     private:
 
+        bool isDone()
+        {
+            return m_it->isDone();
+        }
+
+        bool next()
+        {
+            ++(*m_it);
+            return m_it->isDone();
+        }
+
+        int x()
+        {
+            return m_it->x();
+        }
+
+        int y()
+        {
+            return m_it->y();
+        }
+
         QVariantList pixel()
         {
             Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
@@ -221,7 +252,8 @@ class Iterator : public IteratorBase
         {
             Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
             uint i = 0;
-            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++, i++) {
+            const uint size = pixel.size();
+            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end() && i < size; ++itC, ++i) {
                 KoChannelInfo * ci = *itC;
                 quint8* data = (quint8*)(m_it->rawData() + ci->pos());
                 switch(ci->channelValueType())
@@ -251,17 +283,6 @@ class Iterator : public IteratorBase
         void darken(int shade, bool compensate, double compensation)
         {
             m_layer->paintDevice()->colorSpace()->darken(m_it->rawData(), m_it->rawData(), shade, compensate, compensation, 1);
-        }
-
-        bool isDone()
-        {
-            return m_it->isDone();
-        }
-
-        bool next()
-        {
-            ++(*m_it);
-            return m_it->isDone();
         }
 
 #if 0

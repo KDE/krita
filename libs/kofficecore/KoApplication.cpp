@@ -203,7 +203,7 @@ bool KoApplication::start()
 		     templateBase.setPath(paths[0]);
 		     KDesktopFile templateInfo(paths[0]);
 
-		     QString templateName = templateInfo.readURL();
+		     QString templateName = templateInfo.readUrl();
 		     KUrl templateURL;
 		     templateURL.setPath( templateBase.directory() + "/" + templateName );
 		     if ( shell->openDocument(doc, templateURL )) {

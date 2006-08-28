@@ -56,7 +56,7 @@ QString KoEmbeddingFilter::mimeTypeByExtension( const QString& extension )
     // from the extension, as kservicetypefactory.h isn't installed
     KUrl url;
     url.setPath( QString( "dummy.%1" ).arg( extension ) );
-    KMimeType::Ptr m( KMimeType::findByURL( url, 0, true, true ) );
+    KMimeType::Ptr m( KMimeType::findByUrl( url, 0, true, true ) );
     return m->name();
 }
 

@@ -464,8 +464,8 @@ fileLinkPage::fileLinkPage( QWidget *parent , char* /*name*/  )
   for (QStringList::ConstIterator it = fileList.begin();it != fileList.end(); ++it)
   {
       KDesktopFile f(*it, true /* read only */);
-      if ( !f.readURL().isEmpty())
-          lst.append( f.readURL());
+      if ( !f.readUrl().isEmpty())
+          lst.append( f.readUrl());
   }
   if ( lst.count()<= 1 )
   {

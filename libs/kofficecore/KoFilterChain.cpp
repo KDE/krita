@@ -628,7 +628,7 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
 {
     KUrl url;
     url.setPath( file );
-    KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
+    KMimeType::Ptr t = KMimeType::findByUrl( url, 0, true );
     if ( t->name() == KMimeType::defaultMimeType() ) {
         kError( 30500 ) << "No mimetype found for " << file << endl;
         return 0;

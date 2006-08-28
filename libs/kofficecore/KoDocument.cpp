@@ -1386,7 +1386,7 @@ bool KoDocument::openURL( const KUrl & _url )
         d->lastErrorMessage = i18n( "Malformed URL\n%1",_url.url() ); // ## used anywhere ?
         return false;
     }
-    if ( !closeURL() )
+    if ( !closeUrl() )
         return false;
 
     KUrl url( _url );
@@ -1417,7 +1417,7 @@ bool KoDocument::openURL( const KUrl & _url )
         }
     }
 
-    bool ret = KParts::ReadWritePart::openURL( url );
+    bool ret = KParts::ReadWritePart::openUrl( url );
 
     if ( autosaveOpened )
         resetURL(); // Force save to act like 'Save As'
@@ -1454,7 +1454,7 @@ bool KoDocument::openFile()
 
     KUrl u;
     u.setPath( m_file );
-    QString typeName = KMimeType::findByURL( u, 0, true )->name();
+    QString typeName = KMimeType::findByUrl( u, 0, true )->name();
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if ( typeName == "application/x-trash" )

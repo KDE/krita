@@ -130,7 +130,7 @@ void KoDocumentInfoPropsPage::applyChanges()
     if ( !d->m_dst->open( QIODevice::WriteOnly ) )
         return;
 
-    KMimeType::Ptr mimeType = KMimeType::findByURL( d->m_url, 0, true );
+    KMimeType::Ptr mimeType = KMimeType::findByUrl( d->m_url, 0, true );
     if ( mimeType && dynamic_cast<KFilterDev *>( d->m_dst->device() ) != 0 )
     {
         QByteArray appIdentification( "KOffice " ); // We are limited in the number of chars.

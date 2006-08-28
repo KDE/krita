@@ -591,7 +591,7 @@ bool KoMainWindow::openDocument( KoDocument *newdoc, const KUrl & url )
 
         setRootDocument( newdoc );
         newdoc->setURL(url);
-        QString mime = KMimeType::findByURL(url)->name();
+        QString mime = KMimeType::findByUrl(url)->name();
         if ( mime.isEmpty() || mime == KMimeType::defaultMimeType() )
             mime = newdoc->nativeFormatMimeType();
         if ( url.isLocalFile() ) // workaround for kde<=3.3 kparts bug, fixed for 3.4

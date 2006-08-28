@@ -149,7 +149,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     // Find the mime type for the file to be imported.
     KUrl u;
     u.setPath( url );
-    KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
+    KMimeType::Ptr t = KMimeType::findByUrl( u, 0, true );
     if ( t->name() == KMimeType::defaultMimeType() ) {
         kError(s_area) << "No mimetype found for " << url << endl;
         status = KoFilter::BadMimeType;
@@ -273,7 +273,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QByteArr
     else {
         KUrl u;
         u.setPath( m_importUrl );
-        KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
+        KMimeType::Ptr t = KMimeType::findByUrl( u, 0, true );
         if ( t->name() == KMimeType::defaultMimeType() ) {
             kError(s_area) << "No mimetype found for " << m_importUrl << endl;
             return KoFilter::BadMimeType;

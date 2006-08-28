@@ -131,7 +131,7 @@ bool KSnapshot::save( const QString &filename )
 
 bool KSnapshot::save( const KUrl& url )
 {
-    KMimeType::Ptr mimeType = KMimeType::findByURL(url);
+    KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
     QStringList types(KImageIO::typeForMime(mimeType->name()));
 
     QString type;

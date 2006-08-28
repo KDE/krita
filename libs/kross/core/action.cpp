@@ -106,7 +106,7 @@ Action::Action(const KUrl& file)
 {
     d->scriptfile = file;
     setText(file.fileName());
-    setIcon( KIcon( KMimeType::iconNameForURL(file) ) );
+    setIcon( KIcon( KMimeType::iconNameForUrl(file) ) );
 }
 
 Action::Action(KActionCollection* collection, const QString& name, const KUrl& file)

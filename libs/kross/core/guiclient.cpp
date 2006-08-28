@@ -141,7 +141,7 @@ void GUIClient::readConfig(KConfig* config)
             description += QString("<br>%1").arg(file);
 
         if(icon.isNull())
-            icon = KMimeType::iconNameForURL( KUrl(file) );
+            icon = KMimeType::iconNameForUrl( KUrl(file) );
 
         krossdebug( QString("GUIClient::readConfig Add scriptaction name='%1' file='%2'").arg(name).arg(file) );
 

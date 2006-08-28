@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,9 +29,8 @@ KoPointBaseCommand::KoPointBaseCommand( KoPathShape *shape )
 
 void KoPointBaseCommand::repaint( const QRectF &oldControlPointRect )
 {
-    // the bounding rect has changed -> normalize and adjust position of shape
+    // the bounding rect has changed -> normalize
     QPointF offset = m_shape->normalize();
-    m_shape->moveBy( -offset.x(), -offset.y() );
 
     // adjust the old control rect as the repainting is relative to the new shape position
     QRectF repaintRect = oldControlPointRect.translated( offset ).unite( m_shape->outline().controlPointRect() );

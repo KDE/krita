@@ -391,11 +391,18 @@ void KoPathShape::close()
 
 QPointF KoPathShape::normalize()
 {
+    QPointF oldTL( boundingRect().topLeft() );
+    
     QPointF tl( outline().boundingRect().topLeft() );
     QMatrix matrix;
     matrix.translate( -tl.x(), -tl.y() );
     map( matrix );
-    return -tl;
+
+    // keep the top left point of the object
+    QPointF newTL( boundingRect().topLeft() );
+    QPointF diff( oldTL - newTL );
+    moveBy( diff.x(), diff.y() );
+    return diff;
 }
 
 void KoPathShape::map( const QMatrix &matrix )

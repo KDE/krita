@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -138,12 +139,14 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
         useCursor(Qt::SizeAllCursor);
 
         m_activePoint = points.first();
-        if( roi.contains( m_activePoint->point() ) )
-            m_activePointType = KoPathPoint::Node;
-        else if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 && roi.contains( m_activePoint->controlPoint1() ) )
+        // check first for the control points as otherwise it is no longer 
+        // possible to change the control points when they are the same as the point
+        if( m_activePoint->properties() & KoPathPoint::HasControlPoint1 && roi.contains( m_activePoint->controlPoint1() ) )
             m_activePointType = KoPathPoint::ControlPoint1;
         else if( m_activePoint->properties() & KoPathPoint::HasControlPoint2 && roi.contains( m_activePoint->controlPoint2() ) )
             m_activePointType = KoPathPoint::ControlPoint2;
+        else if( roi.contains( m_activePoint->point() ) )
+            m_activePointType = KoPathPoint::Node;
 
         repaint( transformed( m_pathShape->outline().controlPointRect() ) );
 

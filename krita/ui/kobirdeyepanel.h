@@ -34,6 +34,7 @@
 #include "ui_wdgbirdeye.h"
 
 class QPixmap;
+class QTime;
 class KAction;
 class KoDocument;
 class WdgBirdEye;
@@ -269,6 +270,8 @@ private:
     bool m_dragging;
     enumDragHandle m_dragHandle;
     QPoint m_lastDragPos;
+    
+    QTime m_lastupdate;
 
 };
 

@@ -30,6 +30,7 @@
 #include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QMouseEvent>
+#include <QTime>
 #include <kicon.h>
 
 #include <kdebug.h>
@@ -89,6 +90,8 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
     connect(m_page->zoom, SIGNAL(valueChanged(int)), SLOT(zoomValueChanged(int)));
     connect(m_page->bn100, SIGNAL(clicked()), SLOT(zoom100()));
     connect(m_page->slZoom, SIGNAL(valueChanged(int)), SLOT(sliderChanged( int )));
+
+    m_lastupdate.start();
 }
 
 KoBirdEyePanel::~KoBirdEyePanel()
@@ -204,8 +207,11 @@ void KoBirdEyePanel::sliderChanged( int v )
 
 void KoBirdEyePanel::cursorPosChanged(qint32 xpos, qint32 ypos)
 {
-    m_page->txtX->setText(QString("%L1").arg(xpos, 5));
-    m_page->txtY->setText(QString("%L1").arg(ypos, 5));
+    if(m_lastupdate.elapsed() > 100) {
+        m_lastupdate.restart();
+        m_page->txtX->setText(QString("%L1").arg(xpos, 5));
+        m_page->txtY->setText(QString("%L1").arg(ypos, 5));
+    }
 }
 
 void KoBirdEyePanel::setThumbnailProvider(KoThumbnailAdapter * thumbnailProvider)

@@ -79,11 +79,12 @@ public:
      * If your view extends KoView the line of code is:
 @code
     shell()->addDockWidget(Qt::LeftDockWidgetArea,
-        KoToolManager::instance()->toolBox("MyApp"));
+        KoToolManager::instance()->toolBox(this, "MyApp"));
 @endcode
+     * @param parent the parent QWidget the toolbox will be child of.
      * @param applicationName the title for the toolbox
      */
-    KoToolBox *toolBox(const QString &applicationName = QString());
+    KoToolBox *toolBox(QWidget* parent, const QString &applicationName = QString());
 
     void registerTools(KActionCollection *ac);
 

@@ -87,9 +87,9 @@ void KoToolManager::setup() {
         connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
 }
 
-KoToolBox *KoToolManager::toolBox(const QString &applicationName) {
+KoToolBox *KoToolManager::toolBox(QWidget* parent, const QString &applicationName) {
     setup();
-    KoToolBox *toolBox = new KoToolBox();
+    KoToolBox *toolBox = new KoToolBox(parent);
     foreach(ToolHelper *tool, m_tools) {
         QAbstractButton *but = tool->createButton();
         toolBox->addButton(but, tool->toolType(), tool->priority(), tool->uniqueId());

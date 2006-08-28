@@ -30,7 +30,7 @@
 #include <QMainWindow>
 #include <QBoxLayout>
 
-KoToolBox::KoToolBox() {
+KoToolBox::KoToolBox(QWidget* parent) : QDockWidget(parent) {
     m_buttonGroup = new QButtonGroup(this);
     setFeatures(DockWidgetMovable | DockWidgetFloatable);
 }

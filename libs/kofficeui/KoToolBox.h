@@ -45,7 +45,7 @@ class KOFFICEUI_EXPORT KoToolBox : public QDockWidget {
     Q_OBJECT
 public:
     /// constructor
-    KoToolBox();
+    KoToolBox(QWidget* parent);
     ~KoToolBox();
 
     /**

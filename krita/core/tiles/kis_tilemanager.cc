@@ -108,12 +108,8 @@ KisTileManager::~KisTileManager() {
     delete [] m_poolPixelSizes;
     delete [] m_pools;
 
-    m_poolMutex->unlock();
     delete m_poolMutex;
-
-    m_swapMutex->unlock();
     delete m_swapMutex;
-
 }
 
 KisTileManager* KisTileManager::instance()
@@ -161,7 +157,10 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 
     m_swapMutex->lock();
 
-    if (!m_tileMap.contains(tile)) return;
+    if (!m_tileMap.contains(tile)) {
+        m_swapMutex->unlock();
+        return;
+    }
     // Q_ASSERT(m_tileMap.contains(tile));
 
     TileInfo* info = m_tileMap[tile];
@@ -246,7 +245,10 @@ void KisTileManager::fromSwap(TileInfo* info)
 {
     m_swapMutex->lock();
 
-    if (info->inMem) return;
+    if (info->inMem) {
+        m_swapMutex->unlock();
+        return;
+    }
 
     doSwapping();
 
@@ -274,7 +276,10 @@ void KisTileManager::toSwap(TileInfo* info) {
     m_swapMutex->lock();
 
     //Q_ASSERT(info->inMem);
-    if (!info || !info->inMem) return;
+    if (!info || !info->inMem) {
+        m_swapMutex->unlock();
+        return;
+    }
 
     KisTile *tile = info->tile;
 

@@ -5,6 +5,7 @@ Name=Perspective transform Tool
 Name[da]=Perspectivetransformeringsværktøj
 Name[es]=Herramienta Transformar perspectiva
 Name[et]=Perspektiivteisenduse tööriist
+Name[ja]=視点変更ツール
 Name[nl]=Perspectiefrooster-gereedschap
 Name[sv]=Perspektivtransformverktyg
 ServiceTypes=Krita/Tool

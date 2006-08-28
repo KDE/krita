@@ -140,6 +140,9 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
     , m_pressureSize(true)
     , m_pressureOpacity(false)
     , m_pressureDarken(false)
+    , m_customSize(false)
+    , m_customOpacity(false)
+    , m_customDarken(false)
 {
     if (settings != 0) {
         m_pressureSize = settings->varySize();
@@ -171,7 +174,6 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
         adjustedInfo.pressure = PRESSURE_DEFAULT;
     else if (m_customSize)
         adjustedInfo.pressure = scaleToCurve(adjustedInfo.pressure, m_sizeCurve);
-
 
     // Painting should be implemented according to the following algorithm:
     // retrieve brush

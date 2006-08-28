@@ -233,14 +233,11 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
         #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
             krossdebug( QString("PythonExtension::proxyhandler QMetaMethod idx=%1 sig=%2 tag=%3 type=%4").arg(methodindex).arg(metamethod.signature()).arg(metamethod.tag()).arg(metamethod.typeName()) );
-        #endif
-
-        for(int i = 0; i < argssize; ++i) {
-            QVariant v = PythonType<QVariant>::toVariant( argstuple[i] );
-            #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+            for(int i = 0; i < argssize; ++i) {
+                QVariant v = PythonType<QVariant>::toVariant( argstuple[i] );
                 krossdebug( QString("  Argument index=%1 variant.toString=%2 variant.typeName=%3").arg(i).arg(v.toString()).arg(v.typeName()) );
-            #endif
-        }
+            }
+        #endif
 
         Py::Object pyresult;
         {

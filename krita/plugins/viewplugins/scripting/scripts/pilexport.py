@@ -43,13 +43,15 @@ def saveToFile(filename):
 	#pilimage.save(filename,"JPEG")
 	pilimage.save(filename)
 
-import Tkinter, tkFileDialog
+import string, Tkinter, tkFileDialog
 Image.init()
 filters = []
 for i in Image.ID:
 	try:
-		factory, accept = Image.OPEN[i]
-		filters.append( (factory.format_description,str(".%s" % factory.format).lower()) )
+		driver = Image.SAVE[string.upper(i)]
+		if driver != None:
+			factory, accept = Image.OPEN[i]
+			filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
 	except:
 		pass
 Tkinter.Tk().withdraw()

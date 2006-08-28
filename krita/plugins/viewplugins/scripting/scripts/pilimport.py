@@ -72,7 +72,7 @@ filters = []
 for i in Image.ID:
 	try:
 		factory, accept = Image.OPEN[i]
-		filters.append( (factory.format_description,str(".%s" % factory.format).lower()) )
+		filters.append( (factory.format_description,".%s .%s" % (factory.format,factory.format.lower())) )
 	except:
 		pass
 Tkinter.Tk().withdraw()

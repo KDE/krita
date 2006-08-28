@@ -23,7 +23,8 @@ kritadefaultpaintops_la_SOURCES = \
 	kis_brushop.cc \
 	kis_duplicateop.cc \
 	kis_eraseop.cc \
-	kis_penop.cc
+	kis_penop.cc \
+	kis_dlgbrushcurvecontrol.ui
 
 noinst_HEADERS = defaultpaintops_plugin.h 	kis_airbrushop.h 	kis_brushop.h \
 		kis_duplicateop.h 	kis_eraseop.h 	kis_penop.h

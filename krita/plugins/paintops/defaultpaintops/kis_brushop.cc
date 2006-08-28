@@ -20,14 +20,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <string.h>
+
 #include <qrect.h>
 #include <qwidget.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
+#include <qtoolbutton.h>
 
 #include <kdebug.h>
 
+#include "kcurve.h"
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_paint_device.h"
@@ -38,6 +42,8 @@
 #include "kis_input_device.h"
 #include "kis_selection.h"
 #include "kis_brushop.h"
+
+#include "kis_dlgbrushcurvecontrol.h"
 
 KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettings *settings, KisPainter * painter)
 {
@@ -60,7 +66,49 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     m_size->setChecked(true);
     m_opacity = new QCheckBox(i18n("opacity"), m_optionsWidget);
     m_darken = new QCheckBox(i18n("darken"), m_optionsWidget);
+    m_curveControl = new WdgBrushCurveControl(m_optionsWidget);
+    QToolButton* moreButton = new QToolButton(Qt::UpArrow, m_optionsWidget);
+    moreButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    moreButton->setMinimumSize(QSize(24,24)); // Bah, I had hoped the above line would make this unneeded
+    connect(moreButton, SIGNAL(clicked()), this, SLOT(slotCustomCurves()));
+
+    m_customSize = false;
+    m_customOpacity = false;
+    m_customDarken = false;
+    // the curves will get filled in when the slot gets accepted
 }
+
+void KisBrushOpSettings::slotCustomCurves() {
+    if (m_curveControl->exec() == QDialog::Accepted) {
+        m_customSize = m_curveControl->sizeCheckbox->isChecked();
+        m_customOpacity = m_curveControl->opacityCheckbox->isChecked();
+        m_customDarken = m_curveControl->darkenCheckbox->isChecked();
+
+        if (m_customSize) {
+            transferCurve(m_curveControl->sizeCurve, m_sizeCurve);
+        }
+        if (m_customOpacity) {
+            transferCurve(m_curveControl->opacityCurve, m_opacityCurve);
+        }
+        if (m_customDarken) {
+            transferCurve(m_curveControl->darkenCurve, m_darkenCurve);
+        }
+    }
+}
+
+void KisBrushOpSettings::transferCurve(KCurve* curve, double* target) {
+    double value;
+    for (int i = 0; i < 256; i++) {
+        value = curve->getCurveValue( i / 255.0);
+        if (value < PRESSURE_MIN)
+            target[i] = PRESSURE_MIN;
+        else if (value > PRESSURE_MAX)
+            target[i] = PRESSURE_MAX;
+        else
+            target[i] = value;
+    }
+}
+
 
 bool KisBrushOpSettings::varySize() const
 {
@@ -97,6 +145,18 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
         m_pressureSize = settings->varySize();
         m_pressureOpacity = settings->varyOpacity();
         m_pressureDarken = settings->varyDarken();
+        m_customSize = settings->customSize();
+        m_customOpacity = settings->customOpacity();
+        m_customDarken = settings->customDarken();
+        if (m_customSize) {
+            memcpy(m_sizeCurve, settings->sizeCurve(), 256 * sizeof(double));
+        }
+        if (m_customOpacity) {
+            memcpy(m_opacityCurve, settings->opacityCurve(), 256 * sizeof(double));
+        }
+        if (m_customDarken) {
+            memcpy(m_darkenCurve, settings->darkenCurve(), 256 * sizeof(double));
+        }
     }
 }
 
@@ -109,6 +169,8 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     KisPaintInformation adjustedInfo(info);
     if (!m_pressureSize)
         adjustedInfo.pressure = PRESSURE_DEFAULT;
+    else if (m_customSize)
+        adjustedInfo.pressure = scaleToCurve(adjustedInfo.pressure, m_sizeCurve);
 
 
     // Painting should be implemented according to the following algorithm:
@@ -153,14 +215,24 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     Q_UINT8 origOpacity = m_painter->opacity();
     KisColor origColor = m_painter->paintColor();
 
-    if (m_pressureOpacity)
-        m_painter->setOpacity((Q_INT8)(origOpacity * info.pressure));
+    if (m_pressureOpacity) {
+        if (!m_customOpacity)
+            m_painter->setOpacity((Q_INT8)(origOpacity * info.pressure));
+        else
+            m_painter->setOpacity((Q_INT8)(origOpacity * scaleToCurve(info.pressure, m_opacityCurve)));
+    }
 
     if (m_pressureDarken) {
         KisColor darkened = origColor;
         // Darken docs aren't really clear about what exactly the amount param can have as value...
+        Q_UINT32 darkenAmount;
+        if (!m_customDarken)
+            darkenAmount = (Q_INT32)(255  - 75 * info.pressure);
+        else
+            darkenAmount = (Q_INT32)(255  - 75 * scaleToCurve(info.pressure, m_darkenCurve));
+
         darkened.colorSpace()->darken(origColor.data(), darkened.data(),
-            (Q_INT32)(255  - 75 * info.pressure), false, 0.0, 1);
+            darkenAmount, false, 0.0, 1);
         m_painter->setPaintColor(darkened);
     }
 
@@ -203,3 +275,5 @@ void KisBrushOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
     m_painter->setOpacity(origOpacity);
     m_painter->setPaintColor(origColor);
 }
+
+#include "kis_brushop.moc"

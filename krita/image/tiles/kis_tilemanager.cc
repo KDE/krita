@@ -107,12 +107,8 @@ KisTileManager::~KisTileManager() {
     delete [] m_poolPixelSizes;
     delete [] m_pools;
 
-    m_poolMutex->unlock();
     delete m_poolMutex;
-
-    m_swapMutex->unlock();
     delete m_swapMutex;
-
 }
 
 KisTileManager* KisTileManager::instance()
@@ -126,7 +122,6 @@ KisTileManager* KisTileManager::instance()
 
 void KisTileManager::registerTile(KisTile* tile)
 {
-
     m_swapMutex->lock();
 
     TileInfo* info = new TileInfo();
@@ -159,7 +154,10 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 
     m_swapMutex->lock();
 
-    if (!m_tileMap.contains(tile)) return;
+    if (!m_tileMap.contains(tile)) {
+        m_swapMutex->unlock();
+        return;
+    }
     // Q_ASSERT(m_tileMap.contains(tile));
 
     TileInfo* info = m_tileMap[tile];
@@ -208,7 +206,6 @@ void KisTileManager::deregisterTile(KisTile* tile) {
 
 void KisTileManager::ensureTileLoaded(const KisTile* tile)
 {
-
     m_swapMutex->lock();
 
     TileInfo* info = m_tileMap[tile];
@@ -226,7 +223,6 @@ void KisTileManager::ensureTileLoaded(const KisTile* tile)
 
 void KisTileManager::maySwapTile(const KisTile* tile)
 {
-
     m_swapMutex->lock();
 
     TileInfo* info = m_tileMap[tile];
@@ -243,7 +239,10 @@ void KisTileManager::fromSwap(TileInfo* info)
 {
     m_swapMutex->lock();
 
-    if (info->inMem) return;
+    if (info->inMem) {
+        m_swapMutex->unlock();
+        return;
+    }
 
     doSwapping();
 
@@ -270,7 +269,10 @@ void KisTileManager::toSwap(TileInfo* info) {
     m_swapMutex->lock();
 
     //Q_ASSERT(info->inMem);
-    if (!info || !info->inMem) return;
+    if (!info || !info->inMem) {
+        m_swapMutex->unlock();
+        return;
+    }
 
     KisTile *tile = info->tile;
 
@@ -524,7 +526,7 @@ bool KisTileManager::kritaMmap(quint8*& result, void *start, size_t length,
                                int prot, int flags, int fd, off_t offset) {
     result = (quint8*) mmap(start, length, prot, flags, fd, offset);
 
-            // Same here for warning and GUI
+    // Same here for warning and GUI
     if (result == (quint8*)-1) {
         kWarning(DBG_AREA_TILES) << "mmap failed: errno is " << errno << "; we're probably going to crash very soon now...\n";
 

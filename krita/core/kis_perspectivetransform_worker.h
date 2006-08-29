@@ -22,6 +22,7 @@
 #define KIS_PERSPECTIVETRANSFORM_WORKER_H
 
 #include "kis_types.h"
+#include "kis_point.h"
 #include "kis_progress_subject.h"
 
 class KisPoint;

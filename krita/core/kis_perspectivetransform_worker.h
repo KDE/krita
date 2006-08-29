@@ -47,6 +47,7 @@ class KisPerspectiveTransformWorker : public KisProgressSubject
         KisPaintDeviceSP m_dev;
         KisProgressDisplayInterface *m_progress;
         double m_matrix[3][3];
+        QRect m_r;
 };
 
 #endif

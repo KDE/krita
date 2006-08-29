@@ -35,7 +35,6 @@ class KisTiledRandomAccessor : public KShared {
         const Q_UINT8* oldData;
         QRect area;
     };
-    typedef QValueList<KisTileInfo> KisListTileInfo;
     public:
         KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, bool writable);
         ~KisTiledRandomAccessor();
@@ -44,7 +43,7 @@ class KisTiledRandomAccessor : public KShared {
     private:
         inline Q_UINT32 xToCol(Q_UINT32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; };
         inline Q_UINT32 yToRow(Q_UINT32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; };
-        KisTileInfo fetchTileData(Q_INT32 col, Q_INT32 row);
+        KisTileInfo* fetchTileData(Q_INT32 col, Q_INT32 row);
 
     public:
         /// Move to a given x,y position, fetch tiles and data
@@ -54,7 +53,8 @@ class KisTiledRandomAccessor : public KShared {
 
     private:
         KisTiledDataManager *m_ktm;
-        KisListTileInfo m_tilesCache;
+        KisTileInfo** m_tilesCache;
+        Q_INT32 m_tilesCacheSize;
         Q_INT32 m_pixelSize;
         Q_UINT8* m_data;
         const Q_UINT8* m_oldData;

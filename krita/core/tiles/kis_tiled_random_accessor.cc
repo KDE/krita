@@ -20,7 +20,7 @@
 
 const Q_UINT32 KisTiledRandomAccessor::CACHESIZE = 4; // Define the number of tiles we keep in cache
 
-KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, bool writable) : m_ktm(ktm), m_pixelSize (m_ktm->pixelSize()), m_writable(writable)
+KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32 x, Q_INT32 y, bool writable) : m_ktm(ktm), m_tilesCache(new KisTileInfo*[4]), m_tilesCacheSize(0), m_pixelSize (m_ktm->pixelSize()), m_writable(writable)
 {
     Q_ASSERT(ktm != 0);
     moveTo(x, y);
@@ -28,46 +28,53 @@ KisTiledRandomAccessor::KisTiledRandomAccessor(KisTiledDataManager *ktm, Q_INT32
 
 KisTiledRandomAccessor::~KisTiledRandomAccessor()
 {
-    for( KisListTileInfo::iterator it = m_tilesCache.begin(); it != m_tilesCache.end(); it++)
+    for( int i = 0; i < m_tilesCacheSize; i++)
     {
-        (*it).tile->removeReader();
-        (*it).oldtile->removeReader();
+        m_tilesCache[i]->tile->removeReader();
+        m_tilesCache[i]->oldtile->removeReader();
+        delete m_tilesCache[i];
     }
+    delete m_tilesCache;
 }
 
 void KisTiledRandomAccessor::moveTo(Q_INT32 x, Q_INT32 y)
 {
     // Look in the cache if the tile if the data is available
-    for( KisListTileInfo::iterator it = m_tilesCache.begin(); it != m_tilesCache.end(); it++)
+    for( int i = 0; i < m_tilesCacheSize; i++)
     {
-        if( (*it).area.contains(QPoint(x,y)))
+        if( m_tilesCache[i]->area.contains(QPoint(x,y)))
         {
-            KisTileInfo kti = *it;
-            Q_UINT32 offset = x - kti.area.x() + (y -kti.area.y()) * KisTile::WIDTH;
+            KisTileInfo* kti = m_tilesCache[i];
+            Q_UINT32 offset = x - kti->area.x() + (y -kti->area.y()) * KisTile::WIDTH;
             offset *= m_pixelSize;
-            m_data = kti.data + offset;
-            m_oldData = kti.oldData + offset;
-            m_tilesCache.remove(it);
-            m_tilesCache.prepend(kti);
+            m_data = kti->data + offset;
+            m_oldData = kti->oldData + offset;
+            if(i > 0)
+            {
+                memmove(m_tilesCache+1,m_tilesCache, i * sizeof(KisTileInfo*));
+                m_tilesCache[0] = kti;
+            }
             return;
         }
     }
     // The tile wasn't in cache
-    if(m_tilesCache.size() == KisTiledRandomAccessor::CACHESIZE )
+    if(m_tilesCacheSize == KisTiledRandomAccessor::CACHESIZE )
     { // Remove last element of cache
-        KisTileInfo& it = m_tilesCache.last();
-        it.tile->removeReader();
-        it.oldtile->removeReader();
-        m_tilesCache.pop_back();
+        m_tilesCache[CACHESIZE-1]->tile->removeReader();
+        m_tilesCache[CACHESIZE-1]->oldtile->removeReader();
+        delete m_tilesCache[CACHESIZE-1];
+    } else {
+        m_tilesCacheSize++;
     }
     Q_UINT32 col = xToCol( x );
     Q_UINT32 row = yToRow( y );
-    KisTileInfo kti = fetchTileData(col, row);
-    Q_UINT32 offset = x - kti.area.x() + (y - kti.area.y()) * KisTile::WIDTH;
+    KisTileInfo* kti = fetchTileData(col, row);
+    Q_UINT32 offset = x - kti->area.x() + (y - kti->area.y()) * KisTile::WIDTH;
     offset *= m_pixelSize;
-    m_data = kti.data + offset;
-    m_oldData = kti.oldData + offset;
-    m_tilesCache.prepend(kti);
+    m_data = kti->data + offset;
+    m_oldData = kti->oldData + offset;
+    memmove(m_tilesCache+1,m_tilesCache, (KisTiledRandomAccessor::CACHESIZE-1) * sizeof(KisTileInfo*));
+    m_tilesCache[0] = kti;
 }
 
 
@@ -85,20 +92,20 @@ const Q_UINT8 * KisTiledRandomAccessor::oldRawData() const
     return m_oldData;
 }
 
-KisTiledRandomAccessor::KisTileInfo KisTiledRandomAccessor::fetchTileData(Q_INT32 col, Q_INT32 row)
+KisTiledRandomAccessor::KisTileInfo* KisTiledRandomAccessor::fetchTileData(Q_INT32 col, Q_INT32 row)
 {
-    KisTileInfo kti;
-    kti.tile = m_ktm->getTile(col, row, m_writable);
+    KisTileInfo* kti = new KisTileInfo;
+    kti->tile = m_ktm->getTile(col, row, m_writable);
     
-    kti.tile->addReader();
+    kti->tile->addReader();
 
-    kti.data = kti.tile->data();
+    kti->data = kti->tile->data();
 
-    kti.area = QRect( col * KisTile::HEIGHT, row * KisTile::WIDTH, KisTile::WIDTH - 1, KisTile::HEIGHT - 1 );
+    kti->area = QRect( col * KisTile::HEIGHT, row * KisTile::WIDTH, KisTile::WIDTH - 1, KisTile::HEIGHT - 1 );
 
     // set old data
-    kti.oldtile = m_ktm->getOldTile(col, row, kti.tile);
-    kti.oldtile->addReader();
-    kti.oldData = kti.oldtile->data();
+    kti->oldtile = m_ktm->getOldTile(col, row, kti->tile);
+    kti->oldtile->addReader();
+    kti->oldData = kti->oldtile->data();
     return kti;
 }

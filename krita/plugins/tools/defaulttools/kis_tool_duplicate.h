@@ -27,7 +27,8 @@
 class KisEvent;
 class KisButtonPressEvent;
 
-
+class QCheckBox;
+class KIntNumInput;
 
 class KisToolDuplicate : public KisToolFreehand {
 
@@ -49,6 +50,7 @@ public:
                  const double yTilt);
 
     virtual QString quickHelp() const;
+    virtual QWidget* createOptionWidget(QWidget* parent);
 
 protected slots:
     virtual void activate();
@@ -60,6 +62,8 @@ protected:
     KisPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
     bool m_isOffsetNotUptodate; // Tells if the offset is update
     KisPoint m_position; // Give the position of the last alt-click
+    QCheckBox* m_healing;
+    KIntNumInput* m_healingRadius;
 };
 
 

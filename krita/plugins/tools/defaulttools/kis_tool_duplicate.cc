@@ -19,10 +19,13 @@
  */
 
 #include <qbitmap.h>
+#include <qcheckbox.h>
 #include <qpainter.h>
+#include <qlabel.h>
 
 #include <kaction.h>
 #include <kdebug.h>
+#include <knuminput.h>
 #include <klocale.h>
 
 #include "kis_brush.h"
@@ -148,12 +151,34 @@ void KisToolDuplicate::paintAt(const KisPoint &pos,
             m_offset = pos - m_position;
             m_isOffsetNotUptodate = false;
         }
+        painter()->setDuplicateHealing( m_healing->isChecked() );
+        painter()->setDuplicateHealingRadius( m_healingRadius->value() );
         painter()->paintAt( pos, pressure, xtilt, ytilt);
     }
 }
 
 QString KisToolDuplicate::quickHelp() const {
     return i18n("To start, shift-click on the place you want to duplicate from. Then you can start painting. An indication of where you are copying from will be displayed while drawing and moving the mouse.");
+}
+
+QWidget* KisToolDuplicate::createOptionWidget(QWidget* parent)
+{
+    QWidget* widget = KisToolPaint::createOptionWidget(parent);
+    m_healing = new QCheckBox(widget);
+    m_healing->setChecked( false);
+    addOptionWidgetOption(m_healing, new QLabel(i18n("Healing"), widget ));
+    m_healingRadius = new KIntNumInput(widget);
+    
+    KisBrush *brush = m_subject->currentBrush();
+    int healingradius = 20;
+    if( brush )
+    {
+        healingradius = 2 * QMAX(brush->width(),brush->height());
+    }
+    
+    m_healingRadius->setValue( healingradius );
+    addOptionWidgetOption(m_healingRadius, new QLabel(i18n("Healing radius"), widget ));
+    return widget;
 }
 
 #include "kis_tool_duplicate.moc"

@@ -59,6 +59,9 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
 {
     if (!m_painter) return;
 
+    bool heal = m_painter->duplicateHealing();
+    int healradius = m_painter->duplicateHealingRadius();
+
     KisPaintDeviceSP device = m_painter->device();
     if (m_source) device = m_source;
     if (!device) return;
@@ -118,7 +121,79 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     copyPainter.bitBlt(0, 0, COMPOSITE_COPY, device, srcPoint.x(), srcPoint.y(), sw, sh);
     copyPainter.end();
 
-
+    // heal ?
+    
+    if(heal)
+    {
+        Q_UINT16 data[3];
+        // Compute color info from around source
+        double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
+        double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
+        KisRectIteratorPixel deviceIt = device->createRectIterator(srcPoint.x() - healradius / 2 +hotSpot.x(), srcPoint.y() - healradius / 2+hotSpot.y(), healradius, healradius, false );
+        KisColorSpace* deviceCs = device->colorSpace();
+        while(!deviceIt.isDone())
+        {
+            deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)data, 1);
+            Q_UINT32 L = data[0];
+            Q_UINT32 A = data[1];
+            Q_UINT32 B = data[2];
+            meanL_src += L;
+            meanA_src += A;
+            meanB_src += B;
+            sigmaL_src += L*L;
+            sigmaA_src += A*A;
+            sigmaB_src += B*B;
+            ++deviceIt;
+        }
+        double size = 1. / ( healradius * healradius );
+        meanL_src *= size;
+        meanA_src *= size;
+        meanB_src *= size;
+        sigmaL_src *= size;
+        sigmaA_src *= size;
+        sigmaB_src *= size;
+        // Compute color info from around dst
+        double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
+        double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
+        deviceIt = device->createRectIterator(pos.x() - healradius / 2, pos.y() - healradius / 2, healradius, healradius, false );
+        while(!deviceIt.isDone())
+        {
+            deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)data, 1);
+            Q_UINT32 L = data[0];
+            Q_UINT32 A = data[1];
+            Q_UINT32 B = data[2];
+            meanL_ref += L;
+            meanA_ref += A;
+            meanB_ref += B;
+            sigmaL_ref += L*L;
+            sigmaA_ref += A*A;
+            sigmaB_ref += B*B;
+            ++deviceIt;
+        }
+        meanL_ref *= size;
+        meanA_ref *= size;
+        meanB_ref *= size;
+        sigmaL_ref *= size;
+        sigmaA_ref *= size;
+        sigmaB_ref *= size;
+        // Apply the color transformation
+        KisRectIteratorPixel dstIt = srcdev->createRectIterator(0, 0, sw, sh, false );
+        KisColorSpace* srcdevCs = srcdev->colorSpace();
+        double coefL = sqrt((sigmaL_ref - meanL_ref * meanL_ref) / (sigmaL_src - meanL_src * meanL_src));
+        double coefA = sqrt((sigmaA_ref - meanA_ref * meanA_ref) / (sigmaA_src - meanA_src * meanA_src));
+        double coefB = sqrt((sigmaB_ref - meanB_ref * meanB_ref) / (sigmaB_src - meanB_src * meanB_src));
+        kdDebug() << coefL << " " << coefA << " " << coefB << endl;
+        while(!dstIt.isDone())
+        {
+            srcdevCs->toLabA16(dstIt.rawData(), (Q_UINT8*)data, 1);
+            data[0] = (Q_UINT16)CLAMP( ( (double)data[0] - meanL_src) * coefL + meanL_ref, 0., 65535.);
+            data[1] = (Q_UINT16)CLAMP( ( (double)data[1] - meanA_src) * coefA + meanA_ref, 0., 65535.);
+            data[2] = (Q_UINT16)CLAMP( ( (double)data[2] - meanB_src) * coefB + meanB_ref, 0., 65535.);
+            srcdevCs->fromLabA16((Q_UINT8*)data, dstIt.rawData(), 1);
+            ++dstIt;
+        }
+    }
+    
     // Add the dab as selection to the srcdev
     KisPainter copySelection(srcdev->selection().data());
     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);

@@ -91,6 +91,8 @@ void KisPainter::init()
     m_fillStyle = FillStyleNone;
     m_strokeStyle = StrokeStyleBrush;
     m_pressure = PRESSURE_MIN;
+    m_duplicateHealing = false;
+    m_duplicateHealingRadius = 10;
 }
 
 KisPainter::~KisPainter()

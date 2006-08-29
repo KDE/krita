@@ -327,10 +327,17 @@ public:
      * The offset for paint operations that use it (like KisDuplicateOp). It will use as source
      * the part of the layer that is at its paintedPosition - duplicateOffset
      */
+    // TODO: this is an hack ! it must be fix, the following functions have nothing to do here
     void setDuplicateOffset(const KisPoint& offset) { m_duplicateOffset = offset; }
     /// Returns the offset for duplication
     KisPoint duplicateOffset(){ return m_duplicateOffset; }
 
+    inline void setDuplicateHealing(bool v) { m_duplicateHealing = v; }
+    inline bool duplicateHealing() { return m_duplicateHealing; }
+    
+    inline void setDuplicateHealingRadius(int r) { m_duplicateHealingRadius = r; }
+    inline int duplicateHealingRadius() { return m_duplicateHealingRadius; }
+    
     /// Sets the current pressure for things that like to use this
     void setPressure(double pressure) { m_pressure = pressure; }
     /// Returns the current pressure
@@ -379,6 +386,8 @@ protected:
     KisBrush *m_brush;
     KisPattern *m_pattern;
     KisPoint m_duplicateOffset;
+    bool m_duplicateHealing;
+    int m_duplicateHealingRadius;
     Q_UINT8 m_opacity;
     KisCompositeOp m_compositeOp;
     KisFilterSP m_filter;

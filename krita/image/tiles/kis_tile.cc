@@ -101,7 +101,9 @@ KisTile::~KisTile()
         KisTileManager::instance()->dontNeedTileData(m_data, m_pixelSize);
         m_data = 0;
     }
-    assert( !readers() );
+
+    //assert( !readers() );
+    if( !readers() ) kWarning() << "KisTile::~KisTile() readers() is 0" << endl;
 }
 
 void KisTile::allocate()

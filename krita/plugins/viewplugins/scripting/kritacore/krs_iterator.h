@@ -20,8 +20,8 @@
 #define KROSS_KRITACOREKRS_ITERATOR_H
 
 #include <QObject>
-//#include <Q3ValueList>
-//#include <api/class.h>
+#include <QList>
+#include <QListIterator>
 
 #include <klocale.h>
 
@@ -37,19 +37,6 @@ namespace KritaCore {
 
 /**
  * This object allow to change the value of pixel one by one.
- * The name of some function depends of the colorspace, for instance, if
- * the colorspace of the layer is RGB, you will have setR, setG, setB... and for CMYK,
- * setC, setM, setY, setK. In the doc bellow we will consider the colorspace is called ABC with
- * three channels : A, B and C.
- * 
- * Function: setA setB setC
- * Those functions take one argument:
- *  - the new value of one of the channel of this pixel
- * 
- * Function: setABC
- * Set the value of all channels.
- * This function take one argument:
- *  - an array with the new value for all channels
  */
 class IteratorBase : public QObject
 {
@@ -69,27 +56,56 @@ class IteratorBase : public QObject
         virtual bool next() = 0;
 
         /**
-         * Return true if the iterator is at the end, and that no more pixels are available.
+         * Return true if the iterator is at the end, what means, that
+         * there are no more pixels available.
          */
         virtual bool isDone() = 0;
 
         /**
-         * Return the current column the iterator is on.
+         * Return the current column the iterator is on. The value will
+         * be always smaller then the width of the image/layer.
          */
         virtual int x() = 0;
 
         /**
-         * Return the current row the iterator is on.
+         * Return the current row the iterator is on. The value will
+         * be always smaller then the height of the image/layer.
          */
         virtual int y() = 0;
 
         /**
-         * Return the list of pixels.
+         * Return the value the current pixel has in the channel
+         * number \p channelnr . If the channelnr is out of range
+         * (as in >= what \p channelCount() returns) a invalid
+         * QVariant is returned.
+         */
+        virtual QVariant channel(uint channelnr) = 0;
+
+        /**
+         * Set the value the current pixel has in the channel
+         * number \p channelnr.
+         */
+        virtual void setChannel(uint channelnr, const QVariant& value) = 0;
+
+        /**
+         * Return the number of channels the current pixmap has. As
+         * example for RGBA-images 4 is returned cause R is one channel,
+         * while G, B and A are other channels what makes 4 total.
+         */
+        virtual uint channelCount() = 0;
+
+        /**
+         * Return the current pixel. The pixel itself may have depending
+         * on the used colorspace n colors where each color has it's own
+         * channel. So, as example if the colorspace is RGBA, the returned
+         * list has exact 4 items. The first one is a value 0-255 for the
+         * color red, the second for green and the theird for blue while
+         * the forth is the alpha-channel.
          */
         virtual QVariantList pixel() = 0;
 
         /**
-         * Set the list of pixels.
+         * Set the current pixel.
          */
         virtual void setPixel(QVariantList pixel) = 0;
 
@@ -112,8 +128,8 @@ class IteratorBase : public QObject
 };
 
 /**
- * \internal template class that implements \a IteratorBase to deal
- * with all the different kind of iterators Krita uses.
+ * \internal template class that implements \a IteratorBase to provide
+ * iterators for walking over the pixels of an image or a layer.
  */
 template<class _T_It>
 class Iterator : public IteratorBase
@@ -123,76 +139,12 @@ class Iterator : public IteratorBase
             //: m_itmm (new IteratorMemoryManager(this))
             : IteratorBase()
             , m_it(new _T_It(it))
-            , nchannels(layer->paintDevice()->nChannels())
             , m_layer(layer)
         {
-           //setObjectName("KritaIterator");
-
-#if 0
-            // navigate in the iterator
-            this->addFunction("next",
-                new Kross::Api::ProxyFunction<
-                    Iterator<_T_It>, // instance
-                    bool (Iterator<_T_It>::*)(), // method
-                    Kross::Api::Variant // return-value
-                >(this, &Iterator<_T_It>::next));
-            this->addFunction("isDone",
-                new Kross::Api::ProxyFunction<
-                    Iterator<_T_It>, // instance
-                    bool (Iterator<_T_It>::*)(), // method
-                    Kross::Api::Variant // return-value
-                >(this, &Iterator<_T_It>::isDone));
-
-            // get/set value
-            Q3ValueVector<KoChannelInfo *> channels = layer->paintDevice()->colorSpace()->channels();
-            QString initiales = "";
-            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++)
-            {
-                KoChannelInfo * ci = *itC;
-                initiales += ci->name().left(1);
-                switch(ci->channelValueType())
-                {
-                    case KoChannelInfo::UINT8:
-                        this->addFunction("get"+ci->name(),
-                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
-                                this, &Iterator<_T_It>::getChannelUINT8, ci->pos() ) );
-                        this->addFunction("set"+ci->name(),
-                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
-                                this, &Iterator<_T_It>::setChannelUINT8, ci->pos() ) );
-                        break;
-                    case KoChannelInfo::UINT16:
-                        this->addFunction("get"+ci->name(),
-                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
-                                this, &Iterator<_T_It>::getChannelUINT16, ci->pos() ) );
-                        this->addFunction("set"+ci->name(),
-                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
-                                this, &Iterator<_T_It>::setChannelUINT16, ci->pos() ) );
-                        break;
-                    case KoChannelInfo::FLOAT32:
-                        this->addFunction("get"+ci->name(),
-                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
-                                this, &Iterator<_T_It>::getChannelFLOAT, ci->pos() ) );
-                        this->addFunction("set"+ci->name(),
-                            new Kross::Api::Function1< Iterator<_T_It> , uint >(
-                                this, &Iterator<_T_It>::setChannelFLOAT, ci->pos() ) );
-                        break;
-                    default:
-                        kDebug(41011) << "unsupported data format in scripts" << endl;
-                        break;
-                }
-            }
-            initiales = initiales.toUpper();
-            // set/get general
-            addFunction("set" + initiales, &Iterator::setPixel);
-            addFunction("get" + initiales, &Iterator::getPixel);
-            kDebug(41011) << ( "get" + initiales ) << endl;
-            // Various colorSpace
-            addFunction("invertColor", &Iterator::invertColor);
-            addFunction("darken", &Iterator::darken);
-#endif
+            setObjectName("KritaIterator");
         }
 
-        ~Iterator()
+        virtual ~Iterator()
         {
             invalidateIterator();
             //delete m_itmm;
@@ -221,30 +173,30 @@ class Iterator : public IteratorBase
             return m_it->y();
         }
 
+        QVariant channel(uint channelnr)
+        {
+            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            return channelnr < uint(channels.count()) ? channelValue(channels[channelnr]) : QVariant();
+        }
+
+        void setChannel(uint channelnr, const QVariant& value)
+        {
+            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            if(channelnr < uint(channels.count()))
+                setChannelValue(channels[channelnr], value);
+        }
+
+        uint channelCount()
+        {
+            return m_layer->paintDevice()->colorSpace()->channels().count();
+        }
+
         QVariantList pixel()
         {
-            Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
             QVariantList pixel;
-            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end(); itC++) {
-                KoChannelInfo * ci = *itC;
-                quint8* data = (quint8*)(m_it->rawData() + ci->pos());
-                switch(ci->channelValueType())
-                {
-                    case KoChannelInfo::UINT8:
-                        pixel.push_back( *data);
-                        break;
-                    case KoChannelInfo::UINT16:
-                        pixel.push_back( *((quint16*) data) );
-                        break;
-                    case KoChannelInfo::FLOAT32:
-                        pixel.push_back( *((float*) data) );
-                        break;
-                    default:
-                        //kDebug(41011) << i18n("An error has occurred in %1","getPixel") << endl;
-                        kDebug(41011) << i18n("unsupported data format in scripts") << endl;
-                        break;
-                }
-            }
+            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            for(Q3ValueVector<KoChannelInfo*>::iterator itC = channels.begin(); itC != channels.end(); ++itC)
+                pixel.push_back( channelValue(*itC) );
             return pixel;
         }
 
@@ -253,26 +205,8 @@ class Iterator : public IteratorBase
             Q3ValueVector<KoChannelInfo *> channels = m_layer->paintDevice()->colorSpace()->channels();
             uint i = 0;
             const uint size = pixel.size();
-            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end() && i < size; ++itC, ++i) {
-                KoChannelInfo * ci = *itC;
-                quint8* data = (quint8*)(m_it->rawData() + ci->pos());
-                switch(ci->channelValueType())
-                {
-                    case KoChannelInfo::UINT8:
-                        *data = pixel[i].toUInt();
-                        break;
-                    case KoChannelInfo::UINT16:
-                        *((quint16*) data) = pixel[i].toUInt();
-                        break;
-                    case KoChannelInfo::FLOAT32:
-                        *((float*) data) = pixel[i].toDouble();
-                        break;
-                    default:
-                        //kDebug(41011) << i18n("An error has occurred in %1","setPixel") << endl;
-                        kDebug(41011) << i18n("unsupported data format in scripts") << endl;
-                        break;
-                }
-            }
+            for(Q3ValueVector<KoChannelInfo *>::iterator itC = channels.begin(); itC != channels.end() && i < size; ++itC, ++i)
+                setChannelValue(*itC, pixel[i]);
         }
 
         void invertColor()
@@ -285,65 +219,55 @@ class Iterator : public IteratorBase
             m_layer->paintDevice()->colorSpace()->darken(m_it->rawData(), m_it->rawData(), shade, compensate, compensation, 1);
         }
 
-#if 0
-        Kross::Api::Object::Ptr getChannelUINT8(Kross::Api::List::Ptr, uint channelpos)
-        {
-            quint8* data = (quint8*)(m_it->rawData() + channelpos);
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant( * data));
-        }
-        Kross::Api::Object::Ptr setChannelUINT8(Kross::Api::List::Ptr args, uint channelpos)
-        {
-            quint8* data = (quint8*)(m_it->rawData() + channelpos); //*(uint*)channelpos);
-            *data = Kross::Api::Variant::toUInt( args->item(0) );
-            return Kross::Api::Object::Ptr(0);
-        }
-        Kross::Api::Object::Ptr getChannelUINT16(Kross::Api::List::Ptr, uint channelpos)
-        {
-            quint16* data = (quint16*)(m_it->rawData() + channelpos);
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant( * data));
-        }
-        Kross::Api::Object::Ptr setChannelUINT16(Kross::Api::List::Ptr args, uint channelpos)
-        {
-            quint16* data = (quint16*)(m_it->rawData() + channelpos);
-            *data =  Kross::Api::Variant::toUInt( args->item(0) );
-            return Kross::Api::Object::Ptr(0);
-        }
-        Kross::Api::Object::Ptr getChannelFLOAT(Kross::Api::List::Ptr, uint channelpos)
-        {
-            float* data = (float*)(m_it->rawData() + channelpos);
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant( * data));
-        }
-        Kross::Api::Object::Ptr setChannelFLOAT(Kross::Api::List::Ptr args, uint channelpos)
-        {
-            float* data = (float*)(m_it->rawData() + channelpos);
-            *data = Kross::Api::Variant::toUInt( args->item(0) );
-            return Kross::Api::Object::Ptr(0);
-        }
-#endif
-
     private:
 
         virtual void invalidateIterator()
         {
             kDebug(41011) << "invalidating iterator" << endl;
-            if(m_it)
-            {
-                kDebug(41011) << "deleting iterator" << endl;
-                delete m_it;
+            delete m_it; m_it = 0;
+        }
+
+        inline QVariant channelValue(KoChannelInfo* ci)
+        {
+            quint8* data = (quint8*)(m_it->rawData() + ci->pos());
+            switch(ci->channelValueType()) {
+                case KoChannelInfo::UINT8:
+                    return *data;
+                case KoChannelInfo::UINT16:
+                    return *((quint16*) data);
+                case KoChannelInfo::FLOAT32:
+                    return *((float*) data);
+                default:
+                    kDebug(41011) << "Unsupported data format in script" << endl;
+                    return QVariant();
             }
-            m_it = 0;
-            kDebug() << " Iterator = " << m_it << endl;
+        }
+
+        inline void setChannelValue(KoChannelInfo* ci, const QVariant& value)
+        {
+            quint8* data = (quint8*)(m_it->rawData() + ci->pos());
+            switch(ci->channelValueType()) {
+                case KoChannelInfo::UINT8:
+                    *data = value.toUInt();
+                    break;
+                case KoChannelInfo::UINT16:
+                    *((quint16*) data) = value.toUInt();
+                    break;
+                case KoChannelInfo::FLOAT32:
+                    *((float*) data) = value.toDouble();
+                    break;
+                default:
+                    kDebug(41011) << "Unsupported data format in script" << endl;
+                    break;
+            }
         }
 
     private:
         //IteratorMemoryManager* m_itmm;
         _T_It* m_it;
-        int nchannels;
         KisPaintLayerSP m_layer;
 };
 
-}
-
-}
+}}
 
 #endif

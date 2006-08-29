@@ -73,7 +73,7 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
 
 void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     m_pointMoving = m_activePoint;
-    m_lastPosition = untransformed( event->point );
+    m_lastPosition = event->point;
     m_move = QPointF( 0, 0 );
     if( m_activePoint && event->button() & Qt::LeftButton)
     {
@@ -110,18 +110,15 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     if( m_pointMoving )
     {
         QPointF docPoint = snapToGrid( event->point, event->modifiers() );
-        QPointF move = untransformed( docPoint ) - m_lastPosition;
-        m_lastPosition = untransformed( docPoint );
+        QPointF move = untransformed( docPoint ) - untransformed( m_lastPosition );
+        // as the last position can change when the top left is changed we have 
+        // to save it in document pos and not in shape pos
+        m_lastPosition = event->point;
 
         m_move += move;
 
-        QPointF oldPos = m_pathShape->position();
         KoPointMoveCommand cmd( m_pathShape, m_activePoint, move, m_activePointType );
         cmd.execute();
-        QPointF newPos = m_pathShape->position();
-
-        // adjust the last mouse position after moving the path shape
-        m_lastPosition += oldPos - newPos;
     }
     else
     {

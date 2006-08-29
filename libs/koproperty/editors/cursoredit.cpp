@@ -112,7 +112,7 @@ CursorEdit::~CursorEdit()
 QVariant
 CursorEdit::value() const
 {
-	return QCursor(ComboBox::value().toInt());
+	return QCursor((Qt::CursorShape)ComboBox::value().toInt());
 }
 
 void

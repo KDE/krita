@@ -394,7 +394,7 @@ void KisToolPerspectiveTransform::transform()
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    KisPerspectiveTransformWorker t(img->activeDevice(),m_topleft, m_topright, m_bottomleft, m_bottomright/*, progress*/);
+    KisPerspectiveTransformWorker t(img->activeDevice(),m_topleft, m_topright, m_bottomleft, m_bottomright, progress);
     t.run();
 
     // If canceled, go back to the memento

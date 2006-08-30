@@ -149,6 +149,30 @@ class PaintLayer : public QObject
          */
         bool fastWaveletUntransformation(QObject* wavelet);
 
+        /**
+         * Returns or sets the raw-bytes the layer has.
+         *
+         * Please note, that it is NOT recommed to use that
+         * functionality since they bypass Krita's undo/redo
+         * mechanism as well as the integrated swapping-technology.
+         *
+         * The returned array of bytes has n items where n is
+         * height * size * number of bytes per pixel. Each pixel
+         * is represented by >= 1 bytes depending on the used
+         * colorspace (e.g. for RGBA we have 4 bytes per pixel).
+         *
+         * For example (in Python) :
+         * @code
+         * import Krita, struct, array
+         * layer = Krita.image().activePaintLayer()
+         * ba = layer.bytes()
+         * a = array.array('B', [ (255 - struct.unpack("B",ba[i])[0]) for i in range(len(ba)) ] )
+         * layer.setBytes( a.tostring() )
+         * @endcode
+         */
+        QByteArray bytes();
+        bool setBytes(QByteArray bytearray);
+
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
         inline KisDoc* doc() { return m_doc; }

@@ -31,10 +31,6 @@
 
 #include <typeinfo>
 
-
-
-
-
 #include <QDate>
 #include <QTime>
 #include <QDateTime>
@@ -168,10 +164,12 @@ namespace Kross {
     struct PythonType<QByteArray>
     {
         inline static Py::Object toPyObject(const QByteArray& ba) {
-            return Py::String(ba.constData());
+            return Py::String(ba.constData(), ba.size());
         }
         inline static QByteArray toVariant(const Py::Object& obj) {
-            return QByteArray( Py::String(obj).as_string().c_str() );
+            char* s = PyString_AS_STRING(obj.ptr());
+            int size = PyString_Size(obj.ptr());
+            return QByteArray(s, size);
         }
     };
 

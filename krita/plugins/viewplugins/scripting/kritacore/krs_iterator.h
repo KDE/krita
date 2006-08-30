@@ -209,6 +209,29 @@ class Iterator : public IteratorBase
                 setChannelValue(*itC, pixel[i]);
         }
 
+        /*
+        QVariantList pixels()
+        {
+            QVariantList pixels;
+            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            const int channelcount = channels.count();
+            for(; ! m_it->isDone(); ++(*m_it))
+                for(int k = 0; k < channelcount; ++k)
+                    pixels.append( channelValue(channels[k]) );
+            return pixels;
+        }
+
+        void setPixels(QVariantList pixels)
+        {
+            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
+            const int channelcount = channels.count();
+            const int pixelcount = pixels.count();
+            for(int i = 0; i < pixelcount && ! m_it->isDone(); ++i, ++(*m_it))
+                for(int k = 0; k < channelcount; ++k)
+                    setChannelValue(channels[k], pixels[i]);
+        }
+        */
+
         void invertColor()
         {
             m_layer->paintDevice()->colorSpace()->invertColor(m_it->rawData(), 1);

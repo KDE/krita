@@ -18,6 +18,7 @@
 
 #include "krs_paint_layer.h"
 
+#include <QBuffer>
 #include <klocale.h>
 
 #include <KoColorSpaceRegistry.h>
@@ -174,6 +175,54 @@ bool PaintLayer::fastWaveletUntransformation(QObject* wavelet)
     KisMathToolbox* mathToolbox = KisMetaRegistry::instance()->mtRegistry()->get( paintLayer()->paintDevice()->colorSpace()->mathToolboxID() );
     QRect rect = paintLayer()->exactBounds();
     mathToolbox->fastWaveletUntransformation( paintLayer()->paintDevice(), rect, wav->wavelet() );
+    return true;
+}
+
+QByteArray PaintLayer::bytes()
+{
+    qint32 pixelsize = paintLayer()->paintDevice()->colorSpace()->pixelSize();
+    const int w = width();
+    const int h = height();
+    const int size = w * h * pixelsize;
+    Q_ASSERT(size >= 0);
+
+    QByteArray bytearray;
+    QBuffer buffer(&bytearray);
+    buffer.open(QIODevice::WriteOnly);
+    QDataStream out(&buffer);
+
+    quint8* data = new quint8[size];
+    Q_CHECK_PTR(data);
+    paintLayer()->paintDevice()->readBytes(data, 0, 0, w, h);
+    for(int i = 0; i < size; ++i)
+        out << data[i];
+    delete [] data;
+
+    kDebug()<<"PaintLayer::bytes width="<<w<<" height="<<h<<" pixelsize="<<pixelsize<<" size="<<size<<endl;
+    return bytearray;
+}
+
+bool PaintLayer::setBytes(QByteArray bytearray)
+{
+    qint32 pixelsize = paintLayer()->paintDevice()->colorSpace()->pixelSize();
+    const int w = width();
+    const int h = height();
+    const int size = w * h * pixelsize;
+
+    if(size < 0 || bytearray.size() < size)
+        return false;
+
+    QBuffer buffer(&bytearray);
+    buffer.open(QIODevice::ReadOnly);
+    QDataStream in(&buffer);
+
+    quint8* data = new quint8[size];
+    Q_CHECK_PTR(data);
+    for(int i = 0; i < size; ++i)
+        in >> data[i];
+    paintLayer()->paintDevice()->writeBytes(data, 0, 0, w, h);
+    delete [] data;
+
     return true;
 }
 

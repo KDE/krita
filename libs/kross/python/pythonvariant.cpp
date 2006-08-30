@@ -173,7 +173,7 @@ MetaType* PythonMetaTypeFactory::create(const char* typeName, const Py::Object& 
     int typeId = QVariant::nameToType(typeName);
 
     #ifdef KROSS_PYTHON_VARIANT_DEBUG
-        krossdebug( QString("PythonMetaTypeFactory::create object=%1 typeName=%2 metatype.id=%3 variant.id=%4").arg(object.as_string().c_str()).arg(typeName).arg(QMetaType::type(typeName)).arg(typeId) );
+        krossdebug( QString("PythonMetaTypeFactory::create typeName=%1 metatype.id=%2 variant.id=%3 object=%4").arg(typeName).arg(QMetaType::type(typeName)).arg(typeId).arg(object.as_string().c_str()) );
     #endif
 
     switch(typeId) {

@@ -154,10 +154,14 @@ class PaintLayer : public QObject
          *
          * Please note, that it is NOT recommed to use that
          * functionality since they bypass Krita's undo/redo
-         * mechanism as well as the integrated swapping-technology.
+         * mechanism as well as the integrated swapping-technology
+         * and may consume a lot of RAM cause the whole image
+         * is readed into it (what provides us the possibility
+         * to work direct on the mem-data from within
+         * scripting-languages).
          *
          * The returned array of bytes has n items where n is
-         * height * size * number of bytes per pixel. Each pixel
+         * height * width * number of bytes per pixel. Each pixel
          * is represented by >= 1 bytes depending on the used
          * colorspace (e.g. for RGBA we have 4 bytes per pixel).
          *

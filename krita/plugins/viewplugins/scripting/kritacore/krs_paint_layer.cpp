@@ -178,6 +178,7 @@ bool PaintLayer::fastWaveletUntransformation(QObject* wavelet)
     return true;
 }
 
+#if 0
 QByteArray PaintLayer::bytes()
 {
     qint32 pixelsize = paintLayer()->paintDevice()->colorSpace()->pixelSize();
@@ -225,5 +226,6 @@ bool PaintLayer::setBytes(QByteArray bytearray)
 
     return true;
 }
+#endif
 
 #include "krs_paint_layer.moc"

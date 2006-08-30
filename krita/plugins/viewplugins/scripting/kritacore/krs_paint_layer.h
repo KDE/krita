@@ -149,6 +149,9 @@ class PaintLayer : public QObject
          */
         bool fastWaveletUntransformation(QObject* wavelet);
 
+#if 0
+//Disabled yet cause it's not wanted to expose the Krita internals.
+
         /**
          * Returns or sets the raw-bytes the layer has.
          *
@@ -176,6 +179,7 @@ class PaintLayer : public QObject
          */
         QByteArray bytes();
         bool setBytes(QByteArray bytearray);
+#endif
 
     public:
         inline KisPaintLayerSP paintLayer() { return m_layer; }

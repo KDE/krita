@@ -1,0 +1,38 @@
+<KrossScripting>
+
+	<ScriptAction
+		name="rbinvert"
+		text="Invert with Ruby"
+		description="Invert the pixel of an image with Ruby"
+		interpreter="ruby"
+		file="invert.rb" />
+
+	<ScriptAction
+		name="pyinvert"
+		text="Invert with Python"
+		description="Invert the pixel of an image with Python"
+		interpreter="python"
+		file="invert.py" />
+
+	<ScriptAction
+		name="randompaint"
+		text="Random painting"
+		description="Demonstrate how to use the Painter scripting API and paint random shape on screen"
+		interpreter="ruby"
+		file="randompaint.rb" />
+
+	<ScriptAction
+		name="pilimport"
+		text="Python Imaging Library Import"
+		description="Import images with the Python Imaging Library (PIL)"
+		interpreter="python"
+		file="pilimport.py" />
+
+	<ScriptAction
+		name="pilexport"
+		text="Python Imaging Library Export"
+		description="Export images with the Python Imaging Library (PIL)"
+		interpreter="python"
+		file="pilexport.py" />
+
+</KrossScripting>

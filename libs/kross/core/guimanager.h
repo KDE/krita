@@ -24,7 +24,7 @@
 #include <QWidget>
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
-#include <QListView>
+#include <QTreeView>
 
 #include <kdialog.h>
 #include <kactioncollection.h>
@@ -48,10 +48,12 @@ namespace Kross {
             virtual ~GUIManagerModel();
 
             virtual int columnCount(const QModelIndex& parent = QModelIndex()) const; 
-            virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+            virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
             virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
             virtual QModelIndex parent(const QModelIndex& index) const;
-            virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+            virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+            virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+            virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
         private:
             class Private;
@@ -63,7 +65,7 @@ namespace Kross {
     * model and offers a collection of actions to run, stop, install, uninstall
     * and to get new scripts.
     */
-    class KROSS_EXPORT GUIManagerView : public QListView
+    class KROSS_EXPORT GUIManagerView : public QTreeView
     {
             Q_OBJECT
         public:
@@ -96,6 +98,9 @@ namespace Kross {
         public:
             GUIManagerDialog(GUIClient* guiclient, QWidget* parent);
             virtual ~GUIManagerDialog();
+
+        private slots:
+            void saveChanges();
 
         private:
             class Private;

@@ -2,6 +2,7 @@ include_directories(BEFORE ${KROSS_INCLUDES} )
 
 add_subdirectory( kritacore )
 #add_subdirectory( samples )
+add_subdirectory( scripts )
 
 ########### next target ###############
 

@@ -24,6 +24,8 @@
 
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
+#include <QDomElement>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -117,6 +119,35 @@ Action::Action(KActionCollection* collection, const QString& name, const KUrl& f
     , d( new ActionPrivate() )
 {
     d->scriptfile = file;
+}
+
+Action::Action(KActionCollection* collection, const QDomElement& element, const QDir& packagepath)
+    : KAction( collection, element.attribute("name") )
+    , KShared()
+    , ChildrenInterface()
+    , ErrorInterface()
+    , d( new ActionPrivate() )
+{
+    setText( element.attribute("text") );
+    setDescription( element.attribute("description") );
+    setInterpreter( element.attribute("interpreter") );
+
+    QString file = element.attribute("file");
+    if(! file.isEmpty()) {
+        if(! QFileInfo(file).exists()) {
+            QFileInfo fi(packagepath, file);
+            if(fi.exists())
+                file = fi.absoluteFilePath();
+            else
+                setEnabled(false);
+        }
+        d->scriptfile = KUrl(file);
+    }
+
+    QString icon = element.attribute("icon");
+    if(icon.isEmpty() && d->scriptfile.isValid())
+        icon = KMimeType::iconNameForUrl(d->scriptfile);
+    setIcon( KIcon(icon) );
 }
 
 Action::~Action()

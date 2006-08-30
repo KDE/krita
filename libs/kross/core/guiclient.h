@@ -80,12 +80,23 @@ namespace Kross {
              * Read the configurations like e.g. the installed script-packages
              * from the KConfig \p config configuration-backend.
              */
-            void readConfig(KConfig* config);
+            void readConfig();
 
             /**
              * Write the configurations to the \p config configuration-backend.
              */
-            void writeConfig(KConfig* config);
+            void writeConfig();
+
+            /**
+             * This method tries to determinate all available packages and adds them
+             * to the list of scripts. Normaly only those packages defined in the
+             * KConfig are enabled and therefore it's not needed to read all the
+             * packages what is somewhat slow. So, this method is only needed for
+             * purposes, where you like to have all packages in the list, even those
+             * ones that are disabled. As example the \a GUIManagerModel uses this
+             * to be able to offer the user even those packages he didn't enabled yet.
+             */
+            void readAllConfigs();
 
         public slots:
 
@@ -119,7 +130,7 @@ namespace Kross {
             * Install the scriptpackage \p file . The scriptpackage should be a
             * tar.gz or tar.bzip archivefile.
             *
-            * \param scriptpackagefile The tar.gz or tar.bzip archivfile which contains
+            * \param file The tar.gz or tar.bzip archivfile which contains
             * the files that should be installed.
             * \return true if installing was successfully else false.
             */

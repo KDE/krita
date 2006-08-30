@@ -27,6 +27,7 @@
 #include <kapplication.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <kmenu.h>
 //#include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
@@ -83,7 +84,7 @@ GUIClient::GUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     //connect(d->actions, SIGNAL(removed(KAction*)), scriptsmenu, SLOT(removeAction(QAction*)));
 
     // read the script-actions.
-    readConfig( instance()->config() );
+    readConfig();
 
     //TESTCASE
     //installPackage( KUrl("/home/kde4/koffice/libs/kross/test/Archiv.tar.gz") );
@@ -113,9 +114,31 @@ KActionCollection* GUIClient::scriptsActionCollection() const
     return d->actions;
 }
 
-void GUIClient::readConfig(KConfig* config)
+void GUIClient::readConfig()
 {
-    krossdebug( QString("GUIClient::read hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
+    KConfig* config = instance()->config();
+    krossdebug( QString("GUIClient::readConfig hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
+
+    if(! config->hasGroup("scripts") && ! config->isReadOnly()) {
+        // if there is no scripts-section in the configfile yet, we assume that the user uses a fresh
+        // configfile. So, we just read all available script-packages. Since readAllConfigs calls our
+        // method, we need to be sure, that we don't end in a loop. So, let's add our expected
+        // "scripts" group to the configfile, sync, and re-check if it was really written before we
+        // start to create an initial "scripts" configurationgroup which contains all scripts we found.
+        config->setGroup("scripts");
+        config->writeEntry("names", QStringList());
+        config->sync();
+        if(config->hasGroup("scripts")) {
+            readAllConfigs();
+            foreach(KAction* a, d->actions->actions(QString::null))
+                a->setVisible(true);
+        }
+        writeConfig();
+        return;
+    }
+
+    d->actions->clear();
+    d->scriptsmenu->menu()->clear();
 
     config->setGroup("scripts");
     foreach(QString name, config->readEntry("names", QStringList())) {
@@ -132,15 +155,13 @@ void GUIClient::readConfig(KConfig* config)
                 file = resource;
         }
 
-        if(text.isNull())
+        if(text.isEmpty())
             text = file;
 
         if(description.isEmpty())
-            description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);
-        else
-            description += QString("<br>%1").arg(file);
+            description = text.isEmpty() ? name : text;
 
-        if(icon.isNull())
+        if(icon.isEmpty())
             icon = KMimeType::iconNameForUrl( KUrl(file) );
 
         krossdebug( QString("GUIClient::readConfig Add scriptaction name='%1' file='%2'").arg(name).arg(file) );
@@ -158,12 +179,11 @@ void GUIClient::readConfig(KConfig* config)
 
         d->scriptsmenu->addAction(action);
     }
-
-    d->scriptsmenu->setEnabled( ! d->actions->isEmpty() );
 }
 
-void GUIClient::writeConfig(KConfig* config)
+void GUIClient::writeConfig()
 {
+    KConfig* config = instance()->config();
     krossdebug( QString("GUIClient::write hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
 
     config->deleteGroup("scripts"); // remove old entries
@@ -172,6 +192,7 @@ void GUIClient::writeConfig(KConfig* config)
     QStringList names;
     foreach(KAction* a, d->actions->actions(QString::null)) {
         Action* action = static_cast< Action* >(a);
+        if(! action->isVisible()) continue; // don't remember invisible (as in not installed) scripts
         const QString name = action->objectName();
         names << name;
         config->writeEntry(QString("%1_text").arg(name).toLatin1(), action->text());
@@ -188,129 +209,57 @@ void GUIClient::writeConfig(KConfig* config)
     config->sync();
 }
 
-#if 0
-void GUIClient::loadScriptConfig()
+void GUIClient::readAllConfigs()
 {
-    d->actions->clear();
-    QString configfile = "/home/kde4/scripts.rc";//KGlobal::dirs()->findResource("appdata","scripts.rc");
-    if(configfile.isNull()) {
-        krossdebug( QString("No scriptconfigfile found.") );
-        return;
-    }
-    QDomDocument domdoc;
-    QFile file(configfile);
-    if(! file.open(QIODevice::ReadOnly)) {
-        krosswarning( QString("GUIClient::loadScriptConfig(): Failed to read scriptconfigfile: %1").arg(configfile) );
-        return;
-    }
-    bool ok = domdoc.setContent(&file);
-    file.close();
-    if(! ok) {
-        krosswarning( QString("GUIClient::loadScriptConfig(): Failed to parse scriptconfigfile: %1").arg(configfile) );
-        return;
-    }
-    QDomNodeList nodelist = domdoc.elementsByTagName("ScriptAction");
-    uint nodelistcount = nodelist.count();
-    for(uint i = 0; i < nodelistcount; i++) {
-        QDomElement element = nodelist.item(i).toElement();
-        new Action(d->actions, element);
+    readConfig();
 
-        /*
-        connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
-                this, SLOT( executionFailed(const QString&, const QString&) ));
-        connect(action.data(), SIGNAL( success() ),
-                this, SLOT( successfullyExecuted() ));
-        connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
-        */
-    }
-    //emit collectionChanged(installedcollection);
-    #if 0
-    ActionCollection* installedcollection = d->collections["installedscripts"];
-    if(installedcollection)
-        installedcollection->clear();
     QByteArray partname = d->guiclient->instance()->instanceName();
-    QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*/*.rc");
-    //files.sort();
-    for(QStringList::iterator it = files.begin(); it != files.end(); ++it)
-        loadScriptConfigFile(*it);
-    #endif
-}
+    QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*/install.rc");
+    foreach(QString file, files) {
+        const QDir packagepath = QFileInfo(file).dir();
 
-bool GUIClient::uninstallScriptPackage(const QString& scriptpackagepath)
-{
-    if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
-        KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".", scriptpackagepath));
-        return false;
-    }
-    reloadInstalledScripts();
-    return true;
-}
-
-bool GUIClient::loadScriptConfigFile(const QString& scriptconfigfile)
-{
-    krossdebug( QString("GUIClient::loadScriptConfig file=%1").arg(scriptconfigfile) );
-
-    QDomDocument domdoc;
-    QFile file(scriptconfigfile);
-    if(! file.open(QIODevice::ReadOnly)) {
-        krosswarning( QString("GUIClient::loadScriptConfig(): Failed to read scriptconfigfile: %1").arg(scriptconfigfile) );
-        return false;
-    }
-    bool ok = domdoc.setContent(&file);
-    file.close();
-    if(! ok) {
-        krosswarning( QString("GUIClient::loadScriptConfig(): Failed to parse scriptconfigfile: %1").arg(scriptconfigfile) );
-        return false;
-    }
-    return loadScriptConfigDocument(scriptconfigfile, domdoc);
-}
-
-bool GUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, const QDomDocument &document)
-{
-    ActionCollection* installedcollection = d->collections["installedscripts"];
-    QDomNodeList nodelist = document.elementsByTagName("Action");
-    uint nodelistcount = nodelist.count();
-    for(uint i = 0; i < nodelistcount; i++) {
-        Action::Ptr action = Action::Ptr( new Action(scriptconfigfile, nodelist.item(i).toElement()) );
-        if(installedcollection) {
-            Action::Ptr otheraction = installedcollection->action( action->objectName() );
-            if(otheraction) {
-                // There exists already an action with the same name. Use the versionnumber
-                // to see if one of them is newer and if that's the case display only
-                // the newer aka those with the highest version.
-                if(action->version() < otheraction->version() && action->version() >= 0) {
-                    // Just don't do anything with the above created action. The
-                    // shared pointer will take care of freeing the instance.
-                    continue;
-                }
-                else if(action->version() > otheraction->version() && otheraction->version() >= 0) {
-                    // The previously added scriptaction isn't up-to-date any
-                    // longer. Remove it from the list of installed scripts.
-                    otheraction->finalize();
-                    installedcollection->detach(otheraction);
-                    //otheraction->detachAll() //FIXME: why it crashes with detachAll() ?
-                }
-                else {
-                    // else just print a warning and fall through (so, install the action
-                    // and don't care any longer of the duplicated name)...
-                    krosswarning( QString("GUIClient::loadScriptConfigDocument: There exists already a scriptaction with name \"%1\". Added anyway...").arg(action->objectName()) );
-                }
-            }
-            installedcollection->attach( action );
+        krossdebug( QString("GUIClient::readAllConfigs trying to read \"%1\"").arg(file) );
+        QFile f(file);
+        if(! f.open(QIODevice::ReadOnly)) {
+            krossdebug( QString("GUIClient::readAllConfigs reading \"%1\" failed. Skipping package.").arg(file) );
+            continue;
         }
-        connect(action.data(), SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-        connect(action.data(), SIGNAL( success() ), this, SLOT( successfullyExecuted() ));
-        connect(action.data(), SIGNAL( activated(const Kross::Action*) ), SIGNAL( executionStarted(const Kross::Action*)));
+
+        QDomDocument domdoc;
+        bool ok = domdoc.setContent(&f);
+        f.close();
+        if(! ok) {
+            krossdebug( QString("GUIClient::readAllConfigs parsing \"%1\" failed. Skipping package.").arg(file) );
+            continue;
+        }
+
+        QDomNodeList nodelist = domdoc.elementsByTagName("ScriptAction");
+        int nodelistcount = nodelist.count();
+        for(int i = 0; i < nodelistcount; ++i) {
+            QDomElement element = nodelist.item(i).toElement();
+            const QString name = element.attribute("name");
+            if(d->actions->action(name) != 0) {
+                // if the script-package is already in the list of actions, it's an
+                // already enabled one and therefore it's not needed to add it again.
+                continue;
+            }
+
+            krossdebug( QString("GUIClient::readAllConfigs adding script-package \"%1\" from file \"%2\".").arg(name).arg(file) );
+            Action* action = new Action(d->actions, element, packagepath);
+            action->setVisible(false); // the package is not enabled, so don't display it.
+            connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+            connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
+            connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+            d->scriptsmenu->addAction(action);
+        }
     }
-    emit collectionChanged(installedcollection);
-    return true;
 }
 
+#if 0
 void GUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
 {
     KXMLGUIClient::setXMLFile(file, merge, setXMLDoc);
 }
-
 void GUIClient::setDOMDocument(const QDomDocument &document, bool merge)
 {
     ActionCollection* installedcollection = d->collections["installedscripts"];
@@ -324,15 +273,6 @@ void GUIClient::executionSuccessfull()
 {
     Action* action = dynamic_cast< Action* >( QObject::sender() );
     emit executionFinished(action);
-#if 0
-        ActionCollection* executedcollection = d->collections["executedscripts"];
-        if(executedcollection) {
-            Action* actionptr = const_cast< Action* >( action );
-            executedcollection->detach( Action::Ptr(actionptr) );
-            executedcollection->attach( Action::Ptr(actionptr) );
-            emit collectionChanged(executedcollection);
-        }
-#endif
 }
 
 void GUIClient::executionFailed(const QString& errormessage, const QString& tracedetails)
@@ -403,30 +343,16 @@ bool GUIClient::installPackage(const KUrl& file)
     }
 
     const KArchiveDirectory* archivedir = archive.directory();
-    const KArchiveEntry* entry = archivedir->entry("install.xml");
+    const KArchiveEntry* entry = archivedir->entry("install.rc");
     if(! entry || ! entry->isFile()) {
-        KMessageBox::sorry(0, i18n("The package \"%1\" does not contain a valid install.xml file.", scriptpackagefile));
+        KMessageBox::sorry(0, i18n("The package \"%1\" does not contain a valid install.rc file.", scriptpackagefile));
         return false;
     }
 
     QString xml = static_cast< const KArchiveFile* >(entry)->data();
     QDomDocument domdoc;
     if(! domdoc.setContent(xml)) {
-        KMessageBox::sorry(0, i18n("Failed to parse the install.xml file at package \"%1\".", scriptpackagefile));
-        return false;
-    }
-
-    QDomElement element = domdoc.documentElement();
-    const QString name = element.attribute("name");
-    const QString version = element.attribute("version");
-    const QString text = element.attribute("text");
-    const QString description = element.attribute("description");
-    const QString icon = element.attribute("icon");
-    const QString interpreter = element.attribute("interpreter");
-    const QString scriptfile = element.attribute("file");
-
-    if(name.isNull() || name.contains(QRegExp("[^a-zA-Z0-9\\_\\-]"))) {
-        KMessageBox::sorry(0, i18n("The install.xml file of the package \"%1\" does not define a valid package-name.", scriptpackagefile));
+        KMessageBox::sorry(0, i18n("Failed to parse the install.rc file at package \"%1\".", scriptpackagefile));
         return false;
     }
 
@@ -436,10 +362,13 @@ bool GUIClient::installPackage(const KUrl& file)
         return false;
     }
 
-    destination += name; // add the packagename to the name of the destination-directory.
-    if( QDir(destination).exists() ) {
+    QString packagename = QFileInfo(scriptpackagefile).baseName();
+    destination += packagename; // add the packagename to the name of the destination-directory.
+
+    QDir packagepath(destination);
+    if( packagepath.exists() ) {
         if( KMessageBox::warningContinueCancel(0,
-            i18n("A script package with the name \"%1\" already exists. Replace this package?" , name),
+            i18n("A script package with the name \"%1\" already exists. Replace this package?", packagename),
             i18n("Replace")) != KMessageBox::Continue )
                 return false;
         if(! KIO::NetAccess::del(destination, 0) ) {
@@ -451,21 +380,18 @@ bool GUIClient::installPackage(const KUrl& file)
     krossdebug( QString("Copy script-package to destination directory: %1").arg(destination) );
     archivedir->copyTo(destination, true);
 
-    Action* action = new Action(d->actions, name, scriptfile);
-    action->setText(text);
-    action->setDescription(description);
-    if(! icon.isNull())
-        action->setIcon(KIcon(icon));
-    if(! interpreter.isNull())
-        action->setInterpreter(interpreter);
-    connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-    connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
-    connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+    QDomNodeList nodelist = domdoc.elementsByTagName("ScriptAction");
+    int nodelistcount = nodelist.count();
+    for(int i = 0; i < nodelistcount; ++i) {
+        QDomElement element = nodelist.item(i).toElement();
+        Action* action = new Action(d->actions, element, packagepath);
+        connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
+        connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
+        connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+        d->scriptsmenu->addAction(action);
+    }
 
-    d->scriptsmenu->addAction(action);
-    d->scriptsmenu->setEnabled(true);
-
-    writeConfig( instance()->config() );
+    writeConfig();
     return true;
 }
 
@@ -491,14 +417,13 @@ bool GUIClient::uninstallPackage(Action* action)
     d->scriptsmenu->removeAction(action);
     delete action; action = 0; // removes the action from d->actions as well
 
-    writeConfig( instance()->config() );
+    writeConfig();
     return true;
 }
 
 void GUIClient::showManager()
 {
     GUIManagerDialog* dialog = new GUIManagerDialog(this, d->parent);
-    dialog->resize( QSize(360, 320).expandedTo(dialog->minimumSizeHint()) );
     dialog->show();
 }
 

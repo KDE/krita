@@ -30,6 +30,7 @@
 //#include <QPixmap>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QHeaderView>
 
 #include <kapplication.h>
 //#include <kdeversion.h>
@@ -82,32 +83,19 @@ GUIManagerModel::~GUIManagerModel()
 int GUIManagerModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return 2;
+    return 1;
 }
 
-QVariant GUIManagerModel::data(const QModelIndex& index, int role) const
+int GUIManagerModel::rowCount(const QModelIndex& parent) const
 {
-    if(! index.isValid())
-        return QVariant();
-
-    Action* action = static_cast< Action* >( index.internalPointer() );
-    switch( role ) {
-        case Qt::DecorationRole:
-            return action->icon();
-        case Qt::DisplayRole:
-            return action->text().replace("&","");
-        case Qt::ToolTipRole: // fall through
-        case Qt::WhatsThisRole:
-            return action->description();
-        default:
-            break;
-    }
-    return QVariant();
+    Q_UNUSED(parent);
+    return d->collection->actions(QString::null).count();
 }
 
 QModelIndex GUIManagerModel::index(int row, int column, const QModelIndex& parent) const
 {
-    Q_UNUSED(parent);
+    if(parent.isValid())
+        return QModelIndex();
     return createIndex(row, column, d->collection->actions().value(row));
 }
 
@@ -117,10 +105,52 @@ QModelIndex GUIManagerModel::parent(const QModelIndex& index) const
     return QModelIndex();
 }
 
-int GUIManagerModel::rowCount(const QModelIndex& parent) const
+Qt::ItemFlags GUIManagerModel::flags(const QModelIndex &index) const
 {
-    Q_UNUSED(parent);
-    return d->collection->actions(QString::null).count();
+    if(! index.isValid())
+        return Qt::ItemIsEnabled;
+    if(index.column() == 0)
+        return QAbstractItemModel::flags(index) | Qt::ItemIsUserCheckable;
+    return QAbstractItemModel::flags(index); // | Qt::ItemIsEditable;
+}
+
+QVariant GUIManagerModel::data(const QModelIndex& index, int role) const
+{
+    if(! index.isValid())
+        return QVariant();
+    Action* action = static_cast< Action* >( index.internalPointer() );
+    switch( role ) {
+        case Qt::DecorationRole:
+            return action->icon();
+        case Qt::DisplayRole:
+            return action->text().replace("&","");
+        case Qt::ToolTipRole: // fall through
+        case Qt::WhatsThisRole:
+            return action->description();
+        case Qt::CheckStateRole:
+            return action->isVisible();
+        default:
+            return QVariant();
+    }
+}
+
+bool GUIManagerModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(! index.isValid())
+        return false;
+    Action* action = static_cast< Action* >( index.internalPointer() );
+    switch( role ) {
+        case Qt::EditRole: {
+            action->setText( value.toString() );
+        } break;
+        case Qt::CheckStateRole: {
+            action->setVisible( ! action->isVisible() );
+        } break;
+        default:
+            return false;
+    }
+    emit dataChanged(index, index);
+    return true;
 }
 
 /******************************************************************************
@@ -158,9 +188,15 @@ namespace Kross {
 }
 
 GUIManagerView::GUIManagerView(GUIClient* guiclient, QWidget* parent)
-    : QListView(parent)
+    : QTreeView(parent)
     , d(new Private())
 {
+    setAlternatingRowColors(true);
+    setRootIsDecorated(false);
+    setSortingEnabled(true);
+    setItemsExpandable(false);
+    header()->hide();
+
     d->model = new GUIManagerModel(guiclient->scriptsActionCollection(), this);
     setModel(d->model);
 
@@ -169,16 +205,26 @@ GUIManagerView::GUIManagerView(GUIClient* guiclient, QWidget* parent)
     setSelectionModel(d->selectionmodel);
 
     d->collection = new KActionCollection(this);
-    connect(new KAction(KIcon("player_play"), i18n("Run"), d->collection, "runscript"),
-            SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotRun()) );
-    connect(new KAction(KIcon("player_stop"), i18n("Stop"), d->collection, "stopscript"),
-            SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotStop()) );
-    connect(new KAction(KIcon("fileimport"), i18n("Install"), d->collection, "installscript"),
-            SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotInstall()) );
-    connect(new KAction(KIcon("fileclose"), i18n("Uninstall"), d->collection, "uninstallscript"),
-            SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotUninstall()) );
-    connect(new KAction(KIcon("knewstuff"), i18n("Get New Scripts"), d->collection, "newscript"),
-            SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotNewScripts()) );
+
+    KAction* runaction = new KAction(KIcon("player_play"), i18n("Run"), d->collection, "runscript");
+    runaction->setToolTip( i18n("Execute the selected script.") );
+    connect(runaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotRun()) );
+
+    KAction* stopaction = new KAction(KIcon("player_stop"), i18n("Stop"), d->collection, "stopscript");
+    stopaction->setToolTip( i18n("Stop execution of the selected script.") );
+    connect(stopaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotStop()) );
+
+    KAction* installaction = new KAction(KIcon("fileimport"), i18n("Install"), d->collection, "installscript");
+    installaction->setToolTip( i18n("Install a script-package.") );
+    connect(installaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotInstall()) );
+
+    KAction* uninstallaction = new KAction(KIcon("fileclose"), i18n("Uninstall"), d->collection, "uninstallscript");
+    uninstallaction->setToolTip( i18n("Uninstall the selected script-package.") );
+    connect(uninstallaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotUninstall()) );
+
+    KAction* newstuffaction = new KAction(KIcon("knewstuff"), i18n("Get New Scripts"), d->collection, "newscript");
+    newstuffaction->setToolTip( i18n("Get new scripts from the internet.") );
+    connect(newstuffaction, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), this, SLOT(slotNewScripts()) );
 
     //new KAction(KIcon(""), i18n("About"), d->collection);
     //new KAction(KIcon(""), i18n("Configure"), d->collection);
@@ -265,14 +311,16 @@ namespace Kross {
     class GUIManagerDialog::Private
     {
         public:
+            GUIClient* guiclient;
             GUIManagerView* view;
+            Private(GUIClient* gc) : guiclient(gc) {}
     };
 
 }
 
 GUIManagerDialog::GUIManagerDialog(GUIClient* guiclient, QWidget* parent)
     : KDialog(parent)
-    , d(new Private())
+    , d(new Private(guiclient))
 {
     setCaption( i18n("Scripts Manager") );
     setButtons( KDialog::Close );
@@ -294,17 +342,27 @@ GUIManagerDialog::GUIManagerDialog(GUIClient* guiclient, QWidget* parent)
 
     foreach(KAction* action, d->view->actionCollection()->actions(QString::null)) {
         KPushButton* btn = new KPushButton(action->icon(), action->text(), btnwidget);
+        btn->setToolTip( action->toolTip() );
         btnlayout->addWidget(btn);
         connect(btn, SIGNAL(clicked()), action, SLOT(trigger()));
         //connect(action, SLOT(setEnabled(bool)), btn, SLOT(setEnabled(bool)));
     }
 
     btnlayout->addStretch(1);
+    resize( QSize(460, 340).expandedTo(minimumSizeHint()) );
+
+    guiclient->readAllConfigs();
+    connect(this, SIGNAL(closeClicked()), this, SLOT(saveChanges()));
 }
 
 GUIManagerDialog::~GUIManagerDialog()
 {
     delete d;
+}
+
+void GUIManagerDialog::saveChanges()
+{
+    d->guiclient->writeConfig();
 }
 
 #include "guimanager.moc"

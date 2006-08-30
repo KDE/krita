@@ -33,6 +33,9 @@
 #include "errorinterface.h"
 #include "childreninterface.h"
 
+class QDir;
+class QDomElement;
+
 namespace Kross {
 
     // Forward declarations.
@@ -93,6 +96,11 @@ namespace Kross {
              * tried to determinate the \a getInterpreterName ).
              */
             Action(KActionCollection* collection, const QString& name, const KUrl& file);
+
+            /**
+             * Constructor.
+             */
+            Action(KActionCollection* collection, const QDomElement& element, const QDir& packagepath);
 
             /**
              * Destructor.

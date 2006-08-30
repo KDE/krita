@@ -51,7 +51,7 @@ KisKernelSP kernelFromQImage(const QImage& img)
 }
 
 
-KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), "enhance", i18n("&Unsharp mask..."))
+KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), "enhance", i18n("&Unsharp Mask..."))
 {
 }
 

@@ -30,7 +30,7 @@
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     : super(parent, name)
 {
-    m_lbSpacing = new QLabel(i18n("Spacing: "), this);
+    m_lbSpacing = new QLabel(i18n("Spacing:"), this);
     m_slSpacing = new KisDoubleWidget(0.0, 10, this, "double_widget");
     m_slSpacing->setTickmarks(QSlider::Below);
     m_slSpacing->setTickInterval(1);

@@ -58,7 +58,7 @@ FastColorTransferPlugin::~FastColorTransferPlugin()
 {
 }
 
-KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), "colors", i18n("&Color Transfer"))
+KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), "colors", i18n("&Color Transfer..."))
 {
 }
 

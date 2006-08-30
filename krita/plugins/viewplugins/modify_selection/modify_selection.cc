@@ -66,9 +66,9 @@ ModifySelection::ModifySelection(QObject *parent, const char *name, const QStrin
         m_view = (KisView*) parent;
 
         // Selection manager takes ownership?
-        KAction* a = new KAction(i18n("Grow selection..."), 0, 0, this, SLOT(slotGrowSelection()), actionCollection(), "growselection");
-        KAction* b = new KAction(i18n("Shrink selection..."), 0, 0, this, SLOT(slotShrinkSelection()), actionCollection(), "shrinkselection");
-        KAction* c = new KAction(i18n("Border selection..."), 0, 0, this, SLOT(slotBorderSelection()), actionCollection(), "borderselection");
+        KAction* a = new KAction(i18n("Grow Selection..."), 0, 0, this, SLOT(slotGrowSelection()), actionCollection(), "growselection");
+        KAction* b = new KAction(i18n("Shrink Selection..."), 0, 0, this, SLOT(slotShrinkSelection()), actionCollection(), "shrinkselection");
+        KAction* c = new KAction(i18n("Border Selection..."), 0, 0, this, SLOT(slotBorderSelection()), actionCollection(), "borderselection");
 
         Q_CHECK_PTR(a);
         Q_CHECK_PTR(b);

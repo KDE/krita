@@ -99,7 +99,7 @@ KritaWaveFilter::~KritaWaveFilter()
 {
 }
 
-KisFilterWave::KisFilterWave() : KisFilter(id(), "other", i18n("&Wave"))
+KisFilterWave::KisFilterWave() : KisFilter(id(), "other", i18n("&Wave..."))
 {
 }
 

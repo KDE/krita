@@ -26,7 +26,7 @@
 #include <kis_meta_registry.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-    : KisFilter(id(), "enhance", i18n("&Gaussian Noise Reduction"))
+    : KisFilter(id(), "enhance", i18n("&Gaussian Noise Reduction..."))
 {
 }
 

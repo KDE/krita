@@ -30,7 +30,7 @@
 #include "wdgcolortoalphabase.h"
 #include "kis_wdg_color_to_alpha.h"
 
-KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), "colors", i18n("&Color to alpha"))
+KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), "colors", i18n("&Color to Alpha..."))
 {
 }
 

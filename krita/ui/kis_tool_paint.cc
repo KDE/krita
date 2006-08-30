@@ -120,13 +120,13 @@ QWidget* KisToolPaint::createOptionWidget(QWidget* parent)
     m_optionWidget = new QWidget(parent);
     m_optionWidget->setCaption(m_UIName);
 
-    m_lbOpacity = new QLabel(i18n("Opacity: "), m_optionWidget);
+    m_lbOpacity = new QLabel(i18n("Opacity:"), m_optionWidget);
     m_slOpacity = new KisIntSpinbox( m_optionWidget, "int_m_optionwidget");
     m_slOpacity->setRange( 0, 100);
     m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE * 100);
     connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 
-    m_lbComposite = new QLabel(i18n("Mode: "), m_optionWidget);
+    m_lbComposite = new QLabel(i18n("Mode:"), m_optionWidget);
     m_cmbComposite = new KisCmbComposite(m_optionWidget);
     connect(m_cmbComposite, SIGNAL(activated(const KisCompositeOp&)), this, SLOT(slotSetCompositeMode(const KisCompositeOp&)));
 

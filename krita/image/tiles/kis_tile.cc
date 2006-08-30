@@ -103,7 +103,7 @@ KisTile::~KisTile()
     }
 
     //assert( !readers() );
-    if( !readers() ) kWarning() << "KisTile::~KisTile() readers() is 0" << endl;
+    if( readers() ) kWarning() << "KisTile::~KisTile() readers is non zero! (" << readers() << ")\n";
 }
 
 void KisTile::allocate()

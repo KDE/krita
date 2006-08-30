@@ -34,7 +34,6 @@ set(kstore_LIB_SRCS
    KoStoreBase.cpp 
    KoXmlReader.cpp
    KoXmlWriter.cpp
-   KoEncryptedStore.cpp
    )
 endif( QCA2_FOUND )
 

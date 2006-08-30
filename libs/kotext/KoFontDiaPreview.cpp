@@ -39,8 +39,8 @@
 
 KoFontDiaPreview::KoFontDiaPreview( QWidget* parent, const char* name , Qt::WFlags fl )
         : Q3Frame( parent, name, fl )
-        ,m_text( i18n( "The quick brown dog jumps over the lazy cat." ) )
-        ,displayText( i18n( "The quick brown dog jumps over the lazy cat." ) )
+        ,m_text( i18n( "The quick brown fox jumps over the lazy dog." ) )
+        ,displayText( i18n( "The quick brown fox jumps over the lazy dog." ) )
         ,m_font( KoGlobal::defaultFont() )
         ,m_textColor( Qt::black )
         ,m_backgroundColor( Qt::white )

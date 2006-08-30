@@ -49,7 +49,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Color :</string>
+                        <string>Color:</string>
                     </property>
                 </widget>
                 <widget class="KColorButton">

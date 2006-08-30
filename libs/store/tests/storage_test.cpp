@@ -44,6 +44,12 @@ namespace {
     const char* const unableToRead = "Couldn't read stream back!";
 }
 
+char getch( QIODevice * dev ) {
+    char c = 0;
+    dev->getChar( &c );
+    return c;
+}
+
 int cleanUp( KoStore* store, const QString& testFile, const char* error )
 {
     QFile::remove( testFile );
@@ -117,7 +123,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
     if ( store->open( "test1/with/a/relative/dir.txt" ) ) {
         QIODevice* dev = store->device();
         int i = 0,  lim = strlen( test1 ),  count = 0;
-        while ( static_cast<char>( dev->getch() ) == test1[i++] ) {
+        while ( static_cast<char>( getch(dev) ) == test1[i++] ) {
             if ( i == lim ) {
                 i = 0;
                 ++count;
@@ -137,7 +143,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
     if ( store->open( "test2/with/a/relative/dir.txt" ) ) {
         QIODevice* dev = store->device();
         int i = 0,  lim = strlen( test2 ),  count = 0;
-        while ( static_cast<char>( dev->getch() ) == test2[i++] ) {
+        while ( static_cast<char>( getch(dev) ) == test2[i++] ) {
             if ( i == lim ) {
                 i = 0;
                 ++count;
@@ -162,7 +168,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         if ( store->size() == 22 ) {
             QIODevice* dev = store->device();
             unsigned int i = 0;
-            while ( static_cast<char>( dev->getch() ) == test3[i++] );
+            while ( static_cast<char>( getch(dev) ) == test3[i++] );
             store->close();
             if ( ( i - 1 ) != strlen( test3 ) )
                 return cleanUp( store, testFile, unableToRead );
@@ -207,7 +213,7 @@ int main( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, "storage_test", "Storage Test", "A test for the KoStore classes", "1" );
     //KApplication::disableAutoDcopRegistration();
-    KApplication app;
+    KApplication app(false);
 
     // KZip (due to KSaveFile) doesn't support relative filenames
     // So use $PWD as base for the paths explicitely.

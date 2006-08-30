@@ -40,7 +40,7 @@ class KoTextDocument;
 #include <KoPageLayout.h>
 #include <koffice_export.h>
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 
 
 class QDomElement;

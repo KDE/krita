@@ -29,7 +29,7 @@
 #include <kdemacros.h>
 
 #include "koffice_export.h"
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 
 /**
  *  @brief This class implements a stack for the different styles of an object.

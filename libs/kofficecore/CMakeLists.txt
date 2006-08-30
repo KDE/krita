@@ -58,7 +58,6 @@ set(kofficecore_LIB_SRCS
    KoDocumentInfoPropsPage.cpp
    KoTemplatesPane.cpp
    KoRecentDocumentsPane.cpp
-   KoXmlReader.cpp
 )
 
 kde4_automoc(${kofficecore_LIB_SRCS})

@@ -25,7 +25,7 @@
 #include <QMap>
 #include <koffice_export.h>
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 
 class KoGenStyles;
 class KoXmlWriter;

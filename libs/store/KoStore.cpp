@@ -27,6 +27,9 @@
 #include "KoTarStore.h"
 #include "KoZipStore.h"
 #include "KoDirectoryStore.h"
+#ifdef QCA2
+#include "KoEncryptedStore.h"
+#endif
 
 #include <QBuffer>
 #include <QFileInfo>
@@ -59,7 +62,9 @@ KoStore::Backend KoStore::determineBackend( QIODevice* dev )
 
 KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QByteArray & appIdentification, Backend backend )
 {
+  bool automatic = false;
   if ( backend == Auto ) {
+    automatic = true;
     if ( mode == KoStore::Write )
       backend = DefaultFormat;
     else
@@ -82,9 +87,19 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QByteAr
   case Tar:
     return new KoTarStore( fileName, mode, appIdentification );
   case Zip:
+#ifdef QCA2
+    if( automatic && mode == Read ) {
+        // Determines if the ZIP-store is encrypted and gives us the fastest reader that can read the store
+        return KoEncryptedStore::createEncryptedStoreReader( fileName, appIdentification );
+    }
+#endif
     return new KoZipStore( fileName, mode, appIdentification );
   case Directory:
     return new KoDirectoryStore( fileName /* should be a dir name.... */, mode );
+#ifdef QCA2
+  case Encrypted:
+    return new KoEncryptedStore( fileName, mode, appIdentification );
+#endif
   default:
     kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
     return 0L;
@@ -93,8 +108,10 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QByteAr
 
 KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & appIdentification, Backend backend )
 {
+  bool automatic = false;
   if ( backend == Auto )
   {
+    automatic = true;
     if ( mode == KoStore::Write )
       backend = DefaultFormat;
     else {
@@ -112,7 +129,17 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & 
     kError(s_area) << "Can't create a Directory store for a memory buffer!" << endl;
     // fallback
   case Zip:
+#ifdef QCA2
+    if( automatic && mode == Read ) {
+        // Determines if the ZIP-store is encrypted and gives us the fastest reader that can read the store
+        return KoEncryptedStore::createEncryptedStoreReader( device, appIdentification );
+    }
+#endif
     return new KoZipStore( device, mode, appIdentification );
+#ifdef QCA2
+  case Encrypted:
+    return new KoEncryptedStore( device, mode, appIdentification );
+#endif
   default:
     kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
     return 0L;
@@ -121,6 +148,7 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & 
 
 KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification, Backend backend )
 {
+  bool automatic = ( backend == Auto );
   if ( url.isLocalFile() )
     return createStore(url.path(), mode,  appIdentification, backend );
 
@@ -155,7 +183,17 @@ KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, cons
   case Tar:
     return new KoTarStore( window, url, tmpFile, mode, appIdentification );
   case Zip:
+#ifdef QCA2
+    if( automatic && mode == Read ) {
+        // Determines if the ZIP store is encrypted and gives the fastest reader that can read the store
+        return KoEncryptedStore::createEncryptedStoreReader( window, url, tmpFile, appIdentification );
+    }
+#endif
     return new KoZipStore( window, url, tmpFile, mode, appIdentification );
+#ifdef QCA2
+  case Encrypted:
+    return new KoEncryptedStore( window, url, tmpFile, mode, appIdentification );
+#endif
   default:
     kWarning(s_area) << "Unsupported backend requested for KoStore (KUrl) : " << backend << endl;
     KMessageBox::sorry( window,

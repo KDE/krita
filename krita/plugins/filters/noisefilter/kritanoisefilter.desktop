@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Noise Filter
+Name[ca]=Filtre de soroll
 Name[da]=Støjfilter
 Name[de]=Rauschfilter
 Name[es]=Filtro de ruido
@@ -16,6 +17,7 @@ Name[sk]=Filter zrnenie
 Name[sv]=Brusfilter
 Name[zh_TW]=雜訊過濾器
 Comment=Add noise to an image
+Comment[ca]=Afegeig soroll a una imatge
 Comment[da]=Tilføj støj til et billede
 Comment[de]=Einem Bild Rauschen hinzufügen
 Comment[es]=Añadir ruido a una imagen

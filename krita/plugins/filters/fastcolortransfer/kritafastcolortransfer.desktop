@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=This plugins allow to transfer color from an image to an other image
+Comment[ca]=Aquest endollats permeten de transferir el color d'una imatge a una altra
 Comment[da]=Dette plugin gør det muligt at overføre en farve fra et billede til et andet billede
 Comment[de]=Diese Plugins ermöglichen die Farbübertragung von einem Bild zu einem anderen
 Comment[es]=Esta extensión le permite transferir colores de una imagen a otra
@@ -17,6 +18,7 @@ Comment[zh_TW]=這個外掛程式允許將一張圖片的顏色轉換為另一�
 Encoding=UTF-8
 Icon=
 Name=Color Transfer Filter
+Name[ca]=Filtre de transferència de color
 Name[da]=Farveoverførselsfilter
 Name[de]=Farbübertragungsfilter
 Name[es]=Filtro de transferencia de color

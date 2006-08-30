@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=Transform an image in a wave
+Comment[ca]=Transforma una imatge en una ona
 Comment[da]=Tranbsformér et billede med en bølge
 Comment[de]=Ein Bild in eine Welle transformieren
 Comment[es]=Transformar una imagen en una onda
@@ -17,6 +18,7 @@ Comment[zh_TW]=在 wave 中轉換圖片
 Encoding=UTF-8
 Icon=
 Name=Wave Filter
+Name[ca]=Filtre d'ona
 Name[da]=Bølgefilter
 Name[de]=Wellenfilter
 Name[es]=Filtro de onda

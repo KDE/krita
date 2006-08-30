@@ -2,11 +2,14 @@
 Encoding=UTF-8
 Icon=
 Name=Perspective transform Tool
+Name[ca]=Eina de transformació de perspectiva
 Name[da]=Perspectivetransformeringsværktøj
 Name[es]=Herramienta Transformar perspectiva
 Name[et]=Perspektiivteisenduse tööriist
 Name[ja]=視点変更ツール
 Name[nl]=Perspectiefrooster-gereedschap
+Name[pt]=Ferramenta de Transformação em Perspectiva
+Name[pt_BR]=Ferramenta de Transformação em Perspectiva
 Name[sk]=Perspektívna transformácia
 Name[sv]=Perspektivtransformverktyg
 Name[zh_TW]=透視轉換工具

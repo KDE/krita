@@ -32,7 +32,7 @@
 #define KOFFICE_VERSION_STRING "2.0 alpha"
 #define KOFFICE_VERSION_MAJOR 1
 #define KOFFICE_VERSION_MINOR 9
-#define KOFFICE_VERSION_RELEASE 98
+#define KOFFICE_VERSION_RELEASE 90
 #define KOFFICE_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 
 #define KOFFICE_VERSION \

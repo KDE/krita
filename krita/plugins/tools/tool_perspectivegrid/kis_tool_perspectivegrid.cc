@@ -47,7 +47,7 @@
 #include <kis_canvas.h>
 
 KisToolPerspectiveGrid::KisToolPerspectiveGrid()
-    : super(i18n("Perspective grid")), m_handleSize(13), m_handleHalfSize(6)
+    : super(i18n("Perspective Grid")), m_handleSize(13), m_handleHalfSize(6)
 
 {
     setName("tool_perspectivegrid");
@@ -359,10 +359,10 @@ void KisToolPerspectiveGrid::drawSmallRectangle(KisCanvasPainter& gc, QPoint p)
 
 void KisToolPerspectiveGrid::drawGrid(KisCanvasPainter& gc)
 {
-    
+
     if (!m_subject)
         return;
-    
+
     KisCanvasController *controller = m_subject->canvasController();
 
     QPen pen(Qt::white);
@@ -483,7 +483,7 @@ void KisToolPerspectiveGrid::setup(KActionCollection *collection)
 // {
 //     return 0;
 // }
-// 
+//
 // QWidget* KisToolPerspectiveGrid::optionWidget()
 // {
 //         return 0;

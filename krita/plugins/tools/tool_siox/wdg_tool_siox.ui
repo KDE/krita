@@ -240,7 +240,7 @@
                         <enum>Sunken</enum>
                     </property>
                     <property name="title">
-                        <string>Interactive refinement (Ctrl)</string>
+                        <string>Interactive Refinement (Ctrl)</string>
                     </property>
                     <vbox>
                         <property name="name">

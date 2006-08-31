@@ -62,10 +62,10 @@ KisBrushOpSettings::KisBrushOpSettings(QWidget *parent)
     QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
     l->setAutoAdd(true);
     m_pressureVariation = new QLabel(i18n("Pressure variation: "), m_optionsWidget);
-    m_size =  new QCheckBox(i18n("size"), m_optionsWidget);
+    m_size =  new QCheckBox(i18n("Size"), m_optionsWidget);
     m_size->setChecked(true);
-    m_opacity = new QCheckBox(i18n("opacity"), m_optionsWidget);
-    m_darken = new QCheckBox(i18n("darken"), m_optionsWidget);
+    m_opacity = new QCheckBox(i18n("Opacity"), m_optionsWidget);
+    m_darken = new QCheckBox(i18n("Darken"), m_optionsWidget);
     m_curveControl = new WdgBrushCurveControl(m_optionsWidget);
     QToolButton* moreButton = new QToolButton(Qt::UpArrow, m_optionsWidget);
     moreButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

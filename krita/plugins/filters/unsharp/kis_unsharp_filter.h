@@ -33,7 +33,7 @@ class KisUnsharpFilter : public KisFilter
         KisUnsharpFilter();
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-        static inline KisID id() { return KisID("unsharpmask", i18n("Unsharp mask")); };
+        static inline KisID id() { return KisID("unsharpmask", i18n("Unsharp Mask")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }

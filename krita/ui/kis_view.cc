@@ -243,7 +243,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
     Q_ASSERT(parent);
 
     KisConfig cfg;
-    
+
     m_currentColorChooserDisplay = KisID("BLA");
     setFocusPolicy( QWidget::StrongFocus );
 
@@ -262,7 +262,7 @@ KisView::KisView(KisDoc *doc, KisUndoAdapter *adapter, QWidget *parent, const ch
 
     m_paletteManager = new KoPaletteManager(this, actionCollection(), "Krita palette manager");
     if (cfg.fixDockerWidth()) m_paletteManager->setFixedWidth( 360 );
-    
+
     m_paletteManager->createPalette( krita::CONTROL_PALETTE, i18n("Control box"));
     m_paletteManager->createPalette( krita::COLORBOX, i18n("Colors"));
     m_paletteManager->createPalette( krita::LAYERBOX, i18n("Layers"));
@@ -599,12 +599,12 @@ void KisView::setupActions()
     m_filterManager->setup(actionCollection());
     m_gridManager->setup(actionCollection());
     m_perspectiveGridManager->setup(actionCollection());
-    
+
 
     m_fullScreen = KStdAction::fullScreen( NULL, NULL, actionCollection(), this );
     connect( m_fullScreen, SIGNAL( toggled( bool )), this, SLOT( slotUpdateFullScreen( bool )));
 
-    m_imgProperties = new KAction(i18n("Image Properties..."), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
+    m_imgProperties = new KAction(i18n("Image Properties"), 0, this, SLOT(slotImageProperties()), actionCollection(), "img_properties");
     m_imgScan = 0; // How the hell do I get a KAction to the scan plug-in?!?
     m_imgResizeToLayer = new KAction(i18n("Resize Image to Size of Current Layer"), 0, this, SLOT(imgResizeToActiveLayer()), actionCollection(), "resizeimgtolayer");
 
@@ -636,7 +636,7 @@ void KisView::setupActions()
     m_layerLower = new KAction(i18n("Lower"), "lower", "Ctrl+[", this, SLOT(layerLower()), actionCollection(), "lowerlayer");
     m_layerTop = new KAction(i18n("To Top"), "bring_forward", "Ctrl+Shift+]", this, SLOT(layerFront()), actionCollection(), "toplayer");
     m_layerBottom = new KAction(i18n("To Bottom"), "send_backward", "Ctrl+Shift+[", this, SLOT(layerBack()), actionCollection(), "bottomlayer");
-    m_layerProperties = new KAction(i18n("Properties..."), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
+    m_layerProperties = new KAction(i18n("Properties"), 0, this, SLOT(layerProperties()), actionCollection(), "layer_properties");
     (void)new KAction(i18n("I&nsert Image as Layer..."), 0, this, SLOT(slotInsertImageAsLayer()), actionCollection(), "insert_image_as_layer");
     m_layerSaveAs = new KAction(i18n("Save Layer as Image..."), "filesave", this, SLOT(saveLayerAsImage()), actionCollection(), "save_layer_as_image");
     (void)new KAction(i18n("Flip on &X Axis"), "view_left_right", 0, this, SLOT(mirrorLayerX()), actionCollection(), "mirrorLayerX");
@@ -647,7 +647,7 @@ void KisView::setupActions()
     m_maskFromSelection = new KAction(i18n("Mask From Selection"), 0, this,
                                       SLOT(slotMaskFromSelection()), actionCollection(),
                                       "mask_fromsel");
-    m_maskToSelection = new KAction(i18n("Mask To Selection"), 0, this,
+    m_maskToSelection = new KAction(i18n("Mask to Selection"), 0, this,
                                SLOT(slotMaskToSelection()), actionCollection(), "mask_tosel");
     m_applyMask = new KAction(i18n("Apply Mask"), 0, this, SLOT(slotApplyMask()),
                               actionCollection(), "apply_mask");
@@ -1264,8 +1264,8 @@ void KisView::layerUpdateGUI(bool enable)
     Q_INT32 nlayers = 0;
     Q_INT32 nvisible = 0;
 
-    
-    
+
+
     if (img) {
         layer = img->activeLayer();
         nlayers = img->nlayers();
@@ -1273,7 +1273,7 @@ void KisView::layerUpdateGUI(bool enable)
     }
 
     KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
-        
+
     if (pl && ( m_currentColorChooserDisplay != KisID("BLA") ||
                 pl->paintDevice()->colorSpace()->id() != m_currentColorChooserDisplay)) {
         if (pl->paintDevice()->colorSpace()->id() == KisID("WET")) {
@@ -1318,9 +1318,9 @@ void KisView::layerUpdateGUI(bool enable)
 
     KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(layer.data());
     if (partLayer) {
-        setCanvasCursor( KisCursor::arrowCursor() ); 
+        setCanvasCursor( KisCursor::arrowCursor() );
     }
-    
+
     if (img && img->activeDevice())
         emit currentColorSpaceChanged(img->activeDevice()->colorSpace());
 

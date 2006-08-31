@@ -55,7 +55,7 @@ public:
         t->setup(ac);
         return t;
     }
-    virtual KisID id() { return KisID("bezierselection", i18n("Bezier selection Tool")); }
+    virtual KisID id() { return KisID("bezierselection", i18n("Bezier Selection Tool")); }
 };
 
 #endif //__KIS_TOOL_CURVE_PAINT_H_

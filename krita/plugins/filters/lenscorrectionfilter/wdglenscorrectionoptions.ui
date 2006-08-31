@@ -58,7 +58,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Distortion correction:</string>
+                <string>Distortion Correction</string>
             </property>
             <grid>
                 <property name="name">

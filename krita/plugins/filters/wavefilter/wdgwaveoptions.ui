@@ -58,7 +58,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Horizontal wave:</string>
+                <string>Horizontal Wave</string>
             </property>
             <grid>
                 <property name="name">
@@ -160,7 +160,7 @@
                 <cstring>Vertical_wave</cstring>
             </property>
             <property name="title">
-                <string>Vertical wave:</string>
+                <string>Vertical Wave</string>
             </property>
             <grid>
                 <property name="name">

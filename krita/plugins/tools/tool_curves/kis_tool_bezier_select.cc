@@ -55,7 +55,7 @@
 #include "kis_tool_bezier_select.h"
 
 KisToolBezierSelect::KisToolBezierSelect()
-    : super(i18n("Bezier selection tool"))
+    : super(i18n("Bezier Selection Tool"))
 {
     setName("tool_bezier_select");
     m_cursor = "tool_bezier_cursor.png";

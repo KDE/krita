@@ -1,7 +1,7 @@
 <KrossScripting>
     <ScriptAction
       name="FiltersTestRuby"
-      text="Filters test"
+      text="Filters Test"
       description="Test of filters in scripting (ruby)"
       icon=""
       interpreter="ruby"

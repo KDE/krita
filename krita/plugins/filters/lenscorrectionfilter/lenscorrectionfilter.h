@@ -40,7 +40,7 @@ class KisFilterLensCorrection : public KisFilter
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
         virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
-        static inline KisID id() { return KisID("lenscorrection", i18n("Lens correction")); };
+        static inline KisID id() { return KisID("lenscorrection", i18n("Lens Correction")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }

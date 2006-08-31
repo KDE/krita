@@ -33,7 +33,7 @@ class KisFilterMax : public KisFilter
         KisFilterMax();
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-        static inline KisID id() { return KisID("maximize", i18n("Maximize channel")); };
+        static inline KisID id() { return KisID("maximize", i18n("Maximize Channel")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
@@ -46,7 +46,7 @@ class KisFilterMin : public KisFilter
         KisFilterMin();
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-        static inline KisID id() { return KisID("minimize", i18n("Minimize channel")); };
+        static inline KisID id() { return KisID("minimize", i18n("Minimize Channel")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }

@@ -32,7 +32,7 @@ class KisFilterColorToAlpha : public KisFilter {
         KisFilterColorToAlpha();
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
-        static inline KisID id() { return KisID("colortoalpha", i18n("Color to alpha")); };
+        static inline KisID id() { return KisID("colortoalpha", i18n("Color to Alpha")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }

@@ -65,7 +65,7 @@ void KisPerspectiveGridManager::toggleGrid()
 
         if(!pGrid->hasSubGrids())
         {
-            KMessageBox::error(0, i18n("Before displaying the perspective grid, you need to initialize it with the perspective grid tool"), i18n("No perspective grid to display") );
+            KMessageBox::error(0, i18n("Before displaying the perspective grid, you need to initialize it with the perspective grid tool"), i18n("No Perspective Grid to Display") );
             m_toggleGrid->setChecked(false);
         }
     }

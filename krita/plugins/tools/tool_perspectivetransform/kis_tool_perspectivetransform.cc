@@ -87,7 +87,7 @@ namespace {
     };
 
     PerspectiveTransformCmd::PerspectiveTransformCmd(KisToolPerspectiveTransform *tool, KisPaintDeviceSP device, KisPaintDeviceSP origDevice, KisPoint topleft, KisPoint topright, KisPoint bottomleft, KisPoint bottomright, KisSelectionSP origSel, QRect initialRect) :
-            super(i18n("Perspective transform"), device), m_initialRect(initialRect)
+            super(i18n("Perspective Transform"), device), m_initialRect(initialRect)
             , m_topleft(topleft), m_topright(topright), m_bottomleft(bottomleft), m_bottomright(bottomright)
             , m_tool(tool), m_origSelection(origSel), m_device(device), m_origDevice(origDevice)
     {
@@ -133,7 +133,7 @@ namespace {
 }
 
 KisToolPerspectiveTransform::KisToolPerspectiveTransform()
-    : super(i18n("Perspective transform"))
+    : super(i18n("Perspective Transform"))
 {
     setName("tool_perspectivetransform");
     setCursor(KisCursor::selectCursor());
@@ -488,7 +488,7 @@ QWidget* KisToolPerspectiveTransform::createOptionWidget(QWidget* parent)
     m_optWidget->textLabel2->hide();
     m_optWidget->textLabel3->hide();
     m_optWidget->textLabel4->hide();
-#endif    
+#endif
     return 0;
 }
 
@@ -502,7 +502,7 @@ void KisToolPerspectiveTransform::setup(KActionCollection *collection)
     m_action = static_cast<KRadioAction *>(collection->action(name()));
 
     if (m_action == 0) {
-        m_action = new KRadioAction(i18n("&Perspective transform"),
+        m_action = new KRadioAction(i18n("&Perspective Transform"),
                         "transform",
                         0,
                         this,

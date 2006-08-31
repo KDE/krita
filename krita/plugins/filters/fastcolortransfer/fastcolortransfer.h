@@ -42,7 +42,7 @@ class KisFilterFastColorTransfer : public KisFilter
     public:
         virtual void process(KisPaintDeviceSP src, KisPaintDeviceSP dst, KisFilterConfiguration*, const QRect&);
         virtual ColorSpaceIndependence colorSpaceIndependence() { return FULLY_INDEPENDENT; };
-        static inline KisID id() { return KisID("colortransfer", i18n("Color transfer")); };
+        static inline KisID id() { return KisID("colortransfer", i18n("Color Transfer")); };
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }

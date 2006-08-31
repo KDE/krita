@@ -1,7 +1,7 @@
 <KrossScripting>
     <ScriptAction
       name="TorturePainting"
-      text="Torture krita with painting"
+      text="Torture Krita with Painting"
       description="Paint on an image and create multiple layers"
       icon=""
       interpreter="ruby"

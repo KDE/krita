@@ -486,7 +486,7 @@ KNamedCommand* KisPaintLayer::maskFromSelectionCommand() {
 }
 
 KNamedCommand* KisPaintLayer::maskToSelectionCommand() {
-    return new KisMaskToSelectionCommand(i18n("Mask To Selection"), this);
+    return new KisMaskToSelectionCommand(i18n("Mask to Selection"), this);
 }
 
 

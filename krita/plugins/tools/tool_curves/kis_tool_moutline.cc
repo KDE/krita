@@ -770,7 +770,7 @@ QWidget* KisToolMagnetic::createOptionWidget(QWidget* parent)
 
     m_mode = new QLabel(i18n("Automatic mode"), m_optWidget);
     m_lbDistance = new QLabel(i18n("Distance: "), m_optWidget);
-    QPushButton *finish = new QPushButton(i18n("To selection"), m_optWidget);
+    QPushButton *finish = new QPushButton(i18n("To Selection"), m_optWidget);
     m_slDistance = new QSlider(MINDIST, MAXDIST, PAGESTEP, m_distance, Qt::Horizontal, m_optWidget);
 
     connect(m_slDistance, SIGNAL(valueChanged(int)), this, SLOT(slotSetDistance(int)));

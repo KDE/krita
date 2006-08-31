@@ -55,7 +55,7 @@
 #include "kis_tool_bezier_paint.h"
 
 KisToolBezierPaint::KisToolBezierPaint()
-    : super(i18n("Bezier painting tool"))
+    : super(i18n("Bezier Painting Tool"))
 {
     setName("tool_bezier_paint");
     m_cursor = "tool_bezier_cursor.png";

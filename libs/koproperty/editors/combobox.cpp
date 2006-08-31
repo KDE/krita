@@ -82,7 +82,7 @@ ComboBox::value() const
 void
 ComboBox::setValue(const QVariant &value, bool emitChange)
 {
-	if (!property()->listData()) {
+	if (!property() || !property()->listData()) {
 		kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
 		return;
 	}

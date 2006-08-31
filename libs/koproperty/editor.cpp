@@ -757,7 +757,7 @@ Editor::showUndoButton( bool show )
 
 	int y = viewportToContents(QPoint(0, itemRect(d->currentItem).y())).y();
 	QRect geometry(columnWidth(0), y, columnWidth(1) + 1, d->currentItem->height());
-	d->undoButton->resize(d->baseRowHeight, d->baseRowHeight);
+	d->undoButton->resize(d->baseRowHeight, d->currentItem->height());
 
 	updateEditorGeometry(true, show);
 

@@ -23,11 +23,16 @@
 
 #include "kis_point.h"
 
+class QRect;
+
 class KisPerspectiveMath {
-  private:
+    private:
         KisPerspectiveMath() { }
-  public:
-    struct LineEquation {
+        static double* computeMatrixTransfo( const KisPoint& topLeft1, const KisPoint& topRight1, const KisPoint& bottomLeft1, const KisPoint& bottomRight1 , const KisPoint& topLeft2, const KisPoint& topRight2, const KisPoint& bottomLeft2, const KisPoint& bottomRight2);
+    public:
+      static double* computeMatrixTransfoToPerspective(const KisPoint& topLeft, const KisPoint& topRight, const KisPoint& bottomLeft, const KisPoint& bottomRight, const QRect& r);
+      static double* computeMatrixTransfoFromPerspective(const QRect& r, const KisPoint& topLeft, const KisPoint& topRight, const KisPoint& bottomLeft, const KisPoint& bottomRight);
+      struct LineEquation {
             // y = a*x + b
       double a, b;
     };

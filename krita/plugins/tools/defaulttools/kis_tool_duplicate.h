@@ -64,6 +64,7 @@ protected:
     KisPoint m_position; // Give the position of the last alt-click
     QCheckBox* m_healing;
     KIntNumInput* m_healingRadius;
+    QCheckBox* m_perspectiveCorrection;
 };
 
 

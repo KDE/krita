@@ -64,6 +64,10 @@ class KisSubPerspectiveGrid {
          */
         inline int index() const { return m_index; }
 
+        /**
+         * @return true if the point p is contain by the grid
+         */
+        bool contains(const KisPoint p) const;
     private:
         inline KisPoint computeVanishingPoint(KisPerspectiveGridNodeSP p11, KisPerspectiveGridNodeSP p12, KisPerspectiveGridNodeSP p21, KisPerspectiveGridNodeSP p22)
         {
@@ -91,6 +95,10 @@ class KisPerspectiveGrid {
         inline QValueList<KisSubPerspectiveGrid*>::const_iterator end() const { return m_subGrids.end(); }
         inline bool hasSubGrids() const { return !m_subGrids.isEmpty(); }
         void clearSubGrids();
+        /**
+         * @return the first grid hit by the point p
+         */
+        KisSubPerspectiveGrid* gridAt(KisPoint p);
     private:
         QValueList<KisSubPerspectiveGrid*> m_subGrids;
 };

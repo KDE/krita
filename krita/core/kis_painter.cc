@@ -93,6 +93,7 @@ void KisPainter::init()
     m_pressure = PRESSURE_MIN;
     m_duplicateHealing = false;
     m_duplicateHealingRadius = 10;
+    m_duplicatePerspectiveCorrection = false;
 }
 
 KisPainter::~KisPainter()

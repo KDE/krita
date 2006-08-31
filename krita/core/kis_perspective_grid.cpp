@@ -27,6 +27,34 @@ KisSubPerspectiveGrid::KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, K
     
 }
 
+bool KisSubPerspectiveGrid::contains(const KisPoint p) const
+{
+    return true;
+    KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( topLeft(), topRight() );
+    kdDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+    if( p.y() >= p.x() * d1.a + d1.b)
+    {
+        d1 = KisPerspectiveMath::computeLineEquation( topRight(), bottomRight() );
+        kdDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+        if( p.y() >= p.x() * d1.a + d1.b)
+        {
+            d1 = KisPerspectiveMath::computeLineEquation( bottomRight(), bottomLeft() );
+            kdDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+            if( p.y() <= p.x() * d1.a + d1.b)
+            {
+                d1 = KisPerspectiveMath::computeLineEquation( bottomLeft(), topLeft() );
+                kdDebug() << p.y() << " " << (p.x() * d1.a + d1.b) << endl;
+                if( p.y() <= p.x() * d1.a + d1.b)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
 KisPerspectiveGrid::KisPerspectiveGrid()
 {
 }
@@ -57,3 +85,16 @@ void KisPerspectiveGrid::clearSubGrids( )
     }
     m_subGrids.clear();
 }
+
+KisSubPerspectiveGrid* KisPerspectiveGrid::gridAt(KisPoint p)
+{
+    for( QValueList<KisSubPerspectiveGrid*>::const_iterator it = begin(); it != end(); ++it)
+    {
+        if( (*it)->contains(p) )
+        {
+            return *it;
+        }
+    }
+    return 0;
+}
+

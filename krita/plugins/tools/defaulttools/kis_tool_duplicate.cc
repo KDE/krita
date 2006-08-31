@@ -153,6 +153,7 @@ void KisToolDuplicate::paintAt(const KisPoint &pos,
         }
         painter()->setDuplicateHealing( m_healing->isChecked() );
         painter()->setDuplicateHealingRadius( m_healingRadius->value() );
+        painter()->setDuplicatePerspectiveCorrection( m_perspectiveCorrection->isChecked() );
         painter()->paintAt( pos, pressure, xtilt, ytilt);
     }
 }
@@ -178,6 +179,8 @@ QWidget* KisToolDuplicate::createOptionWidget(QWidget* parent)
     
     m_healingRadius->setValue( healingradius );
     addOptionWidgetOption(m_healingRadius, new QLabel(i18n("Healing radius"), widget ));
+    m_perspectiveCorrection =  new QCheckBox(widget);
+    addOptionWidgetOption(m_perspectiveCorrection, new QLabel(i18n("Correct the perspective"), widget ));
     return widget;
 }
 

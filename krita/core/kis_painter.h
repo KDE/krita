@@ -338,6 +338,9 @@ public:
     inline void setDuplicateHealingRadius(int r) { m_duplicateHealingRadius = r; }
     inline int duplicateHealingRadius() { return m_duplicateHealingRadius; }
     
+    inline void setDuplicatePerspectiveCorrection(bool v) { m_duplicatePerspectiveCorrection = v; }
+    inline bool duplicatePerspectiveCorrection() { return m_duplicatePerspectiveCorrection; }
+    
     /// Sets the current pressure for things that like to use this
     void setPressure(double pressure) { m_pressure = pressure; }
     /// Returns the current pressure
@@ -388,6 +391,7 @@ protected:
     KisPoint m_duplicateOffset;
     bool m_duplicateHealing;
     int m_duplicateHealingRadius;
+    bool m_duplicatePerspectiveCorrection;
     Q_UINT8 m_opacity;
     KisCompositeOp m_compositeOp;
     KisFilterSP m_filter;

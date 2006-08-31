@@ -11,7 +11,7 @@ add_subdirectory( modify_selection )
 add_subdirectory( rotateimage )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
-#add_subdirectory( flakeshapes )
+add_subdirectory( flakeshapes )
 
 if(NOT Q_WS_MAC)
 add_subdirectory( screenshot )

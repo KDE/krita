@@ -60,7 +60,7 @@ KisImageShape::KisImageShape()
 
 }
 
-void KisImageShape::paint(QPainter &painter, KoViewConverter &converter)
+void KisImageShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion( painter,  converter );
     // XXX: We pass 0 for the display profile for now: this should be
@@ -74,8 +74,8 @@ void KisImageShape::paint(QPainter &painter, KoViewConverter &converter)
 
 
 
-K_EXPORT_COMPONENT_FACTORY(kritaflakeshapes,
-     KGenericFactory<KisImageShapeFactory>( "KritaImageShape" ) )
+//K_EXPORT_COMPONENT_FACTORY(kritaflakeshapes,
+//     KGenericFactory<KisImageShapeFactory>( "KritaImageShape" ) )
 KisImageShapeFactory::KisImageShapeFactory(QObject *parent,  const QStringList & sl)
 : KoShapeFactory(parent, "KisImageShape", i18n("Krita Paintimage"))
 {

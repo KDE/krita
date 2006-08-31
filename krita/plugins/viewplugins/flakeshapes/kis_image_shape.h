@@ -41,7 +41,7 @@ class KisImageShape : public KoShape {
 public:
 
     KisImageShape();
-    virtual void paint(QPainter &painter, KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     
 private:
 

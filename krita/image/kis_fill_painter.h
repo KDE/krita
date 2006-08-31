@@ -21,6 +21,7 @@
 
 #include <QRect>
 
+#include "kis_selection.h"
 #include "kis_meta_registry.h"
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"

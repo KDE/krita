@@ -39,7 +39,7 @@ class KisPaintDeviceShape : public KoShape {
 public:
 
     KisPaintDeviceShape();
-    virtual void paint(QPainter &painter, KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     
 private:
 

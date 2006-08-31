@@ -34,29 +34,29 @@
 //   #include <KoShapeFactory.h>
 
 #include "kis_paint_device.h"
-//   #include "kis_fill_painter.h"
-//   #include "kis_colorspace.h"
-//   #include "kis_colorspace_factory_registry.h"
+#include "kis_fill_painter.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_paint_device_shape.h"
 
 KisPaintDeviceShape::KisPaintDeviceShape()
     : KoShape()
 {
-/*
-    KisColorSpace * cs = KisColorspaceFactoryRegistry::instance()->rgb8();
+
+    KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     m_device = new KisPaintDevice(cs, "Krita PaintDevice Shape");
 
     KisFillPainter painter;
     painter.begin(m_device);
-    painter.fillRect(0, 0, 256, 256, KisColor(Qt::white, cs), OPACITY_OPAQUE);
+    painter.fillRect(0, 0, 256, 256, KoColor(Qt::green, cs), OPACITY_OPAQUE);
     painter.end();
 
     resize( QSize( 256, 256 ) );
 
-*/
+
 }
 
-void KisPaintDeviceShape::paint(QPainter &painter, KoViewConverter &converter)
+void KisPaintDeviceShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     // KoViewConvert: has zoom() method to get zoomlevel
 
@@ -68,6 +68,9 @@ void KisPaintDeviceShape::paint(QPainter &painter, KoViewConverter &converter)
 }
 
 
+K_EXPORT_COMPONENT_FACTORY(kritaflakeshapes,
+    KGenericFactory<KisPaintDeviceShapeFactory>( "KisPaintDeviceShape" ) )
+
 KisPaintDeviceShapeFactory::KisPaintDeviceShapeFactory(QObject *parent,  const QStringList &)
 : KoShapeFactory(parent, "KisPaintDeviceShape", i18n( "Krita Paintdevice" ) )
 {
@@ -75,6 +78,10 @@ KisPaintDeviceShapeFactory::KisPaintDeviceShapeFactory(QObject *parent,  const Q
     // setPixmap(); // XXX: load icon using KIconLoader
     // XXX: Set default templates
 
+    KoShapeTemplate t;
+    t.name = "Krita image";
+    t.toolTip = "A nice Krita image";
+    addTemplate(t);
 }
 
 

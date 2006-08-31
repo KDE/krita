@@ -17,15 +17,16 @@
  */
 
 #include "krs_brush.h"
+#include "kritacoremodule.h"
 
 #include <kis_brush.h>
 
-namespace Kross {
+using namespace Kross::KritaCore;
 
-namespace KritaCore {
-
-Brush::Brush(KisBrush* brush, bool sharedBrush)
-    : QObject(), m_brush(brush), m_sharedBrush(sharedBrush)
+Brush::Brush(KritaCoreModule* module, KisBrush* brush, bool sharedBrush)
+    : QObject(module)
+    , m_brush(brush)
+    , m_sharedBrush(sharedBrush)
 {
     setObjectName("KritaBrush");
 }
@@ -36,8 +37,4 @@ Brush::~Brush()
     {
         delete m_brush;
     }
-}
-
-}
-
 }

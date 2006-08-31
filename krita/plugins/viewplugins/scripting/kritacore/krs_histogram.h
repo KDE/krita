@@ -24,24 +24,23 @@
 #include <kis_types.h>
 #include <kis_histogram.h>
 
-namespace Kross {
+namespace Kross { namespace KritaCore {
 
-namespace KritaCore {
+class PaintLayer;
 
 /**
- * This class allow to access the histogram of a PaintLayer.
- * 
+ * This class allow to access the histogram of a \a PaintLayer object.
+ *
  * Example (in Ruby) :
  * @code
- * doc = krosskritacore::get("KritaDocument")
- * image = doc.getImage()
- * layer = image.getActiveLayer()
+ * require "Krita"
+ * image = Krita.image()
+ * layer = image.activePaintLayer()
  * histo = layer.createHistogram("RGB8HISTO",0)
- * min = layer.getMin() * 255
- * max = layer.getMax() * 255
+ * min = histo.min() * 255
+ * max = histo.max() * 255
  * for i in min..max
- *   print layer.getValue(i)
- *   print "\n"
+ *     print layer.getValue(i), "\n"
  * end
  * @endcode
  */
@@ -49,10 +48,15 @@ class Histogram : public QObject
 {
         Q_OBJECT
     public:
-        Histogram(KisPaintLayerSP layer, KisHistogramProducerSP producer, const enumHistogramType type);
+        Histogram(PaintLayer* layer, KisHistogramProducerSP producer, const enumHistogramType type);
         ~Histogram();
 
     public slots:
+
+        /**
+         * Return the selected channel.
+         */
+        uint channel();
 
         /**
          * Select the channel of the layer on which to get the result of the histogram.
@@ -62,67 +66,60 @@ class Histogram : public QObject
         void setChannel(uint channelnr);
 
         /**
-         * Return the selected channel
-         */
-        uint getChannel();
-
-        /**
          * This function return the maximum bound of the histogram
          * (values at greater position than the maximum are null).
          * The value is in the range 0.0 - 1.0.
          */
-        double getMax();
+        double max();
 
         /**
          * This function return the minimum bound of the histogram
          * (values at smaller position than the minimum are null)
          * The value is in the range 0.0 - 1.0.
          */
-        double getMin();
+        double min();
 
         /**
-         * This function return the highest value of the histogram
+         * This function return the highest value of the histogram.
          */
-        uint getHighest();
+        uint highest();
 
         /**
-         * This function return the lowest value of the histogram
+         * This function return the lowest value of the histogram.
          */
-        uint getLowest();
+        uint lowest();
 
         /**
-         * This function return the mean of the histogram
+         * This function return the mean of the histogram.
          */
-        double getMean();
+        double mean();
 
         /**
-         * This function return the number of pixels used by the histogram
+         * This function return the number of pixels used by the histogram.
          */
-        uint getCount();
+        uint count();
 
         /**
-         * This function return the sum of all values of the histogram
+         * This function return the sum of all values of the histogram.
          */
-        double getTotal();
+        double total();
 
         /**
          * Return the value of a bin of the histogram.
          * This function takes one argument :
          *  - index, in the range [0..255], 
          */
-        uint getValue(int index);
+        uint value(int index);
 
         /**
          * Return the number of bins of this histogram.
          */
-        int getNumberOfBins();
+        int numberOfBins();
 
     private:
         KisHistogram* m_histogram;
 };
 
-}
-
-}
+}}
 
 #endif

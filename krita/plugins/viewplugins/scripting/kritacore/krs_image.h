@@ -25,15 +25,18 @@
 
 class KisDoc;
 
-namespace Kross {
+namespace Kross { namespace KritaCore {
 
-namespace KritaCore {
+class KritaCoreModule;
 
+/**
+ * An image object.
+ */
 class Image : public QObject
 {
        Q_OBJECT
     public:
-        Image(KisImageSP image, KisDoc* doc = 0);
+        Image(KritaCoreModule* module, KisImageSP image, KisDoc* doc = 0);
         ~Image();
 
     public slots:
@@ -81,8 +84,8 @@ class Image : public QObject
         /**
          * Resize the image.
          * This function takes four arguments :
-         *  - the new width.
-         *  - the new height.
+         *  - the new width of the image.
+         *  - the new height of the image.
          *  - x-position (if you don't need this, set it to 0).
          *  - y-position (if you don't need this, set it to 0).
          */
@@ -135,8 +138,6 @@ class Image : public QObject
         KisDoc* m_doc;
 };
 
-}
-
-}
+}}
 
 #endif

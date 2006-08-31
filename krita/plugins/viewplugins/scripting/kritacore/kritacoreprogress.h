@@ -27,8 +27,8 @@ class KisView;
 namespace Kross { namespace KritaCore {
 
 /**
- * TODO: clarify the situation, while, in the future, multiple scripts could be running at a same time,
- * some of the functions are global to all script and some aren't.
+ * The KritaCoreProgress object enables displaying of a progressbar
+ * in Krita to visualize the progress your script makes.
  */
 class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
 {
@@ -38,19 +38,45 @@ class KRITASCRIPTING_EXPORT KritaCoreProgress : public KisProgressSubject
         virtual ~KritaCoreProgress();
 
     public:
-
-        /**
-         * This function will set this class as the KisProgressSubject in view
-         */
         void activateAsSubject();
-
         virtual void cancel() {}
 
     public slots:
+
+        /**
+         * Set the total steps the progressbar should have. This
+         * could be as example the width * height of an image
+         * and if you iterate over the images, just call
+         * \a incProgress() to increase the current stage.
+         * If this function got called, Krita starts to display
+         * the progressbar.
+         */
         void setProgressTotalSteps(uint totalSteps);
-        void setProgress(uint progress);
+
+        /**
+         * Increment the progress by one step.
+         */
         void incProgress();
+
+        /**
+         * Set the current stage to \p progress . The value
+         * should be always <= as the with \a setProgressTotalSteps()
+         * defined maximal number of steps.
+         */
+        void setProgress(uint progress);
+
+        /**
+         * Set the current stage to \p progress and provide with
+         * \p stage a in the progressbar displayed string.
+         */
         void setProgressStage(const QString& stage, uint progress);
+
+        /**
+         * If called, the progressbar will be disabled again do
+         * indicate, that the operation is done. Please note, that
+         * it's not needed to call this explicit since once the
+         * script finished, it's called automaticly.
+         */
         void progressDone();
 
         //inline void setPackagePath(QString path) { m_packagePath = path; };

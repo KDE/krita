@@ -32,11 +32,16 @@
 
 namespace Kross { namespace KritaCore {
 
+class PaintLayer;
+
+/**
+ * The painter enables drawing to a \a PaintLayer object.
+ */
 class Painter : public QObject
 {
         Q_OBJECT
     public:
-        Painter(KisPaintLayerSP layer);
+        Painter(PaintLayer* layer);
         virtual ~Painter();
 
     public slots: // Convolution
@@ -82,7 +87,7 @@ class Painter : public QObject
         void fillColor(uint x, uint y);
 
         /**
-         * start filling a pattern
+         * Start filling a pattern.
          * It takes two argument :
          *  - x
          *  - y
@@ -94,13 +99,13 @@ class Painter : public QObject
         /**
          * This function set the fill style of the Painter.
          * It takes one argument :
-         *  - 0 for none 1 for fill with foreground color 2 for fill with background color
-         * 3 for fill with a pattern
+         *  - 0 for none 1 for fill with foreground color 2 for fill with 
+         *    background color 3 for fill with a pattern.
          */
         void setFillStyle(uint style);
 
         /**
-         * This function set the opacity of the painting
+         * This function set the opacity of the painting.
          * It takes one argument :
          *  - opacity in the range 0 to 255
          */
@@ -156,10 +161,10 @@ class Painter : public QObject
          *  - x2
          *  - y2
          *  - p2
-         * 
+         *
          * Where (x1,y1) is the start position, p1 is the pressure at the start,
-         * (x2,y2) is the ending position, p2 is the pressure at the end. (cx1,cy1) and (cx2,cy2)
-         * are the position of the control points.
+         * (x2,y2) is the ending position, p2 is the pressure at the end. (cx1,cy1)
+         * and (cx2,cy2) are the position of the control points.
          */
         void paintBezierCurve(double x1, double y1, double p1, double cx1, double cy1, double cx2, double cy2, double x2, double y2, double p2);
 
@@ -171,7 +176,7 @@ class Painter : public QObject
          *  - x2
          *  - y2
          *  - pressure
-         * 
+         *
          * Where (x1,y1) and (x2,y2) are the position of the two centers.
          */
         void paintEllipse(double x1, double y1, double x2, double y2, double pressure);
@@ -189,8 +194,8 @@ class Painter : public QObject
          * It takes five arguments :
          *  - x
          *  - y
-         *  - width
-         *  - height
+         *  - width of the rectangle
+         *  - height of the rectangle
          *  - pressure
          */
         void paintRect(double x, double y, double width, double height, double pressure);
@@ -223,21 +228,21 @@ class Painter : public QObject
     public slots: // How is painting done operations
 
         /**
-         * This functions set the pattern used for filling.
+         * This function sets the pattern used for filling.
          * It takes one argument :
          *  - a Pattern object
          */
         void setPattern(QObject* pattern);
 
         /**
-         * This functions set the brush used for painting.
+         * This function sets the brush used for painting.
          * It takes one argument :
          *  - a Brush object
          */
         void setBrush(QObject* brush);
 
         /**
-         * This function define the paint operation.
+         * This function defines the paint operation.
          * It takes one argument :
          *  - the name of the paint operation
          */
@@ -245,6 +250,7 @@ class Painter : public QObject
 
     protected:
         inline KisPaintLayerSP paintLayer() { return m_layer; }
+
     private:
         inline vKisPoint createPointsVector( Q3ValueList<QVariant> xs, Q3ValueList<QVariant> ys)
         {
@@ -268,6 +274,7 @@ class Painter : public QObject
             fp->setPattern( m_painter->pattern() );
             return fp;
         }
+
     private:
         KisPaintLayerSP m_layer;
         KisPainter* m_painter;

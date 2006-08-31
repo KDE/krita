@@ -30,8 +30,8 @@ namespace Kross {
 namespace KritaCore {
 
 /**
-	@author Cyrille Berger <cberger@cberger.net>
-*/
+ * Fast Wavelet object.
+ */
 class Wavelet : public QObject
 {
         Q_OBJECT
@@ -42,14 +42,14 @@ class Wavelet : public QObject
     public slots:
 
         /**
-         * Return the value of the Nth coefficient
+         * Return the value of the Nth coefficient.
          * The function takes one argument :
          * - the index of the coefficient
          */
         double getNCoeff(uint index);
 
         /**
-         * Set the value of the Nth coefficient
+         * Set the value of the Nth coefficient.
          * The function takes two arguments :
          * - the index of the coefficient
          * - the new value of the coefficient
@@ -65,7 +65,7 @@ class Wavelet : public QObject
         double getXYCoeff(uint x, uint y);
 
         /**
-         * Set the value of a coefficient
+         * Set the value of a coefficient.
          * The function takes three arguments :
          * - x
          * - y
@@ -74,17 +74,17 @@ class Wavelet : public QObject
         void setXYCoeff(uint x, uint y, double value);
 
         /**
-         * Return the depth of the layer
+         * Return the depth of the layer.
          */
         uint getDepth();
 
         /**
-         * Return the size of the wavelet (size = width = height)
+         * Return the size of the wavelet (size = width = height).
          */
         uint getSize();
 
         /**
-         * Return the number of coefficients in this wavelet (= size * size * depth)
+         * Return the number of coefficients in this wavelet (= size * size * depth).
          */
         uint getNumCoeffs();
 

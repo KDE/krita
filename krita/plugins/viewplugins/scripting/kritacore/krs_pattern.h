@@ -23,17 +23,18 @@
 
 class KisPattern;
 
-namespace Kross {
+namespace Kross { namespace KritaCore {
 
-namespace KritaCore {
+class KritaCoreModule;
 
+/**
+ * Pattern object.
+ */
 class Pattern : public QObject {
         //Q_OBJECT
     public:
-        /**
-         * @param sharedPattern tell if the pattern should be deleted or not when this object is deleted
-         */
-        Pattern(KisPattern*, bool sharedPattern);
+        // @param sharedPattern tell if the pattern should be deleted or not when this object is deleted
+        Pattern(KritaCoreModule* module, KisPattern*, bool sharedPattern);
         ~Pattern();
     public:
         KisPattern* getPattern() { return m_pattern; }
@@ -42,8 +43,6 @@ class Pattern : public QObject {
         bool m_sharedPattern;
 };
 
-}
-
-}
+}}
 
 #endif

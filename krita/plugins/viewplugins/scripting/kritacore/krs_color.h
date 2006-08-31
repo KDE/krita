@@ -25,6 +25,9 @@
 
 namespace Kross { namespace KritaCore {
 
+/**
+ * The color class represents a single color.
+ */
 class Color : public QObject
 {
     public:

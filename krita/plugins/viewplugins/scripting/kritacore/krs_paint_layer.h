@@ -29,14 +29,17 @@ class KisTransaction;
 
 namespace Kross { namespace KritaCore {
 
+class Image;
+
 /**
-@author Cyrille Berger
-*/
+ * A paintlayer is a layer within a \a Image where you are able
+ * to perform paint-operations on.
+ */
 class PaintLayer : public QObject
 {
         Q_OBJECT
     public:
-        explicit PaintLayer(KisPaintLayerSP layer, KisDoc* doc = 0);
+        explicit PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc* doc = 0);
         virtual ~PaintLayer();
 
     public slots:
@@ -52,7 +55,7 @@ class PaintLayer : public QObject
         int height();
 
         /**
-         * Return the id of the colorspace of this image (e.g. "RGBA").
+         * Return the id of the colorspace of this image (e.g. "RGBA" or "CMYK").
          */
         QString colorSpaceId();
 
@@ -112,7 +115,8 @@ class PaintLayer : public QObject
         QObject* createHistogram(const QString& histoname, uint typenr);
 
         /**
-         * This function create a Painter which will allow you to some painting on the layer.
+         * This function create a \a Painter which will allow you to some
+         * painting on the layer.
          */
         QObject* createPainter();
 
@@ -120,27 +124,41 @@ class PaintLayer : public QObject
          * Uses this function to create a new undo entry. The \p name
          * is the displayed undo-name. You should always close the
          * paint-operation with \a endPainting() .
+         *
+         * For example (in Ruby) :
+         * @code
+         * require "Krita"
+         * layer = Krita.image().activePaintLayer()
+         * layer.beginPainting("invert")
+         * iterator = layer.createRectIterator(0, 0, layer.width(), layer.height())
+         * while (not iterator.isDone())
+         *     iterator.invertColor()
+         *     iterator.next()
+         * end
+         * layer.endPainting()
+         * @endcode
          */
         void beginPainting(const QString& name);
 
         /**
          * Uses this function to close the current undo entry and add it to
-         * the history.
+         * the history. This function closes the with \a beginPainting()
+         * started painting-operation.
          */
         void endPainting();
 
         /**
-         * Return the fast \a Wavelet transformed of the layer
+         * Return the fast \a Wavelet transformed of the layer.
          */
         QObject* fastWaveletTransformation();
 
         /**
-         * Untransform a fast \a Wavelet into this layer
+         * Untransform a fast \a Wavelet into this layer.
          * It takes one argument :
          *  - a wavelet object
          * It returns true on success else (e.g. cause no valid \a Wavelet
          * object was passed as argument) false is returned.
-         * 
+         *
          * For example (in Ruby) :
          * @code
          * wavelet = layer.fastWaveletTransformation()

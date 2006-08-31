@@ -17,21 +17,21 @@
  */
 
 #include "krs_painter.h"
+#include "krs_paint_layer.h"
+#include "krs_brush.h"
+#include "krs_color.h"
+#include "krs_pattern.h"
 
 #include <kis_convolution_painter.h>
 #include <kis_paint_layer.h>
 #include <kis_paintop_registry.h>
 
-#include "krs_brush.h"
-#include "krs_color.h"
-#include "krs_pattern.h"
-
 using namespace Kross::KritaCore;
 
-Painter::Painter(KisPaintLayerSP layer)
-    : QObject()
-    , m_layer(layer)
-    , m_painter(new KisPainter(layer->paintDevice()))
+Painter::Painter(PaintLayer* layer)
+    : QObject(layer)
+    , m_layer(layer->paintLayer())
+    , m_painter(new KisPainter(layer->paintLayer()->paintDevice()))
     , m_threshold(1)
 {
     setObjectName("KritaPainter");

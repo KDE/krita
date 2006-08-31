@@ -22,8 +22,9 @@
 #include <QObject>
 #include <QList>
 #include <QListIterator>
-
 #include <klocale.h>
+
+#include "krs_paint_layer.h"
 
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
@@ -31,9 +32,7 @@
 
 //#include "../scriptingmonitor.h"
 
-namespace Kross {
-
-namespace KritaCore {
+namespace Kross { namespace KritaCore {
 
 /**
  * This object allow to change the value of pixel one by one.
@@ -42,7 +41,8 @@ class IteratorBase : public QObject
 {
         Q_OBJECT
     public:
-        IteratorBase() : QObject() {
+        IteratorBase(QObject* parent) : QObject(parent) {
+            setObjectName("KritaIterator");
             // Connect the Monitor to know when the invalidating of iterator is needed
             //connect(ScriptingMonitor::instance(), SIGNAL(executionFinished(const Kross::Api::ScriptAction* )), this, SLOT(invalidate()));
         }
@@ -51,7 +51,10 @@ class IteratorBase : public QObject
     public slots:
 
         /**
-         * Increment the positon, and go to the next pixel.
+         * Increment the positon, and go to the next pixel. The
+         * returned value is true if the iterator reached the
+         * end (so, it's like calling next() and after that asking
+         * what isDone() returns).
          */
         virtual bool next() = 0;
 
@@ -110,7 +113,7 @@ class IteratorBase : public QObject
         virtual void setPixel(QVariantList pixel) = 0;
 
         /**
-         * Invert the color of a pixel.
+         * Invert the color of the current pixel.
          */
         virtual void invertColor() = 0;
 
@@ -135,19 +138,16 @@ template<class _T_It>
 class Iterator : public IteratorBase
 {
     public:
-        Iterator(_T_It it, KisPaintLayerSP layer)
-            //: m_itmm (new IteratorMemoryManager(this))
-            : IteratorBase()
+        Iterator(PaintLayer* layer, _T_It it)
+            : IteratorBase(layer)
             , m_it(new _T_It(it))
-            , m_layer(layer)
+            , m_layer(layer->paintLayer())
         {
-            setObjectName("KritaIterator");
         }
 
         virtual ~Iterator()
         {
             invalidateIterator();
-            //delete m_itmm;
         }
 
     private:
@@ -209,29 +209,6 @@ class Iterator : public IteratorBase
                 setChannelValue(*itC, pixel[i]);
         }
 
-        /*
-        QVariantList pixels()
-        {
-            QVariantList pixels;
-            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
-            const int channelcount = channels.count();
-            for(; ! m_it->isDone(); ++(*m_it))
-                for(int k = 0; k < channelcount; ++k)
-                    pixels.append( channelValue(channels[k]) );
-            return pixels;
-        }
-
-        void setPixels(QVariantList pixels)
-        {
-            Q3ValueVector<KoChannelInfo*> channels = m_layer->paintDevice()->colorSpace()->channels();
-            const int channelcount = channels.count();
-            const int pixelcount = pixels.count();
-            for(int i = 0; i < pixelcount && ! m_it->isDone(); ++i, ++(*m_it))
-                for(int k = 0; k < channelcount; ++k)
-                    setChannelValue(channels[k], pixels[i]);
-        }
-        */
-
         void invertColor()
         {
             m_layer->paintDevice()->colorSpace()->invertColor(m_it->rawData(), 1);
@@ -286,7 +263,6 @@ class Iterator : public IteratorBase
         }
 
     private:
-        //IteratorMemoryManager* m_itmm;
         _T_It* m_it;
         KisPaintLayerSP m_layer;
 };

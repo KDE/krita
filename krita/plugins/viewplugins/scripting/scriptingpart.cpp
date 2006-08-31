@@ -137,8 +137,9 @@ void ScriptingPart::executionFinished(Kross::Action*)
     QApplication::restoreOverrideCursor();
 }
 
-void ScriptingPart::executionStarted(Kross::Action* act)
+void ScriptingPart::executionStarted(Kross::Action* action)
 {
+    Q_UNUSED(action);
     kDebug() << "ScriptingPart::executionStarted" << endl;
 #if 0
     kDebug(41011) << act->getPackagePath() << endl;

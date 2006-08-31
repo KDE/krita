@@ -17,6 +17,7 @@
  */
 
 #include "krs_filter.h"
+#include "kritacoremodule.h"
 #include "krs_paint_layer.h"
 
 #include <kis_filter.h>
@@ -24,8 +25,8 @@
 
 using namespace Kross::KritaCore;
 
-Filter::Filter(KisFilter* filter)
-    : QObject()
+Filter::Filter(KritaCoreModule* module, KisFilter* filter)
+    : QObject(module)
     , m_filter(filter)
 {
     setObjectName("KritaFilter");
@@ -51,6 +52,11 @@ void Filter::setProperty(const QString& name, const QVariant& value)
     m_filter->configuration()->setProperty(name, value);
 }
 
+QVariantMap Filter::properties()
+{
+    return m_filter->configuration()->getProperties();
+}
+
 void Filter::fromXML(const QString& xml)
 {
     m_filter->configuration()->fromXML( xml );
@@ -61,30 +67,33 @@ const QString Filter::toXML()
     return m_filter->configuration()->toString();
 }
 
-#if 0
-Kross::Api::Object::Ptr Filter::process(Kross::Api::List::Ptr args)
+bool Filter::process(QObject* layer)
 {
-    PaintLayer* src = (PaintLayer*)args->item(0);
-    if(!m_filter->workWith( src->paintLayer()->paintDevice()->colorSpace()))
+    PaintLayer* paintlayer = dynamic_cast< PaintLayer* >(layer);
+    if(! paintlayer || ! m_filter->workWith( paintlayer->paintLayer()->paintDevice()->colorSpace()))
     {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception( i18n("An error has occured in %1",QString("process")) ) );
+        kWarning() << i18n("An error has occured in %1",QString("process")) << endl;
+        return false;
     }
-    QRect rect;
-    if( args->count() >1)
-    {
-        uint x = Kross::Api::Variant::toVariant(args->item(1)).toUInt();
-        uint y = Kross::Api::Variant::toVariant(args->item(2)).toUInt();
-        uint w = Kross::Api::Variant::toVariant(args->item(3)).toUInt();
-        uint h = Kross::Api::Variant::toVariant(args->item(4)).toUInt();
-        rect = QRect(x, y, w, h);
-    } else {
-        QRect r1 = src->paintLayer()->paintDevice()->extent();
-        QRect r2 = src->paintLayer()->image()->bounds();
-        rect = r1.intersect(r2);
-    }
-    m_filter->process( src->paintLayer()->paintDevice(), src->paintLayer()->paintDevice(), m_config->filterConfiguration(), rect );
-    return Kross::Api::Object::Ptr(0);
+
+    QRect r1 = paintlayer->paintLayer()->paintDevice()->extent();
+    QRect r2 = paintlayer->paintLayer()->image()->bounds();
+    QRect rect = r1.intersect(r2);
+    m_filter->process(paintlayer->paintLayer()->paintDevice(), paintlayer->paintLayer()->paintDevice(), m_filter->configuration(), rect);
+    return true;
 }
-#endif
+
+bool Filter::process(QObject* layer, int x, int y, int width, int height)
+{
+    PaintLayer* paintlayer = dynamic_cast< PaintLayer* >(layer);
+    if(! paintlayer || ! m_filter->workWith( paintlayer->paintLayer()->paintDevice()->colorSpace()))
+    {
+        kWarning() << i18n("An error has occured in %1",QString("process")) << endl;
+        return false;
+    }
+
+    m_filter->process(paintlayer->paintLayer()->paintDevice(), paintlayer->paintLayer()->paintDevice(), m_filter->configuration(), QRect(x, y, width, height));
+    return true;
+}
 
 #include "krs_filter.moc"

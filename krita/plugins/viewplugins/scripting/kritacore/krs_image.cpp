@@ -17,6 +17,8 @@
  */
 
 #include "krs_image.h"
+#include "krs_paint_layer.h"
+#include "kritacoremodule.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -29,12 +31,10 @@
 #include <kis_paint_layer.h>
 #include <kis_meta_registry.h>
 
-#include "krs_paint_layer.h"
-
 using namespace Kross::KritaCore;
 
-Image::Image(KisImageSP image, KisDoc* doc)
-    : QObject()
+Image::Image(KritaCoreModule* module, KisImageSP image, KisDoc* doc)
+    : QObject(module)
     , m_image(image)
     , m_doc(doc)
 {
@@ -49,7 +49,7 @@ QObject* Image::activePaintLayer()
 {
     KisPaintLayer* activePaintLayer = dynamic_cast< KisPaintLayer* >(m_image->activeLayer().data());
     if(activePaintLayer)
-        return new PaintLayer(KisPaintLayerSP(activePaintLayer), m_doc);
+        return new PaintLayer(this, KisPaintLayerSP(activePaintLayer), m_doc);
     kWarning() << "The active layer is not paintable." << endl;
     return 0;
 }
@@ -101,7 +101,6 @@ void Image::shear(double xangle, double yangle)
     m_image->shear(xangle, yangle, 0);
 }
 
-
 QObject* Image::createPaintLayer(const QString& name, int opacity)
 {
     return createPaintLayer(name, opacity, m_image->colorSpace()->id());
@@ -115,7 +114,7 @@ QObject* Image::createPaintLayer(const QString& name, int opacity, const QString
                               : new KisPaintLayer(m_image.data(), name, opacity);
     layer->setVisible(true);
     m_image->addLayer(KisLayerSP(layer), m_image->rootLayer(), KisLayerSP(0));
-    return new PaintLayer(KisPaintLayerSP(layer));
+    return new PaintLayer(this, KisPaintLayerSP(layer));
 }
 
 #include "krs_image.moc"

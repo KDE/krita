@@ -17,6 +17,7 @@
  */
 
 #include "krs_paint_layer.h"
+#include "krs_image.h"
 
 #include <QBuffer>
 #include <klocale.h>
@@ -36,8 +37,11 @@
 
 using namespace Kross::KritaCore;
 
-PaintLayer::PaintLayer(KisPaintLayerSP layer, KisDoc* doc)
-    : QObject(), m_layer(layer), m_doc(doc), m_cmd(0)
+PaintLayer::PaintLayer(Image* image, KisPaintLayerSP layer, KisDoc* doc)
+    : QObject(image)
+    , m_layer(layer)
+    , m_doc(doc)
+    , m_cmd(0)
 {
     setObjectName("KritaLayer");
 }
@@ -82,23 +86,20 @@ bool PaintLayer::convertToColorspace(const QString& colorspacename)
 
 QObject* PaintLayer::createRectIterator(uint x, uint y, uint width, uint height)
 {
-    return new Iterator<KisRectIteratorPixel>(
-            paintLayer()->paintDevice()->createRectIterator(x, y, width, height, true),
-            paintLayer());
+    return new Iterator<KisRectIteratorPixel>(this,
+            paintLayer()->paintDevice()->createRectIterator(x, y, width, height, true));
 }
 
 QObject* PaintLayer::createHLineIterator(uint x, uint y, uint width)
 {
-    return new Iterator<KisHLineIteratorPixel>(
-            paintLayer()->paintDevice()->createHLineIterator(x, y, width, true),
-            paintLayer());
+    return new Iterator<KisHLineIteratorPixel>(this,
+            paintLayer()->paintDevice()->createHLineIterator(x, y, width, true));
 }
 
 QObject* PaintLayer::createVLineIterator(uint x, uint y, uint height)
 {
-    return new Iterator<KisVLineIteratorPixel>(
-            paintLayer()->paintDevice()->createVLineIterator(x, y, height, true),
-            paintLayer());
+    return new Iterator<KisVLineIteratorPixel>(this,
+            paintLayer()->paintDevice()->createVLineIterator(x, y, height, true));
 }
 
 QObject* PaintLayer::createHistogram(const QString& histoname, uint typenr)
@@ -122,8 +123,9 @@ QObject* PaintLayer::createHistogram(const QString& histoname, uint typenr)
             type = LINEAR;
             break;
     }
+
     if(factory && factory->isCompatibleWith( paintLayer()->paintDevice()->colorSpace() ))
-        return new Histogram(paintLayer(), factory->generate() , type);
+        return new Histogram(this, factory->generate() , type);
 
     kWarning() << QString("An error has occured in %1\n%2").arg("createHistogram").arg( QString("The histogram %1 is not available").arg(histoname) );
     return 0;
@@ -131,7 +133,7 @@ QObject* PaintLayer::createHistogram(const QString& histoname, uint typenr)
 
 QObject* PaintLayer::createPainter()
 {
-    return new Painter(paintLayer());
+    return new Painter(this);
 }
 
 void PaintLayer::beginPainting(const QString& name)

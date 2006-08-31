@@ -20,19 +20,22 @@
 #define KROSS_KRITACOREKRS_FILTER_H
 
 #include <QObject>
+#include <QVariant>
 
 class KisFilter;
 
-namespace Kross {
-namespace KritaCore {
+namespace Kross { namespace KritaCore {
 
-class FilterConfiguration;
+class KritaCoreModule;
 
+/**
+ * This class enables access to the filters Krita provides.
+ */
 class Filter : public QObject
 {
         Q_OBJECT
     public:
-        Filter(KisFilter*);
+        Filter(KritaCoreModule* module, KisFilter*);
         ~Filter();
 
     public slots:
@@ -63,6 +66,21 @@ class Filter : public QObject
         void setProperty(const QString& name, const QVariant& value);
 
         /**
+         * This function returns all properties the filter has
+         * as name=value dictonary.
+         *
+         * For example (in Python)
+         * @code
+         * require "Krita"
+         * filter = Krita.filter("invert")
+         * for propname in filter.properties().keys():
+         *     propvalue = filter.property(propname)
+         *     filter.setProperty(propname, propvalue)
+         * @endcode
+         */
+        QVariantMap properties();
+
+        /**
          * Deserialize the filter-configuration from XML.
          */
         void fromXML(const QString& xml);
@@ -72,40 +90,47 @@ class Filter : public QObject
          */
         const QString toXML();
 
-#if 0
         /**
          * This function will apply the filter.
          * It takes one argument :
          *  - the source layer
-         * You can also use this four aguments :
+         *
+         * For example (in Ruby)
+         * @code
+         * require "Krita"
+         * layer = Krita.image().activePaintLayer()
+         * filter = Krita.filter("invert")
+         * filter.process(layer)
+         * @endcode
+         */
+        bool process(QObject* layer);
+
+        /**
+         * This function will apply the filter.
+         * It takes five argument :
+         *  - the source layer
          *  - x
          *  - y
          *  - width
          *  - height
-         * 
+         *
          * (x,y, width, height) defines the rectangular area on which the filter will be computed.
          * If the rectangle is not defined, then the filter will be apply on alll the source layer.
          * 
-         * For example (in ruby)
+         * For example (in Ruby)
          * @code
-         * doc = Krosskritacore::get("KritaDocument")
-         * image = doc.getImage()
-         * layer = image.getActivePaintLayer()
-         * width = layer.getWidth()
-         * height = layer.getHeight()
-         * filter = Krosskritacore::getFilter("invert")
-         * filter.process(layer, layer)
-         * filter.process(layer, layer, 10, 10, 20, 20 )
+         * require "Krita"
+         * layer = Krita.image().activePaintLayer()
+         * filter = Krita.filter("invert")
+         * filter.process(layer, 10, 10, 20, 20)
          * @endcode
          */
-        Kross::Api::Object::Ptr process(Kross::Api::List::Ptr args);
-#endif
+        bool process(QObject* layer, int x, int y, int width, int height);
 
     private:
         KisFilter* m_filter;
 };
 
-}
-}
+}}
 
 #endif

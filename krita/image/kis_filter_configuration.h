@@ -95,6 +95,8 @@ public:
     bool getBool(const QString & name, bool def = false);
     QString getString(const QString & name, QString def = QString::null);
 
+    QMap<QString, QVariant> getProperties() { return m_properties; }
+
 private:
         void dump();
 

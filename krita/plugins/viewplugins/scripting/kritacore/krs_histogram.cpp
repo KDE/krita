@@ -17,18 +17,17 @@
  */
 
 #include "krs_histogram.h"
+#include "krs_paint_layer.h"
 
 #include <kis_paint_layer.h>
 
 using namespace Kross::KritaCore;
 
-Histogram::Histogram(KisPaintLayerSP layer,
-                     KisHistogramProducerSP producer,
-                     const enumHistogramType type)
-    : QObject()
+Histogram::Histogram(PaintLayer* layer, KisHistogramProducerSP producer, const enumHistogramType type)
+    : QObject(layer)
 {
     setObjectName("KritaHistogram");
-    m_histogram = new KisHistogram(layer, producer, type);
+    m_histogram = new KisHistogram(layer->paintLayer(), producer, type);
 }
 
 Histogram::~Histogram()
@@ -40,52 +39,52 @@ void Histogram::setChannel(uint channelnr)
     m_histogram->setChannel(channelnr);
 }
 
-uint Histogram::getChannel()
+uint Histogram::channel()
 {
     return m_histogram->channel();
 }
 
-double Histogram::getMax()
+double Histogram::max()
 {
     return m_histogram->calculations().getMax();
 }
 
-double Histogram::getMin()
+double Histogram::min()
 {
     return m_histogram->calculations().getMin();
 }
 
-uint Histogram::getHighest()
+uint Histogram::highest()
 {
     return m_histogram->calculations().getHighest();
 }
 
-uint Histogram::getLowest()
+uint Histogram::lowest()
 {
     return m_histogram->calculations().getLowest();
 }
 
-double Histogram::getMean()
+double Histogram::mean()
 {
     return m_histogram->calculations().getMean();
 }
 
-uint Histogram::getCount()
+uint Histogram::count()
 {
     return m_histogram->calculations().getCount();
 }
 
-double Histogram::getTotal()
+double Histogram::total()
 {
     return m_histogram->calculations().getTotal();
 }
 
-uint Histogram::getValue(int index)
+uint Histogram::value(int index)
 {
     return m_histogram->getValue(index);
 }
 
-int Histogram::getNumberOfBins()
+int Histogram::numberOfBins()
 {
     return m_histogram->producer()->numberOfBins();
 }

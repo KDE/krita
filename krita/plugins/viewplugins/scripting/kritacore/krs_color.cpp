@@ -22,9 +22,13 @@ using namespace Kross::KritaCore;
 
 Color::Color(int x, int y, int z, QColor::Spec colorSpec)
     : QObject()
-    , m_color(x,y,z,colorSpec)
 {
     setObjectName("KritaColor");
+
+    if(colorSpec == QColor::Hsv)
+        m_color.setHsv(x, y, z);
+    else
+        m_color.setRgb(x, y, z);
 }
 
 Color::~Color()

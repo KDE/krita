@@ -1,0 +1,29 @@
+/** @mainpage Krita Scripting
+ *
+ * In Krita, you can write scripts in Ruby or Python (the availability of the
+ * interpreters might depend on what your distributions or the administrator
+ * of your machine did install). Here you will find a description of the
+ * scripting API.
+ *
+ * @section Handbook
+ *
+ * Krita offers a complete handbook which includes detailed informations
+ * about the scripting API, examples and more.
+ *
+ * @see http://www.koffice.org/krita
+ * @see http://docs.kde.org/development/en/koffice/krita/
+ *
+ * @section Objects
+ *
+ * The \a Kross::KritaCore::KritaCoreModule is the Krita scripting module
+ * which provides access to the scripting functionality.
+ *
+ * @section Examples
+ *
+ * Some examples are distributed with Krita, and you might find them in
+ * /usr/share/apps/krita/scripts (or /opt/kde/share/apps/krita/scripts depending
+ * on your used distribution).
+ *
+ * Also you are able to get or even provide your own new scripts online at
+ * @see http://www.kde-files.org/index.php?xcontentmode=616
+ */

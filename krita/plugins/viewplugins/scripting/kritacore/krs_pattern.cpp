@@ -17,14 +17,16 @@
  */
 
 #include "krs_pattern.h"
+#include "kritacoremodule.h"
 
 #include <kis_pattern.h>
 
-namespace Kross {
+using namespace Kross::KritaCore;
 
-namespace KritaCore {
-
-Pattern::Pattern(KisPattern* pattern, bool sharedPattern) : QObject(), m_pattern(pattern), m_sharedPattern(sharedPattern)
+Pattern::Pattern(KritaCoreModule* module, KisPattern* pattern, bool sharedPattern)
+    : QObject(module)
+    , m_pattern(pattern)
+    , m_sharedPattern(sharedPattern)
 {
     setObjectName("KritaPattern");
 }
@@ -33,8 +35,4 @@ Pattern::~Pattern()
 {
     if(!m_sharedPattern)
         delete m_pattern;
-}
-
-}
-
 }

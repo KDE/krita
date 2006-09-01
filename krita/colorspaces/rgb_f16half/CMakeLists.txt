@@ -2,6 +2,7 @@
 
 include_directories( ${OPENEXR_INCLUDE_DIR})
 if(KUNITTEST_FOUND)
+    MESSAGE(STATUS "Need to port tests program")
     add_subdirectory(tests)
 endif(KUNITTEST_FOUND)
 

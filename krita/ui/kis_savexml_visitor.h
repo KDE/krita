@@ -56,7 +56,7 @@ public:
         layerElement.setAttribute("layertype", "paintlayer");
         layerElement.setAttribute("filename", QString("layer%1").arg(m_count));
         layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id().id());
-
+        layerElement.setAttribute("hasmask", layer->hasMask());
         m_elem.appendChild(layerElement);
 
         if(layer->paintDevice()->hasExifInfo())

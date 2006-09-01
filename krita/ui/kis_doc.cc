@@ -593,6 +593,15 @@ KisLayerSP KisDoc::loadPaintLayer(const QDomElement& element, KisImageSP img,
     else
         m_layerFilenames[layer.data()] = QString(element.attribute("filename"));
 
+    if ((attr = element.attribute("hasmask")).isNull())
+        attr = "0";
+
+    if (attr == "1") {
+        // We add a mask, but we'll fill in the actual mask later in completeLoading with the visitor
+        layer->createMask();
+    }
+
+
     // Load exif info
     for( QDomNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
     {

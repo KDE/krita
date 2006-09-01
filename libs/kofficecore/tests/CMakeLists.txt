@@ -48,18 +48,6 @@ add_test(kofficecore-kogenstylestest kogenstylestest)
 
 ########### next target ###############
 
-set(kodomtest_SRCS kodomtest.cpp )
-
-kde4_automoc(${kodomtest_SRCS})
-
-kde4_add_executable(kodomtest RUN_UNINSTALLED ${kodomtest_SRCS})
-
-target_link_libraries(kodomtest  ${KDE4_KDECORE_LIBS} kofficecore )
-
-add_test(kofficecore-kodomtest kodomtest)
-
-########### next target ###############
-
 set(kooasissettingstest_SRCS kooasissettingstest.cpp )
 
 kde4_automoc(${kooasissettingstest_SRCS})

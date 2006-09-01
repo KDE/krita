@@ -36,6 +36,18 @@ kde4_add_executable(storedroptest RUN_UNINSTALLED ${storedroptest_SRCS})
 
 target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kstore )
 
+########### next target ###############
+
+set(kodomtest_SRCS kodomtest.cpp )
+
+kde4_automoc(${kodomtest_SRCS})
+
+kde4_add_executable(kodomtest RUN_UNINSTALLED ${kodomtest_SRCS})
+
+target_link_libraries(kodomtest  ${KDE4_KDECORE_LIBS} kstore kofficecore )
+
+add_test(kofficecore-kodomtest kodomtest)
+
 ########### end ###############
 
 endif(KDE4_BUILD_TESTS)

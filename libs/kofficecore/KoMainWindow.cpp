@@ -705,11 +705,7 @@ bool KoMainWindow::exportConfirmation( const QByteArray &outputFormat )
 {
     if (!rootDocument()->wantExportConfirmation()) return true;
     KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
-
-    const bool neverHeardOfIt = ( mime->name() == KMimeType::defaultMimeType() );
-    QString comment = neverHeardOfIt ?
-                      i18n( "%1 (unknown file type)", QString::fromLatin1(outputFormat) )
-                      : mime->comment();
+    QString comment = mime ? mime->comment() : i18n( "%1 (unknown file type)", QString::fromLatin1(outputFormat) );
 
     // Warn the user
     int ret;
@@ -786,6 +782,8 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
             int c = suggestedFilename.lastIndexOf('.');
 
             KMimeType::Ptr mime = KMimeType::mimeType( _native_format );
+	    if ( ! mime )
+                mime = KMimeType::defaultMimeTypePtr();
             QString ext = mime->property( "X-KDE-NativeExtension" ).toString();
             if (!ext.isEmpty ())
             {

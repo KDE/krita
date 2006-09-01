@@ -87,6 +87,8 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
 
     // To get a different description in the combo, we need to change its entries afterwards
     KMimeType::Ptr type = KMimeType::mimeType( nativeFormat );
+    if ( ! type )
+        type = KMimeType::defaultMimeTypePtr();
     int idx = 1; // 0 is the native format
 
     if ( addUncompressed )
@@ -109,6 +111,8 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
     foreach( tmpString, mimeFilter )
     {
         KMimeType::Ptr mime = KMimeType::mimeType( tmpString );
+	if ( ! mime )
+            mime = KMimeType::defaultMimeTypePtr();
         compatString = mime->property ("X-KDE-CompatibleApplication").toString ();
         if (!compatString.isEmpty ())
             filterWidget->setItemText( i, i18n ("%1 (%2 Compatible)", mime->comment (), compatString) );

@@ -1301,7 +1301,8 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 {
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType( nativeFormatMimeType() );
-    Q_ASSERT( mime );
+    if ( ! mime )
+        mime = KMimeType::defaultMimeTypePtr();
     QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
     if ( path.isEmpty() )
     {
@@ -1460,7 +1461,8 @@ bool KoDocument::openFile()
     if ( typeName == "application/x-trash" )
     {
         QString path = u.path();
-        QStringList patterns = KMimeType::mimeType( typeName )->patterns();
+	KMimeType::Ptr mime = KMimeType::mimeType( typeName );
+        QStringList patterns = mime ? mime->patterns() : KMimeType::defaultMimeTypePtr()->patterns();
         // Find the extension that makes it a backup file, and remove it
         for( QStringList::Iterator it = patterns.begin(); it != patterns.end(); ++it ) {
             QString ext = *it;

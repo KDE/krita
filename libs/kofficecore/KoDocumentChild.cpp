@@ -245,7 +245,7 @@ bool KoDocumentChild::createAndLoadDocument( KoStore* store, bool doOpenURL, boo
             // Try to turn the mimetype name into its comment
             QString mimeName = mimeType;
             KMimeType::Ptr mime = KMimeType::mimeType( mimeType );
-            if ( mime->name() != KMimeType::defaultMimeType() )
+            if ( mime /*mime->name() != KMimeType::defaultMimeType()*/ )
                 mimeName = mime->comment();
             d->m_doc->setProperty( "unavailReason", i18n( "No handler found for %1", mimeName ) );
         }

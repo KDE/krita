@@ -99,7 +99,11 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->m_aboutUi->leFileName->setText( doc->file() );
     d->m_aboutUi->leFileName->setReadOnly( true );
-    QPixmap p = KMimeType::mimeType( doc->mimeType() )->pixmap( K3Icon::Desktop, 48 );
+    
+    KMimeType::Ptr mime = KMimeType::mimeType( doc->mimeType() );
+    if ( ! mime )
+        mime = KMimeType::defaultMimeTypePtr();
+    QPixmap p = mime->pixmap( K3Icon::Desktop, 48 );
     d->m_aboutUi->lblPixmap->setPixmap( p );
 
     d->m_aboutUi->leTitle->setText( d->m_info->aboutInfo( "title" ) );
@@ -110,8 +114,11 @@ void KoDocumentInfoDlg::initAboutTab()
         d->m_aboutUi->leKeywords->setText( d->m_info->aboutInfo( "keyword" ) );
 
     d->m_aboutUi->meComments->setPlainText( d->m_info->aboutInfo( "comments" ) );
-    if ( !doc->mimeType().isEmpty() )
-        d->m_aboutUi->lblType->setText( KMimeType::mimeType( doc->mimeType() )->comment() );
+    if ( !doc->mimeType().isEmpty() ) {
+        KMimeType::Ptr docmime = KMimeType::mimeType( doc->mimeType() );
+	if (docmime)
+            d->m_aboutUi->lblType->setText( docmime->comment() );
+    }
     if ( !d->m_info->aboutInfo( "creation-date" ).isEmpty() )
     {
         QDateTime t = QDateTime::fromString( d->m_info->aboutInfo( "creation-date" ),

@@ -79,6 +79,8 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
             it++)
     {
         KMimeType::Ptr mime = KMimeType::mimeType (*it);
+        if ( ! mime )
+	    mime = KMimeType::defaultMimeTypePtr();
         m_filterList->insertItem (mime->comment ());
     }
 

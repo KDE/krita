@@ -335,7 +335,7 @@ public:
      * will be merged into an appropriate repaint action.
      * @param shape the rectangle (in pt) to queue for repaint.
      */
-    void repaint(QRectF &shape) const;
+    void repaint(const QRectF &shape) const;
 
     /**
      * Request a repaint to be queued.

@@ -237,7 +237,7 @@ void KoShape::repaint() const {
     }
 }
 
-void KoShape::repaint(QRectF &shape) const {
+void KoShape::repaint(const QRectF &shape) const {
     if ( !m_shapeManagers.empty() && isVisible() )
     {
         foreach( KoShapeManager * manager, m_shapeManagers )

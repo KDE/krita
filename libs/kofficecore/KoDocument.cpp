@@ -1301,8 +1301,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 {
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType( nativeFormatMimeType() );
-    if ( ! mime )
-        mime = KMimeType::defaultMimeTypePtr();
+    Q_ASSERT(mime);
     QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
     if ( path.isEmpty() )
     {

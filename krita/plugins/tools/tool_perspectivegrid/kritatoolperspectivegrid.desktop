@@ -1,21 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Perspective Grid Tool
-Name[ca]=Eina de graella de perspectiva
-Name[da]=Perspektivgitterværktøj
-Name[de]=Perspektive-Raster-Werkzeug
-Name[es]=Herramienta Cuadrícula de perspectiva
-Name[et]=Perspektiivvõrgu tööriist
-Name[hu]=Perspektívarács
-Name[it]=Strumento di reticolo prospettico
-Name[ja]=遠近法グリッドツール
-Name[nl]=Perspectiefrooster-gereedschap
-Name[pt]=Ferramenta de Grelha em Perspectiva
-Name[pt_BR]=Ferramentas de Grade em Perspectiva
-Name[ru]=Перспектива
-Name[sk]=Perspektívna mriežka
-Name[sv]=Perspektivrutnätsverktyg
-Name[zh_TW]=透視格工具
 ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolperspectivegrid

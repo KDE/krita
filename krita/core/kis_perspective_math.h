@@ -36,6 +36,14 @@ class KisPerspectiveMath {
             // y = a*x + b
       double a, b;
     };
+    /// TODO: get ride of this in 2.0
+    inline static KisPoint matProd(const double (&m)[3][3], const KisPoint& p)
+    {
+        double s = ( p.x() * m[2][0] + p.y() * m[2][1] + 1.0);
+        s = (s == 0.) ? 1. : 1./s;
+        return KisPoint( (p.x() * m[0][0] + p.y() * m[0][1] + m[0][2] ) * s,
+                         (p.x() * m[1][0] + p.y() * m[1][1] + m[1][2] ) * s );
+    }
     static inline LineEquation computeLineEquation(const KisPoint* p1, const KisPoint* p2)
     {
       LineEquation eq;

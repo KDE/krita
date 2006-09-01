@@ -3,7 +3,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_duplicateop.h"
+
 #include <qrect.h>
 
 #include <kdebug.h>
@@ -35,8 +37,8 @@
 #include "kis_paintop.h"
 #include "kis_iterators_pixel.h"
 #include "kis_selection.h"
-
-#include "kis_duplicateop.h"
+#include "kis_perspective_grid.h"
+#include "kis_random_sub_accessor.h"
 
 KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
 {
@@ -116,11 +118,118 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     KisPaintDeviceSP srcdev = new KisPaintDevice(device->colorSpace(), "duplicate source dev");
     Q_CHECK_PTR(srcdev);
 
-    // First, copy the source data on the temporary device:
+    // Perspective correction ?
     KisPainter copyPainter(srcdev);
-    copyPainter.bitBlt(0, 0, COMPOSITE_COPY, device, srcPoint.x(), srcPoint.y(), sw, sh);
-    copyPainter.end();
+    if(m_painter->duplicatePerspectiveCorrection())
+    {
+        double startM[3][3];
+        double endM[3][3];
+        for(int i = 0; i < 3; i++)
+        {
+            for(int j = 0; j < 3; j++)
+            {
+                startM[i][j] = 0.;
+                endM[i][j] = 0.;
+            }
+            startM[i][i] = 1.;
+            endM[i][i] = 1.;
+        }
+        // First look for the grid corresponding to the start point
+        KisSubPerspectiveGrid* subGridStart = device->image()->perspectiveGrid()->gridAt(KisPoint(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
+        QRect r = QRect(0,0, device->image()->width(), device->image()->height());
+        
+#if 1
+        if(subGridStart)
+        {
+            kdDebug() << "fgrid" << endl;
+//             QRect r( QPoint( QMAX( subGridStart->topLeft()->x(), subGridStart->bottomLeft()->x() ),
+//                              QMAX( subGridStart->topLeft()->y(), subGridStart->topRight()->y() ) ),
+//                      QPoint( QMAX( subGridStart->topRight()->x(), subGridStart->bottomRight()->x() ),
+//                              QMAX( subGridStart->bottomLeft()->y(), subGridStart->bottomRight()->y() ) ) );
+            kdDebug() << *subGridStart->topLeft() << " " << *subGridStart->topRight() << " " << *subGridStart->bottomLeft() << " " <<  *subGridStart->bottomRight() << endl;
+            double* b = KisPerspectiveMath::computeMatrixTransfoFromPerspective( r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
+            for(int i = 0; i < 3; i++)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    kdDebug() << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
+                    startM[i][j] = b[3*i+j];
+                }
+            }
 
+        }
+#endif
+#if 1
+        // Second look for the grid corresponding to the end point
+        KisSubPerspectiveGrid* subGridEnd = device->image()->perspectiveGrid()->gridAt(pos);
+        if(subGridEnd)
+        {
+            kdDebug() << "second grid" << endl;
+//             QRect r( QPoint( QMAX( subGridEnd->topLeft()->x(), subGridEnd->bottomLeft()->x() ),
+//                      QMAX( subGridEnd->topLeft()->y(), subGridEnd->topRight()->y() ) ),
+//             QPoint( QMAX( subGridEnd->topRight()->x(), subGridEnd->bottomRight()->x() ),
+//                     QMAX( subGridEnd->bottomLeft()->y(), subGridEnd->bottomRight()->y() ) ) );
+            double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
+            for(int i = 0; i < 3; i++)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    kdDebug() << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
+                    endM[i][j] = b[3*i+j];
+                }
+            }
+        }
+#endif
+        kdDebug() << pt << KisPerspectiveMath::matProd(endM, pt) << KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, pt) ) << KisPerspectiveMath::matProd(endM, KisPerspectiveMath::matProd(startM, pt) ) << endl;
+        kdDebug() << *subGridEnd->topLeft() << KisPerspectiveMath::matProd(endM,  *subGridEnd->topLeft()) << KisPerspectiveMath::matProd(endM, r.topLeft()) << endl;
+        kdDebug() << *subGridEnd->topLeft() << KisPerspectiveMath::matProd(startM,  *subGridEnd->topLeft()) << KisPerspectiveMath::matProd(startM, r.topLeft()) << endl;
+        // Compute the translation in the perspective transformation space:
+        KisPoint translat;
+        {
+            double sf1t = ( pt.x() * endM[2][0] + pt.y() * endM[2][1] + 1.0);
+            sf1t = (sf1t == 0.) ? 1. : 1./sf1t;
+            double x1t = ( pt.x() * endM[0][0] + pt.y() * endM[0][1] + endM[0][2] ) * sf1t;
+            double y1t = ( pt.x() * endM[1][0] + pt.y() * endM[1][1] + endM[1][2] ) * sf1t;
+            double sf2t = ( srcPoint.x() * endM[2][0] + srcPoint.y() * endM[2][1] + 1.0);
+            sf2t = (sf2t == 0.) ? 1. : 1./sf2t;
+            double x2t = ( srcPoint.x() * endM[0][0] + srcPoint.y() * endM[0][1] + endM[0][2] ) * sf2t;
+            double y2t = ( srcPoint.x() * endM[1][0] + srcPoint.y() * endM[1][1] + endM[1][2] ) * sf2t;
+            translat.setX( x2t- x1t);
+            translat.setY( y2t- y1t);
+        }
+        kdDebug() << "translat = " << translat << endl;
+        KisRectIteratorPixel dstIt = srcdev->createRectIterator(0, 0, sw, sh, true); 
+        KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();
+        //Action
+        while(!dstIt.isDone())
+        {
+            if(dstIt.isSelected())
+            {
+                double x1 = dstIt.x() + pt.x();
+                double y1 = dstIt.y() + pt.y();
+                double sf1t = ( x1 * endM[2][0] + y1 * endM[2][1] + 1.0);
+                sf1t = (sf1t == 0.) ? 1. : 1./sf1t;
+                double x1t = ( x1 * endM[0][0] + y1 * endM[0][1] + endM[0][2] ) * sf1t + translat.x();
+                double x2t = ( x1 * endM[1][0] + y1 * endM[1][1] + endM[1][2] ) * sf1t + translat.y();
+
+                KisPoint p;
+                double sf2t = ( x1t * startM[2][0] + x2t * startM[2][1] + 1.0);
+                sf2t = (sf2t == 0.) ? 1. : 1./sf2t;
+                p.setX( ( x1t * startM[0][0] + x2t * startM[0][1] + startM[0][2] ) * sf2t );
+                p.setY( ( x1t * startM[1][0] + x2t * startM[1][1] + startM[1][2] ) * sf2t );
+                srcAcc.moveTo( p );
+                srcAcc.sampledOldRawData( dstIt.rawData() );
+            }
+            ++dstIt;
+        }
+
+        
+    } else {
+        // Or, copy the source data on the temporary device:
+        copyPainter.bitBlt(0, 0, COMPOSITE_COPY, device, srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.end();
+    }
+    
     // heal ?
     
     if(heal)

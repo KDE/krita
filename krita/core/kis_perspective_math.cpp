@@ -378,9 +378,9 @@ void ludcmp(matrix<ElType>& a, vector<int>& indx,double& d)
     for (i=0;i<n;i++)
     {
         big=0.0;
-        kdDebug() << "new search" << endl;
+//         kdDebug() << "new search" << endl;
         for (j=0;j<n;j++) { if ((temp=fabs(a[i][j])) > big) big=temp;
-            kdDebug() << temp << " " << fabs(a[i][j]) << " "<< big <<endl; }
+/*            kdDebug() << temp << " " << fabs(a[i][j]) << " "<< big <<endl; */}
             if (big == 0.0) { cerr << "Singular matrix in routine LUDCMP" << endl; big = TINY;}
             vv[i]=1.0/big;
     }
@@ -473,9 +473,9 @@ double* KisPerspectiveMath::computeMatrixTransfo( const KisPoint& topLeft1, cons
     a[0][0] = topLeft1.x();
     a[0][1] = topLeft1.y();
     a[0][2] = 1;
-    a[0][6] = -topLeft2.y() * topLeft1.x();
-    a[0][7] = -topLeft2.y() * topLeft1.y();
-    a[0][8] = -topLeft2.y();
+    a[0][6] = -topLeft2.x() * topLeft1.x();
+    a[0][7] = -topLeft2.x() * topLeft1.y();
+    a[0][8] = -topLeft2.x();
     a[1][3] = topLeft1.x();
     a[1][4] = topLeft1.y();
     a[1][5] = 1;

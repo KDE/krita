@@ -38,6 +38,7 @@ class KisPerspectiveGridManager : public QObject
         void drawGrid(QRect wr, QPainter *p, bool openGL = false);
         void startEdition();
         void stopEdition();
+        void setGridVisible(bool t);
     public slots:
         void updateGUI();
         void clearPerspectiveGrid();

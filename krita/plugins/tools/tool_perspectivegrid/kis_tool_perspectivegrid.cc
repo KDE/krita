@@ -77,6 +77,7 @@ void KisToolPerspectiveGrid::activate()
 void KisToolPerspectiveGrid::deactivate()
 {
     m_subject->perspectiveGridManager()->stopEdition();
+    m_subject->perspectiveGridManager()->setGridVisible( true);
     if( m_mode == MODE_CREATION )
     {
         drawGridCreation();

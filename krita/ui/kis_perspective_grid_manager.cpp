@@ -43,7 +43,13 @@ KisPerspectiveGridManager::~KisPerspectiveGridManager()
 
 void KisPerspectiveGridManager::updateGUI()
 {
+    KisImageSP image = m_view->canvasSubject()->currentImg();
 
+    
+    if (image ) {
+        KisPerspectiveGrid* pGrid = image->perspectiveGrid();
+        m_toggleGrid->setEnabled( pGrid->hasSubGrids());
+    }
 }
 
 void KisPerspectiveGridManager::setup(KActionCollection * collection)
@@ -54,6 +60,24 @@ void KisPerspectiveGridManager::setup(KActionCollection * collection)
     m_toggleGrid->setChecked(false);
     m_gridClear = new KAction(i18n("Clear Perspective Grid"), 0, "", this, SLOT(clearPerspectiveGrid()), collection, "view_clear_perspective_grid");
 }
+
+void KisPerspectiveGridManager::setGridVisible(bool t)
+{
+    KisImageSP image = m_view->canvasSubject()->currentImg();
+
+    
+    if (t && image ) {
+        KisPerspectiveGrid* pGrid = image->perspectiveGrid();
+        if( pGrid->hasSubGrids())
+        {
+            m_toggleGrid->setChecked(true);
+        }
+    } else {
+        m_toggleGrid->setChecked(false);
+    }
+    m_view->refreshKisCanvas();
+}
+
 
 void KisPerspectiveGridManager::toggleGrid()
 {
@@ -79,6 +103,7 @@ void KisPerspectiveGridManager::clearPerspectiveGrid()
         image->perspectiveGrid()->clearSubGrids();
         m_view->updateCanvas();
         m_toggleGrid->setChecked(false);
+        m_toggleGrid->setEnabled(false);
     }
 }
 

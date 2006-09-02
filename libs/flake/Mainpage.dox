@@ -6,6 +6,44 @@
  * even movies.  Just as important, this library will include tools to manipulate
  * the graphical content. At least at the level of Flake objects.  This goes from
  * moving/rotating the object to a basis for complex brushes for a paint program.
+
+ * <b>Who uses Flake</b><br>
+ * <img src="../flake.png">
+ * Flake is a middle layer between the applications and the content providers.
+ * The applications will allow flake to be plugged in by implementing the
+ * KoCanvasController interface while providers of content (like a chart engine
+ * or a text component) will extend KoShape and optionally KoTool to do their
+ * work.
+ *
+ * A <b>shape</b> is a rectangle or a text or a movie.  A shape paints itself and has content.
+ * A <b>Tool</b> get user input. Tools do things on data, tools do things on shapes.
+ * Both shapes and tools are plugins. So they are independent of applications.
+ * For example; I have a textshape that paints text.  It comes with a texttool that
+ * takes mouse and keyboard events and alters the text that the textshape shows.
+ * This idea of combining a shape and a text is done in flake by "ID"s .  Each
+ * shape has an ID and a tool has an ID.   If they have the same ID they belong
+ * together.
+ * Example;  I select a text shape and the toolbox will show a icon to activate the
+ * text tool.
+ *
+ * The way that a shape is kept separete from the application and from the Flake
+ * layer is similar to how a Widget in a GUI is kept separate from the application.
+ * The shape inherits from the abstract KoShape class and all the logic embeddd in
+ * the KoShape class is enough for the flake layer to do all things with it like
+ * positioning and moving as well as rotating and deleting it.
+ * Just like a widget does not know the difference between painting on one app, or
+ * another a shape will not know the difference. The flake library will take care
+ * of all details.
+ *
+ * It is common to combine a shape-plugin with one or more tools which are made
+ * specifically to work on that shape type. So, a text shape comes with a tool that
+ * knows how to address the shape not only by the abstract KoShape class, but also
+ * by the KoTextShape API and is therefor able to alter the data that that shape
+ * displays. In this case text.
+
+ * Flake natively only has a vector shape. All other types of shapes (including the
+ * text one used in the example above) are plugins and not part of Flake itself.
+ *
  *
  * Use KoShape as a base object for any application-specific graphical
  * content, and extend KoShapeContainer for objects that can contain others.
@@ -16,7 +54,7 @@
  *
  * If you want to be a supplier of shape objects; create a library with a KoShapeFactory
  * class and install a .desktop service file with the following content:
- * 
+ *
 @verbatim
 [Desktop Entry]
 Encoding=UTF-8
@@ -27,86 +65,4 @@ X-KDE-Library=myflakeshapesplugin
 X-Flake-Version=1
 @endverbatim
  *
- * To use Flake in your application you need to have a canvas that is ready for use
- * by flake, do this by implementing the KoCanvasBase interface.  Redirect mouse/key events
- * to the tool and paint events to the shapeManager.
- * Then you have to setup the KoToolManager (from KOfficeUI):
- * In your KoDocument instance:
-@code
-        KoToolManager::instance()->toolBox()->show();
-@endcode
- * And use KoCanvasController KoCanvasView instance with your Canvas:
-@code
-class MyCanvas : public QWidget, public KoCanvasBase {
-    Q_OBJECT
-public:
-    // KoCanvasBase interface methods.
-    void gridSize(double *horizontal, double *vertical) const;
-    bool snapToGrid() const;
-    void addCommand(KCommand *command, bool execute = true);
-    KoShapeManager *shapeManager() const { return m_shapeManager; }
-    void updateCanvas(const QRectF& rc) {
-        QRect clipRect(viewConverter()->documentToView(rc).toRect());
-        clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
-        update(clipRect);
-    }
-    KoTool* tool() { return m_tool; }
-    void setTool(KoTool *tool) { m_tool = tool; }
-    KoViewConverter *viewConverter() { return view()->viewConverter(); }
-    QWidget* canvasWidget() { return this; }
-
-    // event handlers
-    void mouseMoveEvent(QMouseEvent *e) {
-        KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
-        m_tool->mouseMoveEvent( &ev );
-    }
-
-    void mousePressEvent(QMouseEvent *e) {
-        KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
-        m_tool->mousePressEvent( &ev );
-    }
-
-    void mouseReleaseEvent(QMouseEvent *e) {
-        KoPointerEvent ev(e, QPointF( viewConverter()->viewToDocument(e->pos()) ));
-        m_tool->mouseReleaseEvent( &ev );
-    }
-
-    void keyReleaseEvent (QKeyEvent *e) {
-        m_tool->keyReleaseEvent(e);
-    }
-
-    void keyPressEvent( QKeyEvent *e ) {
-        m_tool->keyPressEvent(e);
-    }
-
-    void paintEvent(QPaintEvent * ev) {
-        QPainter painter( this );
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.setClipRect(ev->rect());
-
-        m_shapeManager->paint( painter, *(viewConverter()), false );
-        m_tool->paint( painter, *(viewConverter()) );
-
-        painter.end();
-    }
-
-    KoUnit::Unit unit() {
-        return U_MM; // replace this with a version that uses KoDocument::unit();
-    }
-
-private:
-    KoTool *m_tool;
-    KoShapeManager *m_shapeManager;
-};
-@endcode
- *
- * And then:
- *
-@code
-    KoCanvasController *canvasController = new KoCanvasController(parentWidget);
-    MyCanvas *canvas = new MyCanvas();
-    canvasController->setCanvas(canvas);
-    KoToolManager::instance()->addControllers(canvasController, m_document);
-    parentLayout.addWidget(canvasController);
-@endcode
  */

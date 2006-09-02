@@ -87,6 +87,8 @@ public:
 
     virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
 
+    // KisLayerSupportsIndirectPainting
+    virtual KisLayer* layer() { return this; }
 private:
     bool m_showSelection;
     KisFilterConfiguration * m_filterConfig;

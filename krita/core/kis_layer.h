@@ -246,6 +246,10 @@ public:
     KisPaintDeviceSP temporaryTarget();
     KisCompositeOp temporaryCompositeOp() const;
     Q_UINT8 temporaryOpacity() const;
+
+    // Or I could make KisLayer a virtual base of KisLayerSupportsIndirectPainting and so, but
+    // I'm sure virtual diamond inheritance isn't as appreciated as this
+    virtual KisLayer* layer() = 0;
 };
 
 #endif // KIS_LAYER_H_

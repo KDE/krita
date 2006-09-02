@@ -174,6 +174,18 @@ void KisToolFreehand::initPaint(KisEvent *)
                 layer->setTemporaryTarget(m_target);
                 layer->setTemporaryCompositeOp(m_compositeOp);
                 layer->setTemporaryOpacity(m_opacity);
+
+                // Hack for the painting of single-layered layers using indirect painting,
+                // because the group layer would not have a correctly synched cache (
+                // because of an optimization that would happen, having this layer as
+                // projection).
+                // XXXX I think we could de-hackify this and speed it up at the same
+                // time with CoW Tiles (so: ### FIXME)
+                KisLayer* l = layer->layer();
+                if (l->parent() && (l->parent()->parent() == 0)
+                    && l->parent()->childCount() == 1) {
+                    l->setDirty(); // Hack
+                }
             }
         } else {
             m_target = device;

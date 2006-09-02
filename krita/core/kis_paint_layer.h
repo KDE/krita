@@ -132,6 +132,8 @@ public:
     /// Same as above
     virtual void setDirty(const QRect & rect, bool propagate = true);
 
+    // KisLayerSupportsIndirectPainting
+    virtual KisLayer* layer() { return this; }
 signals:
     /// When the mask is created/destroyed or the editmask or rendermask is changed
     void sigMaskInfoChanged();

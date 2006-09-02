@@ -109,8 +109,6 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     // m_dirtyRect = QRect(); So the non-intersecting part gets brilliantly lost otherwise.
     const QRect rc = m_dirtyRect;//rect.intersect(m_dirtyRect);
 
-    QTime t;
-    t.start();
     updateProjection(rc);
     setClean(rect);
 

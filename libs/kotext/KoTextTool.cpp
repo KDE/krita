@@ -39,6 +39,8 @@ KoTextTool::~KoTextTool() {
 }
 
 void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
+    // TODO using the member m_textShape is incorrect, use m_canvas to reach the KoSelection object
+    // instead and iterator over the selected shapes.
     if(painter.hasClipping()) {
         QRect shape = converter.documentToView(m_textShape->boundingRect()).toRect();
         if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())

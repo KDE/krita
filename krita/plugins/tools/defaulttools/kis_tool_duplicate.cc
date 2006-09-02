@@ -40,6 +40,7 @@
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
 #include "kis_canvas_subject.h"
+#include "kis_perspective_grid.h"
 
 #include "kis_canvas_painter.h"
 #include "kis_boundary_painter.h"
@@ -60,6 +61,13 @@ void KisToolDuplicate::activate()
 {
     m_position = QPoint(-1,-1);
     super::activate();
+    if( m_subject->currentImg()->perspectiveGrid()->countSubGrids() != 1 )
+    {
+        m_perspectiveCorrection->setEnabled( false );
+        m_perspectiveCorrection->setValue( false );
+    } else {
+        m_perspectiveCorrection->setEnabled( true );
+    }
 }
 
 void KisToolDuplicate::buttonPress(KisButtonPressEvent *e)

@@ -109,6 +109,7 @@ private:
     QPointF m_selectionBox[8];
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
+    // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];
     QCursor m_rotateCursors[8];
     QCursor m_shearCursors[8];

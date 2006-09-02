@@ -95,6 +95,7 @@ class KisPerspectiveGrid {
         inline QValueList<KisSubPerspectiveGrid*>::const_iterator end() const { return m_subGrids.end(); }
         inline bool hasSubGrids() const { return !m_subGrids.isEmpty(); }
         void clearSubGrids();
+        inline int countSubGrids() const { return m_subGrids.size(); }
         /**
          * @return the first grid hit by the point p
          */

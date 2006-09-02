@@ -64,7 +64,7 @@ void KisToolDuplicate::activate()
     if( m_subject->currentImg()->perspectiveGrid()->countSubGrids() != 1 )
     {
         m_perspectiveCorrection->setEnabled( false );
-        m_perspectiveCorrection->setValue( false );
+        m_perspectiveCorrection->setChecked( false );
     } else {
         m_perspectiveCorrection->setEnabled( true );
     }
@@ -115,6 +115,7 @@ void KisToolDuplicate::initPaint(KisEvent *e)
             op->setSource(m_source);
             painter()->setPaintOp(op);
         }
+        m_positionStartPainting = e->pos();
     }
 }
 
@@ -128,6 +129,62 @@ void KisToolDuplicate::move(KisMoveEvent *e)
 
     QPoint srcPos;
     if (m_mode == PAINT) {
+        // if we are in perspective correction mode, update the offset when moving
+        if(m_perspectiveCorrection->isChecked())
+        {
+            double startM[3][3];
+            double endM[3][3];
+            for(int i = 0; i < 3; i++)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    startM[i][j] = 0.;
+                    endM[i][j] = 0.;
+                }
+                startM[i][i] = 1.;
+                endM[i][i] = 1.;
+            }
+        
+        // First look for the grid corresponding to the start point
+            KisSubPerspectiveGrid* subGridStart = *m_subject->currentImg()->perspectiveGrid()->begin();//device->image()->perspectiveGrid()->gridAt(KisPoint(srcPoint.x() +hotSpot.x(),srcPoint.y() +hotSpot.y()));
+            QRect r = QRect(0,0, m_subject->currentImg()->width(), m_subject->currentImg()->height());
+        
+            if(subGridStart)
+            {
+                double* b = KisPerspectiveMath::computeMatrixTransfoFromPerspective( r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
+                for(int i = 0; i < 3; i++)
+                {
+                    for(int j = 0; j < 3; j++)
+                    {
+                        startM[i][j] = b[3*i+j];
+                    }
+                }
+
+            }
+        // Second look for the grid corresponding to the end point
+            KisSubPerspectiveGrid* subGridEnd = *m_subject->currentImg()->perspectiveGrid()->begin();// device->image()->perspectiveGrid()->gridAt(pos);
+            if(subGridEnd)
+            {
+                double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
+                for(int i = 0; i < 3; i++)
+                {
+                    for(int j = 0; j < 3; j++)
+                    {
+                        endM[i][j] = b[3*i+j];
+                    }
+                }
+            }
+        // Compute the translation in the perspective transformation space:
+            KisPoint translat;
+            {
+                KisPoint positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_positionStartPainting);
+                KisPoint currentPositionT = KisPerspectiveMath::matProd(endM, e->pos() );
+                KisPoint duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting - m_offset);
+                KisPoint duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT + (currentPositionT - positionStartPaintingT) );
+                painter()->setDuplicateOffset( e->pos() - duplicateRealPosition );
+            }
+
+        }
         srcPos = painter()->duplicateOffset().floorQPoint();
     } else {
         if(m_isOffsetNotUptodate)

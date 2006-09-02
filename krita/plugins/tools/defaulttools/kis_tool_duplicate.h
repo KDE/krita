@@ -62,6 +62,7 @@ protected:
     KisPoint m_offset; // This member give the offset from the click position to the point where we take the duplication
     bool m_isOffsetNotUptodate; // Tells if the offset is update
     KisPoint m_position; // Give the position of the last alt-click
+    KisPoint m_positionStartPainting;
     QCheckBox* m_healing;
     KIntNumInput* m_healingRadius;
     QCheckBox* m_perspectiveCorrection;

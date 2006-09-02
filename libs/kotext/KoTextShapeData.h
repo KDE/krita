@@ -27,9 +27,18 @@
 class QTextDocument;
 class QTextCursor;
 
+/**
+ * The data store that is held by each KoTextShape instance.
+ * This is a separe object to allow KWord proper to use this class' api and
+ * access the internals of the text shape.
+ * This class holds a Document pointer and is build so multiple shapes (and thus
+ * multiple instances of this shape data) can share one document by providing a
+ * different view on (a different part of) the document.
+ */
 class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData {
     Q_OBJECT
 public:
+    /// constructor
     KoTextShapeData();
     ~KoTextShapeData();
 
@@ -62,11 +71,20 @@ public:
     int endPosition() const { return m_endPosition; }
     void setEndPosition(int position) { m_endPosition = position; }
 
+    /// mark shape as dirty triggering a re-layout of its text.
     void faul() { m_dirty = true; }
+    /// mark shape as not-dirty
     void wipe() { m_dirty = false; }
+    /// return if the shape is marked dirty and its text content needs to be relayout
     bool isDirty() const { return m_dirty; }
 
 signals:
+    /**
+     * emitted when the shape thinks it should be relayouted, for example after
+     * it has been resized.
+     * Note that this event is compressed internally to avoid duplicate layout
+     * requests.
+     */
     void relayout();
 
 private:

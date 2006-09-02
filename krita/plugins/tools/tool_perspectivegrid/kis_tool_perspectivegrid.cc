@@ -102,6 +102,12 @@ bool KisToolPerspectiveGrid::mouseNear(const QPoint& mousep, const QPoint point)
 
 void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
 {
+    KisPerspectiveGrid* pGrid = m_subject->currentImg()->perspectiveGrid();
+    if(!pGrid->hasSubGrids() && m_mode != MODE_CREATION)
+    { // it's possible that the perspectiv grid was cleared
+        m_mode = MODE_CREATION;
+        m_points.clear();
+    }
     if( m_mode == MODE_CREATION && event->button() == LeftButton)
     {
         m_dragging = true;
@@ -120,7 +126,6 @@ void KisToolPerspectiveGrid::buttonPress(KisButtonPressEvent *event)
         // Look for the handle which was pressed
         if (!m_subject)
             return;
-        KisPerspectiveGrid* pGrid = m_subject->currentImg()->perspectiveGrid();
         KisCanvasController *controller = m_subject->canvasController();
         Q_ASSERT(controller);
         QPoint mousep = controller->windowToView( event->pos().roundQPoint() );

@@ -1,3 +1,3 @@
 SUBDIRS = defaulttools selectiontools tool_crop tool_curves tool_filter \
 		tool_polygon tool_polyline tool_selectsimilar tool_star tool_transform \
-		tool_perspectivegrid tool_perspectivetransform tool_siox
+		tool_perspectivegrid tool_perspectivetransform

@@ -174,7 +174,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         }
 #endif
         // Compute the translation in the perspective transformation space:
-        KisPoint translat =  KisPerspectiveMath::matProd(endM, srcPointF) -  KisPerspectiveMath::matProd(endM, pt);
+        KisPoint translat =  KisPerspectiveMath::matProd(endM, srcPointF - hotSpot) -  KisPerspectiveMath::matProd(endM, pt - hotSpot);
         
 //         kdDebug() << "translat = " << translat << pt << srcPointF << endl;
         KisRectIteratorPixel dstIt = srcdev->createRectIterator(0, 0, sw, sh, true); 
@@ -184,8 +184,8 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         {
             if(dstIt.isSelected())
             {
-                double x1 = dstIt.x() + pt.floorQPoint().x();
-                double y1 = dstIt.y() + pt.floorQPoint().y();
+                double x1 = dstIt.x() + x;
+                double y1 = dstIt.y() + y;
                 double sf1t = ( x1 * endM[2][0] + y1 * endM[2][1] + 1.0);
                 sf1t = (sf1t == 0.) ? 1. : 1./sf1t;
                 double x1t = ( x1 * endM[0][0] + y1 * endM[0][1] + endM[0][2] ) * sf1t + translat.x();

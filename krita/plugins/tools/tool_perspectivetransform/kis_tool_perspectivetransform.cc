@@ -503,7 +503,7 @@ void KisToolPerspectiveTransform::setup(KActionCollection *collection)
 
     if (m_action == 0) {
         m_action = new KRadioAction(i18n("&Perspective Transform"),
-                        "transform",
+                        "tool_perspectivetransform",
                         0,
                         this,
                         SLOT(activate()),

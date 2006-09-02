@@ -41,6 +41,9 @@ KoPathTool::~KoPathTool() {
 }
 
 void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
+    // TODO using the member m_pathShape is incorrect, use m_canvas to reach the KoSelection object
+    // instead and iterator over the selected shapes.
+
     if( ! m_pathShape )
         return;
     QPainterPath outline = m_pathShape->outline();
@@ -55,7 +58,7 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
 
-    painter.setBrush( Qt::blue );
+    painter.setBrush( Qt::blue ); // TODO make color configurable
     painter.setPen( Qt::blue );
 
     QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
@@ -65,7 +68,7 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
 
     if( m_activePoint )
     {
-        painter.setBrush( Qt::red );
+        painter.setBrush( Qt::red ); // TODO make color configurable
         painter.setPen( Qt::NoPen );
         m_activePoint->paint( painter, handle.size(), m_selectedPoints.contains( m_activePoint ) );
     }

@@ -51,6 +51,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     setCaption(i18n("Image Properties"));
     m_page = new WdgNewImage(this);
 
+    m_page->lblResolution->hide();
+    m_page->doubleResolution->hide();
+
+    
     m_image = image;
 
     setMainWidget(m_page);

@@ -37,6 +37,7 @@
 #include <qslider.h>
 #include <qtextedit.h>
 #include <KoUnitWidgets.h>
+#include <qlabel.h>
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32 defWidth, Q_INT32 defHeight, double resolution, QString defColorSpaceName, QString imageName)
     : WdgNewImage(parent) {
@@ -57,7 +58,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc *doc, Q_INT32
     m_createButton -> setDefault(true);
 
     fillCmbProfiles(cmbColorSpaces->currentItem());
-
+    lblResolution->hide();
+    doubleResolution->hide();
 }
 
 void KisCustomImageWidget::buttonClicked() {

@@ -256,16 +256,18 @@ void KisPaintLayer::createMaskFromSelection(KisSelectionSP from) {
     if (from) {
         QRect r(extent());
 
-        KisRectIteratorPixel srcIt = from->createRectIterator(r.x(), r.y(),
-                r.width(), r.height(), false);
-        KisRectIteratorPixel dstIt = m_mask->createRectIterator(r.x(), r.y(),
-                r.width(), r.height(), true);
+        int w = r.width();
+        int h = r.height();
+        for (int y = r.y(); y < h; y++) {
+            KisHLineIteratorPixel srcIt = from->createHLineIterator(r.x(), y, w, false);
+            KisHLineIteratorPixel dstIt = m_mask->createHLineIterator(r.x(), y, w, true);
 
-        while(!dstIt.isDone()) {
-        // XXX same remark as in convertMaskToSelection
-            *dstIt.rawData() = *srcIt.rawData();
-            ++srcIt;
-            ++dstIt;
+            while(!dstIt.isDone()) {
+                // XXX same remark as in convertMaskToSelection
+                *dstIt.rawData() = *srcIt.rawData();
+                ++srcIt;
+                ++dstIt;
+            }
         }
     }
 

@@ -116,12 +116,12 @@ void KisToolDuplicate::initPaint(KisEvent *e)
             painter()->setPaintOp(op);
         }
         m_positionStartPainting = e->pos();
+        painter()->setDuplicateStart( e->pos() );
     }
 }
 
 void KisToolDuplicate::move(KisMoveEvent *e)
 {
-    super::move(e);
 
     // Paint the outline where we will (or are) copying from
     if( m_position == QPoint(-1,-1) )
@@ -181,11 +181,13 @@ void KisToolDuplicate::move(KisMoveEvent *e)
                 KisPoint currentPositionT = KisPerspectiveMath::matProd(endM, e->pos() );
                 KisPoint duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_positionStartPainting - m_offset);
                 KisPoint duplicateRealPosition = KisPerspectiveMath::matProd(startM, duplicateStartPoisitionT + (currentPositionT - positionStartPaintingT) );
-                painter()->setDuplicateOffset( e->pos() - duplicateRealPosition );
+                KisPoint p = e->pos() - duplicateRealPosition;
+                srcPos = p.floorQPoint();
             }
 
+        }else {
+            srcPos = painter()->duplicateOffset().floorQPoint();
         }
-        srcPos = painter()->duplicateOffset().floorQPoint();
     } else {
         if(m_isOffsetNotUptodate)
             srcPos = e->pos().floorQPoint() - m_position.floorQPoint();
@@ -202,6 +204,7 @@ void KisToolDuplicate::move(KisMoveEvent *e)
     srcPos = QPoint(x - srcPos.x(), y - srcPos.y());
 
     paintOutline(srcPos);
+    super::move(e);
 }
 
 void KisToolDuplicate::paintAt(const KisPoint &pos,

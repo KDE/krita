@@ -173,10 +173,12 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
             }
         }
 #endif
-        // Compute the translation in the perspective transformation space:
-        KisPoint translat =  KisPerspectiveMath::matProd(endM, srcPointF - hotSpot) -  KisPerspectiveMath::matProd(endM, pt - hotSpot);
+//         kdDebug()<< " oouuuuh" << srcPointF << KisPerspectiveMath::matProd(startM,  KisPerspectiveMath::matProd(endM, srcPointF ) ) << KisPerspectiveMath::matProd(endM,  KisPerspectiveMath::matProd(startM, srcPointF ) );
         
-//         kdDebug() << "translat = " << translat << pt << srcPointF << endl;
+        // Compute the translation in the perspective transformation space:
+        KisPoint positionStartPaintingT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart() );
+        KisPoint duplicateStartPoisitionT = KisPerspectiveMath::matProd(endM, m_painter->duplicateStart() - m_painter->duplicateOffset() );
+        KisPoint translat = duplicateStartPoisitionT - positionStartPaintingT;
         KisRectIteratorPixel dstIt = srcdev->createRectIterator(0, 0, sw, sh, true); 
         KisRandomSubAccessorPixel srcAcc = device->createRandomSubAccessor();
         //Action
@@ -184,18 +186,7 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
         {
             if(dstIt.isSelected())
             {
-                double x1 = dstIt.x() + x;
-                double y1 = dstIt.y() + y;
-                double sf1t = ( x1 * endM[2][0] + y1 * endM[2][1] + 1.0);
-                sf1t = (sf1t == 0.) ? 1. : 1./sf1t;
-                double x1t = ( x1 * endM[0][0] + y1 * endM[0][1] + endM[0][2] ) * sf1t + translat.x();
-                double x2t = ( x1 * endM[1][0] + y1 * endM[1][1] + endM[1][2] ) * sf1t + translat.y();
-
-                KisPoint p;
-                double sf2t = ( x1t * startM[2][0] + x2t * startM[2][1] + 1.0);
-                sf2t = (sf2t == 0.) ? 1. : 1./sf2t;
-                p.setX( ( x1t * startM[0][0] + x2t * startM[0][1] + startM[0][2] ) * sf2t );
-                p.setY( ( x1t * startM[1][0] + x2t * startM[1][1] + startM[1][2] ) * sf2t );
+                KisPoint p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, KisPoint(dstIt.x() + x, dstIt.y() + y) ) + translat );
                 srcAcc.moveTo( p );
                 srcAcc.sampledOldRawData( dstIt.rawData() );
             }

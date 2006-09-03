@@ -341,6 +341,9 @@ public:
     inline void setDuplicatePerspectiveCorrection(bool v) { m_duplicatePerspectiveCorrection = v; }
     inline bool duplicatePerspectiveCorrection() { return m_duplicatePerspectiveCorrection; }
     
+    void setDuplicateStart(const KisPoint start) { m_duplicateStart = start;}
+    KisPoint duplicateStart() { return m_duplicateStart;}
+    
     /// Sets the current pressure for things that like to use this
     void setPressure(double pressure) { m_pressure = pressure; }
     /// Returns the current pressure
@@ -389,6 +392,7 @@ protected:
     KisBrush *m_brush;
     KisPattern *m_pattern;
     KisPoint m_duplicateOffset;
+    KisPoint m_duplicateStart;
     bool m_duplicateHealing;
     int m_duplicateHealingRadius;
     bool m_duplicatePerspectiveCorrection;

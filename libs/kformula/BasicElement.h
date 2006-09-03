@@ -23,20 +23,17 @@
 #define BASICELEMENT_H
 
 #include <QPainterPath>
-
-
-
+#include <QMap>
 #include <QString>
-#include <QKeyEvent>
+#include <QVariant>
+
+
 #include <QList>
 #include <QDomElement>
 #include <QDomDocument>
 
 #include "contextstyle.h"
 #include "kformuladefs.h"
-
-class QKeyEvent;
-class KCommand;
 
 class KoXmlWriter;
 
@@ -46,6 +43,11 @@ class FontCommand;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
+/*
+struct UnitSize {
+    double data;
+    Unit unit;
+};*/
 
 /**
  * @short The base class for all elements of a formula
@@ -95,9 +97,6 @@ public:
 
     /// @return The element's painter path used for painting it
     const QPainterPath& elementPath() const;
-
-    /// @returns True if the element is invisible, a phantomelement
-    virtual bool isInvisible() const;
 
     /// @return The height of the element
     double height() const;
@@ -348,9 +347,12 @@ public:
 
 protected:
     /// Draws the element internally, means it paints into m_elementPath
-    virtual void drawInternal() = 0;
+    virtual void drawInternal();
     
     virtual void readMathMLAttributes( const QDomElement& element );
+
+    QMap<QString,QVariant> m_attributes;
+
 
 
 
@@ -396,8 +398,6 @@ private:
     /// The path that is used to paint the element
     QPainterPath m_elementPath;
 
-    /// True if the element is a phantom element means is not visible
-    bool m_phantomElement;   
 
     
     

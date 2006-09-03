@@ -25,13 +25,15 @@ set(kformulalib_LIB_SRCS
    FractionElement.cpp
    RootElement.cpp
    SpaceElement.cpp 
+#   ActionElement.cpp
+#   PaddedElement.cpp
+#   GlyphElement.cpp
+#   ErrorElement.cpp
    ElementFactory.cpp 
    kformulacommand.cc 
    MatrixDialog.cc 
    contextstyle.cc 
-#   kformuladocument.cc 
    symboltable.cc 
-#   kformulaview.cc 
    kformulaconfigpage.cc 
    symbolaction.cc 
    cmstyle.cc 

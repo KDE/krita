@@ -97,13 +97,13 @@ const QList<BasicElement*>& SequenceElement::childElements()
 
 bool SequenceElement::isEmpty()
 {
-    uint count = m_sequenceChildren.count();
+/*    uint count = m_sequenceChildren.count();
     for (uint i = 0; i < count; i++) {
         BasicElement* child = m_sequenceChildren.at(i);
         if (!child->isInvisible()) {
             return false;
         }
-    }
+    }*/
     return true;
 }
 
@@ -116,7 +116,7 @@ void SequenceElement::calcSizes(const ContextStyle& style,
                                 ContextStyle::TextStyle tstyle,
                                 ContextStyle::IndexStyle istyle)
 {
-    if (!isEmpty()) {
+/*    if (!isEmpty()) {
         luPixel width = 0;
         luPixel toBaseline = 0;
         luPixel fromBaseline = 0;
@@ -167,7 +167,7 @@ void SequenceElement::calcSizes(const ContextStyle& style,
         setHeight( h );
         setBaseline( h );
         //setMidline( h*.5 );
-    }
+    }*/
 }
 
 
@@ -189,7 +189,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
                             ContextStyle::IndexStyle istyle,
                             const LuPixelPoint& parentOrigin )
 {
-    QPointF myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
+/*    QPointF myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
 
     if( m_sequenceChildren.isEmpty() )
         drawEmptyRect( painter, context, myPos );
@@ -208,7 +208,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
                //     child += token->end() - token->start();
             }
         }
-    }
+    }*/
 }
 
 /*
@@ -350,7 +350,7 @@ luPixel SequenceElement::getChildPosition( const ContextStyle& context, int chil
  */
 void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
-    // Our parent asks us for a cursor position. Found.
+/*    // Our parent asks us for a cursor position. Found.
     if (from == getParent()) {
         cursor->setTo(this, m_sequenceChildren.count());
         //from->entered( this );
@@ -396,7 +396,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             moveLeft(cursor, this);
         }
         //formula()->tell( "" );
-    }
+    }*/
 }
 
 /**
@@ -406,7 +406,7 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
  */
 void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
 {
-    // Our parent asks us for a cursor position. Found.
+/*    // Our parent asks us for a cursor position. Found.
     if (from == getParent()) {
         cursor->setTo(this, 0);
         //from->entered( this );
@@ -453,7 +453,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             moveRight(cursor, this);
         }
         //formula()->tell( "" );
-    }
+    }*/
 }
 
 
@@ -644,7 +644,7 @@ void SequenceElement::remove(FormulaCursor* cursor,
                              QList<BasicElement*>& removedChildren,
                              Direction direction)
 {
-    if (cursor->isSelection()) {
+/*    if (cursor->isSelection()) {
         int from = cursor->getSelectionStart();
         int to = cursor->getSelectionEnd();
         for (int i = from; i < to; i++) {
@@ -690,7 +690,7 @@ void SequenceElement::remove(FormulaCursor* cursor,
                 formula()->changed();
             }
         }
-    }
+    }*/
     //parse();
 }
 

@@ -74,6 +74,10 @@ BasicElement* BasicElement::parentElement() const
     return m_parentElement;
 }
 
+void BasicElement::drawInternal()
+{
+}
+
 void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )
 {
     if( cursor->currentElement() == this )
@@ -126,12 +130,6 @@ void BasicElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
 
 
 
-
-
-bool BasicElement::isInvisible() const
-{
-    return m_phantomElement;
-}
 
 
 bool BasicElement::readOnly( const BasicElement* /*child*/ ) const

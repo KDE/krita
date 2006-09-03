@@ -88,15 +88,10 @@ namespace Kross {
             void writeConfig();
 
             /**
-             * This method tries to determinate all available packages and adds them
-             * to the list of scripts. Normaly only those packages defined in the
-             * KConfig are enabled and therefore it's not needed to read all the
-             * packages what is somewhat slow. So, this method is only needed for
-             * purposes, where you like to have all packages in the list, even those
-             * ones that are disabled. As example the \a GUIManagerModel uses this
-             * to be able to offer the user even those packages he didn't enabled yet.
+             * This method tries to determinate all available packages and fills
+             * the configuration with actions defined there.
              */
-            void readAllConfigs();
+            void readConfigFromPackages();
 
         public slots:
 

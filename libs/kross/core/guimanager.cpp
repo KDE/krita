@@ -351,7 +351,6 @@ GUIManagerDialog::GUIManagerDialog(GUIClient* guiclient, QWidget* parent)
     btnlayout->addStretch(1);
     resize( QSize(460, 340).expandedTo(minimumSizeHint()) );
 
-    guiclient->readAllConfigs();
     connect(this, SIGNAL(closeClicked()), this, SLOT(saveChanges()));
 }
 

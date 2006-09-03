@@ -25,6 +25,7 @@
 
 #include <QApplication>
 #include <QPoint>
+#include <QPointer>
 
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -62,7 +63,7 @@ class ScriptingPart::Private
     public:
         KisView* view;
         Kross::GUIClient* guiclient;
-        Kross::KritaCore::KritaCoreModule* module;
+        QPointer< Kross::KritaCore::KritaCoreModule > module;
 
         Private() : view(0), guiclient(0), module(0) {}
         virtual ~Private() {
@@ -105,26 +106,22 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &)
     KAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->insert(scriptmenuaction);
 
-#if 0
-    QWidget* w = new Kross::WdgScriptsManager(d->guiclient, d->view);
-    d->view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
-#else
     QWidget* w = new ScriptingViewWidget(d->guiclient, d->view);
     d->view->canvasSubject()->paletteManager()->addWidget(w, "Scripts Manager", krita::LAYERBOX, 10,  PALETTE_DOCKER, false);
-#endif
 
     connect(d->guiclient, SIGNAL(executionFinished(Kross::Action*)), this, SLOT(executionFinished(Kross::Action*)));
     connect(d->guiclient, SIGNAL(executionStarted(Kross::Action*)), this, SLOT(executionStarted(Kross::Action*)));
 
     // do we need the monitor?
     ScriptingMonitor::instance()->monitor( d->guiclient );
-
-    d->module = new Kross::KritaCore::KritaCoreModule(d->view);
-    Kross::Manager::self().addObject(d->module, "Krita");
 }
 
 ScriptingPart::~ScriptingPart()
 {
+    if(d->module) {
+        kDebug() << "ScriptingPart::~ScriptingPart Execution is still running. Trying to free it." << endl;
+        d->module->deleteLater();
+    }
     delete d;
 }
 
@@ -135,12 +132,18 @@ void ScriptingPart::executionFinished(Kross::Action*)
     d->view->canvasSubject()->document()->currentImage()->activeLayer()->setDirty();
     static_cast< Kross::KritaCore::KritaCoreProgress* >( d->module->progress() )->progressDone();
     QApplication::restoreOverrideCursor();
+    //d->module->deleteLater();
 }
 
 void ScriptingPart::executionStarted(Kross::Action* action)
 {
     Q_UNUSED(action);
     kDebug() << "ScriptingPart::executionStarted" << endl;
+
+    if(d->module)
+        delete d->module;
+    d->module = new Kross::KritaCore::KritaCoreModule(d->view);
+    Kross::Manager::self().addObject(d->module, "Krita");
 #if 0
     kDebug(41011) << act->getPackagePath() << endl;
     progress->setPackagePath( act->getPackagePath() );

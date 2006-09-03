@@ -121,20 +121,8 @@ void GUIClient::readConfig()
 
     if(! config->hasGroup("scripts") && ! config->isReadOnly()) {
         // if there is no scripts-section in the configfile yet, we assume that the user uses a fresh
-        // configfile. So, we just read all available script-packages. Since readAllConfigs calls our
-        // method, we need to be sure, that we don't end in a loop. So, let's add our expected
-        // "scripts" group to the configfile, sync, and re-check if it was really written before we
-        // start to create an initial "scripts" configurationgroup which contains all scripts we found.
-        config->setGroup("scripts");
-        config->writeEntry("names", QStringList());
-        config->sync();
-        if(config->hasGroup("scripts")) {
-            readAllConfigs();
-            foreach(KAction* a, d->actions->actions(QString::null))
-                a->setVisible(true);
-        }
-        writeConfig();
-        return;
+        // configfile. So, we just try to read all available script-packages and add them to the config.
+        readConfigFromPackages();
     }
 
     d->actions->clear();
@@ -173,6 +161,7 @@ void GUIClient::readConfig()
             action->setIcon(KIcon(icon));
         if(! interpreter.isNull())
             action->setInterpreter(interpreter);
+        action->setVisible( config->readEntry(QString("%1_enabled").arg(name), true) );
         connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
         connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
         connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
@@ -192,7 +181,6 @@ void GUIClient::writeConfig()
     QStringList names;
     foreach(KAction* a, d->actions->actions(QString::null)) {
         Action* action = static_cast< Action* >(a);
-        if(! action->isVisible()) continue; // don't remember invisible (as in not installed) scripts
         const QString name = action->objectName();
         names << name;
         config->writeEntry(QString("%1_text").arg(name).toLatin1(), action->text());
@@ -203,18 +191,25 @@ void GUIClient::writeConfig()
 
         config->writeEntry(QString("%1_file").arg(name).toLatin1(), action->getFile().path());
         config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), action->interpreter());
+        if(! action->isVisible())
+            config->writeEntry(QString("%1_enabled").arg(name), action->isVisible());
     }
 
     config->writeEntry("names", names);
-    config->sync();
+    //config->sync();
 }
 
-void GUIClient::readAllConfigs()
+void GUIClient::readConfigFromPackages()
 {
-    readConfig();
+    KConfig* config = instance()->config();
+    krossdebug( QString("GUIClient::readConfigFromPackages hasGroup=%1 isReadOnly=%2 isImmutable=%3 ConfigState=%4").arg(config->hasGroup("scripts")).arg(config->isReadOnly()).arg(config->isImmutable()).arg(config->getConfigState()) );
+
+    config->setGroup("scripts");
+    QStringList names = config->readEntry("names", QStringList());
 
     QByteArray partname = d->guiclient->instance()->instanceName();
     QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*/install.rc");
+    files.sort();
     foreach(QString file, files) {
         const QDir packagepath = QFileInfo(file).dir();
 
@@ -244,15 +239,24 @@ void GUIClient::readAllConfigs()
                 continue;
             }
 
-            krossdebug( QString("GUIClient::readAllConfigs adding script-package \"%1\" from file \"%2\".").arg(name).arg(file) );
-            Action* action = new Action(d->actions, element, packagepath);
-            action->setVisible(false); // the package is not enabled, so don't display it.
-            connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-            connect(action, SIGNAL( success() ), this, SLOT( executionSuccessfull() ));
-            connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
-            d->scriptsmenu->addAction(action);
+            names << name;
+            config->writeEntry(QString("%1_text").arg(name).toLatin1(), element.attribute("text"));
+            config->writeEntry(QString("%1_description").arg(name).toLatin1(), element.attribute("description"));
+            config->writeEntry(QString("%1_icon").arg(name).toLatin1(), element.attribute("icon"));
+            config->writeEntry(QString("%1_interpreter").arg(name).toLatin1(), element.attribute("interpreter"));
+
+            QString file = element.attribute("file");
+            if(! QFileInfo(file).exists()) {
+                QFileInfo fi(packagepath, file);
+                if(fi.exists())
+                    file = fi.absoluteFilePath();
+            }
+            config->writeEntry(QString("%1_file").arg(name).toLatin1(), file);
         }
     }
+
+    config->writeEntry("names", names);
+    config->sync();
 }
 
 #if 0

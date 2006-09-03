@@ -99,6 +99,14 @@ namespace Kross {
 
             /**
              * Constructor.
+             *
+             * \param collection The KActionCollection this Action
+             * is child of.
+             * \param element The QDomElement that contains the details
+             * about e.g. the displayed text, the file to execute or the
+             * used interpreter.
+             * \param packagepath The directory where the script-package
+             * is located. This will be used to expand relative paths.
              */
             Action(KActionCollection* collection, const QDomElement& element, const QDir& packagepath);
 

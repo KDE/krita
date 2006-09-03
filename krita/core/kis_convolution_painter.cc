@@ -278,7 +278,6 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
         }
         KisVLineIteratorPixel kit = m_device->createVLineIterator(col + khalfWidth, itStart, itH, false);
         while (!hit.isDone()) {
-            if (hit.isSelected()) {
 
                 // Iterate over all contributing pixels that are covered by the kernel
                 // krow = the y position in the kernel matrix
@@ -394,6 +393,7 @@ void KisConvolutionPainter::applyMatrixRepeat(KisKernelSP kernel, Q_INT32 x, Q_I
                         }
                     }
                 }
+            if (hit.isSelected()) {
                 cs->convolveColors(pixelPtrCache, kernel->data, channelFlags, hit.rawData(), kernel->factor, kernel->offset, kw * kh);
             }
             ++col;

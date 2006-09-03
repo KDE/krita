@@ -193,6 +193,12 @@ public:
     bool loadMathML( const QDomDocument &doc, bool oasisFormat = false );
 
     /**
+     * Load function.
+     * Load the formula from the specified file containing MathML .
+     */
+    bool loadMathML( const QDomElement &element, bool oasisFormat = false );
+
+    /**
      * Loads a formula from the document.
      */
     bool load( const QDomElement &fe );

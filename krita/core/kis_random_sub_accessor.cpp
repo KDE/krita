@@ -37,8 +37,8 @@ void KisRandomSubAccessorPixel::sampledOldRawData(Q_UINT8* dst)
 {
     const Q_UINT8* pixels[4];
     Q_UINT8 weights[4];
-    int x = floor(m_currentPoint.x());
-    int y = floor(m_currentPoint.y());
+    int x = (int)floor(m_currentPoint.x());
+    int y = (int)floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;
     if(hsub < 0.0 ) hsub = 1.0 + hsub;
     double vsub = m_currentPoint.y() - y;
@@ -62,8 +62,8 @@ void KisRandomSubAccessorPixel::sampledRawData(Q_UINT8* dst)
 {
     const Q_UINT8* pixels[4];
     Q_UINT8 weights[4];
-    int x = floor(m_currentPoint.x());
-    int y = floor(m_currentPoint.y());
+    int x = (int)floor(m_currentPoint.x());
+    int y = (int)floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;
     if(hsub < 0.0 ) hsub = 1.0 + hsub;
     double vsub = m_currentPoint.y() - y;

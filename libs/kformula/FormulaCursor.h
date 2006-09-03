@@ -27,7 +27,7 @@
 #include "BasicElement.h"
 #include "kformuladefs.h"
 
-KFORMULA_NAMESPACE_BEGIN
+namespace KFormula {
 
 class FormulaElement;
 class MatrixElement;
@@ -406,6 +406,6 @@ private:
     bool readOnly;
 };
 
-KFORMULA_NAMESPACE_END
+} // namespace KFormula
 
 #endif // FORMULACURSOR_H

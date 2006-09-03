@@ -469,12 +469,12 @@ void KFCRemoveRow::execute()
     FormulaCursor* cursor = getExecuteCursor();
 //    row = matrix->m_matrixRowElements.at( rowPos );
     
-    FormulaElement* formula = matrix->formula();
+//    FormulaElement* formula = matrix->formula();
 /*    for ( int i = matrix->cols(); i > 0; i-- ) 
         formula->elementRemoval( row->at( i-1 ) );
     
     matrix->m_matrixRowElements.takeAt( rowPos );*/
-    formula->changed();
+//    formula->changed();
 
     if ( rowPos < matrix->rows() )
         matrix->matrixEntryAt( rowPos, colPos )->goInside( cursor );
@@ -490,7 +490,7 @@ void KFCRemoveRow::unexecute()
     row = 0;
     FormulaCursor* cursor = getExecuteCursor();
     matrix->matrixEntryAt( rowPos, colPos )->goInside( cursor );
-    matrix->formula()->changed();
+//    matrix->formula()->changed();
     testDirty();
 }
 
@@ -521,13 +521,13 @@ KFCRemoveColumn::~KFCRemoveColumn()
 void KFCRemoveColumn::execute()
 {
     FormulaCursor* cursor = getExecuteCursor();
-    FormulaElement* formula = matrix->formula();
+//    FormulaElement* formula = matrix->formula();
     for ( int i = 0; i < matrix->rows(); i++ ) {
  //       column->append( matrix->matrixEntryAt( i, colPos ) );
-        formula->elementRemoval( column->at( i ) );
+//        formula->elementRemoval( column->at( i ) );
 //        matrix->m_matrixRowElements.at( i )->takeAt( colPos );
     }
-    formula->changed();
+//    formula->changed();
     if ( colPos < matrix->cols() )
         matrix->matrixEntryAt( rowPos, colPos )->goInside( cursor );
     else
@@ -543,7 +543,7 @@ void KFCRemoveColumn::unexecute()
     }
     FormulaCursor* cursor = getExecuteCursor();
     matrix->matrixEntryAt( rowPos, colPos )->goInside( cursor );
-    matrix->formula()->changed();
+//    matrix->formula()->changed();
     testDirty();
 }
 
@@ -598,8 +598,8 @@ void KFCNewLine::execute()
     m_newline = 0;
 
     // Tell that something changed
-    FormulaElement* formula = m_line->formula();
-    formula->changed();
+//    FormulaElement* formula = m_line->formula();
+//    formula->changed();
     testDirty();
 }
 
@@ -614,8 +614,8 @@ void KFCNewLine::unexecute()
     m_newline = parent->m_matrixEntryElements.at( linePos+1 );
 
     // Tell all cursors to leave this sequence
-    FormulaElement* formula = m_line->formula();
-    formula->elementRemoval( m_newline );
+//    FormulaElement* formula = m_line->formula();
+//    formula->elementRemoval( m_newline );
 
     // If there are children to be moved.
     if ( m_newline->countChildren() > 0 ) {
@@ -636,7 +636,7 @@ void KFCNewLine::unexecute()
     parent->m_matrixEntryElements.takeAt( linePos+1 );
 
     // Tell that something changed
-    formula->changed();
+ //   formula->changed();
     testDirty();
 }
 

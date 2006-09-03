@@ -318,7 +318,7 @@ void RootElement::insert(FormulaCursor* cursor,
             m_radicand->moveRight(cursor, this);
         }
         cursor->setSelection(false);
-        formula()->changed();
+        //formula()->changed();
     }
 }
 
@@ -339,10 +339,10 @@ void RootElement::remove(FormulaCursor* cursor,
         break;
     case upperLeftPos:
         removedChildren.append(m_exponent);
-        formula()->elementRemoval(m_exponent);
+        //formula()->elementRemoval(m_exponent);
         m_exponent = 0;
         cursor->setTo(this, upperLeftPos);
-        formula()->changed();
+        //formula()->changed();
         break;
     }
 }

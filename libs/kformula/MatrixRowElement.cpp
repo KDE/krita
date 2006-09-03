@@ -382,7 +382,7 @@ void MatrixRowElement::insert( FormulaCursor* cursor,
         e->moveRight(cursor, this);
     }
     cursor->setSelection(false);
-    formula()->changed();
+    //formula()->changed();
 }
 
 void MatrixRowElement::remove( FormulaCursor* cursor,
@@ -396,9 +396,9 @@ void MatrixRowElement::remove( FormulaCursor* cursor,
     else {
         MatrixEntryElement* e = m_matrixEntryElements.takeAt( cursor->getPos() );
         removedChildren.append( e );
-        formula()->elementRemoval( e );
+        //formula()->elementRemoval( e );
         //cursor->setTo( this, denominatorPos );
-        formula()->changed();
+        //formula()->changed();
     }
 }
 /*

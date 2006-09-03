@@ -79,20 +79,6 @@ void FractionElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
     parent.appendChild( de );*/
 }
 
-
-
-
-/*
-void FractionElement::entered( SequenceElement* child )
-{
-    if ( child == m_numerator ) {
-        formula()->tell( i18n( "Numerator" ) );
-    }
-    else {
-        formula()->tell( i18n( "Denominator" ) );
-    }
-}
-*/
 void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction( tstyle );
@@ -117,12 +103,6 @@ void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
     m_denominator->setY( getHeight() - m_denominator->getHeight() );
 }
 
-
-/**
- * Draws the whole element including its children.
- * The `parentOrigin' is the point this element's parent starts.
- * We can use our parentPosition to get our own origin then.
- */
 void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
                             const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,
@@ -270,10 +250,10 @@ void FractionElement::remove(FormulaCursor* cursor,
         break;
     case denominatorPos:
         removedChildren.append(m_denominator);
-        formula()->elementRemoval(m_denominator);
+        //formula()->elementRemoval(m_denominator);
         m_denominator = 0;
         cursor->setTo(this, denominatorPos);
-        formula()->changed();
+        //formula()->changed();
         break;
     }
 }

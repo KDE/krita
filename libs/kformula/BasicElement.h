@@ -168,12 +168,12 @@ public:
     /**
      * Provide fast access to the rootElement for each child.
      */
-    virtual FormulaElement* formula();
+//    virtual FormulaElement* formula();
 
     /**
      * Provide fast access to the rootElement for each child.
      */
-    virtual const FormulaElement* formula() const { return m_parentElement->formula(); }
+//    virtual const FormulaElement* formula() const { return m_parentElement->formula(); }
 
     /**
      * @returns the character that represents this element. Used for

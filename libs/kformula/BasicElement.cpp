@@ -137,10 +137,10 @@ bool BasicElement::readOnly( const BasicElement* /*child*/ ) const
     return m_parentElement->readOnly( this );
 }
 
-FormulaElement* BasicElement::formula()
+/*FormulaElement* BasicElement::formula()
 {
   return m_parentElement->formula();
-}
+}*/
 
 /**
  * Returns our position inside the widget.

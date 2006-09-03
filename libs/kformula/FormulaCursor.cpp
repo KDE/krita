@@ -167,40 +167,40 @@ void FormulaCursor::moveHome(int flag)
 {
     BasicElement* element = getElement();
     handleSelectState(flag);
-    if (flag & WordMovement) {
-        element->formula()->moveHome(this);
-    }
-    else {
-        element->moveHome(this);
-    }
+    element->moveHome(this);
 }
 
 void FormulaCursor::moveEnd(int flag)
 {
     BasicElement* element = getElement();
     handleSelectState(flag);
-    if (flag & WordMovement) {
-        element->formula()->moveEnd(this);
-    }
-    else {
-        element->moveEnd(this);
-    }
+    element->moveEnd(this);
 }
 
 bool FormulaCursor::isHome() const
 {
-    return ( getElement() == getElement()->formula() ) && ( getPos() == 0 );
+//    return ( getElement() == getElement()->formula() ) && ( getPos() == 0 );
+    return true;
 }
 
 bool FormulaCursor::isEnd() const
 {
-    return ( getElement() == getElement()->formula() ) &&
-                  ( getPos() == normal()->countChildren() );
+//    return ( getElement() == getElement()->formula() ) &&
+//                  ( getPos() == normal()->countChildren() );
+//
+//                  
+    // this should be decided with position in the current element
+    // like the following code there is a cast missing and it is only example code
+/*    if( getElement()->elementType() == Sequence )
+	return ( m_actualPosition == getElement()->childCount() );
+    else
+	return ( m_actualPosition == 1 );*/
+    return true;
 }
 
 void FormulaCursor::mousePress( const LuPixelPoint& pos, int flag )
 {
-    FormulaElement* formula = getElement()->formula();
+//    FormulaElement* formula = getElement()->formula();
 //    formula->goToPos( this, pos );
 
 //    for new kformula api, use it soon
@@ -223,7 +223,7 @@ void FormulaCursor::mouseMove( const LuPixelPoint& point, int )
     BasicElement* element = getElement();
     int mark = getMark();
 
-    FormulaElement* formula = getElement()->formula();
+ //   FormulaElement* formula = getElement()->formula();
 //    formula->goToPos( this, point );
     BasicElement* newElement = getElement();
     int pos = getPos();
@@ -532,7 +532,7 @@ bool FormulaCursor::isReadOnly() const
  */
 void FormulaCursor::copy( QDomDocument& doc )
 {
-    if (isSelection()) {
+/*    if (isSelection()) {
         SequenceElement* sequence = normal();
         if (sequence != 0) {
             QDomElement root = doc.documentElement();
@@ -545,7 +545,7 @@ void FormulaCursor::copy( QDomDocument& doc )
             // This must never happen.
             qFatal("A not normalized cursor is selecting.");
         }
-    }
+    }*/
 }
 
 /**

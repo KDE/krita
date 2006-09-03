@@ -494,7 +494,11 @@ void SequenceElement::moveWordRight(FormulaCursor* cursor)
  */
 void SequenceElement::moveUp(FormulaCursor* cursor, BasicElement* from)
 {
-    if (from == getParent()) {
+// disabled because this uses formula() and implements a moveUp case that
+// is only important for FormulaElement that has to be changed and moved to
+// FormulaElement         -hubipete 2006-09-03
+
+/*    if (from == getParent()) {
         moveRight(cursor, this);
     }
     else {
@@ -504,7 +508,7 @@ void SequenceElement::moveUp(FormulaCursor* cursor, BasicElement* from)
         else {
             formula()->moveOutAbove( cursor );
         }
-    }
+    }*/
 }
 
 /**
@@ -514,7 +518,7 @@ void SequenceElement::moveUp(FormulaCursor* cursor, BasicElement* from)
  */
 void SequenceElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 {
-    if (from == getParent()) {
+/*    if (from == getParent()) {
         moveRight(cursor, this);
     }
     else {
@@ -524,7 +528,7 @@ void SequenceElement::moveDown(FormulaCursor* cursor, BasicElement* from)
         else {
             formula()->moveOutBelow( cursor );
         }
-    }
+    }*/
 }
 
 /**
@@ -629,7 +633,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
         cursor->setTo(this, pos, pos+count);
     }
 
-    formula()->changed();
+    //formula()->changed();
     //parse();
 }
 
@@ -701,11 +705,11 @@ void SequenceElement::remove(FormulaCursor* cursor,
 void SequenceElement::removeChild(QList<BasicElement*>& removedChildren, int pos)
 {
     BasicElement* child = m_sequenceChildren.at(pos);
-    formula()->elementRemoval(child);
+    //formula()->elementRemoval(child);
     m_sequenceChildren.takeAt(pos);
     removedChildren.append(child);
     //cerr << *removedChildren.at(0) << endl;
-    formula()->changed();
+    //formula()->changed();
 }
 
 

@@ -217,13 +217,13 @@ void TextElement::dispatchFontCommand( FontCommand* cmd )
 void TextElement::setCharStyle( CharStyle cs )
 {
     charStyle( cs );
-    formula()->changed();
+    //formula()->changed();
 }
 
 void TextElement::setCharFamily( CharFamily cf )
 {
     charFamily( cf );
-    formula()->changed();
+    //formula()->changed();
 }
 
 QChar TextElement::getRealCharacter(const ContextStyle& context)
@@ -307,7 +307,7 @@ void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
 
 const SymbolTable& TextElement::getSymbolTable() const
 {
-    return formula()->getSymbolTable();
+//    return formula()->getSymbolTable();
 }
 
 

@@ -166,16 +166,6 @@ public:
     virtual bool readOnly( const BasicElement* child ) const;
 
     /**
-     * Provide fast access to the rootElement for each child.
-     */
-//    virtual FormulaElement* formula();
-
-    /**
-     * Provide fast access to the rootElement for each child.
-     */
-//    virtual const FormulaElement* formula() const { return m_parentElement->formula(); }
-
-    /**
      * @returns the character that represents this element. Used for
      * parsing a sequence.
      * This is guaranteed to be QChar::null for all non-text elements.
@@ -346,11 +336,13 @@ public:
 
 
 protected:
-    /// Draws the element internally, means it paints into m_elementPath
+    /// Draw the element internally, means it paints into m_elementPath
     virtual void drawInternal();
-    
+   
+    /// Read all attributes loaded and add them to the m_attributes map 
     virtual void readMathMLAttributes( const QDomElement& element );
 
+    /// A map of all attributes where attribute name is assigned to a value
     QMap<QString,QVariant> m_attributes;
 
 

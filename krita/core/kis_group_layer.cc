@@ -397,7 +397,13 @@ void KisGroupLayer::updateProjection(const QRect & rc)
             const KisCompositeOp cop = child->compositeOp();
             const bool block = child->signalsBlocked();
             child->blockSignals(true);
-            child->m_compositeOp = COMPOSITE_COPY;
+            // Composite op copy doesn't take a mask/selection into account, so we need
+            // to make a difference between a paintlayer with a mask, and one without
+            KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(child.data());
+            if (l && l->hasMask())
+                child->m_compositeOp = COMPOSITE_OVER;
+            else
+                child->m_compositeOp = COMPOSITE_COPY;
             child->blockSignals(block);
             child->accept(visitor);
             child->blockSignals(true);

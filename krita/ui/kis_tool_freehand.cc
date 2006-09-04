@@ -169,6 +169,19 @@ void KisToolFreehand::initPaint(KisEvent *)
             KisLayerSupportsIndirectPainting* layer;
             if ((layer = dynamic_cast<KisLayerSupportsIndirectPainting*>(
                     m_currentImage->activeLayer().data()))) {
+
+                // Hack for the painting of single-layered layers using indirect painting,
+                // because the group layer would not have a correctly synched cache (
+                // because of an optimization that would happen, having this layer as
+                // projection).
+                KisLayer* l = layer->layer();
+                KisPaintLayer* pl = dynamic_cast<KisPaintLayer*>(l);
+                if (l->parent() && (l->parent()->parent() == 0)
+                    && (l->parent()->childCount() == 1)
+                    && l->parent()->paintLayerInducesProjectionOptimization(pl)) {
+                    l->parent()->resetProjection(device);
+                }
+
                 m_target = new KisPaintDevice(m_currentImage->activeLayer(),
                                               device->colorSpace());
                 layer->setTemporaryTarget(m_target);
@@ -177,18 +190,6 @@ void KisToolFreehand::initPaint(KisEvent *)
 
                 if (device->hasSelection())
                     m_target->setSelection(device->selection());
-
-                // Hack for the painting of single-layered layers using indirect painting,
-                // because the group layer would not have a correctly synched cache (
-                // because of an optimization that would happen, having this layer as
-                // projection).
-                // XXXX I think we could de-hackify this and speed it up at the same
-                // time with CoW Tiles (so: ### FIXME)
-                KisLayer* l = layer->layer();
-                if (l->parent() && (l->parent()->parent() == 0)
-                    && l->parent()->childCount() == 1) {
-                    l->setDirty(); // Hack
-                }
             }
         } else {
             m_target = device;

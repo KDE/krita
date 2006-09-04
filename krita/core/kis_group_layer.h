@@ -85,7 +85,7 @@ public:
             return v.visit(this);
         };
 
-    virtual void resetProjection();
+    virtual void resetProjection(KisPaintDevice* to = 0); /// will copy from to, if !0, CoW!!
     virtual KisPaintDeviceSP projection(const QRect & rect);
 
     virtual uint childCount() const;
@@ -117,7 +117,9 @@ public:
     virtual bool removeLayer(KisLayerSP layer);
 
     virtual QImage createThumbnail(Q_INT32 w, Q_INT32 h);
-    
+
+    /// Returns if the layer will induce the projection hack (if the only layer in this group)
+    virtual bool paintLayerInducesProjectionOptimization(KisPaintLayer* l);
 signals:
 
     void sigDirty(QRect rc);

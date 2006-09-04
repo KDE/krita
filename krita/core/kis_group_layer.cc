@@ -75,9 +75,17 @@ void KisGroupLayer::setDirty(const QRect & rc, bool propagate)
     if (propagate) emit sigDirty(rc);
 }
 
-void KisGroupLayer::resetProjection()
+void KisGroupLayer::resetProjection(KisPaintDevice* to)
 {
-    m_projection = new KisPaintDevice(this, image()->colorSpace(), name().latin1());
+    if (to)
+        m_projection = new KisPaintDevice(*to); /// XXX ### look into Copy on Write here (CoW)
+    else
+        m_projection = new KisPaintDevice(this, image()->colorSpace(), name().latin1());
+}
+
+bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayer* l) {
+    return l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible()
+             && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget();
 }
 
 KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
@@ -86,8 +94,7 @@ KisPaintDeviceSP KisGroupLayer::projection(const QRect & rect)
     // paint device as the projection if the child is visible and 100% opaque
     if (parent() == 0 && childCount() == 1) {
         KisPaintLayerSP l = dynamic_cast<KisPaintLayer*>(firstChild().data());
-        if (l && l->paintDevice()->colorSpace() == m_image->colorSpace() && l->visible()
-            && l->opacity() == OPACITY_OPAQUE && !l->temporaryTarget()) {
+        if (paintLayerInducesProjectionOptimization(l)) {
             l->setClean(rect);
             setClean(rect);
             return l->paintDevice();

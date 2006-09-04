@@ -19,6 +19,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "MatrixElement.h"
+#include "MatrixRowElement.h"
+#include "MatrixEntryElement.h"
+#include <KoXmlWriter.h>
+
+
+
 #include <QPainter>
 #include <QList>
 #include <QKeyEvent>
@@ -31,9 +38,6 @@
 #include "FormulaCursor.h"
 #include "FormulaContainer.h"
 #include "kformulacommand.h"
-#include "MatrixElement.h"
-#include "MatrixRowElement.h"
-#include "MatrixEntryElement.h"
 #include "SequenceElement.h"
 #include "SpaceElement.h"
 
@@ -57,7 +61,7 @@ MatrixElement::~MatrixElement()
 {
 }
 
-const QList<BasicElement*>& MatrixElement::childElements()
+const QList<BasicElement*> MatrixElement::childElements()
 {
     return QList<BasicElement*>();
 }
@@ -77,38 +81,19 @@ MatrixEntryElement* MatrixElement::matrixEntryAt( int row, int col )
     return m_matrixRowElements[ row ]->entryAtPosition( col );
 }
 
-void MatrixElement::drawInternal()
-{
-    // a MatrixElement does not paint anything, it just arranges it children
-}
-
 void MatrixElement::readMathML( const QDomElement& element )
 {
 }
 
-void MatrixElement::readMathMLAttributes( const QDomElement& element )
+void MatrixElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void MatrixElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
-    QDomElement row;
-    QDomElement cell;
-
-    for ( int r = 0; r < rows(); r++ )
-    {
-        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
-        de.appendChild( row );
-        for ( int c = 0; c < cols(); c++ )
-        {
-            cell = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
-            row.appendChild( cell );
-    	    matrixEntryAt( r, c )->writeMathML( doc, cell, oasisFormat );
-	}
-    }
-
-    parent.appendChild( de );*/
+    writer->startElement( oasisFormat ? "math:mtable" : "mtable" );
+    writeMathMLAttributes( writer );
+    
+    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
+	tmpRow->writeMathML( writer, oasisFormat );
+    
+    writer->endElement();
 }
 
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)

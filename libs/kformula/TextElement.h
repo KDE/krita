@@ -37,17 +37,18 @@ namespace KFormula {
  */
 class TextElement : public BasicElement {
 public:
+    /// The standart constructor
     TextElement( BasicElement* parent = 0 );
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*>& childElements();
+    const QList<BasicElement*> childElements();
 
     void readMathML( const QDomElement& element );
     
-    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
     
 
@@ -104,12 +105,6 @@ public:
     bool isSymbol() const { return symbol; }
 
 protected:
-    void drawInternal();
-
-    void readMathMLAttributes( const QDomElement& element );
-
-
-
     //Save/load support
 
     /**

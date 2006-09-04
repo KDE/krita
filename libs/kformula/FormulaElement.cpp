@@ -20,12 +20,10 @@
 */
 
 #include "FormulaElement.h"
-
 #include "FormulaCursor.h"
-#include "ElementFactory.h"
+#include <KoXmlWriter.h>
+//#include <QPainter>
 
-
-#include <QPainter>
 #include <QKeyEvent>
 #include <kdebug.h>
 #include "contextstyle.h"
@@ -44,35 +42,33 @@ FormulaElement::~FormulaElement()
 	delete tmpElement;
 }
 
-const QList<BasicElement*>& FormulaElement::childElements()
+const QList<BasicElement*> FormulaElement::childElements()
 {
     return m_childElements;
-}
-
-void FormulaElement::drawInternal()
-{
 }
 
 void FormulaElement::readMathML( const QDomElement& element )
 {
 }
 
-void FormulaElement::readMathMLAttributes( const QDomElement& element )
+void FormulaElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void FormulaElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    QDomElement de;
-    if ( !oasisFormat )
-        de = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
-                                              "math" );
+    if( oasisFormat )
+	writer->startElement( "math:semantics" );
     else
-        de =doc.createElement( "math:semantics" );
+        writer->startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
 
-    BasicElement::writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );*/
+    foreach( BasicElement* tmpElement, m_childElements )
+        tmpElement->writeMathML( writer, oasisFormat );
+    
+    if( oasisFormat )
+	writer->endElement();
+    else
+	writer->endDocument();
 }
+
+
+
 
 
 void FormulaElement::setBaseSize( int size )

@@ -20,7 +20,11 @@
 
 #include "SequenceElement.h"
 
+#include <KoXmlWriter.h>
 #include <QPainter>
+
+
+
 #include <QPaintDevice>
 #include <QStack>
 #include <QKeyEvent>
@@ -54,31 +58,29 @@ SequenceElement::~SequenceElement()
 {
 }
 
+const QList<BasicElement*> SequenceElement::childElements()
+{
+    return QList<BasicElement*>();
+}
+
 BasicElement* SequenceElement::childAt( int i )
 {
     return m_sequenceChildren[ i ];
 }
 
-void SequenceElement::drawInternal()
-{
-}   
-
 void SequenceElement::readMathML( const QDomElement& element )
 {
 }
 
-void SequenceElement::readMathMLAttributes( const QDomElement& element )
+void SequenceElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void SequenceElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
+    writer->startElement( oasisFormat ? "math:mrow" : "mrow" );
+    writeMathMLAttributes( writer );
 
     foreach( BasicElement* tmpChild, m_sequenceChildren )
-        tmpChild->writeMathML( doc, de, oasisFormat );
-
-    parent.appendChild( de );*/
+        tmpChild->writeMathML( writer, oasisFormat );
+   
+    writer->endElement();
 }
 
 
@@ -89,10 +91,7 @@ bool SequenceElement::readOnly( const FormulaCursor* ) const
     return getParent()->readOnly( this );
 }
 
-const QList<BasicElement*>& SequenceElement::childElements()
-{
-    return QList<BasicElement*>();
-}
+
 
 
 bool SequenceElement::isEmpty()

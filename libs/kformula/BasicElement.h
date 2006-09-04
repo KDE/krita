@@ -22,7 +22,6 @@
 #ifndef BASICELEMENT_H
 #define BASICELEMENT_H
 
-#include <QPainterPath>
 #include <QMap>
 #include <QString>
 #include <QVariant>
@@ -93,7 +92,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    virtual const QList<BasicElement*> childElements();
 
     /// @return The element's painter path used for painting it
     const QPainterPath& elementPath() const;
@@ -150,10 +149,11 @@ public:
      */
     virtual void moveEnd( FormulaCursor* cursor );
 
+    /// Read the element from MathML
     virtual void readMathML( const QDomElement& element );
 
     /// Save the element to MathML 
-    virtual void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 
 
@@ -192,11 +192,8 @@ public:
     // It is essential to calculate elements size with the same context
     // before you draw.
 
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle) = 0;
+    /// Calculates our width and height and our children's parentPosition
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
 
     /**
      * Draws the whole element including its children.
@@ -207,7 +204,7 @@ public:
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-                       const LuPixelPoint& parentOrigin ) = 0;
+                       const LuPixelPoint& parentOrigin );
 
 
     /**
@@ -279,7 +276,7 @@ public:
 
 
     /**
-     * This is called by the container to get a command depending on
+     **** This is called by the container to get a command depending on
      * the current cursor position (this is how the element gets chosen)
      * and the request.
      *
@@ -336,15 +333,11 @@ public:
 
 
 protected:
-    /// Draw the element internally, means it paints into m_elementPath
-    virtual void drawInternal();
-   
     /// Read all attributes loaded and add them to the m_attributes map 
-    virtual void readMathMLAttributes( const QDomElement& element );
+    void readMathMLAttributes( const QDomElement& element );
 
-    /// A map of all attributes where attribute name is assigned to a value
-    QMap<QString,QVariant> m_attributes;
-
+    /// Write all attributes of m_attributes to @p writer
+    void writeMathMLAttributes( KoXmlWriter* writer );
 
 
 
@@ -387,8 +380,9 @@ private:
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
 
-    /// The path that is used to paint the element
-    QPainterPath m_elementPath;
+    /// A map of all attributes where attribute name is assigned to a value
+    QMap<QString,QVariant> m_attributes;
+
 
 
     

@@ -45,7 +45,7 @@ public:
     
     ~SequenceElement();
 
-    virtual const QList<BasicElement*>& childElements();
+    virtual const QList<BasicElement*> childElements();
 
     /// @return The child element at the position @p index - 0 if the sequence is empty
     BasicElement* childAt( int index );
@@ -55,7 +55,7 @@ public:
 
     virtual void readMathML( const QDomElement& element );
     
-    virtual void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+    virtual void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
    
 
 
@@ -249,10 +249,6 @@ public:
     bool buildChildrenFromDom(QList<BasicElement*>& list, QDomNode n);
 
 protected:
-    virtual void drawInternal();
-
-    virtual void readMathMLAttributes( const QDomElement& element );
-    
     //Save/load support
 
     /**

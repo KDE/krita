@@ -46,7 +46,7 @@ TextElement::TextElement( BasicElement* parent ) : BasicElement(parent),
     charFamily( anyFamily );
 }
 
-const QList<BasicElement*>& TextElement::childElements()
+const QList<BasicElement*> TextElement::childElements()
 {
     return QList<BasicElement*>();
 }
@@ -55,11 +55,7 @@ void TextElement::readMathML( const QDomElement& element )
 {
 }
 
-void TextElement::readMathMLAttributes( const QDomElement& element )
-{
-}
-
-void TextElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+void TextElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
 }
 
@@ -98,9 +94,6 @@ TokenType TextElement::getTokenType() const
     }
 }
 
-void TextElement::drawInternal()
-{
-}
 
 
 bool TextElement::isInvisible() const

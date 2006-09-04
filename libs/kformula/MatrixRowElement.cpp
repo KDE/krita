@@ -20,10 +20,10 @@
 */
 
 #include "MatrixRowElement.h"
-
-#include "FormulaCursor.h"
-#include "FormulaElement.h"
 #include "MatrixEntryElement.h"
+#include "FormulaCursor.h"
+#include <KoXmlWriter.h>
+
 #include <klocale.h>
 
 #include <QPainter>
@@ -50,7 +50,7 @@ MatrixEntryElement* MatrixRowElement::entryAtPosition( int pos )
     return m_matrixEntryElements[ pos ];
 }
 
-const QList<BasicElement*>& MatrixRowElement::childElements()
+const QList<BasicElement*> MatrixRowElement::childElements()
 {
     QList<BasicElement*> tmp;
     foreach( MatrixEntryElement* element, m_matrixEntryElements )
@@ -59,29 +59,19 @@ const QList<BasicElement*>& MatrixRowElement::childElements()
     return tmp;
 }
 
-void MatrixRowElement::drawInternal()
-{
-    // do not paint anything as a MatrixRowElement only orders its children
-}
-
 void MatrixRowElement::readMathML( const QDomElement& element )
 {
 }
 
-void MatrixRowElement::readMathMLAttributes( const QDomElement& element )
+void MatrixRowElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void MatrixRowElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    QDomElement row; 
+    writer->startElement( oasisFormat ? "math:mtr" : "mtr" );
+    writeMathMLAttributes( writer );
 
     foreach( MatrixEntryElement* tmpEntry, m_matrixEntryElements )
-    {
-        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
-	parent.appendChild( row );
-        tmpEntry->writeMathML( doc, row, oasisFormat );
-    }*/
+        tmpEntry->writeMathML( writer, oasisFormat );
+
+    writer->endElement();
 }
 
 

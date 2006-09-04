@@ -18,35 +18,46 @@
 */
 
 #include "MultiscriptElement.h"
+#include <KoXmlWriter.h>
 
 namespace KFormula {
 
 MultiscriptElement::MultiscriptElement( BasicElement* parent ) : BasicElement( parent )
 {
+    m_baseElement = new BasicElement( this );
+    m_preSubscript = new BasicElement( this );
+    m_preSuperscript = new BasicElement( this );
+    m_postSubscript = new BasicElement( this );
+    m_postSuperscript = new BasicElement( this );
 }
 
 MultiscriptElement::~MultiscriptElement()
-{}
-
-const QList<BasicElement*>& MultiscriptElement::childElements()
 {
-    return QList<BasicElement*>();
+    delete m_baseElement;
+    delete m_preSubscript;
+    delete m_preSuperscript;
+    delete m_postSubscript;
+    delete m_postSuperscript;
 }
 
-void MultiscriptElement::drawInternal()
+const QList<BasicElement*> MultiscriptElement::childElements()
 {
+    return QList<BasicElement*>();
 }
 
 void MultiscriptElement::readMathML( const QDomElement& element )
 {
 }
 
-void MultiscriptElement::readMathMLAttributes( const QDomElement& element )
+void MultiscriptElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void MultiscriptElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
+    writer->startElement( oasisFormat ? "math:mmultiscripts" : "mmultiscripts" );
+    writeMathMLAttributes( writer );
+   
+    m_baseElement->writeMathML( writer, oasisFormat );
+    // saving of mmultiscript is a bit more complicated, still to be done
+    
+    writer->endElement();
 }
 
 void MultiscriptElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,

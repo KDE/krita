@@ -24,15 +24,9 @@
 
 #include "BasicElement.h"
 
-
-
 #include <QPoint>
-#include <QList>
-
 
 namespace KFormula {
-class SequenceElement;
-
 
 /**
  * A nice graphical root.
@@ -52,11 +46,11 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*>& childElements();
+    const QList<BasicElement*> childElements();
 
     void readMathML( const QDomElement& element );
     
-    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 
     
@@ -76,11 +70,6 @@ public:
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
-
-    /**
-     * Dispatch this FontCommand to all our TextElement children.
-     */
- //   virtual void dispatchFontCommand( FontCommand* cmd );
 
     /**
      * Enters this element while moving to the left starting inside
@@ -123,12 +112,6 @@ public:
      */
     virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
-    /**
-     * Moves the cursor to a normal place where new elements
-     * might be inserted.
-     */
-//    virtual void normalize(FormulaCursor*, Direction);
-
     // main child
     //
     // If an element has children one has to become the main one.
@@ -150,12 +133,6 @@ public:
     void setToIndex(FormulaCursor*);
 
 protected:
-    void drawInternal();
-
-    void readMathMLAttributes( const QDomElement& element );
-
-
-    
     //Save/load support
 
     /**
@@ -182,27 +159,11 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
 private:
-/*
-    class RootElementIndex : public ElementIndex {
-    public:
-        RootElementIndex(RootElement* p) : parent(p) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
-            { parent->moveToIndex(cursor, direction); }
-        virtual void setToIndex(FormulaCursor* cursor)
-            { parent->setToIndex(cursor); }
-        virtual bool hasIndex() const
-            { return parent->hasIndex(); }
-        virtual RootElement* getElement() { return parent; }
-    protected:
-        RootElement* parent;
-    };*/
-
-
     /// The element that is the radicand of the root
-    SequenceElement* m_radicand;
+    BasicElement* m_radicand;
 
     /// The element that is the exponent of the root
-    SequenceElement* m_exponent;
+    BasicElement* m_exponent;
 
     /// The point the artwork relates to.
     LuPixelPoint rootOffset;

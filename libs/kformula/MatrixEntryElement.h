@@ -40,11 +40,11 @@ public:
     MatrixEntryElement( BasicElement* parent = 0 );
 
     /// @return a list of all children of this class                           
-    const QList<BasicElement*>& childElements();
+    const QList<BasicElement*> childElements();
 
     void readMathML( const QDomElement& element );
     
-    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 
 
@@ -77,14 +77,6 @@ public:
 	 
          /// Return the position of tab i.
          int tabPos( int i );
-
-
-protected:
-    /// Draws the element internally, means it paints into m_elementPath
-    void drawInternal();
-
-    void readMathMLAttributes( const QDomElement& element );
-
 
 private:
     QList<BasicElement*> tabs;

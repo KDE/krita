@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-
+		 2006 Martin Pfeiffer <hubipete@gmx.net>
+ 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -15,17 +16,21 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
+#include "FractionElement.h"
+
 #include <QPainter>
+
+#include <KoXmlWriter.h>
+
 
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "FormulaElement.h"
 #include "FormulaCursor.h"
-#include "FractionElement.h"
 #include "SequenceElement.h"
 
 namespace KFormula {
@@ -50,33 +55,27 @@ void FractionElement::insertInDenominator( int index, BasicElement* element )
 {
 }
 
-const QList<BasicElement*>& FractionElement::childElements()
+const QList<BasicElement*> FractionElement::childElements()
 {
     QList<BasicElement*> list;
     list << m_denominator << m_numerator;
     return list;
 }
 
-void FractionElement::drawInternal()
-{
-}
-
 void FractionElement::readMathML( const QDomElement& element )
 {
+
 }
 
-void FractionElement::readMathMLAttributes( const QDomElement& element )
+void FractionElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
+    writer->startElement( oasisFormat ? "math:mfrac": "mfrac" );
+    writeMathMLAttributes( writer );
+   
+    m_numerator->writeMathML( writer, oasisFormat );
+    m_denominator->writeMathML( writer, oasisFormat );
 
-void FractionElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
-//    if ( !withLine ) // why is this no function?
-//        de.setAttribute( "linethickness", 0 );
-    m_numerator->writeMathML( doc, de, oasisFormat );
-    m_denominator->writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );*/
+    writer->endElement();		
 }
 
 void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
@@ -132,13 +131,6 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
     
 }
 
-/*
-void FractionElement::dispatchFontCommand( FontCommand* cmd )
-{
-    m_numerator->dispatchFontCommand( cmd );
-    m_denominator->dispatchFontCommand( cmd );
-}
-*/
 void FractionElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
 {
     if (cursor->isSelectionMode()) {

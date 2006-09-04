@@ -29,14 +29,17 @@ namespace KFormula {
  */
 class MultiscriptElement : public BasicElement {
 public:
+    /// The standard constructor
     MultiscriptElement( BasicElement* parent = 0 );
+
+    /// The destructor
     ~MultiscriptElement();
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*>& childElements();
+    const QList<BasicElement*> childElements();
 
     void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
     virtual void draw( QPainter& painter, const LuPixelRect& r,
@@ -45,21 +48,9 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
-
-
-    void calculateSize();
-
-    void layoutElement( const QPointF& offset );
-
     void readMathML( const QDomElement& element );
     
-    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
-
-protected:
-    /// Draws the element internally, means set up @ref m_elementPath
-    void drawInternal();
-
-    void readMathMLAttributes( const QDomElement& element );
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
     
 private:
     BasicElement* m_baseElement;

@@ -66,11 +66,11 @@ public:
      * reimplementated from @see BasicElement
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*>& childElements();
+    const QList<BasicElement*> childElements();
 
     void readMathML( const QDomElement& element );
     
-    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 
 
@@ -94,11 +94,6 @@ public:
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
-
-    /**
-     * Dispatch this FontCommand to all our TextElement children.
-     */
-//    virtual void dispatchFontCommand( FontCommand* cmd );
 
     /**
      * Enters this element while moving to the left starting inside
@@ -139,25 +134,10 @@ public:
      */
     virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
 
-//    virtual SequenceElement* getMainChild();
-
-    /**
-     * Returns wether the element has no more useful
-     * children (except its main child) and should therefore
-     * be replaced by its main child's content.
-     */
-//    virtual bool isSenseless();
-
     /// Sets the cursor to select the child. The mark is placed before, the position behind it.
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
 protected:
-    /// Draws the element internally, means it paints into m_elementPath
-    void drawInternal();
-
-    void readMathMLAttributes( const QDomElement& element );
-
-
     /// Returns the tag name of this element type.
     virtual QString getTagName() const { return "FRACTION"; }
 

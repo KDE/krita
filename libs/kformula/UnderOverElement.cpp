@@ -18,35 +18,43 @@
 */
 
 #include "UnderOverElement.h"
+#include <KoXmlWriter.h>
 
 namespace KFormula {
 
 UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
 {
+    m_baseElement = new BasicElement( this );
+    m_underElement = new BasicElement( this );
+    m_overElement = new BasicElement( this );
 }
 
 UnderOverElement::~UnderOverElement()
-{}
-
-const QList<BasicElement*>& UnderOverElement::childElements()
 {
-    return QList<BasicElement*>();
+    delete m_baseElement;
+    delete m_underElement;
+    delete m_overElement;
 }
 
-void UnderOverElement::drawInternal()
+const QList<BasicElement*> UnderOverElement::childElements()
 {
+    return QList<BasicElement*>();
 }
 
 void UnderOverElement::readMathML( const QDomElement& element )
 {
 }
 
-void UnderOverElement::readMathMLAttributes( const QDomElement& element )
+void UnderOverElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void UnderOverElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
+    writer->startElement( oasisFormat ? "math:munderover" : "munderover" );
+    writeMathMLAttributes( writer );
+   
+    m_baseElement->writeMathML( writer, oasisFormat );
+    m_underElement->writeMathML( writer, oasisFormat );
+    m_overElement->writeMathML( writer, oasisFormat );
+    
+    writer->endElement();
 }
 
 void UnderOverElement::calcSizes( const ContextStyle& context, ContextStyle::TextStyle tstyle,

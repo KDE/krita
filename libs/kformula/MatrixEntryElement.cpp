@@ -19,12 +19,12 @@
 */
 
 #include "MatrixEntryElement.h"
+#include <KoXmlWriter.h>
 
 #include "FormulaContainer.h"
 #include "kformulacommand.h"
 #include "FormulaCursor.h"
 #include "SpaceElement.h"
-
 #include <klocale.h>
 
 namespace KFormula {
@@ -33,56 +33,24 @@ MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : SequenceElement
 {
 }
 
-const QList<BasicElement*>& MatrixEntryElement::childElements()
+const QList<BasicElement*> MatrixEntryElement::childElements()
 {
     return SequenceElement::childElements();
-}
-
-void MatrixEntryElement::drawInternal()
-{
-    // A MatrixEntryElement has no own representation if it has children,
-    // if not it paints a rectangle, this behavior is the same as SequenceElement
-    SequenceElement::drawInternal();
 }
 
 void MatrixEntryElement::readMathML( const QDomElement& element )
 {
 }
 
-void MatrixEntryElement::readMathMLAttributes( const QDomElement& element )
+void MatrixEntryElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void MatrixEntryElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    // parent is required to be a <mtr> tag
-
-    QDomElement tmp = doc.createElement( "TMP" );
-
-    SequenceElement::writeMathML( doc, tmp, oasisFormat );
-*/
-    /* Now we re-parse the Dom tree, because of the TabMarkers
-     * that have no direct representation in MathML but mark the
-     * end of a <mtd> tag.
-     */
-
-/*    QDomElement mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
-
-    // The mrow, if it exists.
-    QDomNode n = tmp.firstChild().firstChild();
-    while ( !n.isNull() ) {
-        // the illegal TabMarkers are children of the mrow, child of tmp.
-        if ( n.isElement() && n.toElement().tagName() == "TAB" ) {
-            parent.appendChild( mtd );
-            mtd = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
-        }
-        else {
-            mtd.appendChild( n.cloneNode() ); // cloneNode needed?
-        }
-        n = n.nextSibling();
-    }
-
-    parent.appendChild( mtd );*/
+    writer->startElement( oasisFormat ? "math:mtd" : "mtd" );
+    writeMathMLAttributes( writer );
+   
+    foreach( BasicElement* tmpElement, childElements() )
+	tmpElement->writeMathML( writer, oasisFormat );
+    
+    writer->endElement();
 }
 
 

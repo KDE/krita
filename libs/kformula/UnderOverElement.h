@@ -43,7 +43,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*>& childElements();
+    virtual const QList<BasicElement*> childElements();
 
     void insertInBaseElement( int index, BasicElement* element );
     void insertInUnderElement( int index, BasicElement* element );
@@ -52,7 +52,7 @@ public:
     void readMathML( const QDomElement& element );
     
     /// Saves the element to MathML
-    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
     virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
     virtual void draw( QPainter& painter, const LuPixelRect& r,
@@ -60,13 +60,6 @@ public:
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
-
-    
-protected:
-    /// Draws the element internally, means it paints into m_elementPath
-    void drawInternal();
-
-    void readMathMLAttributes( const QDomElement& element );
     
 private:
     BasicElement* m_baseElement;

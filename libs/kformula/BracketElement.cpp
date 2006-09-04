@@ -20,7 +20,7 @@
 */
 
 #include "BracketElement.h"
-
+#include <KoXmlWriter.h>
 
 #include <QPainter>
 #include <QPen>
@@ -51,34 +51,23 @@ BracketElement::~BracketElement()
 }
 
 
-const QList<BasicElement*>& BracketElement::childElements()
+const QList<BasicElement*> BracketElement::childElements()
 {
     return QList<BasicElement*>();
-}
-
-void BracketElement::drawInternal()
-{
 }
 
 void BracketElement::readMathML( const QDomElement& element )
 {
 }
 
-void BracketElement::readMathMLAttributes( const QDomElement& element )
+void BracketElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
+    writer->startElement( oasisFormat ? "math:mfenced" : "mfenced" );
+    writeMathMLAttributes( writer );
 
-void BracketElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    QDomElement de = doc.createElement( oasisFormat ? "math:mfenced" : "mfenced" );
-    if ( left->getType() != LeftRoundBracket ||
-         right->getType() != RightRoundBracket )
-    {
-        de.setAttribute( "open",  QString( QChar( leftType ) ) );
-        de.setAttribute( "close", QString( QChar( rightType ) ) );
-    }
-    SingleContentElement::writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );*/
+    // save child elements that will come
+    
+    writer->endElement();
 }
 
 /**

@@ -19,12 +19,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-
-#include "contextstyle.h"
 #include "BasicElement.h"
 #include "FormulaCursor.h"
-#include "FormulaElement.h"
+#include <KoXmlWriter.h>
+
+#include <kdebug.h>
+#include "contextstyle.h"
 #include "SequenceElement.h"
 
 namespace KFormula {
@@ -39,7 +39,7 @@ BasicElement::~BasicElement()
 {
 }
 
-const QList<BasicElement*>& BasicElement::childElements() 
+const QList<BasicElement*> BasicElement::childElements() 
 {
     return QList<BasicElement*>();
 }
@@ -72,10 +72,6 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
 BasicElement* BasicElement::parentElement() const
 {
     return m_parentElement;
-}
-
-void BasicElement::drawInternal()
-{
 }
 
 void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )
@@ -114,20 +110,67 @@ void BasicElement::moveEnd( FormulaCursor* cursor )
     parentElement()->moveEnd( cursor );
 }
 
-void BasicElement::readMathML( const QDomElement& element )
+void BasicElement::readMathML( const QDomElement& )
 {
 }
 
 void BasicElement::readMathMLAttributes( const QDomElement& element )
 {
+    QDomAttr attribute;
+    int attributeCount = element.attributes().count();
+    for( int i = 0; i < attributeCount; i++ )
+    {
+	 attribute = element.attributes().item( i ).toAttr();
+         if( attribute.value() == "true" )
+             m_attributes.insert( attribute.name(), true );
+	 else if( attribute.value() == "false" )
+             m_attributes.insert( attribute.name(), false );
+/*	 else if( attribute.value().endsWith( "em" ) )
+             
+	 else if( attribute.value().endsWith( "ex" ) )
+	 else if( attribute.value().endsWith( "px" ) )
+	 else if( attribute.value().endsWith( "in" ) )
+	 else if( attribute.value().endsWith( "cm" ) )
+	 else if( attribute.value().endsWith( "mm" ) )
+	 else if( attribute.value().endsWith( "pt" ) )
+	 else if( attribute.value().endsWith( "pc" ) )
+	 else if( attribute.value().endsWith( "%" ) )*/
+	 else
+             m_attributes.insert( attribute.name(), attribute.value() );
+    }
 }
 
-void BasicElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
+void BasicElement::writeMathML( KoXmlWriter* , bool )
 {
-/*    parent.appendChild( doc.createComment( QString( "MathML Error in %1" )
-                                           .arg( getTagName() ) ) );*/
 }
 
+void BasicElement::writeMathMLAttributes( KoXmlWriter* writer )
+{
+    QMapIterator<QString, QVariant> attr( m_attributes );
+    while( attr.hasNext() )
+    {
+        attr.next();
+	if( attr.value().canConvert( QVariant::Double ) )
+	    writer->addAttribute( attr.key().toLatin1(), attr.value().toDouble() );
+	else if( attr.value().canConvert( QVariant::Int ) )
+	    writer->addAttribute( attr.key().toLatin1(), attr.value().toInt() );
+	else if( attr.value().canConvert( QVariant::String ) )
+            writer->addAttribute( attr.key().toLatin1(), attr.value().toString() );
+        // combination of data and unit still missing 
+    }
+}
+
+void BasicElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+{
+}
+
+void BasicElement::draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPixelPoint& parentOrigin )
+
+{}
 
 
 
@@ -136,11 +179,6 @@ bool BasicElement::readOnly( const BasicElement* /*child*/ ) const
 {
     return m_parentElement->readOnly( this );
 }
-
-/*FormulaElement* BasicElement::formula()
-{
-  return m_parentElement->formula();
-}*/
 
 /**
  * Returns our position inside the widget.
@@ -156,10 +194,7 @@ LuPixelPoint BasicElement::widgetPos()
     return LuPixelPoint(x, y);
 }
 
-
-
-
- /**
+/**
   * - * Sets the cursor inside this element to its start position
   *   - * For most elements that is the main child.
   *   - */
@@ -170,9 +205,6 @@ void BasicElement::goInside(FormulaCursor* cursor)
       mainChild->goInside(cursor);
     }
 }
-
-
-
 
 /**
  * Moves the cursor to a normal place where new elements
@@ -191,15 +223,12 @@ void BasicElement::normalize(FormulaCursor* cursor, Direction direction)
     }
 }
 
-
 QDomElement BasicElement::getElementDom( QDomDocument& doc)
 {
     QDomElement de = doc.createElement(getTagName());
     writeDom(de);
     return de;
 }
-
-
 
 bool BasicElement::buildFromDom(QDomElement element)
 {

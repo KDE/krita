@@ -20,7 +20,7 @@
 */
 
 #include "SpaceElement.h"
-
+#include <KoXmlWriter.h>
 
 #include <QFontMetrics>
 #include <QPainter>
@@ -37,70 +37,20 @@ SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent ),
 {
 }
 
-const QList<BasicElement*>& SpaceElement::childElements()
+const QList<BasicElement*> SpaceElement::childElements()
 {
     return QList<BasicElement*>();
-}
-
-void SpaceElement::drawInternal()
-{
 }
 
 void SpaceElement::readMathML( const QDomElement& element )
 {
 }
 
-void SpaceElement::readMathMLAttributes( const QDomElement& element )
+void SpaceElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void SpaceElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*
-    QDomElement de = doc.createElement( oasisFormat ? "math:mspace" : "mspace" );
-    QString width;
-
-    switch ( spaceWidth ) {
-    case NEGTHIN:
-        width = "-3/18em";
-        break;
-    case THIN:
-        width = "thinmathspace";
-        break;
-    case MEDIUM:
-        width = "mediummathspace";
-        break;
-    case THICK:
-        width = "thickmathspace";
-        break;
-    case QUAD:
-        width = "veryverythickmathspace"; // double 'very' is appropriate.
-        break;
-    }
-
-    de.setAttribute( "width", width );
-
-    parent.appendChild( de );
-
-
-     // worked, but I redecided.
-    switch ( spaceWidth )
-    {
-    case NEGTHIN:
-        return doc.createEntityReference( "NegativeThinSpace" );
-    case THIN:
-        return doc.createEntityReference( "ThinSpace" );
-    case MEDIUM:
-        return doc.createEntityReference( "MediumSpace" );
-    case THICK:
-        return doc.createEntityReference( "ThickSpace" );
-    case QUAD:
-        //return doc.createEntityReference( "Space" ); // misused &Space;???
-        QDomElement de = doc.createElement( "mspace" );
-        de.setAttribute( "width", "veryverythickmathspace" );
-        return de;
-    }*/
-
+    writer->startElement( oasisFormat ? "math:mspace" : "mspace" );
+    writeMathMLAttributes( writer );
+    writer->endElement();
 }
 
 

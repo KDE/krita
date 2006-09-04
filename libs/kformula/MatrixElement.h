@@ -52,7 +52,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*>& childElements();
+    const QList<BasicElement*> childElements();
 
     /// Return the number of the rows of this matrix
     int rows() const;
@@ -65,8 +65,8 @@ public:
 
     void readMathML( const QDomElement& element );
     
-    /// Save this element to MathMl
-    void writeMathML( const KoXmlWriter* writer, bool oasisFormat = false );
+    /// Save this element to MathML
+    void writeMathML( KoXmlWriter* writer, bool oasisFormat = false );
 
 
 
@@ -125,13 +125,6 @@ public:
 
 
 protected:
-    /// Draws the element internally, means it paints into m_elementPath
-    void drawInternal();
-
-    void readMathMLAttributes( const QDomElement& element );
-
-    
-
     /// Returns the tag name of this element type.
     virtual QString getTagName() const { return "MATRIX"; }
 
@@ -149,7 +142,7 @@ protected:
 
 private:
     /// The rows a matrix contains
-    QList< MatrixRowElement* > m_matrixRowElements;
+    QList<MatrixRowElement*> m_matrixRowElements;
 
 
 

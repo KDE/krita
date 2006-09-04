@@ -34,15 +34,17 @@ namespace KFormula {
 
 RootElement::RootElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_radicand = 0;
-    m_exponent = 0;
+    m_radicand = new BasicElement( this );
+    m_exponent = new BasicElement( this );
 }
 
 RootElement::~RootElement()
 {
+    delete m_radicand;
+    delete m_exponent;
 }
 
-const QList<BasicElement*>& RootElement::childElements()
+const QList<BasicElement*> RootElement::childElements()
 {
     QList<BasicElement*> tmp;
     if( m_exponent )
@@ -50,33 +52,23 @@ const QList<BasicElement*>& RootElement::childElements()
     return tmp << m_radicand;
 }
 
-void RootElement::drawInternal()
-{
-}
-
 void RootElement::readMathML( const QDomElement& element )
 {
 }
 
-void RootElement::readMathMLAttributes( const QDomElement& element )
+void RootElement::writeMathML( KoXmlWriter* writer, bool oasisFormat )
 {
-}
-
-void RootElement::writeMathML( const KoXmlWriter* writer, bool oasisFormat )
-{
-/*    QDomElement de;
-
-    if( m_exponent )
-        de = doc.createElement( oasisFormat ? "math:mroot" : "mroot" );
+/*    if( m_exponent->elementType() == Basic )
+        writer->startElement( oasisFormat ? "math:msqrt" : "msqrt" );
     else
-        de = doc.createElement( oasisFormat ? "math:msqrt" : "msqrt" );
+        writer->startElement( oasisFormat ? "math:mroot" : "mroot" );
 
-    m_radicand->writeMathML( doc, de, oasisFormat );
+    writeMathMLAttributes( writer );
+    m_radicand->writeMathML( writer, oasisFormat );
+    if( m_exponent->elementType() != Basic )
+        m_exponent->writeMathML( writer, oasisFormat );
 
-    if( m_exponent )
-        m_exponent->writeMathML( doc, de, oasisFormat );
-
-    parent.appendChild( de );*/
+    writer->endElement();*/
 }
 
 /**
@@ -354,7 +346,7 @@ void RootElement::remove(FormulaCursor* cursor,
 
 SequenceElement* RootElement::getMainChild()
 {
-    return m_radicand;
+    return 0; //m_radicand;
 }
 
 /**
@@ -426,7 +418,7 @@ bool RootElement::readAttributesFromDom(QDomElement element)
  */
 bool RootElement::readContentFromDom(QDomNode& node)
 {
-    if (!BasicElement::readContentFromDom(node)) {
+/*    if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
 
@@ -448,7 +440,7 @@ bool RootElement::readContentFromDom(QDomNode& node)
         }
     }
     node = node.nextSibling();
-
+*/
     return true;
 }
 

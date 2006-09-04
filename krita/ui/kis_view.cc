@@ -3522,24 +3522,28 @@ bool KisView::eventFilter(QObject *o, QEvent *e)
         }
         break;
     }
-#ifdef EXTENDED_X11_TABLET_SUPPORT
+#if 0
+    // This code is unnecessary now that there's an application event filter
+    // This eventFilter is called for all widgets already, no need to install event filters multiple times
+    // Even worse: with multiple views, they would all install event filters on each other's widgets,
+    // due to the qapp event filter triggering in all views!
     case QEvent::ChildInserted:
     {
         QChildEvent *childEvent = static_cast<QChildEvent *>(e);
         QObject *child = childEvent->child();
+        if ( child->isWidgetType() ) {
 
-        child->installEventFilter(this);
+            child->installEventFilter(this);
 
-        QObjectList *objectList = child->queryList("QWidget");
-        QObjectListIt it(*objectList);
-        QObject *obj;
-
-        while ((obj = it.current()) != 0) {
-           obj->installEventFilter(this);
-           ++it;
+            QObjectList *objectList = child->queryList("QWidget");
+            QObjectListIt it(*objectList);
+            QObject *obj;
+            while ((obj = it.current()) != 0) {
+                obj->installEventFilter(this);
+                ++it;
+            }
+            delete objectList;
         }
-
-        delete objectList;
     }
 #endif
     default:

@@ -19,6 +19,7 @@
 #include "KoShapeGeometry.h"
 
 #include <KoShape.h>
+#include <klocale.h>
 
 KoShapeGeometry::KoShapeGeometry()
     : m_shape(0)

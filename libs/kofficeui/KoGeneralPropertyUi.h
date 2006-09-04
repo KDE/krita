@@ -16,8 +16,8 @@
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef KOGENERALPROPERTYUI_H
-#define KOGENERALPROPERTYUI_H
+#ifndef KOGENERALPROPERTYUI_DUMMY_H
+#define KOGENERALPROPERTYUI_DUMMY_H
 
 #include "koffice_export.h"
 
@@ -31,5 +31,5 @@ public:
   KoGeneralPropertyUI(QWidget* parent = 0, Qt::WFlags fl = 0);
 };
 
-#endif // KOGENERALPROPERTYUI_H
+#endif // KOGENERALPROPERTYUI_DUMMY_H
 

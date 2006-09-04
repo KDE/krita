@@ -111,6 +111,7 @@ bool KoCharacterStyle::propertyBoolean(int key) const {
 void KoCharacterStyle::applyStyle(QTextCharFormat &format) const {
     // copy all relevant properties.
     static const int properties[] = {
+        StyleId,
         QTextFormat::FontPointSize,
         -1
     };
@@ -133,6 +134,7 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const {
     cursor.setPosition(block.position() + block.length()-1, QTextCursor::KeepAnchor);
     applyStyle(cf);
     cursor.mergeCharFormat(cf);
+    cursor.setBlockCharFormat(cf);
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const {

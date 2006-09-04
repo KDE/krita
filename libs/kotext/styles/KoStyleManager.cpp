@@ -64,6 +64,8 @@ void KoStyleManager::add(KoParagraphStyle *style) {
         return;
     style->setStyleId( s_stylesNumber++ );
     m_paragStyles.append(style);
+    if(style->characterStyle())
+        add(style->characterStyle());
 }
 
 void KoStyleManager::remove(KoCharacterStyle *style) {

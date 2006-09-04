@@ -26,6 +26,9 @@
 class StylePrivate;
 
 
+/**
+ * This class groups all styling-options for lists.
+ */
 class KoListStyle {
 public:
     enum Style {

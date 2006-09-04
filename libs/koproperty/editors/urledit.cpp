@@ -78,8 +78,8 @@ URLEdit::slotValueChanged(const QString&)
 void
 URLEdit::setProperty(Property *property)
 {
-	int  mode;
 	if(property) {
+		KFile::Modes mode;
 		switch(property->type()) {
 			case DirectoryURL:  mode = KFile::Directory|KFile::ExistingOnly;  break;
 			case FileURL: case PictureFileURL: default: mode = KFile::File|KFile::ExistingOnly;

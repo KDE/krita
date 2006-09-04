@@ -1230,14 +1230,14 @@ Q_UINT8* KisPaintDevice::writablePixel(Q_INT32 x, Q_INT32 y)
 void KisPaintDevice::setX(Q_INT32 x)
 {
     m_x = x;
-    if(m_selection)
+    if(m_selection && m_selection != this)
         m_selection->setX(x);
 }
 
 void KisPaintDevice::setY(Q_INT32 y)
 {
     m_y = y;
-    if(m_selection)
+    if(m_selection && m_selection != this)
         m_selection->setY(y);
 }
 

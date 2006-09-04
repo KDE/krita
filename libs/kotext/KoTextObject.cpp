@@ -42,6 +42,7 @@
 #include <QByteArray>
 #include <Q3MemArray>
 #include <Q3ValueList>
+#include <QMimeData>
 
 #include <assert.h>
 

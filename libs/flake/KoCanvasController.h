@@ -29,6 +29,7 @@
 
 class QGridLayout;
 class QPaintEvent;
+class QEvent;
 
 /**
  * This widget is a wrapper around your canvas providing scrollbars.
@@ -99,6 +100,8 @@ public:
      */
     bool isCanvasCentered() const;
 
+    virtual bool eventFilter(QObject* watched, QEvent* event);
+
 signals:
     /**
      * Emitted when a previously added canvas is about to be removed.
@@ -110,6 +113,24 @@ signals:
      * @param cv this object
      */
     void canvasSet(KoCanvasController* cv);
+
+    /**
+     * Emited when canvasOffsetX() changes
+     * @param offset the new canvas offset
+     */
+    void canvasOffsetXChanged(int offset);
+
+    /**
+     * Emited when canvasOffsetY() changes
+     * @param offset the new canvas offset
+     */
+    void canvasOffsetYChanged(int offset);
+
+protected Q_SLOTS:
+    /// Called by the horizontal scrollbar when it's value changes
+    void updateCanvasOffsetX();
+    /// Called by the vertical scrollbar when it's value changes
+    void updateCanvasOffsetY();
 
 private:
     class Viewport : public QWidget {

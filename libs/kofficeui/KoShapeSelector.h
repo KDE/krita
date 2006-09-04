@@ -65,6 +65,10 @@ private:
         QRectF documentToView (const QRectF &documentRect) const;
         QRectF viewToDocument (const QRectF &viewRect) const;
         void zoom (double *zoomX, double *zoomY) const;
+        double documentToViewX (double documentX) const;
+        double documentToViewY (double documentY) const;
+        double viewToDocumentX (double viewX) const;
+        double viewToDocumentY (double viewY) const;
     };
 
     /// \internal

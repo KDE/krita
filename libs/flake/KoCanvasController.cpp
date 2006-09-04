@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,8 +20,11 @@
 
 #include "KoCanvasController.h"
 
+#include <kdebug.h>
+
 #include <QGridLayout>
 #include <QScrollBar>
+#include <QEvent>
 
 KoCanvasController::KoCanvasController(QWidget *parent)
 : QScrollArea(parent)
@@ -31,6 +35,9 @@ KoCanvasController::KoCanvasController(QWidget *parent)
     setWidget(m_viewport);
     setWidgetResizable(true);
     setAutoFillBackground(false);
+
+    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
 }
 
 void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
@@ -41,6 +48,7 @@ void KoCanvasController::setCanvas(KoCanvasBase *canvas) {
     }
     m_viewport->setCanvas(canvas->canvasWidget());
     m_canvas = canvas;
+    m_canvas->canvasWidget()->installEventFilter(this);
     emit canvasSet(this);
 }
 
@@ -82,12 +90,52 @@ bool KoCanvasController::isCanvasCentered() const {
 }
 
 int KoCanvasController::canvasOffsetX() const {
-    return 0; // TODO
+    int offset = 0;
+
+    if(m_canvas) {
+        offset = m_canvas->canvasWidget()->x() + frameWidth();
+    }
+
+    if(horizontalScrollBar()) {
+        offset -= horizontalScrollBar()->value();
+    }
+
+    return offset;
 }
 
 int KoCanvasController::canvasOffsetY() const {
-    return 0; // TODO
+    int offset = 0;
+
+    if(m_canvas) {
+        offset = m_canvas->canvasWidget()->y() + frameWidth();
+    }
+
+    if(verticalScrollBar()) {
+        offset -= verticalScrollBar()->value();
+    }
+
+    return offset;
 }
+
+void KoCanvasController::updateCanvasOffsetX() {
+    emit canvasOffsetXChanged(canvasOffsetX());
+}
+
+void KoCanvasController::updateCanvasOffsetY() {
+    emit canvasOffsetYChanged(canvasOffsetY());
+}
+
+bool KoCanvasController::eventFilter(QObject* watched, QEvent* event) {
+    if(m_canvas && m_canvas->canvasWidget() && (watched == m_canvas->canvasWidget())) {
+        if((event->type() == QEvent::Resize) || event->type() == QEvent::Move) {
+            updateCanvasOffsetX();
+            updateCanvasOffsetY();
+        }
+    }
+
+    return false;
+}
+
 
 // ********** Viewport **********
 KoCanvasController::Viewport::Viewport()

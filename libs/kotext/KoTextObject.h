@@ -36,6 +36,7 @@ class KoTextFormat;
 class Q3ProgressDialog;
 class KoLinkVariable;
 class KoVariable;
+class QMimeData;
 
 //#define TIMING_FORMAT
 //#include <QDateTime>

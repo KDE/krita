@@ -28,6 +28,7 @@ class KoGenStyles;
 class KoParagStyle;
 class KoOasisContext;
 class KoSavingContext;
+class KoXmlWriter;
 
 struct KoStyleChangeDef {
     KoStyleChangeDef() {

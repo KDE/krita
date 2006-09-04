@@ -25,6 +25,7 @@
 #include "KoTextFormat.h"
 #include "KoRichText.h" // for KoTextFormat
 #include "KoTextParag.h"
+#include "KoUnit.h"
 #include <float.h>
 
 static const struct BorderStyle {

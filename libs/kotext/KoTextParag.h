@@ -26,6 +26,7 @@
 
 #include "KoTextFormat.h"
 #include "KoRichText.h" // for KoTextString
+#include "KoTabulator.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <Q3MemArray>

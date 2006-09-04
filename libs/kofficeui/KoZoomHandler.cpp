@@ -100,6 +100,26 @@ QRectF KoZoomHandler::viewToDocument( const QRectF &viewRect )  const{
     return r;
 }
 
+double KoZoomHandler::documentToViewX( double documentX ) const
+{
+    return zoomItX( documentX );
+}
+
+double KoZoomHandler::documentToViewY( double documentY ) const
+{
+    return zoomItY( documentY );
+}
+
+double KoZoomHandler::viewToDocumentX( double viewX ) const
+{
+    return unzoomItX( viewX );
+}
+
+double KoZoomHandler::viewToDocumentY( double viewY ) const
+{
+    return unzoomItY( viewY );
+}
+
 void KoZoomHandler::zoom(double *zoomX, double *zoomY) const {
     *zoomX = zoomItX(100.0) / 100.0;
     *zoomY = zoomItY(100.0) / 100.0;

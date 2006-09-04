@@ -268,6 +268,22 @@ void KoShapeSelector::DummyViewConverter::zoom (double *zoomX, double *zoomY) co
     *zoomY = 1.0;
 }
 
+double KoShapeSelector::DummyViewConverter::documentToViewX (double documentX) const {
+    return documentX;
+}
+
+double KoShapeSelector::DummyViewConverter::documentToViewY (double documentY) const {
+    return documentY;
+}
+
+double KoShapeSelector::DummyViewConverter::viewToDocumentX (double viewX) const {
+    return viewX;
+}
+
+double KoShapeSelector::DummyViewConverter::viewToDocumentY (double viewY) const {
+    return viewY;
+}
+
 
 // ********* Canvas **********
 KoShapeSelector::Canvas::Canvas(KoShapeSelector *parent)

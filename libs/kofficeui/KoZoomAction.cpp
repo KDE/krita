@@ -49,14 +49,8 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, co
 
 void KoZoomAction::setZoom( const QString& text )
 {
-  QString zoomString = text;
-  zoomString = zoomString.remove('&');
-  if( KoZoomMode::isConstant( zoomString ) )
-  {
-    regenerateItems( zoomString );
-  }
-
-  setCurrentAction( zoomString );
+  regenerateItems( text );
+  setCurrentAction( text );
 }
 
 void KoZoomAction::setZoom( int zoom )
@@ -110,9 +104,15 @@ void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )
 
 void KoZoomAction::regenerateItems(const QString& zoomString)
 {
-  QString t = zoomString;
   bool ok = false;
-  int zoom = t.remove( '%' ).toInt( &ok );
+  int zoom = 0;
+  QRegExp regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
+  int pos = regexp.indexIn( zoomString );
+
+  if( pos > -1 )
+  {
+    zoom = regexp.cap( 1 ).toInt( &ok );
+  }
 
   // where we'll store sorted new zoom values
   QList<int> zoomLevels;

@@ -20,7 +20,7 @@
 #ifndef koparaglayout_h
 #define koparaglayout_h
 
-#include <KoRuler.h> // for KoTabulatorList
+#include <KoTabulator.h>
 #include <qdom.h>
 //Added by qt3to4:
 #include <QByteArray>

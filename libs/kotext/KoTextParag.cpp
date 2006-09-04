@@ -29,6 +29,7 @@
 #include <KoGenStyles.h>
 #include <KoDom.h>
 #include <KoXmlNS.h>
+#include <KoUnit.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>

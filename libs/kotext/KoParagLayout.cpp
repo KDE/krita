@@ -26,6 +26,7 @@
 #include <KoXmlNS.h>
 #include <KoDom.h>
 #include <KoGenStyles.h>
+#include <KoUnit.h>
 
 #include <kglobal.h>
 #include <klocale.h>

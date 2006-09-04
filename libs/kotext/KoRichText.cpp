@@ -42,6 +42,7 @@
 //Added by qt3to4:
 #include <Q3MemArray>
 #include <Q3PtrList>
+#include <QWidget>
 
 #include <stdlib.h>
 #include "KoParagCounter.h"

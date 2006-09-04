@@ -24,6 +24,8 @@
 #include "KoOasisContext.h"
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
+#include <KoGlobal.h>
+#include <KoUnit.h>
 
 #include <kglobal.h>
 #include <kdebug.h>

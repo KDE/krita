@@ -98,6 +98,7 @@ install(
     KoRuler.h
     KoTabBar.h
     KoTabChooser.h
+    KoTabulator.h
     KoTemplateChooseDia.h
     KoTemplateCreateDia.h
     KoUnitWidgets.h

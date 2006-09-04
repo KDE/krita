@@ -57,6 +57,33 @@ KisDuplicateOp::~KisDuplicateOp()
 {
 }
 
+double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h)
+{
+    int rowstride = 3*w;
+    double err = 0;
+    memcpy(sol, m, 3* sizeof(double) * w);
+    m+=rowstride;
+    sol+=rowstride;
+    for ( int i = 1; i < h - 1; i++)
+    {
+        memcpy(sol, m, 3* sizeof(double));
+        m+=3; sol+=3;
+        for ( int j = 3; j < rowstride-3; j++)
+        {
+            double tmp = *sol;
+            *sol = ( ( *(m - 3 ) + *(m + 3) + *(m - rowstride ) + *(m + rowstride )) + 2 * *m ) /6;
+            double diff = *sol - tmp;
+            err += diff*diff;
+            m ++; sol ++;
+        }
+        memcpy(sol, m, 3* sizeof(double));
+        m+=3; sol+=3;
+}
+    memcpy(sol, m, 3* sizeof(double) * w);
+    return err;
+}
+
+
 void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& info)
 {
     if (!m_painter) return;
@@ -204,74 +231,69 @@ void KisDuplicateOp::paintAt(const KisPoint &pos, const KisPaintInformation& inf
     
     if(heal)
     {
-        Q_UINT16 data[3];
-        // Compute color info from around source
-        double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
-        double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
-        KisRectIteratorPixel deviceIt = device->createRectIterator(srcPoint.x() - healradius / 2 +hotSpot.x(), srcPoint.y() - healradius / 2+hotSpot.y(), healradius, healradius, false );
+        Q_UINT16 dataDevice[4];
+        Q_UINT16 dataSrcDev[4];
+        double matrix [ 3 * sw * sh ];
+        // First divide
         KisColorSpace* deviceCs = device->colorSpace();
-        while(!deviceIt.isDone())
+        KisHLineIteratorPixel deviceIt = device->createHLineIterator(x, y, sw, false );
+        KisHLineIteratorPixel srcDevIt = srcdev->createHLineIterator(0, 0, sw, true );
+        double* matrixIt = matrix;
+        for(int y = 0; y < sh; y++)
         {
-            deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)data, 1);
-            Q_UINT32 L = data[0];
-            Q_UINT32 A = data[1];
-            Q_UINT32 B = data[2];
-            meanL_src += L;
-            meanA_src += A;
-            meanB_src += B;
-            sigmaL_src += L*L;
-            sigmaA_src += A*A;
-            sigmaB_src += B*B;
-            ++deviceIt;
+            for(int x= 0; !srcDevIt.isDone(); x++)
+            {
+                deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)dataDevice, 1);
+                deviceCs->toLabA16(srcDevIt.rawData(), (Q_UINT8*)dataSrcDev, 1);
+                // Division
+                for( int k = 0; k < 3; k++)
+                {
+                    matrixIt[k] = dataDevice[k] / (double)QMAX(dataSrcDev [k], 1);
+                }
+                ++deviceIt;
+                ++srcDevIt;
+                matrixIt +=3;
+            }
+            deviceIt.nextRow();
+            srcDevIt.nextRow();
         }
-        double size = 1. / ( healradius * healradius );
-        meanL_src *= size;
-        meanA_src *= size;
-        meanB_src *= size;
-        sigmaL_src *= size;
-        sigmaA_src *= size;
-        sigmaB_src *= size;
-        // Compute color info from around dst
-        double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
-        double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
-        deviceIt = device->createRectIterator(pos.x() - healradius / 2, pos.y() - healradius / 2, healradius, healradius, false );
-        while(!deviceIt.isDone())
+        // Minimize energy
         {
-            deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)data, 1);
-            Q_UINT32 L = data[0];
-            Q_UINT32 A = data[1];
-            Q_UINT32 B = data[2];
-            meanL_ref += L;
-            meanA_ref += A;
-            meanB_ref += B;
-            sigmaL_ref += L*L;
-            sigmaA_ref += A*A;
-            sigmaB_ref += B*B;
-            ++deviceIt;
+            int iter = 0;
+            double err;
+            double solution [ 3 * sw * sh ];
+            do {
+                err = minimizeEnergy(matrix, solution,sw,sh);
+                memcpy (matrix, solution, sw * sh * 3 * sizeof(double));
+                iter++;
+            } while( err < 0.00001 && iter < 100);
         }
-        meanL_ref *= size;
-        meanA_ref *= size;
-        meanB_ref *= size;
-        sigmaL_ref *= size;
-        sigmaA_ref *= size;
-        sigmaB_ref *= size;
-        // Apply the color transformation
-        KisRectIteratorPixel dstIt = srcdev->createRectIterator(0, 0, sw, sh, false );
-        KisColorSpace* srcdevCs = srcdev->colorSpace();
-        double coefL = sqrt((sigmaL_ref - meanL_ref * meanL_ref) / (sigmaL_src - meanL_src * meanL_src));
-        double coefA = sqrt((sigmaA_ref - meanA_ref * meanA_ref) / (sigmaA_src - meanA_src * meanA_src));
-        double coefB = sqrt((sigmaB_ref - meanB_ref * meanB_ref) / (sigmaB_src - meanB_src * meanB_src));
-//         kdDebug() << coefL << " " << coefA << " " << coefB << endl;
-        while(!dstIt.isDone())
+        
+        // Finaly multiply
+        deviceIt = device->createHLineIterator(x, y, sw, false );
+        srcDevIt = srcdev->createHLineIterator(0, 0, sw, true );
+        matrixIt = matrix;
+        for(int y = 0; y < sh; y++)
         {
-            srcdevCs->toLabA16(dstIt.rawData(), (Q_UINT8*)data, 1);
-            data[0] = (Q_UINT16)CLAMP( ( (double)data[0] - meanL_src) * coefL + meanL_ref, 0., 65535.);
-            data[1] = (Q_UINT16)CLAMP( ( (double)data[1] - meanA_src) * coefA + meanA_ref, 0., 65535.);
-            data[2] = (Q_UINT16)CLAMP( ( (double)data[2] - meanB_src) * coefB + meanB_ref, 0., 65535.);
-            srcdevCs->fromLabA16((Q_UINT8*)data, dstIt.rawData(), 1);
-            ++dstIt;
+            for(int x= 0; !srcDevIt.isDone(); x++)
+            {
+                deviceCs->toLabA16(deviceIt.rawData(), (Q_UINT8*)dataDevice, 1);
+                deviceCs->toLabA16(srcDevIt.rawData(), (Q_UINT8*)dataSrcDev, 1);
+                // Multiplication
+                for( int k = 0; k < 3; k++)
+                {
+                    dataSrcDev[k] = (int)CLAMP( matrixIt[k] * QMAX( dataSrcDev[k], 1), 0, 65535 );
+                }
+                deviceCs->fromLabA16((Q_UINT8*)dataSrcDev, srcDevIt.rawData(), 1);
+                ++deviceIt;
+                ++srcDevIt;
+                matrixIt +=3;
+            }
+            deviceIt.nextRow();
+            srcDevIt.nextRow();
         }
     }
+    
     
     // Add the dab as selection to the srcdev
     KisPainter copySelection(srcdev->selection().data());

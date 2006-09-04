@@ -44,6 +44,9 @@ class KisDuplicateOp : public KisPaintOp {
 
     typedef KisPaintOp super;
 
+    private:
+        double minimizeEnergy(const double* m, double* sol, int w, int h);
+    
 public:
 
     KisDuplicateOp(KisPainter * painter);

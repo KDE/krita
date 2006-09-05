@@ -157,9 +157,9 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
 
 void KoPathTool::mouseReleaseEvent( KoPointerEvent * ) {
     // TODO
-    m_pointMoving = false;
-    if( ! m_move.isNull() )
+    if( m_pointMoving && ! m_move.isNull() )
     {
+        m_pointMoving = false;
         KoPointMoveCommand *cmd = new KoPointMoveCommand( m_pathShape, m_activePoint, m_move, m_activePointType );
         m_canvas->addCommand( cmd, false );
     }
@@ -179,6 +179,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
             repaint( transformed( m_pathShape->outline().controlPointRect() ) );
         break;
         case Qt::Key_Delete:
+            m_pointMoving = false;
             if( m_selectedPoints.size() )
             {
                 KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pathShape, m_selectedPoints.first() );

@@ -307,6 +307,6 @@ void  KoShapeSelector::Canvas::addCommand (KCommand *command, bool execute) {
     if(execute)
         command->execute();
     delete command;
-};
+}
 
 #include "KoShapeSelector.moc"

@@ -30,6 +30,7 @@
 #include <QPointF>
 #include <QRectF>
 #include <QPainter>
+#include <qvarlengtharray.h>
 
 /**
  * @brief The KoRTree class is a template class that provides a R-tree.
@@ -875,7 +876,7 @@ template <typename T>
 typename KoRTree<T>::Node * KoRTree<T>::NoneLeafNode::getLeastEnlargement( const QRectF& bb ) const
 {
     //qDebug() << "NoneLeafNode::getLeastEnlargement";
-    double area[this->m_counter];
+    QVarLengthArray<double> area(this->m_counter);
     for ( int i = 0; i < this->m_counter; ++i )
     {
         QSizeF big( this->m_childBoundingBox[i].unite( bb ).size() );

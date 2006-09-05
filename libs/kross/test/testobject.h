@@ -99,6 +99,6 @@ class TestObject : public QObject
         QString m_qstringproperty;
 };
 
-Q_DECLARE_METATYPE( TestObject* );
+Q_DECLARE_METATYPE( TestObject* )
 
 #endif

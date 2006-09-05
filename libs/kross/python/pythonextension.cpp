@@ -21,6 +21,7 @@
 #include "pythonvariant.h"
 
 #include <QWidget>
+#include <qvarlengtharray.h>
 
 using namespace Kross;
 
@@ -247,8 +248,8 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
 
             // exact 1 returnvalue + 0..9 arguments
             Q_ASSERT(typelistcount <= 10);
-            MetaType* variantargs[ typelistcount + 1 ];
-            void* voidstarargs[ typelistcount + 1 ];
+            QVarLengthArray<MetaType*> variantargs( typelistcount + 1 );
+            QVarLengthArray<void*> voidstarargs( typelistcount + 1 );
 
             // set the return value
             if(hasreturnvalue) {
@@ -298,7 +299,8 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
             }
 
             // call the method now
-            int r = self->m_object->qt_metacall(QMetaObject::InvokeMetaMethod, methodindex, voidstarargs);
+            int r = self->m_object->qt_metacall(QMetaObject::InvokeMetaMethod, methodindex,
+                    &voidstarargs[0]);
             #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
                 krossdebug( QString("RESULT nr=%1").arg(r) );
             #else

@@ -31,6 +31,7 @@
 #include <kis_tool_non_paint.h>
 #include <kis_tool_factory.h>
 #include <kis_undo_adapter.h>
+#include <kis_perspective_math.h>
 
 class KisTransaction;
 class WdgToolPerspectiveTransform;
@@ -46,6 +47,7 @@ class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryLis
     typedef KisToolNonPaint super;
     Q_OBJECT
     enum InterractionMode { DRAWRECTINTERRACTION, EDITRECTINTERRACTION };
+    enum HandleSelected { NOHANDLE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
 public:
     KisToolPerspectiveTransform();
     virtual ~KisToolPerspectiveTransform();
@@ -86,8 +88,6 @@ protected slots:
 
 private:
     bool m_dragging;
-    typedef QValueVector<KisPoint> KisPointVector;
-    KisPointVector m_points;
     InterractionMode m_interractionMode;
     QRect m_initialRect;
     KisPoint m_dragStart, m_dragEnd;
@@ -100,6 +100,13 @@ private:
     KisPaintDeviceSP m_origDevice;
     KisSelectionSP m_origSelection;
     int m_handleHalfSize, m_handleSize;
+    
+    // The following variables are used in during the draw rect interraction mode
+    typedef QValueVector<KisPoint> KisPointVector;
+    KisPointVector m_points;
+    // The following variables are used when moving a middle handle
+    HandleSelected m_handleSelected;
+    
 };
 
 class KisToolPerspectiveTransformFactory : public KisToolFactory {

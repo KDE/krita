@@ -178,6 +178,16 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
                 m_handleRadius++;
             repaint( transformed( m_pathShape->outline().controlPointRect() ) );
         break;
+        case Qt::Key_Delete:
+            if( m_selectedPoints.size() )
+            {
+                KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pathShape, m_selectedPoints.first() );
+                if( m_activePoint == m_selectedPoints.first() )
+                    m_activePoint = 0;
+                m_selectedPoints.removeFirst();
+                m_canvas->addCommand( cmd, true );
+            }
+        break;
     }
     event->accept();
 }

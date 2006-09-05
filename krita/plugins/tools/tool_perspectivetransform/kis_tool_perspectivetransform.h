@@ -9,8 +9,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -46,7 +45,7 @@ class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryLis
 
     typedef KisToolNonPaint super;
     Q_OBJECT
-
+    enum InterractionMode { DRAWRECTINTERRACTION, EDITRECTINTERRACTION };
 public:
     KisToolPerspectiveTransform();
     virtual ~KisToolPerspectiveTransform();
@@ -86,8 +85,12 @@ protected slots:
     virtual void activate();
 
 private:
+    bool m_dragging;
+    typedef QValueVector<KisPoint> KisPointVector;
+    KisPointVector m_points;
+    InterractionMode m_interractionMode;
     QRect m_initialRect;
-    KisPoint m_dragEnd;
+    KisPoint m_dragStart, m_dragEnd;
     KisPoint m_topleft, m_topright, m_bottomleft, m_bottomright;
     KisPoint* m_currentSelectedPoint;
     bool m_actualyMoveWhileSelected;

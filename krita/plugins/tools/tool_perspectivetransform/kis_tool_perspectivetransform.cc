@@ -9,8 +9,7 @@
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  the Free Software Foundation; version 2 of the License.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -56,6 +55,7 @@
 #include <kis_id.h>
 #include <kis_tool_controller.h>
 #include <kis_perspectivetransform_worker.h>
+#include <kis_perspective_math.h>
 
 //#include "wdg_tool_transform.h"
 #include "kis_canvas.h"
@@ -181,6 +181,7 @@ void KisToolPerspectiveTransform::activate()
         // One of our commands is on top
         if(cmd &&cmd->theDevice() == m_subject->currentImg()->activeDevice())
         {
+            m_interractionMode = EDITRECTINTERRACTION;
             // and it even has the same device
             // We should ask for tool args and orig selection
             m_origDevice = cmd->origDevice();
@@ -190,6 +191,8 @@ void KisToolPerspectiveTransform::activate()
         }
         else
         {
+            m_interractionMode = DRAWRECTINTERRACTION;
+            m_points.clear();
             initHandles();
         }
     }
@@ -198,7 +201,7 @@ void KisToolPerspectiveTransform::activate()
 
 void KisToolPerspectiveTransform::initHandles()
 {
-    Q_INT32 x,y,w,h;
+//     Q_INT32 x,y,w,h;
     KisImageSP img = m_subject->currentImg();
 
     KisPaintDeviceSP dev = img->activeDevice();
@@ -243,32 +246,53 @@ bool KisToolPerspectiveTransform::mouseNear(const QPoint& mousep, const QPoint p
 void KisToolPerspectiveTransform::buttonPress(KisButtonPressEvent *event)
 {
     if (m_subject) {
-        KisImageSP img = m_subject->currentImg();
+        switch(m_interractionMode)
+        {
+            case DRAWRECTINTERRACTION:
+            {
+                m_dragging = true;
 
-        if (img && img->activeDevice() && event->button() == LeftButton) {
-            m_actualyMoveWhileSelected = false;
-            m_dragEnd = event->pos();
-            KisCanvasController *controller = m_subject->canvasController();
-            QPoint mousep = controller->windowToView( event->pos().roundQPoint() );
-            if( mouseNear( mousep, controller->windowToView(m_topleft.roundQPoint() ) ) )
-            {
-                kdDebug() << " PRESS TOPLEFT HANDLE " << endl;
-                m_currentSelectedPoint = &m_topleft;
+                if (m_points.isEmpty())
+                {
+                    m_dragStart = event->pos();
+                    m_dragEnd = event->pos();
+                    m_points.append(m_dragStart);
+                } else {
+                    m_dragStart = m_dragEnd;
+                    m_dragEnd = event->pos();
+                    paintOutline();
+                }
             }
-            else if( mouseNear( mousep, controller->windowToView(m_topright.roundQPoint() ) ) )
+            case EDITRECTINTERRACTION:
             {
-                kdDebug() << " PRESS TOPRIGHT HANDLE " << endl;
-                m_currentSelectedPoint = &m_topright;
-            }
-            else if( mouseNear( mousep, controller->windowToView(m_bottomleft.roundQPoint() ) ) )
-            {
-                kdDebug() << " PRESS BOTTOMLEFT HANDLE " << endl;
-                m_currentSelectedPoint = &m_bottomleft;
-            }
-            else if( mouseNear( mousep, controller->windowToView(m_bottomright.roundQPoint() ) ) )
-            {
-                kdDebug() << " PRESS BOTTOMRIGHT HANDLE " << endl;
-                m_currentSelectedPoint = &m_bottomright;
+                KisImageSP img = m_subject->currentImg();
+        
+                if (img && img->activeDevice() && event->button() == LeftButton) {
+                    m_actualyMoveWhileSelected = false;
+                    m_dragEnd = event->pos();
+                    KisCanvasController *controller = m_subject->canvasController();
+                    QPoint mousep = controller->windowToView( event->pos().roundQPoint() );
+                    if( mouseNear( mousep, controller->windowToView(m_topleft.roundQPoint() ) ) )
+                    {
+                        kdDebug() << " PRESS TOPLEFT HANDLE " << endl;
+                        m_currentSelectedPoint = &m_topleft;
+                    }
+                    else if( mouseNear( mousep, controller->windowToView(m_topright.roundQPoint() ) ) )
+                    {
+                        kdDebug() << " PRESS TOPRIGHT HANDLE " << endl;
+                        m_currentSelectedPoint = &m_topright;
+                    }
+                    else if( mouseNear( mousep, controller->windowToView(m_bottomleft.roundQPoint() ) ) )
+                    {
+                        kdDebug() << " PRESS BOTTOMLEFT HANDLE " << endl;
+                        m_currentSelectedPoint = &m_bottomleft;
+                    }
+                    else if( mouseNear( mousep, controller->windowToView(m_bottomright.roundQPoint() ) ) )
+                    {
+                        kdDebug() << " PRESS BOTTOMRIGHT HANDLE " << endl;
+                        m_currentSelectedPoint = &m_bottomright;
+                    }
+                }
             }
         }
     }
@@ -276,15 +300,33 @@ void KisToolPerspectiveTransform::buttonPress(KisButtonPressEvent *event)
 
 void KisToolPerspectiveTransform::move(KisMoveEvent *event)
 {
-    if(m_currentSelectedPoint)
+    switch(m_interractionMode)
     {
-        paintOutline();
-        KisPoint translate = event->pos() - m_dragEnd;
-        m_dragEnd = event->pos();
-        *m_currentSelectedPoint += translate;;
-        paintOutline();
-        m_actualyMoveWhileSelected = true;
-    }
+        case DRAWRECTINTERRACTION:
+        {
+            if (m_dragging) {
+            // erase old lines on canvas
+                paintOutline();
+            // get current mouse position
+                m_dragEnd = event->pos();
+            // draw new lines on canvas
+                paintOutline();
+            }
+        }
+
+        case EDITRECTINTERRACTION:
+        {
+            if(m_currentSelectedPoint)
+            {
+                paintOutline();
+                KisPoint translate = event->pos() - m_dragEnd;
+                m_dragEnd = event->pos();
+                *m_currentSelectedPoint += translate;;
+                paintOutline();
+                m_actualyMoveWhileSelected = true;
+            }
+        }
+    };
 }
 
 void KisToolPerspectiveTransform::buttonRelease(KisButtonReleaseEvent * event)
@@ -293,15 +335,62 @@ void KisToolPerspectiveTransform::buttonRelease(KisButtonReleaseEvent * event)
 
     if (!img)
         return;
-    if( m_currentSelectedPoint &&  event->button() == LeftButton)
+    if( event->button() == LeftButton)
     {
-        m_currentSelectedPoint = 0;
-        if(m_actualyMoveWhileSelected)
+        switch(m_interractionMode)
         {
-            paintOutline();
-            QApplication::setOverrideCursor(KisCursor::waitCursor());
-            transform();
-            QApplication::restoreOverrideCursor();
+            case DRAWRECTINTERRACTION:
+            {
+                 if (m_dragging && event->button() == LeftButton)  {
+                    m_dragging = false;
+                    m_points.append (m_dragEnd);
+                    if( m_points.size() == 4)
+                    {
+                        // from the points, select which is topleft ? topright ? bottomright ? and bottomleft ?
+                        m_topleft = m_points[0];
+                        m_topright  = m_points[1];
+                        m_bottomleft  = m_points[3];
+                        m_bottomright  = m_points[2];
+                        double matrix[3][3];
+                        double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(m_topleft, m_topright, m_bottomleft, m_bottomright, m_initialRect );
+                        for(int i = 0; i < 3; i++)
+                        {
+                            for(int j = 0; j < 3; j++)
+                            {
+                                kdDebug() << "sol[" << 3*i+j << "]=" << b[3*i+j] << endl;
+                                matrix[i][j] = b[3*i+j];
+                            }
+                        }
+                        m_topleft = KisPerspectiveMath::matProd(matrix, m_initialRect.topLeft());
+                        m_topright = KisPerspectiveMath::matProd(matrix, m_initialRect.topRight());
+                        m_bottomleft = KisPerspectiveMath::matProd(matrix, m_initialRect.bottomLeft());
+                        m_bottomright = KisPerspectiveMath::matProd(matrix, m_initialRect.bottomRight());
+/*                        m_topleft = KisPerspectiveMath::matProd(matrix, m_topleft);
+                        m_topright = KisPerspectiveMath::matProd(matrix, m_topright);
+                        m_bottomleft = KisPerspectiveMath::matProd(matrix, m_bottomleft);
+                        m_bottomright = KisPerspectiveMath::matProd(matrix, m_bottomright);*/
+                        m_interractionMode = EDITRECTINTERRACTION;
+                        paintOutline();
+                        QApplication::setOverrideCursor(KisCursor::waitCursor());
+                        transform();
+                        QApplication::restoreOverrideCursor();
+                    }
+                }
+            }
+            case EDITRECTINTERRACTION:
+            {
+                if(m_currentSelectedPoint )
+                {
+                    m_currentSelectedPoint = 0;
+                    if(m_actualyMoveWhileSelected)
+                    {
+                        paintOutline();
+                        QApplication::setOverrideCursor(KisCursor::waitCursor());
+                        transform();
+                        QApplication::restoreOverrideCursor();
+                    }
+                }
+            }
         }
     }
 }
@@ -328,29 +417,60 @@ void KisToolPerspectiveTransform::paintOutline(KisCanvasPainter& gc, const QRect
         pen.setWidth(1);
         Q_ASSERT(controller);
 
-        QPoint topleft = controller->windowToView(m_topleft ).roundQPoint();
-        QPoint topright = controller->windowToView(m_topright).roundQPoint();
-        QPoint bottomleft = controller->windowToView(m_bottomleft).roundQPoint();
-        QPoint bottomright = controller->windowToView(m_bottomright).roundQPoint();
+        switch(m_interractionMode)
+        {
+            case DRAWRECTINTERRACTION:
+            {
+                kdDebug() << "DRAWRECTINTERRACTION paintOutline " << m_points.size() << endl; 
+                KisPoint start, end;
+                QPoint startPos;
+                QPoint endPos;
+                for (KisPointVector::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
-        gc.setRasterOp(Qt::NotROP);
-        gc.setPen(pen);
-        gc.drawRect(topleft.x()-4, topleft.y()-4, 8, 8);
-        gc.drawLine(topleft.x(), topleft.y(), (topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2);
-//         gc.drawRect((topleft.x()+topright.x())/2-4, (topleft.y()+topright.y())/2-4, 8, 8);
-        gc.drawLine((topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2, topright.x(), topright.y());
-        gc.drawRect(topright.x()-4, topright.y()-4, 8, 8);
-        gc.drawLine(topright.x(), topright.y(), (topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2);
-//         gc.drawRect((topright.x()+bottomright.x())/2-4, (topright.y()+bottomright.y())/2-4, 8, 8);
-        gc.drawLine((topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2,bottomright.x(), bottomright.y());
-        gc.drawRect(bottomright.x()-4, bottomright.y()-4, 8, 8);
-        gc.drawLine(bottomright.x(), bottomright.y(), (bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2);
-//         gc.drawRect((bottomleft.x()+bottomright.x())/2-4, (bottomleft.y()+bottomright.y())/2-4, 8, 8);
-        gc.drawLine((bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2, bottomleft.x(), bottomleft.y());
-        gc.drawRect(bottomleft.x()-4, bottomleft.y()-4, 8, 8);
-        gc.drawLine(bottomleft.x(), bottomleft.y(), (topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2);
-//         gc.drawRect((topleft.x()+bottomleft.x())/2-4, (topleft.y()+bottomleft.y())/2-4, 8, 8);
-        gc.drawLine((topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2, topleft.x(), topleft.y());
+                    if (it == m_points.begin())
+                    {
+                        start = (*it);
+                    } else {
+                        end = (*it);
+
+                        startPos = controller->windowToView(start.floorQPoint());
+                        endPos = controller->windowToView(end.floorQPoint());
+
+                        gc.drawLine(startPos, endPos);
+
+                        start = end;
+                    }
+                }
+            }
+            break;
+            case EDITRECTINTERRACTION:
+            {
+                QPoint topleft = controller->windowToView(m_topleft ).roundQPoint();
+                QPoint topright = controller->windowToView(m_topright).roundQPoint();
+                QPoint bottomleft = controller->windowToView(m_bottomleft).roundQPoint();
+                QPoint bottomright = controller->windowToView(m_bottomright).roundQPoint();
+        
+                gc.setRasterOp(Qt::NotROP);
+                gc.setPen(pen);
+                gc.drawRect(topleft.x()-4, topleft.y()-4, 8, 8);
+                gc.drawLine(topleft.x(), topleft.y(), (topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2);
+        //         gc.drawRect((topleft.x()+topright.x())/2-4, (topleft.y()+topright.y())/2-4, 8, 8);
+                gc.drawLine((topleft.x()+topright.x())/2, (topleft.y()+topright.y())/2, topright.x(), topright.y());
+                gc.drawRect(topright.x()-4, topright.y()-4, 8, 8);
+                gc.drawLine(topright.x(), topright.y(), (topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2);
+        //         gc.drawRect((topright.x()+bottomright.x())/2-4, (topright.y()+bottomright.y())/2-4, 8, 8);
+                gc.drawLine((topright.x()+bottomright.x())/2, (topright.y()+bottomright.y())/2,bottomright.x(), bottomright.y());
+                gc.drawRect(bottomright.x()-4, bottomright.y()-4, 8, 8);
+                gc.drawLine(bottomright.x(), bottomright.y(), (bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2);
+        //         gc.drawRect((bottomleft.x()+bottomright.x())/2-4, (bottomleft.y()+bottomright.y())/2-4, 8, 8);
+                gc.drawLine((bottomleft.x()+bottomright.x())/2, (bottomleft.y()+bottomright.y())/2, bottomleft.x(), bottomleft.y());
+                gc.drawRect(bottomleft.x()-4, bottomleft.y()-4, 8, 8);
+                gc.drawLine(bottomleft.x(), bottomleft.y(), (topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2);
+        //         gc.drawRect((topleft.x()+bottomleft.x())/2-4, (topleft.y()+bottomleft.y())/2-4, 8, 8);
+                gc.drawLine((topleft.x()+bottomleft.x())/2, (topleft.y()+bottomleft.y())/2, topleft.x(), topleft.y());
+            }
+            break;
+        }
         gc.setRasterOp(op);
         gc.setPen(old);
     }
@@ -458,7 +578,7 @@ void KisToolPerspectiveTransform::slotLayerActivated(KisLayerSP)
 }
 
 
-QWidget* KisToolPerspectiveTransform::createOptionWidget(QWidget* parent)
+QWidget* KisToolPerspectiveTransform::createOptionWidget(QWidget* /*parent*/)
 {
 #if 0
     m_optWidget = new WdgToolPerspectiveTransform(parent);

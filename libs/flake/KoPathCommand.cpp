@@ -20,6 +20,7 @@
 
 #include "KoPathCommand.h"
 #include <klocale.h>
+#include <kdebug.h>
 #include <math.h>
 
 KoPointBaseCommand::KoPointBaseCommand( KoPathShape *shape )
@@ -33,7 +34,7 @@ void KoPointBaseCommand::repaint( const QRectF &oldControlPointRect )
     QPointF offset = m_shape->normalize();
 
     // adjust the old control rect as the repainting is relative to the new shape position
-    QRectF repaintRect = oldControlPointRect.translated( offset ).unite( m_shape->outline().controlPointRect() );
+    QRectF repaintRect = oldControlPointRect.translated( -offset ).unite( m_shape->outline().controlPointRect() );
     // TODO use the proper adjustment if the actual point size could be retrieved
     repaintRect.adjust( -5.0, -5.0, 5.0, 5.0 );
     m_shape->repaint( repaintRect );
@@ -201,4 +202,37 @@ void KoPointPropertyCommand::unexecute()
 QString KoPointPropertyCommand::name() const
 {
     return i18n( "Set point properties" );
+}
+
+KoPointRemoveCommand::KoPointRemoveCommand( KoPathShape *shape, KoPathPoint *point )
+: KoPointBaseCommand( shape )
+, m_data( point )    
+{
+}
+
+void KoPointRemoveCommand::execute()
+{
+    QRectF oldControlRect = m_shape->outline().controlPointRect();
+    QPair<KoSubpath*, int> pointdata = m_shape->removePoint( m_data.m_point );
+    m_data.m_subpath = pointdata.first;
+    m_data.m_position = pointdata.second;
+
+    QPointF offset = m_shape->normalize();
+    QMatrix matrix;
+    matrix.translate( -offset.x(), -offset.y() );
+    m_data.m_point->map( matrix );
+
+    repaint( oldControlRect.translated( -offset ) );
+}
+
+void KoPointRemoveCommand::unexecute()
+{
+    QRectF oldControlRect = m_shape->outline().controlPointRect();
+    m_shape->insertPoint( m_data.m_point, m_data.m_subpath, m_data.m_position );
+    repaint( oldControlRect );
+}
+
+QString KoPointRemoveCommand::name() const
+{
+    return i18n( "Remove point" );
 }

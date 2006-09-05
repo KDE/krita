@@ -93,4 +93,34 @@ private:
     QPointF m_controlPoint2;
 };
 
+/// The undo / redo command for removing path points.
+class KoPointRemoveCommand : public KoPointBaseCommand {
+public:
+    /**
+     * Command to remove a point from a path shape
+     * @param shape the path shape containing the point
+     * @param point the path point to remove
+     */
+    KoPointRemoveCommand( KoPathShape *shape, KoPathPoint *point );
+    /// execute the command
+    void execute();
+    /// revert the actions done in execute
+    void unexecute();
+    /// return the name of this command
+    QString name() const;
+private:
+    struct KoPointRemoveData
+    {
+        KoPointRemoveData( KoPathPoint * point )
+        : m_point( point )
+        , m_subpath( 0 )
+        , m_position( 0 )
+        {}
+        KoPathPoint * m_point;
+        KoSubpath * m_subpath;///< the position in the path 
+        int m_position;
+    };
+    KoPointRemoveData m_data;
+};
+
 #endif

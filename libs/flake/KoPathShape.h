@@ -53,6 +53,8 @@ public:
         CanHaveControlPoint2 = 2, ///< it can have a control point 2
         HasControlPoint1 = 4, ///< it has a control point 1
         HasControlPoint2 = 8, ///< it has a control point 2
+        CanAndHasControlPoint1 = 5, ///< CanHaveControlPoint1 | HasControlPoint1
+        CanAndHasControlPoint2 = 10, ///< CanHaveControlPoint2 | HasControlPoint2
         StartSubpath = 16, ///< it starts a new subpath by a moveTo command
         CloseSubpath = 32, ///< it closes a subpath
         IsSmooth = 64, ///< it is smooth, both control points on a line through the point
@@ -225,6 +227,10 @@ private:
     QSet<KoPathPoint *> m_points;
 };
 
+/// a KoSubpath contains a path from a moveTo until a close or a new moveTo
+typedef QList<KoPathPoint *> KoSubpath;
+typedef QList<KoSubpath *> KoSubpathList;
+
 /**
  * @brief This is the base for all graphical objects.
  *
@@ -335,6 +341,51 @@ public:
      */
     QList<KoPathPoint*> pointsAt( const QRectF &r );
 
+    void insertPoint( KoPathPoint* point, KoSubpath* subpath, int position );
+    /**
+     * @brief Removes point from the path.
+     * @param point the point to remove
+     * @return A QPair of the KoSubpath and the position in the subpath the removed point had
+     */
+    QPair<KoSubpath*, int> removePoint( KoPathPoint *point );
+
+#if 0 // not used yet
+    /**
+     * @brief Inserts a new point after an existing path point.
+     * @param point the point to insert
+     * @param prevPoint the point the new point is inserted after
+     * @return true if point could be inserted, else false
+     */
+    bool insertPointAfter( KoPathPoint *point, KoPathPoint *prevPoint );
+
+    /**
+     * @brief Inserts a new point before an existing path point.
+     * @param point the point to insert
+     * @param nextPoint the point the new point is inserted before
+     * @return true if point could be inserted, else false
+     */
+    bool insertPointBefore( KoPathPoint *point, KoPathPoint *nextPoint );
+
+    /**
+     * @brief Returns the previous point of a given path point.
+     *
+     * Only a previous point of the same subpath is returned.
+     *
+     * @param point the point to return the previous point for
+     * @return the previous point, or null if no previous point exists
+     */
+    KoPathPoint* prevPoint( KoPathPoint* point );
+
+    /**
+     * @brief Returns the next point of a given path point.
+     *
+     * Only a next point of the same subpath is returned.
+     *
+     * @param point the point to return the next point for
+     * @return the next point, or null if no next point exists
+     */
+    KoPathPoint* nextPoint( KoPathPoint* point );
+#endif
 private:
     void map( const QMatrix &matrix );
 
@@ -345,9 +396,7 @@ private:
 #endif
     QRectF handleRect( const QPointF &p ) const;
 
-    /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
-    typedef QList<KoPathPoint *> KoSubpath;
-    QList<KoSubpath> m_points;
+    KoSubpathList m_points;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KoPathPoint::KoPointProperties )

@@ -94,7 +94,7 @@ namespace Kross {
 
 }
 
-Q_DECLARE_METATYPE( Kross::Object::Ptr );
+Q_DECLARE_METATYPE( Kross::Object::Ptr )
 
 //qRegisterMetaType<Kross::Api::Object>("Kross::Api::Object");
 //qRegisterMetaTypeStreamOperator<Kross::Api::Object>("Kross::Api::Object");

@@ -141,7 +141,7 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
         QPointF move = untransformed( docPoint ) - untransformed( m_lastPosition );
         // as the last position can change when the top left is changed we have 
         // to save it in document pos and not in shape pos
-        m_lastPosition = event->point;
+        m_lastPosition = docPoint;
 
         m_move += move;
 

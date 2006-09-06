@@ -127,6 +127,8 @@ void KisToolSelectEraser::setup(KActionCollection *collection)
 
 QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
 {
+    // Commented out due to the fact that this doesn't actually work if you change the action
+#if 0
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setCaption(i18n("Selection Eraser"));
@@ -135,6 +137,8 @@ QWidget* KisToolSelectEraser::createOptionWidget(QWidget* parent)
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     return m_optWidget;
+#endif
+    return 0;
 }
 
 QWidget* KisToolSelectEraser::optionWidget()

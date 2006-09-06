@@ -21,6 +21,7 @@
 #define KOPATHTOOL_H
 
 #include "KoPathShape.h"
+#include "KoShapeRubberSelectStrategy.h"
 
 #include <KoTool.h>
 
@@ -66,6 +67,17 @@ private:
     QPointF m_lastPosition;            ///< the last mouse position
     QList<KoPathPoint*> m_selectedPoints; ///< list of selected path points
     QPointF m_move;                    ///< the accumulated point move amount
+
+    class KoPointRubberSelectStrategy : public KoShapeRubberSelectStrategy
+    {
+    public:
+        KoPointRubberSelectStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked )
+        : KoShapeRubberSelectStrategy( tool, canvas, clicked ) {};
+        virtual ~KoPointRubberSelectStrategy() {};
+        virtual void finishInteraction() { return; };
+        const QRectF selectionRect() const { return selectRect(); };
+    };
+    KoPointRubberSelectStrategy *m_rubberSelect; ///< the rubber selection strategy
 };
 
 #endif

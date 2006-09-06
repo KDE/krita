@@ -34,6 +34,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 , m_activePoint(0)
 , m_handleRadius( 3 )
 , m_pointMoving( false )
+, m_rubberSelect(0)
 {
 }
 
@@ -43,11 +44,17 @@ KoPathTool::~KoPathTool() {
 void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
     // TODO using the member m_pathShape is incorrect, use m_canvas to reach the KoSelection object
     // instead and iterator over the selected shapes.
-
     if( ! m_pathShape )
         return;
     QPainterPath outline = m_pathShape->outline();
     if(painter.hasClipping()) {
+        if( m_rubberSelect )
+        {
+            QRect rubberBand = converter.documentToView( m_rubberSelect->selectionRect() ).toRect();
+            if( ! painter.clipRegion().intersect( rubberBand ).isEmpty() )
+                m_rubberSelect->paint( painter, converter );
+        }
+
         QRect shape = converter.documentToView( outline.controlPointRect() ).toRect();
         if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
             return;
@@ -75,59 +82,69 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
 }
 
 void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
-    m_pointMoving = m_activePoint;
+    // we are moving if we hit a point and use the left mouse button
+    m_pointMoving = m_activePoint && event->button() & Qt::LeftButton;
     m_lastPosition = event->point;
     m_move = QPointF( 0, 0 );
-    if( m_activePoint && event->button() & Qt::LeftButton)
+    if( m_activePoint )
     {
-        // control select adds/removes points to/from the selection
-        if( event->modifiers() & Qt::ControlModifier )
+        if( event->button() & Qt::LeftButton )
         {
-            if( m_selectedPoints.contains( m_activePoint ) )
+            // control select adds/removes points to/from the selection
+            if( event->modifiers() & Qt::ControlModifier )
             {
-                // active point is already selected, so deselect it
-                int index = m_selectedPoints.indexOf( m_activePoint );
-                m_selectedPoints.removeAt( index );
+                if( m_selectedPoints.contains( m_activePoint ) )
+                {
+                    // active point is already selected, so deselect it
+                    int index = m_selectedPoints.indexOf( m_activePoint );
+                    m_selectedPoints.removeAt( index );
+                }
+                else
+                    m_selectedPoints << m_activePoint;
             }
             else
-                m_selectedPoints << m_activePoint;
-        }
-        else
-        {
-            // no control modifier, so clear selection and select active point
-            if( ! m_selectedPoints.contains( m_activePoint ) )
             {
-                m_selectedPoints.clear();
-                m_selectedPoints << m_activePoint;
+                // no control modifier, so clear selection and select active point
+                if( ! m_selectedPoints.contains( m_activePoint ) )
+                {
+                    m_selectedPoints.clear();
+                    m_selectedPoints << m_activePoint;
+                }
             }
+            repaint( transformed( m_pathShape->outline().controlPointRect() ) );
         }
-        repaint( transformed( m_pathShape->outline().controlPointRect() ) );
-    }
-    else if( m_activePoint && event->button() & Qt::RightButton )
-    {
-        KoPathPoint::KoPointProperties props = m_activePoint->properties();
-        if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
-            return;
-
-        // cycle the smooth->symmetric->unsmooth state of the path point
-        if( props & KoPathPoint::IsSmooth )
+        else if( event->button() & Qt::RightButton )
         {
-            props &= ~KoPathPoint::IsSmooth;
-            props |= KoPathPoint::IsSymmetric;
-        }
-        else if( props & KoPathPoint::IsSymmetric )
-            props &= ~KoPathPoint::IsSymmetric;
-        else
-            props |= KoPathPoint::IsSmooth;
+            KoPathPoint::KoPointProperties props = m_activePoint->properties();
+            if( (props & KoPathPoint::HasControlPoint1) == 0 || (props & KoPathPoint::HasControlPoint2) == 0 )
+                return;
 
-        KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_pathShape, m_activePoint, props );
-        m_canvas->addCommand( cmd, true );
+            // cycle the smooth->symmetric->unsmooth state of the path point
+            if( props & KoPathPoint::IsSmooth )
+            {
+                props &= ~KoPathPoint::IsSmooth;
+                props |= KoPathPoint::IsSymmetric;
+            }
+            else if( props & KoPathPoint::IsSymmetric )
+                props &= ~KoPathPoint::IsSymmetric;
+            else
+                props |= KoPathPoint::IsSmooth;
+
+            KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_pathShape, m_activePoint, props );
+            m_canvas->addCommand( cmd, true );
+        }
     }
     else
     {
-        m_selectedPoints.clear();
-        repaint( transformed( m_pathShape->outline().controlPointRect() ) );
-        // TODO start rubberband selection here
+        if( event->button() & Qt::LeftButton )
+        {
+            if( event->modifiers() & Qt::ControlModifier == 0 )
+                m_selectedPoints.clear();
+            repaint( transformed( m_pathShape->outline().controlPointRect() ) );
+            // starts rubberband selection
+            Q_ASSERT(m_rubberSelect == 0);
+            m_rubberSelect = new KoPointRubberSelectStrategy( this, m_canvas, event->point );
+        }
     }
 }
 
@@ -135,6 +152,9 @@ void KoPathTool::mouseDoubleClickEvent( KoPointerEvent * ) {
 }
 
 void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
+    if( event->button() & Qt::RightButton )
+        return;
+
     if( m_pointMoving )
     {
         QPointF docPoint = snapToGrid( event->point, event->modifiers() );
@@ -156,6 +176,10 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
             KoPointMoveCommand cmd( m_pathShape, m_activePoint, move, m_activePointType );
             cmd.execute();
         }
+    }
+    else if( m_rubberSelect )
+    {
+        m_rubberSelect->handleMouseMove( event->point, event->modifiers() );
     }
     else
     {
@@ -192,20 +216,10 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
 void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
     if( m_pointMoving )
     {
-        if( ! m_move.isNull() )
-        {
-            KoPointMoveCommand *cmd = 0;
-            // only multiple nodes can be moved at once
-            if( m_activePointType == KoPathPoint::Node )
-                cmd = new KoPointMoveCommand( m_pathShape, m_selectedPoints, m_move );
-            else
-                cmd = new KoPointMoveCommand( m_pathShape, m_activePoint, m_move, m_activePointType );
-            m_canvas->addCommand( cmd, false );
-        }
-        else
+        if( m_move.isNull() )
         {
             // it was just a click without moving the mouse
-            if( event->modifiers() == 0 )
+            if( event->modifiers() & Qt::ControlModifier == 0 )
             {
                 // no control modifier pressed, so clear the selection
                 m_selectedPoints.clear();
@@ -215,7 +229,35 @@ void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
                 repaint( transformed( m_pathShape->outline().controlPointRect() ) );
             }
         }
+        else
+        {
+            KoPointMoveCommand *cmd = 0;
+            // only multiple nodes can be moved at once
+            if( m_activePointType == KoPathPoint::Node )
+                cmd = new KoPointMoveCommand( m_pathShape, m_selectedPoints, m_move );
+            else
+                cmd = new KoPointMoveCommand( m_pathShape, m_activePoint, m_move, m_activePointType );
+            m_canvas->addCommand( cmd, false );
+        }
         m_pointMoving = false;
+    }
+    else if( m_rubberSelect )
+    {
+        m_rubberSelect->finishInteraction();
+        QRectF selectRect = m_rubberSelect->selectionRect();
+        if( event->modifiers() & Qt::ControlModifier )
+        {
+            QList<KoPathPoint*> selected = m_pathShape->pointsAt( untransformed( selectRect ) );
+            foreach( KoPathPoint* point, selected )
+                if( ! m_selectedPoints.contains( point ) )
+                    m_selectedPoints << point;
+        }
+        else
+            m_selectedPoints = m_pathShape->pointsAt( untransformed( selectRect ) );
+
+        delete m_rubberSelect;
+        m_rubberSelect = 0;
+        repaint( selectRect.united( transformed( m_pathShape->outline().controlPointRect() ) ) );
     }
 }
 
@@ -269,6 +311,8 @@ void KoPathTool::deactivate() {
     m_pathShape = 0;
     m_activePoint = 0;
     repaint( repaintRect );
+    delete m_rubberSelect;
+    m_rubberSelect = 0;
 }
 
 void KoPathTool::repaint( const QRectF &repaintRect ) {

@@ -69,7 +69,7 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
     while (!n.isNull()) {
         e = n.toElement();
         if (!e.isNull()) {
-            if (e.attribute("name") == "transfer") {
+            if (e.tagName() == "transfer") {
                 QStringList data = QStringList::split( ",", e.text() );
                 QStringList::Iterator start = data.begin();
                 QStringList::Iterator end = data.end();
@@ -80,7 +80,7 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
                     i++;
                 }
             }
-            else if (e.attribute("name") == "curve") {
+            else if (e.tagName() == "curve") {
                 QStringList data = QStringList::split( ";", e.text() );
                 QStringList::Iterator pairStart = data.begin();
                 QStringList::Iterator pairEnd = data.end();

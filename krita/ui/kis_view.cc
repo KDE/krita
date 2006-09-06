@@ -2659,7 +2659,7 @@ namespace {
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_config->fromXML(m_after);
-                Q_ASSERT(m_after == m_config->toString());
+                //Q_ASSERT(m_after == m_config->toString());
                 m_layer->setFilter(m_config);
                 m_layer->setDirty();
                 QApplication::restoreOverrideCursor();
@@ -2669,6 +2669,7 @@ namespace {
             {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_config->fromXML(m_before);
+                //Q_ASSERT(m_before == m_config->toString());
                 m_layer->setFilter(m_config);
                 m_layer->setDirty();
                 QApplication::restoreOverrideCursor();
@@ -2702,11 +2703,13 @@ void KisView::showLayerProperties(KisLayerSP layer)
         QString before = dlg.filterConfiguration()->toString();
         if (dlg.exec() == QDialog::Accepted)
         {
-            m_adapter->addCommand(new KisChangeFilterCmd(alayer,
-                                                         dlg.filterConfiguration(),
-                                                         before,
-                                                         dlg.filterConfiguration()->toString()));
-            //m_doc->setModified( true );
+            KisChangeFilterCmd * cmd = new KisChangeFilterCmd(alayer,
+                    dlg.filterConfiguration(),
+                    before,
+                    dlg.filterConfiguration()->toString());
+            cmd->execute();
+            m_adapter->addCommand(cmd);
+            m_doc->setModified( true );
         }
     }
     else

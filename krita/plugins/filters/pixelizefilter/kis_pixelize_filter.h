@@ -47,6 +47,7 @@ public:
     static inline KisID id() { return KisID("pixelize", i18n("Pixelize")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
+    virtual bool supportsAdjustmentLayers() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
         { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisPixelizeFilterConfiguration(10,10)); return list; }
 public:

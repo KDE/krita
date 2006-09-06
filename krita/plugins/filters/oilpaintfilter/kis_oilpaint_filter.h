@@ -52,6 +52,7 @@ public:
     static inline KisID id() { return KisID("oilpaint", i18n("Oilpaint")); };
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
+    virtual bool supportsAdjustmentLayers() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP dev);
     public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

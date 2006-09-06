@@ -36,6 +36,7 @@ class KisFilterColorToAlpha : public KisFilter {
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsAdjustmentLayers() { return false; }
         virtual ColorSpaceIndependence colorSpaceIndendendence() { return FULLY_INDEPENDENT; };
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);

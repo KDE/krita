@@ -54,6 +54,7 @@ public:
     virtual bool supportsPainting() { return true; }
     virtual bool supportsPreview() { return true; }
     virtual bool supportsIncrementalPainting() { return false; }
+    virtual bool supportsAdjustmentLayers() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisSmallTilesFilterConfiguration(2)); return list; }
 

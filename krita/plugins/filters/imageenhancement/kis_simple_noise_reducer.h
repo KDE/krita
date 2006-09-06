@@ -53,6 +53,7 @@ class KisSimpleNoiseReducer : public KisFilter
         virtual bool supportsPainting() { return false; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsAdjustmentLayers() { return false; }
 };
 
 #endif

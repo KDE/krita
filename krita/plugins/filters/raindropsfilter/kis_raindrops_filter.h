@@ -50,6 +50,7 @@ public:
     static inline KisID id() { return KisID("raindrops", i18n("Raindrops")); };
     virtual bool supportsPainting() { return false; }
     virtual bool supportsPreview() { return true; }
+    virtual bool supportsAdjustmentLayers() { return false; }
     virtual std::list<KisFilterConfiguration*> listOfExamplesConfiguration(KisPaintDeviceSP )
     { std::list<KisFilterConfiguration*> list; list.insert(list.begin(), new KisRainDropsFilterConfiguration( 30, 80, 20)); return list; }
 

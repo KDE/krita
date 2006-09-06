@@ -46,6 +46,7 @@ class KisFilterFastColorTransfer : public KisFilter
         virtual bool supportsPainting() { return true; }
         virtual bool supportsPreview() { return true; }
         virtual bool supportsIncrementalPainting() { return false; }
+        virtual bool supportsAdjustmentLayers() { return false; }
     public:
         virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev);
         virtual KisFilterConfiguration* configuration(QWidget*);

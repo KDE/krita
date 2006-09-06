@@ -186,8 +186,9 @@ void KisToolCrop::move(KisMoveEvent *e)
 
                 KisImageSP image = m_subject->currentImg();
 
-                m_rectCrop.setRight( qMin(m_rectCrop.right(), image->width()));
-                m_rectCrop.setBottom( qMin(m_rectCrop.bottom(), image->width()));
+                m_rectCrop.setRight( QMIN(m_rectCrop.right(), image->width()));
+                m_rectCrop.setBottom( QMIN(m_rectCrop.bottom(), image->width()));
+                m_rectCrop = m_rectCrop.normalize();
 
                 paintOutlineWithHandles();
             }
@@ -319,6 +320,38 @@ void KisToolCrop::move(KisMoveEvent *e)
                             }
                         }
                     }
+                    if( m_rectCrop.height() < 0)
+                    {
+                        if( m_mouseOnHandleType == Lower)
+                            m_mouseOnHandleType = Upper;
+                        else if( m_mouseOnHandleType == LowerLeft)
+                            m_mouseOnHandleType = UpperLeft;
+                        else if( m_mouseOnHandleType == LowerRight)
+                            m_mouseOnHandleType = UpperRight;
+                        else if( m_mouseOnHandleType == Upper)
+                            m_mouseOnHandleType = Lower;
+                        else if( m_mouseOnHandleType == UpperLeft)
+                            m_mouseOnHandleType = LowerLeft;
+                        else if( m_mouseOnHandleType == UpperRight)
+                            m_mouseOnHandleType = LowerRight;
+                    }
+                    if( m_rectCrop.width() < 0)
+                    {
+                        if( m_mouseOnHandleType == Right)
+                            m_mouseOnHandleType = Left;
+                        else if( m_mouseOnHandleType == UpperRight)
+                            m_mouseOnHandleType = UpperLeft;
+                        else if( m_mouseOnHandleType == LowerRight)
+                            m_mouseOnHandleType = LowerLeft;
+                        else if( m_mouseOnHandleType == Left)
+                            m_mouseOnHandleType = Right;
+                        else if( m_mouseOnHandleType == UpperLeft)
+                            m_mouseOnHandleType = UpperRight;
+                        else if( m_mouseOnHandleType == LowerLeft)
+                            m_mouseOnHandleType = LowerRight;
+                    }
+                    
+                    m_rectCrop = m_rectCrop.normalize();
                     m_rectCrop = m_rectCrop.intersect( QRect(0,0, imageWidth + 1, imageHeight + 1 ) );
                     m_dragStart = e->pos().floorQPoint();
                     paintOutlineWithHandles();

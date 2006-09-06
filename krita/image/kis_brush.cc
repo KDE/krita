@@ -862,9 +862,9 @@ QImage KisBrush::scaleImage(const QImage& srcImage, int width, int height)
                 double a = 1 - xInterp;
                 double b = 1 - yInterp;
 
-                int Qt::red;
-                int Qt::green;
-                int Qt::blue;
+                int red;
+                int green;
+                int blue;
                 int alpha;
 
                 if (srcImage.hasAlphaChannel()) {

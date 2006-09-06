@@ -115,6 +115,15 @@ KisFiltersListView::KisFiltersListView(QWidget* parent, bool filterForAdjustment
     init();
 }
 
+KisFiltersListView::KisFiltersListView(QWidget * parent, const char * name, WFlags f, bool filterForAdjustmentLayers)
+    : KIconView(parent, name, f)
+    , m_original(0)
+    , m_profile(0)
+    , m_filterForAdjustmentLayers(filterForAdjustmentLayers)
+{
+    init();
+}
+
 KisFiltersListView::KisFiltersListView(KisLayerSP layer, QWidget* parent, bool filterForAdjustmentLayers, const char * name)
     : KIconView(parent, name)
     , m_original(0)
@@ -195,7 +204,7 @@ void KisFiltersListView::buildPreview()
         if (f->supportsPreview() && f->workWith( m_original->colorSpace() ) ) {
 
             if (m_filterForAdjustmentLayers) {
-                kdDebug() << "We're filtering for adj layers, and this filter supports them: " << f->supportsAdjustmentLayers() << endl;
+                kdDebug() << "We're filtering for adj layers, and this filter (" << f->id().name() << ") supports them: " << f->supportsAdjustmentLayers() << endl;
                 if(!f->supportsAdjustmentLayers()) continue;
             }
             std::list<KisFilterConfiguration*> configlist = f->listOfExamplesConfiguration(m_thumb);

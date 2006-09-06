@@ -80,8 +80,27 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
     m_move = QPointF( 0, 0 );
     if( m_activePoint && event->button() & Qt::LeftButton)
     {
-        m_selectedPoints.clear();
-        m_selectedPoints << m_activePoint;
+        // control select adds/removes points to/from the selection
+        if( event->modifiers() & Qt::ControlModifier )
+        {
+            if( m_selectedPoints.contains( m_activePoint ) )
+            {
+                // active point is already selected, so deselect it
+                int index = m_selectedPoints.indexOf( m_activePoint );
+                m_selectedPoints.removeAt( index );
+            }
+            else
+                m_selectedPoints << m_activePoint;
+        }
+        else
+        {
+            // no control modifier, so clear selection and select active point
+            if( ! m_selectedPoints.contains( m_activePoint ) )
+            {
+                m_selectedPoints.clear();
+                m_selectedPoints << m_activePoint;
+            }
+        }
         repaint( transformed( m_pathShape->outline().controlPointRect() ) );
     }
     else if( m_activePoint && event->button() & Qt::RightButton )
@@ -104,6 +123,12 @@ void KoPathTool::mousePressEvent( KoPointerEvent *event ) {
         KoPointPropertyCommand *cmd = new KoPointPropertyCommand( m_pathShape, m_activePoint, props );
         m_canvas->addCommand( cmd, true );
     }
+    else
+    {
+        m_selectedPoints.clear();
+        repaint( transformed( m_pathShape->outline().controlPointRect() ) );
+        // TODO start rubberband selection here
+    }
 }
 
 void KoPathTool::mouseDoubleClickEvent( KoPointerEvent * ) {
@@ -120,8 +145,17 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
 
         m_move += move;
 
-        KoPointMoveCommand cmd( m_pathShape, m_activePoint, move, m_activePointType );
-        cmd.execute();
+        // only multiple nodes can be moved at once
+        if( m_activePointType == KoPathPoint::Node )
+        {
+            KoPointMoveCommand cmd( m_pathShape, m_selectedPoints, move );
+            cmd.execute();
+        }
+        else
+        {
+            KoPointMoveCommand cmd( m_pathShape, m_activePoint, move, m_activePointType );
+            cmd.execute();
+        }
     }
     else
     {
@@ -155,13 +189,33 @@ void KoPathTool::mouseMoveEvent( KoPointerEvent *event ) {
     }
 }
 
-void KoPathTool::mouseReleaseEvent( KoPointerEvent * ) {
-    // TODO
-    if( m_pointMoving && ! m_move.isNull() )
+void KoPathTool::mouseReleaseEvent( KoPointerEvent *event ) {
+    if( m_pointMoving )
     {
+        if( ! m_move.isNull() )
+        {
+            KoPointMoveCommand *cmd = 0;
+            // only multiple nodes can be moved at once
+            if( m_activePointType == KoPathPoint::Node )
+                cmd = new KoPointMoveCommand( m_pathShape, m_selectedPoints, m_move );
+            else
+                cmd = new KoPointMoveCommand( m_pathShape, m_activePoint, m_move, m_activePointType );
+            m_canvas->addCommand( cmd, false );
+        }
+        else
+        {
+            // it was just a click without moving the mouse
+            if( event->modifiers() == 0 )
+            {
+                // no control modifier pressed, so clear the selection
+                m_selectedPoints.clear();
+                // readd the active point
+                if( m_activePoint )
+                    m_selectedPoints << m_activePoint;
+                repaint( transformed( m_pathShape->outline().controlPointRect() ) );
+            }
+        }
         m_pointMoving = false;
-        KoPointMoveCommand *cmd = new KoPointMoveCommand( m_pathShape, m_activePoint, m_move, m_activePointType );
-        m_canvas->addCommand( cmd, false );
     }
 }
 
@@ -182,10 +236,10 @@ void KoPathTool::keyPressEvent(QKeyEvent *event) {
             m_pointMoving = false;
             if( m_selectedPoints.size() )
             {
-                KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pathShape, m_selectedPoints.first() );
-                if( m_activePoint == m_selectedPoints.first() )
+                KoPointRemoveCommand *cmd = new KoPointRemoveCommand( m_pathShape, m_selectedPoints );
+                if( m_selectedPoints.contains( m_activePoint ) )
                     m_activePoint = 0;
-                m_selectedPoints.removeFirst();
+                m_selectedPoints.clear();
                 m_canvas->addCommand( cmd, true );
             }
         break;

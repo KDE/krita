@@ -97,11 +97,17 @@ private:
 class KoPointRemoveCommand : public KoPointBaseCommand {
 public:
     /**
-     * Command to remove a point from a path shape
+     * Command to remove a single point from a path shape
      * @param shape the path shape containing the point
      * @param point the path point to remove
      */
     KoPointRemoveCommand( KoPathShape *shape, KoPathPoint *point );
+    /**
+     * Command to remove multiple points from a path shape
+     * @param shape the path shape containing the points
+     * @param point the path points to remove
+     */
+    KoPointRemoveCommand( KoPathShape *shape, const QList<KoPathPoint*> &points );
     /// execute the command
     void execute();
     /// revert the actions done in execute
@@ -120,7 +126,7 @@ private:
         KoSubpath * m_subpath;///< the position in the path 
         int m_position;
     };
-    KoPointRemoveData m_data;
+    QList<KoPointRemoveData> m_data;
 };
 
 #endif

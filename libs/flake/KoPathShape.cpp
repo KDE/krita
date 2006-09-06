@@ -180,13 +180,13 @@ void KoPathShape::paint( QPainter &painter, const KoViewConverter &converter )
 #ifndef NDEBUG
 void KoPathShape::paintDebug( QPainter &painter )
 {
-    KoSubpathList::const_iterator pathIt( m_points.begin() );
+    KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
     int i = 0;
 
     QPen pen( Qt::black );
     painter.save();
     painter.setPen( pen );
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         KoSubpath::const_iterator it( ( *pathIt )->begin() );
         for ( ; it != ( *pathIt )->end(); ++it )
@@ -231,7 +231,7 @@ void KoPathShape::paintDecorations(QPainter &painter, const KoViewConverter &con
 
     applyConversion( painter, converter );
 
-    KoSubpathList::const_iterator pathIt( m_points.begin() );
+    KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
 
     painter.save();
     painter.setRenderHint( QPainter::Antialiasing, true );
@@ -240,7 +240,7 @@ void KoPathShape::paintDecorations(QPainter &painter, const KoViewConverter &con
 
     QRectF handle = converter.viewToDocument( handleRect( QPoint(0,0) ) );
 
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         KoSubpath::const_iterator it( ( *pathIt )->begin() );
         for ( ; it != ( *pathIt )->end(); ++it )
@@ -260,9 +260,9 @@ QRectF KoPathShape::handleRect( const QPointF &p ) const
 
 const QPainterPath KoPathShape::KoPathShape::outline() const
 {
-    KoSubpathList::const_iterator pathIt( m_points.begin() );
+    KoSubpathList::const_iterator pathIt( m_subpaths.begin() );
     QPainterPath path;
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         KoSubpath::const_iterator it( ( *pathIt )->begin() );
         KoPathPoint * lastPoint( *it );
@@ -346,47 +346,47 @@ KoPathPoint * KoPathShape::moveTo( const QPointF &p )
     KoPathPoint * point = new KoPathPoint( this, p, KoPathPoint::StartSubpath | KoPathPoint::CanHaveControlPoint2 );
     KoSubpath * path = new KoSubpath;
     path->push_back( point );
-    m_points.push_back( path );
+    m_subpaths.push_back( path );
     return point;
 }
 
 KoPathPoint * KoPathShape::lineTo( const QPointF &p )
 {
-    if ( m_points.empty() )
+    if ( m_subpaths.empty() )
     {
         moveTo( QPointF( 0, 0 ) );
     }
     KoPathPoint * point = new KoPathPoint( this, p, KoPathPoint::CanHaveControlPoint1 );
-    KoPathPoint * lastPoint = m_points.last()->last();
+    KoPathPoint * lastPoint = m_subpaths.last()->last();
     updateLast( lastPoint );
-    m_points.last()->push_back( point );
+    m_subpaths.last()->push_back( point );
     return point;
 }
 
 KoPathPoint * KoPathShape::curveTo( const QPointF &c1, const QPointF &c2, const QPointF &p )
 {
-    if ( m_points.empty() )
+    if ( m_subpaths.empty() )
     {
         moveTo( QPointF( 0, 0 ) );
     }
-    KoPathPoint * lastPoint = m_points.last()->last();
+    KoPathPoint * lastPoint = m_subpaths.last()->last();
     updateLast( lastPoint );
     lastPoint->setControlPoint2( c1 );
     KoPathPoint * point = new KoPathPoint( this, p, KoPathPoint::CanHaveControlPoint1 );
     point->setControlPoint1( c2 );
-    m_points.last()->push_back( point );
+    m_subpaths.last()->push_back( point );
     return point;
 }
 
 void KoPathShape::close()
 {
-    if ( m_points.empty() )
+    if ( m_subpaths.empty() )
     {
         return;
     }
-    KoPathPoint * lastPoint = m_points.last()->last();
+    KoPathPoint * lastPoint = m_subpaths.last()->last();
     lastPoint->setProperties( lastPoint->properties() | KoPathPoint::CloseSubpath | KoPathPoint::CanHaveControlPoint2 );
-    KoPathPoint * firstPoint = m_points.last()->first();
+    KoPathPoint * firstPoint = m_subpaths.last()->first();
     firstPoint->setProperties( firstPoint->properties() | KoPathPoint::CanHaveControlPoint1 );
 }
 
@@ -408,8 +408,8 @@ QPointF KoPathShape::normalize()
 
 void KoPathShape::map( const QMatrix &matrix )
 {
-    KoSubpathList::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         KoSubpath::iterator it( ( *pathIt )->begin() );
         for ( ; it != ( *pathIt )->end(); ++it )
@@ -423,7 +423,7 @@ void KoPathShape::updateLast( KoPathPoint * lastPoint )
 {
     if ( lastPoint->properties() & KoPathPoint::CloseSubpath )
     {
-        KoPathPoint * subpathStart = m_points.last()->first();
+        KoPathPoint * subpathStart = m_subpaths.last()->first();
         KoPathPoint * newLastPoint = new KoPathPoint( *subpathStart );
         KoPointGroup * group = subpathStart->group();
         if ( group == 0 )
@@ -435,7 +435,7 @@ void KoPathShape::updateLast( KoPathPoint * lastPoint )
 
         KoSubpath *path = new KoSubpath;
         path->push_back( newLastPoint );
-        m_points.push_back( path );
+        m_subpaths.push_back( path );
         lastPoint = newLastPoint;
         lastPoint->setProperties( KoPathPoint::Normal );
     }
@@ -446,8 +446,8 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
 {
     QList<KoPathPoint*> result;
 
-    KoSubpathList::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         KoSubpath::iterator it( ( *pathIt )->begin() );
         for ( ; it != ( *pathIt )->end(); ++it )
@@ -465,8 +465,8 @@ QList<KoPathPoint*> KoPathShape::pointsAt( const QRectF &r )
 
 QPair<KoSubpath*, int> KoPathShape::removePoint( KoPathPoint *point )
 {
-    KoSubpathList::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         int index = ( *pathIt )->indexOf( point );
         if( index != -1 )
@@ -504,8 +504,8 @@ void KoPathShape::insertPoint( KoPathPoint* point, KoSubpath* subpath, int posit
 #if 0
 KoPathPoint* KoPathShape::prevPoint( KoPathPoint* point )
 {
-    KoSubpathList::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         int index = ( *pathIt )->indexOf( point );
         if( index != -1 )
@@ -521,8 +521,8 @@ KoPathPoint* KoPathShape::prevPoint( KoPathPoint* point )
 
 KoPathPoint* KoPathShape::nextPoint( KoPathPoint* point )
 {
-    KoSubpathList::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         int index = ( *pathIt )->indexOf( point );
         if( index != -1 )
@@ -538,8 +538,8 @@ KoPathPoint* KoPathShape::nextPoint( KoPathPoint* point )
 
 bool KoPathShape::insertPointAfter( KoPathPoint *point, KoPathPoint *prevPoint )
 {
-   KoSubpathList::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
+   KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         int index = ( *pathIt )->indexOf( prevPoint );
         if( index != -1 )
@@ -557,8 +557,8 @@ bool KoPathShape::insertPointAfter( KoPathPoint *point, KoPathPoint *prevPoint )
 
 bool KoPathShape::insertPointBefore( KoPathPoint *point, KoPathPoint *nextPoint )
 {
-    KoSubpathList::iterator pathIt( m_points.begin() );
-    for ( ; pathIt != m_points.end(); ++pathIt )
+    KoSubpathList::iterator pathIt( m_subpaths.begin() );
+    for ( ; pathIt != m_subpaths.end(); ++pathIt )
     {
         int index = ( *pathIt )->indexOf( nextPoint );
         if( index != -1 )

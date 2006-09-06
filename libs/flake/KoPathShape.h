@@ -396,7 +396,7 @@ private:
 #endif
     QRectF handleRect( const QPointF &p ) const;
 
-    KoSubpathList m_points;
+    KoSubpathList m_subpaths;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KoPathPoint::KoPointProperties )

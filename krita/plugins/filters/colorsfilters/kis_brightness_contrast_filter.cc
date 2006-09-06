@@ -84,6 +84,7 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
                 QStringList data = QStringList::split( ";", e.text() );
                 QStringList::Iterator pairStart = data.begin();
                 QStringList::Iterator pairEnd = data.end();
+                curve.clear(); // XXX QPtrList, sure I won't leak stuff here?
                 for (QStringList::Iterator it = pairStart; it != pairEnd; ++it) {
                     QString pair = * it;
                     if (pair.find(",") > -1) {
@@ -97,6 +98,9 @@ void KisBrightnessContrastFilterConfiguration::fromXML( const QString& s )
         }
         n = n.nextSibling();
     }
+    // If the adjustment was cached, it now has changed - invalidate it
+    delete m_adjustment;
+    m_adjustment = 0;
 }
 
 QString KisBrightnessContrastFilterConfiguration::toString()

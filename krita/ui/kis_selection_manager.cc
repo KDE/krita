@@ -31,6 +31,7 @@
 #include <KoQueryTrader.h>
 
 #include "kis_part_layer.h"
+#include "kis_adjustment_layer.h"
 #include "kis_clipboard.h"
 #include "kis_types.h"
 #include "kis_view.h"
@@ -275,11 +276,14 @@ void KisSelectionManager::updateGUI()
 
 
         KisPartLayer * partLayer = dynamic_cast<KisPartLayer*>(l.data());
-        
+        KisAdjustmentLayer * adjLayer = dynamic_cast<KisAdjustmentLayer*>(l.data());
+
         enable = l && dev&& dev->hasSelection() && !l->locked() && l->visible() && (partLayer==0);
 
-        if(dev)
+        if(dev && !adjLayer)
             m_reselect->setEnabled( dev->selectionDeselected() );
+        if (adjLayer) // There's no reselect for adjustment layers
+            m_reselect->setEnabled(false);
     }
 
     m_cut->setEnabled(enable);
@@ -517,7 +521,12 @@ void KisSelectionManager::deselect()
     if (img->undo()) t = new KisSelectedTransaction(i18n("Deselect"), dev);
     Q_CHECK_PTR(t);
 
-    dev->deselect();
+    // Make adjustment layers behave almost the same (except no reselect)
+    if (dynamic_cast<KisAdjustmentLayer*>(img->activeLayer().data())) {
+        dev->clear();
+    } else {
+        dev->deselect();
+    }
     dev->setDirty();
     dev->emitSelectionChanged();
 

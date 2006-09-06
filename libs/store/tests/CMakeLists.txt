@@ -1,4 +1,5 @@
 
+include_directories (${CMAKE_SOURCE_DIR}/libs/kofficecore)
 
 if(KDE4_BUILD_TESTS)
 

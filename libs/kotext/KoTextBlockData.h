@@ -43,12 +43,22 @@ public:
     /// return the exact text that will be painted as the counter
     const QString &counterText() const { return m_counterText; }
 
+    /**
+     * set the text that is used for the counter at this level.
+     * If this represents a parag with counter 3.1 then the text is the '1'
+     * since the rest is not dependent on this parag, but only its location in the text
+     */
+    void setPartialCounterText(const QString &text) { m_partialCounterText = text; }
+    /// return the partial text for this paragraphs counter
+    const QString &partialCounterText() const { return m_partialCounterText; }
+
     void setCounterPosition(QPointF position) { m_counterPos = position; }
     QPointF counterPosition() const { return m_counterPos; }
 
 private:
     double m_counterWidth;
     QString m_counterText;
+    QString m_partialCounterText;
     QPointF m_counterPos;
 };
 

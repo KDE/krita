@@ -186,8 +186,8 @@ void KisToolCrop::move(KisMoveEvent *e)
 
                 KisImageSP image = m_subject->currentImg();
 
-                m_rectCrop.setRight( QMIN(m_rectCrop.right(), image->width()));
-                m_rectCrop.setBottom( QMIN(m_rectCrop.bottom(), image->width()));
+                m_rectCrop.setRight( qMin(m_rectCrop.right(), image->width()));
+                m_rectCrop.setBottom( qMin(m_rectCrop.bottom(), image->width()));
                 m_rectCrop = m_rectCrop.normalize();
 
                 paintOutlineWithHandles();

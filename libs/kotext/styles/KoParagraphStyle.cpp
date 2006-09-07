@@ -22,7 +22,6 @@
 
 #include "Styles_p.h"
 
-#include <kdebug.h>
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCursor>
@@ -49,14 +48,22 @@ KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
     m_name = orig.name();
     m_charStyle = orig.m_charStyle;
     m_next = orig.m_next;
+    if(orig.m_listStyle) {
+        m_listStyle = orig.m_listStyle;
+        m_listStyle->addUser();
+    }
 }
 
 KoParagraphStyle::~KoParagraphStyle() {
     delete m_stylesPrivate;
     m_stylesPrivate = 0;
     m_charStyle = 0; // QObject will delete it.
-    delete m_listStyle;
-    m_listStyle = 0;
+    if(m_listStyle) {
+        m_listStyle->removeUser();
+        if(m_listStyle->userCount() == 0)
+            delete m_listStyle;
+        m_listStyle = 0;
+    }
 }
 
 void KoParagraphStyle::setParent(KoParagraphStyle *parent) {
@@ -183,8 +190,12 @@ void KoParagraphStyle::applyStyle(QTextBlock &block) const {
 }
 
 void KoParagraphStyle::setListStyle(const KoListStyle &style) {
-    delete m_listStyle;
-    m_listStyle = new KoListStyle(style);
+    if(m_listStyle)
+        m_listStyle->apply(style);
+    else {
+        m_listStyle = new KoListStyle(style);
+        m_listStyle->addUser();
+    }
 }
 
 void KoParagraphStyle::removeListStyle() {

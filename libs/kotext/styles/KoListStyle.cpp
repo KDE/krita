@@ -22,15 +22,16 @@
 
 #include <QTextBlock>
 #include <QTextCursor>
-#include <kdebug.h>
 
 KoListStyle::KoListStyle() {
+    m_refCount = 0;
     m_stylesPrivate = new StylePrivate();
     setStyle(DiscItem);
     setStartValue(1);
 }
 
 KoListStyle::KoListStyle(const KoListStyle &orig) {
+    m_refCount = 0;
     m_stylesPrivate = new StylePrivate();
     m_stylesPrivate->copyMissing(orig.m_stylesPrivate);
     m_name = orig.name();
@@ -61,7 +62,7 @@ QString KoListStyle::propertyString(int key) const {
     return qvariant_cast<QString>(variant);
 }
 
-void KoListStyle::applyStyle(QTextBlock &block) {
+void KoListStyle::applyStyle(const QTextBlock &block) {
     QTextList *textList = m_textLists.value(block.document());
     if(textList && block.textList() && block.textList() != textList) // remove old one
         block.textList()->remove(block);
@@ -112,6 +113,12 @@ void KoListStyle::applyStyle(QTextBlock &block) {
         textList = cursor.createList(format);
         m_textLists.insert(block.document(), QPointer<QTextList>(textList));
     }
+}
+
+void KoListStyle::apply(const KoListStyle &other) {
+    m_name = other.name();
+    m_stylesPrivate->clearAll();
+    m_stylesPrivate->copyMissing(other.m_stylesPrivate);
 }
 
 // TODO; what did I invent m_textLists for?  Can it be removed?

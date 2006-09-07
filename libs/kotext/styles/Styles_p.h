@@ -47,6 +47,7 @@ public:
     bool contains(int key) const;
     void copyMissing(const StylePrivate *other);
     void removeDuplicates(const StylePrivate *other);
+    void clearAll() { m_properties.clear(); }
 
 private:
     QVector<Property> m_properties;

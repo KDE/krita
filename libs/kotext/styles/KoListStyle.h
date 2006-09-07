@@ -70,7 +70,17 @@ public:
     QString listItemPrefix() const { return propertyString(ListItemPrefix); }
     void setListItemSuffix(const QString &suffix) { setProperty(ListItemSuffix, suffix  ); }
     QString listItemSuffix() const { return propertyString(ListItemSuffix); }
+    /**
+     * If true keep numbering even if there was a lower list in between listitems.
+     * This attribute specifies whether or not the list style uses consecutive numbering for
+     * all list levels or whether each list level restarts the numbering.
+     */
     void setConsecutiveNumbering(bool on) { setProperty(ConsecutiveNumbering, on  ); }
+    /**
+     * If true keep numbering even if there was a lower list in between listitems.
+     * This attribute specifies whether or not the list style uses consecutive numbering for
+     * all list levels or whether each list level restarts the numbering.
+     */
     bool consecutiveNumbering() const { return propertyBoolean (ConsecutiveNumbering); }
     void setStartValue(int value) { setProperty(StartValue, value  ); }
     int startValue() const { return propertyInt (StartValue); }
@@ -95,7 +105,15 @@ public:
      * Apply this style to a blockFormat by copying all properties from this style
      * to the target block format.
      */
-    void applyStyle(QTextBlock &block);
+    void applyStyle(const QTextBlock &block);
+
+protected:
+    friend class KoParagraphStyle;
+    void addUser() { m_refCount++; }
+    void removeUser() { m_refCount--; }
+    int userCount() const { return m_refCount; }
+
+    void apply(const KoListStyle &other);
 
 private:
     void setProperty(int key, const QVariant &value);
@@ -107,6 +125,7 @@ private:
     QString m_name;
     StylePrivate *m_stylesPrivate;
     QMap<const QTextDocument*, QPointer<QTextList> > m_textLists;
+    int m_refCount;
 };
 
 #endif

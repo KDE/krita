@@ -1,7 +1,5 @@
 project(krita)
 
-find_package(LCMS)
-
 macro_optional_find_package(Kunittest)
 
 set(REQUIRED_LCMS_VERSION 112)

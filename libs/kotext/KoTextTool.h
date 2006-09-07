@@ -52,6 +52,7 @@ private:
 
 private:
     KoTextShape *m_textShape;
+    KoTextShapeData *m_textShapeData;
     QTextCursor m_caret;
 };
 

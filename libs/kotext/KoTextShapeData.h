@@ -52,9 +52,6 @@ public:
     /// return the document
     QTextDocument *document();
 
-    void setTextCursor(QTextCursor *textCursor) { m_textCursor = textCursor; }
-    QTextCursor *textCursor() const { return m_textCursor; }
-
     /**
      * return the amount of points into the document (y) this shape will display.
      */
@@ -94,7 +91,6 @@ private:
 private:
     QTextDocument *m_document;
     bool m_ownsDocument, m_dirty;
-    QTextCursor *m_textCursor;
     double m_offset;
     int m_position, m_endPosition;
 };

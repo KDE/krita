@@ -23,7 +23,6 @@
 KoTextShapeData::KoTextShapeData()
 : m_ownsDocument(true)
 , m_dirty(true)
-, m_textCursor(0)
 , m_offset(0.0)
 , m_position(-1)
 , m_endPosition(-1)

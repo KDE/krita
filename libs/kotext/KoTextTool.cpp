@@ -32,6 +32,7 @@
 KoTextTool::KoTextTool(KoCanvasBase *canvas)
 : KoTool(canvas)
 , m_textShape(0)
+, m_textShapeData(0)
 {
 }
 
@@ -39,8 +40,6 @@ KoTextTool::~KoTextTool() {
 }
 
 void KoTextTool::paint( QPainter &painter, KoViewConverter &converter) {
-    // TODO using the member m_textShape is incorrect, use m_canvas to reach the KoSelection object
-    // instead and iterator over the selected shapes.
     if(painter.hasClipping()) {
         QRect shape = converter.documentToView(m_textShape->boundingRect()).toRect();
         if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
@@ -115,6 +114,7 @@ kDebug() << "    appending" << endl;
         pen.setColor(invert);
     }
     painter.setPen(pen);
+    painter.translate(0, -m_textShapeData->documentOffset());
     block.layout()->drawCursor(&painter, QPointF(0,0), m_caret.position() - block.position());
 }
 
@@ -128,9 +128,8 @@ void KoTextTool::mousePressEvent( KoPointerEvent *event )  {
 }
 
 int KoTextTool::pointToPosition(const QPointF & point) const {
-    QTextBlock block = m_caret.block();
     QPointF p = m_textShape->convertScreenPos(point);
-    return block.document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
+    return m_caret.block().document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
 }
 
 void KoTextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
@@ -218,23 +217,24 @@ void KoTextTool::keyReleaseEvent(QKeyEvent *event) {
 
 void KoTextTool::activate (bool temporary) {
     Q_UNUSED(temporary);
-    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    m_textShape = dynamic_cast<KoTextShape*> (shape);
-    if(m_textShape == 0) {
+    foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes().toList()) {
+        m_textShape = dynamic_cast<KoTextShape*> (shape);
+        if(m_textShape)
+            break;
+    }
+    if(m_textShape == 0) { // none found
         emit sigDone();
         return;
     }
-    KoTextShapeData *data = static_cast<KoTextShapeData*> (shape->userData());
-    m_caret = QTextCursor(data->document());
-    data->setTextCursor(&m_caret);
+    m_textShapeData = static_cast<KoTextShapeData*> (m_textShape->userData());
+    m_caret = QTextCursor(m_textShapeData->document());
     useCursor(Qt::IBeamCursor, true);
     m_textShape->repaint();
 }
 
 void KoTextTool::deactivate() {
-    if(m_textShape)
-        static_cast<KoTextShapeData*> (m_textShape->userData())->setTextCursor(0);
     m_textShape = 0;
+    m_textShapeData = 0;
 }
 
 void KoTextTool::repaint() {
@@ -246,6 +246,7 @@ void KoTextTool::repaint() {
             repaintRect = tl.rect();
         else // layouting info was removed already :(
             repaintRect = block.layout()->boundingRect();
+        repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
         repaintRect.moveTopLeft(repaintRect.topLeft() + m_textShape->position());
         m_canvas->updateCanvas(repaintRect);
     }

@@ -1,5 +1,3 @@
-find_package(LCMS)
-
 include_directories( ${KOFFICECORE_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LCMS_INCLUDE_DIR} )
 
 set(FILE_OPENEXR_SOURCES)

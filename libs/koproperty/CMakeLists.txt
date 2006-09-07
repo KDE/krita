@@ -44,7 +44,7 @@ kde4_automoc(${koproperty_LIB_SRCS})
 
 kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
 
-target_link_libraries(koproperty ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} )
+target_link_libraries(koproperty ${KDE4_KIO_LIBS} )
 
 set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koproperty  DESTINATION ${LIB_INSTALL_DIR})
@@ -52,33 +52,4 @@ install(TARGETS koproperty  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/koffice/icons)
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#INCLUDES = -I$(srcdir)/editors -I$(top_srcdir)/libs/kofficecore $(all_includes)
-#
-#lib_LTLIBRARIES =  libkoproperty.la
-#
-#libkoproperty_la_LIBADD = $(LIB_KDEUI) ./editors/libkopropertyeditors.la
-#libkoproperty_la_LDFLAGS = -no-undefined $(all_libraries)
-#libkoproperty_la_SOURCES = property.cpp customproperty.cpp set.cpp editor.cpp \
-#	editoritem.cpp factory.cpp widget.cpp
-#
-#METASOURCES = AUTO
-#
-#SUBDIRS = editors . test
-#
-#
-#icondir = $(kde_datadir)/koffice/icons
-#icon_ICON = button_no
-#
-#EXTRA_DIST = $(icon_ICON)
-#
-#messages:
-##	$(EXTRACTRC) */*.rc */*.ui > rc.cpp
-#	$(XGETTEXT) *.cpp editors/*.cpp -o $(podir)/koproperty.pot
+kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )

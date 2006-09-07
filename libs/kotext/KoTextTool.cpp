@@ -157,7 +157,6 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     switch(event->key()) { // map input to moveOperation
         case Qt::Key_Backspace:
-            repaint();
             useCursor(Qt::BlankCursor);
             m_caret.deletePreviousChar();
             break;
@@ -165,7 +164,6 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
             kDebug(32500) << "Tab key pressed";
             break;
         case Qt::Key_Delete:
-            repaint();
             useCursor(Qt::BlankCursor);
             m_caret.deleteChar();
             break;
@@ -202,14 +200,15 @@ void KoTextTool::keyPressEvent(QKeyEvent *event) {
         default:
             if(event->text().length() == 0)
                 return;
-            repaint();
             useCursor(Qt::BlankCursor);
             m_caret.insertText(event->text());
     }
-    repaint();
-    m_caret.movePosition(moveOperation,
-        (event->modifiers() & Qt::ShiftModifier)?QTextCursor::KeepAnchor:QTextCursor::MoveAnchor);
-    repaint();
+    if(moveOperation != QTextCursor::NoMove) {
+        repaint();
+        m_caret.movePosition(moveOperation,
+            (event->modifiers() & Qt::ShiftModifier)?QTextCursor::KeepAnchor:QTextCursor::MoveAnchor);
+        repaint();
+    }
     event->accept();
 }
 
@@ -239,24 +238,15 @@ void KoTextTool::deactivate() {
 }
 
 void KoTextTool::repaint() {
-    QTextFrame *frame = m_caret.block().document()->frameAt(m_caret.position());
-    if(frame == 0)
-        return;
-     QTextFrame::Iterator iter = frame->begin();
-    while(! iter.atEnd()) {
-        QTextBlock block = iter.currentBlock();
-        if(block.isValid() && block.contains(m_caret.position())) {
-            QTextLine tl = block.layout()->lineForTextPosition(m_caret.position() - block.position());
-            QRectF repaintRect;
-            if(tl.isValid())
-                repaintRect = tl.rect();
-            else { // layouting info was removed already :(
-                repaintRect = block.layout()->boundingRect();
-            }
-            repaintRect.moveTopLeft(repaintRect.topLeft() + m_textShape->position());
-            m_canvas->updateCanvas(repaintRect);
-            return;
-        }
-        iter++;
+    QTextBlock block = m_caret.block();
+    if(block.isValid()) {
+        QTextLine tl = block.layout()->lineForTextPosition(m_caret.position() - block.position());
+        QRectF repaintRect;
+        if(tl.isValid())
+            repaintRect = tl.rect();
+        else // layouting info was removed already :(
+            repaintRect = block.layout()->boundingRect();
+        repaintRect.moveTopLeft(repaintRect.topLeft() + m_textShape->position());
+        m_canvas->updateCanvas(repaintRect);
     }
 }

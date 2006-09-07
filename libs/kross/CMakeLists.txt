@@ -8,6 +8,7 @@ add_subdirectory( core )
 add_subdirectory( test )
 
 # KDE Javascript
+# test kjsembed I think
 add_subdirectory( kjs )
 
 # Python

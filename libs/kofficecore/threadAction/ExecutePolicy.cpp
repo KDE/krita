@@ -23,7 +23,7 @@
 #include "JobsListPolicy.h"
 #include <WeaverInterface.h>
 
-namespace ThreadWeaver {
+using namespace ThreadWeaver;
 
 void OnlyLastPolicy::schedule(Action *action, JobsListPolicy *jobsList, QVariant *params) {
     if(action->weaver() == 0) {
@@ -83,4 +83,3 @@ ExecutePolicy *const ExecutePolicy::onlyLastPolicy = new OnlyLastPolicy();
 ExecutePolicy *const ExecutePolicy::directPolicy = new DirectPolicy();
 ExecutePolicy *const ExecutePolicy::queuedPolicy = new QueuedPolicy();
 ExecutePolicy *const ExecutePolicy::simpleQueuedPolicy = new SimpleQueuedPolicy();
-}

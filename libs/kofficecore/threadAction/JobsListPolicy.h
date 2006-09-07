@@ -23,56 +23,54 @@
 #include <QMutex>
 #include <QList>
 
-class Job;
+class ThreadWeaver::Job;
 
-namespace ThreadWeaver {
+/**
+ * Sequential job-queueing policy.
+ * This class holds a list of jobs that will be handled sequentially while allowing
+ * a not-yet-executing job to be removed from the queue.
+ */
+class JobsListPolicy : public ThreadWeaver::QueuePolicy {
+public:
+    /// constructor
+    JobsListPolicy();
+    /// add a job that the policy will manage
+    void addJob(ThreadWeaver::Job *job);
+
+    /// reimplemented method
+    bool canRun (ThreadWeaver::Job *job);
+    /// reimplemented method
+    void free (ThreadWeaver::Job *job);
+    /// reimplemented method
+    void release (ThreadWeaver::Job *job);
+    /// reimplemented method
+    void destructed (ThreadWeaver::Job *job);
+
     /**
-     * Sequential job-queueing policy.
-     * This class holds a list of jobs that will be handled sequentially while allowing
-     * a not-yet-executing job to be removed from the queue.
+     * return a (copy of) the list of jobs.
+     * Note that if you actually plan to use the list, by iterating over it or
+     * even more, you should lock this policy using lock() which guarentees the
+     * list to stay unchanged at least until you call unlock()
      */
-    class JobsListPolicy : public QueuePolicy {
-    public:
-        /// constructor
-        JobsListPolicy();
-        /// add a job that the policy will manage
-        void addJob(Job *job);
+    const QList<ThreadWeaver::Job*> jobs();
+    /// return the amount of jobs that is curently helt
+    int count();
 
-        /// reimplemented method
-        bool canRun (Job *job);
-        /// reimplemented method
-        void free (Job *job);
-        /// reimplemented method
-        void release (Job *job);
-        /// reimplemented method
-        void destructed (Job *job);
+    /**
+     * lock this policy from modifications by other threads. Will also disallow new
+     * jobs to be started.
+     * You should call unlock() afterwards.
+     */
+    void lock() { mutex.lock(); }
+    /**
+     * unlock.
+     * @see lock()
+     */
+    void unlock() { mutex.unlock(); }
 
-        /**
-         * return a (copy of) the list of jobs.
-         * Note that if you actually plan to use the list, by iterating over it or
-         * even more, you should lock this policy using lock() which guarentees the
-         * list to stay unchanged at least until you call unlock()
-         */
-        const QList<Job*> jobs();
-        /// return the amount of jobs that is curently helt
-        int count();
-
-        /**
-         * lock this policy from modifications by other threads. Will also disallow new
-         * jobs to be started.
-         * You should call unlock() afterwards.
-         */
-        void lock() { mutex.lock(); }
-        /**
-         * unlock.
-         * @see lock()
-         */
-        void unlock() { mutex.unlock(); }
-
-    private:
-        QList<Job*> m_jobs;
-        QMutex mutex;
-    };
-}
+private:
+    QList<ThreadWeaver::Job*> m_jobs;
+    QMutex mutex;
+};
 
 #endif

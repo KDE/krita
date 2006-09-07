@@ -24,35 +24,33 @@
 
 class QEvent;
 
-namespace ThreadWeaver {
-    class Action;
+class Action;
 
-    /// private class that schedules the action worker stuff.
-    class ActionJob : public Job {
-        Q_OBJECT
-    public:
-        enum Enable {
-            EnableOn,
-            EnableOff,
-            EnableNoChange
-        };
-        ActionJob(Action *parent, Enable enable, QVariant *params);
-
-        const Action *action() const { return m_action; }
-        bool started() const { return m_started; }
-
-        void run();
-
-    private:
-        bool event(QEvent *e);
-
-    private:
-        Action *m_action;
-        Enable m_enable;
-        bool m_started;
-        QVariant *m_params;
-        QSemaphore m_semaphore;
+/// private class that schedules the action worker stuff.
+class ActionJob : public ThreadWeaver::Job {
+    Q_OBJECT
+public:
+    enum Enable {
+        EnableOn,
+        EnableOff,
+        EnableNoChange
     };
-}
+    ActionJob(Action *parent, Enable enable, QVariant *params);
+
+    const Action *action() const { return m_action; }
+    bool started() const { return m_started; }
+
+    void run();
+
+private:
+    bool event(QEvent *e);
+
+private:
+    Action *m_action;
+    Enable m_enable;
+    bool m_started;
+    QVariant *m_params;
+    QSemaphore m_semaphore;
+};
 
 #endif

@@ -23,8 +23,6 @@
 #include <QEvent>
 #include <QThread>
 
-namespace ThreadWeaver {
-
 class ActionJobEvent : public QEvent {
 public:
     ActionJobEvent() : QEvent(QEvent::User) {}
@@ -69,8 +67,6 @@ bool ActionJob::event(QEvent *e) {
         return true;
     }
     return QObject::event(e);
-}
-
 }
 
 #include "ActionJob_p.moc"

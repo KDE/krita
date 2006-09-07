@@ -19,7 +19,8 @@
 #include "JobsListPolicy.h"
 #include <Job.h>
 
-namespace ThreadWeaver {
+using namespace ThreadWeaver;
+
 JobsListPolicy::JobsListPolicy() : mutex(QMutex::Recursive) {
 }
 
@@ -66,5 +67,4 @@ int JobsListPolicy::count() {
     int i = m_jobs.count();
     mutex.unlock();
     return i;
-}
 }

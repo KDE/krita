@@ -22,7 +22,6 @@
 
 #include <QVariant>
 
-namespace ThreadWeaver {
 Action::Action(QObject *parent)
     : QObject(parent),
     m_policy(ExecutePolicy::simpleQueuedPolicy),
@@ -59,5 +58,4 @@ void Action::doActionUi(QVariant *params) {
     }
 }
 
-}
 #include "Action.moc"

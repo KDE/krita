@@ -55,7 +55,7 @@ void KoPathTool::paint( QPainter &painter, KoViewConverter &converter) {
                 m_rubberSelect->paint( painter, converter );
         }
 
-        QRect shape = converter.documentToView( outline.controlPointRect() ).toRect();
+        QRect shape = converter.documentToView( transformed( outline.controlPointRect() ) ).toRect();
         if(painter.clipRegion().intersect( QRegion(shape) ).isEmpty())
             return;
     }

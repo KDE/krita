@@ -76,7 +76,7 @@ public:
      * Command to change the type of the point
      * @param shape the path shape containing the point
      * @param point the path point to move
-     * @param pointType the new type of the point to set
+     * @param property ??
      */
     KoPointPropertyCommand( KoPathShape *shape, KoPathPoint *point, KoPathPoint::KoPointProperties property );
     /// execute the command
@@ -105,7 +105,7 @@ public:
     /**
      * Command to remove multiple points from a path shape
      * @param shape the path shape containing the points
-     * @param point the path points to remove
+     * @param points the path points to remove
      */
     KoPointRemoveCommand( KoPathShape *shape, const QList<KoPathPoint*> &points );
     /// execute the command

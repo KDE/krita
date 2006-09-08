@@ -6,7 +6,7 @@
 
 import unittest
 
-class TestPlugin(unittest.TestCase):
+class TestKross(unittest.TestCase):
 	""" Testcases to test the Kross python functionality for regressions. """
 
 	def setUp(self):
@@ -46,9 +46,7 @@ class TestPlugin(unittest.TestCase):
 
 	def testByteArray(self):
 		self.assert_( self.object1.func_qbytearray_qbytearray("  Some String as ByteArray  ") == "  Some String as ByteArray  " )
-		self.assert_( self.object1.func_qbytearray_qbytearray("\0") == "" )
-		self.assert_( self.object1.func_qbytearray_qbytearray("  \0  ") == "  " )
-		self.assert_( self.object1.func_qbytearray_qbytearray("\n\r\t\s \0 test \0\0\0 test") == "\n\r\t\s " )
+		self.assert_( self.object1.func_qbytearray_qbytearray(" \0\n\r\t\s\0 test ") == " \0\n\r\t\s\0 test " )
 
 	def testString(self):
 		self.assert_( self.object1.func_qstring_qstring("") == "" )
@@ -67,13 +65,19 @@ class TestPlugin(unittest.TestCase):
 		self.assert_( self.object1.func_qvariantlist_qvariantlist( [[True,[],False,"Other String"],"test"] ) == [[True,[],False,"Other String"],"test"] )
 
 	def testVariantMap(self):
-	        #TODO we can't just compare the dicts like at the other cases cause at least QMap changes the sorting order!!!
-		self.assert_( self.object1.func_qvariantmap_qvariantmap( {} ) == {} )
-		#self.assert_( self.object1.func_qvariantmap_qvariantmap( {"1":73682,"2":285} ) == {"1":73682,"2":285} )
-		#self.assert_( self.object1.func_qvariantmap_qvariantmap( {"a":-6892.957,"b":692.66} ) == {"a":-6892.957,"b":692.66} )
-		#self.assert_( self.object1.func_qvariantmap_qvariantmap( {"key1":True,"key2":False} ) == {"key1":True,"key2":False} )
-		#self.assert_( self.object1.func_qvariantmap_qvariantmap( {"key 1":"  Some String  ","key 2":"oThEr StRiNg"} ) == {"key 1":"  Some String  ","key 2":"oThEr StRiNg"} )
-		#self.assert_( self.object1.func_qvariantmap_qvariantmap( {" key1 ":[12.5,True]," key2 ":[83.002,"test"]} ) == {" key1 ":[12.5,True]," key2 ":[83.002,"test"]} )
+
+		def doTestVariantMap(vmap):
+			rmap = self.object1.func_qvariantmap_qvariantmap( vmap )
+			self.assert_( len(rmap) == len(vmap) )
+			for k in vmap:
+				self.assert_( rmap[k] == vmap[k] )
+
+		doTestVariantMap( {} )
+		doTestVariantMap( {"1":73682,"2":285} )
+		doTestVariantMap( {"a":-6892.957,"b":692.66} )
+		doTestVariantMap( {"key1":True,"key2":False} )
+		doTestVariantMap( {"key 1":"  Some String  ","key 2":"oThEr StRiNg"} )
+		doTestVariantMap( {" key1 ":[12.5,True]," key2 ":[83.002,"test"]} )
 
 	def testVariant(self):
 		#self.assert_( self.object1.func_qvariant_qvariant(0.0) == 0.0 )
@@ -109,13 +113,7 @@ class TestPlugin(unittest.TestCase):
 
 print "__name__ = %s" % __name__
 #print "__main__ = %s %s" % (__main__,dir(__main__))
-#print "========> %s" % TestObject3.name()
+#print "TestObject3.name = %s" % TestObject3.name()
 
-suite = unittest.makeSuite(TestPlugin)
+suite = unittest.makeSuite(TestKross)
 unittest.TextTestRunner(verbosity=2).run(suite)
-
-#print "1==============> %s" % TestObject3.func_testobject_testobject(TestObject3)
-#print "2==============> %s" % TestObject3.func_qobject_qobject( TestObject3 )
-#print "3==============> %s" % TestObject3.func_qstringlist_qstringlist( [" string1","string2 "] )
-#print "4==============> %s" % TestObject3.func_void_qstringlist( [" string1","string2 "] )
-#print "5==============> %s" % TestObject3.func_void()

@@ -30,6 +30,7 @@
 #include <QMetaObject>
 #include <QMetaMethod>
 #include <QHash>
+#include <QVarLengthArray>
 
 using namespace Kross;
 
@@ -178,8 +179,8 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
 
         // exact 1 returnvalue + 0..9 arguments
         Q_ASSERT(typelistcount <= 10);
-        MetaType* variantargs[ typelistcount + 1 ];
-        void* voidstarargs[ typelistcount + 1 ];
+        QVarLengthArray<MetaType*> variantargs( typelistcount + 1 );
+        QVarLengthArray<void*> voidstarargs( typelistcount + 1 );
 
         // set the return value
         if(hasreturnvalue) {
@@ -192,7 +193,7 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
                 returntype = new MetaTypeVariant< QVariant >( QVariant( (QVariant::Type) typeId ) );
             }
             else {
-                // crashes on shared containers like e.g. QStringList and QList
+                // crashes on shared containers like e.g. QStringList and QList which are handled above already
                 typeId = QMetaType::type( metamethod.typeName() );
                 //Q_ASSERT(typeId != QMetaType::Void);
                 #ifdef KROSS_RUBY_EXTENSION_DEBUG
@@ -228,7 +229,7 @@ VALUE RubyExtension::call_method(RubyExtension* extension, int argc, VALUE *argv
         }
 
         // call the method now
-        int r = object->qt_metacall(QMetaObject::InvokeMetaMethod, methodindex, voidstarargs);
+        int r = object->qt_metacall(QMetaObject::InvokeMetaMethod, methodindex, &voidstarargs[0]);
         #ifdef KROSS_RUBY_EXTENSION_DEBUG
             krossdebug( QString("RESULT nr=%1").arg(r) );
         #else
@@ -363,5 +364,4 @@ VALUE RubyExtension::toVALUE(RubyExtension* extension)
     }
 
     return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, extension);
-    //return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, new RubyExtension(extension));
 }

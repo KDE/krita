@@ -59,6 +59,14 @@ void KoShapeRubberSelectStrategy::paint( QPainter &painter, KoViewConverter &con
 
 
 void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) {
+    if(modifiers == Qt::AltModifier) {
+        m_canvas->updateCanvas(m_selectRect.normalized());
+        m_selectRect.moveTopLeft(m_selectRect.topLeft() - (m_lastPos - point));
+        m_lastPos = point;
+        m_canvas->updateCanvas(m_selectRect.normalized());
+        return;
+    }
+    m_lastPos = point;
     QPointF old = m_selectRect.bottomRight();
     m_selectRect.setBottomRight( point );
 /*

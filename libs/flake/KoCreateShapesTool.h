@@ -45,7 +45,7 @@ public:
      */
     KoCreateShapesTool( KoCanvasBase *canvas);
     /// destructor
-    virtual ~KoCreateShapesTool() {};
+    ~KoCreateShapesTool() {};
     void mouseReleaseEvent( KoPointerEvent *event );
 
     void paint( QPainter &painter, KoViewConverter &converter );

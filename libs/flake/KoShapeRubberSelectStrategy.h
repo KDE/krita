@@ -66,6 +66,7 @@ protected:
 
 private:
     QRectF m_selectRect;
+    QPointF m_lastPos;
 };
 
 #endif /* KODEFRUBBERSELECT_H */

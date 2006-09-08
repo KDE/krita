@@ -32,6 +32,7 @@
 #include <QImage>
 
 class KoInteractionStrategy;
+class KoShapeMoveCommand;
 
 #define KoInteractionTool_ID "InteractionTool"
 
@@ -108,6 +109,7 @@ private:
     QPointF m_selectionBox[8];
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
+    KoShapeMoveCommand *m_moveCommand;
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];
     QCursor m_rotateCursors[8];

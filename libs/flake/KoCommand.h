@@ -62,6 +62,9 @@ public:
     /// return the name of this command
     QString name () const;
 
+    /// update newPositions list with new postions.
+    void setNewPositions(QList<QPointF> newPositions) { m_newPositions = newPositions; }
+
 private:
     QList<KoShape*> m_shapes;
     QList<QPointF> m_previousPositions, m_newPositions;

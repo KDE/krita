@@ -32,11 +32,13 @@
 #include "KoShapeManager.h"
 #include "KoInteractionStrategy.h"
 #include "KoCanvasBase.h"
+#include "KoCommand.h"
 
 #include <kcommand.h>
 #include <kcursor.h>
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
+#include <kdebug.h>
 
 #define HANDLE_DISTANCE 10
 
@@ -45,6 +47,7 @@ KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
 , m_currentStrategy( 0 )
 , m_lastHandle(KoFlake::NoHandle)
 , m_mouseWasInsideHandles( false )
+, m_moveCommand(0)
 {
     QPixmap rotatePixmap, shearPixmap;
     rotatePixmap.load(KStandardDirs::locate("data", "koffice/icons/rotate.png"));
@@ -89,6 +92,7 @@ KoInteractionTool::KoInteractionTool( KoCanvasBase *canvas )
 KoInteractionTool::~KoInteractionTool()
 {
     delete m_currentStrategy;
+    m_moveCommand = 0;
 }
 
 bool KoInteractionTool::wantsAutoScroll()
@@ -195,6 +199,7 @@ void KoInteractionTool::paint( QPainter &painter, KoViewConverter &converter) {
 void KoInteractionTool::mousePressEvent( KoPointerEvent *event ) {
     Q_ASSERT(m_currentStrategy == 0);
     m_currentStrategy = KoInteractionStrategy::createStrategy(event, this, m_canvas);
+    m_moveCommand = 0;
     updateCursor();
 }
 
@@ -252,11 +257,51 @@ void KoInteractionTool::mouseReleaseEvent( KoPointerEvent *event ) {
 }
 
 void KoInteractionTool::keyPressEvent(QKeyEvent *event) {
-    if(m_currentStrategy && 
+    if(m_currentStrategy &&
        (event->key() == Qt::Key_Control ||
             event->key() == Qt::Key_Alt || event->key() == Qt::Key_Shift ||
             event->key() == Qt::Key_Meta)) {
         m_currentStrategy->handleMouseMove( m_lastPoint, event->modifiers() );
+    } else if(m_currentStrategy == 0) {
+        double x=0.0, y=0.0;
+        if(event->key() == Qt::Key_Left)
+            x=-1;
+        else if(event->key() == Qt::Key_Right)
+            x=1;
+        else if(event->key() == Qt::Key_Up)
+            y=-1;
+        else if(event->key() == Qt::Key_Down)
+            y=1;
+
+        if(x != 0.0 || y != 0.0) { // actually move
+            if((event->modifiers() & Qt::ShiftModifier) == 0) { // no shift used
+                x *= 10;
+                y *= 10;
+            }
+
+            QList<QPointF> prevPos;
+            QList<QPointF> newPos;
+            QList<KoShape*> shapes;
+            foreach(KoShape* shape, selection()->selectedShapes(KoFlake::StrippedSelection)) {
+                if(shape->isLocked())
+                    continue;
+                shapes.append(shape);
+                QPointF p = shape->position();
+                prevPos.append(p);
+                p.setX(p.x() + x);
+                p.setY(p.y() + y);
+                newPos.append(p);
+            }
+            if(shapes.count() > 0) {
+                if(m_moveCommand) // alter previous instead of creating new one.
+                    m_moveCommand->setNewPositions(newPos);
+                else {
+                    m_moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
+                    m_canvas->addCommand(m_moveCommand, false);
+                }
+                m_moveCommand->execute();
+            }
+        }
     }
 }
 

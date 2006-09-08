@@ -554,6 +554,7 @@ void KisCmykU16ColorSpace::compositeErase(Q_UINT8 *dst,
     }
 }
 
+
 void KisCmykU16ColorSpace::bitBlt(Q_UINT8 *dst,
                       Q_INT32 dstRowStride,
                       const Q_UINT8 *src,
@@ -683,6 +684,12 @@ void KisCmykU16ColorSpace::bitBlt(Q_UINT8 *dst,
     case COMPOSITE_BURN:
         compositeBurn(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
         break;
+    case COMPOSITE_ALPHA_DARKEN:
+        abstractCompositeAlphaDarken<Q_UINT16, U16Mult, Uint8ToU16, U16OpacityTest,
+                                     PIXEL_ALPHA, MAX_CHANNEL_CMYK, MAX_CHANNEL_CMYKA>(
+                dst, dstRowStride, src, srcRowStride, mask, maskRowStride,
+                rows, cols, opacity, U16Mult(), Uint8ToU16(), U16OpacityTest());
+            break;
     default:
         break;
     }
@@ -693,6 +700,7 @@ KisCompositeOpList KisCmykU16ColorSpace::userVisiblecompositeOps() const
     KisCompositeOpList list;
 
     list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KisCompositeOp(COMPOSITE_ALPHA_DARKEN));
     list.append(KisCompositeOp(COMPOSITE_MULT));
     list.append(KisCompositeOp(COMPOSITE_BURN));
     list.append(KisCompositeOp(COMPOSITE_DODGE));

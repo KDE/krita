@@ -680,6 +680,12 @@ void KisCmykColorSpace::bitBlt(Q_UINT8 *dst,
         case COMPOSITE_BURN:
             compositeBurn(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
             break;
+        case COMPOSITE_ALPHA_DARKEN:
+            abstractCompositeAlphaDarken<Q_UINT8, U8Mult, Uint8ToU8, U8OpacityTest,
+                    PIXEL_CMYK_ALPHA, cmyk::MAX_CHANNEL_CMYK, cmyk::MAX_CHANNEL_CMYKA>(
+                    dst, dstRowStride, src, srcRowStride, mask, maskRowStride,
+                    rows, cols, opacity, U8Mult(), Uint8ToU8(), U8OpacityTest());
+                    break;
         default:
             break;
     }
@@ -690,6 +696,7 @@ KisCompositeOpList KisCmykColorSpace::userVisiblecompositeOps() const
     KisCompositeOpList list;
 
     list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KisCompositeOp(COMPOSITE_ALPHA_DARKEN));
     list.append(KisCompositeOp(COMPOSITE_MULT));
     list.append(KisCompositeOp(COMPOSITE_BURN));
     list.append(KisCompositeOp(COMPOSITE_DODGE));

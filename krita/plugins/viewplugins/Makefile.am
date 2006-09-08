@@ -4,7 +4,6 @@ endif
 
 SUBDIRS = \
     substrate \
-    performancetest \
     colorrange \
     colorspaceconversion \
     dropshadow \
@@ -21,3 +20,4 @@ SUBDIRS = \
 
 # variations
 # history_docker
+# performancetest

@@ -84,6 +84,24 @@ public:
     virtual Q_UINT16 scaleToU16(const Q_UINT8 * srcPixel, Q_INT32 channelPos);
 
     virtual bool hasHighDynamicRange() const { return true; }
+
+protected:
+    // For Alpha Composite
+    struct F16HalfMult {
+        inline half operator()(const half& a, const half& b) const {
+            return a * b;
+        }
+    };
+    struct Uint8ToF16Half {
+        inline half operator()(const Q_UINT8 src) const {
+            return UINT8_TO_HALF(src);
+        }
+    };
+    struct F16HalfOpacityTest {
+        inline bool operator()(const half& opacity) const {
+            return opacity > F16HALF_OPACITY_TRANSPARENT + HALF_EPSILON;
+        }
+    };
 };
 
 #endif // KIS_F16HALF_BASE_COLORSPACE_H_

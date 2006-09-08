@@ -911,6 +911,13 @@ void KisRgbF16HalfColorSpace::bitBlt(Q_UINT8 *dst,
     case COMPOSITE_BURN:
         compositeBurn(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
         break;
+    case COMPOSITE_ALPHA_DARKEN:
+        abstractCompositeAlphaDarken<half, F16HalfMult, Uint8ToF16Half, F16HalfOpacityTest,
+                    PIXEL_ALPHA, MAX_CHANNEL_RGB, MAX_CHANNEL_RGBA>(
+                    dst, dstRowStride, src, srcRowStride, mask, maskRowStride,
+                    rows, cols,
+                    U8_opacity, F16HalfMult(), Uint8ToF16Half(), F16HalfOpacityTest());
+        break;
     default:
         break;
     }
@@ -921,6 +928,7 @@ KisCompositeOpList KisRgbF16HalfColorSpace::userVisiblecompositeOps() const
     KisCompositeOpList list;
 
     list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KisCompositeOp(COMPOSITE_ALPHA_DARKEN));
     list.append(KisCompositeOp(COMPOSITE_MULT));
     list.append(KisCompositeOp(COMPOSITE_BURN));
     list.append(KisCompositeOp(COMPOSITE_DODGE));

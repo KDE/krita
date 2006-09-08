@@ -118,6 +118,23 @@ private:
         float red;
         float alpha;
     };
+
+    // For Alpha Composite
+    struct F32Mult {
+        inline float operator()(const float& a, const float& b) const {
+            return a * b;
+        }
+    };
+    struct Uint8ToF32 {
+        inline float operator()(const Q_UINT8 src) const {
+            return UINT8_TO_FLOAT(src);
+        }
+    };
+    struct F32OpacityTest {
+        inline bool operator()(const float& opacity) const {
+            return opacity > F32_OPACITY_TRANSPARENT + 1e-6; // #define EPSILON in the .cc
+        }
+    };
 };
 
 // FIXME: lcms doesn't support 32-bit float

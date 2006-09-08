@@ -910,6 +910,11 @@ void KisRgbF32ColorSpace::bitBlt(Q_UINT8 *dst,
     case COMPOSITE_BURN:
         compositeBurn(dst, dstRowStride, src, srcRowStride, mask, maskRowStride, rows, cols, opacity);
         break;
+    case COMPOSITE_ALPHA_DARKEN:
+        abstractCompositeAlphaDarken<float, F32Mult, Uint8ToF32, F32OpacityTest,
+                    PIXEL_ALPHA, MAX_CHANNEL_RGB, MAX_CHANNEL_RGBA>(
+                    dst, dstRowStride, src, srcRowStride, mask, maskRowStride,
+                    rows, cols, U8_opacity, F32Mult(), Uint8ToF32(), F32OpacityTest());
     default:
         break;
     }
@@ -920,6 +925,7 @@ KisCompositeOpList KisRgbF32ColorSpace::userVisiblecompositeOps() const
     KisCompositeOpList list;
 
     list.append(KisCompositeOp(COMPOSITE_OVER));
+    list.append(KisCompositeOp(COMPOSITE_ALPHA_DARKEN));
     list.append(KisCompositeOp(COMPOSITE_MULT));
     list.append(KisCompositeOp(COMPOSITE_BURN));
     list.append(KisCompositeOp(COMPOSITE_DODGE));
